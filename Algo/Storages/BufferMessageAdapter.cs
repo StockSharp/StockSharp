@@ -161,7 +161,22 @@ namespace StockSharp.Algo.Storages
 				if (message.DataType == MarketDataTypes.CandleTimeFrame)
 				{
 					if (message.IsCalcVolumeProfile)
-						dataType = DataType.Ticks;
+					{
+						switch (message.BuildCandlesFrom)
+						{
+							case MarketDataTypes.Trades:
+								dataType = DataType.Ticks;
+								break;
+
+							case MarketDataTypes.MarketDepth:
+								dataType = DataType.MarketDepth;
+								break;
+
+							default:
+								dataType = DataType.Level1;
+								break;
+						}
+					}
 					else if (message.AllowBuildFromSmallerTimeFrame)
 					{
 						// null arg means do not use DataType.Arg as a filter
@@ -463,19 +478,19 @@ namespace StockSharp.Algo.Storages
 			{
 				case MessageTypes.Level1Change:
 				{
-					var level1Msg = (Level1ChangeMessage)message.Clone();
+					var level1Msg = (Level1ChangeMessage)message;
 
 					if (CanStore<Level1ChangeMessage>(level1Msg.SecurityId))
-						_level1Buffer.Add(level1Msg.SecurityId, level1Msg);
+						_level1Buffer.Add(level1Msg.SecurityId, (Level1ChangeMessage)level1Msg.Clone());
 
 					break;
 				}
 				case MessageTypes.QuoteChange:
 				{
-					var quotesMsg = (QuoteChangeMessage)message.Clone();
+					var quotesMsg = (QuoteChangeMessage)message;
 
 					if (CanStore<QuoteChangeMessage>(quotesMsg.SecurityId))
-						_orderBooksBuffer.Add(quotesMsg.SecurityId, quotesMsg);
+						_orderBooksBuffer.Add(quotesMsg.SecurityId, (QuoteChangeMessage)quotesMsg.Clone());
 
 					break;
 				}
@@ -523,10 +538,10 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.CandleTimeFrame:
 				case MessageTypes.CandleVolume:
 				{
-					var candleMsg = (CandleMessage)message.Clone();
+					var candleMsg = (CandleMessage)message;
 
 					if (CanStore(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg))
-						_candleBuffer.Add(Tuple.Create(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg), candleMsg);
+						_candleBuffer.Add(Tuple.Create(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg), (CandleMessage)candleMsg.Clone());
 
 					break;
 				}
