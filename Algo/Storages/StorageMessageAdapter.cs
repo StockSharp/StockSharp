@@ -438,7 +438,7 @@ namespace StockSharp.Algo.Storages
 						return;
 					}
 
-					Subscribe(msg.SecurityId, CreateDataType(msg));
+					Subscribe(msg);
 
 					var clone = (MarketDataMessage)msg.Clone();
 
@@ -452,7 +452,7 @@ namespace StockSharp.Algo.Storages
 			}
 			else
 			{
-				UnSubscribe(msg.SecurityId, CreateDataType(msg));
+				UnSubscribe(msg);
 
 				if (_fullyProcessedSubscriptions.Remove(msg.OriginalTransactionId))
 				{
@@ -899,48 +899,6 @@ namespace StockSharp.Algo.Storages
 			message.TryInitLocalTime(this);
 
 			RaiseNewOutMessage(message);
-		}
-
-		private static DataType CreateDataType(MarketDataMessage msg)
-		{
-			switch (msg.DataType)
-			{
-				case MarketDataTypes.Level1:
-					return DataType.Level1;
-
-				case MarketDataTypes.MarketDepth:
-					return DataType.MarketDepth;
-
-				case MarketDataTypes.Trades:
-					return DataType.Ticks;
-
-				case MarketDataTypes.OrderLog:
-					return DataType.OrderLog;
-
-				case MarketDataTypes.News:
-					return DataType.News;
-
-				case MarketDataTypes.CandleTimeFrame:
-					return DataType.TimeFrame((TimeSpan)msg.Arg);
-
-				case MarketDataTypes.CandleTick:
-					return DataType.Create(typeof(TickCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandleVolume:
-					return DataType.Create(typeof(VolumeCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandleRange:
-					return DataType.Create(typeof(RangeCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandlePnF:
-					return DataType.Create(typeof(PnFCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandleRenko:
-					return DataType.Create(typeof(RenkoCandleMessage), msg.Arg);
-
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
 		}
 
 		private static DateTimeOffset SetTransactionId(CandleMessage msg, long transactionId)

@@ -120,7 +120,9 @@ namespace StockSharp.Algo.Storages
 		private readonly DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage>();
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
 		private readonly SynchronizedSet<NewsMessage> _newsBuffer = new SynchronizedSet<NewsMessage>();
-		private readonly SynchronizedSet<Tuple<SecurityId, DataType>> _subscriptions = new SynchronizedSet<Tuple<SecurityId, DataType>>();
+		private readonly SyncObject _subscriptionsLock = new SyncObject();
+		private readonly HashSet<Tuple<SecurityId, DataType>> _subscriptions = new HashSet<Tuple<SecurityId, DataType>>();
+		private readonly Dictionary<long, Tuple<MarketDataMessage, Tuple<SecurityId, DataType>>> _subscriptionsById = new Dictionary<long, Tuple<MarketDataMessage, Tuple<SecurityId, DataType>>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BufferMessageAdapter"/>.
@@ -144,23 +146,96 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Update filter with new subscription.
 		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="dataType">Data type info.</param>
-		/// <returns>If subscription was just created, return <see langword="true" />, otherwise <see langword="false" />.</returns>
-		public bool Subscribe(SecurityId securityId, DataType dataType)
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		public void Subscribe(MarketDataMessage message)
 		{
-			return _subscriptions.TryAdd(Tuple.Create(securityId, dataType));
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var origin = (MarketDataMessage)message.Clone();
+			
+			lock (_subscriptionsLock)
+			{
+				DataType dataType;
+
+				if (message.DataType == MarketDataTypes.CandleTimeFrame)
+				{
+					if (message.IsCalcVolumeProfile)
+						dataType = DataType.Ticks;
+					else if (message.AllowBuildFromSmallerTimeFrame)
+					{
+						// null arg means do not use DataType.Arg as a filter
+						dataType = DataType.Create(typeof(TimeFrameCandleMessage), null);
+					}
+					else
+						dataType = DataType.Create(typeof(TimeFrameCandleMessage), message.Arg);
+				}
+				else
+					dataType = CreateDataType(message);
+
+				var subscription = Tuple.Create(message.SecurityId, dataType);
+
+				_subscriptionsById.Add(message.TransactionId, Tuple.Create(origin, subscription));
+				_subscriptions.TryAdd(subscription);
+			}
 		}
 
 		/// <summary>
 		/// Update filter with remove a subscription.
 		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="dataType">Data type info.</param>
-		/// <returns>If subscription was just removed, return <see langword="true" />, otherwise <see langword="false" />.</returns>
-		public bool UnSubscribe(SecurityId securityId, DataType dataType)
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		public void UnSubscribe(MarketDataMessage message)
 		{
-			return _subscriptions.Remove(Tuple.Create(securityId, dataType));
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			lock (_subscriptionsLock)
+			{
+				if (!_subscriptionsById.TryGetValue(message.OriginalTransactionId, out var tuple))
+					return;
+
+				_subscriptionsById.Remove(message.OriginalTransactionId);
+				_subscriptions.Remove(tuple.Item2);
+			}
+		}
+
+		private static DataType CreateDataType(MarketDataMessage msg)
+		{
+			switch (msg.DataType)
+			{
+				case MarketDataTypes.Level1:
+					return DataType.Level1;
+
+				case MarketDataTypes.MarketDepth:
+					return DataType.MarketDepth;
+
+				case MarketDataTypes.Trades:
+					return DataType.Ticks;
+
+				case MarketDataTypes.OrderLog:
+					return DataType.OrderLog;
+
+				case MarketDataTypes.News:
+					return DataType.News;
+
+				case MarketDataTypes.CandleTick:
+					return DataType.Create(typeof(TickCandleMessage), msg.Arg);
+
+				case MarketDataTypes.CandleVolume:
+					return DataType.Create(typeof(VolumeCandleMessage), msg.Arg);
+
+				case MarketDataTypes.CandleRange:
+					return DataType.Create(typeof(RangeCandleMessage), msg.Arg);
+
+				case MarketDataTypes.CandlePnF:
+					return DataType.Create(typeof(PnFCandleMessage), msg.Arg);
+
+				case MarketDataTypes.CandleRenko:
+					return DataType.Create(typeof(RenkoCandleMessage), msg.Arg);
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str1219);
+			}
 		}
 
 		/// <summary>
@@ -168,7 +243,11 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public void ClearSubscriptions()
 		{
-			_subscriptions.Clear();
+			lock (_subscriptionsLock)
+			{
+				_subscriptions.Clear();
+				_subscriptionsById.Clear();
+			}
 		}
 
 		/// <summary>
@@ -254,7 +333,20 @@ namespace StockSharp.Algo.Storages
 			if (!Enabled)
 				return false;
 
-			return !FilterSubscription || _subscriptions.Contains(Tuple.Create(securityId, DataType.Create(messageType, arg)));
+			if (!FilterSubscription)
+				return true;
+
+			lock (_subscriptionsLock)
+			{
+				if (_subscriptions.Contains(Tuple.Create(securityId, DataType.Create(messageType, arg))))
+					return true;
+
+				if (arg == null)
+					return false;
+
+				// null arg means do not use DataType.Arg as a filter
+				return _subscriptions.Contains(Tuple.Create(securityId, DataType.Create(messageType, null)));
+			}
 		}
 
 		/// <summary>
@@ -267,7 +359,8 @@ namespace StockSharp.Algo.Storages
 			{
 				case MessageTypes.Reset:
 				{
-					_subscriptions.Clear();
+					ClearSubscriptions();
+
 					_ticksBuffer.Clear();
 					_level1Buffer.Clear();
 					_candleBuffer.Clear();
