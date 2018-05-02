@@ -231,11 +231,7 @@ namespace StockSharp.Algo.Testing
 			_initialMoney = portfolios.ToDictionary(pf => pf, pf => pf.BeginValue);
 			EntityFactory = new EmulationEntityFactory(securityProvider, _initialMoney.Keys);
 			
-			LatencyManager = null;
 			RiskManager = null;
-			CommissionManager = null;
-			PnLManager = null;
-			SlippageManager = null;
 
 			SupportSubscriptionTracking = true;
 
@@ -247,6 +243,11 @@ namespace StockSharp.Algo.Testing
 			Adapter = new HistoryBasketMessageAdapter(this);
 			Adapter.InnerAdapters.Add(EmulationAdapter);
 			Adapter.InnerAdapters.Add(HistoryMessageAdapter);
+
+			Adapter.LatencyManager = null;
+			Adapter.CommissionManager = null;
+			Adapter.PnLManager = null;
+			Adapter.SlippageManager = null;
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
 			ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;

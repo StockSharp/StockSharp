@@ -25,11 +25,7 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
-	using StockSharp.Algo.Commissions;
-	using StockSharp.Algo.Latency;
-	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Risk;
-	using StockSharp.Algo.Slippage;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -298,18 +294,6 @@ namespace StockSharp.Algo
 					//	//OwnOutputChannel = true,
 					//	OwnInnerAdaper = true
 					//};
-
-					if (LatencyManager != null)
-						_inAdapter = new LatencyMessageAdapter(_inAdapter) { LatencyManager = LatencyManager, OwnInnerAdaper = true };
-
-					if (SlippageManager != null)
-						_inAdapter = new SlippageMessageAdapter(_inAdapter) { SlippageManager = SlippageManager, OwnInnerAdaper = true };
-
-					if (PnLManager != null)
-						_inAdapter = new PnLMessageAdapter(_inAdapter) { PnLManager = PnLManager, OwnInnerAdaper = true };
-
-					if (CommissionManager != null)
-						_inAdapter = new CommissionMessageAdapter(_inAdapter) { CommissionManager = CommissionManager, OwnInnerAdaper = true };
 
 					if (RiskManager != null)
 						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdaper = true };

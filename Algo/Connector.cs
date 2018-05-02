@@ -26,11 +26,7 @@ namespace StockSharp.Algo
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Commissions;
-	using StockSharp.Algo.Latency;
-	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Risk;
-	using StockSharp.Algo.Slippage;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -137,11 +133,8 @@ namespace StockSharp.Algo
 
 			if (initManagers)
 			{
-				LatencyManager = new LatencyManager();
-				CommissionManager = new CommissionManager();
 				//PnLManager = new PnLManager();
 				RiskManager = new RiskManager();
-				SlippageManager = new SlippageManager();
 			}
 
 			_connectorStat.Add(this);
@@ -354,29 +347,9 @@ namespace StockSharp.Algo
 		public IEnumerable<News> News => _entityCache.News;
 
 		/// <summary>
-		/// Orders registration delay calculation manager.
-		/// </summary>
-		public ILatencyManager LatencyManager { get; set; }
-
-		/// <summary>
-		/// The profit-loss manager.
-		/// </summary>
-		public IPnLManager PnLManager { get; set; }
-
-		/// <summary>
 		/// Risk control manager.
 		/// </summary>
 		public IRiskManager RiskManager { get; set; }
-
-		/// <summary>
-		/// The commission calculating manager.
-		/// </summary>
-		public ICommissionManager CommissionManager { get; set; }
-
-		/// <summary>
-		/// Slippage manager.
-		/// </summary>
-		public ISlippageManager SlippageManager { get; set; }
 
 		/// <summary>
 		/// Connection state.
@@ -1449,18 +1422,6 @@ namespace StockSharp.Algo
 			UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), true);
 			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 
-			if (storage.ContainsKey(nameof(LatencyManager)))
-				LatencyManager = storage.GetValue<SettingsStorage>(nameof(LatencyManager)).LoadEntire<ILatencyManager>();
-
-			if (storage.ContainsKey(nameof(CommissionManager)))
-				CommissionManager = storage.GetValue<SettingsStorage>(nameof(CommissionManager)).LoadEntire<ICommissionManager>();
-
-			if (storage.ContainsKey(nameof(PnLManager)))
-				PnLManager = storage.GetValue<SettingsStorage>(nameof(PnLManager)).LoadEntire<IPnLManager>();
-
-			if (storage.ContainsKey(nameof(SlippageManager)))
-				SlippageManager = storage.GetValue<SettingsStorage>(nameof(SlippageManager)).LoadEntire<ISlippageManager>();
-
 			if (storage.ContainsKey(nameof(RiskManager)))
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
 
@@ -1495,18 +1456,6 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
 			storage.SetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
-
-			if (LatencyManager != null)
-				storage.SetValue(nameof(LatencyManager), LatencyManager.SaveEntire(false));
-
-			if (CommissionManager != null)
-				storage.SetValue(nameof(CommissionManager), CommissionManager.SaveEntire(false));
-
-			if (PnLManager != null)
-				storage.SetValue(nameof(PnLManager), PnLManager.SaveEntire(false));
-
-			if (SlippageManager != null)
-				storage.SetValue(nameof(SlippageManager), SlippageManager.SaveEntire(false));
 
 			if (RiskManager != null)
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
