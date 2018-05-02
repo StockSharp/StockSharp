@@ -6,6 +6,7 @@ StockSharp API Change log
 * (bug) BasketMessageAdapter. Fix news ubsubscribe requests.
 * (feature) StorageMessageAdapter. Build candles from tick data in case IsCalcVolumeProfile=true
 * (feature) Candles building refactored. Supported IsCalcVolumeProfile. Removed IsHistory usage.
+* (bug) Grids. Fix filters for enum based fields.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

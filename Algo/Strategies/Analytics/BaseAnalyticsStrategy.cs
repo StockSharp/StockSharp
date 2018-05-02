@@ -34,25 +34,25 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// <summary>
 		/// Table.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str3280Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str3280Key)]
 		Grid,
 
 		/// <summary>
 		/// Bubble chart.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1977Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1977Key)]
 		Bubble,
 
 		/// <summary>
 		/// Histogram.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1976Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1976Key)]
 		Histogram,
 
 		/// <summary>
 		/// Heatmap.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.HeatmapKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.HeatmapKey)]
 		Heatmap,
 	}
 

@@ -16,12 +16,12 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Runtime.Serialization;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
@@ -36,623 +36,623 @@ namespace StockSharp.Messages
 		/// Opening price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str79Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str79Key)]
 		OpenPrice,
 
 		/// <summary>
 		/// Highest price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str287Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str287Key)]
 		HighPrice,
 
 		/// <summary>
 		/// Lowest price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str288Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str288Key)]
 		LowPrice,
 
 		/// <summary>
 		/// Closing price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.ClosingPriceKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ClosingPriceKey)]
 		ClosePrice,
 
 		/// <summary>
 		/// Last trade.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str289Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str289Key)]
 		LastTrade,
 
 		/// <summary>
 		/// Step price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str290Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str290Key)]
 		StepPrice,
 
 		/// <summary>
 		/// Best bid.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str291Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str291Key)]
 		BestBid,
 
 		/// <summary>
 		/// Best ask.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str292Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str292Key)]
 		BestAsk,
 
 		/// <summary>
 		/// Volatility (implied).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str293Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str293Key)]
 		ImpliedVolatility,
 
 		/// <summary>
 		/// Theoretical price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str294Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str294Key)]
 		TheorPrice,
 
 		/// <summary>
 		/// Open interest.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str150Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str150Key)]
 		OpenInterest,
 
 		/// <summary>
 		/// Price (min).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.PriceMinKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceMinKey)]
 		MinPrice,
 
 		/// <summary>
 		/// Price (max).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.PriceMaxKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceMaxKey)]
 		MaxPrice,
 
 		/// <summary>
 		/// Bids volume.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str295Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str295Key)]
 		BidsVolume,
 
 		/// <summary>
 		/// Number of bids.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str296Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str296Key)]
 		BidsCount,
 
 		/// <summary>
 		/// Ask volume.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str297Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str297Key)]
 		AsksVolume,
 
 		/// <summary>
 		/// Number of asks.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str298Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str298Key)]
 		AsksCount,
 
 		/// <summary>
 		/// Volatility (historical).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str299Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str299Key)]
 		HistoricalVolatility,
 
 		/// <summary>
 		/// Delta.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.DeltaKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DeltaKey)]
 		Delta,
 
 		/// <summary>
 		/// Gamma.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.GammaKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.GammaKey)]
 		Gamma,
 
 		/// <summary>
 		/// Vega.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.VegaKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VegaKey)]
 		Vega,
 
 		/// <summary>
 		/// Theta.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.ThetaKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ThetaKey)]
 		Theta,
 
 		/// <summary>
 		/// Initial margin (buy).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str304Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str304Key)]
 		MarginBuy,
 
 		/// <summary>
 		/// Initial margin (sell).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str305Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str305Key)]
 		MarginSell,
 
 		/// <summary>
 		/// Minimum price step.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str306Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str306Key)]
 		PriceStep,
 
 		/// <summary>
 		/// Minimum volume step.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str307Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str307Key)]
 		VolumeStep,
 
 		/// <summary>
 		/// Extended information.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ExtendedInfoKey)]
 		ExtensionInfo,
 
 		/// <summary>
 		/// State.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.StateKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StateKey)]
 		State,
 
 		/// <summary>
 		/// Last trade price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str308Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str308Key)]
 		LastTradePrice,
 
 		/// <summary>
 		/// Last trade volume.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str309Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str309Key)]
 		LastTradeVolume,
 
 		/// <summary>
 		/// Volume per session.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str310Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str310Key)]
 		Volume,
 
 		/// <summary>
 		/// Average price per session.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str311Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str311Key)]
 		AveragePrice,
 
 		/// <summary>
 		/// Settlement price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str312Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str312Key)]
 		SettlementPrice,
 
 		/// <summary>
 		/// Change,%.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("Change,%")]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ChangeKey)]
 		Change,
 
 		/// <summary>
 		/// Best bid price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str313Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str313Key)]
 		BestBidPrice,
 
 		/// <summary>
 		/// Best buy volume.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str314Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str314Key)]
 		BestBidVolume,
 
 		/// <summary>
 		/// Best ask price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str315Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str315Key)]
 		BestAskPrice,
 
 		/// <summary>
 		/// Best sell volume.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str316Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str316Key)]
 		BestAskVolume,
 
 		/// <summary>
 		/// Rho.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.RhoKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RhoKey)]
 		Rho,
 
 		/// <summary>
 		/// Accrued coupon income (ACI).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str318Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str318Key)]
 		AccruedCouponIncome,
 
 		/// <summary>
 		/// Maximum bid during the session.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str319Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str319Key)]
 		HighBidPrice,
 
 		/// <summary>
 		/// Maximum ask during the session.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str320Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str320Key)]
 		LowAskPrice,
 
 		/// <summary>
 		/// Yield.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str321Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str321Key)]
 		Yield,
 
 		/// <summary>
 		/// Time of last trade.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str322Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str322Key)]
 		LastTradeTime,
 
 		/// <summary>
 		/// Number of trades.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.NumOfTradesKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NumOfTradesKey)]
 		TradesCount,
 
 		/// <summary>
 		/// Average price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.AveragePriceKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AveragePriceKey)]
 		VWAP,
 
 		/// <summary>
 		/// Last trade ID.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str325Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str325Key)]
 		LastTradeId,
 
 		/// <summary>
 		/// Best bid time.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str326Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str326Key)]
 		BestBidTime,
 
 		/// <summary>
 		/// Best ask time.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str327Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str327Key)]
 		BestAskTime,
 
 		/// <summary>
 		/// Is tick ascending or descending in price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str328Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str328Key)]
 		LastTradeUpDown,
 
 		/// <summary>
 		/// Initiator of the last trade (buyer or seller).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str329Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str329Key)]
 		LastTradeOrigin,
 
 		/// <summary>
 		/// Lot multiplier.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str330Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str330Key)]
 		Multiplier,
 
 		/// <summary>
 		/// Price/profit.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("P/E")]
+		[Display(Name = "P/E")]
 		PriceEarnings,
 
 		/// <summary>
 		/// Price target/profit.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("Forward P/E")]
+		[Display(Name = "Forward P/E")]
 		ForwardPriceEarnings,
 
 		/// <summary>
 		/// Price/profit (increase).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("PEG")]
+		[Display(Name = "PEG")]
 		PriceEarningsGrowth,
 
 		/// <summary>
 		/// Price/buy.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("P/S")]
+		[Display(Name = "P/S")]
 		PriceSales,
 
 		/// <summary>
 		/// Price/sell.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("P/B")]
+		[Display(Name = "P/B")]
 		PriceBook,
 
 		/// <summary>
 		/// Price/amount.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("P/CF")]
+		[Display(Name = "P/CF")]
 		PriceCash,
 
 		/// <summary>
 		/// Price/amount (free).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("P/FCF")]
+		[Display(Name = "P/FCF")]
 		PriceFreeCash,
 
 		/// <summary>
 		/// Payments.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("Payout")]
+		[Display(Name = "Payout")]
 		Payout,
 
 		/// <summary>
 		/// Number of shares.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str331Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str331Key)]
 		SharesOutstanding,
 
 		/// <summary>
 		/// Shares Float.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("Shares Float")]
+		[Display(Name = "Shares Float")]
 		SharesFloat,
 
 		/// <summary>
 		/// Float Short.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("Float Short")]
+		[Display(Name = "Float Short")]
 		FloatShort,
 
 		/// <summary>
 		/// Short.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("Short")]
+		[Display(Name = "Short")]
 		ShortRatio,
 
 		/// <summary>
 		/// Return on assets.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("ROA")]
+		[Display(Name = "ROA")]
 		ReturnOnAssets,
 
 		/// <summary>
 		/// Return on equity.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("ROE")]
+		[Display(Name = "ROE")]
 		ReturnOnEquity,
 
 		/// <summary>
 		/// Return on investment.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("ROI")]
+		[Display(Name = "ROI")]
 		ReturnOnInvestment,
 
 		/// <summary>
 		/// Liquidity (current).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str332Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str332Key)]
 		CurrentRatio,
 
 		/// <summary>
 		/// Liquidity (instantaneous).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str333Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str333Key)]
 		QuickRatio,
 
 		/// <summary>
 		/// Capital (long-term debt).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str334Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str334Key)]
 		LongTermDebtEquity,
 
 		/// <summary>
 		/// Capital (debt).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str335Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str335Key)]
 		TotalDebtEquity,
 
 		/// <summary>
 		/// Assets margin (gross).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str336Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str336Key)]
 		GrossMargin,
 
 		/// <summary>
 		/// Assets margin.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str337Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str337Key)]
 		OperatingMargin,
 
 		/// <summary>
 		/// Profit margin.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str338Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str338Key)]
 		ProfitMargin,
 
 		/// <summary>
 		/// Beta.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.BetaKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BetaKey)]
 		Beta,
 
 		/// <summary>
 		/// ATR.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("ATR")]
+		[Display(Name = "ATR")]
 		AverageTrueRange,
 
 		/// <summary>
 		/// Volatility (week).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str340Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str340Key)]
 		HistoricalVolatilityWeek,
 
 		/// <summary>
 		/// Volatility (month).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str341Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str341Key)]
 		HistoricalVolatilityMonth,
 
 		/// <summary>
 		/// System info.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str342Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str342Key)]
 		IsSystem,
 
 		/// <summary>
 		/// Number of digits in price after coma.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.DecimalsKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DecimalsKey)]
 		Decimals,
 
 		/// <summary>
 		/// Duration.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.DurationKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DurationKey)]
 		Duration,
 
 		/// <summary>
 		/// Number of issued contracts.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.IssueSizeKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IssueSizeKey)]
 		IssueSize,
 
 		/// <summary>
 		/// BuyBack date.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.BuyBackDateKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BuyBackDateKey)]
 		BuyBackDate,
 
 		/// <summary>
 		/// BuyBack price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.BuyBackPriceKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BuyBackPriceKey)]
 		BuyBackPrice,
 
 		/// <summary>
 		/// Turnover.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.TurnoverKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TurnoverKey)]
 		Turnover,
 
 		/// <summary>
 		/// The middle of spread.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.SpreadKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SpreadKey)]
 		SpreadMiddle,
 
 		/// <summary>
 		/// The dividend amount on shares.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.DividendKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DividendKey)]
 		Dividend,
 
 		/// <summary>
 		/// Price after split.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.AfterSplitKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AfterSplitKey)]
 		AfterSplit,
 
 		/// <summary>
 		/// Price before split.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.BeforeSplitKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BeforeSplitKey)]
 		BeforeSplit,
 	}
 

@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -73,21 +74,21 @@ namespace StockSharp.Community
 		/// Lifetime.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.LifetimeKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LifetimeKey)]
 		Lifetime,
 
 		/// <summary>
 		/// Per month.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.PerMonthKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PerMonthKey)]
 		PerMonth,
 
 		/// <summary>
 		/// Annual.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.AnnualKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AnnualKey)]
 		Annual
 	}
 

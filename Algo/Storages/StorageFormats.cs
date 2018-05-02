@@ -16,9 +16,10 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Storages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
-	using Ecng.ComponentModel;
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// Format types.
@@ -30,14 +31,14 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The binary format StockSharp.
 		/// </summary>
-		[EnumDisplayName("BIN")]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str552Key)]
 		[EnumMember]
 		Binary,
 		
 		/// <summary>
 		/// The text format CSV.
 		/// </summary>
-		[EnumDisplayName("CSV")]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CSVKey)]
 		[EnumMember]
 		Csv,
 

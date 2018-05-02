@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -32,77 +33,77 @@ namespace StockSharp.Messages
 		/// Level 1.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Level1Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Level1Key)]
 		Level1,
 
 		/// <summary>
 		/// Market depth (order book).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.MarketDepthKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MarketDepthKey)]
 		MarketDepth,
 
 		/// <summary>
 		/// Tick trades.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.TicksKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TicksKey)]
 		Trades,
 
 		/// <summary>
 		/// Order log.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.OrderLogKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OrderLogKey)]
 		OrderLog,
 
 		/// <summary>
 		/// News.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.NewsKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NewsKey)]
 		News,
 
 		/// <summary>
 		/// Candles (time-frame).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.TimeFrameCandleKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TimeFrameCandleKey)]
 		CandleTimeFrame,
 
 		/// <summary>
 		/// Candle (tick).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.TickCandleKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TickCandleKey)]
 		CandleTick,
 
 		/// <summary>
 		/// Candle (volume).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.VolumeCandleKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VolumeCandleKey)]
 		CandleVolume,
 
 		/// <summary>
 		/// Candle (range).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.RangeCandleKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RangeCandleKey)]
 		CandleRange,
 
 		/// <summary>
 		/// Candle (X&amp;0).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.PnFCandleKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PnFCandleKey)]
 		CandlePnF,
 
 		/// <summary>
 		/// Candle (renko).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.RenkoCandleKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RenkoCandleKey)]
 		CandleRenko,
 	}
 
@@ -117,21 +118,21 @@ namespace StockSharp.Messages
 		/// Request built candles and build the missing candles from trades, depths etc.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.LoadAndBuildKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadAndBuildKey)]
 		LoadAndBuild,
 
 		/// <summary>
 		/// Request only built candles.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.LoadKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadKey)]
 		Load,
 
 		/// <summary>
 		/// Build from trades, depths etc.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.BuildKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BuildKey)]
 		Build
 	}
 

@@ -15,6 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Strategies.Testing
 {
+	using System.ComponentModel.DataAnnotations;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -25,19 +27,19 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// Storage.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1405Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1405Key)]
 		Storage,
 
 		/// <summary>
 		/// Generated.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1406Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1406Key)]
 		Generate,
 
 		/// <summary>
 		/// None.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1407Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1407Key)]
 		No
 	}
 }

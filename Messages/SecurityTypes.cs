@@ -19,8 +19,6 @@ namespace StockSharp.Messages
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
-	using Ecng.ComponentModel;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -104,7 +102,7 @@ namespace StockSharp.Messages
 		/// CFD.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName(LocalizedStrings.CfdKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CfdKey)]
 		Cfd,
 
 		/// <summary>
@@ -132,7 +130,7 @@ namespace StockSharp.Messages
 		/// American Depositary Receipts.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName(LocalizedStrings.AdrKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AdrKey)]
 		Adr,
 
 		/// <summary>
