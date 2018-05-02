@@ -468,7 +468,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="executions">Tick messages.</param>
 		/// <param name="mdMsg">Market-data message.</param>
-		/// <param name="isTicks">Determine if <param name="executions"> is <see cref="ExecutionTypes.Tick"/> or <see cref="ExecutionTypes.OrderLog"/>.</param></param>
+		/// <param name="isTicks">Determine if <paramref name="executions"/> is <see cref="ExecutionTypes.Tick"/> or <see cref="ExecutionTypes.OrderLog"/>.</param>
 		/// <param name="onlyFormed">Process only formed candles.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> executions, MarketDataMessage mdMsg, bool isTicks, bool onlyFormed = true)
