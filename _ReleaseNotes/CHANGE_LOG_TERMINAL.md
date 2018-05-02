@@ -1,5 +1,26 @@
 StockSharp Terminal Change log
 ========================
+## v4.4.8:
+* (feature) Charting. Auto select Security and Portfolio.
+* (feature) Charting. Show non-charting orders on chart.
+* (feature) Offline. Support replace for pending orders.
+* (bug) InteractiveBrokers. End date for candles request fix https://stocksharp.ru/posts/m/43390/.
+* (bug) InteractiveBrokers. SecurityLookup error response handling fix.
+* (bug) InteractiveBrokers. Candles request fix.
+* (feature) Http -> Https.
+* (feature) Portfolio pickup option.
+* (bug) Binance, Coinbase, Bitfinex, Bitstamp, IQFeed fixes.
+* (feature) SmartCOM. V4 as default.
+* (bug) Transaq. Fix locked file issue.
+* (feature) Compress candles from smaller time-frames.
+* (bug) PnF candles store fixes.
+* (feature) Chartings. Series settings extended.
+* (bug) Scalping market depth. Cancelling orders fix.
+* (feature) Scalping market depth. Order registration by double-click.
+* (feature) Scalping market depth. Sorting by price column only.
+* (bug) Cluster profile build fix.
+* (bug) Grids. Fix filters for enum based fields.
+
 ## v4.4.6.1:
 * (bug) Option position chart. Legend binding fix.
 * (bug) Option filter design fix.
