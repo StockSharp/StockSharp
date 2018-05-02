@@ -27,6 +27,10 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
+	using StockSharp.Algo.Commissions;
+	using StockSharp.Algo.Latency;
+	using StockSharp.Algo.PnL;
+	using StockSharp.Algo.Slippage;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
 	using StockSharp.Logging;
@@ -172,6 +176,26 @@ namespace StockSharp.Algo
 		public IExtendedInfoStorage ExtendedInfoStorage { get; set; }
 
 		/// <summary>
+		/// Orders registration delay calculation manager.
+		/// </summary>
+		public ILatencyManager LatencyManager { get; set; }
+
+		/// <summary>
+		/// The profit-loss manager.
+		/// </summary>
+		public IPnLManager PnLManager { get; set; }
+
+		/// <summary>
+		/// The commission calculating manager.
+		/// </summary>
+		public ICommissionManager CommissionManager { get; set; }
+
+		/// <summary>
+		/// Slippage manager.
+		/// </summary>
+		public ISlippageManager SlippageManager { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
 		/// </summary>
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
@@ -186,6 +210,11 @@ namespace StockSharp.Algo
 			_innerAdapters = new InnerAdapterList();
 			AdapterProvider = adapterProvider;
 			ExchangeInfoProvider = exchangeInfoProvider;
+
+			LatencyManager = new LatencyManager();
+			CommissionManager = new CommissionManager();
+			//PnLManager = new PnLManager();
+			SlippageManager = new SlippageManager();
 		}
 
 		/// <summary>
@@ -269,6 +298,26 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 		{
+			if (LatencyManager != null)
+			{
+				adapter = new LatencyMessageAdapter(adapter) { LatencyManager = LatencyManager.Clone() };
+			}
+
+			if (SlippageManager != null)
+			{
+				adapter = new SlippageMessageAdapter(adapter) { SlippageManager = SlippageManager.Clone() };
+			}
+
+			if (PnLManager != null)
+			{
+				adapter = new PnLMessageAdapter(adapter) { PnLManager = PnLManager.Clone() };
+			}
+
+			if (CommissionManager != null)
+			{
+				adapter = new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone() };
+			}
+
 			if (adapter.IsFullCandlesOnly)
 			{
 				adapter = new CandleHolderMessageAdapter(adapter);
@@ -905,6 +954,18 @@ namespace StockSharp.Algo
 				}).ToArray());
 			}
 
+			if (LatencyManager != null)
+				storage.SetValue(nameof(LatencyManager), LatencyManager.SaveEntire(false));
+
+			if (CommissionManager != null)
+				storage.SetValue(nameof(CommissionManager), CommissionManager.SaveEntire(false));
+
+			if (PnLManager != null)
+				storage.SetValue(nameof(PnLManager), PnLManager.SaveEntire(false));
+
+			if (SlippageManager != null)
+				storage.SetValue(nameof(SlippageManager), SlippageManager.SaveEntire(false));
+
 			base.Save(storage);
 		}
 
@@ -932,6 +993,18 @@ namespace StockSharp.Algo
 					}
 				}
 			}
+
+			if (storage.ContainsKey(nameof(LatencyManager)))
+				LatencyManager = storage.GetValue<SettingsStorage>(nameof(LatencyManager)).LoadEntire<ILatencyManager>();
+
+			if (storage.ContainsKey(nameof(CommissionManager)))
+				CommissionManager = storage.GetValue<SettingsStorage>(nameof(CommissionManager)).LoadEntire<ICommissionManager>();
+
+			if (storage.ContainsKey(nameof(PnLManager)))
+				PnLManager = storage.GetValue<SettingsStorage>(nameof(PnLManager)).LoadEntire<IPnLManager>();
+
+			if (storage.ContainsKey(nameof(SlippageManager)))
+				SlippageManager = storage.GetValue<SettingsStorage>(nameof(SlippageManager)).LoadEntire<ISlippageManager>();
 
 			base.Load(storage);
 		}

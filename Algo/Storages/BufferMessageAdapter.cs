@@ -176,7 +176,7 @@ namespace StockSharp.Algo.Storages
 				var subscription = Tuple.Create(message.SecurityId, dataType);
 
 				_subscriptionsById.Add(message.TransactionId, Tuple.Create(origin, subscription));
-				_subscriptions.TryAdd(subscription);
+				Subscribe(subscription);
 			}
 		}
 
@@ -197,6 +197,21 @@ namespace StockSharp.Algo.Storages
 				_subscriptionsById.Remove(message.OriginalTransactionId);
 				_subscriptions.Remove(tuple.Item2);
 			}
+		}
+
+		/// <summary>
+		/// Update filter with new subscription.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="dataType">Data type info.</param>
+		public void Subscribe(SecurityId securityId, DataType dataType)
+		{
+			Subscribe(Tuple.Create(securityId, dataType));
+		}
+
+		private void Subscribe(Tuple<SecurityId, DataType> subscription)
+		{
+			_subscriptions.TryAdd(subscription);
 		}
 
 		private static DataType CreateDataType(MarketDataMessage msg)
