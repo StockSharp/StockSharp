@@ -233,13 +233,13 @@ namespace StockSharp.Algo.Candles.Compression
 
 							_unsubscriptions.Add(transactionId);
 
-							base.SendInMessage(new MarketDataMessage
-							{
-								TransactionId = transactionId,
-								OriginalTransactionId = series.Current.TransactionId,
-								IsSubscribe = false,
-								SecurityId = series.Current.SecurityId,
-							});
+							var unsubscribe = (MarketDataMessage)series.Current.Clone();
+
+							unsubscribe.TransactionId = transactionId;
+							unsubscribe.OriginalTransactionId = series.Current.TransactionId;
+							unsubscribe.IsSubscribe = false;
+
+							base.SendInMessage(unsubscribe);
 
 							
 							return;
@@ -261,7 +261,23 @@ namespace StockSharp.Algo.Candles.Compression
 			if (getTransactionId == null)
 				throw new ArgumentNullException(nameof(getTransactionId));
 
-			var buildFrom = original.BuildCandlesFrom ?? InnerAdapter.SupportedMarketDataTypes.Intersect(CandleHelper.CandleDataSources).FirstOr();
+			var buildFrom = original.BuildCandlesFrom ?? InnerAdapter.SupportedMarketDataTypes.Intersect(CandleHelper.CandleDataSources).OrderBy(t =>
+			{
+				// make priority
+				switch (t)
+				{
+					case MarketDataTypes.Level1:
+						return 0;
+					case MarketDataTypes.Trades:
+						return 1;
+					case MarketDataTypes.OrderLog:
+						return 2;
+					case MarketDataTypes.MarketDepth:
+						return 3;
+					default:
+						return 4;
+				}
+			}).FirstOr();
 
 			if (buildFrom == null || !InnerAdapter.SupportedMarketDataTypes.Contains(buildFrom.Value))
 				return null;
@@ -441,7 +457,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog)
 						ProcessValue(execMsg.SecurityId, execMsg.OriginalTransactionId, execMsg);
 
-					break;
+					return;
 				}
 
 				case MessageTypes.QuoteChange:
@@ -451,7 +467,7 @@ namespace StockSharp.Algo.Candles.Compression
 					var quoteMsg = (QuoteChangeMessage)message;
 
 					ProcessValue(quoteMsg.SecurityId, 0, quoteMsg);
-					break;
+					return;
 				}
 
 				case MessageTypes.Level1Change:
@@ -461,7 +477,7 @@ namespace StockSharp.Algo.Candles.Compression
 					var l1Msg = (Level1ChangeMessage)message;
 					
 					ProcessValue(l1Msg.SecurityId, 0, l1Msg);
-					break;
+					return;
 				}
 			}
 
