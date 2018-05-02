@@ -466,8 +466,8 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To create candles from the tick trades collection.
 		/// </summary>
-		/// <param name="executions">Tick messages.</param>
-		/// <param name="mdMsg">Market-data message.</param>
+		/// <param name="executions">Tick data.</param>
+		/// <param name="mdMsg">Market data subscription.</param>
 		/// <param name="isTicks">Determine if <paramref name="executions"/> is <see cref="ExecutionTypes.Tick"/> or <see cref="ExecutionTypes.OrderLog"/>.</param>
 		/// <param name="onlyFormed">Process only formed candles.</param>
 		/// <returns>Candles.</returns>
@@ -509,7 +509,7 @@ namespace StockSharp.Algo.Candles
 		/// To create candles from the order books collection.
 		/// </summary>
 		/// <param name="depths">Market depths.</param>
-		/// <param name="mdMsg">Market-data message.</param>
+		/// <param name="mdMsg">Market data subscription.</param>
 		/// <param name="type">Type of candle depth based data.</param>
 		/// <param name="onlyFormed">Process only formed candles.</param>
 		/// <returns>Candles.</returns>

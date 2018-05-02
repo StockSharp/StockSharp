@@ -14883,3 +14883,5 @@ DocStr10424;Indicates the type of product the security is associated with;Ука
 DocStr10425;ASTS (Currencies);ASTS (валютный)
 DocStr10426;ASTS (Equities);ASTS (фондовый)
 DocStr10427;Represents a container for dock and layout items;Представляет контейнер для элементов докинга и разметки
+DocStr10428;Possible data types that can be used as candles source;Возможные типы данных, которые могут быть использованы как источник для свечей
+DocStr10431;Determine if {0} is {1} or {2};Определяет, если {0} является {1} или {2}
