@@ -2600,6 +2600,7 @@ M:StockSharp.Algo.Storages.BufferMessageAdapter.#ctor(StockSharp.Messages.IMessa
 M:StockSharp.Algo.Storages.BufferMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr8563
 P:StockSharp.Algo.Storages.BufferMessageAdapter.FilterSubscription/summary;DocStr9532
 P:StockSharp.Algo.Storages.BufferMessageAdapter.Enabled/summary;DocStr10028
+P:StockSharp.Algo.Storages.BufferMessageAdapter.TicksAsLevel1/summary;DocStr10432
 M:StockSharp.Algo.Storages.BufferMessageAdapter.Subscribe(StockSharp.Messages.MarketDataMessage)/summary;DocStr9533
 M:StockSharp.Algo.Storages.BufferMessageAdapter.Subscribe(StockSharp.Messages.MarketDataMessage)/param/message;DocStr4473
 M:StockSharp.Algo.Storages.BufferMessageAdapter.UnSubscribe(StockSharp.Messages.MarketDataMessage)/summary;DocStr9535

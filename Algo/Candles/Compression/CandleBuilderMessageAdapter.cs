@@ -266,9 +266,9 @@ namespace StockSharp.Algo.Candles.Compression
 				// make priority
 				switch (t)
 				{
-					case MarketDataTypes.Level1:
-						return 0;
 					case MarketDataTypes.Trades:
+						return 0;
+					case MarketDataTypes.Level1:
 						return 1;
 					case MarketDataTypes.OrderLog:
 						return 2;

@@ -144,6 +144,11 @@ namespace StockSharp.Algo.Storages
 		public bool Enabled { get; set; } = true;
 
 		/// <summary>
+		/// Interpret tick messages as level1.
+		/// </summary>
+		public bool TicksAsLevel1 { get; set; } = true;
+
+		/// <summary>
 		/// Update filter with new subscription.
 		/// </summary>
 		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
@@ -165,7 +170,7 @@ namespace StockSharp.Algo.Storages
 						switch (message.BuildCandlesFrom)
 						{
 							case MarketDataTypes.Trades:
-								dataType = DataType.Ticks;
+								dataType = TicksAsLevel1 ? DataType.Level1 : DataType.Ticks;
 								break;
 
 							case MarketDataTypes.MarketDepth:
@@ -229,18 +234,18 @@ namespace StockSharp.Algo.Storages
 			_subscriptions.TryAdd(subscription);
 		}
 
-		private static DataType CreateDataType(MarketDataMessage msg)
+		private DataType CreateDataType(MarketDataMessage msg)
 		{
 			switch (msg.DataType)
 			{
 				case MarketDataTypes.Level1:
 					return DataType.Level1;
 
+				case MarketDataTypes.Trades:
+					return TicksAsLevel1 ? DataType.Level1 : DataType.Ticks;
+
 				case MarketDataTypes.MarketDepth:
 					return DataType.MarketDepth;
-
-				case MarketDataTypes.Trades:
-					return DataType.Ticks;
 
 				case MarketDataTypes.OrderLog:
 					return DataType.OrderLog;
@@ -365,6 +370,12 @@ namespace StockSharp.Algo.Storages
 
 			if (!FilterSubscription)
 				return true;
+
+			if (TicksAsLevel1 && arg == (object)ExecutionTypes.Tick)
+			{
+				messageType = typeof(Level1ChangeMessage);
+				arg = null;
+			}
 
 			lock (_subscriptionsLock)
 			{
@@ -581,6 +592,7 @@ namespace StockSharp.Algo.Storages
 
 			storage.SetValue(nameof(Enabled), Enabled);
 			storage.SetValue(nameof(FilterSubscription), FilterSubscription);
+			storage.SetValue(nameof(TicksAsLevel1), TicksAsLevel1);
 		}
 
 		/// <inheritdoc />
@@ -590,6 +602,7 @@ namespace StockSharp.Algo.Storages
 
 			Enabled = storage.GetValue(nameof(Enabled), Enabled);
 			FilterSubscription = storage.GetValue(nameof(FilterSubscription), FilterSubscription);
+			TicksAsLevel1 = storage.GetValue(nameof(TicksAsLevel1), TicksAsLevel1);
 		}
 
 		/// <summary>
