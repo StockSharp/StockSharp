@@ -630,7 +630,7 @@ M:StockSharp.InteractiveBrokers.Web.Downloader.#ctor/summary;DocStr1
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadMarkets/summary;DocStr3692
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadMarkets/returns;DocStr2694
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadProducts(StockSharp.InteractiveBrokers.Web.Market)/summary;DocStr3693
-M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadProducts(StockSharp.InteractiveBrokers.Web.Market)/param/market;DocStr1313
+M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadProducts(StockSharp.InteractiveBrokers.Web.Market)/param/market;Exchange
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadProducts(StockSharp.InteractiveBrokers.Web.Market)/returns;Securities
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadDescription(StockSharp.InteractiveBrokers.Web.Product)/summary;DocStr3694
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadDescription(StockSharp.InteractiveBrokers.Web.Product)/param/product;DocStr2831
