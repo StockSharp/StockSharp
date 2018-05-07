@@ -693,32 +693,12 @@ namespace StockSharp.Algo
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
-			return new Security
+			var security = new Security
 			{
-				Id = message.SecurityId.ToStringId(),
-				Code = message.SecurityId.SecurityCode,
-				Board = exchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode),
-				Type = message.SecurityType ?? message.SecurityId.SecurityType,
-				CfiCode = message.CfiCode,
-				Strike = message.Strike,
-				OptionType = message.OptionType,
-				Name = message.Name,
-				ShortName = message.ShortName,
-				Class = message.Class,
-				BinaryOptionType = message.BinaryOptionType,
-				ExternalId = message.SecurityId.ToExternalId(),
-				ExpiryDate = message.ExpiryDate,
-				SettlementDate = message.SettlementDate,
-				UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + message.SecurityId.BoardCode,
-				Currency = message.Currency,
-				PriceStep = message.PriceStep,
-				Decimals = message.Decimals,
-				VolumeStep = message.VolumeStep,
-				Multiplier = message.Multiplier,
-				IssueSize = message.IssueSize,
-				IssueDate = message.IssueDate,
-				UnderlyingSecurityType = message.UnderlyingSecurityType,
+				Id = message.SecurityId.ToStringId()
 			};
+			security.ApplyChanges(message, exchangeInfoProvider);
+			return security;
 		}
 
 		private static readonly SecurityIdGenerator _defaultGenerator = new SecurityIdGenerator();
