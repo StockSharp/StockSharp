@@ -240,6 +240,14 @@ namespace StockSharp.Algo.Testing
 			if (DriveInternal == null)
 				return Enumerable.Empty<TimeSpan>();
 
+			var timeFrames = _historySources
+				.Where(t => t.Key.Item2 == MarketDataTypes.CandleTimeFrame && (t.Key.Item1 == securityId || t.Key.Item1.IsDefault()))
+			    .Select(s => (TimeSpan)s.Key.Item3)
+				.ToArray();
+
+			if (timeFrames.Length > 0)
+				return timeFrames;
+
 			return DriveInternal
 				.GetAvailableDataTypes(securityId, StorageFormat)
 				.Where(t => t.MessageType == typeof(TimeFrameCandleMessage))
