@@ -47766,5 +47766,15 @@ namespace StockSharp.Localization
 		/// Market-data time zone.
 		/// </summary>
 		public static string MarketDataTimeZone => GetString(MarketDataTimeZoneKey);
+
+		/// <summary>
+		/// Exchange
+		/// </summary>
+		public const string ExchangeKey = nameof(Exchange);
+
+		/// <summary>
+		/// Exchange
+		/// </summary>
+		public static string Exchange => GetString(ExchangeKey);
 	}
 }
