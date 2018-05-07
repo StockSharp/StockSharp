@@ -214,5 +214,10 @@ namespace StockSharp.Messages
 		/// Market data request finished.
 		/// </summary>
 		MarketDataFinished,
+
+		/// <summary>
+		/// Remove object request (security, portfolio etc.).
+		/// </summary>
+		Remove,
 	}
 }

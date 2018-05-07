@@ -10,6 +10,7 @@ StockSharp API Change log
 * (bug) BufferMessageAdapter. Fix subscription for IsCalcVolumeProfile and AllowBuildFromSmallerTimeFrame.
 * (feature) Managers. Moved from Connector to BasketMessageAdatper.
 * (feature) StorageMessageAdapter. Store historical level1.
+* (feature) RemoveMessage.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

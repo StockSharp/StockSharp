@@ -102,6 +102,7 @@
     <Compile Include="IOrderLogMarketDepthBuilder.cs" />
     <Compile Include="MessagePriorityQueue.cs" />
     <Compile Include="ReConnectionSettings.cs" />
+    <Compile Include="RemoveMessage.cs" />
     <Compile Include="ResetMessage.cs" />
     <Compile Include="TargetPlatformAttribute.cs" />
     <Compile Include="IMessageChannel.cs" />
