@@ -126,6 +126,13 @@ P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppingImage/summary
 P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppedImage/summary;DocStr9505
 T:StockSharp.Xaml.Converters.SelectedItemsCountTextConverter/summary;DocStr9848
 T:StockSharp.Xaml.Converters.SeriesToStringConverter/summary;DocStr9307
+T:StockSharp.Xaml.PermissionCredentialsWindow/summary;DocStr10454
+F:StockSharp.Xaml.PermissionCredentialsWindow.OkCommand/summary;DocStr8459
+F:StockSharp.Xaml.PermissionCredentialsWindow.AddCommand/summary;DocStr8459
+F:StockSharp.Xaml.PermissionCredentialsWindow.RemoveCommand/summary;DocStr8459
+P:StockSharp.Xaml.PermissionCredentialsWindow.Credentials/summary;DocStr10444
+M:StockSharp.Xaml.PermissionCredentialsWindow.#ctor/summary;DocStr1
+M:StockSharp.Xaml.PermissionCredentialsWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.DataSourcePanel/summary;DocStr9358
 P:StockSharp.Xaml.DataSourcePanel.ItemsSource/summary;DocStr9159
 P:StockSharp.Xaml.DataSourcePanel.SelectedItem/summary;DocStr9359

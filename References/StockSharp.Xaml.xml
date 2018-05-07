@@ -577,6 +577,41 @@
         <see cref="T:System.TimeSpan" /> to <see cref="T:System.String" /> converter.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.PermissionCredentialsWindow">
+      <summary>
+            The window for edit credentials.
+            </summary>
+      <summary>
+            PermissionCredentialsWindow
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.OkCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.AddCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.RemoveCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PermissionCredentialsWindow.Credentials">
+      <summary>
+            Credentials.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PermissionCredentialsWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PermissionCredentialsWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PermissionCredentialsWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.DataSourcePanel">
       <summary>
             Select datasource panel.

@@ -18,6 +18,7 @@ StockSharp API Change log
 * (feature) FixServer. Multi leg securities support.
 * (feature) FixServer.NewOutMessage. FixSession as the first parameter.
 * (feature) PermissionCredentialsAuthorization.
+* (feature) PermissionCredentialsWindow.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
