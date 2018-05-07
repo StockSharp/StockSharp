@@ -806,32 +806,32 @@
     <member name="E:StockSharp.Fix.FastMessageAdapter.PropertyChanged">
       <summary>Occurs when a property value changes.</summary>
     </member>
-    <member name="T:StockSharp.Fix.ExtendedMessageTypes">
+    <member name="T:StockSharp.Fix.FixMessageTypes">
       <summary>
             FIX server extended messages.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.ExtendedMessageTypes.SeqReset">
+    <member name="F:StockSharp.Fix.FixMessageTypes.SeqReset">
       <summary>
         <see cref="T:StockSharp.Fix.FixSeqResetMessage" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.ExtendedMessageTypes.ResendRequest">
+    <member name="F:StockSharp.Fix.FixMessageTypes.ResendRequest">
       <summary>
         <see cref="T:StockSharp.Fix.FixResendRequestMessage" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.ExtendedMessageTypes.UserRequest">
+    <member name="F:StockSharp.Fix.FixMessageTypes.UserRequest">
       <summary>
         <see cref="T:StockSharp.Fix.FixUserRequestMessage" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.ExtendedMessageTypes.UserResponse">
+    <member name="F:StockSharp.Fix.FixMessageTypes.UserResponse">
       <summary>
         <see cref="T:StockSharp.Fix.FixUserResponseMessage" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.ExtendedMessageTypes.UserForceLogoff">
+    <member name="F:StockSharp.Fix.FixMessageTypes.UserForceLogoff">
       <summary>
         <see cref="T:StockSharp.Fix.FixUserForceLogoffMessage" />.
             </summary>
@@ -936,6 +936,11 @@
             Initialize <see cref="T:StockSharp.Fix.FixUserResponseMessage" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixUserResponseMessage.UserName">
+      <summary>
+            User name.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.FixUserResponseMessage.ResponseType">
       <summary>
             Response type.
@@ -961,6 +966,21 @@
             ID of the original message <see cref="P:StockSharp.Messages.ChangePasswordMessage.TransactionId" /> for which this message is a response.
             </summary>
     </member>
+    <member name="T:StockSharp.Fix.FixSecurityMessage">
+      <summary>
+            A message containing info about the security.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityMessage.Formula">
+      <summary>
+            The mathematic formula of index.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityMessage.Legs">
+      <summary>
+            Legs.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.FixServer">
       <summary>
             FIX server.
@@ -971,10 +991,11 @@
             New message event.
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.FixServer.RaiseNewOutMessage(StockSharp.Messages.Message)">
+    <member name="M:StockSharp.Fix.FixServer.RaiseNewOutMessage(StockSharp.Fix.FixSession,StockSharp.Messages.Message)">
       <summary>
             To call the event <see cref="E:StockSharp.Fix.FixServer.NewOutMessage" />.
             </summary>
+      <param name="session">Session.</param>
       <param name="message">Message.</param>
     </member>
     <member name="M:StockSharp.Fix.FixServer.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})">
@@ -4970,6 +4991,31 @@
             The response to <see cref="F:StockSharp.Fix.Native.FixMessages.OrderMassCancelRequest" />.
             </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.FixExtendedMessages">
+      <summary>
+            FIX extended messages codes.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityListUpload">
+      <summary>
+            The request for instruments uploading.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityListDelete">
+      <summary>
+            The request for instruments deleting.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.BoardUpdate">
+      <summary>
+            The request for board update.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.BoardDelete">
+      <summary>
+            The request for board delete.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FixTags">
       <summary>
             FIX protocol tags.
@@ -5259,11 +5305,19 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.IssueDate">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.ContractMultiplier">
       <summary>
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.RedemptionDate">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegIssueDate">
       <summary>
       </summary>
     </member>
@@ -5487,6 +5541,14 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoLegs">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegCurrency">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SecurityListRequestType">
       <summary>
       </summary>
@@ -5516,6 +5578,106 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.MassStatusReqType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegSymbol">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegSymbolSfx">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegSecurityID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegSecurityIDSource">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoLegSecurityAltID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegSecurityAltID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegSecurityAltIDSource">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegProduct">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegCFICode">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegSecurityType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegMaturityMonthYear">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegMaturityDate">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegStrikePrice">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegOptAttribute">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegContractMultiplier">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegCouponRate">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegSecurityExchange">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegIssuer">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.EncodedLegIssuerLen">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.EncodedLegIssuer">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegSecurityDesc">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.EncodedLegSecurityDescLen">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.EncodedLegSecurityDesc">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegRatioQty">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegSide">
       <summary>
       </summary>
     </member>
@@ -5664,6 +5826,42 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.CandleState">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.IssueSize">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.Formula">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegRoundLot">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegMinTradeVol">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegNoInstrAttrib">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegInstrAttribType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegInstrAttribValue">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegEndDate">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LegIssueSize">
       <summary>
       </summary>
     </member>
