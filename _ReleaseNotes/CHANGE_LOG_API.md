@@ -17,6 +17,7 @@ StockSharp API Change log
 * (feature) FIX connector. IssueDate, IssueSize translation support.
 * (feature) FixServer. Multi leg securities support.
 * (feature) FixServer.NewOutMessage. FixSession as the first parameter.
+* (feature) PermissionCredentialsAuthorization.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

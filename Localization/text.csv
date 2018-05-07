@@ -14896,3 +14896,14 @@ DocStr10439;Remove object request (security, portfolio etc.);Запрос на �
 DocStr10440;Removing object type;Тип удаляемого объекта
 DocStr10441;Removing object id;Идентификатор удаляемого объекта
 DocStr10442;Prevent updates;Выключить обновление
+DocStr10444;Credentials;Доступ
+DocStr10445;Get credentials by login;Получить доступ по логину
+DocStr10446;Credentials with set of permissions;Доступы с набором правам
+DocStr10447;Add new credentials;Добавить новые доступ
+DocStr10448;Delete credentials by login;Удалить доступ по логину
+DocStr10449;Operation result;Результат операции
+DocStr10450;Load credentials from file;Загрузить доступы из файла
+DocStr10451;Save credentials to file;Сохранить доступы в файл
+DocStr10452;IP address restrictions;Ограничения по IP адресам
+DocStr10453;Permission set;Набор прав
+DocStr10454;The window for edit credentials;Окно для редактирования списка доступов

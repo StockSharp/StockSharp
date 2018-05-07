@@ -21,7 +21,7 @@ namespace StockSharp.Algo
 		Save = 1,
 
 		/// <summary>
-		/// Market-data uploading.
+		/// Market-data downloading.
 		/// </summary>
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadMarketDataKey)]
 		[EnumMember]
@@ -124,5 +124,19 @@ namespace StockSharp.Algo
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ManageServerKey)]
 		[EnumMember]
 		ServerManage = DeleteUsers << 1,
+
+		/// <summary>
+		/// Trading.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str3599Key)]
+		[EnumMember]
+		Trading = ServerManage << 1,
+
+		/// <summary>
+		/// Withdraw.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.WithdrawKey)]
+		[EnumMember]
+		Withdraw = Trading << 1,
 	}
 }
