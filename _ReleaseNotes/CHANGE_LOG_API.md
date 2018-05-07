@@ -11,6 +11,8 @@ StockSharp API Change log
 * (feature) Managers. Moved from Connector to BasketMessageAdatper.
 * (feature) StorageMessageAdapter. Store historical level1.
 * (feature) RemoveMessage.
+* (bug) Backtesting. Fix candles subscription using external source https://stocksharp.ru/posts/m/43646/
+* (bug) Backtesting. Fix candles subscription generators.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

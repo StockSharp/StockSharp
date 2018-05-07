@@ -29,13 +29,15 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	using SourceKey = System.Tuple<Messages.SecurityId, Messages.MarketDataTypes, object>;
+
 	/// <summary>
 	/// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 	/// </summary>
 	public class HistoryMessageAdapter : MessageAdapter
 	{
-		private readonly HashSet<Tuple<SecurityId, MarketDataTypes>> _generators = new HashSet<Tuple<SecurityId, MarketDataTypes>>();
-		private readonly Dictionary<Tuple<SecurityId, MarketDataTypes, object>, Func<DateTimeOffset, IEnumerable<Message>>> _historySources = new Dictionary<Tuple<SecurityId, MarketDataTypes, object>, Func<DateTimeOffset, IEnumerable<Message>>>();
+		private readonly Dictionary<SourceKey, MarketDataGenerator> _generators = new Dictionary<SourceKey, MarketDataGenerator>();
+		private readonly Dictionary<SourceKey, Func<DateTimeOffset, IEnumerable<Message>>> _historySources = new Dictionary<SourceKey, Func<DateTimeOffset, IEnumerable<Message>>>();
 
 		private bool _isSuspended;
 		private bool _isStarted;
@@ -248,6 +250,14 @@ namespace StockSharp.Algo.Testing
 			if (timeFrames.Length > 0)
 				return timeFrames;
 
+			timeFrames = _generators
+			    .Where(t => t.Key.Item2 == MarketDataTypes.CandleTimeFrame && (t.Key.Item1 == securityId || t.Key.Item1.IsDefault()))
+			    .Select(s => (TimeSpan)s.Key.Item3)
+			    .ToArray();
+
+			if (timeFrames.Length > 0)
+				return timeFrames;
+
 			return DriveInternal
 				.GetAvailableDataTypes(securityId, StorageFormat)
 				.Where(t => t.MessageType == typeof(TimeFrameCandleMessage))
@@ -394,10 +404,10 @@ namespace StockSharp.Algo.Testing
 				case ExtendedMessageTypes.Generator:
 				{
 					var generatorMsg = (GeneratorMessage)message;
-					var item = Tuple.Create(generatorMsg.SecurityId, generatorMsg.DataType);
+					var item = Tuple.Create(generatorMsg.SecurityId, generatorMsg.DataType, generatorMsg.Arg);
 
 					if (generatorMsg.IsSubscribe)
-						_generators.Add(item);
+						_generators.Add(item, generatorMsg.Generator);
 					else
 						_generators.Remove(item);
 
@@ -441,7 +451,7 @@ namespace StockSharp.Algo.Testing
 			{
 				case MarketDataTypes.Level1:
 				{
-					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+					if (_generators.ContainsKey(Tuple.Create(message.SecurityId, message.DataType, message.Arg)))
 						break;
 
 					if (message.IsSubscribe)
@@ -478,7 +488,7 @@ namespace StockSharp.Algo.Testing
 
 				case MarketDataTypes.MarketDepth:
 				{
-					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+					if (_generators.ContainsKey(Tuple.Create(message.SecurityId, message.DataType, message.Arg)))
 						break;
 
 					if (message.IsSubscribe)
@@ -498,7 +508,7 @@ namespace StockSharp.Algo.Testing
 
 				case MarketDataTypes.Trades:
 				{
-					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+					if (_generators.ContainsKey(Tuple.Create(message.SecurityId, message.DataType, message.Arg)))
 						break;
 
 					if (message.IsSubscribe)
@@ -518,7 +528,7 @@ namespace StockSharp.Algo.Testing
 
 				case MarketDataTypes.OrderLog:
 				{
-					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+					if (_generators.ContainsKey(Tuple.Create(message.SecurityId, message.DataType, message.Arg)))
 						break;
 
 					if (message.IsSubscribe)
@@ -543,7 +553,7 @@ namespace StockSharp.Algo.Testing
 				case MarketDataTypes.CandlePnF:
 				case MarketDataTypes.CandleRenko:
 				{
-					if (_generators.Contains(Tuple.Create(message.SecurityId, MarketDataTypes.Trades)))
+					if (_generators.ContainsKey(Tuple.Create(message.SecurityId, MarketDataTypes.Trades, message.Arg)))
 					{
 						if (message.IsSubscribe)
 							SendOutMarketDataNotSupported(message.TransactionId);
