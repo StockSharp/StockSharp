@@ -2227,6 +2227,7 @@ M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.#ctor(StockSharp.Algo.Storages.Cs
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.#ctor(StockSharp.Algo.Storages.Csv.CsvEntityRegistry,System.String)/param/fileName;DocStr9396
 P:StockSharp.Algo.Storages.Csv.CsvEntityList`1.FileName/summary;DocStr9396
 P:StockSharp.Algo.Storages.Csv.CsvEntityList`1.DelayAction/summary;DocStr1335
+P:StockSharp.Algo.Storages.Csv.CsvEntityList`1.PreventUpdates/summary;DocStr10442
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Save(`0)/summary;DocStr9398
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Save(`0)/param/entity;DocStr9399
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.IsChanged(`0)/summary;DocStr9670

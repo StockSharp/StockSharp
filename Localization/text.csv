@@ -14895,3 +14895,4 @@ DocStr10438;Removing object types;Типы удаляемых объектов
 DocStr10439;Remove object request (security, portfolio etc.);Запрос на удаление объекта (инструмент, счет и т.д.)
 DocStr10440;Removing object type;Тип удаляемого объекта
 DocStr10441;Removing object id;Идентификатор удаляемого объекта
+DocStr10442;Prevent updates;Выключить обновление

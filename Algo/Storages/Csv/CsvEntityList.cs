@@ -109,6 +109,11 @@ namespace StockSharp.Algo.Storages.Csv
 		}
 
 		/// <summary>
+		/// Prevent updates.
+		/// </summary>
+		public bool PreventUpdates { get; set; }
+
+		/// <summary>
 		/// Save object into storage.
 		/// </summary>
 		/// <param name="entity">Trade object.</param>
@@ -123,7 +128,7 @@ namespace StockSharp.Algo.Storages.Csv
 					Add(entity);
 					return;
 				}
-				else if (IsChanged(entity))
+				else if (!PreventUpdates && IsChanged(entity))
 					UpdateCache(entity);
 				else
 					return;

@@ -13,6 +13,7 @@ StockSharp API Change log
 * (feature) RemoveMessage.
 * (bug) Backtesting. Fix candles subscription using external source https://stocksharp.ru/posts/m/43646/
 * (bug) Backtesting. Fix candles subscription generators.
+* (feature) CsvEntityList.PreventUpdates
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
