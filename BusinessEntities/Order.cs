@@ -615,6 +615,49 @@ namespace StockSharp.BusinessEntities
 		public decimal? Slippage { get; set; }
 
 		/// <summary>
+		/// To copy fields of the current position to <paramref name="order" />.
+		/// </summary>
+		/// <param name="order">The position in which you should to copy fields.</param>
+		public void CopyTo(Order order)
+		{
+			order.Type = Type;
+			order.Id = Id;
+			order.LocalTime = LocalTime;
+			order.Portfolio = Portfolio;
+			order.State = State;
+			order.TransactionId = TransactionId;
+			order.LastChangeTime = LastChangeTime;
+			order.Balance = Balance;
+			order.BoardId = BoardId;
+			order.BrokerCode = BrokerCode;
+			order.ClientCode = ClientCode;
+			order.Comment = Comment;
+			order.Commission = Commission;
+			order.Condition = Condition;
+			order.Currency = Currency;
+			order.Direction = Direction;
+			order.ExpiryDate = ExpiryDate;
+			order.ExtensionInfo = ExtensionInfo != null ? new Dictionary<string, object>(ExtensionInfo) : null;
+			order.IsMargin = IsMargin;
+			order.IsMarketMaker = IsMarketMaker;
+			order.IsSystem = IsSystem;
+			order.LatencyCancellation = LatencyCancellation;
+			order.LatencyRegistration = LatencyRegistration;
+			order.Price = Price;
+			order.RepoInfo = RepoInfo;
+			order.RpsInfo = RpsInfo;
+			order.Security = Security;
+			order.Slippage = Slippage;
+			order.Status = Status;
+			order.StringId = StringId;
+			order.Time = Time;
+			order.TimeInForce = TimeInForce;
+			order.UserOrderId = UserOrderId;
+			order.VisibleVolume = VisibleVolume;
+			order.Volume = Volume;
+		}
+
+		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>
