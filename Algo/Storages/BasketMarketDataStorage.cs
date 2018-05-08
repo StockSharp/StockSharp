@@ -51,8 +51,14 @@ namespace StockSharp.Algo.Storages
 		/// Add inner storage with the specified request id.
 		/// </summary>
 		/// <param name="storage">Market-data storage.</param>
-		/// <param name="transactionId">Request identifier.</param>
+		/// <param name="transactionId">The subscription identifier.</param>
 		void Add(IMarketDataStorage storage, long transactionId);
+
+		/// <summary>
+		/// Remove inner storage.
+		/// </summary>
+		/// <param name="originalTransactionId">The subscription identifier.</param>
+		void Remove(long originalTransactionId);
 	}
 
 	/// <summary>
@@ -276,7 +282,7 @@ namespace StockSharp.Algo.Storages
 		
 		private class BasketMarketDataStorageInnerList : CachedSynchronizedList<IMarketDataStorage>, IBasketMarketDataStorageInnerList
 		{
-			private readonly Dictionary<IMarketDataStorage, long> _transactionIds = new Dictionary<IMarketDataStorage, long>();
+			private readonly PairSet<IMarketDataStorage, long> _transactionIds = new PairSet<IMarketDataStorage, long>();
 
 			public long TryGetTransactionId(IMarketDataStorage storage) => _transactionIds.TryGetValue(storage);
 
@@ -286,6 +292,12 @@ namespace StockSharp.Algo.Storages
 					_transactionIds[storage] = transactionId;
 
 				base.Add(storage);
+			}
+
+			public void Remove(long originalTransactionId)
+			{
+				if (_transactionIds.TryGetKey(originalTransactionId, out var storage))
+					Remove(storage);
 			}
 
 			protected override bool OnRemove(IMarketDataStorage item)

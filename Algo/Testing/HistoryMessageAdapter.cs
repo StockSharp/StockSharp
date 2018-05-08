@@ -119,7 +119,7 @@ namespace StockSharp.Algo.Testing
 		public HistoryMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			BasketStorage = new CachedBasketMarketDataStorage<Message>
+			BasketStorage = new CachedBasketMarketDataStorage<Message>(transactionIdGenerator)
 			{
 				Boards = Enumerable.Empty<ExchangeBoard>()
 			};
@@ -462,15 +462,15 @@ namespace StockSharp.Algo.Testing
 						{
 							BasketStorage.AddStorage(StorageRegistry.GetLevel1MessageStorage(security, Drive, StorageFormat), message.TransactionId);
 
-							BasketStorage.AddStorage(new InMemoryMarketDataStorage<ClearingMessage>(security, null, date => new[]
-							{
-								new ClearingMessage
-								{
-									LocalTime = date.Date + security.Board.ExpiryTime,
-									SecurityId = securityId,
-									ClearMarketDepth = true
-								}
-							}), message.TransactionId);
+							//BasketStorage.AddStorage(new InMemoryMarketDataStorage<ClearingMessage>(security, null, date => new[]
+							//{
+							//	new ClearingMessage
+							//	{
+							//		LocalTime = date.Date + security.Board.ExpiryTime,
+							//		SecurityId = securityId,
+							//		ClearMarketDepth = true
+							//	}
+							//}), message.TransactionId);
 						}
 						else
 						{
@@ -479,8 +479,8 @@ namespace StockSharp.Algo.Testing
 					}
 					else
 					{
-						BasketStorage.RemoveStorage<IMarketDataStorage<Level1ChangeMessage>>(security, MessageTypes.Level1Change, null);
-						BasketStorage.RemoveStorage<InMemoryMarketDataStorage<ClearingMessage>>(security, ExtendedMessageTypes.Clearing, null);
+						BasketStorage.RemoveStorage(message.OriginalTransactionId);
+						//BasketStorage.RemoveStorage<InMemoryMarketDataStorage<ClearingMessage>>(security, ExtendedMessageTypes.Clearing, null);
 					}
 
 					break;
@@ -501,7 +501,7 @@ namespace StockSharp.Algo.Testing
 							message.TransactionId);
 					}
 					else
-						BasketStorage.RemoveStorage<IMarketDataStorage<QuoteChangeMessage>>(security, MessageTypes.QuoteChange, null);
+						BasketStorage.RemoveStorage(message.OriginalTransactionId);
 					
 					break;
 				}
@@ -521,7 +521,7 @@ namespace StockSharp.Algo.Testing
 							message.TransactionId);
 					}
 					else
-						BasketStorage.RemoveStorage<IMarketDataStorage<ExecutionMessage>>(security, MessageTypes.Execution, ExecutionTypes.Tick);
+						BasketStorage.RemoveStorage(message.OriginalTransactionId);
 					
 					break;
 				}
@@ -541,7 +541,7 @@ namespace StockSharp.Algo.Testing
 							message.TransactionId);
 					}
 					else
-						BasketStorage.RemoveStorage<IMarketDataStorage<ExecutionMessage>>(security, MessageTypes.Execution, ExecutionTypes.OrderLog);
+						BasketStorage.RemoveStorage(message.OriginalTransactionId);
 
 					break;
 				}
@@ -561,8 +561,6 @@ namespace StockSharp.Algo.Testing
 						return;
 					}
 
-					var msgType = message.DataType.ToCandleMessageType();
-
 					if (message.IsSubscribe)
 					{
 						var historySource = GetHistorySource();
@@ -574,7 +572,7 @@ namespace StockSharp.Algo.Testing
 							message.TransactionId);
 					}
 					else
-						BasketStorage.RemoveStorage<IMarketDataStorage<CandleMessage>>(security, msgType, message.Arg);
+						BasketStorage.RemoveStorage(message.OriginalTransactionId);
 
 					break;
 				}

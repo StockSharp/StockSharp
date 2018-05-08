@@ -29,6 +29,7 @@ namespace StockSharp.Algo.Storages
 		private readonly SyncObject _moveNextSyncRoot = new SyncObject();
 		private readonly SyncObject _syncRoot = new SyncObject();
 
+		private readonly IdGenerator _transactionIdGenerator;
 		private readonly BasketMarketDataStorage<T> _basketStorage;
 		private readonly CancellationTokenSource _cancellationToken;
 
@@ -37,8 +38,6 @@ namespace StockSharp.Algo.Storages
 		private bool _isTimeLineAdded;
 
 		private DateTimeOffset _currentTime;
-
-		private T _currentMessage;
 
 		///// <summary>
 		///// Embedded storages of market data.
@@ -122,21 +121,22 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CachedBasketMarketDataStorage{T}"/>.
 		/// </summary>
-		public CachedBasketMarketDataStorage()
-			: this(new BasketMarketDataStorage<T>())
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
+		public CachedBasketMarketDataStorage(IdGenerator transactionIdGenerator)
+			: this(transactionIdGenerator, new BasketMarketDataStorage<T>())
 		{
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CachedBasketMarketDataStorage{T}"/>.
 		/// </summary>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		/// <param name="basketStorage">The aggregator-storage, allowing to load data simultaneously from several market data storages.</param>
-		public CachedBasketMarketDataStorage(BasketMarketDataStorage<T> basketStorage)
+		public CachedBasketMarketDataStorage(IdGenerator transactionIdGenerator, BasketMarketDataStorage<T> basketStorage)
 		{
-			if (basketStorage == null)
-				throw new ArgumentNullException(nameof(basketStorage));
+			_transactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
+			_basketStorage = basketStorage ?? throw new ArgumentNullException(nameof(basketStorage));
 
-			_basketStorage = basketStorage;
 			_cancellationToken = new CancellationTokenSource();
 
 			ThreadingHelper
@@ -149,11 +149,14 @@ namespace StockSharp.Algo.Storages
 		/// Add inner market data storage.
 		/// </summary>
 		/// <param name="storage">Market data storage.</param>
-		/// <param name="transactionId">Request identifier.</param>
+		/// <param name="transactionId">The subscription identifier.</param>
 		public void AddStorage(IMarketDataStorage storage, long transactionId)
 		{
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
+
+			if (transactionId == 0)
+				throw new ArgumentNullException(nameof(transactionId));
 
 			_isChanged = true;
 			_actions.Add(Tuple.Create(storage, transactionId));
@@ -165,27 +168,14 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Remove inner market data storage.
 		/// </summary>
-		/// <typeparam name="TStorage">Type of storage.</typeparam>
-		/// <param name="security">Security.</param>
-		/// <param name="messageType">Message type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="messageType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-		public void RemoveStorage<TStorage>(Security security, MessageTypes messageType, object arg)
-			where TStorage : class, IMarketDataStorage
+		/// <param name="originalTransactionId">The subscription identifier.</param>
+		public void RemoveStorage(long originalTransactionId)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			var storage = _basketStorage
-				.InnerStorages
-				.SyncGet(c => c
-					.OfType<TStorage>()
-					.FirstOrDefault(s => s.Security == security && ((arg == null && s.Arg == null) || (s.Arg.Compare(arg) == 0))));
-
-			if (storage == null)
-				return;
+			if (originalTransactionId == 0)
+				throw new ArgumentNullException(nameof(originalTransactionId));
 
 			_isChanged = true;
-			_actions.Add(Tuple.Create((IMarketDataStorage)storage, -1L));
+			_actions.Add(Tuple.Create((IMarketDataStorage)null, originalTransactionId));
 
 			_messageQueue.Close();
 			_syncRoot.PulseSignal();
@@ -201,7 +191,7 @@ namespace StockSharp.Algo.Storages
 		{
 			if (MarketTimeChangedInterval != TimeSpan.Zero && !_isTimeLineAdded)
 			{
-				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(null, null, GetTimeLine), 0);
+				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(null, null, GetTimeLine), _transactionIdGenerator.GetNextId());
 
 				_isTimeLineAdded = true;
 				_moveNextSyncRoot.WaitSignal();
@@ -246,6 +236,8 @@ namespace StockSharp.Algo.Storages
             _basketStorage.InnerStorages.Clear();
 		}
 
+		private T _currentMessage;
+
 		/// <summary>
 		/// Gets the current element in the collection.
 		/// </summary>
@@ -287,11 +279,12 @@ namespace StockSharp.Algo.Storages
 					foreach (var action in _actions.CopyAndClear())
 					{
 						var storage = action.Item1;
+						var subscriptionId = action.Item2;
 
-						if (action.Item2 >= 0)
-							_basketStorage.InnerStorages.Add(storage, action.Item2);
+						if (storage != null)
+							_basketStorage.InnerStorages.Add(storage, subscriptionId);
 						else
-							_basketStorage.InnerStorages.Remove(storage);
+							_basketStorage.InnerStorages.Remove(subscriptionId);
 					}
 
 					var boards = Boards.ToArray();
