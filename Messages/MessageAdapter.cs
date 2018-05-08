@@ -99,17 +99,18 @@ namespace StockSharp.Messages
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		protected MessageAdapter(IdGenerator transactionIdGenerator)
 		{
-			if (transactionIdGenerator == null)
-				throw new ArgumentNullException(nameof(transactionIdGenerator));
-
 			Platform = Platforms.AnyCPU;
 
-			TransactionIdGenerator = transactionIdGenerator;
+			TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
 
 			StorageName = GetType().Namespace.Remove(nameof(StockSharp)).Remove(".");
 
-			Platform = GetType().GetAttribute<TargetPlatformAttribute>()?.Platform ?? Platforms.AnyCPU;
+			Platform = GetType().GetPlatform();
+
+			var attr = GetType().GetAttribute<MessageAdapterCategoryAttribute>();
+			if (attr != null)
+				Categories = attr.Categories;
 		}
 
 		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
@@ -226,6 +227,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual MessageAdapterCategories Categories { get; }
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual string StorageName { get; }
 
 		/// <inheritdoc />
@@ -253,10 +258,7 @@ namespace StockSharp.Messages
 		public virtual Tuple<string, Type>[] SecurityExtendedFields { get; } = ArrayHelper.Empty<Tuple<string, Type>>();
 
 		/// <inheritdoc />
-		public virtual OrderCondition CreateOrderCondition()
-		{
-			return null;
-		}
+		public virtual OrderCondition CreateOrderCondition() => null;
 
 		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
@@ -269,13 +271,7 @@ namespace StockSharp.Messages
 		public IdGenerator TransactionIdGenerator
 		{
 			get => _transactionIdGenerator;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_transactionIdGenerator = value;
-			}
+			set => _transactionIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>

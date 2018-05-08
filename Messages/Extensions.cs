@@ -23,6 +23,7 @@ namespace StockSharp.Messages
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Localization;
 	using Ecng.Net;
 
 	using MoreLinq;
@@ -778,6 +779,16 @@ namespace StockSharp.Messages
 			message.SecurityType = SecurityTypes.CryptoCurrency;
 
 			return message;
+		}
+
+		/// <summary>
+		/// Get prefered language.
+		/// </summary>
+		/// <param name="categories">Message adapter categories.</param>
+		/// <returns>Language</returns>
+		public static Languages GetPreferefLanguage(this MessageAdapterCategories? categories)
+		{
+			return categories?.Contains(MessageAdapterCategories.Russia) == true ? Languages.Russian : Languages.English;
 		}
 	}
 }

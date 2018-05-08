@@ -245,6 +245,9 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override bool IsSupportNativeSecurityLookup => true;
 
+		/// <inheritdoc />
+		public override MessageAdapterCategories Categories => GetSortedAdapters().Select(a => a.Categories).JoinMask();
+
 		/// <summary>
 		/// Restore subscription on reconnect.
 		/// </summary>

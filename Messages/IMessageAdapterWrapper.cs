@@ -242,6 +242,9 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportCandlesUpdates => InnerAdapter.IsSupportCandlesUpdates;
 
 		/// <inheritdoc />
+		public virtual MessageAdapterCategories Categories => InnerAdapter.Categories;
+
+		/// <inheritdoc />
 		public virtual OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
 
 		/// <inheritdoc />

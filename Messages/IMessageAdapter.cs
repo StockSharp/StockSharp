@@ -135,6 +135,11 @@ namespace StockSharp.Messages
 		bool IsSupportCandlesUpdates { get; }
 
 		/// <summary>
+		/// Adapter categories.
+		/// </summary>
+		MessageAdapterCategories Categories { get; }
+
+		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
 		/// </summary>
 		OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; }
