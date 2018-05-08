@@ -21,6 +21,7 @@ StockSharp API Change log
 * (feature) PermissionCredentialsWindow.
 * (bug) FIX connector. SpectraFixDialect. Order mass cancel fix.
 * (feature) FixMessageAdapter. SupportedMessages from Dialect.
+* (bug) OrderGrid. Active filters fix.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
