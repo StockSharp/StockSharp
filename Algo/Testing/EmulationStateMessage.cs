@@ -15,6 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Testing
 {
+	using System;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -22,20 +24,15 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	class EmulationStateMessage : Message
 	{
-		///// <summary>
-		///// Дата в истории, с которой необходимо начать эмуляцию.
-		///// </summary>
-		//public DateTimeOffset StartDate { get; set; }
+		/// <summary>
+		/// Date in history for starting the paper trading.
+		/// </summary>
+		public DateTimeOffset StartDate { get; set; }
 
-		///// <summary>
-		///// Дата в истории, на которой необходимо закончить эмуляцию (дата включается).
-		///// </summary>
-		//public DateTimeOffset StopDate { get; set; }
-
-		///// <summary>
-		///// Предыдущее состояние.
-		///// </summary>
-		//public EmulationStates OldState { get; set; }
+		/// <summary>
+		/// Date in history to stop the paper trading (date is included).
+		/// </summary>
+		public DateTimeOffset StopDate { get; set; }
 
 		/// <summary>
 		/// The state been transferred.
@@ -58,10 +55,9 @@ namespace StockSharp.Algo.Testing
 		{
 			return new EmulationStateMessage
 			{
-				//OldState = OldState,
 				State = State,
-				//StartDate = StartDate,
-				//StopDate = StopDate,
+				StartDate = StartDate,
+				StopDate = StopDate,
 			};
 		}
 	}

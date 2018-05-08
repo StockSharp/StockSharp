@@ -161,20 +161,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Date in history for starting the paper trading.
 		/// </summary>
-		public DateTimeOffset StartDate
-		{
-			get => BasketStorage.StartDate;
-			set => BasketStorage.StartDate = value;
-		}
+		public DateTimeOffset StartDate { get; set; }
 
 		/// <summary>
 		/// Date in history to stop the paper trading (date is included).
 		/// </summary>
-		public DateTimeOffset StopDate
-		{
-			get => BasketStorage.StopDate;
-			set => BasketStorage.StopDate = value;
-		}
+		public DateTimeOffset StopDate { get; set; }
 
 		/// <summary>
 		/// Check loading dates are they tradable.
@@ -374,7 +366,10 @@ namespace StockSharp.Algo.Testing
 							if (_isStarted)
 								_isSuspended = false;
 							else
+							{
 								_isStarted = true;
+								BasketStorage.Start(stateMsg.StartDate.IsDefault() ? StartDate : stateMsg.StartDate, stateMsg.StopDate.IsDefault() ? StopDate : stateMsg.StopDate);
+							}
 
 							break;
 						}
@@ -389,6 +384,7 @@ namespace StockSharp.Algo.Testing
 						case EmulationStates.Stopping:
 						{
 							_isSuspended = false;
+							BasketStorage.Stop();
 							break;
 						}
 					}

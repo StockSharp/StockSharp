@@ -66,16 +66,6 @@ namespace StockSharp.Algo.Storages
 			set => _messageQueue.MaxSize = value;
 		}
 
-		/// <summary>
-		/// Date in history for starting the paper trading.
-		/// </summary>
-		public DateTimeOffset StartDate { get; set; }
-
-		/// <summary>
-		/// Date in history to stop the paper trading (date is included).
-		/// </summary>
-		public DateTimeOffset StopDate { get; set; }
-
 		private int _postTradeMarketTimeChangedCount = 2;
 
 		/// <summary>
@@ -138,11 +128,6 @@ namespace StockSharp.Algo.Storages
 			_basketStorage = basketStorage ?? throw new ArgumentNullException(nameof(basketStorage));
 
 			_cancellationToken = new CancellationTokenSource();
-
-			ThreadingHelper
-				.Thread(() => CultureInfo.InvariantCulture.DoInCulture(OnLoad))
-				.Name("Cached marketdata storage thread.")
-				.Launch();
 		}
 
 		/// <summary>
@@ -252,83 +237,102 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			_cancellationToken.Cancel();
-			_syncRoot.PulseSignal();
+			Stop();
 
 			base.DisposeManaged();
 		}
 
-		private void OnLoad()
+		/// <summary>
+		/// Start data loading.
+		/// </summary>
+		/// <param name="startDate">Date in history for starting the paper trading.</param>
+		/// <param name="stopDate">Date in history to stop the paper trading (date is included).</param>
+		public void Start(DateTimeOffset startDate, DateTimeOffset stopDate)
 		{
-			try
-			{
-				var messageTypes = new[] { MessageTypes.Time, ExtendedMessageTypes.Clearing };
-				var token = _cancellationToken.Token;
-
-				while (!token.IsCancellationRequested)
+			ThreadingHelper
+				.Thread(() => CultureInfo.InvariantCulture.DoInCulture(() =>
 				{
-					_syncRoot.WaitSignal();
-					_messageQueue.Clear();
-					_messageQueue.Open();
-
-					_isInitialized = true;
-					_isChanged = false;
-
-					_moveNextSyncRoot.PulseSignal();
-
-					foreach (var action in _actions.CopyAndClear())
+					try
 					{
-						var storage = action.Item1;
-						var subscriptionId = action.Item2;
+						var messageTypes = new[] { MessageTypes.Time, ExtendedMessageTypes.Clearing };
+						var token = _cancellationToken.Token;
 
-						if (storage != null)
-							_basketStorage.InnerStorages.Add(storage, subscriptionId);
-						else
-							_basketStorage.InnerStorages.Remove(subscriptionId);
-					}
-
-					var boards = Boards.ToArray();
-					var loadDate = _currentTime != DateTimeOffset.MinValue ? _currentTime.Date : StartDate;
-					var startTime = _currentTime;
-					var checkDates = CheckTradableDates && boards.Length > 0;
-
-					while (loadDate.Date <= StopDate.Date && !_isChanged && !token.IsCancellationRequested)
-					{
-						if (!checkDates || boards.Any(b => b.IsTradeDate(loadDate, true)))
+						while (!IsDisposed && !token.IsCancellationRequested)
 						{
-							this.AddInfoLog("Loading {0}", loadDate.Date);
+							_syncRoot.WaitSignal();
+							_messageQueue.Clear();
+							_messageQueue.Open();
 
-							var messages = _basketStorage.Load(loadDate.UtcDateTime.Date);
+							_isInitialized = true;
+							_isChanged = false;
 
-							// storage for the specified date contains only time messages and clearing events
-							var noData = !messages.DataTypes.Except(messageTypes).Any();
+							_moveNextSyncRoot.PulseSignal();
 
-							if (noData)
-								EnqueueMessages(loadDate, startTime, token, GetSimpleTimeLine(loadDate));
-							else
-								EnqueueMessages(loadDate, startTime, token, messages);
+							foreach (var action in _actions.CopyAndClear())
+							{
+								var storage = action.Item1;
+								var subscriptionId = action.Item2;
+
+								if (storage != null)
+									_basketStorage.InnerStorages.Add(storage, subscriptionId);
+								else
+									_basketStorage.InnerStorages.Remove(subscriptionId);
+							}
+
+							var boards = Boards.ToArray();
+							var loadDate = _currentTime != DateTimeOffset.MinValue ? _currentTime.Date : startDate;
+							var startTime = _currentTime;
+							var checkDates = CheckTradableDates && boards.Length > 0;
+
+							while (loadDate.Date <= stopDate.Date && !_isChanged && !token.IsCancellationRequested)
+							{
+								if (!checkDates || boards.Any(b => b.IsTradeDate(loadDate, true)))
+								{
+									this.AddInfoLog("Loading {0}", loadDate.Date);
+
+									var messages = _basketStorage.Load(loadDate.UtcDateTime.Date);
+
+									// storage for the specified date contains only time messages and clearing events
+									var noData = !messages.DataTypes.Except(messageTypes).Any();
+
+									if (noData)
+										EnqueueMessages(startDate, stopDate, loadDate, startTime, token, GetSimpleTimeLine(loadDate));
+									else
+										EnqueueMessages(startDate, stopDate, loadDate, startTime, token, messages);
+								}
+
+								loadDate = loadDate.Date.AddDays(1).ApplyTimeZone(loadDate.Offset);
+							}
+
+							if (!_isChanged)
+								EnqueueMessage(new LastMessage { LocalTime = stopDate });
+
+							_isInitialized = false;
 						}
-
-						loadDate = loadDate.Date.AddDays(1).ApplyTimeZone(loadDate.Offset);
 					}
-
-					if (!_isChanged)
-						EnqueueMessage(new LastMessage { LocalTime = StopDate });
-
-					_isInitialized = false;
-				}
-			}
-			catch (Exception ex)
-			{
-				EnqueueMessage(ex.ToErrorMessage());
-				EnqueueMessage(new LastMessage { IsError = true });
-			}
+					catch (Exception ex)
+					{
+						EnqueueMessage(ex.ToErrorMessage());
+						EnqueueMessage(new LastMessage { IsError = true });
+					}
+				}))
+				.Name("Cached marketdata storage thread.")
+				.Launch();
 		}
 
-		private void EnqueueMessages(DateTimeOffset loadDate, DateTimeOffset startTime, CancellationToken token, IEnumerable<Message> messages)
+		/// <summary>
+		/// Stop data loading.
+		/// </summary>
+		public void Stop()
 		{
-			var checkFromTime = loadDate.Date == StartDate.Date && loadDate.TimeOfDay != TimeSpan.Zero;
-			var checkToTime = loadDate.Date == StopDate.Date;
+			_cancellationToken.Cancel();
+			_syncRoot.PulseSignal();
+		}
+
+		private void EnqueueMessages(DateTimeOffset startDate, DateTimeOffset stopDate, DateTimeOffset loadDate, DateTimeOffset startTime, CancellationToken token, IEnumerable<Message> messages)
+		{
+			var checkFromTime = loadDate.Date == startDate.Date && loadDate.TimeOfDay != TimeSpan.Zero;
+			var checkToTime = loadDate.Date == stopDate.Date;
 
 			foreach (var msg in messages)
 			{
@@ -350,7 +354,7 @@ namespace StockSharp.Algo.Storages
 					// пропускаем только стаканы, тики и ОЛ
 					if (msg.Type == MessageTypes.QuoteChange || msg.Type == MessageTypes.Execution)
 					{
-						if (msg.LocalTime < StartDate)
+						if (msg.LocalTime < startDate)
 							continue;
 
 						checkFromTime = false;
@@ -359,7 +363,7 @@ namespace StockSharp.Algo.Storages
 
 				if (checkToTime)
 				{
-					if (msg.LocalTime > StopDate)
+					if (msg.LocalTime > stopDate)
 						break;
 				}
 
