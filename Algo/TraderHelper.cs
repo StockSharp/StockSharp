@@ -2755,7 +2755,7 @@ namespace StockSharp.Algo
 				if (isOverride || security.Decimals == null)
 					security.Decimals = message.Decimals.Value;
 
-				if (message.PriceStep == null)
+				if (message.PriceStep == null && security.PriceStep == null)
 					security.PriceStep = message.Decimals.Value.GetPriceStep();
 			}
 
