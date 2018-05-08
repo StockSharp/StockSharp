@@ -19,6 +19,8 @@ StockSharp API Change log
 * (feature) FixServer.NewOutMessage. FixSession as the first parameter.
 * (feature) PermissionCredentialsAuthorization.
 * (feature) PermissionCredentialsWindow.
+* (bug) FIX connector. SpectraFixDialect. Order mass cancel fix.
+* (feature) FixMessageAdapter. SupportedMessages from Dialect.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

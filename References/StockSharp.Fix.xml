@@ -242,6 +242,9 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TimeFrames">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedMessages">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedMarketDataTypes">
       <inheritdoc />
     </member>
@@ -644,6 +647,11 @@
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeFrames">
       <summary>
             Possible time-frames.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.SupportedMessages">
+      <summary>
+            Supported by adapter message types.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.SupportedMarketDataTypes">
@@ -6456,55 +6464,34 @@
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition">
-      <summary>
-            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
-            </summary>
-      <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired">
-      <summary>
-        <see cref="T:StockSharp.Messages.OrderStatusMessage" /> required to get orders and own trades.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.SecurityLookupRequired">
-      <summary>
-        <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.PortfolioLookupRequired">
-      <summary>
-        <see cref="T:StockSharp.Messages.PortfolioLookupMessage" /> required to get portfolios and positions.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.OrderCancelVolumeRequired">
-      <summary>
-        <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsNativeIdentifiers">
-      <summary>
-            Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsNativeIdentifiersPersistable">
-      <summary>
-            Native identifier can be stored.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportSubscriptionByPortfolio">
-      <summary>
-            Support portfolio subscriptions.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.StorageName">
-      <summary>
-            The storage name, associated with the adapter.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.SecurityExtendedFields">
-      <summary>
-            Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.SupportedMarketDataTypes">
       <inheritdoc />
@@ -6513,10 +6500,7 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Send message.
-            </summary>
-      <param name="message">Message.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
       <summary>
@@ -6604,22 +6588,13 @@
             </summary>
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.FixDialects">
       <summary>
