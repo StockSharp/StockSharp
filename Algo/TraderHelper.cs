@@ -2691,7 +2691,8 @@ namespace StockSharp.Algo
 		/// <param name="security">Security.</param>
 		/// <param name="message">Meta info.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		public static void ApplyChanges(this Security security, SecurityMessage message, IExchangeInfoProvider exchangeInfoProvider)
+		/// <param name="isOverride">Override previous security data by new values.</param>
+		public static void ApplyChanges(this Security security, SecurityMessage message, IExchangeInfoProvider exchangeInfoProvider, bool isOverride = true)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -2705,26 +2706,45 @@ namespace StockSharp.Algo
 			var secId = message.SecurityId;
 
 			if (!secId.SecurityCode.IsEmpty())
-				security.Code = secId.SecurityCode;
+			{
+				if (isOverride || security.Code.IsEmpty())
+					security.Code = secId.SecurityCode;
+			}
 
 			if (!secId.BoardCode.IsEmpty())
-				security.Board = exchangeInfoProvider.GetOrCreateBoard(secId.BoardCode);
+			{
+				if (isOverride || security.Board == null)
+					security.Board = exchangeInfoProvider.GetOrCreateBoard(secId.BoardCode);
+			}
 
 			if (message.Currency != null)
-				security.Currency = message.Currency;
+			{
+				if (isOverride || security.Currency == null)
+					security.Currency = message.Currency;
+			}
 
 			if (message.ExpiryDate != null)
-				security.ExpiryDate = message.ExpiryDate;
+			{
+				if (isOverride || security.ExpiryDate == null)
+					security.ExpiryDate = message.ExpiryDate;
+			}
 
 			if (message.VolumeStep != null)
-				security.VolumeStep = message.VolumeStep.Value;
+			{
+				if (isOverride || security.VolumeStep == null)
+					security.VolumeStep = message.VolumeStep.Value;
+			}
 
 			if (message.Multiplier != null)
-				security.Multiplier = message.Multiplier.Value;
+			{
+				if (isOverride || security.Multiplier == null)
+					security.Multiplier = message.Multiplier.Value;
+			}
 
 			if (message.PriceStep != null)
 			{
-				security.PriceStep = message.PriceStep.Value;
+				if (isOverride || security.PriceStep == null)
+					security.PriceStep = message.PriceStep.Value;
 
 				if (message.Decimals == null && security.Decimals == null)
 					security.Decimals = message.PriceStep.Value.GetCachedDecimals();
@@ -2732,39 +2752,65 @@ namespace StockSharp.Algo
 
 			if (message.Decimals != null)
 			{
-				security.Decimals = message.Decimals.Value;
+				if (isOverride || security.Decimals == null)
+					security.Decimals = message.Decimals.Value;
 
 				if (message.PriceStep == null)
 					security.PriceStep = message.Decimals.Value.GetPriceStep();
 			}
 
 			if (!message.Name.IsEmpty())
-				security.Name = message.Name;
+			{
+				if (isOverride || security.Name.IsEmpty())
+					security.Name = message.Name;
+			}
 
 			if (!message.Class.IsEmpty())
-				security.Class = message.Class;
+			{
+				if (isOverride || security.Class.IsEmpty())
+					security.Class = message.Class;
+			}
 
 			if (message.OptionType != null)
-				security.OptionType = message.OptionType;
+			{
+				if (isOverride || security.OptionType == null)
+					security.OptionType = message.OptionType;
+			}
 
 			if (message.Strike != null)
-				security.Strike = message.Strike.Value;
+			{
+				if (isOverride || security.Strike == null)
+					security.Strike = message.Strike.Value;
+			}
 
 			if (!message.BinaryOptionType.IsEmpty())
-				security.BinaryOptionType = message.BinaryOptionType;
+			{
+				if (isOverride || security.BinaryOptionType == null)
+					security.BinaryOptionType = message.BinaryOptionType;
+			}
 
 			if (message.SettlementDate != null)
-				security.SettlementDate = message.SettlementDate;
+			{
+				if (isOverride || security.SettlementDate == null)
+					security.SettlementDate = message.SettlementDate;
+			}
 
 			if (!message.ShortName.IsEmpty())
-				security.ShortName = message.ShortName;
+			{
+				if (isOverride || security.ShortName.IsEmpty())
+					security.ShortName = message.ShortName;
+			}
 
 			if (message.SecurityType != null)
-				security.Type = message.SecurityType.Value;
+			{
+				if (isOverride || security.Type == null)
+					security.Type = message.SecurityType.Value;
+			}
 
 			if (!message.CfiCode.IsEmpty())
 			{
-				security.CfiCode = message.CfiCode;
+				if (isOverride || security.CfiCode.IsEmpty())
+					security.CfiCode = message.CfiCode;
 
 				if (security.Type == null)
 					security.Type = security.CfiCode.Iso10962ToSecurityType();
@@ -2779,19 +2825,34 @@ namespace StockSharp.Algo
 			}
 
 			if (!message.UnderlyingSecurityCode.IsEmpty())
-				security.UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + secId.BoardCode;
+			{
+				if (isOverride || security.UnderlyingSecurityId.IsEmpty())
+					security.UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + secId.BoardCode;
+			}
 
 			if (secId.HasExternalId())
-				security.ExternalId = secId.ToExternalId();
+			{
+				if (isOverride || security.ExternalId.Equals(new SecurityExternalId()))
+					security.ExternalId = secId.ToExternalId();
+			}
 
 			if (message.IssueDate != null)
-				security.IssueDate = message.IssueDate.Value;
+			{
+				if (isOverride || security.IssueDate == null)
+					security.IssueDate = message.IssueDate.Value;
+			}
 
 			if (message.IssueSize != null)
-				security.IssueSize = message.IssueSize.Value;
+			{
+				if (isOverride || security.IssueSize == null)
+					security.IssueSize = message.IssueSize.Value;
+			}
 
 			if (message.UnderlyingSecurityType != null)
-				security.UnderlyingSecurityType = message.UnderlyingSecurityType.Value;
+			{
+				if (isOverride || security.UnderlyingSecurityType == null)
+					security.UnderlyingSecurityType = message.UnderlyingSecurityType.Value;
+			}
 
 			message.CopyExtensionInfo(security);
 		}

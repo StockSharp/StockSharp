@@ -226,20 +226,15 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		///// <summary>
-		///// Use timeframe candles instead of trades.
-		///// </summary>
-		//public bool UseCandlesInsteadTrades { get; set; }
-
-		///// <summary>
-		///// Use candles with specified timeframe.
-		///// </summary>
-		//public TimeSpan CandlesTimeFrame { get; set; }
-
 		/// <summary>
 		/// Cache buildable from smaller time-frames candles.
 		/// </summary>
 		public bool CacheBuildableCandles { get; set; }
+
+		/// <summary>
+		/// Override previous security data by new values.
+		/// </summary>
+		public bool OverrideSecurityData { get; set; }
 
 		private StorageModes _mode = StorageModes.Incremental;
 
@@ -735,9 +730,9 @@ namespace StockSharp.Algo.Storages
 					if (security == null)
 						security = secMsg.ToSecurity(_storageRegistry.ExchangeInfoProvider);
 					else
-						security.ApplyChanges(secMsg, _storageRegistry.ExchangeInfoProvider);
+						security.ApplyChanges(secMsg, _storageRegistry.ExchangeInfoProvider, OverrideSecurityData);
 
-					_entityRegistry.Securities.Save(security);
+					_entityRegistry.Securities.Save(security, OverrideSecurityData);
 					break;
 				}
 				case MessageTypes.Board:
@@ -950,9 +945,11 @@ namespace StockSharp.Algo.Storages
 			if (Drive != null)
 				storage.SetValue(nameof(Drive), Drive.SaveEntire(false));
 
+			storage.SetValue(nameof(Mode), Mode);
 			storage.SetValue(nameof(Format), Format);
 			storage.SetValue(nameof(DaysLoad), DaysLoad);
 			storage.SetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
+			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 		}
 
 		/// <inheritdoc />
@@ -963,9 +960,11 @@ namespace StockSharp.Algo.Storages
 			if (storage.ContainsKey(nameof(Drive)))
 				Drive = storage.GetValue<SettingsStorage>(nameof(Drive)).LoadEntire<IMarketDataDrive>();
 
+			Mode = storage.GetValue(nameof(Mode), Mode);
 			Format = storage.GetValue(nameof(Format), Format);
 			DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
 			CacheBuildableCandles = storage.GetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
+			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 		}
 
 		/// <summary>
@@ -974,7 +973,15 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new StorageMessageAdapter(InnerAdapter, _entityRegistry, _storageRegistry);
+			return new StorageMessageAdapter(InnerAdapter, _entityRegistry, _storageRegistry)
+			{
+				CacheBuildableCandles = CacheBuildableCandles,
+				OverrideSecurityData = OverrideSecurityData,
+				DaysLoad = DaysLoad,
+				Format = Format,
+				Drive = Drive,
+				Mode = Mode,
+			};
 		}
 	}
 }

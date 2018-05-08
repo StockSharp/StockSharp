@@ -86,12 +86,12 @@
 								continue;
 							}
 
-							security.ApplyChanges(secMsg, _exchangeInfoProvider);
+							security.ApplyChanges(secMsg, _exchangeInfoProvider, UpdateDuplicateSecurities);
 						}
 						else
 							security = secMsg.ToSecurity(_exchangeInfoProvider);
 
-						_entityRegistry.Securities.Save(security);
+						_entityRegistry.Securities.Save(security, UpdateDuplicateSecurities);
 
 						ExtendedInfoStorageItem?.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
 					}

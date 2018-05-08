@@ -235,6 +235,23 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private bool _overrideSecurityData;
+
+		/// <summary>
+		/// Override previous security data by new values.
+		/// </summary>
+		public bool OverrideSecurityData
+		{
+			get => _overrideSecurityData;
+			set
+			{
+				_overrideSecurityData = value;
+
+				if (StorageAdapter != null)
+					StorageAdapter.OverrideSecurityData = value;
+			}
+		}
+
 		/// <summary>
 		/// List of all exchange boards, for which instruments are loaded <see cref="IConnector.Securities"/>.
 		/// </summary>
@@ -1421,6 +1438,7 @@ namespace StockSharp.Algo
 			UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), true);
 			UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), true);
 			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
+			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 
 			if (storage.ContainsKey(nameof(RiskManager)))
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
@@ -1456,6 +1474,7 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
 			storage.SetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
+			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 
 			if (RiskManager != null)
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));

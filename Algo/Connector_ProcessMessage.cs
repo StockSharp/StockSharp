@@ -302,7 +302,13 @@ namespace StockSharp.Algo
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
 
 					if (_entityRegistry != null && _storageRegistry != null)
-						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
+					{
+						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry)
+						{
+							OwnInnerAdaper = true,
+							OverrideSecurityData = OverrideSecurityData
+						};
+					}
 
 					if (SupportSubscriptionTracking)
 						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdaper = true/*, IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect*/ };
@@ -1094,7 +1100,7 @@ namespace StockSharp.Algo
 				if (!UpdateSecurityByDefinition)
 					return false;
 
-				s.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
+				s.ApplyChanges(message, _entityCache.ExchangeInfoProvider, OverrideSecurityData);
 				return true;
 			});
 
