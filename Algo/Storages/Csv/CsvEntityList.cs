@@ -108,16 +108,18 @@ namespace StockSharp.Algo.Storages.Csv
 			return key;
 		}
 
-		/// <summary>
-		/// Prevent updates.
-		/// </summary>
-		public bool PreventUpdates { get; set; }
+		/// <inheritdoc />
+		public void Save(T entity)
+		{
+			Save(entity, false);
+		}
 
 		/// <summary>
 		/// Save object into storage.
 		/// </summary>
 		/// <param name="entity">Trade object.</param>
-		public virtual void Save(T entity)
+		/// <param name="forced">Forced update.</param>
+		public virtual void Save(T entity, bool forced)
 		{
 			lock (SyncRoot)
 			{
@@ -128,7 +130,7 @@ namespace StockSharp.Algo.Storages.Csv
 					Add(entity);
 					return;
 				}
-				else if (!PreventUpdates && IsChanged(entity))
+				else if (IsChanged(entity, forced))
 					UpdateCache(entity);
 				else
 					return;
@@ -143,8 +145,9 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Is <paramref name="entity"/> changed.
 		/// </summary>
 		/// <param name="entity">Trade object.</param>
+		/// <param name="forced">Forced update.</param>
 		/// <returns>Is changed.</returns>
-		protected virtual bool IsChanged(T entity)
+		protected virtual bool IsChanged(T entity, bool forced)
 		{
 			return true;
 		}
@@ -233,7 +236,11 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
-		private void WriteMany(T[] values)
+		/// <summary>
+		/// Write data into storage.
+		/// </summary>
+		/// <param name="values">Trade objects.</param>
+		protected virtual void WriteMany(T[] values)
 		{
 			_delayActionGroup.Add((writer, state) =>
 			{

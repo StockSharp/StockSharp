@@ -570,7 +570,7 @@ namespace StockSharp.Algo.Storages
 
 						securities.Add(securityId, security);
 
-						securityStorage.Save(security);
+						securityStorage.Save(security, false);
 						newSecurity(security);
 
 						isNew = true;

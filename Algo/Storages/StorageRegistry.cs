@@ -1018,7 +1018,7 @@ namespace StockSharp.Algo.Storages
 				return _securities.Cache.Filter(criteria);
 			}
 
-			void ISecurityStorage.Save(Security security)
+			void ISecurityStorage.Save(Security security, bool forced)
 			{
 				if (!_securities.TryAdd(security))
 					return;

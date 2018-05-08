@@ -304,6 +304,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			private class LiteSecurity
 			{
+				public string Id { get; set; }
 				public string Name { get; set; }
 				public string Code { get; set; }
 				public string Class { get; set; }
@@ -327,11 +328,11 @@ namespace StockSharp.Algo.Storages.Csv
 				public DateTimeOffset? IssueDate { get; set; }
 				public decimal? IssueSize { get; set; }
 
-				public Security ToSecurity(SecurityCsvList list, string id)
+				public Security ToSecurity(SecurityCsvList list)
 				{
 					return new Security
 					{
-						Id = id,
+						Id = Id,
 						Name = Name,
 						Code = Code,
 						Class = Class,
@@ -386,102 +387,102 @@ namespace StockSharp.Algo.Storages.Csv
 
 			private readonly Dictionary<string, LiteSecurity> _cache = new Dictionary<string, LiteSecurity>(StringComparer.InvariantCultureIgnoreCase);
 
-			private static bool IsChanged(string original, string cached)
+			private static bool IsChanged(string original, string cached, bool forced)
 			{
 				if (original.IsEmpty())
-					return !cached.IsEmpty();
+					return forced && !cached.IsEmpty();
 				else
-					return cached.IsEmpty() || !cached.CompareIgnoreCase(original);
+					return cached.IsEmpty() || (forced && !cached.CompareIgnoreCase(original));
 			}
 
-			private static bool IsChanged<T>(T? original, T? cached)
+			private static bool IsChanged<T>(T? original, T? cached, bool forced)
 				where T : struct
 			{
 				if (original == null)
-					return cached != null;
+					return forced && cached != null;
 				else
-					return cached == null || original.Value.Equals(cached.Value);
+					return cached == null || (forced && !original.Value.Equals(cached.Value));
 			}
 
-			protected override bool IsChanged(Security security)
+			protected override bool IsChanged(Security security, bool forced)
 			{
 				var liteSec = _cache.TryGetValue(security.Id);
 
 				if (liteSec == null)
 					throw new ArgumentOutOfRangeException(nameof(security), security.Id, LocalizedStrings.Str2736);
 
-				if (IsChanged(security.Name, liteSec.Name))
+				if (IsChanged(security.Name, liteSec.Name, forced))
 					return true;
 
-				if (IsChanged(security.Code, liteSec.Code))
+				if (IsChanged(security.Code, liteSec.Code, forced))
 					return true;
 
-				if (IsChanged(security.Class, liteSec.Class))
+				if (IsChanged(security.Class, liteSec.Class, forced))
 					return true;
 
-				if (IsChanged(security.ShortName, liteSec.ShortName))
+				if (IsChanged(security.ShortName, liteSec.ShortName, forced))
 					return true;
 
-				if (IsChanged(security.UnderlyingSecurityId, liteSec.UnderlyingSecurityId))
+				if (IsChanged(security.UnderlyingSecurityId, liteSec.UnderlyingSecurityId, forced))
 					return true;
 
-				if (IsChanged(security.UnderlyingSecurityType, liteSec.UnderlyingSecurityType))
+				if (IsChanged(security.UnderlyingSecurityType, liteSec.UnderlyingSecurityType, forced))
 					return true;
 
-				if (IsChanged(security.PriceStep, liteSec.PriceStep))
+				if (IsChanged(security.PriceStep, liteSec.PriceStep, forced))
 					return true;
 
-				if (IsChanged(security.VolumeStep, liteSec.VolumeStep))
+				if (IsChanged(security.VolumeStep, liteSec.VolumeStep, forced))
 					return true;
 
-				if (IsChanged(security.Multiplier, liteSec.Multiplier))
+				if (IsChanged(security.Multiplier, liteSec.Multiplier, forced))
 					return true;
 
-				if (IsChanged(security.Decimals, liteSec.Decimals))
+				if (IsChanged(security.Decimals, liteSec.Decimals, forced))
 					return true;
 
-				if (IsChanged(security.Type, liteSec.Type))
+				if (IsChanged(security.Type, liteSec.Type, forced))
 					return true;
 
-				if (IsChanged(security.ExpiryDate, liteSec.ExpiryDate))
+				if (IsChanged(security.ExpiryDate, liteSec.ExpiryDate, forced))
 					return true;
 
-				if (IsChanged(security.SettlementDate, liteSec.SettlementDate))
+				if (IsChanged(security.SettlementDate, liteSec.SettlementDate, forced))
 					return true;
 
-				if (IsChanged(security.Strike, liteSec.Strike))
+				if (IsChanged(security.Strike, liteSec.Strike, forced))
 					return true;
 
-				if (IsChanged(security.OptionType, liteSec.OptionType))
+				if (IsChanged(security.OptionType, liteSec.OptionType, forced))
 					return true;
 
-				if (IsChanged(security.Currency, liteSec.Currency))
+				if (IsChanged(security.Currency, liteSec.Currency, forced))
 					return true;
 
-				if (IsChanged(security.BinaryOptionType, liteSec.BinaryOptionType))
+				if (IsChanged(security.BinaryOptionType, liteSec.BinaryOptionType, forced))
 					return true;
 
-				if (IsChanged(security.CfiCode, liteSec.CfiCode))
+				if (IsChanged(security.CfiCode, liteSec.CfiCode, forced))
 					return true;
 
-				if (IsChanged(security.IssueDate, liteSec.IssueDate))
+				if (IsChanged(security.IssueDate, liteSec.IssueDate, forced))
 					return true;
 
-				if (IsChanged(security.IssueSize, liteSec.IssueSize))
+				if (IsChanged(security.IssueSize, liteSec.IssueSize, forced))
 					return true;
 
 				if (security.Board == null)
 				{
-					if (!liteSec.Board.IsEmpty())
+					if (!liteSec.Board.IsEmpty() && forced)
 						return true;
 				}
 				else
 				{
-					if (liteSec.Board.IsEmpty() || !liteSec.Board.CompareIgnoreCase(security.Board.Code))
+					if (liteSec.Board.IsEmpty() || (forced && !liteSec.Board.CompareIgnoreCase(security.Board.Code)))
 						return true;
 				}
 
-				if (security.ExternalId != liteSec.ExternalId)
+				if (forced && security.ExternalId != liteSec.ExternalId)
 					return true;
 
 				return false;
@@ -494,7 +495,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override void AddCache(Security item)
 			{
-				var sec = new LiteSecurity();
+				var sec = new LiteSecurity { Id = item.Id };
 				sec.Update(item);
 				_cache.Add(item.Id, sec);
 			}
@@ -509,12 +510,16 @@ namespace StockSharp.Algo.Storages.Csv
 				_cache[item.Id].Update(item);
 			}
 
+			protected override void WriteMany(Security[] values)
+			{
+				base.WriteMany(_cache.Values.Select(l => l.ToSecurity(this)).ToArray());
+			}
+
 			protected override Security Read(FastCsvReader reader)
 			{
-				var id = reader.ReadString();
-
-				var security = new LiteSecurity
+				var liteSec = new LiteSecurity
 				{
+					Id = reader.ReadString(),
 					Name = reader.ReadString(),
 					Code = reader.ReadString(),
 					Class = reader.ReadString(),
@@ -546,14 +551,14 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				{
-					security.UnderlyingSecurityType = reader.ReadNullableEnum<SecurityTypes>();
-					security.BinaryOptionType = reader.ReadString();
-					security.CfiCode = reader.ReadString();
-					security.IssueDate = ReadNullableDateTime(reader);
-					security.IssueSize = reader.ReadNullableDecimal();
+					liteSec.UnderlyingSecurityType = reader.ReadNullableEnum<SecurityTypes>();
+					liteSec.BinaryOptionType = reader.ReadString();
+					liteSec.CfiCode = reader.ReadString();
+					liteSec.IssueDate = ReadNullableDateTime(reader);
+					liteSec.IssueSize = reader.ReadNullableDecimal();
 				}
 
-				return security.ToSecurity(this, id);
+				return liteSec.ToSecurity(this);
 			}
 
 			protected override void Write(CsvFileWriter writer, Security data)
@@ -593,7 +598,7 @@ namespace StockSharp.Algo.Storages.Csv
 				});
 			}
 
-			public override void Save(Security entity)
+			public override void Save(Security entity, bool forced)
 			{
 				lock (Registry.Exchanges.SyncRoot)
 					Registry.Exchanges.TryAdd(entity.Board.Exchange);
@@ -601,7 +606,7 @@ namespace StockSharp.Algo.Storages.Csv
 				lock (Registry.ExchangeBoards.SyncRoot)
 					Registry.ExchangeBoards.TryAdd(entity.Board);
 
-				base.Save(entity);
+				base.Save(entity, forced);
 			}
 
 			#endregion

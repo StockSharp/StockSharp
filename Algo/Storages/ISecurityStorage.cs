@@ -26,7 +26,8 @@ namespace StockSharp.Algo.Storages
 		/// Save security.
 		/// </summary>
 		/// <param name="security">Security.</param>
-		void Save(Security security);
+		/// <param name="forced">Forced update.</param>
+		void Save(Security security, bool forced);
 
 		/// <summary>
 		/// Delete security.
