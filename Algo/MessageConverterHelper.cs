@@ -616,30 +616,9 @@ namespace StockSharp.Algo
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
-			return new Security
-			{
-				Code = message.SecurityId.SecurityCode,
-				Board = message.SecurityId.BoardCode.IsEmpty() ? null : exchangeInfoProvider.GetExchangeBoard(message.SecurityId.BoardCode),
-				ExternalId = message.SecurityId.ToExternalId(),
-				Name = message.Name,
-				Class = message.Class,
-				Type = message.SecurityType,
-				ExpiryDate = message.ExpiryDate,
-				ShortName = message.ShortName,
-				VolumeStep = message.VolumeStep,
-				Multiplier = message.Multiplier,
-				PriceStep = message.PriceStep,
-				Decimals = message.Decimals,
-				Currency = message.Currency,
-				SettlementDate = message.SettlementDate,
-				OptionType = message.OptionType,
-				Strike = message.Strike,
-				BinaryOptionType = message.BinaryOptionType,
-				UnderlyingSecurityId = message.UnderlyingSecurityCode.IsEmpty() ? null : _defaultGenerator.GenerateId(message.UnderlyingSecurityCode, message.SecurityId.BoardCode),
-				IssueSize = message.IssueSize,
-				IssueDate = message.IssueDate,
-				UnderlyingSecurityType = message.UnderlyingSecurityType,
-			};
+			var criteria = new Security();
+			criteria.ApplyChanges(message, exchangeInfoProvider);
+			return criteria;
 		}
 
 		/// <summary>

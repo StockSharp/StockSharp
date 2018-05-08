@@ -36,14 +36,8 @@
 		public CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IEntityRegistry entityRegistry, IExchangeInfoProvider exchangeInfoProvider, IMarketDataDrive drive, StorageFormats storageFormat)
 			: base(dataType, fields)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			if (exchangeInfoProvider == null)
-				throw new ArgumentNullException(nameof(exchangeInfoProvider));
-
-			_entityRegistry = entityRegistry;
-			_exchangeInfoProvider = exchangeInfoProvider;
+			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
+			_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 			_drive = drive;
 			_storageFormat = storageFormat;
 		}
@@ -92,36 +86,14 @@
 								continue;
 							}
 
-							security.Type = secMsg.SecurityType ?? secMsg.SecurityId.SecurityType;
-							security.CfiCode = secMsg.CfiCode;
-							security.Strike = secMsg.Strike;
-							security.OptionType = secMsg.OptionType;
-							security.Name = secMsg.Name;
-							security.ShortName = secMsg.ShortName;
-							security.Class = secMsg.Class;
-							security.BinaryOptionType = secMsg.BinaryOptionType;
-							security.ExternalId = secMsg.SecurityId.ToExternalId();
-							security.ExpiryDate = secMsg.ExpiryDate;
-							security.SettlementDate = secMsg.SettlementDate;
-							security.UnderlyingSecurityId = secMsg.UnderlyingSecurityCode.IsEmpty() ? null : (secMsg.UnderlyingSecurityCode + "@" + secMsg.SecurityId.BoardCode);
-							security.Currency = secMsg.Currency;
-							security.PriceStep = secMsg.PriceStep;
-							security.Decimals = secMsg.Decimals;
-							security.VolumeStep = secMsg.VolumeStep;
-							security.Multiplier = secMsg.Multiplier;
-							security.IssueSize = secMsg.IssueSize;
-							security.IssueDate = secMsg.IssueDate;
-							security.UnderlyingSecurityType = secMsg.UnderlyingSecurityType;
+							security.ApplyChanges(secMsg, _exchangeInfoProvider);
 						}
 						else
 							security = secMsg.ToSecurity(_exchangeInfoProvider);
 
 						_entityRegistry.Securities.Save(security);
 
-						if (ExtendedInfoStorageItem != null)
-						{
-							ExtendedInfoStorageItem.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
-						}
+						ExtendedInfoStorageItem?.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
 					}
 
 					var percent = (int)(((double)lineIndex / len) * 100 - 1).Round();

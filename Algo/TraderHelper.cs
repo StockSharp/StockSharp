@@ -1765,35 +1765,9 @@ namespace StockSharp.Algo
 				                   ? string.Empty
 				                   : connector.SecurityIdGenerator.GenerateId(criteria.SecurityId.SecurityCode, criteria.SecurityId.BoardCode);
 
-			var security = new Security
-			{
-				Id = stocksharpId,
-				Name = criteria.Name,
-				Code = criteria.SecurityId.SecurityCode,
-				Type = criteria.SecurityType,
-				CfiCode = criteria.CfiCode,
-				ExpiryDate = criteria.ExpiryDate,
-				ExternalId = criteria.SecurityId.ToExternalId(),
-				Board = criteria.SecurityId.BoardCode.IsEmpty() ? null : exchangeInfoProvider.GetOrCreateBoard(criteria.SecurityId.BoardCode),
-				ShortName = criteria.ShortName,
-				Decimals = criteria.Decimals,
-				PriceStep = criteria.PriceStep,
-				VolumeStep = criteria.VolumeStep,
-				Multiplier = criteria.Multiplier,
-				OptionType = criteria.OptionType,
-				Strike = criteria.Strike,
-				BinaryOptionType = criteria.BinaryOptionType,
-				Currency = criteria.Currency,
-				SettlementDate = criteria.SettlementDate,
-				IssueSize = criteria.IssueSize,
-				IssueDate = criteria.IssueDate,
-				UnderlyingSecurityId = criteria.UnderlyingSecurityCode.IsEmpty()
-					? null
-					: connector.SecurityIdGenerator.GenerateId(criteria.UnderlyingSecurityCode, criteria.SecurityId.BoardCode),
-				UnderlyingSecurityType = criteria.UnderlyingSecurityType,
-			};
-
-			return security;
+			var secCriteria = new Security { Id = stocksharpId };
+			secCriteria.ApplyChanges(criteria, exchangeInfoProvider);
+			return secCriteria;
 		}
 
 		/// <summary>
@@ -2728,13 +2702,16 @@ namespace StockSharp.Algo
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
-			if (!message.SecurityId.SecurityCode.IsEmpty())
-				security.Code = message.SecurityId.SecurityCode;
+			var secId = message.SecurityId;
+
+			if (!secId.SecurityCode.IsEmpty())
+				security.Code = secId.SecurityCode;
+
+			if (!secId.BoardCode.IsEmpty())
+				security.Board = exchangeInfoProvider.GetOrCreateBoard(secId.BoardCode);
 
 			if (message.Currency != null)
 				security.Currency = message.Currency;
-
-			security.Board = exchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode);
 
 			if (message.ExpiryDate != null)
 				security.ExpiryDate = message.ExpiryDate;
@@ -2802,10 +2779,10 @@ namespace StockSharp.Algo
 			}
 
 			if (!message.UnderlyingSecurityCode.IsEmpty())
-				security.UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + message.SecurityId.BoardCode;
+				security.UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + secId.BoardCode;
 
-			if (message.SecurityId.HasExternalId())
-				security.ExternalId = message.SecurityId.ToExternalId();
+			if (secId.HasExternalId())
+				security.ExternalId = secId.ToExternalId();
 
 			if (message.IssueDate != null)
 				security.IssueDate = message.IssueDate.Value;
