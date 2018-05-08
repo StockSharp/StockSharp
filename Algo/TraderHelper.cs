@@ -1787,7 +1787,7 @@ namespace StockSharp.Algo
 				SettlementDate = criteria.SettlementDate,
 				IssueSize = criteria.IssueSize,
 				IssueDate = criteria.IssueDate,
-				UnderlyingSecurityId = criteria.UnderlyingSecurityCode.IsEmpty() || criteria.SecurityId.BoardCode.IsEmpty()
+				UnderlyingSecurityId = criteria.UnderlyingSecurityCode.IsEmpty()
 					? null
 					: connector.SecurityIdGenerator.GenerateId(criteria.UnderlyingSecurityCode, criteria.SecurityId.BoardCode),
 				UnderlyingSecurityType = criteria.UnderlyingSecurityType,

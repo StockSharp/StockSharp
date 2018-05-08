@@ -103,7 +103,7 @@
 							security.ExternalId = secMsg.SecurityId.ToExternalId();
 							security.ExpiryDate = secMsg.ExpiryDate;
 							security.SettlementDate = secMsg.SettlementDate;
-							security.UnderlyingSecurityId = secMsg.UnderlyingSecurityCode + "@" + secMsg.SecurityId.BoardCode;
+							security.UnderlyingSecurityId = secMsg.UnderlyingSecurityCode.IsEmpty() ? null : (secMsg.UnderlyingSecurityCode + "@" + secMsg.SecurityId.BoardCode);
 							security.Currency = secMsg.Currency;
 							security.PriceStep = secMsg.PriceStep;
 							security.Decimals = secMsg.Decimals;
