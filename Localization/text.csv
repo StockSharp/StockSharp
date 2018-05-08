@@ -14907,3 +14907,7 @@ DocStr10451;Save credentials to file;Сохранить доступы в фай
 DocStr10452;IP address restrictions;Ограничения по IP адресам
 DocStr10453;Permission set;Набор прав
 DocStr10454;The window for edit credentials;Окно для редактирования списка доступов
+DocStr10455;Forced update;Принудительно обновление
+DocStr10456;Write data into storage;Записать данные в хранилище
+DocStr10457;Trade objects;Торговые объекты
+DocStr10458;Override previous security data by new values;Перезаписывать предыдущие данные инструмента новыми значениями
