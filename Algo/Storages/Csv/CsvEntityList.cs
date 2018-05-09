@@ -239,7 +239,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <summary>
 		/// Write data into storage.
 		/// </summary>
-		/// <param name="values">Trade objects.</param>
+		/// <param name="values">Trading objects.</param>
 		protected virtual void WriteMany(T[] values)
 		{
 			_delayActionGroup.Add((writer, state) =>

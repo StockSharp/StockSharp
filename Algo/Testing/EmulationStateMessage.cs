@@ -22,7 +22,7 @@ namespace StockSharp.Algo.Testing
 	/// <summary>
 	/// The message, informing about the emulator state change.
 	/// </summary>
-	class EmulationStateMessage : Message
+	public class EmulationStateMessage : Message
 	{
 		/// <summary>
 		/// Date in history for starting the paper trading.
@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="Message"/>.
+		/// Create a copy of <see cref="EmulationStateMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
