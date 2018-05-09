@@ -53,7 +53,7 @@ namespace StockSharp.Messages
 		Crypto = FX << 1,
 
 		/// <summary>
-		/// Historical data.
+		/// History.
 		/// </summary>
 		[EnumMember]
 		History = Crypto << 1,
@@ -77,43 +77,43 @@ namespace StockSharp.Messages
 		Paid = Free << 1,
 
 		/// <summary>
-		/// Tick data.
+		/// Ticks.
 		/// </summary>
 		[EnumMember]
 		Ticks = Paid << 1,
 
 		/// <summary>
-		/// Candles data.
+		/// Candles.
 		/// </summary>
 		[EnumMember]
 		Candles = Ticks << 1,
 
 		/// <summary>
-		/// Order book data.
+		/// Order book.
 		/// </summary>
 		[EnumMember]
 		MarketDepth = Candles << 1,
 
 		/// <summary>
-		/// Level1 data.
+		/// Level1.
 		/// </summary>
 		[EnumMember]
 		Level1 = MarketDepth << 1,
 
 		/// <summary>
-		/// Order log data.
+		/// Order log.
 		/// </summary>
 		[EnumMember]
 		OrderLog = Level1 << 1,
 
 		/// <summary>
-		/// News data.
+		/// News.
 		/// </summary>
 		[EnumMember]
 		News = OrderLog << 1,
 
 		/// <summary>
-		/// Transactional adapter.
+		/// Transactions.
 		/// </summary>
 		[EnumMember]
 		Transactions = News << 1,

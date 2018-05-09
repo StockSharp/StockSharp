@@ -14909,5 +14909,19 @@ DocStr10453;Permission set;Набор прав
 DocStr10454;The window for edit credentials;Окно для редактирования списка доступов
 DocStr10455;Forced update;Принудительно обновление
 DocStr10456;Write data into storage;Записать данные в хранилище
-DocStr10457;Trade objects;Торговые объекты
 DocStr10458;Override previous security data by new values;Перезаписывать предыдущие данные инструмента новыми значениями
+DocStr10459;Start data loading;Запустить загрузку данных
+DocStr10460;Stop data loading;Остановить загрузку данных
+DocStr10461;Remove inner storage;Удалить внутреннее хранилище
+DocStr10462;Get prefered language;Получить предпочитаемый язык
+DocStr10463;Message adapter categories;Категории адаптера сообщений
+DocStr10465;US;США
+DocStr10466;Europe;Европа
+DocStr10467;Asia;Азия
+DocStr10468;FX;FX
+DocStr10469;Cryptocurrencies;Криптовалюты
+DocStr10475;Tool;Tool
+DocStr10476;Commodities;Товары
+DocStr10477;Specifies a categories for message adapter;Указывать категории для адаптера сообщений
+DocStr10478;Categories;Категории
+DocStr10479;Change time interval updates message;Сообщение измеения интервала обновления

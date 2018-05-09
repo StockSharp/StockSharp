@@ -135,7 +135,7 @@ namespace StockSharp.Messages
 		bool IsSupportCandlesUpdates { get; }
 
 		/// <summary>
-		/// Adapter categories.
+		/// Message adapter categories.
 		/// </summary>
 		MessageAdapterCategories Categories { get; }
 
