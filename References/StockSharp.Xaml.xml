@@ -597,14 +597,22 @@
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.Xaml.PermissionCredentialsWindow.Credentials">
+    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.SelectAllCommand">
       <summary>
-            Credentials.
-            </summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.UnSelectAllCommand">
+      <summary>
+      </summary>
     </member>
     <member name="M:StockSharp.Xaml.PermissionCredentialsWindow.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PermissionCredentialsWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PermissionCredentialsWindow.Credentials">
+      <summary>
+            Credentials.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PermissionCredentialsWindow.InitializeComponent">
