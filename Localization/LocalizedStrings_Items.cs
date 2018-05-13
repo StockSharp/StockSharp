@@ -47776,5 +47776,15 @@ namespace StockSharp.Localization
 		/// Exchange
 		/// </summary>
 		public static string Exchange => GetString(ExchangeKey);
+
+		/// <summary>
+		/// Average
+		/// </summary>
+		public const string AverageKey = nameof(Average);
+
+		/// <summary>
+		/// Average
+		/// </summary>
+		public static string Average => GetString(AverageKey);
 	}
 }

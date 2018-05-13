@@ -4810,6 +4810,7 @@ IncreaseLimit;The count of loaded data has reached the value {0}. To download mo
 CandlesBuildSource;Candles build source (tick trades, order book, level1 etc.).;Источник построения свечей (тиковые сделки сделки, стакан, level1 и т.д.).
 MarketDataTimeZone;Market-data time zone.;Временная зона маркет-данных.
 Exchange;Exchange;Биржа
+Average;Average;Среднее
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
