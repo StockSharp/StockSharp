@@ -246,7 +246,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			#region IStorageSecurityList
 
-			public void Dispose()
+			void IDisposable.Dispose()
 			{
 			}
 
@@ -266,7 +266,7 @@ namespace StockSharp.Algo.Storages.Csv
 				remove => _removed -= value;
 			}
 
-			public IEnumerable<Security> Lookup(Security criteria)
+			IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
 			{
 				if (criteria.IsLookupAll())
 					return ToArray();
@@ -278,20 +278,15 @@ namespace StockSharp.Algo.Storages.Csv
 				return security == null ? Enumerable.Empty<Security>() : new[] { security };
 			}
 
-			public void Delete(Security security)
+			void ISecurityStorage.Delete(Security security)
 			{
 				Remove(security);
 			}
 
-			public void DeleteBy(Security criteria)
+			void ISecurityStorage.DeleteBy(Security criteria)
 			{
 				this.Filter(criteria).ForEach(s => Remove(s));
 			}
-
-			//public IEnumerable<string> GetSecurityIds()
-			//{
-			//	return this.Select(s => s.Id);
-			//}
 
 			#endregion
 
@@ -510,10 +505,10 @@ namespace StockSharp.Algo.Storages.Csv
 				_cache[item.Id].Update(item);
 			}
 
-			protected override void WriteMany(Security[] values)
-			{
-				base.WriteMany(_cache.Values.Select(l => l.ToSecurity(this)).ToArray());
-			}
+			//protected override void WriteMany(Security[] values)
+			//{
+			//	base.WriteMany(_cache.Values.Select(l => l.ToSecurity(this)).ToArray());
+			//}
 
 			protected override Security Read(FastCsvReader reader)
 			{

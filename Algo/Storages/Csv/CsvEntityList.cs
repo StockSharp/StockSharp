@@ -199,7 +199,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 				AddCache(item);
 
-				_delayActionGroup.Add((writer, i) => Write(writer, i), item);
+				_delayActionGroup.Add(Write, item);
 			}
 		}
 
@@ -240,7 +240,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Write data into storage.
 		/// </summary>
 		/// <param name="values">Trading objects.</param>
-		protected virtual void WriteMany(T[] values)
+		private void WriteMany(T[] values)
 		{
 			_delayActionGroup.Add((writer, state) =>
 			{
@@ -273,10 +273,11 @@ namespace StockSharp.Algo.Storages.Csv
 
 			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
-				using (var stream = new FileStream(FileName, FileMode.OpenOrCreate))
+				using (var stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
 				{
 					var reader = new FastCsvReader(stream, Registry.Encoding);
 
+					var hasDuplicates = false;
 					var currErrors = 0;
 
 					while (reader.NextLine())
@@ -288,30 +289,50 @@ namespace StockSharp.Algo.Storages.Csv
 
 							lock (SyncRoot)
 							{
-								InnerCollection.Add(item);
-								AddCache(item);
-
-								try
+								if (!_items.ContainsKey(key))
 								{
 									_items.Add(key, item);
+
+									InnerCollection.Add(item);
+									AddCache(item);
 								}
-								catch (ArgumentException ex)
-								{
-									throw new InvalidOperationException(key.ToString(), ex);
-								}
+								else
+									hasDuplicates = true;
 							}
 
 							currErrors = 0;
 						}
 						catch (Exception ex)
 						{
-							errors.Add(ex);
+							if (errors.Count < 100)
+								errors.Add(ex);
 
 							currErrors++;
 							
-							if (currErrors >= 10 || errors.Count >= 100)
+							if (currErrors >= 1000)
 								break;
 						}
+					}
+
+					if (!hasDuplicates)
+						return;
+
+					try
+					{
+						lock (SyncRoot)
+						{
+							stream.SetLength(0);
+
+							using (var writer = new CsvFileWriter(stream, Registry.Encoding))
+							{
+								foreach (var item in InnerCollection)
+									Write(writer, item);
+							}
+						}
+					}
+					catch (Exception ex)
+					{
+						errors.Add(ex);
 					}
 				}
 			});
