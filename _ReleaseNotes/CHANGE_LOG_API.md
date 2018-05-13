@@ -23,6 +23,7 @@ StockSharp API Change log
 * (feature) FixMessageAdapter. SupportedMessages from Dialect.
 * (bug) OrderGrid. Active filters fix.
 * (bug) GatorHistogram fix.
+* (feature) Charting. GatorOscillatorPainter, RelativeVigorIndexPainter.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

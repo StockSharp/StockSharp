@@ -2439,6 +2439,27 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter">
+      <summary>
+            The renderer for <see cref="T:StockSharp.Algo.Indicators.GatorOscillator" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.Histogram1">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.GatorOscillator.Histogram1" /> line color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.Histogram2">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.GatorOscillator.Histogram2" /> line color.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.Init">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.IndicatorAttribute">
       <summary>
             Attribute, applied to indicator's painter, to provide information about type of <see cref="T:StockSharp.Algo.Indicators.IIndicator" />.
@@ -2454,6 +2475,27 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.IndicatorPainters.IndicatorAttribute" />.
             </summary>
       <param name="type">Indicator type.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter">
+      <summary>
+            The renderer for <see cref="T:StockSharp.Algo.Indicators.RelativeVigorIndex" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.Average">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.RelativeVigorIndex.Average" /> line color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.Signal">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.RelativeVigorIndex.Signal" /> line color.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.Init">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter">
       <summary>
