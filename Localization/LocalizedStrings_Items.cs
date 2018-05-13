@@ -47786,5 +47786,15 @@ namespace StockSharp.Localization
 		/// Average
 		/// </summary>
 		public static string Average => GetString(AverageKey);
+
+		/// <summary>
+		/// Check money balance.
+		/// </summary>
+		public const string CheckMoneyKey = nameof(CheckMoney);
+
+		/// <summary>
+		/// Check money balance.
+		/// </summary>
+		public static string CheckMoney => GetString(CheckMoneyKey);
 	}
 }

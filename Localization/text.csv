@@ -4811,6 +4811,7 @@ CandlesBuildSource;Candles build source (tick trades, order book, level1 etc.).;
 MarketDataTimeZone;Market-data time zone.;Временная зона маркет-данных.
 Exchange;Exchange;Биржа
 Average;Average;Среднее
+CheckMoney;Check money balance.;Проверять денежный баланс.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

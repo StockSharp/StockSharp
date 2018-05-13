@@ -24,6 +24,7 @@ StockSharp API Change log
 * (bug) OrderGrid. Active filters fix.
 * (bug) GatorHistogram fix.
 * (feature) Charting. GatorOscillatorPainter, RelativeVigorIndexPainter.
+* (feature) MarketEmulator. CheckMoney option.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
