@@ -188,19 +188,20 @@ namespace StockSharp.Algo.Storages.Csv
 		/// 
 		/// </summary>
 		/// <param name="item">Trade object.</param>
-		protected override void OnAdded(T item)
+		/// <returns></returns>
+		protected override bool OnAdding(T item)
 		{
-			base.OnAdded(item);
-
 			lock (SyncRoot)
 			{
 				if (!_items.TryAdd(GetNormalizedKey(item), item))
-					return;
+					return false;
 
 				AddCache(item);
 
 				_delayActionGroup.Add(Write, item);
 			}
+
+			return base.OnAdding(item);
 		}
 
 		/// <summary>
@@ -289,10 +290,8 @@ namespace StockSharp.Algo.Storages.Csv
 
 							lock (SyncRoot)
 							{
-								if (!_items.ContainsKey(key))
+								if (_items.TryAdd(key, item))
 								{
-									_items.Add(key, item);
-
 									InnerCollection.Add(item);
 									AddCache(item);
 								}
