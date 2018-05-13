@@ -35,10 +35,20 @@ namespace StockSharp.Algo.Indicators
 		/// <returns>The current value.</returns>
 		public static decimal GetCurrentValue(this IIndicator indicator)
 		{
+			return indicator.GetNullableCurrentValue() ?? 0;
+		}
+
+		/// <summary>
+		/// To get the current value of the indicator.
+		/// </summary>
+		/// <param name="indicator">Indicator.</param>
+		/// <returns>The current value.</returns>
+		public static decimal? GetNullableCurrentValue(this IIndicator indicator)
+		{
 			if (indicator == null)
 				throw new ArgumentNullException(nameof(indicator));
 
-			return indicator.GetCurrentValue<decimal>();
+			return indicator.GetCurrentValue<decimal?>();
 		}
 
 		/// <summary>
@@ -63,10 +73,21 @@ namespace StockSharp.Algo.Indicators
 		/// <returns>Indicator value.</returns>
 		public static decimal GetValue(this IIndicator indicator, int index)
 		{
+			return indicator.GetNullableValue(index) ?? 0;
+		}
+
+		/// <summary>
+		/// To get the indicator value by the index (0 - last value).
+		/// </summary>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="index">The value index.</param>
+		/// <returns>Indicator value.</returns>
+		public static decimal? GetNullableValue(this IIndicator indicator, int index)
+		{
 			if (indicator == null)
 				throw new ArgumentNullException(nameof(indicator));
 
-			return indicator.GetValue<decimal>(index);
+			return indicator.GetValue<decimal?>(index);
 		}
 
 		/// <summary>
@@ -90,6 +111,10 @@ namespace StockSharp.Algo.Indicators
 			}
 
 			var value = indicator.Container.GetValue(index).Item2;
+
+			if (value.IsEmpty)
+				return default(T);
+
 			return typeof(IIndicatorValue).IsAssignableFrom(typeof(T)) ? value.To<T>() : value.GetValue<T>();
 		}
 

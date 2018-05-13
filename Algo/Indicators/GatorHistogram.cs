@@ -30,28 +30,24 @@ namespace StockSharp.Algo.Indicators
 
 		internal GatorHistogram(AlligatorLine line1, AlligatorLine line2, bool isNegative)
 		{
-			if (line1 == null)
-				throw new ArgumentNullException(nameof(line1));
-
-			if (line2 == null)
-				throw new ArgumentNullException(nameof(line2));
-
-			_line1 = line1;
-			_line2 = line2;
+			_line1 = line1 ?? throw new ArgumentNullException(nameof(line1));
+			_line2 = line2 ?? throw new ArgumentNullException(nameof(line2));
 			_isNegative = isNegative;
 		}
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			if (input.IsFinal)
 				IsFormed = true;
 
-			return new DecimalIndicatorValue(this, (_isNegative ? -1 : 1) * Math.Abs(_line1.GetCurrentValue() - _line2.GetCurrentValue()));
+			var line1Curr = _line1.GetNullableCurrentValue();
+			var line2Curr = _line2.GetNullableCurrentValue();
+
+			if (line1Curr == null || line2Curr == null)
+				return new DecimalIndicatorValue(this);
+
+			return new DecimalIndicatorValue(this, (_isNegative ? -1 : 1) * Math.Abs(line1Curr.Value - line2Curr.Value));
 		}
 
 		/// <summary>
@@ -63,10 +59,7 @@ namespace StockSharp.Algo.Indicators
 			return new GatorHistogram((AlligatorLine)_line1.Clone(), (AlligatorLine)_line2.Clone(), _isNegative) { Name = Name };
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="settings">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -75,10 +68,7 @@ namespace StockSharp.Algo.Indicators
 			_line2.LoadNotNull(settings, "line2");
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="settings">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);
