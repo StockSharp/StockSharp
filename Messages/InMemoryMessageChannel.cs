@@ -16,9 +16,9 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Globalization;
+	using System.Collections.Generic;
 
-	using Ecng.Common;
+	using Ecng.Collections;
 
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -26,7 +26,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Message channel, based on the queue and operate within a single process.
 	/// </summary>
-	public class InMemoryMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
+	public class InMemoryMessageChannel : BaseInMemoryChannel<KeyValuePair<long, Message>>, IMessageChannel
 	{
 		private static readonly MemoryStatisticsValue<Message> _msgStat = new MemoryStatisticsValue<Message>(LocalizedStrings.Messages);
 
@@ -36,7 +36,6 @@ namespace StockSharp.Messages
 		}
 
 		private readonly Action<Exception> _errorHandler;
-		private readonly MessagePriorityQueue _messageQueue = new MessagePriorityQueue();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryMessageChannel"/>.
@@ -44,28 +43,15 @@ namespace StockSharp.Messages
 		/// <param name="name">Channel name.</param>
 		/// <param name="errorHandler">Error handler.</param>
 		public InMemoryMessageChannel(string name, Action<Exception> errorHandler)
+			: base(new MessagePriorityQueue(), name, errorHandler)
 		{
-			if (name.IsEmpty())
-				throw new ArgumentNullException(nameof(name));
-
-			if (errorHandler == null)
-				throw new ArgumentNullException(nameof(errorHandler));
-
-			Name = name;
-
 			_errorHandler = errorHandler;
-			_messageQueue.Close();
 		}
-
-		/// <summary>
-		/// Handler name.
-		/// </summary>
-		public string Name { get; }
 
 		/// <summary>
 		/// Message queue count.
 		/// </summary>
-		public int MessageCount => _messageQueue.Count;
+		public int MessageCount => Count;
 
 		/// <summary>
 		/// Max message queue count.
@@ -75,64 +61,17 @@ namespace StockSharp.Messages
 		/// </remarks>
 		public int MaxMessageCount
 		{
-			get => _messageQueue.MaxSize;
-			set => _messageQueue.MaxSize = value;
+			get => MaxCount;
+			set => MaxCount = value;
 		}
 
-		/// <summary>
-		/// Channel closing event.
-		/// </summary>
-		public event Action Closed;
-
-		/// <summary>
-		/// Is channel opened.
-		/// </summary>
-		public bool IsOpened => !_messageQueue.IsClosed;
-
-		/// <summary>
-		/// Open channel.
-		/// </summary>
-		public void Open()
+		/// <inheritdoc />
+		protected override void OnNewOut(KeyValuePair<long, Message> item)
 		{
-			_messageQueue.Open();
+			var message = item.Value;
 
-			ThreadingHelper
-				.Thread(() => CultureInfo.InvariantCulture.DoInCulture(() =>
-				{
-					while (!_messageQueue.IsClosed)
-					{
-						try
-						{
-							if (!_messageQueue.TryDequeue(out var message))
-							{
-								break;
-							}
-
-							//if (!(message is TimeMessage) && message.GetType().Name != "BasketMessage")
-							//	Console.WriteLine("<< ({0}) {1}", System.Threading.Thread.CurrentThread.Name, message);
-
-							_msgStat.Remove(message);
-							NewOutMessage?.Invoke(message);
-						}
-						catch (Exception ex)
-						{
-							_errorHandler(ex);
-						}
-					}
-
-					Closed?.Invoke();
-				}))
-				.Name($"{Name} channel thread.")
-				//.Culture(CultureInfo.InvariantCulture)
-				.Launch();
-		}
-
-		/// <summary>
-		/// Close channel.
-		/// </summary>
-		public void Close()
-		{
-			_messageQueue.Close();
+			_msgStat.Remove(message);
+			NewOutMessage?.Invoke(message);
 		}
 
 		/// <summary>
@@ -148,7 +87,7 @@ namespace StockSharp.Messages
 			//	Console.WriteLine(">> ({0}) {1}", System.Threading.Thread.CurrentThread.Name, message);
 
 			_msgStat.Add(message);
-			_messageQueue.Enqueue(message);
+			SendIn(new KeyValuePair<long, Message>(message.LocalTime.UtcTicks, message));
 		}
 
 		/// <summary>
@@ -156,18 +95,18 @@ namespace StockSharp.Messages
 		/// </summary>
 		public event Action<Message> NewOutMessage;
 
-		void IDisposable.Dispose()
-		{
-			Close();
-		}
-
 		/// <summary>
 		/// Create a copy of <see cref="InMemoryMessageChannel"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone()
+		public virtual IMessageChannel Clone()
 		{
 			return new InMemoryMessageChannel(Name, _errorHandler) { MaxMessageCount = MaxMessageCount };
+		}
+
+		object ICloneable.Clone()
+		{
+			return Clone();
 		}
 	}
 }
