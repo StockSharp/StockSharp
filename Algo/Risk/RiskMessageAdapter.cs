@@ -63,6 +63,12 @@ namespace StockSharp.Algo.Risk
 		{
 			if (message.IsBack)
 			{
+				if (message.Adapter == this)
+				{
+					message.Adapter = null;
+					message.IsBack = false;
+				}
+				
 				base.SendInMessage(message);
 				return;
 			}
@@ -100,10 +106,11 @@ namespace StockSharp.Algo.Risk
 					//	base.SendInMessage(new DisconnectMessage());
 					//	break;
 					case RiskActions.CancelOrders:
-						base.SendInMessage(new OrderGroupCancelMessage
+						RaiseNewOutMessage(new OrderGroupCancelMessage
 						{
 							TransactionId = TransactionIdGenerator.GetNextId(),
 							IsBack = true,
+							Adapter = this,
 						});
 						break;
 					default:

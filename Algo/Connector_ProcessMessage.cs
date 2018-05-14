@@ -110,6 +110,12 @@ namespace StockSharp.Algo
 					var security = mdMsg.DataType == MarketDataTypes.News ? null : GetSecurity(mdMsg.SecurityId);
 					_subscriptionManager.ProcessRequest(security, mdMsg, true);
 				}
+				else if (message.Type == MessageTypes.OrderGroupCancel)
+				{
+					var cancelMsg = (OrderGroupCancelMessage)message;
+					_entityCache.AddMassCancelationId(cancelMsg.TransactionId);
+					SendInMessage(message);
+				}
 				else
 					SendInMessage(message);
 			}
