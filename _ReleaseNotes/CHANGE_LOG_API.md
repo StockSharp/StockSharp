@@ -27,6 +27,7 @@ StockSharp API Change log
 * (feature) MarketEmulator. CheckMoney option.
 * (bug) ConnectorWindow. Fix connector description for Quik lua.
 * (bug) RiskMessageAdapter fixes.
+* (feature) Plaza. v5.3.6
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
