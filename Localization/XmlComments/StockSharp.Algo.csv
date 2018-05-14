@@ -5969,7 +5969,7 @@ P:StockSharp.Algo.Testing.MarketEmulatorSettings.TimeZone/summary;Str68
 P:StockSharp.Algo.Testing.MarketEmulatorSettings.PriceLimitOffset/summary;DocStr1900
 P:StockSharp.Algo.Testing.MarketEmulatorSettings.IncreaseDepthVolume/summary;DocStr1901
 P:StockSharp.Algo.Testing.MarketEmulatorSettings.CheckTradingState/summary;CheckTradingState
-P:StockSharp.Algo.Testing.MarketEmulatorSettings.CheckMoney/summary;DocStr10480
+P:StockSharp.Algo.Testing.MarketEmulatorSettings.CheckMoney/summary;CheckMoney
 M:StockSharp.Algo.Testing.MarketEmulatorSettings.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr1884
 M:StockSharp.Algo.Testing.MarketEmulatorSettings.Save(Ecng.Serialization.SettingsStorage)/param/storage;Str1405
 M:StockSharp.Algo.Testing.MarketEmulatorSettings.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr1885

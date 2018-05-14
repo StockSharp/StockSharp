@@ -861,6 +861,11 @@ P:StockSharp.Xaml.Level1FieldsComboBox.DefaultFields/summary;DocStr8289
 T:StockSharp.Xaml.RiskPanel/summary;DocStr8122
 M:StockSharp.Xaml.RiskPanel.#ctor/summary;DocStr1
 P:StockSharp.Xaml.RiskPanel.Rules/summary;DocStr8125
+M:StockSharp.Xaml.RiskPanel.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
+M:StockSharp.Xaml.RiskPanel.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.RiskPanel.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Xaml.RiskPanel.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+E:StockSharp.Xaml.RiskPanel.LayoutChanged/summary;DocStr8995
 M:StockSharp.Xaml.RiskPanel.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.RiskWindow/summary;DocStr8124
 M:StockSharp.Xaml.RiskWindow.#ctor/summary;DocStr1
