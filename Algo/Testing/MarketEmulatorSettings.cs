@@ -474,7 +474,7 @@ namespace StockSharp.Algo.Testing
 		private bool _checkMoney;
 
 		/// <summary>
-		/// Check money.
+		/// Check money balance.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),

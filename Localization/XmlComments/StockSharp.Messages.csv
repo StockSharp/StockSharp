@@ -722,14 +722,10 @@ T:StockSharp.Messages.InMemoryMessageChannel/summary;DocStr4309
 M:StockSharp.Messages.InMemoryMessageChannel.#ctor(System.String,System.Action{System.Exception})/summary;DocStr1
 M:StockSharp.Messages.InMemoryMessageChannel.#ctor(System.String,System.Action{System.Exception})/param/name;DocStr4310
 M:StockSharp.Messages.InMemoryMessageChannel.#ctor(System.String,System.Action{System.Exception})/param/errorHandler;DocStr4311
-P:StockSharp.Messages.InMemoryMessageChannel.Name/summary;DocStr4312
 P:StockSharp.Messages.InMemoryMessageChannel.MessageCount/summary;DocStr4313
 P:StockSharp.Messages.InMemoryMessageChannel.MaxMessageCount/summary;DocStr4314
 P:StockSharp.Messages.InMemoryMessageChannel.MaxMessageCount/remarks;DocStr4315
-E:StockSharp.Messages.InMemoryMessageChannel.Closed/summary;DocStr4316
-P:StockSharp.Messages.InMemoryMessageChannel.IsOpened/summary;DocStr4078
-M:StockSharp.Messages.InMemoryMessageChannel.Open/summary;DocStr4076
-M:StockSharp.Messages.InMemoryMessageChannel.Close/summary;DocStr4077
+M:StockSharp.Messages.InMemoryMessageChannel.OnNewOut(System.Collections.Generic.KeyValuePair{System.Int64,StockSharp.Messages.Message})/inheritdoc;DocStr8459
 M:StockSharp.Messages.InMemoryMessageChannel.SendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Messages.InMemoryMessageChannel.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 E:StockSharp.Messages.InMemoryMessageChannel.NewOutMessage/summary;DocStr2237
@@ -1461,7 +1457,7 @@ F:StockSharp.Messages.MessageAdapterCategories.Asia/summary;DocStr10467
 F:StockSharp.Messages.MessageAdapterCategories.Stock/summary;Stock
 F:StockSharp.Messages.MessageAdapterCategories.FX/summary;DocStr10468
 F:StockSharp.Messages.MessageAdapterCategories.Crypto/summary;DocStr10469
-F:StockSharp.Messages.MessageAdapterCategories.History/summary;DocStr10480
+F:StockSharp.Messages.MessageAdapterCategories.History/summary;History
 F:StockSharp.Messages.MessageAdapterCategories.RealTime/summary;RealTime
 F:StockSharp.Messages.MessageAdapterCategories.Free/summary;Free
 F:StockSharp.Messages.MessageAdapterCategories.Paid/summary;Paid

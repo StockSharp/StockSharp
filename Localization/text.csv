@@ -3751,7 +3751,7 @@ XamlStr323;Lowest ask;Наименьший оффер
 XamlStr324;Find security;Найти инструмент
 XamlStr325;Find securities:;Найти инструменты:
 CommissionSettings;Commission settings;Настройка комиссий
-RiskSettings;Risk settings;Настройка контроля рисков
+RiskSettings;Risk management settings.;Настройка контроля рисков.
 XamlStr332;Mapping configuration for portfolios and connections;Настройка сопоставления портфелей и подключений
 NetworkSettings;Network settings;Настройки сети
 NotificationSettings;Notification settings;Настройки уведомлений
