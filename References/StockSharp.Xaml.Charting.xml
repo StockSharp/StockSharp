@@ -441,7 +441,7 @@
             </summary>
       <param name="order">The order.</param>
       <param name="isError">Whether an order operation has failed.</param>
-      <param name="freeze">Do not allow user to edit the order from chart.</param>
+      <param name="isFrozen">Do not allow user to edit the order from chart.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
