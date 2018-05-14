@@ -1,5 +1,22 @@
 StockSharp Terminal Change log
 ========================
+## v4.4.9:
+* (feature) Emulator support.
+* (feature) Risk management.
+* (bug) Charting. RVI and Gator rendeding fixes.
+* (bug) Charting. Order moving fix.
+* (bug) Themes fixes.
+* (bug) Grids. Fix filters for enum based fields.
+* (feature) Security storage. Forced updates for manual modified data only.
+* (feature) FIX connector. IssueDate, IssueSize translation support.
+* (bug) FIX connector. SpectraFixDialect. Order mass cancel fix.
+* (bug) OrderGrid. Active filters fix.
+* (feature) MarketEmulator. CheckMoney option.
+* (bug) ConnectorWindow. Fix connector description for Quik lua.
+* (feature) Plaza. v5.3.6
+* (feature) Micex. Stock30, Currency28, Currency30 interfaces.
+* (bug) Transaq. Fix shared dll initialization https://stocksharp.ru/forum/9421/podklyuchenie-sdata-k-tranzak-/
+
 ## v4.4.8:
 * (feature) Charting. Auto select Security and Portfolio.
 * (feature) Charting. Show non-charting orders on chart.
