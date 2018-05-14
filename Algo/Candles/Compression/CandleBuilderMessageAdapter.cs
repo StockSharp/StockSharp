@@ -403,8 +403,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 				case MessageTypes.CandleTimeFrame:
 				{
-					var smallCandle = (CandleMessage)message;
-					var series = _seriesByTransactionId.TryGetValue(smallCandle.OriginalTransactionId);
+					var candle = (CandleMessage)message;
+					var series = _seriesByTransactionId.TryGetValue(candle.OriginalTransactionId);
 
 					if (series == null)
 						break;
@@ -418,12 +418,12 @@ namespace StockSharp.Algo.Candles.Compression
 							break;
 
 						case SeriesStates.SmallTimeFrame:
-							var candles = series.BigTimeFrameCompressor.Process(smallCandle).Where(c => c.State == CandleStates.Finished);
+							var candles = series.BigTimeFrameCompressor.Process(candle).Where(c => c.State == CandleStates.Finished);
 
 							foreach (var bigCandle in candles)
 							{
 								bigCandle.OriginalTransactionId = series.Original.TransactionId;
-								bigCandle.Adapter = smallCandle.Adapter;
+								bigCandle.Adapter = candle.Adapter;
 								series.LastTime = bigCandle.CloseTime;
 								base.OnInnerAdapterNewOutMessage(bigCandle);
 							}
