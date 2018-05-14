@@ -26,6 +26,7 @@ StockSharp API Change log
 * (feature) Charting. GatorOscillatorPainter, RelativeVigorIndexPainter.
 * (feature) MarketEmulator. CheckMoney option.
 * (bug) ConnectorWindow. Fix connector description for Quik lua.
+* (bug) RiskMessageAdapter fixes.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

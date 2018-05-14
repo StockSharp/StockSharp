@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Risk
 	using System;
 
 	using Ecng.ComponentModel;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -47,10 +48,10 @@ namespace StockSharp.Algo.Risk
 			get => _riskManager;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
+				_riskManager = value ?? throw new ArgumentNullException(nameof(value));
 
-				_riskManager = value;
+				if (_riskManager.Parent != null)
+					_riskManager.Parent = this;
 			}
 		}
 
@@ -95,11 +96,15 @@ namespace StockSharp.Algo.Risk
 					{
 						break;
 					}
-					case RiskActions.StopTrading:
-						base.SendInMessage(new DisconnectMessage());
-						break;
+					//case RiskActions.StopTrading:
+					//	base.SendInMessage(new DisconnectMessage());
+					//	break;
 					case RiskActions.CancelOrders:
-						base.SendInMessage(new OrderGroupCancelMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+						base.SendInMessage(new OrderGroupCancelMessage
+						{
+							TransactionId = TransactionIdGenerator.GetNextId(),
+							IsBack = true,
+						});
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -113,7 +118,10 @@ namespace StockSharp.Algo.Risk
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new RiskMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new RiskMessageAdapter((IMessageAdapter)InnerAdapter.Clone())
+			{
+				RiskManager = RiskManager.Clone(),
+			};
 		}
 	}
 }
