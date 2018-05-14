@@ -30,6 +30,7 @@ StockSharp API Change log
 * (feature) Plaza. v5.3.6
 * (feature) Micex. Stock30, Currency28, Currency30 interfaces.
 * (bug) Transaq. Fix shared dll initialization https://stocksharp.ru/forum/9421/podklyuchenie-sdata-k-tranzak-/
+* (feature) FinamHistorySource. .NET 4.6 minimum required.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
