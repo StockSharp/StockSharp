@@ -1,5 +1,17 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.9:
+* (bug) Charting. RVI and Gator rendeding fixes.
+* (bug) Themes fixes.
+* (bug) Grids. Fix filters for enum based fields.
+* (bug) FXCM live source fix.
+* (bug) Themes fixes.
+* (feature) Support board edit by FIX protocol.
+* (feature) Modify securities by FIX connection.
+* (feature) Plaza. v5.3.6
+* (feature) Micex. Stock30, Currency28, Currency30 interfaces.
+* (bug) Transaq. Fix shared dll initialization https://stocksharp.ru/forum/9421/podklyuchenie-sdata-k-tranzak-/
+
 ## v4.4.8:
 * (feature) Task pane redesign.
 * (feature) Candles build from support (mostly fro FX market).
