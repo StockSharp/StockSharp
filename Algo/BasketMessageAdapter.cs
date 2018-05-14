@@ -306,6 +306,11 @@ namespace StockSharp.Algo
 				adapter = new LatencyMessageAdapter(adapter) { LatencyManager = LatencyManager.Clone() };
 			}
 
+			if (adapter.IsNativeIdentifiers)
+			{
+				adapter = new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage);
+			}
+
 			if (SlippageManager != null)
 			{
 				adapter = new SlippageMessageAdapter(adapter) { SlippageManager = SlippageManager.Clone() };
@@ -329,11 +334,6 @@ namespace StockSharp.Algo
 			if (SupportCandlesCompression)
 			{
 				adapter = new CandleBuilderMessageAdapter(adapter, ExchangeInfoProvider);
-			}
-
-			if (adapter.IsNativeIdentifiers)
-			{
-				adapter = new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage);
 			}
 
 			if (SecurityMappingStorage != null && !adapter.StorageName.IsEmpty())
