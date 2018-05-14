@@ -28,6 +28,7 @@ StockSharp API Change log
 * (bug) ConnectorWindow. Fix connector description for Quik lua.
 * (bug) RiskMessageAdapter fixes.
 * (feature) Plaza. v5.3.6
+* (feature) Micex. Stock30, Currency28, Currency30 interfaces.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
