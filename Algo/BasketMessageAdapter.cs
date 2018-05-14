@@ -537,10 +537,15 @@ namespace StockSharp.Algo
 
 			var adapters = GetAdapters(mdMsg)?.Where(a =>
 			{
-				if (!a.IsMarketDataTypeSupported(mdMsg.DataType))
-					return false;
+				var isTfCandles = mdMsg.DataType == MarketDataTypes.CandleTimeFrame;
 
-				if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
+				if (!a.IsMarketDataTypeSupported(mdMsg.DataType))
+				{
+					if (!isTfCandles)
+						return false;
+				}
+
+				if (!isTfCandles)
 					return true;
 
 				var original = (TimeSpan)mdMsg.Arg;
