@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Candles.Compression
 				set => _current = value ?? throw new ArgumentNullException(nameof(value));
 			}
 
-			public SeriesStates State { get; set; }
+			public SeriesStates State { get; set; } = SeriesStates.None;
 
 			public BiggerTimeFrameCandleCompressor BigTimeFrameCompressor { get; set; }
 
@@ -299,7 +299,8 @@ namespace StockSharp.Algo.Candles.Compression
 			var series = new SeriesInfo((MarketDataMessage)original.Clone(), current)
 			{
 				LastTime = lastTime,
-				Transform = CreateTransform(current.DataType, current.BuildCandlesField)
+				Transform = CreateTransform(current.DataType, current.BuildCandlesField),
+				State = SeriesStates.Compress,
 			};
 
 			AddSeries(series);
