@@ -403,7 +403,7 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.SupportedMessages = adapter.SupportedMessages.Concat(type).ToArray();
+			adapter.SupportedMessages = adapter.SupportedMessages.Concat(type).Distinct().ToArray();
 		}
 
 		/// <summary>
