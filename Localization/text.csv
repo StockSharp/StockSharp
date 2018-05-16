@@ -4758,7 +4758,7 @@ Margin;Margin;Маржинальность
 IsMargin;Is margin enabled.;Включена ли маржинальность.
 Ssl;SSL;SSL
 SslProtocol;SSL protocol to establish connect.;SSL протокол для установления соединения.
-SslCertificate;SSL certificate;SSL сертификат
+SslCertificate;SSL certificate.;SSL сертификат.
 SecurityStopped;Security '{0}' is not available for trading.;Инструмент '{0}' не доступен для торгов.
 SessionStopped;Board '{0}' has state '{1}' and not available for trading.;Площадка '{0}' в состоянии '{1}' и не доступна для торгов.
 SessionState;Session state;Состояние торговой сессии
@@ -4812,6 +4812,13 @@ MarketDataTimeZone;Market-data time zone.;Временная зона марке
 Exchange;Exchange;Биржа
 Average;Average;Среднее
 CheckMoney;Check money balance.;Проверять денежный баланс.
+SslCertificatePassword;SSL certificate password.;Пароль к SSL сертификату.
+CheckCertificateRevocation;Check revocation;Проверка отзыва
+CheckCertificateRevocationDesc;Check certificate revocation.;Проверка отзыва сертификата.
+ValidateRemoteCertificates;Validate remote;Проверять удаленные
+ValidateRemoteCertificatesDesc;Validate remove certificates.;Проверять удаленные сертификаты.
+TargetHost;Host name;Имя сервера
+TargetHostDesc;The name of the server that shares SSL connection.;Имя сервера, использующего SSL-соединение.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14927,3 +14934,5 @@ DocStr10476;Commodities;Товары
 DocStr10477;Specifies a categories for message adapter;Указывать категории для адаптера сообщений
 DocStr10478;Categories;Категории
 DocStr10479;Change time interval updates message;Сообщение измеения интервала обновления
+DocStr10480;Quik (pre trade);Quik (pre trade)
+DocStr10481;BRVM, Regional Securities Exchange SA;BRVM, Regional Securities Exchange SA

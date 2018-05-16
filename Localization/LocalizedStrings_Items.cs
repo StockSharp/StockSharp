@@ -47796,5 +47796,75 @@ namespace StockSharp.Localization
 		/// Check money balance.
 		/// </summary>
 		public static string CheckMoney => GetString(CheckMoneyKey);
+
+		/// <summary>
+		/// SSL certificate password.
+		/// </summary>
+		public const string SslCertificatePasswordKey = nameof(SslCertificatePassword);
+
+		/// <summary>
+		/// SSL certificate password.
+		/// </summary>
+		public static string SslCertificatePassword => GetString(SslCertificatePasswordKey);
+
+		/// <summary>
+		/// Check revocation
+		/// </summary>
+		public const string CheckCertificateRevocationKey = nameof(CheckCertificateRevocation);
+
+		/// <summary>
+		/// Check revocation
+		/// </summary>
+		public static string CheckCertificateRevocation => GetString(CheckCertificateRevocationKey);
+
+		/// <summary>
+		/// Check certificate revocation.
+		/// </summary>
+		public const string CheckCertificateRevocationDescKey = nameof(CheckCertificateRevocationDesc);
+
+		/// <summary>
+		/// Check certificate revocation.
+		/// </summary>
+		public static string CheckCertificateRevocationDesc => GetString(CheckCertificateRevocationDescKey);
+
+		/// <summary>
+		/// Validate remote
+		/// </summary>
+		public const string ValidateRemoteCertificatesKey = nameof(ValidateRemoteCertificates);
+
+		/// <summary>
+		/// Validate remote
+		/// </summary>
+		public static string ValidateRemoteCertificates => GetString(ValidateRemoteCertificatesKey);
+
+		/// <summary>
+		/// Validate remove certificates.
+		/// </summary>
+		public const string ValidateRemoteCertificatesDescKey = nameof(ValidateRemoteCertificatesDesc);
+
+		/// <summary>
+		/// Validate remove certificates.
+		/// </summary>
+		public static string ValidateRemoteCertificatesDesc => GetString(ValidateRemoteCertificatesDescKey);
+
+		/// <summary>
+		/// Host name
+		/// </summary>
+		public const string TargetHostKey = nameof(TargetHost);
+
+		/// <summary>
+		/// Host name
+		/// </summary>
+		public static string TargetHost => GetString(TargetHostKey);
+
+		/// <summary>
+		/// The name of the server that shares SSL connection.
+		/// </summary>
+		public const string TargetHostDescKey = nameof(TargetHostDesc);
+
+		/// <summary>
+		/// The name of the server that shares SSL connection.
+		/// </summary>
+		public static string TargetHostDesc => GetString(TargetHostDescKey);
 	}
 }
