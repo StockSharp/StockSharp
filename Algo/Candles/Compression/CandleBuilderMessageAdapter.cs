@@ -167,7 +167,7 @@ namespace StockSharp.Algo.Candles.Compression
 						var originalTf = (TimeSpan)mdMsg.Arg;
 						var timeFrames = InnerAdapter.GetTimeFrames(mdMsg.SecurityId).ToArray();
 
-						if (timeFrames.Contains(originalTf))
+						if (timeFrames.Contains(originalTf) || InnerAdapter.CheckTimeFrameByRequest)
 						{
 							var original = (MarketDataMessage)mdMsg.Clone();
 							_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, original)

@@ -161,6 +161,10 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public virtual IEnumerable<TimeSpan> TimeFrames => Enumerable.Empty<TimeSpan>();
 
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool CheckTimeFrameByRequest { get; set; }
+
 		private TimeSpan _heartbeatInterval = TimeSpan.Zero;
 
 		/// <summary>
@@ -596,6 +600,7 @@ namespace StockSharp.Messages
 			HeartbeatInterval = storage.GetValue<TimeSpan>(nameof(HeartbeatInterval));
 			SupportedMessages = storage.GetValue<string[]>(nameof(SupportedMessages)).Select(i => i.To<MessageTypes>()).ToArray();
 			AssociatedBoardCode = storage.GetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
+			CheckTimeFrameByRequest = storage.GetValue(nameof(CheckTimeFrameByRequest), CheckTimeFrameByRequest);
 
 			base.Load(storage);
 		}
@@ -610,6 +615,7 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
 			storage.SetValue(nameof(SupportedMessages), SupportedMessages.Select(t => t.To<string>()).ToArray());
 			storage.SetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
+			storage.SetValue(nameof(CheckTimeFrameByRequest), CheckTimeFrameByRequest);
 
 			base.Save(storage);
 		}

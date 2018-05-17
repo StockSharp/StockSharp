@@ -34,6 +34,7 @@ StockSharp API Change log
 * (feature) FIX connector. SSL support extended.
 * (feature) FIX connector. QUIK FIX PreRrade support.
 * (bug) PortfolioEditor, SecurityEditor. Fix keyboard typing.
+* (feature) IMessageAdapter. CheckTimeFrameByRequest property.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

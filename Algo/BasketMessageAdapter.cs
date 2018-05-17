@@ -551,7 +551,7 @@ namespace StockSharp.Algo
 				var original = (TimeSpan)mdMsg.Arg;
 				var timeFrames = a.GetTimeFrames(mdMsg.SecurityId).ToArray();
 
-				if (timeFrames.Contains(original))
+				if (timeFrames.Contains(original)|| a.CheckTimeFrameByRequest)
 					return true;
 
 				if (mdMsg.AllowBuildFromSmallerTimeFrame)
@@ -916,7 +916,9 @@ namespace StockSharp.Algo
 			{
 				// we can initiate multiple subscriptions with unique request id and same params
 				_subscriptionsByKey.TryAdd(key, adapter);
-				_subscriptionsById.Add(originalTransactionId, adapter);
+
+				// TODO
+				_subscriptionsById.TryAdd(originalTransactionId, adapter);
 			}
 
 			RaiseMarketDataMessage(adapter, originalTransactionId, error, isSubscribe);

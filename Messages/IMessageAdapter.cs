@@ -70,6 +70,11 @@ namespace StockSharp.Messages
 		IEnumerable<TimeSpan> TimeFrames { get; }
 
 		/// <summary>
+		/// Check possible time-frame by request.
+		/// </summary>
+		bool CheckTimeFrameByRequest { get; set; }
+
+		/// <summary>
 		/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
 		/// </summary>
 		ReConnectionSettings ReConnectionSettings { get; }
