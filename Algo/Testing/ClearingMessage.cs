@@ -22,7 +22,7 @@ namespace StockSharp.Algo.Testing
 	/// <summary>
 	/// The message about performing clearing on exchange.
 	/// </summary>
-	class ClearingMessage : Message
+	public class ClearingMessage : Message
 	{
 		/// <summary>
 		/// Security ID.
