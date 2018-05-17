@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The interval of message <see cref="TimeMessage"/> generation. By default, it is equal to 1 sec.
 		/// </summary>
-		public virtual TimeSpan MarketTimeChangedInterval
+		public TimeSpan MarketTimeChangedInterval
 		{
 			get => _marketTimeChangedInterval;
 			set
@@ -176,7 +176,7 @@ namespace StockSharp.Algo.Storages
 		{
 			if (MarketTimeChangedInterval != TimeSpan.Zero && !_isTimeLineAdded)
 			{
-				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(null, null, GetTimeLine), _transactionIdGenerator.GetNextId());
+				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(null, null, d => GetTimeLine(d, MarketTimeChangedInterval)), _transactionIdGenerator.GetNextId());
 
 				_isTimeLineAdded = true;
 				_moveNextSyncRoot.WaitSignal();
@@ -296,7 +296,7 @@ namespace StockSharp.Algo.Storages
 									var noData = !messages.DataTypes.Except(messageTypes).Any();
 
 									if (noData)
-										EnqueueMessages(startDate, stopDate, loadDate, startTime, token, GetSimpleTimeLine(loadDate));
+										EnqueueMessages(startDate, stopDate, loadDate, startTime, token, GetSimpleTimeLine(loadDate, MarketTimeChangedInterval));
 									else
 										EnqueueMessages(startDate, stopDate, loadDate, startTime, token, messages);
 								}
@@ -424,14 +424,14 @@ namespace StockSharp.Algo.Storages
 			return new Range<TimeSpan>(utcMin.TimeOfDay, utcMax.TimeOfDay);
 		}
 
-		private IEnumerable<TimeMessage> GetTimeLine(DateTimeOffset date)
+		private IEnumerable<TimeMessage> GetTimeLine(DateTimeOffset date, TimeSpan interval)
 		{
 			var ranges = GetOrderedRanges(date);
 			var lastTime = TimeSpan.Zero;
 
 			foreach (var range in ranges)
 			{
-				for (var time = range.Item2.Min; time <= range.Item2.Max; time += MarketTimeChangedInterval)
+				for (var time = range.Item2.Min; time <= range.Item2.Max; time += interval)
 				{
 					var serverTime = GetTime(date, time);
 
@@ -443,13 +443,13 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			foreach (var m in GetPostTradeTimeMessages(date, lastTime))
+			foreach (var m in GetPostTradeTimeMessages(date, lastTime, interval))
 			{
 				yield return m;
 			}
 		}
 
-		private IEnumerable<TimeMessage> GetSimpleTimeLine(DateTimeOffset date)
+		private IEnumerable<TimeMessage> GetSimpleTimeLine(DateTimeOffset date, TimeSpan interval)
 		{
 			var ranges = GetOrderedRanges(date);
 			var lastTime = TimeSpan.Zero;
@@ -467,7 +467,7 @@ namespace StockSharp.Algo.Storages
 				lastTime = range.Item2.Max;
 			}
 
-			foreach (var m in GetPostTradeTimeMessages(date, lastTime))
+			foreach (var m in GetPostTradeTimeMessages(date, lastTime, interval))
 			{
 				yield return m;
 			}
@@ -478,11 +478,11 @@ namespace StockSharp.Algo.Storages
 			return (date.Date + timeOfDay).ApplyTimeZone(date.Offset);
 		}
 
-		private IEnumerable<TimeMessage> GetPostTradeTimeMessages(DateTimeOffset date, TimeSpan lastTime)
+		private IEnumerable<TimeMessage> GetPostTradeTimeMessages(DateTimeOffset date, TimeSpan lastTime, TimeSpan interval)
 		{
 			for (var i = 0; i < PostTradeMarketTimeChangedCount; i++)
 			{
-				lastTime += MarketTimeChangedInterval;
+				lastTime += interval;
 
 				if (lastTime > TimeHelper.LessOneDay)
 					break;

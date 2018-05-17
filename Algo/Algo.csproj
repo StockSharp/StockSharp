@@ -408,6 +408,7 @@
     <Compile Include="Strategies\Testing\EmulationSettings.cs" />
     <Compile Include="Strategies\TimeFrameStrategy.cs" />
     <Compile Include="SubscriptionMessageAdapter.cs" />
+    <Compile Include="Testing\ChangeTimeIntervalMessage.cs" />
     <Compile Include="Testing\CommissionRuleMessage.cs" />
     <Compile Include="Testing\HistorySourceMessage.cs" />
     <Compile Include="TimeQuoteChange.cs" />

@@ -133,6 +133,7 @@ namespace StockSharp.Algo.Testing
 			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
 			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource);
 			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
+			this.AddSupportedMessage(ExtendedMessageTypes.ChangeTimeInterval);
 
 			this.AddSupportedMarketDataType(MarketDataTypes.Trades);
 			this.AddSupportedMarketDataType(MarketDataTypes.MarketDepth);
@@ -407,6 +408,13 @@ namespace StockSharp.Algo.Testing
 					else
 						_generators.Remove(item);
 
+					break;
+				}
+
+				case ExtendedMessageTypes.ChangeTimeInterval:
+				{
+					var intervalMsg = (ChangeTimeIntervalMessage)message;
+					BasketStorage.MarketTimeChangedInterval = intervalMsg.Interval;
 					break;
 				}
 			}

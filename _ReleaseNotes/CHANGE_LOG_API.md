@@ -36,6 +36,7 @@ StockSharp API Change log
 * (bug) PortfolioEditor, SecurityEditor. Fix keyboard typing.
 * (feature) IMessageAdapter. CheckTimeFrameByRequest property.
 * (bug) TimeSpanEditor. Design fix.
+* (feature) Backtesting. Dynamic change market time interval.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
