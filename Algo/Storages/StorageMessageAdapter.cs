@@ -561,7 +561,7 @@ namespace StockSharp.Algo.Storages
 								case MarketDataTypes.Trades:
 									lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-										.ToCandles(mdMsg, true), range.Item1, m => SetTransactionId(m, transactionId));
+										.ToCandles(mdMsg), range.Item1, m => SetTransactionId(m, transactionId));
 
 									break;
 
@@ -573,7 +573,7 @@ namespace StockSharp.Algo.Storages
 										case Level1Fields.LastTradePrice:
 											lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											    .ToCandles(mdMsg, false), range.Item1, m => SetTransactionId(m, transactionId));
+											    .ToCandles(mdMsg), range.Item1, m => SetTransactionId(m, transactionId));
 
 											break;
 											
@@ -597,7 +597,7 @@ namespace StockSharp.Algo.Storages
 											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
 												.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 												.ToTicks()
-												.ToCandles(mdMsg, false), range.Item1, m => SetTransactionId(m, transactionId));
+												.ToCandles(mdMsg), range.Item1, m => SetTransactionId(m, transactionId));
 											break;
 
 										case Level1Fields.BestBidPrice:

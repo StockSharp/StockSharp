@@ -309,17 +309,19 @@ namespace StockSharp.Algo.Candles
 				private readonly ICandleBuilder _candleBuilder;
 				private readonly MarketDataMessage _mdMsg;
 				private readonly bool _onlyFormed;
-				private readonly ICandleBuilderValueTransform _transform;
 				private readonly IEnumerable<Message> _messages;
+
+				private ICandleBuilderValueTransform _transform;
+
 				private CandleMessage _lastActiveCandle;
 				private CandleMessage _lastCandle;
 
 				public CandleMessageEnumerator(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<Message> messages, ICandleBuilderValueTransform transform)
 				{
-					_mdMsg = mdMsg;
+					_mdMsg = mdMsg ?? throw new ArgumentNullException(nameof(mdMsg));
 					_onlyFormed = onlyFormed;
+					_messages = messages ?? throw new ArgumentNullException(nameof(messages));
 					_transform = transform;
-					_messages = messages;
 
 					_messagesEnumerator = _messages.GetEnumerator();
 					_candleBuilder = mdMsg.DataType.CreateCandleBuilder();
@@ -355,7 +357,44 @@ namespace StockSharp.Algo.Candles
 						if (!_messagesEnumerator.MoveNext())
 							break;
 
-						if (!_transform.Process(_messagesEnumerator.Current))
+						var sourceMsg = _messagesEnumerator.Current;
+
+						if (_transform == null)
+						{
+							switch (sourceMsg.Type)
+							{
+								case MessageTypes.QuoteChange:
+									_transform = new QuoteCandleBuilderValueTransform();
+									break;
+
+								case MessageTypes.Level1Change:
+									_transform = new Level1CandleBuilderValueTransform();
+									break;
+
+								case MessageTypes.Execution:
+								{
+									var execMsg = (ExecutionMessage)sourceMsg;
+
+									switch (execMsg.ExecutionType)
+									{
+										case ExecutionTypes.Tick:
+											_transform = new TickCandleBuilderValueTransform();
+											break;
+										case ExecutionTypes.OrderLog:
+											_transform = new OrderLogCandleBuilderValueTransform();
+											break;
+										default:
+											throw new ArgumentOutOfRangeException(nameof(execMsg.ExecutionType), execMsg.ExecutionType, LocalizedStrings.Str1219);
+									}
+
+									break;
+								}
+								default:
+									throw new ArgumentOutOfRangeException(nameof(sourceMsg.Type), sourceMsg.Type, LocalizedStrings.Str1219);
+							}
+						}
+
+						if (!_transform.Process(sourceMsg))
 							continue;
 
 						_lastActiveCandle = null;
@@ -396,8 +435,8 @@ namespace StockSharp.Algo.Candles
 				}
 			}
 
-			public CandleMessageEnumerable(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<ExecutionMessage> executions, bool isTick)
-				: base(() => new CandleMessageEnumerator(mdMsg, onlyFormed, executions, isTick ? (ICandleBuilderValueTransform)new TickCandleBuilderValueTransform() : new OrderLogCandleBuilderValueTransform()))
+			public CandleMessageEnumerable(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<ExecutionMessage> executions)
+				: base(() => new CandleMessageEnumerator(mdMsg, onlyFormed, executions, null))
 			{
 				if (mdMsg == null)
 					throw new ArgumentNullException(nameof(mdMsg));
@@ -468,12 +507,11 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="executions">Tick data.</param>
 		/// <param name="mdMsg">Market data subscription.</param>
-		/// <param name="isTicks">Determine if <paramref name="executions"/> is <see cref="ExecutionTypes.Tick"/> or <see cref="ExecutionTypes.OrderLog"/>.</param>
 		/// <param name="onlyFormed">Process only formed candles.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> executions, MarketDataMessage mdMsg, bool isTicks, bool onlyFormed = true)
+		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> executions, MarketDataMessage mdMsg, bool onlyFormed = true)
 		{
-			return new CandleMessageEnumerable(mdMsg, onlyFormed, executions, isTicks);
+			return new CandleMessageEnumerable(mdMsg, onlyFormed, executions);
 		}
 
 		/// <summary>
