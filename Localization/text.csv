@@ -14936,3 +14936,10 @@ DocStr10478;Categories;Категории
 DocStr10479;Change time interval updates message;Сообщение измеения интервала обновления
 DocStr10480;Quik (pre trade);Quik (pre trade)
 DocStr10481;BRVM, Regional Securities Exchange SA;BRVM, Regional Securities Exchange SA
+DocStr10482;Extended {0};Расширенные {0}
+DocStr10483;Message handler;Обработчик сообщений
+DocStr10484;The request for start historical data;Запрос запуска исторических данных
+DocStr10485;The request for stop historical data;Запрос остановки исторических данных
+DocStr10486;The request for change historical interval;Запрос изменения интервала истории
+DocStr10487;Check possible time-frame by request;Проверять возможный тайм-фрейм через запрос
+DocStr10488;Brush;Кисть
