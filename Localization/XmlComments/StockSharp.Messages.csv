@@ -1299,6 +1299,7 @@ P:StockSharp.Messages.MarketDataMessage.BuildCandlesField/summary;DocStr10135
 P:StockSharp.Messages.MarketDataMessage.AllowBuildFromSmallerTimeFrame/summary;SmallerTimeFrameDesc
 P:StockSharp.Messages.MarketDataMessage.AllowBuildFromSmallerTimeFrame/remarks;DocStr10386
 P:StockSharp.Messages.MarketDataMessage.IsHistory/summary;DocStr9664
+P:StockSharp.Messages.MarketDataMessage.IsRegularTradingHours/summary;RegularTradingHours
 F:StockSharp.Messages.MarketDataMessage.DefaultMaxDepth/summary;DocStr4474
 M:StockSharp.Messages.MarketDataMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.MarketDataMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93

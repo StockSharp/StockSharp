@@ -260,6 +260,12 @@ namespace StockSharp.Messages
 		public bool IsHistory { get; set; }
 
 		/// <summary>
+		/// Use only the regular trading hours for which data will be requested.
+		/// </summary>
+		[DataMember]
+		public bool IsRegularTradingHours { get; set; }
+
+		/// <summary>
 		/// The default depth of order book.
 		/// </summary>
 		public const int DefaultMaxDepth = 50;
@@ -307,6 +313,7 @@ namespace StockSharp.Messages
 				IsCalcVolumeProfile = IsCalcVolumeProfile,
 				//IsHistory = IsHistory,
 				AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame,
+				IsRegularTradingHours = IsRegularTradingHours,
 			};
 
 			CopyTo(clone);
