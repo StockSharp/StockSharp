@@ -114,6 +114,11 @@
       <param name="version">FIX version.</param>
       <param name="format">FIX protocol format.</param>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Version">
+      <summary>
+            FIX version.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Encoding">
       <summary>
             Encoding.
@@ -246,13 +251,13 @@
             Reset state.
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})">
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
       <summary>
             Read next message from FIX protocol.
             </summary>
       <param name="reader">The reader of data recorded in the FIX protocol format.</param>
       <param name="msgType">Message type.</param>
-      <param name="messages">The allocation array.</param>
+      <param name="messageHandler">Message handler.</param>
       <returns>
         <see langword="true" />, if the messages was read successfully, otherwise, <see langword="false" />.</returns>
     </member>
@@ -343,22 +348,22 @@
       <returns>
         <see langword="true" />, if the messages was read successfully, otherwise, <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,Ecng.Common.AllocationArray{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage)">
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage)">
       <summary>
             Process <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> instance.
             </summary>
       <param name="report">
         <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> instance.</param>
-      <param name="messages">The allocation array.</param>
+      <param name="messageHandler">Message handler.</param>
       <param name="message">The message contains information about the execution.</param>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,Ecng.Common.AllocationArray{StockSharp.Messages.Message},System.Action{StockSharp.Fix.Native.ExecutionReport,Ecng.Common.AllocationArray{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage})">
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},System.Action{StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage})">
       <summary>
             Process <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> instance.
             </summary>
       <param name="report">
         <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> instance.</param>
-      <param name="messages">The allocation array.</param>
+      <param name="messageHandler">Message handler.</param>
       <param name="processExecMsg">Post handle an <see cref="T:StockSharp.Messages.ExecutionMessage" /> instance.</param>
     </member>
     <member name="T:StockSharp.Fix.Dialects.DefaultFastDialect">
@@ -383,6 +388,9 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
       <param name="createOrderCondition">Order condition creating handler.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.SupportedMessages">
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.ConvertToLatin">
       <summary>
@@ -414,15 +422,8 @@
       <param name="getCondition">The function returning the order condition.</param>
       <returns>Whether the data was successfully processed.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})">
-      <summary>
-            Read next message from FIX protocol.
-            </summary>
-      <param name="reader">The reader of data recorded in the FIX protocol format.</param>
-      <param name="msgType">Message type.</param>
-      <param name="messages">The allocation array.</param>
-      <returns>
-        <see langword="true" />, if the messages was read successfully, otherwise, <see langword="false" />.</returns>
+    <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.Dialects.IFastDialect">
       <summary>
@@ -494,6 +495,11 @@
     <member name="T:StockSharp.Fix.Dialects.IFixDialect">
       <summary>
             The interface describing the dialect of the FIX protocol.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Version">
+      <summary>
+            FIX version.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.Encoding">
@@ -657,11 +663,12 @@
       <returns>
         <see langword="true" /> if the specified message was processed successfully, otherwise, <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.IFixDialect.Read(Ecng.Common.AllocationArray{StockSharp.Messages.Message})">
+    <member name="M:StockSharp.Fix.Dialects.IFixDialect.Read(System.String,System.Action{StockSharp.Messages.Message})">
       <summary>
             Read next messages from FIX protocol.
             </summary>
-      <param name="messages">The messages.</param>
+      <param name="messageType">Message type.</param>
+      <param name="messageHandler">Message handler.</param>
       <returns>
         <see langword="true" /> if incomming messages was processed successfully, otherwise, <see langword="false" />.</returns>
     </member>
@@ -5014,6 +5021,21 @@
             The request for board delete.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.HistoryStart">
+      <summary>
+            The request for start historical data.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.HistoryEnd">
+      <summary>
+            The request for stop historical data.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.HistoryInterval">
+      <summary>
+            The request for change historical interval.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FixTags">
       <summary>
             FIX protocol tags.
@@ -5780,6 +5802,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.LastFragment">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.StartDate">
       <summary>
       </summary>
     </member>
