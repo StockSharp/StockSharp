@@ -40,6 +40,8 @@ StockSharp API Change log
 * (feature) LogControl. Designer adapted for Devexpress.
 * (feature) LogControl. LayoutChanged event.
 * (bug) MarketDataGrid. Fix further refreshes after error request.
+* (feature) CandleSeries.UsRegularTradingHours.
+* (feature) CandleBuilder. IExchangeInfoProvider as input argument.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

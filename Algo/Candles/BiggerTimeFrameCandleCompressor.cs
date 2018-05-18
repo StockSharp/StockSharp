@@ -67,14 +67,12 @@ namespace StockSharp.Algo.Candles
 		/// Initializes a new instance of the <see cref="BiggerTimeFrameCandleCompressor"/>.
 		/// </summary>
 		/// <param name="subscription">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-		public BiggerTimeFrameCandleCompressor(MarketDataMessage subscription)
+		/// <param name="builder">The builder of candles of <see cref="TimeFrameCandleMessage"/> type.</param>
+		public BiggerTimeFrameCandleCompressor(MarketDataMessage subscription, TimeFrameCandleBuilder builder)
 		{
-			if (subscription == null)
-				throw new ArgumentNullException(nameof(subscription));
-
-			_subscription = subscription;
+			_subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
 			_transform = new PartCandleBuilderValueTransform();
-			_builder = new TimeFrameCandleBuilder();
+			_builder = builder ?? throw new ArgumentNullException(nameof(builder));
 		}
 
 		/// <summary>

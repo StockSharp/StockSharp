@@ -106,19 +106,16 @@ namespace StockSharp.Algo.Candles.Compression
 		public CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, IExchangeInfoProvider exchangeInfoProvider)
 			: base(innerAdapter)
 		{
-			if (exchangeInfoProvider == null)
-				throw new ArgumentNullException(nameof(exchangeInfoProvider));
-
-			_exchangeInfoProvider = exchangeInfoProvider;
+			_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			_candleBuilders = new CandleBuildersList
 			{
 				new TimeFrameCandleBuilder(exchangeInfoProvider),
-				new TickCandleBuilder(),
-				new VolumeCandleBuilder(),
-				new RangeCandleBuilder(),
-				new RenkoCandleBuilder(),
-				new PnFCandleBuilder(),
+				new TickCandleBuilder(exchangeInfoProvider),
+				new VolumeCandleBuilder(exchangeInfoProvider),
+				new RangeCandleBuilder(exchangeInfoProvider),
+				new RenkoCandleBuilder(exchangeInfoProvider),
+				new PnFCandleBuilder(exchangeInfoProvider),
 			};
 		}
 
@@ -196,7 +193,7 @@ namespace StockSharp.Algo.Candles.Compression
 								_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, current)
 								{
 									State = SeriesStates.SmallTimeFrame,
-									BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original),
+									BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, new TimeFrameCandleBuilder(_exchangeInfoProvider)),
 									LastTime = original.From,
 								});
 
@@ -552,7 +549,7 @@ namespace StockSharp.Algo.Candles.Compression
 							series.Current.Arg = smaller;
 							series.Current.TransactionId = TransactionIdGenerator.GetNextId();
 
-							series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original);
+							series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, new TimeFrameCandleBuilder(_exchangeInfoProvider));
 							series.State = SeriesStates.SmallTimeFrame;
 
 							// loopback
@@ -629,12 +626,12 @@ namespace StockSharp.Algo.Candles.Compression
 				if (info.Current.TransactionId != transactionId && (transactionId != 0/* || info.IsHistory*/))
 					continue;
 
-				if (!CheckTime(info, transform.Time))
+				if (info.LastTime != null && info.LastTime.Value > transform.Time)
 					continue;
 
-				var builder = _candleBuilders.Get(info.Original.DataType);
-
 				info.LastTime = transform.Time;
+
+				var builder = _candleBuilders.Get(info.Original.DataType);
 
 				var result = builder.Process(info.Original, info.CurrentCandleMessage, transform);
 
@@ -658,17 +655,6 @@ namespace StockSharp.Algo.Candles.Compression
 			clone.OriginalTransactionId = info.Original.TransactionId;
 
 			RaiseNewOutMessage(clone);
-		}
-
-		private static bool CheckTime(SeriesInfo info, DateTimeOffset time)
-		{
-			if (info.LastTime != null && info.LastTime.Value > time)
-				return false;
-
-			//var res = info.Board.IsTradeTime(time, out var period);
-			//info.CurrentPeriod = Tuple.Create(time, period);
-
-			return true;
 		}
 
 		/// <summary>
