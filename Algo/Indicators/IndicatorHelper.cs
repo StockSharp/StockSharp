@@ -115,7 +115,12 @@ namespace StockSharp.Algo.Indicators
 			var value = container.GetValue(index).Item2;
 
 			if (value.IsEmpty)
+			{
+				if (value is T t)
+					return t;
+
 				return default(T);
+			}
 
 			return typeof(IIndicatorValue).IsAssignableFrom(typeof(T)) ? value.To<T>() : value.GetValue<T>();
 		}
