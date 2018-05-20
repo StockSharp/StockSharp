@@ -44,6 +44,8 @@ StockSharp API Change log
 * (feature) CandleBuilder. IExchangeInfoProvider as input argument.
 * (feature) ComplexCsvSecurityList. Base class for complex security types list.
 * (feature) MultiSecurityStorage.
+* (feature) ISecurityWindow restored.
+* (feature) ThemedIconsExtension. Icons auto coloring.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
