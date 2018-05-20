@@ -577,6 +577,16 @@
         <see cref="T:System.TimeSpan" /> to <see cref="T:System.String" /> converter.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.ISecurityWindow">
+      <summary>
+            The interface that describes a window for trading instrument creating or editing.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ISecurityWindow.Security">
+      <summary>
+            Security.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.PermissionCredentialsWindow">
       <summary>
             The window for edit credentials.
@@ -2725,15 +2735,25 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.IconsExtension" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.IconsExtension.ProvideValue(System.IServiceProvider)">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Xaml.IconsExtension.GetImage(System.String)">
       <summary>
             Get image by resource key.
             </summary>
       <param name="key">Resource key.</param>
       <returns>Image.</returns>
+    </member>
+    <member name="T:StockSharp.Xaml.ThemedIconsExtension">
+      <summary>
+            Xaml extension to extract the resources from a <see cref="T:System.Windows.ResourceDictionary" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ThemedIconsExtension.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ThemedIconsExtension" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ThemedIconsExtension.ProvideValue(System.IServiceProvider)">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.SecretWindow">
       <summary>
@@ -6091,6 +6111,11 @@
     <member name="T:StockSharp.Xaml.ThemeExtensions">
       <summary>
             Extensions for <see cref="T:DevExpress.Xpf.Core.Theme" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.ThemeExtensions.DefaultTheme">
+      <summary>
+            Default theme.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.ThemeExtensions.IsDark(System.String)">

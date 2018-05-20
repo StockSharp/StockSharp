@@ -126,6 +126,8 @@ P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppingImage/summary
 P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppedImage/summary;DocStr9505
 T:StockSharp.Xaml.Converters.SelectedItemsCountTextConverter/summary;DocStr9848
 T:StockSharp.Xaml.Converters.SeriesToStringConverter/summary;DocStr9307
+T:StockSharp.Xaml.ISecurityWindow/summary;DocStr8180
+P:StockSharp.Xaml.ISecurityWindow.Security/summary;DocStr2831
 T:StockSharp.Xaml.PermissionCredentialsWindow/summary;DocStr10454
 F:StockSharp.Xaml.PermissionCredentialsWindow.OkCommand/summary;DocStr8459
 F:StockSharp.Xaml.PermissionCredentialsWindow.AddCommand/summary;DocStr8459
@@ -598,10 +600,12 @@ M:StockSharp.Xaml.ProxyEditorWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.ProxyEditorWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.IconsExtension/summary;DocStr9238
 M:StockSharp.Xaml.IconsExtension.#ctor/summary;DocStr1
-M:StockSharp.Xaml.IconsExtension.ProvideValue(System.IServiceProvider)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.IconsExtension.GetImage(System.String)/summary;DocStr9849
 M:StockSharp.Xaml.IconsExtension.GetImage(System.String)/param/key;DocStr9850
 M:StockSharp.Xaml.IconsExtension.GetImage(System.String)/returns;DocStr9851
+T:StockSharp.Xaml.ThemedIconsExtension/summary;DocStr9238
+M:StockSharp.Xaml.ThemedIconsExtension.#ctor/summary;DocStr1
+M:StockSharp.Xaml.ThemedIconsExtension.ProvideValue(System.IServiceProvider)/inheritdoc;DocStr8459
 T:StockSharp.Xaml.SecretWindow/summary;DocStr9317
 F:StockSharp.Xaml.SecretWindow.OkCommand/summary;DocStr8459
 P:StockSharp.Xaml.SecretWindow.Secret/summary;DocStr9318
@@ -1367,6 +1371,7 @@ P:StockSharp.Xaml.TargetPlatformWindow.SelectedLanguage/summary;DocStr8431
 M:StockSharp.Xaml.TargetPlatformWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.TargetPlatformWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ThemeExtensions/summary;DocStr10280
+F:StockSharp.Xaml.ThemeExtensions.DefaultTheme/summary;DocStr10498
 M:StockSharp.Xaml.ThemeExtensions.IsDark(System.String)/summary;DocStr8459
 M:StockSharp.Xaml.ThemeExtensions.IsDark(System.String)/param/appTheme;DocStr9856
 M:StockSharp.Xaml.ThemeExtensions.IsDark(System.String)/returns;DocStr8659
