@@ -5,14 +5,12 @@ namespace StockSharp.Algo.Storages.Csv
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Configuration;
 
 	using MoreLinq;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// CSV storage of complex securities.
@@ -62,22 +60,12 @@ namespace StockSharp.Algo.Storages.Csv
 
 			security.Id = id;
 			security.Code = secId.SecurityCode;
-			security.Board = GetBoard(secId.BoardCode);
+			security.Board = Registry.GetBoard(secId.BoardCode);
 			security.Decimals = reader.ReadNullableInt();
 			security.PriceStep = reader.ReadNullableDecimal();
 			security.VolumeStep = reader.ReadNullableDecimal();
 
 			return security;
-		}
-
-		private static ExchangeBoard GetBoard(string boardCode)
-		{
-			var board = ConfigManager.GetService<IExchangeInfoProvider>().GetExchangeBoard(boardCode);
-
-			if (board == null)
-				throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
-
-			return board;
 		}
 
 		/// <summary>
