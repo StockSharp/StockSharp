@@ -140,6 +140,7 @@
     <Compile Include="Storages\Binary\Snapshot\QuotesBinarySnapshotSerializer.cs" />
     <Compile Include="Storages\Binary\Snapshot\TransactionBinarySnapshotSerializer.cs" />
     <Compile Include="Storages\CacheableMarketDataStorage.cs" />
+    <Compile Include="Storages\Csv\ComplexSecurityList.cs" />
     <Compile Include="Storages\Csv\MarketDepthCsvSerializer.cs" />
     <Compile Include="Storages\ISnapshotSerializer.cs" />
     <Compile Include="Storages\ISecurityMappingStorage.cs" />
@@ -349,6 +350,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Storages\Binary\Level1BinarySerializer.cs" />
+    <Compile Include="Storages\MultiSecurityStorage.cs" />
     <Compile Include="Storages\NewsList.cs" />
     <Compile Include="Storages\SnapshotStorage.cs" />
     <Compile Include="Storages\StorageEntityFactory.cs" />

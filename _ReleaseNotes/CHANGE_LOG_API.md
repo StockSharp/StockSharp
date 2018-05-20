@@ -42,6 +42,8 @@ StockSharp API Change log
 * (bug) MarketDataGrid. Fix further refreshes after error request.
 * (feature) CandleSeries.IsRegularTradingHours.
 * (feature) CandleBuilder. IExchangeInfoProvider as input argument.
+* (feature) ComplexCsvSecurityList. Base class for complex security types list.
+* (feature) MultiSecurityStorage.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
