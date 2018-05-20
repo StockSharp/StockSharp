@@ -614,7 +614,6 @@ M:StockSharp.Xaml.SecretWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityJump/summary;DocStr8171
 P:StockSharp.Xaml.SecurityJump.Security/summary;DocStr2831
 P:StockSharp.Xaml.SecurityJump.Date/summary;DocStr8172
-E:StockSharp.Xaml.SecurityJump.Changed/summary;DocStr8173
 T:StockSharp.Xaml.SecurityJumpsEditor/summary;DocStr8174
 P:StockSharp.Xaml.SecurityJumpsEditor.Jumps/summary;DocStr8176
 P:StockSharp.Xaml.SecurityJumpsEditor.SelectedJump/summary;DocStr8177

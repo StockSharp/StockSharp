@@ -2797,11 +2797,6 @@
             Rollover date.
             </summary>
     </member>
-    <member name="E:StockSharp.Xaml.SecurityJump.Changed">
-      <summary>
-            The rollover change event.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.SecurityJumpsEditor">
       <summary>
             Graphical component for editing of rollovers between tools.
