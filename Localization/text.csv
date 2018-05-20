@@ -4689,7 +4689,7 @@ Passphrase;Passphrase;Кодовое слово
 MiddleLine;Middle line;Средняя линия
 UpperLine;Upper line;Верхняя линия
 LowerLine;Lower line;Нижняя линия
-ConnectorIsStub;Connector is stub only. Please contact info@stocksharp.com to real module.;Коннектор является заглушкой. Пожалуйста, напишите нам на info@stocksharp.com для того, чтобы получить настоящие модули.
+ConnectorIsStub;Connector is stub only. Please visit https://crowd.stocksharp.com to get more info.;Коннектор является заглушкой. Пожалуйста, ознакомьтесь на сайте https://crowd.stocksharp.ru с информацией.
 Bitfinex;Bitfinex;Bitfinex
 Bithumb;Bithumb;Bithumb
 Bittrex;Bittrex;Bittrex
@@ -4819,6 +4819,8 @@ ValidateRemoteCertificates;Validate remote;Проверять удаленные
 ValidateRemoteCertificatesDesc;Validate remove certificates.;Проверять удаленные сертификаты.
 TargetHost;Host name;Имя сервера
 TargetHostDesc;The name of the server that shares SSL connection.;Имя сервера, использующего SSL-соединение.
+RegularHours;Regular hours;Основные часы
+RegularTradingHours;Use only the regular trading hours for which data will be requested.;Использовать только основные часы торговли, для которых будут запрошены данные.
 AllowTrading;The strategy is in the warm-up mode, the trading is disabled. The trading mode can be turned on with the 'Trading' button.;Стратегия находится в режиме прогрева, выставление заявок отключено. Режим торговли можно включить кнопкой 'Торговля'.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}

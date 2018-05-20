@@ -28,6 +28,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Interop;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -692,7 +693,7 @@ namespace StockSharp.Algo.Storages
 					DataType = MarketDataTypes.CandleTimeFrame,
 					Arg = timeFrame,
 					IsSubscribe = true,
-				});
+				}, new TimeFrameCandleBuilder(registry.ExchangeInfoProvider));
 			}
 
 			private IEnumerable<IMarketDataStorage<CandleMessage>> GetStorages()

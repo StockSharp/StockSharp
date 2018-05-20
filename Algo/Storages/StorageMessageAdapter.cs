@@ -552,6 +552,8 @@ namespace StockSharp.Algo.Storages
 
 						if (range != null)
 						{
+							var exchangeInfoProvider = _storageRegistry.ExchangeInfoProvider;
+
 							var mdMsg = (MarketDataMessage)msg.Clone();
 							mdMsg.From = mdMsg.To = null;
 
@@ -561,7 +563,7 @@ namespace StockSharp.Algo.Storages
 								case MarketDataTypes.Trades:
 									lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-										.ToCandles(mdMsg), range.Item1, m => SetTransactionId(m, transactionId));
+										.ToCandles(mdMsg, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
 
 									break;
 
@@ -573,7 +575,7 @@ namespace StockSharp.Algo.Storages
 										case Level1Fields.LastTradePrice:
 											lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											    .ToCandles(mdMsg), range.Item1, m => SetTransactionId(m, transactionId));
+											    .ToCandles(mdMsg, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
 
 											break;
 											
@@ -582,7 +584,7 @@ namespace StockSharp.Algo.Storages
 										//	lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 										//	    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 										//		.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(security.ToSecurityId()))
-										//	    .ToCandles(mdMsg, false), range.Item1, m => SetTransactionId(m, transactionId));
+										//	    .ToCandles(mdMsg, false, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
 										//	break;
 									}
 
@@ -597,7 +599,7 @@ namespace StockSharp.Algo.Storages
 											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
 												.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 												.ToTicks()
-												.ToCandles(mdMsg), range.Item1, m => SetTransactionId(m, transactionId));
+												.ToCandles(mdMsg, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
 											break;
 
 										case Level1Fields.BestBidPrice:
@@ -606,7 +608,7 @@ namespace StockSharp.Algo.Storages
 											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
 											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 											    .ToOrderBooks()
-											    .ToCandles(mdMsg, msg.BuildCandlesField.Value), range.Item1, m => SetTransactionId(m, transactionId));
+											    .ToCandles(mdMsg, msg.BuildCandlesField.Value, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
 											break;
 									}
 									
@@ -615,7 +617,7 @@ namespace StockSharp.Algo.Storages
 								case MarketDataTypes.MarketDepth:
 									lastTime = LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
 										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-										.ToCandles(mdMsg, msg.BuildCandlesField ?? Level1Fields.SpreadMiddle), range.Item1, m => SetTransactionId(m, transactionId));
+										.ToCandles(mdMsg, msg.BuildCandlesField ?? Level1Fields.SpreadMiddle, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
 									break;
 
 								default:

@@ -177,6 +177,17 @@ namespace StockSharp.Algo.Candles
 		public bool AllowBuildFromSmallerTimeFrame { get; set; } = true;
 
 		/// <summary>
+		/// Use only the regular trading hours for which data will be requested.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.RegularHoursKey,
+			Description = LocalizedStrings.RegularTradingHoursKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 6)]
+		public bool IsRegularTradingHours { get; set; }
+
+		/// <summary>
 		/// Build candles mode.
 		/// </summary>
 		[Display(
@@ -245,6 +256,8 @@ namespace StockSharp.Algo.Candles
 			BuildCandlesFrom = storage.GetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
 			BuildCandlesField = storage.GetValue(nameof(BuildCandlesField), BuildCandlesField);
 			AllowBuildFromSmallerTimeFrame = storage.GetValue(nameof(AllowBuildFromSmallerTimeFrame), AllowBuildFromSmallerTimeFrame);
+
+			IsRegularTradingHours = storage.GetValue(nameof(IsRegularTradingHours), IsRegularTradingHours);
 		}
 
 		/// <summary>
@@ -274,6 +287,8 @@ namespace StockSharp.Algo.Candles
 			storage.SetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
 			storage.SetValue(nameof(BuildCandlesField), BuildCandlesField);
 			storage.SetValue(nameof(AllowBuildFromSmallerTimeFrame), AllowBuildFromSmallerTimeFrame);
+
+			storage.SetValue(nameof(IsRegularTradingHours), IsRegularTradingHours);
 		}
 	}
 }

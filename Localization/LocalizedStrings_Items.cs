@@ -47868,6 +47868,26 @@ namespace StockSharp.Localization
 		public static string TargetHostDesc => GetString(TargetHostDescKey);
 
 		/// <summary>
+		/// Regular hours
+		/// </summary>
+		public const string RegularHoursKey = nameof(RegularHours);
+
+		/// <summary>
+		/// Regular hours
+		/// </summary>
+		public static string RegularHours => GetString(RegularHoursKey);
+
+		/// <summary>
+		/// Use only the regular trading hours for which data will be requested.
+		/// </summary>
+		public const string RegularTradingHoursKey = nameof(RegularTradingHours);
+
+		/// <summary>
+		/// Use only the regular trading hours for which data will be requested.
+		/// </summary>
+		public static string RegularTradingHours => GetString(RegularTradingHoursKey);
+
+		/// <summary>
 		/// The strategy is in the warm-up mode, the trading is disabled. The trading mode can be turned on with the 'Trading' button.
 		/// </summary>
 		public const string AllowTradingKey = nameof(AllowTrading);

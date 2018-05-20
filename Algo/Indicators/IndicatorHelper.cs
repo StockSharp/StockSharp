@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Extension class for indicators.
@@ -102,18 +101,26 @@ namespace StockSharp.Algo.Indicators
 			if (indicator == null)
 				throw new ArgumentNullException(nameof(indicator));
 
-			if (index >= indicator.Container.Count)
+			var container = indicator.Container;
+
+			if (index >= container.Count)
 			{
-				if (index == 0 && typeof(decimal) == typeof(T))
-					return 0m.To<T>();
-				else
-					throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.Str914Params.Put(indicator.Name));
+				return default(T);
+				//if (index == 0 && typeof(decimal) == typeof(T))
+				//	return 0m.To<T>();
+				//else
+				//throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.Str914Params.Put(indicator.Name));
 			}
 
-			var value = indicator.Container.GetValue(index).Item2;
+			var value = container.GetValue(index).Item2;
 
 			if (value.IsEmpty)
+			{
+				if (value is T t)
+					return t;
+
 				return default(T);
+			}
 
 			return typeof(IIndicatorValue).IsAssignableFrom(typeof(T)) ? value.To<T>() : value.GetValue<T>();
 		}
