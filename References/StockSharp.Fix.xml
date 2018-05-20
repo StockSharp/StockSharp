@@ -6651,12 +6651,12 @@
             CFH.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.FixDialects.ASTS_Currencies">
+    <member name="F:StockSharp.Fix.FixDialects.AstsCurrencies">
       <summary>
             ASTS (Currencies).
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.FixDialects.ASTS_Equities">
+    <member name="F:StockSharp.Fix.FixDialects.AstsEquities">
       <summary>
             ASTS (Equities).
             </summary>
@@ -6673,7 +6673,7 @@
     </member>
     <member name="F:StockSharp.Fix.FixDialects.QuikServer">
       <summary>
-            Quik (server).
+            QUIK (server).
             </summary>
     </member>
     <member name="F:StockSharp.Fix.FixDialects.Exante">
@@ -6701,7 +6701,7 @@
             Quik (pre trade).
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.FixDialects.BRVM">
+    <member name="F:StockSharp.Fix.FixDialects.Brvm">
       <summary>
             BRVM, Regional Securities Exchange SA.
             </summary>
