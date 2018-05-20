@@ -14959,3 +14959,8 @@ DocStr10495;Security storage for multiple inner storages (regular, index and con
 DocStr10496;Security storage of {0};Хранилище инструментов {0}
 DocStr10497;InteractiveBrokers FIX CTCI;InteractiveBrokers FIX CTCI
 DocStr10498;Default theme;Тема по-умолчанию
+DocStr10499;Possible errors;Возможные ошибки
+DocStr10500;To get the message sender, associated with the passed strategy;Получить отправитель сообщений, ассоциированный с указанной стратегией
+DocStr10502;To set the message sender for the strategy;Установить отправитель сообщений для стратегии
+DocStr10503;Message sender;Отправитель сообщений
+DocStr10504;Message sender base interface;Интерфейс отправителя сообщений

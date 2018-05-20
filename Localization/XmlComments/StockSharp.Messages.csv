@@ -135,6 +135,7 @@ M:StockSharp.Messages.ChannelMessageAdapter.OnInnerAdapterNewOutMessage(StockSha
 M:StockSharp.Messages.ChannelMessageAdapter.Dispose/summary;DocStr8826
 M:StockSharp.Messages.ChannelMessageAdapter.SendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Messages.ChannelMessageAdapter.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.Messages.ChannelMessageAdapter.SendOutMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Messages.ChannelMessageAdapter.Clone/summary;DocStr643
 M:StockSharp.Messages.ChannelMessageAdapter.Clone/returns;DocStr1116
 T:StockSharp.Messages.ConnectionStates/summary;DocStr4088
@@ -779,6 +780,11 @@ M:StockSharp.Messages.RemoveMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.RemoveMessage.Clone/returns;DocStr1116
 T:StockSharp.Messages.ResetMessage/summary;DocStr4323
 M:StockSharp.Messages.ResetMessage.#ctor/summary;DocStr1
+T:StockSharp.Messages.IMessageSender/summary;DocStr10504
+M:StockSharp.Messages.IMessageSender.SendInMessage(StockSharp.Messages.Message)/summary;DocStr46
+M:StockSharp.Messages.IMessageSender.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.Messages.IMessageSender.SendOutMessage(StockSharp.Messages.Message)/summary;DocStr755
+M:StockSharp.Messages.IMessageSender.SendOutMessage(StockSharp.Messages.Message)/param/message;Str3166
 T:StockSharp.Messages.IMessageChannel/summary;DocStr4075
 P:StockSharp.Messages.IMessageChannel.IsOpened/summary;DocStr4078
 M:StockSharp.Messages.IMessageChannel.Open/summary;DocStr4076

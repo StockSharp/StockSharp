@@ -203,7 +203,7 @@ namespace StockSharp.Algo.Strategies
 		/// To get the message sender, associated with the passed strategy.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
-		/// <returns>The message sender.</returns>
+		/// <returns>Message sender.</returns>
 		public static IMessageSender GetMessageSender(this Strategy strategy)
 		{
 			if (strategy == null)
