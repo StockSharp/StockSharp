@@ -11,10 +11,22 @@ namespace StockSharp.Algo.Storages.Csv
 	using Ecng.Serialization;
 
 	/// <summary>
+	/// The interface for presentation in the form of list of trade objects, received from the external storage.
+	/// </summary>
+	public interface ICsvEntityList
+	{
+		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		/// <param name="errors">Possible errors.</param>
+		void Init(IList<Exception> errors);
+	}
+
+	/// <summary>
 	/// List of trade objects, received from the CSV storage.
 	/// </summary>
 	/// <typeparam name="T">Entity type.</typeparam>
-	public abstract class CsvEntityList<T> : SynchronizedList<T>, IStorageEntityList<T>
+	public abstract class CsvEntityList<T> : SynchronizedList<T>, IStorageEntityList<T>, ICsvEntityList
 		where T : class
 	{
 		private readonly Dictionary<object, T> _items = new Dictionary<object, T>();
@@ -31,13 +43,10 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="fileName">CSV file name.</param>
 		protected CsvEntityList(CsvEntityRegistry registry, string fileName)
 		{
-			if (registry == null)
-				throw new ArgumentNullException(nameof(registry));
-
 			if (fileName == null)
 				throw new ArgumentNullException(nameof(fileName));
 
-			Registry = registry;
+			Registry = registry ?? throw new ArgumentNullException(nameof(registry));
 
 			FileName = Path.Combine(Registry.Path, fileName);
 		}
@@ -264,7 +273,7 @@ namespace StockSharp.Algo.Storages.Csv
 			});
 		}
 
-		internal void ReadItems(List<Exception> errors)
+		void ICsvEntityList.Init(IList<Exception> errors)
 		{
 			if (errors == null)
 				throw new ArgumentNullException(nameof(errors));

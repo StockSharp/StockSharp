@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Storages.Csv
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
@@ -767,7 +766,7 @@ namespace StockSharp.Algo.Storages.Csv
 		private readonly PortfolioCsvList _portfolios;
 		private readonly PositionCsvList _positions;
 
-		private readonly List<IList> _csvLists = new List<IList>();
+		private readonly List<ICsvEntityList> _csvLists = new List<ICsvEntityList>();
 
 		/// <summary>
 		/// The path to data directory.
@@ -787,29 +786,20 @@ namespace StockSharp.Algo.Storages.Csv
 		public Encoding Encoding
 		{
 			get => _encoding;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_encoding = value;
-			}
+			set => _encoding = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		private DelayAction _delayAction;
+		private DelayAction _delayAction = new DelayAction(ex => ex.LogError());
 
 		/// <summary>
 		/// The time delayed action.
 		/// </summary>
-		public DelayAction DelayAction
+		public virtual DelayAction DelayAction
 		{
 			get => _delayAction;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_delayAction = value;
+				_delayAction = value ?? throw new ArgumentNullException(nameof(value));
 
 				_exchanges.DelayAction = _delayAction;
 				_exchangeBoards.DelayAction = _delayAction;
@@ -850,10 +840,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="path">The path to data directory.</param>
 		public CsvEntityRegistry(string path)
 		{
-			if (path == null)
-				throw new ArgumentNullException(nameof(path));
-
-			Path = path;
+			Path = path ?? throw new ArgumentNullException(nameof(path));
 			Storage = new FakeStorage(this);
 
 			Add(_exchanges = new ExchangeCsvList(this));
@@ -861,8 +848,6 @@ namespace StockSharp.Algo.Storages.Csv
 			Add(_securities = new SecurityCsvList(this));
 			Add(_portfolios = new PortfolioCsvList(this));
 			Add(_positions = new PositionCsvList(this));
-
-			DelayAction = new DelayAction(ex => ex.LogError());
 		}
 
 		/// <summary>
@@ -886,19 +871,19 @@ namespace StockSharp.Algo.Storages.Csv
 
 			var errors = new Dictionary<object, Exception>();
 
-			foreach (dynamic list in _csvLists)
+			foreach (var list in _csvLists)
 			{
 				try
 				{
 					var listErrors = new List<Exception>();
-					list.ReadItems(listErrors);
+					list.Init(listErrors);
 
 					if (listErrors.Count > 0)
-						errors.Add((object)list, new AggregateException(listErrors));
+						errors.Add(list, new AggregateException(listErrors));
 				}
 				catch (Exception ex)
 				{
-					errors.Add((object)list, ex);
+					errors.Add(list, ex);
 				}
 			}
 
@@ -907,17 +892,17 @@ namespace StockSharp.Algo.Storages.Csv
 
 		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
-		private ExchangeBoard GetBoard(string boardCode)
+		internal ExchangeBoard GetBoard(string boardCode)
 		{
 			var board = ExchangeBoards.ReadById(boardCode);
 
-			if (board == null)
-			{
-				board = _exchangeInfoProvider.GetExchangeBoard(boardCode);
+			if (board != null)
+				return board;
 
-				if (board == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
-			}
+			board = _exchangeInfoProvider.GetExchangeBoard(boardCode);
+
+			if (board == null)
+				throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
 
 			return board;
 		}
