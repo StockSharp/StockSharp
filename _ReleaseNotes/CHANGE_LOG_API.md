@@ -46,6 +46,7 @@ StockSharp API Change log
 * (feature) MultiSecurityStorage.
 * (feature) ISecurityWindow restored.
 * (feature) ThemedIconsExtension. Icons auto coloring.
+* (feature) ContinuousSecurityWindow. Design refactoring.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

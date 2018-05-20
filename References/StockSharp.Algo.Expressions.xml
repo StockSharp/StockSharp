@@ -147,5 +147,22 @@
             </summary>
             <param name="text">Value, received from <see cref="M:StockSharp.Algo.BasketSecurity.ToSerializedString"/>.</param>
         </member>
+        <member name="T:StockSharp.Algo.Expressions.ExpressionIndexCsvSecurityList">
+            <summary>
+            CSV storage of index securities.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Expressions.ExpressionIndexCsvSecurityList.#ctor(StockSharp.Algo.Storages.Csv.CsvEntityRegistry)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexCsvSecurityList"/>.
+            </summary>
+            <param name="registry">The CSV storage of trading objects.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Expressions.ExpressionIndexCsvSecurityList.CreateSecurity(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Algo.Expressions.ExpressionIndexCsvSecurityList.CreateText(StockSharp.Algo.IndexSecurity)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>
