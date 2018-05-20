@@ -47866,5 +47866,15 @@ namespace StockSharp.Localization
 		/// The name of the server that shares SSL connection.
 		/// </summary>
 		public static string TargetHostDesc => GetString(TargetHostDescKey);
+
+		/// <summary>
+		/// The strategy is in the warm-up mode, the trading is disabled. The trading mode can be turned on with the 'Trading' button.
+		/// </summary>
+		public const string AllowTradingKey = nameof(AllowTrading);
+
+		/// <summary>
+		/// The strategy is in the warm-up mode, the trading is disabled. The trading mode can be turned on with the 'Trading' button.
+		/// </summary>
+		public static string AllowTrading => GetString(AllowTradingKey);
 	}
 }
