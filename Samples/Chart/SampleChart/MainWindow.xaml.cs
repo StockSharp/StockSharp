@@ -239,7 +239,7 @@ namespace SampleChart
 			_holder.CreateCandleSeries(_transactionId, series);
 
 			_candleTransform.Process(new ResetMessage());
-			_candleBuilder = msgType.ToCandleMarketDataType().CreateCandleBuilder();
+			_candleBuilder = msgType.ToCandleMarketDataType().CreateCandleBuilder(_exchangeInfoProvider);
 
 			var storage = new StorageRegistry();
 
