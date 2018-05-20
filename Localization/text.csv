@@ -4244,7 +4244,7 @@ AlfaDirect;Alfa-Direct;Альфа-Директ
 BarChart;Barchart;Barchart
 BitStamp;Bitstamp;Bitstamp
 Fusion;Fusion/Blackwood;Fusion/Blackwood
-DukasCopy;DukasCopy;DukasCopy
+DukasCopy;Dukascopy;Dukascopy
 Btce;BTCE;BTCE
 Finam;Finam;Финам
 FIX;FIX;FIX
@@ -4821,6 +4821,19 @@ TargetHost;Host name;Имя сервера
 TargetHostDesc;The name of the server that shares SSL connection.;Имя сервера, использующего SSL-соединение.
 RegularHours;Regular hours;Основные часы
 RegularTradingHours;Use only the regular trading hours for which data will be requested.;Использовать только основные часы торговли, для которых будут запрошены данные.
+Default;Default;По умолчанию
+CFH;CFH;CFH
+Asts;ASTS;ASTS
+AstsCurrencies;ASTS (Currencies);ASTS (Валюта)
+AstsEquities;ASTS (Equities);ASTS (Бумаги)
+Spectra;Spectra;Spectra
+Otkritie;Otkritie;Открытие
+QuikServer;QUIK (server);QUIK (сервер)
+QuikPreTrade;QUIK (pre trade);QUIK (пре трейд)
+Exante;Exante;Exante
+IBFIX;IB FIX CTCI;IB FIX CTCI
+Reuters;Thomson Reuters;Thomson Reuters
+Brvm;BRVM;BRVM
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13416,12 +13429,6 @@ DocStr8804;Create FIX protocol dialect;Создать диалект FIX про�
 DocStr8805;The dialect;Диалект
 DocStr8806;The FIX dialect. The default is {0};Диалект FIX протокола. По умолчанию равно {0}
 DocStr8807;Dialects of the FIX protocol;Диалекты FIX протокола
-DocStr8808;Default;По умолчанию
-DocStr8809;CFH;CFH
-DocStr8810;ASTS;ASTS
-DocStr8811;Spectra;Spectra
-DocStr8812;Otkritie;Открытие
-DocStr8813;Quik (server);Quik (сервер)
 DocStr8814;Exchange id;Идентификатор рынка
 DocStr8816;Delay load instruments from {0};Отложенная загрузка инструментов из {0}
 DocStr8817;Action when the license expired;Действие, когда лицензия истекла
@@ -13662,7 +13669,6 @@ DocStr9077;Strategy was unsubscribed;Событие об отмене подпи
 DocStr9078;Display name;Отображаемое имя
 DocStr9079;Has position in {0};Присутствует ли позиция в {0}
 DocStr9080;Convert all non-latin text messages to latin;Конвертировать кириллицу в латиницу
-DocStr9081;Exante;Exante
 DocStr9082;Native (internal) trading system security id represented as integer;Внутренний числовой идентификатор торговой системы
 DocStr9084;To get securities for the instrument code;Получить все инструменты для переданного кода
 DocStr9085;Instrument code;Код инструмента
@@ -14812,9 +14818,6 @@ DocStr10338;Cash;Наличные
 DocStr10339;Margin open;Маржинальность открыта
 DocStr10340;Margin close;Маржинальность закрыта
 DocStr10341;The request the following purposes in markets that employ tradeable or restricted tradeable quotes;Запрос для получения торгуемых или ограниченных котировок
-DocStr10342;Dukascopy;Dukascopy
-DocStr10343;InteractiveBrokers FIX CTCI;InteractiveBrokers FIX CTCI
-DocStr10344;Thomson Reuters;Thomson Reuters
 DocStr10345;{0} if incomming messages was processed successfully, otherwise, {1};{0} если входящие сообщения были обработаны успешно, иначе, {1}
 DocStr10346;Use {0} as portfolio name;Использовать {0} как имя портфеля
 DocStr10347;Calculated average price of all fills on this order;Рассчитанная средняя цена всех исполнений в заявке
@@ -14945,3 +14948,13 @@ DocStr10485;The request for stop historical data;Запрос остановки
 DocStr10486;The request for change historical interval;Запрос изменения интервала истории
 DocStr10487;Check possible time-frame by request;Проверять возможный тайм-фрейм через запрос
 DocStr10488;Brush;Кисть
+DocStr10489;CSV storage of index securities;Хранилище индексов в CSV формате
+DocStr10490;CSV storage of complex securities;Хранилище составных инструментов в CSV формате
+DocStr10491;Type of security;Тип инструмента
+DocStr10492;Convert text to {0} instance;Преобразовать текст в объект {0}
+DocStr10493;Convert {0} instance to text;Преобразовать объект {0} в текст
+DocStr10494;CSV storage of continuous securities;Хранилище в CSV формате непрерывных инструментов
+DocStr10495;Security storage for multiple inner storages (regular, index and continuous);Хранилище инструментов с множественными вложенными хранилищами (обычных, индексов and непрерывных инструментов)
+DocStr10496;Security storage of {0};Хранилище инструментов {0}
+DocStr10497;InteractiveBrokers FIX CTCI;InteractiveBrokers FIX CTCI
+DocStr10498;Default theme;Тема по-умолчанию

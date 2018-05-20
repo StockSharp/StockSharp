@@ -47886,5 +47886,135 @@ namespace StockSharp.Localization
 		/// Use only the regular trading hours for which data will be requested.
 		/// </summary>
 		public static string RegularTradingHours => GetString(RegularTradingHoursKey);
+
+		/// <summary>
+		/// CFH
+		/// </summary>
+		public const string CFHKey = nameof(CFH);
+
+		/// <summary>
+		/// CFH
+		/// </summary>
+		public static string CFH => GetString(CFHKey);
+
+		/// <summary>
+		/// ASTS
+		/// </summary>
+		public const string AstsKey = nameof(Asts);
+
+		/// <summary>
+		/// ASTS
+		/// </summary>
+		public static string Asts => GetString(AstsKey);
+
+		/// <summary>
+		/// ASTS (Currencies)
+		/// </summary>
+		public const string AstsCurrenciesKey = nameof(AstsCurrencies);
+
+		/// <summary>
+		/// ASTS (Currencies)
+		/// </summary>
+		public static string AstsCurrencies => GetString(AstsCurrenciesKey);
+
+		/// <summary>
+		/// ASTS (Equities)
+		/// </summary>
+		public const string AstsEquitiesKey = nameof(AstsEquities);
+
+		/// <summary>
+		/// ASTS (Equities)
+		/// </summary>
+		public static string AstsEquities => GetString(AstsEquitiesKey);
+
+		/// <summary>
+		/// Spectra
+		/// </summary>
+		public const string SpectraKey = nameof(Spectra);
+
+		/// <summary>
+		/// Spectra
+		/// </summary>
+		public static string Spectra => GetString(SpectraKey);
+
+		/// <summary>
+		/// Otkritie
+		/// </summary>
+		public const string OtkritieKey = nameof(Otkritie);
+
+		/// <summary>
+		/// Otkritie
+		/// </summary>
+		public static string Otkritie => GetString(OtkritieKey);
+
+		/// <summary>
+		/// QUIK (server)
+		/// </summary>
+		public const string QuikServerKey = nameof(QuikServer);
+
+		/// <summary>
+		/// QUIK (server)
+		/// </summary>
+		public static string QuikServer => GetString(QuikServerKey);
+
+		/// <summary>
+		/// QUIK (pre trade)
+		/// </summary>
+		public const string QuikPreTradeKey = nameof(QuikPreTrade);
+
+		/// <summary>
+		/// QUIK (pre trade)
+		/// </summary>
+		public static string QuikPreTrade => GetString(QuikPreTradeKey);
+
+		/// <summary>
+		/// Exante
+		/// </summary>
+		public const string ExanteKey = nameof(Exante);
+
+		/// <summary>
+		/// Exante
+		/// </summary>
+		public static string Exante => GetString(ExanteKey);
+
+		/// <summary>
+		/// IB FIX CTCI
+		/// </summary>
+		public const string IBFIXKey = nameof(IBFIX);
+
+		/// <summary>
+		/// IB FIX CTCI
+		/// </summary>
+		public static string IBFIX => GetString(IBFIXKey);
+
+		/// <summary>
+		/// Thomson Reuters
+		/// </summary>
+		public const string ReutersKey = nameof(Reuters);
+
+		/// <summary>
+		/// Thomson Reuters
+		/// </summary>
+		public static string Reuters => GetString(ReutersKey);
+
+		/// <summary>
+		/// BRVM
+		/// </summary>
+		public const string BrvmKey = nameof(Brvm);
+
+		/// <summary>
+		/// BRVM
+		/// </summary>
+		public static string Brvm => GetString(BrvmKey);
+
+		/// <summary>
+		/// Default
+		/// </summary>
+		public const string DefaultKey = nameof(Default);
+
+		/// <summary>
+		/// Default
+		/// </summary>
+		public static string Default => GetString(DefaultKey);
 	}
 }
