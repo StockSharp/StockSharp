@@ -27,7 +27,7 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// The main interface providing the connection to the trading systems.
 	/// </summary>
-	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider, INewsProvider, IPortfolioProvider, IPositionProvider
+	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider, INewsProvider, IPortfolioProvider, IPositionProvider, IMessageSender
 	{
 		/// <summary>
 		/// Own trade received.
@@ -627,17 +627,5 @@ namespace StockSharp.BusinessEntities
 		/// Unsubscribe from news.
 		/// </summary>
 		void UnRegisterNews();
-
-		/// <summary>
-		/// Send outgoing message.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		void SendOutMessage(Message message);
-
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		void SendInMessage(Message message);
 	}
 }
