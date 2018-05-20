@@ -4821,6 +4821,7 @@ TargetHost;Host name;Имя сервера
 TargetHostDesc;The name of the server that shares SSL connection.;Имя сервера, использующего SSL-соединение.
 RegularHours;Regular hours;Основные часы
 RegularTradingHours;Use only the regular trading hours for which data will be requested.;Использовать только основные часы торговли, для которых будут запрошены данные.
+AllowTrading;The strategy is in the warm-up mode, the trading is disabled. The trading mode can be turned on with the 'Trading' button.;Стратегия находится в режиме прогрева, выставление заявок отключено. Режим торговли можно включить кнопкой 'Торговля'.
 Default;Default;По умолчанию
 CFH;CFH;CFH
 Asts;ASTS;ASTS
