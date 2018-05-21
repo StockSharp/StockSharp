@@ -710,6 +710,7 @@ P:StockSharp.Algo.Candles.CandleSeries.To/summary;DocStr85
 P:StockSharp.Algo.Candles.CandleSeries.AllowBuildFromSmallerTimeFrame/summary;SmallerTimeFrameDesc
 P:StockSharp.Algo.Candles.CandleSeries.AllowBuildFromSmallerTimeFrame/remarks;DocStr10386
 P:StockSharp.Algo.Candles.CandleSeries.IsRegularTradingHours/summary;RegularTradingHours
+P:StockSharp.Algo.Candles.CandleSeries.Count/summary;DocStr4478
 P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesMode/summary;DocStr9659
 P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesFrom/summary;BuildCandlesFrom
 P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesField/summary;DocStr10135
@@ -4045,7 +4046,7 @@ M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSerie
 M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/param/series;CandlesSeries
 M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/param/from;DocStr84
 M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/param/to;DocStr85
-M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/param/count;DocStr3776
+M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/param/count;CandlesCount
 M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/param/transactionId;TransactionId
 M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/param/extensionInfo;ExtendedInfo
 M:StockSharp.Algo.Connector.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/summary;DocStr86
@@ -5540,7 +5541,7 @@ M:StockSharp.Algo.Strategies.StrategyHelper.SetCandleManager(StockSharp.Algo.Str
 M:StockSharp.Algo.Strategies.StrategyHelper.SetCandleManager(StockSharp.Algo.Strategies.Strategy,StockSharp.Algo.Candles.ICandleManager)/param/candleManager;DocStr534
 M:StockSharp.Algo.Strategies.StrategyHelper.GetMessageSender(StockSharp.Algo.Strategies.Strategy)/summary;DocStr10500
 M:StockSharp.Algo.Strategies.StrategyHelper.GetMessageSender(StockSharp.Algo.Strategies.Strategy)/param/strategy;Strategy
-M:StockSharp.Algo.Strategies.StrategyHelper.GetMessageSender(StockSharp.Algo.Strategies.Strategy)/returns;DocStr10501
+M:StockSharp.Algo.Strategies.StrategyHelper.GetMessageSender(StockSharp.Algo.Strategies.Strategy)/returns;DocStr10503
 M:StockSharp.Algo.Strategies.StrategyHelper.SetMessageSender(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.IMessageSender)/summary;DocStr10502
 M:StockSharp.Algo.Strategies.StrategyHelper.SetMessageSender(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.IMessageSender)/param/strategy;Strategy
 M:StockSharp.Algo.Strategies.StrategyHelper.SetMessageSender(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.IMessageSender)/param/messageSender;DocStr10503
@@ -6732,7 +6733,7 @@ M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Can
 M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/param/isSubscribe;DocStr4475
 M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/param/from;DocStr84
 M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/param/to;DocStr85
-M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/param/count;DocStr3776
+M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/param/count;CandlesCount
 M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/returns;DocStr4473
 T:StockSharp.Algo.ShrinkRules/summary;DocStr2249
 F:StockSharp.Algo.ShrinkRules.Auto/summary;DocStr2250

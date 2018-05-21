@@ -48,21 +48,12 @@ namespace StockSharp.Algo.Candles
 		/// <param name="arg">The candle formation parameter. For example, for <see cref="TimeFrameCandle"/> this value is <see cref="TimeFrameCandle.TimeFrame"/>.</param>
 		public CandleSeries(Type candleType, Security security, object arg)
 		{
-			if (candleType == null)
-				throw new ArgumentNullException(nameof(candleType));
-
 			if (!candleType.IsCandle())
 				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
 
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			if (arg == null)
-				throw new ArgumentNullException(nameof(arg));
-
-			_security = security;
-			_candleType = candleType;
-			_arg = arg;
+			_security = security ?? throw new ArgumentNullException(nameof(security));
+			_candleType = candleType ?? throw new ArgumentNullException(nameof(candleType));
+			_arg = arg ?? throw new ArgumentNullException(nameof(arg));
 			WorkingTime = security.CheckExchangeBoard().WorkingTime;
 		}
 
@@ -188,6 +179,17 @@ namespace StockSharp.Algo.Candles
 		public bool IsRegularTradingHours { get; set; }
 
 		/// <summary>
+		/// Market-data count.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CountKey,
+			Description = LocalizedStrings.CandlesCountKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 7)]
+		public long? Count { get; set; }
+
+		/// <summary>
 		/// Build candles mode.
 		/// </summary>
 		[Display(
@@ -256,8 +258,8 @@ namespace StockSharp.Algo.Candles
 			BuildCandlesFrom = storage.GetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
 			BuildCandlesField = storage.GetValue(nameof(BuildCandlesField), BuildCandlesField);
 			AllowBuildFromSmallerTimeFrame = storage.GetValue(nameof(AllowBuildFromSmallerTimeFrame), AllowBuildFromSmallerTimeFrame);
-
 			IsRegularTradingHours = storage.GetValue(nameof(IsRegularTradingHours), IsRegularTradingHours);
+			Count = storage.GetValue(nameof(Count), Count);
 		}
 
 		/// <summary>
@@ -287,8 +289,8 @@ namespace StockSharp.Algo.Candles
 			storage.SetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
 			storage.SetValue(nameof(BuildCandlesField), BuildCandlesField);
 			storage.SetValue(nameof(AllowBuildFromSmallerTimeFrame), AllowBuildFromSmallerTimeFrame);
-
 			storage.SetValue(nameof(IsRegularTradingHours), IsRegularTradingHours);
+			storage.SetValue(nameof(Count), Count);
 		}
 	}
 }

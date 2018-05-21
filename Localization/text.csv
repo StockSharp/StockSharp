@@ -4835,6 +4835,8 @@ Exante;Exante;Exante
 IBFIX;IB FIX CTCI;IB FIX CTCI
 Reuters;Thomson Reuters;Thomson Reuters
 Brvm;BRVM;BRVM
+Count;Count;Count
+CandlesCount;Candles count.;Количество свечей.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -8539,7 +8541,6 @@ DocStr3770;To send the request for the trades history by the instrument for the 
 DocStr3773;To send the request for the candles history by the instrument for the specified period;Отправить запрос на получение истории свечей по инструменту за указанный период
 DocStr3774;To send the request for the daily candles history by the instrument for the specified period;Отправить запрос на получение истории дневных свечей по инструменту за указанный период
 DocStr3775;To send the request for the daily candles history by the instrument;Отправить запрос на получение истории дневных свечей по инструменту
-DocStr3776;Candles count;Количество свечей
 DocStr3777;To send the request for the weekly candles history by the instrument;Отправить запрос на получение истории недельных свечей по инструменту
 DocStr3778;To send the request for the monthly candles history by the instrument;Отправить запрос на получение истории месячных свечей по инструменту
 DocStr3779;To subscribe to get data by the instrument;Подписаться на получение данных по инструменту

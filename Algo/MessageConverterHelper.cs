@@ -872,10 +872,7 @@ namespace StockSharp.Algo
 
 			public ToMessagesEnumerable(IEnumerable<TEntity> entities)
 			{
-				if (entities == null)
-					throw new ArgumentNullException(nameof(entities));
-
-				_entities = entities;
+				_entities = entities ?? throw new ArgumentNullException(nameof(entities));
 			}
 
 			public IEnumerator<TMessage> GetEnumerator()
@@ -932,14 +929,8 @@ namespace StockSharp.Algo
 
 			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider)
 			{
-				if (messages == null)
-					throw new ArgumentNullException(nameof(messages));
-
-				if (security == null)
-					throw new ArgumentNullException(nameof(security));
-
-				_messages = messages;
-				_security = security;
+				_messages = messages ?? throw new ArgumentNullException(nameof(messages));
+				_security = security ?? throw new ArgumentNullException(nameof(security));
 				_exchangeInfoProvider = exchangeInfoProvider;
 			}
 			
@@ -1709,7 +1700,7 @@ namespace StockSharp.Algo
 				IsSubscribe = isSubscribe,
 				From = from ?? series.From,
 				To = to ?? series.To,
-				Count = count,
+				Count = count ?? series.Count,
 				BuildCandlesMode = series.BuildCandlesMode,
 				BuildCandlesFrom = series.BuildCandlesFrom,
 				BuildCandlesField = series.BuildCandlesField,

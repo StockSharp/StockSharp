@@ -48026,5 +48026,25 @@ namespace StockSharp.Localization
 		/// Default
 		/// </summary>
 		public static string Default => GetString(DefaultKey);
+
+		/// <summary>
+		/// Count
+		/// </summary>
+		public const string CountKey = nameof(Count);
+
+		/// <summary>
+		/// Count
+		/// </summary>
+		public static string Count => GetString(CountKey);
+
+		/// <summary>
+		/// Candles count.
+		/// </summary>
+		public const string CandlesCountKey = nameof(CandlesCount);
+
+		/// <summary>
+		/// Candles count.
+		/// </summary>
+		public static string CandlesCount => GetString(CandlesCountKey);
 	}
 }
