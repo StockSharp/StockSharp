@@ -18,8 +18,10 @@ namespace StockSharp.Algo
 	using System;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -185,7 +187,28 @@ namespace StockSharp.Algo
 		/// </returns>
 		public override string ToString()
 		{
-			return "({0}, {1})".Put(MessageType, Arg);
+			if (this == Ticks)
+				return LocalizedStrings.Ticks;
+			else if (this == Level1)
+				return LocalizedStrings.Level1;
+			else if (this == OrderLog)
+				return LocalizedStrings.OrderLog;
+			else if (this == MarketDepth)
+				return LocalizedStrings.MarketDepth;
+			else if (this == Transactions)
+				return LocalizedStrings.Transactions;
+			else if (this == PositionChanges)
+				return LocalizedStrings.Str972;
+			else if (this == News)
+				return LocalizedStrings.News;
+			else if (this == Securities)
+				return LocalizedStrings.Securities;
+			else if (MessageType?.IsCandleMessage() == true)
+			{
+				return $"{MessageType.GetDisplayName()}: {Arg}";
+			}
+			else
+				return $"{MessageType}: {Arg}";
 		}
 
 		/// <summary>

@@ -328,6 +328,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
+	[DisplayNameLoc(LocalizedStrings.TimeFrameCandleKey)]
 	public class TimeFrameCandleMessage : CandleMessage
 	{
 		/// <summary>
@@ -371,6 +372,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
+	[DisplayNameLoc(LocalizedStrings.TickCandleKey)]
 	public class TickCandleMessage : CandleMessage
 	{
 		/// <summary>
@@ -414,6 +416,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
+	[DisplayNameLoc(LocalizedStrings.VolumeCandleKey)]
 	public class VolumeCandleMessage : CandleMessage
 	{
 		/// <summary>
@@ -457,6 +460,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
+	[DisplayNameLoc(LocalizedStrings.RangeCandleKey)]
 	public class RangeCandleMessage : CandleMessage
 	{
 		/// <summary>
@@ -605,6 +609,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
+	[DisplayNameLoc(LocalizedStrings.PnFCandleKey)]
 	public class PnFCandleMessage : CandleMessage
 	{
 		/// <summary>
@@ -655,6 +660,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
+	[DisplayNameLoc(LocalizedStrings.RenkoCandleKey)]
 	public class RenkoCandleMessage : CandleMessage
 	{
 		/// <summary>
