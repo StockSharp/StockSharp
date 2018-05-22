@@ -108,7 +108,11 @@ namespace StockSharp.Algo
 
 					var credentials = serializer.Deserialize(_fileName);
 
-					Credentials = credentials.Select(s => s.Load<PermissionCredentials>()).ToArray();
+					var ctx = new ContinueOnExceptionContext();
+					ctx.Error += ex => ex.LogError();
+
+					using (new Scope<ContinueOnExceptionContext>(ctx))
+						Credentials = credentials.Select(s => s.Load<PermissionCredentials>()).ToArray();
 				});
 			}
 			catch (Exception ex)
