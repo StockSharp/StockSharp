@@ -50,6 +50,7 @@ StockSharp API Change log
 * (feature) CandleSeries. Count property.
 * (bug) Grids. Time zone column fix.
 * (bug) Chart icons color fixes.
+* (bug) Windows title color fix.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
