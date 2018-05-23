@@ -1,5 +1,15 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.10:
+* (feature) Themes. Icons auto coloring.
+* (feature) CandleSeries.IsRegularTradingHours.
+* (bug) Logs. Designed fix.
+* (feature) FIX connector. SSL support extended.
+* (bug) MarketDataGrid. Fix further refreshes after error request.
+* (feature) Default theme changed.
+* (bug) Grids. Time zone column fix.
+* (feature) Start and stop dates for separate security and data types.
+
 ## v4.4.9:
 * (bug) Charting. RVI and Gator rendeding fixes.
 * (bug) Themes fixes.
