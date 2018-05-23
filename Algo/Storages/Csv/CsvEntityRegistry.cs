@@ -800,13 +800,17 @@ namespace StockSharp.Algo.Storages.Csv
 			set
 			{
 				_delayAction = value ?? throw new ArgumentNullException(nameof(value));
-
-				_exchanges.DelayAction = _delayAction;
-				_exchangeBoards.DelayAction = _delayAction;
-				_securities.DelayAction = _delayAction;
-				_positions.DelayAction = _delayAction;
-				_portfolios.DelayAction = _delayAction;
+				UpdateDelayAction();
 			}
+		}
+
+		private void UpdateDelayAction()
+		{
+			_exchanges.DelayAction = _delayAction;
+			_exchangeBoards.DelayAction = _delayAction;
+			_securities.DelayAction = _delayAction;
+			_positions.DelayAction = _delayAction;
+			_portfolios.DelayAction = _delayAction;
 		}
 
 		/// <summary>
@@ -848,6 +852,8 @@ namespace StockSharp.Algo.Storages.Csv
 			Add(_securities = new SecurityCsvList(this));
 			Add(_portfolios = new PortfolioCsvList(this));
 			Add(_positions = new PositionCsvList(this));
+
+			UpdateDelayAction();
 		}
 
 		/// <summary>
