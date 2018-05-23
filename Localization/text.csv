@@ -4837,6 +4837,7 @@ Reuters;Thomson Reuters;Thomson Reuters
 Brvm;BRVM;BRVM
 Count;Count;Count
 CandlesCount;Candles count.;Количество свечей.
+TasksAllInstruments;Tasks '{0}' are running for all instruments. Often these are incorrect settings. It is recommended to set specific instruments for each task. Do you want to continue as is or stop the launch?;Задачи '{0}' запущены на работу по всем инструментам. Часто это является неправильными настройками. Рекомендуется установить конкретные инструменты для каждой задачи. Вы хотите продолжить как есть или остановить запуск?
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

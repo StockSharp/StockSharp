@@ -48046,5 +48046,15 @@ namespace StockSharp.Localization
 		/// Candles count.
 		/// </summary>
 		public static string CandlesCount => GetString(CandlesCountKey);
+
+		/// <summary>
+		/// Tasks '{0}' are running for all instruments. Often these are incorrect settings. It is recommended to set specific instruments for each task. Do you want to continue as is or stop the launch?
+		/// </summary>
+		public const string TasksAllInstrumentsKey = nameof(TasksAllInstruments);
+
+		/// <summary>
+		/// Tasks '{0}' are running for all instruments. Often these are incorrect settings. It is recommended to set specific instruments for each task. Do you want to continue as is or stop the launch?
+		/// </summary>
+		public static string TasksAllInstruments => GetString(TasksAllInstrumentsKey);
 	}
 }
