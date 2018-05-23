@@ -426,6 +426,7 @@ P:StockSharp.Xaml.Diagram.PaletteTreeItem.ParentId/summary;DocStr10182
 P:StockSharp.Xaml.Diagram.PaletteTreeItem.Name/summary;Name2
 P:StockSharp.Xaml.Diagram.PaletteTreeItem.Element/summary;DocStr7867
 P:StockSharp.Xaml.Diagram.PaletteTreeItem.IsExpanded/summary;DocStr10184
+P:StockSharp.Xaml.Diagram.PaletteTreeItem.Icon/summary;DocStr7908
 E:StockSharp.Xaml.Diagram.PaletteTreeItem.ParentChanged/summary;DocStr10185
 E:StockSharp.Xaml.Diagram.PaletteTreeItem.Changed/summary;DocStr10186
 M:StockSharp.Xaml.Diagram.PaletteTreeItem.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -666,6 +667,7 @@ T:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement/summary;Str3071
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Series/summary;CandlesSeries
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsFinal/summary;ProcessOnlyFormed
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsCalcVolumeProfile/summary;DocStr2053
+P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsRegularTradingHours/summary;RegularTradingHours
 M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IconName/summary;DocStr9214

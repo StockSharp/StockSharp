@@ -1400,6 +1400,11 @@
             Is row expanded.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.PaletteTreeItem.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Diagram.PaletteTreeItem.ParentChanged">
       <summary>
             The parent element changed event.
@@ -2429,6 +2434,11 @@
     <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsCalcVolumeProfile">
       <summary>
             To perform the calculation <see cref="P:StockSharp.Algo.Candles.Candle.PriceLevels" />. By default, it is disabled.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsRegularTradingHours">
+      <summary>
+            Use only the regular trading hours for which data will be requested.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.#ctor">
@@ -3476,16 +3486,6 @@
             The method is called when the data type is changed.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnInputSocketConnected">
-      <summary>
-            The method is called when the input socket is connected.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnInputSocketDisconnected">
-      <summary>
-            The method is called when the input socket is disconnected.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
             The method is called at the processing of the new incoming value.
@@ -3542,12 +3542,6 @@
       <summary>
             The method is called when the data type is changed.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnInputSocketConnected">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnInputSocketDisconnected">
-      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnReseted">
       <summary>

@@ -37,7 +37,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter. CheckTimeFrameByRequest property.
 * (bug) TimeSpanEditor. Design fix.
 * (feature) Backtesting. Dynamic change market time interval.
-* (feature) LogControl. Designer adapted for Devexpress.
+* (feature) LogControl. Design adapted for Devexpress.
 * (feature) LogControl. LayoutChanged event.
 * (bug) MarketDataGrid. Fix further refreshes after error request.
 * (feature) CandleSeries.IsRegularTradingHours.
@@ -48,6 +48,8 @@ StockSharp API Change log
 * (feature) ThemedIconsExtension. Icons auto coloring.
 * (feature) ContinuousSecurityWindow. Design refactoring.
 * (feature) CandleSeries. Count property.
+* (bug) Grids. Time zone column fix.
+* (bug) Chart icons color fixes.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

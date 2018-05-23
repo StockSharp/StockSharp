@@ -5792,6 +5792,11 @@
             The display name.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.LogSourceNode.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.LogSourceNode.#ctor(System.Guid,System.String,StockSharp.Xaml.LogSourceNode)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.LogSourceNode" />.
