@@ -55,6 +55,7 @@ StockSharp API Change log
 * (bug) Binance. Fix https://stocksharp.ru/forum/9354/vyvod-sredstv-iz-binance-/#m43771
 * (feature) SecurityPicker. Removed StatusBar.
 * (bug) SecurityPicker. Fix filtering securities started by @ char.
+* (feature) FIX connector. Try/catch out messages processing.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
