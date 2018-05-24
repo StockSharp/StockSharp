@@ -14966,3 +14966,4 @@ DocStr10500;To get the message sender, associated with the passed strategy;По�
 DocStr10502;To set the message sender for the strategy;Установить отправитель сообщений для стратегии
 DocStr10503;Message sender;Отправитель сообщений
 DocStr10504;Message sender base interface;Интерфейс отправителя сообщений
+DocStr10505;Disable tracking indicator reset;Выключить отслеживание сброса индикаторов

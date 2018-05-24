@@ -98,6 +98,11 @@
             The provider of information about instruments.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.Chart.DisableIndicatorReset">
+      <summary>
+            Disable tracking indicator reset.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)">
       <summary>
             To add an area to the chart.
@@ -1731,6 +1736,11 @@
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.ShareSettings">
       <summary>
             Chart share (upload image to web) settings.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartPanel.DisableIndicatorReset">
+      <summary>
+            Disable tracking indicator reset.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.AddArea(StockSharp.Xaml.Charting.ChartArea)">

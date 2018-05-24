@@ -22,6 +22,7 @@ P:StockSharp.Xaml.Charting.Chart.IsAutoScroll/summary;DocStr7728
 P:StockSharp.Xaml.Charting.Chart.IsAutoRange/summary;DocStr7718
 P:StockSharp.Xaml.Charting.Chart.AutoRangeInterval/summary;DocStr8854
 P:StockSharp.Xaml.Charting.Chart.SecurityProvider/summary;DocStr972
+P:StockSharp.Xaml.Charting.Chart.DisableIndicatorReset/summary;DocStr10505
 M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)/summary;DocStr7706
 M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)/param/area;Str1903
 M:StockSharp.Xaml.Charting.Chart.RemoveArea(StockSharp.Xaml.Charting.ChartArea)/summary;DocStr7707
@@ -462,6 +463,7 @@ P:StockSharp.Xaml.Charting.ChartPanel.IsAutoRange/summary;DocStr7718
 P:StockSharp.Xaml.Charting.ChartPanel.ChartTheme/summary;DocStr7731
 P:StockSharp.Xaml.Charting.ChartPanel.OrderSettings/summary;DocStr8869
 P:StockSharp.Xaml.Charting.ChartPanel.ShareSettings/summary;DocStr8870
+P:StockSharp.Xaml.Charting.ChartPanel.DisableIndicatorReset/summary;DocStr10505
 M:StockSharp.Xaml.Charting.ChartPanel.AddArea(StockSharp.Xaml.Charting.ChartArea)/summary;DocStr7706
 M:StockSharp.Xaml.Charting.ChartPanel.AddArea(StockSharp.Xaml.Charting.ChartArea)/param/area;Str1903
 M:StockSharp.Xaml.Charting.ChartPanel.RemoveArea(StockSharp.Xaml.Charting.ChartArea)/summary;DocStr7707

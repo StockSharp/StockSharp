@@ -56,6 +56,7 @@ StockSharp API Change log
 * (feature) SecurityPicker. Removed StatusBar.
 * (bug) SecurityPicker. Fix filtering securities started by @ char.
 * (feature) FIX connector. Try/catch out messages processing.
+* (feature) Chart.DisableIndicatorReset
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
