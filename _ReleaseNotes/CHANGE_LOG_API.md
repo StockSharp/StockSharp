@@ -51,6 +51,10 @@ StockSharp API Change log
 * (bug) Grids. Time zone column fix.
 * (bug) Chart icons color fixes.
 * (bug) Windows title color fix.
+* (feature) Plaza. AdjustedFee, Prohibition tables. FeeRate, Dealer columns populated.
+* (bug) Binance. Fix https://stocksharp.ru/forum/9354/vyvod-sredstv-iz-binance-/#m43771
+* (feature) SecurityPicker. Removed StatusBar.
+* (bug) SecurityPicker. Fix filtering securities started by @ char.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
