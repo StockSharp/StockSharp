@@ -108,16 +108,17 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in GetTransactions())
 					{
-						if (Mode.Contains(StorageModes.Incremental))
+						// TODO 
+						//if (Mode.Contains(StorageModes.Incremental))
 							GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Transaction).Save(pair.Value);
 						
-						if (Mode.Contains(StorageModes.Snapshot))
-						{
-							var snapshotStorage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
+						//if (Mode.Contains(StorageModes.Snapshot))
+						//{
+						//	var snapshotStorage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
 
-							foreach (var message in pair.Value)
-								snapshotStorage.Update(message);
-						}
+						//	foreach (var message in pair.Value)
+						//		snapshotStorage.Update(message);
+						//}
 					}
 
 					foreach (var pair in GetOrderBooks())
@@ -381,14 +382,14 @@ namespace StockSharp.Algo.Storages
 			//}
 			//else if (Mode.Contains(StorageModes.Incremental))
 			//{
-				// TODO
+			// TODO
 
-				foreach (var secId in requiredSecurities)
-				{
-					GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
-						.Load(from, to)
-						.ForEach(RaiseStorageMessage);
-				}	
+			foreach (var secId in requiredSecurities)
+			{
+				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
+					.Load(from, to)
+					.ForEach(RaiseStorageMessage);
+			}	
 			//}
 		}
 

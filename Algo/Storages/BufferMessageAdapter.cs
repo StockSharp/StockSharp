@@ -417,8 +417,8 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.OrderRegister:
 					var regMsg = (OrderRegisterMessage)message;
 
-					if (!CanStore<ExecutionMessage>(regMsg.SecurityId, ExecutionTypes.Transaction))
-						break;
+					//if (!CanStore<ExecutionMessage>(regMsg.SecurityId, ExecutionTypes.Transaction))
+					//	break;
 
 					_transactionsBuffer.Add(regMsg.SecurityId, new ExecutionMessage
 					{
@@ -451,8 +451,8 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.OrderCancel:
 					var cancelMsg = (OrderCancelMessage)message;
 
-					if (!CanStore<ExecutionMessage>(cancelMsg.SecurityId, ExecutionTypes.Transaction))
-						break;
+					//if (!CanStore<ExecutionMessage>(cancelMsg.SecurityId, ExecutionTypes.Transaction))
+					//	break;
 
 					_transactionsBuffer.Add(cancelMsg.SecurityId, new ExecutionMessage
 					{
@@ -537,7 +537,7 @@ namespace StockSharp.Algo.Storages
 							throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str1695Params.Put(execType));
 					}
 
-					if (CanStore<ExecutionMessage>(secId, execType))
+					if (execType == ExecutionTypes.Transaction || CanStore<ExecutionMessage>(secId, execType))
 						buffer.Add(secId, (ExecutionMessage)message.Clone());
 
 					break;
