@@ -572,8 +572,8 @@ namespace StockSharp.Algo.Storages
 					var posMsg = (PositionChangeMessage)message;
 					var secId = posMsg.SecurityId;
 
-					if (CanStore<PositionChangeMessage>(secId))
-						_positionChangesBuffer.Add(secId, (PositionChangeMessage)posMsg.Clone());
+					//if (CanStore<PositionChangeMessage>(secId))
+					_positionChangesBuffer.Add(secId, (PositionChangeMessage)posMsg.Clone());
 
 					break;
 				}
