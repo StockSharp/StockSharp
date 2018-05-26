@@ -57,6 +57,7 @@ StockSharp API Change log
 * (bug) SecurityPicker. Fix filtering securities started by @ char.
 * (feature) FIX connector. Try/catch out messages processing.
 * (feature) Chart.DisableIndicatorReset
+* (bug) Chart. Indicator draw from non-GUI thread fix.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
