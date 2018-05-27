@@ -72,14 +72,8 @@ namespace StockSharp.Algo.Storages
 		public StorageMessageAdapter(IMessageAdapter innerAdapter, IEntityRegistry entityRegistry, IStorageRegistry storageRegistry)
 			: base(innerAdapter)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			if (storageRegistry == null)
-				throw new ArgumentNullException(nameof(storageRegistry));
-
-			_entityRegistry = entityRegistry;
-			_storageRegistry = storageRegistry;
+			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
+			_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
 
 			var isProcessing = false;
 			var sync = new SyncObject();

@@ -144,13 +144,7 @@ namespace StockSharp.Algo
 		public INativeIdStorage NativeIdStorage
 		{
 			get => _nativeIdStorage;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_nativeIdStorage = value;
-			}
+			set => _nativeIdStorage = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private ISecurityMappingStorage _securityMappingStorage;
@@ -161,13 +155,7 @@ namespace StockSharp.Algo
 		public ISecurityMappingStorage SecurityMappingStorage
 		{
 			get => _securityMappingStorage;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_securityMappingStorage = value;
-			}
+			set => _securityMappingStorage = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
@@ -204,11 +192,8 @@ namespace StockSharp.Algo
 		public BasketMessageAdapter(IdGenerator transactionIdGenerator, IPortfolioMessageAdapterProvider adapterProvider, IExchangeInfoProvider exchangeInfoProvider)
 			: base(transactionIdGenerator)
 		{
-			if (adapterProvider == null)
-				throw new ArgumentNullException(nameof(adapterProvider));
-
 			_innerAdapters = new InnerAdapterList();
-			AdapterProvider = adapterProvider;
+			AdapterProvider = adapterProvider ?? throw new ArgumentNullException(nameof(adapterProvider));
 			ExchangeInfoProvider = exchangeInfoProvider;
 
 			LatencyManager = new LatencyManager();
