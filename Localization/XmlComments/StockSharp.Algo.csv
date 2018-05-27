@@ -2703,9 +2703,11 @@ M:StockSharp.Algo.Storages.BufferMessageAdapter.Load(Ecng.Serialization.Settings
 M:StockSharp.Algo.Storages.BufferMessageAdapter.Clone/summary;DocStr643
 M:StockSharp.Algo.Storages.BufferMessageAdapter.Clone/returns;DocStr1116
 T:StockSharp.Algo.Storages.CacheableMarketDataDrive/summary;DocStr1296
-M:StockSharp.Algo.Storages.CacheableMarketDataDrive.#ctor(StockSharp.Algo.Storages.IMarketDataStorageDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive)/summary;DocStr1
-M:StockSharp.Algo.Storages.CacheableMarketDataDrive.#ctor(StockSharp.Algo.Storages.IMarketDataStorageDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive)/param/sourceDrive;DocStr1304
-M:StockSharp.Algo.Storages.CacheableMarketDataDrive.#ctor(StockSharp.Algo.Storages.IMarketDataStorageDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive)/param/cacheDrive;DocStr1305
+M:StockSharp.Algo.Storages.CacheableMarketDataDrive.#ctor(StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive,System.Action{System.Exception})/summary;DocStr1
+M:StockSharp.Algo.Storages.CacheableMarketDataDrive.#ctor(StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive,System.Action{System.Exception})/param/drive;DocStr1278
+M:StockSharp.Algo.Storages.CacheableMarketDataDrive.#ctor(StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive,System.Action{System.Exception})/param/sourceDrive;DocStr1304
+M:StockSharp.Algo.Storages.CacheableMarketDataDrive.#ctor(StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive,System.Action{System.Exception})/param/cacheDrive;DocStr1305
+M:StockSharp.Algo.Storages.CacheableMarketDataDrive.#ctor(StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive,System.Action{System.Exception})/param/errorHandler;DocStr4311
 T:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1/summary;DocStr8575
 T:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1/typeparam/T;DocStr9
 P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.Boards/summary;DocStr8576

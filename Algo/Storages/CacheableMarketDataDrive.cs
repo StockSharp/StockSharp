@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Storages
 	using System.IO;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	/// <summary>
 	/// The market data storage, saving data in the cache-storage.
@@ -58,31 +59,48 @@ namespace StockSharp.Algo.Storages
 			}, null);
 		}
 
-		private T SafeDo<T>(Func<T> func, T defaultValue)
+		private static readonly TimeSpan _interval = TimeSpan.FromSeconds(5);
+		private DateTime? _lastErrorTime;
+
+		private T SafeDo<T>(Func<T> func, T defaultValue, bool delay = false)
 		{
 			if (func == null)
 				throw new ArgumentNullException(nameof(func));
 
 			try
 			{
-				return func();
+				if (delay && _lastErrorTime != null && (_lastErrorTime.Value + _interval) < TimeHelper.Now)
+					return defaultValue;
+
+				var value = func();
+				_lastErrorTime = null;
+				return value;
 			}
 			catch (Exception ex)
 			{
+				_lastErrorTime = TimeHelper.Now;
 				_errorHandler(ex);
+				return defaultValue;
 			}
-
-			return defaultValue;
 		}
 
 		private readonly IMarketDataDrive _drive;
 		IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
 
-		IEnumerable<DateTime> IMarketDataStorageDrive.Dates =>
-			SafeDo(() => _sourceDrive.Dates, Enumerable.Empty<DateTime>())
-				.Concat(_cacheDrive.Dates)
-				.Distinct()
-				.OrderBy();
+		private IEnumerable<DateTime> _prevSourceDates = Enumerable.Empty<DateTime>();
+
+		IEnumerable<DateTime> IMarketDataStorageDrive.Dates
+		{
+			get
+			{
+				_prevSourceDates = SafeDo(() => _sourceDrive.Dates, _prevSourceDates, true);
+
+				return _prevSourceDates
+				       .Concat(_cacheDrive.Dates)
+				       .Distinct()
+				       .OrderBy();
+			}
+		}
 
 		void IMarketDataStorageDrive.ClearDatesCache()
 		{
