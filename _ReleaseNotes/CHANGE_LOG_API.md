@@ -58,6 +58,7 @@ StockSharp API Change log
 * (feature) FIX connector. Try/catch out messages processing.
 * (feature) Chart.DisableIndicatorReset
 * (bug) Chart. Indicator draw from non-GUI thread fix.
+* (bug) BufferMessageAdapter. Fix transactions data save/load.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

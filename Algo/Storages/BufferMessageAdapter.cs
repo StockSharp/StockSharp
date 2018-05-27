@@ -123,6 +123,7 @@ namespace StockSharp.Algo.Storages
 		private readonly SyncObject _subscriptionsLock = new SyncObject();
 		private readonly HashSet<Tuple<SecurityId, DataType>> _subscriptions = new HashSet<Tuple<SecurityId, DataType>>();
 		private readonly Dictionary<long, Tuple<MarketDataMessage, Tuple<SecurityId, DataType>>> _subscriptionsById = new Dictionary<long, Tuple<MarketDataMessage, Tuple<SecurityId, DataType>>>();
+		private readonly SynchronizedDictionary<long, SecurityId> _securityIds = new SynchronizedDictionary<long, SecurityId>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BufferMessageAdapter"/>.
@@ -420,6 +421,8 @@ namespace StockSharp.Algo.Storages
 					//if (!CanStore<ExecutionMessage>(regMsg.SecurityId, ExecutionTypes.Transaction))
 					//	break;
 
+					_securityIds.Add(regMsg.TransactionId, regMsg.SecurityId);
+
 					_transactionsBuffer.Add(regMsg.SecurityId, new ExecutionMessage
 					{
 						ServerTime = DateTimeOffset.Now,
@@ -453,6 +456,8 @@ namespace StockSharp.Algo.Storages
 
 					//if (!CanStore<ExecutionMessage>(cancelMsg.SecurityId, ExecutionTypes.Transaction))
 					//	break;
+
+					_securityIds.Add(cancelMsg.TransactionId, cancelMsg.SecurityId);
 
 					_transactionsBuffer.Add(cancelMsg.SecurityId, new ExecutionMessage
 					{
@@ -522,7 +527,7 @@ namespace StockSharp.Algo.Storages
 						case ExecutionTypes.Transaction:
 							
 							// some error responses do not contains sec id
-							if (secId.IsDefault())
+							if (secId.IsDefault() && !_securityIds.TryGetValue(execMsg.OriginalTransactionId, out secId))
 							{
 								base.OnInnerAdapterNewOutMessage(message);
 								return;
