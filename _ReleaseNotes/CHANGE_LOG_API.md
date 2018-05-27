@@ -59,6 +59,7 @@ StockSharp API Change log
 * (feature) Chart.DisableIndicatorReset
 * (bug) Chart. Indicator draw from non-GUI thread fix.
 * (bug) BufferMessageAdapter. Fix transactions data save/load.
+* (bug) MACD Histogram calc fix https://stocksharp.ru/forum/9487/nekorrektno-risuetsya-macd-histogram/
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
