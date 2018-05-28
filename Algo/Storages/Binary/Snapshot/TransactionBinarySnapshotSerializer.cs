@@ -229,7 +229,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			{
 				var ptr = handle.Value.AddrOfPinnedObject();
 
-				var snapshot = (TransactionSnapshot)Marshal.PtrToStructure(ptr, typeof(TransactionSnapshot));
+				var snapshot = ptr.ToStruct<TransactionSnapshot>();
 
 				var execMsg = new ExecutionMessage
 				{
@@ -291,7 +291,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				for (var i = 0; i < snapshot.ConditionParamsCount; i++)
 				{
-					var param = (TransactionConditionParam)Marshal.PtrToStructure(ptr, typeof(TransactionConditionParam));
+					var param = ptr.ToStruct<TransactionConditionParam>();
 					execMsg.Condition.Parameters.Add(param.Name, param.Value.To(param.ValueType.To<Type>()));
 					ptr += paramSize;
 				}

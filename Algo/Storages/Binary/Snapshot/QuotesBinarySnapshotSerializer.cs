@@ -130,7 +130,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			{
 				var ptr = handle.Value.AddrOfPinnedObject();
 
-				var snapshot = (QuotesSnapshot)Marshal.PtrToStructure(ptr, typeof(QuotesSnapshot));
+				var snapshot = ptr.ToStruct<QuotesSnapshot>();
 
 				var bids = new List<QuoteChange>();
 				var asks = new List<QuoteChange>();
@@ -151,14 +151,14 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				for (var i = 0; i < snapshot.BidCount; i++)
 				{
-					var row = (QuotesSnapshotRow)Marshal.PtrToStructure(ptr, typeof(QuotesSnapshotRow));
+					var row = ptr.ToStruct<QuotesSnapshotRow>();
 					bids.Add(new QuoteChange(Sides.Buy, row.Price, row.Volume));
 					ptr += rowSize;
 				}
 
 				for (var i = 0; i < snapshot.AskCount; i++)
 				{
-					var row = (QuotesSnapshotRow)Marshal.PtrToStructure(ptr, typeof(QuotesSnapshotRow));
+					var row = ptr.ToStruct<QuotesSnapshotRow>();
 					asks.Add(new QuoteChange(Sides.Sell, row.Price, row.Volume));
 					ptr += rowSize;
 				}

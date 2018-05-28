@@ -385,7 +385,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			// Pin the managed memory while, copy it out the data, then unpin it
 			using (var handle = new GCHandle<byte[]>(buffer, GCHandleType.Pinned))
 			{
-				var snapshot = (Level1Snapshot)Marshal.PtrToStructure(handle.Value.AddrOfPinnedObject(), typeof(Level1Snapshot));
+				var snapshot = handle.Value.AddrOfPinnedObject().ToStruct<Level1Snapshot>();
 
 				var level1Msg = new Level1ChangeMessage
 				{
