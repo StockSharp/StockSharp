@@ -27,20 +27,20 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		string FileName { get; }
 
-		/// <summary>
-		/// Get snapshot size in bytes.
-		/// </summary>
-		/// <param name="version">Version of data format.</param>
-		/// <returns>Snapshot size in bytes.</returns>
-		int GetSnapshotSize(Version version);
+		///// <summary>
+		///// Get snapshot size in bytes.
+		///// </summary>
+		///// <param name="version">Version of data format.</param>
+		///// <returns>Snapshot size in bytes.</returns>
+		//int GetSnapshotSize(Version version);
 
 		/// <summary>
 		/// Serialize the specified message to byte array.
 		/// </summary>
 		/// <param name="version">Version of data format.</param>
 		/// <param name="message">Message.</param>
-		/// <param name="buffer">Byte array.</param>
-		void Serialize(Version version, TMessage message, byte[] buffer);
+		/// <returns>Byte array.</returns>
+		byte[] Serialize(Version version, TMessage message);
 
 		/// <summary>
 		/// Deserialize message from byte array.

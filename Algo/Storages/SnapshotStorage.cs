@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Storages
 {
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
 
@@ -22,11 +23,9 @@ namespace StockSharp.Algo.Storages
 		private readonly string _path;
 
 		private readonly AllocationArray<TKey> _dirtyKeys = new AllocationArray<TKey>(10);
-		private readonly SynchronizedDictionary<TKey, Tuple<long, TMessage>> _snapshots = new SynchronizedDictionary<TKey, Tuple<long, TMessage>>();
-		private long _maxOffset;
+		private readonly SynchronizedDictionary<TKey, TMessage> _snapshots = new SynchronizedDictionary<TKey, TMessage>();
+		private readonly Dictionary<TKey, long> _offsets = new Dictionary<TKey, long>();
 		private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
-
-		private int _snapshotSize;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SnapshotStorage{TKey,TMessage}"/>.
@@ -49,9 +48,9 @@ namespace StockSharp.Algo.Storages
 
 			var fileName = Path.Combine(_path, _serializer.FileName);
 
-			byte[] buffer;
-
 			Version version;
+			const int versionBytes = 2;
+			long currOffset = versionBytes;
 
 			if (File.Exists(fileName))
 			{
@@ -59,35 +58,44 @@ namespace StockSharp.Algo.Storages
 				{
 					version = new Version(stream.ReadByte(), stream.ReadByte());
 
-					buffer = new byte[_serializer.GetSnapshotSize(version)];
-
-					while (stream.Position < stream.Length)
+					if (version.Major >= 2)
 					{
-						stream.ReadBytes(buffer, buffer.Length);
+						while (stream.Position < stream.Length)
+						{
+							var size = stream.Read<int>();
 
-						var message = _serializer.Deserialize(version, buffer);
+							var buffer = new byte[size];
+							stream.ReadBytes(buffer, buffer.Length);
 
-						_snapshots.Add(_serializer.GetKey(message), Tuple.Create(stream.Position - buffer.Length, message));
+							var offset = stream.Position;
+
+							var message = _serializer.Deserialize(version, buffer);
+							var key = _serializer.GetKey(message);
+
+							_snapshots.Add(key, message);
+
+							_offsets.Add(key, offset);
+							currOffset = stream.Position;
+						}
 					}
+				}
 
-					_maxOffset = stream.Position;
+				if (version.Major < 2)
+				{
+					File.Delete(fileName);
+					version = _serializer.Version;
 				}
 			}
 			else
 			{
 				version = _serializer.Version;
-				_maxOffset = 2; // version bytes
-
-				buffer = new byte[_serializer.GetSnapshotSize(version)];
 			}
-
-			_snapshotSize = buffer.Length;
 
 			var isFlushing = false;
 
 			ThreadingHelper.Timer(() =>
 			{
-				Tuple<long, TMessage>[] changed;
+				Tuple<long, byte[]>[] changed;
 
 				lock (_snapshots.SyncRoot)
 				{
@@ -101,8 +109,15 @@ namespace StockSharp.Algo.Storages
 
 					changed = _dirtyKeys.Select(key =>
 					{
-						var tuple = _snapshots[key];
-						return Tuple.Create(tuple.Item1, (TMessage)tuple.Item2.Clone());
+						var buffer = _serializer.Serialize(version, _snapshots[key]);
+
+						if (!_offsets.TryGetValue(key, out var offset))
+						{
+							_offsets.Add(key, currOffset);
+							currOffset += buffer.Length;
+						}
+
+						return Tuple.Create(offset, buffer);
 					}).OrderBy(t => t.Item1).ToArray();
 
 					_dirtyKeys.Count = 0;
@@ -121,11 +136,7 @@ namespace StockSharp.Algo.Storages
 						foreach (var tuple in changed)
 						{
 							stream.Seek(tuple.Item1, SeekOrigin.Begin);
-
-							Array.Clear(buffer, 0, buffer.Length);
-							_serializer.Serialize(version, tuple.Item2, buffer);
-
-							stream.Write(buffer, 0, buffer.Length);
+							stream.Write(tuple.Item2);
 						}
 					}
 				}
@@ -166,16 +177,15 @@ namespace StockSharp.Algo.Storages
 
 			lock (_snapshots.SyncRoot)
 			{
-				var tuple = _snapshots.TryGetValue(key);
+				var prev = _snapshots.TryGetValue(key);
 
-				if (tuple == null)
+				if (prev == null)
 				{
-					_snapshots.Add(key, Tuple.Create(_maxOffset, (TMessage)curr.Clone()));
-					_maxOffset += _snapshotSize;
+					_snapshots.Add(key, (TMessage)curr.Clone());
 				}
 				else
 				{
-					_serializer.Update(tuple.Item2, curr);
+					_serializer.Update(prev, curr);
 				}
 
 				_dirtyKeys.Add(key);
@@ -184,7 +194,7 @@ namespace StockSharp.Algo.Storages
 
 		Message ISnapshotStorage<TKey>.Get(TKey key)
 		{
-			return _snapshots.TryGetValue(key)?.Item2.Clone();
+			return _snapshots.TryGetValue(key)?.Clone();
 		}
 
 		Message ISnapshotStorage.Get(object key)

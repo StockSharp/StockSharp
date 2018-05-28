@@ -5,6 +5,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 	using Ecng.Common;
 	using Ecng.Interop;
+	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 
@@ -13,9 +14,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	/// </summary>
 	public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<long, ExecutionMessage>
 	{
-		private const int _snapshotSize = 1024 * 10; // 10kb
+		//private const int _snapshotSize = 1024 * 10; // 10kb
 
-		[StructLayout(LayoutKind.Sequential, Pack = 1, Size = _snapshotSize, CharSet = CharSet.Unicode)]
+		[StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = _snapshotSize*/, CharSet = CharSet.Unicode)]
 		private struct TransactionSnapshot
 		{
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
@@ -100,13 +101,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public bool? IsMargin;
 		}
 
-		Version ISnapshotSerializer<long, ExecutionMessage>.Version { get; } = new Version(1, 0);
+		Version ISnapshotSerializer<long, ExecutionMessage>.Version { get; } = new Version(2, 0);
 
-		int ISnapshotSerializer<long, ExecutionMessage>.GetSnapshotSize(Version version) => _snapshotSize;
+		//int ISnapshotSerializer<long, ExecutionMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
 		string ISnapshotSerializer<long, ExecutionMessage>.FileName => "transaction_snapshot.bin";
 
-		void ISnapshotSerializer<long, ExecutionMessage>.Serialize(Version version, ExecutionMessage message, byte[] buffer)
+		byte[] ISnapshotSerializer<long, ExecutionMessage>.Serialize(Version version, ExecutionMessage message)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -164,9 +165,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				OrderTif = message.TimeInForce == null ? (sbyte)-1 : (sbyte)message.TimeInForce.Value,
 			};
 
+			var buffer = new byte[typeof(TransactionSnapshot).SizeOf()];
+
 			var ptr = snapshot.StructToPtr();
-			Marshal.Copy(ptr, buffer, 0, _snapshotSize);
+			Marshal.Copy(ptr, buffer, 0, buffer.Length);
 			Marshal.FreeHGlobal(ptr);
+
+			return buffer;
 		}
 
 		ExecutionMessage ISnapshotSerializer<long, ExecutionMessage>.Deserialize(Version version, byte[] buffer)

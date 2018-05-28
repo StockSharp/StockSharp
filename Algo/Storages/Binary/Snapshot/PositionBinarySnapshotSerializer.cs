@@ -5,6 +5,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 	using Ecng.Common;
 	using Ecng.Interop;
+	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 
@@ -13,9 +14,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	/// </summary>
 	public class PositionBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, PositionChangeMessage>
 	{
-		private const int _snapshotSize = 1024 * 10; // 10kb
+		//private const int _snapshotSize = 1024 * 10; // 10kb
 
-		[StructLayout(LayoutKind.Sequential, Pack = 1, Size = _snapshotSize, CharSet = CharSet.Unicode)]
+		[StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = _snapshotSize*/, CharSet = CharSet.Unicode)]
 		private struct PositionSnapshot
 		{
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
@@ -42,13 +43,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public sbyte State;
 		}
 
-		Version ISnapshotSerializer<SecurityId, PositionChangeMessage>.Version { get; } = new Version(1, 0);
+		Version ISnapshotSerializer<SecurityId, PositionChangeMessage>.Version { get; } = new Version(2, 0);
 
-		int ISnapshotSerializer<SecurityId, PositionChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
+		//int ISnapshotSerializer<SecurityId, PositionChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
 		string ISnapshotSerializer<SecurityId, PositionChangeMessage>.FileName => "position_snapshot.bin";
 
-		void ISnapshotSerializer<SecurityId, PositionChangeMessage>.Serialize(Version version, PositionChangeMessage message, byte[] buffer)
+		byte[] ISnapshotSerializer<SecurityId, PositionChangeMessage>.Serialize(Version version, PositionChangeMessage message)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -113,9 +114,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				}
 			}
 
+			var buffer = new byte[typeof(PositionSnapshot).SizeOf()];
+
 			var ptr = snapshot.StructToPtr();
-			Marshal.Copy(ptr, buffer, 0, _snapshotSize);
+			Marshal.Copy(ptr, buffer, 0, buffer.Length);
 			Marshal.FreeHGlobal(ptr);
+
+			return buffer;
 		}
 
 		PositionChangeMessage ISnapshotSerializer<SecurityId, PositionChangeMessage>.Deserialize(Version version, byte[] buffer)

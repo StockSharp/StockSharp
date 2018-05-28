@@ -7,6 +7,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 	using Ecng.Common;
 	using Ecng.Interop;
+	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 
@@ -15,7 +16,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	/// </summary>
 	public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, QuoteChangeMessage>
 	{
-		private const int _snapshotSize = 1024 * 10; // 10kb
+		//private const int _snapshotSize = 1024 * 10; // 10kb
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		private struct QuotesSnapshotRow
@@ -24,7 +25,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public decimal Volume;
 		}
 
-		[StructLayout(LayoutKind.Sequential, Pack = 1, Size = _snapshotSize, CharSet = CharSet.Unicode)]
+		[StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = _snapshotSize*/, CharSet = CharSet.Unicode)]
 		private struct QuotesSnapshot
 		{
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
@@ -37,7 +38,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public int AskCount;
 		}
 
-		private const int _rowsOffset = 224;
+		//private const int _rowsOffset = 224;
 
 		private int _maxDepth = 100;
 
@@ -56,13 +57,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		Version ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Version { get; } = new Version(1, 0);
+		Version ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Version { get; } = new Version(2, 0);
 
-		int ISnapshotSerializer<SecurityId, QuoteChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
+		//int ISnapshotSerializer<SecurityId, QuoteChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
 		string ISnapshotSerializer<SecurityId, QuoteChangeMessage>.FileName => "orderbook_snapshot.bin";
 
-		void ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Serialize(Version version, QuoteChangeMessage message, byte[] buffer)
+		byte[] ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Serialize(Version version, QuoteChangeMessage message)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -84,12 +85,16 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			snapshot.BidCount = bids.Length;
 			snapshot.AskCount = asks.Length;
 
+			var snapshotSize = typeof(QuotesSnapshot).SizeOf();
+			var rowSize = typeof(QuotesSnapshotRow).SizeOf();
+
+			var buffer = new byte[snapshotSize + (bids.Length + asks.Length) * rowSize];
+
 			var ptr = snapshot.StructToPtr();
-			Marshal.Copy(ptr, buffer, 0, _snapshotSize);
+			Marshal.Copy(ptr, buffer, 0, snapshotSize);
 			Marshal.FreeHGlobal(ptr);
 
-			var offset = _rowsOffset;
-			var rowSize = Marshal.SizeOf(typeof(QuotesSnapshotRow));
+			var offset = snapshotSize;
 
 			foreach (var quote in bids.Concat(asks))
 			{
@@ -105,6 +110,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				offset += rowSize;
 			}
+
+			return buffer;
 		}
 
 		QuoteChangeMessage ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Deserialize(Version version, byte[] buffer)
@@ -132,7 +139,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					IsSorted = true,
 				};
 
-				ptr += _rowsOffset;
+				ptr += typeof(QuotesSnapshot).SizeOf();
 
 				var rowSize = Marshal.SizeOf(typeof(QuotesSnapshotRow));
 
