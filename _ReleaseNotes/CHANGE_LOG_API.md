@@ -62,6 +62,7 @@ StockSharp API Change log
 * (bug) MACD Histogram calc fix https://stocksharp.ru/forum/9487/nekorrektno-risuetsya-macd-histogram/
 * (feature) QuotesBinarySnapshotSerializer. Support unlimited depths.
 * (feature) Level1BinarySnapshotSerializer. Support more fields.
+* (feature) TransactionBinarySnapshotSerializer. Condition orders support.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

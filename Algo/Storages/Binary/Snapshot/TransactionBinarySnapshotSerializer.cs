@@ -1,6 +1,8 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Runtime.InteropServices;
 
 	using Ecng.Common;
@@ -99,6 +101,24 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			public decimal? OpenInterest;
 			public byte? IsMargin;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+			public string ConditionType;
+
+			public int ConditionParamsCount;
+		}
+
+		[StructLayout(LayoutKind.Sequential, Pack = 1)]
+		private struct TransactionConditionParam
+		{
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+			public string Name;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+			public string ValueType;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+			public string Value;
 		}
 
 		Version ISnapshotSerializer<long, ExecutionMessage>.Version { get; } = new Version(2, 0);
@@ -130,8 +150,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				Comment = message.Comment,
 				SystemComment = message.SystemComment,
 				Currency = message.Currency == null ? (short?)null : (short)message.Currency.Value,
-				// TODO
-				//Condition = message.Condition,
 				DepoName = message.DepoName,
 				Error = message.Error?.Message,
 				ExpiryDate = message.ExpiryDate?.To<long>(),
@@ -164,13 +182,39 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				OpenInterest = message.OpenInterest,
 				IsSystem = message.IsSystem == null ? (byte?)null : (byte)(message.IsSystem.Value ? 1 : 0),
 				OrderTif = message.TimeInForce == null ? (byte?)null : (byte)message.TimeInForce.Value,
+				ConditionType = message.Condition?.GetType().GetTypeName(false),
 			};
 
-			var buffer = new byte[typeof(TransactionSnapshot).SizeOf()];
+			var conParams = message.Condition?.Parameters.Where(p => p.Value != null).ToArray() ?? ArrayHelper.Empty<KeyValuePair<string, object>>();
+
+			snapshot.ConditionParamsCount = conParams.Length;
+
+			var paramSize = typeof(TransactionConditionParam).SizeOf();
+			var snapshotSize = typeof(TransactionSnapshot).SizeOf();
+
+			var buffer = new byte[snapshotSize + snapshot.ConditionParamsCount * paramSize];
 
 			var ptr = snapshot.StructToPtr();
-			Marshal.Copy(ptr, buffer, 0, buffer.Length);
+			Marshal.Copy(ptr, buffer, 0, snapshotSize);
 			Marshal.FreeHGlobal(ptr);
+
+			var offset = snapshotSize;
+
+			foreach (var conParam in conParams)
+			{
+				var param = new TransactionConditionParam
+				{
+					Name = conParam.Key,
+					ValueType = conParam.Value.GetType().GetTypeAsString(false),
+					Value = conParam.Value.To<string>(),
+				};
+
+				var rowPtr = param.StructToPtr();
+				Marshal.Copy(rowPtr, buffer, offset, paramSize);
+				Marshal.FreeHGlobal(rowPtr);
+
+				offset += paramSize;
+			}
 
 			return buffer;
 		}
@@ -183,7 +227,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			// Pin the managed memory while, copy it out the data, then unpin it
 			using (var handle = new GCHandle<byte[]>(buffer, GCHandleType.Pinned))
 			{
-				var snapshot = (TransactionSnapshot)Marshal.PtrToStructure(handle.Value.AddrOfPinnedObject(), typeof(TransactionSnapshot));
+				var ptr = handle.Value.AddrOfPinnedObject();
+
+				var snapshot = (TransactionSnapshot)Marshal.PtrToStructure(ptr, typeof(TransactionSnapshot));
 
 				var execMsg = new ExecutionMessage
 				{
@@ -235,6 +281,20 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					IsSystem = snapshot.IsSystem == null ? (bool?)null : (snapshot.IsSystem.Value == 1),
 					TimeInForce = snapshot.OrderTif == null ? (TimeInForce?)null : (TimeInForce)snapshot.OrderTif.Value,
 				};
+
+				ptr += typeof(TransactionSnapshot).SizeOf();
+
+				var paramSize = typeof(TransactionConditionParam).SizeOf();
+
+				if (snapshot.ConditionType != null)
+					execMsg.Condition = snapshot.ConditionType.To<Type>().CreateInstance<OrderCondition>();
+
+				for (var i = 0; i < snapshot.ConditionParamsCount; i++)
+				{
+					var param = (TransactionConditionParam)Marshal.PtrToStructure(ptr, typeof(TransactionConditionParam));
+					execMsg.Condition.Parameters.Add(param.Name, param.Value.To(param.ValueType.To<Type>()));
+					ptr += paramSize;
+				}
 				
 				return execMsg;
 			}
