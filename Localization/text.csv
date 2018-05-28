@@ -14679,9 +14679,9 @@ DocStr10186;The tree item settings changed event;Событие изменени
 DocStr10188;Can store message;Можно ли сохранить сообщение
 DocStr10189;The interface for access to the storage of snapshot prices;Интерфейс для доступа к хранилищу снэпшотов цен
 DocStr10190;Clear storage;Очистить хранилище
-DocStr10191;Remove snapshot for the specified security;Удалить снэпшот для указанного инструмента
+DocStr10191;Remove snapshot for the specified key;Удалить снэпшот для указанного ключа
 DocStr10192;Update snapshot;Обновить снэпшот
-DocStr10193;Get snapshot for the specified security;Получить снэпшот для указанного инструмента
+DocStr10193;Get snapshot for the specified key;Получить снэпшот для указанного ключа
 DocStr10194;Implementation of {0} in binary format;Реализация {0} в бинарном формате
 DocStr10195;Storage modes;Режимы хранилищ
 DocStr10196;Full;Полное
@@ -14695,7 +14695,7 @@ DocStr10203;Snapshot size in bytes;Размер снэпшота в байтах
 DocStr10204;Serialize the specified message to byte array;Преобразовать указанное сообщение в массив байтов
 DocStr10205;Byte array;Массив байтов
 DocStr10206;Deserialize message from byte array;Преобразовать сообщение из массива байтов
-DocStr10207;Get security identifier for the specified message;Получить идентификатор инструментам для указанного сообщения
+DocStr10207;Get key for the specified message;Получить ключ для указанного сообщения
 DocStr10208;Update the specified message by new changes;Обновить указанное сообщение новыми изменениями
 DocStr10209;Implementation of {0};Реализация {0}
 DocStr10210;Serializer;Преобразователь

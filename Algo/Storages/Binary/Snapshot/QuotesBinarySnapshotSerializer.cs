@@ -11,9 +11,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Implementation of <see cref="ISnapshotSerializer{TMessage}"/> in binary format for <see cref="QuoteChangeMessage"/>.
+	/// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="QuoteChangeMessage"/>.
 	/// </summary>
-	public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<QuoteChangeMessage>
+	public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, QuoteChangeMessage>
 	{
 		private const int _snapshotSize = 1024 * 10; // 10kb
 
@@ -56,13 +56,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		Version ISnapshotSerializer<QuoteChangeMessage>.Version { get; } = new Version(1, 0);
+		Version ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Version { get; } = new Version(1, 0);
 
-		int ISnapshotSerializer<QuoteChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
+		int ISnapshotSerializer<SecurityId, QuoteChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
-		string ISnapshotSerializer<QuoteChangeMessage>.FileName => "orderbook_snapshot.bin";
+		string ISnapshotSerializer<SecurityId, QuoteChangeMessage>.FileName => "orderbook_snapshot.bin";
 
-		void ISnapshotSerializer<QuoteChangeMessage>.Serialize(Version version, QuoteChangeMessage message, byte[] buffer)
+		void ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Serialize(Version version, QuoteChangeMessage message, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -107,7 +107,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		QuoteChangeMessage ISnapshotSerializer<QuoteChangeMessage>.Deserialize(Version version, byte[] buffer)
+		QuoteChangeMessage ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Deserialize(Version version, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -154,12 +154,12 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		SecurityId ISnapshotSerializer<QuoteChangeMessage>.GetSecurityId(QuoteChangeMessage message)
+		SecurityId ISnapshotSerializer<SecurityId, QuoteChangeMessage>.GetKey(QuoteChangeMessage message)
 		{
 			return message.SecurityId;
 		}
 
-		void ISnapshotSerializer<QuoteChangeMessage>.Update(QuoteChangeMessage message, QuoteChangeMessage changes)
+		void ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Update(QuoteChangeMessage message, QuoteChangeMessage changes)
 		{
 			if (!changes.IsSorted)
 			{
@@ -176,6 +176,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			message.ServerTime = changes.ServerTime;
 		}
 
-		DataType ISnapshotSerializer<QuoteChangeMessage>.DataType => DataType.MarketDepth;
+		DataType ISnapshotSerializer<SecurityId, QuoteChangeMessage>.DataType => DataType.MarketDepth;
 	}
 }

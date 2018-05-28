@@ -102,17 +102,16 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in GetTransactions())
 					{
-						// TODO 
-						//if (Mode.Contains(StorageModes.Incremental))
+						if (Mode.Contains(StorageModes.Incremental))
 							GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Transaction).Save(pair.Value);
-						
-						//if (Mode.Contains(StorageModes.Snapshot))
-						//{
-						//	var snapshotStorage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
 
-						//	foreach (var message in pair.Value)
-						//		snapshotStorage.Update(message);
-						//}
+						if (Mode.Contains(StorageModes.Snapshot))
+						{
+							var snapshotStorage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
+
+							foreach (var message in pair.Value)
+								snapshotStorage.Update(message);
+						}
 					}
 
 					foreach (var pair in GetOrderBooks())

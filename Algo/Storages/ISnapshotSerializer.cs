@@ -7,8 +7,9 @@ namespace StockSharp.Algo.Storages
 	/// <summary>
 	/// The interface for serialize snapshots.
 	/// </summary>
+	/// <typeparam name="TKey">Type of key value.</typeparam>
 	/// <typeparam name="TMessage">Message type.</typeparam>
-	public interface ISnapshotSerializer<TMessage>
+	public interface ISnapshotSerializer<TKey, TMessage>
 		where TMessage : Message
 	{
 		/// <summary>
@@ -50,11 +51,11 @@ namespace StockSharp.Algo.Storages
 		TMessage Deserialize(Version version, byte[] buffer);
 
 		/// <summary>
-		/// Get security identifier for the specified message.
+		/// Get key for the specified message.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		/// <returns>Security ID.</returns>
-		SecurityId GetSecurityId(TMessage message);
+		/// <returns>Key.</returns>
+		TKey GetKey(TMessage message);
 
 		/// <summary>
 		/// Update the specified message by new changes.

@@ -9,9 +9,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Implementation of <see cref="ISnapshotSerializer{TMessage}"/> in binary format for <see cref="PositionChangeMessage"/>.
+	/// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="PositionChangeMessage"/>.
 	/// </summary>
-	public class PositionBinarySnapshotSerializer : ISnapshotSerializer<PositionChangeMessage>
+	public class PositionBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, PositionChangeMessage>
 	{
 		private const int _snapshotSize = 1024 * 10; // 10kb
 
@@ -42,13 +42,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public sbyte State;
 		}
 
-		Version ISnapshotSerializer<PositionChangeMessage>.Version { get; } = new Version(1, 0);
+		Version ISnapshotSerializer<SecurityId, PositionChangeMessage>.Version { get; } = new Version(1, 0);
 
-		int ISnapshotSerializer<PositionChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
+		int ISnapshotSerializer<SecurityId, PositionChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
-		string ISnapshotSerializer<PositionChangeMessage>.FileName => "position_snapshot.bin";
+		string ISnapshotSerializer<SecurityId, PositionChangeMessage>.FileName => "position_snapshot.bin";
 
-		void ISnapshotSerializer<PositionChangeMessage>.Serialize(Version version, PositionChangeMessage message, byte[] buffer)
+		void ISnapshotSerializer<SecurityId, PositionChangeMessage>.Serialize(Version version, PositionChangeMessage message, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -118,7 +118,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			Marshal.FreeHGlobal(ptr);
 		}
 
-		PositionChangeMessage ISnapshotSerializer<PositionChangeMessage>.Deserialize(Version version, byte[] buffer)
+		PositionChangeMessage ISnapshotSerializer<SecurityId, PositionChangeMessage>.Deserialize(Version version, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -179,12 +179,12 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		SecurityId ISnapshotSerializer<PositionChangeMessage>.GetSecurityId(PositionChangeMessage message)
+		SecurityId ISnapshotSerializer<SecurityId, PositionChangeMessage>.GetKey(PositionChangeMessage message)
 		{
 			return message.SecurityId;
 		}
 
-		void ISnapshotSerializer<PositionChangeMessage>.Update(PositionChangeMessage message, PositionChangeMessage changes)
+		void ISnapshotSerializer<SecurityId, PositionChangeMessage>.Update(PositionChangeMessage message, PositionChangeMessage changes)
 		{
 			foreach (var pair in changes.Changes)
 			{
@@ -195,6 +195,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			message.ServerTime = changes.ServerTime;
 		}
 
-		DataType ISnapshotSerializer<PositionChangeMessage>.DataType => DataType.PositionChanges;
+		DataType ISnapshotSerializer<SecurityId, PositionChangeMessage>.DataType => DataType.PositionChanges;
 	}
 }

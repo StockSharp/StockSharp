@@ -182,10 +182,7 @@ namespace StockSharp.Algo.Storages
 
 				public CandleSerializer(IMarketDataSerializer<TCandleMessage> serializer)
 				{
-					if (serializer == null)
-						throw new ArgumentNullException(nameof(serializer));
-
-					_serializer = serializer;
+					_serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
 				}
 
 				StorageFormats IMarketDataSerializer.Format => _serializer.Format;
@@ -489,13 +486,7 @@ namespace StockSharp.Algo.Storages
 		public IExchangeInfoProvider ExchangeInfoProvider
 		{
 			get => _exchangeInfoProvider;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_exchangeInfoProvider = value;
-			}
+			set => _exchangeInfoProvider = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <inheritdoc />
@@ -506,17 +497,17 @@ namespace StockSharp.Algo.Storages
 				ISnapshotStorage storage;
 
 				if (dataType == typeof(Level1ChangeMessage))
-					storage = new SnapshotStorage<Level1ChangeMessage>(key.Item2.Path, new Level1BinarySnapshotSerializer());
+					storage = new SnapshotStorage<SecurityId, Level1ChangeMessage>(key.Item2.Path, new Level1BinarySnapshotSerializer());
 				else if (dataType == typeof(QuoteChangeMessage))
-					storage = new SnapshotStorage<QuoteChangeMessage>(key.Item2.Path, new QuotesBinarySnapshotSerializer());
+					storage = new SnapshotStorage<SecurityId, QuoteChangeMessage>(key.Item2.Path, new QuotesBinarySnapshotSerializer());
 				else if (dataType == typeof(PositionChangeMessage))
-					storage = new SnapshotStorage<PositionChangeMessage>(key.Item2.Path, new PositionBinarySnapshotSerializer());
+					storage = new SnapshotStorage<SecurityId, PositionChangeMessage>(key.Item2.Path, new PositionBinarySnapshotSerializer());
 				else if (dataType == typeof(ExecutionMessage))
 				{
 					switch ((ExecutionTypes)arg)
 					{
 						case ExecutionTypes.Transaction:
-							storage = new SnapshotStorage<ExecutionMessage>(key.Item2.Path, new TransactionBinarySnapshotSerializer());
+							storage = new SnapshotStorage<long, ExecutionMessage>(key.Item2.Path, new TransactionBinarySnapshotSerializer());
 							break;
 						default:
 							throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.Str1219);

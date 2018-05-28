@@ -9,9 +9,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Implementation of <see cref="ISnapshotSerializer{TMessage}"/> in binary format for <see cref="Level1ChangeMessage"/>.
+	/// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="Level1ChangeMessage"/>.
 	/// </summary>
-	public class Level1BinarySnapshotSerializer : ISnapshotSerializer<Level1ChangeMessage>
+	public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Level1ChangeMessage>
 	{
 		private const int _snapshotSize = 1024 * 10; // 10kb
 
@@ -107,13 +107,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			//public decimal QuickRatio;
 		}
 
-		Version ISnapshotSerializer<Level1ChangeMessage>.Version { get; } = new Version(1, 0);
+		Version ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Version { get; } = new Version(1, 0);
 
-		string ISnapshotSerializer<Level1ChangeMessage>.FileName => "level1_snapshot.bin";
+		string ISnapshotSerializer<SecurityId, Level1ChangeMessage>.FileName => "level1_snapshot.bin";
 
-		int ISnapshotSerializer<Level1ChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
+		int ISnapshotSerializer<SecurityId, Level1ChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
-		void ISnapshotSerializer<Level1ChangeMessage>.Serialize(Version version, Level1ChangeMessage message, byte[] buffer)
+		void ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Serialize(Version version, Level1ChangeMessage message, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -291,7 +291,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			Marshal.FreeHGlobal(ptr);
 		}
 
-		Level1ChangeMessage ISnapshotSerializer<Level1ChangeMessage>.Deserialize(Version version, byte[] buffer)
+		Level1ChangeMessage ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Deserialize(Version version, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -383,12 +383,12 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		SecurityId ISnapshotSerializer<Level1ChangeMessage>.GetSecurityId(Level1ChangeMessage message)
+		SecurityId ISnapshotSerializer<SecurityId, Level1ChangeMessage>.GetKey(Level1ChangeMessage message)
 		{
 			return message.SecurityId;
 		}
 
-		void ISnapshotSerializer<Level1ChangeMessage>.Update(Level1ChangeMessage message, Level1ChangeMessage changes)
+		void ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Update(Level1ChangeMessage message, Level1ChangeMessage changes)
 		{
 			var lastTradeFound = false;
 			var bestBidFound = false;
@@ -444,6 +444,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			message.ServerTime = changes.ServerTime;
 		}
 
-		DataType ISnapshotSerializer<Level1ChangeMessage>.DataType => DataType.Level1;
+		DataType ISnapshotSerializer<SecurityId, Level1ChangeMessage>.DataType => DataType.Level1;
 	}
 }

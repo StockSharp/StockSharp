@@ -9,9 +9,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Implementation of <see cref="ISnapshotSerializer{TMessage}"/> in binary format for <see cref="ExecutionMessage"/>.
+	/// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="ExecutionMessage"/>.
 	/// </summary>
-	public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<ExecutionMessage>
+	public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<long, ExecutionMessage>
 	{
 		private const int _snapshotSize = 1024 * 10; // 10kb
 
@@ -31,12 +31,11 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public long OrderId;
 			public long OrderUserId;
 			public decimal OrderVolume;
-			public byte OrderType;
+			public sbyte OrderType;
 			public byte OrderSide;
-			public byte OrderTif;
+			public sbyte OrderTif;
 
-			[MarshalAs(UnmanagedType.I1)]
-			public bool IsSystem;
+			public sbyte IsSystem;
 
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
 			public string OrderStringId;
@@ -101,13 +100,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public bool? IsMargin;
 		}
 
-		Version ISnapshotSerializer<ExecutionMessage>.Version { get; } = new Version(1, 0);
+		Version ISnapshotSerializer<long, ExecutionMessage>.Version { get; } = new Version(1, 0);
 
-		int ISnapshotSerializer<ExecutionMessage>.GetSnapshotSize(Version version) => _snapshotSize;
+		int ISnapshotSerializer<long, ExecutionMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
-		string ISnapshotSerializer<ExecutionMessage>.FileName => "transaction_snapshot.bin";
+		string ISnapshotSerializer<long, ExecutionMessage>.FileName => "transaction_snapshot.bin";
 
-		void ISnapshotSerializer<ExecutionMessage>.Serialize(Version version, ExecutionMessage message, byte[] buffer)
+		void ISnapshotSerializer<long, ExecutionMessage>.Serialize(Version version, ExecutionMessage message, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -136,11 +135,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				IsMarketMaker = message.IsMarketMaker,
 				IsMargin = message.IsMargin,
 				Side = (byte)message.Side,
+				OrderId = message.OrderId ?? 0,
 				OrderStringId = message.OrderStringId,
 				OrderBoardId = message.OrderBoardId,
 				OrderPrice = message.OrderPrice,
 				OrderVolume = message.OrderVolume ?? 0,
 				VisibleVolume = message.VisibleVolume,
+				OrderType = message.OrderType == null ? (sbyte)-1 : (sbyte)message.OrderType.Value,
 				OrderState = message.OrderState == null ? (sbyte)-1 : (sbyte)message.OrderState.Value,
 				OrderStatus = message.OrderStatus ?? 0,
 				Balance = message.Balance ?? 0,
@@ -159,6 +160,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				OpenInterest = message.OpenInterest ?? 0,
 				OriginalTransactionId = message.OriginalTransactionId,
 				TransactionId = message.TransactionId,
+				IsSystem = (sbyte)(message.IsSystem == null ? -1 : message.IsSystem.Value ? 1 : 0),
+				OrderTif = message.TimeInForce == null ? (sbyte)-1 : (sbyte)message.TimeInForce.Value,
 			};
 
 			var ptr = snapshot.StructToPtr();
@@ -166,7 +169,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			Marshal.FreeHGlobal(ptr);
 		}
 
-		ExecutionMessage ISnapshotSerializer<ExecutionMessage>.Deserialize(Version version, byte[] buffer)
+		ExecutionMessage ISnapshotSerializer<long, ExecutionMessage>.Deserialize(Version version, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -197,11 +200,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					IsMarketMaker = snapshot.IsMarketMaker,
 					IsMargin = snapshot.IsMargin,
 					Side = (Sides)snapshot.Side,
+					OrderId = snapshot.OrderId,
 					OrderStringId = snapshot.OrderStringId,
 					OrderBoardId = snapshot.OrderBoardId,
 					OrderPrice = snapshot.OrderPrice,
 					OrderVolume = snapshot.OrderVolume,
 					VisibleVolume = snapshot.VisibleVolume,
+					OrderType = snapshot.OrderType == -1 ? (OrderTypes?)null : (OrderTypes)snapshot.OrderType,
 					OrderState = snapshot.OrderState == -1 ? (OrderStates?)null : (OrderStates)snapshot.OrderState,
 					OrderStatus = snapshot.OrderStatus,
 					Balance = snapshot.Balance,
@@ -220,18 +225,20 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					OpenInterest = snapshot.OpenInterest,
 					OriginalTransactionId = snapshot.OriginalTransactionId,
 					TransactionId = snapshot.TransactionId,
+					IsSystem = snapshot.IsSystem == -1 ? (bool?)null : snapshot.IsSystem == 1,
+					TimeInForce = snapshot.OrderTif == -1 ? (TimeInForce?)null : (TimeInForce)snapshot.OrderTif,
 				};
 
 				return execMsg;
 			}
 		}
 
-		SecurityId ISnapshotSerializer<ExecutionMessage>.GetSecurityId(ExecutionMessage message)
+		long ISnapshotSerializer<long, ExecutionMessage>.GetKey(ExecutionMessage message)
 		{
-			return message.SecurityId;
+			return message.TransactionId == 0 ? message.OriginalTransactionId : message.TransactionId;
 		}
 
-		void ISnapshotSerializer<ExecutionMessage>.Update(ExecutionMessage message, ExecutionMessage changes)
+		void ISnapshotSerializer<long, ExecutionMessage>.Update(ExecutionMessage message, ExecutionMessage changes)
 		{
 			if (!changes.BrokerCode.IsEmpty())
 				message.BrokerCode = changes.BrokerCode;
@@ -269,11 +276,17 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (changes.HasOrderInfo)
 				message.Side = changes.Side;
 
+			if (changes.OrderId != null)
+				message.OrderId = changes.OrderId;
+
 			if (!changes.OrderBoardId.IsEmpty())
 				message.OrderBoardId = changes.OrderBoardId;
 
 			if (!changes.OrderStringId.IsEmpty())
 				message.OrderStringId = changes.OrderStringId;
+
+			if (changes.OrderType != null)
+				message.OrderType = changes.OrderType;
 
 			if (changes.OrderPrice != 0)
 				message.OrderPrice = changes.OrderPrice;
@@ -338,10 +351,16 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (changes.TransactionId != 0)
 				message.TransactionId = changes.TransactionId;
 
+			if (changes.IsMargin != null)
+				message.IsMargin = changes.IsMargin;
+
+			if (changes.TimeInForce != null)
+				message.TimeInForce = changes.TimeInForce;
+
 			message.LocalTime = changes.LocalTime;
 			message.ServerTime = changes.ServerTime;
 		}
 
-		DataType ISnapshotSerializer<ExecutionMessage>.DataType => DataType.Transactions;
+		DataType ISnapshotSerializer<long, ExecutionMessage>.DataType => DataType.Transactions;
 	}
 }

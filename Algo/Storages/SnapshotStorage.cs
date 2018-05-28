@@ -12,36 +12,34 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Implementation of <see cref="ISnapshotStorage"/>.
+	/// Implementation of <see cref="ISnapshotStorage{TKey}"/>.
 	/// </summary>
+	/// <typeparam name="TKey">Type of key value.</typeparam>
 	/// <typeparam name="TMessage">Message type.</typeparam>
-	public class SnapshotStorage<TMessage> : ISnapshotStorage
+	public class SnapshotStorage<TKey, TMessage> : ISnapshotStorage<TKey>
 		where TMessage : Message
 	{
 		private readonly string _path;
 
-		private readonly AllocationArray<SecurityId> _dirtySecurities = new AllocationArray<SecurityId>(10);
-		private readonly SynchronizedDictionary<SecurityId, Tuple<long, TMessage>> _snapshots = new SynchronizedDictionary<SecurityId, Tuple<long, TMessage>>();
+		private readonly AllocationArray<TKey> _dirtyKeys = new AllocationArray<TKey>(10);
+		private readonly SynchronizedDictionary<TKey, Tuple<long, TMessage>> _snapshots = new SynchronizedDictionary<TKey, Tuple<long, TMessage>>();
 		private long _maxOffset;
-		private readonly ISnapshotSerializer<TMessage> _serializer;
+		private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
 
 		private int _snapshotSize;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SnapshotStorage{TMessage}"/>.
+		/// Initializes a new instance of the <see cref="SnapshotStorage{TKey,TMessage}"/>.
 		/// </summary>
 		/// <param name="path">Path to storage.</param>
 		/// <param name="serializer">Serializer.</param>
-		public SnapshotStorage(string path, ISnapshotSerializer<TMessage> serializer)
+		public SnapshotStorage(string path, ISnapshotSerializer<TKey, TMessage> serializer)
 		{
 			if (path == null)
 				throw new ArgumentNullException(nameof(path));
 
-			if (serializer == null)
-				throw new ArgumentNullException(nameof(serializer));
-
 			_path = path.ToFullPath();
-			_serializer = serializer;
+			_serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
 		}
 
 		void ISnapshotStorage.Init()
@@ -69,7 +67,7 @@ namespace StockSharp.Algo.Storages
 
 						var message = _serializer.Deserialize(version, buffer);
 
-						_snapshots.Add(_serializer.GetSecurityId(message), Tuple.Create(stream.Position - buffer.Length, message));
+						_snapshots.Add(_serializer.GetKey(message), Tuple.Create(stream.Position - buffer.Length, message));
 					}
 
 					_maxOffset = stream.Position;
@@ -93,7 +91,7 @@ namespace StockSharp.Algo.Storages
 
 				lock (_snapshots.SyncRoot)
 				{
-					if (_dirtySecurities.Count == 0)
+					if (_dirtyKeys.Count == 0)
 						return;
 
 					if (isFlushing)
@@ -101,13 +99,13 @@ namespace StockSharp.Algo.Storages
 
 					isFlushing = true;
 
-					changed = _dirtySecurities.Select(id =>
+					changed = _dirtyKeys.Select(key =>
 					{
-						var tuple = _snapshots[id];
+						var tuple = _snapshots[key];
 						return Tuple.Create(tuple.Item1, (TMessage)tuple.Item2.Clone());
 					}).OrderBy(t => t.Item1).ToArray();
 
-					_dirtySecurities.Count = 0;
+					_dirtyKeys.Count = 0;
 				}
 
 				try
@@ -147,9 +145,14 @@ namespace StockSharp.Algo.Storages
 			_snapshots.Clear();
 		}
 
-		void ISnapshotStorage.Clear(SecurityId securityId)
+		void ISnapshotStorage<TKey>.Clear(TKey key)
 		{
-			_snapshots.Remove(securityId);
+			_snapshots.Remove(key);
+		}
+
+		void ISnapshotStorage.Clear(object key)
+		{
+			((ISnapshotStorage<TKey>)this).Clear((TKey)key);
 		}
 
 		void ISnapshotStorage.Update(Message message)
@@ -159,15 +162,15 @@ namespace StockSharp.Algo.Storages
 
 			var curr = (TMessage)message;
 
-			var secId = _serializer.GetSecurityId(curr);
+			var key = _serializer.GetKey(curr);
 
 			lock (_snapshots.SyncRoot)
 			{
-				var tuple = _snapshots.TryGetValue(secId);
+				var tuple = _snapshots.TryGetValue(key);
 
 				if (tuple == null)
 				{
-					_snapshots.Add(secId, Tuple.Create(_maxOffset, (TMessage)curr.Clone()));
+					_snapshots.Add(key, Tuple.Create(_maxOffset, (TMessage)curr.Clone()));
 					_maxOffset += _snapshotSize;
 				}
 				else
@@ -175,13 +178,18 @@ namespace StockSharp.Algo.Storages
 					_serializer.Update(tuple.Item2, curr);
 				}
 
-				_dirtySecurities.Add(secId);
+				_dirtyKeys.Add(key);
 			}
 		}
 
-		Message ISnapshotStorage.Get(SecurityId securityId)
+		Message ISnapshotStorage<TKey>.Get(TKey key)
 		{
-			return _snapshots.TryGetValue(securityId)?.Item2.Clone();
+			return _snapshots.TryGetValue(key)?.Item2.Clone();
+		}
+
+		Message ISnapshotStorage.Get(object key)
+		{
+			return ((ISnapshotStorage<TKey>)this).Get((TKey)key);
 		}
 	}
 }

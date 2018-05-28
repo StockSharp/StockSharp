@@ -18,10 +18,10 @@ namespace StockSharp.Algo.Storages
 		void ClearAll();
 
 		/// <summary>
-		/// Remove snapshot for the specified security.
+		/// Remove snapshot for the specified key.
 		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		void Clear(SecurityId securityId);
+		/// <param name="key">Key.</param>
+		void Clear(object key);
 
 		/// <summary>
 		/// Update snapshot.
@@ -30,10 +30,30 @@ namespace StockSharp.Algo.Storages
 		void Update(Message message);
 
 		/// <summary>
-		/// Get snapshot for the specified security.
+		/// Get snapshot for the specified key.
 		/// </summary>
-		/// <param name="securityId">Security ID.</param>
+		/// <param name="key">Key.</param>
 		/// <returns>Snapshot.</returns>
-		Message Get(SecurityId securityId);
+		Message Get(object key);
+	}
+
+	/// <summary>
+	/// The interface for access to the storage of snapshot prices.
+	/// </summary>
+	/// <typeparam name="TKey">Type of key value.</typeparam>
+	public interface ISnapshotStorage<TKey> : ISnapshotStorage
+	{
+		/// <summary>
+		/// Remove snapshot for the specified key.
+		/// </summary>
+		/// <param name="key">Key.</param>
+		void Clear(TKey key);
+
+		/// <summary>
+		/// Get snapshot for the specified key.
+		/// </summary>
+		/// <param name="key">Key.</param>
+		/// <returns>Snapshot.</returns>
+		Message Get(TKey key);
 	}
 }
