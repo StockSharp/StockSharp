@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public decimal? LastTradePrice;
 			public decimal? LastTradeVolume;
 			public byte? LastTradeOrigin;
-			public bool? LastTradeUpDown;
+			public byte? LastTradeUpDown;
 			public long? LastTradeId;
 
 			public decimal? BestBidPrice;
@@ -270,7 +270,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						snapshot.LastTradeId = (long)change.Value;
 						break;
 					case Level1Fields.LastTradeUpDown:
-						snapshot.LastTradeUpDown = (bool)change.Value;
+						snapshot.LastTradeUpDown = (bool)change.Value ? (byte?)1 : 0;
 						break;
 					case Level1Fields.LastTradeOrigin:
 						snapshot.LastTradeOrigin = (byte)(Sides)change.Value;
@@ -483,7 +483,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					level1Msg.Add(Level1Fields.LastTradeTime, snapshot.LastTradeTime.Value.To<DateTimeOffset>());
 
 				if (snapshot.LastTradeUpDown != null)
-					level1Msg.Add(Level1Fields.LastTradeUpDown, snapshot.LastTradeUpDown.Value);
+					level1Msg.Add(Level1Fields.LastTradeUpDown, snapshot.LastTradeUpDown.Value == 1);
 
 				if (snapshot.LastTradeOrigin != null)
 					level1Msg.Add(Level1Fields.LastTradeOrigin, (Sides)snapshot.LastTradeOrigin.Value);

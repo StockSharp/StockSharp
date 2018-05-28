@@ -60,7 +60,8 @@ StockSharp API Change log
 * (bug) Chart. Indicator draw from non-GUI thread fix.
 * (bug) BufferMessageAdapter. Fix transactions data save/load.
 * (bug) MACD Histogram calc fix https://stocksharp.ru/forum/9487/nekorrektno-risuetsya-macd-histogram/
-* (feature) QuotesBinarySnapshotSerializer. Support unlimited depths..
+* (feature) QuotesBinarySnapshotSerializer. Support unlimited depths.
+* (feature) Level1BinarySnapshotSerializer. Support more fields.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
