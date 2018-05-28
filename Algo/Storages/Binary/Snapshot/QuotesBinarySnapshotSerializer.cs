@@ -40,12 +40,12 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		//private const int _rowsOffset = 224;
 
-		private int _maxDepth = 100;
+		private int? _maxDepth;
 
 		/// <summary>
-		/// The maximum depth of order book. The default value is 100.
+		/// The maximum depth of order book.
 		/// </summary>
-		public int MaxDepth
+		public int? MaxDepth
 		{
 			get => _maxDepth;
 			set
@@ -79,8 +79,14 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				LastChangeLocalTime = message.LocalTime.To<long>(),
 			};
 
-			var bids = message.Bids.Take(MaxDepth).ToArray();
-			var asks = message.Asks.Take(MaxDepth).ToArray();
+			var bids = message.Bids.ToArray();
+			var asks = message.Asks.ToArray();
+
+			if (MaxDepth != null)
+			{
+				bids = bids.Take(MaxDepth.Value).ToArray();
+				asks = asks.Take(MaxDepth.Value).ToArray();
+			}
 
 			snapshot.BidCount = bids.Length;
 			snapshot.AskCount = asks.Length;
