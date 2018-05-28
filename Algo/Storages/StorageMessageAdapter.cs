@@ -23,8 +23,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
@@ -323,8 +321,8 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public void Load()
 		{
-			var requiredSecurities = new List<SecurityId>();
-			var availableSecurities = DriveInternal.AvailableSecurities.ToHashSet();
+			//var requiredSecurities = new List<SecurityId>();
+			//var availableSecurities = DriveInternal.AvailableSecurities.ToHashSet();
 
 			foreach (var board in _entityRegistry.ExchangeBoards)
 				RaiseStorageMessage(board.ToMessage());
@@ -333,10 +331,10 @@ namespace StockSharp.Algo.Storages
 			{
 				var msg = security.ToMessage();
 
-				if (availableSecurities.Remove(msg.SecurityId))
-				{
-                    requiredSecurities.Add(msg.SecurityId);
-				}
+				//if (availableSecurities.Remove(msg.SecurityId))
+				//{
+				//	requiredSecurities.Add(msg.SecurityId);
+				//}
 
 				RaiseStorageMessage(msg);
 			}
@@ -349,41 +347,8 @@ namespace StockSharp.Algo.Storages
 
 			foreach (var position in _entityRegistry.Positions)
 			{
-				//RaiseStorageMessage(position.ToMessage());
 				RaiseStorageMessage(position.ToChangeMessage());
 			}
-
-			if (DaysLoad == TimeSpan.Zero)
-				return;
-
-			var today = DateTime.UtcNow.Date;
-
-			var from = (DateTimeOffset)(today - DaysLoad);
-			var to = DateTimeOffset.Now;
-
-			//if (Mode.Contains(StorageModes.Snapshot))
-			//{
-			//	var storage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
-
-			//	foreach (var secId in requiredSecurities)
-			//	{
-			//		var snapshot = storage.Get(secId);
-
-			//		if (snapshot != null)
-			//			RaiseStorageMessage(snapshot);
-			//	}
-			//}
-			//else if (Mode.Contains(StorageModes.Incremental))
-			//{
-			// TODO
-
-			foreach (var secId in requiredSecurities)
-			{
-				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
-					.Load(from, to)
-					.ForEach(RaiseStorageMessage);
-			}	
-			//}
 		}
 
 		/// <summary>
@@ -402,10 +367,57 @@ namespace StockSharp.Algo.Storages
 					ProcessMarketDataRequest((MarketDataMessage)message);
 					break;
 
+				case MessageTypes.OrderStatus:
+					ProcessOrderStatus((OrderStatusMessage)message);
+					break;
+
 				default:
 					base.SendInMessage(message);
 					break;
 			}
+		}
+
+		private bool _orderStatusProcessed;
+
+		private void ProcessOrderStatus(OrderStatusMessage msg)
+		{
+			if (_orderStatusProcessed || msg.IsBack || (msg.From == null && DaysLoad == TimeSpan.Zero) || msg.OrderId != null || !msg.OrderStringId.IsEmpty() || msg.OrderTransactionId != 0)
+			{
+				base.SendInMessage(msg);
+				return;
+			}
+
+			_orderStatusProcessed = true;
+
+			if (Mode.Contains(StorageModes.Snapshot))
+			{
+				var storage = (ISnapshotStorage<long, ExecutionMessage>)GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
+
+				foreach (var snapshot in storage.GetAll())
+				{
+					snapshot.OriginalTransactionId = msg.TransactionId;
+					RaiseStorageMessage(snapshot);
+				}
+			}
+			else if (Mode.Contains(StorageModes.Incremental))
+			{
+				//if (DaysLoad == TimeSpan.Zero)
+				//	return;
+
+				//var today = DateTime.UtcNow.Date;
+
+				//var from = (DateTimeOffset)(today - DaysLoad);
+				//var to = DateTimeOffset.Now;
+
+				//foreach (var secId in requiredSecurities)
+				//{
+				//	GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
+				//		.Load(from, to)
+				//		.ForEach(RaiseStorageMessage);
+				//}
+			}
+
+			base.SendInMessage(msg);
 		}
 
 		private void ProcessMarketDataRequest(MarketDataMessage msg)

@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Storages
 {
+	using System.Collections.Generic;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -35,13 +37,20 @@ namespace StockSharp.Algo.Storages
 		/// <param name="key">Key.</param>
 		/// <returns>Snapshot.</returns>
 		Message Get(object key);
+
+		/// <summary>
+		/// Get all snapshots.
+		/// </summary>
+		/// <returns>All snapshots.</returns>
+		IEnumerable<Message> GetAll();
 	}
 
 	/// <summary>
 	/// The interface for access to the storage of snapshot prices.
 	/// </summary>
 	/// <typeparam name="TKey">Type of key value.</typeparam>
-	public interface ISnapshotStorage<TKey> : ISnapshotStorage
+	/// <typeparam name="TMessage">Message type.</typeparam>
+	public interface ISnapshotStorage<TKey, TMessage> : ISnapshotStorage
 	{
 		/// <summary>
 		/// Remove snapshot for the specified key.
@@ -54,6 +63,12 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="key">Key.</param>
 		/// <returns>Snapshot.</returns>
-		Message Get(TKey key);
+		TMessage Get(TKey key);
+
+		/// <summary>
+		/// Get all snapshots.
+		/// </summary>
+		/// <returns>All snapshots.</returns>
+		new IEnumerable<TMessage> GetAll();
 	}
 }

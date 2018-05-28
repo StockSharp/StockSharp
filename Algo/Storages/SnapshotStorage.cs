@@ -13,11 +13,11 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Implementation of <see cref="ISnapshotStorage{TKey}"/>.
+	/// Implementation of <see cref="ISnapshotStorage{TKey,TMessage}"/>.
 	/// </summary>
 	/// <typeparam name="TKey">Type of key value.</typeparam>
 	/// <typeparam name="TMessage">Message type.</typeparam>
-	public class SnapshotStorage<TKey, TMessage> : ISnapshotStorage<TKey>
+	public class SnapshotStorage<TKey, TMessage> : ISnapshotStorage<TKey, TMessage>
 		where TMessage : Message
 	{
 		private readonly string _path;
@@ -153,17 +153,19 @@ namespace StockSharp.Algo.Storages
 
 		void ISnapshotStorage.ClearAll()
 		{
-			_snapshots.Clear();
+			lock (_snapshots.SyncRoot)
+				_snapshots.Clear();
 		}
 
-		void ISnapshotStorage<TKey>.Clear(TKey key)
+		void ISnapshotStorage<TKey, TMessage>.Clear(TKey key)
 		{
-			_snapshots.Remove(key);
+			lock (_snapshots.SyncRoot)
+				_snapshots.Remove(key);
 		}
 
 		void ISnapshotStorage.Clear(object key)
 		{
-			((ISnapshotStorage<TKey>)this).Clear((TKey)key);
+			((ISnapshotStorage<TKey, TMessage>)this).Clear((TKey)key);
 		}
 
 		void ISnapshotStorage.Update(Message message)
@@ -192,14 +194,26 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		Message ISnapshotStorage<TKey>.Get(TKey key)
+		TMessage ISnapshotStorage<TKey, TMessage>.Get(TKey key)
 		{
-			return _snapshots.TryGetValue(key)?.Clone();
+			lock (_snapshots.SyncRoot)
+				return (TMessage)_snapshots.TryGetValue(key)?.Clone();
 		}
 
 		Message ISnapshotStorage.Get(object key)
 		{
-			return ((ISnapshotStorage<TKey>)this).Get((TKey)key);
+			return ((ISnapshotStorage<TKey, TMessage>)this).Get((TKey)key);
+		}
+
+		IEnumerable<TMessage> ISnapshotStorage<TKey, TMessage>.GetAll()
+		{
+			lock (_snapshots.SyncRoot)
+				return _snapshots.Values.Select(m => (TMessage)m.Clone()).ToArray();
+		}
+
+		IEnumerable<Message> ISnapshotStorage.GetAll()
+		{
+			return ((ISnapshotStorage<TKey, TMessage>)this).GetAll();
 		}
 	}
 }
