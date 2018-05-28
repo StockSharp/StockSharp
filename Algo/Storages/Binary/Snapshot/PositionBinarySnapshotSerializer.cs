@@ -28,19 +28,19 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public long LastChangeServerTime;
 			public long LastChangeLocalTime;
 
-			public decimal BeginValue;
-			public decimal CurrentValue;
-			public decimal BlockedValue;
-			public decimal CurrentPrice;
-			public decimal AveragePrice;
-			public decimal UnrealizedPnL;
-			public decimal RealizedPnL;
-			public decimal VariationMargin;
-			public short Currency;
-			public decimal Leverage;
-			public decimal Commission;
-			public decimal CurrentValueInLots;
-			public sbyte State;
+			public decimal? BeginValue;
+			public decimal? CurrentValue;
+			public decimal? BlockedValue;
+			public decimal? CurrentPrice;
+			public decimal? AveragePrice;
+			public decimal? UnrealizedPnL;
+			public decimal? RealizedPnL;
+			public decimal? VariationMargin;
+			public short? Currency;
+			public decimal? Leverage;
+			public decimal? Commission;
+			public decimal? CurrentValueInLots;
+			public byte? State;
 		}
 
 		Version ISnapshotSerializer<SecurityId, PositionChangeMessage>.Version { get; } = new Version(2, 0);
@@ -63,9 +63,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				Portfolio = message.PortfolioName,
 				LastChangeServerTime = message.ServerTime.To<long>(),
 				LastChangeLocalTime = message.LocalTime.To<long>(),
-
-				Currency = -1,
-				State = -1,
 			};
 
 			foreach (var change in message.Changes)
@@ -109,7 +106,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						snapshot.CurrentValueInLots = (decimal)change.Value;
 						break;
 					case PositionChangeTypes.State:
-						snapshot.State = (sbyte)(PortfolioStates)change.Value;
+						snapshot.State = (byte)(PortfolioStates)change.Value;
 						break;
 				}
 			}
@@ -139,46 +136,25 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					PortfolioName = snapshot.Portfolio,
 					ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
 					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
-				};
+				}
+				.TryAdd(PositionChangeTypes.BeginValue, snapshot.BeginValue, true)
+				.TryAdd(PositionChangeTypes.CurrentValue, snapshot.CurrentValue.Value, true)
+				.TryAdd(PositionChangeTypes.BlockedValue, snapshot.BlockedValue.Value, true)
+				.TryAdd(PositionChangeTypes.CurrentPrice, snapshot.CurrentPrice.Value, true)
+				.TryAdd(PositionChangeTypes.AveragePrice, snapshot.AveragePrice.Value, true)
+				.TryAdd(PositionChangeTypes.UnrealizedPnL, snapshot.UnrealizedPnL.Value, true)
+				.TryAdd(PositionChangeTypes.RealizedPnL, snapshot.RealizedPnL.Value, true)
+				.TryAdd(PositionChangeTypes.VariationMargin, snapshot.VariationMargin.Value, true)
+				.TryAdd(PositionChangeTypes.Leverage, snapshot.Leverage.Value, true)
+				.TryAdd(PositionChangeTypes.Commission, snapshot.Commission.Value, true)
+				.TryAdd(PositionChangeTypes.CurrentValueInLots, snapshot.CurrentValueInLots.Value, true)
+				;
 
-				if (snapshot.BeginValue != 0)
-					posMsg.Add(PositionChangeTypes.BeginValue, snapshot.BeginValue);
+				if (snapshot.Currency != null)
+					posMsg.Add(PositionChangeTypes.Currency, (CurrencyTypes)snapshot.Currency.Value);
 
-				if (snapshot.CurrentValue != 0)
-					posMsg.Add(PositionChangeTypes.CurrentValue, snapshot.CurrentValue);
-
-				if (snapshot.BlockedValue != 0)
-					posMsg.Add(PositionChangeTypes.BlockedValue, snapshot.BlockedValue);
-
-				if (snapshot.CurrentPrice != 0)
-					posMsg.Add(PositionChangeTypes.CurrentPrice, snapshot.CurrentPrice);
-
-				if (snapshot.AveragePrice != 0)
-					posMsg.Add(PositionChangeTypes.AveragePrice, snapshot.AveragePrice);
-
-				if (snapshot.UnrealizedPnL != 0)
-					posMsg.Add(PositionChangeTypes.UnrealizedPnL, snapshot.UnrealizedPnL);
-
-				if (snapshot.RealizedPnL != 0)
-					posMsg.Add(PositionChangeTypes.RealizedPnL, snapshot.RealizedPnL);
-
-				if (snapshot.VariationMargin != 0)
-					posMsg.Add(PositionChangeTypes.VariationMargin, snapshot.VariationMargin);
-
-				if (snapshot.Currency != -1)
-					posMsg.Add(PositionChangeTypes.Currency, (CurrencyTypes)snapshot.Currency);
-
-				if (snapshot.Leverage != 0)
-					posMsg.Add(PositionChangeTypes.Leverage, snapshot.Leverage);
-
-				if (snapshot.Commission != 0)
-					posMsg.Add(PositionChangeTypes.Commission, snapshot.Commission);
-
-				if (snapshot.CurrentValueInLots != 0)
-					posMsg.Add(PositionChangeTypes.CurrentValueInLots, snapshot.CurrentValueInLots);
-
-				if (snapshot.State != -1)
-					posMsg.Add(PositionChangeTypes.State, (PortfolioStates)snapshot.State);
+				if (snapshot.State != null)
+					posMsg.Add(PositionChangeTypes.State, (PortfolioStates)snapshot.State.Value);
 
 				return posMsg;
 			}
