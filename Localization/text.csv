@@ -9012,7 +9012,7 @@ DocStr4296;Copy extended info;Скопировать расширенную ин
 DocStr4297;The object of which is copied to extended information;Объект, из которого копируется расширенная информация
 DocStr4298;The object, which is copied to extended information;Объект, в который копируется расширенная информация
 DocStr4299;Get message server time;Получить серверное время сообщения
-DocStr4300;Server time message. If the value is {0}, the message does not contain the server time;Серверное время сообщения. Если значение равно {0}, то сообщение не содержит серверное время
+DocStr4300;Server time. If the value is {0}, the message does not contain the server time;Серверное время. Если значение равно {0}, то сообщение не содержит серверное время
 DocStr4301;Fill the {0} message types related to transactional;Заполнить {0} типами сообщений, относящихся к транзакционным
 DocStr4302;Remove from {0} message types related to transactional;Удалить из {0} типы сообщений, относящихся к транзакционным
 DocStr4303;Fill the {0} message types related to market-data;Заполнить {0} типами сообщений, относящихся к маркет-данным
@@ -14741,7 +14741,6 @@ DocStr10251;Is specified security id asssociated with the board;Принадле
 DocStr10252;{0}, if asssociated, otherwise, {1};{0}, если принадлежит, иначе, {1}
 DocStr10253;Stop order types;Тип стоп-заявок
 DocStr10254;Stop-loss and take-profit;Стоп-лосс и тейк-профит
-DocStr10256;The maximum depth of order book. The default value is 100;Максимальная глубина стакана. По-умолчанию равно 100
 DocStr10257;To create a rule for the order's profit more on offset;Создать правило для отслеживания прибыльности заявки более чем на указанный уровень
 DocStr10258;The order to be traced for profit;Заявка, которую необходимо отслеживать на прибыльность
 DocStr10259;Profit offset;Уровень прибыли
@@ -14967,3 +14966,12 @@ DocStr10502;To set the message sender for the strategy;Установить от
 DocStr10503;Message sender;Отправитель сообщений
 DocStr10504;Message sender base interface;Интерфейс отправителя сообщений
 DocStr10505;Disable tracking indicator reset;Выключить отслеживание сброса индикаторов
+DocStr10506;Type of key value;Тип ключа значения
+DocStr10507;Get all snapshots;Получить все снэпшоты
+DocStr10508;All snapshots;Все снэпшоты
+DocStr10509;Snapshot storage registry;Реестр хранилащ-снэпшотов
+DocStr10510;Support lookup messages;Поддерживаются ли сообщения поиска
+DocStr10511;Lookup securities, portfolios and orders;Искать инструменты, портфели и заявки
+DocStr10512;Target adapter. Can be {0};Целевой адаптер. Может быть {0}
+DocStr10513;To find orders that match the filter {0}. Found orders will be passed through the event {1};Найти заявки, отвечающие критерию {0}. Найденные заявки будут переданы через событие {1}
+DocStr10514;The order which fields will be used as a filter;Заявка, чьи поля используются как фильтр поиска

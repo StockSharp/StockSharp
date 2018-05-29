@@ -714,9 +714,9 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Load(Ecng.Serializ
 M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter/summary;DocStr7845
-P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DxPlusColor/summary;Str2024
-P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DiMinusColor/summary;Str2026
-P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.AdxColor/summary;Str2028
+P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DxPlusColor/summary;DocStr10368
+P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DiMinusColor/summary;DocStr10368
+P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.AdxColor/summary;DocStr10368
 M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Init/summary;DocStr7839
 M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Init/returns;DocStr7840
 M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/summary;DocStr7841
@@ -786,6 +786,8 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.Load(Ecng.Serializa
 M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter/summary;DocStr7845
+P:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.MacdColor/summary;DocStr10368
+P:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.SignalMaColor/summary;DocStr10368
 M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.Init/summary;DocStr7839
 M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.Init/returns;DocStr7840
 M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/summary;DocStr7841
@@ -925,6 +927,7 @@ M:StockSharp.Xaml.Charting.IChartIndicatorPainter.ProcessValues(System.DateTimeO
 T:StockSharp.Xaml.Charting.IndicatorPickerWindow/summary;DocStr9308
 M:StockSharp.Xaml.Charting.IndicatorPickerWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Charting.IndicatorPickerWindow.SelectedIndicatorType/summary;DocStr9311
+P:StockSharp.Xaml.Charting.IndicatorPickerWindow.Indicator/summary;Str1981
 P:StockSharp.Xaml.Charting.IndicatorPickerWindow.AutoSelectCandles/summary;AutoSelectCandles
 P:StockSharp.Xaml.Charting.IndicatorPickerWindow.IndicatorTypes/summary;DocStr7740
 M:StockSharp.Xaml.Charting.IndicatorPickerWindow.InitializeComponent/summary;DocStr8

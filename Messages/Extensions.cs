@@ -312,7 +312,7 @@ namespace StockSharp.Messages
 		/// Get message server time.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		/// <returns>Server time message.</returns>
+		/// <returns>Server time.</returns>
 		public static DateTimeOffset GetServerTime(this Message message)
 		{
 			return message.TryGetServerTime().Value;
@@ -322,7 +322,7 @@ namespace StockSharp.Messages
 		/// Get message server time.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		/// <returns>Server time message. If the value is <see langword="null" />, the message does not contain the server time.</returns>
+		/// <returns>Server time. If the value is <see langword="null" />, the message does not contain the server time.</returns>
 		public static DateTimeOffset? TryGetServerTime(this Message message)
 		{
 			switch (message.Type)

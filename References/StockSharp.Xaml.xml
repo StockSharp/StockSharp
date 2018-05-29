@@ -4375,441 +4375,271 @@
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewPortfolios">
-      <summary>
-            Portfolios received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.PortfoliosChanged">
-      <summary>
-            Portfolios changed.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewPositions">
-      <summary>
-            Positions received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.PositionsChanged">
-      <summary>
-            Positions changed.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewSecurities">
-      <summary>
-            Securities received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.SecuritiesChanged">
-      <summary>
-            Securities changed.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewTrades">
-      <summary>
-            Tick trades received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewMyTrades">
-      <summary>
-            Own trades received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewOrders">
-      <summary>
-            Orders received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.OrdersChanged">
-      <summary>
-            Orders changed (cancelled, matched).
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.OrdersRegisterFailed">
-      <summary>
-            Order registration errors event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.OrdersCancelFailed">
-      <summary>
-            Order cancellation errors event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MassOrderCanceled">
-      <summary>
-            Mass order cancellation event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MassOrderCancelFailed">
-      <summary>
-            Mass order cancellation event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.OrderStatusFailed">
-      <summary>
-            Failed order status request event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewStopOrders">
-      <summary>
-            Stop-orders received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.StopOrdersChanged">
-      <summary>
-            Stop-orders received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.StopOrdersRegisterFailed">
-      <summary>
-            Stop-order registration errors event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.StopOrdersCancelFailed">
-      <summary>
-            Stop-order cancellation errors event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewMarketDepths">
-      <summary>
-            Order books received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDepthsChanged">
-      <summary>
-            Order books changed.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewOrderLogItems">
-      <summary>
-            Order log received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewNews">
-      <summary>
-            News received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewsChanged">
-      <summary>
-            News updated (news body received <see cref="P:StockSharp.BusinessEntities.News.Story" />).
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewMessage">
-      <summary>
-            Message processed <see cref="T:StockSharp.Messages.Message" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.Connected">
-      <summary>
-            Connected.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.Disconnected">
-      <summary>
-            Disconnected.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.ConnectionError">
-      <summary>
-            Connection error (for example, the connection was aborted by server).
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.ConnectedEx">
-      <summary>
-            Connected.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.DisconnectedEx">
-      <summary>
-            Disconnected.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.ConnectionErrorEx">
-      <summary>
-            Connection error (for example, the connection was aborted by server).
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.Error">
-      <summary>
-            Data process error.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketTimeChanged">
-      <summary>
-            Server time changed <see cref="P:StockSharp.BusinessEntities.IConnector.ExchangeBoards" />. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="F:System.TimeSpan.Zero" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.LookupSecuritiesResult">
-      <summary>
-            Lookup result <see cref="M:StockSharp.Xaml.GuiConnector`1.LookupSecurities(StockSharp.BusinessEntities.Security)" /> received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.LookupPortfoliosResult">
-      <summary>
-            Lookup result <see cref="M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)" /> received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionSucceeded">
-      <summary>
-            Successful subscription market-data.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFailed">
-      <summary>
-            Error subscription market-data.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionSucceeded">
-      <summary>
-            Successful unsubscription market-data.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionFailed">
-      <summary>
-            Error unsubscription market-data.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.SessionStateChanged">
-      <summary>
-            Session changed.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewPortfolio">
-      <summary>
-            Portfolio received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.PortfolioChanged">
-      <summary>
-            Portfolio changed.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewPosition">
-      <summary>
-            Position received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.PositionChanged">
-      <summary>
-            Position changed.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewSecurity">
-      <summary>
-            Security received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.SecurityChanged">
-      <summary>
-            Security changed.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewTrade">
-      <summary>
-            Tick trade received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewMyTrade">
-      <summary>
-            Own trade received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewOrder">
-      <summary>
-            Order received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.OrderChanged">
-      <summary>
-            Order changed (cancelled, matched).
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.OrderRegisterFailed">
-      <summary>
-            Order registration error event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.OrderCancelFailed">
-      <summary>
-            Order cancellation error event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.StopOrderRegisterFailed">
-      <summary>
-            Stop-order registration error event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.StopOrderCancelFailed">
-      <summary>
-            Stop-order cancellation error event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewStopOrder">
-      <summary>
-            Stop-order received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.StopOrderChanged">
-      <summary>
-            Stop order state change event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewMarketDepth">
-      <summary>
-            Order book received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDepthChanged">
-      <summary>
-            Order book changed.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewOrderLogItem">
-      <summary>
-            Order log received.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.TransactionIdGenerator">
-      <summary>
-            Transaction id generator.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)">
-      <summary>
-            Get session state for required board.
-            </summary>
-      <param name="board">Electronic board.</param>
-      <returns>Session state. If the information about session state does not exist, then <see langword="null" /> will be returned.</returns>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.ExchangeBoards">
-      <summary>
-            List of all exchange boards, for which instruments are loaded <see cref="P:StockSharp.BusinessEntities.IConnector.Securities" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.Securities">
-      <summary>
-            List of all loaded instruments. It should be called after event <see cref="E:StockSharp.BusinessEntities.IConnector.NewSecurities" /> arisen. Otherwise the empty set will be returned.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.Orders">
-      <summary>
-            Get all orders.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.StopOrders">
-      <summary>
-            Get all stop-orders.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.OrderRegisterFails">
-      <summary>
-            Get all registration errors.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.OrderCancelFails">
-      <summary>
-            Get all cancellation errors.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.Trades">
-      <summary>
-            Get all tick trades.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.MyTrades">
-      <summary>
-            Get all own trades.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.Portfolios">
-      <summary>
-            Get all portfolios.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.Positions">
-      <summary>
-            Get all positions.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.News">
-      <summary>
-            All news.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.ConnectionState">
-      <summary>
-            Connection state.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.RegisteredSecurities">
-      <summary>
-            List of all securities, subscribed via <see cref="M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.RegisteredMarketDepths">
-      <summary>
-            List of all securities, subscribed via <see cref="M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.RegisteredTrades">
-      <summary>
-            List of all securities, subscribed via <see cref="M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.RegisteredOrderLogs">
-      <summary>
-            List of all securities, subscribed via <see cref="M:StockSharp.BusinessEntities.IConnector.RegisterOrderLog(StockSharp.BusinessEntities.Security)" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.RegisteredPortfolios">
-      <summary>
-            List of all portfolios, subscribed via <see cref="M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.TransactionAdapter">
-      <summary>
-            Transactional adapter.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.MarketDataAdapter">
-      <summary>
-            Market-data adapter.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.Connect">
-      <summary>
-            Connect to trading system.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.Disconnect">
-      <summary>
-            Disconnect from trading system.
-            </summary>
+      <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupSecurities(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="E:StockSharp.Xaml.GuiConnector`1.LookupSecuritiesResult" />.
-            </summary>
-      <param name="criteria">The instrument whose fields will be used as a filter.</param>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupSecurities(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter)">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.LookupSecurities(StockSharp.Messages.SecurityLookupMessage)">
-      <summary>
-            To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="E:StockSharp.BusinessEntities.IConnector.LookupSecuritiesResult" />.
-            </summary>
-      <param name="criteria">The criterion which fields will be used as a filter.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetSecurityId(StockSharp.BusinessEntities.Security)">
-      <summary>
-            Get <see cref="T:StockSharp.Messages.SecurityId" />.
-            </summary>
-      <param name="security">Security.</param>
-      <returns>Security ID.</returns>
+      <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)">
-      <summary>
-            To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="E:StockSharp.Xaml.GuiConnector`1.LookupPortfoliosResult" />.
-            </summary>
-      <param name="criteria">The portfolio which fields will be used as a filter.</param>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio,StockSharp.Messages.IMessageAdapter)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.Messages.PortfolioLookupMessage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.BusinessEntities.Order,StockSharp.Messages.IMessageAdapter)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.Messages.OrderStatusMessage)">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.LookupSecurity(StockSharp.Messages.SecurityId)">
       <inheritdoc />
@@ -4818,100 +4648,49 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)">
-      <summary>
-            To get the position by portfolio and instrument.
-            </summary>
-      <param name="portfolio">The portfolio on which the position should be found.</param>
-      <param name="security">The instrument on which the position should be found.</param>
-      <param name="clientCode">The client code.</param>
-      <param name="depoName">The depository name where the stock is located physically. By default, an empty string is passed, which means the total position by all depositories.</param>
-      <returns>Position.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetMarketDepth(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To get the quotes order book.
-            </summary>
-      <param name="security">The instrument by which an order book should be got.</param>
-      <returns>Order book.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetFilteredMarketDepth(StockSharp.BusinessEntities.Security)">
-      <summary>
-            Get filtered order book.
-            </summary>
-      <param name="security">The instrument by which an order book should be got.</param>
-      <returns>Filtered order book.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.SubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)">
-      <summary>
-            To sign up to get market data by the instrument.
-            </summary>
-      <param name="security">The instrument by which new information getting should be started.</param>
-      <param name="message">The message that contain subscribe info.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)">
-      <summary>
-            To unsubscribe from getting market data by the instrument.
-            </summary>
-      <param name="security">The instrument by which new information getting should be started.</param>
-      <param name="message">The message that contain unsubscribe info.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="E:StockSharp.Xaml.GuiConnector`1.MarketDepthsChanged" />.
-            </summary>
-      <param name="security">The instrument by which quotes getting should be started.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterMarketDepth(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To stop getting quotes by the instrument.
-            </summary>
-      <param name="security">The instrument by which quotes getting should be stopped.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterFilteredMarketDepth(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To start getting filtered quotes (order book) by the instrument. Quotes values are available through the event <see cref="M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security)" />.
-            </summary>
-      <param name="security">The instrument by which quotes getting should be started.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterFilteredMarketDepth(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To stop getting filtered quotes by the instrument.
-            </summary>
-      <param name="security">The instrument by which quotes getting should be stopped.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterTrades(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="E:StockSharp.BusinessEntities.IConnector.NewTrades" />.
-            </summary>
-      <param name="security">The instrument by which trades getting should be started.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterTrades(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To stop getting trades (tick data) by the instrument.
-            </summary>
-      <param name="security">The instrument by which trades getting should be stopped.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)">
-      <summary>
-            Subscribe on the portfolio changes.
-            </summary>
-      <param name="portfolio">Portfolio for subscription.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterPortfolio(StockSharp.BusinessEntities.Portfolio)">
-      <summary>
-            Unsubscribe from the portfolio changes.
-            </summary>
-      <param name="portfolio">Portfolio for unsubscription.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterNews">
-      <summary>
-            Subscribe on news.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterNews">
-      <summary>
-            Unsubscribe from news.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.SendOutMessage(StockSharp.Messages.Message)">
       <inheritdoc />
@@ -4920,102 +4699,46 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RequestNewsStory(StockSharp.BusinessEntities.News)">
-      <summary>
-            Request news <see cref="P:StockSharp.BusinessEntities.News.Story" /> body. After receiving the event <see cref="E:StockSharp.BusinessEntities.IConnector.NewsChanged" /> will be triggered.
-            </summary>
-      <param name="news">News.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterOrderLog(StockSharp.BusinessEntities.Security)">
-      <summary>
-            Subscribe on order log for the security.
-            </summary>
-      <param name="security">Security for subscription.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterOrderLog(StockSharp.BusinessEntities.Security)">
-      <summary>
-            Unsubscribe from order log for the security.
-            </summary>
-      <param name="security">Security for unsubscription.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterSecurity(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To start getting new information (for example, <see cref="P:StockSharp.BusinessEntities.Security.LastTrade" /> or <see cref="P:StockSharp.BusinessEntities.Security.BestBid" />) by the instrument.
-            </summary>
-      <param name="security">The instrument by which new information getting should be started.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterSecurity(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To stop getting new information.
-            </summary>
-      <param name="security">The instrument by which new information getting should be stopped.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterOrder(StockSharp.BusinessEntities.Order)">
-      <summary>
-            Register new order.
-            </summary>
-      <param name="order">Registration details.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)">
-      <summary>
-            Reregister the order.
-            </summary>
-      <param name="oldOrder">Cancelling order.</param>
-      <param name="newOrder">New order to register.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)">
-      <summary>
-            Reregister the order.
-            </summary>
-      <param name="oldOrder">Changing order.</param>
-      <param name="price">Price of the new order.</param>
-      <param name="volume">Volume of the new order.</param>
-      <returns>New order.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.CancelOrder(StockSharp.BusinessEntities.Order)">
-      <summary>
-            Cancel the order.
-            </summary>
-      <param name="order">Order to cancel.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes},System.Nullable{System.Int64})">
-      <summary>
-            Cancel orders by filter.
-            </summary>
-      <param name="isStopOrder">
-        <see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
-      <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
-      <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
-      <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
-      <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
-      <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
-      <param name="transactionId">Order cancellation transaction id.</param>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.ValuesChanged">
-      <summary>
-            Security changed.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetSecurityValue(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
-      <summary>
-            To get the value of market data for the instrument.
-            </summary>
-      <param name="security">Security.</param>
-      <param name="field">Market-data field.</param>
-      <returns>The field value. If no data, the <see langword="null" /> will be returned.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetLevel1Fields(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To get a set of available fields <see cref="T:StockSharp.Messages.Level1Fields" />, for which there is a market data for the instrument.
-            </summary>
-      <param name="security">Security.</param>
-      <returns>Possible fields.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.Lookup(StockSharp.BusinessEntities.Security)">
-      <summary>
-            Lookup securities by criteria <paramref name="criteria" />.
-            </summary>
-      <param name="criteria">The instrument whose fields will be used as a filter.</param>
-      <returns>Found instruments.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.DisposeManaged">
       <summary>
