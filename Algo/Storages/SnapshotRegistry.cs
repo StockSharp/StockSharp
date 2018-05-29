@@ -44,18 +44,18 @@ namespace StockSharp.Algo.Storages
 			{
 				private readonly HashSet<TKey> _dirtyKeys = new HashSet<TKey>();
 				private readonly SynchronizedDictionary<TKey, TMessage> _snapshots = new SynchronizedDictionary<TKey, TMessage>();
-				private readonly Dictionary<TKey, long> _offsets = new Dictionary<TKey, long>();
+				private readonly Dictionary<TKey, byte[]> _buffers = new Dictionary<TKey, byte[]>();
 				private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
 				private readonly Version _version;
 				private readonly string _fileName;
-				private long _currOffset;
+				//private long _currOffset;
 				private bool _resetFile;
 
 				// version has 2 bytes
-				private const int _versionLen = 2;
+				//private const int _versionLen = 2;
 
 				// buffer length 4 bytes
-				private const int _bufSizeLen = 4;
+				//private const int _bufSizeLen = 4;
 
 				public SnapshotStorageDate(string fileName, ISnapshotSerializer<TKey, TMessage> serializer)
 				{
@@ -80,23 +80,23 @@ namespace StockSharp.Algo.Storages
 								var buffer = new byte[size];
 								stream.ReadBytes(buffer, buffer.Length);
 
-								var offset = stream.Position;
+								//var offset = stream.Position;
 
 								var message = _serializer.Deserialize(_version, buffer);
 								var key = _serializer.GetKey(message);
 
 								_snapshots.Add(key, message);
-								_offsets.Add(key, offset);
+								_buffers.Add(key, buffer);
 							}
 
-							_currOffset = stream.Length;
+							//_currOffset = stream.Length;
 						}
 					}
 					else
 					{
 						_version = _serializer.Version;
 
-						_currOffset = _versionLen;
+						//_currOffset = _versionLen;
 					}
 				}
 
@@ -174,7 +174,9 @@ namespace StockSharp.Algo.Storages
 
 				public void FlushChanges()
 				{
-					Tuple<long, byte[]>[] changed;
+					// TODO Optimize memory
+
+					IEnumerable<byte[]> buffers;
 
 					lock (_snapshots.SyncRoot)
 					{
@@ -183,56 +185,34 @@ namespace StockSharp.Algo.Storages
 							if (_dirtyKeys.Count == 0)
 								return;
 
-							changed = _dirtyKeys.Select(key =>
-							{
-								var buffer = _serializer.Serialize(_version, _snapshots[key]);
-
-								if (!_offsets.TryGetValue(key, out var offset))
-								{
-									offset = _currOffset;
-									_offsets.Add(key, offset);
-									_currOffset += _bufSizeLen + buffer.Length;
-								}
-
-								return Tuple.Create(offset, buffer);
-							}).OrderBy(t => t.Item1).ToArray();
+							foreach (var key in _dirtyKeys)
+								_buffers[key] = _serializer.Serialize(_version, _snapshots[key]);
 						}
 						else
 						{
-							_offsets.Clear();
-							_currOffset = _versionLen;
+							_buffers.Clear();
 
-							changed = _snapshots.Select(pair =>
-							{
-								var buffer = _serializer.Serialize(_version, pair.Value);
-								
-								var offset = _currOffset;
-								_offsets.Add(pair.Key, offset);
-								_currOffset += _bufSizeLen + buffer.Length;
-
-								return Tuple.Create(offset, buffer);
-							}).OrderBy(t => t.Item1).ToArray();
+							foreach (var pair in _snapshots)
+								_buffers.Add(pair.Key, _serializer.Serialize(_version, pair.Value));
 						}
 
 						_dirtyKeys.Clear();
-					}
 
-					Debug.WriteLine($"Snapshot (Save): {_fileName}");
+						buffers = _buffers.Values.ToArray();
+					}
 
 					Directory.CreateDirectory(Path.GetDirectoryName(_fileName));
 
-					using (var stream = File.OpenWrite(_fileName))
-					{
-						if (stream.Length == 0)
-						{
-							stream.WriteByte((byte)_version.Major);
-							stream.WriteByte((byte)_version.Minor);
-						}
+					Debug.WriteLine($"Snapshot (Save): {_fileName}");
 
-						foreach (var tuple in changed)
+					using (var stream = new FileStream(_fileName, FileMode.Create, FileAccess.Write))
+					{
+						stream.WriteByte((byte)_version.Major);
+						stream.WriteByte((byte)_version.Minor);
+
+						foreach (var buffer in buffers)
 						{
-							stream.Seek(tuple.Item1, SeekOrigin.Begin);
-							stream.Write(tuple.Item2);
+							stream.Write(buffer);
 						}
 					}
 				}
