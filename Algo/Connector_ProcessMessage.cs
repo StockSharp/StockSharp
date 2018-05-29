@@ -233,9 +233,11 @@ namespace StockSharp.Algo
 
 				while (adapter != null)
 				{
-					adapter.DoIf<IMessageAdapter, StorageMessageAdapter>(a => StorageAdapter = a);
+					if (adapter is StorageMessageAdapter storage)
+						StorageAdapter = storage;
 
-					adapter.InnerAdapter.DoIf<IMessageAdapter, BasketMessageAdapter>(a => _adapter = a);
+					if (adapter.InnerAdapter is BasketMessageAdapter basket)
+						_adapter = basket;
 
 					adapter = adapter.InnerAdapter as IMessageAdapterWrapper;
 				}

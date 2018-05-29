@@ -410,8 +410,13 @@ namespace StockSharp.Algo.Candles
 				throw new ArgumentNullException(nameof(security));
 
 			var clone = arg;
-			clone.DoIf<object, ICloneable>(c => clone = c.Clone());
-			clone.DoIf<object, Unit>(u => u.SetSecurity(security));
+
+			if (clone is ICloneable cloneable)
+				clone = cloneable.Clone();
+
+			if (clone is Unit unit)
+				unit.SetSecurity(security);
+
 			return clone;
 		}
 	}
