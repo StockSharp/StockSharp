@@ -42,8 +42,8 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Get all snapshots.
 		/// </summary>
-		/// <param name="from">The range start time. If the value is not specified, data will be loaded from the start date <see cref="GetFromDate"/>.</param>
-		/// <param name="to">The range end time. If the value is not specified, data will be loaded up to the end date <see cref="GetToDate"/>, inclusive.</param>
+		/// <param name="from">Start date, from which data needs to be retrieved.</param>
+		/// <param name="to">End date, until which data needs to be retrieved.</param>
 		/// <returns>All snapshots.</returns>
 		IEnumerable<Message> GetAll(DateTimeOffset? from = null, DateTimeOffset? to = null);
 	}
@@ -71,8 +71,8 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Get all snapshots.
 		/// </summary>
-		/// <param name="from">The range start time. If the value is not specified, data will be loaded from the start date <see cref="GetFromDate"/>.</param>
-		/// <param name="to">The range end time. If the value is not specified, data will be loaded up to the end date <see cref="GetToDate"/>, inclusive.</param>
+		/// <param name="from">Start date, from which data needs to be retrieved.</param>
+		/// <param name="to">End date, until which data needs to be retrieved.</param>
 		/// <returns>All snapshots.</returns>
 		new IEnumerable<TMessage> GetAll(DateTimeOffset? from = null, DateTimeOffset? to = null);
 	}
