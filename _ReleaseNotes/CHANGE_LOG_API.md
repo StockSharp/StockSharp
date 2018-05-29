@@ -65,6 +65,8 @@ StockSharp API Change log
 * (feature) TransactionBinarySnapshotSerializer. Condition orders support.
 * (feature) IConnector. LookupOrders methods.
 * (feature) StorageMessageAdapter. SupportLookupMessages (method Load is obsolete).
+* (feature) IndicatorPickerWindow. PropGrid for indicator settings.
+* (feature) Charting. MACD Histogram. Signal and MACD lines added.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

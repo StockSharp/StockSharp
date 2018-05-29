@@ -2601,17 +2601,17 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DxPlusColor">
       <summary>
-            DI+ line color.
+        <see cref="T:StockSharp.Algo.Indicators.DiPlus" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DiMinusColor">
       <summary>
-            DI- line color.
+        <see cref="T:StockSharp.Algo.Indicators.DiMinus" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.AdxColor">
       <summary>
-            ADX line color.
+        <see cref="T:StockSharp.Algo.Indicators.AverageDirectionalIndex" /> line color.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Init">
@@ -2833,6 +2833,16 @@
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter">
       <summary>
             The renderer for <see cref="T:StockSharp.Algo.Indicators.MovingAverageConvergenceDivergenceHistogram" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.MacdColor">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.MovingAverageConvergenceDivergenceSignal.SignalMa" /> line color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.SignalMaColor">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.MovingAverageConvergenceDivergenceSignal.SignalMa" /> line color.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.Init">
@@ -3251,6 +3261,11 @@
     <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.SelectedIndicatorType">
       <summary>
             The selected indicator type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.Indicator">
+      <summary>
+            Indicator.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.AutoSelectCandles">
