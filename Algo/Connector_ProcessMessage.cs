@@ -1800,7 +1800,7 @@ namespace StockSharp.Algo
 			}
 
 			if (!processed)
-				throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str1695Params.Put(message.ExecutionType));
+				throw new ArgumentOutOfRangeException(nameof(message), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
 		}
 
 		private void ProcessExecutionMessage(ExecutionMessage message)
@@ -1869,7 +1869,7 @@ namespace StockSharp.Algo
 				}
 				
 				default:
-					throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str1695Params.Put(message.ExecutionType));
+					throw new ArgumentOutOfRangeException(nameof(message), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
 			}
 		}
 
