@@ -81,7 +81,7 @@ namespace SampleMultiConnection
 			// ecng.serialization invoke in several places IStorage obj
 			ConfigManager.RegisterService(entityRegistry.Storage);
 
-			Connector = new Connector(entityRegistry, storageRegistry);
+			Connector = new Connector(entityRegistry, storageRegistry, new SnapshotRegistry(Path.Combine(path, "Snapshots")));
 			logManager.Sources.Add(Connector);
 
 			InitConnector(entityRegistry);
@@ -163,7 +163,7 @@ namespace SampleMultiConnection
 			}
 
 			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
-			Connector.StorageAdapter.Load();
+			Connector.LookupAll();
 
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
 		}
@@ -272,7 +272,7 @@ namespace SampleMultiConnection
 				return;
 
 			Connector.StorageAdapter.Drive = new LocalMarketDataDrive(path.ToFullPath());
-			Connector.StorageAdapter.Load();
+			Connector.LookupAll();
 		}
 	}
 }

@@ -75,7 +75,7 @@ namespace SampleStrategies
 
 			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
 
-			Connector = new Connector(entityRegistry, storageRegistry);
+			Connector = new Connector(entityRegistry, storageRegistry, new SnapshotRegistry(Path.Combine("Data", "Snapshots")));
 			LogManager.Sources.Add(Connector);
 
 			InitConnector(entityRegistry);
@@ -147,7 +147,7 @@ namespace SampleStrategies
 			entityRegistry.Init();
 
 			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
-			//Connector.StorageAdapter.Load();
+			//Connector.LookupAll();
 
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
 		}

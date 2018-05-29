@@ -64,6 +64,7 @@ StockSharp API Change log
 * (feature) Level1BinarySnapshotSerializer. Support more fields.
 * (feature) TransactionBinarySnapshotSerializer. Condition orders support.
 * (feature) IConnector. LookupOrders methods.
+* (feature) StorageMessageAdapter. SupportLookupMessages (method Load is obsolete).
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

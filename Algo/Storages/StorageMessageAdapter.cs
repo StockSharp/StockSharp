@@ -224,6 +224,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
+		/// Support lookup messages.
+		/// </summary>
+		public bool SupportLookupMessages { get; set; } = true;
+
+		/// <summary>
 		/// Cache buildable from smaller time-frames candles.
 		/// </summary>
 		public bool CacheBuildableCandles { get; set; }
@@ -324,6 +329,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Load save data from storage.
 		/// </summary>
+		[Obsolete("Use lookup messages.")]
 		public void Load()
 		{
 			//var requiredSecurities = new List<SecurityId>();
@@ -372,6 +378,14 @@ namespace StockSharp.Algo.Storages
 					ProcessMarketDataRequest((MarketDataMessage)message);
 					break;
 
+				case MessageTypes.SecurityLookup:
+					ProcessSecurityLookup((SecurityLookupMessage)message);
+					break;
+
+				case MessageTypes.PortfolioLookup:
+					ProcessPortfolioLookup((PortfolioLookupMessage)message);
+					break;
+
 				case MessageTypes.OrderStatus:
 					ProcessOrderStatus((OrderStatusMessage)message);
 					break;
@@ -382,25 +396,60 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private bool _orderStatusProcessed;
-
-		private void ProcessOrderStatus(OrderStatusMessage msg)
+		private void ProcessSecurityLookup(SecurityLookupMessage msg)
 		{
-			if (_orderStatusProcessed || msg.IsBack || msg.OrderId != null || !msg.OrderStringId.IsEmpty() || msg.OrderTransactionId != 0)
+			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.SendInMessage(msg);
 				return;
 			}
 
-			if (DaysLoad > TimeSpan.Zero)
+			foreach (var board in _entityRegistry.ExchangeBoards)
+				RaiseStorageMessage(board.ToMessage());
+
+			foreach (var security in _entityRegistry.Securities)
+				RaiseStorageMessage(security.ToMessage());
+
+			base.SendInMessage(msg);
+		}
+
+		private void ProcessPortfolioLookup(PortfolioLookupMessage msg)
+		{
+			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			{
+				base.SendInMessage(msg);
+				return;
+			}
+
+			foreach (var portfolio in _entityRegistry.Portfolios)
+			{
+				RaiseStorageMessage(portfolio.ToMessage());
+				RaiseStorageMessage(portfolio.ToChangeMessage());
+			}
+
+			foreach (var position in _entityRegistry.Positions)
+			{
+				RaiseStorageMessage(position.ToChangeMessage());
+			}
+
+			base.SendInMessage(msg);
+		}
+
+		private void ProcessOrderStatus(OrderStatusMessage msg)
+		{
+			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			{
+				base.SendInMessage(msg);
+				return;
+			}
+
+			if (msg.OrderId == null && msg.OrderStringId.IsEmpty() && msg.OrderTransactionId == 0 && DaysLoad > TimeSpan.Zero)
 			{
 				var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
 				var to = msg.To;
 
 				if (Mode.Contains(StorageModes.Snapshot))
 				{
-					_orderStatusProcessed = true;
-
 					var storage = (ISnapshotStorage<long, ExecutionMessage>)GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
 
 					foreach (var snapshot in storage.GetAll(from, to))
@@ -419,8 +468,6 @@ namespace StockSharp.Algo.Storages
 					}
 				}
 			}
-			else
-				_orderStatusProcessed = true;
 
 			base.SendInMessage(msg);
 		}
@@ -963,6 +1010,7 @@ namespace StockSharp.Algo.Storages
 			storage.SetValue(nameof(DaysLoad), DaysLoad);
 			storage.SetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
 			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
+			storage.SetValue(nameof(SupportLookupMessages), SupportLookupMessages);
 		}
 
 		/// <inheritdoc />
@@ -978,6 +1026,7 @@ namespace StockSharp.Algo.Storages
 			DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
 			CacheBuildableCandles = storage.GetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
 			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
+			SupportLookupMessages = storage.GetValue(nameof(SupportLookupMessages), SupportLookupMessages);
 		}
 
 		/// <summary>
@@ -994,6 +1043,7 @@ namespace StockSharp.Algo.Storages
 				Format = Format,
 				Drive = Drive,
 				Mode = Mode,
+				SupportLookupMessages = SupportLookupMessages,
 			};
 		}
 	}

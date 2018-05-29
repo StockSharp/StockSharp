@@ -4531,8 +4531,8 @@ namespace StockSharp.Algo
 				ServerTime = message.ServerTime,
 			}
 			.TryAdd(Level1Fields.LastTradeId, message.TradeId)
-			.TryAdd(Level1Fields.LastTradePrice, message.TradePrice, false)
-			.TryAdd(Level1Fields.LastTradeVolume, message.TradeVolume, false)
+			.TryAdd(Level1Fields.LastTradePrice, message.TradePrice)
+			.TryAdd(Level1Fields.LastTradeVolume, message.TradeVolume)
 			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest, true)
 			.TryAdd(Level1Fields.LastTradeOrigin, message.OriginSide);
 
@@ -4564,6 +4564,20 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(board));
 
 			return securityId.BoardCode.CompareIgnoreCase(board.Code);
+		}
+
+		/// <summary>
+		/// Lookup securities, portfolios and orders.
+		/// </summary>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
+		public static void LookupAll(this IConnector connector)
+		{
+			if (connector == null)
+				throw new ArgumentNullException(nameof(connector));
+
+			connector.LookupSecurities(new Security());
+			connector.LookupPortfolios(new Portfolio());
+			connector.LookupOrders(new Order());
 		}
 	}
 }
