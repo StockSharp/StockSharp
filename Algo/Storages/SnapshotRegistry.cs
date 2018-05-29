@@ -2,6 +2,7 @@ namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
@@ -41,16 +42,20 @@ namespace StockSharp.Algo.Storages
 		{
 			private class SnapshotStorageDate
 			{
-				//private readonly string _path;
-				//private readonly DateTime _date;
-
-				private readonly AllocationArray<TKey> _dirtyKeys = new AllocationArray<TKey>(10);
+				private readonly HashSet<TKey> _dirtyKeys = new HashSet<TKey>();
 				private readonly SynchronizedDictionary<TKey, TMessage> _snapshots = new SynchronizedDictionary<TKey, TMessage>();
 				private readonly Dictionary<TKey, long> _offsets = new Dictionary<TKey, long>();
 				private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
 				private readonly Version _version;
 				private readonly string _fileName;
 				private long _currOffset;
+				private bool _resetFile;
+
+				// version has 2 bytes
+				private const int _versionLen = 2;
+
+				// buffer length 4 bytes
+				private const int _bufSizeLen = 4;
 
 				public SnapshotStorageDate(string fileName, ISnapshotSerializer<TKey, TMessage> serializer)
 				{
@@ -58,58 +63,61 @@ namespace StockSharp.Algo.Storages
 						throw new ArgumentNullException(nameof(fileName));
 
 					_fileName = fileName;
-					//_date = date;
-
 					_serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
-
-					//_fileName = Path.Combine(_path, LocalMarketDataDrive.GetDirName(date), _serializer.Name);
 
 					if (File.Exists(_fileName))
 					{
+						Debug.WriteLine($"Snapshot (Load): {_fileName}");
+
 						using (var stream = File.OpenRead(_fileName))
 						{
 							_version = new Version(stream.ReadByte(), stream.ReadByte());
 
-							if (_version.Major >= 2)
+							while (stream.Position < stream.Length)
 							{
-								while (stream.Position < stream.Length)
-								{
-									var size = stream.Read<int>();
+								var size = stream.Read<int>();
 
-									var buffer = new byte[size];
-									stream.ReadBytes(buffer, buffer.Length);
+								var buffer = new byte[size];
+								stream.ReadBytes(buffer, buffer.Length);
 
-									var offset = stream.Position;
+								var offset = stream.Position;
 
-									var message = _serializer.Deserialize(_version, buffer);
-									var key = _serializer.GetKey(message);
+								var message = _serializer.Deserialize(_version, buffer);
+								var key = _serializer.GetKey(message);
 
-									_snapshots.Add(key, message);
-
-									_offsets.Add(key, offset);
-									_currOffset = stream.Position;
-								}
+								_snapshots.Add(key, message);
+								_offsets.Add(key, offset);
 							}
+
+							_currOffset = stream.Length;
 						}
 					}
 					else
 					{
 						_version = _serializer.Version;
 
-						_currOffset = 2; // version has 2 bytes
+						_currOffset = _versionLen;
 					}
 				}
 
 				public void ClearAll()
 				{
 					lock (_snapshots.SyncRoot)
+					{
 						_snapshots.Clear();
+						_dirtyKeys.Clear();
+						_resetFile = true;
+					}
 				}
 
 				public void Clear(TKey key)
 				{
 					lock (_snapshots.SyncRoot)
+					{
 						_snapshots.Remove(key);
+						_dirtyKeys.Remove(key);
+						_resetFile = true;
+					}
 				}
 
 				public void Update(TMessage curr)
@@ -170,24 +178,48 @@ namespace StockSharp.Algo.Storages
 
 					lock (_snapshots.SyncRoot)
 					{
-						if (_dirtyKeys.Count == 0)
-							return;
-
-						changed = _dirtyKeys.Select(key =>
+						if (!_resetFile)
 						{
-							var buffer = _serializer.Serialize(_version, _snapshots[key]);
+							if (_dirtyKeys.Count == 0)
+								return;
 
-							if (!_offsets.TryGetValue(key, out var offset))
+							changed = _dirtyKeys.Select(key =>
 							{
-								_offsets.Add(key, _currOffset);
-								_currOffset += buffer.Length;
-							}
+								var buffer = _serializer.Serialize(_version, _snapshots[key]);
 
-							return Tuple.Create(offset, buffer);
-						}).OrderBy(t => t.Item1).ToArray();
+								if (!_offsets.TryGetValue(key, out var offset))
+								{
+									offset = _currOffset;
+									_offsets.Add(key, offset);
+									_currOffset += _bufSizeLen + buffer.Length;
+								}
 
-						_dirtyKeys.Count = 0;
+								return Tuple.Create(offset, buffer);
+							}).OrderBy(t => t.Item1).ToArray();
+						}
+						else
+						{
+							_offsets.Clear();
+							_currOffset = _versionLen;
+
+							changed = _snapshots.Select(pair =>
+							{
+								var buffer = _serializer.Serialize(_version, pair.Value);
+								
+								var offset = _currOffset;
+								_offsets.Add(pair.Key, offset);
+								_currOffset += _bufSizeLen + buffer.Length;
+
+								return Tuple.Create(offset, buffer);
+							}).OrderBy(t => t.Item1).ToArray();
+						}
+
+						_dirtyKeys.Clear();
 					}
+
+					Debug.WriteLine($"Snapshot (Save): {_fileName}");
+
+					Directory.CreateDirectory(Path.GetDirectoryName(_fileName));
 
 					using (var stream = File.OpenWrite(_fileName))
 					{

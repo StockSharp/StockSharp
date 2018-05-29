@@ -9,6 +9,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using Ecng.Interop;
 	using Ecng.Serialization;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -135,6 +136,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			if (message.ExecutionType != ExecutionTypes.Transaction)
+				throw new ArgumentOutOfRangeException(nameof(message), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
+
 			var snapshot = new TransactionSnapshot
 			{
 				SecurityId = message.SecurityId.ToStringId(),
@@ -238,6 +242,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
 					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
 
+					ExecutionType = ExecutionTypes.Transaction,
+
 					OriginalTransactionId = snapshot.OriginalTransactionId,
 					TransactionId = snapshot.TransactionId,
 
@@ -286,7 +292,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				var paramSize = typeof(TransactionConditionParam).SizeOf();
 
-				if (snapshot.ConditionType != null)
+				if (!snapshot.ConditionType.IsEmpty())
 					execMsg.Condition = snapshot.ConditionType.To<Type>().CreateInstance<OrderCondition>();
 
 				for (var i = 0; i < snapshot.ConditionParamsCount; i++)
