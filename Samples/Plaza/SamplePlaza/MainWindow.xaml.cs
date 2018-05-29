@@ -226,6 +226,8 @@ namespace SamplePlaza
 							Trader.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
 							Trader.LookupAll();
 
+							_snapshotRegistry.Init();
+
 							ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(_entityRegistry));
 						}
 					}

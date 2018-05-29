@@ -463,7 +463,13 @@ namespace StockSharp.Algo.Storages
 		public SnapshotRegistry(string path)
 		{
 			_path = path;
+		}
 
+		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		public void Init()
+		{
 			var isFlushing = false;
 			var flushLock = new SyncObject();
 

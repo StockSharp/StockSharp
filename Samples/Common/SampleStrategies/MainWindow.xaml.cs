@@ -74,14 +74,15 @@ namespace SampleStrategies
 			ConfigManager.RegisterService(entityRegistry.Storage);
 
 			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
+			var snapshotRegistry = new SnapshotRegistry(Path.Combine("Data", "Snapshots"));
 
-			Connector = new Connector(entityRegistry, storageRegistry, new SnapshotRegistry(Path.Combine("Data", "Snapshots")));
+			Connector = new Connector(entityRegistry, storageRegistry, snapshotRegistry);
 			LogManager.Sources.Add(Connector);
 
-			InitConnector(entityRegistry);
+			InitConnector(entityRegistry, snapshotRegistry);
 		}
 
-		private void InitConnector(CsvEntityRegistry entityRegistry)
+		private void InitConnector(CsvEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry)
 		{
 			// subscribe on connection successfully event
 			Connector.Connected += () =>
@@ -148,6 +149,8 @@ namespace SampleStrategies
 
 			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
 			//Connector.LookupAll();
+
+			snapshotRegistry.Init();
 
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
 		}
