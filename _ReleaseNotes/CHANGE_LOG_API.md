@@ -67,6 +67,8 @@ StockSharp API Change log
 * (feature) StorageMessageAdapter. SupportLookupMessages (method Load is obsolete).
 * (feature) IndicatorPickerWindow. PropGrid for indicator settings.
 * (feature) Charting. MACD Histogram. Signal and MACD lines added.
+* (bug) Bitfinex. Fix position processing https://stocksharp.ru/forum/9498/pri-podklyucheni-vylazit-oshibka-parsinga-konnektor-bitfinex/
+* (bug) Bithumb. Ticks subscription fix.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
