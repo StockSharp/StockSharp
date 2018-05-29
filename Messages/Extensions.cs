@@ -312,8 +312,18 @@ namespace StockSharp.Messages
 		/// Get message server time.
 		/// </summary>
 		/// <param name="message">Message.</param>
+		/// <returns>Server time message.</returns>
+		public static DateTimeOffset GetServerTime(this Message message)
+		{
+			return message.TryGetServerTime().Value;
+		}
+
+		/// <summary>
+		/// Get message server time.
+		/// </summary>
+		/// <param name="message">Message.</param>
 		/// <returns>Server time message. If the value is <see langword="null" />, the message does not contain the server time.</returns>
-		public static DateTimeOffset? GetServerTime(this Message message)
+		public static DateTimeOffset? TryGetServerTime(this Message message)
 		{
 			switch (message.Type)
 			{
@@ -323,6 +333,10 @@ namespace StockSharp.Messages
 					return ((QuoteChangeMessage)message).ServerTime;
 				case MessageTypes.Level1Change:
 					return ((Level1ChangeMessage)message).ServerTime;
+				case MessageTypes.PositionChange:
+					return ((PositionChangeMessage)message).ServerTime;
+				case MessageTypes.PortfolioChange:
+					return ((PortfolioChangeMessage)message).ServerTime;
 				case MessageTypes.Time:
 					return ((TimeMessage)message).ServerTime;
 				case MessageTypes.Connect:

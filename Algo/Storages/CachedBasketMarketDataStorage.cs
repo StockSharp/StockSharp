@@ -200,7 +200,7 @@ namespace StockSharp.Algo.Storages
 			else
 				message = _messageQueue.Dequeue().Value;
 
-			var serverTime = message.GetServerTime();
+			var serverTime = message.TryGetServerTime();
 
 			if (serverTime != null)
 				_currentTime = serverTime.Value;
@@ -341,13 +341,13 @@ namespace StockSharp.Algo.Storages
 
 				var serverTime = msg.GetServerTime();
 
-				if (serverTime == null)
-					throw new InvalidOperationException();
+				//if (serverTime == null)
+				//	throw new InvalidOperationException();
 
-				if (serverTime.Value < startTime)
+				if (serverTime < startTime)
 					continue;
 
-				msg.LocalTime = serverTime.Value;
+				msg.LocalTime = serverTime;
 
 				if (checkFromTime)
 				{

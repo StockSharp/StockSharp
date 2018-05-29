@@ -116,7 +116,7 @@ namespace StockSharp.Algo.Storages
 						case ActionTypes.Add:
 						{
 							var enu = storage.Load(_date).GetEnumerator();
-							var lastTime = Current == null ? DateTimeOffset.MinValue : Current.GetServerTime();
+							var lastTime = Current?.GetServerTime() ?? DateTimeOffset.MinValue;
 
 							var hasValues = true;
 
@@ -515,12 +515,7 @@ namespace StockSharp.Algo.Storages
 
 		private static DateTimeOffset GetServerTime(Message message)
 		{
-			var serverTime = message.GetServerTime();
-
-			if (serverTime == null)
-				throw new InvalidOperationException();
-
-			return serverTime.Value;
+			return message.GetServerTime();
 		}
 	}
 }

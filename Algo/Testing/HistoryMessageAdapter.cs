@@ -624,7 +624,7 @@ namespace StockSharp.Algo.Testing
 		{
 			LoadedMessageCount++;
 			
-			var serverTime = message.GetServerTime();
+			var serverTime = message.TryGetServerTime();
 
 			if (serverTime != null)
 				_currentTime = serverTime.Value;
