@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		//int ISnapshotSerializer<SecurityId, QuoteChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
-		string ISnapshotSerializer<SecurityId, QuoteChangeMessage>.FileName => "orderbook_snapshot.bin";
+		string ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Name => "OrderBook";
 
 		byte[] ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Serialize(Version version, QuoteChangeMessage message)
 		{

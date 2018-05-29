@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		//int ISnapshotSerializer<SecurityId, PositionChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
-		string ISnapshotSerializer<SecurityId, PositionChangeMessage>.FileName => "position_snapshot.bin";
+		string ISnapshotSerializer<SecurityId, PositionChangeMessage>.Name => "Positions";
 
 		byte[] ISnapshotSerializer<SecurityId, PositionChangeMessage>.Serialize(Version version, PositionChangeMessage message)
 		{

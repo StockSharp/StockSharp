@@ -307,9 +307,9 @@ namespace StockSharp.Algo
 					if (SupportOffline)
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
 
-					if (_entityRegistry != null && _storageRegistry != null)
+					if (_entityRegistry != null && _storageRegistry != null && _snapshotRegistry != null)
 					{
-						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry)
+						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry, _snapshotRegistry)
 						{
 							OwnInnerAdaper = true,
 							OverrideSecurityData = OverrideSecurityData

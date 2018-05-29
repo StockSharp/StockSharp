@@ -79,6 +79,7 @@ namespace StockSharp.Algo
 
 		private IEntityRegistry _entityRegistry;
 		private IStorageRegistry _storageRegistry;
+		private SnapshotRegistry _snapshotRegistry;
 
 		private bool _isDisposing;
 
@@ -95,15 +96,16 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
 		/// <param name="initManagers">Initialize managers.</param>
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
 		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
 		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
-		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, bool initManagers = true,
+		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, bool initManagers = true,
 			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnReconnect = true)
 			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking, isRestoreSubscriptionOnReconnect)
 		{
-			InitializeStorage(entityRegistry, storageRegistry);
+			InitializeStorage(entityRegistry, storageRegistry, snapshotRegistry);
 		}
 
 		/// <summary>
@@ -156,16 +158,12 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
-		public void InitializeStorage(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry)
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
+		public void InitializeStorage(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			if (storageRegistry == null)
-				throw new ArgumentNullException(nameof(storageRegistry));
-
-			_entityRegistry = entityRegistry;
-			_storageRegistry = storageRegistry;
+			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
+			_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
+			_snapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
 
 			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
 

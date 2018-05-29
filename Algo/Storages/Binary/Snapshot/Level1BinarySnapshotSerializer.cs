@@ -119,7 +119,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		Version ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Version { get; } = new Version(2, 0);
 
-		string ISnapshotSerializer<SecurityId, Level1ChangeMessage>.FileName => "level1_snapshot.bin";
+		string ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Name => "Level1";
 
 		//int ISnapshotSerializer<SecurityId, Level1ChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 

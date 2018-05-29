@@ -23,9 +23,9 @@ namespace StockSharp.Algo.Storages
 		Version Version { get; }
 
 		/// <summary>
-		/// File name.
+		/// Name.
 		/// </summary>
-		string FileName { get; }
+		string Name { get; }
 
 		///// <summary>
 		///// Get snapshot size in bytes.

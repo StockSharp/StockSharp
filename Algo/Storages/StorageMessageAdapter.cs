@@ -23,6 +23,8 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
+	using MoreLinq;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
@@ -58,6 +60,7 @@ namespace StockSharp.Algo.Storages
 	{
 		private readonly IStorageRegistry _storageRegistry;
 		private readonly IEntityRegistry _entityRegistry;
+		private readonly SnapshotRegistry _snapshotRegistry;
 
 		private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = new SynchronizedSet<long>();
 
@@ -67,11 +70,13 @@ namespace StockSharp.Algo.Storages
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
-		public StorageMessageAdapter(IMessageAdapter innerAdapter, IEntityRegistry entityRegistry, IStorageRegistry storageRegistry)
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
+		public StorageMessageAdapter(IMessageAdapter innerAdapter, IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
 			: base(innerAdapter)
 		{
 			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
 			_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
+			_snapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
 
 			var isProcessing = false;
 			var sync = new SyncObject();
@@ -277,7 +282,7 @@ namespace StockSharp.Algo.Storages
 
 		private ISnapshotStorage GetSnapshotStorage(Type messageType, object arg)
 		{
-			return _storageRegistry.GetSnapshotStorage(messageType, arg, Drive, Format);
+			return _snapshotRegistry.GetSnapshotStorage(messageType, arg);
 		}
 
 		private IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, object arg)
@@ -381,41 +386,41 @@ namespace StockSharp.Algo.Storages
 
 		private void ProcessOrderStatus(OrderStatusMessage msg)
 		{
-			if (_orderStatusProcessed || msg.IsBack || (msg.From == null && DaysLoad == TimeSpan.Zero) || msg.OrderId != null || !msg.OrderStringId.IsEmpty() || msg.OrderTransactionId != 0)
+			if (_orderStatusProcessed || msg.IsBack || msg.OrderId != null || !msg.OrderStringId.IsEmpty() || msg.OrderTransactionId != 0)
 			{
 				base.SendInMessage(msg);
 				return;
 			}
 
-			_orderStatusProcessed = true;
-
-			if (Mode.Contains(StorageModes.Snapshot))
+			if (DaysLoad > TimeSpan.Zero)
 			{
-				var storage = (ISnapshotStorage<long, ExecutionMessage>)GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
+				var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
+				var to = msg.To;
 
-				foreach (var snapshot in storage.GetAll())
+				if (Mode.Contains(StorageModes.Snapshot))
 				{
-					snapshot.OriginalTransactionId = msg.TransactionId;
-					RaiseStorageMessage(snapshot);
+					_orderStatusProcessed = true;
+
+					var storage = (ISnapshotStorage<long, ExecutionMessage>)GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
+
+					foreach (var snapshot in storage.GetAll(from, to))
+					{
+						snapshot.OriginalTransactionId = msg.TransactionId;
+						RaiseStorageMessage(snapshot);
+					}
+				}
+				else if (Mode.Contains(StorageModes.Incremental))
+				{
+					if (!msg.SecurityId.IsDefault())
+					{
+						GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Transaction)
+							.Load(from, to)
+							.ForEach(RaiseStorageMessage);
+					}
 				}
 			}
-			else if (Mode.Contains(StorageModes.Incremental))
-			{
-				//if (DaysLoad == TimeSpan.Zero)
-				//	return;
-
-				//var today = DateTime.UtcNow.Date;
-
-				//var from = (DateTimeOffset)(today - DaysLoad);
-				//var to = DateTimeOffset.Now;
-
-				//foreach (var secId in requiredSecurities)
-				//{
-				//	GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
-				//		.Load(from, to)
-				//		.ForEach(RaiseStorageMessage);
-				//}
-			}
+			else
+				_orderStatusProcessed = true;
 
 			base.SendInMessage(msg);
 		}
@@ -981,7 +986,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new StorageMessageAdapter(InnerAdapter, _entityRegistry, _storageRegistry)
+			return new StorageMessageAdapter(InnerAdapter, _entityRegistry, _storageRegistry, _snapshotRegistry)
 			{
 				CacheBuildableCandles = CacheBuildableCandles,
 				OverrideSecurityData = OverrideSecurityData,

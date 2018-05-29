@@ -1,5 +1,6 @@
 namespace StockSharp.Algo.Storages
 {
+	using System;
 	using System.Collections.Generic;
 
 	using StockSharp.Messages;
@@ -10,10 +11,10 @@ namespace StockSharp.Algo.Storages
 	public interface ISnapshotStorage
 	{
 		/// <summary>
-		/// Initialize the storage.
+		/// To get all the dates for which market data are recorded.
 		/// </summary>
-		void Init();
-
+		IEnumerable<DateTime> Dates { get; }
+		
 		/// <summary>
 		/// Clear storage.
 		/// </summary>
@@ -41,8 +42,10 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Get all snapshots.
 		/// </summary>
+		/// <param name="from">The range start time. If the value is not specified, data will be loaded from the start date <see cref="GetFromDate"/>.</param>
+		/// <param name="to">The range end time. If the value is not specified, data will be loaded up to the end date <see cref="GetToDate"/>, inclusive.</param>
 		/// <returns>All snapshots.</returns>
-		IEnumerable<Message> GetAll();
+		IEnumerable<Message> GetAll(DateTimeOffset? from = null, DateTimeOffset? to = null);
 	}
 
 	/// <summary>
@@ -68,7 +71,9 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Get all snapshots.
 		/// </summary>
+		/// <param name="from">The range start time. If the value is not specified, data will be loaded from the start date <see cref="GetFromDate"/>.</param>
+		/// <param name="to">The range end time. If the value is not specified, data will be loaded up to the end date <see cref="GetToDate"/>, inclusive.</param>
 		/// <returns>All snapshots.</returns>
-		new IEnumerable<TMessage> GetAll();
+		new IEnumerable<TMessage> GetAll(DateTimeOffset? from = null, DateTimeOffset? to = null);
 	}
 }

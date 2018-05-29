@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		//int ISnapshotSerializer<long, ExecutionMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
-		string ISnapshotSerializer<long, ExecutionMessage>.FileName => "transaction_snapshot.bin";
+		string ISnapshotSerializer<long, ExecutionMessage>.Name => "Transactions";
 
 		byte[] ISnapshotSerializer<long, ExecutionMessage>.Serialize(Version version, ExecutionMessage message)
 		{
