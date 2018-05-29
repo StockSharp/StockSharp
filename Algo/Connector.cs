@@ -558,11 +558,8 @@ namespace StockSharp.Algo
 			SendInMessage(new DisconnectMessage());
 		}
 
-		/// <summary>
-		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="IConnector.LookupSecuritiesResult"/>.
-		/// </summary>
-		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
-		public void LookupSecurities(Security criteria)
+		/// <inheritdoc />
+		public void LookupSecurities(Security criteria, IMessageAdapter adapter = null)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -583,14 +580,12 @@ namespace StockSharp.Algo
 
 			var message = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode, criteria.Type));
 			message.TransactionId = TransactionIdGenerator.GetNextId();
+			message.Adapter = adapter;
 
 			LookupSecurities(message);
 		}
 
-		/// <summary>
-		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="IConnector.LookupSecuritiesResult"/>.
-		/// </summary>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <inheritdoc />
 		public virtual void LookupSecurities(SecurityLookupMessage criteria)
 		{
 			if (criteria == null)
@@ -625,11 +620,27 @@ namespace StockSharp.Algo
 			return security == null;
 		}
 
-		/// <summary>
-		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="IConnector.LookupPortfoliosResult"/>.
-		/// </summary>
-		/// <param name="criteria">The portfolio which fields will be used as a filter.</param>
-		public virtual void LookupPortfolios(Portfolio criteria)
+		/// <inheritdoc />
+		public void LookupOrders(Order criteria, IMessageAdapter adapter = null)
+		{
+			var transactionId = TransactionIdGenerator.GetNextId();
+
+			LookupOrders(new OrderStatusMessage
+			{
+				TransactionId = transactionId,
+				Adapter = adapter,
+			});
+		}
+
+		/// <inheritdoc />
+		public virtual void LookupOrders(OrderStatusMessage criteria)
+		{
+			_entityCache.AddOrderStatusTransactionId(criteria.TransactionId);
+			SendInMessage(criteria);
+		}
+
+		/// <inheritdoc />
+		public void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -640,11 +651,21 @@ namespace StockSharp.Algo
 				BoardCode = criteria.Board == null ? null : criteria.Board.Code,
 				Currency = criteria.Currency,
 				PortfolioName = criteria.Name,
+				Adapter = adapter,
 			};
 
-			_portfolioLookups.Add(msg.TransactionId, msg);
+			LookupPortfolios(msg);
+		}
 
-			SendInMessage(msg);
+		/// <inheritdoc />
+		public virtual void LookupPortfolios(PortfolioLookupMessage criteria)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			_portfolioLookups.Add(criteria.TransactionId, criteria);
+
+			SendInMessage(criteria);
 		}
 
 		/// <summary>

@@ -984,34 +984,13 @@ namespace StockSharp.Algo
 			if (LookupMessagesOnConnect)
 			{
 				if (adapter.PortfolioLookupRequired)
-				{
-					SendInMessage(new PortfolioLookupMessage
-					{
-						TransactionId = TransactionIdGenerator.GetNextId(),
-						Adapter = adapter,
-					});
-				}
+					LookupPortfolios(new Portfolio(), adapter);
 
 				if (adapter.OrderStatusRequired)
-				{
-					var transactionId = TransactionIdGenerator.GetNextId();
-					_entityCache.AddOrderStatusTransactionId(transactionId);
-
-					SendInMessage(new OrderStatusMessage
-					{
-						TransactionId = transactionId,
-						Adapter = adapter,
-					});
-				}
+					LookupOrders(new Order(), adapter);
 
 				if (adapter.SecurityLookupRequired)
-				{
-					SendInMessage(new SecurityLookupMessage
-					{
-						TransactionId = TransactionIdGenerator.GetNextId(),
-						Adapter = adapter,
-					});
-				}	
+					LookupSecurities(new Security(), adapter);
 			}
 
 			if (!isRestored)

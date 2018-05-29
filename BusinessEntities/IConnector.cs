@@ -285,12 +285,12 @@ namespace StockSharp.BusinessEntities
 		event Action<TimeSpan> MarketTimeChanged;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupSecurities(Security)"/> received.
+		/// Lookup result <see cref="LookupSecurities(Security,IMessageAdapter)"/> received.
 		/// </summary>
 		event Action<Exception, IEnumerable<Security>> LookupSecuritiesResult;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupPortfolios"/> received.
+		/// Lookup result <see cref="LookupPortfolios(Portfolio,IMessageAdapter)"/> received.
 		/// </summary>
 		event Action<Exception, IEnumerable<Portfolio>> LookupPortfoliosResult;
 
@@ -440,7 +440,8 @@ namespace StockSharp.BusinessEntities
 		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="LookupSecuritiesResult"/>.
 		/// </summary>
 		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
-		void LookupSecurities(Security criteria);
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void LookupSecurities(Security criteria, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="LookupSecuritiesResult"/>.
@@ -459,7 +460,27 @@ namespace StockSharp.BusinessEntities
 		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
 		/// <param name="criteria">The portfolio which fields will be used as a filter.</param>
-		void LookupPortfolios(Portfolio criteria);
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null);
+
+		/// <summary>
+		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
+		/// </summary>
+		/// <param name="criteria">The portfolio which fields will be used as a filter.</param>
+		void LookupPortfolios(PortfolioLookupMessage criteria);
+
+		/// <summary>
+		/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="NewOrder"/>.
+		/// </summary>
+		/// <param name="criteria">The order which fields will be used as a filter.</param>
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void LookupOrders(Order criteria, IMessageAdapter adapter = null);
+
+		/// <summary>
+		/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="NewOrder"/>.
+		/// </summary>
+		/// <param name="criteria">The order which fields will be used as a filter.</param>
+		void LookupOrders(OrderStatusMessage criteria);
 
 		/// <summary>
 		/// Lookup security by identifier.
