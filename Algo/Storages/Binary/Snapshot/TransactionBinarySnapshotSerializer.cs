@@ -298,7 +298,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				for (var i = 0; i < snapshot.ConditionParamsCount; i++)
 				{
 					var param = ptr.ToStruct<TransactionConditionParam>();
-					execMsg.Condition.Parameters.Add(param.Name, param.Value.To(param.ValueType.To<Type>()));
+					var paramType = param.ValueType.To<Type>();
+					execMsg.Condition.Parameters.Add(param.Name, paramType == typeof(Unit) ? param.Value.ToUnit() : param.Value.To(paramType));
 					ptr += paramSize;
 				}
 				
