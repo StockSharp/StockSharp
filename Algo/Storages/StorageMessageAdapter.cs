@@ -113,7 +113,16 @@ namespace StockSharp.Algo.Storages
 							var snapshotStorage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
 
 							foreach (var message in pair.Value)
+							{
+								// do not store cancellation commands into snapshot
+								if (message.IsCancelled && message.TransactionId != 0)
+									continue;
+
+								if (message.TransactionId == 0 && message.OriginalTransactionId == 0)
+									continue;
+
 								snapshotStorage.Update(message);
+							}
 						}
 					}
 

@@ -421,7 +421,8 @@ namespace StockSharp.Algo.Storages
 					//if (!CanStore<ExecutionMessage>(regMsg.SecurityId, ExecutionTypes.Transaction))
 					//	break;
 
-					_securityIds.Add(regMsg.TransactionId, regMsg.SecurityId);
+					// try - cause looped back messages from offline adapter
+					_securityIds.TryAdd(regMsg.TransactionId, regMsg.SecurityId);
 
 					_transactionsBuffer.Add(regMsg.SecurityId, new ExecutionMessage
 					{
@@ -457,7 +458,8 @@ namespace StockSharp.Algo.Storages
 					//if (!CanStore<ExecutionMessage>(cancelMsg.SecurityId, ExecutionTypes.Transaction))
 					//	break;
 
-					_securityIds.Add(cancelMsg.TransactionId, cancelMsg.SecurityId);
+					// try - cause looped back messages from offline adapter
+					_securityIds.TryAdd(cancelMsg.TransactionId, cancelMsg.SecurityId);
 
 					_transactionsBuffer.Add(cancelMsg.SecurityId, new ExecutionMessage
 					{
