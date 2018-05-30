@@ -886,11 +886,16 @@ namespace StockSharp.Algo
 			{
 				lock (_connectedResponseLock)
 				{
-					var set = _subscriptionNonSupportedAdapters.SafeAdd(originalTransactionId, k => new HashSet<IMessageAdapter>());
-					set.Add(GetUnderlyingAdapter(adapter));
+					// try lookback only subscribe messages
+					if (originMsg.IsSubscribe)
+					{
+						var set = _subscriptionNonSupportedAdapters.SafeAdd(originalTransactionId, k => new HashSet<IMessageAdapter>());
+						set.Add(GetUnderlyingAdapter(adapter));
 
-					originMsg.Adapter = this;
-					originMsg.IsBack = true;
+						originMsg.Adapter = this;
+						originMsg.IsBack = true;
+					}
+					
 					SendOutMessage(originMsg);
 				}
 
