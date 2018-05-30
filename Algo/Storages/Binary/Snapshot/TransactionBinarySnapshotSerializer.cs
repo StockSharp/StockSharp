@@ -34,6 +34,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public long OriginalTransactionId;
 			public long TransactionId;
 
+			public bool HasOrderInfo;
+			public bool HasTradeInfo;
+
 			public decimal OrderPrice;
 			public long? OrderId;
 			//public long OrderUserId;
@@ -149,6 +152,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				OriginalTransactionId = message.OriginalTransactionId,
 				TransactionId = message.TransactionId,
 
+				HasOrderInfo = message.HasOrderInfo,
+				HasTradeInfo = message.HasTradeInfo,
+
 				BrokerCode = message.BrokerCode,
 				ClientCode = message.ClientCode,
 				Comment = message.Comment,
@@ -246,6 +252,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 					OriginalTransactionId = snapshot.OriginalTransactionId,
 					TransactionId = snapshot.TransactionId,
+
+					HasOrderInfo = snapshot.HasOrderInfo,
+					HasTradeInfo = snapshot.HasTradeInfo,
 
 					BrokerCode = snapshot.BrokerCode,
 					ClientCode = snapshot.ClientCode,
@@ -430,6 +439,12 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			if (changes.TransactionId != 0)
 				message.TransactionId = changes.TransactionId;
+
+			if (changes.HasOrderInfo)
+				message.HasOrderInfo = true;
+
+			if (changes.HasTradeInfo)
+				message.HasTradeInfo = true;
 
 			message.LocalTime = changes.LocalTime;
 			message.ServerTime = changes.ServerTime;
