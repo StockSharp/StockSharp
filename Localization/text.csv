@@ -14985,3 +14985,4 @@ DocStr10519;The command to remove selected schemas;Команда на удал�
 DocStr10520;Panel for schema modification;Панель для редактирования схемы
 DocStr10522;Selected rules;Выбранные правила
 DocStr10523;All schemas;Все схемы
+DocStr10524;Create copy for the new snapshot;Создать копию для нового снэпшота

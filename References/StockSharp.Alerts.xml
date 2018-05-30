@@ -416,7 +416,7 @@
     </member>
     <member name="P:StockSharp.Alerts.AlertSettingsPanel.Caption">
       <summary>
-            Caption.
+            Header.
             </summary>
     </member>
     <member name="P:StockSharp.Alerts.AlertSettingsPanel.Message">

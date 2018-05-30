@@ -2507,6 +2507,9 @@ M:StockSharp.Algo.Storages.ISnapshotSerializer`2.Deserialize(System.Version,Syst
 M:StockSharp.Algo.Storages.ISnapshotSerializer`2.GetKey(`1)/summary;DocStr10207
 M:StockSharp.Algo.Storages.ISnapshotSerializer`2.GetKey(`1)/param/message;Str3166
 M:StockSharp.Algo.Storages.ISnapshotSerializer`2.GetKey(`1)/returns;Str3304
+M:StockSharp.Algo.Storages.ISnapshotSerializer`2.CreateCopy(`1)/summary;DocStr10524
+M:StockSharp.Algo.Storages.ISnapshotSerializer`2.CreateCopy(`1)/param/message;Str3166
+M:StockSharp.Algo.Storages.ISnapshotSerializer`2.CreateCopy(`1)/returns;DocStr1116
 M:StockSharp.Algo.Storages.ISnapshotSerializer`2.Update(`1,`1)/summary;DocStr10208
 M:StockSharp.Algo.Storages.ISnapshotSerializer`2.Update(`1,`1)/param/message;Str3166
 M:StockSharp.Algo.Storages.ISnapshotSerializer`2.Update(`1,`1)/param/changes;DocStr8448
