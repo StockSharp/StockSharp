@@ -1826,10 +1826,16 @@ namespace StockSharp.Algo
 						break;
 					}
 
-					if (message.Error != null && _entityCache.IsOrderStatusRequest(originId))
+					var isStatusRequest = _entityCache.IsOrderStatusRequest(originId);
+
+					if (message.Error != null && isStatusRequest)
 					{
-						RaiseOrderStatusFailed(originId, message.Error);
-						break;
+						// TransId != 0 means contains failed order info (not just status response)
+						if (message.TransactionId == 0)
+						{
+							RaiseOrderStatusFailed(originId, message.Error);
+							break;
+						}
 					}
 
 					var order = _entityCache.GetOrder(message, out var transactionId);
@@ -1838,7 +1844,7 @@ namespace StockSharp.Algo
 					{
 						var security = LookupSecurity(message.SecurityId);
 
-						if (transactionId == 0 && _entityCache.IsOrderStatusRequest(originId))
+						if (transactionId == 0 && isStatusRequest)
 							transactionId = TransactionIdGenerator.GetNextId();
 
 						ProcessTransactionMessage(null, security, message, transactionId);

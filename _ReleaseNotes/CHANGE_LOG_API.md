@@ -71,6 +71,7 @@ StockSharp API Change log
 * (bug) Bithumb. Ticks subscription fix.
 * (bug) QuikLua. Fix send back market data errors subscriptions.
 * (feature) Alerts. Schemas panel.
+* (bug) Connector. Fix processing order status response with failed orders info.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
