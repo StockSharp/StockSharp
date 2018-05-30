@@ -287,6 +287,12 @@
 					connectMessage = (ConnectMessage)message;
 					break;
 				}
+
+				case MessageTypes.Disconnect:
+				{
+					_connected = false;
+					break;
+				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);

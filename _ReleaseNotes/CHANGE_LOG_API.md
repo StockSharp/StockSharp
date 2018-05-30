@@ -72,6 +72,7 @@ StockSharp API Change log
 * (bug) QuikLua. Fix send back market data errors subscriptions.
 * (feature) Alerts. Schemas panel.
 * (bug) Connector. Fix processing order status response with failed orders info.
+* (feature) OfflineMessageAdapter. Track disconnect.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
