@@ -147,6 +147,8 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("isCancelled", item.IsCancelled);
 						writer.WriteAttribute("isSystem", item.IsSystem);
 						writer.WriteAttribute("isUpTick", item.IsUpTick);
+						writer.WriteAttribute("isMargin", item.IsMargin);
+						writer.WriteAttribute("isMarketMaker", item.IsMarketMaker);
 
 						writer.WriteEndElement();
 					});
