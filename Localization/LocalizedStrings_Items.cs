@@ -40578,12 +40578,12 @@ namespace StockSharp.Localization
 		public static string XamlStr814 => GetString(XamlStr814Key);
 
 		/// <summary>
-		/// Storage format:
+		/// Storage format
 		/// </summary>
 		public const string StorageFormatKey = nameof(StorageFormat);
 
 		/// <summary>
-		/// Storage format:
+		/// Storage format
 		/// </summary>
 		public static string StorageFormat => GetString(StorageFormatKey);
 
