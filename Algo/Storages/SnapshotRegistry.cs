@@ -82,7 +82,18 @@ namespace StockSharp.Algo.Storages
 
 								//var offset = stream.Position;
 
-								var message = _serializer.Deserialize(_version, buffer);
+								TMessage message;
+
+								try
+								{
+									message = _serializer.Deserialize(_version, buffer);
+								}
+								catch (Exception ex)
+								{
+									ex.LogError();
+									continue;
+								}
+
 								var key = _serializer.GetKey(message);
 
 								_snapshots.Add(key, message);
