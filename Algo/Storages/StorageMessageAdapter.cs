@@ -105,8 +105,10 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in GetTransactions())
 					{
+						var secId = pair.Key;
+
 						if (Mode.Contains(StorageModes.Incremental))
-							GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Transaction).Save(pair.Value);
+							GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction).Save(pair.Value);
 
 						if (Mode.Contains(StorageModes.Snapshot))
 						{
@@ -121,6 +123,7 @@ namespace StockSharp.Algo.Storages
 								if (message.TransactionId == 0 && message.OriginalTransactionId == 0)
 									continue;
 
+								message.SecurityId = secId;
 								snapshotStorage.Update(message);
 							}
 						}

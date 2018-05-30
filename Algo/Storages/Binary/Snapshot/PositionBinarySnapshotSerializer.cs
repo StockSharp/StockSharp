@@ -138,16 +138,16 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
 				}
 				.TryAdd(PositionChangeTypes.BeginValue, snapshot.BeginValue, true)
-				.TryAdd(PositionChangeTypes.CurrentValue, snapshot.CurrentValue.Value, true)
-				.TryAdd(PositionChangeTypes.BlockedValue, snapshot.BlockedValue.Value, true)
-				.TryAdd(PositionChangeTypes.CurrentPrice, snapshot.CurrentPrice.Value, true)
-				.TryAdd(PositionChangeTypes.AveragePrice, snapshot.AveragePrice.Value, true)
-				.TryAdd(PositionChangeTypes.UnrealizedPnL, snapshot.UnrealizedPnL.Value, true)
-				.TryAdd(PositionChangeTypes.RealizedPnL, snapshot.RealizedPnL.Value, true)
-				.TryAdd(PositionChangeTypes.VariationMargin, snapshot.VariationMargin.Value, true)
-				.TryAdd(PositionChangeTypes.Leverage, snapshot.Leverage.Value, true)
-				.TryAdd(PositionChangeTypes.Commission, snapshot.Commission.Value, true)
-				.TryAdd(PositionChangeTypes.CurrentValueInLots, snapshot.CurrentValueInLots.Value, true)
+				.TryAdd(PositionChangeTypes.CurrentValue, snapshot.CurrentValue, true)
+				.TryAdd(PositionChangeTypes.BlockedValue, snapshot.BlockedValue, true)
+				.TryAdd(PositionChangeTypes.CurrentPrice, snapshot.CurrentPrice, true)
+				.TryAdd(PositionChangeTypes.AveragePrice, snapshot.AveragePrice, true)
+				.TryAdd(PositionChangeTypes.UnrealizedPnL, snapshot.UnrealizedPnL, true)
+				.TryAdd(PositionChangeTypes.RealizedPnL, snapshot.RealizedPnL, true)
+				.TryAdd(PositionChangeTypes.VariationMargin, snapshot.VariationMargin, true)
+				.TryAdd(PositionChangeTypes.Leverage, snapshot.Leverage, true)
+				.TryAdd(PositionChangeTypes.Commission, snapshot.Commission, true)
+				.TryAdd(PositionChangeTypes.CurrentValueInLots, snapshot.CurrentValueInLots, true)
 				;
 
 				if (snapshot.Currency != null)

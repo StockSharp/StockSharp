@@ -528,7 +528,7 @@ namespace StockSharp.Algo.Storages
 							break;
 						case ExecutionTypes.Transaction:
 							
-							// some error responses do not contains sec id
+							// some responses do not contains sec id
 							if (secId.IsDefault() && !_securityIds.TryGetValue(execMsg.OriginalTransactionId, out secId))
 							{
 								base.OnInnerAdapterNewOutMessage(message);

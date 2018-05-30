@@ -10,6 +10,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -122,7 +123,10 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public string ValueType;
 
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-			public string Value;
+			public string StringValue;
+			public long? NumValue;
+			public decimal? DecimalValue;
+			public bool? BoolValue;
 		}
 
 		Version ISnapshotSerializer<long, ExecutionMessage>.Version { get; } = new Version(2, 0);
@@ -219,8 +223,62 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				{
 					Name = conParam.Key,
 					ValueType = conParam.Value.GetType().GetTypeAsString(false),
-					Value = conParam.Value.To<string>(),
 				};
+
+				switch (conParam.Value)
+				{
+					case byte b:
+						param.NumValue = b;
+						break;
+					case sbyte sb:
+						param.NumValue = sb;
+						break;
+					case int i:
+						param.NumValue = i;
+						break;
+					case short s:
+						param.NumValue = s;
+						break;
+					case long l:
+						param.NumValue = l;
+						break;
+					case uint ui:
+						param.NumValue = ui;
+						break;
+					case ushort us:
+						param.NumValue = us;
+						break;
+					case ulong ul:
+						param.NumValue = (long)ul;
+						break;
+					case DateTimeOffset dto:
+						param.NumValue = dto.To<long>();
+						break;
+					case DateTime dt:
+						param.NumValue = dt.To<long>();
+						break;
+					case TimeSpan ts:
+						param.NumValue = ts.To<long>();
+						break;
+					case float f:
+						param.DecimalValue = (decimal)f;
+						break;
+					case double d:
+						param.DecimalValue = (decimal)d;
+						break;
+					case decimal dec:
+						param.DecimalValue = dec;
+						break;
+					case bool bln:
+						param.BoolValue = bln;
+						break;
+					case Enum e:
+						param.NumValue = e.To<long>();
+						break;
+					default:
+						param.StringValue = conParam.Value.To<string>();
+						break;
+				}
 
 				var rowPtr = param.StructToPtr();
 				Marshal.Copy(rowPtr, buffer, offset, paramSize);
@@ -311,7 +369,30 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				{
 					var param = ptr.ToStruct<TransactionConditionParam>();
 					var paramType = param.ValueType.To<Type>();
-					execMsg.Condition.Parameters.Add(param.Name, paramType == typeof(Unit) ? param.Value.ToUnit() : param.Value.To(paramType));
+
+					object value;
+
+					if (param.NumValue != null)
+						value = param.NumValue.Value;
+					else if (param.DecimalValue != null)
+						value = param.DecimalValue.Value;
+					else if (param.BoolValue != null)
+						value = param.BoolValue.Value;
+					else if (paramType == typeof(Unit))
+						value = param.StringValue.ToUnit();
+					else
+						value = param.StringValue;
+
+					try
+					{
+						value = value.To(paramType);
+						execMsg.Condition.Parameters.Add(param.Name, value);
+					}
+					catch (Exception ex)
+					{
+						ex.LogError();
+					}
+					
 					ptr += paramSize;
 				}
 				
@@ -326,6 +407,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		ExecutionMessage ISnapshotSerializer<long, ExecutionMessage>.CreateCopy(ExecutionMessage message)
 		{
+			if (message.SecurityId.IsDefault())
+				throw new ArgumentException(message.ToString());
+
 			var copy = (ExecutionMessage)message.Clone();
 
 			if (copy.TransactionId == 0)
