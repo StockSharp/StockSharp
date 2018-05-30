@@ -70,6 +70,7 @@ StockSharp API Change log
 * (bug) Bitfinex. Fix position processing https://stocksharp.ru/forum/9498/pri-podklyucheni-vylazit-oshibka-parsinga-konnektor-bitfinex/
 * (bug) Bithumb. Ticks subscription fix.
 * (bug) QuikLua. Fix send back market data errors subscriptions.
+* (feature) Alerts. Schemas panel.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

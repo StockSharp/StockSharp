@@ -48056,5 +48056,65 @@ namespace StockSharp.Localization
 		/// Tasks '{0}' are running for all instruments. Often these are incorrect settings. It is recommended to set specific instruments for each task. Do you want to continue as is or stop the launch?
 		/// </summary>
 		public static string TasksAllInstruments => GetString(TasksAllInstrumentsKey);
+
+		/// <summary>
+		/// Schema
+		/// </summary>
+		public const string SchemaKey = nameof(Schema);
+
+		/// <summary>
+		/// Schema
+		/// </summary>
+		public static string Schema => GetString(SchemaKey);
+
+		/// <summary>
+		/// Alert type
+		/// </summary>
+		public const string AlertTypeKey = nameof(AlertType);
+
+		/// <summary>
+		/// Alert type
+		/// </summary>
+		public static string AlertType => GetString(AlertTypeKey);
+
+		/// <summary>
+		/// Alerts
+		/// </summary>
+		public const string AlertsKey = nameof(Alerts);
+
+		/// <summary>
+		/// Alerts
+		/// </summary>
+		public static string Alerts => GetString(AlertsKey);
+
+		/// <summary>
+		/// Alerts settings.
+		/// </summary>
+		public const string AlertsSettingsKey = nameof(AlertsSettings);
+
+		/// <summary>
+		/// Alerts settings.
+		/// </summary>
+		public static string AlertsSettings => GetString(AlertsSettingsKey);
+
+		/// <summary>
+		/// The position by the instrument.
+		/// </summary>
+		public const string PositionDescKey = nameof(PositionDesc);
+
+		/// <summary>
+		/// The position by the instrument.
+		/// </summary>
+		public static string PositionDesc => GetString(PositionDescKey);
+
+		/// <summary>
+		/// Level1 market data.
+		/// </summary>
+		public const string Level1MarketDataKey = nameof(Level1MarketData);
+
+		/// <summary>
+		/// Level1 market data.
+		/// </summary>
+		public static string Level1MarketData => GetString(Level1MarketDataKey);
 	}
 }

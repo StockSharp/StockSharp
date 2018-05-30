@@ -4838,6 +4838,12 @@ Brvm;BRVM;BRVM
 Count;Count;Count
 CandlesCount;Candles count.;Количество свечей.
 TasksAllInstruments;Tasks '{0}' are running for all instruments. Often these are incorrect settings. It is recommended to set specific instruments for each task. Do you want to continue as is or stop the launch?;Задачи '{0}' запущены на работу по всем инструментам. Часто это является неправильными настройками. Рекомендуется установить конкретные инструменты для каждой задачи. Вы хотите продолжить как есть или остановить запуск?
+Schema;Schema;Схема
+AlertType;Alert type;Тип сигнала
+Alerts;Alerts;Уведомления
+AlertsSettings;Alerts settings.;Настройки уведомлений.
+PositionDesc;The position by the instrument.;Позиция по инструменту.
+Level1MarketData;Level1 market data.;Level1 маркет-данные.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -4856,8 +4862,6 @@ DocStr14;Rule;Правило
 DocStr15;Message property, which will be made a comparison with the value of {0} based on the criterion {1};Свойство сообщения, с которым будет производиться сравнение со значением {0} на основе критерия {1}
 DocStr16;The criterion of comparison values {0};Критерий сравнения значения {0}
 DocStr17;Comparison value;Значение для сравнения
-DocStr18;Schema;Схема
-DocStr19;Alert type;Тип сигнала
 DocStr20;Alert service;Сервис сигналов
 DocStr21;Defines an alert service;Интерфейс, описывающий сервис сигналов
 DocStr22;Add alert at the output;Добавить сигнал на вывод
@@ -5101,7 +5105,6 @@ DocStr274;Path to market data;Путь к данными
 DocStr275;The market data source from Yahoo Finance;Источник маркет-данных от Yahoo Finance
 DocStr276;To get level1 market data;Получить level1 маркет-данные
 DocStr277;Market data fields. If {0} was passed, then {1} value will be used;Поля маркет-данных. Если было передано {0}, то будет использоваться значение {1}
-DocStr278;Level1 market data;Level1 маркет-данные
 DocStr279;Available fields of market data which can be passed to {0};Доступные поля маркет-данных, которые можно передать в {0}
 DocStr280;The strategy of the automatic position protection;Стратегия автоматической защиты позиции
 DocStr281;New trades come in strategy via {0}. They are automatically protected by {1}. Also, {2} turns over stops in case of position flipping;Новые сделки в стратегию поступают через {0}. Они автоматически защищаются с помощью {1}. Дополнительно, {2} переворачивает стопы в случае переворота позиции
@@ -7090,7 +7093,6 @@ DocStr2291;The position by the portfolio;Позиция по портфелю
 DocStr2292;To get the position by own trades;Получить позицию по собственным сделкам
 DocStr2293;Own trades, used for the position calculation using the {0} method;Собственные сделки, по которым рассчитывается позиция через метод {0}
 DocStr2294;To get the trade volume, collatable with the position size;Получить объем заявки, сопоставимый с размером позиции
-DocStr2295;The position by the instrument;Позиция по инструменту
 DocStr2296;To group orders by instrument and portfolio;Сгруппировать заявки по инструменту и портфелю
 DocStr2297;Recommended to use to reduce trade costs;Рекомендуется использовать для уменьшения транзакционных издержек
 DocStr2298;Initial orders;Исходные заявки
@@ -14975,3 +14977,11 @@ DocStr10511;Lookup securities, portfolios and orders;Искать инструм
 DocStr10512;Target adapter. Can be {0};Целевой адаптер. Может быть {0}
 DocStr10513;To find orders that match the filter {0}. Found orders will be passed through the event {1};Найти заявки, отвечающие критерию {0}. Найденные заявки будут переданы через событие {1}
 DocStr10514;The order which fields will be used as a filter;Заявка, чьи поля используются как фильтр поиска
+DocStr10515;Message type picker window;Окно выбора типа сообщения
+DocStr10516;Panel for schemas modification;Панель для редактирования схем
+DocStr10517;The command to add new schema;Команда на добавление новой схемы
+DocStr10518;The command to edit selected schema;Команда на редактирование выбранной схемы
+DocStr10519;The command to remove selected schemas;Команда на удаление выбранных схем
+DocStr10520;Panel for schema modification;Панель для редактирования схемы
+DocStr10522;Selected rules;Выбранные правила
+DocStr10523;All schemas;Все схемы
