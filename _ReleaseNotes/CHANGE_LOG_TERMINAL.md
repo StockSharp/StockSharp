@@ -1,5 +1,24 @@
 StockSharp Terminal Change log
 ========================
+## v4.4.10:
+* (feature) Themes. Icons auto coloring.
+* (feature) CandleSeries.IsRegularTradingHours.
+* (feature) Index and continuous securities support.
+* (feature) Remote storage support.
+* (bug) Logs. Designed fix.
+* (feature) FIX connector. SSL support extended.
+* (feature) FIX connector. QUIK FIX PreRrade support.
+* (bug) MarketDataGrid. Fix further refreshes after error request.
+* (bug) Chart. Fix Load indicators for deleted candles series.
+* (feature) Default theme changed.
+* (bug) Grids. Time zone column fix.
+* (bug) Chart icons color fixes.
+* (bug) Chart indicators change settings fix.
+* (feature) Alerts panel.
+* (feature) Chartings. Indicators settings while creation.
+* (feature) MACD histogram. Draw signal and macd lines.
+* (feature) Snapshot data refactoring.
+
 ## v4.4.9:
 * (feature) Emulator support.
 * (feature) Risk management.
