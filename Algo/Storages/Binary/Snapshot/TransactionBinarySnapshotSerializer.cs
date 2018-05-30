@@ -142,6 +142,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (message.ExecutionType != ExecutionTypes.Transaction)
 				throw new ArgumentOutOfRangeException(nameof(message), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
 
+			if (message.TransactionId == 0)
+				throw new InvalidOperationException("TransId == 0");
+
 			var snapshot = new TransactionSnapshot
 			{
 				SecurityId = message.SecurityId.ToStringId(),
@@ -149,7 +152,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				LastChangeServerTime = message.ServerTime.To<long>(),
 				LastChangeLocalTime = message.LocalTime.To<long>(),
 
-				OriginalTransactionId = message.OriginalTransactionId,
+				//OriginalTransactionId = message.OriginalTransactionId,
 				TransactionId = message.TransactionId,
 
 				HasOrderInfo = message.HasOrderInfo,
@@ -250,7 +253,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 					ExecutionType = ExecutionTypes.Transaction,
 
-					OriginalTransactionId = snapshot.OriginalTransactionId,
+					//OriginalTransactionId = snapshot.OriginalTransactionId,
 					TransactionId = snapshot.TransactionId,
 
 					HasOrderInfo = snapshot.HasOrderInfo,
@@ -319,6 +322,18 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 		long ISnapshotSerializer<long, ExecutionMessage>.GetKey(ExecutionMessage message)
 		{
 			return message.TransactionId == 0 ? message.OriginalTransactionId : message.TransactionId;
+		}
+
+		ExecutionMessage ISnapshotSerializer<long, ExecutionMessage>.CreateCopy(ExecutionMessage message)
+		{
+			var copy = (ExecutionMessage)message.Clone();
+
+			if (copy.TransactionId == 0)
+				copy.TransactionId = message.OriginalTransactionId;
+
+			copy.OriginalTransactionId = 0;
+
+			return copy;
 		}
 
 		void ISnapshotSerializer<long, ExecutionMessage>.Update(ExecutionMessage message, ExecutionMessage changes)
@@ -434,11 +449,11 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (changes.TimeInForce != null)
 				message.TimeInForce = changes.TimeInForce;
 
-			if (changes.OriginalTransactionId != 0)
-				message.OriginalTransactionId = changes.OriginalTransactionId;
+			//if (changes.OriginalTransactionId != 0)
+			//	message.OriginalTransactionId = changes.OriginalTransactionId;
 
-			if (changes.TransactionId != 0)
-				message.TransactionId = changes.TransactionId;
+			//if (changes.TransactionId != 0)
+			//	message.TransactionId = changes.TransactionId;
 
 			if (changes.HasOrderInfo)
 				message.HasOrderInfo = true;

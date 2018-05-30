@@ -144,7 +144,7 @@ namespace StockSharp.Algo.Storages
 
 						if (prev == null)
 						{
-							_snapshots.Add(key, (TMessage)curr.Clone());
+							_snapshots.Add(key, _serializer.CreateCopy(curr));
 						}
 						else
 						{
