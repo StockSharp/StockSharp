@@ -912,7 +912,7 @@ M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnProcess(StockSharp.X
 T:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement/summary;Str3163
 P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.IconName/summary;DocStr9214
-P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.Type/summary;DocStr19
+P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.Type/summary;AlertType
 P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.Caption/summary;Str3165
 P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.Message/summary;DocStr13
 M:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.#ctor/summary;DocStr1

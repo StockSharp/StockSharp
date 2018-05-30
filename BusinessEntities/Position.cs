@@ -29,8 +29,8 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
-	[DescriptionLoc(LocalizedStrings.Str541Key)]
+	[DisplayNameLoc(LocalizedStrings.Str862Key)]
+	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
 	public class Position : BasePosition
 	{
 		/// <summary>

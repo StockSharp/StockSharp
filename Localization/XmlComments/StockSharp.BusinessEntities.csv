@@ -735,7 +735,7 @@ M:StockSharp.BusinessEntities.Portfolio.CopyTo(StockSharp.BusinessEntities.Portf
 M:StockSharp.BusinessEntities.Portfolio.CopyTo(StockSharp.BusinessEntities.Portfolio)/param/destination;DocStr2930
 M:StockSharp.BusinessEntities.Portfolio.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Portfolio.ToString/returns;DocStr50
-T:StockSharp.BusinessEntities.Position/summary;DocStr2295
+T:StockSharp.BusinessEntities.Position/summary;PositionDesc
 M:StockSharp.BusinessEntities.Position.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.Position.Portfolio/summary;Str270
 P:StockSharp.BusinessEntities.Position.Security/summary;Str271

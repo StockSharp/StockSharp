@@ -2867,6 +2867,7 @@ M:StockSharp.Algo.Storages.NewsList.#ctor(Ecng.Serialization.IStorage)/param/sto
 T:StockSharp.Algo.Storages.SnapshotRegistry/summary;DocStr10509
 M:StockSharp.Algo.Storages.SnapshotRegistry.#ctor(System.String)/summary;DocStr1
 M:StockSharp.Algo.Storages.SnapshotRegistry.#ctor(System.String)/param/path;DocStr9340
+M:StockSharp.Algo.Storages.SnapshotRegistry.Init/summary;DocStr9249
 M:StockSharp.Algo.Storages.SnapshotRegistry.DisposeManaged/summary;DocStr7
 M:StockSharp.Algo.Storages.SnapshotRegistry.GetSnapshotStorage(System.Type,System.Object)/summary;DocStr10211
 M:StockSharp.Algo.Storages.SnapshotRegistry.GetSnapshotStorage(System.Type,System.Object)/param/dataType;DocStr774

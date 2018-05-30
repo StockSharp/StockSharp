@@ -661,6 +661,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
+	[DisplayNameLoc(LocalizedStrings.Level1Key)]
+	[DescriptionLoc(LocalizedStrings.Level1MarketDataKey)]
 	public class Level1ChangeMessage : BaseChangeMessage<Level1Fields>
 	{
 		/// <summary>
