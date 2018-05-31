@@ -12,9 +12,6 @@
       через другое подключение.</para>
       <para>Сопоставить инструменты и подключения можно, нажав кнопку 
       <legacyBold>Инструменты и подключения</legacyBold> нна панели <legacyBold>Все инструменты</legacyBold>.</para>
-      <mediaLink>
-<image xlink:href="Designer_Security_mapping_00"/>
-</mediaLink>
 <para>В появившемся окне, нажав на кнопку <mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline>, добавится новая строчка.</para>
 <para>В столбце <legacyBold>Подключение</legacyBold> из выпадающего списка необходимо выбрать подключение. 
 В столбцах <legacyBold>Код инструмента</legacyBold> и <legacyBold>Код площадки</legacyBold> указать код инструмента и код площадки, как они указаны в 

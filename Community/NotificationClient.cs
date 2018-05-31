@@ -35,7 +35,7 @@ namespace StockSharp.Community
 		/// Initializes a new instance of the <see cref="NotificationClient"/>.
 		/// </summary>
 		public NotificationClient()
-			: this("http://stocksharp.com/services/notificationservice.svc".To<Uri>())
+			: this("https://stocksharp.com/services/notificationservice.svc".To<Uri>())
 		{
 		}
 

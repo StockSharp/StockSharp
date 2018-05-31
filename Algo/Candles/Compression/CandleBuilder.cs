@@ -17,9 +17,9 @@ namespace StockSharp.Algo.Candles.Compression
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Configuration;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
@@ -41,9 +41,16 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Initialize <see cref="CandleBuilder{TCandleMessage}"/>.
 		/// </summary>
-		protected CandleBuilder()
+		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+		protected CandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
 		{
+			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		}
+
+		/// <summary>
+		/// The exchange boards provider.
+		/// </summary>
+		protected IExchangeInfoProvider ExchangeInfoProvider { get; }
 
 		/// <summary>
 		/// To process the new data.
@@ -54,11 +61,27 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>A new candles changes.</returns>
 		public IEnumerable<CandleMessage> Process(MarketDataMessage message, CandleMessage currentCandle, ICandleBuilderValueTransform transform)
 		{
+			if (!IsTimeValid(message, transform.Time))
+				return Enumerable.Empty<CandleMessage>();
+
 			var changes = new List<CandleMessage>();
 
 			Process(message, currentCandle, transform, changes);
 
 			return changes;
+		}
+
+		private bool IsTimeValid(MarketDataMessage message, DateTimeOffset time)
+		{
+			if (!message.IsRegularTradingHours)
+				return true;
+
+			var board = ExchangeInfoProvider.GetExchangeBoard(message.SecurityId.BoardCode);
+
+			if (board == null)
+				return true;
+
+			return board.IsTradeTime(time, out _);
 		}
 
 		/// <summary>
@@ -298,7 +321,6 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class TimeFrameCandleBuilder : CandleBuilder<TimeFrameCandleMessage>
 	{
-		private readonly IExchangeInfoProvider _exchangeInfoProvider;
 		//private sealed class TimeoutInfo : Disposable
 		//{
 		//	private readonly MarketTimer _timer;
@@ -424,22 +446,10 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeFrameCandleBuilder"/>.
 		/// </summary>
-		public TimeFrameCandleBuilder()
-			: this(ConfigManager.TryGetService<IExchangeInfoProvider>() ?? new InMemoryExchangeInfoProvider())
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TimeFrameCandleBuilder"/>.
-		/// </summary>
 		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 		public TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
+			: base(exchangeInfoProvider)
 		{
-			if (exchangeInfoProvider == null)
-				throw new ArgumentNullException(nameof(exchangeInfoProvider));
-
-			_exchangeInfoProvider = exchangeInfoProvider;
-
 			GenerateEmptyCandles = true;
 		}
 
@@ -464,7 +474,7 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var timeFrame = (TimeSpan)message.Arg;
 
-			var board = _exchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode);
+			var board = ExchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode);
 			var bounds = timeFrame.GetCandleBounds(transform.Time, board, board.WorkingTime);
 
 			if (transform.Time < bounds.Min)
@@ -510,7 +520,9 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TickCandleBuilder"/>.
 		/// </summary>
-		public TickCandleBuilder()
+		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+		public TickCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
+			: base(exchangeInfoProvider)
 		{
 		}
 
@@ -580,7 +592,9 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VolumeCandleBuilder"/>.
 		/// </summary>
-		public VolumeCandleBuilder()
+		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+		public VolumeCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
+			: base(exchangeInfoProvider)
 		{
 		}
 
@@ -631,7 +645,9 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RangeCandleBuilder"/>.
 		/// </summary>
-		public RangeCandleBuilder()
+		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+		public RangeCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
+			: base(exchangeInfoProvider)
 		{
 		}
 
@@ -682,7 +698,9 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PnFCandleBuilder"/>.
 		/// </summary>
-		public PnFCandleBuilder()
+		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+		public PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
+			: base(exchangeInfoProvider)
 		{
 		}
 
@@ -837,7 +855,9 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RenkoCandleBuilder"/>.
 		/// </summary>
-		public RenkoCandleBuilder()
+		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+		public RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
+			: base(exchangeInfoProvider)
 		{
 		}
 

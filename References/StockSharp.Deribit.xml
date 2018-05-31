@@ -9,11 +9,6 @@
             The message adapter for <see cref="N:StockSharp.Deribit"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Deribit.DeribitMessageAdapter.AllTimeFrames">
-            <summary>
-            Possible time-frames.
-            </summary>
-        </member>
         <member name="P:StockSharp.Deribit.DeribitMessageAdapter.Key">
             <summary>
             Key.
@@ -51,6 +46,21 @@
         <member name="M:StockSharp.Deribit.DeribitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>
+        <member name="T:StockSharp.Deribit.DeribitOrderAdvancedTypes">
+            <summary>
+            Extended orders types which are specific to <see cref="N:StockSharp.Deribit"/>.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Deribit.DeribitOrderAdvancedTypes.ImpliedVolatility">
+            <summary>
+            Volatility (implied).
+            </summary>
+        </member>
+        <member name="F:StockSharp.Deribit.DeribitOrderAdvancedTypes.Usd">
+            <summary>
+            USD.
+            </summary>
+        </member>
         <member name="T:StockSharp.Deribit.DeribitOrderCondition">
             <summary>
             <see cref="N:StockSharp.Deribit"/> order condition.
@@ -61,14 +71,14 @@
             Initializes a new instance of the <see cref="T:StockSharp.Deribit.DeribitOrderCondition"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Deribit.DeribitOrderCondition.IsWithdraw">
+        <member name="P:StockSharp.Deribit.DeribitOrderCondition.StopPrice">
             <summary>
-            Withdraw.
+            Activation price, when reached an order will be placed.
             </summary>
         </member>
-        <member name="P:StockSharp.Deribit.DeribitOrderCondition.WithdrawInfo">
+        <member name="P:StockSharp.Deribit.DeribitOrderCondition.Advanced">
             <summary>
-            Withdraw info.
+            Extended type of order.
             </summary>
         </member>
         <member name="T:StockSharp.Deribit.DeribitTrader">

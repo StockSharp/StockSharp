@@ -460,7 +460,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.SessionStateKey,
 			Description = LocalizedStrings.CheckTradingStateKey,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 216)]
+			Order = 217)]
 		public bool CheckTradingState
 		{
 			get => _checkTradingState;
@@ -468,6 +468,27 @@ namespace StockSharp.Algo.Testing
 			{
 				_checkTradingState = value;
 				NotifyChanged(nameof(CheckTradingState));
+			}
+		}
+
+		private bool _checkMoney;
+
+		/// <summary>
+		/// Check money balance.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1543Key,
+			Description = LocalizedStrings.CheckMoneyKey,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 218)]
+		public bool CheckMoney
+		{
+			get => _checkMoney;
+			set
+			{
+				_checkMoney = value;
+				NotifyChanged(nameof(CheckMoney));
 			}
 		}
 
@@ -495,6 +516,7 @@ namespace StockSharp.Algo.Testing
 			storage.SetValue(nameof(PriceLimitOffset), PriceLimitOffset);
 			storage.SetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
 			storage.SetValue(nameof(CheckTradingState), CheckTradingState);
+			storage.SetValue(nameof(CheckMoney), CheckMoney);
 
 			if (TimeZone != null)
 				storage.SetValue(nameof(TimeZone), TimeZone);
@@ -524,6 +546,7 @@ namespace StockSharp.Algo.Testing
 			PriceLimitOffset = storage.GetValue(nameof(PriceLimitOffset), PriceLimitOffset);
 			IncreaseDepthVolume = storage.GetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
 			CheckTradingState = storage.GetValue(nameof(CheckTradingState), CheckTradingState);
+			CheckMoney = storage.GetValue(nameof(CheckMoney), CheckMoney);
 
 			if (storage.Contains(nameof(TimeZone)))
 				TimeZone = storage.GetValue<TimeZoneInfo>(nameof(TimeZone));

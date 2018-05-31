@@ -9,7 +9,7 @@
  	<para><externalLink>
 	<linkText>Инструкция использования GitHub</linkText>
 	<linkAlternateText>Инструкция использования GitHub</linkAlternateText>
-		<linkUri>http://stocksharp.com/forum/yaf_postst5473_Rukovodstvo-po-GitHub.aspx</linkUri>
+		<linkUri>https://stocksharp.com/forum/yaf_postst5473_Rukovodstvo-po-GitHub.aspx</linkUri>
 		<linkTarget>_blank</linkTarget>
 	</externalLink>
 </para>
@@ -52,7 +52,7 @@
   			Подробную информацию о стоимости продуктов StockSharp см. <externalLink>
 			<linkText>Стоимость лицензий StockSharp</linkText>
 			<linkAlternateText>Стоимость лицензий</linkAlternateText>
-			<linkUri>http://stocksharp.com/products/pricing/</linkUri>
+			<linkUri>https://stocksharp.com/products/pricing/</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>.
   			</para>
@@ -60,9 +60,9 @@
     
     <relatedTopics>
      	<externalLink>
-			<linkText>Исходный код S# на GitHub</linkText>
+			<linkText>Source code S# on GitHub</linkText>
 			<linkAlternateText>Optional alternate text</linkAlternateText>
-			<linkUri>http://stocksharp.com/news/10454-ishodnyi-kod-s-na-github</linkUri>
+			<linkUri>https://stocksharp.com/news/10454-ishodnyi-kod-s-na-github</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink>
     <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>

@@ -28,7 +28,7 @@
 			<ss:SmartComAddressComboBox x:Name="Address" />
 
 			<Label Content="SmartCOM 4:" HorizontalAlignment="Right" />
-			<CheckBox x:Name="IsSmartCom4" Margin="5" IsChecked="False" />
+			<CheckBox x:Name="IsSmartCom4" Margin="5" IsChecked="True" />
 		</StackPanel>
 		
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />

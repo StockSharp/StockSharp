@@ -98,6 +98,11 @@
             The provider of information about instruments.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.Chart.DisableIndicatorReset">
+      <summary>
+            Disable tracking indicator reset.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)">
       <summary>
             To add an area to the chart.
@@ -214,11 +219,6 @@
     <member name="P:StockSharp.Xaml.Charting.Chart.IsInteracted">
       <summary>
             The interactive mode. The default is off.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.Chart.IsInteractedwithDateRange">
-      <summary>
-            The interactive mode with dates popup. The default is off.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.CrossHair">
@@ -430,6 +430,11 @@
             Do not allow user to edit the order from chart.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Element">
+      <summary>
+            The chart element representing active orders.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartActiveOrderInfo" />.
@@ -441,7 +446,7 @@
             </summary>
       <param name="order">The order.</param>
       <param name="isError">Whether an order operation has failed.</param>
-      <param name="freeze">Do not allow user to edit the order from chart.</param>
+      <param name="isFrozen">Do not allow user to edit the order from chart.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -1733,6 +1738,11 @@
             Chart share (upload image to web) settings.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartPanel.DisableIndicatorReset">
+      <summary>
+            Disable tracking indicator reset.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.AddArea(StockSharp.Xaml.Charting.ChartArea)">
       <summary>
             To add an area to the chart.
@@ -1821,11 +1831,6 @@
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.IsInteracted">
       <summary>
             The interactive mode. The default is off.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartPanel.IsInteractedwithDateRange">
-      <summary>
-            The interactive mode with dates popup. The default is off.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.OrderCreationMode">
@@ -2181,6 +2186,34 @@
             </summary>
       <returns>Copy.</returns>
     </member>
+    <member name="T:StockSharp.Xaml.Charting.CandleSettingsWindow">
+      <summary>
+            The window for edit <see cref="T:StockSharp.Algo.Candles.CandleSeries" />.
+            </summary>
+      <summary>
+            CandleSettingsWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.CandleSettingsWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.CandleSettingsWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.CandleSettingsWindow.Series">
+      <summary>
+            Candles settings.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.CandleSettingsWindow.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.CandleSettingsWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.EquityCurveChart">
       <summary>
             The graphical component to display the equity curve.
@@ -2416,6 +2449,27 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter">
+      <summary>
+            The renderer for <see cref="T:StockSharp.Algo.Indicators.GatorOscillator" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.Histogram1">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.GatorOscillator.Histogram1" /> line color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.Histogram2">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.GatorOscillator.Histogram2" /> line color.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.Init">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.IndicatorAttribute">
       <summary>
             Attribute, applied to indicator's painter, to provide information about type of <see cref="T:StockSharp.Algo.Indicators.IIndicator" />.
@@ -2431,6 +2485,27 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.IndicatorPainters.IndicatorAttribute" />.
             </summary>
       <param name="type">Indicator type.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter">
+      <summary>
+            The renderer for <see cref="T:StockSharp.Algo.Indicators.RelativeVigorIndex" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.Average">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.RelativeVigorIndex.Average" /> line color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.Signal">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.RelativeVigorIndex.Signal" /> line color.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.Init">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter">
       <summary>
@@ -2526,17 +2601,17 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DxPlusColor">
       <summary>
-            DI+ line color.
+        <see cref="T:StockSharp.Algo.Indicators.DiPlus" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DiMinusColor">
       <summary>
-            DI- line color.
+        <see cref="T:StockSharp.Algo.Indicators.DiMinus" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.AdxColor">
       <summary>
-            ADX line color.
+        <see cref="T:StockSharp.Algo.Indicators.AverageDirectionalIndex" /> line color.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Init">
@@ -2758,6 +2833,16 @@
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter">
       <summary>
             The renderer for <see cref="T:StockSharp.Algo.Indicators.MovingAverageConvergenceDivergenceHistogram" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.MacdColor">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.MovingAverageConvergenceDivergenceSignal.SignalMa" /> line color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.SignalMaColor">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.MovingAverageConvergenceDivergenceSignal.SignalMa" /> line color.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.Init">
@@ -3176,6 +3261,11 @@
     <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.SelectedIndicatorType">
       <summary>
             The selected indicator type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.Indicator">
+      <summary>
+            Indicator.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.AutoSelectCandles">

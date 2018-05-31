@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -31,49 +32,49 @@ namespace StockSharp.Messages
 		/// Limit.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str1353Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1353Key)]
 		Limit,
 
 		/// <summary>
 		/// Market.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str241Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str241Key)]
 		Market,
 
 		/// <summary>
 		/// Conditional (stop-loss, take-profit).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str242Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str242Key)]
 		Conditional,
 
 		/// <summary>
 		/// The order for REPO.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str243Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str243Key)]
 		Repo,
 
 		/// <summary>
 		/// The order for modified REPO (REPO-M).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str244Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str244Key)]
 		ExtRepo,
 
 		/// <summary>
 		/// Order for OTC trade.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str245Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str245Key)]
 		Rps,
 
 		/// <summary>
 		/// Execution order to settlement contracts (such as options).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str246Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str246Key)]
 		Execute,
 	}
 }

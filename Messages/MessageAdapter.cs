@@ -99,17 +99,18 @@ namespace StockSharp.Messages
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		protected MessageAdapter(IdGenerator transactionIdGenerator)
 		{
-			if (transactionIdGenerator == null)
-				throw new ArgumentNullException(nameof(transactionIdGenerator));
-
 			Platform = Platforms.AnyCPU;
 
-			TransactionIdGenerator = transactionIdGenerator;
+			TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
 
 			StorageName = GetType().Namespace.Remove(nameof(StockSharp)).Remove(".");
 
-			Platform = GetType().GetAttribute<TargetPlatformAttribute>()?.Platform ?? Platforms.AnyCPU;
+			Platform = GetType().GetPlatform();
+
+			var attr = GetType().GetAttribute<MessageAdapterCategoryAttribute>();
+			if (attr != null)
+				Categories = attr.Categories;
 		}
 
 		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
@@ -159,6 +160,10 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual IEnumerable<TimeSpan> TimeFrames => Enumerable.Empty<TimeSpan>();
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool CheckTimeFrameByRequest { get; set; }
 
 		private TimeSpan _heartbeatInterval = TimeSpan.Zero;
 
@@ -222,6 +227,14 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual bool IsSupportCandlesUpdates => false;
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual MessageAdapterCategories Categories { get; }
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual string StorageName { get; }
 
 		/// <inheritdoc />
@@ -249,10 +262,7 @@ namespace StockSharp.Messages
 		public virtual Tuple<string, Type>[] SecurityExtendedFields { get; } = ArrayHelper.Empty<Tuple<string, Type>>();
 
 		/// <inheritdoc />
-		public virtual OrderCondition CreateOrderCondition()
-		{
-			return null;
-		}
+		public virtual OrderCondition CreateOrderCondition() => null;
 
 		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
@@ -265,13 +275,7 @@ namespace StockSharp.Messages
 		public IdGenerator TransactionIdGenerator
 		{
 			get => _transactionIdGenerator;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_transactionIdGenerator = value;
-			}
+			set => _transactionIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
@@ -580,6 +584,12 @@ namespace StockSharp.Messages
 			throw new NotSupportedException();
 		}
 
+		/// <inheritdoc />
+		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+		{
+			return TimeFrames;
+		}
+
 		/// <summary>
 		/// Load settings.
 		/// </summary>
@@ -590,6 +600,7 @@ namespace StockSharp.Messages
 			HeartbeatInterval = storage.GetValue<TimeSpan>(nameof(HeartbeatInterval));
 			SupportedMessages = storage.GetValue<string[]>(nameof(SupportedMessages)).Select(i => i.To<MessageTypes>()).ToArray();
 			AssociatedBoardCode = storage.GetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
+			CheckTimeFrameByRequest = storage.GetValue(nameof(CheckTimeFrameByRequest), CheckTimeFrameByRequest);
 
 			base.Load(storage);
 		}
@@ -604,6 +615,7 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
 			storage.SetValue(nameof(SupportedMessages), SupportedMessages.Select(t => t.To<string>()).ToArray());
 			storage.SetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
+			storage.SetValue(nameof(CheckTimeFrameByRequest), CheckTimeFrameByRequest);
 
 			base.Save(storage);
 		}

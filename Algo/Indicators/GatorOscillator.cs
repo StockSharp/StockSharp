@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Indicators
 		/// Top histogram.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("Histogram1")]
+		[DisplayName(LocalizedStrings.Str3564Key)]
 		[DescriptionLoc(LocalizedStrings.Str851Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public GatorHistogram Histogram1 { get; }
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Indicators
 		/// Lower histogram.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("Histogram2")]
+		[DisplayName(LocalizedStrings.Str3565Key)]
 		[DescriptionLoc(LocalizedStrings.Str852Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public GatorHistogram Histogram2 { get; }

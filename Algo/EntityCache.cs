@@ -1134,6 +1134,8 @@ namespace StockSharp.Algo
 			}
 		}
 
+		public IEnumerable<CandleSeries> AllCandleSeries => _candlesHolder.AllCandleSeries;
+
 		public void CreateCandleSeries(MarketDataMessage mdMsg, CandleSeries series)
 		{
 			if (mdMsg == null)

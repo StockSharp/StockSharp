@@ -64,42 +64,26 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public IEnumerable<IMessageAdapter> Adapters => _adapters.CachedValues;
 
-		/// <summary>
-		/// All available adapters.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual IEnumerable<KeyValuePair<string, IMessageAdapter>> PortfolioAdapters => _adapters.CachedPairs;
 
-		/// <summary>
-		/// Get adapter by portfolio name.
-		/// </summary>
-		/// <param name="portfolioName">Portfolio name.</param>
-		/// <returns>The found adapter.</returns>
+		/// <inheritdoc />
 		public virtual IMessageAdapter GetAdapter(string portfolioName)
 		{
-			lock (_adapters.SyncRoot)
-				return _adapters.TryGetValue(portfolioName);
+			return _adapters.TryGetValue(portfolioName);
 		}
 
-		/// <summary>
-		/// Make association adapter and portfolio name.
-		/// </summary>
-		/// <param name="portfolioName">Portfolio name.</param>
-		/// <param name="adapter">The adapter.</param>
+		/// <inheritdoc />
 		public virtual void SetAdapter(string portfolioName, IMessageAdapter adapter)
 		{
 			lock (_adapters.SyncRoot)
 				_adapters.TryAdd(portfolioName, adapter);
 		}
 
-		/// <summary>
-		/// Remove association between portfolio name and adapter.
-		/// </summary>
-		/// <param name="portfolioName">Portfolio name.</param>
-		/// <returns><see langword="true"/> if the association is successfully removed, otherwise, <see langword="false"/>.</returns>
+		/// <inheritdoc />
 		public virtual bool RemoveAssociation(string portfolioName)
 		{
-			lock (_adapters.SyncRoot)
-				return _adapters.Remove(portfolioName);
+			return _adapters.Remove(portfolioName);
 		}
 	}
 }

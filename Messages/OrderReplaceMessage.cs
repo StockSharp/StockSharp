@@ -59,26 +59,9 @@ namespace StockSharp.Messages
 		{
 			var clone = new OrderReplaceMessage
 			{
-				Comment = Comment,
-				Condition = Condition,
-				TillDate = TillDate,
-				OrderType = OrderType,
-				PortfolioName = PortfolioName,
-				Price = Price,
-				RepoInfo = RepoInfo,
-				RpsInfo = RpsInfo,
-				SecurityId = SecurityId,
-				Side = Side,
-				TimeInForce = TimeInForce,
-				TransactionId = TransactionId,
-				VisibleVolume = VisibleVolume,
-				Volume = Volume,
 				OldOrderId = OldOrderId,
 				OldOrderStringId = OldOrderStringId,
 				OldTransactionId = OldTransactionId,
-				UserOrderId = UserOrderId,
-				ClientCode = ClientCode,
-				BrokerCode = BrokerCode,
 			};
 
 			CopyTo(clone);

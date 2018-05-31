@@ -154,7 +154,7 @@
         </member>
         <member name="P:StockSharp.Sterling.SterlingOrderCondition.Discretion">
             <summary>
-            
+            Discretion.
             </summary>
         </member>
         <member name="P:StockSharp.Sterling.SterlingOrderCondition.ExecutionInstruction">
@@ -234,7 +234,7 @@
         </member>
         <member name="P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingCode">
             <summary>
-            Код базового актива.
+            Underlying asset.
             </summary>
         </member>
         <member name="P:StockSharp.Sterling.SterlingOrderCondition.IsCover">

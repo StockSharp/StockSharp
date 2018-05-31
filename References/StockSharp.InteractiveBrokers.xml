@@ -109,10 +109,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CreateOrderCondition">
-      <summary>
-            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
-            </summary>
-      <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportCandlesUpdates">
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SecurityLookupRequired">
       <summary>
@@ -1684,6 +1684,21 @@
             The last profitable trade.
             </summary>
     </member>
+    <member name="F:StockSharp.InteractiveBrokers.CandleDataTypes.AdjustedLast">
+      <summary>
+            The last adjusted trade.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.CandleDataTypes.RebateRate">
+      <summary>
+            Rebate rate.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.CandleDataTypes.FeeRate">
+      <summary>
+            Fee rate.
+            </summary>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.Extensions">
       <summary>
             The helper class that is used to access to specific Interactive Brokers information via <see cref="P:StockSharp.Messages.IExtendableEntity.ExtensionInfo" />.
@@ -2455,9 +2470,19 @@
             5 min time-frame.
             </summary>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Minute10">
+      <summary>
+            10 min time-frame.
+            </summary>
+    </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Minute15">
       <summary>
             15 min time-frame.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Minute20">
+      <summary>
+            20 min time-frame.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Minute30">
@@ -2465,9 +2490,29 @@
             30 min time-frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Hour">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Hour1">
       <summary>
-            Hour time frame.
+            1 hour time frame.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Hour2">
+      <summary>
+            2 hour time frame.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Hour3">
+      <summary>
+            3 hour time frame.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Hour4">
+      <summary>
+            4 hour time frame.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Hour8">
+      <summary>
+            8 hour time frame.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Day">
@@ -2478,6 +2523,11 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Week">
       <summary>
             Weekly time frame.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Month">
+      <summary>
+            Monthly time frame.
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.SoftDollarTier">

@@ -117,21 +117,13 @@ namespace StockSharp.Algo.Storages
 			ExchangeBoard.EnumerateExchangeBoards().ForEach(b => _boards[b.Code] = b);
 		}
 
-		/// <summary>
-		/// All exchanges.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<ExchangeBoard> Boards => _boards.CachedValues;
 
-		/// <summary>
-		/// All boards.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<Exchange> Exchanges => _exchanges.CachedValues;
 
-		/// <summary>
-		/// To get a board by the code.
-		/// </summary>
-		/// <param name="code">The board code <see cref="ExchangeBoard.Code"/>.</param>
-		/// <returns>Trading board. If the board with the specified code does not exist, then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		public ExchangeBoard GetExchangeBoard(string code)
 		{
 			if (code.IsEmpty())
@@ -140,11 +132,7 @@ namespace StockSharp.Algo.Storages
 			return _boards.TryGetValue(code);
 		}
 
-		/// <summary>
-		/// To get an exchange by the code.
-		/// </summary>
-		/// <param name="code">The exchange code <see cref="Exchange.Name"/>.</param>
-		/// <returns>Exchange. If the exchange with the specified code does not exist, then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		public Exchange GetExchange(string code)
 		{
 			if (code.IsEmpty())
@@ -156,10 +144,7 @@ namespace StockSharp.Algo.Storages
 			return _exchanges.TryGetValue(code);
 		}
 
-		/// <summary>
-		/// To save the board.
-		/// </summary>
-		/// <param name="board">Trading board.</param>
+		/// <inheritdoc />
 		public virtual void Save(ExchangeBoard board)
 		{
 			if (board == null)
@@ -178,10 +163,7 @@ namespace StockSharp.Algo.Storages
 			BoardAdded?.Invoke(board);
 		}
 
-		/// <summary>
-		/// To save the exchange.
-		/// </summary>
-		/// <param name="exchange">Exchange.</param>
+		/// <inheritdoc />
 		public virtual void Save(Exchange exchange)
 		{
 			if (exchange == null)
@@ -200,30 +182,19 @@ namespace StockSharp.Algo.Storages
 			ExchangeAdded?.Invoke(exchange);
 		}
 
-		/// <summary>
-		/// Notification about adding a new board.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<ExchangeBoard> BoardAdded;
 
-		/// <summary>
-		/// Notification about adding a new exchange.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<Exchange> ExchangeAdded;
 
-		/// <summary>
-		/// Notification about removing the existing board.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<ExchangeBoard> BoardRemoved;
 
-		/// <summary>
-		/// Notification about removing the existing exchange.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<Exchange> ExchangeRemoved;
 
-		/// <summary>
-		/// Delete exchange.
-		/// </summary>
-		/// <param name="exchange">Exchange.</param>
+		/// <inheritdoc />
 		public virtual void Delete(Exchange exchange)
 		{
 			if (exchange == null)
@@ -233,10 +204,7 @@ namespace StockSharp.Algo.Storages
 			ExchangeRemoved?.Invoke(exchange);
 		}
 
-		/// <summary>
-		/// Delete exchange board.
-		/// </summary>
-		/// <param name="board">Exchange board.</param>
+		/// <inheritdoc />
 		public virtual void Delete(ExchangeBoard board)
 		{
 			if (board == null)
@@ -260,10 +228,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		public StorageExchangeInfoProvider(IEntityRegistry entityRegistry)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			_entityRegistry = entityRegistry;
+			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
 
 			var boardCodes = new HashSet<string>();
 
@@ -287,10 +252,7 @@ namespace StockSharp.Algo.Storages
 			_entityRegistry.ExchangeBoards.ForEach(b => base.Save(b));
 		}
 
-		/// <summary>
-		/// To save the board.
-		/// </summary>
-		/// <param name="board">Trading board.</param>
+		/// <inheritdoc />
 		public override void Save(ExchangeBoard board)
 		{
 			if (board == null)
@@ -301,10 +263,7 @@ namespace StockSharp.Algo.Storages
 			base.Save(board);
 		}
 
-		/// <summary>
-		/// To save the exchange.
-		/// </summary>
-		/// <param name="exchange">Exchange.</param>
+		/// <inheritdoc />
 		public override void Save(Exchange exchange)
 		{
 			if (exchange == null)

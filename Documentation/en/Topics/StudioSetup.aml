@@ -8,12 +8,12 @@
 				<para>
 					<ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 						<ddue:linkText>Скачать архив</ddue:linkText>
-						<ddue:linkUri>http://stocksharp.com/products/download/</ddue:linkUri>
+						<ddue:linkUri>https://stocksharp.com/products/download/</ddue:linkUri>
 					</ddue:externalLink> с системой автообновления с 
 					
 					<ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 						<ddue:linkText>сайта S#</ddue:linkText>
-						<ddue:linkUri>http://stocksharp.com/</ddue:linkUri>
+						<ddue:linkUri>https://stocksharp.com/</ddue:linkUri>
 					</ddue:externalLink>:
 				</para>
 				<mediaLink><image placement="center" xlink:href="studio_setup_1" /></mediaLink>	

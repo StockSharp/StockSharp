@@ -42,6 +42,14 @@ namespace StockSharp.Algo
 			}
 		}
 
+		class RestoringSubscriptionMessage : Message
+		{
+			public RestoringSubscriptionMessage()
+				: base(ExtendedMessageTypes.RestoringSubscription)
+			{
+			}
+		}
+
 		private const ConnectionStates _none = (ConnectionStates)(-1);
 		private const ConnectionStates _reConnecting = (ConnectionStates)10;
 
@@ -121,7 +129,9 @@ namespace StockSharp.Algo
 
 					if (isRestored)
 					{
-						if (!SuppressReconnectingErrors)
+						if (SuppressReconnectingErrors)
+							RaiseNewOutMessage(new RestoringSubscriptionMessage { Adapter = message.Adapter });
+						else
 							RaiseNewOutMessage(new RestoredConnectMessage { Adapter = message.Adapter });
 					}
 					else
@@ -171,6 +181,8 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
+			var isStartTimer = false;
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -207,8 +219,8 @@ namespace StockSharp.Algo
 							_connectionTimeOut = _reConnectionSettings.TimeOutInterval;
 							_connectingAttemptCount = _reConnectionSettings.AttemptCount;
 						}
-					
-						StartTimer();
+
+						isStartTimer = true;
 					}
 
 					break;
@@ -235,6 +247,12 @@ namespace StockSharp.Algo
 			}
 
 			base.SendInMessage(message);
+
+			lock (_timeSync)
+			{
+				if (isStartTimer && (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected))
+					StartTimer();
+			}
 
 			if (message != _timeMessage)
 				return;

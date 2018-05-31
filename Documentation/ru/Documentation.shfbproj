@@ -159,8 +159,8 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.BarChart.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.BarChart.xml" />
     </DocumentationSources>
-    <CopyrightHref>http://stocksharp.ru</CopyrightHref>
-    <CopyrightText>&amp;#169%3b 2017 - StockSharp LLC</CopyrightText>
+    <CopyrightHref>https://stocksharp.ru</CopyrightHref>
+    <CopyrightText>&amp;#169%3b 2018 - StockSharp LLC</CopyrightText>
     <FeedbackEMailAddress>info%40stocksharp.ru</FeedbackEMailAddress>
     <FeedbackEMailLinkText>отзыв</FeedbackEMailLinkText>
     <ApiFilter>
@@ -235,6 +235,9 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\HydraUpdate.aml" />
+    <None Include="Topics\Hydra_Creation_tool.aml" />
+    <None Include="Topics\HydraSettingsSecurityEditor.aml" />
     <None Include="Topics\Terminal_Quick_start.aml" />
     <None Include="Topics\Terminal_Quick_start..aml" />
     <None Include="Topics\Terminal_Connectors_settings.aml" />
@@ -3320,6 +3323,94 @@
     <Image Include="Art\Terminal_Quick_start_00.png">
       <ImageId>Terminal_Quick_start_00</ImageId>
       <AlternateText>Terminal Quick start 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Quick_start_06.png">
+      <ImageId>Terminal_Quick_start_06</ImageId>
+      <AlternateText>Terminal Quick start 06</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Quick_start_05.png">
+      <ImageId>Terminal_Quick_start_05</ImageId>
+      <AlternateText>Terminal Quick start 05</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Quick_start_04.png">
+      <ImageId>Terminal_Quick_start_04</ImageId>
+      <AlternateText>Terminal Quick start 04</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Quick_start_03.png">
+      <ImageId>Terminal_Quick_start_03</ImageId>
+      <AlternateText>Terminal Quick start 03</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Quick_start_02.png">
+      <ImageId>Terminal_Quick_start_02</ImageId>
+      <AlternateText>Terminal Quick start 02</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Quick_start_01.png">
+      <ImageId>Terminal_Quick_start_01</ImageId>
+      <AlternateText>Terminal Quick start 01</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Quick_start_011.png">
+      <ImageId>Terminal_Quick_start_011</ImageId>
+      <AlternateText>Terminal Quick start 011</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_securitiesPanel_00.png">
+      <ImageId>hydra_securitiesPanel_00</ImageId>
+      <AlternateText>hydra securities Panel 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_OrderPanel_02.png">
+      <ImageId>Terminal_OrderPanel_02</ImageId>
+      <AlternateText>Terminal Order Panel 02</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_OrderPanel_01.png">
+      <ImageId>Terminal_OrderPanel_01</ImageId>
+      <AlternateText>Terminal Order Panel 01</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Orders_conditional_panel_03.png">
+      <ImageId>Terminal_Orders_conditional_panel_03</ImageId>
+      <AlternateText>Terminal Orders conditional panel 03</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Orders_conditional_panel_02.png">
+      <ImageId>Terminal_Orders_conditional_panel_02</ImageId>
+      <AlternateText>Terminal Orders conditional panel 02</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Orders_conditional_panel_01.png">
+      <ImageId>Terminal_Orders_conditional_panel_01</ImageId>
+      <AlternateText>Terminal Orders conditional panel 01</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_about.png">
+      <ImageId>Terminal_about</ImageId>
+      <AlternateText>Terminal about</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_about.png">
+      <ImageId>hydra_about</ImageId>
+      <AlternateText>hydra about</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_update.png">
+      <ImageId>hydra_update</ImageId>
+      <AlternateText>hydra update</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Panel_graphics_01.png">
+      <ImageId>Terminal_Panel_graphics_01</ImageId>
+      <AlternateText>Terminal Panel graphics 01</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_Quick_start_01.png">
+      <ImageId>hydra_Quick_start_01</ImageId>
+      <AlternateText>hydra Quick start 01</AlternateText>
+    </Image>
+    <Image Include="Art\PlazaConnection.png">
+      <ImageId>PlazaConnection</ImageId>
+      <AlternateText>Plaza Connection</AlternateText>
+    </Image>
+    <Image Include="Art\iQFeedIQConnectLogin.png">
+      <ImageId>iQFeedIQConnectLogin</ImageId>
+      <AlternateText>iQFeedIQConnect Login</AlternateText>
+    </Image>
+    <Image Include="Art\iQFeedIQLinkLauncher.png">
+      <ImageId>iQFeedIQLinkLauncher</ImageId>
+      <AlternateText>iQFeedIQLink Launcher</AlternateText>
+    </Image>
+    <Image Include="Topics\hydra_securitiesPanel_00.png">
+      <ImageId>hydra_securitiesPanel_00</ImageId>
+      <AlternateText>hydra securities Panel 00</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

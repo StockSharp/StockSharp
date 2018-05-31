@@ -121,6 +121,8 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(1024)
 			};
+			yield return new ColumnDescription(nameof(ExecutionMessage.IsMargin)) { DbType = typeof(bool?) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.IsMarketMaker)) { DbType = typeof(bool?) };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(ExecutionMessage value)
@@ -168,6 +170,8 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(ExecutionMessage.OpenInterest), value.OpenInterest },
 				{ nameof(ExecutionMessage.Currency), (int?)value.Currency },
 				{ nameof(ExecutionMessage.Error), value.Error?.Message },
+				{ nameof(ExecutionMessage.IsMargin), value.IsMargin },
+				{ nameof(ExecutionMessage.IsMarketMaker), value.IsMarketMaker },
 			};
 			return result;
 		}

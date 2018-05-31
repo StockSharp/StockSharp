@@ -177,6 +177,13 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public bool CheckTimeFrameByRequest
+		{
+			get => InnerAdapter.CheckTimeFrameByRequest;
+			set => InnerAdapter.CheckTimeFrameByRequest = value;
+		}
+
+		/// <inheritdoc />
 		public ReConnectionSettings ReConnectionSettings => InnerAdapter.ReConnectionSettings;
 
 		/// <inheritdoc />
@@ -214,7 +221,8 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual bool OrderStatusRequired => InnerAdapter.OrderStatusRequired;
 
-		IEnumerable<TimeSpan> IMessageAdapter.TimeFrames => InnerAdapter.TimeFrames;
+		/// <inheritdoc />
+		public virtual IEnumerable<TimeSpan> TimeFrames => InnerAdapter.TimeFrames;
 
 		/// <inheritdoc />
 		public string StorageName => InnerAdapter.StorageName;
@@ -238,6 +246,12 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportSubscriptionByPortfolio => InnerAdapter.IsSupportSubscriptionByPortfolio;
 
 		/// <inheritdoc />
+		public virtual bool IsSupportCandlesUpdates => InnerAdapter.IsSupportCandlesUpdates;
+
+		/// <inheritdoc />
+		public virtual MessageAdapterCategories Categories => InnerAdapter.Categories;
+
+		/// <inheritdoc />
 		public virtual OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
 
 		/// <inheritdoc />
@@ -258,6 +272,12 @@ namespace StockSharp.Messages
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		{
 			return InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
+		}
+
+		/// <inheritdoc />
+		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+		{
+			return InnerAdapter.GetTimeFrames(securityId);
 		}
 
 		/// <summary>

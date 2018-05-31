@@ -44,7 +44,8 @@
 					<xaml:ConnectorSupportedMessagesPanel x:Name="MarketDataSupportedMessages" Grid.Row="1" />
 				</Grid>
 			</dx:DropDownButton>
-			<TextBlock VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.XamlStr360}" />:</TextBlock>
+			<Button x:Name="SwitchMarketData" Click="SwitchMarketData_OnClick">MD (FIX/FAST)</Button>
+			<TextBlock Margin="5,0,0,0" VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.XamlStr360}" />:</TextBlock>
 			<PasswordBox x:Name="NewPassword" Width="150" />
 		</StackPanel>
 

@@ -17,7 +17,7 @@
 					вкладки <legacyBold>Общее</legacyBold>, нужно выбрать <legacyBold>Добавить => Источники</legacyBold>.
 				</para>
 					<mediaLink>
-						  <image placement="left" xlink:href="hydra_source_add" />
+						  <image placement="center" xlink:href="hydra_source_add" />
 					</mediaLink>
 				<para>
 					В окне отметьте нужные источники. Можно воспользоваться фильтрами 
@@ -25,6 +25,9 @@
 					По завершении выбора нажмите кнопку <legacyBold>OK</legacyBold>. После 
 					этого источники будут добавлены на левую панель главного окна приложения.
 				</para>
+						<mediaLink>
+<image placement="center" xlink:href="hydra_Quick_start_01"/>
+</mediaLink>
 				</content>
 			</step>
 			<step>
@@ -52,12 +55,39 @@
 			</step>
 			<step>
 				<content>
-					<para>Далее необходимо добавить инструменты. Для этого выполняем двойной щелчок по значку источника. Откроется окно, показанное на следующем рисунке.</para>
-					<mediaLink>
-						  <image placement="left" xlink:href="hydra_source_first" />
-					</mediaLink>					  
-					<para>Затем нажимаем на кнопку <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline>. Подробно добавление инструментов описано в разделе
-					<link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9">Список инструментов</link>.</para>
+					<para>
+						В центральной части будут открыты панели добавленных источников, где отображается список инструментов. Если панель закрыта, то для открытия необходимо
+						дважды кликнуть на логотип источника в списке в левой части программы. Скачивание данных будет идти только по добавленным инструментам.
+					</para>
+					<para>Далее необходимо добавить инструменты. Для этого выполняем щелчок по кнопке <legacyBold>Добавить</legacyBold> <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline>. Откроется окно, показанное на следующем рисунке.</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_securities" />
+      </mediaLink>
+      <para>Первоначально база данных инструментов в <token>hydra</token> пуста, есть только вспомогательный инструмент <legacyBold>ALL@ALL</legacyBold>. При выборе данного инструмента будут скачиваться данные по всем доступным для данного источника инструментам.
+      Поэтому, если необходимо скачивать данные для каких-то конкретных инструментов, то их надо найти (поиск идет по базе данных инструментов, а также по доступным инструментам, которые предоставляет конкретный источник) и добавить в источник.</para>
+	  
+	  <para>Для скачивания инструментов необходимо нажать соответствующую кнопку <legacyBold>Скачать инструмент</legacyBold>.</para>
+	  
+      <para>После того как инструменты будут получены окно примет следующий вид.</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_security_full_list" />
+      </mediaLink>
+      <para>В котором будут видны все доступные для добавления инструменты.</para>
+				</content>
+			</step>
+						<step>
+				<content>
+				      <para>
+			У каждого инструмента надо выбрать необходимый для скачивания тип маркет-данных. 
+			Если не выбран ни один тип маркет-данных, то в строке с инструментом (слева) будет значок с восклицательным знаком:
+	  </para>
+	  <para>
+			Если не установлены все необходимые параметры инструмента, то в левой колонке строки с инструментом появится значок <mediaLinkInline><image xlink:href="hydra_zero" /></mediaLinkInline>.
+	  </para>
+	  
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_security_select" />
+      </mediaLink>
 				</content>
 			</step>
 			<step>
@@ -66,7 +96,7 @@
 					С выбранным инструментом можно выполнить следующие операции:</para>
 					<list class="bullet">
   						<listItem>
-  							<para>Отредактировать при помощи кнопки <mediaLinkInline><image xlink:href="hydra_edit"/></mediaLinkInline>.</para>
+  							<para>Отредактировать при помощи кнопки <mediaLinkInline><image xlink:href="hydra_edit"/></mediaLinkInline>, более подробно можно посмотреть в пункте <link xlink:href="4323f740-7b37-47ca-bab1-d540d9c0c4f0" />.</para>
   						</listItem>
   						<listItem>
   							<para>Удалить при помощи кнопки <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline>.</para>
@@ -75,6 +105,10 @@
   							<para>Настроить объем получаемой информации при помощи кнопок: <legacyBold>Сделки</legacyBold>, <legacyBold>Стаканы</legacyBold>, 
   							<legacyBold>Свечи</legacyBold>, <legacyBold>Лог заявок</legacyBold>, <legacyBold>Level 1</legacyBold>, <legacyBold>Свои транзакции</legacyBold>.</para>
   						</listItem>
+  						<listItem>
+       		<para>При нажатии на кнопку <legacyBold>All@All</legacyBold> будут удалены все добавленные в источник инструменты, и вместо них добавлен один вспомогательный инструмент All@All, 
+      		при котором будут скачиваться маркет-данные по всем доступным для источника инструментам. Например для <link xlink:href="54a1e95e-ea39-4322-9613-e74859a3a596">Quik</link> 
+      		это будут все инструменты, находящиеся в таблице "Инструменты".</para>  						</listItem>
 					</list>
 					<alert class="note">
   						<para>Обратите внимание. Для получения информации по стаканам, логу заявок, level 1, своим транзакциям необходимо подключение к коннектору в реальном времени.</para>
@@ -89,7 +123,7 @@
 						Кроме того логи сохраняются в файлах в локальной директории.
 					</para>
 					<mediaLink>
-						  <image placement="left" xlink:href="hydra_main_start" />
+						  <image placement="center" xlink:href="hydra_main_start" />
 					</mediaLink>					  
 			    </content>
 			</step>			  

@@ -2024,7 +2024,7 @@ namespace StockSharp.Algo.Testing
 
 			var state = _secStates.TryGetValue(execMsg.SecurityId);
 
-			var secState = (SecurityStates?)state.TryGetValue(Level1Fields.State);
+			var secState = (SecurityStates?)state?.TryGetValue(Level1Fields.State);
 
 			if (secState == SecurityStates.Stoped)
 				return LocalizedStrings.SecurityStopped.Put(execMsg.SecurityId);
@@ -2058,7 +2058,7 @@ namespace StockSharp.Algo.Testing
 
 			var info = GetPortfolioInfo(execMsg.PortfolioName);
 
-			return info.CheckRegistration(execMsg/*, result*/);
+			return Settings.CheckMoney ? info.CheckRegistration(execMsg/*, result*/) : null;
 		}
 
 		private void RecalcPnL(DateTimeOffset time, ICollection<Message> messages)

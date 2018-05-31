@@ -24,6 +24,11 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Okex.OkexMessageAdapter.AdminPassword">
+            <summary>
+            Administrative password.
+            </summary>
+        </member>
         <member name="M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.

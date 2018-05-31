@@ -1,6 +1,7 @@
 namespace StockSharp.Algo
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -15,113 +16,127 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Market-data downloading.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.EditMarketDataKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EditMarketDataKey)]
 		[EnumMember]
 		Save = 1,
 
 		/// <summary>
-		/// Market-data uploading.
+		/// Market-data downloading.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.LoadMarketDataKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadMarketDataKey)]
 		[EnumMember]
 		Load = Save << 1,
 
 		/// <summary>
 		/// Data deletion.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.DeleteMarketDataKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DeleteMarketDataKey)]
 		[EnumMember]
 		Delete = Load << 1,
 
 		/// <summary>
 		/// Security lookup.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.LoadSecuritiesKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadSecuritiesKey)]
 		[EnumMember]
 		SecurityLookup = Delete << 1,
 
 		/// <summary>
 		/// Exchange lookup.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.LoadExchangesKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadExchangesKey)]
 		[EnumMember]
 		ExchangeLookup = SecurityLookup << 1,
 
 		/// <summary>
 		/// Exchange board lookup.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.LoadBoardsKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadBoardsKey)]
 		[EnumMember]
 		ExchangeBoardLookup = ExchangeLookup << 1,
 
 		/// <summary>
 		/// Edit securities.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.EditSecuritiesKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EditSecuritiesKey)]
 		[EnumMember]
 		EditSecurities = ExchangeBoardLookup << 1,
 
 		/// <summary>
 		/// Edit exchanges.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.EditExchangesKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EditExchangesKey)]
 		[EnumMember]
 		EditExchanges = EditSecurities << 1,
 
 		/// <summary>
 		/// Edit boards.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.EditBoardsKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EditBoardsKey)]
 		[EnumMember]
 		EditBoards = EditExchanges << 1,
 
 		/// <summary>
 		/// Delete securities.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.DeleteSecuritiesKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DeleteSecuritiesKey)]
 		[EnumMember]
 		DeleteSecurities = EditBoards << 1,
 
 		/// <summary>
 		/// Delete exchanges.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.DeleteExchangesKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DeleteExchangesKey)]
 		[EnumMember]
 		DeleteExchanges = DeleteSecurities << 1,
 
 		/// <summary>
 		/// Delete boards.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.DeleteBoardsKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DeleteBoardsKey)]
 		[EnumMember]
 		DeleteBoards = DeleteExchanges << 1,
 
 		/// <summary>
 		/// Get users.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.GetUsersKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.GetUsersKey)]
 		[EnumMember]
 		GetUsers = DeleteBoards << 1,
 
 		/// <summary>
 		/// Edit users.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.EditUsersKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EditUsersKey)]
 		[EnumMember]
 		EditUsers = GetUsers << 1,
 
 		/// <summary>
 		/// Delete users.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.DeleteUsersKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DeleteUsersKey)]
 		[EnumMember]
 		DeleteUsers = EditUsers << 1,
 
 		/// <summary>
 		/// Restart.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.ManageServerKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ManageServerKey)]
 		[EnumMember]
 		ServerManage = DeleteUsers << 1,
+
+		/// <summary>
+		/// Trading.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str3599Key)]
+		[EnumMember]
+		Trading = ServerManage << 1,
+
+		/// <summary>
+		/// Withdraw.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.WithdrawKey)]
+		[EnumMember]
+		Withdraw = Trading << 1,
 	}
 }

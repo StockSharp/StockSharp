@@ -70,6 +70,11 @@ namespace StockSharp.Messages
 		IEnumerable<TimeSpan> TimeFrames { get; }
 
 		/// <summary>
+		/// Check possible time-frame by request.
+		/// </summary>
+		bool CheckTimeFrameByRequest { get; set; }
+
+		/// <summary>
 		/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
 		/// </summary>
 		ReConnectionSettings ReConnectionSettings { get; }
@@ -130,6 +135,16 @@ namespace StockSharp.Messages
 		bool IsSupportSubscriptionByPortfolio { get; }
 
 		/// <summary>
+		/// Support candles subscription and live updates.
+		/// </summary>
+		bool IsSupportCandlesUpdates { get; }
+
+		/// <summary>
+		/// Message adapter categories.
+		/// </summary>
+		MessageAdapterCategories Categories { get; }
+
+		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
 		/// </summary>
 		OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; }
@@ -162,5 +177,12 @@ namespace StockSharp.Messages
 		/// <param name="securityId">Security ID.</param>
 		/// <returns>Order log to market depth builder.</returns>
 		IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId);
+
+		/// <summary>
+		/// Get possible time-frames for the specified instrument.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Possible time-frames.</returns>
+		IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId);
 	}
 }

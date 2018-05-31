@@ -54,7 +54,8 @@ namespace StockSharp.Algo.Indicators
 			var signalValue = Macd.IsFormed ? SignalMa.Process(macdValue) : new DecimalIndicatorValue(this, 0);
 
 			var value = new ComplexIndicatorValue(this);
-			value.InnerValues.Add(Macd, input.SetValue(this, macdValue.GetValue<decimal>() - signalValue.GetValue<decimal>()));
+			//value.InnerValues.Add(Macd, input.SetValue(this, macdValue.GetValue<decimal>() - signalValue.GetValue<decimal>()));
+			value.InnerValues.Add(Macd, macdValue);
 			value.InnerValues.Add(SignalMa, signalValue);
 			return value;
 		}

@@ -22,13 +22,11 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.Commissions;
-	using StockSharp.Algo.Latency;
-	using StockSharp.Algo.PnL;
+	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Risk;
-	using StockSharp.Algo.Slippage;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -38,7 +36,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The class to create connections to trading systems.
 	/// </summary>
-	public partial class Connector : BaseLogReceiver, IConnector
+	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager
 	{
 		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new MemoryStatisticsValue<Trade>(LocalizedStrings.Ticks);
 		private static readonly MemoryStatisticsValue<Connector> _connectorStat = new MemoryStatisticsValue<Connector>(LocalizedStrings.Str1093);
@@ -81,6 +79,7 @@ namespace StockSharp.Algo
 
 		private IEntityRegistry _entityRegistry;
 		private IStorageRegistry _storageRegistry;
+		private SnapshotRegistry _snapshotRegistry;
 
 		private bool _isDisposing;
 
@@ -97,14 +96,16 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
 		/// <param name="initManagers">Initialize managers.</param>
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
 		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
-		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, bool initManagers = true,
-			bool supportOffline = false, bool supportSubscriptionTracking = false)
-			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking)
+		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
+		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, bool initManagers = true,
+			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnReconnect = true)
+			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking, isRestoreSubscriptionOnReconnect)
 		{
-			InitializeStorage(entityRegistry, storageRegistry);
+			InitializeStorage(entityRegistry, storageRegistry, snapshotRegistry);
 		}
 
 		/// <summary>
@@ -115,8 +116,9 @@ namespace StockSharp.Algo
 		/// <param name="initManagers">Initialize managers.</param>
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
 		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
+		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
 		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true,
-			bool supportOffline = false, bool supportSubscriptionTracking = false)
+			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnReconnect = true)
 		{
 			_entityCache.ExchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
@@ -130,15 +132,11 @@ namespace StockSharp.Algo
 
 			CreateDepthFromLevel1 = true;
 			SupportFilteredMarketDepth = true;
-			SupportCandleBuilder = true;
 
 			if (initManagers)
 			{
-				LatencyManager = new LatencyManager();
-				CommissionManager = new CommissionManager();
 				//PnLManager = new PnLManager();
 				RiskManager = new RiskManager();
-				SlippageManager = new SlippageManager();
 			}
 
 			_connectorStat.Add(this);
@@ -149,11 +147,10 @@ namespace StockSharp.Algo
 				OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
 			}
 
+			IsRestoreSubscriptionOnReconnect = isRestoreSubscriptionOnReconnect;
+
 			if (initAdapter)
-			{
 				InitAdapter();
-				IsRestoreSubscriptionOnReconnect = true;
-			}
 		}
 
 		/// <summary>
@@ -161,25 +158,21 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
-		public void InitializeStorage(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry)
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
+		public void InitializeStorage(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			if (storageRegistry == null)
-				throw new ArgumentNullException(nameof(storageRegistry));
-
-			_entityRegistry = entityRegistry;
-			_storageRegistry = storageRegistry;
-
-			InitAdapter();
+			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
+			_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
+			_snapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
 
 			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
+
+			InitAdapter();
 		}
 
 		private void InitAdapter()
 		{
-			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
+			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new InMemoryMessageAdapterProvider(), _entityCache.ExchangeInfoProvider);
 		}
 
 		/// <summary>
@@ -237,6 +230,23 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException(nameof(value));
 
 				_securityIdGenerator = value;
+			}
+		}
+
+		private bool _overrideSecurityData;
+
+		/// <summary>
+		/// Override previous security data by new values.
+		/// </summary>
+		public bool OverrideSecurityData
+		{
+			get => _overrideSecurityData;
+			set
+			{
+				_overrideSecurityData = value;
+
+				if (StorageAdapter != null)
+					StorageAdapter.OverrideSecurityData = value;
 			}
 		}
 
@@ -352,29 +362,9 @@ namespace StockSharp.Algo
 		public IEnumerable<News> News => _entityCache.News;
 
 		/// <summary>
-		/// Orders registration delay calculation manager.
-		/// </summary>
-		public ILatencyManager LatencyManager { get; set; }
-
-		/// <summary>
-		/// The profit-loss manager.
-		/// </summary>
-		public IPnLManager PnLManager { get; set; }
-
-		/// <summary>
 		/// Risk control manager.
 		/// </summary>
 		public IRiskManager RiskManager { get; set; }
-
-		/// <summary>
-		/// The commission calculating manager.
-		/// </summary>
-		public ICommissionManager CommissionManager { get; set; }
-
-		/// <summary>
-		/// Slippage manager.
-		/// </summary>
-		public ISlippageManager SlippageManager { get; set; }
 
 		/// <summary>
 		/// Connection state.
@@ -469,13 +459,21 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool TimeChange { get; set; } = true;
 
+		private bool _isRestoreSubscriptionOnReconnect;
+
 		/// <summary>
 		/// Restore subscription on reconnect.
 		/// </summary>
 		public bool IsRestoreSubscriptionOnReconnect
 		{
-			get => Adapter.IsRestoreSubscriptionOnReconnect;
-			set => Adapter.IsRestoreSubscriptionOnReconnect = value;
+			get => _isRestoreSubscriptionOnReconnect;
+			set
+			{
+				_isRestoreSubscriptionOnReconnect = value;
+
+				if (Adapter != null)
+					Adapter.IsRestoreSubscriptionOnReconnect = value;
+			}
 		}
 
 		/// <summary>
@@ -560,11 +558,8 @@ namespace StockSharp.Algo
 			SendInMessage(new DisconnectMessage());
 		}
 
-		/// <summary>
-		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="IConnector.LookupSecuritiesResult"/>.
-		/// </summary>
-		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
-		public void LookupSecurities(Security criteria)
+		/// <inheritdoc />
+		public void LookupSecurities(Security criteria, IMessageAdapter adapter = null)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -585,14 +580,12 @@ namespace StockSharp.Algo
 
 			var message = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode, criteria.Type));
 			message.TransactionId = TransactionIdGenerator.GetNextId();
+			message.Adapter = adapter;
 
 			LookupSecurities(message);
 		}
 
-		/// <summary>
-		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="IConnector.LookupSecuritiesResult"/>.
-		/// </summary>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <inheritdoc />
 		public virtual void LookupSecurities(SecurityLookupMessage criteria)
 		{
 			if (criteria == null)
@@ -627,11 +620,27 @@ namespace StockSharp.Algo
 			return security == null;
 		}
 
-		/// <summary>
-		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="IConnector.LookupPortfoliosResult"/>.
-		/// </summary>
-		/// <param name="criteria">The portfolio which fields will be used as a filter.</param>
-		public virtual void LookupPortfolios(Portfolio criteria)
+		/// <inheritdoc />
+		public void LookupOrders(Order criteria, IMessageAdapter adapter = null)
+		{
+			var transactionId = TransactionIdGenerator.GetNextId();
+
+			LookupOrders(new OrderStatusMessage
+			{
+				TransactionId = transactionId,
+				Adapter = adapter,
+			});
+		}
+
+		/// <inheritdoc />
+		public virtual void LookupOrders(OrderStatusMessage criteria)
+		{
+			_entityCache.AddOrderStatusTransactionId(criteria.TransactionId);
+			SendInMessage(criteria);
+		}
+
+		/// <inheritdoc />
+		public void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -642,11 +651,21 @@ namespace StockSharp.Algo
 				BoardCode = criteria.Board == null ? null : criteria.Board.Code,
 				Currency = criteria.Currency,
 				PortfolioName = criteria.Name,
+				Adapter = adapter,
 			};
 
-			_portfolioLookups.Add(msg.TransactionId, msg);
+			LookupPortfolios(msg);
+		}
 
-			SendInMessage(msg);
+		/// <inheritdoc />
+		public virtual void LookupPortfolios(PortfolioLookupMessage criteria)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			_portfolioLookups.Add(criteria.TransactionId, criteria);
+
+			SendInMessage(criteria);
 		}
 
 		/// <summary>
@@ -1438,29 +1457,17 @@ namespace StockSharp.Algo
 			UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), true);
 			UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), true);
 			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
-
-			if (storage.ContainsKey(nameof(LatencyManager)))
-				LatencyManager = storage.GetValue<SettingsStorage>(nameof(LatencyManager)).LoadEntire<ILatencyManager>();
-
-			if (storage.ContainsKey(nameof(CommissionManager)))
-				CommissionManager = storage.GetValue<SettingsStorage>(nameof(CommissionManager)).LoadEntire<ICommissionManager>();
-
-			if (storage.ContainsKey(nameof(PnLManager)))
-				PnLManager = storage.GetValue<SettingsStorage>(nameof(PnLManager)).LoadEntire<IPnLManager>();
-
-			if (storage.ContainsKey(nameof(SlippageManager)))
-				SlippageManager = storage.GetValue<SettingsStorage>(nameof(SlippageManager)).LoadEntire<ISlippageManager>();
+			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 
 			if (storage.ContainsKey(nameof(RiskManager)))
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
 
 			Adapter.Load(storage.GetValue<SettingsStorage>(nameof(Adapter)));
+			IsRestoreSubscriptionOnReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
 
 			CreateDepthFromOrdersLog = storage.GetValue<bool>(nameof(CreateDepthFromOrdersLog));
 			CreateTradesFromOrdersLog = storage.GetValue<bool>(nameof(CreateTradesFromOrdersLog));
 			CreateDepthFromLevel1 = storage.GetValue(nameof(CreateDepthFromLevel1), CreateDepthFromLevel1);
-
-			IsRestoreSubscriptionOnReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
 
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
 			CreateAssociatedSecurity = storage.GetValue(nameof(CreateAssociatedSecurity), CreateAssociatedSecurity);
@@ -1486,23 +1493,13 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
 			storage.SetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
-
-			if (LatencyManager != null)
-				storage.SetValue(nameof(LatencyManager), LatencyManager.SaveEntire(false));
-
-			if (CommissionManager != null)
-				storage.SetValue(nameof(CommissionManager), CommissionManager.SaveEntire(false));
-
-			if (PnLManager != null)
-				storage.SetValue(nameof(PnLManager), PnLManager.SaveEntire(false));
-
-			if (SlippageManager != null)
-				storage.SetValue(nameof(SlippageManager), SlippageManager.SaveEntire(false));
+			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 
 			if (RiskManager != null)
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
 
 			storage.SetValue(nameof(Adapter), Adapter.Save());
+			storage.SetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
 
 			storage.SetValue(nameof(CreateDepthFromOrdersLog), CreateDepthFromOrdersLog);
 			storage.SetValue(nameof(CreateTradesFromOrdersLog), CreateTradesFromOrdersLog);
@@ -1511,12 +1508,42 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 			storage.SetValue(nameof(CreateAssociatedSecurity), CreateAssociatedSecurity);
 
-			storage.SetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
-
 			storage.SetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
 			storage.SetValue(nameof(AutoPortfoliosSubscribe), AutoPortfoliosSubscribe);
 
 			base.Save(storage);
 		}
+
+		#region ICandleManager implementation
+
+		int ICandleSource<Candle>.SpeedPriority => 0;
+
+		event Action<CandleSeries, Candle> ICandleSource<Candle>.Processing
+		{
+			add => CandleSeriesProcessing += value;
+			remove => CandleSeriesProcessing -= value;
+		}
+
+		event Action<CandleSeries> ICandleSource<Candle>.Stopped
+		{
+			add => CandleSeriesStopped += value;
+			remove => CandleSeriesStopped -= value;
+		}
+
+		IEnumerable<Range<DateTimeOffset>> ICandleSource<Candle>.GetSupportedRanges(CandleSeries series)
+			=> Enumerable.Empty<Range<DateTimeOffset>>();
+
+		void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
+			=> SubscribeCandles(series, from, to);
+
+		void ICandleSource<Candle>.Stop(CandleSeries series) => UnSubscribeCandles(series);
+
+		ICandleManagerContainer ICandleManager.Container { get; } = new CandleManagerContainer();
+
+		IEnumerable<CandleSeries> ICandleManager.Series => SubscribedCandleSeries;
+
+		IList<ICandleSource<Candle>> ICandleManager.Sources => ArrayHelper.Empty<ICandleSource<Candle>>();
+
+		#endregion
 	}
 }

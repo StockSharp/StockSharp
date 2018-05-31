@@ -25,10 +25,11 @@ namespace StockSharp.Algo.Storages
 		where T : Message
 	{
 		private readonly MessagePriorityQueue _messageQueue = new MessagePriorityQueue();
-		private readonly List<Tuple<IMarketDataStorage, bool>> _actions = new List<Tuple<IMarketDataStorage, bool>>();
+		private readonly List<Tuple<IMarketDataStorage, long>> _actions = new List<Tuple<IMarketDataStorage, long>>();
 		private readonly SyncObject _moveNextSyncRoot = new SyncObject();
 		private readonly SyncObject _syncRoot = new SyncObject();
 
+		private readonly IdGenerator _transactionIdGenerator;
 		private readonly BasketMarketDataStorage<T> _basketStorage;
 		private readonly CancellationTokenSource _cancellationToken;
 
@@ -37,8 +38,6 @@ namespace StockSharp.Algo.Storages
 		private bool _isTimeLineAdded;
 
 		private DateTimeOffset _currentTime;
-
-		private T _currentMessage;
 
 		///// <summary>
 		///// Embedded storages of market data.
@@ -67,16 +66,6 @@ namespace StockSharp.Algo.Storages
 			set => _messageQueue.MaxSize = value;
 		}
 
-		/// <summary>
-		/// Date in history for starting the paper trading.
-		/// </summary>
-		public DateTimeOffset StartDate { get; set; }
-
-		/// <summary>
-		/// Date in history to stop the paper trading (date is included).
-		/// </summary>
-		public DateTimeOffset StopDate { get; set; }
-
 		private int _postTradeMarketTimeChangedCount = 2;
 
 		/// <summary>
@@ -102,7 +91,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The interval of message <see cref="TimeMessage"/> generation. By default, it is equal to 1 sec.
 		/// </summary>
-		public virtual TimeSpan MarketTimeChangedInterval
+		public TimeSpan MarketTimeChangedInterval
 		{
 			get => _marketTimeChangedInterval;
 			set
@@ -122,40 +111,40 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CachedBasketMarketDataStorage{T}"/>.
 		/// </summary>
-		public CachedBasketMarketDataStorage()
-			: this(new BasketMarketDataStorage<T>())
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
+		public CachedBasketMarketDataStorage(IdGenerator transactionIdGenerator)
+			: this(transactionIdGenerator, new BasketMarketDataStorage<T>())
 		{
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CachedBasketMarketDataStorage{T}"/>.
 		/// </summary>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		/// <param name="basketStorage">The aggregator-storage, allowing to load data simultaneously from several market data storages.</param>
-		public CachedBasketMarketDataStorage(BasketMarketDataStorage<T> basketStorage)
+		public CachedBasketMarketDataStorage(IdGenerator transactionIdGenerator, BasketMarketDataStorage<T> basketStorage)
 		{
-			if (basketStorage == null)
-				throw new ArgumentNullException(nameof(basketStorage));
+			_transactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
+			_basketStorage = basketStorage ?? throw new ArgumentNullException(nameof(basketStorage));
 
-			_basketStorage = basketStorage;
 			_cancellationToken = new CancellationTokenSource();
-
-			ThreadingHelper
-				.Thread(() => CultureInfo.InvariantCulture.DoInCulture(OnLoad))
-				.Name("Cached marketdata storage thread.")
-				.Launch();
 		}
 
 		/// <summary>
 		/// Add inner market data storage.
 		/// </summary>
 		/// <param name="storage">Market data storage.</param>
-		public void AddStorage(IMarketDataStorage storage)
+		/// <param name="transactionId">The subscription identifier.</param>
+		public void AddStorage(IMarketDataStorage storage, long transactionId)
 		{
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
 
+			if (transactionId == 0)
+				throw new ArgumentNullException(nameof(transactionId));
+
 			_isChanged = true;
-			_actions.Add(Tuple.Create(storage, true));
+			_actions.Add(Tuple.Create(storage, transactionId));
 
 			_messageQueue.Close();
 			_syncRoot.PulseSignal();
@@ -164,27 +153,14 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Remove inner market data storage.
 		/// </summary>
-		/// <typeparam name="TStorage">Type of storage.</typeparam>
-		/// <param name="security">Security.</param>
-		/// <param name="messageType">Message type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="messageType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-		public void RemoveStorage<TStorage>(Security security, MessageTypes messageType, object arg)
-			where TStorage : class, IMarketDataStorage
+		/// <param name="originalTransactionId">The subscription identifier.</param>
+		public void RemoveStorage(long originalTransactionId)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			var storage = _basketStorage
-				.InnerStorages
-				.SyncGet(c => c
-					.OfType<TStorage>()
-					.FirstOrDefault(s => s.Security == security && ((arg == null && s.Arg == null) || (s.Arg.Compare(arg) == 0))));
-
-			if (storage == null)
-				return;
+			if (originalTransactionId == 0)
+				throw new ArgumentNullException(nameof(originalTransactionId));
 
 			_isChanged = true;
-			_actions.Add(Tuple.Create((IMarketDataStorage)storage, false));
+			_actions.Add(Tuple.Create((IMarketDataStorage)null, originalTransactionId));
 
 			_messageQueue.Close();
 			_syncRoot.PulseSignal();
@@ -200,7 +176,7 @@ namespace StockSharp.Algo.Storages
 		{
 			if (MarketTimeChangedInterval != TimeSpan.Zero && !_isTimeLineAdded)
 			{
-				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(null, null, GetTimeLine));
+				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(null, null, d => GetTimeLine(d, MarketTimeChangedInterval)), _transactionIdGenerator.GetNextId());
 
 				_isTimeLineAdded = true;
 				_moveNextSyncRoot.WaitSignal();
@@ -224,7 +200,7 @@ namespace StockSharp.Algo.Storages
 			else
 				message = _messageQueue.Dequeue().Value;
 
-			var serverTime = message.GetServerTime();
+			var serverTime = message.TryGetServerTime();
 
 			if (serverTime != null)
 				_currentTime = serverTime.Value;
@@ -245,6 +221,8 @@ namespace StockSharp.Algo.Storages
             _basketStorage.InnerStorages.Clear();
 		}
 
+		private T _currentMessage;
+
 		/// <summary>
 		/// Gets the current element in the collection.
 		/// </summary>
@@ -259,80 +237,102 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			_cancellationToken.Cancel();
-			_syncRoot.PulseSignal();
+			Stop();
 
 			base.DisposeManaged();
 		}
 
-		private void OnLoad()
+		/// <summary>
+		/// Start data loading.
+		/// </summary>
+		/// <param name="startDate">Date in history for starting the paper trading.</param>
+		/// <param name="stopDate">Date in history to stop the paper trading (date is included).</param>
+		public void Start(DateTimeOffset startDate, DateTimeOffset stopDate)
 		{
-			try
-			{
-				var messageTypes = new[] { MessageTypes.Time, ExtendedMessageTypes.Clearing };
-				var token = _cancellationToken.Token;
-
-				while (!token.IsCancellationRequested)
+			ThreadingHelper
+				.Thread(() => CultureInfo.InvariantCulture.DoInCulture(() =>
 				{
-					_syncRoot.WaitSignal();
-					_messageQueue.Clear();
-					_messageQueue.Open();
-
-					_isInitialized = true;
-					_isChanged = false;
-
-					_moveNextSyncRoot.PulseSignal();
-
-					foreach (var action in _actions.CopyAndClear())
+					try
 					{
-						if (action.Item2)
-							_basketStorage.InnerStorages.Add(action.Item1);
-						else
-							_basketStorage.InnerStorages.Remove(action.Item1);
-					}
+						var messageTypes = new[] { MessageTypes.Time, ExtendedMessageTypes.Clearing };
+						var token = _cancellationToken.Token;
 
-					var boards = Boards.ToArray();
-					var loadDate = _currentTime != DateTimeOffset.MinValue ? _currentTime.Date : StartDate;
-					var startTime = _currentTime;
-					var checkDates = CheckTradableDates && boards.Length > 0;
-
-					while (loadDate.Date <= StopDate.Date && !_isChanged && !token.IsCancellationRequested)
-					{
-						if (!checkDates || boards.Any(b => b.IsTradeDate(loadDate, true)))
+						while (!IsDisposed && !token.IsCancellationRequested)
 						{
-							this.AddInfoLog("Loading {0}", loadDate.Date);
+							_syncRoot.WaitSignal();
+							_messageQueue.Clear();
+							_messageQueue.Open();
 
-							var messages = _basketStorage.Load(loadDate.UtcDateTime.Date);
+							_isInitialized = true;
+							_isChanged = false;
 
-							// storage for the specified date contains only time messages and clearing events
-							var noData = !messages.DataTypes.Except(messageTypes).Any();
+							_moveNextSyncRoot.PulseSignal();
 
-							if (noData)
-								EnqueueMessages(loadDate, startTime, token, GetSimpleTimeLine(loadDate));
-							else
-								EnqueueMessages(loadDate, startTime, token, messages);
+							foreach (var action in _actions.CopyAndClear())
+							{
+								var storage = action.Item1;
+								var subscriptionId = action.Item2;
+
+								if (storage != null)
+									_basketStorage.InnerStorages.Add(storage, subscriptionId);
+								else
+									_basketStorage.InnerStorages.Remove(subscriptionId);
+							}
+
+							var boards = Boards.ToArray();
+							var loadDate = _currentTime != DateTimeOffset.MinValue ? _currentTime.Date : startDate;
+							var startTime = _currentTime;
+							var checkDates = CheckTradableDates && boards.Length > 0;
+
+							while (loadDate.Date <= stopDate.Date && !_isChanged && !token.IsCancellationRequested)
+							{
+								if (!checkDates || boards.Any(b => b.IsTradeDate(loadDate, true)))
+								{
+									this.AddInfoLog("Loading {0}", loadDate.Date);
+
+									var messages = _basketStorage.Load(loadDate.UtcDateTime.Date);
+
+									// storage for the specified date contains only time messages and clearing events
+									var noData = !messages.DataTypes.Except(messageTypes).Any();
+
+									if (noData)
+										EnqueueMessages(startDate, stopDate, loadDate, startTime, token, GetSimpleTimeLine(loadDate, MarketTimeChangedInterval));
+									else
+										EnqueueMessages(startDate, stopDate, loadDate, startTime, token, messages);
+								}
+
+								loadDate = loadDate.Date.AddDays(1).ApplyTimeZone(loadDate.Offset);
+							}
+
+							if (!_isChanged)
+								EnqueueMessage(new LastMessage { LocalTime = stopDate });
+
+							_isInitialized = false;
 						}
-
-						loadDate = loadDate.Date.AddDays(1).ApplyTimeZone(loadDate.Offset);
 					}
-
-					if (!_isChanged)
-						EnqueueMessage(new LastMessage { LocalTime = StopDate });
-
-					_isInitialized = false;
-				}
-			}
-			catch (Exception ex)
-			{
-				EnqueueMessage(ex.ToErrorMessage());
-				EnqueueMessage(new LastMessage { IsError = true });
-			}
+					catch (Exception ex)
+					{
+						EnqueueMessage(ex.ToErrorMessage());
+						EnqueueMessage(new LastMessage { IsError = true });
+					}
+				}))
+				.Name("Cached marketdata storage thread.")
+				.Launch();
 		}
 
-		private void EnqueueMessages(DateTimeOffset loadDate, DateTimeOffset startTime, CancellationToken token, IEnumerable<Message> messages)
+		/// <summary>
+		/// Stop data loading.
+		/// </summary>
+		public void Stop()
 		{
-			var checkFromTime = loadDate.Date == StartDate.Date && loadDate.TimeOfDay != TimeSpan.Zero;
-			var checkToTime = loadDate.Date == StopDate.Date;
+			_cancellationToken.Cancel();
+			_syncRoot.PulseSignal();
+		}
+
+		private void EnqueueMessages(DateTimeOffset startDate, DateTimeOffset stopDate, DateTimeOffset loadDate, DateTimeOffset startTime, CancellationToken token, IEnumerable<Message> messages)
+		{
+			var checkFromTime = loadDate.Date == startDate.Date && loadDate.TimeOfDay != TimeSpan.Zero;
+			var checkToTime = loadDate.Date == stopDate.Date;
 
 			foreach (var msg in messages)
 			{
@@ -341,20 +341,20 @@ namespace StockSharp.Algo.Storages
 
 				var serverTime = msg.GetServerTime();
 
-				if (serverTime == null)
-					throw new InvalidOperationException();
+				//if (serverTime == null)
+				//	throw new InvalidOperationException();
 
-				if (serverTime.Value < startTime)
+				if (serverTime < startTime)
 					continue;
 
-				msg.LocalTime = serverTime.Value;
+				msg.LocalTime = serverTime;
 
 				if (checkFromTime)
 				{
 					// пропускаем только стаканы, тики и ОЛ
 					if (msg.Type == MessageTypes.QuoteChange || msg.Type == MessageTypes.Execution)
 					{
-						if (msg.LocalTime < StartDate)
+						if (msg.LocalTime < startDate)
 							continue;
 
 						checkFromTime = false;
@@ -363,7 +363,7 @@ namespace StockSharp.Algo.Storages
 
 				if (checkToTime)
 				{
-					if (msg.LocalTime > StopDate)
+					if (msg.LocalTime > stopDate)
 						break;
 				}
 
@@ -424,14 +424,14 @@ namespace StockSharp.Algo.Storages
 			return new Range<TimeSpan>(utcMin.TimeOfDay, utcMax.TimeOfDay);
 		}
 
-		private IEnumerable<TimeMessage> GetTimeLine(DateTimeOffset date)
+		private IEnumerable<TimeMessage> GetTimeLine(DateTimeOffset date, TimeSpan interval)
 		{
 			var ranges = GetOrderedRanges(date);
 			var lastTime = TimeSpan.Zero;
 
 			foreach (var range in ranges)
 			{
-				for (var time = range.Item2.Min; time <= range.Item2.Max; time += MarketTimeChangedInterval)
+				for (var time = range.Item2.Min; time <= range.Item2.Max; time += interval)
 				{
 					var serverTime = GetTime(date, time);
 
@@ -443,13 +443,13 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			foreach (var m in GetPostTradeTimeMessages(date, lastTime))
+			foreach (var m in GetPostTradeTimeMessages(date, lastTime, interval))
 			{
 				yield return m;
 			}
 		}
 
-		private IEnumerable<TimeMessage> GetSimpleTimeLine(DateTimeOffset date)
+		private IEnumerable<TimeMessage> GetSimpleTimeLine(DateTimeOffset date, TimeSpan interval)
 		{
 			var ranges = GetOrderedRanges(date);
 			var lastTime = TimeSpan.Zero;
@@ -467,7 +467,7 @@ namespace StockSharp.Algo.Storages
 				lastTime = range.Item2.Max;
 			}
 
-			foreach (var m in GetPostTradeTimeMessages(date, lastTime))
+			foreach (var m in GetPostTradeTimeMessages(date, lastTime, interval))
 			{
 				yield return m;
 			}
@@ -478,11 +478,11 @@ namespace StockSharp.Algo.Storages
 			return (date.Date + timeOfDay).ApplyTimeZone(date.Offset);
 		}
 
-		private IEnumerable<TimeMessage> GetPostTradeTimeMessages(DateTimeOffset date, TimeSpan lastTime)
+		private IEnumerable<TimeMessage> GetPostTradeTimeMessages(DateTimeOffset date, TimeSpan lastTime, TimeSpan interval)
 		{
 			for (var i = 0; i < PostTradeMarketTimeChangedCount; i++)
 			{
-				lastTime += MarketTimeChangedInterval;
+				lastTime += interval;
 
 				if (lastTime > TimeHelper.LessOneDay)
 					break;

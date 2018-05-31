@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="AssociatedSecurityAdapter.cs" />
     <Compile Include="BasketSecurity.cs" />
+    <Compile Include="Candles\BiggerTimeFrameCandleCompressor.cs" />
     <Compile Include="Candles\CandlesHolder.cs" />
     <Compile Include="Candles\Compression\CandleBuilderMessageAdapter.cs" />
     <Compile Include="Candles\Compression\CandleHolderMessageAdapter.cs" />
@@ -124,6 +125,9 @@
     <Compile Include="Export\IndicatorValue.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
+    <Compile Include="PermissionCredentialsAuthorization.cs" />
+    <Compile Include="PermissionCredentialsRemoteAuthorization.cs" />
+    <Compile Include="PermissionCredentialsStorage.cs" />
     <Compile Include="Import\CsvImporter.cs" />
     <Compile Include="Import\CsvParser.cs" />
     <Compile Include="Import\FieldMapping.cs" />
@@ -131,9 +135,12 @@
     <Compile Include="Import\FieldMappingValue.cs" />
     <Compile Include="Indicators\IndicatorValueAttribute.cs" />
     <Compile Include="IRemoteAuthorization.cs" />
+    <Compile Include="PermissionCredentials.cs" />
     <Compile Include="Storages\Binary\Snapshot\PositionBinarySnapshotSerializer.cs" />
     <Compile Include="Storages\Binary\Snapshot\QuotesBinarySnapshotSerializer.cs" />
     <Compile Include="Storages\Binary\Snapshot\TransactionBinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\CacheableMarketDataStorage.cs" />
+    <Compile Include="Storages\Csv\ComplexSecurityList.cs" />
     <Compile Include="Storages\Csv\MarketDepthCsvSerializer.cs" />
     <Compile Include="Storages\ISnapshotSerializer.cs" />
     <Compile Include="Storages\ISecurityMappingStorage.cs" />
@@ -169,7 +176,6 @@
     <Compile Include="Candles\Compression\ICandleBuilder.cs" />
     <Compile Include="Candles\ICandleManagerContainer.cs" />
     <Compile Include="Candles\ICandleManager.cs" />
-    <Compile Include="Candles\ICandleSourceList.cs" />
     <Compile Include="Candles\ICandleSource.cs" />
     <Compile Include="Candles\IExternalCandleSource.cs" />
     <Compile Include="Candles\IndexSecurityCandleManagerSource.cs" />
@@ -344,8 +350,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Storages\Binary\Level1BinarySerializer.cs" />
+    <Compile Include="Storages\MultiSecurityStorage.cs" />
     <Compile Include="Storages\NewsList.cs" />
-    <Compile Include="Storages\SnapshotStorage.cs" />
+    <Compile Include="Storages\SnapshotRegistry.cs" />
     <Compile Include="Storages\StorageEntityFactory.cs" />
     <Compile Include="Storages\Binary\TransactionBinarySerializer.cs" />
     <Compile Include="Storages\Binary\NewsBinarySerializer.cs" />
@@ -403,6 +410,7 @@
     <Compile Include="Strategies\Testing\EmulationSettings.cs" />
     <Compile Include="Strategies\TimeFrameStrategy.cs" />
     <Compile Include="SubscriptionMessageAdapter.cs" />
+    <Compile Include="Testing\ChangeTimeIntervalMessage.cs" />
     <Compile Include="Testing\CommissionRuleMessage.cs" />
     <Compile Include="Testing\HistorySourceMessage.cs" />
     <Compile Include="TimeQuoteChange.cs" />
@@ -477,6 +485,10 @@
     <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj">
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Community\Community.csproj">
+      <Project>{E8E18F8F-97BD-41AE-8888-F54F2411D575}</Project>
+      <Name>Community</Name>
     </ProjectReference>
     <ProjectReference Include="..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>

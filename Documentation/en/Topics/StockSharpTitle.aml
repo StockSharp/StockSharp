@@ -5,7 +5,7 @@
  <para>
 <externalLink>
 <linkText>StockSharp (shortly S#)</linkText>
-<linkUri>http://stocksharp.com/products/</linkUri>
+<linkUri>https://stocksharp.com/products/</linkUri>
 </externalLink>
  - are <legacyBold>free</legacyBold> programs for trading at any markets of the world 
  (American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). 
@@ -69,11 +69,11 @@ Available connections:  </para>
  <para>and many other. Any broker or
 <externalLink>
 <linkText>partner broker</linkText>
-<linkUri>http://stocksharp.com/broker/</linkUri>
+<linkUri>https://stocksharp.com/broker/</linkUri>
 </externalLink>
 <externalLink>
 <linkText>(benefits).</linkText>
-<linkUri>http://stocksharp.com/products/pricing/</linkUri>
+<linkUri>https://stocksharp.com/products/pricing/</linkUri>
 </externalLink>
  </para>
  <title>S#.Designer</title>
@@ -151,20 +151,20 @@ a professional programmer in algotrading.
   <listItem><para><link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" /> - library for writing trading robots on <token>csharp</token>.</para></listItem>
   <listItem><para> <externalLink>
 <linkText>S#.Terminal</linkText>
-<linkUri>http://stocksharp.com/products/terminal/</linkUri>
+<linkUri>https://stocksharp.com/products/terminal/</linkUri>
 </externalLink>
  - trading terminal.</para></listItem>
   <listItem><para><link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0" /> - MatLab integration with trading systems. Trade from MatLab scripts.</para></listItem>
   <listItem><para><externalLink>
 <linkText>BPI Viewer</linkText>
-<linkUri>http://stocksharp.com/products/lci/</linkUri>
+<linkUri>https://stocksharp.com/products/lci/</linkUri>
 </externalLink>
  - graphics of Best Private Investor (BPI) competition with participants’ trades.</para></listItem>
 </list>
 
 <externalLink>
 <linkText>Download</linkText>
-<linkUri>http://stocksharp.com/products/download/</linkUri>
+<linkUri>https://stocksharp.com/products/download/</linkUri>
 </externalLink>
  </introduction>
  <relatedTopics>

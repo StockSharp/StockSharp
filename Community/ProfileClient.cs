@@ -28,7 +28,7 @@ namespace StockSharp.Community
 		/// Initializes a new instance of the <see cref="ProfileClient"/>.
 		/// </summary>
 		public ProfileClient()
-			: this("http://stocksharp.com/services/profileservice.svc".To<Uri>())
+			: this("https://stocksharp.com/services/profileservice.svc".To<Uri>())
 		{
 		}
 

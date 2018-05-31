@@ -15,6 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Testing
 {
+	using System.ComponentModel.DataAnnotations;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -25,37 +27,37 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Stopped.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1128Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1128Key)]
 		Stopped,
 
 		/// <summary>
 		/// Stopping.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1114Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1114Key)]
 		Stopping,
 
 		/// <summary>
 		/// Starting.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1129Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1129Key)]
 		Starting,
 
 		/// <summary>
 		/// Working.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1130Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1130Key)]
 		Started,
 
 		/// <summary>
 		/// In the process of suspension.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1131Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1131Key)]
 		Suspending, 
 
 		/// <summary>
 		/// Suspended.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1132Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1132Key)]
 		Suspended,
 	}
 }

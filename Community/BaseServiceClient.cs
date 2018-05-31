@@ -65,7 +65,19 @@ namespace StockSharp.Community
 		/// <returns>WCF channel.</returns>
 		protected virtual ChannelFactory<TService> CreateChannel()
 		{
-			return new ChannelFactory<TService>(new WSHttpBinding { Security = { Mode = SecurityMode.None }, UseDefaultWebProxy = true }, new EndpointAddress(Address));
+			return new ChannelFactory<TService>(new WSHttpBinding
+			{
+				Security =
+				{
+					Mode = SecurityMode.Transport,
+					//Message =
+					//{
+					//	ClientCredentialType = MessageCredentialType.Certificate,
+					//	AlgorithmSuite = SecurityAlgorithmSuite.Default
+					//}
+				},
+				UseDefaultWebProxy = true
+			}, new EndpointAddress(Address));
 		}
 
 		/// <summary>

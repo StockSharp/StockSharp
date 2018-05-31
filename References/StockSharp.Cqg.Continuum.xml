@@ -41,6 +41,9 @@
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.CreateOrderCondition">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.IsSupportCandlesUpdates">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Send message.

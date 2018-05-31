@@ -435,8 +435,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
 			var timeZone = metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider);
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version53;
-			var bigRange = metaInfo.Version >= MarketDataVersions.Version57;
-			var isTickPrecision = bigRange;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version57;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version58;
 
 			if (metaInfo.Version < MarketDataVersions.Version56)
@@ -482,8 +481,8 @@ namespace StockSharp.Algo.Storages.Binary
 				{
 					var isOrdered = reader.Read();
 
-					var first = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, isTickPrecision, ref lastOffset, bigRange);
-					var second = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, isTickPrecision, ref lastOffset, bigRange);
+					var first = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, isTickPrecision, ref lastOffset);
+					var second = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, isTickPrecision, ref lastOffset);
 
 					candle.HighTime = isOrdered ? first : second;
 					candle.LowTime = isOrdered ? second : first;
@@ -491,17 +490,17 @@ namespace StockSharp.Algo.Storages.Binary
 				else
 				{
 					if (reader.Read())
-						candle.HighTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, isTickPrecision, ref lastOffset, bigRange);
+						candle.HighTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, isTickPrecision, ref lastOffset);
 
 					if (reader.Read())
-						candle.LowTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, isTickPrecision, ref lastOffset, bigRange);
+						candle.LowTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, isTickPrecision, ref lastOffset);
 				}
 			}
 
 			if (metaInfo.Version >= MarketDataVersions.Version47)
 			{
 				if (reader.Read())
-					candle.CloseTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, isTickPrecision, ref lastOffset, bigRange);
+					candle.CloseTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, isTickPrecision, ref lastOffset);
 			}
 			else
 				candle.CloseTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, false, ref lastOffset);

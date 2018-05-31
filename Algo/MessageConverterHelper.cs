@@ -170,7 +170,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To convert the type of candles <see cref="MarketDataTypes"/> into type of message <see cref="MessageTypes"/>.
 		/// </summary>
-		/// <param name="type">The candles type.</param>
+		/// <param name="type">Candles type.</param>
 		/// <returns>Message type.</returns>
 		public static MessageTypes ToCandleMessageType(this MarketDataTypes type)
 		{
@@ -181,7 +181,7 @@ namespace StockSharp.Algo
 		/// To convert the type of message <see cref="MessageTypes"/> into type of candles <see cref="MarketDataTypes"/>.
 		/// </summary>
 		/// <param name="type">Message type.</param>
-		/// <returns>The candles type.</returns>
+		/// <returns>Candles type.</returns>
 		public static MarketDataTypes ToCandleMarketDataType(this MessageTypes type)
 		{
 			return _candleDataTypes[type];
@@ -616,30 +616,9 @@ namespace StockSharp.Algo
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
-			return new Security
-			{
-				Code = message.SecurityId.SecurityCode,
-				Board = message.SecurityId.BoardCode.IsEmpty() ? null : exchangeInfoProvider.GetExchangeBoard(message.SecurityId.BoardCode),
-				ExternalId = message.SecurityId.ToExternalId(),
-				Name = message.Name,
-				Class = message.Class,
-				Type = message.SecurityType,
-				ExpiryDate = message.ExpiryDate,
-				ShortName = message.ShortName,
-				VolumeStep = message.VolumeStep,
-				Multiplier = message.Multiplier,
-				PriceStep = message.PriceStep,
-				Decimals = message.Decimals,
-				Currency = message.Currency,
-				SettlementDate = message.SettlementDate,
-				OptionType = message.OptionType,
-				Strike = message.Strike,
-				BinaryOptionType = message.BinaryOptionType,
-				UnderlyingSecurityId = message.UnderlyingSecurityCode.IsEmpty() ? null : _defaultGenerator.GenerateId(message.UnderlyingSecurityCode, message.SecurityId.BoardCode),
-				IssueSize = message.IssueSize,
-				IssueDate = message.IssueDate,
-				UnderlyingSecurityType = message.UnderlyingSecurityType,
-			};
+			var criteria = new Security();
+			criteria.ApplyChanges(message, exchangeInfoProvider);
+			return criteria;
 		}
 
 		/// <summary>
@@ -693,32 +672,12 @@ namespace StockSharp.Algo
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
-			return new Security
+			var security = new Security
 			{
-				Id = message.SecurityId.ToStringId(),
-				Code = message.SecurityId.SecurityCode,
-				Board = exchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode),
-				Type = message.SecurityType ?? message.SecurityId.SecurityType,
-				CfiCode = message.CfiCode,
-				Strike = message.Strike,
-				OptionType = message.OptionType,
-				Name = message.Name,
-				ShortName = message.ShortName,
-				Class = message.Class,
-				BinaryOptionType = message.BinaryOptionType,
-				ExternalId = message.SecurityId.ToExternalId(),
-				ExpiryDate = message.ExpiryDate,
-				SettlementDate = message.SettlementDate,
-				UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + message.SecurityId.BoardCode,
-				Currency = message.Currency,
-				PriceStep = message.PriceStep,
-				Decimals = message.Decimals,
-				VolumeStep = message.VolumeStep,
-				Multiplier = message.Multiplier,
-				IssueSize = message.IssueSize,
-				IssueDate = message.IssueDate,
-				UnderlyingSecurityType = message.UnderlyingSecurityType,
+				Id = message.SecurityId.ToStringId()
 			};
+			security.ApplyChanges(message, exchangeInfoProvider);
+			return security;
 		}
 
 		private static readonly SecurityIdGenerator _defaultGenerator = new SecurityIdGenerator();
@@ -913,10 +872,7 @@ namespace StockSharp.Algo
 
 			public ToMessagesEnumerable(IEnumerable<TEntity> entities)
 			{
-				if (entities == null)
-					throw new ArgumentNullException(nameof(entities));
-
-				_entities = entities;
+				_entities = entities ?? throw new ArgumentNullException(nameof(entities));
 			}
 
 			public IEnumerator<TMessage> GetEnumerator()
@@ -973,14 +929,8 @@ namespace StockSharp.Algo
 
 			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider)
 			{
-				if (messages == null)
-					throw new ArgumentNullException(nameof(messages));
-
-				if (security == null)
-					throw new ArgumentNullException(nameof(security));
-
-				_messages = messages;
-				_security = security;
+				_messages = messages ?? throw new ArgumentNullException(nameof(messages));
+				_security = security ?? throw new ArgumentNullException(nameof(security));
 				_exchangeInfoProvider = exchangeInfoProvider;
 			}
 			
@@ -1750,11 +1700,13 @@ namespace StockSharp.Algo
 				IsSubscribe = isSubscribe,
 				From = from ?? series.From,
 				To = to ?? series.To,
-				Count = count,
+				Count = count ?? series.Count,
 				BuildCandlesMode = series.BuildCandlesMode,
 				BuildCandlesFrom = series.BuildCandlesFrom,
 				BuildCandlesField = series.BuildCandlesField,
 				IsCalcVolumeProfile = series.IsCalcVolumeProfile,
+				AllowBuildFromSmallerTimeFrame = series.AllowBuildFromSmallerTimeFrame,
+				IsRegularTradingHours = series.IsRegularTradingHours,
 				//ExtensionInfo = extensionInfo
 			};
 

@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Indicators
 		/// Average indicator part.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("Average")]
+		[DisplayNameLoc(LocalizedStrings.AverageKey)]
 		[DescriptionLoc(LocalizedStrings.Str772Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public RelativeVigorIndexAverage Average { get; }
@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Indicators
 		/// Signaling part of indicator.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("Signal")]
+		[DisplayNameLoc(LocalizedStrings.SignalKey)]
 		[DescriptionLoc(LocalizedStrings.Str773Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public RelativeVigorIndexSignal Signal { get; }

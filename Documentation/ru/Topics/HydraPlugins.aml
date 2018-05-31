@@ -27,7 +27,6 @@
 					<code language="C#">
 <![CDATA[
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/0da19c49-1f11-455e-bbd5-c20e428e5149.htm")]
 	[TaskIcon("rts_logo.png")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks)]

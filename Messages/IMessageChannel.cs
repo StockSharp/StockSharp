@@ -20,6 +20,24 @@ namespace StockSharp.Messages
 	using Ecng.Common;
 
 	/// <summary>
+	/// Message sender base interface.
+	/// </summary>
+	public interface IMessageSender
+	{
+		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		void SendInMessage(Message message);
+
+		/// <summary>
+		/// Send outgoing message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		void SendOutMessage(Message message);
+	}
+
+	/// <summary>
 	/// Message channel base interface.
 	/// </summary>
 	public interface IMessageChannel : IDisposable, ICloneable<IMessageChannel>

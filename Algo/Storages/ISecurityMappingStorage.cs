@@ -67,7 +67,8 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initialize the storage.
 		/// </summary>
-		void Init();
+		/// <returns>Possible errors with storage names. Empty dictionary means initialization without any issues.</returns>
+		IDictionary<string, Exception> Init();
 
 		/// <summary>
 		/// Get storage names.
@@ -114,8 +115,9 @@ namespace StockSharp.Algo.Storages
 			remove => _changed -= value;
 		}
 
-		void ISecurityMappingStorage.Init()
+		IDictionary<string, Exception> ISecurityMappingStorage.Init()
 		{
+			return new Dictionary<string, Exception>();
 		}
 
 		IEnumerable<string> ISecurityMappingStorage.GetStorageNames()
@@ -234,14 +236,14 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public void Init()
+		public IDictionary<string, Exception> Init()
 		{
 			if (!Directory.Exists(_path))
 				Directory.CreateDirectory(_path);
 
 			var files = Directory.GetFiles(_path, "*.csv");
 
-			var errors = new List<Exception>();
+			var errors = new Dictionary<string, Exception>();
 
 			foreach (var fileName in files)
 			{
@@ -251,12 +253,11 @@ namespace StockSharp.Algo.Storages
 				}
 				catch (Exception ex)
 				{
-					errors.Add(ex);
+					errors.Add(fileName, ex);
 				}
 			}
 
-			if (errors.Count > 0)
-				throw new AggregateException(errors);
+			return errors;
 		}
 
 		/// <inheritdoc />

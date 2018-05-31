@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Storages.Binary
 			foreach (var msg in messages)
 			{
 				if (msg.ExecutionType != ExecutionTypes.Tick)
-					throw new ArgumentOutOfRangeException(nameof(messages), msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg.TradeId));
+					throw new ArgumentOutOfRangeException(nameof(messages), msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg));
 
 				var tradeId = msg.TradeId ?? 0;
 
@@ -190,14 +190,14 @@ namespace StockSharp.Algo.Storages.Binary
 
 					if (metaInfo.Version >= MarketDataVersions.Version49)
 					{
-						hasLocalTime = !msg.LocalTime.IsDefault() && msg.LocalTime != msg.ServerTime;
+						hasLocalTime = msg.HasLocalTime(msg.ServerTime);
 						writer.Write(hasLocalTime);
 					}
 
 					if (hasLocalTime)
 					{
 						lastOffset = metaInfo.LastLocalOffset;
-						metaInfo.LastLocalTime = writer.WriteTime(msg.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str1024, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
+						metaInfo.LastLocalTime = writer.WriteTime(msg.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str1024, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, true);
 						metaInfo.LastLocalOffset = lastOffset;
 					}
 				}

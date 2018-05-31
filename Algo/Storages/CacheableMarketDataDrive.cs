@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Storages
 	using System.IO;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	/// <summary>
 	/// The market data storage, saving data in the cache-storage.
@@ -28,45 +29,95 @@ namespace StockSharp.Algo.Storages
 	public class CacheableMarketDataDrive : IMarketDataStorageDrive
 	{
 		private readonly IMarketDataStorageDrive _cacheDrive;
+		private readonly Action<Exception> _errorHandler;
 		private readonly IMarketDataStorageDrive _sourceDrive;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CacheableMarketDataDrive"/>.
 		/// </summary>
+		/// <param name="drive">The storage (database, file etc.).</param>
 		/// <param name="sourceDrive">The initial storage of market-data.</param>
 		/// <param name="cacheDrive">The cache-storage of market-data.</param>
-		public CacheableMarketDataDrive(IMarketDataStorageDrive sourceDrive, IMarketDataStorageDrive cacheDrive)
+		/// <param name="errorHandler">Error handler.</param>
+		public CacheableMarketDataDrive(IMarketDataDrive drive, IMarketDataStorageDrive sourceDrive, IMarketDataStorageDrive cacheDrive, Action<Exception> errorHandler)
 		{
-			if (sourceDrive == null)
-				throw new ArgumentNullException(nameof(sourceDrive));
-
-			if (cacheDrive == null)
-				throw new ArgumentNullException(nameof(cacheDrive));
-
-			_sourceDrive = sourceDrive;
-			_cacheDrive = cacheDrive;
+			_drive = drive ?? throw new ArgumentNullException(nameof(drive));
+			_sourceDrive = sourceDrive ?? throw new ArgumentNullException(nameof(sourceDrive));
+			_cacheDrive = cacheDrive ?? throw new ArgumentNullException(nameof(cacheDrive));
+			_errorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
 		}
 
-		IMarketDataDrive IMarketDataStorageDrive.Drive => _sourceDrive.Drive;
+		private void SafeDo(Action action)
+		{
+			if (action == null)
+				throw new ArgumentNullException(nameof(action));
 
-		IEnumerable<DateTime> IMarketDataStorageDrive.Dates => _sourceDrive.Dates.Concat(_cacheDrive.Dates).Distinct().OrderBy();
+			SafeDo<object>(() =>
+			{
+				action();
+				return null;
+			}, null);
+		}
+
+		private static readonly TimeSpan _interval = TimeSpan.FromSeconds(5);
+		private DateTime? _lastErrorTime;
+
+		private T SafeDo<T>(Func<T> func, T defaultValue, bool delay = false)
+		{
+			if (func == null)
+				throw new ArgumentNullException(nameof(func));
+
+			try
+			{
+				if (delay && _lastErrorTime != null && (_lastErrorTime.Value + _interval) < TimeHelper.Now)
+					return defaultValue;
+
+				var value = func();
+				_lastErrorTime = null;
+				return value;
+			}
+			catch (Exception ex)
+			{
+				_lastErrorTime = TimeHelper.Now;
+				_errorHandler(ex);
+				return defaultValue;
+			}
+		}
+
+		private readonly IMarketDataDrive _drive;
+		IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
+
+		private IEnumerable<DateTime> _prevSourceDates = Enumerable.Empty<DateTime>();
+
+		IEnumerable<DateTime> IMarketDataStorageDrive.Dates
+		{
+			get
+			{
+				_prevSourceDates = SafeDo(() => _sourceDrive.Dates, _prevSourceDates, true);
+
+				return _prevSourceDates
+				       .Concat(_cacheDrive.Dates)
+				       .Distinct()
+				       .OrderBy();
+			}
+		}
 
 		void IMarketDataStorageDrive.ClearDatesCache()
 		{
 			_cacheDrive.ClearDatesCache();
-			_sourceDrive.ClearDatesCache();
+			SafeDo(_sourceDrive.ClearDatesCache);
 		}
 
 		void IMarketDataStorageDrive.Delete(DateTime date)
 		{
 			_cacheDrive.Delete(date);
-			_sourceDrive.Delete(date);
+			SafeDo(() => _sourceDrive.Delete(date));
 		}
 
 		void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
 		{
-			_sourceDrive.SaveStream(date, stream);
 			_cacheDrive.SaveStream(date, stream);
+			SafeDo(() => _sourceDrive.SaveStream(date, stream));
 		}
 
 		Stream IMarketDataStorageDrive.LoadStream(DateTime date)
@@ -76,8 +127,8 @@ namespace StockSharp.Algo.Storages
 			if (stream != Stream.Null)
 				return stream;
 
-			stream = _sourceDrive.LoadStream(date);
-
+			stream = SafeDo(() => _sourceDrive.LoadStream(date), Stream.Null);
+			
 			if (stream == Stream.Null)
 				return stream;
 

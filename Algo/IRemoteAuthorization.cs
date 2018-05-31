@@ -8,6 +8,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Security;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -83,6 +84,11 @@ namespace StockSharp.Algo
 				case UserPermissions.DeleteSecurities:
 				case UserPermissions.DeleteExchanges:
 				case UserPermissions.DeleteBoards:
+				case UserPermissions.GetUsers:
+				case UserPermissions.EditUsers:
+				case UserPermissions.ServerManage:
+				case UserPermissions.Trading:
+				case UserPermissions.Withdraw:
 					return false;
 				case UserPermissions.Load:
 				case UserPermissions.SecurityLookup:
@@ -90,7 +96,7 @@ namespace StockSharp.Algo
 				case UserPermissions.ExchangeBoardLookup:
 					return true;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(requiredPermissions), requiredPermissions, null);
+					throw new ArgumentOutOfRangeException(nameof(requiredPermissions), requiredPermissions, LocalizedStrings.Str1219);
 			}
 		}
 

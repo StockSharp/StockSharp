@@ -60,6 +60,9 @@ namespace StockSharp.Algo.Storages
 	{
 		private readonly IStorageRegistry _storageRegistry;
 		private readonly IEntityRegistry _entityRegistry;
+		private readonly SnapshotRegistry _snapshotRegistry;
+
+		private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = new SynchronizedSet<long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StorageMessageAdapter"/>.
@@ -67,19 +70,13 @@ namespace StockSharp.Algo.Storages
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
-		public StorageMessageAdapter(IMessageAdapter innerAdapter, IEntityRegistry entityRegistry, IStorageRegistry storageRegistry)
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
+		public StorageMessageAdapter(IMessageAdapter innerAdapter, IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
 			: base(innerAdapter)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			if (storageRegistry == null)
-				throw new ArgumentNullException(nameof(storageRegistry));
-
-			_entityRegistry = entityRegistry;
-			_storageRegistry = storageRegistry;
-
-			Drive = _storageRegistry.DefaultDrive;
+			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
+			_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
+			_snapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
 
 			var isProcessing = false;
 			var sync = new SyncObject();
@@ -108,15 +105,27 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in GetTransactions())
 					{
+						var secId = pair.Key;
+
 						if (Mode.Contains(StorageModes.Incremental))
-							GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Transaction).Save(pair.Value);
-						
+							GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction).Save(pair.Value);
+
 						if (Mode.Contains(StorageModes.Snapshot))
 						{
 							var snapshotStorage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
 
 							foreach (var message in pair.Value)
+							{
+								// do not store cancellation commands into snapshot
+								if (message.IsCancelled && message.TransactionId != 0)
+									continue;
+
+								if (message.TransactionId == 0 && message.OriginalTransactionId == 0)
+									continue;
+
+								message.SecurityId = secId;
 								snapshotStorage.Update(message);
+							}
 						}
 					}
 
@@ -138,14 +147,21 @@ namespace StockSharp.Algo.Storages
 					{
 						var messages = pair.Value.Where(m => m.Changes.Count > 0).ToArray();
 
+						var dt = DateTime.Today;
+
+						var historical = messages.Where(m => m.ServerTime < dt).ToArray();
+						var today = messages.Where(m => m.ServerTime >= dt).ToArray();
+
+						GetStorage<Level1ChangeMessage>(pair.Key, null).Save(historical);
+
 						if (Mode.Contains(StorageModes.Incremental))
-							GetStorage<Level1ChangeMessage>(pair.Key, null).Save(messages);
+							GetStorage<Level1ChangeMessage>(pair.Key, null).Save(today);
 						
 						if (Mode.Contains(StorageModes.Snapshot))
 						{
 							var snapshotStorage = GetSnapshotStorage(typeof(Level1ChangeMessage), null);
 
-							foreach (var message in messages)
+							foreach (var message in today)
 								snapshotStorage.Update(message);
 						}
 					}
@@ -190,22 +206,12 @@ namespace StockSharp.Algo.Storages
 			}).Interval(TimeSpan.FromSeconds(10));
 		}
 
-		private IMarketDataDrive _drive;
-
 		/// <summary>
 		/// The storage (database, file etc.).
 		/// </summary>
-		public IMarketDataDrive Drive
-		{
-			get => _drive;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
+		public IMarketDataDrive Drive { get; set; }
 
-				_drive = value;
-			}
-		}
+		private IMarketDataDrive DriveInternal => Drive ?? _storageRegistry.DefaultDrive;
 
 		/// <summary>
 		/// Format.
@@ -230,14 +236,19 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Use timeframe candles instead of trades.
+		/// Support lookup messages.
 		/// </summary>
-		public bool UseCandlesInsteadTrades { get; set; }
+		public bool SupportLookupMessages { get; set; } = true;
 
 		/// <summary>
-		/// Use candles with specified timeframe.
+		/// Cache buildable from smaller time-frames candles.
 		/// </summary>
-		public TimeSpan CandlesTimeFrame { get; set; }
+		public bool CacheBuildableCandles { get; set; }
+
+		/// <summary>
+		/// Override previous security data by new values.
+		/// </summary>
+		public bool OverrideSecurityData { get; set; }
 
 		private StorageModes _mode = StorageModes.Incremental;
 
@@ -254,9 +265,41 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		/// <inheritdoc />
+		public override IEnumerable<TimeSpan> TimeFrames
+		{
+			get
+			{
+				if (DriveInternal == null)
+					return Enumerable.Empty<TimeSpan>();
+				
+				return DriveInternal
+				       .AvailableSecurities
+				       .SelectMany(GetTimeFrames)
+				       .Distinct()
+				       .OrderBy()
+				       .ToArray();
+			}
+		}
+
+		/// <inheritdoc />
+		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+		{
+			if (DriveInternal == null)
+				return Enumerable.Empty<TimeSpan>();
+
+			return DriveInternal
+			       .GetAvailableDataTypes(securityId, Format)
+			       .Where(t => t.MessageType == typeof(TimeFrameCandleMessage))
+			       .Select(t => (TimeSpan)t.Arg)
+			       .Distinct()
+			       .OrderBy()
+			       .ToArray();
+		}
+
 		private ISnapshotStorage GetSnapshotStorage(Type messageType, object arg)
 		{
-			return _storageRegistry.GetSnapshotStorage(messageType, arg, Drive, Format);
+			return _snapshotRegistry.GetSnapshotStorage(messageType, arg);
 		}
 
 		private IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, object arg)
@@ -267,21 +310,42 @@ namespace StockSharp.Algo.Storages
 
 		private IMarketDataStorage GetStorage(SecurityId securityId, Type messageType, object arg)
 		{
+			return _storageRegistry.GetStorage(GetSecurity(securityId), messageType, arg, Drive, Format);
+		}
+
+		private IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(SecurityId securityId, TimeSpan timeFrame, bool allowBuildFromSmallerTimeFrame)
+		{
+			var security = GetSecurity(securityId);
+
+			if (!allowBuildFromSmallerTimeFrame)
+				return _storageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, timeFrame, Drive, Format);
+
+			var storage = _storageRegistry.GetCandleMessageBuildableStorage(security, timeFrame, Drive, Format);
+
+			if (CacheBuildableCandles)
+				storage = new CacheableMarketDataStorage<CandleMessage>(storage, _storageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, timeFrame, Drive, Format));
+
+			return storage;
+		}
+
+		private Security GetSecurity(SecurityId securityId)
+		{
 			var security = _entityRegistry.Securities.ReadBySecurityId(securityId) ?? TryCreateSecurity(securityId);
 
 			if (security == null)
 				throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(securityId));
 
-			return _storageRegistry.GetStorage(security, messageType, arg, Drive, Format);
+			return security;
 		}
 
 		/// <summary>
 		/// Load save data from storage.
 		/// </summary>
+		[Obsolete("Use lookup messages.")]
 		public void Load()
 		{
-			var requiredSecurities = new List<SecurityId>();
-			var availableSecurities = Drive.AvailableSecurities.ToHashSet();
+			//var requiredSecurities = new List<SecurityId>();
+			//var availableSecurities = DriveInternal.AvailableSecurities.ToHashSet();
 
 			foreach (var board in _entityRegistry.ExchangeBoards)
 				RaiseStorageMessage(board.ToMessage());
@@ -290,10 +354,10 @@ namespace StockSharp.Algo.Storages
 			{
 				var msg = security.ToMessage();
 
-				if (availableSecurities.Remove(msg.SecurityId))
-				{
-                    requiredSecurities.Add(msg.SecurityId);
-				}
+				//if (availableSecurities.Remove(msg.SecurityId))
+				//{
+				//	requiredSecurities.Add(msg.SecurityId);
+				//}
 
 				RaiseStorageMessage(msg);
 			}
@@ -306,41 +370,8 @@ namespace StockSharp.Algo.Storages
 
 			foreach (var position in _entityRegistry.Positions)
 			{
-				//RaiseStorageMessage(position.ToMessage());
 				RaiseStorageMessage(position.ToChangeMessage());
 			}
-
-			if (DaysLoad == TimeSpan.Zero)
-				return;
-
-			var today = DateTime.UtcNow.Date;
-
-			var from = (DateTimeOffset)(today - DaysLoad);
-			var to = DateTimeOffset.Now;
-
-			//if (Mode.Contains(StorageModes.Snapshot))
-			//{
-			//	var storage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
-
-			//	foreach (var secId in requiredSecurities)
-			//	{
-			//		var snapshot = storage.Get(secId);
-
-			//		if (snapshot != null)
-			//			RaiseStorageMessage(snapshot);
-			//	}
-			//}
-			//else if (Mode.Contains(StorageModes.Incremental))
-			//{
-				// TODO
-
-				foreach (var secId in requiredSecurities)
-				{
-					GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
-						.Load(from, to)
-						.ForEach(RaiseStorageMessage);
-				}	
-			//}
 		}
 
 		/// <summary>
@@ -351,8 +382,24 @@ namespace StockSharp.Algo.Storages
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+					_fullyProcessedSubscriptions.Clear();
+					break;
+
 				case MessageTypes.MarketData:
-					ProcessMarketDataMessage((MarketDataMessage)message);
+					ProcessMarketDataRequest((MarketDataMessage)message);
+					break;
+
+				case MessageTypes.SecurityLookup:
+					ProcessSecurityLookup((SecurityLookupMessage)message);
+					break;
+
+				case MessageTypes.PortfolioLookup:
+					ProcessPortfolioLookup((PortfolioLookupMessage)message);
+					break;
+
+				case MessageTypes.OrderStatus:
+					ProcessOrderStatus((OrderStatusMessage)message);
 					break;
 
 				default:
@@ -361,7 +408,83 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private void ProcessMarketDataMessage(MarketDataMessage msg)
+		private void ProcessSecurityLookup(SecurityLookupMessage msg)
+		{
+			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			{
+				base.SendInMessage(msg);
+				return;
+			}
+
+			foreach (var board in _entityRegistry.ExchangeBoards)
+				RaiseStorageMessage(board.ToMessage());
+
+			foreach (var security in _entityRegistry.Securities)
+				RaiseStorageMessage(security.ToMessage());
+
+			base.SendInMessage(msg);
+		}
+
+		private void ProcessPortfolioLookup(PortfolioLookupMessage msg)
+		{
+			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			{
+				base.SendInMessage(msg);
+				return;
+			}
+
+			foreach (var portfolio in _entityRegistry.Portfolios)
+			{
+				RaiseStorageMessage(portfolio.ToMessage());
+				RaiseStorageMessage(portfolio.ToChangeMessage());
+			}
+
+			foreach (var position in _entityRegistry.Positions)
+			{
+				RaiseStorageMessage(position.ToChangeMessage());
+			}
+
+			base.SendInMessage(msg);
+		}
+
+		private void ProcessOrderStatus(OrderStatusMessage msg)
+		{
+			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			{
+				base.SendInMessage(msg);
+				return;
+			}
+
+			if (msg.OrderId == null && msg.OrderStringId.IsEmpty() && msg.OrderTransactionId == 0 && DaysLoad > TimeSpan.Zero)
+			{
+				var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
+				var to = msg.To;
+
+				if (Mode.Contains(StorageModes.Snapshot))
+				{
+					var storage = (ISnapshotStorage<long, ExecutionMessage>)GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
+
+					foreach (var snapshot in storage.GetAll(from, to))
+					{
+						snapshot.OriginalTransactionId = msg.TransactionId;
+						RaiseStorageMessage(snapshot);
+					}
+				}
+				else if (Mode.Contains(StorageModes.Incremental))
+				{
+					if (!msg.SecurityId.IsDefault())
+					{
+						GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Transaction)
+							.Load(from, to)
+							.ForEach(RaiseStorageMessage);
+					}
+				}
+			}
+
+			base.SendInMessage(msg);
+		}
+
+		private void ProcessMarketDataRequest(MarketDataMessage msg)
 		{
 			if (msg.IsBack || (msg.From == null && DaysLoad == TimeSpan.Zero))
 			{
@@ -375,26 +498,24 @@ namespace StockSharp.Algo.Storages
 				{
 					var transactionId = msg.TransactionId;
 
-					RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId, IsHistory = true });
+					RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId });
 
 					var lastTime = LoadMessages(msg, msg.From, msg.To, transactionId);
 
-					RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId, IsHistory = true });
+					if (msg.To != null && lastTime != null && msg.To <= lastTime)
+					{
+						_fullyProcessedSubscriptions.Add(transactionId);
+						RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId });
 
-					if (msg.IsHistory)
 						return;
+					}
 
-					Subscribe(msg.SecurityId, CreateDataType(msg));
+					Subscribe(msg);
 
 					var clone = (MarketDataMessage)msg.Clone();
 
-					if (!clone.IsRealTimeSubscription())
-					{
+					if (lastTime != null)
 						clone.From = lastTime;
-
-						if (clone.To != null && clone.From >= clone.To)
-							return;
-					}
 
 					base.SendInMessage(clone.ValidateBounds());	
 				}
@@ -403,11 +524,17 @@ namespace StockSharp.Algo.Storages
 			}
 			else
 			{
-				if (msg.IsHistory)
-					return;
+				UnSubscribe(msg);
 
-				UnSubscribe(msg.SecurityId, CreateDataType(msg));
-				base.SendInMessage(msg);
+				if (_fullyProcessedSubscriptions.Remove(msg.OriginalTransactionId))
+				{
+					RaiseNewOutMessage(new MarketDataMessage
+					{
+						OriginalTransactionId = msg.TransactionId,
+					});
+				}
+				else
+					base.SendInMessage(msg);
 			}
 		}
 
@@ -429,7 +556,7 @@ namespace StockSharp.Algo.Storages
 						}
 					}
 					else if (Mode.Contains(StorageModes.Incremental))
-						lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(msg.SecurityId, null), from, to, null);
+						lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(msg.SecurityId, null), from, to, TimeSpan.Zero, null);
 					
 					break;
 
@@ -445,46 +572,168 @@ namespace StockSharp.Algo.Storages
 						}
 					}
 					else if (Mode.Contains(StorageModes.Incremental))
-						lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(msg.SecurityId, null), from, to, null);
+						lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(msg.SecurityId, null), from, to, TimeSpan.Zero, null);
 					
 					break;
 
 				case MarketDataTypes.Trades:
-					lastTime = !UseCandlesInsteadTrades 
-						? LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Tick), from, to, m => SetTransactionId(m, transactionId)) 
-						: LoadTickMessages(msg.SecurityId, from, to, transactionId);
+					lastTime = LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Tick), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.OrderLog:
-					lastTime = LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.OrderLog), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.OrderLog), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.News:
-					lastTime = LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleTimeFrame:
-					lastTime = LoadMessages(GetStorage<TimeFrameCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					var tf = (TimeSpan)msg.Arg;
+
+					if (msg.IsCalcVolumeProfile)
+					{
+						IMarketDataStorage storage;
+
+						switch (msg.BuildCandlesFrom)
+						{
+							case null:
+							case MarketDataTypes.Trades:
+								storage = GetStorage(msg.SecurityId, typeof(ExecutionMessage), ExecutionTypes.Tick);
+								break;
+
+							case MarketDataTypes.OrderLog:
+								storage = GetStorage(msg.SecurityId, typeof(ExecutionMessage), ExecutionTypes.OrderLog);
+								break;
+
+							case MarketDataTypes.Level1:
+								storage = GetStorage(msg.SecurityId, typeof(Level1ChangeMessage), null);
+								break;
+
+							case MarketDataTypes.MarketDepth:
+								storage = GetStorage(msg.SecurityId, typeof(QuoteChangeMessage), null);
+								break;
+
+							default:
+								throw new ArgumentOutOfRangeException(nameof(msg), msg.BuildCandlesFrom, LocalizedStrings.Str1219);
+						}
+
+						var range = GetRange(storage, from, to, TimeSpan.FromDays(2));
+
+						if (range != null)
+						{
+							var exchangeInfoProvider = _storageRegistry.ExchangeInfoProvider;
+
+							var mdMsg = (MarketDataMessage)msg.Clone();
+							mdMsg.From = mdMsg.To = null;
+
+							switch (msg.BuildCandlesFrom)
+							{
+								case null:
+								case MarketDataTypes.Trades:
+									lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
+										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+										.ToCandles(mdMsg, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
+
+									break;
+
+								case MarketDataTypes.OrderLog:
+								{
+									switch (msg.BuildCandlesField)
+									{
+										case null:
+										case Level1Fields.LastTradePrice:
+											lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
+											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+											    .ToCandles(mdMsg, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
+
+											break;
+											
+										// TODO
+										//case Level1Fields.SpreadMiddle:
+										//	lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
+										//	    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+										//		.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(security.ToSecurityId()))
+										//	    .ToCandles(mdMsg, false, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
+										//	break;
+									}
+
+									break;
+								}
+
+								case MarketDataTypes.Level1:
+									switch (msg.BuildCandlesField)
+									{
+										case null:
+										case Level1Fields.LastTradePrice:
+											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
+												.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+												.ToTicks()
+												.ToCandles(mdMsg, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
+											break;
+
+										case Level1Fields.BestBidPrice:
+										case Level1Fields.BestAskPrice:
+										case Level1Fields.SpreadMiddle:
+											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
+											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+											    .ToOrderBooks()
+											    .ToCandles(mdMsg, msg.BuildCandlesField.Value, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
+											break;
+									}
+									
+									break;
+
+								case MarketDataTypes.MarketDepth:
+									lastTime = LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
+										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+										.ToCandles(mdMsg, msg.BuildCandlesField ?? Level1Fields.SpreadMiddle, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
+									break;
+
+								default:
+									throw new ArgumentOutOfRangeException(nameof(msg), msg.BuildCandlesFrom, LocalizedStrings.Str1219);
+							}
+						}
+					}
+					else
+					{
+						var days = DaysLoad;
+
+						if (tf.Ticks > 1)
+						{
+							if (tf.TotalMinutes < 15)
+								days = TimeSpan.FromTicks(tf.Ticks * 10000);
+							else if (tf.TotalHours < 2)
+								days = TimeSpan.FromTicks(tf.Ticks * 1000);
+							else if (tf.TotalDays < 2)
+								days = TimeSpan.FromTicks(tf.Ticks * 100);
+							else
+								days = TimeSpan.FromTicks(tf.Ticks * 50);	
+						}
+
+						lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(msg.SecurityId, tf, msg.AllowBuildFromSmallerTimeFrame), from, to, days, m => SetTransactionId(m, transactionId));
+					}
+					
 					break;
 
 				case MarketDataTypes.CandlePnF:
-					lastTime = LoadMessages(GetStorage<PnFCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<PnFCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleRange:
-					lastTime = LoadMessages(GetStorage<RangeCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<RangeCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleRenko:
-					lastTime = LoadMessages(GetStorage<RenkoCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<RenkoCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleTick:
-					lastTime = LoadMessages(GetStorage<TickCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<TickCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleVolume:
-					lastTime = LoadMessages(GetStorage<VolumeCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<VolumeCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				default:
@@ -494,95 +743,44 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		private DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset? from, DateTimeOffset? to, Func<TMessage, DateTimeOffset> func) 
-			where TMessage : Message
+		private static Tuple<DateTimeOffset, DateTimeOffset> GetRange(IMarketDataStorage storage, DateTimeOffset? from, DateTimeOffset? to, TimeSpan daysLoad)
 		{
 			var last = storage.Dates.LastOr();
 
 			if (last == null)
 				return null;
 
-			if (from == null)
-			{
-				var days = DaysLoad;
-
-				if (typeof(TMessage) == typeof(TimeFrameCandleMessage))
-				{
-					var tf = (TimeSpan)storage.Arg;
-
-					if (tf.Ticks > 1)
-					{
-						if (tf.TotalMinutes < 15)
-							days = TimeSpan.FromTicks(tf.Ticks * 10000);
-						else if (tf.TotalHours < 2)
-							days = TimeSpan.FromTicks(tf.Ticks * 1000);
-						else if (tf.TotalDays < 2)
-							days = TimeSpan.FromTicks(tf.Ticks * 100);
-						else
-							days = TimeSpan.FromTicks(tf.Ticks * 50);	
-					}
-				}
-				else if (typeof(TMessage) == typeof(QuoteChangeMessage) || typeof(TMessage) == typeof(Level1ChangeMessage))
-					days = TimeSpan.Zero;
-
-				from = (to ?? last.Value) - days;
-			}
-
 			if (to == null)
 				to = last.Value;
 
-			var messages = storage.Load(from.Value.Date, to.Value.Date.EndOfDay());
-			var lastTime = from.Value;
+			if (from == null)
+				from = to.Value - daysLoad;
 
+			return Tuple.Create(from.Value, to.Value);
+		}
+
+		private DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset? from, DateTimeOffset? to, TimeSpan daysLoad, Func<TMessage, DateTimeOffset> func) 
+			where TMessage : Message
+		{
+			var range = GetRange(storage, from, to, daysLoad);
+
+			if (range == null)
+				return null;
+
+			var messages = storage.Load(range.Item1.Date, range.Item2.Date.EndOfDay());
+
+			return LoadMessages(messages, range.Item1, func);
+		}
+
+		private DateTimeOffset? LoadMessages<TMessage>(IEnumerable<TMessage> messages, DateTimeOffset lastTime, Func<TMessage, DateTimeOffset> func)
+			where TMessage : Message
+		{
 			foreach (var message in messages)
 			{
 				if (func != null)
 					lastTime = func.Invoke(message);
 
 				RaiseStorageMessage(message);
-			}
-
-			return lastTime;
-		}
-
-		private DateTimeOffset? LoadTickMessages(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to, long transactionId)
-		{
-			var tickStorage = GetStorage<ExecutionMessage>(securityId, ExecutionTypes.Tick);
-
-			var last = tickStorage.Dates.LastOr();
-
-			if (last == null)
-				return null;
-
-			if (from == null)
-				from = (to ?? last.Value) - DaysLoad;
-
-			if (to == null)
-				to = last.Value;
-
-			var tickDates = tickStorage.GetDates(from.Value.Date, to.Value.Date.EndOfDay()).ToArray();
-
-			var candleStorage = GetStorage<TimeFrameCandleMessage>(securityId, CandlesTimeFrame);
-
-			var ticksLastDate = tickStorage.GetToDate() ?? from.Value.Date;
-			var candlesLastDate = candleStorage.GetToDate() ?? from.Value.Date;
-
-			var toDate = ticksLastDate.Max(candlesLastDate).Min(to.Value.Date);
-			var lastTime = from;
-
-			for (var date = from.Value.Date; date <= toDate; date = date.AddDays(1))
-			{
-				var messages = tickDates.Contains(date)
-					? tickStorage.Load(date) 
-					: candleStorage.Load(date).ToTrades(0.001m);
-
-				foreach (var msg in messages)
-				{
-					lastTime = msg.ServerTime;
-
-					msg.OriginalTransactionId = transactionId;
-					RaiseStorageMessage(msg);
-				}
 			}
 
 			return lastTime;
@@ -604,9 +802,9 @@ namespace StockSharp.Algo.Storages
 					if (security == null)
 						security = secMsg.ToSecurity(_storageRegistry.ExchangeInfoProvider);
 					else
-						security.ApplyChanges(secMsg, _storageRegistry.ExchangeInfoProvider);
+						security.ApplyChanges(secMsg, _storageRegistry.ExchangeInfoProvider, OverrideSecurityData);
 
-					_entityRegistry.Securities.Save(security);
+					_entityRegistry.Securities.Save(security, OverrideSecurityData);
 					break;
 				}
 				case MessageTypes.Board:
@@ -777,52 +975,26 @@ namespace StockSharp.Algo.Storages
 			RaiseNewOutMessage(message);
 		}
 
-		private static DataType CreateDataType(MarketDataMessage msg)
-		{
-			switch (msg.DataType)
-			{
-				case MarketDataTypes.Level1:
-					return DataType.Level1;
-
-				case MarketDataTypes.MarketDepth:
-					return DataType.MarketDepth;
-
-				case MarketDataTypes.Trades:
-					return DataType.Ticks;
-
-				case MarketDataTypes.OrderLog:
-					return DataType.OrderLog;
-
-				case MarketDataTypes.News:
-					return DataType.News;
-
-				case MarketDataTypes.CandleTimeFrame:
-					return DataType.TimeFrame((TimeSpan)msg.Arg);
-
-				case MarketDataTypes.CandleTick:
-					return DataType.Create(typeof(TickCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandleVolume:
-					return DataType.Create(typeof(VolumeCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandleRange:
-					return DataType.Create(typeof(RangeCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandlePnF:
-					return DataType.Create(typeof(PnFCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandleRenko:
-					return DataType.Create(typeof(RenkoCandleMessage), msg.Arg);
-
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-
 		private static DateTimeOffset SetTransactionId(CandleMessage msg, long transactionId)
 		{
 			msg.OriginalTransactionId = transactionId;
-			return msg.OpenTime;
+
+			var lastTime = msg.CloseTime;
+
+			if (lastTime.IsDefault())
+			{
+				lastTime = msg.OpenTime;
+
+				if (msg is TimeFrameCandleMessage tfMsg)
+				{
+					if (tfMsg.TimeFrame.IsDefault())
+						throw new InvalidOperationException("tf == 0");
+
+					lastTime += tfMsg.TimeFrame;
+				}
+			}
+
+			return lastTime;
 		}
 
 		private static DateTimeOffset SetTransactionId(NewsMessage msg, long transactionId)
@@ -842,11 +1014,15 @@ namespace StockSharp.Algo.Storages
 		{
 			base.Save(storage);
 
-			storage.SetValue(nameof(Drive), Drive.SaveEntire(false));
+			if (Drive != null)
+				storage.SetValue(nameof(Drive), Drive.SaveEntire(false));
+
+			storage.SetValue(nameof(Mode), Mode);
 			storage.SetValue(nameof(Format), Format);
-			storage.SetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
-			storage.SetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
 			storage.SetValue(nameof(DaysLoad), DaysLoad);
+			storage.SetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
+			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
+			storage.SetValue(nameof(SupportLookupMessages), SupportLookupMessages);
 		}
 
 		/// <inheritdoc />
@@ -857,10 +1033,12 @@ namespace StockSharp.Algo.Storages
 			if (storage.ContainsKey(nameof(Drive)))
 				Drive = storage.GetValue<SettingsStorage>(nameof(Drive)).LoadEntire<IMarketDataDrive>();
 
+			Mode = storage.GetValue(nameof(Mode), Mode);
 			Format = storage.GetValue(nameof(Format), Format);
-			UseCandlesInsteadTrades = storage.GetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
-			CandlesTimeFrame = storage.GetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
 			DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
+			CacheBuildableCandles = storage.GetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
+			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
+			SupportLookupMessages = storage.GetValue(nameof(SupportLookupMessages), SupportLookupMessages);
 		}
 
 		/// <summary>
@@ -869,7 +1047,16 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new StorageMessageAdapter(InnerAdapter, _entityRegistry, _storageRegistry);
+			return new StorageMessageAdapter(InnerAdapter, _entityRegistry, _storageRegistry, _snapshotRegistry)
+			{
+				CacheBuildableCandles = CacheBuildableCandles,
+				OverrideSecurityData = OverrideSecurityData,
+				DaysLoad = DaysLoad,
+				Format = Format,
+				Drive = Drive,
+				Mode = Mode,
+				SupportLookupMessages = SupportLookupMessages,
+			};
 		}
 	}
 }

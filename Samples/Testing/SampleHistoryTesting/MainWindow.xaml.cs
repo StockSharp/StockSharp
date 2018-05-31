@@ -69,7 +69,7 @@ namespace SampleHistoryTesting
 			{
 			}
 
-			void ISecurityStorage.Save(Security security)
+			void ISecurityStorage.Save(Security security, bool forced)
 			{
 			}
 

@@ -37,7 +37,7 @@ namespace StockSharp.Community
 		/// Initializes a new instance of the <see cref="FileClient"/>.
 		/// </summary>
 		public FileClient()
-			: this("http://stocksharp.com/services/fileservice.svc".To<Uri>())
+			: this("https://stocksharp.com/services/fileservice.svc".To<Uri>())
 		{
 		}
 

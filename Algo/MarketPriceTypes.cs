@@ -15,6 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo
 {
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -28,21 +29,21 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The counter-price (for quick closure of position).
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str975Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str975Key)]
 		[EnumMember]
 		Opposite,
 
 		/// <summary>
 		/// The concurrent price (for quoting at the edge of spread).
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str976Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str976Key)]
 		[EnumMember]
 		Following,
 
 		/// <summary>
 		/// Spread middle.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.SpreadKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SpreadKey)]
 		[EnumMember]
 		Middle,
 	}

@@ -15,6 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Risk
 {
+	using System.ComponentModel.DataAnnotations;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -25,19 +27,19 @@ namespace StockSharp.Algo.Risk
 		/// <summary>
 		/// Close positions.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str856Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str856Key)]
 		ClosePositions,
 
 		/// <summary>
 		/// Stop trading.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str857Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str857Key)]
 		StopTrading,
 
 		/// <summary>
 		/// Cancel orders.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str858Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str858Key)]
 		CancelOrders,
 	}
 }

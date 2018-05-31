@@ -39,9 +39,40 @@ S#.API является основой всех остальных продук�
 <externalLink>
 <linkText>других</linkText>
 <linkAlternateText>Брокеры-партнеры StockSharp</linkAlternateText>
-<linkUri>http://stocksharp.ru/broker/</linkUri>
+<linkUri>https://stocksharp.ru/broker/</linkUri>
 <linkTarget>_blank</linkTarget>
 </externalLink>.
+</content>
+</step>
+<step>
+<content>
+<legacyBold><link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9">Биржи криптовалют</link></legacyBold> - 
+		<token>Binance</token>,
+		<token>Bitexbook</token>,
+		<token>Bitfinex</token>,
+		<token>Bithumb</token>,
+		<token>Bitmex</token>,
+		<token>BitStamp</token>,
+		<token>Bittrex</token>,
+		<token>Btce</token>,
+		<token>Cex</token>,
+		<token>Coinbase</token>,
+		<token>Coincheck</token>,
+		<token>CoinExchange</token>,
+		<token>Cryptopia</token>,
+		<token>Deribit</token>,
+		<token>Exmo</token>,
+		<token>Gdax</token>,
+		<token>HitBtc</token>,
+		<token>Huobi</token>,
+		<token>Kraken</token>,
+		<token>Kucoin</token>,
+		<token>Liqui</token>,
+		<token>LiveCoin</token>,
+		<token>Okcoin</token>,
+		<token>Okex</token>,
+		<token>Poloniex</token>,
+		<token>Yobit</token>
 </content>
 </step>
 <step>

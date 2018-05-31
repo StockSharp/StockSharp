@@ -36,14 +36,8 @@
 		public CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IEntityRegistry entityRegistry, IExchangeInfoProvider exchangeInfoProvider, IMarketDataDrive drive, StorageFormats storageFormat)
 			: base(dataType, fields)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			if (exchangeInfoProvider == null)
-				throw new ArgumentNullException(nameof(exchangeInfoProvider));
-
-			_entityRegistry = entityRegistry;
-			_exchangeInfoProvider = exchangeInfoProvider;
+			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
+			_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 			_drive = drive;
 			_storageFormat = storageFormat;
 		}
@@ -92,36 +86,14 @@
 								continue;
 							}
 
-							security.Type = secMsg.SecurityType ?? secMsg.SecurityId.SecurityType;
-							security.CfiCode = secMsg.CfiCode;
-							security.Strike = secMsg.Strike;
-							security.OptionType = secMsg.OptionType;
-							security.Name = secMsg.Name;
-							security.ShortName = secMsg.ShortName;
-							security.Class = secMsg.Class;
-							security.BinaryOptionType = secMsg.BinaryOptionType;
-							security.ExternalId = secMsg.SecurityId.ToExternalId();
-							security.ExpiryDate = secMsg.ExpiryDate;
-							security.SettlementDate = secMsg.SettlementDate;
-							security.UnderlyingSecurityId = secMsg.UnderlyingSecurityCode + "@" + secMsg.SecurityId.BoardCode;
-							security.Currency = secMsg.Currency;
-							security.PriceStep = secMsg.PriceStep;
-							security.Decimals = secMsg.Decimals;
-							security.VolumeStep = secMsg.VolumeStep;
-							security.Multiplier = secMsg.Multiplier;
-							security.IssueSize = secMsg.IssueSize;
-							security.IssueDate = secMsg.IssueDate;
-							security.UnderlyingSecurityType = secMsg.UnderlyingSecurityType;
+							security.ApplyChanges(secMsg, _exchangeInfoProvider, UpdateDuplicateSecurities);
 						}
 						else
 							security = secMsg.ToSecurity(_exchangeInfoProvider);
 
-						_entityRegistry.Securities.Save(security);
+						_entityRegistry.Securities.Save(security, UpdateDuplicateSecurities);
 
-						if (ExtendedInfoStorageItem != null)
-						{
-							ExtendedInfoStorageItem.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
-						}
+						ExtendedInfoStorageItem?.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
 					}
 
 					var percent = (int)(((double)lineIndex / len) * 100 - 1).Round();
@@ -187,28 +159,32 @@
 
 						if (dataType.IsCandleMessage())
 						{
-							var timeFrame = (TimeSpan)DataType.Arg;
+							var timeFrame = DataType.Arg as TimeSpan?;
 							var candles = secGroup.Cast<CandleMessage>().ToArray();
 
 							foreach (var candle in candles)
 							{
 								if (candle.CloseTime < candle.OpenTime)
 								{
-									// если в файле время закрытия отсутствует
-									if (candle.CloseTime.Date == candle.CloseTime)
-										candle.CloseTime = default(DateTimeOffset);
+									// close time doesn't exist in importing file
+									candle.CloseTime = default(DateTimeOffset);
 								}
 								else if (candle.CloseTime > candle.OpenTime)
 								{
-									// если в файле время открытия отсутствует
-									if (candle.OpenTime.Date == candle.OpenTime)
+									// date component can be missed for open time
+									if (candle.OpenTime.Date.IsDefault())
 									{
 										candle.OpenTime = candle.CloseTime;
 
-										//var tfCandle = candle as TimeFrameCandle;
+										if (timeFrame != null)
+											candle.OpenTime -= timeFrame.Value;
+									}
+									else if (candle.OpenTime.TimeOfDay.IsDefault())
+									{
+										candle.OpenTime = candle.CloseTime;
 
-										//if (tfCandle != null)
-										candle.CloseTime += timeFrame;
+										if (timeFrame != null)
+											candle.OpenTime -= timeFrame.Value;
 									}
 								}
 							}

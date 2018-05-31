@@ -9,11 +9,6 @@
             The message adapter for <see cref="N:StockSharp.LiveCoin"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.LiveCoin.LiveCoinMessageAdapter.AllTimeFrames">
-            <summary>
-            Possible time-frames.
-            </summary>
-        </member>
         <member name="P:StockSharp.LiveCoin.LiveCoinMessageAdapter.Key">
             <summary>
             Key.

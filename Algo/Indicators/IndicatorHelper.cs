@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Extension class for indicators.
@@ -35,10 +34,20 @@ namespace StockSharp.Algo.Indicators
 		/// <returns>The current value.</returns>
 		public static decimal GetCurrentValue(this IIndicator indicator)
 		{
+			return indicator.GetNullableCurrentValue() ?? 0;
+		}
+
+		/// <summary>
+		/// To get the current value of the indicator.
+		/// </summary>
+		/// <param name="indicator">Indicator.</param>
+		/// <returns>The current value.</returns>
+		public static decimal? GetNullableCurrentValue(this IIndicator indicator)
+		{
 			if (indicator == null)
 				throw new ArgumentNullException(nameof(indicator));
 
-			return indicator.GetCurrentValue<decimal>();
+			return indicator.GetCurrentValue<decimal?>();
 		}
 
 		/// <summary>
@@ -63,10 +72,21 @@ namespace StockSharp.Algo.Indicators
 		/// <returns>Indicator value.</returns>
 		public static decimal GetValue(this IIndicator indicator, int index)
 		{
+			return indicator.GetNullableValue(index) ?? 0;
+		}
+
+		/// <summary>
+		/// To get the indicator value by the index (0 - last value).
+		/// </summary>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="index">The value index.</param>
+		/// <returns>Indicator value.</returns>
+		public static decimal? GetNullableValue(this IIndicator indicator, int index)
+		{
 			if (indicator == null)
 				throw new ArgumentNullException(nameof(indicator));
 
-			return indicator.GetValue<decimal>(index);
+			return indicator.GetValue<decimal?>(index);
 		}
 
 		/// <summary>
@@ -81,15 +101,27 @@ namespace StockSharp.Algo.Indicators
 			if (indicator == null)
 				throw new ArgumentNullException(nameof(indicator));
 
-			if (index >= indicator.Container.Count)
+			var container = indicator.Container;
+
+			if (index >= container.Count)
 			{
-				if (index == 0 && typeof(decimal) == typeof(T))
-					return 0m.To<T>();
-				else
-					throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.Str914Params.Put(indicator.Name));
+				return default(T);
+				//if (index == 0 && typeof(decimal) == typeof(T))
+				//	return 0m.To<T>();
+				//else
+				//throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.Str914Params.Put(indicator.Name));
 			}
 
-			var value = indicator.Container.GetValue(index).Item2;
+			var value = container.GetValue(index).Item2;
+
+			if (value.IsEmpty)
+			{
+				if (value is T t)
+					return t;
+
+				return default(T);
+			}
+
 			return typeof(IIndicatorValue).IsAssignableFrom(typeof(T)) ? value.To<T>() : value.GetValue<T>();
 		}
 

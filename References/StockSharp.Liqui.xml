@@ -9,11 +9,6 @@
             The message adapter for <see cref="N:StockSharp.Liqui"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Liqui.LiquiMessageAdapter.AllTimeFrames">
-            <summary>
-            Possible time-frames.
-            </summary>
-        </member>
         <member name="P:StockSharp.Liqui.LiquiMessageAdapter.Key">
             <summary>
             Key.

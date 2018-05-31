@@ -7,15 +7,16 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 	using Ecng.Common;
 	using Ecng.Interop;
+	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Implementation of <see cref="ISnapshotSerializer{TMessage}"/> in binary format for <see cref="QuoteChangeMessage"/>.
+	/// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="QuoteChangeMessage"/>.
 	/// </summary>
-	public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<QuoteChangeMessage>
+	public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, QuoteChangeMessage>
 	{
-		private const int _snapshotSize = 1024 * 10; // 10kb
+		//private const int _snapshotSize = 1024 * 10; // 10kb
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		private struct QuotesSnapshotRow
@@ -24,7 +25,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public decimal Volume;
 		}
 
-		[StructLayout(LayoutKind.Sequential, Pack = 1, Size = _snapshotSize, CharSet = CharSet.Unicode)]
+		[StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = _snapshotSize*/, CharSet = CharSet.Unicode)]
 		private struct QuotesSnapshot
 		{
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
@@ -37,14 +38,14 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public int AskCount;
 		}
 
-		private const int _rowsOffset = 224;
+		//private const int _rowsOffset = 224;
 
-		private int _maxDepth = 100;
+		private int? _maxDepth;
 
 		/// <summary>
-		/// The maximum depth of order book. The default value is 100.
+		/// The maximum depth of order book.
 		/// </summary>
-		public int MaxDepth
+		public int? MaxDepth
 		{
 			get => _maxDepth;
 			set
@@ -56,13 +57,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		Version ISnapshotSerializer<QuoteChangeMessage>.Version { get; } = new Version(1, 0);
+		Version ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Version { get; } = new Version(2, 0);
 
-		int ISnapshotSerializer<QuoteChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
+		//int ISnapshotSerializer<SecurityId, QuoteChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
-		string ISnapshotSerializer<QuoteChangeMessage>.FileName => "orderbook_snapshot.bin";
+		string ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Name => "OrderBook";
 
-		void ISnapshotSerializer<QuoteChangeMessage>.Serialize(Version version, QuoteChangeMessage message, byte[] buffer)
+		byte[] ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Serialize(Version version, QuoteChangeMessage message)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -78,18 +79,28 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				LastChangeLocalTime = message.LocalTime.To<long>(),
 			};
 
-			var bids = message.Bids.Take(MaxDepth).ToArray();
-			var asks = message.Asks.Take(MaxDepth).ToArray();
+			var bids = message.Bids.ToArray();
+			var asks = message.Asks.ToArray();
+
+			if (MaxDepth != null)
+			{
+				bids = bids.Take(MaxDepth.Value).ToArray();
+				asks = asks.Take(MaxDepth.Value).ToArray();
+			}
 
 			snapshot.BidCount = bids.Length;
 			snapshot.AskCount = asks.Length;
 
+			var snapshotSize = typeof(QuotesSnapshot).SizeOf();
+			var rowSize = typeof(QuotesSnapshotRow).SizeOf();
+
+			var buffer = new byte[snapshotSize + (bids.Length + asks.Length) * rowSize];
+
 			var ptr = snapshot.StructToPtr();
-			Marshal.Copy(ptr, buffer, 0, _snapshotSize);
+			Marshal.Copy(ptr, buffer, 0, snapshotSize);
 			Marshal.FreeHGlobal(ptr);
 
-			var offset = _rowsOffset;
-			var rowSize = Marshal.SizeOf(typeof(QuotesSnapshotRow));
+			var offset = snapshotSize;
 
 			foreach (var quote in bids.Concat(asks))
 			{
@@ -105,9 +116,11 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				offset += rowSize;
 			}
+
+			return buffer;
 		}
 
-		QuoteChangeMessage ISnapshotSerializer<QuoteChangeMessage>.Deserialize(Version version, byte[] buffer)
+		QuoteChangeMessage ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Deserialize(Version version, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -117,7 +130,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			{
 				var ptr = handle.Value.AddrOfPinnedObject();
 
-				var snapshot = (QuotesSnapshot)Marshal.PtrToStructure(ptr, typeof(QuotesSnapshot));
+				var snapshot = ptr.ToStruct<QuotesSnapshot>();
 
 				var bids = new List<QuoteChange>();
 				var asks = new List<QuoteChange>();
@@ -132,20 +145,20 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					IsSorted = true,
 				};
 
-				ptr += _rowsOffset;
+				ptr += typeof(QuotesSnapshot).SizeOf();
 
 				var rowSize = Marshal.SizeOf(typeof(QuotesSnapshotRow));
 
 				for (var i = 0; i < snapshot.BidCount; i++)
 				{
-					var row = (QuotesSnapshotRow)Marshal.PtrToStructure(ptr, typeof(QuotesSnapshotRow));
+					var row = ptr.ToStruct<QuotesSnapshotRow>();
 					bids.Add(new QuoteChange(Sides.Buy, row.Price, row.Volume));
 					ptr += rowSize;
 				}
 
 				for (var i = 0; i < snapshot.AskCount; i++)
 				{
-					var row = (QuotesSnapshotRow)Marshal.PtrToStructure(ptr, typeof(QuotesSnapshotRow));
+					var row = ptr.ToStruct<QuotesSnapshotRow>();
 					asks.Add(new QuoteChange(Sides.Sell, row.Price, row.Volume));
 					ptr += rowSize;
 				}
@@ -154,12 +167,17 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		SecurityId ISnapshotSerializer<QuoteChangeMessage>.GetSecurityId(QuoteChangeMessage message)
+		SecurityId ISnapshotSerializer<SecurityId, QuoteChangeMessage>.GetKey(QuoteChangeMessage message)
 		{
 			return message.SecurityId;
 		}
 
-		void ISnapshotSerializer<QuoteChangeMessage>.Update(QuoteChangeMessage message, QuoteChangeMessage changes)
+		QuoteChangeMessage ISnapshotSerializer<SecurityId, QuoteChangeMessage>.CreateCopy(QuoteChangeMessage message)
+		{
+			return (QuoteChangeMessage)message.Clone();
+		}
+
+		void ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Update(QuoteChangeMessage message, QuoteChangeMessage changes)
 		{
 			if (!changes.IsSorted)
 			{
@@ -176,6 +194,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			message.ServerTime = changes.ServerTime;
 		}
 
-		DataType ISnapshotSerializer<QuoteChangeMessage>.DataType => DataType.MarketDepth;
+		DataType ISnapshotSerializer<SecurityId, QuoteChangeMessage>.DataType => DataType.MarketDepth;
 	}
 }

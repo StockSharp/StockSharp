@@ -2,6 +2,7 @@ T:StockSharp.Okex.OkexMessageAdapter/summary;DocStr2538
 P:StockSharp.Okex.OkexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Okex.OkexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Okex.OkexMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Okex.OkexMessageAdapter.AdminPassword/summary;AdminPassword
 M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Okex.OkexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2

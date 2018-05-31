@@ -20,7 +20,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Message adapter, forward messages through a transport channel <see cref="IMessageChannel"/>.
 	/// </summary>
-	public class ChannelMessageAdapter : MessageAdapterWrapper
+	public class ChannelMessageAdapter : MessageAdapterWrapper, IMessageSender
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ChannelMessageAdapter"/>.
@@ -113,6 +113,15 @@ namespace StockSharp.Messages
 				InputChannel.Open();
 
 			InputChannel.SendInMessage(message);
+		}
+
+		/// <inheritdoc />
+		public void SendOutMessage(Message message)
+		{
+			if (!OutputChannel.IsOpened)
+				OutputChannel.Open();
+
+			OutputChannel.SendInMessage(message);
 		}
 
 		/// <summary>

@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -32,65 +33,77 @@ namespace StockSharp.Messages
 		/// Level 1.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Level1Key)]
 		Level1,
 
 		/// <summary>
 		/// Market depth (order book).
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MarketDepthKey)]
 		MarketDepth,
 
 		/// <summary>
 		/// Tick trades.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TicksKey)]
 		Trades,
 
 		/// <summary>
 		/// Order log.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OrderLogKey)]
 		OrderLog,
 
 		/// <summary>
 		/// News.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NewsKey)]
 		News,
 
 		/// <summary>
 		/// Candles (time-frame).
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TimeFrameCandleKey)]
 		CandleTimeFrame,
 
 		/// <summary>
 		/// Candle (tick).
 		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TickCandleKey)]
 		CandleTick,
 
 		/// <summary>
 		/// Candle (volume).
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VolumeCandleKey)]
 		CandleVolume,
 
 		/// <summary>
 		/// Candle (range).
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RangeCandleKey)]
 		CandleRange,
 
 		/// <summary>
 		/// Candle (X&amp;0).
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PnFCandleKey)]
 		CandlePnF,
 
 		/// <summary>
 		/// Candle (renko).
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RenkoCandleKey)]
 		CandleRenko,
 	}
 
@@ -105,18 +118,21 @@ namespace StockSharp.Messages
 		/// Request built candles and build the missing candles from trades, depths etc.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadAndBuildKey)]
 		LoadAndBuild,
 
 		/// <summary>
 		/// Request only built candles.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadKey)]
 		Load,
 
 		/// <summary>
 		/// Build from trades, depths etc.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BuildKey)]
 		Build
 	}
 
@@ -228,10 +244,26 @@ namespace StockSharp.Messages
 		public Level1Fields? BuildCandlesField { get; set; }
 
 		/// <summary>
+		/// Allow build candles from smaller timeframe.
+		/// </summary>
+		/// <remarks>
+		/// Avaible only for <see cref="TimeFrameCandleMessage"/>.
+		/// </remarks>
+		[DataMember]
+		public bool AllowBuildFromSmallerTimeFrame { get; set; } = true;
+
+		/// <summary>
 		/// Contains history market data.
 		/// </summary>
 		[DataMember]
+		[Obsolete]
 		public bool IsHistory { get; set; }
+
+		/// <summary>
+		/// Use only the regular trading hours for which data will be requested.
+		/// </summary>
+		[DataMember]
+		public bool IsRegularTradingHours { get; set; }
 
 		/// <summary>
 		/// The default depth of order book.
@@ -279,7 +311,9 @@ namespace StockSharp.Messages
 				BuildCandlesFrom = BuildCandlesFrom,
 				BuildCandlesField = BuildCandlesField,
 				IsCalcVolumeProfile = IsCalcVolumeProfile,
-				IsHistory = IsHistory,
+				//IsHistory = IsHistory,
+				AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame,
+				IsRegularTradingHours = IsRegularTradingHours,
 			};
 
 			CopyTo(clone);

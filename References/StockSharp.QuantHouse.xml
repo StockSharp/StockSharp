@@ -15,6 +15,9 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
+    <member name="P:StockSharp.QuantHouse.QuantFeedMessageAdapter.IsSupportCandlesUpdates">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.QuantHouse.QuantFeedMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>

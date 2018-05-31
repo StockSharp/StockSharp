@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Testing
 
 			public EmulationEntityFactory(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios)
 			{
-				_securityProvider = securityProvider;
+				_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 				_portfolios = portfolios.ToDictionary(p => p.Name, p => p, StringComparer.InvariantCultureIgnoreCase);
 			}
 
@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Testing
 			private readonly HistoryEmulationConnector _parent;
 
 			public HistoryBasketMessageAdapter(HistoryEmulationConnector parent)
-				: base(parent.TransactionIdGenerator)
+				: base(parent.TransactionIdGenerator, new InMemoryMessageAdapterProvider(), new InMemoryExchangeInfoProvider())
 			{
 				_parent = parent;
 			}
@@ -230,12 +230,8 @@ namespace StockSharp.Algo.Testing
 
 			_initialMoney = portfolios.ToDictionary(pf => pf, pf => pf.BeginValue);
 			EntityFactory = new EmulationEntityFactory(securityProvider, _initialMoney.Keys);
-
-			LatencyManager = null;
+			
 			RiskManager = null;
-			CommissionManager = null;
-			PnLManager = null;
-			SlippageManager = null;
 
 			SupportSubscriptionTracking = true;
 
@@ -247,6 +243,11 @@ namespace StockSharp.Algo.Testing
 			Adapter = new HistoryBasketMessageAdapter(this);
 			Adapter.InnerAdapters.Add(EmulationAdapter);
 			Adapter.InnerAdapters.Add(HistoryMessageAdapter);
+
+			Adapter.LatencyManager = null;
+			Adapter.CommissionManager = null;
+			Adapter.PnLManager = null;
+			Adapter.SlippageManager = null;
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
 			ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;

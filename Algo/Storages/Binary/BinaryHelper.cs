@@ -342,7 +342,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return time;
 		}
 
-		public static DateTimeOffset ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, bool isTickPrecision, ref TimeSpan prevOffset, bool bigRange = false)
+		public static DateTimeOffset ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, bool isTickPrecision, ref TimeSpan prevOffset)
 		{
 			if (allowDiffOffsets)
 			{
@@ -543,6 +543,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return null;
 
 			return reader.ReadLong();
+		}
+
+		public static bool HasLocalTime(this Message msg, DateTimeOffset serverTime)
+		{
+			return !msg.LocalTime.IsDefault() && msg.LocalTime != serverTime/* && (msg.LocalTime - serverTime).TotalHours.Abs() < 1*/;
 		}
 	}
 }

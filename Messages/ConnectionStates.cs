@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -31,35 +32,35 @@ namespace StockSharp.Messages
 		/// Non active.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.DisconnectedKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DisconnectedKey)]
 		Disconnected,
 
 		/// <summary>
 		/// Disconnect pending.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.DisconnectingKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DisconnectingKey)]
 		Disconnecting,
 
 		/// <summary>
 		/// Connect pending.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.ConnectingKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ConnectingKey)]
 		Connecting,
 
 		/// <summary>
 		/// Connection active.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.ConnectedKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ConnectedKey)]
 		Connected,
 
 		/// <summary>
 		/// Error connection.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.FailedKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FailedKey)]
 		Failed,
 	}
 }

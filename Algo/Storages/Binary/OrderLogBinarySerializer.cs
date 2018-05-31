@@ -203,7 +203,7 @@ namespace StockSharp.Algo.Storages.Binary
 					throw new ArgumentOutOfRangeException(nameof(messages), orderId, LocalizedStrings.Str925);
 
 				if (message.ExecutionType != ExecutionTypes.OrderLog)
-					throw new ArgumentOutOfRangeException(nameof(messages), message.ExecutionType, LocalizedStrings.Str1695Params.Put(orderId));
+					throw new ArgumentOutOfRangeException(nameof(messages), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
 
 				// sell market orders has zero price (if security do not have min allowed price)
 				// execution ticks (like option execution) may be a zero cost

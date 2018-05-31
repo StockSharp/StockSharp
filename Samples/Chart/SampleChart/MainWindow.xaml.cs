@@ -62,7 +62,7 @@ namespace SampleChart
 		private ICandleBuilder _candleBuilder;
 		private MarketDataMessage _mdMsg;
 		private readonly ICandleBuilderValueTransform _candleTransform = new TickCandleBuilderValueTransform();
-		private CandlesSeriesHolder _holder;
+		private readonly CandlesHolder _holder = new CandlesHolder();
 		private bool _historyLoaded;
 		private bool _isRealTime;
 		private DateTimeOffset _lastTime;
@@ -76,6 +76,9 @@ namespace SampleChart
 
 		private DateTime _lastRealtimeUpdateTime;
 		private DateTime _lastDrawTime;
+
+		private readonly IdGenerator _transactionIdGenerator = new IncrementalIdGenerator();
+		private long _transactionId;
 
 		public MainWindow()
 		{
@@ -231,10 +234,12 @@ namespace SampleChart
 		{
 			var msgType = series.CandleType.ToCandleMessageType();
 
-			_holder = new CandlesSeriesHolder(series);
+			_transactionId = _transactionIdGenerator.GetNextId();
+			_holder.Clear();
+			_holder.CreateCandleSeries(_transactionId, series);
 
 			_candleTransform.Process(new ResetMessage());
-			_candleBuilder = msgType.ToCandleMarketDataType().CreateCandleBuilder();
+			_candleBuilder = msgType.ToCandleMarketDataType().CreateCandleBuilder(_exchangeInfoProvider);
 
 			var storage = new StorageRegistry();
 
@@ -416,6 +421,8 @@ namespace SampleChart
 					continue;
 
 				lastTime = message.OpenTime;
+
+				message.OriginalTransactionId = _transactionId;
 
 				if (_holder.UpdateCandle(message, out var candle) != null)
 				{

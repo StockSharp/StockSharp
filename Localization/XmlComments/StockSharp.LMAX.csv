@@ -1,10 +1,9 @@
 T:StockSharp.LMAX.LmaxMessageAdapter/summary;DocStr3904
 M:StockSharp.LMAX.LmaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.LMAX.LmaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.LMAX.LmaxMessageAdapter.CreateOrderCondition/summary;DocStr44
-M:StockSharp.LMAX.LmaxMessageAdapter.CreateOrderCondition/returns;DocStr45
-M:StockSharp.LMAX.LmaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
-M:StockSharp.LMAX.LmaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.LMAX.LmaxMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
+M:StockSharp.LMAX.LmaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.SecurityLookupRequired/summary;DocStr452
 F:StockSharp.LMAX.LmaxMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.LMAX.LmaxMessageAdapter.Login/summary;Login

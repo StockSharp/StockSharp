@@ -193,6 +193,11 @@ namespace StockSharp.Algo
 		public IEnumerable<Portfolio> RegisteredPortfolios => _subscriptionManager.RegisteredPortfolios;
 
 		/// <summary>
+		/// List of all candles series, subscribed via <see cref="SubscribeCandles"/>.
+		/// </summary>
+		public IEnumerable<CandleSeries> SubscribedCandleSeries => _entityCache.AllCandleSeries;
+
+		/// <summary>
 		/// To sign up to get market data by the instrument.
 		/// </summary>
 		/// <param name="security">The instrument by which new information getting should be started.</param>
@@ -421,7 +426,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Request news <see cref="BusinessEntities.News.Story"/> body. After receiving the event <see cref="Connector.NewsChanged"/> will be triggered.
+		/// Request news <see cref="BusinessEntities.News.Story"/> body. After receiving the event <see cref="NewsChanged"/> will be triggered.
 		/// </summary>
 		/// <param name="news">News.</param>
 		public virtual void RequestNewsStory(News news)

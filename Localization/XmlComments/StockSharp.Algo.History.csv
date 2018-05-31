@@ -61,12 +61,12 @@ M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadTickMessages(StockSha
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadTickMessages(StockSharp.BusinessEntities.Security,System.DateTime)/param/security;DocStr2831
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadTickMessages(StockSharp.BusinessEntities.Security,System.DateTime)/param/date;DocStr118
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadTickMessages(StockSharp.BusinessEntities.Security,System.DateTime)/returns;DocStr119
-M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Sides)/summary;DocStr120
-M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Sides)/param/security;DocStr2831
-M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Sides)/param/timeFrame;DocStr121
-M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Sides)/param/date;Date
-M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Sides)/param/side;Str3789
-M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Sides)/returns;DocStr122
+M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Level1Fields)/summary;DocStr120
+M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Level1Fields)/param/security;DocStr2831
+M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Level1Fields)/param/timeFrame;DocStr121
+M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Level1Fields)/param/date;Date
+M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Level1Fields)/param/field;DocStr10411
+M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Level1Fields)/returns;DocStr122
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)/summary;DocStr102
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)/param/security;DocStr2831
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)/param/from;Str2282
@@ -426,6 +426,7 @@ M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetAvailableDataTypes(StockS
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/param/securityId;DocStr8485
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/param/format;DocStr145
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr8483
+M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Login/summary;DocStr2963
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Invoke``1(System.Func{StockSharp.Algo.History.Hydra.IRemoteStorage,``0})/summary;DocStr183
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Invoke``1(System.Func{StockSharp.Algo.History.Hydra.IRemoteStorage,``0})/typeparam/TResult;DocStr184
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Invoke``1(System.Func{StockSharp.Algo.History.Hydra.IRemoteStorage,``0})/param/handler;DocStr185
@@ -593,7 +594,7 @@ T:StockSharp.Algo.History.Russian.Rts.RtsHistorySource/summary;DocStr254
 M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)/summary;DocStr1
 M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)/param/nativeIdStorage;DocStr9329
 M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)/param/exchangeInfoProvider;DocStr9509
-P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.TimeZone/summary;DocStr259
+P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.TimeZone/summary;MarketDataTimeZone
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.Host/summary;DocStr260
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.UserName/summary;DocStr261
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.Password/summary;DocStr262
@@ -694,7 +695,7 @@ M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.Secur
 M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/param/beginDate;Str2282
 M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/param/endDate;Str418
 M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/param/fields;DocStr277
-M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/returns;DocStr278
+M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/returns;Level1MarketData
 M:StockSharp.Algo.History.YahooHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/summary;DocStr134
 M:StockSharp.Algo.History.YahooHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/param/security;DocStr2831
 M:StockSharp.Algo.History.YahooHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/param/timeFrame;DocStr121

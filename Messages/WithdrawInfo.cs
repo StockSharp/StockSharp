@@ -17,19 +17,19 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Cryptocurrency.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.CryptocurrencyKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CryptocurrencyKey)]
 		Crypto,
 
 		/// <summary>
 		/// Bank wire.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.BankWireKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BankWireKey)]
 		BankWire,
 
 		/// <summary>
 		/// Bank card.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.BankCardKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BankCardKey)]
 		BankCard,
 	}
 

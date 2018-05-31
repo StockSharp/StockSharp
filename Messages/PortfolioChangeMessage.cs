@@ -29,6 +29,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
+	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
+	[DescriptionLoc(LocalizedStrings.Str541Key)]
 	public sealed class PortfolioChangeMessage : BaseChangeMessage<PositionChangeTypes>
 	{
 		/// <summary>

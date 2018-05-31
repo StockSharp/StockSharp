@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Candles.Compression
 {
 	using System;
-	using System.Collections.Generic;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -13,7 +12,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class CandleHolderMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly Dictionary<long, CandleMessage> _infos = new Dictionary<long, CandleMessage>();
+		private readonly SynchronizedDictionary<long, CandleMessage> _infos = new SynchronizedDictionary<long, CandleMessage>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleHolderMessageAdapter"/>.
@@ -24,14 +23,15 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public override void SendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+					_infos.Clear();
+					break;
+
 				case MessageTypes.MarketData:
 				{
 					var mdMsg = (MarketDataMessage)message;
@@ -66,10 +66,7 @@ namespace StockSharp.Algo.Candles.Compression
 			base.SendInMessage(message);
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			if (message.IsBack)
@@ -109,16 +106,12 @@ namespace StockSharp.Algo.Candles.Compression
 				return;
 
 			if (info.SecurityId == default(SecurityId))
-			{
 				info.SecurityId = message.SecurityId;
-			}
 			else
 				message.SecurityId = info.SecurityId;
 
 			if (info.Arg == null)
-			{
 				info.Arg = message.Arg;
-			}
 			else
 				message.Arg = info.Arg;
 
@@ -152,9 +145,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var fromValue = getValue(from);
 
 			if (currentValue == 0 && fromValue != 0)
-			{
 				setValue(current, fromValue);
-			}
 			else
 				setValue(from, currentValue);
 		}
@@ -166,9 +157,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var fromValue = getValue(from);
 
 			if (currentValue == null && fromValue != null)
-			{
 				setValue(current, fromValue);
-			}
 			else
 				setValue(from, currentValue);
 		}
@@ -180,9 +169,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var fromValue = getValue(from);
 
 			if (currentValue == null && fromValue != null)
-			{
 				setValue(current, fromValue);
-			}
 			else
 				setValue(from, currentValue);
 		}
@@ -194,9 +181,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var fromValue = getValue(from);
 
 			if (currentValue == default(DateTimeOffset) && fromValue != default(DateTimeOffset))
-			{
 				setValue(current, fromValue);
-			}
 			else
 				setValue(from, currentValue);
 		}

@@ -19,7 +19,7 @@
 		private readonly List<Message> _pendingMessages = new List<Message>();
 		private readonly PairSet<long, PortfolioMessage> _pfSubscriptions = new PairSet<long, PortfolioMessage>();
 		private readonly PairSet<long, MarketDataMessage> _mdSubscriptions = new PairSet<long, MarketDataMessage>();
-		private readonly PairSet<long, OrderRegisterMessage> _sentOrders = new PairSet<long, OrderRegisterMessage>();
+		private readonly PairSet<long, OrderRegisterMessage> _pendingRegistration = new PairSet<long, OrderRegisterMessage>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OfflineMessageAdapter"/>.
@@ -105,7 +105,7 @@
 						{
 							var orderMsg = (OrderRegisterMessage)message.Clone();
 
-							_sentOrders.Add(orderMsg.TransactionId, orderMsg);
+							_pendingRegistration.Add(orderMsg.TransactionId, orderMsg);
 							StoreMessage(orderMsg);
 
 							return;
@@ -120,12 +120,12 @@
 					{
 						if (!_connected)
 						{
-							var orderMsg = (OrderCancelMessage)message.Clone();
+							var cancelMsg = (OrderCancelMessage)message.Clone();
 
-							var originOrderMsg = _sentOrders.TryGetAndRemove(orderMsg.OrderTransactionId);
+							var originOrderMsg = _pendingRegistration.TryGetAndRemove(cancelMsg.OrderTransactionId);
 
 							if (originOrderMsg == null)
-								_pendingMessages.Add(orderMsg);
+								_pendingMessages.Add(cancelMsg);
 							else
 							{
 								_pendingMessages.Remove(originOrderMsg);
@@ -134,10 +134,49 @@
 								{
 									ExecutionType = ExecutionTypes.Transaction,
 									HasOrderInfo = true,
-									OriginalTransactionId = orderMsg.TransactionId,
+									OriginalTransactionId = cancelMsg.TransactionId,
 									OrderState = OrderStates.Done,
 									OrderType = originOrderMsg.OrderType,
 								});
+							}
+
+							return;
+						}
+					}
+
+					break;
+				}
+				case MessageTypes.OrderReplace:
+				{
+					lock (_syncObject)
+					{
+						if (!_connected)
+						{
+							var replaceMsg = (OrderReplaceMessage)message.Clone();
+
+							var originOrderMsg = _pendingRegistration.TryGetAndRemove(replaceMsg.OldTransactionId);
+
+							if (originOrderMsg == null)
+								_pendingMessages.Add(replaceMsg);
+							else
+							{
+								_pendingMessages.Remove(originOrderMsg);
+
+								RaiseNewOutMessage(new ExecutionMessage
+								{
+									ExecutionType = ExecutionTypes.Transaction,
+									HasOrderInfo = true,
+									OriginalTransactionId = replaceMsg.OldTransactionId,
+									OrderState = OrderStates.Done,
+									OrderType = originOrderMsg.OrderType,
+								});
+
+								var orderMsg = new OrderRegisterMessage();
+
+								replaceMsg.CopyTo(orderMsg);
+
+								_pendingRegistration.Add(replaceMsg.TransactionId, orderMsg);
+								StoreMessage(orderMsg);
 							}
 
 							return;
@@ -248,6 +287,12 @@
 					connectMessage = (ConnectMessage)message;
 					break;
 				}
+
+				case MessageTypes.Disconnect:
+				{
+					_connected = false;
+					break;
+				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
@@ -269,7 +314,7 @@
 						else if (msg is PortfolioMessage pfMsg)
 							_pfSubscriptions.RemoveByValue(pfMsg);
 						else if (msg is OrderRegisterMessage orderMsg)
-							_sentOrders.RemoveByValue(orderMsg);
+							_pendingRegistration.RemoveByValue(orderMsg);
 					}
 				}
 			}

@@ -5,17 +5,18 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 	using Ecng.Common;
 	using Ecng.Interop;
+	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Implementation of <see cref="ISnapshotSerializer{TMessage}"/> in binary format for <see cref="Level1ChangeMessage"/>.
+	/// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="Level1ChangeMessage"/>.
 	/// </summary>
-	public class Level1BinarySnapshotSerializer : ISnapshotSerializer<Level1ChangeMessage>
+	public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Level1ChangeMessage>
 	{
-		private const int _snapshotSize = 1024 * 10; // 10kb
+		//private const int _snapshotSize = 1024 * 10; // 10kb
 
-		[StructLayout(LayoutKind.Sequential, Pack = 1, Size = _snapshotSize, CharSet = CharSet.Unicode)]
+		[StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = _snapshotSize*/, CharSet = CharSet.Unicode)]
 		private struct Level1Snapshot
 		{
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
@@ -24,96 +25,105 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public long LastChangeServerTime;
 			public long LastChangeLocalTime;
 
-			public long LastTradeTime;
-			public decimal LastTradePrice;
-			public decimal LastTradeVolume;
-			public sbyte LastTradeOrigin;
-			public sbyte LastTradeUpDown;
-			public long LastTradeId;
+			public long? LastTradeTime;
+			public decimal? LastTradePrice;
+			public decimal? LastTradeVolume;
+			public byte? LastTradeOrigin;
+			public byte? LastTradeUpDown;
+			public long? LastTradeId;
 
-			public decimal BestBidPrice;
-			public decimal BestAskPrice;
-			public decimal BestBidVolume;
-			public decimal BestAskVolume;
+			public decimal? BestBidPrice;
+			public decimal? BestAskPrice;
+			public decimal? BestBidVolume;
+			public decimal? BestAskVolume;
 
-			public decimal BidsVolume;
-			public decimal AsksVolume;
+			public decimal? BidsVolume;
+			public decimal? AsksVolume;
 
-			public int BidsCount;
-			public int AsksCount;
+			public int? BidsCount;
+			public int? AsksCount;
 
-			public decimal HighBidPrice;
-			public decimal LowAskPrice;
+			public decimal? HighBidPrice;
+			public decimal? LowAskPrice;
 
-			public decimal OpenPrice;
-			public decimal HighPrice;
-			public decimal LowPrice;
-			public decimal ClosePrice;
-			public decimal Volume;
+			public decimal? OpenPrice;
+			public decimal? HighPrice;
+			public decimal? LowPrice;
+			public decimal? ClosePrice;
+			public decimal? Volume;
 
-			public decimal StepPrice;
-			public decimal OI;
+			public decimal? StepPrice;
+			public decimal? OI;
 
-			public decimal MinPrice;
-			public decimal MaxPrice;
+			public decimal? MinPrice;
+			public decimal? MaxPrice;
 
-			public decimal MarginBuy;
-			public decimal MarginSell;
+			public decimal? MarginBuy;
+			public decimal? MarginSell;
 
-			public sbyte State;
+			public byte? State;
 
-			public decimal IV;
-			public decimal HV;
-			public decimal TheorPrice;
-			public decimal Delta;
-			public decimal Gamma;
-			public decimal Vega;
-			public decimal Theta;
-			public decimal Rho;
+			public decimal? IV;
+			public decimal? HV;
+			public decimal? TheorPrice;
+			public decimal? Delta;
+			public decimal? Gamma;
+			public decimal? Vega;
+			public decimal? Theta;
+			public decimal? Rho;
 
-			public decimal AveragePrice;
-			public decimal SettlementPrice;
-			public decimal Change;
-			public decimal AccruedCouponIncome;
-			public decimal Yield;
-			public decimal VWAP;
+			public decimal? AveragePrice;
+			public decimal? SettlementPrice;
+			public decimal? Change;
+			public decimal? AccruedCouponIncome;
+			public decimal? Yield;
+			public decimal? VWAP;
 
-			public int TradesCount;
+			public int? TradesCount;
 
-			public decimal Beta;
-			public decimal AverageTrueRange;
-			public decimal Duration;
-			public decimal Turnover;
-			public decimal SpreadMiddle;
+			public decimal? Beta;
+			public decimal? AverageTrueRange;
+			public decimal? Duration;
+			public decimal? Turnover;
+			public decimal? SpreadMiddle;
 
-			//public decimal PriceEarnings;
-			//public decimal ForwardPriceEarnings;
-			//public decimal PriceEarningsGrowth;
-			//public decimal PriceSales;
-			//public decimal PriceBook;
-			//public decimal PriceCash;
-			//public decimal PriceFreeCash;
-			//public decimal Payout;
+			public decimal? PriceEarnings;
+			public decimal? ForwardPriceEarnings;
+			public decimal? PriceEarningsGrowth;
+			public decimal? PriceSales;
+			public decimal? PriceBook;
+			public decimal? PriceCash;
+			public decimal? PriceFreeCash;
+			public decimal? Payout;
 
-			//public decimal SharesOutstanding;
-			//public decimal SharesFloat;
-			//public decimal FloatShort;
-			//public decimal ShortRatio;
+			public decimal? SharesOutstanding;
+			public decimal? SharesFloat;
+			public decimal? FloatShort;
+			public decimal? ShortRatio;
 
-			//public decimal ReturnOnAssets;
-			//public decimal ReturnOnEquity;
-			//public decimal ReturnOnInvestment;
-			//public decimal CurrentRatio;
-			//public decimal QuickRatio;
+			public decimal? ReturnOnAssets;
+			public decimal? ReturnOnEquity;
+			public decimal? ReturnOnInvestment;
+			public decimal? CurrentRatio;
+			public decimal? QuickRatio;
+
+			public decimal? HistoricalVolatilityWeek;
+			public decimal? HistoricalVolatilityMonth;
+			public decimal? IssueSize;
+			public decimal? BuyBackPrice;
+			public long? BuyBackDate;
+			public decimal? Dividend;
+			public decimal? AfterSplit;
+			public decimal? BeforeSplit;
 		}
 
-		Version ISnapshotSerializer<Level1ChangeMessage>.Version { get; } = new Version(1, 0);
+		Version ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Version { get; } = new Version(2, 0);
 
-		string ISnapshotSerializer<Level1ChangeMessage>.FileName => "level1_snapshot.bin";
+		string ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Name => "Level1";
 
-		int ISnapshotSerializer<Level1ChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
+		//int ISnapshotSerializer<SecurityId, Level1ChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
-		void ISnapshotSerializer<Level1ChangeMessage>.Serialize(Version version, Level1ChangeMessage message, byte[] buffer)
+		byte[] ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Serialize(Version version, Level1ChangeMessage message)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -127,9 +137,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				LastChangeServerTime = message.ServerTime.To<long>(),
 				LastChangeLocalTime = message.LocalTime.To<long>(),
 
-				LastTradeUpDown = -1,
-				LastTradeOrigin = -1,
-				State = -1,
+				//LastTradeUpDown = -1,
+				//LastTradeOrigin = -1,
+				//State = -1,
 			};
 
 			foreach (var change in message.Changes)
@@ -200,7 +210,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						snapshot.MarginSell = (decimal)change.Value;
 						break;
 					case Level1Fields.State:
-						snapshot.State = (sbyte)(SecurityStates)change.Value;
+						snapshot.State = (byte)(SecurityStates)change.Value;
 						break;
 					case Level1Fields.LastTradePrice:
 						snapshot.LastTradePrice = (decimal)change.Value;
@@ -260,19 +270,16 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						snapshot.LastTradeId = (long)change.Value;
 						break;
 					case Level1Fields.LastTradeUpDown:
-						snapshot.LastTradeUpDown = (sbyte)((bool)change.Value == false ? 0 : 1);
+						snapshot.LastTradeUpDown = (bool)change.Value ? (byte?)1 : 0;
 						break;
 					case Level1Fields.LastTradeOrigin:
-						snapshot.LastTradeOrigin = (sbyte)(Sides)change.Value;
+						snapshot.LastTradeOrigin = (byte)(Sides)change.Value;
 						break;
 					case Level1Fields.Beta:
 						snapshot.Beta = (decimal)change.Value;
 						break;
 					case Level1Fields.AverageTrueRange:
 						snapshot.AverageTrueRange = (decimal)change.Value;
-						break;
-					case Level1Fields.HistoricalVolatilityMonth:
-						snapshot.Beta = (decimal)change.Value;
 						break;
 					case Level1Fields.Duration:
 						snapshot.Duration = (decimal)change.Value;
@@ -283,15 +290,94 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					case Level1Fields.SpreadMiddle:
 						snapshot.SpreadMiddle = (decimal)change.Value;
 						break;
+					case Level1Fields.PriceEarnings:
+						snapshot.PriceEarnings = (decimal)change.Value;
+						break;
+					case Level1Fields.ForwardPriceEarnings:
+						snapshot.ForwardPriceEarnings = (decimal)change.Value;
+						break;
+					case Level1Fields.PriceEarningsGrowth:
+						snapshot.PriceEarningsGrowth = (decimal)change.Value;
+						break;
+					case Level1Fields.PriceSales:
+						snapshot.PriceSales = (decimal)change.Value;
+						break;
+					case Level1Fields.PriceBook:
+						snapshot.PriceBook = (decimal)change.Value;
+						break;
+					case Level1Fields.PriceCash:
+						snapshot.PriceCash = (decimal)change.Value;
+						break;
+					case Level1Fields.PriceFreeCash:
+						snapshot.PriceFreeCash = (decimal)change.Value;
+						break;
+					case Level1Fields.Payout:
+						snapshot.Payout = (decimal)change.Value;
+						break;
+					case Level1Fields.SharesOutstanding:
+						snapshot.SharesOutstanding = (decimal)change.Value;
+						break;
+					case Level1Fields.SharesFloat:
+						snapshot.SharesFloat = (decimal)change.Value;
+						break;
+					case Level1Fields.FloatShort:
+						snapshot.FloatShort = (decimal)change.Value;
+						break;
+					case Level1Fields.ShortRatio:
+						snapshot.ShortRatio = (decimal)change.Value;
+						break;
+					case Level1Fields.ReturnOnAssets:
+						snapshot.ReturnOnAssets = (decimal)change.Value;
+						break;
+					case Level1Fields.ReturnOnEquity:
+						snapshot.ReturnOnEquity = (decimal)change.Value;
+						break;
+					case Level1Fields.ReturnOnInvestment:
+						snapshot.ReturnOnInvestment = (decimal)change.Value;
+						break;
+					case Level1Fields.CurrentRatio:
+						snapshot.CurrentRatio = (decimal)change.Value;
+						break;
+					case Level1Fields.QuickRatio:
+						snapshot.QuickRatio = (decimal)change.Value;
+						break;
+					case Level1Fields.HistoricalVolatilityWeek:
+						snapshot.HistoricalVolatilityWeek = (decimal)change.Value;
+						break;
+					case Level1Fields.HistoricalVolatilityMonth:
+						snapshot.HistoricalVolatilityMonth = (decimal)change.Value;
+						break;
+					case Level1Fields.IssueSize:
+						snapshot.IssueSize = (decimal)change.Value;
+						break;
+					case Level1Fields.BuyBackPrice:
+						snapshot.BuyBackPrice = (decimal)change.Value;
+						break;
+					case Level1Fields.BuyBackDate:
+						snapshot.BuyBackDate = change.Value.To<long>();
+						break;
+					case Level1Fields.Dividend:
+						snapshot.Dividend = (decimal)change.Value;
+						break;
+					case Level1Fields.AfterSplit:
+						snapshot.AfterSplit = (decimal)change.Value;
+						break;
+					case Level1Fields.BeforeSplit:
+						snapshot.BeforeSplit = (decimal)change.Value;
+						break;
 				}
 			}
 
+			var buffer = new byte[typeof(Level1Snapshot).SizeOf()];
+
 			var ptr = snapshot.StructToPtr();
-			Marshal.Copy(ptr, buffer, 0, _snapshotSize);
+			Marshal.Copy(ptr, buffer, 0, buffer.Length);
 			Marshal.FreeHGlobal(ptr);
+
+			return buffer;
 		}
 
-		Level1ChangeMessage ISnapshotSerializer<Level1ChangeMessage>.Deserialize(Version version, byte[] buffer)
+		Level1ChangeMessage ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Deserialize(Version version, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -299,7 +385,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			// Pin the managed memory while, copy it out the data, then unpin it
 			using (var handle = new GCHandle<byte[]>(buffer, GCHandleType.Pinned))
 			{
-				var snapshot = (Level1Snapshot)Marshal.PtrToStructure(handle.Value.AddrOfPinnedObject(), typeof(Level1Snapshot));
+				var snapshot = handle.Value.AddrOfPinnedObject().ToStruct<Level1Snapshot>();
 
 				var level1Msg = new Level1ChangeMessage
 				{
@@ -322,8 +408,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					.TryAdd(Level1Fields.BidsVolume, snapshot.BidsVolume)
 					.TryAdd(Level1Fields.AsksVolume, snapshot.AsksVolume)
 
-					.Add(Level1Fields.BidsCount, snapshot.BidsCount)
-					.Add(Level1Fields.AsksCount, snapshot.AsksCount)
+					.TryAdd(Level1Fields.BidsCount, snapshot.BidsCount)
+					.TryAdd(Level1Fields.AsksCount, snapshot.AsksCount)
 
 					.TryAdd(Level1Fields.HighBidPrice, snapshot.HighBidPrice)
 					.TryAdd(Level1Fields.LowAskPrice, snapshot.LowAskPrice)
@@ -359,36 +445,70 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					.TryAdd(Level1Fields.Yield, snapshot.Yield)
 					.TryAdd(Level1Fields.VWAP, snapshot.VWAP)
 								
-					.Add(Level1Fields.TradesCount, snapshot.TradesCount)
+					.TryAdd(Level1Fields.TradesCount, snapshot.TradesCount)
 								
 					.TryAdd(Level1Fields.Beta, snapshot.Beta)
 					.TryAdd(Level1Fields.AverageTrueRange, snapshot.AverageTrueRange)
 					.TryAdd(Level1Fields.Duration, snapshot.Duration)
 					.TryAdd(Level1Fields.Turnover, snapshot.Turnover)
-					.TryAdd(Level1Fields.SpreadMiddle, snapshot.SpreadMiddle);
+					.TryAdd(Level1Fields.SpreadMiddle, snapshot.SpreadMiddle)
 
-				if (snapshot.LastTradeTime > 0)
-					level1Msg.Add(Level1Fields.LastTradeTime, snapshot.LastTradeTime.To<DateTimeOffset>());
+					.TryAdd(Level1Fields.PriceEarnings, snapshot.PriceEarnings)
+					.TryAdd(Level1Fields.ForwardPriceEarnings, snapshot.ForwardPriceEarnings)
+					.TryAdd(Level1Fields.PriceEarningsGrowth, snapshot.PriceEarningsGrowth)
+					.TryAdd(Level1Fields.PriceSales, snapshot.PriceSales)
+					.TryAdd(Level1Fields.PriceBook, snapshot.PriceBook)
+					.TryAdd(Level1Fields.PriceCash, snapshot.PriceCash)
+					.TryAdd(Level1Fields.PriceFreeCash, snapshot.PriceFreeCash)
+					.TryAdd(Level1Fields.Payout, snapshot.Payout)
+					.TryAdd(Level1Fields.SharesOutstanding, snapshot.SharesOutstanding)
+					.TryAdd(Level1Fields.SharesFloat, snapshot.SharesFloat)
+					.TryAdd(Level1Fields.FloatShort, snapshot.FloatShort)
+					.TryAdd(Level1Fields.ShortRatio, snapshot.ShortRatio)
+					.TryAdd(Level1Fields.ReturnOnAssets, snapshot.ReturnOnAssets)
+					.TryAdd(Level1Fields.ReturnOnEquity, snapshot.ReturnOnEquity)
+					.TryAdd(Level1Fields.ReturnOnInvestment, snapshot.ReturnOnInvestment)
+					.TryAdd(Level1Fields.CurrentRatio, snapshot.CurrentRatio)
+					.TryAdd(Level1Fields.QuickRatio, snapshot.QuickRatio)
+					.TryAdd(Level1Fields.HistoricalVolatilityWeek, snapshot.HistoricalVolatilityWeek)
+					.TryAdd(Level1Fields.HistoricalVolatilityMonth, snapshot.HistoricalVolatilityMonth)
+					.TryAdd(Level1Fields.IssueSize, snapshot.IssueSize)
+					.TryAdd(Level1Fields.BuyBackPrice, snapshot.BuyBackPrice)
+					.TryAdd(Level1Fields.Dividend, snapshot.Dividend)
+					.TryAdd(Level1Fields.AfterSplit, snapshot.AfterSplit)
+					.TryAdd(Level1Fields.BeforeSplit, snapshot.BeforeSplit)
+					;
 
-				if (snapshot.LastTradeUpDown != -1)
-					level1Msg.Add(Level1Fields.LastTradeUpDown, snapshot.LastTradeUpDown == 0);
+				if (snapshot.LastTradeTime != null)
+					level1Msg.Add(Level1Fields.LastTradeTime, snapshot.LastTradeTime.Value.To<DateTimeOffset>());
 
-				if (snapshot.LastTradeOrigin != -1)
-					level1Msg.Add(Level1Fields.LastTradeOrigin, (Sides)snapshot.LastTradeOrigin);
+				if (snapshot.LastTradeUpDown != null)
+					level1Msg.Add(Level1Fields.LastTradeUpDown, snapshot.LastTradeUpDown.Value == 1);
 
-				if (snapshot.State != -1)
-					level1Msg.Add(Level1Fields.State, (SecurityStates)snapshot.State);
+				if (snapshot.LastTradeOrigin != null)
+					level1Msg.Add(Level1Fields.LastTradeOrigin, (Sides)snapshot.LastTradeOrigin.Value);
+
+				if (snapshot.State != null)
+					level1Msg.Add(Level1Fields.State, (SecurityStates)snapshot.State.Value);
+
+				if (snapshot.BuyBackDate != null)
+					level1Msg.Add(Level1Fields.BuyBackDate, snapshot.BuyBackDate.Value.To<DateTimeOffset>());
 
 				return level1Msg;
 			}
 		}
 
-		SecurityId ISnapshotSerializer<Level1ChangeMessage>.GetSecurityId(Level1ChangeMessage message)
+		SecurityId ISnapshotSerializer<SecurityId, Level1ChangeMessage>.GetKey(Level1ChangeMessage message)
 		{
 			return message.SecurityId;
 		}
 
-		void ISnapshotSerializer<Level1ChangeMessage>.Update(Level1ChangeMessage message, Level1ChangeMessage changes)
+		Level1ChangeMessage ISnapshotSerializer<SecurityId, Level1ChangeMessage>.CreateCopy(Level1ChangeMessage message)
+		{
+			return (Level1ChangeMessage)message.Clone();
+		}
+
+		void ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Update(Level1ChangeMessage message, Level1ChangeMessage changes)
 		{
 			var lastTradeFound = false;
 			var bestBidFound = false;
@@ -444,6 +564,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			message.ServerTime = changes.ServerTime;
 		}
 
-		DataType ISnapshotSerializer<Level1ChangeMessage>.DataType => DataType.Level1;
+		DataType ISnapshotSerializer<SecurityId, Level1ChangeMessage>.DataType => DataType.Level1;
 	}
 }

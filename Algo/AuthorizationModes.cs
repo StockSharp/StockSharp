@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo
 {
-	using Ecng.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using StockSharp.Localization;
 
@@ -27,25 +27,25 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Anonymous.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.AnonymousKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AnonymousKey)]
 		Anonymous,
 
 		/// <summary>
 		/// Windows authorization.
 		/// </summary>
-		[EnumDisplayName("Windows")]
+		[Display(Name = "Windows")]
 		Windows,
 
 		/// <summary>
 		/// Custom.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.CustomKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CustomKey)]
 		Custom,
 
 		/// <summary>
 		/// StockSharp.
 		/// </summary>
-		[EnumDisplayName("StockSharp")]
+		[Display(Name = "StockSharp")]
 		Community
 	}
 }

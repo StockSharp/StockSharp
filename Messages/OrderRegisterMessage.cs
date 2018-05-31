@@ -161,35 +161,46 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new OrderRegisterMessage(Type)
-			{
-				Comment = Comment,
-				Condition = Condition,
-				TillDate = TillDate,
-				OrderType = OrderType,
-				PortfolioName = PortfolioName,
-				Price = Price,
-				RepoInfo = RepoInfo?.Clone(),
-				RpsInfo = RpsInfo?.Clone(),
-				SecurityId = SecurityId,
-				//SecurityType = SecurityType,
-				Side = Side,
-				TimeInForce = TimeInForce,
-				TransactionId = TransactionId,
-				VisibleVolume = VisibleVolume,
-				Volume = Volume,
-				Currency = Currency,
-				UserOrderId = UserOrderId,
-				ClientCode = ClientCode,
-				BrokerCode = BrokerCode,
-				IsMarketMaker = IsMarketMaker,
-				IsMargin = IsMargin,
-				Slippage = Slippage,
-			};
+			var clone = new OrderRegisterMessage(Type);
 
 			CopyTo(clone);
 
 			return clone;
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		public void CopyTo(OrderRegisterMessage destination)
+		{
+			if (destination == null)
+				throw new ArgumentNullException(nameof(destination));
+
+			destination.Comment = Comment;
+			destination.Condition = Condition?.Clone();
+			destination.TillDate = TillDate;
+			destination.OrderType = OrderType;
+			destination.PortfolioName = PortfolioName;
+			destination.Price = Price;
+			destination.RepoInfo = RepoInfo?.Clone();
+			destination.RpsInfo = RpsInfo?.Clone();
+			//destination.SecurityId = SecurityId;
+			//destination.SecurityType = SecurityType;
+			destination.Side = Side;
+			destination.TimeInForce = TimeInForce;
+			destination.TransactionId = TransactionId;
+			destination.VisibleVolume = VisibleVolume;
+			destination.Volume = Volume;
+			//destination.Currency = Currency;
+			destination.UserOrderId = UserOrderId;
+			destination.ClientCode = ClientCode;
+			destination.BrokerCode = BrokerCode;
+			destination.IsMarketMaker = IsMarketMaker;
+			destination.IsMargin = IsMargin;
+			destination.Slippage = Slippage;
+
+			base.CopyTo(destination);
 		}
 
 		/// <summary>

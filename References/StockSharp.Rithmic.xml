@@ -16,26 +16,19 @@
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
         <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.CreateOrderCondition">
-            <summary>
-            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional"/>, that supports the adapter.
-            </summary>
-            <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
+            <inheritdoc />
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.SecurityLookupRequired">
-            <summary>
-            <see cref="T:StockSharp.Messages.SecurityLookupMessage"/> required to get securities.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportNativeSecurityLookup">
-            <summary>
-            Gets a value indicating whether the connector supports security lookup.
-            </summary>
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportCandlesUpdates">
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-            <summary>
-            Send message.
-            </summary>
-            <param name="message">Message.</param>
+            <inheritdoc />
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.UserName">
             <summary>

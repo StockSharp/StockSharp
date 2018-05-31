@@ -45,3 +45,8 @@ M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.ToSerializedString/summary
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.ToSerializedString/returns;DocStr9586
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.FromSerializedString(System.String)/summary;DocStr9587
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.FromSerializedString(System.String)/param/text;DocStr9588
+T:StockSharp.Algo.Expressions.ExpressionIndexCsvSecurityList/summary;DocStr10489
+M:StockSharp.Algo.Expressions.ExpressionIndexCsvSecurityList.#ctor(StockSharp.Algo.Storages.Csv.CsvEntityRegistry)/summary;DocStr1
+M:StockSharp.Algo.Expressions.ExpressionIndexCsvSecurityList.#ctor(StockSharp.Algo.Storages.Csv.CsvEntityRegistry)/param/registry;DocStr9193
+M:StockSharp.Algo.Expressions.ExpressionIndexCsvSecurityList.CreateSecurity(System.String)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Expressions.ExpressionIndexCsvSecurityList.CreateText(StockSharp.Algo.IndexSecurity)/inheritdoc;DocStr8459

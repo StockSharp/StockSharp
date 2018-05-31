@@ -9,11 +9,6 @@
             The message adapter for <see cref="N:StockSharp.CoinExchange"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.CoinExchange.CoinExchangeMessageAdapter.AllTimeFrames">
-            <summary>
-            Possible time-frames.
-            </summary>
-        </member>
         <member name="P:StockSharp.CoinExchange.CoinExchangeMessageAdapter.Key">
             <summary>
             Key.

@@ -1,36 +1,49 @@
-﻿#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: StockSharp.Algo.Algo
-File: ExtendedMessageTypes.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo
+﻿namespace StockSharp.Algo
 {
-	using System.Reflection;
-
+	using StockSharp.Algo.Testing;
 	using StockSharp.Messages;
 
-	[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
-	static class ExtendedMessageTypes
+	/// <summary>
+	/// Extended <see cref="MessageTypes"/>.
+	/// </summary>
+	public static class ExtendedMessageTypes
 	{
-		public const MessageTypes Last = (MessageTypes)(-1);
+		internal const MessageTypes Last = (MessageTypes)(-1);
+
+		/// <summary>
+		/// <see cref="ClearingMessage"/>.
+		/// </summary>
 		public const MessageTypes Clearing = (MessageTypes)(-2);
+
+		/// <summary>
+		/// <see cref="EmulationStateMessage"/>.
+		/// </summary>
 		public const MessageTypes EmulationState = (MessageTypes)(-5);
+
+		/// <summary>
+		/// <see cref="GeneratorMessage"/>.
+		/// </summary>
 		public const MessageTypes Generator = (MessageTypes)(-6);
+
+		/// <summary>
+		/// <see cref="CommissionRuleMessage"/>.
+		/// </summary>
 		public const MessageTypes CommissionRule = (MessageTypes)(-7);
+		
+		/// <summary>
+		/// <see cref="HistorySourceMessage"/>.
+		/// </summary>
 		public const MessageTypes HistorySource = (MessageTypes)(-8);
-		public const MessageTypes RemoveSecurity = (MessageTypes)(-9);
-		public const MessageTypes ProcessSuspendedSecurityMessages = (MessageTypes)(-10);
-		public const MessageTypes StrategyChangeState = (MessageTypes)(-11);
-		public const MessageTypes Reconnect = (MessageTypes)(-12);
+		
+		internal const MessageTypes RemoveSecurity = (MessageTypes)(-9);
+		internal const MessageTypes ProcessSuspendedSecurityMessages = (MessageTypes)(-10);
+		internal const MessageTypes StrategyChangeState = (MessageTypes)(-11);
+		internal const MessageTypes Reconnect = (MessageTypes)(-12);
+		internal const MessageTypes RestoringSubscription = (MessageTypes)(-13);
+		
+		/// <summary>
+		/// <see cref="ChangeTimeIntervalMessage"/>.
+		/// </summary>
+		public const MessageTypes ChangeTimeInterval = (MessageTypes)(-14);
 	}
 }

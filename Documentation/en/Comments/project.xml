@@ -171,6 +171,17 @@
 				<p>CSV storage components.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Algo.Storages.Binary">
+			<summary>
+				<p>Binary storage components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Storages.Binary.Snapshot">
+			<summary>
+				<p>Binary format snapshots components.</p>
+			</summary>
+		</member>
+
 		<member name="N:StockSharp.Algo.Strategies.Reporting">
 			<summary>
 				<p>Strategies report components.</p>
@@ -409,6 +420,131 @@
 		<member name="N:StockSharp.QuantHouse">
 			<summary>
 				<p>QuantHouse connectivity components (QuantFEED etc.).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Bitfinex">
+			<summary>
+				<p>Bitfinex connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Coinbase">
+			<summary>
+				<p>Coinbase connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Kraken">
+			<summary>
+				<p>Kraken connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Poloniex">
+			<summary>
+				<p>Poloniex connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Gdax">
+			<summary>
+				<p>GDAX connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Bittrex">
+			<summary>
+				<p>Bittrex connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Bithumb">
+			<summary>
+				<p>Bithumb connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.HitBtc">
+			<summary>
+				<p>HitBTC connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Okcoin">
+			<summary>
+				<p>OKCoin connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Coincheck">
+			<summary>
+				<p>Coincheck connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Binance">
+			<summary>
+				<p>Binance connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Exmo">
+			<summary>
+				<p>EXMO connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Huobi">
+			<summary>
+				<p>Huobi connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Bitexbook">
+			<summary>
+				<p>BITEXBOOK connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.CoinExchange">
+			<summary>
+				<p>CoinExchange connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Kucoin">
+			<summary>
+				<p>Kucoin connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Deribit">
+			<summary>
+				<p>Deribit connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Yobit">
+			<summary>
+				<p>Yobit connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.LiveCoin">
+			<summary>
+				<p>LiveCoin connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Liqui">
+			<summary>
+				<p>Liqui connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Cex">
+			<summary>
+				<p>CEX.IO connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Cryptopia">
+			<summary>
+				<p>Cryptopia connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Bitmex">
+			<summary>
+				<p>BitMEX connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Okex">
+			<summary>
+				<p>OKEx connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.BarChart">
+			<summary>
+				<p>BarChart connectivity components.</p>
 			</summary>
 		</member>
 	</members>

@@ -1400,6 +1400,11 @@
             Is row expanded.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.PaletteTreeItem.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Diagram.PaletteTreeItem.ParentChanged">
       <summary>
             The parent element changed event.
@@ -2429,6 +2434,11 @@
     <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsCalcVolumeProfile">
       <summary>
             To perform the calculation <see cref="P:StockSharp.Algo.Candles.Candle.PriceLevels" />. By default, it is disabled.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsRegularTradingHours">
+      <summary>
+            Use only the regular trading hours for which data will be requested.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.#ctor">

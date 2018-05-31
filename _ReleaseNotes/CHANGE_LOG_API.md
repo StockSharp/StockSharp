@@ -1,5 +1,124 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) Connector. ICandleManager implemented.
+* (feature) ICandleSourceList removed.
+* (bug) BasketMessageAdapter. Fix news ubsubscribe requests.
+* (feature) StorageMessageAdapter. Build candles from tick data in case IsCalcVolumeProfile=true
+* (feature) Candles building refactored. Supported IsCalcVolumeProfile. Removed IsHistory usage.
+* (bug) Grids. Fix filters for enum based fields.
+* (bug) BufferMessageAdapter. Fix subscription for IsCalcVolumeProfile and AllowBuildFromSmallerTimeFrame.
+* (feature) Managers. Moved from Connector to BasketMessageAdatper.
+* (feature) StorageMessageAdapter. Store historical level1.
+* (feature) RemoveMessage.
+* (bug) Backtesting. Fix candles subscription using external source https://stocksharp.ru/posts/m/43646/
+* (bug) Backtesting. Fix candles subscription generators.
+* (feature) Security storage. Forced updates for manual modified data only.
+* (feature) FIX connector. IssueDate, IssueSize translation support.
+* (feature) FixServer. Multi leg securities support.
+* (feature) FixServer.NewOutMessage. FixSession as the first parameter.
+* (feature) PermissionCredentialsAuthorization.
+* (feature) PermissionCredentialsWindow.
+* (bug) FIX connector. SpectraFixDialect. Order mass cancel fix.
+* (feature) FixMessageAdapter. SupportedMessages from Dialect.
+* (bug) OrderGrid. Active filters fix.
+* (bug) GatorHistogram fix.
+* (feature) Charting. GatorOscillatorPainter, RelativeVigorIndexPainter.
+* (feature) MarketEmulator. CheckMoney option.
+* (bug) ConnectorWindow. Fix connector description for Quik lua.
+* (bug) RiskMessageAdapter fixes.
+* (feature) Plaza. v5.3.6
+* (feature) Micex. Stock30, Currency28, Currency30 interfaces.
+* (bug) Transaq. Fix shared dll initialization https://stocksharp.ru/forum/9421/podklyuchenie-sdata-k-tranzak-/
+* (feature) FinamHistorySource. .NET 4.6 minimum required.
+* (feature) FIX connector. SSL support extended.
+* (feature) FIX connector. QUIK FIX PreRrade support.
+* (bug) PortfolioEditor, SecurityEditor. Fix keyboard typing.
+* (feature) IMessageAdapter. CheckTimeFrameByRequest property.
+* (bug) TimeSpanEditor. Design fix.
+* (feature) Backtesting. Dynamic change market time interval.
+* (feature) LogControl. Design adapted for Devexpress.
+* (feature) LogControl. LayoutChanged event.
+* (bug) MarketDataGrid. Fix further refreshes after error request.
+* (feature) CandleSeries.IsRegularTradingHours.
+* (feature) CandleBuilder. IExchangeInfoProvider as input argument.
+* (feature) ComplexCsvSecurityList. Base class for complex security types list.
+* (feature) MultiSecurityStorage.
+* (feature) ISecurityWindow restored.
+* (feature) ThemedIconsExtension. Icons auto coloring.
+* (feature) ContinuousSecurityWindow. Design refactoring.
+* (feature) CandleSeries. Count property.
+* (bug) Grids. Time zone column fix.
+* (bug) Chart icons color fixes.
+* (bug) Windows title color fix.
+* (feature) Plaza. AdjustedFee, Prohibition tables. FeeRate, Dealer columns populated.
+* (bug) Binance. Fix https://stocksharp.ru/forum/9354/vyvod-sredstv-iz-binance-/#m43771
+* (feature) SecurityPicker. Removed StatusBar.
+* (bug) SecurityPicker. Fix filtering securities started by @ char.
+* (feature) FIX connector. Try/catch out messages processing.
+* (feature) Chart.DisableIndicatorReset
+* (bug) Chart. Indicator draw from non-GUI thread fix.
+* (bug) BufferMessageAdapter. Fix transactions data save/load.
+* (bug) MACD Histogram calc fix https://stocksharp.ru/forum/9487/nekorrektno-risuetsya-macd-histogram/
+* (feature) QuotesBinarySnapshotSerializer. Support unlimited depths.
+* (feature) Level1BinarySnapshotSerializer. Support more fields.
+* (feature) TransactionBinarySnapshotSerializer. Condition orders support.
+* (feature) IConnector. LookupOrders methods.
+* (feature) StorageMessageAdapter. SupportLookupMessages (method Load is obsolete).
+* (feature) IndicatorPickerWindow. PropGrid for indicator settings.
+* (feature) Charting. MACD Histogram. Signal and MACD lines added.
+* (bug) Bitfinex. Fix position processing https://stocksharp.ru/forum/9498/pri-podklyucheni-vylazit-oshibka-parsinga-konnektor-bitfinex/
+* (bug) Bithumb. Ticks subscription fix.
+* (bug) QuikLua. Fix send back market data errors subscriptions.
+* (feature) Alerts. Schemas panel.
+* (bug) Connector. Fix processing order status response with failed orders info.
+* (feature) OfflineMessageAdapter. Track disconnect.
+
+## v4.4.8:
+* (feature) ImportSettingsPanel control.
+* (feature) CSV storages. Provide error details as return from Init method.
+* (feature) CsvEntityRegistry. Store UnderlyingSecurityType, CfiCode, IssueDate, IssueSize.
+* (feature) MarketDepthControl. GetOrders method.
+* (feature) MarketDepthControl. CellMouseLeftDoubleClick event.
+* (feature) InteractiveBrokers. Min10, Min 20, Hour2, Hour3, Hour4, Hour8 timeframes support.
+* (feature) InteractiveBrokers. Historical data types AdjustedLast, RebateRate, FeeRate support.
+* (bug) InteractiveBrokers. End date for candles request fix https://stocksharp.ru/posts/m/43390/.
+* (bug) InteractiveBrokers. SecurityLookup error response handling fix.
+* (bug) InteractiveBrokers. Candles request fix.
+* (feature) PortfolioPicker.
+* (feature) DukasCopyHistorySource.GetCandles. Sides -> Level1Fields.
+* (feature) OrderRegisterMessage. CopyTo method.
+* (feature) OfflineMessageAdapter. Support replace for pending orders.
+* (bug) Real time candles subscription determine fix.
+* (bug) InteractiveBrokers. Native order ids fix.
+* (bug) Charting. Fix order creation for non first panel.
+* (feature) Charting. Auto select Security and Portfolio.
+* (bug) CsvEntityRegistry. Securities IsChanged fix (new empty values).
+* (bug) SampleLogging fix. Support Verbose.
+* (feature) SampleFix. Market data adapter switch FIX<->FAST.
+* (bug) LogControl. Fix themes https://stocksharp.ru/forum/9253/kak-zapretit-izmenenie-svoistv-kontrola/
+* (bug) FIX connector. CFI code sending fix.
+* (feature) FIX connector. FixTags.Product support.
+* (feature) FIX connector. AstsFixDialect splitted on Currency and Equity dialects.
+* (feature) NewsPanel. IPersistable support.
+
+## v4.4.7:
+* (feature) Connector.SubscribedCandleSeries.
+* (feature) CandleSeries.AllowBuildFromSmallerTimeFrame.
+* (feature) SmartCOM. V4 as default.
+* (bug) Transaq. Fix locked file issue.
+* (feature) LocalMarketDataDrive.GetDataType. Return null in case parsing error.
+* (feature) BasketMarketDataStorage. Initialize OriginalTransactionId.
+* (feature) IMessageAdapter.GetTimeFrames.
+* (feature) StorageMessageAdapter.CacheBuildableCandles.
+* (bug) CandleArgToFolderName and ToCandleArg fixes.
+* (bug) BasketMessageAdapter. Handle multiple subscriptions fix.
+* (bug) SubscriptionMessageAdapter. Fix multiple candles subscription handling.
+* (bug) CsvImporter. Fix candles processing.
+* (feature) DateRangeWindow renamed to CandleSettingsWindow and moved to Xaml.Charting.
+* (bug) Binary storage. Fix local time save http://stocksharp.ru/forum/9296/isklyuchenie-pri-sohranenii-executionmessage
+* (feature) IMessageAdapter.IsSupportCandlesUpdates
+
 ## v4.4.6.2:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors
 * (bug) HeartbeatMessageAdapter. Infinitive reconnection attempts fix.

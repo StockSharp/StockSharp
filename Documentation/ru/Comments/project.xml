@@ -181,6 +181,16 @@
 				<p>Классы для работы с форматом csv хранилища.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Algo.Storages.Binary">
+			<summary>
+				<p>Классы для работы с бинарным форматом хранилища.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Storages.Binary.Snapshot">
+			<summary>
+				<p>Классы для работы со снимком данных в бинарном формате.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Algo.Strategies.Reporting">
 			<summary>
 				<p>Отчеты работы стратегии.</p>
@@ -193,12 +203,12 @@
 		</member>
 		<member name="N:StockSharp.BitStamp">
 			<summary>
-				<p>Коннектор к бирже BitStamp.</p>
+				<p>Коннектор к крипто-бирже BitStamp.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Btce">
 			<summary>
-				<p>Коннектор к бирже BTCE.</p>
+				<p>Коннектор к крипто-бирже BTCE.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.BusinessEntities">
@@ -559,6 +569,131 @@
 		<member name="N:StockSharp.QuantHouse">
 			<summary>
 				<p>Коннектор к сервисам QuantHouse (QuantFEED и т.д.).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Bitfinex">
+			<summary>
+				<p>Коннектор к крипто-бирже Bitfinex.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Coinbase">
+			<summary>
+				<p>Коннектор к крипто-бирже Coinbase.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Kraken">
+			<summary>
+				<p>Коннектор к крипто-бирже Kraken.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Poloniex">
+			<summary>
+				<p>Коннектор к крипто-бирже Poloniex.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Gdax">
+			<summary>
+				<p>Коннектор к крипто-бирже GDAX.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Bittrex">
+			<summary>
+				<p>Коннектор к крипто-бирже Bittrex.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Bithumb">
+			<summary>
+				<p>Коннектор к крипто-бирже Bithumb.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.HitBtc">
+			<summary>
+				<p>Коннектор к крипто-бирже HitBTC.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Okcoin">
+			<summary>
+				<p>Коннектор к крипто-бирже OKCoin.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Coincheck">
+			<summary>
+				<p>Коннектор к крипто-бирже Coincheck.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Binance">
+			<summary>
+				<p>Коннектор к крипто-бирже Binance.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Exmo">
+			<summary>
+				<p>Коннектор к крипто-бирже EXMO.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Huobi">
+			<summary>
+				<p>Коннектор к крипто-бирже Huobi.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Bitexbook">
+			<summary>
+				<p>Коннектор к крипто-бирже BITEXBOOK.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.CoinExchange">
+			<summary>
+				<p>Коннектор к крипто-бирже CoinExchange.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Kucoin">
+			<summary>
+				<p>Коннектор к крипто-бирже Kucoin.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Deribit">
+			<summary>
+				<p>Коннектор к крипто-бирже Deribit.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Yobit">
+			<summary>
+				<p>Коннектор к крипто-бирже Yobit.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.LiveCoin">
+			<summary>
+				<p>Коннектор к крипто-бирже LiveCoin.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Liqui">
+			<summary>
+				<p>Коннектор к крипто-бирже Liqui.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Cex">
+			<summary>
+				<p>Коннектор к крипто-бирже CEX.IO.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Cryptopia">
+			<summary>
+				<p>Коннектор к крипто-бирже Cryptopia.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Bitmex">
+			<summary>
+				<p>Коннектор к крипто-бирже BitMEX.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Okex">
+			<summary>
+				<p>Коннектор к крипто-бирже OKEx.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.BarChart">
+			<summary>
+				<p>Реализация шлюза для взаимодействия с BarChart для скачивания исторических и реал-тайм маркет-данных.</p>
 			</summary>
 		</member>
 	</members>
