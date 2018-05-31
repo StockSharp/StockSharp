@@ -73,6 +73,8 @@ StockSharp API Change log
 * (feature) Alerts. Schemas panel.
 * (bug) Connector. Fix processing order status response with failed orders info.
 * (feature) OfflineMessageAdapter. Track disconnect.
+* (bug) YahooHistorySource. Fix downloading history for futures.
+* (feature) YahooHistorySource. Intraday interval supported.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
