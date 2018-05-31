@@ -75,6 +75,7 @@ StockSharp API Change log
 * (feature) OfflineMessageAdapter. Track disconnect.
 * (bug) YahooHistorySource. Fix downloading history for futures.
 * (feature) YahooHistorySource. Intraday interval supported.
+* (bug) Image publish cancellation processing fix.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
