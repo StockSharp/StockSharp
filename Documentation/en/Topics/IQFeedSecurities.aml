@@ -8,7 +8,7 @@
       </para>
       <list class="ordered">
   	  	<listItem>
-  	  		Instruments search by the <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security)</codeEntityReference>
+  	  		Instruments search by the <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter)</codeEntityReference>
   	  		method  (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more detail</link>). Transferred instrument properties used as a filter:
   	  		<list class="ordered">
   	  			<listItem>The <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Code</codeEntityReference> property which specifies the instrument name mask.</listItem>

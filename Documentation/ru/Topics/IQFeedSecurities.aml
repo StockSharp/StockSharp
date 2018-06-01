@@ -8,7 +8,7 @@
       </para>
       <list class="ordered">
   	  	<listItem>
-  	  		Поиск инструментов с помощью метода <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security)</codeEntityReference>
+  	  		Поиск инструментов с помощью метода <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter)</codeEntityReference>
   	  		(<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>). У передаваемого инструмента в качестве фильтра используются:
   	  		<list class="ordered">
   	  			<listItem>Свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Code</codeEntityReference>, которое задает маску имени инструмента.</listItem>

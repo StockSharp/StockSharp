@@ -18,7 +18,7 @@
       </para>
       
       <para>
-      	Для поиска инструмента необходимо вызывать метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security)</codeEntityReference>.
+      	Для поиска инструмента необходимо вызывать метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter)</codeEntityReference>.
       	Передаваемый в него инструмент используется в качестве фильтра. Доступны следующие критерии поиска (точное количество зависит от брокерской системы):
       </para>
 		<list class="bullet">
