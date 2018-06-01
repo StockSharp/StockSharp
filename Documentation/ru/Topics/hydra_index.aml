@@ -2,7 +2,7 @@
 <topic id="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 <introduction>
-		<para>С помощью <token>hydra</token> можно создать свой индекс.</para> 
+		<para>Присутствует возможность создать свой индекс.</para> 
 		<para>Для этого на вкладке <legacyBold>Общее</legacyBold> нужно выбрать <legacyBold>Инструменты</legacyBold>, появится вкладка <legacyBold>Все инструменты.</legacyBold></para>
 		<para>Перед тем как создавать <legacyBold>Индекс</legacyBold>, необходимо проверить, какие маркет-данные есть.
 		Для этого выбирается путь где лежат данные и по очереди просматриваются 
