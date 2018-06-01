@@ -1,34 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-
     <introduction>
-
-      <para>Дизайнер предоставляет возможность настроить уведомления. 
-      Для открытия окна уведомления необходимо нажать на кнопку <mediaLinkInline><image xlink:href="Designer_Alert_Bell"/></mediaLinkInline> (<link xlink:href="0fc19f50-24cb-4f8b-bb22-728968686f8b" />, <link xlink:href="a06c5482-e2d0-413d-888f-3307c80f7b65" />). 
-      Появится окно <legacyBold>Настройки уведомлений</legacyBold>.</para>
-<mediaLink>
-<image placement="center" xlink:href="Designer_Notifications_Setting"/>
-</mediaLink>
-      <para>Уведомление можно настроить на изменение следующих типов данных: Портфель, 
-      Код клиента, Брокер, Депозитарий, Серверное время, Транзакция, Тип данных, Отмена, Идентификатор заявки, 
-      Идентификатор заявки (строка), Идентификатор заявки (площадка), Производная, Производная (строка), 
-      Цена, Объем (заявка), Объем (сделка), Видимый объем, Направление, Остаток, Тип заявки, Состояние, Комментарий, 
-      Сообщение к заявке, Системная заявка, Время экспирации заявки, Условие исполнения, Идентификатор заявки, 
-      Идентификатор заявки (строка), Цена, Инициатор сделки, Открытый интерес, Ошибка, Условие, Восходящий тренд, Комиссия,
-      Задержка, Проскальзывание, Идентификатор (пользоват.), Валюта, П/У, Позиция, Маркет-мейкер.</para>
-      
-<para>Уведомления могут быть следующего вида:</para>
-<list class="bullet">
-  <listItem><para><legacyBold>Окно</legacyBold> – в углу экрана будет появляться маленькое всплывающее окно с сообщением.</para></listItem>
-  <listItem><para><legacyBold>Мелодия</legacyBold> – будет проигрываться мелодия.</para></listItem>
-  <listItem><para><legacyBold>SMS</legacyBold> – сообщение будет отправлено по смс.</para></listItem>
-  <listItem><para><legacyBold>Email</legacyBold> – сообщение будет отправлено в письме на электронную почту.</para></listItem>
-  <listItem><para><legacyBold>Речь</legacyBold> – сообщение будет проговорено сгенерированным компьютером голосом.</para></listItem>
-  <listItem><para><legacyBold>Лог</legacyBold> – сообщение будет отправлено в окно логи Дизайнера.</para></listItem>
-  <listItem><para><legacyBold>Выключено</legacyBold> – уведомление показываться не будет.</para></listItem>
-</list>
-      
+    См. 
+<link xlink:href="b027b553-9842-4c2d-9b49-d01bf1394bb2" />
     </introduction>
     <relatedTopics>
     </relatedTopics>
