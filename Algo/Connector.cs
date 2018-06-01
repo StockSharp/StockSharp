@@ -26,7 +26,11 @@ namespace StockSharp.Algo
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Commissions;
+	using StockSharp.Algo.Latency;
+	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Risk;
+	using StockSharp.Algo.Slippage;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -365,6 +369,42 @@ namespace StockSharp.Algo
 		/// Risk control manager.
 		/// </summary>
 		public IRiskManager RiskManager { get; set; }
+
+		/// <summary>
+		/// Orders registration delay calculation manager.
+		/// </summary>
+		public ILatencyManager LatencyManager
+		{
+			get => Adapter.LatencyManager;
+			set => Adapter.LatencyManager = value;
+		}
+
+		/// <summary>
+		/// The profit-loss manager.
+		/// </summary>
+		public IPnLManager PnLManager
+		{
+			get => Adapter.PnLManager;
+			set => Adapter.PnLManager = value;
+		}
+
+		/// <summary>
+		/// The commission calculating manager.
+		/// </summary>
+		public ICommissionManager CommissionManager
+		{
+			get => Adapter.CommissionManager;
+			set => Adapter.CommissionManager = value;
+		}
+
+		/// <summary>
+		/// Slippage manager.
+		/// </summary>
+		public ISlippageManager SlippageManager
+		{
+			get => Adapter.SlippageManager;
+			set => Adapter.SlippageManager = value;
+		}
 
 		/// <summary>
 		/// Connection state.

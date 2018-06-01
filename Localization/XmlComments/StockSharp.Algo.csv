@@ -4115,6 +4115,10 @@ P:StockSharp.Algo.Connector.Portfolios/summary;DocStr917
 P:StockSharp.Algo.Connector.Positions/summary;DocStr918
 P:StockSharp.Algo.Connector.News/summary;DocStr919
 P:StockSharp.Algo.Connector.RiskManager/summary;DocStr8511
+P:StockSharp.Algo.Connector.LatencyManager/summary;DocStr1244
+P:StockSharp.Algo.Connector.PnLManager/summary;DocStr2058
+P:StockSharp.Algo.Connector.CommissionManager/summary;DocStr745
+P:StockSharp.Algo.Connector.SlippageManager/summary;DocStr8536
 P:StockSharp.Algo.Connector.ConnectionState/summary;DocStr922
 P:StockSharp.Algo.Connector.CreateDepthFromOrdersLog/summary;Str2616
 P:StockSharp.Algo.Connector.CreateTradesFromOrdersLog/summary;Str2614
