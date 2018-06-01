@@ -442,7 +442,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			//adapter.InnerAdapters.RemoveWhere(a => a is EmulationMessageAdapter);
 			//adapter.InnerAdapters.Add(new EmulationMessageAdapter(EmulationConnector.TransactionIdGenerator));
 
-			var id = 0;
+			var id = _currentBatch * EmulationSettings.BatchSize;
 
 			foreach (var strategy in strategies)
 			{
@@ -545,7 +545,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			{
 				strategy.Stop();
 
-				strategy.GetCandleManager()?.Dispose();
+				//strategy.GetCandleManager()?.Dispose();
 
 				EmulationConnector
 					.Adapter

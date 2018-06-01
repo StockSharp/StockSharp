@@ -31,7 +31,8 @@ namespace StockSharp.Algo.Storages
 
 		private readonly IdGenerator _transactionIdGenerator;
 		private readonly BasketMarketDataStorage<T> _basketStorage;
-		private readonly CancellationTokenSource _cancellationToken;
+
+		private CancellationTokenSource _cancellationToken;
 
 		private bool _isInitialized;
 		private bool _isChanged;
@@ -126,8 +127,6 @@ namespace StockSharp.Algo.Storages
 		{
 			_transactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 			_basketStorage = basketStorage ?? throw new ArgumentNullException(nameof(basketStorage));
-
-			_cancellationToken = new CancellationTokenSource();
 		}
 
 		/// <summary>
@@ -249,6 +248,8 @@ namespace StockSharp.Algo.Storages
 		/// <param name="stopDate">Date in history to stop the paper trading (date is included).</param>
 		public void Start(DateTimeOffset startDate, DateTimeOffset stopDate)
 		{
+			_cancellationToken = new CancellationTokenSource();
+
 			ThreadingHelper
 				.Thread(() => CultureInfo.InvariantCulture.DoInCulture(() =>
 				{
@@ -325,7 +326,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public void Stop()
 		{
-			_cancellationToken.Cancel();
+			_cancellationToken?.Cancel();
 			_syncRoot.PulseSignal();
 		}
 
