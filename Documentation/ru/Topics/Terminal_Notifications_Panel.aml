@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
   <introduction>
 <para>Панель <legacyBold>Уведомления</legacyBold> представляет собой таблицу, в которой 
-отображается информация о всех заданных на текущий момент уведомления.</para>
+отображается информация о всех заданных на текущий момент уведомлениях.</para>
 <mediaLink>
 <image placement="center" xlink:href="Terminal_Notifications_Panel"/>
 </mediaLink>

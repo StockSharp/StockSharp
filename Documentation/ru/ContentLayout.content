@@ -4,7 +4,7 @@
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="Лицензирование StockSharp" />
   <Topic id="536b1c81-5336-4dc0-ab29-8bef70a162ba" visible="True" title="Исходные коды" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Справочные материалы" />
-  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" title="S#.API">
+  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Архитектура S#.API" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Установка S#.API" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
@@ -468,12 +468,12 @@
     <Topic id="5a717b34-e3ed-45c7-934e-94d93b98ced8" visible="True" isExpanded="true" title="Хранилище маркет-данных">
       <Topic id="dc4bee68-e85c-46c2-bf32-34a1c554ab65" visible="True" title="Скачивание инструментов" />
       <Topic id="4d149f5d-351e-4348-9f29-973760caf153" visible="True" title="Создание инструмента" />
+      <Topic id="d5094488-8fe5-45cd-ba3b-a77775654950" visible="True" title="Редактирование инструмента" />
       <Topic id="fd5e986c-9f05-4929-b9af-c8253d118eb8" visible="True" title="Индекс" />
       <Topic id="893ab9b9-0286-4fdb-b001-98f34cc236c0" visible="True" title="Непрерывный фьючерс" />
-      <Topic id="d5094488-8fe5-45cd-ba3b-a77775654950" visible="True" title="Редактирование инструмента" />
+      <Topic id="edb17138-6fe1-4a59-bdaa-d58f1d7ec22f" visible="True" title="Создание хранилища исторических данных" />
       <Topic id="23380c66-45ab-44fc-b59a-ca5133da41ad" visible="True" title="Расширенная информация по инструменту" />
       <Topic id="e994c10c-b36a-44e6-95db-8a6975295140" visible="True" title="Сопоставление инструменты-подключения" />
-      <Topic id="edb17138-6fe1-4a59-bdaa-d58f1d7ec22f" visible="True" title="Создание хранилища исторических данных" />
     </Topic>
     <Topic id="3d15acfa-6c54-4889-95a7-200d7fef9dae" visible="True" title="Совместная работа">
       <Topic id="28978b77-d474-420b-a54e-c492c4cd7410" visible="True" title="Чат" />
@@ -758,16 +758,16 @@
       <Topic id="b162bfe7-9e25-4f36-92b0-00872dca443f" visible="True" title="Оптимизация" />
       <Topic id="1db75098-3878-4843-9c0d-75bd9dd47a48" visible="True" title="Портфельное тестирование" />
     </Topic>
-    <Topic id="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" visible="True" isExpanded="true" title="Хранилище исторических данных">
-      <Topic id="ec56221a-92a0-45f4-9fec-e6e7edc7c264" visible="True" title="Создание хранилища исторических данных" />
+    <Topic id="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" visible="True" isExpanded="true" title="Хранилище маркет-данных">
       <Topic id="d0a1bb26-7a29-4607-992c-4f539632c2eb" visible="True" title="Скачивание инструментов" />
       <Topic id="2ee93171-34db-4f23-a5d3-30ff5c81dda3" visible="True" title="Создание инструмента" />
-      <Topic id="8563e716-ba68-4e52-a45a-79f66eb2346a" visible="True" title="Индекс" />
-      <Topic id="01a8166a-57b5-4f89-985f-9fb3c2ee0168" visible="True" isSelected="true" title="Непрерывный фьючерс" />
       <Topic id="bc271b21-3ef5-422e-b6cf-9f0228607d2b" visible="True" title="Редактирование инструмента" />
-      <Topic id="a966079a-3a89-49ef-918c-d69ea3d2b240" visible="True" title="Расширенная информация по инструменту" />
+      <Topic id="8563e716-ba68-4e52-a45a-79f66eb2346a" visible="True" title="Индекс" />
+      <Topic id="01a8166a-57b5-4f89-985f-9fb3c2ee0168" visible="True" title="Непрерывный фьючерс" />
       <Topic id="085174e5-3be9-4dc3-bdeb-dcc3706b483d" visible="True" title="Скачивание данных" />
       <Topic id="4456e138-a1be-4bc2-8aab-a1f0f226759d" visible="True" title="Просмотр загруженных данных" />
+      <Topic id="ec56221a-92a0-45f4-9fec-e6e7edc7c264" visible="True" title="Создание хранилища исторических данных" />
+      <Topic id="a966079a-3a89-49ef-918c-d69ea3d2b240" visible="True" title="Расширенная информация по инструменту" />
       <Topic id="aa54fb3f-ed47-4291-9cc6-34840bab4fff" visible="True" title="Сопоставление инструменты-подключения" />
     </Topic>
     <Topic id="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" visible="True" title="Live торговля">
