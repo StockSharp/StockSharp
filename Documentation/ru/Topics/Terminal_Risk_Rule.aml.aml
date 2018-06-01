@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="70c973a4-d132-4727-ad6a-c07bee65408c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+
+<para>На панели <legacyBold>Риски</legacyBold> можно установить настройки контроля рисков.</para>
+<para>В нижней части панели необходимо выбрать <legacyBold>Риск-правило</legacyBold>, 
+настроить условие срабатывания <legacyBold>Риск-правила</legacyBold> и действие 
+(Закрыть позиции, Остановить торговлю, Отменить заявки), которое будет выполняться при наступлении условия <legacyBold>Риск-правил</legacyBold>.</para>
+
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Risk_Rule"/>
+</mediaLink>
+
+<definitionTable>
+  <definedTerm>Список Риск-правил</definedTerm>
+  <definition>
+<list class="bullet">
+<listItem><para><legacyBold>Заявка (объем) </legacyBold> - риск-правило, отслеживающее объем заявки.</para></listItem>
+<listItem><para><legacyBold>Заявка(цена) </legacyBold> - риск-правило, отслеживающее цену заявки.</para></listItem>
+<listItem><para><legacyBold>Заявка (частота) </legacyBold> - риск-правило, отслеживающее частоту выставления заявок.</para></listItem>
+<listItem><para><legacyBold>Комиссия </legacyBold> - риск-правило, отслеживающее размер комиссии.</para></listItem>
+<listItem><para><legacyBold>П/У</legacyBold> - риск-правило, отслеживающее прибыль-убыток. </para></listItem>
+<listItem><para><legacyBold>Позиция </legacyBold> - риск-правило, отслеживающее размер позиции. </para></listItem>
+<listItem><para><legacyBold>Позиция (время) </legacyBold> - риск-правило, отслеживающее время жизни позиции. </para></listItem>
+<listItem><para><legacyBold>Проскальзывание </legacyBold> - риск-правило, отслеживающее размер проскальзывания. </para></listItem>
+<listItem><para><legacyBold>Сделка (объем) </legacyBold> - риск-правило, отслеживающее частоту совершения сделок. </para></listItem>
+<listItem><para><legacyBold>Сделка (цена) </legacyBold> - риск-правило, отслеживающее цену сделки.</para></listItem>
+<listItem><para><legacyBold>Сделка (частота)</legacyBold> - риск-правило, отслеживающее объем сделки.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+</introduction>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
