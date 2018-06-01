@@ -235,6 +235,14 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Designer_GluingData.aml" />
+    <None Include="Topics\Designer_create_index.aml" />
+    <None Include="Topics\Terminal_GluingData.aml" />
+    <None Include="Topics\Termina_index.aml" />
+    <None Include="Topics\Terminal_Notifications.aml" />
+    <None Include="Topics\Terminal_Notifications_Panel.aml" />
+    <None Include="Topics\Terminal_Creating_repository_of_historical_data.aml" />
+    <None Include="Topics\Terminal_Risk_Rule.aml.aml" />
     <None Include="Topics\HydraUpdate.aml" />
     <None Include="Topics\Hydra_Creation_tool.aml" />
     <None Include="Topics\HydraSettingsSecurityEditor.aml" />
@@ -3407,6 +3415,14 @@
     <Image Include="Art\iQFeedIQLinkLauncher.png">
       <ImageId>iQFeedIQLinkLauncher</ImageId>
       <AlternateText>iQFeedIQLink Launcher</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Risk_Rule.png">
+      <ImageId>Terminal_Risk_Rule</ImageId>
+      <AlternateText>Terminal Risk Rule</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Notifications_Panel.png">
+      <ImageId>Terminal_Notifications_Panel</ImageId>
+      <AlternateText>Terminal Notifications Panel</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>

@@ -4,11 +4,11 @@
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="Лицензирование StockSharp" />
   <Topic id="536b1c81-5336-4dc0-ab29-8bef70a162ba" visible="True" title="Исходные коды" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Справочные материалы" />
-  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" title="S#.API">
+  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Архитектура S#.API" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Установка S#.API" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
-    <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" title="Коннекторы (Россия)">
+    <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (Россия)">
       <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" title="Quik">
         <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
         <Topic id="d79f3357-6bdf-4a6f-92d6-c9b45e820f1a" visible="True" title="Пример использования Quik Lua" />
@@ -75,7 +75,7 @@
         <Topic id="29a2e2d4-af15-4340-be6d-3c77c66c1977" visible="True" title="Настройки коннектора Twime" />
         <Topic id="01f08ac6-ce17-49a6-a531-b24eec6d7f5c" visible="True" title="Пример работы с TwimeTrader" />
       </Topic>
-      <Topic id="2bbcaa58-0092-4603-a35f-d4a9bc7cb835" visible="True" title="SPB Exchange">
+      <Topic id="2bbcaa58-0092-4603-a35f-d4a9bc7cb835" visible="True" isExpanded="true" title="SPB Exchange">
         <Topic id="bb643f2e-d235-47ea-9a71-6dbec18d188a" visible="True" title="Настройки коннектора SPB Exchange" />
         <Topic id="f43e0966-da3b-4709-ae47-c6c7f9546567" visible="True" title="Пример работы с SpbExTrader" />
       </Topic>
@@ -371,7 +371,7 @@
       <Topic id="d27245ae-abfd-4d6b-b8c4-d1a24a45116f" visible="True" title="На рыночных данных" />
       <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Настройки тестирования" />
     </Topic>
-    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Пользовательский интерфейс (GUI)">
+    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" title="Пользовательский интерфейс (GUI)">
       <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Графики">
         <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Свечной график" />
         <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="График-панель" />
@@ -433,13 +433,14 @@
     <Topic id="f70783b8-59e1-4ea7-9d94-c20524f3470a" visible="True" title="Установка S#.Terminal" />
     <Topic id="e51b9e8f-52d3-4e16-887e-1aad12db2cc8" visible="True" title="Обновление на новую версию" />
     <Topic id="b7809562-d829-42d2-95c9-cbca8bf5549e" visible="True" title="Быстрый запуск" />
-    <Topic id="11e13dbe-5a49-44c2-b552-38726eade631" visible="True" title="Интерфейс программы">
+    <Topic id="11e13dbe-5a49-44c2-b552-38726eade631" visible="True" isExpanded="true" title="Интерфейс программы">
       <Topic id="ec274602-6148-450d-9b59-41799d8e12cb" visible="True" title="Панель быстрого доступа" />
       <Topic id="af6c6888-e54e-4a5d-b09a-ffc8d5c0f38a" visible="True" title="Лента" />
       <Topic id="da986495-ba3c-450b-a3fc-8298c783ce2d" visible="True" title="Рабочая область" />
       <Topic id="9952e304-7e1e-4957-b837-d0a656e9dbc6" visible="True" title="Панель Логи" />
       <Topic id="fae1620c-0e4f-4028-a18c-6a6a3dbd7e58" visible="True" title="Портфели" />
       <Topic id="033352f0-fd7a-4d43-aae9-faa2ca9f85da" visible="True" title="Редактор площадок" />
+      <Topic id="70c973a4-d132-4727-ad6a-c07bee65408c" visible="True" title="Риск-менеджмент" />
       <Topic id="cbd63a4a-b653-4044-b4dd-7e7d42be1492" visible="True" title="Компоненты">
         <Topic id="fd4646ce-924c-479e-ab63-53be64d954be" visible="True" title="Инструменты" />
         <Topic id="8e7a5377-4c7c-41fb-bd2c-42b699d9d36e" visible="True" title="Level 1" />
@@ -464,30 +465,36 @@
       <Topic id="f12e5802-58c6-4fae-a210-37adb953ca2e" visible="True" title="Симулятор торгов" />
       <Topic id="9474580c-0867-4ba5-be79-83fe4b51b513" visible="True" title="Привязка счета к подключению" />
     </Topic>
-    <Topic id="5a717b34-e3ed-45c7-934e-94d93b98ced8" visible="True" title="Хранилище маркет-данных">
+    <Topic id="5a717b34-e3ed-45c7-934e-94d93b98ced8" visible="True" isExpanded="true" title="Хранилище маркет-данных">
       <Topic id="dc4bee68-e85c-46c2-bf32-34a1c554ab65" visible="True" title="Скачивание инструментов" />
       <Topic id="4d149f5d-351e-4348-9f29-973760caf153" visible="True" title="Создание инструмента" />
+      <Topic id="fd5e986c-9f05-4929-b9af-c8253d118eb8" visible="True" title="Индекс" />
+      <Topic id="893ab9b9-0286-4fdb-b001-98f34cc236c0" visible="True" title="Непрерывный фьючерс" />
       <Topic id="d5094488-8fe5-45cd-ba3b-a77775654950" visible="True" title="Редактирование инструмента" />
       <Topic id="23380c66-45ab-44fc-b59a-ca5133da41ad" visible="True" title="Расширенная информация по инструменту" />
       <Topic id="e994c10c-b36a-44e6-95db-8a6975295140" visible="True" title="Сопоставление инструменты-подключения" />
+      <Topic id="edb17138-6fe1-4a59-bdaa-d58f1d7ec22f" visible="True" title="Создание хранилища исторических данных" />
     </Topic>
     <Topic id="3d15acfa-6c54-4889-95a7-200d7fef9dae" visible="True" title="Совместная работа">
       <Topic id="28978b77-d474-420b-a54e-c492c4cd7410" visible="True" title="Чат" />
       <Topic id="b3847a6b-817e-4bf3-9007-22227263d19c" visible="True" title="Публикация графиков и таблиц" />
     </Topic>
-    <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" title="Настройки">
+    <Topic id="7445482b-c1cd-4bbd-9c26-d05386e24940" visible="True" isExpanded="true" title="Уведомления">
+      <Topic id="c2495e73-82ef-4276-8576-7f99a5ea71ee" visible="True" title="Панель уведомлений" />
       <Topic id="b027b553-9842-4c2d-9b49-d01bf1394bb2" visible="True" title="Настройки уведомлений" />
+    </Topic>
+    <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" title="Настройки">
       <Topic id="bc6f0874-1c3a-49ff-b615-8c438dcea716" visible="True" title="Режим запуска" />
       <Topic id="e5994bfc-2458-41b2-a3c8-3e2b62d78ea9" visible="True" title="Сброс языка и настроек" />
       <Topic id="5db34ace-ab66-4848-b335-11402f3d96c3" visible="True" title="Обратная связь" />
     </Topic>
   </Topic>
-  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
+  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Установка S#.Data" />
     <Topic id="7fc5f53a-b6b9-4f0f-8b97-983dd98f0237" visible="True" title="Обновление на новую версию" />
-    <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" isSelected="true" title="Первый запуск" />
-    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Настройка источников">
-      <Topic id="3b645eca-0171-49a9-ba44-e2e83507ed86" visible="True" noFile="true" title="Россия">
+    <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="Первый запуск" />
+    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Настройка источников">
+      <Topic id="3b645eca-0171-49a9-ba44-e2e83507ed86" visible="True" noFile="true" isExpanded="true" title="Россия">
         <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
         <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" title="Алор" />
         <Topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" visible="True" title="Finam" />
@@ -559,7 +566,7 @@
         <Topic id="ecabd085-3287-4d14-8725-09635b7ca111" visible="True" title="Poloniex" />
         <Topic id="de19cd76-bedc-4765-8951-c4c4b5b05111" visible="True" title="Yobit" />
       </Topic>
-      <Topic id="0f6a2b55-c841-45fb-96ad-a562a8cea016" visible="True" noFile="true" isExpanded="true" title="Другие">
+      <Topic id="0f6a2b55-c841-45fb-96ad-a562a8cea016" visible="True" noFile="true" title="Другие">
         <Topic id="e81b1b7f-5c96-488e-a90d-e60cb8675977" visible="True" title="Fix" />
         <Topic id="c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f" visible="True" title="HydraServer" />
         <Topic id="91454878-ec26-4872-9a85-1bfbc76dc77a" visible="True" title="RSS" />
@@ -593,7 +600,7 @@
       <Topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" visible="True" title="Подключение через WCF" />
       <Topic id="040cdc40-39b4-47be-b3f0-441710515562" visible="True" title="Удаленное администрирование" />
     </Topic>
-    <Topic id="7545b685-f318-4d91-af10-52708257f452" visible="True" noFile="true" title="Настройка инструментов и площадок">
+    <Topic id="7545b685-f318-4d91-af10-52708257f452" visible="True" noFile="true" isExpanded="true" title="Настройка инструментов и площадок">
       <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Инструменты" />
       <Topic id="cc9ddc6c-27e9-4bc4-91e8-a418303ae201" visible="True" title="Создание инструмента" />
       <Topic id="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" visible="True" title="Индекс" />
@@ -614,7 +621,7 @@
       <Topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" visible="True" title="Работа со скриптами" />
       <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" title="Отображение результатов анализа" />
     </Topic>
-    <Topic id="b6131db4-4a22-48ea-b89e-8e2a79d633c1" visible="True" noFile="true" title="Настройки">
+    <Topic id="b6131db4-4a22-48ea-b89e-8e2a79d633c1" visible="True" noFile="true" isExpanded="true" title="Настройки">
       <Topic id="e088a37c-22aa-4a85-a20e-3b64c1b039d3" visible="True" title="Сбросить настройки" />
       <Topic id="45cc9b3a-117c-4567-94af-fea13087ebe9" visible="True" title="Удалить данные " />
       <Topic id="938a2834-a3cc-4d92-8a41-e4c11cf84d78" visible="True" title="Настройка сети" />
@@ -628,11 +635,11 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Установка S#.Designer" />
     <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Обновление на новую версию" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Быстрый запуск" />
-    <Topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" visible="True" isExpanded="true" title="Интерфейс программы">
+    <Topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" visible="True" title="Интерфейс программы">
       <Topic id="45ae6713-c28b-457d-be6b-19016f54507e" visible="True" title="Панель быстрого доступа" />
       <Topic id="2f00e9bc-8ea7-4679-9688-b02c3424f03a" visible="True" title="Лента" />
       <Topic id="71792b34-7013-4e7d-a486-400ec92e2410" visible="True" title="Рабочая область" />
@@ -642,7 +649,7 @@
       <Topic id="66f50d15-6eaa-4692-ba88-12bee0b6e6e5" visible="True" title="Редактор площадок" />
       <Topic id="b4f8c503-6589-4979-93ee-506df859d967" visible="True" title="Риск-менеджмент" />
       <Topic id="e8449e6a-bd7f-4bc9-a1a6-e92404e3a44b" visible="True" title="Комиссии" />
-      <Topic id="055fe44c-6ca5-4b41-a62d-16b319f6d3de" visible="True" title="Компоненты">
+      <Topic id="055fe44c-6ca5-4b41-a62d-16b319f6d3de" visible="True" isExpanded="true" title="Компоненты">
         <Topic id="09d8c617-e7de-4405-bc07-b06118b9c655" visible="True" title="График" />
         <Topic id="f17f9b12-4676-4815-83f3-9cbc3e1e87fc" visible="True" title="Заявки" />
         <Topic id="acc5951e-e627-453b-896e-d53f1687e3fb" visible="True" title="Условные заявки" />
@@ -657,7 +664,7 @@
       </Topic>
     </Topic>
     <Topic id="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" visible="True" title="Создание стратегии">
-      <Topic id="6974891d-4c8d-46e1-bdeb-fc7391bc0625" visible="True" isExpanded="true" title="Использование кубиков">
+      <Topic id="6974891d-4c8d-46e1-bdeb-fc7391bc0625" visible="True" title="Использование кубиков">
         <Topic id="622b706b-f729-46f2-8509-900c5bde2244" visible="True" title="Дизайнер стратегии" />
         <Topic id="37e547dd-5141-4a57-9ed2-8ca058e9240c" visible="True" isExpanded="true" title="Описание кубиков">
           <Topic id="f6d39c95-12c4-4db9-a350-aa576cbf00a5" visible="True" noFile="true" title="Общее">
@@ -728,7 +735,7 @@
           <Topic id="4b3ab78a-1a3d-4cd0-9e25-c52948de52ee" visible="True" title="Получение указанного уровня в стакане" />
         </Topic>
       </Topic>
-      <Topic id="20a8932b-09cb-4f13-bade-770a68ac96fd" visible="True" isExpanded="true" title="Использование C#">
+      <Topic id="20a8932b-09cb-4f13-bade-770a68ac96fd" visible="True" title="Использование C#">
         <Topic id="22a4dc42-dc36-41cc-a849-32aa2a8194fe" visible="True" title="Интерфейс" />
         <Topic id="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" visible="True" title="Пример стратегии на C#" />
         <Topic id="77322bb8-139a-40e8-b871-8a13ddc96b13" visible="True" title="Интеграция C# кода на общую схему" />
@@ -755,13 +762,15 @@
       <Topic id="ec56221a-92a0-45f4-9fec-e6e7edc7c264" visible="True" title="Создание хранилища исторических данных" />
       <Topic id="d0a1bb26-7a29-4607-992c-4f539632c2eb" visible="True" title="Скачивание инструментов" />
       <Topic id="2ee93171-34db-4f23-a5d3-30ff5c81dda3" visible="True" title="Создание инструмента" />
+      <Topic id="8563e716-ba68-4e52-a45a-79f66eb2346a" visible="True" title="Индекс" />
+      <Topic id="01a8166a-57b5-4f89-985f-9fb3c2ee0168" visible="True" isSelected="true" title="Непрерывный фьючерс" />
       <Topic id="bc271b21-3ef5-422e-b6cf-9f0228607d2b" visible="True" title="Редактирование инструмента" />
       <Topic id="a966079a-3a89-49ef-918c-d69ea3d2b240" visible="True" title="Расширенная информация по инструменту" />
       <Topic id="085174e5-3be9-4dc3-bdeb-dcc3706b483d" visible="True" title="Скачивание данных" />
       <Topic id="4456e138-a1be-4bc2-8aab-a1f0f226759d" visible="True" title="Просмотр загруженных данных" />
       <Topic id="aa54fb3f-ed47-4291-9cc6-34840bab4fff" visible="True" title="Сопоставление инструменты-подключения" />
     </Topic>
-    <Topic id="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" visible="True" isExpanded="true" title="Live торговля">
+    <Topic id="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" visible="True" title="Live торговля">
       <Topic id="628d619b-ef20-4496-9bd1-d854d4a853e4" visible="True" title="Добавление стратегии в Live торговлю" />
       <Topic id="0dec6014-51ee-4463-b102-aed24464833e" visible="True" title="Интерфейс" />
       <Topic id="24d370d1-fd00-4914-83ac-57472eb99e93" visible="True" title="Панель стратегий" />
