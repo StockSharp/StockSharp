@@ -1668,7 +1668,8 @@ namespace StockSharp.Algo
 
 						if (isStatusRequest && order.State == OrderStates.Pending)
 						{
-							RegisterOrder(order, false);
+							// TODO temp disabled (need more tests)
+							//RegisterOrder(order, false);
 						}
 					}
 					else if (change.IsChanged)
