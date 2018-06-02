@@ -757,8 +757,8 @@ namespace StockSharp.Algo
 					info = new MarketDepthInfo(EntityFactory.CreateMarketDepth(security));
 
 					// стакан из лога заявок бесконечен
-					if (CreateDepthFromOrdersLog)
-						info.First.MaxDepth = int.MaxValue;
+					//if (CreateDepthFromOrdersLog)
+					//	info.First.MaxDepth = int.MaxValue;
 
 					_marketDepths.Add(key, info);
 				}

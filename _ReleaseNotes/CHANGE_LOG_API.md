@@ -76,6 +76,7 @@ StockSharp API Change log
 * (bug) YahooHistorySource. Fix downloading history for futures.
 * (feature) YahooHistorySource. Intraday interval supported.
 * (bug) Image publish cancellation processing fix.
+* (feature) MarketDepth.MaxDepth marked as obsolete.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
