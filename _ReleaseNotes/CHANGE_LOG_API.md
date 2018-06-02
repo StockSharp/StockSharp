@@ -81,6 +81,7 @@ StockSharp API Change log
 * (feature) QuikLua. Handle From To date range for market data requests. https://stocksharp.ru/forum/9460/korrektnoe-otobrazhenie-svechei/
 * (feature) StrategiesDashboard. Set security and portfolio directly. Allow trading and last error columns.
 * (bug) Charting. Fix Equity legend color.
+* (feature) Diagram. MarketDepthTruncateDiagramElement.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
