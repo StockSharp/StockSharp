@@ -4591,15 +4591,8 @@ namespace StockSharp.Algo
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
 
-			var result = new MarketDepth(depth.Security)
-			{
-				LocalTime = depth.LocalTime,
-				LastChangeTime = depth.LastChangeTime,
-				Currency = depth.Currency,
-			};
-			
-			result.Update(depth.Bids.Take(maxDepth), depth.Asks.Take(maxDepth));
-
+			var result = depth.Clone();
+			result.Update(result.Bids.Take(maxDepth), result.Asks.Take(maxDepth), true);
 			return result;
 		}
 	}
