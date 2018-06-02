@@ -14986,3 +14986,13 @@ DocStr10520;Panel for schema modification;Панель для редактиро
 DocStr10522;Selected rules;Выбранные правила
 DocStr10523;All schemas;Все схемы
 DocStr10524;Create copy for the new snapshot;Создать копию для нового снэпшота
+DocStr10525;Allow trading key;Ключ для Торговля доступна
+DocStr10526;Truncate the specified order book by max depth value;Обрезать переданный стакан до максимально допустимой глубины
+DocStr10527;Truncated order book;Обрезанный стакан
+DocStr10528;Truncate market depth element;Элемент обрезания глубины стакана
+DocStr10529;Max depth;Максимальная глубина
+DocStr10530;Get icon for {0};Получить иконку для {0}
+DocStr10531;Icon name;Название иконки
+DocStr10532;Strategy state icon;Иконка для состояния стратегии
+DocStr10533;Last error;Послед. ошибка
+DocStr10534;Allow trading;Торговля доступна

@@ -170,6 +170,9 @@ M:StockSharp.Xaml.Extensions.SaveLayout(DevExpress.Xpf.Docking.DockLayoutManager
 M:StockSharp.Xaml.Extensions.LoadLayout(DevExpress.Xpf.Docking.DockLayoutManager,System.String)/summary;DocStr8194
 M:StockSharp.Xaml.Extensions.LoadLayout(DevExpress.Xpf.Docking.DockLayoutManager,System.String)/param/manager;DocStr10427
 M:StockSharp.Xaml.Extensions.LoadLayout(DevExpress.Xpf.Docking.DockLayoutManager,System.String)/param/layout;DocStr8193
+M:StockSharp.Xaml.Extensions.GetStrategyProcessStateIconName(StockSharp.Algo.Strategies.Strategy)/summary;DocStr10530
+M:StockSharp.Xaml.Extensions.GetStrategyProcessStateIconName(StockSharp.Algo.Strategies.Strategy)/param/strategy;Strategy
+M:StockSharp.Xaml.Extensions.GetStrategyProcessStateIconName(StockSharp.Algo.Strategies.Strategy)/returns;DocStr10531
 T:StockSharp.Xaml.FileProgressWindow/summary;DocStr9782
 M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/summary;DocStr1
 M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/param/fileId;DocStr10239
@@ -411,6 +414,10 @@ M:StockSharp.Xaml.SecurityMappingWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.StrategiesDashboard/summary;DocStr9506
 F:StockSharp.Xaml.StrategiesDashboard.StartCommand/summary;DocStr8459
 F:StockSharp.Xaml.StrategiesDashboard.StopCommand/summary;DocStr8459
+F:StockSharp.Xaml.StrategiesDashboard.SecurityProviderProperty/summary;DocStr29
+P:StockSharp.Xaml.StrategiesDashboard.SecurityProvider/summary;DocStr972
+F:StockSharp.Xaml.StrategiesDashboard.PortfoliosProperty/summary;DocStr29
+P:StockSharp.Xaml.StrategiesDashboard.Portfolios/summary;DocStr8362
 M:StockSharp.Xaml.StrategiesDashboard.#ctor/summary;DocStr1
 P:StockSharp.Xaml.StrategiesDashboard.Items/summary;DocStr9023
 E:StockSharp.Xaml.StrategiesDashboard.CanExecuteStart/summary;DocStr9507
@@ -422,6 +429,7 @@ T:StockSharp.Xaml.StrategiesDashboardItem/summary;DocStr9513
 P:StockSharp.Xaml.StrategiesDashboardItem.Name/summary;DocStr9078
 P:StockSharp.Xaml.StrategiesDashboardItem.Strategy/summary;Strategy
 P:StockSharp.Xaml.StrategiesDashboardItem.Tag/summary;DocStr3155
+P:StockSharp.Xaml.StrategiesDashboardItem.ProcessStateIcon/summary;DocStr10532
 M:StockSharp.Xaml.StrategiesDashboardItem.#ctor/summary;DocStr1
 M:StockSharp.Xaml.StrategiesDashboardItem.#ctor(System.String,StockSharp.Algo.Strategies.Strategy,System.Object)/summary;DocStr1
 M:StockSharp.Xaml.StrategiesDashboardItem.#ctor(System.String,StockSharp.Algo.Strategies.Strategy,System.Object)/param/name;DocStr9078
@@ -432,6 +440,8 @@ P:StockSharp.Xaml.StrategiesDashboardItem.TradesCount/summary;DocStr8623
 P:StockSharp.Xaml.StrategiesDashboardItem.PnLChange/summary;PnLChange
 P:StockSharp.Xaml.StrategiesDashboardItem.PnLValues/summary;DocStr10154
 P:StockSharp.Xaml.StrategiesDashboardItem.ProcessState/summary;DocStr1367
+P:StockSharp.Xaml.StrategiesDashboardItem.Error/summary;DocStr10533
+P:StockSharp.Xaml.StrategiesDashboardItem.AllowTrading/summary;DocStr10534
 T:StockSharp.Xaml.QuestionWindow/summary;DocStr9455
 F:StockSharp.Xaml.QuestionWindow.OkCommand/summary;DocStr8459
 P:StockSharp.Xaml.QuestionWindow.NotificationClient/summary;DocStr3070

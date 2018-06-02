@@ -5524,6 +5524,7 @@ M:StockSharp.Algo.Strategies.Strategy.Lookup(StockSharp.BusinessEntities.Securit
 M:StockSharp.Algo.Strategies.Strategy.Lookup(StockSharp.BusinessEntities.Security)/returns;DocStr8518
 M:StockSharp.Algo.Strategies.Strategy.DisposeManaged/summary;DocStr7
 T:StockSharp.Algo.Strategies.StrategyHelper/summary;DocStr2939
+F:StockSharp.Algo.Strategies.StrategyHelper.AllowTradingKey/summary;DocStr10525
 M:StockSharp.Algo.Strategies.StrategyHelper.BuyAtMarket(StockSharp.Algo.Strategies.Strategy,System.Nullable{System.Decimal})/summary;DocStr1763
 M:StockSharp.Algo.Strategies.StrategyHelper.BuyAtMarket(StockSharp.Algo.Strategies.Strategy,System.Nullable{System.Decimal})/param/strategy;Strategy
 M:StockSharp.Algo.Strategies.StrategyHelper.BuyAtMarket(StockSharp.Algo.Strategies.Strategy,System.Nullable{System.Decimal})/param/volume;DocStr1765
@@ -5575,12 +5576,12 @@ M:StockSharp.Algo.Strategies.StrategyHelper.GetIsEmulation(StockSharp.Algo.Strat
 M:StockSharp.Algo.Strategies.StrategyHelper.SetIsEmulation(StockSharp.Algo.Strategies.Strategy,System.Boolean)/summary;DocStr1779
 M:StockSharp.Algo.Strategies.StrategyHelper.SetIsEmulation(StockSharp.Algo.Strategies.Strategy,System.Boolean)/param/strategy;Strategy
 M:StockSharp.Algo.Strategies.StrategyHelper.SetIsEmulation(StockSharp.Algo.Strategies.Strategy,System.Boolean)/param/isEmulation;DocStr1778
-M:StockSharp.Algo.Strategies.StrategyHelper.GetIsInitialization(StockSharp.Algo.Strategies.Strategy)/summary;DocStr1780
-M:StockSharp.Algo.Strategies.StrategyHelper.GetIsInitialization(StockSharp.Algo.Strategies.Strategy)/param/strategy;Strategy
-M:StockSharp.Algo.Strategies.StrategyHelper.GetIsInitialization(StockSharp.Algo.Strategies.Strategy)/returns;DocStr1781
-M:StockSharp.Algo.Strategies.StrategyHelper.SetIsInitialization(StockSharp.Algo.Strategies.Strategy,System.Boolean)/summary;DocStr1782
-M:StockSharp.Algo.Strategies.StrategyHelper.SetIsInitialization(StockSharp.Algo.Strategies.Strategy,System.Boolean)/param/strategy;Strategy
-M:StockSharp.Algo.Strategies.StrategyHelper.SetIsInitialization(StockSharp.Algo.Strategies.Strategy,System.Boolean)/param/isInitialization;DocStr1781
+M:StockSharp.Algo.Strategies.StrategyHelper.GetAllowTrading(StockSharp.Algo.Strategies.Strategy)/summary;DocStr1780
+M:StockSharp.Algo.Strategies.StrategyHelper.GetAllowTrading(StockSharp.Algo.Strategies.Strategy)/param/strategy;Strategy
+M:StockSharp.Algo.Strategies.StrategyHelper.GetAllowTrading(StockSharp.Algo.Strategies.Strategy)/returns;DocStr1781
+M:StockSharp.Algo.Strategies.StrategyHelper.SetAllowTrading(StockSharp.Algo.Strategies.Strategy,System.Boolean)/summary;DocStr1782
+M:StockSharp.Algo.Strategies.StrategyHelper.SetAllowTrading(StockSharp.Algo.Strategies.Strategy,System.Boolean)/param/strategy;Strategy
+M:StockSharp.Algo.Strategies.StrategyHelper.SetAllowTrading(StockSharp.Algo.Strategies.Strategy,System.Boolean)/param/isInitialization;DocStr1781
 M:StockSharp.Algo.Strategies.StrategyHelper.LoadState(StockSharp.Algo.Strategies.Strategy,Ecng.Serialization.SettingsStorage)/summary;DocStr1783
 M:StockSharp.Algo.Strategies.StrategyHelper.LoadState(StockSharp.Algo.Strategies.Strategy,Ecng.Serialization.SettingsStorage)/param/strategy;Strategy
 M:StockSharp.Algo.Strategies.StrategyHelper.LoadState(StockSharp.Algo.Strategies.Strategy,Ecng.Serialization.SettingsStorage)/param/storage;MarketDataStorage
@@ -7473,6 +7474,10 @@ M:StockSharp.Algo.TraderHelper.IsAssociated(StockSharp.Messages.SecurityId,Stock
 M:StockSharp.Algo.TraderHelper.IsAssociated(StockSharp.Messages.SecurityId,StockSharp.BusinessEntities.ExchangeBoard)/returns;DocStr10252
 M:StockSharp.Algo.TraderHelper.LookupAll(StockSharp.BusinessEntities.IConnector)/summary;DocStr10511
 M:StockSharp.Algo.TraderHelper.LookupAll(StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398
+M:StockSharp.Algo.TraderHelper.Truncate(StockSharp.BusinessEntities.MarketDepth,System.Int32)/summary;DocStr10526
+M:StockSharp.Algo.TraderHelper.Truncate(StockSharp.BusinessEntities.MarketDepth,System.Int32)/param/depth;DocStr2829
+M:StockSharp.Algo.TraderHelper.Truncate(StockSharp.BusinessEntities.MarketDepth,System.Int32)/param/maxDepth;DocStr2885
+M:StockSharp.Algo.TraderHelper.Truncate(StockSharp.BusinessEntities.MarketDepth,System.Int32)/returns;DocStr10527
 T:StockSharp.Algo.UserPermissions/summary;DocStr163
 F:StockSharp.Algo.UserPermissions.Save/summary;DocStr165
 F:StockSharp.Algo.UserPermissions.Load/summary;DocStr165

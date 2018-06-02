@@ -603,6 +603,11 @@ M:StockSharp.Xaml.Diagram.DiagramStrategy.NeedShowProperty(System.ComponentModel
 M:StockSharp.Xaml.Diagram.DiagramStrategy.NeedShowProperty(System.ComponentModel.PropertyDescriptor)/returns;DocStr8040
 E:StockSharp.Xaml.Diagram.DiagramStrategy.PropertiesChanged/summary;DocStr7913
 M:StockSharp.Xaml.Diagram.DiagramStrategy.RaisePropertiesChanged/summary;DocStr7901
+T:StockSharp.Xaml.Diagram.Elements.MarketDepthTruncateDiagramElement/summary;DocStr10528
+P:StockSharp.Xaml.Diagram.Elements.MarketDepthTruncateDiagramElement.TypeId/summary;DocStr7902
+P:StockSharp.Xaml.Diagram.Elements.MarketDepthTruncateDiagramElement.IconName/summary;DocStr9214
+P:StockSharp.Xaml.Diagram.Elements.MarketDepthTruncateDiagramElement.MaxDepth/summary;DocStr10529
+M:StockSharp.Xaml.Diagram.Elements.MarketDepthTruncateDiagramElement.#ctor/summary;DocStr1
 T:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks/summary;DocStr9271
 F:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks.Delta/summary;Delta
 F:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks.Gamma/summary;Gamma
