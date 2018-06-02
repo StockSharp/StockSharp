@@ -352,7 +352,12 @@ namespace StockSharp.Algo
 				if (adapter == null)
 					throw new InvalidOperationException();
 
-				if (adapter != this)
+				if (adapter == this)
+				{
+					message.Adapter = null;
+					message.IsBack = false;
+				}
+				else
 				{
 					adapter.SendInMessage(message);
 					return;	
