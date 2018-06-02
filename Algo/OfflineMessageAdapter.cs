@@ -135,6 +135,7 @@
 									ExecutionType = ExecutionTypes.Transaction,
 									HasOrderInfo = true,
 									OriginalTransactionId = cancelMsg.TransactionId,
+									ServerTime = DateTimeOffset.Now,
 									OrderState = OrderStates.Done,
 									OrderType = originOrderMsg.OrderType,
 								});
@@ -167,6 +168,7 @@
 									ExecutionType = ExecutionTypes.Transaction,
 									HasOrderInfo = true,
 									OriginalTransactionId = replaceMsg.OldTransactionId,
+									ServerTime = DateTimeOffset.Now,
 									OrderState = OrderStates.Done,
 									OrderType = originOrderMsg.OrderType,
 								});
