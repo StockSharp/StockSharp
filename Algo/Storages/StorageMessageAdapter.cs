@@ -63,6 +63,7 @@ namespace StockSharp.Algo.Storages
 		private readonly SnapshotRegistry _snapshotRegistry;
 
 		private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = new SynchronizedSet<long>();
+		private readonly SynchronizedDictionary<long, long> _cancellationTransactions = new SynchronizedDictionary<long, long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StorageMessageAdapter"/>.
@@ -116,12 +117,20 @@ namespace StockSharp.Algo.Storages
 
 							foreach (var message in pair.Value)
 							{
-								// do not store cancellation commands into snapshot
-								if (message.IsCancelled && message.TransactionId != 0)
-									continue;
-
 								if (message.TransactionId == 0 && message.OriginalTransactionId == 0)
 									continue;
+
+								// do not store cancellation commands into snapshot
+								if (message.IsCancelled && message.TransactionId != 0)
+								{
+									continue;
+								}
+
+								if (message.TransactionId == 0 && _cancellationTransactions.TryGetValue(message.OriginalTransactionId, out var newOriginId))
+								{
+									// override cancel trans id by original order's registration trans id
+									message.OriginalTransactionId = newOriginId;
+								}
 
 								message.SecurityId = secId;
 								snapshotStorage.Update(message);
@@ -384,6 +393,7 @@ namespace StockSharp.Algo.Storages
 			{
 				case MessageTypes.Reset:
 					_fullyProcessedSubscriptions.Clear();
+					_cancellationTransactions.Clear();
 					break;
 
 				case MessageTypes.MarketData:
@@ -400,6 +410,10 @@ namespace StockSharp.Algo.Storages
 
 				case MessageTypes.OrderStatus:
 					ProcessOrderStatus((OrderStatusMessage)message);
+					break;
+
+				case MessageTypes.OrderCancel:
+					ProcessOrderCancel((OrderCancelMessage)message);
 					break;
 
 				default:
@@ -481,6 +495,12 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
+			base.SendInMessage(msg);
+		}
+
+		private void ProcessOrderCancel(OrderCancelMessage msg)
+		{
+			_cancellationTransactions.Add(msg.TransactionId, msg.OrderTransactionId);
 			base.SendInMessage(msg);
 		}
 
