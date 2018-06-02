@@ -821,18 +821,10 @@ namespace StockSharp.Algo
 			{
 				this.AddOrderInfoLog(order, "RegisterOrder");
 
-				CheckOnNew(order, order.Type != OrderTypes.Conditional, initOrder);
-
-				//var cs = order.Security as ContinuousSecurity;
-
-				//while (cs != null)
-				//{
-				//	order.Security = cs.GetSecurity(CurrentTime);
-				//	cs = order.Security as ContinuousSecurity;
-				//}
-
 				if (initOrder)
 				{
+					CheckOnNew(order, order.Type != OrderTypes.Conditional);
+
 					if (order.Type == null)
 						order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
 

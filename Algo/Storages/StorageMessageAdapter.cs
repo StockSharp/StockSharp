@@ -488,9 +488,11 @@ namespace StockSharp.Algo.Storages
 				{
 					if (!msg.SecurityId.IsDefault())
 					{
-						GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Transaction)
-							.Load(from, to)
-							.ForEach(RaiseStorageMessage);
+						// TODO restore last actual state from incremental messages
+
+						//GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Transaction)
+						//	.Load(from, to)
+						//	.ForEach(RaiseStorageMessage);
 					}
 				}
 			}

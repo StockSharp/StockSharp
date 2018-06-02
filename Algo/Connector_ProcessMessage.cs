@@ -1628,7 +1628,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessOrderMessage(Order o, Security security, ExecutionMessage message, long transactionId)
+		private void ProcessOrderMessage(Order o, Security security, ExecutionMessage message, long transactionId, bool isStatusRequest)
 		{
 			if (message.OrderState != OrderStates.Failed && message.Error == null)
 			{
@@ -1665,6 +1665,11 @@ namespace StockSharp.Algo
 							RaiseNewStopOrder(order);
 						else
 							RaiseNewOrder(order);
+
+						if (isStatusRequest && order.State == OrderStates.Pending)
+						{
+							RegisterOrder(order, false);
+						}
 					}
 					else if (change.IsChanged)
 					{
@@ -1785,14 +1790,14 @@ namespace StockSharp.Algo
 			RaiseNewMyTrade(tuple.Item1);
 		}
 
-		private void ProcessTransactionMessage(Order order, Security security, ExecutionMessage message, long transactionId)
+		private void ProcessTransactionMessage(Order order, Security security, ExecutionMessage message, long transactionId, bool isStatusRequest)
 		{
 			var processed = false;
 
 			if (message.HasOrderInfo())
 			{
 				processed = true;
-				ProcessOrderMessage(order, security, message, transactionId);
+				ProcessOrderMessage(order, security, message, transactionId, isStatusRequest);
 			}
 
 			if (message.HasTradeInfo())
@@ -1847,11 +1852,11 @@ namespace StockSharp.Algo
 						if (transactionId == 0 && isStatusRequest)
 							transactionId = TransactionIdGenerator.GetNextId();
 
-						ProcessTransactionMessage(null, security, message, transactionId);
+						ProcessTransactionMessage(null, security, message, transactionId, isStatusRequest);
 					}
 					else
 					{
-						ProcessTransactionMessage(order, order.Security, message, transactionId);
+						ProcessTransactionMessage(order, order.Security, message, transactionId, isStatusRequest);
 					}
 
 					break;
