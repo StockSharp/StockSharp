@@ -4579,5 +4579,28 @@ namespace StockSharp.Algo
 			connector.LookupPortfolios(new Portfolio());
 			connector.LookupOrders(new Order());
 		}
+
+		/// <summary>
+		/// Truncate the specified order book by max depth value.
+		/// </summary>
+		/// <param name="depth">Order book.</param>
+		/// <param name="maxDepth">The maximum depth of order book.</param>
+		/// <returns>Truncated order book.</returns>
+		public static MarketDepth Truncate(this MarketDepth depth, int maxDepth)
+		{
+			if (depth == null)
+				throw new ArgumentNullException(nameof(depth));
+
+			var result = new MarketDepth(depth.Security)
+			{
+				LocalTime = depth.LocalTime,
+				LastChangeTime = depth.LastChangeTime,
+				Currency = depth.Currency,
+			};
+			
+			result.Update(depth.Bids.Take(maxDepth), depth.Asks.Take(maxDepth));
+
+			return result;
+		}
 	}
 }

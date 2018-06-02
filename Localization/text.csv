@@ -4449,7 +4449,7 @@ TotalAsksVolume;Asks total volume;Общий объем по офферам
 TotalVolume;Total volume;Общий объем
 TotalPrice;Total price size;Общий ценовой размер
 TotalQuotesCount;Total quotes count;Общее количество котировок
-MaxDepthOfBook;Maximum depth of book;Максимальная глубина стакана
+MaxDepthOfBook;Maximum depth of book.;Максимальная глубина стакана.
 BuildIndexError;Build index {0} for {1} error.;Ошибка построения индекса {0} для {1}.
 OSVersion;OS version;Версия ОС
 BitMode;Bit mode;Битность

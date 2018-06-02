@@ -52,7 +52,7 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// The default value is 100. If the exceeded the maximum depth the event <see cref="MarketDepth.QuoteOutOfDepth"/> will triggered.
 		/// </remarks>
-		[DisplayNameLoc(LocalizedStrings.MaxDepthOfBookKey)]
+		[DisplayNameLoc(LocalizedStrings.Str1660Key)]
 		[Obsolete]
 		public int MaxDepth
 		{
