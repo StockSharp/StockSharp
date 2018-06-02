@@ -78,6 +78,7 @@ StockSharp API Change log
 * (bug) Image publish cancellation processing fix.
 * (feature) MarketDepth.MaxDepth marked as obsolete.
 * (feature) MarketDepth. Removed thread safety support.
+* (feature) QuikLua. Handle From To date range for market data requests. https://stocksharp.ru/forum/9460/korrektnoe-otobrazhenie-svechei/
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
