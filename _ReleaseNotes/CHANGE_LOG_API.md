@@ -82,6 +82,7 @@ StockSharp API Change log
 * (feature) StrategiesDashboard. Set security and portfolio directly. Allow trading and last error columns.
 * (bug) Charting. Fix Equity legend color.
 * (feature) Diagram. MarketDepthTruncateDiagramElement.
+* (bug) TimeSpanEditor. Fix DevExpress themes.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
