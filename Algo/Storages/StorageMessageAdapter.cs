@@ -23,8 +23,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
@@ -617,7 +615,7 @@ namespace StockSharp.Algo.Storages
 					{
 						IMarketDataStorage storage;
 
-						switch (msg.BuildCandlesFrom)
+						switch (msg.BuildFrom)
 						{
 							case null:
 							case MarketDataTypes.Trades:
@@ -637,7 +635,7 @@ namespace StockSharp.Algo.Storages
 								break;
 
 							default:
-								throw new ArgumentOutOfRangeException(nameof(msg), msg.BuildCandlesFrom, LocalizedStrings.Str1219);
+								throw new ArgumentOutOfRangeException(nameof(msg), msg.BuildFrom, LocalizedStrings.Str1219);
 						}
 
 						var range = GetRange(storage, from, to, TimeSpan.FromDays(2));
@@ -649,7 +647,7 @@ namespace StockSharp.Algo.Storages
 							var mdMsg = (MarketDataMessage)msg.Clone();
 							mdMsg.From = mdMsg.To = null;
 
-							switch (msg.BuildCandlesFrom)
+							switch (msg.BuildFrom)
 							{
 								case null:
 								case MarketDataTypes.Trades:
@@ -661,7 +659,7 @@ namespace StockSharp.Algo.Storages
 
 								case MarketDataTypes.OrderLog:
 								{
-									switch (msg.BuildCandlesField)
+									switch (msg.BuildField)
 									{
 										case null:
 										case Level1Fields.LastTradePrice:
@@ -684,7 +682,7 @@ namespace StockSharp.Algo.Storages
 								}
 
 								case MarketDataTypes.Level1:
-									switch (msg.BuildCandlesField)
+									switch (msg.BuildField)
 									{
 										case null:
 										case Level1Fields.LastTradePrice:
@@ -700,7 +698,7 @@ namespace StockSharp.Algo.Storages
 											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
 											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 											    .ToOrderBooks()
-											    .ToCandles(mdMsg, msg.BuildCandlesField.Value, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
+											    .ToCandles(mdMsg, msg.BuildField.Value, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
 											break;
 									}
 									
@@ -709,11 +707,11 @@ namespace StockSharp.Algo.Storages
 								case MarketDataTypes.MarketDepth:
 									lastTime = LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
 										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-										.ToCandles(mdMsg, msg.BuildCandlesField ?? Level1Fields.SpreadMiddle, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
+										.ToCandles(mdMsg, msg.BuildField ?? Level1Fields.SpreadMiddle, exchangeInfoProvider: exchangeInfoProvider), range.Item1, m => SetTransactionId(m, transactionId));
 									break;
 
 								default:
-									throw new ArgumentOutOfRangeException(nameof(msg), msg.BuildCandlesFrom, LocalizedStrings.Str1219);
+									throw new ArgumentOutOfRangeException(nameof(msg), msg.BuildFrom, LocalizedStrings.Str1219);
 							}
 						}
 					}

@@ -555,7 +555,7 @@ namespace StockSharp.Algo
 						return true;
 				}
 
-				var buildFrom = mdMsg.BuildCandlesFrom ?? a.SupportedMarketDataTypes.Intersect(CandleHelper.CandleDataSources).FirstOr();
+				var buildFrom = mdMsg.BuildFrom ?? a.SupportedMarketDataTypes.Intersect(CandleHelper.CandleDataSources).FirstOr();
 
 				return buildFrom != null && a.SupportedMarketDataTypes.Contains(buildFrom.Value);
 			}).ToArray();

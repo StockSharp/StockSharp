@@ -258,7 +258,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (getTransactionId == null)
 				throw new ArgumentNullException(nameof(getTransactionId));
 
-			var buildFrom = original.BuildCandlesFrom ?? InnerAdapter.SupportedMarketDataTypes.Intersect(CandleHelper.CandleDataSources).OrderBy(t =>
+			var buildFrom = original.BuildFrom ?? InnerAdapter.SupportedMarketDataTypes.Intersect(CandleHelper.CandleDataSources).OrderBy(t =>
 			{
 				// make priority
 				switch (t)
@@ -287,7 +287,7 @@ namespace StockSharp.Algo.Candles.Compression
 				Count = original.Count,
 				MaxDepth = original.MaxDepth,
 				TransactionId = getTransactionId(),
-				BuildCandlesField = original.BuildCandlesField,
+				BuildField = original.BuildField,
 				IsSubscribe = true,
 			};
 
@@ -296,7 +296,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var series = new SeriesInfo((MarketDataMessage)original.Clone(), current)
 			{
 				LastTime = lastTime,
-				Transform = CreateTransform(current.DataType, current.BuildCandlesField),
+				Transform = CreateTransform(current.DataType, current.BuildField),
 				State = SeriesStates.Compress,
 			};
 

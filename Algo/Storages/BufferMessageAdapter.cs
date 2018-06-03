@@ -168,7 +168,7 @@ namespace StockSharp.Algo.Storages
 				{
 					if (message.IsCalcVolumeProfile)
 					{
-						switch (message.BuildCandlesFrom)
+						switch (message.BuildFrom)
 						{
 							case MarketDataTypes.Trades:
 								dataType = TicksAsLevel1 ? DataType.Level1 : DataType.Ticks;

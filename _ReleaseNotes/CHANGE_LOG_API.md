@@ -84,6 +84,7 @@ StockSharp API Change log
 * (feature) Diagram. MarketDepthTruncateDiagramElement.
 * (bug) TimeSpanEditor. Fix DevExpress themes.
 * (feature) Default implementation of IOrderLogMarketDepthBuilder.
+* (feature) MarketDataMessage. BuildCandlesModes -> BuildMode, BuildCandlesFrom -> BuildFrom, BuildCandlesField -> BuildField.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

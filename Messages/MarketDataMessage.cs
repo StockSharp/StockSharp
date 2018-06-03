@@ -226,22 +226,22 @@ namespace StockSharp.Messages
 		public bool IsCalcVolumeProfile { get; set; }
 
 		/// <summary>
-		/// Build candles mode.
+		/// Build mode.
 		/// </summary>
 		[DataMember]
-		public BuildCandlesModes BuildCandlesMode { get; set; }
+		public BuildCandlesModes BuildMode { get; set; }
 
 		/// <summary>
-		/// Which market-data type is used as an candle source value.
+		/// Which market-data type is used as a source value.
 		/// </summary>
 		[DataMember]
-		public MarketDataTypes? BuildCandlesFrom { get; set; }
+		public MarketDataTypes? BuildFrom { get; set; }
 
 		/// <summary>
-		/// Extra info for the <see cref="BuildCandlesFrom"/>.
+		/// Extra info for the <see cref="BuildFrom"/>.
 		/// </summary>
 		[DataMember]
-		public Level1Fields? BuildCandlesField { get; set; }
+		public Level1Fields? BuildField { get; set; }
 
 		/// <summary>
 		/// Allow build candles from smaller timeframe.
@@ -307,9 +307,9 @@ namespace StockSharp.Messages
 				NewsId = NewsId,
 				LocalTime = LocalTime,
 				IsNotSupported = IsNotSupported,
-				BuildCandlesMode = BuildCandlesMode,
-				BuildCandlesFrom = BuildCandlesFrom,
-				BuildCandlesField = BuildCandlesField,
+				BuildMode = BuildMode,
+				BuildFrom = BuildFrom,
+				BuildField = BuildField,
 				IsCalcVolumeProfile = IsCalcVolumeProfile,
 				//IsHistory = IsHistory,
 				AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame,
