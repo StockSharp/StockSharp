@@ -4083,7 +4083,7 @@ XamlStr831;Lowest price;Цена наименьшая
 XamlStr833;Last trade price;Цена посл. сделки
 TradePrice;Trade price;Цена сделки
 XamlStr846;Equity from;Эквити от
-XamlStr848;Expiration (hh:mm):;Экспирация (чч:мм):
+XamlStr848;Expiration;Экспирация
 XamlStr850;Export DDE;Экспорт DDE
 XamlStr852;Export report;Экспорт отчета
 Str2898;Creating task '{0}'.;Создание задачи '{0}'.

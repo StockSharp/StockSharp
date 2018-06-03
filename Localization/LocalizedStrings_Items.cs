@@ -40708,12 +40708,12 @@ namespace StockSharp.Localization
 		public static string XamlStr846 => GetString(XamlStr846Key);
 
 		/// <summary>
-		/// Expiration (hh:mm):
+		/// Expiration
 		/// </summary>
 		public const string XamlStr848Key = nameof(XamlStr848);
 
 		/// <summary>
-		/// Expiration (hh:mm):
+		/// Expiration
 		/// </summary>
 		public static string XamlStr848 => GetString(XamlStr848Key);
 
