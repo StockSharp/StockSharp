@@ -83,6 +83,7 @@ StockSharp API Change log
 * (bug) Charting. Fix Equity legend color.
 * (feature) Diagram. MarketDepthTruncateDiagramElement.
 * (bug) TimeSpanEditor. Fix DevExpress themes.
+* (feature) Default implementation of IOrderLogMarketDepthBuilder.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

@@ -565,23 +565,16 @@ namespace StockSharp.Messages
 			SendOutMessage(new MarketDataMessage { OriginalTransactionId = originalTransactionId, IsNotSupported = true });
 		}
 
-		/// <summary>
-		/// Check the connection is alive. Uses only for connected states.
-		/// </summary>
-		/// <returns><see langword="true" />, is the connection still alive, <see langword="false" />, if the connection was rejected.</returns>
+		/// <inheritdoc />
 		public virtual bool IsConnectionAlive()
 		{
 			return true;
 		}
 
-		/// <summary>
-		/// Create market depth builder.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <returns>Order log to market depth builder.</returns>
+		/// <inheritdoc />
 		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		{
-			throw new NotSupportedException();
+			return new OrderLogMarketDepthBuilder(securityId);
 		}
 
 		/// <inheritdoc />

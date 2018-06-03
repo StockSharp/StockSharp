@@ -63,19 +63,6 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="item">Order log item.</param>
 		/// <returns><see langword="true" />, if the string contains the order registration, otherwise, <see langword="false" />.</returns>
-		public static bool IsOrderLogRegistered(this ExecutionMessage item)
-		{
-			if (item == null)
-				throw new ArgumentNullException(nameof(item));
-
-			return item.OrderState == OrderStates.Active && item.TradePrice == null;
-		}
-
-		/// <summary>
-		/// To check, does the string contain the order registration.
-		/// </summary>
-		/// <param name="item">Order log item.</param>
-		/// <returns><see langword="true" />, if the string contains the order registration, otherwise, <see langword="false" />.</returns>
 		public static bool IsRegistered(this OrderLogItem item)
 		{
 			return item.ToMessage().IsOrderLogRegistered();
@@ -86,35 +73,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="item">Order log item.</param>
 		/// <returns><see langword="true" />, if the string contain the cancelled order, otherwise, <see langword="false" />.</returns>
-		public static bool IsOrderLogCanceled(this ExecutionMessage item)
-		{
-			if (item == null)
-				throw new ArgumentNullException(nameof(item));
-
-			return item.OrderState == OrderStates.Done && item.TradePrice == null;
-		}
-
-		/// <summary>
-		/// To check, does the string contain the cancelled order.
-		/// </summary>
-		/// <param name="item">Order log item.</param>
-		/// <returns><see langword="true" />, if the string contain the cancelled order, otherwise, <see langword="false" />.</returns>
 		public static bool IsCanceled(this OrderLogItem item)
 		{
 			return item.ToMessage().IsOrderLogCanceled();
-		}
-
-		/// <summary>
-		/// To check, does the string contain the order matching.
-		/// </summary>
-		/// <param name="item">Order log item.</param>
-		/// <returns><see langword="true" />, if the string contains order matching, otherwise, <see langword="false" />.</returns>
-		public static bool IsOrderLogMatched(this ExecutionMessage item)
-		{
-			if (item == null)
-				throw new ArgumentNullException(nameof(item));
-
-			return item.TradeId != null;
 		}
 
 		/// <summary>

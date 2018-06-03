@@ -37,12 +37,10 @@ namespace SampleHistoryTesting
 	using StockSharp.Algo.Testing;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.BusinessEntities;
-	using StockSharp.ITCH;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
-	using StockSharp.Plaza;
 
 	public partial class MainWindow
 	{
@@ -420,9 +418,7 @@ namespace SampleHistoryTesting
 						{
 							{
 								secId,
-								LocalizedStrings.ActiveLanguage == Languages.Russian
-									? (IOrderLogMarketDepthBuilder)new PlazaOrderLogMarketDepthBuilder(secId)
-									: new ItchOrderLogMarketDepthBuilder(secId)
+								new OrderLogMarketDepthBuilder(secId)
 							}
 						}
 					},
