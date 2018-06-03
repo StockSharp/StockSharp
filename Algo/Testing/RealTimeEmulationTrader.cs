@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	/// <typeparam name="TUnderlyingMarketDataAdapter">The type <see cref="IMessageAdapter"/>, through which market data will be received.</typeparam>
 	public class RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> : BaseEmulationConnector
-		where TUnderlyingMarketDataAdapter : IMessageAdapter
+		where TUnderlyingMarketDataAdapter : class, IMessageAdapter
 	{
 		private sealed class EmulationEntityFactory : EntityFactory
 		{
