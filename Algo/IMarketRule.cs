@@ -215,13 +215,10 @@ namespace StockSharp.Algo
 			get => _container;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
 				if (Container != null)
 					throw new ArgumentException(LocalizedStrings.Str1091Params.Put(Name, Container));
 
-				_container = value;
+				_container = value ?? throw new ArgumentNullException(nameof(value));
 
 				//_container.AddRuleLog(LogLevels.Info, this, "Добавлено.");
 			}
@@ -234,10 +231,7 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public MarketRule<TToken, TArg> Until(Func<bool> canFinish)
 		{
-			if (canFinish == null)
-				throw new ArgumentNullException(nameof(canFinish));
-
-			_canFinish = canFinish;
+			_canFinish = canFinish ?? throw new ArgumentNullException(nameof(canFinish));
 			return this;
 		}
 
@@ -248,13 +242,10 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public MarketRule<TToken, TArg> Do(Action<TArg> action)
 		{
-			if (action == null)
-				throw new ArgumentNullException(nameof(action));
-
 			//return Do((r, a) => action(a));
 
 			_process = ProcessRuleVoid;
-			_actionVoid = action;
+			_actionVoid = action ?? throw new ArgumentNullException(nameof(action));
 
 			return this;
 		}

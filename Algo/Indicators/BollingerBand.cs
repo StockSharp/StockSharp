@@ -34,14 +34,8 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="dev">Standard deviation.</param>
 		public BollingerBand(LengthIndicator<decimal> ma, StandardDeviation dev)
 		{
-			if (ma == null)
-				throw new ArgumentNullException(nameof(ma));
-
-			if (dev == null)
-				throw new ArgumentNullException(nameof(dev));
-
-			_ma = ma;
-			_dev = dev;
+			_ma = ma ?? throw new ArgumentNullException(nameof(ma));
+			_dev = dev ?? throw new ArgumentNullException(nameof(dev));
 		}
 
 		/// <summary>

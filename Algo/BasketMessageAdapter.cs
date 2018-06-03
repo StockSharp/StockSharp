@@ -670,10 +670,7 @@ namespace StockSharp.Algo
 			{
 				var a = _hearbeatAdapters.TryGetValue(adapter);
 
-				if (a == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1838Params.Put(adapter.GetType()));
-
-				adapter = a;
+				adapter = a ?? throw new InvalidOperationException(LocalizedStrings.Str1838Params.Put(adapter.GetType()));
 			}
 
 			adapter.SendInMessage(message);

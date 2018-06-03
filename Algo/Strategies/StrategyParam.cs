@@ -110,16 +110,13 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="initialValue">The initial value.</param>
 		public StrategyParam(Strategy strategy, string id, string name, T initialValue)
 		{
-			if (strategy == null)
-				throw new ArgumentNullException(nameof(strategy));
-
 			if (id.IsEmpty())
 				throw new ArgumentNullException(nameof(id));
 
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
-			_strategy = strategy;
+			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			Id = id;
 			Name = name;
 			_value = initialValue;

@@ -130,13 +130,10 @@ namespace StockSharp.Algo.Storages
 
 			public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName)
 			{
-				if (storage == null)
-					throw new ArgumentNullException(nameof(storage));
-
 				if (fileName.IsEmpty())
 					throw new ArgumentNullException(nameof(fileName));
 
-				_storage = storage;
+				_storage = storage ?? throw new ArgumentNullException(nameof(storage));
 				_fileName = fileName;
 			}
 
@@ -339,13 +336,7 @@ namespace StockSharp.Algo.Storages
 		public DelayAction DelayAction
 		{
 			get => _delayAction;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_delayAction = value;
-			}
+			set => _delayAction = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		IExtendedInfoStorageItem IExtendedInfoStorage.Create(string storageName, Tuple<string, Type>[] fields)

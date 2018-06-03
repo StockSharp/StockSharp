@@ -41,13 +41,7 @@ namespace StockSharp.Algo.Latency
 		public ILatencyManager LatencyManager
 		{
 			get => _latencyManager;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_latencyManager = value;
-			}
+			set => _latencyManager = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>

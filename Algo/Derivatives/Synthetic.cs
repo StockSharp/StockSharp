@@ -37,14 +37,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="provider">The provider of information about instruments.</param>
 		public Synthetic(Security security, ISecurityProvider provider)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
-
-			_security = security;
-			_provider = provider;
+			_security = security ?? throw new ArgumentNullException(nameof(security));
+			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
 		}
 
 		private Security Option

@@ -48,10 +48,7 @@ namespace StockSharp.Algo.Derivatives
 
 			public InnerModelList(BasketBlackScholes parent)
 			{
-				if (parent == null)
-					throw new ArgumentNullException(nameof(parent));
-
-				_parent = parent;
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 			}
 
 			BlackScholes IInnerModelList.this[Security option]
@@ -87,11 +84,8 @@ namespace StockSharp.Algo.Derivatives
 		public BasketBlackScholes(ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IPositionProvider positionProvider)
 			: base(securityProvider, dataProvider)
 		{
-			if (positionProvider == null)
-				throw new ArgumentNullException(nameof(positionProvider));
-			
 			_innerModels = new InnerModelList(this);
-			PositionProvider = positionProvider;
+			PositionProvider = positionProvider ?? throw new ArgumentNullException(nameof(positionProvider));
 		}
 
 		/// <summary>
@@ -103,12 +97,9 @@ namespace StockSharp.Algo.Derivatives
 		public BasketBlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider, IPositionProvider positionProvider)
 			: base(underlyingAsset, dataProvider)
 		{
-			if (positionProvider == null)
-				throw new ArgumentNullException(nameof(positionProvider));
-
 			_innerModels = new InnerModelList(this);
 			UnderlyingAsset = underlyingAsset;
-			PositionProvider = positionProvider;
+			PositionProvider = positionProvider ?? throw new ArgumentNullException(nameof(positionProvider));
 		}
 
 		/// <summary>

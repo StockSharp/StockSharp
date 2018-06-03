@@ -23,14 +23,8 @@ namespace StockSharp.Algo.Storages
 		/// <param name="cacheStorage">The cache-storage of market-data.</param>
 		public CacheableMarketDataStorage(IMarketDataStorage<TData> sourceStorage, IMarketDataStorage<TData> cacheStorage)
 		{
-			if (sourceStorage == null)
-				throw new ArgumentNullException(nameof(sourceStorage));
-
-			if (cacheStorage == null)
-				throw new ArgumentNullException(nameof(cacheStorage));
-
-			_sourceStorage = sourceStorage;
-			_cacheStorage = cacheStorage;
+			_sourceStorage = sourceStorage ?? throw new ArgumentNullException(nameof(sourceStorage));
+			_cacheStorage = cacheStorage ?? throw new ArgumentNullException(nameof(cacheStorage));
 		}
 
 		IEnumerable<DateTime> IMarketDataStorage.Dates => _sourceStorage.Dates;

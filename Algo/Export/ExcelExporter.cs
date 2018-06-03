@@ -47,10 +47,7 @@ namespace StockSharp.Algo.Export
 		public ExcelExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName, Action breaked)
 			: base(security, arg, isCancelled, fileName)
 		{
-			if (breaked == null)
-				throw new ArgumentNullException(nameof(breaked));
-
-			_breaked = breaked;
+			_breaked = breaked ?? throw new ArgumentNullException(nameof(breaked));
 		}
 
 		/// <inheritdoc />

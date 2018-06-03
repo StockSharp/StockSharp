@@ -77,10 +77,7 @@ namespace StockSharp.Algo.Storages
 
 			public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<TMessage> storage, DateTime date)
 			{
-				if (storage == null)
-					throw new ArgumentNullException(nameof(storage));
-
-				_storage = storage;
+				_storage = storage ?? throw new ArgumentNullException(nameof(storage));
 				_date = date;
 
 				foreach (var s in storage._innerStorages.Cache)
@@ -421,10 +418,7 @@ namespace StockSharp.Algo.Storages
 
 			public BasketMarketDataSerializer(BasketMarketDataStorage<TMessage> parent)
 			{
-				if (parent == null)
-					throw new ArgumentNullException(nameof(parent));
-
-				_parent = parent;
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 			}
 
 			StorageFormats IMarketDataSerializer.Format => _parent.InnerStorages.First().Serializer.Format;

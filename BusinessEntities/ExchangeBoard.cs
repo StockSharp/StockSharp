@@ -83,13 +83,10 @@ namespace StockSharp.BusinessEntities
 			get => _code;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
 				if (Code == value)
 					return;
 
-				_code = value;
+				_code = value ?? throw new ArgumentNullException(nameof(value));
 				Notify(nameof(Code));
 			}
 		}
@@ -195,13 +192,10 @@ namespace StockSharp.BusinessEntities
 			get => _workingTime;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
 				if (WorkingTime == value)
 					return;
 
-				_workingTime = value;
+				_workingTime = value ?? throw new ArgumentNullException(nameof(value));
 				Notify(nameof(WorkingTime));
 			}
 		}
@@ -220,13 +214,10 @@ namespace StockSharp.BusinessEntities
 			get => _timeZone;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
 				if (TimeZone == value)
 					return;
 
-				_timeZone = value;
+				_timeZone = value ?? throw new ArgumentNullException(nameof(value));
 				Notify(nameof(TimeZone));
 			}
 		}
@@ -260,10 +251,7 @@ namespace StockSharp.BusinessEntities
 			get => _extensionInfo;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_extensionInfo = value;
+				_extensionInfo = value ?? throw new ArgumentNullException(nameof(value));
 				Notify(nameof(ExtensionInfo));
 			}
 		}

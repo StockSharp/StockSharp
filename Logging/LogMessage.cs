@@ -50,15 +50,8 @@ namespace StockSharp.Logging
 		/// <param name="getMessage">The function returns the text for <see cref="LogMessage.Message"/>.</param>
 		public LogMessage(ILogSource source, DateTimeOffset time, LogLevels level, Func<string> getMessage)
 		{
-			if (source == null)
-				throw new ArgumentNullException(nameof(source));
-
-			if (getMessage == null)
-				throw new ArgumentNullException(nameof(getMessage));
-
-			_getMessage = getMessage;
-
-			Source = source;
+			Source = source ?? throw new ArgumentNullException(nameof(source));
+			_getMessage = getMessage ?? throw new ArgumentNullException(nameof(getMessage));
 			Time = time;
 			Level = level;
 		}

@@ -53,13 +53,7 @@ namespace StockSharp.Messages
 		public IEnumerable<QuoteChange> Bids
 		{
 			get => _bids;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_bids = value;
-			}
+			set => _bids = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private IEnumerable<QuoteChange> _asks = Enumerable.Empty<QuoteChange>();
@@ -74,13 +68,7 @@ namespace StockSharp.Messages
 		public IEnumerable<QuoteChange> Asks
 		{
 			get => _asks;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_asks = value;
-			}
+			set => _asks = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>

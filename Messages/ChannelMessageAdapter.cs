@@ -31,14 +31,8 @@ namespace StockSharp.Messages
 		public ChannelMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inputChannel, IMessageChannel outputChannel)
 			: base(innerAdapter)
 		{
-			if (inputChannel == null)
-				throw new ArgumentNullException(nameof(inputChannel));
-
-			if (outputChannel == null)
-				throw new ArgumentNullException(nameof(outputChannel));
-
-			InputChannel = inputChannel;
-			OutputChannel = outputChannel;
+			InputChannel = inputChannel ?? throw new ArgumentNullException(nameof(inputChannel));
+			OutputChannel = outputChannel ?? throw new ArgumentNullException(nameof(outputChannel));
 
 			InputChannel.NewOutMessage += InputChannelOnNewOutMessage;
 			OutputChannel.NewOutMessage += OutputChannelOnNewOutMessage;

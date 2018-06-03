@@ -125,13 +125,10 @@ namespace StockSharp.Algo.Storages
 
 			public void AddMessage(int securityIndex, TBuffer msg)
 			{
-				if (msg == null)
-					throw new ArgumentNullException(nameof(msg));
-
 				//if (Messages[securityIndex] != null)
 				//	throw new ArgumentException(LocalizedStrings.Str654Params.Put(msg.LocalTime), nameof(msg));
 
-				Messages[securityIndex] = msg;
+				Messages[securityIndex] = msg ?? throw new ArgumentNullException(nameof(msg));
 			}
 
 			public void Fill(MessageBuffer<TBuffer> prevBuffer)
@@ -161,10 +158,7 @@ namespace StockSharp.Algo.Storages
 
 		protected IndexBuilder(IndexSecurity security)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			Security = security;
+			Security = security ?? throw new ArgumentNullException(nameof(security));
 			SecurityId = security.ToSecurityId();
 			SecurityId.EnsureHashCode();
 

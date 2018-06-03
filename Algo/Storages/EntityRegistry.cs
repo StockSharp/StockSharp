@@ -42,10 +42,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="storage">The special interface for direct access to the storage.</param>
 		public EntityRegistry(IStorage storage)
 		{
-			if (storage == null)
-				throw new ArgumentNullException(nameof(storage));
-
-			Storage = storage;
+			Storage = storage ?? throw new ArgumentNullException(nameof(storage));
 
 			ConfigManager.TryRegisterService(storage);
 

@@ -33,13 +33,10 @@ namespace StockSharp.Algo.PnL
 		/// <param name="pnL">The profit, realized by this trade.</param>
 		public PnLInfo(ExecutionMessage trade, decimal closedVolume, decimal pnL)
 		{
-			if (trade == null)
-				throw new ArgumentNullException(nameof(trade));
-
 			if (closedVolume < 0)
 				throw new ArgumentOutOfRangeException(nameof(closedVolume), closedVolume, LocalizedStrings.Str946);
 
-			Trade = trade;
+			Trade = trade ?? throw new ArgumentNullException(nameof(trade));
 			ClosedVolume = closedVolume;
 			PnL = pnL;
 		}

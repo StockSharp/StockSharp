@@ -62,7 +62,7 @@ namespace StockSharp.Algo.Strategies
 			MemoryStatistics.Instance.Values.Add(_strategyStat);
 		}
 
-		sealed class ChildStrategyList : SynchronizedSet<Strategy>, IStrategyChildStrategyList
+		private sealed class ChildStrategyList : SynchronizedSet<Strategy>, IStrategyChildStrategyList
 		{
 			private readonly Dictionary<Strategy, IMarketRule> _childStrategyRules = new Dictionary<Strategy, IMarketRule>();
 			private readonly Strategy _parent;
@@ -70,10 +70,7 @@ namespace StockSharp.Algo.Strategies
 			public ChildStrategyList(Strategy parent)
 				: base(true)
 			{
-				if (parent == null)
-					throw new ArgumentNullException(nameof(parent));
-
-				_parent = parent;
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 			}
 			
 			protected override void OnAdded(Strategy item)
@@ -201,10 +198,7 @@ namespace StockSharp.Algo.Strategies
 			public StrategyRuleList(Strategy strategy)
 				: base(strategy)
 			{
-				if (strategy == null)
-					throw new ArgumentNullException(nameof(strategy));
-
-				_strategy = strategy;
+				_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			}
 
 			protected override bool OnAdding(IMarketRule item)
@@ -492,13 +486,7 @@ namespace StockSharp.Algo.Strategies
 		public IPnLManager PnLManager
 		{
 			get => _pnLManager;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_pnLManager = value;
-			}
+			set => _pnLManager = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
@@ -656,13 +644,7 @@ namespace StockSharp.Algo.Strategies
 		public StatisticManager StatisticManager
 		{
 			get => _statisticManager;
-			protected set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_statisticManager = value;
-			}
+			protected set => _statisticManager = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private IRiskManager _riskManager;
@@ -674,13 +656,7 @@ namespace StockSharp.Algo.Strategies
 		public IRiskManager RiskManager
 		{
 			get => _riskManager;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_riskManager = value;
-			}
+			set => _riskManager = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>

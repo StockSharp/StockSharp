@@ -44,10 +44,7 @@ namespace StockSharp.Messages
 		/// <param name="priceLevels">Price levels.</param>
 		public CandleMessageVolumeProfile(IList<CandlePriceLevel> priceLevels)
 		{
-			if (priceLevels == null)
-				throw new ArgumentNullException(nameof(priceLevels));
-
-			PriceLevels = priceLevels;
+			PriceLevels = priceLevels ?? throw new ArgumentNullException(nameof(priceLevels));
 		}
 
 		/// <summary>

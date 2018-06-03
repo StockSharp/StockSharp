@@ -904,13 +904,10 @@ namespace StockSharp.Algo.Storages
 
 			public SecurityStorage(StorageRegistry parent, IMarketDataDrive drive)
 			{
-				if (parent == null)
-					throw new ArgumentNullException(nameof(parent));
-
 				if (drive == null)
 					throw new ArgumentNullException(nameof(drive));
 
-				_parent = parent;
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 				_file = Path.Combine(drive.Path, "instruments.csv");
 				Load();
 			}

@@ -38,10 +38,7 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="kijun">Kijun line.</param>
 		public IchimokuSenkouBLine(IchimokuLine kijun)
 		{
-			if (kijun == null)
-				throw new ArgumentNullException(nameof(kijun));
-
-			Kijun = kijun;
+			Kijun = kijun ?? throw new ArgumentNullException(nameof(kijun));
 		}
 
 		/// <summary>

@@ -146,14 +146,8 @@ namespace StockSharp.Algo.Candles
 
 		public IndexCandleBuilder(IndexSecurity security, Type candleType)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			if (candleType == null)
-				throw new ArgumentNullException(nameof(candleType));
-
-			_security = security;
-			_candleType = candleType;
+			_security = security ?? throw new ArgumentNullException(nameof(security));
+			_candleType = candleType ?? throw new ArgumentNullException(nameof(candleType));
 			FillSecurityIndecies(_security);
 			_bufferSize = _securityIndecies.Values.Distinct().Count();
 		}

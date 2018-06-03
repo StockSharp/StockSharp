@@ -42,14 +42,8 @@ namespace StockSharp.Algo
 		/// <param name="activated">The timer processor.</param>
 		public MarketTimer(IConnector connector, Action activated)
 		{
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			if (activated == null)
-				throw new ArgumentNullException(nameof(activated));
-
-			_connector = connector;
-			_activated = activated;
+			_connector = connector ?? throw new ArgumentNullException(nameof(connector));
+			_activated = activated ?? throw new ArgumentNullException(nameof(activated));
 		}
 
 		/// <summary>

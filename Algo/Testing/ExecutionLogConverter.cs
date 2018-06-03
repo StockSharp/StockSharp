@@ -59,22 +59,10 @@ namespace StockSharp.Algo.Testing
 			SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> asks,
 			MarketEmulatorSettings settings, Func<DateTimeOffset, DateTimeOffset> getServerTime)
 		{
-			if (bids == null)
-				throw new ArgumentNullException(nameof(bids));
-
-			if (asks == null)
-				throw new ArgumentNullException(nameof(asks));
-
-			if (settings == null)
-				throw new ArgumentNullException(nameof(settings));
-
-			if (getServerTime == null)
-				throw new ArgumentNullException(nameof(getServerTime));
-
-			_bids = bids;
-			_asks = asks;
-			_settings = settings;
-			_getServerTime = getServerTime;
+			_bids = bids ?? throw new ArgumentNullException(nameof(bids));
+			_asks = asks ?? throw new ArgumentNullException(nameof(asks));
+			_settings = settings ?? throw new ArgumentNullException(nameof(settings));
+			_getServerTime = getServerTime ?? throw new ArgumentNullException(nameof(getServerTime));
 			SecurityId = securityId;
 		}
 
@@ -771,10 +759,7 @@ namespace StockSharp.Algo.Testing
 
 		public void UpdateSecurityDefinition(SecurityMessage securityDefinition)
 		{
-			if (securityDefinition == null)
-				throw new ArgumentNullException(nameof(securityDefinition));
-
-			_securityDefinition = securityDefinition;
+			_securityDefinition = securityDefinition ?? throw new ArgumentNullException(nameof(securityDefinition));
 
 			_priceStepUpdated = _securityDefinition.PriceStep != null;
 			_volumeStepUpdated = _securityDefinition.VolumeStep != null;

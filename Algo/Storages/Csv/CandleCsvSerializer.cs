@@ -50,11 +50,8 @@ namespace StockSharp.Algo.Storages.Csv
 			public CandleCsvMetaInfo(CandleCsvSerializer<TCandleMessage> serializer, DateTime date, Encoding encoding)
 				: base(date)
 			{
-				if (encoding == null)
-					throw new ArgumentNullException(nameof(encoding));
-
 				_serializer = serializer;
-				_encoding = encoding;
+				_encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
 			}
 
 			public override object LastId { get; set; }
@@ -129,10 +126,7 @@ namespace StockSharp.Algo.Storages.Csv
 		public CandleCsvSerializer(SecurityId securityId, object arg, Encoding encoding = null)
 			: base(securityId, encoding)
 		{
-			if (arg == null)
-				throw new ArgumentNullException(nameof(arg));
-
-			Arg = arg;
+			Arg = arg ?? throw new ArgumentNullException(nameof(arg));
 		}
 
 		/// <summary>

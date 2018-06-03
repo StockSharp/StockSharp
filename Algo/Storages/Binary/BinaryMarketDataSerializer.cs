@@ -99,7 +99,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 		public override object LastId
 		{
-			get { return LastTime; }
+			get => LastTime;
 			set { }
 		}
 
@@ -332,20 +332,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 			public MarketDataEnumerator(BinaryMarketDataSerializer<TData, TMetaInfo> serializer, BitArrayReader reader, TMetaInfo metaInfo)
 			{
-				if (serializer == null)
-					throw new ArgumentNullException(nameof(serializer));
-
-				if (reader == null)
-					throw new ArgumentNullException(nameof(reader));
-
-				if (metaInfo == null)
-					throw new ArgumentNullException(nameof(metaInfo));
-
-				Serializer = serializer;
+				Serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
 				Index = -1;
-				Reader = reader;
+				Reader = reader ?? throw new ArgumentNullException(nameof(reader));
 
-				_originalMetaInfo = metaInfo;
+				_originalMetaInfo = metaInfo ?? throw new ArgumentNullException(nameof(metaInfo));
 			}
 
 			public BitArrayReader Reader { get; }
@@ -412,14 +403,11 @@ namespace StockSharp.Algo.Storages.Binary
 			if (securityId == null)
 				throw new ArgumentNullException(nameof(securityId));
 
-			if (exchangeInfoProvider == null)
-				throw new ArgumentNullException(nameof(exchangeInfoProvider));
-
 			SecurityId = securityId;
 			DataSize = dataSize;
 
 			Version = version;
-			ExchangeInfoProvider = exchangeInfoProvider;
+			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		}
 
 		protected SecurityId SecurityId { get; }

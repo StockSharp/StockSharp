@@ -37,10 +37,7 @@ namespace StockSharp.BusinessEntities
 
 			public InnerQuotesList(AggregatedQuote parent)
 			{
-				if (parent == null)
-					throw new ArgumentNullException(nameof(parent));
-
-				_parent = parent;
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 			}
 
 			protected override bool OnAdding(Quote item)

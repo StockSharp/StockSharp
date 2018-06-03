@@ -96,13 +96,7 @@ namespace StockSharp.Algo.Storages
 		public DelayAction DelayAction
 		{
 			get => _delayAction;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_delayAction = value;
-			}
+			set => _delayAction = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <inheritdoc />

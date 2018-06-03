@@ -55,13 +55,7 @@ namespace StockSharp.Messages
 		public List<WorkingTimePeriod> Periods
 		{
 			get => _periods;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_periods = value;
-			}
+			set => _periods = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private List<DateTime> _specialWorkingDays = new List<DateTime>();

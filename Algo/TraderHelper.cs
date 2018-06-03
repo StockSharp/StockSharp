@@ -2213,10 +2213,7 @@ namespace StockSharp.Algo
 
 			public NativePositionManager(Position position)
 			{
-				if (position == null)
-					throw new ArgumentNullException(nameof(position));
-
-				_position = position;
+				_position = position ?? throw new ArgumentNullException(nameof(position));
 			}
 
 			/// <summary>
@@ -3952,10 +3949,7 @@ namespace StockSharp.Algo
 
 				public TickEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
 				{
-					if (level1Enumerator == null)
-						throw new ArgumentNullException(nameof(level1Enumerator));
-
-					_level1Enumerator = level1Enumerator;
+					_level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
 				}
 
 				public ExecutionMessage Current { get; private set; }
@@ -4066,10 +4060,7 @@ namespace StockSharp.Algo
 
 				public OrderBookEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
 				{
-					if (level1Enumerator == null)
-						throw new ArgumentNullException(nameof(level1Enumerator));
-
-					_level1Enumerator = level1Enumerator;
+					_level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
 				}
 
 				public QuoteChangeMessage Current { get; private set; }

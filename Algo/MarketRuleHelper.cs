@@ -41,14 +41,8 @@ namespace StockSharp.Algo
 			protected OrderRule(Order order, IConnector connector)
 				: base(order)
 			{
-				if (order == null)
-					throw new ArgumentNullException(nameof(order));
-
-				if (connector == null)
-					throw new ArgumentNullException(nameof(connector));
-
-				Order = order;
-				Connector = connector;
+				Order = order ?? throw new ArgumentNullException(nameof(order));
+				Connector = connector ?? throw new ArgumentNullException(nameof(connector));
 			}
 
 			protected override bool CanFinish()
@@ -201,10 +195,7 @@ namespace StockSharp.Algo
 			public ChangedOrNewOrderRule(Order order, IConnector connector, Func<Order, bool> condition)
 				: base(order, connector)
 			{
-				if (condition == null)
-					throw new ArgumentNullException(nameof(condition));
-
-				_condition = condition;
+				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Name = LocalizedStrings.Str1031;
 
@@ -640,19 +631,10 @@ namespace StockSharp.Algo
 			public PortfolioRule(Portfolio portfolio, IConnector connector, Func<Portfolio, bool> changed)
 				: base(portfolio)
 			{
-				if (portfolio == null)
-					throw new ArgumentNullException(nameof(portfolio));
+				_changed = changed ?? throw new ArgumentNullException(nameof(changed));
 
-				if (connector == null)
-					throw new ArgumentNullException(nameof(connector));
-
-				if (changed == null)
-					throw new ArgumentNullException(nameof(changed));
-
-				_changed = changed;
-
-				_portfolio = portfolio;
-				_connector = connector;
+				_portfolio = portfolio ?? throw new ArgumentNullException(nameof(portfolio));
+				_connector = connector ?? throw new ArgumentNullException(nameof(connector));
 				_connector.PortfolioChanged += OnPortfolioChanged;
 			}
 
@@ -751,19 +733,10 @@ namespace StockSharp.Algo
 			public PositionRule(Position position, IConnector connector, Func<Position, bool> changed)
 				: base(position)
 			{
-				if (position == null)
-					throw new ArgumentNullException(nameof(position));
+				_changed = changed ?? throw new ArgumentNullException(nameof(changed));
 
-				if (connector == null)
-					throw new ArgumentNullException(nameof(connector));
-
-				if (changed == null)
-					throw new ArgumentNullException(nameof(changed));
-
-				_changed = changed;
-
-				_position = position;
-				_connector = connector;
+				_position = position ?? throw new ArgumentNullException(nameof(position));
+				_connector = connector ?? throw new ArgumentNullException(nameof(connector));
 				_connector.PositionChanged += OnPositionChanged;
 			}
 
@@ -846,14 +819,8 @@ namespace StockSharp.Algo
 			protected SecurityRule(Security security, IConnector connector)
 				: base(security)
 			{
-				if (security == null)
-					throw new ArgumentNullException(nameof(security));
-
-				if (connector == null)
-					throw new ArgumentNullException(nameof(connector));
-
-				Security = security;
-				Connector = connector;
+				Security = security ?? throw new ArgumentNullException(nameof(security));
+				Connector = connector ?? throw new ArgumentNullException(nameof(connector));
 			}
 
 			protected Security Security { get; }
@@ -874,10 +841,7 @@ namespace StockSharp.Algo
 			public SecurityChangedRule(Security security, IConnector connector, Func<Security, bool> condition)
 				: base(security, connector)
 			{
-				if (condition == null)
-					throw new ArgumentNullException(nameof(condition));
-
-				_condition = condition;
+				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Name = LocalizedStrings.Str1046 + " " + security;
 				Connector.SecurityChanged += OnSecurityChanged;
@@ -967,10 +931,7 @@ namespace StockSharp.Algo
 			public SecurityLastTradeRule(Security security, IConnector connector, Func<Security, bool> condition)
 				: base(security, connector)
 			{
-				if (condition == null)
-					throw new ArgumentNullException(nameof(condition));
-
-				_condition = condition;
+				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Name = LocalizedStrings.Str1049 + " " + security;
 
@@ -1371,10 +1332,7 @@ namespace StockSharp.Algo
 			protected MarketDepthRule(MarketDepth depth)
 				: base(depth)
 			{
-				if (depth == null)
-					throw new ArgumentNullException(nameof(depth));
-
-				Depth = depth;
+				Depth = depth ?? throw new ArgumentNullException(nameof(depth));
 			}
 
 			protected MarketDepth Depth { get; }
@@ -1392,10 +1350,7 @@ namespace StockSharp.Algo
 			public MarketDepthChangedRule(MarketDepth depth, Func<MarketDepth, bool> condition)
 				: base(depth)
 			{
-				if (condition == null)
-					throw new ArgumentNullException(nameof(condition));
-
-				_condition = condition;
+				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Name = LocalizedStrings.Str1056 + " " + depth.Security;
 				Depth.QuotesChanged += OnQuotesChanged;
@@ -1559,10 +1514,7 @@ namespace StockSharp.Algo
 			protected BaseCandleSeriesRule(CandleSeries series)
 				: base(series)
 			{
-				if (series == null)
-					throw new ArgumentNullException(nameof(series));
-
-				Series = series;
+				Series = series ?? throw new ArgumentNullException(nameof(series));
 			}
 
 			protected CandleSeries Series { get; }
@@ -1575,10 +1527,7 @@ namespace StockSharp.Algo
 			protected CandleSeriesRule(ICandleManager candleManager, CandleSeries series)
 				: base(series)
 			{
-				if (candleManager == null)
-					throw new ArgumentNullException(nameof(candleManager));
-
-				_candleManager = candleManager;
+				_candleManager = candleManager ?? throw new ArgumentNullException(nameof(candleManager));
 				_candleManager.Processing += OnProcessing;
 			}
 
@@ -1657,10 +1606,7 @@ namespace StockSharp.Algo
 			public CandleChangedSeriesRule(ICandleManager candleManager, CandleSeries series, Func<Candle, bool> condition)
 				: base(candleManager, series)
 			{
-				if (condition == null)
-					throw new ArgumentNullException(nameof(condition));
-
-				_condition = condition;
+				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 				Name = LocalizedStrings.Str1064 + " " + series;
 			}
 
@@ -1678,10 +1624,7 @@ namespace StockSharp.Algo
 			public CurrentCandleSeriesRule(ICandleManager candleManager, CandleSeries series, Func<Candle, bool> condition)
 				: base(candleManager, series)
 			{
-				if (condition == null)
-					throw new ArgumentNullException(nameof(condition));
-
-				_condition = condition;
+				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 			}
 
 			protected override void OnProcessCandle(Candle candle)
@@ -1698,10 +1641,7 @@ namespace StockSharp.Algo
 			protected CandleRule(ICandleManager candleManager, Candle candle)
 				: base(candle)
 			{
-				if (candleManager == null)
-					throw new ArgumentNullException(nameof(candleManager));
-
-				_candleManager = candleManager;
+				_candleManager = candleManager ?? throw new ArgumentNullException(nameof(candleManager));
 				_candleManager.Processing += OnProcessing;
 
 				Candle = candle;
@@ -1738,10 +1678,7 @@ namespace StockSharp.Algo
 			public ChangedCandleRule(ICandleManager candleManager, Candle candle, Func<Candle, bool> condition)
 				: base(candleManager, candle)
 			{
-				if (condition == null)
-					throw new ArgumentNullException(nameof(condition));
-
-				_condition = condition;
+				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 				Name = LocalizedStrings.Str1065 + " " + candle;
 			}
 
@@ -2103,10 +2040,7 @@ namespace StockSharp.Algo
 			protected ConnectorRule(IConnector connector)
 				: base(connector)
 			{
-				if (connector == null)
-					throw new ArgumentNullException(nameof(connector));
-
-				Connector = connector;
+				Connector = connector ?? throw new ArgumentNullException(nameof(connector));
 			}
 
 			protected IConnector Connector { get; }

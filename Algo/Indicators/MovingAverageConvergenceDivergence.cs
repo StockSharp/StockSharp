@@ -44,14 +44,8 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="shortMa">Short moving average.</param>
 		public MovingAverageConvergenceDivergence(ExponentialMovingAverage longMa, ExponentialMovingAverage shortMa)
 		{
-			if (longMa == null)
-				throw new ArgumentNullException(nameof(longMa));
-
-			if (shortMa == null)
-				throw new ArgumentNullException(nameof(shortMa));
-
-			ShortMa = shortMa;
-			LongMa = longMa;
+			ShortMa = shortMa ?? throw new ArgumentNullException(nameof(shortMa));
+			LongMa = longMa ?? throw new ArgumentNullException(nameof(longMa));
 		}
 
 		/// <summary>

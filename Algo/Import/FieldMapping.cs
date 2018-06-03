@@ -327,10 +327,7 @@ namespace StockSharp.Algo.Import
 		public FieldMapping(string name, string displayName, string description, Action<TInstance, TValue> apply, bool isExtended = false)
 			: base(name, displayName, description, typeof(TValue), isExtended)
 		{
-			if (apply == null)
-				throw new ArgumentNullException(nameof(apply));
-
-			_apply = apply;
+			_apply = apply ?? throw new ArgumentNullException(nameof(apply));
 		}
 
 		/// <inheritdoc />

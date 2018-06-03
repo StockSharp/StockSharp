@@ -51,13 +51,7 @@ namespace StockSharp.Algo.Testing
 		public IdGenerator IdGenerator
 		{
 			get => _idGenerator;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_idGenerator = value;
-			}
+			set => _idGenerator = value ?? throw new ArgumentNullException(nameof(value));
 		}
 	}
 

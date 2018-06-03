@@ -66,30 +66,15 @@ namespace StockSharp.Algo.Storages
 			if (securityId.IsDefault())
 				throw new ArgumentException(LocalizedStrings.Str1025, nameof(securityId));
 
-			if (getTime == null)
-				throw new ArgumentNullException(nameof(getTime));
-
-			if (getSecurityId == null)
-				throw new ArgumentNullException(nameof(getSecurityId));
-
-			if (getId == null)
-				throw new ArgumentNullException(nameof(getId));
-
-			if (serializer == null)
-				throw new ArgumentNullException(nameof(serializer));
-
-			if (drive == null)
-				throw new ArgumentNullException(nameof(drive));
-
 			SecurityId = securityId;
 
 			AppendOnlyNew = true;
 
-			_getTime = getTime;
-			_getSecurityId = getSecurityId;
-			_getId = getId;
-			Drive = drive;
-			Serializer = serializer;
+			_getTime = getTime ?? throw new ArgumentNullException(nameof(getTime));
+			_getSecurityId = getSecurityId ?? throw new ArgumentNullException(nameof(getSecurityId));
+			_getId = getId ?? throw new ArgumentNullException(nameof(getId));
+			Drive = drive ?? throw new ArgumentNullException(nameof(drive));
+			Serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
 			_arg = arg;
 		}
 

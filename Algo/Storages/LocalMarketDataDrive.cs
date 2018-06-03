@@ -53,9 +53,6 @@ namespace StockSharp.Algo.Storages
 
 			public LocalMarketDataStorageDrive(string fileName, string path, StorageFormats format, IMarketDataDrive drive)
 			{
-				if (drive == null)
-					throw new ArgumentNullException(nameof(drive));
-
 				if (fileName.IsEmpty())
 					throw new ArgumentNullException(nameof(fileName));
 
@@ -63,7 +60,7 @@ namespace StockSharp.Algo.Storages
 					throw new ArgumentNullException(nameof(path));
 
 				_path = path;
-				_drive = drive;
+				_drive = drive ?? throw new ArgumentNullException(nameof(drive));
 				_fileNameWithExtension = fileName + GetExtension(format);
 				_datesPath = IOPath.Combine(_path, fileName + format + "Dates.txt");
 

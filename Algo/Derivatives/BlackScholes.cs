@@ -35,14 +35,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="dataProvider">The market data provider.</param>
 		protected BlackScholes(ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
-			if (securityProvider == null)
-				throw new ArgumentNullException(nameof(securityProvider));
-
-			if (dataProvider == null)
-				throw new ArgumentNullException(nameof(dataProvider));
-
-			SecurityProvider = securityProvider;
-			DataProvider = dataProvider;
+			SecurityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
+			DataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
 		}
 
 		/// <summary>
@@ -54,10 +48,7 @@ namespace StockSharp.Algo.Derivatives
 		public BlackScholes(Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 			: this(securityProvider, dataProvider)
 		{
-			if (option == null)
-				throw new ArgumentNullException(nameof(option));
-
-			Option = option;
+			Option = option ?? throw new ArgumentNullException(nameof(option));
 		}
 
 		/// <summary>
@@ -67,14 +58,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="dataProvider">The market data provider.</param>
 		protected BlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider)
 		{
-			if (underlyingAsset == null)
-				throw new ArgumentNullException(nameof(underlyingAsset));
-
-			if (dataProvider == null)
-				throw new ArgumentNullException(nameof(dataProvider));
-
-			_underlyingAsset = underlyingAsset;
-			DataProvider = dataProvider;
+			_underlyingAsset = underlyingAsset ?? throw new ArgumentNullException(nameof(underlyingAsset));
+			DataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
 		}
 
 		/// <summary>
@@ -86,10 +71,7 @@ namespace StockSharp.Algo.Derivatives
 		public BlackScholes(Security option, Security underlyingAsset, IMarketDataProvider dataProvider)
 			: this(underlyingAsset, dataProvider)
 		{
-			if (option == null)
-				throw new ArgumentNullException(nameof(option));
-
-			Option = option;
+			Option = option ?? throw new ArgumentNullException(nameof(option));
 		}
 
 		/// <summary>

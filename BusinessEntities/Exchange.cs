@@ -142,10 +142,7 @@ namespace StockSharp.BusinessEntities
 			get => _extensionInfo;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_extensionInfo = value;
+				_extensionInfo = value ?? throw new ArgumentNullException(nameof(value));
 				Notify(nameof(ExtensionInfo));
 			}
 		}

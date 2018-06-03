@@ -46,14 +46,8 @@ namespace StockSharp.Algo.Export
 		public StockSharpExporter(Security security, object arg, Func<int, bool> isCancelled, IStorageRegistry storageRegistry, IMarketDataDrive drive, StorageFormats format)
 			: base(security, arg, isCancelled, drive.Path)
 		{
-			if (storageRegistry == null)
-				throw new ArgumentNullException(nameof(storageRegistry));
-
-			if (drive == null)
-				throw new ArgumentNullException(nameof(drive));
-
-			_storageRegistry = storageRegistry;
-			_drive = drive;
+			_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
+			_drive = drive ?? throw new ArgumentNullException(nameof(drive));
 			_format = format;
 		}
 

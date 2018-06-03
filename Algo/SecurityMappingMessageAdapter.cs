@@ -29,10 +29,7 @@ namespace StockSharp.Algo
 		public SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecurityMappingStorage storage)
 			: base(innerAdapter)
 		{
-			if (storage == null)
-				throw new ArgumentNullException(nameof(storage));
-
-			Storage = storage;
+			Storage = storage ?? throw new ArgumentNullException(nameof(storage));
 			Storage.Changed += OnStorageMappingChanged;
 		}
 

@@ -55,10 +55,7 @@ namespace StockSharp.Algo
 			{
 				public WeightedPosition(WeightedPortfolio portfolio, IEnumerable<Position> innerPositions)
 				{
-					if (innerPositions == null)
-						throw new ArgumentNullException(nameof(innerPositions));
-
-					_innerPositions = innerPositions;
+					_innerPositions = innerPositions ?? throw new ArgumentNullException(nameof(innerPositions));
 
 					decimal? beginValue = null;
 					decimal? currentValue = null;
@@ -99,10 +96,7 @@ namespace StockSharp.Algo
 
 			public WeightsDictionary(WeightedPortfolio parent, IConnector connector)
 			{
-				if (parent == null)
-					throw new ArgumentNullException(nameof(parent));
-
-				_parent = parent;
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 				_connector = connector;
 			}
 

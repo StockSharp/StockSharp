@@ -29,10 +29,7 @@ namespace StockSharp.Logging
 		/// <param name="logger">External recipient of messages.</param>
 		public ExternalLogListener(ILogListener logger)
 		{
-			if (logger == null)
-				throw new ArgumentNullException(nameof(logger));
-
-			Logger = logger;
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		/// <summary>

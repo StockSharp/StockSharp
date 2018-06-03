@@ -27,10 +27,7 @@ namespace StockSharp.Algo
 
 			public SubscriptionInfo(MarketDataMessage message)
 			{
-				if (message == null)
-					throw new ArgumentNullException(nameof(message));
-
-				Message = message;
+				Message = message ?? throw new ArgumentNullException(nameof(message));
 				Subscriptions = new List<MarketDataMessage>();
 			}
 		}

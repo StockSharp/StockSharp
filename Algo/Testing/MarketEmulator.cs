@@ -149,10 +149,7 @@ namespace StockSharp.Algo.Testing
 
 			public SecurityMarketEmulator(MarketEmulator parent, SecurityId securityId)
 			{
-				if (parent == null)
-					throw new ArgumentNullException(nameof(parent));
-
-				_parent = parent;
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 				_securityId = securityId;
 				_execLogConverter = new ExecutionLogConverter(securityId, _bids, _asks, _parent.Settings, GetServerTime);
 			}

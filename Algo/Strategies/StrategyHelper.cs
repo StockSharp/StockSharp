@@ -484,10 +484,7 @@ namespace StockSharp.Algo.Strategies
 			protected StrategyRule(Strategy strategy)
 				: base(strategy)
 			{
-				if (strategy == null)
-					throw new ArgumentNullException(nameof(strategy));
-
-				Strategy = strategy;
+				Strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			}
 
 			protected Strategy Strategy { get; }
@@ -506,10 +503,7 @@ namespace StockSharp.Algo.Strategies
 			public PnLManagerStrategyRule(Strategy strategy, Func<decimal, bool> changed)
 				: base(strategy)
 			{
-				if (changed == null)
-					throw new ArgumentNullException(nameof(changed));
-
-				_changed = changed;
+				_changed = changed ?? throw new ArgumentNullException(nameof(changed));
 
 				Strategy.PnLChanged += OnPnLChanged;
 			}
@@ -540,10 +534,7 @@ namespace StockSharp.Algo.Strategies
 			public PositionManagerStrategyRule(Strategy strategy, Func<decimal, bool> changed)
 				: base(strategy)
 			{
-				if (changed == null)
-					throw new ArgumentNullException(nameof(changed));
-
-				_changed = changed;
+				_changed = changed ?? throw new ArgumentNullException(nameof(changed));
 
 				Strategy.PositionChanged += OnPositionChanged;
 			}
@@ -625,10 +616,7 @@ namespace StockSharp.Algo.Strategies
 			public ProcessStateChangedStrategyRule(Strategy strategy, Func<ProcessStates, bool> condition)
 				: base(strategy)
 			{
-				if (condition == null)
-					throw new ArgumentNullException(nameof(condition));
-
-				_condition = condition;
+				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Strategy.ProcessStateChanged += OnProcessStateChanged;
 			}
@@ -653,10 +641,7 @@ namespace StockSharp.Algo.Strategies
 			public PropertyChangedStrategyRule(Strategy strategy, Func<Strategy, bool> condition)
 				: base(strategy)
 			{
-				if (condition == null)
-					throw new ArgumentNullException(nameof(condition));
-
-				_condition = condition;
+				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Strategy.PropertyChanged += OnPropertyChanged;
 			}

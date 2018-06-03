@@ -128,13 +128,7 @@ namespace StockSharp.Messages
 		public WorkingTime WorkingTime
 		{
 			get => _workingTime;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_workingTime = value;
-			}
+			set => _workingTime = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>

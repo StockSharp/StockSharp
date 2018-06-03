@@ -47,10 +47,7 @@
 		public SecurityNativeIdMessageAdapter(IMessageAdapter innerAdapter, INativeIdStorage storage)
 			: base(innerAdapter)
 		{
-			if (storage == null)
-				throw new ArgumentNullException(nameof(storage));
-
-			Storage = storage;
+			Storage = storage ?? throw new ArgumentNullException(nameof(storage));
 			Storage.Added += OnStorageNewIdentifierAdded;
 		}
 

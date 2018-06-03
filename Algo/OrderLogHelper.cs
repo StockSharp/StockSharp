@@ -175,9 +175,6 @@ namespace StockSharp.Algo
 
 				public DepthEnumerator(IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval, int maxDepth)
 				{
-					if (builder == null)
-						throw new ArgumentNullException(nameof(builder));
-
 					if (items == null)
 						throw new ArgumentNullException(nameof(items));
 
@@ -185,7 +182,7 @@ namespace StockSharp.Algo
 						throw new ArgumentOutOfRangeException(nameof(maxDepth), maxDepth, LocalizedStrings.Str941);
 
 					_itemsEnumerator = items.GetEnumerator();
-					_builder = builder;
+					_builder = builder ?? throw new ArgumentNullException(nameof(builder));
 					_interval = interval;
 					_maxDepth = maxDepth;
 				}
