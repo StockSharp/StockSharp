@@ -4799,8 +4799,8 @@ Build;Build;Построение
 Load;Load;Загрузить
 LoadAndBuild;Load and build;Загрузить и построить
 Mode;Mode;Режим
-CandlesBuildMode;Build candles mode.;Режим построения свечей.
-BuildCandlesFrom;Which market-data type is used as an candle source value.;Какой именно тип данных используется как источник свечей.
+BuildMode;Build mode.;Режим свечей.
+BuildFrom;Which market-data type is used as a source value.;Какой именно тип данных используется как источник.
 Level1Field;Level1 field.;Поле Level1.
 CandlesType;Candles type;Тип свечей
 WaitInterval;Waiting interval. Make some pause before sending the next request.;Интервал ожидания. Делать некую паузу до отправки следующего запроса.
@@ -14204,16 +14204,13 @@ DocStr9646;Use V100 plus version at the connect time;Использовать V1
 DocStr9647;Interface of candles source for {0} that builds candles with {1};Интерфейс источника свечей для {0}, который строит свечи с помощью {1}
 DocStr9648;The candles source for {0} that builds candles with {1};Источник свечей для {0}, который строит свечи с помощью {1}
 DocStr9649;Candle builder adapter;Адаптер построения свечей
-DocStr9650;Build candles from;Строить свечи из
 DocStr9651;Candles builders;Построители свечей
 DocStr9654;A new candles changes;Новые изменения свечей
-DocStr9659;Build candles mode;Режим построения свечей
 DocStr9660;Time precision;Временная точность
 DocStr9661;Update candle from {0};Обновить свечу из {0}
 DocStr9664;Contains history market data;Содержит историю рыночных данных
-DocStr9665;Build candles modes;Режима построения свечей
-DocStr9666;Request built candles and build the missing candles from trades, depths etc.;Запросить готовые свечи, или построить их из сделок, стаканов и т.д.
-DocStr9667;Request only built candles;Запросить готовые свечи
+DocStr9666;Request built data and build the missing data from trades, depths etc.;Запросить готовые данные, или построить их из сделок, стаканов и т.д.
+DocStr9667;Request only built data;Запросить только готовые данные
 DocStr9668;Build from trades, depths etc.;Построить из сделок, стаканов и т.д.
 DocStr9669;Candles builder;Построитель свечей
 DocStr9670;Is {0} changed;Изменилось ли {0}
@@ -14996,3 +14993,7 @@ DocStr10531;Icon name;Название иконки
 DocStr10532;Strategy state icon;Иконка для состояния стратегии
 DocStr10533;Last error;Послед. ошибка
 DocStr10534;Allow trading;Торговля доступна
+DocStr10535;The messages adapter build orer book and tick data from order log flow;Адаптер сообщений, строящий стаканы и тиковые сделки из потока лога заявок
+DocStr10536;To tick trade from the order log;Преобразовать в тиковую сделку из строки лога заявок
+DocStr10537;Default implementation of {0};Реализация интерфейса {0} по-умолчанию
+DocStr10538;Build modes;Режимы построения

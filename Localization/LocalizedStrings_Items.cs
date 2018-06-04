@@ -47618,24 +47618,24 @@ namespace StockSharp.Localization
 		public static string Mode => GetString(ModeKey);
 
 		/// <summary>
-		/// Build candles mode.
+		/// Build mode.
 		/// </summary>
-		public const string CandlesBuildModeKey = nameof(CandlesBuildMode);
+		public const string BuildModeKey = nameof(BuildMode);
 
 		/// <summary>
-		/// Build candles mode.
+		/// Build mode.
 		/// </summary>
-		public static string CandlesBuildMode => GetString(CandlesBuildModeKey);
+		public static string BuildMode => GetString(BuildModeKey);
 
 		/// <summary>
-		/// Which market-data type is used as an candle source value.
+		/// Which market-data type is used as a source value.
 		/// </summary>
-		public const string BuildCandlesFromKey = nameof(BuildCandlesFrom);
+		public const string BuildFromKey = nameof(BuildFrom);
 
 		/// <summary>
-		/// Which market-data type is used as an candle source value.
+		/// Which market-data type is used as a source value.
 		/// </summary>
-		public static string BuildCandlesFrom => GetString(BuildCandlesFromKey);
+		public static string BuildFrom => GetString(BuildFromKey);
 
 		/// <summary>
 		/// Level1 field.
