@@ -82,6 +82,9 @@
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.LoadSettingsFromFile(System.String)">
       <inheritdoc />
     </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)">
       <summary>
             To call the event <see cref="E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage" />.
@@ -492,6 +495,13 @@
             </summary>
       <param name="settingsFile">Settings file.</param>
     </member>
+    <member name="M:StockSharp.Fix.Dialects.IFastDialect.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)">
+      <summary>
+            Create market depth builder.
+            </summary>
+      <param name="securityId">Security ID.</param>
+      <returns>Order log to market depth builder.</returns>
+    </member>
     <member name="T:StockSharp.Fix.Dialects.IFixDialect">
       <summary>
             The interface describing the dialect of the FIX protocol.
@@ -767,6 +777,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportCandlesUpdates">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.FastMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FastMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

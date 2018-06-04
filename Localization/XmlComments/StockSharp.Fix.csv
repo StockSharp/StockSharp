@@ -18,6 +18,7 @@ E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage/summary;DocStr2237
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportSubscriptionBySecurity/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.LoadSettingsFromFile(System.String)/inheritdoc;DocStr8459
+M:StockSharp.Fix.Dialects.BaseFastDialect.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)/summary;DocStr466
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
 M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -158,6 +159,9 @@ M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictiona
 M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})/param/dumpFiles;DocStr9963
 M:StockSharp.Fix.Dialects.IFastDialect.LoadSettingsFromFile(System.String)/summary;DocStr9950
 M:StockSharp.Fix.Dialects.IFastDialect.LoadSettingsFromFile(System.String)/param/settingsFile;SettingsFile
+M:StockSharp.Fix.Dialects.IFastDialect.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/summary;DocStr3790
+M:StockSharp.Fix.Dialects.IFastDialect.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
+M:StockSharp.Fix.Dialects.IFastDialect.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/returns;DocStr1450
 T:StockSharp.Fix.Dialects.IFixDialect/summary;DocStr8773
 P:StockSharp.Fix.Dialects.IFixDialect.Version/summary;DocStr8745
 P:StockSharp.Fix.Dialects.IFixDialect.Encoding/summary;Encoding
@@ -227,6 +231,7 @@ P:StockSharp.Fix.FastMessageAdapter.SecurityExtendedFields/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.IsSupportSubscriptionBySecurity/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.SupportedMarketDataTypes/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
+M:StockSharp.Fix.FastMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FastMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FastMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)/summary;DocStr9956
 M:StockSharp.Fix.FastMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)/param/dialect;DocStr9957
