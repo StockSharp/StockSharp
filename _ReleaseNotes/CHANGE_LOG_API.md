@@ -87,6 +87,7 @@ StockSharp API Change log
 * (feature) MarketDataMessage. BuildCandlesModes -> BuildMode, BuildCandlesFrom -> BuildFrom, BuildCandlesField -> BuildField.
 * (feature) OrderLogMessageAdapter. Moved depth and tick building from Connector to Adapter.
 * (feature) Connector. CreateDepthFromOrdersLog, CreateTradesFromOrdersLog market as obsolete.
+* (feature) SampleFix. OrdersLogWindow
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
