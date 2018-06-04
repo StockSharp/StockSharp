@@ -435,7 +435,7 @@ namespace SampleHistoryTesting
 
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
 				{
-					BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? BuildCandlesModes.Build : BuildCandlesModes.Load,
+					BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? MarketDataBuildModes.Build : MarketDataBuildModes.Load,
 					BuildCandlesFrom = emulationInfo.UseOrderLog ? (MarketDataTypes?)MarketDataTypes.OrderLog : null,
 				};
 

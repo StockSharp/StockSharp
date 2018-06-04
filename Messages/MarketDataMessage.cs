@@ -108,21 +108,21 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Build candles modes.
+	/// Build modes.
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public enum BuildCandlesModes
+	public enum MarketDataBuildModes
 	{
 		/// <summary>
-		/// Request built candles and build the missing candles from trades, depths etc.
+		/// Request built data and build the missing data from trades, depths etc.
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadAndBuildKey)]
 		LoadAndBuild,
 
 		/// <summary>
-		/// Request only built candles.
+		/// Request only built data.
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadKey)]
@@ -229,7 +229,7 @@ namespace StockSharp.Messages
 		/// Build mode.
 		/// </summary>
 		[DataMember]
-		public BuildCandlesModes BuildMode { get; set; }
+		public MarketDataBuildModes BuildMode { get; set; }
 
 		/// <summary>
 		/// Which market-data type is used as a source value.
