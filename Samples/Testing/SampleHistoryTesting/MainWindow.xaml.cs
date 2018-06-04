@@ -403,8 +403,8 @@ namespace SampleHistoryTesting
 
 					//UseExternalCandleSource = emulationInfo.UseCandleTimeFrame != null,
 
-					CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
-					CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
+					//CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
+					//CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
 
 					HistoryMessageAdapter =
 					{

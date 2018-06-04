@@ -150,10 +150,10 @@ namespace SamplePlaza
 						Trader.Tables.Clear();
 						Trader.TableRegistry.SyncTables(Tables.SelectedTables);
 
-						if (Trader.Tables.Contains(Trader.TableRegistry.AnonymousOrdersLog))
-						{
-							Trader.CreateDepthFromOrdersLog = true;
-						}
+						//if (Trader.Tables.Contains(Trader.TableRegistry.AnonymousOrdersLog))
+						//{
+						//	Trader.CreateDepthFromOrdersLog = true;
+						//}
 
 						Trader.ReConnectionSettings.AttemptCount = -1;
 						Trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));

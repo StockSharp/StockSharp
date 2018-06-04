@@ -90,7 +90,6 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly Dictionary<Security, IOrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, IOrderLogMarketDepthBuilder>();
 		private readonly CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates> _adapterStates = new CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates>();
 		
 		private readonly ResetMessage _disposeMessage = new ResetMessage();
@@ -1503,47 +1502,6 @@ namespace StockSharp.Algo
 			//logItem.LocalTime = message.LocalTime;
 
 			RaiseNewOrderLogItem(logItem);
-
-			if (message.IsSystem == false)
-				return;
-
-			if (CreateDepthFromOrdersLog)
-			{
-				try
-				{
-					var builder = _olBuilders.SafeAdd(security, key => MarketDataAdapter.CreateOrderLogMarketDepthBuilder(message.SecurityId));
-
-					if (builder == null)
-						throw new InvalidOperationException();
-
-					var updated = builder.Update(message);
-
-					if (updated)
-					{
-						RaiseNewMessage(builder.Depth.Clone());
-						ProcessQuotesMessage(security, builder.Depth);
-					}
-				}
-				catch (Exception ex)
-				{
-					// если ОЛ поврежден, то не нарушаем весь цикл обработки сообщения
-					// а только выводим сообщение в лог
-					RaiseError(ex);
-				}
-			}
-
-			if (trade != null && CreateTradesFromOrdersLog)
-			{
-				var tuple = _entityCache.GetTrade(security, message.TradeId, message.TradeStringId, (id, stringId) =>
-				{
-					var t = trade.Clone();
-					t.OrderDirection = message.Side.Invert();
-					return t;
-				});
-
-				if (tuple.Item2)
-					RaiseNewTrade(tuple.Item1);
-			}
 		}
 
 		private void ProcessTradeMessage(Security security, ExecutionMessage message)

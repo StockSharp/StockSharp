@@ -85,6 +85,8 @@ StockSharp API Change log
 * (bug) TimeSpanEditor. Fix DevExpress themes.
 * (feature) Default implementation of IOrderLogMarketDepthBuilder.
 * (feature) MarketDataMessage. BuildCandlesModes -> BuildMode, BuildCandlesFrom -> BuildFrom, BuildCandlesField -> BuildField.
+* (feature) OrderLogMessageAdapter. Moved depth and tick building from Connector to Adapter.
+* (feature) Connector. CreateDepthFromOrdersLog, CreateTradesFromOrdersLog market as obsolete.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

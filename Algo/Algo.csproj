@@ -125,6 +125,7 @@
     <Compile Include="Export\IndicatorValue.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
+    <Compile Include="OrderLogMessageAdapter.cs" />
     <Compile Include="PermissionCredentialsAuthorization.cs" />
     <Compile Include="PermissionCredentialsRemoteAuthorization.cs" />
     <Compile Include="PermissionCredentialsStorage.cs" />

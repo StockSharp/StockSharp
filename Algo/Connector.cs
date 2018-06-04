@@ -419,11 +419,13 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Use orders log to create market depths. Disabled by default.
 		/// </summary>
+		[Obsolete("Use MarketDataMessage.BuildFrom=OrderLog instead.")]
 		public virtual bool CreateDepthFromOrdersLog { get; set; }
 
 		/// <summary>
 		/// Use orders log to create ticks. Disabled by default.
 		/// </summary>
+		[Obsolete("Use MarketDataMessage.BuildFrom=OrderLog instead.")]
 		public virtual bool CreateTradesFromOrdersLog { get; set; }
 
 		/// <summary>
@@ -1431,7 +1433,6 @@ namespace StockSharp.Algo
 
 			_securityValues.Clear();
 			_sessionStates.Clear();
-			_olBuilders.Clear();
 
 			SendInMessage(new ResetMessage());
 
@@ -1497,8 +1498,8 @@ namespace StockSharp.Algo
 			Adapter.Load(storage.GetValue<SettingsStorage>(nameof(Adapter)));
 			IsRestoreSubscriptionOnReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
 
-			CreateDepthFromOrdersLog = storage.GetValue<bool>(nameof(CreateDepthFromOrdersLog));
-			CreateTradesFromOrdersLog = storage.GetValue<bool>(nameof(CreateTradesFromOrdersLog));
+			//CreateDepthFromOrdersLog = storage.GetValue<bool>(nameof(CreateDepthFromOrdersLog));
+			//CreateTradesFromOrdersLog = storage.GetValue<bool>(nameof(CreateTradesFromOrdersLog));
 			CreateDepthFromLevel1 = storage.GetValue(nameof(CreateDepthFromLevel1), CreateDepthFromLevel1);
 
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
@@ -1533,8 +1534,8 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(Adapter), Adapter.Save());
 			storage.SetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
 
-			storage.SetValue(nameof(CreateDepthFromOrdersLog), CreateDepthFromOrdersLog);
-			storage.SetValue(nameof(CreateTradesFromOrdersLog), CreateTradesFromOrdersLog);
+			//storage.SetValue(nameof(CreateDepthFromOrdersLog), CreateDepthFromOrdersLog);
+			//storage.SetValue(nameof(CreateTradesFromOrdersLog), CreateTradesFromOrdersLog);
 			storage.SetValue(nameof(CreateDepthFromLevel1), CreateDepthFromLevel1);
 
 			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);

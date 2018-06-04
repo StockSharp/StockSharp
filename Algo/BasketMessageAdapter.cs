@@ -248,6 +248,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportCandlesCompression { get; set; } = true;
 
+		/// <summary>
+		/// Use <see cref="OrderLogMessageAdapter"/>.
+		/// </summary>
+		public bool SupportBuildingFromOrderLog { get; set; } = true;
+
 		/// <inheritdoc />
 		public override IEnumerable<TimeSpan> TimeFrames
 		{
@@ -309,6 +314,11 @@ namespace StockSharp.Algo
 			if (CommissionManager != null)
 			{
 				adapter = new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone() };
+			}
+
+			if (SupportBuildingFromOrderLog)
+			{
+				adapter = new OrderLogMessageAdapter(adapter);
 			}
 
 			if (adapter.IsFullCandlesOnly)
@@ -532,7 +542,17 @@ namespace StockSharp.Algo
 				if (!a.IsMarketDataTypeSupported(mdMsg.DataType))
 				{
 					if (!isTfCandles)
+					{
+						if (mdMsg.DataType == MarketDataTypes.MarketDepth || mdMsg.DataType == MarketDataTypes.Trades)
+						{
+							if (a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog))
+							{
+								return true;
+							}
+						}
+
 						return false;
+					}
 				}
 
 				if (!isTfCandles)
@@ -1033,6 +1053,7 @@ namespace StockSharp.Algo
 				SupportCandlesCompression = SupportCandlesCompression,
 				SuppressReconnectingErrors = SuppressReconnectingErrors,
 				IsRestoreSubscriptionOnReconnect = IsRestoreSubscriptionOnReconnect,
+				SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
 			};
 
 			clone.Load(this.Save());

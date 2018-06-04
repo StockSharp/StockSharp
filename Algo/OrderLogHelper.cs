@@ -284,22 +284,7 @@ namespace StockSharp.Algo
 						{
 							_trades.Remove(tradeId.Value);
 
-							Current = new ExecutionMessage
-							{
-								ExecutionType = ExecutionTypes.Tick,
-								SecurityId = currItem.SecurityId,
-								TradeId = tradeId,
-								TradePrice = currItem.TradePrice,
-								TradeStatus = currItem.TradeStatus,
-								TradeVolume = currItem.OrderVolume,
-								ServerTime = currItem.ServerTime,
-								LocalTime = currItem.LocalTime,
-								IsSystem = currItem.IsSystem,
-								OpenInterest = currItem.OpenInterest,
-								OriginSide = prevItem.Item2 == Sides.Buy
-									? (prevItem.Item1 > currItem.OrderId ? Sides.Buy : Sides.Sell)
-									: (prevItem.Item1 > currItem.OrderId ? Sides.Sell : Sides.Buy),
-							};
+							Current = currItem.ToTick();
 
 							return true;
 						}
@@ -355,6 +340,39 @@ namespace StockSharp.Algo
 				.ToTicks();
 
 			return ticks.Select(m => m.ToTrade(first.Order.Security));
+		}
+
+		/// <summary>
+		/// To tick trade from the order log.
+		/// </summary>
+		/// <param name="item">Order log item.</param>
+		/// <returns>Tick trade.</returns>
+		public static ExecutionMessage ToTick(this ExecutionMessage item)
+		{
+			if (item == null)
+				throw new ArgumentNullException(nameof(item));
+
+			if (item.ExecutionType != ExecutionTypes.OrderLog)
+				throw new ArgumentException(nameof(item));
+
+			return new ExecutionMessage
+			{
+				ExecutionType = ExecutionTypes.Tick,
+				SecurityId = item.SecurityId,
+				TradeId = item.TradeId,
+				TradeStringId = item.TradeStringId,
+				TradePrice = item.TradePrice,
+				TradeStatus = item.TradeStatus,
+				TradeVolume = item.OrderVolume,
+				ServerTime = item.ServerTime,
+				LocalTime = item.LocalTime,
+				IsSystem = item.IsSystem,
+				OpenInterest = item.OpenInterest,
+				OriginSide = item.OriginSide,
+				//OriginSide = prevItem.Item2 == Sides.Buy
+				//	? (prevItem.Item1 > item.OrderId ? Sides.Buy : Sides.Sell)
+				//	: (prevItem.Item1 > item.OrderId ? Sides.Sell : Sides.Buy),
+			};
 		}
 
 		/// <summary>
