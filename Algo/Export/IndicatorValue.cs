@@ -52,13 +52,11 @@ namespace StockSharp.Algo.Export
 			{
 				values.Add(value.IsEmpty ? (decimal?)null : value.GetValue<decimal>());
 			}
-			else if (value is ComplexIndicatorValue)
+			else if (value is ComplexIndicatorValue complexValue)
 			{
-				var complexInd = (ComplexIndicatorValue)value;
-
 				foreach (var innerIndicator in ((IComplexIndicator)value.Indicator).InnerIndicators)
 				{
-					var innerValue = complexInd.InnerValues.TryGetValue(innerIndicator);
+					var innerValue = complexValue.InnerValues.TryGetValue(innerIndicator);
 
 					if (innerValue == null)
 						values.Add(null);

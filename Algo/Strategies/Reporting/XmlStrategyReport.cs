@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 							strategy.Parameters.CachedValues.Select(p =>
 								new XElement("parameter",
 									new XElement("name", p.Name),
-									new XElement("value", p.Value is TimeSpan ? Format((TimeSpan)p.Value) : p.Value)
+									new XElement("value", p.Value is TimeSpan ts ? Format(ts) : p.Value)
 									))),
 						new XElement("totalWorkingTime", Format(strategy.TotalWorkingTime)),
 						new XElement("commission", strategy.Commission),
@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 							strategy.StatisticManager.Parameters.SyncGet(c => c.ToArray()).Select(p =>
 								new XElement("parameter",
 									new XElement("name", p.Name),
-									new XElement("value", p.Value is TimeSpan ? Format((TimeSpan)p.Value) : p.Value)
+									new XElement("value", p.Value is TimeSpan ts ? Format(ts) : p.Value)
 									))),
 						new XElement("orders",
 							strategy.Orders.OrderBy(o => o.TransactionId).Select(o =>

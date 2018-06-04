@@ -63,19 +63,6 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="item">Order log item.</param>
 		/// <returns><see langword="true" />, if the string contains the order registration, otherwise, <see langword="false" />.</returns>
-		public static bool IsOrderLogRegistered(this ExecutionMessage item)
-		{
-			if (item == null)
-				throw new ArgumentNullException(nameof(item));
-
-			return item.OrderState == OrderStates.Active && item.TradePrice == null;
-		}
-
-		/// <summary>
-		/// To check, does the string contain the order registration.
-		/// </summary>
-		/// <param name="item">Order log item.</param>
-		/// <returns><see langword="true" />, if the string contains the order registration, otherwise, <see langword="false" />.</returns>
 		public static bool IsRegistered(this OrderLogItem item)
 		{
 			return item.ToMessage().IsOrderLogRegistered();
@@ -86,35 +73,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="item">Order log item.</param>
 		/// <returns><see langword="true" />, if the string contain the cancelled order, otherwise, <see langword="false" />.</returns>
-		public static bool IsOrderLogCanceled(this ExecutionMessage item)
-		{
-			if (item == null)
-				throw new ArgumentNullException(nameof(item));
-
-			return item.OrderState == OrderStates.Done && item.TradePrice == null;
-		}
-
-		/// <summary>
-		/// To check, does the string contain the cancelled order.
-		/// </summary>
-		/// <param name="item">Order log item.</param>
-		/// <returns><see langword="true" />, if the string contain the cancelled order, otherwise, <see langword="false" />.</returns>
 		public static bool IsCanceled(this OrderLogItem item)
 		{
 			return item.ToMessage().IsOrderLogCanceled();
-		}
-
-		/// <summary>
-		/// To check, does the string contain the order matching.
-		/// </summary>
-		/// <param name="item">Order log item.</param>
-		/// <returns><see langword="true" />, if the string contains order matching, otherwise, <see langword="false" />.</returns>
-		public static bool IsOrderLogMatched(this ExecutionMessage item)
-		{
-			if (item == null)
-				throw new ArgumentNullException(nameof(item));
-
-			return item.TradeId != null;
 		}
 
 		/// <summary>
@@ -175,9 +136,6 @@ namespace StockSharp.Algo
 
 				public DepthEnumerator(IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval, int maxDepth)
 				{
-					if (builder == null)
-						throw new ArgumentNullException(nameof(builder));
-
 					if (items == null)
 						throw new ArgumentNullException(nameof(items));
 
@@ -185,7 +143,7 @@ namespace StockSharp.Algo
 						throw new ArgumentOutOfRangeException(nameof(maxDepth), maxDepth, LocalizedStrings.Str941);
 
 					_itemsEnumerator = items.GetEnumerator();
-					_builder = builder;
+					_builder = builder ?? throw new ArgumentNullException(nameof(builder));
 					_interval = interval;
 					_maxDepth = maxDepth;
 				}
@@ -326,22 +284,7 @@ namespace StockSharp.Algo
 						{
 							_trades.Remove(tradeId.Value);
 
-							Current = new ExecutionMessage
-							{
-								ExecutionType = ExecutionTypes.Tick,
-								SecurityId = currItem.SecurityId,
-								TradeId = tradeId,
-								TradePrice = currItem.TradePrice,
-								TradeStatus = currItem.TradeStatus,
-								TradeVolume = currItem.OrderVolume,
-								ServerTime = currItem.ServerTime,
-								LocalTime = currItem.LocalTime,
-								IsSystem = currItem.IsSystem,
-								OpenInterest = currItem.OpenInterest,
-								OriginSide = prevItem.Item2 == Sides.Buy
-									? (prevItem.Item1 > currItem.OrderId ? Sides.Buy : Sides.Sell)
-									: (prevItem.Item1 > currItem.OrderId ? Sides.Sell : Sides.Buy),
-							};
+							Current = currItem.ToTick();
 
 							return true;
 						}
@@ -397,6 +340,39 @@ namespace StockSharp.Algo
 				.ToTicks();
 
 			return ticks.Select(m => m.ToTrade(first.Order.Security));
+		}
+
+		/// <summary>
+		/// To tick trade from the order log.
+		/// </summary>
+		/// <param name="item">Order log item.</param>
+		/// <returns>Tick trade.</returns>
+		public static ExecutionMessage ToTick(this ExecutionMessage item)
+		{
+			if (item == null)
+				throw new ArgumentNullException(nameof(item));
+
+			if (item.ExecutionType != ExecutionTypes.OrderLog)
+				throw new ArgumentException(nameof(item));
+
+			return new ExecutionMessage
+			{
+				ExecutionType = ExecutionTypes.Tick,
+				SecurityId = item.SecurityId,
+				TradeId = item.TradeId,
+				TradeStringId = item.TradeStringId,
+				TradePrice = item.TradePrice,
+				TradeStatus = item.TradeStatus,
+				TradeVolume = item.OrderVolume,
+				ServerTime = item.ServerTime,
+				LocalTime = item.LocalTime,
+				IsSystem = item.IsSystem,
+				OpenInterest = item.OpenInterest,
+				OriginSide = item.OriginSide,
+				//OriginSide = prevItem.Item2 == Sides.Buy
+				//	? (prevItem.Item1 > item.OrderId ? Sides.Buy : Sides.Sell)
+				//	: (prevItem.Item1 > item.OrderId ? Sides.Sell : Sides.Buy),
+			};
 		}
 
 		/// <summary>

@@ -442,14 +442,8 @@ namespace StockSharp.Algo.Storages
 		/// <param name="security">Security.</param>
 		public SecurityMarketDataDrive(IMarketDataDrive drive, Security security)
 		{
-			if (drive == null)
-				throw new ArgumentNullException(nameof(drive));
-
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			Drive = drive;
-			Security = security;
+			Drive = drive ?? throw new ArgumentNullException(nameof(drive));
+			Security = security ?? throw new ArgumentNullException(nameof(security));
 			SecurityId = security.ToSecurityId();
 			SecurityId.EnsureHashCode();
 		}
@@ -498,13 +492,7 @@ namespace StockSharp.Algo.Storages
 		public IExchangeInfoProvider ExchangeInfoProvider
 		{
 			get => _exchangeInfoProvider;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_exchangeInfoProvider = value;
-			}
+			set => _exchangeInfoProvider = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <inheritdoc />

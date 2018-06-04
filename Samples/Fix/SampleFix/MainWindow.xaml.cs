@@ -44,6 +44,7 @@ namespace SampleFix
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
+		private readonly OrdersLogWindow _ordersLogWindow = new OrdersLogWindow();
 		private readonly NewsWindow _newsWindow = new NewsWindow();
 
 		private readonly LogManager _logManager = new LogManager();
@@ -62,6 +63,7 @@ namespace SampleFix
 			_securitiesWindow.MakeHideable();
 			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
+			_ordersLogWindow.MakeHideable();
 			_newsWindow.MakeHideable();
 
 			if (File.Exists(_settingsFile))
@@ -94,6 +96,7 @@ namespace SampleFix
 			_securitiesWindow.DeleteHideable();
 			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
+			_ordersLogWindow.DeleteHideable();
 			_newsWindow.DeleteHideable();
 			
 			_securitiesWindow.Close();
@@ -102,6 +105,7 @@ namespace SampleFix
 			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
+			_ordersLogWindow.Close();
 			_newsWindow.Close();
 
 			if (Trader != null)
@@ -155,6 +159,8 @@ namespace SampleFix
 				Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
 				Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
 
+				Trader.NewOrderLogItem += _ordersLogWindow.OrderLogGrid.LogItems.Add;
+
 				Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
 				Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
@@ -180,7 +186,7 @@ namespace SampleFix
 				_newsWindow.NewsPanel.NewsProvider = Trader;
 
 				ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowNews.IsEnabled =
-				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
+				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = ShowOrdersLog.IsEnabled =
 				ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
 			}
 
@@ -266,6 +272,11 @@ namespace SampleFix
 		private void ShowNewsClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_newsWindow);
+		}
+
+		private void ShowOrdersLogClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_ordersLogWindow);
 		}
 
 		private static void ShowOrHide(Window window)

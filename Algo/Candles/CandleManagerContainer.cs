@@ -53,10 +53,7 @@ namespace StockSharp.Algo.Candles
 
 			public SeriesInfo(CandleManagerContainer container)
 			{
-				if (container == null)
-					throw new ArgumentNullException(nameof(container));
-
-				_container = container;
+				_container = container ?? throw new ArgumentNullException(nameof(container));
 			}
 
 			public int CandleCount => _allCandles.Count;

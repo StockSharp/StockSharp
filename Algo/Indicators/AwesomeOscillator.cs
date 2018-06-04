@@ -47,14 +47,8 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="shortSma">Short moving average.</param>
 		public AwesomeOscillator(SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
 		{
-			if (longSma == null)
-				throw new ArgumentNullException(nameof(longSma));
-
-			if (shortSma == null)
-				throw new ArgumentNullException(nameof(shortSma));
-
-			ShortMa = shortSma;
-			LongMa = longSma;
+			ShortMa = shortSma ?? throw new ArgumentNullException(nameof(shortSma));
+			LongMa = longSma ?? throw new ArgumentNullException(nameof(longSma));
 			MedianPrice = new MedianPrice();
 		}
 

@@ -41,13 +41,7 @@ namespace StockSharp.Algo.Slippage
 		public ISlippageManager SlippageManager
 		{
 			get => _slippageManager;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_slippageManager = value;
-			}
+			set => _slippageManager = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>

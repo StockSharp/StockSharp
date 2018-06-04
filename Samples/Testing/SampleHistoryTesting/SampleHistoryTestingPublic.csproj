@@ -61,12 +61,6 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.ITCH">
-      <HintPath>..\..\..\References\StockSharp.ITCH.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Plaza">
-      <HintPath>..\..\..\References\StockSharp.Plaza.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -161,9 +155,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.History\Algo.HistoryPublic.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.History\Algo.History.csproj">
       <Project>{5814D093-FA6D-44A5-B75B-4CC7E8F11EB0}</Project>
-      <Name>Algo.HistoryPublic</Name>
+      <Name>Algo.History</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>

@@ -91,10 +91,7 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="indicator">Indicator.</param>
 		protected BaseIndicatorValue(IIndicator indicator)
 		{
-			if (indicator == null)
-				throw new ArgumentNullException(nameof(indicator));
-
-			Indicator = indicator;
+			Indicator = indicator ?? throw new ArgumentNullException(nameof(indicator));
 			IsFormed = indicator.IsFormed;
 		}
 
@@ -344,10 +341,7 @@ namespace StockSharp.Algo.Indicators
 			if (value == null)
 				throw new ArgumentNullException(nameof(value));
 
-			if (getPart == null)
-				throw new ArgumentNullException(nameof(getPart));
-
-			_getPart = getPart;
+			_getPart = getPart ?? throw new ArgumentNullException(nameof(getPart));
 
 			IsFinal = value.State == CandleStates.Finished;
 		}
@@ -443,10 +437,7 @@ namespace StockSharp.Algo.Indicators
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
 
-			if (getPart == null)
-				throw new ArgumentNullException(nameof(getPart));
-
-			_getPart = getPart;
+			_getPart = getPart ?? throw new ArgumentNullException(nameof(getPart));
 		}
 
 		/// <summary>

@@ -43,10 +43,7 @@ namespace StockSharp.Algo
 		///// <param name="excludeFilter">Filter for instruments exclusion.</param>
 		public FilterableSecurityProvider(ISecurityProvider provider, bool ownProvider = false/*, Func<Security, bool> excludeFilter = null*/)
 		{
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
-
-			_provider = provider;
+			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
 			_ownProvider = ownProvider;
 
 			//ExcludeFilter = excludeFilter;

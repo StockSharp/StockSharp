@@ -41,6 +41,11 @@ namespace StockSharp.Algo.Strategies
 	public static class StrategyHelper
 	{
 		/// <summary>
+		/// Allow trading key.
+		/// </summary>
+		public const string AllowTradingKey = "AllowTrading";
+
+		/// <summary>
 		/// To create initialized object of buy order at market price.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
@@ -253,9 +258,9 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <returns>If initialization is performed - <see langword="true" />, otherwise - <see langword="false" />.</returns>
-		public static bool GetIsInitialization(this Strategy strategy)
+		public static bool GetAllowTrading(this Strategy strategy)
 		{
-			return strategy.Environment.GetValue("IsInitializationMode", false);
+			return strategy.Environment.GetValue(AllowTradingKey, false);
 		}
 
 		/// <summary>
@@ -263,9 +268,10 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="isInitialization">If initialization is performed - <see langword="true" />, otherwise - <see langword="false" />.</param>
-		public static void SetIsInitialization(this Strategy strategy, bool isInitialization)
+		public static void SetAllowTrading(this Strategy strategy, bool isInitialization)
 		{
-			strategy.Environment.SetValue("IsInitializationMode", isInitialization);
+			strategy.Environment.SetValue(AllowTradingKey, isInitialization);
+			strategy.RaiseParametersChanged(AllowTradingKey);
 		}
 
 		/// <summary>
@@ -478,10 +484,7 @@ namespace StockSharp.Algo.Strategies
 			protected StrategyRule(Strategy strategy)
 				: base(strategy)
 			{
-				if (strategy == null)
-					throw new ArgumentNullException(nameof(strategy));
-
-				Strategy = strategy;
+				Strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			}
 
 			protected Strategy Strategy { get; }
@@ -500,10 +503,7 @@ namespace StockSharp.Algo.Strategies
 			public PnLManagerStrategyRule(Strategy strategy, Func<decimal, bool> changed)
 				: base(strategy)
 			{
-				if (changed == null)
-					throw new ArgumentNullException(nameof(changed));
-
-				_changed = changed;
+				_changed = changed ?? throw new ArgumentNullException(nameof(changed));
 
 				Strategy.PnLChanged += OnPnLChanged;
 			}
@@ -534,10 +534,7 @@ namespace StockSharp.Algo.Strategies
 			public PositionManagerStrategyRule(Strategy strategy, Func<decimal, bool> changed)
 				: base(strategy)
 			{
-				if (changed == null)
-					throw new ArgumentNullException(nameof(changed));
-
-				_changed = changed;
+				_changed = changed ?? throw new ArgumentNullException(nameof(changed));
 
 				Strategy.PositionChanged += OnPositionChanged;
 			}
@@ -619,10 +616,7 @@ namespace StockSharp.Algo.Strategies
 			public ProcessStateChangedStrategyRule(Strategy strategy, Func<ProcessStates, bool> condition)
 				: base(strategy)
 			{
-				if (condition == null)
-					throw new ArgumentNullException(nameof(condition));
-
-				_condition = condition;
+				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Strategy.ProcessStateChanged += OnProcessStateChanged;
 			}
@@ -647,10 +641,7 @@ namespace StockSharp.Algo.Strategies
 			public PropertyChangedStrategyRule(Strategy strategy, Func<Strategy, bool> condition)
 				: base(strategy)
 			{
-				if (condition == null)
-					throw new ArgumentNullException(nameof(condition));
-
-				_condition = condition;
+				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Strategy.PropertyChanged += OnPropertyChanged;
 			}

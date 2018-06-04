@@ -39,16 +39,13 @@ namespace StockSharp.BusinessEntities
 		/// <param name="ask">Ask.</param>
 		public MarketDepthPair(Security security, Quote bid, Quote ask)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
 			if (bid != null && bid.OrderDirection != Sides.Buy)
 				throw new ArgumentException(LocalizedStrings.Str492, nameof(bid));
 
 			if (ask != null && ask.OrderDirection != Sides.Sell)
 				throw new ArgumentException(LocalizedStrings.Str493, nameof(ask));
 
-			Security = security;
+			Security = security ?? throw new ArgumentNullException(nameof(security));
 			Bid = bid;
 			Ask = ask;
 

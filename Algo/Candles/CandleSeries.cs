@@ -190,18 +190,18 @@ namespace StockSharp.Algo.Candles
 		public long? Count { get; set; }
 
 		/// <summary>
-		/// Build candles mode.
+		/// Build mode.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ModeKey,
-			Description = LocalizedStrings.CandlesBuildModeKey,
+			Description = LocalizedStrings.BuildModeKey,
 			GroupName = LocalizedStrings.BuildKey,
 			Order = 20)]
-		public BuildCandlesModes BuildCandlesMode { get; set; }
+		public MarketDataBuildModes BuildCandlesMode { get; set; }
 
 		/// <summary>
-		/// Which market-data type is used as an candle source value.
+		/// Which market-data type is used as a source value.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),

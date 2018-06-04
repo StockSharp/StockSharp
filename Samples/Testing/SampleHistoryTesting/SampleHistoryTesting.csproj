@@ -172,14 +172,6 @@
       <Project>{FCB47C52-E1EA-4020-B88C-E750924F5716}</Project>
       <Name>Algo.Strategies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\ITCH\ITCH.csproj">
-      <Project>{5E66A118-9D37-4F93-9598-A8B56A6BE1CA}</Project>
-      <Name>ITCH</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Plaza\Plaza.csproj">
-      <Project>{7EABA894-FC98-4F5E-A212-C40550260886}</Project>
-      <Name>Plaza</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">
       <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
       <Name>Algo</Name>

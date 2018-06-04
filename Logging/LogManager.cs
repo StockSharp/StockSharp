@@ -57,10 +57,7 @@ namespace StockSharp.Logging
 
 			public LogSourceList(LogManager parent)
 			{
-				if (parent == null)
-					throw new ArgumentNullException(nameof(parent));
-
-				_parent = parent;
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 			}
 
 			protected override bool OnAdding(ILogSource item)

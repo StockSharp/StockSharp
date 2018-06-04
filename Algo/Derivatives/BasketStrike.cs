@@ -37,18 +37,9 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="dataProvider">The market data provider.</param>
 		protected BasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
-			if (underlyingAsset == null)
-				throw new ArgumentNullException(nameof(underlyingAsset));
-
-			if (securityProvider == null)
-				throw new ArgumentNullException(nameof(securityProvider));
-
-			if (dataProvider == null)
-				throw new ArgumentNullException(nameof(dataProvider));
-
-			UnderlyingAsset = underlyingAsset;
-			SecurityProvider = securityProvider;
-			DataProvider = dataProvider;
+			UnderlyingAsset = underlyingAsset ?? throw new ArgumentNullException(nameof(underlyingAsset));
+			SecurityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
+			DataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
 		}
 
 		/// <summary>
@@ -110,10 +101,7 @@ namespace StockSharp.Algo.Derivatives
 		public OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, Range<int> strikeOffset)
 			: base(underlyingSecurity, securityProvider, dataProvider)
 		{
-			if (strikeOffset == null)
-				throw new ArgumentNullException(nameof(strikeOffset));
-
-			_strikeOffset = strikeOffset;
+			_strikeOffset = strikeOffset ?? throw new ArgumentNullException(nameof(strikeOffset));
 		}
 
 		/// <summary>
@@ -180,10 +168,7 @@ namespace StockSharp.Algo.Derivatives
 		public VolatilityBasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, Range<decimal> volatilityRange)
 			: base(underlyingAsset, securityProvider, dataProvider)
 		{
-			if (volatilityRange == null)
-				throw new ArgumentNullException(nameof(volatilityRange));
-
-			_volatilityRange = volatilityRange;
+			_volatilityRange = volatilityRange ?? throw new ArgumentNullException(nameof(volatilityRange));
 		}
 
 		/// <summary>

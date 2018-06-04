@@ -26,10 +26,7 @@ namespace StockSharp.Algo.Candles
 			/// <param name="series">Candles series.</param>
 			public CandlesSeriesHolder(CandleSeries series)
 			{
-				if (series == null)
-					throw new ArgumentNullException(nameof(series));
-
-				Series = series;
+				Series = series ?? throw new ArgumentNullException(nameof(series));
 			}
 
 			/// <summary>

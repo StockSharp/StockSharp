@@ -61,10 +61,7 @@ namespace StockSharp.Algo
 
 			public OrderInfo(Order order, bool raiseNewOrder = true)
 			{
-				if (order == null)
-					throw new ArgumentNullException(nameof(order));
-
-				Order = order;
+				Order = order ?? throw new ArgumentNullException(nameof(order));
 				_raiseNewOrder = raiseNewOrder;
 			}
 
@@ -265,13 +262,7 @@ namespace StockSharp.Algo
 		public IEntityFactory EntityFactory
 		{
 			get => _entityFactory;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_entityFactory = value;
-			}
+			set => _entityFactory = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
@@ -279,13 +270,7 @@ namespace StockSharp.Algo
 		public IExchangeInfoProvider ExchangeInfoProvider
 		{
 			get => _exchangeInfoProvider;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_exchangeInfoProvider = value;
-			}
+			set => _exchangeInfoProvider = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private readonly CachedSynchronizedList<Order> _orders = new CachedSynchronizedList<Order>();

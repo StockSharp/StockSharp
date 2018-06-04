@@ -2213,10 +2213,7 @@ namespace StockSharp.Algo
 
 			public NativePositionManager(Position position)
 			{
-				if (position == null)
-					throw new ArgumentNullException(nameof(position));
-
-				_position = position;
+				_position = position ?? throw new ArgumentNullException(nameof(position));
 			}
 
 			/// <summary>
@@ -3952,10 +3949,7 @@ namespace StockSharp.Algo
 
 				public TickEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
 				{
-					if (level1Enumerator == null)
-						throw new ArgumentNullException(nameof(level1Enumerator));
-
-					_level1Enumerator = level1Enumerator;
+					_level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
 				}
 
 				public ExecutionMessage Current { get; private set; }
@@ -4066,10 +4060,7 @@ namespace StockSharp.Algo
 
 				public OrderBookEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
 				{
-					if (level1Enumerator == null)
-						throw new ArgumentNullException(nameof(level1Enumerator));
-
-					_level1Enumerator = level1Enumerator;
+					_level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
 				}
 
 				public QuoteChangeMessage Current { get; private set; }
@@ -4578,6 +4569,22 @@ namespace StockSharp.Algo
 			connector.LookupSecurities(new Security());
 			connector.LookupPortfolios(new Portfolio());
 			connector.LookupOrders(new Order());
+		}
+
+		/// <summary>
+		/// Truncate the specified order book by max depth value.
+		/// </summary>
+		/// <param name="depth">Order book.</param>
+		/// <param name="maxDepth">The maximum depth of order book.</param>
+		/// <returns>Truncated order book.</returns>
+		public static MarketDepth Truncate(this MarketDepth depth, int maxDepth)
+		{
+			if (depth == null)
+				throw new ArgumentNullException(nameof(depth));
+
+			var result = depth.Clone();
+			result.Update(result.Bids.Take(maxDepth), result.Asks.Take(maxDepth), true);
+			return result;
 		}
 	}
 }

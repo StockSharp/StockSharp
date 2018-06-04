@@ -32,10 +32,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		public StorageEntityFactory(IEntityRegistry entityRegistry)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			_entityRegistry = entityRegistry;
+			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
 		}
 
 		/// <summary>

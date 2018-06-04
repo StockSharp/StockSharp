@@ -53,10 +53,7 @@ namespace StockSharp.Algo.Indicators
 		public GatorOscillator(Alligator alligator, GatorHistogram histogram1, GatorHistogram histogram2)
 			: base(histogram1, histogram2)
 		{
-			if (alligator == null)
-				throw new ArgumentNullException(nameof(alligator));
-
-			_alligator = alligator;
+			_alligator = alligator ?? throw new ArgumentNullException(nameof(alligator));
 			Histogram1 = histogram1;
 			Histogram2 = histogram2;
 		}

@@ -33,10 +33,7 @@ namespace StockSharp.Logging
 
 			public TraceListenerEx(TraceSource source)
 			{
-				if (source == null)
-					throw new ArgumentNullException(nameof(source));
-
-				_source = source;
+				_source = source ?? throw new ArgumentNullException(nameof(source));
 			}
 
 			public override void Write(string message)

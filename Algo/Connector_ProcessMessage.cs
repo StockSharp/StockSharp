@@ -90,7 +90,6 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly Dictionary<Security, IOrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, IOrderLogMarketDepthBuilder>();
 		private readonly CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates> _adapterStates = new CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates>();
 		
 		private readonly ResetMessage _disposeMessage = new ResetMessage();
@@ -1503,47 +1502,6 @@ namespace StockSharp.Algo
 			//logItem.LocalTime = message.LocalTime;
 
 			RaiseNewOrderLogItem(logItem);
-
-			if (message.IsSystem == false)
-				return;
-
-			if (CreateDepthFromOrdersLog)
-			{
-				try
-				{
-					var builder = _olBuilders.SafeAdd(security, key => MarketDataAdapter.CreateOrderLogMarketDepthBuilder(message.SecurityId));
-
-					if (builder == null)
-						throw new InvalidOperationException();
-
-					var updated = builder.Update(message);
-
-					if (updated)
-					{
-						RaiseNewMessage(builder.Depth.Clone());
-						ProcessQuotesMessage(security, builder.Depth);
-					}
-				}
-				catch (Exception ex)
-				{
-					// если ОЛ поврежден, то не нарушаем весь цикл обработки сообщения
-					// а только выводим сообщение в лог
-					RaiseError(ex);
-				}
-			}
-
-			if (trade != null && CreateTradesFromOrdersLog)
-			{
-				var tuple = _entityCache.GetTrade(security, message.TradeId, message.TradeStringId, (id, stringId) =>
-				{
-					var t = trade.Clone();
-					t.OrderDirection = message.Side.Invert();
-					return t;
-				});
-
-				if (tuple.Item2)
-					RaiseNewTrade(tuple.Item1);
-			}
 		}
 
 		private void ProcessTradeMessage(Security security, ExecutionMessage message)
@@ -1628,7 +1586,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessOrderMessage(Order o, Security security, ExecutionMessage message, long transactionId)
+		private void ProcessOrderMessage(Order o, Security security, ExecutionMessage message, long transactionId, bool isStatusRequest)
 		{
 			if (message.OrderState != OrderStates.Failed && message.Error == null)
 			{
@@ -1665,6 +1623,12 @@ namespace StockSharp.Algo
 							RaiseNewStopOrder(order);
 						else
 							RaiseNewOrder(order);
+
+						if (isStatusRequest && order.State == OrderStates.Pending)
+						{
+							// TODO temp disabled (need more tests)
+							//RegisterOrder(order, false);
+						}
 					}
 					else if (change.IsChanged)
 					{
@@ -1785,14 +1749,14 @@ namespace StockSharp.Algo
 			RaiseNewMyTrade(tuple.Item1);
 		}
 
-		private void ProcessTransactionMessage(Order order, Security security, ExecutionMessage message, long transactionId)
+		private void ProcessTransactionMessage(Order order, Security security, ExecutionMessage message, long transactionId, bool isStatusRequest)
 		{
 			var processed = false;
 
 			if (message.HasOrderInfo())
 			{
 				processed = true;
-				ProcessOrderMessage(order, security, message, transactionId);
+				ProcessOrderMessage(order, security, message, transactionId, isStatusRequest);
 			}
 
 			if (message.HasTradeInfo())
@@ -1847,11 +1811,11 @@ namespace StockSharp.Algo
 						if (transactionId == 0 && isStatusRequest)
 							transactionId = TransactionIdGenerator.GetNextId();
 
-						ProcessTransactionMessage(null, security, message, transactionId);
+						ProcessTransactionMessage(null, security, message, transactionId, isStatusRequest);
 					}
 					else
 					{
-						ProcessTransactionMessage(order, order.Security, message, transactionId);
+						ProcessTransactionMessage(order, order.Security, message, transactionId, isStatusRequest);
 					}
 
 					break;

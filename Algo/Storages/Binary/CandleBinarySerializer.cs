@@ -93,10 +93,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public CandleBinarySerializer(SecurityId securityId, object arg, IExchangeInfoProvider exchangeInfoProvider)
 			: base(securityId, 74, MarketDataVersions.Version58, exchangeInfoProvider)
 		{
-			if (arg == null)
-				throw new ArgumentNullException(nameof(arg));
-
-			_arg = arg;
+			_arg = arg ?? throw new ArgumentNullException(nameof(arg));
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<TCandleMessage> candles, CandleMetaInfo metaInfo)

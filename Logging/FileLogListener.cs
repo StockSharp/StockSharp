@@ -117,13 +117,7 @@ namespace StockSharp.Logging
 		public Encoding Encoding
 		{
 			get => _encoding;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_encoding = value;
-			}
+			set => _encoding = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private long _maxLength;

@@ -41,13 +41,7 @@ namespace StockSharp.Algo.Commissions
 		public ICommissionManager CommissionManager
 		{
 			get => _commissionManager;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_commissionManager = value;
-			}
+			set => _commissionManager = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>

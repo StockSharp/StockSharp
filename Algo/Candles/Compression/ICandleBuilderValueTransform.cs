@@ -13,7 +13,7 @@ namespace StockSharp.Algo.Candles.Compression
 	public interface ICandleBuilderValueTransform
 	{
 		/// <summary>
-		/// Which market-data type is used as an candle source value.
+		/// Which market-data type is used as a source value.
 		/// </summary>
 		MarketDataTypes BuildFrom { get; }
 
@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseCandleBuilderValueTransform"/>.
 		/// </summary>
-		/// <param name="buildFrom">Which market-data type is used as an candle source value.</param>
+		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		protected BaseCandleBuilderValueTransform(MarketDataTypes buildFrom)
 		{
 			_buildFrom = buildFrom;

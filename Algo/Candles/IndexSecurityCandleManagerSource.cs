@@ -44,27 +44,18 @@ namespace StockSharp.Algo.Candles
 
 			public IndexSeriesInfo(ICandleManager candleManager, Type candleType, IEnumerable<CandleSeries> innerSeries, DateTimeOffset? from, DateTimeOffset? to, IndexSecurity security, Action<Candle> processing, Action stopped)
 			{
-				if (candleManager == null)
-					throw new ArgumentNullException(nameof(candleManager));
-
 				if (innerSeries == null)
 					throw new ArgumentNullException(nameof(innerSeries));
 
 				if (security == null)
 					throw new ArgumentNullException(nameof(security));
 
-				if (processing == null)
-					throw new ArgumentNullException(nameof(processing));
-
-				if (stopped == null)
-					throw new ArgumentNullException(nameof(stopped));
-
-				_candleManager = candleManager;
+				_candleManager = candleManager ?? throw new ArgumentNullException(nameof(candleManager));
 				_innerSeries = innerSeries.ToHashSet();
 				_from = from;
 				_to = to;
-				_processing = processing;
-				_stopped = stopped;
+				_processing = processing ?? throw new ArgumentNullException(nameof(processing));
+				_stopped = stopped ?? throw new ArgumentNullException(nameof(stopped));
 
 				candleManager.Processing += OnInnerSourceProcessCandle;
 				candleManager.Stopped += OnInnerSourceStopped;
@@ -153,16 +144,10 @@ namespace StockSharp.Algo.Candles
 
 		public IndexSecurityCandleManagerSource(ICandleManager candleManager, ISecurityProvider securityProvider, DateTimeOffset? from, DateTimeOffset? to)
 		{
-			if (candleManager == null)
-				throw new ArgumentNullException(nameof(candleManager));
-
-			if (securityProvider == null)
-				throw new ArgumentNullException(nameof(securityProvider));
-
-			_securityProvider = securityProvider;
+			_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 			_from = from;
 			_to = to;
-			_candleManager = candleManager;
+			_candleManager = candleManager ?? throw new ArgumentNullException(nameof(candleManager));
 		}
 
 		public int SpeedPriority => 2;

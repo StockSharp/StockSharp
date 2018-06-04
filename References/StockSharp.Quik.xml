@@ -246,6 +246,16 @@
             Дополнительный аргумент, ассоциированный с типом данных. Например, параметр свечи.
             </summary>
     </member>
+    <member name="P:StockSharp.Quik.Lua.LuaRequest.From">
+      <summary>
+            Дата начала, с которой необходимо получать данные.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaRequest.To">
+      <summary>
+            Дата окончания, до которой необходимо получать данные.
+            </summary>
+    </member>
     <member name="M:StockSharp.Quik.Lua.LuaRequest.ToString">
       <summary>
             Получить строковое представление.

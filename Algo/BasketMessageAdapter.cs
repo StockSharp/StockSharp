@@ -248,6 +248,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportCandlesCompression { get; set; } = true;
 
+		/// <summary>
+		/// Use <see cref="OrderLogMessageAdapter"/>.
+		/// </summary>
+		public bool SupportBuildingFromOrderLog { get; set; } = true;
+
 		/// <inheritdoc />
 		public override IEnumerable<TimeSpan> TimeFrames
 		{
@@ -311,6 +316,11 @@ namespace StockSharp.Algo
 				adapter = new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone() };
 			}
 
+			if (SupportBuildingFromOrderLog)
+			{
+				adapter = new OrderLogMessageAdapter(adapter);
+			}
+
 			if (adapter.IsFullCandlesOnly)
 			{
 				adapter = new CandleHolderMessageAdapter(adapter);
@@ -352,7 +362,12 @@ namespace StockSharp.Algo
 				if (adapter == null)
 					throw new InvalidOperationException();
 
-				if (adapter != this)
+				if (adapter == this)
+				{
+					message.Adapter = null;
+					message.IsBack = false;
+				}
+				else
 				{
 					adapter.SendInMessage(message);
 					return;	
@@ -527,7 +542,17 @@ namespace StockSharp.Algo
 				if (!a.IsMarketDataTypeSupported(mdMsg.DataType))
 				{
 					if (!isTfCandles)
+					{
+						if (mdMsg.DataType == MarketDataTypes.MarketDepth || mdMsg.DataType == MarketDataTypes.Trades)
+						{
+							if (a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog))
+							{
+								return true;
+							}
+						}
+
 						return false;
+					}
 				}
 
 				if (!isTfCandles)
@@ -550,7 +575,7 @@ namespace StockSharp.Algo
 						return true;
 				}
 
-				var buildFrom = mdMsg.BuildCandlesFrom ?? a.SupportedMarketDataTypes.Intersect(CandleHelper.CandleDataSources).FirstOr();
+				var buildFrom = mdMsg.BuildFrom ?? a.SupportedMarketDataTypes.Intersect(CandleHelper.CandleDataSources).FirstOr();
 
 				return buildFrom != null && a.SupportedMarketDataTypes.Contains(buildFrom.Value);
 			}).ToArray();
@@ -665,10 +690,7 @@ namespace StockSharp.Algo
 			{
 				var a = _hearbeatAdapters.TryGetValue(adapter);
 
-				if (a == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1838Params.Put(adapter.GetType()));
-
-				adapter = a;
+				adapter = a ?? throw new InvalidOperationException(LocalizedStrings.Str1838Params.Put(adapter.GetType()));
 			}
 
 			adapter.SendInMessage(message);
@@ -1031,6 +1053,7 @@ namespace StockSharp.Algo
 				SupportCandlesCompression = SupportCandlesCompression,
 				SuppressReconnectingErrors = SuppressReconnectingErrors,
 				IsRestoreSubscriptionOnReconnect = IsRestoreSubscriptionOnReconnect,
+				SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
 			};
 
 			clone.Load(this.Save());

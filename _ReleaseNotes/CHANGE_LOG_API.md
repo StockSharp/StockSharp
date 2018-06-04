@@ -73,6 +73,22 @@ StockSharp API Change log
 * (feature) Alerts. Schemas panel.
 * (bug) Connector. Fix processing order status response with failed orders info.
 * (feature) OfflineMessageAdapter. Track disconnect.
+* (bug) YahooHistorySource. Fix downloading history for futures.
+* (feature) YahooHistorySource. Intraday interval supported.
+* (bug) Image publish cancellation processing fix.
+* (feature) MarketDepth.MaxDepth marked as obsolete.
+* (feature) MarketDepth. Removed thread safety support.
+* (feature) QuikLua. Handle From To date range for market data requests. https://stocksharp.ru/forum/9460/korrektnoe-otobrazhenie-svechei/
+* (feature) StrategiesDashboard. Set security and portfolio directly. Allow trading and last error columns.
+* (bug) Charting. Fix Equity legend color.
+* (feature) Diagram. MarketDepthTruncateDiagramElement.
+* (bug) TimeSpanEditor. Fix DevExpress themes.
+* (feature) Default implementation of IOrderLogMarketDepthBuilder.
+* (feature) MarketDataMessage. BuildCandlesModes -> BuildMode, BuildCandlesFrom -> BuildFrom, BuildCandlesField -> BuildField.
+* (feature) OrderLogMessageAdapter. Moved depth and tick building from Connector to Adapter.
+* (feature) Connector. CreateDepthFromOrdersLog, CreateTradesFromOrdersLog market as obsolete.
+* (feature) SampleFix. OrdersLogWindow added.
+* (feature) SamplePlaza. OrdersLogWindow uses OrderLogGrid.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

@@ -150,10 +150,10 @@ namespace SamplePlaza
 						Trader.Tables.Clear();
 						Trader.TableRegistry.SyncTables(Tables.SelectedTables);
 
-						if (Trader.Tables.Contains(Trader.TableRegistry.AnonymousOrdersLog))
-						{
-							Trader.CreateDepthFromOrdersLog = true;
-						}
+						//if (Trader.Tables.Contains(Trader.TableRegistry.AnonymousOrdersLog))
+						//{
+						//	Trader.CreateDepthFromOrdersLog = true;
+						//}
 
 						Trader.ReConnectionSettings.AttemptCount = -1;
 						Trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
@@ -186,7 +186,7 @@ namespace SamplePlaza
 						Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 						Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
 						Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
-						Trader.NewOrderLogItem += _ordersLogWindow.AddOperation;
+						Trader.NewOrderLogItem += _ordersLogWindow.OrderLogGrid.LogItems.Add;
 
 						Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
 						Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;

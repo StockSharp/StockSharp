@@ -48,12 +48,9 @@ namespace StockSharp.Algo.Testing
 		public OrderLogGenerator(SecurityId securityId, TradeGenerator tradeGenerator)
 			: base(securityId)
 		{
-			if (tradeGenerator == null)
-				throw new ArgumentNullException(nameof(tradeGenerator));
-
 			//_lastOrderPrice = startPrice;
 
-			TradeGenerator = tradeGenerator;
+			TradeGenerator = tradeGenerator ?? throw new ArgumentNullException(nameof(tradeGenerator));
 			IdGenerator = new IncrementalIdGenerator();
 		}
 
@@ -75,13 +72,7 @@ namespace StockSharp.Algo.Testing
 		public IdGenerator IdGenerator
 		{
 			get => _idGenerator;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_idGenerator = value;
-			}
+			set => _idGenerator = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>

@@ -45,10 +45,7 @@ namespace StockSharp.Algo.Candles
 
 				public SourceInfo(ICandleSource<Candle> source, CandleManager manager)
 				{
-					if (source == null)
-						throw new ArgumentNullException(nameof(source));
-
-					_source = source;
+					_source = source ?? throw new ArgumentNullException(nameof(source));
 					_manager = manager;
 
 					_source.Processing += OnProcessing;
@@ -81,10 +78,7 @@ namespace StockSharp.Algo.Candles
 
 			public CandleManagerSourceList(CandleManager manager)
 			{
-				if (manager == null)
-					throw new ArgumentNullException(nameof(manager));
-
-				_manager = manager;
+				_manager = manager ?? throw new ArgumentNullException(nameof(manager));
 			}
 
 			protected override void OnAdded(ICandleSource<Candle> item)
@@ -136,10 +130,7 @@ namespace StockSharp.Algo.Candles
 
 			public ExternalCandleSource(IExternalCandleSource source)
 			{
-				if (source == null)
-					throw new ArgumentNullException(nameof(source));
-
-				_source = source;
+				_source = source ?? throw new ArgumentNullException(nameof(source));
 				_source.NewCandles += OnNewCandles;
 				_source.Stopped += OnStopped;
 			}
@@ -222,10 +213,7 @@ namespace StockSharp.Algo.Candles
 
 			public ConnectorCandleSource(Connector connector)
 			{
-				if (connector == null)
-					throw new ArgumentNullException(nameof(connector));
-
-				_connector = connector;
+				_connector = connector ?? throw new ArgumentNullException(nameof(connector));
 				_connector.CandleSeriesProcessing += OnConnectorProcessingCandle;
 				_connector.CandleSeriesStopped += OnConnectorCandleSeriesStopped;
 			}

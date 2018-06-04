@@ -745,6 +745,13 @@
       <param name="manager">Represents a container for dock and layout items.</param>
       <param name="layout">Layout encoded as a string.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Extensions.GetStrategyProcessStateIconName(StockSharp.Algo.Strategies.Strategy)">
+      <summary>
+            Get icon for <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState" />.
+            </summary>
+      <param name="strategy">Strategy.</param>
+      <returns>Icon name.</returns>
+    </member>
     <member name="T:StockSharp.Xaml.FileProgressWindow">
       <summary>
             File uploading/downloading progress bar window.
@@ -1855,6 +1862,26 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Xaml.StrategiesDashboard.SecurityProviderProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.StrategiesDashboard.SecurityProvider" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboard.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.StrategiesDashboard.PortfoliosProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.StrategiesDashboard.Portfolios" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboard.Portfolios">
+      <summary>
+            Available portfolios.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.StrategiesDashboard.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.StrategiesDashboard" />.
@@ -1910,6 +1937,11 @@
             Tag.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboardItem.ProcessStateIcon">
+      <summary>
+            Strategy state icon.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.StrategiesDashboardItem.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.StrategiesDashboardItem" />.
@@ -1946,6 +1978,16 @@
     <member name="P:StockSharp.Xaml.StrategiesDashboardItem.ProcessState">
       <summary>
             The operation state.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboardItem.Error">
+      <summary>
+            Last error.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboardItem.AllowTrading">
+      <summary>
+            Allow trading.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.QuestionWindow">

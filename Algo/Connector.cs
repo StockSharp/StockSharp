@@ -26,7 +26,11 @@ namespace StockSharp.Algo
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Commissions;
+	using StockSharp.Algo.Latency;
+	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Risk;
+	using StockSharp.Algo.Slippage;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -367,6 +371,42 @@ namespace StockSharp.Algo
 		public IRiskManager RiskManager { get; set; }
 
 		/// <summary>
+		/// Orders registration delay calculation manager.
+		/// </summary>
+		public ILatencyManager LatencyManager
+		{
+			get => Adapter.LatencyManager;
+			set => Adapter.LatencyManager = value;
+		}
+
+		/// <summary>
+		/// The profit-loss manager.
+		/// </summary>
+		public IPnLManager PnLManager
+		{
+			get => Adapter.PnLManager;
+			set => Adapter.PnLManager = value;
+		}
+
+		/// <summary>
+		/// The commission calculating manager.
+		/// </summary>
+		public ICommissionManager CommissionManager
+		{
+			get => Adapter.CommissionManager;
+			set => Adapter.CommissionManager = value;
+		}
+
+		/// <summary>
+		/// Slippage manager.
+		/// </summary>
+		public ISlippageManager SlippageManager
+		{
+			get => Adapter.SlippageManager;
+			set => Adapter.SlippageManager = value;
+		}
+
+		/// <summary>
 		/// Connection state.
 		/// </summary>
 		public ConnectionStates ConnectionState { get; private set; }
@@ -379,11 +419,13 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Use orders log to create market depths. Disabled by default.
 		/// </summary>
+		[Obsolete("Use MarketDataMessage.BuildFrom=OrderLog instead.")]
 		public virtual bool CreateDepthFromOrdersLog { get; set; }
 
 		/// <summary>
 		/// Use orders log to create ticks. Disabled by default.
 		/// </summary>
+		[Obsolete("Use MarketDataMessage.BuildFrom=OrderLog instead.")]
 		public virtual bool CreateTradesFromOrdersLog { get; set; }
 
 		/// <summary>
@@ -717,8 +759,8 @@ namespace StockSharp.Algo
 					info = new MarketDepthInfo(EntityFactory.CreateMarketDepth(security));
 
 					// стакан из лога заявок бесконечен
-					if (CreateDepthFromOrdersLog)
-						info.First.MaxDepth = int.MaxValue;
+					//if (CreateDepthFromOrdersLog)
+					//	info.First.MaxDepth = int.MaxValue;
 
 					_marketDepths.Add(key, info);
 				}
@@ -781,18 +823,10 @@ namespace StockSharp.Algo
 			{
 				this.AddOrderInfoLog(order, "RegisterOrder");
 
-				CheckOnNew(order, order.Type != OrderTypes.Conditional, initOrder);
-
-				//var cs = order.Security as ContinuousSecurity;
-
-				//while (cs != null)
-				//{
-				//	order.Security = cs.GetSecurity(CurrentTime);
-				//	cs = order.Security as ContinuousSecurity;
-				//}
-
 				if (initOrder)
 				{
+					CheckOnNew(order, order.Type != OrderTypes.Conditional);
+
 					if (order.Type == null)
 						order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
 
@@ -1399,7 +1433,6 @@ namespace StockSharp.Algo
 
 			_securityValues.Clear();
 			_sessionStates.Clear();
-			_olBuilders.Clear();
 
 			SendInMessage(new ResetMessage());
 
@@ -1465,8 +1498,8 @@ namespace StockSharp.Algo
 			Adapter.Load(storage.GetValue<SettingsStorage>(nameof(Adapter)));
 			IsRestoreSubscriptionOnReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
 
-			CreateDepthFromOrdersLog = storage.GetValue<bool>(nameof(CreateDepthFromOrdersLog));
-			CreateTradesFromOrdersLog = storage.GetValue<bool>(nameof(CreateTradesFromOrdersLog));
+			//CreateDepthFromOrdersLog = storage.GetValue<bool>(nameof(CreateDepthFromOrdersLog));
+			//CreateTradesFromOrdersLog = storage.GetValue<bool>(nameof(CreateTradesFromOrdersLog));
 			CreateDepthFromLevel1 = storage.GetValue(nameof(CreateDepthFromLevel1), CreateDepthFromLevel1);
 
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
@@ -1501,8 +1534,8 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(Adapter), Adapter.Save());
 			storage.SetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
 
-			storage.SetValue(nameof(CreateDepthFromOrdersLog), CreateDepthFromOrdersLog);
-			storage.SetValue(nameof(CreateTradesFromOrdersLog), CreateTradesFromOrdersLog);
+			//storage.SetValue(nameof(CreateDepthFromOrdersLog), CreateDepthFromOrdersLog);
+			//storage.SetValue(nameof(CreateTradesFromOrdersLog), CreateTradesFromOrdersLog);
 			storage.SetValue(nameof(CreateDepthFromLevel1), CreateDepthFromLevel1);
 
 			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);

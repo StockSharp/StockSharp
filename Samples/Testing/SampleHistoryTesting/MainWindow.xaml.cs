@@ -37,12 +37,10 @@ namespace SampleHistoryTesting
 	using StockSharp.Algo.Testing;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.BusinessEntities;
-	using StockSharp.ITCH;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
-	using StockSharp.Plaza;
 
 	public partial class MainWindow
 	{
@@ -405,8 +403,8 @@ namespace SampleHistoryTesting
 
 					//UseExternalCandleSource = emulationInfo.UseCandleTimeFrame != null,
 
-					CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
-					CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
+					//CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
+					//CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
 
 					HistoryMessageAdapter =
 					{
@@ -420,9 +418,7 @@ namespace SampleHistoryTesting
 						{
 							{
 								secId,
-								LocalizedStrings.ActiveLanguage == Languages.Russian
-									? (IOrderLogMarketDepthBuilder)new PlazaOrderLogMarketDepthBuilder(secId)
-									: new ItchOrderLogMarketDepthBuilder(secId)
+								new OrderLogMarketDepthBuilder(secId)
 							}
 						}
 					},
@@ -439,7 +435,7 @@ namespace SampleHistoryTesting
 
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
 				{
-					BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? BuildCandlesModes.Build : BuildCandlesModes.Load,
+					BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? MarketDataBuildModes.Build : MarketDataBuildModes.Load,
 					BuildCandlesFrom = emulationInfo.UseOrderLog ? (MarketDataTypes?)MarketDataTypes.OrderLog : null,
 				};
 

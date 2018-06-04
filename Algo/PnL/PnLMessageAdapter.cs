@@ -41,13 +41,7 @@ namespace StockSharp.Algo.PnL
 		public IPnLManager PnLManager
 		{
 			get => _pnLManager;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_pnLManager = value;
-			}
+			set => _pnLManager = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>

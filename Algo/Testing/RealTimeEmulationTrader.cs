@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	/// <typeparam name="TUnderlyingMarketDataAdapter">The type <see cref="IMessageAdapter"/>, through which market data will be received.</typeparam>
 	public class RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> : BaseEmulationConnector
-		where TUnderlyingMarketDataAdapter : IMessageAdapter
+		where TUnderlyingMarketDataAdapter : class, IMessageAdapter
 	{
 		private sealed class EmulationEntityFactory : EntityFactory
 		{
@@ -214,18 +214,12 @@ namespace StockSharp.Algo.Testing
 		/// <param name="ownAdapter">Track the connection <paramref name="underlyngMarketDataAdapter" /> lifetime.</param>
 		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, Portfolio portfolio, bool ownAdapter = true)
 		{
-			if (underlyngMarketDataAdapter == null)
-				throw new ArgumentNullException(nameof(underlyngMarketDataAdapter));
-
-			if (portfolio == null)
-				throw new ArgumentNullException(nameof(portfolio));
-
-			UnderlyngMarketDataAdapter = underlyngMarketDataAdapter;
+			UnderlyngMarketDataAdapter = underlyngMarketDataAdapter ?? throw new ArgumentNullException(nameof(underlyngMarketDataAdapter));
 
 			UpdateSecurityByLevel1 = false;
 			UpdateSecurityLastQuotes = false;
 
-			_portfolio = portfolio;
+			_portfolio = portfolio ?? throw new ArgumentNullException(nameof(portfolio));
 			EntityFactory = new EmulationEntityFactory(_portfolio);
 
 			_ownAdapter = ownAdapter;

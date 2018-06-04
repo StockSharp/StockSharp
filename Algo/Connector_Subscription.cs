@@ -40,10 +40,7 @@ namespace StockSharp.Algo
 
 			public SubscriptionManager(Connector connector)
 			{
-				if (connector == null)
-					throw new ArgumentNullException(nameof(connector));
-
-				_connector = connector;
+				_connector = connector ?? throw new ArgumentNullException(nameof(connector));
 			}
 
 			public void ClearCache()

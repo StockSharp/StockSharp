@@ -193,13 +193,7 @@ namespace StockSharp.Algo.Testing
 
 				return _volumes;
 			}
-			protected set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_volumes = value;
-			}
+			protected set => _volumes = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private RandomArray<int> _steps;
@@ -216,13 +210,7 @@ namespace StockSharp.Algo.Testing
 
 				return _steps;
 			}
-			protected set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_steps = value;
-			}
+			protected set => _steps = value ?? throw new ArgumentNullException(nameof(value));
 		}
 	}
 }

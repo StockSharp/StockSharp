@@ -47,15 +47,12 @@ namespace StockSharp.Algo.Export
 			//if (security == null)
 			//	throw new ArgumentNullException(nameof(security));
 
-			if (isCancelled == null)
-				throw new ArgumentNullException(nameof(isCancelled));
-
 			if (path.IsEmpty())
 				throw new ArgumentNullException(nameof(path));
 
 			Security = security;
 			Arg = arg;
-			_isCancelled = isCancelled;
+			_isCancelled = isCancelled ?? throw new ArgumentNullException(nameof(isCancelled));
 			Path = path;
 		}
 

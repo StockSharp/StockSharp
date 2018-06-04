@@ -58,12 +58,9 @@ namespace StockSharp.Algo.Storages
 		/// <param name="getData">Handler for retrieving in-memory data.</param>
 		public InMemoryMarketDataStorage(Security security, object arg, Func<DateTimeOffset, IEnumerable<T>> getData)
 		{
-			if (getData == null)
-				throw new ArgumentNullException(nameof(getData));
-
 			_security = security;
 			_arg = arg;
-			_getData = getData;
+			_getData = getData ?? throw new ArgumentNullException(nameof(getData));
 		}
 
 		IEnumerable<DateTime> IMarketDataStorage.Dates => throw new NotSupportedException();

@@ -117,14 +117,8 @@ namespace StockSharp.Algo.Testing
 
 			public HistoryEmulationMessageChannel(HistoryMessageAdapter historyMessageAdapter, Action<Exception> errorHandler)
 			{
-				if (historyMessageAdapter == null)
-					throw new ArgumentNullException(nameof(historyMessageAdapter));
-
-				if (errorHandler == null)
-					throw new ArgumentNullException(nameof(errorHandler));
-
-				_historyMessageAdapter = historyMessageAdapter;
-				_errorHandler = errorHandler;
+				_historyMessageAdapter = historyMessageAdapter ?? throw new ArgumentNullException(nameof(historyMessageAdapter));
+				_errorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
 
 				_messageQueue.Close();
 			}

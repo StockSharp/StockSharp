@@ -73,10 +73,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="strategy">Strategy.</param>
 		public StrategyNameGenerator(Strategy strategy)
 		{
-			if (strategy == null)
-				throw new ArgumentNullException(nameof(strategy));
-
-			_strategy = strategy;
+			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			_strategy.SecurityChanged += () =>
 			{
 				if (_selectors.Contains("Security"))

@@ -168,7 +168,7 @@ namespace StockSharp.Algo.Storages
 				{
 					if (message.IsCalcVolumeProfile)
 					{
-						switch (message.BuildCandlesFrom)
+						switch (message.BuildFrom)
 						{
 							case MarketDataTypes.Trades:
 								dataType = TicksAsLevel1 ? DataType.Level1 : DataType.Ticks;
@@ -429,6 +429,7 @@ namespace StockSharp.Algo.Storages
 						ServerTime = DateTimeOffset.Now,
 						ExecutionType = ExecutionTypes.Transaction,
 						SecurityId = regMsg.SecurityId,
+						TransactionId = regMsg.TransactionId,
 						HasOrderInfo = true,
 						OrderPrice = regMsg.Price,
 						OrderVolume = regMsg.Volume,
@@ -440,14 +441,16 @@ namespace StockSharp.Algo.Storages
 						Side = regMsg.Side,
 						TimeInForce = regMsg.TimeInForce,
 						ExpiryDate = regMsg.TillDate,
+						Balance = regMsg.Volume,
 						VisibleVolume = regMsg.VisibleVolume,
 						LocalTime = regMsg.LocalTime,
-						TransactionId = regMsg.TransactionId,
 						IsMarketMaker = regMsg.IsMarketMaker,
 						IsMargin = regMsg.IsMargin,
 						Slippage = regMsg.Slippage,
 						OrderType = regMsg.OrderType,
 						UserOrderId = regMsg.UserOrderId,
+						OrderState = OrderStates.Pending,
+						Condition = regMsg.Condition?.Clone(),
 						//RepoInfo = regMsg.RepoInfo?.Clone(),
 						//RpsInfo = regMsg.RpsInfo?.Clone(),
 					});
@@ -467,6 +470,7 @@ namespace StockSharp.Algo.Storages
 						ExecutionType = ExecutionTypes.Transaction,
 						SecurityId = cancelMsg.SecurityId,
 						HasOrderInfo = true,
+						TransactionId = cancelMsg.TransactionId,
 						IsCancelled = true,
 						OrderId = cancelMsg.OrderId,
 						OrderStringId = cancelMsg.OrderStringId,

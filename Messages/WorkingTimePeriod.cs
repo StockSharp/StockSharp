@@ -72,13 +72,7 @@ namespace StockSharp.Messages
 		public List<Range<TimeSpan>> Times
 		{
 			get => _times;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_times = value;
-			}
+			set => _times = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>

@@ -64,10 +64,7 @@ namespace StockSharp.Algo
 		/// <param name="container">The rules container.</param>
 		public MarketRuleList(IMarketRuleContainer container)
 		{
-			if (container == null)
-				throw new ArgumentNullException(nameof(container));
-
-			_container = container;
+			_container = container ?? throw new ArgumentNullException(nameof(container));
 		}
 
 		/// <summary>

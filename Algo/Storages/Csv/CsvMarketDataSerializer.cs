@@ -36,10 +36,7 @@ namespace StockSharp.Algo.Storages.Csv
 		public CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> readId)
 			: base(date)
 		{
-			if (encoding == null)
-				throw new ArgumentNullException(nameof(encoding));
-
-			_encoding = encoding;
+			_encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
 			_readId = readId;
 		}
 
@@ -221,18 +218,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			public CsvEnumerator(CsvMarketDataSerializer<TData> serializer, FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 			{
-				if (serializer == null)
-					throw new ArgumentNullException(nameof(serializer));
-
-				if (reader == null)
-					throw new ArgumentNullException(nameof(reader));
-
-				if (metaInfo == null)
-					throw new ArgumentNullException(nameof(metaInfo));
-
-				_serializer = serializer;
-				_reader = reader;
-				_metaInfo = metaInfo;
+				_serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+				_reader = reader ?? throw new ArgumentNullException(nameof(reader));
+				_metaInfo = metaInfo ?? throw new ArgumentNullException(nameof(metaInfo));
 			}
 
 			public override bool MoveNext()

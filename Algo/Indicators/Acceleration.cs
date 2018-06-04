@@ -47,14 +47,8 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="sma">The moving average.</param>
 		public Acceleration(AwesomeOscillator ao, SimpleMovingAverage sma)
 		{
-			if (ao == null)
-				throw new ArgumentNullException(nameof(ao));
-
-			if (sma == null)
-				throw new ArgumentNullException(nameof(sma));
-
-			Ao = ao;
-			Sma = sma;
+			Ao = ao ?? throw new ArgumentNullException(nameof(ao));
+			Sma = sma ?? throw new ArgumentNullException(nameof(sma));
 		}
 
 		/// <summary>

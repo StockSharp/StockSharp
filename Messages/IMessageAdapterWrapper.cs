@@ -47,10 +47,7 @@ namespace StockSharp.Messages
 		/// <param name="innerAdapter">Underlying adapter.</param>
 		protected MessageAdapterWrapper(IMessageAdapter innerAdapter)
 		{
-			if (innerAdapter == null)
-				throw new ArgumentNullException(nameof(innerAdapter));
-
-			InnerAdapter = innerAdapter;
+			InnerAdapter = innerAdapter ?? throw new ArgumentNullException(nameof(innerAdapter));
 		}
 
 		/// <summary>

@@ -41,13 +41,7 @@ namespace StockSharp.Algo.Positions
 		public IPositionManager PositionManager
 		{
 			get => _positionManager;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_positionManager = value;
-			}
+			set => _positionManager = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
