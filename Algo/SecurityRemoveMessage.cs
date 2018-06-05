@@ -19,5 +19,17 @@ namespace StockSharp.Algo
 		/// Security ID.
 		/// </summary>
 		public SecurityId SecurityId { get; set; }
+
+		/// <summary>
+		/// Create a copy of <see cref="SecurityRemoveMessage"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override Message Clone()
+		{
+			return new SecurityRemoveMessage
+			{
+				SecurityId = SecurityId,
+			};
+		}
 	}
 }

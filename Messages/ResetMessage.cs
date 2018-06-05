@@ -15,6 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Messages
 {
+	using System;
+
 	/// <summary>
 	/// Reset state message.
 	/// </summary>
@@ -26,6 +28,15 @@ namespace StockSharp.Messages
 		public ResetMessage()
 			: base(MessageTypes.Reset)
 		{
+		}
+
+		/// <summary>
+		/// Create a copy of <see cref="ResetMessage"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override Message Clone()
+		{
+			throw new NotSupportedException();
 		}
 	}
 }

@@ -40,6 +40,11 @@ namespace StockSharp.Algo
 				: base(ExtendedMessageTypes.Reconnect)
 			{
 			}
+
+			public override Message Clone()
+			{
+				return new ReconnectMessage();
+			}
 		}
 
 		class RestoringSubscriptionMessage : Message
@@ -47,6 +52,11 @@ namespace StockSharp.Algo
 			public RestoringSubscriptionMessage()
 				: base(ExtendedMessageTypes.RestoringSubscription)
 			{
+			}
+
+			public override Message Clone()
+			{
+				return new RestoringSubscriptionMessage();
 			}
 		}
 

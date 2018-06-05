@@ -101,9 +101,10 @@ namespace StockSharp.Messages
 		/// Create a copy of <see cref="Message"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			throw new NotSupportedException(LocalizedStrings.Str17 + " " + GetType().FullName);
-		}
+		public abstract override Message Clone();
+
+		//{
+		//	throw new NotSupportedException(LocalizedStrings.Str17 + " " + GetType().FullName);
+		//}
 	}
 }

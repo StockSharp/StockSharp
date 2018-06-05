@@ -27,6 +27,11 @@
 				SecurityId = securityId;
 				IsBack = true;
 			}
+
+			public override Message Clone()
+			{
+				return new ProcessSuspendedSecurityMessage(Adapter, SecurityId);
+			}
 		}
 
 		private readonly PairSet<object, SecurityId> _securityIds = new PairSet<object, SecurityId>();
