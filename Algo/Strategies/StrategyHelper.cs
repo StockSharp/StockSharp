@@ -175,6 +175,8 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
+		private const string _candleManagerKey = "CandleManager";
+
 		/// <summary>
 		/// To get the candle manager, associated with the passed strategy.
 		/// </summary>
@@ -185,7 +187,7 @@ namespace StockSharp.Algo.Strategies
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			return strategy.Environment.GetValue<ICandleManager>("CandleManager");
+			return strategy.Environment.GetValue<ICandleManager>(_candleManagerKey);
 		}
 
 		/// <summary>
@@ -201,8 +203,10 @@ namespace StockSharp.Algo.Strategies
 			if (candleManager == null)
 				throw new ArgumentNullException(nameof(candleManager));
 
-			strategy.Environment.SetValue("CandleManager", candleManager);
+			strategy.Environment.SetValue(_candleManagerKey, candleManager);
 		}
+
+		private const string _messageSenderKey = "MessageSender";
 
 		/// <summary>
 		/// To get the message sender, associated with the passed strategy.
@@ -214,7 +218,7 @@ namespace StockSharp.Algo.Strategies
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			return strategy.Environment.GetValue<IMessageSender>("MessageSender");
+			return strategy.Environment.GetValue<IMessageSender>(_messageSenderKey);
 		}
 
 		/// <summary>
@@ -230,8 +234,10 @@ namespace StockSharp.Algo.Strategies
 			if (messageSender == null)
 				throw new ArgumentNullException(nameof(messageSender));
 
-			strategy.Environment.SetValue("MessageSender", messageSender);
+			strategy.Environment.SetValue(_messageSenderKey, messageSender);
 		}
+
+		private const string _isEmulationModeKey = "IsEmulationMode";
 
 		/// <summary>
 		/// To get the strategy start-up mode (paper trading or real).
@@ -240,7 +246,7 @@ namespace StockSharp.Algo.Strategies
 		/// <returns>If the paper trading mode is used - <see langword="true" />, otherwise - <see langword="false" />.</returns>
 		public static bool GetIsEmulation(this Strategy strategy)
 		{
-			return strategy.Environment.GetValue("IsEmulationMode", false);
+			return strategy.Environment.GetValue(_isEmulationModeKey, false);
 		}
 
 		/// <summary>
@@ -250,7 +256,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="isEmulation">If the paper trading mode is used - <see langword="true" />, otherwise - <see langword="false" />.</param>
 		public static void SetIsEmulation(this Strategy strategy, bool isEmulation)
 		{
-			strategy.Environment.SetValue("IsEmulationMode", isEmulation);
+			strategy.Environment.SetValue(_isEmulationModeKey, isEmulation);
 		}
 
 		/// <summary>
