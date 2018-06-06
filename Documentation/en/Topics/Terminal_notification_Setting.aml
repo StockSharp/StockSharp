@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b027b553-9842-4c2d-9b49-d01bf1394bb2" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+
+<para>To set a notification, you have to click the <mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline>  button in the notification 
+panel (<link xlink:href="c2495e73-82ef-4276-8576-7f99a5ea71ee" />) or click the <mediaLinkInline><image xlink:href="Designer_Alert_Bell"/></mediaLinkInline> 
+ button directly in the panels that support notifications 
+ (<link xlink:href="fae1620c-0e4f-4028-a18c-6a6a3dbd7e58" />, 
+ <link xlink:href="60e0ac1b-6fa5-4ad9-a3b3-d7884eae0f6f" />, 
+ <link xlink:href="bb6987ed-dc46-4a98-8827-bc90fa032a98" />, 
+ <link xlink:href="8e7a5377-4c7c-41fb-bd2c-42b699d9d36e" />).</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Notifications_Setting"/>
+</mediaLink>
+      <para>Notification can be configure for change of the following data types: 
+      Portfolio, Customer code, Broker, Depository, Server time, Trade, Data type, 
+      Cancellation, Order ID, Order ID (string), Order ID (board), Derivative, 
+      Derivative (string), Price, Volume (order), Volume (trade), Visible volume, 
+      Direction, Remainder, Order type, Status, Comment, Message to order, 
+      System order, Order expiration time, Execution condition, Oder ID, 
+      Order ID (string), Price, Trade initiator, Open interest, Error, Condition, 
+      Uptrend, Commission, Delay, Slippage, ID (user), Currency, P/L, Position, 
+      Market Maker.</para>
+      
+<para>Notifications can be of the following form:</para>
+<list class="bullet">
+  <listItem><para><legacyBold>Window</legacyBold> – small pop-up window with a 
+  message will appear the screen corner.</para></listItem>
+  <listItem><para><legacyBold>Melody</legacyBold> – a melody will be played.</para></listItem>
+  <listItem><para><legacyBold>SMS</legacyBold> – message will be sent using sms.</para></listItem>
+  <listItem><para><legacyBold>Email</legacyBold> – message will be emailed.</para></listItem>
+  <listItem><para><legacyBold>Speech</legacyBold> – message will be spoken by 
+  the computer generated voice.</para></listItem>
+  <listItem><para><legacyBold>Log</legacyBold> – message will be sent to the 
+  Designer logs window.</para></listItem>
+  <listItem><para><legacyBold>Off</legacyBold> – notification will not be shown.</para></listItem>
+</list>
+      
+    </introduction>
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

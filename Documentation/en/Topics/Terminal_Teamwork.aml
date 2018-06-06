@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="3d15acfa-6c54-4889-95a7-200d7fef9dae" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+
+<para>There are the following options for team working:</para>
+
+<list class="bullet">
+  <listItem><para><link xlink:href="d99a1e55-2438-4e34-8ee5-ed7b15727e75" /> - for instant exchange of messages.</para></listItem>
+  <listItem><para><link xlink:href="6d13af11-61ae-47b7-93a3-097abe7640c9" /> - to publish or auto-publish the trading or testing results.</para></listItem>
+</list>
+
+
+    </introduction>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

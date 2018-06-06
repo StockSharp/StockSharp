@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b38b4a67-92d4-4385-81de-772c4ee2854a" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>The <legacyBold>Smile volatility</legacyBold> component is a graphic 
+representation of the expected volatility level for options with the same underlying asset and different strikes.</para>
+<para>To display the volatility smile, you have to select the underlying asset and options based on the prices of which the volatility smile will be built.</para>
+<para>In addition, you can specify a filter for the exact expiration date of options and filters for minimum/maximum strikes.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_smile_of_volatility_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="8898cea8-4229-475e-a31d-c88e09b2c46f" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

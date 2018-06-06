@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4b3a9854-0e5d-42ce-b01e-70ca594cceb6" revisionNumber="1">
+ <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>The <legacyBold>Conditional</legacyBold> orders component is a table with orders, which displays complete 
+information about all conditional orders. When you right click the mouse button on 
+the order, a panel appears with which you can register a new conditional order, 
+cancel or change the selected conditional order.
+</para> 
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Orders_conditional_panel_01"/>
+</mediaLink>
+
+<para>When you click the <legacyBold>Order Registration</legacyBold> button, a window 
+appears. To register a new conditional order, you have to fill it out and click the <legacyBold>Send</legacyBold> button.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Orders_conditional_panel_02"/>
+</mediaLink>
+<para>When you click the <legacyBold>Change Order</legacyBold> button, a window 
+appears. To change the conditional order, you have to make the required changes and click the <legacyBold>Send</legacyBold> button.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Orders_conditional_panel_03"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="697bcab0-932a-4bba-a1fd-4285d4b45930" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

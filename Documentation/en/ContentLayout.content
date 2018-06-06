@@ -3,7 +3,7 @@
   <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" title="About StockSharp" />
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="StockSharp Licensing" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Reference materials" />
-  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" title="S#.API">
+  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Architecture" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Installation instruction" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="Releases history" />
@@ -130,7 +130,7 @@
         <Topic id="154475d4-8b10-4181-b64f-8113f47b963f" visible="True" title="Getting started" />
       </Topic>
       <Topic id="d941f537-602b-400f-91d4-d4b2b37b9767" visible="True" isExpanded="true" title="GDAX">
-        <Topic id="cddf98a2-3ec9-4e49-9757-8b0de893fb15" visible="True" isSelected="true" title="Getting started" />
+        <Topic id="cddf98a2-3ec9-4e49-9757-8b0de893fb15" visible="True" title="Getting started" />
       </Topic>
       <Topic id="17ebcf40-aa25-4717-83cd-d275209ff524" visible="True" isExpanded="true" title="HitBTC">
         <Topic id="88e70b23-2b66-49e8-b77d-803697cee16d" visible="True" title="Getting started" />
@@ -314,7 +314,67 @@
     <Topic id="a8486498-a2d8-4924-b009-8b93138b268a" visible="True" title="Arithmetic operations" />
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Currency converter" />
   </Topic>
-  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
+  <Topic id="E4B5E112-BD08-4F40-8741-7514E7E4088E" visible="True" isExpanded="true" title="S#.Terminal">
+    <Topic id="f70783b8-59e1-4ea7-9d94-c20524f3470a" visible="True" title="Installing S#.Terminal" />
+    <Topic id="e51b9e8f-52d3-4e16-887e-1aad12db2cc8" visible="True" title="Update to the new version" />
+    <Topic id="b7809562-d829-42d2-95c9-cbca8bf5549e" visible="True" title="Quick start" />
+    <Topic id="11e13dbe-5a49-44c2-b552-38726eade631" visible="True" isExpanded="true" title="User interface">
+      <Topic id="ec274602-6148-450d-9b59-41799d8e12cb" visible="True" title="Quick access panel" />
+      <Topic id="af6c6888-e54e-4a5d-b09a-ffc8d5c0f38a" visible="True" title="Ribbon" />
+      <Topic id="da986495-ba3c-450b-a3fc-8298c783ce2d" visible="True" title="Workspace" />
+      <Topic id="9952e304-7e1e-4957-b837-d0a656e9dbc6" visible="True" title="Logs" />
+      <Topic id="fae1620c-0e4f-4028-a18c-6a6a3dbd7e58" visible="True" title="Portfolios" />
+      <Topic id="033352f0-fd7a-4d43-aae9-faa2ca9f85da" visible="True" title="Board editor" />
+      <Topic id="70c973a4-d132-4727-ad6a-c07bee65408c" visible="True" title="Risk management" />
+      <Topic id="cbd63a4a-b653-4044-b4dd-7e7d42be1492" visible="True" isExpanded="true" title="Components">
+        <Topic id="fd4646ce-924c-479e-ab63-53be64d954be" visible="True" title="Instruments" />
+        <Topic id="8e7a5377-4c7c-41fb-bd2c-42b699d9d36e" visible="True" title="Level 1" />
+        <Topic id="48a67112-c623-4227-89ad-a5d39e36be76" visible="True" title="Buy/Sell" />
+        <Topic id="92ccb73a-d49d-4d2a-aa31-1c8ba915be4b" visible="True" title="Order book" />
+        <Topic id="9ff6005e-3622-498e-929f-3d9d141d6a69" visible="True" title="Chart" />
+        <Topic id="b16dd47a-ce5c-4e77-9208-8ece5722d091" visible="True" title="P&amp;L chart" />
+        <Topic id="f8ff7018-ed36-4391-863f-8ab55296c0e0" visible="True" title="Trades" />
+        <Topic id="f1ef5036-ad9c-4a19-b7c3-33876b98124b" visible="True" title="Orders" />
+        <Topic id="4b3a9854-0e5d-42ce-b01e-70ca594cceb6" visible="True" title="Conditional orders" />
+        <Topic id="552b54f0-9417-4839-bedd-4dcac18e2616" visible="True" title="Positions" />
+        <Topic id="60e0ac1b-6fa5-4ad9-a3b3-d7884eae0f6f" visible="True" title="Trades feed" />
+        <Topic id="bb6987ed-dc46-4a98-8827-bc90fa032a98" visible="True" title="News" />
+        <Topic id="beed7d94-24ec-41ee-93e7-56c56c4af77d" visible="True" title="Positions (options)" />
+        <Topic id="238f8d14-38ce-4f26-b032-b018b2fcd3e6" visible="True" title="Option desk" />
+        <Topic id="b38b4a67-92d4-4385-81de-772c4ee2854a" visible="True" title="Smile volatility" />
+        <Topic id="8898cea8-4229-475e-a31d-c88e09b2c46f" visible="True" title="Order log" />
+      </Topic>
+    </Topic>
+    <Topic id="0f40a3ad-c627-4552-a581-7dc048f19739" visible="True" isExpanded="true" title="Connection settings">
+      <Topic id="6326b77f-e732-49f3-8e95-505d99bbc606" visible="True" title="Connector settings" />
+      <Topic id="f12e5802-58c6-4fae-a210-37adb953ca2e" visible="True" title="Trade simulator" />
+      <Topic id="9474580c-0867-4ba5-be79-83fe4b51b513" visible="True" title="Binding account to connection" />
+    </Topic>
+    <Topic id="5a717b34-e3ed-45c7-934e-94d93b98ced8" visible="True" isExpanded="true" title="Market data storage">
+      <Topic id="dc4bee68-e85c-46c2-bf32-34a1c554ab65" visible="True" title="Download instruments" />
+      <Topic id="4d149f5d-351e-4348-9f29-973760caf153" visible="True" title="Create instrument" />
+      <Topic id="d5094488-8fe5-45cd-ba3b-a77775654950" visible="True" title="Edit instrument" />
+      <Topic id="fd5e986c-9f05-4929-b9af-c8253d118eb8" visible="True" title="Index" />
+      <Topic id="893ab9b9-0286-4fdb-b001-98f34cc236c0" visible="True" title="Continuous futures" />
+      <Topic id="edb17138-6fe1-4a59-bdaa-d58f1d7ec22f" visible="True" title="Creating a historical data storage" />
+      <Topic id="23380c66-45ab-44fc-b59a-ca5133da41ad" visible="True" title="Instrument extended info" />
+      <Topic id="e994c10c-b36a-44e6-95db-8a6975295140" visible="True" title="Symbol mapping" />
+    </Topic>
+    <Topic id="3d15acfa-6c54-4889-95a7-200d7fef9dae" visible="True" isExpanded="true" title="Team working">
+      <Topic id="28978b77-d474-420b-a54e-c492c4cd7410" visible="True" title="Chat" />
+      <Topic id="b3847a6b-817e-4bf3-9007-22227263d19c" visible="True" title="Share images for charts and tables" />
+    </Topic>
+    <Topic id="7445482b-c1cd-4bbd-9c26-d05386e24940" visible="True" isExpanded="true" title="Notifications">
+      <Topic id="c2495e73-82ef-4276-8576-7f99a5ea71ee" visible="True" title="Notification panel" />
+      <Topic id="b027b553-9842-4c2d-9b49-d01bf1394bb2" visible="True" title="Настройки уведомлений" />
+    </Topic>
+    <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" isExpanded="true" title="Settings">
+      <Topic id="bc6f0874-1c3a-49ff-b615-8c438dcea716" visible="True" title="Launch settings" />
+      <Topic id="e5994bfc-2458-41b2-a3c8-3e2b62d78ea9" visible="True" title="Reset settings" />
+      <Topic id="5db34ace-ab66-4848-b335-11402f3d96c3" visible="True" isSelected="true" title="Feedback forms" />
+    </Topic>
+  </Topic>
+  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Installing S#.Data" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="First start" />
     <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Sources setting up">
@@ -470,7 +530,7 @@
         <Topic id="a06c5482-e2d0-413d-888f-3307c80f7b65" visible="True" title="Tick trades" />
       </Topic>
     </Topic>
-    <Topic id="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" visible="True" isExpanded="true" title="Strategies">
+    <Topic id="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" visible="True" title="Strategies">
       <Topic id="6974891d-4c8d-46e1-bdeb-fc7391bc0625" visible="True" isExpanded="true" title="Using visual designer">
         <Topic id="622b706b-f729-46f2-8509-900c5bde2244" visible="True" title="Diagram panel" />
         <Topic id="37e547dd-5141-4a57-9ed2-8ca058e9240c" visible="True" isExpanded="true" title="Elements">

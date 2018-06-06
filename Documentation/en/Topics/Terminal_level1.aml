@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8e7a5377-4c7c-41fb-bd2c-42b699d9d36e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>The <legacyBold>Level 1</legacyBold> component is a table with a history of changing <legacyBold>Level 1</legacyBold> for the selected instruments.</para> 
+<para><legacyBold>Level 1</legacyBold> has a filter to select the necessary instruments. 
+It is also possible to configure notifications for events of the selected instruments - 
+<link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Level1_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="48a67112-c623-4227-89ad-a5d39e36be76" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

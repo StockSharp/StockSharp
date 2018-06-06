@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c2495e73-82ef-4276-8576-7f99a5ea71ee" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <introduction>
+<para>The <legacyBold>Notifications</legacyBold> panel is a table that displays information about all currently set notifications.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Notifications_Panel"/>
+</mediaLink>
+<para>In the <legacyBold>Notifications</legacyBold> panel, you can edit 
+<mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_01"/></mediaLinkInline>  
+an existing notification, delete <mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_02"/></mediaLinkInline> 
+it, or set a new notification <mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_00"/></mediaLinkInline>. </para>
+
+</introduction>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

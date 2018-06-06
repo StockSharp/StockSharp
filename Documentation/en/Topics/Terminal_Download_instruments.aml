@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="dc4bee68-e85c-46c2-bf32-34a1c554ab65" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>After clicking the <mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline> 
+button, a window appears in which you have to enter the instrument code, instrument 
+type, select the data source and click the <legacyBold>OK</legacyBold> button. 
+<link xlink:href="E4B5E112-BD08-4F40-8741-7514E7E4088E" /> will start searching for instruments in the source. 
+All found instruments will be added to the instrument list on the <legacyBold>All instrument</legacyBold> panel.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Download_the_tools_00"/>
+</mediaLink>
+ 
+<para>Clicking the Add connection button opens the <link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" /> window.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="2ee93171-34db-4f23-a5d3-30ff5c81dda3" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>
