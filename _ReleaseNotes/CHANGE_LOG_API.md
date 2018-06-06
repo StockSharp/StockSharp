@@ -93,6 +93,7 @@ StockSharp API Change log
 * (feature) Message. Method Clone made as abstract.
 * (feature) Bittrex. Web sockets supported.
 * (bug) Charting. Fix drawing trades with string id.
+* (feature) OrderGrid, ExecutionGrid, TradeGrid, MyTradeGrid. Sides coloring.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
