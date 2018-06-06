@@ -3,8 +3,8 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 <summary>
 <para>
-<legacyBold>S#.Terminal</legacyBold> - бесплатный торговый терминал. Основное преимущество, 
-которого является одновременное подключение ко множеству торговых площадок, включая 
+<legacyBold>S#.Terminal</legacyBold> - бесплатный торговый терминал. Основным преимуществом которого является 
+одновременное подключение ко множеству торговых площадок, включая 
 те, где нет собственного терминала. 
 </para>
  <mediaLink>

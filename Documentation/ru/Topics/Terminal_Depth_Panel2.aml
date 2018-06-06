@@ -7,10 +7,10 @@
 </para> 
 <para>
 При нажатии на кнопку настройки <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline> появляется панель 
- в которой можно установить необходимый инструмент и потрфель, а также настроить параметры отображения стакана.
+ в которой можно установить необходимый инструмент и портфель, а также настроить параметры отображения стакана.
 </para>
 <para>Заявки можно отправлять как нажатием на кнопки <legacyBold>Купить/Продать</legacyBold>, 
-так и нажатием на ячейку солбцов <legacyBold>Бид/Офер</legacyBold> в самом стакане.</para>
+так и нажатием на ячейку столбцов <legacyBold>Бид/Офер</legacyBold> в самом стакане.</para>
 <mediaLink>
 <image placement="center" xlink:href="Terminal_Panel_Market_Depth"/>
 </mediaLink>
