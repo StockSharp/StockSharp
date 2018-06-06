@@ -886,6 +886,12 @@
             Old password.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.FixUserRequestMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixUserRequestMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.Fix.FixUserResponseTypes">
       <summary>
             Response types.
@@ -956,6 +962,12 @@
             ID of the original message <see cref="P:StockSharp.Messages.ChangePasswordMessage.TransactionId" /> for which this message is a response.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.FixUserResponseMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixUserResponseMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.Fix.FixUserForceLogoffMessage">
       <summary>
             FIX server extended message for force logoff message.
@@ -971,6 +983,12 @@
             ID of the original message <see cref="P:StockSharp.Messages.ChangePasswordMessage.TransactionId" /> for which this message is a response.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.FixUserForceLogoffMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixUserForceLogoffMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.Fix.FixSecurityMessage">
       <summary>
             A message containing info about the security.
@@ -985,6 +1003,12 @@
       <summary>
             Legs.
             </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixSecurityMessage" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="T:StockSharp.Fix.FixServer">
       <summary>
