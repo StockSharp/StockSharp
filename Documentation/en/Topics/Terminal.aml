@@ -20,7 +20,8 @@ connection to a variety of trading boards, including those where there is no own
 <legacyBold>Many types of connections:</legacyBold> Quik, Transaq, SmartCOM, AlfaDirect, 
 Plaza 2 (CGate), TWIME, FIX/FAST, Micex Bridge, Oanda, FXCM, LMAX, Rithmic, Fusion/Blackwood, 
 Interactive Brokers, OpenECry, Sterling, BarChart, IQFeed, E * Trade, BTCE, BitStamp, 
-BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, ITCH.
+BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, ITCH,
+Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, KuCoin, BITEXBOOK, CoinExchange.
 </content>
 </step>
 <step>

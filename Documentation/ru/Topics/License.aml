@@ -55,6 +55,20 @@
 		<token>Kraken</token>,
 		<token>Okcoin</token>,
 		<token>Poloniex</token>,
+		<token>Binance</token>,
+		<token>Liqui</token>,
+		<token>CEX.IO</token>,
+		<token>Cryptopia</token>,
+		<token>OKEx</token>,
+		<token>BitMEX</token>,
+		<token>YoBit</token>,
+		<token>Livecoin</token>,
+		<token>EXMO</token>,
+		<token>Deribit</token>,
+		<token>Huobi</token>,
+		<token>KuCoin</token>,
+		<token>BITEXBOOK</token>,
+		<token>CoinExchange</token>
   				</para>
   			</listItem>
 		</list>
