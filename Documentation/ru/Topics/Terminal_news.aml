@@ -4,7 +4,7 @@
 <introduction>
 <para>Компонент <legacyBold>Новости</legacyBold> предназначен для отображения новостей полученных из подключений.</para>
 <para>Для начала получения новостей необходимо нажать на кнопку <legacyBold>Получать новости</legacyBold></para>
-<para>Панель новости имеет возможность настроить уведомления по выбранным событиям <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />.</para>
+<para>Панель <legacyBold>Новости</legacyBold> имеет возможность настроить уведомления по выбранным событиям <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />.</para>
 <mediaLink>
 <image placement="center" xlink:href="Terminal_news_00"/>
 </mediaLink>

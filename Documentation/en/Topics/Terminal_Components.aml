@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="cbd63a4a-b653-4044-b4dd-7e7d42be1492" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+<para>During trade there is a need to fully control the process. For complete control and analysis, 
+<legacyBold>S#.Terminal</legacyBold> provides graphical components that you can add by selecting them in the <legacyBold>Components</legacyBold> group of the <legacyBold>Ribbon</legacyBold>:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Components" />
+</mediaLink>
+
+
+<list class="bullet">
+<listItem><para><link xlink:href="fd4646ce-924c-479e-ab63-53be64d954be" /> - 
+is a table with instruments that displays information about all selected instruments.</para></listItem>
+<listItem><para><link xlink:href="8e7a5377-4c7c-41fb-bd2c-42b699d9d36e" /> - 
+is a table with a history of changing Level 1 for the selected instruments.</para></listItem>
+<listItem><para><link xlink:href="48a67112-c623-4227-89ad-a5d39e36be76" /> - 
+is a panel group that displays the best price information for the selected instruments, as well as you can buy or sell the required volume for the selected instruments.</para></listItem>
+<listItem><para><link xlink:href="92ccb73a-d49d-4d2a-aa31-1c8ba915be4b" /> - 
+is a table of limit orders for purchase and sale. </para></listItem>
+<listItem><para><link xlink:href="9ff6005e-3622-498e-929f-3d9d141d6a69" /> - 
+allows you to draw candles and indicators for the selected instrument. </para></listItem>
+<listItem><para><link xlink:href="24d370d1-fd00-4914-83ac-574721299e93" /> - 
+is a chart of Profit/Loss (unrealized), Profit/Loss (realized) and commission.</para></listItem>
+<listItem><para><link xlink:href="697bcab0-932a-4bba-a1fd-4285d4b45930" /> - 
+is a table with trades, that displays complete information about all trades of the strategy.</para></listItem>
+<listItem><para><link xlink:href="f17f9b12-4676-4815-83f3-9cbc3e1e87fc" /> - 
+is a table with orders, that displays complete information about all orders of the strategy.</para></listItem>
+<listItem><para><link xlink:href="acc5951e-e627-453b-896e-d53f1687e3fb" /> - 
+is a table with conditional orders, that displays complete information about all conditional orders of the strategy.</para></listItem>
+<listItem><para><link xlink:href="1ea96e9e-7018-41b9-891f-f47617cce648" /> - 
+is a table of the current Position. </para></listItem>
+<listItem><para><link xlink:href="a06c5482-e2d0-413d-888f-3307c80f7b65" /> - 
+is a trade table that displays complete information about all trades for the selected instruments.</para></listItem>
+<listItem><para><link xlink:href="1ea96e9e-7018-41b9-891f-f47617cce648" /> - 
+is a chart of the Position.</para></listItem>
+<listItem><para><link xlink:href="bb6987ed-dc46-4a98-8827-bc90fa032a98" /> - 
+displays news received from connections.</para></listItem>
+<listItem><para><link xlink:href="beed7d94-24ec-41ee-93e7-56c56c4af77d" /> - 
+is a graphic display of the position by options.</para></listItem>
+<listItem><para><link xlink:href="238f8d14-38ce-4f26-b032-b018b2fcd3e6" /> - 
+is a table of the main parameters of the selected options for the underlying instrument.</para></listItem>
+<listItem><para><link xlink:href="b38b4a67-92d4-4385-81de-772c4ee2854a" /> - 
+is a graphic representation of the expected volatility level for options with the same underlying asset and different strikes.</para></listItem>
+<listItem><para><link xlink:href="8898cea8-4229-475e-a31d-c88e09b2c46f" /> - 
+is a table with orders, which displays complete information about all orders for the selected instruments.</para></listItem>
+</list>
+
+    </introduction>
+
+    <relatedTopics>
+    
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

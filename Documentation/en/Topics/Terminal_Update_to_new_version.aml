@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e51b9e8f-52d3-4e16-887e-1aad12db2cc8" revisionNumber="1">
+   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    <para>When a new version appears, the Terminal itself will prompt you to update.</para>
+    <para>In the <legacyBold>About program</legacyBold> window you can check the current version and, if necessary, update it.</para>
+    <mediaLink>
+<image placement="center" xlink:href="Terminal_about"/>
+</mediaLink>
+<para>In the window that appears, the changes and improvements available in the 
+new version will be described, you must click the <legacyBold>Update</legacyBold> button to update.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Installation_02"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="f70783b8-59e1-4ea7-9d94-c20524f3470a" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

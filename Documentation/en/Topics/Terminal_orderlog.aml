@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8898cea8-4229-475e-a31d-c88e09b2c46f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>The <legacyBold>Order log</legacyBold> component is a table with orders that displays complete information about all orders for the selected instruments.</para> 
+<para>The <legacyBold>Order log</legacyBold> has a filter for selecting the necessary instruments.
+It is also possible to configure notifications for events of the selected instruments - 
+<link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_orderlog_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="5a717b34-e3ed-45c7-934e-94d93b98ced8" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -2,8 +2,8 @@
 <topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    <para>При появлении новой версии терминал сам предложи вам обновиться.</para>
-    <para>Проверить актуальность текущей версии и обновить при необходимости можно на в окне <legacyBold>О программе</legacyBold>.</para>
+    <para>При появлении новой версии терминал сам предложит вам обновиться.</para>
+    <para>Проверить актуальность текущей версии и обновить при необходимости можно в окне <legacyBold>О программе</legacyBold>.</para>
     <mediaLink>
 <image placement="center" xlink:href="Designer_About"/>
 </mediaLink>

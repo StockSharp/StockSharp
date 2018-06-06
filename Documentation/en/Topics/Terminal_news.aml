@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="bb6987ed-dc46-4a98-8827-bc90fa032a98" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>The <legacyBold>News</legacyBold> component displays news received from connections.</para>
+<para>To start receiving news, click the <legacyBold>Receive news</legacyBold> button</para>
+<para>The News panel has the ability to configure notifications for selected events – <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_news_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="beed7d94-24ec-41ee-93e7-56c56c4af77d" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

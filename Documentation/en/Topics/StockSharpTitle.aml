@@ -127,7 +127,6 @@ Available connections:  </para>
   <listItem><para>High compression ratio (2 bytes per trade, 7 bytes per order book).</para></listItem>
   <listItem><para>Any data type (candles, ticks, order book, order-log, options, news and other).</para></listItem>
   <listItem><para>Program access to stored data via API.</para></listItem>
-  <listItem><para>Экспорт в csv, excel, xml или базу данных.</para></listItem>
   <listItem><para>Export to csv, excel, xml or database.</para></listItem>
   <listItem><para>Import from csv.</para></listItem>
   <listItem><para>Scheduled tasks.</para></listItem>
