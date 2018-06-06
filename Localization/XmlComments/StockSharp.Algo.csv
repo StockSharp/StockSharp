@@ -3778,6 +3778,8 @@ M:StockSharp.Algo.SecurityNativeIdMessageAdapter.Clone/returns;DocStr1116
 T:StockSharp.Algo.SecurityRemoveMessage/summary;DocStr9192
 M:StockSharp.Algo.SecurityRemoveMessage.#ctor/summary;DocStr1
 P:StockSharp.Algo.SecurityRemoveMessage.SecurityId/summary;SecurityId
+M:StockSharp.Algo.SecurityRemoveMessage.Clone/summary;DocStr643
+M:StockSharp.Algo.SecurityRemoveMessage.Clone/returns;DocStr1116
 T:StockSharp.Algo.SecurityTrie/summary;DocStr8512
 M:StockSharp.Algo.SecurityTrie.#ctor/summary;DocStr1
 P:StockSharp.Algo.SecurityTrie.Count/summary;DocStr8499
@@ -5803,6 +5805,8 @@ T:StockSharp.Algo.Testing.CommissionRuleMessage/summary;DocStr1912
 M:StockSharp.Algo.Testing.CommissionRuleMessage.#ctor/summary;DocStr1
 P:StockSharp.Algo.Testing.CommissionRuleMessage.Rule/summary;DocStr753
 P:StockSharp.Algo.Testing.CommissionRuleMessage.PortfolioName/summary;DocStr1913
+M:StockSharp.Algo.Testing.CommissionRuleMessage.Clone/summary;DocStr643
+M:StockSharp.Algo.Testing.CommissionRuleMessage.Clone/returns;DocStr1116
 T:StockSharp.Algo.Testing.HistorySourceMessage/summary;DocStr8629
 M:StockSharp.Algo.Testing.HistorySourceMessage.#ctor/summary;DocStr1
 P:StockSharp.Algo.Testing.HistorySourceMessage.GetMessages/summary;DocStr8630
@@ -5825,6 +5829,8 @@ T:StockSharp.Algo.Testing.ClearingMessage/summary;DocStr2102
 P:StockSharp.Algo.Testing.ClearingMessage.SecurityId/summary;SecurityId
 P:StockSharp.Algo.Testing.ClearingMessage.ClearMarketDepth/summary;DocStr2103
 M:StockSharp.Algo.Testing.ClearingMessage.#ctor/summary;DocStr1
+M:StockSharp.Algo.Testing.ClearingMessage.Clone/summary;DocStr643
+M:StockSharp.Algo.Testing.ClearingMessage.Clone/returns;DocStr1116
 M:StockSharp.Algo.Testing.ClearingMessage.ToString/summary;DocStr49
 M:StockSharp.Algo.Testing.ClearingMessage.ToString/returns;DocStr50
 T:StockSharp.Algo.Testing.HistoryMessageAdapter/summary;DocStr2104

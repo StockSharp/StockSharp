@@ -29,6 +29,12 @@
             Data in the xml format.
             </summary>
     </member>
+    <member name="M:StockSharp.InteractiveBrokers.FinancialAdviseMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.FinancialAdviseMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.FundamentalReportMarketDataMessage">
       <summary>
             The message to receive market reports for the specified instrument. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport" /> event.
@@ -64,6 +70,12 @@
             The query identifier <see cref="T:StockSharp.InteractiveBrokers.FundamentalReportMarketDataMessage" />.
             </summary>
     </member>
+    <member name="M:StockSharp.InteractiveBrokers.FundamentalReportMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.FundamentalReportMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.HistogramMarketDataMessage">
       <summary>
             Request histogram data message.
@@ -93,6 +105,12 @@
       <summary>
             Data.
             </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.HistogramMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.HistogramMessage" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter">
       <summary>
@@ -2027,6 +2045,12 @@
             The parameters in the xml format.
             </summary>
     </member>
+    <member name="M:StockSharp.InteractiveBrokers.ScannerParametersMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.ScannerParametersMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.ScannerResult">
       <summary>
             The filter result of scanner starting via <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)" />.
@@ -2081,6 +2105,12 @@
       <summary>
             The query identifier <see cref="T:StockSharp.InteractiveBrokers.ScannerMarketDataMessage" />.
             </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.ScannerResultMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.ScannerResultMessage" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.ServerLogLevels">
       <summary>
@@ -2579,6 +2609,12 @@
       <summary>
             Tiers.
             </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.SoftDollarTierMessage" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.TickByTickDataTypes">
       <summary>
