@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="beed7d94-24ec-41ee-93e7-56c56c4af77d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para><legacyBold>Positions (options)</legacyBold> is a graphic display of the position by options.</para>
+<para>To display the position by options, you have to select the underlying asset and options based on the prices of which the position will be built.</para>
+<para>In addition, you can specify a filter for the exact expiration date of options and filters for minimum/maximum strikes.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Graph_options_positions_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="238f8d14-38ce-4f26-b032-b018b2fcd3e6" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

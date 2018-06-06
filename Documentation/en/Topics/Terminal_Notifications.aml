@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="7445482b-c1cd-4bbd-9c26-d05386e24940" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <introduction>
+
+<para>Notifications are a system for alerting a user about a pre-specified event that occurs.</para>
+<para>Notifications can be specified for a wide range of trading events for the 
+following objects: portfolio, position, Level 1, news. For example, exceeding the 
+weighted average position price of a certain value or the appearance of news with a specific title.</para>
+<para>Notifications can be of the following form:</para>
+<list class="bullet">
+  <listItem><para><legacyBold>Window</legacyBold> - a small pop-up window with a message will appear in the corner of the screen.</para></listItem>
+  <listItem><para><legacyBold>Music</legacyBold> - the music will be played.</para></listItem>
+  <listItem><para><legacyBold>SMS</legacyBold> - the message will be sent by SMS.</para></listItem>
+  <listItem><para><legacyBold>Email</legacyBold> - the message will be sent to the e-mail.</para></listItem>
+  <listItem><para><legacyBold>Voice</legacyBold> - the message will be spoken by the computer generated voice.</para></listItem>
+  <listItem><para><legacyBold>Log</legacyBold> - the message will be sent to the <link xlink:href="9952e304-7e1e-4957-b837-d0a656e9dbc6" />.</para></listItem>
+  <listItem><para><legacyBold>Disabled</legacyBold> - the notification will not be displayed.</para></listItem>
+</list>
+<para>To set a notification, you have to click the <mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline> 
+button in the notification panel (<link xlink:href="c2495e73-82ef-4276-8576-7f99a5ea71ee" />) 
+or click the <mediaLinkInline><image xlink:href="Designer_Alert_Bell"/></mediaLinkInline> button directly in the panels that support notifications.</para>
+
+<para>For information on how to configure notifications, see <link xlink:href="b027b553-9842-4c2d-9b49-d01bf1394bb2" /> section.</para>
+
+
+</introduction>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

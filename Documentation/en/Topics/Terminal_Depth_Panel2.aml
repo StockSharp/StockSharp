@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="92ccb73a-d49d-4d2a-aa31-1c8ba915be4b" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>The <legacyBold>Order book</legacyBold> component is a table of limit orders for the purchase and sale. 
+</para> 
+<para>
+When you click the settings <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline> button, 
+a panel appears in which you can set the necessary instrument and portfolio, as well as configure the order book display options.
+</para>
+<para>Orders can be registered either by clicking the <legacyBold>Buy/Sell</legacyBold> buttons or by clicking the cell of the <legacyBold>Bid/Offer</legacyBold> columns in the order book itself.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Panel_Market_Depth"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="1ea96e9e-7018-41b9-891f-f47617cce648" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

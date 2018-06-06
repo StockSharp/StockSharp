@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="48a67112-c623-4227-89ad-a5d39e36be76" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>The <legacyBold>Buy/Sell</legacyBold> component is a panel group that displays the best price 
+information for the selected instruments, as well as you can buy or sell the 
+required volume for the selected instruments.</para> 
+<para>To add a new instrument, click the <mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline> button. </para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Buy_Sell_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="92ccb73a-d49d-4d2a-aa31-1c8ba915be4b" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

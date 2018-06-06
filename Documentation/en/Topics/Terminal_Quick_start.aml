@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b7809562-d829-42d2-95c9-cbca8bf5549e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>When you start <link xlink:href="E4B5E112-BD08-4F40-8741-7514E7E4088E" /> for the first time, the following window will be displayed:</para>
+<mediaLink><image placement="center" xlink:href="Terminal_Quick_start_00"/></mediaLink>
+<para>You must select the start mode and click <legacyBold>OK</legacyBold>.</para>
+<para>After selecting the start mode, the terminal window opens with the default set of components.</para> 
+<para>Let's go to the connection settings and select the required connection. 
+How to setup the connection is described in the <link xlink:href="0f40a3ad-c627-4552-a581-7dc048f19739" /> section.</para>
+<mediaLink><image placement="center" xlink:href="Terminal_Quick_start_011"/></mediaLink>
+<para>The next step is to connect by clicking the <legacyBold>Connect</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_00"/></mediaLinkInline> button.</para>
+
+<para>Clicking the <legacyBold>Add</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline> 
+button on the chart panel we add a new chart area. Right clicking the mouse button 
+on the chart area, we add candles to it by the instrument of interest to us. 
+We can add indicators, own trades and orders to the chart. There is also a possibility 
+to register orders from the chart. For more information on how to work with the chart, 
+see the <link xlink:href="9ff6005e-3622-498e-929f-3d9d141d6a69" /> section.</para>
+<mediaLink><image placement="center" xlink:href="Terminal_Quick_start_01"/></mediaLink>
+
+<para>Clicking the <legacyBold>Add</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline> 
+button on the Instrument panel, we add the instruments we want to watch. Here, 
+the best price data will be displayed. For more information on how to work with the 
+Instrument panel, see the <link xlink:href="fd4646ce-924c-479e-ab63-53be64d954be" /> section.</para>
+<mediaLink><image placement="center" xlink:href="Terminal_Quick_start_02"/></mediaLink>
+
+
+<para>In the order book, after clicking the <legacyBold>Settings</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline> 
+button, a panel appears, in which we will indicate the <legacyBold>Instrument</legacyBold> and the <legacyBold>Portfolio</legacyBold> 
+by which the trades will take place. Also adjust the order book depth. For more 
+information on how to work with an order book, see the  <link xlink:href="92ccb73a-d49d-4d2a-aa31-1c8ba915be4b" /> section.</para>
+<mediaLink><image placement="center" xlink:href="Terminal_Quick_start_03"/></mediaLink>
+
+<para>Let’s register the first few orders. Orders can be registered either by 
+clicking the <legacyBold>Buy/Sell</legacyBold> buttons or by clicking the cell of the <legacyBold>Bid/Offer</legacyBold> columns 
+in the order book itself. The order panel will display all our orders. When you 
+right click with the mouse button on the order, you will see a panel with which 
+you can register submit a new order, cancel or change the selected order. For more 
+information on how to work with the order panel, see the <link xlink:href="f1ef5036-ad9c-4a19-b7c3-33876b98124b" /> section.</para>
+<mediaLink><image placement="center" xlink:href="Terminal_Quick_start_04"/></mediaLink>
+
+<para>In the Trades panel, you can view trades by instruments. For more information 
+on how to work with the Trades panel, see the  <link xlink:href="f8ff7018-ed36-4391-863f-8ab55296c0e0" /> section.</para>
+<mediaLink><image placement="center" xlink:href="Terminal_Quick_start_05"/></mediaLink>
+
+<para>If necessary, you can add additional components. All components are described in the 
+<link xlink:href="cbd63a4a-b653-4044-b4dd-7e7d42be1492" /> section.</para>
+<mediaLink><image placement="center" xlink:href="Terminal_Quick_start_06"/></mediaLink>
+
+   </introduction>
+    <relatedTopics>
+<link xlink:href="c74991fa-bad6-4196-98c0-8952e2a57b3e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>
