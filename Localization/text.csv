@@ -4844,6 +4844,7 @@ Alerts;Alerts;Уведомления
 AlertsSettings;Alerts settings.;Настройки уведомлений.
 PositionDesc;The position by the instrument.;Позиция по инструменту.
 Level1MarketData;Level1 market data.;Level1 маркет-данные.
+UseWebSockets;Use web sockets.;Использовать веб сокеты.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

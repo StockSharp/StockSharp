@@ -48116,5 +48116,15 @@ namespace StockSharp.Localization
 		/// Level1 market data.
 		/// </summary>
 		public static string Level1MarketData => GetString(Level1MarketDataKey);
+
+		/// <summary>
+		/// Use web sockets.
+		/// </summary>
+		public const string UseWebSocketsKey = nameof(UseWebSockets);
+
+		/// <summary>
+		/// Use web sockets.
+		/// </summary>
+		public static string UseWebSockets => GetString(UseWebSocketsKey);
 	}
 }

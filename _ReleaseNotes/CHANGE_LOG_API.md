@@ -91,6 +91,7 @@ StockSharp API Change log
 * (feature) SamplePlaza. OrdersLogWindow uses OrderLogGrid.
 * (feature) Connector. Own trades tracking moved to TransactionMessageAdapter.
 * (feature) Message. Method Clone made as abstract.
+* (feature) Bittrex. Web sockets supported.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
