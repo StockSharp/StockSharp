@@ -92,6 +92,7 @@ StockSharp API Change log
 * (feature) Connector. Own trades tracking moved to TransactionMessageAdapter.
 * (feature) Message. Method Clone made as abstract.
 * (feature) Bittrex. Web sockets supported.
+* (bug) Charting. Fix drawing trades with string id.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
