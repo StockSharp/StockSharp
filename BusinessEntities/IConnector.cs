@@ -595,7 +595,10 @@ namespace StockSharp.BusinessEntities
 		/// To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="IConnector.NewTrades"/>.
 		/// </summary>
 		/// <param name="security">The instrument by which trades getting should be started.</param>
-		void RegisterTrades(Security security);
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Trades count.</param>
+		void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null);
 
 		/// <summary>
 		/// To stop getting trades (tick data) by the instrument.
