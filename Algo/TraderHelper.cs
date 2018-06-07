@@ -2636,6 +2636,12 @@ namespace StockSharp.Algo
 						case Level1Fields.Turnover:
 							security.Turnover = (decimal)value;
 							break;
+						case Level1Fields.BuyBackPrice:
+							security.BuyBackPrice = (decimal)value;
+							break;
+						case Level1Fields.BuyBackDate:
+							security.BuyBackDate = (DateTimeOffset)value;
+							break;
 						//default:
 						//	throw new ArgumentOutOfRangeException();
 					}

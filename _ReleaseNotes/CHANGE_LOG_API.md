@@ -94,6 +94,8 @@ StockSharp API Change log
 * (feature) Bittrex. Web sockets supported.
 * (bug) Charting. Fix drawing trades with string id.
 * (feature) OrderGrid, ExecutionGrid, TradeGrid, MyTradeGrid. Sides coloring.
+* (feature) SecurityGrid. BuyBackDate, BuyBackPrice columns.
+* (bug) ConnectorWindow. Fix stub connectors check.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
