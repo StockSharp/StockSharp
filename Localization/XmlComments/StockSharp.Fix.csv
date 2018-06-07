@@ -256,6 +256,8 @@ M:StockSharp.Fix.FixUserRequestMessage.#ctor/summary;DocStr93
 P:StockSharp.Fix.FixUserRequestMessage.RequestType/summary;DocStr9871
 P:StockSharp.Fix.FixUserRequestMessage.UserName/summary;DocStr3319
 P:StockSharp.Fix.FixUserRequestMessage.OldPassword/summary;DocStr9872
+M:StockSharp.Fix.FixUserRequestMessage.Clone/summary;DocStr643
+M:StockSharp.Fix.FixUserRequestMessage.Clone/returns;DocStr1116
 T:StockSharp.Fix.FixUserResponseTypes/summary;DocStr9873
 F:StockSharp.Fix.FixUserResponseTypes.PasswordChanged/summary;DocStr9874
 F:StockSharp.Fix.FixUserResponseTypes.UserFound/summary;DocStr9875
@@ -270,12 +272,18 @@ M:StockSharp.Fix.FixUserResponseMessage.#ctor/summary;DocStr93
 P:StockSharp.Fix.FixUserResponseMessage.UserName/summary;DocStr3319
 P:StockSharp.Fix.FixUserResponseMessage.ResponseType/summary;DocStr9881
 P:StockSharp.Fix.FixUserResponseMessage.OriginalTransactionId/summary;DocStr4056
+M:StockSharp.Fix.FixUserResponseMessage.Clone/summary;DocStr643
+M:StockSharp.Fix.FixUserResponseMessage.Clone/returns;DocStr1116
 T:StockSharp.Fix.FixUserForceLogoffMessage/summary;DocStr9882
 M:StockSharp.Fix.FixUserForceLogoffMessage.#ctor/summary;DocStr93
 P:StockSharp.Fix.FixUserForceLogoffMessage.OriginalTransactionId/summary;DocStr4056
+M:StockSharp.Fix.FixUserForceLogoffMessage.Clone/summary;DocStr643
+M:StockSharp.Fix.FixUserForceLogoffMessage.Clone/returns;DocStr1116
 T:StockSharp.Fix.FixSecurityMessage/summary;DocStr4378
 P:StockSharp.Fix.FixSecurityMessage.Formula/summary;DocStr1117
 P:StockSharp.Fix.FixSecurityMessage.Legs/summary;Legs
+M:StockSharp.Fix.FixSecurityMessage.Clone/summary;DocStr643
+M:StockSharp.Fix.FixSecurityMessage.Clone/returns;DocStr1116
 T:StockSharp.Fix.FixServer/summary;DocStr3152
 E:StockSharp.Fix.FixServer.NewOutMessage/summary;DocStr2237
 M:StockSharp.Fix.FixServer.RaiseNewOutMessage(StockSharp.Fix.FixSession,StockSharp.Messages.Message)/summary;DocStr466

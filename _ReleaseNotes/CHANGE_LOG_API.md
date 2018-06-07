@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.10:
 * (feature) Connector. ICandleManager implemented.
 * (feature) ICandleSourceList removed.
 * (bug) BasketMessageAdapter. Fix news ubsubscribe requests.
