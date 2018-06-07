@@ -168,7 +168,7 @@
 				{
 					var updated = depthBuilder.Update(execMsg);
 
-					this.AddVerboseLog("OL->MD processing {0}={1}.", execMsg.SecurityId, updated);
+					this.AddDebugLog("OL->MD processing {0}={1}.", execMsg.SecurityId, updated);
 
 					if (updated)
 					{
@@ -183,11 +183,11 @@
 				}
 			}
 			else
-				this.AddVerboseLog("OL->MD processing {0} not found.", execMsg.SecurityId);
+				this.AddDebugLog("OL->MD processing {0} not found.", execMsg.SecurityId);
 
 			if (_tickBuilders.Contains(secId))
 			{
-				this.AddVerboseLog("OL->TICK processing {0}.", secId);
+				this.AddDebugLog("OL->TICK processing {0}.", secId);
 				base.OnInnerAdapterNewOutMessage(execMsg.ToTick());
 			}
 		}

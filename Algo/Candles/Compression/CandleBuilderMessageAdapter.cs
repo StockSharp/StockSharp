@@ -7,6 +7,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -166,6 +167,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 						if (timeFrames.Contains(originalTf) || InnerAdapter.CheckTimeFrameByRequest)
 						{
+							this.AddInfoLog("Origin tf: {0}", originalTf);
+
 							var original = (MarketDataMessage)mdMsg.Clone();
 							_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, original)
 							{
@@ -185,6 +188,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 							if (smaller != null)
 							{
+								this.AddInfoLog("Smaller tf: {0}->{1}", originalTf, smaller);
+
 								var original = (MarketDataMessage)mdMsg.Clone();
 
 								var current = (MarketDataMessage)original.Clone();
@@ -292,6 +297,8 @@ namespace StockSharp.Algo.Candles.Compression
 			};
 
 			original.CopyTo(current, false);
+
+			this.AddInfoLog("Build tf: {0}->{1}", buildFrom, original.Arg);
 
 			var series = new SeriesInfo((MarketDataMessage)original.Clone(), current)
 			{
