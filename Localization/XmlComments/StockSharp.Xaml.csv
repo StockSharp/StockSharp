@@ -1056,11 +1056,11 @@ M:StockSharp.Xaml.GuiConnector`1.GetMarketDepth(StockSharp.BusinessEntities.Secu
 M:StockSharp.Xaml.GuiConnector`1.GetFilteredMarketDepth(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.SubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)/inheritdoc;DocStr8459
-M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterMarketDepth(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.RegisterFilteredMarketDepth(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterFilteredMarketDepth(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
-M:StockSharp.Xaml.GuiConnector`1.RegisterTrades(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes})/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterTrades(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterPortfolio(StockSharp.BusinessEntities.Portfolio)/inheritdoc;DocStr8459
@@ -1069,9 +1069,9 @@ M:StockSharp.Xaml.GuiConnector`1.UnRegisterNews/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.SendOutMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.RequestNewsStory(StockSharp.BusinessEntities.News)/inheritdoc;DocStr8459
-M:StockSharp.Xaml.GuiConnector`1.RegisterOrderLog(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.RegisterOrderLog(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterOrderLog(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
-M:StockSharp.Xaml.GuiConnector`1.RegisterSecurity(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes})/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterSecurity(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.RegisterOrder(StockSharp.BusinessEntities.Order)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)/inheritdoc;DocStr8459
