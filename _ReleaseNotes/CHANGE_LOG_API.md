@@ -1,10 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
-* (feature) IConnector. Method RegisterXXX accepts From and To range, build from option.
-* (feature) ExecutionGrid. OriginSide coloring.
-
-## v4.4.10:
+## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
 * (feature) ICandleSourceList removed.
 * (bug) BasketMessageAdapter. Fix news ubsubscribe requests.
@@ -100,6 +96,8 @@ StockSharp API Change log
 * (feature) OrderGrid, ExecutionGrid, TradeGrid, MyTradeGrid. Sides coloring.
 * (feature) SecurityGrid. BuyBackDate, BuyBackPrice columns.
 * (bug) ConnectorWindow. Fix stub connectors check.
+* (feature) IConnector. Method RegisterXXX accepts From and To range, build from option.
+* (feature) ExecutionGrid. OriginSide coloring.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
