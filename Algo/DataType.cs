@@ -212,6 +212,15 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Determines whether the specified message type is derived from <see cref="CandleMessage"/>.
+		/// </summary>
+		/// <returns><see langword="true"/> if the specified message type is derived from <see cref="CandleMessage"/>, otherwise, <see langword="false"/>.</returns>
+		public bool IsCandles()
+		{
+			return MessageType?.IsCandleMessage() == true;
+		}
+
+		/// <summary>
 		/// Load settings.
 		/// </summary>
 		/// <param name="storage">Settings storage.</param>
