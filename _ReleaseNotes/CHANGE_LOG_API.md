@@ -1,7 +1,8 @@
 StockSharp API Change log
 ========================
 ## current:
-* (feature) IConnector. Method RegisterTrades accepts From and To range.
+* (feature) IConnector. Method RegisterXXX accepts From and To range, build from option.
+* (feature) ExecutionGrid. OriginSide coloring.
 
 ## v4.4.10:
 * (feature) Connector. ICandleManager implemented.
