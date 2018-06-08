@@ -212,7 +212,7 @@ namespace StockSharp.Algo
 			_subscriptionManager.ProcessRequest(security, message, false);
 		}
 
-		private void SubscribeMarketData(Security security, MarketDataTypes type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null)
+		private void SubscribeMarketData(Security security, MarketDataTypes type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null)
 		{
 			SubscribeMarketData(security, new MarketDataMessage
 			{
@@ -221,6 +221,9 @@ namespace StockSharp.Algo
 				From = from,
 				To = to,
 				Count = count,
+				BuildFrom = buildFrom,
+				BuildField = buildField,
+				MaxDepth = maxDepth,
 			});
 		}
 
@@ -234,9 +237,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterSecurity(Security security)
+		public void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.Level1);
+			SubscribeMarketData(security, MarketDataTypes.Level1, from, to, count, buildFrom);
 		}
 
 		/// <inheritdoc />
@@ -246,9 +249,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterMarketDepth(Security security)
+		public void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null, int? maxDepth = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.MarketDepth);
+			SubscribeMarketData(security, MarketDataTypes.MarketDepth, from, to, count, buildFrom, null, maxDepth);
 		}
 
 		/// <inheritdoc />
@@ -284,9 +287,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null)
+		public void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.Trades, from, to, count);
+			SubscribeMarketData(security, MarketDataTypes.Trades, from, to, count, buildFrom);
 		}
 
 		/// <inheritdoc />
@@ -339,9 +342,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterOrderLog(Security security)
+		public void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.OrderLog);
+			SubscribeMarketData(security, MarketDataTypes.OrderLog, from, to, count);
 		}
 
 		/// <inheritdoc />
