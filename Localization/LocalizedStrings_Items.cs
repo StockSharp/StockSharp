@@ -20868,12 +20868,12 @@ namespace StockSharp.Localization
 		public static string Str2207Params => GetString(Str2207ParamsKey);
 
 		/// <summary>
-		/// For {0} {1} {2} ({3} were loaded).
+		/// For {0} {1} {2} were loaded.
 		/// </summary>
 		public const string Str2208ParamsKey = nameof(Str2208Params);
 
 		/// <summary>
-		/// For {0} {1} {2} ({3} were loaded).
+		/// For {0} {1} {2} were loaded.
 		/// </summary>
 		public static string Str2208Params => GetString(Str2208ParamsKey);
 
@@ -48126,5 +48126,15 @@ namespace StockSharp.Localization
 		/// Use web sockets.
 		/// </summary>
 		public static string UseWebSockets => GetString(UseWebSocketsKey);
+
+		/// <summary>
+		/// View downloaded
+		/// </summary>
+		public const string ViewDownloadedKey = nameof(ViewDownloaded);
+
+		/// <summary>
+		/// View downloaded
+		/// </summary>
+		public static string ViewDownloaded => GetString(ViewDownloadedKey);
 	}
 }

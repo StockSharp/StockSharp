@@ -2087,7 +2087,7 @@ Str2205;Low price is not a multiple of security price step. Price step is '{0}',
 Str2206;Close price in not a multiple of security price step. Price step is '{0}', C is '{1}'.;Цена закрытия не кратна шагу цены инструмента. Шаг цены '{0}', C '{1}'.
 CandleVolumeNotMultiple;Candle volume is not a multiple of security volume step. Volume step is '{0}', candle is '{1}'.;Объем свечи не кратен шагу объема инструмента. Шаг объема '{0}', свеча '{1}'.
 Str2207Params;Loaded {0} {1}.;Загружено {0} {1}.
-Str2208Params;For {0} {1} {2} ({3}) were loaded.;Для {0} загружено {1} {2} ({3}).
+Str2208Params;For {0} {1} {2} were loaded.;Для {0} загружено {1} {2}.
 Str2209;New connection...;Новое подключение...
 Str2210;Select path...;Выберите путь...
 Str2211;S#.Data settings;Настройки S#.Data
@@ -4845,6 +4845,7 @@ AlertsSettings;Alerts settings.;Настройки уведомлений.
 PositionDesc;The position by the instrument.;Позиция по инструменту.
 Level1MarketData;Level1 market data.;Level1 маркет-данные.
 UseWebSockets;Use web sockets.;Использовать веб сокеты.
+ViewDownloaded;View downloaded;Посмотреть скаченное
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -9188,7 +9189,7 @@ DocStr4475;The message is market-data subscription;Является ли соо�
 DocStr4476;The message is not supported by adapter. To be setted if the answer;Поддерживает ли торговая система запрашиваемый тип данных. Заполняется в случае ответа
 DocStr4477;Subscribe or unsubscribe error info. Заполняется в случае ответа;Информация об ошибке. Сигнализирует об ошибке подписки или отписки. Заполняется в случае ответа
 DocStr4478;Market-data count;Количество маркет-данных
-DocStr4479;Max depth or requested order book. Uses in case {0} = {1};Максимальная глубина стакана. Используется в случае {0} равное {1}
+DocStr4479;Max depth of requested order book. Uses in case {0} = {1};Максимальная глубина запрощенного стакана. Используется в случае {0} равное {1}
 DocStr4480;News id. Uses in case of request news text;Идентификатор новости. Используется, если идет запрос получения текста новости
 DocStr4481;REPO info;Информация, необходимая для создания РЕПО-заявки
 DocStr4482;Partner-organization;Код организации – партнера по внебиржевой сделке
@@ -14998,3 +14999,5 @@ DocStr10535;The messages adapter build orer book and tick data from order log fl
 DocStr10536;To tick trade from the order log;Преобразовать в тиковую сделку из строки лога заявок
 DocStr10537;Default implementation of {0};Реализация интерфейса {0} по-умолчанию
 DocStr10538;Build modes;Режимы построения
+DocStr10539;Max count;Максимальное количество
+DocStr10540;Max depth of requested order book;Максимальная глубина запрощенного стакана
