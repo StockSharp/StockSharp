@@ -1,5 +1,16 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.11:
+* (feature) Support dates range for ticks, order book and order log subscriptions.
+* (feature) Yahoo. Intraday interval supported.
+* (bug) Yahoo. Fix downloading history for futures.
+* (bug) Bithumb. Ticks subscription fix.
+* (bug) Image publish cancellation processing fix.
+* (feature) QuikLua. Handle From To date range for market data requests. https://stocksharp.ru/forum/9460/korrektnoe-otobrazhenie-svechei/
+* (feature) Bittrex. Web sockets supported.
+* (feature) Orders, Executions, Trades, MyTrades. Sides coloring.
+* (feature) Securities. BuyBackDate, BuyBackPrice columns.
+
 ## v4.4.10:
 * (feature) Themes. Icons auto coloring.
 * (feature) CandleSeries.IsRegularTradingHours.
