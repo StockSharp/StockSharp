@@ -1,6 +1,7 @@
 T:StockSharp.Exmo.ExmoMessageAdapter/summary;DocStr2538
 P:StockSharp.Exmo.ExmoMessageAdapter.Key/summary;Str3304
 P:StockSharp.Exmo.ExmoMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Exmo.ExmoMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Exmo.ExmoMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Exmo.ExmoMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Exmo.ExmoMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -18,3 +19,4 @@ T:StockSharp.Exmo.ExmoTrader/summary;DocStr2539
 M:StockSharp.Exmo.ExmoTrader.#ctor/summary;DocStr1
 P:StockSharp.Exmo.ExmoTrader.Key/summary;Str3304
 P:StockSharp.Exmo.ExmoTrader.Secret/summary;DocStr3146
+P:StockSharp.Exmo.ExmoTrader.BalanceCheckInterval/summary;BalanceCheckInterval

@@ -29,6 +29,11 @@
             Client ID.
             </summary>
         </member>
+        <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
         <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.
@@ -113,6 +118,11 @@
         <member name="P:StockSharp.BitStamp.BitStampTrader.ClientId">
             <summary>
             Client ID.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitStamp.BitStampTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
     </members>

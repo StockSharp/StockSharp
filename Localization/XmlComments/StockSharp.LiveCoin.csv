@@ -1,6 +1,7 @@
 T:StockSharp.LiveCoin.LiveCoinMessageAdapter/summary;DocStr2538
 P:StockSharp.LiveCoin.LiveCoinMessageAdapter.Key/summary;Str3304
 P:StockSharp.LiveCoin.LiveCoinMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.LiveCoin.LiveCoinMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.LiveCoin.LiveCoinMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.LiveCoin.LiveCoinMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.LiveCoin.LiveCoinMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -18,3 +19,4 @@ T:StockSharp.LiveCoin.LiveCoinTrader/summary;DocStr2539
 M:StockSharp.LiveCoin.LiveCoinTrader.#ctor/summary;DocStr1
 P:StockSharp.LiveCoin.LiveCoinTrader.Key/summary;Str3304
 P:StockSharp.LiveCoin.LiveCoinTrader.Secret/summary;DocStr3146
+P:StockSharp.LiveCoin.LiveCoinTrader.BalanceCheckInterval/summary;BalanceCheckInterval

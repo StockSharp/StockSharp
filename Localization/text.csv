@@ -4846,6 +4846,7 @@ PositionDesc;The position by the instrument.;Позиция по инструм�
 Level1MarketData;Level1 market data.;Level1 маркет-данные.
 UseWebSockets;Use web sockets.;Использовать веб сокеты.
 ViewDownloaded;View downloaded;Посмотреть скаченное
+BalanceCheckInterval;Balance check interval. Required in case of deposit and withdraw actions.;Интервал проверки баланса. Требуется в случае наличия действий по вводы или выводы.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

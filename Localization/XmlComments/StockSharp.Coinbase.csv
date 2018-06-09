@@ -1,6 +1,7 @@
 T:StockSharp.Coinbase.CoinbaseMessageAdapter/summary;DocStr2538
 P:StockSharp.Coinbase.CoinbaseMessageAdapter.Key/summary;Str3304
 P:StockSharp.Coinbase.CoinbaseMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Coinbase.CoinbaseMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Coinbase.CoinbaseMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Coinbase.CoinbaseMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Coinbase.CoinbaseMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -18,3 +19,4 @@ T:StockSharp.Coinbase.CoinbaseTrader/summary;DocStr2539
 M:StockSharp.Coinbase.CoinbaseTrader.#ctor/summary;DocStr1
 P:StockSharp.Coinbase.CoinbaseTrader.Key/summary;Str3304
 P:StockSharp.Coinbase.CoinbaseTrader.Secret/summary;DocStr3146
+P:StockSharp.Coinbase.CoinbaseTrader.BalanceCheckInterval/summary;BalanceCheckInterval

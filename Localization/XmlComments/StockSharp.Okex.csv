@@ -3,6 +3,7 @@ P:StockSharp.Okex.OkexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Okex.OkexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Okex.OkexMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.Okex.OkexMessageAdapter.AdminPassword/summary;AdminPassword
+P:StockSharp.Okex.OkexMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Okex.OkexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -20,3 +21,4 @@ T:StockSharp.Okex.OkexTrader/summary;DocStr2539
 M:StockSharp.Okex.OkexTrader.#ctor/summary;DocStr1
 P:StockSharp.Okex.OkexTrader.Key/summary;Str3304
 P:StockSharp.Okex.OkexTrader.Secret/summary;DocStr3146
+P:StockSharp.Okex.OkexTrader.BalanceCheckInterval/summary;BalanceCheckInterval

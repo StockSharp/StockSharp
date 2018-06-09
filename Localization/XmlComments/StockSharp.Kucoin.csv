@@ -2,6 +2,7 @@ T:StockSharp.Kucoin.KucoinMessageAdapter/summary;DocStr2538
 P:StockSharp.Kucoin.KucoinMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Kucoin.KucoinMessageAdapter.Key/summary;Str3304
 P:StockSharp.Kucoin.KucoinMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Kucoin.KucoinMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Kucoin.KucoinMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Kucoin.KucoinMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Kucoin.KucoinMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -19,3 +20,4 @@ T:StockSharp.Kucoin.KucoinTrader/summary;DocStr2539
 M:StockSharp.Kucoin.KucoinTrader.#ctor/summary;DocStr1
 P:StockSharp.Kucoin.KucoinTrader.Key/summary;Str3304
 P:StockSharp.Kucoin.KucoinTrader.Secret/summary;DocStr3146
+P:StockSharp.Kucoin.KucoinTrader.BalanceCheckInterval/summary;BalanceCheckInterval

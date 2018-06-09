@@ -29,6 +29,11 @@
             Use web sockets.
             </summary>
         </member>
+        <member name="P:StockSharp.Bittrex.BittrexMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
         <member name="M:StockSharp.Bittrex.BittrexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.
@@ -79,6 +84,11 @@
         <member name="P:StockSharp.Bittrex.BittrexTrader.UseWebSockets">
             <summary>
             Use web sockets.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bittrex.BittrexTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
     </members>

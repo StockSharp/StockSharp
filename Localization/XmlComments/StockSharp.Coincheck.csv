@@ -1,6 +1,7 @@
 T:StockSharp.Coincheck.CoincheckMessageAdapter/summary;DocStr2538
 P:StockSharp.Coincheck.CoincheckMessageAdapter.Key/summary;Str3304
 P:StockSharp.Coincheck.CoincheckMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Coincheck.CoincheckMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Coincheck.CoincheckMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Coincheck.CoincheckMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Coincheck.CoincheckMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -18,3 +19,4 @@ T:StockSharp.Coincheck.CoincheckTrader/summary;DocStr2539
 M:StockSharp.Coincheck.CoincheckTrader.#ctor/summary;DocStr1
 P:StockSharp.Coincheck.CoincheckTrader.Key/summary;Str3304
 P:StockSharp.Coincheck.CoincheckTrader.Secret/summary;DocStr3146
+P:StockSharp.Coincheck.CoincheckTrader.BalanceCheckInterval/summary;BalanceCheckInterval

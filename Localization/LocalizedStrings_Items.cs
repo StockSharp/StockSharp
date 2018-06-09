@@ -48136,5 +48136,15 @@ namespace StockSharp.Localization
 		/// View downloaded
 		/// </summary>
 		public static string ViewDownloaded => GetString(ViewDownloadedKey);
+
+		/// <summary>
+		/// Balance check interval. Required in case of deposit and withdraw actions.
+		/// </summary>
+		public const string BalanceCheckIntervalKey = nameof(BalanceCheckInterval);
+
+		/// <summary>
+		/// Balance check interval. Required in case of deposit and withdraw actions.
+		/// </summary>
+		public static string BalanceCheckInterval => GetString(BalanceCheckIntervalKey);
 	}
 }

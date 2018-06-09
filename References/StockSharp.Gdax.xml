@@ -29,6 +29,11 @@
             Passphrase.
             </summary>
         </member>
+        <member name="P:StockSharp.Gdax.GdaxMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
         <member name="M:StockSharp.Gdax.GdaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.
@@ -104,6 +109,11 @@
         <member name="P:StockSharp.Gdax.GdaxTrader.Passphrase">
             <summary>
             Passphrase.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Gdax.GdaxTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
     </members>
