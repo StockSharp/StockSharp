@@ -100,7 +100,6 @@ StockSharp API Change log
 * (feature) Connector. CreateDepthFromOrdersLog, CreateTradesFromOrdersLog market as obsolete.
 * (feature) SampleFix. OrdersLogWindow added.
 * (feature) SamplePlaza. OrdersLogWindow uses OrderLogGrid.
-* (feature) Connector. Own trades tracking moved to TransactionMessageAdapter.
 * (feature) Message. Method Clone made as abstract.
 * (feature) Bittrex. Web sockets supported.
 * (bug) Charting. Fix drawing trades with string id.
