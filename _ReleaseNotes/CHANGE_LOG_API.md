@@ -3,6 +3,7 @@ StockSharp API Change log
 ## current:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
 * (feature) SubscriptionMessageAdapter. SupportLookupMessages options to support duplicated subscriptions as unique.
+* (feature) Huobi. Support HADAX.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.

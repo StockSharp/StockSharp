@@ -3,6 +3,7 @@ P:StockSharp.Huobi.HuobiMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Huobi.HuobiMessageAdapter.Key/summary;Str3304
 P:StockSharp.Huobi.HuobiMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.Huobi.HuobiMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
+P:StockSharp.Huobi.HuobiMessageAdapter.UseHadax/summary;UseHadax
 M:StockSharp.Huobi.HuobiMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Huobi.HuobiMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Huobi.HuobiMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -21,3 +22,4 @@ M:StockSharp.Huobi.HuobiTrader.#ctor/summary;DocStr1
 P:StockSharp.Huobi.HuobiTrader.Key/summary;Str3304
 P:StockSharp.Huobi.HuobiTrader.Secret/summary;DocStr3146
 P:StockSharp.Huobi.HuobiTrader.BalanceCheckInterval/summary;BalanceCheckInterval
+P:StockSharp.Huobi.HuobiTrader.UseHadax/summary;UseHadax

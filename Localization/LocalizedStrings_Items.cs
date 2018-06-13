@@ -48146,5 +48146,25 @@ namespace StockSharp.Localization
 		/// Balance check interval. Required in case of deposit and withdraw actions.
 		/// </summary>
 		public static string BalanceCheckInterval => GetString(BalanceCheckIntervalKey);
+
+		/// <summary>
+		/// HADAX
+		/// </summary>
+		public const string HadaxKey = nameof(Hadax);
+
+		/// <summary>
+		/// HADAX
+		/// </summary>
+		public static string Hadax => GetString(HadaxKey);
+
+		/// <summary>
+		/// Use HADAX.
+		/// </summary>
+		public const string UseHadaxKey = nameof(UseHadax);
+
+		/// <summary>
+		/// Use HADAX.
+		/// </summary>
+		public static string UseHadax => GetString(UseHadaxKey);
 	}
 }
