@@ -6616,6 +6616,21 @@
             Should the sequence counter be resetted.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.DateFormat">
+      <summary>
+            Date format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeStampFormat">
+      <summary>
+            Timestamp format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFormat">
+      <summary>
+            Time format.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.ReadTimeout">
       <summary>
             The timeout of reading data. The default value is <see cref="F:System.TimeSpan.Zero" />.
