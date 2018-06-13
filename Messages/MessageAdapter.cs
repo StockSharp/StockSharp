@@ -34,7 +34,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The base adapter converts messages <see cref="Message"/> to the command of the trading system and back.
 	/// </summary>
-	public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter
+	public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotifyPropertyChanged
 	{
 		private class CodeTimeOut
 			//where T : class
@@ -627,6 +627,23 @@ namespace StockSharp.Messages
 		object ICloneable.Clone()
 		{
 			return Clone();
+		}
+
+		private PropertyChangedEventHandler _propertyChanged;
+
+		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+		{
+			add => _propertyChanged += value;
+			remove => _propertyChanged -= value;
+		}
+
+		/// <summary>
+		/// Raise <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
+		/// </summary>
+		/// <param name="propertyName">The name of the property that changed.</param>
+		protected virtual void OnPropertyChanged(string propertyName)
+		{
+			_propertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 

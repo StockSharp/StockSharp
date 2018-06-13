@@ -7,6 +7,7 @@ StockSharp API Change log
 * (feature) CurrencyTypes.ZAC
 * (feature) FIX connector. Time format parsing settings as public.
 * (bug) Charting. Fix duplicate candle series save/load.
+* (feature) MessageAdapter. INotifyPropertyChanged implemented.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.

@@ -886,6 +886,8 @@ M:StockSharp.Messages.MessageAdapter.Save(Ecng.Serialization.SettingsStorage)/su
 M:StockSharp.Messages.MessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Messages.MessageAdapter.Clone/summary;DocStr643
 M:StockSharp.Messages.MessageAdapter.Clone/returns;DocStr1116
+M:StockSharp.Messages.MessageAdapter.OnPropertyChanged(System.String)/summary;DocStr9006
+M:StockSharp.Messages.MessageAdapter.OnPropertyChanged(System.String)/param/propertyName;DocStr10545
 T:StockSharp.Messages.PassThroughMessageAdapter/summary;DocStr4346
 M:StockSharp.Messages.PassThroughMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Messages.PassThroughMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311

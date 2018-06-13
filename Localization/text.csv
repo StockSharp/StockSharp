@@ -15008,3 +15008,4 @@ DocStr10541;Support multiple subscriptions with duplicate parameters;Подде�
 DocStr10542;Timestamp format;Формат метки времени
 DocStr10543;South Africa, Rand. The Rand is subdivided into 100 cents;South Africa, Rand. The Rand is subdivided into 100 cents
 DocStr10544;Request history market data only;Запросить только исторические маркет-данные
+DocStr10545;The name of the property that changed;Имя свойства, которое было изменено
