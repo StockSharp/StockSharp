@@ -5776,6 +5776,7 @@ T:StockSharp.Algo.SubscriptionMessageAdapter/summary;DocStr9212
 M:StockSharp.Algo.SubscriptionMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
 M:StockSharp.Algo.SubscriptionMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr9208
 P:StockSharp.Algo.SubscriptionMessageAdapter.IsRestoreOnReconnect/summary;DocStr9349
+P:StockSharp.Algo.SubscriptionMessageAdapter.SupportMultipleSubscriptions/summary;DocStr10541
 M:StockSharp.Algo.SubscriptionMessageAdapter.SendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Algo.SubscriptionMessageAdapter.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Algo.SubscriptionMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/summary;DocStr8488
