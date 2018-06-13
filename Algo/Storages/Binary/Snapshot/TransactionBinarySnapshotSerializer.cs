@@ -16,7 +16,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	/// <summary>
 	/// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="ExecutionMessage"/>.
 	/// </summary>
-	public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<long, ExecutionMessage>
+	public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, ExecutionMessage>
 	{
 		//private const int _snapshotSize = 1024 * 10; // 10kb
 
@@ -129,13 +129,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public bool? BoolValue;
 		}
 
-		Version ISnapshotSerializer<long, ExecutionMessage>.Version { get; } = new Version(2, 0);
+		Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = new Version(2, 0);
 
 		//int ISnapshotSerializer<long, ExecutionMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
-		string ISnapshotSerializer<long, ExecutionMessage>.Name => "Transactions";
+		string ISnapshotSerializer<string, ExecutionMessage>.Name => "Transactions";
 
-		byte[] ISnapshotSerializer<long, ExecutionMessage>.Serialize(Version version, ExecutionMessage message)
+		byte[] ISnapshotSerializer<string, ExecutionMessage>.Serialize(Version version, ExecutionMessage message)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -290,7 +290,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			return buffer;
 		}
 
-		ExecutionMessage ISnapshotSerializer<long, ExecutionMessage>.Deserialize(Version version, byte[] buffer)
+		ExecutionMessage ISnapshotSerializer<string, ExecutionMessage>.Deserialize(Version version, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -400,27 +400,37 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		long ISnapshotSerializer<long, ExecutionMessage>.GetKey(ExecutionMessage message)
+		string ISnapshotSerializer<string, ExecutionMessage>.GetKey(ExecutionMessage message)
 		{
-			return message.TransactionId == 0 ? message.OriginalTransactionId : message.TransactionId;
+			if (message.TransactionId == 0)
+				throw new InvalidOperationException("TransId == 0");
+
+			var key = message.TransactionId.To<string>();
+
+			if (message.TradeId != null)
+				key += "-" + message.TradeId;
+			else if (!message.TradeStringId.IsEmpty())
+				key += "-" + message.TradeStringId;
+
+			return key.ToLowerInvariant();
 		}
 
-		ExecutionMessage ISnapshotSerializer<long, ExecutionMessage>.CreateCopy(ExecutionMessage message)
+		ExecutionMessage ISnapshotSerializer<string, ExecutionMessage>.CreateCopy(ExecutionMessage message)
 		{
 			if (message.SecurityId.IsDefault())
 				throw new ArgumentException(message.ToString());
 
 			var copy = (ExecutionMessage)message.Clone();
 
-			if (copy.TransactionId == 0)
-				copy.TransactionId = message.OriginalTransactionId;
+			//if (copy.TransactionId == 0)
+			//	copy.TransactionId = message.OriginalTransactionId;
 
-			copy.OriginalTransactionId = 0;
+			//copy.OriginalTransactionId = 0;
 
 			return copy;
 		}
 
-		void ISnapshotSerializer<long, ExecutionMessage>.Update(ExecutionMessage message, ExecutionMessage changes)
+		void ISnapshotSerializer<string, ExecutionMessage>.Update(ExecutionMessage message, ExecutionMessage changes)
 		{
 			if (!changes.BrokerCode.IsEmpty())
 				message.BrokerCode = changes.BrokerCode;
@@ -549,6 +559,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			message.ServerTime = changes.ServerTime;
 		}
 
-		DataType ISnapshotSerializer<long, ExecutionMessage>.DataType => DataType.Transactions;
+		DataType ISnapshotSerializer<string, ExecutionMessage>.DataType => DataType.Transactions;
 	}
 }

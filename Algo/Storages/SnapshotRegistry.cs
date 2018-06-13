@@ -316,6 +316,9 @@ namespace StockSharp.Algo.Storages
 				var curr = (TMessage)message;
 
 				var date = curr.GetServerTime().UtcDateTime.Date;
+
+				if (date.IsDefault())
+					throw new ArgumentException(message.ToString());
 				
 				GetStorageDate(date).Update(curr);
 
@@ -550,7 +553,7 @@ namespace StockSharp.Algo.Storages
 					switch ((ExecutionTypes)arg)
 					{
 						case ExecutionTypes.Transaction:
-							storage = new SnapshotStorage<long, ExecutionMessage>(_path, new TransactionBinarySnapshotSerializer());
+							storage = new SnapshotStorage<string, ExecutionMessage>(_path, new TransactionBinarySnapshotSerializer());
 							break;
 						default:
 							throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.Str1219);
