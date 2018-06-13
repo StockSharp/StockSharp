@@ -397,6 +397,7 @@ F:StockSharp.Messages.CurrencyTypes.AID/summary;DocStr10322
 F:StockSharp.Messages.CurrencyTypes.SNG/summary;DocStr10323
 F:StockSharp.Messages.CurrencyTypes.REP/summary;DocStr10324
 F:StockSharp.Messages.CurrencyTypes.ELF/summary;DocStr10325
+F:StockSharp.Messages.CurrencyTypes.ZAC/summary;DocStr10543
 T:StockSharp.Messages.DisconnectMessage/summary;DocStr4281
 M:StockSharp.Messages.DisconnectMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.DisconnectMessage.Clone/summary;DocStr643
@@ -1314,7 +1315,7 @@ P:StockSharp.Messages.MarketDataMessage.BuildFrom/summary;BuildFrom
 P:StockSharp.Messages.MarketDataMessage.BuildField/summary;DocStr10135
 P:StockSharp.Messages.MarketDataMessage.AllowBuildFromSmallerTimeFrame/summary;SmallerTimeFrameDesc
 P:StockSharp.Messages.MarketDataMessage.AllowBuildFromSmallerTimeFrame/remarks;DocStr10386
-P:StockSharp.Messages.MarketDataMessage.IsHistory/summary;DocStr9664
+P:StockSharp.Messages.MarketDataMessage.IsHistory/summary;DocStr10544
 P:StockSharp.Messages.MarketDataMessage.IsRegularTradingHours/summary;RegularTradingHours
 F:StockSharp.Messages.MarketDataMessage.DefaultMaxDepth/summary;DocStr4474
 M:StockSharp.Messages.MarketDataMessage.#ctor/summary;DocStr1
