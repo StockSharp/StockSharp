@@ -514,15 +514,15 @@ namespace StockSharp.Algo.Storages
 
 			if (msg.IsSubscribe)
 			{
+				var transactionId = msg.TransactionId;
+
 				if (Enabled)
 				{
-					var transactionId = msg.TransactionId;
-
 					RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId });
 
 					var lastTime = LoadMessages(msg, msg.From, msg.To, transactionId);
 
-					if (msg.To != null && lastTime != null && msg.To <= lastTime)
+					if (msg.IsHistory || (msg.To != null && lastTime != null && msg.To <= lastTime))
 					{
 						_fullyProcessedSubscriptions.Add(transactionId);
 						RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId });
@@ -540,7 +540,15 @@ namespace StockSharp.Algo.Storages
 					base.SendInMessage(clone.ValidateBounds());	
 				}
 				else
-					base.SendInMessage(msg);
+				{
+					if (msg.IsHistory)
+					{
+						RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId });
+						RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId });
+					}
+					else
+						base.SendInMessage(msg);
+				}
 			}
 			else
 			{

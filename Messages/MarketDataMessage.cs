@@ -253,10 +253,9 @@ namespace StockSharp.Messages
 		public bool AllowBuildFromSmallerTimeFrame { get; set; } = true;
 
 		/// <summary>
-		/// Contains history market data.
+		/// Request history market data only.
 		/// </summary>
 		[DataMember]
-		[Obsolete]
 		public bool IsHistory { get; set; }
 
 		/// <summary>
@@ -311,7 +310,7 @@ namespace StockSharp.Messages
 				BuildFrom = BuildFrom,
 				BuildField = BuildField,
 				IsCalcVolumeProfile = IsCalcVolumeProfile,
-				//IsHistory = IsHistory,
+				IsHistory = IsHistory,
 				AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame,
 				IsRegularTradingHours = IsRegularTradingHours,
 			};
