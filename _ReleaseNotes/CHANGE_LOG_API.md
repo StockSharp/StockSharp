@@ -9,6 +9,7 @@ StockSharp API Change log
 * (bug) Charting. Fix duplicate candle series save/load.
 * (feature) MessageAdapter. INotifyPropertyChanged implemented.
 * (bug) TransactionSnapshot. Fix trade data save.
+* (feature) OrderWindow. SecurityEnabled, PortfolioEnabled for modify orders.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.

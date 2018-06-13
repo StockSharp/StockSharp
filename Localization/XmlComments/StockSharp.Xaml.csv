@@ -847,6 +847,9 @@ P:StockSharp.Xaml.OrderWindow.Portfolios/summary;DocStr8362
 P:StockSharp.Xaml.OrderWindow.MarketDataProvider/summary;DocStr973
 P:StockSharp.Xaml.OrderWindow.SecurityProvider/summary;DocStr972
 P:StockSharp.Xaml.OrderWindow.Order/summary;Str504
+P:StockSharp.Xaml.OrderWindow.SecurityEnabled/summary;DocStr10546
+P:StockSharp.Xaml.OrderWindow.PortfolioEnabled/summary;DocStr10546
+P:StockSharp.Xaml.OrderWindow.IsMarketEnabled/summary;DocStr10546
 M:StockSharp.Xaml.OrderWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PortfolioMessageAdaptersWindow/summary;DocStr8268
 F:StockSharp.Xaml.PortfolioMessageAdaptersWindow.RemoveCommand/summary;DocStr8269

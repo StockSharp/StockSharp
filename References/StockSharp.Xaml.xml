@@ -3866,6 +3866,21 @@
             Order.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.OrderWindow.SecurityEnabled">
+      <summary>
+            Is <see cref="P:StockSharp.BusinessEntities.Order.Security" /> able to change.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OrderWindow.PortfolioEnabled">
+      <summary>
+            Is <see cref="P:StockSharp.BusinessEntities.Order.Portfolio" /> able to change.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OrderWindow.IsMarketEnabled">
+      <summary>
+            Is <see cref="P:StockSharp.BusinessEntities.Order.Type" /> able to change.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.OrderWindow.InitializeComponent">
       <summary>
             InitializeComponent
