@@ -6,6 +6,7 @@ StockSharp API Change log
 * (feature) Huobi. Support HADAX.
 * (feature) CurrencyTypes.ZAC
 * (feature) FIX connector. Time format parsing settings as public.
+* (bug) Charting. Fix duplicate candle series save/load.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
