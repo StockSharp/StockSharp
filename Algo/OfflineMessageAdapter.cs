@@ -217,12 +217,15 @@
 				}
 				default:
 				{
-					lock (_syncObject)
+					if (!message.IgnoreOffline)
 					{
-						if (!_connected)
+						lock (_syncObject)
 						{
-							StoreMessage(message.Clone());
-							return;
+							if (!_connected)
+							{
+								StoreMessage(message.Clone());
+								return;
+							}
 						}
 					}
 

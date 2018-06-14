@@ -75,6 +75,11 @@ namespace StockSharp.Messages
 		public bool IsBack { get; set; }
 
 		/// <summary>
+		/// Ignore offline mode and continue processing.
+		/// </summary>
+		public bool IgnoreOffline { get; set; }
+
+		/// <summary>
 		/// Source adapter. Can be <see langword="null" />.
 		/// </summary>
 		public IMessageAdapter Adapter { get; set; }

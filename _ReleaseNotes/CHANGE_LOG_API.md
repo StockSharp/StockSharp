@@ -11,6 +11,7 @@ StockSharp API Change log
 * (bug) TransactionSnapshot. Fix trade data save.
 * (feature) OrderWindow. SecurityEnabled, PortfolioEnabled for modify orders.
 * (bug) OrderGrid. Cancel group orders fix.
+* (feature) Message. IgnoreOffline option to prevent buffering in offline mode.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
