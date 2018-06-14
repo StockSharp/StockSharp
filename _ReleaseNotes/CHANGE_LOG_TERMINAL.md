@@ -1,5 +1,28 @@
 StockSharp Terminal Change log
 ========================
+## v4.4.11:
+* (bug) Quik. Fix portfolio receive fix.
+* (bug) Image publish cancellation processing fix.
+* (feature) QuikLua. Handle From To date range for market data requests. https://stocksharp.ru/forum/9460/korrektnoe-otobrazhenie-svechei/
+* (bug) Charting. Fix Equity legend color.
+* (bug) TimeSpanEditor. Fix DevExpress themes.
+* (feature) Default implementation of order log-> order book builder.
+* (feature) Bittrex. Web sockets supported.
+* (bug) Charting. Fix drawing trades with string id.
+* (feature) OrderGrid, ExecutionGrid, TradeGrid, MyTradeGrid. Sides coloring.
+* (feature) SecurityGrid. BuyBackDate, BuyBackPrice columns.
+* (bug) ConnectorWindow. Fix stub connectors check.
+* (feature) IConnector. Method RegisterXXX accepts From and To range, build from option.
+* (feature) ExecutionGrid. OriginSide coloring.
+* (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
+* (bug) Fix duplicate candles subscriptions.
+* (feature) Huobi. Support HADAX.
+* (feature) FIX connector. Time format parsing settings as public.
+* (bug) Snapshot. Fix trade data save.
+* (feature) Orders modify. Disable security and portfolio.
+* (feature) Binary format by default.
+* (feature) Default theme is VS2017Dark.
+
 ## v4.4.10:
 * (feature) Themes. Icons auto coloring.
 * (feature) CandleSeries.IsRegularTradingHours.
