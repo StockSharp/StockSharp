@@ -12,6 +12,7 @@ StockSharp API Change log
 * (feature) OrderWindow. SecurityEnabled, PortfolioEnabled for modify orders.
 * (bug) OrderGrid. Cancel group orders fix.
 * (feature) Message. IgnoreOffline option to prevent buffering in offline mode.
+* (feature) OpenECry. v3.5.14.41
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
