@@ -91,6 +91,12 @@
             </summary>
       <param name="message">The message.</param>
     </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutError(System.Exception)">
+      <summary>
+            Initialize a new message <see cref="T:StockSharp.Messages.ErrorMessage" /> and pass it to the method <see cref="M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)" />.
+            </summary>
+      <param name="error">Error details.</param>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
             Save settings.
@@ -807,9 +813,6 @@
     </member>
     <member name="M:StockSharp.Fix.FastMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <inheritdoc />
-    </member>
-    <member name="E:StockSharp.Fix.FastMessageAdapter.PropertyChanged">
-      <summary>Occurs when a property value changes.</summary>
     </member>
     <member name="T:StockSharp.Fix.FixMessageTypes">
       <summary>

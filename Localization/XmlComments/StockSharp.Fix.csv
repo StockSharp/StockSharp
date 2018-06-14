@@ -21,6 +21,8 @@ M:StockSharp.Fix.Dialects.BaseFastDialect.LoadSettingsFromFile(System.String)/in
 M:StockSharp.Fix.Dialects.BaseFastDialect.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)/summary;DocStr466
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
+M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutError(System.Exception)/summary;DocStr4332
+M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutError(System.Exception)/param/error;DocStr325
 M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Fix.Dialects.BaseFastDialect.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -240,7 +242,6 @@ P:StockSharp.Fix.FastMessageAdapter.Dialect/summary;DocStr9958
 P:StockSharp.Fix.FastMessageAdapter.DialectSettings/summary;FastSettings
 M:StockSharp.Fix.FastMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FastMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
-E:StockSharp.Fix.FastMessageAdapter.PropertyChanged/summary;DocStr10102
 T:StockSharp.Fix.FixMessageTypes/summary;DocStr9866
 F:StockSharp.Fix.FixMessageTypes.SeqReset/summary;DocStr608
 F:StockSharp.Fix.FixMessageTypes.ResendRequest/summary;DocStr608

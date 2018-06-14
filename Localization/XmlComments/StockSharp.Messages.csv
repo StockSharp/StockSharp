@@ -939,6 +939,7 @@ P:StockSharp.Messages.Message.Type/summary;DocStr9
 P:StockSharp.Messages.Message.ExtensionInfo/summary;ExtendedInfo
 P:StockSharp.Messages.Message.ExtensionInfo/remarks;DocStr4044
 P:StockSharp.Messages.Message.IsBack/summary;DocStr4045
+P:StockSharp.Messages.Message.IgnoreOffline/summary;DocStr10547
 P:StockSharp.Messages.Message.Adapter/summary;DocStr4046
 M:StockSharp.Messages.Message.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.Message.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
