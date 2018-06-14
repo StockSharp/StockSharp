@@ -202,6 +202,7 @@ namespace StockSharp.Algo.Storages
 									{
 										HasTradeInfo = true,
 										SecurityId = message.SecurityId,
+										ServerTime = message.ServerTime,
 										TransactionId = message.TransactionId,
 										ExecutionType = message.ExecutionType,
 										TradeId = message.TradeId,
