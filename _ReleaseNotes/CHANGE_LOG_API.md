@@ -10,6 +10,7 @@ StockSharp API Change log
 * (feature) MessageAdapter. INotifyPropertyChanged implemented.
 * (bug) TransactionSnapshot. Fix trade data save.
 * (feature) OrderWindow. SecurityEnabled, PortfolioEnabled for modify orders.
+* (bug) OrderGrid. Cancel group orders fix.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
