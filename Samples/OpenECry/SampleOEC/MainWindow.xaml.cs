@@ -33,7 +33,6 @@ namespace SampleOEC
 		public OpenECryTrader Trader;
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
-		private readonly TradesWindow _tradesWindow = new TradesWindow();
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
@@ -48,7 +47,6 @@ namespace SampleOEC
 
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
-			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
 			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
@@ -61,14 +59,12 @@ namespace SampleOEC
 		{
 			_ordersWindow.DeleteHideable();
 			_myTradesWindow.DeleteHideable();
-			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
 			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			_newsWindow.DeleteHideable();
 			
 			_securitiesWindow.Close();
-			_tradesWindow.Close();
 			_myTradesWindow.Close();
 			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
@@ -143,7 +139,6 @@ namespace SampleOEC
 
 					Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
 					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
-					Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
 					Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
 					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
@@ -170,7 +165,7 @@ namespace SampleOEC
 					// set news provider
 					_newsWindow.NewsPanel.NewsProvider = Trader;
 
-					ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
+					ShowSecurities.IsEnabled = ShowNews.IsEnabled =
 					ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = 
 					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
 				}
@@ -209,11 +204,6 @@ namespace SampleOEC
 		private void ShowSecuritiesClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_securitiesWindow);
-		}
-
-		private void ShowTradesClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_tradesWindow);
 		}
 
 		private void ShowMyTradesClick(object sender, RoutedEventArgs e)

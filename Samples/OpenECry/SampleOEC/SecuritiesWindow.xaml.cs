@@ -148,12 +148,10 @@ namespace SampleOEC
 				if (trader.RegisteredSecurities.Contains(security))
 				{
 					trader.UnRegisterSecurity(security);
-					trader.UnRegisterTrades(security);
 				}
 				else
 				{
 					trader.RegisterSecurity(security);
-					trader.RegisterTrades(security);
 				}
 			}
 		}
