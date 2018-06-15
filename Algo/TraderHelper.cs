@@ -3542,12 +3542,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Lookup all securities predefined criteria.
 		/// </summary>
-		public static readonly Security LookupAllCriteria = new Security { Code = "*" };
+		public static readonly Security LookupAllCriteria = new Security();
 
 		/// <summary>
 		/// Lookup all securities predefined criteria.
 		/// </summary>
-		public static readonly SecurityLookupMessage LookupAllCriteriaMessage = new SecurityLookupMessage { SecurityId = new SecurityId { SecurityCode = "*" } };
+		public static readonly SecurityLookupMessage LookupAllCriteriaMessage = LookupAllCriteria.ToLookupMessage();
 
 		/// <summary>
 		/// Determine the <paramref name="criteria"/> contains lookup all filter.
@@ -3564,7 +3564,7 @@ namespace StockSharp.Algo
 
 			return
 				criteria.Id.IsEmpty() &&
-				criteria.Code == "*" &&
+				criteria.Code.IsEmpty() &&
 				criteria.Type == null;
 		}
 
@@ -3582,7 +3582,7 @@ namespace StockSharp.Algo
 				return true;
 
 			return
-				criteria.SecurityId.SecurityCode == "*" &&
+				criteria.SecurityId.IsDefault() &&
 				criteria.SecurityType == null;
 		}
 
@@ -4572,7 +4572,7 @@ namespace StockSharp.Algo
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
-			connector.LookupSecurities(new Security());
+			connector.LookupSecurities(LookupAllCriteria);
 			connector.LookupPortfolios(new Portfolio());
 			connector.LookupOrders(new Order());
 		}

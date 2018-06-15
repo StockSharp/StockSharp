@@ -15,6 +15,7 @@ StockSharp API Change log
 * (feature) OpenECry. v3.5.14.41
 * (feature) SampleOEC. Removed obsolete.
 * (feature) FAST dialects. Made network settings configurable.
+* (feature) TraderHelper. LookupAllCriteria changed from asterisk to empty string.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
