@@ -24908,12 +24908,12 @@ namespace StockSharp.Localization
 		public static string Str2657 => GetString(Str2657Key);
 
 		/// <summary>
-		/// Futures: 20 quotes deep market depth
+		/// Futures: 5 quotes deep market depth
 		/// </summary>
 		public const string Str2658Key = nameof(Str2658);
 
 		/// <summary>
-		/// Futures: 20 quotes deep market depth
+		/// Futures: 5 quotes deep market depth
 		/// </summary>
 		public static string Str2658 => GetString(Str2658Key);
 

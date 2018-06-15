@@ -5,7 +5,11 @@ P:StockSharp.Fix.Dialects.BaseFastDialect.SecurityExtendedFields/summary;DocStr9
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsNativeIdentifiersPersistable/summary;DocStr9388
 P:StockSharp.Fix.Dialects.BaseFastDialect.SupportedMarketDataTypes/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportCandlesUpdates/inheritdoc;DocStr8459
-P:StockSharp.Fix.Dialects.BaseFastDialect.EnableSuspend/summary;SuspendDesc
+P:StockSharp.Fix.Dialects.BaseFastDialect.MaxRestores/summary;DocStr10548
+P:StockSharp.Fix.Dialects.BaseFastDialect.MaxRestoreError/summary;DocStr10549
+P:StockSharp.Fix.Dialects.BaseFastDialect.MaxIncrementalWrongOrder/summary;DocStr10550
+P:StockSharp.Fix.Dialects.BaseFastDialect.MaxRestoreCount/summary;DocStr10551
+P:StockSharp.Fix.Dialects.BaseFastDialect.MaxSuspended/summary;DocStr10552
 P:StockSharp.Fix.Dialects.BaseFastDialect.Login/summary;Login
 P:StockSharp.Fix.Dialects.BaseFastDialect.Password/summary;Password
 M:StockSharp.Fix.Dialects.BaseFastDialect.Clone/summary;DocStr643
@@ -151,7 +155,6 @@ P:StockSharp.Fix.Dialects.IFastDialect.StorageName/summary;DocStr9382
 P:StockSharp.Fix.Dialects.IFastDialect.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.Fix.Dialects.IFastDialect.SecurityExtendedFields/summary;DocStr9383
 P:StockSharp.Fix.Dialects.IFastDialect.IsNativeIdentifiersPersistable/summary;DocStr9388
-P:StockSharp.Fix.Dialects.IFastDialect.EnableSuspend/summary;SuspendDesc
 P:StockSharp.Fix.Dialects.IFastDialect.Login/summary;Login
 P:StockSharp.Fix.Dialects.IFastDialect.Password/summary;Password
 P:StockSharp.Fix.Dialects.IFastDialect.IsSupportSubscriptionBySecurity/summary;DocStr10029

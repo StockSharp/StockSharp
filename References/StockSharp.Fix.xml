@@ -35,9 +35,29 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.EnableSuspend">
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxRestores">
       <summary>
-            Enable suspend mode (enqueue non ordered messages).
+            Max possible restores.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxRestoreError">
+      <summary>
+            Max restore errors.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxIncrementalWrongOrder">
+      <summary>
+            Max incremental messages with wrong order before recovering start.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxRestoreCount">
+      <summary>
+            Max message count that can be restored.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxSuspended">
+      <summary>
+            Max suspended messages.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.Login">
@@ -457,11 +477,6 @@
     <member name="P:StockSharp.Fix.Dialects.IFastDialect.IsNativeIdentifiersPersistable">
       <summary>
             Native identifier can be stored.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.IFastDialect.EnableSuspend">
-      <summary>
-            Enable suspend mode (enqueue non ordered messages).
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFastDialect.Login">

@@ -14,6 +14,7 @@ StockSharp API Change log
 * (feature) Message. IgnoreOffline option to prevent buffering in offline mode.
 * (feature) OpenECry. v3.5.14.41
 * (feature) SampleOEC. Removed obsolete.
+* (feature) FAST dialects. Made network settings configurable.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
