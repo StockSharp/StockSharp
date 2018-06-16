@@ -3246,5 +3246,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Huobi.Name,
 			Exchange = Exchange.Huobi,
 		};
+
+		/// <summary>
+		/// Information about Globex board of <see cref="BusinessEntities.Exchange.Cme"/> exchange.
+		/// </summary>
+		public static ExchangeBoard Globex { get; } = new ExchangeBoard
+		{
+			Code = "Globex",
+			Exchange = Exchange.Cme,
+		};
 	}
 }
