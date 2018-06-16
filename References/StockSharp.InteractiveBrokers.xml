@@ -286,7 +286,7 @@
     </member>
     <member name="F:StockSharp.InteractiveBrokers.GenericFieldTypes.AverageOptVolume">
       <summary>
-            Average Opt Volume.
+            Average Option Volume (currently for stocks).
             </summary>
     </member>
     <member name="F:StockSharp.InteractiveBrokers.GenericFieldTypes.OptionImpliedVolatility">
@@ -1584,6 +1584,11 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2ExecutionAlgo">
       <summary>
             For MiFID 2 reporting: identifies the algorithm responsible for the execution of a transaction within the firm.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.DontUseAutoPriceForHedge">
+      <summary>
+            Don't use auto price for hedge
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.ExchangeNewsTypes">

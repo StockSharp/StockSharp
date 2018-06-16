@@ -8142,7 +8142,7 @@ DocStr3358;Estimates;Прогноз
 DocStr3359;Option Volume For stocks only. Returns TickType.OptionCallVolume and TickType.OptionPutVolume;Option Volume For stocks only. Returns TickType.OptionCallVolume and TickType.OptionPutVolume
 DocStr3360;Option Open Interest For stocks only. Returns TickType.OptionCallOpenInterest and TickType.OptionPutOpenInterest;Option Open Interest For stocks only. Returns TickType.OptionCallOpenInterest and TickType.OptionPutOpenInterest
 DocStr3361;Historical Volatility For stocks only. Returns TickType.OptionHistoricalVol;Historical Volatility For stocks only. Returns TickType.OptionHistoricalVol
-DocStr3362;Average Opt Volume;Average Opt Volume
+DocStr3362;Average Option Volume (currently for stocks);Average Option Volume (currently for stocks)
 DocStr3363;Option Implied Volatility For stocks only. Returns TickType.OptionImpliedVol;Option Implied Volatility For stocks only. Returns TickType.OptionImpliedVol
 DocStr3364;Close Implied Volatility;Close Implied Volatility
 DocStr3365;Bond analytic data;Bond analytic data
@@ -15021,3 +15021,4 @@ DocStr10556;Spectra FAST dialect;FAST диалект для Spectra
 DocStr10557;Futures: general session information;Фьючерсы: основная информация о сессии
 DocStr10558;Options: general session information;Опционы: основная информация о сессии
 DocStr10559;Support lookup all securities;Поддерживает запрос всех инструментов
+DocStr10561;Don't use auto price for hedge;Не использовать авто-цену для хеджирования
