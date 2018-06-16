@@ -18,6 +18,7 @@ M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tr
 P:StockSharp.ETrade.ETradeMessageAdapter.SecurityLookupRequired/summary;DocStr452
 M:StockSharp.ETrade.ETradeMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.ETrade.ETradeMessageAdapter.CreateOrderCondition/returns;DocStr45
+P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr3113
 M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.ETrade.ETradeMessageAdapter.SetCustomAuthorizationMethod(System.Action{System.String})/summary;DocStr3117

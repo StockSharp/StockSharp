@@ -16,6 +16,7 @@ StockSharp API Change log
 * (feature) SampleOEC. Removed obsolete.
 * (feature) FAST dialects. Made network settings configurable.
 * (feature) TraderHelper. LookupAllCriteria changed from asterisk to empty string.
+* (feature) IMessageAdapter. IsSupportSecuritiesLookupAll option indicates adapter able to download all available securities.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.

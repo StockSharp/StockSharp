@@ -5,6 +5,7 @@ M:StockSharp.Rithmic.RithmicMessageAdapter.CreateOrderCondition/inheritdoc;DocSt
 P:StockSharp.Rithmic.RithmicMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
+P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.Rithmic.RithmicMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.UserName/summary;Login
 P:StockSharp.Rithmic.RithmicMessageAdapter.Password/summary;Password

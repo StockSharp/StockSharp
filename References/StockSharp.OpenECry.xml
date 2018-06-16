@@ -52,6 +52,9 @@
             Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
             </summary>
     </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultHeartbeatInterval">
       <summary>
             Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.

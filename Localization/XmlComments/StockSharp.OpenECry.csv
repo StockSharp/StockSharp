@@ -10,6 +10,7 @@ P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportCandlesUpdates/inheritdoc;
 M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityExtendedFields/summary;DocStr9383
+P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.OpenECry.OpenECryMessageAdapter.Address/summary;DocStr5927
 P:StockSharp.OpenECry.OpenECryMessageAdapter.Login/summary;Login

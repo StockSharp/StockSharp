@@ -655,6 +655,7 @@ P:StockSharp.Messages.IMessageAdapter.Categories/summary;DocStr10463
 P:StockSharp.Messages.IMessageAdapter.OrderCancelVolumeRequired/summary;DocStr8752
 P:StockSharp.Messages.IMessageAdapter.AssociatedBoardCode/summary;Str199
 P:StockSharp.Messages.IMessageAdapter.SecurityExtendedFields/summary;DocStr9383
+P:StockSharp.Messages.IMessageAdapter.IsSupportSecuritiesLookupAll/summary;DocStr10559
 M:StockSharp.Messages.IMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.Messages.IMessageAdapter.CreateOrderCondition/returns;DocStr45
 M:StockSharp.Messages.IMessageAdapter.IsConnectionAlive/summary;DocStr441
@@ -726,6 +727,7 @@ P:StockSharp.Messages.MessageAdapterWrapper.IsSupportCandlesUpdates/inheritdoc;D
 P:StockSharp.Messages.MessageAdapterWrapper.Categories/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.OrderCancelVolumeRequired/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.AssociatedBoardCode/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapterWrapper.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.Dispose/summary;DocStr8826
 T:StockSharp.Messages.InMemoryMessageChannel/summary;DocStr4309
@@ -851,6 +853,7 @@ P:StockSharp.Messages.MessageAdapter.IsSupportNativeSecurityLookup/summary;DocSt
 P:StockSharp.Messages.MessageAdapter.IsSupportNativePortfolioLookup/summary;DocStr51
 P:StockSharp.Messages.MessageAdapter.Platform/summary;DocStr4335
 P:StockSharp.Messages.MessageAdapter.SecurityExtendedFields/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.ReConnectionSettings/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.TransactionIdGenerator/inheritdoc;DocStr8459

@@ -256,6 +256,9 @@ namespace StockSharp.Messages
 
 		Tuple<string, Type>[] IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
 
+		/// <inheritdoc />
+		public virtual bool IsSupportSecuritiesLookupAll => InnerAdapter.IsSupportSecuritiesLookupAll;
+
 		OrderCondition IMessageAdapter.CreateOrderCondition()
 		{
 			return InnerAdapter.CreateOrderCondition();

@@ -22,6 +22,7 @@ M:StockSharp.LMAX.LmaxMessageAdapter.ToString/returns;DocStr50
 P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
 P:StockSharp.LMAX.LmaxMessageAdapter.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.LMAX.LmaxMessageAdapter.StorageName/summary;DocStr9382
+P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 T:StockSharp.LMAX.LmaxOrderCondition/summary;DocStr60
 M:StockSharp.LMAX.LmaxOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.LMAX.LmaxOrderCondition.StopLossOffset/summary;Str3383

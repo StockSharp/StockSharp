@@ -100,6 +100,9 @@
             The storage name, associated with the adapter.
             </summary>
     </member>
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.LMAX.LmaxOrderCondition">
       <summary>
         <see cref="N:StockSharp.LMAX" /> order condition.

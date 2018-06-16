@@ -116,6 +116,9 @@
         <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
             </summary>
     </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Send message.

@@ -22,6 +22,7 @@ M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(Ecng.Common.IdGenerator)/pa
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateOrderCondition/returns;DocStr45
 P:StockSharp.Blackwood.BlackwoodMessageAdapter.SecurityLookupRequired/summary;DocStr452
+P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.IsConnectionAlive/summary;DocStr441

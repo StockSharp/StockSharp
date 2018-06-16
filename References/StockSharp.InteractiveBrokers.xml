@@ -132,6 +132,9 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SecurityLookupRequired">
       <summary>
         <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.

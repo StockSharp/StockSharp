@@ -262,6 +262,10 @@ namespace StockSharp.Messages
 		public virtual Tuple<string, Type>[] SecurityExtendedFields { get; } = ArrayHelper.Empty<Tuple<string, Type>>();
 
 		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsSupportSecuritiesLookupAll => true;
+
+		/// <inheritdoc />
 		public virtual OrderCondition CreateOrderCondition() => null;
 
 		/// <inheritdoc />

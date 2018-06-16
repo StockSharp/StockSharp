@@ -18,6 +18,9 @@
     <member name="P:StockSharp.QuantHouse.QuantFeedMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.QuantHouse.QuantFeedMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.QuantHouse.QuantFeedMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>

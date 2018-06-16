@@ -27,6 +27,9 @@
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportCandlesUpdates">
             <inheritdoc />
         </member>
+        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportSecuritiesLookupAll">
+            <inheritdoc />
+        </member>
         <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>

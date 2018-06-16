@@ -72,6 +72,9 @@
             </summary>
       <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
     </member>
+    <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Send incoming message.

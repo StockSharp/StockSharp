@@ -36,6 +36,9 @@
         <member name="P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportCandlesUpdates">
             <inheritdoc />
         </member>
+        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportSecuritiesLookupAll">
+            <inheritdoc />
+        </member>
         <member name="M:StockSharp.BarChart.BarChartMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>

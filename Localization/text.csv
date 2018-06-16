@@ -15020,3 +15020,4 @@ DocStr10553;ASTS FAST dialect;FAST диалект для ASTS
 DocStr10556;Spectra FAST dialect;FAST диалект для Spectra
 DocStr10557;Futures: general session information;Фьючерсы: основная информация о сессии
 DocStr10558;Options: general session information;Опционы: основная информация о сессии
+DocStr10559;Support lookup all securities;Поддерживает запрос всех инструментов
