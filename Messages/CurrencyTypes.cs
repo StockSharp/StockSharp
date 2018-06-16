@@ -1273,6 +1273,18 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		ZAC,
+
+		/// <summary>
+		/// Deutsche Mark.
+		/// </summary>
+		[EnumMember]
+		DEM,
+
+		/// <summary>
+		/// Luxembourgish franc.
+		/// </summary>
+		[EnumMember]
+		LUF,
 // ReSharper restore InconsistentNaming
 	}
 }

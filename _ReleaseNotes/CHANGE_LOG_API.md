@@ -20,6 +20,7 @@ StockSharp API Change log
 * (feature) InteractiveBrokers. v9.73.07
 * (feature) InteractiveBrokers. SSL support.
 * (bug) BasketMessageAdapter. Fix securities lookup all processing.
+* (feature) CurrencyTypes. DEM, LUF.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
