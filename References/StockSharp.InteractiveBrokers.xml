@@ -211,23 +211,44 @@
             Use V100 plus version at the connect time.
             </summary>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SslProtocol">
       <summary>
-            Load settings.
+            SSL protocol to establish connect.
             </summary>
-      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SslCertificate">
+      <summary>
+            SSL certificate.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SslCertificatePassword">
+      <summary>
+            SSL certificate password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CheckCertificateRevocation">
+      <summary>
+            Check certificate revocation.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ValidateRemoteCertificates">
+      <summary>
+            Validate remove certificates.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.TargetHost">
+      <summary>
+            The name of the server that shares SSL connection.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.InteractiveBrokers.FundamentalReports">
       <summary>

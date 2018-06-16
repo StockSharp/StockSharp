@@ -18,6 +18,7 @@ StockSharp API Change log
 * (feature) TraderHelper. LookupAllCriteria changed from asterisk to empty string.
 * (feature) IMessageAdapter. IsSupportSecuritiesLookupAll option indicates adapter able to download all available securities.
 * (feature) InteractiveBrokers. v9.73.07
+* (feature) InteractiveBrokers. SSL support.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
