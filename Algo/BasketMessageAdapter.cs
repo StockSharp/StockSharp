@@ -485,7 +485,7 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			GetAdapters(message)?.ForEach(a => a.SendInMessage(message));
+			GetAdapters(message).ForEach(a => a.SendInMessage(message));
 		}
 
 		private IMessageAdapter[] GetAdapters(Message message)
@@ -496,16 +496,26 @@ namespace StockSharp.Algo
 			{
 				adapters = _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
 
-				if (adapters != null && message.Type == MessageTypes.MarketData)
+				if (adapters != null)
 				{
-					var set = _subscriptionNonSupportedAdapters.TryGetValue(((MarketDataMessage)message).TransactionId);
-
-					if (set != null)
+					if (message.Type == MessageTypes.MarketData)
 					{
-						adapters = adapters.Where(a => !set.Contains(GetUnderlyingAdapter(a))).ToArray();
+						var set = _subscriptionNonSupportedAdapters.TryGetValue(((MarketDataMessage)message).TransactionId);
 
-						if (adapters.Length == 0)
-							adapters = null;
+						if (set != null)
+						{
+							adapters = adapters.Where(a => !set.Contains(GetUnderlyingAdapter(a))).ToArray();
+
+							if (adapters.Length == 0)
+								adapters = null;
+						}
+					}
+					else if (message.Type == MessageTypes.SecurityLookup)
+					{
+						var isAll = ((SecurityLookupMessage)message).IsLookupAll();
+
+						if (isAll)
+							adapters = adapters.Where(a => a.IsSupportSecuritiesLookupAll).ToArray();
 					}
 				}
 
@@ -514,13 +524,21 @@ namespace StockSharp.Algo
 					if (_pendingConnectAdapters.Count > 0)
 					{
 						_pendingMessages.Enqueue(message.Clone());
-						return null;
+						return ArrayHelper.Empty<IMessageAdapter>();
 					}
 				}
 			}
 
-			if (adapters == null || adapters.Length == 0)
-				throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message));
+			if (adapters == null)
+			{
+				adapters = ArrayHelper.Empty<IMessageAdapter>();
+			}
+
+			if (adapters.Length == 0)
+			{
+				this.AddWarningLog(LocalizedStrings.Str629Params.Put(message));
+				//throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message));
+			}
 
 			return adapters;
 		}
@@ -535,7 +553,7 @@ namespace StockSharp.Algo
 					return new[] { (IMessageAdapter)wrapper };
 			}
 
-			var adapters = GetAdapters(mdMsg)?.Where(a =>
+			var adapters = GetAdapters(mdMsg).Where(a =>
 			{
 				var isTfCandles = mdMsg.DataType == MarketDataTypes.CandleTimeFrame;
 
@@ -580,7 +598,7 @@ namespace StockSharp.Algo
 				return buildFrom != null && a.SupportedMarketDataTypes.Contains(buildFrom.Value);
 			}).ToArray();
 
-			if (adapters == null || adapters.Length == 0)
+			if (adapters.Length == 0)
 				throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(mdMsg));
 
 			return adapters;
@@ -679,12 +697,10 @@ namespace StockSharp.Algo
 
 			if (adapter == null)
 			{
-				var adapters = GetAdapters(message);
+				adapter = GetAdapters(message).FirstOrDefault();
 
-				if (adapters == null)
+				if (adapter == null)
 					return;
-
-				adapter = adapters.First();
 			}
 			else
 			{
