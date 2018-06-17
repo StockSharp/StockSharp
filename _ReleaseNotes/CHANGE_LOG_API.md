@@ -22,6 +22,7 @@ StockSharp API Change log
 * (bug) BasketMessageAdapter. Fix securities lookup all processing.
 * (feature) CurrencyTypes. DEM, LUF.
 * (feature) ExchangeBoard. Globex board info added.
+* (bug) CandleMessageBuildableStorage. Fix process multiples timeframes.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
