@@ -21,6 +21,7 @@ StockSharp API Change log
 * (feature) InteractiveBrokers. SSL support.
 * (bug) BasketMessageAdapter. Fix securities lookup all processing.
 * (feature) CurrencyTypes. DEM, LUF.
+* (feature) ExchangeBoard. Globex board info added.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
