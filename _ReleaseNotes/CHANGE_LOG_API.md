@@ -23,6 +23,7 @@ StockSharp API Change log
 * (feature) CurrencyTypes. DEM, LUF.
 * (feature) ExchangeBoard. Globex board info added.
 * (bug) CandleMessageBuildableStorage. Fix process multiples timeframes.
+* (bug) Transactions snapshot storage. Fix orders and trades save.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.

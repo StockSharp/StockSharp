@@ -194,40 +194,7 @@ namespace StockSharp.Algo.Storages
 
 								message.OriginalTransactionId = 0;
 
-								ExecutionMessage sepTrade = null;
-
-								if (message.HasOrderInfo && message.HasTradeInfo)
-								{
-									sepTrade = new ExecutionMessage
-									{
-										HasTradeInfo = true,
-										SecurityId = message.SecurityId,
-										ServerTime = message.ServerTime,
-										TransactionId = message.TransactionId,
-										ExecutionType = message.ExecutionType,
-										TradeId = message.TradeId,
-										TradeVolume = message.TradeVolume,
-										TradePrice = message.TradePrice,
-										TradeStatus = message.TradeStatus,
-										TradeStringId = message.TradeStringId,
-										OriginSide = message.OriginSide,
-										Commission = message.Commission,
-										IsSystem = message.IsSystem,
-									};
-
-									message.HasTradeInfo = false;
-									message.TradeId = null;
-									message.TradeVolume = null;
-									message.TradePrice = null;
-									message.TradeStatus = null;
-									message.TradeStringId = null;
-									message.OriginSide = null;
-								}
-
-								snapshotStorage.Update(message);
-
-								if (sepTrade != null)
-									snapshotStorage.Update(sepTrade);
+								SaveTransaction(snapshotStorage, message);
 
 								if (message.OrderId != null)
 								{
@@ -238,7 +205,7 @@ namespace StockSharp.Algo.Storages
 										foreach (var trade in suspended)
 										{
 											trade.TransactionId = message.TransactionId;
-											snapshotStorage.Update(trade);
+											SaveTransaction(snapshotStorage, trade);
 										}
 									}
 								}
@@ -251,7 +218,7 @@ namespace StockSharp.Algo.Storages
 										foreach (var trade in suspended)
 										{
 											trade.TransactionId = message.TransactionId;
-											snapshotStorage.Update(trade);
+											SaveTransaction(snapshotStorage, trade);
 										}
 									}
 								}
@@ -334,6 +301,44 @@ namespace StockSharp.Algo.Storages
 						isProcessing = false;
 				}
 			}).Interval(TimeSpan.FromSeconds(10));
+		}
+
+		private static void SaveTransaction(ISnapshotStorage snapshotStorage, ExecutionMessage message)
+		{
+			ExecutionMessage sepTrade = null;
+
+			if (message.HasOrderInfo && message.HasTradeInfo)
+			{
+				sepTrade = new ExecutionMessage
+				{
+					HasTradeInfo = true,
+					SecurityId = message.SecurityId,
+					ServerTime = message.ServerTime,
+					TransactionId = message.TransactionId,
+					ExecutionType = message.ExecutionType,
+					TradeId = message.TradeId,
+					TradeVolume = message.TradeVolume,
+					TradePrice = message.TradePrice,
+					TradeStatus = message.TradeStatus,
+					TradeStringId = message.TradeStringId,
+					OriginSide = message.OriginSide,
+					Commission = message.Commission,
+					IsSystem = message.IsSystem,
+				};
+
+				message.HasTradeInfo = false;
+				message.TradeId = null;
+				message.TradeVolume = null;
+				message.TradePrice = null;
+				message.TradeStatus = null;
+				message.TradeStringId = null;
+				message.OriginSide = null;
+			}
+
+			snapshotStorage.Update(message);
+
+			if (sepTrade != null)
+				snapshotStorage.Update(sepTrade);
 		}
 
 		/// <summary>
