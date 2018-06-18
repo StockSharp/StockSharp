@@ -329,6 +329,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Deribit/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Kucoin/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Liqui/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Huobi/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.Globex/summary;DocStr10563
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrade/summary;DocStr8546
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867

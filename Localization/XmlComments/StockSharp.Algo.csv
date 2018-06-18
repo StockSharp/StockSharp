@@ -534,11 +534,11 @@ M:StockSharp.Algo.Candles.CandleHelper.GetTimeFrameCount(StockSharp.BusinessEnti
 M:StockSharp.Algo.Candles.CandleHelper.GetValueArea(System.Collections.Generic.IEnumerable{StockSharp.Algo.Candles.Candle})/summary;DocStr8542
 M:StockSharp.Algo.Candles.CandleHelper.GetValueArea(System.Collections.Generic.IEnumerable{StockSharp.Algo.Candles.Candle})/param/candles;XamlStr631
 M:StockSharp.Algo.Candles.CandleHelper.GetValueArea(System.Collections.Generic.IEnumerable{StockSharp.Algo.Candles.Candle})/returns;DocStr8543
-M:StockSharp.Algo.Candles.CandleHelper.Compress(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},System.TimeSpan,StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder)/summary;DocStr10377
-M:StockSharp.Algo.Candles.CandleHelper.Compress(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},System.TimeSpan,StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder)/param/source;DocStr10378
-M:StockSharp.Algo.Candles.CandleHelper.Compress(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},System.TimeSpan,StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder)/param/destination;DocStr10379
-M:StockSharp.Algo.Candles.CandleHelper.Compress(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},System.TimeSpan,StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder)/param/builder;DocStr505
-M:StockSharp.Algo.Candles.CandleHelper.Compress(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},System.TimeSpan,StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder)/returns;DocStr10380
+M:StockSharp.Algo.Candles.CandleHelper.Compress(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},StockSharp.Algo.Candles.BiggerTimeFrameCandleCompressor,System.Boolean)/summary;DocStr10377
+M:StockSharp.Algo.Candles.CandleHelper.Compress(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},StockSharp.Algo.Candles.BiggerTimeFrameCandleCompressor,System.Boolean)/param/source;DocStr10378
+M:StockSharp.Algo.Candles.CandleHelper.Compress(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},StockSharp.Algo.Candles.BiggerTimeFrameCandleCompressor,System.Boolean)/param/compressor;DocStr10374
+M:StockSharp.Algo.Candles.CandleHelper.Compress(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},StockSharp.Algo.Candles.BiggerTimeFrameCandleCompressor,System.Boolean)/param/includeLastCandle;DocStr10562
+M:StockSharp.Algo.Candles.CandleHelper.Compress(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},StockSharp.Algo.Candles.BiggerTimeFrameCandleCompressor,System.Boolean)/returns;DocStr10380
 M:StockSharp.Algo.Candles.CandleHelper.FilterSmallerTimeFrames(System.Collections.Generic.IEnumerable{System.TimeSpan},System.TimeSpan)/summary;DocStr10381
 M:StockSharp.Algo.Candles.CandleHelper.FilterSmallerTimeFrames(System.Collections.Generic.IEnumerable{System.TimeSpan},System.TimeSpan)/param/timeFrames;DocStr10382
 M:StockSharp.Algo.Candles.CandleHelper.FilterSmallerTimeFrames(System.Collections.Generic.IEnumerable{System.TimeSpan},System.TimeSpan)/param/original;DocStr10383

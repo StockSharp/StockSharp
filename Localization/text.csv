@@ -15022,3 +15022,7 @@ DocStr10557;Futures: general session information;Фьючерсы: основн�
 DocStr10558;Options: general session information;Опционы: основная информация о сессии
 DocStr10559;Support lookup all securities;Поддерживает запрос всех инструментов
 DocStr10561;Don't use auto price for hedge;Не использовать авто-цену для хеджирования
+DocStr10562;Output last active candle as finished;Выводить последнюю активную свечу как законченную
+DocStr10563;Information about Globex board of {0} exchange;Информация о Globex площадки биржи {0}
+DocStr10564;Deutsche Mark;Немецкая марка
+DocStr10565;Luxembourgish franc;Люксембургский франк
