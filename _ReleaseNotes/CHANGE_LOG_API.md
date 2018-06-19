@@ -26,7 +26,7 @@ StockSharp API Change log
 * (bug) Transactions snapshot storage. Fix orders and trades save.
 * (bug) SecurityGrid. Do not show errors in security grid.
 * (bug) Level1FieldsComboBox. Text alignment fixes.
-* (feature) PropertyGrid. Reset button to exhange board editor added.
+* (feature) PropertyGrid. Reset button to exchange board editor added.
 * (feature) CsvEntityRegistry. Method GetBoard uses IExchangeInfoProvider service.
 
 ## v4.4.11:
