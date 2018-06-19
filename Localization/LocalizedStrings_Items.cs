@@ -39408,16 +39408,6 @@ namespace StockSharp.Localization
 		public static string XamlStr626 => GetString(XamlStr626Key);
 
 		/// <summary>
-		/// Reset
-		/// </summary>
-		public const string XamlStr627Key = nameof(XamlStr627);
-
-		/// <summary>
-		/// Reset
-		/// </summary>
-		public static string XamlStr627 => GetString(XamlStr627Key);
-
-		/// <summary>
 		/// Reset current date modification
 		/// </summary>
 		public const string XamlStr628Key = nameof(XamlStr628);
