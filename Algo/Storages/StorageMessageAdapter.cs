@@ -865,17 +865,17 @@ namespace StockSharp.Algo.Storages
 					{
 						var days = DaysLoad;
 
-						if (tf.Ticks > 1)
-						{
-							if (tf.TotalMinutes < 15)
-								days = TimeSpan.FromTicks(tf.Ticks * 10000);
-							else if (tf.TotalHours < 2)
-								days = TimeSpan.FromTicks(tf.Ticks * 1000);
-							else if (tf.TotalDays < 2)
-								days = TimeSpan.FromTicks(tf.Ticks * 100);
-							else
-								days = TimeSpan.FromTicks(tf.Ticks * 50);	
-						}
+						//if (tf.Ticks > 1)
+						//{
+						//	if (tf.TotalMinutes < 15)
+						//		days = TimeSpan.FromTicks(tf.Ticks * 10000);
+						//	else if (tf.TotalHours < 2)
+						//		days = TimeSpan.FromTicks(tf.Ticks * 1000);
+						//	else if (tf.TotalDays < 2)
+						//		days = TimeSpan.FromTicks(tf.Ticks * 100);
+						//	else
+						//		days = TimeSpan.FromTicks(tf.Ticks * 50);	
+						//}
 
 						lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(msg.SecurityId, tf, msg.AllowBuildFromSmallerTimeFrame), from, to, days, m => SetTransactionId(m, transactionId));
 					}
