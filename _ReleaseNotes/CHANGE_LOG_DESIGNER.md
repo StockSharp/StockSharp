@@ -1,5 +1,69 @@
 StockSharp Designer Change log
 ========================
+## v4.4.11:
+* (bug) Many live trading fixes.
+* (feature) Offline. Support replace for pending orders.
+* (bug) InteractiveBrokers. End date for candles request fix https://stocksharp.ru/posts/m/43390/.
+* (bug) InteractiveBrokers. SecurityLookup error response handling fix.
+* (bug) InteractiveBrokers. Candles request fix.
+* (feature) Http -> Https.
+* (feature) Portfolio pickup option.
+* (bug) Binance, Coinbase, Bitfinex, Bitstamp, IQFeed fixes.
+* (feature) SmartCOM. V4 as default.
+* (bug) Transaq. Fix locked file issue.
+* (feature) Compress candles from smaller time-frames.
+* (bug) PnF candles store fixes.
+* (bug) Grids. Fix filters for enum based fields.
+* (bug) ConnectorWindow. Fix connector description for Quik lua.
+* (feature) FIX connector. IssueDate, IssueSize translation support.
+* (bug) FIX connector. SpectraFixDialect. Order mass cancel fix.
+* (bug) OrderGrid. Active filters fix.
+* (feature) MarketEmulator. CheckMoney option.
+* (feature) Plaza. v5.3.6
+* (feature) Micex. Stock30, Currency28, Currency30 interfaces.
+* (bug) Transaq. Fix shared dll initialization https://stocksharp.ru/forum/9421/podklyuchenie-sdata-k-tranzak-/
+* (bug) Fix Finam 1day candles downloading.
+* (feature) Index and continuous securities support.
+* (feature) Themes. Icons auto coloring.
+* (feature) CandleSeries.IsRegularTradingHours.
+* (bug) Logs. Designed fix.
+* (feature) FIX connector. SSL support.
+* (feature) FIX connector. QUIK FIX PreRrade and DukasCopy support.
+* (bug) MarketDataGrid. Fix further refreshes after error request.
+* (feature) Default theme changed.
+* (bug) Grids. Time zone column fix.
+* (bug) Chart icons color fixes.
+* (feature) MACD histogram. Draw signal and macd lines.
+* (feature) Snapshot data refactoring.
+* (bug) Quik. Fix portfolio receive fix.
+* (bug) Image publish cancellation processing fix.
+* (feature) QuikLua. Handle From To date range for market data requests. https://stocksharp.ru/forum/9460/korrektnoe-otobrazhenie-svechei/
+* (feature) StrategiesDashboard. Set security and portfolio directly. Allow trading and last error columns.
+* (bug) Charting. Fix Equity legend color.
+* (feature) Diagram. MarketDepthTruncateDiagramElement.
+* (bug) TimeSpanEditor. Fix DevExpress themes.
+* (feature) Default implementation of order log-> order book builder.
+* (feature) Bittrex. Web sockets supported.
+* (bug) Charting. Fix drawing trades with string id.
+* (feature) OrderGrid, ExecutionGrid, TradeGrid, MyTradeGrid. Sides coloring.
+* (feature) SecurityGrid. BuyBackDate, BuyBackPrice columns.
+* (bug) ConnectorWindow. Fix stub connectors check.
+* (feature) ExecutionGrid. OriginSide coloring.
+* (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
+* (feature) Huobi. Support HADAX.
+* (feature) FIX connector. Time format parsing settings as public.
+* (bug) Transaction snapshot. Fix trade data save.
+* (feature) Binary format by default.
+* (feature) Default theme is VS2017Dark.
+* (feature) OpenECry. v3.5.14.41
+* (feature) FAST dialects. Made network settings configurable.
+* (feature) InteractiveBrokers. v9.73.07
+* (feature) InteractiveBrokers. SSL support.
+* (bug) Fix securities lookup all processing.
+* (feature) CurrencyTypes. DEM, LUF.
+* (feature) ExchangeBoard. Globex board info added.
+* (bug) Candle building from smaller tf. Fix process multiples timeframes.
+
 ## v4.4.6.1:
 * (bug) Option position chart. Legend binding fix.
 * (bug) Options charts theme binding fix.
