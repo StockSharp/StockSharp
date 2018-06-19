@@ -24,6 +24,10 @@ StockSharp API Change log
 * (feature) ExchangeBoard. Globex board info added.
 * (bug) CandleMessageBuildableStorage. Fix process multiples timeframes.
 * (bug) Transactions snapshot storage. Fix orders and trades save.
+* (bug) SecurityGrid. Do not show errors in security grid.
+* (bug) Level1FieldsComboBox. Text alignment fixes.
+* (feature) PropertyGrid. Reset button to exhange board editor added.
+* (feature) CsvEntityRegistry. Method GetBoard uses IExchangeInfoProvider service.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.

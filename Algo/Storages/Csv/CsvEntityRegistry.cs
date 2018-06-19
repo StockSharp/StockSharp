@@ -9,6 +9,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Configuration;
 	using Ecng.Serialization;
 
 	using MoreLinq;
@@ -905,7 +906,7 @@ namespace StockSharp.Algo.Storages.Csv
 			if (board != null)
 				return board;
 
-			board = _exchangeInfoProvider.GetExchangeBoard(boardCode);
+			board = (ConfigManager.TryGetService<IExchangeInfoProvider>() ?? _exchangeInfoProvider).GetExchangeBoard(boardCode);
 
 			if (board == null)
 				throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
