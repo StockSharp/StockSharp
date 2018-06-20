@@ -48156,5 +48156,25 @@ namespace StockSharp.Localization
 		/// Use HADAX.
 		/// </summary>
 		public static string UseHadax => GetString(UseHadaxKey);
+
+		/// <summary>
+		/// Truncated order book
+		/// </summary>
+		public const string TruncatedBookKey = nameof(TruncatedBook);
+
+		/// <summary>
+		/// Truncated order book
+		/// </summary>
+		public static string TruncatedBook => GetString(TruncatedBookKey);
+
+		/// <summary>
+		/// Truncate market depth element.
+		/// </summary>
+		public const string TruncatedBookDescKey = nameof(TruncatedBookDesc);
+
+		/// <summary>
+		/// Truncate market depth element.
+		/// </summary>
+		public static string TruncatedBookDesc => GetString(TruncatedBookDescKey);
 	}
 }

@@ -4848,6 +4848,8 @@ ViewDownloaded;View downloaded;Посмотреть скаченное
 BalanceCheckInterval;Balance check interval. Required in case of deposit and withdraw actions.;Интервал проверки баланса. Требуется в случае наличия действий по вводы или выводы.
 Hadax;HADAX;HADAX
 UseHadax;Use HADAX.;Использовать HADAX.
+TruncatedBook;Truncated order book;Обрезанный стакан
+TruncatedBookDesc;Truncate market depth element.;Элемент обрезания глубины стакана.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14989,8 +14991,6 @@ DocStr10523;All schemas;Все схемы
 DocStr10524;Create copy for the new snapshot;Создать копию для нового снэпшота
 DocStr10525;Allow trading key;Ключ для Торговля доступна
 DocStr10526;Truncate the specified order book by max depth value;Обрезать переданный стакан до максимально допустимой глубины
-DocStr10527;Truncated order book;Обрезанный стакан
-DocStr10528;Truncate market depth element;Элемент обрезания глубины стакана
 DocStr10529;Max depth;Максимальная глубина
 DocStr10530;Get icon for {0};Получить иконку для {0}
 DocStr10531;Icon name;Название иконки
