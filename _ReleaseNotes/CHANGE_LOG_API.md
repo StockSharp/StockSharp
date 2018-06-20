@@ -30,6 +30,7 @@ StockSharp API Change log
 * (feature) CsvEntityRegistry. Method GetBoard uses IExchangeInfoProvider service.
 * (bug) InteractiveBrokers. Fix expiry time parsing fix.
 * (bug) InteractiveBrokers. Market depth fix.
+* (feature) Index builder. Ignore errors as parameters.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
