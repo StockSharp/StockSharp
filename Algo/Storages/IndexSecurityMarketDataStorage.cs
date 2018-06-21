@@ -43,7 +43,8 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="security">The index, built of instruments. For example, to specify spread at arbitrage or pair trading.</param>
 		/// <param name="arg">The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.</param>
-		public IndexSecurityMarketDataStorage(IndexSecurity security, object arg)
+		/// <param name="ignoreErrors">Ignore errors.</param>
+		public IndexSecurityMarketDataStorage(IndexSecurity security, object arg, bool ignoreErrors = true)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -53,17 +54,17 @@ namespace StockSharp.Algo.Storages
 
 			if (typeof(T) == typeof(ExecutionMessage))
 			{
-				_builder = new TradeIndexBuilder(security).To<IndexBuilder<T>>();
+				_builder = new TradeIndexBuilder(security, ignoreErrors).To<IndexBuilder<T>>();
 				_messageType = MessageTypes.Execution;
 			}
 			else if (typeof(T) == typeof(CandleMessage))
 			{
-				_builder = new TimeFrameCandleIndexBuilder(security).To<IndexBuilder<T>>();
+				_builder = new TimeFrameCandleIndexBuilder(security, ignoreErrors).To<IndexBuilder<T>>();
 				_messageType = MessageTypes.CandleTimeFrame;
 			}
 			else if (typeof(T) == typeof(QuoteChangeMessage))
 			{
-				_builder = new QuoteChangeIndexBuilder(security).To<IndexBuilder<T>>();
+				_builder = new QuoteChangeIndexBuilder(security, ignoreErrors).To<IndexBuilder<T>>();
 				_messageType = MessageTypes.QuoteChange;
 			}
 			else
@@ -149,6 +150,7 @@ namespace StockSharp.Algo.Storages
 		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, MessageBuffer<T>> _buffers = new CachedSynchronizedOrderedDictionary<DateTimeOffset, MessageBuffer<T>>();
 		private readonly SynchronizedDictionary<SecurityId, int> _securityIndecies = new SynchronizedDictionary<SecurityId, int>();
 
+		private readonly bool _ignoreErrors;
 		private readonly int _bufferSize;
 
 		private MessageBuffer<T> _lastProcessBuffer;
@@ -156,8 +158,9 @@ namespace StockSharp.Algo.Storages
 		public IndexSecurity Security { get; }
 		public SecurityId SecurityId { get; }
 
-		protected IndexBuilder(IndexSecurity security)
+		protected IndexBuilder(IndexSecurity security, bool ignoreErrors)
 		{
+			_ignoreErrors = ignoreErrors;
 			Security = security ?? throw new ArgumentNullException(nameof(security));
 			SecurityId = security.ToSecurityId();
 			SecurityId.EnsureHashCode();
@@ -281,7 +284,7 @@ namespace StockSharp.Algo.Storages
 					}
 					catch (ArithmeticException ex)
 					{
-						if (!Security.IgnoreErrors)
+						if (!_ignoreErrors)
 							throw;
 
 						ex.LogError();
@@ -318,8 +321,8 @@ namespace StockSharp.Algo.Storages
 
 	sealed class TradeIndexBuilder : IndexBuilder<ExecutionMessage>
 	{
-		public TradeIndexBuilder(IndexSecurity security)
-			: base(security)
+		public TradeIndexBuilder(IndexSecurity security, bool ignoreErrors)
+			: base(security, ignoreErrors)
 		{
 		}
 
@@ -346,8 +349,8 @@ namespace StockSharp.Algo.Storages
 
 	sealed class TimeFrameCandleIndexBuilder : IndexBuilder<CandleMessage>
 	{
-		public TimeFrameCandleIndexBuilder(IndexSecurity security)
-			: base(security)
+		public TimeFrameCandleIndexBuilder(IndexSecurity security, bool ignoreErrors)
+			: base(security, ignoreErrors)
 		{
 		}
 
@@ -388,8 +391,8 @@ namespace StockSharp.Algo.Storages
 
 	sealed class QuoteChangeIndexBuilder : IndexBuilder<QuoteChangeMessage>
 	{
-		public QuoteChangeIndexBuilder(IndexSecurity security)
-			: base(security)
+		public QuoteChangeIndexBuilder(IndexSecurity security, bool ignoreErrors)
+			: base(security, ignoreErrors)
 		{
 		}
 

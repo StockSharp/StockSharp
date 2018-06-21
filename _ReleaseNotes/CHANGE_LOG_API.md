@@ -28,6 +28,9 @@ StockSharp API Change log
 * (bug) Level1FieldsComboBox. Text alignment fixes.
 * (feature) PropertyGrid. Reset button to exchange board editor added.
 * (feature) CsvEntityRegistry. Method GetBoard uses IExchangeInfoProvider service.
+* (bug) InteractiveBrokers. Fix expiry time parsing fix.
+* (bug) InteractiveBrokers. Market depth fix.
+* (feature) Index builder. Ignore errors as parameters.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.

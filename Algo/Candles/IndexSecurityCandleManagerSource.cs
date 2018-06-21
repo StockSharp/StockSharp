@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Candles
 				candleManager.Processing += OnInnerSourceProcessCandle;
 				candleManager.Stopped += OnInnerSourceStopped;
 
-				_builder = new IndexCandleBuilder(security, candleType);
+				_builder = new IndexCandleBuilder(security, candleType, security.IgnoreErrors);
 
 				//_innerSeries.ForEach(s =>
 				//{
