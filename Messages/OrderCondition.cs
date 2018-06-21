@@ -68,7 +68,7 @@ namespace StockSharp.Messages
 		{
 			var clone = GetType().CreateInstance<OrderCondition>();
 			clone.Parameters.Clear(); // удаляем параметры по умолчанию
-			clone.Parameters.AddRange(_parameters.SyncGet(d => d.Select(p => new KeyValuePair<string, object>(p.Key, p.Value is ICloneable cl ? cl.Clone() : p.Value)).ToArray()));
+			clone.Parameters.AddRange(_parameters.SyncGet(d => d.Select(p => new KeyValuePair<string, object>(p.Key, p.Value is ICloneable cl ? cl.Clone() : (p.Value is IPersistable pers ? pers.Clone() : p.Value))).ToArray()));
 			return clone;
 		}
 	}

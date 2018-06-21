@@ -5,7 +5,7 @@ namespace StockSharp.Messages
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
@@ -37,9 +37,9 @@ namespace StockSharp.Messages
 	/// Bank details.
 	/// </summary>
 	[Serializable]
-	[DataContract]
+	[System.Runtime.Serialization.DataContract]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
-	public class BankDetails : Cloneable<BankDetails>
+	public class BankDetails : IPersistable
 	{
 		/// <summary>
 		/// Bank account.
@@ -163,25 +163,41 @@ namespace StockSharp.Messages
 		public CurrencyTypes Currency { get; set; } = CurrencyTypes.BTC;
 
 		/// <summary>
-		/// Create a copy of <see cref="BankDetails"/>.
+		/// Load settings.
 		/// </summary>
-		/// <returns>Copy.</returns>
-		public override BankDetails Clone()
+		/// <param name="storage">Settings storage.</param>
+		public void Load(SettingsStorage storage)
 		{
-			return new BankDetails
-			{
-				Account = Account,
-				AccountName = AccountName,
-				Name = Name,
-				Address = Address,
-				Country = Country,
-				City = City,
-				Bic = Bic,
-				Swift = Swift,
-				Iban = Iban,
-				PostalCode = PostalCode,
-				Currency = Currency,
-			};
+			Account = storage.GetValue<string>(nameof(Account));
+			AccountName = storage.GetValue<string>(nameof(AccountName));
+			Name = storage.GetValue<string>(nameof(Name));
+			Address = storage.GetValue<string>(nameof(Address));
+			Country = storage.GetValue<string>(nameof(Country));
+			City = storage.GetValue<string>(nameof(City));
+			Bic = storage.GetValue<string>(nameof(Bic));
+			Swift = storage.GetValue<string>(nameof(Swift));
+			Iban = storage.GetValue<string>(nameof(Iban));
+			PostalCode = storage.GetValue<string>(nameof(PostalCode));
+			Currency = storage.GetValue<CurrencyTypes>(nameof(Currency));
+		}
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Save(SettingsStorage storage)
+		{
+			storage.SetValue(nameof(Account), Account);
+			storage.SetValue(nameof(AccountName), AccountName);
+			storage.SetValue(nameof(Name), Name);
+			storage.SetValue(nameof(Address), Address);
+			storage.SetValue(nameof(Country), Country);
+			storage.SetValue(nameof(City), City);
+			storage.SetValue(nameof(Bic), Bic);
+			storage.SetValue(nameof(Swift), Swift);
+			storage.SetValue(nameof(Iban), Iban);
+			storage.SetValue(nameof(PostalCode), PostalCode);
+			storage.SetValue(nameof(Currency), Currency);
 		}
 	}
 
@@ -189,9 +205,9 @@ namespace StockSharp.Messages
 	/// Withdraw info.
 	/// </summary>
 	[Serializable]
-	[DataContract]
+	[System.Runtime.Serialization.DataContract]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
-	public class WithdrawInfo : Cloneable<WithdrawInfo>
+	public class WithdrawInfo : IPersistable
 	{
 		/// <summary>
 		/// Withdraw type.
@@ -314,24 +330,39 @@ namespace StockSharp.Messages
 		public string Comment { get; set; }
 
 		/// <summary>
-		/// Create a copy of <see cref="WithdrawInfo"/>.
+		/// Load settings.
 		/// </summary>
-		/// <returns>Copy.</returns>
-		public override WithdrawInfo Clone()
+		/// <param name="storage">Settings storage.</param>
+		public void Load(SettingsStorage storage)
 		{
-			return new WithdrawInfo
-			{
-				Type = Type,
-				Express = Express,
-				ChargeFee = ChargeFee,
-				BankDetails = BankDetails?.Clone(),
-				IntermediaryBankDetails = IntermediaryBankDetails?.Clone(),
-				CompanyDetails = CompanyDetails?.Clone(),
-				CardNumber = CardNumber,
-				PaymentId = PaymentId,
-				CryptoAddress = CryptoAddress,
-				Comment = Comment,
-			};
+			Type = storage.GetValue<WithdrawTypes>(nameof(Type));
+			Express = storage.GetValue<bool>(nameof(Express));
+			ChargeFee = storage.GetValue<decimal?>(nameof(ChargeFee));
+			BankDetails = storage.GetValue<SettingsStorage>(nameof(BankDetails))?.Load<BankDetails>();
+			IntermediaryBankDetails = storage.GetValue<SettingsStorage>(nameof(IntermediaryBankDetails))?.Load<BankDetails>();
+			CompanyDetails = storage.GetValue<SettingsStorage>(nameof(CompanyDetails))?.Load<BankDetails>();
+			CardNumber = storage.GetValue<string>(nameof(CardNumber));
+			PaymentId = storage.GetValue<string>(nameof(PaymentId));
+			CryptoAddress = storage.GetValue<string>(nameof(CryptoAddress));
+			Comment = storage.GetValue<string>(nameof(Comment));
+		}
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Save(SettingsStorage storage)
+		{
+			storage.SetValue(nameof(Type), Type);
+			storage.SetValue(nameof(Express), Express);
+			storage.SetValue(nameof(ChargeFee), ChargeFee);
+			storage.SetValue(nameof(BankDetails), BankDetails?.Save());
+			storage.SetValue(nameof(IntermediaryBankDetails), IntermediaryBankDetails?.Save());
+			storage.SetValue(nameof(CompanyDetails), CompanyDetails?.Save());
+			storage.SetValue(nameof(CardNumber), CardNumber);
+			storage.SetValue(nameof(PaymentId), PaymentId);
+			storage.SetValue(nameof(CryptoAddress), CryptoAddress);
+			storage.SetValue(nameof(Comment), Comment);
 		}
 	}
 }
