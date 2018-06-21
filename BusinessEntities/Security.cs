@@ -113,7 +113,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 2)]
 		[Required]
-		public ExchangeBoard Board
+		public virtual ExchangeBoard Board
 		{
 			get => _board;
 			set
