@@ -152,6 +152,17 @@ namespace StockSharp.Messages
 		public string PostalCode { get; set; }
 
 		/// <summary>
+		/// Currency.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CurrencyKey,
+			Description = LocalizedStrings.CurrencyKey + LocalizedStrings.Dot,
+			Order = 9)]
+		public CurrencyTypes Currency { get; set; } = CurrencyTypes.BTC;
+
+		/// <summary>
 		/// Create a copy of <see cref="BankDetails"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
@@ -169,6 +180,7 @@ namespace StockSharp.Messages
 				Swift = Swift,
 				Iban = Iban,
 				PostalCode = PostalCode,
+				Currency = Currency,
 			};
 		}
 	}
@@ -192,18 +204,6 @@ namespace StockSharp.Messages
 			GroupName = LocalizedStrings.WithdrawKey,
 			Order = 0)]
 		public WithdrawTypes Type { get; set; }
-
-		/// <summary>
-		/// Currency.
-		/// </summary>
-		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.CurrencyKey,
-			Description = LocalizedStrings.CurrencyKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.WithdrawKey,
-			Order = 1)]
-		public CurrencyTypes Currency { get; set; } = CurrencyTypes.BTC;
 
 		/// <summary>
 		/// Crypto address.
@@ -261,8 +261,8 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BankKey,
 			Description = LocalizedStrings.BankDetailsKey,
-			GroupName = LocalizedStrings.WithdrawKey,
-			Order = 5)]
+			GroupName = LocalizedStrings.BankKey,
+			Order = 50)]
 		public BankDetails BankDetails { get; set; }
 
 		/// <summary>
@@ -273,8 +273,8 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IntermediaryBankKey,
 			Description = LocalizedStrings.IntermediaryBankDetailsKey,
-			GroupName = LocalizedStrings.WithdrawKey,
-			Order = 6)]
+			GroupName = LocalizedStrings.BankKey,
+			Order = 51)]
 		public BankDetails IntermediaryBankDetails { get; set; }
 
 		/// <summary>
@@ -285,7 +285,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CompanyKey,
 			Description = LocalizedStrings.CompanyDetailsKey,
-			GroupName = LocalizedStrings.WithdrawKey,
+			GroupName = LocalizedStrings.BankKey,
 			Order = 7)]
 		public BankDetails CompanyDetails { get; set; }
 
@@ -297,7 +297,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BankCardKey,
 			Description = LocalizedStrings.BankCardNumberKey,
-			GroupName = LocalizedStrings.WithdrawKey,
+			GroupName = LocalizedStrings.BankKey,
 			Order = 8)]
 		public string CardNumber { get; set; }
 
@@ -309,6 +309,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str135Key,
 			Description = LocalizedStrings.BankCommentKey,
+			GroupName = LocalizedStrings.WithdrawKey,
 			Order = 9)]
 		public string Comment { get; set; }
 
@@ -321,7 +322,6 @@ namespace StockSharp.Messages
 			return new WithdrawInfo
 			{
 				Type = Type,
-				Currency = Currency,
 				Express = Express,
 				ChargeFee = ChargeFee,
 				BankDetails = BankDetails?.Clone(),
