@@ -3861,6 +3861,11 @@
             The provider of information about instruments.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.OrderWindow.PortfolioMessageAdapterProvider">
+      <summary>
+            The message adapter's provider.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.OrderWindow.Order">
       <summary>
             Order.
@@ -3876,7 +3881,7 @@
             Is <see cref="P:StockSharp.BusinessEntities.Order.Portfolio" /> able to change.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.OrderWindow.IsMarketEnabled">
+    <member name="P:StockSharp.Xaml.OrderWindow.OrderTypeEnabled">
       <summary>
             Is <see cref="P:StockSharp.BusinessEntities.Order.Type" /> able to change.
             </summary>
@@ -5998,6 +6003,16 @@
     <member name="M:StockSharp.Xaml.WithdrawWindow.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.WithdrawWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.WithdrawWindow.Volume">
+      <summary>
+            Volume.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.WithdrawWindow.VolumeStep">
+      <summary>
+            Volume step.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.WithdrawWindow.WithdrawInfo">

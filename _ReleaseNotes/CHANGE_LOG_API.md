@@ -32,6 +32,8 @@ StockSharp API Change log
 * (bug) InteractiveBrokers. Market depth fix.
 * (feature) Index builder. Ignore errors as parameters.
 * (feature) IMesssageAdapterExtension. Extra info about typical order's condition.
+* (feature) OrderWindow. Support conditional orders creation. Take-profit and stop-loss shortcuts.
+* (feature) WithdrawWindow. Volume and VolumeStep properties.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.

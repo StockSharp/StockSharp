@@ -846,10 +846,11 @@ M:StockSharp.Xaml.OrderWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.OrderWindow.Portfolios/summary;DocStr8362
 P:StockSharp.Xaml.OrderWindow.MarketDataProvider/summary;DocStr973
 P:StockSharp.Xaml.OrderWindow.SecurityProvider/summary;DocStr972
+P:StockSharp.Xaml.OrderWindow.PortfolioMessageAdapterProvider/summary;DocStr9328
 P:StockSharp.Xaml.OrderWindow.Order/summary;Str504
 P:StockSharp.Xaml.OrderWindow.SecurityEnabled/summary;DocStr10546
 P:StockSharp.Xaml.OrderWindow.PortfolioEnabled/summary;DocStr10546
-P:StockSharp.Xaml.OrderWindow.IsMarketEnabled/summary;DocStr10546
+P:StockSharp.Xaml.OrderWindow.OrderTypeEnabled/summary;DocStr10546
 M:StockSharp.Xaml.OrderWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PortfolioMessageAdaptersWindow/summary;DocStr8268
 F:StockSharp.Xaml.PortfolioMessageAdaptersWindow.RemoveCommand/summary;DocStr8269
@@ -1357,5 +1358,7 @@ E:StockSharp.Xaml.UnitEditor.ValueChanged/summary;DocStr8437
 M:StockSharp.Xaml.UnitEditor.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.WithdrawWindow/summary;DocStr8182
 M:StockSharp.Xaml.WithdrawWindow.#ctor/summary;DocStr1
+P:StockSharp.Xaml.WithdrawWindow.Volume/summary;DocStr3526
+P:StockSharp.Xaml.WithdrawWindow.VolumeStep/summary;VolumeStep
 P:StockSharp.Xaml.WithdrawWindow.WithdrawInfo/summary;WithdrawInfo
 M:StockSharp.Xaml.WithdrawWindow.InitializeComponent/summary;DocStr8
