@@ -4592,5 +4592,22 @@ namespace StockSharp.Algo
 			result.Update(result.Bids.Take(maxDepth), result.Asks.Take(maxDepth), true);
 			return result;
 		}
+
+		/// <summary>
+		/// Get adapter by portfolio.
+		/// </summary>
+		/// <param name="provider">The message adapter's provider.</param>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <returns>The found adapter.</returns>
+		public static IMessageAdapter GetAdapter(this IPortfolioMessageAdapterProvider provider, Portfolio portfolio)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			if (portfolio == null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			return provider.GetAdapter(portfolio.Name);
+		}
 	}
 }
