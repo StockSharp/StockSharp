@@ -2,6 +2,8 @@ T:StockSharp.Rithmic.RithmicMessageAdapter/summary;DocStr2538
 M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Rithmic.RithmicMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
+M:StockSharp.Rithmic.RithmicMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
@@ -34,7 +36,7 @@ M:StockSharp.Rithmic.RithmicMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Rithmic.RithmicMessageAdapter.ToString/returns;DocStr50
 T:StockSharp.Rithmic.RithmicOrderCondition/summary;DocStr60
 M:StockSharp.Rithmic.RithmicOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Rithmic.RithmicOrderCondition.TriggerPrice/summary;Str3460
+P:StockSharp.Rithmic.RithmicOrderCondition.StopPrice/summary;Str3460
 T:StockSharp.Rithmic.RithmicServers/summary;DocStr7414
 F:StockSharp.Rithmic.RithmicServers.Sim/summary;Str3461
 F:StockSharp.Rithmic.RithmicServers.Paper/summary;Str3462

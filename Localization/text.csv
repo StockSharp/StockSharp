@@ -15025,3 +15025,13 @@ DocStr10562;Output last active candle as finished;Выводить послед�
 DocStr10563;Information about Globex board of {0} exchange;Информация о Globex площадки биржи {0}
 DocStr10564;Deutsche Mark;Немецкая марка
 DocStr10565;Luxembourgish franc;Люксембургский франк
+DocStr10566;Get adapter by portfolio;Получить адаптер по портфелю
+DocStr10567;Extended interface for specify extra operation with conditional orders;Расширенный интерфейс для указания дополнительных операций с условными заявками
+DocStr10568;Determines whether the adapter support stop-loss orders;Определить, поддерживает ли адаптер заявки типа стоп-лосс
+DocStr10569;Determines whether the adapter support take-porift orders;Определить, поддерживает ли адаптер заявки типа тейк-профит
+DocStr10570;Determines whether the adapter support withdraw orders;Определить, поддерживает ли адаптер заявки на вывод
+DocStr10571;Create stop order condition;Создать стоп условие
+DocStr10572;Is take-profit of stop-loss;Является ли тейк-профитом или стоп-лоссом
+DocStr10573;Limit price for activated order. Can be {0} for {1};Лимитная цена для активированной заявки. Может быть {0} для {1}
+DocStr10574;Order condition. If the connection does not support the order type, the exception {0} will be thrown;Условие заявки. Если соединение не поддерживает тип заявки, будет выброшено исключение {0}
+DocStr10575;Create withdraw order condition;Создать условие заявки на вывод

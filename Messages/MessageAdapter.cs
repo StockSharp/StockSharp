@@ -649,6 +649,23 @@ namespace StockSharp.Messages
 		{
 			_propertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
+
+		/// <inheritdoc />
+		public virtual bool IsSupportStopLoss => false;
+
+		/// <inheritdoc />
+		public virtual bool IsSupportTakeProfit => false;
+
+		/// <inheritdoc />
+		public virtual bool IsSupportWithdraw => false;
+
+		/// <inheritdoc />
+		public virtual OrderCondition CreateStopCondition(bool isTakeProfit, decimal? stopPrice)
+			=> throw new NotSupportedException();
+
+		/// <inheritdoc />
+		public virtual OrderCondition CreateWithdrawCondition(WithdrawInfo info)
+			=> throw new NotSupportedException();
 	}
 
 	/// <summary>

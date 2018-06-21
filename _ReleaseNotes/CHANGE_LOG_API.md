@@ -31,6 +31,7 @@ StockSharp API Change log
 * (bug) InteractiveBrokers. Fix expiry time parsing fix.
 * (bug) InteractiveBrokers. Market depth fix.
 * (feature) Index builder. Ignore errors as parameters.
+* (feature) IMesssageAdapterExtension. Extra info about typical order's condition.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.

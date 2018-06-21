@@ -15,12 +15,12 @@ T:StockSharp.ETrade.ETradeMessageAdapter/summary;DocStr3108
 P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
 M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.ETrade.ETradeMessageAdapter.SecurityLookupRequired/summary;DocStr452
-M:StockSharp.ETrade.ETradeMessageAdapter.CreateOrderCondition/summary;DocStr44
-M:StockSharp.ETrade.ETradeMessageAdapter.CreateOrderCondition/returns;DocStr45
+P:StockSharp.ETrade.ETradeMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
+M:StockSharp.ETrade.ETradeMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
+M:StockSharp.ETrade.ETradeMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
 P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
-M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr3113
-M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.ETrade.ETradeMessageAdapter.SetCustomAuthorizationMethod(System.Action{System.String})/summary;DocStr3117
 M:StockSharp.ETrade.ETradeMessageAdapter.SetCustomAuthorizationMethod(System.Action{System.String})/param/method;DocStr3118
 P:StockSharp.ETrade.ETradeMessageAdapter.ConsumerKey/summary;Str3304

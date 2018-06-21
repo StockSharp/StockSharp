@@ -71,6 +71,12 @@ P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedMarketDataTypes/inheritdoc;Doc
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.NewOrderSingleErrorsAsReject/summary;DocStr10106
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportStopLoss/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportTakeProfit/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportWithdraw/inheritdoc;DocStr8459
+M:StockSharp.Fix.Dialects.BaseFixDialect.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
+M:StockSharp.Fix.Dialects.BaseFixDialect.CreateWithdrawCondition(StockSharp.Messages.WithdrawInfo)/inheritdoc;DocStr8459
+M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/summary;DocStr9453
 M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/param/writer;DocStr8757
 M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/param/reader;DocStr3327
@@ -202,6 +208,8 @@ P:StockSharp.Fix.Dialects.IFixDialect.SupportedMarketDataTypes/summary;DocStr101
 P:StockSharp.Fix.Dialects.IFixDialect.IsSupportCandlesUpdates/summary;DocStr10392
 P:StockSharp.Fix.Dialects.IFixDialect.SupportUnknownExecutions/summary;UnknownTransactonsDesc
 P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSecuritiesLookupAll/summary;DocStr10559
+M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition/summary;DocStr44
+M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition/returns;DocStr45
 M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/summary;DocStr9453
 M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/param/writer;DocStr8757
 M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/param/reader;DocStr3327
@@ -1698,6 +1706,11 @@ T:StockSharp.Fix.FixMessageAdapter/summary;DocStr3325
 M:StockSharp.Fix.FixMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Fix.FixMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+P:StockSharp.Fix.FixMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
+P:StockSharp.Fix.FixMessageAdapter.IsSupportTakeProfit/inheritdoc;DocStr8459
+P:StockSharp.Fix.FixMessageAdapter.IsSupportWithdraw/inheritdoc;DocStr8459
+M:StockSharp.Fix.FixMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
+M:StockSharp.Fix.FixMessageAdapter.CreateWithdrawCondition(StockSharp.Messages.WithdrawInfo)/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.PortfolioLookupRequired/inheritdoc;DocStr8459

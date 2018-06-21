@@ -290,5 +290,17 @@ namespace StockSharp.Messages
 			if (OwnInnerAdaper)
 				InnerAdapter.Dispose();
 		}
+
+		bool IMessageAdapterExtension.IsSupportStopLoss => InnerAdapter.IsSupportStopLoss;
+
+		bool IMessageAdapterExtension.IsSupportTakeProfit => InnerAdapter.IsSupportTakeProfit;
+
+		bool IMessageAdapterExtension.IsSupportWithdraw => InnerAdapter.IsSupportWithdraw;
+
+		OrderCondition IMessageAdapterExtension.CreateStopCondition(bool isTakeProfit, decimal? stopPrice)
+			=> InnerAdapter.CreateStopCondition(isTakeProfit, stopPrice);
+
+		OrderCondition IMessageAdapterExtension.CreateWithdrawCondition(WithdrawInfo info)
+			=> InnerAdapter.CreateWithdrawCondition(info);
 	}
 }

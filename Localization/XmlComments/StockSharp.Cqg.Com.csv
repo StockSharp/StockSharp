@@ -3,6 +3,8 @@ M:StockSharp.Cqg.Com.CqgComMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsNativeIdentifiers/summary;DocStr9381
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
+M:StockSharp.Cqg.Com.CqgComMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
 P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
