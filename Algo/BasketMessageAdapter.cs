@@ -990,6 +990,14 @@ namespace StockSharp.Algo
 
 					return s;
 				}).ToArray());
+
+				var pairs = AdapterProvider
+					.PortfolioAdapters
+					.Where(p => InnerAdapters.Contains(p.Value))
+					.Select(p => RefTuple.Create(p.Key, p.Value.Id))
+					.ToArray();
+
+				storage.SetValue(nameof(AdapterProvider), pairs);
 			}
 
 			if (LatencyManager != null)
@@ -1017,6 +1025,8 @@ namespace StockSharp.Algo
 			{
 				InnerAdapters.Clear();
 
+				var adapters = new Dictionary<Guid, IMessageAdapter>();
+
 				foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(InnerAdapters)))
 				{
 					try
@@ -1024,10 +1034,23 @@ namespace StockSharp.Algo
 						var adapter = s.GetValue<Type>("AdapterType").CreateInstance<IMessageAdapter>(TransactionIdGenerator);
 						adapter.Load(s.GetValue<SettingsStorage>("AdapterSettings"));
 						InnerAdapters[adapter] = s.GetValue<int>("Priority");
+
+						adapters.Add(adapter.Id, adapter);
 					}
 					catch (Exception e)
 					{
 						e.LogError();
+					}
+				}
+
+				if (storage.ContainsKey(nameof(AdapterProvider)))
+				{
+					var mapping = storage.GetValue<RefPair<string, Guid>[]>(nameof(AdapterProvider));
+
+					foreach (var tuple in mapping)
+					{
+						if (adapters.TryGetValue(tuple.Second, out var adapter))
+							AdapterProvider.SetAdapter(tuple.First, adapter);
 					}
 				}
 			}
