@@ -3050,9 +3050,10 @@ M:StockSharp.Algo.Storages.BaseMarketDataDrive.ToString/summary;DocStr49
 M:StockSharp.Algo.Storages.BaseMarketDataDrive.ToString/returns;DocStr50
 T:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1/summary;DocStr9538
 T:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1/typeparam/T;DocStr9
-M:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.#ctor(StockSharp.Algo.IndexSecurity,System.Object)/summary;DocStr1
-M:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.#ctor(StockSharp.Algo.IndexSecurity,System.Object)/param/security;DocStr1112
-M:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.#ctor(StockSharp.Algo.IndexSecurity,System.Object)/param/arg;DocStr1277
+M:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.#ctor(StockSharp.Algo.IndexSecurity,System.Object,System.Boolean)/summary;DocStr1
+M:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.#ctor(StockSharp.Algo.IndexSecurity,System.Object,System.Boolean)/param/security;DocStr1112
+M:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.#ctor(StockSharp.Algo.IndexSecurity,System.Object,System.Boolean)/param/arg;DocStr1277
+M:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.#ctor(StockSharp.Algo.IndexSecurity,System.Object,System.Boolean)/param/ignoreErrors;IgnoreErrors
 P:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.DataType/summary;DocStr1275
 P:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.Security/summary;DocStr1276
 P:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.Arg/summary;DocStr1277
@@ -7472,7 +7473,11 @@ M:StockSharp.Algo.TraderHelper.LookupAll(StockSharp.BusinessEntities.IConnector)
 M:StockSharp.Algo.TraderHelper.Truncate(StockSharp.BusinessEntities.MarketDepth,System.Int32)/summary;DocStr10526
 M:StockSharp.Algo.TraderHelper.Truncate(StockSharp.BusinessEntities.MarketDepth,System.Int32)/param/depth;DocStr2829
 M:StockSharp.Algo.TraderHelper.Truncate(StockSharp.BusinessEntities.MarketDepth,System.Int32)/param/maxDepth;DocStr2885
-M:StockSharp.Algo.TraderHelper.Truncate(StockSharp.BusinessEntities.MarketDepth,System.Int32)/returns;DocStr10527
+M:StockSharp.Algo.TraderHelper.Truncate(StockSharp.BusinessEntities.MarketDepth,System.Int32)/returns;TruncatedBook
+M:StockSharp.Algo.TraderHelper.GetAdapter(StockSharp.Messages.IPortfolioMessageAdapterProvider,StockSharp.BusinessEntities.Portfolio)/summary;DocStr10566
+M:StockSharp.Algo.TraderHelper.GetAdapter(StockSharp.Messages.IPortfolioMessageAdapterProvider,StockSharp.BusinessEntities.Portfolio)/param/provider;DocStr9328
+M:StockSharp.Algo.TraderHelper.GetAdapter(StockSharp.Messages.IPortfolioMessageAdapterProvider,StockSharp.BusinessEntities.Portfolio)/param/portfolio;Portfolio
+M:StockSharp.Algo.TraderHelper.GetAdapter(StockSharp.Messages.IPortfolioMessageAdapterProvider,StockSharp.BusinessEntities.Portfolio)/returns;DocStr9325
 T:StockSharp.Algo.UserPermissions/summary;DocStr163
 F:StockSharp.Algo.UserPermissions.Save/summary;DocStr165
 F:StockSharp.Algo.UserPermissions.Load/summary;DocStr165
