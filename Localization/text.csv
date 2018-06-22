@@ -15035,3 +15035,4 @@ DocStr10572;Is take-profit of stop-loss;Является ли тейк-проф�
 DocStr10573;Limit price for activated order. Can be {0} for {1};Лимитная цена для активированной заявки. Может быть {0} для {1}
 DocStr10574;Order condition. If the connection does not support the order type, the exception {0} will be thrown;Условие заявки. Если соединение не поддерживает тип заявки, будет выброшено исключение {0}
 DocStr10575;Create withdraw order condition;Создать условие заявки на вывод
+DocStr10576;Association changed;Ассоциация изменилась
