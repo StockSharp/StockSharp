@@ -35,6 +35,7 @@ StockSharp API Change log
 * (feature) OrderWindow. Support conditional orders creation. Take-profit and stop-loss shortcuts.
 * (feature) WithdrawWindow. Volume and VolumeStep properties.
 * (feature) BasketMessageAdapter. Save/load IPortfolioMessageAdapterProvider mapping.
+* (bug) TransactionSnapshot. Fix conditional orders save.
 
 ## v4.4.11:
 * (feature) Connector. ICandleManager implemented.

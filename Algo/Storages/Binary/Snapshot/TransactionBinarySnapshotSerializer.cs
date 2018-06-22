@@ -4,6 +4,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.InteropServices;
+	using System.Text;
 
 	using Ecng.Common;
 	using Ecng.Interop;
@@ -122,11 +123,14 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
 			public string ValueType;
 
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-			public string StringValue;
 			public long? NumValue;
 			public decimal? DecimalValue;
 			public bool? BoolValue;
+
+			public int StringValueLen;
+
+			//[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+			//public string StringValue;
 		}
 
 		Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = new Version(2, 0);
@@ -209,21 +213,27 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			var paramSize = typeof(TransactionConditionParam).SizeOf();
 			var snapshotSize = typeof(TransactionSnapshot).SizeOf();
 
-			var buffer = new byte[snapshotSize + snapshot.ConditionParamsCount * paramSize];
+			var result = new List<byte>();
+
+			var buffer = new byte[snapshotSize];
 
 			var ptr = snapshot.StructToPtr();
 			Marshal.Copy(ptr, buffer, 0, snapshotSize);
 			Marshal.FreeHGlobal(ptr);
 
-			var offset = snapshotSize;
+			result.AddRange(buffer);
 
 			foreach (var conParam in conParams)
 			{
+				buffer = new byte[paramSize];
+
 				var param = new TransactionConditionParam
 				{
 					Name = conParam.Key,
 					ValueType = conParam.Value.GetType().GetTypeAsString(false),
 				};
+
+				byte[] stringValue = null;
 
 				switch (conParam.Value)
 				{
@@ -275,19 +285,32 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					case Enum e:
 						param.NumValue = e.To<long>();
 						break;
+					case IPersistable p:
+						stringValue = new XmlSerializer<SettingsStorage>().Serialize(p.Save());
+						break;
 					default:
-						param.StringValue = conParam.Value.To<string>();
+						stringValue = Encoding.UTF8.GetBytes(conParam.Value.To<string>());
 						break;
 				}
 
+				if (stringValue != null)
+				{
+					param.StringValueLen = stringValue.Length;
+				}
+
 				var rowPtr = param.StructToPtr();
-				Marshal.Copy(rowPtr, buffer, offset, paramSize);
+				Marshal.Copy(rowPtr, buffer, 0, paramSize);
 				Marshal.FreeHGlobal(rowPtr);
 
-				offset += paramSize;
+				result.AddRange(buffer);
+
+				if (stringValue == null)
+					continue;
+
+				result.AddRange(stringValue);
 			}
 
-			return buffer;
+			return result.ToArray();
 		}
 
 		ExecutionMessage ISnapshotSerializer<string, ExecutionMessage>.Deserialize(Version version, byte[] buffer)
@@ -363,12 +386,17 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				var paramSize = typeof(TransactionConditionParam).SizeOf();
 
 				if (!snapshot.ConditionType.IsEmpty())
+				{
 					execMsg.Condition = snapshot.ConditionType.To<Type>().CreateInstance<OrderCondition>();
+					execMsg.Condition.Parameters.Clear(); // removing pre-defined values
+				}
 
 				for (var i = 0; i < snapshot.ConditionParamsCount; i++)
 				{
 					var param = ptr.ToStruct<TransactionConditionParam>();
 					var paramType = param.ValueType.To<Type>();
+
+					ptr += paramSize;
 
 					object value;
 
@@ -378,10 +406,26 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						value = param.DecimalValue.Value;
 					else if (param.BoolValue != null)
 						value = param.BoolValue.Value;
-					else if (paramType == typeof(Unit))
-						value = param.StringValue.ToUnit();
+					//else if (paramType == typeof(Unit))
+					//	value = param.StringValue.ToUnit();
+					else if (param.StringValueLen > 0)
+					{
+						var strBuffer = new byte[param.StringValueLen];
+						Marshal.Copy(ptr, strBuffer, 0, strBuffer.Length);
+
+						if (typeof(IPersistable).IsAssignableFrom(paramType))
+						{
+							var persistable = paramType.CreateInstance<IPersistable>();
+							persistable.Load(new XmlSerializer<SettingsStorage>().Deserialize(strBuffer));
+							value = persistable;
+						}
+						else
+							value = Encoding.UTF8.GetString(strBuffer);
+						
+						ptr += param.StringValueLen;
+					}
 					else
-						value = param.StringValue;
+						value = null;
 
 					try
 					{
@@ -392,8 +436,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					{
 						ex.LogError();
 					}
-					
-					ptr += paramSize;
 				}
 				
 				return execMsg;
