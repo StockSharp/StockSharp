@@ -1,5 +1,24 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.12:
+* (bug) Fix cross-thread UI issues.
+* (bug) Fix spashscreen info.
+* (feature) OpenECry. v3.5.14.41
+* (feature) FAST dialects. Made network settings configurable.
+* (feature) InteractiveBrokers. v9.73.07
+* (feature) InteractiveBrokers. SSL support.
+* (bug) Fix securities lookup all processing.
+* (feature) CurrencyTypes. DEM, LUF.
+* (feature) ExchangeBoard. Globex board info added.
+* (bug) SecurityGrid. Do not show errors in security grid.
+* (feature) Security lookup. Reset button to exchange board editor added.
+* (bug) InteractiveBrokers. Fix expiry time parsing fix.
+* (bug) InteractiveBrokers. Market depth fix.
+* (feature) Index builder. Ignore errors as parameters.
+* (bug) Fix begin date set for downloaded candles.
+* (bug) Fix board info loading for index securities.
+* (feature) FIX server. Skip unknown security requests.
+
 ## v4.4.11:
 * (feature) Support dates range for ticks, order book and order log subscriptions.
 * (feature) Yahoo. Intraday interval supported.
