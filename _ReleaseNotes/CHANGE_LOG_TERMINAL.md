@@ -1,5 +1,31 @@
 StockSharp Terminal Change log
 ========================
+## v4.4.12:
+* (bug) Fix storage format select.
+* (bug) Fix cross-thread UI issues.
+* (bug) Fix spashscreen info.
+* (bug) Charting. Buy/Sell annotation theme fix.
+* (feature) Portfolios panel. Provide withdraw operation.
+* (feature) Orders panel. Conditional orders joined with regular orders.
+* (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
+* (bug) OrderGrid. Cancel group orders fix.
+* (feature) OpenECry. v3.5.14.41
+* (feature) FAST dialects. Made network settings configurable.
+* (feature) InteractiveBrokers. v9.73.07
+* (feature) InteractiveBrokers. SSL support.
+* (bug) Fix securities lookup all processing.
+* (feature) CurrencyTypes. DEM, LUF.
+* (feature) ExchangeBoard. Globex board info added.
+* (bug) Fix process multiples timeframes.
+* (bug) Transactions snapshot storage. Fix orders and trades save.
+* (bug) SecurityGrid. Do not show errors in security grid.
+* (feature) Security lookup. Reset button to exchange board editor added.
+* (bug) InteractiveBrokers. Fix expiry time parsing fix.
+* (bug) InteractiveBrokers. Market depth fix.
+* (feature) Index builder. Ignore errors as parameters.
+* (feature) Save/load portfolio-connection mapping.
+* (bug) Fix conditional orders save.
+
 ## v4.4.11:
 * (bug) Quik. Fix portfolio receive fix.
 * (bug) Image publish cancellation processing fix.
