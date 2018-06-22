@@ -1,5 +1,23 @@
 StockSharp Designer Change log
 ========================
+## v4.4.12:
+* (bug) Fix storage format select.
+* (bug) Fix cross-thread UI issues.
+* (bug) Fix spashscreen info.
+* (bug) Charting. Buy/Sell annotation theme fix.
+* (feature) Orders panel. Conditional orders joined with regular orders.
+* (bug) SecurityGrid. Do not show errors in security grid.
+* (feature) Security lookup. Reset button to exchange board editor added.
+* (bug) InteractiveBrokers. Fix expiry time parsing fix.
+* (bug) InteractiveBrokers. Market depth fix.
+* (feature) Index builder. Ignore errors as parameters.
+* (feature) Save/load portfolio-connection mapping.
+* (bug) Fix conditional orders save.
+* (feature) Tooltip for pallete and solution tree added.
+* (bug) Fix download history enable/disable.
+* (bug) MarketDepthTruncateDiagramElement. Description fix.
+* (feature) Live. Show only one button (start or stop).
+
 ## v4.4.11:
 * (bug) Many live trading fixes.
 * (feature) Offline. Support replace for pending orders.
