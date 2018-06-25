@@ -505,7 +505,7 @@ namespace StockSharp.Algo.Candles.Compression
 					RaiseNewOutMessage(message);
 			}
 			else
-				UpgradeSubscription(series);
+				UpgradeSubscription(series, message);
 
 			return true;
 		}
@@ -515,11 +515,11 @@ namespace StockSharp.Algo.Candles.Compression
 			if (!_seriesByTransactionId.TryGetValue(message.OriginalTransactionId, out var series))
 				return false;
 
-			UpgradeSubscription(series);
+			UpgradeSubscription(series, null);
 			return true;
 		}
 
-		private void UpgradeSubscription(SeriesInfo series)
+		private void UpgradeSubscription(SeriesInfo series, MarketDataMessage response)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
@@ -529,7 +529,15 @@ namespace StockSharp.Algo.Candles.Compression
 			void Finish()
 			{
 				RemoveSeries(series);
-				RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = original.TransactionId });
+
+				if (response != null && (response.Error != null || response.IsNotSupported))
+				{
+					response = (MarketDataMessage)response.Clone();
+					response.OriginalTransactionId = original.TransactionId;
+					RaiseNewOutMessage(response);
+				}
+				else
+					RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = original.TransactionId });
 			}
 
 			if (original.To != null && series.LastTime != null && original.To <= series.LastTime)

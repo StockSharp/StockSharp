@@ -2,6 +2,7 @@ StockSharp API Change log
 ========================
 ## current:
 * (bug) Monitor.Clear fix.
+* (bug) Candles. Fix process error response in case of multiples connections.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
