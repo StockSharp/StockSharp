@@ -4357,7 +4357,7 @@ PriceRange;Price range;Ценовой диапазон
 NeedToAddOptionPositionChart;Need to add the option positions chart panel;Необходимо добавить график позиций опционов
 Math;Math;Математика
 Diagram;Diagram;Схема
-NeedToAddOptionDesk;Need to add the option desk panel;Необходимо добавить панель опционный деск
+NeedToAddOptionDesk;Need to add the option desk;Необходимо добавить доску опционов
 ImpliedVolatilityMarketDepth;Implied volatility order book;Стакан подразумеваемой волатильности
 StrikeLeftOffset;Offset to the left (less) from central strike. If not set, all less then central strikes will be collected.;Сдвиг влево (меньше) от центрального страйка. Если не установлено, то все страйки с меньшим значением центрального будут использованы.
 StrikeRightOffset;Offset to the right (more) from central strike. If not set, all more then central strikes will be collected.;Сдвиг вправо (больше) от центрального страйка. Если не установлено, то все страйки с большим значением центрального будут использованы.
@@ -14973,8 +14973,8 @@ DocStr10504;Message sender base interface;Интерфейс отправите�
 DocStr10505;Disable tracking indicator reset;Выключить отслеживание сброса индикаторов
 DocStr10506;Type of key value;Тип ключа значения
 DocStr10507;Get all snapshots;Получить все снэпшоты
-DocStr10508;All snapshots;Все снэпшоты
-DocStr10509;Snapshot storage registry;Реестр хранилащ-снэпшотов
+DocStr10508;All snapshots;Все снэпшотыщ
+DocStr10509;Snapshot storage registry;Реестр хранилищ-снэпшотов
 DocStr10510;Support lookup messages;Поддерживаются ли сообщения поиска
 DocStr10511;Lookup securities, portfolios and orders;Искать инструменты, портфели и заявки
 DocStr10512;Target adapter. Can be {0};Целевой адаптер. Может быть {0}
