@@ -66,7 +66,11 @@
 						{
 							var secId = GetSecurityId(message.SecurityId);
 
-							_depthBuilders.Add(secId, InnerAdapter.CreateOrderLogMarketDepthBuilder(secId));
+							if (InnerAdapter.IsSupportSubscriptionBySecurity)
+								_depthBuilders.Add(secId, InnerAdapter.CreateOrderLogMarketDepthBuilder(secId));
+							else
+								_depthBuilders.TryAdd(secId, (IOrderLogMarketDepthBuilder)null);
+
 							_subscriptionIds.Add(message.TransactionId, Tuple.Create(secId, message.DataType));
 
 							var clone = (MarketDataMessage)message.Clone();

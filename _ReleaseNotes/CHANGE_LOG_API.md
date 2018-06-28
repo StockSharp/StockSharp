@@ -4,6 +4,7 @@ StockSharp API Change log
 * (bug) Monitor.Clear fix.
 * (bug) Candles. Fix process error response in case of multiples connections.
 * (bug) PortfolioGrid. Fix State column localization.
+* (bug) OrderLogMessageAdapter. Fix multi subscription processing.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
