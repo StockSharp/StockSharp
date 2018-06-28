@@ -6,6 +6,7 @@ StockSharp API Change log
 * (bug) PortfolioGrid. Fix State column localization.
 * (bug) OrderLogMessageAdapter. Fix multi subscription processing.
 * (feature) FAST settings as public.
+* (bug) LMAX securities lookup fix.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
