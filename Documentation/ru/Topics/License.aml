@@ -34,15 +34,16 @@
 Крипто-трейдер
 
 </legacyBold></para>
-		<list class="ordered">
+		<!--<list class="ordered">
   			<listItem>
   				<para>Пожизненно всем участникам <externalLink>
   				<linkText>крауд кампаний</linkText>
 			<linkAlternateText>крауд кампаний</linkAlternateText>
 			<linkUri>http://crowd.stocksharp.ru</linkUri>
 			<linkTarget>_blank</linkTarget>
-			</externalLink>. 
-  				Доступно:
+			</externalLink>.
+  				Доступно:-->
+  		<para>
 		<token>Bitfinex</token>,
 		<token>Bithumb</token>,
 		<token>BitStamp</token>,
@@ -57,7 +58,7 @@
 		<token>Poloniex</token>,
 		<token>Binance</token>,
 		<token>Liqui</token>,
-		<token>CEX.IO</token>,
+		<token>CEX</token>,
 		<token>Cryptopia</token>,
 		<token>OKEx</token>,
 		<token>BitMEX</token>,
@@ -69,9 +70,10 @@
 		<token>KuCoin</token>,
 		<token>BITEXBOOK</token>,
 		<token>CoinExchange</token>
-  				</para>
+		</para>
+  				<!--</para>
   			</listItem>
-		</list>
+		</list>-->
 		<para><legacyBold>Расширенная лицензия</legacyBold></para>
 		<list class="ordered">
   			<listItem>

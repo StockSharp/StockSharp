@@ -30,7 +30,7 @@
 
 		<para>See also <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">StockSharp installation</link>.</para>
 		<para><legacyBold>Crypto trader</legacyBold></para>
-		<list class="ordered">
+		<!--<list class="ordered">
   			<listItem>
   				<para>Perpetual license for investors of our crowd campaigns <externalLink>
   				<linkText>crowd campaigns</linkText>
@@ -38,7 +38,8 @@
 			<linkUri>http://crowd.stocksharp.com</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>.
-  				It's include:
+  				It's include:-->
+  		<para>
 		<token>Bitfinex</token>,
 		<token>Bithumb</token>,
 		<token>BitStamp</token>,
@@ -53,7 +54,7 @@
 		<token>Poloniex</token>,
 		<token>Binance</token>,
 		<token>Liqui</token>,
-		<token>CEX.IO</token>,
+		<token>CEX</token>,
 		<token>Cryptopia</token>,
 		<token>OKEx</token>,
 		<token>BitMEX</token>,
@@ -65,9 +66,10 @@
 		<token>KuCoin</token>,
 		<token>BITEXBOOK</token>,
 		<token>CoinExchange</token>
-  				</para>
+		</para>
+  				<!--</para>
   			</listItem>
-		</list>
+		</list>-->
 		<para><legacyBold>Extended License</legacyBold></para>
 		<list class="ordered">
   			<listItem>
