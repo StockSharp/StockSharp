@@ -10,6 +10,7 @@ StockSharp API Change log
 * (bug) QuikLua. Fix Si and Eu symbols processing.
 * (bug) FixServer. QuotesInterval handling fix.
 * (feature) FixServer. TransactionId mapping associated with clients session.
+* (bug) TraderHelper. IsLookupAll method fix.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

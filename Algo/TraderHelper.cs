@@ -3565,7 +3565,19 @@ namespace StockSharp.Algo
 			return
 				criteria.Id.IsEmpty() &&
 				criteria.Code.IsEmpty() &&
-				criteria.Type == null;
+				criteria.Board == null &&
+				criteria.ExpiryDate == null &&
+				criteria.Type == null &&
+				criteria.OptionType == null &&
+				criteria.Strike == null &&
+				criteria.CfiCode.IsEmpty() &&
+				criteria.Class.IsEmpty() &&
+				criteria.Currency == null &&
+				criteria.Decimals == null &&
+				criteria.Name.IsEmpty() &&
+				criteria.UnderlyingSecurityType == null &&
+				criteria.UnderlyingSecurityId.IsEmpty() &&
+				criteria.BinaryOptionType.IsEmpty();
 		}
 
 		/// <summary>
