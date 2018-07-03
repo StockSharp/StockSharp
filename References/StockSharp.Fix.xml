@@ -1388,10 +1388,11 @@
             Stop the server.
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.FixServer.TryGetRequestId(System.Int64)">
+    <member name="M:StockSharp.Fix.FixServer.TryGetRequestId(StockSharp.Fix.FixSession,System.Int64)">
       <summary>
             Get the request identifier.
             </summary>
+      <param name="session">The session.</param>
       <param name="transactionId">Transaction ID.</param>
       <returns>Request identifier.</returns>
     </member>

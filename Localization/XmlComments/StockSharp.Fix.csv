@@ -386,9 +386,10 @@ P:StockSharp.Fix.FixServer.State/summary;DocStr3173
 E:StockSharp.Fix.FixServer.StateChanged/summary;DocStr3900
 M:StockSharp.Fix.FixServer.Start/summary;DocStr3163
 M:StockSharp.Fix.FixServer.Stop/summary;DocStr3164
-M:StockSharp.Fix.FixServer.TryGetRequestId(System.Int64)/summary;DocStr3165
-M:StockSharp.Fix.FixServer.TryGetRequestId(System.Int64)/param/transactionId;TransactionId
-M:StockSharp.Fix.FixServer.TryGetRequestId(System.Int64)/returns;DocStr3166
+M:StockSharp.Fix.FixServer.TryGetRequestId(StockSharp.Fix.FixSession,System.Int64)/summary;DocStr3165
+M:StockSharp.Fix.FixServer.TryGetRequestId(StockSharp.Fix.FixSession,System.Int64)/param/session;DocStr8778
+M:StockSharp.Fix.FixServer.TryGetRequestId(StockSharp.Fix.FixSession,System.Int64)/param/transactionId;TransactionId
+M:StockSharp.Fix.FixServer.TryGetRequestId(StockSharp.Fix.FixSession,System.Int64)/returns;DocStr3166
 M:StockSharp.Fix.FixServer.GetTransactionId(StockSharp.Fix.FixSession,System.String)/summary;DocStr8777
 M:StockSharp.Fix.FixServer.GetTransactionId(StockSharp.Fix.FixSession,System.String)/param/session;DocStr8778
 M:StockSharp.Fix.FixServer.GetTransactionId(StockSharp.Fix.FixSession,System.String)/param/requestId;DocStr8779
