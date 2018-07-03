@@ -7,6 +7,7 @@ StockSharp API Change log
 * (bug) OrderLogMessageAdapter. Fix multi subscription processing.
 * (feature) FAST settings as public.
 * (bug) LMAX securities lookup fix.
+* (bug) QuikLua. Fix Si and Eu symbols processing.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

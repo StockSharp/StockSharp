@@ -179,6 +179,20 @@
       <param name="timeFrame">Тайм-фрейм.</param>
       <returns>Последняя отправленная свеча.</returns>
     </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixServer.TryAddSecurityCode(System.String)">
+      <summary>
+      </summary>
+      <param name="secCode">
+      </param>
+    </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixServer.TryGetSecurityCode(System.String)">
+      <summary>
+      </summary>
+      <param name="secCode">
+      </param>
+      <returns>
+      </returns>
+    </member>
     <member name="T:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter">
       <summary>
             Адаптер сообщений для Quik LUA FIX.
