@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		private readonly SynchronizedDictionary<long, SeriesInfo> _seriesByTransactionId = new SynchronizedDictionary<long, SeriesInfo>();
-		private readonly SynchronizedDictionary<SecurityId, SynchronizedList<SeriesInfo>> _seriesBySecurityId = new SynchronizedDictionary<SecurityId, SynchronizedList<SeriesInfo>>();
+		private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedList<SeriesInfo>> _seriesBySecurityId = new SynchronizedDictionary<SecurityId, CachedSynchronizedList<SeriesInfo>>();
 		private readonly SynchronizedSet<long> _unsubscriptions = new SynchronizedSet<long>();
 		private readonly CandleBuildersList _candleBuilders;
 		private readonly IExchangeInfoProvider _exchangeInfoProvider;
@@ -333,13 +333,19 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void RemoveSeries(SeriesInfo series)
 		{
-			var seriesList = _seriesBySecurityId.TryGetValue(series.Original.SecurityId);
+			lock (_seriesBySecurityId.SyncRoot)
+			{
+				var seriesList = _seriesBySecurityId.TryGetValue(series.Original.SecurityId);
 
-			if (seriesList == null)
-				return;
+				if (seriesList == null)
+					return;
 
-			lock (seriesList.SyncRoot)
-				seriesList.RemoveWhere(s => s.Original.TransactionId == series.Original.TransactionId);
+				lock (seriesList.SyncRoot)
+					seriesList.RemoveWhere(s => s.Original.TransactionId == series.Original.TransactionId);
+
+				if (seriesList.Count == 0)
+					_seriesBySecurityId.Remove(series.Original.SecurityId);
+			}
 		}
 
 		private static ICandleBuilderValueTransform CreateTransform(MarketDataTypes dataType, Level1Fields? field)
@@ -625,34 +631,44 @@ namespace StockSharp.Algo.Candles.Compression
 		private void ProcessValue<TMessage>(SecurityId securityId, long transactionId, TMessage message)
 			where TMessage : Message
 		{
-			var infos = _seriesBySecurityId.TryGetValue(securityId);
+			var seriesList = _seriesBySecurityId.TryGetValue(securityId);
 
-			if (infos == null)
+			if (seriesList == null)
 				return;
 
-			foreach (var info in infos)
+			foreach (var series in seriesList.Cache)
 			{
-				var transform = info.Transform;
+				if (series.Current.TransactionId != transactionId && (transactionId != 0/* || info.IsHistory*/))
+					continue;
+
+				var transform = series.Transform;
 
 				if (transform?.Process(message) != true)
 					continue;
 
-				if (info.Current.TransactionId != transactionId && (transactionId != 0/* || info.IsHistory*/))
+				var time = transform.Time;
+				var origin = series.Original;
+
+				if (origin.To != null && origin.To.Value < time)
+				{
+					RemoveSeries(series);
+					RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = origin.TransactionId });
+					continue;
+				}
+
+				if (series.LastTime != null && series.LastTime.Value > time)
 					continue;
 
-				if (info.LastTime != null && info.LastTime.Value > transform.Time)
-					continue;
+				series.LastTime = time;
 
-				info.LastTime = transform.Time;
+				var builder = _candleBuilders.Get(origin.DataType);
 
-				var builder = _candleBuilders.Get(info.Original.DataType);
-
-				var result = builder.Process(info.Original, info.CurrentCandleMessage, transform);
+				var result = builder.Process(origin, series.CurrentCandleMessage, transform);
 
 				foreach (var candleMessage in result)
 				{
-					info.CurrentCandleMessage = candleMessage;
-					SendCandle(info, candleMessage);
+					series.CurrentCandleMessage = candleMessage;
+					SendCandle(series, candleMessage);
 				}
 			}
 		}
