@@ -13,6 +13,7 @@ StockSharp API Change log
 * (bug) TraderHelper. IsLookupAll method fix.
 * (bug) CandleBuilderMessageAdapter. Fix BuildMode processing.
 * (feature) CandleBuilderMessageAdapter. Track From date.
+* (bug) Transaq. Fix sec code decoding (&amp;).
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
