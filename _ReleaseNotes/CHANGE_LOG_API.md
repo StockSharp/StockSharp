@@ -18,6 +18,7 @@ StockSharp API Change log
 * (bug) Chart. Date on x-axis not clipped to control bounds.
 * (bug) Bittrex. Market depth fix and nullable order's field fix.
 * (bug) Yobit. Empty order book processing fix.
+* (feature) Chart. Removed obsolete xml exporting option.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

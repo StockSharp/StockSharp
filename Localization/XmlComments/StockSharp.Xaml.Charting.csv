@@ -386,9 +386,6 @@ M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,Syst
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,System.Collections.Generic.IEnumerable{Ecng.Common.RefPair{System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object}}})/summary;DocStr486
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,System.Collections.Generic.IEnumerable{Ecng.Common.RefPair{System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object}}})/param/chart;Str3200
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,System.Collections.Generic.IEnumerable{Ecng.Common.RefPair{System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object}}})/param/values;DocStr467
-M:StockSharp.Xaml.Charting.ChartHelper.SaveToXml(StockSharp.Xaml.Charting.IChart,System.String)/summary;DocStr7782
-M:StockSharp.Xaml.Charting.ChartHelper.SaveToXml(StockSharp.Xaml.Charting.IChart,System.String)/param/chart;Str3200
-M:StockSharp.Xaml.Charting.ChartHelper.SaveToXml(StockSharp.Xaml.Charting.IChart,System.String)/param/fileName;DocStr7783
 M:StockSharp.Xaml.Charting.ChartHelper.SaveToImage(StockSharp.Xaml.Charting.IChart)/summary;DocStr7784
 M:StockSharp.Xaml.Charting.ChartHelper.SaveToImage(StockSharp.Xaml.Charting.IChart)/param/chart;Str3200
 M:StockSharp.Xaml.Charting.ChartHelper.SaveToImage(StockSharp.Xaml.Charting.IChart)/returns;DocStr8868
@@ -1000,6 +997,7 @@ M:StockSharp.Xaml.Charting.OptionPositionChart.Save(Ecng.Serialization.SettingsS
 M:StockSharp.Xaml.Charting.OptionPositionChart.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Charting.OptionVolatilitySmileChart/summary;VolatilitySmileChart
 P:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.ChartTheme/summary;DocStr7731
+P:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.SmileStep/summary;DocStr10577
 M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.Elements/summary;DocStr10045
 M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.CreateSmile(System.String,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles,System.Guid)/summary;DocStr9371
