@@ -11,6 +11,7 @@ StockSharp API Change log
 * (bug) FixServer. QuotesInterval handling fix.
 * (feature) FixServer. TransactionId mapping associated with clients session.
 * (bug) TraderHelper. IsLookupAll method fix.
+* (bug) CandleBuilderMessageAdapter. Fix BuildMode processing.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

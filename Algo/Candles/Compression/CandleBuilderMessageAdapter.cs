@@ -148,7 +148,7 @@ namespace StockSharp.Algo.Candles.Compression
 					{
 						var transactionId = mdMsg.TransactionId;
 
-						if (mdMsg.IsCalcVolumeProfile)
+						if (mdMsg.IsCalcVolumeProfile || mdMsg.BuildMode == MarketDataBuildModes.Build)
 						{
 							if (!TrySubscribeBuild(mdMsg, transactionId))
 							{
@@ -243,7 +243,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 							base.SendInMessage(unsubscribe);
 
-							
 							return;
 						}
 
