@@ -15,6 +15,7 @@ StockSharp API Change log
 * (feature) CandleBuilderMessageAdapter. Track From date.
 * (bug) Transaq. Fix sec code decoding (&amp;).
 * (bug) Bitmex. Process order fix.
+* (bug) Chart. Date on x-axis not clipped to control bounds.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
