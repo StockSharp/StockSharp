@@ -16,6 +16,7 @@ StockSharp API Change log
 * (bug) Transaq. Fix sec code decoding (&amp;).
 * (bug) Bitmex. Process order fix.
 * (bug) Chart. Date on x-axis not clipped to control bounds.
+* (bug) Bittrex. Market depth fix and nullable order's field fix.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
