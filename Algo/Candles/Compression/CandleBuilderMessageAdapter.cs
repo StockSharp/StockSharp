@@ -555,7 +555,8 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				case SeriesStates.Regular:
 				{
-					if (original.AllowBuildFromSmallerTimeFrame)
+					// upgrate to smaller tf only in case failed subscription
+					if (response != null && original.AllowBuildFromSmallerTimeFrame)
 					{
 						var smaller = InnerAdapter
 										.TimeFrames
