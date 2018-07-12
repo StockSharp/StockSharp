@@ -147,10 +147,11 @@ namespace StockSharp.Algo.Candles.Compression
 					if (mdMsg.IsSubscribe)
 					{
 						var transactionId = mdMsg.TransactionId;
+						var isLoadOnly = mdMsg.BuildMode == MarketDataBuildModes.Load;
 
 						if (mdMsg.IsCalcVolumeProfile || mdMsg.BuildMode == MarketDataBuildModes.Build)
 						{
-							if (!TrySubscribeBuild(mdMsg, transactionId))
+							if (isLoadOnly || !TrySubscribeBuild(mdMsg, transactionId))
 							{
 								RaiseNewOutMessage(new MarketDataMessage
 								{
@@ -177,6 +178,17 @@ namespace StockSharp.Algo.Candles.Compression
 							});
 
 							break;
+						}
+
+						if (isLoadOnly)
+						{
+							RaiseNewOutMessage(new MarketDataMessage
+							{
+								OriginalTransactionId = transactionId,
+								IsNotSupported = true,
+							});
+
+							return;
 						}
 
 						if (mdMsg.AllowBuildFromSmallerTimeFrame)
@@ -555,9 +567,17 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				case SeriesStates.Regular:
 				{
+					var isLoadOnly = series.Original.BuildMode == MarketDataBuildModes.Load;
+
 					// upgrate to smaller tf only in case failed subscription
 					if (response != null && original.AllowBuildFromSmallerTimeFrame)
 					{
+						if (isLoadOnly)
+						{
+							Finish();
+							return;
+						}
+
 						var smaller = InnerAdapter
 										.TimeFrames
 						                .FilterSmallerTimeFrames((TimeSpan)original.Arg)
@@ -579,6 +599,12 @@ namespace StockSharp.Algo.Candles.Compression
 
 							return;
 						}
+					}
+
+					if (response == null && isLoadOnly)
+					{
+						Finish();
+						return;
 					}
 
 					series.State = SeriesStates.Compress;

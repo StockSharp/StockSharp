@@ -20,6 +20,7 @@ StockSharp API Change log
 * (bug) Yobit. Empty order book processing fix.
 * (feature) Chart. Removed obsolete xml exporting option.
 * (bug) CandleBuilderMessageAdapter. Do not switch to smaller tf in case successfully finished original tf series.
+* (bug) CandleBuilderMessageAdapter. Fix Load only subscription processing.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
