@@ -22,6 +22,7 @@ StockSharp API Change log
 * (bug) CandleBuilderMessageAdapter. Do not switch to smaller tf in case successfully finished original tf series.
 * (bug) CandleBuilderMessageAdapter. Fix Load only subscription processing.
 * (bug) SecurityNativeIdMessageAdapter. Ignore candles with empty security id.
+* (bug) BasketMessageAdapter. Send error response for unhandled security lookup request.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
