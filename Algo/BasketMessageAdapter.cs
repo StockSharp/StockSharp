@@ -231,6 +231,9 @@ namespace StockSharp.Algo
 		protected override bool IsSupportNativeSecurityLookup => true;
 
 		/// <inheritdoc />
+		public override bool IsSupportSecuritiesLookupAll => GetSortedAdapters().Any(a => a.IsSupportSecuritiesLookupAll);
+
+		/// <inheritdoc />
 		public override MessageAdapterCategories Categories => GetSortedAdapters().Select(a => a.Categories).JoinMask();
 
 		/// <summary>

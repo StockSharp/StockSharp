@@ -23,6 +23,7 @@ StockSharp API Change log
 * (bug) CandleBuilderMessageAdapter. Fix Load only subscription processing.
 * (bug) SecurityNativeIdMessageAdapter. Ignore candles with empty security id.
 * (bug) BasketMessageAdapter. Send error response for unhandled security lookup request.
+* (bug) Samples. Fix lookup all securities for non supported connections.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

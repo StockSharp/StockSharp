@@ -318,7 +318,11 @@ namespace SampleRealTimeEmulation
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
+			var wnd = new SecurityLookupWindow
+			{
+				ShowAllOption = _emuConnector.MarketDataAdapter.IsSupportSecuritiesLookupAll,
+				Criteria = new Security { Code = "AAPL" }
+			};
 
 			if (!wnd.ShowModal(this))
 				return;

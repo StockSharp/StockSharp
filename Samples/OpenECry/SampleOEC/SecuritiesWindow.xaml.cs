@@ -166,7 +166,11 @@ namespace SampleOEC
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "ES" } };
+			var wnd = new SecurityLookupWindow
+			{
+				ShowAllOption = MainWindow.Instance.Trader.MarketDataAdapter.IsSupportSecuritiesLookupAll,
+				Criteria = new Security { Code = "ES" }
+			};
 
 			if (!wnd.ShowModal(this))
 				return;
