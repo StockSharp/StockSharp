@@ -3,8 +3,6 @@
 	using System;
 	using System.ComponentModel;
 	using System.Windows.Media;
-	
-	using Ecng.Common;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -19,14 +17,11 @@
 		private readonly ChartCandleElement _candleElem;
 		private readonly long _transactionId;
 
-		public ChartWindow(CandleSeries candleSeries, DateTime from, DateTime to)
+		public ChartWindow(CandleSeries candleSeries, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			InitializeComponent();
 
-			if (candleSeries.IsNull())
-				throw new ArgumentNullException(nameof(candleSeries));
-
-			_candleSeries = candleSeries;
+			_candleSeries = candleSeries ?? throw new ArgumentNullException(nameof(candleSeries));
 			_trader = MainWindow.Instance.Trader;
 
 			Chart.ChartTheme = ChartThemes.ExpressionDark;
