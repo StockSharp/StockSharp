@@ -60,8 +60,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.PropertyGrid.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.PropertyGrid.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v18.1.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Net">
       <HintPath>..\..\..\References\Ecng.Net.dll</HintPath>
@@ -102,20 +102,20 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Data.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Data.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Data.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v17.2.Core">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v18.1.Core">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v18.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.LayoutControl.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v18.1.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
