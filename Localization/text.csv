@@ -4850,6 +4850,7 @@ Hadax;HADAX;HADAX
 UseHadax;Use HADAX.;Использовать HADAX.
 TruncatedBook;Truncated order book;Обрезанный стакан
 TruncatedBookDesc;Truncate market depth element.;Элемент обрезания глубины стакана.
+SearchColumns;Search columns...;Поиск столбцов...
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
