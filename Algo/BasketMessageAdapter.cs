@@ -231,6 +231,9 @@ namespace StockSharp.Algo
 		protected override bool IsSupportNativeSecurityLookup => true;
 
 		/// <inheritdoc />
+		public override bool IsSupportSecuritiesLookupAll => GetSortedAdapters().Any(a => a.IsSupportSecuritiesLookupAll);
+
+		/// <inheritdoc />
 		public override MessageAdapterCategories Categories => GetSortedAdapters().Select(a => a.Categories).JoinMask();
 
 		/// <summary>
@@ -536,7 +539,19 @@ namespace StockSharp.Algo
 
 			if (adapters.Length == 0)
 			{
-				this.AddWarningLog(LocalizedStrings.Str629Params.Put(message));
+				var msg = LocalizedStrings.Str629Params.Put(message);
+
+				this.AddWarningLog(msg);
+
+				if (message.Type == MessageTypes.SecurityLookup)
+				{
+					SendOutMessage(new SecurityLookupResultMessage
+					{
+						OriginalTransactionId = ((SecurityLookupMessage)message).TransactionId,
+						Error = new InvalidOperationException(msg),
+					});
+				}
+
 				//throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message));
 			}
 

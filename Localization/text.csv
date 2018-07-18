@@ -1775,7 +1775,7 @@ Str1853Params;Security {0} does not have a SmartCOM ID.;Инструмент {0}
 Str1854;SmartCOM does not support simultaneous search of securities on multiple queries.;SmartCOM не поддерживает одновременный поиск инструментов по нескольким запросам.
 Str1855Params;Unregistered candles series securityId = {0} timeFrame = {1}.;Незарегистрированная ранее серия свечей securityId = {0} timeFrame = {1}.
 Str1856;Connection was not successful.;Подключение не было произведено.
-Str1860;Version SmartCOM API. By default equal 3.x.;Версия SmartCOM API. По умолчанию равна 3.x.
+Str1860;Version API.;Версия API.
 ServerAddress;Server address;Адрес сервера
 Str1862;Client configuration;Конфигурация клиента
 Str1863;SmartCOM 3.x client part configuration settings;Настройки конфигурации клиентской части SmartCOM 3.x
@@ -15037,3 +15037,4 @@ DocStr10573;Limit price for activated order. Can be {0} for {1};Лимитная
 DocStr10574;Order condition. If the connection does not support the order type, the exception {0} will be thrown;Условие заявки. Если соединение не поддерживает тип заявки, будет выброшено исключение {0}
 DocStr10575;Create withdraw order condition;Создать условие заявки на вывод
 DocStr10576;Association changed;Ассоциация изменилась
+DocStr10577;Volatility smile draw step;Volatility smile draw step

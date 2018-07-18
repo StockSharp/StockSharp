@@ -180,7 +180,7 @@ namespace StockSharp.Algo.Candles
 					.GetInnerSecurities(_securityProvider)
 					.Select(sec => new CandleSeries(series.CandleType, sec, IndexCandleBuilder.CloneArg(series.Arg, sec))
 					{
-						WorkingTime = series.WorkingTime.Clone(),
+						WorkingTime = series.WorkingTime?.Clone(),
 					})
 					.ToArray(),
 				from, to, indexSecurity,

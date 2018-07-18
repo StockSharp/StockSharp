@@ -21,6 +21,11 @@ StockSharp API Change log
 * (feature) Chart. Removed obsolete xml exporting option.
 * (bug) CandleBuilderMessageAdapter. Do not switch to smaller tf in case successfully finished original tf series.
 * (bug) CandleBuilderMessageAdapter. Fix Load only subscription processing.
+* (bug) SecurityNativeIdMessageAdapter. Ignore candles with empty security id.
+* (bug) BasketMessageAdapter. Send error response for unhandled security lookup request.
+* (bug) Samples. Fix lookup all securities for non supported connections.
+* (bug) LMAX. Fix Level1 subscription.
+* (feature) LMAX. v1.9.0.2
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

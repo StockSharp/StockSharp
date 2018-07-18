@@ -17748,12 +17748,12 @@ namespace StockSharp.Localization
 		public static string Str1856 => GetString(Str1856Key);
 
 		/// <summary>
-		/// Version SmartCOM API. By default equal 3.x.
+		/// Version API.
 		/// </summary>
 		public const string Str1860Key = nameof(Str1860);
 
 		/// <summary>
-		/// Version SmartCOM API. By default equal 3.x.
+		/// Version API.
 		/// </summary>
 		public static string Str1860 => GetString(Str1860Key);
 
