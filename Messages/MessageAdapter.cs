@@ -255,7 +255,7 @@ namespace StockSharp.Messages
 		/// Bit process, which can run the adapter.
 		/// </summary>
 		[Browsable(false)]
-		public Platforms Platform { get; }
+		public Platforms Platform { get; protected set; }
 
 		/// <inheritdoc />
 		[Browsable(false)]
