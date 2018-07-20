@@ -48176,5 +48176,15 @@ namespace StockSharp.Localization
 		/// Truncate market depth element.
 		/// </summary>
 		public static string TruncatedBookDesc => GetString(TruncatedBookDescKey);
+
+		/// <summary>
+		/// Search columns...
+		/// </summary>
+		public const string SearchColumnsKey = nameof(SearchColumns);
+
+		/// <summary>
+		/// Search columns...
+		/// </summary>
+		public static string SearchColumns => GetString(SearchColumnsKey);
 	}
 }

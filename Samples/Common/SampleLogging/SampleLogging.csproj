@@ -45,8 +45,8 @@
     <Reference Include="Ecng.Serialization">
       <HintPath>..\..\..\References\Ecng.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v18.1.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
