@@ -27,9 +27,6 @@
     <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.CreateOrderCondition">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportCandlesUpdates">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
@@ -263,29 +260,9 @@
             Initializes a new instance of the <see cref="T:StockSharp.Fxcm.FxcmTrader" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Fxcm.FxcmTrader.Login">
-      <summary>
-            Login.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fxcm.FxcmTrader.Password">
-      <summary>
-            Password.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fxcm.FxcmTrader.Address">
-      <summary>
-            Server address.
-            </summary>
-    </member>
     <member name="P:StockSharp.Fxcm.FxcmTrader.IsDemo">
       <summary>
             Connect to demo trading instead of real trading server.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fxcm.FxcmTrader.Pin">
-      <summary>
-            Pin.
             </summary>
     </member>
     <member name="P:StockSharp.Fxcm.FxcmTrader.Token">

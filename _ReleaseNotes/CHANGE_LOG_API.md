@@ -26,6 +26,7 @@ StockSharp API Change log
 * (bug) Samples. Fix lookup all securities for non supported connections.
 * (bug) LMAX. Fix Level1 subscription.
 * (feature) LMAX. v1.9.0.2
+* (feature) FXCM. REST API support.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

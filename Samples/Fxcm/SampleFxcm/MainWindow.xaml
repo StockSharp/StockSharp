@@ -17,11 +17,8 @@
 		</Grid.RowDefinitions>
 
 		<StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Orientation="Horizontal">
-			<TextBlock HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Login}" />:</TextBlock>
-			<TextBox x:Name="Login" Text="" Width="70" />
-
-			<TextBlock HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Password}" />:</TextBlock>
-			<PasswordBox x:Name="Password" Password="" Width="100" />
+			<TextBlock HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Str3451}" />:</TextBlock>
+			<PasswordBox x:Name="Token" Password="" Width="300" />
 
 			<TextBlock HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Demo}" />:</TextBlock>
 			<CheckBox x:Name="IsDemo" VerticalAlignment="Center" />
