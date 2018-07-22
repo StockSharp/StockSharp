@@ -4834,7 +4834,7 @@ Exante;Exante;Exante
 IBFIX;IB FIX CTCI;IB FIX CTCI
 Reuters;Thomson Reuters;Thomson Reuters
 Brvm;BRVM;BRVM
-Count;Count;Count
+Count;Count;Количество
 CandlesCount;Candles count.;Количество свечей.
 TasksAllInstruments;Tasks '{0}' are running for all instruments. Often these are incorrect settings. It is recommended to set specific instruments for each task. Do you want to continue as is or stop the launch?;Задачи '{0}' запущены на работу по всем инструментам. Часто это является неправильными настройками. Рекомендуется установить конкретные инструменты для каждой задачи. Вы хотите продолжить как есть или остановить запуск?
 Schema;Schema;Схема
