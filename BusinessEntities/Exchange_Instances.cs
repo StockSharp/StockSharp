@@ -906,5 +906,16 @@ namespace StockSharp.BusinessEntities
 			EngName = "Huobi",
 			RusName = "Huobi",
 		};
+
+		/// <summary>
+		/// Information about IEX.
+		/// </summary>
+		public static Exchange IEX { get; } = new Exchange
+		{
+			Name = "IEX",
+			EngName = "IEX",
+			RusName = "IEX",
+			CountryCode = CountryCodes.US,
+		};
 	}
 }

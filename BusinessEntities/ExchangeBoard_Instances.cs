@@ -3255,5 +3255,14 @@ namespace StockSharp.BusinessEntities
 			Code = "Globex",
 			Exchange = Exchange.Cme,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.IEX"/>.
+		/// </summary>
+		public static ExchangeBoard IEX { get; } = new ExchangeBoard
+		{
+			Code = Exchange.IEX.Name,
+			Exchange = Exchange.IEX,
+		};
 	}
 }

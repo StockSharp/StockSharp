@@ -27,6 +27,7 @@ StockSharp API Change log
 * (bug) LMAX. Fix Level1 subscription.
 * (feature) LMAX. v1.9.0.2
 * (feature) FXCM. REST API support.
+* (feature) ExchangeBoard. IEX board.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
