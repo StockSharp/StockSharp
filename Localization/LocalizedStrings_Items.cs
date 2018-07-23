@@ -48186,5 +48186,25 @@ namespace StockSharp.Localization
 		/// Search columns...
 		/// </summary>
 		public static string SearchColumns => GetString(SearchColumnsKey);
+
+		/// <summary>
+		/// AlphaVantage
+		/// </summary>
+		public const string AlphaVantageKey = nameof(AlphaVantage);
+
+		/// <summary>
+		/// AlphaVantage
+		/// </summary>
+		public static string AlphaVantage => GetString(AlphaVantageKey);
+
+		/// <summary>
+		/// IEX
+		/// </summary>
+		public const string IEXKey = nameof(IEX);
+
+		/// <summary>
+		/// IEX
+		/// </summary>
+		public static string IEX => GetString(IEXKey);
 	}
 }

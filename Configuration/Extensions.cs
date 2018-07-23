@@ -38,6 +38,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Storages;
+	using StockSharp.AlphaVantage;
 	using StockSharp.BarChart;
 	using StockSharp.Binance;
 	using StockSharp.Bitexbook;
@@ -63,6 +64,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Gdax;
 	using StockSharp.HitBtc;
 	using StockSharp.Huobi;
+	using StockSharp.IEX;
 	using StockSharp.InteractiveBrokers;
 	using StockSharp.IQFeed;
 	using StockSharp.ITCH;
@@ -225,6 +227,8 @@ namespace StockSharp.Configuration
 			() => typeof(LiveCoinMessageAdapter),
 			() => typeof(OkexMessageAdapter),
 			() => typeof(YobitMessageAdapter),
+			() => typeof(AlphaVantageMessageAdapter),
+			() => typeof(IEXMessageAdapter),
 		});
 
 		/// <summary>

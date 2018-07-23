@@ -217,6 +217,12 @@
     <Reference Include="StockSharp.Yobit">
       <HintPath>..\References\StockSharp.Yobit.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.AlphaVantage">
+      <HintPath>..\References\StockSharp.AlphaVantage.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.IEX">
+      <HintPath>..\References\StockSharp.IEX.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
