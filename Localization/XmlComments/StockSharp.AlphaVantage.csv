@@ -1,0 +1,11 @@
+T:StockSharp.AlphaVantage.AlphaVantageMessageAdapter/summary;DocStr2538
+M:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+P:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.TimeFrames/inheritdoc;DocStr8459
+M:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+P:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.Token/summary;DocStr3145
+M:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+T:StockSharp.AlphaVantage.AlphaVantageTrader/summary;DocStr2539
+M:StockSharp.AlphaVantage.AlphaVantageTrader.#ctor/summary;DocStr1
+P:StockSharp.AlphaVantage.AlphaVantageTrader.Token/summary;DocStr3145

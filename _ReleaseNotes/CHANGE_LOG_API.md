@@ -28,6 +28,7 @@ StockSharp API Change log
 * (feature) LMAX. v1.9.0.2
 * (feature) FXCM. REST API support.
 * (feature) ExchangeBoard. IEX board.
+* (feature) AlphaVantage connector.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
