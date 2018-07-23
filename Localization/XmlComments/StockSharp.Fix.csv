@@ -258,7 +258,7 @@ P:StockSharp.Fix.Dialects.IFixDialect.TimeFrames/summary;DocStr206
 P:StockSharp.Fix.Dialects.IFixDialect.SupportedMessages/summary;DocStr449
 P:StockSharp.Fix.Dialects.IFixDialect.SupportedMarketDataTypes/summary;DocStr10120
 P:StockSharp.Fix.Dialects.IFixDialect.IsSupportCandlesUpdates/summary;DocStr10392
-P:StockSharp.Fix.Dialects.IFixDialect.SupportUnknownExecutions/summary;UnknownTransactonsDesc
+P:StockSharp.Fix.Dialects.IFixDialect.SupportUnknownExecutions/summary;UnknownTransactionsDesc
 P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSecuritiesLookupAll/summary;DocStr10559
 M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition/summary;DocStr44
 M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition/returns;DocStr45
@@ -1804,7 +1804,7 @@ P:StockSharp.Fix.FixMessageAdapter.CheckCertificateRevocation/summary;CheckCerti
 P:StockSharp.Fix.FixMessageAdapter.ValidateRemoteCertificates/summary;ValidateRemoteCertificatesDesc
 P:StockSharp.Fix.FixMessageAdapter.TargetHost/summary;TargetHostDesc
 P:StockSharp.Fix.FixMessageAdapter.TimeFrames/inheritdoc;DocStr8459
-P:StockSharp.Fix.FixMessageAdapter.SupportUnknownExecutions/summary;UnknownTransactonsDesc
+P:StockSharp.Fix.FixMessageAdapter.SupportUnknownExecutions/summary;UnknownTransactionsDesc
 M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.ToString/inheritdoc;DocStr8459
