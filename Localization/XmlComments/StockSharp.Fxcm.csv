@@ -6,12 +6,7 @@ P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;D
 P:StockSharp.Fxcm.FxcmMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-F:StockSharp.Fxcm.FxcmMessageAdapter.DefaultAddress/summary;DocStr9884
-P:StockSharp.Fxcm.FxcmMessageAdapter.Address/summary;ServerAddress
 P:StockSharp.Fxcm.FxcmMessageAdapter.IsDemo/summary;Str3388
-P:StockSharp.Fxcm.FxcmMessageAdapter.Login/summary;Login
-P:StockSharp.Fxcm.FxcmMessageAdapter.Password/summary;Password
-P:StockSharp.Fxcm.FxcmMessageAdapter.Pin/summary;Pin
 P:StockSharp.Fxcm.FxcmMessageAdapter.Token/summary;AccessToken
 P:StockSharp.Fxcm.FxcmMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Fxcm.FxcmMessageAdapter.TimeFrames/inheritdoc;DocStr8459
