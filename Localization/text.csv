@@ -15038,3 +15038,4 @@ DocStr10574;Order condition. If the connection does not support the order type, 
 DocStr10575;Create withdraw order condition;Создать условие заявки на вывод
 DocStr10576;Association changed;Ассоциация изменилась
 DocStr10577;Volatility smile draw step;Volatility smile draw step
+DocStr10578;Information about IEX;Информация о IEX

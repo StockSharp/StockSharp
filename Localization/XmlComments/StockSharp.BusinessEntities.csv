@@ -118,6 +118,7 @@ P:StockSharp.BusinessEntities.Exchange.Deribit/summary;DocStr10358
 P:StockSharp.BusinessEntities.Exchange.Kucoin/summary;DocStr10359
 P:StockSharp.BusinessEntities.Exchange.Liqui/summary;DocStr10360
 P:StockSharp.BusinessEntities.Exchange.Huobi/summary;DocStr10361
+P:StockSharp.BusinessEntities.Exchange.IEX/summary;DocStr10578
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694
@@ -330,6 +331,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Kucoin/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Liqui/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Huobi/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Globex/summary;DocStr10563
+P:StockSharp.BusinessEntities.ExchangeBoard.IEX/summary;DocStr2809
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrade/summary;DocStr8546
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867
@@ -683,6 +685,7 @@ P:StockSharp.BusinessEntities.News.LocalTime/summary;Str515
 P:StockSharp.BusinessEntities.News.Url/summary;Str222
 P:StockSharp.BusinessEntities.News.ExtensionInfo/summary;ExtendedInfo
 P:StockSharp.BusinessEntities.News.ExtensionInfo/remarks;Str427
+M:StockSharp.BusinessEntities.News.ToString/inheritdoc;DocStr8459
 T:StockSharp.BusinessEntities.Order/summary;Str504
 M:StockSharp.BusinessEntities.Order.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.Order.LatencyRegistration/summary;Str518
