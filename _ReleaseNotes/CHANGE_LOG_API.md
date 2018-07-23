@@ -29,6 +29,7 @@ StockSharp API Change log
 * (feature) FXCM. REST API support.
 * (feature) ExchangeBoard. IEX board.
 * (feature) AlphaVantage connector.
+* (feature) IEX connector.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
