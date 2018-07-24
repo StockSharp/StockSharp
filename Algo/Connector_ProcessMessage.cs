@@ -802,7 +802,10 @@ namespace StockSharp.Algo
 			else
 			{
 				if (error == null)
+				{
 					RaiseMarketDataUnSubscriptionSucceeded(security, originalMsg);
+					ProcessCandleSeriesStopped(originalMsg.OriginalTransactionId);
+				}
 				else
 					RaiseMarketDataUnSubscriptionFailed(security, originalMsg, error);
 			}
@@ -1857,7 +1860,12 @@ namespace StockSharp.Algo
 
 		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
 		{
-			var series = _entityCache.RemoveCandleSeries(message.OriginalTransactionId);
+			ProcessCandleSeriesStopped(message.OriginalTransactionId);
+		}
+
+		private void ProcessCandleSeriesStopped(long originalTransactionId)
+		{
+			var series = _entityCache.RemoveCandleSeries(originalTransactionId);
 
 			if (series == null)
 				return;

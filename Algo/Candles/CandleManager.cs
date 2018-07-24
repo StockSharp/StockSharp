@@ -413,7 +413,7 @@ namespace StockSharp.Algo.Candles
 					throw new ArgumentException(LocalizedStrings.Str650Params.Put(series), nameof(series));
 
 				enumerator = new CandleSourceEnumerator<ICandleSource<Candle>, Candle>(series, from, to,
-					series.Security is IndexSecurity ? (IEnumerable<ICandleSource<Candle>>)new[] { new IndexSecurityCandleManagerSource(this, ConfigManager.GetService<ISecurityProvider>(), from, to) } : Sources,
+					series.Security is IndexSecurity ? new[] { new IndexSecurityCandleManagerSource(this, ConfigManager.GetService<ISecurityProvider>(), from, to) } : Sources,
 					c =>
 					{
 						Processing?.Invoke(series, c);
