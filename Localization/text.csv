@@ -4853,6 +4853,9 @@ TruncatedBookDesc;Truncate market depth element.;Элемент обрезани
 SearchColumns;Search columns...;Поиск столбцов...
 AlphaVantage;AlphaVantage;AlphaVantage
 IEX;IEX;IEX
+Quoinex;QUOINEX;QUOINEX
+Zaif;Zaif;Zaif
+Bitbank;Bitbank;Bitbank
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15041,3 +15044,6 @@ DocStr10575;Create withdraw order condition;Создать условие зая
 DocStr10576;Association changed;Ассоциация изменилась
 DocStr10577;Volatility smile draw step;Volatility smile draw step
 DocStr10578;Information about IEX;Информация о IEX
+DocStr10579;Information about Bitbank;Информация о Bitbank
+DocStr10580;Information about Zaif;Информация о Zaif
+DocStr10581;Information about QUOINEX;Информация о QUOINEX

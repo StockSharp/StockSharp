@@ -41,6 +41,7 @@ namespace StockSharp.Configuration
 	using StockSharp.AlphaVantage;
 	using StockSharp.BarChart;
 	using StockSharp.Binance;
+	using StockSharp.Bitbank;
 	using StockSharp.Bitexbook;
 	using StockSharp.Bitfinex;
 	using StockSharp.Bithumb;
@@ -84,6 +85,7 @@ namespace StockSharp.Configuration
 	using StockSharp.QuantHouse;
 	using StockSharp.Quik;
 	using StockSharp.Quik.Lua;
+	using StockSharp.Quoinex;
 	using StockSharp.Rithmic;
 	using StockSharp.Rss;
 	using StockSharp.SmartCom;
@@ -95,6 +97,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Charting.IndicatorPainters;
 	using StockSharp.Yobit;
+	using StockSharp.Zaif;
 
 	/// <summary>
 	/// Extension class.
@@ -229,6 +232,9 @@ namespace StockSharp.Configuration
 			() => typeof(YobitMessageAdapter),
 			() => typeof(AlphaVantageMessageAdapter),
 			() => typeof(IEXMessageAdapter),
+			() => typeof(QuoinexMessageAdapter),
+			() => typeof(BitbankMessageAdapter),
+			() => typeof(ZaifMessageAdapter),
 		});
 
 		/// <summary>

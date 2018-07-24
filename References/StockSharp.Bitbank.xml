@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Bitbank</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Bitbank.BitbankMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Bitbank"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitbank.BitbankMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitbank.BitbankMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitbank.BitbankMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitbank.BitbankMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bitbank.BitbankMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Bitbank.BitbankMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Bitbank.BitbankMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.Bitbank.BitbankMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bitbank.BitbankMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Bitbank.BitbankMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Bitbank.BitbankOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Bitbank"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bitbank.BitbankOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bitbank.BitbankOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitbank.BitbankOrderCondition.IsWithdraw">
+            <summary>
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitbank.BitbankOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Bitbank.BitbankTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Bitbank"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bitbank.BitbankTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bitbank.BitbankTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitbank.BitbankTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitbank.BitbankTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitbank.BitbankTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

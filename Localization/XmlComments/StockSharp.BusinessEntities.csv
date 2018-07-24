@@ -119,6 +119,9 @@ P:StockSharp.BusinessEntities.Exchange.Kucoin/summary;DocStr10359
 P:StockSharp.BusinessEntities.Exchange.Liqui/summary;DocStr10360
 P:StockSharp.BusinessEntities.Exchange.Huobi/summary;DocStr10361
 P:StockSharp.BusinessEntities.Exchange.IEX/summary;DocStr10578
+P:StockSharp.BusinessEntities.Exchange.Bitbank/summary;DocStr10579
+P:StockSharp.BusinessEntities.Exchange.Zaif/summary;DocStr10580
+P:StockSharp.BusinessEntities.Exchange.Quoinex/summary;DocStr10581
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694
@@ -332,6 +335,9 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Liqui/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Huobi/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Globex/summary;DocStr10563
 P:StockSharp.BusinessEntities.ExchangeBoard.IEX/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.Bitbank/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.Zaif/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.Quoinex/summary;DocStr2809
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrade/summary;DocStr8546
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867
