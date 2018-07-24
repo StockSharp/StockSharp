@@ -31,6 +31,7 @@ StockSharp API Change log
 * (feature) AlphaVantage connector.
 * (feature) IEX connector.
 * (bug) Deribit. Fix news subscription.
+* (bug) Cryptopia. Order book request fix.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
