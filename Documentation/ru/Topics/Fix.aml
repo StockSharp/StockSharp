@@ -7,7 +7,7 @@
       </para>
     </introduction>
     
-    <para>
+    <!--<para>
 		  В настоящий момент поддерживаются следующие площадки:
     </para>
     
@@ -34,7 +34,7 @@
 	
 	<para>
 		  <legacyItalic>В случае необходимости возможно подключение дополнительной площадки.</legacyItalic>
-    </para>
+    </para>-->
     
     <relatedTopics>
     	<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43">Пример работы с FixTrader</link>

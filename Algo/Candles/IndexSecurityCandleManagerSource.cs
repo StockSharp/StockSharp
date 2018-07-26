@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Candles
 				candleManager.Processing += OnInnerSourceProcessCandle;
 				candleManager.Stopped += OnInnerSourceStopped;
 
-				_builder = new IndexCandleBuilder(security, candleType);
+				_builder = new IndexCandleBuilder(security, candleType, security.IgnoreErrors);
 
 				//_innerSeries.ForEach(s =>
 				//{
@@ -180,7 +180,7 @@ namespace StockSharp.Algo.Candles
 					.GetInnerSecurities(_securityProvider)
 					.Select(sec => new CandleSeries(series.CandleType, sec, IndexCandleBuilder.CloneArg(series.Arg, sec))
 					{
-						WorkingTime = series.WorkingTime.Clone(),
+						WorkingTime = series.WorkingTime?.Clone(),
 					})
 					.ToArray(),
 				from, to, indexSecurity,

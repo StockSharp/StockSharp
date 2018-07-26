@@ -66,7 +66,11 @@
 						{
 							var secId = GetSecurityId(message.SecurityId);
 
-							_depthBuilders.Add(secId, InnerAdapter.CreateOrderLogMarketDepthBuilder(secId));
+							if (InnerAdapter.IsSupportSubscriptionBySecurity)
+								_depthBuilders.Add(secId, InnerAdapter.CreateOrderLogMarketDepthBuilder(secId));
+							else
+								_depthBuilders.TryAdd(secId, (IOrderLogMarketDepthBuilder)null);
+
 							_subscriptionIds.Add(message.TransactionId, Tuple.Create(secId, message.DataType));
 
 							var clone = (MarketDataMessage)message.Clone();
@@ -168,7 +172,7 @@
 				{
 					var updated = depthBuilder.Update(execMsg);
 
-					this.AddVerboseLog("OL->MD processing {0}={1}.", execMsg.SecurityId, updated);
+					this.AddDebugLog("OL->MD processing {0}={1}.", execMsg.SecurityId, updated);
 
 					if (updated)
 					{
@@ -183,11 +187,11 @@
 				}
 			}
 			else
-				this.AddVerboseLog("OL->MD processing {0} not found.", execMsg.SecurityId);
+				this.AddDebugLog("OL->MD processing {0} not found.", execMsg.SecurityId);
 
 			if (_tickBuilders.Contains(secId))
 			{
-				this.AddVerboseLog("OL->TICK processing {0}.", secId);
+				this.AddDebugLog("OL->TICK processing {0}.", secId);
 				base.OnInnerAdapterNewOutMessage(execMsg.ToTick());
 			}
 		}

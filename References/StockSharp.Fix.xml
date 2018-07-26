@@ -35,9 +35,35 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.EnableSuspend">
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.SecurityLookupRequired">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxRestores">
       <summary>
-            Enable suspend mode (enqueue non ordered messages).
+            Max possible restores.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxRestoreError">
+      <summary>
+            Max restore errors.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxIncrementalWrongOrder">
+      <summary>
+            Max incremental messages with wrong order before recovering start.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxRestoreCount">
+      <summary>
+            Max message count that can be restored.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxSuspended">
+      <summary>
+            Max suspended messages.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.Login">
@@ -90,6 +116,12 @@
             To call the event <see cref="E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage" />.
             </summary>
       <param name="message">The message.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutError(System.Exception)">
+      <summary>
+            Initialize a new message <see cref="T:StockSharp.Messages.ErrorMessage" /> and pass it to the method <see cref="M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)" />.
+            </summary>
+      <param name="error">Error details.</param>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -240,6 +272,27 @@
       <summary>
             Reply errors for messages of type <see cref="F:StockSharp.Fix.Native.FixMessages.NewOrderSingle" /> transfers via <see cref="F:StockSharp.Fix.Native.FixMessages.Reject" />.
             </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportStopLoss">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportTakeProfit">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportWithdraw">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateWithdrawCondition(StockSharp.Messages.WithdrawInfo)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
       <summary>
@@ -453,11 +506,6 @@
             Native identifier can be stored.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFastDialect.EnableSuspend">
-      <summary>
-            Enable suspend mode (enqueue non ordered messages).
-            </summary>
-    </member>
     <member name="P:StockSharp.Fix.Dialects.IFastDialect.Login">
       <summary>
             Login.
@@ -483,6 +531,16 @@
             Support candles subscription and live updates.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFastDialect.IsSupportSecuritiesLookupAll">
+      <summary>
+            Support lookup all securities.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFastDialect.SecurityLookupRequired">
+      <summary>
+        <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
       <summary>
             Test dump files.
@@ -501,6 +559,208 @@
             </summary>
       <param name="securityId">Security ID.</param>
       <returns>Order log to market depth builder.</returns>
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect">
+      <summary>
+            ASTS FAST dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Name">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Open">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Close">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.SendInMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Config">
+      <summary>
+            Configuration.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Config.Statistics">
+      <summary>
+            Statistics.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Config.Orders">
+      <summary>
+            Orders.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Config.Trades">
+      <summary>
+            Trades.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Config.Instruments">
+      <summary>
+            Securities.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Config.InstrumentsStatus">
+      <summary>
+            Status.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Config.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Config.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Curr">
+      <summary>
+            Currency market.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Fond">
+      <summary>
+            Fond market.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.LoadSettingsFromFile(System.String)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Save(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Load(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect">
+      <summary>
+            Spectra FAST dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.IsNativeIdentifiers">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.StorageName">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.Name">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.Open">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.Close">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.SendInMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.FutDepth5">
+      <summary>
+            Futures: 5 quotes deep market depth.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.FutDepth20">
+      <summary>
+            Futures: 20 quotes deep market depth.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.FutDepth50">
+      <summary>
+            Futures: 50 quotes deep market depth.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.FutTrades">
+      <summary>
+            Futures: trades log.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.FutInfo">
+      <summary>
+            Futures: general session information.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.OptDepth5">
+      <summary>
+            Options: 5 quotes deep market depth.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.OptDepth20">
+      <summary>
+            Options: 20 quotes deep market depth.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.OptDepth50">
+      <summary>
+            Options: 50 quotes deep market depth.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.OptTrades">
+      <summary>
+            Options: trades log.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.OptInfo">
+      <summary>
+            Options: general session information.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.Index">
+      <summary>
+            Indexes.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.News">
+      <summary>
+            News.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.NewsSkrin">
+      <summary>
+            News (SKRIN).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.OrderLog">
+      <summary>
+            Order log. Anonymous order_log.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.LoadSettingsFromFile(System.String)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.Load(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.Save(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.Dialects.IFixDialect">
       <summary>
@@ -657,6 +917,17 @@
             Support process <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> generated by third-party software.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSecuritiesLookupAll">
+      <summary>
+            Support lookup all securities.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition">
+      <summary>
+            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
+            </summary>
+      <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
       <summary>
             Initialize dialect.
@@ -782,6 +1053,12 @@
     <member name="M:StockSharp.Fix.FastMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.FastMessageAdapter.SecurityLookupRequired">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.FastMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
@@ -802,14 +1079,16 @@
             FAST settings.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FastMessageAdapter.SettingsFile">
+      <summary>
+            Settings file.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.FastMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FastMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <inheritdoc />
-    </member>
-    <member name="E:StockSharp.Fix.FastMessageAdapter.PropertyChanged">
-      <summary>Occurs when a property value changes.</summary>
     </member>
     <member name="T:StockSharp.Fix.FixMessageTypes">
       <summary>
@@ -886,6 +1165,12 @@
             Old password.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.FixUserRequestMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixUserRequestMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.Fix.FixUserResponseTypes">
       <summary>
             Response types.
@@ -956,6 +1241,12 @@
             ID of the original message <see cref="P:StockSharp.Messages.ChangePasswordMessage.TransactionId" /> for which this message is a response.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.FixUserResponseMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixUserResponseMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.Fix.FixUserForceLogoffMessage">
       <summary>
             FIX server extended message for force logoff message.
@@ -971,6 +1262,12 @@
             ID of the original message <see cref="P:StockSharp.Messages.ChangePasswordMessage.TransactionId" /> for which this message is a response.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.FixUserForceLogoffMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixUserForceLogoffMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.Fix.FixSecurityMessage">
       <summary>
             A message containing info about the security.
@@ -985,6 +1282,12 @@
       <summary>
             Legs.
             </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixSecurityMessage" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="T:StockSharp.Fix.FixServer">
       <summary>
@@ -1085,10 +1388,11 @@
             Stop the server.
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.FixServer.TryGetRequestId(System.Int64)">
+    <member name="M:StockSharp.Fix.FixServer.TryGetRequestId(StockSharp.Fix.FixSession,System.Int64)">
       <summary>
             Get the request identifier.
             </summary>
+      <param name="session">The session.</param>
       <param name="transactionId">Transaction ID.</param>
       <returns>Request identifier.</returns>
     </member>
@@ -6499,6 +6803,21 @@
     <member name="M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportStopLoss">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportTakeProfit">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportWithdraw">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateWithdrawCondition(StockSharp.Messages.WithdrawInfo)">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired">
       <inheritdoc />
     </member>
@@ -6530,6 +6849,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportCandlesUpdates">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -6590,6 +6912,21 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsResetCounter">
       <summary>
             Should the sequence counter be resetted.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.DateFormat">
+      <summary>
+            Date format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeStampFormat">
+      <summary>
+            Timestamp format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFormat">
+      <summary>
+            Time format.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.ReadTimeout">

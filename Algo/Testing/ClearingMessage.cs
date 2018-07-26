@@ -43,6 +43,19 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
+		/// Create a copy of <see cref="ClearingMessage"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override Message Clone()
+		{
+			return new ClearingMessage
+			{
+				SecurityId = SecurityId,
+				ClearMarketDepth = ClearMarketDepth,
+			};
+		}
+
+		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>

@@ -2,6 +2,7 @@ T:StockSharp.Bitexbook.BitexbookMessageAdapter/summary;DocStr2538
 P:StockSharp.Bitexbook.BitexbookMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Bitexbook.BitexbookMessageAdapter.Key/summary;Str3304
 P:StockSharp.Bitexbook.BitexbookMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Bitexbook.BitexbookMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Bitexbook.BitexbookMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Bitexbook.BitexbookMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Bitexbook.BitexbookMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -19,3 +20,4 @@ T:StockSharp.Bitexbook.BitexbookTrader/summary;DocStr2539
 M:StockSharp.Bitexbook.BitexbookTrader.#ctor/summary;DocStr1
 P:StockSharp.Bitexbook.BitexbookTrader.Key/summary;Str3304
 P:StockSharp.Bitexbook.BitexbookTrader.Secret/summary;DocStr3146
+P:StockSharp.Bitexbook.BitexbookTrader.BalanceCheckInterval/summary;BalanceCheckInterval

@@ -27,6 +27,8 @@ namespace StockSharp.Algo.Storages
 	using Ecng.ComponentModel;
 	using Ecng.Interop;
 
+	using MoreLinq;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.BusinessEntities;
@@ -676,8 +678,9 @@ namespace StockSharp.Algo.Storages
 		{
 			private readonly IMarketDataStorage<CandleMessage> _original;
 			private readonly Func<TimeSpan, IMarketDataStorage<CandleMessage>> _getStorage;
-			private readonly BiggerTimeFrameCandleCompressor _compressor;
-			private DateTimeOffset _prevCandleTime;
+			private readonly Dictionary<TimeSpan, BiggerTimeFrameCandleCompressor> _compressors;
+			private readonly TimeSpan _timeFrame;
+			private DateTime _prevDate;
 
 			public CandleMessageBuildableStorage(IStorageRegistry registry, Security security, TimeSpan timeFrame, IMarketDataDrive drive, StorageFormats format)
 			{
@@ -687,26 +690,30 @@ namespace StockSharp.Algo.Storages
 				_getStorage = tf => registry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, tf, drive, format);
 				_original = _getStorage(timeFrame);
 
-				_compressor = new BiggerTimeFrameCandleCompressor(new MarketDataMessage
+				_timeFrame = timeFrame;
+
+				_compressors = GetSmallerTimeFrames().ToDictionary(tf => tf, tf => new BiggerTimeFrameCandleCompressor(new MarketDataMessage
 				{
 					SecurityId = security.ToSecurityId(),
 					DataType = MarketDataTypes.CandleTimeFrame,
 					Arg = timeFrame,
 					IsSubscribe = true,
-				}, new TimeFrameCandleBuilder(registry.ExchangeInfoProvider));
+				}, new TimeFrameCandleBuilder(registry.ExchangeInfoProvider)));
+			}
+
+			private IEnumerable<TimeSpan> GetSmallerTimeFrames()
+			{
+				return _original.Drive.Drive
+					.GetAvailableDataTypes(_original.Security.ToSecurityId(), ((IMarketDataStorage<CandleMessage>)this).Serializer.Format)
+					.Where(t => t.MessageType == typeof(TimeFrameCandleMessage))
+					.Select(t => (TimeSpan)t.Arg)
+					.FilterSmallerTimeFrames(_timeFrame)
+					.OrderByDescending();
 			}
 
 			private IEnumerable<IMarketDataStorage<CandleMessage>> GetStorages()
 			{
-				var timeFrame = (TimeSpan)_original.Arg;
-
-				return new[] { _original }.Concat(_original.Drive.Drive
-					.GetAvailableDataTypes(_original.Security.ToSecurityId(), ((IMarketDataStorage<CandleMessage>)this).Serializer.Format)
-					.Where(t => t.MessageType == typeof(TimeFrameCandleMessage))
-					.Select(t => (TimeSpan)t.Arg)
-					.FilterSmallerTimeFrames(timeFrame)
-					.OrderByDescending()
-					.Select(_getStorage));
+				return new[] { _original }.Concat(GetSmallerTimeFrames().Select(_getStorage));
 			}
 
 			IEnumerable<DateTime> IMarketDataStorage.Dates => GetStorages().SelectMany(s => s.Dates).OrderBy().Distinct();
@@ -739,34 +746,63 @@ namespace StockSharp.Algo.Storages
 
 			IEnumerable<CandleMessage> IMarketDataStorage<CandleMessage>.Load(DateTime date)
 			{
-				foreach (var storage in GetStorages())
+				if (date <= _prevDate)
+					_compressors.Values.ForEach(c => c.Reset());
+
+				_prevDate = date;
+
+				var enumerators = GetStorages().Where(s => s.Dates.Contains(date)).Select(s =>
 				{
-					if (!storage.Dates.Contains(date))
-						continue;
+					var data = s.Load(date);
 
-					var data = storage.Load(date);
-
-					if (storage == _original)
-					{
-						foreach (var candle in data)
-							yield return candle;
-					}
+					if (s == _original)
+						return data;
 					else
 					{
-						foreach (var smallCandle in data)
-						{
-							if (smallCandle.OpenTime < _prevCandleTime)
-								_compressor.Reset();
+						var compressor = _compressors.TryGetValue((TimeSpan)s.Arg);
 
-							_prevCandleTime = smallCandle.OpenTime;
+						if (compressor == null)
+							return Enumerable.Empty<CandleMessage>();
 
-							foreach (var bigCandle in _compressor.Process(smallCandle))
-							{
-								if (bigCandle.State == CandleStates.Finished)
-									yield return bigCandle;
-							}
-						}
+						return data.Compress(compressor, false);
 					}
+				}).Select(e => e.GetEnumerator()).ToList();
+
+				if (enumerators.Count == 0)
+					yield break;
+
+				if (enumerators.Count == 1)
+				{
+					var enu = enumerators[0];
+
+					while (enu.MoveNext())
+						yield return enu.Current;
+
+					enu.Dispose();
+					yield break;
+				}
+
+				var needMove = enumerators.ToArray();
+
+				while (true)
+				{
+					foreach (var enumerator in needMove)
+					{
+						if (enumerator.MoveNext())
+							continue;
+
+						enumerator.Dispose();
+						enumerators.Remove(enumerator);
+					}
+
+					if (enumerators.Count == 0)
+						yield break;
+
+					var candle = enumerators.Select(e => e.Current).OrderBy(c => c.OpenTime).First();
+
+					needMove = enumerators.Where(c => c.Current.OpenTime == candle.OpenTime).ToArray();
+
+					yield return candle;
 				}
 			}
 

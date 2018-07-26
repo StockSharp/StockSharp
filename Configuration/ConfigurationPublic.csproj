@@ -35,8 +35,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Core.v17.2">
-      <HintPath>..\References\DevExpress.Xpf.Core.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v18.1">
+      <HintPath>..\References\DevExpress.Xpf.Core.v18.1.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
@@ -216,6 +216,12 @@
     </Reference>
     <Reference Include="StockSharp.Yobit">
       <HintPath>..\References\StockSharp.Yobit.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.AlphaVantage">
+      <HintPath>..\References\StockSharp.AlphaVantage.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.IEX">
+      <HintPath>..\References\StockSharp.IEX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

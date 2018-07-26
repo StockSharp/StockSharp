@@ -3,8 +3,8 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:oec="clr-namespace:StockSharp.OpenECry.Xaml;assembly=StockSharp.OpenECry"
-        Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="134" Width="501">
-    <Grid Height="92">
+        Title="{x:Static loc:LocalizedStrings.XamlStr540}" SizeToContent="WidthAndHeight">
+    <Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />
 			<ColumnDefinition />
@@ -28,14 +28,14 @@
 			<oec:OpenECryAddressComboBox Name="Address" Width="141" />
         </StackPanel>
 		
-		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
-	    <Button x:Name="ShowNews" Grid.Column="0" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.News}" Click="ShowNewsClick" />
+		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 		
 		<Button x:Name="ShowSecurities" Grid.Column="1" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
 		<Button x:Name="ShowPortfolios" Grid.Column="2" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" />
 		<Button x:Name="ShowStopOrders" Grid.Column="3" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.StopOrders}" Click="ShowStopOrdersClick" />
 		
-		<Button x:Name="ShowTrades" Grid.Column="1" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Ticks}" Click="ShowTradesClick" />
+	    <Button x:Name="ShowNews" Grid.Column="1" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.News}" Click="ShowNewsClick" />
+		<!--<Button x:Name="ShowTrades" Grid.Column="1" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Ticks}" Click="ShowTradesClick" />-->
 		<Button x:Name="ShowMyTrades" Grid.Column="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" />
 		<Button x:Name="ShowOrders" Grid.Column="3" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
     </Grid>

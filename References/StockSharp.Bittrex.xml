@@ -9,6 +9,11 @@
             The message adapter for <see cref="N:StockSharp.Bittrex"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.Bittrex.BittrexMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
         <member name="P:StockSharp.Bittrex.BittrexMessageAdapter.Key">
             <summary>
             Key.
@@ -17,6 +22,16 @@
         <member name="P:StockSharp.Bittrex.BittrexMessageAdapter.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bittrex.BittrexMessageAdapter.UseWebSockets">
+            <summary>
+            Use web sockets.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bittrex.BittrexMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
         <member name="M:StockSharp.Bittrex.BittrexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
@@ -64,6 +79,16 @@
         <member name="P:StockSharp.Bittrex.BittrexTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bittrex.BittrexTrader.UseWebSockets">
+            <summary>
+            Use web sockets.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bittrex.BittrexTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
     </members>

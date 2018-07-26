@@ -1,6 +1,9 @@
 T:StockSharp.Bittrex.BittrexMessageAdapter/summary;DocStr2538
+P:StockSharp.Bittrex.BittrexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Bittrex.BittrexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Bittrex.BittrexMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Bittrex.BittrexMessageAdapter.UseWebSockets/summary;UseWebSockets
+P:StockSharp.Bittrex.BittrexMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Bittrex.BittrexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Bittrex.BittrexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Bittrex.BittrexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -14,3 +17,5 @@ T:StockSharp.Bittrex.BittrexTrader/summary;DocStr2539
 M:StockSharp.Bittrex.BittrexTrader.#ctor/summary;DocStr1
 P:StockSharp.Bittrex.BittrexTrader.Key/summary;Str3304
 P:StockSharp.Bittrex.BittrexTrader.Secret/summary;DocStr3146
+P:StockSharp.Bittrex.BittrexTrader.UseWebSockets/summary;UseWebSockets
+P:StockSharp.Bittrex.BittrexTrader.BalanceCheckInterval/summary;BalanceCheckInterval

@@ -1,6 +1,7 @@
 T:StockSharp.Yobit.YobitMessageAdapter/summary;DocStr2538
 P:StockSharp.Yobit.YobitMessageAdapter.Key/summary;Str3304
 P:StockSharp.Yobit.YobitMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Yobit.YobitMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Yobit.YobitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Yobit.YobitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Yobit.YobitMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -18,3 +19,4 @@ T:StockSharp.Yobit.YobitTrader/summary;DocStr2539
 M:StockSharp.Yobit.YobitTrader.#ctor/summary;DocStr1
 P:StockSharp.Yobit.YobitTrader.Key/summary;Str3304
 P:StockSharp.Yobit.YobitTrader.Secret/summary;DocStr3146
+P:StockSharp.Yobit.YobitTrader.BalanceCheckInterval/summary;BalanceCheckInterval

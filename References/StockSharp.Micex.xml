@@ -19,6 +19,12 @@
             Структура данных.
             </summary>
     </member>
+    <member name="M:StockSharp.Micex.MicexStructureMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Micex.MicexStructureMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.Micex.MicexOrderCondition">
       <summary>
             Условие заявок, специфичных для <see cref="N:StockSharp.Micex" />.

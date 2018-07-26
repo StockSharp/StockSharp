@@ -22,7 +22,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\StockSharp.Configuration.xml</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -32,11 +31,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\StockSharp.Configuration.xml</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Core.v17.2">
-      <HintPath>..\References\DevExpress.Xpf.Core.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v18.1">
+      <HintPath>..\References\DevExpress.Xpf.Core.v18.1.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
@@ -91,6 +89,10 @@
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlphaVantage\AlphaVantage.csproj">
+      <Project>{C09745E8-CE51-47DF-8856-E3E3E41EF911}</Project>
+      <Name>AlphaVantage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Binance\Binance.csproj">
       <Project>{E8577520-E582-4409-9287-4D0859F64EE7}</Project>
       <Name>Binance</Name>
@@ -154,6 +156,10 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Huobi\Huobi.csproj">
       <Project>{1B76C578-6A8C-4CE2-8556-A8F32FB5FB85}</Project>
       <Name>Huobi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\IEX\IEX.csproj">
+      <Project>{76FD8C86-E4BA-4B86-A966-29C13D085EE7}</Project>
+      <Name>IEX</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Kraken\Kraken.csproj">
       <Project>{8F90DE0D-C2A2-4C86-A66E-EEA01F830C70}</Project>

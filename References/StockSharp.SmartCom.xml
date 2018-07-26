@@ -1061,6 +1061,12 @@
             </summary>
       <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено <see langword="null" />.</returns>
     </member>
+    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportStopLoss">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportNativePortfolioLookup">
       <summary>
             Поддерживается ли торговой системой поиск портфелей.
@@ -1079,7 +1085,7 @@
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.Version">
       <summary>
-            Версия SmartCOM API. По-умолчанию равна <see cref="F:StockSharp.SmartCom.Native.SmartComVersions.V4" />.
+            Версия API. По-умолчанию равна <see cref="F:StockSharp.SmartCom.Native.SmartComVersions.V4" />.
             </summary>
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.Login">

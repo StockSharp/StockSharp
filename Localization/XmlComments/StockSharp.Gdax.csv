@@ -3,6 +3,7 @@ P:StockSharp.Gdax.GdaxMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Gdax.GdaxMessageAdapter.Key/summary;Str3304
 P:StockSharp.Gdax.GdaxMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.Gdax.GdaxMessageAdapter.Passphrase/summary;Passphrase
+P:StockSharp.Gdax.GdaxMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Gdax.GdaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Gdax.GdaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Gdax.GdaxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -22,3 +23,4 @@ M:StockSharp.Gdax.GdaxTrader.#ctor/summary;DocStr1
 P:StockSharp.Gdax.GdaxTrader.Key/summary;Str3304
 P:StockSharp.Gdax.GdaxTrader.Secret/summary;DocStr3146
 P:StockSharp.Gdax.GdaxTrader.Passphrase/summary;Passphrase
+P:StockSharp.Gdax.GdaxTrader.BalanceCheckInterval/summary;BalanceCheckInterval

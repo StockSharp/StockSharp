@@ -136,6 +136,9 @@
         <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
             </summary>
     </member>
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>

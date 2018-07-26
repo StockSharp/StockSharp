@@ -366,7 +366,7 @@
     </Topic>
     <Topic id="7445482b-c1cd-4bbd-9c26-d05386e24940" visible="True" isExpanded="true" title="Notifications">
       <Topic id="c2495e73-82ef-4276-8576-7f99a5ea71ee" visible="True" title="Notification panel" />
-      <Topic id="b027b553-9842-4c2d-9b49-d01bf1394bb2" visible="True" title="Настройки уведомлений" />
+      <Topic id="b027b553-9842-4c2d-9b49-d01bf1394bb2" visible="True" title="Notifications setup" />
     </Topic>
     <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" isExpanded="true" title="Settings">
       <Topic id="bc6f0874-1c3a-49ff-b615-8c438dcea716" visible="True" title="Launch settings" />

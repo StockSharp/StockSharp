@@ -1,6 +1,7 @@
 T:StockSharp.Cryptopia.CryptopiaMessageAdapter/summary;DocStr2538
 P:StockSharp.Cryptopia.CryptopiaMessageAdapter.Key/summary;Str3304
 P:StockSharp.Cryptopia.CryptopiaMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Cryptopia.CryptopiaMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Cryptopia.CryptopiaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Cryptopia.CryptopiaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Cryptopia.CryptopiaMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -18,3 +19,4 @@ T:StockSharp.Cryptopia.CryptopiaTrader/summary;DocStr2539
 M:StockSharp.Cryptopia.CryptopiaTrader.#ctor/summary;DocStr1
 P:StockSharp.Cryptopia.CryptopiaTrader.Key/summary;Str3304
 P:StockSharp.Cryptopia.CryptopiaTrader.Secret/summary;DocStr3146
+P:StockSharp.Cryptopia.CryptopiaTrader.BalanceCheckInterval/summary;BalanceCheckInterval

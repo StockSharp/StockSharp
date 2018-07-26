@@ -1258,7 +1258,7 @@ namespace StockSharp.Algo
 
 				if (AutoPortfoliosSubscribe)
 				{
-					var adapter = Adapter.AdapterProvider.GetAdapter(portfolio.Name);
+					var adapter = Adapter.AdapterProvider.GetAdapter(portfolio);
 
 					if (adapter?.IsSupportSubscriptionByPortfolio == true && Adapter.InnerAdapters[adapter] != -1)
 					{

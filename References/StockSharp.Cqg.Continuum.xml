@@ -41,6 +41,12 @@
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.CreateOrderCondition">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.IsSupportStopLoss">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>

@@ -164,29 +164,19 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// List of all securities, subscribed via <see cref="RegisterSecurity"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<Security> RegisteredSecurities => _subscriptionManager.RegisteredSecurities;
 
-		/// <summary>
-		/// List of all securities, subscribed via <see cref="RegisterMarketDepth"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<Security> RegisteredMarketDepths => _subscriptionManager.RegisteredMarketDepths;
 
-		/// <summary>
-		/// List of all securities, subscribed via <see cref="RegisterTrades"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<Security> RegisteredTrades => _subscriptionManager.RegisteredTrades;
 
-		/// <summary>
-		/// List of all securities, subscribed via <see cref="RegisterOrderLog"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<Security> RegisteredOrderLogs => _subscriptionManager.RegisteredOrderLogs;
 
-		/// <summary>
-		/// List of all portfolios, subscribed via <see cref="RegisterPortfolio"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<Portfolio> RegisteredPortfolios => _subscriptionManager.RegisteredPortfolios;
 
 		/// <summary>
@@ -194,11 +184,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IEnumerable<CandleSeries> SubscribedCandleSeries => _entityCache.AllCandleSeries;
 
-		/// <summary>
-		/// To sign up to get market data by the instrument.
-		/// </summary>
-		/// <param name="security">The instrument by which new information getting should be started.</param>
-		/// <param name="message">The message that contain subscribe info.</param>
+		/// <inheritdoc />
 		public virtual void SubscribeMarketData(Security security, MarketDataMessage message)
 		{
 			var msg = LocalizedStrings.SubscriptionSent.Put(security?.Id,
@@ -212,11 +198,7 @@ namespace StockSharp.Algo
 			_subscriptionManager.ProcessRequest(security, message, false);
 		}
 
-		/// <summary>
-		/// To unsubscribe from getting market data by the instrument.
-		/// </summary>
-		/// <param name="security">The instrument by which new information getting should be started.</param>
-		/// <param name="message">The message that contain unsubscribe info.</param>
+		/// <inheritdoc />
 		public virtual void UnSubscribeMarketData(Security security, MarketDataMessage message)
 		{
 			var msg = LocalizedStrings.UnSubscriptionSent.Put(security?.Id,
@@ -230,12 +212,18 @@ namespace StockSharp.Algo
 			_subscriptionManager.ProcessRequest(security, message, false);
 		}
 
-		private void SubscribeMarketData(Security security, MarketDataTypes type)
+		private void SubscribeMarketData(Security security, MarketDataTypes type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null)
 		{
 			SubscribeMarketData(security, new MarketDataMessage
 			{
 				DataType = type,
 				IsSubscribe = true,
+				From = from,
+				To = to,
+				Count = count,
+				BuildFrom = buildFrom,
+				BuildField = buildField,
+				MaxDepth = maxDepth,
 			});
 		}
 
@@ -248,46 +236,31 @@ namespace StockSharp.Algo
 			});
 		}
 
-		/// <summary>
-		/// To start getting new information (for example, <see cref="Security.LastTrade"/> or <see cref="Security.BestBid"/>) by the instrument.
-		/// </summary>
-		/// <param name="security">The instrument by which new information getting should be started.</param>
-		public void RegisterSecurity(Security security)
+		/// <inheritdoc />
+		public void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.Level1);
+			SubscribeMarketData(security, MarketDataTypes.Level1, from, to, count, buildFrom);
 		}
 
-		/// <summary>
-		/// To stop getting new information.
-		/// </summary>
-		/// <param name="security">The instrument by which new information getting should be stopped.</param>
+		/// <inheritdoc />
 		public void UnRegisterSecurity(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.Level1);
 		}
 
-		/// <summary>
-		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="Connector.MarketDepthsChanged"/>.
-		/// </summary>
-		/// <param name="security">The instrument by which quotes getting should be started.</param>
-		public void RegisterMarketDepth(Security security)
+		/// <inheritdoc />
+		public void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null, int? maxDepth = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.MarketDepth);
+			SubscribeMarketData(security, MarketDataTypes.MarketDepth, from, to, count, buildFrom, null, maxDepth);
 		}
 
-		/// <summary>
-		/// To stop getting quotes by the instrument.
-		/// </summary>
-		/// <param name="security">The instrument by which quotes getting should be stopped.</param>
+		/// <inheritdoc />
 		public void UnRegisterMarketDepth(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.MarketDepth);
 		}
 
-		/// <summary>
-		/// To start getting filtered quotes (order book) by the instrument. Quotes values are available through the event <see cref="IConnector.GetFilteredMarketDepth"/>.
-		/// </summary>
-		/// <param name="security">The instrument by which quotes getting should be started.</param>
+		/// <inheritdoc />
 		public void RegisterFilteredMarketDepth(Security security)
 		{
 			if (security == null)
@@ -307,37 +280,25 @@ namespace StockSharp.Algo
 			});
 		}
 
-		/// <summary>
-		/// To stop getting filtered quotes by the instrument.
-		/// </summary>
-		/// <param name="security">The instrument by which quotes getting should be stopped.</param>
+		/// <inheritdoc />
 		public void UnRegisterFilteredMarketDepth(Security security)
 		{
 			UnSubscribeMarketData(security, FilteredMarketDepthAdapter.FilteredMarketDepth);
 		}
 
-		/// <summary>
-		/// To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="IConnector.NewTrades"/>.
-		/// </summary>
-		/// <param name="security">The instrument by which trades getting should be started.</param>
-		public void RegisterTrades(Security security)
+		/// <inheritdoc />
+		public void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.Trades);
+			SubscribeMarketData(security, MarketDataTypes.Trades, from, to, count, buildFrom);
 		}
 
-		/// <summary>
-		/// To stop getting trades (tick data) by the instrument.
-		/// </summary>
-		/// <param name="security">The instrument by which trades getting should be stopped.</param>
+		/// <inheritdoc />
 		public void UnRegisterTrades(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.Trades);
 		}
 
-		/// <summary>
-		/// Subscribe on the portfolio changes.
-		/// </summary>
-		/// <param name="portfolio">Portfolio for subscription.</param>
+		/// <inheritdoc />
 		public void RegisterPortfolio(Portfolio portfolio)
 		{
 			_subscriptionManager.RegisterPortfolio(portfolio);
@@ -380,27 +341,19 @@ namespace StockSharp.Algo
 			});
 		}
 
-		/// <summary>
-		/// Subscribe on order log for the security.
-		/// </summary>
-		/// <param name="security">Security for subscription.</param>
-		public void RegisterOrderLog(Security security)
+		/// <inheritdoc />
+		public void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.OrderLog);
+			SubscribeMarketData(security, MarketDataTypes.OrderLog, from, to, count);
 		}
 
-		/// <summary>
-		/// Unsubscribe from order log for the security.
-		/// </summary>
-		/// <param name="security">Security for unsubscription.</param>
+		/// <inheritdoc />
 		public void UnRegisterOrderLog(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.OrderLog);
 		}
 
-		/// <summary>
-		/// Subscribe on news.
-		/// </summary>
+		/// <inheritdoc />
 		public void RegisterNews()
 		{
 			OnRegisterNews();
@@ -414,18 +367,13 @@ namespace StockSharp.Algo
 			SubscribeMarketData(null, MarketDataTypes.News);
 		}
 
-		/// <summary>
-		/// Unsubscribe from news.
-		/// </summary>
+		/// <inheritdoc />
 		public void UnRegisterNews()
 		{
 			OnUnRegisterNews();
 		}
 
-		/// <summary>
-		/// Request news <see cref="BusinessEntities.News.Story"/> body. After receiving the event <see cref="NewsChanged"/> will be triggered.
-		/// </summary>
-		/// <param name="news">News.</param>
+		/// <inheritdoc />
 		public virtual void RequestNewsStory(News news)
 		{
 			if (news == null)

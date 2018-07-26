@@ -27,6 +27,11 @@
 				SecurityId = securityId;
 				IsBack = true;
 			}
+
+			public override Message Clone()
+			{
+				return new ProcessSuspendedSecurityMessage(Adapter, SecurityId);
+			}
 		}
 
 		private readonly PairSet<object, SecurityId> _securityIds = new PairSet<object, SecurityId>();
@@ -168,7 +173,7 @@
 				{
 					var positionMsg = (PositionChangeMessage)message;
 
-					ProcessMessage(positionMsg.SecurityId, positionMsg, (prev, curr) =>
+					ProcessMessage(positionMsg.SecurityId, positionMsg, true, (prev, curr) =>
 					{
 						foreach (var pair in prev.Changes)
 						{
@@ -183,7 +188,7 @@
 				case MessageTypes.Execution:
 				{
 					var execMsg = (ExecutionMessage)message;
-					ProcessMessage(execMsg.SecurityId, execMsg, null);
+					ProcessMessage(execMsg.SecurityId, execMsg, execMsg.ExecutionType == ExecutionTypes.Tick && execMsg.OriginalTransactionId == 0, null);
 					break;
 				}
 
@@ -191,7 +196,7 @@
 				{
 					var level1Msg = (Level1ChangeMessage)message;
 
-					ProcessMessage(level1Msg.SecurityId, level1Msg, (prev, curr) =>
+					ProcessMessage(level1Msg.SecurityId, level1Msg, true, (prev, curr) =>
 					{
 						foreach (var pair in prev.Changes)
 						{
@@ -206,7 +211,7 @@
 				case MessageTypes.QuoteChange:
 				{
 					var quoteChangeMsg = (QuoteChangeMessage)message;
-					ProcessMessage(quoteChangeMsg.SecurityId, quoteChangeMsg, (prev, curr) => curr);
+					ProcessMessage(quoteChangeMsg.SecurityId, quoteChangeMsg, true, (prev, curr) => curr);
 					break;
 				}
 
@@ -218,7 +223,7 @@
 				case MessageTypes.CandleVolume:
 				{
 					var candleMsg = (CandleMessage)message;
-					ProcessMessage(candleMsg.SecurityId, candleMsg, null);
+					ProcessMessage(candleMsg.SecurityId, candleMsg, candleMsg.OriginalTransactionId == 0, null);
 					break;
 				}
 
@@ -227,7 +232,7 @@
 					var newsMsg = (NewsMessage)message;
 
 					if (newsMsg.SecurityId != null)
-						ProcessMessage(newsMsg.SecurityId.Value, newsMsg, null);
+						ProcessMessage(newsMsg.SecurityId.Value, newsMsg, true, null);
 					else
 						base.OnInnerAdapterNewOutMessage(message);
 
@@ -331,7 +336,7 @@
 			return new SecurityNativeIdMessageAdapter(InnerAdapter, Storage);
 		}
 
-		private void ProcessMessage<TMessage>(SecurityId securityId, TMessage message, Func<TMessage, TMessage, TMessage> processSuspend)
+		private void ProcessMessage<TMessage>(SecurityId securityId, TMessage message, bool throwIfSecIdEmpty, Func<TMessage, TMessage, TMessage> processSuspend)
 			where TMessage : Message
 		{
 			var native = securityId.Native;
@@ -383,7 +388,7 @@
 
 				var isSecCodeEmpty = securityCode.IsEmpty();
 
-				if (isSecCodeEmpty && message.Type != MessageTypes.Execution)
+				if (isSecCodeEmpty && throwIfSecIdEmpty)
 					throw new InvalidOperationException();
 
 				if (!isSecCodeEmpty && boardCode.IsEmpty())

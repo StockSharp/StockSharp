@@ -1266,7 +1266,25 @@ namespace StockSharp.Messages
 		/// Aelf.
 		/// </summary>
 		[EnumMember]
-		ELF
+		ELF,
+
+		/// <summary>
+		/// South Africa, Rand. The Rand is subdivided into 100 cents.
+		/// </summary>
+		[EnumMember]
+		ZAC,
+
+		/// <summary>
+		/// Deutsche Mark.
+		/// </summary>
+		[EnumMember]
+		DEM,
+
+		/// <summary>
+		/// Luxembourgish franc.
+		/// </summary>
+		[EnumMember]
+		LUF,
 // ReSharper restore InconsistentNaming
 	}
 }

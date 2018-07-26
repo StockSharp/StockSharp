@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.IEX</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.IEX.IEXMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.IEX"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.IEX.IEXMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.IEX.IEXMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="P:StockSharp.IEX.IEXMessageAdapter.IsSupportNativeSecurityLookup">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.IEX.IEXMessageAdapter.TimeFrames">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.IEX.IEXMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.IEX.IEXMessageAdapter.Token">
+            <summary>
+            Token.
+            </summary>
+        </member>
+        <member name="M:StockSharp.IEX.IEXMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.IEX.IEXMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.IEX.IEXTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.IEX"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.IEX.IEXTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.IEX.IEXTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.IEX.IEXTrader.Token">
+            <summary>
+            Token.
+            </summary>
+        </member>
+    </members>
+</doc>

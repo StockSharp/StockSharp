@@ -2,6 +2,7 @@ T:StockSharp.Bithumb.BithumbMessageAdapter/summary;DocStr2538
 F:StockSharp.Bithumb.BithumbMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Bithumb.BithumbMessageAdapter.Key/summary;Str3304
 P:StockSharp.Bithumb.BithumbMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Bithumb.BithumbMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Bithumb.BithumbMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Bithumb.BithumbMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Bithumb.BithumbMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -19,3 +20,4 @@ T:StockSharp.Bithumb.BithumbTrader/summary;DocStr2539
 M:StockSharp.Bithumb.BithumbTrader.#ctor/summary;DocStr1
 P:StockSharp.Bithumb.BithumbTrader.Key/summary;Str3304
 P:StockSharp.Bithumb.BithumbTrader.Secret/summary;DocStr3146
+P:StockSharp.Bithumb.BithumbTrader.BalanceCheckInterval/summary;BalanceCheckInterval

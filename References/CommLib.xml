@@ -34,14 +34,9 @@
             </summary>
             <exclude />
         </member>
-        <member name="T:OEC.Data.IDEntity">
-            <summary>
-            </summary>
-            <exclude/>
-        </member>
         <member name="T:OEC.Data.Continuous.Offset">
-            <summary>Represents offset for next\previous <see cref="T:OEC.Data.ContractMonth"/></summary>
-            <exclude/>
+            <summary>Represents offset for next\previous <see cref="T:OEC.Data.ContractMonth" /></summary>
+            <exclude />
         </member>
         <member name="F:OEC.Data.Continuous.Offset.Delta">
             <summary>Value for a next; prevStop - nextStart</summary>
@@ -72,11 +67,6 @@
             <summary>
             </summary>
             <exclude />
-        </member>
-        <member name="T:OEC.Data.ExtendedData">
-            <summary>
-            </summary>
-            <exclude/>
         </member>
         <member name="T:OEC.Data.PegScope">
             <summary>
@@ -181,136 +171,10 @@
             </summary>
             <exclude />
         </member>
-        <member name="T:OEC.Data.IDEntityEx`1">
-            <summary>
-            </summary>
-            <exclude/>
-        </member>
         <member name="T:OEC.Data.ProviderContractMapKey">
             <summary>
             </summary>
             <exclude />
-        </member>
-        <member name="T:OEC.CommLib.PriceIntern">
-            <summary>
-                Utility class for formatting and parsing prices
-            </summary>
-            <remarks>
-                This class using special notation for price format:
-                <ul>
-                    <li>positive values specifies number of digits after decimal point (2 = 0.00)</li>
-                    <li>negative - divisor of fraction (-32 = 1/32)</li>
-                </ul>
-            </remarks>
-        </member>
-        <member name="M:OEC.CommLib.PriceIntern.#ctor(System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
-            <summary>
-                Construct the formatter using given format specifiers, value and min/max value
-            </summary>
-            <param name="pPriceFormat">
-                <see cref="!:Contract.PriceFormat"/>
-            </param>
-            <param name="pPriceMultiplier">Multiplier, power of 10</param>
-            <param name="tickSize">Tick size - mimimal price increment</param>
-            <param name="value">Price value</param>
-            <param name="minvalue">Minimum</param>
-            <param name="maxvalue">Maximum</param>
-        </member>
-        <member name="M:OEC.CommLib.PriceIntern.#ctor(System.Int32,System.Int32,System.Double,System.Double)">
-            <summary>
-                Constructs formatter using given format specifiers value and default min/max values (0, 1e9)
-            </summary>
-            <param name="priceFormat">
-                <see cref="!:Contract.PriceFormat"/>
-            </param>
-            <param name="priceMultiplier">Multiplier, power of 10</param>
-            <param name="tickSize">Tick size - minimal price increment</param>
-            <param name="value">Price value</param>
-        </member>
-        <member name="M:OEC.CommLib.PriceIntern.fromString(System.String,System.Globalization.CultureInfo)">
-            <summary>
-                Parse formatted price
-            </summary>
-            <param name="value">string price</param>
-            <param name="culture"></param>
-            <returns>false, if price doesn't match expected pattern</returns>
-        </member>
-        <member name="M:OEC.CommLib.PriceIntern.fromString(System.String)">
-            <summary>
-                Parse formatted price
-            </summary>
-            <param name="value">string price</param>
-            <returns>false, if price doesn't match expected pattern</returns>
-        </member>
-        <member name="M:OEC.CommLib.PriceIntern.ToString(System.Globalization.CultureInfo)">
-            <summary>
-                Format current value
-            </summary>
-            <returns>formatted price</returns>
-        </member>
-        <member name="M:OEC.CommLib.PriceIntern.ToString">
-            <summary>
-                Format current value
-            </summary>
-            <returns>formatted price</returns>
-        </member>
-        <member name="M:OEC.CommLib.PriceIntern.Inc">
-            <summary>
-                increase value by 1 tick
-            </summary>
-        </member>
-        <member name="M:OEC.CommLib.PriceIntern.Dec">
-            <summary>
-                decrease value by 1 tick
-            </summary>
-        </member>
-        <member name="M:OEC.CommLib.PriceIntern.getPriceMask">
-            <summary>
-                Returns a string representing input mask for given format and tick
-                <see cref="!:Contract.PriceFormat"/>
-                <see cref="F:OEC.Data.Contract.TickSize"/>
-            </summary>
-            <returns>string mask</returns>
-        </member>
-        <member name="M:OEC.CommLib.PriceIntern.getPriceFormatString">
-            <summary>
-                builds format string for using with string.Format(integer part, fractional part)
-            </summary>
-            <returns>price format string</returns>
-        </member>
-        <member name="P:OEC.CommLib.PriceIntern.Value">
-            <summary>
-                get or set current price value
-                when assigning, value will be aligned by tick size and min/max boundaries.
-            </summary>
-        </member>
-        <member name="P:OEC.CommLib.PriceIntern.MinValue">
-            <summary>
-                get/set min value
-            </summary>
-        </member>
-        <member name="P:OEC.CommLib.PriceIntern.MaxValue">
-            <summary>
-                get/set maxvalue
-            </summary>
-        </member>
-        <member name="T:OEC.Scheduler">
-            <summary />
-            <exclude/>
-        </member>
-        <member name="T:OEC.ScheduledTask">
-            <exclude />
-        </member>
-        <member name="T:OEC.SortedTree`1">
-            <summary>
-            </summary>
-            <typeparam name="T"></typeparam>
-            <exclude />
-        </member>
-        <member name="T:OEC.BidirectionalMap`2">
-            <summary>
-            </summary>
-            <exclude/>
         </member>
         <member name="T:OEC.Data.ICacheGetter`1">
             <summary>
@@ -352,7 +216,17 @@
             </summary>
             <exclude/>
         </member>
+        <member name="T:OEC.Data.IDEntity">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
         <member name="T:OEC.Data.IDEntityEx">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.IDEntityEx`1">
             <summary>
             </summary>
             <exclude/>
@@ -398,11 +272,6 @@
             <exclude/>
         </member>
         <member name="T:OEC.Data.NameChildEntity">
-            <summary>
-            </summary>
-            <exclude/>
-        </member>
-        <member name="T:OEC.HashTools.Certificate">
             <summary>
             </summary>
             <exclude/>
@@ -468,6 +337,11 @@
             Universal account
             </summary>
             <exclude/>
+        </member>
+        <member name="F:OEC.Data.AccountType.MicroFX">
+            <summary>
+            Micro FX account
+            </summary>
         </member>
         <member name="T:OEC.Data.PostAllocationPermission">
             <exclude/>
@@ -1005,6 +879,21 @@
             See OEC.API.OECClient class for API overview 
             </summary>
         </member>
+        <member name="T:OEC.Data.OSOGroupingMethod">
+            <summary>
+            OSO grouping method
+            </summary>
+        </member>
+        <member name="T:OEC.Data.FakeOrder">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ExtendedData">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
         <member name="T:OEC.Data.TrailingStopData">
             <summary>
             </summary>
@@ -1077,18 +966,6 @@
             </summary>
             <exclude/>
         </member>
-        <member name="F:OEC.Data.OsmRootOrder.AlgoParams">
-            <summary>
-            </summary>
-        </member>
-        <member name="M:OEC.Data.OsmRootOrder.AddParam(System.String,System.String)">
-            <summary>
-            </summary>
-        </member>
-        <member name="M:OEC.Data.OsmRootOrder.Clone">
-            <summary>
-            </summary>
-        </member>
         <member name="T:OEC.Data.OsmRootOrder.AlgoParam">
             <summary>
             </summary>
@@ -1107,6 +984,18 @@
             </summary>
         </member>
         <member name="M:OEC.Data.OsmRootOrder.AlgoParam.#ctor">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmRootOrder.AlgoParams">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmRootOrder.AddParam(System.String,System.String)">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmRootOrder.Clone">
             <summary>
             </summary>
         </member>
@@ -1161,43 +1050,6 @@
             </summary>
             <exclude/>
         </member>
-        <member name="F:OEC.Data.OsmAlgoInfo.Name">
-            <summary>
-            </summary>
-        </member>
-        <member name="F:OEC.Data.OsmAlgoInfo.Params">
-            <summary>
-            </summary>
-        </member>
-        <member name="F:OEC.Data.OsmAlgoInfo.OrderTypes">
-            <summary>
-            </summary>
-        </member>
-        <member name="F:OEC.Data.OsmAlgoInfo.OrderFlags">
-            <summary>
-            </summary>
-        </member>
-        <member name="F:OEC.Data.OsmAlgoInfo.OtherDetails">
-            <summary>
-            </summary>
-            <exclude></exclude>
-        </member>
-        <member name="M:OEC.Data.OsmAlgoInfo.#ctor">
-            <summary>
-            </summary>
-        </member>
-        <member name="M:OEC.Data.OsmAlgoInfo.#ctor(System.String)">
-            <summary>
-            </summary>
-        </member>
-        <member name="M:OEC.Data.OsmAlgoInfo.AddParam(OEC.Data.OsmAlgoInfo.Param)">
-            <summary>
-            </summary>
-        </member>
-        <member name="M:OEC.Data.OsmAlgoInfo.Clone">
-            <summary>
-            </summary>
-        </member>
         <member name="T:OEC.Data.OsmAlgoInfo.Param">
             <summary>
             </summary>
@@ -1248,6 +1100,43 @@
             </summary>
         </member>
         <member name="M:OEC.Data.OsmAlgoInfo.Param.Clone">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Name">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Params">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.OrderTypes">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.OrderFlags">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.OtherDetails">
+            <summary>
+            </summary>
+            <exclude></exclude>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfo.#ctor">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfo.#ctor(System.String)">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfo.AddParam(OEC.Data.OsmAlgoInfo.Param)">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfo.Clone">
             <summary>
             </summary>
         </member>
@@ -1457,6 +1346,9 @@
             <exclude />
         </member>
         <member name="F:OEC.Data.PriceFields.CumLastVol">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.PendingSettlement">
             <summary></summary>
         </member>
         <member name="F:OEC.Data.PriceFields.All">
@@ -1981,580 +1873,6 @@
             </summary>
             <exclude />
         </member>
-        <member name="T:OEC.FieldCache`1">
-            <summary>
-            </summary>
-            <exclude/>
-        </member>
-        <member name="T:OEC.CreatorDelegate`1">
-            <summary>
-            </summary>
-            <exclude/>
-        </member>
-        <member name="T:OEC.SetterDelegate`1">
-            <summary>
-            </summary>
-            <exclude/>
-        </member>
-        <member name="T:OEC.GetterDelegate`1">
-            <summary>
-            </summary>
-            <exclude/>
-        </member>
-        <member name="T:OEC.FieldList`1">
-            <summary>
-            Map of field name/field information
-            </summary>
-            <exclude/>
-        </member>
-        <member name="T:OEC.Field`1">
-            <summary>
-            </summary>
-            <exclude/>
-        </member>
-        <member name="T:OEC.CommLib.InvokeControl">
-            <summary>
-            WinForms Control wrapper with windows message queue overload protection
-            </summary>
-            <exclude />
-        </member>
-        <member name="M:OEC.CommLib.InvokeControl.#ctor">
-            <summary>
-            </summary>
-            <exclude/>
-        </member>
-        <member name="M:OEC.CommLib.InvokeControl.BeginInvoke``1(``0,System.Object[])">
-            <summary>
-            WinForms control begininvoke generic wrapper with windows message queue overload protection
-            </summary>
-        </member>
-        <member name="M:OEC.CommLib.InvokeControl.Invoke``1(``0,System.Object[])">
-            <summary>
-            Generic wrapper for WinForms control invoke.
-            </summary>
-        </member>
-        <member name="P:OEC.CommLib.InvokeControl.InvokeRequired">
-            <summary>
-            Indicates if caller is different than control creator thread
-            </summary>
-        </member>
-        <member name="T:OEC.MathExt">
-            <summary>
-            </summary>
-            <exclude />
-        </member>
-        <member name="M:OEC.MathExt.GCD(System.Int32,System.Int32)">
-            <summary>
-            </summary>
-            <exclude />
-        </member>
-        <member name="M:OEC.MathExt.GCD(System.Int32[])">
-            <summary>
-            </summary>
-            <exclude />
-        </member>
-        <member name="T:OEC.CommLib.ProtoClient`2">
-            <summary>
-            </summary>
-            <exclude />
-        </member>
-        <member name="M:OEC.CommLib.ProtoClient`2.WriteSync(`1)">
-            <summary>
-                Synchronous write - blocks
-            </summary>
-            <param name="item"></param>
-        </member>
-        <member name="M:OEC.CommLib.ProtoClient`2.WriteAsync(`1)">
-            <summary>
-                Async write and forget, no notification
-            </summary>
-            <param name="item"></param>
-        </member>
-        <member name="M:OEC.CommLib.ProtoClient`2.EndWrite(System.IAsyncResult)">
-            <summary>
-                Async Write closing
-            </summary>
-            <param name="ar"></param>
-        </member>
-        <member name="M:OEC.CommLib.ProtoClient`2.WriteKeepAliveSync">
-            <summary>
-                Async write empty msg
-            </summary>
-        </member>
-        <member name="M:OEC.CommLib.ProtoClient`2.WriteKeepAlive">
-            <summary>
-                Async write empty msg
-            </summary>
-        </member>
-        <member name="M:OEC.CommLib.ProtoClient`2.Trace(System.Int32,System.String,System.Object[])">
-            <summary>
-                Traces network activity
-            </summary>
-            <param name="level"> 1 write, 2 read, 4 pair(begin/end), 8 keepalive, 16 misc</param>
-            <param name="format"></param>
-            <param name="args"></param>
-        </member>
-        <member name="T:OEC.CommLib.ProtoClient`2.NetFilter">
-            <summary>
-            </summary>
-            <exclude />
-        </member>
-        <member name="T:OEC.SafeQue`1">
-            <summary>
-            Thread-safe queue
-            </summary>
-            <typeparam name="T"></typeparam>
-            <exclude/>
-        </member>
-        <member name="T:OEC.SafeList`1">
-            <summary>
-            Thread-safe list
-            </summary>
-            <typeparam name="T"></typeparam>
-            <exclude/>
-        </member>
-        <member name="M:OEC.SafeList`1.Clear">
-            <summary>
-            Clears the list.
-            </summary>
-            <returns>Old contents of list</returns>
-        </member>
-        <member name="T:OEC.IBaseDictionary`2">
-            <summary>
-            Simple base interface for dictionaries which doesn't include ICollection and IEnumerable interfaces
-            </summary>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="TValue"></typeparam>
-            <exclude/>
-        </member>
-        <member name="T:OEC.BaseDictionary`2">
-            <summary>
-            Simple dictionary with basic methods
-            </summary>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="TValue"></typeparam>
-            <exclude/>
-        </member>
-        <member name="T:OEC.SafeBaseDictionary`2">
-            <summary>
-            Thread-safe version of simple dictionary
-            </summary>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="TValue"></typeparam>
-            <exclude/>
-        </member>
-        <member name="T:OEC.SafeDictionary`3">
-            <summary>
-            Thread-safe wrapper for any dictionary with rwl locks.
-            </summary>
-            <typeparam name="TKey">Key type</typeparam>
-            <typeparam name="TValue">Value type</typeparam>
-            <typeparam name="Container">Containter type : IDictionary</typeparam>
-            <exclude/>
-        </member>
-        <member name="M:OEC.SafeDictionary`3.Extract(`0,`1)">
-            <summary>
-            Extracts a value from list, or returns a provided value if key does not present
-            </summary>
-            <param name="key">Key</param>
-            <param name="notfound">Default value</param>
-            <returns>Value</returns>
-        </member>
-        <member name="M:OEC.SafeDictionary`3.ReplaceIf(`0,System.Predicate{`1},`1,System.Boolean)">
-            <summary>
-            Compare and Replace
-            </summary>
-            <param name="key">Key</param>
-            <param name="pred">Predicate</param>
-            <param name="newvalue">New value</param>
-            <param name="notfound">Add value if key is not found</param>
-            <returns></returns>
-        </member>
-        <member name="M:OEC.SafeDictionary`3.ClearValues">
-            <summary>
-            Thread-safe - returns a copy of list and clears list
-            </summary>
-        </member>
-        <member name="M:OEC.SafeDictionary`3.ClearDictionary">
-            <summary>
-            Thread-safe - returns a copy of list and clears list
-            </summary>
-        </member>
-        <member name="M:OEC.SafeDictionary`3.CopyDictionary">
-            <summary>
-            Thread-safe - returns a copy of list
-            </summary>
-        </member>
-        <member name="P:OEC.SafeDictionary`3.List">
-            <summary>
-            must use ReaderLock
-            </summary>
-        </member>
-        <member name="P:OEC.SafeDictionary`3.CopyValues">
-            <summary>
-            Thread-safe - returns a copy of list
-            </summary>
-        </member>
-        <member name="P:OEC.SafeDictionary`3.Keys">
-            <summary>
-            Thread-safe - returns a copy of list
-            </summary>
-        </member>
-        <member name="T:OEC.SafeDictionary`2">
-            <summary>
-            Thread-Safe Dictionary
-            </summary>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="TValue"></typeparam>
-            <exclude/>
-        </member>
-        <member name="T:OEC.SafeSortedList`2">
-            <summary>
-            Thread-safe sorted list
-            </summary>
-            <typeparam name="TKey">Key type</typeparam>
-            <typeparam name="TValue">Value type</typeparam>
-            <exclude/>
-        </member>
-        <member name="M:OEC.SafeSortedList`2.Pred(`0)">
-            <summary>
-            Predecessor 
-            </summary>
-            <param name="key"></param>
-            <returns>Value or default</returns>
-        </member>
-        <member name="P:OEC.SafeSortedList`2.Last">
-            <summary>
-            Last value in the list (by key order)
-            </summary>
-        </member>
-        <member name="T:OEC.SafeDefaultDictionary`2">
-            <summary>
-            Thread-safe dictionary with default value for not-found keys
-            </summary>
-            <remarks>
-            Does not throw an exception if key is not found.
-            </remarks>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="T"></typeparam>
-            <exclude/>
-        </member>
-        <member name="T:OEC.CreatingSafeDictionary`2">
-            <exclude/>
-            <summary>
-            Thread-safe version of CreatingDictionary
-            </summary>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="TValue"></typeparam>
-        </member>
-        <member name="T:OEC.DefaultCreatingSortedList`2">
-            <exclude/>
-            <summary>
-            SortedList creating a new value for not-found keys
-            </summary>
-            <remarks>
-            Does not throw an exception if key is not found.
-            </remarks>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:OEC.CreatingSortedList`2">
-            <exclude/>
-            <summary>
-            SortedList creating a new value for not-found keys using given creator
-            </summary>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:OEC.CreatingDictionary`2">
-            <exclude/>
-            <summary>
-            Dictionary creating a new value for not-found keys using given creator
-            </summary>
-            <remarks>
-            Does not throw an exception if key is not found.
-            </remarks>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="M:OEC.CreatingDictionary`2.#ctor">
-            <summary>
-            must ininitialize creator later
-            </summary>
-        </member>
-        <member name="T:OEC.DummyDictionary`2">
-            <exclude/>
-            <summary>
-            Dictionary creating a new value for not-found keys using given creator
-            </summary>
-            <remarks>
-            Does not throw an exception if key is not found.
-            </remarks>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:OEC.CreatingSafeSortedList`2">
-            <exclude/>
-            <summary>
-            Thread-safe version of CreatingSortedList
-            </summary>
-        </member>
-        <member name="T:OEC.DefaultCreatingDictionary`2">
-            <exclude/>
-            <summary>
-            Dictionary creating a new value for not-found keys
-            </summary>
-            <remarks>
-            Does not throw an exception if key is not found.
-            </remarks>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:OEC.NullDictionary`2">
-            <exclude/>
-            <summary>
-            Dictionary returning null (or default value) for not found keys
-            </summary>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:OEC.NullSortedList`2">
-            <exclude/>
-            <summary>
-            SortedList returning null (or default value) for not found keys
-            </summary>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="TValue"></typeparam>
-        </member>
-        <member name="T:OEC.OrderedList`1">
-            <exclude/>
-            <summary>
-            List maintaining given order.
-            </summary>
-            <remarks>
-            Override Compare to provide custom order
-            </remarks>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="M:OEC.OrderedList`1.Add(`0)">
-            <summary>
-            Inserts an item to a position by order
-            </summary>
-            <param name="item"></param>
-            <returns></returns>
-        </member>
-        <member name="T:OEC.RangeMap`1">
-            <exclude/>
-            <summary>
-            </summary>
-        </member>
-        <member name="T:OEC.SafeSet`2">
-            <exclude/>
-            <summary>
-            </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="Container"></typeparam>
-        </member>
-        <member name="T:OEC.SafeSet`1">
-            <exclude/>
-            <summary>
-            </summary>
-        </member>
-        <member name="T:OEC.SafeBitArray">
-            <exclude />
-        </member>
-        <member name="T:OEC.Severity">
-            <summary>
-            Log message severity
-            </summary>
-        </member>
-        <member name="F:OEC.Severity.N_A">
-            <summary>
-            Not specified
-            </summary>
-        </member>
-        <member name="F:OEC.Severity.Prf">
-            <summary>
-            Performance messages
-            </summary>
-        </member>
-        <member name="F:OEC.Severity.Dbg">
-            <summary>
-            Debug tracing messages
-            </summary>
-        </member>
-        <member name="F:OEC.Severity.Inf">
-            <summary>
-            Information messages
-            </summary>
-        </member>
-        <member name="F:OEC.Severity.Wrn">
-            <summary>
-            Warning messages
-            </summary>
-        </member>
-        <member name="F:OEC.Severity.Err">
-            <summary>
-            Error messages
-            </summary>
-        </member>
-        <member name="F:OEC.Severity.Crt">
-            <summary>
-            Critical error messages
-            </summary>
-        </member>
-        <member name="T:OEC.Log">
-            <summary>
-            OEC Log
-            </summary>
-            <remarks>
-            Default implementation creates a separate file for each day. It can be replaced by custom implementation
-            </remarks>
-        </member>
-        <member name="F:OEC.Log.CurrentLogicalThread">
-            <summary>
-            Custom logical thead name used for log output
-            </summary>
-            <exclude/>
-        </member>
-        <member name="F:OEC.Log.ConsoleOutput">
-            <summary>
-            Gets or sets whether to output non-DBG entries to console for internal logger
-            </summary>
-        </member>
-        <member name="M:OEC.Log.Initialize(OEC.ILogImpl)">
-            <summary>
-            Logger can be changed to own implementation
-            </summary>
-            <param name="logImpl">Custom log implementation</param>
-        </member>
-        <member name="M:OEC.Log.Start">
-            <summary>
-            Starts logger at default path
-            </summary>
-        </member>
-        <member name="M:OEC.Log.Start(System.String)">
-            <summary>
-            Starts logger at cpecified path
-            </summary>
-            <param name="path"></param>
-        </member>
-        <member name="M:OEC.Log.Stop">
-            <summary>
-            Stops logger
-            </summary>
-        </member>
-        <member name="M:OEC.Log.WriteLine(System.String,System.Object[])">
-            <summary>
-            Logs formatted text with Dbg severity
-            </summary>
-        </member>
-        <member name="F:OEC.Log.WritePerformanceInfo">
-            <summary>
-            </summary>
-            <exclude />
-        </member>
-        <member name="M:OEC.Log.WriteLine(OEC.Severity,System.String,System.Object[])">
-            <summary>
-            Logs formatted text with specified severity
-            </summary>
-        </member>
-        <member name="P:OEC.Log.ThreadContext">
-            <summary>
-            User defined loging thread context, can be used to pass user defined parameters from application to log implementation. Different threads have different contexts
-            </summary>
-        </member>
-        <member name="T:OEC.Log.Context">
-            <summary>
-            Implementation for log contexts
-            </summary>
-        </member>
-        <member name="F:OEC.Log.Context.Stacks">
-            <summary>
-            Properties container for log context in form of property name -> stack collection
-            </summary>
-        </member>
-        <member name="M:OEC.Log.Context.Current``1">
-            <summary>
-            Returns typed current Stacks object
-            </summary>
-            <typeparam name="T">Type used to return</typeparam>
-            <returns>Top logging stack object of type T</returns>
-        </member>
-        <member name="M:OEC.Log.Context.Current(System.String)">
-            <summary>
-            Returns current Stacks object
-            </summary>
-        </member>
-        <member name="T:OEC.Log.LogStack">
-            <summary>
-            Stack of user-defined objects
-            </summary>
-        </member>
-        <member name="M:OEC.Log.LogStack.Push(System.Object)">
-            <summary>
-            Stack push
-            </summary>
-        </member>
-        <member name="M:OEC.Log.LogStack.Pop">
-            <summary>
-            Stack pop
-            </summary>
-        </member>
-        <member name="M:OEC.Log.LogStack.Peek">
-            <summary>
-            Access to top object
-            </summary>
-        </member>
-        <member name="M:OEC.Log.LogStack.ToString">
-            <summary>
-            String representation of stack top object
-            </summary>
-        </member>
-        <member name="T:OEC.ILogImpl">
-            <summary>
-            Custom log implementation.
-            </summary>
-        </member>
-        <member name="M:OEC.ILogImpl.Start(System.String)">
-            <summary>
-            Signal that logging has started. Can be used to place starting code for logging, like starting log thread for example
-            </summary>
-            <param name="path">Path on which log file is intended to be created. Can be ignored by custom application in favor of own path</param>
-        </member>
-        <member name="M:OEC.ILogImpl.Stop">
-            <summary>
-            Signal that logging has stopped.
-            </summary>
-        </member>
-        <member name="M:OEC.ILogImpl.WriteLine(OEC.Severity,System.String,System.Object[])">
-            <summary>
-            Called for log message output. 
-            </summary>
-            <param name="severity">Severity of the message</param>
-            <param name="format">Message format like in string.Format</param>
-            <param name="args">Arguments for message formatting like in string.Format</param>
-        </member>
-        <member name="T:OEC.Log.InternalLogImpl.LogItem">
-            <summary>
-            Log record.
-            </summary>
-        </member>
-        <member name="T:OEC.ExactTime">
-            <summary>
-            </summary>
-            <exclude />
-        </member>
-        <member name="T:OEC.CommLib.PacketSocket">
-            <summary>
-            </summary>
-            <exclude/>
-        </member>
-        <member name="T:OEC.CommLib.ProtoSocket">
-            <summary>
-            </summary>
-            <exclude/>
-        </member>
         <member name="T:OEC.Data.Currency">
             <exclude/>
             <summary>
@@ -2619,7 +1937,7 @@
         <member name="T:OEC.Data.ContractMonth">
             <summary>ContractMonth provides expiration dates for <see cref="T:OEC.Data.Contract"/></summary>
             <remarks>Usually it is used when a <see cref="T:OEC.Data.Contract"/> is not available</remarks>
-            <exclude/>
+            <exclude />
         </member>
         <member name="T:OEC.Data.Contract">
             <summary>
@@ -2788,6 +2106,721 @@
         <member name="T:OEC.Data.SecuredMode">
             <summary>
             http://www.cftc.gov/opa/press00/opa4441-00.htm
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.OrderedEnumerable">
+            <summary> IOrderedEnumerable clone from .Net 4.0 code </summary>
+        </member>
+        <member name="T:OEC.CommLib.PriceIntern">
+            <summary>
+                Utility class for formatting and parsing prices
+            </summary>
+            <remarks>
+                This class using special notation for price format:
+                <ul>
+                    <li>positive values specifies number of digits after decimal point (2 = 0.00)</li>
+                    <li>negative - divisor of fraction (-32 = 1/32)</li>
+                </ul>
+            </remarks>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.#ctor(System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+                Construct the formatter using given format specifiers, value and min/max value
+            </summary>
+            <param name="pPriceFormat">
+                <see cref="!:Contract.PriceFormat" />
+            </param>
+            <param name="pPriceMultiplier">Multiplier, power of 10</param>
+            <param name="tickSize">Tick size - mimimal price increment</param>
+            <param name="value">Price value</param>
+            <param name="minvalue">Minimum</param>
+            <param name="maxvalue">Maximum</param>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.#ctor(System.Int32,System.Int32,System.Double,System.Double)">
+            <summary>
+                Constructs formatter using given format specifiers value and default min/max values (0, 1e9)
+            </summary>
+            <param name="priceFormat">
+                <see cref="!:Contract.PriceFormat" />
+            </param>
+            <param name="priceMultiplier">Multiplier, power of 10</param>
+            <param name="tickSize">Tick size - minimal price increment</param>
+            <param name="value">Price value</param>
+        </member>
+        <member name="P:OEC.CommLib.PriceIntern.Value">
+            <summary>
+                get or set current price value
+                when assigning, value will be aligned by tick size and min/max boundaries.
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.fromString(System.String,System.Globalization.CultureInfo)">
+            <summary>
+                Parse formatted price
+            </summary>
+            <param name="value">string price</param>
+            <param name="culture"></param>
+            <returns>false, if price doesn't match expected pattern</returns>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.fromString(System.String)">
+            <summary>
+                Parse formatted price
+            </summary>
+            <param name="value">string price</param>
+            <returns>false, if price doesn't match expected pattern</returns>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.ToString(System.Globalization.CultureInfo)">
+            <summary>
+                Format current value
+            </summary>
+            <returns>formatted price</returns>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.ToString">
+            <summary>
+                Format current value
+            </summary>
+            <returns>formatted price</returns>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.Inc">
+            <summary>
+                increase value by 1 tick
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.Dec">
+            <summary>
+                decrease value by 1 tick
+            </summary>
+        </member>
+        <member name="P:OEC.CommLib.PriceIntern.MinValue">
+            <summary>
+                get/set min value
+            </summary>
+        </member>
+        <member name="P:OEC.CommLib.PriceIntern.MaxValue">
+            <summary>
+                get/set maxvalue
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.getPriceMask">
+            <summary>
+                Returns a string representing input mask for given format and tick
+                <see cref="!:Contract.PriceFormat" />
+                <see cref="F:OEC.Data.Contract.TickSize" />
+            </summary>
+            <returns>string mask</returns>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.getPriceFormatString">
+            <summary>
+                builds format string for using with string.Format(integer part, fractional part)
+            </summary>
+            <returns>price format string</returns>
+        </member>
+        <member name="T:OEC.CommLib.InvokeControl">
+            <summary>
+            WinForms Control wrapper with windows message queue overload protection
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:OEC.CommLib.InvokeControl.#ctor">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="P:OEC.CommLib.InvokeControl.InvokeRequired">
+            <summary>
+            Indicates if caller is different than control creator thread
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.InvokeControl.BeginInvoke``1(``0,System.Object[])">
+            <summary>
+            WinForms control begininvoke generic wrapper with windows message queue overload protection
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.InvokeControl.Invoke``1(``0,System.Object[])">
+            <summary>
+            Generic wrapper for WinForms control invoke.
+            </summary>
+        </member>
+        <member name="T:OEC.CommLib.ProtoClient`2">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.WriteSync(`1)">
+            <summary>
+                Synchronous write - blocks
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.WriteAsync(`1)">
+            <summary>
+                Async write and forget, no notification
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.EndWrite(System.IAsyncResult)">
+            <summary>
+                Async Write closing
+            </summary>
+            <param name="ar"></param>
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.WriteKeepAliveSync">
+            <summary>
+                Async write empty msg
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.WriteKeepAlive">
+            <summary>
+                Async write empty msg
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.Trace(System.Int32,System.String,System.Object[])">
+            <summary>
+                Traces network activity
+            </summary>
+            <param name="level"> 1 write, 2 read, 4 pair(begin/end), 8 keepalive, 16 misc</param>
+            <param name="format"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:OEC.CommLib.ProtoClient`2.NetFilter">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.CommLib.PacketSocket">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.CommLib.ProtoSocket">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.CommLib.ProtoStream">
+            <summary>
+            Serializes objects using ProtoBuf protocol
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.CommLib.PacketStream">
+            <summary>
+            Serializes length of packet as int32, then packet contents
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Scheduler">
+            <summary />
+            <exclude/>
+        </member>
+        <member name="T:OEC.ScheduledTask">
+            <exclude />
+        </member>
+        <member name="T:OEC.SortedTree`1">
+            <summary>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <exclude />
+        </member>
+        <member name="T:OEC.BidirectionalMap`2">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.HashTools.Certificate">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.FieldCache`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.CreatorDelegate`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.SetterDelegate`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.GetterDelegate`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.FieldList`1">
+            <summary>
+            Map of field name/field information
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Field`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.MathExt">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:OEC.MathExt.GCD(System.Int32,System.Int32)">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:OEC.MathExt.GCD(System.Int32[])">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.SafeQue`1">
+            <summary>
+            Thread-safe queue
+            </summary>
+            <typeparam name="T"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.SafeList`1">
+            <summary>
+            Thread-safe list
+            </summary>
+            <typeparam name="T"></typeparam>
+            <exclude/>
+        </member>
+        <member name="M:OEC.SafeList`1.Clear">
+            <summary>
+            Clears the list.
+            </summary>
+            <returns>Old contents of list</returns>
+        </member>
+        <member name="T:OEC.IBaseDictionary`2">
+            <summary>
+            Simple base interface for dictionaries which doesn't include ICollection and IEnumerable interfaces
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.BaseDictionary`2">
+            <summary>
+            Simple dictionary with basic methods
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.SafeBaseDictionary`2">
+            <summary>
+            Thread-safe version of simple dictionary
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.SafeDictionary`3">
+            <summary>
+            Thread-safe wrapper for any dictionary with rwl locks.
+            </summary>
+            <typeparam name="TKey">Key type</typeparam>
+            <typeparam name="TValue">Value type</typeparam>
+            <typeparam name="Container">Containter type : IDictionary</typeparam>
+            <exclude/>
+        </member>
+        <member name="P:OEC.SafeDictionary`3.List">
+            <summary>
+            must use ReaderLock
+            </summary>
+        </member>
+        <member name="M:OEC.SafeDictionary`3.Extract(`0,`1)">
+            <summary>
+            Extracts a value from list, or returns a provided value if key does not present
+            </summary>
+            <param name="key">Key</param>
+            <param name="notfound">Default value</param>
+            <returns>Value</returns>
+        </member>
+        <member name="M:OEC.SafeDictionary`3.ReplaceIf(`0,System.Predicate{`1},`1,System.Boolean)">
+            <summary>
+            Compare and Replace
+            </summary>
+            <param name="key">Key</param>
+            <param name="pred">Predicate</param>
+            <param name="newvalue">New value</param>
+            <param name="notfound">Add value if key is not found</param>
+            <returns></returns>
+        </member>
+        <member name="P:OEC.SafeDictionary`3.CopyValues">
+            <summary>
+            Thread-safe - returns a copy of list
+            </summary>
+        </member>
+        <member name="M:OEC.SafeDictionary`3.ClearValues">
+            <summary>
+            Thread-safe - returns a copy of list and clears list
+            </summary>
+        </member>
+        <member name="M:OEC.SafeDictionary`3.ClearDictionary">
+            <summary>
+            Thread-safe - returns a copy of list and clears list
+            </summary>
+        </member>
+        <member name="M:OEC.SafeDictionary`3.CopyDictionary">
+            <summary>
+            Thread-safe - returns a copy of list
+            </summary>
+        </member>
+        <member name="P:OEC.SafeDictionary`3.Keys">
+            <summary>
+            Thread-safe - returns a copy of list
+            </summary>
+        </member>
+        <member name="T:OEC.SafeDictionary`2">
+            <summary>
+            Thread-Safe Dictionary
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.SafeSortedList`2">
+            <summary>
+            Thread-safe sorted list
+            </summary>
+            <typeparam name="TKey">Key type</typeparam>
+            <typeparam name="TValue">Value type</typeparam>
+            <exclude/>
+        </member>
+        <member name="P:OEC.SafeSortedList`2.Last">
+            <summary>
+            Last value in the list (by key order)
+            </summary>
+        </member>
+        <member name="M:OEC.SafeSortedList`2.Pred(`0)">
+            <summary>
+            Predecessor 
+            </summary>
+            <param name="key"></param>
+            <returns>Value or default</returns>
+        </member>
+        <member name="T:OEC.SafeDefaultDictionary`2">
+            <summary>
+            Thread-safe dictionary with default value for not-found keys
+            </summary>
+            <remarks>
+            Does not throw an exception if key is not found.
+            </remarks>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.DefaultCreatingSortedList`2">
+            <exclude/>
+            <summary>
+            SortedList creating a new value for not-found keys
+            </summary>
+            <remarks>
+            Does not throw an exception if key is not found.
+            </remarks>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:OEC.CreatingSortedList`2">
+            <exclude/>
+            <summary>
+            SortedList creating a new value for not-found keys using given creator
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:OEC.CreatingDictionary`2">
+            <exclude/>
+            <summary>
+            Dictionary creating a new value for not-found keys using given creator
+            </summary>
+            <remarks>
+            Does not throw an exception if key is not found.
+            </remarks>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:OEC.CreatingDictionary`2.#ctor">
+            <summary>
+            must ininitialize creator later
+            </summary>
+        </member>
+        <member name="T:OEC.DummyDictionary`2">
+            <exclude/>
+            <summary>
+            Dictionary creating a new value for not-found keys using given creator
+            </summary>
+            <remarks>
+            Does not throw an exception if key is not found.
+            </remarks>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:OEC.CreatingSafeSortedList`2">
+            <exclude/>
+            <summary>
+            Thread-safe version of CreatingSortedList
+            </summary>
+        </member>
+        <member name="T:OEC.CreatingSafeDictionary`2">
+            <exclude/>
+            <summary>
+            Thread-safe version of CreatingDictionary
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="T:OEC.DefaultCreatingDictionary`2">
+            <exclude/>
+            <summary>
+            Dictionary creating a new value for not-found keys
+            </summary>
+            <remarks>
+            Does not throw an exception if key is not found.
+            </remarks>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:OEC.NullDictionary`2">
+            <exclude/>
+            <summary>
+            Dictionary returning null (or default value) for not found keys
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:OEC.NullSortedList`2">
+            <exclude/>
+            <summary>
+            SortedList returning null (or default value) for not found keys
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="T:OEC.OrderedList`1">
+            <exclude/>
+            <summary>
+            List maintaining given order.
+            </summary>
+            <remarks>
+            Override Compare to provide custom order
+            </remarks>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:OEC.OrderedList`1.Add(`0)">
+            <summary>
+            Inserts an item to a position by order
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OEC.RangeMap`1">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.SafeSet`2">
+            <exclude/>
+            <summary>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="Container"></typeparam>
+        </member>
+        <member name="T:OEC.SafeSet`1">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.SafeBitArray">
+            <exclude />
+        </member>
+        <member name="T:OEC.Severity">
+            <summary>
+            Log message severity
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.N_A">
+            <summary>
+            Not specified
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Prf">
+            <summary>
+            Performance messages
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Dbg">
+            <summary>
+            Debug tracing messages
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Inf">
+            <summary>
+            Information messages
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Wrn">
+            <summary>
+            Warning messages
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Err">
+            <summary>
+            Error messages
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Crt">
+            <summary>
+            Critical error messages
+            </summary>
+        </member>
+        <member name="T:OEC.Log">
+            <summary>
+            OEC Log
+            </summary>
+            <remarks>
+            Default implementation creates a separate file for each day. It can be replaced by custom implementation
+            </remarks>
+        </member>
+        <member name="F:OEC.Log.CurrentLogicalThread">
+            <summary>
+            Custom logical thead name used for log output
+            </summary>
+            <exclude/>
+        </member>
+        <member name="P:OEC.Log.ThreadContext">
+            <summary>
+            User defined loging thread context, can be used to pass user defined parameters from application to log implementation. Different threads have different contexts
+            </summary>
+        </member>
+        <member name="T:OEC.Log.Context">
+            <summary>
+            Implementation for log contexts
+            </summary>
+        </member>
+        <member name="F:OEC.Log.Context.Stacks">
+            <summary>
+            Properties container for log context in form of property name -> stack collection
+            </summary>
+        </member>
+        <member name="M:OEC.Log.Context.Current``1">
+            <summary>
+            Returns typed current Stacks object
+            </summary>
+            <typeparam name="T">Type used to return</typeparam>
+            <returns>Top logging stack object of type T</returns>
+        </member>
+        <member name="M:OEC.Log.Context.Current(System.String)">
+            <summary>
+            Returns current Stacks object
+            </summary>
+        </member>
+        <member name="T:OEC.Log.LogStack">
+            <summary>
+            Stack of user-defined objects
+            </summary>
+        </member>
+        <member name="M:OEC.Log.LogStack.Push(System.Object)">
+            <summary>
+            Stack push
+            </summary>
+        </member>
+        <member name="M:OEC.Log.LogStack.Pop">
+            <summary>
+            Stack pop
+            </summary>
+        </member>
+        <member name="M:OEC.Log.LogStack.Peek">
+            <summary>
+            Access to top object
+            </summary>
+        </member>
+        <member name="M:OEC.Log.LogStack.ToString">
+            <summary>
+            String representation of stack top object
+            </summary>
+        </member>
+        <member name="F:OEC.Log.ConsoleOutput">
+            <summary>
+            Gets or sets whether to output non-DBG entries to console for internal logger
+            </summary>
+        </member>
+        <member name="M:OEC.Log.Initialize(OEC.ILogImpl)">
+            <summary>
+            Logger can be changed to own implementation
+            </summary>
+            <param name="logImpl">Custom log implementation</param>
+        </member>
+        <member name="M:OEC.Log.Start">
+            <summary>
+            Starts logger at default path
+            </summary>
+        </member>
+        <member name="M:OEC.Log.Start(System.String)">
+            <summary>
+            Starts logger at cpecified path
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:OEC.Log.Stop">
+            <summary>
+            Stops logger
+            </summary>
+        </member>
+        <member name="M:OEC.Log.WriteLine(System.String,System.Object[])">
+            <summary>
+            Logs formatted text with Dbg severity
+            </summary>
+        </member>
+        <member name="F:OEC.Log.WritePerformanceInfo">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:OEC.Log.WriteLine(OEC.Severity,System.String,System.Object[])">
+            <summary>
+            Logs formatted text with specified severity
+            </summary>
+        </member>
+        <member name="T:OEC.Log.InternalLogImpl.LogItem">
+            <summary>
+            Log record.
+            </summary>
+        </member>
+        <member name="T:OEC.ILogImpl">
+            <summary>
+            Custom log implementation.
+            </summary>
+        </member>
+        <member name="M:OEC.ILogImpl.Start(System.String)">
+            <summary>
+            Signal that logging has started. Can be used to place starting code for logging, like starting log thread for example
+            </summary>
+            <param name="path">Path on which log file is intended to be created. Can be ignored by custom application in favor of own path</param>
+        </member>
+        <member name="M:OEC.ILogImpl.Stop">
+            <summary>
+            Signal that logging has stopped.
+            </summary>
+        </member>
+        <member name="M:OEC.ILogImpl.WriteLine(OEC.Severity,System.String,System.Object[])">
+            <summary>
+            Called for log message output. 
+            </summary>
+            <param name="severity">Severity of the message</param>
+            <param name="format">Message format like in string.Format</param>
+            <param name="args">Arguments for message formatting like in string.Format</param>
+        </member>
+        <member name="T:OEC.ExactTime">
+            <summary>
             </summary>
             <exclude />
         </member>
@@ -2970,6 +3003,10 @@
             <summary/>
             <exclude/>
         </member>
+        <member name="T:OEC.Protocol.ContractMessage.CreateBaseContractsRequest">
+            <summary/>
+            <exclude/>
+        </member>
         <member name="T:OEC.Protocol.ProviderContractMapping">
             <summary>
             </summary>
@@ -3116,23 +3153,41 @@
             </summary>
             <exclude/>
         </member>
-        <member name="T:OEC.CommLib.ProtoStream">
-            <summary>
-            Serializes objects using ProtoBuf protocol
-            </summary>
-            <exclude/>
-        </member>
-        <member name="T:OEC.CommLib.PacketStream">
-            <summary>
-            Serializes length of packet as int32, then packet contents
-            </summary>
-            <exclude/>
-        </member>
         <member name="T:OEC.Range">
             <summary>
             Time range
             </summary>
             <exclude/>
+        </member>
+        <member name="P:OEC.Range.Max">
+            <summary>
+            Maximum time range
+            </summary>
+        </member>
+        <member name="P:OEC.Range.Ages">
+            <summary>
+            A large time range, which does not include minvalue and maxvalue
+            </summary>
+        </member>
+        <member name="P:OEC.Range.BackDays">
+            <summary>
+            Generates days from range, starting from EndDate backwards.
+            </summary>
+        </member>
+        <member name="P:OEC.Range.Days">
+            <summary>
+            Generates days from range
+            </summary>
+        </member>
+        <member name="P:OEC.Range.Holidays">
+            <summary>
+            Returns number of holidays within range
+            </summary>
+        </member>
+        <member name="P:OEC.Range.Valid">
+            <summary>
+            Validate range
+            </summary>
         </member>
         <member name="M:OEC.Range.In(System.DateTime)">
             <summary>
@@ -3187,36 +3242,6 @@
             </summary>
             <param name="range"></param>
             <returns></returns>
-        </member>
-        <member name="P:OEC.Range.Max">
-            <summary>
-            Maximum time range
-            </summary>
-        </member>
-        <member name="P:OEC.Range.Ages">
-            <summary>
-            A large time range, which does not include minvalue and maxvalue
-            </summary>
-        </member>
-        <member name="P:OEC.Range.BackDays">
-            <summary>
-            Generates days from range, starting from EndDate backwards.
-            </summary>
-        </member>
-        <member name="P:OEC.Range.Days">
-            <summary>
-            Generates days from range
-            </summary>
-        </member>
-        <member name="P:OEC.Range.Holidays">
-            <summary>
-            Returns number of holidays within range
-            </summary>
-        </member>
-        <member name="P:OEC.Range.Valid">
-            <summary>
-            Validate range
-            </summary>
         </member>
         <member name="T:OEC.ContinuousContracts.SplicingRule">
             <summary>
@@ -3419,14 +3444,6 @@
             <param name="end">End index (not inclusive)</param>
             <returns>subrange list</returns>
         </member>
-        <member name="M:OEC.Tools.Intersect``1(System.Collections.Generic.IEnumerable{``0}[])">
-            <summary>
-            Union arbitrary number of enumerators
-            </summary>
-            <typeparam name="T">element type</typeparam>
-            <param name="lists">enumerators</param>
-            <returns>combined enumerator</returns>
-        </member>
         <member name="T:OEC.Tools.ListSegment`1">
             <summary>
             Virtual list based on a subrange of an existing lists
@@ -3436,6 +3453,19 @@
             </remarks>
             <typeparam name="T">Element type</typeparam>
             <exclude/>
+        </member>
+        <member name="M:OEC.Tools.Intersect``1(System.Collections.Generic.IEnumerable{``0}[])">
+            <summary>
+            Union arbitrary number of enumerators
+            </summary>
+            <typeparam name="T">element type</typeparam>
+            <param name="lists">enumerators</param>
+            <returns>combined enumerator</returns>
+        </member>
+        <member name="M:OEC.Tools.AsList``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Preferred name is ToList, but this collides with ToList in higher .NET versions.
+            </summary>
         </member>
         <member name="T:OEC.Enum`1">
             <exclude/>
@@ -3524,6 +3554,23 @@
         </member>
         <member name="T:OEC.ExtDateTime">
             <exclude />
+        </member>
+        <member name="T:GF.CommLib.Maybe`1">
+            <summary>
+            An instance of Maybe contains either a particular value, or None.
+            It is a superior alternative to encoding meaning in null references.
+            
+            This pattern is best used with the convention that null references are always in error, 
+            except for when they are unavoidable (e.g. used by a third party library).
+            If null references are considered meaningful, then every instance reference 
+            encodes two values: both the value itself and the presence or absence of the value.
+            Therefore, every instance reference is suspect and should be checked against null.
+            But most instance references are intended to always have a value, 
+            and null checking is noisy and verbose, so null is only sometimes checked.
+            
+            Most null reference exceptions are caused by this ambiguity.
+            The Maybe pattern eliminates this entire class of run-time errors.
+            </summary>
         </member>
     </members>
 </doc>

@@ -256,6 +256,9 @@ namespace StockSharp.Messages
 
 		Tuple<string, Type>[] IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
 
+		/// <inheritdoc />
+		public virtual bool IsSupportSecuritiesLookupAll => InnerAdapter.IsSupportSecuritiesLookupAll;
+
 		OrderCondition IMessageAdapter.CreateOrderCondition()
 		{
 			return InnerAdapter.CreateOrderCondition();
@@ -287,5 +290,17 @@ namespace StockSharp.Messages
 			if (OwnInnerAdaper)
 				InnerAdapter.Dispose();
 		}
+
+		bool IMessageAdapterExtension.IsSupportStopLoss => InnerAdapter.IsSupportStopLoss;
+
+		bool IMessageAdapterExtension.IsSupportTakeProfit => InnerAdapter.IsSupportTakeProfit;
+
+		bool IMessageAdapterExtension.IsSupportWithdraw => InnerAdapter.IsSupportWithdraw;
+
+		OrderCondition IMessageAdapterExtension.CreateStopCondition(bool isTakeProfit, decimal? stopPrice)
+			=> InnerAdapter.CreateStopCondition(isTakeProfit, stopPrice);
+
+		OrderCondition IMessageAdapterExtension.CreateWithdrawCondition(WithdrawInfo info)
+			=> InnerAdapter.CreateWithdrawCondition(info);
 	}
 }

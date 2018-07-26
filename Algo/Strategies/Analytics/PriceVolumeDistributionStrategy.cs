@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			{
 				case AnalyticsResultTypes.Grid:
 				{
-					var grid = Panel.CreateGrid(LocalizedStrings.Str3200);
+					var grid = Panel.CreateGrid(LocalizedStrings.Str3280);
 
 					grid.AddColumn(nameof(GridRow.Price), LocalizedStrings.Price).Width = 150;
 					var volumeColumn = grid.AddColumn(nameof(GridRow.Volume), LocalizedStrings.Volume);
@@ -91,13 +91,13 @@ namespace StockSharp.Algo.Strategies.Analytics
 					break;
 				}
 				case AnalyticsResultTypes.Bubble:
-					chart = Panel.CreateBubbleChart(LocalizedStrings.Str3280);
+					chart = Panel.CreateBubbleChart(LocalizedStrings.Str3200);
 					break;
 				case AnalyticsResultTypes.Heatmap:
-					chart = Panel.CreateHeatmap(LocalizedStrings.Str3280);
+					chart = Panel.CreateHeatmap(LocalizedStrings.Str3200);
 					break;
 				case AnalyticsResultTypes.Histogram:
-					chart = Panel.CreateHistogramChart(LocalizedStrings.Str3280);
+					chart = Panel.CreateHistogramChart(LocalizedStrings.Str3200);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

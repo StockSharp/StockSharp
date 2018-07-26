@@ -208,7 +208,7 @@ namespace StockSharp.Messages
 		public long? Count { get; set; }
 
 		/// <summary>
-		/// Max depth or requested order book. Uses in case <see cref="MarketDataMessage.DataType"/> = <see cref="MarketDataTypes.MarketDepth"/>.
+		/// Max depth of requested order book. Uses in case <see cref="MarketDataMessage.DataType"/> = <see cref="MarketDataTypes.MarketDepth"/>.
 		/// </summary>
 		[DataMember]
 		public int? MaxDepth { get; set; }
@@ -253,10 +253,9 @@ namespace StockSharp.Messages
 		public bool AllowBuildFromSmallerTimeFrame { get; set; } = true;
 
 		/// <summary>
-		/// Contains history market data.
+		/// Request history market data only.
 		/// </summary>
 		[DataMember]
-		[Obsolete]
 		public bool IsHistory { get; set; }
 
 		/// <summary>
@@ -311,7 +310,7 @@ namespace StockSharp.Messages
 				BuildFrom = BuildFrom,
 				BuildField = BuildField,
 				IsCalcVolumeProfile = IsCalcVolumeProfile,
-				//IsHistory = IsHistory,
+				IsHistory = IsHistory,
 				AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame,
 				IsRegularTradingHours = IsRegularTradingHours,
 			};

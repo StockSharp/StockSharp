@@ -3861,9 +3861,29 @@
             The provider of information about instruments.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.OrderWindow.PortfolioMessageAdapterProvider">
+      <summary>
+            The message adapter's provider.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.OrderWindow.Order">
       <summary>
             Order.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OrderWindow.SecurityEnabled">
+      <summary>
+            Is <see cref="P:StockSharp.BusinessEntities.Order.Security" /> able to change.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OrderWindow.PortfolioEnabled">
+      <summary>
+            Is <see cref="P:StockSharp.BusinessEntities.Order.Portfolio" /> able to change.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OrderWindow.OrderTypeEnabled">
+      <summary>
+            Is <see cref="P:StockSharp.BusinessEntities.Order.Type" /> able to change.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.OrderWindow.InitializeComponent">
@@ -4704,7 +4724,7 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterMarketDepth(StockSharp.BusinessEntities.Security)">
@@ -4716,7 +4736,7 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterFilteredMarketDepth(StockSharp.BusinessEntities.Security)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterTrades(StockSharp.BusinessEntities.Security)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterTrades(StockSharp.BusinessEntities.Security)">
@@ -4743,13 +4763,13 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.RequestNewsStory(StockSharp.BusinessEntities.News)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterOrderLog(StockSharp.BusinessEntities.Security)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterOrderLog(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterOrderLog(StockSharp.BusinessEntities.Security)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterSecurity(StockSharp.BusinessEntities.Security)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterSecurity(StockSharp.BusinessEntities.Security)">
@@ -5983,6 +6003,16 @@
     <member name="M:StockSharp.Xaml.WithdrawWindow.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.WithdrawWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.WithdrawWindow.Volume">
+      <summary>
+            Volume.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.WithdrawWindow.VolumeStep">
+      <summary>
+            Volume step.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.WithdrawWindow.WithdrawInfo">

@@ -137,6 +137,7 @@ namespace StockSharp.Algo.Candles
 
 		private readonly IndexSecurity _security;
 		private readonly Type _candleType;
+		private readonly bool _ignoreErrors;
 		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, CandleBuffer> _buffers = new CachedSynchronizedOrderedDictionary<DateTimeOffset, CandleBuffer>();
 		private CandleBuffer _lastProcessBuffer;
 		private readonly SynchronizedDictionary<SecurityId, int> _securityIndecies = new SynchronizedDictionary<SecurityId, int>();
@@ -144,10 +145,11 @@ namespace StockSharp.Algo.Candles
 		private CandleBuffer _sparseBuffer1;
 		private CandleBuffer _sparseBuffer2;
 
-		public IndexCandleBuilder(IndexSecurity security, Type candleType)
+		public IndexCandleBuilder(IndexSecurity security, Type candleType, bool ignoreErrors)
 		{
 			_security = security ?? throw new ArgumentNullException(nameof(security));
 			_candleType = candleType ?? throw new ArgumentNullException(nameof(candleType));
+			_ignoreErrors = ignoreErrors;
 			FillSecurityIndecies(_security);
 			_bufferSize = _securityIndecies.Values.Distinct().Count();
 		}
@@ -202,7 +204,7 @@ namespace StockSharp.Algo.Candles
 					}
 					catch (ArithmeticException ex)
 					{
-						if (!_security.IgnoreErrors)
+						if (!_ignoreErrors)
 							throw;
 
 						ex.LogError();

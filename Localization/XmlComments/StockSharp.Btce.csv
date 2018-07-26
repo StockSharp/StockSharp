@@ -3,6 +3,7 @@ F:StockSharp.Btce.BtceMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Btce.BtceMessageAdapter.Key/summary;Str3304
 P:StockSharp.Btce.BtceMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.Btce.BtceMessageAdapter.Domain/summary;Str3486
+P:StockSharp.Btce.BtceMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 F:StockSharp.Btce.BtceMessageAdapter.DefaultDomain/summary;DocStr9884
 M:StockSharp.Btce.BtceMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Btce.BtceMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
@@ -21,3 +22,4 @@ T:StockSharp.Btce.BtceTrader/summary;DocStr2539
 M:StockSharp.Btce.BtceTrader.#ctor/summary;DocStr1
 P:StockSharp.Btce.BtceTrader.Key/summary;Str3304
 P:StockSharp.Btce.BtceTrader.Secret/summary;DocStr3146
+P:StockSharp.Btce.BtceTrader.BalanceCheckInterval/summary;BalanceCheckInterval

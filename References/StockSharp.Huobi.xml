@@ -24,6 +24,16 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Huobi.HuobiMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Huobi.HuobiMessageAdapter.UseHadax">
+            <summary>
+            Use HADAX.
+            </summary>
+        </member>
         <member name="M:StockSharp.Huobi.HuobiMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.
@@ -89,6 +99,16 @@
         <member name="P:StockSharp.Huobi.HuobiTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Huobi.HuobiTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Huobi.HuobiTrader.UseHadax">
+            <summary>
+            Use HADAX.
             </summary>
         </member>
     </members>

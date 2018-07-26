@@ -2,6 +2,9 @@ T:StockSharp.LMAX.LmaxMessageAdapter/summary;DocStr3904
 M:StockSharp.LMAX.LmaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.LMAX.LmaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.LMAX.LmaxMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
+P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportTakeProfit/inheritdoc;DocStr8459
+M:StockSharp.LMAX.LmaxMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.LMAX.LmaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.SecurityLookupRequired/summary;DocStr452
@@ -22,6 +25,7 @@ M:StockSharp.LMAX.LmaxMessageAdapter.ToString/returns;DocStr50
 P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
 P:StockSharp.LMAX.LmaxMessageAdapter.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.LMAX.LmaxMessageAdapter.StorageName/summary;DocStr9382
+P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 T:StockSharp.LMAX.LmaxOrderCondition/summary;DocStr60
 M:StockSharp.LMAX.LmaxOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.LMAX.LmaxOrderCondition.StopLossOffset/summary;Str3383

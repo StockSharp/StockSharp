@@ -21,6 +21,15 @@
             </summary>
             <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
         </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportStopLoss">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportTakeProfit">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
+            <inheritdoc />
+        </member>
         <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportNativePortfolioLookup">
             <summary>
             Поддерживается ли торговой системой поиск портфелей.
@@ -140,7 +149,7 @@
             Проскальзывание.
             </summary>
         </member>
-        <member name="P:StockSharp.AlfaDirect.AlfaOrderCondition.TargetPrice">
+        <member name="P:StockSharp.AlfaDirect.AlfaOrderCondition.TakeProfit">
             <summary>
             Цена фиксирования прибыли. Используется для заявок Stop+TargetProfit.
             </summary>

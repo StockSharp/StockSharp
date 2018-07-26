@@ -24,6 +24,11 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Poloniex.PoloniexMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
         <member name="M:StockSharp.Poloniex.PoloniexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.
@@ -89,6 +94,11 @@
         <member name="P:StockSharp.Poloniex.PoloniexTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Poloniex.PoloniexTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
     </members>

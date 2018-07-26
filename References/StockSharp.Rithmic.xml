@@ -18,6 +18,12 @@
         <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.CreateOrderCondition">
             <inheritdoc />
         </member>
+        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportStopLoss">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
+            <inheritdoc />
+        </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.SecurityLookupRequired">
             <inheritdoc />
         </member>
@@ -25,6 +31,9 @@
             <inheritdoc />
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportCandlesUpdates">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -151,7 +160,7 @@
             Initializes a new instance of the <see cref="T:StockSharp.Rithmic.RithmicOrderCondition"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Rithmic.RithmicOrderCondition.TriggerPrice">
+        <member name="P:StockSharp.Rithmic.RithmicOrderCondition.StopPrice">
             <summary>
             Activation price, when reached an order will be placed.
             </summary>

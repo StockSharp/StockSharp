@@ -1775,7 +1775,7 @@ Str1853Params;Security {0} does not have a SmartCOM ID.;Инструмент {0}
 Str1854;SmartCOM does not support simultaneous search of securities on multiple queries.;SmartCOM не поддерживает одновременный поиск инструментов по нескольким запросам.
 Str1855Params;Unregistered candles series securityId = {0} timeFrame = {1}.;Незарегистрированная ранее серия свечей securityId = {0} timeFrame = {1}.
 Str1856;Connection was not successful.;Подключение не было произведено.
-Str1860;Version SmartCOM API. By default equal 3.x.;Версия SmartCOM API. По умолчанию равна 3.x.
+Str1860;Version API.;Версия API.
 ServerAddress;Server address;Адрес сервера
 Str1862;Client configuration;Конфигурация клиента
 Str1863;SmartCOM 3.x client part configuration settings;Настройки конфигурации клиентской части SmartCOM 3.x
@@ -2087,7 +2087,7 @@ Str2205;Low price is not a multiple of security price step. Price step is '{0}',
 Str2206;Close price in not a multiple of security price step. Price step is '{0}', C is '{1}'.;Цена закрытия не кратна шагу цены инструмента. Шаг цены '{0}', C '{1}'.
 CandleVolumeNotMultiple;Candle volume is not a multiple of security volume step. Volume step is '{0}', candle is '{1}'.;Объем свечи не кратен шагу объема инструмента. Шаг объема '{0}', свеча '{1}'.
 Str2207Params;Loaded {0} {1}.;Загружено {0} {1}.
-Str2208Params;For {0} {1} {2} ({3}) were loaded.;Для {0} загружено {1} {2} ({3}).
+Str2208Params;For {0} {1} {2} were loaded.;Для {0} загружено {1} {2}.
 Str2209;New connection...;Новое подключение...
 Str2210;Select path...;Выберите путь...
 Str2211;S#.Data settings;Настройки S#.Data
@@ -3953,7 +3953,6 @@ XamlStr623;Market order type;Рыночный тип заявок
 XamlStr624;From;С
 XamlStr625;From:;С:
 XamlStr626;Assembly:;Сборка:
-XamlStr627;Reset;Сбросить
 XamlStr628;Reset current date modification;Сбросить модифицированную текущую дату
 XamlStr629;Reset price modification;Сбросить модифицированную цену
 XamlStr631;Candles;Свечек
@@ -4266,7 +4265,7 @@ HFT;HFT;HFT
 SmartCOM;SmartCOM;SmartCOM
 Rss;RSS;RSS
 Rithmic;Rithmic;Rithmic
-OpenECry;OpenECry;OpenECry
+OpenECry;OpenECry/GainFutures;OpenECry/GainFutures
 MFD;MFD;MFD
 Micex;Micex;ММВБ
 Itch;ITCH;ITCH
@@ -4358,7 +4357,7 @@ PriceRange;Price range;Ценовой диапазон
 NeedToAddOptionPositionChart;Need to add the option positions chart panel;Необходимо добавить график позиций опционов
 Math;Math;Математика
 Diagram;Diagram;Схема
-NeedToAddOptionDesk;Need to add the option desk panel;Необходимо добавить панель опционный деск
+NeedToAddOptionDesk;Need to add the option desk;Необходимо добавить доску опционов
 ImpliedVolatilityMarketDepth;Implied volatility order book;Стакан подразумеваемой волатильности
 StrikeLeftOffset;Offset to the left (less) from central strike. If not set, all less then central strikes will be collected.;Сдвиг влево (меньше) от центрального страйка. Если не установлено, то все страйки с меньшим значением центрального будут использованы.
 StrikeRightOffset;Offset to the right (more) from central strike. If not set, all more then central strikes will be collected.;Сдвиг вправо (больше) от центрального страйка. Если не установлено, то все страйки с большим значением центрального будут использованы.
@@ -4689,7 +4688,7 @@ Passphrase;Passphrase;Кодовое слово
 MiddleLine;Middle line;Средняя линия
 UpperLine;Upper line;Верхняя линия
 LowerLine;Lower line;Нижняя линия
-ConnectorIsStub;Connector is stub only. Please visit https://crowd.stocksharp.com to get more info.;Коннектор является заглушкой. Пожалуйста, ознакомьтесь на сайте https://crowd.stocksharp.ru с информацией.
+ConnectorIsStub;Connector is stub only. Please visit https://stocksharp.com/products/pricing/#crypto to get more info.;Коннектор является заглушкой. Пожалуйста, ознакомьтесь на сайте https://stocksharp.ru/products/pricing/#crypto с информацией.
 Bitfinex;Bitfinex;Bitfinex
 Bithumb;Bithumb;Bithumb
 Bittrex;Bittrex;Bittrex
@@ -4777,8 +4776,8 @@ Cex;CEX.IO;CEX.IO
 Bitmex;BitMEX;BitMEX
 Bitexbook;Bitexbook;Bitexbook
 Binance;Binance;Binance
-UnknownTransactons;Unknown transactons;Неизвестные транзакции
-UnknownTransactonsDesc;Support process {0} generated by third-party software.;Обрабатывать неизвестные {0}, генерируемые третьей стороной.
+UnknownTransactions;Unknown transactions;Неизвестные транзакции
+UnknownTransactionsDesc;Support process {0} generated by third-party software.;Обрабатывать неизвестные {0}, генерируемые третьей стороной.
 Dividend;Dividend;Дивиденды
 SelectDates;Select dates;Выберите даты
 AfterSplit;Split (after);Сплит (после)
@@ -4835,7 +4834,7 @@ Exante;Exante;Exante
 IBFIX;IB FIX CTCI;IB FIX CTCI
 Reuters;Thomson Reuters;Thomson Reuters
 Brvm;BRVM;BRVM
-Count;Count;Count
+Count;Count;Количество
 CandlesCount;Candles count.;Количество свечей.
 TasksAllInstruments;Tasks '{0}' are running for all instruments. Often these are incorrect settings. It is recommended to set specific instruments for each task. Do you want to continue as is or stop the launch?;Задачи '{0}' запущены на работу по всем инструментам. Часто это является неправильными настройками. Рекомендуется установить конкретные инструменты для каждой задачи. Вы хотите продолжить как есть или остановить запуск?
 Schema;Schema;Схема
@@ -4844,6 +4843,16 @@ Alerts;Alerts;Уведомления
 AlertsSettings;Alerts settings.;Настройки уведомлений.
 PositionDesc;The position by the instrument.;Позиция по инструменту.
 Level1MarketData;Level1 market data.;Level1 маркет-данные.
+UseWebSockets;Use web sockets.;Использовать веб сокеты.
+ViewDownloaded;View downloaded;Посмотреть скаченное
+BalanceCheckInterval;Balance check interval. Required in case of deposit and withdraw actions.;Интервал проверки баланса. Требуется в случае наличия действий по вводы или выводы.
+Hadax;HADAX;HADAX
+UseHadax;Use HADAX.;Использовать HADAX.
+TruncatedBook;Truncated order book;Обрезанный стакан
+TruncatedBookDesc;Truncate market depth element.;Элемент обрезания глубины стакана.
+SearchColumns;Search columns...;Поиск столбцов...
+AlphaVantage;AlphaVantage;AlphaVantage
+IEX;IEX;IEX
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -8137,7 +8146,7 @@ DocStr3358;Estimates;Прогноз
 DocStr3359;Option Volume For stocks only. Returns TickType.OptionCallVolume and TickType.OptionPutVolume;Option Volume For stocks only. Returns TickType.OptionCallVolume and TickType.OptionPutVolume
 DocStr3360;Option Open Interest For stocks only. Returns TickType.OptionCallOpenInterest and TickType.OptionPutOpenInterest;Option Open Interest For stocks only. Returns TickType.OptionCallOpenInterest and TickType.OptionPutOpenInterest
 DocStr3361;Historical Volatility For stocks only. Returns TickType.OptionHistoricalVol;Historical Volatility For stocks only. Returns TickType.OptionHistoricalVol
-DocStr3362;Average Opt Volume;Average Opt Volume
+DocStr3362;Average Option Volume (currently for stocks);Average Option Volume (currently for stocks)
 DocStr3363;Option Implied Volatility For stocks only. Returns TickType.OptionImpliedVol;Option Implied Volatility For stocks only. Returns TickType.OptionImpliedVol
 DocStr3364;Close Implied Volatility;Close Implied Volatility
 DocStr3365;Bond analytic data;Bond analytic data
@@ -9187,7 +9196,7 @@ DocStr4475;The message is market-data subscription;Является ли соо�
 DocStr4476;The message is not supported by adapter. To be setted if the answer;Поддерживает ли торговая система запрашиваемый тип данных. Заполняется в случае ответа
 DocStr4477;Subscribe or unsubscribe error info. Заполняется в случае ответа;Информация об ошибке. Сигнализирует об ошибке подписки или отписки. Заполняется в случае ответа
 DocStr4478;Market-data count;Количество маркет-данных
-DocStr4479;Max depth or requested order book. Uses in case {0} = {1};Максимальная глубина стакана. Используется в случае {0} равное {1}
+DocStr4479;Max depth of requested order book. Uses in case {0} = {1};Максимальная глубина запрощенного стакана. Используется в случае {0} равное {1}
 DocStr4480;News id. Uses in case of request news text;Идентификатор новости. Используется, если идет запрос получения текста новости
 DocStr4481;REPO info;Информация, необходимая для создания РЕПО-заявки
 DocStr4482;Partner-organization;Код организации – партнера по внебиржевой сделке
@@ -14967,8 +14976,8 @@ DocStr10504;Message sender base interface;Интерфейс отправите�
 DocStr10505;Disable tracking indicator reset;Выключить отслеживание сброса индикаторов
 DocStr10506;Type of key value;Тип ключа значения
 DocStr10507;Get all snapshots;Получить все снэпшоты
-DocStr10508;All snapshots;Все снэпшоты
-DocStr10509;Snapshot storage registry;Реестр хранилащ-снэпшотов
+DocStr10508;All snapshots;Все снэпшотыщ
+DocStr10509;Snapshot storage registry;Реестр хранилищ-снэпшотов
 DocStr10510;Support lookup messages;Поддерживаются ли сообщения поиска
 DocStr10511;Lookup securities, portfolios and orders;Искать инструменты, портфели и заявки
 DocStr10512;Target adapter. Can be {0};Целевой адаптер. Может быть {0}
@@ -14985,8 +14994,6 @@ DocStr10523;All schemas;Все схемы
 DocStr10524;Create copy for the new snapshot;Создать копию для нового снэпшота
 DocStr10525;Allow trading key;Ключ для Торговля доступна
 DocStr10526;Truncate the specified order book by max depth value;Обрезать переданный стакан до максимально допустимой глубины
-DocStr10527;Truncated order book;Обрезанный стакан
-DocStr10528;Truncate market depth element;Элемент обрезания глубины стакана
 DocStr10529;Max depth;Максимальная глубина
 DocStr10530;Get icon for {0};Получить иконку для {0}
 DocStr10531;Icon name;Название иконки
@@ -14997,3 +15004,40 @@ DocStr10535;The messages adapter build orer book and tick data from order log fl
 DocStr10536;To tick trade from the order log;Преобразовать в тиковую сделку из строки лога заявок
 DocStr10537;Default implementation of {0};Реализация интерфейса {0} по-умолчанию
 DocStr10538;Build modes;Режимы построения
+DocStr10539;Max count;Максимальное количество
+DocStr10540;Max depth of requested order book;Максимальная глубина запрощенного стакана
+DocStr10541;Support multiple subscriptions with duplicate parameters;Поддерживать множественные подписки с одинаковыми параметрами
+DocStr10542;Timestamp format;Формат метки времени
+DocStr10543;South Africa, Rand. The Rand is subdivided into 100 cents;South Africa, Rand. The Rand is subdivided into 100 cents
+DocStr10544;Request history market data only;Запросить только исторические маркет-данные
+DocStr10545;The name of the property that changed;Имя свойства, которое было изменено
+DocStr10546;Is {0} able to change;Возможность изменить {0}
+DocStr10547;Ignore offline mode and continue processing;Игнорировать оффлайн режим и продолжать обработку
+DocStr10548;Max possible restores;Максимально возможное количество восстановлений
+DocStr10549;Max restore errors;Максимально количество ошибок восстановлений
+DocStr10550;Max incremental messages with wrong order before recovering start;Максимальное количество инкрементальных сообщений с неправильным порядком до старта восстановления
+DocStr10551;Max message count that can be restored;Максимальное количество сообщений, которые можно восстановить
+DocStr10552;Max suspended messages;Максимальное количество приостановленных сообщений
+DocStr10553;ASTS FAST dialect;FAST диалект для ASTS
+DocStr10556;Spectra FAST dialect;FAST диалект для Spectra
+DocStr10557;Futures: general session information;Фьючерсы: основная информация о сессии
+DocStr10558;Options: general session information;Опционы: основная информация о сессии
+DocStr10559;Support lookup all securities;Поддерживает запрос всех инструментов
+DocStr10561;Don't use auto price for hedge;Не использовать авто-цену для хеджирования
+DocStr10562;Output last active candle as finished;Выводить последнюю активную свечу как законченную
+DocStr10563;Information about Globex board of {0} exchange;Информация о Globex площадки биржи {0}
+DocStr10564;Deutsche Mark;Немецкая марка
+DocStr10565;Luxembourgish franc;Люксембургский франк
+DocStr10566;Get adapter by portfolio;Получить адаптер по портфелю
+DocStr10567;Extended interface for specify extra operation with conditional orders;Расширенный интерфейс для указания дополнительных операций с условными заявками
+DocStr10568;Determines whether the adapter support stop-loss orders;Определить, поддерживает ли адаптер заявки типа стоп-лосс
+DocStr10569;Determines whether the adapter support take-porift orders;Определить, поддерживает ли адаптер заявки типа тейк-профит
+DocStr10570;Determines whether the adapter support withdraw orders;Определить, поддерживает ли адаптер заявки на вывод
+DocStr10571;Create stop order condition;Создать стоп условие
+DocStr10572;Is take-profit of stop-loss;Является ли тейк-профитом или стоп-лоссом
+DocStr10573;Limit price for activated order. Can be {0} for {1};Лимитная цена для активированной заявки. Может быть {0} для {1}
+DocStr10574;Order condition. If the connection does not support the order type, the exception {0} will be thrown;Условие заявки. Если соединение не поддерживает тип заявки, будет выброшено исключение {0}
+DocStr10575;Create withdraw order condition;Создать условие заявки на вывод
+DocStr10576;Association changed;Ассоциация изменилась
+DocStr10577;Volatility smile draw step;Volatility smile draw step
+DocStr10578;Information about IEX;Информация о IEX

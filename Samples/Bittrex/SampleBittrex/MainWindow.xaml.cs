@@ -149,6 +149,7 @@ namespace SampleBittrex
 
 				Trader.Key = Key.Text;
 				Trader.Secret = Secret.Password;
+				Trader.UseWebSockets = UseWebSockets.IsChecked == true;
 
 				// clear password box for security reason
 				//Secret.Clear();

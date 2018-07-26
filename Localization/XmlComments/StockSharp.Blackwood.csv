@@ -19,9 +19,11 @@ P:StockSharp.Blackwood.BlackwoodImbalance.ClosingOnlyClearingPrice/summary;DocSt
 T:StockSharp.Blackwood.BlackwoodMessageAdapter/summary;DocStr2555
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateOrderCondition/summary;DocStr44
-M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateOrderCondition/returns;DocStr45
-P:StockSharp.Blackwood.BlackwoodMessageAdapter.SecurityLookupRequired/summary;DocStr452
+M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
+M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
+P:StockSharp.Blackwood.BlackwoodMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
+P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.IsConnectionAlive/summary;DocStr441

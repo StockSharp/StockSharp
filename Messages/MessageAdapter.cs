@@ -34,7 +34,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The base adapter converts messages <see cref="Message"/> to the command of the trading system and back.
 	/// </summary>
-	public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter
+	public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter, INotifyPropertyChanged
 	{
 		private class CodeTimeOut
 			//where T : class
@@ -255,11 +255,15 @@ namespace StockSharp.Messages
 		/// Bit process, which can run the adapter.
 		/// </summary>
 		[Browsable(false)]
-		public Platforms Platform { get; }
+		public Platforms Platform { get; protected set; }
 
 		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual Tuple<string, Type>[] SecurityExtendedFields { get; } = ArrayHelper.Empty<Tuple<string, Type>>();
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsSupportSecuritiesLookupAll => true;
 
 		/// <inheritdoc />
 		public virtual OrderCondition CreateOrderCondition() => null;
@@ -628,6 +632,40 @@ namespace StockSharp.Messages
 		{
 			return Clone();
 		}
+
+		private PropertyChangedEventHandler _propertyChanged;
+
+		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+		{
+			add => _propertyChanged += value;
+			remove => _propertyChanged -= value;
+		}
+
+		/// <summary>
+		/// Raise <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
+		/// </summary>
+		/// <param name="propertyName">The name of the property that changed.</param>
+		protected virtual void OnPropertyChanged(string propertyName)
+		{
+			_propertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		/// <inheritdoc />
+		public virtual bool IsSupportStopLoss => false;
+
+		/// <inheritdoc />
+		public virtual bool IsSupportTakeProfit => false;
+
+		/// <inheritdoc />
+		public virtual bool IsSupportWithdraw => false;
+
+		/// <inheritdoc />
+		public virtual OrderCondition CreateStopCondition(bool isTakeProfit, decimal? stopPrice)
+			=> throw new NotSupportedException();
+
+		/// <inheritdoc />
+		public virtual OrderCondition CreateWithdrawCondition(WithdrawInfo info)
+			=> throw new NotSupportedException();
 	}
 
 	/// <summary>

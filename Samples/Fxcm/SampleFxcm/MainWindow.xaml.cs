@@ -2,6 +2,7 @@ namespace SampleFxcm
 {
 	using System;
 	using System.ComponentModel;
+	using System.Security;
 	using System.Windows;
 
 	using Ecng.Common;
@@ -68,14 +69,9 @@ namespace SampleFxcm
 		{
 			if (!_isConnected)
 			{
-				if (Login.Text.IsEmpty())
+				if (Token.Password.IsEmpty())
 				{
-					MessageBox.Show(this, LocalizedStrings.Str2974);
-					return;
-				}
-				else if (Password.Password.IsEmpty())
-				{
-					MessageBox.Show(this, LocalizedStrings.Str2975);
+					MessageBox.Show(this, LocalizedStrings.Str3836);
 					return;
 				}
 
@@ -150,12 +146,11 @@ namespace SampleFxcm
 					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
 				}
 
-				Trader.Login = Login.Text;
-				Trader.Password = Password.Password;
+				Trader.Token = Token.Password.To<SecureString>();
 				Trader.IsDemo = IsDemo.IsChecked == true;
 
 				// clear password box for security reason
-				//Password.Clear();
+				//Token.Clear();
 
 				Trader.Connect();
 			}

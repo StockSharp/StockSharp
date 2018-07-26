@@ -1192,12 +1192,13 @@
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartOrderElement,System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal)">
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartOrderElement,System.Int64,System.String,StockSharp.Messages.Sides,System.Decimal,System.Decimal)">
       <summary>
             Put the trade data.
             </summary>
       <param name="element">The chart element representing orders.</param>
       <param name="orderId">Order ID.</param>
+      <param name="orderStringId">Order ID (as string, if electronic board does not use numeric order ID representation).</param>
       <param name="side">Order side (buy or sell).</param>
       <param name="price">Order price.</param>
       <param name="volume">Number of contracts in the order.</param>
@@ -1213,12 +1214,13 @@
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartTradeElement,System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal)">
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartTradeElement,System.Int64,System.String,StockSharp.Messages.Sides,System.Decimal,System.Decimal)">
       <summary>
             Put the trade data.
             </summary>
       <param name="element">The chart element representing trades.</param>
       <param name="tradeId">Trade ID.</param>
+      <param name="tradeStringId">Trade ID (as string, if electronic board does not use numeric order ID representation).</param>
       <param name="side">Order side (buy or sell).</param>
       <param name="price">Trade price.</param>
       <param name="volume">Number of contracts in the trade.</param>
@@ -1419,13 +1421,6 @@
             </summary>
       <param name="chart">Chart.</param>
       <param name="values">New data.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartHelper.SaveToXml(StockSharp.Xaml.Charting.IChart,System.String)">
-      <summary>
-            To save the chart data to xml file.
-            </summary>
-      <param name="chart">Chart.</param>
-      <param name="fileName">The full path to the file.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartHelper.SaveToImage(StockSharp.Xaml.Charting.IChart)">
       <summary>
@@ -3559,6 +3554,11 @@
     <member name="P:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.ChartTheme">
       <summary>
             The name of the graphic theme.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.SmileStep">
+      <summary>
+            Volatility smile draw step.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.#ctor">

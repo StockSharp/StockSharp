@@ -23,6 +23,12 @@
     <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateOrderCondition">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportStopLoss">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityLookupRequired">
       <summary>
         <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
@@ -51,6 +57,9 @@
       <summary>
             Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
             </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
     </member>
     <member name="F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultHeartbeatInterval">
       <summary>

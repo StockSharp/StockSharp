@@ -149,5 +149,11 @@ namespace StockSharp.BusinessEntities
 			get => _extensionInfo;
 			set => _extensionInfo = value;
 		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			return $"{ServerTime} {Headline} {Story} {Source}";
+		}
 	}
 }

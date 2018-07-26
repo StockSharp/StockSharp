@@ -22,6 +22,8 @@
 
 			<Label Content="{x:Static loc:LocalizedStrings.XamlStr646}" HorizontalAlignment="Right" />
 			<PasswordBox x:Name="Secret" Password="" Width="170" />
+			
+			<CheckBox x:Name="UseWebSockets" VerticalContentAlignment="Center" IsChecked="True"><TextBlock Text="{x:Static loc:LocalizedStrings.Sockets}" /></CheckBox>
 		</StackPanel>
 		
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />

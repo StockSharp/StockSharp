@@ -58,11 +58,7 @@ namespace SampleITCH
 			_logManager.Listeners.Add(new GuiLogListener(Monitor));
 
 			// create connector
-			Trader = new ItchTrader
-			{
-				LogLevel = LogLevels.Debug,
-				CreateDepthFromOrdersLog = true
-			};
+			Trader = new ItchTrader();
 
 			_logManager.Sources.Add(Trader);
 

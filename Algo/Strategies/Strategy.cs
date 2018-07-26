@@ -53,6 +53,11 @@ namespace StockSharp.Algo.Strategies
 				Strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 				State = state;
 			}
+
+			public override Message Clone()
+			{
+				return new StrategyChangeStateMessage(Strategy, State);
+			}
 		}
 
 		private static readonly MemoryStatisticsValue<Strategy> _strategyStat = new MemoryStatisticsValue<Strategy>(LocalizedStrings.Str1355);

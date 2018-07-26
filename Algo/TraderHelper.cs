@@ -2636,6 +2636,12 @@ namespace StockSharp.Algo
 						case Level1Fields.Turnover:
 							security.Turnover = (decimal)value;
 							break;
+						case Level1Fields.BuyBackPrice:
+							security.BuyBackPrice = (decimal)value;
+							break;
+						case Level1Fields.BuyBackDate:
+							security.BuyBackDate = (DateTimeOffset)value;
+							break;
 						//default:
 						//	throw new ArgumentOutOfRangeException();
 					}
@@ -3536,12 +3542,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Lookup all securities predefined criteria.
 		/// </summary>
-		public static readonly Security LookupAllCriteria = new Security { Code = "*" };
+		public static readonly Security LookupAllCriteria = new Security();
 
 		/// <summary>
 		/// Lookup all securities predefined criteria.
 		/// </summary>
-		public static readonly SecurityLookupMessage LookupAllCriteriaMessage = new SecurityLookupMessage { SecurityId = new SecurityId { SecurityCode = "*" } };
+		public static readonly SecurityLookupMessage LookupAllCriteriaMessage = LookupAllCriteria.ToLookupMessage();
 
 		/// <summary>
 		/// Determine the <paramref name="criteria"/> contains lookup all filter.
@@ -3558,8 +3564,20 @@ namespace StockSharp.Algo
 
 			return
 				criteria.Id.IsEmpty() &&
-				criteria.Code == "*" &&
-				criteria.Type == null;
+				criteria.Code.IsEmpty() &&
+				criteria.Board == null &&
+				criteria.ExpiryDate == null &&
+				criteria.Type == null &&
+				criteria.OptionType == null &&
+				criteria.Strike == null &&
+				criteria.CfiCode.IsEmpty() &&
+				criteria.Class.IsEmpty() &&
+				criteria.Currency == null &&
+				criteria.Decimals == null &&
+				criteria.Name.IsEmpty() &&
+				criteria.UnderlyingSecurityType == null &&
+				criteria.UnderlyingSecurityId.IsEmpty() &&
+				criteria.BinaryOptionType.IsEmpty();
 		}
 
 		/// <summary>
@@ -3576,7 +3594,7 @@ namespace StockSharp.Algo
 				return true;
 
 			return
-				criteria.SecurityId.SecurityCode == "*" &&
+				criteria.SecurityId.IsDefault() &&
 				criteria.SecurityType == null;
 		}
 
@@ -4566,7 +4584,7 @@ namespace StockSharp.Algo
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
-			connector.LookupSecurities(new Security());
+			connector.LookupSecurities(LookupAllCriteria);
 			connector.LookupPortfolios(new Portfolio());
 			connector.LookupOrders(new Order());
 		}
@@ -4585,6 +4603,23 @@ namespace StockSharp.Algo
 			var result = depth.Clone();
 			result.Update(result.Bids.Take(maxDepth), result.Asks.Take(maxDepth), true);
 			return result;
+		}
+
+		/// <summary>
+		/// Get adapter by portfolio.
+		/// </summary>
+		/// <param name="provider">The message adapter's provider.</param>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <returns>The found adapter.</returns>
+		public static IMessageAdapter GetAdapter(this IPortfolioMessageAdapterProvider provider, Portfolio portfolio)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			if (portfolio == null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			return provider.GetAdapter(portfolio.Name);
 		}
 	}
 }

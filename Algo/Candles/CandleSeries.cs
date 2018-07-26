@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Candles
 			_security = security ?? throw new ArgumentNullException(nameof(security));
 			_candleType = candleType ?? throw new ArgumentNullException(nameof(candleType));
 			_arg = arg ?? throw new ArgumentNullException(nameof(arg));
-			WorkingTime = security.CheckExchangeBoard().WorkingTime;
+			WorkingTime = security.Board?.WorkingTime;
 		}
 
 		private Security _security;

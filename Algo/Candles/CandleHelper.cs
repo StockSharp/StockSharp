@@ -1224,28 +1224,21 @@ namespace StockSharp.Algo.Candles
 		/// Compress candles to bigger time-frame candles.
 		/// </summary>
 		/// <param name="source">Smaller time-frame candles.</param>
-		/// <param name="destination">Bigger time-frame.</param>
-		/// <param name="builder">The builder of candles of <see cref="TimeFrameCandleMessage"/> type.</param>
+		/// <param name="compressor">Compressor of candles from smaller time-frames to bigger.</param>
+		/// <param name="includeLastCandle">Output last active candle as finished.</param>
 		/// <returns>Bigger time-frame candles.</returns>
-		public static IEnumerable<CandleMessage> Compress(this IEnumerable<CandleMessage> source, TimeSpan destination, TimeFrameCandleBuilder builder)
+		public static IEnumerable<CandleMessage> Compress(this IEnumerable<CandleMessage> source, BiggerTimeFrameCandleCompressor compressor, bool includeLastCandle)
 		{
-			BiggerTimeFrameCandleCompressor compressor = null;
+			if (source == null)
+				throw new ArgumentNullException(nameof(source));
+
+			if (compressor == null)
+				throw new ArgumentNullException(nameof(compressor));
 
 			CandleMessage lastActiveCandle = null;
 			
 			foreach (var message in source)
 			{
-				if (compressor == null)
-				{
-					compressor = new BiggerTimeFrameCandleCompressor(new MarketDataMessage
-					{
-						SecurityId = message.SecurityId,
-						DataType = MarketDataTypes.CandleTimeFrame,
-						Arg = destination,
-						IsSubscribe = true,
-					}, builder);
-				}
-
 				foreach (var candleMessage in compressor.Process(message))
 				{
 					if (candleMessage.State == CandleStates.Finished)
@@ -1258,7 +1251,7 @@ namespace StockSharp.Algo.Candles
 				}
 			}
 
-			if (lastActiveCandle == null)
+			if (!includeLastCandle || lastActiveCandle == null)
 				yield break;
 
 			lastActiveCandle.State = CandleStates.Finished;

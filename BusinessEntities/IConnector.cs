@@ -571,7 +571,12 @@ namespace StockSharp.BusinessEntities
 		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="IConnector.MarketDepthsChanged"/>.
 		/// </summary>
 		/// <param name="security">The instrument by which quotes getting should be started.</param>
-		void RegisterMarketDepth(Security security);
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Max count.</param>
+		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
+		/// <param name="maxDepth">Max depth of requested order book.</param>
+		void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null, int? maxDepth = null);
 
 		/// <summary>
 		/// To stop getting quotes by the instrument.
@@ -595,7 +600,11 @@ namespace StockSharp.BusinessEntities
 		/// To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="IConnector.NewTrades"/>.
 		/// </summary>
 		/// <param name="security">The instrument by which trades getting should be started.</param>
-		void RegisterTrades(Security security);
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Max count.</param>
+		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
+		void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null);
 
 		/// <summary>
 		/// To stop getting trades (tick data) by the instrument.
@@ -607,7 +616,11 @@ namespace StockSharp.BusinessEntities
 		/// To start getting new information (for example, <see cref="Security.LastTrade"/> or <see cref="Security.BestBid"/>) by the instrument.
 		/// </summary>
 		/// <param name="security">The instrument by which new information getting should be started.</param>
-		void RegisterSecurity(Security security);
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Max count.</param>
+		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
+		void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null);
 
 		/// <summary>
 		/// To stop getting new information.
@@ -619,7 +632,10 @@ namespace StockSharp.BusinessEntities
 		/// Subscribe on order log for the security.
 		/// </summary>
 		/// <param name="security">Security for subscription.</param>
-		void RegisterOrderLog(Security security);
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Max count.</param>
+		void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null);
 
 		/// <summary>
 		/// Unsubscribe from order log for the security.

@@ -106,7 +106,11 @@ namespace SampleCQG
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "ES" } };
+			var wnd = new SecurityLookupWindow
+			{
+				ShowAllOption = Connector.MarketDataAdapter.IsSupportSecuritiesLookupAll,
+				Criteria = new Security { Code = "ES" }
+			};
 
 			if (!wnd.ShowModal(this))
 				return;

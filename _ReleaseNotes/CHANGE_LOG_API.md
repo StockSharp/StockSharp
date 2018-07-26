@@ -1,6 +1,74 @@
 StockSharp API Change log
 ========================
 ## current:
+* (bug) Monitor.Clear fix.
+* (bug) Candles. Fix process error response in case of multiples connections.
+* (bug) PortfolioGrid. Fix State column localization.
+* (bug) OrderLogMessageAdapter. Fix multi subscription processing.
+* (feature) FAST settings as public.
+* (bug) LMAX securities lookup fix.
+* (bug) QuikLua. Fix Si and Eu symbols processing.
+* (bug) FixServer. QuotesInterval handling fix.
+* (feature) FixServer. TransactionId mapping associated with clients session.
+* (bug) TraderHelper. IsLookupAll method fix.
+* (bug) CandleBuilderMessageAdapter. Fix BuildMode processing.
+* (feature) CandleBuilderMessageAdapter. Track From date.
+* (bug) Transaq. Fix sec code decoding (&amp;).
+* (bug) Bitmex. Process order fix.
+* (bug) Chart. Date on x-axis not clipped to control bounds.
+* (bug) Bittrex. Market depth fix and nullable order's field fix.
+* (bug) Yobit. Empty order book processing fix.
+* (feature) Chart. Removed obsolete xml exporting option.
+* (bug) CandleBuilderMessageAdapter. Do not switch to smaller tf in case successfully finished original tf series.
+* (bug) CandleBuilderMessageAdapter. Fix Load only subscription processing.
+* (bug) SecurityNativeIdMessageAdapter. Ignore candles with empty security id.
+* (bug) BasketMessageAdapter. Send error response for unhandled security lookup request.
+* (bug) Samples. Fix lookup all securities for non supported connections.
+* (bug) LMAX. Fix Level1 subscription.
+* (feature) LMAX. v1.9.0.2
+* (feature) FXCM. REST API support.
+* (feature) ExchangeBoard. IEX board.
+* (feature) AlphaVantage connector.
+* (feature) IEX connector.
+
+## v4.4.12:
+* (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
+* (feature) SubscriptionMessageAdapter. SupportLookupMessages options to support duplicated subscriptions as unique.
+* (feature) Huobi. Support HADAX.
+* (feature) CurrencyTypes.ZAC
+* (feature) FIX connector. Time format parsing settings as public.
+* (bug) Charting. Fix duplicate candle series save/load.
+* (feature) MessageAdapter. INotifyPropertyChanged implemented.
+* (bug) TransactionSnapshot. Fix trade data save.
+* (feature) OrderWindow. SecurityEnabled, PortfolioEnabled for modify orders.
+* (bug) OrderGrid. Cancel group orders fix.
+* (feature) Message. IgnoreOffline option to prevent buffering in offline mode.
+* (feature) OpenECry. v3.5.14.41
+* (feature) SampleOEC. Removed obsolete.
+* (feature) FAST dialects. Made network settings configurable.
+* (feature) TraderHelper. LookupAllCriteria changed from asterisk to empty string.
+* (feature) IMessageAdapter. IsSupportSecuritiesLookupAll option indicates adapter able to download all available securities.
+* (feature) InteractiveBrokers. v9.73.07
+* (feature) InteractiveBrokers. SSL support.
+* (bug) BasketMessageAdapter. Fix securities lookup all processing.
+* (feature) CurrencyTypes. DEM, LUF.
+* (feature) ExchangeBoard. Globex board info added.
+* (bug) CandleMessageBuildableStorage. Fix process multiples timeframes.
+* (bug) Transactions snapshot storage. Fix orders and trades save.
+* (bug) SecurityGrid. Do not show errors in security grid.
+* (bug) Level1FieldsComboBox. Text alignment fixes.
+* (feature) PropertyGrid. Reset button to exchange board editor added.
+* (feature) CsvEntityRegistry. Method GetBoard uses IExchangeInfoProvider service.
+* (bug) InteractiveBrokers. Fix expiry time parsing fix.
+* (bug) InteractiveBrokers. Market depth fix.
+* (feature) Index builder. Ignore errors as parameters.
+* (feature) IMesssageAdapterExtension. Extra info about typical order's condition.
+* (feature) OrderWindow. Support conditional orders creation. Take-profit and stop-loss shortcuts.
+* (feature) WithdrawWindow. Volume and VolumeStep properties.
+* (feature) BasketMessageAdapter. Save/load IPortfolioMessageAdapterProvider mapping.
+* (bug) TransactionSnapshot. Fix conditional orders save.
+
+## v4.4.11:
 * (feature) Connector. ICandleManager implemented.
 * (feature) ICandleSourceList removed.
 * (bug) BasketMessageAdapter. Fix news ubsubscribe requests.
@@ -89,6 +157,14 @@ StockSharp API Change log
 * (feature) Connector. CreateDepthFromOrdersLog, CreateTradesFromOrdersLog market as obsolete.
 * (feature) SampleFix. OrdersLogWindow added.
 * (feature) SamplePlaza. OrdersLogWindow uses OrderLogGrid.
+* (feature) Message. Method Clone made as abstract.
+* (feature) Bittrex. Web sockets supported.
+* (bug) Charting. Fix drawing trades with string id.
+* (feature) OrderGrid, ExecutionGrid, TradeGrid, MyTradeGrid. Sides coloring.
+* (feature) SecurityGrid. BuyBackDate, BuyBackPrice columns.
+* (bug) ConnectorWindow. Fix stub connectors check.
+* (feature) IConnector. Method RegisterXXX accepts From and To range, build from option.
+* (feature) ExecutionGrid. OriginSide coloring.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

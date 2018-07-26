@@ -34,5 +34,10 @@ namespace StockSharp.Algo.Testing
 			: base(ExtendedMessageTypes.Last)
 		{
 		}
+
+		public override Message Clone()
+		{
+			return new LastMessage { IsError = IsError };
+		}
 	}
 }

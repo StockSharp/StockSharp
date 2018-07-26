@@ -635,7 +635,7 @@ namespace StockSharp.Algo
 			return new SecurityLookupMessage
 			{
 				//LocalTime = CurrentTime,
-				SecurityId = securityId ?? criteria.ToSecurityId(),
+				SecurityId = securityId ?? (criteria.Id.IsEmpty() && criteria.Code.IsEmpty() ? default(SecurityId) : criteria.ToSecurityId()),
 				Name = criteria.Name,
 				Class = criteria.Class,
 				SecurityType = criteria.Type,

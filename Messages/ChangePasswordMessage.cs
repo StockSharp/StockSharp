@@ -75,6 +75,8 @@ namespace StockSharp.Messages
 		{
 			return new ChangePasswordMessage
 			{
+				TransactionId = TransactionId,
+				OriginalTransactionId = OriginalTransactionId,
 				LocalTime = LocalTime,
 				NewPassword = NewPassword,
 				Error = Error,

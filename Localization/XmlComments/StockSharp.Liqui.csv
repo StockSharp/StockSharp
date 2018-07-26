@@ -1,6 +1,7 @@
 T:StockSharp.Liqui.LiquiMessageAdapter/summary;DocStr2538
 P:StockSharp.Liqui.LiquiMessageAdapter.Key/summary;Str3304
 P:StockSharp.Liqui.LiquiMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Liqui.LiquiMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Liqui.LiquiMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Liqui.LiquiMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Liqui.LiquiMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -18,3 +19,4 @@ T:StockSharp.Liqui.LiquiTrader/summary;DocStr2539
 M:StockSharp.Liqui.LiquiTrader.#ctor/summary;DocStr1
 P:StockSharp.Liqui.LiquiTrader.Key/summary;Str3304
 P:StockSharp.Liqui.LiquiTrader.Secret/summary;DocStr3146
+P:StockSharp.Liqui.LiquiTrader.BalanceCheckInterval/summary;BalanceCheckInterval

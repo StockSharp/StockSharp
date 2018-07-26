@@ -15,6 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Testing
 {
+	using Ecng.Serialization;
+
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Messages;
 
@@ -40,5 +42,18 @@ namespace StockSharp.Algo.Testing
 		/// The portfolio name. If it is given, then <see cref="Rule"/> is applied to specific portfolio.
 		/// </summary>
 		public string PortfolioName { get; set; }
+
+		/// <summary>
+		/// Create a copy of <see cref="CommissionRuleMessage"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override Message Clone()
+		{
+			return new CommissionRuleMessage
+			{
+				Rule = Rule?.Clone(),
+				PortfolioName = PortfolioName,
+			};
+		}
 	}
 }

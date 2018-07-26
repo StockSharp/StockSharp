@@ -7,7 +7,7 @@
       </para>
 
     
-    <para>
+    <!--<para>
 		  Currently supported the following markets and brokers:
     </para>
     
@@ -40,7 +40,7 @@
 	
 	<para>
 		  <legacyItalic>A new markets can be supported as extensions.</legacyItalic>
-    </para>
+    </para>-->
         </introduction>
     <relatedTopics>
     	<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43">Getting started</link>

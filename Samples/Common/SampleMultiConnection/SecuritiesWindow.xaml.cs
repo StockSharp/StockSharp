@@ -146,7 +146,11 @@ namespace SampleMultiConnection
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "IS" } };
+			var wnd = new SecurityLookupWindow
+			{
+				ShowAllOption = MainWindow.Instance.Connector.Adapter.IsSupportSecuritiesLookupAll,
+				Criteria = new Security { Code = "IS" }
+			};
 
 			if (!wnd.ShowModal(this))
 				return;

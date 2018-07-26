@@ -29,6 +29,11 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Kraken.KrakenMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
         <member name="M:StockSharp.Kraken.KrakenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.
@@ -144,6 +149,11 @@
         <member name="P:StockSharp.Kraken.KrakenTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kraken.KrakenTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
     </members>

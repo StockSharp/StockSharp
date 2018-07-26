@@ -228,13 +228,7 @@ namespace StockSharp.Algo
 		public SecurityIdGenerator SecurityIdGenerator
 		{
 			get => _securityIdGenerator;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_securityIdGenerator = value;
-			}
+			set => _securityIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private bool _overrideSecurityData;

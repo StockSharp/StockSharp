@@ -1,11 +1,11 @@
 T:StockSharp.Sterling.SterlingMessageAdapter/summary;DocStr2538
 M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Sterling.SterlingMessageAdapter.CreateOrderCondition/summary;DocStr44
-M:StockSharp.Sterling.SterlingMessageAdapter.CreateOrderCondition/returns;DocStr45
-P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportNativePortfolioLookup/summary;DocStr51
-M:StockSharp.Sterling.SterlingMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
-M:StockSharp.Sterling.SterlingMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.Sterling.SterlingMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
+M:StockSharp.Sterling.SterlingMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
+P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
+M:StockSharp.Sterling.SterlingMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Sterling.SterlingExtendedOrderTypes/summary;DocStr7559
 F:StockSharp.Sterling.SterlingExtendedOrderTypes.MarketOnClose/summary;Str2312
 F:StockSharp.Sterling.SterlingExtendedOrderTypes.MarketOrBetter/summary;MarketOrBetter
@@ -45,7 +45,7 @@ P:StockSharp.Sterling.SterlingOrderCondition.LocateVolume/summary;DocStr3526
 P:StockSharp.Sterling.SterlingOrderCondition.LocateTime/summary;Time
 P:StockSharp.Sterling.SterlingOrderCondition.IsOpen/summary;DocStr631
 P:StockSharp.Sterling.SterlingOrderCondition.Maturity/summary;DocStr3731
-P:StockSharp.Sterling.SterlingOrderCondition.Type/summary;Str551
+P:StockSharp.Sterling.SterlingOrderCondition.OptionType/summary;Str551
 P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingCode/summary;UnderlyingAsset
 P:StockSharp.Sterling.SterlingOrderCondition.IsCover/summary;DocStr7579
 P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingType/summary;DocStr7580

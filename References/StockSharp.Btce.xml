@@ -29,6 +29,11 @@
             Domain address.
             </summary>
         </member>
+        <member name="P:StockSharp.Btce.BtceMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
         <member name="F:StockSharp.Btce.BtceMessageAdapter.DefaultDomain">
             <summary>
             Default value for <see cref="P:StockSharp.Btce.BtceMessageAdapter.Domain"/>.
@@ -99,6 +104,11 @@
         <member name="P:StockSharp.Btce.BtceTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Btce.BtceTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
     </members>

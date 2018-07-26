@@ -75,6 +75,11 @@ namespace StockSharp.Messages
 		public bool IsBack { get; set; }
 
 		/// <summary>
+		/// Ignore offline mode and continue processing.
+		/// </summary>
+		public bool IgnoreOffline { get; set; }
+
+		/// <summary>
 		/// Source adapter. Can be <see langword="null" />.
 		/// </summary>
 		public IMessageAdapter Adapter { get; set; }
@@ -101,9 +106,10 @@ namespace StockSharp.Messages
 		/// Create a copy of <see cref="Message"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			throw new NotSupportedException(LocalizedStrings.Str17 + " " + GetType().FullName);
-		}
+		public abstract override Message Clone();
+
+		//{
+		//	throw new NotSupportedException(LocalizedStrings.Str17 + " " + GetType().FullName);
+		//}
 	}
 }

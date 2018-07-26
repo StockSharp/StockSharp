@@ -29,6 +29,12 @@
             Data in the xml format.
             </summary>
     </member>
+    <member name="M:StockSharp.InteractiveBrokers.FinancialAdviseMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.FinancialAdviseMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.FundamentalReportMarketDataMessage">
       <summary>
             The message to receive market reports for the specified instrument. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport" /> event.
@@ -64,6 +70,12 @@
             The query identifier <see cref="T:StockSharp.InteractiveBrokers.FundamentalReportMarketDataMessage" />.
             </summary>
     </member>
+    <member name="M:StockSharp.InteractiveBrokers.FundamentalReportMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.FundamentalReportMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.HistogramMarketDataMessage">
       <summary>
             Request histogram data message.
@@ -94,6 +106,12 @@
             Data.
             </summary>
     </member>
+    <member name="M:StockSharp.InteractiveBrokers.HistogramMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.HistogramMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter">
       <summary>
             The messages adapter for InteractiveBrokers.
@@ -111,7 +129,16 @@
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CreateOrderCondition">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportStopLoss">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportCandlesUpdates">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SecurityLookupRequired">
@@ -190,23 +217,44 @@
             Use V100 plus version at the connect time.
             </summary>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SslProtocol">
       <summary>
-            Load settings.
+            SSL protocol to establish connect.
             </summary>
-      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SslCertificate">
+      <summary>
+            SSL certificate.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SslCertificatePassword">
+      <summary>
+            SSL certificate password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CheckCertificateRevocation">
+      <summary>
+            Check certificate revocation.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ValidateRemoteCertificates">
+      <summary>
+            Validate remove certificates.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.TargetHost">
+      <summary>
+            The name of the server that shares SSL connection.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.InteractiveBrokers.FundamentalReports">
       <summary>
@@ -265,7 +313,7 @@
     </member>
     <member name="F:StockSharp.InteractiveBrokers.GenericFieldTypes.AverageOptVolume">
       <summary>
-            Average Opt Volume.
+            Average Option Volume (currently for stocks).
             </summary>
     </member>
     <member name="F:StockSharp.InteractiveBrokers.GenericFieldTypes.OptionImpliedVolatility">
@@ -1565,6 +1613,11 @@
             For MiFID 2 reporting: identifies the algorithm responsible for the execution of a transaction within the firm.
             </summary>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.DontUseAutoPriceForHedge">
+      <summary>
+            Don't use auto price for hedge
+            </summary>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.ExchangeNewsTypes">
       <summary>
             News types.
@@ -2027,6 +2080,12 @@
             The parameters in the xml format.
             </summary>
     </member>
+    <member name="M:StockSharp.InteractiveBrokers.ScannerParametersMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.ScannerParametersMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.ScannerResult">
       <summary>
             The filter result of scanner starting via <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)" />.
@@ -2081,6 +2140,12 @@
       <summary>
             The query identifier <see cref="T:StockSharp.InteractiveBrokers.ScannerMarketDataMessage" />.
             </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.ScannerResultMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.ScannerResultMessage" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.ServerLogLevels">
       <summary>
@@ -2579,6 +2644,12 @@
       <summary>
             Tiers.
             </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.InteractiveBrokers.SoftDollarTierMessage" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.TickByTickDataTypes">
       <summary>

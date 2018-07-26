@@ -60,6 +60,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommLib">
+      <HintPath>..\..\..\References\CommLib.dll</HintPath>
+    </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
     </Reference>
@@ -92,20 +95,20 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Data.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Data.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Data.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v17.2.Core">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v18.1.Core">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v18.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.LayoutControl.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v18.1.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -164,9 +167,6 @@
     <Compile Include="StopOrdersWindow.xaml.cs">
       <DependentUpon>StopOrdersWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TradesWindow.xaml.cs">
-      <DependentUpon>TradesWindow.xaml</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -222,12 +222,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="StopOrdersWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="TradesWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

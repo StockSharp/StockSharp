@@ -113,7 +113,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 2)]
 		[Required]
-		public ExchangeBoard Board
+		public virtual ExchangeBoard Board
 		{
 			get => _board;
 			set
@@ -1742,6 +1742,42 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private decimal? _buyBackPrice;
+
+		/// <summary>
+		/// BuyBack price.
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public decimal? BuyBackPrice
+		{
+			get => _buyBackPrice;
+			set
+			{
+				_buyBackPrice = value;
+				Notify(nameof(BuyBackPrice));
+			}
+		}
+
+		private DateTimeOffset? _buyBackDate;
+		
+		/// <summary>
+		/// BuyBack date.
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public DateTimeOffset? BuyBackDate
+		{
+			get => _buyBackDate;
+			set
+			{
+				_buyBackDate = value;
+				Notify(nameof(BuyBackDate));
+			}
+		}
+
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;
 
@@ -1822,6 +1858,8 @@ namespace StockSharp.BusinessEntities
 			destination.IssueSize = IssueSize;
 			destination.IssueDate = IssueDate;
 			destination.UnderlyingSecurityType = UnderlyingSecurityType;
+			destination.BuyBackDate = BuyBackDate;
+			destination.BuyBackPrice = BuyBackPrice;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();
