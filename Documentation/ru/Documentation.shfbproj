@@ -235,6 +235,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Hydra_export_position.aml" />
     <None Include="Topics\Hydra_export_indicator.aml" />
     <None Include="Topics\Designer_GluingData.aml" />
     <None Include="Topics\Designer_create_index.aml" />

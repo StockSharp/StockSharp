@@ -582,7 +582,8 @@
       <Topic id="243486c1-b9d4-47af-889e-61aaaa670644" visible="True" title="Новости" />
       <Topic id="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677" visible="True" title="Транзакции" />
       <Topic id="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9" visible="True" title="Доска опционов" />
-      <Topic id="0d15d724-6a2d-46b5-9341-596c9209bbff" visible="True" title="Индикатор" />
+      <Topic id="0d15d724-6a2d-46b5-9341-596c9209bbff" visible="True" title="Индикаторы" />
+      <Topic id="9acae0d2-041e-403a-b04c-de6117c3bb76" visible="True" isSelected="true" title="Позиции" />
     </Topic>
     <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" title="Генерация свечек" />
     <Topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" visible="True" title="Импорт данных">
@@ -615,7 +616,7 @@
     <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" isExpanded="true" title="Утилиты">
       <Topic id="272eef99-c7e4-4245-ae83-7efa4d2345bc" visible="True" title="Конвертер" />
       <Topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" visible="True" title="Экспорт (авто)" />
-      <Topic id="ec33258b-c0bb-4f2b-bef3-368e607a92a4" visible="True" isSelected="true" title="Импорт (авто)" />
+      <Topic id="ec33258b-c0bb-4f2b-bef3-368e607a92a4" visible="True" title="Импорт (авто)" />
       <Topic id="f2b919bd-cb33-4cf1-818f-315c8f79b5ce" visible="True" title="Бэкап данных" />
     </Topic>
     <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" title="Аналитика">

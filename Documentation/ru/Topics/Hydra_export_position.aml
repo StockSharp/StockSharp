@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="9acae0d2-041e-403a-b04c-de6117c3bb76" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>В появившимся окне выбрать интересуемый диапазон времени, выбрать инструмент и нажать кнопку <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_export_position" />
+      </mediaLink>
+      
+	<para>При помощи контекстного меню можно настроить различные параметры таблицы позиций: группировку строк, доступные колонки, формат отображения и др.</para>
+	 <mediaLink>
+       <image placement="center" xlink:href="hydra_export_context" />
+     </mediaLink>
+      
+	<para>Найденные позиции можно экспортировать в файлы формата <token>excel</token>, xml, sql, bin или txt. Это делается при помощи раскрывающегося списка:</para>
+    	<mediaLink>
+    		<image placement="center" xlink:href="hydra_export" />
+    	</mediaLink>
+
+</introduction>
+  </developerWalkthroughDocument>
+</topic>
