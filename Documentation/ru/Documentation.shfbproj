@@ -3424,6 +3424,10 @@
       <ImageId>Terminal_Notifications_Panel</ImageId>
       <AlternateText>Terminal Notifications Panel</AlternateText>
     </Image>
+    <Image Include="Art\hydra_tasks_import.png">
+      <ImageId>hydra_tasks_import</ImageId>
+      <AlternateText>hydra tasks import</AlternateText>
+    </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
       <AlternateText>hydra securities Panel 00</AlternateText>
