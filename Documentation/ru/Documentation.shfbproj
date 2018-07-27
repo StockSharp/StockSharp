@@ -235,6 +235,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Hydra_export_indicator.aml" />
     <None Include="Topics\Designer_GluingData.aml" />
     <None Include="Topics\Designer_create_index.aml" />
     <None Include="Topics\Terminal_GluingData.aml" />
@@ -3427,6 +3428,10 @@
     <Image Include="Art\hydra_tasks_import.png">
       <ImageId>hydra_tasks_import</ImageId>
       <AlternateText>hydra tasks import</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_indicator.png">
+      <ImageId>hydra_export_indicator</ImageId>
+      <AlternateText>hydra export indicator</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
