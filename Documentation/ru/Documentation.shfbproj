@@ -3434,6 +3434,10 @@
       <ImageId>hydra_export_indicator</ImageId>
       <AlternateText>hydra export indicator</AlternateText>
     </Image>
+    <Image Include="Art\hyda_export_txt.png">
+      <ImageId>hyda_export_txt</ImageId>
+      <AlternateText>hyda export txt</AlternateText>
+    </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
       <AlternateText>hydra securities Panel 00</AlternateText>
