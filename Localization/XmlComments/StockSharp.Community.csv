@@ -18,7 +18,7 @@ M:StockSharp.Community.AuthenticationClient.Login(System.Nullable{StockSharp.Com
 M:StockSharp.Community.AuthenticationClient.Logout/summary;DocStr2964
 M:StockSharp.Community.AuthenticationClient.GetId(System.Guid)/summary;DocStr2965
 M:StockSharp.Community.AuthenticationClient.GetId(System.Guid)/param/sessionId;DocStr138
-M:StockSharp.Community.AuthenticationClient.GetId(System.Guid)/returns;DocStr2966
+M:StockSharp.Community.AuthenticationClient.GetId(System.Guid)/returns;UserId
 M:StockSharp.Community.AuthenticationClient.DisposeManaged/summary;DocStr7
 T:StockSharp.Community.BaseCommunityClient`1/summary;DocStr2970
 T:StockSharp.Community.BaseCommunityClient`1/typeparam/TService;DocStr2957
@@ -125,7 +125,7 @@ M:StockSharp.Community.IAuthenticationService.Logout(System.Guid)/summary;DocStr
 M:StockSharp.Community.IAuthenticationService.Logout(System.Guid)/param/sessionId;DocStr138
 M:StockSharp.Community.IAuthenticationService.GetId(System.Guid)/summary;DocStr2965
 M:StockSharp.Community.IAuthenticationService.GetId(System.Guid)/param/sessionId;DocStr138
-M:StockSharp.Community.IAuthenticationService.GetId(System.Guid)/returns;DocStr2966
+M:StockSharp.Community.IAuthenticationService.GetId(System.Guid)/returns;UserId
 T:StockSharp.Community.IFileService/summary;DocStr3013
 M:StockSharp.Community.IFileService.GetFileInfo(System.Guid,System.Int64)/summary;DocStr9030
 M:StockSharp.Community.IFileService.GetFileInfo(System.Guid,System.Int64)/param/sessionId;DocStr138
