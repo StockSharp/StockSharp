@@ -15044,8 +15044,15 @@ DocStr10573;Limit price for activated order. Can be {0} for {1};Лимитная
 DocStr10574;Order condition. If the connection does not support the order type, the exception {0} will be thrown;Условие заявки. Если соединение не поддерживает тип заявки, будет выброшено исключение {0}
 DocStr10575;Create withdraw order condition;Создать условие заявки на вывод
 DocStr10576;Association changed;Ассоциация изменилась
-DocStr10577;Volatility smile draw step;Volatility smile draw step
+DocStr10577;Volatility smile draw step;Шаг отрисовки улыбки волатильности
 DocStr10578;Information about IEX;Информация о IEX
 DocStr10579;Information about Bitbank;Информация о Bitbank
 DocStr10580;Information about Zaif;Информация о Zaif
 DocStr10581;Information about QUOINEX;Информация о QUOINEX
+DocStr10582;Is QRYPTOS API;Является ли QRYPTOS API
+DocStr10583;Pusher access key;Ключ доступа Pusher сервиса
+DocStr10584;Order directions;Направления заявки
+DocStr10585;One way;Одностороннее
+DocStr10586;Two way;Двухстороннее
+DocStr10587;Netout;Наружу
+DocStr10588;Order direction;Направление заявки
