@@ -4856,6 +4856,9 @@ IEX;IEX;IEX
 Quoinex;QUOINEX;QUOINEX
 Zaif;Zaif;Zaif
 Bitbank;Bitbank;Bitbank
+Funding;Funding;Фондирование
+FundingCurrency;Currency used to fund the trade with.;Валюта, использующаяся для фондирования сделки.
+UserId;User id.;Идентификатор пользователя.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -7765,7 +7768,6 @@ DocStr2962;Service address;Адрес сервиса
 DocStr2963;To log in;Произвести вход в систему
 DocStr2964;Logout;Выйти из системы
 DocStr2965;Get a user id;Получить идентификатор пользователя
-DocStr2966;User id;Идентификатор пользователя
 DocStr2967;The common authorization client for the whole application;Общий клиент авторизации для всего приложения
 DocStr2968;Information about the login and password for access to the StockSharp;Информация о логине и пароле для доступа к StockSharp
 DocStr2969;Has the client successfully authenticated;Прошел ли успешно авторизацию клиент
