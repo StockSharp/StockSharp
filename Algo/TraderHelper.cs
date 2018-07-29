@@ -3379,6 +3379,16 @@ namespace StockSharp.Algo
 		/// </summary>
 		public const string SecurityVerticalBarSeparator = "##VBAR##";
 
+		/// <summary>
+		/// The delimiter, replacing first '.' in the path for instruments with id like .AA-CA@SPBEX. Is equal to '##DOT##'.
+		/// </summary>
+		public const string SecurityFirstDot = "##DOT##";
+
+		///// <summary>
+		///// The delimiter, replacing first '..' in the path for instruments with id like ..AA-CA@SPBEX. Is equal to '##DDOT##'.
+		///// </summary>
+		//public const string SecurityFirst2Dots = "##DDOT##";
+
 		private static readonly CachedSynchronizedDictionary<string, string> _securitySeparators = new CachedSynchronizedDictionary<string, string>
 		{
 			{ "/", SecurityPairSeparator },
@@ -3410,6 +3420,9 @@ namespace StockSharp.Algo
 			if (_reservedDos.Any(d => folderName.StartsWithIgnoreCase(d)))
 				folderName = "_" + folderName;
 
+			if (folderName.StartsWithIgnoreCase("."))
+				folderName = SecurityFirstDot + folderName.Remove(0, 1);
+
 			return _securitySeparators
 				.CachedPairs
 				.Aggregate(folderName, (current, pair) => current.Replace(pair.Key, pair.Value));
@@ -3429,6 +3442,9 @@ namespace StockSharp.Algo
 
 			if (id[0] == '_' && _reservedDos.Any(d => id.StartsWithIgnoreCase("_" + d)))
 				id = id.Substring(1);
+
+			if (id.StartsWithIgnoreCase(SecurityFirstDot))
+				id = id.ReplaceIgnoreCase(SecurityFirstDot, ".");
 
 			return _securitySeparators
 				.CachedPairs

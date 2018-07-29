@@ -34,6 +34,7 @@ StockSharp API Change log
 * (bug) Cryptopia. Order book request fix.
 * (bug) Fix CandleManager.Stopped event invoke for Connector source https://stocksharp.ru/posts/m/44515/
 * (feature) Zaif, Quoinex, Bitbank connectors.
+* (bug) Storage. Fix path for security id start from '.'.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
