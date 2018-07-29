@@ -15056,3 +15056,4 @@ DocStr10585;One way;Одностороннее
 DocStr10586;Two way;Двухстороннее
 DocStr10587;Netout;Наружу
 DocStr10588;Order direction;Направление заявки
+DocStr10589;The delimiter, replacing first '.' in the path for instruments with id like .AA-CA@SPBEX. Is equal to '##DOT##';Разделитель, заменяющий первый символ '.' в пути для инструментов с идентификаторами вида .AA-CA@SPBEX. Равен '##DOT##'

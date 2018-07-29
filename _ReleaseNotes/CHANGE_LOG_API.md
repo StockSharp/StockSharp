@@ -36,6 +36,9 @@ StockSharp API Change log
 * (feature) Zaif, Quoinex, Bitbank connectors.
 * (bug) Storage. Fix path for security id start from '.'.
 * (feature) IConnector. Methods RegisterMarketDepth, RegisterSecurity and RegisterTrades accepts BuildFrom argument.
+* (bug) Bitmex. Fix tick subscription https://stocksharp.ru/forum/9741/bitmex-poluchenie-sdelok-api-4412/
+* (bug) Bitmex. Fix candles state.
+* (bug) Bitmex. OL processing fix.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
