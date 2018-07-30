@@ -7,7 +7,7 @@
                   	 теоретическую цену, лучший оффер и бид для Put и Call опционов.
       </para>
       <para>
-      	Ниже показан пример OptionCalculator, в котором используется этот компонент. Исходные коды примера можно найти в папке <legacyItalic>Samples/Options/OptionCalculator</legacyItalic>.
+      	Ниже показан пример OptionCalculator, в котором используется этот компонент. Исходные коды примера можно найти в папке <legacyItalic>Samples\Options\SampleOptionQuoting</legacyItalic>.
       </para>
       <mediaLink><image placement="left" xlink:href="option_desk" /></mediaLink>
     </introduction>
