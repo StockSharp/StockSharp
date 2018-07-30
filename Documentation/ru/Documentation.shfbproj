@@ -3442,6 +3442,14 @@
       <ImageId>Designer_Stopping_point_02</ImageId>
       <AlternateText>Designer Stopping point 02</AlternateText>
     </Image>
+    <Image Include="Art\hydra_export_00.png">
+      <ImageId>hydra_export_00</ImageId>
+      <AlternateText>hydra export 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_position.png">
+      <ImageId>hydra_export_position</ImageId>
+      <AlternateText>hydra export position</AlternateText>
+    </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
       <AlternateText>hydra securities Panel 00</AlternateText>
