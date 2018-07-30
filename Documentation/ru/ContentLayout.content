@@ -489,7 +489,7 @@
       <Topic id="5db34ace-ab66-4848-b335-11402f3d96c3" visible="True" title="Обратная связь" />
     </Topic>
   </Topic>
-  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
+  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Установка S#.Data" />
     <Topic id="7fc5f53a-b6b9-4f0f-8b97-983dd98f0237" visible="True" title="Обновление на новую версию" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="Первый запуск" />
@@ -573,7 +573,7 @@
       </Topic>
       <Topic id="01a85a46-7510-4385-b81c-348ffb3dfc46" visible="True" title="Параметры подключения" />
     </Topic>
-    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" isExpanded="true" title="Просмотр и экспорт">
+    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="Просмотр и экспорт">
       <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Сделки" />
       <Topic id="6126cb15-de8b-4bcc-8b81-7354e8894239" visible="True" title="Стаканы" />
       <Topic id="0adb23fa-a295-43e0-9e75-9060b1d03388" visible="True" title="Свечи" />
@@ -583,7 +583,7 @@
       <Topic id="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677" visible="True" title="Транзакции" />
       <Topic id="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9" visible="True" title="Доска опционов" />
       <Topic id="0d15d724-6a2d-46b5-9341-596c9209bbff" visible="True" title="Индикаторы" />
-      <Topic id="9acae0d2-041e-403a-b04c-de6117c3bb76" visible="True" isSelected="true" title="Позиции" />
+      <Topic id="9acae0d2-041e-403a-b04c-de6117c3bb76" visible="True" title="Позиции" />
     </Topic>
     <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" title="Генерация свечек" />
     <Topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" visible="True" title="Импорт данных">
@@ -637,7 +637,7 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Установка S#.Designer" />
     <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Обновление на новую версию" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Быстрый запуск" />
@@ -760,14 +760,13 @@
       <Topic id="b162bfe7-9e25-4f36-92b0-00872dca443f" visible="True" title="Оптимизация" />
       <Topic id="1db75098-3878-4843-9c0d-75bd9dd47a48" visible="True" title="Портфельное тестирование" />
     </Topic>
-    <Topic id="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" visible="True" title="Хранилище маркет-данных">
+    <Topic id="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" visible="True" isExpanded="true" isSelected="true" title="Хранилище маркет-данных">
       <Topic id="d0a1bb26-7a29-4607-992c-4f539632c2eb" visible="True" title="Скачивание инструментов" />
       <Topic id="2ee93171-34db-4f23-a5d3-30ff5c81dda3" visible="True" title="Создание инструмента" />
       <Topic id="bc271b21-3ef5-422e-b6cf-9f0228607d2b" visible="True" title="Редактирование инструмента" />
       <Topic id="8563e716-ba68-4e52-a45a-79f66eb2346a" visible="True" title="Индекс" />
       <Topic id="01a8166a-57b5-4f89-985f-9fb3c2ee0168" visible="True" title="Непрерывный фьючерс" />
       <Topic id="085174e5-3be9-4dc3-bdeb-dcc3706b483d" visible="True" title="Скачивание данных" />
-      <Topic id="4456e138-a1be-4bc2-8aab-a1f0f226759d" visible="True" title="Просмотр загруженных данных" />
       <Topic id="ec56221a-92a0-45f4-9fec-e6e7edc7c264" visible="True" title="Создание хранилища исторических данных" />
       <Topic id="a966079a-3a89-49ef-918c-d69ea3d2b240" visible="True" title="Расширенная информация по инструменту" />
       <Topic id="aa54fb3f-ed47-4291-9cc6-34840bab4fff" visible="True" title="Сопоставление инструменты-подключения" />
