@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <summary>
@@ -81,6 +81,20 @@ _trader.NewSecurity += security => this.GuiSync(() => this.Security.ItemsSource 
 
   </content>
 </section>
+  <title>Темы графических компонентов S#</title>
+  <para>Для всех графических элементов S# существует несколько разных тем. 
+  Для установки темы приложения достаточно написать одну строчку. Например, 
+  для установки темной темы VisualStudio 2017 необходимо задать строчку:</para>
+  <code title="C#" language="C#">
+<![CDATA[
+...                 
+ApplicationThemeHelper.ApplicationThemeName = Theme.VS2017DarkName;
+...
+]]>
+                  	</code>
+  <para>Так как все графические элементы S# базируются на графических элементах 
+  <legacyBold>DevExpress</legacyBold>, то к проекту необходимо добавить соответствующие библиотеки <legacyBold>DevExpress</legacyBold> 
+  (<legacyBold>DevExpress.Xpf.Core</legacyBold>, <legacyBold>DevExpress.Xpf.Themes.VS2017Dark</legacyBold> и т.д.)</para>
 	  
     </introduction>
     
