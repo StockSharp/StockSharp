@@ -9,11 +9,6 @@
             The message adapter for <see cref="N:StockSharp.Zaif"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Zaif.ZaifMessageAdapter.AllTimeFrames">
-            <summary>
-            Possible time-frames.
-            </summary>
-        </member>
         <member name="P:StockSharp.Zaif.ZaifMessageAdapter.Key">
             <summary>
             Key.
