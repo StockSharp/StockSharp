@@ -2,6 +2,7 @@ T:StockSharp.Bitbank.BitbankMessageAdapter/summary;DocStr2538
 P:StockSharp.Bitbank.BitbankMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Bitbank.BitbankMessageAdapter.Key/summary;Str3304
 P:StockSharp.Bitbank.BitbankMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Bitbank.BitbankMessageAdapter.RequestWithdrawAccounts/summary;DocStr10590
 P:StockSharp.Bitbank.BitbankMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Bitbank.BitbankMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Bitbank.BitbankMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
@@ -21,3 +22,4 @@ M:StockSharp.Bitbank.BitbankTrader.#ctor/summary;DocStr1
 P:StockSharp.Bitbank.BitbankTrader.Key/summary;Str3304
 P:StockSharp.Bitbank.BitbankTrader.Secret/summary;DocStr3146
 P:StockSharp.Bitbank.BitbankTrader.BalanceCheckInterval/summary;BalanceCheckInterval
+P:StockSharp.Bitbank.BitbankTrader.RequestWithdrawAccounts/summary;DocStr10590

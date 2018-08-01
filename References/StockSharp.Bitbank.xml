@@ -24,6 +24,11 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Bitbank.BitbankMessageAdapter.RequestWithdrawAccounts">
+            <summary>
+            Request withdraw account's info.
+            </summary>
+        </member>
         <member name="P:StockSharp.Bitbank.BitbankMessageAdapter.BalanceCheckInterval">
             <summary>
             Balance check interval. Required in case of deposit and withdraw actions.
@@ -99,6 +104,11 @@
         <member name="P:StockSharp.Bitbank.BitbankTrader.BalanceCheckInterval">
             <summary>
             Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitbank.BitbankTrader.RequestWithdrawAccounts">
+            <summary>
+            Request withdraw account's info.
             </summary>
         </member>
     </members>
