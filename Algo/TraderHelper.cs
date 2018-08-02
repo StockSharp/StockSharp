@@ -3817,11 +3817,16 @@ namespace StockSharp.Algo
 		public static SecurityTypes? Iso10962ToSecurityType(this string cfi)
 		{
 			if (cfi.IsEmpty())
-				throw new ArgumentNullException(nameof(cfi));
+			{
+				return null;
+				//throw new ArgumentNullException(nameof(cfi));
+			}
 
 			if (cfi.Length != 6)
+			{
 				return null;
 				//throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.Str2117);
+			}
 
 			switch (cfi[0])
 			{
@@ -3864,6 +3869,9 @@ namespace StockSharp.Algo
 									return SecurityTypes.Index;
 
 								case 'C':
+									return SecurityTypes.Currency;
+
+								case 'R':
 									return SecurityTypes.Currency;
 
 								case 'T':
