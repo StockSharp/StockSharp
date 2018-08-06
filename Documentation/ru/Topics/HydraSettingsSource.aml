@@ -9,7 +9,7 @@
 						  <image placement="left" xlink:href="hydra_source_add" />
 					</mediaLink>
     
-      <para>Для настройки источников маркет-данных необходимо нажать на кнопку <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> у соответствующего источника.</para>
+      <para>Настройки источников можно изменить в панели <legacyBold>Свойства</legacyBold> которая расположена с правой стороны.</para>
       <mediaLink> <image placement="left" xlink:href="hydra_setting_source_button" /></mediaLink>
       
       <para>На данный момент <token>hydra</token> поддерживает следующие источники:</para>

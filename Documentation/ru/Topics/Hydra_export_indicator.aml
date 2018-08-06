@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0d15d724-6a2d-46b5-9341-596c9209bbff" revisionNumber="1">
+ <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>В появившейся панели выбрать инструмент, интересуемый диапазон времени, 
+      указать тип данных и которых будет строиться индикатор, задать индикатор и 
+      его параметры, после чего нажать кнопку  <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_export_indicator" />
+      </mediaLink>
+  
+	     
+	<para>Полученые значения индикатора можно посмтреть на графике или экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Это делается при помощи раскрывающегося списка:</para>
+    	<mediaLink>
+    		<image placement="center" xlink:href="hydra_export" />
+    	</mediaLink>
+
+</introduction>
+  </developerWalkthroughDocument>
+</topic>
