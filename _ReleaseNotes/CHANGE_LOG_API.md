@@ -41,6 +41,7 @@ StockSharp API Change log
 * (bug) Bitmex. OL processing fix.
 * (feature) DevExpress v18.1.5
 * (bug) Yobit. Orders processing fix.
+* (bug) Fix processing non associated with transaction id order's messages.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
