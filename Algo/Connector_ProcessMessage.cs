@@ -802,7 +802,10 @@ namespace StockSharp.Algo
 			else
 			{
 				if (error == null)
+				{
 					RaiseMarketDataUnSubscriptionSucceeded(security, originalMsg);
+					ProcessCandleSeriesStopped(originalMsg.OriginalTransactionId);
+				}
 				else
 					RaiseMarketDataUnSubscriptionFailed(security, originalMsg, error);
 			}
@@ -1595,6 +1598,21 @@ namespace StockSharp.Algo
 				if (changes == null)
 				{
 					this.AddWarningLog(LocalizedStrings.Str1156Params, message.OrderId.To<string>() ?? message.OrderStringId);
+
+					if (transactionId == 0 && !isStatusRequest)
+					{
+						if (message.OrderId != null)
+						{
+							this.AddInfoLog("{0} info suspended.", message.OrderId.Value);
+							_nonAssociatedOrderIds.SafeAdd(message.OrderId.Value).Add((ExecutionMessage)message.Clone());
+						}
+						else if (!message.OrderStringId.IsEmpty())
+						{
+							this.AddInfoLog("{0} info suspended.", message.OrderStringId);
+							_nonAssociatedStringOrderIds.SafeAdd(message.OrderStringId).Add((ExecutionMessage)message.Clone());
+						}
+					}
+					
 					return;
 				}
 
@@ -1649,6 +1667,23 @@ namespace StockSharp.Algo
 						ProcessMyTrades(order, order.StringId, _nonAssociatedByStringIdMyTrades);
 
 					//ProcessConditionOrders(order);
+
+					List<ExecutionMessage> suspended = null;
+
+					if (order.Id != null)
+						suspended = _nonAssociatedOrderIds.TryGetAndRemove(order.Id.Value);
+					else if (!order.StringId.IsEmpty())
+						suspended = _nonAssociatedStringOrderIds.TryGetAndRemove(order.StringId);
+
+					if (suspended != null)
+					{
+						this.AddInfoLog("{0} resumed.", order.Id);
+
+						foreach (var s in suspended)
+						{
+							ProcessOrderMessage(order, order.Security, s, transactionId, isStatusRequest);
+						}
+					}
 				}
 			}
 			else
@@ -1857,7 +1892,12 @@ namespace StockSharp.Algo
 
 		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
 		{
-			var series = _entityCache.RemoveCandleSeries(message.OriginalTransactionId);
+			ProcessCandleSeriesStopped(message.OriginalTransactionId);
+		}
+
+		private void ProcessCandleSeriesStopped(long originalTransactionId)
+		{
+			var series = _entityCache.RemoveCandleSeries(originalTransactionId);
 
 			if (series == null)
 				return;

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StockSharp.Configuration</RootNamespace>
     <AssemblyName>StockSharp.Configuration</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -69,6 +69,9 @@
     </Reference>
     <Reference Include="StockSharp.BarChart">
       <HintPath>..\References\StockSharp.BarChart.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bitbank">
+      <HintPath>..\References\StockSharp.Bitbank.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Bitfinex">
       <HintPath>..\References\StockSharp.Bitfinex.dll</HintPath>
@@ -154,6 +157,9 @@
     <Reference Include="StockSharp.Quik">
       <HintPath>..\References\StockSharp.Quik.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Quoinex">
+      <HintPath>..\References\StockSharp.Quoinex.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Rithmic">
       <HintPath>..\References\StockSharp.Rithmic.dll</HintPath>
     </Reference>
@@ -222,6 +228,9 @@
     </Reference>
     <Reference Include="StockSharp.IEX">
       <HintPath>..\References\StockSharp.IEX.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Zaif">
+      <HintPath>..\References\StockSharp.Zaif.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

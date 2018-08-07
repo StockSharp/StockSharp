@@ -651,12 +651,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool IsSupportStopLoss => false;
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool IsSupportTakeProfit => false;
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool IsSupportWithdraw => false;
 
 		/// <inheritdoc />

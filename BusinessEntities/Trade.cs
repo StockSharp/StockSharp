@@ -259,7 +259,8 @@ namespace StockSharp.BusinessEntities
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return "{0} {1} {2} {3}".Put(Time, Id, Price, Volume);
+			var idStr = Id == 0 ? StringId : Id.To<string>();
+			return $"{Time} {idStr} {Price} {Volume}";
 		}
 	}
 }

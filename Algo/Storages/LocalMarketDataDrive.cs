@@ -558,7 +558,7 @@ namespace StockSharp.Algo.Storages
 			var folderName = id.SecurityIdToFolderName();
 
 			return //UseAlphabeticPath
-				IOPath.Combine(Path, id.Substring(0, 1), folderName);
+				IOPath.Combine(Path, folderName.Substring(0, 1), folderName);
 			//: IOPath.Combine(Path, folderName);
 		}
 //#pragma warning restore 612
