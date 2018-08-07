@@ -574,9 +574,10 @@ namespace StockSharp.BusinessEntities
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <param name="count">Max count.</param>
+		/// <param name="buildMode">Build mode.</param>
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="maxDepth">Max depth of requested order book.</param>
-		void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null, int? maxDepth = null);
+		void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null);
 
 		/// <summary>
 		/// To stop getting quotes by the instrument.
@@ -603,8 +604,9 @@ namespace StockSharp.BusinessEntities
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <param name="count">Max count.</param>
+		/// <param name="buildMode">Build mode.</param>
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
-		void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null);
+		void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null);
 
 		/// <summary>
 		/// To stop getting trades (tick data) by the instrument.
@@ -619,8 +621,9 @@ namespace StockSharp.BusinessEntities
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <param name="count">Max count.</param>
+		/// <param name="buildMode">Build mode.</param>
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
-		void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataTypes? buildFrom = null);
+		void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null);
 
 		/// <summary>
 		/// To stop getting new information.

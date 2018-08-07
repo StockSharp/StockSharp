@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Quoinex</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Quoinex.QuoinexMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Quoinex"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexMessageAdapter.IsQryptos">
+            <summary>
+            Is QRYPTOS API.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexMessageAdapter.UserId">
+            <summary>
+            User id.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexMessageAdapter.PusherAccessKey">
+            <summary>
+            Pusher access key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Quoinex.QuoinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Quoinex.QuoinexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Quoinex.QuoinexMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.Quoinex.QuoinexMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Quoinex.QuoinexMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Quoinex.QuoinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Quoinex.QuoinexOrderDirections">
+            <summary>
+            Order directions.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Quoinex.QuoinexOrderDirections.One">
+            <summary>
+            One way.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Quoinex.QuoinexOrderDirections.Two">
+            <summary>
+            Two way.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Quoinex.QuoinexOrderDirections.NetOut">
+            <summary>
+            Netout.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Quoinex.QuoinexOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Quoinex"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Quoinex.QuoinexOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Quoinex.QuoinexOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.PriceRange">
+            <summary>
+            Slippage.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.LeverageLevel">
+            <summary>
+            Leverage.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.FundingCurrency">
+            <summary>
+            Currency used to fund the trade with.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.OrderDirection">
+            <summary>
+            Order direction.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Quoinex.QuoinexTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Quoinex"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Quoinex.QuoinexTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Quoinex.QuoinexTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexTrader.IsQryptos">
+            <summary>
+            Is QRYPTOS API.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexTrader.UserId">
+            <summary>
+            User id.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexTrader.PusherAccessKey">
+            <summary>
+            Pusher access key.
+            </summary>
+        </member>
+    </members>
+</doc>

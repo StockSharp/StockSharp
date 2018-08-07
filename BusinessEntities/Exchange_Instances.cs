@@ -917,5 +917,35 @@ namespace StockSharp.BusinessEntities
 			RusName = "IEX",
 			CountryCode = CountryCodes.US,
 		};
+
+		/// <summary>
+		/// Information about Bitbank.
+		/// </summary>
+		public static Exchange Bitbank { get; } = new Exchange
+		{
+			Name = "BTBN",
+			EngName = "Bitbank",
+			RusName = "Bitbank",
+		};
+
+		/// <summary>
+		/// Information about Zaif.
+		/// </summary>
+		public static Exchange Zaif { get; } = new Exchange
+		{
+			Name = "ZAIF",
+			EngName = "Zaif",
+			RusName = "Zaif",
+		};
+
+		/// <summary>
+		/// Information about QUOINEX.
+		/// </summary>
+		public static Exchange Quoinex { get; } = new Exchange
+		{
+			Name = "QINX",
+			EngName = "QUOINEX",
+			RusName = "QUOINEX",
+		};
 	}
 }

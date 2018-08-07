@@ -48206,5 +48206,65 @@ namespace StockSharp.Localization
 		/// IEX
 		/// </summary>
 		public static string IEX => GetString(IEXKey);
+
+		/// <summary>
+		/// QUOINEX
+		/// </summary>
+		public const string QuoinexKey = nameof(Quoinex);
+
+		/// <summary>
+		/// QUOINEX
+		/// </summary>
+		public static string Quoinex => GetString(QuoinexKey);
+
+		/// <summary>
+		/// Zaif
+		/// </summary>
+		public const string ZaifKey = nameof(Zaif);
+
+		/// <summary>
+		/// Zaif
+		/// </summary>
+		public static string Zaif => GetString(ZaifKey);
+
+		/// <summary>
+		/// Bitbank
+		/// </summary>
+		public const string BitbankKey = nameof(Bitbank);
+
+		/// <summary>
+		/// Bitbank
+		/// </summary>
+		public static string Bitbank => GetString(BitbankKey);
+
+		/// <summary>
+		/// Funding
+		/// </summary>
+		public const string FundingKey = nameof(Funding);
+
+		/// <summary>
+		/// Funding
+		/// </summary>
+		public static string Funding => GetString(FundingKey);
+
+		/// <summary>
+		/// Currency used to fund the trade with.
+		/// </summary>
+		public const string FundingCurrencyKey = nameof(FundingCurrency);
+
+		/// <summary>
+		/// Currency used to fund the trade with.
+		/// </summary>
+		public static string FundingCurrency => GetString(FundingCurrencyKey);
+
+		/// <summary>
+		/// User id.
+		/// </summary>
+		public const string UserIdKey = nameof(UserId);
+
+		/// <summary>
+		/// User id.
+		/// </summary>
+		public static string UserId => GetString(UserIdKey);
 	}
 }
