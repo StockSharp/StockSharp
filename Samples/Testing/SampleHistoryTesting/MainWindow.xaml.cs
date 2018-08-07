@@ -13,6 +13,9 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
+using DevExpress.Xpf.Core;
+
 namespace SampleHistoryTesting
 {
 	using System;
@@ -31,8 +34,6 @@ namespace SampleHistoryTesting
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Commissions;
-	using StockSharp.Algo.History;
-	using StockSharp.Algo.History.Russian.Finam;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
 	using StockSharp.Algo.Indicators;
@@ -105,18 +106,9 @@ namespace SampleHistoryTesting
 		private readonly List<HistoryEmulationConnector> _connectors = new List<HistoryEmulationConnector>();
 		
 		private DateTime _startEmulationTime;
-		private ChartCandleElement _candlesElem;
-		private ChartTradeElement _tradesElem;
-		private ChartIndicatorElement _shortElem;
-		private SimpleMovingAverage _shortMa;
-		private ChartIndicatorElement _longElem;
-		private SimpleMovingAverage _longMa;
-		private ChartArea _area;
 
 		private readonly InMemoryNativeIdStorage _nativeIdStorage = new InMemoryNativeIdStorage();
 		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
-
-		private readonly FinamHistorySource _finamHistorySource;
 
 		public MainWindow()
 		{
@@ -168,8 +160,6 @@ namespace SampleHistoryTesting
 				FinamCandlesCheckBox,
 				YahooCandlesCheckBox,
 			});
-
-			_finamHistorySource = new FinamHistorySource(_nativeIdStorage, _exchangeInfoProvider);
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
@@ -217,7 +207,6 @@ namespace SampleHistoryTesting
 
 			if (FinamCandlesCheckBox.IsChecked == true)
 			{
-				_finamHistorySource.Refresh(new FinamSecurityStorage(security), security, s => {}, () => false);
 			}
 
 			// create backtesting modes
@@ -293,25 +282,6 @@ namespace SampleHistoryTesting
 					Level1Equity,
 					Level1Position),
 
-				Tuple.Create(
-					FinamCandlesCheckBox,
-					FinamCandlesProgress,
-					FinamCandlesParameterGrid,
-					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles},
-					FinamCandlesChart,
-					FinamCandlesEquity,
-					FinamCandlesPosition),
-
-				Tuple.Create(
-					YahooCandlesCheckBox,
-					YahooCandlesProgress,
-					YahooCandlesParameterGrid,
-					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource(_exchangeInfoProvider).GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles},
-					YahooCandlesChart,
-					YahooCandlesEquity,
-					YahooCandlesPosition),
 			};
 
 			// storage to historical data
@@ -439,28 +409,32 @@ namespace SampleHistoryTesting
 					BuildCandlesFrom = emulationInfo.UseOrderLog ? (MarketDataTypes?)MarketDataTypes.OrderLog : null,
 				};
 
-				_shortMa = new SimpleMovingAverage { Length = 10 };
-				_shortElem = new ChartIndicatorElement
+				var shortMa = new SimpleMovingAverage { Length = 10 };
+				var shortElem = new ChartIndicatorElement
 				{
 					Color = Colors.Coral,
 					ShowAxisMarker = false,
-					FullTitle = _shortMa.ToString()
+					FullTitle = shortMa.ToString()
 				};
 
 				var chart = set.Item5;
+				var area = chart.Areas.First();
 
-				chart.AddElement(_area, _shortElem);
+				chart.AddElement(area, shortElem);
 
-				_longMa = new SimpleMovingAverage { Length = 80 };
-				_longElem = new ChartIndicatorElement
+				var longMa = new SimpleMovingAverage { Length = 80 };
+				var longElem = new ChartIndicatorElement
 				{
 					ShowAxisMarker = false,
-					FullTitle = _longMa.ToString()
+					FullTitle = longMa.ToString()
 				};
-				chart.AddElement(_area, _longElem);
+				chart.AddElement(area, longElem);
+
+				var candles = area.Elements.OfType<ChartCandleElement>().First();
+				var trades = area.Elements.OfType<ChartTradeElement>().First();
 
 				// create strategy based on 80 5-min и 10 5-min
-				var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, candleManager, series)
+				var strategy = new SmaStrategy(chart, candles, trades, shortMa, shortElem, longMa, longElem, candleManager, series)
 				{
 					Volume = 1,
 					Portfolio = portfolio,
@@ -568,38 +542,34 @@ namespace SampleHistoryTesting
 				statistic.Parameters.Clear();
 				statistic.Parameters.AddRange(strategy.StatisticManager.Parameters);
 
-				var equity = set.Item6;
+				var equityChart = set.Item6;
+				var posChart = set.Item7;
 
-				var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, Colors.Green, Colors.Red, LineChartStyles.Area);
-				var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black);
-				var commissionCurve = equity.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, LineChartStyles.DashedLine);
-				var posItems = set.Item7.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor);
+				var pnlCurve = equityChart.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, Colors.Green, Colors.Red, ChartIndicatorDrawStyles.Band);
+				var unrealizedPnLCurve = equityChart.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black);
+				var commissionCurve = equityChart.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, ChartIndicatorDrawStyles.DashedLine);
+				var posItems = posChart.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor);
+
 				strategy.PnLChanged += () =>
 				{
-					var pnl = new EquityData
-					{
-						Time = strategy.CurrentTime,
-						Value = strategy.PnL - strategy.Commission ?? 0
-					};
+					var data = new ChartDrawData();
 
-					var unrealizedPnL = new EquityData
-					{
-						Time = strategy.CurrentTime,
-						Value = strategy.PnLManager.UnrealizedPnL ?? 0
-					};
+					var g = data.Group(strategy.CurrentTime);
 
-					var commission = new EquityData
-					{
-						Time = strategy.CurrentTime,
-						Value = strategy.Commission ?? 0
-					};
+					g.Add(pnlCurve,           decimal.ToDouble(strategy.PnL - strategy.Commission ?? 0), 0);
+					g.Add(unrealizedPnLCurve, decimal.ToDouble(strategy.PnLManager.UnrealizedPnL ?? 0), 0);
+					g.Add(commissionCurve,    decimal.ToDouble(strategy.Commission ?? 0), 0);
 
-					pnlCurve.Add(pnl);
-					unrealizedPnLCurve.Add(unrealizedPnL);
-					commissionCurve.Add(commission);
+					equityChart.Draw(data);
 				};
 
-				strategy.PositionChanged += () => posItems.Add(new EquityData { Time = strategy.CurrentTime, Value = strategy.Position });
+				strategy.PositionChanged += () =>
+				{
+					var data = new ChartDrawData();
+					var g = data.Group(strategy.CurrentTime);
+					g.Add(posItems, decimal.ToDouble(strategy.Position), 0);
+					posChart.Draw(data);
+				};
 
 				var nextTime = startTime + progressStep;
 
@@ -721,14 +691,11 @@ namespace SampleHistoryTesting
 			equity.Clear();
 			position.Clear();
 
-			_area = new ChartArea();
-			chart.AddArea(_area);
+			var area = new ChartArea();
+			chart.AddArea(area);
 
-			_candlesElem = new ChartCandleElement { ShowAxisMarker = false };
-			chart.AddElement(_area, _candlesElem);
-
-			_tradesElem = new ChartTradeElement { FullTitle = LocalizedStrings.Str985 };
-			chart.AddElement(_area, _tradesElem);
+			chart.AddElement(area, new ChartCandleElement { ShowAxisMarker = false });
+			chart.AddElement(area, new ChartTradeElement { FullTitle = LocalizedStrings.Str985 });
 		}
 
 		private void SetIsEnabled(bool canStart, bool canSuspend, bool canStop)
@@ -750,5 +717,13 @@ namespace SampleHistoryTesting
 		{
 			this.GuiAsync(() => chart.IsAutoRange = started);
 		}
+
+		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			var theme = (string)((ComboBoxItem)Theme.SelectedValue).Content;
+			if (theme.IsEmpty())
+				return;
+
+			ApplicationThemeHelper.ApplicationThemeName = theme;
+		}
 	}
-}
