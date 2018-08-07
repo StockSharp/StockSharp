@@ -5,7 +5,9 @@
 <mediaLink>
 <image xlink:href="Designer_Glass_Panel"/>
 </mediaLink>
-<para>Кубик предназначен для отображения стакана в панели <link xlink:href="24d370d1-fd00-4914-83ac-574721299e93" /> 
+<para>Кубик предназначен для отображения стакана в специальном графическом компаненте <link xlink:href="3efed911-8876-40b8-8203-b9b48b1c599c" />,
+который необходимо добавить из группы <link xlink:href="055fe44c-6ca5-4b41-a62d-16b319f6d3de" /> 
+вкладок <legacyBold>Эмуляция</legacyBold> или <legacyBold>Торговля</legacyBold>.
 </para>
 <definitionTable>
   <definedTerm>Входящие сокеты</definedTerm>
