@@ -44,6 +44,7 @@ StockSharp API Change log
 * (bug) Fix processing non associated with transaction id order's messages.
 * (bug) https://stocksharp.ru/forum/9726/instrument-dlya-market-dannyh-s-identifikatorom-zaprosa-71415971-ne-naiden/ fix delete prev subscriptions.
 * (feature) FixServer. Auto unsubscribe for disconnected sessions.
+* (bug) CommissionRule. Fix rules processing with percentage values.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

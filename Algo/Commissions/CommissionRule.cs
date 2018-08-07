@@ -134,6 +134,17 @@ namespace StockSharp.Algo.Commissions
 		{
 			storage.SetValue(nameof(Value), Value);
 		}
+
+		internal decimal? GetValue(decimal? baseValue)
+		{
+			if (baseValue == null)
+				return null;
+
+			if (Value.Type == UnitTypes.Percent)
+				return (baseValue.Value * Value.Value) / 100m;
+
+			return (decimal)Value;
+		}
 	}
 
 	/// <summary>
@@ -151,7 +162,7 @@ namespace StockSharp.Algo.Commissions
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasOrderInfo())
-				return (decimal)Value;
+				return GetValue(message.OrderPrice);
 			
 			return null;
 		}
@@ -172,7 +183,7 @@ namespace StockSharp.Algo.Commissions
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo())
-				return (decimal)Value;
+				return GetValue(message.TradePrice);
 			
 			return null;
 		}
@@ -426,7 +437,7 @@ namespace StockSharp.Algo.Commissions
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && message.SecurityId == _securityId)
-				return (decimal)Value;
+				return GetValue(message.TradePrice);
 			
 			return null;
 		}
@@ -496,7 +507,7 @@ namespace StockSharp.Algo.Commissions
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && message.SecurityId.SecurityType == SecurityType)
-				return (decimal)Value;
+				return GetValue(message.TradePrice);
 			
 			return null;
 		}
@@ -557,7 +568,7 @@ namespace StockSharp.Algo.Commissions
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && Board != null && message.SecurityId.BoardCode.CompareIgnoreCase(Board.Code))
-				return (decimal)Value;
+				return GetValue(message.TradePrice);
 			
 			return null;
 		}
