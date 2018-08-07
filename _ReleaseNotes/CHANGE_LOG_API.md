@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.13:
 * (bug) Monitor.Clear fix.
 * (bug) Candles. Fix process error response in case of multiples connections.
 * (bug) PortfolioGrid. Fix State column localization.
