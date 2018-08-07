@@ -577,211 +577,6 @@
         <see cref="T:System.TimeSpan" /> to <see cref="T:System.String" /> converter.
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.ISecurityWindow">
-      <summary>
-            The interface that describes a window for trading instrument creating or editing.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.ISecurityWindow.Security">
-      <summary>
-            Security.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PermissionCredentialsWindow">
-      <summary>
-            The window for edit credentials.
-            </summary>
-      <summary>
-            PermissionCredentialsWindow
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.OkCommand">
-      <summary>
-      </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.AddCommand">
-      <summary>
-      </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.RemoveCommand">
-      <summary>
-      </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.SelectAllCommand">
-      <summary>
-      </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.UnSelectAllCommand">
-      <summary>
-      </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PermissionCredentialsWindow.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PermissionCredentialsWindow" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PermissionCredentialsWindow.Credentials">
-      <summary>
-            Credentials.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PermissionCredentialsWindow.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.DataSourcePanel">
-      <summary>
-            Select datasource panel.
-            </summary>
-      <summary>
-            DataSourcePanel
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.DataSourcePanel.ItemsSource">
-      <summary>
-            Items source.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.DataSourcePanel.SelectedItem">
-      <summary>
-            Selected item.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.DataSourcePanel.Configure">
-      <summary>
-            Configure action.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.DataSourcePanel.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.DataSourcePanel" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.DataSourcePanel.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.ExtendedInfoStorageWindow">
-      <summary>
-            The extended storage selection window.
-            </summary>
-      <summary>
-            ExtendedInfoStorageWindow
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.ExtendedInfoStorageWindow.Storages">
-      <summary>
-            Available storages.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.ExtendedInfoStorageWindow.SelectedStorage">
-      <summary>
-            Selected storage.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.ExtendedInfoStorageWindow.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ExtendedInfoStorageWindow" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.ExtendedInfoStorageWindow.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Extensions">
-      <summary>
-            Extension class.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Extensions.LoadWindowSettings(System.Windows.Window,Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="window">Window instance.</param>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Extensions.SaveWindowSettings(System.Windows.Window,Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="window">Window instance.</param>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Extensions.SaveDevExpressControl(System.Windows.DependencyObject)">
-      <summary>
-            Save DevExpress control settings.
-            </summary>
-      <param name="obj">Control.</param>
-      <returns>Settings.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Extensions.LoadDevExpressControl(System.Windows.DependencyObject,System.String)">
-      <summary>
-            Load DevExpress control settings.
-            </summary>
-      <param name="obj">Control.</param>
-      <param name="settings">Settings.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.DependencyObject)">
-      <summary>
-            Try to open the specified link.
-            </summary>
-      <param name="url">Link.</param>
-      <param name="owner">UI thread owner.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Extensions.SaveLayout(DevExpress.Xpf.Docking.DockLayoutManager)">
-      <summary>
-            Save layout state.
-            </summary>
-      <param name="manager">Represents a container for dock and layout items.</param>
-      <returns>Layout encoded as a string.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Extensions.LoadLayout(DevExpress.Xpf.Docking.DockLayoutManager,System.String)">
-      <summary>
-            Restore layout state.
-            </summary>
-      <param name="manager">Represents a container for dock and layout items.</param>
-      <param name="layout">Layout encoded as a string.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Extensions.GetStrategyProcessStateIconName(StockSharp.Algo.Strategies.Strategy)">
-      <summary>
-            Get icon for <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState" />.
-            </summary>
-      <param name="strategy">Strategy.</param>
-      <returns>Icon name.</returns>
-    </member>
-    <member name="T:StockSharp.Xaml.FileProgressWindow">
-      <summary>
-            File uploading/downloading progress bar window.
-            </summary>
-      <summary>
-            FileProgressWindow
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.FileProgressWindow" />.
-            </summary>
-      <param name="fileId">Downloading file ID.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.FileProgressWindow.#ctor(System.String)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.FileProgressWindow" />.
-            </summary>
-      <param name="path">Link to uploading file.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.FileProgressWindow.File">
-      <summary>
-            The file data.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.FileProgressWindow.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.GridControl.IPriceChartDataProvider">
       <summary>
             Price chart data provider interface.
@@ -1003,6 +798,211 @@
             Save settings.
             </summary>
       <param name="storage">Settings storage.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.ISecurityWindow">
+      <summary>
+            The interface that describes a window for trading instrument creating or editing.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ISecurityWindow.Security">
+      <summary>
+            Security.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PermissionCredentialsWindow">
+      <summary>
+            The window for edit credentials.
+            </summary>
+      <summary>
+            PermissionCredentialsWindow
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.OkCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.AddCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.RemoveCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.SelectAllCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.UnSelectAllCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PermissionCredentialsWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PermissionCredentialsWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PermissionCredentialsWindow.Credentials">
+      <summary>
+            Credentials.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PermissionCredentialsWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.DataSourcePanel">
+      <summary>
+            Select datasource panel.
+            </summary>
+      <summary>
+            DataSourcePanel
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.DataSourcePanel.ItemsSource">
+      <summary>
+            Items source.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.DataSourcePanel.SelectedItem">
+      <summary>
+            Selected item.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.DataSourcePanel.Configure">
+      <summary>
+            Configure action.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.DataSourcePanel.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.DataSourcePanel" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.DataSourcePanel.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.ExtendedInfoStorageWindow">
+      <summary>
+            The extended storage selection window.
+            </summary>
+      <summary>
+            ExtendedInfoStorageWindow
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ExtendedInfoStorageWindow.Storages">
+      <summary>
+            Available storages.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ExtendedInfoStorageWindow.SelectedStorage">
+      <summary>
+            Selected storage.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ExtendedInfoStorageWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ExtendedInfoStorageWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ExtendedInfoStorageWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Extensions">
+      <summary>
+            Extension class.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.LoadWindowSettings(System.Windows.Window,Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="window">Window instance.</param>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.SaveWindowSettings(System.Windows.Window,Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="window">Window instance.</param>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.SaveDevExpressControl(System.Windows.DependencyObject)">
+      <summary>
+            Save DevExpress control settings.
+            </summary>
+      <param name="obj">Control.</param>
+      <returns>Settings.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.LoadDevExpressControl(System.Windows.DependencyObject,System.String)">
+      <summary>
+            Load DevExpress control settings.
+            </summary>
+      <param name="obj">Control.</param>
+      <param name="settings">Settings.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.DependencyObject)">
+      <summary>
+            Try to open the specified link.
+            </summary>
+      <param name="url">Link.</param>
+      <param name="owner">UI thread owner.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.SaveLayout(DevExpress.Xpf.Docking.DockLayoutManager)">
+      <summary>
+            Save layout state.
+            </summary>
+      <param name="manager">Represents a container for dock and layout items.</param>
+      <returns>Layout encoded as a string.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.LoadLayout(DevExpress.Xpf.Docking.DockLayoutManager,System.String)">
+      <summary>
+            Restore layout state.
+            </summary>
+      <param name="manager">Represents a container for dock and layout items.</param>
+      <param name="layout">Layout encoded as a string.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.GetStrategyProcessStateIconName(StockSharp.Algo.Strategies.Strategy)">
+      <summary>
+            Get icon for <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState" />.
+            </summary>
+      <param name="strategy">Strategy.</param>
+      <returns>Icon name.</returns>
+    </member>
+    <member name="T:StockSharp.Xaml.FileProgressWindow">
+      <summary>
+            File uploading/downloading progress bar window.
+            </summary>
+      <summary>
+            FileProgressWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.FileProgressWindow" />.
+            </summary>
+      <param name="fileId">Downloading file ID.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.FileProgressWindow.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.FileProgressWindow" />.
+            </summary>
+      <param name="path">Link to uploading file.</param>
+    </member>
+    <member name="P:StockSharp.Xaml.FileProgressWindow.File">
+      <summary>
+            The file data.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.FileProgressWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
     </member>
     <member name="T:StockSharp.Xaml.ImportDataMappingButton">
       <summary>
@@ -4724,7 +4724,7 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterMarketDepth(StockSharp.BusinessEntities.Security)">
@@ -4736,7 +4736,7 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterFilteredMarketDepth(StockSharp.BusinessEntities.Security)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes})">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterTrades(StockSharp.BusinessEntities.Security)">
@@ -4769,7 +4769,7 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterOrderLog(StockSharp.BusinessEntities.Security)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes})">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterSecurity(StockSharp.BusinessEntities.Security)">
