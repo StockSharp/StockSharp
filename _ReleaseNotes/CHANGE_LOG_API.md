@@ -42,6 +42,8 @@ StockSharp API Change log
 * (feature) DevExpress v18.1.5
 * (bug) Yobit. Orders processing fix.
 * (bug) Fix processing non associated with transaction id order's messages.
+* (bug) https://stocksharp.ru/forum/9726/instrument-dlya-market-dannyh-s-identifikatorom-zaprosa-71415971-ne-naiden/ fix delete prev subscriptions.
+* (feature) FixServer. Auto unsubscribe for disconnected sessions.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

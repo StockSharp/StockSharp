@@ -171,12 +171,11 @@
       <returns>
         <see langword="true" />, если транзакция не была ранее обработана и ее можно обработать, иначе <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixServer.GetLastCandle(StockSharp.Messages.SecurityId,System.TimeSpan)">
+    <member name="M:StockSharp.Quik.Lua.LuaFixServer.GetLastCandle(System.Int64)">
       <summary>
             Получить последнюю отправленную свечу.
             </summary>
-      <param name="securityId">Идентификатор инструмента.</param>
-      <param name="timeFrame">Тайм-фрейм.</param>
+      <param name="originalTransactionId">Идентификатор первоначального сообщения <see cref="P:StockSharp.Messages.MarketDataMessage.TransactionId" />, для которого данное сообщение является ответом.</param>
       <returns>Последняя отправленная свеча.</returns>
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixServer.TryAddSecurityCode(System.String)">
