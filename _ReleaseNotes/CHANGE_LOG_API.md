@@ -45,6 +45,7 @@ StockSharp API Change log
 * (bug) https://stocksharp.ru/forum/9726/instrument-dlya-market-dannyh-s-identifikatorom-zaprosa-71415971-ne-naiden/ fix delete prev subscriptions.
 * (feature) FixServer. Auto unsubscribe for disconnected sessions.
 * (bug) CommissionRule. Fix rules processing with percentage values.
+* (feature) AlfaDirect. v4.0 support (market data only).
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.
