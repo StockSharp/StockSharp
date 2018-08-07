@@ -2,7 +2,78 @@
 <topic id="ec33258b-c0bb-4f2b-bef3-368e607a92a4" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-     <para>Описание временно недоступно.</para>
+      <para>Задача выполняет автоматический импорт биржевых данных из фаилов в указанном каталоге по заданной маске файла.</para>
+
+    	    <mediaLink>
+        		<image placement="left" xlink:href="hydra_tasks_import" />
+      		</mediaLink>
+
+<para>В нижней части панели можно выбрать инструменты, по которым будут импортироваться данные, а также тип данных для импорта.</para>
+<para>Для каждого инструмента можно указать следующие свойства импорта данных:</para>
+      <para><legacyBold>Импорт (авто)</legacyBold></para>
+    <list class="bullet">
+        <listItem>
+			<legacyBold>Настройки</legacyBold> - настройки импорта из CSV.
+		</listItem>
+		<listItem>
+ 		    <legacyBold>Директория с данными</legacyBold> - директория с данными.
+		</listItem>
+		<listItem>
+ 		    <legacyBold>Маска файла</legacyBold> - маска файла, которая используется при сканировании директории. Например, candles*.csv.
+		</listItem>
+		<listItem>
+			<legacyBold>Подкаталоги</legacyBold> - включать подкаталоги.
+		</listItem>
+		<listItem>
+			<legacyBold>Разделитель колонок</legacyBold> - разделитель колонок. Табуляция обозначается TAB.
+		</listItem>
+		<listItem>
+			<legacyBold>Отступ с начала</legacyBold> - количество строчек, которые нужно пропустить с начала файла (если они несут мета информацию).
+		</listItem>
+		<listItem>
+			<legacyBold>Часовой пояс</legacyBold> - часовой пояс.
+		</listItem>
+	</list>
+		
+	<para><legacyBold>Основные</legacyBold></para>
+		<list class="bullet">
+        <listItem>
+          <legacyBold>Заголовок</legacyBold> - заголовок задачи.
+		</listItem>
+        <listItem>
+          <legacyBold>Работать с</legacyBold> - время начала работы.
+		</listItem>
+        <listItem>
+          <legacyBold>Работать до</legacyBold> - время окончания работы.
+		</listItem>
+        <listItem>
+          <legacyBold>Интервал работы</legacyBold> - интервал работы.
+		</listItem>
+        <listItem>
+          <legacyBold>Директория с данными</legacyBold> - директория с данными, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.
+		</listItem>
+		<listItem>
+          <legacyBold>Формат</legacyBold> - формат данных: BIN/CSV.
+		</listItem>
+		<listItem>
+          <legacyBold>Макс. ошибок</legacyBold> - максимальное количество ошибок по достижению которого задача будет остановлена. По умолчанию 0 - количество ошибок игнорируются.
+		</listItem>
+		<listItem>
+          <legacyBold>Зависимость</legacyBold> - задача, которая должна быть выполнена перед запуском текущей.
+		</listItem>
+		<listItem>
+          <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
+		</listItem>
+      </list>
+     <para><legacyBold>Инструменты</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Дубликаты</legacyBold> - обновлять дубликаты инструментов, если они уже существуют.
+		</listItem>
+        <listItem>
+			<legacyBold>Игнорировать без ИД</legacyBold> - игнорировать инструменты без идентификатора.
+		</listItem>
+ 	  </list>
     </introduction>
   </developerConceptualDocument>
 </topic>

@@ -195,7 +195,11 @@ namespace SampleFix
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
+			var wnd = new SecurityLookupWindow
+			{
+				ShowAllOption = MainWindow.Instance.Trader.MarketDataAdapter.IsSupportSecuritiesLookupAll,
+				Criteria = new Security { Code = "AAPL" }
+			};
 
 			if (!wnd.ShowModal(this))
 				return;
@@ -220,7 +224,7 @@ namespace SampleFix
 				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
 
-				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.Now).Show();
+				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000))).Show();
 			}
 		}
 	}

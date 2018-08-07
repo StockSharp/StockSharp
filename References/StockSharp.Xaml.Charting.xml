@@ -1422,13 +1422,6 @@
       <param name="chart">Chart.</param>
       <param name="values">New data.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartHelper.SaveToXml(StockSharp.Xaml.Charting.IChart,System.String)">
-      <summary>
-            To save the chart data to xml file.
-            </summary>
-      <param name="chart">Chart.</param>
-      <param name="fileName">The full path to the file.</param>
-    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartHelper.SaveToImage(StockSharp.Xaml.Charting.IChart)">
       <summary>
             To save the chart as image.
@@ -3561,6 +3554,11 @@
     <member name="P:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.ChartTheme">
       <summary>
             The name of the graphic theme.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.SmileStep">
+      <summary>
+            Volatility smile draw step.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.#ctor">

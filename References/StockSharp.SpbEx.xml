@@ -164,12 +164,6 @@
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.StorageName">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.SecurityLookupRequired">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.PortfolioLookupRequired">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.IsSupportSubscriptionBySecurity">
       <inheritdoc />
     </member>

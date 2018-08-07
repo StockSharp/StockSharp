@@ -21,6 +21,10 @@
  <mediaLink>
 <image placement="center" xlink:href="Designer_Repository_of_historical_data_00"/>
 </mediaLink>
+<para>Для просмотра имеющихся данных необходимо выбрать 
+инструмент в списке <legacyBold>Активные</legacyBold>. На панели 
+справа необходимо выбрать хранилище исторических данных или создать его если оно не было создано (<link xlink:href="ec56221a-92a0-45f4-9fec-e6e7edc7c264" />). 
+После чего отобразятся все имеющиеся данные в хранилище по выбранному инструменту инструменту.</para>
 
 
     </introduction>

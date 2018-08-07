@@ -3379,6 +3379,16 @@ namespace StockSharp.Algo
 		/// </summary>
 		public const string SecurityVerticalBarSeparator = "##VBAR##";
 
+		/// <summary>
+		/// The delimiter, replacing first '.' in the path for instruments with id like .AA-CA@SPBEX. Is equal to '##DOT##'.
+		/// </summary>
+		public const string SecurityFirstDot = "##DOT##";
+
+		///// <summary>
+		///// The delimiter, replacing first '..' in the path for instruments with id like ..AA-CA@SPBEX. Is equal to '##DDOT##'.
+		///// </summary>
+		//public const string SecurityFirst2Dots = "##DDOT##";
+
 		private static readonly CachedSynchronizedDictionary<string, string> _securitySeparators = new CachedSynchronizedDictionary<string, string>
 		{
 			{ "/", SecurityPairSeparator },
@@ -3410,6 +3420,9 @@ namespace StockSharp.Algo
 			if (_reservedDos.Any(d => folderName.StartsWithIgnoreCase(d)))
 				folderName = "_" + folderName;
 
+			if (folderName.StartsWithIgnoreCase("."))
+				folderName = SecurityFirstDot + folderName.Remove(0, 1);
+
 			return _securitySeparators
 				.CachedPairs
 				.Aggregate(folderName, (current, pair) => current.Replace(pair.Key, pair.Value));
@@ -3429,6 +3442,9 @@ namespace StockSharp.Algo
 
 			if (id[0] == '_' && _reservedDos.Any(d => id.StartsWithIgnoreCase("_" + d)))
 				id = id.Substring(1);
+
+			if (id.StartsWithIgnoreCase(SecurityFirstDot))
+				id = id.ReplaceIgnoreCase(SecurityFirstDot, ".");
 
 			return _securitySeparators
 				.CachedPairs
@@ -3565,7 +3581,19 @@ namespace StockSharp.Algo
 			return
 				criteria.Id.IsEmpty() &&
 				criteria.Code.IsEmpty() &&
-				criteria.Type == null;
+				criteria.Board == null &&
+				criteria.ExpiryDate == null &&
+				criteria.Type == null &&
+				criteria.OptionType == null &&
+				criteria.Strike == null &&
+				criteria.CfiCode.IsEmpty() &&
+				criteria.Class.IsEmpty() &&
+				criteria.Currency == null &&
+				criteria.Decimals == null &&
+				criteria.Name.IsEmpty() &&
+				criteria.UnderlyingSecurityType == null &&
+				criteria.UnderlyingSecurityId.IsEmpty() &&
+				criteria.BinaryOptionType.IsEmpty();
 		}
 
 		/// <summary>
@@ -3789,11 +3817,16 @@ namespace StockSharp.Algo
 		public static SecurityTypes? Iso10962ToSecurityType(this string cfi)
 		{
 			if (cfi.IsEmpty())
-				throw new ArgumentNullException(nameof(cfi));
+			{
+				return null;
+				//throw new ArgumentNullException(nameof(cfi));
+			}
 
 			if (cfi.Length != 6)
+			{
 				return null;
 				//throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.Str2117);
+			}
 
 			switch (cfi[0])
 			{
@@ -3836,6 +3869,9 @@ namespace StockSharp.Algo
 									return SecurityTypes.Index;
 
 								case 'C':
+									return SecurityTypes.Currency;
+
+								case 'R':
 									return SecurityTypes.Currency;
 
 								case 'T':

@@ -13,6 +13,9 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
+using DevExpress.Xpf.Core;
+
 namespace SampleOptionQuoting
 {
 	using System;
@@ -446,8 +449,9 @@ namespace SampleOptionQuoting
 
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
-			if (Connector.Configure(this))
-				new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
+			ApplicationThemeHelper.ApplicationThemeName = "VS2017Dark";
+			//if (Connector.Configure(this))
+			//	new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
 		}
 
 		private void Level1FieldsCtrl_OnEditValueChanged(object sender, EditValueChangedEventArgs e)

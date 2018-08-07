@@ -21,6 +21,16 @@
  
 <para>Точки останова могут быть добавлены как до запуска 
 процесса тестирования, так и в процессе тестирования стратегии на истории.</para>
+<para>
+Если нажать на кнопку <mediaLinkInline><image xlink:href="Designer_Debug_01"/></mediaLinkInline> 
+<legacyBold>Точки останова</legacyBold>, появиться окно, в котором будут отображены 
+все точки останова. Для каждой из них можно задать дополнительное условие срабатывания. 
+Например, для логического сигнала можно установить значение <legacyBold>Истина</legacyBold>, в таком случая 
+точка останова будет останавливаться только если значение сигнала будет <legacyBold>Истина</legacyBold>.
+</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Stopping_point_02"/>
+</mediaLink>
     </introduction>
     <relatedTopics>
 <link xlink:href="f1929c45-e092-4b11-a31e-9d153e075429" />

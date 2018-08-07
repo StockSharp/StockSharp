@@ -42,7 +42,7 @@
 			</step>
 			<step>
 				<content>
-					<para>Следующий шаг - настройка источника. Для этого нажимаем кнопку <mediaLinkInline><image xlink:href="hydra_edit"/></mediaLinkInline>. 
+					<para>Следующий шаг - настройка источника. Настройка источника выполняется в панеле справа.
 					Подробно настройка описана в разделе <link xlink:href="f005431b-3a1b-49c2-a389-f1d4e9756f45">Настройка источников</link>.</para>
 				</content>
 			</step>
@@ -73,22 +73,22 @@
         <image placement="center" xlink:href="hydra_security_full_list" />
       </mediaLink>
       <para>В котором будут видны все доступные для добавления инструменты.</para>
+      <para>Выбранные инструменты будут отображены в таблице <legacyBold>Инструменты</legacyBold>, которая 
+      подставляет собой таблицу с древовидной структурой. Главным элементом которой 
+      является инструмент, а дополнительным типы маркет данных которые будет получены 
+      для этого инструмента.</para>
 				</content>
 			</step>
 						<step>
 				<content>
 				      <para>
-			У каждого инструмента надо выбрать необходимый для скачивания тип маркет-данных. 
-			Если не выбран ни один тип маркет-данных, то в строке с инструментом (слева) будет значок с восклицательным знаком:
+			У каждого инструмента надо выбрать необходимые для скачивания типы маркет-данных. 
 	  </para>
 	  <para>
 			Если не установлены все необходимые параметры инструмента, то в левой колонке строки с инструментом появится значок <mediaLinkInline><image xlink:href="hydra_zero" /></mediaLinkInline>.
 	  </para>
 	  
-      <mediaLink>
-        <image placement="center" xlink:href="hydra_security_select" />
-      </mediaLink>
-				</content>
+    				</content>
 			</step>
 			<step>
 				<content>
@@ -104,6 +104,12 @@
   						<listItem>
   							<para>Настроить объем получаемой информации при помощи кнопок: <legacyBold>Сделки</legacyBold>, <legacyBold>Стаканы</legacyBold>, 
   							<legacyBold>Свечи</legacyBold>, <legacyBold>Лог заявок</legacyBold>, <legacyBold>Level 1</legacyBold>, <legacyBold>Свои транзакции</legacyBold>.</para>
+  						</listItem>
+  						<listItem>
+  							<para>Указать необходимые периоды для загружаемых свечей.</para>  
+  						</listItem>
+  						<listItem>
+  							<para>Указать из чего будут построены маркет данные. Например, свечи могут быть построены из тиковых данных или из спрэда стакана (обычно для рынка Форекс).</para>
   						</listItem>
   						<listItem>
        		<para>При нажатии на кнопку <legacyBold>All@All</legacyBold> будут удалены все добавленные в источник инструменты, и вместо них добавлен один вспомогательный инструмент All@All, 

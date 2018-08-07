@@ -3863,6 +3863,7 @@ P:StockSharp.Algo.BasketMessageAdapter.OrderStatusRequired/inheritdoc;DocStr8459
 P:StockSharp.Algo.BasketMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
 P:StockSharp.Algo.BasketMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
 P:StockSharp.Algo.BasketMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.Algo.BasketMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 P:StockSharp.Algo.BasketMessageAdapter.Categories/inheritdoc;DocStr8459
 P:StockSharp.Algo.BasketMessageAdapter.IsRestoreSubscriptionOnReconnect/summary;DocStr9349
 P:StockSharp.Algo.BasketMessageAdapter.SuppressReconnectingErrors/summary;DocStr10373
@@ -4035,13 +4036,13 @@ P:StockSharp.Algo.Connector.RegisteredPortfolios/inheritdoc;DocStr8459
 P:StockSharp.Algo.Connector.SubscribedCandleSeries/summary;DocStr10375
 M:StockSharp.Algo.Connector.SubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)/inheritdoc;DocStr8459
-M:StockSharp.Algo.Connector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes})/inheritdoc;DocStr8459
+M:StockSharp.Algo.Connector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.UnRegisterSecurity(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
-M:StockSharp.Algo.Connector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})/inheritdoc;DocStr8459
+M:StockSharp.Algo.Connector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.UnRegisterMarketDepth(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.RegisterFilteredMarketDepth(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.UnRegisterFilteredMarketDepth(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
-M:StockSharp.Algo.Connector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{StockSharp.Messages.MarketDataTypes})/inheritdoc;DocStr8459
+M:StockSharp.Algo.Connector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.UnRegisterTrades(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.OnRegisterPortfolio(StockSharp.BusinessEntities.Portfolio)/summary;DocStr789
@@ -7321,6 +7322,7 @@ F:StockSharp.Algo.TraderHelper.SecurityPairSeparator/summary;DocStr8654
 F:StockSharp.Algo.TraderHelper.SecurityStarSeparator/summary;DocStr8655
 F:StockSharp.Algo.TraderHelper.SecurityColonSeparator/summary;DocStr8656
 F:StockSharp.Algo.TraderHelper.SecurityVerticalBarSeparator/summary;DocStr9321
+F:StockSharp.Algo.TraderHelper.SecurityFirstDot/summary;DocStr10589
 M:StockSharp.Algo.TraderHelper.SecurityIdToFolderName(System.String)/summary;DocStr2505
 M:StockSharp.Algo.TraderHelper.SecurityIdToFolderName(System.String)/param/id;SecurityId
 M:StockSharp.Algo.TraderHelper.SecurityIdToFolderName(System.String)/returns;DocStr2506

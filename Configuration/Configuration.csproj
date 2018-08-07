@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StockSharp.Configuration</RootNamespace>
     <AssemblyName>StockSharp.Configuration</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -33,8 +33,8 @@
     <DocumentationFile>bin\Release\StockSharp.Configuration.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Core.v17.2">
-      <HintPath>..\References\DevExpress.Xpf.Core.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v18.1">
+      <HintPath>..\References\DevExpress.Xpf.Core.v18.1.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
@@ -89,9 +89,17 @@
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlphaVantage\AlphaVantage.csproj">
+      <Project>{C09745E8-CE51-47DF-8856-E3E3E41EF911}</Project>
+      <Name>AlphaVantage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Binance\Binance.csproj">
       <Project>{E8577520-E582-4409-9287-4D0859F64EE7}</Project>
       <Name>Binance</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitbank\Bitbank.csproj">
+      <Project>{21000430-C80E-47F8-AD9A-1376BBA03E6D}</Project>
+      <Name>Bitbank</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitexbook\Bitexbook.csproj">
       <Project>{F98F430B-D6F2-418C-BB52-B7B02A073D97}</Project>
@@ -153,6 +161,10 @@
       <Project>{1B76C578-6A8C-4CE2-8556-A8F32FB5FB85}</Project>
       <Name>Huobi</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\IEX\IEX.csproj">
+      <Project>{76FD8C86-E4BA-4B86-A966-29C13D085EE7}</Project>
+      <Name>IEX</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Kraken\Kraken.csproj">
       <Project>{8F90DE0D-C2A2-4C86-A66E-EEA01F830C70}</Project>
       <Name>Kraken</Name>
@@ -184,6 +196,10 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\QuantHouse\QuantHouse.csproj">
       <Project>{E818D294-DBF6-4126-AF13-D83EF9740536}</Project>
       <Name>QuantHouse</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quoinex\Quoinex.csproj">
+      <Project>{C307BB36-5F18-4BB9-8812-4051C9E7962A}</Project>
+      <Name>Quoinex</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\SpbEx\SpbEx.csproj">
       <Project>{EF303E28-DCD1-4FA4-B10D-BF3506FDF9B8}</Project>
@@ -228,6 +244,10 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Yobit\Yobit.csproj">
       <Project>{E66E747C-A9AD-4FA2-99D0-143834EED83D}</Project>
       <Name>Yobit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Zaif\Zaif.csproj">
+      <Project>{63C3ABE0-9E3C-4354-A3D1-22359FD34489}</Project>
+      <Name>Zaif</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>

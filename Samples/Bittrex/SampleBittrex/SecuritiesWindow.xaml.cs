@@ -95,7 +95,7 @@ namespace SampleBittrex
 				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
 
-				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 1000)), DateTime.Now).Show();
+				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 1000))).Show();
 			}
 		}
 

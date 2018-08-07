@@ -598,5 +598,10 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string StorageFormatDot => AppendDot(StorageFormat);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string OrderSideDot => AppendDot(OrderSide);
 	}
 }

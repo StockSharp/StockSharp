@@ -3255,5 +3255,41 @@ namespace StockSharp.BusinessEntities
 			Code = "Globex",
 			Exchange = Exchange.Cme,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.IEX"/>.
+		/// </summary>
+		public static ExchangeBoard IEX { get; } = new ExchangeBoard
+		{
+			Code = Exchange.IEX.Name,
+			Exchange = Exchange.IEX,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Bitbank"/>.
+		/// </summary>
+		public static ExchangeBoard Bitbank { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Bitbank.Name,
+			Exchange = Exchange.Bitbank,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Zaif"/>.
+		/// </summary>
+		public static ExchangeBoard Zaif { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Zaif.Name,
+			Exchange = Exchange.Zaif,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Quoinex"/>.
+		/// </summary>
+		public static ExchangeBoard Quoinex { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Quoinex.Name,
+			Exchange = Exchange.Quoinex,
+		};
 	}
 }

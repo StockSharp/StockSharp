@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.AlphaVantage</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.AlphaVantage.AlphaVantageMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.AlphaVantage"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.AlphaVantage.AlphaVantageMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="P:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.TimeFrames">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.Token">
+            <summary>
+            Token.
+            </summary>
+        </member>
+        <member name="M:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.AlphaVantage.AlphaVantageTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.AlphaVantage"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.AlphaVantage.AlphaVantageTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.AlphaVantage.AlphaVantageTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlphaVantage.AlphaVantageTrader.Token">
+            <summary>
+            Token.
+            </summary>
+        </member>
+    </members>
+</doc>

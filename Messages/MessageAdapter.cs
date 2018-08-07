@@ -255,7 +255,7 @@ namespace StockSharp.Messages
 		/// Bit process, which can run the adapter.
 		/// </summary>
 		[Browsable(false)]
-		public Platforms Platform { get; }
+		public Platforms Platform { get; protected set; }
 
 		/// <inheritdoc />
 		[Browsable(false)]
@@ -651,12 +651,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool IsSupportStopLoss => false;
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool IsSupportTakeProfit => false;
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool IsSupportWithdraw => false;
 
 		/// <inheritdoc />

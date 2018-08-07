@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.13:
 * (bug) Monitor.Clear fix.
 * (bug) Candles. Fix process error response in case of multiples connections.
 * (bug) PortfolioGrid. Fix State column localization.
@@ -10,6 +10,42 @@ StockSharp API Change log
 * (bug) QuikLua. Fix Si and Eu symbols processing.
 * (bug) FixServer. QuotesInterval handling fix.
 * (feature) FixServer. TransactionId mapping associated with clients session.
+* (bug) TraderHelper. IsLookupAll method fix.
+* (bug) CandleBuilderMessageAdapter. Fix BuildMode processing.
+* (feature) CandleBuilderMessageAdapter. Track From date.
+* (bug) Transaq. Fix sec code decoding (&amp;).
+* (bug) Bitmex. Process order fix.
+* (bug) Chart. Date on x-axis not clipped to control bounds.
+* (bug) Bittrex. Market depth fix and nullable order's field fix.
+* (bug) Yobit. Empty order book processing fix.
+* (feature) Chart. Removed obsolete xml exporting option.
+* (bug) CandleBuilderMessageAdapter. Do not switch to smaller tf in case successfully finished original tf series.
+* (bug) CandleBuilderMessageAdapter. Fix Load only subscription processing.
+* (bug) SecurityNativeIdMessageAdapter. Ignore candles with empty security id.
+* (bug) BasketMessageAdapter. Send error response for unhandled security lookup request.
+* (bug) Samples. Fix lookup all securities for non supported connections.
+* (bug) LMAX. Fix Level1 subscription.
+* (feature) LMAX. v1.9.0.2
+* (feature) FXCM. REST API support.
+* (feature) ExchangeBoard. IEX board.
+* (feature) AlphaVantage connector.
+* (feature) IEX connector.
+* (bug) Deribit. Fix news subscription.
+* (bug) Cryptopia. Order book request fix.
+* (bug) Fix CandleManager.Stopped event invoke for Connector source https://stocksharp.ru/posts/m/44515/
+* (feature) Zaif, Quoinex, Bitbank connectors.
+* (bug) Storage. Fix path for security id start from '.'.
+* (feature) IConnector. Methods RegisterMarketDepth, RegisterSecurity and RegisterTrades accepts BuildFrom argument.
+* (bug) Bitmex. Fix tick subscription https://stocksharp.ru/forum/9741/bitmex-poluchenie-sdelok-api-4412/
+* (bug) Bitmex. Fix candles state.
+* (bug) Bitmex. OL processing fix.
+* (feature) DevExpress v18.1.5
+* (bug) Yobit. Orders processing fix.
+* (bug) Fix processing non associated with transaction id order's messages.
+* (bug) https://stocksharp.ru/forum/9726/instrument-dlya-market-dannyh-s-identifikatorom-zaprosa-71415971-ne-naiden/ fix delete prev subscriptions.
+* (feature) FixServer. Auto unsubscribe for disconnected sessions.
+* (bug) CommissionRule. Fix rules processing with percentage values.
+* (feature) AlfaDirect. v4.0 support (market data only).
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

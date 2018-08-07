@@ -49,6 +49,8 @@ namespace SampleAlfa
 			InitializeComponent();
 			Instance = this;
 
+			Title = Title.Put("AlfaDirect");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();
@@ -167,7 +169,7 @@ namespace SampleAlfa
 
 						ShowSecurities.IsEnabled = ShowNews.IsEnabled =
 						ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = ShowStopOrders.IsEnabled =
-						ShowPortfolios.IsEnabled = true;
+						ShowPortfolios.IsEnabled = ShowTrades.IsEnabled = true;
 
 						Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
 					}

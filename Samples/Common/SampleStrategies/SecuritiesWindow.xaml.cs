@@ -142,6 +142,7 @@ namespace SampleStrategies
 		{
 			var wnd = new SecurityLookupWindow
 			{
+				ShowAllOption = MainWindow.Instance.Connector.Adapter.IsSupportSecuritiesLookupAll,
 				Criteria = new Security
 				{
 					Code = "IS"

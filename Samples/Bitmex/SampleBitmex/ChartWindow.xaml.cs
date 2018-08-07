@@ -14,14 +14,11 @@ namespace SampleBitmex
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
 
-		public ChartWindow(CandleSeries candleSeries, DateTime from, DateTime to)
+		public ChartWindow(CandleSeries candleSeries, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			InitializeComponent();
 
-			if (candleSeries == null)
-				throw new ArgumentNullException(nameof(candleSeries));
-
-			_candleSeries = candleSeries;
+			_candleSeries = candleSeries ?? throw new ArgumentNullException(nameof(candleSeries));
 			_trader = MainWindow.Instance.Trader;
 
 			Chart.ChartTheme = ChartThemes.ExpressionDark;

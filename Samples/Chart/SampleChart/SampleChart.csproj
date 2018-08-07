@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SampleChart</RootNamespace>
     <AssemblyName>SampleChart</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -41,23 +41,23 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Data.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Data.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Data.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.MetropolisDark.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisDark.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.MetropolisDark.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisDark.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.MetropolisLight.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisLight.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.MetropolisLight.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisLight.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016Black.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016Black.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016Black.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016Black.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v18.1.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Backup">
       <HintPath>..\..\..\References\Ecng.Backup.dll</HintPath>
