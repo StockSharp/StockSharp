@@ -1046,10 +1046,10 @@ P:StockSharp.Xaml.GuiConnector`1.TransactionAdapter/inheritdoc;DocStr8459
 P:StockSharp.Xaml.GuiConnector`1.MarketDataAdapter/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.Connect/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.Disconnect/inheritdoc;DocStr8459
-M:StockSharp.Xaml.GuiConnector`1.LookupSecurities(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.LookupSecurities(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.LookupSecurities(StockSharp.Messages.SecurityLookupMessage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.GetSecurityId(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
-M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio,StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.Messages.PortfolioLookupMessage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.BusinessEntities.Order,StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.Messages.OrderStatusMessage)/inheritdoc;DocStr8459

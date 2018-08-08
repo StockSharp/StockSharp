@@ -4603,13 +4603,14 @@ namespace StockSharp.Algo
 		/// Lookup securities, portfolios and orders.
 		/// </summary>
 		/// <param name="connector">The connection of interaction with trade systems.</param>
-		public static void LookupAll(this IConnector connector)
+		/// <param name="offlineMode">Offline mode handling message.</param>
+		public static void LookupAll(this IConnector connector, MessageOfflineModes offlineMode = MessageOfflineModes.Cancel)
 		{
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
-			connector.LookupSecurities(LookupAllCriteria);
-			connector.LookupPortfolios(new Portfolio());
+			connector.LookupSecurities(LookupAllCriteria, offlineMode: offlineMode);
+			connector.LookupPortfolios(new Portfolio(), offlineMode: offlineMode);
 			connector.LookupOrders(new Order());
 		}
 

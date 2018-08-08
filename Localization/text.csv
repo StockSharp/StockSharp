@@ -15058,3 +15058,6 @@ DocStr10587;Netout;Наружу
 DocStr10588;Order direction;Направление заявки
 DocStr10589;The delimiter, replacing first '.' in the path for instruments with id like .AA-CA@SPBEX. Is equal to '##DOT##';Разделитель, заменяющий первый символ '.' в пути для инструментов с идентификаторами вида .AA-CA@SPBEX. Равен '##DOT##'
 DocStr10590;Request withdraw account's info;Запрашивать информацию о счетах для вывода
+DocStr10591;Offline mode handling message;Оффлан режим обработки сообщения
+DocStr10592;{0} offline modes;{0} оффлайн режимы
+DocStr10593;Cancel message processing and create reply;Отменить обработку сообщения и создать ответ
