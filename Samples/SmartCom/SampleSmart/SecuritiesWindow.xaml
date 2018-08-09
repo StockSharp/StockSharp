@@ -18,6 +18,8 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
 			<Button x:Name="Quotes" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.XamlStr40}" Width="100" IsEnabled="False" Click="QuotesClick" />
@@ -30,6 +32,8 @@
 			<Button x:Name="NewStopOrder" Grid.Column="3" Width="120" IsEnabled="False" Click="NewStopOrderClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewStopOrder}" />...</TextBlock>
 			</Button>
+			<Button x:Name="Candles" Grid.Column="4" Content="{x:Static loc:LocalizedStrings.Candles}" Width="100" IsEnabled="False" Click="CandlesClick" />
+			<ComboBox x:Name="CandlesPeriods" Grid.Column="5" Width="100" SelectionChanged="CandlesPeriods_SelectionChanged" />
 		</Grid>
 	</Grid>
 </Window>
