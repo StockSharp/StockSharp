@@ -47,6 +47,8 @@ StockSharp API Change log
 * (bug) CommissionRule. Fix rules processing with percentage values.
 * (feature) AlfaDirect. v4.0 support (market data only).
 * (feature) Message. IgnoreOffline -> OfflineMode.
+* (feature) SampleSmartCandles removed.
+* (bug) SmartCOM. Fix candles and historical ticks requests.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

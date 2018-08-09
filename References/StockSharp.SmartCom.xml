@@ -1227,6 +1227,11 @@
             Возможные тайм-фреймы.
             </summary>
     </member>
+    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Tick">
+      <summary>
+            Тиковый тайм-фрейм.
+            </summary>
+    </member>
     <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Minute1">
       <summary>
             Минутный тайм-фрейм.
@@ -1348,49 +1353,6 @@
             Настройки конфигурации серверной части SmartCOM 3.x.
             </summary>
     </member>
-    <member name="P:StockSharp.SmartCom.SmartTrader.RealTimeCandleOffset">
-      <summary>
-            Временной отступ для нового запроса получение новой свечи. По-умолчанию равен 5 секундам.
-            </summary>
-      <remarks>Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечек.</remarks>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartTrader.RestartServiceTimeOut">
-      <summary>
-            Ограничение по времени для перезапуска службы SmartCOM.
-            Для отключения ограничения по времени необходимо указать <see cref="F:System.TimeSpan.Zero" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})">
-      <summary>
-            Подписаться на получение свечек.
-            </summary>
-      <param name="series">Серия свечек.</param>
-      <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-      <param name="to">Конечная дата, до которой необходимо получать данные.</param>
-      <param name="count">Количество свечей.</param>
-      <param name="transactionId">Номер транзакции.</param>
-      <param name="extensionInfo">Расширенная информация.</param>
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartTrader.RequestCandles(StockSharp.BusinessEntities.Security,StockSharp.SmartCom.SmartComTimeFrames,Ecng.ComponentModel.Range{System.DateTimeOffset})">
-      <summary>
-            Получить тайм-фрейм свечи от сервера SmartCOM.
-            </summary>
-      <param name="security">Инструмент, для которого необходимо начать получать исторические свечи.</param>
-      <param name="timeFrame">Тайм-фрейм.</param>
-      <param name="range">Диапазон времени, для которого нужно получить свечи.</param>
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartTrader.RequestCandles(StockSharp.BusinessEntities.Security,StockSharp.SmartCom.SmartComTimeFrames,System.DateTimeOffset,System.Int64,StockSharp.SmartCom.SmartComHistoryDirections)">
-      <summary>
-            Получить тайм-фрейм свечи от сервера SmartCOM.
-            </summary>
-      <param name="security">Инструмент, для которого необходимо начать получать исторические свечи.</param>
-      <param name="timeFrame">Тайм-фрейм.</param>
-      <param name="from">Временная точка отсчета.</param>
-      <param name="count">Количество свечек.</param>
-      <param name="direction">Направление поиска относительно параметра from. Если значение равно <see cref="F:StockSharp.SmartCom.SmartComHistoryDirections.Forward" />,
-            то данные ищутся от from в сторону увеличения времени. Если значение равно <see cref="F:StockSharp.SmartCom.SmartComHistoryDirections.Backward" />, то свечи
-            ищутся до from в сторону уменьшения времени.</param>
-    </member>
     <member name="M:StockSharp.SmartCom.SmartTrader.OnConnect">
       <summary>
             Подключиться к торговой системе.
@@ -1408,18 +1370,6 @@
       <param name="board">Торговая площадка. Если значение равно <see langword="null" />, то площадка не попадает в фильтр снятия заявок.</param>
       <param name="security">Инструмент. Если значение равно <see langword="null" />, то инструмент не попадает в фильтр снятия заявок.</param>
       <param name="securityType">Тип инструмента. Если значение равно <see langword="null" />, то тип не попадает в фильтр снятия заявок.</param>
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartTrader.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartTrader.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
     </member>
     <member name="T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox">
       <summary>
