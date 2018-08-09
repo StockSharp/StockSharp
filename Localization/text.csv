@@ -4859,6 +4859,8 @@ Bitbank;Bitbank;Bitbank
 Funding;Funding;Фондирование
 FundingCurrency;Currency used to fund the trade with.;Валюта, использующаяся для фондирования сделки.
 UserId;User id.;Идентификатор пользователя.
+Dll;DLL;DLL
+DllDesc;The element which is using compiled strategy, based on S#.API.;Элемент, использующий скомпилированную сборку со стратегией, написанной на S#.API.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13872,7 +13874,6 @@ DocStr9272;The Black-Scholes "Greeks" evaluation element;Элемент вычи
 DocStr9273;The Level1 element;Элемент Level1
 DocStr9274;Sparsed market depth element;Элемент, делающий стакан разреженным (пустые строчки цен)
 DocStr9275;Grouped market depth element;Элемент, группирующий стакан
-DocStr9276;The element which is using compiled strategy, based on S#.API;Элемент, использующий скомпилированную сборку со стратегией, написанной на S#.API
 DocStr9277;The command for the applying changes;Команда для применения изменений
 DocStr9278;The command for the adding references;Команда для добавления ссылок
 DocStr9279;The command for the removing references;Команда для удаления ссылок
