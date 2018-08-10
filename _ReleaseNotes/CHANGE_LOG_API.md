@@ -6,6 +6,7 @@ StockSharp API Change log
 * (bug) SmartCOM. Fix candles and historical ticks requests.
 * (bug) LocalMarketDataDrive. GetAvailableDataTypes fix.
 * (bug) CandleBuilderMessageAdapter. Fix start date for compression subscriptions.
+* (feature) IConnector. MarketDataSubscriptionFinished event to notify end of subscription packet.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.

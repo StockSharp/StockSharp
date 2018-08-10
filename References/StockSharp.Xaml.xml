@@ -4553,6 +4553,9 @@
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionFailed">
       <inheritdoc />
     </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFinished">
+      <inheritdoc />
+    </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.SessionStateChanged">
       <inheritdoc />
     </member>

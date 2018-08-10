@@ -393,6 +393,7 @@ E:StockSharp.BusinessEntities.IConnector.MarketDataSubscriptionSucceeded/summary
 E:StockSharp.BusinessEntities.IConnector.MarketDataSubscriptionFailed/summary;DocStr896
 E:StockSharp.BusinessEntities.IConnector.MarketDataUnSubscriptionSucceeded/summary;DocStr9350
 E:StockSharp.BusinessEntities.IConnector.MarketDataUnSubscriptionFailed/summary;DocStr9351
+E:StockSharp.BusinessEntities.IConnector.MarketDataSubscriptionFinished/summary;DocStr10596
 E:StockSharp.BusinessEntities.IConnector.SessionStateChanged/summary;DocStr897
 P:StockSharp.BusinessEntities.IConnector.TransactionIdGenerator/summary;DocStr3311
 M:StockSharp.BusinessEntities.IConnector.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/summary;DocStr803

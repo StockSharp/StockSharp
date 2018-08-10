@@ -3987,6 +3987,7 @@ E:StockSharp.Algo.Connector.MarketDataSubscriptionSucceeded/inheritdoc;DocStr845
 E:StockSharp.Algo.Connector.MarketDataSubscriptionFailed/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.MarketDataUnSubscriptionSucceeded/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.MarketDataUnSubscriptionFailed/inheritdoc;DocStr8459
+E:StockSharp.Algo.Connector.MarketDataSubscriptionFinished/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.SessionStateChanged/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.ValuesChanged/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.Restored/summary;DocStr899
@@ -7481,6 +7482,9 @@ M:StockSharp.Algo.TraderHelper.GetAdapter(StockSharp.Messages.IPortfolioMessageA
 M:StockSharp.Algo.TraderHelper.GetAdapter(StockSharp.Messages.IPortfolioMessageAdapterProvider,StockSharp.BusinessEntities.Portfolio)/param/provider;DocStr9328
 M:StockSharp.Algo.TraderHelper.GetAdapter(StockSharp.Messages.IPortfolioMessageAdapterProvider,StockSharp.BusinessEntities.Portfolio)/param/portfolio;Portfolio
 M:StockSharp.Algo.TraderHelper.GetAdapter(StockSharp.Messages.IPortfolioMessageAdapterProvider,StockSharp.BusinessEntities.Portfolio)/returns;DocStr9325
+M:StockSharp.Algo.TraderHelper.TimeFrameCandles(System.Collections.Generic.IEnumerable{StockSharp.Algo.DataType})/summary;DocStr10594
+M:StockSharp.Algo.TraderHelper.TimeFrameCandles(System.Collections.Generic.IEnumerable{StockSharp.Algo.DataType})/param/dataTypes;DocStr8483
+M:StockSharp.Algo.TraderHelper.TimeFrameCandles(System.Collections.Generic.IEnumerable{StockSharp.Algo.DataType})/returns;DocStr10595
 T:StockSharp.Algo.UserPermissions/summary;DocStr163
 F:StockSharp.Algo.UserPermissions.Save/summary;DocStr165
 F:StockSharp.Algo.UserPermissions.Load/summary;DocStr165

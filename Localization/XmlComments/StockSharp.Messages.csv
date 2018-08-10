@@ -636,6 +636,7 @@ P:StockSharp.Messages.MarketDataFinishedMessage.IsHistory/summary;DocStr9664
 M:StockSharp.Messages.MarketDataFinishedMessage.#ctor/summary;DocStr93
 M:StockSharp.Messages.MarketDataFinishedMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.MarketDataFinishedMessage.Clone/returns;DocStr1116
+M:StockSharp.Messages.MarketDataFinishedMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.IExtendableEntity/summary;DocStr4041
 P:StockSharp.Messages.IExtendableEntity.ExtensionInfo/summary;ExtendedInfo
 P:StockSharp.Messages.IExtendableEntity.ExtensionInfo/remarks;Str427

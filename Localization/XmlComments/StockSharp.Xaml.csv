@@ -1003,6 +1003,7 @@ E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionSucceeded/inheritdoc;DocS
 E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFailed/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionSucceeded/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionFailed/inheritdoc;DocStr8459
+E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFinished/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.SessionStateChanged/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.NewPortfolio/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.PortfolioChanged/inheritdoc;DocStr8459
