@@ -4646,5 +4646,15 @@ namespace StockSharp.Algo
 
 			return provider.GetAdapter(portfolio.Name);
 		}
+
+		/// <summary>
+		/// Get available candles types.
+		/// </summary>
+		/// <param name="dataTypes">Data types.</param>
+		/// <returns>Candles types.</returns>
+		public static IEnumerable<DataType> TimeFrameCandles(this IEnumerable<DataType> dataTypes)
+		{
+			return dataTypes.Where(t => t.MessageType == typeof(TimeFrameCandleMessage));
+		}
 	}
 }

@@ -253,7 +253,7 @@ namespace StockSharp.Algo.Testing
 
 			return DriveInternal
 				.GetAvailableDataTypes(securityId, StorageFormat)
-				.Where(t => t.MessageType == typeof(TimeFrameCandleMessage))
+				.TimeFrameCandles()
 				.Select(t => (TimeSpan)t.Arg)
 				.Distinct()
 				.OrderBy()
