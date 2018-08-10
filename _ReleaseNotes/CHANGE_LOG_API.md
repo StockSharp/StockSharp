@@ -5,6 +5,7 @@ StockSharp API Change log
 * (feature) SampleSmartCandles removed.
 * (bug) SmartCOM. Fix candles and historical ticks requests.
 * (bug) LocalMarketDataDrive. GetAvailableDataTypes fix.
+* (bug) CandleBuilderMessageAdapter. Fix start date for compression subscriptions.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
