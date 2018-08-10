@@ -417,7 +417,8 @@
         <Topic id="5d9f8c0d-d05c-4a39-9fad-7148df4411ad" visible="True" title="График позиции" />
       </Topic>
       <Topic id="c4aa5add-198d-432b-93fa-6ce60d0b7856" visible="True" title="Таблица редактирования свойств объектов" />
-      <Topic id="0e99f0d7-9d8a-4bb5-a914-6461677b267b" visible="True" isSelected="true" title="Окно настройки подключений" />
+      <Topic id="0e99f0d7-9d8a-4bb5-a914-6461677b267b" visible="True" title="Окно настройки подключений" />
+      <Topic id="0731b924-25de-4949-b24f-1f2fbe231b7c" visible="True" isSelected="true" title="Окно настройки рисков" />
     </Topic>
     <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Сообщения">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Описание" />

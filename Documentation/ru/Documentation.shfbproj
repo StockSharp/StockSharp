@@ -235,6 +235,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API_GUI_RiskWindow.aml" />
     <None Include="Topics\API_UI_ConnectorWindow.aml" />
     <None Include="Topics\Hydra_export_position.aml" />
     <None Include="Topics\Hydra_export_indicator.aml" />
@@ -3454,6 +3455,10 @@
     <Image Include="Art\API_GUI_ConnectorWindow.png">
       <ImageId>API_GUI_ConnectorWindow</ImageId>
       <AlternateText>API GUI Connector Window</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_RiskWindow.png">
+      <ImageId>API_GUI_RiskWindow</ImageId>
+      <AlternateText>API GUI Risk Window</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
