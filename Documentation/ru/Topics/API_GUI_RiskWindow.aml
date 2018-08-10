@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T: StockSharp.Alerts.AlertSettingsWindow</codeEntityReference> - 
+      	<codeEntityReference>T:StockSharp.Alerts.AlertSettingsWindow</codeEntityReference> - 
       	Специальное окно для настройки контроля рисков.
       </para>
       <para>
