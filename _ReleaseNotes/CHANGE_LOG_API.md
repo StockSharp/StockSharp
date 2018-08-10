@@ -7,6 +7,7 @@ StockSharp API Change log
 * (bug) LocalMarketDataDrive. GetAvailableDataTypes fix.
 * (bug) CandleBuilderMessageAdapter. Fix start date for compression subscriptions.
 * (feature) IConnector. MarketDataSubscriptionFinished event to notify end of subscription packet.
+* (feature) Diagram. Options elements description.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
