@@ -1,5 +1,11 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) Message. IgnoreOffline -> OfflineMode.
+* (feature) SampleSmartCandles removed.
+* (bug) SmartCOM. Fix candles and historical ticks requests.
+* (bug) LocalMarketDataDrive. GetAvailableDataTypes fix.
+
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
 * (bug) Candles. Fix process error response in case of multiples connections.
@@ -46,9 +52,6 @@ StockSharp API Change log
 * (feature) FixServer. Auto unsubscribe for disconnected sessions.
 * (bug) CommissionRule. Fix rules processing with percentage values.
 * (feature) AlfaDirect. v4.0 support (market data only).
-* (feature) Message. IgnoreOffline -> OfflineMode.
-* (feature) SampleSmartCandles removed.
-* (bug) SmartCOM. Fix candles and historical ticks requests.
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

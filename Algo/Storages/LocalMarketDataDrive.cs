@@ -382,7 +382,8 @@ namespace StockSharp.Algo.Storages
 
 			return InteropHelper
 				.GetDirectories(secPath)
-				.SelectMany(dir => Directory.GetFiles(dir, "candles_*" + ext).Select(IOPath.GetFileNameWithoutExtension))
+			    .SelectMany(dir => Directory.GetFiles(dir, "*" + ext))
+				.Select(IOPath.GetFileNameWithoutExtension)
 				.Distinct()
 				.Select(GetDataType)
 				.Where(t => t != null);
@@ -446,7 +447,7 @@ namespace StockSharp.Algo.Storages
 			if (info != null)
 				return info;
 
-			if (!fileName.ContainsIgnoreCase("candle"))
+			if (!fileName.StartsWithIgnoreCase("candles_"))
 				return null;
 
 			var parts = fileName.Split('_');
