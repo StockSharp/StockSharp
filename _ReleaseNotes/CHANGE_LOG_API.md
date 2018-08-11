@@ -1,6 +1,15 @@
 StockSharp API Change log
 ========================
 ## current:
+* (feature) Message. IgnoreOffline -> OfflineMode.
+* (feature) SampleSmartCandles removed.
+* (bug) SmartCOM. Fix candles and historical ticks requests.
+* (bug) LocalMarketDataDrive. GetAvailableDataTypes fix.
+* (bug) CandleBuilderMessageAdapter. Fix start date for compression subscriptions.
+* (feature) IConnector. MarketDataSubscriptionFinished event to notify end of subscription packet.
+* (feature) Diagram. Options elements description.
+
+## v4.4.13:
 * (bug) Monitor.Clear fix.
 * (bug) Candles. Fix process error response in case of multiples connections.
 * (bug) PortfolioGrid. Fix State column localization.
@@ -42,6 +51,10 @@ StockSharp API Change log
 * (feature) DevExpress v18.1.5
 * (bug) Yobit. Orders processing fix.
 * (bug) Fix processing non associated with transaction id order's messages.
+* (bug) https://stocksharp.ru/forum/9726/instrument-dlya-market-dannyh-s-identifikatorom-zaprosa-71415971-ne-naiden/ fix delete prev subscriptions.
+* (feature) FixServer. Auto unsubscribe for disconnected sessions.
+* (bug) CommissionRule. Fix rules processing with percentage values.
+* (feature) AlfaDirect. v4.0 support (market data only).
 
 ## v4.4.12:
 * (feature) Crypto connectors. BalanceCheckInterval for refresh an account balances in case of deposit and withdraw operation.

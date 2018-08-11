@@ -3372,6 +3372,11 @@
             Icon resource name.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.FileName">
+      <summary>
+            Path to assembly, where strategy executable code is.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement" />.

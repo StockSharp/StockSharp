@@ -597,7 +597,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void LookupSecurities(Security criteria, IMessageAdapter adapter = null)
+		public void LookupSecurities(Security criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -619,6 +619,7 @@ namespace StockSharp.Algo
 			var message = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode, criteria.Type));
 			message.TransactionId = TransactionIdGenerator.GetNextId();
 			message.Adapter = adapter;
+			message.OfflineMode = offlineMode;
 
 			LookupSecurities(message);
 		}
@@ -678,7 +679,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null)
+		public void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -690,6 +691,7 @@ namespace StockSharp.Algo
 				Currency = criteria.Currency,
 				PortfolioName = criteria.Name,
 				Adapter = adapter,
+				OfflineMode = offlineMode,
 			};
 
 			LookupPortfolios(msg);

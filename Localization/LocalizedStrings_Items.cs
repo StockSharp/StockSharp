@@ -48266,5 +48266,65 @@ namespace StockSharp.Localization
 		/// User id.
 		/// </summary>
 		public static string UserId => GetString(UserIdKey);
+
+		/// <summary>
+		/// DLL
+		/// </summary>
+		public const string DllKey = nameof(Dll);
+
+		/// <summary>
+		/// DLL
+		/// </summary>
+		public static string Dll => GetString(DllKey);
+
+		/// <summary>
+		/// The element which is using compiled strategy, based on S#.API.
+		/// </summary>
+		public const string DllDescKey = nameof(DllDesc);
+
+		/// <summary>
+		/// The element which is using compiled strategy, based on S#.API.
+		/// </summary>
+		public static string DllDesc => GetString(DllDescKey);
+
+		/// <summary>
+		/// Options hedging diagram element.
+		/// </summary>
+		public const string OptionsHedgeDiagramElementKey = nameof(OptionsHedgeDiagramElement);
+
+		/// <summary>
+		/// Options hedging diagram element.
+		/// </summary>
+		public static string OptionsHedgeDiagramElement => GetString(OptionsHedgeDiagramElementKey);
+
+		/// <summary>
+		/// Options quoting diagram element.
+		/// </summary>
+		public const string OptionsQuotingDiagramElementKey = nameof(OptionsQuotingDiagramElement);
+
+		/// <summary>
+		/// Options quoting diagram element.
+		/// </summary>
+		public static string OptionsQuotingDiagramElement => GetString(OptionsQuotingDiagramElementKey);
+
+		/// <summary>
+		/// Filtering derivatives by underlying asset diagram element.
+		/// </summary>
+		public const string OptionsStrikesDiagramElementKey = nameof(OptionsStrikesDiagramElement);
+
+		/// <summary>
+		/// Filtering derivatives by underlying asset diagram element.
+		/// </summary>
+		public static string OptionsStrikesDiagramElement => GetString(OptionsStrikesDiagramElementKey);
+
+		/// <summary>
+		/// The Black-Scholes "Greeks" evaluation element.
+		/// </summary>
+		public const string OptionsBlackScholesDiagramElementKey = nameof(OptionsBlackScholesDiagramElement);
+
+		/// <summary>
+		/// The Black-Scholes "Greeks" evaluation element.
+		/// </summary>
+		public static string OptionsBlackScholesDiagramElement => GetString(OptionsBlackScholesDiagramElementKey);
 	}
 }
