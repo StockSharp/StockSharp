@@ -420,7 +420,9 @@
       <Topic id="0e99f0d7-9d8a-4bb5-a914-6461677b267b" visible="True" title="Окно настройки подключений" />
       <Topic id="0731b924-25de-4949-b24f-1f2fbe231b7c" visible="True" title="Окно настройки рисков" />
       <Topic id="2a6b8dc6-2935-4fc7-8295-243cafcfd1d4" visible="True" title="Панель Купить/Продать" />
-      <Topic id="400fd089-d0fd-47a7-b14f-3e25bd577c05" visible="True" isSelected="true" title="Окно настройки комиссии" />
+      <Topic id="400fd089-d0fd-47a7-b14f-3e25bd577c05" visible="True" title="Окно настройки комиссии" />
+      <Topic id="076b8019-1f9f-4dbf-bd32-1abdac5fd7fe" visible="True" title="Таблица доступных рыночных данных" />
+      <Topic id="71196e37-b6ae-44ec-989d-0396e21af6fd" visible="True" isSelected="true" title="Окно настройки оповещений" />
     </Topic>
     <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Сообщения">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Описание" />
@@ -641,7 +643,7 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Установка S#.Designer" />
     <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Обновление на новую версию" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Быстрый запуск" />
@@ -797,7 +799,7 @@
       <Topic id="31a208d0-d543-47aa-8008-389c071118d4" visible="True" title="Симулятор торгов" />
       <Topic id="057382bf-1726-48e4-8563-df1069510823" visible="True" title="Привязка счета к подключению" />
     </Topic>
-    <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" title="Настройки">
+    <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" isExpanded="true" title="Настройки">
       <Topic id="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" visible="True" title="Настройки уведомлений" />
       <Topic id="57dc2e39-baa6-4c67-83a9-13278370a877" visible="True" title="Режим запуска" />
       <Topic id="7c04efc6-036c-4c25-855f-f086ee4c266d" visible="True" title="Сброс языка и настроек" />
