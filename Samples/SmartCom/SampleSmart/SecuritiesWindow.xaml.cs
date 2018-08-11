@@ -18,16 +18,19 @@ namespace SampleSmart
 	using System;
 	using System.Linq;
 	using System.Windows;
+	using System.Windows.Controls;
 
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.SmartCom;
 
 	public partial class SecuritiesWindow
 	{
@@ -37,6 +40,9 @@ namespace SampleSmart
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
+
+			CandlesPeriods.ItemsSource = SmartComTimeFrames.AllTimeFrames;
+			CandlesPeriods.SelectedIndex = 1;
 		}
 
 		protected override void OnClosed(EventArgs e)
@@ -59,8 +65,8 @@ namespace SampleSmart
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Depth.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled =
-			Quotes.IsEnabled = security != null;
+			Depth.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled = Quotes.IsEnabled = security != null;
+			TryEnableCandles();
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -157,6 +163,25 @@ namespace SampleSmart
 					trader.RegisterTrades(security);
 				}
 			}
+		}
+
+		private void CandlesClick(object sender, RoutedEventArgs e)
+		{
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, (TimeSpan)CandlesPeriods.SelectedItem);
+				new ChartWindow(series).Show();
+			}
+		}
+
+		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			TryEnableCandles();
+		}
+
+		private void TryEnableCandles()
+		{
+			Candles.IsEnabled = CandlesPeriods.SelectedItem != null && SecurityPicker.SelectedSecurity != null;
 		}
 	}
 }

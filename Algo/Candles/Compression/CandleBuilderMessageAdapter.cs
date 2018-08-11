@@ -298,7 +298,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var current = new MarketDataMessage
 			{
 				DataType = buildFrom.Value,
-				From = original.From,
+				From = lastTime,
 				To = original.To,
 				Count = original.Count,
 				MaxDepth = original.MaxDepth,

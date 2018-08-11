@@ -124,6 +124,11 @@ namespace StockSharp.Algo
 				}
 			}
 
+			public Security TryGetSecurity(long originalTransactionId)
+			{
+				return _pendingSubscriptions.TryGetValue(originalTransactionId)?.Item2;
+			}
+
 			public Security ProcessResponse(long originalTransactionId, out MarketDataMessage message)
 			{
 				var tuple = _pendingSubscriptions.TryGetValue(originalTransactionId);

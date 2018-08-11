@@ -217,16 +217,40 @@
 				}
 				default:
 				{
-					if (!message.IgnoreOffline)
+					switch (message.OfflineMode)
 					{
-						lock (_syncObject)
-						{
-							if (!_connected)
+						case MessageOfflineModes.None:
+							lock (_syncObject)
 							{
-								StoreMessage(message.Clone());
-								return;
+								if (!_connected)
+								{
+									StoreMessage(message.Clone());
+									return;
+								}
 							}
+
+							break;
+						case MessageOfflineModes.Force:
+							break;
+						case MessageOfflineModes.Cancel:
+						{
+							switch (message.Type)
+							{
+								case MessageTypes.SecurityLookup:
+									var secLookup = (SecurityLookupMessage)message;
+									RaiseNewOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = secLookup.TransactionId });
+									break;
+
+								case MessageTypes.PortfolioLookup:
+									var pfLookup = (PortfolioLookupMessage)message;
+									RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = pfLookup.TransactionId });
+									break;
+							}
+
+							return;
 						}
+						default:
+							throw new ArgumentOutOfRangeException();
 					}
 
 					break;

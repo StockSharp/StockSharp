@@ -285,12 +285,12 @@ namespace StockSharp.BusinessEntities
 		event Action<TimeSpan> MarketTimeChanged;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupSecurities(Security,IMessageAdapter)"/> received.
+		/// Lookup result <see cref="LookupSecurities(Security,IMessageAdapter,MessageOfflineModes)"/> received.
 		/// </summary>
 		event Action<Exception, IEnumerable<Security>> LookupSecuritiesResult;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupPortfolios(Portfolio,IMessageAdapter)"/> received.
+		/// Lookup result <see cref="LookupPortfolios(Portfolio,IMessageAdapter,MessageOfflineModes)"/> received.
 		/// </summary>
 		event Action<Exception, IEnumerable<Portfolio>> LookupPortfoliosResult;
 
@@ -313,6 +313,11 @@ namespace StockSharp.BusinessEntities
 		/// Error unsubscription market-data.
 		/// </summary>
 		event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
+
+		/// <summary>
+		/// Subscription market-data finished.
+		/// </summary>
+		event Action<Security, MarketDataFinishedMessage> MarketDataSubscriptionFinished;
 
 		/// <summary>
 		/// Session changed.
@@ -441,7 +446,8 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void LookupSecurities(Security criteria, IMessageAdapter adapter = null);
+		/// <param name="offlineMode">Offline mode handling message.</param>
+		void LookupSecurities(Security criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
 
 		/// <summary>
 		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="LookupSecuritiesResult"/>.
@@ -461,7 +467,8 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="criteria">The portfolio which fields will be used as a filter.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null);
+		/// <param name="offlineMode">Offline mode handling message.</param>
+		void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
 
 		/// <summary>
 		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.

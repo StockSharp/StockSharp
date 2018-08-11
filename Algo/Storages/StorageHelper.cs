@@ -705,7 +705,7 @@ namespace StockSharp.Algo.Storages
 			{
 				return _original.Drive.Drive
 					.GetAvailableDataTypes(_original.Security.ToSecurityId(), ((IMarketDataStorage<CandleMessage>)this).Serializer.Format)
-					.Where(t => t.MessageType == typeof(TimeFrameCandleMessage))
+					.TimeFrameCandles()
 					.Select(t => (TimeSpan)t.Arg)
 					.FilterSmallerTimeFrames(_timeFrame)
 					.OrderByDescending();
