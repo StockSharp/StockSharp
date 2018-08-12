@@ -26,6 +26,27 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
+	/// <see cref="Message"/> offline modes.
+	/// </summary>
+	public enum MessageOfflineModes
+	{
+		/// <summary>
+		/// None.
+		/// </summary>
+		None,
+
+		/// <summary>
+		/// Ignore offline mode and continue processing.
+		/// </summary>
+		Force,
+
+		/// <summary>
+		/// Cancel message processing and create reply.
+		/// </summary>
+		Cancel,
+	}
+
+	/// <summary>
 	/// A message containing market data or command.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
@@ -75,9 +96,9 @@ namespace StockSharp.Messages
 		public bool IsBack { get; set; }
 
 		/// <summary>
-		/// Ignore offline mode and continue processing.
+		/// Offline mode handling message.
 		/// </summary>
-		public bool IgnoreOffline { get; set; }
+		public MessageOfflineModes OfflineMode { get; set; }
 
 		/// <summary>
 		/// Source adapter. Can be <see langword="null" />.

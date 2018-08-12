@@ -4859,6 +4859,12 @@ Bitbank;Bitbank;Bitbank
 Funding;Funding;Фондирование
 FundingCurrency;Currency used to fund the trade with.;Валюта, использующаяся для фондирования сделки.
 UserId;User id.;Идентификатор пользователя.
+Dll;DLL;DLL
+DllDesc;The element which is using compiled strategy, based on S#.API.;Элемент, использующий скомпилированную сборку со стратегией, написанной на S#.API.
+OptionsHedgeDiagramElement;Options hedging diagram element.;Элемент диаграммы, хеджирующий опционы.
+OptionsQuotingDiagramElement;Options quoting diagram element.;Элемент диаграммы, котирующий опционы.
+OptionsStrikesDiagramElement;Filtering derivatives by underlying asset diagram element.;Элемент диаграммы, фильтрующий опционы по базовому активу.
+OptionsBlackScholesDiagramElement;The Black-Scholes "Greeks" evaluation element.;Элемент вычисления "греков" по формуле Black-Scholes.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13868,11 +13874,9 @@ DocStr9268;Restore the state of some models to before the current state;Восс
 DocStr9269;Restore the state of some models to after the current state;Восстановить состояние после текущего момента
 DocStr9270;Is composition contains element;Пустой ли сложный элемент
 DocStr9271;Black-Scholes "greeks";"Греки" модели Black-Scholes
-DocStr9272;The Black-Scholes "Greeks" evaluation element;Элемент вычисления "греков" по формуле Black-Scholes
 DocStr9273;The Level1 element;Элемент Level1
 DocStr9274;Sparsed market depth element;Элемент, делающий стакан разреженным (пустые строчки цен)
 DocStr9275;Grouped market depth element;Элемент, группирующий стакан
-DocStr9276;The element which is using compiled strategy, based on S#.API;Элемент, использующий скомпилированную сборку со стратегией, написанной на S#.API
 DocStr9277;The command for the applying changes;Команда для применения изменений
 DocStr9278;The command for the adding references;Команда для добавления ссылок
 DocStr9279;The command for the removing references;Команда для удаления ссылок
@@ -13881,10 +13885,7 @@ DocStr9281;The source diagram element socket;Сокет элемента исх�
 DocStr9282;Implied volatility market depth element;Элемент конвертации стакана в IV
 DocStr9283;Number of orders;Количество заявок
 DocStr9284;Index in sockets list;Индекс в списке сокетов
-DocStr9285;Options hedging diagram element;Элемент диаграммы, хеджирующий опционы
 DocStr9286;Options quoting types;Типы котирования опционов
-DocStr9287;Options quoting diagram element;Элемент диаграммы, котирующий опционы
-DocStr9288;Filtering derivatives by underlying asset diagram element;Элемент диаграммы, фильтрующий опционы по базовому активу
 DocStr9289;The volume of bids and asks;Объем бидов и офферов
 DocStr9290;Raise changed event when property is changed;Вызывать событие изменения при изменении свойства
 DocStr9293;The element which is using strategy, based on S#.API;Элемент, использующий стратегию, написанную на S#. API
@@ -15058,3 +15059,9 @@ DocStr10587;Netout;Наружу
 DocStr10588;Order direction;Направление заявки
 DocStr10589;The delimiter, replacing first '.' in the path for instruments with id like .AA-CA@SPBEX. Is equal to '##DOT##';Разделитель, заменяющий первый символ '.' в пути для инструментов с идентификаторами вида .AA-CA@SPBEX. Равен '##DOT##'
 DocStr10590;Request withdraw account's info;Запрашивать информацию о счетах для вывода
+DocStr10591;Offline mode handling message;Оффлан режим обработки сообщения
+DocStr10592;{0} offline modes;{0} оффлайн режимы
+DocStr10593;Cancel message processing and create reply;Отменить обработку сообщения и создать ответ
+DocStr10594;Get available candles types;Получить доступные типы свечей
+DocStr10595;Candles types;Типы свечей
+DocStr10596;Subscription market-data finished;Подписка на маркет-данные закончена

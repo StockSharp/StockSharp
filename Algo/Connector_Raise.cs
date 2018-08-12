@@ -205,6 +205,9 @@ namespace StockSharp.Algo
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
 
 		/// <inheritdoc />
+		public event Action<Security, MarketDataFinishedMessage> MarketDataSubscriptionFinished;
+
+		/// <inheritdoc />
 		public event Action<ExchangeBoard, SessionStates> SessionStateChanged;
 
 		/// <inheritdoc />
@@ -556,6 +559,12 @@ namespace StockSharp.Algo
 		{
 			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security?.Id, message.DataType, message.Error);
 			MarketDataUnSubscriptionFailed?.Invoke(security, message, error);
+		}
+
+		private void RaiseMarketDataSubscriptionFinished(Security security, MarketDataFinishedMessage message)
+		{
+			this.AddDebugLog("Market data finished: {0} {1}", security?.Id, message);
+			MarketDataSubscriptionFinished?.Invoke(security, message);
 		}
 
 		/// <summary>

@@ -614,13 +614,13 @@ F:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks.Gamma/summary;Gamma
 F:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks.Vega/summary;Vega
 F:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks.Theta/summary;Theta
 F:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks.Rho/summary;Rho
-T:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement/summary;DocStr9272
+T:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement/summary;OptionsBlackScholesDiagramElement
 P:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement.IconName/summary;DocStr9214
 P:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement.UseBlackModel/summary;DocStr8222
 P:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement.ValueType/summary;DocStr1145
 M:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement.#ctor/summary;DocStr1
-T:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement/summary;DocStr9285
+T:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement/summary;OptionsHedgeDiagramElement
 P:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement.IconName/summary;DocStr9214
 P:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement.HedgeType/summary;DocStr9726
@@ -630,7 +630,7 @@ M:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement.OnStop/summary;Doc
 T:StockSharp.Xaml.Diagram.Elements.OptionsQuotingTypes/summary;DocStr9286
 F:StockSharp.Xaml.Diagram.Elements.OptionsQuotingTypes.Volalitity/summary;DocStr410
 F:StockSharp.Xaml.Diagram.Elements.OptionsQuotingTypes.TheorPrice/summary;DocStr408
-T:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement/summary;DocStr9287
+T:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement/summary;OptionsQuotingDiagramElement
 P:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.IconName/summary;DocStr9214
 P:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.QuotingType/summary;DocStr9727
@@ -640,7 +640,7 @@ P:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.Max/summary;Xaml
 M:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.OnStop/summary;DocStr7894
-T:StockSharp.Xaml.Diagram.Elements.OptionsStrikesDiagramElement/summary;DocStr9288
+T:StockSharp.Xaml.Diagram.Elements.OptionsStrikesDiagramElement/summary;OptionsStrikesDiagramElement
 P:StockSharp.Xaml.Diagram.Elements.OptionsStrikesDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.OptionsStrikesDiagramElement.IconName/summary;DocStr9214
 P:StockSharp.Xaml.Diagram.Elements.OptionsStrikesDiagramElement.OptionType/summary;Str551
@@ -862,9 +862,10 @@ M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.Save(Ecng.Serializ
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.IsTypeCompatible(System.Type)/summary;DocStr9840
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.IsTypeCompatible(System.Type)/param/type;Str1963
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.IsTypeCompatible(System.Type)/returns;DocStr8659
-T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement/summary;DocStr9276
+T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement/summary;DllDesc
 P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.IconName/summary;DocStr9214
+P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.FileName/summary;Str3191
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStop/summary;DocStr7894
