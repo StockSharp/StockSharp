@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="956b3163-c537-4e1d-af29-cf80b633db3c" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -32,6 +32,9 @@
   		</listItem>
   		<listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.OptionPositionChart</codeEntityReference> - графический компонент, показывающий позиции и "греки" опционов относительно базового актива. См. <link xlink:href="5d9f8c0d-d05c-4a39-9fad-7148df4411ad">OptionPositionChart</link>.</para>
+  		</listItem>
+  		<listItem>
+  			<para><codeEntityReference>T:StockSharp.Xaml.Charting.Chart.OrderCreationMode</codeEntityReference> - Режим создания заявок, когда установлен позволяет создавать заявки из графика. По умолчанию выключено.</para>
   		</listItem>
 	</list>
 	
