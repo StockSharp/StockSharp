@@ -15,7 +15,7 @@
 			</Grid.RowDefinitions>
 
 			<StackPanel Orientation="Horizontal">
-				<GroupBox Padding="5" VerticalAlignment="Center">
+				<GroupBox Padding="5">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="{x:Static loc:LocalizedStrings.Str1242}" VerticalAlignment="Center"/>
 						<sx:CandleSettingsEditor x:Name="SeriesEditor" Margin="3,0" />
@@ -31,28 +31,18 @@
 					</StackPanel>
 				</GroupBox>
 
-				<ComboBox Margin="5,0,0,0" x:Name="Theme" SelectionChanged="OnThemeSelectionChanged" VerticalAlignment="Center" Width="100">
+				<ComboBox Margin="10,0,0,0" x:Name="Theme" SelectionChanged="OnThemeSelectionChanged" VerticalAlignment="Center" Width="150">
 					<ComboBoxItem Content="{x:Static dx:Theme.Office2016BlackName}"/>
 					<ComboBoxItem Content="{x:Static dx:Theme.Office2016WhiteName}"/>
 					<ComboBoxItem Content="{x:Static dx:Theme.MetropolisDarkName}"/>
 					<ComboBoxItem Content="{x:Static dx:Theme.MetropolisLightName}"/>
 				</ComboBox>
 
-				<GroupBox Margin="0" Padding="0" VerticalAlignment="Center">
-					<StackPanel Orientation="Vertical">
-						<CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="3,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center" Checked="IsRealtime_OnChecked" Unchecked="IsRealtime_OnChecked" />
-						<CheckBox Content="{x:Static loc:LocalizedStrings.CustomColors}" Margin="3,0,0,0" x:Name="CustomColors" Checked="CustomColors_Changed" Unchecked="CustomColors_Changed" VerticalAlignment="Center"/>
-					</StackPanel>
-				</GroupBox>
+				<CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="10,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center" Checked="IsRealtime_OnChecked" Unchecked="IsRealtime_OnChecked" />
 
-				<xaml:TimeZoneComboBox Margin="5,0,0,0" SelectedTimeZone="{Binding TimeZone, Mode=TwoWay, ElementName=Chart}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="100" ToolTip="Chart time zone"/>
+				<CheckBox Content="{x:Static loc:LocalizedStrings.CustomColors}" Margin="10,0,0,0" x:Name="CustomColors" Checked="CustomColors_Changed" Unchecked="CustomColors_Changed" VerticalAlignment="Center"/>
 
-				<GroupBox Header="Annotations" Margin="3,2" Padding="0">
-					<StackPanel Orientation="Horizontal">
-						<Button x:Name="_btnNewAnnotation" Content="new" Margin="4,0" IsEnabled="False" Click="NewAnnotation_Click" ToolTip="Create new annotation from code" VerticalAlignment="Center"/>
-						<Button x:Name="_btnModifyAnnotation" Content="modify" Margin="4,0" IsEnabled="False" Click="ModifyAnnotation_Click" ToolTip="Modify annotation from code" VerticalAlignment="Center"/>
-					</StackPanel>
-				</GroupBox>
+				<xaml:TimeZoneComboBox Margin="5,0,0,0" SelectedTimeZone="{Binding TimeZone, Mode=TwoWay, ElementName=Chart}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="150" ToolTip="Chart time zone"/>
 			</StackPanel>
 
 			<sx:ChartPanel x:Name="Chart" IsInteracted="True" Grid.Row="1"/>

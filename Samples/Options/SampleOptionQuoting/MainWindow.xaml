@@ -61,7 +61,7 @@
 				<xaml:OptionDesk x:Name="Desk" />
 			</TabItem>
 			<TabItem Header="Smile">
-				<xaml:OptionVolatilitySmileChart SmileStep="500" x:Name="SmileChart" />
+				<xaml:OptionVolatilitySmileChart x:Name="SmileChart" />
 			</TabItem>
 		</TabControl>
 	</Grid>

@@ -221,17 +221,8 @@ namespace SampleOptionQuoting
 
 			Instance = this;
 
-			var loaded = false;
-
-			Loaded += (sender, args) =>
-			{
-				if(loaded) return;
-
-				loaded = true;
-
-				DrawTestData();
-				InitConnector();
-			};
+			DrawTestData();
+			InitConnector();
 		}
 
 		private void DrawTestData()
@@ -526,13 +517,13 @@ namespace SampleOptionQuoting
 				if (strike == null)
 					continue;
 
-				if(_callBidSmile != null) TryAddSmileItem(_callBidSmile, strike.Value, row.Call?.ImpliedVolatilityBestBid);
-				if(_callAskSmile != null) TryAddSmileItem(_callAskSmile, strike.Value, row.Call?.ImpliedVolatilityBestAsk);
-				if(_callLastSmile != null) TryAddSmileItem(_callLastSmile, strike.Value, row.Call?.ImpliedVolatilityLastTrade);
+				TryAddSmileItem(_callBidSmile, strike.Value, row.Call?.ImpliedVolatilityBestBid);
+				TryAddSmileItem(_callAskSmile, strike.Value, row.Call?.ImpliedVolatilityBestAsk);
+				TryAddSmileItem(_callLastSmile, strike.Value, row.Call?.ImpliedVolatilityLastTrade);
 
-				if(_putBidSmile != null) TryAddSmileItem(_putBidSmile, strike.Value, row.Put?.ImpliedVolatilityBestBid);
-				if(_putAskSmile != null) TryAddSmileItem(_putAskSmile, strike.Value, row.Put?.ImpliedVolatilityBestAsk);
-				if(_putLastSmile != null) TryAddSmileItem(_putLastSmile, strike.Value, row.Put?.ImpliedVolatilityLastTrade);
+				TryAddSmileItem(_putBidSmile, strike.Value, row.Put?.ImpliedVolatilityBestBid);
+				TryAddSmileItem(_putAskSmile, strike.Value, row.Put?.ImpliedVolatilityBestAsk);
+				TryAddSmileItem(_putLastSmile, strike.Value, row.Put?.ImpliedVolatilityLastTrade);
 			}
 		}
 
@@ -550,12 +541,12 @@ namespace SampleOptionQuoting
 
 		private void ClearSmiles()
 		{
-			_putBidSmile?.Clear();
-			_putAskSmile?.Clear();
-			_putLastSmile?.Clear();
-			_callBidSmile?.Clear();
-			_callAskSmile?.Clear();
-			_callLastSmile?.Clear();
+			_putBidSmile.Clear();
+			_putAskSmile.Clear();
+			_putLastSmile.Clear();
+			_callBidSmile.Clear();
+			_callAskSmile.Clear();
+			_callLastSmile.Clear();
 		}
 
 		private void Assets_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
