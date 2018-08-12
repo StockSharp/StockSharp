@@ -77,10 +77,11 @@ namespace StockSharp.Algo.Indicators
 
 			if (Ema.IsFormed)
 			{
-				return Roc.Process(emaValue);
+				var val = Roc.Process(emaValue);
+				return new DecimalIndicatorValue(this, val.GetValue<decimal>());
 			}
 
-			return input;
+			return new DecimalIndicatorValue(this);
 		}
 
 		/// <summary>
