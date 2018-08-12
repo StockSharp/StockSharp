@@ -1,4 +1,6 @@
-﻿ResetTimeZone;Reset axis time zone;Сбросить часовой пояс оси
+﻿DashedLine;Dashed line;Пунктирная линия
+SenkouRange;Senkou range;Диапазон Senkou
+ResetTimeZone;Reset axis time zone;Сбросить часовой пояс оси
 ShowHiddenAxes;Show hidden axes;Показать скрытые оси
 AreaColor;Area color;Цвет области
 BuyBlinkColor;Buy blink color;Цвет мерцания Buy

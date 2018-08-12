@@ -18,6 +18,26 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Dashed line
+		/// </summary>
+		public const string DashedLineKey = nameof(DashedLine);
+
+		/// <summary>
+		/// Dashed line
+		/// </summary>
+		public static string DashedLine => GetString(DashedLineKey);
+
+		/// <summary>
+		/// Senkou range
+		/// </summary>
+		public const string SenkouRangeKey = nameof(SenkouRange);
+
+		/// <summary>
+		/// Senkou range
+		/// </summary>
+		public static string SenkouRange => GetString(SenkouRangeKey);
+
+		/// <summary>
 		/// Show hidden axes
 		/// </summary>
 		public const string ShowHiddenAxesKey = nameof(ShowHiddenAxes);

@@ -82,16 +82,18 @@ namespace StockSharp.Algo.Indicators
 			var ema1Value = _ema1.Process(input);
 
 			if (!_ema1.IsFormed)
-				return input;
+				return new DecimalIndicatorValue(this);
 
 			var ema2Value = _ema2.Process(ema1Value);
 
 			if (!_ema2.IsFormed)
-				return input;
+				return new DecimalIndicatorValue(this);
 
 			var ema3Value = _ema3.Process(ema2Value);
 
-			return _ema3.IsFormed ? _roc.Process(ema3Value) : input;
+			return _ema3.IsFormed ? 
+				new DecimalIndicatorValue(this, _roc.Process(ema3Value).GetValue<decimal>()) :
+				new DecimalIndicatorValue(this);
 		}
 	}
 }

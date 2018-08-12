@@ -140,7 +140,7 @@ namespace SamplePerformance
 
 				_indicatorElement = new ChartIndicatorElement
 				{
-					DrawStyle = ChartIndicatorDrawStyles.Line,
+					Style = ChartIndicatorDrawStyles.Line,
 					AntiAliasing = true,
 					StrokeThickness = 1,
 					Color = Colors.Blue,

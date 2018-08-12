@@ -95,7 +95,6 @@ namespace StockSharp.Configuration
 	using StockSharp.Twime;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
-	using StockSharp.Xaml.Charting.IndicatorPainters;
 	using StockSharp.Yobit;
 	using StockSharp.Zaif;
 
@@ -315,15 +314,15 @@ namespace StockSharp.Configuration
 			{
 				var ns = typeof(IIndicator).Namespace;
 
-				var rendererTypes = typeof(Chart).Assembly
+				var chartIndicatorTypes = typeof(Chart).Assembly
 					.GetTypes()
-					.Where(t => !t.IsAbstract && typeof(BaseChartIndicatorPainter).IsAssignableFrom(t) && t.GetAttribute<IndicatorAttribute>() != null)
+					.Where(t => !t.IsAbstract && typeof(ChartIndicatorElement).IsAssignableFrom(t) && t.GetAttribute<IndicatorAttribute>() != null)
 					.ToDictionary(t => t.GetAttribute<IndicatorAttribute>().Type);
 
 				_indicatorTypes = typeof(IIndicator).Assembly
 					.GetTypes()
 					.Where(t => t.Namespace == ns && !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t) && t.GetConstructor(Type.EmptyTypes) != null && t.GetAttribute<BrowsableAttribute>()?.Browsable != false)
-					.Select(t => new IndicatorType(t, rendererTypes.TryGetValue(t)))
+					.Select(t => new IndicatorType(t, chartIndicatorTypes.TryGetValue(t) ?? typeof(ChartIndicatorElement)))
 					.Concat(_customIndicators)
 					.OrderBy(t => t.Name)
 					.ToArray();
