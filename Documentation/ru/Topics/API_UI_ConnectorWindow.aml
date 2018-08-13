@@ -7,10 +7,10 @@
       </para>
       <para>
       Вызов данного окна следует выполнять через метод расширение 
-      <codeEntityReference>M:StockSharp.Configuration.Configure</codeEntityReference> 
+      <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference> 
       в который передается <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
       и родительское окно. При удачной настройке метод расширение 
-      <codeEntityReference>M:StockSharp.Configuration.Configure</codeEntityReference> 
+      <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference>
       вернет значение "true". 
       Ниже приведен код вызова окна настройки подключения коннектора и сохранения настроек в файл. 
       </para>

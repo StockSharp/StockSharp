@@ -58,7 +58,7 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 				  <codeEntityReference qualifyHint="true">P:StockSharp.AlfaDirect.AlfaOrderCondition.StopPrice</codeEntityReference> - условие лимитной стоп-заявки.
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference qualifyHint="true">P:StockSharp.AlfaDirect.AlfaOrderCondition.TargetPrice</codeEntityReference> - условие лимитной стоп-заявки + цель.
+				  <codeEntityReference qualifyHint="true">P:StockSharp.AlfaDirect.AlfaOrderCondition.TakeProfit</codeEntityReference> - условие лимитной стоп-заявки + цель.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true">P:StockSharp.AlfaDirect.AlfaOrderCondition.Level</codeEntityReference> - заявки "скользящий стоп".

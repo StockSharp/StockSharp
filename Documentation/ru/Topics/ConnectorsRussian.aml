@@ -11,7 +11,7 @@
 			<listItem><codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference> для <token>plaza</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.Transaq.TransaqTrader</codeEntityReference> для <token>transaq</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.Micex.MicexTrader</codeEntityReference> для <token>micexbridge</token></listItem>
-			<listItem><codeEntityReference>T:StockSharp.Alor.AlorTrader</codeEntityReference> для <token>alor</token></listItem>
+			<!--listItem><codeEntityReference>T:StockSharp.Alor.AlorTrader</codeEntityReference> для <token>alor</token></listItem-->
 			<listItem><codeEntityReference>T:StockSharp.SpbEx.SpbExTrader</codeEntityReference> для <token>spbex</token></listItem>
 		</list>
 	</introduction>

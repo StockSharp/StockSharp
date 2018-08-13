@@ -35,13 +35,13 @@
 				  <alert class="note">
 					  Если стакан для необходимого инструмента еще ни разу не открывался в <token>quik</token>-е, то <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>
 					  самостоятельно создаст окно в терминале и настроит его при вызове метода 
-					  <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>
+					  <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference>
 					  из кода программы. Или можно принудительно закрыть стакан в <token>quik</token>-е и он будет переоткрыт с уже корректными для <token>stocksharp</token>
 					  настройками.
 				  </alert>
 				  <alert class="caution">
 					  Если в таблице "Инструменты" включена сортировка по одному из столбцов, то при автоматическом открытии стакана методом 
-					  <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>, 
+					  <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference>, 
 					  любая сортировка будет отменена.
 				  </alert>
 				  <para>
@@ -67,7 +67,7 @@
 			  <content>
 				  <para>
 					  После настройки стакана, он будет доступен для экспорта. Для того, чтобы начать получать данные по <token>dde</token> из стакана в программу
-					  необходимо вызвать метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:
+					  необходимо вызвать метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference>:
 			 	  </para>
 					  <code language="C#">trader.RegisterMarketDepth(lkoh);</code>
 			  </content>
