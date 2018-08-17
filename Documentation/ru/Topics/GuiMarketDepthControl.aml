@@ -2,6 +2,7 @@
 <topic id="3a23bf32-fcbd-409b-99b3-2ff1b953c85a" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+          <mediaLink><image placement="left" xlink:href="GUI_MarketDepthControl" /></mediaLink>
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.MarketDepthControl</codeEntityReference> - графический компонент для отображения стакана.
       	Компонент позволяет отображать котировки и собственные заявки.
@@ -34,10 +35,10 @@
 		</list>
 		
 	  <para>
-Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/BarChart/SampleBarChart</legacyItalic>.
+Ниже показаны фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/BarChart/SampleBarChart</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_MarketDepthControl" /></mediaLink>
+
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

@@ -2,6 +2,7 @@
 <topic id="583c9ad6-8798-4167-a6a1-667e9929fe2d" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+          <mediaLink><image placement="left" xlink:href="GUI_orderlog" /></mediaLink>
     <para>
       	<codeEntityReference>T:StockSharp.Xaml.OrderLogGrid</codeEntityReference> - графический компонент для отображения лога заявок (
       	<codeEntityReference>T:StockSharp.BusinessEntities.OrderLogItem</codeEntityReference>).
@@ -24,10 +25,10 @@
 		</list>
 		
 	  <para>
-Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/ITCH/SampleITCH</legacyItalic>.
+Ниже показаны фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/ITCH/SampleITCH</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_orderlog" /></mediaLink>
+
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

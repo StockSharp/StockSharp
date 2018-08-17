@@ -6,6 +6,7 @@
       	<codeEntityReference>T:StockSharp.Xaml.BuySellPanel</codeEntityReference> - 
       	Специальная панель дающая возможность быстро выставить заявку по лучшим ценам.
       </para>
+      <mediaLink><image placement="left" xlink:href="API_GUI_BuySell" /></mediaLink>
       <para>
       
       Ниже приведен пример кода добавления панели <codeEntityReference>T:StockSharp.Xaml.BuySellPanel</codeEntityReference>. 
@@ -51,7 +52,7 @@
 		}
 	  				]]>
 				   </code>
-    <mediaLink><image placement="left" xlink:href="API_GUI_BuySell" /></mediaLink>
+    
     </introduction>
    </developerConceptualDocument>
 </topic>

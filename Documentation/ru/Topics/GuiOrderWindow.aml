@@ -5,6 +5,7 @@
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.OrderWindow</codeEntityReference> - окно для создания заявки.
       </para>
+      <mediaLink><image placement="left" xlink:href="GUI_OrderWindow" /></mediaLink>
       <para>
        <legacyBold>Основные свойства</legacyBold>
        </para>
@@ -25,10 +26,10 @@
 		</list>
 		
 	  <para>
-Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+Ниже показаны фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_OrderWindow" /></mediaLink>
+      
       
               <code title="C#" language="C#">
               		<![CDATA[

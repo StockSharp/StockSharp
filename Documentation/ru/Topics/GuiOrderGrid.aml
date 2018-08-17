@@ -7,7 +7,7 @@
       событий: <codeEntityReference qualifyHint="true">E:StockSharp.Xaml.OrderGrid.OrderRegistering</codeEntityReference>, 
       <codeEntityReference qualifyHint="true">E:StockSharp.Xaml.OrderGrid.OrderReRegistering</codeEntityReference> или 
       <codeEntityReference qualifyHint="true">E:StockSharp.Xaml.OrderGrid.OrderCanceling</codeEntityReference> соответственно.</para>
-      
+      <mediaLink><image placement="left" xlink:href="GUI_OrderGrid" /></mediaLink>
 	<alert class="note">
   		<para>Сама операция (регистрация, замена, отмена) не выполняется. Соответствующий код нужно прописывать в обработчиках событий самостоятельно.</para>
 	</alert>
@@ -43,10 +43,10 @@
 
       
      	  <para>
-Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+Ниже показаны фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_OrderGrid" /></mediaLink>
+      
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

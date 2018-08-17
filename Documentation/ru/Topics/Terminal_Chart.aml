@@ -26,7 +26,7 @@
 предварительно указать <legacyBold>Инструмент</legacyBold> и <legacyBold>Портфель</legacyBold> 
 по которым будут выставляться заявки.</para>
 <para>Заявки на покупку будут выставляться по сочетанию клавиш <legacyBold>Ctrl + ЛКМ</legacyBold>.  </para>
-<para>Заявки на продажу будут будут выставляться по сочетанию клавиш <legacyBold>Ctrl + ПКМ</legacyBold>. </para> 
+<para>Заявки на продажу будут выставляться по сочетанию клавиш <legacyBold>Ctrl + ПКМ</legacyBold>. </para> 
 <mediaLink>
 <image placement="center" xlink:href="Terminal_Panel_graphics_01"/>
 </mediaLink>

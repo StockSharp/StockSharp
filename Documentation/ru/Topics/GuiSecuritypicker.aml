@@ -6,6 +6,7 @@
       Компонент позволяет фильтровать список инструментов по их типу. Также этот компонент может использоваться для отображения финансовой информации (полей level1), как показано в разделе
       <link xlink:href="de52af78-ec80-45b4-9820-0052f8add762">SecurityGrid</link>.
       </para>
+       <mediaLink><image placement="left" xlink:href="GUI_SecurityPicker2" /></mediaLink>	
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.SecurityPicker</codeEntityReference> состоит из:
       </para>	
@@ -68,14 +69,14 @@
 	  </list>
 	  
       <para>
-       Ниже показаны внешний вид компонента и фрагмент кода с его использованием, взятый из примера <legacyItalic>Samples/Quik/Sample</legacyItalic> .
+       Ниже показан фрагмент кода с его использованием, взятый из примера <legacyItalic>Samples/Quik/Sample</legacyItalic> .
       </para>
  <section>
  
  <sections>
  	<section address="SubSection1">
      	<content>
-              <mediaLink><image placement="left" xlink:href="GUI_SecurityPicker2" /></mediaLink>	
+             
               <code title="XAML" language="XAML">
 	  		<![CDATA[
 <Window x:Class="Sample.SecuritiesWindow"

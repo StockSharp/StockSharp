@@ -2,10 +2,12 @@
 <topic id="0731b924-25de-4949-b24f-1f2fbe231b7c" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+        
       <para>
       	<codeEntityReference>T:StockSharp.Alerts.AlertSettingsWindow</codeEntityReference> - 
       	Специальное окно для настройки контроля рисков.
       </para>
+      <mediaLink><image placement="left" xlink:href="API_GUI_RiskWindow" /></mediaLink>
       <para>
       
       Ниже приведен пример кода вызова окна настройки контроля рисков для стратегии. 
@@ -26,7 +28,7 @@
 		}
 	  				]]>
 				   </code>
-    <mediaLink><image placement="left" xlink:href="API_GUI_RiskWindow" /></mediaLink>
+
     </introduction>
    </developerConceptualDocument>
 </topic>

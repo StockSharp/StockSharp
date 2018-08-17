@@ -6,6 +6,7 @@
       	<codeEntityReference>T:StockSharp.Xaml.ContinuousSecurityWindow</codeEntityReference> -  визуальный редактор для создания <legacyItalic>непрерывных</legacyItalic> 
       	(<codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference>) инструментов. См. <link xlink:href="0f7cceee-bb7c-4f24-a266-ed900cb8e557">Непрерывный фьючерс</link>.
       </para>
+            <mediaLink><image placement="left" xlink:href="HydraGluingCSCustom" /></mediaLink>
       <para>
   		Этот компонент включает: 
   	 </para>
@@ -59,10 +60,10 @@
 		</list>
 		
 	  <para>
-      	Ниже приведен внешний вид компонента и фрагмент кода с его использованием. 
+      	Ниже приведен фрагмент кода с его использованием. 
       </para>
       
-      <mediaLink><image placement="left" xlink:href="HydraGluingCSCustom" /></mediaLink>
+
 
 		
   <code title="C#" language="C#">

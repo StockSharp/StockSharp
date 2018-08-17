@@ -2,6 +2,7 @@
 <topic id="8ec4f4b6-e7c8-4bf0-b05e-1d98960ca45f" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+          <mediaLink><image placement="left" xlink:href="GUI_TradeGrid" /></mediaLink>
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.TradeGrid</codeEntityReference> - таблица сделок.
       </para>
@@ -22,10 +23,10 @@
 		</list>
 		
 	  <para>
-Ниже показан внеший вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+Ниже показаны фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_TradeGrid" /></mediaLink>
+
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[
