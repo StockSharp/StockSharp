@@ -8,6 +8,8 @@ StockSharp API Change log
 * (bug) CandleBuilderMessageAdapter. Fix start date for compression subscriptions.
 * (feature) IConnector. MarketDataSubscriptionFinished event to notify end of subscription packet.
 * (feature) Diagram. Options elements description.
+* (feature) Plaza. Spectra 6.1 supported.
+* (feature) TWIME. 3.1 supported.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
