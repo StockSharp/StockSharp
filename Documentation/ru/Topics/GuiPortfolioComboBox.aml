@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
      <introduction>
       <para><codeEntityReference>T:StockSharp.Xaml.PortfolioComboBox</codeEntityReference> - комбинированный список для выбора портфеля.</para>
-
+      <mediaLink><image placement="left" xlink:href="Gui_PortfolioComboBox" /></mediaLink>
 	<para>
 		<legacyBold>Основные свойства</legacyBold>
 	</para>
@@ -21,7 +21,7 @@
 Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/DDE/SampleAsyncTransactions</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="Gui_PortfolioComboBox" /></mediaLink>
+
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

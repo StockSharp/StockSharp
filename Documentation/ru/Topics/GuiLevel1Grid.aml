@@ -3,6 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
        <introduction>
+             <mediaLink><image placement="left" xlink:href="GUI_Leve1Grid" /></mediaLink>
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.Level1Grid</codeEntityReference> - таблица для отображения полей Level1. 
       	Эта таблица использует данные в виде сообщений <codeEntityReference>T:StockSharp.Messages.Level1ChangeMessage</codeEntityReference>. 
@@ -27,10 +28,10 @@
 		</list>
 		
 	  <para>
-	  Ниже показан внешний вид компонента, а также фрагменты кода с его использованием.
+	  Ниже показаны фрагменты кода с его использованием.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_Leve1Grid" /></mediaLink>
+
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

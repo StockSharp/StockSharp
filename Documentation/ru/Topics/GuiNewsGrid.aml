@@ -29,7 +29,7 @@
 	  Внеший вид компонета в составе <codeEntityReference>T:StockSharp.Xaml.NewsPanel</codeEntityReference>, а также фрагменты кода см. в разделе <link xlink:href="00026219-17a5-4749-82ab-ec018aa1ab0b">NewsPanel</link>.
       </para>-->
       <para>
-Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/AlfaDirect/SampleAlfa</legacyItalic>.
+Ниже показаны фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/AlfaDirect/SampleAlfa</legacyItalic>.
       </para>
       
       <!-- <mediaLink><image placement="left" xlink:href="GUI_TradeGrid" /></mediaLink> -->

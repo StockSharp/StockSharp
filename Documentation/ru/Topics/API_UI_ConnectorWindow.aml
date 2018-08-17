@@ -2,9 +2,11 @@
 <topic id="0e99f0d7-9d8a-4bb5-a914-6461677b267b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+        
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.ConnectorWindow</codeEntityReference> - Специальное окно для настройки адаптеров подключения коннектора.
       </para>
+      <mediaLink><image placement="left" xlink:href="API_GUI_ConnectorWindow" /></mediaLink>
       <para>
       Вызов данного окна следует выполнять через метод расширение 
       <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference> 
@@ -26,7 +28,7 @@
 		}
 	  				]]>
 				   </code>
-    <mediaLink><image placement="left" xlink:href="API_GUI_ConnectorWindow" /></mediaLink>
+
     </introduction>
    </developerConceptualDocument>
 </topic>

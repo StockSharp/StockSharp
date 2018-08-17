@@ -235,6 +235,10 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API_GUI_Trading_From_Chart.aml" />
+    <None Include="Topics\Hydra_Export_TSLab_MetaStock.aml" />
+    <None Include="Topics\Designer_Warm_Up_mode.aml" />
+    <None Include="Topics\API_GUI_Thems.aml" />
     <None Include="Topics\API_GUI_AlertsWindow.aml" />
     <None Include="Topics\API_GUI_MarketDataGкid.aml" />
     <None Include="Topics\API_GUI_MarketDataGкid.aml.aml" />
@@ -3480,6 +3484,30 @@
     <Image Include="Art\API_GUI_AlertWindow.png">
       <ImageId>API_GUI_AlertWindow</ImageId>
       <AlternateText>API GUI Alert Window</AlternateText>
+    </Image>
+    <Image Include="Art\hyda_export_TSLab_MetaStock.png">
+      <ImageId>hyda_export_TSLab_MetaStock</ImageId>
+      <AlternateText>hyda export TSLab Meta Stock</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Thems_02.png">
+      <ImageId>API_GUI_Thems_02</ImageId>
+      <AlternateText>API GUI Thems 02</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Thems_01.png">
+      <ImageId>API_GUI_Thems_01</ImageId>
+      <AlternateText>API GUI Thems 01</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Trading_from_chart.png">
+      <ImageId>API_GUI_Trading_from_chart</ImageId>
+      <AlternateText>API GUI Trading from chart</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Warm_up_mode_00.png">
+      <ImageId>Designer_Warm_up_mode_00</ImageId>
+      <AlternateText>Designer Warm up mode 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_Quick_start_02.png">
+      <ImageId>hydra_Quick_start_02</ImageId>
+      <AlternateText>hydra Quick start 02</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>

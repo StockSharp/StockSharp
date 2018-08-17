@@ -5,6 +5,7 @@
       <para>Компонент <codeEntityReference>T:StockSharp.Xaml.SecurityGrid</codeEntityReference> предназначен для отображения финансовой
       информации (поля level1) и ее изменения, относящейся к инструментам, в табличном виде. Компонент позволяет выбирать один или несколько инструментов.
       </para>
+       <mediaLink><image placement="left" xlink:href="GUI_SecurityPicker2" /></mediaLink>
       <para>
       <legacyBold>Основные свойства</legacyBold>
       </para>
@@ -34,7 +35,7 @@
  <sections>
  	<section address="SubSection1">
      	<content>
-              <mediaLink><image placement="left" xlink:href="GUI_SecurityPicker2" /></mediaLink>
+             
      	<para>
               На рисунке компонент <codeEntityReference>T:StockSharp.Xaml.SecurityGrid</codeEntityReference> показан в составе
               графического компонента <link xlink:href="f4e84944-41ad-42f2-9d2a-2854a8665152">SecurityPicker</link>.

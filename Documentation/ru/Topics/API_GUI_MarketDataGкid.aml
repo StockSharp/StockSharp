@@ -6,6 +6,7 @@
       	<codeEntityReference>T:StockSharp.Xaml.MarketDataGrid</codeEntityReference> - 
       	таблица отображения рыночных данных, в данной таблице можно просматривать доступные рыночные данные.
       </para>
+          <mediaLink><image placement="left" xlink:href="API_GUI_MarketDataGrid" /></mediaLink>
       <para>
       
       Ниже приведен пример кода добавления таблицы <codeEntityReference>T:StockSharp.Xaml.MarketDataGrid</codeEntityReference> на экранную форму. 
@@ -39,7 +40,7 @@
 
 	  				]]>
               </code>
-    <mediaLink><image placement="left" xlink:href="API_GUI_MarketDataGrid" /></mediaLink>
+
     </introduction>
    </developerConceptualDocument>
 </topic>

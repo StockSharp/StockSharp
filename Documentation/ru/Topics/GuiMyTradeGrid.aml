@@ -5,7 +5,7 @@
       <para>
       <codeEntityReference>T:StockSharp.Xaml.MyTradeGrid</codeEntityReference> - таблица для отображения собственных сделок.
       </para>
-
+<mediaLink><image placement="left" xlink:href="GUI_MytradeGrid" /></mediaLink>
 	<para>
 		<legacyBold>Основные члены</legacyBold>
 	</para>
@@ -24,10 +24,10 @@
 
       
      	  <para>
-Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+Ниже показаны фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_MytradeGrid" /></mediaLink>
+      
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

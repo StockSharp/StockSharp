@@ -9,9 +9,9 @@
        <codeEntityReference qualifyHint="true">F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.BoxVolume</codeEntityReference>
        
        В качестве исходных данных этот график использует информацию из свойства 
-       <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.Candle.PriceLevels</codeEntityReference>.
-       
+       <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.Candle.PriceLevels</codeEntityReference>.      
       </para>
+                <mediaLink><image placement="left" xlink:href="Gui_BoxChart"/></mediaLink>
       <para>
       <legacyBold>Основные свойства</legacyBold>
       </para>
@@ -63,7 +63,7 @@
   </listItem>
 </list>
       
-          <mediaLink><image placement="left" xlink:href="Gui_BoxChart"/></mediaLink>
+
       
       <para>
    Пример использования этого типа графика расположен в Samples/Common/SampleChart. 

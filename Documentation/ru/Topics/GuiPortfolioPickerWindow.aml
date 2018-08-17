@@ -5,7 +5,7 @@
      <para><codeEntityReference>T:StockSharp.Xaml.PortfolioPickerWindow</codeEntityReference> - окно для выбора портфеля. 
      В окне отображается список портфелей
      и информация о денежных позициях портфелей.</para>
-
+      <mediaLink><image placement="left" xlink:href="GUI_PortfolioPickerWindow" /></mediaLink>
 	<para>
 		<legacyBold>Основные свойства</legacyBold>
 	</para>
@@ -23,7 +23,7 @@
 Ниже показан внеший вид компонента, а также фрагмент кода с его использованием.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_PortfolioPickerWindow" /></mediaLink>
+
       
               <code title="C#" language="C#">
               		<![CDATA[

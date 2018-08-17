@@ -5,7 +5,7 @@
       
       <para><codeEntityReference>T:StockSharp.Xaml.PortfolioGrid</codeEntityReference> - компонент, отображающий состояние портфелей и позиций.
       </para>
-
+      <mediaLink><image placement="left" xlink:href="GUI_PortfolioGrid" /></mediaLink>
 	<para>
 		<legacyBold>Основные свойства</legacyBold>
 	</para>
@@ -30,7 +30,7 @@
 	  Ниже показан внеший вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_PortfolioGrid" /></mediaLink>
+
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[
