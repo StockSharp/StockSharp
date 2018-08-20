@@ -12,6 +12,7 @@ StockSharp API Change log
 * (feature) TWIME. 3.1 supported.
 * (feature) Algo.Expressions. Moved to Algo proj.
 * (feature) IBasketSecurityProcessorProvider. Basket securities refactoring.
+* (feature) BaseGridControl. Autoscroll added.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.

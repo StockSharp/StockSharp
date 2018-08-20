@@ -767,6 +767,16 @@
             Backup service for sharing exports.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.GridControl.BaseGridControl.AutoScrollProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.GridControl.BaseGridControl.AutoScroll" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.AutoScroll">
+      <summary>
+            Automatically to scroll control on the last row added. The default is off.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.BaseGridControl" />.

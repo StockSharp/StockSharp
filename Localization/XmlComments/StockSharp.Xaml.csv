@@ -175,6 +175,8 @@ E:StockSharp.Xaml.GridControl.BaseGridControl.DdeErrorHandler/summary;DocStr8994
 E:StockSharp.Xaml.GridControl.BaseGridControl.LayoutChanged/summary;DocStr8995
 E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick/summary;DocStr9459
 P:StockSharp.Xaml.GridControl.BaseGridControl.BackupService/summary;DocStr9785
+F:StockSharp.Xaml.GridControl.BaseGridControl.AutoScrollProperty/summary;DocStr29
+P:StockSharp.Xaml.GridControl.BaseGridControl.AutoScroll/summary;DocStr8348
 M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor/summary;DocStr1
 M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)/summary;DocStr8996
 M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)/param/oldValue;DocStr8997
