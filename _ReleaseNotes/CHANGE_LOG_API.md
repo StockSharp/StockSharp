@@ -10,6 +10,7 @@ StockSharp API Change log
 * (feature) Diagram. Options elements description.
 * (feature) Plaza. Spectra 6.1 supported.
 * (feature) TWIME. 3.1 supported.
+* (feature) Algo.Expressions. Moved to Algo proj.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
