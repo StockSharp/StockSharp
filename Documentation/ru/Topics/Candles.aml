@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -45,32 +45,37 @@
 	</introduction>
 
     <procedure>
-		<title>Создание CandleManager и запуск получения данных</title>
+		<title>Запуск получения данных</title>
 
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>В самом начале необходимо создать менеджер свечей <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
-					который, подписываясь на событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>,
-					будет формировать свечи:</para>
+					<para>Все необходимые для методы получения свечей реализованны в классе 
+					<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+					<para>Создадим коннектор и сконфигурируем его через <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />, как это сделать описано в пункте <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" /></para>
 			
 					<code language="C#">
 					<![CDATA[
-_trader = new QuikTrader(this.Path.Text);
-_trader.Connect();
+...
+
+private readonly Connector _connector = new Connector();
 
 ...
 
-_candleManager = new CandleManager(_trader);
+if (_connector.Configure(this))
+			{
+				new XmlSerializer<SettingsStorage>().Serialize(_connector.Save(), _connectorFile);
+			}
+			
+...
 					]]>
 					</code>
-					
-					<alert class="note">
+										<!--alert class="note">
 						<para>Если для получения свечей вместо шлюза <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> используется источник с другим механизмом,
 						то необходимо реализовать интерфейс <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.IExternalCandleSource</codeEntityReference>,
 						и передать реализацию в <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>
 						
-						<!--<para>В <token>stocksharp</token> существуют следующие реализации данного интерфейса:</para>
+						<para>В <token>stocksharp</token> существуют следующие реализации данного интерфейса:</para>
 						
 						<list class="bullet">
   							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder</codeEntityReference></para></listItem>
@@ -83,27 +88,29 @@ _candleManager = new CandleManager(_trader);
 						</list>
 						
 						<para>Вышеописанные реализации стандартно идут в качестве <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>
-						при создании <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>-->
+						при создании <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>>
 
-					</alert>
+					</alert-->
 				</content>
 			</step>
 			
 			<step>
 				<content>
-					<para>Далее, необходимо подписаться на событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>, 
+					<para>Далее, необходимо подписаться на событие 
+					<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.ICandleSource`1.Processing</codeEntityReference>,
 					сигнализирующее о появления нового значения для обработки:</para>
 			
 					<code language="C#">
 					<![CDATA[
-_candleManager.Processing += DrawCandle;
+_connector.CandleSeriesProcessing += Connector_CandleSeriesProcessing;
+...
 
-private void DrawCandle(CandleSeries series, Candle candle)
+private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, Candle candle)
 {
-	 ...
-	 
-	wnd.Chart.Draw((ChartCandleElement)wnd.Chart.Areas[0].Elements[0], candle);
+	Chart.Draw(_candleElement, candle);
 }
+
+...
 					]]>
 					</code>
 					
@@ -115,36 +122,40 @@ private void DrawCandle(CandleSeries series, Candle candle)
 		
 			<step>
 				<content>
-					<para>Необходимо объявить, какие именно свечи требуются для робота и запустить получение данных через 
-					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})</codeEntityReference>:</para>
+					<para>Необходимо объявить, какие именно свечи требуются и запустить получение данных через 
+<codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})</codeEntityReference>:</para>
 
 					<code language="C#">
 					<![CDATA[
-switch (type)
-{
-	case CandleTypes.TimeFrame:
-		series = new CandleSeries(typeof(TimeFrameCandle), security, TimeFrame.Value.Value.TimeOfDay);
-		break;
-	case CandleTypes.Tick:
-		series = new CandleSeries(typeof(TickCandle), security, VolumeCtrl.Text.To<int>());
-		break;
-	case CandleTypes.Volume:
-		series = new CandleSeries(typeof(VolumeCandle), security, VolumeCtrl.Text.To<decimal>());
-		break;
-	case CandleTypes.Range:
-		series = new CandleSeries(typeof(RangeCandle), security, PriceRange.Unit);
-		break;
-	default:
-		throw new ArgumentOutOfRangeException();
-}
+...
+
+//var _candleSeries = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromMinutes(5))
+//var _candleSeries = new CandleSeries(typeof(VolumeCandle), security, 10000m)
+//var _candleSeries = new CandleSeries(typeof(TickCandle), security, 1000)
+//var _candleSeries = new CandleSeries(typeof(RangeCandle), security, new Unit(0.1m))
+//var _candleSeries = new CandleSeries(typeof(RenkoCandle), security, new Unit(0.1m))
+//var _candleSeries = new CandleSeries(typeof(PnFCandle), security, new PnFArg() { BoxSize = 0.1m, ReversalAmount =1})
+//{
+//    BuildCandlesMode = MarketDataBuildModes.Build,
+//    IsCalcVolumeProfile = true
+//};
+
+_candleSeries =
+	new CandleSeries(CandleSettingsEditor.Settings.CandleType, security, CandleSettingsEditor.Settings.Arg)
+	{
+		BuildCandlesMode = MarketDataBuildModes.Build,
+		BuildCandlesFrom = MarketDataTypes.Trades,
+		IsCalcVolumeProfile = true,
+
+	};
 
 ...
 
-_candleManager.Start(series);				
+_connector.SubscribeCandles(_candleSeries, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);			
 					]]>
 					</code>
 			
-					<para>После этого этапа начнет вызываться событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>.</para>
+					<para>После этого этапа начнет вызываться событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.ICandleSource`1.Processing</codeEntityReference>.</para>
 				</content>
 			</step>
 		</steps>
@@ -162,18 +173,12 @@ _candleManager.Start(series);
 					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset)</codeEntityReference>:</para>
 					<code language="C#">
 					<![CDATA[
-// получить 100 свечей-пятиминуток для Лукойла
-private Security _lkoh;
-private readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(5);
-private _series;
-
+// получить 100 свечей-пятиминуток
 ...
 
-_series = new CandleSeries(typeof(TimeFrameCandle), _lkoh, _timeFrame);
+var prev100Candles =_connector.GetCandles<TimeFrameCandle>(_candleSeries, 100);
 
 ...
-
-var candles = _series.GetCandles(100);
 					]]>
 					</code>
 				</content>    		
@@ -186,18 +191,11 @@ var candles = _series.GetCandles(100);
 					<code language="C#">
 					<![CDATA[
 // получить 5-ую свечу с конца (нумерация идет от 0, 0 - текущая свеча)
-private Security _lkoh;
-private readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(5);
-private _series;
-
 ...
 
-_series = new CandleSeries(typeof(TimeFrameCandle), _lkoh, _timeFrame);
+var prev5Candle = _connector.GetCandle<TimeFrameCandle>(_candleSeries, 5);
 
 ...
-
-var prev5Candle = _series.GetCandle<TimeFrameCandle>(5);
-
 					]]>
 					</code>
 				</content>    		
