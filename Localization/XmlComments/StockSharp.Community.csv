@@ -459,6 +459,7 @@ F:StockSharp.Community.Products.Hydra/summary;DocStr3000
 F:StockSharp.Community.Products.Studio/summary;DocStr3001
 F:StockSharp.Community.Products.Designer/summary;DocStr8696
 F:StockSharp.Community.Products.Terminal/summary;DocStr8696
+F:StockSharp.Community.Products.Server/summary;DocStr3002
 T:StockSharp.Community.ISessionService/summary;DocStr3037
 M:StockSharp.Community.ISessionService.CreateSession(StockSharp.Community.Products,System.Guid)/summary;DocStr8697
 M:StockSharp.Community.ISessionService.CreateSession(StockSharp.Community.Products,System.Guid)/param/product;Product
