@@ -71,6 +71,8 @@ namespace SampleMultiConnection
 			HistoryPath.Folder = path;
 
 			var entityRegistry = new CsvEntityRegistry(path);
+			ConfigManager.RegisterService(entityRegistry.ProcessorProvider);
+
 			var storageRegistry = new StorageRegistry
 			{
 				DefaultDrive = new LocalMarketDataDrive(path)
