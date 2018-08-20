@@ -33,9 +33,6 @@
   		<listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.OptionPositionChart</codeEntityReference> - графический компонент, показывающий позиции и "греки" опционов относительно базового актива. См. <link xlink:href="5d9f8c0d-d05c-4a39-9fad-7148df4411ad">OptionPositionChart</link>.</para>
   		</listItem>
-  		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.OrderCreationMode</codeEntityReference> - Режим создания заявок, когда установлен позволяет создавать заявки из графика. По умолчанию выключено.</para>
-  		</listItem>
 	</list>
 	
 	<para>
@@ -104,11 +101,11 @@
   				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})</codeEntityReference> - "сбросить" ранее отрисованные значения.</para>
   			</listItem>
   			<listItem>
-  				<para>
-  				<codeEntityReference>M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference> - отрисовать значение на графике.
-  				</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference> - отрисовать значение на графике.</para>
   			</listItem>
-  			
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.OrderCreationMode</codeEntityReference> - Режим создания заявок, когда установлен позволяет создавать заявки из графика. По умолчанию выключено.</para>
+	  		</listItem>
 		</list>
 
       </content>
