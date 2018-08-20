@@ -21,6 +21,7 @@
 	{
 		private readonly IEntityRegistry _entityRegistry;
 		private readonly IExchangeInfoProvider _exchangeInfoProvider;
+		private readonly IBasketSecurityProcessorProvider _processorProvider;
 		private readonly IMarketDataDrive _drive;
 		private readonly StorageFormats _storageFormat;
 
@@ -31,13 +32,15 @@
 		/// <param name="fields">Importing fields.</param>
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		/// <param name="processorProvider">Basket security processors provider.</param>
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
 		/// <param name="storageFormat">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		public CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IEntityRegistry entityRegistry, IExchangeInfoProvider exchangeInfoProvider, IMarketDataDrive drive, StorageFormats storageFormat)
+		public CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IEntityRegistry entityRegistry, IExchangeInfoProvider exchangeInfoProvider, IBasketSecurityProcessorProvider processorProvider, IMarketDataDrive drive, StorageFormats storageFormat)
 			: base(dataType, fields)
 		{
 			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
 			_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
+			_processorProvider = processorProvider ?? throw new ArgumentNullException(nameof(processorProvider));
 			_drive = drive;
 			_storageFormat = storageFormat;
 		}
@@ -89,7 +92,7 @@
 							security.ApplyChanges(secMsg, _exchangeInfoProvider, UpdateDuplicateSecurities);
 						}
 						else
-							security = secMsg.ToSecurity(_exchangeInfoProvider);
+							security = secMsg.ToSecurity(_exchangeInfoProvider, _processorProvider);
 
 						_entityRegistry.Securities.Save(security, UpdateDuplicateSecurities);
 

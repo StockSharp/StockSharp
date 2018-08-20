@@ -48326,5 +48326,15 @@ namespace StockSharp.Localization
 		/// The Black-Scholes "Greeks" evaluation element.
 		/// </summary>
 		public static string OptionsBlackScholesDiagramElement => GetString(OptionsBlackScholesDiagramElementKey);
+
+		/// <summary>
+		/// Basket security '{0}' do not contains legs.
+		/// </summary>
+		public const string SecurityDoNotContainsLegsKey = nameof(SecurityDoNotContainsLegs);
+
+		/// <summary>
+		/// Basket security '{0}' do not contains legs.
+		/// </summary>
+		public static string SecurityDoNotContainsLegs => GetString(SecurityDoNotContainsLegsKey);
 	}
 }

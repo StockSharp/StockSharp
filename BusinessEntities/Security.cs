@@ -1891,5 +1891,16 @@ namespace StockSharp.BusinessEntities
 		{
 			_propertyChanged?.Invoke(this, propName);
 		}
+
+		/// <summary>
+		/// Try get basket security expression.
+		/// </summary>
+		/// <param name="legs">Basket security legs.</param>
+		/// <returns>Basket security expression. Can be <see langword="null"/> in case of regular security.</returns>
+		public virtual string TryGetBasketExpression(out SecurityId[] legs)
+		{
+			legs = ArrayHelper.Empty<SecurityId>();
+			return null;
+		}
 	}
 }

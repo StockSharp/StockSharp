@@ -18,9 +18,36 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Linq;
+
+	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
+
+	/// <summary>
+	/// Attribute, applied to derived from <see cref="BasketSecurity"/> class, to provide basket type code.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+	public class BasketCodeAttribute : Attribute
+	{
+		/// <summary>
+		/// Basket type code.
+		/// </summary>
+		public string Code { get; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BasketCodeAttribute"/>.
+		/// </summary>
+		/// <param name="code">Basket type code.</param>
+		public BasketCodeAttribute(string code)
+		{
+			if (code.IsEmpty())
+				throw new ArgumentNullException(nameof(code));
+
+			Code = code;
+		}
+	}
 
 	/// <summary>
 	/// Instruments basket.
@@ -43,15 +70,40 @@ namespace StockSharp.Algo
 		public abstract IEnumerable<SecurityId> InnerSecurityIds { get; }
 
 		/// <summary>
+		/// Basket type code.
+		/// </summary>
+		[Browsable(false)]
+		public virtual string BasketCode => GetType().GetAttribute<BasketCodeAttribute>().Code;
+
+		/// <summary>
 		/// Save security state to string.
 		/// </summary>
 		/// <returns>String.</returns>
-		public abstract string ToSerializedString();
+		protected abstract string ToSerializedString();
 
 		/// <summary>
 		/// Load security state from <paramref name="text"/>.
 		/// </summary>
 		/// <param name="text">Value, received from <see cref="ToSerializedString"/>.</param>
-		public abstract void FromSerializedString(string text);
+		protected abstract void FromSerializedString(string text);
+
+		/// <inheritdoc />
+		public override string TryGetBasketExpression(out SecurityId[] legs)
+		{
+			legs = InnerSecurityIds.ToArray();
+			return $"{BasketCode}_{ToSerializedString()}";
+		}
+
+		/// <summary>
+		/// Set basket security expression.
+		/// </summary>
+		/// <param name="expression">Basket security expression</param>
+		public virtual void SetBasketExpression(string expression)
+		{
+			if (expression.IsEmpty())
+				throw new ArgumentNullException(nameof(expression));
+
+			FromSerializedString(expression.Substring(3));
+		}
 	}
 }

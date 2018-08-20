@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The interface describing the trade objects storage.
@@ -86,6 +87,11 @@ namespace StockSharp.Algo.Storages
 		///// The list of news.
 		///// </summary>
 		//IStorageEntityList<News> News { get; }
+
+		/// <summary>
+		/// Basket security processors provider.
+		/// </summary>
+		IBasketSecurityProcessorProvider ProcessorProvider { get; }
 
 		/// <summary>
 		/// Initialize the storage.

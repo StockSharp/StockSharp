@@ -3663,7 +3663,7 @@ XamlStr174;Change order;Заменить заявку
 XamlStr175;Sign up for the next algotrading course;Записаться на ближайшие курсы по алготрейдингу
 XamlStr176;Remember choice (start selected configuration automatically);Запомнить выбор (запускать выбранную конфигурацию автоматически)
 XamlStr177;Request all securities;Запрашивать все инструменты
-XamlStr178;Launch are available in 32- or 64- bit modes.;Запуск возможен в режимах 32-ух и 64-ех бит.
+XamlStr178;The launch is available in 32- or 64- bit modes.;Запуск возможен в режимах 32-ух и 64-ех бит.
 XamlStr180;Runned Quiks:;Запущенные Quik:
 XamlStr182;Order fail;Заявка-Ошибка
 XamlStr186;Value (S#);Значение (S#)
@@ -4865,6 +4865,7 @@ OptionsHedgeDiagramElement;Options hedging diagram element.;Элемент ди�
 OptionsQuotingDiagramElement;Options quoting diagram element.;Элемент диаграммы, котирующий опционы.
 OptionsStrikesDiagramElement;Filtering derivatives by underlying asset diagram element.;Элемент диаграммы, фильтрующий опционы по базовому активу.
 OptionsBlackScholesDiagramElement;The Black-Scholes "Greeks" evaluation element.;Элемент вычисления "греков" по формуле Black-Scholes.
+SecurityDoNotContainsLegs;Basket security '{0}' do not contains legs.;Корзина инструментов '{0}' не содержит ноги.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15065,3 +15066,35 @@ DocStr10593;Cancel message processing and create reply;Отменить обра
 DocStr10594;Get available candles types;Получить доступные типы свечей
 DocStr10595;Candles types;Типы свечей
 DocStr10596;Subscription market-data finished;Подписка на маркет-данные закончена
+DocStr10597;Basket security processors provider;Провайдер обработчиков корзин инструментов
+DocStr10598;The messages adapter builds market data for basket securities;Адаптер сообщений строящий маркет-данные для корзины инструментов
+DocStr10599;Create security instance;Создать объект инструмента
+DocStr10600;Basket security expression. Can be {0} in case of regular security;Выражение корзины инструментов. Может быть {0} в случае обычного инструмента
+DocStr10601;Volume trigger causes switch to the next contract;Триггер объема вызывающий переход на следующий контракт
+DocStr10602;Try get basket security expression;Попытка получить выражение корзины инструментов
+DocStr10603;Basket security legs;Ноги корзины инструментов
+DocStr10604;The interface of market data processor for basket securities;Интерфейс обработчика маркет-данных для корзины инструментов
+DocStr10605;Input message;Входящее сообщение
+DocStr10606;Output messages;Исходящие сообщения
+DocStr10607;The interface for provider of {0};Интерфейс провайдера {0}
+DocStr10608;Register new security type;Зарегистрировать новый тип инструмента
+DocStr10609;Security type code;Код типа инструмента
+DocStr10610;Processor type;Тип обработчика
+DocStr10611;Remove old security type;Удалить тип инструмента
+DocStr10612;Get processor type;Получить тип обработчика
+DocStr10613;Basket security expression;Выражение корзины инструментов
+DocStr10614;Get security type;Получить тип инструмента
+DocStr10615;Attribute, applied to derived from {0} class, to provide basket type code;Атрибут, применяемый к унаследованному от {0} классу, для предоставления кода типа корзины
+DocStr10616;Basket type code;Код типа корзины
+DocStr10617;Set basket security expression;Установить выражение корзины инструментов
+DocStr10618;Base basket securities processor;Базовый обработчик корзины инструментов
+DocStr10619;Basket security type;Тип корзины инструментов
+DocStr10620;Base continuous securities processor;Базовый обработчик непрерывных инструментов
+DocStr10621;Determines can process message;Определить, можно ли обработать сообщение
+DocStr10622;{0} if the specified message can be processed, otherwise, {1};{0} если переданное сообщение можно обработать, иначе, {1}
+DocStr10623;Continuous securities processor for {0};Обработчик непрерывных инструментов для {0}
+DocStr10624;Base index securities processor;Базовый обработчик индексов
+DocStr10625;Index securities processor for {0};Обработчик индексов для {0}
+DocStr10626;Use open interest for {0};Использовать открытый интерес для {0}
+DocStr10627;Fill market-data gaps by zero values;Заполнять пробелы маркет-данных нолями
+DocStr10628;Clone {0};Копия {0}

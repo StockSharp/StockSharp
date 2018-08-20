@@ -110,6 +110,9 @@
     </Compile>
     <Compile Include="AssociatedSecurityAdapter.cs" />
     <Compile Include="BasketSecurity.cs" />
+    <Compile Include="BasketSecurityBaseProcessor.cs" />
+    <Compile Include="BasketSecurityMessageAdapter.cs" />
+    <Compile Include="BasketSecurityProcessorProvider.cs" />
     <Compile Include="Candles\BiggerTimeFrameCandleCompressor.cs" />
     <Compile Include="Candles\CandlesHolder.cs" />
     <Compile Include="Candles\Compression\CandleBuilderMessageAdapter.cs" />
@@ -123,6 +126,10 @@
     <Compile Include="Export\Database\PositionChangeTable.cs" />
     <Compile Include="Export\Database\SecurityTable.cs" />
     <Compile Include="Export\IndicatorValue.cs" />
+    <Compile Include="Expressions\ExpressionFormula.cs" />
+    <Compile Include="Expressions\ExpressionHelper.cs" />
+    <Compile Include="Expressions\ExpressionIndexSecurity.cs" />
+    <Compile Include="Expressions\ExpressionIndexSecurityProcessor.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
     <Compile Include="OrderLogMessageAdapter.cs" />
@@ -141,7 +148,6 @@
     <Compile Include="Storages\Binary\Snapshot\QuotesBinarySnapshotSerializer.cs" />
     <Compile Include="Storages\Binary\Snapshot\TransactionBinarySnapshotSerializer.cs" />
     <Compile Include="Storages\CacheableMarketDataStorage.cs" />
-    <Compile Include="Storages\Csv\ComplexSecurityList.cs" />
     <Compile Include="Storages\Csv\MarketDepthCsvSerializer.cs" />
     <Compile Include="Storages\ISnapshotSerializer.cs" />
     <Compile Include="Storages\ISecurityMappingStorage.cs" />
@@ -168,7 +174,6 @@
     <Compile Include="BasketMessageAdapter.cs" />
     <Compile Include="BasketPortfolio.cs" />
     <Compile Include="BasketPosition.cs" />
-    <Compile Include="Candles\BaseCandleSource.cs" />
     <Compile Include="Candles\CandleSourceEnumerator.cs" />
     <Compile Include="Candles\Compression\CandleBuilder.cs" />
     <Compile Include="Candles\CandleManagerContainer.cs" />
@@ -179,8 +184,6 @@
     <Compile Include="Candles\ICandleManager.cs" />
     <Compile Include="Candles\ICandleSource.cs" />
     <Compile Include="Candles\IExternalCandleSource.cs" />
-    <Compile Include="Candles\IndexSecurityCandleManagerSource.cs" />
-    <Compile Include="Candles\IndexCandleBuilder.cs" />
     <Compile Include="Candles\Compression\VolumeProfileHelper.cs" />
     <Compile Include="Commissions\CommissionManager.cs" />
     <Compile Include="Commissions\CommissionRule.cs" />
@@ -351,7 +354,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Storages\Binary\Level1BinarySerializer.cs" />
-    <Compile Include="Storages\MultiSecurityStorage.cs" />
     <Compile Include="Storages\NewsList.cs" />
     <Compile Include="Storages\SnapshotRegistry.cs" />
     <Compile Include="Storages\StorageEntityFactory.cs" />
@@ -373,7 +375,6 @@
     <Compile Include="Statistics\StatisticManager.cs" />
     <Compile Include="SecurityIdGenerator.cs" />
     <Compile Include="Slippage\ISlippageManager.cs" />
-    <Compile Include="Storages\ContinuousSecurityMarketDataStorage.cs" />
     <Compile Include="Storages\Binary\CandleBinarySerializer.cs" />
     <Compile Include="Storages\EntityRegistry.cs" />
     <Compile Include="Storages\ExchangeBoardList.cs" />
@@ -381,7 +382,6 @@
     <Compile Include="Storages\IMarketDataSerializer.cs" />
     <Compile Include="Storages\IMarketDataStorage.cs" />
     <Compile Include="Storages\IMarketDataDrive.cs" />
-    <Compile Include="Storages\IndexSecurityMarketDataStorage.cs" />
     <Compile Include="Storages\LocalMarketDataDrive.cs" />
     <Compile Include="Storages\Binary\BinaryHelper.cs" />
     <Compile Include="Storages\Binary\OrderLogBinarySerializer.cs" />

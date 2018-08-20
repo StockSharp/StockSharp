@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <typeparam name="TKey">The key type.</typeparam>
 		/// <typeparam name="TMarketData">Market data type.</typeparam>
-		class DataBuffer<TKey, TMarketData>
+		private class DataBuffer<TKey, TMarketData>
 			where TMarketData : Message
 		{
 			private readonly SynchronizedDictionary<TKey, List<TMarketData>> _data = new SynchronizedDictionary<TKey, List<TMarketData>>();

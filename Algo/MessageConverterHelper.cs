@@ -599,6 +599,8 @@ namespace StockSharp.Algo
 				IssueSize = security.IssueSize,
 				IssueDate = security.IssueDate,
 				UnderlyingSecurityType = security.UnderlyingSecurityType,
+				BasketExpression = security.TryGetBasketExpression(out var legs),
+				BasketLegs = legs
 			};
 		}
 
@@ -659,12 +661,29 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Create security instance.
+		/// </summary>
+		/// <param name="processorProvider">Basket security processors provider.</param>
+		/// <param name="expression">Basket security expression. Can be <see langword="null"/> in case of regular security.</param>
+		/// <returns>Security.</returns>
+		public static Security CreateSecurity(this IBasketSecurityProcessorProvider processorProvider, string expression)
+		{
+			if (processorProvider == null || expression.IsEmpty())
+				return new Security();
+
+			var bs = processorProvider.GetSecurityType(expression).CreateInstance<BasketSecurity>();
+			bs.SetBasketExpression(expression);
+			return bs;
+		}
+
+		/// <summary>
 		/// To convert the message into instrument.
 		/// </summary>
 		/// <param name="message">Message.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		/// <param name="processorProvider">Basket security processors provider.</param>
 		/// <returns>Security.</returns>
-		public static Security ToSecurity(this SecurityMessage message, IExchangeInfoProvider exchangeInfoProvider)
+		public static Security ToSecurity(this SecurityMessage message, IExchangeInfoProvider exchangeInfoProvider, IBasketSecurityProcessorProvider processorProvider)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -672,11 +691,14 @@ namespace StockSharp.Algo
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
-			var security = new Security
-			{
-				Id = message.SecurityId.ToStringId()
-			};
+			//if (processorProvider == null)
+			//	throw new ArgumentNullException(nameof(processorProvider));
+
+			var security = processorProvider.CreateSecurity(message.BasketExpression);
+
+			security.Id = message.SecurityId.ToStringId();
 			security.ApplyChanges(message, exchangeInfoProvider);
+
 			return security;
 		}
 

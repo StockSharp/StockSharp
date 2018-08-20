@@ -966,7 +966,7 @@ namespace StockSharp.Algo.Storages
 					var security = _entityRegistry.Securities.ReadBySecurityId(secMsg.SecurityId);
 
 					if (security == null)
-						security = secMsg.ToSecurity(_storageRegistry.ExchangeInfoProvider);
+						security = secMsg.ToSecurity(_storageRegistry.ExchangeInfoProvider, _entityRegistry.ProcessorProvider);
 					else
 						security.ApplyChanges(secMsg, _storageRegistry.ExchangeInfoProvider, OverrideSecurityData);
 

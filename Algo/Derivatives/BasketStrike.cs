@@ -57,9 +57,7 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		public Security UnderlyingAsset { get; }
 
-		/// <summary>
-		/// Instruments, from which this basket is created.
-		/// </summary>
+		/// <inheritdoc />
 		public override IEnumerable<SecurityId> InnerSecurityIds
 		{
 			get
@@ -104,11 +102,7 @@ namespace StockSharp.Algo.Derivatives
 			_strikeOffset = strikeOffset ?? throw new ArgumentNullException(nameof(strikeOffset));
 		}
 
-		/// <summary>
-		/// To get filtered strikes.
-		/// </summary>
-		/// <param name="allStrikes">All strikes.</param>
-		/// <returns>Filtered strikes.</returns>
+		/// <inheritdoc />
 		protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes)
 		{
 			if (_strikeStep == 0)
@@ -132,20 +126,14 @@ namespace StockSharp.Algo.Derivatives
 						.OrderBy(s => s.Strike);
 		}
 
-		/// <summary>
-		/// Save security state to string.
-		/// </summary>
-		/// <returns>String.</returns>
-		public override string ToSerializedString()
+		/// <inheritdoc />
+		protected override string ToSerializedString()
 		{
 			return _strikeOffset.ToString();
 		}
 
-		/// <summary>
-		/// Load security state from <paramref name="text"/>.
-		/// </summary>
-		/// <param name="text">Value, received from <see cref="BasketSecurity.ToSerializedString"/>.</param>
-		public override void FromSerializedString(string text)
+		/// <inheritdoc />
+		protected override void FromSerializedString(string text)
 		{
 			_strikeOffset = Range<int>.Parse(text);
 		}
@@ -171,11 +159,7 @@ namespace StockSharp.Algo.Derivatives
 			_volatilityRange = volatilityRange ?? throw new ArgumentNullException(nameof(volatilityRange));
 		}
 
-		/// <summary>
-		/// To get filtered strikes.
-		/// </summary>
-		/// <param name="allStrikes">All strikes.</param>
-		/// <returns>Filtered strikes.</returns>
+		/// <inheritdoc />
 		protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes)
 		{
 			return allStrikes.Where(s =>
@@ -185,20 +169,14 @@ namespace StockSharp.Algo.Derivatives
 			});
 		}
 
-		/// <summary>
-		/// Save security state to string.
-		/// </summary>
-		/// <returns>String.</returns>
-		public override string ToSerializedString()
+		/// <inheritdoc />
+		protected override string ToSerializedString()
 		{
 			return _volatilityRange.ToString();
 		}
 
-		/// <summary>
-		/// Load security state from <paramref name="text"/>.
-		/// </summary>
-		/// <param name="text">Value, received from <see cref="BasketSecurity.ToSerializedString"/>.</param>
-		public override void FromSerializedString(string text)
+		/// <inheritdoc />
+		protected override void FromSerializedString(string text)
 		{
 			_volatilityRange = Range<decimal>.Parse(text);
 		}

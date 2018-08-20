@@ -17,8 +17,10 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel;
+	using System.Linq;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -216,6 +218,24 @@ namespace StockSharp.Messages
 		public SecurityTypes? UnderlyingSecurityType { get; set; }
 
 		/// <summary>
+		/// Basket security expression. Can be <see langword="null"/> in case of regular security.
+		/// </summary>
+		[DataMember]
+		public string BasketExpression { get; set; }
+
+		private SecurityId[] _basketLegs = ArrayHelper.Empty<SecurityId>();
+
+		/// <summary>
+		/// Basket security legs.
+		/// </summary>
+		[DataMember]
+		public SecurityId[] BasketLegs
+		{
+			get => _basketLegs;
+			set => _basketLegs = value ?? throw new ArgumentNullException(nameof(value));
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityMessage"/>.
 		/// </summary>
 		public SecurityMessage()
@@ -274,15 +294,16 @@ namespace StockSharp.Messages
 			destination.IssueSize = IssueSize;
 			destination.IssueDate = IssueDate;
 			destination.UnderlyingSecurityType = UnderlyingSecurityType;
+			destination.BasketExpression = BasketExpression;
+
+			if (BasketLegs.Length > 0)
+				destination.BasketLegs = BasketLegs.ToArray();
 
 			if (copyOriginalTransactionId)
 				destination.OriginalTransactionId = OriginalTransactionId;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",Sec={SecurityId}";
