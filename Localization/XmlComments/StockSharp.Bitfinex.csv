@@ -1,4 +1,5 @@
 T:StockSharp.Bitfinex.BitfinexMessageAdapter/summary;DocStr2538
+P:StockSharp.Bitfinex.BitfinexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Bitfinex.BitfinexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Bitfinex.BitfinexMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

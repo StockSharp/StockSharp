@@ -13,6 +13,7 @@ StockSharp API Change log
 * (feature) Algo.Expressions. Moved to Algo proj.
 * (feature) IBasketSecurityProcessorProvider. Basket securities refactoring.
 * (feature) BaseGridControl. Autoscroll added.
+* (feature) Bitfinex. Market data v2 API.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
