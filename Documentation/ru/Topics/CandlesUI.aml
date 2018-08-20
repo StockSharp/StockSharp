@@ -8,12 +8,11 @@
       
 		<mediaLink><image placement="center" xlink:href="sample_candleschart" /></mediaLink>
 	  
-		<para>Для отображения, поступающие свечи от <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> 
-		передаются в метод
+		<para>Для отображения, поступающие свечи передаются в метод
 		<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference>.</para>
 		
 		<para>При передаче свечи из события 
-		<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>
+		<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.ICandleSource`1.Processing</codeEntityReference>
 		для отрисовки на графике, будут отображаться изменения текущей свечи.</para>
 		
 		<para>Если же нужно отображать только <legacyBold>"целые"</legacyBold> свечи, то необходимо проверить свойство 
@@ -33,11 +32,11 @@ Chart.AddElement(_areaComb, _candleElement, series);
 
 ...
 		
-candleManager.Processing += CandleManagerOnProcessing;
+_connector.CandleSeriesProcessing += Connector_CandleSeriesProcessing;
 
 ...
 
-private void CandleManagerOnProcessing(CandleSeries candleSeries, Candle candle)
+private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, Candle candle)
 {
     if (candle.State == CandleStates.Finished) 
     {
