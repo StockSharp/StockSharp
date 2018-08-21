@@ -5,7 +5,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using Ecng.Collections;
 
-	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -15,47 +14,6 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 	{
-		private sealed class CandleBuildersList : SynchronizedList<ICandleBuilder>
-		{
-			private readonly SynchronizedDictionary<MarketDataTypes, ICandleBuilder> _builders = new SynchronizedDictionary<MarketDataTypes, ICandleBuilder>();
-
-			public ICandleBuilder Get(MarketDataTypes type)
-			{
-				var builder = _builders.TryGetValue(type);
-
-				if (builder == null)
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-
-				return builder;
-			}
-
-			protected override void OnAdded(ICandleBuilder item)
-			{
-				_builders.Add(item.CandleType, item);
-				base.OnAdded(item);
-			}
-
-			protected override bool OnRemoving(ICandleBuilder item)
-			{
-				lock (_builders.SyncRoot)
-					_builders.RemoveWhere(p => p.Value == item);
-
-				return base.OnRemoving(item);
-			}
-
-			protected override void OnInserted(int index, ICandleBuilder item)
-			{
-				_builders.Add(item.CandleType, item);
-				base.OnInserted(index, item);
-			}
-
-			protected override bool OnClearing()
-			{
-				_builders.Clear();
-				return base.OnClearing();
-			}
-		}
-
 		private enum SeriesStates
 		{
 			None,
@@ -96,28 +54,17 @@ namespace StockSharp.Algo.Candles.Compression
 		private readonly SynchronizedDictionary<long, SeriesInfo> _seriesByTransactionId = new SynchronizedDictionary<long, SeriesInfo>();
 		private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedList<SeriesInfo>> _seriesBySecurityId = new SynchronizedDictionary<SecurityId, CachedSynchronizedList<SeriesInfo>>();
 		private readonly SynchronizedSet<long> _unsubscriptions = new SynchronizedSet<long>();
-		private readonly CandleBuildersList _candleBuilders;
-		private readonly IExchangeInfoProvider _exchangeInfoProvider;
+		private readonly CandleBuilderProvider _candleBuilderProvider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleBuilderMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Inner message adapter.</param>
-		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
-		public CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, IExchangeInfoProvider exchangeInfoProvider)
+		/// <param name="candleBuilderProvider">Candle builders provider.</param>
+		public CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBuilderProvider candleBuilderProvider)
 			: base(innerAdapter)
 		{
-			_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
-
-			_candleBuilders = new CandleBuildersList
-			{
-				new TimeFrameCandleBuilder(exchangeInfoProvider),
-				new TickCandleBuilder(exchangeInfoProvider),
-				new VolumeCandleBuilder(exchangeInfoProvider),
-				new RangeCandleBuilder(exchangeInfoProvider),
-				new RenkoCandleBuilder(exchangeInfoProvider),
-				new PnFCandleBuilder(exchangeInfoProvider),
-			};
+			_candleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(candleBuilderProvider));
 		}
 
 		/// <inheritdoc />
@@ -210,7 +157,7 @@ namespace StockSharp.Algo.Candles.Compression
 								_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, current)
 								{
 									State = SeriesStates.SmallTimeFrame,
-									BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, new TimeFrameCandleBuilder(_exchangeInfoProvider)),
+									BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(MarketDataTypes.CandleTimeFrame)),
 									LastTime = original.From,
 								});
 
@@ -590,7 +537,7 @@ namespace StockSharp.Algo.Candles.Compression
 							series.Current.Arg = smaller;
 							series.Current.TransactionId = TransactionIdGenerator.GetNextId();
 
-							series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, new TimeFrameCandleBuilder(_exchangeInfoProvider));
+							series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(MarketDataTypes.CandleTimeFrame));
 							series.State = SeriesStates.SmallTimeFrame;
 
 							// loopback
@@ -688,7 +635,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 				series.LastTime = time;
 
-				var builder = _candleBuilders.Get(origin.DataType);
+				var builder = _candleBuilderProvider.Get(origin.DataType);
 
 				var result = builder.Process(origin, series.CurrentCandleMessage, transform);
 
@@ -720,7 +667,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new CandleBuilderMessageAdapter(InnerAdapter, _exchangeInfoProvider);
+			return new CandleBuilderMessageAdapter(InnerAdapter, _candleBuilderProvider);
 		}
 	}
 }

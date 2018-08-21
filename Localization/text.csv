@@ -5609,7 +5609,6 @@ DocStr770;Found portfolios;Найденные портфели
 DocStr771;A new message;Новое сообщение
 DocStr772;To sign up to get market data by the instrument;Подписаться на получение рыночных данных по инструменту
 DocStr773;The instrument by which new information getting should be started;Инструмент, по которому необходимо начать получать новую информацию
-DocStr774;Market data type;Тип рыночных данных
 DocStr775;To unsubscribe from getting market data by the instrument;Отписаться от получения рыночных данных по инструменту
 DocStr776;To start getting new information (for example, {0} or {1}) by the instrument;Начать получать новую информацию (например, {0} или {1}) по инструменту
 DocStr777;To stop getting new information;Остановить получение новой информации
@@ -15098,3 +15097,7 @@ DocStr10625;Index securities processor for {0};Обработчик индекс
 DocStr10626;Use open interest for {0};Использовать открытый интерес для {0}
 DocStr10627;Fill market-data gaps by zero values;Заполнять пробелы маркет-данных нолями
 DocStr10628;Clone {0};Копия {0}
+DocStr10629;Candle builders provider;Провайдер построителей свечей
+DocStr10630;Get candles builder;Получить построитель свечей
+DocStr10632;Register candles builder;Зарегистрировать построитель свечей
+DocStr10633;Unregister candles builder;Удалить построитель свечей

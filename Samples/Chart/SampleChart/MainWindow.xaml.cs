@@ -56,13 +56,13 @@ namespace SampleChart
 		private readonly SynchronizedList<CandleMessage> _updatedCandles = new SynchronizedList<CandleMessage>();
 		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, Candle> _allCandles = new CachedSynchronizedOrderedDictionary<DateTimeOffset, Candle>();
 		private Security _security;
-		private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 		private RandomWalkTradeGenerator _tradeGenerator;
 		private readonly CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator> _indicators = new CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator>();
 		private ICandleBuilder _candleBuilder;
 		private MarketDataMessage _mdMsg;
 		private readonly ICandleBuilderValueTransform _candleTransform = new TickCandleBuilderValueTransform();
 		private readonly CandlesHolder _holder = new CandlesHolder();
+		private readonly CandleBuilderProvider _builderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
 		private bool _historyLoaded;
 		private bool _isRealTime;
 		private DateTimeOffset _lastTime;
@@ -239,7 +239,7 @@ namespace SampleChart
 			_holder.CreateCandleSeries(_transactionId, series);
 
 			_candleTransform.Process(new ResetMessage());
-			_candleBuilder = msgType.ToCandleMarketDataType().CreateCandleBuilder(_exchangeInfoProvider);
+			_candleBuilder = _builderProvider.Get(msgType.ToCandleMarketDataType());
 
 			var storage = new StorageRegistry();
 

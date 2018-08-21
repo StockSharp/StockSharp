@@ -15,6 +15,7 @@ StockSharp API Change log
 * (feature) BaseGridControl. Autoscroll added.
 * (feature) Bitfinex. Market data v2 API.
 * (feature) Bithumb. WebSocket support.
+* (feature) CandleBuilderProvider. Ability to register own CandleBuilder-s.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
