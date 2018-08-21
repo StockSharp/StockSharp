@@ -97,7 +97,7 @@ if (_connector.Configure(this))
 			<step>
 				<content>
 					<para>Далее, необходимо подписаться на событие 
-					<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.ICandleSource`1.Processing</codeEntityReference>,
+					<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>,
 					сигнализирующее о появления нового значения для обработки:</para>
 			
 					<code language="C#">
@@ -155,7 +155,7 @@ _connector.SubscribeCandles(_candleSeries, DateTime.Today.Subtract(TimeSpan.From
 					]]>
 					</code>
 			
-					<para>После этого этапа начнет вызываться событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.ICandleSource`1.Processing</codeEntityReference>.</para>
+					<para>После этого этапа начнет вызываться событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>.</para>
 				</content>
 			</step>
 		</steps>

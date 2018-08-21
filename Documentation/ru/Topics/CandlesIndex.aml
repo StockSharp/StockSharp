@@ -58,7 +58,7 @@ _candleManager.Start(_indexSeries);
 		]]>
 		</code>
 		
-		<para>После этого, в обработчик события Processing - DrawCandles, будут поступать свечи, которые можно вывести на график:</para>
+		<para>После этого, в обработчик события <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference> - DrawCandles, будут поступать свечи, которые можно вывести на график:</para>
 
         <code language="C#">
         <![CDATA[

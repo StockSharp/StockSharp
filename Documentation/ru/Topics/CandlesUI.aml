@@ -12,7 +12,7 @@
 		<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference>.</para>
 		
 		<para>При передаче свечи из события 
-		<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.ICandleSource`1.Processing</codeEntityReference>
+		<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>
 		для отрисовки на графике, будут отображаться изменения текущей свечи.</para>
 		
 		<para>Если же нужно отображать только <legacyBold>"целые"</legacyBold> свечи, то необходимо проверить свойство 

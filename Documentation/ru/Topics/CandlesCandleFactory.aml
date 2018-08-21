@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="99da6499-9ac1-4e7e-bcaf-a0c832dce4de" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
 	<introduction>
-		<para><token>stocksharp</token> позволяет расширить возможности <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
-		давая возможность работать с произвольными типами свечей. Это полезно в тех случаях, когда требуется работать со свечами, не поддерживаемые
-		в данный момент <token>stocksharp</token>. Ниже описан план действия по добавлению тиковых свечей (свечи, которые формируются по количеству сделок).</para>
+		<para><token>stocksharp</token> позволяет расширить возможности построения свечей, давая возможность работать с произвольными типами свечей.
+		Это полезно в тех случаях, когда требуется работать со свечами, не поддерживаемые в данный момент <token>stocksharp</token>. Ниже описан план действия
+		по добавлению тиковых свечей (свечи, которые формируются по количеству сделок).</para>
     </introduction>
     
 	<procedure>
@@ -147,7 +147,7 @@ public class TickCandleBuilder : CandleBuilder<TickCandleMessage>
     protected override TickCandle CreateCandle(CandleSeries series, ICandleBuilderValueTransform transform)
     {
         var candle = new TickCandleMessage
-	{
+        {
             TradeCount = (int)series.Arg,
             OpenTime = transform.Time,
             CloseTime = transform.Time
@@ -197,8 +197,8 @@ public class TickCandleBuilder : CandleBuilder<TickCandleMessage>
     /// <param name="transform">Данные.</param>
     protected override void UpdateCandle(CandleSeries series, TickCandleMessage candle, ICandleBuilderValueTransform transform)
     {
-        base.UpdateCandle(series, candle, transform);
-	candle.TotalTicks++;
+		base.UpdateCandle(series, candle, transform);
+		candle.TotalTicks++;
     }
 }
 ]]>
@@ -208,22 +208,19 @@ public class TickCandleBuilder : CandleBuilder<TickCandleMessage>
 				
 			<step>
 				<content>
-<para>Затем, при создании <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, нужно добавить 
-<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference> в источники. 
-Этот построитель будет брать тики из <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
+<para>Затем, необходимо получить <codeEntityReference>T:StockSharp.Algo.Candles.Compression.CandleBuilderProvider</codeEntityReference> из подключения, и добавить 
+в него <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference>:</para>
 <alert class="caution"><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference>, 
-как источник свечей, стандартно присутствует в <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.
+как источник свечей, стандартно присутствует в <codeEntityReference>T:StockSharp.Algo.Candles.Compression.CandleBuilderProvider</codeEntityReference>.
 Данный шаг представлен лишь в качестве примера.</alert>
 
 <code language="C#">
 <![CDATA[
-private QuikTrader _trader;
-private CandleManager _candleManager;
+private Connector _connector;
 
 ...
 
-_candleManager = new CandleManager(_trader);
-_trader.CandleAdapter.Builders.Add(new TickCandleBuilder());
+_connector.Adapter.CandleBuilderProvider.Register(new TickCandleBuilder());
 ]]>
 </code>
 
@@ -239,7 +236,7 @@ var series = new CandleSeries(typeof(TickCandle), _security, 1000);
 
 ...
 
-_candleManager.Start(series);
+_connector.SubscribeCandles(series);
 ]]>
 </code>				
 				</content>
