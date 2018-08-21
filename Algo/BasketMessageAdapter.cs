@@ -570,31 +570,36 @@ namespace StockSharp.Algo
 
 			var adapters = GetAdapters(mdMsg).Where(a =>
 			{
-				var isTfCandles = mdMsg.DataType == MarketDataTypes.CandleTimeFrame;
-
-				if (!a.IsMarketDataTypeSupported(mdMsg.DataType))
+				if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
 				{
-					if (!isTfCandles)
+					if (a.IsMarketDataTypeSupported(mdMsg.DataType))
+						return true;
+					else
 					{
-						if (mdMsg.DataType == MarketDataTypes.MarketDepth || mdMsg.DataType == MarketDataTypes.Trades)
+						switch (mdMsg.DataType)
 						{
-							if (a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog))
+							case MarketDataTypes.Level1:
+							case MarketDataTypes.OrderLog:
+							case MarketDataTypes.News:
+								return false;
+							case MarketDataTypes.MarketDepth:
+							case MarketDataTypes.Trades:
+								return a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog);
+							default:
 							{
-								return true;
+								if (CandleBuilderProvider.IsRegistered(mdMsg.DataType))
+									return mdMsg.BuildMode != MarketDataBuildModes.Load;
+								else
+									throw new ArgumentOutOfRangeException(mdMsg.DataType.ToString());
 							}
 						}
-
-						return false;
 					}
 				}
-
-				if (!isTfCandles)
-					return true;
 
 				var original = (TimeSpan)mdMsg.Arg;
 				var timeFrames = a.GetTimeFrames(mdMsg.SecurityId).ToArray();
 
-				if (timeFrames.Contains(original)|| a.CheckTimeFrameByRequest)
+				if (timeFrames.Contains(original) || a.CheckTimeFrameByRequest)
 					return true;
 
 				if (mdMsg.AllowBuildFromSmallerTimeFrame)

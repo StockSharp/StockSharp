@@ -121,8 +121,11 @@ T:StockSharp.Algo.Candles.Compression.CandleBuilderProvider/summary;DocStr10629
 M:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)/summary;DocStr1
 M:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)/param/exchangeInfoProvider;DocStr8927
 P:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.ExchangeInfoProvider/summary;DocStr8927
+M:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.IsRegistered(StockSharp.Messages.MarketDataTypes)/summary;DocStr10634
+M:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.IsRegistered(StockSharp.Messages.MarketDataTypes)/param/type;Str1670
+M:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.IsRegistered(StockSharp.Messages.MarketDataTypes)/returns;DocStr10635
 M:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.Get(StockSharp.Messages.MarketDataTypes)/summary;DocStr10630
-M:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.Get(StockSharp.Messages.MarketDataTypes)/param/type;DocStr10631
+M:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.Get(StockSharp.Messages.MarketDataTypes)/param/type;Str1670
 M:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.Get(StockSharp.Messages.MarketDataTypes)/returns;DocStr9669
 M:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.Register(StockSharp.Algo.Candles.Compression.ICandleBuilder)/summary;DocStr10632
 M:StockSharp.Algo.Candles.Compression.CandleBuilderProvider.Register(StockSharp.Algo.Candles.Compression.ICandleBuilder)/param/builder;DocStr9669
@@ -947,7 +950,7 @@ P:StockSharp.Algo.Export.BaseExporter.Security/summary;DocStr2831
 P:StockSharp.Algo.Export.BaseExporter.Arg/summary;DocStr1087
 P:StockSharp.Algo.Export.BaseExporter.Path/summary;DocStr1089
 M:StockSharp.Algo.Export.BaseExporter.Export(System.Type,System.Collections.IEnumerable)/summary;DocStr1090
-M:StockSharp.Algo.Export.BaseExporter.Export(System.Type,System.Collections.IEnumerable)/param/dataType;DocStr774
+M:StockSharp.Algo.Export.BaseExporter.Export(System.Type,System.Collections.IEnumerable)/param/dataType;Str1670
 M:StockSharp.Algo.Export.BaseExporter.Export(System.Type,System.Collections.IEnumerable)/param/values;Str3099
 M:StockSharp.Algo.Export.BaseExporter.CanProcess(System.Int32)/summary;DocStr1091
 M:StockSharp.Algo.Export.BaseExporter.CanProcess(System.Int32)/param/exported;DocStr1092
@@ -2328,7 +2331,7 @@ M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Alg
 M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/sessionId;DocStr138
 M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/requiredPermissions;DocStr9606
 M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/securityId;SecurityId
-M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/dataType;DocStr774
+M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/dataType;Str1670
 M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/arg;DocStr144
 M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/date;Date
 M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/returns;DocStr159
@@ -2338,7 +2341,7 @@ M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockS
 M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/sessionId;DocStr138
 M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/requiredPermissions;DocStr9606
 M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/securityId;SecurityId
-M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/dataType;DocStr774
+M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/dataType;Str1670
 M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/arg;DocStr144
 M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/date;Date
 M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/returns;DocStr159
@@ -2358,7 +2361,7 @@ P:StockSharp.Algo.Storages.Binary.Snapshot.QuotesBinarySnapshotSerializer.MaxDep
 T:StockSharp.Algo.Storages.Binary.Snapshot.TransactionBinarySnapshotSerializer/summary;DocStr10199
 T:StockSharp.Algo.Storages.Binary.Snapshot.Level1BinarySnapshotSerializer/summary;DocStr10199
 T:StockSharp.Algo.Storages.CacheableMarketDataStorage`1/summary;DocStr1296
-T:StockSharp.Algo.Storages.CacheableMarketDataStorage`1/typeparam/TData;DocStr774
+T:StockSharp.Algo.Storages.CacheableMarketDataStorage`1/typeparam/TData;Str1670
 M:StockSharp.Algo.Storages.CacheableMarketDataStorage`1.#ctor(StockSharp.Algo.Storages.IMarketDataStorage{`0},StockSharp.Algo.Storages.IMarketDataStorage{`0})/summary;DocStr1
 M:StockSharp.Algo.Storages.CacheableMarketDataStorage`1.#ctor(StockSharp.Algo.Storages.IMarketDataStorage{`0},StockSharp.Algo.Storages.IMarketDataStorage{`0})/param/sourceStorage;DocStr1304
 M:StockSharp.Algo.Storages.CacheableMarketDataStorage`1.#ctor(StockSharp.Algo.Storages.IMarketDataStorage{`0},StockSharp.Algo.Storages.IMarketDataStorage{`0})/param/cacheStorage;DocStr1305
@@ -2743,7 +2746,7 @@ T:StockSharp.Algo.Storages.InMemoryNativeIdStorage/summary;DocStr9353
 T:StockSharp.Algo.Storages.BufferMessageAdapter/summary;DocStr8565
 T:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2/summary;DocStr1589
 T:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2/typeparam/TKey;DocStr1590
-T:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2/typeparam/TMarketData;DocStr774
+T:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2/typeparam/TMarketData;Str1670
 M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Add(`0,`1)/summary;DocStr1591
 M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Add(`0,`1)/param/key;DocStr1592
 M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Add(`0,`1)/param/data;DocStr1593
@@ -2882,7 +2885,7 @@ M:StockSharp.Algo.Storages.ISecurityMarketDataDrive.GetTransactionStorage(StockS
 M:StockSharp.Algo.Storages.ISecurityMarketDataDrive.GetTransactionStorage(StockSharp.Algo.Storages.IMarketDataSerializer{StockSharp.Messages.ExecutionMessage})/param/serializer;DocStr1280
 M:StockSharp.Algo.Storages.ISecurityMarketDataDrive.GetTransactionStorage(StockSharp.Algo.Storages.IMarketDataSerializer{StockSharp.Messages.ExecutionMessage})/returns;DocStr1429
 M:StockSharp.Algo.Storages.ISecurityMarketDataDrive.GetStorage(System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataSerializer)/summary;DocStr1430
-M:StockSharp.Algo.Storages.ISecurityMarketDataDrive.GetStorage(System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataSerializer)/param/dataType;DocStr774
+M:StockSharp.Algo.Storages.ISecurityMarketDataDrive.GetStorage(System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataSerializer)/param/dataType;Str1670
 M:StockSharp.Algo.Storages.ISecurityMarketDataDrive.GetStorage(System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataSerializer)/param/arg;DocStr144
 M:StockSharp.Algo.Storages.ISecurityMarketDataDrive.GetStorage(System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataSerializer)/param/serializer;DocStr1280
 M:StockSharp.Algo.Storages.ISecurityMarketDataDrive.GetStorage(System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataSerializer)/returns;DocStr168
@@ -2951,7 +2954,7 @@ M:StockSharp.Algo.Storages.SnapshotRegistry.#ctor(System.String)/param/path;DocS
 M:StockSharp.Algo.Storages.SnapshotRegistry.Init/summary;DocStr9249
 M:StockSharp.Algo.Storages.SnapshotRegistry.DisposeManaged/summary;DocStr7
 M:StockSharp.Algo.Storages.SnapshotRegistry.GetSnapshotStorage(System.Type,System.Object)/summary;DocStr10211
-M:StockSharp.Algo.Storages.SnapshotRegistry.GetSnapshotStorage(System.Type,System.Object)/param/dataType;DocStr774
+M:StockSharp.Algo.Storages.SnapshotRegistry.GetSnapshotStorage(System.Type,System.Object)/param/dataType;Str1670
 M:StockSharp.Algo.Storages.SnapshotRegistry.GetSnapshotStorage(System.Type,System.Object)/param/arg;DocStr144
 M:StockSharp.Algo.Storages.SnapshotRegistry.GetSnapshotStorage(System.Type,System.Object)/returns;DocStr10212
 T:StockSharp.Algo.Storages.StorageEntityFactory/summary;DocStr8605
@@ -3043,7 +3046,7 @@ M:StockSharp.Algo.Storages.IMarketDataStorage.GetMetaInfo(System.DateTime)/param
 M:StockSharp.Algo.Storages.IMarketDataStorage.GetMetaInfo(System.DateTime)/returns;DocStr1273
 P:StockSharp.Algo.Storages.IMarketDataStorage.Serializer/summary;DocStr1280
 T:StockSharp.Algo.Storages.IMarketDataStorage`1/summary;DocStr1263
-T:StockSharp.Algo.Storages.IMarketDataStorage`1/typeparam/TData;DocStr774
+T:StockSharp.Algo.Storages.IMarketDataStorage`1/typeparam/TData;Str1670
 M:StockSharp.Algo.Storages.IMarketDataStorage`1.Save(System.Collections.Generic.IEnumerable{`0})/summary;DocStr1264
 M:StockSharp.Algo.Storages.IMarketDataStorage`1.Save(System.Collections.Generic.IEnumerable{`0})/param/data;MarketData
 M:StockSharp.Algo.Storages.IMarketDataStorage`1.Save(System.Collections.Generic.IEnumerable{`0})/returns;DocStr8606
@@ -3080,7 +3083,7 @@ M:StockSharp.Algo.Storages.IMarketDataDrive.GetAvailableDataTypes(StockSharp.Mes
 M:StockSharp.Algo.Storages.IMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr8483
 M:StockSharp.Algo.Storages.IMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/summary;DocStr1578
 M:StockSharp.Algo.Storages.IMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/securityId;SecurityId
-M:StockSharp.Algo.Storages.IMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/dataType;DocStr774
+M:StockSharp.Algo.Storages.IMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/dataType;Str1670
 M:StockSharp.Algo.Storages.IMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/arg;DocStr144
 M:StockSharp.Algo.Storages.IMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/format;DocStr145
 M:StockSharp.Algo.Storages.IMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr273
@@ -3100,7 +3103,7 @@ M:StockSharp.Algo.Storages.BaseMarketDataDrive.GetAvailableDataTypes(StockSharp.
 M:StockSharp.Algo.Storages.BaseMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr8483
 M:StockSharp.Algo.Storages.BaseMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/summary;DocStr272
 M:StockSharp.Algo.Storages.BaseMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/securityId;SecurityId
-M:StockSharp.Algo.Storages.BaseMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/dataType;DocStr774
+M:StockSharp.Algo.Storages.BaseMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/dataType;Str1670
 M:StockSharp.Algo.Storages.BaseMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/arg;DocStr144
 M:StockSharp.Algo.Storages.BaseMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/format;DocStr145
 M:StockSharp.Algo.Storages.BaseMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr273
@@ -3125,7 +3128,7 @@ M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetAvailableDataTypes(StockSharp
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr8483
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/summary;DocStr272
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/securityId;SecurityId
-M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/dataType;DocStr774
+M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/dataType;Str1670
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/arg;DocStr144
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/format;DocStr145
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr273
@@ -3364,7 +3367,7 @@ M:StockSharp.Algo.Storages.IStorageRegistry.GetTransactionStorage(StockSharp.Bus
 M:StockSharp.Algo.Storages.IStorageRegistry.GetTransactionStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr1429
 M:StockSharp.Algo.Storages.IStorageRegistry.GetStorage(StockSharp.BusinessEntities.Security,System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/summary;DocStr1430
 M:StockSharp.Algo.Storages.IStorageRegistry.GetStorage(StockSharp.BusinessEntities.Security,System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/param/security;DocStr2831
-M:StockSharp.Algo.Storages.IStorageRegistry.GetStorage(StockSharp.BusinessEntities.Security,System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/param/dataType;DocStr774
+M:StockSharp.Algo.Storages.IStorageRegistry.GetStorage(StockSharp.BusinessEntities.Security,System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/param/dataType;Str1670
 M:StockSharp.Algo.Storages.IStorageRegistry.GetStorage(StockSharp.BusinessEntities.Security,System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/param/arg;DocStr144
 M:StockSharp.Algo.Storages.IStorageRegistry.GetStorage(StockSharp.BusinessEntities.Security,System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/param/drive;DocStr1605
 M:StockSharp.Algo.Storages.IStorageRegistry.GetStorage(StockSharp.BusinessEntities.Security,System.Type,System.Object,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/param/format;DocStr1606
@@ -5970,7 +5973,7 @@ M:StockSharp.Algo.Testing.LastMessage.#ctor/summary;DocStr1
 T:StockSharp.Algo.Testing.MarketDataGenerator/summary;DocStr2178
 M:StockSharp.Algo.Testing.MarketDataGenerator.#ctor(StockSharp.Messages.SecurityId)/summary;DocStr93
 M:StockSharp.Algo.Testing.MarketDataGenerator.#ctor(StockSharp.Messages.SecurityId)/param/securityId;DocStr2183
-P:StockSharp.Algo.Testing.MarketDataGenerator.DataType/summary;DocStr774
+P:StockSharp.Algo.Testing.MarketDataGenerator.DataType/summary;Str1670
 P:StockSharp.Algo.Testing.MarketDataGenerator.RandomArrayLength/summary;DocStr2188
 M:StockSharp.Algo.Testing.MarketDataGenerator.Init/summary;DocStr2184
 P:StockSharp.Algo.Testing.MarketDataGenerator.SecurityId/summary;DocStr2183
@@ -5997,7 +6000,7 @@ P:StockSharp.Algo.Testing.MarketDataGenerator.Steps/summary;DocStr2197
 T:StockSharp.Algo.Testing.MarketDepthGenerator/summary;DocStr2198
 M:StockSharp.Algo.Testing.MarketDepthGenerator.#ctor(StockSharp.Messages.SecurityId)/summary;DocStr93
 M:StockSharp.Algo.Testing.MarketDepthGenerator.#ctor(StockSharp.Messages.SecurityId)/param/securityId;DocStr2183
-P:StockSharp.Algo.Testing.MarketDepthGenerator.DataType/summary;DocStr774
+P:StockSharp.Algo.Testing.MarketDepthGenerator.DataType/summary;Str1670
 P:StockSharp.Algo.Testing.MarketDepthGenerator.UseTradeVolume/summary;DocStr2203
 P:StockSharp.Algo.Testing.MarketDepthGenerator.UseTradeVolume/remarks;DocStr2204
 P:StockSharp.Algo.Testing.MarketDepthGenerator.MinSpreadStepCount/summary;DocStr2205
@@ -6078,7 +6081,7 @@ M:StockSharp.Algo.Testing.OrderLogGenerator.#ctor(StockSharp.Messages.SecurityId
 M:StockSharp.Algo.Testing.OrderLogGenerator.#ctor(StockSharp.Messages.SecurityId,StockSharp.Algo.Testing.TradeGenerator)/summary;DocStr1
 M:StockSharp.Algo.Testing.OrderLogGenerator.#ctor(StockSharp.Messages.SecurityId,StockSharp.Algo.Testing.TradeGenerator)/param/securityId;DocStr2183
 M:StockSharp.Algo.Testing.OrderLogGenerator.#ctor(StockSharp.Messages.SecurityId,StockSharp.Algo.Testing.TradeGenerator)/param/tradeGenerator;DocStr2239
-P:StockSharp.Algo.Testing.OrderLogGenerator.DataType/summary;DocStr774
+P:StockSharp.Algo.Testing.OrderLogGenerator.DataType/summary;Str1670
 P:StockSharp.Algo.Testing.OrderLogGenerator.TradeGenerator/summary;DocStr2239
 P:StockSharp.Algo.Testing.OrderLogGenerator.IdGenerator/summary;DocStr2240
 M:StockSharp.Algo.Testing.OrderLogGenerator.Init/summary;DocStr2184
@@ -6113,7 +6116,7 @@ M:StockSharp.Algo.Testing.RealTimeEmulationTrader`1.DisposeManaged/summary;DocSt
 T:StockSharp.Algo.Testing.TradeGenerator/summary;DocStr2239
 M:StockSharp.Algo.Testing.TradeGenerator.#ctor(StockSharp.Messages.SecurityId)/summary;DocStr93
 M:StockSharp.Algo.Testing.TradeGenerator.#ctor(StockSharp.Messages.SecurityId)/param/securityId;DocStr2183
-P:StockSharp.Algo.Testing.TradeGenerator.DataType/summary;DocStr774
+P:StockSharp.Algo.Testing.TradeGenerator.DataType/summary;Str1670
 P:StockSharp.Algo.Testing.TradeGenerator.IdGenerator/summary;DocStr2247
 T:StockSharp.Algo.Testing.RandomWalkTradeGenerator/summary;DocStr2248
 M:StockSharp.Algo.Testing.RandomWalkTradeGenerator.#ctor(StockSharp.Messages.SecurityId)/summary;DocStr1

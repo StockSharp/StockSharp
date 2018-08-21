@@ -15101,3 +15101,5 @@ DocStr10629;Candle builders provider;Провайдер построителей
 DocStr10630;Get candles builder;Получить построитель свечей
 DocStr10632;Register candles builder;Зарегистрировать построитель свечей
 DocStr10633;Unregister candles builder;Удалить построитель свечей
+DocStr10634;Whether the candle type registered;Зарегистрирован ли тип свечи
+DocStr10635;{0} if the candle type registered, {1} otherwise;{0} если тип свечи зарегистрирован, {1} иначе

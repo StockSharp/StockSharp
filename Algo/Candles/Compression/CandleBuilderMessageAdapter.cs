@@ -88,7 +88,7 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
+					if (!_candleBuilderProvider.IsRegistered(mdMsg.DataType))
 						break;
 
 					if (mdMsg.IsSubscribe)
@@ -110,69 +110,99 @@ namespace StockSharp.Algo.Candles.Compression
 							return;
 						}
 
-						var originalTf = (TimeSpan)mdMsg.Arg;
-						var timeFrames = InnerAdapter.GetTimeFrames(mdMsg.SecurityId).ToArray();
-
-						if (timeFrames.Contains(originalTf) || InnerAdapter.CheckTimeFrameByRequest)
+						if (mdMsg.DataType == MarketDataTypes.CandleTimeFrame)
 						{
-							this.AddInfoLog("Origin tf: {0}", originalTf);
+							var originalTf = (TimeSpan)mdMsg.Arg;
+							var timeFrames = InnerAdapter.GetTimeFrames(mdMsg.SecurityId).ToArray();
 
-							var original = (MarketDataMessage)mdMsg.Clone();
-							_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, original)
+							if (timeFrames.Contains(originalTf) || InnerAdapter.CheckTimeFrameByRequest)
 							{
-								State = SeriesStates.Regular,
-								LastTime = original.From,
-							});
-
-							break;
-						}
-
-						if (isLoadOnly)
-						{
-							RaiseNewOutMessage(new MarketDataMessage
-							{
-								OriginalTransactionId = transactionId,
-								IsNotSupported = true,
-							});
-
-							return;
-						}
-
-						if (mdMsg.AllowBuildFromSmallerTimeFrame)
-						{
-							var smaller = timeFrames
-										  .FilterSmallerTimeFrames(originalTf)
-										  .OrderByDescending()
-										  .FirstOr();
-
-							if (smaller != null)
-							{
-								this.AddInfoLog("Smaller tf: {0}->{1}", originalTf, smaller);
+								this.AddInfoLog("Origin tf: {0}", originalTf);
 
 								var original = (MarketDataMessage)mdMsg.Clone();
-
-								var current = (MarketDataMessage)original.Clone();
-								current.Arg = smaller;
-
-								_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, current)
+								_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, original)
 								{
-									State = SeriesStates.SmallTimeFrame,
-									BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(MarketDataTypes.CandleTimeFrame)),
+									State = SeriesStates.Regular,
 									LastTime = original.From,
 								});
 
-								base.SendInMessage(current);
+								break;
+							}
+
+							if (isLoadOnly)
+							{
+								RaiseNewOutMessage(new MarketDataMessage
+								{
+									OriginalTransactionId = transactionId,
+									IsNotSupported = true,
+								});
+
 								return;
 							}
-						}
 
-						if (!TrySubscribeBuild(mdMsg, transactionId))
-						{
-							RaiseNewOutMessage(new MarketDataMessage
+							if (mdMsg.AllowBuildFromSmallerTimeFrame)
 							{
-								OriginalTransactionId = transactionId,
-								IsNotSupported = true,
-							});
+								var smaller = timeFrames
+								              .FilterSmallerTimeFrames(originalTf)
+								              .OrderByDescending()
+								              .FirstOr();
+
+								if (smaller != null)
+								{
+									this.AddInfoLog("Smaller tf: {0}->{1}", originalTf, smaller);
+
+									var original = (MarketDataMessage)mdMsg.Clone();
+
+									var current = (MarketDataMessage)original.Clone();
+									current.Arg = smaller;
+
+									_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, current)
+									{
+										State = SeriesStates.SmallTimeFrame,
+										BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(MarketDataTypes.CandleTimeFrame)),
+										LastTime = original.From,
+									});
+
+									base.SendInMessage(current);
+									return;
+								}
+							}
+
+							if (!TrySubscribeBuild(mdMsg, transactionId))
+							{
+								RaiseNewOutMessage(new MarketDataMessage
+								{
+									OriginalTransactionId = transactionId,
+									IsNotSupported = true,
+								});
+							}
+						}
+						else
+						{
+							if (InnerAdapter.IsMarketDataTypeSupported(mdMsg.DataType))
+							{
+								this.AddInfoLog("Origin arg: {0}", mdMsg.Arg);
+
+								var original = (MarketDataMessage)mdMsg.Clone();
+								_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, original)
+								{
+									State = SeriesStates.Regular,
+									LastTime = original.From,
+								});
+
+								break;
+							}
+							else
+							{
+								if (!TrySubscribeBuild(mdMsg, transactionId))
+								{
+									RaiseNewOutMessage(new MarketDataMessage
+									{
+										OriginalTransactionId = transactionId,
+										IsNotSupported = true,
+									});
+								}
+							}
 						}
 						
 						return;

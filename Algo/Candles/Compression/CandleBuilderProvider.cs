@@ -37,6 +37,13 @@ namespace StockSharp.Algo.Candles.Compression
 		public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
 		/// <summary>
+		/// Whether the candle type registered.
+		/// </summary>
+		/// <param name="type">Market data type.</param>
+		/// <returns><see langword="true" /> if the candle type registered, <see langword="false" /> otherwise.</returns>
+		public bool IsRegistered(MarketDataTypes type) => _builders.ContainsKey(type);
+
+		/// <summary>
 		/// Get candles builder.
 		/// </summary>
 		/// <param name="type">Market data type.</param>
