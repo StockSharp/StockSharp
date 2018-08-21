@@ -353,13 +353,7 @@ namespace StockSharp.Algo
 		public Unit VolumeLevel
 		{
 			get => _volumeLevel;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_volumeLevel = value;
-			}
+			set => _volumeLevel = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <inheritdoc />
@@ -371,7 +365,7 @@ namespace StockSharp.Algo
 		{
 			lock (InnerSecurities.SyncRoot)
 			{
-				return $"{VolumeLevel}," + InnerSecurities.Select(id => id.ToStringId()).Join(",");
+				return $"{IsOpenInterest},{VolumeLevel}," + InnerSecurities.Select(id => id.ToStringId()).Join(",");
 			}
 		}
 
@@ -380,12 +374,13 @@ namespace StockSharp.Algo
 		{
 			var parts = text.Split(",");
 
-			VolumeLevel = parts[0].ToUnit();
+			IsOpenInterest = parts[0].To<bool>();
+			VolumeLevel = parts[1].ToUnit();
 
 			lock (InnerSecurities.SyncRoot)
 			{
 				InnerSecurities.Clear();
-				InnerSecurities.AddRange(parts.Skip(1).Select(p => p.ToSecurityId()));
+				InnerSecurities.AddRange(parts.Skip(2).Select(p => p.ToSecurityId()));
 			}
 		}
 	}
