@@ -4,8 +4,8 @@ namespace StockSharp.Algo
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
-	using Ecng.Reflection;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -19,19 +19,21 @@ namespace StockSharp.Algo
 			public readonly SynchronizedDictionary<SecurityId, Tuple<IBasketSecurityProcessor, long>> BySecurityIds = new SynchronizedDictionary<SecurityId, Tuple<IBasketSecurityProcessor, long>>();
 		}
 
-		private readonly SynchronizedDictionary<SecurityId, SecurityMessage> _basketSecurities = new SynchronizedDictionary<SecurityId, SecurityMessage>();
 		private readonly SynchronizedDictionary<MarketDataTypes, SubscriptionLegsInfo> _subscriptions = new SynchronizedDictionary<MarketDataTypes, SubscriptionLegsInfo>();
 		
+		private readonly ISecurityProvider _securityProvider;
 		private readonly IBasketSecurityProcessorProvider _processorProvider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketSecurityMessageAdapter"/>.
 		/// </summary>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="processorProvider">Basket security processors provider.</param>
 		/// <param name="innerAdapter">Underlying adapter.</param>
-		public BasketSecurityMessageAdapter(IBasketSecurityProcessorProvider processorProvider, IMessageAdapter innerAdapter)
+		public BasketSecurityMessageAdapter(ISecurityProvider securityProvider, IBasketSecurityProcessorProvider processorProvider, IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
+			_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 			_processorProvider = processorProvider ?? throw new ArgumentNullException(nameof(processorProvider));
 		}
 
@@ -52,13 +54,17 @@ namespace StockSharp.Algo
 
 					if (mdMsg.IsSubscribe)
 					{
-						if (_basketSecurities.TryGetValue(mdMsg.SecurityId, out var basket))
+						if (mdMsg.BasketExpression.IsEmpty())
+							break;
+
+						if (_securityProvider.LookupById(mdMsg.SecurityId) is BasketSecurity basket)
 						{
-							var tuple = Tuple.Create(_processorProvider.GetProcessorType(basket.BasketExpression).CreateInstance<IBasketSecurityProcessor>(basket), mdMsg.TransactionId);
+							var processor = _processorProvider.CreateProcessor(basket);
+							var tuple = Tuple.Create(processor, mdMsg.TransactionId);
 
 							var info = _subscriptions.SafeAdd(mdMsg.DataType);
 
-							var ids = new long[basket.BasketLegs.Length];
+							var ids = new long[processor.BasketLegs.Length];
 
 							for (var i = 0; i < ids.Length; i++)
 							{
@@ -95,16 +101,6 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.Security:
-				{
-					var secMsg = (SecurityMessage)message;
-					
-					if (secMsg.BasketLegs.Length > 0)
-						_basketSecurities.Add(secMsg.SecurityId, (SecurityMessage)secMsg.Clone());
-					
-					break;
-				}
-
 				case MessageTypes.MarketData:
 				{
 					var mdMsg = (MarketDataMessage)message;
@@ -200,7 +196,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override IMessageChannel Clone()
 		{
-			return new BasketSecurityMessageAdapter(_processorProvider, InnerAdapter);
+			return new BasketSecurityMessageAdapter(_securityProvider, _processorProvider, InnerAdapter);
 		}
 	}
 }

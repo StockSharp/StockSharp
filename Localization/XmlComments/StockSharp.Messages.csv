@@ -530,10 +530,10 @@ M:StockSharp.Messages.Extensions.IsMessageSupported(StockSharp.Messages.IMessage
 M:StockSharp.Messages.Extensions.IsMessageSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageTypes)/returns;DocStr8834
 M:StockSharp.Messages.Extensions.AddSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/summary;DocStr10114
 M:StockSharp.Messages.Extensions.AddSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/adapter;DocStr929
-M:StockSharp.Messages.Extensions.AddSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/type;DocStr774
+M:StockSharp.Messages.Extensions.AddSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/type;Str1670
 M:StockSharp.Messages.Extensions.RemoveSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/summary;DocStr10116
 M:StockSharp.Messages.Extensions.RemoveSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/adapter;DocStr929
-M:StockSharp.Messages.Extensions.RemoveSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/type;DocStr774
+M:StockSharp.Messages.Extensions.RemoveSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/type;Str1670
 M:StockSharp.Messages.Extensions.IsMarketDataTypeSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/summary;DocStr10117
 M:StockSharp.Messages.Extensions.IsMarketDataTypeSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/adapter;DocStr929
 M:StockSharp.Messages.Extensions.IsMarketDataTypeSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/type;DocStr9
@@ -614,6 +614,7 @@ M:StockSharp.Messages.Extensions.IsOrderLogMatched(StockSharp.Messages.Execution
 M:StockSharp.Messages.Extensions.IsOrderLogMatched(StockSharp.Messages.ExecutionMessage)/returns;DocStr1447
 T:StockSharp.Messages.IBasketSecurityProcessor/summary;DocStr10604
 P:StockSharp.Messages.IBasketSecurityProcessor.SecurityId/summary;SecurityId
+P:StockSharp.Messages.IBasketSecurityProcessor.BasketLegs/summary;DocStr10603
 M:StockSharp.Messages.IBasketSecurityProcessor.Process(StockSharp.Messages.Message)/summary;DocStr80
 M:StockSharp.Messages.IBasketSecurityProcessor.Process(StockSharp.Messages.Message)/param/message;DocStr10605
 M:StockSharp.Messages.IBasketSecurityProcessor.Process(StockSharp.Messages.Message)/returns;DocStr10606
@@ -1352,7 +1353,7 @@ F:StockSharp.Messages.MarketDataBuildModes.Build/summary;DocStr9668
 T:StockSharp.Messages.MarketDataMessage/summary;DocStr4473
 P:StockSharp.Messages.MarketDataMessage.From/summary;Str344
 P:StockSharp.Messages.MarketDataMessage.To/summary;Str346
-P:StockSharp.Messages.MarketDataMessage.DataType/summary;DocStr774
+P:StockSharp.Messages.MarketDataMessage.DataType/summary;Str1670
 P:StockSharp.Messages.MarketDataMessage.Arg/summary;Str348
 P:StockSharp.Messages.MarketDataMessage.IsSubscribe/summary;DocStr4475
 P:StockSharp.Messages.MarketDataMessage.TransactionId/summary;DocStr3166
@@ -1476,7 +1477,6 @@ P:StockSharp.Messages.SecurityMessage.IssueSize/summary;DocStr10219
 P:StockSharp.Messages.SecurityMessage.IssueDate/summary;IssueDate
 P:StockSharp.Messages.SecurityMessage.UnderlyingSecurityType/summary;UnderlyingSecurityType
 P:StockSharp.Messages.SecurityMessage.BasketExpression/summary;DocStr10600
-P:StockSharp.Messages.SecurityMessage.BasketLegs/summary;DocStr10603
 M:StockSharp.Messages.SecurityMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.SecurityMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr1
 M:StockSharp.Messages.SecurityMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9

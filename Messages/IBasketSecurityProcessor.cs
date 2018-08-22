@@ -13,6 +13,11 @@ namespace StockSharp.Messages
 		SecurityId SecurityId { get; }
 
 		/// <summary>
+		/// Basket security legs.
+		/// </summary>
+		SecurityId[] BasketLegs { get; }
+
+		/// <summary>
 		/// Process message.
 		/// </summary>
 		/// <param name="message">Input message.</param>

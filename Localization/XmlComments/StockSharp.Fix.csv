@@ -350,11 +350,6 @@ M:StockSharp.Fix.FixUserForceLogoffMessage.#ctor/summary;DocStr93
 P:StockSharp.Fix.FixUserForceLogoffMessage.OriginalTransactionId/summary;DocStr4056
 M:StockSharp.Fix.FixUserForceLogoffMessage.Clone/summary;DocStr643
 M:StockSharp.Fix.FixUserForceLogoffMessage.Clone/returns;DocStr1116
-T:StockSharp.Fix.FixSecurityMessage/summary;DocStr4378
-P:StockSharp.Fix.FixSecurityMessage.Formula/summary;DocStr1117
-P:StockSharp.Fix.FixSecurityMessage.Legs/summary;Legs
-M:StockSharp.Fix.FixSecurityMessage.Clone/summary;DocStr643
-M:StockSharp.Fix.FixSecurityMessage.Clone/returns;DocStr1116
 T:StockSharp.Fix.FixServer/summary;DocStr3152
 E:StockSharp.Fix.FixServer.NewOutMessage/summary;DocStr2237
 M:StockSharp.Fix.FixServer.RaiseNewOutMessage(StockSharp.Fix.FixSession,StockSharp.Messages.Message)/summary;DocStr466
@@ -417,7 +412,7 @@ M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWri
 M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.ExecutionMessage)/param/writer;DocStr3169
 M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.ExecutionMessage)/param/message;DocStr3170
 M:StockSharp.Fix.FixServer.HasSubscriptions(StockSharp.Messages.MarketDataTypes,StockSharp.Messages.SecurityId)/summary;DocStr3171
-M:StockSharp.Fix.FixServer.HasSubscriptions(StockSharp.Messages.MarketDataTypes,StockSharp.Messages.SecurityId)/param/dataType;DocStr774
+M:StockSharp.Fix.FixServer.HasSubscriptions(StockSharp.Messages.MarketDataTypes,StockSharp.Messages.SecurityId)/param/dataType;Str1670
 M:StockSharp.Fix.FixServer.HasSubscriptions(StockSharp.Messages.MarketDataTypes,StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 M:StockSharp.Fix.FixServer.HasSubscriptions(StockSharp.Messages.MarketDataTypes,StockSharp.Messages.SecurityId)/returns;DocStr3171
 T:StockSharp.Fix.FixSession/summary;DocStr3178

@@ -599,8 +599,7 @@ namespace StockSharp.Algo
 				IssueSize = security.IssueSize,
 				IssueDate = security.IssueDate,
 				UnderlyingSecurityType = security.UnderlyingSecurityType,
-				BasketExpression = security.TryGetBasketExpression(out var legs),
-				BasketLegs = legs
+				BasketExpression = security.TryGetBasketExpression(out _),
 			};
 		}
 

@@ -15103,3 +15103,9 @@ DocStr10632;Register candles builder;Зарегистрировать постр
 DocStr10633;Unregister candles builder;Удалить построитель свечей
 DocStr10634;Whether the candle type registered;Зарегистрирован ли тип свечи
 DocStr10635;{0} if the candle type registered, {1} otherwise;{0} если тип свечи зарегистрирован, {1} иначе
+DocStr10636;Convert inner securities messages to basket;Преобразовать сообщения вложенных инструментов в корзину
+DocStr10637;Inner securities messages;Сообщения вложенных инструментов
+DocStr10639;Messages of basket securities;Сообщения корзины
+DocStr10640;Create market data processor for basket securities;Создать обработчик маркет-данных корзины инструментов
+DocStr10641;Basket security;Корзина инструментов
+DocStr10642;Market data processor for basket securities;Обработчик маркет-данных корзины инструментов

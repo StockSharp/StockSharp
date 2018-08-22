@@ -1268,27 +1268,6 @@
             </summary>
       <returns>Copy.</returns>
     </member>
-    <member name="T:StockSharp.Fix.FixSecurityMessage">
-      <summary>
-            A message containing info about the security.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSecurityMessage.Formula">
-      <summary>
-            The mathematic formula of index.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSecurityMessage.Legs">
-      <summary>
-            Legs.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Fix.FixSecurityMessage.Clone">
-      <summary>
-            Create a copy of <see cref="T:StockSharp.Fix.FixSecurityMessage" />.
-            </summary>
-      <returns>Copy.</returns>
-    </member>
     <member name="T:StockSharp.Fix.FixServer">
       <summary>
             FIX server.
