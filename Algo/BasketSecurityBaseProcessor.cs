@@ -26,10 +26,11 @@ namespace StockSharp.Algo
 		{
 			BasketSecurity = basketSecurity ?? throw new ArgumentNullException(nameof(basketSecurity));
 
-			if (BasketSecurity.InnerSecurityIds.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.SecurityDoNotContainsLegs.Put(basketSecurity.Id), nameof(basketSecurity));
-
+			BasketLegs = BasketSecurity.InnerSecurityIds.ToArray();
 			SecurityId = BasketSecurity.ToSecurityId();
+
+			if (BasketLegs.IsEmpty())
+				throw new ArgumentException(LocalizedStrings.SecurityDoNotContainsLegs.Put(basketSecurity.Id), nameof(basketSecurity));
 		}
 
 		/// <summary>
@@ -39,6 +40,9 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public SecurityId SecurityId { get; }
+
+		/// <inheritdoc />
+		public SecurityId[] BasketLegs { get; }
 
 		/// <inheritdoc />
 		public abstract IEnumerable<Message> Process(Message message);
@@ -68,7 +72,15 @@ namespace StockSharp.Algo
 				case MessageTypes.QuoteChange:
 					var quoteMsg = (QuoteChangeMessage)message;
 
-					if (!CanProcess(quoteMsg.SecurityId, quoteMsg.ServerTime, null, null, null))
+					var bestBid = quoteMsg.GetBestBid();
+					var bestAsk = quoteMsg.GetBestAsk();
+
+					var volume = bestBid?.Volume;
+					
+					if (bestAsk?.Volume != null)
+						volume = volume ?? 0 + bestAsk.Volume;
+
+					if (!CanProcess(quoteMsg.SecurityId, quoteMsg.ServerTime, (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price), volume, null))
 						yield break;
 
 					break;
@@ -76,11 +88,20 @@ namespace StockSharp.Algo
 				case MessageTypes.Execution:
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType != ExecutionTypes.OrderLog && execMsg.ExecutionType != ExecutionTypes.Tick)
-						yield break;
+					switch (execMsg.ExecutionType)
+					{
+						case ExecutionTypes.Tick:
+							if (!CanProcess(execMsg.SecurityId, execMsg.ServerTime, execMsg.TradePrice, execMsg.TradeVolume, execMsg.OpenInterest))
+								yield break;
 
-					if (!CanProcess(execMsg.SecurityId, execMsg.ServerTime, execMsg.TradePrice, execMsg.TradeVolume, execMsg.OpenInterest))
-						yield break;
+							break;
+
+						case ExecutionTypes.OrderLog:
+							if (!CanProcess(execMsg.SecurityId, execMsg.ServerTime, execMsg.OrderPrice, execMsg.OrderVolume, execMsg.OpenInterest))
+								yield break;
+
+							break;
+					}
 
 					break;
 
@@ -167,7 +188,6 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class ContinuousSecurityVolumeProcessor : ContinuousSecurityBaseProcessor<VolumeContinuousSecurity>
 	{
-		private readonly SecurityId[] _ids;
 		private int _idIdx;
 		private SecurityId _currId;
 		private SecurityId _nextId;
@@ -182,19 +202,17 @@ namespace StockSharp.Algo
 		public ContinuousSecurityVolumeProcessor(VolumeContinuousSecurity basketSecurity)
 			: base(basketSecurity)
 		{
-			_ids = basketSecurity.InnerSecurityIds.ToArray();
-
 			if (!NextId())
 				throw new InvalidOperationException();
 		}
 
 		private bool NextId()
 		{
-			if ((_idIdx + 1) >= _ids.Length)
+			if ((_idIdx + 1) >= BasketLegs.Length)
 				return false;
 
-			_currId = _ids[_idIdx];
-			_nextId = _ids[_idIdx + 1];
+			_currId = BasketLegs[_idIdx];
+			_nextId = BasketLegs[_idIdx + 1];
 
 			_idIdx++;
 			return true;
@@ -220,7 +238,7 @@ namespace StockSharp.Algo
 				return false;
 
 			if ((_currVolume.Value + BasketSecurity.VolumeLevel) >= _nextVolume.Value)
-				return false;
+				return securityId == _currId;
 
 			if (!NextId())
 			{
@@ -239,8 +257,16 @@ namespace StockSharp.Algo
 	public abstract class IndexSecurityBaseProcessor<TSecurity> : BasketSecurityBaseProcessor<TSecurity>
 		where TSecurity : IndexSecurity
 	{
+		private static class Holder<TMessage>
+			where TMessage : Message
+		{
+			public static readonly Dictionary<SecurityId, TMessage> Messages = new Dictionary<SecurityId, TMessage>();
+		}
+
+		private readonly Dictionary<SecurityId, ExecutionMessage> _ticks = new Dictionary<SecurityId, ExecutionMessage>();
+		private readonly Dictionary<SecurityId, ExecutionMessage> _ol = new Dictionary<SecurityId, ExecutionMessage>();
+
 		private readonly SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>> _candles = new SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>>();
-		private readonly int _secCount;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IndexSecurityBaseProcessor{TSecurity}"/>.
@@ -249,7 +275,6 @@ namespace StockSharp.Algo
 		protected IndexSecurityBaseProcessor(TSecurity basketSecurity)
 			: base(basketSecurity)
 		{
-			_secCount = basketSecurity.InnerSecurityIds.Count();
 		}
 
 		/// <inheritdoc />
@@ -258,18 +283,91 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.QuoteChange:
+					var quotesMsg = (QuoteChangeMessage)message;
+
+					foreach (var msg in ProcessMessage(Holder<QuoteChangeMessage>.Messages, quotesMsg.SecurityId, quotesMsg, quotes => new QuoteChangeMessage
+					{
+						SecurityId = SecurityId,
+						ServerTime = quotesMsg.ServerTime,
+					}))
+						yield return msg;
+
 					break;
 
 				case MessageTypes.Execution:
+					var execMsg = (ExecutionMessage)message;
+
+					switch (execMsg.ExecutionType)
+					{
+						case ExecutionTypes.OrderLog:
+						{
+							foreach (var msg in ProcessMessage(_ol, execMsg.SecurityId, execMsg, execMsgs =>
+							{
+								var prices = new decimal[execMsgs.Length];
+								var volumes = new decimal[execMsgs.Length];
+
+								for (var i = 0; i < execMsgs.Length; i++)
+								{
+									var msg = execMsgs[i];
+
+									prices[i] = msg.OrderPrice;
+									volumes[i] = msg.OrderVolume ?? 0;
+								}
+
+								return new ExecutionMessage
+								{
+									SecurityId = SecurityId,
+									ServerTime = execMsg.ServerTime,
+									ExecutionType = execMsg.ExecutionType,
+									OrderPrice = Calculate(prices, true),
+									OrderVolume = Calculate(volumes, false),
+								};
+							}))
+								yield return msg;
+
+							break;
+						}
+
+						case ExecutionTypes.Tick:
+						{
+							foreach (var msg in ProcessMessage(_ticks, execMsg.SecurityId, execMsg, execMsgs =>
+							{
+								var prices = new decimal[execMsgs.Length];
+								var volumes = new decimal[execMsgs.Length];
+
+								for (var i = 0; i < execMsgs.Length; i++)
+								{
+									var msg = execMsgs[i];
+
+									prices[i] = msg.TradePrice ?? 0;
+									volumes[i] = msg.TradeVolume ?? 0;
+								}
+
+								return new ExecutionMessage
+								{
+									SecurityId = SecurityId,
+									ServerTime = execMsg.ServerTime,
+									ExecutionType = execMsg.ExecutionType,
+									TradePrice = Calculate(prices, true),
+									TradeVolume = Calculate(volumes, false),
+								};
+							}))
+								yield return msg;
+
+							break;
+						}
+					}
+
 					break;
 
 				case MessageTypes.CandleTimeFrame:
+				{
 					var candleMsg = (CandleMessage)message;
 					var dict = _candles.SafeAdd(candleMsg.OpenTime);
 					
 					dict[candleMsg.SecurityId] = (CandleMessage)candleMsg.Clone();
 
-					if (dict.Count == _secCount)
+					if (dict.Count == BasketLegs.Length)
 					{
 						var keys = _candles.Keys.Where(t => t <= candleMsg.OpenTime).ToArray();
 
@@ -277,113 +375,180 @@ namespace StockSharp.Algo
 						{
 							var d = _candles.GetAndRemove(key);
 
-							if (d.Count < _secCount && BasketSecurity.FillGapsByZeros)
+							if (d.Count < BasketLegs.Length && BasketSecurity.FillGapsByZeros)
 								continue;
 
-							var indexCandle = candleMsg.GetType().CreateInstance<CandleMessage>();
+							var indexCandle = new TimeFrameCandleMessage();
 
-							indexCandle.SecurityId = SecurityId;
-							indexCandle.Arg = candleMsg.CloneArg();
-							indexCandle.OpenTime = candleMsg.OpenTime;
-							indexCandle.CloseTime = candleMsg.CloseTime;
-
-							try
-							{
-								indexCandle.OpenPrice = Calculate(d, true, c => c.OpenPrice);
-								indexCandle.ClosePrice = Calculate(d, true, c => c.ClosePrice);
-								indexCandle.HighPrice = Calculate(d, true, c => c.HighPrice);
-								indexCandle.LowPrice = Calculate(d, true, c => c.LowPrice);
-
-								if (BasketSecurity.CalculateExtended)
-								{
-									indexCandle.TotalVolume = Calculate(dict, false, c => c.TotalVolume);
-
-									indexCandle.TotalPrice = Calculate(d, true, c => c.TotalPrice);
-									indexCandle.OpenVolume = Calculate(d, false, c => c.OpenVolume ?? 0);
-									indexCandle.CloseVolume = Calculate(d, false, c => c.CloseVolume ?? 0);
-									indexCandle.HighVolume = Calculate(d, false, c => c.HighVolume ?? 0);
-									indexCandle.LowVolume = Calculate(d, false, c => c.LowVolume ?? 0);
-								}
-							}
-							catch (ArithmeticException ex)
-							{
-								if (!BasketSecurity.IgnoreErrors)
-									throw;
-
-								ex.LogError();
-								continue;
-							}
-
-							// если некоторые свечи имеют неполные данные, то и индекс будет таким же неполным
-							if (indexCandle.OpenPrice == 0 || indexCandle.HighPrice == 0 || indexCandle.LowPrice == 0 || indexCandle.ClosePrice == 0)
-							{
-								var nonZeroPrice = indexCandle.OpenPrice;
-
-								if (nonZeroPrice == 0)
-									nonZeroPrice = indexCandle.HighPrice;
-
-								if (nonZeroPrice == 0)
-									nonZeroPrice = indexCandle.LowPrice;
-
-								if (nonZeroPrice == 0)
-									nonZeroPrice = indexCandle.LowPrice;
-
-								if (nonZeroPrice != 0)
-								{
-									if (indexCandle.OpenPrice == 0)
-										indexCandle.OpenPrice = nonZeroPrice;
-
-									if (indexCandle.HighPrice == 0)
-										indexCandle.HighPrice = nonZeroPrice;
-
-									if (indexCandle.LowPrice == 0)
-										indexCandle.LowPrice = nonZeroPrice;
-
-									if (indexCandle.ClosePrice == 0)
-										indexCandle.ClosePrice = nonZeroPrice;
-								}
-							}
-
-							if (indexCandle.HighPrice < indexCandle.LowPrice)
-							{
-								var high = indexCandle.HighPrice;
-
-								indexCandle.HighPrice = indexCandle.LowPrice;
-								indexCandle.LowPrice = high;
-							}
-
-							if (indexCandle.OpenPrice > indexCandle.HighPrice)
-								indexCandle.HighPrice = indexCandle.OpenPrice;
-							else if (indexCandle.OpenPrice < indexCandle.LowPrice)
-								indexCandle.LowPrice = indexCandle.OpenPrice;
-
-							if (indexCandle.ClosePrice > indexCandle.HighPrice)
-								indexCandle.HighPrice = indexCandle.ClosePrice;
-							else if (indexCandle.ClosePrice < indexCandle.LowPrice)
-								indexCandle.LowPrice = indexCandle.ClosePrice;
-
-							indexCandle.State = CandleStates.Finished;
+							FillIndexCandle(indexCandle, candleMsg, d.Values.ToArray());
 
 							yield return indexCandle;
 						}
 					}
 
 					break;
+				}
 
 				case MessageTypes.CandlePnF:
-				case MessageTypes.CandleRange:
-				case MessageTypes.CandleRenko:
-				case MessageTypes.CandleTick:
-				case MessageTypes.CandleVolume:
+				{
+					var candleMsg = (PnFCandleMessage)message;
+
+					foreach (var msg in ProcessMessage(Holder<PnFCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
+						yield return msg;
+
 					break;
+				}
+				case MessageTypes.CandleRange:
+				{
+					var candleMsg = (RangeCandleMessage)message;
+
+					foreach (var msg in ProcessMessage(Holder<RangeCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
+						yield return msg;
+
+					break;
+				}
+				case MessageTypes.CandleRenko:
+				{
+					var candleMsg = (RenkoCandleMessage)message;
+
+					foreach (var msg in ProcessMessage(Holder<RenkoCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
+						yield return msg;
+
+					break;
+				}
+				case MessageTypes.CandleTick:
+				{
+					var candleMsg = (TickCandleMessage)message;
+
+					foreach (var msg in ProcessMessage(Holder<TickCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
+						yield return msg;
+
+					break;
+				}
+				case MessageTypes.CandleVolume:
+				{
+					var candleMsg = (VolumeCandleMessage)message;
+
+					foreach (var msg in ProcessMessage(Holder<VolumeCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
+						yield return msg;
+
+					break;
+				}
 			}
 
 			//return Enumerable.Empty<Message>();
 		}
 
-		private decimal Calculate(Dictionary<SecurityId, CandleMessage> buffer, bool isPrice, Func<CandleMessage, decimal> getPart)
+		private void FillIndexCandle(CandleMessage indexCandle, CandleMessage candleMsg, CandleMessage[] candles)
 		{
-			var values = buffer.Values.Select(getPart).ToArray();
+			indexCandle.SecurityId = SecurityId;
+			indexCandle.Arg = candleMsg.CloneArg();
+			indexCandle.OpenTime = candleMsg.OpenTime;
+			indexCandle.CloseTime = candleMsg.CloseTime;
+
+			try
+			{
+				indexCandle.OpenPrice = Calculate(candles, true, c => c.OpenPrice);
+				indexCandle.ClosePrice = Calculate(candles, true, c => c.ClosePrice);
+				indexCandle.HighPrice = Calculate(candles, true, c => c.HighPrice);
+				indexCandle.LowPrice = Calculate(candles, true, c => c.LowPrice);
+
+				if (BasketSecurity.CalculateExtended)
+				{
+					indexCandle.TotalVolume = Calculate(candles, false, c => c.TotalVolume);
+
+					indexCandle.TotalPrice = Calculate(candles, true, c => c.TotalPrice);
+					indexCandle.OpenVolume = Calculate(candles, false, c => c.OpenVolume ?? 0);
+					indexCandle.CloseVolume = Calculate(candles, false, c => c.CloseVolume ?? 0);
+					indexCandle.HighVolume = Calculate(candles, false, c => c.HighVolume ?? 0);
+					indexCandle.LowVolume = Calculate(candles, false, c => c.LowVolume ?? 0);
+				}
+			}
+			catch (ArithmeticException ex)
+			{
+				if (!BasketSecurity.IgnoreErrors)
+					throw;
+
+				ex.LogError();
+				return;
+			}
+
+			// если некоторые свечи имеют неполные данные, то и индекс будет таким же неполным
+			if (indexCandle.OpenPrice == 0 || indexCandle.HighPrice == 0 || indexCandle.LowPrice == 0 || indexCandle.ClosePrice == 0)
+			{
+				var nonZeroPrice = indexCandle.OpenPrice;
+
+				if (nonZeroPrice == 0)
+					nonZeroPrice = indexCandle.HighPrice;
+
+				if (nonZeroPrice == 0)
+					nonZeroPrice = indexCandle.LowPrice;
+
+				if (nonZeroPrice == 0)
+					nonZeroPrice = indexCandle.LowPrice;
+
+				if (nonZeroPrice != 0)
+				{
+					if (indexCandle.OpenPrice == 0)
+						indexCandle.OpenPrice = nonZeroPrice;
+
+					if (indexCandle.HighPrice == 0)
+						indexCandle.HighPrice = nonZeroPrice;
+
+					if (indexCandle.LowPrice == 0)
+						indexCandle.LowPrice = nonZeroPrice;
+
+					if (indexCandle.ClosePrice == 0)
+						indexCandle.ClosePrice = nonZeroPrice;
+				}
+			}
+
+			if (indexCandle.HighPrice < indexCandle.LowPrice)
+			{
+				var high = indexCandle.HighPrice;
+
+				indexCandle.HighPrice = indexCandle.LowPrice;
+				indexCandle.LowPrice = high;
+			}
+
+			if (indexCandle.OpenPrice > indexCandle.HighPrice)
+				indexCandle.HighPrice = indexCandle.OpenPrice;
+			else if (indexCandle.OpenPrice < indexCandle.LowPrice)
+				indexCandle.LowPrice = indexCandle.OpenPrice;
+
+			if (indexCandle.ClosePrice > indexCandle.HighPrice)
+				indexCandle.HighPrice = indexCandle.ClosePrice;
+			else if (indexCandle.ClosePrice < indexCandle.LowPrice)
+				indexCandle.LowPrice = indexCandle.ClosePrice;
+
+			indexCandle.State = CandleStates.Finished;
+		}
+
+		private TCandleMessage CreateBasketCandle<TCandleMessage>(TCandleMessage[] candles, TCandleMessage last)
+			where TCandleMessage : CandleMessage, new()
+		{
+			var indexCandle = new TCandleMessage();
+
+			FillIndexCandle(indexCandle, last, candles);
+
+			return indexCandle;
+		}
+
+		private IEnumerable<Message> ProcessMessage<TMessage>(Dictionary<SecurityId, TMessage> dict, SecurityId securityId, TMessage message, Func<TMessage[], TMessage> convert)
+			where TMessage : Message
+		{
+			dict[securityId] = (TMessage)message.Clone();
+
+			if (dict.Count != BasketLegs.Length)
+				yield break;
+
+			yield return convert(dict.Values.ToArray());
+			dict.Clear();
+		}
+
+		private decimal Calculate(CandleMessage[] buffer, bool isPrice, Func<CandleMessage, decimal> getPart)
+		{
+			var values = buffer.Select(getPart).ToArray();
 
 			try
 			{
