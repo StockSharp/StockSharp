@@ -17,6 +17,7 @@ StockSharp API Change log
 * (feature) Bithumb. WebSocket support.
 * (feature) CandleBuilderProvider. Ability to register own CandleBuilder-s.
 * (bug) CandleBuilderMessageAdapter. Fix non time-frame based candles processing.
+* (feature) MarketDataGenerator. Set Interval default value.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
