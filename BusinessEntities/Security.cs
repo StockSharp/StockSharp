@@ -1778,6 +1778,20 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		/// <summary>
+		/// Basket security type. Can be <see langword="null"/> in case of regular security.
+		/// </summary>
+		[DataMember]
+		[Browsable(false)]
+		public virtual string BasketCode { get; set; }
+
+		/// <summary>
+		/// Basket security expression. Can be <see langword="null"/> in case of regular security.
+		/// </summary>
+		[DataMember]
+		[Browsable(false)]
+		public virtual string BasketExpression { get; set; }
+
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;
 
@@ -1787,14 +1801,8 @@ namespace StockSharp.BusinessEntities
 			remove => _propertyChanged -= value;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
-		public override string ToString()
-		{
-			return Id;
-		}
+		/// <inheritdoc />
+		public override string ToString() => Id;
 
 		/// <summary>
 		/// Create a copy of <see cref="Security"/>.
@@ -1860,6 +1868,8 @@ namespace StockSharp.BusinessEntities
 			destination.UnderlyingSecurityType = UnderlyingSecurityType;
 			destination.BuyBackDate = BuyBackDate;
 			destination.BuyBackPrice = BuyBackPrice;
+			destination.BasketCode = BasketCode;
+			destination.BasketExpression = BasketExpression;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();
@@ -1890,17 +1900,6 @@ namespace StockSharp.BusinessEntities
 		protected void Notify(string propName)
 		{
 			_propertyChanged?.Invoke(this, propName);
-		}
-
-		/// <summary>
-		/// Try get basket security expression.
-		/// </summary>
-		/// <param name="legs">Basket security legs.</param>
-		/// <returns>Basket security expression. Can be <see langword="null"/> in case of regular security.</returns>
-		public virtual string TryGetBasketExpression(out SecurityId[] legs)
-		{
-			legs = ArrayHelper.Empty<SecurityId>();
-			return null;
 		}
 	}
 }

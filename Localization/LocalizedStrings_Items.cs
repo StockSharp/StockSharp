@@ -48336,5 +48336,45 @@ namespace StockSharp.Localization
 		/// Basket security '{0}' do not contains legs.
 		/// </summary>
 		public static string SecurityDoNotContainsLegs => GetString(SecurityDoNotContainsLegsKey);
+
+		/// <summary>
+		/// Basket
+		/// </summary>
+		public const string BasketKey = nameof(Basket);
+
+		/// <summary>
+		/// Basket
+		/// </summary>
+		public static string Basket => GetString(BasketKey);
+
+		/// <summary>
+		/// Basket type code.
+		/// </summary>
+		public const string BasketCodeKey = nameof(BasketCode);
+
+		/// <summary>
+		/// Basket type code.
+		/// </summary>
+		public static string BasketCode => GetString(BasketCodeKey);
+
+		/// <summary>
+		/// Expression
+		/// </summary>
+		public const string ExpressionKey = nameof(Expression);
+
+		/// <summary>
+		/// Expression
+		/// </summary>
+		public static string Expression => GetString(ExpressionKey);
+
+		/// <summary>
+		/// The mathematic formula of index.
+		/// </summary>
+		public const string ExpressionDescKey = nameof(ExpressionDesc);
+
+		/// <summary>
+		/// The mathematic formula of index.
+		/// </summary>
+		public static string ExpressionDesc => GetString(ExpressionDescKey);
 	}
 }

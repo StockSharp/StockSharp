@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The storage of trade objects.
@@ -32,9 +31,8 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EntityRegistry"/>.
 		/// </summary>
-		/// <param name="processorProvider">Basket security processors provider.</param>
-		public EntityRegistry(IBasketSecurityProcessorProvider processorProvider)
-			: this(new InMemoryStorage(), processorProvider)
+		public EntityRegistry()
+			: this(new InMemoryStorage())
 		{
 		}
 
@@ -42,11 +40,9 @@ namespace StockSharp.Algo.Storages
 		/// Initializes a new instance of the <see cref="EntityRegistry"/>.
 		/// </summary>
 		/// <param name="storage">The special interface for direct access to the storage.</param>
-		/// <param name="processorProvider">Basket security processors provider.</param>
-		public EntityRegistry(IStorage storage, IBasketSecurityProcessorProvider processorProvider)
+		public EntityRegistry(IStorage storage)
 		{
 			Storage = storage ?? throw new ArgumentNullException(nameof(storage));
-			ProcessorProvider = processorProvider ?? throw new ArgumentNullException(nameof(processorProvider));
 
 			ConfigManager.TryRegisterService(storage);
 
@@ -104,9 +100,6 @@ namespace StockSharp.Algo.Storages
 		///// The list of news.
 		///// </summary>
 		//public virtual IStorageEntityList<News> News { get; }
-
-		/// <inheritdoc />
-		public IBasketSecurityProcessorProvider ProcessorProvider { get; }
 
 		IDictionary<object, Exception> IEntityRegistry.Init()
 		{

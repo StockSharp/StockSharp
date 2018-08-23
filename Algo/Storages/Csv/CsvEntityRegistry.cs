@@ -299,13 +299,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 			private class LiteSecurity
 			{
-				private readonly CsvEntityRegistry _parent;
-
-				public LiteSecurity(CsvEntityRegistry parent)
-				{
-					_parent = parent;
-				}
-
 				public string Id { get; set; }
 				public string Name { get; set; }
 				public string Code { get; set; }
@@ -329,37 +322,39 @@ namespace StockSharp.Algo.Storages.Csv
 				public string CfiCode { get; set; }
 				public DateTimeOffset? IssueDate { get; set; }
 				public decimal? IssueSize { get; set; }
+				public string BasketCode { get; set; }
 				public string BasketExpression { get; set; }
 
 				public Security ToSecurity(SecurityCsvList list)
 				{
-					var security = _parent.ProcessorProvider.CreateSecurity(BasketExpression);
-
-					security.Id = Id;
-					security.Name = Name;
-					security.Code = Code;
-					security.Class = Class;
-					security.ShortName = ShortName;
-					security.Board = list.Registry.GetBoard(Board);
-					security.UnderlyingSecurityId = UnderlyingSecurityId;
-					security.PriceStep = PriceStep;
-					security.VolumeStep = VolumeStep;
-					security.Multiplier = Multiplier;
-					security.Decimals = Decimals;
-					security.Type = Type;
-					security.ExpiryDate = ExpiryDate;
-					security.SettlementDate = SettlementDate;
-					security.Strike = Strike;
-					security.OptionType = OptionType;
-					security.Currency = Currency;
-					security.ExternalId = ExternalId.Clone();
-					security.UnderlyingSecurityType = UnderlyingSecurityType;
-					security.BinaryOptionType = BinaryOptionType;
-					security.CfiCode = CfiCode;
-					security.IssueDate = IssueDate;
-					security.IssueSize = IssueSize;
-
-					return security;
+					return new Security
+					{
+						Id = Id,
+						Name = Name,
+						Code = Code,
+						Class = Class,
+						ShortName = ShortName,
+						Board = list.Registry.GetBoard(Board),
+						UnderlyingSecurityId = UnderlyingSecurityId,
+						PriceStep = PriceStep,
+						VolumeStep = VolumeStep,
+						Multiplier = Multiplier,
+						Decimals = Decimals,
+						Type = Type,
+						ExpiryDate = ExpiryDate,
+						SettlementDate = SettlementDate,
+						Strike = Strike,
+						OptionType = OptionType,
+						Currency = Currency,
+						ExternalId = ExternalId.Clone(),
+						UnderlyingSecurityType = UnderlyingSecurityType,
+						BinaryOptionType = BinaryOptionType,
+						CfiCode = CfiCode,
+						IssueDate = IssueDate,
+						IssueSize = IssueSize,
+						BasketCode = BasketCode,
+						BasketExpression = BasketExpression,
+					};
 				}
 
 				public void Update(Security security)
@@ -386,7 +381,8 @@ namespace StockSharp.Algo.Storages.Csv
 					CfiCode = security.CfiCode;
 					IssueDate = security.IssueDate;
 					IssueSize = security.IssueSize;
-					BasketExpression = security.TryGetBasketExpression(out _);
+					BasketCode = security.BasketCode;
+					BasketExpression = security.BasketExpression;
 				}
 			}
 
@@ -490,7 +486,10 @@ namespace StockSharp.Algo.Storages.Csv
 				if (forced && security.ExternalId != liteSec.ExternalId)
 					return true;
 
-				if (IsChanged(security.TryGetBasketExpression(out _), liteSec.BasketExpression, forced))
+				if (IsChanged(security.BasketCode, liteSec.BasketCode, forced))
+					return true;
+
+				if (IsChanged(security.BasketExpression, liteSec.BasketExpression, forced))
 					return true;
 
 				return false;
@@ -503,7 +502,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override void AddCache(Security item)
 			{
-				var sec = new LiteSecurity(Registry) { Id = item.Id };
+				var sec = new LiteSecurity { Id = item.Id };
 				sec.Update(item);
 				_cache.Add(item.Id, sec);
 			}
@@ -525,7 +524,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override Security Read(FastCsvReader reader)
 			{
-				var liteSec = new LiteSecurity(Registry)
+				var liteSec = new LiteSecurity
 				{
 					Id = reader.ReadString(),
 					Name = reader.ReadString(),
@@ -567,6 +566,9 @@ namespace StockSharp.Algo.Storages.Csv
 				}
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					liteSec.BasketCode = reader.ReadString();
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					liteSec.BasketExpression = reader.ReadString();
 
 				return liteSec.ToSecurity(this);
@@ -606,7 +608,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.CfiCode,
 					data.IssueDate?.UtcDateTime.ToString(_dateTimeFormat),
 					data.IssueSize.To<string>(),
-					data.TryGetBasketExpression(out _)
+					data.BasketCode,
+					data.BasketExpression,
 				});
 			}
 
@@ -792,9 +795,6 @@ namespace StockSharp.Algo.Storages.Csv
 		public string Path { get; set; }
 
 		/// <inheritdoc />
-		public IBasketSecurityProcessorProvider ProcessorProvider { get; }
-
-		/// <inheritdoc />
 		public IStorage Storage { get; }
 
 		private Encoding _encoding = Encoding.UTF8;
@@ -850,19 +850,8 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="path">The path to data directory.</param>
 		public CsvEntityRegistry(string path)
-			: this(path, new BasketSecurityProcessorProvider())
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CsvEntityRegistry"/>.
-		/// </summary>
-		/// <param name="path">The path to data directory.</param>
-		/// <param name="processorProvider">Basket security processors provider.</param>
-		public CsvEntityRegistry(string path, IBasketSecurityProcessorProvider processorProvider)
 		{
 			Path = path ?? throw new ArgumentNullException(nameof(path));
-			ProcessorProvider = processorProvider ?? throw new ArgumentNullException(nameof(processorProvider));
 			Storage = new FakeStorage(this);
 
 			Add(_exchanges = new ExchangeCsvList(this));

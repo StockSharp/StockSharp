@@ -2857,6 +2857,18 @@ namespace StockSharp.Algo
 					security.UnderlyingSecurityType = message.UnderlyingSecurityType.Value;
 			}
 
+			if (!message.BasketCode.IsEmpty())
+			{
+				if (isOverride || security.BasketCode.IsEmpty())
+					security.BasketCode = message.BasketCode;
+			}
+
+			if (!message.BasketExpression.IsEmpty())
+			{
+				if (isOverride || security.BasketExpression.IsEmpty())
+					security.BasketExpression = message.BasketExpression;
+			}
+
 			message.CopyExtensionInfo(security);
 		}
 
@@ -4687,7 +4699,85 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return processorProvider.GetProcessorType(security.TryGetBasketExpression(out _)).CreateInstance<IBasketSecurityProcessor>(security);
+			return processorProvider.GetProcessorType(security.BasketExpression).CreateInstance<IBasketSecurityProcessor>(security);
+		}
+
+		/// <summary>
+		/// Is specified security is basket.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsBasket(this Security security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return !security.BasketCode.IsEmpty();
+		}
+
+		/// <summary>
+		/// Is specified security is basket.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsBasket(this SecurityMessage security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return !security.BasketCode.IsEmpty();
+		}
+		
+		/// <summary>
+		/// Is specified security is index.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsIndex(this Security security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.BasketCode == "WI" || security.BasketCode == "EI";
+		}
+
+		/// <summary>
+		/// Is specified security is index.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsIndex(this SecurityMessage security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.BasketCode == "WI" || security.BasketCode == "EI";
+		}
+
+		/// <summary>
+		/// Is specified security is continuous.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsContinuous(this Security security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.BasketCode == "CE" || security.BasketCode == "CV";
+		}
+
+		/// <summary>
+		/// Is specified security is continuous.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsContinuous(this SecurityMessage security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.BasketCode == "CE" || security.BasketCode == "CV";
 		}
 	}
 }

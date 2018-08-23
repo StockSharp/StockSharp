@@ -59,10 +59,6 @@ namespace StockSharp.Algo.Export.Database
 
 	class ColumnDescription
 	{
-		public ColumnDescription()
-		{
-		}
-
 		public ColumnDescription(string name)
 		{
 			Name = name;
@@ -79,10 +75,6 @@ namespace StockSharp.Algo.Export.Database
 
 	class StringRestriction
 	{
-		public StringRestriction()
-		{
-		}
-
 		public StringRestriction(int maxLength)
 		{
 			MaxLength = maxLength;

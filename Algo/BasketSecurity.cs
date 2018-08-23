@@ -18,7 +18,6 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Linq;
 
 	using Ecng.Common;
 
@@ -69,11 +68,15 @@ namespace StockSharp.Algo
 		[Browsable(false)]
 		public abstract IEnumerable<SecurityId> InnerSecurityIds { get; }
 
-		/// <summary>
-		/// Basket type code.
-		/// </summary>
-		[Browsable(false)]
-		public virtual string BasketCode => GetType().GetAttribute<BasketCodeAttribute>().Code;
+		/// <inheritdoc />
+		public override string BasketCode => GetType().GetAttribute<BasketCodeAttribute>().Code;
+
+		/// <inheritdoc />
+		public override string BasketExpression
+		{
+			get => ToSerializedString();
+			set => FromSerializedString(value);
+		}
 
 		/// <summary>
 		/// Save security state to string.
@@ -86,24 +89,5 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="text">Value, received from <see cref="ToSerializedString"/>.</param>
 		protected abstract void FromSerializedString(string text);
-
-		/// <inheritdoc />
-		public override string TryGetBasketExpression(out SecurityId[] legs)
-		{
-			legs = InnerSecurityIds.ToArray();
-			return $"{BasketCode}_{ToSerializedString()}";
-		}
-
-		/// <summary>
-		/// Set basket security expression.
-		/// </summary>
-		/// <param name="expression">Basket security expression</param>
-		public virtual void SetBasketExpression(string expression)
-		{
-			if (expression.IsEmpty())
-				throw new ArgumentNullException(nameof(expression));
-
-			FromSerializedString(expression.Substring(3));
-		}
 	}
 }

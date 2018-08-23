@@ -362,6 +362,12 @@ namespace StockSharp.Algo.Export
 				if (security.SettlementDate != null)
 					writer.WriteAttribute("settlementDate", security.SettlementDate.Value.ToString("yyyy-MM-dd"));
 
+				if (!security.BasketCode.IsEmpty())
+					writer.WriteAttribute("basketCode", security.BasketCode);
+
+				if (!security.BasketExpression.IsEmpty())
+					writer.WriteAttribute("basketExpression", security.BasketExpression);
+
 				if (!security.SecurityId.Bloomberg.IsEmpty())
 					writer.WriteAttribute("bloomberg", security.SecurityId.Bloomberg);
 

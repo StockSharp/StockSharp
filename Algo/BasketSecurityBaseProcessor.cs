@@ -439,7 +439,8 @@ namespace StockSharp.Algo
 			//return Enumerable.Empty<Message>();
 		}
 
-		private void FillIndexCandle(CandleMessage indexCandle, CandleMessage candleMsg, CandleMessage[] candles)
+		private void FillIndexCandle<TCandleMessage>(TCandleMessage indexCandle, TCandleMessage candleMsg, TCandleMessage[] candles)
+			where TCandleMessage : CandleMessage
 		{
 			indexCandle.SecurityId = SecurityId;
 			indexCandle.Arg = candleMsg.CloneArg();
@@ -546,9 +547,9 @@ namespace StockSharp.Algo
 			dict.Clear();
 		}
 
-		private decimal Calculate(CandleMessage[] buffer, bool isPrice, Func<CandleMessage, decimal> getPart)
+		private decimal Calculate(IEnumerable<CandleMessage> candles, bool isPrice, Func<CandleMessage, decimal> getPart)
 		{
-			var values = buffer.Select(getPart).ToArray();
+			var values = candles.Select(getPart).ToArray();
 
 			try
 			{
@@ -560,13 +561,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// To calculate the basket value.
-		/// </summary>
-		/// <param name="values">Values of basket composite instruments <see cref="BasketSecurity.InnerSecurityIds"/>.</param>
-		/// <param name="isPrice">Is price based value calculation.</param>
-		/// <returns>The basket value.</returns>
-		public decimal Calculate(decimal[] values, bool isPrice)
+		private decimal Calculate(decimal[] values, bool isPrice)
 		{
 			var value = OnCalculate(values);
 

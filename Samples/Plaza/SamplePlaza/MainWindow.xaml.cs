@@ -70,7 +70,6 @@ namespace SamplePlaza
 			const string dataPath = "Data";
 
 			_entityRegistry = new CsvEntityRegistry(dataPath);
-			ConfigManager.RegisterService(_entityRegistry.ProcessorProvider);
 
 			ConfigManager.RegisterService<IEntityRegistry>(_entityRegistry);
 			// ecng.serialization invoke in several places IStorage obj

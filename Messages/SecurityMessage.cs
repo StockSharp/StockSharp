@@ -216,6 +216,12 @@ namespace StockSharp.Messages
 		public SecurityTypes? UnderlyingSecurityType { get; set; }
 
 		/// <summary>
+		/// Basket security type. Can be <see langword="null"/> in case of regular security.
+		/// </summary>
+		[DataMember]
+		public string BasketCode { get; set; }
+
+		/// <summary>
 		/// Basket security expression. Can be <see langword="null"/> in case of regular security.
 		/// </summary>
 		[DataMember]
@@ -279,6 +285,7 @@ namespace StockSharp.Messages
 			destination.IssueSize = IssueSize;
 			destination.IssueDate = IssueDate;
 			destination.UnderlyingSecurityType = UnderlyingSecurityType;
+			destination.BasketCode = BasketCode;
 			destination.BasketExpression = BasketExpression;
 
 			if (copyOriginalTransactionId)

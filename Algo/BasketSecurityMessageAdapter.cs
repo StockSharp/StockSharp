@@ -54,7 +54,7 @@ namespace StockSharp.Algo
 
 					if (mdMsg.IsSubscribe)
 					{
-						if (mdMsg.BasketExpression.IsEmpty())
+						if (!mdMsg.IsBasket())
 							break;
 
 						if (_securityProvider.LookupById(mdMsg.SecurityId) is BasketSecurity basket)
