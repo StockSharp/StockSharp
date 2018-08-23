@@ -13,6 +13,7 @@ Created: 2015, 12, 2, 8:18 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace SampleChart
 {
 	using System;
@@ -35,6 +36,7 @@ namespace SampleChart
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Xaml;
+	using Ecng.Xaml.Charting.Visuals.Annotations;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -80,6 +82,10 @@ namespace SampleChart
 		private readonly IdGenerator _transactionIdGenerator = new IncrementalIdGenerator();
 		private long _transactionId;
 
+		private ChartAnnotation _annotation;
+		private ChartDrawData.AnnotationData _annotationData;
+		private int _annotationId;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -116,6 +122,9 @@ namespace SampleChart
 			Chart.FillIndicators();
 			Chart.SubscribeIndicatorElement += Chart_OnSubscribeIndicatorElement;
 			Chart.UnSubscribeElement += Chart_OnUnSubscribeElement;
+			Chart.AnnotationCreated += ChartOnAnnotationCreated;
+			Chart.AnnotationModified += ChartOnAnnotationModified;
+			Chart.AnnotationDeleted += ChartOnAnnotationDeleted;
 
 			ConfigManager.RegisterService<IBackupService>(new YandexDiskService());
 
@@ -155,15 +164,16 @@ namespace SampleChart
 				Chart.Draw(chartData);
 
 				_indicators[element] = indicator;
-
-				this.GuiAsync(() => CustomColors_Changed(null, null));
 			});
 		}
 
 		private void Chart_OnUnSubscribeElement(IChartElement element)
 		{
-			if (element is ChartIndicatorElement indElem)
-				_indicators.Remove(indElem);
+			_dataThreadActions.Add(() =>
+			{
+				if (element is ChartIndicatorElement indElem)
+					_indicators.Remove(indElem);
+			});
 		}
 
 		private void RefreshCharts()
@@ -250,7 +260,7 @@ namespace SampleChart
 			var format = Format.SelectedFormat;
 
 			var maxDays = (isBuild || series.CandleType != typeof(TimeFrameCandle))
-				? 5
+				? 2
 				: 30 * (int)((TimeSpan)series.Arg).TotalMinutes;
 
 			_mdMsg = series.ToMarketDataMessage(true);
@@ -339,6 +349,8 @@ namespace SampleChart
 
 				BusyIndicator.IsBusy = false;
 				Chart.IsAutoRange = false;
+				_btnModifyAnnotation.IsEnabled = true;
+				_btnNewAnnotation.IsEnabled = true;
 
 			}, TaskScheduler.FromCurrentSynchronizationContext());
 		}
@@ -402,7 +414,7 @@ namespace SampleChart
 				}
 			}
 
-			_lastTime += TimeSpan.FromSeconds(RandomGen.GetInt(1, 10));
+			_lastTime += TimeSpan.FromMilliseconds(RandomGen.GetInt(100, 2000));
 		}
 
 		private void DrawChartElements()
@@ -478,7 +490,7 @@ namespace SampleChart
 			if (CustomColors.IsChecked == true)
 			{
 				_candleElement.Colorer = (dto, isUpCandle, isLastCandle) => dto.Hour % 2 != 0 ? null : (isUpCandle ? (Color?)Colors.Chartreuse : Colors.Aqua);
-				_indicators.Keys.ForEach(el => el.Colorer = dto => dto.Hour % 2 != 0 ? null : (Color?)Colors.Magenta);
+				_indicators.Keys.ForEach(el => el.Colorer = c => ((DateTimeOffset)c).Hour % 2 != 0 ? null : (Color?)Colors.Magenta);
 			}
 			else
 			{
@@ -493,6 +505,158 @@ namespace SampleChart
 		private void IsRealtime_OnChecked(object sender, RoutedEventArgs e)
 		{
 			_isRealTime = IsRealtime.IsChecked == true;
+		}
+
+		private void GetMiddle(out DateTimeOffset time, out decimal price)
+		{
+			var dtMin = DateTimeOffset.MaxValue;
+			var dtMax = DateTimeOffset.MinValue;
+			var priceMin = decimal.MaxValue;
+			var priceMax = decimal.MinValue;
+
+			foreach (var candle in _allCandles.CachedValues)
+			{
+				if(candle.OpenTime < dtMin) dtMin = candle.OpenTime;
+				if(candle.OpenTime > dtMax) dtMax = candle.OpenTime;
+
+				if(candle.LowPrice < priceMin)  priceMin = candle.LowPrice;
+				if(candle.HighPrice > priceMax) priceMax = candle.HighPrice;
+			}
+
+			time = dtMin + TimeSpan.FromTicks((dtMax - dtMin).Ticks / 2);
+			price = priceMin + (priceMax - priceMin) / 2;
+		}
+
+		private void ModifyAnnotation(bool isNew)
+		{
+			Brush randomBrush()
+			{
+				var b = new SolidColorBrush(Color.FromRgb((byte)RandomGen.GetInt(0, 255), (byte)RandomGen.GetInt(0, 255), (byte)RandomGen.GetInt(0, 255)));
+				b.Freeze();
+				return b;
+			}
+
+			if(_annotation == null)
+				return;
+
+			IComparable x1, x2, y1, y2;
+
+			var mode = RandomGen.GetDouble() > 0.5 ? AnnotationCoordinateMode.Absolute : AnnotationCoordinateMode.Relative;
+
+			if (_annotationData == null)
+			{
+				if (mode == AnnotationCoordinateMode.Absolute)
+				{
+					GetMiddle(out var x0, out var y0);
+					x1 = x0 - TimeSpan.FromMinutes(RandomGen.GetInt(10, 60));
+					x2 = x0 + TimeSpan.FromMinutes(RandomGen.GetInt(10, 60));
+					y1 = y0 - RandomGen.GetInt(5, 10) * _security.PriceStep ?? 0.01m;
+					y2 = y0 + RandomGen.GetInt(5, 10) * _security.PriceStep ?? 0.01m;
+				}
+				else
+				{
+					x1 = 0.5 - RandomGen.GetDouble() / 10;
+					x2 = 0.5 + RandomGen.GetDouble() / 10;
+					y1 = 0.5 - RandomGen.GetDouble() / 10;
+					y2 = 0.5 - RandomGen.GetDouble() / 10;
+				}
+			}
+			else
+			{
+				mode = _annotationData.CoordinateMode.Value;
+
+				if (mode == AnnotationCoordinateMode.Absolute)
+				{
+					x1 = (DateTimeOffset)_annotationData.X1 - TimeSpan.FromMinutes(1);
+					x2 = (DateTimeOffset)_annotationData.X2 + TimeSpan.FromMinutes(1);
+					y1 = (decimal)_annotationData.Y1 + _security.PriceStep ?? 0.01m;
+					y2 = (decimal)_annotationData.Y2 - _security.PriceStep ?? 0.01m;
+				}
+				else
+				{
+					x1 = ((double)_annotationData.X1) - 0.05;
+					x2 = ((double)_annotationData.X2) + 0.05;
+					y1 = ((double)_annotationData.Y1) - 0.05;
+					y2 = ((double)_annotationData.Y2) + 0.05;
+				}
+			}
+
+			_dataThreadActions.Add(() =>
+			{
+				var data = new ChartDrawData.AnnotationData
+				{
+					X1 = x1,
+					X2 = x2,
+					Y1 = y1,
+					Y2 = y2,
+					IsVisible = true,
+					Fill = randomBrush(),
+					Stroke = randomBrush(),
+					Foreground = randomBrush(),
+					Thickness = new Thickness(RandomGen.GetInt(1, 5)),
+				};
+
+				if (isNew)
+				{
+					data.Text = "random annotation #" + (++_annotationId);
+					data.HorizontalAlignment = HorizontalAlignment.Stretch;
+					data.VerticalAlignment = VerticalAlignment.Stretch;
+					data.LabelPlacement = LabelPlacement.Axis;
+					data.ShowLabel = true;
+					data.CoordinateMode = mode;
+				}
+
+				var dd = new ChartDrawData();
+				dd.Add(_annotation, data);
+
+				Chart.Draw(dd);
+			});
+		}
+
+		private void NewAnnotation_Click(object sender, RoutedEventArgs e)
+		{
+			if(_currCandle == null)
+				return;
+
+			var values = Enum.GetValues(typeof(ChartAnnotationTypes));
+			var atype = (ChartAnnotationTypes)values.GetValue(RandomGen.GetInt(1, values.Length - 1));
+
+			_annotation = new ChartAnnotation(atype);
+			_annotationData = null;
+
+			Chart.AddElement(_areaComb, _annotation);
+			ModifyAnnotation(true);
+		}
+
+		private void ModifyAnnotation_Click(object sender, RoutedEventArgs e)
+		{
+			if (_annotation == null)
+			{
+				Error("no last annotation");
+				return;
+			}
+
+			ModifyAnnotation(false);
+		}
+
+		private void ChartOnAnnotationCreated(ChartAnnotation ann)
+		{
+			_annotation = ann;
+		}
+
+		private void ChartOnAnnotationModified(ChartAnnotation ann, ChartDrawData.AnnotationData data)
+		{
+			_annotation = ann;
+			_annotationData = data;
+		}
+
+		private void ChartOnAnnotationDeleted(ChartAnnotation ann)
+		{
+			if (_annotation == ann)
+			{
+				_annotation = null;
+				_annotationData = null;
+			}
 		}
 	}
 }

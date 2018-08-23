@@ -1,4 +1,18 @@
-﻿ResetTimeZone;Reset axis time zone;Сбросить часовой пояс оси
+﻿ChartPainterAlreadySet;Indicator painter can only be set once.;Рендерер чарт элемента индикатора может быть установлен лишь единожды.
+AnnotationTypeCantBeChanged;Annotation type cannot be changed once set.;Тип аннотации не может быть изменен после первичной установки.
+ElementAlreadyAttached;The element was already attached to chart before.;Элемент уже был добавлен в чарт ранее.
+AxisTypeCantBeSet;Axis type must be set before adding any elements.;Тип оси должен быть задан до добавления элементов графика.
+AxesTypesNotSupportedParams;Element of type '{0}' doesn't support axes X({1}), Y({2}).;Элемент графика '{0}' не поддерживает оси X({1}), Y({2}).
+InvalidAxisType;Invalid axis type.;Неверный тип оси.
+ElementDontSupportAxisTypeParams;Elements on chart do not support axis type {0}.;Элементы, уже добавленные на график, не поддерживают тип оси {0}.
+CantSetChildProperty;Cannot set this property on child element.;Невозможно установить данное свойство у дочернего элемента.
+ParentElementAlreadySet;The element already has a parent.;Родительский элемент чарта уже задан.
+RemoveNotSupported;Remove is not supported. Use Clear() instead.;Операция Remove не поддерживается. Используйте Clear.
+NewIndicatorNoReset;Got new Indicator with same ChartIndicatorElement without Reset() call.;Получен новый индикатор без предварительного вызова Reset().
+UnexpectedCoordTypeParams;Unexpected coordinate type {0}.;Неожиданный тип координаты {0}.
+DashedLine;Dashed line;Пунктирная линия
+SenkouRange;Senkou range;Диапазон Senkou
+ResetTimeZone;Reset axis time zone;Сбросить часовой пояс оси
 ShowHiddenAxes;Show hidden axes;Показать скрытые оси
 AreaColor;Area color;Цвет области
 BuyBlinkColor;Buy blink color;Цвет мерцания Buy
