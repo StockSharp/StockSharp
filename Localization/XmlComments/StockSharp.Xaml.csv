@@ -288,7 +288,7 @@ T:StockSharp.Xaml.IndexSecurityWindow/summary;DocStr8182
 M:StockSharp.Xaml.IndexSecurityWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.IndexSecurityWindow.SecurityStorage/summary;DocStr110
 P:StockSharp.Xaml.IndexSecurityWindow.ValidateId/summary;DocStr8181
-P:StockSharp.Xaml.IndexSecurityWindow.Security/summary;Index
+P:StockSharp.Xaml.IndexSecurityWindow.Security/inheritdoc;DocStr8459
 M:StockSharp.Xaml.IndexSecurityWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PortfolioPicker/summary;DocStr8368
 M:StockSharp.Xaml.PortfolioPicker.#ctor/summary;DocStr1
@@ -643,7 +643,7 @@ M:StockSharp.Xaml.ContinuousSecurityWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityStorage/summary;DocStr110
 P:StockSharp.Xaml.ContinuousSecurityWindow.ExchangeInfoProvider/summary;DocStr8914
 P:StockSharp.Xaml.ContinuousSecurityWindow.ValidateId/summary;DocStr8181
-P:StockSharp.Xaml.ContinuousSecurityWindow.Security/summary;ContinuousSecurity
+P:StockSharp.Xaml.ContinuousSecurityWindow.Security/inheritdoc;DocStr8459
 M:StockSharp.Xaml.ContinuousSecurityWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.CredentialsWindow/summary;DocStr8182
 M:StockSharp.Xaml.CredentialsWindow.#ctor/summary;DocStr1

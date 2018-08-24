@@ -541,7 +541,7 @@
       <param name="codes">Board codes.</param>
       <returns>Exchange boards.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.SaveSecurities(System.Guid,System.Tuple{StockSharp.BusinessEntities.Security,System.String,System.String}[])">
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.SaveSecurities(System.Guid,StockSharp.BusinessEntities.Security[])">
       <summary>
             Save securities.
             </summary>
@@ -787,7 +787,7 @@
             The external market data storage access to which is organized through the WCF network connection (for more details see <see cref="N:System.ServiceModel" />).
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.IExtendedInfoStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.Messages.IBasketSecurityProcessorProvider)">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.IExtendedInfoStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initialize <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" />.
             </summary>
@@ -795,7 +795,6 @@
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="extendedInfoStorage">Extended info <see cref="P:StockSharp.Messages.Message.ExtensionInfo" /> storage.</param>
       <param name="exchangeInfoProvider">The exchange boards provider.</param>
-      <param name="processorProvider">Basket security processors provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.StorageRegistry">
       <summary>
@@ -815,11 +814,6 @@
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.ExchangeInfoProvider">
       <summary>
             The exchange boards provider.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.ProcessorProvider">
-      <summary>
-            Basket security processors provider.
             </summary>
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.Authorization">
@@ -869,30 +863,23 @@
             The client for access to the history server <see cref="T:StockSharp.Algo.History.Hydra.IRemoteStorage" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.Messages.IBasketSecurityProcessorProvider)">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorageClient" />.
             </summary>
       <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-      <param name="processorProvider">Basket security processors provider.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.Messages.IBasketSecurityProcessorProvider,System.Uri,System.Boolean)">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider,System.Uri,System.Boolean)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorageClient" />.
             </summary>
       <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-      <param name="processorProvider">Basket security processors provider.</param>
       <param name="address">Server address.</param>
       <param name="streaming">Data transfer via WCF Streaming.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorageClient.ExchangeInfoProvider">
       <summary>
             Exchanges and trading boards provider.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorageClient.ProcessorProvider">
-      <summary>
-            Basket security processors provider.
             </summary>
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorageClient.Credentials">
@@ -1793,12 +1780,11 @@
             Remote storage of market data working via <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorageClient" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.Messages.IBasketSecurityProcessorProvider)">
+    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.Storages.RemoteMarketDataDrive" />.
             </summary>
       <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-      <param name="processorProvider">Basket security processors provider.</param>
     </member>
     <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.#ctor(StockSharp.Algo.History.Hydra.RemoteStorageClient)">
       <summary>

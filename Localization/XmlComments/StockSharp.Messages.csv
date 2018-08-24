@@ -1476,6 +1476,7 @@ P:StockSharp.Messages.SecurityMessage.Class/summary;SecurityClass
 P:StockSharp.Messages.SecurityMessage.IssueSize/summary;DocStr10219
 P:StockSharp.Messages.SecurityMessage.IssueDate/summary;IssueDate
 P:StockSharp.Messages.SecurityMessage.UnderlyingSecurityType/summary;UnderlyingSecurityType
+P:StockSharp.Messages.SecurityMessage.BasketCode/summary;DocStr10646
 P:StockSharp.Messages.SecurityMessage.BasketExpression/summary;DocStr10600
 M:StockSharp.Messages.SecurityMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.SecurityMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr1

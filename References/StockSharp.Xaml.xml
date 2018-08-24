@@ -1240,9 +1240,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.IndexSecurityWindow.Security">
-      <summary>
-            Index.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.IndexSecurityWindow.InitializeComponent">
       <summary>
@@ -2937,9 +2935,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.ContinuousSecurityWindow.Security">
-      <summary>
-            Continuous security.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.ContinuousSecurityWindow.InitializeComponent">
       <summary>
