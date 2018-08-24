@@ -15124,3 +15124,28 @@ DocStr10639;Messages of basket securities;Сообщения корзины
 DocStr10640;Create market data processor for basket securities;Создать обработчик маркет-данных корзины инструментов
 DocStr10641;Basket security;Корзина инструментов
 DocStr10642;Market data processor for basket securities;Обработчик маркет-данных корзины инструментов
+DocStr10643;Is specified security is basket;Является ли инструмент корзиной
+DocStr10644;Is specified security is index;Является ли инструмент индексом
+DocStr10645;Is specified security is continuous;Является ли инструмент непрерывным
+DocStr10646;Basket security type. Can be {0} in case of regular security;Тип корзины инструментов. Может быть {0} в случае обычного инструмента
+DocStr10647;Create instance;Create instance
+DocStr10648;Used to transfer annotation draw data;Used to transfer annotation draw data
+DocStr10649;Show/hide annotation;Show/hide annotation
+DocStr10650;Whether user can edit annotation;Whether user can edit annotation
+DocStr10651;X1 coordinate for annotation drawing. DateTimeOffset for coordinate mode Absolute or RelativeY. Double otherwise;X1 coordinate for annotation drawing. DateTimeOffset for coordinate mode Absolute or RelativeY. Double otherwise
+DocStr10652;Y1 coordinate for annotation drawing. decimal for coordinate mode Absolute or RelativeX. Double otherwise;Y1 coordinate for annotation drawing. decimal for coordinate mode Absolute or RelativeX. Double otherwise
+DocStr10653;X2 coordinate for annotation drawing. DateTimeOffset for coordinate mode Absolute or RelativeY. Double otherwise;X2 coordinate for annotation drawing. DateTimeOffset for coordinate mode Absolute or RelativeY. Double otherwise
+DocStr10654;Y2 coordinate for annotation drawing. decimal for coordinate mode Absolute or RelativeX. Double otherwise;Y2 coordinate for annotation drawing. decimal for coordinate mode Absolute or RelativeX. Double otherwise
+DocStr10655;Brush to draw lines and borders;Brush to draw lines and borders
+DocStr10656;Brush to fill background;Brush to fill background
+DocStr10657;Line thickness;Line thickness
+DocStr10658;Turn on/off label show for horizontal and vertical lines;Turn on/off label show for horizontal and vertical lines
+DocStr10659;Label placement for horizontal and vertical lines;Label placement for horizontal and vertical lines
+DocStr10660;Alignment for horizontal lines;Alignment for horizontal lines
+DocStr10661;Alignment for vertical lines;Alignment for vertical lines
+DocStr10662;Coordinate mode. Absolute means DateTimeOffset for X and decimal price for Y. Relative means relative to the screen edges: double. 0=top/left, 0.5=center, 1=bottom/right;Coordinate mode. Absolute means DateTimeOffset for X and decimal price for Y. Relative means relative to the screen edges: double. 0=top/left, 0.5=center, 1=bottom/right
+DocStr10663;Text for text annotation;Text for text annotation
+DocStr10664;Put the annotation data;Put the annotation data
+DocStr10665;The chart element representing an annotation;The chart element representing an annotation
+DocStr10666;Annotation draw data;Annotation draw data
+DocStr10667;Annotation modified event;Annotation modified event
