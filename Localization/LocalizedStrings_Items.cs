@@ -19,122 +19,122 @@ namespace StockSharp.Localization
 	{
         /// <summary>
         /// Indicator painter can only be set once.
-        /// </summary
+        /// </summary>
         public const string ChartPainterAlreadySetKey = nameof(ChartPainterAlreadySet);
 
         /// <summary>
         /// Indicator painter can only be set once.
-        /// </summary
+        /// </summary>
         public static string ChartPainterAlreadySet => GetString(ChartPainterAlreadySetKey);
 
         /// <summary>
         /// Annotation type cannot be changed once set.
-        /// </summary
+        /// </summary>
         public const string AnnotationTypeCantBeChangedKey = nameof(AnnotationTypeCantBeChanged);
 
         /// <summary>
         /// Annotation type cannot be changed once set.
-        /// </summary
+        /// </summary>
         public static string AnnotationTypeCantBeChanged => GetString(AnnotationTypeCantBeChangedKey);
 
         /// <summary>
         /// The element was already attached to chart before.
-        /// </summary
+        /// </summary>
         public const string ElementAlreadyAttachedKey = nameof(ElementAlreadyAttached);
 
         /// <summary>
         /// The element was already attached to chart before.
-        /// </summary
+        /// </summary>
         public static string ElementAlreadyAttached => GetString(ElementAlreadyAttachedKey);
 
         /// <summary>
         /// Axis type must be set before adding any elements.
-        /// </summary
+        /// </summary>
         public const string AxisTypeCantBeSetKey = nameof(AxisTypeCantBeSet);
 
         /// <summary>
         /// Axis type must be set before adding any elements.
-        /// </summary
+        /// </summary>
         public static string AxisTypeCantBeSet => GetString(AxisTypeCantBeSetKey);
 
         /// <summary>
         /// Element of type '{0}' doesn't support axes X({1}), Y({2}).
-        /// </summary
+        /// </summary>
         public const string AxesTypesNotSupportedParamsKey = nameof(AxesTypesNotSupportedParams);
 
         /// <summary>
         /// Element of type '{0}' doesn't support axes X({1}), Y({2}).
-        /// </summary
+        /// </summary>
         public static string AxesTypesNotSupportedParams => GetString(AxesTypesNotSupportedParamsKey);
 
         /// <summary>
         /// Invalid axis type.
-        /// </summary
+        /// </summary>
         public const string InvalidAxisTypeKey = nameof(InvalidAxisType);
 
         /// <summary>
         /// Invalid axis type.
-        /// </summary
+        /// </summary>
         public static string InvalidAxisType => GetString(InvalidAxisTypeKey);
 
         /// <summary>
         /// Elements on chart do not support axis type {0}.
-        /// </summary
+        /// </summary>
         public const string ElementDontSupportAxisTypeParamsKey = nameof(ElementDontSupportAxisTypeParams);
 
         /// <summary>
         /// Elements on chart do not support axis type {0}.
-        /// </summary
+        /// </summary>
         public static string ElementDontSupportAxisTypeParams => GetString(ElementDontSupportAxisTypeParamsKey);
 
         /// <summary>
         /// Cannot set this property on child element.
-        /// </summary
+        /// </summary>
         public const string CantSetChildPropertyKey = nameof(CantSetChildProperty);
 
         /// <summary>
         /// Cannot set this property on child element.
-        /// </summary
+        /// </summary>
         public static string CantSetChildProperty => GetString(CantSetChildPropertyKey);
 
         /// <summary>
         /// The element already has a parent.
-        /// </summary
+        /// </summary>
         public const string ParentElementAlreadySetKey = nameof(ParentElementAlreadySet);
 
         /// <summary>
         /// The element already has a parent.
-        /// </summary
+        /// </summary>
         public static string ParentElementAlreadySet => GetString(ParentElementAlreadySetKey);
 
         /// <summary>
         /// Remove is not supported. Use Clear() instead.
-        /// </summary
+        /// </summary>
         public const string RemoveNotSupportedKey = nameof(RemoveNotSupported);
 
         /// <summary>
         /// Remove is not supported. Use Clear() instead.
-        /// </summary
+        /// </summary>
         public static string RemoveNotSupported => GetString(RemoveNotSupportedKey);
 
         /// <summary>
         /// Got new Indicator with same ChartIndicatorElement without Reset() call.
-        /// </summary
+        /// </summary>
         public const string NewIndicatorNoResetKey = nameof(NewIndicatorNoReset);
 
         /// <summary>
         /// Got new Indicator with same ChartIndicatorElement without Reset() call.
-        /// </summary
+        /// </summary>
         public static string NewIndicatorNoReset => GetString(NewIndicatorNoResetKey);
 
         /// <summary>
         /// Unexpected coordinate type {0}.
-        /// </summary
+        /// </summary>
         public const string UnexpectedCoordTypeParamsKey = nameof(UnexpectedCoordTypeParams);
 
         /// <summary>
         /// Unexpected coordinate type {0}.
-        /// </summary
+        /// </summary>
         public static string UnexpectedCoordTypeParams => GetString(UnexpectedCoordTypeParamsKey);
 
 		/// <summary>
