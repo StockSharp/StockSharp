@@ -4781,7 +4781,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Convert <see cref="Security"/> to <see cref="BasketSecurity"/> instance.
+		/// Convert <see cref="Security"/> to <see cref="BasketSecurity"/> value.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="processorProvider">Basket security processors provider.</param>

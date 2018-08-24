@@ -26,6 +26,9 @@ P:StockSharp.Algo.BasketSecurityBaseProcessor`1.BasketSecurity/summary;DocStr261
 P:StockSharp.Algo.BasketSecurityBaseProcessor`1.SecurityId/inheritdoc;DocStr8459
 P:StockSharp.Algo.BasketSecurityBaseProcessor`1.BasketLegs/inheritdoc;DocStr8459
 M:StockSharp.Algo.BasketSecurityBaseProcessor`1.Process(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+M:StockSharp.Algo.BasketSecurityBaseProcessor`1.ContainsLeg(StockSharp.Messages.SecurityId)/summary;DocStr10668
+M:StockSharp.Algo.BasketSecurityBaseProcessor`1.ContainsLeg(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
+M:StockSharp.Algo.BasketSecurityBaseProcessor`1.ContainsLeg(StockSharp.Messages.SecurityId)/returns;DocStr10669
 T:StockSharp.Algo.ContinuousSecurityBaseProcessor`1/summary;DocStr10620
 T:StockSharp.Algo.ContinuousSecurityBaseProcessor`1/typeparam/TSecurity;DocStr10619
 M:StockSharp.Algo.ContinuousSecurityBaseProcessor`1.#ctor(`0)/summary;DocStr1
@@ -7539,6 +7542,10 @@ M:StockSharp.Algo.TraderHelper.IsContinuous(StockSharp.BusinessEntities.Security
 M:StockSharp.Algo.TraderHelper.IsContinuous(StockSharp.Messages.SecurityMessage)/summary;DocStr10645
 M:StockSharp.Algo.TraderHelper.IsContinuous(StockSharp.Messages.SecurityMessage)/param/security;DocStr2831
 M:StockSharp.Algo.TraderHelper.IsContinuous(StockSharp.Messages.SecurityMessage)/returns;DocStr8659
+M:StockSharp.Algo.TraderHelper.ToBasket(StockSharp.BusinessEntities.Security,StockSharp.Messages.IBasketSecurityProcessorProvider)/summary;DocStr10670
+M:StockSharp.Algo.TraderHelper.ToBasket(StockSharp.BusinessEntities.Security,StockSharp.Messages.IBasketSecurityProcessorProvider)/param/security;DocStr2831
+M:StockSharp.Algo.TraderHelper.ToBasket(StockSharp.BusinessEntities.Security,StockSharp.Messages.IBasketSecurityProcessorProvider)/param/processorProvider;DocStr10597
+M:StockSharp.Algo.TraderHelper.ToBasket(StockSharp.BusinessEntities.Security,StockSharp.Messages.IBasketSecurityProcessorProvider)/returns;DocStr2619
 T:StockSharp.Algo.UserPermissions/summary;DocStr163
 F:StockSharp.Algo.UserPermissions.Save/summary;DocStr165
 F:StockSharp.Algo.UserPermissions.Load/summary;DocStr165

@@ -15128,24 +15128,25 @@ DocStr10643;Is specified security is basket;Является ли инструм
 DocStr10644;Is specified security is index;Является ли инструмент индексом
 DocStr10645;Is specified security is continuous;Является ли инструмент непрерывным
 DocStr10646;Basket security type. Can be {0} in case of regular security;Тип корзины инструментов. Может быть {0} в случае обычного инструмента
-DocStr10647;Create instance;Create instance
-DocStr10648;Used to transfer annotation draw data;Used to transfer annotation draw data
-DocStr10649;Show/hide annotation;Show/hide annotation
-DocStr10650;Whether user can edit annotation;Whether user can edit annotation
-DocStr10651;X1 coordinate for annotation drawing. DateTimeOffset for coordinate mode Absolute or RelativeY. Double otherwise;X1 coordinate for annotation drawing. DateTimeOffset for coordinate mode Absolute or RelativeY. Double otherwise
-DocStr10652;Y1 coordinate for annotation drawing. decimal for coordinate mode Absolute or RelativeX. Double otherwise;Y1 coordinate for annotation drawing. decimal for coordinate mode Absolute or RelativeX. Double otherwise
-DocStr10653;X2 coordinate for annotation drawing. DateTimeOffset for coordinate mode Absolute or RelativeY. Double otherwise;X2 coordinate for annotation drawing. DateTimeOffset for coordinate mode Absolute or RelativeY. Double otherwise
-DocStr10654;Y2 coordinate for annotation drawing. decimal for coordinate mode Absolute or RelativeX. Double otherwise;Y2 coordinate for annotation drawing. decimal for coordinate mode Absolute or RelativeX. Double otherwise
-DocStr10655;Brush to draw lines and borders;Brush to draw lines and borders
-DocStr10656;Brush to fill background;Brush to fill background
-DocStr10657;Line thickness;Line thickness
-DocStr10658;Turn on/off label show for horizontal and vertical lines;Turn on/off label show for horizontal and vertical lines
-DocStr10659;Label placement for horizontal and vertical lines;Label placement for horizontal and vertical lines
-DocStr10660;Alignment for horizontal lines;Alignment for horizontal lines
-DocStr10661;Alignment for vertical lines;Alignment for vertical lines
-DocStr10662;Coordinate mode. Absolute means DateTimeOffset for X and decimal price for Y. Relative means relative to the screen edges: double. 0=top/left, 0.5=center, 1=bottom/right;Coordinate mode. Absolute means DateTimeOffset for X and decimal price for Y. Relative means relative to the screen edges: double. 0=top/left, 0.5=center, 1=bottom/right
-DocStr10663;Text for text annotation;Text for text annotation
-DocStr10664;Put the annotation data;Put the annotation data
-DocStr10665;The chart element representing an annotation;The chart element representing an annotation
-DocStr10666;Annotation draw data;Annotation draw data
-DocStr10667;Annotation modified event;Annotation modified event
+DocStr10648;Used to transfer annotation draw data;Используется для передачи данных рисования аннотаций
+DocStr10649;Show/hide annotation;Показать/скрыть аннотацию
+DocStr10650;Whether user can edit annotation;Может ли пользователь редактировать аннотацию
+DocStr10655;Brush to draw lines and borders;Кисть для рисования линий и границ
+DocStr10656;Brush to fill background;Кисть для заполнения фона
+DocStr10657;Line thickness;Толщина линии
+DocStr10658;Turn on/off label show for horizontal and vertical lines;Включить/выключить показ меток для горизонтальных и вертикальных линий
+DocStr10659;Label placement for horizontal and vertical lines;Размещение меток для горизонтальных и вертикальных линий
+DocStr10660;Alignment for horizontal lines;Выравнивание для горизонтальных линий
+DocStr10661;Alignment for vertical lines;Выравнивание для вертикальных линий
+DocStr10663;Text for text annotation;Текст для текстовой аннотации
+DocStr10664;Put the annotation data;Передать данные по аннотации
+DocStr10665;The chart element representing an annotation;Элемент диаграммы, представляющий аннотацию
+DocStr10666;Annotation draw data;Данные отрисовки аннотации
+DocStr10667;Annotation modified event;Событие изменения аннотации
+DocStr10668;Whether contains the specified leg;Содержится ли указанная нога
+DocStr10669;{0} if the leg exist, otherwise {1};{0} если нога существует, иначе {1}
+DocStr10671;X1 coordinate for annotation drawing. {0} for coordinate mode {1} or {2}. {3} otherwise;Координата X1 для рисования аннотаций. {0} для режима координат {1} или {2}. {3} в противном случае
+DocStr10672;Y1 coordinate for annotation drawing. {0} for coordinate mode {1} or {2}. {3} otherwise;Координата Y1 для рисования аннотаций. {0} для режима координат {1} или {2}. {3} в противном случае
+DocStr10673;X2 coordinate for annotation drawing. {0} for coordinate mode {1} or {2}. {3} otherwise;Координата X2 для рисования аннотаций. {0} для режима координат {1} или {2}. {3} в противном случае
+DocStr10674;Y2 coordinate for annotation drawing. {0} for coordinate mode {1} or {2}. {3} otherwise;Координата Y2 для рисования аннотаций. {0} для режима координат {1} или {2}. {3} в противном случае
+DocStr10675;Coordinate mode. {0} means {1} for X and {2} price for Y. {3} means relative to the screen edges: double. 0=top/left, 0.5=center, 1=bottom/right;Режим координат. {0} означает {1} для X и {2} цена для Y. {3} означает относительно краев экрана: double. 0=top/left, 0.5=center, 1=bottom/right

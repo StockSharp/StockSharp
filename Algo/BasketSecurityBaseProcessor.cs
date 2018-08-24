@@ -57,7 +57,7 @@ namespace StockSharp.Algo
 		/// Whether contains the specified leg.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
-		/// <returns><see langword="true"/> if the candle type registered, otherwise <see langword="false"/>.</returns>
+		/// <returns><see langword="true"/> if the leg exist, otherwise <see langword="false"/>.</returns>
 		protected bool ContainsLeg(SecurityId securityId) => _legsSet.Contains(securityId);
 	}
 
