@@ -4699,7 +4699,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return processorProvider.GetProcessorType(security.BasketExpression).CreateInstance<IBasketSecurityProcessor>(security);
+			return processorProvider.GetProcessorType(security.BasketCode).CreateInstance<IBasketSecurityProcessor>(security);
 		}
 
 		/// <summary>
@@ -4778,6 +4778,26 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			return security.BasketCode == "CE" || security.BasketCode == "CV";
+		}
+
+		/// <summary>
+		/// Convert <see cref="Security"/> to <see cref="BasketSecurity"/> instance.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="processorProvider">Basket security processors provider.</param>
+		/// <returns>Instruments basket.</returns>
+		public static BasketSecurity ToBasket(this Security security, IBasketSecurityProcessorProvider processorProvider)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			if (processorProvider == null)
+				throw new ArgumentNullException(nameof(processorProvider));
+
+			var type = processorProvider.GetSecurityType(security.BasketCode);
+			var basketSec = type.CreateInstance<BasketSecurity>();
+			security.CopyTo(basketSec);
+			return basketSec;
 		}
 	}
 }

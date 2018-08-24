@@ -7,6 +7,8 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using MoreLinq;
+
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -18,6 +20,8 @@ namespace StockSharp.Algo
 	public abstract class BasketSecurityBaseProcessor<TSecurity> : IBasketSecurityProcessor
 		where TSecurity : BasketSecurity
 	{
+		private readonly HashSet<SecurityId> _legsSet;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketSecurityBaseProcessor{TSecurity}"/>.
 		/// </summary>
@@ -28,6 +32,8 @@ namespace StockSharp.Algo
 
 			BasketLegs = BasketSecurity.InnerSecurityIds.ToArray();
 			SecurityId = BasketSecurity.ToSecurityId();
+
+			_legsSet = BasketLegs.ToHashSet();
 
 			if (BasketLegs.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.SecurityDoNotContainsLegs.Put(basketSecurity.Id), nameof(basketSecurity));
@@ -46,6 +52,13 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public abstract IEnumerable<Message> Process(Message message);
+
+		/// <summary>
+		/// Whether contains the specified leg.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns><see langword="true"/> if the candle type registered, otherwise <see langword="false"/>.</returns>
+		protected bool ContainsLeg(SecurityId securityId) => _legsSet.Contains(securityId);
 	}
 
 	/// <summary>
@@ -72,6 +85,9 @@ namespace StockSharp.Algo
 				case MessageTypes.QuoteChange:
 					var quoteMsg = (QuoteChangeMessage)message;
 
+					if (!ContainsLeg(quoteMsg.SecurityId))
+						yield break;
+
 					var bestBid = quoteMsg.GetBestBid();
 					var bestAsk = quoteMsg.GetBestAsk();
 
@@ -87,6 +103,9 @@ namespace StockSharp.Algo
 
 				case MessageTypes.Execution:
 					var execMsg = (ExecutionMessage)message;
+
+					if (!ContainsLeg(execMsg.SecurityId))
+						yield break;
 
 					switch (execMsg.ExecutionType)
 					{
@@ -112,6 +131,9 @@ namespace StockSharp.Algo
 				case MessageTypes.CandleTick:
 				case MessageTypes.CandleVolume:
 					var candleMsg = (CandleMessage)message;
+
+					if (!ContainsLeg(candleMsg.SecurityId))
+						yield break;
 
 					if (!CanProcess(candleMsg.SecurityId, candleMsg.OpenTime, candleMsg.ClosePrice, candleMsg.TotalVolume, candleMsg.OpenInterest))
 						yield break;
@@ -285,6 +307,9 @@ namespace StockSharp.Algo
 				case MessageTypes.QuoteChange:
 					var quotesMsg = (QuoteChangeMessage)message;
 
+					if (!ContainsLeg(quotesMsg.SecurityId))
+						yield break;
+
 					foreach (var msg in ProcessMessage(Holder<QuoteChangeMessage>.Messages, quotesMsg.SecurityId, quotesMsg, quotes => new QuoteChangeMessage
 					{
 						SecurityId = SecurityId,
@@ -296,6 +321,9 @@ namespace StockSharp.Algo
 
 				case MessageTypes.Execution:
 					var execMsg = (ExecutionMessage)message;
+
+					if (!ContainsLeg(execMsg.SecurityId))
+						yield break;
 
 					switch (execMsg.ExecutionType)
 					{
@@ -363,6 +391,10 @@ namespace StockSharp.Algo
 				case MessageTypes.CandleTimeFrame:
 				{
 					var candleMsg = (CandleMessage)message;
+
+					if (!ContainsLeg(candleMsg.SecurityId))
+						yield break;
+
 					var dict = _candles.SafeAdd(candleMsg.OpenTime);
 					
 					dict[candleMsg.SecurityId] = (CandleMessage)candleMsg.Clone();
@@ -375,7 +407,7 @@ namespace StockSharp.Algo
 						{
 							var d = _candles.GetAndRemove(key);
 
-							if (d.Count < BasketLegs.Length && BasketSecurity.FillGapsByZeros)
+							if (d.Count < BasketLegs.Length && !BasketSecurity.FillGapsByZeros)
 								continue;
 
 							var indexCandle = new TimeFrameCandleMessage();
@@ -393,6 +425,9 @@ namespace StockSharp.Algo
 				{
 					var candleMsg = (PnFCandleMessage)message;
 
+					if (!ContainsLeg(candleMsg.SecurityId))
+						yield break;
+
 					foreach (var msg in ProcessMessage(Holder<PnFCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
 						yield return msg;
 
@@ -401,6 +436,9 @@ namespace StockSharp.Algo
 				case MessageTypes.CandleRange:
 				{
 					var candleMsg = (RangeCandleMessage)message;
+
+					if (!ContainsLeg(candleMsg.SecurityId))
+						yield break;
 
 					foreach (var msg in ProcessMessage(Holder<RangeCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
 						yield return msg;
@@ -411,6 +449,9 @@ namespace StockSharp.Algo
 				{
 					var candleMsg = (RenkoCandleMessage)message;
 
+					if (!ContainsLeg(candleMsg.SecurityId))
+						yield break;
+
 					foreach (var msg in ProcessMessage(Holder<RenkoCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
 						yield return msg;
 
@@ -420,6 +461,9 @@ namespace StockSharp.Algo
 				{
 					var candleMsg = (TickCandleMessage)message;
 
+					if (!ContainsLeg(candleMsg.SecurityId))
+						yield break;
+
 					foreach (var msg in ProcessMessage(Holder<TickCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
 						yield return msg;
 
@@ -428,6 +472,9 @@ namespace StockSharp.Algo
 				case MessageTypes.CandleVolume:
 				{
 					var candleMsg = (VolumeCandleMessage)message;
+
+					if (!ContainsLeg(candleMsg.SecurityId))
+						yield break;
 
 					foreach (var msg in ProcessMessage(Holder<VolumeCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
 						yield return msg;
@@ -543,7 +590,7 @@ namespace StockSharp.Algo
 			if (dict.Count != BasketLegs.Length)
 				yield break;
 
-			yield return convert(dict.Values.ToArray());
+			yield return convert(BasketLegs.Select(leg => dict[leg]).ToArray());
 			dict.Clear();
 		}
 

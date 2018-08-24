@@ -43,13 +43,18 @@ namespace StockSharp.Algo
 			_processors.Add(attr.Code, Tuple.Create(processorType, securityType));
 		}
 
-		void IBasketSecurityProcessorProvider.Register(string code, Type processorType, Type securityType)
+		private static void Validate(string basketCode)
 		{
-			if (code.IsEmpty())
-				throw new ArgumentNullException(nameof(code));
+			if (basketCode.IsEmpty())
+				throw new ArgumentNullException(nameof(basketCode));
 
-			if (code.Length != 2)
-				throw new ArgumentOutOfRangeException(nameof(code));
+			if (basketCode.Length != 2)
+				throw new ArgumentOutOfRangeException(nameof(basketCode));
+		}
+
+		void IBasketSecurityProcessorProvider.Register(string basketCode, Type processorType, Type securityType)
+		{
+			Validate(basketCode);
 
 			if (processorType == null)
 				throw new ArgumentNullException(nameof(processorType));
@@ -57,44 +62,34 @@ namespace StockSharp.Algo
 			if (securityType == null)
 				throw new ArgumentNullException(nameof(securityType));
 
-			_processors.Add(code, Tuple.Create(processorType, securityType));
+			_processors.Add(basketCode, Tuple.Create(processorType, securityType));
 		}
 
-		void IBasketSecurityProcessorProvider.UnRegister(string code)
+		void IBasketSecurityProcessorProvider.UnRegister(string basketCode)
 		{
-			if (code.IsEmpty())
-				throw new ArgumentNullException(nameof(code));
+			Validate(basketCode);
 
-			if (code.Length != 2)
-				throw new ArgumentOutOfRangeException(nameof(code));
-
-			_processors.Remove(code);
+			_processors.Remove(basketCode);
 		}
 
-		private Tuple<Type, Type> GetInfo(string expression)
+		private Tuple<Type, Type> GetInfo(string basketCode)
 		{
-			if (expression.IsEmpty())
-				throw new ArgumentNullException(nameof(expression));
+			Validate(basketCode);
 
-			if (expression.Length < 4)
-				throw new ArgumentOutOfRangeException(nameof(expression));
-
-			var code = expression.Substring(0, 2);
-
-			if (_processors.TryGetValue(code, out var processor))
+			if (_processors.TryGetValue(basketCode, out var processor))
 				return processor;
 
-			throw new ArgumentException(LocalizedStrings.Str2140Params.Put(code));
+			throw new ArgumentException(LocalizedStrings.Str2140Params.Put(basketCode));
 		}
 
-		Type IBasketSecurityProcessorProvider.GetProcessorType(string expression)
+		Type IBasketSecurityProcessorProvider.GetProcessorType(string basketCode)
 		{
-			return GetInfo(expression).Item1;
+			return GetInfo(basketCode).Item1;
 		}
 
-		Type IBasketSecurityProcessorProvider.GetSecurityType(string expression)
+		Type IBasketSecurityProcessorProvider.GetSecurityType(string basketCode)
 		{
-			return GetInfo(expression).Item2;
+			return GetInfo(basketCode).Item2;
 		}
 	}
 }

@@ -10,29 +10,29 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Register new security type.
 		/// </summary>
-		/// <param name="code">Security type code.</param>
+		/// <param name="basketCode">Basket security type.</param>
 		/// <param name="processorType">Processor type.</param>
 		/// <param name="securityType">Security type.</param>
-		void Register(string code, Type processorType, Type securityType);
+		void Register(string basketCode, Type processorType, Type securityType);
 
 		/// <summary>
 		/// Remove old security type.
 		/// </summary>
-		/// <param name="code">Security type code.</param>
-		void UnRegister(string code);
+		/// <param name="basketCode">Basket security type.</param>
+		void UnRegister(string basketCode);
 
 		/// <summary>
 		/// Get processor type.
 		/// </summary>
-		/// <param name="expression">Basket security expression.</param>
+		/// <param name="basketCode">Basket security type.</param>
 		/// <returns>Processor type.</returns>
-		Type GetProcessorType(string expression);
+		Type GetProcessorType(string basketCode);
 
 		/// <summary>
 		/// Get security type.
 		/// </summary>
-		/// <param name="expression">Basket security expression.</param>
+		/// <param name="basketCode">Basket security type.</param>
 		/// <returns>Security type.</returns>
-		Type GetSecurityType(string expression);
+		Type GetSecurityType(string basketCode);
 	}
 }
