@@ -47,6 +47,7 @@ namespace SampleChart
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
 
@@ -386,6 +387,10 @@ namespace SampleChart
 				var now = DateTime.UtcNow;
 				DoIfTime(UpdateRealtimeCandles, now, ref _lastRealtimeUpdateTime, _realtimeInterval);
 				DoIfTime(DrawChartElements,     now, ref _lastDrawTime,           _drawInterval);
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
 			}
 			finally
 			{
