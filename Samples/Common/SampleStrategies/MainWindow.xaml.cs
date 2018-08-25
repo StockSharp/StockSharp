@@ -68,7 +68,6 @@ namespace SampleStrategies
 			LogManager.Listeners.Add(new GuiLogListener(Monitor));
 
 			var entityRegistry = new CsvEntityRegistry("Data");
-			ConfigManager.RegisterService(entityRegistry.ProcessorProvider);
 
 			ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
 			// ecng.serialization invoke in several places IStorage obj
