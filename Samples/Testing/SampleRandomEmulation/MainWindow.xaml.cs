@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleRandomEmulation
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Windows;
 	using System.Windows.Media;
@@ -40,7 +39,7 @@ namespace SampleRandomEmulation
 	{
 		private SmaStrategy _strategy;
 
-		private readonly ICollection<LineData<DateTime>> _curveItems;
+		private readonly ChartBandElement _curveElem;
 		private HistoryEmulationConnector _connector;
 
 		private readonly LogManager _logManager = new LogManager();
@@ -52,7 +51,7 @@ namespace SampleRandomEmulation
 			InitializeComponent();
 
 			_logManager.Listeners.Add(new FileLogListener("log.txt"));
-			_curveItems = Curve.CreateCurve("Equity", Colors.DarkGreen);
+			_curveElem = Curve.CreateCurve("Equity", Colors.DarkGreen, ChartIndicatorDrawStyles.Line);
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
@@ -157,13 +156,13 @@ namespace SampleRandomEmulation
 
 			_strategy.PnLChanged += () =>
 			{
-				var data = new EquityData
-				{
-					Time = _strategy.CurrentTime,
-					Value = _strategy.PnL,
-				};
+				var data = new ChartDrawData();
 
-				this.GuiAsync(() => _curveItems.Add(data));
+				data
+					.Group(_strategy.CurrentTime)
+						.Add(_curveElem, _strategy.PnL);
+
+				Curve.Draw(data);
 			};
 
 			_logManager.Sources.Add(_strategy);
@@ -205,7 +204,7 @@ namespace SampleRandomEmulation
 				}
 			};
 
-			_curveItems.Clear();
+			Curve.Reset(new[] { _curveItems });
 
 			Report.IsEnabled = false;
 

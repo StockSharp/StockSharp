@@ -15150,3 +15150,67 @@ DocStr10672;Y1 coordinate for annotation drawing. {0} for coordinate mode {1} or
 DocStr10673;X2 coordinate for annotation drawing. {0} for coordinate mode {1} or {2}. {3} otherwise;Координата X2 для рисования аннотаций. {0} для режима координат {1} или {2}. {3} в противном случае
 DocStr10674;Y2 coordinate for annotation drawing. {0} for coordinate mode {1} or {2}. {3} otherwise;Координата Y2 для рисования аннотаций. {0} для режима координат {1} или {2}. {3} в противном случае
 DocStr10675;Coordinate mode. {0} means {1} for X and {2} price for Y. {3} means relative to the screen edges: double. 0=top/left, 0.5=center, 1=bottom/right;Режим координат. {0} означает {1} для X и {2} цена для Y. {3} означает относительно краев экрана: double. 0=top/left, 0.5=center, 1=bottom/right
+DocStr10676;Type of X axis for this chart;Type of X axis for this chart
+DocStr10677;Chart this area attached to;Chart this area attached to
+DocStr10678;Current data point with for X axis;Current data point with for X axis
+DocStr10679;The chart element representing a band;The chart element representing a band
+DocStr10680;"The band drawing style. The default is {0}. Can also be {1}.""/>";"The band drawing style. The default is {0}. Can also be {1}.""/>"
+DocStr10681;Create instance;Create instance
+DocStr10682;Base class for chart related view models;Base class for chart related view models
+DocStr10683;Raised before property value is changed;Raised before property value is changed
+DocStr10684;Set property value and raise events;Set property value and raise events
+DocStr10685;Property backing field;Property backing field
+DocStr10686;Name of the property;Name of the property
+DocStr10687;Helper method to raise property change notifications on this object if the event was raised on another object {0};Helper method to raise property change notifications on this object if the event was raised on another object {0}
+DocStr10688;Interface which represents all chart draw data types;Interface which represents all chart draw data types
+DocStr10689;Indicator values to draw on chart;Indicator values to draw on chart
+DocStr10690;Value timestamp;Value timestamp
+DocStr10691;Value of X coordinate for {0};Value of X coordinate for {0}
+DocStr10692;Put the line data;Put the line data
+DocStr10693;The value1;The value1
+DocStr10694;The value2;The value2
+DocStr10695;Value of X coordinate for the data;Value of X coordinate for the data
+DocStr10696;Parent chart element;Parent chart element
+DocStr10697;Child chart elements;Child chart elements
+DocStr10698;Whether this element is visible on chart;Whether this element is visible on chart
+DocStr10699;Should this element be shown in the legend;Should this element be shown in the legend
+DocStr10700;X axis this element currently attached to;X axis this element currently attached to
+DocStr10701;Children chart elements;Children chart elements
+DocStr10702;Add child chart element;Add child chart element
+DocStr10703;Do not create corresponding chart element. Used for nested elements;Do not create corresponding chart element. Used for nested elements
+DocStr10704;Remove child chart element;Remove child chart element
+DocStr10705;Reset element;Reset element
+DocStr10706;Draw on root element;Draw on root element
+DocStr10707;Check if the element can be drawn using supplied axis types;Check if the element can be drawn using supplied axis types
+DocStr10708;X axis type;X axis type
+DocStr10709;Y axis type;Y axis type
+DocStr10710;True if supplied types are supported;True if supplied types are supported
+DocStr10711;Compatibility property for {0} for {1};Compatibility property for {0} for {1}
+DocStr10712;The chart element representing bubbles;The chart element representing bubbles
+DocStr10713;Default type of X axis;Default type of X axis
+DocStr10714;Chart element representing a line;Chart element representing a line
+DocStr10715;The chart element obtained from the method {0};The chart element obtained from the method {0}
+DocStr10716;To reset all chart elements;To reset all chart elements
+DocStr10717;To reset specified chart elements;To reset specified chart elements
+DocStr10718;Elements to reset;Elements to reset
+DocStr10720;Indicator painter which is used by default;Indicator painter which is used by default
+DocStr10721;Default indicator line element;Default indicator line element
+DocStr10722;Draw new values;Draw new values
+DocStr10723;The chart element for {0};The chart element for {0}
+DocStr10724;Chart painter for {0} indicator;Chart painter for {0} indicator
+DocStr10725;Painter for {0} indicator;Painter for {0} indicator
+DocStr10726;Indicator which is being drawn;Indicator which is being drawn
+DocStr10727;Whether this painter is currently attached to chart element;Whether this painter is currently attached to chart element
+DocStr10728;Draw values on chart;Draw values on chart
+DocStr10729;Draw indicator values using value getter;Draw indicator values using value getter
+DocStr10730;Draw indicator single double values;Draw indicator single double values
+DocStr10731;Draw indicator band values (2 doubles);Draw indicator band values (2 doubles)
+DocStr10732;Draw indicator converting from 2 doubles to one with converter;Draw indicator converting from 2 doubles to one with converter
+DocStr10733;Add inner chart element;Add inner chart element
+DocStr10734;{0} line;{0} line
+DocStr10735;Embedded chart elements;Embedded chart elements
+DocStr10736;To reset painter child elements;To reset painter child elements
+DocStr10737;Called when this painter is attached to chart indicator element;Called when this painter is attached to chart indicator element
+DocStr10738;Called when this painter is detached from chart indicator element;Called when this painter is detached from chart indicator element
+DocStr10739;Step size for volatility smile calculation;Step size for volatility smile calculation
+DocStr10740;Used to convert {0} and icon resource key to {1}, colored with corresponding brush;Used to convert {0} and icon resource key to {1}, colored with corresponding brush

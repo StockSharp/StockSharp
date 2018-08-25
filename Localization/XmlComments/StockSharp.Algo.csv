@@ -7542,7 +7542,7 @@ M:StockSharp.Algo.TraderHelper.IsContinuous(StockSharp.BusinessEntities.Security
 M:StockSharp.Algo.TraderHelper.IsContinuous(StockSharp.Messages.SecurityMessage)/summary;DocStr10645
 M:StockSharp.Algo.TraderHelper.IsContinuous(StockSharp.Messages.SecurityMessage)/param/security;DocStr2831
 M:StockSharp.Algo.TraderHelper.IsContinuous(StockSharp.Messages.SecurityMessage)/returns;DocStr8659
-M:StockSharp.Algo.TraderHelper.ToBasket(StockSharp.BusinessEntities.Security,StockSharp.Messages.IBasketSecurityProcessorProvider)/summary;DocStr10670
+M:StockSharp.Algo.TraderHelper.ToBasket(StockSharp.BusinessEntities.Security,StockSharp.Messages.IBasketSecurityProcessorProvider)/summary;DocStr8644
 M:StockSharp.Algo.TraderHelper.ToBasket(StockSharp.BusinessEntities.Security,StockSharp.Messages.IBasketSecurityProcessorProvider)/param/security;DocStr2831
 M:StockSharp.Algo.TraderHelper.ToBasket(StockSharp.BusinessEntities.Security,StockSharp.Messages.IBasketSecurityProcessorProvider)/param/processorProvider;DocStr10597
 M:StockSharp.Algo.TraderHelper.ToBasket(StockSharp.BusinessEntities.Security,StockSharp.Messages.IBasketSecurityProcessorProvider)/returns;DocStr2619

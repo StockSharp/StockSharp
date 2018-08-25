@@ -541,6 +541,11 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.Converters.ColoredIconConverter">
+      <summary>
+            Used to convert <see cref="T:System.Windows.Media.Brush" /> and icon resource key to <see cref="T:System.Windows.Media.DrawingImage" />, colored with corresponding brush.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1">
       <summary>
         <see cref="T:DevExpress.Xpf.Editors.ComboBoxEdit" /> value converter.
