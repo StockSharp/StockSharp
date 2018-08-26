@@ -350,8 +350,8 @@ namespace SampleChart
 
 				BusyIndicator.IsBusy = false;
 				Chart.IsAutoRange = false;
-				_btnModifyAnnotation.IsEnabled = true;
-				_btnNewAnnotation.IsEnabled = true;
+				ModifyAnnotationBtn.IsEnabled = true;
+				NewAnnotationBtn.IsEnabled = true;
 
 			}, TaskScheduler.FromCurrentSynchronizationContext());
 		}

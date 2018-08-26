@@ -49,8 +49,8 @@
 
 				<GroupBox Header="Annotations" Margin="3,2" Padding="0">
 					<StackPanel Orientation="Horizontal">
-						<Button x:Name="_btnNewAnnotation" Content="new" Margin="4,0" IsEnabled="False" Click="NewAnnotation_Click" ToolTip="Create new annotation from code" VerticalAlignment="Center"/>
-						<Button x:Name="_btnModifyAnnotation" Content="modify" Margin="4,0" IsEnabled="False" Click="ModifyAnnotation_Click" ToolTip="Modify annotation from code" VerticalAlignment="Center"/>
+						<Button x:Name="NewAnnotationBtn" Content="new" Margin="4,0" IsEnabled="False" Click="NewAnnotation_Click" ToolTip="Create new annotation from code" VerticalAlignment="Center"/>
+						<Button x:Name="ModifyAnnotationBtn" Content="modify" Margin="4,0" IsEnabled="False" Click="ModifyAnnotation_Click" ToolTip="Modify annotation from code" VerticalAlignment="Center"/>
 					</StackPanel>
 				</GroupBox>
 			</StackPanel>
