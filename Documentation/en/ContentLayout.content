@@ -371,13 +371,13 @@
     <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" isExpanded="true" title="Settings">
       <Topic id="bc6f0874-1c3a-49ff-b615-8c438dcea716" visible="True" title="Launch settings" />
       <Topic id="e5994bfc-2458-41b2-a3c8-3e2b62d78ea9" visible="True" title="Reset settings" />
-      <Topic id="5db34ace-ab66-4848-b335-11402f3d96c3" visible="True" isSelected="true" title="Feedback forms" />
+      <Topic id="5db34ace-ab66-4848-b335-11402f3d96c3" visible="True" title="Feedback forms" />
     </Topic>
   </Topic>
-  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" title="S#.Data">
+  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Installing S#.Data" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="First start" />
-    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Sources setting up">
+    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Sources setting up">
       <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" title="Stock, Futures and Options">
         <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
         <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" title="FinViz" />
@@ -407,7 +407,7 @@
         <Topic id="24a5983b-28a7-4620-b4b8-9356f683a9ba" visible="True" title="FXCM" />
         <Topic id="e81e69f8-bfcf-49f8-aefe-cd18270c1d9e" visible="True" title="FXCM (history)" />
       </Topic>
-      <Topic id="8cde5dc1-05c2-412b-8f29-cd7d5d8742f5" visible="True" noFile="true" isExpanded="true" title="Crypto currency">
+      <Topic id="8cde5dc1-05c2-412b-8f29-cd7d5d8742f5" visible="True" noFile="true" title="Crypto currency">
         <Topic id="82177082-714f-4a6c-912d-78ab1f0855fa" visible="True" title="Binance" />
         <Topic id="85bd184e-a4de-4e9a-8efa-d3f6f316fc85" visible="True" title="Bitexbook" />
         <Topic id="571aaaa7-8eef-4a97-89a6-ba2b94083411" visible="True" title="Bitfinex" />
@@ -469,13 +469,14 @@
       <Topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" visible="True" title="WCF connectivity" />
       <Topic id="040cdc40-39b4-47be-b3f0-441710515562" visible="True" title="Remote administration" />
     </Topic>
-    <Topic id="7545b685-f318-4d91-af10-52708257f452" visible="True" noFile="true" title="Instruments and boards">
+    <Topic id="7545b685-f318-4d91-af10-52708257f452" visible="True" noFile="true" isExpanded="true" title="Instruments and boards">
       <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Instruments list" />
+      <Topic id="cc9ddc6c-27e9-4bc4-91e8-a418303ae201" visible="True" isSelected="true" title="Create instrument" />
       <Topic id="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" visible="True" title="Index" />
       <Topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" visible="True" title="Continuous futures" />
       <Topic id="b7f2c08a-2920-42a4-9887-eb0441c246cb" visible="True" title="Extended instrument info" />
-      <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" title="Boards" />
       <Topic id="65b09400-90fa-49f3-8d71-6d4309a33934" visible="True" title="Symbol mappings" />
+      <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" title="Boards" />
     </Topic>
     <Topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" visible="True" title="Create new souce" />
     <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" title="Tasks">

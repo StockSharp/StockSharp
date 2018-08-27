@@ -217,6 +217,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Hydra_Creation_tool.aml" />
     <None Include="Topics\Terminal_Trades.aml" />
     <None Include="Topics\Terminal_Teamwork.aml" />
     <None Include="Topics\Terminal_Tape_Trades.aml" />
