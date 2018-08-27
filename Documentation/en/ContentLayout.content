@@ -471,12 +471,13 @@
     </Topic>
     <Topic id="7545b685-f318-4d91-af10-52708257f452" visible="True" noFile="true" isExpanded="true" title="Instruments and boards">
       <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Instruments list" />
-      <Topic id="cc9ddc6c-27e9-4bc4-91e8-a418303ae201" visible="True" isSelected="true" title="Create instrument" />
+      <Topic id="cc9ddc6c-27e9-4bc4-91e8-a418303ae201" visible="True" title="Create instrument" />
       <Topic id="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" visible="True" title="Index" />
       <Topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" visible="True" title="Continuous futures" />
       <Topic id="b7f2c08a-2920-42a4-9887-eb0441c246cb" visible="True" title="Extended instrument info" />
       <Topic id="65b09400-90fa-49f3-8d71-6d4309a33934" visible="True" title="Symbol mappings" />
       <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" title="Boards" />
+      <Topic id="4323f740-7b37-47ca-bab1-d540d9c0c4f0" visible="True" title="Editing instruments" />
     </Topic>
     <Topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" visible="True" title="Create new souce" />
     <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" title="Tasks">
@@ -503,11 +504,11 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Installing S#.Designer" />
     <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Update S#.Designer" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Quick start" />
-    <Topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" visible="True" isExpanded="true" title="User interface">
+    <Topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" visible="True" title="User interface">
       <Topic id="45ae6713-c28b-457d-be6b-19016f54507e" visible="True" title="Quick access panel" />
       <Topic id="2f00e9bc-8ea7-4679-9688-b02c3424f03a" visible="True" title="Ribbon" />
       <Topic id="71792b34-7013-4e7d-a486-400ec92e2410" visible="True" title="Workspace" />
@@ -616,7 +617,7 @@
         </Topic>
       </Topic>
     </Topic>
-    <Topic id="a26317f6-5e11-4d6d-913f-73a4f497cec8" visible="True" noFile="true" isExpanded="true" title="Backtesting">
+    <Topic id="a26317f6-5e11-4d6d-913f-73a4f497cec8" visible="True" noFile="true" title="Backtesting">
       <Topic id="18a5214f-1c03-445a-ab96-d29c91555af4" visible="True" title="User interface" />
       <Topic id="667ad9ff-6afe-48e2-9c53-1850d0533a77" visible="True" isExpanded="true" title="Debugging">
         <Topic id="81221569-7e65-4817-9b1f-7d6c6efccdf6" visible="True" title="Break points" />
@@ -627,13 +628,15 @@
       <Topic id="1db75098-3878-4843-9c0d-75bd9dd47a48" visible="True" title="Portfolio optimization" />
     </Topic>
     <Topic id="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" visible="True" isExpanded="true" title="Market data storage">
-      <Topic id="ec56221a-92a0-45f4-9fec-e6e7edc7c264" visible="True" title="Getting started" />
       <Topic id="d0a1bb26-7a29-4607-992c-4f539632c2eb" visible="True" title="Download instruments" />
       <Topic id="2ee93171-34db-4f23-a5d3-30ff5c81dda3" visible="True" title="Create instrument" />
       <Topic id="bc271b21-3ef5-422e-b6cf-9f0228607d2b" visible="True" title="Edit instrument" />
-      <Topic id="a966079a-3a89-49ef-918c-d69ea3d2b240" visible="True" title="Instrument extended info" />
+      <Topic id="8563e716-ba68-4e52-a45a-79f66eb2346a" visible="True" title="Index" />
+      <Topic id="01a8166a-57b5-4f89-985f-9fb3c2ee0168" visible="True" title="Continuous futures" />
       <Topic id="085174e5-3be9-4dc3-bdeb-dcc3706b483d" visible="True" title="Download market-data" />
-      <Topic id="4456e138-a1be-4bc2-8aab-a1f0f226759d" visible="True" title="View downloaded data" />
+      <Topic id="ec56221a-92a0-45f4-9fec-e6e7edc7c264" visible="True" title="Getting started" />
+      <Topic id="a966079a-3a89-49ef-918c-d69ea3d2b240" visible="True" title="Instrument extended info" />
+      <Topic id="4456e138-a1be-4bc2-8aab-a1f0f226759d" visible="True" isSelected="true" title="View downloaded data" />
       <Topic id="aa54fb3f-ed47-4291-9cc6-34840bab4fff" visible="True" title="Symbol mapping" />
     </Topic>
     <Topic id="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" visible="True" isExpanded="true" title="Live execution">

@@ -217,6 +217,9 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Designer_GluingData.aml" />
+    <None Include="Topics\Designer_create_index.aml" />
+    <None Include="Topics\HydraSettingsSecurityEditor.aml" />
     <None Include="Topics\Hydra_Creation_tool.aml" />
     <None Include="Topics\Terminal_Trades.aml" />
     <None Include="Topics\Terminal_Teamwork.aml" />
