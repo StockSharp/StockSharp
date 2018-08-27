@@ -839,40 +839,6 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
-    <member name="E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanging">
-      <summary>
-            The chart element properties value changing event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartAxis.RaisePropertyChanging(System.String)">
-      <summary>
-            To call the <see cref="E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanging" /> event.
-            </summary>
-      <param name="name">Property name.</param>
-    </member>
-    <member name="E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanged">
-      <summary>
-            The chart element properties value change event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartAxis.RaisePropertyChanged(System.String)">
-      <summary>
-            To call the <see cref="E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanged" /> event.
-            </summary>
-      <param name="name">Property name.</param>
-    </member>
-    <member name="E:StockSharp.Xaml.Charting.ChartAxis.PropertyValueChanging">
-      <summary>
-            The chart element properties value change start event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartAxis.RaisePropertyValueChanging(System.String,System.Object)">
-      <summary>
-            To call the <see cref="E:StockSharp.Xaml.Charting.ChartAxis.PropertyValueChanging" /> event.
-            </summary>
-      <param name="name">Property name.</param>
-      <param name="value">New value of the property.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartBandElement">
       <summary>
             The chart element representing a band.
@@ -1433,6 +1399,15 @@
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartBandElement,System.Decimal)">
+      <summary>
+            Put the line data.
+            </summary>
+      <param name="element">The chart element representing a band.</param>
+      <param name="value">The value.</param>
+      <returns>
+        <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartBandElement,System.Double,System.Double)">
       <summary>
             Put the line data.
@@ -1538,11 +1513,6 @@
             </summary>
       <typeparam name="T">The chart element type.</typeparam>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartElement`1.#ctor">
-      <summary>
-            Initialize <see cref="T:StockSharp.Xaml.Charting.ChartElement`1" />.
-            </summary>
-    </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.Chart">
       <summary>
             The chart on which the element is drawn.
@@ -1609,7 +1579,7 @@
             </summary>
       <param name="element">
       </param>
-      <param name="dontDraw">Do not create corresponding UltrachartElement for the element. Used for nested elements.</param>
+      <param name="dontDraw">Do not create corresponding chart element. Used for nested elements.</param>
       <exception cref="T:System.InvalidOperationException">
       </exception>
     </member>
@@ -1670,20 +1640,6 @@
             Extension class for <see cref="T:StockSharp.Xaml.Charting.IChart" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartHelper.SeriesName(System.String)">
-      <summary>
-            To get the unique name for the series.
-            </summary>
-      <param name="prefix">Name prefix.</param>
-      <returns>The unique name.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartHelper.GetSimpleValues(StockSharp.Algo.Indicators.IIndicatorValue)">
-      <summary>
-            Get simple indicator values.
-            </summary>
-      <param name="value">Indicator value.</param>
-      <returns>Simple indicator values.</returns>
-    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)">
       <summary>
             To draw the candle.
@@ -1715,13 +1671,6 @@
             </summary>
       <param name="chart">Chart.</param>
       <param name="values">New data.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartHelper.SaveToXml(StockSharp.Xaml.Charting.IChart,System.String)">
-      <summary>
-            To save the chart data to xml file.
-            </summary>
-      <param name="chart">Chart.</param>
-      <param name="fileName">The full path to the file.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartHelper.SaveToImage(StockSharp.Xaml.Charting.IChart)">
       <summary>
@@ -1838,7 +1787,7 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartIndicatorElement.ToString">
-      <summary>Returns a string that represents the current object.</summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartIndicatorElement.#ctor">
       <summary>
@@ -1883,16 +1832,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartIndicatorElement.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartIndicatorElement.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartLineElement">
       <summary>
@@ -2798,7 +2741,7 @@
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorAttribute">
       <summary>
-            Attribute, applied to chart element, to provide information about type of <see cref="T:StockSharp.Algo.Indicators.IIndicator" />.
+            Attribute, applied to indicator's painter, to provide information about type of <see cref="T:StockSharp.Algo.Indicators.IIndicator" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorAttribute.Type">
@@ -2830,6 +2773,12 @@
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.DefaultPainter.OnDraw">
       <summary>Draw new values.</summary>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.DefaultPainter.Load(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.DefaultPainter.Save(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter">
       <summary>
             The chart element for <see cref="T:StockSharp.Algo.Indicators.Envelope" />.
@@ -2854,16 +2803,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter">
       <summary>
@@ -2889,16 +2832,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter">
       <summary>
@@ -2924,16 +2861,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter">
       <summary>
@@ -2959,16 +2890,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter">
       <summary>
@@ -2999,16 +2924,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter">
       <summary>
@@ -3039,16 +2958,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter">
       <summary>
@@ -3145,16 +3058,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter">
       <summary>
@@ -3180,16 +3087,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter">
       <summary>
@@ -3225,16 +3126,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter">
       <summary>
@@ -3265,16 +3160,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter">
       <summary>
@@ -3300,16 +3189,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.ParabolicSarPainter">
       <summary>
@@ -3345,16 +3228,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.IThemeableChart">
       <summary>

@@ -15214,3 +15214,4 @@ DocStr10737;Called when this painter is attached to chart indicator element;Call
 DocStr10738;Called when this painter is detached from chart indicator element;Called when this painter is detached from chart indicator element
 DocStr10739;Step size for volatility smile calculation;Step size for volatility smile calculation
 DocStr10740;Used to convert {0} and icon resource key to {1}, colored with corresponding brush;Used to convert {0} and icon resource key to {1}, colored with corresponding brush
+DocStr10741;The value;The value
