@@ -4,7 +4,7 @@
     <introduction>
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.BuySellPanel</codeEntityReference> - 
-      	Специальная панель дающая возможность быстро выставить заявку по лучшим ценам.
+      	Специальная панель, дающая возможность быстро выставить заявку по лучшим ценам.
       </para>
       <mediaLink><image placement="left" xlink:href="API_GUI_BuySell" /></mediaLink>
       <para>
@@ -40,7 +40,7 @@
 
 	  				]]>
               </code>
-<para>Для наполнения панели данными необходимо указать источник маркет данных и источник инструментов.</para>
+<para>Для наполнения панели данными необходимо указать источник маркет-данных и источник инструментов.</para>
       <code title="C#" language="C#">
 <![CDATA[
 		private void Connect_Click(object sender, RoutedEventArgs e)

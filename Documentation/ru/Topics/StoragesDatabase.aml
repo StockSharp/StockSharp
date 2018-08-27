@@ -19,7 +19,7 @@
 	</connectionStrings>
 		]]>
 		</code>		
-		<para>Например заменить <legacyBold>%Documents%\StockSharp\Hydra\StockSharp.db</legacyBold> на <legacyBold>С:\StockSharp.db</legacyBold>, для сохранения БД в корень диска С:\.</para>
+		<para>Например, заменить <legacyBold>%Documents%\StockSharp\Hydra\StockSharp.db</legacyBold> на <legacyBold>С:\StockSharp.db</legacyBold>, для сохранения БД в корень диска С:\.</para>
 		
 		
 		

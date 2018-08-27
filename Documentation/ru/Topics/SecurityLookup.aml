@@ -24,7 +24,7 @@
 		<list class="bullet">
 			<listItem>
 				<para>Свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Code</codeEntityReference>
-				задает маску имени инструмента или описания (например «ES» или «e-mini» или «gold») или точное название (например «esh5»).</para>
+				задает маску имени инструмента или описания (например, «ES» или «e-mini» или «gold») или точное название (например, «esh5»).</para>
 			</listItem>
 			<listItem>
 				<para>Свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Type</codeEntityReference> задает тип инструмента.</para>

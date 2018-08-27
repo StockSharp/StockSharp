@@ -17,8 +17,10 @@
 </mediaLink>
 <para>В появившемся окне, нажав на кнопку <mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline>, добавится новая строчка.</para>
 <para>В столбце <legacyBold>Подключение</legacyBold> из выпадающего списка необходимо выбрать подключение. 
-В столбцах <legacyBold>Код инструмента</legacyBold> и <legacyBold>Код площадки</legacyBold> указать код инструмента и код площадки. В столбцах <legacyBold>Код инструмента адаптере</legacyBold> и <legacyBold>Код площадки в адаптере</legacyBold> необходимо 
-указать код инструмента и код площадки как они указаны во внешней торговой системе.</para>
+В столбцах <legacyBold>Код инструмента</legacyBold> и <legacyBold>Код площадки</legacyBold> указать код 
+инструмента и код площадки. В столбцах <legacyBold>Код инструмента адаптере</legacyBold> и 
+<legacyBold>Код площадки в адаптере</legacyBold> необходимо 
+указать код инструмента и код площадки, как они указаны во внешней торговой системе.</para>
 
 
     </introduction>

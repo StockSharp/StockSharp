@@ -17,7 +17,7 @@
 режимах 32- и 64-бит, при выборе режима запуска доступная 
 функциональность будет выделена 
 значком <mediaLinkInline><image xlink:href="Designer_Start_mode_01"/></mediaLinkInline> 
-например при 64-битном режиме могут быть недоступны некоторые подключения (выделены в окне).</para>
+например, при 64-битном режиме могут быть недоступны некоторые подключения (выделены в окне).</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Start_mode_02"/>
 </mediaLink>

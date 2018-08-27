@@ -9,7 +9,8 @@
           <mediaLink><image placement="left" xlink:href="API_GUI_MarketDataGrid" /></mediaLink>
       <para>
       
-      Ниже приведен пример кода добавления таблицы <codeEntityReference>T:StockSharp.Xaml.MarketDataGrid</codeEntityReference> на экранную форму. 
+      Ниже приведен пример кода добавления таблицы 
+      <codeEntityReference>T:StockSharp.Xaml.MarketDataGrid</codeEntityReference> на экранную форму.
       </para>
              <code title="XAML" language="XAML">
 	  				<![CDATA[

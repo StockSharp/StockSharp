@@ -7,7 +7,7 @@
 		<codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference>,
 		<codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> или 
 		<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> 
-		используется тот же механизм что и при создании свечей <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>.</para>
+		используется тот же механизм, что и при создании свечей <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>.</para>
 		<para>Например создадим 1мин. свечи для спреда GZM5 - LKM5:</para>
         <code language="C#">
         <![CDATA[
@@ -58,7 +58,7 @@ _candleManager.Start(_indexSeries);
 		]]>
 		</code>
 		
-		<para>После этого, в обработчик события <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference> - DrawCandles, будут поступать свечи, которые можно вывести на график:</para>
+		<para>После этого в обработчик события <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference> - DrawCandles, будут поступать свечи, которые можно вывести на график:</para>
 
         <code language="C#">
         <![CDATA[
