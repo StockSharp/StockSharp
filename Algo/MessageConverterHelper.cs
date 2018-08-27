@@ -599,6 +599,8 @@ namespace StockSharp.Algo
 				IssueSize = security.IssueSize,
 				IssueDate = security.IssueDate,
 				UnderlyingSecurityType = security.UnderlyingSecurityType,
+				BasketCode = security.BasketCode,
+				BasketExpression = security.BasketExpression,
 			};
 		}
 
@@ -655,6 +657,8 @@ namespace StockSharp.Algo
 				IssueSize = criteria.IssueSize,
 				IssueDate = criteria.IssueDate,
 				UnderlyingSecurityType = criteria.UnderlyingSecurityType,
+				BasketCode = criteria.BasketCode,
+				BasketExpression = criteria.BasketExpression,
 			};
 		}
 
@@ -672,11 +676,10 @@ namespace StockSharp.Algo
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
-			var security = new Security
-			{
-				Id = message.SecurityId.ToStringId()
-			};
+			var security = new Security { Id = message.SecurityId.ToStringId() };
+
 			security.ApplyChanges(message, exchangeInfoProvider);
+
 			return security;
 		}
 

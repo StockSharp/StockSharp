@@ -92,6 +92,8 @@
     <Compile Include="DisconnectMessage.cs" />
     <Compile Include="ExecutionMessage.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="IBasketSecurityProcessor.cs" />
+    <Compile Include="IBasketSecurityProcessorProvider.cs" />
     <Compile Include="IDailyInfoSoap.cs" />
     <Compile Include="IPortfolioMessageAdapterProvider.cs" />
     <Compile Include="MarketDataFinishedMessage.cs" />

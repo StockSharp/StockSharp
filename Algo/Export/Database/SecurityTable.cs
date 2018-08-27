@@ -127,6 +127,16 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(6)
 			};
+			yield return new ColumnDescription(nameof(SecurityMessage.BasketCode))
+			{
+				DbType = typeof(string),
+				ValueRestriction = new StringRestriction(2)
+			};
+			yield return new ColumnDescription(nameof(SecurityMessage.BasketExpression))
+			{
+				DbType = typeof(string),
+				ValueRestriction = new StringRestriction(int.MaxValue)
+			};
 			yield return new ColumnDescription(nameof(SecurityId.Bloomberg))
 			{
 				DbType = typeof(string),

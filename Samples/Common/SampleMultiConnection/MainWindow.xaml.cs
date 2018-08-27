@@ -71,6 +71,7 @@ namespace SampleMultiConnection
 			HistoryPath.Folder = path;
 
 			var entityRegistry = new CsvEntityRegistry(path);
+
 			var storageRegistry = new StorageRegistry
 			{
 				DefaultDrive = new LocalMarketDataDrive(path)

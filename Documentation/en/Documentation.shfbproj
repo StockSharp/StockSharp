@@ -27,8 +27,6 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Alerts.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Alerts.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Algo.dll" />
-      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Algo.Expressions.dll" />
-      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Algo.Expressions.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Algo.History.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Algo.History.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Algo.Strategies.dll" />

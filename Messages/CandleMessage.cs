@@ -277,6 +277,12 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Clone <see cref="Arg"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public virtual object CloneArg() => Arg;
+
+		/// <summary>
 		/// Copy parameters.
 		/// </summary>
 		/// <param name="copy">Copy.</param>
@@ -485,7 +491,7 @@ namespace StockSharp.Messages
 		{
 			return CopyTo(new RangeCandleMessage
 			{
-				PriceRange = PriceRange
+				PriceRange = PriceRange.Clone()
 			});
 		}
 
@@ -497,6 +503,9 @@ namespace StockSharp.Messages
 			get => PriceRange;
 			set => PriceRange = (Unit)value;
 		}
+
+		/// <inheritdoc />
+		public override object CloneArg() => PriceRange.Clone();
 	}
 
 	///// <summary>
@@ -640,7 +649,7 @@ namespace StockSharp.Messages
 		{
 			return CopyTo(new PnFCandleMessage
 			{
-				PnFArg = PnFArg,
+				PnFArg = PnFArg.Clone(),
 				//PnFType = PnFType
 			});
 		}
@@ -653,6 +662,9 @@ namespace StockSharp.Messages
 			get => PnFArg;
 			set => PnFArg = (PnFArg)value;
 		}
+
+		/// <inheritdoc />
+		public override object CloneArg() => PnFArg.Clone();
 	}
 
 	/// <summary>
@@ -685,7 +697,7 @@ namespace StockSharp.Messages
 		{
 			return CopyTo(new RenkoCandleMessage
 			{
-				BoxSize = BoxSize
+				BoxSize = BoxSize.Clone()
 			});
 		}
 
@@ -697,5 +709,8 @@ namespace StockSharp.Messages
 			get => BoxSize;
 			set => BoxSize = (Unit)value;
 		}
+
+		/// <inheritdoc />
+		public override object CloneArg() => BoxSize.Clone();
 	}
 }

@@ -2857,6 +2857,18 @@ namespace StockSharp.Algo
 					security.UnderlyingSecurityType = message.UnderlyingSecurityType.Value;
 			}
 
+			if (!message.BasketCode.IsEmpty())
+			{
+				if (isOverride || security.BasketCode.IsEmpty())
+					security.BasketCode = message.BasketCode;
+			}
+
+			if (!message.BasketExpression.IsEmpty())
+			{
+				if (isOverride || security.BasketExpression.IsEmpty())
+					security.BasketExpression = message.BasketExpression;
+			}
+
 			message.CopyExtensionInfo(security);
 		}
 
@@ -4655,6 +4667,137 @@ namespace StockSharp.Algo
 		public static IEnumerable<DataType> TimeFrameCandles(this IEnumerable<DataType> dataTypes)
 		{
 			return dataTypes.Where(t => t.MessageType == typeof(TimeFrameCandleMessage));
+		}
+
+		/// <summary>
+		/// Convert inner securities messages to basket.
+		/// </summary>
+		/// <typeparam name="TMessage">Message type.</typeparam>
+		/// <param name="innerSecMessages">Inner securities messages.</param>
+		/// <param name="security">Basket security.</param>
+		/// <param name="processorProvider">Basket security processors provider.</param>
+		/// <returns>Messages of basket securities.</returns>
+		public static IEnumerable<TMessage> ToBasket<TMessage>(this IEnumerable<TMessage> innerSecMessages, BasketSecurity security, IBasketSecurityProcessorProvider processorProvider)
+			where TMessage : Message
+		{
+			var processor = processorProvider.CreateProcessor(security);
+
+			return innerSecMessages.SelectMany(processor.Process).Cast<TMessage>();
+		}
+
+		/// <summary>
+		/// Create market data processor for basket securities.
+		/// </summary>
+		/// <param name="processorProvider">Basket security processors provider.</param>
+		/// <param name="security">Basket security.</param>
+		/// <returns>Market data processor for basket securities.</returns>
+		public static IBasketSecurityProcessor CreateProcessor(this IBasketSecurityProcessorProvider processorProvider, BasketSecurity security)
+		{
+			if (processorProvider == null)
+				throw new ArgumentNullException(nameof(processorProvider));
+
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return processorProvider.GetProcessorType(security.BasketCode).CreateInstance<IBasketSecurityProcessor>(security);
+		}
+
+		/// <summary>
+		/// Is specified security is basket.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsBasket(this Security security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return !security.BasketCode.IsEmpty();
+		}
+
+		/// <summary>
+		/// Is specified security is basket.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsBasket(this SecurityMessage security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return !security.BasketCode.IsEmpty();
+		}
+		
+		/// <summary>
+		/// Is specified security is index.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsIndex(this Security security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.BasketCode == "WI" || security.BasketCode == "EI";
+		}
+
+		/// <summary>
+		/// Is specified security is index.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsIndex(this SecurityMessage security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.BasketCode == "WI" || security.BasketCode == "EI";
+		}
+
+		/// <summary>
+		/// Is specified security is continuous.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsContinuous(this Security security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.BasketCode == "CE" || security.BasketCode == "CV";
+		}
+
+		/// <summary>
+		/// Is specified security is continuous.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsContinuous(this SecurityMessage security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.BasketCode == "CE" || security.BasketCode == "CV";
+		}
+
+		/// <summary>
+		/// Convert <see cref="Security"/> to <see cref="BasketSecurity"/> value.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="processorProvider">Basket security processors provider.</param>
+		/// <returns>Instruments basket.</returns>
+		public static BasketSecurity ToBasket(this Security security, IBasketSecurityProcessorProvider processorProvider)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			if (processorProvider == null)
+				throw new ArgumentNullException(nameof(processorProvider));
+
+			var type = processorProvider.GetSecurityType(security.BasketCode);
+			var basketSec = type.CreateInstance<BasketSecurity>();
+			security.CopyTo(basketSec);
+			return basketSec;
 		}
 	}
 }

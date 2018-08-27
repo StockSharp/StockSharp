@@ -188,13 +188,13 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		/// <param name="adapterProvider">The message adapter's provider.</param>
-		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
-		public BasketMessageAdapter(IdGenerator transactionIdGenerator, IPortfolioMessageAdapterProvider adapterProvider, IExchangeInfoProvider exchangeInfoProvider)
+		/// <param name="candleBuilderProvider">Candle builders provider.</param>
+		public BasketMessageAdapter(IdGenerator transactionIdGenerator, IPortfolioMessageAdapterProvider adapterProvider, CandleBuilderProvider candleBuilderProvider)
 			: base(transactionIdGenerator)
 		{
 			_innerAdapters = new InnerAdapterList();
 			AdapterProvider = adapterProvider ?? throw new ArgumentNullException(nameof(adapterProvider));
-			ExchangeInfoProvider = exchangeInfoProvider;
+			CandleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(adapterProvider));
 
 			LatencyManager = new LatencyManager();
 			CommissionManager = new CommissionManager();
@@ -208,9 +208,9 @@ namespace StockSharp.Algo
 		public IPortfolioMessageAdapterProvider AdapterProvider { get; }
 
 		/// <summary>
-		/// The exchange boards provider.
+		/// Candle builders provider.
 		/// </summary>
-		public IExchangeInfoProvider ExchangeInfoProvider { get; }
+		public CandleBuilderProvider CandleBuilderProvider { get; }
 
 		/// <inheritdoc />
 		public override MessageTypes[] SupportedMessages => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct().ToArray();
@@ -331,7 +331,7 @@ namespace StockSharp.Algo
 
 			if (SupportCandlesCompression)
 			{
-				adapter = new CandleBuilderMessageAdapter(adapter, ExchangeInfoProvider);
+				adapter = new CandleBuilderMessageAdapter(adapter, CandleBuilderProvider);
 			}
 
 			if (SecurityMappingStorage != null && !adapter.StorageName.IsEmpty())
@@ -570,31 +570,36 @@ namespace StockSharp.Algo
 
 			var adapters = GetAdapters(mdMsg).Where(a =>
 			{
-				var isTfCandles = mdMsg.DataType == MarketDataTypes.CandleTimeFrame;
-
-				if (!a.IsMarketDataTypeSupported(mdMsg.DataType))
+				if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
 				{
-					if (!isTfCandles)
+					if (a.IsMarketDataTypeSupported(mdMsg.DataType))
+						return true;
+					else
 					{
-						if (mdMsg.DataType == MarketDataTypes.MarketDepth || mdMsg.DataType == MarketDataTypes.Trades)
+						switch (mdMsg.DataType)
 						{
-							if (a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog))
+							case MarketDataTypes.Level1:
+							case MarketDataTypes.OrderLog:
+							case MarketDataTypes.News:
+								return false;
+							case MarketDataTypes.MarketDepth:
+							case MarketDataTypes.Trades:
+								return a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog);
+							default:
 							{
-								return true;
+								if (CandleBuilderProvider.IsRegistered(mdMsg.DataType))
+									return mdMsg.BuildMode != MarketDataBuildModes.Load;
+								else
+									throw new ArgumentOutOfRangeException(mdMsg.DataType.ToString());
 							}
 						}
-
-						return false;
 					}
 				}
-
-				if (!isTfCandles)
-					return true;
 
 				var original = (TimeSpan)mdMsg.Arg;
 				var timeFrames = a.GetTimeFrames(mdMsg.SecurityId).ToArray();
 
-				if (timeFrames.Contains(original)|| a.CheckTimeFrameByRequest)
+				if (timeFrames.Contains(original) || a.CheckTimeFrameByRequest)
 					return true;
 
 				if (mdMsg.AllowBuildFromSmallerTimeFrame)
@@ -1101,7 +1106,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			var clone = new BasketMessageAdapter(TransactionIdGenerator, AdapterProvider, ExchangeInfoProvider)
+			var clone = new BasketMessageAdapter(TransactionIdGenerator, AdapterProvider, CandleBuilderProvider)
 			{
 				ExtendedInfoStorage = ExtendedInfoStorage,
 				SupportCandlesCompression = SupportCandlesCompression,

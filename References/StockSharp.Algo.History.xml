@@ -541,7 +541,7 @@
       <param name="codes">Board codes.</param>
       <returns>Exchange boards.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.SaveSecurities(System.Guid,System.Tuple{StockSharp.BusinessEntities.Security,System.String,System.String}[])">
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.SaveSecurities(System.Guid,StockSharp.BusinessEntities.Security[])">
       <summary>
             Save securities.
             </summary>

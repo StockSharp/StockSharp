@@ -221,14 +221,14 @@ namespace SampleSMA
 
 				_longMaElem = new ChartIndicatorElement
 				{
-					Title = LocalizedStrings.Long,
+					FullTitle = LocalizedStrings.Long,
 					Color = Colors.OrangeRed
 				};
 				_area.Elements.Add(_longMaElem);
 
 				_shortMaElem = new ChartIndicatorElement
 				{
-					Title = LocalizedStrings.Short,
+					FullTitle = LocalizedStrings.Short,
 					Color = Colors.RoyalBlue
 				};
 				_area.Elements.Add(_shortMaElem);

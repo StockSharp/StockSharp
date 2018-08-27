@@ -69,7 +69,6 @@ namespace StockSharp.Algo.Testing
 		public RandomWalkTradeGenerator(SecurityId securityId)
 			: base(securityId)
 		{
-			Interval = TimeSpan.FromMilliseconds(50);
 		}
 
 		/// <summary>

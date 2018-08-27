@@ -570,36 +570,35 @@ namespace SampleHistoryTesting
 
 				var equity = set.Item6;
 
-				var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, Colors.Green, Colors.Red, LineChartStyles.Area);
-				var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black);
-				var commissionCurve = equity.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, LineChartStyles.DashedLine);
-				var posItems = set.Item7.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor);
+				var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, Colors.Green, Colors.Red, ChartIndicatorDrawStyles.Area);
+				var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black, ChartIndicatorDrawStyles.Line);
+				var commissionCurve = equity.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, ChartIndicatorDrawStyles.DashedLine);
+				
 				strategy.PnLChanged += () =>
 				{
-					var pnl = new EquityData
-					{
-						Time = strategy.CurrentTime,
-						Value = strategy.PnL - strategy.Commission ?? 0
-					};
+					var data = new ChartDrawData();
 
-					var unrealizedPnL = new EquityData
-					{
-						Time = strategy.CurrentTime,
-						Value = strategy.PnLManager.UnrealizedPnL ?? 0
-					};
+					data
+						.Group(strategy.CurrentTime)
+							.Add(pnlCurve, strategy.PnL - strategy.Commission ?? 0)
+							.Add(unrealizedPnLCurve, strategy.PnLManager.UnrealizedPnL ?? 0)
+							.Add(commissionCurve, strategy.Commission ?? 0);
 
-					var commission = new EquityData
-					{
-						Time = strategy.CurrentTime,
-						Value = strategy.Commission ?? 0
-					};
-
-					pnlCurve.Add(pnl);
-					unrealizedPnLCurve.Add(unrealizedPnL);
-					commissionCurve.Add(commission);
+					equity.Draw(data);
 				};
 
-				strategy.PositionChanged += () => posItems.Add(new EquityData { Time = strategy.CurrentTime, Value = strategy.Position });
+				var posItems = set.Item7.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor, ChartIndicatorDrawStyles.Line);
+
+				strategy.PositionChanged += () =>
+				{
+					var data = new ChartDrawData();
+
+					data
+						.Group(strategy.CurrentTime)
+							.Add(posItems, strategy.Position);
+
+					set.Item7.Draw(data);
+				};
 
 				var nextTime = startTime + progressStep;
 

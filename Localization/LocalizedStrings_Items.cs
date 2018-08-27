@@ -17,6 +17,146 @@ namespace StockSharp.Localization
 {
 	partial class LocalizedStrings
 	{
+        /// <summary>
+        /// Indicator painter can only be set once.
+        /// </summary>
+        public const string ChartPainterAlreadySetKey = nameof(ChartPainterAlreadySet);
+
+        /// <summary>
+        /// Indicator painter can only be set once.
+        /// </summary>
+        public static string ChartPainterAlreadySet => GetString(ChartPainterAlreadySetKey);
+
+        /// <summary>
+        /// Annotation type cannot be changed once set.
+        /// </summary>
+        public const string AnnotationTypeCantBeChangedKey = nameof(AnnotationTypeCantBeChanged);
+
+        /// <summary>
+        /// Annotation type cannot be changed once set.
+        /// </summary>
+        public static string AnnotationTypeCantBeChanged => GetString(AnnotationTypeCantBeChangedKey);
+
+        /// <summary>
+        /// The element was already attached to chart before.
+        /// </summary>
+        public const string ElementAlreadyAttachedKey = nameof(ElementAlreadyAttached);
+
+        /// <summary>
+        /// The element was already attached to chart before.
+        /// </summary>
+        public static string ElementAlreadyAttached => GetString(ElementAlreadyAttachedKey);
+
+        /// <summary>
+        /// Axis type must be set before adding any elements.
+        /// </summary>
+        public const string AxisTypeCantBeSetKey = nameof(AxisTypeCantBeSet);
+
+        /// <summary>
+        /// Axis type must be set before adding any elements.
+        /// </summary>
+        public static string AxisTypeCantBeSet => GetString(AxisTypeCantBeSetKey);
+
+        /// <summary>
+        /// Element of type '{0}' doesn't support axes X({1}), Y({2}).
+        /// </summary>
+        public const string AxesTypesNotSupportedParamsKey = nameof(AxesTypesNotSupportedParams);
+
+        /// <summary>
+        /// Element of type '{0}' doesn't support axes X({1}), Y({2}).
+        /// </summary>
+        public static string AxesTypesNotSupportedParams => GetString(AxesTypesNotSupportedParamsKey);
+
+        /// <summary>
+        /// Invalid axis type.
+        /// </summary>
+        public const string InvalidAxisTypeKey = nameof(InvalidAxisType);
+
+        /// <summary>
+        /// Invalid axis type.
+        /// </summary>
+        public static string InvalidAxisType => GetString(InvalidAxisTypeKey);
+
+        /// <summary>
+        /// Elements on chart do not support axis type {0}.
+        /// </summary>
+        public const string ElementDontSupportAxisTypeParamsKey = nameof(ElementDontSupportAxisTypeParams);
+
+        /// <summary>
+        /// Elements on chart do not support axis type {0}.
+        /// </summary>
+        public static string ElementDontSupportAxisTypeParams => GetString(ElementDontSupportAxisTypeParamsKey);
+
+        /// <summary>
+        /// Cannot set this property on child element.
+        /// </summary>
+        public const string CantSetChildPropertyKey = nameof(CantSetChildProperty);
+
+        /// <summary>
+        /// Cannot set this property on child element.
+        /// </summary>
+        public static string CantSetChildProperty => GetString(CantSetChildPropertyKey);
+
+        /// <summary>
+        /// The element already has a parent.
+        /// </summary>
+        public const string ParentElementAlreadySetKey = nameof(ParentElementAlreadySet);
+
+        /// <summary>
+        /// The element already has a parent.
+        /// </summary>
+        public static string ParentElementAlreadySet => GetString(ParentElementAlreadySetKey);
+
+        /// <summary>
+        /// Remove is not supported. Use Clear() instead.
+        /// </summary>
+        public const string RemoveNotSupportedKey = nameof(RemoveNotSupported);
+
+        /// <summary>
+        /// Remove is not supported. Use Clear() instead.
+        /// </summary>
+        public static string RemoveNotSupported => GetString(RemoveNotSupportedKey);
+
+        /// <summary>
+        /// Got new Indicator with same ChartIndicatorElement without Reset() call.
+        /// </summary>
+        public const string NewIndicatorNoResetKey = nameof(NewIndicatorNoReset);
+
+        /// <summary>
+        /// Got new Indicator with same ChartIndicatorElement without Reset() call.
+        /// </summary>
+        public static string NewIndicatorNoReset => GetString(NewIndicatorNoResetKey);
+
+        /// <summary>
+        /// Unexpected coordinate type {0}.
+        /// </summary>
+        public const string UnexpectedCoordTypeParamsKey = nameof(UnexpectedCoordTypeParams);
+
+        /// <summary>
+        /// Unexpected coordinate type {0}.
+        /// </summary>
+        public static string UnexpectedCoordTypeParams => GetString(UnexpectedCoordTypeParamsKey);
+
+		/// <summary>
+		/// Dashed line
+		/// </summary>
+		public const string DashedLineKey = nameof(DashedLine);
+
+		/// <summary>
+		/// Dashed line
+		/// </summary>
+		public static string DashedLine => GetString(DashedLineKey);
+
+		/// <summary>
+		/// Senkou range
+		/// </summary>
+		public const string SenkouRangeKey = nameof(SenkouRange);
+
+		/// <summary>
+		/// Senkou range
+		/// </summary>
+		public static string SenkouRange => GetString(SenkouRangeKey);
+
 		/// <summary>
 		/// Show hidden axes
 		/// </summary>
@@ -106,7 +246,7 @@ namespace StockSharp.Localization
 		/// Show FPS stats
 		/// </summary>
 		public static string ShowFPS => GetString(ShowFPSKey);
-		
+
 		/// <summary>
 		/// Active orders
 		/// </summary>
@@ -216,7 +356,7 @@ namespace StockSharp.Localization
 		/// Line (close)
 		/// </summary>
 		public static string LineClose => GetString(LineCloseKey);
-		
+
 		/// <summary>
 		/// Timeframe and price step were not set
 		/// </summary>
@@ -41936,7 +42076,7 @@ namespace StockSharp.Localization
 		/// Open the window to get historical data from Finam website.
 		/// </summary>
 		public static string LoadHistoryDataQuestion => GetString(LoadHistoryDataQuestionKey);
-		
+
 		/// <summary>
 		/// Clipboard (as csv).
 		/// </summary>
@@ -46606,7 +46746,7 @@ namespace StockSharp.Localization
 		/// Poloniex
 		/// </summary>
 		public static string Poloniex => GetString(PoloniexKey);
-		
+
 		/// <summary>
 		/// Restore positions
 		/// </summary>
@@ -46616,7 +46756,7 @@ namespace StockSharp.Localization
 		/// Restore positions
 		/// </summary>
 		public static string RestorePositions => GetString(RestorePositionsKey);
-		
+
 		/// <summary>
 		/// Restore positions when strategy starts
 		/// </summary>
@@ -46626,7 +46766,7 @@ namespace StockSharp.Localization
 		/// RRestore positions when strategy starts
 		/// </summary>
 		public static string RestorePositionsWhenStrategyStarts => GetString(RestorePositionsWhenStrategyStartsKey);
-	
+
 		/// <summary>
 		/// Warranty provisions
 		/// </summary>
@@ -46636,7 +46776,7 @@ namespace StockSharp.Localization
 		/// Warranty provisions
 		/// </summary>
 		public static string WarrantyProvisions => GetString(WarrantyProvisionsKey);
-		
+
 		/// <summary>
 		/// Warranty on one contract for testing
 		/// </summary>
@@ -46646,7 +46786,7 @@ namespace StockSharp.Localization
 		/// Warranty on one contract for testing
 		/// </summary>
 		public static string WarrantyOnOneContractForTesting => GetString(WarrantyOnOneContractForTestingKey);
-		
+
 		/// <summary>
 		/// The minimum size of the spread in the price steps for placing orders
 		/// </summary>
@@ -46666,7 +46806,7 @@ namespace StockSharp.Localization
 		/// Indent in the price steps from the edge of the order glass. more 0 - far from the spread, less0 - the spread of the spread
 		/// </summary>
 		public static string IndentThePriceSteps => GetString(IndentThePriceStepsKey);
-		
+
 		/// <summary>
 		/// Stop in seconds how much to keep open position
 		/// </summary>
@@ -46676,7 +46816,7 @@ namespace StockSharp.Localization
 		/// Stop in seconds how much to keep open position
 		/// </summary>
 		public static string StopSecondsOpenPosition => GetString(StopSecondsOpenPositionKey);
-		
+
 		/// <summary>
 		/// Stop order closing order type
 		/// </summary>
@@ -46696,7 +46836,7 @@ namespace StockSharp.Localization
 		/// A shift in the price steps from the edge of the spread in price steps. To buy at a value of more 0 shifts the spread inside, less0 away from the spread.
 		/// </summary>
 		public static string ShiftThePriceStepsFromTheEdge => GetString(ShiftThePriceStepsFromTheEdgeKey);
-		
+
 		/// <summary>
 		/// Timeout (sec)
 		/// </summary>
@@ -46706,7 +46846,7 @@ namespace StockSharp.Localization
 		/// Timeout (sec)
 		/// </summary>
 		public static string TimeOutSecond => GetString(TimeOutSecondKey);
-		
+
 		/// <summary>
 		/// The interval in seconds, not more than which you can rearrange orders.
 		/// </summary>
@@ -46716,7 +46856,7 @@ namespace StockSharp.Localization
 		/// The interval in seconds, not more than which you can rearrange orders.
 		/// </summary>
 		public static string IntervalInSeconds => GetString(IntervalInSecondsKey);
-		
+
 		/// <summary>
 		/// Stop and close positions
 		/// </summary>
@@ -48326,5 +48466,55 @@ namespace StockSharp.Localization
 		/// The Black-Scholes "Greeks" evaluation element.
 		/// </summary>
 		public static string OptionsBlackScholesDiagramElement => GetString(OptionsBlackScholesDiagramElementKey);
+
+		/// <summary>
+		/// Basket security '{0}' do not contains legs.
+		/// </summary>
+		public const string SecurityDoNotContainsLegsKey = nameof(SecurityDoNotContainsLegs);
+
+		/// <summary>
+		/// Basket security '{0}' do not contains legs.
+		/// </summary>
+		public static string SecurityDoNotContainsLegs => GetString(SecurityDoNotContainsLegsKey);
+
+		/// <summary>
+		/// Basket
+		/// </summary>
+		public const string BasketKey = nameof(Basket);
+
+		/// <summary>
+		/// Basket
+		/// </summary>
+		public static string Basket => GetString(BasketKey);
+
+		/// <summary>
+		/// Basket type code.
+		/// </summary>
+		public const string BasketCodeKey = nameof(BasketCode);
+
+		/// <summary>
+		/// Basket type code.
+		/// </summary>
+		public static string BasketCode => GetString(BasketCodeKey);
+
+		/// <summary>
+		/// Expression
+		/// </summary>
+		public const string ExpressionKey = nameof(Expression);
+
+		/// <summary>
+		/// Expression
+		/// </summary>
+		public static string Expression => GetString(ExpressionKey);
+
+		/// <summary>
+		/// The mathematic formula of index.
+		/// </summary>
+		public const string ExpressionDescKey = nameof(ExpressionDesc);
+
+		/// <summary>
+		/// The mathematic formula of index.
+		/// </summary>
+		public static string ExpressionDesc => GetString(ExpressionDescKey);
 	}
 }

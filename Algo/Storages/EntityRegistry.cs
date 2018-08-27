@@ -58,34 +58,22 @@ namespace StockSharp.Algo.Storages
 			//News = new NewsList(storage);
 		}
 
-		/// <summary>
-		/// The special interface for direct access to the storage.
-		/// </summary>
+		/// <inheritdoc />
 		public IStorage Storage { get; }
 
-		/// <summary>
-		/// List of exchanges.
-		/// </summary>
+		/// <inheritdoc />
 		public IStorageEntityList<Exchange> Exchanges { get; }
 
-		/// <summary>
-		/// The list of stock boards.
-		/// </summary>
+		/// <inheritdoc />
 		public IStorageEntityList<ExchangeBoard> ExchangeBoards { get; }
 
-		/// <summary>
-		/// The list of instruments.
-		/// </summary>
+		/// <inheritdoc />
 		public IStorageSecurityList Securities { get; }
 
-		/// <summary>
-		/// The list of portfolios.
-		/// </summary>
+		/// <inheritdoc />
 		public IStorageEntityList<Portfolio> Portfolios { get; }
 
-		/// <summary>
-		/// The list of positions.
-		/// </summary>
+		/// <inheritdoc />
 		public IStoragePositionList Positions { get; }
 
 		///// <summary>

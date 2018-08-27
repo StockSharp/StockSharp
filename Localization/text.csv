@@ -1,4 +1,18 @@
-﻿ResetTimeZone;Reset axis time zone;Сбросить часовой пояс оси
+﻿ChartPainterAlreadySet;Indicator painter can only be set once.;Рендерер чарт элемента индикатора может быть установлен лишь единожды.
+AnnotationTypeCantBeChanged;Annotation type cannot be changed once set.;Тип аннотации не может быть изменен после первичной установки.
+ElementAlreadyAttached;The element was already attached to chart before.;Элемент уже был добавлен в чарт ранее.
+AxisTypeCantBeSet;Axis type must be set before adding any elements.;Тип оси должен быть задан до добавления элементов графика.
+AxesTypesNotSupportedParams;Element of type '{0}' doesn't support axes X({1}), Y({2}).;Элемент графика '{0}' не поддерживает оси X({1}), Y({2}).
+InvalidAxisType;Invalid axis type.;Неверный тип оси.
+ElementDontSupportAxisTypeParams;Elements on chart do not support axis type {0}.;Элементы, уже добавленные на график, не поддерживают тип оси {0}.
+CantSetChildProperty;Cannot set this property on child element.;Невозможно установить данное свойство у дочернего элемента.
+ParentElementAlreadySet;The element already has a parent.;Родительский элемент чарта уже задан.
+RemoveNotSupported;Remove is not supported. Use Clear() instead.;Операция Remove не поддерживается. Используйте Clear.
+NewIndicatorNoReset;Got new Indicator with same ChartIndicatorElement without Reset() call.;Получен новый индикатор без предварительного вызова Reset().
+UnexpectedCoordTypeParams;Unexpected coordinate type {0}.;Неожиданный тип координаты {0}.
+DashedLine;Dashed line;Пунктирная линия
+SenkouRange;Senkou range;Диапазон Senkou
+ResetTimeZone;Reset axis time zone;Сбросить часовой пояс оси
 ShowHiddenAxes;Show hidden axes;Показать скрытые оси
 AreaColor;Area color;Цвет области
 BuyBlinkColor;Buy blink color;Цвет мерцания Buy
@@ -3663,7 +3677,7 @@ XamlStr174;Change order;Заменить заявку
 XamlStr175;Sign up for the next algotrading course;Записаться на ближайшие курсы по алготрейдингу
 XamlStr176;Remember choice (start selected configuration automatically);Запомнить выбор (запускать выбранную конфигурацию автоматически)
 XamlStr177;Request all securities;Запрашивать все инструменты
-XamlStr178;Launch are available in 32- or 64- bit modes.;Запуск возможен в режимах 32-ух и 64-ех бит.
+XamlStr178;The launch is available in 32- or 64- bit modes.;Запуск возможен в режимах 32-ух и 64-ех бит.
 XamlStr180;Runned Quiks:;Запущенные Quik:
 XamlStr182;Order fail;Заявка-Ошибка
 XamlStr186;Value (S#);Значение (S#)
@@ -4865,6 +4879,11 @@ OptionsHedgeDiagramElement;Options hedging diagram element.;Элемент ди�
 OptionsQuotingDiagramElement;Options quoting diagram element.;Элемент диаграммы, котирующий опционы.
 OptionsStrikesDiagramElement;Filtering derivatives by underlying asset diagram element.;Элемент диаграммы, фильтрующий опционы по базовому активу.
 OptionsBlackScholesDiagramElement;The Black-Scholes "Greeks" evaluation element.;Элемент вычисления "греков" по формуле Black-Scholes.
+SecurityDoNotContainsLegs;Basket security '{0}' do not contains legs.;Корзина инструментов '{0}' не содержит ноги.
+Basket;Basket;Basket
+BasketCode;Basket type code.;Код типа корзины.
+Expression;Expression;Выражение
+ExpressionDesc;The mathematic formula of index.;Математическая формула индекса.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5608,7 +5627,6 @@ DocStr770;Found portfolios;Найденные портфели
 DocStr771;A new message;Новое сообщение
 DocStr772;To sign up to get market data by the instrument;Подписаться на получение рыночных данных по инструменту
 DocStr773;The instrument by which new information getting should be started;Инструмент, по которому необходимо начать получать новую информацию
-DocStr774;Market data type;Тип рыночных данных
 DocStr775;To unsubscribe from getting market data by the instrument;Отписаться от получения рыночных данных по инструменту
 DocStr776;To start getting new information (for example, {0} or {1}) by the instrument;Начать получать новую информацию (например, {0} или {1}) по инструменту
 DocStr777;To stop getting new information;Остановить получение новой информации
@@ -5951,7 +5969,6 @@ DocStr1113;To calculate the basket value;Вычислить значение к�
 DocStr1114;Values of basket composite instruments {0};Значения составных инструментов корзины {0}
 DocStr1115;The basket value;Значение корзины
 DocStr1116;Copy;Копия объекта
-DocStr1117;The mathematic formula of index;Математическая формула индекса
 DocStr1118;The stochastic oscillator;Стохастический Осциллятор
 DocStr1119;The base indicator, built in form of several indicators combination;Базовый индикатор, который строится в виде комбинации нескольких индикаторов
 DocStr1120;The base Indicator;Базовый индикатор
@@ -14617,7 +14634,6 @@ DocStr10101;Support portfolio subscriptions;Поддерживается ли п
 DocStr10102;Occurs when a property value changes;Вызывается при изменении значения свойства
 DocStr10103;The chart area creation event;Событие создания области графика
 DocStr10104;Function;Функция
-DocStr10105;Expression;Выражение
 DocStr10106;Reply errors for messages of type {0} transfers via {1};Ошибки в качестве ответа на сообщения типа {0} передаются через {1}
 DocStr10107;Indicator to identify whether this fill was a result of a liquidity provider providing or liquidity taker taking the liquidity. Valid values: 1 = Added Liquidity 2 = Removed Liquidity 3 = Liquidity Routed Out;Индикатор, показывающий, является ли сведение заявки результатом добавления ликвидности или убирание ликвидности через маркет-тейкера. Доступные значения: 1 = Добавление ликвидности 2 = Удаление ликвидности 3 = Вывод ликвидности
 DocStr10108;Input values type;Тип входящих данных
@@ -15065,3 +15081,137 @@ DocStr10593;Cancel message processing and create reply;Отменить обра
 DocStr10594;Get available candles types;Получить доступные типы свечей
 DocStr10595;Candles types;Типы свечей
 DocStr10596;Subscription market-data finished;Подписка на маркет-данные закончена
+DocStr10597;Basket security processors provider;Провайдер обработчиков корзин инструментов
+DocStr10598;The messages adapter builds market data for basket securities;Адаптер сообщений строящий маркет-данные для корзины инструментов
+DocStr10599;Create security instance;Создать объект инструмента
+DocStr10600;Basket security expression. Can be {0} in case of regular security;Выражение корзины инструментов. Может быть {0} в случае обычного инструмента
+DocStr10601;Volume trigger causes switch to the next contract;Триггер объема вызывающий переход на следующий контракт
+DocStr10602;Try get basket security expression;Попытка получить выражение корзины инструментов
+DocStr10603;Basket security legs;Ноги корзины инструментов
+DocStr10604;The interface of market data processor for basket securities;Интерфейс обработчика маркет-данных для корзины инструментов
+DocStr10605;Input message;Входящее сообщение
+DocStr10606;Output messages;Исходящие сообщения
+DocStr10607;The interface for provider of {0};Интерфейс провайдера {0}
+DocStr10608;Register new security type;Зарегистрировать новый тип инструмента
+DocStr10609;Security type code;Код типа инструмента
+DocStr10610;Processor type;Тип обработчика
+DocStr10611;Remove old security type;Удалить тип инструмента
+DocStr10612;Get processor type;Получить тип обработчика
+DocStr10613;Basket security expression;Выражение корзины инструментов
+DocStr10614;Get security type;Получить тип инструмента
+DocStr10615;Attribute, applied to derived from {0} class, to provide basket type code;Атрибут, применяемый к унаследованному от {0} классу, для предоставления кода типа корзины
+DocStr10617;Set basket security expression;Установить выражение корзины инструментов
+DocStr10618;Base basket securities processor;Базовый обработчик корзины инструментов
+DocStr10619;Basket security type;Тип корзины инструментов
+DocStr10620;Base continuous securities processor;Базовый обработчик непрерывных инструментов
+DocStr10621;Determines can process message;Определить, можно ли обработать сообщение
+DocStr10622;{0} if the specified message can be processed, otherwise, {1};{0} если переданное сообщение можно обработать, иначе, {1}
+DocStr10623;Continuous securities processor for {0};Обработчик непрерывных инструментов для {0}
+DocStr10624;Base index securities processor;Базовый обработчик индексов
+DocStr10625;Index securities processor for {0};Обработчик индексов для {0}
+DocStr10626;Use open interest for {0};Использовать открытый интерес для {0}
+DocStr10627;Fill market-data gaps by zero values;Заполнять пробелы маркет-данных нолями
+DocStr10628;Clone {0};Копия {0}
+DocStr10629;Candle builders provider;Провайдер построителей свечей
+DocStr10630;Get candles builder;Получить построитель свечей
+DocStr10632;Register candles builder;Зарегистрировать построитель свечей
+DocStr10633;Unregister candles builder;Удалить построитель свечей
+DocStr10634;Whether the candle type registered;Зарегистрирован ли тип свечи
+DocStr10635;{0} if the candle type registered, {1} otherwise;{0} если тип свечи зарегистрирован, {1} иначе
+DocStr10636;Convert inner securities messages to basket;Преобразовать сообщения вложенных инструментов в корзину
+DocStr10637;Inner securities messages;Сообщения вложенных инструментов
+DocStr10639;Messages of basket securities;Сообщения корзины
+DocStr10640;Create market data processor for basket securities;Создать обработчик маркет-данных корзины инструментов
+DocStr10641;Basket security;Корзина инструментов
+DocStr10642;Market data processor for basket securities;Обработчик маркет-данных корзины инструментов
+DocStr10643;Is specified security is basket;Является ли инструмент корзиной
+DocStr10644;Is specified security is index;Является ли инструмент индексом
+DocStr10645;Is specified security is continuous;Является ли инструмент непрерывным
+DocStr10646;Basket security type. Can be {0} in case of regular security;Тип корзины инструментов. Может быть {0} в случае обычного инструмента
+DocStr10648;Used to transfer annotation draw data;Используется для передачи данных рисования аннотаций
+DocStr10649;Show/hide annotation;Показать/скрыть аннотацию
+DocStr10650;Whether user can edit annotation;Может ли пользователь редактировать аннотацию
+DocStr10655;Brush to draw lines and borders;Кисть для рисования линий и границ
+DocStr10656;Brush to fill background;Кисть для заполнения фона
+DocStr10657;Line thickness;Толщина линии
+DocStr10658;Turn on/off label show for horizontal and vertical lines;Включить/выключить показ меток для горизонтальных и вертикальных линий
+DocStr10659;Label placement for horizontal and vertical lines;Размещение меток для горизонтальных и вертикальных линий
+DocStr10660;Alignment for horizontal lines;Выравнивание для горизонтальных линий
+DocStr10661;Alignment for vertical lines;Выравнивание для вертикальных линий
+DocStr10663;Text for text annotation;Текст для текстовой аннотации
+DocStr10664;Put the annotation data;Передать данные по аннотации
+DocStr10665;The chart element representing an annotation;Элемент диаграммы, представляющий аннотацию
+DocStr10666;Annotation draw data;Данные отрисовки аннотации
+DocStr10667;Annotation modified event;Событие изменения аннотации
+DocStr10668;Whether contains the specified leg;Содержится ли указанная нога
+DocStr10669;{0} if the leg exist, otherwise {1};{0} если нога существует, иначе {1}
+DocStr10671;X1 coordinate for annotation drawing. {0} for coordinate mode {1} or {2}. {3} otherwise;Координата X1 для рисования аннотаций. {0} для режима координат {1} или {2}. {3} в противном случае
+DocStr10672;Y1 coordinate for annotation drawing. {0} for coordinate mode {1} or {2}. {3} otherwise;Координата Y1 для рисования аннотаций. {0} для режима координат {1} или {2}. {3} в противном случае
+DocStr10673;X2 coordinate for annotation drawing. {0} for coordinate mode {1} or {2}. {3} otherwise;Координата X2 для рисования аннотаций. {0} для режима координат {1} или {2}. {3} в противном случае
+DocStr10674;Y2 coordinate for annotation drawing. {0} for coordinate mode {1} or {2}. {3} otherwise;Координата Y2 для рисования аннотаций. {0} для режима координат {1} или {2}. {3} в противном случае
+DocStr10675;Coordinate mode. {0} means {1} for X and {2} price for Y. {3} means relative to the screen edges: double. 0=top/left, 0.5=center, 1=bottom/right;Режим координат. {0} означает {1} для X и {2} цена для Y. {3} означает относительно краев экрана: double. 0=top/left, 0.5=center, 1=bottom/right
+DocStr10676;Type of X axis for this chart;Type of X axis for this chart
+DocStr10677;Chart this area attached to;Chart this area attached to
+DocStr10678;Current data point with for X axis;Current data point with for X axis
+DocStr10679;The chart element representing a band;The chart element representing a band
+DocStr10680;"The band drawing style. The default is {0}. Can also be {1}.""/>";"The band drawing style. The default is {0}. Can also be {1}.""/>"
+DocStr10681;Create instance;Create instance
+DocStr10682;Base class for chart related view models;Base class for chart related view models
+DocStr10683;Raised before property value is changed;Raised before property value is changed
+DocStr10684;Set property value and raise events;Set property value and raise events
+DocStr10685;Property backing field;Property backing field
+DocStr10686;Name of the property;Name of the property
+DocStr10687;Helper method to raise property change notifications on this object if the event was raised on another object {0};Helper method to raise property change notifications on this object if the event was raised on another object {0}
+DocStr10688;Interface which represents all chart draw data types;Interface which represents all chart draw data types
+DocStr10689;Indicator values to draw on chart;Indicator values to draw on chart
+DocStr10690;Value timestamp;Value timestamp
+DocStr10691;Value of X coordinate for {0};Value of X coordinate for {0}
+DocStr10692;Put the line data;Put the line data
+DocStr10693;The value1;The value1
+DocStr10694;The value2;The value2
+DocStr10695;Value of X coordinate for the data;Value of X coordinate for the data
+DocStr10696;Parent chart element;Parent chart element
+DocStr10697;Child chart elements;Child chart elements
+DocStr10698;Whether this element is visible on chart;Whether this element is visible on chart
+DocStr10699;Should this element be shown in the legend;Should this element be shown in the legend
+DocStr10700;X axis this element currently attached to;X axis this element currently attached to
+DocStr10701;Children chart elements;Children chart elements
+DocStr10702;Add child chart element;Add child chart element
+DocStr10703;Do not create corresponding chart element. Used for nested elements;Do not create corresponding chart element. Used for nested elements
+DocStr10704;Remove child chart element;Remove child chart element
+DocStr10705;Reset element;Reset element
+DocStr10706;Draw on root element;Draw on root element
+DocStr10707;Check if the element can be drawn using supplied axis types;Check if the element can be drawn using supplied axis types
+DocStr10708;X axis type;X axis type
+DocStr10709;Y axis type;Y axis type
+DocStr10710;True if supplied types are supported;True if supplied types are supported
+DocStr10711;Compatibility property for {0} for {1};Compatibility property for {0} for {1}
+DocStr10712;The chart element representing bubbles;The chart element representing bubbles
+DocStr10713;Default type of X axis;Default type of X axis
+DocStr10714;Chart element representing a line;Chart element representing a line
+DocStr10715;The chart element obtained from the method {0};The chart element obtained from the method {0}
+DocStr10716;To reset all chart elements;To reset all chart elements
+DocStr10717;To reset specified chart elements;To reset specified chart elements
+DocStr10718;Elements to reset;Elements to reset
+DocStr10720;Indicator painter which is used by default;Indicator painter which is used by default
+DocStr10721;Default indicator line element;Default indicator line element
+DocStr10722;Draw new values;Draw new values
+DocStr10723;The chart element for {0};The chart element for {0}
+DocStr10724;Chart painter for {0} indicator;Chart painter for {0} indicator
+DocStr10725;Painter for {0} indicator;Painter for {0} indicator
+DocStr10726;Indicator which is being drawn;Indicator which is being drawn
+DocStr10727;Whether this painter is currently attached to chart element;Whether this painter is currently attached to chart element
+DocStr10728;Draw values on chart;Draw values on chart
+DocStr10729;Draw indicator values using value getter;Draw indicator values using value getter
+DocStr10730;Draw indicator single double values;Draw indicator single double values
+DocStr10731;Draw indicator band values (2 doubles);Draw indicator band values (2 doubles)
+DocStr10732;Draw indicator converting from 2 doubles to one with converter;Draw indicator converting from 2 doubles to one with converter
+DocStr10733;Add inner chart element;Add inner chart element
+DocStr10734;{0} line;{0} line
+DocStr10735;Embedded chart elements;Embedded chart elements
+DocStr10736;To reset painter child elements;To reset painter child elements
+DocStr10737;Called when this painter is attached to chart indicator element;Called when this painter is attached to chart indicator element
+DocStr10738;Called when this painter is detached from chart indicator element;Called when this painter is detached from chart indicator element
+DocStr10739;Step size for volatility smile calculation;Step size for volatility smile calculation
+DocStr10740;Used to convert {0} and icon resource key to {1}, colored with corresponding brush;Used to convert {0} and icon resource key to {1}, colored with corresponding brush
+DocStr10741;The value;The value

@@ -198,7 +198,6 @@ namespace StockSharp.Algo.Testing
 		public TrendMarketDepthGenerator(SecurityId securityId)
 			: base(securityId)
 		{
-			Interval = TimeSpan.FromMilliseconds(50);
 		}
 
 		/// <summary>

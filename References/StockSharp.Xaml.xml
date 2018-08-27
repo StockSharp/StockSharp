@@ -541,6 +541,11 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.Converters.ColoredIconConverter">
+      <summary>
+            Used to convert <see cref="T:System.Windows.Media.Brush" /> and icon resource key to <see cref="T:System.Windows.Media.DrawingImage" />, colored with corresponding brush.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1">
       <summary>
         <see cref="T:DevExpress.Xpf.Editors.ComboBoxEdit" /> value converter.
@@ -765,6 +770,16 @@
     <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.BackupService">
       <summary>
             Backup service for sharing exports.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.GridControl.BaseGridControl.AutoScrollProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.GridControl.BaseGridControl.AutoScroll" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.AutoScroll">
+      <summary>
+            Automatically to scroll control on the last row added. The default is off.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor">
@@ -1230,9 +1245,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.IndexSecurityWindow.Security">
-      <summary>
-            Index.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.IndexSecurityWindow.InitializeComponent">
       <summary>
@@ -2927,9 +2940,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.ContinuousSecurityWindow.Security">
-      <summary>
-            Continuous security.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.ContinuousSecurityWindow.InitializeComponent">
       <summary>

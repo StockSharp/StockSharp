@@ -39,6 +39,8 @@ namespace StockSharp.Algo.Testing
 			MinVolume = 1;
 			MaxPriceStepCount = 10;
 			RandomArrayLength = 100;
+
+			Interval = TimeSpan.FromMilliseconds(50);
 		}
 
 		/// <summary>

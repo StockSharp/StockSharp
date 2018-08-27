@@ -10,6 +10,23 @@ StockSharp API Change log
 * (feature) Diagram. Options elements description.
 * (feature) Plaza. Spectra 6.1 supported.
 * (feature) TWIME. 3.1 supported.
+* (feature) Algo.Expressions. Moved to Algo proj.
+* (feature) IBasketSecurityProcessorProvider. Basket securities refactoring.
+* (feature) BaseGridControl. Autoscroll added.
+* (feature) Bitfinex. Market data v2 API.
+* (feature) Bithumb. WebSocket support.
+* (feature) CandleBuilderProvider. Ability to register own CandleBuilder-s.
+* (bug) CandleBuilderMessageAdapter. Fix non time-frame based candles processing.
+* (feature) MarketDataGenerator. Set Interval default value.
+* (feature) Charting. Move orders with mouse beyond chart range.
+* (bug) Charting. Fix exception in BoxVolume chart.
+* (bug) Charting. Fix date on x-axis not clipped to control bounds.
+* (feature) Charting. Panels resize animation.
+* (bug) Charting. Indicators binding with additional axis fix.
+* (bug) Charting. Composite indicators properties modification fix.
+* (feature) Charting. Volatility smile chart. Line interpolation.
+* (feature) Charting. Equity and option charts - change drawing style possibility.
+* (feature) Charting. Annotations creates from code.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.

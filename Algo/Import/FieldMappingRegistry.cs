@@ -55,6 +55,8 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<SecurityMessage, DateTimeOffset>(nameof(SecurityMessage.IssueDate), LocalizedStrings.IssueDate, LocalizedStrings.IssueDate, (i, v) => i.IssueDate = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.CfiCode), LocalizedStrings.CfiCode, LocalizedStrings.CfiCodeDesc, (i, v) => i.CfiCode = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.ShortName), LocalizedStrings.Str363, LocalizedStrings.Str364, (i, v) => i.ShortName = v));
+				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BasketCode), LocalizedStrings.Basket, LocalizedStrings.BasketCode, (i, v) => i.BasketCode = v));
+				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BasketExpression), LocalizedStrings.Expression, LocalizedStrings.ExpressionDesc, (i, v) => i.BasketExpression = v));
 			}
 			else if (msgType == typeof(ExecutionMessage))
 			{

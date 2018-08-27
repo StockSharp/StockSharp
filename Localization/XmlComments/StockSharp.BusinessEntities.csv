@@ -864,8 +864,9 @@ P:StockSharp.BusinessEntities.Security.IssueDate/summary;IssueDate
 P:StockSharp.BusinessEntities.Security.UnderlyingSecurityType/summary;UnderlyingSecurityType
 P:StockSharp.BusinessEntities.Security.BuyBackPrice/summary;BuyBackPrice
 P:StockSharp.BusinessEntities.Security.BuyBackDate/summary;BuyBackDate
-M:StockSharp.BusinessEntities.Security.ToString/summary;DocStr49
-M:StockSharp.BusinessEntities.Security.ToString/returns;DocStr50
+P:StockSharp.BusinessEntities.Security.BasketCode/summary;DocStr10646
+P:StockSharp.BusinessEntities.Security.BasketExpression/summary;DocStr10600
+M:StockSharp.BusinessEntities.Security.ToString/inheritdoc;DocStr8459
 M:StockSharp.BusinessEntities.Security.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Security.Clone/returns;DocStr1116
 M:StockSharp.BusinessEntities.Security.CopyTo(StockSharp.BusinessEntities.Security)/summary;DocStr2620

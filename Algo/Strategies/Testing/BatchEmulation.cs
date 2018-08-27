@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
@@ -41,8 +42,8 @@ namespace StockSharp.Algo.Strategies.Testing
 			private readonly EmulationSettings _settings;
 			private bool _isInitialized;
 
-			public BasketEmulationAdapter(IdGenerator transactionIdGenerator, IPortfolioMessageAdapterProvider adapterProvider, IExchangeInfoProvider exchangeInfoProvider, EmulationSettings settings)
-				: base(transactionIdGenerator, adapterProvider, exchangeInfoProvider)
+			public BasketEmulationAdapter(IdGenerator transactionIdGenerator, IPortfolioMessageAdapterProvider adapterProvider, CandleBuilderProvider candleBuilderProvider, EmulationSettings settings)
+				: base(transactionIdGenerator, adapterProvider, candleBuilderProvider)
 			{
 				_settings = settings;
 			}

@@ -322,6 +322,8 @@ namespace StockSharp.Algo.Storages.Csv
 				public string CfiCode { get; set; }
 				public DateTimeOffset? IssueDate { get; set; }
 				public decimal? IssueSize { get; set; }
+				public string BasketCode { get; set; }
+				public string BasketExpression { get; set; }
 
 				public Security ToSecurity(SecurityCsvList list)
 				{
@@ -350,6 +352,8 @@ namespace StockSharp.Algo.Storages.Csv
 						CfiCode = CfiCode,
 						IssueDate = IssueDate,
 						IssueSize = IssueSize,
+						BasketCode = BasketCode,
+						BasketExpression = BasketExpression,
 					};
 				}
 
@@ -377,6 +381,8 @@ namespace StockSharp.Algo.Storages.Csv
 					CfiCode = security.CfiCode;
 					IssueDate = security.IssueDate;
 					IssueSize = security.IssueSize;
+					BasketCode = security.BasketCode;
+					BasketExpression = security.BasketExpression;
 				}
 			}
 
@@ -480,6 +486,12 @@ namespace StockSharp.Algo.Storages.Csv
 				if (forced && security.ExternalId != liteSec.ExternalId)
 					return true;
 
+				if (IsChanged(security.BasketCode, liteSec.BasketCode, forced))
+					return true;
+
+				if (IsChanged(security.BasketExpression, liteSec.BasketExpression, forced))
+					return true;
+
 				return false;
 			}
 
@@ -553,6 +565,12 @@ namespace StockSharp.Algo.Storages.Csv
 					liteSec.IssueSize = reader.ReadNullableDecimal();
 				}
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					liteSec.BasketCode = reader.ReadString();
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					liteSec.BasketExpression = reader.ReadString();
+
 				return liteSec.ToSecurity(this);
 			}
 
@@ -590,6 +608,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.CfiCode,
 					data.IssueDate?.UtcDateTime.ToString(_dateTimeFormat),
 					data.IssueSize.To<string>(),
+					data.BasketCode,
+					data.BasketExpression,
 				});
 			}
 
@@ -774,9 +794,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		public string Path { get; set; }
 
-		/// <summary>
-		/// The special interface for direct access to the storage.
-		/// </summary>
+		/// <inheritdoc />
 		public IStorage Storage { get; }
 
 		private Encoding _encoding = Encoding.UTF8;
@@ -792,9 +810,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 		private DelayAction _delayAction = new DelayAction(ex => ex.LogError());
 
-		/// <summary>
-		/// The time delayed action.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual DelayAction DelayAction
 		{
 			get => _delayAction;
@@ -814,29 +830,19 @@ namespace StockSharp.Algo.Storages.Csv
 			_portfolios.DelayAction = _delayAction;
 		}
 
-		/// <summary>
-		/// List of exchanges.
-		/// </summary>
+		/// <inheritdoc />
 		public IStorageEntityList<Exchange> Exchanges => _exchanges;
 
-		/// <summary>
-		/// The list of stock boards.
-		/// </summary>
+		/// <inheritdoc />
 		public IStorageEntityList<ExchangeBoard> ExchangeBoards => _exchangeBoards;
 
-		/// <summary>
-		/// The list of instruments.
-		/// </summary>
+		/// <inheritdoc />
 		public IStorageSecurityList Securities => _securities;
 
-		/// <summary>
-		/// The list of portfolios.
-		/// </summary>
+		/// <inheritdoc />
 		public IStorageEntityList<Portfolio> Portfolios => _portfolios;
 
-		/// <summary>
-		/// The list of positions.
-		/// </summary>
+		/// <inheritdoc />
 		public IStoragePositionList Positions => _positions;
 
 		/// <summary>

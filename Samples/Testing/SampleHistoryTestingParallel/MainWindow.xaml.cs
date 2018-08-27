@@ -188,16 +188,17 @@ namespace SampleHistoryTestingParallel
 
 					strategy.SetCandleManager(candleManager);
 
-					var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3);
+					var curveElem = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3, ChartIndicatorDrawStyles.Line);
+					
 					strategy.PnLChanged += () =>
 					{
-						var data = new EquityData
-						{
-							Time = strategy.CurrentTime,
-							Value = strategy.PnL,
-						};
+						var data = new ChartDrawData();
 
-						this.GuiAsync(() => curveItems.Add(data));
+						data
+							.Group(strategy.CurrentTime)
+								.Add(curveElem, strategy.PnL);
+
+						Curve.Draw(data);
 					};
 
 					Stat.AddStrategies(new[] { strategy });

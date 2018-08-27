@@ -118,6 +118,7 @@ M:StockSharp.Xaml.Code.CodeReferencesWindow.Load(Ecng.Serialization.SettingsStor
 M:StockSharp.Xaml.Code.CodeReferencesWindow.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Code.CodeReferencesWindow.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Code.CodeReferencesWindow.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.Converters.ColoredIconConverter/summary;DocStr10740
 T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1/summary;DocStr9842
 T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1/typeparam/T;DocStr10030
 T:StockSharp.Xaml.Converters.ProcessStatesToImageConverter/summary;DocStr9307
@@ -175,6 +176,8 @@ E:StockSharp.Xaml.GridControl.BaseGridControl.DdeErrorHandler/summary;DocStr8994
 E:StockSharp.Xaml.GridControl.BaseGridControl.LayoutChanged/summary;DocStr8995
 E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick/summary;DocStr9459
 P:StockSharp.Xaml.GridControl.BaseGridControl.BackupService/summary;DocStr9785
+F:StockSharp.Xaml.GridControl.BaseGridControl.AutoScrollProperty/summary;DocStr29
+P:StockSharp.Xaml.GridControl.BaseGridControl.AutoScroll/summary;DocStr8348
 M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor/summary;DocStr1
 M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)/summary;DocStr8996
 M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)/param/oldValue;DocStr8997
@@ -286,7 +289,7 @@ T:StockSharp.Xaml.IndexSecurityWindow/summary;DocStr8182
 M:StockSharp.Xaml.IndexSecurityWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.IndexSecurityWindow.SecurityStorage/summary;DocStr110
 P:StockSharp.Xaml.IndexSecurityWindow.ValidateId/summary;DocStr8181
-P:StockSharp.Xaml.IndexSecurityWindow.Security/summary;Index
+P:StockSharp.Xaml.IndexSecurityWindow.Security/inheritdoc;DocStr8459
 M:StockSharp.Xaml.IndexSecurityWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PortfolioPicker/summary;DocStr8368
 M:StockSharp.Xaml.PortfolioPicker.#ctor/summary;DocStr1
@@ -641,7 +644,7 @@ M:StockSharp.Xaml.ContinuousSecurityWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityStorage/summary;DocStr110
 P:StockSharp.Xaml.ContinuousSecurityWindow.ExchangeInfoProvider/summary;DocStr8914
 P:StockSharp.Xaml.ContinuousSecurityWindow.ValidateId/summary;DocStr8181
-P:StockSharp.Xaml.ContinuousSecurityWindow.Security/summary;ContinuousSecurity
+P:StockSharp.Xaml.ContinuousSecurityWindow.Security/inheritdoc;DocStr8459
 M:StockSharp.Xaml.ContinuousSecurityWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.CredentialsWindow/summary;DocStr8182
 M:StockSharp.Xaml.CredentialsWindow.#ctor/summary;DocStr1

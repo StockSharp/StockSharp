@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Candles
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Configuration;
 
 	using MoreLinq;
 
@@ -413,7 +412,8 @@ namespace StockSharp.Algo.Candles
 					throw new ArgumentException(LocalizedStrings.Str650Params.Put(series), nameof(series));
 
 				enumerator = new CandleSourceEnumerator<ICandleSource<Candle>, Candle>(series, from, to,
-					series.Security is IndexSecurity ? new[] { new IndexSecurityCandleManagerSource(this, ConfigManager.GetService<ISecurityProvider>(), from, to) } : Sources,
+					//series.Security is IndexSecurity ? new[] { new IndexSecurityCandleManagerSource(this, ConfigManager.GetService<ISecurityProvider>(), from, to) } : 
+					Sources,
 					c =>
 					{
 						Processing?.Invoke(series, c);
