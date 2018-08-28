@@ -48108,6 +48108,16 @@ namespace StockSharp.Localization
 		public static string QuikPreTrade => GetString(QuikPreTradeKey);
 
 		/// <summary>
+		/// QUIK (drop copy)
+		/// </summary>
+		public const string QuikDropCopyKey = nameof(QuikDropCopy);
+
+		/// <summary>
+		/// QUIK (drop copy)
+		/// </summary>
+		public static string QuikDropCopy => GetString(QuikDropCopyKey);
+
+		/// <summary>
 		/// Exante
 		/// </summary>
 		public const string ExanteKey = nameof(Exante);
