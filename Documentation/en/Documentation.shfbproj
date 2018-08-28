@@ -217,6 +217,47 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\FIXConnectorsSettings.aml" />
+    <None Include="Topics\FXCMConnectorsSettings.aml" />
+    <None Include="Topics\OandaConnectorsSettings.aml" />
+    <None Include="Topics\LMAXConnectorsSettings.aml" />
+    <None Include="Topics\QuantFEEDConnectorsSettings.aml" />
+    <None Include="Topics\BarChartConnectorsSettings.aml" />
+    <None Include="Topics\ITCHConnectorsSettings.aml" />
+    <None Include="Topics\RithmicConnectorsSettings.aml" />
+    <None Include="Topics\ETradeConnectorsSettings.aml" />
+    <None Include="Topics\BlackwoodConnectorsSettings.aml" />
+    <None Include="Topics\OpenECryConnectorsSettings.aml" />
+    <None Include="Topics\SterlingConnectorsSettings.aml" />
+    <None Include="Topics\IQFeedConnectorsSettings.aml" />
+    <None Include="Topics\CQGConnectorsSettings.aml" />
+    <None Include="Topics\BittrexConnectorsSettings.aml" />
+    <None Include="Topics\BitStampConnectorsSettings.aml" />
+    <None Include="Topics\BitMEXConnectorsSettings.aml" />
+    <None Include="Topics\BithumbConnectorsSettings.aml" />
+    <None Include="Topics\BitfinexConnectorsSettings.aml" />
+    <None Include="Topics\BitexbookConnectorsSettings.aml" />
+    <None Include="Topics\YobitConnectorsSettings.aml" />
+    <None Include="Topics\PoloniexConnectorsSettings.aml" />
+    <None Include="Topics\OKExConnectorsSettings.aml" />
+    <None Include="Topics\OKCoinConnectorsSettings.aml" />
+    <None Include="Topics\LiquiConnectorsSettings.aml" />
+    <None Include="Topics\KucoinConnectorsSettings.aml" />
+    <None Include="Topics\KrakenConnectorsSettings.aml" />
+    <None Include="Topics\HuobiConnectorsSettings.aml" />
+    <None Include="Topics\HitBTCConnectorsSettings.aml" />
+    <None Include="Topics\GDAXConnectorsSettings.aml" />
+    <None Include="Topics\EXMOConnectorsSettings.aml" />
+    <None Include="Topics\DeribitConnectorsSettings.aml" />
+    <None Include="Topics\CryptopiaConnectorsSettings.aml" />
+    <None Include="Topics\CoinExchangeConnectorsSettings.aml" />
+    <None Include="Topics\CoincheckConnectorsSettings.aml" />
+    <None Include="Topics\CoinbaseConnectorsSettings.aml" />
+    <None Include="Topics\CexConnectorsSettings.aml" />
+    <None Include="Topics\BtceConnectorsSettings.aml" />
+    <None Include="Topics\LivecoinConnectorsSettings.aml" />
+    <None Include="Topics\BinanceConnectorsSettings.aml" />
+    <None Include="Topics\Connectors_setting.aml" />
     <None Include="Topics\Designer_GluingData.aml" />
     <None Include="Topics\Designer_create_index.aml" />
     <None Include="Topics\HydraSettingsSecurityEditor.aml" />
@@ -3280,6 +3321,22 @@
     <Image Include="Art\Terminal_Workspace_00.png">
       <ImageId>Terminal_Workspace_00</ImageId>
       <AlternateText>Terminal Workspace 00</AlternateText>
+    </Image>
+    <Image Include="Art\iQFeedIQConnectLogin.png">
+      <ImageId>iQFeedIQConnectLogin</ImageId>
+      <AlternateText>iQFeedIQConnect Login</AlternateText>
+    </Image>
+    <Image Include="Art\iQFeedIQLinkLauncher.png">
+      <ImageId>iQFeedIQLinkLauncher</ImageId>
+      <AlternateText>iQFeedIQLink Launcher</AlternateText>
+    </Image>
+    <Image Include="Art\APIConnectorsSettingsHydraWindow.png">
+      <ImageId>APIConnectorsSettingsHydraWindow</ImageId>
+      <AlternateText>APIConnectors Settings Hydra Window</AlternateText>
+    </Image>
+    <Image Include="Art\APIConnectorsSettingsWindow.png">
+      <ImageId>APIConnectorsSettingsWindow</ImageId>
+      <AlternateText>APIConnectors Settings Window</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

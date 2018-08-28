@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="3a4f70bf-24b9-489f-8d58-5bc4f5b623b0" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    <mediaLink><image placement="center" xlink:href="Sterling_loging"/></mediaLink>
+<para>To work with the <legacyBold>Sterling</legacyBold> connector, you need to use 
+the local <legacyBold>Sterling Trader Pro</legacyBold> terminal, which is installed 
+directly on the computer from which the connection will be made. To connect to 
+<legacyBold>Sterling Trader Pro</legacyBold>, you have to specify the <legacyBold>Login</legacyBold> and <legacyBold>Password</legacyBold>.
+</para>
+<para><legacyBold>Sterling Trader Pro, Login, Password</legacyBold> and server address 
+are provided by the broker. To get the API access it is recommended to contact the broker.
+</para>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

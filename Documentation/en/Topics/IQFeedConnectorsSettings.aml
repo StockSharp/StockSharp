@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="add6156b-b2a9-401c-93cc-be333762da15" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To work with the <legacyBold>iQFeed</legacyBold> connector, you need to install 
+the <legacyBold>IQ Feed Client</legacyBold> router on the computer, which can be 
+installed on both the local computer and the remote one. Data exchange between the 
+client application and the <legacyBold>IQ Feed Client</legacyBold>, as well as between 
+the <legacyBold>IQ Feed Client</legacyBold> and the servers, is performed via the TCP/IP protocol.
+</para>
+
+<para>To download the <legacyBold>IQ Feed Client</legacyBold> from the 
+
+<ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>iQFeed</ddue:linkText>
+    <ddue:linkUri>http://www.iqfeed.net</ddue:linkUri>
+  </ddue:externalLink>
+ site, you must first authorize using the password and login received from <legacyBold>iQFeed</legacyBold>.</para>
+<para>After installing <legacyBold>IQ Feed Client</legacyBold>, it is recommended to restart the computer.</para>
+
+<para>After installing <legacyBold>IQ Feed Client, IQLink Launcher</legacyBold> must be started.</para>
+<mediaLink><image placement="center" xlink:href="iQFeedIQLinkLauncher"/></mediaLink>
+<para>In the <legacyBold>IQLink Launcher</legacyBold> window that opens, click <legacyBold>Start IQLink</legacyBold>.</para>
+<mediaLink><image placement="center" xlink:href="iQFeedIQConnectLogin"/></mediaLink>
+<para>In the opened <legacyBold>IQ Connect Login</legacyBold> window it is necessary 
+to enter the <legacyBold>Login</legacyBold> and <legacyBold>Password</legacyBold> (or PIN) 
+received from the <legacyBold>iQFeed</legacyBold> service, in this case the 
+Login and Password are not the Login and Password from the <legacyBold>iQFeed</legacyBold> site. 
+After filling in Login and Password, you have to click <legacyBold>Connect</legacyBold> to connect.</para>   
+
+      <para>
+      	To receive data, the client application uses four connections through different ports:
+      </para>
+      <list class="ordered">
+  	  	<listItem>Level1 (port 5009) is used to get real-time data on instruments (ticks, opening and closing prices, volatility, etc.) and news.</listItem>
+  	  	<listItem>Level2 (port 9200) is used to get extended quotes for instruments, for each ECN you can get the best pair of quotes.</listItem>
+  	  	<listItem>Lookup (port 9100) is used to search for instruments, retrieve historical data, get advanced information on news.</listItem>
+  	  	<listItem>Admin (port 9300) is used to get general information about connection and changing settings.</listItem>
+	  </list>
+	  <para>
+      	The port numbers that are used by default for connection to the <legacyBold>IQ Feed Client</legacyBold> are specified in brackets. 
+      	For client connections, the port numbers can be changed in the registry, for example, 
+      	for Level1 on the following path: [HKEY_CURRENT_USER\SOFTWARE\DTN\IQFEED\Startup\Level1Port]. 
+      	Port numbers for connecting to IQ servers can not be changed.
+      </para>
+ </introduction>
+  </developerConceptualDocument>
+</topic>
