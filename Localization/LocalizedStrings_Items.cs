@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
         /// <summary>
+        /// Source values.
+        /// </summary
+        public const string SourceValuesKey = nameof(SourceValues);
+
+        /// <summary>
+        /// Source values.
+        /// </summary
+        public static string SourceValues => GetString(SourceValuesKey);
+
+        /// <summary>
         /// Indicator painter can only be set once.
         /// </summary>
         public const string ChartPainterAlreadySetKey = nameof(ChartPainterAlreadySet);
