@@ -345,7 +345,8 @@
         <Topic id="5d9f8c0d-d05c-4a39-9fad-7148df4411ad" visible="True" title="Position chart" />
       </Topic>
       <Topic id="c4aa5add-198d-432b-93fa-6ce60d0b7856" visible="True" title="PropertyGridEx" />
-      <Topic id="076b8019-1f9f-4dbf-bd32-1abdac5fd7fe" visible="True" isSelected="true" title="Table of available market data" />
+      <Topic id="076b8019-1f9f-4dbf-bd32-1abdac5fd7fe" visible="True" title="Table of available market data" />
+      <Topic id="2a6b8dc6-2935-4fc7-8295-243cafcfd1d4" visible="True" isSelected="true" title="Buy/Sell panel" />
     </Topic>
     <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Messages">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Description" />

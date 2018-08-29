@@ -217,6 +217,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API_GUI_BuySellPanel.aml" />
     <None Include="Topics\API_GUI_MarketDataGrid.aml" />
     <None Include="Topics\API_GUI_Trading_From_Chart.aml" />
     <None Include="Topics\FIXConnectorsSettings.aml" />
@@ -3347,6 +3348,10 @@
     <Image Include="Art\API_GUI_MarketDataGrid.png">
       <ImageId>API_GUI_MarketDataGrid</ImageId>
       <AlternateText>API GUI Market Data Grid</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_BuySell.png">
+      <ImageId>API_GUI_BuySell</ImageId>
+      <AlternateText>API GUI Buy Sell</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
