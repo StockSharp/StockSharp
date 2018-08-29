@@ -217,6 +217,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API_GUI_CommissionWindow.aml" />
     <None Include="Topics\API_GUI_RiskWindow.aml" />
     <None Include="Topics\API_UI_ConnectorWindow.aml" />
     <None Include="Topics\API_GUI_BuySellPanel.aml" />
@@ -3362,6 +3363,10 @@
     <Image Include="Art\API_GUI_RiskWindow.png">
       <ImageId>API_GUI_RiskWindow</ImageId>
       <AlternateText>API GUI Risk Window</AlternateText>
+    </Image>
+    <Image Include="Art\API_ComissionWindow.png">
+      <ImageId>API_ComissionWindow</ImageId>
+      <AlternateText>API Comission Window</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
