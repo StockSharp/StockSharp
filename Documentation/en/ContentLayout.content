@@ -351,7 +351,7 @@
       <Topic id="0731b924-25de-4949-b24f-1f2fbe231b7c" visible="True" title="Risk settings window" />
       <Topic id="400fd089-d0fd-47a7-b14f-3e25bd577c05" visible="True" title="Commission settings window" />
       <Topic id="71196e37-b6ae-44ec-989d-0396e21af6fd" visible="True" title="Notification settings window" />
-      <Topic id="b2d8d1c3-b486-4e4c-bc60-aaf6593fdbec" visible="True" isSelected="true" title="Themes of S# graphic components" />
+      <Topic id="b2d8d1c3-b486-4e4c-bc60-aaf6593fdbec" visible="True" title="Themes of S# graphic components" />
     </Topic>
     <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Messages">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Description" />
@@ -423,8 +423,9 @@
       <Topic id="5db34ace-ab66-4848-b335-11402f3d96c3" visible="True" title="Feedback forms" />
     </Topic>
   </Topic>
-  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" title="S#.Data">
+  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Installing S#.Data" />
+    <Topic id="7fc5f53a-b6b9-4f0f-8b97-983dd98f0237" visible="True" isSelected="true" title="Update to the new version" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="First start" />
     <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Sources setting up">
       <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" title="Stock, Futures and Options">

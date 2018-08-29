@@ -217,6 +217,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\HydraUpdate.aml" />
     <None Include="Topics\API_GUI_Thems.aml" />
     <None Include="Topics\API_GUI_AlertsWindow.aml" />
     <None Include="Topics\API_GUI_CommissionWindow.aml" />
