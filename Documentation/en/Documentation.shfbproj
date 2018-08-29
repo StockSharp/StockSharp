@@ -3383,6 +3383,14 @@
       <ImageId>API_GUI_Thems_02</ImageId>
       <AlternateText>API GUI Thems 02</AlternateText>
     </Image>
+    <Image Include="Art\hydra_about.png">
+      <ImageId>hydra_about</ImageId>
+      <AlternateText>hydra about</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_update.png">
+      <ImageId>hydra_update</ImageId>
+      <AlternateText>hydra update</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

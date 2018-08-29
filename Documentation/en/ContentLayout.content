@@ -363,7 +363,7 @@
     <Topic id="a8486498-a2d8-4924-b009-8b93138b268a" visible="True" title="Arithmetic operations" />
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Currency converter" />
   </Topic>
-  <Topic id="E4B5E112-BD08-4F40-8741-7514E7E4088E" visible="True" title="S#.Terminal">
+  <Topic id="E4B5E112-BD08-4F40-8741-7514E7E4088E" visible="True" isExpanded="true" title="S#.Terminal">
     <Topic id="f70783b8-59e1-4ea7-9d94-c20524f3470a" visible="True" title="Installing S#.Terminal" />
     <Topic id="e51b9e8f-52d3-4e16-887e-1aad12db2cc8" visible="True" title="Update to the new version" />
     <Topic id="b7809562-d829-42d2-95c9-cbca8bf5549e" visible="True" title="Quick start" />
@@ -425,7 +425,7 @@
   </Topic>
   <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Installing S#.Data" />
-    <Topic id="7fc5f53a-b6b9-4f0f-8b97-983dd98f0237" visible="True" isSelected="true" title="Update to the new version" />
+    <Topic id="7fc5f53a-b6b9-4f0f-8b97-983dd98f0237" visible="True" title="Update to the new version" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="First start" />
     <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Sources setting up">
       <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" title="Stock, Futures and Options">
@@ -556,7 +556,7 @@
   </Topic>
   <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Installing S#.Designer" />
-    <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Update S#.Designer" />
+    <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" isSelected="true" title="Update to the new version" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Quick start" />
     <Topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" visible="True" title="User interface">
       <Topic id="45ae6713-c28b-457d-be6b-19016f54507e" visible="True" title="Quick access panel" />
