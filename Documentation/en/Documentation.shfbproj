@@ -3399,6 +3399,10 @@
       <ImageId>hydra_Quick_start_01</ImageId>
       <AlternateText>hydra Quick start 01</AlternateText>
     </Image>
+    <Image Include="Art\hydra_setting_source_button.png">
+      <ImageId>hydra_setting_source_button</ImageId>
+      <AlternateText>hydra setting source button</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
