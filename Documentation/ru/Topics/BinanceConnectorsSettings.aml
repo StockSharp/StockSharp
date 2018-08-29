@@ -6,7 +6,7 @@
      <legacyBold>Ключ (API Key)</legacyBold> и <legacyBold>Секрет (Secret)</legacyBold> и 
      указать их при настройках подключения.</para>
     <alert class="note">
-     <para>Стоит обратить внимание что <legacyBold>Ключ и Секрет</legacyBold> это 
+     <para>Стоит обратить внимание что <legacyBold>Ключ и Секрет</legacyBold> - это 
      не <legacyBold>Логин и Пароль</legacyBold>.
 	<legacyBold>Ключ и Секрет</legacyBold> генерируются отдельно в личном кабинете. 
 	Для работы с коннектором Логин и Пароль не требуется и их нигде указывать не нужно.</para>	  
