@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="076b8019-1f9f-4dbf-bd32-1abdac5fd7fe" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+      	<codeEntityReference>T:StockSharp.Xaml.MarketDataGrid</codeEntityReference> - a table displaying market data, in this table you can view available market data.
+      </para>
+          <mediaLink><image placement="left" xlink:href="API_GUI_MarketDataGrid" /></mediaLink>
+      <para>
+      
+      The following is an example of the code for adding a 
+      <codeEntityReference>T:StockSharp.Xaml.MarketDataGrid</codeEntityReference> table to the screen form.
+      </para>
+             <code title="XAML" language="XAML">
+	  				<![CDATA[
+<Window x:Class="MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xaml="http://schemas.stocksharp.com/xaml"
+
+        mc:Ignorable="d"
+        Title="MainWindow" Height="662" Width="787" Left="10" Top="10">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="923*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+		<xaml:MarketDataGrid x:Name="MarketDataGrid"  Grid.Row="1" Grid.ColumnSpan="3" />
+		<Button Grid.Row="0" Grid.Column="0" x:Name="Setting" Content="Setting" Click="Setting_Click" />
+		<Button Grid.Row="0" Grid.Column="1" x:Name="Connect" Content="Connect" Click="Connect_Click" />
+    </Grid>
+</Window>
+
+	  				]]>
+              </code>
+
+    </introduction>
+   </developerConceptualDocument>
+</topic>

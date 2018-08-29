@@ -299,13 +299,13 @@
       <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Extended settings" />
     </Topic>
     <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Graphical user interface">
-      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" isExpanded="true" title="Charts">
+      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Charts">
         <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Candle chart" />
         <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="Candle chart panel" />
         <Topic id="da275a7f-ff6f-4dc7-8451-bf4fc22624a6" visible="True" title="Equity curve chart" />
         <Topic id="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce" visible="True" title="Box chart" />
         <Topic id="96f4c342-1d2f-4e0d-9352-5452643df5ab" visible="True" title="Cluster chart" />
-        <Topic id="c3c46599-2939-4399-90ff-6d8d961e7c4a" visible="True" isSelected="true" title="Registering of orders from the chart" />
+        <Topic id="c3c46599-2939-4399-90ff-6d8d961e7c4a" visible="True" title="Registering of orders from the chart" />
       </Topic>
       <Topic id="4cd2b7f9-fe8d-404a-bec6-227783410beb" visible="True" title="Logging">
         <Topic id="a206d470-20f1-42ed-b066-6e322d55d436" visible="True" title="Log panel" />
@@ -345,6 +345,7 @@
         <Topic id="5d9f8c0d-d05c-4a39-9fad-7148df4411ad" visible="True" title="Position chart" />
       </Topic>
       <Topic id="c4aa5add-198d-432b-93fa-6ce60d0b7856" visible="True" title="PropertyGridEx" />
+      <Topic id="076b8019-1f9f-4dbf-bd32-1abdac5fd7fe" visible="True" isSelected="true" title="Table of available market data" />
     </Topic>
     <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Messages">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Description" />
