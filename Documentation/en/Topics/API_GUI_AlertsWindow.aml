@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="71196e37-b6ae-44ec-989d-0396e21af6fd" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+
+      <para>
+      	<codeEntityReference>T:StockSharp.Alerts.AlertSettingsWindow</codeEntityReference> - window for configuring notifications of certain events
+      </para>
+    <mediaLink>
+<image placement="center" xlink:href="API_GUI_AlertWindow"/>
+</mediaLink>
+      <para>You can configure notifications about changing the following data types: 
+      Portfolio, Client code, Broker, Depository, Server time, Transaction, Data type, 
+      Cancel, Order ID, Order ID (string), Order ID (platform), Derivative, Derivative 
+      (string), Price, Volume (order), Volume (trade), Visible volume, Direction, Balance, 
+      Order type, Status, Comment, Order message, System order, Order expiration time, 
+      Execution condition, Price, Trade initiator, Open interest, Error, Condition, Uptrend, 
+      Commission, Delay, Slippage, Identifier (user), Currency, P/L, Position, Market maker.</para>
+      
+<para>Notifications can be of the following form:</para>
+<list class="bullet">
+  <listItem><para><legacyBold>Window</legacyBold> - a small pop-up window with a message will appear in the corner of the screen.</para></listItem>
+  <listItem><para><legacyBold>Melody</legacyBold> - the melody will play.</para></listItem>
+  <listItem><para><legacyBold>SMS</legacyBold> - a message will be sent by SMS.</para></listItem>
+  <listItem><para><legacyBold>Email</legacyBold> - a message will be sent by email.</para></listItem>
+  <listItem><para><legacyBold>Speech</legacyBold> - a message will be spoken by the computer-generated voice.</para></listItem>
+  <listItem><para><legacyBold>Log</legacyBold> - a message will be sent to the Designer Logs window.</para></listItem>
+  <listItem><para><legacyBold>Disabled</legacyBold> - a notification will not be displayed.</para></listItem>
+</list>
+    </introduction>
+   </developerConceptualDocument>
+</topic>
