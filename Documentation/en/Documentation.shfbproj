@@ -3391,6 +3391,14 @@
       <ImageId>hydra_update</ImageId>
       <AlternateText>hydra update</AlternateText>
     </Image>
+    <Image Include="Art\hydra_Quick_start_02.png">
+      <ImageId>hydra_Quick_start_02</ImageId>
+      <AlternateText>hydra Quick start 02</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_Quick_start_01.png">
+      <ImageId>hydra_Quick_start_01</ImageId>
+      <AlternateText>hydra Quick start 01</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
