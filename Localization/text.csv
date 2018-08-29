@@ -1,4 +1,5 @@
-﻿ChartPainterAlreadySet;Indicator painter can only be set once.;Рендерер чарт элемента индикатора может быть установлен лишь единожды.
+﻿SourceValues;Source values;Исходные значения
+ChartPainterAlreadySet;Indicator painter can only be set once.;Рендерер чарт элемента индикатора может быть установлен лишь единожды.
 AnnotationTypeCantBeChanged;Annotation type cannot be changed once set.;Тип аннотации не может быть изменен после первичной установки.
 ElementAlreadyAttached;The element was already attached to chart before.;Элемент уже был добавлен в чарт ранее.
 AxisTypeCantBeSet;Axis type must be set before adding any elements.;Тип оси должен быть задан до добавления элементов графика.
