@@ -238,11 +238,11 @@
       <Topic id="e4a57b52-bd14-4640-a7c7-0979dba1ad0a" visible="True" title="API" />
       <Topic id="ac584200-f06a-49e6-b2fd-141b5fc898f9" visible="True" title="Messages storage" />
     </Topic>
-    <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" isExpanded="true" title="Candles">
+    <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" title="Candles">
       <Topic id="287125e1-7c7e-4be3-a8ce-5018538e613f" visible="True" title="Chart" />
       <Topic id="ccc96909-8623-4f56-b3ee-fdc5070b3fde" visible="True" title="Patterns" />
       <Topic id="99da6499-9ac1-4e7e-bcaf-a0c832dce4de" visible="True" title="Custom type of candle" />
-      <Topic id="f71010d3-135c-4fe9-a573-abf0245b3f5d" visible="True" isSelected="true" title="Gluing candles, history + real-time" />
+      <Topic id="f71010d3-135c-4fe9-a573-abf0245b3f5d" visible="True" title="Gluing candles, history + real-time" />
       <Topic id="b6f4b3fb-3a34-4ba8-bcea-258613f2b455" visible="True" title="Candles creating by instrument basket" />
     </Topic>
     <Topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" visible="True" title="Indicators">
@@ -298,13 +298,14 @@
       <Topic id="d27245ae-abfd-4d6b-b8c4-d1a24a45116f" visible="True" title="Simulator" />
       <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Extended settings" />
     </Topic>
-    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" title="Graphical user interface">
-      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Charts">
+    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Graphical user interface">
+      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" isExpanded="true" title="Charts">
         <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Candle chart" />
         <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="Candle chart panel" />
         <Topic id="da275a7f-ff6f-4dc7-8451-bf4fc22624a6" visible="True" title="Equity curve chart" />
         <Topic id="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce" visible="True" title="Box chart" />
         <Topic id="96f4c342-1d2f-4e0d-9352-5452643df5ab" visible="True" title="Cluster chart" />
+        <Topic id="c3c46599-2939-4399-90ff-6d8d961e7c4a" visible="True" isSelected="true" title="Registering of orders from the chart" />
       </Topic>
       <Topic id="4cd2b7f9-fe8d-404a-bec6-227783410beb" visible="True" title="Logging">
         <Topic id="a206d470-20f1-42ed-b066-6e322d55d436" visible="True" title="Log panel" />

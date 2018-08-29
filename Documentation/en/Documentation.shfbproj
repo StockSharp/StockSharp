@@ -217,6 +217,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API_GUI_Trading_From_Chart.aml" />
     <None Include="Topics\FIXConnectorsSettings.aml" />
     <None Include="Topics\FXCMConnectorsSettings.aml" />
     <None Include="Topics\OandaConnectorsSettings.aml" />
@@ -3337,6 +3338,10 @@
     <Image Include="Art\APIConnectorsSettingsWindow.png">
       <ImageId>APIConnectorsSettingsWindow</ImageId>
       <AlternateText>APIConnectors Settings Window</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Trading_from_chart.png">
+      <ImageId>API_GUI_Trading_from_chart</ImageId>
+      <AlternateText>API GUI Trading from chart</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

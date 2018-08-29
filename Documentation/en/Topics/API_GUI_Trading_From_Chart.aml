@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c3c46599-2939-4399-90ff-6d8d961e7c4a" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>S# allows to register orders from the chart, to activate this feature, you need to set the 
+<codeEntityReference>P:StockSharp.Xaml.Charting.Chart.OrderCreationMode</codeEntityReference> 
+property to <legacyBold>"True"</legacyBold>, it is disabled by default.</para>
+<mediaLink><image placement="left" xlink:href="API_GUI_Trading_from_chart"/></mediaLink> 
+<para>Orders for purchase will be registered using the <legacyBold>Ctrl + Left Mouse Button</legacyBold> combination.</para>
+<para>Orders for sale will be registered using the <legacyBold>Ctrl + Right Mouse Button</legacyBold> combination.</para>
+
+<para>The resulting order can be intercepted through the event of a new order creation.</para>
+<code title="C#" language="C#"><![CDATA[
+ChartPanel.CreateOrder += (chartArea,order) =>
+{
+	order.Portfolio = _portfolio;
+	order.Security = _security;
+	order.Volume = 1;
+	
+	trader.RegisterOrder(order);
+};
+
+]]></code>
+<para>Registered orders will be displayed as a special element for displaying orders 
+<codeEntityReference>T:StockSharp.Xaml.Charting.ChartOrderElement</codeEntityReference>.</para>
+    </introduction>
+
+  </developerConceptualDocument>
+</topic>
