@@ -7,9 +7,9 @@
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Architecture" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Installation instruction" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="Releases history" />
-    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" isExpanded="true" title="Connectors (Stock, Futures and Options)">
+    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Connectors (Stock, Futures and Options)">
       <Topic id="f8cae46b-57e1-4954-a4cf-832854840981" visible="True" isExpanded="true" title="OpenECry">
-        <Topic id="1ff92943-e18d-4542-988f-254aded4cbe1" visible="True" isSelected="true" title="OpenECry configuration" />
+        <Topic id="1ff92943-e18d-4542-988f-254aded4cbe1" visible="True" title="OpenECry configuration" />
         <Topic id="1dbc72c4-cc59-4094-824a-a2b77f9623d6" visible="True" title="Getting started" />
         <Topic id="6f3be323-80bb-4823-9d27-8060c238af32" visible="True" title="Stop orders" />
         <Topic id="a1e2b191-995c-4b03-9858-8fe9d2ae1fa1" visible="True" title="Historical data" />
@@ -76,7 +76,7 @@
         <Topic id="733374e6-1410-468e-b2df-c7d3f2081ef3" visible="True" title="Getting started" />
       </Topic>
     </Topic>
-    <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" isExpanded="true" title="Connectors (Forex)">
+    <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" title="Connectors (Forex)">
       <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" title="LMAX">
         <Topic id="96e186b5-a78f-4f2d-8a1b-ea1734d9ed86" visible="True" title="LMAX configuration" />
         <Topic id="9cd10cbc-8534-4d44-bf3b-60b0a3f03590" visible="True" title="Getting started" />
@@ -203,7 +203,7 @@
         <Topic id="cccadabe-b3fa-4afa-badd-ca0a1633ca2d" visible="True" title="Getting started" />
       </Topic>
     </Topic>
-    <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" isExpanded="true" title="Connectors (FIX/FAST)">
+    <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" title="Connectors (FIX/FAST)">
       <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" isExpanded="true" title="FIX">
         <Topic id="9012c95b-9858-4ee8-948d-c6f776b128eb" visible="True" title="FIX configuration" />
         <Topic id="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" visible="True" title="Getting started" />
@@ -238,11 +238,11 @@
       <Topic id="e4a57b52-bd14-4640-a7c7-0979dba1ad0a" visible="True" title="API" />
       <Topic id="ac584200-f06a-49e6-b2fd-141b5fc898f9" visible="True" title="Messages storage" />
     </Topic>
-    <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" title="Candles">
+    <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" isExpanded="true" title="Candles">
       <Topic id="287125e1-7c7e-4be3-a8ce-5018538e613f" visible="True" title="Chart" />
       <Topic id="ccc96909-8623-4f56-b3ee-fdc5070b3fde" visible="True" title="Patterns" />
       <Topic id="99da6499-9ac1-4e7e-bcaf-a0c832dce4de" visible="True" title="Custom type of candle" />
-      <Topic id="f71010d3-135c-4fe9-a573-abf0245b3f5d" visible="True" title="The candles joining, history + real-time" />
+      <Topic id="f71010d3-135c-4fe9-a573-abf0245b3f5d" visible="True" isSelected="true" title="Gluing candles, history + real-time" />
       <Topic id="b6f4b3fb-3a34-4ba8-bcea-258613f2b455" visible="True" title="Candles creating by instrument basket" />
     </Topic>
     <Topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" visible="True" title="Indicators">
