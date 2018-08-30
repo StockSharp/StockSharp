@@ -5,15 +5,15 @@
 <mediaLink>
 <image xlink:href="Designer_Glass_Panel"/>
 </mediaLink>
-<para>The cube is designed to display an order book in the 
-<link xlink:href="24d370d1-fd00-4914-83ac-574721299e93" /> panel.
+<para>The cube is designed to display an order book in a special graphic component <link xlink:href="3efed911-8876-40b8-8203-b9b48b1c599c" />.</para>
+<para>You need to add the <link xlink:href="3efed911-8876-40b8-8203-b9b48b1c599c" /> component from the <link xlink:href="055fe44c-6ca5-4b41-a62d-16b319f6d3de" /> 
+group of the Emulation or Trade tabs. For more information on the <link xlink:href="3efed911-8876-40b8-8203-b9b48b1c599c" /> component, see the <link xlink:href="3efed911-8876-40b8-8203-b9b48b1c599c" /> clause..
 </para>
 <definitionTable>
   <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Order book</legacyBold> - the order book to be 
-  displayed.</para></listItem>
+  <listItem><para><legacyBold>Order book</legacyBold> – an order book to be displayed.</para></listItem>
 </list>
   </definition>
 </definitionTable>
