@@ -1163,7 +1163,7 @@ namespace StockSharp.Algo
 		{
 			decimal? volume;
 
-			switch (TransactionAdapter.OrderCancelVolumeRequired)
+			switch (TransactionAdapter?.OrderCancelVolumeRequired)
 			{
 				case null:
 					volume = null;
