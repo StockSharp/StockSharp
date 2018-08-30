@@ -3403,6 +3403,10 @@
       <ImageId>hydra_setting_source_button</ImageId>
       <AlternateText>hydra setting source button</AlternateText>
     </Image>
+    <Image Include="Art\hydra_settings_QuantFEED.png">
+      <ImageId>hydra_settings_QuantFEED</ImageId>
+      <AlternateText>hydra settings QuantFEED</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

@@ -39,7 +39,15 @@
 		</listItem>
       </list>
       <para><legacyBold>Connection</legacyBold> - connection properties (see <link xlink:href="01a85a46-7510-4385-b81c-348ffb3dfc46">Connection properties</link> section).</para>
-    
+    <para>In addition to the source settings in 
+<link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" />, 
+the connector should be configured, as described in the clause 
+<link xlink:href="6609d974-6822-4fcd-887d-716b9d050ba8" />.
+</para>
+
+<para>Before starting the data acquisition, it is necessary to download and select the necessary instruments, as described in the clause 
+<link xlink:href="47ebc084-6b07-4b69-8f96-ea190110111f" />.
+</para>
     </introduction>
   </developerConceptualDocument>
 </topic>
