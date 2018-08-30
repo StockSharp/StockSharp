@@ -84,10 +84,6 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _sessionStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
 		private readonly SynchronizedDictionary<Security, object[]> _securityValues = new SynchronizedDictionary<Security, object[]>();
 
-		private IEntityRegistry _entityRegistry;
-		private IStorageRegistry _storageRegistry;
-		private SnapshotRegistry _snapshotRegistry;
-
 		private bool _isDisposing;
 
 		/// <summary>
@@ -168,14 +164,29 @@ namespace StockSharp.Algo
 		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
 		public void InitializeStorage(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
 		{
-			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
-			_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
-			_snapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
+			EntityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
+			StorageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
+			SnapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
 
 			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
 
 			InitAdapter();
 		}
+
+		/// <summary>
+		/// The storage of trade objects.
+		/// </summary>
+		public IEntityRegistry EntityRegistry { get; private set; }
+
+		/// <summary>
+		/// The storage of market data.
+		/// </summary>
+		public IStorageRegistry StorageRegistry { get; private set; }
+
+		/// <summary>
+		/// Snapshot storage registry.
+		/// </summary>
+		public SnapshotRegistry SnapshotRegistry { get; private set; }
 
 		private void InitAdapter()
 		{
