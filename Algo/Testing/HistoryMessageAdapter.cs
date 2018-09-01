@@ -121,7 +121,8 @@ namespace StockSharp.Algo.Testing
 		{
 			BasketStorage = new CachedBasketMarketDataStorage<Message>(transactionIdGenerator)
 			{
-				Boards = Enumerable.Empty<ExchangeBoard>()
+				Boards = Enumerable.Empty<ExchangeBoard>(),
+				Parent = this
 			};
 
 			MaxMessageCount = DefaultMaxMessageCount;

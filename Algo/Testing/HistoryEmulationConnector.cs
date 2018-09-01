@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Testing
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -140,13 +141,16 @@ namespace StockSharp.Algo.Testing
 							try
 							{
 								var sended = _historyMessageAdapter.SendOutMessage();
-								var block = !sended;
-
-								while (_messageQueue.TryDequeue(out var message, true, block))
+								var processed = false;
+								
+								while (_messageQueue.TryDequeue(out var message, true, false))
 								{
 									NewOutMessage?.Invoke(message);
-									block = false;
+									processed = true;
 								}
+
+								if (!sended && !processed && !_messageQueue.IsClosed)
+									Thread.Sleep(100);
 							}
 							catch (Exception ex)
 							{

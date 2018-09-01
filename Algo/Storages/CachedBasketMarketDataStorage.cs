@@ -204,7 +204,7 @@ namespace StockSharp.Algo.Storages
 			if (serverTime != null)
 				_currentTime = serverTime.Value;
 
-			_currentMessage = (T)message;
+			Current = (T)message;
 
 			return true;
 		}
@@ -214,20 +214,18 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public void Reset()
 		{
-			_currentMessage = null;
+			Current = null;
 			_currentTime = DateTimeOffset.MinValue;
 			_isTimeLineAdded = false;
             _basketStorage.InnerStorages.Clear();
 		}
 
-		private T _currentMessage;
-
 		/// <summary>
 		/// Gets the current element in the collection.
 		/// </summary>
-		public T Current => _currentMessage;
+		public T Current { get; private set; }
 
-		object IEnumerator.Current => _currentMessage;
+		object IEnumerator.Current => Current;
 
 		#endregion
 
