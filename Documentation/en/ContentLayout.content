@@ -503,6 +503,7 @@
       <Topic id="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9" visible="True" title="Option desk" />
       <Topic id="0d15d724-6a2d-46b5-9341-596c9209bbff" visible="True" title="Indicators" />
       <Topic id="9acae0d2-041e-403a-b04c-de6117c3bb76" visible="True" title="Positions" />
+      <Topic id="e8991383-328f-4bf6-b046-6ab823c8c1de" visible="True" isSelected="true" title="Export to MetaStock formats" />
     </Topic>
     <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" title="Candle generation" />
     <Topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" visible="True" title="Importing">
@@ -521,14 +522,14 @@
       <Topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" visible="True" title="WCF connectivity" />
       <Topic id="040cdc40-39b4-47be-b3f0-441710515562" visible="True" title="Remote administration" />
     </Topic>
-    <Topic id="7545b685-f318-4d91-af10-52708257f452" visible="True" noFile="true" isExpanded="true" title="Instruments and boards">
+    <Topic id="7545b685-f318-4d91-af10-52708257f452" visible="True" noFile="true" title="Instruments and boards">
       <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Instruments list" />
       <Topic id="cc9ddc6c-27e9-4bc4-91e8-a418303ae201" visible="True" title="Create instrument" />
       <Topic id="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" visible="True" title="Index" />
       <Topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" visible="True" title="Continuous futures" />
       <Topic id="4323f740-7b37-47ca-bab1-d540d9c0c4f0" visible="True" title="Editing instruments" />
       <Topic id="b7f2c08a-2920-42a4-9887-eb0441c246cb" visible="True" title="Extended instrument info" />
-      <Topic id="65b09400-90fa-49f3-8d71-6d4309a33934" visible="True" isSelected="true" title="Matching instruments-connections" />
+      <Topic id="65b09400-90fa-49f3-8d71-6d4309a33934" visible="True" title="Matching instruments-connections" />
       <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" title="Boards" />
     </Topic>
     <Topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" visible="True" title="Create new souce" />
@@ -556,7 +557,7 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Installing S#.Designer" />
     <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Update to the new version" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Quick start" />
@@ -671,7 +672,7 @@
     </Topic>
     <Topic id="a26317f6-5e11-4d6d-913f-73a4f497cec8" visible="True" noFile="true" title="Backtesting">
       <Topic id="18a5214f-1c03-445a-ab96-d29c91555af4" visible="True" title="User interface" />
-      <Topic id="667ad9ff-6afe-48e2-9c53-1850d0533a77" visible="True" title="Debugging">
+      <Topic id="667ad9ff-6afe-48e2-9c53-1850d0533a77" visible="True" isExpanded="true" title="Debugging">
         <Topic id="81221569-7e65-4817-9b1f-7d6c6efccdf6" visible="True" title="Break points" />
         <Topic id="f1929c45-e092-4b11-a31e-9d153e075429" visible="True" title="Step by step execution" />
       </Topic>
@@ -691,11 +692,12 @@
       <Topic id="4456e138-a1be-4bc2-8aab-a1f0f226759d" visible="True" title="View downloaded data" />
       <Topic id="aa54fb3f-ed47-4291-9cc6-34840bab4fff" visible="True" title="Symbol mapping" />
     </Topic>
-    <Topic id="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" visible="True" title="Live execution">
+    <Topic id="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" visible="True" isExpanded="true" title="Live execution">
       <Topic id="628d619b-ef20-4496-9bd1-d854d4a853e4" visible="True" title="Getting started" />
       <Topic id="0dec6014-51ee-4463-b102-aed24464833e" visible="True" title="User interface" />
       <Topic id="24d370d1-fd00-4914-83ac-57472eb99e93" visible="True" title="Strategies dashboard" />
       <Topic id="91644d63-00b3-416f-8677-ca57dfa8032e" visible="True" title="Live execution sample" />
+      <Topic id="3ad21487-4a9a-4ba3-bbd8-787f9573bbe5" visible="True" title="Strategy warm-up" />
     </Topic>
     <Topic id="3c44a545-4674-4272-9269-e50265efcd82" visible="True" title="Strategy gallery">
       <Topic id="f8bbe4c2-293b-4a5d-aa0c-4ddf4b2bef87" visible="True" title="Publish own strategy" />

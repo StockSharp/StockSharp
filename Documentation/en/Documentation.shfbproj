@@ -217,6 +217,8 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Hydra_Export_TSLab_MetaStock.aml" />
+    <None Include="Topics\Designer_Warm_Up_mode.aml" />
     <None Include="Topics\Hydra_export_position.aml" />
     <None Include="Topics\Hydra_export_indicator.aml" />
     <None Include="Topics\HydraUpdate.aml" />
@@ -3436,6 +3438,10 @@
     <Image Include="Art\Designer_Stopping_point_02.png">
       <ImageId>Designer_Stopping_point_02</ImageId>
       <AlternateText>Designer Stopping point 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Warm_up_mode_00.png">
+      <ImageId>Designer_Warm_up_mode_00</ImageId>
+      <AlternateText>Designer Warm up mode 00</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
