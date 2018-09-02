@@ -438,6 +438,13 @@ namespace StockSharp.Algo
 					break;
 				}
 
+				case MessageTypes.PortfolioChange:
+				{
+					var pfMsg = (PortfolioChangeMessage)message;
+					ProcessPortfolioMessage(pfMsg.PortfolioName, pfMsg);
+					break;
+				}
+
 				case MessageTypes.OrderRegister:
 				case MessageTypes.OrderReplace:
 				case MessageTypes.OrderCancel:

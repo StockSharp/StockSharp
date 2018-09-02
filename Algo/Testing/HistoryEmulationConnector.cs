@@ -83,9 +83,7 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.Time:
 					case MessageTypes.Execution:
 					{
-						var adapter = message.Adapter;
-
-						if (adapter == _parent.MarketDataAdapter)
+						if (message.Adapter == _parent.MarketDataAdapter)
 							_parent.TransactionAdapter.SendInMessage(message);
 
 						break;
