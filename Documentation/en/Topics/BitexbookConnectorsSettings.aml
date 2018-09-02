@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<topic id="c5538843-8326-410e-9862-a82fbfbcb345" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+     <para>To work with a connector, it is required to generate the <legacyBold>Key (API Key)</legacyBold> 
+     and <legacyBold>Secret</legacyBold> in the personal account of the exchange and specify them at the connection settings.</para>
+    <alert class="note">
+     <para>It is worth paying attention that the <legacyBold>Key</legacyBold> and <legacyBold>Secret</legacyBold> 
+     are not the <legacyBold>Login</legacyBold> and <legacyBold>Password</legacyBold>.
+     The <legacyBold>Key</legacyBold> and <legacyBold>Secret</legacyBold> are generated separately in your personal account. 
+     You do not need the <legacyBold>Login</legacyBold> and <legacyBold>Password</legacyBold> to 
+     work with the connector and you do not need to specify them anywhere.</para>
+	</alert>
+
+
+     <para>For example, for the settings window in 
+     <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" /> or  
+     <link xlink:href="E4B5E112-BD08-4F40-8741-7514E7E4088E" />, 
+     the entry point for the <legacyBold>Key</legacyBold> and <legacyBold>Secret</legacyBold> is as follows:</para>
+     <mediaLink><image placement="center" xlink:href="APIConnectorsSettingsWindow" /></mediaLink>
+     <para>And for <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" />:</para>
+     <mediaLink><image placement="center" xlink:href="APIConnectorsSettingsHydraWindow" /></mediaLink>
+     <para>In the code, the Key and the Secret can be specified in the corresponding properties of the connector:</para>
+                 		<code language="C#">
+            				<![CDATA[
+.....
+Trader.Key = Key.Text;
+Trader.Secret = Secret.Password;
+.....
+							]]>
+					</code>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

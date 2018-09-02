@@ -25,7 +25,7 @@
   <listItem><para><legacyBold>SMS</legacyBold> – сообщение будет отправлено по смс.</para></listItem>
   <listItem><para><legacyBold>Email</legacyBold> – сообщение будет отправлено в письме на электронную почту.</para></listItem>
   <listItem><para><legacyBold>Речь</legacyBold> – сообщение будет проговорено сгенерированным компьютером голосом.</para></listItem>
-  <listItem><para><legacyBold>Лог</legacyBold> – сообщение будет отправлено в окно логи Дизайнера.</para></listItem>
+  <listItem><para><legacyBold>Лог</legacyBold> – сообщение будет отправлено в окно Логи.</para></listItem>
   <listItem><para><legacyBold>Выключено</legacyBold> – уведомление показываться не будет.</para></listItem>
 </list>
     </introduction>

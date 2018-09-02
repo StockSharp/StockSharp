@@ -3,7 +3,7 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
 		<para>Присутствует возможность склеить различные виды маркет-данных по разным контрактам в один непрерывный инструмент.</para> 
-		<para>Для этого на вкладке <legacyBold>Общее</legacyBold> нужно выбрать <legacyBold>Инструменты</legacyBold>, появиться вкладка <legacyBold>Все инструменты.</legacyBold></para>
+		<para>Для этого на вкладке <legacyBold>Общее</legacyBold> нужно выбрать <legacyBold>Инструменты</legacyBold>, появится вкладка <legacyBold>Все инструменты.</legacyBold></para>
 		<para>Перед тем как склеивать данные, необходимо проверить, какие маркет-данные есть.
 		Для этого выбирается путь где лежат данные и по очереди просматриваются инструменты, которые предполагается склеить.
 		Если имеются пропуски, то необходимо докачать нужные маркет-данные(например, с финама).</para>
@@ -23,7 +23,7 @@
   				<mediaLink><image placement="center" xlink:href="HydraGluingCSCustom" /></mediaLink>
   			</listItem>
   			<listItem>
-  				<para>Если в качестве имени задать первые две буквы контракта, например RI, и 
+  				<para>Если в качестве имени задать первые две буквы контракта, например, RI, и 
   				нажать кнопку <legacyBold>Авто</legacyBold>, то будут добавлены все найденные в БД инструменты.</para>
   				<mediaLink><image placement="center" xlink:href="HydraGluingCSAuto" /></mediaLink>
   			</listItem>

@@ -3,17 +3,16 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-<para>To create 
-<codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference>, 
-<codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>
-or 
-<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> 
-candles the same procedure used as for creating the 
-<codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference> 
-candles.</para>
-<para>For example, create a 1 min candle for APM5 - ESM5 spread:</para>
-<code language="C#"><![CDATA[
-private OpenECryTrader _trader;
+		<para>To create 
+		<codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference>,
+		<codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> or 
+		<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> 
+		candles, the same procedure is used as in the creation of the 
+		<codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference> candles.</para>
+		<para>For example, create 1 min candles for spread APM5 - ESM5:</para>
+        <code language="C#">
+        <![CDATA[
+private Connector _connector;
 
 private Security _instr1;
 private Security _instr2;
@@ -22,14 +21,19 @@ private WeightedIndexSecurity _indexInstr;
 private const string _secCode1 = "APM5";
 private const string _secCode2 = "ESM5";
 
-private CandleManager _candleManager;
 private CandleSeries _indexSeries;
 
 readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(1);
 
 private ChartArea _area;
 private ChartCandleElement _candlesElem;
+...
 
+if (_connector.Configure(this))
+			{
+				new XmlSerializer<SettingsStorage>().Serialize(_connector.Save(), _connectorFile);
+			}
+			
 ...
 
 _area = new ChartArea();
@@ -40,43 +44,53 @@ _area.Candles.Add(_candlesElem);
 
 ...
 
-_candleManager = new CandleManager(_trader);
-_candleManager.Processing += DrawCandles;
+_connector.CandleSeriesProcessing += Connector_CandleSeriesProcessing;
+
 ....
-ConfigManager.RegisterService<ISecurityProvider>(_trader);
+ConfigManager.RegisterService<ISecurityProvider>(_connector);
+ConfigManager.RegisterService<ICompilerService>(new RoslynCompilerService());
 ...
 
 _indexInstr = new WeightedIndexSecurity() { Board = ExchangeBoard.Nyse, Id = "IndexInstr" };
 _indexInstr.Weights.Add(_instr1, 1);
 _indexInstr.Weights.Add(_instr2, -1);
-_indexSeries = new CandleSeries(typeof(TimeFrameCandle), _indexInstr, _timeFrame)
-{
-    BuildCandlesMode = BuildCandlesModes.Build,
-};
+
+_indexSeries =
+	new CandleSeries(typeof(TimeFrameCandle), _indexInstr, _timeFrame)
+	{
+		BuildCandlesMode = MarketDataBuildModes.Build,
+		BuildCandlesFrom = MarketDataTypes.Trades,
+	};
+
 ...
 
-_candleManager.Start(_indexSeries);
-]]></code>
+_connector.SubscribeCandles(_indexSeries, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);			
+		]]>
+		</code>
 		
-<para>After that, candles will come to the event handler Processing - DrawCandles. These candles can be displayed on the chart:</para>
+		<para>After that, the 
+		<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference> 
+		- DrawCandles event handler will receive the candles, which can be displayed on the chart:</para>
 
-<code language="C#"><![CDATA[
-private void DrawCandles(CandleSeries series, Candle candle)
+        <code language="C#">
+        <![CDATA[
+private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, Candle candle)
 {
-    if (series == _indexSeries) 
+    if (candleSeries == _indexSeries) 
        {
           var chartData = new ChartDrawData();
           chartData.Group(candle.OpenTime).Add(_candleElement, candle);
           _chart.Draw(chartData);
        }
 }
-]]></code>
+		]]>
+		</code>
 		
 	</introduction>
 
     <relatedTopics>
-      <link xlink:href="0f7cceee-bb7c-4f24-a266-ed900cb8e557">Continuous futures</link>
-      <link xlink:href="ee8f7be8-80ad-4ab9-a5aa-14754fe024f1">Index</link>
+      <link xlink:href="0f7cceee-bb7c-4f24-a266-ed900cb8e557" />
+      <link xlink:href="ee8f7be8-80ad-4ab9-a5aa-14754fe024f1" />
     </relatedTopics>
 
 	</developerWalkthroughDocument>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6611fa9f-0e57-4378-954f-f582881d7504" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+     <para>При работе с коннектором требуется указать <legacyBold>Логин</legacyBold> и 
+     <legacyBold>Пароль</legacyBold> для подключения
+     к торговой площадке. <legacyBold>Логин</legacyBold> и <legacyBold>Пароль</legacyBold> 
+     предоставляются брокером. Для получения API доступа рекомендуется обратиться к брокеру.</para>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

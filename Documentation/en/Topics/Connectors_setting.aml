@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4aae45b0-37c5-4d3c-a910-08ccfc9b63ed" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   
+    <introduction>
+ <para>Some connectors must be pre-configured. Below are links to pages with connectors settings.</para>
+	<list class="bullet">
+<listItem>
+<para>Connectors Stock, Futures and Options: </para>
+
+
+<para><link xlink:href="1ff92943-e18d-4542-988f-254aded4cbe1" />, </para>
+<para><link xlink:href="eab815a2-65f7-46e8-9989-4ae52d234703" />, </para>
+<para><link xlink:href="69cb6aac-29fa-46e3-8d3b-af81f89bfff3" />, </para>
+<para><link xlink:href="dcd93518-1169-44d1-ab9b-2d016d727842" />, </para>
+<para><link xlink:href="add6156b-b2a9-401c-93cc-be333762da15" />, </para>
+<para><link xlink:href="3a4f70bf-24b9-489f-8d58-5bc4f5b623b0" />, </para>
+<para><link xlink:href="3ee05287-d25f-4967-9dc0-26d9a5a9578a" />, </para>
+<para><link xlink:href="e08adf2c-8f14-4ba2-a486-0d0b0de25704" />, </para>
+<para><link xlink:href="35f9c7d1-741e-4721-8deb-1991102c0e28" />, </para>
+<para><link xlink:href="baa2df0a-ca79-4437-8b99-496f905c254e" />, </para>
+<para><link xlink:href="93737846-dc53-4789-93a8-4c24da7779df" />.</para>
+
+ 		</listItem>
+   		<listItem>
+<para>Connectors Forex: 	</para>
+<para><link xlink:href="96e186b5-a78f-4f2d-8a1b-ea1734d9ed86" />, </para>
+<para><link xlink:href="6e81fb6e-d465-4bcc-b29a-906ea3a1b821" />, </para>
+<para><link xlink:href="27823c36-faf5-486e-be14-15ce5c5581d2" />.</para>
+
+
+ 		</listItem>
+    		<listItem>
+<para>Connectors Cryptocurrencies: 	</para>
+
+<para><link xlink:href="a72395b7-e651-40a2-97d1-f5236bc27a4f" />, </para>
+<para><link xlink:href="c5538843-8326-410e-9862-a82fbfbcb345" />, </para>
+<para><link xlink:href="eae3076b-f1ca-475a-b66c-715b998bada7" />, </para>
+<para><link xlink:href="c71fcd66-6ee2-4da9-a898-02f66fced4b2" />, </para>
+<para><link xlink:href="69dc4e39-5e8f-46e1-8282-475b6b767deb" />, </para>
+<para><link xlink:href="6609d974-6822-4fcd-887d-716b9d050ba8" />, </para>
+<para><link xlink:href="f33c1001-24bb-4b5f-a184-79c75487f1cc" />, </para>
+<para><link xlink:href="9621e260-1aab-4fbd-9023-13028f249f9d" />, </para>
+<para><link xlink:href="e67f1833-2c9b-4e62-8e15-a71aab04b356" />, </para>
+<para><link xlink:href="e08c0579-ca96-42f4-8be9-86ab1e9ad174" />, </para>
+<para><link xlink:href="cf66da6f-47cd-4596-a772-fb23e1a72b5f" />, </para>
+<para><link xlink:href="3d17039e-55d4-4ec0-80e5-1e23eb6c960e" />, </para>
+<para><link xlink:href="d222e77d-9410-4f1a-a7cf-92d5a9305027" />, </para>
+<para><link xlink:href="cf64a6d0-e0f4-4144-b949-5c7aa3c557ab" />,</para> 
+<para><link xlink:href="c259cacc-d0f1-4a02-9419-dbaa805cab31" />, </para>
+<para><link xlink:href="4e7930af-1aa2-4599-91de-7e9eae031fbf" />, </para>
+<para><link xlink:href="0171d5e9-b148-4b02-9d49-4c00a7c3cc3a" />, </para>
+<para><link xlink:href="ccf8139f-afb1-43ca-adfa-a74d9c9b8280" />, </para>
+<para><link xlink:href="39dac157-8de7-4dd1-ad0c-4520aa9ec953" />,</para> 
+<para><link xlink:href="7228e2e5-eb4e-4ad7-b575-088ee696f926" />, </para>
+<para><link xlink:href="84110311-8092-4090-89ce-89c57557ee1a" />, </para>
+<para><link xlink:href="5887c466-24d7-4d50-9ae3-8a746bdecd9e" />, </para>
+<para><link xlink:href="c00c59c2-d12f-4b16-b9f5-ceb451494a6b" />, </para>
+<para><link xlink:href="1d9788e7-0f75-4993-84a2-4a331dfea2d2" />, </para>
+<para><link xlink:href="1a6b49de-05a2-44c3-8f67-b8acdec5aec0" />, </para>
+<para><link xlink:href="78aa3ef5-8eae-4c53-b7e9-85ee1f8a9137" />.</para>
+
+
+ 		</listItem>
+     		<listItem>
+<para>Connectors FIX/FAST: </para>
+
+<para><link xlink:href="9012c95b-9858-4ee8-948d-c6f776b128eb" />.</para>
+
+ 		</listItem>
+	</list>
+
+		
+		
+    </introduction>
+
+  </developerConceptualDocument>
+</topic>

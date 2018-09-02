@@ -4,7 +4,7 @@
     <introduction>
 <para>S# позволяет выставлять заявки с графика, для активации этой возможности необходимо 
 свойство <codeEntityReference>P:StockSharp.Xaml.Charting.Chart.OrderCreationMode</codeEntityReference> установить в True, 
-по умолчании оно отключено.</para>
+по умолчанию оно отключено.</para>
 <mediaLink><image placement="left" xlink:href="API_GUI_Trading_from_chart"/></mediaLink> 
 <para>Заявки на покупку будут выставляться по сочетанию клавиш Ctrl + ЛКМ. </para>
 <para>Заявки на продажу будут выставляться по сочетанию клавиш Ctrl + ПКМ. </para>

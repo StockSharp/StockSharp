@@ -5,6 +5,7 @@
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.TradeGrid</codeEntityReference> - trade table.
       </para>
+      <mediaLink><image placement="left" xlink:href="GUI_TradeGrid" /></mediaLink>
       <para>
        <legacyBold>Main properties</legacyBold>
       </para>
@@ -22,11 +23,9 @@
 		</list>
 		
 	  <para>
-Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/SampleOEC</legacyItalic>.
+Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/SampleOEC</legacyItalic>.
       </para>
-      
-      <mediaLink><image placement="left" xlink:href="GUI_TradeGrid" /></mediaLink>
-      
+     
        <code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="SampleOEC.MyTradesWindow"

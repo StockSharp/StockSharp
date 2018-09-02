@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="29a2e2d4-af15-4340-be6d-3c77c66c1977" revisionNumber="1">
+   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    <para>При работе с коннектором используется прямое подключение, требующее <legacyBold>VPN</legacyBold> или <legacyBold>шифрованного</legacyBold> канала.</para>
+     <para>Для подключения необходимо  указать <legacyBold>Логин</legacyBold> и 
+     <legacyBold>Пароль</legacyBold> подключения к торговой площадке. </para>
+     <para><legacyBold>Логин</legacyBold>, <legacyBold>Пароль</legacyBold> и <legacyBold>настройки соединения</legacyBold> 
+     предоставляются брокером. Для получения API доступа рекомендуется обратиться к брокеру.</para>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

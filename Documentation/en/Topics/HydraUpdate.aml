@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="7fc5f53a-b6b9-4f0f-8b97-983dd98f0237" revisionNumber="1">
+   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    <para>When a new version appears, the program itself will prompt you to update.</para>
+    <para>You can check the current version for up-to-date and, if necessary, update it in the <legacyBold>About</legacyBold> window.</para>
+    <mediaLink>
+<image placement="center" xlink:href="hydra_about"/>
+</mediaLink>
+<para>In the window that appears, the changes available in the new version will be described, you have to click the <legacyBold>Update</legacyBold> button to update.</para>
+<mediaLink>
+<image placement="center" xlink:href="hydra_update"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="47ebc084-6b07-4b69-8f96-ea190110111f" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

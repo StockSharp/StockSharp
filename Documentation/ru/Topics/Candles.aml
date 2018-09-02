@@ -98,7 +98,7 @@ if (_connector.Configure(this))
 				<content>
 					<para>Далее, необходимо подписаться на событие 
 					<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>,
-					сигнализирующее о появления нового значения для обработки:</para>
+					сигнализирующее о появлении нового значения для обработки:</para>
 			
 					<code language="C#">
 					<![CDATA[

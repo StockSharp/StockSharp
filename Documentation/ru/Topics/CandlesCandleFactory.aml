@@ -4,7 +4,7 @@
     
 	<introduction>
 		<para><token>stocksharp</token> позволяет расширить возможности построения свечей, давая возможность работать с произвольными типами свечей.
-		Это полезно в тех случаях, когда требуется работать со свечами, не поддерживаемые в данный момент <token>stocksharp</token>. Ниже описан план действия
+		Это полезно в тех случаях, когда требуется работать со свечами, не поддерживаемыми в данный момент <token>stocksharp</token>. Ниже описан план действия
 		по добавлению тиковых свечей (свечи, которые формируются по количеству сделок).</para>
     </introduction>
     
@@ -208,7 +208,7 @@ public class TickCandleBuilder : CandleBuilder<TickCandleMessage>
 				
 			<step>
 				<content>
-<para>Затем, необходимо получить <codeEntityReference>T:StockSharp.Algo.Candles.Compression.CandleBuilderProvider</codeEntityReference> из подключения, и добавить 
+<para>Затем необходимо получить <codeEntityReference>T:StockSharp.Algo.Candles.Compression.CandleBuilderProvider</codeEntityReference> из подключения и добавить 
 в него <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference>:</para>
 <alert class="caution"><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference>, 
 как источник свечей, стандартно присутствует в <codeEntityReference>T:StockSharp.Algo.Candles.Compression.CandleBuilderProvider</codeEntityReference>.

@@ -24,7 +24,7 @@
   				<listItem>
   					<para>
   					<legacyBold>Маска файла</legacyBold> - маска файла,
-  					которая используется при сканировании директории. Например candle_*.csv.</para>
+  					которая используется при сканировании директории. Например, candle_*.csv.</para>
   				</listItem>
   				<listItem>
   					<para><legacyBold>Разделитель колонок</legacyBold> - разделитель колонок. Табуляция обозначается TAB.</para>

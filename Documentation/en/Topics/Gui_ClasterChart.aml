@@ -9,7 +9,7 @@
        This chart uses the information from the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.Candle.PriceLevels</codeEntityReference>
        property as source data.
       </para>
-      
+      <mediaLink><image placement="left" xlink:href="Gui_ClasterChart"/></mediaLink>   
             <para>
       <legacyBold>Main properties</legacyBold>
       </para>
@@ -38,7 +38,7 @@
   </listItem>
 </list>
       
-<mediaLink><image placement="left" xlink:href="Gui_ClasterChart"/></mediaLink>      
+   
 
 <para>
    An example of using this type of chart is in <legacyItalic>Samples/Common/SampleChart</legacyItalic>. 

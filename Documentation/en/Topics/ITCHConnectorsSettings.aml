@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="35f9c7d1-741e-4721-8deb-1991102c0e28" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+     <para>To work with a connector, you have to specify the <legacyBold>Login</legacyBold> and 
+     <legacyBold>Password</legacyBold>. <legacyBold>Login</legacyBold> and <legacyBold>Password</legacyBold>  
+     are provided by the broker. To get the API access it is recommended to contact the broker.</para>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

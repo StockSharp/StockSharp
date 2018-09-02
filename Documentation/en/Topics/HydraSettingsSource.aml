@@ -1,9 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" revisionNumber="1">
-  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>To set up the market data sources click the <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> button at the appropriate source.</para>
-      <para>Currently the <token>hydra</token> supports following sources:</para>
+    <para>To add a new source on the <legacyBold>General</legacyBold> tab, select <legacyBold>Add => Sources</legacyBold>.</para>
+    				<para>
+					Then the window for selecting data sources appears.</para>
+					<mediaLink>
+						  <image placement="left" xlink:href="hydra_source_add" />
+					</mediaLink>
+    
+      <para>Source settings can be changed in the <legacyBold>Properties</legacyBold> panel, which is located on the right side.</para>
+      <mediaLink> <image placement="left" xlink:href="hydra_setting_source_button" /></mediaLink>
+      
+      <para>At the moment, <token>hydra</token> supports the following sources:</para>
       
       
       <list class="bullet">

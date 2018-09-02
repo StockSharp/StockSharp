@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
      <introduction>
       <para><codeEntityReference>T:StockSharp.Xaml.PortfolioComboBox</codeEntityReference> is the combo box for portfolio selection.</para>
-
+      <mediaLink><image placement="left" xlink:href="Gui_PortfolioComboBox" /></mediaLink>
 	<para>
 		<legacyBold>Main properties</legacyBold>
 	</para>
@@ -18,11 +18,9 @@
 	</list>
       
      	  <para>
-Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC</legacyItalic>.
+Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC</legacyItalic>.
       </para>
-      
-      <mediaLink><image placement="left" xlink:href="Gui_PortfolioComboBox" /></mediaLink>
-      
+            
        <code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="SampleOEC.MainWindow"

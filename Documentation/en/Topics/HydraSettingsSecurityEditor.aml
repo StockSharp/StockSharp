@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4323f740-7b37-47ca-bab1-d540d9c0c4f0" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+			To edit an instrument (for example, when the instrument was not filled with all the necessary data), double click the instrument or click the 
+			<mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> button to open the window in which to perform the necessary settings:
+		</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_security_edit" />
+      </mediaLink>
+      <para>
+			If necessary, the instrument group can be edited. To do this, select the instrument group, and click the 
+			<mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> button.
+		</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_securities_edit" />
+      </mediaLink>
+      <para>
+      		If the selected instrument group has the same values, this field will 
+      		be filled with this value. If the values are different, then this field 
+      		will be empty. For example, two instruments are selected, which both 
+      		have the Price Step value equal to 1, while the lot size of one instrument 
+      		is 10, and the other is 100. Accordingly, the Price Step field will be 1, 
+      		and the Volume Step field will be empty.
+      </para>
+    </introduction>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

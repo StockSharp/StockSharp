@@ -4,8 +4,9 @@
     <introduction>
      <para><codeEntityReference>T:StockSharp.Xaml.PortfolioPickerWindow</codeEntityReference> is the window for selecting a portfolio. 
      The window displays a list of portfolios and information about the cash positions of portfolios.</para>
-
+<mediaLink><image placement="left" xlink:href="GUI_PortfolioPickerWindow" /></mediaLink>
 	<para>
+	
 		<legacyBold>Main properties</legacyBold>
 	</para>
       
@@ -19,10 +20,10 @@
 	</list>
       
      	  <para>
-	Below is the appearance of the component, as well as a code snippet with its use.
+Below is the code snippet with its use. 
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_PortfolioPickerWindow" /></mediaLink>
+      
       
               <code title="C#" language="C#">
               		<![CDATA[

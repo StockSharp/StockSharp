@@ -42,6 +42,13 @@
 		</listItem>
       </list>
        <para><legacyBold>Connection</legacyBold> - connection properties (see <link xlink:href="01a85a46-7510-4385-b81c-348ffb3dfc46">Connection properties</link> section).</para>
+    <para>To configure the source in <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
+you will need the <legacyBold>RSS feed address</legacyBold> (for example, Bloomberg (http://www.bloomberg.com/feed/podcast/etf-report.xml)).
+</para>
+
+<para>This source does not provide a possibility to download instruments. Before starting the data acquisition, it is necessary to select from the available instruments or create new ones, as described in the clause 
+<link xlink:href="47ebc084-6b07-4b69-8f96-ea190110111f" />.
+</para>
     </introduction>
   </developerConceptualDocument>
 </topic>

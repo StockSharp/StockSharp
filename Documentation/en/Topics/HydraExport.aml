@@ -8,70 +8,60 @@
     -->
     <introduction>
       <para>
-		  The <token>hydra</token> allows you to view downloaded data in special windows.
+		  The received <token>hydra</token> мdata can be viewed in special panels.
 	  </para>
 
       <para>
-		  To do this, on the <legacyBold>Common</legacyBold> tab you should click one of the following buttons -
+		  To do this, on the <legacyBold>General</legacyBold> tab, click one of the following buttons:  
+          	<link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">Ticks</link>, 
+          	<link xlink:href="6126cb15-de8b-4bcc-8b81-7354e8894239">Order Books</link>,
+          	<link xlink:href="621927b7-839f-4492-8dbb-162e63d57769">Candles</link>, 
+         	 <link xlink:href="fe4f5992-a496-45bb-82e6-d353b42df894">Order Log</link>,
+          	 <link xlink:href="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99">Level 1</link>, 
+          	 <link xlink:href="243486c1-b9d4-47af-889e-61aaaa670644">News</link>,
+          	 <link xlink:href="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677">Transactions</link>,
+          	 <link xlink:href="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9">Board Options</link>,
+			<link xlink:href="0d15d724-6a2d-46b5-9341-596c9209bbff" />,
+			<link xlink:href="9acae0d2-041e-403a-b04c-de6117c3bb76" />.
 	  </para>
-	  
-	  	
-      <list class="bullet">
-        <listItem>
-          <para>
-          	<link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">Ticks</link> 
-          </para>
-        </listItem>
-        <listItem>
-          <para>
-          	<link xlink:href="6126cb15-de8b-4bcc-8b81-7354e8894239">Order book</link>
-          </para>
-        </listItem>
-        <listItem>
-          <para>
-          	<link xlink:href="621927b7-839f-4492-8dbb-162e63d57769">Candles</link> 
-          </para>
-        </listItem>
-        <listItem>
-          <para>
-          	 <link xlink:href="fe4f5992-a496-45bb-82e6-d353b42df894">Order log</link> 
-          </para>
-        </listItem>
-        <listItem>
-          <para>
-          	 <link xlink:href="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99">Level 1</link> 
-          </para>
-        </listItem>
-        <listItem>
-          <para>
-          	 <link xlink:href="243486c1-b9d4-47af-889e-61aaaa670644">News</link> 
-          </para>
-        </listItem>
-        <listItem>
-          <para>
-          	 <link xlink:href="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677">Transactions</link> 
-          </para>
-        </listItem>
-        <listItem>
-          <para>
-          	 <link xlink:href="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9">Option desk</link> 
-          </para>
-        </listItem>
-      </list> 
       
-      <para>Or right-click on the instrument, select the required data type in the drop-down menu. As it shown on the picture.</para>
-	  
-	  
+ <para>Or, right-click on the desired data type. As it shown on the picture.</para>
 	  <mediaLink>
-		  <image placement="center" xlink:href="hydra_main_start" />
+		  <image placement="center" xlink:href="hydra_view_export" />
 	  </mediaLink>	  
 	  
+	  <para>Each panel contains a general interface of the settings as follows:</para>
+	  
+	  	  <mediaLink>
+		  <image placement="center" xlink:href="hydra_export_00" />
+	  </mediaLink>	
+	  <para>In the top line, you need to select a market data storage and its format (BIN or CSV).</para>
+	      	<para>
+In the bottom line, you need to specify the period for which data will be requested. 
+When you click the Select Instrument button, an instrument selection window appears 
+in which you can select one or several instruments. If several instruments will be 
+selected, then when you later export to Excel or CSV, the program itself will sort 
+the data of different instruments on different files.
+    	</para>
+	<para>Exporting data to <token>excel</token>, xml, bin, txt file formats or to SQL tables is done from the drop-down list:</para>
+    	<mediaLink>
+    		<image placement="center" xlink:href="hydra_export" />
+    	</mediaLink>
 
+    	<para>
+    	When exporting to text format (Txt) files, a window appears in which you can specify the export template as follows:
+    	</para>
 
+<para>
+<legacyBold>{OpenTime:yyyyMMdd};{OpenTime:HHmmss};{OpenPrice};{HighPrice};{LowPrice};{ClosePrice};{TotalVolume}</legacyBold>
+</para>
+<para>where the properties that need to be exported and their order are specified in curly brackets via a semicolon.</para>
+
+	  <mediaLink>
+		  <image placement="center" xlink:href="hyda_export_TSLab_MetaStock" />
+	  </mediaLink>	
     </introduction>
-
     <relatedTopics>
-
     </relatedTopics>
   </developerHowToDocument>
 </topic>

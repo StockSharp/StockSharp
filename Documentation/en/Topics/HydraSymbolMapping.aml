@@ -1,8 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="65b09400-90fa-49f3-8d71-6d4309a33934" revisionNumber="1">
-  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   
     <introduction>
-      <para>TODO</para>
+      <para>The same instrument in different trading systems can be called differently. 
+      It is possible to match the instrument and the connections through which this 
+      instrument will be traded, and specify how it is identified in the external trading 
+      system. This is useful when trading with one instrument on different trading 
+      platforms or through different connections (or brokers). Also, it makes it 
+      possible to get data from one connection and make trades through another connection.</para>
+      <para>You can match instruments and connections by clicking the <legacyBold>Instruments and Connections</legacyBold> button on the <legacyBold>Instruments</legacyBold> panel.</para>
+<mediaLink>
+<image xlink:href="Designer_Security_mapping_01"/>
+</mediaLink>
+<para>In the appeared window, clicking the <mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline> 
+button, a new line will be added.
+It is necessary to select the connection in the <legacyBold>Connection</legacyBold> column from the drop-down 
+list. Specify the instrument code and platform code in the <legacyBold>Instrument code</legacyBold> and <legacyBold>Platform code </legacyBold>
+columns. You have to specify the instrument code and platform code as specified in the external 
+trading system in the columns <legacyBold>Instrument code in the adapter</legacyBold> and <legacyBold>Platform code in the adapter</legacyBold>.
+</para>
+
+
+
     </introduction>
+   
+    <relatedTopics>
+     
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

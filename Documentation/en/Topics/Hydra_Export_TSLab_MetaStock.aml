@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e8991383-328f-4bf6-b046-6ab823c8c1de" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To export data to MetaStock format files, select the Txt format from the drop-down list:</para>
+    	<mediaLink>
+    		<image placement="center" xlink:href="hydra_export" />
+    	</mediaLink>
+
+    	<para>
+    	When exporting to text format (Txt) files, a window appears:
+    	</para>
+    	<mediaLink>
+    		<image placement="center" xlink:href="hyda_export_TSLab_MetaStock" />
+    	</mediaLink>
+    	    	<para>
+    	In which you need to specify the export template, where the curly brackets indicate the properties that need to be exported, and their order:
+    	</para>
+        <code >
+<![CDATA[
+{SecurityId.SecurityCode},5,{OpenTime:yyyyMMdd},{OpenTime:HHmmss},{OpenPrice},{HighPrice},{LowPrice},{ClosePrice},{TotalVolume}
+	  				]]>
+				   </code>    	  	
+    	    	<para>
+    	In the example, the timeframe of the candles in 5 minutes is indicated in the second place.
+    	</para>
+
+    	    	<para>
+    	Also, the first line (Header) should be set in the file:
+    	</para>
+        <code >
+<![CDATA[
+<TICKER>,<PER>,<DATE>,<TIME>,<OPEN>,<HIGH>,<LOW>,<CLOSE>,<VOL>
+	  				]]>
+				   </code>    
+
+    </introduction>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
