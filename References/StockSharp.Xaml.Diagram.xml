@@ -3516,6 +3516,16 @@
             The method is called when the data type is changed.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnInputSocketConnected">
+      <summary>
+            The method is called when the input socket is connected.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnInputSocketDisconnected">
+      <summary>
+            The method is called when the input socket is disconnected.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
             The method is called at the processing of the new incoming value.
@@ -3572,6 +3582,12 @@
       <summary>
             The method is called when the data type is changed.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnInputSocketConnected">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnInputSocketDisconnected">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnReseted">
       <summary>

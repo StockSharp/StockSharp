@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
 * (feature) SampleSmartCandles removed.
 * (bug) SmartCOM. Fix candles and historical ticks requests.

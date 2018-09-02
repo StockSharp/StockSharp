@@ -846,7 +846,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartBandElement.Style">
       <summary>
-            The band drawing style. The default is <see cref="F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.Band" />. Can also be <see cref="F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.BandOneValue" />."/&gt;
+            The band drawing style. The default is <see cref="F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.Band" />. Can also be <see cref="F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.BandOneValue" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartBandElement.Line1">
@@ -2507,7 +2507,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Values">
       <summary>
-            Point line that displays source volatility values.
+            Points that displays source volatility values.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Smile">

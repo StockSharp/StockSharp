@@ -761,7 +761,7 @@ M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.OnStart/summar
 T:StockSharp.Xaml.Diagram.Elements.MathDiagramElement/summary;Str3122
 P:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.IconName/summary;DocStr9214
-P:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.Expression/summary;DocStr10105
+P:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.Expression/summary;Expression
 M:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.OnStart/summary;DocStr7892
 T:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement/summary;DocStr9778
@@ -897,6 +897,8 @@ M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.#ctor(System.String)/pa
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.SetTypes(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Diagram.DiagramSocketType})/summary;DocStr8053
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.SetTypes(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Diagram.DiagramSocketType})/param/types;Str2133
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.TypeChanged/summary;DocStr8054
+M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnInputSocketConnected/summary;DocStr10421
+M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnInputSocketDisconnected/summary;DocStr10422
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)/summary;DocStr7882
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)/param/value;DocStr7883
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.UpdateOutputSocketType/summary;DocStr9298
@@ -910,6 +912,8 @@ P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.RaiseValueOnStart/summ
 P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.Value/summary;DocStr9742
 M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.TypeChanged/summary;DocStr8054
+M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnInputSocketConnected/inheritdoc;DocStr8459
+M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnInputSocketDisconnected/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnReseted/summary;DocStr7896
 M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnStop/summary;DocStr7894
