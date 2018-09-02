@@ -6,6 +6,7 @@
       	<codeEntityReference>T:StockSharp.Xaml.ContinuousSecurityWindow</codeEntityReference> -  is a visual editor for creating <legacyItalic>continuous</legacyItalic> 
       	(<codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference>) instruments. See  <link xlink:href="0f7cceee-bb7c-4f24-a266-ed900cb8e557"/>.
       </para>
+      <mediaLink><image placement="left" xlink:href="HydraGluingCSCustom" /></mediaLink>
       <para>
 This component includes:
   	 </para>
@@ -62,10 +63,10 @@ Buttons for adding/removing instruments.
 		</list>
 		
 	  <para>
-Below is the appearance of the component and the code snippet with its use.
+Below is the code snippet with its use. 
       </para>
       
-      <mediaLink><image placement="left" xlink:href="HydraGluingCSCustom" /></mediaLink>
+      
 
 		
   <code title="C#" language="C#">

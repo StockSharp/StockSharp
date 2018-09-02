@@ -11,6 +11,7 @@
        property as source data.
        
       </para>
+                <mediaLink><image placement="left" xlink:href="Gui_BoxChart"/></mediaLink>
       <para>
       <legacyBold>Main properties</legacyBold>
       </para>
@@ -61,7 +62,7 @@
   </listItem>
 </list>
       
-          <mediaLink><image placement="left" xlink:href="Gui_BoxChart"/></mediaLink>
+
       
       <para>
    An example of using this type of chart is in <legacyItalic>Samples/Common/SampleChart</legacyItalic>. 
