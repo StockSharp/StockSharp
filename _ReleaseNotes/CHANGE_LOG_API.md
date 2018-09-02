@@ -27,6 +27,7 @@ StockSharp API Change log
 * (feature) Charting. Volatility smile chart. Line interpolation.
 * (feature) Charting. Equity and option charts - change drawing style possibility.
 * (feature) Charting. Annotations creates from code.
+* (feature) UserInfoMessage. The message provided user's information.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.

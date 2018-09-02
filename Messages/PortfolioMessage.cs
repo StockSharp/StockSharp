@@ -77,6 +77,15 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string BoardCode { get; set; }
 
+		/// <summary>
+		/// User id.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str3725Key)]
+		[DescriptionLoc(LocalizedStrings.UserIdKey)]
+		[MainCategory]
+		public string User { get; set; }
+
 		///// <summary>
 		///// Portfolio state.
 		///// </summary>
@@ -124,10 +133,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",Name={PortfolioName}";
@@ -156,6 +162,7 @@ namespace StockSharp.Messages
 			destination.IsSubscribe = IsSubscribe;
 			//destination.State = State;
 			destination.TransactionId = TransactionId;
+			destination.User = User;
 
 			this.CopyExtensionInfo(destination);
 

@@ -52,6 +52,15 @@ namespace StockSharp.Messages
 		public string BoardCode { get; set; }
 
 		/// <summary>
+		/// User id.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str3725Key)]
+		[DescriptionLoc(LocalizedStrings.UserIdKey)]
+		[MainCategory]
+		public string User { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioChangeMessage"/>.
 		/// </summary>
 		public PortfolioChangeMessage()
@@ -70,7 +79,8 @@ namespace StockSharp.Messages
 				LocalTime = LocalTime,
 				PortfolioName = PortfolioName,
 				BoardCode = BoardCode,
-				ServerTime = ServerTime
+				ServerTime = ServerTime,
+				User = User,
 			};
 
 			msg.Changes.AddRange(Changes);
@@ -79,10 +89,7 @@ namespace StockSharp.Messages
 			return msg;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",P={PortfolioName},Changes={Changes.Select(c => c.ToString()).Join(",")}";
