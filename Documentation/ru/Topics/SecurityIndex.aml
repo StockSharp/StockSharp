@@ -20,6 +20,8 @@
 и сам <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
+ConfigManager.RegisterService<ICompilerService>(new RoslynCompilerService());
+
 private Security _instr1;
 private Security _instr2;
 
