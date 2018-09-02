@@ -9,7 +9,7 @@ offer and bid for Put and Call options.
       </para>
       <para>
 Below is the <legacyBold>OptionCalculator</legacyBold> example, which uses this component. The source code 
-of the example can be found in the <legacyBold>Samples/Options/OptionCalculator</legacyBold> folder.</para>
+of the example can be found in the <legacyItalic>Samples\Options\SampleOptionQuoting</legacyItalic> folder.</para>
       <mediaLink><image placement="left" xlink:href="option_desk" /></mediaLink>
     </introduction>
     
