@@ -30,6 +30,7 @@ StockSharp API Change log
 * (feature) UserInfoMessage. The message provided user's information.
 * (feature) ExpirationContinuousSecurity. Moved implementation from ContinuousSecurity. ContinuousSecurity is abstract.
 * (bug) FinamHistorySource. Fix stocks lookup.
+* (feature) Charting. OptionVolitilitySmileChart. Combine approximated lines + points in legend.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
