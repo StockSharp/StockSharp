@@ -208,7 +208,7 @@ public class TickCandleBuilder : CandleBuilder<TickCandleMessage>
 				
 			<step>
 				<content>
-<para>Затем необходимо получить <codeEntityReference>T:StockSharp.Algo.Candles.Compression.CandleBuilderProvider</codeEntityReference> ииз подключения и добавить 
+<para>Затем необходимо получить <codeEntityReference>T:StockSharp.Algo.Candles.Compression.CandleBuilderProvider</codeEntityReference> из подключения и добавить 
 в него <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference>:</para>
 <alert class="caution"><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference>, 
 как источник свечей, стандартно присутствует в <codeEntityReference>T:StockSharp.Algo.Candles.Compression.CandleBuilderProvider</codeEntityReference>.
