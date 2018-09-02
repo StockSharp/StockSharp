@@ -43,13 +43,13 @@
 			</step>
 			<step>
 				<content>
-					<para>3.	The next step is to configure the source. The source 
+					<para>The next step is to configure the source. The source 
 					is configured in the right panel. Detailed setup is described in <link xlink:href="f005431b-3a1b-49c2-a389-f1d4e9756f45" />.</para>
 				</content>
 			</step>
 		  	<step>
 				<content>
-					  <para>4.	To enable the source to download data after clicking 
+					  <para>To enable the source to download data after clicking 
 					  the <legacyBold>Start</legacyBold> button, it must be enabled. 
 					  To do this, select the source icon in the left panel and use 
 					  the button <mediaLinkInline><image xlink:href="hydra_source_on_off"/></mediaLinkInline> 
@@ -60,7 +60,7 @@
 			<step>
 				<content>
 					<para>
-						5.	In the central part, the panels of the added sources 
+						In the central part, the panels of the added sources 
 						will open, where the list of instruments is displayed. If the 
 						panel is closed, then to open it, double click the source logo 
 						in the list on the left side of the program. The data will be 
@@ -158,7 +158,7 @@
 			<step>
 				<content>
 					<para>
-						8.	When all the settings are applied, and the instruments 
+						When all the settings are applied, and the instruments 
 						are selected, on the <legacyBold>General</legacyBold> tab, you can click the <legacyBold>Start</legacyBold> button. 
 						This will launch the active sources, and they will start downloading 
 						the data. The work process can be observed in the 
