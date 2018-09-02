@@ -8,7 +8,7 @@
       <codeEntityReference qualifyHint="true">E:StockSharp.Xaml.OrderGrid.OrderRegistering</codeEntityReference>,
       <codeEntityReference qualifyHint="true">E:StockSharp.Xaml.OrderGrid.OrderReRegistering</codeEntityReference> or  
       <codeEntityReference qualifyHint="true">E:StockSharp.Xaml.OrderGrid.OrderCanceling</codeEntityReference> respectively.</para>
-      
+       <mediaLink><image placement="left" xlink:href="GUI_OrderGrid" /></mediaLink>
 	<alert class="note">
   		<para>The operation itself (registration, replacement, cancellation) is not performed. The appropriate code must be written in the event handlers independently.</para>
 	</alert>
@@ -44,10 +44,10 @@
 
       
      	  <para>
-Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC</legacyItalic>.
+Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_OrderGrid" /></mediaLink>
+     
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

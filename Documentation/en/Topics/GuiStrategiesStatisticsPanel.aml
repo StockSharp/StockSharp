@@ -5,6 +5,7 @@
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.StrategiesStatisticsPanel</codeEntityReference> - is the table to display parameters and statistics of the strategies.
       </para>
+      <mediaLink><image placement="left" xlink:href="GUI_StrategiesStatisticsPanel" /></mediaLink>
       <para>
        <legacyBold>Main properties and methods</legacyBold>
       </para>
@@ -29,10 +30,10 @@
 		</list>
 		
 	  <para>
-Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/Testing/SampleHistoryTestingParallel</legacyItalic>.
+Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/Testing/SampleHistoryTestingParallel</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_StrategiesStatisticsPanel" /></mediaLink>
+      
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

@@ -5,7 +5,7 @@
     <mediaLink><image placement="center" xlink:href="Sterling_loging"/></mediaLink>
 <para>Для работы с коннектором <legacyBold>Sterling</legacyBold> необходимо использовать локальный 
 терминал <legacyBold>Sterling Trader Pro</legacyBold>, который устанавливается 
-непосредственно на компьютер с которого будет проводиться подключение. 
+непосредственно на компьютер, с которого будет проводиться подключение. 
 
 Для подключения к <legacyBold>Sterling Trader Pro</legacyBold> необходимо 
 указать <legacyBold>Логин</legacyBold> и <legacyBold>Пароль</legacyBold>.

@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-     		Для подключения к сервису маркет данных <token>quantfeed_external</token> необходимо использовать
+     		Для подключения к сервису маркет-данных <token>quantfeed_external</token> необходимо использовать
 		<codeEntityReference qualifyHint="false">T:StockSharp.QuantHouse.QuantFeedTrader</codeEntityReference>.
 	</para>
     </introduction>

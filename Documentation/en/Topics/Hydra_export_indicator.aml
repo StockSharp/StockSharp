@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0d15d724-6a2d-46b5-9341-596c9209bbff" revisionNumber="1">
+ <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>In the panel that appears, select the instrument, the required time interval, 
+      specify the data type from which the indicator will be built, set the indicator and 
+      its parameters, and then click the <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline> button:</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_export_indicator" />
+      </mediaLink>
+  
+	     
+	<para>The obtained indicator values can be viewed on the chart or exported to the <token>excel</token>, xml, sql, bin or txt formats. This is done using the drop-down list:</para>
+    	<mediaLink>
+    		<image placement="center" xlink:href="hydra_export" />
+    	</mediaLink>
+
+</introduction>
+  </developerWalkthroughDocument>
+</topic>

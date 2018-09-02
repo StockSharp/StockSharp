@@ -36,6 +36,9 @@
           <legacyBold>Logging level</legacyBold> - logging level.
 		</listItem>
       </list>
+<para>Before starting the data acquisition, it is necessary to download and select the necessary instruments, as described in the clause 
+<link xlink:href="47ebc084-6b07-4b69-8f96-ea190110111f" />.
+</para>
     </introduction>
   </developerConceptualDocument>
 </topic>

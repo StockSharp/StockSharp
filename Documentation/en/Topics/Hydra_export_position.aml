@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="9acae0d2-041e-403a-b04c-de6117c3bb76" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>In the window that appears, select the instrument, the required time interval and click the <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline> button:</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_export_position" />
+      </mediaLink>
+      
+	<para>Using the context menu, various settings for the position table can be configured: grouping of rows, available columns, display format, etc.</para>
+	 <mediaLink>
+       <image placement="center" xlink:href="hydra_export_context" />
+     </mediaLink>
+      
+	<para>The found positions can be exported to <token>excel</token>, xml, sql, bin or txt format files. This is done using the drop-down list:</para>
+    	<mediaLink>
+    		<image placement="center" xlink:href="hydra_export" />
+    	</mediaLink>
+
+</introduction>
+  </developerWalkthroughDocument>
+</topic>

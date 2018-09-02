@@ -372,7 +372,7 @@
       <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Настройки тестирования" />
     </Topic>
     <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Пользовательский интерфейс (GUI)">
-      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Графики">
+      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" isExpanded="true" title="Графики">
         <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Свечной график" />
         <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="График-панель" />
         <Topic id="da275a7f-ff6f-4dc7-8451-bf4fc22624a6" visible="True" title="График эквити" />
@@ -409,7 +409,7 @@
         <Topic id="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4" visible="True" title="Собственные сделки" />
         <Topic id="cfc729e7-65e7-4ec3-b215-57031be290c7" visible="True" title="Ввод новой заявки" />
         <Topic id="94e71651-8964-41fc-866d-3ff65f513440" visible="True" title="Ввод стоп-заявки" />
-        <Topic id="076b8019-1f9f-4dbf-bd32-1abdac5fd7fe" visible="True" title="Таблица доступных рыночных данных" />
+        <Topic id="076b8019-1f9f-4dbf-bd32-1abdac5fd7fe" visible="True" isSelected="true" title="Таблица доступных рыночных данных" />
         <Topic id="2a6b8dc6-2935-4fc7-8295-243cafcfd1d4" visible="True" title="Панель Купить/Продать" />
       </Topic>
       <Topic id="36095948-4925-4809-b621-e3188d80b739" visible="True" title="Стратегии">
@@ -454,7 +454,7 @@
         <Topic id="8e7a5377-4c7c-41fb-bd2c-42b699d9d36e" visible="True" title="Level 1" />
         <Topic id="48a67112-c623-4227-89ad-a5d39e36be76" visible="True" title="Купить/Продать" />
         <Topic id="92ccb73a-d49d-4d2a-aa31-1c8ba915be4b" visible="True" title="Стакан" />
-        <Topic id="9ff6005e-3622-498e-929f-3d9d141d6a69" visible="True" isSelected="true" title="График" />
+        <Topic id="9ff6005e-3622-498e-929f-3d9d141d6a69" visible="True" title="График" />
         <Topic id="b16dd47a-ce5c-4e77-9208-8ece5722d091" visible="True" title="График П/У" />
         <Topic id="f8ff7018-ed36-4391-863f-8ab55296c0e0" visible="True" title="Сделки" />
         <Topic id="f1ef5036-ad9c-4a19-b7c3-33876b98124b" visible="True" title="Заявки" />

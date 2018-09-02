@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="3ee05287-d25f-4967-9dc0-26d9a5a9578a" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    
+   <para>There are two ways to work with the <legacyBold>CQG</legacyBold> connector:</para>
+<para>1. <legacyBold>CQG COM</legacyBold>, connection through the local <legacyBold>CQG Integrated Client</legacyBold>, 
+which is installed directly on the computer from which the connection will be made. <legacyBold>CQG Integrated Client</legacyBold> can be downloaded  
+<ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>на сайте разработчика.</ddue:linkText>
+    <ddue:linkUri>http://www.cqg.com/products/cqg-integrated-client</ddue:linkUri>
+  </ddue:externalLink>
+To connect to the <legacyBold>CQG Integrated Client</legacyBold>, you have to specify 
+the <legacyBold>Login</legacyBold> and <legacyBold>Password</legacyBold>.
+</para>
+<para>2. <legacyBold>CQG Continuum</legacyBold>, connection directly to the server, 
+to connect you have to specify the <legacyBold>Login</legacyBold>, <legacyBold>Password</legacyBold> and <legacyBold>server address</legacyBold>.</para>
+<para><legacyBold>Login</legacyBold>, <legacyBold>Password</legacyBold> and <legacyBold>server address</legacyBold> are provided by the broker. To get the API access it is recommended to contact the broker.</para>
+
+   
+    </introduction>
+  </developerConceptualDocument>
+</topic>

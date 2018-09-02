@@ -217,6 +217,64 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Hydra_Export_TSLab_MetaStock.aml" />
+    <None Include="Topics\Designer_Warm_Up_mode.aml" />
+    <None Include="Topics\Hydra_export_position.aml" />
+    <None Include="Topics\Hydra_export_indicator.aml" />
+    <None Include="Topics\HydraUpdate.aml" />
+    <None Include="Topics\API_GUI_Thems.aml" />
+    <None Include="Topics\API_GUI_AlertsWindow.aml" />
+    <None Include="Topics\API_GUI_CommissionWindow.aml" />
+    <None Include="Topics\API_GUI_RiskWindow.aml" />
+    <None Include="Topics\API_UI_ConnectorWindow.aml" />
+    <None Include="Topics\API_GUI_BuySellPanel.aml" />
+    <None Include="Topics\API_GUI_MarketDataGrid.aml" />
+    <None Include="Topics\API_GUI_Trading_From_Chart.aml" />
+    <None Include="Topics\FIXConnectorsSettings.aml" />
+    <None Include="Topics\FXCMConnectorsSettings.aml" />
+    <None Include="Topics\OandaConnectorsSettings.aml" />
+    <None Include="Topics\LMAXConnectorsSettings.aml" />
+    <None Include="Topics\QuantFEEDConnectorsSettings.aml" />
+    <None Include="Topics\BarChartConnectorsSettings.aml" />
+    <None Include="Topics\ITCHConnectorsSettings.aml" />
+    <None Include="Topics\RithmicConnectorsSettings.aml" />
+    <None Include="Topics\ETradeConnectorsSettings.aml" />
+    <None Include="Topics\BlackwoodConnectorsSettings.aml" />
+    <None Include="Topics\OpenECryConnectorsSettings.aml" />
+    <None Include="Topics\SterlingConnectorsSettings.aml" />
+    <None Include="Topics\IQFeedConnectorsSettings.aml" />
+    <None Include="Topics\CQGConnectorsSettings.aml" />
+    <None Include="Topics\BittrexConnectorsSettings.aml" />
+    <None Include="Topics\BitStampConnectorsSettings.aml" />
+    <None Include="Topics\BitMEXConnectorsSettings.aml" />
+    <None Include="Topics\BithumbConnectorsSettings.aml" />
+    <None Include="Topics\BitfinexConnectorsSettings.aml" />
+    <None Include="Topics\BitexbookConnectorsSettings.aml" />
+    <None Include="Topics\YobitConnectorsSettings.aml" />
+    <None Include="Topics\PoloniexConnectorsSettings.aml" />
+    <None Include="Topics\OKExConnectorsSettings.aml" />
+    <None Include="Topics\OKCoinConnectorsSettings.aml" />
+    <None Include="Topics\LiquiConnectorsSettings.aml" />
+    <None Include="Topics\KucoinConnectorsSettings.aml" />
+    <None Include="Topics\KrakenConnectorsSettings.aml" />
+    <None Include="Topics\HuobiConnectorsSettings.aml" />
+    <None Include="Topics\HitBTCConnectorsSettings.aml" />
+    <None Include="Topics\GDAXConnectorsSettings.aml" />
+    <None Include="Topics\EXMOConnectorsSettings.aml" />
+    <None Include="Topics\DeribitConnectorsSettings.aml" />
+    <None Include="Topics\CryptopiaConnectorsSettings.aml" />
+    <None Include="Topics\CoinExchangeConnectorsSettings.aml" />
+    <None Include="Topics\CoincheckConnectorsSettings.aml" />
+    <None Include="Topics\CoinbaseConnectorsSettings.aml" />
+    <None Include="Topics\CexConnectorsSettings.aml" />
+    <None Include="Topics\BtceConnectorsSettings.aml" />
+    <None Include="Topics\LivecoinConnectorsSettings.aml" />
+    <None Include="Topics\BinanceConnectorsSettings.aml" />
+    <None Include="Topics\Connectors_setting.aml" />
+    <None Include="Topics\Designer_GluingData.aml" />
+    <None Include="Topics\Designer_create_index.aml" />
+    <None Include="Topics\HydraSettingsSecurityEditor.aml" />
+    <None Include="Topics\Hydra_Creation_tool.aml" />
     <None Include="Topics\Terminal_Trades.aml" />
     <None Include="Topics\Terminal_Teamwork.aml" />
     <None Include="Topics\Terminal_Tape_Trades.aml" />
@@ -3276,6 +3334,114 @@
     <Image Include="Art\Terminal_Workspace_00.png">
       <ImageId>Terminal_Workspace_00</ImageId>
       <AlternateText>Terminal Workspace 00</AlternateText>
+    </Image>
+    <Image Include="Art\iQFeedIQConnectLogin.png">
+      <ImageId>iQFeedIQConnectLogin</ImageId>
+      <AlternateText>iQFeedIQConnect Login</AlternateText>
+    </Image>
+    <Image Include="Art\iQFeedIQLinkLauncher.png">
+      <ImageId>iQFeedIQLinkLauncher</ImageId>
+      <AlternateText>iQFeedIQLink Launcher</AlternateText>
+    </Image>
+    <Image Include="Art\APIConnectorsSettingsHydraWindow.png">
+      <ImageId>APIConnectorsSettingsHydraWindow</ImageId>
+      <AlternateText>APIConnectors Settings Hydra Window</AlternateText>
+    </Image>
+    <Image Include="Art\APIConnectorsSettingsWindow.png">
+      <ImageId>APIConnectorsSettingsWindow</ImageId>
+      <AlternateText>APIConnectors Settings Window</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Trading_from_chart.png">
+      <ImageId>API_GUI_Trading_from_chart</ImageId>
+      <AlternateText>API GUI Trading from chart</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_MarketDataGrid.png">
+      <ImageId>API_GUI_MarketDataGrid</ImageId>
+      <AlternateText>API GUI Market Data Grid</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_BuySell.png">
+      <ImageId>API_GUI_BuySell</ImageId>
+      <AlternateText>API GUI Buy Sell</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_ConnectorWindow.png">
+      <ImageId>API_GUI_ConnectorWindow</ImageId>
+      <AlternateText>API GUI Connector Window</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_RiskWindow.png">
+      <ImageId>API_GUI_RiskWindow</ImageId>
+      <AlternateText>API GUI Risk Window</AlternateText>
+    </Image>
+    <Image Include="Art\API_ComissionWindow.png">
+      <ImageId>API_ComissionWindow</ImageId>
+      <AlternateText>API Comission Window</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_AlertWindow.png">
+      <ImageId>API_GUI_AlertWindow</ImageId>
+      <AlternateText>API GUI Alert Window</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Thems_01.png">
+      <ImageId>API_GUI_Thems_01</ImageId>
+      <AlternateText>API GUI Thems 01</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Thems_02.png">
+      <ImageId>API_GUI_Thems_02</ImageId>
+      <AlternateText>API GUI Thems 02</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_about.png">
+      <ImageId>hydra_about</ImageId>
+      <AlternateText>hydra about</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_update.png">
+      <ImageId>hydra_update</ImageId>
+      <AlternateText>hydra update</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_Quick_start_02.png">
+      <ImageId>hydra_Quick_start_02</ImageId>
+      <AlternateText>hydra Quick start 02</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_Quick_start_01.png">
+      <ImageId>hydra_Quick_start_01</ImageId>
+      <AlternateText>hydra Quick start 01</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_setting_source_button.png">
+      <ImageId>hydra_setting_source_button</ImageId>
+      <AlternateText>hydra setting source button</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_QuantFEED.png">
+      <ImageId>hydra_settings_QuantFEED</ImageId>
+      <AlternateText>hydra settings QuantFEED</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_00.png">
+      <ImageId>hydra_export_00</ImageId>
+      <AlternateText>hydra export 00</AlternateText>
+    </Image>
+    <Image Include="Art\hyda_export_TSLab_MetaStock.png">
+      <ImageId>hyda_export_TSLab_MetaStock</ImageId>
+      <AlternateText>hyda export TSLab Meta Stock</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_indicator.png">
+      <ImageId>hydra_export_indicator</ImageId>
+      <AlternateText>hydra export indicator</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_position.png">
+      <ImageId>hydra_export_position</ImageId>
+      <AlternateText>hydra export position</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_securitiesPanel_00.png">
+      <ImageId>hydra_securitiesPanel_00</ImageId>
+      <AlternateText>hydra securities Panel 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_import.png">
+      <ImageId>hydra_tasks_import</ImageId>
+      <AlternateText>hydra tasks import</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Stopping_point_02.png">
+      <ImageId>Designer_Stopping_point_02</ImageId>
+      <AlternateText>Designer Stopping point 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Warm_up_mode_00.png">
+      <ImageId>Designer_Warm_up_mode_00</ImageId>
+      <AlternateText>Designer Warm up mode 00</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

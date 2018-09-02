@@ -5,7 +5,7 @@
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.MarketDepthControl</codeEntityReference> - is a graphical component for displaying an order book. The component allows you to display quotes and own orders.
       </para>
-      
+      <mediaLink><image placement="left" xlink:href="GUI_MarketDepthControl" /></mediaLink>
             <para>
        <legacyBold>Main properties and methods</legacyBold>
       </para>
@@ -33,10 +33,10 @@
 		</list>
 		
 	  <para>
-Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/BarChart/SampleBarChart</legacyItalic>.
+Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/BarChart/SampleBarChart</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_MarketDepthControl" /></mediaLink>
+      
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

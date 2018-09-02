@@ -19,6 +19,8 @@ is the index built from a combination of several instruments through the <codeEn
 and in the <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> itself:</para>
             				<code language="C#">
             				<![CDATA[
+ConfigManager.RegisterService<ICompilerService>(new RoslynCompilerService());
+
 private Security _instr1;
 private Security _instr2;
 

@@ -52,7 +52,15 @@
           <legacyBold>Logging level</legacyBold> - logging level.
 		</listItem>
       </list>
-		
+		<para>In addition to the source settings in 
+<link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" />, 
+the server mode should be configured, as described in the clause 
+<link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" />.
+</para>
+
+<para>Before starting the data acquisition, it is necessary to download and select the necessary instruments, as described in the clause 
+<link xlink:href="47ebc084-6b07-4b69-8f96-ea190110111f" />.
+</para>
     </introduction>
 	</developerConceptualDocument>
 </topic>

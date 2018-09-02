@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0e99f0d7-9d8a-4bb5-a914-6461677b267b" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+        
+      <para>
+      	<codeEntityReference>T:StockSharp.Xaml.ConnectorWindow</codeEntityReference> - A special window for configuring the connector connection adapters.
+      </para>
+      <mediaLink><image placement="left" xlink:href="API_GUI_ConnectorWindow" /></mediaLink>
+      <para>
+      You should call this window through the 
+      <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference>, 
+      extension method to which the <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
+      and the parent window are passed. If the configuration is successful, the 
+      <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference>
+      extension method will return the <legacyBold>"True"</legacyBold> value. Below is the code to call the connector connection settings window and saving the settings to a file.
+      </para>
+      
+      <code title="C#" language="C#">
+<![CDATA[
+		private void Setting_Click(object sender, RoutedEventArgs e)
+		{
+			if (_connector.Configure(this))
+			{
+				new XmlSerializer<SettingsStorage>().Serialize(_connector.Save(), _connectorFile);
+			}
+		}
+	  				]]>
+				   </code>
+
+    </introduction>
+   </developerConceptualDocument>
+</topic>

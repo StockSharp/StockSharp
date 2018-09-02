@@ -38,7 +38,7 @@
 вкладке <legacyBold>Эмуляция</legacyBold> в группе <legacyBold>Компоненты</legacyBold>.</para></listItem>
   <listItem><para>Панель <legacyBold>Свойства</legacyBold> по умолчанию свернута справа во 
 вкладки стратегии. На панели <legacyBold>Свойства</legacyBold> можно установить 
-общие настройки <legacyBold>Эмуляции</legacyBold>. Например <legacyBold>Формат хранилища 
+общие настройки <legacyBold>Эмуляции</legacyBold>. Например, <legacyBold>Формат хранилища 
 маркет-данных</legacyBold> можно установить <legacyBold>BIN</legacyBold> или <legacyBold>CSV</legacyBold>, в зависимости от 
 формата файлов выбранного хранилища. Тип данных Ticks или Candles. При выботе Ticks 
 свечи будут формироваться из тиков <link xlink:href="31a208d0-d543-47aa-8008-389c07e1e8d4" />.</para></listItem>

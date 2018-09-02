@@ -9,7 +9,7 @@
 						  <image placement="left" xlink:href="hydra_source_add" />
 					</mediaLink>
     
-      <para>Настройки источников можно изменить в панели <legacyBold>Свойства</legacyBold> которая расположена с правой стороны.</para>
+      <para>Настройки источников можно изменить в панели <legacyBold>Свойства</legacyBold>, которая расположена с правой стороны.</para>
       <mediaLink> <image placement="left" xlink:href="hydra_setting_source_button" /></mediaLink>
       
       <para>На данный момент <token>hydra</token> поддерживает следующие источники:</para>

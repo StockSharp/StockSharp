@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="5a43d423-1c1f-470a-b32f-92c24023de2c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для работы с коннектором <legacyBold>SmartCOM</legacyBold>  необходимо использовать локальный 
+терминал <legacyBold>SMARTcom </legacyBold> 4-ой версии (x86 или x64 зависит от конфигкрации компьютера), который устанавливается 
+непосредственно на компьютер с которого будет проводиться подключение. SMARTcom можно скачать 
+<ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>на сайте разработчика.</ddue:linkText>
+    <ddue:linkUri>https://iticapital.ru/software/hft-algo-software/smartcom/</ddue:linkUri>
+  </ddue:externalLink>
+
+Для подключения к <legacyBold>SMARTcom </legacyBold> необходимо 
+указать <legacyBold>Логин</legacyBold> и <legacyBold>Пароль</legacyBold>.
+</para>
+<para> <legacyBold>Логин</legacyBold>, 
+<legacyBold>Пароль</legacyBold> предоставляются брокером. Для получения API доступа рекомендуется обратиться к брокеру.
+</para>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

@@ -6,7 +6,7 @@
       	<codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference> - the table for editing object properties. The component includes a set of additional editors for system types and <token>stocksharp</token> types.
       	
       	</para>
-      	     
+      	     <mediaLink><image placement="left" xlink:href="GUI_PropertyDataGridEx" /></mediaLink>
       <para>
       <codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference> has its own editors for the following types:
       </para>
@@ -105,10 +105,10 @@
 		</list>
 		
 	  <para>
-Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/Fix/SampleFix</legacyItalic>.
+Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/Fix/SampleFix</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_PropertyDataGridEx" /></mediaLink>
+      
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

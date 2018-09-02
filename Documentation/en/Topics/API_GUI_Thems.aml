@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b2d8d1c3-b486-4e4c-bc60-aaf6593fdbec" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <introduction>
+  <para>For all S# graphic elements, there are several different themes. Below are the two most popular themes.</para>
+  <mediaLink>
+<image placement="center" xlink:href="API_GUI_Thems_01"/>
+</mediaLink>
+	  <mediaLink>
+<image placement="center" xlink:href="API_GUI_Thems_02"/>
+</mediaLink>
+<para>To install the application theme, just write one line. For example, to set the VisualStudio 2017 dark theme, you have to specify the line:</para>
+  <code title="C#" language="C#">
+<![CDATA[
+...                 
+ApplicationThemeHelper.ApplicationThemeName = Theme.VS2017DarkName;
+...
+]]>
+                  	</code>
+  <para>Since all S# graphics elements are based on 
+  <legacyBold>DevExpress</legacyBold> graphic elements, you need to add the appropriate
+  <legacyBold>DevExpress</legacyBold> libraries 
+  (<legacyBold>DevExpress.Xpf.Core</legacyBold>, <legacyBold>DevExpress.Xpf.Themes.VS2017Dark</legacyBold>, etc.)</para>
+  <para></para>
+	  
+    </introduction>
+    
+  </developerWalkthroughDocument>
+</topic>

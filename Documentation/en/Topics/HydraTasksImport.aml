@@ -1,6 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="ec33258b-c0bb-4f2b-bef3-368e607a92a4" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    TODO
+    <introduction>
+      <para>The task performs automatic import of exchange data from files in the specified directory according to the specified file mask.</para>
+
+    	    <mediaLink>
+        		<image placement="left" xlink:href="hydra_tasks_import" />
+      		</mediaLink>
+
+<para>At the bottom of the panel, you can select the instruments by which data will be imported, as well as the data type to import.</para>
+      <para><legacyBold>Import (auto)</legacyBold></para>
+    <list class="bullet">
+        <listItem>
+			<legacyBold>Settings</legacyBold> - settings for import from CSV.
+		</listItem>
+		<listItem>
+ 		    <legacyBold>Data directory</legacyBold> - data directory.
+		</listItem>
+		<listItem>
+ 		    <legacyBold>The file mask</legacyBold> - the file mask that is used when scanning the directory. For example, candles*.csv.
+		</listItem>
+		<listItem>
+			<legacyBold>Subdirectories</legacyBold> - include subdirectories.
+		</listItem>
+		<listItem>
+			<legacyBold>Column separator</legacyBold> - column separator. Tabulation is denoted by TAB.
+		</listItem>
+		<listItem>
+			<legacyBold>Indent from the beginning</legacyBold> - the number of lines to skip from the beginning of the file (if they contain meta information).
+		</listItem>
+		<listItem>
+			<legacyBold>Time zone</legacyBold> - the time zone.
+		</listItem>
+	</list>
+		
+	<para><legacyBold>Basic</legacyBold></para>
+		<list class="bullet">
+        <listItem>
+          <legacyBold>Header</legacyBold> - the task header.
+		</listItem>
+        <listItem>
+          <legacyBold>Operate from</legacyBold> - the time to start operating.
+		</listItem>
+        <listItem>
+          <legacyBold>Operate to</legacyBold> - the time to stop operating.
+		</listItem>
+        <listItem>
+          I<legacyBold>nterval of operation</legacyBold> - the interval of operation.
+		</listItem>
+        <listItem>
+          D<legacyBold>irectory with data</legacyBold> - a directory with data, where the final files in S# format will be saved.
+		</listItem>
+		<listItem>
+          <legacyBold>Format</legacyBold> - data format: BIN/CSV.
+		</listItem>
+		<listItem>
+          <legacyBold>Max. errors</legacyBold> - the maximum number of errors, upon which the task will be stopped. By default 0 - the number of errors is ignored.
+		</listItem>
+		<listItem>
+          <legacyBold>Dependency</legacyBold> - a task that must be performed before running the current one.
+		</listItem>
+		<listItem>
+          <legacyBold>Logging level</legacyBold> - the logging level.
+		</listItem>
+      </list>
+     <para><legacyBold>Instruments</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Duplicates</legacyBold> - update instrument duplicates if they already exist.
+		</listItem>
+        <listItem>
+			<legacyBold>Ignore without an ID</legacyBold> - ignore instruments without an identifier.
+		</listItem>
+ 	  </list>
+    </introduction>
   </developerConceptualDocument>
 </topic>

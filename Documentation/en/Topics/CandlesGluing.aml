@@ -3,82 +3,98 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>When the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> created it at once contains the different
-		types of candles sources. In order to patch the historic candles with real-time ones, it is necessary to initialize the appropriate source.</para>
-		
-		<para>Consider the patching on example of the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> using
-		tick data stored using <token>hydra</token>:</para>
+		<para>
+		In order to glue historical candles with a real-time, it is necessary to initialize the corresponding storage of trade objects 
+		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.Csv.CsvEntityRegistry</codeEntityReference>,
+		storage of market data 
+		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference> 
+		and registry of snapshot storage 
+		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.SnapshotRegistry</codeEntityReference>.
+		</para>
+		<para>Consider the following example of gluing 
+		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>
+		using the tick data saved with <token>hydra</token>:</para>
         <code language="C#">
         <![CDATA[
-private RithmicTrader _trader;
+private Connector _connector;
 
-private Security _instr1;
-private const string _secCode1 = "ESM2";
-
-private CandleManager _candleManager;
+private Security security;
 private CandleSeries _series;
-
-readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(1);
-readonly DateTime _startTime = new DateTime(2012, 5, 3);
-readonly DateTime _endTime = DateTime.MaxValue;
-
-// market-data path
+private readonly CsvEntityRegistry _csvEntityRegistry;
+private readonly StorageRegistry _storageRegistry;
+private readonly SnapshotRegistry _snapshotRegistry;
 private const string _historyPath = @"e:\DataServer\";
 
-private ChartArea _area;
-private ChartCandleElement _candlesElem;
+...
+public MainWindow()
+		{
+			InitializeComponent();     
+            ....   
+            _csvEntityRegistry = new CsvEntityRegistry(_historyPath);
+            _storageRegistry = new StorageRegistry
+            {
+            	DefaultDrive = new LocalMarketDataDrive(_historyPath),
+            };
+            _snapshotRegistry = new SnapshotRegistry("Snapshots");
+            _connector.InitializeStorage(_entityRegistry, _storageRegistry, _snapshotRegistry);
+
+            _connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(30);
+		}
 
 ...
 
-_area = new ChartArea();
-_chart.Areas.Add(_area);
-
-_candlesElem = new ChartCandleElement();
-_area.Candles.Add(_candlesElem);
+_connector.CandleSeriesProcessing += Connector_CandleSeriesProcessing;
 
 ...
 
-_candleManager = new CandleManager(_trader);
 
-// To set into TimeFrameCandleBuilder data source from S#.Data
-var storageRegistry = new StorageRegistry();
-((LocalMarketDataDrive)storageRegistry.DefaultDrive).Path = _historyPath;
-var cbs = new TradeStorageCandleBuilderSource { StorageRegistry = storageRegistry };
-_candleManager.Sources.OfType<TimeFrameCandleBuilder>().Single().Sources.Add(cbs);
-
-_candleManager.Processing += DrawCandles;
-
-...
-
-_series = new CandleSeries(typeof(TimeFrameCandle), _instr1, _timeFrame);
-
-...
-           
-_candleManager.Start(_series, _startTime, _endTime);
+_candleSeries =
+	new CandleSeries(CandleSettingsEditor.Settings.CandleType, security, CandleSettingsEditor.Settings.Arg)
+	{
+		BuildCandlesMode = MarketDataBuildModes.Build,
+		BuildCandlesFrom = MarketDataTypes.Trades,
+		IsCalcVolumeProfile = true,
+	};
+  
+_connector.SubscribeCandles(_candleSeries, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 		]]>
 		</code>
 		
-		<para>After that, candles, from the first historical to current real-time, begin to come to the Processing - DrawCandles event handler:</para>
+		<para>After that, candles will start to arrive to the CandleSeriesProcessing event handler, starting from the first historical and until the current real-time:</para>
 
         <code language="C#">
         <![CDATA[
-private void DrawCandles(CandleSeries series, Candle candle)
+        
+		private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, Candle candle)
+		{
+			Chart.Draw(_candleElement, candle);
+		}
+		]]>
+		</code>
+<para>If the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Connector</codeEntityReference>, 
+ is originally created, then no need to initialize StorageAdapter, enough to pass the storage of  trade objects 
+ <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.Csv.CsvEntityRegistry</codeEntityReference>, 
+ storage of market data <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference> 
+ and registry of snapshot storage 
+ <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.SnapshotRegistry</codeEntityReference>
+
+to the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Connector</codeEntityReference> constructor:</para>
+
+        <code language="C#">
+        <![CDATA[
+...
+_csvEntityRegistry = new CsvEntityRegistry(_historyPath);
+_storageRegistry = new StorageRegistry
 {
-    if (series == _series) this.GuiAsync(() => _chart.ProcessCandle(_candlesElem, candle) );
-}
+   DefaultDrive = new LocalMarketDataDrive(_historyPath),
+};
+_snapshotRegistry = new SnapshotRegistry("Snapshots");
+_connector = new Connector(_entityRegistry, _storageRegistry, _snapshotRegistry, supportOffline: true, supportSubscriptionTracking: true);
+_connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
+...
 		]]>
 		</code>
-		
-<para>When calling the 
-<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
-method we get all the candles, history + real-time:</para>		
-        <code language="C#">
-        <![CDATA[
-var allCandles = _series.GetCandles();
-		]]>
-		</code>
-	
-	
+
 	</introduction>
 
 	</developerWalkthroughDocument>

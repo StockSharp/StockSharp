@@ -2,17 +2,8 @@
 <topic id="bc271b21-3ef5-422e-b6cf-9f0228607d2b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>Clicking the <legacyBold>Change security</legacyBold> 
-<mediaLinkInline><image xlink:href="Designer_Edit_tool_00"/></mediaLinkInline>
-button opens the <legacyBold>Editing</legacyBold> window for the selected 
-security. After changing the parameters click the 
-<legacyBold>OK</legacyBold> button.</para>
- <mediaLink>
-<image placement="center" xlink:href="Designer_Edit_tool_01"/>
-</mediaLink>
+See 
+<link xlink:href="4323f740-7b37-47ca-bab1-d540d9c0c4f0" />
     </introduction>
-    <relatedTopics>
-<link xlink:href="085174e5-3be9-4dc3-bdeb-dcc3706b483d" />
-</relatedTopics>
   </developerConceptualDocument>
 </topic>

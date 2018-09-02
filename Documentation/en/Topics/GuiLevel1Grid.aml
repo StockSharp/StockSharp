@@ -7,6 +7,7 @@
       	<codeEntityReference>T:StockSharp.Xaml.Level1Grid</codeEntityReference> is the table for displaying the Level1 fields. This table uses the data as 
 <codeEntityReference>T:StockSharp.Messages.Level1ChangeMessage</codeEntityReference> messages.
       </para>
+      <mediaLink><image placement="left" xlink:href="GUI_Leve1Grid" /></mediaLink>
       <para>
        <legacyBold>Main properties</legacyBold>
       </para>
@@ -27,11 +28,9 @@
 		</list>
 		
 	  <para>
-	  Below is the appearance of the component, as well as code snippets with its use.
+Below is the code snippet with its use. 
       </para>
-      
-      <mediaLink><image placement="left" xlink:href="GUI_Leve1Grid" /></mediaLink>
-      
+        
        <code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="Membrane02.Level1Window"

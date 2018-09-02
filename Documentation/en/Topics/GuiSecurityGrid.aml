@@ -6,6 +6,7 @@
       display financial information (level1 fields) and its changes relating to instruments in a tabular form. 
       The component allows you to select one or more instruments.
       </para>
+      <mediaLink><image placement="left" xlink:href="GUI_SecurityPicker2" /></mediaLink>
       <para>
       <legacyBold>Main properties</legacyBold>
       </para>
@@ -27,7 +28,7 @@
 Please note that for the display of changes in market information, you must specify a provider of market data.
       </para>
       <para>
-Below is the appearance of the component and the code snippet with its use.
+Below is the code snippet with its use.
       </para>
       
  <section>
@@ -35,7 +36,7 @@ Below is the appearance of the component and the code snippet with its use.
  <sections>
  	<section address="SubSection1">
      	<content>
-              <mediaLink><image placement="left" xlink:href="GUI_SecurityPicker2" /></mediaLink>
+              
       <para>         
 In the figure, the <codeEntityReference>T:StockSharp.Xaml.SecurityGrid</codeEntityReference> component is shown in the 
 <link xlink:href="f4e84944-41ad-42f2-9d2a-2854a8665152">SecurityPicker</link> graphical component.

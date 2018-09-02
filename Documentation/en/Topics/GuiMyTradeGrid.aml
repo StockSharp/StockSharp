@@ -5,7 +5,7 @@
       <para>
       <codeEntityReference>T:StockSharp.Xaml.MyTradeGrid</codeEntityReference> -  a table to display own trades.
       </para>
-
+<mediaLink><image placement="left" xlink:href="GUI_MytradeGrid" /></mediaLink>
 	<para>
 		<legacyBold>Main members</legacyBold>
 	</para>
@@ -24,12 +24,9 @@
 
       
      	  <para>
-Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC.</legacyItalic>
+Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC.</legacyItalic>
       </para>
-      
-      <mediaLink><image placement="left" xlink:href="GUI_MytradeGrid" /></mediaLink>
-      
-       <code title="XAML" language="XAML">
+        <code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="SampleOEC.MyTradesWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

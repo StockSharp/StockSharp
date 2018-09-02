@@ -233,6 +233,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API_GUI_MarketDataGrid.aml" />
     <None Include="Topics\API_GUI_Trading_From_Chart.aml" />
     <None Include="Topics\Hydra_Export_TSLab_MetaStock.aml" />
     <None Include="Topics\Designer_Warm_Up_mode.aml" />

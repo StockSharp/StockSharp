@@ -4,7 +4,7 @@
 
 	<introduction>
 		<para>
-		Для того чтобы склеить исторические свечи с реал-тайм, надо инициализировать соответствующие
+		Для того, чтобы склеить исторические свечи с реал-тайм, надо инициализировать соответствующие
 		хранилище торговых объектов <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.Csv.CsvEntityRegistry</codeEntityReference>, 
 		хранилище маркет-данных <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference> и 
 		реестр хранилищ-снэпшотов <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.SnapshotRegistry</codeEntityReference>.
@@ -61,7 +61,7 @@ _connector.SubscribeCandles(_candleSeries, DateTime.Today.Subtract(TimeSpan.From
 		]]>
 		</code>
 		
-		<para>После этого, в обработчик события CandleSeriesProcessing, начнут поступать свечи начиная с первой исторической и по текущую реал-тайм:</para>
+		<para>После этого, в обработчик события CandleSeriesProcessing начнут поступать свечи, начиная с первой исторической и по текущую реал-тайм:</para>
 
         <code language="C#">
         <![CDATA[

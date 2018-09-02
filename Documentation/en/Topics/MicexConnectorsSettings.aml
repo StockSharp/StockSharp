@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ac5713e1-b841-4ace-8e8e-6fab52fc7530" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для работы с коннектором <legacyBold>Micex (TEAP)</legacyBold> необходимо 
+скачать и установить <legacyBold>Micex Bridge</legacyBold> в случае подключения к торгам через интернет. Для подключения в зоне колокации установка программы не требуется.
+</para>
+<para>Все необходимые параметры для подключения предоставляются брокером. Для получения API доступа рекомендуется обратиться к брокеру.
+</para>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

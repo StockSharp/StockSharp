@@ -3,86 +3,170 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 		<para>
-			At first start you will see the following window:
+			The following window will be displayed the first time you start:
 		</para>
 		<mediaLink>
-			<image placement="center" xlink:href="hydra_Quick_start_00"/>
-		</mediaLink>
-<para>You must select the startup mode and click OK button.</para>
+<image placement="center" xlink:href="hydra_Quick_start_00"/>
+</mediaLink>
+<para>You have to select the start mode and click <legacyBold>ОК</legacyBold>.</para>
 		<steps class="ordered">
 			<step>
 				<content>
 				<para>
-Then the window for selecting data sources appears. You can also open this window in the <legacyBold>Common</legacyBold> tab, where you need to select <legacyBold>Add => Sources</legacyBold>.
+					Then the window for selecting data sources appears. You can also open this window from the 
+					<legacyBold>General</legacyBold> tab, you need to select <legacyBold>Add => Sources</legacyBold>.
 				</para>
 					<mediaLink>
-						  <image placement="left" xlink:href="hydra_source_add" />
+						  <image placement="center" xlink:href="hydra_source_add" />
 					</mediaLink>
 				<para>
-In the window select the required sources. You can use filters by the region, the electronic board, the data type, the free or paid, real-time or not. When the choice is finished click <legacyBold>OK</legacyBold> button. After that, the sources will be added to the left panel of the main application window.
+					Select the required sources in the window. You can use filters 
+					by region, electronic platform, data type, payability, real-time or not. 
+					When the selection is complete, click <legacyBold>OK</legacyBold>. After that, the 
+					sources will be added to the left panel of the main application window.
 				</para>
+						<mediaLink>
+<image placement="center" xlink:href="hydra_Quick_start_01"/>
+</mediaLink>
 				</content>
 			</step>
 			<step>
 				<content>
 				<para>
-					2.	You can create multiple instances of one source. For example, several instances of Finam, which will save the downloaded data to different folders. This can be done as well as during the initial addition, from the <legacyBold>Common tab</legacyBold>, selecting <legacyBold>Add => Sources</legacyBold>. Unnecessary sources can be removed by clicking the <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline> button.
+					You can create multiple instances of the same source. For example, 
+					several Finam instances that will save the downloaded data to different 
+					folders. This can be done, as with the initial addition, from 
+					the <legacyBold>General</legacyBold> tab, select <legacyBold>Add => Sources</legacyBold>. Unnecessary sources can 
+					be deleted using the button <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline>.
 				</para>
 				</content>
 			</step>
 			<step>
 				<content>
-					<para>The next step is the source setting up. To do this, click the <mediaLinkInline><image xlink:href="hydra_edit"/></mediaLinkInline> button. 
-					For more details see the <link xlink:href="f005431b-3a1b-49c2-a389-f1d4e9756f45">Sources setting up</link> section.</para>
+					<para>The next step is to configure the source. The source 
+					is configured in the right panel. Detailed setup is described in <link xlink:href="f005431b-3a1b-49c2-a389-f1d4e9756f45" />.</para>
 				</content>
 			</step>
 		  	<step>
 				<content>
-					  <para>In order to the source begins to download data after clicking the <legacyBold>Start</legacyBold> button, it must be turned on. To do this,
-					  select the source icon in the left panel and use the <mediaLinkInline><image xlink:href="hydra_source_on_off"/></mediaLinkInline> button to turn
-					  on or off. This operation can be performed before or after the adding of instruments for downloading, which is described below.</para>
+					  <para>To enable the source to download data after clicking 
+					  the <legacyBold>Start</legacyBold> button, it must be enabled. 
+					  To do this, select the source icon in the left panel and use 
+					  the button <mediaLinkInline><image xlink:href="hydra_source_on_off"/></mediaLinkInline> 
+					  to switch it on or off. You can perform this operation before 
+					  or after adding instruments for downloading, as described below.</para>
 				</content>
 			</step>
 			<step>
 				<content>
-					<para>Then, it is necessary to add instruments. To do this, double-click on the source icon. The window shown in the following figure opens.</para>
-					<mediaLink>
-						  <image placement="left" xlink:href="hydra_source_first" />
-					</mediaLink>					  
-					<para>Then click the <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline> button. For more details see the
-					<link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9">Instrument list</link> section.</para>
+					<para>
+						In the central part, the panels of the added sources 
+						will open, where the list of instruments is displayed. If the 
+						panel is closed, then to open it, double click the source logo 
+						in the list on the left side of the program. The data will be 
+						downloaded only by the added instruments.
+					</para>
+					<para>Then you need to add instruments. To do this, click 
+					the <legacyBold>Add</legacyBold> <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline>. 
+					button. The window shown in the following figure opens.</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_securities" />
+      </mediaLink>
+      <para>Initially, the instrument database in <token>hydra</token> is empty, 
+      there is only an auxiliary instrument <legacyBold>ALL@ALL</legacyBold>. When this instrument is selected, 
+      data will be downloaded for all available instruments for this source. Therefore, 
+      if you need to download data for some specific instruments, you need to find 
+      them (search for the instrument database, as well as for the available instruments 
+      that a specific source provides) and add to the source.</para>
+	  
+	  <para>To download the instruments, you have to click the corresponding <legacyBold>Download Instrument</legacyBold> button.</para>
+	  
+      <para>After the instruments are received, the window will become the following.</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_security_full_list" />
+      </mediaLink>
+      <para>In which all the instruments available for adding will be visible.</para>
+      <para>The selected instruments will be displayed in the <legacyBold>Instruments</legacyBold> table, 
+      which is a table with a tree structure. The main element of this is the instrument, 
+      and the additional ones are the market data types that will be obtained for this instrument.</para>
 				</content>
+			</step>
+						<step>
+				<content>
+				      <para>
+			For each instrument, you need to select the market data types you need to download.
+	  </para>
+	  <para>
+			If all the necessary instrument parameters are not set, the 
+			<mediaLinkInline><image xlink:href="hydra_zero" /></mediaLinkInline> icon will appear in the left column of the instrument line..
+	  </para>
+	  
+    				</content>
 			</step>
 			<step>
 				<content>
-					<para>The panel with buttons to work with the instruments is located at the bottom of the source window. You can do the following steps with the
-					selected instrument:</para>
+<para>At the bottom of the source window is a panel with buttons for setting up the data and instruments to be received.</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_Quick_start_02" />
+      </mediaLink>
+      <para>The following operations can be performed from this panel:</para>
 					<list class="bullet">
+
   						<listItem>
-  							<para>To edit with the <mediaLinkInline><image xlink:href="hydra_edit"/></mediaLinkInline> button.</para>
+  							<para>Set up the amount of information received with 
+  							the buttons: <legacyBold>Trades, Order Books, Candles, Order Log, Level 1, Own Transactions</legacyBold>. 
+  							Lists of available market data types vary for different sources.</para>
   						</listItem>
   						<listItem>
-  							<para>To delete with the <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline> button.</para>
+  							<para>Specify the necessary periods for the downloaded candles. The periods of the received candles vary for different sources.</para>  
   						</listItem>
   						<listItem>
-  							<para>To set up the volume of downloaded information with buttons: <legacyBold>Ticks</legacyBold>, <legacyBold>Order books</legacyBold>, 
-  							<legacyBold>Candles</legacyBold>, <legacyBold>Order log</legacyBold>, <legacyBold>Level 1</legacyBold>, <legacyBold>Own transactions</legacyBold>.</para>
+  							<para>Specify what the market data will be built from. If you do not specify 
+  							this option, candles available in the source will be received, otherwise the candles 
+  							will be built from another type of market data. For example, candles can be built from 
+  							the price of the last trade, the order book spread (usually for the Forex market), 
+  							volatility or the best price.
+  							</para>
   						</listItem>
+  						<listItem>
+ <para>Specify the periods of the data to be received. You can specify your period for 
+ obtaining data for each data type. For example, for daylight candles, you can specify 
+ the download for the last few years, and for trades, specify the download for the last 
+ few months. Periods of the received data can be set not only from the panel, but also 
+ directly in the table of market data.</para>
+ </listItem>
+  						<listItem>
+  							<para>Edit using the <mediaLinkInline><image xlink:href="hydra_edit"/></mediaLinkInline> button, you 
+  							can see more details in the <link xlink:href="4323f740-7b37-47ca-bab1-d540d9c0c4f0" /> section.</para>
+  						</listItem>
+  						<listItem>
+  							<para>Delete using the <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline>.</para>
+  						</listItem>
+  						<listItem>
+       		<para>When you click the <legacyBold>All@All</legacyBold> button , all instruments added 
+       		to the source will be deleted, and instead of them one auxiliary instrument All@All will 
+       		be added, which will download the market data for all available instruments for the source. 
+       		For example, for <link xlink:href="54a1e95e-ea39-4322-9613-e74859a3a596">Quik</link>,
+      		 this will be all the instruments that are in the Instruments table.</para>  						</listItem>
 					</list>
 					<alert class="note">
-  						<para>Please, note. For the getting information on the order books, orders log, level 1, own transactions, the connector must be connected in real time.</para>
+  						<para>Pay attention. To get information on order books, 
+  						an order log, level 1, own transactions, you need to connect to the connector in real time.</para>
 					</alert>
 				</content>
 			</step>
 			<step>
 				<content>
 					<para>
-When all the settings are applied and the instruments are selected, on the <legacyBold>Common</legacyBold> tab, you can click the <legacyBold>Start</legacyBold> button. 
-This will launch active sources and they will start to download the data. The work process can be observed in the 
-special <legacyBold>Logs</legacyBold> tab, which is fixed at the bottom of the program. Also, logs are stored in files in the local directory.
+						When all the settings are applied, and the instruments 
+						are selected, on the <legacyBold>General</legacyBold> tab, you can click the <legacyBold>Start</legacyBold> button. 
+						This will launch the active sources, and they will start downloading 
+						the data. The work process can be observed in the 
+						special <legacyBold>Logs</legacyBold> tab, which is fixed at the bottom of the program. 
+						In addition, logs are stored in files in the local directory.
 					</para>
 					<mediaLink>
-						  <image placement="left" xlink:href="hydra_main_start" />
+						  <image placement="center" xlink:href="hydra_main_start" />
 					</mediaLink>					  
 			    </content>
 			</step>			  

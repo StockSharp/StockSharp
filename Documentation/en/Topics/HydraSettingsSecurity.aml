@@ -1,74 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" revisionNumber="1">
-  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Click the <legacyBold>Add</legacyBold> <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline>, 
-      button, then select the <legacyBold>Instrument</legacyBold> item in the drop-down menu. The window for searching and adding instruments opens.</para>
-      <mediaLink>
-        <image placement="center" xlink:href="hydra_securities" />
-      </mediaLink>
-      <para>Initially, the instrument database in the <token>hydra</token> is empty, 
-      there is only an auxiliary instrument <legacyBold>All@All</legacyBold> (when this instrument is selected 
-      the data on all available for this source instruments will be downloaded). Therefore, 
-      if you want to download data for the specific instruments, they should be found 
-      (search is carried out in the instrument database, as well as in the available 
-      instruments that a specific source provides) and added to the source.
+      <para>If you click the <legacyBold>Instruments</legacyBold> button on the General tab, the <legacyBold>Instruments</legacyBold> panel 
+      appears. The <legacyBold>Instruments</legacyBold> panel displays all available instruments, as well as the market data for them.
 </para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_securitiesPanel_00" />
+      </mediaLink>
+      
+      <para>At the bottom of the <legacyBold>Instruments</legacyBold> panel are buttons that allow to:</para>
 	  
-	  <para>To download the instruments, you must click the corresponding <legacyBold>Download Instrument</legacyBold> button.</para>
-	  
-      <para>Once the instruments are received, the window will be as shown below.</para>
-      <mediaLink>
-        <image placement="center" xlink:href="hydra_security_full_list" />
-      </mediaLink>
-      <para>All the instruments available for adding will be visible in this window.</para>
-      <alert class="caution">
-			For <token>rts</token> and <token>ux</token> sources there is a special scheme. These sources add instruments to the 
-			<token>hydra</token> base themselves as new information about trades is downloaded. Therefore, 
-			for these sources it is not necessary to find and to set up instruments beforehand.
-	  </alert>
-      <para>
-Data sources download market data only on instruments that are added to these sources (with the exception of sources for RTS and UrkBirzha) and have selected at least one type of market data.
-	  </para>
-      <para>
-To do this, after the instruments adding, for each instrument you should select the market data type required for download. If you do not select any type of market data, then there will be an icon with an exclamation mark in line with the instrument (on the left):
-	  </para>
-	  <para>
-If you do not set all parameters of the instrument, then in the left column of the line with the instrument the <mediaLinkInline><image xlink:href="hydra_zero" /></mediaLinkInline> icon appears.
-	  </para>
-	  
-      <mediaLink>
-        <image placement="center" xlink:href="hydra_security_select" />
-      </mediaLink>
-      <alert class="note">
-      		<para>When you click on the All@All button all added to the source instruments will be deleted, and 
-      		instead one auxiliary instrument All@All will be added, with which market data will be downloaded by 
-      		all instruments available for the source. For example, for <link xlink:href="0b962432-d81d-4646-a818-9fa7093cbe4f">LMAX</link>, 
-      		this will be all the instruments that are in the Instruments table.</para>
-      		<para>The <mediaLinkInline><image xlink:href="hydra_delete" /></mediaLinkInline> button allows you to remove unnecessary instruments.</para>
-	  </alert>      
-      <para>
-To edit the instrument (for example, when the instrument was not filled with all the required data), 
-you have to double click on the instrument or by pressing the <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> 
-button to open a window in which to make the necessary settings:
-		</para>
-      <mediaLink>
-        <image placement="center" xlink:href="hydra_security_edit" />
-      </mediaLink>
-      <para>
-If necessary, you can edit a group of instruments. To do this, select a group of instruments and press the 
-<mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> button.
-		</para>
-      <mediaLink>
-        <image placement="center" xlink:href="hydra_securities_edit" />
-      </mediaLink>
-      <para>
-If the selected group of instruments has the same values, then this field will be 
-filled with that value. If values are different, then this field will be empty. For 
-example, two instruments have selected whose Price Increment value is 1, one instrument 
-has lot size 10 and another has 100. Correspondingly the value of the Price Increment 
-field will be 1, and the Volume Increment field will be empty.
-      </para>
+<list class="bullet">
+  <listItem><para>Add a new instrument, as described in the clause  <link xlink:href="cc9ddc6c-27e9-4bc4-91e8-a418303ae201" />.</para></listItem>
+  <listItem><para>Add a new index, as described in the clause <link xlink:href="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" />.</para></listItem>
+  <listItem><para>Add a new continuous instrument, as described in the clause <link xlink:href="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" />.</para></listItem>
+  <listItem><para>Change the instrument or group of instruments, as described in the clause <link xlink:href="4323f740-7b37-47ca-bab1-d540d9c0c4f0" />.</para></listItem>
+  <listItem><para>Specify additional information about the instrument, as described in the clause <link xlink:href="b7f2c08a-2920-42a4-9887-eb0441c246cb" />.</para></listItem>
+  <listItem><para>Match the instruments and connections, as described in clause <link xlink:href="65b09400-90fa-49f3-8d71-6d4309a33934" />.</para></listItem>  
+</list>
+
+
       
     </introduction>
   </developerWalkthroughDocument>

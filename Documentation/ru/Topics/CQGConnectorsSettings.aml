@@ -3,10 +3,10 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     
-   <para>Для работе с коннектором <legacyBold>CQG</legacyBold> существуют два способа подключения:</para>
+   <para>Для работы с коннектором <legacyBold>CQG</legacyBold> существуют два способа подключения:</para>
 <para>1. <legacyBold>CQG COM</legacyBold>, подключение через локальный 
 <legacyBold>CQG Integrated Client</legacyBold>, который устанавливается непосредственно 
-на компьютер с которого будет проводиться подключение. <legacyBold>CQG Integrated Client</legacyBold> 
+на компьютер, с которого будет проводиться подключение. <legacyBold>CQG Integrated Client</legacyBold> 
 можно скачать 
 <ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>на сайте разработчика.</ddue:linkText>
