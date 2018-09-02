@@ -28,6 +28,7 @@ StockSharp API Change log
 * (feature) Charting. Equity and option charts - change drawing style possibility.
 * (feature) Charting. Annotations creates from code.
 * (feature) UserInfoMessage. The message provided user's information.
+* (feature) ExpirationContinuousSecurity. Moved implementation from ContinuousSecurity. ContinuousSecurity is abstract.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.

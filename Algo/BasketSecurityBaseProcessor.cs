@@ -162,7 +162,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Continuous securities processor for <see cref="ContinuousSecurity"/>.
 	/// </summary>
-	public class ContinuousSecurityExpirationProcessor : ContinuousSecurityBaseProcessor<ContinuousSecurity>
+	public class ContinuousSecurityExpirationProcessor : ContinuousSecurityBaseProcessor<ExpirationContinuousSecurity>
 	{
 		private SecurityId _currId;
 		private DateTimeOffset _expirationDate;
@@ -173,7 +173,7 @@ namespace StockSharp.Algo
 		/// Initializes a new instance of the <see cref="ContinuousSecurityExpirationProcessor"/>.
 		/// </summary>
 		/// <param name="basketSecurity">Continuous security (generally, a futures contract), containing expirable securities.</param>
-		public ContinuousSecurityExpirationProcessor(ContinuousSecurity basketSecurity)
+		public ContinuousSecurityExpirationProcessor(ExpirationContinuousSecurity basketSecurity)
 			: base(basketSecurity)
 		{
 			_currId = basketSecurity.ExpirationJumps.FirstSecurity;

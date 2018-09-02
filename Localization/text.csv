@@ -4886,6 +4886,7 @@ Basket;Basket;Basket
 BasketCode;Basket type code.;Код типа корзины.
 Expression;Expression;Выражение
 ExpressionDesc;The mathematic formula of index.;Математическая формула индекса.
+VolumeTrigger;Volume trigger causes switch to the next contract.;Триггер объема, вызывающий переход на следующий контракт.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15087,7 +15088,6 @@ DocStr10597;Basket security processors provider;Провайдер обрабо�
 DocStr10598;The messages adapter builds market data for basket securities;Адаптер сообщений строящий маркет-данные для корзины инструментов
 DocStr10599;Create security instance;Создать объект инструмента
 DocStr10600;Basket security expression. Can be {0} in case of regular security;Выражение корзины инструментов. Может быть {0} в случае обычного инструмента
-DocStr10601;Volume trigger causes switch to the next contract;Триггер объема вызывающий переход на следующий контракт
 DocStr10602;Try get basket security expression;Попытка получить выражение корзины инструментов
 DocStr10603;Basket security legs;Ноги корзины инструментов
 DocStr10604;The interface of market data processor for basket securities;Интерфейс обработчика маркет-данных для корзины инструментов
@@ -15156,7 +15156,7 @@ DocStr10676;Type of X axis for this chart;Type of X axis for this chart
 DocStr10677;Chart this area attached to;Chart this area attached to
 DocStr10678;Current data point with for X axis;Current data point with for X axis
 DocStr10679;The chart element representing a band;The chart element representing a band
-DocStr10680;"The band drawing style. The default is {0}. Can also be {1}.""/>";"The band drawing style. The default is {0}. Can also be {1}.""/>"
+DocStr10680;The band drawing style. The default is {0}. Can also be {1};The band drawing style. The default is {0}. Can also be {1}
 DocStr10681;Create instance;Create instance
 DocStr10682;Base class for chart related view models;Base class for chart related view models
 DocStr10683;Raised before property value is changed;Raised before property value is changed
@@ -15214,6 +15214,17 @@ DocStr10735;Embedded chart elements;Embedded chart elements
 DocStr10736;To reset painter child elements;To reset painter child elements
 DocStr10737;Called when this painter is attached to chart indicator element;Called when this painter is attached to chart indicator element
 DocStr10738;Called when this painter is detached from chart indicator element;Called when this painter is detached from chart indicator element
-DocStr10739;Step size for volatility smile calculation;Step size for volatility smile calculation
+DocStr10739;Step size for volatility smile calculation;Размер шага для расчета улыбки волатильности
 DocStr10740;Used to convert {0} and icon resource key to {1}, colored with corresponding brush;Used to convert {0} and icon resource key to {1}, colored with corresponding brush
-DocStr10741;The value;The value
+DocStr10741;The value;Значение
+DocStr10742;Rollover by expiration date continuous security;Непрерывный инструмент, переходящий по условию экспирации
+DocStr10743;Rollover by volume continuous security;Непрерывный инструмент, переходящий по условию объема
+DocStr10744;Instruments rollover by volume;Инструменты, переходящие по условию объема
+DocStr10745;User info;Информация о пользователе
+DocStr10746;Users search;Поиск пользователей
+DocStr10747;Users search result;Результат поиска пользователей
+DocStr10748;The message contains information about user;Сообщение содержащее информацию о пользователе
+DocStr10749;Message users lookup for specified criteria;Сообщение о поиске пользователей по указанном критерию
+DocStr10750;Users search result message;Сообщение о результате поиска пользователей
+DocStr10751;Points that displays source volatility values;Точки, которые отоюражают исходное значение улыбки волатильности
+DocStr10752;Line that displays approximated volatility smile;Линия, которая отображает аппроксимированную улыбку волатильности
