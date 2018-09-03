@@ -145,9 +145,7 @@
   						<listItem>
        		<para>When you click the <legacyBold>All@All</legacyBold> button , all instruments added 
        		to the source will be deleted, and instead of them one auxiliary instrument All@All will 
-       		be added, which will download the market data for all available instruments for the source. 
-       		For example, for <link xlink:href="54a1e95e-ea39-4322-9613-e74859a3a596">Quik</link>,
-      		 this will be all the instruments that are in the Instruments table.</para>  						</listItem>
+       		be added, which will download the market data for all available instruments for the source.</para>  						</listItem>
 					</list>
 					<alert class="note">
   						<para>Pay attention. To get information on order books, 

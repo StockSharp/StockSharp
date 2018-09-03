@@ -484,7 +484,7 @@ private void IBSocket_NewSymbol(int row, int rowCount, long contractId, string n
 				 <legacyBold>Registration/cancellation of registration of trades.</legacyBold>
 				</para>
 				<para>
-When you call the <codeEntityReference>M:StockSharp.Algo.Connector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> or
+When you call the <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> or
 				 <codeEntityReference>M:StockSharp.Algo.Connector.UnRegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> 
 				 methods, the outgoing message MarketDataMessage <codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference> will be received.
 				 </para>

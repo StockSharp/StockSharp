@@ -63,9 +63,9 @@ Trader.RegisterNews();
  	  		<list class="ordered">
  	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – instrument change (last price, best bid/ask price, etc.).</listItem>
  	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – 
- 	  			order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</listItem>
+ 	  			order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference> method.</listItem>
  	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> – 
- 	  			new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</listItem>
+ 	  			new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> method.</listItem>
  	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference> – news.</listItem>
  	  		</list>
  	  	</listItem>
@@ -87,8 +87,8 @@ private void FindClick(object sender, RoutedEventArgs e)
 		<listItem>
  	  		<para>
  	  			For updates on the selected instrument and ticks you need to use the
- 	  			<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> and
- 	  			<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> methods, respectively:
+ 	  			<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> and
+ 	  			<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> methods, respectively:
  	  		</para>
  	  		<code language="C#">
 private void Level1Click(object sender, RoutedEventArgs e)
@@ -121,7 +121,7 @@ private void Level1Click(object sender, RoutedEventArgs e)
 			</code>
 		</listItem>
 		<listItem>
- 	  		<para>To request updates on the order books you need to use the <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference> method:</para>
+ 	  		<para>To request updates on the order books you need to use the <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference> method:</para>
  	  		<code language="C#">
 private void DepthClick(object sender, RoutedEventArgs e)
 {
