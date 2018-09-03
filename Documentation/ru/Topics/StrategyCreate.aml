@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="a8159c99-256b-46e4-80fe-7cf92944b4c9" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -71,15 +71,14 @@
 				<![CDATA[
 class SmaStrategy : Strategy
 {
-	private readonly ICandleManager _candleManager;
+	private readonly Connector _trader;
 	private readonly CandleSeries _series;
 	private bool _isShortLessThenLong;
 
-	public SmaStrategy(ICandleManager candleManager, CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
+	public SmaStrategy(CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
 	{
-		_candleManager = candleManager;
 		_series = series;
-
+		_trader = ((Connector)this.Connector);
 		LongSma = longSma;
 		ShortSma = shortSma;
 	}
@@ -89,7 +88,7 @@ class SmaStrategy : Strategy
 
 	protected override void OnStarted()
 	{
-		_candleManager
+		_trader
 			.WhenCandlesFinished(_series)
 			.Do(ProcessCandle)
 			.Apply(this);
@@ -191,8 +190,6 @@ _trader = new QuikTrader(this.Path.Text);
 
 _trader.Connected += () =>
 {
-	_candleManager = new CandleManager(_trader);
-
 	_trader.NewSecurity += security =>
 	{
 		if (!security.Code.CompareIgnoreCase("LKOH"))
@@ -219,7 +216,7 @@ _trader.Connected += () =>
 		}
 	};
 
-	_candleManager.Processing += (series, candle) =>
+	_trader.CandleSeriesProcessing += (series, candle) =>
 	{
 		// если скользящие за сегодняшний день отрисованны, то рисуем в реальном времени текущие скользящие
 		if (_isTodaySmaDrawn && candle.State == CandleStates.Finished)
@@ -255,7 +252,7 @@ private void StartClick(object sender, RoutedEventArgs e)
 		var series = new CandleSeries(typeof(TimeFrameCandle), _lkoh, _timeFrame);
 
 		// создаем торговую стратегию, скользящие средние на 80 5-минуток и 10 5-минуток
-		_strategy = new SmaStrategy(_candleManager, series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
+		_strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
 		{
 			Volume = 1,
 			Security = _lkoh,
@@ -310,7 +307,7 @@ private void StartClick(object sender, RoutedEventArgs e)
 			lastCandleTime = candle.OpenTime;
 		}
 
-		_candleManager.Start(series);
+		_trader.SubscribeCandles(_candleSeries, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 ...
 ]]></code>
 			<alert class="caution">
@@ -374,12 +371,12 @@ foreach (var candle in candles)
 	lastCandleTime = candle.OpenTime;
 }
 
-_candleManager.Start(series);
+trader.Start(series);
 
 // вычисляем временные отрезки текущей свечи
 var bounds = _timeFrame.GetCandleBounds(_trader.CurrentTime);
 
-candles = _candleManager.Container.GetCandles(series, new Range<DateTimeOffset>(lastCandleTime + _timeFrame, bounds.Min));
+candles = _trader.GetCandles(series, new Range<DateTimeOffset>(lastCandleTime + _timeFrame, bounds.Min));
 
 foreach (var candle in candles)
 {
