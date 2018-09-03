@@ -57,7 +57,7 @@ Trader.NewSecurity += security =>
         series.CandleType = typeof (TimeFrameCandle);
         series.Security = security;
         series.Arg = TimeSpan.FromMinutes(5);
-        _candleManager.Start(series);
+        Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
     }
 };
 
