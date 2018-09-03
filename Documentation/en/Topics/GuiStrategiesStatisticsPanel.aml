@@ -100,7 +100,7 @@ var strategies = periods
 
 		strategy.SetCandleManager(candleManager);
 
-		var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3);
+		var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3, ChartIndicatorDrawStyles.Line);
 		strategy.PnLChanged += () =>
 		{
 			var data = new EquityData

@@ -94,7 +94,7 @@ public MainWindow()
 	InitializeComponent();
 
 	_logManager.Listeners.Add(new FileLogListener("log.txt"));
-	_curveItems = Curve.CreateCurve("Equity", Colors.DarkGreen);
+	_curveItems = Curve.CreateCurve("Equity", Colors.DarkGreen, ChartIndicatorDrawStyles.Line);
 }
 	  				]]>
 

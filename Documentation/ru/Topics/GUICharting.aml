@@ -147,9 +147,6 @@
   				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartCandleElement</codeEntityReference> - элемент для отображения свечей.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>T:StockSharp.Xaml.Charting.LineElement</codeEntityReference> - элемент для отображения линии.</para>
-  			</listItem>
-  			<listItem>
   				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartIndicatorElement</codeEntityReference> - элемент для отображения индикаторов.</para>
   			</listItem>
   			<listItem>
