@@ -148,6 +148,7 @@ private void ShowChartClick(object sender, RoutedEventArgs e)
 
         return wnd;
     }).Show();
+    _trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 }
 ]]></code>
 			  </content>
