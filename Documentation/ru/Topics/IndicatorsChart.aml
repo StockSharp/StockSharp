@@ -9,7 +9,6 @@
 private QuikTrader _trader;
 private Security _security;
 
-private CandleManager _candleManager;
 private CandleSeries _candleSeries;
 private SimpleMovingAverage _sma;
 
@@ -39,13 +38,12 @@ _area.Elements.Add(_longMaElem);
 ...
 
 _sma = new SimpleMovingAverage() { Length = 80 };
-_candleManager = new CandleManager(_trader);
-_candleManager.Processing += Draw;
+_trader.CandleSeriesProcessing += DrawCandle;
 
 ...
 
 _candleSeries = new CandleSeries(typeof(TimeFrameCandle), _security, _timeFrame);
-_candleManager.Start(_candleSeries);
+_trader.SubscribeCandles(_candleSeries, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 
 ...
 
