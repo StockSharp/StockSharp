@@ -18,7 +18,7 @@
           <step>
 			  <content>
 				  <para>
-				  	As a demonstration selected examples showing work with the <token>rithmic</token>. All examples log information from the connector to a text file.
+				  	As a demonstration selected examples showing work with the <token>ib</token>. All examples log information from the connector to a text file.
 				  </para>
 			  </content>
 		  </step>
@@ -42,7 +42,7 @@
 			  <content>
 				  <content>
 						<para>
-							The final step is to add the <codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference>
+							The final step is to add the <codeEntityReference>T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>
 							in <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>:
 						</para>
 						<code language="C#">_logManager.Sources.Add(_trader);</code>

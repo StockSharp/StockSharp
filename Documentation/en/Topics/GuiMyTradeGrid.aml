@@ -24,11 +24,11 @@
 
       
      	  <para>
-Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC.</legacyItalic>
+Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/InteractiveBrokers/SampleIB.</legacyItalic>
       </para>
         <code title="XAML" language="XAML">
 	  				<![CDATA[
-<Window x:Class="SampleOEC.MyTradesWindow"
+<Window x:Class="SampleIB.MyTradesWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"

@@ -54,7 +54,7 @@
             <para>
             	Then, the created generator must be passed to the connector:
             </para>
-            <code language="C#">var trader = new RithmicTrader();
+            <code language="C#">var trader = new InteractiveBrokersTrader();
 trader.SecurityIdGenerator = new CustomSecurityIdGenerator();
 </code>
           </content>

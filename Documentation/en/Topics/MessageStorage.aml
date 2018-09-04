@@ -64,7 +64,7 @@ instrument will be received in the instrument getting event using the
 
 <code language="C#">
 					<![CDATA[
-var connector = new OpenECryTrader();
+var connector = new InteractiveBrokersTrader();
 
 var securityId = "ESM5@NYSE";
 

@@ -56,7 +56,7 @@
         <step>
           <content>
 			  <code language="C#">
-					var trader = new OpeneCryTrader(login, password);
+					var trader = new InteractiveBrokersTrader();
 					
 					// printing the current local time
 					Console.WriteLine(TimeHelper.Now);

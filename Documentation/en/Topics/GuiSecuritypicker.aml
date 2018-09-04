@@ -71,7 +71,7 @@
 	  </list>
 	  
       <para>
-Below is the code snippet with its use, taken from example <legacyItalic>Samples/OpenECry/SampleOEC</legacyItalic>.
+Below is the code snippet with its use, taken from example <legacyItalic>Samples/InteractiveBrokers/SampleIB</legacyItalic>.
       </para>
  <section>
  
@@ -81,7 +81,7 @@ Below is the code snippet with its use, taken from example <legacyItalic>Samples
               	
               <code title="XAML" language="XAML">
 	  		<![CDATA[
-<Window x:Class="SampleOEC.SecuritiesWindow"
+<Window x:Class="SampleIB.SecuritiesWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"

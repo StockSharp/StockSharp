@@ -7,8 +7,7 @@
 
     <introduction>
       <para>
-		  Класс <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> (от которого наследуют шлюзы <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>
-		  и <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>) реализует в своем коде механизм мониторинга соединений. Такой механизм
+		  Класс <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> реализует в своем коде механизм мониторинга соединений. Такой механизм
 		  настраивается через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference> и позволяет
 		  отслеживать следующие сценарии ошибок:
 		  
