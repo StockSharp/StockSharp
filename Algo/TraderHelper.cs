@@ -2173,7 +2173,7 @@ namespace StockSharp.Algo
 		/// <param name="to">The end of the expiration range.</param>
 		/// <param name="throwIfNotExists">To generate exception, if some of instruments for passed <paramref name="continuousSecurity" /> are not available.</param>
 		/// <returns>Expiration instruments.</returns>
-		public static IEnumerable<Security> GetFortsJumps(this ContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to, bool throwIfNotExists = true)
+		public static IEnumerable<Security> GetFortsJumps(this ExpirationContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to, bool throwIfNotExists = true)
 		{
 			if (continuousSecurity == null)
 				throw new ArgumentNullException(nameof(continuousSecurity));
@@ -2185,14 +2185,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To fill transitions <see cref="ContinuousSecurity.ExpirationJumps"/>.
+		/// To fill transitions <see cref="ExpirationContinuousSecurity.ExpirationJumps"/>.
 		/// </summary>
 		/// <param name="continuousSecurity">Continuous security.</param>
 		/// <param name="provider">The provider of information about instruments.</param>
 		/// <param name="baseCode">The base part of the instrument code.</param>
 		/// <param name="from">The start of the expiration range.</param>
 		/// <param name="to">The end of the expiration range.</param>
-		public static void FillFortsJumps(this ContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to)
+		public static void FillFortsJumps(this ExpirationContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to)
 		{
 			var securities = continuousSecurity.GetFortsJumps(provider, baseCode, from, to);
 

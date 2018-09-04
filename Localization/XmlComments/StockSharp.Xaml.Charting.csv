@@ -680,6 +680,16 @@ M:StockSharp.Xaml.Charting.CandleSettingsWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Charting.CandleSettingsWindow.Series/summary;Str1942
 P:StockSharp.Xaml.Charting.CandleSettingsWindow.SecurityProvider/summary;DocStr972
 M:StockSharp.Xaml.Charting.CandleSettingsWindow.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.Charting.ChartVolatilitySmileElement/summary;DocStr10679
+P:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Values/summary;DocStr10751
+P:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Smile/summary;DocStr10752
+M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.#ctor/summary;DocStr10681
+M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.CheckAxesCompatible(StockSharp.Xaml.Charting.ChartAxisType,StockSharp.Xaml.Charting.ChartAxisType)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
+M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Xaml.Charting.EquityCurveChart/summary;DocStr7816
 P:StockSharp.Xaml.Charting.EquityCurveChart.ChartTheme/summary;DocStr7731
 P:StockSharp.Xaml.Charting.EquityCurveChart.NoGapMode/summary;DocStr7826

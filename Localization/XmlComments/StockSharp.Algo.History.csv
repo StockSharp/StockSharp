@@ -552,10 +552,11 @@ M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.Busines
 M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/param/to;DocStr251
 M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/returns;DocStr205
 T:StockSharp.Algo.History.Russian.MoexDownloader/summary;DocStr8486
-M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Boolean)/summary;DocStr9084
-M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Boolean)/param/code;DocStr9085
-M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Boolean)/param/isDownload;DocStr227
-M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Boolean)/returns;DocStr9086
+M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Nullable{StockSharp.Messages.SecurityTypes},System.Boolean)/summary;DocStr9084
+M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Nullable{StockSharp.Messages.SecurityTypes},System.Boolean)/param/code;DocStr9085
+M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Nullable{StockSharp.Messages.SecurityTypes},System.Boolean)/param/type;Str360
+M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Nullable{StockSharp.Messages.SecurityTypes},System.Boolean)/param/isDownload;DocStr227
+M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Nullable{StockSharp.Messages.SecurityTypes},System.Boolean)/returns;DocStr9086
 T:StockSharp.Algo.History.Russian.Rts.Competition/summary;DocStr229
 T:StockSharp.Algo.History.Russian.Rts.Competition.CompetitionYear/summary;DocStr234
 P:StockSharp.Algo.History.Russian.Rts.Competition.CompetitionYear.Year/summary;DocStr239
@@ -635,6 +636,8 @@ P:StockSharp.Algo.History.Russian.SecurityInfo.Decimals/summary;Str548
 P:StockSharp.Algo.History.Russian.SecurityInfo.Multiplier/summary;DocStr2623
 P:StockSharp.Algo.History.Russian.SecurityInfo.PriceStep/summary;Str306
 P:StockSharp.Algo.History.Russian.SecurityInfo.Currency/summary;Str382
+M:StockSharp.Algo.History.Russian.SecurityInfo.GetSecurityType/summary;DocStr10614
+M:StockSharp.Algo.History.Russian.SecurityInfo.GetSecurityType/returns;Str360
 M:StockSharp.Algo.History.Russian.SecurityInfo.FillTo(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IExchangeInfoProvider)/summary;DocStr2620
 M:StockSharp.Algo.History.Russian.SecurityInfo.FillTo(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IExchangeInfoProvider)/param/security;DocStr2831
 M:StockSharp.Algo.History.Russian.SecurityInfo.FillTo(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IExchangeInfoProvider)/param/exchangeInfoProvider;DocStr9509
