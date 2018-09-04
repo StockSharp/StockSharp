@@ -33,7 +33,8 @@ _candleElement = new ChartCandleElement() { FullTitle = "Candles" };
 Chart.AddElement(_areaComb, _candleElement, series);
 
 ...
-		
+
+_connector.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(5)), DateTime.Now);			
 _connector.CandleSeriesProcessing += Connector_CandleSeriesProcessing;
 
 ...
