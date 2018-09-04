@@ -51,13 +51,13 @@ class FirstStrategy : Strategy
 	
 	protected override void OnStarting()
 	{
-		_series
-			.WhenCandlesFinished()
+		Trader
+			.WhenCandlesFinished(_series)
 			.Do(FinishCandle)
 			.Apply(this);
 
 		Security
-			.WhenNewTrade(trader)
+			.WhenNewTrade(Trader)
 			.Do(NewTrade)
 			.Apply(this);
 
@@ -138,7 +138,7 @@ TimeSpan _holdTimeToOpen = TimeSpan.FromMilliseconds(5000);
 
 Trader
 	.WhenIntervalElapsed(_holdTimeToOpen)
-	.Or(__candleManager.WhenCandlesStarted(_series))
+	.Or(Trader.WhenCandlesStarted(_series))
 	.Do(() => this.AddInfoLog("Свеча закрыта или вышло время"))
 	.Once()
 	.Apply(this);
@@ -150,7 +150,7 @@ Trader
   				<code language="C#">
 				<![CDATA[
 MarketRuleHelper
-	.Or(new IMarketRule[] {Trader.WhenIntervalElapsed(_holdTimeToOpen), _candleManager.WhenCandlesStarted(_series)})
+	.Or(new IMarketRule[] {Trader.WhenIntervalElapsed(_holdTimeToOpen), Trader.WhenCandlesStarted(_series)})
 	.Do(() => this.AddInfoLog("Свеча закрыта или вышло время"))
 	.Once()
 	.Apply(this);

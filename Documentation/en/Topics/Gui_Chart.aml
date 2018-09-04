@@ -43,16 +43,13 @@ The example from Samples/Chart/SampleChart is taken as a basis, in which some ch
 		  <step>
 			  <content>
 <para>
-2.	In the main window code we declare the variables for 
-<codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, 
-the chart areas, the chart elements and indicators.				  
+2.	In the main window code we declare the variables for the chart areas, the chart elements and indicators.				  
 </para>
 				    <code title="C#" language="C#">
               		<![CDATA[
               		
 private readonly Dictionary<CandleSeries, ChartWindow> _chartWindows = new Dictionary<CandleSeries, ChartWindow>();
 
-private CandleManager _candleManager;
 private readonly LogManager _logManager;
 
 private ChartArea _candlesArea;
@@ -77,8 +74,8 @@ private MovingAverageConvergenceDivergence _macd;
 3.	In the <legacyBold>Click</legacyBold> event handler of the <legacyBold>Connect</legacyBold> 
 button, along with subscribing to connector events and calling the 
 <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.Connect</codeEntityReference> 
-method, we initialize a candle manager and subscribe to the 
-<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>  
+method, we subscribe to the 
+<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference> 
 event. of this event, The chart plotting will be performed in the handler of this event when a new candle is received.
 				  </para>
 				    <code title="C#" language="C#">
@@ -94,12 +91,10 @@ private void ConnectClick(object sender, RoutedEventArgs e)
         _trader.MarketDataSubscriptionFailed += (security, type, error) =>
             this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
-        Security.SecurityProvider = new FilterableSecurityProvider(_trader);
+		Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
-        _trader.Connect();
-
-        _candleManager = new CandleManager(_trader);
-        _candleManager.Processing += DrawCandle;
+		_trader.CandleSeriesProcessing += DrawCandle;
+		_trader.Connect();
 
         ConnectBtn.IsEnabled = false;
     }
@@ -153,8 +148,7 @@ private void ShowChartClick(object sender, RoutedEventArgs e)
 
         return wnd;
     }).Show();
-
-    _candleManager.Start(series);
+    _trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 }
 ]]></code>
 			  </content>
@@ -163,7 +157,7 @@ private void ShowChartClick(object sender, RoutedEventArgs e)
 			  <content>
 <para>
 5.	In the 
-<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference> 
+<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference> 
 event handler we draw the candle and the values of the indicators for each completed candle. For this, we:
 				</para>
 				<list class="ordered">

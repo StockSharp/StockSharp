@@ -70,27 +70,7 @@ if (_connector.Configure(this))
 ...
 					]]>
 					</code>
-										<!--alert class="note">
-						<para>Если для получения свечей вместо шлюза <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> используется источник с другим механизмом,
-						то необходимо реализовать интерфейс <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.IExternalCandleSource</codeEntityReference>,
-						и передать реализацию в <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>
-						
-						<para>В <token>stocksharp</token> существуют следующие реализации данного интерфейса:</para>
-						
-						<list class="bullet">
-  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder</codeEntityReference></para></listItem>
-  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.RangeCandleBuilder</codeEntityReference></para></listItem>
-  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.VolumeCandleBuilder</codeEntityReference></para></listItem>
-  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference></para></listItem>
-  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.PnFCandleBuilder</codeEntityReference></para></listItem>
-  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.RenkoCandleBuilder</codeEntityReference></para></listItem>
-  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.StorageCandleSource</codeEntityReference></para></listItem>
-						</list>
-						
-						<para>Вышеописанные реализации стандартно идут в качестве <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>
-						при создании <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>>
 
-					</alert-->
 				</content>
 			</step>
 			

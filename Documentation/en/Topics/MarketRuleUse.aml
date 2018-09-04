@@ -50,13 +50,13 @@ class FirstStrategy : Strategy
 	
 	protected override void OnStarting()
 	{
-		_series
-			.WhenCandlesFinished()
+		Trader
+			.WhenCandlesFinished(_series)
 			.Do(FinishCandle)
 			.Apply(this);
 
 		Security
-			.WhenNewTrade()
+			.WhenNewTrade(Trader)
 			.Do(NewTrade)
 			.Apply(this);
 
@@ -64,7 +64,7 @@ class FirstStrategy : Strategy
 	}
     
     ...
-}    
+}      
 	  	  		]]>
 				</code>	  				
   			</listItem>
@@ -136,7 +136,7 @@ TimeSpan _holdTimeToOpen = TimeSpan.FromMilliseconds(5000);
 
 Trader
 	.WhenIntervalElapsed(_holdTimeToOpen)
-	.Or(_series.WhenCandlesStarted())
+	.Or(Trader.WhenCandlesStarted(_series))
 	.Do(() => this.AddInfoLog("The candle is finished or time is over."))
 	.Once()
 	.Apply(this);
@@ -148,7 +148,7 @@ Trader
   				<code language="C#">
 				<![CDATA[
 MarketRuleHelper
-	.Or(new IMarketRule[] {Trader.WhenIntervalElapsed(_holdTimeToOpen), _series.WhenCandlesStarted()})
+	.Or(new IMarketRule[] {Trader.WhenIntervalElapsed(_holdTimeToOpen), Trader.WhenCandlesStarted(_series)})
 	.Do(() => this.AddInfoLog("The candle is finished or time is over."))
 	.Once()
 	.Apply(this);

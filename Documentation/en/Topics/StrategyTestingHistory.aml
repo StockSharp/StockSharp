@@ -342,7 +342,8 @@ connector.NewSecurity += s =>
 
 	// start strategy before emulation started
 	strategy.Start();
-	candleManager.Start(series);
+	_series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+	connector.SubscribeCandles(series);
 
 	// start historical data loading when connection established successfully and all data subscribed
 	connector.Start();
@@ -366,23 +367,6 @@ connector.Connect();
 					  </para>
 				  </content>
 			  </step>
-		  
-			  <step>
-				  <content>
-					  <para>
-						  Creation of the <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> (required for the moving average strategy),
-						  in which the <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> is specified as the source:
-					  </para>
-					  <code language="C#"><![CDATA[
-var candleManager = new CandleManager((Connector)connector);
-var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
-{
-	BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? BuildCandlesModes.Build : BuildCandlesModes.Load
-};
-]]></code>
-
-				  </content>
-			  </step>
 			  <step>
 				  <content>
 					  <para>
@@ -390,7 +374,7 @@ var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
 					  </para>
 					  <code language="C#"><![CDATA[
 // create strategy based on 80 5-min and 10 5-min
-var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, candleManager, series)
+var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, _series)
 {
 	Volume = 1,
 	Portfolio = portfolio,

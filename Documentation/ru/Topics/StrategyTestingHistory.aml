@@ -369,8 +369,9 @@ connector.NewSecurity += s =>
 
 	// start strategy before emulation started
 	strategy.Start();
-	candleManager.Start(series);
-
+	_series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+	connector.SubscribeCandles(series);
+	
 	// start historical data loading when connection established successfully and all data subscribed
 	connector.Start();
 };
@@ -394,25 +395,7 @@ trader.Connect();
 					  </para>
 				  </content>
 			  </step>
-		  
-			  <step>
-				  <content>
-					  <para>
-						  Создание менеджера свечей <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> (необходимо для
-						  стратегии скользящих средних), в котором в качестве источника указан шлюз 
-						  <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>:
-					  </para>
-					  <code language="C#"><![CDATA[
-var candleManager = emulationInfo.UseCandleTimeFrame == null
-	? new CandleManager(new TradeCandleBuilderSourceEx(connector))
-	: new CandleManager(connector);
-
-var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
-
-]]></code>
-
-				  </content>
-			  </step>
+	  
 			  <step>
 				  <content>
 					  <para>
@@ -420,7 +403,7 @@ var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 					  </para>
 					  <code language="C#"><![CDATA[
 // создаем торговую стратегию, скользящие средние на 80 5-минуток и 10 5-минуток
-var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, candleManager, series)
+var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, _series)
 {
 	Volume = 1,
 	Portfolio = portfolio,

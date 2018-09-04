@@ -58,9 +58,9 @@ class FirstStrategy : Strategy
     {
 		this.SuspendRules(() =>
 		{
-			_series
-				.WhenCandlesFinished()
-				.Do(FinishCandle)
+			Trader
+                .WhenCandlesFinished(_series)
+			    .Do(FinishCandle)
 				.Apply(this);
 
 			Security

@@ -42,7 +42,7 @@
 		  <step>
 			  <content>
 				  <para>
-					  В коде главного окна декларируем переменные для <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, областей графика, элементов графика и индикаторов.					  
+					  В коде главного окна декларируем переменные для областей графика, элементов графика и индикаторов.					  
 				  </para>
 				    <code title="C#" language="C#">
               		<![CDATA[
@@ -50,7 +50,6 @@
 private readonly Dictionary<CandleSeries, ChartWindow> _chartWindows = new Dictionary<CandleSeries, ChartWindow>();
 private QuikTrader _trader;
 
-private CandleManager _candleManager;
 private readonly LogManager _logManager;
 
 private ChartArea _candlesArea;
@@ -73,8 +72,8 @@ private MovingAverageConvergenceDivergence _macd;
 			  <content>
 				  <para>
 					  В обработчике события <legacyBold>Click</legacyBold> кнопки <legacyBold>Connect</legacyBold>, наряду с подпиской на события коннектора и вызовом метода
-					   <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.Connect</codeEntityReference>, инициализируем кандлменеджер и подписываемся на событие
-					   <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>. 
+					   <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.Connect</codeEntityReference>, подписываемся на событие
+					   <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>. 
 					   В обработчике этого события при получении новой свечи будет выполнятся отрисовка графика.
 				  </para>
 				    <code title="C#" language="C#">
@@ -116,12 +115,8 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 				
 		Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
+		_trader.CandleSeriesProcessing += DrawCandle;
 		_trader.Connect();
-
-		// инициализуруем _candleManager и подписываемся на событие получения свечи
-		_candleManager = new CandleManager(_trader);
-		_candleManager.Processing += DrawCandle;
-
 		ConnectBtn.IsEnabled = false;
 	}
 }
@@ -179,9 +174,7 @@ private void ShowChartClick(object sender, RoutedEventArgs e)
 
         return wnd;
 	}).Show();
-
-	// стартуем кандлменеджер
-	_candleManager.Start(series);
+	_trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 }
 	  				]]>
 				   </code>
@@ -190,7 +183,7 @@ private void ShowChartClick(object sender, RoutedEventArgs e)
 		  		  <step>
 			  <content>
 				<para>
-					  В обработчике события <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference> производим отрисовку
+					  В обработчике события <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference> производим отрисовку
 					  свечи и значений индикаторов для каждой завершенной свечи. Для этого:
 				</para>
 				<list class="ordered">

@@ -42,15 +42,12 @@
 			  <step>
 				  <content>
 					  <para>
-						  Созданный шлюз используется как обычный коннектор. В нашем случае подписываемся на события, 
-						  создаем <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, передаем информацию
+						  Созданный шлюз используется как обычный коннектор. В нашем случае подписываемся на события, передаем информацию
 						  в графические компоненты и устанавливаем соединение.
 					  </para>
 					  <code language="C#"><![CDATA[
 SecurityPicker.SecurityProvider = new FilterableSecurityProvider(_connector);
 SecurityPicker.MarketDataProvider = _connector;
-
-_candleManager = new CandleManager(_connector);
 
 _logManager.Sources.Add(_connector);
 					
@@ -88,11 +85,12 @@ _connector.NewMyTrade += TradeGrid.Trades.Add;
 // subscribe on error of order registration event
 _connector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
 
-_candleManager.Processing += (s, candle) =>
+_connector.CandleSeriesProcessing += (s, candle) =>
 {
 	if (candle.State == CandleStates.Finished)
 		_buffer.Add(candle);
 };
+_connector.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(5)), DateTime.Now);	
 
 _connector.MassOrderCancelFailed += (transId, error) =>
 	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));

@@ -30,23 +30,21 @@
 		  <step>
 			  <content>
 				  <para>
-					  В самом начале необходимо добавить <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> 
-					  в <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>
-					  как источник свечей:
-				  </para>
+Исторические свечи можно получить напрямую из <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, подписавшись на событие
+<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>. Для начала получения свечей необходимо вызвать метод
+<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})</codeEntityReference>.				  </para>
 				  <code language="C#"><![CDATA[// создаем шлюз
+...
 _trader = new SmartTrader(this.Login.Text, this.Password.Password);
+...
+_trader.CandleSeriesProcessing += DrawCandle;
+...
+var series = new CandleSeries(typeof(TimeFrameCandle),_security,TimeSpan.FromMinutes(_timeframe));
+_trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(5)), DateTime.Now);
+]]></code>
 
-_candleManager = new CandleManager(_trader);]]></code>
 
 
-				<alert class="note">
-  					<para>
-  						Исторические свечи можно получить напрямую из <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, подписавшись на событие
-  						<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>. Для начала получения свечей необходимо вызвать метод
-  						<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})</codeEntityReference>.
-  					</para>
-				</alert>
 			  </content>
 		  </step>
 		  <step>
