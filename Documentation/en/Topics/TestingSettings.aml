@@ -24,12 +24,6 @@
 				all modes except the order log. The default is off.</para>
   			</listItem>
   			
-  			<!--<listItem>
-				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseExternalCandleSource</codeEntityReference> -
-				to send the candles to	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> directly. It can speed
-				up the candles creation, but there will be no intermediate candle changes. The default is off.</para>
-  			</listItem>-->  			
-  			
   		</list>
 
 		<para>Even if the strategy is tested on the candles, it is necessary to subscribe to the tick trades:</para>

@@ -38,19 +38,6 @@
 				удовлетворять заявки, если цена “коснулась” уровня (допущение иногда слишком “оптимистично” и для реалистичного тестирования следует выключить режим).
 				Если режим выключен, то лимитные заявки будут удовлетворяться, если цена “прошла сквозь них” хотя бы на 1 шаг. Опция работает во всех режимах кроме ордер лога.	По-умолчанию выключено.</para>
   			</listItem>
-
-  		<!--	<listItem>
-				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseExternalCandleSource</codeEntityReference> -
-				отправлять свечи c таймфреймом	<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseCandlesTimeFrame</codeEntityReference> в 
-				<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. Может ускорить построение свечей. По-умолчанию выключено.</para>
-  			</listItem> 			
-  			
-  			<listItem>
-				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseExternalCandleSource</codeEntityReference> -
-				отправлять свечи в <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. 
-				Может ускорить построение свечей, но при этом будут отсутствовать промежуточные изменения свечи. По-умолчанию выключено.</para>
-  			</listItem>  	-->		
-  			
   			
   			
   		</list>

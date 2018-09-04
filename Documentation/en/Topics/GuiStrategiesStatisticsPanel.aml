@@ -84,7 +84,7 @@ var strategies = periods
 	{
 		...
 		// create strategy based SMA
-		var strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
+		var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
 		{
 			Volume = 1,
 			Security = security,
