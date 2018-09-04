@@ -188,8 +188,8 @@ _startEmulationTime = DateTime.Now;
 var strategies = periods
 	.Select(period =>
 	{
-        var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
-
+		...
+    
 		// create strategy based SMA
 		var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
 		{
@@ -203,13 +203,10 @@ var strategies = periods
 			UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
 		};
 
-<<<<<<< HEAD
-		var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3);
-=======
-		strategy.SetCandleManager(candleManager);
+		...
 
-		var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3, ChartIndicatorDrawStyles.Line);
->>>>>>> 5a2a25d2a705c2163ceab7cf67599982804b6478
+    var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3, ChartIndicatorDrawStyles.Line);
+
 		strategy.PnLChanged += () =>
 		{
 			var data = new EquityData
