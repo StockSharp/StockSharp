@@ -52,6 +52,11 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
+		/// <summary>
+		/// Is blocked.
+		/// </summary>
+		public bool IsBlocked { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
@@ -77,6 +82,7 @@ namespace StockSharp.Messages
 			destination.Login = Login;
 			destination.Password = Password;
 			destination.OriginalTransactionId = OriginalTransactionId;
+			destination.IsBlocked = IsBlocked;
 
 			this.CopyExtensionInfo(destination);
 
