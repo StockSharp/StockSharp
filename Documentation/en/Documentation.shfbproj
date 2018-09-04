@@ -448,7 +448,7 @@
     <None Include="Topics\Gui_ClasterChart.aml" />
     <None Include="Topics\ITCH.aml" />
     <None Include="Topics\ConnectorCreating.aml" />
-    <None Include="Topics\Gui_EquityCurveChartd.aml" />
+    <None Include="Topics\Gui_EquityCurveChart.aml" />
     <None Include="Topics\Gui_ChartPanel.aml" />
     <None Include="Topics\Gui_Chart.aml" />
     <None Include="Topics\StrategyTestingFinam.aml" />

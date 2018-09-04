@@ -18,6 +18,7 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -32,8 +33,17 @@ namespace StockSharp.Algo
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.ContinuousSecurityKey)]
 	[DescriptionLoc(LocalizedStrings.Str696Key)]
+	public abstract class ContinuousSecurity : BasketSecurity
+	{
+	}
+
+	/// <summary>
+	/// Rollover by expiration date continuous security.
+	/// </summary>
+	[DisplayNameLoc(LocalizedStrings.ContinuousSecurityKey)]
+	[DescriptionLoc(LocalizedStrings.Str696Key)]
 	[BasketCode("CE")]
-	public class ContinuousSecurity : BasketSecurity
+	public class ExpirationContinuousSecurity : ContinuousSecurity
 	{
 		/// <summary>
 		/// The interface describing the internal instruments collection <see cref="ExpirationJumps"/>.
@@ -238,9 +248,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ContinuousSecurity"/>.
+		/// Initializes a new instance of the <see cref="ExpirationContinuousSecurity"/>.
 		/// </summary>
-		public ContinuousSecurity()
+		public ExpirationContinuousSecurity()
 		{
 			Type = SecurityTypes.Future;
 			_expirationJumps = new ExpirationJumpsDictionary();
@@ -283,6 +293,10 @@ namespace StockSharp.Algo
 			lock (_expirationJumps.SyncRoot)
 			{
 				_expirationJumps.Clear();
+
+				if (text.IsEmpty())
+					return;
+
 				_expirationJumps.AddRange(text.Split(",").Select(p =>
 				{
 					var parts = p.Split("=");
@@ -321,7 +335,7 @@ namespace StockSharp.Algo
 	}
 
 	/// <summary>
-	/// Continuous security (generally, a futures contract), containing expirable securities.
+	/// Rollover by volume continuous security.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.ContinuousSecurityKey)]
 	[DescriptionLoc(LocalizedStrings.Str696Key)]
@@ -333,16 +347,23 @@ namespace StockSharp.Algo
 		/// </summary>
 		public VolumeContinuousSecurity()
 		{
+			Type = SecurityTypes.Future;
 		}
 
 		/// <summary>
-		/// Instruments and their weighting coefficients in the basket.
+		/// Instruments rollover by volume.
 		/// </summary>
 		public SynchronizedList<SecurityId> InnerSecurities { get; } = new SynchronizedList<SecurityId>();
 
 		/// <summary>
 		/// Use open interest for <see cref="VolumeLevel"/>.
 		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OIKey,
+			Description = LocalizedStrings.OpenInterestKey,
+			GroupName = LocalizedStrings.ContinuousSecurityKey,
+			Order = 1)]
 		public bool IsOpenInterest { get; set; }
 
 		private Unit _volumeLevel = new Unit();
@@ -350,6 +371,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Volume trigger causes switch to the next contract.
 		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VolumeKey,
+			Description = LocalizedStrings.VolumeTriggerKey,
+			GroupName = LocalizedStrings.ContinuousSecurityKey,
+			Order = 0)]
 		public Unit VolumeLevel
 		{
 			get => _volumeLevel;

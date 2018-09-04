@@ -7035,6 +7035,11 @@
             BRVM, Regional Securities Exchange SA.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.FixDialects.QuikDropCopy">
+      <summary>
+            QUIK (drop copy).
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.FixTrader">
       <summary>
             The implementation of the interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> for interaction with the exchange or broker system via FIX protocol.

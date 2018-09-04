@@ -145,9 +145,6 @@
   				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartCandleElement</codeEntityReference> - the element to display the candles.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>T:StockSharp.Xaml.Charting.LineElement</codeEntityReference> - the element to display the line.</para>
-  			</listItem>
-  			<listItem>
   				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartIndicatorElement</codeEntityReference> - the element to display the indicators.</para>
   			</listItem>
   			<listItem>

@@ -126,6 +126,7 @@ namespace SampleChart
 			Chart.AnnotationCreated += ChartOnAnnotationCreated;
 			Chart.AnnotationModified += ChartOnAnnotationModified;
 			Chart.AnnotationDeleted += ChartOnAnnotationDeleted;
+			Chart.AnnotationSelected += ChartOnAnnotationSelected;
 
 			ConfigManager.RegisterService<IBackupService>(new YandexDiskService());
 
@@ -643,9 +644,12 @@ namespace SampleChart
 			ModifyAnnotation(false);
 		}
 
-		private void ChartOnAnnotationCreated(ChartAnnotation ann)
+		private void ChartOnAnnotationCreated(ChartAnnotation ann) => _annotation = ann;
+
+		private void ChartOnAnnotationSelected(ChartAnnotation ann, ChartDrawData.AnnotationData data)
 		{
 			_annotation = ann;
+			_annotationData = data;
 		}
 
 		private void ChartOnAnnotationModified(ChartAnnotation ann, ChartDrawData.AnnotationData data)

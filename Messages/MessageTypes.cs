@@ -219,5 +219,20 @@ namespace StockSharp.Messages
 		/// Remove object request (security, portfolio etc.).
 		/// </summary>
 		Remove,
+
+		/// <summary>
+		/// User info.
+		/// </summary>
+		UserInfo,
+
+		/// <summary>
+		/// Users search.
+		/// </summary>
+		UserLookup,
+
+		/// <summary>
+		/// Users search result.
+		/// </summary>
+		UserLookupResult
 	}
 }

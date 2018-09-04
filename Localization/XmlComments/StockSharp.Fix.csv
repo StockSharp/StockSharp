@@ -1817,6 +1817,7 @@ F:StockSharp.Fix.FixDialects.InteractiveBrokers/summary;DocStr10497
 F:StockSharp.Fix.FixDialects.Reuters/summary;Reuters
 F:StockSharp.Fix.FixDialects.QuikPreTrade/summary;DocStr10480
 F:StockSharp.Fix.FixDialects.Brvm/summary;DocStr10481
+F:StockSharp.Fix.FixDialects.QuikDropCopy/summary;QuikDropCopy
 T:StockSharp.Fix.FixTrader/summary;DocStr3349
 M:StockSharp.Fix.FixTrader.#ctor/summary;DocStr1
 T:StockSharp.Fix.FixStopOrderTypes/summary;DocStr3350

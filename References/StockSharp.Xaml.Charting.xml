@@ -846,7 +846,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartBandElement.Style">
       <summary>
-            The band drawing style. The default is <see cref="F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.Band" />. Can also be <see cref="F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.BandOneValue" />."/&gt;
+            The band drawing style. The default is <see cref="F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.Band" />. Can also be <see cref="F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.BandOneValue" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartBandElement.Line1">
@@ -2499,6 +2499,44 @@
       <summary>
             InitializeComponent
             </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.ChartVolatilitySmileElement">
+      <summary>
+            The chart element representing a band.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Values">
+      <summary>
+            Points that displays source volatility values.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Smile">
+      <summary>
+            Line that displays approximated volatility smile.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.#ctor">
+      <summary>
+            Create instance.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.CheckAxesCompatible(StockSharp.Xaml.Charting.ChartAxisType,StockSharp.Xaml.Charting.ChartAxisType)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="T:StockSharp.Xaml.Charting.EquityCurveChart">
       <summary>

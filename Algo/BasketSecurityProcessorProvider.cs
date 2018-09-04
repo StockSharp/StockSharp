@@ -21,7 +21,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public BasketSecurityProcessorProvider()
 		{
-			Register(typeof(ContinuousSecurityExpirationProcessor), typeof(ContinuousSecurity));
+			Register(typeof(ContinuousSecurityExpirationProcessor), typeof(ExpirationContinuousSecurity));
 			Register(typeof(ContinuousSecurityVolumeProcessor), typeof(VolumeContinuousSecurity));
 			Register(typeof(ExpressionIndexSecurityProcessor), typeof(ExpressionIndexSecurity));
 			Register(typeof(WeightedIndexSecurityProcessor), typeof(WeightedIndexSecurity));
