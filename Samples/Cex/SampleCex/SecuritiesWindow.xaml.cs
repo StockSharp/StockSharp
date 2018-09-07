@@ -27,7 +27,7 @@ namespace SampleCex
 			InitializeComponent();
 
 			CandlesPeriods.ItemsSource = CexMessageAdapter.AllTimeFrames;
-			CandlesPeriods.SelectedIndex = 1;
+			CandlesPeriods.SelectedIndex = 0;
 		}
 
 		protected override void OnClosed(EventArgs e)
@@ -95,7 +95,7 @@ namespace SampleCex
 				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
 
-				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100))).Show();
+				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 1000))).Show();
 			}
 		}
 
@@ -153,12 +153,12 @@ namespace SampleCex
 			{
 				if (trader.RegisteredSecurities.Contains(security))
 				{
-					trader.UnRegisterSecurity(security);
+					//trader.UnRegisterSecurity(security);
 					trader.UnRegisterTrades(security);
 				}
 				else
 				{
-					trader.RegisterSecurity(security);
+					//trader.RegisterSecurity(security);
 					trader.RegisterTrades(security);
 				}
 			}
