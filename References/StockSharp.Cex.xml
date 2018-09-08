@@ -24,11 +24,6 @@
             Secret.
             </summary>
         </member>
-        <member name="P:StockSharp.Cex.CexMessageAdapter.ClientId">
-            <summary>
-            Client ID.
-            </summary>
-        </member>
         <member name="M:StockSharp.Cex.CexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.
@@ -94,11 +89,6 @@
         <member name="P:StockSharp.Cex.CexTrader.Secret">
             <summary>
             Secret.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Cex.CexTrader.ClientId">
-            <summary>
-            Client ID.
             </summary>
         </member>
     </members>
