@@ -85,7 +85,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 					var found = false;
 
-					for (var i = 0; i < 10; i++)
+					for (var i = 0; i < 20; i++)
 					{
 						if ((price % newPriceStep) == 0)
 						{
