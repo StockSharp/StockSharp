@@ -322,6 +322,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private void EmulationConnectorOnDisconnected()
 		{
+			DisposeAdapters();
 			TryStartNextBatch();
 		}
 
@@ -391,7 +392,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			EmulationConnector.ClearCache();
 
-			InitAdapters(_batch);
+			InitAdapters();
 
 			EmulationConnector.HistoryMessageAdapter.StartDate = EmulationSettings.StartTime;
 			EmulationConnector.HistoryMessageAdapter.StopDate = EmulationSettings.StopTime;
@@ -401,14 +402,14 @@ namespace StockSharp.Algo.Strategies.Testing
 			EmulationConnector.Connect();
 		}
 
-		private void InitAdapters(IEnumerable<Strategy> strategies)
+		private void InitAdapters()
 		{
 			var adapter = EmulationConnector.Adapter;
 			
 			var id = _currentBatch * EmulationSettings.BatchSize;
 			var portfolios = new List<Portfolio>();
 
-			foreach (var strategy in strategies)
+			foreach (var strategy in _batch)
 			{
 				_strategyInfo[strategy] = new Tuple<Portfolio, Security>(strategy.Portfolio, strategy.Security);
 
@@ -509,22 +510,9 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private void OnEmulationStopped()
 		{
-			var adapter = EmulationConnector.Adapter;
-
 			foreach (var strategy in _batch)
 			{
 				strategy.Stop();
-
-				var strategyAdapter = adapter.AdapterProvider.GetAdapter(strategy.Portfolio);
-
-				if (strategyAdapter != null)
-				{
-					adapter.InnerAdapters.Remove(strategyAdapter);
-
-					adapter
-						.AdapterProvider
-						.RemoveAssociation(strategy.Portfolio.Name);
-				}
 
 				var tuple = _strategyInfo.TryGetValue(strategy);
 
@@ -534,9 +522,31 @@ namespace StockSharp.Algo.Strategies.Testing
 				strategy.Security = tuple.Item2;
 				strategy.Portfolio = tuple.Item1;
 			}
+			
+			_strategyInfo.Clear();
+		}
+
+		private void DisposeAdapters()
+		{
+			var adapter = EmulationConnector.Adapter;
+
+			foreach (var strategy in _batch)
+			{
+				strategy.Stop();
+
+				var strategyAdapter = adapter.AdapterProvider.GetAdapter(strategy.Portfolio);
+
+				if (strategyAdapter == null) 
+					continue;
+
+				adapter.InnerAdapters.Remove(strategyAdapter);
+
+				adapter
+					.AdapterProvider
+					.RemoveAssociation(strategy.Portfolio.Name);
+			}
 
 			_batch = ArrayHelper.Empty<Strategy>();
-			_strategyInfo.Clear();
 		}
 
 		/// <summary>
