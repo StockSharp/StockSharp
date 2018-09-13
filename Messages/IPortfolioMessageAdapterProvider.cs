@@ -68,12 +68,18 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual IMessageAdapter GetAdapter(string portfolioName)
 		{
+			if (portfolioName.IsEmpty())
+				throw new ArgumentNullException(nameof(portfolioName));
+
 			return _adapters.TryGetValue(portfolioName);
 		}
 
 		/// <inheritdoc />
 		public virtual void SetAdapter(string portfolioName, IMessageAdapter adapter)
 		{
+			if (portfolioName.IsEmpty())
+				throw new ArgumentNullException(nameof(portfolioName));
+
 			IMessageAdapter prev;
 
 			lock (_adapters.SyncRoot)
@@ -89,6 +95,9 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual bool RemoveAssociation(string portfolioName)
 		{
+			if (portfolioName.IsEmpty())
+				throw new ArgumentNullException(nameof(portfolioName));
+
 			if (!_adapters.Remove(portfolioName))
 				return false;
 
