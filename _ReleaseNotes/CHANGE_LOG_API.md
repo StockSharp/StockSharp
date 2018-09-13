@@ -33,6 +33,7 @@ StockSharp API Change log
 * (feature) Charting. OptionVolitilitySmileChart. Combine approximated lines + points in legend.
 * (feature) CEX. Remove ClientId settings.
 * (feature) BasePosition. ExpirationDate property added.
+* (bug) FXCM fixes.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
