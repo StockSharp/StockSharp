@@ -140,6 +140,13 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str265Key)]
 		State,
+
+		/// <summary>
+		/// Expiration date.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ExpiryDateKey)]
+		ExpirationDate,
 	}
 
 	/// <summary>

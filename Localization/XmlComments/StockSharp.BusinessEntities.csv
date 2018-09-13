@@ -21,6 +21,7 @@ P:StockSharp.BusinessEntities.BasePosition.LastChangeTime/summary;Str435
 P:StockSharp.BusinessEntities.BasePosition.LocalTime/summary;DocStr2618
 P:StockSharp.BusinessEntities.BasePosition.Description/summary;Str269
 P:StockSharp.BusinessEntities.BasePosition.Currency/summary;Str251
+P:StockSharp.BusinessEntities.BasePosition.ExpirationDate/summary;ExpiryDate
 M:StockSharp.BusinessEntities.BasePosition.CopyTo(StockSharp.BusinessEntities.BasePosition)/summary;DocStr2615
 M:StockSharp.BusinessEntities.BasePosition.CopyTo(StockSharp.BusinessEntities.BasePosition)/param/destination;DocStr2616
 T:StockSharp.BusinessEntities.Exchange/summary;ExchangeInfo

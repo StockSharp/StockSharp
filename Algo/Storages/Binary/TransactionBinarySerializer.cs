@@ -397,15 +397,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (msg.IsUpTick != null)
 					writer.Write(msg.IsUpTick.Value);
 
-				if (msg.ExpiryDate != null)
-				{
-					writer.Write(true);
-					writer.WriteLong(msg.ExpiryDate.Value.Ticks);
-					writer.WriteInt(msg.ExpiryDate.Value.Offset.Hours);
-					writer.WriteInt(msg.ExpiryDate.Value.Offset.Minutes);
-				}
-				else
-					writer.Write(false);
+				writer.WriteDto(msg.ExpiryDate);
 
 				metaInfo.LastCommission = Write(writer, msg.Commission, metaInfo.LastCommission);
 				metaInfo.LastPnL = Write(writer, msg.PnL, metaInfo.LastPnL);
@@ -526,7 +518,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isSystem = reader.Read() ? reader.Read() : (bool?)null;
 			var isUpTick = reader.Read() ? reader.Read() : (bool?)null;
 
-			var expDate = reader.Read() ? reader.ReadLong().To<DateTime>().ApplyTimeZone(new TimeSpan(reader.ReadInt(), reader.ReadInt(), 0)) : (DateTimeOffset?)null;
+			var expDate = reader.ReadDto();
 
 			var commission = reader.Read() ? metaInfo.FirstCommission = reader.ReadDecimal(metaInfo.FirstCommission) : (decimal?)null;
 			var pnl = reader.Read() ? metaInfo.FirstPnL = reader.ReadDecimal(metaInfo.FirstPnL) : (decimal?)null;

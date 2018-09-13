@@ -32,6 +32,7 @@ StockSharp API Change log
 * (bug) FinamHistorySource. Fix stocks lookup.
 * (feature) Charting. OptionVolitilitySmileChart. Combine approximated lines + points in legend.
 * (feature) CEX. Remove ClientId settings.
+* (feature) BasePosition. ExpirationDate property added.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
