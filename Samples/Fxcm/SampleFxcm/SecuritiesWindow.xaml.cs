@@ -19,23 +19,19 @@ namespace SampleFxcm
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
-	
-	using Ecng.Collections;
-	using Ecng.Xaml;
 
-	using MoreLinq;
+	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Fxcm;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
-	using StockSharp.Localization;
 
 	public partial class SecuritiesWindow
 	{
-		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
-		private bool _initialized;
+		//private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
+		//private bool _initialized;
 
 		public SecuritiesWindow()
 		{
@@ -45,27 +41,27 @@ namespace SampleFxcm
 			CandlesPeriods.SelectedIndex = 1;
 		}
 
-		protected override void OnClosed(EventArgs e)
-		{
-			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
-			{
-				w.DeleteHideable();
-				w.Close();
-			}));
+		//protected override void OnClosed(EventArgs e)
+		//{
+		//	_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+		//	{
+		//		w.DeleteHideable();
+		//		w.Close();
+		//	}));
 
-			var trader = MainWindow.Instance.Trader;
-			if (trader != null)
-			{
-				if (_initialized)
-					trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
-			}
+		//	var trader = MainWindow.Instance.Trader;
+		//	if (trader != null)
+		//	{
+		//		if (_initialized)
+		//			trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
+		//	}
 
-			base.OnClosed(e);
-		}
+		//	base.OnClosed(e);
+		//}
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Level1.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
+			Level1.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled = /*Depth.IsEnabled =*/ security != null;
 			TryEnableCandles();
 		}
 
@@ -102,41 +98,41 @@ namespace SampleFxcm
 				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 		}
 
-		private void DepthClick(object sender, RoutedEventArgs e)
-		{
-			var trader = MainWindow.Instance.Trader;
+		//private void DepthClick(object sender, RoutedEventArgs e)
+		//{
+		//	var trader = MainWindow.Instance.Trader;
 
-			foreach (var security in SecurityPicker.SelectedSecurities)
-			{
-				var window = _quotesWindows.SafeAdd(security, s =>
-				{
-					// subscribe on order book flow
-					//trader.RegisterMarketDepth(security);
+		//	foreach (var security in SecurityPicker.SelectedSecurities)
+		//	{
+		//		var window = _quotesWindows.SafeAdd(security, s =>
+		//		{
+		//			// subscribe on order book flow
+		//			//trader.RegisterMarketDepth(security);
 
-					// create order book window
-					var wnd = new QuotesWindow
-					{
-						Title = security.Id + " " + LocalizedStrings.MarketDepth
-					};
-					wnd.MakeHideable();
-					return wnd;
-				});
+		//			// create order book window
+		//			var wnd = new QuotesWindow
+		//			{
+		//				Title = security.Id + " " + LocalizedStrings.MarketDepth
+		//			};
+		//			wnd.MakeHideable();
+		//			return wnd;
+		//		});
 
-				if (window.Visibility == Visibility.Visible)
-					window.Hide();
-				else
-				{
-					window.Show();
-					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
-				}
+		//		if (window.Visibility == Visibility.Visible)
+		//			window.Hide();
+		//		else
+		//		{
+		//			window.Show();
+		//			window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+		//		}
 
-				if (!_initialized)
-				{
-					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-					_initialized = true;
-				}
-			}
-		}
+		//		if (!_initialized)
+		//		{
+		//			trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+		//			_initialized = true;
+		//		}
+		//	}
+		//}
 
 		private void Level1Click(object sender, RoutedEventArgs e)
 		{
@@ -151,13 +147,13 @@ namespace SampleFxcm
 			}
 		}
 
-		private void TraderOnMarketDepthChanged(MarketDepth depth)
-		{
-			var wnd = _quotesWindows.TryGetValue(depth.Security);
+		//private void TraderOnMarketDepthChanged(MarketDepth depth)
+		//{
+		//	var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-			if (wnd != null)
-				wnd.DepthCtrl.UpdateDepth(depth);
-		}
+		//	if (wnd != null)
+		//		wnd.DepthCtrl.UpdateDepth(depth);
+		//}
 
 		//private void FindClick(object sender, RoutedEventArgs e)
 		//{
