@@ -41,21 +41,12 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			private readonly HistoryEmulationConnector _parent;
 
-			private DateTimeOffset _currentTime;
-
-			public override DateTimeOffset CurrentTime => _currentTime;
+			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
 
 			public BasketEmulationAdapter(HistoryEmulationConnector parent)
 				: base(parent.TransactionIdGenerator, new InMemoryMessageAdapterProvider(), new CandleBuilderProvider(new InMemoryExchangeInfoProvider()))
 			{
 				_parent = parent;
-			}
-
-			protected override void OnSendInMessage(Message message)
-			{
-				_currentTime = message.LocalTime;
-
-				base.OnSendInMessage(message);
 			}
 
 			protected override void OnInnerAdapterNewOutMessage(IMessageAdapter innerAdapter, Message message)
