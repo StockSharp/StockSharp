@@ -48546,5 +48546,15 @@ namespace StockSharp.Localization
 		/// Volume trigger causes switch to the next contract.
 		/// </summary>
 		public static string VolumeTrigger => GetString(VolumeTriggerKey);
+
+		/// <summary>
+		/// Add folder.
+		/// </summary>
+		public const string AddFolderKey = nameof(AddFolder);
+
+		/// <summary>
+		/// Add folder.
+		/// </summary>
+		public static string AddFolder => GetString(AddFolderKey);
 	}
 }
