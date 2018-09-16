@@ -15228,3 +15228,12 @@ DocStr10749;Message users lookup for specified criteria;Сообщение о п
 DocStr10750;Users search result message;Сообщение о результате поиска пользователей
 DocStr10751;Points that displays source volatility values;Точки, которые отоюражают исходное значение улыбки волатильности
 DocStr10752;Line that displays approximated volatility smile;Линия, которая отображает аппроксимированную улыбку волатильности
+DocStr10753;The response of user lookup result;Результат поиска пользоватеей
+DocStr10754;Is blocked;Заблокирован
+DocStr10755;Annotation selection event;Событие выделения аннотации
+DocStr10756;{0} wrapper;Обертка {0}
+DocStr10757;Create clone but do not fill out fields/properties;Create clone but do not fill out fields/properties
+DocStr10758;Object of the same type to copy to;Object of the same type to copy to
+DocStr10759;The price of the associated stop order (loss limit level);The price of the associated stop order (loss limit level)
+DocStr10760;The price of the associated limit order (profit limit level);The price of the associated limit order (profit limit level)
+DocStr10761;Defines if the trade‘s stop/limit rate is in pips;Defines if the trade‘s stop/limit rate is in pips
