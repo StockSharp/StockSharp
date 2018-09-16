@@ -4887,6 +4887,7 @@ BasketCode;Basket type code.;Код типа корзины.
 Expression;Expression;Выражение
 ExpressionDesc;The mathematic formula of index.;Математическая формула индекса.
 VolumeTrigger;Volume trigger causes switch to the next contract.;Триггер объема, вызывающий переход на следующий контракт.
+AddFolder;Add folder;Добавить папку
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

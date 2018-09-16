@@ -41,21 +41,12 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			private readonly HistoryEmulationConnector _parent;
 
-			private DateTimeOffset _currentTime;
-
-			public override DateTimeOffset CurrentTime => _currentTime;
+			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
 
 			public BasketEmulationAdapter(HistoryEmulationConnector parent)
 				: base(parent.TransactionIdGenerator, new InMemoryMessageAdapterProvider(), new CandleBuilderProvider(new InMemoryExchangeInfoProvider()))
 			{
 				_parent = parent;
-			}
-
-			protected override void OnSendInMessage(Message message)
-			{
-				_currentTime = message.LocalTime;
-
-				base.OnSendInMessage(message);
 			}
 
 			protected override void OnInnerAdapterNewOutMessage(IMessageAdapter innerAdapter, Message message)
@@ -511,8 +502,25 @@ namespace StockSharp.Algo.Strategies.Testing
 		private void OnEmulationStopped()
 		{
 			foreach (var strategy in _batch)
-			{
 				strategy.Stop();
+		}
+
+		private void DisposeAdapters()
+		{
+			var adapter = EmulationConnector.Adapter;
+
+			foreach (var strategy in _batch)
+			{
+				var strategyAdapter = adapter.AdapterProvider.GetAdapter(strategy.Portfolio);
+
+				if (strategyAdapter != null)
+				{
+					adapter.InnerAdapters.Remove(strategyAdapter);
+
+					adapter
+						.AdapterProvider
+						.RemoveAssociation(strategy.Portfolio.Name);
+				}
 
 				var tuple = _strategyInfo.TryGetValue(strategy);
 
@@ -522,31 +530,9 @@ namespace StockSharp.Algo.Strategies.Testing
 				strategy.Security = tuple.Item2;
 				strategy.Portfolio = tuple.Item1;
 			}
-			
-			_strategyInfo.Clear();
-		}
-
-		private void DisposeAdapters()
-		{
-			var adapter = EmulationConnector.Adapter;
-
-			foreach (var strategy in _batch)
-			{
-				strategy.Stop();
-
-				var strategyAdapter = adapter.AdapterProvider.GetAdapter(strategy.Portfolio);
-
-				if (strategyAdapter == null) 
-					continue;
-
-				adapter.InnerAdapters.Remove(strategyAdapter);
-
-				adapter
-					.AdapterProvider
-					.RemoveAssociation(strategy.Portfolio.Name);
-			}
 
 			_batch = ArrayHelper.Empty<Strategy>();
+			_strategyInfo.Clear();
 		}
 
 		/// <summary>

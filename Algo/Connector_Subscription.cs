@@ -47,6 +47,7 @@ namespace StockSharp.Algo
 			{
 				_subscribers.Clear();
 				_registeredPortfolios.Clear();
+				_pendingSubscriptions.Clear();
 			}
 
 			private IEnumerable<Security> GetSubscribers(MarketDataTypes type)

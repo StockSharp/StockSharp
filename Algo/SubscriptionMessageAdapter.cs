@@ -64,6 +64,7 @@ namespace StockSharp.Algo
 			_subscribers.Clear();
 			_newsSubscribers.Clear();
 			_pfSubscribers.Clear();
+			_subscribersById.Clear();
 		}
 
 		/// <summary>
