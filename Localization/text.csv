@@ -15238,3 +15238,4 @@ DocStr10758;Object of the same type to copy to;Object of the same type to copy t
 DocStr10759;The price of the associated stop order (loss limit level);The price of the associated stop order (loss limit level)
 DocStr10760;The price of the associated limit order (profit limit level);The price of the associated limit order (profit limit level)
 DocStr10761;Defines if the trade‘s stop/limit rate is in pips;Defines if the trade‘s stop/limit rate is in pips
+DocStr10762;Is composite diagram element loaded;Is composite diagram element loaded

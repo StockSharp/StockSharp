@@ -204,7 +204,7 @@ namespace SampleRandomEmulation
 				}
 			};
 
-			Curve.Reset(new[] { _curveItems });
+			Curve.Reset(new[] { _curveElem });
 
 			Report.IsEnabled = false;
 
