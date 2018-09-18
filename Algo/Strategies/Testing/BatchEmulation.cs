@@ -304,7 +304,9 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private void EmulationConnectorOnMarketTimeChanged(TimeSpan timeSpan)
 		{
-			if (EmulationConnector.CurrentTime < _nextTime && EmulationConnector.CurrentTime < EmulationSettings.StopTime)
+			if (EmulationConnector.CurrentTime < _nextTime && 
+			    EmulationConnector.CurrentTime < EmulationSettings.StopTime || 
+			    EmulationConnector.State != EmulationStates.Started)
 				return;
 
 			_nextTime += _progressStep;
