@@ -40,7 +40,11 @@ namespace StockSharp.Algo.Risk
 			_rules.Added += r => r.Parent = this;
 			_rules.Removed += r => r.Parent = null;
 			_rules.Inserted += (i, r) => r.Parent = this;
-			_rules.Clearing += () => _rules.Cache.ForEach(r => r.Parent = null);
+			_rules.Clearing += () =>
+			{
+				_rules.Cache.ForEach(r => r.Parent = null);
+				return true;
+			};
 		}
 
 		private readonly CachedSynchronizedSet<IRiskRule> _rules = new CachedSynchronizedSet<IRiskRule>();
