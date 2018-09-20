@@ -48556,5 +48556,15 @@ namespace StockSharp.Localization
 		/// Add folder.
 		/// </summary>
 		public static string AddFolder => GetString(AddFolderKey);
+
+		/// <summary>
+		/// Asset type
+		/// </summary>
+		public const string AssetTypeKey = nameof(AssetType);
+
+		/// <summary>
+		/// Asset type
+		/// </summary>
+		public static string AssetType => GetString(AssetTypeKey);
 	}
 }

@@ -4888,6 +4888,7 @@ Expression;Expression;Выражение
 ExpressionDesc;The mathematic formula of index.;Математическая формула индекса.
 VolumeTrigger;Volume trigger causes switch to the next contract.;Триггер объема, вызывающий переход на следующий контракт.
 AddFolder;Add folder;Добавить папку
+AssetType;Asset type;Тип актива
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -12292,7 +12293,6 @@ DocStr7576;Limit price;Лимит цены исполнения
 DocStr7577;Trailing stop price step;Шаг увеличения цены скользящего стопа
 DocStr7578;Average price;Средняя цена исполнения
 DocStr7579;Covered option;Покрытый опцион
-DocStr7580;Asset type;Тип базового актива
 DocStr7581;Strike price;Страйк-цена
 DocStr7583;Уровни логирования;Уровни логирования
 DocStr7584;Стандарт (оптимально);Стандарт (оптимально)

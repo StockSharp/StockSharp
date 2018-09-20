@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using Ecng.Serialization;
@@ -219,12 +220,24 @@ namespace StockSharp.Messages
 		/// Basket security type. Can be <see langword="null"/> in case of regular security.
 		/// </summary>
 		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CodeKey,
+			Description = LocalizedStrings.BasketCodeKey,
+			GroupName = LocalizedStrings.BasketKey,
+			Order = 200)]
 		public string BasketCode { get; set; }
 
 		/// <summary>
 		/// Basket security expression. Can be <see langword="null"/> in case of regular security.
 		/// </summary>
 		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ExpressionKey,
+			Description = LocalizedStrings.ExpressionDescKey,
+			GroupName = LocalizedStrings.BasketKey,
+			Order = 201)]
 		public string BasketExpression { get; set; }
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityMessage"/>.
