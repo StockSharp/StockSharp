@@ -184,7 +184,7 @@ class SmaStrategy : Strategy
 			</para>
 			<code language="C#">
 	<![CDATA[
-_trader = new QuikTrader(this.Path.Text);
+_trader = new InteractiveBrokersTrader();
 
 _trader.Connected += () =>
 {

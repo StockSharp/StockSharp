@@ -85,6 +85,7 @@ E:StockSharp.Xaml.Charting.Chart.CancelOrder/summary;DocStr8943
 E:StockSharp.Xaml.Charting.Chart.AnnotationCreated/summary;DocStr10171
 E:StockSharp.Xaml.Charting.Chart.AnnotationModified/summary;DocStr10171
 E:StockSharp.Xaml.Charting.Chart.AnnotationDeleted/summary;DocStr10172
+E:StockSharp.Xaml.Charting.Chart.AnnotationSelected/summary;DocStr10755
 E:StockSharp.Xaml.Charting.Chart.SubscribeCandleElement/summary;DocStr7813
 E:StockSharp.Xaml.Charting.Chart.SubscribeIndicatorElement/summary;DocStr7813
 E:StockSharp.Xaml.Charting.Chart.SubscribeOrderElement/summary;DocStr7813
@@ -431,6 +432,7 @@ M:StockSharp.Xaml.Charting.ChartElement`1.Load(Ecng.Serialization.SettingsStorag
 M:StockSharp.Xaml.Charting.ChartElement`1.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.ChartElement`1.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Charting.ChartElement`1.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.Charting.ChartElement`1.CreateClone/summary;DocStr10757
 M:StockSharp.Xaml.Charting.ChartElement`1.Clone/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartElement`1.CheckAxesCompatible(StockSharp.Xaml.Charting.ChartAxisType,StockSharp.Xaml.Charting.ChartAxisType)/summary;DocStr10707
 M:StockSharp.Xaml.Charting.ChartElement`1.CheckAxesCompatible(StockSharp.Xaml.Charting.ChartAxisType,StockSharp.Xaml.Charting.ChartAxisType)/param/xType;DocStr10708
@@ -503,6 +505,7 @@ P:StockSharp.Xaml.Charting.ChartIndicatorElement.ShowAxisMarker/summary;DocStr10
 P:StockSharp.Xaml.Charting.ChartIndicatorElement.DrawTemplate/summary;DocStr10711
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.OnReset/inheritdoc;DocStr8459
+M:StockSharp.Xaml.Charting.ChartIndicatorElement.CreateClone/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 T:StockSharp.Xaml.Charting.ChartLineElement/summary;DocStr7855
@@ -538,6 +541,7 @@ E:StockSharp.Xaml.Charting.ChartPanel.CancelOrder/summary;DocStr8983
 E:StockSharp.Xaml.Charting.ChartPanel.AnnotationCreated/summary;DocStr10171
 E:StockSharp.Xaml.Charting.ChartPanel.AnnotationModified/summary;DocStr10667
 E:StockSharp.Xaml.Charting.ChartPanel.AnnotationDeleted/summary;DocStr10172
+E:StockSharp.Xaml.Charting.ChartPanel.AnnotationSelected/summary;DocStr10755
 E:StockSharp.Xaml.Charting.ChartPanel.SubscribeCandleElement/summary;DocStr7813
 E:StockSharp.Xaml.Charting.ChartPanel.SubscribeIndicatorElement/summary;DocStr7813
 E:StockSharp.Xaml.Charting.ChartPanel.SubscribeOrderElement/summary;DocStr7813
@@ -837,6 +841,10 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.DrawValue
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.DrawValues(StockSharp.Algo.Indicators.IIndicator,StockSharp.Algo.Indicators.IIndicator,StockSharp.Xaml.Charting.IChartElement)/summary;DocStr10731
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.DrawValues(StockSharp.Algo.Indicators.IIndicator,StockSharp.Algo.Indicators.IIndicator,StockSharp.Xaml.Charting.IChartElement,System.Func{System.Double,System.Double,System.Double})/summary;DocStr10732
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.AddChildElement(StockSharp.Xaml.Charting.IChartElement)/summary;DocStr10733
+M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Clone/inheritdoc;DocStr8459
+M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.CopyTo(System.Object)/summary;DocStr7750
+M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.CopyTo(System.Object)/param/o;DocStr10758
+M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.CopyTo(System.Object)/returns;DocStr1116
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

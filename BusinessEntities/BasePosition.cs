@@ -360,6 +360,26 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private DateTimeOffset? _expirationDate;
+
+		/// <summary>
+		/// Expiration date.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
+		[DescriptionLoc(LocalizedStrings.ExpiryDateKey)]
+		[MainCategory]
+		[Nullable]
+		public DateTimeOffset? ExpirationDate
+		{
+			get => _expirationDate;
+			set
+			{
+				_expirationDate = value;
+				NotifyChanged(nameof(ExpirationDate));
+			}
+		}
+
 		/// <summary>
 		/// To copy fields of the current position to <paramref name="destination" />.
 		/// </summary>
@@ -379,6 +399,7 @@ namespace StockSharp.BusinessEntities
 			destination.AveragePrice = AveragePrice;
 			destination.CurrentPrice = CurrentPrice;
 			destination.Description = Description;
+			destination.ExpirationDate = ExpirationDate;
 			//destination.LastChangeTime = LastChangeTime;
 			//destination.LocalTime = LocalTime;
 		}

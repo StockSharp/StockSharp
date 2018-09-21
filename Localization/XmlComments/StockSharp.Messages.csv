@@ -1192,6 +1192,7 @@ F:StockSharp.Messages.PositionChangeTypes.Commission/summary;Str262
 F:StockSharp.Messages.PositionChangeTypes.CurrentValueInLots/summary;Str263
 F:StockSharp.Messages.PositionChangeTypes.DepoName/summary;DocStr2933
 F:StockSharp.Messages.PositionChangeTypes.State/summary;Str265
+F:StockSharp.Messages.PositionChangeTypes.ExpirationDate/summary;ExpiryDate
 T:StockSharp.Messages.PositionChangeMessage/summary;DocStr4439
 P:StockSharp.Messages.PositionChangeMessage.SecurityId/summary;SecurityId
 P:StockSharp.Messages.PositionChangeMessage.PortfolioName/summary;DocStr3127
@@ -1714,6 +1715,7 @@ M:StockSharp.Messages.UserInfoMessage.#ctor/summary;DocStr1
 P:StockSharp.Messages.UserInfoMessage.Login/summary;Login
 P:StockSharp.Messages.UserInfoMessage.Password/summary;Str251
 P:StockSharp.Messages.UserInfoMessage.OriginalTransactionId/summary;DocStr4056
+P:StockSharp.Messages.UserInfoMessage.IsBlocked/summary;DocStr10754
 M:StockSharp.Messages.UserInfoMessage.ToString/inheritdoc;DocStr8459
 M:StockSharp.Messages.UserInfoMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.UserInfoMessage.Clone/returns;DocStr1116

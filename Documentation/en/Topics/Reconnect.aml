@@ -5,9 +5,7 @@
 
     <introduction>
       <para>
-		  The <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> class (from which the
-		  <codeEntityReference>T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>
-		  and <codeEntityReference>T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> connectors are inherited) realizes in its code the connections monitoring.
+		  The <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> class realizes in its code the connections monitoring.
 		  Such a tracking is configured through the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference>
 		  property and allows to track the following error scenarios:
 

@@ -6,7 +6,7 @@
 	    	
         <code language="C#">
         <![CDATA[
-private RithmicTrader _trader;
+private InteractiveBrokersTrader _trader;
 private Security _security;
 
 private CandleSeries _candleSeries;

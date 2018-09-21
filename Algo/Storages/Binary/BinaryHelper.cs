@@ -85,7 +85,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 					var found = false;
 
-					for (var i = 0; i < 10; i++)
+					for (var i = 0; i < 20; i++)
 					{
 						if ((price % newPriceStep) == 0)
 						{
@@ -548,6 +548,24 @@ namespace StockSharp.Algo.Storages.Binary
 		public static bool HasLocalTime(this Message msg, DateTimeOffset serverTime)
 		{
 			return !msg.LocalTime.IsDefault() && msg.LocalTime != serverTime/* && (msg.LocalTime - serverTime).TotalHours.Abs() < 1*/;
+		}
+
+		public static void WriteDto(this BitArrayWriter writer, DateTimeOffset? dto)
+		{
+			if (dto != null)
+			{
+				writer.Write(true);
+				writer.WriteLong(dto.Value.Ticks);
+				writer.WriteInt(dto.Value.Offset.Hours);
+				writer.WriteInt(dto.Value.Offset.Minutes);
+			}
+			else
+				writer.Write(false);
+		}
+
+		public static DateTimeOffset? ReadDto(this BitArrayReader reader)
+		{
+			return reader.Read() ? reader.ReadLong().To<DateTime>().ApplyTimeZone(new TimeSpan(reader.ReadInt(), reader.ReadInt(), 0)) : (DateTimeOffset?)null;
 		}
 	}
 }

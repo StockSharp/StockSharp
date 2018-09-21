@@ -359,8 +359,7 @@ namespace StockSharp.Configuration
 					.GetTypes()
 					.Where(t => !t.IsAbstract && 
 						t.IsSubclassOf(typeof(Xaml.Diagram.DiagramElement)) && 
-						t != typeof(Xaml.Diagram.CompositionDiagramElement) &&
-						t != typeof(Xaml.Diagram.ExportDiagramElement))
+						t != typeof(Xaml.Diagram.CompositionDiagramElement))
 					.Concat(_customDiagramElements)
 					.OrderBy(t => t.Name)
 					.ToArray();

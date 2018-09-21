@@ -41,21 +41,12 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			private readonly HistoryEmulationConnector _parent;
 
-			private DateTimeOffset _currentTime;
-
-			public override DateTimeOffset CurrentTime => _currentTime;
+			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
 
 			public BasketEmulationAdapter(HistoryEmulationConnector parent)
 				: base(parent.TransactionIdGenerator, new InMemoryMessageAdapterProvider(), new CandleBuilderProvider(new InMemoryExchangeInfoProvider()))
 			{
 				_parent = parent;
-			}
-
-			protected override void OnSendInMessage(Message message)
-			{
-				_currentTime = message.LocalTime;
-
-				base.OnSendInMessage(message);
 			}
 
 			protected override void OnInnerAdapterNewOutMessage(IMessageAdapter innerAdapter, Message message)
@@ -313,7 +304,9 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private void EmulationConnectorOnMarketTimeChanged(TimeSpan timeSpan)
 		{
-			if (EmulationConnector.CurrentTime < _nextTime && EmulationConnector.CurrentTime < EmulationSettings.StopTime)
+			if (EmulationConnector.CurrentTime < _nextTime && 
+			    EmulationConnector.CurrentTime < EmulationSettings.StopTime || 
+			    EmulationConnector.State != EmulationStates.Started)
 				return;
 
 			_nextTime += _progressStep;
@@ -322,6 +315,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private void EmulationConnectorOnDisconnected()
 		{
+			DisposeAdapters();
 			TryStartNextBatch();
 		}
 
@@ -391,7 +385,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			EmulationConnector.ClearCache();
 
-			InitAdapters(_batch);
+			InitAdapters();
 
 			EmulationConnector.HistoryMessageAdapter.StartDate = EmulationSettings.StartTime;
 			EmulationConnector.HistoryMessageAdapter.StopDate = EmulationSettings.StopTime;
@@ -401,14 +395,14 @@ namespace StockSharp.Algo.Strategies.Testing
 			EmulationConnector.Connect();
 		}
 
-		private void InitAdapters(IEnumerable<Strategy> strategies)
+		private void InitAdapters()
 		{
 			var adapter = EmulationConnector.Adapter;
 			
 			var id = _currentBatch * EmulationSettings.BatchSize;
 			var portfolios = new List<Portfolio>();
 
-			foreach (var strategy in strategies)
+			foreach (var strategy in _batch)
 			{
 				_strategyInfo[strategy] = new Tuple<Portfolio, Security>(strategy.Portfolio, strategy.Security);
 
@@ -509,12 +503,16 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private void OnEmulationStopped()
 		{
+			foreach (var strategy in _batch)
+				strategy.Stop();
+		}
+
+		private void DisposeAdapters()
+		{
 			var adapter = EmulationConnector.Adapter;
 
 			foreach (var strategy in _batch)
 			{
-				strategy.Stop();
-
 				var strategyAdapter = adapter.AdapterProvider.GetAdapter(strategy.Portfolio);
 
 				if (strategyAdapter != null)

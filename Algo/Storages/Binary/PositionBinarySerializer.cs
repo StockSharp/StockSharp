@@ -277,6 +277,9 @@ namespace StockSharp.Algo.Storages.Binary
 						case PositionChangeTypes.State:
 							writer.WriteInt((int)(PortfolioStates)change.Value);
 							break;
+						case PositionChangeTypes.ExpirationDate:
+							writer.WriteDto((DateTimeOffset)change.Value);
+							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
@@ -367,6 +370,9 @@ namespace StockSharp.Algo.Storages.Binary
 						break;
 					case PositionChangeTypes.State:
 						posMsg.Add(type, (PortfolioStates)reader.ReadInt());
+						break;
+					case PositionChangeTypes.ExpirationDate:
+						posMsg.Add(type, reader.ReadDto().Value);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

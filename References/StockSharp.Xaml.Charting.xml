@@ -321,6 +321,11 @@
             Annotation deleted event.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.AnnotationSelected">
+      <summary>
+            Annotation selection event.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Charting.Chart.SubscribeCandleElement">
       <summary>
             The event of the subscription to getting data for the element.
@@ -1606,6 +1611,11 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartElement`1.CreateClone">
+      <summary>
+            Create clone but do not fill out fields/properties.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.Clone">
       <inheritdoc />
     </member>
@@ -1831,6 +1841,9 @@
     <member name="M:StockSharp.Xaml.Charting.ChartIndicatorElement.OnReset">
       <inheritdoc />
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartIndicatorElement.CreateClone">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartIndicatorElement.Load(Ecng.Serialization.SettingsStorage)">
       <inheritdoc />
     </member>
@@ -1989,6 +2002,11 @@
     <member name="E:StockSharp.Xaml.Charting.ChartPanel.AnnotationDeleted">
       <summary>
             Annotation deleted event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Charting.ChartPanel.AnnotationSelected">
+      <summary>
+            Annotation selection event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Charting.ChartPanel.SubscribeCandleElement">
@@ -3059,6 +3077,16 @@
       <summary>
             Add inner chart element.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Clone">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.CopyTo(System.Object)">
+      <summary>
+            To fill out a copy of the element.
+            </summary>
+      <param name="o">Object of the same type to copy to.</param>
+      <returns>Copy.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>

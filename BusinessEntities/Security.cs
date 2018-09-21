@@ -1726,7 +1726,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.UnderlyingSecurityTypeKey,
+			Name = LocalizedStrings.AssetTypeKey,
 			Description = LocalizedStrings.UnderlyingSecurityTypeKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 103)]
@@ -1782,14 +1782,24 @@ namespace StockSharp.BusinessEntities
 		/// Basket security type. Can be <see langword="null"/> in case of regular security.
 		/// </summary>
 		[DataMember]
-		[Browsable(false)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CodeKey,
+			Description = LocalizedStrings.BasketCodeKey,
+			GroupName = LocalizedStrings.BasketKey,
+			Order = 200)]
 		public virtual string BasketCode { get; set; }
 
 		/// <summary>
 		/// Basket security expression. Can be <see langword="null"/> in case of regular security.
 		/// </summary>
 		[DataMember]
-		[Browsable(false)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ExpressionKey,
+			Description = LocalizedStrings.ExpressionDescKey,
+			GroupName = LocalizedStrings.BasketKey,
+			Order = 201)]
 		public virtual string BasketExpression { get; set; }
 
 		[field: NonSerialized]
