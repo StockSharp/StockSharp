@@ -48566,5 +48566,15 @@ namespace StockSharp.Localization
 		/// Asset type
 		/// </summary>
 		public static string AssetType => GetString(AssetTypeKey);
+
+		/// <summary>
+		/// To close the tab {0} strategy must be stopped. Stop strategy?
+		/// </summary>
+		public const string StopStrategyOnTabClosingKey = nameof(StopStrategyOnTabClosing);
+
+		/// <summary>
+		/// To close the tab {0} strategy must be stopped. Stop strategy?
+		/// </summary>
+		public static string StopStrategyOnTabClosing => GetString(StopStrategyOnTabClosingKey);
 	}
 }
