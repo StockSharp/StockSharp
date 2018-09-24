@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Element axis is not set.
+		/// </summary
+		public const string AxisIsNotSetKey = nameof(AxisIsNotSet);
+
+		/// <summary>
+		/// Element axis is not set.
+		/// </summary
+		public static string AxisIsNotSet => GetString(AxisIsNotSetKey);
+
+		/// <summary>
 		/// Unable to remove default axis.
 		/// </summary
 		public const string ErrorRemovingDefaultAxisKey = nameof(ErrorRemovingDefaultAxis);
