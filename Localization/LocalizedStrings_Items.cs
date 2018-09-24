@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Unable to remove default axis.
+		/// </summary
+		public const string ErrorRemovingDefaultAxisKey = nameof(ErrorRemovingDefaultAxis);
+
+		/// <summary>
+		/// Unable to remove default axis.
+		/// </summary
+		public static string ErrorRemovingDefaultAxis => GetString(ErrorRemovingDefaultAxisKey);
+
+		/// <summary>
 		/// Source values.
 		/// </summary>
 		public const string SourceValuesKey = nameof(SourceValues);
