@@ -19,22 +19,22 @@ namespace StockSharp.Localization
 	{
 		/// <summary>
 		/// Element axis is not set.
-		/// </summary
+		/// </summary>
 		public const string AxisIsNotSetKey = nameof(AxisIsNotSet);
 
 		/// <summary>
 		/// Element axis is not set.
-		/// </summary
+		/// </summary>
 		public static string AxisIsNotSet => GetString(AxisIsNotSetKey);
 
 		/// <summary>
 		/// Unable to remove default axis.
-		/// </summary
+		/// </summary>
 		public const string ErrorRemovingDefaultAxisKey = nameof(ErrorRemovingDefaultAxis);
 
 		/// <summary>
 		/// Unable to remove default axis.
-		/// </summary
+		/// </summary>
 		public static string ErrorRemovingDefaultAxis => GetString(ErrorRemovingDefaultAxisKey);
 
 		/// <summary>
