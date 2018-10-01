@@ -658,6 +658,9 @@ namespace StockSharp.Algo.Storages.Csv
 					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc)
 				};
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					portfolio.ClientCode = reader.ReadString();
+
 				return portfolio;
 			}
 
@@ -682,7 +685,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.State.To<string>(),
 					data.Description,
 					data.LastChangeTime.UtcDateTime.ToString(_dateTimeFormat),
-					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat)
+					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat),
+					data.ClientCode,
 				});
 			}
 		}
@@ -737,8 +741,11 @@ namespace StockSharp.Algo.Storages.Csv
 					Commission = reader.ReadNullableDecimal(),
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
 					LastChangeTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc),
-					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc)
+					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc),
 				};
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					position.ClientCode = reader.ReadString();
 
 				return position;
 			}
@@ -758,7 +765,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.Commission.To<string>(),
 					data.Description,
 					data.LastChangeTime.UtcDateTime.ToString(_dateTimeFormat),
-					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat)
+					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat),
+					data.ClientCode,
 				});
 			}
 

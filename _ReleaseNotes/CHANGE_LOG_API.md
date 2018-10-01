@@ -39,6 +39,7 @@ StockSharp API Change log
 * (feature) ImportSettingsPanel. IPersistable implemented.
 * (bug) Monitor. Clear sources tree in monitor fixes.
 * (bug) Monitor. Do not trim log sources names.
+* (feature) CsvEntityRegistry. Support Position.ClientCode save-load.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
