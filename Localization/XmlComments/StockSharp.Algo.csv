@@ -1156,6 +1156,7 @@ M:StockSharp.Algo.Import.CsvImporter.#ctor(StockSharp.Algo.DataType,System.Colle
 M:StockSharp.Algo.Import.CsvImporter.#ctor(StockSharp.Algo.DataType,System.Collections.Generic.IEnumerable{StockSharp.Algo.Import.FieldMapping},StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/param/drive;DocStr1605
 M:StockSharp.Algo.Import.CsvImporter.#ctor(StockSharp.Algo.DataType,System.Collections.Generic.IEnumerable{StockSharp.Algo.Import.FieldMapping},StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/param/storageFormat;DocStr1606
 P:StockSharp.Algo.Import.CsvImporter.UpdateDuplicateSecurities/summary;UpdateDuplicateSecurities
+E:StockSharp.Algo.Import.CsvImporter.SecurityUpdated/summary;DocStr10778
 M:StockSharp.Algo.Import.CsvImporter.Import(System.String,System.Action{System.Int32},System.Func{System.Boolean})/summary;DocStr9976
 M:StockSharp.Algo.Import.CsvImporter.Import(System.String,System.Action{System.Int32},System.Func{System.Boolean})/param/fileName;Str2002
 M:StockSharp.Algo.Import.CsvImporter.Import(System.String,System.Action{System.Int32},System.Func{System.Boolean})/param/updateProgress;DocStr424

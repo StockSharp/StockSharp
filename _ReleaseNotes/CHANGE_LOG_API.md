@@ -34,6 +34,7 @@ StockSharp API Change log
 * (feature) CEX. Remove ClientId settings.
 * (feature) BasePosition. ExpirationDate property added.
 * (bug) FXCM fixes.
+* (feature) CsvImporter. SecurityUpdated event added.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
