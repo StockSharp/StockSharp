@@ -196,7 +196,7 @@ namespace StockSharp.Messages
 		public bool IsNotSupported { get; set; }
 
 		/// <summary>
-		/// Subscribe or unsubscribe error info. Заполняется в случае ответа.
+		/// Subscribe or unsubscribe error info. To be setted if the answer.
 		/// </summary>
 		[DataMember]
 		public Exception Error { get; set; }
