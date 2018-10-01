@@ -52,13 +52,13 @@ namespace StockSharp.Messages
 		public string BoardCode { get; set; }
 
 		/// <summary>
-		/// User id.
+		/// Client code assigned by the broker.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str3725Key)]
-		[DescriptionLoc(LocalizedStrings.UserIdKey)]
 		[MainCategory]
-		public string User { get; set; }
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		public string ClientCode { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioChangeMessage"/>.
@@ -80,7 +80,7 @@ namespace StockSharp.Messages
 				PortfolioName = PortfolioName,
 				BoardCode = BoardCode,
 				ServerTime = ServerTime,
-				User = User,
+				ClientCode = ClientCode,
 			};
 
 			msg.Changes.AddRange(Changes);

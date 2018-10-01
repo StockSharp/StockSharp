@@ -22,6 +22,7 @@ P:StockSharp.BusinessEntities.BasePosition.LocalTime/summary;DocStr2618
 P:StockSharp.BusinessEntities.BasePosition.Description/summary;Str269
 P:StockSharp.BusinessEntities.BasePosition.Currency/summary;Str251
 P:StockSharp.BusinessEntities.BasePosition.ExpirationDate/summary;ExpiryDate
+P:StockSharp.BusinessEntities.BasePosition.ClientCode/summary;ClientCodeDesc
 M:StockSharp.BusinessEntities.BasePosition.CopyTo(StockSharp.BusinessEntities.BasePosition)/summary;DocStr2615
 M:StockSharp.BusinessEntities.BasePosition.CopyTo(StockSharp.BusinessEntities.BasePosition)/param/destination;DocStr2616
 T:StockSharp.BusinessEntities.Exchange/summary;ExchangeInfo
@@ -773,7 +774,6 @@ M:StockSharp.BusinessEntities.Position.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.Position.Portfolio/summary;Str270
 P:StockSharp.BusinessEntities.Position.Security/summary;Str271
 P:StockSharp.BusinessEntities.Position.DepoName/summary;DocStr2933
-P:StockSharp.BusinessEntities.Position.ClientCode/summary;ClientCodeDesc
 P:StockSharp.BusinessEntities.Position.LimitType/summary;DocStr2934
 M:StockSharp.BusinessEntities.Position.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Position.Clone/returns;DocStr1116

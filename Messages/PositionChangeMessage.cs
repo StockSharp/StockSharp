@@ -195,15 +195,6 @@ namespace StockSharp.Messages
 		public string DepoName { get; set; }
 
 		/// <summary>
-		/// User id.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str3725Key)]
-		[DescriptionLoc(LocalizedStrings.UserIdKey)]
-		[MainCategory]
-		public string User { get; set; }
-
-		/// <summary>
 		/// Limit type for Т+ market.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str266Key)]
@@ -252,7 +243,6 @@ namespace StockSharp.Messages
 				Description = Description,
 				OriginalTransactionId = OriginalTransactionId,
 				ClientCode = ClientCode,
-				User = User,
 			};
 
 			msg.Changes.AddRange(Changes);

@@ -2331,6 +2331,9 @@ namespace StockSharp.Algo
 			if (!message.BoardCode.IsEmpty())
 				portfolio.Board = exchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
 
+			if (!message.ClientCode.IsEmpty())
+				portfolio.ClientCode = message.ClientCode;
+
 			foreach (var change in message.Changes)
 			{
 				switch (change.Key)

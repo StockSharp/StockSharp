@@ -69,15 +69,6 @@ namespace StockSharp.BusinessEntities
 		public string DepoName { get; set; }
 
 		/// <summary>
-		/// Client code assigned by the broker.
-		/// </summary>
-		[DataMember]
-		[MainCategory]
-		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
-		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
-		public string ClientCode { get; set; }
-
-		/// <summary>
 		/// Limit type for Т+ market.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str272Key)]

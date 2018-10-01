@@ -381,6 +381,15 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
+		/// Client code assigned by the broker.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		public string ClientCode { get; set; }
+
+		/// <summary>
 		/// To copy fields of the current position to <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The position in which you should to copy fields.</param>
@@ -400,6 +409,7 @@ namespace StockSharp.BusinessEntities
 			destination.CurrentPrice = CurrentPrice;
 			destination.Description = Description;
 			destination.ExpirationDate = ExpirationDate;
+			destination.ClientCode = ClientCode;
 			//destination.LastChangeTime = LastChangeTime;
 			//destination.LocalTime = LocalTime;
 		}

@@ -1137,7 +1137,7 @@ F:StockSharp.Messages.OrderTypes.Execute/summary;DocStr4428
 T:StockSharp.Messages.PortfolioChangeMessage/summary;DocStr4429
 P:StockSharp.Messages.PortfolioChangeMessage.PortfolioName/summary;DocStr3127
 P:StockSharp.Messages.PortfolioChangeMessage.BoardCode/summary;DocStr4375
-P:StockSharp.Messages.PortfolioChangeMessage.User/summary;UserId
+P:StockSharp.Messages.PortfolioChangeMessage.ClientCode/summary;ClientCodeDesc
 M:StockSharp.Messages.PortfolioChangeMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.PortfolioChangeMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.PortfolioChangeMessage.Clone/returns;DocStr1116
@@ -1163,7 +1163,7 @@ T:StockSharp.Messages.PortfolioMessage/summary;DocStr4432
 P:StockSharp.Messages.PortfolioMessage.PortfolioName/summary;Str247
 P:StockSharp.Messages.PortfolioMessage.Currency/summary;Str251
 P:StockSharp.Messages.PortfolioMessage.BoardCode/summary;DocStr4375
-P:StockSharp.Messages.PortfolioMessage.User/summary;UserId
+P:StockSharp.Messages.PortfolioMessage.ClientCode/summary;ClientCodeDesc
 P:StockSharp.Messages.PortfolioMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Messages.PortfolioMessage.TransactionId/summary;DocStr4433
 P:StockSharp.Messages.PortfolioMessage.IsSubscribe/summary;DocStr4434
@@ -1198,7 +1198,6 @@ P:StockSharp.Messages.PositionChangeMessage.SecurityId/summary;SecurityId
 P:StockSharp.Messages.PositionChangeMessage.PortfolioName/summary;DocStr3127
 P:StockSharp.Messages.PositionChangeMessage.ClientCode/summary;ClientCodeDesc
 P:StockSharp.Messages.PositionChangeMessage.DepoName/summary;DocStr2933
-P:StockSharp.Messages.PositionChangeMessage.User/summary;UserId
 P:StockSharp.Messages.PositionChangeMessage.LimitType/summary;DocStr2934
 P:StockSharp.Messages.PositionChangeMessage.Description/summary;Str269
 P:StockSharp.Messages.PositionChangeMessage.OriginalTransactionId/summary;DocStr4056

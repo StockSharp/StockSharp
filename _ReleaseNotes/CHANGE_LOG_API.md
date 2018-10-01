@@ -35,6 +35,7 @@ StockSharp API Change log
 * (feature) BasePosition. ExpirationDate property added.
 * (bug) FXCM fixes.
 * (feature) CsvImporter. SecurityUpdated event added.
+* (feature) Positions. ClientCode moved from Position to BasePosition.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
