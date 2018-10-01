@@ -1150,6 +1150,18 @@
             </summary>
       <param name="items">Fields.</param>
     </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsPanel.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsPanel.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="M:StockSharp.Xaml.ImportSettingsPanel.InitializeComponent">
       <summary>
             InitializeComponent
@@ -5613,6 +5625,18 @@
       <summary>
             Child nodes.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.LogSourceNode.Add(StockSharp.Xaml.LogSourceNode)">
+      <summary>
+            Add <see cref="T:StockSharp.Xaml.LogSourceNode" />.
+            </summary>
+      <param name="node">Node.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.LogSourceNode.Remove(StockSharp.Xaml.LogSourceNode)">
+      <summary>
+            Remove <see cref="T:StockSharp.Xaml.LogSourceNode" />.
+            </summary>
+      <param name="node">Node.</param>
     </member>
     <member name="M:StockSharp.Xaml.LogSourceNode.ToString">
       <summary>

@@ -36,6 +36,9 @@ StockSharp API Change log
 * (bug) FXCM fixes.
 * (feature) CsvImporter. SecurityUpdated event added.
 * (feature) Positions. ClientCode moved from Position to BasePosition.
+* (feature) ImportSettingsPanel. IPersistable implemented.
+* (bug) Monitor. Clear sources tree in monitor fixes.
+* (bug) Monitor. Do not trim log sources names.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.

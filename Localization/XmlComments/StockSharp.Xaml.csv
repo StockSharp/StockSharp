@@ -271,6 +271,10 @@ M:StockSharp.Xaml.ImportSettingsPanel.SelectFields(System.Collections.Generic.IE
 M:StockSharp.Xaml.ImportSettingsPanel.SelectFields(System.Collections.Generic.IEnumerable{StockSharp.Algo.Import.FieldMapping},System.Boolean)/param/autoSetOrders;DocStr10401
 M:StockSharp.Xaml.ImportSettingsPanel.UnselectFields(System.Collections.Generic.IEnumerable{StockSharp.Algo.Import.FieldMapping})/summary;DocStr10402
 M:StockSharp.Xaml.ImportSettingsPanel.UnselectFields(System.Collections.Generic.IEnumerable{StockSharp.Algo.Import.FieldMapping})/param/items;DocStr10400
+M:StockSharp.Xaml.ImportSettingsPanel.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
+M:StockSharp.Xaml.ImportSettingsPanel.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.ImportSettingsPanel.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Xaml.ImportSettingsPanel.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.ImportSettingsPanel.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.IndexEditor/summary;DocStr8204
 M:StockSharp.Xaml.IndexEditor.#ctor/summary;DocStr1
@@ -1271,6 +1275,10 @@ M:StockSharp.Xaml.LogSourceNode.#ctor(System.Guid,System.String,StockSharp.Xaml.
 M:StockSharp.Xaml.LogSourceNode.#ctor(System.Guid,System.String,StockSharp.Xaml.LogSourceNode)/param/parentNode;DocStr8400
 P:StockSharp.Xaml.LogSourceNode.ParentNode/summary;DocStr8400
 P:StockSharp.Xaml.LogSourceNode.ChildNodes/summary;DocStr8403
+M:StockSharp.Xaml.LogSourceNode.Add(StockSharp.Xaml.LogSourceNode)/summary;DocStr10775
+M:StockSharp.Xaml.LogSourceNode.Add(StockSharp.Xaml.LogSourceNode)/param/node;DocStr10776
+M:StockSharp.Xaml.LogSourceNode.Remove(StockSharp.Xaml.LogSourceNode)/summary;DocStr10777
+M:StockSharp.Xaml.LogSourceNode.Remove(StockSharp.Xaml.LogSourceNode)/param/node;DocStr10776
 M:StockSharp.Xaml.LogSourceNode.ToString/summary;DocStr49
 M:StockSharp.Xaml.LogSourceNode.ToString/returns;DocStr50
 T:StockSharp.Xaml.StorageSettingsPanel/summary;DocStr8404
