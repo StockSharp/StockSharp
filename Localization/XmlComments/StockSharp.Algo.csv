@@ -3243,6 +3243,10 @@ M:StockSharp.Algo.Storages.StorageHelper.GetCandleMessageBuildableStorage(StockS
 M:StockSharp.Algo.Storages.StorageHelper.GetCandleMessageBuildableStorage(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,System.TimeSpan,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/param/drive;DocStr1605
 M:StockSharp.Algo.Storages.StorageHelper.GetCandleMessageBuildableStorage(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,System.TimeSpan,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/param/format;DocStr1606
 M:StockSharp.Algo.Storages.StorageHelper.GetCandleMessageBuildableStorage(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,System.TimeSpan,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr1427
+M:StockSharp.Algo.Storages.StorageHelper.LookupBoards(StockSharp.Algo.Storages.IExchangeInfoProvider,System.String)/summary;DocStr10780
+M:StockSharp.Algo.Storages.StorageHelper.LookupBoards(StockSharp.Algo.Storages.IExchangeInfoProvider,System.String)/param/provider;DocStr8927
+M:StockSharp.Algo.Storages.StorageHelper.LookupBoards(StockSharp.Algo.Storages.IExchangeInfoProvider,System.String)/param/like;DocStr3836
+M:StockSharp.Algo.Storages.StorageHelper.LookupBoards(StockSharp.Algo.Storages.IExchangeInfoProvider,System.String)/returns;DocStr10781
 T:StockSharp.Algo.Storages.StorageRegistry/summary;DocStr8561
 M:StockSharp.Algo.Storages.StorageRegistry.#ctor/summary;DocStr1
 M:StockSharp.Algo.Storages.StorageRegistry.DisposeManaged/summary;DocStr7
@@ -4028,6 +4032,7 @@ E:StockSharp.Algo.Connector.ConnectionErrorEx/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.Error/summary;DocStr893
 E:StockSharp.Algo.Connector.LookupSecuritiesResult/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.LookupPortfoliosResult/inheritdoc;DocStr8459
+E:StockSharp.Algo.Connector.LookupBoardsResult/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.MarketDataSubscriptionSucceeded/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.MarketDataSubscriptionFailed/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.MarketDataUnSubscriptionSucceeded/inheritdoc;DocStr8459
@@ -4069,8 +4074,11 @@ M:StockSharp.Algo.Connector.RaiseMarketTimeChanged(System.TimeSpan)/param/diff;D
 M:StockSharp.Algo.Connector.RaiseLookupSecuritiesResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/summary;DocStr466
 M:StockSharp.Algo.Connector.RaiseLookupSecuritiesResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/param/error;DocStr9314
 M:StockSharp.Algo.Connector.RaiseLookupSecuritiesResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/param/securities;DocStr8518
+M:StockSharp.Algo.Connector.RaiseLookupBoardsResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.ExchangeBoard})/summary;DocStr466
+M:StockSharp.Algo.Connector.RaiseLookupBoardsResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.ExchangeBoard})/param/error;DocStr9314
+M:StockSharp.Algo.Connector.RaiseLookupBoardsResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.ExchangeBoard})/param/boards;DocStr10781
 M:StockSharp.Algo.Connector.RaiseLookupPortfoliosResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/summary;DocStr466
-M:StockSharp.Algo.Connector.RaiseLookupPortfoliosResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/param/error;DocStr9315
+M:StockSharp.Algo.Connector.RaiseLookupPortfoliosResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/param/error;DocStr9314
 M:StockSharp.Algo.Connector.RaiseLookupPortfoliosResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/param/portfolios;DocStr770
 M:StockSharp.Algo.Connector.RaiseNewMessage(StockSharp.Messages.Message)/summary;DocStr466
 M:StockSharp.Algo.Connector.RaiseNewMessage(StockSharp.Messages.Message)/param/message;DocStr771
@@ -4102,6 +4110,8 @@ M:StockSharp.Algo.Connector.UnRegisterOrderLog(StockSharp.BusinessEntities.Secur
 M:StockSharp.Algo.Connector.RegisterNews/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.OnRegisterNews/summary;DocStr797
 M:StockSharp.Algo.Connector.UnRegisterNews/inheritdoc;DocStr8459
+M:StockSharp.Algo.Connector.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Connector.UnSubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.RequestNewsStory(StockSharp.BusinessEntities.News)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.OnUnRegisterNews/summary;DocStr798
 M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/summary;DocStr83
@@ -4188,6 +4198,8 @@ M:StockSharp.Algo.Connector.LookupOrders(StockSharp.BusinessEntities.Order,Stock
 M:StockSharp.Algo.Connector.LookupOrders(StockSharp.Messages.OrderStatusMessage)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.LookupPortfolios(StockSharp.Messages.PortfolioLookupMessage)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Connector.LookupBoards(StockSharp.BusinessEntities.ExchangeBoard,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Connector.LookupBoards(StockSharp.Messages.BoardLookupMessage)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/summary;DocStr812
 M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/portfolio;DocStr813
 M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/security;DocStr814

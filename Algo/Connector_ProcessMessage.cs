@@ -668,6 +668,10 @@ namespace StockSharp.Algo
 						ProcessSecurityLookupResultMessage((SecurityLookupResultMessage)message);
 						break;
 
+					case MessageTypes.BoardLookupResult:
+						ProcessBoardLookupResultMessage((BoardLookupResultMessage)message);
+						break;
+
 					case MessageTypes.PortfolioLookupResult:
 						ProcessPortfolioLookupResultMessage((PortfolioLookupResultMessage)message);
 						break;
@@ -735,8 +739,8 @@ namespace StockSharp.Algo
 						break;
 					}
 
-					case MessageTypes.Session:
-						ProcessSessionMessage((SessionMessage)message);
+					case MessageTypes.BoardState:
+						ProcessBoardStateMessage((BoardStateMessage)message);
 						break;
 
 					case ExtendedMessageTypes.RemoveSecurity:
@@ -1065,10 +1069,10 @@ namespace StockSharp.Algo
 			RaiseConnectionErrorEx(adapter, error);
 		}
 
-		private void ProcessSessionMessage(SessionMessage message)
+		private void ProcessBoardStateMessage(BoardStateMessage message)
 		{
 			var board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
-			_sessionStates[board] = message.State;
+			_boardStates[board] = message.State;
 			SessionStateChanged?.Invoke(board, message.State);
 		}
 
@@ -1140,6 +1144,19 @@ namespace StockSharp.Algo
 					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = nextCriteria.TransactionId });
 				}
 			}
+		}
+
+		private void ProcessBoardLookupResultMessage(BoardLookupResultMessage message)
+		{
+			if (message.Error != null)
+				RaiseError(message.Error);
+
+			var criteria = _boardLookups.TryGetValue(message.OriginalTransactionId);
+
+			if (criteria == null)
+				return;
+
+			RaiseLookupBoardsResult(message.Error, ExchangeBoards.Where(b => criteria.Like.IsEmpty() || b.Code.ContainsIgnoreCase(criteria.Like)));
 		}
 
 		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)

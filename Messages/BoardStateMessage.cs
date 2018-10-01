@@ -69,13 +69,13 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class SessionMessage : Message
+	public class BoardStateMessage : Message
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SessionMessage"/>.
+		/// Initializes a new instance of the <see cref="BoardStateMessage"/>.
 		/// </summary>
-		public SessionMessage()
-			: base(MessageTypes.Session)
+		public BoardStateMessage()
+			: base(MessageTypes.BoardState)
 		{
 		}
 
@@ -92,12 +92,12 @@ namespace StockSharp.Messages
 		public SessionStates State { get; set; }
 
 		/// <summary>
-		/// Create a copy of <see cref="SessionMessage"/>.
+		/// Create a copy of <see cref="BoardStateMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new SessionMessage
+			return new BoardStateMessage
 			{
 				BoardCode = BoardCode,
 				State = State,

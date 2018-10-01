@@ -40,6 +40,11 @@ StockSharp API Change log
 * (bug) Monitor. Clear sources tree in monitor fixes.
 * (bug) Monitor. Do not trim log sources names.
 * (feature) CsvEntityRegistry. Support Position.ClientCode save-load.
+* (feature) SessionMessage->BoardStateMessage renamed.
+* (feature) BoardLookupMessage, BoardRequestMessage, UserRequestMessage added.
+* (feature) IConnector. LookupBoardsResult event added.
+* (feature) IConnector. LookupBoards method added.
+* (feature) IConnector. SubscribeBoard/UnSubscribeBoard methods added.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.

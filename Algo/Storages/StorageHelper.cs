@@ -830,5 +830,24 @@ namespace StockSharp.Algo.Storages
 		{
 			return new CandleMessageBuildableStorage(registry, security, timeFrame, drive, format);
 		}
+
+		/// <summary>
+		/// Filter boards by code criteria.
+		/// </summary>
+		/// <param name="provider">The exchange boards provider.</param>
+		/// <param name="like">Criteria.</param>
+		/// <returns>Found boards.</returns>
+		public static IEnumerable<ExchangeBoard> LookupBoards(this IExchangeInfoProvider provider, string like)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			var boards = provider.Boards;
+
+			if (!like.IsEmpty())
+				boards = boards.Where(b => b.Code.ContainsIgnoreCase(like));
+
+			return boards;
+		}
 	}
 }

@@ -1,7 +1,6 @@
 namespace StockSharp.Messages
 {
 	using System;
-	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -31,21 +30,15 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Login.
+		/// The filter for user search.
 		/// </summary>
 		[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.LoginKey,
-			Description = LocalizedStrings.LoginKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 0)]
-		public string Login { get; set; }
+		public string Like { get; set; }
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Name={Login}";
+			return base.ToString() + $",Name={Like}";
 		}
 
 		/// <summary>
@@ -64,7 +57,7 @@ namespace StockSharp.Messages
 		/// <returns>The object, to which copied information.</returns>
 		protected UserLookupMessage CopyTo(UserLookupMessage destination)
 		{
-			destination.Login = Login;
+			destination.Like = Like;
 			destination.TransactionId = TransactionId;
 
 			this.CopyExtensionInfo(destination);

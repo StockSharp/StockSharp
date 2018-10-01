@@ -424,12 +424,56 @@ namespace StockSharp.Messages
 						return;
 					}
 
+					case MessageTypes.BoardLookup:
+					{
+						var lookupMsg = (BoardLookupMessage)message;
+						SendOutMessage(new BoardLookupResultMessage
+						{
+							OriginalTransactionId = lookupMsg.TransactionId,
+							Error = ex
+						});
+						return;
+					}
+
+					case MessageTypes.BoardRequest:
+					{
+						var requestMsg = (BoardRequestMessage)message;
+						SendOutMessage(new BoardRequestMessage
+						{
+							OriginalTransactionId = requestMsg.TransactionId,
+							Error = ex
+						});
+						return;
+					}
+
 					case MessageTypes.PortfolioLookup:
 					{
 						var lookupMsg = (PortfolioLookupMessage)message;
 						SendOutMessage(new PortfolioLookupResultMessage
 						{
 							OriginalTransactionId = lookupMsg.TransactionId,
+							Error = ex
+						});
+						return;
+					}
+
+					case MessageTypes.UserLookup:
+					{
+						var lookupMsg = (UserLookupMessage)message;
+						SendOutMessage(new UserLookupResultMessage
+						{
+							OriginalTransactionId = lookupMsg.TransactionId,
+							Error = ex
+						});
+						return;
+					}
+
+					case MessageTypes.UserRequest:
+					{
+						var requestMsg = (UserRequestMessage)message;
+						SendOutMessage(new UserRequestMessage
+						{
+							OriginalTransactionId = requestMsg.TransactionId,
 							Error = ex
 						});
 						return;

@@ -1635,7 +1635,7 @@ namespace StockSharp.Algo.Testing
 		private DateTimeOffset _bufferPrevFlush;
 		private DateTimeOffset _portfoliosPrevRecalc;
 		private readonly ICommissionManager _commissionManager = new CommissionManager();
-		private readonly Dictionary<string, SessionStates> _sessionStates = new Dictionary<string, SessionStates>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<string, SessionStates> _boardStates = new Dictionary<string, SessionStates>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketEmulator"/>.
@@ -1708,7 +1708,7 @@ namespace StockSharp.Algo.Testing
 
 					if (Settings.CheckTradingState)
 					{
-						var state = _sessionStates.TryGetValue2(nameof(MarketEmulator)) ?? _sessionStates.TryGetValue2(secId.BoardCode);
+						var state = _boardStates.TryGetValue2(nameof(MarketEmulator)) ?? _boardStates.TryGetValue2(secId.BoardCode);
 
 						switch (state)
 						{
@@ -1749,7 +1749,7 @@ namespace StockSharp.Algo.Testing
 
 					_portfolios.Clear();
 					_boardDefinitions.Clear();
-					_sessionStates.Clear();
+					_boardStates.Clear();
 
 					_secStates.Clear();
 
@@ -1877,17 +1877,17 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case MessageTypes.Session:
+				case MessageTypes.BoardState:
 					if (Settings.CheckTradingState)
 					{
-						var sessionMsg = (SessionMessage)message;
+						var boardStateMsg = (BoardStateMessage)message;
 
-						var board = sessionMsg.BoardCode;
+						var board = boardStateMsg.BoardCode;
 
 						if (board.IsEmpty())
 							board = nameof(MarketEmulator);
 
-						_sessionStates[board] = sessionMsg.State;
+						_boardStates[board] = boardStateMsg.State;
 					}
 
 					retVal.Add(message);

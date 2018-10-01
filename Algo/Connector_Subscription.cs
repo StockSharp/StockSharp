@@ -381,6 +381,34 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
+		public void SubscribeBoard(ExchangeBoard board)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			SendInMessage(new BoardRequestMessage
+			{
+				IsSubscribe = true,
+				BoardCode = board.Code,
+				TransactionId = TransactionIdGenerator.GetNextId(),
+			});
+		}
+
+		/// <inheritdoc />
+		public void UnSubscribeBoard(ExchangeBoard board)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			SendInMessage(new BoardRequestMessage
+			{
+				IsSubscribe = false,
+				BoardCode = board.Code,
+				TransactionId = TransactionIdGenerator.GetNextId(),
+			});
+		}
+
+		/// <inheritdoc />
 		public virtual void RequestNewsStory(News news)
 		{
 			if (news == null)

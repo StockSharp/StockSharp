@@ -537,6 +537,10 @@ namespace StockSharp.Algo.Storages
 					ProcessSecurityLookup((SecurityLookupMessage)message);
 					break;
 
+				case MessageTypes.BoardLookup:
+					ProcessBoardLookup((BoardLookupMessage)message);
+					break;
+
 				case MessageTypes.PortfolioLookup:
 					ProcessPortfolioLookup((PortfolioLookupMessage)message);
 					break;
@@ -563,11 +567,29 @@ namespace StockSharp.Algo.Storages
 				return;
 			}
 
+			// TODO filters
+
 			foreach (var board in _entityRegistry.ExchangeBoards)
 				RaiseStorageMessage(board.ToMessage());
 
 			foreach (var security in _entityRegistry.Securities)
 				RaiseStorageMessage(security.ToMessage());
+
+			base.SendInMessage(msg);
+		}
+
+		private void ProcessBoardLookup(BoardLookupMessage msg)
+		{
+			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			{
+				base.SendInMessage(msg);
+				return;
+			}
+
+			// TODO filters
+
+			foreach (var board in _entityRegistry.ExchangeBoards)
+				RaiseStorageMessage(board.ToMessage());
 
 			base.SendInMessage(msg);
 		}
@@ -579,6 +601,8 @@ namespace StockSharp.Algo.Storages
 				base.SendInMessage(msg);
 				return;
 			}
+
+			// TODO filters
 
 			foreach (var portfolio in _entityRegistry.Portfolios)
 			{

@@ -78,10 +78,11 @@ namespace StockSharp.Algo
 		private readonly SynchronizedQueue<SecurityLookupMessage> _lookupQueue = new SynchronizedQueue<SecurityLookupMessage>();
 		private readonly SynchronizedDictionary<long, SecurityLookupMessage> _securityLookups = new SynchronizedDictionary<long, SecurityLookupMessage>();
 		private readonly SynchronizedDictionary<long, PortfolioLookupMessage> _portfolioLookups = new SynchronizedDictionary<long, PortfolioLookupMessage>();
-		
+		private readonly SynchronizedDictionary<long, BoardLookupMessage> _boardLookups = new SynchronizedDictionary<long, BoardLookupMessage>();
+
 		private readonly SubscriptionManager _subscriptionManager;
 
-		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _sessionStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
+		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _boardStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
 		private readonly SynchronizedDictionary<Security, object[]> _securityValues = new SynchronizedDictionary<Security, object[]>();
 
 		private bool _isDisposing;
@@ -322,7 +323,7 @@ namespace StockSharp.Algo
 		/// <returns>Session state. If the information about session state does not exist, then <see langword="null" /> will be returned.</returns>
 		public SessionStates? GetSessionState(ExchangeBoard board)
 		{
-			return _sessionStates.TryGetValue2(board);
+			return _boardStates.TryGetValue2(board);
 		}
 
 		/// <summary>
@@ -699,7 +700,7 @@ namespace StockSharp.Algo
 			var msg = new PortfolioLookupMessage
 			{
 				TransactionId = TransactionIdGenerator.GetNextId(),
-				BoardCode = criteria.Board == null ? null : criteria.Board.Code,
+				BoardCode = criteria.Board?.Code,
 				Currency = criteria.Currency,
 				PortfolioName = criteria.Name,
 				Adapter = adapter,
@@ -716,6 +717,34 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(criteria));
 
 			_portfolioLookups.Add(criteria.TransactionId, criteria);
+
+			SendInMessage(criteria);
+		}
+
+		/// <inheritdoc />
+		public void LookupBoards(ExchangeBoard criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			var msg = new BoardLookupMessage
+			{
+				TransactionId = TransactionIdGenerator.GetNextId(),
+				Like = criteria.Code,
+				Adapter = adapter,
+				OfflineMode = offlineMode,
+			};
+
+			LookupBoards(msg);
+		}
+
+		/// <inheritdoc />
+		public void LookupBoards(BoardLookupMessage criteria)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			_boardLookups.Add(criteria.TransactionId, criteria);
 
 			SendInMessage(criteria);
 		}
@@ -1424,6 +1453,7 @@ namespace StockSharp.Algo
 			_currentTime = default(DateTimeOffset);
 
 			_securityLookups.Clear();
+			_boardLookups.Clear();
 			_portfolioLookups.Clear();
 
 			_lookupQueue.Clear();
@@ -1445,7 +1475,7 @@ namespace StockSharp.Algo
 			_subscriptionManager.ClearCache();
 
 			_securityValues.Clear();
-			_sessionStates.Clear();
+			_boardStates.Clear();
 
 			SendInMessage(new ResetMessage());
 

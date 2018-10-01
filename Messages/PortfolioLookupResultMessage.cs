@@ -32,7 +32,7 @@ namespace StockSharp.Messages
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Portfolio lookup error info.
+		/// Lookup error info.
 		/// </summary>
 		[DataMember]
 		public Exception Error { get; set; }

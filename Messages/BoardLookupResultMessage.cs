@@ -4,22 +4,22 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Users search result message.
+	/// Boards search result message.
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class UserLookupResultMessage : Message
+	public class BoardLookupResultMessage : Message
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UserLookupResultMessage"/>.
+		/// Initializes a new instance of the <see cref="BoardLookupResultMessage"/>.
 		/// </summary>
-		public UserLookupResultMessage()
-			: base(MessageTypes.UserLookupResult)
+		public BoardLookupResultMessage()
+			: base(MessageTypes.BoardLookupResult)
 		{
 		}
 
 		/// <summary>
-		/// ID of the original message <see cref="UserLookupMessage.TransactionId"/> for which this message is a response.
+		/// ID of the original message <see cref="BoardLookupMessage.TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
@@ -31,12 +31,12 @@ namespace StockSharp.Messages
 		public Exception Error { get; set; }
 
 		/// <summary>
-		/// Create a copy of <see cref="UserLookupResultMessage"/>.
+		/// Create a copy of <see cref="BoardLookupResultMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return CopyTo(new UserLookupResultMessage());
+			return CopyTo(new BoardLookupResultMessage());
 		}
 
 		/// <summary>
@@ -44,7 +44,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
 		/// <returns>The object, to which copied information.</returns>
-		protected UserLookupResultMessage CopyTo(UserLookupResultMessage destination)
+		protected BoardLookupResultMessage CopyTo(BoardLookupResultMessage destination)
 		{
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.Error = Error;
