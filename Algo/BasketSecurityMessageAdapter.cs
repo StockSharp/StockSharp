@@ -2,8 +2,10 @@ namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -13,14 +15,22 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class BasketSecurityMessageAdapter : MessageAdapterWrapper
 	{
-		private class SubscriptionLegsInfo
+		private class SubscriptionInfo
 		{
-			public readonly SynchronizedDictionary<long, Tuple<IBasketSecurityProcessor, long>> ByTransactionIds = new SynchronizedDictionary<long, Tuple<IBasketSecurityProcessor, long>>();
-			public readonly SynchronizedDictionary<SecurityId, Tuple<IBasketSecurityProcessor, long>> BySecurityIds = new SynchronizedDictionary<SecurityId, Tuple<IBasketSecurityProcessor, long>>();
+			public IBasketSecurityProcessor Processor { get; }
+			public long TransactionId { get; }
+			public HashSet<long> LegsSubscriptions { get; } = new HashSet<long>();
+
+			public SubscriptionInfo(IBasketSecurityProcessor processor, long transactionId)
+			{
+				Processor = processor ?? throw new ArgumentNullException(nameof(processor));
+				TransactionId = transactionId;
+			}
 		}
 
-		private readonly SynchronizedDictionary<MarketDataTypes, SubscriptionLegsInfo> _subscriptions = new SynchronizedDictionary<MarketDataTypes, SubscriptionLegsInfo>();
-		
+		private readonly SynchronizedDictionary<MarketDataTypes, SynchronizedDictionary<long, SubscriptionInfo>> _subscriptions = new SynchronizedDictionary<MarketDataTypes, SynchronizedDictionary<long, SubscriptionInfo>>();
+		private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsById = new SynchronizedDictionary<long, SubscriptionInfo>();
+
 		private readonly ISecurityProvider _securityProvider;
 		private readonly IBasketSecurityProcessorProvider _processorProvider;
 
@@ -45,6 +55,7 @@ namespace StockSharp.Algo
 				case MessageTypes.Reset:
 				{
 					_subscriptions.Clear();
+					_subscriptionsById.Clear();
 					break;
 				}
 
@@ -52,44 +63,64 @@ namespace StockSharp.Algo
 				{
 					var mdMsg = (MarketDataMessage)message;
 
+					if (mdMsg.SecurityId.IsDefault())
+						break;
+
+					var security = _securityProvider.LookupById(mdMsg.SecurityId);
+
+					if (security?.BasketCode.IsEmpty() == true)
+						break;
+
 					if (mdMsg.IsSubscribe)
 					{
-						if (!mdMsg.IsBasket())
-							break;
+						var processor = _processorProvider.CreateProcessor(security);
+						var info = new SubscriptionInfo(processor, mdMsg.TransactionId);
 
-						if (_securityProvider.LookupById(mdMsg.SecurityId) is BasketSecurity basket)
+						var dict = _subscriptions.SafeAdd(mdMsg.DataType);
+						_subscriptionsById.Add(mdMsg.TransactionId, info);
+
+						var inners = new MarketDataMessage[processor.BasketLegs.Length];
+
+						for (var i = 0; i < inners.Length; i++)
 						{
-							var processor = _processorProvider.CreateProcessor(basket);
-							var tuple = Tuple.Create(processor, mdMsg.TransactionId);
+							var inner = (MarketDataMessage)mdMsg.Clone();
 
-							var info = _subscriptions.SafeAdd(mdMsg.DataType);
+							inner.TransactionId = TransactionIdGenerator.GetNextId();
+							inner.SecurityId = processor.BasketLegs[i];
 
-							var ids = new long[processor.BasketLegs.Length];
+							inners[i] = inner;
 
-							for (var i = 0; i < ids.Length; i++)
-							{
-								ids[i] = TransactionIdGenerator.GetNextId();
-								info.ByTransactionIds.Add(ids[i], tuple);
-							}
-
-							foreach (var id in ids)
-							{
-								var clone = (MarketDataMessage)mdMsg.Clone();
-								clone.TransactionId = id;
-								SendInMessage(clone);
-							}
-
-							return;
+							info.LegsSubscriptions.Add(inner.TransactionId);
+							dict.Add(inner.TransactionId, info);
 						}
+
+						foreach (var inner in inners)
+							base.SendInMessage(inner);
 					}
 					else
 					{
+						if (!_subscriptionsById.TryGetValue(mdMsg.OriginalTransactionId, out var info))
+							break;
 
+						_subscriptionsById.Remove(mdMsg.OriginalTransactionId);
+
+						foreach (var id in info.LegsSubscriptions)
+						{
+							base.SendInMessage(new MarketDataMessage
+							{
+								TransactionId = TransactionIdGenerator.GetNextId(),
+								IsSubscribe = false,
+								OriginalTransactionId = id
+							});
+						}
 					}
 
-					
-					
-					break;
+					RaiseNewOutMessage(new MarketDataMessage
+					{
+						OriginalTransactionId = mdMsg.TransactionId
+					});
+
+					return;
 				}
 			}
 
@@ -116,15 +147,15 @@ namespace StockSharp.Algo
 				{
 					var candleMsg = (CandleMessage)message;
 
-					if (_subscriptions.TryGetValue(message.Type.ToCandleMarketDataType(), out var info))
+					if (_subscriptions.TryGetValue(message.Type.ToCandleMarketDataType(), out var dict))
 					{
-						if (info.ByTransactionIds.TryGetValue(candleMsg.OriginalTransactionId, out var tuple))
+						if (dict.TryGetValue(candleMsg.OriginalTransactionId, out var info))
 						{
-							var basketMsgs = (IEnumerable<CandleMessage>)tuple.Item1.Process(candleMsg);
+							var basketMsgs = info.Processor.Process(candleMsg).Cast<CandleMessage>();
 
 							foreach (var basketMsg in basketMsgs)
 							{
-								basketMsg.OriginalTransactionId = tuple.Item2;
+								basketMsg.OriginalTransactionId = info.TransactionId;
 								RaiseNewOutMessage(basketMsg);
 							}
 
@@ -146,24 +177,24 @@ namespace StockSharp.Algo
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					SubscriptionLegsInfo info;
+					SynchronizedDictionary<long, SubscriptionInfo> dict;
 
 					switch (execMsg.ExecutionType)
 					{
 						case ExecutionTypes.Tick:
-							info = _subscriptions.TryGetValue(MarketDataTypes.Trades);
+							dict = _subscriptions.TryGetValue(MarketDataTypes.Trades);
 							break;
 						case ExecutionTypes.Transaction:
-							info = null;
+							dict = null;
 							break;
 						case ExecutionTypes.OrderLog:
-							info = _subscriptions.TryGetValue(MarketDataTypes.OrderLog);
+							dict = _subscriptions.TryGetValue(MarketDataTypes.OrderLog);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
 
-					if (info != null)
+					if (dict != null)
 					{
 						if (execMsg.OriginalTransactionId == 0)
 						{
@@ -171,13 +202,13 @@ namespace StockSharp.Algo
 						}
 						else
 						{
-							if (info.ByTransactionIds.TryGetValue(execMsg.OriginalTransactionId, out var tuple))
+							if (dict.TryGetValue(execMsg.OriginalTransactionId, out var info))
 							{
-								var basketMsgs = (IEnumerable<ExecutionMessage>)tuple.Item1.Process(execMsg);
+								var basketMsgs = info.Processor.Process(execMsg).Cast<ExecutionMessage>();
 
 								foreach (var basketMsg in basketMsgs)
 								{
-									basketMsg.OriginalTransactionId = tuple.Item2;
+									basketMsg.OriginalTransactionId = info.TransactionId;
 									RaiseNewOutMessage(basketMsg);
 								}
 
