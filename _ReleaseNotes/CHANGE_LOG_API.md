@@ -47,6 +47,7 @@ StockSharp API Change log
 * (feature) IConnector. SubscribeBoard/UnSubscribeBoard methods added.
 * (bug) SubscriptionMessageAdapter. Set original trans id while disconnect unsubscribe.
 * (feature) Connector. SupportBasketSecurities property added.
+* (feature) InteractiveBrokers. MaxVersion settings added.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
