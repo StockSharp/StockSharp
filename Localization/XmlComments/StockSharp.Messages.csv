@@ -39,6 +39,7 @@ P:StockSharp.Messages.BoardRequestMessage.BoardCode/summary;BoardCode
 P:StockSharp.Messages.BoardRequestMessage.IsSubscribe/summary;DocStr10795
 P:StockSharp.Messages.BoardRequestMessage.TransactionId/summary;DocStr3166
 P:StockSharp.Messages.BoardRequestMessage.OriginalTransactionId/summary;DocStr4056
+P:StockSharp.Messages.BoardRequestMessage.Error/summary;DocStr4477
 M:StockSharp.Messages.BoardRequestMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.BoardRequestMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.BoardRequestMessage.Clone/returns;DocStr1116
@@ -645,6 +646,7 @@ M:StockSharp.Messages.Extensions.IsOrderLogMatched(StockSharp.Messages.Execution
 M:StockSharp.Messages.Extensions.IsOrderLogMatched(StockSharp.Messages.ExecutionMessage)/returns;DocStr1447
 T:StockSharp.Messages.IBasketSecurityProcessor/summary;DocStr10604
 P:StockSharp.Messages.IBasketSecurityProcessor.SecurityId/summary;SecurityId
+P:StockSharp.Messages.IBasketSecurityProcessor.BasketExpression/summary;DocStr10613
 P:StockSharp.Messages.IBasketSecurityProcessor.BasketLegs/summary;DocStr10603
 M:StockSharp.Messages.IBasketSecurityProcessor.Process(StockSharp.Messages.Message)/summary;DocStr80
 M:StockSharp.Messages.IBasketSecurityProcessor.Process(StockSharp.Messages.Message)/param/message;DocStr10605
@@ -1780,6 +1782,7 @@ P:StockSharp.Messages.UserRequestMessage.Login/summary;Login
 P:StockSharp.Messages.UserRequestMessage.IsSubscribe/summary;DocStr10795
 P:StockSharp.Messages.UserRequestMessage.TransactionId/summary;DocStr3166
 P:StockSharp.Messages.UserRequestMessage.OriginalTransactionId/summary;DocStr4056
+P:StockSharp.Messages.UserRequestMessage.Error/summary;DocStr4477
 M:StockSharp.Messages.UserRequestMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.UserRequestMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.UserRequestMessage.Clone/returns;DocStr1116

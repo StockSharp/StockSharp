@@ -15155,24 +15155,23 @@ DocStr10673;X2 coordinate for annotation drawing. {0} for coordinate mode {1} or
 DocStr10674;Y2 coordinate for annotation drawing. {0} for coordinate mode {1} or {2}. {3} otherwise;Координата Y2 для рисования аннотаций. {0} для режима координат {1} или {2}. {3} в противном случае
 DocStr10675;Coordinate mode. {0} means {1} for X and {2} price for Y. {3} means relative to the screen edges: double. 0=top/left, 0.5=center, 1=bottom/right;Режим координат. {0} означает {1} для X и {2} цена для Y. {3} означает относительно краев экрана: double. 0=top/left, 0.5=center, 1=bottom/right
 DocStr10676;Type of X axis for this chart;Type of X axis for this chart
-DocStr10677;Chart this area attached to;Chart this area attached to
 DocStr10678;Current data point with for X axis;Current data point with for X axis
 DocStr10679;The chart element representing a band;The chart element representing a band
 DocStr10680;The band drawing style. The default is {0}. Can also be {1};The band drawing style. The default is {0}. Can also be {1}
-DocStr10681;Create instance;Create instance
-DocStr10682;Base class for chart related view models;Base class for chart related view models
-DocStr10683;Raised before property value is changed;Raised before property value is changed
-DocStr10684;Set property value and raise events;Set property value and raise events
-DocStr10685;Property backing field;Property backing field
-DocStr10686;Name of the property;Name of the property
+DocStr10681;Create instance;Создать объект
+DocStr10682;Base class for chart related view models;Базовый класс для моделей, связанных с графиком
+DocStr10683;Raised before property value is changed;Вызывается до изменения значения свойства
+DocStr10684;Set property value and raise events;Установить значение свойства и вызвать события
+DocStr10685;Property backing field;Поле свойства
+DocStr10686;Name of the property;Название свойства
 DocStr10687;Helper method to raise property change notifications on this object if the event was raised on another object {0};Helper method to raise property change notifications on this object if the event was raised on another object {0}
 DocStr10688;Interface which represents all chart draw data types;Interface which represents all chart draw data types
-DocStr10689;Indicator values to draw on chart;Indicator values to draw on chart
-DocStr10690;Value timestamp;Value timestamp
-DocStr10691;Value of X coordinate for {0};Value of X coordinate for {0}
-DocStr10692;Put the line data;Put the line data
-DocStr10693;The value1;The value1
-DocStr10694;The value2;The value2
+DocStr10689;Indicator values to draw on chart;Значения индикатора для отрисовки на графике
+DocStr10690;Value timestamp;Значение метки времени
+DocStr10691;Value of X coordinate for {0};Значение координаты X для {0}
+DocStr10692;Put the line data;Добавить данные линии
+DocStr10693;The value1;Значение value1
+DocStr10694;The value2;Значение value2
 DocStr10695;Value of X coordinate for the data;Value of X coordinate for the data
 DocStr10696;Parent chart element;Parent chart element
 DocStr10697;Child chart elements;Child chart elements
@@ -15210,14 +15209,13 @@ DocStr10729;Draw indicator values using value getter;Draw indicator values using
 DocStr10730;Draw indicator single double values;Draw indicator single double values
 DocStr10731;Draw indicator band values (2 doubles);Draw indicator band values (2 doubles)
 DocStr10732;Draw indicator converting from 2 doubles to one with converter;Draw indicator converting from 2 doubles to one with converter
-DocStr10733;Add inner chart element;Add inner chart element
-DocStr10734;{0} line;{0} line
-DocStr10735;Embedded chart elements;Embedded chart elements
-DocStr10736;To reset painter child elements;To reset painter child elements
-DocStr10737;Called when this painter is attached to chart indicator element;Called when this painter is attached to chart indicator element
-DocStr10738;Called when this painter is detached from chart indicator element;Called when this painter is detached from chart indicator element
+DocStr10733;Add inner chart element;Добавить вложенный элемент графика
+DocStr10734;{0} line;{0} линия
+DocStr10736;To reset painter child elements;Сбросить рендеры вложенных элементов
+DocStr10737;Called when this painter is attached to chart indicator element;Вызывается, когда рендер прикрепляется к элементу индикатора графика
+DocStr10738;Called when this painter is detached from chart indicator element;Вызывается, когда рендер открепляется от элемента индикатора графика
 DocStr10739;Step size for volatility smile calculation;Размер шага для расчета улыбки волатильности
-DocStr10740;Used to convert {0} and icon resource key to {1}, colored with corresponding brush;Used to convert {0} and icon resource key to {1}, colored with corresponding brush
+DocStr10740;Used to convert {0} and icon resource key to {1}, colored with corresponding brush;Используется для конвертации {0} и иконки ресурса в {1}, раскрашенным соответствующей кистью
 DocStr10741;The value;Значение
 DocStr10742;Rollover by expiration date continuous security;Непрерывный инструмент, переходящий по условию экспирации
 DocStr10743;Rollover by volume continuous security;Непрерывный инструмент, переходящий по условию объема
@@ -15234,48 +15232,49 @@ DocStr10753;The response of user lookup result;Результат поиска �
 DocStr10754;Is blocked;Заблокирован
 DocStr10755;Annotation selection event;Событие выделения аннотации
 DocStr10756;{0} wrapper;Обертка {0}
-DocStr10757;Create clone but do not fill out fields/properties;Create clone but do not fill out fields/properties
-DocStr10758;Object of the same type to copy to;Object of the same type to copy to
-DocStr10759;The price of the associated stop order (loss limit level);The price of the associated stop order (loss limit level)
-DocStr10760;The price of the associated limit order (profit limit level);The price of the associated limit order (profit limit level)
-DocStr10761;Defines if the trade‘s stop/limit rate is in pips;Defines if the trade‘s stop/limit rate is in pips
-DocStr10762;Is composite diagram element loaded;Is composite diagram element loaded
-DocStr10763;Max support version;Max support version
-DocStr10764;Whether this axis can be removed from chart area;Whether this axis can be removed from chart area
-DocStr10765;Proxy object to edit chart indicator element in property grid;Proxy object to edit chart indicator element in property grid
-DocStr10766;Base proxy object to edit chart element in property grid;Base proxy object to edit chart element in property grid
-DocStr10767;Selector delegate to add condition to select wrapped object properties;Selector delegate to add condition to select wrapped object properties
-DocStr10768;Specialization of {0} class for chart element properties;Specialization of {0} class for chart element properties
-DocStr10769;Create chart settings object wrapper for an object;Create chart settings object wrapper for an object
-DocStr10770;Parent object;Parent object
-DocStr10771;Parent chart element or indicator;Parent chart element or indicator
-DocStr10772;Categories mode of property grid;Categories mode of property grid
-DocStr10773;Get property list from wrapped object;Get property list from wrapped object
-DocStr10774;Show red border around legend element if one or both axes are undefined;Show red border around legend element if one or both axes are undefined
-DocStr10775;Add {0};Add {0}
-DocStr10776;Node;Node
-DocStr10777;Remove {0};Remove {0}
+DocStr10757;Create clone but do not fill out fields/properties;Создать клон, но не заполнять поля/свойства
+DocStr10758;Object of the same type to copy to;Объект того же типа для копирования в
+DocStr10759;The price of the associated stop order (loss limit level);Цена ассоциированной стоп заявки (уровень лосса)
+DocStr10760;The price of the associated limit order (profit limit level);Цена ассоциированной стоп заявки (уровень тейка)
+DocStr10761;Defines if the trade‘s stop/limit rate is in pips;Определяет, находится ли стоп/лимит ставка торговли в пипсах
+DocStr10762;Is composite diagram element loaded;Загружен ли составной элемент диаграммы
+DocStr10763;Max support version;Максимальная поддерживаемая версия
+DocStr10764;Whether this axis can be removed from chart area;Можно ли удалить эту ось из области графика
+DocStr10765;Proxy object to edit chart indicator element in property grid;Прокси-объект для редактирования индикатора графика в таблице свойств
+DocStr10766;Base proxy object to edit chart element in property grid;Базовый прокси-объект для редактирования элемента графика в таблице свойств
+DocStr10767;Selector delegate to add condition to select wrapped object properties;Делегат выбора добавления условия для выбора свойств обернутого объекта
+DocStr10768;Specialization of {0} class for chart element properties;Специализация класса {0} для свойств элемента графика
+DocStr10769;Create chart settings object wrapper for an object;Создать обертку объекта настроек графика
+DocStr10770;Parent object;Родительсткий элемент
+DocStr10771;Parent chart element or indicator;Родительсткий элемент или индикатор
+DocStr10772;Categories mode of property grid;Режим категорий для таблицы свойств
+DocStr10773;Get property list from wrapped object;Получить список свойств из обертки
+DocStr10774;Show red border around legend element if one or both axes are undefined;Показать краную границу вокруг легенды элемента если одна или обе оси неопределены
+DocStr10775;Add {0};Удалить {0}
+DocStr10776;Node;Узел
+DocStr10777;Remove {0};Добавить {0}
 DocStr10778;Security updated event;Событие обновления инструмента
 DocStr10779;The request for the getting the session status;Запрос на получение состояния сессии
-DocStr10780;Filter boards by code criteria;Filter boards by code criteria
-DocStr10781;Found boards;Found boards
-DocStr10782;To find boards that match the filter {0}. Found boards will be passed through the event {1};To find boards that match the filter {0}. Found boards will be passed through the event {1}
-DocStr10783;Subscribe on the board changes;Subscribe on the board changes
-DocStr10784;Board for subscription;Board for subscription
-DocStr10785;Unsubscribe from the board changes;Unsubscribe from the board changes
-DocStr10786;Board for unsubscription;Board for unsubscription
-DocStr10787;The request for board lookup;The request for board lookup
-DocStr10788;The response of board lookup result;The response of board lookup result
-DocStr10789;The request for user's info subscription;The request for user's info subscription
-DocStr10790;Message boards lookup for specified criteria;Message boards lookup for specified criteria
-DocStr10791;The filter for board search;The filter for board search
-DocStr10792;Boards search result message;Boards search result message
-DocStr10793;Lookup error info;Lookup error info
-DocStr10794;Board request message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case);Board request message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case)
-DocStr10795;The message is subscription;The message is subscription
-DocStr10796;Board subscription request;Board subscription request
-DocStr10797;Boards search;Boards search
-DocStr10798;Boards search result;Boards search result
-DocStr10799;User subscription request;User subscription request
-DocStr10800;The filter for user search;The filter for user search
-DocStr10801;User request message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case);User request message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case)
+DocStr10780;Filter boards by code criteria;Отфильтровать площадки по критерию
+DocStr10781;Found boards;Найденные площадки
+DocStr10782;To find boards that match the filter {0}. Found boards will be passed through the event {1};Найти площадки, соответствующие фильтру {0}. Найденные площадки будут переданы через событие {1}
+DocStr10783;Subscribe on the board changes;Подписаться на изменения площадки
+DocStr10784;Board for subscription;Площадка для подписки
+DocStr10785;Unsubscribe from the board changes;Отписаться от изменений площадки
+DocStr10786;Board for unsubscription;Площадка для отписки
+DocStr10787;The request for board lookup;Запрос на поиск площадок
+DocStr10788;The response of board lookup result;Ответ на поиск площадок
+DocStr10789;The request for user's info subscription;Запрос на подписку на изменения информации о пользователе
+DocStr10790;Message boards lookup for specified criteria;Поиск площадок по заданным критериям
+DocStr10791;The filter for board search;Фильтр поиска площадок
+DocStr10792;Boards search result message;Сообщение о результате поиска площадок
+DocStr10793;Lookup error info;Ошибка поиска
+DocStr10794;Board request message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case);Сообщение о подписке или отписки на изменения площадки (при отправке используется как команда, при получении является событием подтверждения)
+DocStr10795;The message is subscription;Сообщение является подпиской
+DocStr10796;Board subscription request;Запрос на подписку изменения площадки
+DocStr10797;Boards search;Поиск площадок
+DocStr10798;Boards search result;Результат поиска площадок
+DocStr10799;User subscription request;Запрос на подписку изменения пользователя
+DocStr10800;The filter for user search;Фильтр для поиска пользователей
+DocStr10801;User request message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case);Сообщение о подписке или отписки на изменения пользователя (при отправке используется как команда, при получении является событием подтверждения)
+DocStr10802;Helper is used to disable the removal of part of the axes from chart panel;Вспомогательный класс, использующийся для запрета удаления части осей графика

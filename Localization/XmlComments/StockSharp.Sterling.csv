@@ -48,7 +48,7 @@ P:StockSharp.Sterling.SterlingOrderCondition.Maturity/summary;DocStr3731
 P:StockSharp.Sterling.SterlingOrderCondition.OptionType/summary;Str551
 P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingCode/summary;UnderlyingAsset
 P:StockSharp.Sterling.SterlingOrderCondition.IsCover/summary;DocStr7579
-P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingType/summary;DocStr7580
+P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingType/summary;AssetType
 P:StockSharp.Sterling.SterlingOrderCondition.StrikePrice/summary;DocStr7581
 T:StockSharp.Sterling.SterlingTrader/summary;DocStr2539
 M:StockSharp.Sterling.SterlingTrader.#ctor/summary;DocStr1
