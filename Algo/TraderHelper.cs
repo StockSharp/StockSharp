@@ -4683,7 +4683,7 @@ namespace StockSharp.Algo
 		/// <param name="security">Basket security.</param>
 		/// <param name="processorProvider">Basket security processors provider.</param>
 		/// <returns>Messages of basket securities.</returns>
-		public static IEnumerable<TMessage> ToBasket<TMessage>(this IEnumerable<TMessage> innerSecMessages, BasketSecurity security, IBasketSecurityProcessorProvider processorProvider)
+		public static IEnumerable<TMessage> ToBasket<TMessage>(this IEnumerable<TMessage> innerSecMessages, Security security, IBasketSecurityProcessorProvider processorProvider)
 			where TMessage : Message
 		{
 			var processor = processorProvider.CreateProcessor(security);
@@ -4697,7 +4697,7 @@ namespace StockSharp.Algo
 		/// <param name="processorProvider">Basket security processors provider.</param>
 		/// <param name="security">Basket security.</param>
 		/// <returns>Market data processor for basket securities.</returns>
-		public static IBasketSecurityProcessor CreateProcessor(this IBasketSecurityProcessorProvider processorProvider, BasketSecurity security)
+		public static IBasketSecurityProcessor CreateProcessor(this IBasketSecurityProcessorProvider processorProvider, Security security)
 		{
 			if (processorProvider == null)
 				throw new ArgumentNullException(nameof(processorProvider));
@@ -4802,6 +4802,23 @@ namespace StockSharp.Algo
 
 			var type = processorProvider.GetSecurityType(security.BasketCode);
 			var basketSec = type.CreateInstance<BasketSecurity>();
+			security.CopyTo(basketSec);
+			return basketSec;
+		}
+
+		/// <summary>
+		/// Convert <see cref="Security"/> to <see cref="BasketSecurity"/> value.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Instruments basket.</returns>
+		/// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
+		public static TBasketSecurity ToBasket<TBasketSecurity>(this Security security)
+			where TBasketSecurity : BasketSecurity, new()
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			var basketSec = new TBasketSecurity();
 			security.CopyTo(basketSec);
 			return basketSec;
 		}
