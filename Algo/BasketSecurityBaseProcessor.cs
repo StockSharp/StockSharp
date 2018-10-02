@@ -252,7 +252,7 @@ namespace StockSharp.Algo
 		protected override bool CanProcess(SecurityId securityId, DateTimeOffset serverTime, decimal? price, decimal? volume, decimal? openInterest)
 		{
 			if (_finished)
-				return false;
+				return _currId == securityId;
 
 			var vol = BasketSecurity.IsOpenInterest ? openInterest : volume;
 
