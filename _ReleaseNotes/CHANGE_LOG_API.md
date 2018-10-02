@@ -45,6 +45,7 @@ StockSharp API Change log
 * (feature) IConnector. LookupBoardsResult event added.
 * (feature) IConnector. LookupBoards method added.
 * (feature) IConnector. SubscribeBoard/UnSubscribeBoard methods added.
+* (bug) SubscriptionMessageAdapter. Set original trans id while disconnect unsubscribe.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
