@@ -318,6 +318,9 @@ namespace StockSharp.Algo
 						};
 					}
 
+					if (SupportBasketSecurities)
+						_inAdapter = new BasketSecurityMessageAdapter(this, BasketSecurityProcessorProvider, _inAdapter) { OwnInnerAdaper = true };
+
 					if (SupportSubscriptionTracking)
 						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdaper = true/*, IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect*/ };
 
@@ -334,6 +337,11 @@ namespace StockSharp.Algo
 				}
 			}
 		}
+
+		/// <summary>
+		/// Use <see cref="BasketSecurityMessageAdapter"/>.
+		/// </summary>
+		public bool SupportBasketSecurities { get; set; }
 
 		private bool _supportOffline;
 

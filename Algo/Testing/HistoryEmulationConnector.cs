@@ -231,6 +231,7 @@ namespace StockSharp.Algo.Testing
 			RiskManager = null;
 
 			SupportSubscriptionTracking = true;
+			SupportBasketSecurities = true;
 
 			HistoryMessageAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
 

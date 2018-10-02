@@ -189,6 +189,17 @@ namespace StockSharp.Algo
 		/// </summary>
 		public SnapshotRegistry SnapshotRegistry { get; private set; }
 
+		private IBasketSecurityProcessorProvider _basketSecurityProcessorProvider = new BasketSecurityProcessorProvider();
+
+		/// <summary>
+		/// Basket security processors provider.
+		/// </summary>
+		public IBasketSecurityProcessorProvider BasketSecurityProcessorProvider
+		{
+			get => _basketSecurityProcessorProvider;
+			set => _basketSecurityProcessorProvider = value ?? throw new ArgumentNullException(nameof(value));
+		}
+
 		private void InitAdapter()
 		{
 			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new InMemoryMessageAdapterProvider(), new CandleBuilderProvider(_entityCache.ExchangeInfoProvider));
