@@ -68,7 +68,7 @@ namespace StockSharp.Algo
 
 					var security = _securityProvider.LookupById(mdMsg.SecurityId);
 
-					if (security?.BasketCode.IsEmpty() == true)
+					if (security == null || !security.IsBasket())
 						break;
 
 					if (mdMsg.IsSubscribe)
