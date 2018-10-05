@@ -5368,12 +5368,12 @@ namespace StockSharp.Localization
 		public static string Str533 => GetString(Str533Key);
 
 		/// <summary>
-		/// {0}/{1} {2} Price={3} Volume={4} State={5} Bal={6}
+		/// {0}/{1} {2} {3} {4} Price={5} Volume={6} State={7} Bal={8} State={9}
 		/// </summary>
 		public const string Str534ParamsKey = nameof(Str534Params);
 
 		/// <summary>
-		/// {0}/{1} {2} Price={3} Volume={4} State={5} Bal={6}
+		/// {0}/{1} {2} {3} {4} Price={5} Volume={6} State={7} Bal={8} State={9}
 		/// </summary>
 		public static string Str534Params => GetString(Str534ParamsKey);
 
