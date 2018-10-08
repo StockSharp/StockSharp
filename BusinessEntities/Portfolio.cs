@@ -18,6 +18,7 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using Ecng.Serialization;
 
@@ -139,12 +140,46 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private static readonly Portfolio _anonymousPortfolio = new Portfolio { Name = LocalizedStrings.Str545 };
+		private decimal? _commissionTaker;
+
+		/// <summary>
+		/// Commission (taker).
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public decimal? CommissionTaker
+		{
+			get => _commissionTaker;
+			set
+			{
+				_commissionTaker = value;
+				NotifyChanged(nameof(CommissionTaker));
+			}
+		}
+
+		private decimal? _commissionMaker;
+
+		/// <summary>
+		/// Commission (maker).
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public decimal? CommissionMaker
+		{
+			get => _commissionMaker;
+			set
+			{
+				_commissionMaker = value;
+				NotifyChanged(nameof(CommissionMaker));
+			}
+		}
 
 		/// <summary>
 		/// Portfolio associated with the orders received through the orders log.
 		/// </summary>
-		public static Portfolio AnonymousPortfolio => _anonymousPortfolio;
+		public static Portfolio AnonymousPortfolio { get; } = new Portfolio { Name = LocalizedStrings.Str545 };
 
 		/// <summary>
 		/// Create a copy of <see cref="Portfolio"/>.
@@ -171,6 +206,8 @@ namespace StockSharp.BusinessEntities
 			destination.Leverage = Leverage;
 			//destination.Connector = Connector;
 			destination.State = State;
+			destination.CommissionMaker = CommissionMaker;
+			destination.CommissionTaker = CommissionTaker;
 		}
 
 		/// <summary>

@@ -147,6 +147,20 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ExpiryDateKey)]
 		ExpirationDate,
+
+		/// <summary>
+		/// Commission (taker).
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CommissionTakerKey)]
+		CommissionTaker,
+
+		/// <summary>
+		/// Commission (maker).
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CommissionMakerKey)]
+		CommissionMaker,
 	}
 
 	/// <summary>
