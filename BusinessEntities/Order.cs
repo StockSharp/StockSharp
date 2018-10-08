@@ -529,6 +529,11 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public decimal? Commission { get; set; }
 
+		/// <summary>
+		/// Commission currency. Can be <see lnagword="null"/>.
+		/// </summary>
+		public string CommissionCurrency { get; set; }
+
 		//[field: NonSerialized]
 		//private IConnector _connector;
 

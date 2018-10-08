@@ -275,6 +275,7 @@ namespace StockSharp.Algo
 				PnL = trade.PnL,
 				Slippage = trade.Slippage,
 				Commission = trade.Commission,
+				CommissionCurrency = trade.CommissionCurrency,
 			};
 		}
 
@@ -311,6 +312,7 @@ namespace StockSharp.Algo
 				ExpiryDate = order.ExpiryDate,
 				UserOrderId = order.UserOrderId,
 				Commission = order.Commission,
+				CommissionCurrency = order.CommissionCurrency,
 				IsSystem = order.IsSystem,
 				Comment = order.Comment,
 				VisibleVolume = order.VisibleVolume,
@@ -1242,6 +1244,7 @@ namespace StockSharp.Algo
 			order.UserOrderId = message.UserOrderId;
 			order.Comment = message.Comment;
 			order.Commission = message.Commission;
+			order.CommissionCurrency = message.CommissionCurrency;
 			order.Currency = message.Currency;
 			order.IsMarketMaker = message.IsMarketMaker;
 			order.IsMargin = message.IsMargin;

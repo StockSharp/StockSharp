@@ -97,6 +97,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.LocalTime.WriteTimeMls(),
 				data.LocalTime.ToString("zzz"),
 				data.IsMarketMaker.ToString(),
+				data.CommissionCurrency,
 			};
 			writer.WriteRow(row);
 
@@ -179,6 +180,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			msg.LocalTime = reader.ReadTime(metaInfo.Date);
 			msg.IsMarketMaker = reader.ReadNullableBool();
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				msg.CommissionCurrency = reader.ReadString();
 
 			return msg;
 		}

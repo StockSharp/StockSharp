@@ -243,7 +243,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
 		public TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 200, MarketDataVersions.Version62, exchangeInfoProvider)
+			: base(securityId, 200, MarketDataVersions.Version63, exchangeInfoProvider)
 		{
 		}
 
@@ -314,16 +314,10 @@ namespace StockSharp.Algo.Storages.Binary
 				}
 				else
 				{
-					writer.Write(!msg.OrderStringId.IsEmpty());
-
-					if (!msg.OrderStringId.IsEmpty())
-						writer.WriteString(msg.OrderStringId);
+					writer.WriteStringEx(msg.OrderStringId);
 				}
 
-				writer.Write(!msg.OrderBoardId.IsEmpty());
-
-				if (!msg.OrderBoardId.IsEmpty())
-					writer.WriteString(msg.OrderBoardId);
+				writer.WriteStringEx(msg.OrderBoardId);
 
 				writer.Write(msg.TradeId != null);
 
@@ -333,10 +327,7 @@ namespace StockSharp.Algo.Storages.Binary
 				}
 				else
 				{
-					writer.Write(!msg.TradeStringId.IsEmpty());
-
-					if (!msg.TradeStringId.IsEmpty())
-						writer.WriteString(msg.TradeStringId);
+					writer.WriteStringEx(msg.TradeStringId);
 				}
 
 				if (msg.OrderPrice != 0)
@@ -445,6 +436,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (msg.IsMargin != null)
 					writer.Write(msg.IsMargin.Value);
+
+				if (metaInfo.Version < MarketDataVersions.Version63)
+					continue;
+
+				writer.WriteStringEx(msg.CommissionCurrency);
 			}
 		}
 
@@ -462,7 +458,6 @@ namespace StockSharp.Algo.Storages.Binary
 			long? orderId = null;
 			long? tradeId = null;
 
-			string orderBoardId = null;
 			string orderStringId = null;
 			string tradeStringId = null;
 
@@ -473,12 +468,10 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 			else
 			{
-				if (reader.Read())
-					orderStringId = reader.ReadString();
+				orderStringId = reader.ReadStringEx();
 			}
 
-			if (reader.Read())
-				orderBoardId = reader.ReadString();
+			var orderBoardId = reader.ReadStringEx();
 
 			if (reader.Read())
 			{
@@ -487,8 +480,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 			else
 			{
-				if (reader.Read())
-					tradeStringId = reader.ReadString();
+				tradeStringId = reader.ReadStringEx();
 			}
 
 			var orderPrice = reader.Read() ? reader.ReadPriceEx(metaInfo) : (decimal?)null;
@@ -613,6 +605,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (reader.Read())
 				msg.IsMargin = reader.Read();
+
+			if (metaInfo.Version < MarketDataVersions.Version63)
+				return msg;
+				
+			msg.CommissionCurrency = reader.ReadStringEx();
 
 			return msg;
 		}

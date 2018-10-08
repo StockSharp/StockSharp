@@ -137,6 +137,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("isOrder", item.HasOrderInfo);
 						writer.WriteAttribute("isTrade", item.HasTradeInfo);
 						writer.WriteAttribute("commission", item.Commission);
+						writer.WriteAttribute("commissionCurrency", item.CommissionCurrency);
 						writer.WriteAttribute("pnl", item.PnL);
 						writer.WriteAttribute("position", item.Position);
 						writer.WriteAttribute("latency", item.Latency);

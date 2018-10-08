@@ -50,6 +50,7 @@ StockSharp API Change log
 * (feature) InteractiveBrokers. MaxVersion settings added.
 * (feature) Level1ChangeMessage. CommissionMaker, CommissionTaker fields added.
 * (feature) PositionChangeMessage. CommissionMaker, CommissionTaker fields added.
+* (feature) Order, MyTrade. CommissionCurrency field added.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
