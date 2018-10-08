@@ -1312,6 +1312,7 @@ F:StockSharp.Fix.Native.ExecutionReport.ExpireTime/summary;DocStr8459
 F:StockSharp.Fix.Native.ExecutionReport.LastPx/summary;DocStr8800
 F:StockSharp.Fix.Native.ExecutionReport.LastQty/summary;DocStr8801
 F:StockSharp.Fix.Native.ExecutionReport.Commission/summary;XamlStr249
+F:StockSharp.Fix.Native.ExecutionReport.CommissionCurrency/summary;DocStr10805
 F:StockSharp.Fix.Native.ExecutionReport.Text/summary;DocStr8802
 F:StockSharp.Fix.Native.ExecutionReport.ExecId/summary;DocStr8803
 F:StockSharp.Fix.Native.ExecutionReport.OrdStatusReqId/summary;DocStr9461
@@ -1502,6 +1503,7 @@ F:StockSharp.Fix.Native.FixTags.PartyRole/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoPartyIDs/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Product/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.CFICode/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.CommCurrency/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NestedPartyID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OrderCapacity/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OrderRestrictions/summary;DocStr8459

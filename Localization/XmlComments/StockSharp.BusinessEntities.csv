@@ -691,6 +691,7 @@ M:StockSharp.BusinessEntities.MyTrade.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.MyTrade.Order/summary;Str505
 P:StockSharp.BusinessEntities.MyTrade.Trade/summary;DocStr2911
 P:StockSharp.BusinessEntities.MyTrade.Commission/summary;XamlStr249
+P:StockSharp.BusinessEntities.MyTrade.CommissionCurrency/summary;DocStr10805
 P:StockSharp.BusinessEntities.MyTrade.Slippage/summary;Str164
 P:StockSharp.BusinessEntities.MyTrade.PnL/summary;DocStr8684
 P:StockSharp.BusinessEntities.MyTrade.Position/summary;DocStr8685
@@ -745,6 +746,7 @@ P:StockSharp.BusinessEntities.Order.RpsInfo/summary;Str236
 P:StockSharp.BusinessEntities.Order.ExtensionInfo/summary;DocStr2921
 P:StockSharp.BusinessEntities.Order.ExtensionInfo/remarks;DocStr2922
 P:StockSharp.BusinessEntities.Order.Commission/summary;Str160
+P:StockSharp.BusinessEntities.Order.CommissionCurrency/summary;DocStr10805
 P:StockSharp.BusinessEntities.Order.UserOrderId/summary;Str166
 P:StockSharp.BusinessEntities.Order.BrokerCode/summary;Str2619
 P:StockSharp.BusinessEntities.Order.ClientCode/summary;ClientCodeDesc
@@ -773,6 +775,8 @@ P:StockSharp.BusinessEntities.Portfolio.Name/summary;Str247
 P:StockSharp.BusinessEntities.Portfolio.Leverage/summary;Str261
 P:StockSharp.BusinessEntities.Portfolio.Board/summary;Str544
 P:StockSharp.BusinessEntities.Portfolio.State/summary;Str265
+P:StockSharp.BusinessEntities.Portfolio.CommissionTaker/summary;CommissionTaker
+P:StockSharp.BusinessEntities.Portfolio.CommissionMaker/summary;CommissionMaker
 P:StockSharp.BusinessEntities.Portfolio.AnonymousPortfolio/summary;DocStr2932
 M:StockSharp.BusinessEntities.Portfolio.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Portfolio.Clone/returns;DocStr1116
@@ -878,6 +882,8 @@ P:StockSharp.BusinessEntities.Security.BuyBackPrice/summary;BuyBackPrice
 P:StockSharp.BusinessEntities.Security.BuyBackDate/summary;BuyBackDate
 P:StockSharp.BusinessEntities.Security.BasketCode/summary;DocStr10646
 P:StockSharp.BusinessEntities.Security.BasketExpression/summary;DocStr10600
+P:StockSharp.BusinessEntities.Security.CommissionTaker/summary;CommissionTaker
+P:StockSharp.BusinessEntities.Security.CommissionMaker/summary;CommissionMaker
 M:StockSharp.BusinessEntities.Security.ToString/inheritdoc;DocStr8459
 M:StockSharp.BusinessEntities.Security.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Security.Clone/returns;DocStr1116

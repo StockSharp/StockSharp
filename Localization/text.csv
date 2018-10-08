@@ -15282,3 +15282,4 @@ DocStr10801;User request message (uses as a subscribe/unsubscribe in outgoing ca
 DocStr10802;Helper is used to disable the removal of part of the axes from chart panel;Вспомогательный класс, использующийся для запрета удаления части осей графика
 DocStr10803;Is take profit;Is take profit
 DocStr10804;Сhild elements;Сhild elements
+DocStr10805;Commission currency. Can be {0};Валюта комиссии. Может быть {0}

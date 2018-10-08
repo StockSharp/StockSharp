@@ -487,6 +487,7 @@ P:StockSharp.Messages.ExecutionMessage.Error/summary;Str153
 P:StockSharp.Messages.ExecutionMessage.Condition/summary;Str155
 P:StockSharp.Messages.ExecutionMessage.IsUpTick/summary;DocStr4285
 P:StockSharp.Messages.ExecutionMessage.Commission/summary;DocStr8848
+P:StockSharp.Messages.ExecutionMessage.CommissionCurrency/summary;DocStr10805
 P:StockSharp.Messages.ExecutionMessage.Latency/summary;DocStr4287
 P:StockSharp.Messages.ExecutionMessage.Slippage/summary;DocStr4288
 P:StockSharp.Messages.ExecutionMessage.UserOrderId/summary;DocStr4289
@@ -1230,6 +1231,8 @@ F:StockSharp.Messages.PositionChangeTypes.CurrentValueInLots/summary;Str263
 F:StockSharp.Messages.PositionChangeTypes.DepoName/summary;DocStr2933
 F:StockSharp.Messages.PositionChangeTypes.State/summary;Str265
 F:StockSharp.Messages.PositionChangeTypes.ExpirationDate/summary;ExpiryDate
+F:StockSharp.Messages.PositionChangeTypes.CommissionTaker/summary;CommissionTaker
+F:StockSharp.Messages.PositionChangeTypes.CommissionMaker/summary;CommissionMaker
 T:StockSharp.Messages.PositionChangeMessage/summary;DocStr4439
 P:StockSharp.Messages.PositionChangeMessage.SecurityId/summary;SecurityId
 P:StockSharp.Messages.PositionChangeMessage.PortfolioName/summary;DocStr3127
@@ -1368,6 +1371,8 @@ F:StockSharp.Messages.Level1Fields.SpreadMiddle/summary;DocStr10122
 F:StockSharp.Messages.Level1Fields.Dividend/summary;DocStr971
 F:StockSharp.Messages.Level1Fields.AfterSplit/summary;DocStr10364
 F:StockSharp.Messages.Level1Fields.BeforeSplit/summary;DocStr10365
+F:StockSharp.Messages.Level1Fields.CommissionTaker/summary;CommissionTaker
+F:StockSharp.Messages.Level1Fields.CommissionMaker/summary;CommissionMaker
 T:StockSharp.Messages.Level1ChangeMessage/summary;DocStr4470
 P:StockSharp.Messages.Level1ChangeMessage.SecurityId/summary;SecurityId
 M:StockSharp.Messages.Level1ChangeMessage.#ctor/summary;DocStr1
