@@ -48,6 +48,7 @@ StockSharp API Change log
 * (bug) SubscriptionMessageAdapter. Set original trans id while disconnect unsubscribe.
 * (feature) Connector. SupportBasketSecurities property added.
 * (feature) InteractiveBrokers. MaxVersion settings added.
+* (feature) Level1ChangeMessage. CommissionMaker, CommissionTaker fields added.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.

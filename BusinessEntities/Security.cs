@@ -1802,6 +1802,42 @@ namespace StockSharp.BusinessEntities
 			Order = 201)]
 		public virtual string BasketExpression { get; set; }
 
+		private decimal? _commissionTaker;
+
+		/// <summary>
+		/// Commission (taker).
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public decimal? CommissionTaker
+		{
+			get => _commissionTaker;
+			set
+			{
+				_commissionTaker = value;
+				Notify(nameof(CommissionTaker));
+			}
+		}
+
+		private decimal? _commissionMaker;
+
+		/// <summary>
+		/// Commission (maker).
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public decimal? CommissionMaker
+		{
+			get => _commissionMaker;
+			set
+			{
+				_commissionMaker = value;
+				Notify(nameof(CommissionMaker));
+			}
+		}
+
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;
 
@@ -1880,6 +1916,8 @@ namespace StockSharp.BusinessEntities
 			destination.BuyBackPrice = BuyBackPrice;
 			destination.BasketCode = BasketCode;
 			destination.BasketExpression = BasketExpression;
+			destination.CommissionTaker = CommissionTaker;
+			destination.CommissionMaker = CommissionMaker;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();

@@ -2347,6 +2347,12 @@ namespace StockSharp.Algo
 					case PositionChangeTypes.State:
 						portfolio.State = (PortfolioStates)change.Value;
 						break;
+					case PositionChangeTypes.CommissionMaker:
+						portfolio.CommissionMaker = (decimal)change.Value;
+						break;
+					case PositionChangeTypes.CommissionTaker:
+						portfolio.CommissionTaker = (decimal)change.Value;
+						break;
 					default:
 						ApplyChange(portfolio, change);
 						break;
@@ -2647,6 +2653,12 @@ namespace StockSharp.Algo
 							break;
 						case Level1Fields.BuyBackDate:
 							security.BuyBackDate = (DateTimeOffset)value;
+							break;
+						case Level1Fields.CommissionTaker:
+							security.CommissionTaker = (decimal)value;
+							break;
+						case Level1Fields.CommissionMaker:
+							security.CommissionMaker = (decimal)value;
 							break;
 						//default:
 						//	throw new ArgumentOutOfRangeException();

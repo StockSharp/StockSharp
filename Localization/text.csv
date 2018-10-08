@@ -4892,6 +4892,8 @@ VolumeTrigger;Volume trigger causes switch to the next contract.;Триггер 
 AddFolder;Add folder;Добавить папку
 AssetType;Asset type;Тип актива
 StopStrategyOnTabClosing;To close the tab {0} strategy must be stopped. Stop strategy?;Для закрытия вкладки {0} необходимо остановить стратегию. Остановить стратегию?
+CommissionTaker;Commission (taker);Комиссия (тейкер)
+CommissionMaker;Commission (maker);Комиссия (мейкер)
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15278,3 +15280,5 @@ DocStr10799;User subscription request;Запрос на подписку изм�
 DocStr10800;The filter for user search;Фильтр для поиска пользователей
 DocStr10801;User request message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case);Сообщение о подписке или отписки на изменения пользователя (при отправке используется как команда, при получении является событием подтверждения)
 DocStr10802;Helper is used to disable the removal of part of the axes from chart panel;Вспомогательный класс, использующийся для запрета удаления части осей графика
+DocStr10803;Is take profit;Is take profit
+DocStr10804;Сhild elements;Сhild elements

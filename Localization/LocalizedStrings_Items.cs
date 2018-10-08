@@ -48596,5 +48596,25 @@ namespace StockSharp.Localization
 		/// To close the tab {0} strategy must be stopped. Stop strategy?
 		/// </summary>
 		public static string StopStrategyOnTabClosing => GetString(StopStrategyOnTabClosingKey);
+
+		/// <summary>
+		/// Commission (taker)
+		/// </summary>
+		public const string CommissionTakerKey = nameof(CommissionTaker);
+
+		/// <summary>
+		/// Commission (taker)
+		/// </summary>
+		public static string CommissionTaker => GetString(CommissionTakerKey);
+
+		/// <summary>
+		/// Commission (maker)
+		/// </summary>
+		public const string CommissionMakerKey = nameof(CommissionMaker);
+
+		/// <summary>
+		/// Commission (maker)
+		/// </summary>
+		public static string CommissionMaker => GetString(CommissionMakerKey);
 	}
 }
