@@ -51,6 +51,8 @@ StockSharp API Change log
 * (feature) Level1ChangeMessage. CommissionMaker, CommissionTaker fields added.
 * (feature) PositionChangeMessage. CommissionMaker, CommissionTaker fields added.
 * (feature) Order, MyTrade. CommissionCurrency field added.
+* (feature) SecurityGrid, Level1Grid. CommissionMaker, CommissionTaker columns added.
+* (feature) PortfolioGrid. Show Board, CommissionMaker, CommissionTaker columns.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
