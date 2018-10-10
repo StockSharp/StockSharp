@@ -59,6 +59,7 @@ P:StockSharp.BusinessEntities.Exchange.Nyse/summary;DocStr2651
 P:StockSharp.BusinessEntities.Exchange.Nasdaq/summary;DocStr2652
 P:StockSharp.BusinessEntities.Exchange.Nqlx/summary;DocStr2653
 P:StockSharp.BusinessEntities.Exchange.Lse/summary;DocStr2654
+P:StockSharp.BusinessEntities.Exchange.Lme/summary;DocStr10806
 P:StockSharp.BusinessEntities.Exchange.Tse/summary;DocStr2655
 P:StockSharp.BusinessEntities.Exchange.Hkex/summary;DocStr2656
 P:StockSharp.BusinessEntities.Exchange.Hkfe/summary;DocStr2657
@@ -124,6 +125,7 @@ P:StockSharp.BusinessEntities.Exchange.IEX/summary;DocStr10578
 P:StockSharp.BusinessEntities.Exchange.Bitbank/summary;DocStr10579
 P:StockSharp.BusinessEntities.Exchange.Zaif/summary;DocStr10580
 P:StockSharp.BusinessEntities.Exchange.Quoinex/summary;DocStr10581
+P:StockSharp.BusinessEntities.Exchange.Wiki/summary;DocStr10807
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694
@@ -269,6 +271,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Nyse/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Nasdaq/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Nqlx/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Lse/summary;DocStr2807
+P:StockSharp.BusinessEntities.ExchangeBoard.Lme/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Tse/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Hkex/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Hkfe/summary;DocStr2807
@@ -340,6 +343,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.IEX/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Bitbank/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Zaif/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Quoinex/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.Wiki/summary;DocStr2809
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrade/summary;DocStr8546
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867

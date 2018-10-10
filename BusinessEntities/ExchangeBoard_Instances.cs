@@ -1632,6 +1632,27 @@ namespace StockSharp.BusinessEntities
 				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
 			};
 
+			Lme = new ExchangeBoard
+			{
+				Code = "LME",
+				WorkingTime = new WorkingTime
+				{
+					Periods = new List<WorkingTimePeriod>
+					{
+						new WorkingTimePeriod
+						{
+							Till = DateTime.MaxValue,
+							Times = new List<Range<TimeSpan>>
+							{
+								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "18:00:00".To<TimeSpan>())
+							},
+						}
+					},
+				},
+				Exchange = Exchange.Lme,
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
+			};
+
 			Tse = new ExchangeBoard
 			{
 				Code = "TSE",
@@ -2806,6 +2827,11 @@ namespace StockSharp.BusinessEntities
 		public static ExchangeBoard Lse { get; }
 
 		/// <summary>
+		/// Information about board of <see cref="BusinessEntities.Exchange.Lme"/> exchange.
+		/// </summary>
+		public static ExchangeBoard Lme { get; }
+
+		/// <summary>
 		/// Information about board of <see cref="BusinessEntities.Exchange.Tse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Tse { get; }
@@ -3290,6 +3316,15 @@ namespace StockSharp.BusinessEntities
 		{
 			Code = Exchange.Quoinex.Name,
 			Exchange = Exchange.Quoinex,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Wiki"/>.
+		/// </summary>
+		public static ExchangeBoard Wiki { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Wiki.Name,
+			Exchange = Exchange.Wiki,
 		};
 	}
 }

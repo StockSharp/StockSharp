@@ -56,6 +56,7 @@ StockSharp API Change log
 * (feature) InteractiveBrokers, Micex, Plaza. Commission translate supported.
 * (feature) Crypto connectors. Commission translate supported.
 * (feature) FIX server. CommissionCurrency supported.
+* (feature) ExchangeBoard. LME, WIKI instances.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.

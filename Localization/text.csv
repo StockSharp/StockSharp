@@ -15283,3 +15283,5 @@ DocStr10802;Helper is used to disable the removal of part of the axes from chart
 DocStr10803;Is take profit;Is take profit
 DocStr10804;Сhild elements;Сhild elements
 DocStr10805;Commission currency. Can be {0};Валюта комиссии. Может быть {0}
+DocStr10806;Information about LME (London Metal Exchange);Информация о бирже LME (London Metal Exchange)
+DocStr10807;Information about WIKI;Информация о бирже WIKI
