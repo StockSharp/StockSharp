@@ -55,6 +55,7 @@ StockSharp API Change log
 * (feature) PortfolioGrid. Show Board, CommissionMaker, CommissionTaker columns.
 * (feature) InteractiveBrokers, Micex, Plaza. Commission translate supported.
 * (feature) Crypto connectors. Commission translate supported.
+* (feature) FIX server. CommissionCurrency supported.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.

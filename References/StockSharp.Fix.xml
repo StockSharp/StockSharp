@@ -5009,6 +5009,11 @@
             Commission.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.ExecutionReport.CommissionCurrency">
+      <summary>
+            Commission currency. Can be <see lnagword="null" />.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.Text">
       <summary>
             Free format text string.
@@ -5816,6 +5821,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.CFICode">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.CommCurrency">
       <summary>
       </summary>
     </member>
