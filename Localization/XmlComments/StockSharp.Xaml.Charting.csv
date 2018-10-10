@@ -156,7 +156,7 @@ T:StockSharp.Xaml.Charting.ChartArea/summary;Str1903
 F:StockSharp.Xaml.Charting.ChartArea.XAxisId/summary;DocStr7754
 F:StockSharp.Xaml.Charting.ChartArea.YAxisId/summary;DocStr7755
 M:StockSharp.Xaml.Charting.ChartArea.#ctor/summary;DocStr1
-P:StockSharp.Xaml.Charting.ChartArea.Chart/summary;DocStr10677
+P:StockSharp.Xaml.Charting.ChartArea.Chart/summary;Str3200
 P:StockSharp.Xaml.Charting.ChartArea.XAxisType/summary;DocStr10676
 P:StockSharp.Xaml.Charting.ChartArea.Title/summary;Str1905
 P:StockSharp.Xaml.Charting.ChartArea.Height/summary;DocStr7757
@@ -955,7 +955,7 @@ M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)/s
 M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)/param/data;DocStr467
 T:StockSharp.Xaml.Charting.IChartIndicatorPainter/summary;DocStr7838
 P:StockSharp.Xaml.Charting.IChartIndicatorPainter.Element/summary;DocStr7792
-P:StockSharp.Xaml.Charting.IChartIndicatorPainter.InnerElements/summary;DocStr10735
+P:StockSharp.Xaml.Charting.IChartIndicatorPainter.InnerElements/summary;DocStr10804
 M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Draw(StockSharp.Xaml.Charting.ChartDrawData)/summary;DocStr486
 M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Draw(StockSharp.Xaml.Charting.ChartDrawData)/param/data;DocStr467
 M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Reset/summary;DocStr10736

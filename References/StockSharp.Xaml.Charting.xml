@@ -630,7 +630,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartArea.Chart">
       <summary>
-            Chart this area attached to.
+            Chart.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartArea.XAxisType">
@@ -3494,7 +3494,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IChartIndicatorPainter.InnerElements">
       <summary>
-            Embedded chart elements.
+            Сhild elements.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Draw(StockSharp.Xaml.Charting.ChartDrawData)">
