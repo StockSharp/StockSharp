@@ -1096,15 +1096,7 @@
             </summary>
     </member>
     <member name="M:StockSharp.Algo.History.QuandlHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
-      <summary>
-            Get the full path to the downloaded file.
-            </summary>
-      <param name="security">Security.</param>
-      <param name="from">Start date.</param>
-      <param name="to">End date.</param>
-      <param name="dataType">Data type.</param>
-      <param name="arg">Argument.</param>
-      <returns>Full path to the downloaded file.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Algo.History.QuandlHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
       <summary>
@@ -1117,13 +1109,7 @@
       <returns>Candles.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.QuandlHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
-      <summary>
-            Download new securities.
-            </summary>
-      <param name="securityStorage">Securities meta info storage.</param>
-      <param name="criteria">The instrument whose fields will be used as a filter.</param>
-      <param name="newSecurity">The handler through which a new instrument will be passed.</param>
-      <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Algo.History.Russian.AlorHistorySource">
       <summary>
@@ -1610,6 +1596,11 @@
     <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.Currency">
       <summary>
             Trading security currency.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.SettleDate">
+      <summary>
+            Settlement date for security (for derivatives and bonds).
             </summary>
     </member>
     <member name="M:StockSharp.Algo.History.Russian.SecurityInfo.GetSecurityType">

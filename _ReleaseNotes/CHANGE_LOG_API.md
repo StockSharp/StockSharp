@@ -57,6 +57,8 @@ StockSharp API Change log
 * (feature) Crypto connectors. Commission translate supported.
 * (feature) FIX server. CommissionCurrency supported.
 * (feature) ExchangeBoard. LME, WIKI instances.
+* (feature) MfdHistorySource. Filter for options lookup.
+* (feature) QuandlHistorySource. Lookup securities. Support newest protocol changes.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
