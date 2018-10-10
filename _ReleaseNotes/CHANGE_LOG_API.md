@@ -59,6 +59,7 @@ StockSharp API Change log
 * (feature) ExchangeBoard. LME, WIKI instances.
 * (feature) MfdHistorySource. Filter for options lookup.
 * (feature) QuandlHistorySource. Lookup securities. Support newest protocol changes.
+* (bug) Plaza. TableEditor fix.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.
