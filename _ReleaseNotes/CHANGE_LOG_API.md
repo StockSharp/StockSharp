@@ -1,5 +1,9 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) LiveCoin. Candles support.
+* (feature) LiveCoin. Websocket supported.
+
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
 * (feature) SampleSmartCandles removed.
