@@ -1,5 +1,18 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.14:
+* (feature) MFD. Filter for options lookup.
+* (feature) Quandl. Lookup securities. Support newest protocol changes.
+* (feature) Erase data. All dates options.
+* (feature) Basket security refactoring.
+* (bug) Build candles from bid/ask fix.
+* (feature) FixServer mode. User lookup support.
+* (feature) Hydra server. Board lookup support.
+* (feature) Status bar redesign.
+* (bug) Fix From date for Connector's based tasks.
+* (feature) Level1. CommissionMaker, CommissionTaker columns added.
+* (bug) Minor sources fix.
+
 ## v4.4.12:
 * (bug) Fix cross-thread UI issues.
 * (bug) Fix spashscreen info.
