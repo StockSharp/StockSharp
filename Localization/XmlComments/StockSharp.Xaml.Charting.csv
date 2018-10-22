@@ -152,6 +152,8 @@ T:StockSharp.Xaml.Charting.ChartAnnotation/summary;DocStr10173
 P:StockSharp.Xaml.Charting.ChartAnnotation.Type/summary;DocStr10174
 M:StockSharp.Xaml.Charting.ChartAnnotation.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Charting.ChartAnnotation.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.Charting.ChartAnnotation.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.Charting.ChartAnnotation.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 T:StockSharp.Xaml.Charting.ChartArea/summary;Str1903
 F:StockSharp.Xaml.Charting.ChartArea.XAxisId/summary;DocStr7754
 F:StockSharp.Xaml.Charting.ChartArea.YAxisId/summary;DocStr7755
@@ -303,6 +305,10 @@ P:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.HorizontalAlignment/summ
 P:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.VerticalAlignment/summary;DocStr10661
 P:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.CoordinateMode/summary;DocStr10675
 P:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.Text/summary;DocStr10663
+M:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
+M:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem/summary;DocStr8968
 P:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.TimeStamp/summary;DocStr7780
 P:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.XValue/summary;DocStr10691

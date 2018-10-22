@@ -608,6 +608,12 @@
     <member name="M:StockSharp.Xaml.Charting.ChartAnnotation.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)">
       <inheritdoc />
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartAnnotation.Load(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartAnnotation.Save(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartArea">
       <summary>
             Chart area.
@@ -1272,6 +1278,18 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.Text">
       <summary>Text for text annotation.</summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem">
       <summary>
