@@ -4,6 +4,7 @@ StockSharp API Change log
 * (feature) LiveCoin. Candles support.
 * (feature) LiveCoin. Websocket supported.
 * (feature) Position. SettlementPrice added.
+* (feature) OKEx. V3 protocol supported.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
