@@ -76,6 +76,85 @@
             With the specified price when the condition is fulfilled.
             </summary>
         </member>
+        <member name="T:StockSharp.Bitmex.BitmexOrderContingencyTypes">
+            <summary>
+            Contingency types.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderContingencyTypes.OneCancelsTheOther">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderContingencyTypes.OneTriggersTheOther">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderContingencyTypes.OneUpdatesTheOtherAbsolute">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderContingencyTypes.OneUpdatesTheOtherProportional">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:StockSharp.Bitmex.BitmexOrderPegPriceTypes">
+            <summary>
+            Peg price types.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderPegPriceTypes.LastPeg">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderPegPriceTypes.MidPricePeg">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderPegPriceTypes.MarketPeg">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderPegPriceTypes.PrimaryPeg">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderPegPriceTypes.TrailingStopPeg">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:StockSharp.Bitmex.BitmexOrderExecInstructions">
+            <summary>
+            Execution instructions.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderExecInstructions.AllOrNone">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderExecInstructions.MarkPrice">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderExecInstructions.IndexPrice">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderExecInstructions.LastPrice">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderExecInstructions.Close">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderExecInstructions.ReduceOnly">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderExecInstructions.Fixed">
+            <summary>
+            </summary>
+        </member>
         <member name="T:StockSharp.Bitmex.BitmexOrderCondition">
             <summary>
             <see cref="N:StockSharp.Bitmex"/> order condition.
@@ -104,6 +183,31 @@
         <member name="P:StockSharp.Bitmex.BitmexOrderCondition.WithdrawInfo">
             <summary>
             Withdraw info.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexOrderCondition.ClOrdLinkId">
+            <summary>
+            Client Order Link ID for contingent orders.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexOrderCondition.PegOffsetValue">
+            <summary>
+            Trailing offset from the current price.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexOrderCondition.PegPriceType">
+            <summary>
+            Peg price type.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexOrderCondition.ContingencyType">
+            <summary>
+            Contingency type for use with <see cref="P:StockSharp.Bitmex.BitmexOrderCondition.ClOrdLinkId"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexOrderCondition.ExecInst">
+            <summary>
+            Execution instruction.
             </summary>
         </member>
         <member name="T:StockSharp.Bitmex.BitmexTrader">

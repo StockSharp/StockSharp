@@ -15285,3 +15285,10 @@ DocStr10804;Сhild elements;Сhild elements
 DocStr10805;Commission currency. Can be {0};Валюта комиссии. Может быть {0}
 DocStr10806;Information about LME (London Metal Exchange);Информация о бирже LME (London Metal Exchange)
 DocStr10807;Information about WIKI;Информация о бирже WIKI
+DocStr10808;Contingency types;Типы непредвиденных обстоятельств
+DocStr10809;Peg price types;Опорные типы цен
+DocStr10810;Client Order Link ID for contingent orders;Client Order Link ID для непредвиденных заявок
+DocStr10811;Trailing offset from the current price;Сдвиг скольщяшего стопа для текущей цены
+DocStr10812;Peg price type;Опорные тип цены
+DocStr10813;Contingency type for use with {0};Непредвиденный тип обстоятельства, использующийся с {0}
+DocStr10814;Margin mode;Режим маржинальности

@@ -5,6 +5,7 @@ StockSharp API Change log
 * (feature) LiveCoin. Websocket supported.
 * (feature) Position. SettlementPrice added.
 * (feature) OKEx. V3 protocol supported.
+* (feature) Bitmex. Stop orders extended.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
