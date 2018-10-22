@@ -161,6 +161,13 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CommissionMakerKey)]
 		CommissionMaker,
+
+		/// <summary>
+		/// Settlement price.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str312Key)]
+		SettlementPrice,
 	}
 
 	/// <summary>

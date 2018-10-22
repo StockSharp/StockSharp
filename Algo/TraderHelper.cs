@@ -2431,6 +2431,9 @@ namespace StockSharp.Algo
 					case PositionChangeTypes.ExpirationDate:
 						position.ExpirationDate = (DateTimeOffset)change.Value;
 						break;
+					case PositionChangeTypes.SettlementPrice:
+						position.SettlementPrice = (decimal)change.Value;
+						break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(change), change.Key, LocalizedStrings.Str1219);
 				}

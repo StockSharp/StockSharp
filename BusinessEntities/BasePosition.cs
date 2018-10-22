@@ -281,6 +281,30 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private decimal? _settlementPrice;
+
+		/// <summary>
+		/// Settlement price.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str312Key)]
+		[DescriptionLoc(LocalizedStrings.SettlementPriceKey)]
+		[StatisticsCategory]
+		[Nullable]
+		[Browsable(false)]
+		public decimal? SettlementPrice
+		{
+			get => _settlementPrice;
+			set
+			{
+				if (_settlementPrice == value)
+					return;
+
+				_settlementPrice = value;
+				NotifyChanged(nameof(SettlementPrice));
+			}
+		}
+
 		private DateTimeOffset _lastChangeTime;
 
 		/// <summary>
@@ -407,6 +431,7 @@ namespace StockSharp.BusinessEntities
 			destination.UnrealizedPnL = UnrealizedPnL;
 			destination.AveragePrice = AveragePrice;
 			destination.CurrentPrice = CurrentPrice;
+			destination.SettlementPrice = SettlementPrice;
 			destination.Description = Description;
 			destination.ExpirationDate = ExpirationDate;
 			destination.ClientCode = ClientCode;

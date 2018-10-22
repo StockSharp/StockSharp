@@ -17,6 +17,7 @@ P:StockSharp.BusinessEntities.BasePosition.UnrealizedPnL/summary;Str258
 P:StockSharp.BusinessEntities.BasePosition.RealizedPnL/summary;Str259
 P:StockSharp.BusinessEntities.BasePosition.VariationMargin/summary;Str260
 P:StockSharp.BusinessEntities.BasePosition.Commission/summary;Str262
+P:StockSharp.BusinessEntities.BasePosition.SettlementPrice/summary;Str312
 P:StockSharp.BusinessEntities.BasePosition.LastChangeTime/summary;Str435
 P:StockSharp.BusinessEntities.BasePosition.LocalTime/summary;DocStr2618
 P:StockSharp.BusinessEntities.BasePosition.Description/summary;Str269

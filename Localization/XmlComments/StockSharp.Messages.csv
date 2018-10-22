@@ -1233,6 +1233,7 @@ F:StockSharp.Messages.PositionChangeTypes.State/summary;Str265
 F:StockSharp.Messages.PositionChangeTypes.ExpirationDate/summary;ExpiryDate
 F:StockSharp.Messages.PositionChangeTypes.CommissionTaker/summary;CommissionTaker
 F:StockSharp.Messages.PositionChangeTypes.CommissionMaker/summary;CommissionMaker
+F:StockSharp.Messages.PositionChangeTypes.SettlementPrice/summary;Str312
 T:StockSharp.Messages.PositionChangeMessage/summary;DocStr4439
 P:StockSharp.Messages.PositionChangeMessage.SecurityId/summary;SecurityId
 P:StockSharp.Messages.PositionChangeMessage.PortfolioName/summary;DocStr3127
