@@ -15188,7 +15188,7 @@ DocStr10706;Draw on root element;Отрисовать на корневом эл
 DocStr10707;Check if the element can be drawn using supplied axis types;Проверить если элемент может быть отрисован с использованием указанными типами осей
 DocStr10708;X axis type;Тип оси X
 DocStr10709;Y axis type;Тип оси Y
-DocStr10710;True if supplied types are supported;{0} если указанные тип поддерживаются
+DocStr10710;{0} if supplied types are supported;{0} если указанные тип поддерживаются
 DocStr10711;Compatibility property for {0} for {1};Совместимость свойства {0} с {1}
 DocStr10712;The chart element representing bubbles;Элемент графика, представляющий пузыри
 DocStr10713;Default type of X axis;Тип оси X по-умолчанию
@@ -15206,7 +15206,7 @@ DocStr10726;Indicator which is being drawn;Индикатор, который б
 DocStr10727;Whether this painter is currently attached to chart element;Присоединен ли текущий отрисовщик к элементу графика
 DocStr10728;Draw values on chart;Отрисовать значения на графике
 DocStr10729;Draw indicator values using value getter;Отрисовать значения индикатора, используя значение из getter-а
-DocStr10730;Draw indicator single double values;Отрисовать индикатор с единичными double значениями.
+DocStr10730;Draw indicator single double values;Отрисовать индикатор с единичными double значениями
 DocStr10731;Draw indicator band values (2 doubles);Отрисовать индикатор-полосу (2 double значения)
 DocStr10732;Draw indicator converting from 2 doubles to one with converter;Отрисовать индикатор, преобразовав два double значения в один
 DocStr10733;Add inner chart element;Добавить вложенный элемент графика
@@ -15278,8 +15278,7 @@ DocStr10799;User subscription request;Запрос на подписку изм�
 DocStr10800;The filter for user search;Фильтр для поиска пользователей
 DocStr10801;User request message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case);Сообщение о подписке или отписки на изменения пользователя (при отправке используется как команда, при получении является событием подтверждения)
 DocStr10802;Helper is used to disable the removal of part of the axes from chart panel;Вспомогательный класс, использующийся для запрета удаления части осей графика
-DocStr10803;Is take profit;Is take profit
-DocStr10804;Сhild elements;Сhild elements
+DocStr10803;Is take profit;Является ли тейк-профитом
 DocStr10805;Commission currency. Can be {0};Валюта комиссии. Может быть {0}
 DocStr10806;Information about LME (London Metal Exchange);Информация о бирже LME (London Metal Exchange)
 DocStr10807;Information about WIKI;Информация о бирже WIKI

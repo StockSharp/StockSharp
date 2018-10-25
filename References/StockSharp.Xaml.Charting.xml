@@ -1601,7 +1601,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.ChildElements">
       <summary>
-            Children chart elements.
+            Child chart elements.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.AddChildElement(StockSharp.Xaml.Charting.IChartElement,System.Boolean)">
@@ -1651,7 +1651,8 @@
             </summary>
       <param name="xType">X axis type.</param>
       <param name="yType">Y axis type.</param>
-      <returns>True if supplied types are supported.</returns>
+      <returns>
+        <see langword="true" /> if supplied types are supported.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartElementEditor">
       <summary>
@@ -3013,7 +3014,7 @@
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter">
       <summary>
-            Painter for <see cref="T:StockSharp.Algo.Indicators.AverageDirectionalIndex" /> indicator.
+            Chart painter for <see cref="T:StockSharp.Algo.Indicators.AverageDirectionalIndex" /> indicator.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DiPlus">
@@ -3512,7 +3513,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IChartIndicatorPainter.InnerElements">
       <summary>
-            Сhild elements.
+            Child elements.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Draw(StockSharp.Xaml.Charting.ChartDrawData)">

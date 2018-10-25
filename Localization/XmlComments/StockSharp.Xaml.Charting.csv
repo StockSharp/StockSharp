@@ -428,7 +428,7 @@ P:StockSharp.Xaml.Charting.ChartElement`1.Colorer/summary;DocStr10273
 P:StockSharp.Xaml.Charting.ChartElement`1.XAxis/summary;DocStr10700
 P:StockSharp.Xaml.Charting.ChartElement`1.YAxis/summary;DocStr10700
 P:StockSharp.Xaml.Charting.ChartElement`1.ParentElement/summary;DocStr10696
-P:StockSharp.Xaml.Charting.ChartElement`1.ChildElements/summary;DocStr10701
+P:StockSharp.Xaml.Charting.ChartElement`1.ChildElements/summary;DocStr10697
 M:StockSharp.Xaml.Charting.ChartElement`1.AddChildElement(StockSharp.Xaml.Charting.IChartElement,System.Boolean)/summary;DocStr10702
 M:StockSharp.Xaml.Charting.ChartElement`1.AddChildElement(StockSharp.Xaml.Charting.IChartElement,System.Boolean)/param/element;DocStr8459
 M:StockSharp.Xaml.Charting.ChartElement`1.AddChildElement(StockSharp.Xaml.Charting.IChartElement,System.Boolean)/param/dontDraw;DocStr10703
@@ -826,7 +826,7 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.#ctor/summary;DocS
 M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.OnDraw/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
-T:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter/summary;DocStr10725
+T:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter/summary;DocStr10724
 P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DiPlus/summary;DocStr608
 P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DiMinus/summary;DocStr608
 P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Adx/summary;DocStr608
@@ -961,7 +961,7 @@ M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)/s
 M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)/param/data;DocStr467
 T:StockSharp.Xaml.Charting.IChartIndicatorPainter/summary;DocStr7838
 P:StockSharp.Xaml.Charting.IChartIndicatorPainter.Element/summary;DocStr7792
-P:StockSharp.Xaml.Charting.IChartIndicatorPainter.InnerElements/summary;DocStr10804
+P:StockSharp.Xaml.Charting.IChartIndicatorPainter.InnerElements/summary;DocStr9767
 M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Draw(StockSharp.Xaml.Charting.ChartDrawData)/summary;DocStr486
 M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Draw(StockSharp.Xaml.Charting.ChartDrawData)/param/data;DocStr467
 M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Reset/summary;DocStr10736
