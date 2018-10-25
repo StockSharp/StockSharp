@@ -15289,3 +15289,4 @@ DocStr10811;Trailing offset from the current price;Сдвиг скольщяше
 DocStr10812;Peg price type;Опорные тип цены
 DocStr10813;Contingency type for use with {0};Непредвиденный тип обстоятельства, использующийся с {0}
 DocStr10814;Margin mode;Режим маржинальности
+DocStr10815;Argument which contains candle info;Аргумент, передающий информацию о свечах

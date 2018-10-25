@@ -6,6 +6,7 @@ StockSharp API Change log
 * (feature) Position. SettlementPrice added.
 * (feature) OKEx. V3 protocol supported.
 * (feature) Bitmex. Stop orders extended.
+* (feature) MatLab. Candles supported.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
