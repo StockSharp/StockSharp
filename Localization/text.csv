@@ -8135,7 +8135,7 @@ DocStr3309;Change list;Список изменений
 DocStr3310;FIX protocol writer;Писать FIX протокола
 DocStr3311;Transaction id generator;Генератор транзакций
 DocStr3312;The interval of the connection availability check;Интервал проверки доступности соединения
-DocStr3313;Should the sequence counter be resetted;Нужно ли сбрасывать счетчик номеров
+DocStr3313;Should the sequence counter be reset;Нужно ли сбрасывать счетчик номеров
 DocStr3314;Write message {0};Записать сообщение {0}
 DocStr3315;Whether to fill gaps;Заполнять ли пробелы
 DocStr3316;The original message identifier;Идентификатор первоначального сообщения
@@ -9230,8 +9230,8 @@ DocStr4472;Candles (time-frame);Свечи (тайм-фрейм)
 DocStr4473;Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case);Сообщение о подписке или отписки на маркет-данные (при отправке используется как команда, при получении является событием подтверждения)
 DocStr4474;The default depth of order book;Максимальная глубина стакана по умолчанию
 DocStr4475;The message is market-data subscription;Является ли сообщение подпиской на маркет-данные
-DocStr4476;The message is not supported by adapter. To be setted if the answer;Поддерживает ли торговая система запрашиваемый тип данных. Заполняется в случае ответа
-DocStr4477;Subscribe or unsubscribe error info. To be setted if the answer;Информация об ошибке. Сигнализирует об ошибке подписки или отписки. Заполняется в случае ответа
+DocStr4476;The message is not supported by adapter. To be set if the answer;Поддерживает ли торговая система запрашиваемый тип данных. Заполняется в случае ответа
+DocStr4477;Subscribe or unsubscribe error info. To be set if the answer;Информация об ошибке. Сигнализирует об ошибке подписки или отписки. Заполняется в случае ответа
 DocStr4478;Market-data count;Количество маркет-данных
 DocStr4479;Max depth of requested order book. Uses in case {0} = {1};Максимальная глубина запрощенного стакана. Используется в случае {0} равное {1}
 DocStr4480;News id. Uses in case of request news text;Идентификатор новости. Используется, если идет запрос получения текста новости
@@ -13932,7 +13932,7 @@ DocStr9308;The indicator selection window;Окно выбора типа инд�
 DocStr9310;To handle an order;Обработать заявку
 DocStr9311;The selected indicator type;Выбранный тип индикатора
 DocStr9312;Max message queue count. The default value is 10000;Максимальный размер очереди сообщений. Значение по умолчанию равно 10000
-DocStr9313;Value setted to -1 corresponds to the size without limitations;Значение -1 означает отсутствие ограничений
+DocStr9313;Value set to -1 corresponds to the size without limitations;Значение -1 означает отсутствие ограничений
 DocStr9314;An error of lookup operation. The value will be {0} if operation complete successfully;Ошибка поиска. Значение будет равно {0}, если операция выполнена успешно
 DocStr9316;Attribute, applied to methods or parameters, to create input socket;Атрибут, применяемый к методу или параметру, для создания входящего сокета
 DocStr9317;The window for set the secret;Окно установки секрет
@@ -14857,7 +14857,7 @@ DocStr10338;Cash;Наличные
 DocStr10339;Margin open;Маржинальность открыта
 DocStr10340;Margin close;Маржинальность закрыта
 DocStr10341;The request the following purposes in markets that employ tradeable or restricted tradeable quotes;Запрос для получения торгуемых или ограниченных котировок
-DocStr10345;{0} if incomming messages was processed successfully, otherwise, {1};{0} если входящие сообщения были обработаны успешно, иначе, {1}
+DocStr10345;{0} if incoming messages was processed successfully, otherwise, {1};{0} если входящие сообщения были обработаны успешно, иначе, {1}
 DocStr10346;Use {0} as portfolio name;Использовать {0} как имя портфеля
 DocStr10347;Calculated average price of all fills on this order;Рассчитанная средняя цена всех исполнений в заявке
 DocStr10348;Information about Binance;Информация о Binance

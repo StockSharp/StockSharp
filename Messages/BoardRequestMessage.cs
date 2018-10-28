@@ -35,7 +35,7 @@ namespace StockSharp.Messages
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Subscribe or unsubscribe error info. To be setted if the answer.
+		/// Subscribe or unsubscribe error info. To be set if the answer.
 		/// </summary>
 		[DataMember]
 		public Exception Error { get; set; }

@@ -36,7 +36,7 @@
 		/// Max message queue count. The default value is 10000.
 		/// </summary>
 		/// <remarks>
-		/// Value setted to -1 corresponds to the size without limitations.
+		/// Value set to -1 corresponds to the size without limitations.
 		/// </remarks>
 		public int MaxMessageCount
 		{

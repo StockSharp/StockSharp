@@ -190,13 +190,13 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// The message is not supported by adapter. To be setted if the answer.
+		/// The message is not supported by adapter. To be set if the answer.
 		/// </summary>
 		[DataMember]
 		public bool IsNotSupported { get; set; }
 
 		/// <summary>
-		/// Subscribe or unsubscribe error info. To be setted if the answer.
+		/// Subscribe or unsubscribe error info. To be set if the answer.
 		/// </summary>
 		[DataMember]
 		public Exception Error { get; set; }
