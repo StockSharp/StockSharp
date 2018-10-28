@@ -150,64 +150,40 @@
       <param name="format">FIX protocol format.</param>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Version">
-      <summary>
-            FIX version.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Encoding">
-      <summary>
-            Encoding.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Login">
-      <summary>
-            Login.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Password">
-      <summary>
-            Password.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SenderCompId">
-      <summary>
-            Sender ID.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TargetCompId">
-      <summary>
-            Target ID.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TimeStampParser">
-      <summary>
-            UTC time stamp parser.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TimeParser">
-      <summary>
-            UTC time parser.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.DateParser">
-      <summary>
-            UTC date parser.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsResetCounter">
-      <summary>
-            Should the sequence counter be resetted.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.HeartbeatInterval">
-      <summary>
-            Heartbeat interval.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TimeZone">
-      <summary>
-            Information about the time zone where the exchange is located.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.ExchangeBoard">
       <inheritdoc />
@@ -295,12 +271,7 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
-      <summary>
-            Initialize dialect.
-            </summary>
-      <param name="writer">The recorder of data in the FIX protocol format.</param>
-      <param name="reader">The reader of data recorded in the FIX protocol format.</param>
-      <param name="idGenerator">Sequence id generator.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.OnReset">
       <summary>
@@ -813,7 +784,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsResetCounter">
       <summary>
-            Should the sequence counter be resetted.
+            Should the sequence counter be reset.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.HeartbeatInterval">
@@ -945,7 +916,7 @@
       <param name="messageType">Message type.</param>
       <param name="messageHandler">Message handler.</param>
       <returns>
-        <see langword="true" /> if incomming messages was processed successfully, otherwise, <see langword="false" />.</returns>
+        <see langword="true" /> if incoming messages was processed successfully, otherwise, <see langword="false" />.</returns>
     </member>
     <member name="T:StockSharp.Fix.FastFeedGroup">
       <summary>
@@ -6913,7 +6884,7 @@
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsResetCounter">
       <summary>
-            Should the sequence counter be resetted.
+            Should the sequence counter be reset.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.DateFormat">
