@@ -157,7 +157,7 @@ namespace StockSharp.Algo.Candles
 		/// Allow build candles from smaller timeframe.
 		/// </summary>
 		/// <remarks>
-		/// Avaible only for <see cref="TimeFrameCandle"/>.
+		/// Available only for <see cref="TimeFrameCandle"/>.
 		/// </remarks>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),

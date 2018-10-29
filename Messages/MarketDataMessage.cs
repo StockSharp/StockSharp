@@ -247,7 +247,7 @@ namespace StockSharp.Messages
 		/// Allow build candles from smaller timeframe.
 		/// </summary>
 		/// <remarks>
-		/// Avaible only for <see cref="TimeFrameCandleMessage"/>.
+		/// Available only for <see cref="TimeFrameCandleMessage"/>.
 		/// </remarks>
 		[DataMember]
 		public bool AllowBuildFromSmallerTimeFrame { get; set; } = true;
@@ -320,13 +320,10 @@ namespace StockSharp.Messages
 			return clone;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe},Arg={Arg},TransId={TransactionId},OrigId={OriginalTransactionId}";
+			return base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe},Arg={Arg},TransId={TransactionId},OrigId={OriginalTransactionId},Error={Error?.Message}";
 		}
 	}
 }

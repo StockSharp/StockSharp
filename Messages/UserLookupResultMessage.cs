@@ -53,5 +53,11 @@ namespace StockSharp.Messages
 
 			return destination;
 		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			return base.ToString() + $",Orig={OriginalTransactionId},Error={Error?.Message}";
+		}
 	}
 }

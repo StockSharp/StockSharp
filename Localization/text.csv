@@ -14897,7 +14897,7 @@ DocStr10381;Filter time-frames to find multiple smaller time-frames;Отфиль
 DocStr10382;All time-frames;Все тайм-фреймы
 DocStr10383;Original time-frame;Изначальный тайм-фрейм
 DocStr10384;Multiple smaller time-frames;Кратные тайм-фреймы меньшего размера
-DocStr10386;Avaible only for {0};Доступно только для {0}
+DocStr10386;Available only for {0};Доступно только для {0}
 DocStr10387;Cache buildable from smaller time-frames candles;Кэшировать построенные из меньшего тайм-фрейма свечи
 DocStr10388;To get the candles storage for the specified instrument. The storage will build candles from smaller time-frames if original time-frames is not exist;Получить хранилище свечей для указанного инструмента. Хранилище будет строить свечи из меньшего тайм-фрейма если для оригинального тайм-фрейма свечи отсутствуют
 DocStr10389;The interface, describing a list of embedded storages of market data;Интерфейс, описывающий список внутренних хранилищ маркет-данных
