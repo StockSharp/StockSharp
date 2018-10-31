@@ -9,6 +9,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
@@ -160,6 +161,9 @@ namespace StockSharp.Algo.Storages.Csv
 				return exchange;
 			}
 
+			private const string _dateFormat = "yyyyMMdd";
+			private const string _timeFormat = "hh\\:mm";
+
 			protected override ExchangeBoard Read(FastCsvReader reader)
 			{
 				var board = new ExchangeBoard
@@ -170,14 +174,54 @@ namespace StockSharp.Algo.Storages.Csv
 					//IsSupportAtomicReRegister = reader.ReadBool(),
 					//IsSupportMarketOrders = reader.ReadBool(),
 					TimeZone = TimeZoneInfo.FindSystemTimeZoneById(reader.ReadString()),
-					WorkingTime =
-					{
-						Periods = Deserialize<List<WorkingTimePeriod>>(reader.ReadString()),
-						SpecialWorkingDays = Deserialize<List<DateTime>>(reader.ReadString()),
-						SpecialHolidays = Deserialize<List<DateTime>>(reader.ReadString())
-					},
-					//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 				};
+
+				var time = board.WorkingTime;
+
+				if (reader.ColumnCount == 7)
+				{
+					time.Periods = Deserialize<List<WorkingTimePeriod>>(reader.ReadString());
+					time.SpecialWorkingDays = Deserialize<IEnumerable<DateTime>>(reader.ReadString()).ToArray();
+					time.SpecialHolidays = Deserialize<IEnumerable<DateTime>>(reader.ReadString()).ToArray();
+				}
+				else
+				{
+					foreach (var str in (reader.ReadString() ?? string.Empty).Split(","))
+					{
+						var parts = str.Split('=');
+						time.Periods.Add(new WorkingTimePeriod
+						{
+							Till = parts[0].ToDateTime(_dateFormat),
+							Times = parts[1].Split("--").Select(s =>
+							{
+								var parts2 = s.Split('-');
+								return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
+							}).ToList(),
+							SpecialDays = parts[2].Split("//").Select(s =>
+							{
+								var parts2 = s.Split(':');
+								return new KeyValuePair<DayOfWeek, Range<TimeSpan>[]>(parts2[0].To<DayOfWeek>(), parts2[1].Split("--").Select(s2 =>
+								{
+									var parts3 = s2.Split('-');
+									return new Range<TimeSpan>(parts3[0].ToTimeSpan(_timeFormat), parts3[1].ToTimeSpan(_timeFormat));
+								}).ToArray());
+							}).ToDictionary()
+						});
+						//time.Periods;
+					}
+
+					foreach (var str in (reader.ReadString() ?? string.Empty).Split(","))
+					{
+						var parts = str.Split('=');
+						time.SpecialDays[parts[0].ToDateTime(_dateFormat)] = parts[1].Split("--").Select(s =>
+						{
+							var parts2 = s.Split('-');
+							return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
+						}).ToArray();
+					}
+				}
+
+				//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 
 				return board;
 			}
@@ -192,29 +236,31 @@ namespace StockSharp.Algo.Storages.Csv
 					//data.IsSupportAtomicReRegister.To<string>(),
 					//data.IsSupportMarketOrders.To<string>(),
 					data.TimeZone.Id,
-					Serialize(data.WorkingTime.Periods),
-					Serialize(data.WorkingTime.SpecialWorkingDays),
-					Serialize(data.WorkingTime.SpecialHolidays),
+					//Serialize(data.WorkingTime.Periods),
+					data.WorkingTime.Periods.Select(p => $"{p.Till:yyyyMMdd}=" + p.Times.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--") + "=" + p.SpecialDays.Select(p2 => $"{p2.Key}:" + p2.Value.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--")).Join("//")).Join(","),
+					//Serialize(data.WorkingTime.SpecialWorkingDays),
+					//Serialize(data.WorkingTime.SpecialHolidays),
+					data.WorkingTime.SpecialDays.Select(p => $"{p.Key:yyyyMMdd}=" + p.Value.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--")).Join(","),
 					//Serialize(data.ExtensionInfo)
 				});
 			}
 
 			private readonly SynchronizedDictionary<Type, IXmlSerializer> _serializers = new SynchronizedDictionary<Type, IXmlSerializer>();
 
-			private string Serialize<TItem>(TItem item)
-				where TItem : class
-			{
-				if (item == null)
-					return null;
+			//private string Serialize<TItem>(TItem item)
+			//	where TItem : class
+			//{
+			//	if (item == null)
+			//		return null;
 
-				var serializer = GetSerializer<TItem>();
+			//	var serializer = GetSerializer<TItem>();
 
-				using (var stream = new MemoryStream())
-				{
-					serializer.Serialize(item, stream);
-					return Registry.Encoding.GetString(stream.ToArray()).Remove(Environment.NewLine).Replace("\"", "'");
-				}
-			}
+			//	using (var stream = new MemoryStream())
+			//	{
+			//		serializer.Serialize(item, stream);
+			//		return Registry.Encoding.GetString(stream.ToArray()).Remove(Environment.NewLine).Replace("\"", "'");
+			//	}
+			//}
 
 			private TItem Deserialize<TItem>(string value)
 				where TItem : class

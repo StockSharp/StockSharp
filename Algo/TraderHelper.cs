@@ -519,7 +519,7 @@ namespace StockSharp.Algo
 		{
 			var period = workingTime.GetPeriod(date);
 
-			if ((period == null || period.Times.Count == 0) && workingTime.SpecialWorkingDays.Count == 0 && workingTime.SpecialHolidays.Count == 0)
+			if ((period == null || period.Times.Count == 0) && workingTime.SpecialWorkingDays.Length == 0 && workingTime.SpecialHolidays.Length == 0)
 				return true;
 
 			bool isWorkingDay;
@@ -3339,20 +3339,6 @@ namespace StockSharp.Algo
 					}
 				}
 			}
-		}
-
-		/// <summary>
-		/// Get period for schedule.
-		/// </summary>
-		/// <param name="time">Trading schedule.</param>
-		/// <param name="date">The date in time for search of appropriate period.</param>
-		/// <returns>The schedule period. If no period is appropriate, <see langword="null" /> is returned.</returns>
-		public static WorkingTimePeriod GetPeriod(this WorkingTime time, DateTime date)
-		{
-			if (time == null)
-				throw new ArgumentNullException(nameof(time));
-
-			return time.Periods.FirstOrDefault(p => p.Till >= date);
 		}
 
 		/// <summary>

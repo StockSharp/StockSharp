@@ -382,8 +382,8 @@ namespace StockSharp.BusinessEntities
 							},
 						}
 					},
-					SpecialWorkingDays = new List<DateTime>(russianSpecialWorkingDays),
-					SpecialHolidays = new List<DateTime>(russianSpecialHolidays),
+					SpecialWorkingDays = russianSpecialWorkingDays,
+					SpecialHolidays = russianSpecialHolidays,
 				},
 				ExpiryTime = new TimeSpan(18, 45, 00),
 				//IsSupportAtomicReRegister = true,
@@ -404,8 +404,8 @@ namespace StockSharp.BusinessEntities
 						},
 					}
 				},
-				SpecialWorkingDays = new List<DateTime>(russianSpecialWorkingDays),
-				SpecialHolidays = new List<DateTime>(russianSpecialHolidays),
+				SpecialWorkingDays = russianSpecialWorkingDays,
+				SpecialHolidays = russianSpecialHolidays,
 			};
 
 			Micex = new ExchangeBoard

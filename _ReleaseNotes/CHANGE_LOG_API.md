@@ -7,6 +7,7 @@ StockSharp API Change log
 * (feature) OKEx. V3 protocol supported.
 * (feature) Bitmex. Stop orders extended.
 * (feature) MatLab. Candles supported.
+* (feature) WorkingTime. Set schedules for part-time working days.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
