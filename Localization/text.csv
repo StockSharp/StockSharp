@@ -15290,3 +15290,9 @@ DocStr10812;Peg price type;Опорные тип цены
 DocStr10813;Contingency type for use with {0};Непредвиденный тип обстоятельства, использующийся с {0}
 DocStr10814;Margin mode;Режим маржинальности
 DocStr10815;Argument which contains candle info;Аргумент, передающий информацию о свечах
+DocStr10816;The response of board lookup;Ответ на поиск площадок
+DocStr10817;Encode {0} to string;Закодировать {0} в строку
+DocStr10818;Encoded string;Закодированная строка
+DocStr10819;Decode from string to {0};Декодировать из строки в {0}
+DocStr10820;Special working days and holidays;Специальные рабочие дни и выходные
+DocStr10821;Work schedule for days with different from {0} schedules;Расписание работы для дней с отличным от {0} расписанием

@@ -9,7 +9,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
@@ -161,9 +160,6 @@ namespace StockSharp.Algo.Storages.Csv
 				return exchange;
 			}
 
-			private const string _dateFormat = "yyyyMMdd";
-			private const string _timeFormat = "hh\\:mm";
-
 			protected override ExchangeBoard Read(FastCsvReader reader)
 			{
 				var board = new ExchangeBoard
@@ -186,39 +182,8 @@ namespace StockSharp.Algo.Storages.Csv
 				}
 				else
 				{
-					foreach (var str in (reader.ReadString() ?? string.Empty).Split(","))
-					{
-						var parts = str.Split('=');
-						time.Periods.Add(new WorkingTimePeriod
-						{
-							Till = parts[0].ToDateTime(_dateFormat),
-							Times = parts[1].Split("--").Select(s =>
-							{
-								var parts2 = s.Split('-');
-								return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
-							}).ToList(),
-							SpecialDays = parts[2].Split("//").Select(s =>
-							{
-								var parts2 = s.Split(':');
-								return new KeyValuePair<DayOfWeek, Range<TimeSpan>[]>(parts2[0].To<DayOfWeek>(), parts2[1].Split("--").Select(s2 =>
-								{
-									var parts3 = s2.Split('-');
-									return new Range<TimeSpan>(parts3[0].ToTimeSpan(_timeFormat), parts3[1].ToTimeSpan(_timeFormat));
-								}).ToArray());
-							}).ToDictionary()
-						});
-						//time.Periods;
-					}
-
-					foreach (var str in (reader.ReadString() ?? string.Empty).Split(","))
-					{
-						var parts = str.Split('=');
-						time.SpecialDays[parts[0].ToDateTime(_dateFormat)] = parts[1].Split("--").Select(s =>
-						{
-							var parts2 = s.Split('-');
-							return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
-						}).ToArray();
-					}
+					time.Periods.AddRange(reader.ReadString().DecodeToPeriods());
+					time.SpecialDays.AddRange(reader.ReadString().DecodeToSpecialDays());
 				}
 
 				//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
@@ -237,10 +202,10 @@ namespace StockSharp.Algo.Storages.Csv
 					//data.IsSupportMarketOrders.To<string>(),
 					data.TimeZone.Id,
 					//Serialize(data.WorkingTime.Periods),
-					data.WorkingTime.Periods.Select(p => $"{p.Till:yyyyMMdd}=" + p.Times.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--") + "=" + p.SpecialDays.Select(p2 => $"{p2.Key}:" + p2.Value.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--")).Join("//")).Join(","),
+					data.WorkingTime.Periods.EncodeToString(),
 					//Serialize(data.WorkingTime.SpecialWorkingDays),
 					//Serialize(data.WorkingTime.SpecialHolidays),
-					data.WorkingTime.SpecialDays.Select(p => $"{p.Key:yyyyMMdd}=" + p.Value.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--")).Join(","),
+					data.WorkingTime.SpecialDays.EncodeToString(),
 					//Serialize(data.ExtensionInfo)
 				});
 			}
