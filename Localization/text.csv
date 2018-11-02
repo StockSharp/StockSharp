@@ -14966,7 +14966,7 @@ DocStr10458;Override previous security data by new values;Перезаписыв
 DocStr10459;Start data loading;Запустить загрузку данных
 DocStr10460;Stop data loading;Остановить загрузку данных
 DocStr10461;Remove inner storage;Удалить внутреннее хранилище
-DocStr10462;Get prefered language;Получить предпочитаемый язык
+DocStr10462;Get preffered language;Получить предпочитаемый язык
 DocStr10463;Message adapter categories;Категории адаптера сообщений
 DocStr10465;US;США
 DocStr10466;Europe;Европа

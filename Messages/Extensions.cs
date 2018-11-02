@@ -797,11 +797,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Get prefered language.
+		/// Get preferred language.
 		/// </summary>
 		/// <param name="categories">Message adapter categories.</param>
 		/// <returns>Language</returns>
-		public static Languages GetPreferedLanguage(this MessageAdapterCategories? categories)
+		public static Languages GetPreferredLanguage(this MessageAdapterCategories? categories)
 		{
 			return categories?.Contains(MessageAdapterCategories.Russia) == true ? Languages.Russian : Languages.English;
 		}
