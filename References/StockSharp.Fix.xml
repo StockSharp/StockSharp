@@ -5269,6 +5269,11 @@
             The request for instruments deleting.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.Board">
+      <summary>
+            The response of board lookup.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixExtendedMessages.BoardUpdate">
       <summary>
             The request for board update.
@@ -5987,6 +5992,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.TradingSessionSubID">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.QuoteStatusReqID">
       <summary>
       </summary>
@@ -6180,6 +6189,14 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.LegIssueSize">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SessionPeriods">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SessionSpecialDays">
       <summary>
       </summary>
     </member>

@@ -1371,6 +1371,7 @@ F:StockSharp.Fix.Native.FixMessages.OrderMassCancelReport/summary;DocStr3264
 T:StockSharp.Fix.Native.FixExtendedMessages/summary;DocStr10433
 F:StockSharp.Fix.Native.FixExtendedMessages.SecurityListUpload/summary;DocStr10434
 F:StockSharp.Fix.Native.FixExtendedMessages.SecurityListDelete/summary;DocStr10435
+F:StockSharp.Fix.Native.FixExtendedMessages.Board/summary;DocStr10816
 F:StockSharp.Fix.Native.FixExtendedMessages.BoardUpdate/summary;DocStr10436
 F:StockSharp.Fix.Native.FixExtendedMessages.BoardDelete/summary;DocStr10437
 F:StockSharp.Fix.Native.FixExtendedMessages.HistoryStart/summary;DocStr10484
@@ -1548,6 +1549,7 @@ F:StockSharp.Fix.Native.FixTags.EncodedLegSecurityDescLen/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.EncodedLegSecurityDesc/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.LegRatioQty/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.LegSide/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.TradingSessionSubID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.QuoteStatusReqID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.QuoteRequestRejectReason/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.AcctIDSource/summary;DocStr8459
@@ -1597,6 +1599,8 @@ F:StockSharp.Fix.Native.FixTags.LegInstrAttribType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.LegInstrAttribValue/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.LegEndDate/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.LegIssueSize/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.SessionPeriods/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.SessionSpecialDays/summary;DocStr8459
 T:StockSharp.Fix.Native.FixBase/summary;DocStr3186
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr93
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr1295

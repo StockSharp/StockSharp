@@ -8,6 +8,7 @@ StockSharp API Change log
 * (feature) Bitmex. Stop orders extended.
 * (feature) MatLab. Candles supported.
 * (feature) WorkingTime. Set schedules for part-time working days.
+* (feature) FixServer. Translates Board info.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
