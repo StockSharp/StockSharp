@@ -193,6 +193,9 @@ namespace StockSharp.Algo
 		public event Action<Exception, IEnumerable<Portfolio>> LookupPortfoliosResult;
 
 		/// <inheritdoc />
+		public event Action<Exception, IEnumerable<ExchangeBoard>> LookupBoardsResult;
+
+		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
 
 		/// <inheritdoc />
@@ -506,7 +509,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To call the event <see cref="LookupSecuritiesResult"/>.
 		/// </summary>
-		/// <param name="error">An error of security lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
+		/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="securities">Found instruments.</param>
 		private void RaiseLookupSecuritiesResult(Exception error, IEnumerable<Security> securities)
 		{
@@ -514,9 +517,19 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// To call the event <see cref="LookupBoardsResult"/>.
+		/// </summary>
+		/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
+		/// <param name="boards">Found boards.</param>
+		private void RaiseLookupBoardsResult(Exception error, IEnumerable<ExchangeBoard> boards)
+		{
+			LookupBoardsResult?.Invoke(error, boards);
+		}
+
+		/// <summary>
 		/// To call the event <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
-		/// <param name="error">An error of portfolio lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
+		/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="portfolios">Found portfolios.</param>
 		private void RaiseLookupPortfoliosResult(Exception error, IEnumerable<Portfolio> portfolios)
 		{

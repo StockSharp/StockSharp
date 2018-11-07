@@ -59,13 +59,10 @@ namespace StockSharp.Messages
 			};
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Orig={OriginalTransactionId}";
+			return base.ToString() + $",Orig={OriginalTransactionId},Error={Error?.Message}";
 		}
 	}
 }

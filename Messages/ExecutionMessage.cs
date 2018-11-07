@@ -447,6 +447,11 @@ namespace StockSharp.Messages
 		public decimal? Commission { get; set; }
 
 		/// <summary>
+		/// Commission currency. Can be <see lnagword="null"/>.
+		/// </summary>
+		public string CommissionCurrency { get; set; }
+
+		/// <summary>
 		/// Network latency. Uses when <see cref="ExecutionType"/> set to <see cref="ExecutionTypes.Transaction"/>.
 		/// </summary>
 		[DataMember]
@@ -602,6 +607,8 @@ namespace StockSharp.Messages
 
 				IsMarketMaker = IsMarketMaker,
 				IsMargin = IsMargin,
+
+				CommissionCurrency = CommissionCurrency,
 			};
 
 			this.CopyExtensionInfo(clone);

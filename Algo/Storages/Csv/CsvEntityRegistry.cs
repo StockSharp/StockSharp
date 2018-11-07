@@ -170,14 +170,23 @@ namespace StockSharp.Algo.Storages.Csv
 					//IsSupportAtomicReRegister = reader.ReadBool(),
 					//IsSupportMarketOrders = reader.ReadBool(),
 					TimeZone = TimeZoneInfo.FindSystemTimeZoneById(reader.ReadString()),
-					WorkingTime =
-					{
-						Periods = Deserialize<List<WorkingTimePeriod>>(reader.ReadString()),
-						SpecialWorkingDays = Deserialize<List<DateTime>>(reader.ReadString()),
-						SpecialHolidays = Deserialize<List<DateTime>>(reader.ReadString())
-					},
-					//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 				};
+
+				var time = board.WorkingTime;
+
+				if (reader.ColumnCount == 7)
+				{
+					time.Periods = Deserialize<List<WorkingTimePeriod>>(reader.ReadString());
+					time.SpecialWorkingDays = Deserialize<IEnumerable<DateTime>>(reader.ReadString()).ToArray();
+					time.SpecialHolidays = Deserialize<IEnumerable<DateTime>>(reader.ReadString()).ToArray();
+				}
+				else
+				{
+					time.Periods.AddRange(reader.ReadString().DecodeToPeriods());
+					time.SpecialDays.AddRange(reader.ReadString().DecodeToSpecialDays());
+				}
+
+				//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 
 				return board;
 			}
@@ -192,29 +201,31 @@ namespace StockSharp.Algo.Storages.Csv
 					//data.IsSupportAtomicReRegister.To<string>(),
 					//data.IsSupportMarketOrders.To<string>(),
 					data.TimeZone.Id,
-					Serialize(data.WorkingTime.Periods),
-					Serialize(data.WorkingTime.SpecialWorkingDays),
-					Serialize(data.WorkingTime.SpecialHolidays),
+					//Serialize(data.WorkingTime.Periods),
+					data.WorkingTime.Periods.EncodeToString(),
+					//Serialize(data.WorkingTime.SpecialWorkingDays),
+					//Serialize(data.WorkingTime.SpecialHolidays),
+					data.WorkingTime.SpecialDays.EncodeToString(),
 					//Serialize(data.ExtensionInfo)
 				});
 			}
 
 			private readonly SynchronizedDictionary<Type, IXmlSerializer> _serializers = new SynchronizedDictionary<Type, IXmlSerializer>();
 
-			private string Serialize<TItem>(TItem item)
-				where TItem : class
-			{
-				if (item == null)
-					return null;
+			//private string Serialize<TItem>(TItem item)
+			//	where TItem : class
+			//{
+			//	if (item == null)
+			//		return null;
 
-				var serializer = GetSerializer<TItem>();
+			//	var serializer = GetSerializer<TItem>();
 
-				using (var stream = new MemoryStream())
-				{
-					serializer.Serialize(item, stream);
-					return Registry.Encoding.GetString(stream.ToArray()).Remove(Environment.NewLine).Replace("\"", "'");
-				}
-			}
+			//	using (var stream = new MemoryStream())
+			//	{
+			//		serializer.Serialize(item, stream);
+			//		return Registry.Encoding.GetString(stream.ToArray()).Remove(Environment.NewLine).Replace("\"", "'");
+			//	}
+			//}
 
 			private TItem Deserialize<TItem>(string value)
 				where TItem : class
@@ -658,6 +669,9 @@ namespace StockSharp.Algo.Storages.Csv
 					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc)
 				};
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					portfolio.ClientCode = reader.ReadString();
+
 				return portfolio;
 			}
 
@@ -682,7 +696,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.State.To<string>(),
 					data.Description,
 					data.LastChangeTime.UtcDateTime.ToString(_dateTimeFormat),
-					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat)
+					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat),
+					data.ClientCode,
 				});
 			}
 		}
@@ -737,8 +752,11 @@ namespace StockSharp.Algo.Storages.Csv
 					Commission = reader.ReadNullableDecimal(),
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
 					LastChangeTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc),
-					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc)
+					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc),
 				};
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					position.ClientCode = reader.ReadString();
 
 				return position;
 			}
@@ -758,7 +776,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.Commission.To<string>(),
 					data.Description,
 					data.LastChangeTime.UtcDateTime.ToString(_dateTimeFormat),
-					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat)
+					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat),
+					data.ClientCode,
 				});
 			}
 

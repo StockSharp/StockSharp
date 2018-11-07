@@ -94,14 +94,29 @@
             Market depth.
             </summary>
         </member>
-        <member name="T:StockSharp.MatLab.OrderLogItemEventArg">
+        <member name="T:StockSharp.MatLab.OrderLogItemEventArgs">
             <summary>
             Argument which contains order log.
             </summary>
         </member>
-        <member name="P:StockSharp.MatLab.OrderLogItemEventArg.Item">
+        <member name="P:StockSharp.MatLab.OrderLogItemEventArgs.Item">
             <summary>
             Order log.
+            </summary>
+        </member>
+        <member name="T:StockSharp.MatLab.CandleEventArgs">
+            <summary>
+            Argument which contains candle info.
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.CandleEventArgs.Series">
+            <summary>
+            Candles series.
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.CandleEventArgs.Candle">
+            <summary>
+            Candle.
             </summary>
         </member>
         <member name="T:StockSharp.MatLab.MatLabConnector">
@@ -109,13 +124,13 @@
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides ability to use from MatLab scripts.
             </summary>
         </member>
-        <member name="M:StockSharp.MatLab.MatLabConnector.#ctor(StockSharp.BusinessEntities.IConnector)">
+        <member name="M:StockSharp.MatLab.MatLabConnector.#ctor(StockSharp.Algo.Connector)">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.MatLab.MatLabConnector"/>.
             </summary>
             <param name="realConnector">The connection for market-data and transactions.</param>
         </member>
-        <member name="M:StockSharp.MatLab.MatLabConnector.#ctor(StockSharp.BusinessEntities.IConnector,System.Boolean)">
+        <member name="M:StockSharp.MatLab.MatLabConnector.#ctor(StockSharp.Algo.Connector,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.MatLab.MatLabConnector"/>.
             </summary>
@@ -240,6 +255,21 @@
         <member name="E:StockSharp.MatLab.MatLabConnector.MarketDepthChanged">
             <summary>
             Order book changed.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.NewOrderLogItem">
+            <summary>
+            Order log received.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.CandleSeriesProcessing">
+            <summary>
+            A new value for processing occurrence event.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.CandleSeriesStopped">
+            <summary>
+            The series processing end event.
             </summary>
         </member>
         <member name="M:StockSharp.MatLab.MatLabConnector.LookupSecurity(System.String)">

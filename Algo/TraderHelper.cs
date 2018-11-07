@@ -519,7 +519,7 @@ namespace StockSharp.Algo
 		{
 			var period = workingTime.GetPeriod(date);
 
-			if ((period == null || period.Times.Count == 0) && workingTime.SpecialWorkingDays.Count == 0 && workingTime.SpecialHolidays.Count == 0)
+			if ((period == null || period.Times.Count == 0) && workingTime.SpecialWorkingDays.Length == 0 && workingTime.SpecialHolidays.Length == 0)
 				return true;
 
 			bool isWorkingDay;
@@ -2331,6 +2331,9 @@ namespace StockSharp.Algo
 			if (!message.BoardCode.IsEmpty())
 				portfolio.Board = exchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
 
+			if (!message.ClientCode.IsEmpty())
+				portfolio.ClientCode = message.ClientCode;
+
 			foreach (var change in message.Changes)
 			{
 				switch (change.Key)
@@ -2343,6 +2346,12 @@ namespace StockSharp.Algo
 						break;
 					case PositionChangeTypes.State:
 						portfolio.State = (PortfolioStates)change.Value;
+						break;
+					case PositionChangeTypes.CommissionMaker:
+						portfolio.CommissionMaker = (decimal)change.Value;
+						break;
+					case PositionChangeTypes.CommissionTaker:
+						portfolio.CommissionTaker = (decimal)change.Value;
 						break;
 					default:
 						ApplyChange(portfolio, change);
@@ -2421,6 +2430,9 @@ namespace StockSharp.Algo
 						break;
 					case PositionChangeTypes.ExpirationDate:
 						position.ExpirationDate = (DateTimeOffset)change.Value;
+						break;
+					case PositionChangeTypes.SettlementPrice:
+						position.SettlementPrice = (decimal)change.Value;
 						break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(change), change.Key, LocalizedStrings.Str1219);
@@ -2644,6 +2656,12 @@ namespace StockSharp.Algo
 							break;
 						case Level1Fields.BuyBackDate:
 							security.BuyBackDate = (DateTimeOffset)value;
+							break;
+						case Level1Fields.CommissionTaker:
+							security.CommissionTaker = (decimal)value;
+							break;
+						case Level1Fields.CommissionMaker:
+							security.CommissionMaker = (decimal)value;
 							break;
 						//default:
 						//	throw new ArgumentOutOfRangeException();
@@ -3321,20 +3339,6 @@ namespace StockSharp.Algo
 					}
 				}
 			}
-		}
-
-		/// <summary>
-		/// Get period for schedule.
-		/// </summary>
-		/// <param name="time">Trading schedule.</param>
-		/// <param name="date">The date in time for search of appropriate period.</param>
-		/// <returns>The schedule period. If no period is appropriate, <see langword="null" /> is returned.</returns>
-		public static WorkingTimePeriod GetPeriod(this WorkingTime time, DateTime date)
-		{
-			if (time == null)
-				throw new ArgumentNullException(nameof(time));
-
-			return time.Periods.FirstOrDefault(p => p.Till >= date);
 		}
 
 		/// <summary>
@@ -4680,7 +4684,7 @@ namespace StockSharp.Algo
 		/// <param name="security">Basket security.</param>
 		/// <param name="processorProvider">Basket security processors provider.</param>
 		/// <returns>Messages of basket securities.</returns>
-		public static IEnumerable<TMessage> ToBasket<TMessage>(this IEnumerable<TMessage> innerSecMessages, BasketSecurity security, IBasketSecurityProcessorProvider processorProvider)
+		public static IEnumerable<TMessage> ToBasket<TMessage>(this IEnumerable<TMessage> innerSecMessages, Security security, IBasketSecurityProcessorProvider processorProvider)
 			where TMessage : Message
 		{
 			var processor = processorProvider.CreateProcessor(security);
@@ -4694,7 +4698,7 @@ namespace StockSharp.Algo
 		/// <param name="processorProvider">Basket security processors provider.</param>
 		/// <param name="security">Basket security.</param>
 		/// <returns>Market data processor for basket securities.</returns>
-		public static IBasketSecurityProcessor CreateProcessor(this IBasketSecurityProcessorProvider processorProvider, BasketSecurity security)
+		public static IBasketSecurityProcessor CreateProcessor(this IBasketSecurityProcessorProvider processorProvider, Security security)
 		{
 			if (processorProvider == null)
 				throw new ArgumentNullException(nameof(processorProvider));
@@ -4799,6 +4803,23 @@ namespace StockSharp.Algo
 
 			var type = processorProvider.GetSecurityType(security.BasketCode);
 			var basketSec = type.CreateInstance<BasketSecurity>();
+			security.CopyTo(basketSec);
+			return basketSec;
+		}
+
+		/// <summary>
+		/// Convert <see cref="Security"/> to <see cref="BasketSecurity"/> value.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Instruments basket.</returns>
+		/// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
+		public static TBasketSecurity ToBasket<TBasketSecurity>(this Security security)
+			where TBasketSecurity : BasketSecurity, new()
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			var basketSec = new TBasketSecurity();
 			security.CopyTo(basketSec);
 			return basketSec;
 		}

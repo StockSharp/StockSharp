@@ -13,6 +13,11 @@ namespace StockSharp.Messages
 		SecurityId SecurityId { get; }
 
 		/// <summary>
+		/// Basket security expression.
+		/// </summary>
+		string BasketExpression { get; }
+
+		/// <summary>
 		/// Basket security legs.
 		/// </summary>
 		SecurityId[] BasketLegs { get; }

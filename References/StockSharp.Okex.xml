@@ -24,6 +24,11 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Okex.OkexMessageAdapter.Passphrase">
+            <summary>
+            Passphrase.
+            </summary>
+        </member>
         <member name="P:StockSharp.Okex.OkexMessageAdapter.AdminPassword">
             <summary>
             Administrative password.
@@ -81,6 +86,21 @@
             Withdraw info.
             </summary>
         </member>
+        <member name="P:StockSharp.Okex.OkexOrderCondition.Margin">
+            <summary>
+            Margin.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexOrderCondition.Leverage">
+            <summary>
+            Leverage.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexOrderCondition.MarginMode">
+            <summary>
+            Margin mode.
+            </summary>
+        </member>
         <member name="T:StockSharp.Okex.OkexTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Okex"/>.
@@ -99,6 +119,11 @@
         <member name="P:StockSharp.Okex.OkexTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexTrader.Passphrase">
+            <summary>
+            Passphrase.
             </summary>
         </member>
         <member name="P:StockSharp.Okex.OkexTrader.BalanceCheckInterval">

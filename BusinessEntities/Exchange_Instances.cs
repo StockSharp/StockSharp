@@ -132,6 +132,14 @@ namespace StockSharp.BusinessEntities
 				CountryCode = CountryCodes.GB,
 			};
 
+			Lme = new Exchange
+			{
+				Name = "LME",
+				RusName = "Лондонская биржа металлов",
+				EngName = "London Metal Exchange",
+				CountryCode = CountryCodes.GB,
+			};
+
 			Tse = new Exchange
 			{
 				Name = "TSE",
@@ -469,6 +477,11 @@ namespace StockSharp.BusinessEntities
 		/// Information about LSE (London Stock Exchange).
 		/// </summary>
 		public static Exchange Lse { get; }
+
+		/// <summary>
+		/// Information about LME (London Metal Exchange).
+		/// </summary>
+		public static Exchange Lme { get; }
 
 		/// <summary>
 		/// Information about TSE (Tokyo Stock Exchange).
@@ -946,6 +959,16 @@ namespace StockSharp.BusinessEntities
 			Name = "QINX",
 			EngName = "QUOINEX",
 			RusName = "QUOINEX",
+		};
+
+		/// <summary>
+		/// Information about WIKI.
+		/// </summary>
+		public static Exchange Wiki { get; } = new Exchange
+		{
+			Name = "WIKI",
+			EngName = "WIKI",
+			RusName = "WIKI",
 		};
 	}
 }

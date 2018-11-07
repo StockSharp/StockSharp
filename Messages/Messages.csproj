@@ -80,7 +80,10 @@
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BaseConnectionMessage.cs" />
+    <Compile Include="BoardLookupMessage.cs" />
+    <Compile Include="BoardLookupResultMessage.cs" />
     <Compile Include="BoardMessage.cs" />
+    <Compile Include="BoardRequestMessage.cs" />
     <Compile Include="CandleMessage.cs" />
     <Compile Include="CandlePriceLevel.cs" />
     <Compile Include="ChangePasswordMessage.cs" />
@@ -145,7 +148,7 @@
     <Compile Include="SecurityMessage.cs" />
     <Compile Include="SecurityStates.cs" />
     <Compile Include="SecurityTypes.cs" />
-    <Compile Include="SessionMessage.cs" />
+    <Compile Include="BoardStateMessage.cs" />
     <Compile Include="Sides.cs" />
     <Compile Include="MessageAdapterCategories.cs" />
     <Compile Include="TimeInForce.cs" />
@@ -156,6 +159,7 @@
     <Compile Include="UserInfoMessage.cs" />
     <Compile Include="UserLookupMessage.cs" />
     <Compile Include="UserLookupResultMessage.cs" />
+    <Compile Include="UserRequestMessage.cs" />
     <Compile Include="WithdrawInfo.cs" />
     <Compile Include="WorkingTime.cs" />
     <Compile Include="WorkingTimePeriod.cs" />

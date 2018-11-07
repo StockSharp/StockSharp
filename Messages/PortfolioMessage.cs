@@ -78,13 +78,13 @@ namespace StockSharp.Messages
 		public string BoardCode { get; set; }
 
 		/// <summary>
-		/// User id.
+		/// Client code assigned by the broker.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str3725Key)]
-		[DescriptionLoc(LocalizedStrings.UserIdKey)]
 		[MainCategory]
-		public string User { get; set; }
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		public string ClientCode { get; set; }
 
 		///// <summary>
 		///// Portfolio state.
@@ -162,7 +162,7 @@ namespace StockSharp.Messages
 			destination.IsSubscribe = IsSubscribe;
 			//destination.State = State;
 			destination.TransactionId = TransactionId;
-			destination.User = User;
+			destination.ClientCode = ClientCode;
 
 			this.CopyExtensionInfo(destination);
 

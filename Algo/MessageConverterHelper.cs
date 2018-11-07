@@ -275,6 +275,7 @@ namespace StockSharp.Algo
 				PnL = trade.PnL,
 				Slippage = trade.Slippage,
 				Commission = trade.Commission,
+				CommissionCurrency = trade.CommissionCurrency,
 			};
 		}
 
@@ -311,6 +312,7 @@ namespace StockSharp.Algo
 				ExpiryDate = order.ExpiryDate,
 				UserOrderId = order.UserOrderId,
 				Commission = order.Commission,
+				CommissionCurrency = order.CommissionCurrency,
 				IsSystem = order.IsSystem,
 				Comment = order.Comment,
 				VisibleVolume = order.VisibleVolume,
@@ -720,8 +722,9 @@ namespace StockSharp.Algo
 			return new PortfolioMessage
 			{
 				PortfolioName = portfolio.Name,
-				BoardCode = portfolio.Board == null ? null : portfolio.Board.Code,
+				BoardCode = portfolio.Board?.Code,
 				Currency = portfolio.Currency,
+				ClientCode = portfolio.ClientCode,
 			};
 		}
 
@@ -741,6 +744,7 @@ namespace StockSharp.Algo
 				BoardCode = portfolio.Board == null ? null : portfolio.Board.Code,
 				LocalTime = portfolio.LocalTime,
 				ServerTime = portfolio.LastChangeTime,
+				ClientCode = portfolio.ClientCode,
 			}
 			.TryAdd(PositionChangeTypes.BeginValue, portfolio.BeginValue, true)
 			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.CurrentValue, true);
@@ -781,6 +785,7 @@ namespace StockSharp.Algo
 				ServerTime = position.LastChangeTime,
 				PortfolioName = position.Portfolio.Name,
 				SecurityId = position.Security.ToSecurityId(),
+				ClientCode = position.ClientCode,
 			}
 			.TryAdd(PositionChangeTypes.BeginValue, position.BeginValue, true)
 			.TryAdd(PositionChangeTypes.CurrentValue, position.CurrentValue, true)
@@ -1239,6 +1244,7 @@ namespace StockSharp.Algo
 			order.UserOrderId = message.UserOrderId;
 			order.Comment = message.Comment;
 			order.Commission = message.Commission;
+			order.CommissionCurrency = message.CommissionCurrency;
 			order.Currency = message.Currency;
 			order.IsMarketMaker = message.IsMarketMaker;
 			order.IsMargin = message.IsMargin;
@@ -1624,10 +1630,14 @@ namespace StockSharp.Algo
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
 
-			portfolio.Board = message.BoardCode.IsEmpty() ? null : exchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
+			if (!message.BoardCode.IsEmpty())
+				portfolio.Board = exchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
 
 			if (message.Currency != null)
 				portfolio.Currency = message.Currency;
+
+			if (!message.ClientCode.IsEmpty())
+				portfolio.ClientCode = message.ClientCode;
 
 			//if (message.State != null)
 			//	portfolio.State = message.State;

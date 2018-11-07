@@ -75,6 +75,17 @@ namespace StockSharp.Messages
 			set => _times = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
+		private IDictionary<DayOfWeek, Range<TimeSpan>[]> _specialDays = new Dictionary<DayOfWeek, Range<TimeSpan>[]>();
+
+		/// <summary>
+		/// Work schedule for days with different from <see cref="Times"/> schedules.
+		/// </summary>
+		public IDictionary<DayOfWeek, Range<TimeSpan>[]> SpecialDays
+		{
+			get => _specialDays;
+			set => _specialDays = value ?? throw new ArgumentNullException(nameof(value));
+		}
+
 		/// <summary>
 		/// Create a copy of <see cref="WorkingTimePeriod"/>.
 		/// </summary>
@@ -85,6 +96,7 @@ namespace StockSharp.Messages
 			{
 				Till = Till,
 				Times = Times.Select(t => t.Clone()).ToList(),
+				SpecialDays = SpecialDays.ToDictionary(p => p.Key, p => p.Value.ToArray()),
 			};
 		}
 
@@ -96,6 +108,9 @@ namespace StockSharp.Messages
 		{
 			Times = storage.GetValue<List<Range<TimeSpan>>>(nameof(Times));
 			Till = storage.GetValue<DateTime>(nameof(Till));
+
+			if (storage.ContainsKey(nameof(SpecialDays)))
+				SpecialDays = storage.GetValue<IDictionary<DayOfWeek, Range<TimeSpan>[]>>(nameof(SpecialDays));
 		}
 
 		/// <summary>
@@ -106,6 +121,7 @@ namespace StockSharp.Messages
 		{
 			storage.SetValue(nameof(Times), Times);
 			storage.SetValue(nameof(Till), Till);
+			storage.SetValue(nameof(SpecialDays), SpecialDays);
 		}
 
 		/// <summary>

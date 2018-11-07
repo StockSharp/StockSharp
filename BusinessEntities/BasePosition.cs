@@ -281,6 +281,30 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private decimal? _settlementPrice;
+
+		/// <summary>
+		/// Settlement price.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str312Key)]
+		[DescriptionLoc(LocalizedStrings.SettlementPriceKey)]
+		[StatisticsCategory]
+		[Nullable]
+		[Browsable(false)]
+		public decimal? SettlementPrice
+		{
+			get => _settlementPrice;
+			set
+			{
+				if (_settlementPrice == value)
+					return;
+
+				_settlementPrice = value;
+				NotifyChanged(nameof(SettlementPrice));
+			}
+		}
+
 		private DateTimeOffset _lastChangeTime;
 
 		/// <summary>
@@ -381,6 +405,15 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
+		/// Client code assigned by the broker.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		public string ClientCode { get; set; }
+
+		/// <summary>
 		/// To copy fields of the current position to <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The position in which you should to copy fields.</param>
@@ -398,8 +431,10 @@ namespace StockSharp.BusinessEntities
 			destination.UnrealizedPnL = UnrealizedPnL;
 			destination.AveragePrice = AveragePrice;
 			destination.CurrentPrice = CurrentPrice;
+			destination.SettlementPrice = SettlementPrice;
 			destination.Description = Description;
 			destination.ExpirationDate = ExpirationDate;
+			destination.ClientCode = ClientCode;
 			//destination.LastChangeTime = LastChangeTime;
 			//destination.LocalTime = LocalTime;
 		}

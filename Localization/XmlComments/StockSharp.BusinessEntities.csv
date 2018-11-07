@@ -17,11 +17,13 @@ P:StockSharp.BusinessEntities.BasePosition.UnrealizedPnL/summary;Str258
 P:StockSharp.BusinessEntities.BasePosition.RealizedPnL/summary;Str259
 P:StockSharp.BusinessEntities.BasePosition.VariationMargin/summary;Str260
 P:StockSharp.BusinessEntities.BasePosition.Commission/summary;Str262
+P:StockSharp.BusinessEntities.BasePosition.SettlementPrice/summary;Str312
 P:StockSharp.BusinessEntities.BasePosition.LastChangeTime/summary;Str435
 P:StockSharp.BusinessEntities.BasePosition.LocalTime/summary;DocStr2618
 P:StockSharp.BusinessEntities.BasePosition.Description/summary;Str269
 P:StockSharp.BusinessEntities.BasePosition.Currency/summary;Str251
 P:StockSharp.BusinessEntities.BasePosition.ExpirationDate/summary;ExpiryDate
+P:StockSharp.BusinessEntities.BasePosition.ClientCode/summary;ClientCodeDesc
 M:StockSharp.BusinessEntities.BasePosition.CopyTo(StockSharp.BusinessEntities.BasePosition)/summary;DocStr2615
 M:StockSharp.BusinessEntities.BasePosition.CopyTo(StockSharp.BusinessEntities.BasePosition)/param/destination;DocStr2616
 T:StockSharp.BusinessEntities.Exchange/summary;ExchangeInfo
@@ -58,6 +60,7 @@ P:StockSharp.BusinessEntities.Exchange.Nyse/summary;DocStr2651
 P:StockSharp.BusinessEntities.Exchange.Nasdaq/summary;DocStr2652
 P:StockSharp.BusinessEntities.Exchange.Nqlx/summary;DocStr2653
 P:StockSharp.BusinessEntities.Exchange.Lse/summary;DocStr2654
+P:StockSharp.BusinessEntities.Exchange.Lme/summary;DocStr10806
 P:StockSharp.BusinessEntities.Exchange.Tse/summary;DocStr2655
 P:StockSharp.BusinessEntities.Exchange.Hkex/summary;DocStr2656
 P:StockSharp.BusinessEntities.Exchange.Hkfe/summary;DocStr2657
@@ -123,6 +126,7 @@ P:StockSharp.BusinessEntities.Exchange.IEX/summary;DocStr10578
 P:StockSharp.BusinessEntities.Exchange.Bitbank/summary;DocStr10579
 P:StockSharp.BusinessEntities.Exchange.Zaif/summary;DocStr10580
 P:StockSharp.BusinessEntities.Exchange.Quoinex/summary;DocStr10581
+P:StockSharp.BusinessEntities.Exchange.Wiki/summary;DocStr10807
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694
@@ -268,6 +272,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Nyse/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Nasdaq/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Nqlx/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Lse/summary;DocStr2807
+P:StockSharp.BusinessEntities.ExchangeBoard.Lme/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Tse/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Hkex/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Hkfe/summary;DocStr2807
@@ -339,6 +344,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.IEX/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Bitbank/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Zaif/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Quoinex/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.Wiki/summary;DocStr2809
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrade/summary;DocStr8546
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867
@@ -390,6 +396,7 @@ E:StockSharp.BusinessEntities.IConnector.Error/summary;DocStr893
 E:StockSharp.BusinessEntities.IConnector.MarketTimeChanged/summary;DocStr886
 E:StockSharp.BusinessEntities.IConnector.LookupSecuritiesResult/summary;DocStr894
 E:StockSharp.BusinessEntities.IConnector.LookupPortfoliosResult/summary;DocStr894
+E:StockSharp.BusinessEntities.IConnector.LookupBoardsResult/summary;DocStr894
 E:StockSharp.BusinessEntities.IConnector.MarketDataSubscriptionSucceeded/summary;DocStr895
 E:StockSharp.BusinessEntities.IConnector.MarketDataSubscriptionFailed/summary;DocStr896
 E:StockSharp.BusinessEntities.IConnector.MarketDataUnSubscriptionSucceeded/summary;DocStr9350
@@ -420,7 +427,7 @@ P:StockSharp.BusinessEntities.IConnector.MarketDataAdapter/summary;DocStr866
 M:StockSharp.BusinessEntities.IConnector.Connect/summary;DocStr806
 M:StockSharp.BusinessEntities.IConnector.Disconnect/summary;DocStr807
 M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/summary;DocStr808
-M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/param/criteria;DocStr111
+M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/param/criteria;DocStr809
 M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/param/adapter;DocStr10512
 M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/param/offlineMode;DocStr10591
 M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.Messages.SecurityLookupMessage)/summary;DocStr808
@@ -428,12 +435,18 @@ M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.Messages.Se
 M:StockSharp.BusinessEntities.IConnector.GetSecurityId(StockSharp.BusinessEntities.Security)/summary;DocStr848
 M:StockSharp.BusinessEntities.IConnector.GetSecurityId(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
 M:StockSharp.BusinessEntities.IConnector.GetSecurityId(StockSharp.BusinessEntities.Security)/returns;SecurityId
+M:StockSharp.BusinessEntities.IConnector.LookupBoards(StockSharp.BusinessEntities.ExchangeBoard,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/summary;DocStr10782
+M:StockSharp.BusinessEntities.IConnector.LookupBoards(StockSharp.BusinessEntities.ExchangeBoard,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/param/criteria;DocStr809
+M:StockSharp.BusinessEntities.IConnector.LookupBoards(StockSharp.BusinessEntities.ExchangeBoard,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/param/adapter;DocStr10512
+M:StockSharp.BusinessEntities.IConnector.LookupBoards(StockSharp.BusinessEntities.ExchangeBoard,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/param/offlineMode;DocStr10591
+M:StockSharp.BusinessEntities.IConnector.LookupBoards(StockSharp.Messages.BoardLookupMessage)/summary;DocStr10782
+M:StockSharp.BusinessEntities.IConnector.LookupBoards(StockSharp.Messages.BoardLookupMessage)/param/criteria;DocStr809
 M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/summary;DocStr810
-M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/param/criteria;DocStr811
+M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/param/criteria;DocStr809
 M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/param/adapter;DocStr10512
 M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/param/offlineMode;DocStr10591
 M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.Messages.PortfolioLookupMessage)/summary;DocStr810
-M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.Messages.PortfolioLookupMessage)/param/criteria;DocStr811
+M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.Messages.PortfolioLookupMessage)/param/criteria;DocStr809
 M:StockSharp.BusinessEntities.IConnector.LookupOrders(StockSharp.BusinessEntities.Order,StockSharp.Messages.IMessageAdapter)/summary;DocStr10513
 M:StockSharp.BusinessEntities.IConnector.LookupOrders(StockSharp.BusinessEntities.Order,StockSharp.Messages.IMessageAdapter)/param/criteria;DocStr10514
 M:StockSharp.BusinessEntities.IConnector.LookupOrders(StockSharp.BusinessEntities.Order,StockSharp.Messages.IMessageAdapter)/param/adapter;DocStr10512
@@ -525,6 +538,10 @@ M:StockSharp.BusinessEntities.IConnector.UnRegisterPortfolio(StockSharp.Business
 M:StockSharp.BusinessEntities.IConnector.UnRegisterPortfolio(StockSharp.BusinessEntities.Portfolio)/param/portfolio;DocStr792
 M:StockSharp.BusinessEntities.IConnector.RegisterNews/summary;DocStr797
 M:StockSharp.BusinessEntities.IConnector.UnRegisterNews/summary;DocStr798
+M:StockSharp.BusinessEntities.IConnector.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/summary;DocStr10783
+M:StockSharp.BusinessEntities.IConnector.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/param/board;DocStr10784
+M:StockSharp.BusinessEntities.IConnector.UnSubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/summary;DocStr10785
+M:StockSharp.BusinessEntities.IConnector.UnSubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/param/board;DocStr10786
 T:StockSharp.BusinessEntities.IMarketDataProvider/summary;DocStr2826
 E:StockSharp.BusinessEntities.IMarketDataProvider.ValuesChanged/summary;DocStr898
 M:StockSharp.BusinessEntities.IMarketDataProvider.GetMarketDepth(StockSharp.BusinessEntities.Security)/summary;DocStr816
@@ -679,6 +696,7 @@ M:StockSharp.BusinessEntities.MyTrade.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.MyTrade.Order/summary;Str505
 P:StockSharp.BusinessEntities.MyTrade.Trade/summary;DocStr2911
 P:StockSharp.BusinessEntities.MyTrade.Commission/summary;XamlStr249
+P:StockSharp.BusinessEntities.MyTrade.CommissionCurrency/summary;DocStr10805
 P:StockSharp.BusinessEntities.MyTrade.Slippage/summary;Str164
 P:StockSharp.BusinessEntities.MyTrade.PnL/summary;DocStr8684
 P:StockSharp.BusinessEntities.MyTrade.Position/summary;DocStr8685
@@ -733,6 +751,7 @@ P:StockSharp.BusinessEntities.Order.RpsInfo/summary;Str236
 P:StockSharp.BusinessEntities.Order.ExtensionInfo/summary;DocStr2921
 P:StockSharp.BusinessEntities.Order.ExtensionInfo/remarks;DocStr2922
 P:StockSharp.BusinessEntities.Order.Commission/summary;Str160
+P:StockSharp.BusinessEntities.Order.CommissionCurrency/summary;DocStr10805
 P:StockSharp.BusinessEntities.Order.UserOrderId/summary;Str166
 P:StockSharp.BusinessEntities.Order.BrokerCode/summary;Str2619
 P:StockSharp.BusinessEntities.Order.ClientCode/summary;ClientCodeDesc
@@ -761,6 +780,8 @@ P:StockSharp.BusinessEntities.Portfolio.Name/summary;Str247
 P:StockSharp.BusinessEntities.Portfolio.Leverage/summary;Str261
 P:StockSharp.BusinessEntities.Portfolio.Board/summary;Str544
 P:StockSharp.BusinessEntities.Portfolio.State/summary;Str265
+P:StockSharp.BusinessEntities.Portfolio.CommissionTaker/summary;CommissionTaker
+P:StockSharp.BusinessEntities.Portfolio.CommissionMaker/summary;CommissionMaker
 P:StockSharp.BusinessEntities.Portfolio.AnonymousPortfolio/summary;DocStr2932
 M:StockSharp.BusinessEntities.Portfolio.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Portfolio.Clone/returns;DocStr1116
@@ -773,7 +794,6 @@ M:StockSharp.BusinessEntities.Position.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.Position.Portfolio/summary;Str270
 P:StockSharp.BusinessEntities.Position.Security/summary;Str271
 P:StockSharp.BusinessEntities.Position.DepoName/summary;DocStr2933
-P:StockSharp.BusinessEntities.Position.ClientCode/summary;ClientCodeDesc
 P:StockSharp.BusinessEntities.Position.LimitType/summary;DocStr2934
 M:StockSharp.BusinessEntities.Position.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Position.Clone/returns;DocStr1116
@@ -867,6 +887,8 @@ P:StockSharp.BusinessEntities.Security.BuyBackPrice/summary;BuyBackPrice
 P:StockSharp.BusinessEntities.Security.BuyBackDate/summary;BuyBackDate
 P:StockSharp.BusinessEntities.Security.BasketCode/summary;DocStr10646
 P:StockSharp.BusinessEntities.Security.BasketExpression/summary;DocStr10600
+P:StockSharp.BusinessEntities.Security.CommissionTaker/summary;CommissionTaker
+P:StockSharp.BusinessEntities.Security.CommissionMaker/summary;CommissionMaker
 M:StockSharp.BusinessEntities.Security.ToString/inheritdoc;DocStr8459
 M:StockSharp.BusinessEntities.Security.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Security.Clone/returns;DocStr1116

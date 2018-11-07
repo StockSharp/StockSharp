@@ -7913,5 +7913,10 @@
             Создать <see cref="T:StockSharp.Plaza.Xaml.PlazaTableEditor" />.
             </summary>
     </member>
+    <member name="M:StockSharp.Plaza.Xaml.PlazaTableEditor.OnLoadedInternal">
+      <summary>
+            Control loading handler.
+            </summary>
+    </member>
   </members>
 </doc>

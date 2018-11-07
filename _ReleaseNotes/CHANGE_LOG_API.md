@@ -1,5 +1,15 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) LiveCoin. Candles support.
+* (feature) LiveCoin. Websocket supported.
+* (feature) Position. SettlementPrice added.
+* (feature) OKEx. V3 protocol supported.
+* (feature) Bitmex. Stop orders extended.
+* (feature) MatLab. Candles supported.
+* (feature) WorkingTime. Set schedules for part-time working days.
+* (feature) FixServer. Translates Board info.
+
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
 * (feature) SampleSmartCandles removed.
@@ -34,6 +44,32 @@ StockSharp API Change log
 * (feature) CEX. Remove ClientId settings.
 * (feature) BasePosition. ExpirationDate property added.
 * (bug) FXCM fixes.
+* (feature) CsvImporter. SecurityUpdated event added.
+* (feature) Positions. ClientCode moved from Position to BasePosition.
+* (feature) ImportSettingsPanel. IPersistable implemented.
+* (bug) Monitor. Clear sources tree in monitor fixes.
+* (bug) Monitor. Do not trim log sources names.
+* (feature) CsvEntityRegistry. Support Position.ClientCode save-load.
+* (feature) SessionMessage->BoardStateMessage renamed.
+* (feature) BoardLookupMessage, BoardRequestMessage, UserRequestMessage added.
+* (feature) IConnector. LookupBoardsResult event added.
+* (feature) IConnector. LookupBoards method added.
+* (feature) IConnector. SubscribeBoard/UnSubscribeBoard methods added.
+* (bug) SubscriptionMessageAdapter. Set original trans id while disconnect unsubscribe.
+* (feature) Connector. SupportBasketSecurities property added.
+* (feature) InteractiveBrokers. MaxVersion settings added.
+* (feature) Level1ChangeMessage. CommissionMaker, CommissionTaker fields added.
+* (feature) PositionChangeMessage. CommissionMaker, CommissionTaker fields added.
+* (feature) Order, MyTrade. CommissionCurrency field added.
+* (feature) SecurityGrid, Level1Grid. CommissionMaker, CommissionTaker columns added.
+* (feature) PortfolioGrid. Show Board, CommissionMaker, CommissionTaker columns.
+* (feature) InteractiveBrokers, Micex, Plaza. Commission translate supported.
+* (feature) Crypto connectors. Commission translate supported.
+* (feature) FIX server. CommissionCurrency supported.
+* (feature) ExchangeBoard. LME, WIKI instances.
+* (feature) MfdHistorySource. Filter for options lookup.
+* (feature) QuandlHistorySource. Lookup securities. Support newest protocol changes.
+* (bug) Plaza. TableEditor fix.
 
 ## v4.4.13:
 * (bug) Monitor.Clear fix.

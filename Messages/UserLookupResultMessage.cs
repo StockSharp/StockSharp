@@ -25,6 +25,12 @@ namespace StockSharp.Messages
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
+		/// Lookup error info.
+		/// </summary>
+		[DataMember]
+		public Exception Error { get; set; }
+
+		/// <summary>
 		/// Create a copy of <see cref="UserLookupResultMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
@@ -41,10 +47,17 @@ namespace StockSharp.Messages
 		protected UserLookupResultMessage CopyTo(UserLookupResultMessage destination)
 		{
 			destination.OriginalTransactionId = OriginalTransactionId;
+			destination.Error = Error;
 
 			this.CopyExtensionInfo(destination);
 
 			return destination;
+		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			return base.ToString() + $",Orig={OriginalTransactionId},Error={Error?.Message}";
 		}
 	}
 }

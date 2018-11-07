@@ -150,64 +150,40 @@
       <param name="format">FIX protocol format.</param>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Version">
-      <summary>
-            FIX version.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Encoding">
-      <summary>
-            Encoding.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Login">
-      <summary>
-            Login.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Password">
-      <summary>
-            Password.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SenderCompId">
-      <summary>
-            Sender ID.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TargetCompId">
-      <summary>
-            Target ID.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TimeStampParser">
-      <summary>
-            UTC time stamp parser.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TimeParser">
-      <summary>
-            UTC time parser.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.DateParser">
-      <summary>
-            UTC date parser.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsResetCounter">
-      <summary>
-            Should the sequence counter be resetted.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.HeartbeatInterval">
-      <summary>
-            Heartbeat interval.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TimeZone">
-      <summary>
-            Information about the time zone where the exchange is located.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.ExchangeBoard">
       <inheritdoc />
@@ -295,12 +271,7 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
-      <summary>
-            Initialize dialect.
-            </summary>
-      <param name="writer">The recorder of data in the FIX protocol format.</param>
-      <param name="reader">The reader of data recorded in the FIX protocol format.</param>
-      <param name="idGenerator">Sequence id generator.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.OnReset">
       <summary>
@@ -453,14 +424,11 @@
             Convert all non-latin text messages to latin.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
-      <summary>
-            Write the specified message into FIX protocol.
-            </summary>
-      <param name="writer">The recorder of data in the FIX protocol format.</param>
-      <param name="message">The message.</param>
-      <returns>
-        <see cref="T:StockSharp.Fix.Native.FixMessages" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage)">
       <summary>
@@ -477,9 +445,6 @@
       <param name="tag">Tag.</param>
       <param name="getCondition">The function returning the order condition.</param>
       <returns>Whether the data was successfully processed.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
-      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.Dialects.IFastDialect">
       <summary>
@@ -819,7 +784,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsResetCounter">
       <summary>
-            Should the sequence counter be resetted.
+            Should the sequence counter be reset.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.HeartbeatInterval">
@@ -951,7 +916,7 @@
       <param name="messageType">Message type.</param>
       <param name="messageHandler">Message handler.</param>
       <returns>
-        <see langword="true" /> if incomming messages was processed successfully, otherwise, <see langword="false" />.</returns>
+        <see langword="true" /> if incoming messages was processed successfully, otherwise, <see langword="false" />.</returns>
     </member>
     <member name="T:StockSharp.Fix.FastFeedGroup">
       <summary>
@@ -1123,11 +1088,6 @@
     <member name="T:StockSharp.Fix.FixUserRequestTypes">
       <summary>
             Request types.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Fix.FixUserRequestTypes.Lookup">
-      <summary>
-            Lookup.
             </summary>
     </member>
     <member name="F:StockSharp.Fix.FixUserRequestTypes.LogoffForce">
@@ -1400,21 +1360,13 @@
       <returns>Transaction ID.</returns>
     </member>
     <member name="M:StockSharp.Fix.FixServer.DisposeManaged">
-      <summary>
-            Release resources.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixServer.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixServer.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixServer.SendInMessage(StockSharp.Fix.FixSession,System.String,StockSharp.Messages.Message)">
       <summary>
@@ -5028,6 +4980,11 @@
             Commission.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.ExecutionReport.CommissionCurrency">
+      <summary>
+            Commission currency. Can be <see lnagword="null" />.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.Text">
       <summary>
             Free format text string.
@@ -5227,6 +5184,11 @@
             The request for the getting the order status.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixMessages.TradingSessionStatusRequest">
+      <summary>
+            The request for the getting the session status.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixMessages.TradingSessionStatus">
       <summary>
             The response with the session state.
@@ -5307,6 +5269,11 @@
             The request for instruments deleting.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.Board">
+      <summary>
+            The response of board lookup.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixExtendedMessages.BoardUpdate">
       <summary>
             The request for board update.
@@ -5330,6 +5297,26 @@
     <member name="F:StockSharp.Fix.Native.FixExtendedMessages.HistoryInterval">
       <summary>
             The request for change historical interval.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.UserLookupResult">
+      <summary>
+            The response of user lookup result.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.BoardLookup">
+      <summary>
+            The request for board lookup.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.BoardLookupResult">
+      <summary>
+            The response of board lookup result.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.UserRequest">
+      <summary>
+            The request for user's info subscription.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.FixTags">
@@ -5741,6 +5728,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.TradSesReqID">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.TradingSessionID">
       <summary>
       </summary>
@@ -5806,6 +5797,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.CFICode">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.CommCurrency">
       <summary>
       </summary>
     </member>
@@ -5997,6 +5992,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.TradingSessionSubID">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.QuoteStatusReqID">
       <summary>
       </summary>
@@ -6006,6 +6005,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.AcctIDSource">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.ContractSettlMonth">
       <summary>
       </summary>
     </member>
@@ -6186,6 +6189,14 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.LegIssueSize">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SessionPeriods">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SessionSpecialDays">
       <summary>
       </summary>
     </member>
@@ -6890,7 +6901,7 @@
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsResetCounter">
       <summary>
-            Should the sequence counter be resetted.
+            Should the sequence counter be reset.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.DateFormat">

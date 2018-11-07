@@ -127,6 +127,7 @@ namespace StockSharp.Algo
 
 							if (msg is MarketDataMessage mdMsg)
 							{
+								mdMsg.OriginalTransactionId = mdMsg.TransactionId;
 								mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
 								mdMsg.IsSubscribe = false;
 							}

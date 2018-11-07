@@ -153,7 +153,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Session.
 		/// </summary>
-		Session,
+		BoardState,
 
 		/// <summary>
 		/// Order state request.
@@ -233,6 +233,26 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Users search result.
 		/// </summary>
-		UserLookupResult
+		UserLookupResult,
+
+		/// <summary>
+		/// Board subscription request.
+		/// </summary>
+		BoardRequest,
+
+		/// <summary>
+		/// Boards search.
+		/// </summary>
+		BoardLookup,
+
+		/// <summary>
+		/// Boards search result.
+		/// </summary>
+		BoardLookupResult,
+
+		/// <summary>
+		/// User subscription request.
+		/// </summary>
+		UserRequest
 	}
 }

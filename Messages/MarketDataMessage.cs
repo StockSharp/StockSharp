@@ -190,13 +190,13 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// The message is not supported by adapter. To be setted if the answer.
+		/// The message is not supported by adapter. To be set if the answer.
 		/// </summary>
 		[DataMember]
 		public bool IsNotSupported { get; set; }
 
 		/// <summary>
-		/// Subscribe or unsubscribe error info. Заполняется в случае ответа.
+		/// Subscribe or unsubscribe error info. To be set if the answer.
 		/// </summary>
 		[DataMember]
 		public Exception Error { get; set; }
@@ -247,7 +247,7 @@ namespace StockSharp.Messages
 		/// Allow build candles from smaller timeframe.
 		/// </summary>
 		/// <remarks>
-		/// Avaible only for <see cref="TimeFrameCandleMessage"/>.
+		/// Available only for <see cref="TimeFrameCandleMessage"/>.
 		/// </remarks>
 		[DataMember]
 		public bool AllowBuildFromSmallerTimeFrame { get; set; } = true;
@@ -320,13 +320,10 @@ namespace StockSharp.Messages
 			return clone;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe},Arg={Arg},TransId={TransactionId},OrigId={OriginalTransactionId}";
+			return base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe},Arg={Arg},TransId={TransactionId},OrigId={OriginalTransactionId},Error={Error?.Message}";
 		}
 	}
 }

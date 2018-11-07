@@ -147,6 +147,27 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ExpiryDateKey)]
 		ExpirationDate,
+
+		/// <summary>
+		/// Commission (taker).
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CommissionTakerKey)]
+		CommissionTaker,
+
+		/// <summary>
+		/// Commission (maker).
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CommissionMakerKey)]
+		CommissionMaker,
+
+		/// <summary>
+		/// Settlement price.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str312Key)]
+		SettlementPrice,
 	}
 
 	/// <summary>
@@ -193,15 +214,6 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.DepoNameKey)]
 		[MainCategory]
 		public string DepoName { get; set; }
-
-		/// <summary>
-		/// User id.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str3725Key)]
-		[DescriptionLoc(LocalizedStrings.UserIdKey)]
-		[MainCategory]
-		public string User { get; set; }
 
 		/// <summary>
 		/// Limit type for Т+ market.
@@ -252,7 +264,6 @@ namespace StockSharp.Messages
 				Description = Description,
 				OriginalTransactionId = OriginalTransactionId,
 				ClientCode = ClientCode,
-				User = User,
 			};
 
 			msg.Changes.AddRange(Changes);

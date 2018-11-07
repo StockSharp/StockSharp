@@ -1150,6 +1150,18 @@
             </summary>
       <param name="items">Fields.</param>
     </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsPanel.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsPanel.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="M:StockSharp.Xaml.ImportSettingsPanel.InitializeComponent">
       <summary>
             InitializeComponent
@@ -4627,6 +4639,9 @@
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewOrderLogItem">
       <inheritdoc />
     </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.LookupBoardsResult">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.TransactionIdGenerator">
       <inheritdoc />
     </member>
@@ -4705,6 +4720,12 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetSecurityId(StockSharp.BusinessEntities.Security)">
       <inheritdoc />
     </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupBoards(StockSharp.BusinessEntities.ExchangeBoard,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupBoards(StockSharp.Messages.BoardLookupMessage)">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)">
       <inheritdoc />
     </member>
@@ -4766,6 +4787,12 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterNews">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.UnSubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.SendOutMessage(StockSharp.Messages.Message)">
@@ -5613,6 +5640,18 @@
       <summary>
             Child nodes.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.LogSourceNode.Add(StockSharp.Xaml.LogSourceNode)">
+      <summary>
+            Add <see cref="T:StockSharp.Xaml.LogSourceNode" />.
+            </summary>
+      <param name="node">Node.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.LogSourceNode.Remove(StockSharp.Xaml.LogSourceNode)">
+      <summary>
+            Remove <see cref="T:StockSharp.Xaml.LogSourceNode" />.
+            </summary>
+      <param name="node">Node.</param>
     </member>
     <member name="M:StockSharp.Xaml.LogSourceNode.ToString">
       <summary>

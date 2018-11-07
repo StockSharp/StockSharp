@@ -48,6 +48,11 @@
 		public bool UpdateDuplicateSecurities { get; set; }
 
 		/// <summary>
+		/// Security updated event.
+		/// </summary>
+		public event Action<Security, bool> SecurityUpdated;
+
+		/// <summary>
 		/// Import from CSV file.
 		/// </summary>
 		/// <param name="fileName">File name.</param>
@@ -77,6 +82,7 @@
 					else
 					{
 						var security = _entityRegistry.Securities.ReadBySecurityId(secMsg.SecurityId);
+						var isNew = true;
 
 						if (security != null)
 						{
@@ -86,6 +92,7 @@
 								continue;
 							}
 
+							isNew = false;
 							security.ApplyChanges(secMsg, _exchangeInfoProvider, UpdateDuplicateSecurities);
 						}
 						else
@@ -94,6 +101,8 @@
 						_entityRegistry.Securities.Save(security, UpdateDuplicateSecurities);
 
 						ExtendedInfoStorageItem?.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
+
+						SecurityUpdated?.Invoke(security, isNew);
 					}
 
 					var percent = (int)(((double)lineIndex / len) * 100 - 1).Round();

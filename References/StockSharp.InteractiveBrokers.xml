@@ -247,6 +247,11 @@
             The name of the server that shares SSL connection.
             </summary>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.MaxVersion">
+      <summary>
+            Max support version.
+            </summary>
+    </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <inheritdoc />
     </member>

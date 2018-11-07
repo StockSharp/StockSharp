@@ -295,6 +295,11 @@ namespace StockSharp.BusinessEntities
 		event Action<Exception, IEnumerable<Portfolio>> LookupPortfoliosResult;
 
 		/// <summary>
+		/// Lookup result <see cref="LookupBoards(ExchangeBoard,IMessageAdapter,MessageOfflineModes)"/> received.
+		/// </summary>
+		event Action<Exception, IEnumerable<ExchangeBoard>> LookupBoardsResult;
+
+		/// <summary>
 		/// Successful subscription market-data.
 		/// </summary>
 		event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
@@ -444,7 +449,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="LookupSecuritiesResult"/>.
 		/// </summary>
-		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <param name="offlineMode">Offline mode handling message.</param>
 		void LookupSecurities(Security criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
@@ -463,9 +468,23 @@ namespace StockSharp.BusinessEntities
 		SecurityId GetSecurityId(Security security);
 
 		/// <summary>
+		/// To find boards that match the filter <paramref name="criteria" />. Found boards will be passed through the event <see cref="LookupBoardsResult"/>.
+		/// </summary>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		/// <param name="offlineMode">Offline mode handling message.</param>
+		void LookupBoards(ExchangeBoard criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
+
+		/// <summary>
+		/// To find boards that match the filter <paramref name="criteria" />. Found boards will be passed through the event <see cref="LookupBoardsResult"/>.
+		/// </summary>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		void LookupBoards(BoardLookupMessage criteria);
+
+		/// <summary>
 		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
-		/// <param name="criteria">The portfolio which fields will be used as a filter.</param>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <param name="offlineMode">Offline mode handling message.</param>
 		void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
@@ -473,7 +492,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
-		/// <param name="criteria">The portfolio which fields will be used as a filter.</param>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
 		void LookupPortfolios(PortfolioLookupMessage criteria);
 
 		/// <summary>
@@ -674,5 +693,17 @@ namespace StockSharp.BusinessEntities
 		/// Unsubscribe from news.
 		/// </summary>
 		void UnRegisterNews();
+
+		/// <summary>
+		/// Subscribe on the board changes.
+		/// </summary>
+		/// <param name="board">Board for subscription.</param>
+		void SubscribeBoard(ExchangeBoard board);
+
+		/// <summary>
+		/// Unsubscribe from the board changes.
+		/// </summary>
+		/// <param name="board">Board for unsubscription.</param>
+		void UnSubscribeBoard(ExchangeBoard board);
 	}
 }

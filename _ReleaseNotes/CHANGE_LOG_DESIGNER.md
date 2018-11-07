@@ -1,5 +1,14 @@
 StockSharp Designer Change log
 ========================
+## v4.4.14:
+* (feature) Chart. Multi axes supported.
+* (bug) Finam downloading fix.
+* (feature) Status bar redesign.
+* (bug) Close live tab fix.
+* (bug) Index securities edit fix.
+* (feature) Volume continous securit.
+* (bug) Many bug fixes.
+
 ## v4.4.12:
 * (bug) Fix storage format select.
 * (bug) Fix cross-thread UI issues.

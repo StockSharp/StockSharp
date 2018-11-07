@@ -11,6 +11,7 @@ P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Description/summary;DocStr79
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Revision/summary;DocStr9071
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.PublishedId/summary;DocStr9530
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsModifiable/summary;DocStr7914
+P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsLoaded/summary;DocStr10762
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Type/summary;DocStr9200
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.HasErrors/summary;DocStr7915
 E:StockSharp.Xaml.Diagram.CompositionDiagramElement.Changed/summary;DocStr7916
@@ -678,6 +679,10 @@ P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.TypeId/summary;Doc
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IconName/summary;DocStr9214
 M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.OnStop/summary;DocStr7894
 T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement/summary;ChartPanelElement
+T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ChartIndicatorElementWrapper/summary;DocStr10756
+P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ChartIndicatorElementWrapper.Element/summary;DocStr608
+M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ChartIndicatorElementWrapper.#ctor/summary;DocStr1
+M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ChartIndicatorElementWrapper.#ctor(StockSharp.Xaml.Charting.ChartIndicatorElement)/summary;DocStr1
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.CandleElements/summary;XamlStr631
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.IndicatorElements/summary;DocStr9743
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.OrderElements/summary;Orders
@@ -926,15 +931,6 @@ P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.Type/summary;AlertType
 P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.Caption/summary;Str3165
 P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.Message/summary;DocStr13
 M:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.#ctor/summary;DocStr1
-T:StockSharp.Xaml.Diagram.ExportDiagramElement/summary;DocStr8055
-M:StockSharp.Xaml.Diagram.ExportDiagramElement.#ctor/summary;DocStr1
-M:StockSharp.Xaml.Diagram.ExportDiagramElement.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement)/summary;DocStr1
-M:StockSharp.Xaml.Diagram.ExportDiagramElement.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement)/param/source;XamlStr688
-M:StockSharp.Xaml.Diagram.ExportDiagramElement.OnStart/summary;DocStr7892
-M:StockSharp.Xaml.Diagram.ExportDiagramElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
-M:StockSharp.Xaml.Diagram.ExportDiagramElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Xaml.Diagram.ExportDiagramElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
-M:StockSharp.Xaml.Diagram.ExportDiagramElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource/summary;DocStr8056
 P:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.IndicatorTypes/summary;DocStr9022
 M:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.GetValues/summary;DocStr8057
@@ -942,3 +938,5 @@ M:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.GetValues/returns;DocStr8058
 T:StockSharp.Xaml.Diagram.SocketTypesSource/summary;DocStr8059
 M:StockSharp.Xaml.Diagram.SocketTypesSource.GetValues/summary;DocStr8060
 M:StockSharp.Xaml.Diagram.SocketTypesSource.GetValues/returns;DocStr8061
+T:StockSharp.Xaml.Diagram.Themes.AxesPropertyDefinitionHelper/summary;DocStr10802
+M:StockSharp.Xaml.Diagram.Themes.AxesPropertyDefinitionHelper.Init/summary;DocStr93

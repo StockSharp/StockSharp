@@ -484,11 +484,27 @@ namespace StockSharp.Algo.Storages.Binary
 			return reader.Read() ? (reader.Read() ? Sides.Buy : Sides.Sell) : (Sides?)null;
 		}
 
+		public static void WriteStringEx(this BitArrayWriter writer, string value)
+		{
+			if (value.IsEmpty())
+				writer.Write(false);
+			else
+			{
+				writer.Write(true);
+				writer.WriteString(value);
+			}
+		}
+
 		public static void WriteString(this BitArrayWriter writer, string value)
 		{
 			var bits = Encoding.UTF8.GetBytes(value).To<BitArray>().To<bool[]>();
 			writer.WriteInt(bits.Length);
 			bits.ForEach(writer.Write);
+		}
+
+		public static string ReadStringEx(this BitArrayReader reader)
+		{
+			return reader.Read() ? reader.ReadString() : null;
 		}
 
 		public static string ReadString(this BitArrayReader reader)

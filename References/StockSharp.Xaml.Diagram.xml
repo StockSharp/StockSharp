@@ -69,6 +69,11 @@
             Is it possible to edit a composite element diagram.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsLoaded">
+      <summary>
+            Is composite diagram element loaded.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Type">
       <summary>
             Scheme type.
@@ -2491,6 +2496,26 @@
             Chart panel element (candles display area, indicators, orders and trades).
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ChartIndicatorElementWrapper">
+      <summary>
+        <see cref="T:StockSharp.Xaml.Charting.ChartIndicatorElement" /> wrapper.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ChartIndicatorElementWrapper.Element">
+      <summary>
+        <see cref="T:StockSharp.Xaml.Charting.ChartIndicatorElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ChartIndicatorElementWrapper.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ChartIndicatorElementWrapper" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ChartIndicatorElementWrapper.#ctor(StockSharp.Xaml.Charting.ChartIndicatorElement)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ChartIndicatorElementWrapper" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.CandleElements">
       <summary>
             Candles.
@@ -3645,39 +3670,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement" />.
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Diagram.ExportDiagramElement">
-      <summary>
-            The exported composite element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.ExportDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.ExportDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.ExportDiagramElement.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.ExportDiagramElement" />.
-            </summary>
-      <param name="source">Composite element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.ExportDiagramElement.OnStart">
-      <summary>
-            The method is called at the start of the diagram element algorithm.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.ExportDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.ExportDiagramElement.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource">
       <summary>
             The graphical component for the indicator type choosing.
@@ -3704,6 +3696,16 @@
             To get a list of available connection types.
             </summary>
       <returns>The list of connection types.</returns>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Themes.AxesPropertyDefinitionHelper">
+      <summary>
+            Helper is used to disable the removal of part of the axes from chart panel.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Themes.AxesPropertyDefinitionHelper.Init">
+      <summary>
+            Initialize <see cref="T:StockSharp.Xaml.Diagram.Themes.AxesPropertyDefinitionHelper" />.
+            </summary>
     </member>
   </members>
 </doc>

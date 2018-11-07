@@ -608,6 +608,12 @@
     <member name="M:StockSharp.Xaml.Charting.ChartAnnotation.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)">
       <inheritdoc />
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartAnnotation.Load(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartAnnotation.Save(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartArea">
       <summary>
             Chart area.
@@ -630,7 +636,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartArea.Chart">
       <summary>
-            Chart this area attached to.
+            Chart.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartArea.XAxisType">
@@ -686,6 +692,9 @@
             Returns a string that represents the current object.
             </summary>
       <returns>A string that represents the current object.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartArea.Dispose">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartAxisAlignment">
       <summary>
@@ -745,6 +754,11 @@
     <member name="P:StockSharp.Xaml.Charting.ChartAxis.ChartArea">
       <summary>
             Chart area.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartAxis.IsDefault">
+      <summary>
+            Whether this axis can be removed from chart area.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartAxis.Id">
@@ -869,7 +883,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartBandElement.CheckAxesCompatible(StockSharp.Xaml.Charting.ChartAxisType,StockSharp.Xaml.Charting.ChartAxisType)">
+    <member name="M:StockSharp.Xaml.Charting.ChartBandElement.CheckAxesCompatible(System.Nullable{StockSharp.Xaml.Charting.ChartAxisType},System.Nullable{StockSharp.Xaml.Charting.ChartAxisType})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartBandElement.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)">
@@ -1265,6 +1279,18 @@
     <member name="P:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.Text">
       <summary>Text for text annotation.</summary>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem">
       <summary>
             Chart drawing data item.
@@ -1575,7 +1601,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.ChildElements">
       <summary>
-            Children chart elements.
+            Child chart elements.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.AddChildElement(StockSharp.Xaml.Charting.IChartElement,System.Boolean)">
@@ -1619,13 +1645,14 @@
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.Clone">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartElement`1.CheckAxesCompatible(StockSharp.Xaml.Charting.ChartAxisType,StockSharp.Xaml.Charting.ChartAxisType)">
+    <member name="M:StockSharp.Xaml.Charting.ChartElement`1.CheckAxesCompatible(System.Nullable{StockSharp.Xaml.Charting.ChartAxisType},System.Nullable{StockSharp.Xaml.Charting.ChartAxisType})">
       <summary>
             Check if the element can be drawn using supplied axis types.
             </summary>
       <param name="xType">X axis type.</param>
       <param name="yType">Y axis type.</param>
-      <returns>True if supplied types are supported.</returns>
+      <returns>
+        <see langword="true" /> if supplied types are supported.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartElementEditor">
       <summary>
@@ -1910,7 +1937,7 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartLineElement.CheckAxesCompatible(StockSharp.Xaml.Charting.ChartAxisType,StockSharp.Xaml.Charting.ChartAxisType)">
+    <member name="M:StockSharp.Xaml.Charting.ChartLineElement.CheckAxesCompatible(System.Nullable{StockSharp.Xaml.Charting.ChartAxisType},System.Nullable{StockSharp.Xaml.Charting.ChartAxisType})">
       <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartBubbleElement">
@@ -2538,7 +2565,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.CheckAxesCompatible(StockSharp.Xaml.Charting.ChartAxisType,StockSharp.Xaml.Charting.ChartAxisType)">
+    <member name="M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.CheckAxesCompatible(System.Nullable{StockSharp.Xaml.Charting.ChartAxisType},System.Nullable{StockSharp.Xaml.Charting.ChartAxisType})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)">
@@ -2987,7 +3014,7 @@
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter">
       <summary>
-            Painter for <see cref="T:StockSharp.Algo.Indicators.AverageDirectionalIndex" /> indicator.
+            Chart painter for <see cref="T:StockSharp.Algo.Indicators.AverageDirectionalIndex" /> indicator.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.DiPlus">
@@ -3486,7 +3513,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IChartIndicatorPainter.InnerElements">
       <summary>
-            Embedded chart elements.
+            Child elements.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Draw(StockSharp.Xaml.Charting.ChartDrawData)">
@@ -3845,6 +3872,123 @@
       <summary>
             InitializeComponent
             </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.Ultrachart.ChartIndicatorElementSettingsObject">
+      <summary>
+            Proxy object to edit chart indicator element in property grid.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartIndicatorElementSettingsObject.#ctor(StockSharp.Xaml.Charting.IChartElement)">
+      <summary>
+            Create instance.
+            </summary>
+      <param name="element">
+      </param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartIndicatorElementSettingsObject.OnGetProperties(StockSharp.Xaml.Charting.IChartElement)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1">
+      <summary>
+            Base proxy object to edit chart element in property grid.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.PdSelector">
+      <summary>
+            Selector delegate to add condition to select wrapped object properties.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor">
+      <summary>
+            Specialization of <see cref="T:System.ComponentModel.PropertyDescriptor" /> class for chart element properties.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.#ctor(System.String,System.Object,`0,System.Collections.Generic.IEnumerable{System.Attribute},StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase{`0}.PdSelector)">
+      <summary>
+            Create instance.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.CreateWrapper(`0,StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase{`0}.PdSelector)">
+      <summary>
+            Create chart settings object wrapper for an object.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.Owner">
+      <summary>
+            Parent object.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.GetValue(System.Object)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.SetValue(System.Object,System.Object)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.CanResetValue(System.Object)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.ResetValue(System.Object)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.ShouldSerializeValue(System.Object)">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.Attributes">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.ComponentType">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.IsReadOnly">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.PropertyType">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.Orig">
+      <summary>
+            Parent chart element or indicator.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.CategoriesMode">
+      <summary>
+            Categories mode of property grid.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.#ctor(`0)">
+      <summary>
+            Create instance.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.OnGetProperties(`0)">
+      <summary>
+            Get property list from wrapped object.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ToString">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.Ultrachart.AreaAxesToTooltipConverter">
+      <summary>
+            Show red border around legend element if one or both axes are undefined.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.AreaAxesToTooltipConverter.Convert(System.Object[],System.Type,System.Object,System.Globalization.CultureInfo)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.AreaAxesToTooltipConverter.ConvertBack(System.Object,System.Type[],System.Object,System.Globalization.CultureInfo)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.Ultrachart.AreaAxesToBorderColorConverter">
+      <summary>
+            Show red border around legend element if one or both axes are undefined.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.AreaAxesToBorderColorConverter.Convert(System.Object[],System.Type,System.Object,System.Globalization.CultureInfo)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.AreaAxesToBorderColorConverter.ConvertBack(System.Object,System.Type[],System.Object,System.Globalization.CultureInfo)">
+      <inheritdoc />
     </member>
   </members>
 </doc>

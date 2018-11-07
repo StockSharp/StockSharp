@@ -28,7 +28,7 @@ namespace StockSharp.Messages
 	public class BoardMessage : Message
 	{
 		/// <summary>
-		/// Exchange code, which owns the board. Maybe be the same <see cref="BoardMessage.Code"/>.
+		/// Exchange code, which owns the board. Maybe be the same <see cref="Code"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ExchangeInfoKey)]
@@ -44,6 +44,12 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[MainCategory]
 		public string Code { get; set; }
+
+		/// <summary>
+		/// ID of the original message <see cref="BoardLookupMessage.TransactionId"/> for which this message is a response.
+		/// </summary>
+		[DataMember]
+		public long OriginalTransactionId { get; set; }
 
 		///// <summary>
 		///// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
@@ -144,13 +150,11 @@ namespace StockSharp.Messages
 				//IsSupportMarketOrders = IsSupportMarketOrders,
 				WorkingTime = WorkingTime.Clone(),
 				TimeZone = TimeZone,
+				OriginalTransactionId = OriginalTransactionId,
 			};
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",Code={Code},Ex={ExchangeCode}";

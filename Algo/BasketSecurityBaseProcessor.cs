@@ -7,8 +7,7 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using MoreLinq;
-
+	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -16,39 +15,48 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Base basket securities processor.
 	/// </summary>
-	/// <typeparam name="TSecurity">Basket security type.</typeparam>
-	public abstract class BasketSecurityBaseProcessor<TSecurity> : IBasketSecurityProcessor
-		where TSecurity : BasketSecurity
+	/// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
+	public abstract class BasketSecurityBaseProcessor<TBasketSecurity> : IBasketSecurityProcessor
+		where TBasketSecurity : BasketSecurity, new()
 	{
-		private readonly HashSet<SecurityId> _legsSet;
+		private readonly CachedSynchronizedSet<SecurityId> _basketLegs = new CachedSynchronizedSet<SecurityId>();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BasketSecurityBaseProcessor{TSecurity}"/>.
+		/// Initializes a new instance of the <see cref="BasketSecurityBaseProcessor{TBasketSecurity}"/>.
 		/// </summary>
-		/// <param name="basketSecurity">Instruments basket.</param>
-		protected BasketSecurityBaseProcessor(TSecurity basketSecurity)
+		/// <param name="security">Security.</param>
+		protected BasketSecurityBaseProcessor(Security security)
 		{
-			BasketSecurity = basketSecurity ?? throw new ArgumentNullException(nameof(basketSecurity));
+			Security = security ?? throw new ArgumentNullException(nameof(security));
+			SecurityId = security.ToSecurityId();
+			BasketExpression = security.BasketExpression;
 
-			BasketLegs = BasketSecurity.InnerSecurityIds.ToArray();
-			SecurityId = BasketSecurity.ToSecurityId();
+			BasketSecurity = Security.ToBasket<TBasketSecurity>();
 
-			_legsSet = BasketLegs.ToHashSet();
+			if (BasketSecurity.InnerSecurityIds.IsEmpty())
+				throw new ArgumentException(LocalizedStrings.SecurityDoNotContainsLegs.Put(BasketExpression), nameof(security));
 
-			if (BasketLegs.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.SecurityDoNotContainsLegs.Put(basketSecurity.Id), nameof(basketSecurity));
+			_basketLegs.AddRange(BasketSecurity.InnerSecurityIds);
 		}
+
+		/// <summary>
+		/// Security.
+		/// </summary>
+		public Security Security { get; }
 
 		/// <summary>
 		/// Instruments basket.
 		/// </summary>
-		public TSecurity BasketSecurity { get; set; }
+		public TBasketSecurity BasketSecurity { get; }
 
 		/// <inheritdoc />
 		public SecurityId SecurityId { get; }
 
 		/// <inheritdoc />
-		public SecurityId[] BasketLegs { get; }
+		public string BasketExpression { get; }
+
+		/// <inheritdoc />
+		public SecurityId[] BasketLegs => _basketLegs.Cache;
 
 		/// <inheritdoc />
 		public abstract IEnumerable<Message> Process(Message message);
@@ -58,22 +66,22 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
 		/// <returns><see langword="true"/> if the leg exist, otherwise <see langword="false"/>.</returns>
-		protected bool ContainsLeg(SecurityId securityId) => _legsSet.Contains(securityId);
+		protected bool ContainsLeg(SecurityId securityId) => _basketLegs.Contains(securityId);
 	}
 
 	/// <summary>
 	/// Base continuous securities processor.
 	/// </summary>
-	/// <typeparam name="TSecurity">Basket security type.</typeparam>
-	public abstract class ContinuousSecurityBaseProcessor<TSecurity> : BasketSecurityBaseProcessor<TSecurity>
-		where TSecurity : ContinuousSecurity
+	/// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
+	public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
+		where TBasketSecurity : ContinuousSecurity, new()
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ContinuousSecurityBaseProcessor{TSecurity}"/>.
+		/// Initializes a new instance of the <see cref="ContinuousSecurityBaseProcessor{TBasketSecurity}"/>.
 		/// </summary>
-		/// <param name="basketSecurity">Continuous security (generally, a futures contract), containing expirable securities.</param>
-		protected ContinuousSecurityBaseProcessor(TSecurity basketSecurity)
-			: base(basketSecurity)
+		/// <param name="security">Security.</param>
+		protected ContinuousSecurityBaseProcessor(Security security)
+			: base(security)
 		{
 		}
 
@@ -172,12 +180,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ContinuousSecurityExpirationProcessor"/>.
 		/// </summary>
-		/// <param name="basketSecurity">Continuous security (generally, a futures contract), containing expirable securities.</param>
-		public ContinuousSecurityExpirationProcessor(ExpirationContinuousSecurity basketSecurity)
-			: base(basketSecurity)
+		/// <param name="security">Security.</param>
+		public ContinuousSecurityExpirationProcessor(Security security)
+			: base(security)
 		{
-			_currId = basketSecurity.ExpirationJumps.FirstSecurity;
-			_expirationDate = basketSecurity.ExpirationJumps[_currId];
+			_currId = BasketSecurity.ExpirationJumps.FirstSecurity;
+			_expirationDate = BasketSecurity.ExpirationJumps[_currId];
 		}
 
 		/// <inheritdoc />
@@ -220,9 +228,9 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ContinuousSecurityVolumeProcessor"/>.
 		/// </summary>
-		/// <param name="basketSecurity">Continuous security (generally, a futures contract), containing expirable securities.</param>
-		public ContinuousSecurityVolumeProcessor(VolumeContinuousSecurity basketSecurity)
-			: base(basketSecurity)
+		/// <param name="security">Security.</param>
+		public ContinuousSecurityVolumeProcessor(Security security)
+			: base(security)
 		{
 			if (!NextId())
 				throw new InvalidOperationException();
@@ -244,7 +252,7 @@ namespace StockSharp.Algo
 		protected override bool CanProcess(SecurityId securityId, DateTimeOffset serverTime, decimal? price, decimal? volume, decimal? openInterest)
 		{
 			if (_finished)
-				return false;
+				return _currId == securityId;
 
 			var vol = BasketSecurity.IsOpenInterest ? openInterest : volume;
 
@@ -275,9 +283,9 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Base index securities processor.
 	/// </summary>
-	/// <typeparam name="TSecurity">Basket security type.</typeparam>
-	public abstract class IndexSecurityBaseProcessor<TSecurity> : BasketSecurityBaseProcessor<TSecurity>
-		where TSecurity : IndexSecurity
+	/// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
+	public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
+		where TBasketSecurity : IndexSecurity, new()
 	{
 		private static class Holder<TMessage>
 			where TMessage : Message
@@ -291,11 +299,11 @@ namespace StockSharp.Algo
 		private readonly SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>> _candles = new SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>>();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="IndexSecurityBaseProcessor{TSecurity}"/>.
+		/// Initializes a new instance of the <see cref="IndexSecurityBaseProcessor{TBasketSecurity}"/>.
 		/// </summary>
-		/// <param name="basketSecurity">The index, built of instruments. For example, to specify spread at arbitrage or pair trading.</param>
-		protected IndexSecurityBaseProcessor(TSecurity basketSecurity)
-			: base(basketSecurity)
+		/// <param name="security">Security.</param>
+		protected IndexSecurityBaseProcessor(Security security)
+			: base(security)
 		{
 		}
 
@@ -604,7 +612,7 @@ namespace StockSharp.Algo
 			}
 			catch (ArithmeticException excp)
 			{
-				throw new ArithmeticException(LocalizedStrings.BuildIndexError.Put(BasketSecurity, BasketSecurity.InnerSecurityIds.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
+				throw new ArithmeticException(LocalizedStrings.BuildIndexError.Put(SecurityId, BasketLegs.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
 			}
 		}
 
@@ -614,14 +622,14 @@ namespace StockSharp.Algo
 
 			if (isPrice)
 			{
-				var step = BasketSecurity.PriceStep;
+				var step = Security.PriceStep;
 
 				if (step != null)
-					value = BasketSecurity.ShrinkPrice(value);
+					value = Security.ShrinkPrice(value);
 			}
 			else
 			{
-				var step = BasketSecurity.VolumeStep;
+				var step = Security.VolumeStep;
 
 				if (step != null)
 					value = MathHelper.Round(value, step.Value, step.Value.GetCachedDecimals());
@@ -646,9 +654,9 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WeightedIndexSecurityProcessor"/>.
 		/// </summary>
-		/// <param name="basketSecurity">The instruments basket, based on weigh-scales <see cref="WeightedIndexSecurity.Weights"/>.</param>
-		public WeightedIndexSecurityProcessor(WeightedIndexSecurity basketSecurity)
-			: base(basketSecurity)
+		/// <param name="security">Security.</param>
+		public WeightedIndexSecurityProcessor(Security security)
+			: base(security)
 		{
 		}
 
@@ -658,7 +666,7 @@ namespace StockSharp.Algo
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
 
-			if (values.Length != BasketSecurity.Weights.Count)// || !InnerSecurities.All(prices.ContainsKey))
+			if (values.Length != BasketLegs.Length)// || !InnerSecurities.All(prices.ContainsKey))
 				throw new ArgumentOutOfRangeException(nameof(values));
 
 			var value = 0M;

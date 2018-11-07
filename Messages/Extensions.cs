@@ -23,6 +23,7 @@ namespace StockSharp.Messages
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 	using Ecng.Localization;
 	using Ecng.Net;
 
@@ -796,11 +797,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Get prefered language.
+		/// Get preferred language.
 		/// </summary>
 		/// <param name="categories">Message adapter categories.</param>
 		/// <returns>Language</returns>
-		public static Languages GetPreferedLanguage(this MessageAdapterCategories? categories)
+		public static Languages GetPreferredLanguage(this MessageAdapterCategories? categories)
 		{
 			return categories?.Contains(MessageAdapterCategories.Russia) == true ? Languages.Russian : Languages.English;
 		}
@@ -842,6 +843,106 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(item));
 
 			return item.TradeVolume != null;
+		}
+
+		/// <summary>
+		/// Get period for schedule.
+		/// </summary>
+		/// <param name="time">Trading schedule.</param>
+		/// <param name="date">The date in time for search of appropriate period.</param>
+		/// <returns>The schedule period. If no period is appropriate, <see langword="null" /> is returned.</returns>
+		public static WorkingTimePeriod GetPeriod(this WorkingTime time, DateTime date)
+		{
+			if (time == null)
+				throw new ArgumentNullException(nameof(time));
+
+			return time.Periods.FirstOrDefault(p => p.Till >= date);
+		}
+
+		private const string _dateFormat = "yyyyMMdd";
+		private const string _timeFormat = "hh\\:mm";
+
+		/// <summary>
+		/// Encode <see cref="WorkingTime.Periods"/> to string.
+		/// </summary>
+		/// <param name="periods">Schedule validity periods.</param>
+		/// <returns>Encoded string.</returns>
+		public static string EncodeToString(this IEnumerable<WorkingTimePeriod> periods)
+		{
+			return periods.Select(p => $"{p.Till:yyyyMMdd}=" + p.Times.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--") + "=" + p.SpecialDays.Select(p2 => $"{p2.Key}:" + p2.Value.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--")).Join("//")).Join(",");
+		}
+
+		/// <summary>
+		/// Decode from string to <see cref="WorkingTime.Periods"/>.
+		/// </summary>
+		/// <param name="input">Encoded string.</param>
+		/// <returns>Schedule validity periods.</returns>
+		public static IEnumerable<WorkingTimePeriod> DecodeToPeriods(this string input)
+		{
+			var periods = new List<WorkingTimePeriod>();
+
+			if (input.IsEmpty())
+				return periods;
+
+			foreach (var str in input.Split(","))
+			{
+				var parts = str.Split('=');
+				periods.Add(new WorkingTimePeriod
+				{
+					Till = parts[0].ToDateTime(_dateFormat),
+					Times = parts[1].Split("--").Select(s =>
+					{
+						var parts2 = s.Split('-');
+						return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
+					}).ToList(),
+					SpecialDays = parts[2].Split("//").Select(s =>
+					{
+						var parts2 = s.Split(':');
+						return new KeyValuePair<DayOfWeek, Range<TimeSpan>[]>(parts2[0].To<DayOfWeek>(), parts2[1].Split("--").Select(s2 =>
+						{
+							var parts3 = s2.Split('-');
+							return new Range<TimeSpan>(parts3[0].ToTimeSpan(_timeFormat), parts3[1].ToTimeSpan(_timeFormat));
+						}).ToArray());
+					}).ToDictionary()
+				});
+			}
+
+			return periods;
+		}
+
+		/// <summary>
+		/// Encode <see cref="WorkingTime.SpecialDays"/> to string.
+		/// </summary>
+		/// <param name="specialDays">Special working days and holidays.</param>
+		/// <returns>Encoded string.</returns>
+		public static string EncodeToString(this IDictionary<DateTime, Range<TimeSpan>[]> specialDays)
+		{
+			return specialDays.Select(p => $"{p.Key:yyyyMMdd}=" + p.Value.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--")).Join(",");
+		}
+
+		/// <summary>
+		/// Decode from string to <see cref="WorkingTime.SpecialDays"/>.
+		/// </summary>
+		/// <param name="input">Encoded string.</param>
+		/// <returns>Special working days and holidays.</returns>
+		public static IDictionary<DateTime, Range<TimeSpan>[]> DecodeToSpecialDays(this string input)
+		{
+			var specialDays = new Dictionary<DateTime, Range<TimeSpan>[]>();
+
+			if (input.IsEmpty())
+				return specialDays;
+
+			foreach (var str in input.Split(","))
+			{
+				var parts = str.Split('=');
+				specialDays[parts[0].ToDateTime(_dateFormat)] = parts[1].Split("--").Select(s =>
+				{
+					var parts2 = s.Split('-');
+					return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
+				}).ToArray();
+			}
+
+			return specialDays;
 		}
 	}
 }

@@ -132,6 +132,9 @@ namespace StockSharp.Algo
 				if (message.Commission != null)
 					order.Commission = message.Commission;
 
+				if (!message.CommissionCurrency.IsEmpty())
+					order.CommissionCurrency = message.CommissionCurrency;
+
 				if (message.TimeInForce != null)
 					order.TimeInForce = message.TimeInForce.Value;
 
@@ -633,6 +636,9 @@ namespace StockSharp.Algo
 				if (message.Commission != null)
 					o.Commission = message.Commission;
 
+				if (!message.CommissionCurrency.IsEmpty())
+					o.CommissionCurrency = message.CommissionCurrency;
+
 				message.CopyExtensionInfo(o);
 
 				var error = message.Error ?? new InvalidOperationException(isCancelTransaction ? LocalizedStrings.Str716 : LocalizedStrings.Str717);
@@ -685,6 +691,9 @@ namespace StockSharp.Algo
 
 				if (message.Commission != null)
 					t.Commission = message.Commission;
+
+				if (!message.CommissionCurrency.IsEmpty())
+					t.CommissionCurrency = message.CommissionCurrency;
 
 				if (message.Slippage != null)
 					t.Slippage = message.Slippage;

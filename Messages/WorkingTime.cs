@@ -22,6 +22,7 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -58,7 +59,7 @@ namespace StockSharp.Messages
 			set => _periods = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		private List<DateTime> _specialWorkingDays = new List<DateTime>();
+		//private List<DateTime> _specialWorkingDays = new List<DateTime>();
 
 		/// <summary>
 		/// Working days, falling on Saturday and Sunday.
@@ -67,13 +68,23 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str411Key)]
 		[DescriptionLoc(LocalizedStrings.Str412Key)]
-		public List<DateTime> SpecialWorkingDays
+		public DateTime[] SpecialWorkingDays
 		{
-			get => _specialWorkingDays;
-			set => _specialWorkingDays = CheckDates(value);
+			get => _specialDays.Where(p => p.Value.Length > 0).Select(p => p.Key).ToArray();
+			set
+			{
+				//_specialWorkingDays = CheckDates(value);
+
+				foreach (var day in CheckDates(value))
+				{
+					var period = this.GetPeriod(day);
+
+					_specialDays[day] = period?.Times.ToArray() ?? new[] { new Range<TimeSpan>(new TimeSpan(9, 0, 0), new TimeSpan(16, 0, 0)) };
+				}
+			}
 		}
 
-		private List<DateTime> _specialHolidays = new List<DateTime>();
+		//private List<DateTime> _specialHolidays = new List<DateTime>();
 
 		/// <summary>
 		/// Holidays that fall on workdays.
@@ -82,15 +93,32 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str413Key)]
 		[DescriptionLoc(LocalizedStrings.Str414Key)]
-		public List<DateTime> SpecialHolidays
+		public DateTime[] SpecialHolidays
 		{
-			get => _specialHolidays;
-			set => _specialHolidays = CheckDates(value);
+			get => _specialDays.Where(p => p.Value.Length == 0).Select(p => p.Key).ToArray();
+			set
+			{
+				//_specialHolidays = CheckDates(value);
+
+				foreach (var day in CheckDates(value))
+					_specialDays[day] = ArrayHelper.Empty<Range<TimeSpan>>();
+			}
+		}
+
+		private IDictionary<DateTime, Range<TimeSpan>[]> _specialDays = new Dictionary<DateTime, Range<TimeSpan>[]>();
+
+		/// <summary>
+		/// Special working days and holidays.
+		/// </summary>
+		public IDictionary<DateTime, Range<TimeSpan>[]> SpecialDays
+		{
+			get => _specialDays;
+			set => _specialDays = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private bool _checkDates = true;
 
-		private List<DateTime> CheckDates(List<DateTime> dates)
+		private DateTime[] CheckDates(DateTime[] dates)
 		{
 			if (!_checkDates)
 				return dates;
@@ -116,8 +144,9 @@ namespace StockSharp.Messages
 			{
 				_checkDates = false,
 				Periods = Periods.Select(t => t.Clone()).ToList(),
-				SpecialWorkingDays = SpecialWorkingDays.ToList(),
-				SpecialHolidays = SpecialHolidays.ToList()
+				//SpecialWorkingDays = SpecialWorkingDays.ToList(),
+				//SpecialHolidays = SpecialHolidays.ToList(),
+				SpecialDays = SpecialDays.ToDictionary(p => p.Key, p => p.Value.ToArray()),
 			};
 
 			clone._checkDates = true;
@@ -132,8 +161,16 @@ namespace StockSharp.Messages
 		public void Load(SettingsStorage storage)
 		{
 			Periods = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Periods)).Select(s => s.Load<WorkingTimePeriod>()).ToList();
-			SpecialWorkingDays = storage.GetValue<List<DateTime>>(nameof(SpecialWorkingDays));
-			SpecialHolidays = storage.GetValue<List<DateTime>>(nameof(SpecialHolidays));
+
+			if (storage.ContainsKey(nameof(SpecialDays)))
+			{
+				SpecialDays = storage.GetValue<IDictionary<DateTime, Range<TimeSpan>[]>>(nameof(SpecialDays));
+			}
+			else
+			{
+				SpecialWorkingDays = storage.GetValue<List<DateTime>>(nameof(SpecialWorkingDays)).ToArray();
+				SpecialHolidays = storage.GetValue<List<DateTime>>(nameof(SpecialHolidays)).ToArray();
+			}
 		}
 
 		/// <summary>
@@ -143,8 +180,9 @@ namespace StockSharp.Messages
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Periods), Periods.Select(p => p.Save()).ToArray());
-			storage.SetValue(nameof(SpecialWorkingDays), SpecialWorkingDays);
-			storage.SetValue(nameof(SpecialHolidays), SpecialHolidays);
+			storage.SetValue(nameof(SpecialDays), SpecialDays);
+			//storage.SetValue(nameof(SpecialWorkingDays), SpecialWorkingDays);
+			//storage.SetValue(nameof(SpecialHolidays), SpecialHolidays);
 		}
 
 		/// <summary>

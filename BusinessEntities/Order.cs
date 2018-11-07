@@ -529,6 +529,11 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public decimal? Commission { get; set; }
 
+		/// <summary>
+		/// Commission currency. Can be <see lnagword="null"/>.
+		/// </summary>
+		public string CommissionCurrency { get; set; }
+
 		//[field: NonSerialized]
 		//private IConnector _connector;
 
@@ -621,7 +626,7 @@ namespace StockSharp.BusinessEntities
 		public override string ToString()
 		{
 			return LocalizedStrings.Str534Params
-				.Put(TransactionId, Id == null ? StringId : Id.To<string>(), Security?.Id, Portfolio?.Name, Direction == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404, Price, Volume, State, Balance);
+				.Put(TransactionId, Id == null ? StringId : Id.To<string>(), Security?.Id, Portfolio?.Name, Direction == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404, Price, Volume, State, Balance, Type);
 		}
 	}
 }
