@@ -7,7 +7,7 @@
 
 **StockSharp** (shortly **S#**) – are **free** programs for trading at any markets of the world (American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
 
-**Available connections**: FIX/FAST, ITCH (LSE, NASDAQ), Blackwood/Fusion, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, OpenECry, Rithmic, RSS, Sterling, BTCE, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, KuCoin, BITEXBOOK, CoinExchange, QuantFEED and many other. Any broker or [partner broker (benefits)][6].
+**Available connections**: FIX/FAST, ITCH (LSE, NASDAQ), Blackwood/Fusion, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, OpenECry, Rithmic, RSS, Sterling, BTCE, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, KuCoin, BITEXBOOK, CoinExchange, QuantFEED and many other.
 
 ## [S#.Designer][8]
 <img src="https://github.com/StockSharp/StockSharp/blob/master/Media/Designer500.gif" align="left" />
@@ -64,33 +64,33 @@
 S#.API is a **free** C# library for programmers who use Visual Studio. S#.API lets you create any trading strategy, from long-timeframe positional strategies to high frequency strategies (HFT) with direct access to the exchange (DMA). [More info...](https://stocksharp.com/products/api/)
 ### Strategy example
 ```C#
-   public class SimpleStrategy : Strategy
+public class SimpleStrategy : Strategy
+{
+	[Display(Name = "CandleSeries",
+		 GroupName = "Base settings")]
+	public CandleSeries CandleSeries { get; set; }
+	public SimpleStrategy(){}
+
+	protected override void OnStarted()
 	{
-		[Display(Name = "CandleSeries",
-			 GroupName = "Base settings")]
-		public CandleSeries CandleSeries { get; set; }
-		public SimpleStrategy(){}
+		var connector = (Connector)Connector;
+		connector.WhenCandlesFinished(CandleSeries).Do(CandlesFinished).Apply(this);
+		connector.SubscribeCandles(CandleSeries);
+		base.OnStarted();
+	}
 
-		protected override void OnStarted()
+	private void CandlesFinished(Candle candle)
+	{
+		if (candle.OpenPrice < candle.ClosePrice && Position <= 0)
 		{
-			var connector = (Connector)Connector;
-			connector.WhenCandlesFinished(CandleSeries).Do(CandlesFinished).Apply(this);
-			connector.SubscribeCandles(CandleSeries);
-			base.OnStarted();
+			RegisterOrder(this.BuyAtMarket(Volume + Math.Abs(Position)));
 		}
-
-		private void CandlesFinished(Candle candle)
+		else if (candle.OpenPrice > candle.ClosePrice && Position >= 0)
 		{
-			if (candle.OpenPrice < candle.ClosePrice && Position <= 0)
-			{
-				RegisterOrder(this.BuyAtMarket(Volume + Math.Abs(Position)));
-			}
-			else if (candle.OpenPrice > candle.ClosePrice && Position >= 0)
-			{
-				RegisterOrder(this.SellAtMarket(Volume + Math.Abs(Position)));
-			}
+			RegisterOrder(this.SellAtMarket(Volume + Math.Abs(Position)));
 		}
 	}
+}
 ```
 
 ## Development stage
