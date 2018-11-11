@@ -99,7 +99,7 @@ namespace SampleIQFeed
 				{
 					Trader.RegisterNews();
 
-					// update gui labes
+					// update gui labels
 					this.GuiAsync(() => ChangeConnectStatus(true));
 				};
 				Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
@@ -107,7 +107,7 @@ namespace SampleIQFeed
 				// subscribe on connection error event
 				Trader.ConnectionError += error => this.GuiAsync(() =>
 				{
-					// update gui labes
+					// update gui labels
 					this.GuiAsync(() => ChangeConnectStatus(false));
 
 					MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
