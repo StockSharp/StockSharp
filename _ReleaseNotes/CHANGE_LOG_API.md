@@ -9,6 +9,7 @@ StockSharp API Change log
 * (feature) MatLab. Candles supported.
 * (feature) WorkingTime. Set schedules for part-time working days.
 * (feature) FixServer. Translates Board info.
+* (feature) OpenECry. v3.5.14.53
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
