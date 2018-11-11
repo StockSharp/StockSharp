@@ -674,6 +674,7 @@ P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Series/summary;Can
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsFinal/summary;ProcessOnlyFormed
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsCalcVolumeProfile/summary;DocStr2053
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsRegularTradingHours/summary;RegularTradingHours
+P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.AllowBuildFromSmallerTimeFrame/summary;SmallerTimeFrameDesc
 M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IconName/summary;DocStr9214

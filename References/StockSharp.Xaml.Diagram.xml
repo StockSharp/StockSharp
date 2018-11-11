@@ -2471,6 +2471,11 @@
             Use only the regular trading hours for which data will be requested.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.AllowBuildFromSmallerTimeFrame">
+      <summary>
+            Allow build candles from smaller timeframe.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement" />.

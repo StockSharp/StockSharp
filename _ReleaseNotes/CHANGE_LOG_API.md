@@ -12,6 +12,8 @@ StockSharp API Change log
 * (feature) OpenECry. v3.5.14.53
 * (feature) MyTradeGrid. Support PnL column update.
 * (bug) PropertyGridEx. Exchange board editor fixes.
+* (feature) Diagrams. CandleSourceDiagramElement.AllowBuildFromSmallerTimeFrame added.
+* (feature) Diagrams. Support market depth based indicators.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
