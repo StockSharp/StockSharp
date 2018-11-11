@@ -48616,5 +48616,25 @@ namespace StockSharp.Localization
 		/// Commission (maker)
 		/// </summary>
 		public static string CommissionMaker => GetString(CommissionMakerKey);
+
+		/// <summary>
+		/// Special days
+		/// </summary>
+		public const string SpecialDaysKey = nameof(SpecialDays);
+
+		/// <summary>
+		/// Special days
+		/// </summary>
+		public static string SpecialDays => GetString(SpecialDaysKey);
+
+		/// <summary>
+		/// Special working days and holidays.
+		/// </summary>
+		public const string SpecialDaysDescKey = nameof(SpecialDaysDesc);
+
+		/// <summary>
+		/// Special working days and holidays.
+		/// </summary>
+		public static string SpecialDaysDesc => GetString(SpecialDaysDescKey);
 	}
 }

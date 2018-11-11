@@ -4894,6 +4894,8 @@ AssetType;Asset type;Тип актива
 StopStrategyOnTabClosing;To close the tab {0} strategy must be stopped. Stop strategy?;Для закрытия вкладки {0} необходимо остановить стратегию. Остановить стратегию?
 CommissionTaker;Commission (taker);Комиссия (тейкер)
 CommissionMaker;Commission (maker);Комиссия (мейкер)
+SpecialDays;Special days;Специальные дни
+SpecialDaysDesc;Special working days and holidays.;Специальные рабочие дни и выходные.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15294,5 +15296,12 @@ DocStr10816;The response of board lookup;Ответ на поиск площад
 DocStr10817;Encode {0} to string;Закодировать {0} в строку
 DocStr10818;Encoded string;Закодированная строка
 DocStr10819;Decode from string to {0};Декодировать из строки в {0}
-DocStr10820;Special working days and holidays;Специальные рабочие дни и выходные
 DocStr10821;Work schedule for days with different from {0} schedules;Расписание работы для дней с отличным от {0} расписанием
+DocStr10822;The message contains information about strategy;The message contains information about strategy
+DocStr10823;Strategy ID;Strategy ID
+DocStr10824;Message strategies lookup for specified criteria;Message strategies lookup for specified criteria
+DocStr10825;Strategies search result message;Strategies search result message
+DocStr10826;Get preferred language;Get preferred language
+DocStr10827;Strategies search;Strategies search
+DocStr10828;Strategies search result;Strategies search result
+DocStr10829;Strategy info;Strategy info
