@@ -252,6 +252,9 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.CheckTimeFrameByRequest">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportStopLoss">
       <inheritdoc />
     </member>
@@ -423,6 +426,9 @@
       <summary>
             Convert all non-latin text messages to latin.
             </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.CheckTimeFrameByRequest">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
       <inheritdoc />
@@ -887,6 +893,11 @@
             Support lookup all securities.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.CheckTimeFrameByRequest">
+      <summary>
+            Check possible time-frame by request.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition">
       <summary>
             Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
@@ -1281,6 +1292,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixServer" />.
             </summary>
       <param name="authorization">The customer authentication.</param>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.Authorization">
+      <summary>
+            The customer authentication.
+            </summary>
     </member>
     <member name="P:StockSharp.Fix.FixServer.InitialTransactionId">
       <summary>
@@ -6844,6 +6860,12 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFrames">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.CheckTimeFrameByRequest">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
@@ -6958,9 +6980,6 @@
       <summary>
             The name of the server that shares SSL connection.
             </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFrames">
-      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.SupportUnknownExecutions">
       <summary>

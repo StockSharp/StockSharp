@@ -14,6 +14,7 @@ StockSharp API Change log
 * (bug) PropertyGridEx. Exchange board editor fixes.
 * (feature) Diagrams. CandleSourceDiagramElement.AllowBuildFromSmallerTimeFrame added.
 * (feature) Diagrams. Support market depth based indicators.
+* (feature) FIX. CheckTimeFrameByRequest for default dialect.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
