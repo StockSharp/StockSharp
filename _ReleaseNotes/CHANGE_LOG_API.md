@@ -10,6 +10,8 @@ StockSharp API Change log
 * (feature) WorkingTime. Set schedules for part-time working days.
 * (feature) FixServer. Translates Board info.
 * (feature) OpenECry. v3.5.14.53
+* (feature) MyTradeGrid. Support PnL column update.
+* (bug) PropertyGridEx. Exchange board editor fixes.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
