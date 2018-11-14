@@ -24,7 +24,7 @@
 			<PasswordBox x:Name="Secret" Password="" Width="120" />
 			
 			<Label Content="{x:Static loc:LocalizedStrings.Passphrase}" HorizontalAlignment="Right" />
-			<PasswordBox x:Name="Passphrase" Password="3u5rh3ri43" Width="170" />
+			<PasswordBox x:Name="Passphrase" Password="" Width="170" />
 		</StackPanel>
 		
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
