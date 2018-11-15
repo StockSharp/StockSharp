@@ -1424,6 +1424,7 @@ F:StockSharp.Fix.Native.FixTags.TargetCompID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Text/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TimeInForce/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TransactTime/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.SettlDate/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SymbolSfx/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TradeDate/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ExecBroker/summary;DocStr8459
@@ -1480,7 +1481,15 @@ F:StockSharp.Fix.Native.FixTags.OpenCloseSettleFlag/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MDEntryPositionNo/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.QuoteCancelType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.QuoteEntryID/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.UnderlyingIDSource/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityDesc/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityExchange/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityID/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityType/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.UnderlyingSymbol/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.UnderlyingMaturityMonthYear/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.UnderlyingCurrency/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.RatioQty/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SecurityReqID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SecurityRequestType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SecurityResponseID/summary;DocStr8459
@@ -1796,6 +1805,7 @@ P:StockSharp.Fix.FixMessageAdapter.Login/summary;Login
 P:StockSharp.Fix.FixMessageAdapter.Password/summary;Password
 P:StockSharp.Fix.FixMessageAdapter.RequestAllPortfolios/summary;RequestAllPortfolios
 P:StockSharp.Fix.FixMessageAdapter.RequestAllSecurities/summary;RequestAllSecurities
+P:StockSharp.Fix.FixMessageAdapter.Encoding/summary;Encoding
 P:StockSharp.Fix.FixMessageAdapter.IsResetCounter/summary;DocStr3313
 P:StockSharp.Fix.FixMessageAdapter.DateFormat/summary;DocStr3182
 P:StockSharp.Fix.FixMessageAdapter.TimeStampFormat/summary;DocStr10542

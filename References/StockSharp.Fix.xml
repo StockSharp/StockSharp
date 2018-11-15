@@ -5492,6 +5492,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SettlDate">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SymbolSfx">
       <summary>
       </summary>
@@ -5716,7 +5720,39 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingIDSource">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityDesc">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityExchange">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSymbol">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingMaturityMonthYear">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingCurrency">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.RatioQty">
       <summary>
       </summary>
     </member>
@@ -6919,6 +6955,11 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.RequestAllSecurities">
       <summary>
             Request all securities on connection.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.Encoding">
+      <summary>
+            Encoding.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsResetCounter">

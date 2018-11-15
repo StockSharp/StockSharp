@@ -15,6 +15,9 @@ StockSharp API Change log
 * (feature) Diagrams. CandleSourceDiagramElement.AllowBuildFromSmallerTimeFrame added.
 * (feature) Diagrams. Support market depth based indicators.
 * (feature) FIX. CheckTimeFrameByRequest for default dialect.
+* (feature) FIX connector. Support TotalNumSecurities processing.
+* (feature) FIX connector. Allow change Encoding in dialect.
+* (bug) FIX connector. Fix position processing errors.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
