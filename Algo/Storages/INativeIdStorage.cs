@@ -70,8 +70,7 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
-		private readonly SyncObject _sync = new SyncObject();
-		private readonly Dictionary<string, PairSet<SecurityId, object>> _nativeIds = new Dictionary<string, PairSet<SecurityId, object>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly INativeIdStorage _inMemory = new InMemoryNativeIdStorage();
 
 		private readonly string _path;
 
@@ -108,6 +107,8 @@ namespace StockSharp.Algo.Storages
 			if (!Directory.Exists(_path))
 				Directory.CreateDirectory(_path);
 
+			_inMemory.Init();
+
 			var files = Directory.GetFiles(_path, "*.csv");
 
 			var errors = new Dictionary<string, Exception>();
@@ -130,37 +131,16 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public Tuple<SecurityId, object>[] Get(string storageName)
 		{
-			if (storageName.IsEmpty())
-				throw new ArgumentNullException(nameof(storageName));
-
-			lock (_sync)
-			{
-				var nativeIds = _nativeIds.TryGetValue(storageName);
-
-				if (nativeIds == null)
-					return ArrayHelper.Empty<Tuple<SecurityId, object>>();
-
-				return nativeIds.Select(p => Tuple.Create(p.Key, p.Value)).ToArray();
-			}
+			return _inMemory.Get(storageName);
 		}
 
 		/// <inheritdoc />
 		public bool TryAdd(string storageName, SecurityId securityId, object nativeId, bool isPersistable)
 		{
-			if (storageName.IsEmpty())
-				throw new ArgumentNullException(nameof(storageName));
+			var added = _inMemory.TryAdd(storageName, securityId, nativeId, isPersistable);
 
-			if (nativeId == null)
-				throw new ArgumentNullException(nameof(nativeId));
-
-			lock (_sync)
-			{
-				var nativeIds = _nativeIds.SafeAdd(storageName);
-				var added = nativeIds.TryAdd(securityId, nativeId);
-
-				if (!added)
-					return false;
-			}
+			if (!added)
+				return false;
 
 			if (isPersistable)
 				Save(storageName, securityId, nativeId);
@@ -173,31 +153,13 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public SecurityId? TryGetByNativeId(string storageName, object nativeId)
 		{
-			if (storageName.IsEmpty())
-				throw new ArgumentNullException(nameof(storageName));
-
-			lock (_sync)
-			{
-				var nativeIds = _nativeIds.TryGetValue(storageName);
-
-				if (nativeIds == null)
-					return null;
-
-				if (!nativeIds.TryGetKey(nativeId, out var securityId))
-					return null;
-
-				return securityId;
-			}
+			return _inMemory.TryGetByNativeId(storageName, nativeId);
 		}
 
 		/// <inheritdoc />
 		public object TryGetBySecurityId(string storageName, SecurityId securityId)
 		{
-			if (storageName.IsEmpty())
-				throw new ArgumentNullException(nameof(storageName));
-
-			lock (_sync)
-				return _nativeIds.TryGetValue(storageName)?.TryGetValue(securityId);
+			return _inMemory.TryGetBySecurityId(storageName, securityId);
 		}
 
 		private void Save(string storageName, SecurityId securityId, object nativeId)
@@ -311,15 +273,7 @@ namespace StockSharp.Algo.Storages
 					}
 				}
 
-				lock (_sync)
-				{
-					var nativeIds = _nativeIds.SafeAdd(name);
-
-					foreach (var tuple in pairs)
-					{
-						nativeIds.Add(tuple.Item1, tuple.Item2);
-					}
-				}
+				((InMemoryNativeIdStorage)_inMemory).Add(name, pairs);
 			});
         }
 	}
@@ -329,7 +283,8 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class InMemoryNativeIdStorage : INativeIdStorage
 	{
-		private readonly SynchronizedDictionary<string, PairSet<SecurityId, object>> _nativeIds = new SynchronizedDictionary<string, PairSet<SecurityId, object>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<string, PairSet<SecurityId, object>> _nativeIds = new Dictionary<string, PairSet<SecurityId, object>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SyncObject _syncRoot = new SyncObject();
 
 		private Action<string, SecurityId, object> _added;
 
@@ -344,6 +299,25 @@ namespace StockSharp.Algo.Storages
 			return new Dictionary<string, Exception>();
 		}
 
+		internal void Add(string storageName, IEnumerable<Tuple<SecurityId, object>> ids)
+		{
+			if (storageName.IsEmpty())
+				throw new ArgumentNullException(nameof(storageName));
+
+			if (ids == null)
+				throw new ArgumentNullException(nameof(ids));
+
+			lock (_syncRoot)
+			{
+				var dict = _nativeIds.SafeAdd(storageName);
+
+				foreach (var id in ids)
+				{
+					dict.Add(id.Item1, id.Item2);
+				}
+			}
+		}
+
 		bool INativeIdStorage.TryAdd(string storageName, SecurityId securityId, object nativeId, bool isPersistable)
 		{
 			if (storageName.IsEmpty())
@@ -352,7 +326,7 @@ namespace StockSharp.Algo.Storages
 			if (nativeId == null)
 				throw new ArgumentNullException(nameof(nativeId));
 
-			lock (_nativeIds.SyncRoot)
+			lock (_syncRoot)
 			{
 				var added = _nativeIds.SafeAdd(storageName).TryAdd(securityId, nativeId);
 
@@ -370,7 +344,7 @@ namespace StockSharp.Algo.Storages
 			if (storageName.IsEmpty())
 				throw new ArgumentNullException(nameof(storageName));
 
-			lock (_nativeIds.SyncRoot)
+			lock (_syncRoot)
 				return _nativeIds.TryGetValue(storageName)?.TryGetValue(securityId);
 		}
 
@@ -381,7 +355,7 @@ namespace StockSharp.Algo.Storages
 
 			var securityId = default(SecurityId);
 
-			lock (_nativeIds.SyncRoot)
+			lock (_syncRoot)
 			{
 				if (_nativeIds.TryGetValue(storageName)?.TryGetKey(nativeId, out securityId) != true)
 					return null;
@@ -395,7 +369,7 @@ namespace StockSharp.Algo.Storages
 			if (storageName.IsEmpty())
 				throw new ArgumentNullException(nameof(storageName));
 
-			lock (_nativeIds.SyncRoot)
+			lock (_syncRoot)
 				return _nativeIds.TryGetValue(storageName)?.Select(p => Tuple.Create(p.Key, p.Value)).ToArray() ?? ArrayHelper.Empty<Tuple<SecurityId, object>>();
 		}
 	}
