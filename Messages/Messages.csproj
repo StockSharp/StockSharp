@@ -151,6 +151,8 @@
     <Compile Include="BoardStateMessage.cs" />
     <Compile Include="Sides.cs" />
     <Compile Include="MessageAdapterCategories.cs" />
+    <Compile Include="TimeFrameLookupMessage.cs" />
+    <Compile Include="TimeFrameLookupResultMessage.cs" />
     <Compile Include="TimeInForce.cs" />
     <Compile Include="TimeMessage.cs" />
     <Compile Include="TPlusLimits.cs" />

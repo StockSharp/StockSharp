@@ -8005,7 +8005,7 @@ DocStr3176;Password change event;Событие изменения пароля 
 DocStr3177;User lookup event;Событие поиска клиента по его логину
 DocStr3178;Session settings;Настройки сессии
 DocStr3179;The interval of the connection availability check. The default is 1 minute;Интервал проверки доступности соединения. По умолчанию равно 1 минуте
-DocStr3180;The encoding used for data transmission. The default value is {0};Кодировка, используемая при передаче данных. По умолчанию значение равно {0}
+DocStr3180;The encoding used for data transmission;Кодировка, используемая при передаче данных
 DocStr3181;To send changes by the order book. If disabled, the order book is sent entirely. The default is enabled;Отправлять изменения по стакану. Если выключено, отправляется стакан целиком. По умолчанию, включено
 DocStr3182;Date format;Формат даты
 DocStr3183;The timeout of reading data. The default value is {0};Время ожидания получения данных. По умолчанию равно {0}
@@ -14968,7 +14968,7 @@ DocStr10458;Override previous security data by new values;Перезаписыв
 DocStr10459;Start data loading;Запустить загрузку данных
 DocStr10460;Stop data loading;Остановить загрузку данных
 DocStr10461;Remove inner storage;Удалить внутреннее хранилище
-DocStr10462;Get preffered language;Получить предпочитаемый язык
+DocStr10462;Get preferred language;Получить предпочитаемый язык
 DocStr10463;Message adapter categories;Категории адаптера сообщений
 DocStr10465;US;США
 DocStr10466;Europe;Европа
@@ -15297,11 +15297,9 @@ DocStr10817;Encode {0} to string;Закодировать {0} в строку
 DocStr10818;Encoded string;Закодированная строка
 DocStr10819;Decode from string to {0};Декодировать из строки в {0}
 DocStr10821;Work schedule for days with different from {0} schedules;Расписание работы для дней с отличным от {0} расписанием
-DocStr10822;The message contains information about strategy;The message contains information about strategy
-DocStr10823;Strategy ID;Strategy ID
-DocStr10824;Message strategies lookup for specified criteria;Message strategies lookup for specified criteria
-DocStr10825;Strategies search result message;Strategies search result message
-DocStr10826;Get preferred language;Get preferred language
-DocStr10827;Strategies search;Strategies search
-DocStr10828;Strategies search result;Strategies search result
-DocStr10829;Strategy info;Strategy info
+DocStr10830;The request for available time-frames;Запрос доступных тайм-фреймов
+DocStr10831;The response for {0};Ответ для {0}
+DocStr10832;Time-frames search;Поиск тайм-фреймов
+DocStr10833;Time-frames search result;Результат поиска тайм-фреймов
+DocStr10834;Message to request supported time-frames;Сообщение на запрос доступных тайм-фреймов
+DocStr10835;Time-frames search result message;Сообщение о результате поиска тайм-фреймов

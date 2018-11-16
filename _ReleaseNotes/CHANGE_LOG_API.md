@@ -20,6 +20,7 @@ StockSharp API Change log
 * (bug) FIX connector. Fix position processing errors.
 * (feature) SecurityMessage.ToString override improved.
 * (feature) ToString overrides. Avoid print empty Error tag for successful messages.
+* (feature) TimeFrameLookupMessage, TimeFrameLookupResultMessage added.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
