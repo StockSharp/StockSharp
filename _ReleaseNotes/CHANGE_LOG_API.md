@@ -19,6 +19,7 @@ StockSharp API Change log
 * (feature) FIX connector. Allow change Encoding in dialect.
 * (bug) FIX connector. Fix position processing errors.
 * (feature) SecurityMessage.ToString override improved.
+* (feature) ToString overrides. Avoid print empty Error tag for successful messages.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

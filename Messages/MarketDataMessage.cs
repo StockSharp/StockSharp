@@ -323,7 +323,39 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe},Arg={Arg},TransId={TransactionId},OrigId={OriginalTransactionId},Error={Error?.Message}";
+			var str = base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe},Arg={Arg},TransId={TransactionId},OrigId={OriginalTransactionId}";
+
+			if (MaxDepth != null)
+				str += $",MaxDepth={MaxDepth}";
+
+			if (Count != null)
+				str += $",Cnt={Count}";
+
+			if (From != null)
+				str += $",From={From}";
+
+			if (To != null)
+				str += $",To={To}";
+
+			if (BuildMode == MarketDataBuildModes.Build)
+				str += $",Build={BuildMode}/{BuildFrom}/{BuildField}";
+
+			if (AllowBuildFromSmallerTimeFrame)
+				str += $",SmallTF={AllowBuildFromSmallerTimeFrame}";
+
+			if (IsRegularTradingHours)
+				str += $",RegularTH={IsRegularTradingHours}";
+
+			if (IsHistory)
+				str += $",Hist={IsHistory}";
+
+			if (IsCalcVolumeProfile)
+				str += $",Profile={IsCalcVolumeProfile}";
+
+			if (Error != null)
+				str += $",Error={Error.Message}";
+
+			return str;
 		}
 	}
 }

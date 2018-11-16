@@ -57,7 +57,12 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Orig={OriginalTransactionId},Error={Error?.Message}";
+			var str = base.ToString() + $",Orig={OriginalTransactionId}";
+
+			if (Error != null)
+				str += $",Error={Error.Message}";
+
+			return str;
 		}
 	}
 }
