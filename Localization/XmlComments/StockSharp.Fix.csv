@@ -418,6 +418,7 @@ P:StockSharp.Fix.FixSession.TargetCompId/summary;Str1667
 P:StockSharp.Fix.FixSession.SenderCompId/summary;Str1665
 P:StockSharp.Fix.FixSession.HeartBeat/summary;DocStr3179
 P:StockSharp.Fix.FixSession.Encoding/summary;DocStr3180
+P:StockSharp.Fix.FixSession.Encoding/remarks;DocStr2204
 P:StockSharp.Fix.FixSession.IncrementalDepthUpdates/summary;DocStr3181
 P:StockSharp.Fix.FixSession.TimeZone/summary;Str68
 P:StockSharp.Fix.FixSession.DateParser/summary;DocStr9466
@@ -1385,6 +1386,8 @@ F:StockSharp.Fix.Native.FixExtendedMessages.UserLookupResult/summary;DocStr10753
 F:StockSharp.Fix.Native.FixExtendedMessages.BoardLookup/summary;DocStr10787
 F:StockSharp.Fix.Native.FixExtendedMessages.BoardLookupResult/summary;DocStr10788
 F:StockSharp.Fix.Native.FixExtendedMessages.UserRequest/summary;DocStr10789
+F:StockSharp.Fix.Native.FixExtendedMessages.TimeFramesRequest/summary;DocStr10830
+F:StockSharp.Fix.Native.FixExtendedMessages.TimeFramesResponse/summary;DocStr10831
 T:StockSharp.Fix.Native.FixTags/summary;DocStr3321
 F:StockSharp.Fix.Native.FixTags.Account/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.AvgPx/summary;DocStr8459
@@ -1440,6 +1443,7 @@ F:StockSharp.Fix.Native.FixTags.MinQty/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MaxFloor/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TestReqID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.QuoteID/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.SettlCurrency/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.GapFillFlag/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ExpireTime/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.QuoteReqID/summary;DocStr8459
@@ -1614,6 +1618,7 @@ F:StockSharp.Fix.Native.FixTags.LegEndDate/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.LegIssueSize/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SessionPeriods/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SessionSpecialDays/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.TimeFrames/summary;DocStr8459
 T:StockSharp.Fix.Native.FixBase/summary;DocStr3186
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr93
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr1295
@@ -1805,7 +1810,7 @@ P:StockSharp.Fix.FixMessageAdapter.Login/summary;Login
 P:StockSharp.Fix.FixMessageAdapter.Password/summary;Password
 P:StockSharp.Fix.FixMessageAdapter.RequestAllPortfolios/summary;RequestAllPortfolios
 P:StockSharp.Fix.FixMessageAdapter.RequestAllSecurities/summary;RequestAllSecurities
-P:StockSharp.Fix.FixMessageAdapter.Encoding/summary;Encoding
+P:StockSharp.Fix.FixMessageAdapter.Encoding/summary;DocStr3180
 P:StockSharp.Fix.FixMessageAdapter.IsResetCounter/summary;DocStr3313
 P:StockSharp.Fix.FixMessageAdapter.DateFormat/summary;DocStr3182
 P:StockSharp.Fix.FixMessageAdapter.TimeStampFormat/summary;DocStr10542
