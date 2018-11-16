@@ -48636,5 +48636,55 @@ namespace StockSharp.Localization
 		/// Special working days and holidays.
 		/// </summary>
 		public static string SpecialDaysDesc => GetString(SpecialDaysDescKey);
+
+		/// <summary>
+		/// LMAX location
+		/// </summary>
+		public const string LmaxLocationKey = nameof(LmaxLocation);
+
+		/// <summary>
+		/// LMAX location
+		/// </summary>
+		public static string LmaxLocation => GetString(LmaxLocationKey);
+
+		/// <summary>
+		/// LMAX exchange location.
+		/// </summary>
+		public const string LmaxLocationDescKey = nameof(LmaxLocationDesc);
+
+		/// <summary>
+		/// LMAX exchange location.
+		/// </summary>
+		public static string LmaxLocationDesc => GetString(LmaxLocationDescKey);
+
+		/// <summary>
+		/// London
+		/// </summary>
+		public const string LondonKey = nameof(London);
+
+		/// <summary>
+		/// London
+		/// </summary>
+		public static string London => GetString(LondonKey);
+
+		/// <summary>
+		/// New York
+		/// </summary>
+		public const string NewYorkKey = nameof(NewYork);
+
+		/// <summary>
+		/// New York
+		/// </summary>
+		public static string NewYork => GetString(NewYorkKey);
+
+		/// <summary>
+		/// Tokyo
+		/// </summary>
+		public const string TokyoKey = nameof(Tokyo);
+
+		/// <summary>
+		/// Tokyo
+		/// </summary>
+		public static string Tokyo => GetString(TokyoKey);
 	}
 }
