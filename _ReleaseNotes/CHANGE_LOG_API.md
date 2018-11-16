@@ -18,6 +18,7 @@ StockSharp API Change log
 * (feature) FIX connector. Support TotalNumSecurities processing.
 * (feature) FIX connector. Allow change Encoding in dialect.
 * (bug) FIX connector. Fix position processing errors.
+* (feature) SecurityMessage.ToString override improved.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
