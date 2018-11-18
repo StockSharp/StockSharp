@@ -633,7 +633,7 @@ M:StockSharp.Messages.Extensions.FillDefaultCryptoFields(StockSharp.Messages.Sec
 M:StockSharp.Messages.Extensions.FillDefaultCryptoFields(StockSharp.Messages.SecurityMessage)/summary;DocStr10264
 M:StockSharp.Messages.Extensions.FillDefaultCryptoFields(StockSharp.Messages.SecurityMessage)/param/message;DocStr4378
 M:StockSharp.Messages.Extensions.FillDefaultCryptoFields(StockSharp.Messages.SecurityMessage)/returns;DocStr4378
-M:StockSharp.Messages.Extensions.GetPreferredLanguage(System.Nullable{StockSharp.Messages.MessageAdapterCategories})/summary;DocStr10826
+M:StockSharp.Messages.Extensions.GetPreferredLanguage(System.Nullable{StockSharp.Messages.MessageAdapterCategories})/summary;DocStr10462
 M:StockSharp.Messages.Extensions.GetPreferredLanguage(System.Nullable{StockSharp.Messages.MessageAdapterCategories})/param/categories;DocStr10463
 M:StockSharp.Messages.Extensions.GetPreferredLanguage(System.Nullable{StockSharp.Messages.MessageAdapterCategories})/returns;Str3429
 M:StockSharp.Messages.Extensions.IsOrderLogRegistered(StockSharp.Messages.ExecutionMessage)/summary;DocStr1441
@@ -1036,9 +1036,6 @@ F:StockSharp.Messages.MessageTypes.BoardRequest/summary;DocStr10796
 F:StockSharp.Messages.MessageTypes.BoardLookup/summary;DocStr10797
 F:StockSharp.Messages.MessageTypes.BoardLookupResult/summary;DocStr10798
 F:StockSharp.Messages.MessageTypes.UserRequest/summary;DocStr10799
-F:StockSharp.Messages.MessageTypes.StrategyLookup/summary;DocStr10827
-F:StockSharp.Messages.MessageTypes.StrategyLookupResult/summary;DocStr10828
-F:StockSharp.Messages.MessageTypes.StrategyInfo/summary;DocStr10829
 F:StockSharp.Messages.MessageTypes.TimeFrameLookup/summary;DocStr10832
 F:StockSharp.Messages.MessageTypes.TimeFrameLookupResult/summary;DocStr10833
 T:StockSharp.Messages.MessageOfflineModes/summary;DocStr10592

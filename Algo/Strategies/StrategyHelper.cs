@@ -29,6 +29,7 @@ namespace StockSharp.Algo.Strategies
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Strategies.Messages;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -964,6 +965,25 @@ namespace StockSharp.Algo.Strategies
 				throw new ArgumentException(LocalizedStrings.Str1263Params.Put(rule.Name), nameof(rule));
 
 			return strategy;
+		}
+
+		/// <summary>
+		/// Convert <see cref="Type"/> to <see cref="StrategyTypeMessage"/>.
+		/// </summary>
+		/// <param name="strategyType">Strategy type.</param>
+		/// <param name="transactionId">ID of the original message <see cref="StrategyLookupMessage.TransactionId"/> for which this message is a response.</param>
+		/// <returns>The message contains information about strategy type.</returns>
+		public static StrategyTypeMessage ToTypeMessage(this Type strategyType, long transactionId = 0)
+		{
+			if (strategyType == null)
+				throw new ArgumentNullException(nameof(strategyType));
+
+			return new StrategyTypeMessage
+			{
+				StrategyTypeId = strategyType.GUID,
+				StrategyName = strategyType.Name,
+				OriginalTransactionId = transactionId,
+			};
 		}
 	}
 }

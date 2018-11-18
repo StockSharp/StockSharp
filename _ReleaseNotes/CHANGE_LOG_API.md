@@ -22,6 +22,7 @@ StockSharp API Change log
 * (feature) ToString overrides. Avoid print empty Error tag for successful messages.
 * (feature) TimeFrameLookupMessage, TimeFrameLookupResultMessage added.
 * (feature) FIX connector, QuikLua. Supported TimeFrameLookupMessage, TimeFrameLookupResultMessage.
+* (feature) Strategy messages.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

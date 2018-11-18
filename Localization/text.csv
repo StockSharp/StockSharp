@@ -15302,19 +15302,26 @@ DocStr10817;Encode {0} to string;Закодировать {0} в строку
 DocStr10818;Encoded string;Закодированная строка
 DocStr10819;Decode from string to {0};Декодировать из строки в {0}
 DocStr10821;Work schedule for days with different from {0} schedules;Расписание работы для дней с отличным от {0} расписанием
-DocStr10822;The message contains information about strategy;The message contains information about strategy
 DocStr10823;Strategy ID;Идентификатор стратегии
-DocStr10824;Message strategies lookup for specified criteria;Message strategies lookup for specified criteria
-DocStr10825;Strategies search result message;Strategies search result message
-DocStr10827;Strategies search;Strategies search
-DocStr10828;Strategies search result;Strategies search result
-DocStr10829;Strategy info;Strategy info
+DocStr10824;Message strategies lookup;Сообщение поиска стратегий
+DocStr10825;Strategies search result message;Сообщение о результате поиска стратегий
+DocStr10827;Strategies search;Поиск стратегий
+DocStr10828;Strategies search result;Результат поиска стратегий
+DocStr10829;Strategy info;Информация о стратегии
 DocStr10830;The request for available time-frames;Запрос доступных тайм-фреймов
 DocStr10831;The response for {0};Ответ для {0}
 DocStr10832;Time-frames search;Поиск тайм-фреймов
 DocStr10833;Time-frames search result;Результат поиска тайм-фреймов
 DocStr10834;Message to request supported time-frames;Сообщение на запрос доступных тайм-фреймов
 DocStr10835;Time-frames search result message;Сообщение о результате поиска тайм-фреймов
-DocStr10836;The message contains information about strategy type;The message contains information about strategy type
+DocStr10836;The message contains information about strategy type;Сообщение, содержащее информацияю о типе стратегии
 DocStr10837;Strategy type ID;Идентификатор типа стратегии
 DocStr10838;LMAX locations;LMAX расположения
+DocStr10839;The message contains information about strategy state or command to change state;Сообщение, содержащее информацияю о состоянии стратегии или команду на изменение состояния
+DocStr10840;Command;Команда
+DocStr10841;New {0} occurred event;Событие появления нового {0}
+DocStr10842;Convert to {0};Преобразовать в {0}
+DocStr10843;Apply changes;Применить изменения
+DocStr10844;Apply incoming command;Применить входящую команду
+DocStr10845;Strategy type;Тип стратегии
+DocStr10846;Message type for {0};Тип сообщения для {0}

@@ -398,6 +398,11 @@
     <Compile Include="Strategies\Analytics\PriceVolumeDistributionStrategy.cs" />
     <Compile Include="Strategies\BasketStrategy.cs" />
     <Compile Include="Strategies\IStrategyChildStrategyList.cs" />
+    <Compile Include="Strategies\Messages\StrategyInfoMessage.cs" />
+    <Compile Include="Strategies\Messages\StrategyLookupMessage.cs" />
+    <Compile Include="Strategies\Messages\StrategyLookupResultMessage.cs" />
+    <Compile Include="Strategies\Messages\StrategyStateMessage.cs" />
+    <Compile Include="Strategies\Messages\StrategyTypeMessage.cs" />
     <Compile Include="Strategies\Reporting\CsvStrategyReport.cs" />
     <Compile Include="Strategies\Reporting\ExcelStrategyReport.cs" />
     <Compile Include="Strategies\Reporting\StrategyReport.cs" />

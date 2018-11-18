@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Algo
 {
+	using StockSharp.Algo.Strategies.Messages;
 	using StockSharp.Algo.Testing;
 	using StockSharp.Messages;
 
@@ -45,5 +46,30 @@
 		/// <see cref="ChangeTimeIntervalMessage"/>.
 		/// </summary>
 		public const MessageTypes ChangeTimeInterval = (MessageTypes)(-14);
+
+		/// <summary>
+		/// <see cref="StrategyLookupMessage"/>.
+		/// </summary>
+		public const MessageTypes StrategyLookup = (MessageTypes)(-15);
+
+		/// <summary>
+		/// <see cref="StrategyLookupResultMessage"/>.
+		/// </summary>
+		public const MessageTypes StrategyLookupResult = (MessageTypes)(-16);
+
+		/// <summary>
+		/// <see cref="StrategyInfoMessage"/>.
+		/// </summary>
+		public const MessageTypes StrategyInfo = (MessageTypes)(-17);
+
+		/// <summary>
+		/// <see cref="StrategyTypeMessage"/>.
+		/// </summary>
+		public const MessageTypes StrategyType = (MessageTypes)(-18);
+
+		/// <summary>
+		/// <see cref="StrategyStateMessage"/>.
+		/// </summary>
+		public const MessageTypes StrategyState = (MessageTypes)(-19);
 	}
 }
