@@ -23,6 +23,7 @@ StockSharp API Change log
 * (feature) TimeFrameLookupMessage, TimeFrameLookupResultMessage added.
 * (feature) FIX connector, QuikLua. Supported TimeFrameLookupMessage, TimeFrameLookupResultMessage.
 * (feature) Strategy messages.
+* (feature) FixServer. Strategy messages supported.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
