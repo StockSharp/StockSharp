@@ -320,7 +320,7 @@ namespace StockSharp.Messages
 		HighBidPrice,
 
 		/// <summary>
-		/// Maximum ask during the session.
+		/// Minimum ask during the session.
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str320Key)]

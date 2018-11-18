@@ -1496,7 +1496,7 @@ namespace StockSharp.BusinessEntities
 
 		//[DataMember]
 		/// <summary>
-		/// Maximum ask during the session.
+		/// Minimum ask during the session.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]

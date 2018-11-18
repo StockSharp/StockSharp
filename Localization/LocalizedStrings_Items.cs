@@ -5918,12 +5918,12 @@ namespace StockSharp.Localization
 		public static string Str594 => GetString(Str594Key);
 
 		/// <summary>
-		/// Maximum ask during the session.
+		/// Minimum ask during the session.
 		/// </summary>
 		public const string Str595Key = nameof(Str595);
 
 		/// <summary>
-		/// Maximum ask during the session.
+		/// Minimum ask during the session.
 		/// </summary>
 		public static string Str595 => GetString(Str595Key);
 

@@ -588,7 +588,7 @@ Asks;Asks;Офферов
 AsksCount;Number of sell orders.;Количество заявок на продажу.
 TradesOf;Trades;Сделок
 Str594;Maximum bid during the session.;Максимальный бид за сессию.
-Str595;Maximum ask during the session.;Минимальный оффер за сессию.
+Str595;Minimum ask during the session.;Минимальный оффер за сессию.
 AveragePrice;Average price;Средневзвешенная цена
 SettlementPrice;Settlement price.;Расчетная цена.
 Str600;Average price per session.;Средняя цена за сессию.
