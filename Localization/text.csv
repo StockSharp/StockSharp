@@ -1551,7 +1551,7 @@ Str1603;Unknown type of security.;Неизвестный тип инструме
 Str1604Params;Code {0} does not contain information about option.;Код {0} не содержит информации по опциону.
 Str1605Params;Code {0} does not contain information about option type.;Код {0} не содержит информации о типе опциона.
 Str1606Params;Unknown type of option {0}.;Неизвестный тип опциона {0}.
-Str1608;Unknown market-data field.;Неизвестный поле маркет-данных.
+Str1608;Unknown market-data field.;Неизвестное поле маркет-данных.
 Str1609;Unknown FIX version.;Неизвестная версия FIX.
 Str1610;Session board is not specified.;Площадка у сессии не заполнена.
 Str1611;Connection dropped.;Подключение разорвано.
@@ -4053,7 +4053,7 @@ XamlStr757;Ticks and depths;Тики и стаканы
 XamlStr759;Ticks (OL);Тиков (ОЛ)
 XamlStr762;Type (values);Тип (значение)
 XamlStr763;Type (option);Тип (опцион)
-XamlStr765;Strategy type:;Тип стратегии:
+XamlStr765;Strategy type;Тип стратегии
 BorderWidth;Border width;Толщина рамки
 OnlyPublic;Only public;Только публичные
 XamlStr776;Trader;Трейдер
@@ -15317,11 +15317,12 @@ DocStr10835;Time-frames search result message;Сообщение о резуль
 DocStr10836;The message contains information about strategy type;Сообщение, содержащее информацияю о типе стратегии
 DocStr10837;Strategy type ID;Идентификатор типа стратегии
 DocStr10838;LMAX locations;LMAX расположения
-DocStr10839;The message contains information about strategy state or command to change state;Сообщение, содержащее информацияю о состоянии стратегии или команду на изменение состояния
+DocStr10839;The message contains information about strategy state or command to change state;Сообщение, содержащее информацию о состоянии стратегии или команду на изменение состояния
 DocStr10840;Command;Команда
 DocStr10841;New {0} occurred event;Событие появления нового {0}
 DocStr10842;Convert to {0};Преобразовать в {0}
 DocStr10843;Apply changes;Применить изменения
 DocStr10844;Apply incoming command;Применить входящую команду
-DocStr10845;Strategy type;Тип стратегии
 DocStr10846;Message type for {0};Тип сообщения для {0}
+DocStr10847;The message contains information about strategy;Сообщение, содержащее информацию о стратегии
+DocStr10848;Convert {0} to {1};Преобразовать {0} в {1}
