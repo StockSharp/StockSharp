@@ -24,6 +24,7 @@ StockSharp API Change log
 * (feature) FIX connector, QuikLua. Supported TimeFrameLookupMessage, TimeFrameLookupResultMessage.
 * (feature) Strategy messages.
 * (feature) FixServer. Strategy messages supported.
+* (feature) IConnector. Lookup result events passes lookup request messages.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

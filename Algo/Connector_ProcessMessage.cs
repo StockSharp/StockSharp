@@ -1116,10 +1116,11 @@ namespace StockSharp.Algo
 				RaiseError(message.Error);
 
 			var result = _lookupResult.CopyAndClear();
+			SecurityLookupMessage criteria = null;
 
 			if (result.Length == 0)
 			{
-				var criteria = _securityLookups.TryGetValue(message.OriginalTransactionId);
+				criteria = _securityLookups.TryGetValue(message.OriginalTransactionId);
 
 				if (criteria != null)
 				{
@@ -1128,7 +1129,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			RaiseLookupSecuritiesResult(message.Error, result);
+			RaiseLookupSecuritiesResult(criteria, message.Error, result);
 
 			lock (_lookupQueue.SyncRoot)
 			{
@@ -1164,7 +1165,7 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				return;
 
-			RaiseLookupBoardsResult(message.Error, ExchangeBoards.Where(b => criteria.Like.IsEmpty() || b.Code.ContainsIgnoreCase(criteria.Like)));
+			RaiseLookupBoardsResult(criteria, message.Error, ExchangeBoards.Where(b => criteria.Like.IsEmpty() || b.Code.ContainsIgnoreCase(criteria.Like)));
 		}
 
 		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)
@@ -1177,7 +1178,7 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				return;
 
-			RaiseLookupPortfoliosResult(message.Error, Portfolios.Where(pf => criteria.PortfolioName.IsEmpty() || pf.Name.ContainsIgnoreCase(criteria.PortfolioName)));
+			RaiseLookupPortfoliosResult(criteria, message.Error, Portfolios.Where(pf => criteria.PortfolioName.IsEmpty() || pf.Name.ContainsIgnoreCase(criteria.PortfolioName)));
 		}
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
