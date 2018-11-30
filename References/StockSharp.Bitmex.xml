@@ -155,6 +155,10 @@
             <summary>
             </summary>
         </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderExecInstructions.ParticipateDoNotInitiate">
+            <summary>
+            </summary>
+        </member>
         <member name="T:StockSharp.Bitmex.BitmexOrderCondition">
             <summary>
             <see cref="N:StockSharp.Bitmex"/> order condition.

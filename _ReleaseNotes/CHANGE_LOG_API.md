@@ -26,6 +26,7 @@ StockSharp API Change log
 * (feature) FixServer. Strategy messages supported.
 * (feature) IConnector. Lookup result events passes lookup request messages.
 * (feature) FixServer. SecurityMappingRequest, SecurityMappingResult messages supported.
+* (bug) Bitmex. ExecInst fixes.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
