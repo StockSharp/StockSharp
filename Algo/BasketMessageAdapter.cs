@@ -329,6 +329,11 @@ namespace StockSharp.Algo
 				adapter = new CandleHolderMessageAdapter(adapter);
 			}
 
+			if (adapter.IsSupportSubscriptions)
+			{
+				adapter = new SubscriptionMessageAdapter(adapter) { IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect };
+			}
+
 			if (SupportCandlesCompression)
 			{
 				adapter = new CandleBuilderMessageAdapter(adapter, CandleBuilderProvider);
@@ -342,11 +347,6 @@ namespace StockSharp.Algo
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
 			{
 				adapter = new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage, adapter.StorageName, adapter.SecurityExtendedFields);
-			}
-
-			if (adapter.IsSupportSubscriptions)
-			{
-				adapter = new SubscriptionMessageAdapter(adapter) { IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect };
 			}
 
 			return adapter;
@@ -951,7 +951,7 @@ namespace StockSharp.Algo
 			{
 				lock (_connectedResponseLock)
 				{
-					// try lookback only subscribe messages
+					// try loopback only subscribe messages
 					if (originMsg.IsSubscribe)
 					{
 						var set = _subscriptionNonSupportedAdapters.SafeAdd(originalTransactionId, k => new HashSet<IMessageAdapter>());

@@ -27,6 +27,7 @@ StockSharp API Change log
 * (feature) IConnector. Lookup result events passes lookup request messages.
 * (feature) FixServer. SecurityMappingRequest, SecurityMappingResult messages supported.
 * (bug) Bitmex. ExecInst fixes.
+* (bug) Candles. Fix duplicate candles subscription.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
