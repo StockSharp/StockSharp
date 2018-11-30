@@ -52,6 +52,12 @@ namespace StockSharp.Algo.Storages
 		{
 			return new KeyValuePair<SecurityId, SecurityId>(mapping.StockSharpId, mapping.AdapterId);
 		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			return $"{StockSharpId}<->{AdapterId}";
+		}
 	}
 
 	/// <summary>
