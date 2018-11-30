@@ -839,7 +839,10 @@ namespace StockSharp.Algo
 				transactionId = GetTransactionId(message.OriginalTransactionId);
 
 			if (transactionId == 0)
-				return null;
+			{
+				return message.OrderId == null ? null : _allOrdersById.TryGetValue(message.OrderId.Value);
+				//return null;
+			}
 
 			return _allOrdersByTransactionId.TryGetValue(Tuple.Create(transactionId, true)) ?? _allOrdersByTransactionId.TryGetValue(Tuple.Create(transactionId, false));
 		}
