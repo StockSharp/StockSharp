@@ -180,8 +180,8 @@ VisibleVolume;Visible volume;Видимый объем
 Str127;Visible quantity of contracts in order.;Видимое количество контрактов в заявке.
 Str128;Direction;Направление
 Str129;Order side (buy or sell).;Направление заявки (покупка или продажа).
-Str130;Remainder;Остаток
-Str131;Order contracts remainder.;Остаток контрактов в заявке.
+Str130;Balance;Остаток
+Str131;Order contracts balance.;Остаток контрактов в заявке.
 Str132;Order type;Тип заявки
 Str133;Order type (Limit, Market, Stop-order etc.).;Тип заявки (Лимитированная, Рыночная, Стоп-заявка и т.д.).
 Str134;Order state (Active, Not active, Error).;Состояние заявки (Активна, Не активна, Ошибка).
@@ -14575,7 +14575,7 @@ DocStr10028;Enable storage;Включить хранилище
 DocStr10029;Support filtering subscriptions (subscribe/unsubscribe for specified security);Поддерживает ли фильтрация подписки (подписка/отписка для указанного инструмента)
 DocStr10030;Convertible type;Конвертируемый тип
 DocStr10031;The security for which {0} will be calculated;Инструмент, для которого будет вычисляться значение {0}
-DocStr10032;Schema registerating event;Событие регистрации схемы
+DocStr10032;Schema registration event;Событие регистрации схемы
 DocStr10033;Schema unregistering event;Событие удаления схемы
 DocStr10034;Tracking field info;Информация об отслеживаемой поле
 DocStr10035;Tracking property;Отслеживаемое свойство

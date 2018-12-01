@@ -1838,22 +1838,22 @@ namespace StockSharp.Localization
 		public static string Str129 => GetString(Str129Key);
 
 		/// <summary>
-		/// Remainder
+		/// Balance
 		/// </summary>
 		public const string Str130Key = nameof(Str130);
 
 		/// <summary>
-		/// Remainder
+		/// Balance
 		/// </summary>
 		public static string Str130 => GetString(Str130Key);
 
 		/// <summary>
-		/// Order contracts remainder.
+		/// Order contracts balance.
 		/// </summary>
 		public const string Str131Key = nameof(Str131);
 
 		/// <summary>
-		/// Order contracts remainder.
+		/// Order contracts balance.
 		/// </summary>
 		public static string Str131 => GetString(Str131Key);
 

@@ -323,7 +323,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _balance;
 
 		/// <summary>
-		/// Order contracts remainder.
+		/// Order contracts balance.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str130Key)]
