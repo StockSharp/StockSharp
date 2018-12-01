@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.15:
 * (feature) LiveCoin. Candles support.
 * (feature) LiveCoin. Websocket supported.
 * (feature) Position. SettlementPrice added.
@@ -29,6 +29,7 @@ StockSharp API Change log
 * (bug) Bitmex. ExecInst fixes.
 * (bug) Candles. Fix duplicate candles subscription.
 * (bug) Market depth. Fix build depths from OL and L1.
+* (feature) MT4, MT5 connectors.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
