@@ -253,6 +253,16 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// User subscription request.
 		/// </summary>
-		UserRequest
+		UserRequest,
+
+		/// <summary>
+		/// Time-frames search.
+		/// </summary>
+		TimeFrameLookup,
+
+		/// <summary>
+		/// Time-frames search result.
+		/// </summary>
+		TimeFrameLookupResult,
 	}
 }

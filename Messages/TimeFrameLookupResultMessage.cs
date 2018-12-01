@@ -1,28 +1,43 @@
 namespace StockSharp.Messages
 {
 	using System;
+	using System.Linq;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
+
 	/// <summary>
-	/// Boards search result message.
+	/// Time-frames search result message.
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class BoardLookupResultMessage : Message
+	public class TimeFrameLookupResultMessage : Message
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BoardLookupResultMessage"/>.
+		/// Initializes a new instance of the <see cref="TimeFrameLookupResultMessage"/>.
 		/// </summary>
-		public BoardLookupResultMessage()
-			: base(MessageTypes.BoardLookupResult)
+		public TimeFrameLookupResultMessage()
+			: base(MessageTypes.TimeFrameLookupResult)
 		{
 		}
 
 		/// <summary>
-		/// ID of the original message <see cref="BoardLookupMessage.TransactionId"/> for which this message is a response.
+		/// ID of the original message <see cref="TimeFrameLookupMessage.TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
+
+		private TimeSpan[] _timeFrames = ArrayHelper.Empty<TimeSpan>();
+
+		/// <summary>
+		/// Available timeframes of historical data.
+		/// </summary>
+		[DataMember]
+		public TimeSpan[] TimeFrames
+		{
+			get => _timeFrames;
+			set => _timeFrames = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
 		/// <summary>
 		/// Lookup error info.
@@ -31,12 +46,12 @@ namespace StockSharp.Messages
 		public Exception Error { get; set; }
 
 		/// <summary>
-		/// Create a copy of <see cref="BoardLookupResultMessage"/>.
+		/// Create a copy of <see cref="TimeFrameLookupResultMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return CopyTo(new BoardLookupResultMessage());
+			return CopyTo(new TimeFrameLookupResultMessage());
 		}
 
 		/// <summary>
@@ -44,10 +59,11 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
 		/// <returns>The object, to which copied information.</returns>
-		protected BoardLookupResultMessage CopyTo(BoardLookupResultMessage destination)
+		protected TimeFrameLookupResultMessage CopyTo(TimeFrameLookupResultMessage destination)
 		{
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.Error = Error;
+			destination.TimeFrames = TimeFrames.ToArray();
 
 			this.CopyExtensionInfo(destination);
 
@@ -61,6 +77,8 @@ namespace StockSharp.Messages
 
 			if (Error != null)
 				str += $",Error={Error.Message}";
+			else
+				str += $",TF={TimeFrames.Select(t => t.ToString()).Join(",")}";
 
 			return str;
 		}

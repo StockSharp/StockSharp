@@ -253,7 +253,18 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return $"S#:{SecurityCode}@{BoardCode}, Native:{Native},Type:{SecurityType}";
+			var id = $"S#:{SecurityCode}@{BoardCode}, Native:{Native},Type:{SecurityType}";
+
+			if (!Isin.IsEmpty())
+				id += $",ISIN:{Isin}";
+
+			if (!IQFeed.IsEmpty())
+				id += $",IQFeed:{IQFeed}";
+
+			if (InteractiveBrokers != null)
+				id += $",IB:{InteractiveBrokers}";
+
+			return id;
 		}
 	}
 }

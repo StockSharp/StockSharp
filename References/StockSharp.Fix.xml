@@ -252,6 +252,9 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.CheckTimeFrameByRequest">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportStopLoss">
       <inheritdoc />
     </member>
@@ -287,6 +290,14 @@
       <param name="messageHandler">Message handler.</param>
       <returns>
         <see langword="true" />, if the messages was read successfully, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.IsLogoutError(System.String)">
+      <summary>
+            Check <see cref="F:StockSharp.Fix.Native.FixMessages.Logout" /> contains error message.
+            </summary>
+      <param name="text">Text message.</param>
+      <returns>
+        <see langword="true" /> if the specified text contains error message, otherwise, <see langword="false" />.</returns>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
       <summary>
@@ -351,6 +362,15 @@
       <param name="timeMsg">Heartbeat message.</param>
       <returns>
         <see cref="T:StockSharp.Fix.Native.FixMessages" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessSecurityDefinition(StockSharp.Fix.Native.FixTags,StockSharp.Fix.Native.IFixReader,StockSharp.Messages.SecurityMessage)">
+      <summary>
+            Process <see cref="F:StockSharp.Fix.Native.FixMessages.SecurityDefinition" /> message.
+            </summary>
+      <param name="tag">Tag.</param>
+      <param name="reader">The reader of data recorded in the FIX protocol format.</param>
+      <param name="message">A message containing info about the security.</param>
+      <returns>Processing result.</returns>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.InitSecId(StockSharp.Messages.SecurityMessage,System.String,System.String,System.String,System.String)">
       <summary>
@@ -423,6 +443,9 @@
       <summary>
             Convert all non-latin text messages to latin.
             </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.CheckTimeFrameByRequest">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
       <inheritdoc />
@@ -802,6 +825,16 @@
             Board, where securities are traded.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Writer">
+      <summary>
+            The recorder of data in the FIX protocol format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Reader">
+      <summary>
+            The reader of data recorded in the FIX protocol format.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.SecurityLookup">
       <summary>
             Supports <see cref="T:StockSharp.Messages.SecurityLookupMessage" />.
@@ -885,6 +918,11 @@
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSecuritiesLookupAll">
       <summary>
             Support lookup all securities.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.CheckTimeFrameByRequest">
+      <summary>
+            Check possible time-frame by request.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition">
@@ -1085,6 +1123,16 @@
         <see cref="T:StockSharp.Fix.FixUserForceLogoffMessage" />.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.FixMessageTypes.SecurityMappingRequest">
+      <summary>
+        <see cref="T:StockSharp.Fix.FixSecurityMappingRequestMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixMessageTypes.SecurityMappingResult">
+      <summary>
+        <see cref="T:StockSharp.Fix.FixSecurityMappingResultMessage" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.FixUserRequestTypes">
       <summary>
             Request types.
@@ -1228,22 +1276,68 @@
             </summary>
       <returns>Copy.</returns>
     </member>
+    <member name="T:StockSharp.Fix.FixSecurityMappingRequestMessage">
+      <summary>
+            Security mapping request message.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityMappingRequestMessage.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Fix.FixSecurityMappingRequestMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityMappingRequestMessage.TransactionId">
+      <summary>
+            Request identifier.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityMappingRequestMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixSecurityMappingRequestMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityMappingRequestMessage.ToString">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.FixSecurityMappingResultMessage">
+      <summary>
+            Security mapping request message.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityMappingResultMessage.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Fix.FixSecurityMappingResultMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityMappingResultMessage.OriginalTransactionId">
+      <summary>
+            ID of the original message <see cref="P:StockSharp.Fix.FixSecurityMappingRequestMessage.TransactionId" /> for which this message is a response.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityMappingResultMessage.Error">
+      <summary>
+            Lookup error info.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityMappingResultMessage.Mapping">
+      <summary>
+            Security identifier mapping.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityMappingResultMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixSecurityMappingResultMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityMappingResultMessage.ToString">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Fix.FixServer">
       <summary>
             FIX server.
             </summary>
-    </member>
-    <member name="E:StockSharp.Fix.FixServer.NewOutMessage">
-      <summary>
-            New message event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Fix.FixServer.RaiseNewOutMessage(StockSharp.Fix.FixSession,StockSharp.Messages.Message)">
-      <summary>
-            To call the event <see cref="E:StockSharp.Fix.FixServer.NewOutMessage" />.
-            </summary>
-      <param name="session">Session.</param>
-      <param name="message">Message.</param>
     </member>
     <member name="M:StockSharp.Fix.FixServer.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})">
       <summary>
@@ -1267,6 +1361,25 @@
       <param name="ordType">Order type.</param>
       <param name="condition">The order condition.</param>
     </member>
+    <member name="M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.ExecutionMessage)">
+      <summary>
+            To record data by the order condition.
+            </summary>
+      <param name="writer">FIX data writer.</param>
+      <param name="message">The message containing information about the order.</param>
+    </member>
+    <member name="E:StockSharp.Fix.FixServer.NewOutMessage">
+      <summary>
+            New message event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.RaiseNewOutMessage(StockSharp.Fix.FixSession,StockSharp.Messages.Message)">
+      <summary>
+            To call the event <see cref="E:StockSharp.Fix.FixServer.NewOutMessage" />.
+            </summary>
+      <param name="session">Session.</param>
+      <param name="message">Message.</param>
+    </member>
     <member name="M:StockSharp.Fix.FixServer.OnProcess(StockSharp.Fix.FixSession,System.String,StockSharp.Fix.Native.IFixReader)">
       <summary>
             The method is called when the received message is processing.
@@ -1281,6 +1394,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixServer" />.
             </summary>
       <param name="authorization">The customer authentication.</param>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.Authorization">
+      <summary>
+            The customer authentication.
+            </summary>
     </member>
     <member name="P:StockSharp.Fix.FixServer.InitialTransactionId">
       <summary>
@@ -1382,13 +1500,6 @@
             </summary>
       <param name="message">Message.</param>
     </member>
-    <member name="M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.ExecutionMessage)">
-      <summary>
-            To record data by the order condition.
-            </summary>
-      <param name="writer">FIX data writer.</param>
-      <param name="message">The message containing information about the order.</param>
-    </member>
     <member name="M:StockSharp.Fix.FixServer.HasSubscriptions(StockSharp.Messages.MarketDataTypes,StockSharp.Messages.SecurityId)">
       <summary>
             Are there subscribers.
@@ -1434,8 +1545,9 @@
     </member>
     <member name="P:StockSharp.Fix.FixSession.Encoding">
       <summary>
-            The encoding used for data transmission. The default value is <see cref="P:System.Text.Encoding.UTF8" />.
+            The encoding used for data transmission.
             </summary>
+      <remarks>The default value is <see cref="P:System.Text.Encoding.UTF8" />.</remarks>
     </member>
     <member name="P:StockSharp.Fix.FixSession.IncrementalDepthUpdates">
       <summary>
@@ -1480,6 +1592,11 @@
     <member name="P:StockSharp.Fix.FixSession.MaxWriteBytes">
       <summary>
             Gets and sets the maximum allowed bytes per write.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.IsEnabled">
+      <summary>
+            Enabled.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.FixSession.Load(Ecng.Serialization.SettingsStorage)">
@@ -5319,6 +5436,51 @@
             The request for user's info subscription.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.TimeFramesRequest">
+      <summary>
+            The request for available time-frames.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.TimeFramesResponse">
+      <summary>
+            The response for <see cref="F:StockSharp.Fix.Native.FixExtendedMessages.TimeFramesRequest" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.StrategyInfo">
+      <summary>
+            Message type for <see cref="T:StockSharp.Algo.Strategies.Messages.StrategyInfoMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.StrategyType">
+      <summary>
+            Message type for <see cref="T:StockSharp.Algo.Strategies.Messages.StrategyTypeMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.StrategyState">
+      <summary>
+            Message type for <see cref="T:StockSharp.Algo.Strategies.Messages.StrategyStateMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.StrategyLookup">
+      <summary>
+            Message type for <see cref="T:StockSharp.Algo.Strategies.Messages.StrategyLookupMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.StrategyLookupResult">
+      <summary>
+            Message type for <see cref="T:StockSharp.Algo.Strategies.Messages.StrategyLookupResultMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityMappingRequest">
+      <summary>
+            Message type for <see cref="T:StockSharp.Fix.FixSecurityMappingRequestMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityMappingResult">
+      <summary>
+            Message type for <see cref="T:StockSharp.Fix.FixSecurityMappingResultMessage" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FixTags">
       <summary>
             FIX protocol tags.
@@ -5476,6 +5638,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SettlDate">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SymbolSfx">
       <summary>
       </summary>
@@ -5533,6 +5699,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.QuoteID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SettlCurrency">
       <summary>
       </summary>
     </member>
@@ -5605,6 +5775,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SecurityExchange">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.PegOffsetValue">
       <summary>
       </summary>
     </member>
@@ -5700,7 +5874,51 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingIDSource">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityDesc">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityExchange">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSymbol">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSymbolSfx">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingMaturityMonthYear">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingPutOrCall">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingStrikePrice">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingCurrency">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.RatioQty">
       <summary>
       </summary>
     </member>
@@ -5717,6 +5935,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SecurityResponseType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnsolicitedIndicator">
       <summary>
       </summary>
     </member>
@@ -5789,6 +6011,18 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.NoPartyIDs">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoSecurityAltID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SecurityAltID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SecurityAltIDSource">
       <summary>
       </summary>
     </member>
@@ -6048,6 +6282,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.PosMaintRptID">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.PosReqType">
       <summary>
       </summary>
@@ -6081,6 +6319,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.TrdType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.PegOffsetType">
       <summary>
       </summary>
     </member>
@@ -6197,6 +6439,42 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SessionSpecialDays">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.TimeFrames">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.StrategyName">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.StrategyTypeId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.StrategyId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoStrategyParameters">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.StrategyParameterName">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.StrategyParameterType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.StrategyParameterValue">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.StrategyCommand">
       <summary>
       </summary>
     </member>
@@ -6844,6 +7122,12 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFrames">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.CheckTimeFrameByRequest">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
@@ -6857,6 +7141,11 @@
     <member name="F:StockSharp.Fix.FixMessageAdapter.DefaultHeartbeatInterval">
       <summary>
             Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.FixDialect">
+      <summary>
+            The FIX dialect.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.Address">
@@ -6897,6 +7186,11 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.RequestAllSecurities">
       <summary>
             Request all securities on connection.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.Encoding">
+      <summary>
+            The encoding used for data transmission.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsResetCounter">
@@ -6958,9 +7252,6 @@
       <summary>
             The name of the server that shares SSL connection.
             </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFrames">
-      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.SupportUnknownExecutions">
       <summary>
@@ -7104,6 +7395,11 @@
     <member name="P:StockSharp.Fix.FixOrderCondition.StopPrice">
       <summary>
             Stop-price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixOrderCondition.Offset">
+      <summary>
+            Offset.
             </summary>
     </member>
   </members>

@@ -103,7 +103,7 @@ namespace SampleTwime
 
 				Trader.Restored += () => this.GuiAsync(() =>
 				{
-					// update gui labes
+					// update gui labels
 					ChangeConnectStatus(true);
 					MessageBox.Show(this, LocalizedStrings.Str2958);
 				});
@@ -119,7 +119,7 @@ namespace SampleTwime
 				// subscribe on connection error event
 				Trader.ConnectionError += error => this.GuiAsync(() =>
 				{
-					// update gui labes
+					// update gui labels
 					ChangeConnectStatus(false);
 
 					MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);

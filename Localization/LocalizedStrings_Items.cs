@@ -5918,12 +5918,12 @@ namespace StockSharp.Localization
 		public static string Str594 => GetString(Str594Key);
 
 		/// <summary>
-		/// Maximum ask during the session.
+		/// Minimum ask during the session.
 		/// </summary>
 		public const string Str595Key = nameof(Str595);
 
 		/// <summary>
-		/// Maximum ask during the session.
+		/// Minimum ask during the session.
 		/// </summary>
 		public static string Str595 => GetString(Str595Key);
 
@@ -40408,12 +40408,12 @@ namespace StockSharp.Localization
 		public static string XamlStr763 => GetString(XamlStr763Key);
 
 		/// <summary>
-		/// Strategy type:
+		/// Strategy type
 		/// </summary>
 		public const string XamlStr765Key = nameof(XamlStr765);
 
 		/// <summary>
-		/// Strategy type:
+		/// Strategy type
 		/// </summary>
 		public static string XamlStr765 => GetString(XamlStr765Key);
 
@@ -48616,5 +48616,75 @@ namespace StockSharp.Localization
 		/// Commission (maker)
 		/// </summary>
 		public static string CommissionMaker => GetString(CommissionMakerKey);
+
+		/// <summary>
+		/// Special days
+		/// </summary>
+		public const string SpecialDaysKey = nameof(SpecialDays);
+
+		/// <summary>
+		/// Special days
+		/// </summary>
+		public static string SpecialDays => GetString(SpecialDaysKey);
+
+		/// <summary>
+		/// Special working days and holidays.
+		/// </summary>
+		public const string SpecialDaysDescKey = nameof(SpecialDaysDesc);
+
+		/// <summary>
+		/// Special working days and holidays.
+		/// </summary>
+		public static string SpecialDaysDesc => GetString(SpecialDaysDescKey);
+
+		/// <summary>
+		/// LMAX location
+		/// </summary>
+		public const string LmaxLocationKey = nameof(LmaxLocation);
+
+		/// <summary>
+		/// LMAX location
+		/// </summary>
+		public static string LmaxLocation => GetString(LmaxLocationKey);
+
+		/// <summary>
+		/// LMAX exchange location.
+		/// </summary>
+		public const string LmaxLocationDescKey = nameof(LmaxLocationDesc);
+
+		/// <summary>
+		/// LMAX exchange location.
+		/// </summary>
+		public static string LmaxLocationDesc => GetString(LmaxLocationDescKey);
+
+		/// <summary>
+		/// London
+		/// </summary>
+		public const string LondonKey = nameof(London);
+
+		/// <summary>
+		/// London
+		/// </summary>
+		public static string London => GetString(LondonKey);
+
+		/// <summary>
+		/// New York
+		/// </summary>
+		public const string NewYorkKey = nameof(NewYork);
+
+		/// <summary>
+		/// New York
+		/// </summary>
+		public static string NewYork => GetString(NewYorkKey);
+
+		/// <summary>
+		/// Tokyo
+		/// </summary>
+		public const string TokyoKey = nameof(Tokyo);
+
+		/// <summary>
+		/// Tokyo
+		/// </summary>
+		public static string Tokyo => GetString(TokyoKey);
 	}
 }

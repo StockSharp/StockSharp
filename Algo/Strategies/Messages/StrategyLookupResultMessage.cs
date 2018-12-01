@@ -1,25 +1,27 @@
-namespace StockSharp.Messages
+namespace StockSharp.Algo.Strategies.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
 
+	using StockSharp.Messages;
+
 	/// <summary>
-	/// Boards search result message.
+	/// Strategies search result message.
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class BoardLookupResultMessage : Message
+	public class StrategyLookupResultMessage : Message
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BoardLookupResultMessage"/>.
+		/// Initializes a new instance of the <see cref="StrategyLookupResultMessage"/>.
 		/// </summary>
-		public BoardLookupResultMessage()
-			: base(MessageTypes.BoardLookupResult)
+		public StrategyLookupResultMessage()
+			: base(ExtendedMessageTypes.StrategyLookupResult)
 		{
 		}
 
 		/// <summary>
-		/// ID of the original message <see cref="BoardLookupMessage.TransactionId"/> for which this message is a response.
+		/// ID of the original message <see cref="StrategyLookupMessage.TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
@@ -31,12 +33,12 @@ namespace StockSharp.Messages
 		public Exception Error { get; set; }
 
 		/// <summary>
-		/// Create a copy of <see cref="BoardLookupResultMessage"/>.
+		/// Create a copy of <see cref="StrategyLookupResultMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return CopyTo(new BoardLookupResultMessage());
+			return CopyTo(new StrategyLookupResultMessage());
 		}
 
 		/// <summary>
@@ -44,7 +46,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
 		/// <returns>The object, to which copied information.</returns>
-		protected BoardLookupResultMessage CopyTo(BoardLookupResultMessage destination)
+		protected StrategyLookupResultMessage CopyTo(StrategyLookupResultMessage destination)
 		{
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.Error = Error;

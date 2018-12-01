@@ -588,7 +588,7 @@ Asks;Asks;Офферов
 AsksCount;Number of sell orders.;Количество заявок на продажу.
 TradesOf;Trades;Сделок
 Str594;Maximum bid during the session.;Максимальный бид за сессию.
-Str595;Maximum ask during the session.;Минимальный оффер за сессию.
+Str595;Minimum ask during the session.;Минимальный оффер за сессию.
 AveragePrice;Average price;Средневзвешенная цена
 SettlementPrice;Settlement price.;Расчетная цена.
 Str600;Average price per session.;Средняя цена за сессию.
@@ -1551,7 +1551,7 @@ Str1603;Unknown type of security.;Неизвестный тип инструме
 Str1604Params;Code {0} does not contain information about option.;Код {0} не содержит информации по опциону.
 Str1605Params;Code {0} does not contain information about option type.;Код {0} не содержит информации о типе опциона.
 Str1606Params;Unknown type of option {0}.;Неизвестный тип опциона {0}.
-Str1608;Unknown market-data field.;Неизвестный поле маркет-данных.
+Str1608;Unknown market-data field.;Неизвестное поле маркет-данных.
 Str1609;Unknown FIX version.;Неизвестная версия FIX.
 Str1610;Session board is not specified.;Площадка у сессии не заполнена.
 Str1611;Connection dropped.;Подключение разорвано.
@@ -4053,7 +4053,7 @@ XamlStr757;Ticks and depths;Тики и стаканы
 XamlStr759;Ticks (OL);Тиков (ОЛ)
 XamlStr762;Type (values);Тип (значение)
 XamlStr763;Type (option);Тип (опцион)
-XamlStr765;Strategy type:;Тип стратегии:
+XamlStr765;Strategy type;Тип стратегии
 BorderWidth;Border width;Толщина рамки
 OnlyPublic;Only public;Только публичные
 XamlStr776;Trader;Трейдер
@@ -4894,6 +4894,13 @@ AssetType;Asset type;Тип актива
 StopStrategyOnTabClosing;To close the tab {0} strategy must be stopped. Stop strategy?;Для закрытия вкладки {0} необходимо остановить стратегию. Остановить стратегию?
 CommissionTaker;Commission (taker);Комиссия (тейкер)
 CommissionMaker;Commission (maker);Комиссия (мейкер)
+SpecialDays;Special days;Специальные дни
+SpecialDaysDesc;Special working days and holidays.;Специальные рабочие дни и выходные.
+LmaxLocation;LMAX location;LMAX расположение
+LmaxLocationDesc;LMAX exchange location.;Расположение биржи LMAX.
+London;London;Лондон
+NewYork;New York;Нью йорк
+Tokyo;Tokyo;Токио
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -8003,7 +8010,7 @@ DocStr3176;Password change event;Событие изменения пароля 
 DocStr3177;User lookup event;Событие поиска клиента по его логину
 DocStr3178;Session settings;Настройки сессии
 DocStr3179;The interval of the connection availability check. The default is 1 minute;Интервал проверки доступности соединения. По умолчанию равно 1 минуте
-DocStr3180;The encoding used for data transmission. The default value is {0};Кодировка, используемая при передаче данных. По умолчанию значение равно {0}
+DocStr3180;The encoding used for data transmission;Кодировка, используемая при передаче данных
 DocStr3181;To send changes by the order book. If disabled, the order book is sent entirely. The default is enabled;Отправлять изменения по стакану. Если выключено, отправляется стакан целиком. По умолчанию, включено
 DocStr3182;Date format;Формат даты
 DocStr3183;The timeout of reading data. The default value is {0};Время ожидания получения данных. По умолчанию равно {0}
@@ -14966,7 +14973,7 @@ DocStr10458;Override previous security data by new values;Перезаписыв
 DocStr10459;Start data loading;Запустить загрузку данных
 DocStr10460;Stop data loading;Остановить загрузку данных
 DocStr10461;Remove inner storage;Удалить внутреннее хранилище
-DocStr10462;Get preffered language;Получить предпочитаемый язык
+DocStr10462;Get preferred language;Получить предпочитаемый язык
 DocStr10463;Message adapter categories;Категории адаптера сообщений
 DocStr10465;US;США
 DocStr10466;Europe;Европа
@@ -15294,5 +15301,34 @@ DocStr10816;The response of board lookup;Ответ на поиск площад
 DocStr10817;Encode {0} to string;Закодировать {0} в строку
 DocStr10818;Encoded string;Закодированная строка
 DocStr10819;Decode from string to {0};Декодировать из строки в {0}
-DocStr10820;Special working days and holidays;Специальные рабочие дни и выходные
 DocStr10821;Work schedule for days with different from {0} schedules;Расписание работы для дней с отличным от {0} расписанием
+DocStr10823;Strategy ID;Идентификатор стратегии
+DocStr10824;Message strategies lookup;Сообщение поиска стратегий
+DocStr10825;Strategies search result message;Сообщение о результате поиска стратегий
+DocStr10827;Strategies search;Поиск стратегий
+DocStr10828;Strategies search result;Результат поиска стратегий
+DocStr10829;Strategy info;Информация о стратегии
+DocStr10830;The request for available time-frames;Запрос доступных тайм-фреймов
+DocStr10831;The response for {0};Ответ для {0}
+DocStr10832;Time-frames search;Поиск тайм-фреймов
+DocStr10833;Time-frames search result;Результат поиска тайм-фреймов
+DocStr10834;Message to request supported time-frames;Сообщение на запрос доступных тайм-фреймов
+DocStr10835;Time-frames search result message;Сообщение о результате поиска тайм-фреймов
+DocStr10836;The message contains information about strategy type;Сообщение, содержащее информацияю о типе стратегии
+DocStr10837;Strategy type ID;Идентификатор типа стратегии
+DocStr10838;LMAX locations;LMAX расположения
+DocStr10839;The message contains information about strategy state or command to change state;Сообщение, содержащее информацию о состоянии стратегии или команду на изменение состояния
+DocStr10840;Command;Команда
+DocStr10841;New {0} occurred event;Событие появления нового {0}
+DocStr10842;Convert to {0};Преобразовать в {0}
+DocStr10843;Apply changes;Применить изменения
+DocStr10844;Apply incoming command;Применить входящую команду
+DocStr10846;Message type for {0};Тип сообщения для {0}
+DocStr10847;The message contains information about strategy;Сообщение, содержащее информацию о стратегии
+DocStr10848;Convert {0} to {1};Преобразовать {0} в {1}
+DocStr10849;Process {0} message;Обработать сообщение {0}
+DocStr10850;Processing result;Результат обработки
+DocStr10851;Check {0} contains error message;Проверить, содержит ли сообщение {0} ошибку
+DocStr10852;{0} if the specified text contains error message, otherwise, {1};{0} если переданное текстовое сообщение содержит ошибку, иначе, {1}
+DocStr10853;Security mapping request message;Сообщение запроса получения маппинга инструментов
+DocStr10854;Security mapping result message;Сообщение ответа маппинга инструментов

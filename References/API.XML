@@ -6,8 +6,8 @@
     <members>
         <member name="T:OECX.FuturesPairer._Action">
             <summary>
-            <exclude/>
             </summary>
+            <exclude/>
         </member>
         <member name="T:OEC.API.AdministratorExtenstion">
             <summary>
@@ -72,7 +72,7 @@
             </summary>
             <exclude />
         </member>
-        <member name="M:OEC.API.AdministratorExtenstion.SubmitRiskLimitDetails(System.Collections.Generic.IEnumerable{OEC.API.RiskLimitDetail},System.Boolean,System.String)">
+        <member name="M:OEC.API.AdministratorExtenstion.SubmitRiskLimitDetails(System.Collections.Generic.IEnumerable{OEC.API.RiskLimitData},System.Boolean,System.String)">
             <summary>
             </summary>
             <exclude />
@@ -421,6 +421,11 @@
                 Some order comments are prohibited for using by 3rd party applications
             </summary>
         </member>
+        <member name="T:OEC.API.ProhibitedOrderLocationException">
+            <summary>
+                Only authorized users can set sender location
+            </summary>
+        </member>
         <member name="T:OEC.API.InvalidOrderPartsException">
             <summary>
                 Exception that raised at the time of sending order draft with invlid order parts
@@ -622,30 +627,35 @@
             <param name="appType">Application Type</param>
             <param name="companyName">Company Name</param>
         </member>
+        <member name="T:OEC.API.Location">
+            <summary>
+                A country (from ISO-3166-1), or a country + state/province (ISO-3166-2) for United States and Canada
+            </summary>
+        </member>
         <member name="T:OEC.API.Monitoring.BalanceGroup">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.BalanceGroupList">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.BalanceGroupItem">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.BalanceGroupItemList">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.Monitor">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="F:OEC.API.Monitoring.Monitor.Rules">
             <summary>
@@ -683,83 +693,83 @@
         </member>
         <member name="E:OEC.API.Monitoring.Monitor.OnRuleAdded">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="E:OEC.API.Monitoring.Monitor.OnRuleReplaced">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="E:OEC.API.Monitoring.Monitor.OnRuleRemoved">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="E:OEC.API.Monitoring.Monitor.OnSignalAdded">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="E:OEC.API.Monitoring.Monitor.OnSignalChanged">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.OnRuleEvent">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.OnSignalEvent">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.CompletionResult">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.Rule">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.RuleList">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.TriggerCondition">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.RuleScope">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.ExitMethodDescription">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.ExitStrategyDescription">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.Signal">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Monitoring.SignalList">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.ABAggregatedPosition">
             <summary>
@@ -1583,10 +1593,10 @@
             <summary>
                 Constructs BaseContract instance based on given contract
             </summary>
-            <param name="bc">Base contract</param>
+            <param name="baseContract">Base contract</param>
             <param name="group">Contract group</param>
-            <param name="cur">Currency</param>
-            <param name="ex">Exchange</param>
+            <param name="currency">Currency</param>
+            <param name="exchange">Exchange</param>
         </member>
         <member name="P:OEC.API.BaseContract.Symbol">
             <summary>
@@ -2224,7 +2234,7 @@
             <param name="version">Optional version</param>
             <param name="order">Order of command</param>
         </member>
-        <member name="M:OEC.API.Command.#ctor(System.Int32,System.DateTime,OEC.Data.CommandType,OEC.Data.CommandState,OEC.API.Order,System.Nullable{System.Boolean})">
+        <member name="M:OEC.API.Command.#ctor(System.Int32,System.DateTime,OEC.Data.CommandType,OEC.Data.CommandState,OEC.API.Order,System.Nullable{System.Boolean},OEC.API.Location)">
             <summary>
                 Internal constructor for creating new commands
                 'create' commands are created with ID equal to order ID, and state=Executed
@@ -2281,6 +2291,11 @@
             <summary>
                 True if command is a result of manual action, otherwise should be false.
                 If this parameter is not specified, servers will treat command as manually initiated.
+            </summary>
+        </member>
+        <member name="P:OEC.API.Command.SenderLocation">
+            <summary>
+                Sender location
             </summary>
         </member>
         <member name="P:OEC.API.Command.TypeState">
@@ -2627,7 +2642,7 @@
             <seealso cref="T:OEC.API.ContractGroup" />
             <seealso cref="P:OEC.API.Order.Contract" />
         </member>
-        <member name="M:OEC.API.Contract.#ctor(OEC.API.Core,OEC.Data.Contract,OEC.API.Contract,System.Collections.Generic.List{OEC.API.Leg},OEC.API.BaseContract)">
+        <member name="M:OEC.API.Contract.#ctor(OEC.API.Core,OEC.Data.Contract,OEC.API.Contract,System.Collections.Generic.List{OEC.API.Leg},OEC.API.BaseContract,OEC.Data.ContractKind,OEC.API.ContractSortKey,System.DateTime,System.String,System.String,System.String)">
             <summary>
                 Constructs Contract from serializable contract instance
             </summary>
@@ -2636,6 +2651,12 @@
             <param name="parent"></param>
             <param name="legs"></param>
             <param name="baseContract">BaseContract instance</param>
+            <param name="contractKind"></param>
+            <param name="sortKey"></param>
+            <param name="expirationDate"></param>
+            <param name="symbol"></param>
+            <param name="monthYear"></param>
+            <param name="suffix"></param>
         </member>
         <member name="P:OEC.API.Contract.Strike">
             <summary>
@@ -4292,12 +4313,13 @@
                 PutCallRatio, ImpliedVolatility, etc.
             </summary>
         </member>
-        <member name="T:OEC.API.RiskLimitDetailKey">
+        <member name="T:OEC.API.RiskLimitEntity">
             <summary>
-            
+            An Enitity that has risk limits.
+            Used as the key when organizing risk limit data.
             </summary>
         </member>
-        <member name="M:OEC.API.RiskLimitDetailKey.#ctor(OEC.Data.LimitType,OEC.API.Account,System.Nullable{OEC.Data.AccountType},OEC.API.TraderCategory,OEC.API.Contract,System.String,OEC.API.Exchange,System.Nullable{OEC.Data.ContractKind},System.Int32,System.Boolean)">
+        <member name="M:OEC.API.RiskLimitEntity.#ctor(OEC.Data.LimitType,OEC.API.Account,System.Nullable{OEC.Data.AccountType},OEC.API.TraderCategory,OEC.API.Contract,System.String,OEC.API.Exchange,System.Nullable{OEC.Data.ContractKind},System.Int32,System.Boolean)">
             <summary>
             </summary>
             <param name="limitType"></param>
@@ -4311,95 +4333,269 @@
             <param name="providerID"></param>
             /// <param name="_override"></param>
         </member>
-        <member name="P:OEC.API.RiskLimitDetailKey.AccountID">
+        <member name="P:OEC.API.RiskLimitEntity.AccountID">
             <summary>
                 Account ID. Optional.
                 <seealso cref="T:OEC.API.Account" />
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetailKey.ExchangeID">
+        <member name="P:OEC.API.RiskLimitEntity.ExchangeID">
             <summary>
                 Exchange ID. Optional.
                 <seealso cref="T:OEC.API.Exchange" />
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetailKey.ContractID">
+        <member name="P:OEC.API.RiskLimitEntity.ContractID">
             <summary>
                 Contract ID. Optional.
                 <seealso cref="T:OEC.API.Contract" />
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetailKey.TraderCategoryID">
+        <member name="P:OEC.API.RiskLimitEntity.TraderCategoryID">
             <summary>
                 Trader's category ID. Optional.
                 <seealso cref="T:OEC.API.TraderCategory" />
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetailKey.Underlying">
+        <member name="P:OEC.API.RiskLimitEntity.Underlying">
             <summary>
                 Underlying contract. Optional.
                 <seealso cref="T:OEC.API.BaseContract" />
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetailKey.ContractKind">
+        <member name="P:OEC.API.RiskLimitEntity.ContractKind">
             <summary>
                 Contract kind. Optional.
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetailKey.AccountType">
+        <member name="P:OEC.API.RiskLimitEntity.AccountType">
             <summary>
                 Account type. Optional.
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetailKey.ProviderID">
+        <member name="P:OEC.API.RiskLimitEntity.ProviderID">
             <summary>
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetailKey.Type">
+        <member name="P:OEC.API.RiskLimitEntity.Type">
             <summary>
                 Limit Type
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetailKey.Override">
+        <member name="P:OEC.API.RiskLimitEntity.Override">
             <summary>
                 Override 
             </summary>
         </member>
-        <member name="T:OEC.API.RiskLimitDetail">
+        <member name="M:OEC.API.RiskLimitEntity.CompareTo(OEC.API.RiskLimitEntity)">
             <summary>
-                Risk limit detail
+            Compare to another RiskLimitEntity
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.API.RiskLimitEntity.Equals(System.Object)">
+            <summary>
+            Check for equality
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.API.RiskLimitEntity.GetHashCode">
+            <summary>
+            Get Hash code for use in dictionaries.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OEC.API.RiskLimitValue">
+            <summary>
+            A Risk Limit Value. 
             </summary>
         </member>
-        <member name="F:OEC.API.RiskLimitDetail.Key">
+        <member name="F:OEC.API.RiskLimitValue.Submitter">
+            <summary>
+            Submitter (or approver) of this limit
+            </summary>
+        </member>
+        <member name="M:OEC.API.RiskLimitValue.Update(OEC.API.RiskLimitValue)">
+            <summary>
+            Update with data from another RiskLimitValue
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="P:OEC.API.RiskLimitValue.IsCleared">
+            <summary>
+            Is there no data in this RiskLimitValue
+            </summary>
+        </member>
+        <member name="M:OEC.API.RiskLimitValue.Clone">
+            <summary>
+            Deep Copy
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.API.RiskLimitValue.CompareTo(OEC.API.RiskLimitValue)">
+            <summary>
+            Compare to another RiskLimitValue
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.API.RiskLimitValue.ToString">
+            <summary>
+            Get Formatted string
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.API.RiskLimitValue.GetEditString">
+            <summary>
+            Get unformatted string for edit boxes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OEC.API.RiskLimitRealValue">
+            <summary>
+            RiskLimitValue for percentages and currency
+            Only RealValue is used.
+            </summary>
+        </member>
+        <member name="M:OEC.API.RiskLimitRealValue.#ctor(System.Nullable{System.Double})">
+            <summary>
+            Contstructor
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:OEC.API.RiskLimitIntValue">
+            <summary>
+            RiskLimitValue for counting, (quantities, positions, contracts, etc)
+            Only IntValue is used.
+            </summary>
+        </member>
+        <member name="M:OEC.API.RiskLimitIntValue.#ctor(System.Nullable{System.Int32})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:OEC.API.RiskLimitBoolValue">
+            <summary>
+            RiskLimitValue for booleans.
+            IntValue is used.
+            </summary>
+        </member>
+        <member name="M:OEC.API.RiskLimitBoolValue.#ctor(System.Nullable{System.Boolean})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:OEC.API.RiskLimitMarginLevels">
+            <summary>
+            RiskLimitValue for a collection of Margin Levels.    
+            </summary>
+        </member>
+        <member name="M:OEC.API.RiskLimitMarginLevels.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:OEC.API.RiskLimitMarginLevels.#ctor(System.Collections.Generic.IEnumerable{OEC.API.RiskLimitMarginLevel})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="levels">Initial margin levels</param>
+        </member>
+        <member name="P:OEC.API.RiskLimitMarginLevels.Count">
+            <summary>
+            Number of margin levels.
+            </summary>
+        </member>
+        <member name="M:OEC.API.RiskLimitMarginLevels.Update(OEC.API.RiskLimitValue)">
+            <summary>
+            Replace margin levels with levels from another
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:OEC.API.RiskLimitMarginLevels.Update(OEC.Protocol.RiskLimit)">
+            <summary>
+            Replace or remove a margin level.
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="T:OEC.API.RiskLimitMarginLevel">
+            <summary>
+            A Margin Level
+            </summary>
+        </member>
+        <member name="P:OEC.API.RiskLimitMarginLevel.Absolute">
+            <summary>
+            Is the Value an currency value or percentage
+            </summary>
+        </member>
+        <member name="P:OEC.API.RiskLimitMarginLevel.Value">
+            <summary>
+            currency or percentage
+            </summary>
+        </member>
+        <member name="P:OEC.API.RiskLimitMarginLevel.PositionLimit">
+            <summary>
+            Number of contracts that this level is valid for
+            </summary>
+        </member>
+        <member name="M:OEC.API.RiskLimitMarginLevel.Clone">
+            <summary>
+            Deep copy
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OEC.API.RiskLimitData">
+            <summary>
+            Risk Limit Data. Keyed class with current, new, and approved risk limit values
+            </summary>
+        </member>
+        <member name="F:OEC.API.RiskLimitData.Key">
             <summary>
                 Unique key of risk limit
             </summary>
         </member>
-        <member name="M:OEC.API.RiskLimitDetail.#ctor(OEC.API.RiskLimitDetailKey,System.Boolean,System.Boolean,System.Nullable{System.Double},System.Nullable{System.Double})">
-            <exclude />
-        </member>
-        <member name="P:OEC.API.RiskLimitDetail.Value">
+        <member name="M:OEC.API.RiskLimitData.#ctor(OEC.API.RiskLimitEntity)">
             <summary>
-                Current value
+            Constructor
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:OEC.API.RiskLimitData.Update(OEC.Data.RiskLimitStatus,OEC.API.RiskLimitValue)">
+            <summary>
+            Update risklimit values based on status.
+            </summary>
+            <param name="status">status (active, approved, new) of new value</param>
+            <param name="value">new value</param>
+            <param name="removeCleared">Remove value if new value is empty</param>
+        </member>
+        <member name="P:OEC.API.RiskLimitData.Limit">
+            <summary>
+            Currently active risk limit 
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetail.ApproveValue">
+        <member name="P:OEC.API.RiskLimitData.NewLimit">
             <summary>
-                Approved value
+            Submitted, but not approved limit
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetail.NewValue">
+        <member name="P:OEC.API.RiskLimitData.ApproveLimit">
             <summary>
-                New value
+            Approved limit
             </summary>
         </member>
-        <member name="P:OEC.API.RiskLimitDetail.IsVirtual">
+        <member name="P:OEC.API.RiskLimitData.Submitter">
             <exclude />
         </member>
-        <member name="P:OEC.API.RiskLimitDetail.Submitter">
-            <exclude />
+        <member name="P:OEC.API.RiskLimitData.IsEmpty">
+            <summary>
+            Is there anything in this risk limit
+            </summary>
         </member>
-        <member name="T:OEC.API.RiskLimitDetailList">
+        <member name="T:OEC.API.RiskLimitDataList">
             <summary>
                 Risk limit list
             </summary>
@@ -5567,6 +5763,11 @@
                 Occurs when <see cref="T:OEC.API.Currency" /> price (conversion rate) is changed
             </summary>
         </member>
+        <member name="E:OEC.API.OECClient.OnInterestRateChanged">
+            <summary>
+                Occurs when <see cref="T:OEC.API.InterestRate" /> rate is changed
+            </summary>
+        </member>
         <member name="E:OEC.API.OECClient.OnDOMChanged">
             <summary>
                 Occurs when Depth of Market (<see cref="T:OEC.API.DOM" />) data are changed
@@ -5952,6 +6153,11 @@
             </summary>
             <exclude />
         </member>
+        <member name="P:OEC.API.OECClient.IsGreekCalculationEnabled">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
         <member name="P:OEC.API.OECClient.LoggedUserClients">
             <summary>
                 List of another sessions of current user
@@ -5966,6 +6172,7 @@
             <summary>
                 Initializes the component. See <see cref="M:OEC.API.OECClient.Connect(System.String,System.Int32,System.String,System.String,System.Boolean)" /> method.
             </summary>
+            <exclude />
         </member>
         <member name="M:OEC.API.OECClient.#ctor(OEC.API.ThreadingPolicy)">
             <summary>
@@ -6053,10 +6260,14 @@
             <summary>
                 Sends an chain of orders
             </summary>
-            <remarks>- when main order is filled, linked orders are activated as OCO orders</remarks>
+            <remarks>- when main order is filled, linked orders are activated as OCO orders
+            <para>To specify grouping method, use the overload method <see cref="M:OEC.API.OECClient.SendLinkedOrders(OEC.API.OrderDraft,OEC.Data.OSOGroupingMethod,OEC.API.OrderDraft[])"/></para>
+            <para>To make the linked orders depend on the main order's price use <see cref="P:OEC.API.OrderDraft.DeltaTicks"/> and <see cref="P:OEC.API.OrderDraft.DeltaTicks2"/>. If grouping method is unspecified this will have no effect.</para>
+            </remarks>
             <seealso cref="T:OEC.API.OrderDraft" />
             <seealso cref="M:OEC.API.OECClient.SendOrder(OEC.API.OrderDraft)" />
             <seealso cref="M:OEC.API.OECClient.SendOCOOrders(OEC.API.OrderDraft[])" />
+            <seealso cref="T:OEC.Data.OSOGroupingMethod" />
             <param name="main">Main order</param>
             <param name="linked">Linked OCO orders</param>
         </member>
@@ -6064,13 +6275,15 @@
             <summary>
                 Sends an chain of orders
             </summary>
-            <remarks>- when main order is filled, linked orders are activated as OCO orders</remarks>
+            <remarks>- when main order is filled, linked orders are activated as OCO orders
+            <para>To set a price dependence of the linked orders from the main order user <see cref="P:OEC.API.OrderDraft.DeltaTicks"/> and <see cref="P:OEC.API.OrderDraft.DeltaTicks2"/> </para>
+            </remarks>
             <seealso cref="T:OEC.API.OrderDraft" />
             <seealso cref="M:OEC.API.OECClient.SendOrder(OEC.API.OrderDraft)" />
             <seealso cref="M:OEC.API.OECClient.SendOCOOrders(OEC.API.OrderDraft[])" />
             <seealso cref="T:OEC.Data.OSOGroupingMethod" />
             <param name="main">Main order</param>
-            <param name="groupingMethod">Groupig method</param>
+            <param name="groupingMethod">Defines how linked orders are grouped</param>
             <param name="linked">Linked OCO orders</param>
         </member>
         <member name="M:OEC.API.OECClient.SendOrder(OEC.API.OrderDraft,System.Boolean)">
@@ -7929,21 +8142,33 @@
             <summary>
                 Limit price or stop price for STP and STPLMT orders
             </summary>
+            <remarks>In a linked order if <see cref="P:OEC.API.OrderDraft.DeltaTicks"/> is specified changing this value will have a no effect. Change <see cref="P:OEC.API.OrderDraft.DeltaTicks"/> instead.</remarks>
         </member>
         <member name="P:OEC.API.OrderDraft.Price2">
             <summary>
                 Limit price for STPLMT orders
             </summary>
+            <remarks>In a linked order if <see cref="P:OEC.API.OrderDraft.DeltaTicks2"/> is specified changing this value will have a no effect. Change <see cref="P:OEC.API.OrderDraft.DeltaTicks2"/> instead.</remarks>
         </member>
         <member name="P:OEC.API.OrderDraft.DeltaTicks">
             <summary>
-               Price delta for bracket order
+            The difference between <see cref="P:OEC.API.OrderDraft.Price"/> of the linked order and the main order in ticks.
             </summary>
+            <remarks>If a value is <c>null</c>, then <see cref="P:OEC.API.OrderDraft.Price"/> is constant and does not depend on the price changes of the main order. Also all sub orders will have the same price.
+            <para>When value is specified price changes of the main order will affect <see cref="P:OEC.API.OrderDraft.Price"/>. Sub orders will have price according to <see cref="T:OEC.Data.OSOGroupingMethod"/> specified in <see cref="M:OEC.API.OECClient.SendLinkedOrders(OEC.API.OrderDraft,OEC.Data.OSOGroupingMethod,OEC.API.OrderDraft[])"/>.</para>
+            </remarks>
+            <seealso cref="T:OEC.Data.OSOGroupingMethod" />
+            <seealso cref="M:OEC.API.OECClient.SendLinkedOrders(OEC.API.OrderDraft,OEC.Data.OSOGroupingMethod,OEC.API.OrderDraft[])" />
         </member>
         <member name="P:OEC.API.OrderDraft.DeltaTicks2">
             <summary>
-               Price delta for bracket order
+            The difference between <see cref="P:OEC.API.OrderDraft.Price2"/> of the linked order and the main order in ticks.
             </summary>
+            <remarks>If a value is <c>null</c>, then <see cref="P:OEC.API.OrderDraft.Price2"/> is constant and does not depend on the price changes of the main order. Also all sub orders will have the same price.
+            <para>When value is specified price changes of the main order will affect <see cref="P:OEC.API.OrderDraft.Price2"/>. Sub orders will have price according to <see cref="T:OEC.Data.OSOGroupingMethod"/> specified in <see cref="M:OEC.API.OECClient.SendLinkedOrders(OEC.API.OrderDraft,OEC.Data.OSOGroupingMethod,OEC.API.OrderDraft[])"/>.</para>
+            </remarks>
+            <seealso cref="T:OEC.Data.OSOGroupingMethod" />
+            <seealso cref="M:OEC.API.OECClient.SendLinkedOrders(OEC.API.OrderDraft,OEC.Data.OSOGroupingMethod,OEC.API.OrderDraft[])" />
         </member>
         <member name="P:OEC.API.OrderDraft.Flags">
             <summary>
@@ -7993,6 +8218,11 @@
         <member name="P:OEC.API.OrderDraft.PIN">
             <summary>
                 PIN that must be passed for particular equity contracts
+            </summary>
+        </member>
+        <member name="P:OEC.API.OrderDraft.SenderLocation">
+            <summary>
+                Sender location, only for allowed users.
             </summary>
         </member>
         <member name="P:OEC.API.OrderDraft.ExtData">
@@ -8386,6 +8616,13 @@
             <param name="currency">affected currency</param>
             <param name="price">Price values</param>
         </member>
+        <member name="T:OEC.API.OnInterestRateChangedEvent">
+            <summary>
+               Risk-free interest rate was changed
+            </summary>
+            <param name="currency">affected currency</param>
+            <param name="rate">Interest rate</param>
+        </member>
         <member name="T:OEC.API.OnDOMChangedEvent">
             <summary>
                 DOM data updated
@@ -8556,7 +8793,7 @@
                 Occurs when risk limit changed
             </summary>
             <param name="riskLimitDetailList">list of changed risk limits</param>
-            <seealso cref="T:OEC.API.RiskLimitDetail" />
+            <seealso cref="!:OEC.API.RiskLimitDetail" />
         </member>
         <member name="T:OEC.API.OnProductCalendarUpdatedEvent">
             <summary>
@@ -9625,6 +9862,11 @@
             </summary>
             <exclude />
         </member>
+        <member name="P:OEC.API.Position.PnLMarketPrice">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
         <member name="M:OEC.API.Position.GetContractSize(OEC.API.Contract,OEC.API.Account)">
             <summary>
                 Calculates contract size of contract for account
@@ -9757,10 +9999,16 @@
                 List of <see cref="T:OEC.API.Position">Positions</see> indexed by <see cref="T:OEC.API.Contract" />. See <see cref="T:OEC.API.AvgPositionList" />
             </summary>
         </member>
+        <member name="M:OEC.API.PositionIDList.#ctor">
+            <exclude/>
+        </member>
         <member name="T:OEC.API.PositionList">
             <summary>
                 List of detailed <see cref="T:OEC.API.Position">Positions</see>. See <see cref="T:OEC.API.DetailedPositionList" />
             </summary>
+        </member>
+        <member name="M:OEC.API.PositionList.#ctor">
+            <exclude/>
         </member>
         <member name="T:OEC.API.Price">
             <summary>
@@ -10356,14 +10604,14 @@
         </member>
         <member name="T:OEC.API.Layers.DataProviderLayer`1">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="M:OEC.API.Layers.DataProviderLayer`1.HistoryRequest(`0,OEC.Protocol.PriceRequest)">
             <summary>
                 Processes historical requests
             </summary>
-            <param name="ci"></param>
+            <param name="contractInfo"></param>
             <param name="r"></param>
         </member>
         <member name="M:OEC.API.Layers.DataProviderLayer`1.Subscribe(`0,OEC.Data.SubscriptionType)">
@@ -10396,8 +10644,8 @@
         <member name="T:OEC.API.Layers.DataProviderContractInfo">
             <summary>
                 General contract properties
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="F:OEC.API.Layers.DataProviderContractInfo.Fake">
             <summary>
@@ -10481,13 +10729,13 @@
         </member>
         <member name="T:OEC.API.Layers.InitiateReconnect">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.Layers.LayerPriorityAttribute">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.API.User">
             <summary>
@@ -10581,21 +10829,33 @@
             <summary>
                 Order limit/stop price
             </summary>
+            <remarks>In a linked order if <see cref="P:OEC.API.Version.DeltaTicks"/> is specified changing this value will have a no effect. Change <see cref="P:OEC.API.Version.DeltaTicks"/> instead.</remarks>
         </member>
         <member name="P:OEC.API.Version.Price2">
             <summary>
                 Current order limit price for STPLMT orders
             </summary>
+            <remarks>In a linked order if <see cref="P:OEC.API.Version.DeltaTicks2"/> is specified changing this value will not have a no effect. Change <see cref="P:OEC.API.Version.DeltaTicks2"/> instead.</remarks>
         </member>
         <member name="P:OEC.API.Version.DeltaTicks">
             <summary>
-            Delta for bracket order
+            Defines the difference between <see cref="P:OEC.API.Version.Price"/> of the linked order and the main order in ticks.
             </summary>
+            <remarks>If a value is null <see cref="P:OEC.API.Version.Price"/> is constant and does not depend on the price changes of the main order. Also all sub orders will have the same price.
+            <para>When value is specified price changes of the main order will affect <see cref="P:OEC.API.Version.Price"/>. Sub orders will have price according to <see cref="T:OEC.Data.OSOGroupingMethod"/> specified in <see cref="M:OEC.API.OECClient.SendLinkedOrders(OEC.API.OrderDraft,OEC.Data.OSOGroupingMethod,OEC.API.OrderDraft[])"/>.</para>
+            </remarks>
+            <seealso cref="T:OEC.Data.OSOGroupingMethod" />
+            <seealso cref="M:OEC.API.OECClient.SendLinkedOrders(OEC.API.OrderDraft,OEC.Data.OSOGroupingMethod,OEC.API.OrderDraft[])" />
         </member>
         <member name="P:OEC.API.Version.DeltaTicks2">
             <summary>
-            Delta for bracket order
+            Defines the difference between <see cref="P:OEC.API.Version.Price2"/> of the linked order and the main order in ticks.
             </summary>
+            <remarks>If a value is null <see cref="P:OEC.API.Version.Price2"/> is constant and does not depend on the price changes of the main order. Also all sub orders will have the same price.
+            <para>When value is specified price changes of the main order will affect <see cref="P:OEC.API.Version.Price2"/>. Sub orders will have price according to <see cref="T:OEC.Data.OSOGroupingMethod"/> specified in <see cref="M:OEC.API.OECClient.SendLinkedOrders(OEC.API.OrderDraft,OEC.Data.OSOGroupingMethod,OEC.API.OrderDraft[])"/>.</para>
+            </remarks>
+            <seealso cref="T:OEC.Data.OSOGroupingMethod" />
+            <seealso cref="M:OEC.API.OECClient.SendLinkedOrders(OEC.API.OrderDraft,OEC.Data.OSOGroupingMethod,OEC.API.OrderDraft[])" />
         </member>
         <member name="P:OEC.API.Version.Comments">
             <summary>
@@ -10733,13 +10993,13 @@
         </member>
         <member name="T:OEC.HashTools.HashHelper`1">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
         <member name="T:OEC.HashTools.ProcessHasher">
             <summary>
-                <exclude />
             </summary>
+            <exclude />
         </member>
     </members>
 </doc>

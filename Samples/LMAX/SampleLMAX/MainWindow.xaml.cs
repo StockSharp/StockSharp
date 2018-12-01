@@ -101,7 +101,7 @@ namespace SampleLMAX
 
 					Trader.Restored += () => this.GuiAsync(() =>
 					{
-						// update gui labes
+						// update gui labels
 						ChangeConnectStatus(true);
 						MessageBox.Show(this, LocalizedStrings.Str2958);
 					});
@@ -112,7 +112,7 @@ namespace SampleLMAX
 						// set flag (connection is established)
 						_isConnected = true;
 
-						// update gui labes
+						// update gui labels
 						this.GuiAsync(() => ChangeConnectStatus(true));
 					};
 					Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
@@ -120,7 +120,7 @@ namespace SampleLMAX
 					// subscribe on connection error event
 					Trader.ConnectionError += error => this.GuiAsync(() =>
 					{
-						// update gui labes
+						// update gui labels
 						ChangeConnectStatus(false);
 
 						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);

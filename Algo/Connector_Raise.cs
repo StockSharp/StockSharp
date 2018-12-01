@@ -187,13 +187,13 @@ namespace StockSharp.Algo
 		public event Action<Exception> Error;
 
 		/// <inheritdoc />
-		public event Action<Exception, IEnumerable<Security>> LookupSecuritiesResult;
+		public event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> LookupSecuritiesResult;
 
 		/// <inheritdoc />
-		public event Action<Exception, IEnumerable<Portfolio>> LookupPortfoliosResult;
+		public event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult;
 
 		/// <inheritdoc />
-		public event Action<Exception, IEnumerable<ExchangeBoard>> LookupBoardsResult;
+		public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult;
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
@@ -509,31 +509,34 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To call the event <see cref="LookupSecuritiesResult"/>.
 		/// </summary>
+		/// <param name="message">Message.</param>
 		/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="securities">Found instruments.</param>
-		private void RaiseLookupSecuritiesResult(Exception error, IEnumerable<Security> securities)
+		private void RaiseLookupSecuritiesResult(SecurityLookupMessage message, Exception error, IEnumerable<Security> securities)
 		{
-			LookupSecuritiesResult?.Invoke(error, securities);
+			LookupSecuritiesResult?.Invoke(message, securities, error);
 		}
 
 		/// <summary>
 		/// To call the event <see cref="LookupBoardsResult"/>.
 		/// </summary>
+		/// <param name="message">Message.</param>
 		/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="boards">Found boards.</param>
-		private void RaiseLookupBoardsResult(Exception error, IEnumerable<ExchangeBoard> boards)
+		private void RaiseLookupBoardsResult(BoardLookupMessage message, Exception error, IEnumerable<ExchangeBoard> boards)
 		{
-			LookupBoardsResult?.Invoke(error, boards);
+			LookupBoardsResult?.Invoke(message, boards, error);
 		}
 
 		/// <summary>
 		/// To call the event <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
+		/// <param name="message">Message.</param>
 		/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="portfolios">Found portfolios.</param>
-		private void RaiseLookupPortfoliosResult(Exception error, IEnumerable<Portfolio> portfolios)
+		private void RaiseLookupPortfoliosResult(PortfolioLookupMessage message, Exception error, IEnumerable<Portfolio> portfolios)
 		{
-			LookupPortfoliosResult?.Invoke(error, portfolios);
+			LookupPortfoliosResult?.Invoke(message, portfolios, error);
 		}
 
 		private void RaiseMarketDataSubscriptionSucceeded(Security security, MarketDataMessage message)

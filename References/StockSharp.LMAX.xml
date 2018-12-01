@@ -4,6 +4,26 @@
     <name>StockSharp.LMAX</name>
   </assembly>
   <members>
+    <member name="T:StockSharp.LMAX.LmaxLocations">
+      <summary>
+            LMAX locations.
+            </summary>
+    </member>
+    <member name="F:StockSharp.LMAX.LmaxLocations.London">
+      <summary>
+            London.
+            </summary>
+    </member>
+    <member name="F:StockSharp.LMAX.LmaxLocations.NewYork">
+      <summary>
+            New York.
+            </summary>
+    </member>
+    <member name="F:StockSharp.LMAX.LmaxLocations.Tokyo">
+      <summary>
+            Tokyo.
+            </summary>
+    </member>
     <member name="T:StockSharp.LMAX.LmaxMessageAdapter">
       <summary>
             The messages adapter for LMAX.
@@ -30,13 +50,11 @@
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.LMAX.LmaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.SecurityLookupRequired">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.SecurityLookupRequired">
-      <summary>
-        <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
-            </summary>
+    <member name="M:StockSharp.LMAX.LmaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
     </member>
     <member name="F:StockSharp.LMAX.LmaxMessageAdapter.DefaultHeartbeatInterval">
       <summary>
@@ -63,6 +81,11 @@
             Should the whole set of securities be loaded from LMAX website. Switched off by default.
             </summary>
     </member>
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.SecuritiesLocation">
+      <summary>
+            LMAX location.
+            </summary>
+    </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.CandleDownloadInterval">
       <summary>
             Candle downloading sleep interval.
@@ -77,37 +100,22 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportNativeSecurityLookup">
-      <summary>
-            Gets a value indicating whether the connector supports security lookup.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsNativeIdentifiers">
-      <summary>
-            Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.StorageName">
-      <summary>
-            The storage name, associated with the adapter.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
@@ -160,6 +168,11 @@
     <member name="P:StockSharp.LMAX.LmaxTrader.IsDownloadSecurityFromSite">
       <summary>
             Should the whole set of securities be loaded from LMAX website. Switched off by default.
+            </summary>
+    </member>
+    <member name="P:StockSharp.LMAX.LmaxTrader.SecuritiesLocation">
+      <summary>
+            LMAX location.
             </summary>
     </member>
   </members>

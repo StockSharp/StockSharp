@@ -9,6 +9,26 @@ StockSharp API Change log
 * (feature) MatLab. Candles supported.
 * (feature) WorkingTime. Set schedules for part-time working days.
 * (feature) FixServer. Translates Board info.
+* (feature) OpenECry. v3.5.14.53
+* (feature) MyTradeGrid. Support PnL column update.
+* (bug) PropertyGridEx. Exchange board editor fixes.
+* (feature) Diagrams. CandleSourceDiagramElement.AllowBuildFromSmallerTimeFrame added.
+* (feature) Diagrams. Support market depth based indicators.
+* (feature) FIX. CheckTimeFrameByRequest for default dialect.
+* (feature) FIX connector. Support TotalNumSecurities processing.
+* (feature) FIX connector. Allow change Encoding in dialect.
+* (bug) FIX connector. Fix position processing errors.
+* (feature) SecurityMessage.ToString override improved.
+* (feature) ToString overrides. Avoid print empty Error tag for successful messages.
+* (feature) TimeFrameLookupMessage, TimeFrameLookupResultMessage added.
+* (feature) FIX connector, QuikLua. Supported TimeFrameLookupMessage, TimeFrameLookupResultMessage.
+* (feature) Strategy messages.
+* (feature) FixServer. Strategy messages supported.
+* (feature) IConnector. Lookup result events passes lookup request messages.
+* (feature) FixServer. SecurityMappingRequest, SecurityMappingResult messages supported.
+* (bug) Bitmex. ExecInst fixes.
+* (bug) Candles. Fix duplicate candles subscription.
+* (bug) Market depth. Fix build depths from OL and L1.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

@@ -287,17 +287,17 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Lookup result <see cref="LookupSecurities(Security,IMessageAdapter,MessageOfflineModes)"/> received.
 		/// </summary>
-		event Action<Exception, IEnumerable<Security>> LookupSecuritiesResult;
+		event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> LookupSecuritiesResult;
 
 		/// <summary>
 		/// Lookup result <see cref="LookupPortfolios(Portfolio,IMessageAdapter,MessageOfflineModes)"/> received.
 		/// </summary>
-		event Action<Exception, IEnumerable<Portfolio>> LookupPortfoliosResult;
+		event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult;
 
 		/// <summary>
 		/// Lookup result <see cref="LookupBoards(ExchangeBoard,IMessageAdapter,MessageOfflineModes)"/> received.
 		/// </summary>
-		event Action<Exception, IEnumerable<ExchangeBoard>> LookupBoardsResult;
+		event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult;
 
 		/// <summary>
 		/// Successful subscription market-data.

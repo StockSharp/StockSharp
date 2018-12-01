@@ -20,6 +20,7 @@ namespace StockSharp.Messages
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -308,7 +309,48 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId}";
+			var str = base.ToString() + $",Sec={SecurityId}";
+
+			if (SecurityType != null)
+				str += $",SecType={SecurityType}";
+
+			if (!Name.IsEmpty())
+				str += $",Name={Name}";
+
+			if (!ShortName.IsEmpty())
+				str += $",Short={ShortName}";
+
+			if (ExpiryDate != null)
+				str += $",Exp={ExpiryDate}";
+
+			if (PriceStep != null)
+				str += $",Price={PriceStep}";
+
+			if (VolumeStep != null)
+				str += $",Vol={VolumeStep}";
+
+			if (Decimals != null)
+				str += $",Dec={Decimals}";
+
+			if (Multiplier != null)
+				str += $",Mult={Multiplier}";
+
+			if (SettlementDate != null)
+				str += $",Sett={SettlementDate}";
+
+			if (Currency != null)
+				str += $",Cur={Currency}";
+
+			if (OptionType != null)
+				str += $",Opt={OptionType}";
+
+			if (Strike != null)
+				str += $",Strike={Strike}";
+
+			if (BasketCode != null)
+				str += $",Basket={BasketCode}/{BasketExpression}";
+
+			return str;
 		}
 	}
 }

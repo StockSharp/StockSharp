@@ -32,6 +32,7 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Algo.Positions;
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Statistics;
+	using StockSharp.Algo.Strategies.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -272,7 +273,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<Guid> _id;
 
 		/// <summary>
-		/// The unique identifier of the source.
+		/// Strategy ID.
 		/// </summary>
 		public override Guid Id
 		{
@@ -817,6 +818,8 @@ namespace StockSharp.Algo.Strategies
 
 					TryFinalStop();
 				}
+
+				RaiseNewStateMessage(nameof(ProcessState), ProcessState);
 			}
 		}
 
@@ -2352,6 +2355,8 @@ namespace StockSharp.Algo.Strategies
 		{
 			this.Notify(nameof(Slippage));
 			SlippageChanged?.Invoke();
+
+			RaiseNewStateMessage(nameof(Slippage), Slippage);
 		}
 
 		private void RaisePositionChanged()
@@ -2363,12 +2368,16 @@ namespace StockSharp.Algo.Strategies
 
 			StatisticManager.AddPosition(CurrentTime, Position);
 			StatisticManager.AddPnL(CurrentTime, PnL);
+
+			RaiseNewStateMessage(nameof(Position), Position);
 		}
 
 		private void RaiseCommissionChanged()
 		{
 			this.Notify(nameof(Commission));
 			CommissionChanged?.Invoke();
+
+			RaiseNewStateMessage(nameof(Commission), Commission);
 		}
 
 		private void RaisePnLChanged()
@@ -2377,12 +2386,16 @@ namespace StockSharp.Algo.Strategies
 			PnLChanged?.Invoke();
 
 			StatisticManager.AddPnL(_lastPnlRefreshTime, PnL);
+
+			RaiseNewStateMessage(nameof(PnL), PnL);
 		}
 
 		private void RaiseLatencyChanged()
 		{
 			this.Notify(nameof(Latency));
 			LatencyChanged?.Invoke();
+
+			RaiseNewStateMessage(nameof(Latency), Latency);
 		}
 
 		/// <summary>
@@ -2395,10 +2408,7 @@ namespace StockSharp.Algo.Strategies
 			return _ordersInfo.SyncGet(d => newOrders.Where(IsOwnOrder).ToArray());
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			var parameters = storage.GetValue<SettingsStorage[]>(nameof(Parameters));
@@ -2427,10 +2437,7 @@ namespace StockSharp.Algo.Strategies
 				RiskManager.Load(riskStorage);
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Parameters), Parameters.CachedValues.Select(p => p.Save()).ToArray());
@@ -2441,9 +2448,7 @@ namespace StockSharp.Algo.Strategies
 			//storage.SetValue(nameof(PositionManager), PositionManager.Save());
 		}
 
-		/// <summary>
-		/// The event of strategy parameters change.
-		/// </summary>
+		/// <inheritdoc />
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		void INotifyPropertyChangedEx.NotifyPropertyChanged(string info)
@@ -2649,27 +2654,16 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
-		/// <summary>
-		/// Security changed.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
 
-		/// <summary>
-		/// To get the quotes order book.
-		/// </summary>
-		/// <param name="security">The instrument by which an order book should be got.</param>
-		/// <returns>Order book.</returns>
+		/// <inheritdoc />
 		public MarketDepth GetMarketDepth(Security security)
 		{
 			return SafeGetConnector().GetMarketDepth(security);
 		}
 
-		/// <summary>
-		/// To get the value of market data for the instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="field">Market-data field.</param>
-		/// <returns>The field value. If no data, the <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		public object GetSecurityValue(Security security, Level1Fields field)
 		{
 			if (security == null)
@@ -2678,11 +2672,7 @@ namespace StockSharp.Algo.Strategies
 			return SafeGetConnector().GetSecurityValue(security, field);
 		}
 
-		/// <summary>
-		/// To get a set of available fields <see cref="Level1Fields"/>, for which there is a market data for the instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <returns>Possible fields.</returns>
+		/// <inheritdoc />
 		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
 		{
 			if (security == null)
@@ -2711,14 +2701,162 @@ namespace StockSharp.Algo.Strategies
 			remove => SafeGetConnector().Cleared -= value;
 		}
 
-		/// <summary>
-		/// Lookup securities by criteria <paramref name="criteria" />.
-		/// </summary>
-		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
-		/// <returns>Found instruments.</returns>
+		/// <inheritdoc />
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
 			return SafeGetConnector().Lookup(criteria);
+		}
+
+		/// <summary>
+		/// New <see cref="StrategyStateMessage"/> occurred event.
+		/// </summary>
+		public event Action<StrategyStateMessage> NewStateMessage;
+
+		private void RaiseNewStateMessage<T>(string paramName, T value)
+		{
+			NewStateMessage?.Invoke(new StrategyStateMessage
+			{
+				StrategyId = Id,
+				Statistics =
+				{
+					{ paramName, Tuple.Create(typeof(T).FullName, value?.ToString()) }
+				}
+			});
+		}
+
+		/// <summary>
+		/// Convert to <see cref="StrategyInfoMessage"/>.
+		/// </summary>
+		/// <param name="transactionId">ID of the original message <see cref="StrategyLookupMessage.TransactionId"/> for which this message is a response.</param>
+		/// <returns>The message contains information about strategy.</returns>
+		public virtual StrategyInfoMessage ToInfoMessage(long transactionId = 0)
+		{
+			var msg = new StrategyInfoMessage
+			{
+				StrategyId = Id,
+				StrategyName = Name,
+				OriginalTransactionId = transactionId,
+			};
+
+			foreach (var parameter in Parameters)
+			{
+				msg.Parameters.Add(parameter.Key, Tuple.Create(parameter.Value.Value.GetType().FullName, parameter.Value.Value?.ToString()));
+			}
+
+			return msg;
+		}
+
+		/// <summary>
+		/// Apply changes.
+		/// </summary>
+		/// <param name="message">The message contains information about strategy.</param>
+		public virtual void ApplyChanges(StrategyInfoMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			foreach (var parameter in message.Parameters)
+			{
+				if (!Parameters.TryGetValue(parameter.Key, out var param))
+				{
+					this.AddWarningLog("Unknown parameter '{0}'.", parameter.Key);
+					continue;
+				}
+
+				if (parameter.Value.Item2 == null)
+					param.Value = null;
+				else
+				{
+					param.Value = parameter.Value.Item1 == typeof(Unit).FullName
+						? parameter.Value.Item2.ToUnit()
+						: parameter.Value.Item2.To(parameter.Value.Item1.To<Type>());
+				}
+			}
+		}
+
+		/// <summary>
+		/// Apply incoming command.
+		/// </summary>
+		/// <param name="stateMsg">The message contains information about strategy state or command to change state.</param>
+		public virtual void ApplyCommand(StrategyStateMessage stateMsg)
+		{
+			if (stateMsg == null)
+				throw new ArgumentNullException(nameof(stateMsg));
+
+			switch (stateMsg.Command)
+			{
+				case nameof(ProcessState):
+				{
+					var state = stateMsg.Statistics[nameof(ProcessState)].Item2.To<ProcessStates>();
+
+					switch (state)
+					{
+						case ProcessStates.Stopped:
+						case ProcessStates.Stopping:
+							Stop();
+							break;
+						case ProcessStates.Started:
+							Start();
+							break;
+						default:
+							throw new ArgumentOutOfRangeException(state.ToString());
+					}
+
+					break;
+				}
+
+				case nameof(CancelActiveOrders):
+				{
+					CancelActiveOrders();
+					break;
+				}
+
+				case nameof(RegisterOrder):
+				{
+					var secId = stateMsg.Statistics.TryGetValue(nameof(Order.Security))?.Item2;
+					var pfName = stateMsg.Statistics.TryGetValue(nameof(Order.Portfolio))?.Item2;
+					var side = stateMsg.Statistics[nameof(Order.Direction)].Item2.To<Sides>();
+					var volume = stateMsg.Statistics[nameof(Order.Volume)].Item2.To<decimal>();
+					var price = stateMsg.Statistics.TryGetValue(nameof(Order.Price))?.Item2.To<decimal?>() ?? 0;
+					var comment = stateMsg.Statistics.TryGetValue(nameof(Order.Comment))?.Item2;
+					var clientCode = stateMsg.Statistics.TryGetValue(nameof(Order.ClientCode))?.Item2;
+					var tif = stateMsg.Statistics.TryGetValue(nameof(Order.TimeInForce))?.Item2.To<TimeInForce?>();
+
+					var order = new Order
+					{
+						Security = secId == null ? Security : this.LookupById(secId),
+						Portfolio = pfName == null ? Portfolio : Connector.LookupByPortfolioName(pfName),
+						Direction = side,
+						Volume = volume,
+						Price = price,
+						Comment = comment,
+						ClientCode = clientCode,
+						TimeInForce = tif,
+					};
+
+					RegisterOrder(order);
+					
+					break;
+				}
+
+				case nameof(CancelOrder):
+				{
+					var orderId = stateMsg.Statistics[nameof(Order.Id)].Item2.To<long>();
+
+					CancelOrder(Connector.Orders.First(o => o.Id == orderId));
+
+					break;
+				}
+
+				case nameof(StrategyHelper.ClosePosition):
+				{
+					var slippage = stateMsg.Statistics.TryGetValue(nameof(Order.Slippage))?.Item2.To<decimal?>();
+					
+					this.ClosePosition(slippage ?? 0);
+					
+					break;
+				}
+			}
 		}
 
 		//private bool IsChildOrder(Order order)

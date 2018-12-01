@@ -35,6 +35,7 @@ F:StockSharp.Bitmex.BitmexOrderExecInstructions.LastPrice/summary;DocStr8459
 F:StockSharp.Bitmex.BitmexOrderExecInstructions.Close/summary;DocStr8459
 F:StockSharp.Bitmex.BitmexOrderExecInstructions.ReduceOnly/summary;DocStr8459
 F:StockSharp.Bitmex.BitmexOrderExecInstructions.Fixed/summary;DocStr8459
+F:StockSharp.Bitmex.BitmexOrderExecInstructions.ParticipateDoNotInitiate/summary;DocStr8459
 T:StockSharp.Bitmex.BitmexOrderCondition/summary;DocStr60
 M:StockSharp.Bitmex.BitmexOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Bitmex.BitmexOrderCondition.StopType/summary;Str2570

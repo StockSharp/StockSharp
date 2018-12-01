@@ -18,8 +18,10 @@ namespace StockSharp.Messages
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -50,9 +52,12 @@ namespace StockSharp.Messages
 		/// Schedule validity periods.
 		/// </summary>
 		[DataMember]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[DisplayNameLoc(LocalizedStrings.Str409Key)]
-		[DescriptionLoc(LocalizedStrings.Str410Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str409Key,
+			Description = LocalizedStrings.Str410Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public List<WorkingTimePeriod> Periods
 		{
 			get => _periods;
@@ -64,10 +69,12 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Working days, falling on Saturday and Sunday.
 		/// </summary>
-		[DataMember]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[DisplayNameLoc(LocalizedStrings.Str411Key)]
-		[DescriptionLoc(LocalizedStrings.Str412Key)]
+		//[DataMember]
+		//[CategoryLoc(LocalizedStrings.GeneralKey)]
+		//[DisplayNameLoc(LocalizedStrings.Str411Key)]
+		//[DescriptionLoc(LocalizedStrings.Str412Key)]
+		[XmlIgnore]
+		[Ignore]
 		public DateTime[] SpecialWorkingDays
 		{
 			get => _specialDays.Where(p => p.Value.Length > 0).Select(p => p.Key).ToArray();
@@ -89,10 +96,12 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Holidays that fall on workdays.
 		/// </summary>
-		[DataMember]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[DisplayNameLoc(LocalizedStrings.Str413Key)]
-		[DescriptionLoc(LocalizedStrings.Str414Key)]
+		//[DataMember]
+		//[CategoryLoc(LocalizedStrings.GeneralKey)]
+		//[DisplayNameLoc(LocalizedStrings.Str413Key)]
+		//[DescriptionLoc(LocalizedStrings.Str414Key)]
+		[XmlIgnore]
+		[Ignore]
 		public DateTime[] SpecialHolidays
 		{
 			get => _specialDays.Where(p => p.Value.Length == 0).Select(p => p.Key).ToArray();
@@ -110,6 +119,13 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Special working days and holidays.
 		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SpecialDaysKey,
+			Description = LocalizedStrings.SpecialDaysDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 1)]
 		public IDictionary<DateTime, Range<TimeSpan>[]> SpecialDays
 		{
 			get => _specialDays;
