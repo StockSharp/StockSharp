@@ -86,6 +86,12 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Xaml">
+      <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -150,14 +156,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
-      <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
-      <Name>Xaml.Charting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
-      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
-      <Name>Xaml</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">
       <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
       <Name>Algo</Name>

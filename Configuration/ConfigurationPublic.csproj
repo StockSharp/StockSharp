@@ -220,6 +220,15 @@
     <Reference Include="StockSharp.Okex">
       <HintPath>..\References\StockSharp.Okex.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Xaml">
+      <HintPath>..\References\StockSharp.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\References\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Diagram">
+      <HintPath>..\References\StockSharp.Xaml.Diagram.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Yobit">
       <HintPath>..\References\StockSharp.Yobit.dll</HintPath>
     </Reference>
@@ -259,18 +268,6 @@
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
-      <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
-      <Name>Xaml.Charting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharpApps\Xaml.Diagram\Xaml.Diagram.csproj">
-      <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>
-      <Name>Xaml.Diagram</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharpApps\Xaml\Xaml.csproj">
-      <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
-      <Name>Xaml</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Algo\Algo.csproj">
       <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
       <Name>Algo</Name>

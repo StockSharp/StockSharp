@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -62,6 +62,9 @@
   <ItemGroup>
     <Reference Include="StockSharp.Kucoin">
       <HintPath>..\..\..\References\StockSharp.Kucoin.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml">
+      <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
@@ -242,10 +245,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
-      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
-      <Name>Xaml</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">
       <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
       <Name>Algo</Name>

@@ -78,6 +78,12 @@
     <Reference Include="StockSharp.QuantHouse">
       <HintPath>..\..\..\References\StockSharp.QuantHouse.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Xaml">
+      <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -227,14 +233,6 @@
     <ProjectReference Include="..\..\..\Messages\Messages.csproj">
       <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
-      <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
-      <Name>Xaml.Charting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
-      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
-      <Name>Xaml</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
