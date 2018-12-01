@@ -28,6 +28,7 @@ StockSharp API Change log
 * (feature) FixServer. SecurityMappingRequest, SecurityMappingResult messages supported.
 * (bug) Bitmex. ExecInst fixes.
 * (bug) Candles. Fix duplicate candles subscription.
+* (bug) Market depth. Fix build depths from OL and L1.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

@@ -590,6 +590,20 @@ namespace StockSharp.Algo
 							case MarketDataTypes.News:
 								return false;
 							case MarketDataTypes.MarketDepth:
+							{
+								if (mdMsg.BuildMode != MarketDataBuildModes.Load)
+								{
+									switch (mdMsg.BuildFrom)
+									{
+										case MarketDataTypes.Level1:
+											return a.IsMarketDataTypeSupported(MarketDataTypes.Level1);
+										case MarketDataTypes.OrderLog:
+											return a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog);
+									}
+								}
+
+								return false;
+							}
 							case MarketDataTypes.Trades:
 								return a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog);
 							default:
