@@ -364,7 +364,7 @@ P:StockSharp.Fix.FixSecurityMappingRequestMessage.TransactionId/summary;DocStr31
 M:StockSharp.Fix.FixSecurityMappingRequestMessage.Clone/summary;DocStr643
 M:StockSharp.Fix.FixSecurityMappingRequestMessage.Clone/returns;DocStr1116
 M:StockSharp.Fix.FixSecurityMappingRequestMessage.ToString/inheritdoc;DocStr8459
-T:StockSharp.Fix.FixSecurityMappingResultMessage/summary;DocStr10853
+T:StockSharp.Fix.FixSecurityMappingResultMessage/summary;DocStr10854
 M:StockSharp.Fix.FixSecurityMappingResultMessage.#ctor/summary;DocStr93
 P:StockSharp.Fix.FixSecurityMappingResultMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Fix.FixSecurityMappingResultMessage.Error/summary;DocStr10793

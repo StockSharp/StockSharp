@@ -2583,6 +2583,26 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="T:StockSharp.Xaml.Charting.Editors.BuildCandlesFieldEditor">
+      <summary>
+        <see cref="P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesField" /> editor.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Editors.BuildCandlesFieldEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.Editors.BuildCandlesFieldEditor" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.Editors.BuildCandlesFromEditor">
+      <summary>
+        <see cref="P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesFrom" /> editor.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Editors.BuildCandlesFromEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.Editors.BuildCandlesFromEditor" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.EquityCurveChart">
       <summary>
             The graphical component to display the equity curve.

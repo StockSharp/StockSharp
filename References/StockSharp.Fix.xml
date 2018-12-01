@@ -1302,7 +1302,7 @@
     </member>
     <member name="T:StockSharp.Fix.FixSecurityMappingResultMessage">
       <summary>
-            Security mapping request message.
+            Security mapping result message.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.FixSecurityMappingResultMessage.#ctor">

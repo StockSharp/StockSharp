@@ -58,7 +58,7 @@
     </member>
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Version">
       <summary>
-            Версия API. По-умолчанию равна <see cref="F:StockSharp.AlfaDirect.AlfaDirectVersions.V3" />.
+            Версия API. По-умолчанию равна <see cref="F:StockSharp.AlfaDirect.AlfaDirectVersions.V4" />.
             </summary>
     </member>
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Login">

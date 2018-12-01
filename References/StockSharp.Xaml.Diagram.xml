@@ -2476,6 +2476,21 @@
             Allow build candles from smaller timeframe.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.BuildCandlesMode">
+      <summary>
+            Build mode.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.BuildCandlesFrom">
+      <summary>
+            Which market-data type is used as a source value.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.BuildCandlesField">
+      <summary>
+            Extra info for the <see cref="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.BuildCandlesFrom" />.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement" />.
