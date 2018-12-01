@@ -9,7 +9,7 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// The messages adapter build orer book and tick data from order log flow.
+	/// The messages adapter build order book and tick data from order log flow.
 	/// </summary>
 	public class OrderLogMessageAdapter : MessageAdapterWrapper
 	{

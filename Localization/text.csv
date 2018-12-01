@@ -15036,7 +15036,7 @@ DocStr10531;Icon name;Название иконки
 DocStr10532;Strategy state icon;Иконка для состояния стратегии
 DocStr10533;Last error;Послед. ошибка
 DocStr10534;Allow trading;Торговля доступна
-DocStr10535;The messages adapter build orer book and tick data from order log flow;Адаптер сообщений, строящий стаканы и тиковые сделки из потока лога заявок
+DocStr10535;The messages adapter build order book and tick data from order log flow;Адаптер сообщений, строящий стаканы и тиковые сделки из потока лога заявок
 DocStr10536;To tick trade from the order log;Преобразовать в тиковую сделку из строки лога заявок
 DocStr10537;Default implementation of {0};Реализация интерфейса {0} по-умолчанию
 DocStr10538;Build modes;Режимы построения
