@@ -1,5 +1,25 @@
 StockSharp Designer Change log
 ========================
+## v4.4.15:
+* (feature) LiveCoin. Candles support.
+* (feature) Position. SettlementPrice added.
+* (feature) OKEx. V3 protocol supported.
+* (feature) Bitmex. Stop orders extended.
+* (feature) OpenECry. v3.5.14.53
+* (bug) Bitmex. ExecInst fixes.
+* (bug) Candles. Fix duplicate candles subscription.
+* (bug) Market depth. Fix build depths from OL and L1.
+* (feature) MT4, MT5 connectors.
+* (bug) Remove live strategies fixes.
+* (bug) Remove area from chart fixes.
+* (bug) Remove items from solution tree fixes.
+* (feature) Saving and restoring order for items.
+* (bug) Clone source code element fixes.
+* (feature) Candle series settings added to diagram element.
+* (bug) Wrong element names fixes.
+* (feature) Add breaks to multiple elements.
+* (feature) Do not show breaks without settings.
+
 ## v4.4.14:
 * (feature) Chart. Multi axes supported.
 * (bug) Finam downloading fix.
