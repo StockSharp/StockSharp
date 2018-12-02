@@ -30,6 +30,7 @@ StockSharp API Change log
 * (bug) Candles. Fix duplicate candles subscription.
 * (bug) Market depth. Fix build depths from OL and L1.
 * (feature) MT4, MT5 connectors.
+* (feature) Alerts. Message made optional for sound based events.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

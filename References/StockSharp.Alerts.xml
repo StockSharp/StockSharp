@@ -454,6 +454,11 @@
             The change event <see cref="P:StockSharp.Alerts.AlertSettingsPanel.Schema" />.
             </summary>
     </member>
+    <member name="E:StockSharp.Alerts.AlertSettingsPanel.AlertTypeChanged">
+      <summary>
+            The change event <see cref="P:StockSharp.Alerts.AlertSettingsPanel.AlertType" />.
+            </summary>
+    </member>
     <member name="M:StockSharp.Alerts.AlertSettingsPanel.InitializeComponent">
       <summary>
             InitializeComponent
@@ -543,7 +548,7 @@
     </member>
     <member name="E:StockSharp.Alerts.IAlertProcessingService.Registered">
       <summary>
-            Schema registerating event.
+            Schema registration event.
             </summary>
     </member>
     <member name="E:StockSharp.Alerts.IAlertProcessingService.UnRegistered">
