@@ -20578,12 +20578,12 @@ namespace StockSharp.Localization
 		public static string Str2138 => GetString(Str2138Key);
 
 		/// <summary>
-		/// IQFeed does not support interval {0}.
+		/// Interval {0} isn't supported.
 		/// </summary>
 		public const string Str2139ParamsKey = nameof(Str2139Params);
 
 		/// <summary>
-		/// IQFeed does not support interval {0}.
+		/// Interval {0} isn't supported.
 		/// </summary>
 		public static string Str2139Params => GetString(Str2139ParamsKey);
 

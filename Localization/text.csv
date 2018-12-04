@@ -533,7 +533,7 @@ Str530;Last change local time;Локальное время последнего
 Str531;Last trade change local time (Cancellation, Fill).;Локальное время последнего изменения заявки (Снятие, Сведение).
 Str532;Linked order;Связанная заявка
 Str533;Order created by a stop-order during condition activation (empty value, if stop-condition has not been activated).;Биржевая заявка, которая была создана стоп-заявкой при активации условия (пустое значение, если стоп-условие еще не было активировано).
-Str534Params;{0}/{1} {2} {3} {4} Price={5} Volume={6} State={7} Bal={8} State={9};{0}/{1} {2} {3} {4} Цена={5} Объем={6} Сост={7} Бал={8} Сост={9}
+Str534Params;{0}/{1} {2} {3} {4} Price={5} Volume={6} State={7} Bal={8} Type={9};{0}/{1} {2} {3} {4} Цена={5} Объем={6} Сост={7} Бал={8} Тип={9}
 Str535;Orders log item.;Строка лога заявок.
 Str536Params;{0} orders {1};{0} заявки {1}
 Str537;Cancellation;Снятие
@@ -2058,7 +2058,7 @@ Str2135;Load securities;Загружать инструменты
 Str2136;Should the whole set of securities be loaded from IQFeed website archive.;Загружать ли инструменты из архива с сайта IQFeed.
 Str2137;File with securities;Файл с инструментами
 Str2138;Path to file with IQFeed list of securities, downloaded from the website. If path is specified, then secondary download from website does not occur, and only the local copy gets parsed.;Путь к файлу со списком инструментов IQFeed, скачанный с сайта. Если путь задан, то повторное скачивание с сайта не происходит, и парсится только локальная копия.
-Str2139Params;IQFeed does not support interval {0}.;IQFeed не поддерживает интервал {0}.
+Str2139Params;Interval {0} isn't supported.;Интервал {0} не поддерживается.
 Str2140Params;Unknown type of security '{0}'.;Неизвестный тип инструмента '{0}'.
 Str2141Params;Error parsing string '{0}'.;Ошибка парсинга строки '{0}'.
 Str2142Params;Unknown type of message '{0}'.;Неизвестный тип сообщения '{0}'.
