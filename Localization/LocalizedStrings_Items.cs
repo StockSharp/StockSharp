@@ -48686,5 +48686,55 @@ namespace StockSharp.Localization
 		/// Tokyo
 		/// </summary>
 		public static string Tokyo => GetString(TokyoKey);
+
+		/// <summary>
+		/// Premium service
+		/// </summary>
+		public const string PremiumServiceKey = nameof(PremiumService);
+
+		/// <summary>
+		/// Premium service
+		/// </summary>
+		public static string PremiumService => GetString(PremiumServiceKey);
+
+		/// <summary>
+		/// Securities associations
+		/// </summary>
+		public const string SecuritiesAssociationsKey = nameof(SecuritiesAssociations);
+
+		/// <summary>
+		/// Securities associations
+		/// </summary>
+		public static string SecuritiesAssociations => GetString(SecuritiesAssociationsKey);
+
+		/// <summary>
+		/// Futures section
+		/// </summary>
+		public const string FuturesSectionKey = nameof(FuturesSection);
+
+		/// <summary>
+		/// Futures section
+		/// </summary>
+		public static string FuturesSection => GetString(FuturesSectionKey);
+
+		/// <summary>
+		/// Spot section
+		/// </summary>
+		public const string SpotSectionKey = nameof(SpotSection);
+
+		/// <summary>
+		/// Spot section
+		/// </summary>
+		public static string SpotSection => GetString(SpotSectionKey);
+
+		/// <summary>
+		/// Spot
+		/// </summary>
+		public const string SpotKey = nameof(Spot);
+
+		/// <summary>
+		/// Spot
+		/// </summary>
+		public static string Spot => GetString(SpotKey);
 	}
 }

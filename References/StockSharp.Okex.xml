@@ -29,6 +29,16 @@
             Passphrase.
             </summary>
         </member>
+        <member name="P:StockSharp.Okex.OkexMessageAdapter.IsFutures">
+            <summary>
+            Futures section enabled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexMessageAdapter.IsSpot">
+            <summary>
+            Spot section enabled.
+            </summary>
+        </member>
         <member name="P:StockSharp.Okex.OkexMessageAdapter.AdminPassword">
             <summary>
             Administrative password.
@@ -40,22 +50,13 @@
             </summary>
         </member>
         <member name="M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Save settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Okex.OkexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Load settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Okex.OkexMessageAdapter.ToString">
-            <summary>
-            Returns a string that represents the current object.
-            </summary>
-            <returns>A string that represents the current object.</returns>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Okex.OkexMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
             <summary>
@@ -129,6 +130,16 @@
         <member name="P:StockSharp.Okex.OkexTrader.BalanceCheckInterval">
             <summary>
             Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexTrader.IsFutures">
+            <summary>
+            Futures section enabled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexTrader.IsSpot">
+            <summary>
+            Spot section enabled.
             </summary>
         </member>
     </members>

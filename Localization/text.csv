@@ -4901,6 +4901,11 @@ LmaxLocationDesc;LMAX exchange location.;Расположение биржи LMA
 London;London;Лондон
 NewYork;New York;Нью йорк
 Tokyo;Tokyo;Токио
+PremiumService;Premium service;Премиальный сервис
+SecuritiesAssociations;Securities associations;Ассоциации инструментов
+FuturesSection;Futures section;Фьючерсная секция
+SpotSection;Spot section;Спот секция
+Spot;Spot;Спот
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5836,7 +5841,7 @@ DocStr964;The option theta. If the value is equal to {0}, then the value calcula
 DocStr965;To calculate the option rho;Рассчитать ро опциона
 DocStr966;The option rho. If the value is equal to {0}, then the value calculation currently is impossible;Ро опциона. Если значение равно {0}, то расчет значения в данный момент невозможен
 DocStr967;To calculate the implied volatility;Рассчитать подразумеваемую волатильность
-DocStr968;The option premium;Премия по опциону
+DocStr968;The option premium;Премия опциона
 DocStr969;The implied volatility. If the value is equal to {0}, then the value calculation currently is impossible;Подразумеваемая волатильность. Если значение равно {0}, то расчет значения в данный момент невозможен
 DocStr970;The risk free interest rate;Безрисковая процентная ставка
 DocStr971;The dividend amount on shares;Размер дивиденда по акциям
@@ -5939,7 +5944,6 @@ DocStr1067;The time exhibitor;Временная экспонента
 DocStr1068;The d1 parameter of the option fulfilment probability estimating;Параметр d1 определения вероятности исполнения опциона
 DocStr1069;To calculate the d2 parameter of the option fulfilment probability estimating;Рассчитать параметр d2 определения вероятности исполнения опциона
 DocStr1070;The d2 parameter of the option fulfilment probability estimating;Параметр d2 определения вероятности исполнения опциона
-DocStr1071;The option premium;Премия опциона
 DocStr1072;Days per year;Дней в году
 DocStr1073;To calculate the implied volatility;Рассчитать подразумеваемую волатильность (Implied Volatility)
 DocStr1074;To calculate the premium by volatility;Рассчитать премию по волатильности
@@ -15332,3 +15336,19 @@ DocStr10851;Check {0} contains error message;Проверить, содержи�
 DocStr10852;{0} if the specified text contains error message, otherwise, {1};{0} если переданное текстовое сообщение содержит ошибку, иначе, {1}
 DocStr10853;Security mapping request message;Сообщение запроса получения маппинга инструментов
 DocStr10854;Security mapping result message;Сообщение ответа маппинга инструментов
+DocStr10857;The interface describing the security associations storage;The interface describing the security associations storage
+DocStr10858;Save association;Save association
+DocStr10859;Master security id;Master security id
+DocStr10860;Tradable security ids;Tradable security ids
+DocStr10861;Adapter name;Adapter name
+DocStr10862;Tradable security id;Tradable security id
+DocStr10863;Load all associations;Load all associations
+DocStr10864;All associations;All associations
+DocStr10865;Delete all associations;Delete all associations
+DocStr10866;CSV security associations storage;CSV security associations storage
+DocStr10867;Translate tick data as {0} or {1};Translate tick data as {0} or {1}
+DocStr10868;Security association request message;Security association request message
+DocStr10869;Security association result message;Security association result message
+DocStr10870;Security associations;Security associations
+DocStr10871;The window for edit securities associations;The window for edit securities associations
+DocStr10872;Associations storage;Associations storage

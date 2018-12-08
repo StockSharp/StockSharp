@@ -33,6 +33,7 @@ StockSharp API Change log
 * (feature) Alerts. Message made optional for sound based events.
 * (feature) ISecurityAssociationStorage added.
 * (feature) Bithumb. Prime service supported.
+* (feature) OKEX. Support turn on/off sections.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
