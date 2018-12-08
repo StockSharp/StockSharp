@@ -31,6 +31,7 @@ StockSharp API Change log
 * (bug) Market depth. Fix build depths from OL and L1.
 * (feature) MT4, MT5 connectors.
 * (feature) Alerts. Message made optional for sound based events.
+* (feature) ISecurityAssociationStorage added.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
