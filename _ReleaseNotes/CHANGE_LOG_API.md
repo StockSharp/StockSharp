@@ -34,6 +34,7 @@ StockSharp API Change log
 * (feature) ISecurityAssociationStorage added.
 * (feature) Bithumb. Prime service supported.
 * (feature) OKEX. Support turn on/off sections.
+* (bug) IQFeed. Candles request fixes.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

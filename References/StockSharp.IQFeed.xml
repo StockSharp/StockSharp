@@ -103,16 +103,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.ToString">
       <summary>
@@ -127,14 +121,10 @@
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsSupportNativeSecurityLookup">
-      <summary>
-            Gets a value indicating whether the connector supports security lookup.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SecurityLookupRequired">
-      <summary>
-        <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
@@ -143,10 +133,7 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Send message.
-            </summary>
-      <param name="message">Message.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.IQFeed.IQFeedAddresses">
       <summary>
