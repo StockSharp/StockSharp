@@ -79,15 +79,14 @@ namespace SampleRealTimeEmulation
 			_candlesElem = new ChartCandleElement();
 			area.Elements.Add(_candlesElem);
 
-			InitConnector();
+			InitRealConnector();
+			InitEmuConnector();
 
 			GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(ProcessCandles);
 		}
 
-		private void InitConnector()
+		private void InitRealConnector()
 		{
-			_emuConnector?.Dispose();
-
 			try
 			{
 				if (File.Exists(_settingsFile))
@@ -95,6 +94,25 @@ namespace SampleRealTimeEmulation
 			}
 			catch
 			{
+			}
+
+			_realConnector.NewOrder += OrderGrid.Orders.Add;
+			_realConnector.NewMyTrade += TradeGrid.Trades.Add;
+			_realConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
+
+			_realConnector.MassOrderCancelFailed += (transId, error) =>
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
+			_realConnector.Error += error =>
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+		}
+
+		private void InitEmuConnector()
+		{
+			if (_emuConnector != null)
+			{
+				_emuConnector.Dispose();
+				_logManager.Sources.Remove(_emuConnector);
 			}
 
 			_emuConnector = new RealTimeEmulationTrader<IMessageAdapter>(_realConnector.MarketDataAdapter ?? new PassThroughMessageAdapter(new IncrementalIdGenerator()), _emuPf, false);
@@ -140,12 +158,8 @@ namespace SampleRealTimeEmulation
 			_emuConnector.NewOrder += OrderGrid.Orders.Add;
 			_emuConnector.NewMyTrade += TradeGrid.Trades.Add;
 
-			_realConnector.NewOrder += OrderGrid.Orders.Add;
-			_realConnector.NewMyTrade += TradeGrid.Trades.Add;
-
 			// subscribe on error of order registration event
 			_emuConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
-			_realConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
 
 			_candleManager.Processing += (s, candle) =>
 			{
@@ -155,13 +169,9 @@ namespace SampleRealTimeEmulation
 
 			_emuConnector.MassOrderCancelFailed += (transId, error) =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
-			_realConnector.MassOrderCancelFailed += (transId, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
 			// subscribe on error event
 			_emuConnector.Error += error =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
-			_realConnector.Error += error =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			// subscribe on error of market data subscription event
@@ -193,10 +203,11 @@ namespace SampleRealTimeEmulation
 
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
-			if (_realConnector.Configure(this))
-				new XmlSerializer<SettingsStorage>().Serialize(_realConnector.Save(), _settingsFile);
+			if (!_realConnector.Configure(this))
+				return;
 
-			InitConnector();
+			new XmlSerializer<SettingsStorage>().Serialize(_realConnector.Save(), _settingsFile);
+			InitEmuConnector();
 		}
 
 		private void ConnectClick(object sender, RoutedEventArgs e)
