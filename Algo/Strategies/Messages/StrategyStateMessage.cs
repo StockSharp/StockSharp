@@ -32,6 +32,12 @@ namespace StockSharp.Algo.Strategies.Messages
 		public Guid StrategyId { get; set; }
 
 		/// <summary>
+		/// Strategy type ID.
+		/// </summary>
+		[DataMember]
+		public Guid StrategyTypeId { get; set; }
+
+		/// <summary>
 		/// Command.
 		/// </summary>
 		[DataMember]
@@ -64,7 +70,13 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",Id={StrategyId},TrId={TransactionId},Orig={OriginalTransactionId},Stat={Statistics.Select(p => $"{p.Key}={p.Value}").Join(",")}";
+			var str = base.ToString() + $",TrId={TransactionId},Orig={OriginalTransactionId},Stat={Statistics.Select(p => $"{p.Key}={p.Value}").Join(",")}";
+
+			if (!StrategyId.IsDefault())
+				str += $",Id={StrategyId}";
+
+			if (!StrategyTypeId.IsDefault())
+				str += $",TypeId={StrategyTypeId}";
 
 			if (!Command.IsEmpty())
 				str += $",Command={Command}";
@@ -94,6 +106,7 @@ namespace StockSharp.Algo.Strategies.Messages
 			destination.TransactionId = TransactionId;
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.StrategyId = StrategyId;
+			destination.StrategyTypeId = StrategyTypeId;
 			destination.Statistics = Statistics.ToDictionary();
 			destination.Command = Command;
 			destination.Error = Error;
