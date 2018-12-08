@@ -32,6 +32,7 @@ StockSharp API Change log
 * (feature) MT4, MT5 connectors.
 * (feature) Alerts. Message made optional for sound based events.
 * (feature) ISecurityAssociationStorage added.
+* (feature) Bithumb. Prime service supported.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
