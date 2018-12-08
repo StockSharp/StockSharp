@@ -35,6 +35,7 @@ StockSharp API Change log
 * (feature) Bithumb. Prime service supported.
 * (feature) OKEX. Support turn on/off sections.
 * (bug) IQFeed. Candles request fixes.
+* (feature) FIX connector. IFixDialect tick as level1 option.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

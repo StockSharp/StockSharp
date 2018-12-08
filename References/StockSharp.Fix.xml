@@ -205,6 +205,9 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.OrderLookup">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TickAsLevel1">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.LoginAsPortfolioName">
       <inheritdoc />
     </member>
@@ -850,6 +853,11 @@
             Supports <see cref="T:StockSharp.Messages.OrderStatusMessage" /> for mass orders.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TickAsLevel1">
+      <summary>
+            Translate tick data as <see cref="T:StockSharp.Messages.Level1ChangeMessage" /> or <see cref="T:StockSharp.Messages.ExecutionMessage" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.LoginAsPortfolioName">
       <summary>
             Use <see cref="P:StockSharp.Fix.Dialects.IFixDialect.Login" /> as portfolio name.
@@ -1133,6 +1141,16 @@
         <see cref="T:StockSharp.Fix.FixSecurityMappingResultMessage" />.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.FixMessageTypes.SecurityAssociationRequest">
+      <summary>
+        <see cref="T:StockSharp.Fix.FixSecurityAssociationRequestMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixMessageTypes.SecurityAssociationResult">
+      <summary>
+        <see cref="T:StockSharp.Fix.FixSecurityAssociationResultMessage" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.FixUserRequestTypes">
       <summary>
             Request types.
@@ -1332,6 +1350,64 @@
       <returns>Copy.</returns>
     </member>
     <member name="M:StockSharp.Fix.FixSecurityMappingResultMessage.ToString">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.FixSecurityAssociationRequestMessage">
+      <summary>
+            Security association request message.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityAssociationRequestMessage.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Fix.FixSecurityAssociationRequestMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityAssociationRequestMessage.TransactionId">
+      <summary>
+            Request identifier.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityAssociationRequestMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixSecurityAssociationRequestMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityAssociationRequestMessage.ToString">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.FixSecurityAssociationResultMessage">
+      <summary>
+            Security association result message.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityAssociationResultMessage.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Fix.FixSecurityAssociationResultMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityAssociationResultMessage.OriginalTransactionId">
+      <summary>
+            ID of the original message <see cref="P:StockSharp.Fix.FixSecurityAssociationRequestMessage.TransactionId" /> for which this message is a response.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityAssociationResultMessage.Error">
+      <summary>
+            Lookup error info.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityAssociationResultMessage.Associations">
+      <summary>
+            Security associations.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityAssociationResultMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixSecurityAssociationResultMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityAssociationResultMessage.ToString">
       <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.FixServer">
@@ -5479,6 +5555,16 @@
     <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityMappingResult">
       <summary>
             Message type for <see cref="T:StockSharp.Fix.FixSecurityMappingResultMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityAssociationRequest">
+      <summary>
+            Message type for <see cref="T:StockSharp.Fix.FixSecurityAssociationRequestMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityAssociationResult">
+      <summary>
+            Message type for <see cref="T:StockSharp.Fix.FixSecurityAssociationResultMessage" />.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.FixTags">
