@@ -15336,19 +15336,19 @@ DocStr10851;Check {0} contains error message;Проверить, содержи�
 DocStr10852;{0} if the specified text contains error message, otherwise, {1};{0} если переданное текстовое сообщение содержит ошибку, иначе, {1}
 DocStr10853;Security mapping request message;Сообщение запроса получения маппинга инструментов
 DocStr10854;Security mapping result message;Сообщение ответа маппинга инструментов
-DocStr10857;The interface describing the security associations storage;The interface describing the security associations storage
-DocStr10858;Save association;Save association
-DocStr10859;Master security id;Master security id
-DocStr10860;Tradable security ids;Tradable security ids
-DocStr10861;Adapter name;Adapter name
-DocStr10862;Tradable security id;Tradable security id
-DocStr10863;Load all associations;Load all associations
-DocStr10864;All associations;All associations
-DocStr10865;Delete all associations;Delete all associations
-DocStr10866;CSV security associations storage;CSV security associations storage
-DocStr10867;Translate tick data as {0} or {1};Translate tick data as {0} or {1}
-DocStr10868;Security association request message;Security association request message
-DocStr10869;Security association result message;Security association result message
-DocStr10870;Security associations;Security associations
-DocStr10871;The window for edit securities associations;The window for edit securities associations
-DocStr10872;Associations storage;Associations storage
+DocStr10857;The interface describing the security associations storage;Интерфейс, описывающий хранилище ассоциаций инструментов
+DocStr10858;Save association;Сохранить ассоциацию
+DocStr10859;Master security id;Идентификатор мастер-инструмента
+DocStr10860;Tradable security ids;Идентификаторы торгуемых инструментов
+DocStr10861;Adapter name;Название адаптера
+DocStr10862;Tradable security id;Идентификатор торгуемого инструмента
+DocStr10863;Load all associations;Загрузить все ассоциации
+DocStr10864;All associations;Все ассоциации
+DocStr10865;Delete all associations;Удалить все ассоциации
+DocStr10866;CSV security associations storage;Хранилище ассоциаций в формате CSV
+DocStr10867;Translate tick data as {0} or {1};Передавать тиковые данных как {0} или {1}
+DocStr10868;Security association request message;Сообщение запроса ассоциаций инструментов
+DocStr10869;Security association result message;Сообщение с результатами ассоциаций инструментов
+DocStr10870;Security associations;Ассоциации инструментов
+DocStr10871;The window for edit securities associations;Окно для редактирования ассоциации инструментов
+DocStr10872;Associations storage;Хранилище ассоциаций

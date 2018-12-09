@@ -31,12 +31,12 @@
         </member>
         <member name="P:StockSharp.Okex.OkexMessageAdapter.IsFutures">
             <summary>
-            Futures section enabled.
+            Futures section.
             </summary>
         </member>
         <member name="P:StockSharp.Okex.OkexMessageAdapter.IsSpot">
             <summary>
-            Spot section enabled.
+            Spot section.
             </summary>
         </member>
         <member name="P:StockSharp.Okex.OkexMessageAdapter.AdminPassword">
@@ -134,12 +134,12 @@
         </member>
         <member name="P:StockSharp.Okex.OkexTrader.IsFutures">
             <summary>
-            Futures section enabled.
+            Futures section.
             </summary>
         </member>
         <member name="P:StockSharp.Okex.OkexTrader.IsSpot">
             <summary>
-            Spot section enabled.
+            Spot section.
             </summary>
         </member>
     </members>

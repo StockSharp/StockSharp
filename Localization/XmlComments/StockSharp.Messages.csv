@@ -1851,6 +1851,7 @@ M:StockSharp.Messages.BankDetails.Load(Ecng.Serialization.SettingsStorage)/summa
 M:StockSharp.Messages.BankDetails.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Messages.BankDetails.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Messages.BankDetails.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Messages.BankDetails.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.WithdrawInfo/summary;WithdrawInfo
 P:StockSharp.Messages.WithdrawInfo.Type/summary;WithdrawType
 P:StockSharp.Messages.WithdrawInfo.CryptoAddress/summary;CryptoAddress
@@ -1866,6 +1867,7 @@ M:StockSharp.Messages.WithdrawInfo.Load(Ecng.Serialization.SettingsStorage)/summ
 M:StockSharp.Messages.WithdrawInfo.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Messages.WithdrawInfo.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Messages.WithdrawInfo.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Messages.WithdrawInfo.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.WorkingTime/summary;Str408
 M:StockSharp.Messages.WorkingTime.#ctor/summary;DocStr1
 P:StockSharp.Messages.WorkingTime.Periods/summary;Str410

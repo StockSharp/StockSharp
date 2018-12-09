@@ -3,8 +3,8 @@ P:StockSharp.Okex.OkexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Okex.OkexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Okex.OkexMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.Okex.OkexMessageAdapter.Passphrase/summary;Passphrase
-P:StockSharp.Okex.OkexMessageAdapter.IsFutures/summary;DocStr10855
-P:StockSharp.Okex.OkexMessageAdapter.IsSpot/summary;DocStr10856
+P:StockSharp.Okex.OkexMessageAdapter.IsFutures/summary;FuturesSection
+P:StockSharp.Okex.OkexMessageAdapter.IsSpot/summary;SpotSection
 P:StockSharp.Okex.OkexMessageAdapter.AdminPassword/summary;AdminPassword
 P:StockSharp.Okex.OkexMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
@@ -26,5 +26,5 @@ P:StockSharp.Okex.OkexTrader.Key/summary;Str3304
 P:StockSharp.Okex.OkexTrader.Secret/summary;DocStr3146
 P:StockSharp.Okex.OkexTrader.Passphrase/summary;Passphrase
 P:StockSharp.Okex.OkexTrader.BalanceCheckInterval/summary;BalanceCheckInterval
-P:StockSharp.Okex.OkexTrader.IsFutures/summary;DocStr10855
-P:StockSharp.Okex.OkexTrader.IsSpot/summary;DocStr10856
+P:StockSharp.Okex.OkexTrader.IsFutures/summary;FuturesSection
+P:StockSharp.Okex.OkexTrader.IsSpot/summary;SpotSection
