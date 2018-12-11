@@ -554,7 +554,7 @@ namespace StockSharp.Algo
 
 		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
 		{
-			this.AddErrorLog(LocalizedStrings.SubscribedError, security?.Id, message.DataType, message.Error);
+			this.AddErrorLog(LocalizedStrings.SubscribedError, security?.Id, message.DataType, error);
 			MarketDataSubscriptionFailed?.Invoke(security, message, error);
 		}
 
@@ -573,7 +573,7 @@ namespace StockSharp.Algo
 
 		private void RaiseMarketDataUnSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
 		{
-			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security?.Id, message.DataType, message.Error);
+			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security?.Id, message.DataType, error);
 			MarketDataUnSubscriptionFailed?.Invoke(security, message, error);
 		}
 
