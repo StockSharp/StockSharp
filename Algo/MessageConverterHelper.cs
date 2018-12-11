@@ -678,7 +678,10 @@ namespace StockSharp.Algo
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
-			var security = new Security { Id = message.SecurityId.ToStringId() };
+			var security = new Security
+			{
+				Id = message.SecurityId.IsDefault() ? null : message.SecurityId.ToStringId()
+			};
 
 			security.ApplyChanges(message, exchangeInfoProvider);
 
@@ -1452,7 +1455,18 @@ namespace StockSharp.Algo
 			else
 			{
 				if (security.Code.IsEmpty())
+				{
+					if (!security.BasketCode.IsEmpty())
+					{
+						return new SecurityId
+						{
+							SecurityCode = security.BasketExpression.Replace('@', '_'),
+							BoardCode = security.Board?.Code ?? MessageAdapter.DefaultAssociatedBoardCode
+						};
+					}
+
 					throw new ArgumentException(LocalizedStrings.Str1123);
+				}
 
 				if (security.Board == null)
 					throw new ArgumentException(LocalizedStrings.Str1124Params.Put(security.Code));
@@ -1538,14 +1552,7 @@ namespace StockSharp.Algo
 		/// <returns>The message for market data subscription.</returns>
 		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, Security security)
 		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			security.ToMessage(security.ToSecurityId()).CopyTo(message, false);
-			return message;
+			return message.FillSecurityInfo(security.ToSecurityId(), security);
 		}
 
 		/// <summary>
@@ -1557,16 +1564,28 @@ namespace StockSharp.Algo
 		/// <returns>The message for market data subscription.</returns>
 		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, IConnector connector, Security security)
 		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
+
+			return message.FillSecurityInfo(connector.GetSecurityId(security), security);
+		}
+
+		/// <summary>
+		/// To fill the message with information about instrument.
+		/// </summary>
+		/// <param name="message">The message for market data subscription.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>The message for market data subscription.</returns>
+		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, SecurityId securityId, Security security)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
 
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			security.ToMessage(connector.GetSecurityId(security)).CopyTo(message, false);
+			security.ToMessage(securityId).CopyTo(message, false);
 			return message;
 		}
 

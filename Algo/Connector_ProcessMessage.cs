@@ -319,7 +319,7 @@ namespace StockSharp.Algo
 					}
 
 					if (SupportBasketSecurities)
-						_inAdapter = new BasketSecurityMessageAdapter(this, BasketSecurityProcessorProvider, _inAdapter) { OwnInnerAdaper = true };
+						_inAdapter = new BasketSecurityMessageAdapter(this, BasketSecurityProcessorProvider, _entityCache.ExchangeInfoProvider, _inAdapter) { OwnInnerAdaper = true };
 
 					if (SupportSubscriptionTracking)
 						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdaper = true/*, IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect*/ };
