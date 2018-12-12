@@ -50,12 +50,6 @@
     <Reference Include="Ecng.Configuration">
       <HintPath>..\References\Ecng.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Data">
-      <HintPath>..\References\Ecng.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Interop">
-      <HintPath>..\References\Ecng.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Serialization">
       <HintPath>..\References\Ecng.Serialization.dll</HintPath>
     </Reference>
@@ -244,7 +238,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
