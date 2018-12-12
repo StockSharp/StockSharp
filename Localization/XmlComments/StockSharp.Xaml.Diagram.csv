@@ -196,6 +196,7 @@ P:StockSharp.Xaml.Diagram.DiagramElement.SelectedOutputSocket/summary;DocStr8894
 P:StockSharp.Xaml.Diagram.DiagramElement.SelectedSocket/summary;DocStr8895
 P:StockSharp.Xaml.Diagram.DiagramElement.Parameters/summary;DocStr7905
 P:StockSharp.Xaml.Diagram.DiagramElement.Category/summary;DocStr7906
+P:StockSharp.Xaml.Diagram.DiagramElement.CanAutoName/summary;UseAutoNaming
 P:StockSharp.Xaml.Diagram.DiagramElement.Name/summary;Name2
 P:StockSharp.Xaml.Diagram.DiagramElement.Description/summary;DocStr7907
 P:StockSharp.Xaml.Diagram.DiagramElement.LogLevel/summary;DocStr1679
@@ -743,6 +744,10 @@ P:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.TypeId/summary
 P:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.IconName/summary;DocStr9214
 P:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Operator/summary;Operator
 M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.#ctor/summary;DocStr1
+M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
+M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnStop/summary;DocStr7894
 T:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement/summary;Str3114

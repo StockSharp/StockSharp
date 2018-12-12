@@ -40,6 +40,7 @@ StockSharp API Change log
 * (bug) Storage adapter. Fix boards lookup and update.
 * (feature) IPositionStorage added.
 * (feature) Reduced IEntityRegistry usage.
+* (feature) Diagram. Multiple sockets for logical condition added.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
