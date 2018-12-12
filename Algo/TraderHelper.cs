@@ -4628,6 +4628,7 @@ namespace StockSharp.Algo
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
+			connector.LookupBoards(new ExchangeBoard(), offlineMode: offlineMode);
 			connector.LookupSecurities(LookupAllCriteria, offlineMode: offlineMode);
 			connector.LookupPortfolios(new Portfolio(), offlineMode: offlineMode);
 			connector.LookupOrders(new Order());
@@ -4822,6 +4823,37 @@ namespace StockSharp.Algo
 			var basketSec = new TBasketSecurity();
 			security.CopyTo(basketSec);
 			return basketSec;
+		}
+
+		/// <summary>
+		/// Filter boards by code criteria.
+		/// </summary>
+		/// <param name="provider">The exchange boards provider.</param>
+		/// <param name="like">Criteria.</param>
+		/// <returns>Found boards.</returns>
+		public static IEnumerable<ExchangeBoard> LookupBoards(this IExchangeInfoProvider provider, string like)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			return provider.Boards.LookupBoards(like);
+		}
+
+		/// <summary>
+		/// Filter boards by code criteria.
+		/// </summary>
+		/// <param name="boards">All boards.</param>
+		/// <param name="like">Criteria.</param>
+		/// <returns>Found boards.</returns>
+		public static IEnumerable<ExchangeBoard> LookupBoards(this IEnumerable<ExchangeBoard> boards, string like)
+		{
+			if (boards == null)
+				throw new ArgumentNullException(nameof(boards));
+
+			if (!like.IsEmpty())
+				boards = boards.Where(b => b.Code.ContainsIgnoreCase(like));
+
+			return boards;
 		}
 	}
 }

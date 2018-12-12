@@ -851,28 +851,41 @@ namespace StockSharp.Algo
 		/// <returns>Board.</returns>
 		public static ExchangeBoard ToBoard(this BoardMessage message)
 		{
-			return message.ToBoard(new ExchangeBoard { Code = message.Code, Exchange = new Exchange { Name = message.ExchangeCode } });
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var board = new ExchangeBoard
+			{
+				Code = message.Code,
+				Exchange = new Exchange { Name = message.ExchangeCode }
+			};
+			board.ApplyChanges(message);
+			return board;
 		}
 
 		/// <summary>
 		/// To convert the message into board.
 		/// </summary>
-		/// <param name="message">Message.</param>
 		/// <param name="board">Board.</param>
+		/// <param name="message">Message.</param>
 		/// <returns>Board.</returns>
-		public static ExchangeBoard ToBoard(this BoardMessage message, ExchangeBoard board)
+		public static ExchangeBoard ApplyChanges(this ExchangeBoard board, BoardMessage message)
 		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
+
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
 
 			board.WorkingTime = message.WorkingTime;
 			//board.IsSupportAtomicReRegister = message.IsSupportAtomicReRegister;
 			//board.IsSupportMarketOrders = message.IsSupportMarketOrders;
-			board.ExpiryTime = message.ExpiryTime;
-			board.TimeZone = message.TimeZone;
+
+			if (!message.ExpiryTime.IsDefault())
+				board.ExpiryTime = message.ExpiryTime;
+
+			if (message.TimeZone != null)
+				board.TimeZone = message.TimeZone;
 
 			return board;
 		}

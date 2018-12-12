@@ -561,6 +561,9 @@ namespace StockSharp.Algo.Storages
 
 		private void ProcessSecurityLookup(SecurityLookupMessage msg)
 		{
+			if (msg == null)
+				throw new ArgumentNullException(nameof(msg));
+
 			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.SendInMessage(msg);
@@ -568,9 +571,6 @@ namespace StockSharp.Algo.Storages
 			}
 
 			// TODO filters
-
-			foreach (var board in _entityRegistry.ExchangeBoards)
-				RaiseStorageMessage(board.ToMessage());
 
 			foreach (var security in _entityRegistry.Securities)
 				RaiseStorageMessage(security.ToMessage());
@@ -580,15 +580,16 @@ namespace StockSharp.Algo.Storages
 
 		private void ProcessBoardLookup(BoardLookupMessage msg)
 		{
+			if (msg == null)
+				throw new ArgumentNullException(nameof(msg));
+
 			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.SendInMessage(msg);
 				return;
 			}
 
-			// TODO filters
-
-			foreach (var board in _entityRegistry.ExchangeBoards)
+			foreach (var board in _entityRegistry.ExchangeBoards.LookupBoards(msg.Like))
 				RaiseStorageMessage(board.ToMessage());
 
 			base.SendInMessage(msg);
@@ -596,6 +597,9 @@ namespace StockSharp.Algo.Storages
 
 		private void ProcessPortfolioLookup(PortfolioLookupMessage msg)
 		{
+			if (msg == null)
+				throw new ArgumentNullException(nameof(msg));
+
 			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.SendInMessage(msg);
@@ -620,6 +624,9 @@ namespace StockSharp.Algo.Storages
 
 		private void ProcessOrderStatus(OrderStatusMessage msg)
 		{
+			if (msg == null)
+				throw new ArgumentNullException(nameof(msg));
+
 			_orderStatusIds.Add(msg.TransactionId);
 
 			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
@@ -666,12 +673,18 @@ namespace StockSharp.Algo.Storages
 
 		private void ProcessOrderCancel(OrderCancelMessage msg)
 		{
+			if (msg == null)
+				throw new ArgumentNullException(nameof(msg));
+
 			_cancellationTransactions.Add(msg.TransactionId, msg.OrderTransactionId);
 			base.SendInMessage(msg);
 		}
 
 		private void ProcessMarketDataRequest(MarketDataMessage msg)
 		{
+			if (msg == null)
+				throw new ArgumentNullException(nameof(msg));
+
 			if (msg.IsBack || (msg.From == null && DaysLoad == TimeSpan.Zero))
 			{
 				base.SendInMessage(msg);
@@ -1015,17 +1028,15 @@ namespace StockSharp.Algo.Storages
 									Name = boardMsg.ExchangeCode
 								});
 
-							return boardMsg.ToBoard(new ExchangeBoard
+							return new ExchangeBoard
 							{
 								Code = code,
 								Exchange = exchange
-							});
+							};
 						});
 					}
-					else
-					{
-						// TODO apply changes
-					}
+
+					board.ApplyChanges(boardMsg);
 
 					_entityRegistry.Exchanges.Save(board.Exchange);
 					_entityRegistry.ExchangeBoards.Save(board);

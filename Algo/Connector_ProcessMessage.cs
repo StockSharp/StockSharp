@@ -1089,7 +1089,8 @@ namespace StockSharp.Algo
 			_entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.Code, code =>
 			{
 				var exchange = message.ToExchange(EntityFactory.CreateExchange(message.ExchangeCode));
-				return message.ToBoard(EntityFactory.CreateBoard(code, exchange));
+				var board = EntityFactory.CreateBoard(code, exchange);
+				return board.ApplyChanges(message);
 			});
 		}
 
@@ -1165,7 +1166,7 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				return;
 
-			RaiseLookupBoardsResult(criteria, message.Error, ExchangeBoards.Where(b => criteria.Like.IsEmpty() || b.Code.ContainsIgnoreCase(criteria.Like)));
+			RaiseLookupBoardsResult(criteria, message.Error, ExchangeBoards.LookupBoards(criteria.Like));
 		}
 
 		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)

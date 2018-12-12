@@ -36,6 +36,8 @@ StockSharp API Change log
 * (feature) OKEX. Support turn on/off sections.
 * (bug) IQFeed. Candles request fixes.
 * (feature) FIX connector. IFixDialect tick as level1 option.
+* (feature) Process non persistable basket securities.
+* (bug) Storage adapter. Fix boards lookup and update.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
