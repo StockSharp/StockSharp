@@ -3630,7 +3630,14 @@ namespace StockSharp.Algo
 
 			return
 				criteria.SecurityId.IsDefault() &&
-				criteria.SecurityType == null;
+				criteria.SecurityType == null &&
+				criteria.Name.IsEmpty() &&
+				criteria.ShortName.IsEmpty() &&
+				criteria.UnderlyingSecurityCode.IsEmpty() &&
+				criteria.UnderlyingSecurityType == null &&
+				criteria.ExpiryDate == null &&
+				criteria.OptionType == null &&
+				criteria.Strike == null;
 		}
 
 		/// <summary>
@@ -4605,11 +4612,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Is specified security id asssociated with the board.
+		/// Is specified security id associated with the board.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="board">Board info.</param>
-		/// <returns><see langword="true" />, if asssociated, otherwise, <see langword="false"/>.</returns>
+		/// <returns><see langword="true" />, if associated, otherwise, <see langword="false"/>.</returns>
 		public static bool IsAssociated(this SecurityId securityId, ExchangeBoard board)
 		{
 			if (board == null)

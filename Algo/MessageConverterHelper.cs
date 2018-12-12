@@ -620,6 +620,9 @@ namespace StockSharp.Algo
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
+			if (message.IsLookupAll())
+				return TraderHelper.LookupAllCriteria;
+
 			var criteria = new Security();
 			criteria.ApplyChanges(message, exchangeInfoProvider);
 			return criteria;
