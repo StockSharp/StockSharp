@@ -351,12 +351,14 @@
     <Compile Include="Storages\ISecurityStorage.cs" />
     <Compile Include="Storages\Binary\Snapshot\Level1BinarySnapshotSerializer.cs" />
     <Compile Include="Storages\ISnapshotStorage.cs" />
+    <Compile Include="Storages\IPositionStorage.cs" />
     <Compile Include="Storages\IStoragePositionList.cs" />
     <Compile Include="Storages\IStorageSecurityList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Storages\Binary\Level1BinarySerializer.cs" />
     <Compile Include="Storages\NewsList.cs" />
+    <Compile Include="Storages\PositionStorage.cs" />
     <Compile Include="Storages\SnapshotRegistry.cs" />
     <Compile Include="Storages\StorageEntityFactory.cs" />
     <Compile Include="Storages\Binary\TransactionBinarySerializer.cs" />

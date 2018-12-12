@@ -1,4 +1,4 @@
-﻿#region S# License
+#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -15,19 +15,23 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Storages
 {
+	using Ecng.Collections;
+
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
 	/// The interface for access to the position storage.
 	/// </summary>
-	public interface IStoragePositionList : IStorageEntityList<Position>
+	public interface IStoragePositionList : ICollectionEx<Position>, IStorageEntityList<Position>
 	{
 		/// <summary>
-		/// To load the position.
+		/// To get the position by portfolio and instrument.
 		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="portfolio">The portfolio on which the position should be found.</param>
+		/// <param name="security">The instrument on which the position should be found.</param>
+		/// <param name="clientCode">The client code.</param>
+		/// <param name="depoName">The depository name where the stock is located physically. By default, an empty string is passed, which means the total position by all depositories.</param>
 		/// <returns>Position.</returns>
-		Position ReadBySecurityAndPortfolio(Security security, Portfolio portfolio);
+		Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "");
 	}
 }

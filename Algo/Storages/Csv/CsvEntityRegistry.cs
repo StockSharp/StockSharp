@@ -781,9 +781,9 @@ namespace StockSharp.Algo.Storages.Csv
 				});
 			}
 
-			public Position ReadBySecurityAndPortfolio(Security security, Portfolio portfolio)
+			public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "")
 			{
-				return ((IStoragePositionList)this).ReadById(Tuple.Create(portfolio, security));
+				return ((IStorageEntityList<Position>)this).ReadById(Tuple.Create(portfolio, security));
 			}
 		}
 
@@ -864,6 +864,9 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <inheritdoc />
 		public IStoragePositionList Positions => _positions;
 
+		/// <inheritdoc />
+		public IPositionStorage PositionStorage { get; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CsvEntityRegistry"/>.
 		/// </summary>
@@ -880,6 +883,8 @@ namespace StockSharp.Algo.Storages.Csv
 			Add(_positions = new PositionCsvList(this));
 
 			UpdateDelayAction();
+
+			PositionStorage = new PositionStorage(this);
 		}
 
 		/// <summary>

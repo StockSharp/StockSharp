@@ -56,6 +56,8 @@ namespace StockSharp.Algo.Storages
 			Portfolios = new PortfolioList(storage);
 			Positions = new PositionList(storage);
 			//News = new NewsList(storage);
+
+			PositionStorage = new PositionStorage(this);
 		}
 
 		/// <inheritdoc />
@@ -75,6 +77,9 @@ namespace StockSharp.Algo.Storages
 
 		/// <inheritdoc />
 		public IStoragePositionList Positions { get; }
+
+		/// <inheritdoc />
+		public IPositionStorage PositionStorage { get; }
 
 		///// <summary>
 		///// The list of own trades.

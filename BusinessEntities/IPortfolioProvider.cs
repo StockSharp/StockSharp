@@ -24,6 +24,13 @@ namespace StockSharp.BusinessEntities
 	public interface IPortfolioProvider
 	{
 		/// <summary>
+		/// Load portfolio by name.
+		/// </summary>
+		/// <param name="portfolioName">Portfolio code name.</param>
+		/// <returns>Portfolio.</returns>
+		Portfolio GetPortfolio(string portfolioName);
+
+		/// <summary>
 		/// Get all portfolios.
 		/// </summary>
 		IEnumerable<Portfolio> Portfolios { get; }

@@ -19,7 +19,7 @@
 	/// </summary>
 	public class CsvImporter : CsvParser
 	{
-		private readonly IEntityRegistry _entityRegistry;
+		private readonly ISecurityStorage _securityStorage;
 		private readonly IExchangeInfoProvider _exchangeInfoProvider;
 		private readonly IMarketDataDrive _drive;
 		private readonly StorageFormats _storageFormat;
@@ -29,14 +29,14 @@
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>
 		/// <param name="fields">Importing fields.</param>
-		/// <param name="entityRegistry">The storage of trade objects.</param>
+		/// <param name="securityStorage">Securities meta info storage.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
 		/// <param name="storageFormat">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		public CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IEntityRegistry entityRegistry, IExchangeInfoProvider exchangeInfoProvider, IMarketDataDrive drive, StorageFormats storageFormat)
+		public CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, ISecurityStorage securityStorage, IExchangeInfoProvider exchangeInfoProvider, IMarketDataDrive drive, StorageFormats storageFormat)
 			: base(dataType, fields)
 		{
-			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
+			_securityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
 			_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 			_drive = drive;
 			_storageFormat = storageFormat;
@@ -81,7 +81,7 @@
 					}
 					else
 					{
-						var security = _entityRegistry.Securities.ReadBySecurityId(secMsg.SecurityId);
+						var security = _securityStorage.LookupById(secMsg.SecurityId);
 						var isNew = true;
 
 						if (security != null)
@@ -98,7 +98,7 @@
 						else
 							security = secMsg.ToSecurity(_exchangeInfoProvider);
 
-						_entityRegistry.Securities.Save(security, UpdateDuplicateSecurities);
+						_securityStorage.Save(security, UpdateDuplicateSecurities);
 
 						ExtendedInfoStorageItem?.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
 
@@ -128,7 +128,7 @@
 		private Security InitSecurity(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			var id = securityId.ToStringId();
-			var security = _entityRegistry.Securities.ReadById(id);
+			var security = _securityStorage.LookupById(id);
 
 			if (security != null)
 				return security;
@@ -141,7 +141,7 @@
 				Type = securityId.SecurityType,
 			};
 
-			_entityRegistry.Securities.Save(security);
+			_securityStorage.Save(security, false);
 			this.AddInfoLog(LocalizedStrings.Str2871Params.Put(id));
 
 			return security;

@@ -115,6 +115,24 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Connector"/>.
 		/// </summary>
+		/// <param name="securityStorage">Securities meta info storage.</param>
+		/// <param name="positionStorage">Position storage.</param>
+		/// <param name="storageRegistry">The storage of market data.</param>
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
+		/// <param name="initManagers">Initialize managers.</param>
+		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
+		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
+		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
+		public Connector(ISecurityStorage securityStorage, IPositionStorage positionStorage, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, bool initManagers = true,
+			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnReconnect = true)
+			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking, isRestoreSubscriptionOnReconnect)
+		{
+			InitializeStorage(securityStorage, positionStorage, storageRegistry, snapshotRegistry);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Connector"/>.
+		/// </summary>
 		/// <param name="initAdapter">Initialize basket adapter.</param>
 		/// <param name="initChannels">Initialize channels.</param>
 		/// <param name="initManagers">Initialize managers.</param>
@@ -165,7 +183,24 @@ namespace StockSharp.Algo
 		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
 		public void InitializeStorage(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
 		{
+			if (entityRegistry == null)
+				throw new ArgumentNullException(nameof(entityRegistry));
+
 			EntityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
+			InitializeStorage(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry, snapshotRegistry);
+		}
+
+		/// <summary>
+		/// Initialize <see cref="StorageAdapter"/>.
+		/// </summary>
+		/// <param name="securityStorage">Securities meta info storage.</param>
+		/// <param name="positionStorage">Position storage.</param>
+		/// <param name="storageRegistry">The storage of market data.</param>
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
+		public void InitializeStorage(ISecurityStorage securityStorage, IPositionStorage positionStorage, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
+		{
+			SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
+			PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
 			StorageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
 			SnapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
 
@@ -178,6 +213,16 @@ namespace StockSharp.Algo
 		/// The storage of trade objects.
 		/// </summary>
 		public IEntityRegistry EntityRegistry { get; private set; }
+
+		/// <summary>
+		/// Securities meta info storage.
+		/// </summary>
+		public ISecurityStorage SecurityStorage { get; private set; }
+
+		/// <summary>
+		/// Position storage.
+		/// </summary>
+		public IPositionStorage PositionStorage { get; private set; }
 
 		/// <summary>
 		/// The storage of market data.

@@ -516,23 +516,6 @@ namespace StockSharp.BusinessEntities
 		Security LookupSecurity(SecurityId securityId);
 
 		/// <summary>
-		/// To get the portfolio by the name. If the portfolio is not registered, it will be created.
-		/// </summary>
-		/// <param name="name">Portfolio name.</param>
-		/// <returns>Portfolio.</returns>
-		Portfolio GetPortfolio(string name);
-
-		/// <summary>
-		/// To get the position by portfolio and instrument.
-		/// </summary>
-		/// <param name="portfolio">The portfolio on which the position should be found.</param>
-		/// <param name="security">The instrument on which the position should be found.</param>
-		/// <param name="clientCode">The client code.</param>
-		/// <param name="depoName">The depository name where the stock is located physically. By default, an empty string is passed, which means the total position by all depositories.</param>
-		/// <returns>Position.</returns>
-		Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "");
-
-		/// <summary>
 		/// Get filtered order book.
 		/// </summary>
 		/// <param name="security">The instrument by which an order book should be got.</param>
