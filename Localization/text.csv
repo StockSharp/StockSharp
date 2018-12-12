@@ -5722,7 +5722,7 @@ DocStr845;Get security by code;Получить инструмент по код
 DocStr846;To get the instrument by the code. If the instrument is not found, then the {0} is called to create an instrument;Получить инструмент по коду. Если инструмент не найден, то для создания инструмента вызывается {0}
 DocStr847;The handler changing the instrument. It returns {0} if the instrument has been changed and the {1} should be called;Обработчик, изменяющий инструмент. Возвращает {0}, если инструмент был изменен, и необходимо вызвать {1}
 DocStr848;Get {0};Получить {0}
-DocStr849;To get the portfolio by the name. If the portfolio is not registered, it is created via {0};Получить портфель по названию. Если портфель не зарегистрирован, то он создается через {0}
+DocStr849;If the portfolio is not registered, it is created via {0};Если портфель не зарегистрирован, то он создается через {0}
 DocStr850;Portfolio handler;Обработчик, изменяющий портфель
 DocStr851;Generate {0} security;Сгенерировать {0} инструмента
 DocStr852;{0} security;{0} инструмента
@@ -14716,7 +14716,6 @@ DocStr10173;Annotation;Аннотация
 DocStr10174;Annotation type;Тип аннотации
 DocStr10175;The position provider;Провайдер позиций
 DocStr10176;Lookup security by identifier;Найти инструмент по идентификатору
-DocStr10177;To get the portfolio by the name. If the portfolio is not registered, it will be created;Получить портфель по имени. Если портфель не зарегистрирован, он будет создан
 DocStr10178;The position provider interface;Интерфейс провайдера позиций
 DocStr10179;New position received;Получена новая позиция
 DocStr10180;Palette element;Элемент палитры
@@ -14785,8 +14784,8 @@ DocStr10247;Middle line color;Цвет средней линии
 DocStr10248;Upper line color;Цвет верхней линии
 DocStr10249;Lower line color;Цвет нижний линии
 DocStr10250;Attribute, applied to indicator's painter, to provide information about type of {0};Атрибут, применяющийся к отрисовщику индикатора для предоставления информации о типе {0}
-DocStr10251;Is specified security id asssociated with the board;Принадлежит ли указанный идентификатор инструмента площадку
-DocStr10252;{0}, if asssociated, otherwise, {1};{0}, если принадлежит, иначе, {1}
+DocStr10251;Is specified security id associated with the board;Принадлежит ли указанный идентификатор инструмента площадку
+DocStr10252;{0}, if associated, otherwise, {1};{0}, если принадлежит, иначе, {1}
 DocStr10253;Stop order types;Тип стоп-заявок
 DocStr10254;Stop-loss and take-profit;Стоп-лосс и тейк-профит
 DocStr10257;To create a rule for the order's profit more on offset;Создать правило для отслеживания прибыльности заявки более чем на указанный уровень
@@ -15352,3 +15351,10 @@ DocStr10869;Security association result message;Сообщение с резул
 DocStr10870;Security associations;Ассоциации инструментов
 DocStr10871;The window for edit securities associations;Окно для редактирования ассоциации инструментов
 DocStr10872;Associations storage;Хранилище ассоциаций
+DocStr10873;Save portfolio;Сохранить портфель
+DocStr10874;Delete portfolio;Удалить портфель
+DocStr10875;Save position;Сохранить позицию
+DocStr10876;Delete position;Удалить позицию
+DocStr10877;Position storage;Хранилище позиций
+DocStr10878;Track positions;Отслеживать позиции
+DocStr10879;To get the portfolio by the name;Получить портфель по названию

@@ -1251,8 +1251,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get the portfolio by the name. If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
+		/// To get the portfolio by the name.
 		/// </summary>
+		/// <remarks>
+		/// If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
+		/// </remarks>
 		/// <param name="name">Portfolio name.</param>
 		/// <returns>Portfolio.</returns>
 		public Portfolio GetPortfolio(string name)
@@ -1261,8 +1264,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get the portfolio by the name. If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
+		/// To get the portfolio by the name.
 		/// </summary>
+		/// <remarks>
+		/// If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
+		/// </remarks>
 		/// <param name="name">Portfolio name.</param>
 		/// <param name="changePortfolio">Portfolio handler.</param>
 		/// <returns>Portfolio.</returns>
