@@ -15358,3 +15358,11 @@ DocStr10876;Delete position;Удалить позицию
 DocStr10877;Position storage;Хранилище позиций
 DocStr10878;Track positions;Отслеживать позиции
 DocStr10879;To get the portfolio by the name;Получить портфель по названию
+DocStr10880;Services registry;Реестр сервисов
+DocStr10881;Connector;Коннектор
+DocStr10882;Log manager;Менеджер логирования
+DocStr10883;Filter portfolios by the specified criteria;Отфильтровать портфели по указанному критерию
+DocStr10884;All portfolios;Все портфели
+DocStr10885;Filter positions the specified criteria;Отфильтровать позиции по указанному критерию
+DocStr10886;All positions;Все позиции
+DocStr10887;Found positions;Найденные позиции
