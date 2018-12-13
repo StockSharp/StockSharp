@@ -574,8 +574,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="securityId">Security ID.</param>
+		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
 		/// <returns>Message.</returns>
-		public static SecurityMessage ToMessage(this Security security, SecurityId? securityId = null)
+		public static SecurityMessage ToMessage(this Security security, SecurityId? securityId = null, long originalTransactionId = 0)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -603,6 +604,8 @@ namespace StockSharp.Algo
 				UnderlyingSecurityType = security.UnderlyingSecurityType,
 				BasketCode = security.BasketCode,
 				BasketExpression = security.BasketExpression,
+
+				OriginalTransactionId = originalTransactionId,
 			};
 		}
 
@@ -719,8 +722,9 @@ namespace StockSharp.Algo
 		/// To convert the portfolio into message.
 		/// </summary>
 		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
 		/// <returns>Message.</returns>
-		public static PortfolioMessage ToMessage(this Portfolio portfolio)
+		public static PortfolioMessage ToMessage(this Portfolio portfolio, long originalTransactionId = 0)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -731,6 +735,7 @@ namespace StockSharp.Algo
 				BoardCode = portfolio.Board?.Code,
 				Currency = portfolio.Currency,
 				ClientCode = portfolio.ClientCode,
+				OriginalTransactionId = originalTransactionId,
 			};
 		}
 
@@ -779,8 +784,9 @@ namespace StockSharp.Algo
 		/// To convert the position into message.
 		/// </summary>
 		/// <param name="position">Position.</param>
+		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
 		/// <returns>Message.</returns>
-		public static PositionChangeMessage ToChangeMessage(this Position position)
+		public static PositionChangeMessage ToChangeMessage(this Position position, long originalTransactionId = 0)
 		{
 			if (position == null)
 				throw new ArgumentNullException(nameof(position));
@@ -792,6 +798,7 @@ namespace StockSharp.Algo
 				PortfolioName = position.Portfolio.Name,
 				SecurityId = position.Security.ToSecurityId(),
 				ClientCode = position.ClientCode,
+				OriginalTransactionId = originalTransactionId,
 			}
 			.TryAdd(PositionChangeTypes.BeginValue, position.BeginValue, true)
 			.TryAdd(PositionChangeTypes.CurrentValue, position.CurrentValue, true)
@@ -802,8 +809,9 @@ namespace StockSharp.Algo
 		/// To convert the board into message.
 		/// </summary>
 		/// <param name="board">Board.</param>
+		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
 		/// <returns>Message.</returns>
-		public static BoardMessage ToMessage(this ExchangeBoard board)
+		public static BoardMessage ToMessage(this ExchangeBoard board, long originalTransactionId = 0)
 		{
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
@@ -816,7 +824,8 @@ namespace StockSharp.Algo
 				//IsSupportMarketOrders = board.IsSupportMarketOrders,
 				//IsSupportAtomicReRegister = board.IsSupportAtomicReRegister,
 				ExpiryTime = board.ExpiryTime,
-				TimeZone = board.TimeZone
+				TimeZone = board.TimeZone,
+				OriginalTransactionId = originalTransactionId,
 			};
 		}
 

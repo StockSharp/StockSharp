@@ -589,7 +589,7 @@ namespace StockSharp.Algo.Storages
 			}
 
 			foreach (var security in _securityStorage.Lookup(msg.ToLookupCriteria(ExchangeInfoProvider)))
-				RaiseStorageMessage(security.ToMessage());
+				RaiseStorageMessage(security.ToMessage(originalTransactionId: msg.TransactionId));
 
 			base.SendInMessage(msg);
 		}
@@ -606,7 +606,7 @@ namespace StockSharp.Algo.Storages
 			}
 
 			foreach (var board in ExchangeInfoProvider.LookupBoards(msg.Like))
-				RaiseStorageMessage(board.ToMessage());
+				RaiseStorageMessage(board.ToMessage(msg.TransactionId));
 
 			base.SendInMessage(msg);
 		}
@@ -624,13 +624,13 @@ namespace StockSharp.Algo.Storages
 
 			foreach (var portfolio in _positionStorage.Portfolios.Filter(msg))
 			{
-				RaiseStorageMessage(portfolio.ToMessage());
+				RaiseStorageMessage(portfolio.ToMessage(msg.TransactionId));
 				RaiseStorageMessage(portfolio.ToChangeMessage());
 			}
 
 			foreach (var position in _positionStorage.Positions.Filter(msg))
 			{
-				RaiseStorageMessage(position.ToChangeMessage());
+				RaiseStorageMessage(position.ToChangeMessage(msg.TransactionId));
 			}
 
 			base.SendInMessage(msg);
