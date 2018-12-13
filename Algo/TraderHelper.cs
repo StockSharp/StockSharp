@@ -3568,10 +3568,9 @@ namespace StockSharp.Algo
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			if (code.IsEmpty())
-				throw new ArgumentNullException(nameof(code));
-
-			return provider.Lookup(new Security { Code = code });
+			return code.IsEmpty()
+				? provider.LookupAll()
+				: provider.Lookup(new Security { Code = code });
 		}
 
 		/// <summary>
