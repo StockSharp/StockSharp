@@ -126,7 +126,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To call the <see cref="Connected"/> event when the first adapter connects to <see cref="Adapter"/>.
 		/// </summary>
-		protected virtual bool RaiseConnectedOnFirstAdapter => true;
+		public bool RaiseConnectedOnFirstAdapter { get; set; } = true;
 
 		private IMessageChannel _inMessageChannel;
 
