@@ -191,7 +191,7 @@ namespace SampleMultiConnection
 
 			Connector.Dispose();
 
-			ConfigManager.GetService<IEntityRegistry>().DelayAction.DefaultGroup.WaitFlush(true);
+			ServicesRegistry.EntityRegistry.DelayAction.DefaultGroup.WaitFlush(true);
 
 			base.OnClosing(e);
 		}

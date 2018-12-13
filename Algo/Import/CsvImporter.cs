@@ -6,7 +6,6 @@
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Configuration;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -149,7 +148,7 @@
 
 		private void FlushBuffer(List<dynamic> buffer)
 		{
-			var registry = ConfigManager.GetService<IStorageRegistry>();
+			var registry = ServicesRegistry.StorageRegistry;
 
 			if (DataType.MessageType == typeof(NewsMessage))
 			{

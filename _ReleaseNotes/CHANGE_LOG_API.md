@@ -42,6 +42,7 @@ StockSharp API Change log
 * (feature) Reduced IEntityRegistry usage.
 * (feature) Diagram. Multiple sockets for logical condition added.
 * (feature) TraderHelper. Filter positions by PortfolioLookupMessage.
+* (feature) ServicesRegistry added.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
