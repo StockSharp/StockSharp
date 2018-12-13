@@ -1166,7 +1166,7 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				return;
 
-			RaiseLookupBoardsResult(criteria, message.Error, ExchangeBoards.LookupBoards(criteria.Like));
+			RaiseLookupBoardsResult(criteria, message.Error, ExchangeBoards.Filter(criteria.Like));
 		}
 
 		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)

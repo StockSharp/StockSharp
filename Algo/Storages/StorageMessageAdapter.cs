@@ -622,15 +622,13 @@ namespace StockSharp.Algo.Storages
 				return;
 			}
 
-			// TODO filters
-
-			foreach (var portfolio in _positionStorage.Portfolios)
+			foreach (var portfolio in _positionStorage.Portfolios.Filter(msg))
 			{
 				RaiseStorageMessage(portfolio.ToMessage());
 				RaiseStorageMessage(portfolio.ToChangeMessage());
 			}
 
-			foreach (var position in _positionStorage.Positions)
+			foreach (var position in _positionStorage.Positions.Filter(msg))
 			{
 				RaiseStorageMessage(position.ToChangeMessage());
 			}

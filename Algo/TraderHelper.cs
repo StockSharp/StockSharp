@@ -4843,7 +4843,7 @@ namespace StockSharp.Algo
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			return provider.Boards.LookupBoards(like);
+			return provider.Boards.Filter(like);
 		}
 
 		/// <summary>
@@ -4852,7 +4852,7 @@ namespace StockSharp.Algo
 		/// <param name="boards">All boards.</param>
 		/// <param name="like">Criteria.</param>
 		/// <returns>Found boards.</returns>
-		public static IEnumerable<ExchangeBoard> LookupBoards(this IEnumerable<ExchangeBoard> boards, string like)
+		public static IEnumerable<ExchangeBoard> Filter(this IEnumerable<ExchangeBoard> boards, string like)
 		{
 			if (boards == null)
 				throw new ArgumentNullException(nameof(boards));
@@ -4861,6 +4861,58 @@ namespace StockSharp.Algo
 				boards = boards.Where(b => b.Code.ContainsIgnoreCase(like));
 
 			return boards;
+		}
+
+		/// <summary>
+		/// Filter portfolios by the specified criteria.
+		/// </summary>
+		/// <param name="portfolios">All portfolios.</param>
+		/// <param name="criteria">Criteria.</param>
+		/// <returns>Found portfolios.</returns>
+		public static IEnumerable<Portfolio> Filter(this IEnumerable<Portfolio> portfolios, PortfolioLookupMessage criteria)
+		{
+			if (portfolios == null)
+				throw new ArgumentNullException(nameof(portfolios));
+
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (!criteria.PortfolioName.IsEmpty())
+				portfolios = portfolios.Where(p => p.Name.ContainsIgnoreCase(criteria.PortfolioName));
+
+			if (criteria.Currency != null)
+				portfolios = portfolios.Where(p => p.Currency == criteria.Currency);
+
+			if (!criteria.BoardCode.IsEmpty())
+				portfolios = portfolios.Where(p => p.Board?.Code.ContainsIgnoreCase(criteria.BoardCode) == true);
+
+			return portfolios;
+		}
+
+		/// <summary>
+		/// Filter positions the specified criteria.
+		/// </summary>
+		/// <param name="positions">All positions.</param>
+		/// <param name="criteria">Criteria.</param>
+		/// <returns>Found positions.</returns>
+		public static IEnumerable<Position> Filter(this IEnumerable<Position> positions, PortfolioLookupMessage criteria)
+		{
+			if (positions == null)
+				throw new ArgumentNullException(nameof(positions));
+
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (!criteria.PortfolioName.IsEmpty())
+				positions = positions.Where(p => p.Portfolio.Name.ContainsIgnoreCase(criteria.PortfolioName));
+
+			if (criteria.Currency != null)
+				positions = positions.Where(p => p.Currency == criteria.Currency);
+
+			if (!criteria.BoardCode.IsEmpty())
+				positions = positions.Where(p => p.Security.ToSecurityId().BoardCode.ContainsIgnoreCase(criteria.BoardCode));
+
+			return positions;
 		}
 	}
 }
