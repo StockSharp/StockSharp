@@ -57,7 +57,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Name={Like},TrId={TransactionId}";
+			return base.ToString() + $",Like={Like},TrId={TransactionId}";
 		}
 	}
 }
