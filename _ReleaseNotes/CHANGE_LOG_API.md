@@ -44,6 +44,7 @@ StockSharp API Change log
 * (feature) TraderHelper. Filter positions by PortfolioLookupMessage.
 * (feature) ServicesRegistry added.
 * (bug) ExpressionIndexSecurityProcessor fix.
+* (feature) FixServer. FixSecurityLegsRequestMessage, FixSecurityLegsResultMessage messages added.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

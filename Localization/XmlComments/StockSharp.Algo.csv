@@ -1092,8 +1092,8 @@ M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.ToString/inheritdoc;DocStr
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.ToSerializedString/inheritdoc;DocStr8459
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.FromSerializedString(System.String)/inheritdoc;DocStr8459
 T:StockSharp.Algo.Expressions.ExpressionIndexSecurityProcessor/summary;DocStr10625
-M:StockSharp.Algo.Expressions.ExpressionIndexSecurityProcessor.#ctor(StockSharp.Algo.Expressions.ExpressionIndexSecurity)/summary;DocStr1
-M:StockSharp.Algo.Expressions.ExpressionIndexSecurityProcessor.#ctor(StockSharp.Algo.Expressions.ExpressionIndexSecurity)/param/basketSecurity;DocStr1111
+M:StockSharp.Algo.Expressions.ExpressionIndexSecurityProcessor.#ctor(StockSharp.BusinessEntities.Security)/summary;DocStr1
+M:StockSharp.Algo.Expressions.ExpressionIndexSecurityProcessor.#ctor(StockSharp.BusinessEntities.Security)/param/basketSecurity;DocStr1111
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurityProcessor.OnCalculate(System.Decimal[])/inheritdoc;DocStr8459
 T:StockSharp.Algo.FilterableSecurityProvider/summary;DocStr2818
 M:StockSharp.Algo.FilterableSecurityProvider.#ctor(StockSharp.BusinessEntities.ISecurityProvider,System.Boolean)/summary;DocStr1
@@ -6075,7 +6075,6 @@ E:StockSharp.Algo.Testing.HistoryEmulationConnector.StateChanged/summary;DocStr2
 P:StockSharp.Algo.Testing.HistoryEmulationConnector.IsFinished/summary;DocStr1875
 P:StockSharp.Algo.Testing.HistoryEmulationConnector.MarketTimeChangedInterval/inheritdoc;DocStr8459
 M:StockSharp.Algo.Testing.HistoryEmulationConnector.ClearCache/summary;DocStr858
-P:StockSharp.Algo.Testing.HistoryEmulationConnector.RaiseConnectedOnFirstAdapter/summary;DocStr862
 M:StockSharp.Algo.Testing.HistoryEmulationConnector.OnDisconnect/summary;DocStr807
 M:StockSharp.Algo.Testing.HistoryEmulationConnector.DisposeManaged/summary;DocStr861
 M:StockSharp.Algo.Testing.HistoryEmulationConnector.Start/summary;DocStr2119

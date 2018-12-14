@@ -1151,6 +1151,16 @@
         <see cref="T:StockSharp.Fix.FixSecurityAssociationResultMessage" />.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.FixMessageTypes.SecurityLegsRequest">
+      <summary>
+        <see cref="T:StockSharp.Fix.FixSecurityLegsRequestMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixMessageTypes.SecurityLegsResult">
+      <summary>
+        <see cref="T:StockSharp.Fix.FixSecurityLegsResultMessage" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.FixUserRequestTypes">
       <summary>
             Request types.
@@ -1408,6 +1418,69 @@
       <returns>Copy.</returns>
     </member>
     <member name="M:StockSharp.Fix.FixSecurityAssociationResultMessage.ToString">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.FixSecurityLegsRequestMessage">
+      <summary>
+            Security legs request message.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityLegsRequestMessage.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Fix.FixSecurityLegsRequestMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityLegsRequestMessage.TransactionId">
+      <summary>
+            Request identifier.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityLegsRequestMessage.Like">
+      <summary>
+            The filter for securities search.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityLegsRequestMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixSecurityLegsRequestMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityLegsRequestMessage.ToString">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.FixSecurityLegsResultMessage">
+      <summary>
+            Security legs result message.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityLegsResultMessage.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Fix.FixSecurityLegsResultMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityLegsResultMessage.OriginalTransactionId">
+      <summary>
+            ID of the original message <see cref="P:StockSharp.Fix.FixSecurityLegsRequestMessage.TransactionId" /> for which this message is a response.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityLegsResultMessage.Error">
+      <summary>
+            Lookup error info.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSecurityLegsResultMessage.Legs">
+      <summary>
+            Security legs.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityLegsResultMessage.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.FixSecurityLegsResultMessage" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixSecurityLegsResultMessage.ToString">
       <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.FixServer">
@@ -5565,6 +5638,16 @@
     <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityAssociationResult">
       <summary>
             Message type for <see cref="T:StockSharp.Fix.FixSecurityAssociationResultMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityLegsRequest">
+      <summary>
+            Message type for <see cref="T:StockSharp.Fix.FixSecurityLegsRequestMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityLegsResult">
+      <summary>
+            Message type for <see cref="T:StockSharp.Fix.FixSecurityLegsResultMessage" />.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.FixTags">

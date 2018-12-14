@@ -15366,3 +15366,7 @@ DocStr10884;All portfolios;Все портфели
 DocStr10885;Filter positions the specified criteria;Отфильтровать позиции по указанному критерию
 DocStr10886;All positions;Все позиции
 DocStr10887;Found positions;Найденные позиции
+DocStr10888;Security legs request message;Сообщение запроса ног инструмента
+DocStr10889;The filter for securities search;Фильтр поиска инструментов
+DocStr10890;Security legs result message;Сообщение результата запроса ног инструмента
+DocStr10891;Security legs;Ноги инструмента
