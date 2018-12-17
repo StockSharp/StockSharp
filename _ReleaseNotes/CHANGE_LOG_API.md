@@ -45,6 +45,7 @@ StockSharp API Change log
 * (feature) ServicesRegistry added.
 * (bug) ExpressionIndexSecurityProcessor fix.
 * (feature) FixServer. FixSecurityLegsRequestMessage, FixSecurityLegsResultMessage messages added.
+* (bug) Reconnection fix.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

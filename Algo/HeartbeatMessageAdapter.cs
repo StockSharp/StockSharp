@@ -76,6 +76,7 @@ namespace StockSharp.Algo
 		private Timer _timer;
 		private bool _canSendTime;
 		private bool _isFirstTimeConnect = true;
+		private bool _suppressDisconnectError;
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HeartbeatMessageAdapter"/>.
@@ -163,13 +164,20 @@ namespace StockSharp.Algo
 					}
 					else
 					{
-						//lock (_timeSync)
-						//{
-						//	if (_currState == ConnectionStates.Connected)
-						//		_prevState = _reConnecting;
+						lock (_timeSync)
+						{
+							if (_suppressDisconnectError)
+							{
+								_suppressDisconnectError = false;
+								RaiseNewOutMessage(disconnectMsg.Error.ToErrorMessage());
+								disconnectMsg.Error = null;
+							}
 
-						//	_currState = _reConnecting;
-						//}
+							//if (_currState == ConnectionStates.Connected)
+							//	_prevState = _reConnecting;
+
+							//_currState = _reConnecting;
+						}
 
 						//_connectionTimeOut = _reConnectionSettings.Interval;
 						//_connectingAttemptCount = _reConnectionSettings.ReAttemptCount;
@@ -208,6 +216,7 @@ namespace StockSharp.Algo
 						_connectingAttemptCount = 0;
 						_connectionTimeOut = default(TimeSpan);
 						_canSendTime = false;
+						_suppressDisconnectError = false;
 					}
 
 					break;
@@ -239,6 +248,8 @@ namespace StockSharp.Algo
 				{
 					lock (_timeSync)
 					{
+						_suppressDisconnectError = _timer != null;
+
 						_currState = ConnectionStates.Disconnecting;
 						_connectionTimeOut = _reConnectionSettings.TimeOutInterval;
 
@@ -252,7 +263,7 @@ namespace StockSharp.Algo
 				case ExtendedMessageTypes.Reconnect:
 				{
 					SendInMessage(new ConnectMessage());
-					break;
+					return;
 				}
 			}
 
