@@ -18,6 +18,9 @@
         <member name="P:StockSharp.IEX.IEXMessageAdapter.IsSupportNativeSecurityLookup">
             <inheritdoc />
         </member>
+        <member name="P:StockSharp.IEX.IEXMessageAdapter.IsSupportSecuritiesLookupAll">
+            <inheritdoc />
+        </member>
         <member name="P:StockSharp.IEX.IEXMessageAdapter.TimeFrames">
             <inheritdoc />
         </member>

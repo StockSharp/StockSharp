@@ -40,6 +40,9 @@
             Поддерживается ли торговой системой поиск инструментов.
             </summary>
     </member>
+    <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.TimeFrames">
       <summary>
             Возможные тайм-фреймы.

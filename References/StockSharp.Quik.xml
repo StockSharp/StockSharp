@@ -2353,6 +2353,9 @@
             Маркет-дата адаптер сообщений для Quik, работающий через протокол DDE.
             </summary>
     </member>
+    <member name="P:StockSharp.Quik.QuikDdeAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Quik.QuikDdeAdapter.CustomTables">
       <summary>
             Список произвольных таблиц.

@@ -79,6 +79,9 @@
             Поддерживается ли торговой системой поиск инструментов.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Micex.MicexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Отправить сообщение.

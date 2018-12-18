@@ -46,6 +46,7 @@ StockSharp API Change log
 * (bug) ExpressionIndexSecurityProcessor fix.
 * (feature) FixServer. FixSecurityLegsRequestMessage, FixSecurityLegsResultMessage messages added.
 * (bug) Reconnection fix.
+* (bug) IMessageAdapter.IsSupportSecuritiesLookupAll overriding fix.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

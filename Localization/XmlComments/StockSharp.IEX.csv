@@ -2,6 +2,7 @@ T:StockSharp.IEX.IEXMessageAdapter/summary;DocStr2538
 M:StockSharp.IEX.IEXMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.IEX.IEXMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.IEX.IEXMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.IEX.IEXMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 P:StockSharp.IEX.IEXMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.IEX.IEXMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.IEX.IEXMessageAdapter.Token/summary;DocStr3145
