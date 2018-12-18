@@ -3246,9 +3246,9 @@ Str3462;On live data;На живых данных
 Str3463;Real;Реальное
 Str3465;Certificate;Сертификат
 Str3466;Path to certificate file, necessary to connect to Rithmic system.;Путь к файлу сертификата, необходимому для подключения к системе Rithmic.
-Str3467;Login (extra);Логин (дополнительно)
+Str3467;Login (trans);Логин (транзак)
 Str3468;Additional login. Used when transaction sending is carried out to a separate server.;Дополнительное имя пользователя. Используется в случае, если отправка транзакций осуществляется на отдельный сервер.
-Str3469;Password (extra);Пароль (дополнительно)
+Str3469;Password (trans);Пароль (транзак)
 Str3470;Additional password. Used when transaction sending is carried out to a separate server.;Дополнительный пароль. Используется в случае, если отправка транзакций осуществляется на отдельный сервер.
 Str3471;File log;Лог файл
 Str3472;Path to log file.;Путь к лог файлу.
@@ -4906,6 +4906,10 @@ SecuritiesAssociations;Securities associations;Ассоциации инстру
 FuturesSection;Futures section;Фьючерсная секция
 SpotSection;Spot section;Спот секция
 Spot;Spot;Спот
+HistoricalUserName;User name (hist);Логин (история)
+HistoricalUserNameDesc;Additional login. User id used for authentication with the history plant.;Дополнительный логин. Используется для авторизации на сервере истории.
+HistoricalPassword;Password (hist);Пароль (история)
+HistoricalPasswordDesc;Additional password. Password used for authentication with the history plant.;Дополнительный пароль. Используется для авторизации на сервере истории.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -10685,7 +10689,7 @@ DocStr5927;The OpenECry server API address. The default is {0};Адрес API с
 DocStr5928;The required mode of connection to the terminal. The default is {0};Требуемый режим подключения к терминалу. По умолчанию {0}
 DocStr5929;To use the 'native' reconnection process. Enabled by default;"Использовать ""родной"" механизм восстановления соединения. По умолчанию включено"
 DocStr5930;Connection to the terminal modes. Description of functionality http://www.openecry.com/api/OECAPIRemoting.pdf;Режимы подключения к терминалу. Описание функциональности http://www.openecry.com/api/OECAPIRemoting.pdf
-DocStr5931;If there is another connection with the same Login/Password, it can be diconnected;Если существует другое подключение с теми же Login/Password, оно может быть разорвано
+DocStr5931;If there is another connection with the same Login/Password, it can be disconnected;Если существует другое подключение с теми же Login/Password, оно может быть разорвано
 DocStr5932;An attempt to activate the mode {0}, in case of failure the mode {1} is activated;Попытка активировать в режиме {0}, в случае неудачи - режим {1}
 DocStr5933;The drop-down list to select the OpenECry server address;Выпадающий список для выбора адреса сервера OpenECry
 DocStr5934;Addresses of OpenECry system servers;Адреса серверов системы OpenECry

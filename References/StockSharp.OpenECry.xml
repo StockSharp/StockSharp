@@ -133,7 +133,7 @@
     </member>
     <member name="F:StockSharp.OpenECry.OpenECryRemoting.Primary">
       <summary>
-            If there is another connection with the same Login/Password, it can be diconnected.
+            If there is another connection with the same Login/Password, it can be disconnected.
             </summary>
     </member>
     <member name="F:StockSharp.OpenECry.OpenECryRemoting.Secondary">

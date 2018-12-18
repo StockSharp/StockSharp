@@ -32388,12 +32388,12 @@ namespace StockSharp.Localization
 		public static string Str3466 => GetString(Str3466Key);
 
 		/// <summary>
-		/// Login (extra)
+		/// Login (trans)
 		/// </summary>
 		public const string Str3467Key = nameof(Str3467);
 
 		/// <summary>
-		/// Login (extra)
+		/// Login (trans)
 		/// </summary>
 		public static string Str3467 => GetString(Str3467Key);
 
@@ -32408,12 +32408,12 @@ namespace StockSharp.Localization
 		public static string Str3468 => GetString(Str3468Key);
 
 		/// <summary>
-		/// Password (extra)
+		/// Password (trans)
 		/// </summary>
 		public const string Str3469Key = nameof(Str3469);
 
 		/// <summary>
-		/// Password (extra)
+		/// Password (trans)
 		/// </summary>
 		public static string Str3469 => GetString(Str3469Key);
 
@@ -48736,5 +48736,45 @@ namespace StockSharp.Localization
 		/// Spot
 		/// </summary>
 		public static string Spot => GetString(SpotKey);
+
+		/// <summary>
+		/// User name (hist)
+		/// </summary>
+		public const string HistoricalUserNameKey = nameof(HistoricalUserName);
+
+		/// <summary>
+		/// User name (hist)
+		/// </summary>
+		public static string HistoricalUserName => GetString(HistoricalUserNameKey);
+
+		/// <summary>
+		/// Additional login. User id used for authentication with the history plant.
+		/// </summary>
+		public const string HistoricalUserNameDescKey = nameof(HistoricalUserNameDesc);
+
+		/// <summary>
+		/// Additional login. User id used for authentication with the history plant.
+		/// </summary>
+		public static string HistoricalUserNameDesc => GetString(HistoricalUserNameDescKey);
+
+		/// <summary>
+		/// Password (hist)
+		/// </summary>
+		public const string HistoricalPasswordKey = nameof(HistoricalPassword);
+
+		/// <summary>
+		/// Password (hist)
+		/// </summary>
+		public static string HistoricalPassword => GetString(HistoricalPasswordKey);
+
+		/// <summary>
+		/// Additional password. Password used for authentication with the history plant.
+		/// </summary>
+		public const string HistoricalPasswordDescKey = nameof(HistoricalPasswordDesc);
+
+		/// <summary>
+		/// Additional password. Password used for authentication with the history plant.
+		/// </summary>
+		public static string HistoricalPasswordDesc => GetString(HistoricalPasswordDescKey);
 	}
 }
