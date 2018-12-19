@@ -6698,22 +6698,22 @@ namespace StockSharp.Localization
 		public static string UnSubscribedOk => GetString(UnSubscribedOkKey);
 
 		/// <summary>
-		/// Security {0} cannot subscribe for {1}. Error is '{0}'.
+		/// Security {0} cannot subscribe for {1}. Error is '{2}'.
 		/// </summary>
 		public const string SubscribedErrorKey = nameof(SubscribedError);
 
 		/// <summary>
-		/// Security {0} cannot subscribe for {1}. Error is '{0}'.
+		/// Security {0} cannot subscribe for {1}. Error is '{2}'.
 		/// </summary>
 		public static string SubscribedError => GetString(SubscribedErrorKey);
 
 		/// <summary>
-		/// Security {0} cannot unsubscribe from {1}. Error is '{0}'.
+		/// Security {0} cannot unsubscribe from {1}. Error is '{2}'.
 		/// </summary>
 		public const string UnSubscribedErrorKey = nameof(UnSubscribedError);
 
 		/// <summary>
-		/// Security {0} cannot unsubscribe from {1}. Error is '{0}'.
+		/// Security {0} cannot unsubscribe from {1}. Error is '{2}'.
 		/// </summary>
 		public static string UnSubscribedError => GetString(UnSubscribedErrorKey);
 

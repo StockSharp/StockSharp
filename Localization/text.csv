@@ -671,8 +671,8 @@ Str688Params;Message '{0}' does not have information about the type of data bein
 Str689Params;For order {0}/{1} security information has not been submitted.;Для заявки {0}/{1} не была передана информация об инструменте.
 SubscribedOk;Security {0} is subscribed for {1};Инструмент {0} подписан на {1}
 UnSubscribedOk;Security {0} is unsubscribed for {1};Инструмент {0} отписан от {1}
-SubscribedError;Security {0} cannot subscribe for {1}. Error is '{0}'.;Инструмент {0} не может подписаться на {1}. Ошибка'{0}'.
-UnSubscribedError;Security {0} cannot unsubscribe from {1}. Error is '{0}'.;Инструмент {0} не может отписаться от {1}. Ошибка'{0}'.
+SubscribedError;Security {0} cannot subscribe for {1}. Error is '{2}'.;Инструмент {0} не может подписаться на {1}. Ошибка'{2}'.
+UnSubscribedError;Security {0} cannot unsubscribe from {1}. Error is '{2}'.;Инструмент {0} не может отписаться от {1}. Ошибка'{2}'.
 SubscriptionSent;Security {0} is subscribing for {1};Инструмент {0} подписается на {1}
 UnSubscriptionSent;Security {0} is unsubscribing from {1};Инструмент {0} отписается от {1}
 Str691Params; from {0} till {1}; с {0} по {1}
