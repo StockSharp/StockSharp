@@ -160,9 +160,9 @@
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Configuration\ConfigurationPublic.csproj">
+    <ProjectReference Include="..\..\..\Configuration\ConfigurationGitHub.csproj">
       <Project>{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}</Project>
-      <Name>ConfigurationPublic</Name>
+      <Name>ConfigurationGitHub</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{a98a81ce-75a1-4fab-9c02-e6eef4b51f4f}</Project>
