@@ -4910,6 +4910,9 @@ HistoricalUserName;User name (hist);Логин (история)
 HistoricalUserNameDesc;Additional login. User id used for authentication with the history plant.;Дополнительный логин. Используется для авторизации на сервере истории.
 HistoricalPassword;Password (hist);Пароль (история)
 HistoricalPasswordDesc;Additional password. Password used for authentication with the history plant.;Дополнительный пароль. Используется для авторизации на сервере истории.
+Idax;IDAX;IDAX
+Digifinex;DigiFinex;DigiFinex
+TradeOgre;TradeOgre;TradeOgre
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15374,3 +15377,7 @@ DocStr10888;Security legs request message;Сообщение запроса но
 DocStr10889;The filter for securities search;Фильтр поиска инструментов
 DocStr10890;Security legs result message;Сообщение результата запроса ног инструмента
 DocStr10891;Security legs;Ноги инструмента
+DocStr10892;Information about IDAX;Информация о IDAX
+DocStr10893;Information about DigiFinex;Информация о DigiFinex
+DocStr10894;Information about TradeOgre;Информация о TradeOgre
+DocStr10895;Help url;Help адрес

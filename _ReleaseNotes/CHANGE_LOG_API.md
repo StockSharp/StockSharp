@@ -47,6 +47,7 @@ StockSharp API Change log
 * (feature) FixServer. FixSecurityLegsRequestMessage, FixSecurityLegsResultMessage messages added.
 * (bug) Reconnection fix.
 * (bug) IMessageAdapter.IsSupportSecuritiesLookupAll overriding fix.
+* (feature) Digifinex, Idax, TradeOgre connectors.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

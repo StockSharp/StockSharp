@@ -226,6 +226,15 @@
     <Reference Include="StockSharp.Zaif">
       <HintPath>..\References\StockSharp.Zaif.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Digifinex">
+      <HintPath>..\References\StockSharp.Digifinex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Idax">
+      <HintPath>..\References\StockSharp.Idax.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.TradeOgre">
+      <HintPath>..\References\StockSharp.TradeOgre.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />

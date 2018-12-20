@@ -48776,5 +48776,35 @@ namespace StockSharp.Localization
 		/// Additional password. Password used for authentication with the history plant.
 		/// </summary>
 		public static string HistoricalPasswordDesc => GetString(HistoricalPasswordDescKey);
+
+		/// <summary>
+		/// IDAX
+		/// </summary>
+		public const string IdaxKey = nameof(Idax);
+
+		/// <summary>
+		/// IDAX
+		/// </summary>
+		public static string Idax => GetString(IdaxKey);
+
+		/// <summary>
+		/// DigiFinex
+		/// </summary>
+		public const string DigifinexKey = nameof(Digifinex);
+
+		/// <summary>
+		/// DigiFinex
+		/// </summary>
+		public static string Digifinex => GetString(DigifinexKey);
+
+		/// <summary>
+		/// TradeOgre
+		/// </summary>
+		public const string TradeOgreKey = nameof(TradeOgre);
+
+		/// <summary>
+		/// TradeOgre
+		/// </summary>
+		public static string TradeOgre => GetString(TradeOgreKey);
 	}
 }

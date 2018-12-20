@@ -97,6 +97,9 @@
     <Reference Include="StockSharp.Cqg.Continuum">
       <HintPath>..\References\StockSharp.Cqg.Continuum.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Digifinex">
+      <HintPath>..\References\StockSharp.Digifinex.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.ETrade">
       <HintPath>..\References\StockSharp.ETrade.dll</HintPath>
     </Reference>
@@ -111,6 +114,9 @@
     </Reference>
     <Reference Include="StockSharp.HitBtc">
       <HintPath>..\References\StockSharp.HitBtc.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Idax">
+      <HintPath>..\References\StockSharp.Idax.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.InteractiveBrokers">
       <HintPath>..\References\StockSharp.InteractiveBrokers.dll</HintPath>
@@ -168,6 +174,9 @@
     </Reference>
     <Reference Include="StockSharp.Sterling">
       <HintPath>..\References\StockSharp.Sterling.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.TradeOgre">
+      <HintPath>..\References\StockSharp.TradeOgre.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Transaq">
       <HintPath>..\References\StockSharp.Transaq.dll</HintPath>

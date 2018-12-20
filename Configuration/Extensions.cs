@@ -52,6 +52,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Cqg.Com;
 	using StockSharp.Cryptopia;
 	using StockSharp.Deribit;
+	using StockSharp.Digifinex;
 	using StockSharp.ETrade;
 	using StockSharp.Exmo;
 	using StockSharp.Fix;
@@ -59,6 +60,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Gdax;
 	using StockSharp.HitBtc;
 	using StockSharp.Huobi;
+	using StockSharp.Idax;
 	using StockSharp.IEX;
 	using StockSharp.InteractiveBrokers;
 	using StockSharp.IQFeed;
@@ -85,6 +87,7 @@ namespace StockSharp.Configuration
 	using StockSharp.SmartCom;
 	using StockSharp.SpbEx;
 	using StockSharp.Sterling;
+	using StockSharp.TradeOgre;
 	using StockSharp.Transaq;
 	using StockSharp.Twime;
 	using StockSharp.Xaml;
@@ -229,6 +232,9 @@ namespace StockSharp.Configuration
 			() => typeof(QuoinexMessageAdapter),
 			() => typeof(BitbankMessageAdapter),
 			() => typeof(ZaifMessageAdapter),
+			() => typeof(DigifinexMessageAdapter),
+			() => typeof(IdaxMessageAdapter),
+			() => typeof(TradeOgreMessageAdapter),
 		});
 
 		/// <summary>

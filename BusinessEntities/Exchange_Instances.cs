@@ -970,5 +970,35 @@ namespace StockSharp.BusinessEntities
 			EngName = "WIKI",
 			RusName = "WIKI",
 		};
+
+		/// <summary>
+		/// Information about IDAX.
+		/// </summary>
+		public static Exchange Idax { get; } = new Exchange
+		{
+			Name = "IDAX",
+			EngName = "IDAX",
+			RusName = "IDAX",
+		};
+
+		/// <summary>
+		/// Information about DigiFinex.
+		/// </summary>
+		public static Exchange Digifinex { get; } = new Exchange
+		{
+			Name = "DGFX",
+			EngName = "DigiFinex",
+			RusName = "DigiFinex",
+		};
+
+		/// <summary>
+		/// Information about TradeOgre.
+		/// </summary>
+		public static Exchange TradeOgre { get; } = new Exchange
+		{
+			Name = "TOGR",
+			EngName = "TradeOgre",
+			RusName = "TradeOgre",
+		};
 	}
 }
