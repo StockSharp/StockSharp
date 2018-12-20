@@ -169,7 +169,10 @@ namespace SampleLMAX
 				Trader.IsDemo = IsDemo.IsChecked == true;
 
 				// in sandbox security identifies may be different than uploaded on the site
-				Trader.IsDownloadSecurityFromSite = !Trader.IsDemo;
+				if (!Trader.IsDemo)
+				{
+					Trader.SecuritiesLocation = LmaxLocations.London;
+				}
 
 				// clear password box for security reason
 				//Password.Clear();
