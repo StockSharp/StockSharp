@@ -91,7 +91,7 @@ namespace SampleRithmic
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Quotes.IsEnabled = Depth.IsEnabled = NewOrder.IsEnabled = NewStopOrder.IsEnabled = security != null;
+			Quotes.IsEnabled = OrderLog.IsEnabled = Depth.IsEnabled = NewOrder.IsEnabled = NewStopOrder.IsEnabled = security != null;
 
 			TryEnableCandles();
 		}
@@ -182,6 +182,23 @@ namespace SampleRithmic
 				{
 					trader.RegisterSecurity(security);
 					trader.RegisterTrades(security);
+				}
+			}
+		}
+
+		private void OrderLogClick(object sender, RoutedEventArgs e)
+		{
+			var trader = MainWindow.Instance.Trader;
+
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				if (trader.RegisteredOrderLogs.Contains(security))
+				{
+					trader.UnRegisterOrderLog(security);
+				}
+				else
+				{
+					trader.RegisterOrderLog(security);
 				}
 			}
 		}
