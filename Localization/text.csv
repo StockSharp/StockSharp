@@ -14370,7 +14370,7 @@ DocStr9792;Length of result buffer;Длина результирующего б�
 DocStr9793;The default value;Значение по-умолчанию
 DocStr9794;Result buffer;Результирующий буфер
 DocStr9800;Spb exchange;СПб биржа
-DocStr9801;All avaliable adapters;Все доступные адаптеры
+DocStr9801;All available adapters;Все доступные адаптеры
 DocStr9802;Users info;Информация о пользователях
 DocStr9803;Type of builder;Тип построителя
 DocStr9804;{0} derived type;Производный тип {0}

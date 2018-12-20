@@ -238,7 +238,7 @@ namespace StockSharp.Configuration
 		});
 
 		/// <summary>
-		/// All avaliable adapters.
+		/// All available adapters.
 		/// </summary>
 		public static IEnumerable<Type> Adapters => _customAdapters.Concat(_adapters.Value.Select(v =>
 		{
