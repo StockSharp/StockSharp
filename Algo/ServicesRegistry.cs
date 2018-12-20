@@ -53,6 +53,11 @@ namespace StockSharp.Algo
 		public static ISecurityProvider SecurityProvider => ConfigManager.GetService<ISecurityProvider>();
 
 		/// <summary>
+		/// The market data provider.
+		/// </summary>
+		public static IMarketDataProvider MarketDataProvider => ConfigManager.GetService<IMarketDataProvider>();
+
+		/// <summary>
 		/// The storage of market data.
 		/// </summary>
 		public static IStorageRegistry StorageRegistry => ConfigManager.GetService<IStorageRegistry>();
