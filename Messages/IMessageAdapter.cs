@@ -50,7 +50,7 @@ namespace StockSharp.Messages
 		bool IsSupportStopLoss { get; }
 
 		/// <summary>
-		/// Determines whether the adapter support take-porift orders.
+		/// Determines whether the adapter support take-profit orders.
 		/// </summary>
 		bool IsSupportTakeProfit { get; }
 

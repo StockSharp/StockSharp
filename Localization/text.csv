@@ -15077,7 +15077,7 @@ DocStr10565;Luxembourgish franc;Люксембургский франк
 DocStr10566;Get adapter by portfolio;Получить адаптер по портфелю
 DocStr10567;Extended interface for specify extra operation with conditional orders;Расширенный интерфейс для указания дополнительных операций с условными заявками
 DocStr10568;Determines whether the adapter support stop-loss orders;Определить, поддерживает ли адаптер заявки типа стоп-лосс
-DocStr10569;Determines whether the adapter support take-porift orders;Определить, поддерживает ли адаптер заявки типа тейк-профит
+DocStr10569;Determines whether the adapter support take-profit orders;Определить, поддерживает ли адаптер заявки типа тейк-профит
 DocStr10570;Determines whether the adapter support withdraw orders;Определить, поддерживает ли адаптер заявки на вывод
 DocStr10571;Create stop order condition;Создать стоп условие
 DocStr10572;Is take-profit of stop-loss;Является ли тейк-профитом или стоп-лоссом
