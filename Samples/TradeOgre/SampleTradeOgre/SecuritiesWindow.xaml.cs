@@ -25,9 +25,6 @@ namespace SampleTradeOgre
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
-
-			CandlesPeriods.ItemsSource = TradeOgreMessageAdapter.AllTimeFrames;
-			CandlesPeriods.SelectedIndex = 1;
 		}
 
 		protected override void OnClosed(EventArgs e)
@@ -51,8 +48,6 @@ namespace SampleTradeOgre
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
 			Quotes.IsEnabled = NewOrder.IsEnabled = NewStopOrder.IsEnabled = NewStopOrder.IsEnabled = Depth.IsEnabled = security != null;
-
-			TryEnableCandles();
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -86,27 +81,6 @@ namespace SampleTradeOgre
 
 			if (newOrder.ShowModal(this))
 				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
-		}
-
-		private void CandlesClick(object sender, RoutedEventArgs e)
-		{
-			foreach (var security in SecurityPicker.SelectedSecurities)
-			{
-				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
-				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
-
-				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100))).Show();
-			}
-		}
-
-		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			TryEnableCandles();
-		}
-
-		private void TryEnableCandles()
-		{
-			Candles.IsEnabled = CandlesPeriods.SelectedItem != null && SecurityPicker.SelectedSecurity != null;
 		}
 
 		private void DepthClick(object sender, RoutedEventArgs e)
