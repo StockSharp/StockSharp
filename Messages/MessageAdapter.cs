@@ -286,7 +286,7 @@ namespace StockSharp.Messages
 		/// Securities and portfolios lookup timeout.
 		/// </summary>
 		/// <remarks>
-		/// By defaut is 10 seconds.
+		/// By default is 10 seconds.
 		/// </remarks>
 		[Browsable(false)]
 		public TimeSpan LookupTimeOut
@@ -598,15 +598,6 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Initialize a new message <see cref="SecurityMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		protected void SendOutSecurityMessage(SecurityId securityId)
-		{
-			SendOutMessage(new SecurityMessage { SecurityId = securityId });
-		}
-
-		/// <summary>
-		/// Initialize a new message <see cref="SecurityMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
-		/// </summary>
 		/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
 		protected void SendOutMarketDataNotSupported(long originalTransactionId)
 		{
@@ -631,10 +622,7 @@ namespace StockSharp.Messages
 			return TimeFrames;
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			Id = storage.GetValue(nameof(Id), Id);
@@ -646,10 +634,7 @@ namespace StockSharp.Messages
 			base.Load(storage);
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Id), Id);
@@ -705,14 +690,6 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual bool IsSupportWithdraw => false;
-
-		/// <inheritdoc />
-		public virtual OrderCondition CreateStopCondition(bool isTakeProfit, decimal? stopPrice)
-			=> throw new NotSupportedException();
-
-		/// <inheritdoc />
-		public virtual OrderCondition CreateWithdrawCondition(WithdrawInfo info)
-			=> throw new NotSupportedException();
 	}
 
 	/// <summary>
@@ -729,10 +706,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
 			SendOutMessage(message);

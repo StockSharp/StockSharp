@@ -3300,9 +3300,6 @@
     <member name="P:StockSharp.Quik.QuikTrans2QuikAdapter.IsSupportTakeProfit">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Отправить сообщение.

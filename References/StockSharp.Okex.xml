@@ -77,16 +77,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Okex.OkexOrderCondition"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Okex.OkexOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Okex.OkexOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
-        </member>
         <member name="P:StockSharp.Okex.OkexOrderCondition.Margin">
             <summary>
             Margin.

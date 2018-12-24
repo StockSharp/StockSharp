@@ -56,26 +56,6 @@
         <member name="M:StockSharp.Digifinex.DigifinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>
-        <member name="T:StockSharp.Digifinex.DigifinexOrderCondition">
-            <summary>
-            <see cref="N:StockSharp.Digifinex"/> order condition.
-            </summary>
-        </member>
-        <member name="M:StockSharp.Digifinex.DigifinexOrderCondition.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Digifinex.DigifinexOrderCondition"/>.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Digifinex.DigifinexOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Digifinex.DigifinexOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
-        </member>
         <member name="T:StockSharp.Digifinex.DigifinexTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Digifinex"/>.

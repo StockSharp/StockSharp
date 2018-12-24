@@ -13,8 +13,6 @@ M:StockSharp.Zaif.ZaifMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transa
 M:StockSharp.Zaif.ZaifMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Zaif.ZaifOrderCondition/summary;DocStr60
 M:StockSharp.Zaif.ZaifOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Zaif.ZaifOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Zaif.ZaifOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Zaif.ZaifTrader/summary;DocStr2539
 M:StockSharp.Zaif.ZaifTrader.#ctor/summary;DocStr1
 P:StockSharp.Zaif.ZaifTrader.Key/summary;Str3304

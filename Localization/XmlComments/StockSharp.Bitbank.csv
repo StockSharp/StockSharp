@@ -15,8 +15,8 @@ M:StockSharp.Bitbank.BitbankMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/
 M:StockSharp.Bitbank.BitbankMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Bitbank.BitbankOrderCondition/summary;DocStr60
 M:StockSharp.Bitbank.BitbankOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Bitbank.BitbankOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Bitbank.BitbankOrderCondition.WithdrawInfo/summary;WithdrawInfo
+P:StockSharp.Bitbank.BitbankOrderCondition.IsWithdraw/inheritdoc;DocStr8459
+P:StockSharp.Bitbank.BitbankOrderCondition.WithdrawInfo/inheritdoc;DocStr8459
 T:StockSharp.Bitbank.BitbankTrader/summary;DocStr2539
 M:StockSharp.Bitbank.BitbankTrader.#ctor/summary;DocStr1
 P:StockSharp.Bitbank.BitbankTrader.Key/summary;Str3304

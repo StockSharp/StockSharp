@@ -4,7 +4,6 @@ M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tran
 M:StockSharp.Oanda.OandaMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportTakeProfit/inheritdoc;DocStr8459
-M:StockSharp.Oanda.OandaMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459

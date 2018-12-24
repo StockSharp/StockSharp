@@ -76,16 +76,6 @@
             Activation price, when reached an order will be placed.
             </summary>
         </member>
-        <member name="P:StockSharp.Gdax.GdaxOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Gdax.GdaxOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
-        </member>
         <member name="T:StockSharp.Gdax.GdaxTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Gdax"/>.

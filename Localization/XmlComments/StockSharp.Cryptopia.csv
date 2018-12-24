@@ -13,8 +13,8 @@ M:StockSharp.Cryptopia.CryptopiaMessageAdapter.#ctor(Ecng.Common.IdGenerator)/pa
 M:StockSharp.Cryptopia.CryptopiaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Cryptopia.CryptopiaOrderCondition/summary;DocStr60
 M:StockSharp.Cryptopia.CryptopiaOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Cryptopia.CryptopiaOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Cryptopia.CryptopiaOrderCondition.WithdrawInfo/summary;WithdrawInfo
+P:StockSharp.Cryptopia.CryptopiaOrderCondition.IsWithdraw/inheritdoc;DocStr8459
+P:StockSharp.Cryptopia.CryptopiaOrderCondition.WithdrawInfo/inheritdoc;DocStr8459
 T:StockSharp.Cryptopia.CryptopiaTrader/summary;DocStr2539
 M:StockSharp.Cryptopia.CryptopiaTrader.#ctor/summary;DocStr1
 P:StockSharp.Cryptopia.CryptopiaTrader.Key/summary;Str3304

@@ -44,9 +44,6 @@
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportTakeProfit">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.LMAX.LmaxMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>

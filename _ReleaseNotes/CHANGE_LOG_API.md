@@ -48,6 +48,7 @@ StockSharp API Change log
 * (bug) Reconnection fix.
 * (bug) IMessageAdapter.IsSupportSecuritiesLookupAll overriding fix.
 * (feature) Digifinex, Idax, TradeOgre connectors.
+* (feature) ITakeProfitOrderCondition, IStopLossOrderCondition, IWithdrawOrderCondition.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

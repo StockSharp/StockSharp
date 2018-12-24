@@ -72,14 +72,10 @@
             </summary>
         </member>
         <member name="P:StockSharp.Bitbank.BitbankOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="P:StockSharp.Bitbank.BitbankOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="T:StockSharp.Bitbank.BitbankTrader">
             <summary>

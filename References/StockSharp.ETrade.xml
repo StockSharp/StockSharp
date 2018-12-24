@@ -70,9 +70,6 @@
     <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportStopLoss">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.ETrade.ETradeMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>

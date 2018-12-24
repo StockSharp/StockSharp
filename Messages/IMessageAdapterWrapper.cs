@@ -296,11 +296,5 @@ namespace StockSharp.Messages
 		bool IMessageAdapterExtension.IsSupportTakeProfit => InnerAdapter.IsSupportTakeProfit;
 
 		bool IMessageAdapterExtension.IsSupportWithdraw => InnerAdapter.IsSupportWithdraw;
-
-		OrderCondition IMessageAdapterExtension.CreateStopCondition(bool isTakeProfit, decimal? stopPrice)
-			=> InnerAdapter.CreateStopCondition(isTakeProfit, stopPrice);
-
-		OrderCondition IMessageAdapterExtension.CreateWithdrawCondition(WithdrawInfo info)
-			=> InnerAdapter.CreateWithdrawCondition(info);
 	}
 }

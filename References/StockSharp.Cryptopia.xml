@@ -62,14 +62,10 @@
             </summary>
         </member>
         <member name="P:StockSharp.Cryptopia.CryptopiaOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="P:StockSharp.Cryptopia.CryptopiaOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="T:StockSharp.Cryptopia.CryptopiaTrader">
             <summary>

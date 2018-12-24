@@ -3,7 +3,6 @@ M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summ
 M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Sterling.SterlingMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
-M:StockSharp.Sterling.SterlingMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
 P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
 M:StockSharp.Sterling.SterlingMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Sterling.SterlingExtendedOrderTypes/summary;DocStr7559

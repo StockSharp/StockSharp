@@ -7249,12 +7249,6 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportWithdraw">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateWithdrawCondition(StockSharp.Messages.WithdrawInfo)">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired">
       <inheritdoc />
     </member>

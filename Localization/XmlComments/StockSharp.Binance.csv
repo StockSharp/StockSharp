@@ -18,8 +18,6 @@ T:StockSharp.Binance.BinanceOrderCondition/summary;DocStr60
 M:StockSharp.Binance.BinanceOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Binance.BinanceOrderCondition.Type/summary;Str1963
 P:StockSharp.Binance.BinanceOrderCondition.StopPrice/summary;Str3460
-P:StockSharp.Binance.BinanceOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Binance.BinanceOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Binance.BinanceTrader/summary;DocStr2539
 M:StockSharp.Binance.BinanceTrader.#ctor/summary;DocStr1
 P:StockSharp.Binance.BinanceTrader.Key/summary;Str3304

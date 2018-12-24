@@ -15,8 +15,6 @@ M:StockSharp.Okex.OkexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transa
 M:StockSharp.Okex.OkexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Okex.OkexOrderCondition/summary;DocStr60
 M:StockSharp.Okex.OkexOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Okex.OkexOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Okex.OkexOrderCondition.WithdrawInfo/summary;WithdrawInfo
 P:StockSharp.Okex.OkexOrderCondition.Margin/summary;Margin
 P:StockSharp.Okex.OkexOrderCondition.Leverage/summary;Leverage
 P:StockSharp.Okex.OkexOrderCondition.MarginMode/summary;DocStr10814

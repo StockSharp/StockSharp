@@ -21,9 +21,6 @@
         <member name="P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportStopLoss">
             <inheritdoc />
         </member>
-        <member name="M:StockSharp.Sterling.SterlingMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportNativePortfolioLookup">
             <inheritdoc />
         </member>

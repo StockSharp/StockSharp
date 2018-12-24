@@ -25,8 +25,6 @@ P:StockSharp.Kraken.KrakenOrderCondition.IsTrailing/summary;Str3446
 P:StockSharp.Kraken.KrakenOrderCondition.Leverage/summary;Leverage
 P:StockSharp.Kraken.KrakenOrderCondition.OrderFlags/summary;OrderFlags
 P:StockSharp.Kraken.KrakenOrderCondition.StartTime/summary;StartTime
-P:StockSharp.Kraken.KrakenOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Kraken.KrakenOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Kraken.KrakenTrader/summary;DocStr2539
 M:StockSharp.Kraken.KrakenTrader.#ctor/summary;DocStr1
 P:StockSharp.Kraken.KrakenTrader.Key/summary;Str3304

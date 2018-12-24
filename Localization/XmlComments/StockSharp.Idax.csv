@@ -14,8 +14,6 @@ M:StockSharp.Idax.IdaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transa
 M:StockSharp.Idax.IdaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Idax.IdaxOrderCondition/summary;DocStr60
 M:StockSharp.Idax.IdaxOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Idax.IdaxOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Idax.IdaxOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Idax.IdaxTrader/summary;DocStr2539
 M:StockSharp.Idax.IdaxTrader.#ctor/summary;DocStr1
 P:StockSharp.Idax.IdaxTrader.Key/summary;Str3304

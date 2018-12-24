@@ -26,9 +26,6 @@
     <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportStopLoss">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityLookupRequired">
       <summary>
         <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.

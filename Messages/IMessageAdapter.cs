@@ -40,41 +40,6 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Extended interface for specify extra operation with conditional orders.
-	/// </summary>
-	public interface IMessageAdapterExtension
-	{
-		/// <summary>
-		/// Determines whether the adapter support stop-loss orders.
-		/// </summary>
-		bool IsSupportStopLoss { get; }
-
-		/// <summary>
-		/// Determines whether the adapter support take-profit orders.
-		/// </summary>
-		bool IsSupportTakeProfit { get; }
-
-		/// <summary>
-		/// Determines whether the adapter support withdraw orders.
-		/// </summary>
-		bool IsSupportWithdraw { get; }
-
-		/// <summary>
-		/// Create stop order condition.
-		/// </summary>
-		/// <param name="isTakeProfit">Is take-profit of stop-loss.</param>
-		/// <param name="stopPrice">Limit price for activated order. Can be <see langword="null" /> for <see cref="OrderTypes.Market"/>.</param>
-		/// <returns>Order condition. If the connection does not support the order type, the exception <see cref="NotSupportedException" /> will be thrown.</returns>
-		OrderCondition CreateStopCondition(bool isTakeProfit, decimal? stopPrice);
-
-		/// <summary>
-		/// Create withdraw order condition.
-		/// </summary>
-		/// <returns>Order condition. If the connection does not support the order type, the exception <see cref="NotSupportedException" /> will be thrown.</returns>
-		OrderCondition CreateWithdrawCondition(WithdrawInfo info);
-	}
-
-	/// <summary>
 	/// Base message adapter interface which convert messages <see cref="Message"/> to native commands and back.
 	/// </summary>
 	public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver, IMessageAdapterExtension

@@ -4,7 +4,6 @@ M:StockSharp.OpenECry.OpenECryMessageAdapter.#ctor(Ecng.Common.IdGenerator)/para
 F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultUuid/summary;DocStr8849
 M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
-M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
 P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityLookupRequired/summary;DocStr452
 P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativePortfolioLookup/summary;DocStr51
 P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52

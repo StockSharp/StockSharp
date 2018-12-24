@@ -66,16 +66,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.LiveCoin.LiveCoinOrderCondition"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.LiveCoin.LiveCoinOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
-        </member>
-        <member name="P:StockSharp.LiveCoin.LiveCoinOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
-        </member>
         <member name="T:StockSharp.LiveCoin.LiveCoinTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.LiveCoin"/>.

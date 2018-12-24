@@ -2366,6 +2366,7 @@ P:StockSharp.Algo.ServicesRegistry.PositionStorage/summary;DocStr10877
 P:StockSharp.Algo.ServicesRegistry.PortfolioProvider/summary;DocStr10038
 P:StockSharp.Algo.ServicesRegistry.PositionProvider/summary;DocStr10175
 P:StockSharp.Algo.ServicesRegistry.SecurityProvider/summary;DocStr972
+P:StockSharp.Algo.ServicesRegistry.MarketDataProvider/summary;DocStr973
 P:StockSharp.Algo.ServicesRegistry.StorageRegistry/summary;DocStr8561
 P:StockSharp.Algo.ServicesRegistry.Connector/summary;DocStr10881
 P:StockSharp.Algo.ServicesRegistry.IConnector/summary;DocStr10881
@@ -5973,6 +5974,9 @@ P:StockSharp.Algo.Testing.CommissionRuleMessage.Rule/summary;DocStr753
 P:StockSharp.Algo.Testing.CommissionRuleMessage.PortfolioName/summary;DocStr1913
 M:StockSharp.Algo.Testing.CommissionRuleMessage.Clone/summary;DocStr643
 M:StockSharp.Algo.Testing.CommissionRuleMessage.Clone/returns;DocStr1116
+T:StockSharp.Algo.Testing.EmulationOrderCondition/summary;DocStr60
+P:StockSharp.Algo.Testing.EmulationOrderCondition.IsTakeProfit/summary;DocStr10803
+P:StockSharp.Algo.Testing.EmulationOrderCondition.StopPrice/summary;StopPrice
 T:StockSharp.Algo.Testing.HistorySourceMessage/summary;DocStr8629
 M:StockSharp.Algo.Testing.HistorySourceMessage.#ctor/summary;DocStr1
 P:StockSharp.Algo.Testing.HistorySourceMessage.GetMessages/summary;DocStr8630
@@ -6045,6 +6049,8 @@ P:StockSharp.Algo.Testing.EmulationMessageAdapter.CurrentTime/inheritdoc;DocStr8
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.ProcessedMessageCount/summary;DocStr2113
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.IsFullCandlesOnly/inheritdoc;DocStr8459
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.IsSupportSubscriptions/inheritdoc;DocStr8459
+P:StockSharp.Algo.Testing.EmulationMessageAdapter.IsSupportTakeProfit/inheritdoc;DocStr8459
+P:StockSharp.Algo.Testing.EmulationMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
 M:StockSharp.Algo.Testing.EmulationMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Algo.Testing.EmulationStateMessage/summary;DocStr2114
 P:StockSharp.Algo.Testing.EmulationStateMessage.StartDate/summary;DocStr1902

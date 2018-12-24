@@ -86,16 +86,6 @@
             Activation price, when reached an order will be placed.
             </summary>
         </member>
-        <member name="P:StockSharp.Binance.BinanceOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Binance.BinanceOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
-        </member>
         <member name="T:StockSharp.Binance.BinanceTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Binance"/>.

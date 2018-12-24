@@ -40,8 +40,6 @@ T:StockSharp.Bitmex.BitmexOrderCondition/summary;DocStr60
 M:StockSharp.Bitmex.BitmexOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Bitmex.BitmexOrderCondition.StopType/summary;Str2570
 P:StockSharp.Bitmex.BitmexOrderCondition.StopPrice/summary;StopPrice
-P:StockSharp.Bitmex.BitmexOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Bitmex.BitmexOrderCondition.WithdrawInfo/summary;WithdrawInfo
 P:StockSharp.Bitmex.BitmexOrderCondition.ClOrdLinkId/summary;DocStr10810
 P:StockSharp.Bitmex.BitmexOrderCondition.PegOffsetValue/summary;DocStr10811
 P:StockSharp.Bitmex.BitmexOrderCondition.PegPriceType/summary;DocStr10812

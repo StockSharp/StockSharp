@@ -1872,8 +1872,6 @@ M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsSupportTakeProfit/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsSupportWithdraw/inheritdoc;DocStr8459
-M:StockSharp.Fix.FixMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
-M:StockSharp.Fix.FixMessageAdapter.CreateWithdrawCondition(StockSharp.Messages.WithdrawInfo)/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.PortfolioLookupRequired/inheritdoc;DocStr8459
