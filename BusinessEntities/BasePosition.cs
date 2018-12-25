@@ -433,6 +433,7 @@ namespace StockSharp.BusinessEntities
 			destination.CurrentPrice = CurrentPrice;
 			destination.SettlementPrice = SettlementPrice;
 			destination.Description = Description;
+			destination.Currency = Currency;
 			destination.ExpirationDate = ExpirationDate;
 			destination.ClientCode = ClientCode;
 			//destination.LastChangeTime = LastChangeTime;
