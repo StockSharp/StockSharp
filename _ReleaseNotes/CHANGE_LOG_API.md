@@ -49,6 +49,7 @@ StockSharp API Change log
 * (bug) IMessageAdapter.IsSupportSecuritiesLookupAll overriding fix.
 * (feature) Digifinex, Idax, TradeOgre connectors.
 * (feature) ITakeProfitOrderCondition, IStopLossOrderCondition, IWithdrawOrderCondition.
+* (feature) CsvEntityRegistry. Currency and ExpirationDate added.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
