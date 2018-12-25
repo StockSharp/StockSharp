@@ -277,7 +277,8 @@ namespace SampleRealTimeEmulation
 
 		private void OrderGrid_OrderRegistering()
 		{
-			var pfDataSource = new PortfolioDataSource { _emuPf };
+			var pfDataSource = new PortfolioDataSource();
+			pfDataSource.Add(_emuPf);
 			pfDataSource.AddRange(_realConnector.Portfolios);
 
 			var newOrder = new OrderWindow
@@ -309,12 +310,15 @@ namespace SampleRealTimeEmulation
 
 		private void OrderGrid_OnOrderReRegistering(Order order)
 		{
+			var pfDataSource = new PortfolioDataSource();
+			pfDataSource.Add(order.Portfolio);
+
 			var window = new OrderWindow
 			{
 				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
 				SecurityProvider = _emuConnector,
 				MarketDataProvider = _emuConnector,
-				Portfolios = new PortfolioDataSource { order.Portfolio },
+				Portfolios = pfDataSource,
 				Order = order.ReRegisterClone(newVolume: order.Balance)
 			};
 
