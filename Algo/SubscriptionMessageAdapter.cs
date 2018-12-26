@@ -67,10 +67,7 @@ namespace StockSharp.Algo
 			_subscribersById.Clear();
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public override void SendInMessage(Message message)
 		{
 			if (message.IsBack)
@@ -159,10 +156,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			if (message.IsBack)
@@ -174,6 +168,23 @@ namespace StockSharp.Algo
 			List<Message> messages = null;
 			List<Message> clones = null;
 
+			void FillSubscriptions()
+			{
+				messages = new List<Message>();
+
+				lock (_sync)
+				{
+					messages.AddRange(_subscribers.Values.Select(p => p.Message));
+					messages.AddRange(_newsSubscribers.Values.Select(p => p.Message));
+					messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
+
+					ClearSubscribers();
+				}
+
+				if (messages.Count == 0)
+					messages = null;
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
@@ -181,21 +192,7 @@ namespace StockSharp.Algo
 					var connectMsg = (ConnectMessage)message;
 
 					if (connectMsg.Error == null && IsRestoreOnReconnect)
-					{
-						messages = new List<Message>();
-
-						lock (_sync)
-						{
-							messages.AddRange(_subscribers.Values.Select(p => p.Message));
-							messages.AddRange(_newsSubscribers.Values.Select(p => p.Message));
-							messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
-
-							ClearSubscribers();
-						}
-
-						if (messages.Count == 0)
-							messages = null;
-					}
+						FillSubscriptions();
 
 					break;
 				}
@@ -203,21 +200,7 @@ namespace StockSharp.Algo
 				case ExtendedMessageTypes.RestoringSubscription:
 				{
 					if (IsRestoreOnReconnect)
-					{
-						messages = new List<Message>();
-
-						lock (_sync)
-						{
-							messages.AddRange(_subscribers.Values.Select(p => p.Message));
-							messages.AddRange(_newsSubscribers.Values.Select(p => p.Message));
-							messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
-
-							ClearSubscribers();
-						}
-
-						if (messages.Count == 0)
-							messages = null;
-					}
+						FillSubscriptions();
 
 					break;
 				}
