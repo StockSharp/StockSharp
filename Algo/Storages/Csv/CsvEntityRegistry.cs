@@ -9,7 +9,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Configuration;
 	using Ecng.Serialization;
 
 	using MoreLinq;
@@ -947,8 +946,6 @@ namespace StockSharp.Algo.Storages.Csv
 			return errors;
 		}
 
-		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
-
 		internal ExchangeBoard GetBoard(string boardCode)
 		{
 			var board = ExchangeBoards.ReadById(boardCode);
@@ -956,7 +953,7 @@ namespace StockSharp.Algo.Storages.Csv
 			if (board != null)
 				return board;
 
-			board = (ConfigManager.TryGetService<IExchangeInfoProvider>() ?? _exchangeInfoProvider).GetExchangeBoard(boardCode);
+			board = ServicesRegistry.EnsureGetExchangeInfoProvider().GetExchangeBoard(boardCode);
 
 			if (board == null)
 				throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
