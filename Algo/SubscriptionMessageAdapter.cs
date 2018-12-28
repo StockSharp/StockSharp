@@ -39,6 +39,7 @@ namespace StockSharp.Algo
 		private readonly Dictionary<string, RefPair<PortfolioMessage, int>> _pfSubscribers = new Dictionary<string, RefPair<PortfolioMessage, int>>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<long, SubscriptionInfo> _subscribersById = new Dictionary<long, SubscriptionInfo>();
 		private readonly HashSet<long> _onlyHistorySubscriptions = new HashSet<long>();
+		private readonly List<Message> _subscriptionRequests = new List<Message>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
@@ -52,7 +53,18 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Restore subscription on reconnect.
 		/// </summary>
-		public bool IsRestoreOnReconnect { get; set; }
+		/// <summary>
+		/// Error case like connection lost etc.
+		/// </summary>
+		public bool IsRestoreOnErrorReconnect { get; set; }
+
+		/// <summary>
+		/// Restore subscription on reconnect.
+		/// </summary>
+		/// <summary>
+		/// Normal case connect/disconnect.
+		/// </summary>
+		public bool IsRestoreOnNormalReconnect { get; set; }
 
 		/// <summary>
 		/// Support multiple subscriptions with duplicate parameters.
@@ -90,8 +102,10 @@ namespace StockSharp.Algo
 				{
 					lock (_sync)
 					{
-						if (!IsRestoreOnReconnect)
+						if (!IsRestoreOnErrorReconnect)
 							ClearSubscribers();
+					
+						_subscriptionRequests.Clear();
 					}
 
 					base.SendInMessage(message);
@@ -100,42 +114,48 @@ namespace StockSharp.Algo
 
 				case MessageTypes.Disconnect:
 				{
-					if (!IsRestoreOnReconnect)
-					{
-						var messages = new List<Message>();
+					var messages = new List<Message>();
 
+					lock (_sync)
+					{
+						//if (_newsSubscribers.Count > 0)
+						messages.AddRange(_newsSubscribers.Values.Select(p => p.Message));
+
+						//if (_subscribers.Count > 0)
+						messages.AddRange(_subscribers.Values.Select(p => p.Message));
+
+						//if (_pfSubscribers.Count > 0)
+						messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
+						
+						ClearSubscribers();
+					}
+
+					if (IsRestoreOnNormalReconnect)
+					{
 						lock (_sync)
 						{
-							//if (_newsSubscribers.Count > 0)
-							messages.AddRange(_newsSubscribers.Values.Select(p => p.Message));
-
-							//if (_subscribers.Count > 0)
-							messages.AddRange(_subscribers.Values.Select(p => p.Message));
-
-							//if (_pfSubscribers.Count > 0)
-							messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
-						
-							ClearSubscribers();
+							_subscriptionRequests.Clear();
+							_subscriptionRequests.AddRange(messages);
 						}
+					}
 
-						foreach (var m in messages)
+					foreach (var m in messages)
+					{
+						var msg = m.Clone();
+
+						if (msg is MarketDataMessage mdMsg)
 						{
-							var msg = m.Clone();
-
-							if (msg is MarketDataMessage mdMsg)
-							{
-								mdMsg.OriginalTransactionId = mdMsg.TransactionId;
-								mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
-								mdMsg.IsSubscribe = false;
-							}
-							else if (msg is PortfolioMessage pfMsg)
-							{
-								pfMsg.TransactionId = TransactionIdGenerator.GetNextId();
-								pfMsg.IsSubscribe = false;
-							}
-
-							base.SendInMessage(msg);
+							mdMsg.OriginalTransactionId = mdMsg.TransactionId;
+							mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
+							mdMsg.IsSubscribe = false;
 						}
+						else if (msg is PortfolioMessage pfMsg)
+						{
+							pfMsg.TransactionId = TransactionIdGenerator.GetNextId();
+							pfMsg.IsSubscribe = false;
+						}
+
+						base.SendInMessage(msg);
 					}
 
 					base.SendInMessage(message);
@@ -191,15 +211,29 @@ namespace StockSharp.Algo
 				{
 					var connectMsg = (ConnectMessage)message;
 
-					if (connectMsg.Error == null && IsRestoreOnReconnect)
-						FillSubscriptions();
+					if (connectMsg.Error == null)
+					{
+						if (IsRestoreOnErrorReconnect)
+							FillSubscriptions();
+						else if (IsRestoreOnNormalReconnect)
+						{
+							lock (_sync)
+							{
+								if (_subscriptionRequests.Count > 0)
+								{
+									messages = new List<Message>(_subscriptionRequests);
+									_subscriptionRequests.Clear();
+								}
+							}
+						}
+					}
 
 					break;
 				}
 
 				case ExtendedMessageTypes.RestoringSubscription:
 				{
-					if (IsRestoreOnReconnect)
+					if (IsRestoreOnErrorReconnect)
 						FillSubscriptions();
 
 					break;
@@ -570,7 +604,8 @@ namespace StockSharp.Algo
 		{
 			return new SubscriptionMessageAdapter(InnerAdapter)
 			{
-				IsRestoreOnReconnect = IsRestoreOnReconnect,
+				IsRestoreOnErrorReconnect = IsRestoreOnErrorReconnect,
+				IsRestoreOnNormalReconnect = IsRestoreOnNormalReconnect,
 				SupportMultipleSubscriptions = SupportMultipleSubscriptions,
 			};
 		}

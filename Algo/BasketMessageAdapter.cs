@@ -268,7 +268,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override bool IsConnectionAlive() => throw new NotSupportedException();
 
-		private void ProcessReset(Message message)
+		private void ProcessReset(ResetMessage message)
 		{
 			_hearbeatAdapters.Values.ForEach(a =>
 			{
@@ -331,7 +331,7 @@ namespace StockSharp.Algo
 
 			if (adapter.IsSupportSubscriptions)
 			{
-				adapter = new SubscriptionMessageAdapter(adapter) { IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect };
+				adapter = new SubscriptionMessageAdapter(adapter) { IsRestoreOnErrorReconnect = IsRestoreSubscriptionOnReconnect };
 			}
 
 			if (SupportCandlesCompression)
@@ -380,7 +380,7 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					ProcessReset(message);
+					ProcessReset((ResetMessage)message);
 					break;
 
 				case MessageTypes.Connect:

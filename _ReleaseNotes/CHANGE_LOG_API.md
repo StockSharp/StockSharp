@@ -50,6 +50,7 @@ StockSharp API Change log
 * (feature) Digifinex, Idax, TradeOgre connectors.
 * (feature) ITakeProfitOrderCondition, IStopLossOrderCondition, IWithdrawOrderCondition.
 * (feature) CsvEntityRegistry. Currency and ExpirationDate added.
+* (feature) SubscriptionMessageAdapter. IsRestoreOnNormalReconnect added.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
