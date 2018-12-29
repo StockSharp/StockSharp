@@ -63,7 +63,7 @@
     <Reference Include="StockSharp.Digifinex">
       <HintPath>..\..\..\References\StockSharp.Digifinex.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Xaml, Version=4.4.15.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="StockSharp.Xaml">
       <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
