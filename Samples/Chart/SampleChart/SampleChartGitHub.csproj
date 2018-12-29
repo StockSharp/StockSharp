@@ -41,6 +41,9 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v18.1.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Data.v18.1">
       <HintPath>..\..\..\References\DevExpress.Data.v18.1.dll</HintPath>
     </Reference>
@@ -55,9 +58,6 @@
     </Reference>
     <Reference Include="DevExpress.Xpf.Themes.Office2016Black.v18.1">
       <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016Black.v18.1.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v18.1.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\References\Ecng.Collections.dll</HintPath>
