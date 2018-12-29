@@ -15,29 +15,30 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class SubscriptionMessageAdapter : MessageAdapterWrapper
 	{
-		private sealed class SubscriptionInfo
+		private sealed class SubscriptionInfo<TMessage>
+			where TMessage : Message
 		{
-			public MarketDataMessage Message { get; }
+			public TMessage Message { get; }
 
-			public IList<MarketDataMessage> Subscriptions { get; }
+			public IList<TMessage> Subscriptions { get; }
 
 			public int Subscribers { get; set; }
 
 			public bool IsSubscribed { get; set; }
 
-			public SubscriptionInfo(MarketDataMessage message)
+			public SubscriptionInfo(TMessage message)
 			{
 				Message = message ?? throw new ArgumentNullException(nameof(message));
-				Subscriptions = new List<MarketDataMessage>();
+				Subscriptions = new List<TMessage>();
 			}
 		}
 
 		private readonly SyncObject _sync = new SyncObject();
 
-		private readonly Dictionary<Helper.SubscriptionKey, SubscriptionInfo> _subscribers = new Dictionary<Helper.SubscriptionKey, SubscriptionInfo>();
-		private readonly Dictionary<string, SubscriptionInfo> _newsSubscribers = new Dictionary<string, SubscriptionInfo>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly Dictionary<string, RefPair<PortfolioMessage, int>> _pfSubscribers = new Dictionary<string, RefPair<PortfolioMessage, int>>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly Dictionary<long, SubscriptionInfo> _subscribersById = new Dictionary<long, SubscriptionInfo>();
+		private readonly Dictionary<Helper.SubscriptionKey, SubscriptionInfo<MarketDataMessage>> _subscribers = new Dictionary<Helper.SubscriptionKey, SubscriptionInfo<MarketDataMessage>>();
+		private readonly Dictionary<string, SubscriptionInfo<MarketDataMessage>> _newsSubscribers = new Dictionary<string, SubscriptionInfo<MarketDataMessage>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<string, SubscriptionInfo<PortfolioMessage>> _pfSubscribers = new Dictionary<string, SubscriptionInfo<PortfolioMessage>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<long, SubscriptionInfo<MarketDataMessage>> _subscribersById = new Dictionary<long, SubscriptionInfo<MarketDataMessage>>();
 		private readonly HashSet<long> _onlyHistorySubscriptions = new HashSet<long>();
 		private readonly List<Message> _subscriptionRequests = new List<Message>();
 
@@ -125,7 +126,7 @@ namespace StockSharp.Algo
 						messages.AddRange(_subscribers.Values.Select(p => p.Message));
 
 						//if (_pfSubscribers.Count > 0)
-						messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
+						messages.AddRange(_pfSubscribers.Values.Select(p => p.Message));
 						
 						ClearSubscribers();
 					}
@@ -196,7 +197,7 @@ namespace StockSharp.Algo
 				{
 					messages.AddRange(_subscribers.Values.Select(p => p.Message));
 					messages.AddRange(_newsSubscribers.Values.Select(p => p.Message));
-					messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
+					messages.AddRange(_pfSubscribers.Values.Select(p => p.Message));
 
 					ClearSubscribers();
 				}
@@ -381,7 +382,7 @@ namespace StockSharp.Algo
 			var sendIn = false;
 			var isOnlyHistory = false;
 			MarketDataMessage sendOutMsg = null;
-			SubscriptionInfo info;
+			SubscriptionInfo<MarketDataMessage> info;
 
 			lock (_sync)
 			{
@@ -439,7 +440,7 @@ namespace StockSharp.Algo
 			return true;
 		}
 
-		private IEnumerable<MarketDataMessage> ProcessSubscriptionResult<T>(Dictionary<T, SubscriptionInfo> subscriptions, T key, SubscriptionInfo info, MarketDataMessage message)
+		private IEnumerable<MarketDataMessage> ProcessSubscriptionResult<T>(Dictionary<T, SubscriptionInfo<MarketDataMessage>> subscriptions, T key, SubscriptionInfo<MarketDataMessage> info, MarketDataMessage message)
 		{
 			//var info = subscriptions.TryGetValue(key);
 
@@ -474,10 +475,10 @@ namespace StockSharp.Algo
 			return replies;
 		}
 
-		private SubscriptionInfo ProcessSubscription<T>(Dictionary<T, SubscriptionInfo> subscriptions, T key, MarketDataMessage message, ref bool sendIn, ref bool isOnlyHistory, ref MarketDataMessage sendOutMsg)
+		private SubscriptionInfo<MarketDataMessage> ProcessSubscription<T>(Dictionary<T, SubscriptionInfo<MarketDataMessage>> subscriptions, T key, MarketDataMessage message, ref bool sendIn, ref bool isOnlyHistory, ref MarketDataMessage sendOutMsg)
 		{
 			MarketDataMessage clone = null;
-			var info = subscriptions.TryGetValue(key) ?? new SubscriptionInfo(clone = (MarketDataMessage)message.Clone());
+			var info = subscriptions.TryGetValue(key) ?? new SubscriptionInfo<MarketDataMessage>(clone = (MarketDataMessage)message.Clone());
 			var subscribersCount = info.Subscribers;
 			var isSubscribe = message.IsSubscribe;
 
@@ -554,13 +555,14 @@ namespace StockSharp.Algo
 			var sendIn = false;
 			var pfName = message.PortfolioName;
 			
-			RefPair<PortfolioMessage, int> pair;
+			SubscriptionInfo<PortfolioMessage> info;
 
 			lock (_sync)
 			{
-				pair = _pfSubscribers.TryGetValue(pfName) ?? RefTuple.Create((PortfolioMessage)message.Clone(), 0);
+				PortfolioMessage clone = null;
+				info = _pfSubscribers.TryGetValue(pfName) ?? new SubscriptionInfo<PortfolioMessage>(clone = (PortfolioMessage)message.Clone());
 
-				var subscribersCount = pair.Second;
+				var subscribersCount = info.Subscribers;
 
 				if (message.IsSubscribe)
 				{
@@ -578,10 +580,12 @@ namespace StockSharp.Algo
 					//	sendOutMsg = NonExist(message);
 				}
 
+				info.Subscriptions.Add(clone ?? (PortfolioMessage)message.Clone());
+
 				if (subscribersCount > 0)
 				{
-					pair.Second = subscribersCount;
-					_pfSubscribers[pfName] = pair;
+					info.Subscribers = subscribersCount;
+					_pfSubscribers[pfName] = info;
 				}
 				else
 					_pfSubscribers.Remove(pfName);
@@ -590,7 +594,7 @@ namespace StockSharp.Algo
 			if (sendIn)
 			{
 				if (!message.IsSubscribe && message.OriginalTransactionId == 0)
-					message.OriginalTransactionId = pair.First.TransactionId;
+					message.OriginalTransactionId = info.Message.TransactionId;
 
 				base.SendInMessage(message);
 			}
