@@ -40,6 +40,9 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v18.1.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Rss">
       <HintPath>..\..\..\References\StockSharp.Rss.dll</HintPath>
     </Reference>
