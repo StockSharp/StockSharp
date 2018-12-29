@@ -3,15 +3,12 @@ namespace SampleTradeOgre
 	using System;
 	using System.Linq;
 	using System.Windows;
-	using System.Windows.Controls;
 
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
 	using MoreLinq;
 
-	using StockSharp.Algo.Candles;
-	using StockSharp.TradeOgre;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
