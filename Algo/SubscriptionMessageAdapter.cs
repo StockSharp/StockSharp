@@ -41,6 +41,7 @@ namespace StockSharp.Algo
 		private readonly Dictionary<long, SubscriptionInfo<MarketDataMessage>> _subscribersById = new Dictionary<long, SubscriptionInfo<MarketDataMessage>>();
 		private readonly HashSet<long> _onlyHistorySubscriptions = new HashSet<long>();
 		private readonly List<Message> _subscriptionRequests = new List<Message>();
+		private readonly HashSet<long> _passThroughtIds = new HashSet<long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
@@ -107,6 +108,7 @@ namespace StockSharp.Algo
 							ClearSubscribers();
 					
 						_subscriptionRequests.Clear();
+						_passThroughtIds.Clear();
 					}
 
 					base.SendInMessage(message);
@@ -119,41 +121,34 @@ namespace StockSharp.Algo
 
 					lock (_sync)
 					{
-						//if (_newsSubscribers.Count > 0)
-						messages.AddRange(_newsSubscribers.Values.Select(p => p.Message));
+						messages.AddRange(_newsSubscribers.Values.Select(p => p.Message.Clone()));
+						messages.AddRange(_subscribers.Values.Select(p => p.Message.Clone()));
+						messages.AddRange(_pfSubscribers.Values.Select(p => p.Message.Clone()));
 
-						//if (_subscribers.Count > 0)
-						messages.AddRange(_subscribers.Values.Select(p => p.Message));
-
-						//if (_pfSubscribers.Count > 0)
-						messages.AddRange(_pfSubscribers.Values.Select(p => p.Message));
-						
-						ClearSubscribers();
+						if (IsRestoreOnNormalReconnect)
+							_subscriptionRequests.AddRange(messages.Select(m => m.Clone()));
+						else
+							ClearSubscribers();
 					}
 
-					if (IsRestoreOnNormalReconnect)
+					foreach (var msg in messages)
 					{
-						lock (_sync)
-						{
-							_subscriptionRequests.Clear();
-							_subscriptionRequests.AddRange(messages);
-						}
-					}
-
-					foreach (var m in messages)
-					{
-						var msg = m.Clone();
-
 						if (msg is MarketDataMessage mdMsg)
 						{
 							mdMsg.OriginalTransactionId = mdMsg.TransactionId;
 							mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
 							mdMsg.IsSubscribe = false;
+
+							if (IsRestoreOnNormalReconnect)
+								_passThroughtIds.Add(mdMsg.TransactionId);
 						}
 						else if (msg is PortfolioMessage pfMsg)
 						{
 							pfMsg.TransactionId = TransactionIdGenerator.GetNextId();
 							pfMsg.IsSubscribe = false;
+
+							if (IsRestoreOnNormalReconnect)
+								_passThroughtIds.Add(pfMsg.TransactionId);
 						}
 
 						base.SendInMessage(msg);
@@ -195,11 +190,11 @@ namespace StockSharp.Algo
 
 				lock (_sync)
 				{
-					messages.AddRange(_subscribers.Values.Select(p => p.Message));
-					messages.AddRange(_newsSubscribers.Values.Select(p => p.Message));
-					messages.AddRange(_pfSubscribers.Values.Select(p => p.Message));
+					messages.AddRange(_subscribers.Values.Select(p => p.Message.Clone()));
+					messages.AddRange(_newsSubscribers.Values.Select(p => p.Message.Clone()));
+					messages.AddRange(_pfSubscribers.Values.Select(p => p.Message.Clone()));
 
-					ClearSubscribers();
+					//ClearSubscribers();
 				}
 
 				if (messages.Count == 0)
@@ -295,20 +290,20 @@ namespace StockSharp.Algo
 
 			if (messages != null)
 			{
-				foreach (var m in messages)
+				foreach (var msg in messages)
 				{
-					var msg = m.Clone();
-
 					msg.IsBack = true;
 					msg.Adapter = this;
 
 					if (msg is MarketDataMessage mdMsg)
 					{
-						mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
+						//mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
+						_passThroughtIds.Add(mdMsg.TransactionId);
 					}
 					else if (msg is PortfolioMessage pfMsg)
 					{
-						pfMsg.TransactionId = TransactionIdGenerator.GetNextId();
+						//pfMsg.TransactionId = TransactionIdGenerator.GetNextId();
+						_passThroughtIds.Add(pfMsg.TransactionId);
 					}
 
 					base.OnInnerAdapterNewOutMessage(msg);
@@ -379,6 +374,12 @@ namespace StockSharp.Algo
 
 		private void ProcessInMarketDataMessage(MarketDataMessage message)
 		{
+			if (_passThroughtIds.Contains(message.TransactionId))
+			{
+				base.SendInMessage(message);
+				return;
+			}
+
 			var sendIn = false;
 			var isOnlyHistory = false;
 			MarketDataMessage sendOutMsg = null;
@@ -412,14 +413,16 @@ namespace StockSharp.Algo
 
 		private bool ProcessOutMarketDataMessage(MarketDataMessage message)
 		{
-			if (_onlyHistorySubscriptions.Remove(message.OriginalTransactionId))
+			var originId = message.OriginalTransactionId;
+
+			if (_onlyHistorySubscriptions.Remove(originId) || _passThroughtIds.Remove(originId))
 				return false;
 
 			IEnumerable<MarketDataMessage> replies;
 
 			lock (_sync)
 			{
-				var info = _subscribersById.TryGetValue(message.OriginalTransactionId);
+				var info = _subscribersById.TryGetValue(originId);
 
 				if (info == null)
 					return false;
