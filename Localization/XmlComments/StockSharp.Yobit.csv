@@ -13,8 +13,6 @@ M:StockSharp.Yobit.YobitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tran
 M:StockSharp.Yobit.YobitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Yobit.YobitOrderCondition/summary;DocStr60
 M:StockSharp.Yobit.YobitOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Yobit.YobitOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Yobit.YobitOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Yobit.YobitTrader/summary;DocStr2539
 M:StockSharp.Yobit.YobitTrader.#ctor/summary;DocStr1
 P:StockSharp.Yobit.YobitTrader.Key/summary;Str3304

@@ -3326,5 +3326,32 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Wiki.Name,
 			Exchange = Exchange.Wiki,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Idax"/>.
+		/// </summary>
+		public static ExchangeBoard Idax { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Idax.Name,
+			Exchange = Exchange.Idax,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Digifinex"/>.
+		/// </summary>
+		public static ExchangeBoard Digifinex { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Digifinex.Name,
+			Exchange = Exchange.Digifinex,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.TradeOgre"/>.
+		/// </summary>
+		public static ExchangeBoard TradeOgre { get; } = new ExchangeBoard
+		{
+			Code = Exchange.TradeOgre.Name,
+			Exchange = Exchange.TradeOgre,
+		};
 	}
 }

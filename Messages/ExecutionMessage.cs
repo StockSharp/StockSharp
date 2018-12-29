@@ -260,7 +260,7 @@ namespace StockSharp.Messages
 		public Sides Side { get; set; }
 
 		/// <summary>
-		/// Order contracts remainder.
+		/// Order contracts balance.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str130Key)]

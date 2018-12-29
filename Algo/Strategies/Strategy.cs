@@ -618,6 +618,11 @@ namespace StockSharp.Algo.Strategies
 			remove => _positionChanged -= value;
 		}
 
+		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName)
+		{
+			return _positions.TryGetValue(Tuple.Create(security, portfolio));
+		}
+
 		/// <summary>
 		/// <see cref="Position"/> change event.
 		/// </summary>

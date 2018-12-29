@@ -24,28 +24,24 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Bithumb.BithumbMessageAdapter.IsPrime">
+            <summary>
+            Premium service.
+            </summary>
+        </member>
         <member name="P:StockSharp.Bithumb.BithumbMessageAdapter.BalanceCheckInterval">
             <summary>
             Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
         <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Save settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Load settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.ToString">
-            <summary>
-            Returns a string that represents the current object.
-            </summary>
-            <returns>A string that represents the current object.</returns>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
             <summary>
@@ -64,16 +60,6 @@
         <member name="M:StockSharp.Bithumb.BithumbOrderCondition.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Bithumb.BithumbOrderCondition"/>.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Bithumb.BithumbOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Bithumb.BithumbOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
             </summary>
         </member>
         <member name="T:StockSharp.Bithumb.BithumbTrader">
@@ -99,6 +85,11 @@
         <member name="P:StockSharp.Bithumb.BithumbTrader.BalanceCheckInterval">
             <summary>
             Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bithumb.BithumbTrader.IsPrime">
+            <summary>
+            Premium service.
             </summary>
         </member>
     </members>

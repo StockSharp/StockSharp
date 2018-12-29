@@ -40,7 +40,6 @@ namespace SampleOptionQuoting
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Derivatives;
 	using StockSharp.Algo.Strategies.Derivatives;
-	using StockSharp.Configuration;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -54,10 +53,7 @@ namespace SampleOptionQuoting
 			public DummyProvider(IEnumerable<Security> securities, IEnumerable<Position> positions)
 				: base(securities)
 			{
-				if (positions == null)
-					throw new ArgumentNullException(nameof(positions));
-
-				_positions = positions;
+				_positions = positions ?? throw new ArgumentNullException(nameof(positions));
 			}
 
 			event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> IMarketDataProvider.ValuesChanged
@@ -140,6 +136,11 @@ namespace SampleOptionQuoting
 			{
 				add { }
 				remove { }
+			}
+
+			Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName)
+			{
+				return _positions.FirstOrDefault(p => p.Security == security && p.Portfolio == portfolio);
 			}
 		}
 

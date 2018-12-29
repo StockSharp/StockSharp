@@ -7,6 +7,7 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
@@ -33,18 +34,21 @@ namespace StockSharp.Algo
 
 		private readonly ISecurityProvider _securityProvider;
 		private readonly IBasketSecurityProcessorProvider _processorProvider;
+		private readonly IExchangeInfoProvider _exchangeInfoProvider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketSecurityMessageAdapter"/>.
 		/// </summary>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="processorProvider">Basket security processors provider.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <param name="innerAdapter">Underlying adapter.</param>
-		public BasketSecurityMessageAdapter(ISecurityProvider securityProvider, IBasketSecurityProcessorProvider processorProvider, IMessageAdapter innerAdapter)
+		public BasketSecurityMessageAdapter(ISecurityProvider securityProvider, IBasketSecurityProcessorProvider processorProvider, IExchangeInfoProvider exchangeInfoProvider, IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
 			_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 			_processorProvider = processorProvider ?? throw new ArgumentNullException(nameof(processorProvider));
+			_exchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		}
 
 		/// <inheritdoc />
@@ -68,7 +72,14 @@ namespace StockSharp.Algo
 
 					var security = _securityProvider.LookupById(mdMsg.SecurityId);
 
-					if (security == null || !security.IsBasket())
+					if (security == null)
+					{
+						if (!mdMsg.IsBasket())
+							break;
+				
+						security = mdMsg.ToSecurity(_exchangeInfoProvider).ToBasket(_processorProvider);
+					}
+					else if (!security.IsBasket())
 						break;
 
 					if (mdMsg.IsSubscribe)
@@ -227,7 +238,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override IMessageChannel Clone()
 		{
-			return new BasketSecurityMessageAdapter(_securityProvider, _processorProvider, InnerAdapter);
+			return new BasketSecurityMessageAdapter(_securityProvider, _processorProvider, _exchangeInfoProvider, InnerAdapter);
 		}
 	}
 }

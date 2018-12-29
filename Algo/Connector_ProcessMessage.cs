@@ -126,7 +126,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To call the <see cref="Connected"/> event when the first adapter connects to <see cref="Adapter"/>.
 		/// </summary>
-		protected virtual bool RaiseConnectedOnFirstAdapter => true;
+		public bool RaiseConnectedOnFirstAdapter { get; set; } = true;
 
 		private IMessageChannel _inMessageChannel;
 
@@ -309,9 +309,9 @@ namespace StockSharp.Algo
 					if (SupportOffline)
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
 
-					if (EntityRegistry != null && StorageRegistry != null && SnapshotRegistry != null)
+					if (SecurityStorage != null && StorageRegistry != null && SnapshotRegistry != null)
 					{
-						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, EntityRegistry, StorageRegistry, SnapshotRegistry, _adapter.CandleBuilderProvider)
+						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry, SnapshotRegistry, _adapter.CandleBuilderProvider)
 						{
 							OwnInnerAdaper = true,
 							OverrideSecurityData = OverrideSecurityData
@@ -319,7 +319,7 @@ namespace StockSharp.Algo
 					}
 
 					if (SupportBasketSecurities)
-						_inAdapter = new BasketSecurityMessageAdapter(this, BasketSecurityProcessorProvider, _inAdapter) { OwnInnerAdaper = true };
+						_inAdapter = new BasketSecurityMessageAdapter(this, BasketSecurityProcessorProvider, _entityCache.ExchangeInfoProvider, _inAdapter) { OwnInnerAdaper = true };
 
 					if (SupportSubscriptionTracking)
 						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdaper = true/*, IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect*/ };
@@ -1089,7 +1089,8 @@ namespace StockSharp.Algo
 			_entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.Code, code =>
 			{
 				var exchange = message.ToExchange(EntityFactory.CreateExchange(message.ExchangeCode));
-				return message.ToBoard(EntityFactory.CreateBoard(code, exchange));
+				var board = EntityFactory.CreateBoard(code, exchange);
+				return board.ApplyChanges(message);
 			});
 		}
 
@@ -1165,7 +1166,7 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				return;
 
-			RaiseLookupBoardsResult(criteria, message.Error, ExchangeBoards.Where(b => criteria.Like.IsEmpty() || b.Code.ContainsIgnoreCase(criteria.Like)));
+			RaiseLookupBoardsResult(criteria, message.Error, ExchangeBoards.Filter(criteria.Like));
 		}
 
 		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)
@@ -1250,8 +1251,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get the portfolio by the name. If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
+		/// To get the portfolio by the name.
 		/// </summary>
+		/// <remarks>
+		/// If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
+		/// </remarks>
 		/// <param name="name">Portfolio name.</param>
 		/// <returns>Portfolio.</returns>
 		public Portfolio GetPortfolio(string name)
@@ -1260,8 +1264,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get the portfolio by the name. If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
+		/// To get the portfolio by the name.
 		/// </summary>
+		/// <remarks>
+		/// If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
+		/// </remarks>
 		/// <param name="name">Portfolio name.</param>
 		/// <param name="changePortfolio">Portfolio handler.</param>
 		/// <returns>Portfolio.</returns>

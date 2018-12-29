@@ -108,6 +108,15 @@
     <Compile Include="MyTradesWindow.xaml.cs">
       <DependentUpon>MyTradesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NewsWindow.xaml.cs">
+      <DependentUpon>NewsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TradesWindow.xaml.cs">
+      <DependentUpon>TradesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrdersLogWindow.xaml.cs">
+      <DependentUpon>OrdersLogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="QuotesWindow.xaml.cs">
       <DependentUpon>QuotesWindow.xaml</DependentUpon>
     </Compile>
@@ -134,6 +143,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MyTradesWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NewsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OrdersLogWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TradesWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

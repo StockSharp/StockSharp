@@ -12,8 +12,8 @@ M:StockSharp.CoinExchange.CoinExchangeMessageAdapter.#ctor(Ecng.Common.IdGenerat
 M:StockSharp.CoinExchange.CoinExchangeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.CoinExchange.CoinExchangeOrderCondition/summary;DocStr60
 M:StockSharp.CoinExchange.CoinExchangeOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.CoinExchange.CoinExchangeOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.CoinExchange.CoinExchangeOrderCondition.WithdrawInfo/summary;WithdrawInfo
+P:StockSharp.CoinExchange.CoinExchangeOrderCondition.IsWithdraw/inheritdoc;DocStr8459
+P:StockSharp.CoinExchange.CoinExchangeOrderCondition.WithdrawInfo/inheritdoc;DocStr8459
 T:StockSharp.CoinExchange.CoinExchangeTrader/summary;DocStr2539
 M:StockSharp.CoinExchange.CoinExchangeTrader.#ctor/summary;DocStr1
 P:StockSharp.CoinExchange.CoinExchangeTrader.Key/summary;Str3304

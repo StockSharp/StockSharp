@@ -21,6 +21,9 @@
     <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativePortfolioLookup">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.CreateOrderCondition">
       <inheritdoc />
     </member>

@@ -1,5 +1,17 @@
 StockSharp Terminal Change log
 ========================
+## v4.4.15:
+* (feature) LiveCoin. Candles support.
+* (feature) Position. SettlementPrice added.
+* (feature) OKEx. V3 protocol supported.
+* (feature) Bitmex. Stop orders extended.
+* (feature) OpenECry. v3.5.14.53
+* (bug) Bitmex. ExecInst fixes.
+* (bug) Candles. Fix duplicate candles subscription.
+* (bug) Market depth. Fix build depths from OL and L1.
+* (feature) MT4, MT5 connectors.
+* (feature) Terminal. Save and load annotations for Chart.
+
 ## v4.4.12:
 * (bug) Fix storage format select.
 * (bug) Fix cross-thread UI issues.

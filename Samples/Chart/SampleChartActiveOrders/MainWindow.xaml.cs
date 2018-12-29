@@ -50,13 +50,7 @@
 			Board = ExchangeBoard.Forts
 		};
 
-		private readonly PortfolioDataSource _portfolios = new PortfolioDataSource
-		{
-			new Portfolio
-			{
-				Name = "Test portfolio"
-			}
-		};
+		private readonly PortfolioDataSource _portfolios = new PortfolioDataSource();
 
 		public MainWindow()
 		{
@@ -66,8 +60,11 @@
 			InitializeComponent();
 			Loaded += OnLoaded;
 
+			var pf = new Portfolio { Name = "Test portfolio" };
+			_portfolios.Add(pf);
+
 			Chart.OrderSettings.Security = _security;
-			Chart.OrderSettings.Portfolio = _portfolios.First();
+			Chart.OrderSettings.Portfolio = pf;
 			Chart.OrderSettings.Volume = 5;
 
 			_chartUpdateTimer.Interval = TimeSpan.FromMilliseconds(100);

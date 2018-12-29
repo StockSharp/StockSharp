@@ -47,16 +47,6 @@ M:StockSharp.Configuration.Extensions.GetDiagramElements/summary;DocStr8724
 M:StockSharp.Configuration.Extensions.GetDiagramElements/returns;DocStr8725
 M:StockSharp.Configuration.Extensions.GetCandles/summary;DocStr8726
 M:StockSharp.Configuration.Extensions.GetCandles/returns;DocStr8727
-M:StockSharp.Configuration.Extensions.FirstTimeInit(StockSharp.Algo.Storages.IEntityRegistry,System.Byte[],System.Action{Ecng.Data.Database})/summary;DocStr8728
-M:StockSharp.Configuration.Extensions.FirstTimeInit(StockSharp.Algo.Storages.IEntityRegistry,System.Byte[],System.Action{Ecng.Data.Database})/param/entityRegistry;DocStr1309
-M:StockSharp.Configuration.Extensions.FirstTimeInit(StockSharp.Algo.Storages.IEntityRegistry,System.Byte[],System.Action{Ecng.Data.Database})/param/databaseRaw;DocStr8729
-M:StockSharp.Configuration.Extensions.FirstTimeInit(StockSharp.Algo.Storages.IEntityRegistry,System.Byte[],System.Action{Ecng.Data.Database})/param/init;DocStr8730
-M:StockSharp.Configuration.Extensions.FirstTimeInit(StockSharp.Algo.Storages.IEntityRegistry,System.Byte[],System.Action{Ecng.Data.Database})/returns;DocStr8731
-M:StockSharp.Configuration.Extensions.FirstTimeInit(Ecng.Data.Database,System.Byte[],System.Action{Ecng.Data.Database})/summary;DocStr8728
-M:StockSharp.Configuration.Extensions.FirstTimeInit(Ecng.Data.Database,System.Byte[],System.Action{Ecng.Data.Database})/param/database;DocStr8732
-M:StockSharp.Configuration.Extensions.FirstTimeInit(Ecng.Data.Database,System.Byte[],System.Action{Ecng.Data.Database})/param/databaseRaw;DocStr8729
-M:StockSharp.Configuration.Extensions.FirstTimeInit(Ecng.Data.Database,System.Byte[],System.Action{Ecng.Data.Database})/param/init;DocStr8730
-M:StockSharp.Configuration.Extensions.FirstTimeInit(Ecng.Data.Database,System.Byte[],System.Action{Ecng.Data.Database})/returns;DocStr8731
 T:StockSharp.Configuration.IndicatorElement/summary;DocStr8733
 P:StockSharp.Configuration.IndicatorElement.Type/summary;DocStr8734
 P:StockSharp.Configuration.IndicatorElement.Painter/summary;DocStr8735

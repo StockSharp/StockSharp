@@ -57,14 +57,10 @@
             </summary>
         </member>
         <member name="P:StockSharp.CoinExchange.CoinExchangeOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="P:StockSharp.CoinExchange.CoinExchangeOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="T:StockSharp.CoinExchange.CoinExchangeTrader">
             <summary>

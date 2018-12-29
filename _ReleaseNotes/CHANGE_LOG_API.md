@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.15:
 * (feature) LiveCoin. Candles support.
 * (feature) LiveCoin. Websocket supported.
 * (feature) Position. SettlementPrice added.
@@ -29,6 +29,28 @@ StockSharp API Change log
 * (bug) Bitmex. ExecInst fixes.
 * (bug) Candles. Fix duplicate candles subscription.
 * (bug) Market depth. Fix build depths from OL and L1.
+* (feature) MT4, MT5 connectors.
+* (feature) Alerts. Message made optional for sound based events.
+* (feature) ISecurityAssociationStorage added.
+* (feature) Bithumb. Prime service supported.
+* (feature) OKEX. Support turn on/off sections.
+* (bug) IQFeed. Candles request fixes.
+* (feature) FIX connector. IFixDialect tick as level1 option.
+* (feature) Process non persistable basket securities.
+* (bug) Storage adapter. Fix boards lookup and update.
+* (feature) IPositionStorage added.
+* (feature) Reduced IEntityRegistry usage.
+* (feature) Diagram. Multiple sockets for logical condition added.
+* (feature) TraderHelper. Filter positions by PortfolioLookupMessage.
+* (feature) ServicesRegistry added.
+* (bug) ExpressionIndexSecurityProcessor fix.
+* (feature) FixServer. FixSecurityLegsRequestMessage, FixSecurityLegsResultMessage messages added.
+* (bug) Reconnection fix.
+* (bug) IMessageAdapter.IsSupportSecuritiesLookupAll overriding fix.
+* (feature) Digifinex, Idax, TradeOgre connectors.
+* (feature) ITakeProfitOrderCondition, IStopLossOrderCondition, IWithdrawOrderCondition.
+* (feature) CsvEntityRegistry. Currency and ExpirationDate added.
+* (feature) SubscriptionMessageAdapter. IsRestoreOnNormalReconnect added.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

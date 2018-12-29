@@ -61,16 +61,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Yobit.YobitOrderCondition"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Yobit.YobitOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Yobit.YobitOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
-        </member>
         <member name="T:StockSharp.Yobit.YobitTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Yobit"/>.

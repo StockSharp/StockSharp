@@ -1064,9 +1064,6 @@
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportStopLoss">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportNativePortfolioLookup">
       <summary>
             Поддерживается ли торговой системой поиск портфелей.
@@ -1076,6 +1073,9 @@
       <summary>
             Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native" />.
             </summary>
+    </member>
+    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>

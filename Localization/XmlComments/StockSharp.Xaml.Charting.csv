@@ -702,6 +702,10 @@ M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Load(Ecng.Serialization.S
 M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Charting.ChartVolatilitySmileElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+T:StockSharp.Xaml.Charting.Editors.BuildCandlesFieldEditor/summary;DocStr9240
+M:StockSharp.Xaml.Charting.Editors.BuildCandlesFieldEditor.#ctor/summary;DocStr1
+T:StockSharp.Xaml.Charting.Editors.BuildCandlesFromEditor/summary;DocStr9240
+M:StockSharp.Xaml.Charting.Editors.BuildCandlesFromEditor.#ctor/summary;DocStr1
 T:StockSharp.Xaml.Charting.EquityCurveChart/summary;DocStr7816
 P:StockSharp.Xaml.Charting.EquityCurveChart.ChartTheme/summary;DocStr7731
 P:StockSharp.Xaml.Charting.EquityCurveChart.NoGapMode/summary;DocStr7826

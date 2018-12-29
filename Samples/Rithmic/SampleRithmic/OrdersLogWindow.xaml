@@ -1,0 +1,8 @@
+<Window x:Class="SampleRithmic.OrdersLogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:xaml="http://schemas.stocksharp.com/xaml"
+        Title="{x:Static loc:LocalizedStrings.OrderLog}" Height="450" Width="800">
+	<xaml:OrderLogGrid x:Name="OrderLogGrid" x:FieldModifier="public" />
+</Window>

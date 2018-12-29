@@ -590,8 +590,8 @@ P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.Host/summary;DocStr260
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.UserName/summary;DocStr261
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.Password/summary;DocStr262
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.ExchangeBoard/summary;BoardInfo
-F:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.RtsMinAvaliableTime/summary;DocStr255
-F:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.UxMinAvaliableTime/summary;DocStr256
+F:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.RtsMinAvailableTime/summary;DocStr255
+F:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.UxMinAvailableTime/summary;DocStr256
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.DbfDirectory/summary;DocStr263
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.DbfDirectory/remarks;DocStr264
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.TxtDirectory/summary;DocStr265

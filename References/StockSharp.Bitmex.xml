@@ -179,16 +179,6 @@
             Stop-price.
             </summary>
         </member>
-        <member name="P:StockSharp.Bitmex.BitmexOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Bitmex.BitmexOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
-        </member>
         <member name="P:StockSharp.Bitmex.BitmexOrderCondition.ClOrdLinkId">
             <summary>
             Client Order Link ID for contingent orders.

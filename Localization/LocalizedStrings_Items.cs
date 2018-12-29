@@ -1838,22 +1838,22 @@ namespace StockSharp.Localization
 		public static string Str129 => GetString(Str129Key);
 
 		/// <summary>
-		/// Remainder
+		/// Balance
 		/// </summary>
 		public const string Str130Key = nameof(Str130);
 
 		/// <summary>
-		/// Remainder
+		/// Balance
 		/// </summary>
 		public static string Str130 => GetString(Str130Key);
 
 		/// <summary>
-		/// Order contracts remainder.
+		/// Order contracts balance.
 		/// </summary>
 		public const string Str131Key = nameof(Str131);
 
 		/// <summary>
-		/// Order contracts remainder.
+		/// Order contracts balance.
 		/// </summary>
 		public static string Str131 => GetString(Str131Key);
 
@@ -6698,22 +6698,22 @@ namespace StockSharp.Localization
 		public static string UnSubscribedOk => GetString(UnSubscribedOkKey);
 
 		/// <summary>
-		/// Security {0} cannot subscribe for {1}. Error is '{0}'.
+		/// Security {0} cannot subscribe for {1}. Error is '{2}'.
 		/// </summary>
 		public const string SubscribedErrorKey = nameof(SubscribedError);
 
 		/// <summary>
-		/// Security {0} cannot subscribe for {1}. Error is '{0}'.
+		/// Security {0} cannot subscribe for {1}. Error is '{2}'.
 		/// </summary>
 		public static string SubscribedError => GetString(SubscribedErrorKey);
 
 		/// <summary>
-		/// Security {0} cannot unsubscribe from {1}. Error is '{0}'.
+		/// Security {0} cannot unsubscribe from {1}. Error is '{2}'.
 		/// </summary>
 		public const string UnSubscribedErrorKey = nameof(UnSubscribedError);
 
 		/// <summary>
-		/// Security {0} cannot unsubscribe from {1}. Error is '{0}'.
+		/// Security {0} cannot unsubscribe from {1}. Error is '{2}'.
 		/// </summary>
 		public static string UnSubscribedError => GetString(UnSubscribedErrorKey);
 
@@ -20578,12 +20578,12 @@ namespace StockSharp.Localization
 		public static string Str2138 => GetString(Str2138Key);
 
 		/// <summary>
-		/// IQFeed does not support interval {0}.
+		/// Interval {0} isn't supported.
 		/// </summary>
 		public const string Str2139ParamsKey = nameof(Str2139Params);
 
 		/// <summary>
-		/// IQFeed does not support interval {0}.
+		/// Interval {0} isn't supported.
 		/// </summary>
 		public static string Str2139Params => GetString(Str2139ParamsKey);
 
@@ -32388,12 +32388,12 @@ namespace StockSharp.Localization
 		public static string Str3466 => GetString(Str3466Key);
 
 		/// <summary>
-		/// Login (extra)
+		/// Login (trans)
 		/// </summary>
 		public const string Str3467Key = nameof(Str3467);
 
 		/// <summary>
-		/// Login (extra)
+		/// Login (trans)
 		/// </summary>
 		public static string Str3467 => GetString(Str3467Key);
 
@@ -32408,12 +32408,12 @@ namespace StockSharp.Localization
 		public static string Str3468 => GetString(Str3468Key);
 
 		/// <summary>
-		/// Password (extra)
+		/// Password (trans)
 		/// </summary>
 		public const string Str3469Key = nameof(Str3469);
 
 		/// <summary>
-		/// Password (extra)
+		/// Password (trans)
 		/// </summary>
 		public static string Str3469 => GetString(Str3469Key);
 
@@ -48686,5 +48686,125 @@ namespace StockSharp.Localization
 		/// Tokyo
 		/// </summary>
 		public static string Tokyo => GetString(TokyoKey);
+
+		/// <summary>
+		/// Premium service
+		/// </summary>
+		public const string PremiumServiceKey = nameof(PremiumService);
+
+		/// <summary>
+		/// Premium service
+		/// </summary>
+		public static string PremiumService => GetString(PremiumServiceKey);
+
+		/// <summary>
+		/// Securities associations
+		/// </summary>
+		public const string SecuritiesAssociationsKey = nameof(SecuritiesAssociations);
+
+		/// <summary>
+		/// Securities associations
+		/// </summary>
+		public static string SecuritiesAssociations => GetString(SecuritiesAssociationsKey);
+
+		/// <summary>
+		/// Futures section
+		/// </summary>
+		public const string FuturesSectionKey = nameof(FuturesSection);
+
+		/// <summary>
+		/// Futures section
+		/// </summary>
+		public static string FuturesSection => GetString(FuturesSectionKey);
+
+		/// <summary>
+		/// Spot section
+		/// </summary>
+		public const string SpotSectionKey = nameof(SpotSection);
+
+		/// <summary>
+		/// Spot section
+		/// </summary>
+		public static string SpotSection => GetString(SpotSectionKey);
+
+		/// <summary>
+		/// Spot
+		/// </summary>
+		public const string SpotKey = nameof(Spot);
+
+		/// <summary>
+		/// Spot
+		/// </summary>
+		public static string Spot => GetString(SpotKey);
+
+		/// <summary>
+		/// User name (hist)
+		/// </summary>
+		public const string HistoricalUserNameKey = nameof(HistoricalUserName);
+
+		/// <summary>
+		/// User name (hist)
+		/// </summary>
+		public static string HistoricalUserName => GetString(HistoricalUserNameKey);
+
+		/// <summary>
+		/// Additional login. User id used for authentication with the history plant.
+		/// </summary>
+		public const string HistoricalUserNameDescKey = nameof(HistoricalUserNameDesc);
+
+		/// <summary>
+		/// Additional login. User id used for authentication with the history plant.
+		/// </summary>
+		public static string HistoricalUserNameDesc => GetString(HistoricalUserNameDescKey);
+
+		/// <summary>
+		/// Password (hist)
+		/// </summary>
+		public const string HistoricalPasswordKey = nameof(HistoricalPassword);
+
+		/// <summary>
+		/// Password (hist)
+		/// </summary>
+		public static string HistoricalPassword => GetString(HistoricalPasswordKey);
+
+		/// <summary>
+		/// Additional password. Password used for authentication with the history plant.
+		/// </summary>
+		public const string HistoricalPasswordDescKey = nameof(HistoricalPasswordDesc);
+
+		/// <summary>
+		/// Additional password. Password used for authentication with the history plant.
+		/// </summary>
+		public static string HistoricalPasswordDesc => GetString(HistoricalPasswordDescKey);
+
+		/// <summary>
+		/// IDAX
+		/// </summary>
+		public const string IdaxKey = nameof(Idax);
+
+		/// <summary>
+		/// IDAX
+		/// </summary>
+		public static string Idax => GetString(IdaxKey);
+
+		/// <summary>
+		/// DigiFinex
+		/// </summary>
+		public const string DigifinexKey = nameof(Digifinex);
+
+		/// <summary>
+		/// DigiFinex
+		/// </summary>
+		public static string Digifinex => GetString(DigifinexKey);
+
+		/// <summary>
+		/// TradeOgre
+		/// </summary>
+		public const string TradeOgreKey = nameof(TradeOgre);
+
+		/// <summary>
+		/// TradeOgre
+		/// </summary>
+		public static string TradeOgre => GetString(TradeOgreKey);
 	}
 }

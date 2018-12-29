@@ -20,13 +20,13 @@
             Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportSecuritiesLookupAll">
+            <inheritdoc />
+        </member>
         <member name="M:StockSharp.Cqg.Com.CqgComMessageAdapter.CreateOrderCondition">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportStopLoss">
-            <inheritdoc />
-        </member>
-        <member name="M:StockSharp.Cqg.Com.CqgComMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportCandlesUpdates">

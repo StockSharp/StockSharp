@@ -104,6 +104,7 @@ E:StockSharp.Alerts.AlertSettingsPanel.CaptionChanged/summary;DocStr1489
 E:StockSharp.Alerts.AlertSettingsPanel.MessageChanged/summary;DocStr1489
 E:StockSharp.Alerts.AlertSettingsPanel.SelectedRulesChanged/summary;DocStr1489
 E:StockSharp.Alerts.AlertSettingsPanel.SchemaChanged/summary;DocStr1489
+E:StockSharp.Alerts.AlertSettingsPanel.AlertTypeChanged/summary;DocStr1489
 M:StockSharp.Alerts.AlertSettingsPanel.InitializeComponent/summary;DocStr8
 T:StockSharp.Alerts.AlertSettingsWindow/summary;DocStr30
 M:StockSharp.Alerts.AlertSettingsWindow.#ctor/summary;DocStr1

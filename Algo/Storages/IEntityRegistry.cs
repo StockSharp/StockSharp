@@ -53,6 +53,11 @@ namespace StockSharp.Algo.Storages
 		IStorageSecurityList Securities { get; }
 
 		/// <summary>
+		/// Position storage.
+		/// </summary>
+		IPositionStorage PositionStorage { get; }
+
+		/// <summary>
 		/// The list of portfolios.
 		/// </summary>
 		IStorageEntityList<Portfolio> Portfolios { get; }

@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.TradeOgre</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.TradeOgre.TradeOgreMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.TradeOgre"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.TradeOgre.TradeOgreMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.TradeOgre.TradeOgreMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.TradeOgre.TradeOgreMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.TradeOgre.TradeOgreMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.TradeOgre.TradeOgreMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.TradeOgre.TradeOgreMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.TradeOgre.TradeOgreMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.TradeOgre.TradeOgreMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.TradeOgre.TradeOgreMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.TradeOgre.TradeOgreOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.TradeOgre"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.TradeOgre.TradeOgreOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.TradeOgre.TradeOgreOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.TradeOgre.TradeOgreOrderCondition.IsWithdraw">
+            <summary>
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.TradeOgre.TradeOgreOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
+            </summary>
+        </member>
+        <member name="T:StockSharp.TradeOgre.TradeOgreTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.TradeOgre"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.TradeOgre.TradeOgreTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.TradeOgre.TradeOgreTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.TradeOgre.TradeOgreTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.TradeOgre.TradeOgreTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.TradeOgre.TradeOgreTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

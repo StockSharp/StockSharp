@@ -26,7 +26,6 @@ namespace StockSharp.Algo.Candles
 	using Ecng.Configuration;
 
 	using StockSharp.Algo.Candles.Compression;
-	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -437,7 +436,7 @@ namespace StockSharp.Algo.Candles
 					throw new ArgumentNullException(nameof(mdMsg));
 
 				if (candleBuilderProvider == null)
-					candleBuilderProvider = ConfigManager.TryGetService<CandleBuilderProvider>() ?? new CandleBuilderProvider(ConfigManager.TryGetService<IExchangeInfoProvider>() ?? new InMemoryExchangeInfoProvider());
+					candleBuilderProvider = ConfigManager.TryGetService<CandleBuilderProvider>() ?? new CandleBuilderProvider(ServicesRegistry.EnsureGetExchangeInfoProvider());
 
 				return candleBuilderProvider.Get(mdMsg.DataType);
 			}

@@ -14,8 +14,6 @@ M:StockSharp.Kucoin.KucoinMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tr
 M:StockSharp.Kucoin.KucoinMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Kucoin.KucoinOrderCondition/summary;DocStr60
 M:StockSharp.Kucoin.KucoinOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Kucoin.KucoinOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Kucoin.KucoinOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Kucoin.KucoinTrader/summary;DocStr2539
 M:StockSharp.Kucoin.KucoinTrader.#ctor/summary;DocStr1
 P:StockSharp.Kucoin.KucoinTrader.Key/summary;Str3304

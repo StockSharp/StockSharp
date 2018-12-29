@@ -57,24 +57,16 @@ namespace StockSharp.Algo.Storages
 			return CreateSource(entity);
 		}
 
-		/// <summary>
-		/// To load the position.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="portfolio">Portfolio.</param>
-		/// <returns>Position.</returns>
-		public Position ReadBySecurityAndPortfolio(Security security, Portfolio portfolio)
+		/// <inheritdoc />
+		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "")
 		{
 			return Read(CreateSource(security, portfolio));
 		}
 
-		/// <summary>
-		/// To save the trading object.
-		/// </summary>
-		/// <param name="entity">The trading object.</param>
+		/// <inheritdoc />
 		public override void Save(Position entity)
 		{
-			if (ReadBySecurityAndPortfolio(entity.Security, entity.Portfolio) == null)
+			if (GetPosition(entity.Portfolio, entity.Security) == null)
 				Add(entity);
 			else
 				UpdateByKey(entity);

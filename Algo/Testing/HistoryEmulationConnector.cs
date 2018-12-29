@@ -253,6 +253,8 @@ namespace StockSharp.Algo.Testing
 			//MaxMessageCount = 1000;
 
 			TradesKeepCount = 0;
+
+			RaiseConnectedOnFirstAdapter = false;
 		}
 
 		/// <summary>
@@ -371,11 +373,6 @@ namespace StockSharp.Algo.Testing
 
 			IsFinished = false;
 		}
-
-		/// <summary>
-		/// To call the <see cref="Connector.Connected"/> event when the first adapter connects to <see cref="Connector.Adapter"/>.
-		/// </summary>
-		protected override bool RaiseConnectedOnFirstAdapter => false;
 
 		/// <summary>
 		/// Disconnect from trading system.

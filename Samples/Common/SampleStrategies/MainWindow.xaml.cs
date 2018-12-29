@@ -73,7 +73,7 @@ namespace SampleStrategies
 			// ecng.serialization invoke in several places IStorage obj
 			ConfigManager.RegisterService(entityRegistry.Storage);
 
-			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
+			var storageRegistry = ServicesRegistry.StorageRegistry;
 			var snapshotRegistry = new SnapshotRegistry(Path.Combine("Data", "Snapshots"));
 
 			Connector = new Connector(entityRegistry, storageRegistry, snapshotRegistry);
@@ -171,7 +171,7 @@ namespace SampleStrategies
 
 			Connector.Dispose();
 
-			ConfigManager.GetService<IEntityRegistry>().DelayAction.DefaultGroup.WaitFlush(true);
+			ServicesRegistry.EntityRegistry.DelayAction.DefaultGroup.WaitFlush(true);
 
 			base.OnClosing(e);
 		}

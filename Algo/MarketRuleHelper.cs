@@ -21,7 +21,6 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Configuration;
 
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
@@ -825,8 +824,6 @@ namespace StockSharp.Algo
 
 			protected Security Security { get; }
 			protected IConnector Connector { get; }
-
-			protected static ISecurityProvider SecurityProvider => ConfigManager.GetService<ISecurityProvider>();
 		}
 
 		private sealed class SecurityChangedRule : SecurityRule<Security>
@@ -851,7 +848,7 @@ namespace StockSharp.Algo
 			{
 				if (Security is BasketSecurity basket)
 				{
-					if (basket.Contains(SecurityProvider, security) && _condition(security))
+					if (basket.Contains(ServicesRegistry.SecurityProvider, security) && _condition(security))
 						Activate(security);
 				}
 				else
@@ -883,7 +880,7 @@ namespace StockSharp.Algo
 
 				var basket = sec as BasketSecurity;
 
-				var has = basket?.Contains(SecurityProvider, trade.Security) ?? trade.Security == sec;
+				var has = basket?.Contains(ServicesRegistry.SecurityProvider, trade.Security) ?? trade.Security == sec;
 
 				if (has)
 					Activate(trade);
@@ -911,7 +908,7 @@ namespace StockSharp.Algo
 
 				var basket = sec as BasketSecurity;
 
-				var has = basket?.Contains(SecurityProvider, item.Order.Security) ?? item.Order.Security == sec;
+				var has = basket?.Contains(ServicesRegistry.SecurityProvider, item.Order.Security) ?? item.Order.Security == sec;
 
 				if (has)
 					Activate(item);
@@ -949,7 +946,7 @@ namespace StockSharp.Algo
 			{
 				if (Security is BasketSecurity basket)
 				{
-					return basket.Contains(SecurityProvider, security) && _condition(security);
+					return basket.Contains(ServicesRegistry.SecurityProvider, security) && _condition(security);
 				}
 				else
 				{
@@ -966,7 +963,7 @@ namespace StockSharp.Algo
 			private bool CheckTrades(Security security, Trade trade)
 			{
 				return security is BasketSecurity basket
-					? basket.Contains(SecurityProvider, trade.Security) && _condition(trade.Security)
+					? basket.Contains(ServicesRegistry.SecurityProvider, trade.Security) && _condition(trade.Security)
 					: trade.Security == security && _condition(trade.Security);
 			}
 
@@ -1022,7 +1019,7 @@ namespace StockSharp.Algo
 			{
 				var basket = security as BasketSecurity;
 
-				return basket?.Contains(SecurityProvider, depth.Security) ?? depth.Security == security;
+				return basket?.Contains(ServicesRegistry.SecurityProvider, depth.Security) ?? depth.Security == security;
 			}
 
 			protected override void DisposeManaged()

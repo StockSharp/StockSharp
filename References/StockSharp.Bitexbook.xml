@@ -66,16 +66,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Bitexbook.BitexbookOrderCondition"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Bitexbook.BitexbookOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Bitexbook.BitexbookOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
-        </member>
         <member name="T:StockSharp.Bitexbook.BitexbookTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Bitexbook"/>.

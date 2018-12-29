@@ -3568,10 +3568,9 @@ namespace StockSharp.Algo
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			if (code.IsEmpty())
-				throw new ArgumentNullException(nameof(code));
-
-			return provider.Lookup(new Security { Code = code });
+			return code.IsEmpty()
+				? provider.LookupAll()
+				: provider.Lookup(new Security { Code = code });
 		}
 
 		/// <summary>
@@ -3630,7 +3629,14 @@ namespace StockSharp.Algo
 
 			return
 				criteria.SecurityId.IsDefault() &&
-				criteria.SecurityType == null;
+				criteria.SecurityType == null &&
+				criteria.Name.IsEmpty() &&
+				criteria.ShortName.IsEmpty() &&
+				criteria.UnderlyingSecurityCode.IsEmpty() &&
+				criteria.UnderlyingSecurityType == null &&
+				criteria.ExpiryDate == null &&
+				criteria.OptionType == null &&
+				criteria.Strike == null;
 		}
 
 		/// <summary>
@@ -4605,11 +4611,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Is specified security id asssociated with the board.
+		/// Is specified security id associated with the board.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="board">Board info.</param>
-		/// <returns><see langword="true" />, if asssociated, otherwise, <see langword="false"/>.</returns>
+		/// <returns><see langword="true" />, if associated, otherwise, <see langword="false"/>.</returns>
 		public static bool IsAssociated(this SecurityId securityId, ExchangeBoard board)
 		{
 			if (board == null)
@@ -4628,6 +4634,7 @@ namespace StockSharp.Algo
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
+			connector.LookupBoards(new ExchangeBoard(), offlineMode: offlineMode);
 			connector.LookupSecurities(LookupAllCriteria, offlineMode: offlineMode);
 			connector.LookupPortfolios(new Portfolio(), offlineMode: offlineMode);
 			connector.LookupOrders(new Order());
@@ -4822,6 +4829,89 @@ namespace StockSharp.Algo
 			var basketSec = new TBasketSecurity();
 			security.CopyTo(basketSec);
 			return basketSec;
+		}
+
+		/// <summary>
+		/// Filter boards by code criteria.
+		/// </summary>
+		/// <param name="provider">The exchange boards provider.</param>
+		/// <param name="like">Criteria.</param>
+		/// <returns>Found boards.</returns>
+		public static IEnumerable<ExchangeBoard> LookupBoards(this IExchangeInfoProvider provider, string like)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			return provider.Boards.Filter(like);
+		}
+
+		/// <summary>
+		/// Filter boards by code criteria.
+		/// </summary>
+		/// <param name="boards">All boards.</param>
+		/// <param name="like">Criteria.</param>
+		/// <returns>Found boards.</returns>
+		public static IEnumerable<ExchangeBoard> Filter(this IEnumerable<ExchangeBoard> boards, string like)
+		{
+			if (boards == null)
+				throw new ArgumentNullException(nameof(boards));
+
+			if (!like.IsEmpty())
+				boards = boards.Where(b => b.Code.ContainsIgnoreCase(like));
+
+			return boards;
+		}
+
+		/// <summary>
+		/// Filter portfolios by the specified criteria.
+		/// </summary>
+		/// <param name="portfolios">All portfolios.</param>
+		/// <param name="criteria">Criteria.</param>
+		/// <returns>Found portfolios.</returns>
+		public static IEnumerable<Portfolio> Filter(this IEnumerable<Portfolio> portfolios, PortfolioLookupMessage criteria)
+		{
+			if (portfolios == null)
+				throw new ArgumentNullException(nameof(portfolios));
+
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (!criteria.PortfolioName.IsEmpty())
+				portfolios = portfolios.Where(p => p.Name.ContainsIgnoreCase(criteria.PortfolioName));
+
+			if (criteria.Currency != null)
+				portfolios = portfolios.Where(p => p.Currency == criteria.Currency);
+
+			if (!criteria.BoardCode.IsEmpty())
+				portfolios = portfolios.Where(p => p.Board?.Code.ContainsIgnoreCase(criteria.BoardCode) == true);
+
+			return portfolios;
+		}
+
+		/// <summary>
+		/// Filter positions the specified criteria.
+		/// </summary>
+		/// <param name="positions">All positions.</param>
+		/// <param name="criteria">Criteria.</param>
+		/// <returns>Found positions.</returns>
+		public static IEnumerable<Position> Filter(this IEnumerable<Position> positions, PortfolioLookupMessage criteria)
+		{
+			if (positions == null)
+				throw new ArgumentNullException(nameof(positions));
+
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (!criteria.PortfolioName.IsEmpty())
+				positions = positions.Where(p => p.Portfolio.Name.ContainsIgnoreCase(criteria.PortfolioName));
+
+			if (criteria.Currency != null)
+				positions = positions.Where(p => p.Currency == criteria.Currency);
+
+			if (!criteria.BoardCode.IsEmpty())
+				positions = positions.Where(p => p.Security.ToSecurityId().BoardCode.ContainsIgnoreCase(criteria.BoardCode));
+
+			return positions;
 		}
 	}
 }

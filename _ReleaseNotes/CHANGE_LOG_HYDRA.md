@@ -1,5 +1,19 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.15:
+* (feature) LiveCoin. Candles support.
+* (feature) OKEx. V3 protocol supported.
+* (feature) OpenECry. v3.5.14.53
+* (bug) Candles. Fix duplicate candles subscription.
+* (bug) Market depth. Fix build depths from OL and L1.
+* (feature) MT4, MT5 connectors.
+* (feature) Quandl. Lookup securities. Support newest protocol changes.
+* (feature) MFD. Filter for options lookup.
+* (feature) Hydra server. Board lookup support.
+* (feature) AlfaDirect. v4 by default.
+* (feature) LMAX. Download securities from several places.
+* (feature) Server supported SecurityMapping requests.
+
 ## v4.4.14:
 * (feature) MFD. Filter for options lookup.
 * (feature) Quandl. Lookup securities. Support newest protocol changes.

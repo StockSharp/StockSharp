@@ -77,9 +77,6 @@
     <member name="P:StockSharp.Transaq.TransaqMessageAdapter.IsSupportTakeProfit">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Transaq.TransaqMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Transaq.TransaqMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Отправить сообщение.

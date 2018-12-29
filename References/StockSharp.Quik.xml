@@ -2353,6 +2353,9 @@
             Маркет-дата адаптер сообщений для Quik, работающий через протокол DDE.
             </summary>
     </member>
+    <member name="P:StockSharp.Quik.QuikDdeAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Quik.QuikDdeAdapter.CustomTables">
       <summary>
             Список произвольных таблиц.
@@ -3295,9 +3298,6 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Quik.QuikTrans2QuikAdapter.IsSupportTakeProfit">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.OnSendInMessage(StockSharp.Messages.Message)">

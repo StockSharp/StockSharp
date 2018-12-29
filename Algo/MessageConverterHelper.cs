@@ -574,8 +574,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="securityId">Security ID.</param>
+		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
 		/// <returns>Message.</returns>
-		public static SecurityMessage ToMessage(this Security security, SecurityId? securityId = null)
+		public static SecurityMessage ToMessage(this Security security, SecurityId? securityId = null, long originalTransactionId = 0)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -603,6 +604,8 @@ namespace StockSharp.Algo
 				UnderlyingSecurityType = security.UnderlyingSecurityType,
 				BasketCode = security.BasketCode,
 				BasketExpression = security.BasketExpression,
+
+				OriginalTransactionId = originalTransactionId,
 			};
 		}
 
@@ -619,6 +622,9 @@ namespace StockSharp.Algo
 
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
+			if (message.IsLookupAll())
+				return TraderHelper.LookupAllCriteria;
 
 			var criteria = new Security();
 			criteria.ApplyChanges(message, exchangeInfoProvider);
@@ -678,7 +684,10 @@ namespace StockSharp.Algo
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
-			var security = new Security { Id = message.SecurityId.ToStringId() };
+			var security = new Security
+			{
+				Id = message.SecurityId.IsDefault() ? null : message.SecurityId.ToStringId()
+			};
 
 			security.ApplyChanges(message, exchangeInfoProvider);
 
@@ -713,8 +722,9 @@ namespace StockSharp.Algo
 		/// To convert the portfolio into message.
 		/// </summary>
 		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
 		/// <returns>Message.</returns>
-		public static PortfolioMessage ToMessage(this Portfolio portfolio)
+		public static PortfolioMessage ToMessage(this Portfolio portfolio, long originalTransactionId = 0)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -725,6 +735,7 @@ namespace StockSharp.Algo
 				BoardCode = portfolio.Board?.Code,
 				Currency = portfolio.Currency,
 				ClientCode = portfolio.ClientCode,
+				OriginalTransactionId = originalTransactionId,
 			};
 		}
 
@@ -773,8 +784,9 @@ namespace StockSharp.Algo
 		/// To convert the position into message.
 		/// </summary>
 		/// <param name="position">Position.</param>
+		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
 		/// <returns>Message.</returns>
-		public static PositionChangeMessage ToChangeMessage(this Position position)
+		public static PositionChangeMessage ToChangeMessage(this Position position, long originalTransactionId = 0)
 		{
 			if (position == null)
 				throw new ArgumentNullException(nameof(position));
@@ -786,6 +798,7 @@ namespace StockSharp.Algo
 				PortfolioName = position.Portfolio.Name,
 				SecurityId = position.Security.ToSecurityId(),
 				ClientCode = position.ClientCode,
+				OriginalTransactionId = originalTransactionId,
 			}
 			.TryAdd(PositionChangeTypes.BeginValue, position.BeginValue, true)
 			.TryAdd(PositionChangeTypes.CurrentValue, position.CurrentValue, true)
@@ -796,8 +809,9 @@ namespace StockSharp.Algo
 		/// To convert the board into message.
 		/// </summary>
 		/// <param name="board">Board.</param>
+		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
 		/// <returns>Message.</returns>
-		public static BoardMessage ToMessage(this ExchangeBoard board)
+		public static BoardMessage ToMessage(this ExchangeBoard board, long originalTransactionId = 0)
 		{
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
@@ -810,7 +824,8 @@ namespace StockSharp.Algo
 				//IsSupportMarketOrders = board.IsSupportMarketOrders,
 				//IsSupportAtomicReRegister = board.IsSupportAtomicReRegister,
 				ExpiryTime = board.ExpiryTime,
-				TimeZone = board.TimeZone
+				TimeZone = board.TimeZone,
+				OriginalTransactionId = originalTransactionId,
 			};
 		}
 
@@ -848,28 +863,41 @@ namespace StockSharp.Algo
 		/// <returns>Board.</returns>
 		public static ExchangeBoard ToBoard(this BoardMessage message)
 		{
-			return message.ToBoard(new ExchangeBoard { Code = message.Code, Exchange = new Exchange { Name = message.ExchangeCode } });
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var board = new ExchangeBoard
+			{
+				Code = message.Code,
+				Exchange = new Exchange { Name = message.ExchangeCode }
+			};
+			board.ApplyChanges(message);
+			return board;
 		}
 
 		/// <summary>
 		/// To convert the message into board.
 		/// </summary>
-		/// <param name="message">Message.</param>
 		/// <param name="board">Board.</param>
+		/// <param name="message">Message.</param>
 		/// <returns>Board.</returns>
-		public static ExchangeBoard ToBoard(this BoardMessage message, ExchangeBoard board)
+		public static ExchangeBoard ApplyChanges(this ExchangeBoard board, BoardMessage message)
 		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
+
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
 
 			board.WorkingTime = message.WorkingTime;
 			//board.IsSupportAtomicReRegister = message.IsSupportAtomicReRegister;
 			//board.IsSupportMarketOrders = message.IsSupportMarketOrders;
-			board.ExpiryTime = message.ExpiryTime;
-			board.TimeZone = message.TimeZone;
+
+			if (!message.ExpiryTime.IsDefault())
+				board.ExpiryTime = message.ExpiryTime;
+
+			if (message.TimeZone != null)
+				board.TimeZone = message.TimeZone;
 
 			return board;
 		}
@@ -1452,7 +1480,18 @@ namespace StockSharp.Algo
 			else
 			{
 				if (security.Code.IsEmpty())
+				{
+					if (!security.BasketCode.IsEmpty())
+					{
+						return new SecurityId
+						{
+							SecurityCode = security.BasketExpression.Replace('@', '_'),
+							BoardCode = security.Board?.Code ?? MessageAdapter.DefaultAssociatedBoardCode
+						};
+					}
+
 					throw new ArgumentException(LocalizedStrings.Str1123);
+				}
 
 				if (security.Board == null)
 					throw new ArgumentException(LocalizedStrings.Str1124Params.Put(security.Code));
@@ -1538,14 +1577,7 @@ namespace StockSharp.Algo
 		/// <returns>The message for market data subscription.</returns>
 		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, Security security)
 		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			security.ToMessage(security.ToSecurityId()).CopyTo(message, false);
-			return message;
+			return message.FillSecurityInfo(security.ToSecurityId(), security);
 		}
 
 		/// <summary>
@@ -1557,16 +1589,28 @@ namespace StockSharp.Algo
 		/// <returns>The message for market data subscription.</returns>
 		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, IConnector connector, Security security)
 		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
+
+			return message.FillSecurityInfo(connector.GetSecurityId(security), security);
+		}
+
+		/// <summary>
+		/// To fill the message with information about instrument.
+		/// </summary>
+		/// <param name="message">The message for market data subscription.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>The message for market data subscription.</returns>
+		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, SecurityId securityId, Security security)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
 
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			security.ToMessage(connector.GetSecurityId(security)).CopyTo(message, false);
+			security.ToMessage(securityId).CopyTo(message, false);
 			return message;
 		}
 

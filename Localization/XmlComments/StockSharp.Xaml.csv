@@ -191,6 +191,14 @@ M:StockSharp.Xaml.GridControl.BaseGridControl.Save(Ecng.Serialization.SettingsSt
 M:StockSharp.Xaml.GridControl.BaseGridControl.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Xaml.ISecurityWindow/summary;DocStr8180
 P:StockSharp.Xaml.ISecurityWindow.Security/summary;DocStr2831
+T:StockSharp.Xaml.SecurityAssociationWindow/summary;DocStr10871
+M:StockSharp.Xaml.SecurityAssociationWindow.#ctor/summary;DocStr1
+F:StockSharp.Xaml.SecurityAssociationWindow.ConnectorsInfoProperty/summary;DocStr29
+P:StockSharp.Xaml.SecurityAssociationWindow.ConnectorsInfo/summary;DocStr8314
+F:StockSharp.Xaml.SecurityAssociationWindow.SecurityProviderProperty/summary;DocStr29
+P:StockSharp.Xaml.SecurityAssociationWindow.SecurityProvider/summary;DocStr972
+P:StockSharp.Xaml.SecurityAssociationWindow.AssociationStorage/summary;DocStr10872
+M:StockSharp.Xaml.SecurityAssociationWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PermissionCredentialsWindow/summary;DocStr10454
 F:StockSharp.Xaml.PermissionCredentialsWindow.OkCommand/summary;DocStr8459
 F:StockSharp.Xaml.PermissionCredentialsWindow.AddCommand/summary;DocStr8459

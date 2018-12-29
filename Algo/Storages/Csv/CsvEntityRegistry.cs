@@ -9,7 +9,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Configuration;
 	using Ecng.Serialization;
 
 	using MoreLinq;
@@ -672,6 +671,14 @@ namespace StockSharp.Algo.Storages.Csv
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					portfolio.ClientCode = reader.ReadString();
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				{
+					portfolio.Currency = reader.ReadString().To<CurrencyTypes?>();
+
+					var str = reader.ReadString();
+					portfolio.ExpirationDate = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).ChangeKind(DateTimeKind.Utc);
+				}
+
 				return portfolio;
 			}
 
@@ -698,6 +705,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.LastChangeTime.UtcDateTime.ToString(_dateTimeFormat),
 					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat),
 					data.ClientCode,
+					data.Currency?.To<string>(),
+					data.ExpirationDate?.UtcDateTime.ToString(_dateTimeFormat),
 				});
 			}
 		}
@@ -758,6 +767,14 @@ namespace StockSharp.Algo.Storages.Csv
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					position.ClientCode = reader.ReadString();
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				{
+					position.Currency = reader.ReadString().To<CurrencyTypes?>();
+
+					var str = reader.ReadString();
+					position.ExpirationDate = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).ChangeKind(DateTimeKind.Utc);
+				}
+
 				return position;
 			}
 
@@ -778,12 +795,14 @@ namespace StockSharp.Algo.Storages.Csv
 					data.LastChangeTime.UtcDateTime.ToString(_dateTimeFormat),
 					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat),
 					data.ClientCode,
+					data.Currency?.To<string>(),
+					data.ExpirationDate?.UtcDateTime.ToString(_dateTimeFormat),
 				});
 			}
 
-			public Position ReadBySecurityAndPortfolio(Security security, Portfolio portfolio)
+			public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "")
 			{
-				return ((IStoragePositionList)this).ReadById(Tuple.Create(portfolio, security));
+				return ((IStorageEntityList<Position>)this).ReadById(Tuple.Create(portfolio, security));
 			}
 		}
 
@@ -864,6 +883,9 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <inheritdoc />
 		public IStoragePositionList Positions => _positions;
 
+		/// <inheritdoc />
+		public IPositionStorage PositionStorage { get; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CsvEntityRegistry"/>.
 		/// </summary>
@@ -880,6 +902,8 @@ namespace StockSharp.Algo.Storages.Csv
 			Add(_positions = new PositionCsvList(this));
 
 			UpdateDelayAction();
+
+			PositionStorage = new PositionStorage(this);
 		}
 
 		/// <summary>
@@ -922,8 +946,6 @@ namespace StockSharp.Algo.Storages.Csv
 			return errors;
 		}
 
-		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
-
 		internal ExchangeBoard GetBoard(string boardCode)
 		{
 			var board = ExchangeBoards.ReadById(boardCode);
@@ -931,7 +953,7 @@ namespace StockSharp.Algo.Storages.Csv
 			if (board != null)
 				return board;
 
-			board = (ConfigManager.TryGetService<IExchangeInfoProvider>() ?? _exchangeInfoProvider).GetExchangeBoard(boardCode);
+			board = ServicesRegistry.EnsureGetExchangeInfoProvider().GetExchangeBoard(boardCode);
 
 			if (board == null)
 				throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));

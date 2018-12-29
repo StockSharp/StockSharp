@@ -1458,12 +1458,12 @@
             Board info.
             </summary>
     </member>
-    <member name="F:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.RtsMinAvaliableTime">
+    <member name="F:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.RtsMinAvailableTime">
       <summary>
             The earliest date in RTS, for which there are historical data.
             </summary>
     </member>
-    <member name="F:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.UxMinAvaliableTime">
+    <member name="F:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.UxMinAvailableTime">
       <summary>
             The earliest date in UX, for which there are historical data.
             </summary>

@@ -14,8 +14,6 @@ M:StockSharp.Bitexbook.BitexbookMessageAdapter.#ctor(Ecng.Common.IdGenerator)/pa
 M:StockSharp.Bitexbook.BitexbookMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Bitexbook.BitexbookOrderCondition/summary;DocStr60
 M:StockSharp.Bitexbook.BitexbookOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Bitexbook.BitexbookOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Bitexbook.BitexbookOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Bitexbook.BitexbookTrader/summary;DocStr2539
 M:StockSharp.Bitexbook.BitexbookTrader.#ctor/summary;DocStr1
 P:StockSharp.Bitexbook.BitexbookTrader.Key/summary;Str3304

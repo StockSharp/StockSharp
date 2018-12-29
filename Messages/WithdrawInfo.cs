@@ -199,6 +199,12 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(PostalCode), PostalCode);
 			storage.SetValue(nameof(Currency), Currency);
 		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			return $"Acc={Account}&AccName={AccountName}&Curr={Currency}&Name={Name}&Add={Address}&Cntry={Country}&City={City}&Bic={Bic}&Swift={Swift}&Iban={Iban}&Postal={PostalCode}";
+		}
 	}
 
 	/// <summary>
@@ -363,6 +369,12 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(PaymentId), PaymentId);
 			storage.SetValue(nameof(CryptoAddress), CryptoAddress);
 			storage.SetValue(nameof(Comment), Comment);
+		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			return $"Type={Type}&Addr={CryptoAddress}&Id={PaymentId}&Comment={Comment}&Company={CompanyDetails}&Bank={BankDetails}&Fee={ChargeFee}";
 		}
 	}
 }

@@ -14,8 +14,6 @@ M:StockSharp.LiveCoin.LiveCoinMessageAdapter.#ctor(Ecng.Common.IdGenerator)/para
 M:StockSharp.LiveCoin.LiveCoinMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.LiveCoin.LiveCoinOrderCondition/summary;DocStr60
 M:StockSharp.LiveCoin.LiveCoinOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.LiveCoin.LiveCoinOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.LiveCoin.LiveCoinOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.LiveCoin.LiveCoinTrader/summary;DocStr2539
 M:StockSharp.LiveCoin.LiveCoinTrader.#ctor/summary;DocStr1
 P:StockSharp.LiveCoin.LiveCoinTrader.Key/summary;Str3304

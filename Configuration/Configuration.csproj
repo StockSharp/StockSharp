@@ -48,12 +48,6 @@
     <Reference Include="Ecng.Configuration">
       <HintPath>..\References\Ecng.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Data">
-      <HintPath>..\References\Ecng.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Interop">
-      <HintPath>..\References\Ecng.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Serialization">
       <HintPath>..\References\Ecng.Serialization.dll</HintPath>
     </Reference>
@@ -65,7 +59,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
@@ -145,6 +138,10 @@
       <Project>{DA9C9641-6113-4F0B-AEF0-A70D1C4C059E}</Project>
       <Name>Deribit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Digifinex\Digifinex.csproj">
+      <Project>{87EC89A6-4152-4346-A0FB-4E9B6AA23B2B}</Project>
+      <Name>Digifinex</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Exmo\Exmo.csproj">
       <Project>{E5396BB1-3D40-4D09-BDB3-13A4D849BC5F}</Project>
       <Name>Exmo</Name>
@@ -160,6 +157,10 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Huobi\Huobi.csproj">
       <Project>{1B76C578-6A8C-4CE2-8556-A8F32FB5FB85}</Project>
       <Name>Huobi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Idax\Idax.csproj">
+      <Project>{1220BAC4-35A3-4230-B600-10893067C573}</Project>
+      <Name>Idax</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\IEX\IEX.csproj">
       <Project>{76FD8C86-E4BA-4B86-A966-29C13D085EE7}</Project>
@@ -224,6 +225,10 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Plaza\Plaza.csproj">
       <Project>{7EABA894-FC98-4F5E-A212-C40550260886}</Project>
       <Name>Plaza</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\TradeOgre\TradeOgre.csproj">
+      <Project>{D138E571-EAEE-4F78-B317-A155D038A69E}</Project>
+      <Name>TradeOgre</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Twime\Twime.csproj">
       <Project>{2C3ADA93-249E-4EEB-A1B7-CE5DA8DC4E33}</Project>

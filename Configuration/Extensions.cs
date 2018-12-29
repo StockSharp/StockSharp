@@ -19,17 +19,12 @@ namespace StockSharp.Configuration
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Data.Common;
-	using System.IO;
 	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
-	using Ecng.Data;
-	using Ecng.Data.Sql;
-	using Ecng.Interop;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
@@ -37,7 +32,6 @@ namespace StockSharp.Configuration
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
-	using StockSharp.Algo.Storages;
 	using StockSharp.AlphaVantage;
 	using StockSharp.BarChart;
 	using StockSharp.Binance;
@@ -58,6 +52,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Cqg.Com;
 	using StockSharp.Cryptopia;
 	using StockSharp.Deribit;
+	using StockSharp.Digifinex;
 	using StockSharp.ETrade;
 	using StockSharp.Exmo;
 	using StockSharp.Fix;
@@ -65,6 +60,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Gdax;
 	using StockSharp.HitBtc;
 	using StockSharp.Huobi;
+	using StockSharp.Idax;
 	using StockSharp.IEX;
 	using StockSharp.InteractiveBrokers;
 	using StockSharp.IQFeed;
@@ -91,6 +87,7 @@ namespace StockSharp.Configuration
 	using StockSharp.SmartCom;
 	using StockSharp.SpbEx;
 	using StockSharp.Sterling;
+	using StockSharp.TradeOgre;
 	using StockSharp.Transaq;
 	using StockSharp.Twime;
 	using StockSharp.Xaml;
@@ -235,10 +232,13 @@ namespace StockSharp.Configuration
 			() => typeof(QuoinexMessageAdapter),
 			() => typeof(BitbankMessageAdapter),
 			() => typeof(ZaifMessageAdapter),
+			() => typeof(DigifinexMessageAdapter),
+			() => typeof(IdaxMessageAdapter),
+			() => typeof(TradeOgreMessageAdapter),
 		});
 
 		/// <summary>
-		/// All avaliable adapters.
+		/// All available adapters.
 		/// </summary>
 		public static IEnumerable<Type> Adapters => _customAdapters.Concat(_adapters.Value.Select(v =>
 		{
@@ -383,75 +383,6 @@ namespace StockSharp.Configuration
 				.Where(t => !t.IsAbstract && t.IsCandle())
 				.Concat(_customCandles)
 				.ToArray());
-		}
-
-		/// <summary>
-		/// First time database initialization.
-		/// </summary>
-		/// <param name="entityRegistry">The storage of trade objects.</param>
-		/// <param name="databaseRaw">Raw bytes of database file.</param>
-		/// <param name="init">Initialization callback.</param>
-		/// <returns>Path to the database file.</returns>
-		public static string FirstTimeInit(this IEntityRegistry entityRegistry, byte[] databaseRaw, Action<Database> init = null)
-		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			if (databaseRaw == null)
-				throw new ArgumentNullException(nameof(databaseRaw));
-
-			var database = entityRegistry.Storage as Database;
-			return database?.FirstTimeInit(databaseRaw, init);
-		}
-
-		/// <summary>
-		/// First time database initialization.
-		/// </summary>
-		/// <param name="database">The database.</param>
-		/// <param name="databaseRaw">Raw bytes of database file.</param>
-		/// <param name="init">Initialization callback.</param>
-		/// <returns>Path to the database file.</returns>
-		public static string FirstTimeInit(this Database database, byte[] databaseRaw, Action<Database> init = null)
-		{
-			if (database == null)
-				throw new ArgumentNullException(nameof(database));
-
-			if (databaseRaw == null)
-				throw new ArgumentNullException(nameof(databaseRaw));
-
-			var conStr = new DbConnectionStringBuilder
-			{
-				ConnectionString = database.ConnectionString
-			};
-
-			var dbFile = (string)conStr.Cast<KeyValuePair<string, object>>().ToDictionary(StringComparer.InvariantCultureIgnoreCase).TryGetValue("Data Source");
-
-			if (dbFile == null)
-				return null;
-
-			dbFile = dbFile.ToFullPathIfNeed();
-
-			conStr["Data Source"] = dbFile;
-			database.ConnectionString = conStr.ToString();
-
-			dbFile.CreateDirIfNotExists();
-
-			if (!File.Exists(dbFile))
-			{
-				databaseRaw.Save(dbFile);
-				UpdateDatabaseWalMode(database);
-
-				init?.Invoke(database);
-			}
-
-			return dbFile;
-		}
-
-		private static void UpdateDatabaseWalMode(Database database)
-		{
-			var walQuery = Query.Execute("PRAGMA journal_mode=WAL;");
-			var walCmd = database.GetCommand(walQuery, null, new FieldList(), new FieldList(), false);
-			database.Execute(walCmd, new SerializationItemCollection(), false);
 		}
 	}
 }

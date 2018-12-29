@@ -14,8 +14,6 @@ M:StockSharp.Poloniex.PoloniexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/para
 M:StockSharp.Poloniex.PoloniexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Poloniex.PoloniexOrderCondition/summary;DocStr60
 M:StockSharp.Poloniex.PoloniexOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Poloniex.PoloniexOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Poloniex.PoloniexOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Poloniex.PoloniexTrader/summary;DocStr2539
 M:StockSharp.Poloniex.PoloniexTrader.#ctor/summary;DocStr1
 P:StockSharp.Poloniex.PoloniexTrader.Key/summary;Str3304

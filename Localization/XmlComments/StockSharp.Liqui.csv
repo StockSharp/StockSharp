@@ -13,8 +13,6 @@ M:StockSharp.Liqui.LiquiMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tran
 M:StockSharp.Liqui.LiquiMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Liqui.LiquiOrderCondition/summary;DocStr60
 M:StockSharp.Liqui.LiquiOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Liqui.LiquiOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Liqui.LiquiOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Liqui.LiquiTrader/summary;DocStr2539
 M:StockSharp.Liqui.LiquiTrader.#ctor/summary;DocStr1
 P:StockSharp.Liqui.LiquiTrader.Key/summary;Str3304

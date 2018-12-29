@@ -13,8 +13,6 @@ M:StockSharp.Exmo.ExmoMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transa
 M:StockSharp.Exmo.ExmoMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Exmo.ExmoOrderCondition/summary;DocStr60
 M:StockSharp.Exmo.ExmoOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Exmo.ExmoOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Exmo.ExmoOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Exmo.ExmoTrader/summary;DocStr2539
 M:StockSharp.Exmo.ExmoTrader.#ctor/summary;DocStr1
 P:StockSharp.Exmo.ExmoTrader.Key/summary;Str3304

@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Expressions
 {
+	using StockSharp.BusinessEntities;
+
 	/// <summary>
 	/// Index securities processor for <see cref="ExpressionIndexSecurity"/>.
 	/// </summary>
@@ -9,7 +11,7 @@ namespace StockSharp.Algo.Expressions
 		/// Initializes a new instance of the <see cref="ExpressionIndexSecurityProcessor"/>.
 		/// </summary>
 		/// <param name="basketSecurity">The index, built of combination of several instruments through mathematic formula <see cref="ExpressionIndexSecurity.Expression"/>.</param>
-		public ExpressionIndexSecurityProcessor(ExpressionIndexSecurity basketSecurity)
+		public ExpressionIndexSecurityProcessor(Security basketSecurity)
 			: base(basketSecurity)
 		{
 		}

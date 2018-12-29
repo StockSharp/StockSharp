@@ -15,8 +15,6 @@ M:StockSharp.Huobi.HuobiMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tran
 M:StockSharp.Huobi.HuobiMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Huobi.HuobiOrderCondition/summary;DocStr60
 M:StockSharp.Huobi.HuobiOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Huobi.HuobiOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Huobi.HuobiOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Huobi.HuobiTrader/summary;DocStr2539
 M:StockSharp.Huobi.HuobiTrader.#ctor/summary;DocStr1
 P:StockSharp.Huobi.HuobiTrader.Key/summary;Str3304

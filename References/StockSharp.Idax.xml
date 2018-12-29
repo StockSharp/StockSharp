@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Idax</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Idax.IdaxMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Idax"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Idax.IdaxMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Idax.IdaxMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Idax.IdaxMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Idax.IdaxMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Idax.IdaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Idax.IdaxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Idax.IdaxMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.Idax.IdaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Idax.IdaxMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Idax.IdaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Idax.IdaxOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Idax"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Idax.IdaxOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Idax.IdaxOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Idax.IdaxTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Idax"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Idax.IdaxTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Idax.IdaxTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Idax.IdaxTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Idax.IdaxTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Idax.IdaxTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

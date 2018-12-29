@@ -111,9 +111,6 @@
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsSupportStopLoss">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.SecurityLookupRequired">
       <inheritdoc />
     </member>

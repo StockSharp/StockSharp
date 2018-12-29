@@ -24,47 +24,47 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class StorageEntityFactory : EntityFactory
 	{
-		private readonly IEntityRegistry _entityRegistry;
+		private readonly ISecurityStorage _securityStorage;
+		private readonly IPositionStorage _positionStorage;
+		private readonly bool _trackPositions;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StorageEntityFactory"/>.
 		/// </summary>
-		/// <param name="entityRegistry">The storage of trade objects.</param>
-		public StorageEntityFactory(IEntityRegistry entityRegistry)
+		/// <param name="securityStorage">Securities meta info storage.</param>
+		/// <param name="positionStorage">Position storage.</param>
+		/// <param name="trackPositions">Track positions.</param>
+		public StorageEntityFactory(ISecurityStorage securityStorage, IPositionStorage positionStorage, bool trackPositions)
 		{
-			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
+			_securityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
+			_positionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
+			_trackPositions = trackPositions;
 		}
 
-		/// <summary>
-		/// To create the instrument by the identifier.
-		/// </summary>
-		/// <param name="id">Security ID.</param>
-		/// <returns>Created instrument.</returns>
+		/// <inheritdoc />
 		public override Security CreateSecurity(string id)
 		{
-			return _entityRegistry.Securities.ReadById(id) ?? base.CreateSecurity(id);
+			return _securityStorage.LookupById(id) ?? base.CreateSecurity(id);
 		}
 
-		/// <summary>
-		/// To create the portfolio by the account number.
-		/// </summary>
-		/// <param name="name">Account number.</param>
-		/// <returns>Created portfolio.</returns>
+		/// <inheritdoc />
 		public override Portfolio CreatePortfolio(string name)
 		{
-			return _entityRegistry.Portfolios.ReadById(name) ?? base.CreatePortfolio(name);
+			return _positionStorage.GetPortfolio(name) ?? base.CreatePortfolio(name);
 		}
 
-		/// <summary>
-		/// Create position.
-		/// </summary>
-		/// <param name="portfolio">Portfolio.</param>
-		/// <param name="security">Security.</param>
-		/// <returns>Created position.</returns>
+		/// <inheritdoc />
 		public override Position CreatePosition(Portfolio portfolio, Security security)
 		{
-			return _entityRegistry.Positions.ReadBySecurityAndPortfolio(security, portfolio)
-			       ?? base.CreatePosition(portfolio, security);
+			if (_trackPositions)
+			{
+				var position = _positionStorage.GetPosition(portfolio, security);
+
+				if (position != null)
+					return position;
+			}
+			
+			return base.CreatePosition(portfolio, security);
 		}
 	}
 }

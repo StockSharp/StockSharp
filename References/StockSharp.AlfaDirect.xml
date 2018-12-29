@@ -27,9 +27,6 @@
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportTakeProfit">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportNativePortfolioLookup">
       <summary>
             Поддерживается ли торговой системой поиск портфелей.
@@ -39,6 +36,9 @@
       <summary>
             Поддерживается ли торговой системой поиск инструментов.
             </summary>
+    </member>
+    <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.TimeFrames">
       <summary>
@@ -58,7 +58,7 @@
     </member>
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Version">
       <summary>
-            Версия API. По-умолчанию равна <see cref="F:StockSharp.AlfaDirect.AlfaDirectVersions.V3" />.
+            Версия API. По-умолчанию равна <see cref="F:StockSharp.AlfaDirect.AlfaDirectVersions.V4" />.
             </summary>
     </member>
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Login">

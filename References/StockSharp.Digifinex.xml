@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Digifinex</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Digifinex.DigifinexMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Digifinex"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Digifinex.DigifinexMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Digifinex.DigifinexMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Digifinex.DigifinexMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Digifinex.DigifinexMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Digifinex.DigifinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Digifinex.DigifinexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Digifinex.DigifinexMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.Digifinex.DigifinexMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Digifinex.DigifinexMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Digifinex.DigifinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Digifinex.DigifinexTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Digifinex"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Digifinex.DigifinexTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Digifinex.DigifinexTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Digifinex.DigifinexTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Digifinex.DigifinexTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Digifinex.DigifinexTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -16,8 +16,6 @@ M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transa
 M:StockSharp.Btce.BtceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Btce.BtceOrderCondition/summary;DocStr60
 M:StockSharp.Btce.BtceOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Btce.BtceOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Btce.BtceOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Btce.BtceTrader/summary;DocStr2539
 M:StockSharp.Btce.BtceTrader.#ctor/summary;DocStr1
 P:StockSharp.Btce.BtceTrader.Key/summary;Str3304

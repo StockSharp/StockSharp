@@ -824,6 +824,49 @@
             Security.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.SecurityAssociationWindow">
+      <summary>
+            The window for edit securities associations.
+            </summary>
+      <summary>
+            SecurityAssociationWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityAssociationWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityAssociationWindow" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityAssociationWindow.ConnectorsInfoProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SecurityAssociationWindow.ConnectorsInfo" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityAssociationWindow.ConnectorsInfo">
+      <summary>
+            Visual description of available connections.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityAssociationWindow.SecurityProviderProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SecurityAssociationWindow.SecurityProvider" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityAssociationWindow.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityAssociationWindow.AssociationStorage">
+      <summary>
+            Associations storage.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityAssociationWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.PermissionCredentialsWindow">
       <summary>
             The window for edit credentials.
@@ -3696,7 +3739,7 @@
             To handle an order.
             </summary>
       <param name="order">Order.</param>
-      <param name="balance">Order contracts remainder.</param>
+      <param name="balance">Order contracts balance.</param>
       <param name="state">Order state.</param>
     </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.BusinessEntities.MarketDepth)">

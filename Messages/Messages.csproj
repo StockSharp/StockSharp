@@ -98,6 +98,7 @@
     <Compile Include="IBasketSecurityProcessor.cs" />
     <Compile Include="IBasketSecurityProcessorProvider.cs" />
     <Compile Include="IDailyInfoSoap.cs" />
+    <Compile Include="IMessageAdapterExtension.cs" />
     <Compile Include="IPortfolioMessageAdapterProvider.cs" />
     <Compile Include="MarketDataFinishedMessage.cs" />
     <Compile Include="IExtendableEntity.cs" />

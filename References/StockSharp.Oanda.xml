@@ -24,13 +24,13 @@
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportTakeProfit">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Oanda.OandaMessageAdapter.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativeSecurityLookup">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativePortfolioLookup">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Oanda.OandaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

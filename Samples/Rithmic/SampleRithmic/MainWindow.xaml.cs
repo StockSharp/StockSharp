@@ -51,6 +51,9 @@ namespace SampleRithmic
 		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
+		private readonly TradesWindow _tradesWindow = new TradesWindow();
+		private readonly OrdersLogWindow _ordersLogWindow = new OrdersLogWindow();
+		private readonly NewsWindow _newsWindow = new NewsWindow();
 
 		private readonly LogManager _logManager = new LogManager();
 
@@ -66,9 +69,11 @@ namespace SampleRithmic
 			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
+			_tradesWindow.MakeHideable();
+			_ordersLogWindow.MakeHideable();
+			_newsWindow.MakeHideable();
 
 			var guilistener = new GuiLogListener(LogControl);
-			//guilistener.Filters.Add(msg => msg.Level > LogLevels.Debug);
 			_logManager.Listeners.Add(guilistener);
 
 			_logManager.Listeners.Add(new FileLogListener("rithmic")
@@ -79,19 +84,23 @@ namespace SampleRithmic
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			Properties.Settings.Default.Save();
-
 			_securitiesWindow.DeleteHideable();
 			_ordersWindow.DeleteHideable();
 			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			_myTradesWindow.DeleteHideable();
+			_tradesWindow.DeleteHideable();
+			_ordersLogWindow.DeleteHideable();
+			_newsWindow.DeleteHideable();
 
 			_securitiesWindow.Close();
 			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 			_myTradesWindow.Close();
+			_tradesWindow.Close();
+			_ordersLogWindow.Close();
+			_newsWindow.Close();
 
 			if (Trader != null)
 				Trader.Dispose();
@@ -101,13 +110,12 @@ namespace SampleRithmic
 
 		private void ConnectClick(object sender, RoutedEventArgs e)
 		{
-			var pwd = PwdBox.Password;
-
 			if (!IsConnected)
 			{
-				var settings = Properties.Settings.Default;
+				var login = Login.Text;
+				var pwd = PwdBox.Password;
 
-				if (settings.Username.IsEmpty())
+				if (login.IsEmpty())
 				{
 					MessageBox.Show(this, LocalizedStrings.Str3751);
 					return;
@@ -151,6 +159,8 @@ namespace SampleRithmic
 
 					Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
 					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
+					Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+					Trader.NewOrderLogItem += _ordersLogWindow.OrderLogGrid.LogItems.Add;
 					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
 					Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
 					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
@@ -169,14 +179,19 @@ namespace SampleRithmic
 					Trader.MassOrderCancelFailed += (transId, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
+					Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
+
 					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
+
+					// set news provider
+					_newsWindow.NewsPanel.NewsProvider = Trader;
 				}
 
-				Trader.UserName = settings.Username;
-				Trader.Server = settings.Server;
+				Trader.Server = Server.SelectedServer ?? RithmicServers.Real;
+				Trader.UserName = login;
 				Trader.Password = pwd;
-				Trader.CertFile = settings.CertFile;
+				Trader.CertFile = CertFile.Text;
 
 				Trader.Connect();
 			}
@@ -236,6 +251,21 @@ namespace SampleRithmic
 			ShowOrHide(_stopOrdersWindow);
 		}
 
+		private void ShowTradesClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_tradesWindow);
+		}
+
+		private void ShowOrdersLogClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_ordersLogWindow);
+		}
+
+		private void ShowNewsClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_newsWindow);
+		}
+
 		private void CertificateButtonClick(object sender, RoutedEventArgs e)
 		{
 			var dialog = new VistaOpenFileDialog
@@ -248,7 +278,7 @@ namespace SampleRithmic
 			if (dialog.ShowDialog(this) != true)
 				return;
 
-			Properties.Settings.Default.CertFile = dialog.FileName;
+			CertFile.Text = dialog.FileName;
 		}
 	}
 }

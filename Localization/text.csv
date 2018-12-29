@@ -180,8 +180,8 @@ VisibleVolume;Visible volume;Видимый объем
 Str127;Visible quantity of contracts in order.;Видимое количество контрактов в заявке.
 Str128;Direction;Направление
 Str129;Order side (buy or sell).;Направление заявки (покупка или продажа).
-Str130;Remainder;Остаток
-Str131;Order contracts remainder.;Остаток контрактов в заявке.
+Str130;Balance;Остаток
+Str131;Order contracts balance.;Остаток контрактов в заявке.
 Str132;Order type;Тип заявки
 Str133;Order type (Limit, Market, Stop-order etc.).;Тип заявки (Лимитированная, Рыночная, Стоп-заявка и т.д.).
 Str134;Order state (Active, Not active, Error).;Состояние заявки (Активна, Не активна, Ошибка).
@@ -533,7 +533,7 @@ Str530;Last change local time;Локальное время последнего
 Str531;Last trade change local time (Cancellation, Fill).;Локальное время последнего изменения заявки (Снятие, Сведение).
 Str532;Linked order;Связанная заявка
 Str533;Order created by a stop-order during condition activation (empty value, if stop-condition has not been activated).;Биржевая заявка, которая была создана стоп-заявкой при активации условия (пустое значение, если стоп-условие еще не было активировано).
-Str534Params;{0}/{1} {2} {3} {4} Price={5} Volume={6} State={7} Bal={8} State={9};{0}/{1} {2} {3} {4} Цена={5} Объем={6} Сост={7} Бал={8} Сост={9}
+Str534Params;{0}/{1} {2} {3} {4} Price={5} Volume={6} State={7} Bal={8} Type={9};{0}/{1} {2} {3} {4} Цена={5} Объем={6} Сост={7} Бал={8} Тип={9}
 Str535;Orders log item.;Строка лога заявок.
 Str536Params;{0} orders {1};{0} заявки {1}
 Str537;Cancellation;Снятие
@@ -671,8 +671,8 @@ Str688Params;Message '{0}' does not have information about the type of data bein
 Str689Params;For order {0}/{1} security information has not been submitted.;Для заявки {0}/{1} не была передана информация об инструменте.
 SubscribedOk;Security {0} is subscribed for {1};Инструмент {0} подписан на {1}
 UnSubscribedOk;Security {0} is unsubscribed for {1};Инструмент {0} отписан от {1}
-SubscribedError;Security {0} cannot subscribe for {1}. Error is '{0}'.;Инструмент {0} не может подписаться на {1}. Ошибка'{0}'.
-UnSubscribedError;Security {0} cannot unsubscribe from {1}. Error is '{0}'.;Инструмент {0} не может отписаться от {1}. Ошибка'{0}'.
+SubscribedError;Security {0} cannot subscribe for {1}. Error is '{2}'.;Инструмент {0} не может подписаться на {1}. Ошибка'{2}'.
+UnSubscribedError;Security {0} cannot unsubscribe from {1}. Error is '{2}'.;Инструмент {0} не может отписаться от {1}. Ошибка'{2}'.
 SubscriptionSent;Security {0} is subscribing for {1};Инструмент {0} подписается на {1}
 UnSubscriptionSent;Security {0} is unsubscribing from {1};Инструмент {0} отписается от {1}
 Str691Params; from {0} till {1}; с {0} по {1}
@@ -2058,7 +2058,7 @@ Str2135;Load securities;Загружать инструменты
 Str2136;Should the whole set of securities be loaded from IQFeed website archive.;Загружать ли инструменты из архива с сайта IQFeed.
 Str2137;File with securities;Файл с инструментами
 Str2138;Path to file with IQFeed list of securities, downloaded from the website. If path is specified, then secondary download from website does not occur, and only the local copy gets parsed.;Путь к файлу со списком инструментов IQFeed, скачанный с сайта. Если путь задан, то повторное скачивание с сайта не происходит, и парсится только локальная копия.
-Str2139Params;IQFeed does not support interval {0}.;IQFeed не поддерживает интервал {0}.
+Str2139Params;Interval {0} isn't supported.;Интервал {0} не поддерживается.
 Str2140Params;Unknown type of security '{0}'.;Неизвестный тип инструмента '{0}'.
 Str2141Params;Error parsing string '{0}'.;Ошибка парсинга строки '{0}'.
 Str2142Params;Unknown type of message '{0}'.;Неизвестный тип сообщения '{0}'.
@@ -3246,9 +3246,9 @@ Str3462;On live data;На живых данных
 Str3463;Real;Реальное
 Str3465;Certificate;Сертификат
 Str3466;Path to certificate file, necessary to connect to Rithmic system.;Путь к файлу сертификата, необходимому для подключения к системе Rithmic.
-Str3467;Login (extra);Логин (дополнительно)
+Str3467;Login (trans);Логин (транзак)
 Str3468;Additional login. Used when transaction sending is carried out to a separate server.;Дополнительное имя пользователя. Используется в случае, если отправка транзакций осуществляется на отдельный сервер.
-Str3469;Password (extra);Пароль (дополнительно)
+Str3469;Password (trans);Пароль (транзак)
 Str3470;Additional password. Used when transaction sending is carried out to a separate server.;Дополнительный пароль. Используется в случае, если отправка транзакций осуществляется на отдельный сервер.
 Str3471;File log;Лог файл
 Str3472;Path to log file.;Путь к лог файлу.
@@ -4901,6 +4901,18 @@ LmaxLocationDesc;LMAX exchange location.;Расположение биржи LMA
 London;London;Лондон
 NewYork;New York;Нью йорк
 Tokyo;Tokyo;Токио
+PremiumService;Premium service;Премиальный сервис
+SecuritiesAssociations;Securities associations;Ассоциации инструментов
+FuturesSection;Futures section;Фьючерсная секция
+SpotSection;Spot section;Спот секция
+Spot;Spot;Спот
+HistoricalUserName;User name (hist);Логин (история)
+HistoricalUserNameDesc;Additional login. User id used for authentication with the history plant.;Дополнительный логин. Используется для авторизации на сервере истории.
+HistoricalPassword;Password (hist);Пароль (история)
+HistoricalPasswordDesc;Additional password. Password used for authentication with the history plant.;Дополнительный пароль. Используется для авторизации на сервере истории.
+Idax;IDAX;IDAX
+Digifinex;DigiFinex;DigiFinex
+TradeOgre;TradeOgre;TradeOgre
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5717,7 +5729,7 @@ DocStr845;Get security by code;Получить инструмент по код
 DocStr846;To get the instrument by the code. If the instrument is not found, then the {0} is called to create an instrument;Получить инструмент по коду. Если инструмент не найден, то для создания инструмента вызывается {0}
 DocStr847;The handler changing the instrument. It returns {0} if the instrument has been changed and the {1} should be called;Обработчик, изменяющий инструмент. Возвращает {0}, если инструмент был изменен, и необходимо вызвать {1}
 DocStr848;Get {0};Получить {0}
-DocStr849;To get the portfolio by the name. If the portfolio is not registered, it is created via {0};Получить портфель по названию. Если портфель не зарегистрирован, то он создается через {0}
+DocStr849;If the portfolio is not registered, it is created via {0};Если портфель не зарегистрирован, то он создается через {0}
 DocStr850;Portfolio handler;Обработчик, изменяющий портфель
 DocStr851;Generate {0} security;Сгенерировать {0} инструмента
 DocStr852;{0} security;{0} инструмента
@@ -5836,7 +5848,7 @@ DocStr964;The option theta. If the value is equal to {0}, then the value calcula
 DocStr965;To calculate the option rho;Рассчитать ро опциона
 DocStr966;The option rho. If the value is equal to {0}, then the value calculation currently is impossible;Ро опциона. Если значение равно {0}, то расчет значения в данный момент невозможен
 DocStr967;To calculate the implied volatility;Рассчитать подразумеваемую волатильность
-DocStr968;The option premium;Премия по опциону
+DocStr968;The option premium;Премия опциона
 DocStr969;The implied volatility. If the value is equal to {0}, then the value calculation currently is impossible;Подразумеваемая волатильность. Если значение равно {0}, то расчет значения в данный момент невозможен
 DocStr970;The risk free interest rate;Безрисковая процентная ставка
 DocStr971;The dividend amount on shares;Размер дивиденда по акциям
@@ -5939,7 +5951,6 @@ DocStr1067;The time exhibitor;Временная экспонента
 DocStr1068;The d1 parameter of the option fulfilment probability estimating;Параметр d1 определения вероятности исполнения опциона
 DocStr1069;To calculate the d2 parameter of the option fulfilment probability estimating;Рассчитать параметр d2 определения вероятности исполнения опциона
 DocStr1070;The d2 parameter of the option fulfilment probability estimating;Параметр d2 определения вероятности исполнения опциона
-DocStr1071;The option premium;Премия опциона
 DocStr1072;Days per year;Дней в году
 DocStr1073;To calculate the implied volatility;Рассчитать подразумеваемую волатильность (Implied Volatility)
 DocStr1074;To calculate the premium by volatility;Рассчитать премию по волатильности
@@ -10681,7 +10692,7 @@ DocStr5927;The OpenECry server API address. The default is {0};Адрес API с
 DocStr5928;The required mode of connection to the terminal. The default is {0};Требуемый режим подключения к терминалу. По умолчанию {0}
 DocStr5929;To use the 'native' reconnection process. Enabled by default;"Использовать ""родной"" механизм восстановления соединения. По умолчанию включено"
 DocStr5930;Connection to the terminal modes. Description of functionality http://www.openecry.com/api/OECAPIRemoting.pdf;Режимы подключения к терминалу. Описание функциональности http://www.openecry.com/api/OECAPIRemoting.pdf
-DocStr5931;If there is another connection with the same Login/Password, it can be diconnected;Если существует другое подключение с теми же Login/Password, оно может быть разорвано
+DocStr5931;If there is another connection with the same Login/Password, it can be disconnected;Если существует другое подключение с теми же Login/Password, оно может быть разорвано
 DocStr5932;An attempt to activate the mode {0}, in case of failure the mode {1} is activated;Попытка активировать в режиме {0}, в случае неудачи - режим {1}
 DocStr5933;The drop-down list to select the OpenECry server address;Выпадающий список для выбора адреса сервера OpenECry
 DocStr5934;Addresses of OpenECry system servers;Адреса серверов системы OpenECry
@@ -14359,7 +14370,7 @@ DocStr9792;Length of result buffer;Длина результирующего б�
 DocStr9793;The default value;Значение по-умолчанию
 DocStr9794;Result buffer;Результирующий буфер
 DocStr9800;Spb exchange;СПб биржа
-DocStr9801;All avaliable adapters;Все доступные адаптеры
+DocStr9801;All available adapters;Все доступные адаптеры
 DocStr9802;Users info;Информация о пользователях
 DocStr9803;Type of builder;Тип построителя
 DocStr9804;{0} derived type;Производный тип {0}
@@ -14575,7 +14586,7 @@ DocStr10028;Enable storage;Включить хранилище
 DocStr10029;Support filtering subscriptions (subscribe/unsubscribe for specified security);Поддерживает ли фильтрация подписки (подписка/отписка для указанного инструмента)
 DocStr10030;Convertible type;Конвертируемый тип
 DocStr10031;The security for which {0} will be calculated;Инструмент, для которого будет вычисляться значение {0}
-DocStr10032;Schema registerating event;Событие регистрации схемы
+DocStr10032;Schema registration event;Событие регистрации схемы
 DocStr10033;Schema unregistering event;Событие удаления схемы
 DocStr10034;Tracking field info;Информация об отслеживаемой поле
 DocStr10035;Tracking property;Отслеживаемое свойство
@@ -14712,7 +14723,6 @@ DocStr10173;Annotation;Аннотация
 DocStr10174;Annotation type;Тип аннотации
 DocStr10175;The position provider;Провайдер позиций
 DocStr10176;Lookup security by identifier;Найти инструмент по идентификатору
-DocStr10177;To get the portfolio by the name. If the portfolio is not registered, it will be created;Получить портфель по имени. Если портфель не зарегистрирован, он будет создан
 DocStr10178;The position provider interface;Интерфейс провайдера позиций
 DocStr10179;New position received;Получена новая позиция
 DocStr10180;Palette element;Элемент палитры
@@ -14781,8 +14791,8 @@ DocStr10247;Middle line color;Цвет средней линии
 DocStr10248;Upper line color;Цвет верхней линии
 DocStr10249;Lower line color;Цвет нижний линии
 DocStr10250;Attribute, applied to indicator's painter, to provide information about type of {0};Атрибут, применяющийся к отрисовщику индикатора для предоставления информации о типе {0}
-DocStr10251;Is specified security id asssociated with the board;Принадлежит ли указанный идентификатор инструмента площадку
-DocStr10252;{0}, if asssociated, otherwise, {1};{0}, если принадлежит, иначе, {1}
+DocStr10251;Is specified security id associated with the board;Принадлежит ли указанный идентификатор инструмента площадку
+DocStr10252;{0}, if associated, otherwise, {1};{0}, если принадлежит, иначе, {1}
 DocStr10253;Stop order types;Тип стоп-заявок
 DocStr10254;Stop-loss and take-profit;Стоп-лосс и тейк-профит
 DocStr10257;To create a rule for the order's profit more on offset;Создать правило для отслеживания прибыльности заявки более чем на указанный уровень
@@ -15036,7 +15046,7 @@ DocStr10531;Icon name;Название иконки
 DocStr10532;Strategy state icon;Иконка для состояния стратегии
 DocStr10533;Last error;Послед. ошибка
 DocStr10534;Allow trading;Торговля доступна
-DocStr10535;The messages adapter build orer book and tick data from order log flow;Адаптер сообщений, строящий стаканы и тиковые сделки из потока лога заявок
+DocStr10535;The messages adapter build order book and tick data from order log flow;Адаптер сообщений, строящий стаканы и тиковые сделки из потока лога заявок
 DocStr10536;To tick trade from the order log;Преобразовать в тиковую сделку из строки лога заявок
 DocStr10537;Default implementation of {0};Реализация интерфейса {0} по-умолчанию
 DocStr10538;Build modes;Режимы построения
@@ -15067,7 +15077,7 @@ DocStr10565;Luxembourgish franc;Люксембургский франк
 DocStr10566;Get adapter by portfolio;Получить адаптер по портфелю
 DocStr10567;Extended interface for specify extra operation with conditional orders;Расширенный интерфейс для указания дополнительных операций с условными заявками
 DocStr10568;Determines whether the adapter support stop-loss orders;Определить, поддерживает ли адаптер заявки типа стоп-лосс
-DocStr10569;Determines whether the adapter support take-porift orders;Определить, поддерживает ли адаптер заявки типа тейк-профит
+DocStr10569;Determines whether the adapter support take-profit orders;Определить, поддерживает ли адаптер заявки типа тейк-профит
 DocStr10570;Determines whether the adapter support withdraw orders;Определить, поддерживает ли адаптер заявки на вывод
 DocStr10571;Create stop order condition;Создать стоп условие
 DocStr10572;Is take-profit of stop-loss;Является ли тейк-профитом или стоп-лоссом
@@ -15332,3 +15342,42 @@ DocStr10851;Check {0} contains error message;Проверить, содержи�
 DocStr10852;{0} if the specified text contains error message, otherwise, {1};{0} если переданное текстовое сообщение содержит ошибку, иначе, {1}
 DocStr10853;Security mapping request message;Сообщение запроса получения маппинга инструментов
 DocStr10854;Security mapping result message;Сообщение ответа маппинга инструментов
+DocStr10857;The interface describing the security associations storage;Интерфейс, описывающий хранилище ассоциаций инструментов
+DocStr10858;Save association;Сохранить ассоциацию
+DocStr10859;Master security id;Идентификатор мастер-инструмента
+DocStr10860;Tradable security ids;Идентификаторы торгуемых инструментов
+DocStr10861;Adapter name;Название адаптера
+DocStr10862;Tradable security id;Идентификатор торгуемого инструмента
+DocStr10863;Load all associations;Загрузить все ассоциации
+DocStr10864;All associations;Все ассоциации
+DocStr10865;Delete all associations;Удалить все ассоциации
+DocStr10866;CSV security associations storage;Хранилище ассоциаций в формате CSV
+DocStr10867;Translate tick data as {0} or {1};Передавать тиковые данных как {0} или {1}
+DocStr10868;Security association request message;Сообщение запроса ассоциаций инструментов
+DocStr10869;Security association result message;Сообщение с результатами ассоциаций инструментов
+DocStr10870;Security associations;Ассоциации инструментов
+DocStr10871;The window for edit securities associations;Окно для редактирования ассоциации инструментов
+DocStr10872;Associations storage;Хранилище ассоциаций
+DocStr10873;Save portfolio;Сохранить портфель
+DocStr10874;Delete portfolio;Удалить портфель
+DocStr10875;Save position;Сохранить позицию
+DocStr10876;Delete position;Удалить позицию
+DocStr10877;Position storage;Хранилище позиций
+DocStr10878;Track positions;Отслеживать позиции
+DocStr10879;To get the portfolio by the name;Получить портфель по названию
+DocStr10880;Services registry;Реестр сервисов
+DocStr10881;Connector;Коннектор
+DocStr10882;Log manager;Менеджер логирования
+DocStr10883;Filter portfolios by the specified criteria;Отфильтровать портфели по указанному критерию
+DocStr10884;All portfolios;Все портфели
+DocStr10885;Filter positions the specified criteria;Отфильтровать позиции по указанному критерию
+DocStr10886;All positions;Все позиции
+DocStr10887;Found positions;Найденные позиции
+DocStr10888;Security legs request message;Сообщение запроса ног инструмента
+DocStr10889;The filter for securities search;Фильтр поиска инструментов
+DocStr10890;Security legs result message;Сообщение результата запроса ног инструмента
+DocStr10891;Security legs;Ноги инструмента
+DocStr10892;Information about IDAX;Информация о IDAX
+DocStr10893;Information about DigiFinex;Информация о DigiFinex
+DocStr10894;Information about TradeOgre;Информация о TradeOgre
+DocStr10895;Help url;Help адрес
