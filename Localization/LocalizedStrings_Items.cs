@@ -48806,5 +48806,55 @@ namespace StockSharp.Localization
 		/// TradeOgre
 		/// </summary>
 		public static string TradeOgre => GetString(TradeOgreKey);
+
+		/// <summary>
+		/// CoinCap
+		/// </summary>
+		public const string CoinCapKey = nameof(CoinCap);
+
+		/// <summary>
+		/// CoinCap
+		/// </summary>
+		public static string CoinCap => GetString(CoinCapKey);
+
+		/// <summary>
+		/// Low
+		/// </summary>
+		public const string LowKey = nameof(Low);
+
+		/// <summary>
+		/// Low
+		/// </summary>
+		public static string Low => GetString(LowKey);
+
+		/// <summary>
+		/// High
+		/// </summary>
+		public const string HighKey = nameof(High);
+
+		/// <summary>
+		/// High
+		/// </summary>
+		public static string High => GetString(HighKey);
+
+		/// <summary>
+		/// Priority
+		/// </summary>
+		public const string PriorityKey = nameof(Priority);
+
+		/// <summary>
+		/// Priority
+		/// </summary>
+		public static string Priority => GetString(PriorityKey);
+
+		/// <summary>
+		/// News priority.
+		/// </summary>
+		public const string NewsPriorityKey = nameof(NewsPriority);
+
+		/// <summary>
+		/// News priority.
+		/// </summary>
+		public static string NewsPriority => GetString(NewsPriorityKey);
 	}
 }

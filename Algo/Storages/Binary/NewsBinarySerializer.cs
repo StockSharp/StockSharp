@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class NewsBinarySerializer : BinaryMarketDataSerializer<NewsMessage, NewsMetaInfo>
 	{
 		public NewsBinarySerializer(IExchangeInfoProvider exchangeInfoProvider)
-			: base(default(SecurityId), 200, MarketDataVersions.Version47, exchangeInfoProvider)
+			: base(default(SecurityId), 200, MarketDataVersions.Version48, exchangeInfoProvider)
 		{
 		}
 
@@ -102,6 +102,14 @@ namespace StockSharp.Algo.Storages.Binary
 				var lastOffset = metaInfo.LastServerOffset;
 				metaInfo.LastTime = writer.WriteTime(news.ServerTime, metaInfo.LastTime, LocalizedStrings.News, true, true, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
+
+				if (metaInfo.Version < MarketDataVersions.Version48)
+					continue;
+
+				writer.Write(news.Priority != null);
+
+				if (news.Priority != null)
+					writer.WriteInt((int)news.Priority.Value);
 			}
 		}
 
@@ -129,6 +137,12 @@ namespace StockSharp.Algo.Storages.Binary
 			message.ServerTime = reader.ReadTime(ref prevTime, true, true, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
+
+			if (metaInfo.Version >= MarketDataVersions.Version48)
+			{
+				if (reader.Read())
+					message.Priority = (NewsPriorities)reader.ReadInt();
+			}
 
 			return message;
 		}

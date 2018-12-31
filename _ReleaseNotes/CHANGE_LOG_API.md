@@ -51,6 +51,7 @@ StockSharp API Change log
 * (feature) ITakeProfitOrderCondition, IStopLossOrderCondition, IWithdrawOrderCondition.
 * (feature) CsvEntityRegistry. Currency and ExpirationDate added.
 * (feature) SubscriptionMessageAdapter. IsRestoreOnNormalReconnect added.
+* (feature) News. Priority property added.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

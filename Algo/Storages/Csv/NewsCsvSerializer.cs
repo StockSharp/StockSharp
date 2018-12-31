@@ -26,12 +26,7 @@ namespace StockSharp.Algo.Storages.Csv
 	/// </summary>
 	public class NewsCsvSerializer : CsvMarketDataSerializer<NewsMessage>
 	{
-		/// <summary>
-		/// Write data to the specified writer.
-		/// </summary>
-		/// <param name="writer">CSV writer.</param>
-		/// <param name="data">Data.</param>
-		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		/// <inheritdoc />
 		protected override void Write(CsvFileWriter writer, NewsMessage data, IMarketDataMetaInfo metaInfo)
 		{
 			writer.WriteRow(new[]
@@ -43,18 +38,14 @@ namespace StockSharp.Algo.Storages.Csv
 				data.Url?.ToString(),
 				data.Id,
 				data.BoardCode,
-				data.SecurityId?.SecurityCode
+				data.SecurityId?.SecurityCode,
+				data.Priority?.ToString(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
 		}
 
-		/// <summary>
-		/// Read data from the specified reader.
-		/// </summary>
-		/// <param name="reader">CSV reader.</param>
-		/// <param name="metaInfo">Meta-information on data for one day.</param>
-		/// <returns>Data.</returns>
+		/// <inheritdoc />
 		protected override NewsMessage Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
 			var news = new NewsMessage
@@ -71,6 +62,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if (!secCode.IsEmpty())
 				news.SecurityId = new SecurityId { SecurityCode = secCode };
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				news.Priority = reader.ReadNullableEnum<NewsPriorities>();
 
 			return news;
 		}

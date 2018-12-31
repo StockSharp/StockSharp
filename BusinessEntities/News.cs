@@ -17,6 +17,7 @@ namespace StockSharp.BusinessEntities
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -129,6 +130,18 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		[Url]
 		public Uri Url { get; set; }
+
+		/// <summary>
+		/// News priority.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PriorityKey,
+			Description = LocalizedStrings.NewsPriorityKey,
+			GroupName = LocalizedStrings.GeneralKey)]
+		[Nullable]
+		public NewsPriorities? Priority { get; set; }
 
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;

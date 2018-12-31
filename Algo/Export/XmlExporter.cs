@@ -292,6 +292,9 @@ namespace StockSharp.Algo.Export
 				if (n.Url != null)
 					writer.WriteAttribute("board", n.Url);
 
+				if (n.Priority != null)
+					writer.WriteAttribute("priority", n.Priority.Value);
+
 				if (!n.Story.IsEmpty())
 					writer.WriteCData(n.Story);
 

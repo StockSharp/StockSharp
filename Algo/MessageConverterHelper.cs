@@ -1444,6 +1444,7 @@ namespace StockSharp.Algo
 				SecurityId = news.Security?.ToSecurityId(),
 				BoardCode = news.Board == null ? string.Empty : news.Board.Code,
 				Url = news.Url,
+				Priority = news.Priority,
 			};
 		}
 
@@ -1652,6 +1653,7 @@ namespace StockSharp.Algo
 				Headline = message.Headline,
 				Board = message.BoardCode.IsEmpty() ? null : exchangeInfoProvider?.GetOrCreateBoard(message.BoardCode),
 				LocalTime = message.LocalTime,
+				Priority = message.Priority,
 				Security = message.SecurityId == null ? null : new Security
 				{
 					Id = message.SecurityId.Value.SecurityCode
