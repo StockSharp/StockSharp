@@ -52,6 +52,7 @@ StockSharp API Change log
 * (feature) CsvEntityRegistry. Currency and ExpirationDate added.
 * (feature) SubscriptionMessageAdapter. IsRestoreOnNormalReconnect added.
 * (feature) News. Priority property added.
+* (feature) CoinCap connector.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

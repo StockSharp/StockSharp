@@ -95,6 +95,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Xaml.Charting.IndicatorPainters;
 	using StockSharp.Yobit;
 	using StockSharp.Zaif;
+	using StockSharp.CoinCap;
 
 	/// <summary>
 	/// Extension class.
@@ -235,6 +236,7 @@ namespace StockSharp.Configuration
 			() => typeof(DigifinexMessageAdapter),
 			() => typeof(IdaxMessageAdapter),
 			() => typeof(TradeOgreMessageAdapter),
+			() => typeof(CoinCapMessageAdapter),
 		});
 
 		/// <summary>

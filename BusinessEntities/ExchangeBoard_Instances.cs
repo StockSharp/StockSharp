@@ -3353,5 +3353,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.TradeOgre.Name,
 			Exchange = Exchange.TradeOgre,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.CoinCap"/>.
+		/// </summary>
+		public static ExchangeBoard CoinCap { get; } = new ExchangeBoard
+		{
+			Code = Exchange.CoinCap.Name,
+			Exchange = Exchange.CoinCap,
+		};
 	}
 }

@@ -122,6 +122,10 @@
       <Project>{AB948D64-73B2-4BDC-972C-337E51A67265}</Project>
       <Name>Coinbase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CoinCap\CoinCap.csproj">
+      <Project>{6C63BF6A-28F2-4C5E-ADD9-55CD1126DE4B}</Project>
+      <Name>CoinCap</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Coincheck\Coincheck.csproj">
       <Project>{1D19F91C-214C-44CD-9064-A22BD89D7AB1}</Project>
       <Name>Coincheck</Name>

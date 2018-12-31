@@ -88,6 +88,9 @@
     <Reference Include="StockSharp.Coinbase">
       <HintPath>..\References\StockSharp.Coinbase.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.CoinCap">
+      <HintPath>..\References\StockSharp.CoinCap.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Coincheck">
       <HintPath>..\References\StockSharp.Coincheck.dll</HintPath>
     </Reference>

@@ -1000,5 +1000,15 @@ namespace StockSharp.BusinessEntities
 			EngName = "TradeOgre",
 			RusName = "TradeOgre",
 		};
+
+		/// <summary>
+		/// Information about CoinCap.
+		/// </summary>
+		public static Exchange CoinCap { get; } = new Exchange
+		{
+			Name = "CNCP",
+			EngName = "CoinCap",
+			RusName = "CoinCap",
+		};
 	}
 }
