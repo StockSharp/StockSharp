@@ -131,6 +131,7 @@ P:StockSharp.BusinessEntities.Exchange.Idax/summary;DocStr10892
 P:StockSharp.BusinessEntities.Exchange.Digifinex/summary;DocStr10893
 P:StockSharp.BusinessEntities.Exchange.TradeOgre/summary;DocStr10894
 P:StockSharp.BusinessEntities.Exchange.CoinCap/summary;DocStr10903
+P:StockSharp.BusinessEntities.Exchange.Coinigy/summary;DocStr10908
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694
@@ -353,6 +354,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Idax/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Digifinex/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.TradeOgre/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.CoinCap/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.Coinigy/summary;DocStr2809
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrade/summary;DocStr8546
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867
@@ -722,6 +724,7 @@ P:StockSharp.BusinessEntities.News.Story/summary;Str218
 P:StockSharp.BusinessEntities.News.ServerTime/summary;Str220
 P:StockSharp.BusinessEntities.News.LocalTime/summary;Str515
 P:StockSharp.BusinessEntities.News.Url/summary;Str222
+P:StockSharp.BusinessEntities.News.Priority/summary;NewsPriority
 P:StockSharp.BusinessEntities.News.ExtensionInfo/summary;ExtendedInfo
 P:StockSharp.BusinessEntities.News.ExtensionInfo/remarks;Str427
 M:StockSharp.BusinessEntities.News.ToString/inheritdoc;DocStr8459

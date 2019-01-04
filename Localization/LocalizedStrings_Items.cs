@@ -48856,5 +48856,35 @@ namespace StockSharp.Localization
 		/// News priority.
 		/// </summary>
 		public static string NewsPriority => GetString(NewsPriorityKey);
+
+		/// <summary>
+		/// Coinigy
+		/// </summary>
+		public const string CoinigyKey = nameof(Coinigy);
+
+		/// <summary>
+		/// Coinigy
+		/// </summary>
+		public static string Coinigy => GetString(CoinigyKey);
+
+		/// <summary>
+		/// Websocket
+		/// </summary>
+		public const string WebSocketKey = nameof(WebSocket);
+
+		/// <summary>
+		/// Websocket
+		/// </summary>
+		public static string WebSocket => GetString(WebSocketKey);
+
+		/// <summary>
+		/// Websocket id.
+		/// </summary>
+		public const string WebSocketIdKey = nameof(WebSocketId);
+
+		/// <summary>
+		/// Websocket id.
+		/// </summary>
+		public static string WebSocketId => GetString(WebSocketIdKey);
 	}
 }

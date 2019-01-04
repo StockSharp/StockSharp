@@ -94,6 +94,9 @@
     <Reference Include="StockSharp.Coincheck">
       <HintPath>..\References\StockSharp.Coincheck.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Coinigy">
+      <HintPath>..\References\StockSharp.Coinigy.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Cqg.Com">
       <HintPath>..\References\StockSharp.Cqg.Com.dll</HintPath>
     </Reference>

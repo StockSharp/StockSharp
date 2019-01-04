@@ -53,6 +53,7 @@ StockSharp API Change log
 * (feature) SubscriptionMessageAdapter. IsRestoreOnNormalReconnect added.
 * (feature) News. Priority property added.
 * (feature) CoinCap connector.
+* (feature) Coinigy connector.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

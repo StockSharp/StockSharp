@@ -96,6 +96,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Yobit;
 	using StockSharp.Zaif;
 	using StockSharp.CoinCap;
+	using StockSharp.Coinigy;
 
 	/// <summary>
 	/// Extension class.
@@ -237,6 +238,7 @@ namespace StockSharp.Configuration
 			() => typeof(IdaxMessageAdapter),
 			() => typeof(TradeOgreMessageAdapter),
 			() => typeof(CoinCapMessageAdapter),
+			() => typeof(CoinigyMessageAdapter),
 		});
 
 		/// <summary>

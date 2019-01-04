@@ -1010,5 +1010,15 @@ namespace StockSharp.BusinessEntities
 			EngName = "CoinCap",
 			RusName = "CoinCap",
 		};
+
+		/// <summary>
+		/// Information about Coinigy.
+		/// </summary>
+		public static Exchange Coinigy { get; } = new Exchange
+		{
+			Name = "CNGY",
+			EngName = "Coinigy",
+			RusName = "Coinigy",
+		};
 	}
 }

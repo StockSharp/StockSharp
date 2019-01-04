@@ -134,6 +134,10 @@
       <Project>{E0C2FC7C-581A-4B05-B6BE-331D0DF45153}</Project>
       <Name>CoinExchange</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Coinigy\Coinigy.csproj">
+      <Project>{EC468653-253E-4D5C-8E91-4CDCF06898B9}</Project>
+      <Name>Coinigy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cryptopia\Cryptopia.csproj">
       <Project>{42C7D967-5AFB-4BA5-A2F4-DB232BDF7D20}</Project>
       <Name>Cryptopia</Name>
