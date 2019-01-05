@@ -54,6 +54,8 @@ StockSharp API Change log
 * (feature) News. Priority property added.
 * (feature) CoinCap connector.
 * (feature) Coinigy connector.
+* (feature) FIX connector. IBKR dialect supported algo orders.
+* (feature) FixServer. Support SecurityStatusRequest.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
