@@ -43,6 +43,7 @@ E:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectiveVolumeChang
 P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectiveLevel/summary;DocStr396
 P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.IsTrailing/summary;DocStr397
 P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ActivationPrice/summary;DocStr398
+P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ActivationPrice/remarks;DocStr10899
 P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.IsActivated/summary;DocStr399
 E:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.Activated/summary;DocStr400
 P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.UseQuoting/summary;DocStr363

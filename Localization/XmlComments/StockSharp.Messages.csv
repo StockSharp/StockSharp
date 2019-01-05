@@ -694,11 +694,11 @@ P:StockSharp.Messages.BaseWithdrawOrderCondition.IsWithdraw/inheritdoc;DocStr845
 P:StockSharp.Messages.BaseWithdrawOrderCondition.WithdrawInfo/inheritdoc;DocStr8459
 T:StockSharp.Messages.ITakeProfitOrderCondition/summary;DocStr10897
 P:StockSharp.Messages.ITakeProfitOrderCondition.ClosePositionPrice/summary;DocStr10898
-P:StockSharp.Messages.ITakeProfitOrderCondition.ActivationPrice/summary;DocStr10899
+P:StockSharp.Messages.ITakeProfitOrderCondition.ActivationPrice/summary;DocStr398
 P:StockSharp.Messages.ITakeProfitOrderCondition.IsTrailing/summary;TrailingTakeProfit
 T:StockSharp.Messages.IStopLossOrderCondition/summary;DocStr10900
 P:StockSharp.Messages.IStopLossOrderCondition.ClosePositionPrice/summary;DocStr10898
-P:StockSharp.Messages.IStopLossOrderCondition.ActivationPrice/summary;DocStr10899
+P:StockSharp.Messages.IStopLossOrderCondition.ActivationPrice/summary;DocStr398
 P:StockSharp.Messages.IStopLossOrderCondition.IsTrailing/summary;Str3446
 T:StockSharp.Messages.IMessageAdapterExtension/summary;DocStr10567
 P:StockSharp.Messages.IMessageAdapterExtension.IsSupportStopLoss/summary;DocStr10568
@@ -1058,6 +1058,10 @@ M:StockSharp.Messages.Message.ToString/summary;DocStr49
 M:StockSharp.Messages.Message.ToString/returns;DocStr50
 M:StockSharp.Messages.Message.Clone/summary;DocStr643
 M:StockSharp.Messages.Message.Clone/returns;DocStr1116
+T:StockSharp.Messages.NewsPriorities/summary;DocStr10999
+F:StockSharp.Messages.NewsPriorities.Low/summary;Low
+F:StockSharp.Messages.NewsPriorities.Regular/summary;Str1629
+F:StockSharp.Messages.NewsPriorities.High/summary;High
 T:StockSharp.Messages.NewsMessage/summary;DocStr4374
 P:StockSharp.Messages.NewsMessage.Id/summary;NewsId
 P:StockSharp.Messages.NewsMessage.BoardCode/summary;DocStr4375
@@ -1068,9 +1072,9 @@ P:StockSharp.Messages.NewsMessage.Story/summary;Str218
 P:StockSharp.Messages.NewsMessage.ServerTime/summary;Str220
 P:StockSharp.Messages.NewsMessage.Url/summary;Str222
 P:StockSharp.Messages.NewsMessage.OriginalTransactionId/summary;DocStr4056
+P:StockSharp.Messages.NewsMessage.Priority/summary;NewsPriority
 M:StockSharp.Messages.NewsMessage.#ctor/summary;DocStr1
-M:StockSharp.Messages.NewsMessage.ToString/summary;DocStr49
-M:StockSharp.Messages.NewsMessage.ToString/returns;DocStr50
+M:StockSharp.Messages.NewsMessage.ToString/inheritdoc;DocStr8459
 M:StockSharp.Messages.NewsMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.NewsMessage.Clone/returns;DocStr1116
 T:StockSharp.Messages.OptionTypes/summary;DocStr3251

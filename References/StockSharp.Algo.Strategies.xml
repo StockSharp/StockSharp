@@ -164,8 +164,9 @@
         </member>
         <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ActivationPrice">
             <summary>
-            The absolute value of the price when the one is reached the protective strategy is activated. If the price is equal to <see langword="null" /> then the activation is not required.
+            The absolute value of the price when the one is reached the protective strategy is activated.
             </summary>
+            <remarks>If the price is equal to <see langword="null" /> then the activation is not required.</remarks>
         </member>
         <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.IsActivated">
             <summary>
