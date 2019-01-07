@@ -16,7 +16,7 @@ namespace SampleCoinCap
 			InitializeComponent();
 
 			CandlesPeriods.ItemsSource = CoinCapMessageAdapter.AllTimeFrames;
-			CandlesPeriods.SelectedIndex = 1;
+			CandlesPeriods.SelectedIndex = 0;
 		}
 
 		private void SecurityPicker_OnSecuritySelected(Security security)

@@ -27,7 +27,7 @@ namespace SampleCoinigy
 			InitializeComponent();
 
 			CandlesPeriods.ItemsSource = CoinigyMessageAdapter.AllTimeFrames;
-			CandlesPeriods.SelectedIndex = 1;
+			CandlesPeriods.SelectedIndex = 0;
 		}
 
 		protected override void OnClosed(EventArgs e)
