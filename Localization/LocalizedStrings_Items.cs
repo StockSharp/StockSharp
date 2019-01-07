@@ -48886,5 +48886,15 @@ namespace StockSharp.Localization
 		/// Websocket id.
 		/// </summary>
 		public static string WebSocketId => GetString(WebSocketIdKey);
+
+		/// <summary>
+		/// Swap section.
+		/// </summary>
+		public const string SwapSectionKey = nameof(SwapSection);
+
+		/// <summary>
+		/// Swap section.
+		/// </summary>
+		public static string SwapSection => GetString(SwapSectionKey);
 	}
 }

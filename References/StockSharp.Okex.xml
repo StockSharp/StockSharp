@@ -39,14 +39,14 @@
             Spot section.
             </summary>
         </member>
+        <member name="P:StockSharp.Okex.OkexMessageAdapter.IsSwap">
+            <summary>
+            Swap section.
+            </summary>
+        </member>
         <member name="P:StockSharp.Okex.OkexMessageAdapter.AdminPassword">
             <summary>
             Administrative password.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Okex.OkexMessageAdapter.BalanceCheckInterval">
-            <summary>
-            Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
         <member name="M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
@@ -117,11 +117,6 @@
             Passphrase.
             </summary>
         </member>
-        <member name="P:StockSharp.Okex.OkexTrader.BalanceCheckInterval">
-            <summary>
-            Balance check interval. Required in case of deposit and withdraw actions.
-            </summary>
-        </member>
         <member name="P:StockSharp.Okex.OkexTrader.IsFutures">
             <summary>
             Futures section.
@@ -130,6 +125,11 @@
         <member name="P:StockSharp.Okex.OkexTrader.IsSpot">
             <summary>
             Spot section.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexTrader.IsSwap">
+            <summary>
+            Swap section.
             </summary>
         </member>
     </members>

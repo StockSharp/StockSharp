@@ -1566,7 +1566,7 @@ F:StockSharp.Messages.SecurityTypes.Currency/summary;Currency
 F:StockSharp.Messages.SecurityTypes.Bond/summary;Bond
 F:StockSharp.Messages.SecurityTypes.Warrant/summary;Warrant
 F:StockSharp.Messages.SecurityTypes.Forward/summary;Forward
-F:StockSharp.Messages.SecurityTypes.Swap/summary;DocStr4514
+F:StockSharp.Messages.SecurityTypes.Swap/summary;Swap
 F:StockSharp.Messages.SecurityTypes.Commodity/summary;Commodity
 F:StockSharp.Messages.SecurityTypes.Cfd/summary;DocStr4515
 F:StockSharp.Messages.SecurityTypes.News/summary;News

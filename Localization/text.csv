@@ -4921,6 +4921,7 @@ NewsPriority;News priority.;Новостной приоритет.
 Coinigy;Coinigy;Coinigy
 WebSocket;Websocket;Вебсокет
 WebSocketId;Websocket id.;Вебсокет идентификатор.
+SwapSection;Swap section.;Своп секция.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -9291,7 +9292,6 @@ DocStr4510;Security states;Состояния инструмента
 DocStr4511;Active;Торгуется
 DocStr4512;Suspended;Торги приостановлены
 DocStr4513;Shares;Ценная бумага
-DocStr4514;Swap;Спот
 DocStr4515;CFD;CFD
 DocStr4516;Mutual funds;Паевые фонды
 DocStr4517;American Depositary Receipts;Американские депозитарные расписки
@@ -9419,7 +9419,6 @@ DocStr4642;SecNormal;SecNormal
 DocStr4643;SecIndex;SecIndex
 DocStr4644;Ценные бумаги;Ценные бумаги
 DocStr4645;Список;Список
-DocStr4646;SWAP;SWAP
 DocStr4647;Бивалютная корзина;Бивалютная корзина
 DocStr4648;Язык сообщений ТС;Язык сообщений ТС
 DocStr4649;Русский;Русский
