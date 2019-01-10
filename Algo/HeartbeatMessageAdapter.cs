@@ -110,7 +110,7 @@ namespace StockSharp.Algo
 
 					if (connectMsg.Error == null)
 					{
-						isRestored = _prevState == _reConnecting;
+						isRestored = _currState == ConnectionStates.Connecting && _prevState == ConnectionStates.Failed;
 
 						lock (_timeSync)
 						{
