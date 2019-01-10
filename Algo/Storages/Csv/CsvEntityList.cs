@@ -16,6 +16,11 @@ namespace StockSharp.Algo.Storages.Csv
 	public interface ICsvEntityList
 	{
 		/// <summary>
+		/// The time delayed action.
+		/// </summary>
+		DelayAction DelayAction { get; set; }
+
+		/// <summary>
 		/// Initialize the storage.
 		/// </summary>
 		/// <param name="errors">Possible errors.</param>
