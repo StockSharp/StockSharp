@@ -48896,5 +48896,15 @@ namespace StockSharp.Localization
 		/// Swap section.
 		/// </summary>
 		public static string SwapSection => GetString(SwapSectionKey);
+
+		/// <summary>
+		/// Colocation
+		/// </summary>
+		public const string ColocationKey = nameof(Colocation);
+
+		/// <summary>
+		/// Colocation
+		/// </summary>
+		public static string Colocation => GetString(ColocationKey);
 	}
 }

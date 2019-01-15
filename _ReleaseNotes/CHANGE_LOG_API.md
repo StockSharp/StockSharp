@@ -59,6 +59,7 @@ StockSharp API Change log
 * (feature) OKEx. Web sockets v3 supported.
 * (feature) Plaza CGate. Spectra 6.2 supported.
 * (feature) TWIME. Spectra 6.2 supported.
+* (feature) Micex TEAP. Interface 31 supported.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

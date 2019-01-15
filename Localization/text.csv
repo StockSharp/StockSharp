@@ -4922,6 +4922,7 @@ Coinigy;Coinigy;Coinigy
 WebSocket;Websocket;Вебсокет
 WebSocketId;Websocket id.;Вебсокет идентификатор.
 SwapSection;Swap section.;Своп секция.
+Colocation;Colocation;Колокация
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15494,3 +15495,4 @@ DocStr10998;Background;Фоновая
 DocStr10999;News priorities;Приоритеты новостей
 DocStr11000;Request the status of a security;Запросить статус инструмента
 DocStr11001;Report changes in status to a security;Отчет об изменениях статуса инструмента
+DocStr11002;The condition operation Valid Values: <= >= New Order-Single;The condition operation Valid Values: <= >= New Order-Single
