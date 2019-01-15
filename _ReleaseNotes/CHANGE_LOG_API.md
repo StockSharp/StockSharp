@@ -58,6 +58,7 @@ StockSharp API Change log
 * (feature) FixServer. Support SecurityStatusRequest.
 * (feature) OKEx. Web sockets v3 supported.
 * (feature) Plaza CGate. Spectra 6.2 supported.
+* (feature) TWIME. Spectra 6.2 supported.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
