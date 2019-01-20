@@ -60,6 +60,7 @@ StockSharp API Change log
 * (feature) Plaza CGate. Spectra 6.2 supported.
 * (feature) TWIME. Spectra 6.2 supported.
 * (feature) Micex TEAP. Interface 31 supported.
+* (feature) Storage lists. WaitFlush added. Removed ReadLasts.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

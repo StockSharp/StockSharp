@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			public FakeStorage(CsvEntityRegistry registry)
 			{
-				_registry = registry;
+				_registry = registry ?? throw new ArgumentNullException(nameof(registry));
 			}
 
 			public long GetCount<TEntity>()

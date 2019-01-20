@@ -97,16 +97,16 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
+		/// <inheritdoc />
+		void IStorageEntityList<T>.WaitFlush()
+		{
+			_delayActionGroup?.WaitFlush(false);
+		}
+
 		T IStorageEntityList<T>.ReadById(object id)
 		{
 			lock (SyncRoot)
 				return _items.TryGetValue(NormalizedKey(id));
-		}
-
-		IEnumerable<T> IStorageEntityList<T>.ReadLasts(int count)
-		{
-			lock (SyncRoot)
-				return _items.Values.Skip(Count - count).Take(count).ToArray();
 		}
 
 		private object GetNormalizedKey(T entity)
