@@ -55,17 +55,17 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Restore subscription on reconnect.
 		/// </summary>
-		/// <summary>
+		/// <remarks>
 		/// Error case like connection lost etc.
-		/// </summary>
+		/// </remarks>
 		public bool IsRestoreOnErrorReconnect { get; set; }
 
 		/// <summary>
 		/// Restore subscription on reconnect.
 		/// </summary>
-		/// <summary>
+		/// <remarks>
 		/// Normal case connect/disconnect.
-		/// </summary>
+		/// </remarks>
 		public bool IsRestoreOnNormalReconnect { get; set; }
 
 		/// <summary>

@@ -129,23 +129,5 @@ namespace StockSharp.Messages
 		/// Determines whether the adapter support withdraw orders.
 		/// </summary>
 		bool IsSupportWithdraw { get; }
-
-		///// <summary>
-		///// Create stop-loss order condition.
-		///// </summary>
-		///// <returns>Order condition. If the connection does not support the order type, the exception <see cref="NotSupportedException" /> will be thrown.</returns>
-		//IStopLossOrderCondition CreateStopLossCondition();
-
-		///// <summary>
-		///// Create take-profit order condition.
-		///// </summary>
-		///// <returns>Order condition. If the connection does not support the order type, the exception <see cref="NotSupportedException" /> will be thrown.</returns>
-		//ITakeProfitOrderCondition CreateTakeProfitCondition();
-
-		///// <summary>
-		///// Create withdraw order condition.
-		///// </summary>
-		///// <returns>Order condition. If the connection does not support the order type, the exception <see cref="NotSupportedException" /> will be thrown.</returns>
-		//IWithdrawOrderCondition CreateWithdrawCondition();
 	}
 }
