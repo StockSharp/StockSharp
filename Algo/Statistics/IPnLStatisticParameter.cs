@@ -42,11 +42,7 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class MaxProfitParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
-		/// <summary>
-		/// To add new data to the parameter.
-		/// </summary>
-		/// <param name="marketTime">The exchange time.</param>
-		/// <param name="pnl">The profit-loss value.</param>
+		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			Value = Math.Max(Value, pnl);
@@ -63,31 +59,21 @@ namespace StockSharp.Algo.Statistics
 	{
 		private decimal _maxEquity = decimal.MinValue;
 
-		/// <summary>
-		/// To add new data to the parameter.
-		/// </summary>
-		/// <param name="marketTime">The exchange time.</param>
-		/// <param name="pnl">The profit-loss value.</param>
+		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			_maxEquity = Math.Max(_maxEquity, pnl);
 			Value = Math.Max(Value, _maxEquity - pnl);
 		}
 
-		/// <summary>
-		/// To save the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("MaxEquity", _maxEquity);
 			base.Save(storage);
 		}
 
-		/// <summary>
-		/// To load the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			_maxEquity = storage.GetValue<decimal>("MaxEquity");
@@ -105,11 +91,7 @@ namespace StockSharp.Algo.Statistics
 	{
 		private decimal _maxEquity = decimal.MinValue;
 
-		/// <summary>
-		/// To add new data to the parameter.
-		/// </summary>
-		/// <param name="marketTime">The exchange time.</param>
-		/// <param name="pnl">The profit-loss value.</param>
+		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			_maxEquity = Math.Max(_maxEquity, pnl);
@@ -118,20 +100,14 @@ namespace StockSharp.Algo.Statistics
 			Value = Math.Max(Value, _maxEquity != 0 ? drawdown / _maxEquity : 0);
 		}
 
-		/// <summary>
-		/// To save the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("MaxEquity", _maxEquity);
 			base.Save(storage);
 		}
 
-		/// <summary>
-		/// To load the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			_maxEquity = storage.GetValue<decimal>("MaxEquity");
@@ -149,11 +125,7 @@ namespace StockSharp.Algo.Statistics
 	{
 		private decimal _minEquity = decimal.MaxValue;
 
-		/// <summary>
-		/// To add new data to the parameter.
-		/// </summary>
-		/// <param name="marketTime">The exchange time.</param>
-		/// <param name="pnl">The profit-loss value.</param>
+		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			_minEquity = Math.Min(_minEquity, pnl);
@@ -162,20 +134,14 @@ namespace StockSharp.Algo.Statistics
 			Value = Math.Max(Value, _minEquity != 0 ? profit / _minEquity : 0);
 		}
 
-		/// <summary>
-		/// To save the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("MinEquity", _minEquity);
 			base.Save(storage);
 		}
 
-		/// <summary>
-		/// To load the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			_minEquity = storage.GetValue<decimal>("MinEquity");
@@ -194,11 +160,7 @@ namespace StockSharp.Algo.Statistics
 		private readonly MaxDrawdownParameter _maxDrawdown = new MaxDrawdownParameter();
 		private readonly NetProfitParameter _netProfit = new NetProfitParameter();
 
-		/// <summary>
-		/// To add new data to the parameter.
-		/// </summary>
-		/// <param name="marketTime">The exchange time.</param>
-		/// <param name="pnl">The profit-loss value.</param>
+		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			_maxDrawdown.Add(marketTime, pnl);
@@ -207,10 +169,7 @@ namespace StockSharp.Algo.Statistics
 			Value = _maxDrawdown.Value != 0 ? _netProfit.Value / _maxDrawdown.Value : 0;
 		}
 
-		/// <summary>
-		/// To save the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("MaxDrawdown", _maxDrawdown.Save());
@@ -219,10 +178,7 @@ namespace StockSharp.Algo.Statistics
 			base.Save(storage);
 		}
 
-		/// <summary>
-		/// To load the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			_maxDrawdown.Load(storage.GetValue<SettingsStorage>("MaxDrawdown"));
@@ -242,11 +198,7 @@ namespace StockSharp.Algo.Statistics
 	{
 		private decimal? _firstPnL;
 
-		/// <summary>
-		/// To add new data to the parameter.
-		/// </summary>
-		/// <param name="marketTime">The exchange time.</param>
-		/// <param name="pnl">The profit-loss value.</param>
+		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			if (_firstPnL == null)
@@ -255,20 +207,14 @@ namespace StockSharp.Algo.Statistics
 			Value = pnl - _firstPnL.Value;
 		}
 
-		/// <summary>
-		/// To save the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("FirstPnL", _firstPnL);
 			base.Save(storage);
 		}
 
-		/// <summary>
-		/// To load the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			_firstPnL = storage.GetValue<decimal?>("FirstPnL");

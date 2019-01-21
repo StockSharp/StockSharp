@@ -42,10 +42,7 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.Str985Key)]
 	public class WinningTradesParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
-		/// <summary>
-		/// To add information about new trade to the parameter.
-		/// </summary>
-		/// <param name="info">Information on new trade.</param>
+		/// <inheritdoc />
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
@@ -66,10 +63,7 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.Str985Key)]
 	public class LossingTradesParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
-		/// <summary>
-		/// To add information about new trade to the parameter.
-		/// </summary>
-		/// <param name="info">Information on new trade.</param>
+		/// <inheritdoc />
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
@@ -88,10 +82,7 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.Str985Key)]
 	public class TradeCountParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
-		/// <summary>
-		/// To add information about new trade to the parameter.
-		/// </summary>
-		/// <param name="info">Information on new trade.</param>
+		/// <inheritdoc />
 		public void Add(PnLInfo info)
 		{
 			Value++;
@@ -106,10 +97,7 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.Str985Key)]
 	public class RoundtripCountParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
-		/// <summary>
-		/// To add information about new trade to the parameter.
-		/// </summary>
-		/// <param name="info">Information on new trade.</param>
+		/// <inheritdoc />
 		public void Add(PnLInfo info)
 		{
 			if (info.ClosedVolume > 0)
@@ -128,10 +116,7 @@ namespace StockSharp.Algo.Statistics
 		private decimal _sum;
 		private int _count;
 
-		/// <summary>
-		/// To add information about new trade to the parameter.
-		/// </summary>
-		/// <param name="info">Information on new trade.</param>
+		/// <inheritdoc />
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
@@ -146,10 +131,7 @@ namespace StockSharp.Algo.Statistics
 			Value = _count > 0 ? _sum / _count : 0;
 		}
 
-		/// <summary>
-		/// To save the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Sum", _sum);
@@ -158,10 +140,7 @@ namespace StockSharp.Algo.Statistics
 			base.Save(storage);
 		}
 
-		/// <summary>
-		/// To load the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			_sum = storage.GetValue<decimal>("Sum");
@@ -182,10 +161,7 @@ namespace StockSharp.Algo.Statistics
 		private decimal _sum;
 		private int _count;
 
-		/// <summary>
-		/// To add information about new trade to the parameter.
-		/// </summary>
-		/// <param name="info">Information on new trade.</param>
+		/// <inheritdoc />
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
@@ -203,10 +179,7 @@ namespace StockSharp.Algo.Statistics
 			Value = _count > 0 ? _sum / _count : 0;
 		}
 
-		/// <summary>
-		/// To save the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Sum", _sum);
@@ -215,10 +188,7 @@ namespace StockSharp.Algo.Statistics
 			base.Save(storage);
 		}
 
-		/// <summary>
-		/// To load the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			_sum = storage.GetValue<decimal>("Sum");
@@ -239,10 +209,7 @@ namespace StockSharp.Algo.Statistics
 		private decimal _sum;
 		private int _count;
 
-		/// <summary>
-		/// To add information about new trade to the parameter.
-		/// </summary>
-		/// <param name="info">Information on new trade.</param>
+		/// <inheritdoc />
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
@@ -260,10 +227,7 @@ namespace StockSharp.Algo.Statistics
 			Value = _count > 0 ? _sum / _count : 0;
 		}
 
-		/// <summary>
-		/// To save the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Sum", _sum);
@@ -272,10 +236,7 @@ namespace StockSharp.Algo.Statistics
 			base.Save(storage);
 		}
 
-		/// <summary>
-		/// To load the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			_sum = storage.GetValue<decimal>("Sum");
