@@ -117,6 +117,14 @@ namespace StockSharp.Algo.Statistics
 		private int _count;
 
 		/// <inheritdoc />
+		public override void Reset()
+		{
+			_sum = 0;
+			_count = 0;
+			base.Reset();
+		}
+
+		/// <inheritdoc />
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
@@ -160,6 +168,14 @@ namespace StockSharp.Algo.Statistics
 	{
 		private decimal _sum;
 		private int _count;
+
+		/// <inheritdoc />
+		public override void Reset()
+		{
+			_sum = 0;
+			_count = 0;
+			base.Reset();
+		}
 
 		/// <inheritdoc />
 		public void Add(PnLInfo info)
@@ -208,6 +224,14 @@ namespace StockSharp.Algo.Statistics
 	{
 		private decimal _sum;
 		private int _count;
+
+		/// <inheritdoc />
+		public override void Reset()
+		{
+			_sum = 0;
+			_count = 0;
+			base.Reset();
+		}
 
 		/// <inheritdoc />
 		public void Add(PnLInfo info)

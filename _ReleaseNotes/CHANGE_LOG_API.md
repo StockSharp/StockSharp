@@ -61,6 +61,7 @@ StockSharp API Change log
 * (feature) TWIME. Spectra 6.2 supported.
 * (feature) Micex TEAP. Interface 31 supported.
 * (feature) Storage lists. WaitFlush added. Removed ReadLasts.
+* (bug) Statistics parameters. Fix reset state.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

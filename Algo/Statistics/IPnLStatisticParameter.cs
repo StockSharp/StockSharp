@@ -60,6 +60,13 @@ namespace StockSharp.Algo.Statistics
 		private decimal _maxEquity = decimal.MinValue;
 
 		/// <inheritdoc />
+		public override void Reset()
+		{
+			_maxEquity = decimal.MinValue;
+			base.Reset();
+		}
+
+		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			_maxEquity = Math.Max(_maxEquity, pnl);
@@ -90,6 +97,13 @@ namespace StockSharp.Algo.Statistics
 	public class MaxRelativeDrawdownParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		private decimal _maxEquity = decimal.MinValue;
+
+		/// <inheritdoc />
+		public override void Reset()
+		{
+			_maxEquity = decimal.MinValue;
+			base.Reset();
+		}
 
 		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
@@ -126,6 +140,13 @@ namespace StockSharp.Algo.Statistics
 		private decimal _minEquity = decimal.MaxValue;
 
 		/// <inheritdoc />
+		public override void Reset()
+		{
+			_minEquity = decimal.MaxValue;
+			base.Reset();
+		}
+
+		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			_minEquity = Math.Min(_minEquity, pnl);
@@ -159,6 +180,14 @@ namespace StockSharp.Algo.Statistics
 	{
 		private readonly MaxDrawdownParameter _maxDrawdown = new MaxDrawdownParameter();
 		private readonly NetProfitParameter _netProfit = new NetProfitParameter();
+
+		/// <inheritdoc />
+		public override void Reset()
+		{
+			_maxDrawdown.Reset();
+			_netProfit.Reset();
+			base.Reset();
+		}
 
 		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
@@ -197,6 +226,13 @@ namespace StockSharp.Algo.Statistics
 	public class NetProfitParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		private decimal? _firstPnL;
+
+		/// <inheritdoc />
+		public override void Reset()
+		{
+			_firstPnL = null;
+			base.Reset();
+		}
 
 		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)

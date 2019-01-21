@@ -131,6 +131,13 @@ namespace StockSharp.Algo.Statistics
 		private bool _initialized;
 
 		/// <inheritdoc />
+		public override void Reset()
+		{
+			_initialized = false;
+			base.Reset();
+		}
+
+		/// <inheritdoc />
 		public override void New(Order order)
 		{
 			if (order.LatencyRegistration == null)
@@ -169,6 +176,13 @@ namespace StockSharp.Algo.Statistics
 	public class MinLatencyCancellationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
 		private bool _initialized;
+
+		/// <inheritdoc />
+		public override void Reset()
+		{
+			_initialized = false;
+			base.Reset();
+		}
 
 		/// <inheritdoc />
 		public override void Changed(Order order)
