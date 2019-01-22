@@ -63,6 +63,7 @@ StockSharp API Change log
 * (feature) Storage lists. WaitFlush added. Removed ReadLasts.
 * (bug) Statistics parameters. Fix reset state.
 * (bug) MarketDepthControl. Fix processing quote msgs with empty instrument info.
+* (bug) RSS fixes.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

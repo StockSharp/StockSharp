@@ -94,67 +94,62 @@
             Initializes a new instance of the <see cref="T:StockSharp.Rss.Xaml.RssAddressEditor"/>.
             </summary>
         </member>
-        <member name="T:StockSharp.Rss.Xaml.RssAddresses">
+        <member name="T:StockSharp.Rss.RssAddresses">
             <summary>
             The most popular RSS feeds.
             </summary>
         </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.Reuters">
+        <member name="F:StockSharp.Rss.RssAddresses.Reuters">
             <summary>
-            Reuters (ecomony).
+            Reuters (economy).
             </summary>
         </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.Bloomberg">
-            <summary>
-            Bloomberg.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.Nyse">
+        <member name="F:StockSharp.Rss.RssAddresses.Nyse">
             <summary>
             NYSE.
             </summary>
         </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.Nasdaq">
+        <member name="F:StockSharp.Rss.RssAddresses.Nasdaq">
             <summary>
             NASDAQ (Stocks).
             </summary>
         </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.Moex">
+        <member name="F:StockSharp.Rss.RssAddresses.Moex">
             <summary>
             MOEX.
             </summary>
         </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.TradingEconomics">
+        <member name="F:StockSharp.Rss.RssAddresses.TradingEconomics">
             <summary>
             Trading Economics (Russia).
             </summary>
         </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.TechnicalTraders">
+        <member name="F:StockSharp.Rss.RssAddresses.TechnicalTraders">
             <summary>
             Technical Traders.
             </summary>
         </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.DailyFX">
+        <member name="F:StockSharp.Rss.RssAddresses.DailyFX">
             <summary>
             DailyFX.
             </summary>
         </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.TradingFloor">
+        <member name="F:StockSharp.Rss.RssAddresses.TradingFloor">
             <summary>
             Trading Floor.
             </summary>
         </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.MarketWatch">
+        <member name="F:StockSharp.Rss.RssAddresses.MarketWatch">
             <summary>
             MarketWatch.
             </summary>
         </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.SmartLab">
+        <member name="F:StockSharp.Rss.RssAddresses.SmartLab">
             <summary>
             Smart-Lab.
             </summary>
         </member>
-        <member name="F:StockSharp.Rss.Xaml.RssAddresses.H2T">
+        <member name="F:StockSharp.Rss.RssAddresses.H2T">
             <summary>
             H2T.
             </summary>
