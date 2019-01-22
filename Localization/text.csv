@@ -4923,6 +4923,9 @@ WebSocket;Websocket;Вебсокет
 WebSocketId;Websocket id.;Вебсокет идентификатор.
 SwapSection;Swap section.;Своп секция.
 Colocation;Colocation;Колокация
+SelectDataTypes;Select data types;Выберите тип данных
+ExpandAll;Expand all;Развернуть всё
+CollapseAll;Collapse all;Свернуть всё
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -12178,7 +12181,7 @@ DocStr7418;The market-data message adapter for Rss;Маркет-дата ада�
 DocStr7420;The format of dates. Should be fill in, if the format is different from ddd, dd MMM yyyy hh:mm:ss;Формат дат. Необходимо заполнить, если формат RSS потока отличается от ddd, dd MMM yyyy hh:mm:ss
 DocStr7421;The drop-down list to select the RSS feed address;Выпадающий список для выбора адреса RSS фида
 DocStr7422;The most popular RSS feeds;Адреса RSS популярных фидов
-DocStr7423;Reuters (ecomony);Reuters (ecomony)
+DocStr7423;Reuters (economy);Reuters (экономика)
 DocStr7424;Bloomberg;Bloomberg
 DocStr7425;NYSE;NYSE
 DocStr7426;NASDAQ (Stocks);NASDAQ (Stocks)

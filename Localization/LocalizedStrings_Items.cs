@@ -48906,5 +48906,35 @@ namespace StockSharp.Localization
 		/// Colocation
 		/// </summary>
 		public static string Colocation => GetString(ColocationKey);
+
+		/// <summary>
+		/// Select data types
+		/// </summary>
+		public const string SelectDataTypesKey = nameof(SelectDataTypes);
+
+		/// <summary>
+		/// Select data types
+		/// </summary>
+		public static string SelectDataTypes => GetString(SelectDataTypesKey);
+
+		/// <summary>
+		/// Expand all
+		/// </summary>
+		public const string ExpandAllKey = nameof(ExpandAll);
+
+		/// <summary>
+		/// Expand all
+		/// </summary>
+		public static string ExpandAll => GetString(ExpandAllKey);
+
+		/// <summary>
+		/// Collapse all
+		/// </summary>
+		public const string CollapseAllKey = nameof(CollapseAll);
+
+		/// <summary>
+		/// Collapse all
+		/// </summary>
+		public static string CollapseAll => GetString(CollapseAllKey);
 	}
 }
