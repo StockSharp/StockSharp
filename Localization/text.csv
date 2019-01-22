@@ -15496,3 +15496,4 @@ DocStr10999;News priorities;Приоритеты новостей
 DocStr11000;Request the status of a security;Запросить статус инструмента
 DocStr11001;Report changes in status to a security;Отчет об изменениях статуса инструмента
 DocStr11002;The condition operation Valid Values: <= >= New Order-Single;The condition operation Valid Values: <= >= New Order-Single
+DocStr11003;Wait flush;Подождать сброса

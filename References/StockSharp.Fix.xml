@@ -575,7 +575,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.LocateBroker">
       <summary>
-            Tag 5700 is required for short sale orders involving U.S. stocks to indicate the present location of the shares that are to be delivered in connection with customer�s short sale order New Order.
+            Tag 5700 is required for short sale orders involving U.S. stocks to indicate the present location of the shares that are to be delivered in connection with customer's short sale order New Order.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.NoStrategyParameters">
@@ -610,12 +610,12 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.TradingClass">
       <summary>
-            Used for product identification for Options only. This represents the option �class� Example: The underlying symbol for Microsoft is �MSFT� The option class symbol for Microsoft is �MSQ� New Order-Single.
+            Used for product identification for Options only. This represents the option 'class' Example: The underlying symbol for Microsoft is 'MSFT' The option class symbol for Microsoft is 'MSQ' New Order-Single.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ShortSaleRule">
       <summary>
-            The valid values are either �1� or �2�. New Order.
+            The valid values are either '1' or '2'. New Order.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.WhatIf">
@@ -648,7 +648,11 @@
             The trigger price for the condition New Order-Single.
             </summary>
     </member>
-    <!-- Badly formed XML comment ignored for member "P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionOperand" -->
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionOperand">
+      <summary>
+            The condition operation Valid Values: &lt;= &gt;= New Order-Single.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionTriggerMethod">
       <summary>
             Trigger method for the condition Valid Values: 1 = Double Bid/Ask 2 = Last 3 = Double Last 4 = Bid/Ask New Order-Single.
@@ -726,12 +730,12 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.LegLocateReqd">
       <summary>
-            Same as 114 � Used for combination orders Valid codes = �N� or �Y.� Required for multi-leg short sale orders involving U.S. equity securities (�stocks�). If customer uses IBKR as its executing broker but uses a clearing broker other than IBKR (a �NonCleared Customer�) and Tag 624 contains the value �5� and Tag 6086 contains the value �1� or �2�, this Tag 6215 must contain the value �N�. New Order - Multileg.
+            Same as 114 ' Used for combination orders Valid codes = 'N' or 'Y.' Required for multi-leg short sale orders involving U.S. equity securities ('stocks'). If customer uses IBKR as its executing broker but uses a clearing broker other than IBKR (a 'NonCleared Customer') and Tag 624 contains the value '5' and Tag 6086 contains the value '1' or '2', this Tag 6215 must contain the value 'N'. New Order - Multileg.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.LegLocateBroker">
       <summary>
-            Same as 5700 � Used for combination orders Tag 6216 (a four letter clearing broker or custodian MPID) is required for multi-leg short sale orders involving U.S. stocks to indicate the present location of the shares that are to be delivered in connection with customer�s short sale order New Order � Multileg.
+            Same as 5700 ' Used for combination orders Tag 6216 (a four letter clearing broker or custodian MPID) is required for multi-leg short sale orders involving U.S. stocks to indicate the present location of the shares that are to be delivered in connection with customer's short sale order New Order ' Multileg.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.CondPrimaryExch">
@@ -771,7 +775,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.NoBarriers">
       <summary>
-            Specifies the number of �barriers� used in the adjustable stop order type. New Order Single.
+            Specifies the number of 'barriers' used in the adjustable stop order type. New Order Single.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.BarrierPrice">
@@ -806,17 +810,17 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.TrailingAmtUnit">
       <summary>
-            Specifies the trail method used: Valid Values: 6268=0 � Absolute offset used 6268=100 � Percentage offset used New Order � Single (trailing stop orders).
+            Specifies the trail method used: Valid Values: 6268=0 ' Absolute offset used 6268=100 ' Percentage offset used New Order ' Single (trailing stop orders).
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.BarrierTrailingAmtUnit">
       <summary>
-            Specifies the trail method used for Barrier orders: Valid Values: 6268=0 � Absolute offset used 6268=100 � Percentage offset used New Order � Single (trailing stop orders).
+            Specifies the trail method used for Barrier orders: Valid Values: 6268=0 ' Absolute offset used 6268=100 ' Percentage offset used New Order ' Single (trailing stop orders).
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.CheapToReroute">
       <summary>
-            Specifies whether to route non-marketable orders to exchanges that charge cancellation fees. Valid Values: 6271=1 � Confirm route to exchanges where there are no cancellation fees. New Order.
+            Specifies whether to route non-marketable orders to exchanges that charge cancellation fees. Valid Values: 6271=1 ' Confirm route to exchanges where there are no cancellation fees. New Order.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ContinuousUpdate">
@@ -831,37 +835,37 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.XcrossC1OrdID">
       <summary>
-            ISE Facilitation Order Firm side for C1OrdID (firm equivalent to tag 11) New Order � Single (ISE FOK only).
+            ISE Facilitation Order Firm side for C1OrdID (firm equivalent to tag 11) New Order ' Single (ISE FOK only).
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.XCrossClearingFirm">
       <summary>
-            ISE Facilitation Order Firm�s ClearingFirm (firm equivalent to tag 439) New Order � Single (ISE FOK only).
+            ISE Facilitation Order Firm's ClearingFirm (firm equivalent to tag 439) New Order ' Single (ISE FOK only).
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.XCrossClearingAccount">
       <summary>
-            ISE Facilitation Order Firm�s ClearingAccount (firm equivalent to tag 440) New Order � Single (ISE FOK only).
+            ISE Facilitation Order Firm's ClearingAccount (firm equivalent to tag 440) New Order ' Single (ISE FOK only).
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.XCrossOpenClose">
       <summary>
-            ISE Facilitation Order Firm�s OpenClose (firm equivalent to tag 77) New Order � Single (ISE FOK only).
+            ISE Facilitation Order Firm's OpenClose (firm equivalent to tag 77) New Order ' Single (ISE FOK only).
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.XCrossOptionAcct">
       <summary>
-            ISE Facilitation Order Firm�s OptionAcct (firm equivalent to tag6122) New Order � Single (ISE FOK only).
+            ISE Facilitation Order Firm's OptionAcct (firm equivalent to tag6122) New Order ' Single (ISE FOK only).
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.FacilitationPercentage">
       <summary>
-            ISE Facilitation Order Desired percentage New Order � Single (ISE FOK only).
+            ISE Facilitation Order Desired percentage New Order ' Single (ISE FOK only).
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.NotHeld">
       <summary>
-            Required with a value of �1� on all new orders (35=D) for stock quoting customers Valid Values: ( 0 = false , 1 = true ) New Order � Single.
+            Required with a value of '1' on all new orders (35=D) for stock quoting customers Valid Values: ( 0 = false , 1 = true ) New Order ' Single.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.HedgingType">
@@ -926,7 +930,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ProfessionalCustomer">
       <summary>
-            Allows routing firms to designate an order as being routed by a �professional customer� as determined by the order routing firm. IBKR will pass this designation on to destination option exchange. 1 = True 0 = False (default) New Order - Single.
+            Allows routing firms to designate an order as being routed by a 'professional customer' as determined by the order routing firm. IBKR will pass this designation on to destination option exchange. 1 = True 0 = False (default) New Order - Single.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.HedgeType">
@@ -956,7 +960,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.Mifid2DecisionMakerShortCode">
       <summary>
-            Mifid2 Code used to demine IBKR�s assigned short code for decision maker for the order. New Order Single.
+            Mifid2 Code used to demine IBKR's assigned short code for decision maker for the order. New Order Single.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.Mifid2DecisionAlgo">
