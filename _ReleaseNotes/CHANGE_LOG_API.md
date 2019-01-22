@@ -62,6 +62,7 @@ StockSharp API Change log
 * (feature) Micex TEAP. Interface 31 supported.
 * (feature) Storage lists. WaitFlush added. Removed ReadLasts.
 * (bug) Statistics parameters. Fix reset state.
+* (bug) MarketDepthControl. Fix processing quote msgs with empty instrument info.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

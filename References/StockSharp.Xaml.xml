@@ -933,6 +933,11 @@
             Configure action.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.DataSourcePanel.SelectedItemChanged">
+      <summary>
+        <see cref="P:StockSharp.Xaml.DataSourcePanel.SelectedItem" /> changed event.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.DataSourcePanel.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.DataSourcePanel" />.
@@ -1658,6 +1663,11 @@
     <member name="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.Portfolios">
       <summary>
             Available portfolios.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolioProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolio" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolio">
@@ -2743,10 +2753,20 @@
             </summary>
       <param name="provider">The provider of information about portfolios.</param>
     </member>
-    <member name="M:StockSharp.Xaml.PortfolioDataSource.Dispose">
+    <member name="M:StockSharp.Xaml.PortfolioDataSource.Add(StockSharp.BusinessEntities.Portfolio)">
       <summary>
-            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            Add portfolio.
             </summary>
+      <param name="portfolio">Portfolio.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.PortfolioDataSource.AddRange(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})">
+      <summary>
+            Add portfolios.
+            </summary>
+      <param name="portfolios">Portfolios.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.PortfolioDataSource.Dispose">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.ProxySettings">
       <summary>

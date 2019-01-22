@@ -212,6 +212,7 @@ T:StockSharp.Xaml.DataSourcePanel/summary;DocStr9358
 P:StockSharp.Xaml.DataSourcePanel.ItemsSource/summary;DocStr9159
 P:StockSharp.Xaml.DataSourcePanel.SelectedItem/summary;DocStr9359
 P:StockSharp.Xaml.DataSourcePanel.Configure/summary;DocStr9360
+E:StockSharp.Xaml.DataSourcePanel.SelectedItemChanged/summary;DocStr10071
 M:StockSharp.Xaml.DataSourcePanel.#ctor/summary;DocStr1
 M:StockSharp.Xaml.DataSourcePanel.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ExtendedInfoStorageWindow/summary;DocStr9769
@@ -374,6 +375,7 @@ M:StockSharp.Xaml.PropertyGrid.ExtensionInfoEditor.InitializeComponent/summary;D
 T:StockSharp.Xaml.PropertyGrid.PortfolioEditor/summary;DocStr8278
 F:StockSharp.Xaml.PropertyGrid.PortfolioEditor.PortfoliosProperty/summary;DocStr29
 P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.Portfolios/summary;DocStr8362
+F:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolioProperty/summary;DocStr29
 P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolio/summary;DocStr8280
 M:StockSharp.Xaml.PropertyGrid.PortfolioEditor.#ctor/summary;DocStr1
 M:StockSharp.Xaml.PropertyGrid.PortfolioEditor.InitializeComponent/summary;DocStr8
@@ -602,7 +604,11 @@ T:StockSharp.Xaml.PortfolioDataSource/summary;DocStr8922
 M:StockSharp.Xaml.PortfolioDataSource.#ctor/summary;DocStr1
 M:StockSharp.Xaml.PortfolioDataSource.#ctor(StockSharp.BusinessEntities.IPortfolioProvider)/summary;DocStr1
 M:StockSharp.Xaml.PortfolioDataSource.#ctor(StockSharp.BusinessEntities.IPortfolioProvider)/param/provider;DocStr10038
-M:StockSharp.Xaml.PortfolioDataSource.Dispose/summary;DocStr8826
+M:StockSharp.Xaml.PortfolioDataSource.Add(StockSharp.BusinessEntities.Portfolio)/summary;DocStr10901
+M:StockSharp.Xaml.PortfolioDataSource.Add(StockSharp.BusinessEntities.Portfolio)/param/portfolio;Portfolio
+M:StockSharp.Xaml.PortfolioDataSource.AddRange(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/summary;DocStr10902
+M:StockSharp.Xaml.PortfolioDataSource.AddRange(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/param/portfolios;Portfolios
+M:StockSharp.Xaml.PortfolioDataSource.Dispose/inheritdoc;DocStr8459
 T:StockSharp.Xaml.ProxySettings/summary;Str1435
 P:StockSharp.Xaml.ProxySettings.UseProxy/summary;DocStr8168
 P:StockSharp.Xaml.ProxySettings.Address/summary;Str3688
@@ -852,7 +858,7 @@ P:StockSharp.Xaml.OrderConditionalWindow.Portfolios/summary;DocStr8362
 P:StockSharp.Xaml.OrderConditionalWindow.SecurityProvider/summary;DocStr972
 P:StockSharp.Xaml.OrderConditionalWindow.MarketDataProvider/summary;DocStr973
 P:StockSharp.Xaml.OrderConditionalWindow.MessageAdapterProvider/summary;DocStr9328
-P:StockSharp.Xaml.OrderConditionalWindow.Adapters/summary;DocStr9323
+P:StockSharp.Xaml.OrderConditionalWindow.Adapters/summary;DocStr9801
 P:StockSharp.Xaml.OrderConditionalWindow.Adapter/summary;DocStr8912
 P:StockSharp.Xaml.OrderConditionalWindow.Order/summary;Str504
 M:StockSharp.Xaml.OrderConditionalWindow.InitializeComponent/summary;DocStr8
