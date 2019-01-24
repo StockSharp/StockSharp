@@ -64,6 +64,8 @@ StockSharp API Change log
 * (bug) Statistics parameters. Fix reset state.
 * (bug) MarketDepthControl. Fix processing quote msgs with empty instrument info.
 * (bug) RSS fixes.
+* (feature) MarketDepthControl. Dynamic change price/volume text formats.
+* (feature) UnitEditor refactoring.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

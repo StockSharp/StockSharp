@@ -3699,15 +3699,41 @@
             The selected quote.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.DefaultPriceTextFormat">
+      <summary>
+            Default value of <see cref="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.PriceTextFormatProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat">
       <summary>
-            The price format. The default value is "0.00".
+            Price format.
+            </summary>
+      <remarks>
+            The default value is <see cref="F:StockSharp.Xaml.MarketDepthControl.DefaultPriceTextFormat" />.
+            </remarks>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.DefaultVolumeTextFormat">
+      <summary>
+            Default value of <see cref="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.VolumeTextFormatProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat">
       <summary>
-            The amount format. The default value is "0".
+            Volume format.
             </summary>
+      <remarks>
+            The default value is <see cref="F:StockSharp.Xaml.MarketDepthControl.DefaultVolumeTextFormat" />.
+            </remarks>
     </member>
     <member name="F:StockSharp.Xaml.MarketDepthControl.MaxVolumeProperty">
       <summary>
@@ -3737,6 +3763,11 @@
     <member name="P:StockSharp.Xaml.MarketDepthControl.MaxSellVolume">
       <summary>
             The maximum volume of all asks.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.AutoUpdateFormat">
+      <summary>
+            Automatically update format by <see cref="M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)" />. By default is on.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)">
