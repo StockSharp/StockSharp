@@ -15506,7 +15506,7 @@ DocStr11000;Request the status of a security;Запросить статус и�
 DocStr11001;Report changes in status to a security;Отчет об изменениях статуса инструмента
 DocStr11002;The condition operation Valid Values: <= >= New Order-Single;The condition operation Valid Values: <= >= New Order-Single
 DocStr11003;Wait flush;Подождать сброса
-DocStr11004;Market order, released before pit session closes (when applicable);Market order, released before pit session closes (when applicable)
-DocStr11005;Market order, released on pit session open (when applicable);Market order, released on pit session open (when applicable)
-DocStr11006;When partially filled, remaining part filled as limit order by partial fill price;When partially filled, remaining part filled as limit order by partial fill price
-DocStr11007;Automatically update format by {0}. By default is on;Automatically update format by {0}. By default is on
+DocStr11004;Market order, released before pit session closes (when applicable);Рыночная заявка, выпущенная до закрытия ямы (когда доступно)
+DocStr11005;Market order, released on pit session open (when applicable);Рыночная заявка, выпущенная до открытия ямы (когда доступно)
+DocStr11006;When partially filled, remaining part filled as limit order by partial fill price;Когда частично исполнена, оставшийся объем будет отправлен как лимитная заявка по цене исполнения
+DocStr11007;Automatically update format by {0}. By default is on;Автоматически обновлять формат через {0}. По умолчанию включено
