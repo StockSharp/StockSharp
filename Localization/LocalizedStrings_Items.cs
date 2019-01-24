@@ -48936,5 +48936,85 @@ namespace StockSharp.Localization
 		/// Collapse all
 		/// </summary>
 		public static string CollapseAll => GetString(CollapseAllKey);
+
+		/// <summary>
+		/// Market on close (pit)
+		/// </summary>
+		public const string MarketOnPitCloseKey = nameof(MarketOnPitClose);
+
+		/// <summary>
+		/// Market on close (pit)
+		/// </summary>
+		public static string MarketOnPitClose => GetString(MarketOnPitCloseKey);
+
+		/// <summary>
+		/// Market on open (pit)
+		/// </summary>
+		public const string MarketOnPitOpenKey = nameof(MarketOnPitOpen);
+
+		/// <summary>
+		/// Market on open (pit)
+		/// </summary>
+		public static string MarketOnPitOpen => GetString(MarketOnPitOpenKey);
+
+		/// <summary>
+		/// Market-&gt;Limit
+		/// </summary>
+		public const string MarketToLimitKey = nameof(MarketToLimit);
+
+		/// <summary>
+		/// Market-&gt;Limit
+		/// </summary>
+		public static string MarketToLimit => GetString(MarketToLimitKey);
+
+		/// <summary>
+		/// Execution start time.
+		/// </summary>
+		public const string ExecutionStartKey = nameof(ExecutionStart);
+
+		/// <summary>
+		/// Execution start time.
+		/// </summary>
+		public static string ExecutionStart => GetString(ExecutionStartKey);
+
+		/// <summary>
+		/// Execution end time.
+		/// </summary>
+		public const string ExecutionEndKey = nameof(ExecutionEnd);
+
+		/// <summary>
+		/// Execution end time.
+		/// </summary>
+		public static string ExecutionEnd => GetString(ExecutionEndKey);
+
+		/// <summary>
+		/// End
+		/// </summary>
+		public const string EndKey = nameof(End);
+
+		/// <summary>
+		/// End
+		/// </summary>
+		public static string End => GetString(EndKey);
+
+		/// <summary>
+		/// Price format.
+		/// </summary>
+		public const string PriceTextFormatKey = nameof(PriceTextFormat);
+
+		/// <summary>
+		/// Price format.
+		/// </summary>
+		public static string PriceTextFormat => GetString(PriceTextFormatKey);
+
+		/// <summary>
+		/// Volume format.
+		/// </summary>
+		public const string VolumeTextFormatKey = nameof(VolumeTextFormat);
+
+		/// <summary>
+		/// Volume format.
+		/// </summary>
+		public static string VolumeTextFormat => GetString(VolumeTextFormatKey);
 	}
 }

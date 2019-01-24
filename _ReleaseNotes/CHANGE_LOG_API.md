@@ -66,6 +66,7 @@ StockSharp API Change log
 * (bug) RSS fixes.
 * (feature) MarketDepthControl. Dynamic change price/volume text formats.
 * (feature) UnitEditor refactoring.
+* (feature) OpenECry. More order types supported.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.
