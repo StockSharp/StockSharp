@@ -293,7 +293,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			foreach (var quote in quotes)
 			{
-				// quotes for indecies may have zero prices
+				// quotes for indices may have zero prices
 				//if (quote.Price <= 0)
 				//	throw new ArgumentOutOfRangeException(nameof(quotes), quote.Price, LocalizedStrings.Str935);
 

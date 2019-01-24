@@ -2252,7 +2252,7 @@ namespace StockSharp.BusinessEntities
 		public static ExchangeBoard Forts { get; }
 
 		/// <summary>
-		/// Information about indecies of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about indices of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Micex { get; }
 

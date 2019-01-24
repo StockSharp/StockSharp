@@ -7569,7 +7569,7 @@ DocStr2700;Exchange board;Биржевая площадка
 DocStr2701;ALL board with no schedule limits;Информация об объединенной площадке, не имеющей ограничений в расписание работы
 DocStr2702;Test board with no schedule limits;Информация о тестовой площадке, не имеющая ограничения в расписание работы
 DocStr2703;Information about FORTS board of {0} exchange;Информация о площадке FORTS биржи {0}
-DocStr2704;Information about indecies of {0} exchange;Информация о индексах биржи {0}
+DocStr2704;Information about indices of {0} exchange;Информация о индексах биржи {0}
 DocStr2705;Information about AUCT of {0} exchange;Информация о площадке AUCT биржи {0}
 DocStr2706;Information about AUBB of {0} exchange;Информация о площадке AUBB биржи {0}
 DocStr2707;Information about CASF of {0} exchange;Информация о площадке CASF биржи {0}
