@@ -67,6 +67,7 @@ StockSharp API Change log
 * (feature) MarketDepthControl. Dynamic change price/volume text formats.
 * (feature) UnitEditor refactoring.
 * (feature) OpenECry. More order types supported.
+* (feature) OKEX. Position and account swap and margin supported.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

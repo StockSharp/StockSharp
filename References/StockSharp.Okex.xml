@@ -77,19 +77,9 @@
             Initializes a new instance of the <see cref="T:StockSharp.Okex.OkexOrderCondition"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Okex.OkexOrderCondition.Margin">
-            <summary>
-            Margin.
-            </summary>
-        </member>
         <member name="P:StockSharp.Okex.OkexOrderCondition.Leverage">
             <summary>
             Leverage.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Okex.OkexOrderCondition.MarginMode">
-            <summary>
-            Margin mode.
             </summary>
         </member>
         <member name="T:StockSharp.Okex.OkexTrader">
