@@ -1037,6 +1037,20 @@
       <param name="strategy">Strategy.</param>
       <returns>Icon name.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Extensions.GetPriceTextFormat(StockSharp.BusinessEntities.Security)">
+      <summary>
+            Generate price format for the specified security.
+            </summary>
+      <param name="security">Security.</param>
+      <returns>Price format.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.GetVolumeTextFormat(StockSharp.BusinessEntities.Security)">
+      <summary>
+            Generate volume format for the specified security.
+            </summary>
+      <param name="security">Security.</param>
+      <returns>Volume format.</returns>
+    </member>
     <member name="T:StockSharp.Xaml.FileProgressWindow">
       <summary>
             File uploading/downloading progress bar window.

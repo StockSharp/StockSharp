@@ -245,6 +245,12 @@ M:StockSharp.Xaml.Extensions.LoadLayout(DevExpress.Xpf.Docking.DockLayoutManager
 M:StockSharp.Xaml.Extensions.GetStrategyProcessStateIconName(StockSharp.Algo.Strategies.Strategy)/summary;DocStr10530
 M:StockSharp.Xaml.Extensions.GetStrategyProcessStateIconName(StockSharp.Algo.Strategies.Strategy)/param/strategy;Strategy
 M:StockSharp.Xaml.Extensions.GetStrategyProcessStateIconName(StockSharp.Algo.Strategies.Strategy)/returns;DocStr10531
+M:StockSharp.Xaml.Extensions.GetPriceTextFormat(StockSharp.BusinessEntities.Security)/summary;DocStr11008
+M:StockSharp.Xaml.Extensions.GetPriceTextFormat(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
+M:StockSharp.Xaml.Extensions.GetPriceTextFormat(StockSharp.BusinessEntities.Security)/returns;PriceTextFormat
+M:StockSharp.Xaml.Extensions.GetVolumeTextFormat(StockSharp.BusinessEntities.Security)/summary;DocStr11009
+M:StockSharp.Xaml.Extensions.GetVolumeTextFormat(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
+M:StockSharp.Xaml.Extensions.GetVolumeTextFormat(StockSharp.BusinessEntities.Security)/returns;VolumeTextFormat
 T:StockSharp.Xaml.FileProgressWindow/summary;DocStr9782
 M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/summary;DocStr1
 M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/param/fileId;DocStr10239
