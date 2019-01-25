@@ -495,11 +495,13 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			GetAdapters(message).ForEach(a => a.SendInMessage(message));
+			GetAdapters(message, out _).ForEach(a => a.SendInMessage(message));
 		}
 
-		private IMessageAdapter[] GetAdapters(Message message)
+		private IMessageAdapter[] GetAdapters(Message message, out bool isPended)
 		{
+			isPended = false;
+
 			IMessageAdapter[] adapters;
 
 			lock (_connectedResponseLock)
@@ -533,6 +535,7 @@ namespace StockSharp.Algo
 				{
 					if (_pendingConnectAdapters.Count > 0)
 					{
+						isPended = true;
 						_pendingMessages.Enqueue(message.Clone());
 						return ArrayHelper.Empty<IMessageAdapter>();
 					}
@@ -575,7 +578,7 @@ namespace StockSharp.Algo
 					return new[] { (IMessageAdapter)wrapper };
 			}
 
-			var adapters = GetAdapters(mdMsg).Where(a =>
+			var adapters = GetAdapters(mdMsg, out var isPended).Where(a =>
 			{
 				if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
 				{
@@ -639,7 +642,7 @@ namespace StockSharp.Algo
 				return buildFrom != null && a.SupportedMarketDataTypes.Contains(buildFrom.Value);
 			}).ToArray();
 
-			if (adapters.Length == 0)
+			if (!isPended && adapters.Length == 0)
 				throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(mdMsg));
 
 			return adapters;
@@ -707,15 +710,15 @@ namespace StockSharp.Algo
 					var key = mdMsg.CreateKey();
 
 					var adapter = mdMsg.IsSubscribe
-							? GetSubscriptionAdapters(mdMsg).First()
+							? GetSubscriptionAdapters(mdMsg).FirstOrDefault()
 							: (_subscriptionsById.TryGetValue(mdMsg.OriginalTransactionId) ?? _subscriptionsByKey.TryGetValue(key));
 
-					if (adapter == null)
-						break;
-
-					// if the message was looped back via IsBack=true
-					_subscriptionMessages.TryAdd(mdMsg.TransactionId, (MarketDataMessage)mdMsg.Clone());
-					adapter.SendInMessage(mdMsg);
+					if (adapter != null)
+					{
+						// if the message was looped back via IsBack=true
+						_subscriptionMessages.TryAdd(mdMsg.TransactionId, (MarketDataMessage)mdMsg.Clone());
+						adapter.SendInMessage(mdMsg);
+					}
 
 					break;
 				}
@@ -738,7 +741,7 @@ namespace StockSharp.Algo
 
 			if (adapter == null)
 			{
-				adapter = GetAdapters(message).FirstOrDefault();
+				adapter = GetAdapters(message, out _).FirstOrDefault();
 
 				if (adapter == null)
 					return;
