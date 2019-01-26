@@ -26,6 +26,11 @@ namespace StockSharp.Algo
 		public static IExchangeInfoProvider ExchangeInfoProvider => ConfigManager.GetService<IExchangeInfoProvider>();
 		
 		/// <summary>
+		/// Exchanges and trading boards provider.
+		/// </summary>
+		public static IExchangeInfoProvider TryExchangeInfoProvider => ConfigManager.TryGetService<IExchangeInfoProvider>();
+
+		/// <summary>
 		/// Securities meta info storage.
 		/// </summary>
 		public static ISecurityStorage SecurityStorage => ConfigManager.GetService<ISecurityStorage>();
@@ -61,9 +66,19 @@ namespace StockSharp.Algo
 		public static ISecurityProvider SecurityProvider => ConfigManager.GetService<ISecurityProvider>();
 
 		/// <summary>
+		/// The provider of information about instruments.
+		/// </summary>
+		public static ISecurityProvider TrySecurityProvider => ConfigManager.TryGetService<ISecurityProvider>();
+
+		/// <summary>
 		/// The market data provider.
 		/// </summary>
 		public static IMarketDataProvider MarketDataProvider => ConfigManager.GetService<IMarketDataProvider>();
+
+		/// <summary>
+		/// The market data provider.
+		/// </summary>
+		public static IMarketDataProvider TryMarketDataProvider => ConfigManager.TryGetService<IMarketDataProvider>();
 
 		/// <summary>
 		/// The storage of market data.
