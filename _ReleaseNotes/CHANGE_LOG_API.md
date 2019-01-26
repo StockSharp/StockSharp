@@ -72,6 +72,7 @@ StockSharp API Change log
 * (bug) Basket adapter. Fix processing pending connect subscriptions.
 * (bug) Connector. Fix subscribers counter for error responses.
 * (feature) IConnector. MarketDataUnexpectedCancelled event added.
+* (feature) Basket adapter. Support offline mode for dedicated adapters.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

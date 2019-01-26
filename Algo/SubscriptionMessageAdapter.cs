@@ -227,7 +227,7 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				case ExtendedMessageTypes.RestoringSubscription:
+				case ExtendedMessageTypes.ReconnectingFinished:
 				{
 					if (IsRestoreOnErrorReconnect)
 						FillSubscriptions();

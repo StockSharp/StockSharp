@@ -768,7 +768,7 @@ namespace StockSharp.Algo
 						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
 						break;
 
-					case ExtendedMessageTypes.RestoringSubscription:
+					case ExtendedMessageTypes.ReconnectingFinished:
 						ProcessRestoringSubscription(message.Adapter);
 						break;
 
