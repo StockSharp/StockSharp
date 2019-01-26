@@ -27,7 +27,7 @@ namespace SampleHitBtc
 			InitializeComponent();
 
 			CandlesPeriods.ItemsSource = HitBtcMessageAdapter.AllTimeFrames;
-			CandlesPeriods.SelectedIndex = 1;
+			CandlesPeriods.SelectedIndex = 0;
 		}
 
 		protected override void OnClosed(EventArgs e)
