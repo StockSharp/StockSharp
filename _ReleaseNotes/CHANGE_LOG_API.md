@@ -71,6 +71,7 @@ StockSharp API Change log
 * (bug) Candles compression. Fix for non TF candles compression.
 * (bug) Basket adapter. Fix processing pending connect subscriptions.
 * (bug) Connector. Fix subscribers counter for error responses.
+* (feature) IConnector. MarketDataUnexpectedCancelled event added.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

@@ -49016,5 +49016,25 @@ namespace StockSharp.Localization
 		/// Volume format.
 		/// </summary>
 		public static string VolumeTextFormat => GetString(VolumeTextFormatKey);
+
+		/// <summary>
+		/// Market data finished: sec='{0}' msg='{1}'.
+		/// </summary>
+		public const string SubscriptionFinishedKey = nameof(SubscriptionFinished);
+
+		/// <summary>
+		/// Market data finished: sec='{0}' msg='{1}'.
+		/// </summary>
+		public static string SubscriptionFinished => GetString(SubscriptionFinishedKey);
+
+		/// <summary>
+		/// Subscription '{0}' to {1} unexpected cancelled with error '{2}'.
+		/// </summary>
+		public const string SubscriptionUnexpectedCancelledKey = nameof(SubscriptionUnexpectedCancelled);
+
+		/// <summary>
+		/// Subscription '{0}' to {1} unexpected cancelled with error '{2}'.
+		/// </summary>
+		public static string SubscriptionUnexpectedCancelled => GetString(SubscriptionUnexpectedCancelledKey);
 	}
 }

@@ -130,8 +130,10 @@ namespace StockSharp.Algo
 				return _pendingSubscriptions.TryGetValue(originalTransactionId)?.Item2;
 			}
 
-			public Security ProcessResponse(MarketDataMessage response, out MarketDataMessage originalMsg)
+			public Security ProcessResponse(MarketDataMessage response, out MarketDataMessage originalMsg, out bool unexpectedCancelled)
 			{
+				unexpectedCancelled = false;
+
 				if (!_pendingSubscriptions.TryGetValue(response.OriginalTransactionId, out var tuple))
 				{
 					originalMsg = null;
@@ -151,6 +153,15 @@ namespace StockSharp.Algo
 						{
 							if (response.Error == null)
 								_subscribers.SafeAdd(originalMsg.DataType).Add(subscriber);
+							else
+							{
+								var set = _subscribers.TryGetValue(originalMsg.DataType);
+
+								if (set != null && set.Remove(subscriber))
+								{
+									unexpectedCancelled = true;
+								}
+							}
 						}
 						else
 						{

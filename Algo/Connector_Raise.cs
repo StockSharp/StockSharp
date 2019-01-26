@@ -211,6 +211,9 @@ namespace StockSharp.Algo
 		public event Action<Security, MarketDataFinishedMessage> MarketDataSubscriptionFinished;
 
 		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled;
+
+		/// <inheritdoc />
 		public event Action<ExchangeBoard, SessionStates> SessionStateChanged;
 
 		/// <inheritdoc />
@@ -579,8 +582,14 @@ namespace StockSharp.Algo
 
 		private void RaiseMarketDataSubscriptionFinished(Security security, MarketDataFinishedMessage message)
 		{
-			this.AddDebugLog("Market data finished: {0} {1}", security?.Id, message);
+			this.AddDebugLog(LocalizedStrings.SubscriptionFinished, security?.Id, message);
 			MarketDataSubscriptionFinished?.Invoke(security, message);
+		}
+
+		private void RaiseMarketDataUnexpectedCancelled(Security security, MarketDataMessage message, Exception error)
+		{
+			this.AddErrorLog(LocalizedStrings.SubscriptionUnexpectedCancelled, security?.Id, message.DataType, error.Message);
+			MarketDataUnexpectedCancelled?.Invoke(security, message, error);
 		}
 
 		/// <summary>

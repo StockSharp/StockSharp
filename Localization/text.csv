@@ -4934,6 +4934,8 @@ ExecutionEnd;Execution end time.;Время окончания исполнен�
 End;End;Окончание
 PriceTextFormat;Price format.;Формат цены.
 VolumeTextFormat;Volume format.;Формат объема.
+SubscriptionFinished;Market data finished: sec='{0}' msg='{1}'.;Подписка закончена: инстр='{0}' сообщение='{1}'.
+SubscriptionUnexpectedCancelled;Subscription '{0}' to {1} unexpected cancelled with error '{2}'.;Подписка '{0}' на {1} неожоданное закончилась с ошибкой '{2}'.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15512,3 +15514,4 @@ DocStr11006;When partially filled, remaining part filled as limit order by parti
 DocStr11007;Automatically update format by {0}. By default is on;Автоматически обновлять формат через {0}. По умолчанию включено
 DocStr11008;Generate price format for the specified security;Создать текстовый формат цены для указанного инструмента
 DocStr11009;Generate volume format for the specified security;Создать текстовый формат объема для указанного инструмента
+DocStr11010;Market-data subscription unexpected cancelled;Подписка на рыночные данные неожиданно отменена
