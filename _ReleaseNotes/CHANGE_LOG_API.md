@@ -70,6 +70,7 @@ StockSharp API Change log
 * (feature) OKEX. Position and account swap and margin supported.
 * (bug) Candles compression. Fix for non TF candles compression.
 * (bug) Basket adapter. Fix processing pending connect subscriptions.
+* (bug) Connector. Fix subscribers counter for error responses.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

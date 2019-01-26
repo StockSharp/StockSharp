@@ -785,21 +785,9 @@ namespace StockSharp.Algo
 
 		private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
 		{
-			//_subscriptionManager.ProcessResponse(mdMsg);
-
-			////инструмент может быть не указан
-			////и нет необходимости вызывать события MarketDataSubscriptionSucceeded/Failed
-			//if (mdMsg.SecurityId.IsDefault())
-			//{
-			//	if (mdMsg.Error != null)
-			//		RaiseError(mdMsg.Error);
-
-			//	return;
-			//}
-
 			var error = mdMsg.Error;
 
-			var security = _subscriptionManager.ProcessResponse(mdMsg.OriginalTransactionId, out var originalMsg);
+			var security = _subscriptionManager.ProcessResponse(mdMsg, out var originalMsg);
 
 			if (security == null && originalMsg?.DataType != MarketDataTypes.News)
 			{
