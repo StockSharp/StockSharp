@@ -588,7 +588,7 @@ namespace StockSharp.Algo
 				var wrapper = _hearbeatAdapters.TryGetValue(mdMsg.Adapter);
 
 				if (wrapper != null)
-					return new[] { (IMessageAdapter)wrapper };
+					return new[] { wrapper };
 			}
 
 			var adapters = GetAdapters(mdMsg, out var isPended).Where(a =>
@@ -1132,7 +1132,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			_hearbeatAdapters.Values.ForEach(a => ((IMessageAdapter)a).Parent = null);
+			_hearbeatAdapters.Values.ForEach(a => a.Parent = null);
 
 			base.DisposeManaged();
 		}
