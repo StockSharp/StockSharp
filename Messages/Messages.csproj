@@ -79,6 +79,7 @@
     <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ActionMessage.cs" />
     <Compile Include="BaseConnectionMessage.cs" />
     <Compile Include="BoardLookupMessage.cs" />
     <Compile Include="BoardLookupResultMessage.cs" />

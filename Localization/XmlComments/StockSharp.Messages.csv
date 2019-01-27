@@ -1,3 +1,12 @@
+T:StockSharp.Messages.ActionMessage/summary;DocStr11011
+M:StockSharp.Messages.ActionMessage.#ctor/summary;DocStr1
+P:StockSharp.Messages.ActionMessage.TransactionId/summary;TransactionId
+M:StockSharp.Messages.ActionMessage.ToString/inheritdoc;DocStr8459
+M:StockSharp.Messages.ActionMessage.Clone/summary;DocStr643
+M:StockSharp.Messages.ActionMessage.Clone/returns;DocStr1116
+M:StockSharp.Messages.ActionMessage.CopyTo(StockSharp.Messages.ActionMessage)/summary;DocStr629
+M:StockSharp.Messages.ActionMessage.CopyTo(StockSharp.Messages.ActionMessage)/param/destination;DocStr630
+M:StockSharp.Messages.ActionMessage.CopyTo(StockSharp.Messages.ActionMessage)/returns;DocStr630
 T:StockSharp.Messages.BaseConnectionMessage/summary;DocStr4039
 M:StockSharp.Messages.BaseConnectionMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.BaseConnectionMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
@@ -1040,6 +1049,7 @@ F:StockSharp.Messages.MessageTypes.BoardLookupResult/summary;DocStr10798
 F:StockSharp.Messages.MessageTypes.UserRequest/summary;DocStr10799
 F:StockSharp.Messages.MessageTypes.TimeFrameLookup/summary;DocStr10832
 F:StockSharp.Messages.MessageTypes.TimeFrameLookupResult/summary;DocStr10833
+F:StockSharp.Messages.MessageTypes.Action/summary;DocStr11012
 T:StockSharp.Messages.MessageOfflineModes/summary;DocStr10592
 F:StockSharp.Messages.MessageOfflineModes.None/summary;Str1658
 F:StockSharp.Messages.MessageOfflineModes.Force/summary;DocStr10547
