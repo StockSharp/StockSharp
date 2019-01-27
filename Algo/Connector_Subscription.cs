@@ -130,37 +130,49 @@ namespace StockSharp.Algo
 				return _pendingSubscriptions.TryGetValue(originalTransactionId)?.Item2;
 			}
 
-			public Security ProcessResponse(long originalTransactionId, out MarketDataMessage message)
+			public Security ProcessResponse(MarketDataMessage response, out MarketDataMessage originalMsg, out bool unexpectedCancelled)
 			{
-				var tuple = _pendingSubscriptions.TryGetValue(originalTransactionId);
+				unexpectedCancelled = false;
 
-				if (tuple == null)
+				if (!_pendingSubscriptions.TryGetValue(response.OriginalTransactionId, out var tuple))
 				{
-					message = null;
+					originalMsg = null;
 					return null;
 				}
 
-				_pendingSubscriptions.Remove(originalTransactionId);
+				_pendingSubscriptions.Remove(response.OriginalTransactionId);
 
 				var subscriber = tuple.Item2;
-				message = tuple.Item1;
+				originalMsg = tuple.Item1;
 
-				if (message.DataType != MarketDataTypes.News)
+				if (originalMsg.DataType != MarketDataTypes.News)
 				{
 					lock (_subscribers.SyncRoot)
 					{
-						if (message.IsSubscribe)
-							_subscribers.SafeAdd(message.DataType).Add(subscriber);
+						if (originalMsg.IsSubscribe)
+						{
+							if (response.Error == null)
+								_subscribers.SafeAdd(originalMsg.DataType).Add(subscriber);
+							else
+							{
+								var set = _subscribers.TryGetValue(originalMsg.DataType);
+
+								if (set != null && set.Remove(subscriber))
+								{
+									unexpectedCancelled = true;
+								}
+							}
+						}
 						else
 						{
-							var dict = _subscribers.TryGetValue(message.DataType);
+							var dict = _subscribers.TryGetValue(originalMsg.DataType);
 
 							if (dict != null)
 							{
 								dict.Remove(subscriber);
 
 								if (dict.Count == 0)
-									_subscribers.Remove(message.DataType);
+									_subscribers.Remove(originalMsg.DataType);
 							}
 						}
 					}

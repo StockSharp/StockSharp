@@ -27,7 +27,7 @@ namespace SampleBittrex
 			InitializeComponent();
 
 			CandlesPeriods.ItemsSource = BittrexMessageAdapter.AllTimeFrames;
-			CandlesPeriods.SelectedIndex = 1;
+			CandlesPeriods.SelectedIndex = 0;
 		}
 
 		protected override void OnClosed(EventArgs e)

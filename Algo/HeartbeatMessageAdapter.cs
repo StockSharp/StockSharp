@@ -47,16 +47,29 @@ namespace StockSharp.Algo
 			}
 		}
 
-		class RestoringSubscriptionMessage : Message
+		class ReconnectingFinishedMessage : Message
 		{
-			public RestoringSubscriptionMessage()
-				: base(ExtendedMessageTypes.RestoringSubscription)
+			public ReconnectingFinishedMessage()
+				: base(ExtendedMessageTypes.ReconnectingFinished)
 			{
 			}
 
 			public override Message Clone()
 			{
-				return new RestoringSubscriptionMessage();
+				return new ReconnectingFinishedMessage();
+			}
+		}
+
+		private class ReconnectingStartedMessage : Message
+		{
+			public ReconnectingStartedMessage()
+				: base(ExtendedMessageTypes.ReconnectingStarted)
+			{
+			}
+
+			public override Message Clone()
+			{
+				return new ReconnectingStartedMessage();
 			}
 		}
 
@@ -107,6 +120,7 @@ namespace StockSharp.Algo
 					var connectMsg = (ConnectMessage)message;
 					var isRestored = false;
 					var isReconnecting = false;
+					var isReconnectionStarted = false;
 
 					if (connectMsg.Error == null)
 					{
@@ -126,6 +140,8 @@ namespace StockSharp.Algo
 						{
 							if (_connectingAttemptCount != 0)
 							{
+								isReconnectionStarted = _prevState == ConnectionStates.Connected;
+
 								_prevState = _currState == ConnectionStates.Connected
 									? _reConnecting
 									: ConnectionStates.Failed;
@@ -141,7 +157,7 @@ namespace StockSharp.Algo
 					if (isRestored)
 					{
 						if (SuppressReconnectingErrors)
-							RaiseNewOutMessage(new RestoringSubscriptionMessage { Adapter = message.Adapter });
+							RaiseNewOutMessage(new ReconnectingFinishedMessage { Adapter = message.Adapter });
 						else
 							RaiseNewOutMessage(new RestoredConnectMessage { Adapter = message.Adapter });
 					}
@@ -149,6 +165,8 @@ namespace StockSharp.Algo
 					{
 						if (connectMsg.Error == null || !SuppressReconnectingErrors || !isReconnecting)
 							base.OnInnerAdapterNewOutMessage(message);
+						else if (isReconnectionStarted)
+							base.OnInnerAdapterNewOutMessage(new ReconnectingStartedMessage());
 					}
 
 					break;

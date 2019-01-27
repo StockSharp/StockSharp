@@ -27,7 +27,7 @@ namespace SampleDigifinex
 			InitializeComponent();
 
 			CandlesPeriods.ItemsSource = DigifinexMessageAdapter.AllTimeFrames;
-			CandlesPeriods.SelectedIndex = 1;
+			CandlesPeriods.SelectedIndex = 0;
 		}
 
 		protected override void OnClosed(EventArgs e)

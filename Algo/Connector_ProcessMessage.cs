@@ -768,7 +768,7 @@ namespace StockSharp.Algo
 						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
 						break;
 
-					case ExtendedMessageTypes.RestoringSubscription:
+					case ExtendedMessageTypes.ReconnectingFinished:
 						ProcessRestoringSubscription(message.Adapter);
 						break;
 
@@ -785,21 +785,9 @@ namespace StockSharp.Algo
 
 		private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
 		{
-			//_subscriptionManager.ProcessResponse(mdMsg);
-
-			////инструмент может быть не указан
-			////и нет необходимости вызывать события MarketDataSubscriptionSucceeded/Failed
-			//if (mdMsg.SecurityId.IsDefault())
-			//{
-			//	if (mdMsg.Error != null)
-			//		RaiseError(mdMsg.Error);
-
-			//	return;
-			//}
-
 			var error = mdMsg.Error;
 
-			var security = _subscriptionManager.ProcessResponse(mdMsg.OriginalTransactionId, out var originalMsg);
+			var security = _subscriptionManager.ProcessResponse(mdMsg, out var originalMsg, out var unexpectedCancelled);
 
 			if (security == null && originalMsg?.DataType != MarketDataTypes.News)
 			{
@@ -814,7 +802,15 @@ namespace StockSharp.Algo
 				if (error == null)
 					RaiseMarketDataSubscriptionSucceeded(security, originalMsg);
 				else
-					RaiseMarketDataSubscriptionFailed(security, originalMsg, error);
+				{
+					if (unexpectedCancelled)
+					{
+						RaiseMarketDataUnexpectedCancelled(security, originalMsg, error);
+						ProcessCandleSeriesStopped(mdMsg.OriginalTransactionId);
+					}
+					else
+						RaiseMarketDataSubscriptionFailed(security, originalMsg, error);
+				}
 			}
 			else
 			{

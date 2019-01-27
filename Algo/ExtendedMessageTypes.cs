@@ -40,7 +40,7 @@
 		internal const MessageTypes ProcessSuspendedSecurityMessages = (MessageTypes)(-10);
 		internal const MessageTypes StrategyChangeState = (MessageTypes)(-11);
 		internal const MessageTypes Reconnect = (MessageTypes)(-12);
-		internal const MessageTypes RestoringSubscription = (MessageTypes)(-13);
+		internal const MessageTypes ReconnectingFinished = (MessageTypes)(-13);
 		
 		/// <summary>
 		/// <see cref="ChangeTimeIntervalMessage"/>.
@@ -71,5 +71,7 @@
 		/// <see cref="StrategyStateMessage"/>.
 		/// </summary>
 		public const MessageTypes StrategyState = (MessageTypes)(-19);
+
+		internal const MessageTypes ReconnectingStarted = (MessageTypes)(-20);
 	}
 }
