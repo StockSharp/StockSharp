@@ -15515,3 +15515,12 @@ DocStr11007;Automatically update format by {0}. By default is on;Автомат�
 DocStr11008;Generate price format for the specified security;Создать текстовый формат цены для указанного инструмента
 DocStr11009;Generate volume format for the specified security;Создать текстовый формат объема для указанного инструмента
 DocStr11010;Market-data subscription unexpected cancelled;Подписка на рыночные данные неожиданно отменена
+DocStr11011;Message for iterate action;Сообщения для итерационного действия
+DocStr11012;Iterate action;Итерационное действие
+DocStr11013;Editor of time range list;Редактор списка временных диапазонов
+DocStr11016;Selected range;Выбранный диапазон
+DocStr11017;New From time;Новое время От
+DocStr11018;New Till time;Новое время До
+DocStr11019;Add command;Команда добавления
+DocStr11020;Delete command;Команда удаления
+DocStr11021;Data changed;Данные изменены

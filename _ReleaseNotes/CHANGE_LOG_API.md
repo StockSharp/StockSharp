@@ -75,6 +75,7 @@ StockSharp API Change log
 * (feature) Basket adapter. Support offline mode for dedicated adapters.
 * (feature) SampleBitfinex. Candles added.
 * (feature) ActionMessage. Message for iterate actions.
+* (feature) BoardEditor redesign.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

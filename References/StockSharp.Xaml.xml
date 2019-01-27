@@ -824,6 +824,84 @@
             Security.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.RangeListEditor">
+      <summary>
+            Editor of range list.
+            </summary>
+      <summary>
+            RangeListEditor
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.RangeListEditor.RangesProperty">
+      <summary>
+            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.Ranges" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.Ranges">
+      <summary>
+            Ranges.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.RangeListEditor.SelectedRangeProperty">
+      <summary>
+            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.SelectedRange" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.SelectedRange">
+      <summary>
+            Selected range.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.RangeListEditor.NewTimeFromProperty">
+      <summary>
+            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.NewTimeFrom" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.NewTimeFrom">
+      <summary>
+            New from time.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.RangeListEditor.NewTimeTillProperty">
+      <summary>
+            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.NewTimeTill" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.NewTimeTill">
+      <summary>
+            New till time.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.CommandAddTimes">
+      <summary>
+            Add command.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.CommandDelTimes">
+      <summary>
+            Delete command.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.RangeListEditor.Error">
+      <summary>
+            Error.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.RangeListEditor.DataChanged">
+      <summary>
+            Data changed.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.RangeListEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.RangeListEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.RangeListEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.SecurityAssociationWindow">
       <summary>
             The window for edit securities associations.
