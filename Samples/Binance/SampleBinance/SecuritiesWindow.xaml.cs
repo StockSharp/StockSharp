@@ -27,7 +27,7 @@ namespace SampleBinance
 			InitializeComponent();
 
 			CandlesPeriods.ItemsSource = BinanceMessageAdapter.AllTimeFrames;
-			CandlesPeriods.SelectedIndex = 1;
+			CandlesPeriods.SelectedIndex = 0;
 		}
 
 		protected override void OnClosed(EventArgs e)

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.CoinCap</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.CoinCap.CoinCapMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.CoinCap"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinCap.CoinCapMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CoinCap.CoinCapMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.CoinCap.CoinCapMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.CoinCap.CoinCapMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.CoinCap.CoinCapTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.CoinCap"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CoinCap.CoinCapTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.CoinCap.CoinCapTrader"/>.
+            </summary>
+        </member>
+    </members>
+</doc>

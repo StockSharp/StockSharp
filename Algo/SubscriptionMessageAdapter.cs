@@ -55,17 +55,17 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Restore subscription on reconnect.
 		/// </summary>
-		/// <summary>
+		/// <remarks>
 		/// Error case like connection lost etc.
-		/// </summary>
+		/// </remarks>
 		public bool IsRestoreOnErrorReconnect { get; set; }
 
 		/// <summary>
 		/// Restore subscription on reconnect.
 		/// </summary>
-		/// <summary>
+		/// <remarks>
 		/// Normal case connect/disconnect.
-		/// </summary>
+		/// </remarks>
 		public bool IsRestoreOnNormalReconnect { get; set; }
 
 		/// <summary>
@@ -227,7 +227,7 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				case ExtendedMessageTypes.RestoringSubscription:
+				case ExtendedMessageTypes.ReconnectingFinished:
 				{
 					if (IsRestoreOnErrorReconnect)
 						FillSubscriptions();
@@ -370,7 +370,7 @@ namespace StockSharp.Algo
 			return null;
 		}
 
-		private SecurityId GetSecurityId(MarketDataMessage message) => IsSupportSubscriptionBySecurity ? message.SecurityId : default(SecurityId);
+		private SecurityId GetSecurityId(SecurityId securityId) => IsSupportSubscriptionBySecurity ? securityId : default(SecurityId);
 
 		private void ProcessInMarketDataMessage(MarketDataMessage message)
 		{
@@ -389,7 +389,7 @@ namespace StockSharp.Algo
 			{
 				info = message.DataType == MarketDataTypes.News
 					? ProcessSubscription(_newsSubscribers, message.NewsId ?? string.Empty, message, ref sendIn, ref isOnlyHistory, ref sendOutMsg)
-					: ProcessSubscription(_subscribers, message.CreateKey(GetSecurityId(message)), message, ref sendIn, ref isOnlyHistory, ref sendOutMsg);
+					: ProcessSubscription(_subscribers, message.CreateKey(GetSecurityId(message.SecurityId)), message, ref sendIn, ref isOnlyHistory, ref sendOutMsg);
 			}
 
 			if (sendIn)
@@ -429,7 +429,7 @@ namespace StockSharp.Algo
 
 				replies = info.Message.DataType == MarketDataTypes.News
 					? ProcessSubscriptionResult(_newsSubscribers, info.Message.NewsId ?? string.Empty, info, message)
-					: ProcessSubscriptionResult(_subscribers, info.Message.CreateKey(GetSecurityId(message)), info, message);
+					: ProcessSubscriptionResult(_subscribers, info.Message.CreateKey(GetSecurityId(info.Message.SecurityId)), info, message);
 			}
 
 			if (replies == null)

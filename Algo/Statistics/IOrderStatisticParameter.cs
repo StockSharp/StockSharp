@@ -67,34 +67,22 @@ namespace StockSharp.Algo.Statistics
 		{
 		}
 
-		/// <summary>
-		/// To add to the parameter an information on new order.
-		/// </summary>
-		/// <param name="order">New order.</param>
+		/// <inheritdoc />
 		public virtual void New(Order order)
 		{
 		}
 
-		/// <summary>
-		/// To add to the parameter an information on changed order.
-		/// </summary>
-		/// <param name="order">The changed order.</param>
+		/// <inheritdoc />
 		public virtual void Changed(Order order)
 		{
 		}
 
-		/// <summary>
-		/// To add to the parameter an information on error of order registration.
-		/// </summary>
-		/// <param name="fail">Error registering order.</param>
+		/// <inheritdoc />
 		public virtual void RegisterFailed(OrderFail fail)
 		{
 		}
 
-		/// <summary>
-		/// To add to the parameter an information on error of order cancelling.
-		/// </summary>
-		/// <param name="fail">Error cancelling order.</param>
+		/// <inheritdoc />
 		public virtual void CancelFailed(OrderFail fail)
 		{
 		}
@@ -108,10 +96,7 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.OrdersKey)]
 	public class MaxLatencyRegistrationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
-		/// <summary>
-		/// To add to the parameter an information on new order.
-		/// </summary>
-		/// <param name="order">New order.</param>
+		/// <inheritdoc />
 		public override void New(Order order)
 		{
 			if (order.LatencyRegistration != null)
@@ -127,10 +112,7 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.OrdersKey)]
 	public class MaxLatencyCancellationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
-		/// <summary>
-		/// To add to the parameter an information on changed order.
-		/// </summary>
-		/// <param name="order">The changed order.</param>
+		/// <inheritdoc />
 		public override void Changed(Order order)
 		{
 			if (order.LatencyCancellation != null)
@@ -148,10 +130,14 @@ namespace StockSharp.Algo.Statistics
 	{
 		private bool _initialized;
 
-		/// <summary>
-		/// To add to the parameter an information on new order.
-		/// </summary>
-		/// <param name="order">New order.</param>
+		/// <inheritdoc />
+		public override void Reset()
+		{
+			_initialized = false;
+			base.Reset();
+		}
+
+		/// <inheritdoc />
 		public override void New(Order order)
 		{
 			if (order.LatencyRegistration == null)
@@ -166,20 +152,14 @@ namespace StockSharp.Algo.Statistics
 				Value = Value.Min(order.LatencyRegistration.Value);
 		}
 
-		/// <summary>
-		/// To load the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			_initialized = storage.GetValue<bool>("Initialized");
 			base.Load(storage);
 		}
 
-		/// <summary>
-		/// To save the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Initialized", _initialized);
@@ -197,10 +177,14 @@ namespace StockSharp.Algo.Statistics
 	{
 		private bool _initialized;
 
-		/// <summary>
-		/// To add to the parameter an information on changed order.
-		/// </summary>
-		/// <param name="order">The changed order.</param>
+		/// <inheritdoc />
+		public override void Reset()
+		{
+			_initialized = false;
+			base.Reset();
+		}
+
+		/// <inheritdoc />
 		public override void Changed(Order order)
 		{
 			if (order.LatencyCancellation == null)
@@ -215,20 +199,14 @@ namespace StockSharp.Algo.Statistics
 				Value = Value.Min(order.LatencyCancellation.Value);
 		}
 
-		/// <summary>
-		/// To load the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			_initialized = storage.GetValue<bool>("Initialized");
 			base.Load(storage);
 		}
 
-		/// <summary>
-		/// To save the state of statistic parameter.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Initialized", _initialized);
@@ -244,10 +222,7 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.OrdersKey)]
 	public class OrderCountParameter : BaseOrderStatisticParameter<int>
 	{
-		/// <summary>
-		/// To add to the parameter an information on new order.
-		/// </summary>
-		/// <param name="order">New order.</param>
+		/// <inheritdoc />
 		public override void New(Order order)
 		{
 			Value++;

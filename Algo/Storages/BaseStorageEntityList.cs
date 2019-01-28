@@ -41,11 +41,6 @@ namespace StockSharp.Algo.Storages
 		public SyncObject SyncRoot { get; } = new SyncObject();
 
 		/// <summary>
-		/// The time designating field.
-		/// </summary>
-		protected virtual Field TimeField => Schema.Fields["Time"];
-
-		/// <summary>
 		/// Initialize <see cref="BaseStorageEntityList{T}"/>.
 		/// </summary>
 		/// <param name="storage">The special interface for direct access to the storage.</param>
@@ -55,6 +50,12 @@ namespace StockSharp.Algo.Storages
 		}
 
 		DelayAction IStorageEntityList<T>.DelayAction => DelayAction;
+
+		/// <inheritdoc />
+		void IStorageEntityList<T>.WaitFlush()
+		{
+			DelayAction.DefaultGroup.WaitFlush(false);
+		}
 
 		/// <summary>
 		/// To add the trading object to the collection.
@@ -100,16 +101,6 @@ namespace StockSharp.Algo.Storages
 
 			lock (SyncRoot)
 				base.Save(entity);
-		}
-
-		/// <summary>
-		/// To load last created data.
-		/// </summary>
-		/// <param name="count">The amount of requested data.</param>
-		/// <returns>The data range.</returns>
-		public virtual IEnumerable<T> ReadLasts(int count)
-		{
-			return ReadLasts(count, TimeField);
 		}
 
 		/// <summary>

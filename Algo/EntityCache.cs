@@ -785,6 +785,9 @@ namespace StockSharp.Algo
 			if (message.Url != null)
 				news.Url = message.Url;
 
+			if (message.Priority != null)
+				news.Priority = message.Priority;
+
 			message.CopyExtensionInfo(news);
 
 			return Tuple.Create(news, isNew);

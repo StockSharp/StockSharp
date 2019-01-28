@@ -319,7 +319,22 @@
 
 				case MessageTypes.Disconnect:
 				{
-					_connected = false;
+					lock (_syncObject)
+						_connected = false;
+
+					break;
+				}
+
+				case ExtendedMessageTypes.ReconnectingStarted:
+				{
+					lock (_syncObject)
+						_connected = false;
+
+					return;
+				}
+
+				case ExtendedMessageTypes.ReconnectingFinished:
+				{
 					break;
 				}
 			}
@@ -328,7 +343,7 @@
 
 			Message[] msgs = null;
 
-			if (connectMessage != null && connectMessage.Error == null)
+			if ((connectMessage != null && connectMessage.Error == null) || message.Type == ExtendedMessageTypes.ReconnectingFinished)
 			{
 				lock (_syncObject)
 				{

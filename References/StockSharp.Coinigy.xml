@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Coinigy</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Coinigy.CoinigyMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Coinigy"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinigy.CoinigyMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinigy.CoinigyMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinigy.CoinigyMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinigy.CoinigyMessageAdapter.WebSocketId">
+            <summary>
+            Websocket id.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinigy.CoinigyMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Coinigy.CoinigyMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Coinigy.CoinigyMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Coinigy.CoinigyMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Coinigy.CoinigyMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Coinigy.CoinigyMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Coinigy.CoinigyMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Coinigy.CoinigyOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Coinigy"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Coinigy.CoinigyOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Coinigy.CoinigyOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinigy.CoinigyOrderCondition.ConditionalPrice">
+            <summary>
+            Activation price, when reached an order will be placed.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Coinigy.CoinigyTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Coinigy"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Coinigy.CoinigyTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Coinigy.CoinigyTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinigy.CoinigyTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinigy.CoinigyTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinigy.CoinigyTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinigy.CoinigyTrader.WebSocketId">
+            <summary>
+            Websocket id.
+            </summary>
+        </member>
+    </members>
+</doc>

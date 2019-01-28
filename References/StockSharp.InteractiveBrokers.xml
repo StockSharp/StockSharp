@@ -1620,6 +1620,16 @@
             Don't use auto price for hedge
             </summary>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.IsOmsContainer">
+      <summary>
+            Create tickets from API orders when TWS is used as an OMS.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.DiscretionaryUpToLimitPrice">
+      <summary>
+            Convert order of type 'Primary Peg' to 'D-Peg'.
+            </summary>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.ExchangeNewsTypes">
       <summary>
             News types.

@@ -4016,7 +4016,7 @@ XamlStr693;Save new board;Сохранить новую площадку
 XamlStr694;Save layout...;Сохранить разметку...
 XamlStr695;Save basket security;Сохранить составной инструмент
 XamlStr696;Special non-working days:;Специальные выходные дни:
-XamlStr697;Special working days:;Специальные рабочие дни:
+XamlStr697;Special working and holidays;Специальные рабочие и выходные дни
 XamlStr698;Change list:;Список изменений:
 XamlStr699;Error list;Список ошибок
 Help;Help;Справка
@@ -4913,6 +4913,29 @@ HistoricalPasswordDesc;Additional password. Password used for authentication wit
 Idax;IDAX;IDAX
 Digifinex;DigiFinex;DigiFinex
 TradeOgre;TradeOgre;TradeOgre
+CoinCap;CoinCap;CoinCap
+Low;Low;Низко
+High;High;Высоко
+Priority;Priority;Приоритет
+NewsPriority;News priority.;Новостной приоритет.
+Coinigy;Coinigy;Coinigy
+WebSocket;Websocket;Вебсокет
+WebSocketId;Websocket id.;Вебсокет идентификатор.
+SwapSection;Swap section.;Своп секция.
+Colocation;Colocation;Колокация
+SelectDataTypes;Select data types;Выберите тип данных
+ExpandAll;Expand all;Развернуть всё
+CollapseAll;Collapse all;Свернуть всё
+MarketOnPitClose;Market on close (pit);Рыночная при закрытие (яма)
+MarketOnPitOpen;Market on open (pit);Рыночная при открытие (яма)
+MarketToLimit;Market->Limit;Рыночная->Лимитная
+ExecutionStart;Execution start time.;Время начала исполнения.
+ExecutionEnd;Execution end time.;Время окончания исполнения.
+End;End;Окончание
+PriceTextFormat;Price format.;Формат цены.
+VolumeTextFormat;Volume format.;Формат объема.
+SubscriptionFinished;Market data finished: sec='{0}' msg='{1}'.;Подписка закончена: инстр='{0}' сообщение='{1}'.
+SubscriptionUnexpectedCancelled;Subscription '{0}' to {1} unexpected cancelled with error '{2}'.;Подписка '{0}' на {1} неожоданное закончилась с ошибкой '{2}'.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5292,7 +5315,7 @@ DocStr394;The protective level. If the {0} type is equal to {1}, then the given 
 DocStr395;To create a quoting strategy for the protective order (its fulfilment is guaranteed);Создать стратегию котирования для защитной заявки (гарантированно исполнить ее)
 DocStr396;The protective level. If the {0} type is equal to {1}, then the given price is specified. Otherwise, the shift value from the protected trade {2} is specified;Защитный уровень. Если тип {0} равен {1}, то задается конкретная цена. Иначе, указывается величина сдвига от защищаемой сделки {2}
 DocStr397;Whether to use a trailing technique. For the {0} with profit increasing the level of profit taking is automatically increased. For the {1} with profit increasing the level of loss protection is automatically increased. The default is disabled;Использовать ли механизм скольжения. Для {0} при увеличении прибыли автоматически увеличивается уровень взятия прибыли. Для {1} при увеличении прибыли автоматически увеличивается уровень защиты убытка. По умолчанию выключено
-DocStr398;The absolute value of the price when the one is reached the protective strategy is activated. If the price is equal to {0} then the activation is not required;Абсолютное значение цены, при достижении которой активизируется защитная стратегия. Если цена равна {0}, то активация не требуется
+DocStr398;The absolute value of the price when the one is reached the protective strategy is activated;Абсолютное значение цены, при достижении которой активизируется защитная стратегия
 DocStr399;Whether the protective strategy is activated;Активирована ли защитная стратегия
 DocStr400;The protective strategy activation event;Событие активации защитной стратегии
 DocStr401;Whether to use {0} for protection. By default, orders {1} are used;Использовать ли {0} при защите. По умолчанию используются заявки {1}
@@ -7556,7 +7579,7 @@ DocStr2700;Exchange board;Биржевая площадка
 DocStr2701;ALL board with no schedule limits;Информация об объединенной площадке, не имеющей ограничений в расписание работы
 DocStr2702;Test board with no schedule limits;Информация о тестовой площадке, не имеющая ограничения в расписание работы
 DocStr2703;Information about FORTS board of {0} exchange;Информация о площадке FORTS биржи {0}
-DocStr2704;Information about indecies of {0} exchange;Информация о индексах биржи {0}
+DocStr2704;Information about indices of {0} exchange;Информация о индексах биржи {0}
 DocStr2705;Information about AUCT of {0} exchange;Информация о площадке AUCT биржи {0}
 DocStr2706;Information about AUBB of {0} exchange;Информация о площадке AUBB биржи {0}
 DocStr2707;Information about CASF of {0} exchange;Информация о площадке CASF биржи {0}
@@ -9115,7 +9138,7 @@ DocStr4333;ID of the original message for which this message is a response;Ид�
 DocStr4334;Server check interval for track the connection alive. The value is {0} turned off tracking;Интервал оповещения сервера о том, что подключение еще живое. Значение {0} означает выключенное оповещение
 DocStr4335;Bit process, which can run the adapter;Разрядность процесса, в котором может работать адаптер
 DocStr4336;Securities and portfolios lookup timeout;Ограничение по времени, в течении которого должен отработать поиск инструментов или портфелей
-DocStr4337;By defaut is 10 seconds;Значение по умолчанию равно 10 секундам
+DocStr4337;By default is 10 seconds;Значение по умолчанию равно 10 секундам
 DocStr4338;Associated board code. The default is ALL;Код площадки для объединенного инструмента. По умолчанию равно ALL
 DocStr4339;Outgoing message event;Событие получения исходящего сообщения
 DocStr4340;Ожидание выполнения некоего действия, связанного с ключом;Ожидание выполнения некоего действия, связанного с ключом
@@ -9283,7 +9306,6 @@ DocStr4510;Security states;Состояния инструмента
 DocStr4511;Active;Торгуется
 DocStr4512;Suspended;Торги приостановлены
 DocStr4513;Shares;Ценная бумага
-DocStr4514;Swap;Спот
 DocStr4515;CFD;CFD
 DocStr4516;Mutual funds;Паевые фонды
 DocStr4517;American Depositary Receipts;Американские депозитарные расписки
@@ -9411,7 +9433,6 @@ DocStr4642;SecNormal;SecNormal
 DocStr4643;SecIndex;SecIndex
 DocStr4644;Ценные бумаги;Ценные бумаги
 DocStr4645;Список;Список
-DocStr4646;SWAP;SWAP
 DocStr4647;Бивалютная корзина;Бивалютная корзина
 DocStr4648;Язык сообщений ТС;Язык сообщений ТС
 DocStr4649;Русский;Русский
@@ -12170,7 +12191,7 @@ DocStr7418;The market-data message adapter for Rss;Маркет-дата ада�
 DocStr7420;The format of dates. Should be fill in, if the format is different from ddd, dd MMM yyyy hh:mm:ss;Формат дат. Необходимо заполнить, если формат RSS потока отличается от ddd, dd MMM yyyy hh:mm:ss
 DocStr7421;The drop-down list to select the RSS feed address;Выпадающий список для выбора адреса RSS фида
 DocStr7422;The most popular RSS feeds;Адреса RSS популярных фидов
-DocStr7423;Reuters (ecomony);Reuters (ecomony)
+DocStr7423;Reuters (economy);Reuters (экономика)
 DocStr7424;Bloomberg;Bloomberg
 DocStr7425;NYSE;NYSE
 DocStr7426;NASDAQ (Stocks);NASDAQ (Stocks)
@@ -12976,8 +12997,6 @@ DocStr8251;Cell;Ячейка
 DocStr8252;The column type;Тип колонки
 DocStr8253;The maximum depth of order book display. The default value is {0};Максимальная глубина отображения стакана. По умолчанию равно {0}
 DocStr8255;The selected quote;Выбранная котировка
-DocStr8256;"The price format. The default value is ""0.00""";"Формат цены. По умолчанию равен ""0.00"""
-DocStr8257;"The amount format. The default value is ""0""";"Формат объема. По умолчанию равен ""0"""
 DocStr8258;The container of orders grouped by price {0};Контейнер заявок, сгруппированных по цене {0}
 DocStr8259;The total balance to buy. Calculation by internal orders {0};Суммарный баланс на покупку. Расчет идет по внутренним заявкам {0}
 DocStr8260;The total balance to sale. Calculation by internal orders {0};Суммарный баланс на продажу. Расчет идет по внутренним заявкам {0}
@@ -14092,9 +14111,9 @@ DocStr9458;Handler will be called after the window was showed;Обработчи
 DocStr9459;Event of double-clicking the mouse on the selected item;Событие двойного клика мышкой
 DocStr9460;Failed order status request event;Событие ошибки запроса состояния зевок
 DocStr9461;Required if responding to and if provided on the {0} message;Указывается, если сообщение является ответом на {0}
-DocStr9462;UTC time stamp parser;Парсер временной метки в формате UTC
-DocStr9463;UTC time parser;Парсер даты в формате UTC
-DocStr9464;UTC date parser;Парсер времени в формате UTC
+DocStr9462;Time stamp parser;Парсер временной метки
+DocStr9463;Time parser;Парсер времени
+DocStr9464;Date parser;Парсер даты
 DocStr9465;Parser for {0} field;Парсер для поля {0}
 DocStr9466;Date parser;Парсер даты
 DocStr9467;Date and time parser;Парсер даты и времени
@@ -15079,7 +15098,7 @@ DocStr10567;Extended interface for specify extra operation with conditional orde
 DocStr10568;Determines whether the adapter support stop-loss orders;Определить, поддерживает ли адаптер заявки типа стоп-лосс
 DocStr10569;Determines whether the adapter support take-profit orders;Определить, поддерживает ли адаптер заявки типа тейк-профит
 DocStr10570;Determines whether the adapter support withdraw orders;Определить, поддерживает ли адаптер заявки на вывод
-DocStr10571;Create stop order condition;Создать стоп условие
+DocStr10571;Create stop-loss order condition;Создать стоп-лосс условие
 DocStr10572;Is take-profit of stop-loss;Является ли тейк-профитом или стоп-лоссом
 DocStr10573;Limit price for activated order. Can be {0} for {1};Лимитная цена для активированной заявки. Может быть {0} для {1}
 DocStr10574;Order condition. If the connection does not support the order type, the exception {0} will be thrown;Условие заявки. Если соединение не поддерживает тип заявки, будет выброшено исключение {0}
@@ -15380,4 +15399,128 @@ DocStr10891;Security legs;Ноги инструмента
 DocStr10892;Information about IDAX;Информация о IDAX
 DocStr10893;Information about DigiFinex;Информация о DigiFinex
 DocStr10894;Information about TradeOgre;Информация о TradeOgre
-DocStr10895;Help url;Help адрес
+DocStr10895;Help url;Адрес подсказки
+DocStr10896;The interface describing withdraw funds condition;Интерфейс, описывающий условие заявки на вывод средств
+DocStr10897;The interface describing take-profit order condition;Интерфейс, описывающий условие тейк-профит заявки
+DocStr10898;Close position price. {0} means close by market;Цена закрытия позиции. {0} означает закрытие по рынку
+DocStr10899;If the price is equal to {0} then the activation is not required;Если цена равна {0}, то активация не требуется
+DocStr10900;The interface describing stop-loss order condition;Интерфейс, описывающий условие стоп-лосс заявки
+DocStr10901;Add portfolio;Добавить портфель
+DocStr10902;Add portfolios;Добавить портфели
+DocStr10903;Information about CoinCap;Информация о CoinCap
+DocStr10904;Create tickets from API orders when TWS is used as an OMS;Создать тикеты через API заявки когда TWS используется как OMS
+DocStr10905;Convert order of type 'Primary Peg' to 'D-Peg';Преобразовать заявку типа 'Primary Peg' в 'D-Peg'
+DocStr10906;Error case like connection lost etc;Error case like connection lost etc
+DocStr10907;Normal case connect/disconnect;Normal case connect/disconnect
+DocStr10908;Information about Coinigy;Information about Coinigy
+DocStr10909;InteractiveBrokers (FIX CTCI) order condition;InteractiveBrokers (FIX CTCI) order condition
+DocStr10910;Tag 5700 is required for short sale orders involving U.S. stocks to indicate the present location of the shares that are to be delivered in connection with customer's short sale order New Order;Tag 5700 is required for short sale orders involving U.S. stocks to indicate the present location of the shares that are to be delivered in connection with customer's short sale order New Order
+DocStr10911;Used for IBKR Algo Orders New Order (IBKR Algos);Used for IBKR Algo Orders New Order (IBKR Algos)
+DocStr10912;Used for IBKR Algo Orders Valid Values: riskAversion pctVol forceCompletion New Order (IBKR Algos);Used for IBKR Algo Orders Valid Values: riskAversion pctVol forceCompletion New Order (IBKR Algos)
+DocStr10913;Used for IBKR Algo Orders Valid Values: Aggressive Passive Neutral Get Done New Order (IBKR Algos);Used for IBKR Algo Orders Valid Values: Aggressive Passive Neutral Get Done New Order (IBKR Algos)
+DocStr10914;New Order;New Order
+DocStr10915;Extra user-defined field for additional identification for customer orders. New Order-Single;Extra user-defined field for additional identification for customer orders. New Order-Single
+DocStr10916;For US Equity Options, the OCC 21-character OSI symbol is used. Format: Option root [6 char] Yr (2 char] Mo [2 char] Day [2 char] c/p [1 char] dollar strike [5 char] decimal strike [3 char] Example: MSFT 200117C00140000 I New Order-Single;For US Equity Options, the OCC 21-character OSI symbol is used. Format: Option root [6 char] Yr (2 char] Mo [2 char] Day [2 char] c/p [1 char] dollar strike [5 char] decimal strike [3 char] Example: MSFT 200117C00140000 I New Order-Single
+DocStr10917;Used for product identification for Options only. This represents the option 'class' Example: The underlying symbol for Microsoft is 'MSFT' The option class symbol for Microsoft is 'MSQ' New Order-Single;Used for product identification for Options only. This represents the option 'class' Example: The underlying symbol for Microsoft is 'MSFT' The option class symbol for Microsoft is 'MSQ' New Order-Single
+DocStr10918;The valid values are either '1' or '2'. New Order;The valid values are either '1' or '2'. New Order
+DocStr10919;WhatIf: 6091 = 1 New Order - Single;WhatIf: 6091 = 1 New Order - Single
+DocStr10920;Sets the Stop Trigger Method for stops, stop limits, and trailing stops. New Order;Sets the Stop Trigger Method for stops, stop limits, and trailing stops. New Order
+DocStr10921;Specifies the order capacity. This tag take precedence over all other order capacity tags. Valid Values: c = Customer f = Firm m = Market Maker b = Broker Dealer n = Away Market Maker y = Specialist in Underlying j = Joint Back Office New Order;Specifies the order capacity. This tag take precedence over all other order capacity tags. Valid Values: c = Customer f = Firm m = Market Maker b = Broker Dealer n = Away Market Maker y = Specialist in Underlying j = Joint Back Office New Order
+DocStr10922;IBKR's internal contract ID New Order-Single;IBKR's internal contract ID New Order-Single
+DocStr10923;The condition needs to be met based upon market data from this exchange New Order-Single;The condition needs to be met based upon market data from this exchange New Order-Single
+DocStr10924;The trigger price for the condition New Order-Single;The trigger price for the condition New Order-Single
+DocStr10925;Trigger method for the condition Valid Values: 1 = Double Bid/Ask 2 = Last 3 = Double Last 4 = Bid/Ask New Order-Single;Trigger method for the condition Valid Values: 1 = Double Bid/Ask 2 = Last 3 = Double Last 4 = Bid/Ask New Order-Single
+DocStr10926;Setting to allow for the triggering of conditional orders outside regular market hours. Valid Values: 1 = Allow triggering outside of regular trading hours If tag is omitted, triggering will be limited to regular trading hours. New Order-Single;Setting to allow for the triggering of conditional orders outside regular market hours. Valid Values: 1 = Allow triggering outside of regular trading hours If tag is omitted, triggering will be limited to regular trading hours. New Order-Single
+DocStr10927;The number of conditions in the message New Order-Single;The number of conditions in the message New Order-Single
+DocStr10928;The logical binder used with multiple conditions. a = and o = or n = non defined (should only be used with the last condition in a list) New Order-Single;The logical binder used with multiple conditions. a = and o = or n = non defined (should only be used with the last condition in a list) New Order-Single
+DocStr10929;Used in conjunction with the custom Tag 18=s (peg to stock) function. This tag specifies the lower range of the underlying range for a delta order. If the underlying stock goes below this value, the order is canceled New Order-Single;Used in conjunction with the custom Tag 18=s (peg to stock) function. This tag specifies the lower range of the underlying range for a delta order. If the underlying stock goes below this value, the order is canceled New Order-Single
+DocStr10930;Used in conjunction with the custom Tag 18=s (peg to stock) function. This tag specifies the lower range of the underlying range for a delta order. If the underlying stock goes above this value, the order is canceled New Order-Single;Used in conjunction with the custom Tag 18=s (peg to stock) function. This tag specifies the lower range of the underlying range for a delta order. If the underlying stock goes above this value, the order is canceled New Order-Single
+DocStr10931;Used in conjunction with the custom Tag 18=s (peg to stock) function. This tag specifies the delta to be used in the order. Value must be between -100 and 100. (the sign is ignored) New Order-Single;Used in conjunction with the custom Tag 18=s (peg to stock) function. This tag specifies the delta to be used in the order. Value must be between -100 and 100. (the sign is ignored) New Order-Single
+DocStr10932;Underlying symbol of the product upon which the condition exists. New Order-Single;Underlying symbol of the product upon which the condition exists. New Order-Single
+DocStr10933;The strike price of the security if it is an option New Order-Single;The strike price of the security if it is an option New Order-Single
+DocStr10934;The right of an option (call or put) Valid Values: C = Call P = Put New Order-Single;The right of an option (call or put) Valid Values: C = Call P = Put New Order-Single
+DocStr10935;The expiration year and month (for futures or options) Format: ( yyyymm ) New Order-Single;The expiration year and month (for futures or options) Format: ( yyyymm ) New Order-Single
+DocStr10936;Specifies the security type in a conditional order New Order-Single;Specifies the security type in a conditional order New Order-Single
+DocStr10937;Specifies the IBKR Local Symbol of the product you are making an order conditional upon New Order-Single;Specifies the IBKR Local Symbol of the product you are making an order conditional upon New Order-Single
+DocStr10938;For use with the P.I.P. order type on the BOX. Specifies the Auction Strategy for the P.I.P. order 1 = Discretionary Matching 2 = Discretionary Improving 3 = Transparent New Order-Single;For use with the P.I.P. order type on the BOX. Specifies the Auction Strategy for the P.I.P. order 1 = Discretionary Matching 2 = Discretionary Improving 3 = Transparent New Order-Single
+DocStr10939;1=ForceOnlyRTH is ON New Order Single;1=ForceOnlyRTH is ON New Order Single
+DocStr10940;Same as 114 ' Used for combination orders Valid codes = 'N' or 'Y.' Required for multi-leg short sale orders involving U.S. equity securities ('stocks'). If customer uses IBKR as its executing broker but uses a clearing broker other than IBKR (a 'NonCleared Customer') and Tag 624 contains the value '5' and Tag 6086 contains the value '1' or '2', this Tag 6215 must contain the value 'N'. New Order - Multileg;Same as 114 ' Used for combination orders Valid codes = 'N' or 'Y.' Required for multi-leg short sale orders involving U.S. equity securities ('stocks'). If customer uses IBKR as its executing broker but uses a clearing broker other than IBKR (a 'NonCleared Customer') and Tag 624 contains the value '5' and Tag 6086 contains the value '1' or '2', this Tag 6215 must contain the value 'N'. New Order - Multileg
+DocStr10941;Same as 5700 ' Used for combination orders Tag 6216 (a four letter clearing broker or custodian MPID) is required for multi-leg short sale orders involving U.S. stocks to indicate the present location of the shares that are to be delivered in connection with customer's short sale order New Order ' Multileg;Same as 5700 ' Used for combination orders Tag 6216 (a four letter clearing broker or custodian MPID) is required for multi-leg short sale orders involving U.S. stocks to indicate the present location of the shares that are to be delivered in connection with customer's short sale order New Order ' Multileg
+DocStr10942;Used if condition symbol would be otherwise ambiguous New Order - Single;Used if condition symbol would be otherwise ambiguous New Order - Single
+DocStr10943;Used if sending ConditionType other than Price (default if tag 6222 not specified) is desired. 1=Price, 3=Time, 4=Margin Cushion, 5=Trade, 6=Volume New Order - Single;Used if sending ConditionType other than Price (default if tag 6222 not specified) is desired. 1=Price, 3=Time, 4=Margin Cushion, 5=Trade, 6=Volume New Order - Single
+DocStr10944;Required if 6222=3, format: yyyymmdd-hh:mm:ss New Order - Single;Required if 6222=3, format: yyyymmdd-hh:mm:ss New Order - Single
+DocStr10945;Required if 6222=4, format: integer New Order - Single;Required if 6222=4, format: integer New Order - Single
+DocStr10946;Required if 6222=5, format: string New Order - Single;Required if 6222=5, format: string New Order - Single
+DocStr10947;Used with SMART routed combos to specify whether inter-exchange SMART combos are to be guaranteed or non-guaranteed. 0 = Guaranteed 1 = Non-Guaranteed 6248=1 required for STK/STK combo orders New Order - Multileg;Used with SMART routed combos to specify whether inter-exchange SMART combos are to be guaranteed or non-guaranteed. 0 = Guaranteed 1 = Non-Guaranteed 6248=1 required for STK/STK combo orders New Order - Multileg
+DocStr10948;Specifies the number of 'barriers' used in the adjustable stop order type. New Order Single;Specifies the number of 'barriers' used in the adjustable stop order type. New Order Single
+DocStr10949;Specifies the trigger price for the barrier. (required if 6257 >0) New Order Single;Specifies the trigger price for the barrier. (required if 6257 >0) New Order Single
+DocStr10950;Specifies the new stop price once the barrier is reached. New Order Single;Specifies the new stop price once the barrier is reached. New Order Single
+DocStr10951;Specifies the new trailing amount once the barrier is reached New Order Single;Specifies the new trailing amount once the barrier is reached New Order Single
+DocStr10952;Specifies the order type when the barrier is reached. Valid Values: 3 = Stop 4 = Stop Limit T = Trailing Stop TSL = Trailing Stop Limit New Order Single;Specifies the order type when the barrier is reached. Valid Values: 3 = Stop 4 = Stop Limit T = Trailing Stop TSL = Trailing Stop Limit New Order Single
+DocStr10953;Specifies the new limit price once the barrier is reached. New Order Single;Specifies the new limit price once the barrier is reached. New Order Single
+DocStr10954;Required if 6222=6 New Order Single;Required if 6222=6 New Order Single
+DocStr10955;Specifies the trail method used: Valid Values: 6268=0 ' Absolute offset used 6268=100 ' Percentage offset used New Order ' Single (trailing stop orders);Specifies the trail method used: Valid Values: 6268=0 ' Absolute offset used 6268=100 ' Percentage offset used New Order ' Single (trailing stop orders)
+DocStr10956;Specifies the trail method used for Barrier orders: Valid Values: 6268=0 ' Absolute offset used 6268=100 ' Percentage offset used New Order ' Single (trailing stop orders);Specifies the trail method used for Barrier orders: Valid Values: 6268=0 ' Absolute offset used 6268=100 ' Percentage offset used New Order ' Single (trailing stop orders)
+DocStr10957;Specifies whether to route non-marketable orders to exchanges that charge cancellation fees. Valid Values: 6271=1 ' Confirm route to exchanges where there are no cancellation fees. New Order;Specifies whether to route non-marketable orders to exchanges that charge cancellation fees. Valid Values: 6271=1 ' Confirm route to exchanges where there are no cancellation fees. New Order
+DocStr10958;Used in IBKR Volatility Orders 1=Use initial volatility calculation only 2=Continuously update the price as volatility calculation changes 3=Price for main order specified by client New Order (IBKR Volatility Orders);Used in IBKR Volatility Orders 1=Use initial volatility calculation only 2=Continuously update the price as volatility calculation changes 3=Price for main order specified by client New Order (IBKR Volatility Orders)
+DocStr10959;Used in IBKR Volatility Orders 1=midpoint 2=bid or ask New Order (IBKR Volatility Orders);Used in IBKR Volatility Orders 1=midpoint 2=bid or ask New Order (IBKR Volatility Orders)
+DocStr10960;ISE Facilitation Order Firm side for C1OrdID (firm equivalent to tag 11) New Order ' Single (ISE FOK only);ISE Facilitation Order Firm side for C1OrdID (firm equivalent to tag 11) New Order ' Single (ISE FOK only)
+DocStr10961;ISE Facilitation Order Firm's ClearingFirm (firm equivalent to tag 439) New Order ' Single (ISE FOK only);ISE Facilitation Order Firm's ClearingFirm (firm equivalent to tag 439) New Order ' Single (ISE FOK only)
+DocStr10962;ISE Facilitation Order Firm's ClearingAccount (firm equivalent to tag 440) New Order ' Single (ISE FOK only);ISE Facilitation Order Firm's ClearingAccount (firm equivalent to tag 440) New Order ' Single (ISE FOK only)
+DocStr10963;ISE Facilitation Order Firm's OpenClose (firm equivalent to tag 77) New Order ' Single (ISE FOK only);ISE Facilitation Order Firm's OpenClose (firm equivalent to tag 77) New Order ' Single (ISE FOK only)
+DocStr10964;ISE Facilitation Order Firm's OptionAcct (firm equivalent to tag6122) New Order ' Single (ISE FOK only);ISE Facilitation Order Firm's OptionAcct (firm equivalent to tag6122) New Order ' Single (ISE FOK only)
+DocStr10965;ISE Facilitation Order Desired percentage New Order ' Single (ISE FOK only);ISE Facilitation Order Desired percentage New Order ' Single (ISE FOK only)
+DocStr10966;Required with a value of '1' on all new orders (35=D) for stock quoting customers Valid Values: ( 0 = false , 1 = true ) New Order ' Single;Required with a value of '1' on all new orders (35=D) for stock quoting customers Valid Values: ( 0 = false , 1 = true ) New Order ' Single
+DocStr10967;Used in IBKR Volatility Orders Valid Values: -1=No Hedging 1=MKT Hedging 2=Limit Order Hedge E=Relative Order Hedge New Order (IBKR Volatility Orders);Used in IBKR Volatility Orders Valid Values: -1=No Hedging 1=MKT Hedging 2=Limit Order Hedge E=Relative Order Hedge New Order (IBKR Volatility Orders)
+DocStr10968;Used in trailing stop limit orders to specify the offset of the limit price. Can be positive, negative, or zero New Order - Single;Used in trailing stop limit orders to specify the offset of the limit price. Can be positive, negative, or zero New Order - Single
+DocStr10969;Used to identify if an order will be staged to the TWS Blotter screen Valid Values: 1=Yes 0=No (defaults to 0 if omitted) New Order - Single;Used to identify if an order will be staged to the TWS Blotter screen Valid Values: 1=Yes 0=No (defaults to 0 if omitted) New Order - Single
+DocStr10970;Used in IBKR Algo Orders to deactivate an order at the close of the current trading day. 1=deactivate the order at the end fo the day. 0=do not deactivate at the end of the day. (defaults to 0 if omitted) New Order (IBKR Algo Orders);Used in IBKR Algo Orders to deactivate an order at the close of the current trading day. 1=deactivate the order at the end fo the day. 0=do not deactivate at the end of the day. (defaults to 0 if omitted) New Order (IBKR Algo Orders)
+DocStr10971;Used in IBKR Volatility Orders Valid Format: Yyyymmdd/value,yyyymmdd/value etc. New Order (IBKR Volatility Orders);Used in IBKR Volatility Orders Valid Format: Yyyymmdd/value,yyyymmdd/value etc. New Order (IBKR Volatility Orders)
+DocStr10972;Used in IBKR Volatility Orders Valid Values: 1=Hedging Order Anything else or omitted=NOT hedging order New Order (IBKR Volatility Orders);Used in IBKR Volatility Orders Valid Values: 1=Hedging Order Anything else or omitted=NOT hedging order New Order (IBKR Volatility Orders)
+DocStr10973;Used in IBKR Volatility Orders Percentage in decimal form New Order (IBKR Volatility Orders);Used in IBKR Volatility Orders Percentage in decimal form New Order (IBKR Volatility Orders)
+DocStr10974;Used in IBKR Volatility Orders Price tick offset in decimal form New Order (IBKR Volatility Orders);Used in IBKR Volatility Orders Price tick offset in decimal form New Order (IBKR Volatility Orders)
+DocStr10975;Only available for clients with unbundled commissions 1 = Highest Rebate 2 = Primary Exchange 3 = Highest Volume Exchange with Rebate 4 = Highest Volume Exchange with Lowest Fee New Order Single;Only available for clients with unbundled commissions 1 = Highest Rebate 2 = Primary Exchange 3 = Highest Volume Exchange with Rebate 4 = Highest Volume Exchange with Lowest Fee New Order Single
+DocStr10976;Specifies if the order should be submitted or canceled if the condition is met 0 = Submit 1 = Cancel New Order - Single;Specifies if the order should be submitted or canceled if the condition is met 0 = Submit 1 = Cancel New Order - Single
+DocStr10977;Stock reference price for pegged to stock orders. (i.e. Option order Price = auxPrice + (NBBO - stockRefPrice) * delta ) New Order - Single;Stock reference price for pegged to stock orders. (i.e. Option order Price = auxPrice + (NBBO - stockRefPrice) * delta ) New Order - Single
+DocStr10978;Allows routing firms to designate an order as being routed by a 'professional customer' as determined by the order routing firm. IBKR will pass this designation on to destination option exchange. 1 = True 0 = False (default) New Order - Single;Allows routing firms to designate an order as being routed by a 'professional customer' as determined by the order routing firm. IBKR will pass this designation on to destination option exchange. 1 = True 0 = False (default) New Order - Single
+DocStr10979;Used in Pair Trade 6665 = 3 (Pair Trade) New Order Single;Used in Pair Trade 6665 = 3 (Pair Trade) New Order Single
+DocStr10980;Used in Pair Trade 6666 = Rate used to compute child order size Example: 1.8 (parent order size = 100, 180 will be used for child) New Order Single;Used in Pair Trade 6666 = Rate used to compute child order size Example: 1.8 (parent order size = 100, 180 will be used for child) New Order Single
+DocStr10981;Per-Leg clearing for combo orders. Order should contain blank values for all legs except stock legs New Order - Multileg;Per-Leg clearing for combo orders. Order should contain blank values for all legs except stock legs New Order - Multileg
+DocStr10982;Specifies whether net pricing should be used over standard raw pricing. 1 = Use net price 0 = Use raw price (default) New Order Single (Fixed Income Orders);Specifies whether net pricing should be used over standard raw pricing. 1 = Use net price 0 = Use raw price (default) New Order Single (Fixed Income Orders)
+DocStr10983;Used in Imbalance Orders, use case is 6737=1 New Order Single;Used in Imbalance Orders, use case is 6737=1 New Order Single
+DocStr10984;Mifid2 Code used to demine IBKR's assigned short code for decision maker for the order. New Order Single;Mifid2 Code used to demine IBKR's assigned short code for decision maker for the order. New Order Single
+DocStr10985;Mifid2 Algo used to demine decision maker ALGO for the order. New Order Single;Mifid2 Algo used to demine decision maker ALGO for the order. New Order Single
+DocStr10986;Name of person or IB assigned short code who is responsible for the execution within the firm New Order Single;Name of person or IB assigned short code who is responsible for the execution within the firm New Order Single
+DocStr10987;Name of ALGO or IB assigned short code who is responsible for the execution within the firm New Order Single;Name of ALGO or IB assigned short code who is responsible for the execution within the firm New Order Single
+DocStr10988;Distinct Parameter for IBKR Algo Orders 1 = yes 0 = no NewOrder Single (IBKR ALGO Orders);Distinct Parameter for IBKR Algo Orders 1 = yes 0 = no NewOrder Single (IBKR ALGO Orders)
+DocStr10989;Distinct Parameter for IBKR Algo Orders NewOrder Single (IBKR ALGO Orders);Distinct Parameter for IBKR Algo Orders NewOrder Single (IBKR ALGO Orders)
+DocStr10990;Distinct Parameter for IBKR Algo Orders Format: yyyymmdd-hh:mm:ss NewOrder Single (IBKR ALGO Orders);Distinct Parameter for IBKR Algo Orders Format: yyyymmdd-hh:mm:ss NewOrder Single (IBKR ALGO Orders)
+DocStr10991;Distinct Parameter for IBKR Algo Orders 1 = true 0 = false NewOrder Single (IBKR ALGO Orders);Distinct Parameter for IBKR Algo Orders 1 = true 0 = false NewOrder Single (IBKR ALGO Orders)
+DocStr10992;Distinct Parameter for IBKR Algo Orders One of these 4 values: Aggr / Pass / Neut / GetDon NewOrder Single (IBKR ALGO Orders);Distinct Parameter for IBKR Algo Orders One of these 4 values: Aggr / Pass / Neut / GetDon NewOrder Single (IBKR ALGO Orders)
+DocStr10993;Used in IBKR Volatility Orders Volatility in decimal form (decimal percentage) New Order (IBKR Volatility Orders);Used in IBKR Volatility Orders Volatility in decimal form (decimal percentage) New Order (IBKR Volatility Orders)
+DocStr10994;Year and month parser;Year and month parser
+DocStr10995;Urgency;Срочность
+DocStr10996;Normal;Нормально
+DocStr10997;Flash;Экстренно
+DocStr10998;Background;Фоновая
+DocStr10999;News priorities;Приоритеты новостей
+DocStr11000;Request the status of a security;Запросить статус инструмента
+DocStr11001;Report changes in status to a security;Отчет об изменениях статуса инструмента
+DocStr11002;The condition operation Valid Values: <= >= New Order-Single;The condition operation Valid Values: <= >= New Order-Single
+DocStr11003;Wait flush;Подождать сброса
+DocStr11004;Market order, released before pit session closes (when applicable);Рыночная заявка, выпущенная до закрытия ямы (когда доступно)
+DocStr11005;Market order, released on pit session open (when applicable);Рыночная заявка, выпущенная до открытия ямы (когда доступно)
+DocStr11006;When partially filled, remaining part filled as limit order by partial fill price;Когда частично исполнена, оставшийся объем будет отправлен как лимитная заявка по цене исполнения
+DocStr11007;Automatically update format by {0}. By default is on;Автоматически обновлять формат через {0}. По умолчанию включено
+DocStr11008;Generate price format for the specified security;Создать текстовый формат цены для указанного инструмента
+DocStr11009;Generate volume format for the specified security;Создать текстовый формат объема для указанного инструмента
+DocStr11010;Market-data subscription unexpected cancelled;Подписка на рыночные данные неожиданно отменена
+DocStr11011;Message for iterate action;Сообщения для итерационного действия
+DocStr11012;Iterate action;Итерационное действие
+DocStr11013;Editor of time range list;Редактор списка временных диапазонов
+DocStr11016;Selected range;Выбранный диапазон
+DocStr11017;New From time;Новое время От
+DocStr11018;New Till time;Новое время До
+DocStr11019;Add command;Команда добавления
+DocStr11020;Delete command;Команда удаления
+DocStr11021;Data changed;Данные изменены

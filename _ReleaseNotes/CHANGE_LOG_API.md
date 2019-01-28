@@ -51,6 +51,31 @@ StockSharp API Change log
 * (feature) ITakeProfitOrderCondition, IStopLossOrderCondition, IWithdrawOrderCondition.
 * (feature) CsvEntityRegistry. Currency and ExpirationDate added.
 * (feature) SubscriptionMessageAdapter. IsRestoreOnNormalReconnect added.
+* (feature) News. Priority property added.
+* (feature) CoinCap connector.
+* (feature) Coinigy connector.
+* (feature) FIX connector. IBKR dialect supported algo orders.
+* (feature) FixServer. Support SecurityStatusRequest.
+* (feature) OKEx. Web sockets v3 supported.
+* (feature) Plaza CGate. Spectra 6.2 supported.
+* (feature) TWIME. Spectra 6.2 supported.
+* (feature) Micex TEAP. Interface 31 supported.
+* (feature) Storage lists. WaitFlush added. Removed ReadLasts.
+* (bug) Statistics parameters. Fix reset state.
+* (bug) MarketDepthControl. Fix processing quote msgs with empty instrument info.
+* (bug) RSS fixes.
+* (feature) MarketDepthControl. Dynamic change price/volume text formats.
+* (feature) UnitEditor refactoring.
+* (feature) OpenECry. More order types supported.
+* (feature) OKEX. Position and account swap and margin supported.
+* (bug) Candles compression. Fix for non TF candles compression.
+* (bug) Basket adapter. Fix processing pending connect subscriptions.
+* (bug) Connector. Fix subscribers counter for error responses.
+* (feature) IConnector. MarketDataUnexpectedCancelled event added.
+* (feature) Basket adapter. Support offline mode for dedicated adapters.
+* (feature) SampleBitfinex. Candles added.
+* (feature) ActionMessage. Message for iterate actions.
+* (feature) BoardEditor redesign.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

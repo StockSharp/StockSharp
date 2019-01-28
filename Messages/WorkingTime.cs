@@ -36,7 +36,6 @@ namespace StockSharp.Messages
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str184Key)]
 	[DescriptionLoc(LocalizedStrings.Str408Key)]
-	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class WorkingTime : Cloneable<WorkingTime>, IPersistable
 	{
 		/// <summary>
@@ -75,6 +74,7 @@ namespace StockSharp.Messages
 		//[DescriptionLoc(LocalizedStrings.Str412Key)]
 		[XmlIgnore]
 		[Ignore]
+        [Browsable(false)]
 		public DateTime[] SpecialWorkingDays
 		{
 			get => _specialDays.Where(p => p.Value.Length > 0).Select(p => p.Key).ToArray();
@@ -102,7 +102,8 @@ namespace StockSharp.Messages
 		//[DescriptionLoc(LocalizedStrings.Str414Key)]
 		[XmlIgnore]
 		[Ignore]
-		public DateTime[] SpecialHolidays
+		[Browsable(false)]
+        public DateTime[] SpecialHolidays
 		{
 			get => _specialDays.Where(p => p.Value.Length == 0).Select(p => p.Key).ToArray();
 			set

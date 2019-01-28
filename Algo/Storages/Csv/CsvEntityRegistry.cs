@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			public FakeStorage(CsvEntityRegistry registry)
 			{
-				_registry = registry;
+				_registry = registry ?? throw new ArgumentNullException(nameof(registry));
 			}
 
 			public long GetCount<TEntity>()
@@ -861,11 +861,10 @@ namespace StockSharp.Algo.Storages.Csv
 
 		private void UpdateDelayAction()
 		{
-			_exchanges.DelayAction = _delayAction;
-			_exchangeBoards.DelayAction = _delayAction;
-			_securities.DelayAction = _delayAction;
-			_positions.DelayAction = _delayAction;
-			_portfolios.DelayAction = _delayAction;
+			foreach (var csvList in _csvLists)
+			{
+				csvList.DelayAction = _delayAction;
+			}
 		}
 
 		/// <inheritdoc />

@@ -2252,7 +2252,7 @@ namespace StockSharp.BusinessEntities
 		public static ExchangeBoard Forts { get; }
 
 		/// <summary>
-		/// Information about indecies of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about indices of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Micex { get; }
 
@@ -3352,6 +3352,24 @@ namespace StockSharp.BusinessEntities
 		{
 			Code = Exchange.TradeOgre.Name,
 			Exchange = Exchange.TradeOgre,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.CoinCap"/>.
+		/// </summary>
+		public static ExchangeBoard CoinCap { get; } = new ExchangeBoard
+		{
+			Code = Exchange.CoinCap.Name,
+			Exchange = Exchange.CoinCap,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Coinigy"/>.
+		/// </summary>
+		public static ExchangeBoard Coinigy { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Coinigy.Name,
+			Exchange = Exchange.Coinigy,
 		};
 	}
 }

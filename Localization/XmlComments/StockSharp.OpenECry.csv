@@ -43,6 +43,9 @@ F:StockSharp.OpenECry.OpenECryStopTypes.TrailingStopLimit/summary;DocStr5940
 F:StockSharp.OpenECry.OpenECryStopTypes.MarketOnClose/summary;DocStr3406
 F:StockSharp.OpenECry.OpenECryStopTypes.MarketIfTouched/summary;DocStr3421
 F:StockSharp.OpenECry.OpenECryStopTypes.MarketOnOpen/summary;Str2426
+F:StockSharp.OpenECry.OpenECryStopTypes.MarketOnPitClose/summary;DocStr11004
+F:StockSharp.OpenECry.OpenECryStopTypes.MarketOnPitOpen/summary;DocStr11005
+F:StockSharp.OpenECry.OpenECryStopTypes.MarketToLimit/summary;DocStr11006
 T:StockSharp.OpenECry.OpenECryOrderCondition/summary;DocStr60
 M:StockSharp.OpenECry.OpenECryOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.OpenECry.OpenECryOrderCondition.StopType/summary;Str2570
@@ -52,6 +55,8 @@ P:StockSharp.OpenECry.OpenECryOrderCondition.IsPercentDelta/summary;DocStr5941
 P:StockSharp.OpenECry.OpenECryOrderCondition.TriggerType/summary;Str2575
 P:StockSharp.OpenECry.OpenECryOrderCondition.ReferencePrice/summary;Str2577
 P:StockSharp.OpenECry.OpenECryOrderCondition.SplitVolume/summary;Str2435
+P:StockSharp.OpenECry.OpenECryOrderCondition.Start/summary;ExecutionStart
+P:StockSharp.OpenECry.OpenECryOrderCondition.End/summary;ExecutionEnd
 T:StockSharp.OpenECry.OpenECryException/summary;DocStr5942
 T:StockSharp.OpenECry.OpenECryTrader/summary;DocStr2539
 M:StockSharp.OpenECry.OpenECryTrader.#ctor/summary;DocStr1

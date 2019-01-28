@@ -885,27 +885,34 @@ namespace StockSharp.Messages
 			if (input.IsEmpty())
 				return periods;
 
-			foreach (var str in input.Split(","))
+			try
 			{
-				var parts = str.Split('=');
-				periods.Add(new WorkingTimePeriod
+				foreach (var str in input.Split(","))
 				{
-					Till = parts[0].ToDateTime(_dateFormat),
-					Times = parts[1].Split("--").Select(s =>
+					var parts = str.Split('=');
+					periods.Add(new WorkingTimePeriod
 					{
-						var parts2 = s.Split('-');
-						return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
-					}).ToList(),
-					SpecialDays = parts[2].Split("//").Select(s =>
-					{
-						var parts2 = s.Split(':');
-						return new KeyValuePair<DayOfWeek, Range<TimeSpan>[]>(parts2[0].To<DayOfWeek>(), parts2[1].Split("--").Select(s2 =>
+						Till = parts[0].ToDateTime(_dateFormat),
+						Times = parts[1].Split("--").Select(s =>
 						{
-							var parts3 = s2.Split('-');
-							return new Range<TimeSpan>(parts3[0].ToTimeSpan(_timeFormat), parts3[1].ToTimeSpan(_timeFormat));
-						}).ToArray());
-					}).ToDictionary()
-				});
+							var parts2 = s.Split('-');
+							return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
+						}).ToList(),
+						SpecialDays = parts[2].Split("//").Select(s =>
+						{
+							var idx = s.IndexOf(':');
+							return new KeyValuePair<DayOfWeek, Range<TimeSpan>[]>(s.Substring(0, idx).To<DayOfWeek>(), s.Substring(idx + 1).Split("--").Select(s2 =>
+							{
+								var parts3 = s2.Split('-');
+								return new Range<TimeSpan>(parts3[0].ToTimeSpan(_timeFormat), parts3[1].ToTimeSpan(_timeFormat));
+							}).ToArray());
+						}).ToDictionary()
+					});
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new InvalidOperationException(LocalizedStrings.Str2141Params.Put(input), ex);
 			}
 
 			return periods;
@@ -933,14 +940,21 @@ namespace StockSharp.Messages
 			if (input.IsEmpty())
 				return specialDays;
 
-			foreach (var str in input.Split(","))
+			try
 			{
-				var parts = str.Split('=');
-				specialDays[parts[0].ToDateTime(_dateFormat)] = parts[1].Split("--").Select(s =>
+				foreach (var str in input.Split(","))
 				{
-					var parts2 = s.Split('-');
-					return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
-				}).ToArray();
+					var parts = str.Split('=');
+					specialDays[parts[0].ToDateTime(_dateFormat)] = parts[1].Split("--").Select(s =>
+					{
+						var parts2 = s.Split('-');
+						return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
+					}).ToArray();
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new InvalidOperationException(LocalizedStrings.Str2141Params.Put(input), ex);
 			}
 
 			return specialDays;

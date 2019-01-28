@@ -121,12 +121,12 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<long, IMessageAdapter> _subscriptionsById = new SynchronizedDictionary<long, IMessageAdapter>();
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _subscriptionNonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
 		private readonly SynchronizedDictionary<Helper.SubscriptionKey, IMessageAdapter> _subscriptionsByKey = new SynchronizedDictionary<Helper.SubscriptionKey, IMessageAdapter>();
-		private readonly SynchronizedDictionary<IMessageAdapter, HeartbeatMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, HeartbeatMessageAdapter>();
+		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly SyncObject _connectedResponseLock = new SyncObject();
 		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
 		private readonly HashSet<IMessageAdapter> _pendingConnectAdapters = new HashSet<IMessageAdapter>();
 		private readonly Queue<Message> _pendingMessages = new Queue<Message>();
-		private readonly HashSet<HeartbeatMessageAdapter> _connectedAdapters = new HashSet<HeartbeatMessageAdapter>();
+		private readonly HashSet<IMessageAdapter> _connectedAdapters = new HashSet<IMessageAdapter>();
 		private bool _isFirstConnect;
 		private readonly InnerAdapterList _innerAdapters;
 		private readonly SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>> _newsSubscriptions = new SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>>();
@@ -255,6 +255,11 @@ namespace StockSharp.Algo
 		/// Use <see cref="OrderLogMessageAdapter"/>.
 		/// </summary>
 		public bool SupportBuildingFromOrderLog { get; set; } = true;
+
+		/// <summary>
+		/// Use <see cref="OfflineMessageAdapter"/>.
+		/// </summary>
+		public bool SupportOffline { get; set; }
 
 		/// <inheritdoc />
 		public override IEnumerable<TimeSpan> TimeFrames
@@ -396,10 +401,18 @@ namespace StockSharp.Algo
 							_pendingConnectAdapters.Add(a);
 
 						var wrapper = CreateWrappers(a);
-						var hearbeatAdapter = new HeartbeatMessageAdapter(wrapper) { SuppressReconnectingErrors = SuppressReconnectingErrors };
-						((IMessageAdapter)hearbeatAdapter).Parent = this;
-						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(wrapper, m);
-						return hearbeatAdapter;
+						var adapter = (IMessageAdapter)new HeartbeatMessageAdapter(wrapper)
+						{
+							SuppressReconnectingErrors = SuppressReconnectingErrors,
+							Parent = this
+						};
+
+						if (SupportOffline)
+							adapter = new OfflineMessageAdapter(adapter);
+
+						adapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(wrapper, m);
+						
+						return adapter;
 					}));
 					
 					if (_hearbeatAdapters.Count == 0)
@@ -495,11 +508,13 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			GetAdapters(message).ForEach(a => a.SendInMessage(message));
+			GetAdapters(message, out _).ForEach(a => a.SendInMessage(message));
 		}
 
-		private IMessageAdapter[] GetAdapters(Message message)
+		private IMessageAdapter[] GetAdapters(Message message, out bool isPended)
 		{
+			isPended = false;
+
 			IMessageAdapter[] adapters;
 
 			lock (_connectedResponseLock)
@@ -533,6 +548,7 @@ namespace StockSharp.Algo
 				{
 					if (_pendingConnectAdapters.Count > 0)
 					{
+						isPended = true;
 						_pendingMessages.Enqueue(message.Clone());
 						return ArrayHelper.Empty<IMessageAdapter>();
 					}
@@ -572,10 +588,10 @@ namespace StockSharp.Algo
 				var wrapper = _hearbeatAdapters.TryGetValue(mdMsg.Adapter);
 
 				if (wrapper != null)
-					return new[] { (IMessageAdapter)wrapper };
+					return new[] { wrapper };
 			}
 
-			var adapters = GetAdapters(mdMsg).Where(a =>
+			var adapters = GetAdapters(mdMsg, out var isPended).Where(a =>
 			{
 				if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
 				{
@@ -639,7 +655,7 @@ namespace StockSharp.Algo
 				return buildFrom != null && a.SupportedMarketDataTypes.Contains(buildFrom.Value);
 			}).ToArray();
 
-			if (adapters.Length == 0)
+			if (!isPended && adapters.Length == 0)
 				throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(mdMsg));
 
 			return adapters;
@@ -707,15 +723,15 @@ namespace StockSharp.Algo
 					var key = mdMsg.CreateKey();
 
 					var adapter = mdMsg.IsSubscribe
-							? GetSubscriptionAdapters(mdMsg).First()
+							? GetSubscriptionAdapters(mdMsg).FirstOrDefault()
 							: (_subscriptionsById.TryGetValue(mdMsg.OriginalTransactionId) ?? _subscriptionsByKey.TryGetValue(key));
 
-					if (adapter == null)
-						break;
-
-					// if the message was looped back via IsBack=true
-					_subscriptionMessages.TryAdd(mdMsg.TransactionId, (MarketDataMessage)mdMsg.Clone());
-					adapter.SendInMessage(mdMsg);
+					if (adapter != null)
+					{
+						// if the message was looped back via IsBack=true
+						_subscriptionMessages.TryAdd(mdMsg.TransactionId, (MarketDataMessage)mdMsg.Clone());
+						adapter.SendInMessage(mdMsg);
+					}
 
 					break;
 				}
@@ -738,7 +754,7 @@ namespace StockSharp.Algo
 
 			if (adapter == null)
 			{
-				adapter = GetAdapters(message).FirstOrDefault();
+				adapter = GetAdapters(message, out _).FirstOrDefault();
 
 				if (adapter == null)
 					return;
@@ -1116,7 +1132,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			_hearbeatAdapters.Values.ForEach(a => ((IMessageAdapter)a).Parent = null);
+			_hearbeatAdapters.Values.ForEach(a => a.Parent = null);
 
 			base.DisposeManaged();
 		}
@@ -1134,6 +1150,7 @@ namespace StockSharp.Algo
 				SuppressReconnectingErrors = SuppressReconnectingErrors,
 				IsRestoreSubscriptionOnReconnect = IsRestoreSubscriptionOnReconnect,
 				SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
+				SupportOffline = SupportOffline,
 			};
 
 			clone.Load(this.Save());

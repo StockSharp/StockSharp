@@ -203,6 +203,21 @@
             At trading opening.
             </summary>
     </member>
+    <member name="F:StockSharp.OpenECry.OpenECryStopTypes.MarketOnPitClose">
+      <summary>
+            Market order, released before pit session closes (when applicable).
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryStopTypes.MarketOnPitOpen">
+      <summary>
+            Market order, released on pit session open (when applicable).
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryStopTypes.MarketToLimit">
+      <summary>
+            When partially filled, remaining part filled as limit order by partial fill price.
+            </summary>
+    </member>
     <member name="T:StockSharp.OpenECry.OpenECryOrderCondition">
       <summary>
         <see cref="N:StockSharp.OpenECry" /> order condition.
@@ -246,6 +261,16 @@
     <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.SplitVolume">
       <summary>
             Split order volume.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.Start">
+      <summary>
+            Execution start time.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.End">
+      <summary>
+            Execution end time.
             </summary>
     </member>
     <member name="T:StockSharp.OpenECry.OpenECryException">

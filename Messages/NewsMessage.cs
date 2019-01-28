@@ -16,17 +16,45 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
-	using Ecng.Serialization;
-
 	using StockSharp.Localization;
+
+	/// <summary>
+	/// News priorities.
+	/// </summary>
+	[DataContract]
+	[Serializable]
+	public enum NewsPriorities
+	{
+		/// <summary>
+		/// Low.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LowKey)]
+		Low,
+
+		/// <summary>
+		/// Regular.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1629Key)]
+		Regular,
+
+		/// <summary>
+		/// High.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.HighKey)]
+		High,
+	}
 
 	/// <summary>
 	/// The message contains information about the news.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	public class NewsMessage : Message
 	{
 		/// <summary>
@@ -55,7 +83,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 		[DescriptionLoc(LocalizedStrings.Str212Key)]
 		[MainCategory]
-		[Nullable]
+		[Ecng.Serialization.Nullable]
 		public SecurityId? SecurityId { get; set; }
 
 		/// <summary>
@@ -110,6 +138,18 @@ namespace StockSharp.Messages
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
+		/// News priority.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PriorityKey,
+			Description = LocalizedStrings.NewsPriorityKey,
+			GroupName = LocalizedStrings.GeneralKey)]
+		[Ecng.Serialization.Nullable]
+		public NewsPriorities? Priority { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="NewsMessage"/>.
 		/// </summary>
 		public NewsMessage()
@@ -117,10 +157,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",Sec={SecurityId},Head={Headline}";
@@ -142,7 +179,8 @@ namespace StockSharp.Messages
 				Id = Id,
 				Source = Source,
 				Story = Story,
-				Url = Url
+				Url = Url,
+				Priority = Priority,
 			};
 		}
 	}

@@ -152,10 +152,10 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 				
 				var isNullable = false;
 				
-				if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+				if (type.IsGenericType && type.IsNullable())
 				{
 					isNullable = true;
-					type = type.GetGenericArguments()[0];
+					type = type.GetUnderlyingType();
 				}
 				else if (type == typeof(string))
 					isNullable = true;

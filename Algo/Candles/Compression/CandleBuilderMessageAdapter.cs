@@ -547,7 +547,7 @@ namespace StockSharp.Algo.Candles.Compression
 					var isLoadOnly = series.Original.BuildMode == MarketDataBuildModes.Load;
 
 					// upgrate to smaller tf only in case failed subscription
-					if (response != null && original.AllowBuildFromSmallerTimeFrame)
+					if (response != null && original.DataType == MarketDataTypes.CandleTimeFrame && original.AllowBuildFromSmallerTimeFrame)
 					{
 						if (isLoadOnly)
 						{

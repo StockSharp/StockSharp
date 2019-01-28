@@ -35,7 +35,7 @@ namespace StockSharp.Messages
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str416Key)]
 	[DescriptionLoc(LocalizedStrings.Str417Key)]
-	public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable
+    public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable
 	{
 		sealed class TimeSpanRangeInitializer : NewItemInstanceInitializerAttribute
 		{
@@ -77,10 +77,10 @@ namespace StockSharp.Messages
 
 		private IDictionary<DayOfWeek, Range<TimeSpan>[]> _specialDays = new Dictionary<DayOfWeek, Range<TimeSpan>[]>();
 
-		/// <summary>
-		/// Work schedule for days with different from <see cref="Times"/> schedules.
-		/// </summary>
-		public IDictionary<DayOfWeek, Range<TimeSpan>[]> SpecialDays
+        /// <summary>
+        /// Work schedule for days with different from <see cref="Times"/> schedules.
+        /// </summary>
+        public IDictionary<DayOfWeek, Range<TimeSpan>[]> SpecialDays
 		{
 			get => _specialDays;
 			set => _specialDays = value ?? throw new ArgumentNullException(nameof(value));

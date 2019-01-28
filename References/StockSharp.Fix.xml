@@ -176,6 +176,9 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.DateParser">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.YearMonthParser">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsResetCounter">
       <inheritdoc />
     </member>
@@ -385,6 +388,15 @@
       <param name="idSource">Id source.</param>
       <param name="idValue">Id value.</param>
     </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.FromSecurityTradingStatus(System.Nullable{System.Int32})">
+      <summary>
+            Convert <see cref="F:StockSharp.Fix.Native.FixTags.SecurityTradingStatus" /> to <see cref="T:StockSharp.Messages.SecurityStates" /> value.
+            </summary>
+      <param name="status">
+        <see cref="F:StockSharp.Fix.Native.FixTags.SecurityTradingStatus" /> value.</param>
+      <returns>
+        <see cref="T:StockSharp.Messages.SecurityStates" /> value.</returns>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.ReadExecutionReport(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.ExecutionReport,Ecng.Common.FastDateTimeParser,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
       <summary>
             Read the <see cref="F:StockSharp.Fix.Native.FixMessages.ExecutionReport" /> message.
@@ -550,6 +562,461 @@
             </summary>
       <param name="securityId">Security ID.</param>
       <returns>Order log to market depth builder.</returns>
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition">
+      <summary>
+            InteractiveBrokers (FIX CTCI) order condition.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.LocateBroker">
+      <summary>
+            Tag 5700 is required for short sale orders involving U.S. stocks to indicate the present location of the shares that are to be delivered in connection with customer's short sale order New Order.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.NoStrategyParameters">
+      <summary>
+            Used for IBKR Algo Orders New Order (IBKR Algos).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.StrategyParameterName">
+      <summary>
+            Used for IBKR Algo Orders Valid Values: riskAversion pctVol forceCompletion New Order (IBKR Algos).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.StrategyParameterValue">
+      <summary>
+            Used for IBKR Algo Orders Valid Values: Aggressive Passive Neutral Get Done New Order (IBKR Algos).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ContractID">
+      <summary>
+            New Order.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.OrderReferenceAccount">
+      <summary>
+            Extra user-defined field for additional identification for customer orders. New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.IBKRLocalSymbol">
+      <summary>
+            For US Equity Options, the OCC 21-character OSI symbol is used. Format: Option root [6 char] Yr (2 char] Mo [2 char] Day [2 char] c/p [1 char] dollar strike [5 char] decimal strike [3 char] Example: MSFT 200117C00140000 I New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.TradingClass">
+      <summary>
+            Used for product identification for Options only. This represents the option 'class' Example: The underlying symbol for Microsoft is 'MSFT' The option class symbol for Microsoft is 'MSQ' New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ShortSaleRule">
+      <summary>
+            The valid values are either '1' or '2'. New Order.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.WhatIf">
+      <summary>
+            WhatIf: 6091 = 1 New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.TriggerMethod">
+      <summary>
+            Sets the Stop Trigger Method for stops, stop limits, and trailing stops. New Order.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.OptionAcct">
+      <summary>
+            Specifies the order capacity. This tag take precedence over all other order capacity tags. Valid Values: c = Customer f = Firm m = Market Maker b = Broker Dealer n = Away Market Maker y = Specialist in Underlying j = Joint Back Office New Order.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionConID">
+      <summary>
+            IBKR's internal contract ID New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionExchange">
+      <summary>
+            The condition needs to be met based upon market data from this exchange New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionTriggerPrice">
+      <summary>
+            The trigger price for the condition New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionOperand">
+      <summary>
+            The condition operation Valid Values: &lt;= &gt;= New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionTriggerMethod">
+      <summary>
+            Trigger method for the condition Valid Values: 1 = Double Bid/Ask 2 = Last 3 = Double Last 4 = Bid/Ask New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionIgnoreRegularTradingHours">
+      <summary>
+            Setting to allow for the triggering of conditional orders outside regular market hours. Valid Values: 1 = Allow triggering outside of regular trading hours If tag is omitted, triggering will be limited to regular trading hours. New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionListSize">
+      <summary>
+            The number of conditions in the message New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionLogicOperantBinder">
+      <summary>
+            The logical binder used with multiple conditions. a = and o = or n = non defined (should only be used with the last condition in a list) New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.StockRangeLower">
+      <summary>
+            Used in conjunction with the custom Tag 18=s (peg to stock) function. This tag specifies the lower range of the underlying range for a delta order. If the underlying stock goes below this value, the order is canceled New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.StockRangeUpper">
+      <summary>
+            Used in conjunction with the custom Tag 18=s (peg to stock) function. This tag specifies the lower range of the underlying range for a delta order. If the underlying stock goes above this value, the order is canceled New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.Delta">
+      <summary>
+            Used in conjunction with the custom Tag 18=s (peg to stock) function. This tag specifies the delta to be used in the order. Value must be between -100 and 100. (the sign is ignored) New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionUnderlying">
+      <summary>
+            Underlying symbol of the product upon which the condition exists. New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionStrike">
+      <summary>
+            The strike price of the security if it is an option New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionRight">
+      <summary>
+            The right of an option (call or put) Valid Values: C = Call P = Put New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionExpiry">
+      <summary>
+            The expiration year and month (for futures or options) Format: ( yyyymm ) New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionSecurityType">
+      <summary>
+            Specifies the security type in a conditional order New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionLocalSymbol">
+      <summary>
+            Specifies the IBKR Local Symbol of the product you are making an order conditional upon New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.DiscretionaryType">
+      <summary>
+            For use with the P.I.P. order type on the BOX. Specifies the Auction Strategy for the P.I.P. order 1 = Discretionary Matching 2 = Discretionary Improving 3 = Transparent New Order-Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ForceOnlyRTH">
+      <summary>
+            1=ForceOnlyRTH is ON New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.LegLocateReqd">
+      <summary>
+            Same as 114 ' Used for combination orders Valid codes = 'N' or 'Y.' Required for multi-leg short sale orders involving U.S. equity securities ('stocks'). If customer uses IBKR as its executing broker but uses a clearing broker other than IBKR (a 'NonCleared Customer') and Tag 624 contains the value '5' and Tag 6086 contains the value '1' or '2', this Tag 6215 must contain the value 'N'. New Order - Multileg.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.LegLocateBroker">
+      <summary>
+            Same as 5700 ' Used for combination orders Tag 6216 (a four letter clearing broker or custodian MPID) is required for multi-leg short sale orders involving U.S. stocks to indicate the present location of the shares that are to be delivered in connection with customer's short sale order New Order ' Multileg.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.CondPrimaryExch">
+      <summary>
+            Used if condition symbol would be otherwise ambiguous New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.CondCurrency">
+      <summary>
+            Used if condition symbol would be otherwise ambiguous New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionType">
+      <summary>
+            Used if sending ConditionType other than Price (default if tag 6222 not specified) is desired. 1=Price, 3=Time, 4=Margin Cushion, 5=Trade, 6=Volume New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionTime">
+      <summary>
+            Required if 6222=3, format: yyyymmdd-hh:mm:ss New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionMargin">
+      <summary>
+            Required if 6222=4, format: integer New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionExecutionPattern">
+      <summary>
+            Required if 6222=5, format: string New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.SmartComboGuarantee">
+      <summary>
+            Used with SMART routed combos to specify whether inter-exchange SMART combos are to be guaranteed or non-guaranteed. 0 = Guaranteed 1 = Non-Guaranteed 6248=1 required for STK/STK combo orders New Order - Multileg.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.NoBarriers">
+      <summary>
+            Specifies the number of 'barriers' used in the adjustable stop order type. New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.BarrierPrice">
+      <summary>
+            Specifies the trigger price for the barrier. (required if 6257 &gt;0) New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.BarrierStopPrice">
+      <summary>
+            Specifies the new stop price once the barrier is reached. New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.BarrierTrailingAmt">
+      <summary>
+            Specifies the new trailing amount once the barrier is reached New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.BarrierPriceDelimiter">
+      <summary>
+            Specifies the order type when the barrier is reached. Valid Values: 3 = Stop 4 = Stop Limit T = Trailing Stop TSL = Trailing Stop Limit New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.BarrierLimitPrice">
+      <summary>
+            Specifies the new limit price once the barrier is reached. New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConditionVolume">
+      <summary>
+            Required if 6222=6 New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.TrailingAmtUnit">
+      <summary>
+            Specifies the trail method used: Valid Values: 6268=0 ' Absolute offset used 6268=100 ' Percentage offset used New Order ' Single (trailing stop orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.BarrierTrailingAmtUnit">
+      <summary>
+            Specifies the trail method used for Barrier orders: Valid Values: 6268=0 ' Absolute offset used 6268=100 ' Percentage offset used New Order ' Single (trailing stop orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.CheapToReroute">
+      <summary>
+            Specifies whether to route non-marketable orders to exchanges that charge cancellation fees. Valid Values: 6271=1 ' Confirm route to exchanges where there are no cancellation fees. New Order.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ContinuousUpdate">
+      <summary>
+            Used in IBKR Volatility Orders 1=Use initial volatility calculation only 2=Continuously update the price as volatility calculation changes 3=Price for main order specified by client New Order (IBKR Volatility Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.UnderlyingRefPrice">
+      <summary>
+            Used in IBKR Volatility Orders 1=midpoint 2=bid or ask New Order (IBKR Volatility Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.XcrossC1OrdID">
+      <summary>
+            ISE Facilitation Order Firm side for C1OrdID (firm equivalent to tag 11) New Order ' Single (ISE FOK only).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.XCrossClearingFirm">
+      <summary>
+            ISE Facilitation Order Firm's ClearingFirm (firm equivalent to tag 439) New Order ' Single (ISE FOK only).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.XCrossClearingAccount">
+      <summary>
+            ISE Facilitation Order Firm's ClearingAccount (firm equivalent to tag 440) New Order ' Single (ISE FOK only).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.XCrossOpenClose">
+      <summary>
+            ISE Facilitation Order Firm's OpenClose (firm equivalent to tag 77) New Order ' Single (ISE FOK only).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.XCrossOptionAcct">
+      <summary>
+            ISE Facilitation Order Firm's OptionAcct (firm equivalent to tag6122) New Order ' Single (ISE FOK only).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.FacilitationPercentage">
+      <summary>
+            ISE Facilitation Order Desired percentage New Order ' Single (ISE FOK only).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.NotHeld">
+      <summary>
+            Required with a value of '1' on all new orders (35=D) for stock quoting customers Valid Values: ( 0 = false , 1 = true ) New Order ' Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.HedgingType">
+      <summary>
+            Used in IBKR Volatility Orders Valid Values: -1=No Hedging 1=MKT Hedging 2=Limit Order Hedge E=Relative Order Hedge New Order (IBKR Volatility Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.TrailLimitOffset">
+      <summary>
+            Used in trailing stop limit orders to specify the offset of the limit price. Can be positive, negative, or zero New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.StagedOrder">
+      <summary>
+            Used to identify if an order will be staged to the TWS Blotter screen Valid Values: 1=Yes 0=No (defaults to 0 if omitted) New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.tDeactivateOnClose">
+      <summary>
+            Used in IBKR Algo Orders to deactivate an order at the close of the current trading day. 1=deactivate the order at the end fo the day. 0=do not deactivate at the end of the day. (defaults to 0 if omitted) New Order (IBKR Algo Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.DividendSchedule">
+      <summary>
+            Used in IBKR Volatility Orders Valid Format: Yyyymmdd/value,yyyymmdd/value etc. New Order (IBKR Volatility Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.InterestSchedule">
+      <summary>
+            Used in IBKR Volatility Orders Valid Format: Yyyymmdd/value,yyyymmdd/value etc. New Order (IBKR Volatility Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.IsDeltaHedge">
+      <summary>
+            Used in IBKR Volatility Orders Valid Values: 1=Hedging Order Anything else or omitted=NOT hedging order New Order (IBKR Volatility Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.VolatCapPercentage">
+      <summary>
+            Used in IBKR Volatility Orders Percentage in decimal form New Order (IBKR Volatility Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.VolatCapTicks">
+      <summary>
+            Used in IBKR Volatility Orders Price tick offset in decimal form New Order (IBKR Volatility Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ConsiderExecCost">
+      <summary>
+            Only available for clients with unbundled commissions 1 = Highest Rebate 2 = Primary Exchange 3 = Highest Volume Exchange with Rebate 4 = Highest Volume Exchange with Lowest Fee New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.CondSubmitCancel">
+      <summary>
+            Specifies if the order should be submitted or canceled if the condition is met 0 = Submit 1 = Cancel New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.StockRefPrice">
+      <summary>
+            Stock reference price for pegged to stock orders. (i.e. Option order Price = auxPrice + (NBBO - stockRefPrice) * delta ) New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ProfessionalCustomer">
+      <summary>
+            Allows routing firms to designate an order as being routed by a 'professional customer' as determined by the order routing firm. IBKR will pass this designation on to destination option exchange. 1 = True 0 = False (default) New Order - Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.HedgeType">
+      <summary>
+            Used in Pair Trade 6665 = 3 (Pair Trade) New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.HedgeRatio">
+      <summary>
+            Used in Pair Trade 6666 = Rate used to compute child order size Example: 1.8 (parent order size = 100, 180 will be used for child) New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.LegClearingFirm">
+      <summary>
+            Per-Leg clearing for combo orders. Order should contain blank values for all legs except stock legs New Order - Multileg.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.UseNetPrice">
+      <summary>
+            Specifies whether net pricing should be used over standard raw pricing. 1 = Use net price 0 = Use raw price (default) New Order Single (Fixed Income Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ImbalanceOnly">
+      <summary>
+            Used in Imbalance Orders, use case is 6737=1 New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.Mifid2DecisionMakerShortCode">
+      <summary>
+            Mifid2 Code used to demine IBKR's assigned short code for decision maker for the order. New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.Mifid2DecisionAlgo">
+      <summary>
+            Mifid2 Algo used to demine decision maker ALGO for the order. New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.Mifid2ExecutionTrader">
+      <summary>
+            Name of person or IB assigned short code who is responsible for the execution within the firm New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.Mifid2ExecutionAlgo">
+      <summary>
+            Name of ALGO or IB assigned short code who is responsible for the execution within the firm New Order Single.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.AllowPastEndTime">
+      <summary>
+            Distinct Parameter for IBKR Algo Orders 1 = yes 0 = no NewOrder Single (IBKR ALGO Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.DisplaySize">
+      <summary>
+            Distinct Parameter for IBKR Algo Orders NewOrder Single (IBKR ALGO Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.EndTime">
+      <summary>
+            Distinct Parameter for IBKR Algo Orders Format: yyyymmdd-hh:mm:ss NewOrder Single (IBKR ALGO Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ForceCompletion">
+      <summary>
+            Distinct Parameter for IBKR Algo Orders 1 = true 0 = false NewOrder Single (IBKR ALGO Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.PctVol">
+      <summary>
+            Distinct Parameter for IBKR Algo Orders NewOrder Single (IBKR ALGO Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.RiskAversion">
+      <summary>
+            Distinct Parameter for IBKR Algo Orders One of these 4 values: Aggr / Pass / Neut / GetDon NewOrder Single (IBKR ALGO Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.StartTime">
+      <summary>
+            Distinct Parameter for IBKR Algo Orders Format: yyyymmdd-hh:mm:ss NewOrder Single (IBKR ALGO Orders).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition.ImpVolatility">
+      <summary>
+            Used in IBKR Volatility Orders Volatility in decimal form (decimal percentage) New Order (IBKR Volatility Orders).
+            </summary>
     </member>
     <member name="T:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect">
       <summary>
@@ -795,17 +1262,22 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeStampParser">
       <summary>
-            UTC time stamp parser.
+            Time stamp parser.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeParser">
       <summary>
-            UTC time parser.
+            Time parser.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.DateParser">
       <summary>
-            UTC date parser.
+            Date parser.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.YearMonthParser">
+      <summary>
+            Year and month parser.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsResetCounter">
@@ -5033,6 +5505,26 @@
       <summary>
       </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.Urgency">
+      <summary>
+            Urgency.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Urgency.Normal">
+      <summary>
+            Normal.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Urgency.Flash">
+      <summary>
+            Flash.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Urgency.Background">
+      <summary>
+            Background.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.Party">
       <summary>
             Party.
@@ -5520,6 +6012,16 @@
             The response to <see cref="F:StockSharp.Fix.Native.FixMessages.OrderMassCancelRequest" />.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixMessages.SecurityStatusRequest">
+      <summary>
+            Request the status of a security.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixMessages.SecurityStatus">
+      <summary>
+            Report changes in status to a security.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FixExtendedMessages">
       <summary>
             FIX extended messages codes.
@@ -5807,6 +6309,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.Urgency">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SettlDate">
       <summary>
       </summary>
@@ -5935,11 +6441,19 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MaturityMonthYear">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.PutOrCall">
       <summary>
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.StrikePrice">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MaturityDay">
       <summary>
       </summary>
     </member>
@@ -6107,7 +6621,15 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SecurityStatusReqID">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.UnsolicitedIndicator">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SecurityTradingStatus">
       <summary>
       </summary>
     </member>

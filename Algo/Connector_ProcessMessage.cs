@@ -768,6 +768,10 @@ namespace StockSharp.Algo
 						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
 						break;
 
+					case ExtendedMessageTypes.ReconnectingFinished:
+						ProcessRestoringSubscription(message.Adapter);
+						break;
+
 					// если адаптеры передают специфичные сообщения
 					//default:
 					//	throw new ArgumentOutOfRangeException(LocalizedStrings.Str2142Params.Put(message.Type));
@@ -781,21 +785,9 @@ namespace StockSharp.Algo
 
 		private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
 		{
-			//_subscriptionManager.ProcessResponse(mdMsg);
-
-			////инструмент может быть не указан
-			////и нет необходимости вызывать события MarketDataSubscriptionSucceeded/Failed
-			//if (mdMsg.SecurityId.IsDefault())
-			//{
-			//	if (mdMsg.Error != null)
-			//		RaiseError(mdMsg.Error);
-
-			//	return;
-			//}
-
 			var error = mdMsg.Error;
 
-			var security = _subscriptionManager.ProcessResponse(mdMsg.OriginalTransactionId, out var originalMsg);
+			var security = _subscriptionManager.ProcessResponse(mdMsg, out var originalMsg, out var unexpectedCancelled);
 
 			if (security == null && originalMsg?.DataType != MarketDataTypes.News)
 			{
@@ -810,7 +802,15 @@ namespace StockSharp.Algo
 				if (error == null)
 					RaiseMarketDataSubscriptionSucceeded(security, originalMsg);
 				else
-					RaiseMarketDataSubscriptionFailed(security, originalMsg, error);
+				{
+					if (unexpectedCancelled)
+					{
+						RaiseMarketDataUnexpectedCancelled(security, originalMsg, error);
+						ProcessCandleSeriesStopped(mdMsg.OriginalTransactionId);
+					}
+					else
+						RaiseMarketDataSubscriptionFailed(security, originalMsg, error);
+				}
 			}
 			else
 			{
@@ -869,6 +869,12 @@ namespace StockSharp.Algo
 			}
 
 			return security;
+		}
+
+		private void ProcessRestoringSubscription(IMessageAdapter adapter)
+		{
+			TrySendLookupMessages(adapter);
+			TrySubscribePortfolios(adapter);
 		}
 
 		private void ProcessConnectMessage(BaseConnectionMessage message)
@@ -998,41 +1004,11 @@ namespace StockSharp.Algo
 
 			RaiseConnectedEx(adapter);
 
-			if (LookupMessagesOnConnect)
-			{
-				if (adapter.PortfolioLookupRequired)
-					LookupPortfolios(new Portfolio(), adapter);
-
-				if (adapter.OrderStatusRequired)
-					LookupOrders(new Order(), adapter);
-
-				if (adapter.SecurityLookupRequired)
-					LookupSecurities(new Security(), adapter);
-			}
+			TrySendLookupMessages(adapter);
 
 			if (!isRestored)
 			{
-				if (AutoPortfoliosSubscribe && adapter.IsSupportSubscriptionByPortfolio)
-				{
-					var portfolioNames = Adapter
-						.AdapterProvider
-						.PortfolioAdapters
-						.Where(p => p.Value == adapter)
-						.Select(p => p.Key)
-						.ToArray();
-
-					foreach (var portfolioName in portfolioNames)
-					{
-						SendInMessage(new PortfolioMessage
-						{
-							PortfolioName = portfolioName,
-							TransactionId = TransactionIdGenerator.GetNextId(),
-							IsSubscribe = true,
-							Adapter = adapter,
-						});
-					}
-				}
-
+				TrySubscribePortfolios(adapter);
 				return;
 			}
 
@@ -1043,6 +1019,45 @@ namespace StockSharp.Algo
 
 			ConnectionState = ConnectionStates.Connected;
 			RaiseRestored();
+		}
+
+		private void TrySubscribePortfolios(IMessageAdapter adapter)
+		{
+			if (!AutoPortfoliosSubscribe || !adapter.IsSupportSubscriptionByPortfolio)
+				return;
+
+			var portfolioNames = Adapter
+			                     .AdapterProvider
+			                     .PortfolioAdapters
+			                     .Where(p => p.Value == adapter)
+			                     .Select(p => p.Key)
+			                     .ToArray();
+
+			foreach (var portfolioName in portfolioNames)
+			{
+				SendInMessage(new PortfolioMessage
+				{
+					PortfolioName = portfolioName,
+					TransactionId = TransactionIdGenerator.GetNextId(),
+					IsSubscribe = true,
+					Adapter = adapter,
+				});
+			}
+		}
+
+		private void TrySendLookupMessages(IMessageAdapter adapter)
+		{
+			if (!LookupMessagesOnConnect)
+				return;
+
+			if (adapter.PortfolioLookupRequired)
+				LookupPortfolios(new Portfolio(), adapter);
+
+			if (adapter.OrderStatusRequired)
+				LookupOrders(new Order(), adapter);
+
+			if (adapter.SecurityLookupRequired)
+				LookupSecurities(new Security(), adapter);
 		}
 
 		private void RaiseConnectedWhenAllConnected()

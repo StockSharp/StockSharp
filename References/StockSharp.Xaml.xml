@@ -824,6 +824,84 @@
             Security.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.RangeListEditor">
+      <summary>
+            Editor of range list.
+            </summary>
+      <summary>
+            RangeListEditor
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.RangeListEditor.RangesProperty">
+      <summary>
+            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.Ranges" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.Ranges">
+      <summary>
+            Ranges.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.RangeListEditor.SelectedRangeProperty">
+      <summary>
+            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.SelectedRange" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.SelectedRange">
+      <summary>
+            Selected range.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.RangeListEditor.NewTimeFromProperty">
+      <summary>
+            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.NewTimeFrom" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.NewTimeFrom">
+      <summary>
+            New from time.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.RangeListEditor.NewTimeTillProperty">
+      <summary>
+            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.NewTimeTill" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.NewTimeTill">
+      <summary>
+            New till time.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.CommandAddTimes">
+      <summary>
+            Add command.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RangeListEditor.CommandDelTimes">
+      <summary>
+            Delete command.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.RangeListEditor.Error">
+      <summary>
+            Error.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.RangeListEditor.DataChanged">
+      <summary>
+            Data changed.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.RangeListEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.RangeListEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.RangeListEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.SecurityAssociationWindow">
       <summary>
             The window for edit securities associations.
@@ -933,6 +1011,11 @@
             Configure action.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.DataSourcePanel.SelectedItemChanged">
+      <summary>
+        <see cref="P:StockSharp.Xaml.DataSourcePanel.SelectedItem" /> changed event.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.DataSourcePanel.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.DataSourcePanel" />.
@@ -1031,6 +1114,20 @@
             </summary>
       <param name="strategy">Strategy.</param>
       <returns>Icon name.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.GetPriceTextFormat(StockSharp.BusinessEntities.Security)">
+      <summary>
+            Generate price format for the specified security.
+            </summary>
+      <param name="security">Security.</param>
+      <returns>Price format.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.GetVolumeTextFormat(StockSharp.BusinessEntities.Security)">
+      <summary>
+            Generate volume format for the specified security.
+            </summary>
+      <param name="security">Security.</param>
+      <returns>Volume format.</returns>
     </member>
     <member name="T:StockSharp.Xaml.FileProgressWindow">
       <summary>
@@ -1658,6 +1755,11 @@
     <member name="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.Portfolios">
       <summary>
             Available portfolios.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolioProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolio" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolio">
@@ -2743,10 +2845,20 @@
             </summary>
       <param name="provider">The provider of information about portfolios.</param>
     </member>
-    <member name="M:StockSharp.Xaml.PortfolioDataSource.Dispose">
+    <member name="M:StockSharp.Xaml.PortfolioDataSource.Add(StockSharp.BusinessEntities.Portfolio)">
       <summary>
-            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            Add portfolio.
             </summary>
+      <param name="portfolio">Portfolio.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.PortfolioDataSource.AddRange(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})">
+      <summary>
+            Add portfolios.
+            </summary>
+      <param name="portfolios">Portfolios.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.PortfolioDataSource.Dispose">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.ProxySettings">
       <summary>
@@ -3679,15 +3791,41 @@
             The selected quote.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.DefaultPriceTextFormat">
+      <summary>
+            Default value of <see cref="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.PriceTextFormatProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat">
       <summary>
-            The price format. The default value is "0.00".
+            Price format.
+            </summary>
+      <remarks>
+            The default value is <see cref="F:StockSharp.Xaml.MarketDepthControl.DefaultPriceTextFormat" />.
+            </remarks>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.DefaultVolumeTextFormat">
+      <summary>
+            Default value of <see cref="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.VolumeTextFormatProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat">
       <summary>
-            The amount format. The default value is "0".
+            Volume format.
             </summary>
+      <remarks>
+            The default value is <see cref="F:StockSharp.Xaml.MarketDepthControl.DefaultVolumeTextFormat" />.
+            </remarks>
     </member>
     <member name="F:StockSharp.Xaml.MarketDepthControl.MaxVolumeProperty">
       <summary>
@@ -3717,6 +3855,11 @@
     <member name="P:StockSharp.Xaml.MarketDepthControl.MaxSellVolume">
       <summary>
             The maximum volume of all asks.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.AutoUpdateFormat">
+      <summary>
+            Automatically update format by <see cref="M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)" />. By default is on.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)">
@@ -4620,6 +4763,9 @@
       <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFinished">
+      <inheritdoc />
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataUnexpectedCancelled">
       <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.SessionStateChanged">

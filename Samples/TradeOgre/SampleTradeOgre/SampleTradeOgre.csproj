@@ -233,7 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\TradeOgre\TradeOgre.csproj">
-      <Project>{E8577520-E582-4409-9287-4D0859F64EE7}</Project>
+      <Project>{D138E571-EAEE-4F78-B317-A155D038A69E}</Project>
       <Name>TradeOgre</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">

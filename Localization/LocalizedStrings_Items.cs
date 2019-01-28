@@ -48806,5 +48806,235 @@ namespace StockSharp.Localization
 		/// TradeOgre
 		/// </summary>
 		public static string TradeOgre => GetString(TradeOgreKey);
+
+		/// <summary>
+		/// CoinCap
+		/// </summary>
+		public const string CoinCapKey = nameof(CoinCap);
+
+		/// <summary>
+		/// CoinCap
+		/// </summary>
+		public static string CoinCap => GetString(CoinCapKey);
+
+		/// <summary>
+		/// Low
+		/// </summary>
+		public const string LowKey = nameof(Low);
+
+		/// <summary>
+		/// Low
+		/// </summary>
+		public static string Low => GetString(LowKey);
+
+		/// <summary>
+		/// High
+		/// </summary>
+		public const string HighKey = nameof(High);
+
+		/// <summary>
+		/// High
+		/// </summary>
+		public static string High => GetString(HighKey);
+
+		/// <summary>
+		/// Priority
+		/// </summary>
+		public const string PriorityKey = nameof(Priority);
+
+		/// <summary>
+		/// Priority
+		/// </summary>
+		public static string Priority => GetString(PriorityKey);
+
+		/// <summary>
+		/// News priority.
+		/// </summary>
+		public const string NewsPriorityKey = nameof(NewsPriority);
+
+		/// <summary>
+		/// News priority.
+		/// </summary>
+		public static string NewsPriority => GetString(NewsPriorityKey);
+
+		/// <summary>
+		/// Coinigy
+		/// </summary>
+		public const string CoinigyKey = nameof(Coinigy);
+
+		/// <summary>
+		/// Coinigy
+		/// </summary>
+		public static string Coinigy => GetString(CoinigyKey);
+
+		/// <summary>
+		/// Websocket
+		/// </summary>
+		public const string WebSocketKey = nameof(WebSocket);
+
+		/// <summary>
+		/// Websocket
+		/// </summary>
+		public static string WebSocket => GetString(WebSocketKey);
+
+		/// <summary>
+		/// Websocket id.
+		/// </summary>
+		public const string WebSocketIdKey = nameof(WebSocketId);
+
+		/// <summary>
+		/// Websocket id.
+		/// </summary>
+		public static string WebSocketId => GetString(WebSocketIdKey);
+
+		/// <summary>
+		/// Swap section.
+		/// </summary>
+		public const string SwapSectionKey = nameof(SwapSection);
+
+		/// <summary>
+		/// Swap section.
+		/// </summary>
+		public static string SwapSection => GetString(SwapSectionKey);
+
+		/// <summary>
+		/// Colocation
+		/// </summary>
+		public const string ColocationKey = nameof(Colocation);
+
+		/// <summary>
+		/// Colocation
+		/// </summary>
+		public static string Colocation => GetString(ColocationKey);
+
+		/// <summary>
+		/// Select data types
+		/// </summary>
+		public const string SelectDataTypesKey = nameof(SelectDataTypes);
+
+		/// <summary>
+		/// Select data types
+		/// </summary>
+		public static string SelectDataTypes => GetString(SelectDataTypesKey);
+
+		/// <summary>
+		/// Expand all
+		/// </summary>
+		public const string ExpandAllKey = nameof(ExpandAll);
+
+		/// <summary>
+		/// Expand all
+		/// </summary>
+		public static string ExpandAll => GetString(ExpandAllKey);
+
+		/// <summary>
+		/// Collapse all
+		/// </summary>
+		public const string CollapseAllKey = nameof(CollapseAll);
+
+		/// <summary>
+		/// Collapse all
+		/// </summary>
+		public static string CollapseAll => GetString(CollapseAllKey);
+
+		/// <summary>
+		/// Market on close (pit)
+		/// </summary>
+		public const string MarketOnPitCloseKey = nameof(MarketOnPitClose);
+
+		/// <summary>
+		/// Market on close (pit)
+		/// </summary>
+		public static string MarketOnPitClose => GetString(MarketOnPitCloseKey);
+
+		/// <summary>
+		/// Market on open (pit)
+		/// </summary>
+		public const string MarketOnPitOpenKey = nameof(MarketOnPitOpen);
+
+		/// <summary>
+		/// Market on open (pit)
+		/// </summary>
+		public static string MarketOnPitOpen => GetString(MarketOnPitOpenKey);
+
+		/// <summary>
+		/// Market-&gt;Limit
+		/// </summary>
+		public const string MarketToLimitKey = nameof(MarketToLimit);
+
+		/// <summary>
+		/// Market-&gt;Limit
+		/// </summary>
+		public static string MarketToLimit => GetString(MarketToLimitKey);
+
+		/// <summary>
+		/// Execution start time.
+		/// </summary>
+		public const string ExecutionStartKey = nameof(ExecutionStart);
+
+		/// <summary>
+		/// Execution start time.
+		/// </summary>
+		public static string ExecutionStart => GetString(ExecutionStartKey);
+
+		/// <summary>
+		/// Execution end time.
+		/// </summary>
+		public const string ExecutionEndKey = nameof(ExecutionEnd);
+
+		/// <summary>
+		/// Execution end time.
+		/// </summary>
+		public static string ExecutionEnd => GetString(ExecutionEndKey);
+
+		/// <summary>
+		/// End
+		/// </summary>
+		public const string EndKey = nameof(End);
+
+		/// <summary>
+		/// End
+		/// </summary>
+		public static string End => GetString(EndKey);
+
+		/// <summary>
+		/// Price format.
+		/// </summary>
+		public const string PriceTextFormatKey = nameof(PriceTextFormat);
+
+		/// <summary>
+		/// Price format.
+		/// </summary>
+		public static string PriceTextFormat => GetString(PriceTextFormatKey);
+
+		/// <summary>
+		/// Volume format.
+		/// </summary>
+		public const string VolumeTextFormatKey = nameof(VolumeTextFormat);
+
+		/// <summary>
+		/// Volume format.
+		/// </summary>
+		public static string VolumeTextFormat => GetString(VolumeTextFormatKey);
+
+		/// <summary>
+		/// Market data finished: sec='{0}' msg='{1}'.
+		/// </summary>
+		public const string SubscriptionFinishedKey = nameof(SubscriptionFinished);
+
+		/// <summary>
+		/// Market data finished: sec='{0}' msg='{1}'.
+		/// </summary>
+		public static string SubscriptionFinished => GetString(SubscriptionFinishedKey);
+
+		/// <summary>
+		/// Subscription '{0}' to {1} unexpected cancelled with error '{2}'.
+		/// </summary>
+		public const string SubscriptionUnexpectedCancelledKey = nameof(SubscriptionUnexpectedCancelled);
+
+		/// <summary>
+		/// Subscription '{0}' to {1} unexpected cancelled with error '{2}'.
+		/// </summary>
+		public static string SubscriptionUnexpectedCancelled => GetString(SubscriptionUnexpectedCancelledKey);
 	}
 }

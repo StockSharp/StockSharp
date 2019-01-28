@@ -283,6 +283,7 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Story), LocalizedStrings.Str217, LocalizedStrings.Str218, (i, v) => i.Story = v));
 				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Source), LocalizedStrings.Str213, LocalizedStrings.Str214, (i, v) => i.Source = v));
 				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Url), LocalizedStrings.Str221, LocalizedStrings.Str222, (i, v) => i.Url = v.To<Uri>()));
+				fields.Add(new FieldMapping<NewsMessage, NewsPriorities>(nameof(NewsMessage.Priority), LocalizedStrings.Priority, LocalizedStrings.NewsPriority, (i, v) => i.Priority = v));
 			}
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1655);
