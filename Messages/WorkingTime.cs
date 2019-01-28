@@ -36,7 +36,6 @@ namespace StockSharp.Messages
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str184Key)]
 	[DescriptionLoc(LocalizedStrings.Str408Key)]
-	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class WorkingTime : Cloneable<WorkingTime>, IPersistable
 	{
 		/// <summary>
