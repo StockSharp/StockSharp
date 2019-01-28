@@ -234,8 +234,8 @@ Str180;Reconnection;Переподключение
 Str181;Number of attempts to reconnect, if the connection was lost during process.;Количество попыток переподключиться, если подключение было разорвано в процессе работы.
 Str182;Waiting time;Время ожидания
 Str183;Successful connection / disconnection waiting time.;Время ожидания успешного подключения/отключения.
-Str184;Work mode;Режим работы
-Str185;Work mode, during which connections must be established.;Режим работы, во время которого необходимо производить подключения.
+Str184;Work schedule;Режим работы
+Str185;Work schedule, during which connections must be established.;Режим работы, во время которого необходимо производить подключения.
 Str186;Adapters;Адаптеры
 Securities;Securities;Инструменты
 MarketData;Market data;Маркет-данные
@@ -449,7 +449,7 @@ Str404;Sell;Продажа
 Str405;Put in queue;Поставить в очередь
 FOK;Fill Or Kill;Немедленно или отклонить
 IOC;Immediate Or Cancel;Снять остаток
-Str408;Work mode (time, holidays etc.).;Режим работы (время, выходные дни и т.д.).
+Str408;Work schedule (time, holidays etc.).;Режим работы (время, выходные дни и т.д.).
 Str409;Periods;Периоды
 Str410;Schedule validity periods.;Периоды действия расписания.
 Str411;Working days;Рабочие дни
@@ -15523,4 +15523,4 @@ DocStr11017;New From time;Новое время От
 DocStr11018;New Till time;Новое время До
 DocStr11019;Add command;Команда добавления
 DocStr11020;Delete command;Команда удаления
-DocStr11021;Data changed;Данные изменены
+DocStr11021;Data changed event;Событие изменения данных

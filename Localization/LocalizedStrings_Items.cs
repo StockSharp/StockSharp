@@ -2378,22 +2378,22 @@ namespace StockSharp.Localization
 		public static string Str183 => GetString(Str183Key);
 
 		/// <summary>
-		/// Work mode
+		/// Work schedule
 		/// </summary>
 		public const string Str184Key = nameof(Str184);
 
 		/// <summary>
-		/// Work mode
+		/// Work schedule
 		/// </summary>
 		public static string Str184 => GetString(Str184Key);
 
 		/// <summary>
-		/// Work mode, during which connections must be established.
+		/// Work schedule, during which connections must be established.
 		/// </summary>
 		public const string Str185Key = nameof(Str185);
 
 		/// <summary>
-		/// Work mode, during which connections must be established.
+		/// Work schedule, during which connections must be established.
 		/// </summary>
 		public static string Str185 => GetString(Str185Key);
 
@@ -4528,12 +4528,12 @@ namespace StockSharp.Localization
 		public static string IOC => GetString(IOCKey);
 
 		/// <summary>
-		/// Work mode (time, holidays etc.).
+		/// Work schedule (time, holidays etc.).
 		/// </summary>
 		public const string Str408Key = nameof(Str408);
 
 		/// <summary>
-		/// Work mode (time, holidays etc.).
+		/// Work schedule (time, holidays etc.).
 		/// </summary>
 		public static string Str408 => GetString(Str408Key);
 

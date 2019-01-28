@@ -30,7 +30,7 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Work mode (time, holidays etc.).
+	/// Work schedule (time, holidays etc.).
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -75,6 +75,7 @@ namespace StockSharp.Messages
 		//[DescriptionLoc(LocalizedStrings.Str412Key)]
 		[XmlIgnore]
 		[Ignore]
+		[Browsable(false)]
 		public DateTime[] SpecialWorkingDays
 		{
 			get => _specialDays.Where(p => p.Value.Length > 0).Select(p => p.Key).ToArray();
@@ -102,6 +103,7 @@ namespace StockSharp.Messages
 		//[DescriptionLoc(LocalizedStrings.Str414Key)]
 		[XmlIgnore]
 		[Ignore]
+		[Browsable(false)]
 		public DateTime[] SpecialHolidays
 		{
 			get => _specialDays.Where(p => p.Value.Length == 0).Select(p => p.Key).ToArray();
