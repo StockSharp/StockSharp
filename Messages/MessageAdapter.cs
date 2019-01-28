@@ -631,6 +631,9 @@ namespace StockSharp.Messages
 			AssociatedBoardCode = storage.GetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
 			CheckTimeFrameByRequest = storage.GetValue(nameof(CheckTimeFrameByRequest), CheckTimeFrameByRequest);
 
+			if (storage.ContainsKey(nameof(ReConnectionSettings)))
+				ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
+
 			base.Load(storage);
 		}
 
@@ -642,6 +645,7 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(SupportedMessages), SupportedMessages.Select(t => t.To<string>()).ToArray());
 			storage.SetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
 			storage.SetValue(nameof(CheckTimeFrameByRequest), CheckTimeFrameByRequest);
+			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 
 			base.Save(storage);
 		}

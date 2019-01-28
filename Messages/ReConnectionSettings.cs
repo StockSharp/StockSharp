@@ -137,8 +137,7 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			if (storage.ContainsKey(nameof(WorkingTime)))
-				WorkingTime.Load(storage.GetValue<SettingsStorage>(nameof(WorkingTime)));
+			WorkingTime.Load(storage.GetValue<SettingsStorage>(nameof(WorkingTime)));
 
 			Interval = storage.GetValue<TimeSpan>(nameof(Interval));
 			AttemptCount = storage.GetValue<int>(nameof(AttemptCount));
