@@ -51,6 +51,7 @@ StockSharp API Change log
 * (feature) PropertyGridEx. WorkingTime supported.
 * (feature) OpenECryException removed.
 * (bug) Connector. Clear portfolio lookup criteria fix.
+* (bug) Simulator. Turn off heartbeat tracking for non owned adapters https://stocksharp.ru/posts/m/46473/
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.

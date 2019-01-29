@@ -165,8 +165,8 @@ namespace StockSharp.Algo
 
 			if (initChannels)
 			{
-				InMessageChannel = new InMemoryMessageChannel("Connector In", RaiseError);
-				OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
+				InMessageChannel = new InMemoryMessageChannel($"Connector In ({Name})", RaiseError);
+				OutMessageChannel = new InMemoryMessageChannel($"Connector Out ({Name})", RaiseError);
 			}
 
 			IsRestoreSubscriptionOnReconnect = isRestoreSubscriptionOnReconnect;
