@@ -433,7 +433,7 @@ namespace StockSharp.Algo
 					if (_connectionTimeOut > TimeSpan.Zero)
 						break;
 
-					if (_reConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now, out var _))
+					if (_reConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now, out _))
 					{
 						this.AddInfoLog("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", FormatState(_currState), FormatState(_prevState), _connectingAttemptCount);
 

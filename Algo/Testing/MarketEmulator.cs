@@ -1506,7 +1506,7 @@ namespace StockSharp.Algo.Testing
 			{
 				var time = tradeMsg.ServerTime;
 
-				PnLManager.ProcessMyTrade(tradeMsg, out var _);
+				PnLManager.ProcessMyTrade(tradeMsg, out _);
 				tradeMsg.Commission = _parent._commissionManager.Process(tradeMsg);
 
 				var position = tradeMsg.GetPosition(false);
