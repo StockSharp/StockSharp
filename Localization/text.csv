@@ -15523,3 +15523,5 @@ DocStr11017;New From time;Новое время От
 DocStr11018;New Till time;Новое время До
 DocStr11019;Add command;Команда добавления
 DocStr11020;Delete command;Команда удаления
+DocStr11021;Apply on/off heartbeat mode for the specified adapter;Применить вкл/выкл режим отслеживания соединения для указанного адаптера
+DocStr11022;Is active;Активно
