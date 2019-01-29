@@ -1189,11 +1189,14 @@ namespace StockSharp.Algo
 			if (message.Error != null)
 				RaiseError(message.Error);
 
-			var criteria = _portfolioLookups.TryGetValue(message.OriginalTransactionId);
+			PortfolioLookupMessage criteria;
+
+			lock (_portfolioLookups.SyncRoot)
+				criteria = _portfolioLookups.TryGetAndRemove(message.OriginalTransactionId);
 
 			if (criteria == null)
 				return;
-
+			
 			RaiseLookupPortfoliosResult(criteria, message.Error, Portfolios.Where(pf => criteria.PortfolioName.IsEmpty() || pf.Name.ContainsIgnoreCase(criteria.PortfolioName)));
 		}
 
