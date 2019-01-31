@@ -1280,46 +1280,6 @@
             Time ranges.
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.RangeListEditor.SelectedRangeProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.RangeListEditor.SelectedRange" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.RangeListEditor.SelectedRange">
-      <summary>
-            Selected range.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.RangeListEditor.NewTimeFromProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.RangeListEditor.NewTimeFrom" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.RangeListEditor.NewTimeFrom">
-      <summary>
-            New From time.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.RangeListEditor.NewTimeTillProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.RangeListEditor.NewTimeTill" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.RangeListEditor.NewTimeTill">
-      <summary>
-            New Till time.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.RangeListEditor.CommandAddTimes">
-      <summary>
-            Add command.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.RangeListEditor.CommandDelTimes">
-      <summary>
-            Delete command.
-            </summary>
-    </member>
     <member name="E:StockSharp.Xaml.RangeListEditor.Error">
       <summary>
             Error handler.

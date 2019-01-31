@@ -128,6 +128,7 @@ namespace StockSharp.Algo.Export.Database
 			};
 			yield return new ColumnDescription(nameof(ExecutionMessage.IsMargin)) { DbType = typeof(bool?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.IsMarketMaker)) { DbType = typeof(bool?) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.IsManual)) { DbType = typeof(bool?) };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(ExecutionMessage value)
@@ -178,6 +179,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(ExecutionMessage.Error), value.Error?.Message },
 				{ nameof(ExecutionMessage.IsMargin), value.IsMargin },
 				{ nameof(ExecutionMessage.IsMarketMaker), value.IsMarketMaker },
+				{ nameof(ExecutionMessage.IsManual), value.IsManual },
 			};
 			return result;
 		}

@@ -52,6 +52,7 @@ StockSharp API Change log
 * (feature) OpenECryException removed.
 * (bug) Connector. Clear portfolio lookup criteria fix.
 * (bug) Simulator. Turn off heartbeat tracking for non owned adapters https://stocksharp.ru/posts/m/46473/
+* (feature) Order. IsManual property added.
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.

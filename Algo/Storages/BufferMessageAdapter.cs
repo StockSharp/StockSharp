@@ -447,6 +447,7 @@ namespace StockSharp.Algo.Storages
 						IsMarketMaker = regMsg.IsMarketMaker,
 						IsMargin = regMsg.IsMargin,
 						Slippage = regMsg.Slippage,
+						IsManual = regMsg.IsManual,
 						OrderType = regMsg.OrderType,
 						UserOrderId = regMsg.UserOrderId,
 						OrderState = OrderStates.Pending,

@@ -150,6 +150,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("isUpTick", item.IsUpTick);
 						writer.WriteAttribute("isMargin", item.IsMargin);
 						writer.WriteAttribute("isMarketMaker", item.IsMarketMaker);
+						writer.WriteAttribute("isManual", item.IsManual);
 
 						writer.WriteEndElement();
 					});

@@ -4936,6 +4936,8 @@ PriceTextFormat;Price format.;Формат цены.
 VolumeTextFormat;Volume format.;Формат объема.
 SubscriptionFinished;Market data finished: sec='{0}' msg='{1}'.;Подписка закончена: инстр='{0}' сообщение='{1}'.
 SubscriptionUnexpectedCancelled;Subscription '{0}' to {1} unexpected cancelled with error '{2}'.;Подписка '{0}' на {1} неожоданное закончилась с ошибкой '{2}'.
+Manual;Manual;Ручная
+IsOrderManual;Is order manual.;Является ли заявка ручной.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

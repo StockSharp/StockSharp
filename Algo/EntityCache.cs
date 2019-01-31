@@ -518,6 +518,7 @@ namespace StockSharp.Algo
 					o.IsMarketMaker = message.IsMarketMaker;
 					o.IsMargin = message.IsMargin;
 					o.Slippage = message.Slippage;
+					o.IsManual = message.IsManual;
 
 					if (message.PortfolioName.IsEmpty())
 						o.Portfolio = _portfolios.FirstOrDefault().Value;

@@ -139,6 +139,14 @@ namespace StockSharp.Messages
 		public decimal? Slippage { get; set; }
 
 		/// <summary>
+		/// Is order manual.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.ManualKey)]
+		[DescriptionLoc(LocalizedStrings.IsOrderManualKey)]
+		public bool? IsManual { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderRegisterMessage"/>.
 		/// </summary>
 		public OrderRegisterMessage()
@@ -199,6 +207,7 @@ namespace StockSharp.Messages
 			destination.IsMarketMaker = IsMarketMaker;
 			destination.IsMargin = IsMargin;
 			destination.Slippage = Slippage;
+			destination.IsManual = IsManual;
 
 			base.CopyTo(destination);
 		}

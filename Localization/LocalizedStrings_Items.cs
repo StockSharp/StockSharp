@@ -49036,5 +49036,25 @@ namespace StockSharp.Localization
 		/// Subscription '{0}' to {1} unexpected cancelled with error '{2}'.
 		/// </summary>
 		public static string SubscriptionUnexpectedCancelled => GetString(SubscriptionUnexpectedCancelledKey);
+
+		/// <summary>
+		/// Manual
+		/// </summary>
+		public const string ManualKey = nameof(Manual);
+
+		/// <summary>
+		/// Manual
+		/// </summary>
+		public static string Manual => GetString(ManualKey);
+
+		/// <summary>
+		/// Is order manual.
+		/// </summary>
+		public const string IsOrderManualKey = nameof(IsOrderManual);
+
+		/// <summary>
+		/// Is order manual.
+		/// </summary>
+		public static string IsOrderManual => GetString(IsOrderManualKey);
 	}
 }
