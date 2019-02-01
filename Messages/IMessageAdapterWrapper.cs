@@ -291,6 +291,9 @@ namespace StockSharp.Messages
 				InnerAdapter.Dispose();
 		}
 
+		/// <inheritdoc />
+		public override string ToString() => InnerAdapter.ToString();
+
 		bool IMessageAdapterExtension.IsSupportStopLoss => InnerAdapter.IsSupportStopLoss;
 
 		bool IMessageAdapterExtension.IsSupportTakeProfit => InnerAdapter.IsSupportTakeProfit;

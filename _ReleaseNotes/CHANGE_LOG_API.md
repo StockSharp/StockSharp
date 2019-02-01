@@ -54,6 +54,7 @@ StockSharp API Change log
 * (bug) Simulator. Turn off heartbeat tracking for non owned adapters https://stocksharp.ru/posts/m/46473/
 * (feature) Order. IsManual property added.
 * (feature) LBank, BitMax, BW, Bibox, CoinBene, BitZ, ZB connectors.
+* (bug) Heartbeat. Restore after reconnect.
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.

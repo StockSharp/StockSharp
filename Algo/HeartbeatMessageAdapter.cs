@@ -77,7 +77,7 @@ namespace StockSharp.Algo
 		private const ConnectionStates _reConnecting = (ConnectionStates)10;
 
 		private readonly SyncObject _timeSync = new SyncObject();
-		private readonly TimeMessage _timeMessage = new TimeMessage();
+		private readonly TimeMessage _timeMessage = new TimeMessage { OfflineMode = MessageOfflineModes.Force };
 
 		private readonly ReConnectionSettings _reConnectionSettings;
 
@@ -285,19 +285,24 @@ namespace StockSharp.Algo
 				}
 			}
 
-			base.SendInMessage(message);
-
-			lock (_timeSync)
+			try
 			{
-				if (isStartTimer && (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected))
-					StartTimer();
+				base.SendInMessage(message);
+
+				lock (_timeSync)
+				{
+					if (isStartTimer && (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected))
+						StartTimer();
+				}
 			}
-
-			if (message != _timeMessage)
-				return;
-
-			lock (_timeSync)
-				_canSendTime = true;
+			finally
+			{
+				if (message == _timeMessage)
+				{
+					lock (_timeSync)
+						_canSendTime = true;
+				}	
+			}
 		}
 
 		private void StartTimer()
@@ -307,8 +312,10 @@ namespace StockSharp.Algo
 
 			var period = ReConnectionSettings.Interval;
 			var needHeartbeat = HeartbeatInterval != TimeSpan.Zero;
+			
 			var time = TimeHelper.Now;
 			var lastHeartBeatTime = TimeHelper.Now;
+
 			var sync = new SyncObject();
 			var isProcessing = false;
 
