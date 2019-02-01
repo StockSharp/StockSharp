@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.BitMax</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.BitMax.BitMaxMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.BitMax"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitMax.BitMaxMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitMax.BitMaxMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitMax.BitMaxMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitMax.BitMaxMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BitMax.BitMaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.BitMax.BitMaxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.BitMax.BitMaxMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.BitMax.BitMaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BitMax.BitMaxMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.BitMax.BitMaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.BitMax.BitMaxOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.BitMax"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BitMax.BitMaxOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BitMax.BitMaxOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.BitMax.BitMaxTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.BitMax"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BitMax.BitMaxTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BitMax.BitMaxTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitMax.BitMaxTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitMax.BitMaxTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitMax.BitMaxTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

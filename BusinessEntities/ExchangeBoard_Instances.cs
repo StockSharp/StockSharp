@@ -3371,5 +3371,68 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Coinigy.Name,
 			Exchange = Exchange.Coinigy,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.LBank"/>.
+		/// </summary>
+		public static ExchangeBoard LBank { get; } = new ExchangeBoard
+		{
+			Code = Exchange.LBank.Name,
+			Exchange = Exchange.LBank,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.BitMax"/>.
+		/// </summary>
+		public static ExchangeBoard BitMax { get; } = new ExchangeBoard
+		{
+			Code = Exchange.BitMax.Name,
+			Exchange = Exchange.BitMax,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.BW"/>.
+		/// </summary>
+		public static ExchangeBoard BW { get; } = new ExchangeBoard
+		{
+			Code = Exchange.BW.Name,
+			Exchange = Exchange.BW,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Bibox"/>.
+		/// </summary>
+		public static ExchangeBoard Bibox { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Bibox.Name,
+			Exchange = Exchange.Bibox,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.CoinBene"/>.
+		/// </summary>
+		public static ExchangeBoard CoinBene { get; } = new ExchangeBoard
+		{
+			Code = Exchange.CoinBene.Name,
+			Exchange = Exchange.CoinBene,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.BitZ"/>.
+		/// </summary>
+		public static ExchangeBoard BitZ { get; } = new ExchangeBoard
+		{
+			Code = Exchange.BitZ.Name,
+			Exchange = Exchange.BitZ,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.ZB"/>.
+		/// </summary>
+		public static ExchangeBoard ZB { get; } = new ExchangeBoard
+		{
+			Code = Exchange.ZB.Name,
+			Exchange = Exchange.ZB,
+		};
 	}
 }

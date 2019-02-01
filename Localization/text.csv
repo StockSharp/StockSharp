@@ -4938,6 +4938,14 @@ SubscriptionFinished;Market data finished: sec='{0}' msg='{1}'.;Подписка
 SubscriptionUnexpectedCancelled;Subscription '{0}' to {1} unexpected cancelled with error '{2}'.;Подписка '{0}' на {1} неожоданное закончилась с ошибкой '{2}'.
 Manual;Manual;Ручная
 IsOrderManual;Is order manual.;Является ли заявка ручной.
+LBank;LBank;LBank
+BitMax;BitMax;BitMax
+BW;BW;BW
+Bibox;Bibox;Bibox
+BitZ;Bit-Z;Bit-Z
+ZB;ZB.COM;ZB.COM
+CoinBene;CoinBene;CoinBene
+ETrade;E*TRADE;E*TRADE
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15527,3 +15535,10 @@ DocStr11019;Add command;Команда добавления
 DocStr11020;Delete command;Команда удаления
 DocStr11021;Apply on/off heartbeat mode for the specified adapter;Применить вкл/выкл режим отслеживания соединения для указанного адаптера
 DocStr11022;Is active;Активно
+DocStr11023;Information about LBank;Информация о LBank
+DocStr11024;Information about BitMax;Информация о BitMax
+DocStr11025;Information about BW;Информация о BW
+DocStr11026;Information about Bibox;Информация о Bibox
+DocStr11027;Information about CoinBene;Информация о CoinBene
+DocStr11028;Information about BitZ;Информация о BitZ
+DocStr11029;Information about ZB;Информация о ZB

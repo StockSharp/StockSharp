@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.LBank</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.LBank.LBankMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.LBank"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.LBank.LBankMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.LBank.LBankMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.LBank.LBankMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.LBank.LBankMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.LBank.LBankMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.LBank.LBankMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.LBank.LBankMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.LBank.LBankMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.LBank.LBankMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.LBank.LBankMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.LBank.LBankOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.LBank"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.LBank.LBankOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.LBank.LBankOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.LBank.LBankTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.LBank"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.LBank.LBankTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.LBank.LBankTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.LBank.LBankTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.LBank.LBankTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.LBank.LBankTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

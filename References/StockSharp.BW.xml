@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.BW</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.BW.BWMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.BW"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BW.BWMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BW.BWMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BW.BWMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BW.BWMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BW.BWMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.BW.BWMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.BW.BWMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.BW.BWMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BW.BWMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.BW.BWMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.BW.BWOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.BW"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BW.BWOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BW.BWOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.BW.BWTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.BW"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BW.BWTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BW.BWTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BW.BWTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BW.BWTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BW.BWTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -86,6 +86,10 @@
       <Project>{C09745E8-CE51-47DF-8856-E3E3E41EF911}</Project>
       <Name>AlphaVantage</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bibox\Bibox.csproj">
+      <Project>{CA38A429-99DF-44CB-9C5A-44276B6CB724}</Project>
+      <Name>Bibox</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Binance\Binance.csproj">
       <Project>{E8577520-E582-4409-9287-4D0859F64EE7}</Project>
       <Name>Binance</Name>
@@ -106,6 +110,10 @@
       <Project>{4FD21E37-BD2D-4AEF-8297-CEA4C7EBEF01}</Project>
       <Name>Bithumb</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BitMax\BitMax.csproj">
+      <Project>{EC2A187C-2E2A-4E28-8C1A-73AB596E9EE3}</Project>
+      <Name>BitMax</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitmex\Bitmex.csproj">
       <Project>{4E875AEF-166E-44C5-BB3C-FB80AA1C0046}</Project>
       <Name>Bitmex</Name>
@@ -114,6 +122,14 @@
       <Project>{302F3C2A-EB95-4AF7-BE22-E7BE567B2DAB}</Project>
       <Name>Bittrex</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BitZ\BitZ.csproj">
+      <Project>{9D5E2881-23E5-48D5-BD36-F42E8668B127}</Project>
+      <Name>BitZ</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BW\BW.csproj">
+      <Project>{F1D480C2-351F-41B3-9E58-B82A02D421C6}</Project>
+      <Name>BW</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cex\Cex.csproj">
       <Project>{86A35D77-6FE9-497F-A9C9-86A4789F813A}</Project>
       <Name>Cex</Name>
@@ -121,6 +137,10 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Coinbase\Coinbase.csproj">
       <Project>{AB948D64-73B2-4BDC-972C-337E51A67265}</Project>
       <Name>Coinbase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CoinBene\CoinBene.csproj">
+      <Project>{4ED59879-963C-43F5-99FC-E2BC1713706C}</Project>
+      <Name>CoinBene</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CoinCap\CoinCap.csproj">
       <Project>{6C63BF6A-28F2-4C5E-ADD9-55CD1126DE4B}</Project>
@@ -181,6 +201,10 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Kucoin\Kucoin.csproj">
       <Project>{0694E03C-F9B2-4001-AC64-E33C061D40FC}</Project>
       <Name>Kucoin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\LBank\LBank.csproj">
+      <Project>{36C9E446-2518-4E00-869D-F30C955A0415}</Project>
+      <Name>LBank</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Liqui\Liqui.csproj">
       <Project>{E8A86950-D42E-48E7-8728-18F5C1ADC812}</Project>
@@ -261,6 +285,10 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Zaif\Zaif.csproj">
       <Project>{63C3ABE0-9E3C-4354-A3D1-22359FD34489}</Project>
       <Name>Zaif</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\ZB\ZB.csproj">
+      <Project>{3D584F59-FC33-4C2B-85EA-24A116BEDCB4}</Project>
+      <Name>ZB</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>

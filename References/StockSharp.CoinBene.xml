@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.CoinBene</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.CoinBene.CoinBeneMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.CoinBene"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinBene.CoinBeneMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinBene.CoinBeneMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinBene.CoinBeneMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinBene.CoinBeneMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CoinBene.CoinBeneMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.CoinBene.CoinBeneMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.CoinBene.CoinBeneMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.CoinBene.CoinBeneMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.CoinBene.CoinBeneMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.CoinBene.CoinBeneMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.CoinBene.CoinBeneOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.CoinBene"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CoinBene.CoinBeneOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.CoinBene.CoinBeneOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.CoinBene.CoinBeneTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.CoinBene"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CoinBene.CoinBeneTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.CoinBene.CoinBeneTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinBene.CoinBeneTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinBene.CoinBeneTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinBene.CoinBeneTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

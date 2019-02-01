@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Bibox</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Bibox.BiboxMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Bibox"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bibox.BiboxMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bibox.BiboxMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bibox.BiboxMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bibox.BiboxMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bibox.BiboxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Bibox.BiboxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Bibox.BiboxMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Bibox.BiboxMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bibox.BiboxMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Bibox.BiboxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Bibox.BiboxOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Bibox"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bibox.BiboxOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bibox.BiboxOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Bibox.BiboxTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Bibox"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bibox.BiboxTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bibox.BiboxTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bibox.BiboxTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bibox.BiboxTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bibox.BiboxTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

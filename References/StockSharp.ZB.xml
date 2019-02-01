@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.ZB</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.ZB.ZBMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.ZB"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ZB.ZBMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ZB.ZBMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ZB.ZBMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ZB.ZBMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.ZB.ZBMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.ZB.ZBMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.ZB.ZBMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.ZB.ZBMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.ZB.ZBMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.ZB.ZBMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.ZB.ZBOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.ZB"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.ZB.ZBOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.ZB.ZBOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.ZB.ZBTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.ZB"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.ZB.ZBTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.ZB.ZBTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ZB.ZBTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ZB.ZBTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ZB.ZBTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

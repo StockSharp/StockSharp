@@ -1020,5 +1020,75 @@ namespace StockSharp.BusinessEntities
 			EngName = "Coinigy",
 			RusName = "Coinigy",
 		};
+
+		/// <summary>
+		/// Information about LBank.
+		/// </summary>
+		public static Exchange LBank { get; } = new Exchange
+		{
+			Name = "LBNK",
+			EngName = "LBank",
+			RusName = "LBank",
+		};
+
+		/// <summary>
+		/// Information about BitMax.
+		/// </summary>
+		public static Exchange BitMax { get; } = new Exchange
+		{
+			Name = "BMAX",
+			EngName = "BitMax",
+			RusName = "BitMax",
+		};
+
+		/// <summary>
+		/// Information about BW.
+		/// </summary>
+		public static Exchange BW { get; } = new Exchange
+		{
+			Name = "BW",
+			EngName = "BW",
+			RusName = "BW",
+		};
+
+		/// <summary>
+		/// Information about Bibox.
+		/// </summary>
+		public static Exchange Bibox { get; } = new Exchange
+		{
+			Name = "BBOX",
+			EngName = "Bibox",
+			RusName = "Bibox",
+		};
+
+		/// <summary>
+		/// Information about CoinBene.
+		/// </summary>
+		public static Exchange CoinBene { get; } = new Exchange
+		{
+			Name = "CNBN",
+			EngName = "CoinBene",
+			RusName = "CoinBene",
+		};
+
+		/// <summary>
+		/// Information about BitZ.
+		/// </summary>
+		public static Exchange BitZ { get; } = new Exchange
+		{
+			Name = "BITZ",
+			EngName = "BitZ",
+			RusName = "BitZ",
+		};
+
+		/// <summary>
+		/// Information about ZB.
+		/// </summary>
+		public static Exchange ZB { get; } = new Exchange
+		{
+			Name = "ZB",
+			EngName = "ZB",
+			RusName = "ZB",
+		};
 	}
 }
