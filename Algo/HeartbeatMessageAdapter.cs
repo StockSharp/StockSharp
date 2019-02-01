@@ -156,6 +156,8 @@ namespace StockSharp.Algo
 
 					if (isRestored)
 					{
+						this.AddInfoLog(LocalizedStrings.Str2958);
+
 						if (SuppressReconnectingErrors)
 							RaiseNewOutMessage(new ReconnectingFinishedMessage { Adapter = message.Adapter });
 						else
@@ -166,7 +168,10 @@ namespace StockSharp.Algo
 						if (connectMsg.Error == null || !SuppressReconnectingErrors || !isReconnecting)
 							base.OnInnerAdapterNewOutMessage(message);
 						else if (isReconnectionStarted)
+						{
+							this.AddInfoLog(LocalizedStrings.Reconnecting);
 							base.OnInnerAdapterNewOutMessage(new ReconnectingStartedMessage());
+						}
 					}
 
 					break;
