@@ -49056,5 +49056,85 @@ namespace StockSharp.Localization
 		/// Is order manual.
 		/// </summary>
 		public static string IsOrderManual => GetString(IsOrderManualKey);
+
+		/// <summary>
+		/// LBank
+		/// </summary>
+		public const string LBankKey = nameof(LBank);
+
+		/// <summary>
+		/// LBank
+		/// </summary>
+		public static string LBank => GetString(LBankKey);
+
+		/// <summary>
+		/// BitMax
+		/// </summary>
+		public const string BitMaxKey = nameof(BitMax);
+
+		/// <summary>
+		/// BitMax
+		/// </summary>
+		public static string BitMax => GetString(BitMaxKey);
+
+		/// <summary>
+		/// BW
+		/// </summary>
+		public const string BWKey = nameof(BW);
+
+		/// <summary>
+		/// BW
+		/// </summary>
+		public static string BW => GetString(BWKey);
+
+		/// <summary>
+		/// Bibox
+		/// </summary>
+		public const string BiboxKey = nameof(Bibox);
+
+		/// <summary>
+		/// Bibox
+		/// </summary>
+		public static string Bibox => GetString(BiboxKey);
+
+		/// <summary>
+		/// Bit-Z
+		/// </summary>
+		public const string BitZKey = nameof(BitZ);
+
+		/// <summary>
+		/// Bit-Z
+		/// </summary>
+		public static string BitZ => GetString(BitZKey);
+
+		/// <summary>
+		/// ZB.COM
+		/// </summary>
+		public const string ZBKey = nameof(ZB);
+
+		/// <summary>
+		/// ZB.COM
+		/// </summary>
+		public static string ZB => GetString(ZBKey);
+
+		/// <summary>
+		/// CoinBene
+		/// </summary>
+		public const string CoinBeneKey = nameof(CoinBene);
+
+		/// <summary>
+		/// CoinBene
+		/// </summary>
+		public static string CoinBene => GetString(CoinBeneKey);
+
+		/// <summary>
+		/// E*TRADE
+		/// </summary>
+		public const string ETradeKey = nameof(ETrade);
+
+		/// <summary>
+		/// E*TRADE
+		/// </summary>
+		public static string ETrade => GetString(ETradeKey);
 	}
 }

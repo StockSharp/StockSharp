@@ -241,6 +241,27 @@
     <Reference Include="StockSharp.TradeOgre">
       <HintPath>..\References\StockSharp.TradeOgre.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Bibox">
+      <HintPath>..\References\StockSharp.Bibox.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BitMax">
+      <HintPath>..\References\StockSharp.BitMax.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BitZ">
+      <HintPath>..\References\StockSharp.BitZ.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BW">
+      <HintPath>..\References\StockSharp.BW.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.CoinBene">
+      <HintPath>..\References\StockSharp.CoinBene.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.LBank">
+      <HintPath>..\References\StockSharp.LBank.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.ZB">
+      <HintPath>..\References\StockSharp.ZB.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
