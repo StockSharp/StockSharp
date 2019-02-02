@@ -1,5 +1,28 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.16:
+* (feature) SQLite->CSV migrated.
+* (feature) Bithumb. Prime service supported.
+* (feature) OKEX. Support turn on/off sections.
+* (bug) IQFeed. Candles request fixes.
+* (feature) Process non persistable basket securities.
+* (bug) Storage adapter. Fix boards lookup and update.
+* (feature) Digifinex, Idax, TradeOgre, CoinCap, Coinigy, LBank, BitMax, BW, Bibox, CoinBene, BitZ, ZB connectors.
+* (feature) News. Priority property added.
+* (feature) FIX connector. IBKR dialect supported algo orders.
+* (feature) OKEx. Web sockets v3 supported.
+* (feature) Plaza CGate. Spectra 6.2 supported.
+* (feature) TWIME. Spectra 6.2 supported.
+* (feature) Micex TEAP. Interface 31 supported.
+* (feature) Wait flushing data fix.
+* (bug) Statistics parameters. Fix reset state.
+* (bug) MarketDepth. Fix processing quote msgs with empty instrument info.
+* (bug) RSS fixes.
+* (feature) OpenECry. More order types supported.
+* (feature) OKEX. Position and account swap and margin supported.
+* (bug) Candles compression. Fix for non TF candles compression.
+* (feature) Board editor redesign.
+
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.
 * (feature) OKEx. V3 protocol supported.
