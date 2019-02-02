@@ -13,10 +13,15 @@ M:StockSharp.Deribit.DeribitMessageAdapter.OnSendInMessage(StockSharp.Messages.M
 T:StockSharp.Deribit.DeribitOrderAdvancedTypes/summary;DocStr3405
 F:StockSharp.Deribit.DeribitOrderAdvancedTypes.ImpliedVolatility/summary;Str293
 F:StockSharp.Deribit.DeribitOrderAdvancedTypes.Usd/summary;DocStr10404
+T:StockSharp.Deribit.DeribitOrderTriggers/summary;DocStr11030
+F:StockSharp.Deribit.DeribitOrderTriggers.Index/summary;DocStr11031
+F:StockSharp.Deribit.DeribitOrderTriggers.Mark/summary;DocStr11032
 T:StockSharp.Deribit.DeribitOrderCondition/summary;DocStr60
 M:StockSharp.Deribit.DeribitOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Deribit.DeribitOrderCondition.StopPrice/summary;Str3460
+P:StockSharp.Deribit.DeribitOrderCondition.Trigger/summary;Str2575
 P:StockSharp.Deribit.DeribitOrderCondition.Advanced/summary;Str2368
+P:StockSharp.Deribit.DeribitOrderCondition.PostOnly/summary;PostOnlyOrder
 T:StockSharp.Deribit.DeribitTrader/summary;DocStr2539
 M:StockSharp.Deribit.DeribitTrader.#ctor/summary;DocStr1
 P:StockSharp.Deribit.DeribitTrader.Key/summary;Str3304

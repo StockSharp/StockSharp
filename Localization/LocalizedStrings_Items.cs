@@ -49136,5 +49136,35 @@ namespace StockSharp.Localization
 		/// E*TRADE
 		/// </summary>
 		public static string ETrade => GetString(ETradeKey);
+
+		/// <summary>
+		/// Mark
+		/// </summary>
+		public const string MarkKey = nameof(Mark);
+
+		/// <summary>
+		/// Mark
+		/// </summary>
+		public static string Mark => GetString(MarkKey);
+
+		/// <summary>
+		/// Post-only
+		/// </summary>
+		public const string PostOnlyKey = nameof(PostOnly);
+
+		/// <summary>
+		/// Post-only
+		/// </summary>
+		public static string PostOnly => GetString(PostOnlyKey);
+
+		/// <summary>
+		/// Post-only order.
+		/// </summary>
+		public const string PostOnlyOrderKey = nameof(PostOnlyOrder);
+
+		/// <summary>
+		/// Post-only order.
+		/// </summary>
+		public static string PostOnlyOrder => GetString(PostOnlyOrderKey);
 	}
 }

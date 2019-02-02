@@ -4946,6 +4946,9 @@ BitZ;Bit-Z;Bit-Z
 ZB;ZB.COM;ZB.COM
 CoinBene;CoinBene;CoinBene
 ETrade;E*TRADE;E*TRADE
+Mark;Mark;Метка
+PostOnly;Post-only;Post-only
+PostOnlyOrder;Post-only order.;Заявка post-only.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15542,3 +15545,6 @@ DocStr11026;Information about Bibox;Информация о Bibox
 DocStr11027;Information about CoinBene;Информация о CoinBene
 DocStr11028;Information about BitZ;Информация о BitZ
 DocStr11029;Information about ZB;Информация о ZB
+DocStr11030;Triggers;Триггеры
+DocStr11031;Index price;Цена индекса
+DocStr11032;Mark price;Цена отметки

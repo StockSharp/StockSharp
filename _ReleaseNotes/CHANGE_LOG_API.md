@@ -55,6 +55,7 @@ StockSharp API Change log
 * (feature) Order. IsManual property added.
 * (feature) LBank, BitMax, BW, Bibox, CoinBene, BitZ, ZB connectors.
 * (bug) Heartbeat. Restore after reconnect.
+* (feature) Deribit. Extended orders.
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.
