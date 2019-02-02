@@ -56,6 +56,7 @@ StockSharp API Change log
 * (feature) LBank, BitMax, BW, Bibox, CoinBene, BitZ, ZB connectors.
 * (bug) Heartbeat. Restore after reconnect.
 * (feature) Deribit. Extended orders.
+* (feature) Diagram. More options for order registration.
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.
