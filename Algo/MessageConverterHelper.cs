@@ -541,6 +541,10 @@ namespace StockSharp.Algo
 				Currency = newOrder.Currency,
 
 				IsManual = newOrder.IsManual,
+				IsMarketMaker = newOrder.IsMarketMaker,
+				IsMargin = newOrder.IsMargin,
+
+				Slippage = newOrder.Slippage,
 			};
 
 			oldOrder.Security.ToMessage(securityId).CopyTo(msg, false);
