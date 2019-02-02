@@ -37,12 +37,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 		}
 
-		/// <summary>
-		/// Write data to the specified writer.
-		/// </summary>
-		/// <param name="writer">CSV writer.</param>
-		/// <param name="data">Data.</param>
-		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		/// <inheritdoc />
 		protected override void Write(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo)
 		{
 			var row = new[]
@@ -98,18 +93,15 @@ namespace StockSharp.Algo.Storages.Csv
 				data.LocalTime.ToString("zzz"),
 				data.IsMarketMaker.ToString(),
 				data.CommissionCurrency,
+				data.IsMargin.ToString(),
+				data.IsManual.ToString(),
 			};
 			writer.WriteRow(row);
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
 		}
 
-		/// <summary>
-		/// Read data from the specified reader.
-		/// </summary>
-		/// <param name="reader">CSV reader.</param>
-		/// <param name="metaInfo">Meta-information on data for one day.</param>
-		/// <returns>Data.</returns>
+		/// <inheritdoc />
 		protected override ExecutionMessage Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
 			var msg = new ExecutionMessage
@@ -183,6 +175,12 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				msg.CommissionCurrency = reader.ReadString();
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			{
+				msg.IsMargin = reader.ReadNullableBool();
+				msg.IsManual = reader.ReadNullableBool();
+			}
 
 			return msg;
 		}
