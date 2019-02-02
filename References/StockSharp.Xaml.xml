@@ -2952,6 +2952,11 @@
             </summary>
       <param name="provider">The provider of information about portfolios.</param>
     </member>
+    <member name="P:StockSharp.Xaml.PortfolioDataSource.Portfolios">
+      <summary>
+            All portfolios.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.PortfolioDataSource.Add(StockSharp.BusinessEntities.Portfolio)">
       <summary>
             Add portfolio.

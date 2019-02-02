@@ -644,6 +644,7 @@ T:StockSharp.Xaml.PortfolioDataSource/summary;DocStr8922
 M:StockSharp.Xaml.PortfolioDataSource.#ctor/summary;DocStr1
 M:StockSharp.Xaml.PortfolioDataSource.#ctor(StockSharp.BusinessEntities.IPortfolioProvider)/summary;DocStr1
 M:StockSharp.Xaml.PortfolioDataSource.#ctor(StockSharp.BusinessEntities.IPortfolioProvider)/param/provider;DocStr10038
+P:StockSharp.Xaml.PortfolioDataSource.Portfolios/summary;DocStr10884
 M:StockSharp.Xaml.PortfolioDataSource.Add(StockSharp.BusinessEntities.Portfolio)/summary;DocStr10901
 M:StockSharp.Xaml.PortfolioDataSource.Add(StockSharp.BusinessEntities.Portfolio)/param/portfolio;Portfolio
 M:StockSharp.Xaml.PortfolioDataSource.AddRange(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/summary;DocStr10902

@@ -837,6 +837,7 @@ P:StockSharp.Messages.MessageAdapterWrapper.AssociatedBoardCode/inheritdoc;DocSt
 P:StockSharp.Messages.MessageAdapterWrapper.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.Dispose/summary;DocStr8826
+M:StockSharp.Messages.MessageAdapterWrapper.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.InMemoryMessageChannel/summary;DocStr4309
 M:StockSharp.Messages.InMemoryMessageChannel.#ctor(System.String,System.Action{System.Exception})/summary;DocStr1
 M:StockSharp.Messages.InMemoryMessageChannel.#ctor(System.String,System.Action{System.Exception})/param/name;DocStr4310

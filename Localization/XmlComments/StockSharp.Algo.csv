@@ -2585,14 +2585,8 @@ T:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer/summary;DocStr8598
 M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.#ctor(StockSharp.Messages.SecurityId,System.Text.Encoding)/summary;DocStr1
 M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.#ctor(StockSharp.Messages.SecurityId,System.Text.Encoding)/param/securityId;SecurityId
 M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.#ctor(StockSharp.Messages.SecurityId,System.Text.Encoding)/param/encoding;Encoding
-M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.Write(Ecng.Common.CsvFileWriter,StockSharp.Messages.ExecutionMessage,StockSharp.Algo.Storages.IMarketDataMetaInfo)/summary;DocStr8584
-M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.Write(Ecng.Common.CsvFileWriter,StockSharp.Messages.ExecutionMessage,StockSharp.Algo.Storages.IMarketDataMetaInfo)/param/writer;DocStr8585
-M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.Write(Ecng.Common.CsvFileWriter,StockSharp.Messages.ExecutionMessage,StockSharp.Algo.Storages.IMarketDataMetaInfo)/param/data;XamlStr109
-M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.Write(Ecng.Common.CsvFileWriter,StockSharp.Messages.ExecutionMessage,StockSharp.Algo.Storages.IMarketDataMetaInfo)/param/metaInfo;DocStr1282
-M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.Read(Ecng.Common.FastCsvReader,StockSharp.Algo.Storages.IMarketDataMetaInfo)/summary;DocStr8586
-M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.Read(Ecng.Common.FastCsvReader,StockSharp.Algo.Storages.IMarketDataMetaInfo)/param/reader;DocStr8587
-M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.Read(Ecng.Common.FastCsvReader,StockSharp.Algo.Storages.IMarketDataMetaInfo)/param/metaInfo;DocStr1282
-M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.Read(Ecng.Common.FastCsvReader,StockSharp.Algo.Storages.IMarketDataMetaInfo)/returns;XamlStr109
+M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.Write(Ecng.Common.CsvFileWriter,StockSharp.Messages.ExecutionMessage,StockSharp.Algo.Storages.IMarketDataMetaInfo)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Storages.Csv.TransactionCsvSerializer.Read(Ecng.Common.FastCsvReader,StockSharp.Algo.Storages.IMarketDataMetaInfo)/inheritdoc;DocStr8459
 T:StockSharp.Algo.Storages.ISecurityAssociationStorage/summary;DocStr10857
 M:StockSharp.Algo.Storages.ISecurityAssociationStorage.Init/summary;DocStr9249
 M:StockSharp.Algo.Storages.ISecurityAssociationStorage.Save(StockSharp.Messages.SecurityId,Ecng.Collections.PairSet{System.String,StockSharp.Messages.SecurityId})/summary;DocStr10858
