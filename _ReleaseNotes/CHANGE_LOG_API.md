@@ -57,6 +57,7 @@ StockSharp API Change log
 * (bug) Heartbeat. Restore after reconnect.
 * (feature) Deribit. Extended orders.
 * (feature) Diagram. More options for order registration.
+* (feature) CurrencyTypes. MXP added.
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.

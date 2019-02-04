@@ -3334,7 +3334,11 @@ namespace StockSharp.Algo
 					}
 					catch (Exception ex)
 					{
-						errorHandler?.Invoke(ex);
+						if (errorHandler == null)
+							ex.LogError();
+						else
+							errorHandler.Invoke(ex);
+
 						return null;
 					}
 				}
