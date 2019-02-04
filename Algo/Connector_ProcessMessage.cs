@@ -742,7 +742,7 @@ namespace StockSharp.Algo
 					case MessageTypes.SecurityLookup:
 					{
 						var lookupMsg = (SecurityLookupMessage)message;
-						_securityLookups.Add(lookupMsg.TransactionId, (SecurityLookupMessage)lookupMsg.Clone());
+						_securityLookups.Add(lookupMsg.TransactionId, new LookupInfo<SecurityLookupMessage, Security>(lookupMsg));
 						SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
 						break;
 					}
@@ -1101,12 +1101,22 @@ namespace StockSharp.Algo
 
 		private void ProcessBoardMessage(BoardMessage message)
 		{
-			_entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.Code, code =>
+			var board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.Code, out var isNew, code =>
 			{
 				var exchange = message.ToExchange(EntityFactory.CreateExchange(message.ExchangeCode));
-				var board = EntityFactory.CreateBoard(code, exchange);
-				return board.ApplyChanges(message);
+				var b = EntityFactory.CreateBoard(code, exchange);
+				return b.ApplyChanges(message);
 			});
+
+			if (message.OriginalTransactionId == 0 || !isNew)
+				return;
+
+			LookupInfo<BoardLookupMessage, ExchangeBoard> info;
+
+			lock (_securityLookups.SyncRoot)
+				info = _boardLookups.TryGetValue(message.OriginalTransactionId);
+
+			info?.Items.Add(board);
 		}
 
 		private void ProcessSecurityMessage(SecurityMessage message/*, string boardCode = null*/)
@@ -1120,10 +1130,22 @@ namespace StockSharp.Algo
 
 				s.ApplyChanges(message, _entityCache.ExchangeInfoProvider, OverrideSecurityData);
 				return true;
-			});
+			}, out var isNew);
 
-			if (message.OriginalTransactionId != 0)
-				_lookupResult.Add(security);
+			if (message.OriginalTransactionId == 0)
+				return;
+
+			_lookupResult.Add(security);
+
+			if (!isNew)
+				return;
+
+			LookupInfo<SecurityLookupMessage, Security> info;
+
+			lock (_securityLookups.SyncRoot)
+				info = _securityLookups.TryGetValue(message.OriginalTransactionId);
+
+			info?.Items.Add(security);
 		}
 
 		private void ProcessSecurityLookupResultMessage(SecurityLookupResultMessage message)
@@ -1132,20 +1154,21 @@ namespace StockSharp.Algo
 				RaiseError(message.Error);
 
 			var result = _lookupResult.CopyAndClear();
-			SecurityLookupMessage criteria = null;
+			
+			LookupInfo<SecurityLookupMessage, Security> info = null;
 
 			if (result.Length == 0)
 			{
-				criteria = _securityLookups.TryGetValue(message.OriginalTransactionId);
+				lock (_securityLookups.SyncRoot)
+					info = _securityLookups.TryGetAndRemove(message.OriginalTransactionId);
 
-				if (criteria != null)
+				if (info != null)
 				{
-					_securityLookups.Remove(message.OriginalTransactionId);
-					result = this.FilterSecurities(criteria, _entityCache.ExchangeInfoProvider).ToArray();
+					result = this.FilterSecurities(info.Criteria, _entityCache.ExchangeInfoProvider).ToArray();
 				}
 			}
 
-			RaiseLookupSecuritiesResult(criteria, message.Error, result);
+			RaiseLookupSecuritiesResult(info?.Criteria, message.Error, result, info?.Items.ToArray() ?? ArrayHelper.Empty<Security>());
 
 			lock (_lookupQueue.SyncRoot)
 			{
@@ -1155,17 +1178,18 @@ namespace StockSharp.Algo
 				//удаляем текущий запрос лукапа из очереди
 				_lookupQueue.Dequeue();
 
-				if (_lookupQueue.Count == 0)
+				var nextCriteria = _lookupQueue.TryPeek();
+
+				if (nextCriteria == null)
 					return;
 
-				var nextCriteria = _lookupQueue.Peek();
+				_securityLookups.TryAdd(nextCriteria.TransactionId, new LookupInfo<SecurityLookupMessage, Security>(nextCriteria));
 
 				//если есть еще запросы, для которых нет инструментов, то отправляем следующий
 				if (NeedLookupSecurities(nextCriteria.SecurityId))
 					SendInMessage(nextCriteria);
 				else
 				{
-					_securityLookups.Add(nextCriteria.TransactionId, (SecurityLookupMessage)nextCriteria.Clone());
 					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = nextCriteria.TransactionId });
 				}
 			}
@@ -1176,12 +1200,15 @@ namespace StockSharp.Algo
 			if (message.Error != null)
 				RaiseError(message.Error);
 
-			var criteria = _boardLookups.TryGetValue(message.OriginalTransactionId);
+			LookupInfo<BoardLookupMessage, ExchangeBoard> info;
+				
+			lock (_boardLookups.SyncRoot)
+				info = _boardLookups.TryGetAndRemove(message.OriginalTransactionId);
 
-			if (criteria == null)
+			if (info == null)
 				return;
 
-			RaiseLookupBoardsResult(criteria, message.Error, ExchangeBoards.Filter(criteria.Like));
+			RaiseLookupBoardsResult(info.Criteria, message.Error, ExchangeBoards.Filter(info.Criteria.Like).ToArray(), info.Items.ToArray());
 		}
 
 		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)
@@ -1189,15 +1216,17 @@ namespace StockSharp.Algo
 			if (message.Error != null)
 				RaiseError(message.Error);
 
-			PortfolioLookupMessage criteria;
+			LookupInfo<PortfolioLookupMessage, Portfolio> info;
 
 			lock (_portfolioLookups.SyncRoot)
-				criteria = _portfolioLookups.TryGetAndRemove(message.OriginalTransactionId);
+				info = _portfolioLookups.TryGetAndRemove(message.OriginalTransactionId);
 
-			if (criteria == null)
+			if (info == null)
 				return;
+
+			var criteria = info.Criteria;
 			
-			RaiseLookupPortfoliosResult(criteria, message.Error, Portfolios.Where(pf => criteria.PortfolioName.IsEmpty() || pf.Name.ContainsIgnoreCase(criteria.PortfolioName)));
+			RaiseLookupPortfoliosResult(criteria, message.Error, Portfolios.Where(pf => criteria.PortfolioName.IsEmpty() || pf.Name.ContainsIgnoreCase(criteria.PortfolioName)).ToArray(), info.Items.ToArray());
 		}
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
@@ -1278,7 +1307,7 @@ namespace StockSharp.Algo
 		/// <returns>Portfolio.</returns>
 		public Portfolio GetPortfolio(string name)
 		{
-			return GetPortfolio(name, null);
+			return GetPortfolio(name, null, out _);
 		}
 
 		/// <summary>
@@ -1289,14 +1318,16 @@ namespace StockSharp.Algo
 		/// </remarks>
 		/// <param name="name">Portfolio name.</param>
 		/// <param name="changePortfolio">Portfolio handler.</param>
+		/// <param name="isNew">Is newly created.</param>
 		/// <returns>Portfolio.</returns>
-		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio)
+		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio, out bool isNew)
 		{
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
 			var result = _entityCache.ProcessPortfolio(name, changePortfolio);
 			ProcessPortfolio(result);
+			isNew = result.Item2;
 			return result.Item1;
 		}
 
@@ -1333,11 +1364,21 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioMessage(PortfolioMessage message)
 		{
-			GetPortfolio(message.PortfolioName, p =>
+			var portfolio = GetPortfolio(message.PortfolioName, p =>
 			{
 				message.ToPortfolio(p, _entityCache.ExchangeInfoProvider);
 				return true;
-			});
+			}, out var isNew);
+
+			if (message.OriginalTransactionId == 0 || !isNew)
+				return;
+
+			LookupInfo<PortfolioLookupMessage, Portfolio> info;
+
+			lock (_securityLookups.SyncRoot)
+				info = _portfolioLookups.TryGetValue(message.OriginalTransactionId);
+
+			info?.Items.Add(portfolio);
 		}
 
 		private void ProcessPortfolioChangeMessage(PortfolioChangeMessage message)
@@ -1346,7 +1387,7 @@ namespace StockSharp.Algo
 			{
 				portfolio.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
 				return true;
-			});
+			}, out _);
 		}
 
 		//private void ProcessPositionMessage(PositionMessage message)

@@ -58,6 +58,7 @@ StockSharp API Change log
 * (feature) Deribit. Extended orders.
 * (feature) Diagram. More options for order registration.
 * (feature) CurrencyTypes. MXP added.
+* (feature) IConnector. LookupXXXResult2 overloads.
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.
