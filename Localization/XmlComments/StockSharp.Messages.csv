@@ -446,6 +446,7 @@ F:StockSharp.Messages.CurrencyTypes.ELF/summary;DocStr10325
 F:StockSharp.Messages.CurrencyTypes.ZAC/summary;DocStr10543
 F:StockSharp.Messages.CurrencyTypes.DEM/summary;DocStr10564
 F:StockSharp.Messages.CurrencyTypes.LUF/summary;DocStr10565
+F:StockSharp.Messages.CurrencyTypes.MXP/summary;DocStr11036
 T:StockSharp.Messages.DisconnectMessage/summary;DocStr4281
 M:StockSharp.Messages.DisconnectMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.DisconnectMessage.Clone/summary;DocStr643

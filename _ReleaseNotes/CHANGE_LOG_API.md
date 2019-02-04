@@ -59,6 +59,7 @@ StockSharp API Change log
 * (feature) Diagram. More options for order registration.
 * (feature) CurrencyTypes. MXP added.
 * (feature) IConnector. LookupXXXResult2 overloads.
+* (feature) AlphaVantage. Lookup instruments supported.
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.
