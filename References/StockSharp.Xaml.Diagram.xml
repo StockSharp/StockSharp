@@ -64,6 +64,11 @@
             The published strategy identifier.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.DocUrl">
+      <summary>
+            Help url.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsModifiable">
       <summary>
             Is it possible to edit a composite element diagram.
@@ -584,6 +589,16 @@
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.RedoCommand">
       <summary>
             Redo command.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.HelpCommandProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.HelpCommand" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.HelpCommand">
+      <summary>
+            Help command.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.CompositionProperty">
@@ -1463,6 +1478,11 @@
     <member name="P:StockSharp.Xaml.Diagram.DiagramPaletteControl.RemoveCommand">
       <summary>
       </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramPaletteControl.HelpCommand">
+      <summary>
+            Help command.
+            </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramPaletteControl.Items">
       <summary>
@@ -3060,6 +3080,36 @@
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ShrinkPrice">
       <summary>
             Shrink order price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IsManual">
+      <summary>
+            Is order manual.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IsMargin">
+      <summary>
+            Is margin enabled.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IsMarketMaker">
+      <summary>
+            Is the order of market-maker.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.TimeInForce">
+      <summary>
+            Limit order time in force.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ExpiryDate">
+      <summary>
+            Order expiry time. The default is <see langword="null" />, which mean (GTC).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Slippage">
+      <summary>
+            Slippage in trade price.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.#ctor">

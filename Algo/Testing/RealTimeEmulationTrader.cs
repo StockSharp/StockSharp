@@ -228,7 +228,12 @@ namespace StockSharp.Algo.Testing
 
 			Adapter.InnerAdapters.Add(new RealTimeEmulationMarketDataAdapter(this, underlyngMarketDataAdapter));
 			Adapter.InnerAdapters.Add(EmulationAdapter);
-		
+
+			foreach (var adapter in Adapter.InnerAdapters)
+			{
+				Adapter.ApplyHeartbeat(adapter, false);
+			}
+
 			//if (_ownAdapter)
 			//	UnderlyngMarketDataAdapter.Log += RaiseLog;
 		}

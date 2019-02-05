@@ -411,7 +411,7 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time)
 		{
-			return board.ToMessage().IsTradeTime(time, out var _);
+			return board.ToMessage().IsTradeTime(time, out _);
 		}
 
 		/// <summary>
@@ -434,7 +434,7 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
 		{
-			return board.IsTradeTime(time, out var _);
+			return board.IsTradeTime(time, out _);
 		}
 
 		/// <summary>

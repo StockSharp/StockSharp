@@ -234,8 +234,8 @@ Str180;Reconnection;Переподключение
 Str181;Number of attempts to reconnect, if the connection was lost during process.;Количество попыток переподключиться, если подключение было разорвано в процессе работы.
 Str182;Waiting time;Время ожидания
 Str183;Successful connection / disconnection waiting time.;Время ожидания успешного подключения/отключения.
-Str184;Work mode;Режим работы
-Str185;Work mode, during which connections must be established.;Режим работы, во время которого необходимо производить подключения.
+Str184;Work schedule;Режим работы
+Str185;Work schedule, during which connections must be established.;Режим работы, во время которого необходимо производить подключения.
 Str186;Adapters;Адаптеры
 Securities;Securities;Инструменты
 MarketData;Market data;Маркет-данные
@@ -449,7 +449,7 @@ Str404;Sell;Продажа
 Str405;Put in queue;Поставить в очередь
 FOK;Fill Or Kill;Немедленно или отклонить
 IOC;Immediate Or Cancel;Снять остаток
-Str408;Work mode (time, holidays etc.).;Режим работы (время, выходные дни и т.д.).
+Str408;Work schedule (time, holidays etc.).;Режим работы (время, выходные дни и т.д.).
 Str409;Periods;Периоды
 Str410;Schedule validity periods.;Периоды действия расписания.
 Str411;Working days;Рабочие дни
@@ -4016,7 +4016,7 @@ XamlStr693;Save new board;Сохранить новую площадку
 XamlStr694;Save layout...;Сохранить разметку...
 XamlStr695;Save basket security;Сохранить составной инструмент
 XamlStr696;Special non-working days:;Специальные выходные дни:
-XamlStr697;Special working and holidays;Специальные рабочие и выходные дни
+XamlStr697;Special working days:;Специальные рабочие дни:
 XamlStr698;Change list:;Список изменений:
 XamlStr699;Error list;Список ошибок
 Help;Help;Справка
@@ -4936,6 +4936,19 @@ PriceTextFormat;Price format.;Формат цены.
 VolumeTextFormat;Volume format.;Формат объема.
 SubscriptionFinished;Market data finished: sec='{0}' msg='{1}'.;Подписка закончена: инстр='{0}' сообщение='{1}'.
 SubscriptionUnexpectedCancelled;Subscription '{0}' to {1} unexpected cancelled with error '{2}'.;Подписка '{0}' на {1} неожоданное закончилась с ошибкой '{2}'.
+Manual;Manual;Ручная
+IsOrderManual;Is order manual.;Является ли заявка ручной.
+LBank;LBank;LBank
+BitMax;BitMax;BitMax
+BW;BW;BW
+Bibox;Bibox;Bibox
+BitZ;Bit-Z;Bit-Z
+ZB;ZB.COM;ZB.COM
+CoinBene;CoinBene;CoinBene
+ETrade;E*TRADE;E*TRADE
+Mark;Mark;Метка
+PostOnly;Post-only;Post-only
+PostOnlyOrder;Post-only order.;Заявка post-only.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15523,4 +15536,15 @@ DocStr11017;New From time;Новое время От
 DocStr11018;New Till time;Новое время До
 DocStr11019;Add command;Команда добавления
 DocStr11020;Delete command;Команда удаления
-DocStr11021;Data changed;Данные изменены
+DocStr11021;Apply on/off heartbeat mode for the specified adapter;Применить вкл/выкл режим отслеживания соединения для указанного адаптера
+DocStr11022;Is active;Активно
+DocStr11023;Information about LBank;Информация о LBank
+DocStr11024;Information about BitMax;Информация о BitMax
+DocStr11025;Information about BW;Информация о BW
+DocStr11026;Information about Bibox;Информация о Bibox
+DocStr11027;Information about CoinBene;Информация о CoinBene
+DocStr11028;Information about BitZ;Информация о BitZ
+DocStr11029;Information about ZB;Информация о ZB
+DocStr11030;Triggers;Триггеры
+DocStr11031;Index price;Цена индекса
+DocStr11032;Mark price;Цена отметки

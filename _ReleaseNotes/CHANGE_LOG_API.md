@@ -1,35 +1,6 @@
 StockSharp API Change log
 ========================
-## v4.4.15:
-* (feature) LiveCoin. Candles support.
-* (feature) LiveCoin. Websocket supported.
-* (feature) Position. SettlementPrice added.
-* (feature) OKEx. V3 protocol supported.
-* (feature) Bitmex. Stop orders extended.
-* (feature) MatLab. Candles supported.
-* (feature) WorkingTime. Set schedules for part-time working days.
-* (feature) FixServer. Translates Board info.
-* (feature) OpenECry. v3.5.14.53
-* (feature) MyTradeGrid. Support PnL column update.
-* (bug) PropertyGridEx. Exchange board editor fixes.
-* (feature) Diagrams. CandleSourceDiagramElement.AllowBuildFromSmallerTimeFrame added.
-* (feature) Diagrams. Support market depth based indicators.
-* (feature) FIX. CheckTimeFrameByRequest for default dialect.
-* (feature) FIX connector. Support TotalNumSecurities processing.
-* (feature) FIX connector. Allow change Encoding in dialect.
-* (bug) FIX connector. Fix position processing errors.
-* (feature) SecurityMessage.ToString override improved.
-* (feature) ToString overrides. Avoid print empty Error tag for successful messages.
-* (feature) TimeFrameLookupMessage, TimeFrameLookupResultMessage added.
-* (feature) FIX connector, QuikLua. Supported TimeFrameLookupMessage, TimeFrameLookupResultMessage.
-* (feature) Strategy messages.
-* (feature) FixServer. Strategy messages supported.
-* (feature) IConnector. Lookup result events passes lookup request messages.
-* (feature) FixServer. SecurityMappingRequest, SecurityMappingResult messages supported.
-* (bug) Bitmex. ExecInst fixes.
-* (bug) Candles. Fix duplicate candles subscription.
-* (bug) Market depth. Fix build depths from OL and L1.
-* (feature) MT4, MT5 connectors.
+## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
 * (feature) ISecurityAssociationStorage added.
 * (feature) Bithumb. Prime service supported.
@@ -76,6 +47,47 @@ StockSharp API Change log
 * (feature) SampleBitfinex. Candles added.
 * (feature) ActionMessage. Message for iterate actions.
 * (feature) BoardEditor redesign.
+* (bug) MessageAdapter. Fix ReConnectionSettings save/load.
+* (feature) PropertyGridEx. WorkingTime supported.
+* (feature) OpenECryException removed.
+* (bug) Connector. Clear portfolio lookup criteria fix.
+* (bug) Simulator. Turn off heartbeat tracking for non owned adapters https://stocksharp.ru/posts/m/46473/
+* (feature) Order. IsManual property added.
+* (feature) LBank, BitMax, BW, Bibox, CoinBene, BitZ, ZB connectors.
+* (bug) Heartbeat. Restore after reconnect.
+* (feature) Deribit. Extended orders.
+* (feature) Diagram. More options for order registration.
+
+## v4.4.15:
+* (feature) LiveCoin. Candles support.
+* (feature) LiveCoin. Websocket supported.
+* (feature) Position. SettlementPrice added.
+* (feature) OKEx. V3 protocol supported.
+* (feature) Bitmex. Stop orders extended.
+* (feature) MatLab. Candles supported.
+* (feature) WorkingTime. Set schedules for part-time working days.
+* (feature) FixServer. Translates Board info.
+* (feature) OpenECry. v3.5.14.53
+* (feature) MyTradeGrid. Support PnL column update.
+* (bug) PropertyGridEx. Exchange board editor fixes.
+* (feature) Diagrams. CandleSourceDiagramElement.AllowBuildFromSmallerTimeFrame added.
+* (feature) Diagrams. Support market depth based indicators.
+* (feature) FIX. CheckTimeFrameByRequest for default dialect.
+* (feature) FIX connector. Support TotalNumSecurities processing.
+* (feature) FIX connector. Allow change Encoding in dialect.
+* (bug) FIX connector. Fix position processing errors.
+* (feature) SecurityMessage.ToString override improved.
+* (feature) ToString overrides. Avoid print empty Error tag for successful messages.
+* (feature) TimeFrameLookupMessage, TimeFrameLookupResultMessage added.
+* (feature) FIX connector, QuikLua. Supported TimeFrameLookupMessage, TimeFrameLookupResultMessage.
+* (feature) Strategy messages.
+* (feature) FixServer. Strategy messages supported.
+* (feature) IConnector. Lookup result events passes lookup request messages.
+* (feature) FixServer. SecurityMappingRequest, SecurityMappingResult messages supported.
+* (bug) Bitmex. ExecInst fixes.
+* (bug) Candles. Fix duplicate candles subscription.
+* (bug) Market depth. Fix build depths from OL and L1.
+* (feature) MT4, MT5 connectors.
 
 ## v4.4.14:
 * (feature) Message. IgnoreOffline -> OfflineMode.

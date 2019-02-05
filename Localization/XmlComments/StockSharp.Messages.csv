@@ -505,6 +505,7 @@ P:StockSharp.Messages.ExecutionMessage.PnL/summary;DocStr8684
 P:StockSharp.Messages.ExecutionMessage.Position/summary;DocStr8832
 P:StockSharp.Messages.ExecutionMessage.IsMarketMaker/summary;MarketMakerOrder
 P:StockSharp.Messages.ExecutionMessage.IsMargin/summary;IsMargin
+P:StockSharp.Messages.ExecutionMessage.IsManual/summary;IsOrderManual
 M:StockSharp.Messages.ExecutionMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.ExecutionMessage.ToString/summary;DocStr49
 M:StockSharp.Messages.ExecutionMessage.ToString/returns;DocStr50
@@ -798,7 +799,7 @@ T:StockSharp.Messages.MessageAdapterWrapper/summary;DocStr8846
 M:StockSharp.Messages.MessageAdapterWrapper.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr93
 M:StockSharp.Messages.MessageAdapterWrapper.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr8563
 P:StockSharp.Messages.MessageAdapterWrapper.InnerAdapter/summary;DocStr8563
-P:StockSharp.Messages.MessageAdapterWrapper.OwnInnerAdaper/summary;DocStr8847
+P:StockSharp.Messages.MessageAdapterWrapper.OwnInnerAdapter/summary;DocStr8847
 M:StockSharp.Messages.MessageAdapterWrapper.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/summary;DocStr8488
 M:StockSharp.Messages.MessageAdapterWrapper.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
 M:StockSharp.Messages.MessageAdapterWrapper.RaiseNewOutMessage(StockSharp.Messages.Message)/summary;DocStr466
@@ -836,6 +837,7 @@ P:StockSharp.Messages.MessageAdapterWrapper.AssociatedBoardCode/inheritdoc;DocSt
 P:StockSharp.Messages.MessageAdapterWrapper.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.Dispose/summary;DocStr8826
+M:StockSharp.Messages.MessageAdapterWrapper.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.InMemoryMessageChannel/summary;DocStr4309
 M:StockSharp.Messages.InMemoryMessageChannel.#ctor(System.String,System.Action{System.Exception})/summary;DocStr1
 M:StockSharp.Messages.InMemoryMessageChannel.#ctor(System.String,System.Action{System.Exception})/param/name;DocStr4310
@@ -1148,6 +1150,7 @@ P:StockSharp.Messages.OrderRegisterMessage.RpsInfo/summary;Str236
 P:StockSharp.Messages.OrderRegisterMessage.IsMarketMaker/summary;MarketMakerOrder
 P:StockSharp.Messages.OrderRegisterMessage.IsMargin/summary;IsMargin
 P:StockSharp.Messages.OrderRegisterMessage.Slippage/summary;Str164
+P:StockSharp.Messages.OrderRegisterMessage.IsManual/summary;IsOrderManual
 M:StockSharp.Messages.OrderRegisterMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.OrderRegisterMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.OrderRegisterMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9

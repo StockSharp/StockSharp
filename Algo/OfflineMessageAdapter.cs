@@ -92,7 +92,14 @@
 					lock (_syncObject)
 					{
 						if (!_connected)
+						{
+							var timeMsg = (TimeMessage)message;
+
+							if (timeMsg.OfflineMode == MessageOfflineModes.Force)
+								break;
+
 							return;
+						}
 					}
 
 					break;

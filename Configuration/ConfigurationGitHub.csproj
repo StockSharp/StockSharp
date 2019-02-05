@@ -64,6 +64,9 @@
     <Reference Include="StockSharp.BarChart">
       <HintPath>..\References\StockSharp.BarChart.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Bibox">
+      <HintPath>..\References\StockSharp.Bibox.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Bitbank">
       <HintPath>..\References\StockSharp.Bitbank.dll</HintPath>
     </Reference>
@@ -73,11 +76,17 @@
     <Reference Include="StockSharp.Bithumb">
       <HintPath>..\References\StockSharp.Bithumb.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.BitMax">
+      <HintPath>..\References\StockSharp.BitMax.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.BitStamp">
       <HintPath>..\References\StockSharp.BitStamp.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Bittrex">
       <HintPath>..\References\StockSharp.Bittrex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BitZ">
+      <HintPath>..\References\StockSharp.BitZ.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Blackwood">
       <HintPath>..\References\StockSharp.Blackwood.dll</HintPath>
@@ -85,8 +94,14 @@
     <Reference Include="StockSharp.Btce">
       <HintPath>..\References\StockSharp.Btce.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.BW">
+      <HintPath>..\References\StockSharp.BW.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Coinbase">
       <HintPath>..\References\StockSharp.Coinbase.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.CoinBene">
+      <HintPath>..\References\StockSharp.CoinBene.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.CoinCap">
       <HintPath>..\References\StockSharp.CoinCap.dll</HintPath>
@@ -135,6 +150,9 @@
     </Reference>
     <Reference Include="StockSharp.Kraken">
       <HintPath>..\References\StockSharp.Kraken.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.LBank">
+      <HintPath>..\References\StockSharp.LBank.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.LMAX">
       <HintPath>..\References\StockSharp.LMAX.dll</HintPath>
@@ -249,6 +267,9 @@
     </Reference>
     <Reference Include="StockSharp.Zaif">
       <HintPath>..\References\StockSharp.Zaif.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.ZB">
+      <HintPath>..\References\StockSharp.ZB.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

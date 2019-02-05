@@ -78,8 +78,6 @@ P:StockSharp.Fix.Dialects.BaseFixDialect.CheckTimeFrameByRequest/inheritdoc;DocS
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportStopLoss/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportTakeProfit/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportWithdraw/inheritdoc;DocStr8459
-M:StockSharp.Fix.Dialects.BaseFixDialect.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})/inheritdoc;DocStr8459
-M:StockSharp.Fix.Dialects.BaseFixDialect.CreateWithdrawCondition(StockSharp.Messages.WithdrawInfo)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.OnReset/summary;Str3282

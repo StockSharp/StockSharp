@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.BitZ</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.BitZ.BitZMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.BitZ"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitZ.BitZMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitZ.BitZMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitZ.BitZMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitZ.BitZMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BitZ.BitZMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.BitZ.BitZMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.BitZ.BitZMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.BitZ.BitZMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BitZ.BitZMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.BitZ.BitZMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.BitZ.BitZOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.BitZ"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BitZ.BitZOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BitZ.BitZOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.BitZ.BitZTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.BitZ"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BitZ.BitZTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BitZ.BitZTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitZ.BitZTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitZ.BitZTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitZ.BitZTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

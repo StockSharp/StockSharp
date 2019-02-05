@@ -243,7 +243,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
 		public TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 200, MarketDataVersions.Version63, exchangeInfoProvider)
+			: base(securityId, 200, MarketDataVersions.Version64, exchangeInfoProvider)
 		{
 		}
 
@@ -441,6 +441,14 @@ namespace StockSharp.Algo.Storages.Binary
 					continue;
 
 				writer.WriteStringEx(msg.CommissionCurrency);
+
+				if (metaInfo.Version < MarketDataVersions.Version64)
+					continue;
+
+				writer.Write(msg.IsManual != null);
+
+				if (msg.IsManual != null)
+					writer.Write(msg.IsManual.Value);
 			}
 		}
 
@@ -610,6 +618,12 @@ namespace StockSharp.Algo.Storages.Binary
 				return msg;
 				
 			msg.CommissionCurrency = reader.ReadStringEx();
+
+			if (metaInfo.Version < MarketDataVersions.Version64)
+				return msg;
+
+			if (reader.Read())
+				msg.IsManual = reader.Read();
 
 			return msg;
 		}

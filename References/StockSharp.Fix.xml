@@ -270,12 +270,6 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportWithdraw">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateStopCondition(System.Boolean,System.Nullable{System.Decimal})">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateWithdrawCondition(StockSharp.Messages.WithdrawInfo)">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition">
       <inheritdoc />
     </member>

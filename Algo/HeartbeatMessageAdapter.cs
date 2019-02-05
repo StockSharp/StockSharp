@@ -77,7 +77,7 @@ namespace StockSharp.Algo
 		private const ConnectionStates _reConnecting = (ConnectionStates)10;
 
 		private readonly SyncObject _timeSync = new SyncObject();
-		private readonly TimeMessage _timeMessage = new TimeMessage();
+		private readonly TimeMessage _timeMessage = new TimeMessage { OfflineMode = MessageOfflineModes.Force };
 
 		private readonly ReConnectionSettings _reConnectionSettings;
 
@@ -156,6 +156,8 @@ namespace StockSharp.Algo
 
 					if (isRestored)
 					{
+						this.AddInfoLog(LocalizedStrings.Str2958);
+
 						if (SuppressReconnectingErrors)
 							RaiseNewOutMessage(new ReconnectingFinishedMessage { Adapter = message.Adapter });
 						else
@@ -166,7 +168,10 @@ namespace StockSharp.Algo
 						if (connectMsg.Error == null || !SuppressReconnectingErrors || !isReconnecting)
 							base.OnInnerAdapterNewOutMessage(message);
 						else if (isReconnectionStarted)
+						{
+							this.AddInfoLog(LocalizedStrings.Reconnecting);
 							base.OnInnerAdapterNewOutMessage(new ReconnectingStartedMessage());
+						}
 					}
 
 					break;
@@ -285,19 +290,24 @@ namespace StockSharp.Algo
 				}
 			}
 
-			base.SendInMessage(message);
-
-			lock (_timeSync)
+			try
 			{
-				if (isStartTimer && (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected))
-					StartTimer();
+				base.SendInMessage(message);
+
+				lock (_timeSync)
+				{
+					if (isStartTimer && (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected))
+						StartTimer();
+				}
 			}
-
-			if (message != _timeMessage)
-				return;
-
-			lock (_timeSync)
-				_canSendTime = true;
+			finally
+			{
+				if (message == _timeMessage)
+				{
+					lock (_timeSync)
+						_canSendTime = true;
+				}	
+			}
 		}
 
 		private void StartTimer()
@@ -307,8 +317,10 @@ namespace StockSharp.Algo
 
 			var period = ReConnectionSettings.Interval;
 			var needHeartbeat = HeartbeatInterval != TimeSpan.Zero;
+			
 			var time = TimeHelper.Now;
 			var lastHeartBeatTime = TimeHelper.Now;
+
 			var sync = new SyncObject();
 			var isProcessing = false;
 
@@ -433,7 +445,7 @@ namespace StockSharp.Algo
 					if (_connectionTimeOut > TimeSpan.Zero)
 						break;
 
-					if (_reConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now, out var _))
+					if (_reConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now, out _))
 					{
 						this.AddInfoLog("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", FormatState(_currState), FormatState(_prevState), _connectingAttemptCount);
 

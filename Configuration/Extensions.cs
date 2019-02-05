@@ -34,18 +34,23 @@ namespace StockSharp.Configuration
 	using StockSharp.Algo.Indicators;
 	using StockSharp.AlphaVantage;
 	using StockSharp.BarChart;
+	using StockSharp.Bibox;
 	using StockSharp.Binance;
 	using StockSharp.Bitbank;
 	using StockSharp.Bitexbook;
 	using StockSharp.Bitfinex;
 	using StockSharp.Bithumb;
 	using StockSharp.Bitmex;
+	using StockSharp.BitMax;
 	using StockSharp.BitStamp;
 	using StockSharp.Bittrex;
+	using StockSharp.BitZ;
 	using StockSharp.Blackwood;
 	using StockSharp.Btce;
+	using StockSharp.BW;
 	using StockSharp.Cex;
 	using StockSharp.Coinbase;
+	using StockSharp.CoinBene;
 	using StockSharp.Coincheck;
 	using StockSharp.CoinExchange;
 	using StockSharp.Cqg.Continuum;
@@ -97,6 +102,8 @@ namespace StockSharp.Configuration
 	using StockSharp.Zaif;
 	using StockSharp.CoinCap;
 	using StockSharp.Coinigy;
+	using StockSharp.LBank;
+	using StockSharp.ZB;
 
 	/// <summary>
 	/// Extension class.
@@ -239,6 +246,13 @@ namespace StockSharp.Configuration
 			() => typeof(TradeOgreMessageAdapter),
 			() => typeof(CoinCapMessageAdapter),
 			() => typeof(CoinigyMessageAdapter),
+			() => typeof(LBankMessageAdapter),
+			() => typeof(BitMaxMessageAdapter),
+			() => typeof(BWMessageAdapter),
+			() => typeof(BiboxMessageAdapter),
+			() => typeof(CoinBeneMessageAdapter),
+			() => typeof(BitZMessageAdapter),
+			() => typeof(ZBMessageAdapter),
 		});
 
 		/// <summary>

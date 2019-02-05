@@ -300,38 +300,38 @@ namespace StockSharp.Algo
 					//_inAdapter = new ChannelMessageAdapter(_inAdapter, InMessageChannel, OutMessageChannel)
 					//{
 					//	//OwnOutputChannel = true,
-					//	OwnInnerAdaper = true
+					//	OwnInnerAdapter = true
 					//};
 
 					if (RiskManager != null)
-						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdaper = true };
+						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdapter = true };
 
 					if (SupportOffline)
-						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
+						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdapter = true };
 
 					if (SecurityStorage != null && StorageRegistry != null && SnapshotRegistry != null)
 					{
 						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry, SnapshotRegistry, _adapter.CandleBuilderProvider)
 						{
-							OwnInnerAdaper = true,
+							OwnInnerAdapter = true,
 							OverrideSecurityData = OverrideSecurityData
 						};
 					}
 
 					if (SupportBasketSecurities)
-						_inAdapter = new BasketSecurityMessageAdapter(this, BasketSecurityProcessorProvider, _entityCache.ExchangeInfoProvider, _inAdapter) { OwnInnerAdaper = true };
+						_inAdapter = new BasketSecurityMessageAdapter(this, BasketSecurityProcessorProvider, _entityCache.ExchangeInfoProvider, _inAdapter) { OwnInnerAdapter = true };
 
 					if (SupportSubscriptionTracking)
-						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdaper = true/*, IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect*/ };
+						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdapter = true/*, IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect*/ };
 
 					if (SupportLevel1DepthBuilder)
-						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdaper = true };
+						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdapter = true };
 
 					if (SupportAssociatedSecurity)
-						_inAdapter = new AssociatedSecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
+						_inAdapter = new AssociatedSecurityAdapter(_inAdapter) { OwnInnerAdapter = true };
 
 					if (SupportFilteredMarketDepth)
-						_inAdapter = new FilteredMarketDepthAdapter(_inAdapter) { OwnInnerAdaper = true };
+						_inAdapter = new FilteredMarketDepthAdapter(_inAdapter) { OwnInnerAdapter = true };
 
 					_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
 				}
@@ -357,7 +357,7 @@ namespace StockSharp.Algo
 					return;
 
 				if (value)
-					EnableAdapter(a => new OfflineMessageAdapter(a) { OwnInnerAdaper = true }, typeof(StorageMessageAdapter), false);
+					EnableAdapter(a => new OfflineMessageAdapter(a) { OwnInnerAdapter = true }, typeof(StorageMessageAdapter), false);
 				else
 					DisableAdapter<OfflineMessageAdapter>();
 
@@ -379,7 +379,7 @@ namespace StockSharp.Algo
 					return;
 
 				if (value)
-					EnableAdapter(a => new SubscriptionMessageAdapter(a) { OwnInnerAdaper = true }, typeof(OfflineMessageAdapter), false);
+					EnableAdapter(a => new SubscriptionMessageAdapter(a) { OwnInnerAdapter = true }, typeof(OfflineMessageAdapter), false);
 				else
 					DisableAdapter<SubscriptionMessageAdapter>();
 
@@ -401,7 +401,7 @@ namespace StockSharp.Algo
 					return;
 
 				if (value)
-					EnableAdapter(a => new FilteredMarketDepthAdapter(a) { OwnInnerAdaper = true }, typeof(Level1DepthBuilderAdapter));
+					EnableAdapter(a => new FilteredMarketDepthAdapter(a) { OwnInnerAdapter = true }, typeof(Level1DepthBuilderAdapter));
 				else
 					DisableAdapter<FilteredMarketDepthAdapter>();
 
@@ -423,7 +423,7 @@ namespace StockSharp.Algo
 					return;
 
 				if (value)
-					EnableAdapter(a => new AssociatedSecurityAdapter(a) { OwnInnerAdaper = true }, typeof(Level1DepthBuilderAdapter));
+					EnableAdapter(a => new AssociatedSecurityAdapter(a) { OwnInnerAdapter = true }, typeof(Level1DepthBuilderAdapter));
 				else
 					DisableAdapter<AssociatedSecurityAdapter>();
 
@@ -445,7 +445,7 @@ namespace StockSharp.Algo
 					return;
 
 				if (value)
-					EnableAdapter(a => new Level1DepthBuilderAdapter(a) { OwnInnerAdaper = true }, typeof(AssociatedSecurityAdapter), false);
+					EnableAdapter(a => new Level1DepthBuilderAdapter(a) { OwnInnerAdapter = true }, typeof(AssociatedSecurityAdapter), false);
 				else
 					DisableAdapter<Level1DepthBuilderAdapter>();
 
@@ -561,7 +561,7 @@ namespace StockSharp.Algo
 			else
 				nextWrapper.InnerAdapter = adapterWrapper.InnerAdapter;
 
-			adapterWrapper.OwnInnerAdaper = false;
+			adapterWrapper.OwnInnerAdapter = false;
 			adapterWrapper.Dispose();
 		}
 
@@ -1189,11 +1189,14 @@ namespace StockSharp.Algo
 			if (message.Error != null)
 				RaiseError(message.Error);
 
-			var criteria = _portfolioLookups.TryGetValue(message.OriginalTransactionId);
+			PortfolioLookupMessage criteria;
+
+			lock (_portfolioLookups.SyncRoot)
+				criteria = _portfolioLookups.TryGetAndRemove(message.OriginalTransactionId);
 
 			if (criteria == null)
 				return;
-
+			
 			RaiseLookupPortfoliosResult(criteria, message.Error, Portfolios.Where(pf => criteria.PortfolioName.IsEmpty() || pf.Name.ContainsIgnoreCase(criteria.PortfolioName)));
 		}
 

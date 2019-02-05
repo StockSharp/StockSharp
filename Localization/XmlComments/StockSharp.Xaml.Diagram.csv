@@ -10,6 +10,7 @@ P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Category/summary;DocStr7906
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Description/summary;DocStr7907
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Revision/summary;DocStr9071
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.PublishedId/summary;DocStr9530
+P:StockSharp.Xaml.Diagram.CompositionDiagramElement.DocUrl/summary;DocStr10895
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsModifiable/summary;DocStr7914
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsLoaded/summary;DocStr10762
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Type/summary;DocStr9200
@@ -166,6 +167,8 @@ F:StockSharp.Xaml.Diagram.DiagramEditorControl.UndoCommandProperty/summary;DocSt
 P:StockSharp.Xaml.Diagram.DiagramEditorControl.UndoCommand/summary;DocStr9253
 F:StockSharp.Xaml.Diagram.DiagramEditorControl.RedoCommandProperty/summary;DocStr29
 P:StockSharp.Xaml.Diagram.DiagramEditorControl.RedoCommand/summary;DocStr9254
+F:StockSharp.Xaml.Diagram.DiagramEditorControl.HelpCommandProperty/summary;DocStr29
+P:StockSharp.Xaml.Diagram.DiagramEditorControl.HelpCommand/summary;DocStr9858
 F:StockSharp.Xaml.Diagram.DiagramEditorControl.CompositionProperty/summary;DocStr29
 P:StockSharp.Xaml.Diagram.DiagramEditorControl.Composition/summary;XamlStr688
 F:StockSharp.Xaml.Diagram.DiagramEditorControl.ShowOverviewProperty/summary;DocStr29
@@ -441,6 +444,7 @@ M:StockSharp.Xaml.Diagram.PaletteTreeItem.ToString/returns;DocStr50
 T:StockSharp.Xaml.Diagram.DiagramPaletteControl/summary;DocStr8000
 P:StockSharp.Xaml.Diagram.DiagramPaletteControl.AddCommand/summary;DocStr8459
 P:StockSharp.Xaml.Diagram.DiagramPaletteControl.RemoveCommand/summary;DocStr8459
+P:StockSharp.Xaml.Diagram.DiagramPaletteControl.HelpCommand/summary;DocStr9858
 P:StockSharp.Xaml.Diagram.DiagramPaletteControl.Items/summary;DocStr8001
 P:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteElement/summary;DocStr8002
 E:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteElementDoubleClicked/summary;DocStr8004
@@ -797,6 +801,12 @@ P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IsMarket/summary;
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ClientCode/summary;ClientCodeDesc
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.BrokerCode/summary;Str2619
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ShrinkPrice/summary;DocStr10091
+P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IsManual/summary;IsOrderManual
+P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IsMargin/summary;IsMargin
+P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IsMarketMaker/summary;MarketMakerOrder
+P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.TimeInForce/summary;Str232
+P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ExpiryDate/summary;DocStr2918
+P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Slippage/summary;Str164
 M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.OnStop/summary;DocStr7894
 M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2

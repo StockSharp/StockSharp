@@ -824,9 +824,447 @@
             Security.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.SpecialDaysControl">
+      <summary>
+            Editor for <see cref="P:StockSharp.Messages.WorkingTime.SpecialDays" />.
+            </summary>
+      <summary>
+            SpecialDaysControl
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.SpecialDaysControl.SpecialDaysProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.SpecialDaysControl.SpecialDays" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.SpecialDaysControl.SpecialDays">
+      <summary>
+            Special working days and holidays.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PropertyGrid.SpecialDaysControl.Error">
+      <summary>
+            Error handler.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PropertyGrid.SpecialDaysControl.DataChanged">
+      <summary>
+        <see cref="P:StockSharp.Xaml.PropertyGrid.SpecialDaysControl.SpecialDays" /> changed event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.SpecialDaysControl.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SpecialDaysControl" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.SpecialDaysControl.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.SpecialDaysOfWeekControl">
+      <summary>
+            Editor for <see cref="P:StockSharp.Messages.WorkingTimePeriod.SpecialDays" />.
+            </summary>
+      <summary>
+            SpecialDaysOfWeekControl
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.SpecialDaysOfWeekControl.SpecialDaysOfWeekProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.SpecialDaysOfWeekControl.SpecialDaysOfWeek" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.SpecialDaysOfWeekControl.SpecialDaysOfWeek">
+      <summary>
+            Work schedule for days with different from <see cref="P:StockSharp.Messages.WorkingTimePeriod.Times" /> schedules.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PropertyGrid.SpecialDaysOfWeekControl.Error">
+      <summary>
+            Error handler.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PropertyGrid.SpecialDaysOfWeekControl.DataChanged">
+      <summary>
+        <see cref="P:StockSharp.Xaml.PropertyGrid.SpecialDaysOfWeekControl.SpecialDaysOfWeek" /> changed event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.SpecialDaysOfWeekControl.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SpecialDaysOfWeekControl" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.SpecialDaysOfWeekControl.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.WorkingTimeControl">
+      <summary>
+            Editor for <see cref="P:StockSharp.Xaml.PropertyGrid.WorkingTimeControl.WorkingTime" />.
+            </summary>
+      <summary>
+            WorkingTimeControl
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.WorkingTimeControl.WorkingTimeProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.WorkingTimeControl.WorkingTime" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.WorkingTimeControl.WorkingTime">
+      <summary>
+            Work schedule (time, holidays etc.).
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PropertyGrid.WorkingTimeControl.Error">
+      <summary>
+            Error handler.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PropertyGrid.WorkingTimeControl.DataChanged">
+      <summary>
+        <see cref="P:StockSharp.Xaml.PropertyGrid.WorkingTimeControl.WorkingTime" /> changed event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.WorkingTimeControl.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.WorkingTimeControl" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.WorkingTimeControl.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.WorkingTimeEditor">
+      <summary>
+            Editor for <see cref="P:StockSharp.Xaml.PropertyGrid.WorkingTimeEditor.WorkingTime" />.
+            </summary>
+      <summary>
+            WorkingTimeEditor
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.WorkingTimeEditor.WorkingTimeProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.WorkingTimeEditor.WorkingTime" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.WorkingTimeEditor.WorkingTime">
+      <summary>
+            Work schedule (time, holidays etc.).
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.WorkingTimeEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.WorkingTimeEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.WorkingTimeEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor">
+      <summary>
+            Editor for <see cref="T:StockSharp.Algo.Commissions.CommissionRule" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor.#ctor">
+      <summary>
+            Create <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor">
+      <summary>
+            Editor for extended storage.
+            </summary>
+      <summary>
+            ExtendedInfoStorageEditor
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.AssignToEditCore(DevExpress.Xpf.Editors.IBaseEdit)">
+      <summary>
+      </summary>
+      <param name="edit">
+      </param>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.RiskRulesEditor">
+      <summary>
+            Editor for <see cref="T:StockSharp.Algo.Risk.IRiskRule" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.RiskRulesEditor.#ctor">
+      <summary>
+            Create <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow">
+      <summary>
+            The interface for a window to select multiples securities.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow.SelectedSecurities">
+      <summary>
+            Selected securities.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.SecuritiesEditor">
+      <summary>
+            Editor to select multiples securities.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.SecuritiesEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SecuritiesEditor" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.SecuritiesEditor.ServiceName">
+      <summary>
+            Service name.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor">
+      <summary>
+            Editor for <see cref="T:StockSharp.BusinessEntities.ExchangeBoard" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.ExchangeInfoProviderProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.ExchangeInfoProvider" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.ExchangeInfoProvider">
+      <summary>
+            The exchange info provider.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.ExchangeEditor">
+      <summary>
+            Editor for <see cref="T:StockSharp.BusinessEntities.Exchange" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.ExchangeEditor.ExchangeInfoProviderProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.ExchangeEditor.ExchangeInfoProvider" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.ExchangeEditor.ExchangeInfoProvider">
+      <summary>
+            The exchange info provider.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.ExchangeEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.ExchangeEditor" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.ExtensionInfoEditor">
+      <summary>
+            The button activating the window <see cref="T:StockSharp.Xaml.ExtensionInfoWindow" />.
+            </summary>
+      <summary>
+            ExtensionInfoEditor
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.ExtensionInfoEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.ExtensionInfoEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.ExtensionInfoEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.PortfolioEditor">
+      <summary>
+            The control activating <see cref="T:StockSharp.Xaml.PortfolioPickerWindow" />.
+            </summary>
+      <summary>
+            PortfolioEditor
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.PortfolioEditor.PortfoliosProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.Portfolios" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.Portfolios">
+      <summary>
+            Available portfolios.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolioProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolio" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolio">
+      <summary>
+            The selected portfolio.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.PortfolioEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.PortfolioEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.PortfolioEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.SecurityEditor">
+      <summary>
+            The control activating <see cref="T:StockSharp.Xaml.SecurityPickerWindow" />.
+            </summary>
+      <summary>
+            SecurityEditor
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecurityProviderProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecurityProvider" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.SecurityEditor.SelectedSecurity">
+      <summary>
+            The selected instrument.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecuritySelected">
+      <summary>
+            The selected instrument change event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.SecurityEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SecurityEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.SecurityEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor">
+      <summary>
+            Editor for <see cref="T:StockSharp.Algo.Candles.CandleSeries" />.
+            </summary>
+      <summary>
+            CandleSettingsEditor
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsChanged">
+      <summary>
+        <see cref="P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings" /> changed event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings">
+      <summary>
+            Candles settings.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.PropertyGridEx">
+      <summary>
+            The extended table of settings.
+            </summary>
+      <summary>
+            PropertyGridEx
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SecurityProviderProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SecurityProvider" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.PropertyGridEx.ExchangeInfoProviderProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.ExchangeInfoProvider" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.ExchangeInfoProvider">
+      <summary>
+            The exchange boards provider.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.PropertyGridEx.PortfoliosProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.Portfolios" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.Portfolios">
+      <summary>
+            Available portfolios.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Object,System.Object)">
+      <summary>
+            The value change handle.
+            </summary>
+      <param name="oldValue">Previous value.</param>
+      <param name="newValue">The new value.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.PropertyGridEx" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.RangeListEditor">
       <summary>
-            Editor of range list.
+            Editor of time range list.
             </summary>
       <summary>
             RangeListEditor
@@ -834,62 +1272,22 @@
     </member>
     <member name="F:StockSharp.Xaml.RangeListEditor.RangesProperty">
       <summary>
-            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.Ranges" />.
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.RangeListEditor.Ranges" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.RangeListEditor.Ranges">
       <summary>
-            Ranges.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.RangeListEditor.SelectedRangeProperty">
-      <summary>
-            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.SelectedRange" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.RangeListEditor.SelectedRange">
-      <summary>
-            Selected range.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.RangeListEditor.NewTimeFromProperty">
-      <summary>
-            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.NewTimeFrom" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.RangeListEditor.NewTimeFrom">
-      <summary>
-            New from time.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.RangeListEditor.NewTimeTillProperty">
-      <summary>
-            Dependency property for <see cref="P:StockSharp.Xaml.RangeListEditor.NewTimeTill" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.RangeListEditor.NewTimeTill">
-      <summary>
-            New till time.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.RangeListEditor.CommandAddTimes">
-      <summary>
-            Add command.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.RangeListEditor.CommandDelTimes">
-      <summary>
-            Delete command.
+            Time ranges.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.RangeListEditor.Error">
       <summary>
-            Error.
+            Error handler.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.RangeListEditor.DataChanged">
       <summary>
-            Data changed.
+        <see cref="P:StockSharp.Xaml.RangeListEditor.Ranges" /> changed event.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.RangeListEditor.#ctor">
@@ -1607,302 +2005,6 @@
       <param name="currentTime">The current time.</param>
       <param name="assetPrice">The current price of the underlying asset. If it is set, then <see cref="T:StockSharp.Algo.Derivatives.IBlackScholes" /> uses this price.</param>
     </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor">
-      <summary>
-            Editor for <see cref="T:StockSharp.Algo.Commissions.CommissionRule" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor.#ctor">
-      <summary>
-            Create <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor">
-      <summary>
-            Editor for extended storage.
-            </summary>
-      <summary>
-            ExtendedInfoStorageEditor
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.AssignToEditCore(DevExpress.Xpf.Editors.IBaseEdit)">
-      <summary>
-      </summary>
-      <param name="edit">
-      </param>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.RiskRulesEditor">
-      <summary>
-            Editor for <see cref="T:StockSharp.Algo.Risk.IRiskRule" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.RiskRulesEditor.#ctor">
-      <summary>
-            Create <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow">
-      <summary>
-            The interface for a window to select multiples securities.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow.SecurityProvider">
-      <summary>
-            The provider of information about instruments.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow.SelectedSecurities">
-      <summary>
-            Selected securities.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.SecuritiesEditor">
-      <summary>
-            Editor to select multiples securities.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.SecuritiesEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SecuritiesEditor" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.SecuritiesEditor.ServiceName">
-      <summary>
-            Service name.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor">
-      <summary>
-            Editor for <see cref="T:StockSharp.BusinessEntities.ExchangeBoard" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.ExchangeInfoProviderProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.ExchangeInfoProvider" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.ExchangeInfoProvider">
-      <summary>
-            The exchange info provider.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.ExchangeEditor">
-      <summary>
-            Editor for <see cref="T:StockSharp.BusinessEntities.Exchange" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.ExchangeEditor.ExchangeInfoProviderProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.ExchangeEditor.ExchangeInfoProvider" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.ExchangeEditor.ExchangeInfoProvider">
-      <summary>
-            The exchange info provider.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.ExchangeEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.ExchangeEditor" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.ExtensionInfoEditor">
-      <summary>
-            The button activating the window <see cref="T:StockSharp.Xaml.ExtensionInfoWindow" />.
-            </summary>
-      <summary>
-            ExtensionInfoEditor
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.ExtensionInfoEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.ExtensionInfoEditor" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.ExtensionInfoEditor.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.PortfolioEditor">
-      <summary>
-            The control activating <see cref="T:StockSharp.Xaml.PortfolioPickerWindow" />.
-            </summary>
-      <summary>
-            PortfolioEditor
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.PortfolioEditor.PortfoliosProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.Portfolios" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.Portfolios">
-      <summary>
-            Available portfolios.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolioProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolio" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolio">
-      <summary>
-            The selected portfolio.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.PortfolioEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.PortfolioEditor" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.PortfolioEditor.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.SecurityEditor">
-      <summary>
-            The control activating <see cref="T:StockSharp.Xaml.SecurityPickerWindow" />.
-            </summary>
-      <summary>
-            SecurityEditor
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecurityProviderProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecurityProvider" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecurityProvider">
-      <summary>
-            The provider of information about instruments.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.SecurityEditor.SelectedSecurity">
-      <summary>
-            The selected instrument.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecuritySelected">
-      <summary>
-            The selected instrument change event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.SecurityEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SecurityEditor" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.SecurityEditor.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor">
-      <summary>
-            Editor for <see cref="T:StockSharp.Algo.Candles.CandleSeries" />.
-            </summary>
-      <summary>
-            CandleSettingsEditor
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsChanged">
-      <summary>
-            Settings changed event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings">
-      <summary>
-            Candles settings.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.PropertyGridEx">
-      <summary>
-            The extended table of settings.
-            </summary>
-      <summary>
-            PropertyGridEx
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SecurityProviderProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SecurityProvider" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SecurityProvider">
-      <summary>
-            The provider of information about instruments.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.PropertyGridEx.ExchangeInfoProviderProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.ExchangeInfoProvider" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.ExchangeInfoProvider">
-      <summary>
-            The exchange boards provider.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.PropertyGridEx.PortfoliosProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.Portfolios" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.Portfolios">
-      <summary>
-            Available portfolios.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Object,System.Object)">
-      <summary>
-            The value change handle.
-            </summary>
-      <param name="oldValue">Previous value.</param>
-      <param name="newValue">The new value.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.PropertyGridEx" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.ExtendedInfoStorageComboBox">
       <summary>
             The drop-down list for extended storage selection.
@@ -2506,6 +2608,11 @@
             The code of board which is currently being edited.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.ExchangeBoardsPanel.Changed">
+      <summary>
+        <see cref="P:StockSharp.Xaml.ExchangeBoardsPanel.Boards" /> changed event.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.ExchangeBoardsPanel.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.ExchangeBoardsPanel" />.
@@ -2844,6 +2951,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PortfolioDataSource" />.
             </summary>
       <param name="provider">The provider of information about portfolios.</param>
+    </member>
+    <member name="P:StockSharp.Xaml.PortfolioDataSource.Portfolios">
+      <summary>
+            All portfolios.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.PortfolioDataSource.Add(StockSharp.BusinessEntities.Portfolio)">
       <summary>

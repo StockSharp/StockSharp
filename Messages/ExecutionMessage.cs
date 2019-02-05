@@ -527,6 +527,14 @@ namespace StockSharp.Messages
 		public bool? IsMargin { get; set; }
 
 		/// <summary>
+		/// Is order manual.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.ManualKey)]
+		[DescriptionLoc(LocalizedStrings.IsOrderManualKey)]
+		public bool? IsManual { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -607,6 +615,7 @@ namespace StockSharp.Messages
 
 				IsMarketMaker = IsMarketMaker,
 				IsMargin = IsMargin,
+				IsManual = IsManual,
 
 				CommissionCurrency = CommissionCurrency,
 			};

@@ -5127,6 +5127,11 @@
             Идентификатор курса.
             </summary>
     </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaVcbDerivativeColumns.BaseContractId">
+      <summary>
+            Идентификатор базового контракта.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaBondIsinFutureColumns">
       <summary>
             Поток FORTS_FUTINFO_REPL - Фьючерсы: справочная и сессионная информация.

@@ -165,8 +165,8 @@ namespace StockSharp.Algo
 
 			if (initChannels)
 			{
-				InMessageChannel = new InMemoryMessageChannel("Connector In", RaiseError);
-				OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
+				InMessageChannel = new InMemoryMessageChannel($"Connector In ({Name})", RaiseError);
+				OutMessageChannel = new InMemoryMessageChannel($"Connector Out ({Name})", RaiseError);
 			}
 
 			IsRestoreSubscriptionOnReconnect = isRestoreSubscriptionOnReconnect;
@@ -699,6 +699,8 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
+			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
+
 			//если для критерия указаны код биржи и код инструмента, то сначала смотрим нет ли такого инструмента
 			if (!NeedLookupSecurities(criteria.SecurityId))
 			{
@@ -743,7 +745,12 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public virtual void LookupOrders(OrderStatusMessage criteria)
 		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
 			_entityCache.AddOrderStatusTransactionId(criteria.TransactionId);
+			
+			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
 			SendInMessage(criteria);
 		}
 
@@ -774,6 +781,7 @@ namespace StockSharp.Algo
 
 			_portfolioLookups.Add(criteria.TransactionId, criteria);
 
+			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
 			SendInMessage(criteria);
 		}
 
@@ -802,6 +810,7 @@ namespace StockSharp.Algo
 
 			_boardLookups.Add(criteria.TransactionId, criteria);
 
+			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
 			SendInMessage(criteria);
 		}
 

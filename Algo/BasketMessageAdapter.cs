@@ -121,7 +121,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<long, IMessageAdapter> _subscriptionsById = new SynchronizedDictionary<long, IMessageAdapter>();
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _subscriptionNonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
 		private readonly SynchronizedDictionary<Helper.SubscriptionKey, IMessageAdapter> _subscriptionsByKey = new SynchronizedDictionary<Helper.SubscriptionKey, IMessageAdapter>();
-		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
+		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _activeAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly SyncObject _connectedResponseLock = new SyncObject();
 		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
 		private readonly HashSet<IMessageAdapter> _pendingConnectAdapters = new HashSet<IMessageAdapter>();
@@ -275,7 +275,7 @@ namespace StockSharp.Algo
 
 		private void ProcessReset(ResetMessage message)
 		{
-			_hearbeatAdapters.Values.ForEach(a =>
+			_activeAdapters.Values.ForEach(a =>
 			{
 				a.SendInMessage(message);
 				a.Dispose();
@@ -290,7 +290,7 @@ namespace StockSharp.Algo
 				_subscriptionNonSupportedAdapters.Clear();
 			}
 
-			_hearbeatAdapters.Clear();
+			_activeAdapters.Clear();
 			_subscriptionsById.Clear();
 			_subscriptionsByKey.Clear();
 			_subscriptionMessages.Clear();
@@ -357,6 +357,23 @@ namespace StockSharp.Algo
 			return adapter;
 		}
 
+		private readonly Dictionary<IMessageAdapter, bool> _hearbeatFlags = new Dictionary<IMessageAdapter, bool>();
+
+		private bool IsHeartbeatOn(IMessageAdapter adapter)
+		{
+			return _hearbeatFlags.TryGetValue2(adapter) ?? true;
+		}
+
+		/// <summary>
+		/// Apply on/off heartbeat mode for the specified adapter.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="on">Is active.</param>
+		public void ApplyHeartbeat(IMessageAdapter adapter, bool on)
+		{
+			_hearbeatFlags[adapter] = on;
+		}
+
 		/// <summary>
 		/// Send message.
 		/// </summary>
@@ -395,17 +412,23 @@ namespace StockSharp.Algo
 					else
 						ProcessReset(new ResetMessage());
 
-					_hearbeatAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
+					_activeAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
 					{
 						lock (_connectedResponseLock)
 							_pendingConnectAdapters.Add(a);
 
 						var wrapper = CreateWrappers(a);
-						var adapter = (IMessageAdapter)new HeartbeatMessageAdapter(wrapper)
+
+						var adapter = wrapper;
+
+						if (IsHeartbeatOn(a))
 						{
-							SuppressReconnectingErrors = SuppressReconnectingErrors,
-							Parent = this
-						};
+							adapter = new HeartbeatMessageAdapter(adapter)
+							{
+								SuppressReconnectingErrors = SuppressReconnectingErrors,
+								Parent = this
+							};
+						}
 
 						if (SupportOffline)
 							adapter = new OfflineMessageAdapter(adapter);
@@ -415,10 +438,10 @@ namespace StockSharp.Algo
 						return adapter;
 					}));
 					
-					if (_hearbeatAdapters.Count == 0)
+					if (_activeAdapters.Count == 0)
 						throw new InvalidOperationException(LocalizedStrings.Str3650);
 
-					_hearbeatAdapters.Values.ForEach(a =>
+					_activeAdapters.Values.ForEach(a =>
 					{
 						var u = GetUnderlyingAdapter(a);
 						this.AddInfoLog("Connecting '{0}'.", u);
@@ -585,7 +608,7 @@ namespace StockSharp.Algo
 		{
 			if (mdMsg.Adapter != null)
 			{
-				var wrapper = _hearbeatAdapters.TryGetValue(mdMsg.Adapter);
+				var wrapper = _activeAdapters.TryGetValue(mdMsg.Adapter);
 
 				if (wrapper != null)
 					return new[] { wrapper };
@@ -761,7 +784,7 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				var a = _hearbeatAdapters.TryGetValue(adapter);
+				var a = _activeAdapters.TryGetValue(adapter);
 
 				adapter = a ?? throw new InvalidOperationException(LocalizedStrings.Str1838Params.Put(adapter.GetType()));
 			}
@@ -828,7 +851,7 @@ namespace StockSharp.Algo
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message)
 		{
 			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
-			var heartbeatAdapter = _hearbeatAdapters[underlyingAdapter];
+			var wrapper = _activeAdapters[underlyingAdapter];
 
 			var isError = message.Error != null;
 
@@ -845,7 +868,7 @@ namespace StockSharp.Algo
 
 				if (isError)
 				{
-					_connectedAdapters.Remove(heartbeatAdapter);
+					_connectedAdapters.Remove(wrapper);
 
 					if (_pendingConnectAdapters.Count == 0)
 					{
@@ -859,10 +882,10 @@ namespace StockSharp.Algo
 				{
 					foreach (var supportedMessage in innerAdapter.SupportedMessages)
 					{
-						_messageTypeAdapters.SafeAdd(supportedMessage).Add(heartbeatAdapter);
+						_messageTypeAdapters.SafeAdd(supportedMessage).Add(wrapper);
 					}
 
-					_connectedAdapters.Add(heartbeatAdapter);
+					_connectedAdapters.Add(wrapper);
 
 					pendingMessages = _pendingMessages.ToArray();
 					_pendingMessages.Clear();
@@ -888,7 +911,7 @@ namespace StockSharp.Algo
 		private void ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message)
 		{
 			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
-			var heartbeatAdapter = _hearbeatAdapters[underlyingAdapter];
+			var wrapper = _activeAdapters[underlyingAdapter];
 
 			if (message.Error == null)
 				this.AddInfoLog("Disconnected from '{0}'.", underlyingAdapter);
@@ -904,13 +927,13 @@ namespace StockSharp.Algo
 					if (list == null)
 						continue;
 
-					list.Remove(heartbeatAdapter);
+					list.Remove(wrapper);
 
 					if (list.Count == 0)
 						_messageTypeAdapters.Remove(supportedMessage);
 				}
 
-				_connectedAdapters.Remove(heartbeatAdapter);
+				_connectedAdapters.Remove(wrapper);
 			}
 
 			message.Adapter = underlyingAdapter;
@@ -1132,7 +1155,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			_hearbeatAdapters.Values.ForEach(a => a.Parent = null);
+			_activeAdapters.Values.ForEach(a => a.Parent = null);
 
 			base.DisposeManaged();
 		}

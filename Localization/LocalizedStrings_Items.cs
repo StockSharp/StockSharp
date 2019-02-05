@@ -2378,22 +2378,22 @@ namespace StockSharp.Localization
 		public static string Str183 => GetString(Str183Key);
 
 		/// <summary>
-		/// Work mode
+		/// Work schedule
 		/// </summary>
 		public const string Str184Key = nameof(Str184);
 
 		/// <summary>
-		/// Work mode
+		/// Work schedule
 		/// </summary>
 		public static string Str184 => GetString(Str184Key);
 
 		/// <summary>
-		/// Work mode, during which connections must be established.
+		/// Work schedule, during which connections must be established.
 		/// </summary>
 		public const string Str185Key = nameof(Str185);
 
 		/// <summary>
-		/// Work mode, during which connections must be established.
+		/// Work schedule, during which connections must be established.
 		/// </summary>
 		public static string Str185 => GetString(Str185Key);
 
@@ -4528,12 +4528,12 @@ namespace StockSharp.Localization
 		public static string IOC => GetString(IOCKey);
 
 		/// <summary>
-		/// Work mode (time, holidays etc.).
+		/// Work schedule (time, holidays etc.).
 		/// </summary>
 		public const string Str408Key = nameof(Str408);
 
 		/// <summary>
-		/// Work mode (time, holidays etc.).
+		/// Work schedule (time, holidays etc.).
 		/// </summary>
 		public static string Str408 => GetString(Str408Key);
 
@@ -49036,5 +49036,135 @@ namespace StockSharp.Localization
 		/// Subscription '{0}' to {1} unexpected cancelled with error '{2}'.
 		/// </summary>
 		public static string SubscriptionUnexpectedCancelled => GetString(SubscriptionUnexpectedCancelledKey);
+
+		/// <summary>
+		/// Manual
+		/// </summary>
+		public const string ManualKey = nameof(Manual);
+
+		/// <summary>
+		/// Manual
+		/// </summary>
+		public static string Manual => GetString(ManualKey);
+
+		/// <summary>
+		/// Is order manual.
+		/// </summary>
+		public const string IsOrderManualKey = nameof(IsOrderManual);
+
+		/// <summary>
+		/// Is order manual.
+		/// </summary>
+		public static string IsOrderManual => GetString(IsOrderManualKey);
+
+		/// <summary>
+		/// LBank
+		/// </summary>
+		public const string LBankKey = nameof(LBank);
+
+		/// <summary>
+		/// LBank
+		/// </summary>
+		public static string LBank => GetString(LBankKey);
+
+		/// <summary>
+		/// BitMax
+		/// </summary>
+		public const string BitMaxKey = nameof(BitMax);
+
+		/// <summary>
+		/// BitMax
+		/// </summary>
+		public static string BitMax => GetString(BitMaxKey);
+
+		/// <summary>
+		/// BW
+		/// </summary>
+		public const string BWKey = nameof(BW);
+
+		/// <summary>
+		/// BW
+		/// </summary>
+		public static string BW => GetString(BWKey);
+
+		/// <summary>
+		/// Bibox
+		/// </summary>
+		public const string BiboxKey = nameof(Bibox);
+
+		/// <summary>
+		/// Bibox
+		/// </summary>
+		public static string Bibox => GetString(BiboxKey);
+
+		/// <summary>
+		/// Bit-Z
+		/// </summary>
+		public const string BitZKey = nameof(BitZ);
+
+		/// <summary>
+		/// Bit-Z
+		/// </summary>
+		public static string BitZ => GetString(BitZKey);
+
+		/// <summary>
+		/// ZB.COM
+		/// </summary>
+		public const string ZBKey = nameof(ZB);
+
+		/// <summary>
+		/// ZB.COM
+		/// </summary>
+		public static string ZB => GetString(ZBKey);
+
+		/// <summary>
+		/// CoinBene
+		/// </summary>
+		public const string CoinBeneKey = nameof(CoinBene);
+
+		/// <summary>
+		/// CoinBene
+		/// </summary>
+		public static string CoinBene => GetString(CoinBeneKey);
+
+		/// <summary>
+		/// E*TRADE
+		/// </summary>
+		public const string ETradeKey = nameof(ETrade);
+
+		/// <summary>
+		/// E*TRADE
+		/// </summary>
+		public static string ETrade => GetString(ETradeKey);
+
+		/// <summary>
+		/// Mark
+		/// </summary>
+		public const string MarkKey = nameof(Mark);
+
+		/// <summary>
+		/// Mark
+		/// </summary>
+		public static string Mark => GetString(MarkKey);
+
+		/// <summary>
+		/// Post-only
+		/// </summary>
+		public const string PostOnlyKey = nameof(PostOnly);
+
+		/// <summary>
+		/// Post-only
+		/// </summary>
+		public static string PostOnly => GetString(PostOnlyKey);
+
+		/// <summary>
+		/// Post-only order.
+		/// </summary>
+		public const string PostOnlyOrderKey = nameof(PostOnlyOrder);
+
+		/// <summary>
+		/// Post-only order.
+		/// </summary>
+		public static string PostOnlyOrder => GetString(PostOnlyOrderKey);
 	}
 }

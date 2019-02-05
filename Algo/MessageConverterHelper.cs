@@ -456,6 +456,7 @@ namespace StockSharp.Algo
 				IsMarketMaker = order.IsMarketMaker,
 				IsMargin = order.IsMargin,
 				Slippage = order.Slippage,
+				IsManual = order.IsManual,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -538,6 +539,12 @@ namespace StockSharp.Algo
 				ClientCode = oldOrder.ClientCode,
 
 				Currency = newOrder.Currency,
+
+				IsManual = newOrder.IsManual,
+				IsMarketMaker = newOrder.IsMarketMaker,
+				IsMargin = newOrder.IsMargin,
+
+				Slippage = newOrder.Slippage,
 			};
 
 			oldOrder.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -1277,6 +1284,7 @@ namespace StockSharp.Algo
 			order.IsMarketMaker = message.IsMarketMaker;
 			order.IsMargin = message.IsMargin;
 			order.Slippage = message.Slippage;
+			order.IsManual = message.IsManual;
 
 			if (message.OrderState != null)
 				order.State = order.State.CheckModification((OrderStates)message.OrderState);

@@ -183,7 +183,7 @@ namespace StockSharp.Algo.Expressions
 				text = text.Replace(".", dotSep);
 
 				var groups = GetVariableNames(text)
-					.Where(g => !g.Value.ContainsIgnoreCase(dotSep) && !long.TryParse(g.Value, out var _) && !_funcReplaces.ContainsKey(g.Value))
+					.Where(g => !g.Value.ContainsIgnoreCase(dotSep) && !long.TryParse(g.Value, out _) && !_funcReplaces.ContainsKey(g.Value))
 					.ToArray();
 
 				var dict = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);

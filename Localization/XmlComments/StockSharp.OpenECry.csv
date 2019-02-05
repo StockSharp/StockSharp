@@ -57,7 +57,6 @@ P:StockSharp.OpenECry.OpenECryOrderCondition.ReferencePrice/summary;Str2577
 P:StockSharp.OpenECry.OpenECryOrderCondition.SplitVolume/summary;Str2435
 P:StockSharp.OpenECry.OpenECryOrderCondition.Start/summary;ExecutionStart
 P:StockSharp.OpenECry.OpenECryOrderCondition.End/summary;ExecutionEnd
-T:StockSharp.OpenECry.OpenECryException/summary;DocStr5942
 T:StockSharp.OpenECry.OpenECryTrader/summary;DocStr2539
 M:StockSharp.OpenECry.OpenECryTrader.#ctor/summary;DocStr1
 P:StockSharp.OpenECry.OpenECryTrader.Uuid/summary;Str2565

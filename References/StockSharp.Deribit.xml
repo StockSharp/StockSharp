@@ -61,6 +61,21 @@
             USD.
             </summary>
         </member>
+        <member name="T:StockSharp.Deribit.DeribitOrderTriggers">
+            <summary>
+            Triggers.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Deribit.DeribitOrderTriggers.Index">
+            <summary>
+            Index price.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Deribit.DeribitOrderTriggers.Mark">
+            <summary>
+            Mark price.
+            </summary>
+        </member>
         <member name="T:StockSharp.Deribit.DeribitOrderCondition">
             <summary>
             <see cref="N:StockSharp.Deribit"/> order condition.
@@ -76,9 +91,19 @@
             Activation price, when reached an order will be placed.
             </summary>
         </member>
+        <member name="P:StockSharp.Deribit.DeribitOrderCondition.Trigger">
+            <summary>
+            Trigger field.
+            </summary>
+        </member>
         <member name="P:StockSharp.Deribit.DeribitOrderCondition.Advanced">
             <summary>
             Extended type of order.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Deribit.DeribitOrderCondition.PostOnly">
+            <summary>
+            Post-only order.
             </summary>
         </member>
         <member name="T:StockSharp.Deribit.DeribitTrader">
