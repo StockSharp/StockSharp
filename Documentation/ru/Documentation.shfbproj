@@ -233,14 +233,23 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="HydraSettingsCoinigy.aml" />
-    <None Include="HydraSettingsCoinCap.aml" />
-    <None Include="HydraSettingsTradeOrge.aml" />
-    <None Include="HydraSettingsIdax.aml" />
-    <None Include="HydraSettingsDigifinex.aml" />
-    <None Include="HydraSettingsBitbank.aml" />
-    <None Include="HydraSettingsQuoinex.aml" />
-    <None Include="HydraSettingsZaif.aml" />
+    <None Include="Topics\HydraSettingsAlphaVantage.aml" />
+    <None Include="Topics\HydraSettingsAlphaVantage.aml" />
+    <None Include="Topics\HydraSettingsIEX.aml" />
+    <None Include="Topics\AlphaVantageConnectorsSettings.aml" />
+    <None Include="Topics\AlphaVantage.aml" />
+    <None Include="Topics\AlphaVantageSample.aml" />
+    <None Include="Topics\IEXSample.aml" />
+    <None Include="Topics\IEXConnectorsSettings.aml" />
+    <None Include="Topics\IEX.aml" />
+    <None Include="Topics\HydraSettingsCoinigy.aml" />
+    <None Include="Topics\HydraSettingsCoinCap.aml" />
+    <None Include="Topics\HydraSettingsTradeOrge.aml" />
+    <None Include="Topics\HydraSettingsIdax.aml" />
+    <None Include="Topics\HydraSettingsDigifinex.aml" />
+    <None Include="Topics\HydraSettingsBitbank.aml" />
+    <None Include="Topics\HydraSettingsQuoinex.aml" />
+    <None Include="Topics\HydraSettingsZaif.aml" />
     <None Include="Topics\CoinigySample.aml" />
     <None Include="Topics\CoinigyConnectorsSettings.aml" />
     <None Include="Topics\CoinCapSample.aml" />
@@ -3605,6 +3614,22 @@
     <Image Include="Art\hydra_settings_Quoinex.png">
       <ImageId>hydra_settings_Quoinex</ImageId>
       <AlternateText>hydra settings Quoinex</AlternateText>
+    </Image>
+    <Image Include="Art\IEXSample.png">
+      <ImageId>IEXSample</ImageId>
+      <AlternateText>IEXSample</AlternateText>
+    </Image>
+    <Image Include="Art\AlphaVantageSample.png">
+      <ImageId>AlphaVantageSample</ImageId>
+      <AlternateText>Alpha Vantage Sample</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_IEX.png">
+      <ImageId>hydra_settings_IEX</ImageId>
+      <AlternateText>hydra settings IEX</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_AlphaVantage.png">
+      <ImageId>hydra_settings_AlphaVantage</ImageId>
+      <AlternateText>hydra settings Alpha Vantage</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
