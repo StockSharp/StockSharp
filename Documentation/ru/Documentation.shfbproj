@@ -233,6 +233,14 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="HydraSettingsCoinigy.aml" />
+    <None Include="HydraSettingsCoinCap.aml" />
+    <None Include="HydraSettingsTradeOrge.aml" />
+    <None Include="HydraSettingsIdax.aml" />
+    <None Include="HydraSettingsDigifinex.aml" />
+    <None Include="HydraSettingsBitbank.aml" />
+    <None Include="HydraSettingsQuoinex.aml" />
+    <None Include="HydraSettingsZaif.aml" />
     <None Include="Topics\CoinigySample.aml" />
     <None Include="Topics\CoinigyConnectorsSettings.aml" />
     <None Include="Topics\CoinCapSample.aml" />
@@ -3565,6 +3573,38 @@
     <Image Include="Art\ZaifSample.png">
       <ImageId>ZaifSample</ImageId>
       <AlternateText>Zaif Sample</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Zaif.png">
+      <ImageId>hydra_settings_Zaif</ImageId>
+      <AlternateText>hydra settings Zaif</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Coinigy.png">
+      <ImageId>hydra_settings_Coinigy</ImageId>
+      <AlternateText>hydra settings Coinigy</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_CoinCap.png">
+      <ImageId>hydra_settings_CoinCap</ImageId>
+      <AlternateText>hydra settings Coin Cap</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_TradeOrge.png">
+      <ImageId>hydra_settings_TradeOrge</ImageId>
+      <AlternateText>hydra settings Trade Orge</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Idax.png">
+      <ImageId>hydra_settings_Idax</ImageId>
+      <AlternateText>hydra settings Idax</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Digifinex.png">
+      <ImageId>hydra_settings_Digifinex</ImageId>
+      <AlternateText>hydra settings Digifinex</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Bitbank.png">
+      <ImageId>hydra_settings_Bitbank</ImageId>
+      <AlternateText>hydra settings Bitbank</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Quoinex.png">
+      <ImageId>hydra_settings_Quoinex</ImageId>
+      <AlternateText>hydra settings Quoinex</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
