@@ -387,4 +387,6 @@
   <item id="TradeOrge"><ddue:link xlink:href="989447cf-bc05-4f6a-a736-b3a916ee1ffc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="CoinCap"><ddue:link xlink:href="588ae84d-4ac1-4f08-a235-a194292e66ff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="Coinigy"><ddue:link xlink:href="93ab9c0b-d310-4285-b132-cdace95134dd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="AlphaVantage"><ddue:link xlink:href="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="IEX"><ddue:link xlink:href="fb946f86-fe4b-4e30-97f7-543178e81792" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
 </content>
