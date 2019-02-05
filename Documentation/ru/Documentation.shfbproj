@@ -233,6 +233,32 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\CoinigySample.aml" />
+    <None Include="Topics\CoinigyConnectorsSettings.aml" />
+    <None Include="Topics\CoinCapSample.aml" />
+    <None Include="Topics\CoinCapConnectorsSettings.aml" />
+    <None Include="Topics\TradeOrgeSample.aml" />
+    <None Include="Topics\TradeOrgeConnectorsSettings.aml" />
+    <None Include="Topics\IdaxSample.aml" />
+    <None Include="Topics\IdaxConnectorsSettings.aml" />
+    <None Include="Topics\DigifinexSample.aml" />
+    <None Include="Topics\DigifinexConnectorsSettings.aml" />
+    <None Include="Topics\QuoinexConnectorsSettings.aml" />
+    <None Include="Topics\BitbankSample.aml" />
+    <None Include="Topics\BitbankConnectorsSettings.aml" />
+    <None Include="Topics\QuoinexSample.aml" />
+    <None Include="Topics\Quoinex ConnectorsSettings.aml" />
+    <None Include="Topics\Zaif ConnectorsSettings.aml" />
+    <None Include="Topics\Coinigy.aml" />
+    <None Include="Topics\CoinCap.aml" />
+    <None Include="Topics\TradeOrge.aml" />
+    <None Include="Topics\Idax.aml" />
+    <None Include="Topics\Digifinex.aml" />
+    <None Include="Topics\Bitbank.aml" />
+    <None Include="Topics\Quoinex.aml" />
+    <None Include="Topics\ZaifSample.aml" />
+    <None Include="Topics\ZaifConnectorsSettings.aml" />
+    <None Include="Topics\Zaif.aml" />
     <None Include="Topics\API_GUI_MarketDataGrid.aml" />
     <None Include="Topics\API_GUI_Trading_From_Chart.aml" />
     <None Include="Topics\Hydra_Export_TSLab_MetaStock.aml" />
@@ -3507,6 +3533,38 @@
     <Image Include="Art\hydra_Quick_start_02.png">
       <ImageId>hydra_Quick_start_02</ImageId>
       <AlternateText>hydra Quick start 02</AlternateText>
+    </Image>
+    <Image Include="Art\CoinigySample.png">
+      <ImageId>CoinigySample</ImageId>
+      <AlternateText>Coinigy Sample</AlternateText>
+    </Image>
+    <Image Include="Art\CoinCapSample.png">
+      <ImageId>CoinCapSample</ImageId>
+      <AlternateText>Coin Cap Sample</AlternateText>
+    </Image>
+    <Image Include="Art\TradeOrgeSample.png">
+      <ImageId>TradeOrgeSample</ImageId>
+      <AlternateText>Trade Orge Sample</AlternateText>
+    </Image>
+    <Image Include="Art\IdaxSample.png">
+      <ImageId>IdaxSample</ImageId>
+      <AlternateText>Idax Sample</AlternateText>
+    </Image>
+    <Image Include="Art\DigifinexSample.png">
+      <ImageId>DigifinexSample</ImageId>
+      <AlternateText>Digifinex Sample</AlternateText>
+    </Image>
+    <Image Include="Art\BitbankSample.png">
+      <ImageId>BitbankSample</ImageId>
+      <AlternateText>Bitbank Sample</AlternateText>
+    </Image>
+    <Image Include="Art\QuoinexSample.png">
+      <ImageId>QuoinexSample</ImageId>
+      <AlternateText>Quoinex Sample</AlternateText>
+    </Image>
+    <Image Include="Art\ZaifSample.png">
+      <ImageId>ZaifSample</ImageId>
+      <AlternateText>Zaif Sample</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
