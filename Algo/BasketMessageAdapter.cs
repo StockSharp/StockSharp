@@ -130,6 +130,7 @@ namespace StockSharp.Algo
 		private bool _isFirstConnect;
 		private readonly InnerAdapterList _innerAdapters;
 		private readonly SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>> _newsSubscriptions = new SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>>();
+		private readonly SynchronizedDictionary<Tuple<MessageTypes, long>, HashSet<IMessageAdapter>> _lookups = new SynchronizedDictionary<Tuple<MessageTypes, long>, HashSet<IMessageAdapter>>();
 
 		/// <summary>
 		/// Adapters with which the aggregator operates.
@@ -273,6 +274,12 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override bool IsConnectionAlive() => throw new NotSupportedException();
 
+		/// <summary>
+		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
+		/// </summary>
+		/// <returns>Sorted adapters.</returns>
+		protected IEnumerable<IMessageAdapter> GetSortedAdapters() => _innerAdapters.SortedAdapters;
+
 		private void ProcessReset(ResetMessage message)
 		{
 			_activeAdapters.Values.ForEach(a =>
@@ -295,6 +302,7 @@ namespace StockSharp.Algo
 			_subscriptionsByKey.Clear();
 			_subscriptionMessages.Clear();
 			_newsSubscriptions.Clear();
+			_lookups.Clear();
 		}
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
@@ -374,10 +382,7 @@ namespace StockSharp.Algo
 			_hearbeatFlags[adapter] = on;
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
 			if (message.IsBack)
@@ -531,7 +536,68 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			GetAdapters(message, out _).ForEach(a => a.SendInMessage(message));
+			var adapters = GetAdapters(message, out var isPended);
+
+			if (isPended)
+				return;
+
+			if (adapters.Length == 0)
+			{
+				switch (message.Type)
+				{
+					case MessageTypes.SecurityLookup:
+						SendOutMessage(new SecurityLookupResultMessage
+						{
+							OriginalTransactionId = ((SecurityLookupMessage)message).TransactionId,
+						});
+
+						break;
+
+					case MessageTypes.BoardLookup:
+						SendOutMessage(new BoardLookupResultMessage
+						{
+							OriginalTransactionId = ((BoardLookupMessage)message).TransactionId,
+						});
+
+						break;
+
+					case MessageTypes.PortfolioLookup:
+						SendOutMessage(new PortfolioLookupResultMessage
+						{
+							OriginalTransactionId = ((PortfolioLookupMessage)message).TransactionId,
+						});
+
+						break;
+				}
+			}
+			else
+			{
+				Tuple<MessageTypes, long> key = null;
+
+				switch (message.Type)
+				{
+					case MessageTypes.SecurityLookup:
+						key = Tuple.Create(MessageTypes.SecurityLookupResult, ((SecurityLookupMessage)message).TransactionId);
+						break;
+					case MessageTypes.BoardLookup:
+						key = Tuple.Create(MessageTypes.BoardLookupResult, ((BoardLookupMessage)message).TransactionId);
+						break;
+					case MessageTypes.PortfolioLookup:
+						key = Tuple.Create(MessageTypes.PortfolioLookupResult, ((PortfolioLookupMessage)message).TransactionId);
+						break;
+				}
+
+				if (key != null && key.Item2 != 0)
+				{
+					lock (_lookups.SyncRoot)
+					{
+						if (!_lookups.ContainsKey(key))
+							_lookups.Add(key, new HashSet<IMessageAdapter>(adapters.Select(GetUnderlyingAdapter)));
+					}
+				}
+
+				adapters.ForEach(a => a.SendInMessage(message));
+			}
 		}
 
 		private IMessageAdapter[] GetAdapters(Message message, out bool isPended)
@@ -585,19 +651,7 @@ namespace StockSharp.Algo
 
 			if (adapters.Length == 0)
 			{
-				var msg = LocalizedStrings.Str629Params.Put(message);
-
-				this.AddWarningLog(msg);
-
-				if (message.Type == MessageTypes.SecurityLookup)
-				{
-					SendOutMessage(new SecurityLookupResultMessage
-					{
-						OriginalTransactionId = ((SecurityLookupMessage)message).TransactionId,
-						Error = new InvalidOperationException(msg),
-					});
-				}
-
+				this.AddInfoLog(LocalizedStrings.Str629Params.Put(message));
 				//throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message));
 			}
 
@@ -837,10 +891,54 @@ namespace StockSharp.Algo
 						var posChangeMsg = (PositionChangeMessage)message;
 						AdapterProvider.SetAdapter(posChangeMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
 						break;
+
+					case MessageTypes.SecurityLookupResult:
+					case MessageTypes.PortfolioLookupResult:
+					case MessageTypes.BoardLookupResult:
+						if (!CanProcessLookupResult(GetUnderlyingAdapter(innerAdapter), message))
+							return;
+
+						break;
 				}
 			}
 
 			SendOutMessage(message);
+		}
+
+		private bool CanProcessLookupResult(IMessageAdapter innerAdapter, Message message)
+		{
+			var transId = 0L;
+
+			switch (message.Type)
+			{
+				case MessageTypes.SecurityLookupResult:
+					transId = ((SecurityLookupResultMessage)message).OriginalTransactionId;
+					break;
+				case MessageTypes.PortfolioLookupResult:
+					transId = ((PortfolioLookupResultMessage)message).OriginalTransactionId;
+					break;
+				case MessageTypes.BoardLookupResult:
+					transId = ((BoardLookupResultMessage)message).OriginalTransactionId;
+					break;
+			}
+
+			if (transId == 0)
+				return true;
+
+			var key = Tuple.Create(message.Type, transId);
+
+			lock (_lookups.SyncRoot)
+			{
+				var adapters = _lookups.TryGetValue(key);
+
+				if (adapters == null)
+					return true;
+
+				if (!adapters.Remove(innerAdapter))
+					return true;
+
+				return adapters.Count == 0;	
+			}
 		}
 
 		private static IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)
@@ -1043,19 +1141,7 @@ namespace StockSharp.Algo
 			});
 		}
 
-		/// <summary>
-		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
-		/// </summary>
-		/// <returns>Sorted adapters.</returns>
-		protected IEnumerable<IMessageAdapter> GetSortedAdapters()
-		{
-			return _innerAdapters.SortedAdapters;
-		}
-
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			lock (InnerAdapters.SyncRoot)
@@ -1095,10 +1181,7 @@ namespace StockSharp.Algo
 			base.Save(storage);
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			lock (InnerAdapters.SyncRoot)
