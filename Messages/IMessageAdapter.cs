@@ -80,7 +80,7 @@ namespace StockSharp.Messages
 		ReConnectionSettings ReConnectionSettings { get; }
 
 		/// <summary>
-		/// Lifetime ping interval.
+		///  Server check interval for track the connection alive. The value is <see cref="TimeSpan.Zero"/> turned off tracking.
 		/// </summary>
 		TimeSpan HeartbeatInterval { get; set; }
 

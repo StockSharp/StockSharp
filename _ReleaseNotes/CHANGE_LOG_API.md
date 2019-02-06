@@ -63,6 +63,7 @@ StockSharp API Change log
 * (bug) Quik. Fix hands while instruments lookup https://stocksharp.ru/forum/9238/zavisaet-quik-pri-podklyuchenii/
 * (bug) Fix security lookup.
 * (bug) Basket adapter. Fix lookup processing.
+* (bug) MessageAdapter. Time out fixes.
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.

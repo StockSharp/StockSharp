@@ -8899,7 +8899,6 @@ DocStr4076;Open channel;Открыть канал
 DocStr4077;Close channel;Закрыть канал
 DocStr4078;Is channel opened;Открыт ли канал
 DocStr4079;Connection tracking settings {0} with a server;Настройки механизма отслеживания соединений {0} с торговой системой
-DocStr4080;Lifetime ping interval;Интервал оповещения сервера о том, что подключение еще живое
 DocStr4081;Incoming messages channel;Транспортный канал входящих сообщений
 DocStr4082;Control the lifetime of the incoming messages channel;Контролировать время жизни канала входящих сообщений
 DocStr4083;Control the lifetime of the outgoing messages channel;Контролировать время жизни канала исходящих сообщений

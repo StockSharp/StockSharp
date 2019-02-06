@@ -39,7 +39,7 @@ namespace StockSharp.Messages
 		private class CodeTimeOut
 			//where T : class
 		{
-			private readonly CachedSynchronizedDictionary<long, TimeSpan> _registeredKeys = new CachedSynchronizedDictionary<long, TimeSpan>();
+			private readonly CachedSynchronizedDictionary<long, TimeSpan> _registeredIds = new CachedSynchronizedDictionary<long, TimeSpan>();
 
 			private TimeSpan _timeOut = TimeSpan.FromSeconds(10);
 
@@ -55,20 +55,39 @@ namespace StockSharp.Messages
 				}
 			}
 
-			public void StartTimeOut(long key)
+			public void StartTimeOut(long transactionId)
 			{
-				//if (key == 0)
-				//	throw new ArgumentNullException(nameof(key));
+				if (transactionId == 0)
+				{
+					//throw new ArgumentNullException(nameof(transactionId));
+					return;
+				}
 
-				_registeredKeys.SafeAdd(key, s => TimeOut);
+				_registeredIds.SafeAdd(transactionId, s => TimeOut);
+			}
+
+			public void UpdateTimeOut(long transactionId)
+			{
+				if (transactionId == 0)
+					return;
+
+				_registeredIds[transactionId] = TimeOut;
+			}
+
+			public void RemoveTimeOut(long transactionId)
+			{
+				if (transactionId == 0)
+					return;
+
+				_registeredIds.Remove(transactionId);
 			}
 
 			public IEnumerable<long> ProcessTime(TimeSpan diff)
 			{
-				if (_registeredKeys.Count == 0)
+				if (_registeredIds.Count == 0)
 					return Enumerable.Empty<long>();
 
-				return _registeredKeys.SyncGet(d =>
+				return _registeredIds.SyncGet(d =>
 				{
 					var timeOutCodes = new List<long>();
 
@@ -85,6 +104,11 @@ namespace StockSharp.Messages
 
 					return timeOutCodes;
 				});
+			}
+
+			public void Clear()
+			{
+				_registeredIds.Clear();
 			}
 		}
 
@@ -167,9 +191,7 @@ namespace StockSharp.Messages
 
 		private TimeSpan _heartbeatInterval = TimeSpan.Zero;
 
-		/// <summary>
-		/// Server check interval for track the connection alive. The value is <see cref="TimeSpan.Zero"/> turned off tracking.
-		/// </summary>
+		/// <inheritdoc />
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str192Key,
@@ -302,9 +324,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		public const string DefaultAssociatedBoardCode = "ALL";
 
-		/// <summary>
-		/// Associated board code. The default is ALL.
-		/// </summary>
+		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str186Key)]
 		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
 		[DescriptionLoc(LocalizedStrings.Str199Key)]
@@ -325,10 +345,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Send incoming message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public void SendInMessage(Message message)
 		{
 			if (message.Type == MessageTypes.Connect)
@@ -350,6 +367,8 @@ namespace StockSharp.Messages
 			{
 				case MessageTypes.Reset:
 					_prevTime = default(DateTimeOffset);
+					_secLookupTimeOut.Clear();
+					_pfLookupTimeOut.Clear();
 					break;
 
 				case MessageTypes.PortfolioLookup:
@@ -414,6 +433,10 @@ namespace StockSharp.Messages
 					case MessageTypes.SecurityLookup:
 					{
 						var lookupMsg = (SecurityLookupMessage)message;
+						
+						if (!IsSupportNativeSecurityLookup)
+							_secLookupTimeOut.RemoveTimeOut(lookupMsg.TransactionId);
+
 						SendOutMessage(new SecurityLookupResultMessage
 						{
 							OriginalTransactionId = lookupMsg.TransactionId,
@@ -447,6 +470,10 @@ namespace StockSharp.Messages
 					case MessageTypes.PortfolioLookup:
 					{
 						var lookupMsg = (PortfolioLookupMessage)message;
+
+						if (!IsSupportNativePortfolioLookup)
+							_pfLookupTimeOut.RemoveTimeOut(lookupMsg.TransactionId);
+
 						SendOutMessage(new PortfolioLookupResultMessage
 						{
 							OriginalTransactionId = lookupMsg.TransactionId,
@@ -526,6 +553,33 @@ namespace StockSharp.Messages
 
 			if (/*message.IsBack && */message.Adapter == null)
 				message.Adapter = this;
+
+			switch (message.Type)
+			{
+				case MessageTypes.Security:
+					if (!IsSupportNativeSecurityLookup)
+						_secLookupTimeOut.UpdateTimeOut(((SecurityMessage)message).OriginalTransactionId);
+
+					break;
+
+				case MessageTypes.Portfolio:
+					if (!IsSupportNativePortfolioLookup)
+						_pfLookupTimeOut.UpdateTimeOut(((PortfolioMessage)message).OriginalTransactionId);
+
+					break;
+
+				case MessageTypes.SecurityLookupResult:
+					if (!IsSupportNativeSecurityLookup)
+						_secLookupTimeOut.RemoveTimeOut(((SecurityLookupResultMessage)message).OriginalTransactionId);
+
+					break;
+
+				case MessageTypes.PortfolioLookupResult:
+					if (!IsSupportNativePortfolioLookup)
+						_pfLookupTimeOut.RemoveTimeOut(((PortfolioLookupResultMessage)message).OriginalTransactionId);
+
+					break;
+			}
 
 			if (_prevTime != DateTimeOffset.MinValue)
 			{
