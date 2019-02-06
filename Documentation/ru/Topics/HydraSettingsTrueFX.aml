@@ -2,6 +2,12 @@
 <topic id="a92bca75-1a0c-4581-a75a-6f13afd7975e" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    <alert class="note">
+<para>Для настройки источника в <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
+вам понадобится <legacyBold>Логин и Пароль</legacyBold>. Их вы можете 
+получить в личном кабинете на сайте <legacyBold>TrueFX</legacyBold>.
+</para>
+	</alert>
      <mediaLink>
         <image placement="left" xlink:href="hydra_settings_truefx" />
       </mediaLink>
@@ -43,11 +49,7 @@
 		<listItem>
           <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
 		</listItem>
-      </list>
-      <para>Для настройки источника в <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
-вам понадобится <legacyBold>Логин и Пароль</legacyBold>. Их вы можете 
-получить в личном кабинете на сайте <legacyBold>TrueFX</legacyBold>.
-</para>
+      </list>      
 
 <para>Перед запуском получения данных необходимо скачать и выбрать необходимые 
 инструменты, как это сделать описано в пункте 

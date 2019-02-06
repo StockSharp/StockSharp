@@ -2,6 +2,9 @@
 <topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+      <alert class="note">
+			Данный источник поддерживает закачку в виде готовых свечей. Подробнее в <link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9">Список инструментов</link>.
+	  </alert>
       <mediaLink>
         <image placement="left" xlink:href="hydra_settings_finam" />
       </mediaLink>
@@ -56,12 +59,6 @@
 <link xlink:href="47ebc084-6b07-4b69-8f96-ea190110111f" />
 .
 </para>
-      
-      
-      <alert class="note">
-			Данный источник поддерживает закачку в виде готовых свечей. Подробнее в <link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9">Список инструментов</link>.
-	  </alert>
-	  
     </introduction>
   </developerWalkthroughDocument>
 </topic>

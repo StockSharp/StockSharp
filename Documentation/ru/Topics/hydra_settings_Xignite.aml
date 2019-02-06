@@ -2,6 +2,12 @@
 <topic id="3adf98fb-fa41-46ad-93cb-583fb67c1d6b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
    <introduction>
+   <alert class="note">
+<para>Для настройки источника в <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
+вам понадобится <legacyBold>Токен (API-ключ) Xignite</legacyBold>. Его вы можете 
+получить в личном кабинете на сайте <legacyBold>Xignite</legacyBold>.
+</para>
+	</alert>
       <mediaLink>
         <image placement="left" xlink:href="hydra_settings_Xignite" />
       </mediaLink>
@@ -54,12 +60,6 @@
           <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
 		</listItem>
       </list>
-      
-      
-     <para>Для настройки источника в <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
-вам понадобится <legacyBold>Токен (API-ключ) Xignite</legacyBold>. Его вы можете 
-получить в личном кабинете на сайте <legacyBold>Xignite</legacyBold>.
-</para>
 
 <para>Перед запуском получения данных необходимо скачать и выбрать необходимые 
 инструменты, как это сделать описано в пункте 

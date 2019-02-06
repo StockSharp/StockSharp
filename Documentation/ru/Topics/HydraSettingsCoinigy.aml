@@ -2,6 +2,13 @@
 <topic id="c231ad1b-a588-49c0-b97b-170f6113b184" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
      <introduction>
+<alert class="note">
+<para> 	Помимо настроек источника в <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
+необходимо настроить коннектор, как это сделать описано в пункте 
+<link xlink:href="3bac2825-0c74-4e81-811b-6d2ff33f08e6" />
+.
+</para>
+	 </alert>
       <mediaLink>
         <image placement="left" xlink:href="hydra_settings_Coinigy" />
       </mediaLink>

@@ -2,6 +2,13 @@
 <topic id="e9c53ea1-e1ec-4d82-9663-e3c860c48b11" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    <alert class="note">
+<para> 	Помимо настроек источника в <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
+необходимо настроить коннектор, как это сделать описано в пункте 
+<link xlink:href="c71fcd66-6ee2-4da9-a898-02f66fced4b2" />
+.
+</para>
+	</alert>
       <mediaLink>
         <image placement="left" xlink:href="hydra_settings_Bithumb" />
       </mediaLink>
@@ -62,13 +69,7 @@
       </list>
      <para><legacyBold>Подключение</legacyBold> - свойства подключения (см. <link xlink:href="01a85a46-7510-4385-b81c-348ffb3dfc46">Параметры подключения.</link>) </para>
      
-     <para> 	Помимо настроек источника в <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
-необходимо настроить коннектор, как это сделать описано в пункте 
-<link xlink:href="c71fcd66-6ee2-4da9-a898-02f66fced4b2" />
-.
-</para>
-
-<para>Перед запуском получения данных необходимо скачать и выбрать необходимые 
+     <para>Перед запуском получения данных необходимо скачать и выбрать необходимые 
 инструменты, как это сделать описано в пункте 
 <link xlink:href="47ebc084-6b07-4b69-8f96-ea190110111f" />
 .

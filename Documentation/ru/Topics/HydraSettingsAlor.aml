@@ -2,6 +2,13 @@
 <topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
    <introduction>
+   <alert class="note">
+<para> 	Помимо настроек источника в <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
+необходимо настроить коннектор, как это сделать описано в пункте 
+<link xlink:href="fac9cc90-6498-47f5-9b87-5f9f876c854b" />
+.
+</para>
+	 </alert>
     <mediaLink>
         <image placement="left" xlink:href="hydra_settings_allor" />
       </mediaLink>
