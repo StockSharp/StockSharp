@@ -199,9 +199,7 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public virtual bool OrderStatusRequired => this.IsMessageSupported(MessageTypes.OrderStatus);
 
-		/// <summary>
-		/// Native identifier can be stored.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual bool IsNativeIdentifiersPersistable => true;
 

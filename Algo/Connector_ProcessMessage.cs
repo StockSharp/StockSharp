@@ -1056,7 +1056,7 @@ namespace StockSharp.Algo
 			if (adapter.OrderStatusRequired)
 				LookupOrders(new Order(), adapter);
 
-			if (adapter.SecurityLookupRequired)
+			if (adapter.SecurityLookupRequired && adapter.IsSupportSecuritiesLookupAll)
 				LookupSecurities(new Security(), adapter);
 		}
 

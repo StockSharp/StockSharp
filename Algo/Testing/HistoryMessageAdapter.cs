@@ -208,9 +208,6 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <inheritdoc />
-		public override bool SecurityLookupRequired => true;
-
-		/// <inheritdoc />
 		public override bool IsFullCandlesOnly => false;
 
 		/// <inheritdoc />
