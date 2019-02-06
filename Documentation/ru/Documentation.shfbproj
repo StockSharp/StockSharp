@@ -233,6 +233,10 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Designer_MarketDepthTruncateDiagramElement.aml" />
+    <None Include="Topics\Designer_StrategyPnLDiagramElement.aml" />
+    <None Include="Topics\MarketDepthTruncateDiagramElement.aml" />
+    <None Include="Topics\ChartAnnotations.aml" />
     <None Include="Topics\IndicatorPainter.aml" />
     <None Include="Topics\HydraSettingsAlphaVantage.aml" />
     <None Include="Topics\HydraSettingsAlphaVantage.aml" />
@@ -3631,6 +3635,14 @@
     <Image Include="Art\hydra_settings_AlphaVantage.png">
       <ImageId>hydra_settings_AlphaVantage</ImageId>
       <AlternateText>hydra settings Alpha Vantage</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_MarketDepthTruncateDiagramElement_00.png">
+      <ImageId>Designer_MarketDepthTruncateDiagramElement_00</ImageId>
+      <AlternateText>Designer Market Depth Truncate Diagram Element 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_StrategyPnLDiagramElement_00.png">
+      <ImageId>Designer_StrategyPnLDiagramElement_00</ImageId>
+      <AlternateText>Designer Strategy PnLDiagram Element 00</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
