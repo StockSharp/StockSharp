@@ -749,6 +749,7 @@
             <Topic id="6971235a-c9e5-4606-a266-5df4a3b9da94" visible="True" title="DLL стратегия" />
             <Topic id="412aebdc-2700-4172-bde5-cb749cba64c0" visible="True" title="Изменение П/У" />
             <Topic id="250003df-48b4-4211-9c8e-25ac3f6a45be" visible="True" title="Сделки стратегии" />
+            <Topic id="211ccab1-174c-476e-a726-1c6525b39533" visible="True" isSelected="true" title="Разрешена ли торговля" />
           </Topic>
           <Topic id="fe04d489-8a1d-422f-8d35-17ee08a6feae" visible="True" noFile="true" title="Источники данных">
             <Topic id="a89a0073-cb59-4a79-be90-463ea1683dad" visible="True" title="Свечи" />
@@ -773,7 +774,7 @@
             <Topic id="c2dbe6dc-ea13-492a-b4a7-751262875d68" visible="True" title="Сгруппированный стакан" />
             <Topic id="181e2f26-86dd-4c4b-b737-124664ef9481" visible="True" title="Панель стакана" />
             <Topic id="06db9cf4-55d1-4340-bdad-cfd1465fd61f" visible="True" title="Разреженный стакан" />
-            <Topic id="8104583d-15d0-406d-bdf6-d601110226a9" visible="True" isSelected="true" title="Обрезанный стакан" />
+            <Topic id="8104583d-15d0-406d-bdf6-d601110226a9" visible="True" title="Обрезанный стакан" />
           </Topic>
           <Topic id="7515073c-a2d6-40d3-adc5-b8f6f6f450df" visible="True" noFile="true" title="Опционы">
             <Topic id="1e0038a5-d74f-4898-ad8d-e2fa8750f40a" visible="True" title="Стакан подразумеваемой волатильности" />

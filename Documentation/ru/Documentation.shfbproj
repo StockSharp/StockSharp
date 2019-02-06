@@ -233,6 +233,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Designer_TradeAllowedDiagramElement.aml" />
     <None Include="Topics\Designer_MarketDepthTruncateDiagramElement.aml" />
     <None Include="Topics\Designer_StrategyPnLDiagramElement.aml" />
     <None Include="Topics\MarketDepthTruncateDiagramElement.aml" />
@@ -3643,6 +3644,10 @@
     <Image Include="Art\Designer_StrategyPnLDiagramElement_00.png">
       <ImageId>Designer_StrategyPnLDiagramElement_00</ImageId>
       <AlternateText>Designer Strategy PnLDiagram Element 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_TradeAllowedDiagramElement_00.png">
+      <ImageId>Designer_TradeAllowedDiagramElement_00</ImageId>
+      <AlternateText>Designer Trade Allowed Diagram Element 00</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
