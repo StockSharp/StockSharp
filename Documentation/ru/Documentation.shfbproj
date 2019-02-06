@@ -233,6 +233,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\IndicatorPainter.aml" />
     <None Include="Topics\HydraSettingsAlphaVantage.aml" />
     <None Include="Topics\HydraSettingsAlphaVantage.aml" />
     <None Include="Topics\HydraSettingsIEX.aml" />
