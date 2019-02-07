@@ -233,6 +233,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Designer_run_strategy_on_server.aml" />
     <None Include="Topics\API.RemoteManager.aml" />
     <None Include="Topics\Shell_run_Designer_strategy.aml" />
     <None Include="Topics\Shell_custom_strategy_panel.aml" />

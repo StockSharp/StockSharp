@@ -10,9 +10,9 @@
 <para>После чего необходимо включить <legacyBold>серверный режим</legacyBold>.
 </para>
 <mediaLink><image placement="center" xlink:href="Shell_RemoteManager_02"/></mediaLink>
-<para>Теперь к Shell можно подключиться из другого Shell. Для этого необходимо 
-запустить другой Shell. В нем перейти в настройки подключений.
-</para>
+<para>Теперь к Shell можно подключиться из другого Shell. </para>
+<para>Для этого необходимо запустить <legacyBold>другой</legacyBold> Shell. В нем перейти в настройки подключений.</para>
+
 <mediaLink><image placement="center" xlink:href="Shell_RemoteManager_03"/></mediaLink>
 <para>В открывшемся окне настроить Fix подключение</para>
 <mediaLink><image placement="center" xlink:href="Shell_RemoteManager_04"/></mediaLink>
