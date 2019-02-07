@@ -482,13 +482,7 @@ M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.#ctor(StockSharp.Algo
 P:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.TimeFrames/summary;DocStr206
 M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.DownloadSecurityInfo/summary;DocStr210
 M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.DownloadSecurityInfo/returns;DocStr211
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)/summary;DocStr102
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)/param/security;DocStr2831
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)/param/from;Str2282
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)/param/to;Str418
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)/param/dataType;Str2133
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)/param/arg;Str347
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)/returns;DocStr103
+M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)/inheritdoc;DocStr8459
 M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Boolean)/summary;DocStr257
 M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Boolean)/param/security;DocStr213
 M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Boolean)/param/from;DocStr247
@@ -501,11 +495,7 @@ M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp
 M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/param/from;DocStr247
 M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/param/to;DocStr251
 M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/returns;DocStr205
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/summary;DocStr109
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/param/securityStorage;DocStr110
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/param/criteria;DocStr111
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/param/newSecurity;DocStr112
-M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/param/isCancelled;DocStr113
+M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/inheritdoc;DocStr8459
 T:StockSharp.Algo.History.Russian.Finam.FinamSecurityInfo/summary;DocStr214
 P:StockSharp.Algo.History.Russian.Finam.FinamSecurityInfo.FinamSecurityId/summary;DocStr215
 P:StockSharp.Algo.History.Russian.Finam.FinamSecurityInfo.FinamMarketId/summary;DocStr216

@@ -2766,6 +2766,8 @@ M:StockSharp.Algo.Storages.INativeIdStorage.TryGetBySecurityId(System.String,Sto
 M:StockSharp.Algo.Storages.INativeIdStorage.TryGetBySecurityId(System.String,StockSharp.Messages.SecurityId)/param/storageName;DocStr429
 M:StockSharp.Algo.Storages.INativeIdStorage.TryGetBySecurityId(System.String,StockSharp.Messages.SecurityId)/param/securityId;DocStr9333
 M:StockSharp.Algo.Storages.INativeIdStorage.TryGetBySecurityId(System.String,StockSharp.Messages.SecurityId)/returns;DocStr802
+M:StockSharp.Algo.Storages.INativeIdStorage.Clear(System.String)/summary;DocStr10190
+M:StockSharp.Algo.Storages.INativeIdStorage.Clear(System.String)/param/storageName;DocStr429
 T:StockSharp.Algo.Storages.CsvNativeIdStorage/summary;DocStr9338
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.#ctor(System.String)/summary;DocStr1
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.#ctor(System.String)/param/path;DocStr9340
@@ -2774,6 +2776,7 @@ E:StockSharp.Algo.Storages.CsvNativeIdStorage.Added/inheritdoc;DocStr8459
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.Init/inheritdoc;DocStr8459
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.Get(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.TryAdd(System.String,StockSharp.Messages.SecurityId,System.Object,System.Boolean)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Storages.CsvNativeIdStorage.Clear(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.TryGetByNativeId(System.String,System.Object)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.TryGetBySecurityId(System.String,StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 T:StockSharp.Algo.Storages.InMemoryNativeIdStorage/summary;DocStr9353

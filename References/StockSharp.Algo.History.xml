@@ -1185,15 +1185,7 @@
       <returns>Information about securities.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
-      <summary>
-            Get the full path to the downloaded file.
-            </summary>
-      <param name="security">Security.</param>
-      <param name="from">Start date.</param>
-      <param name="to">End date.</param>
-      <param name="dataType">Data type.</param>
-      <param name="arg">Argument.</param>
-      <returns>Full path to the downloaded file.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Boolean)">
       <summary>
@@ -1216,13 +1208,7 @@
       <returns>Downloaded candles.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
-      <summary>
-            Download new securities.
-            </summary>
-      <param name="securityStorage">Securities meta info storage.</param>
-      <param name="criteria">The instrument whose fields will be used as a filter.</param>
-      <param name="newSecurity">The handler through which a new instrument will be passed.</param>
-      <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Algo.History.Russian.Finam.FinamSecurityInfo">
       <summary>
