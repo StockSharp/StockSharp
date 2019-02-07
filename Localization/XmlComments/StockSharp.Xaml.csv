@@ -189,6 +189,7 @@ M:StockSharp.Xaml.GridControl.BaseGridControl.Load(Ecng.Serialization.SettingsSt
 M:StockSharp.Xaml.GridControl.BaseGridControl.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.GridControl.BaseGridControl.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.GridControl.BaseGridControl.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.GridControl.BaseGridControl.LoadExpandedState/summary;DocStr11037
 T:StockSharp.Xaml.ISecurityWindow/summary;DocStr8180
 P:StockSharp.Xaml.ISecurityWindow.Security/summary;DocStr2831
 T:StockSharp.Xaml.PropertyGrid.SpecialDaysControl/summary;DocStr8144
@@ -1067,7 +1068,9 @@ E:StockSharp.Xaml.GuiConnector`1.ConnectionErrorEx/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.Error/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketTimeChanged/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.LookupSecuritiesResult/inheritdoc;DocStr8459
+E:StockSharp.Xaml.GuiConnector`1.LookupSecuritiesResult2/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.LookupPortfoliosResult/inheritdoc;DocStr8459
+E:StockSharp.Xaml.GuiConnector`1.LookupPortfoliosResult2/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionSucceeded/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFailed/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionSucceeded/inheritdoc;DocStr8459
@@ -1095,6 +1098,7 @@ E:StockSharp.Xaml.GuiConnector`1.NewMarketDepth/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDepthChanged/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.NewOrderLogItem/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.LookupBoardsResult/inheritdoc;DocStr8459
+E:StockSharp.Xaml.GuiConnector`1.LookupBoardsResult2/inheritdoc;DocStr8459
 P:StockSharp.Xaml.GuiConnector`1.TransactionIdGenerator/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/inheritdoc;DocStr8459
 P:StockSharp.Xaml.GuiConnector`1.ExchangeBoards/inheritdoc;DocStr8459

@@ -123,6 +123,7 @@ P:StockSharp.BusinessEntities.Exchange.Kucoin/summary;DocStr10359
 P:StockSharp.BusinessEntities.Exchange.Liqui/summary;DocStr10360
 P:StockSharp.BusinessEntities.Exchange.Huobi/summary;DocStr10361
 P:StockSharp.BusinessEntities.Exchange.IEX/summary;DocStr10578
+P:StockSharp.BusinessEntities.Exchange.AlphaVantage/summary;DocStr11035
 P:StockSharp.BusinessEntities.Exchange.Bitbank/summary;DocStr10579
 P:StockSharp.BusinessEntities.Exchange.Zaif/summary;DocStr10580
 P:StockSharp.BusinessEntities.Exchange.Quoinex/summary;DocStr10581
@@ -353,6 +354,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Liqui/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Huobi/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Globex/summary;DocStr10563
 P:StockSharp.BusinessEntities.ExchangeBoard.IEX/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.AlphaVantage/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Bitbank/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Zaif/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Quoinex/summary;DocStr2809
@@ -421,6 +423,9 @@ E:StockSharp.BusinessEntities.IConnector.MarketTimeChanged/summary;DocStr886
 E:StockSharp.BusinessEntities.IConnector.LookupSecuritiesResult/summary;DocStr894
 E:StockSharp.BusinessEntities.IConnector.LookupPortfoliosResult/summary;DocStr894
 E:StockSharp.BusinessEntities.IConnector.LookupBoardsResult/summary;DocStr894
+E:StockSharp.BusinessEntities.IConnector.LookupSecuritiesResult2/summary;DocStr894
+E:StockSharp.BusinessEntities.IConnector.LookupPortfoliosResult2/summary;DocStr894
+E:StockSharp.BusinessEntities.IConnector.LookupBoardsResult2/summary;DocStr894
 E:StockSharp.BusinessEntities.IConnector.MarketDataSubscriptionSucceeded/summary;DocStr895
 E:StockSharp.BusinessEntities.IConnector.MarketDataSubscriptionFailed/summary;DocStr896
 E:StockSharp.BusinessEntities.IConnector.MarketDataUnSubscriptionSucceeded/summary;DocStr9350

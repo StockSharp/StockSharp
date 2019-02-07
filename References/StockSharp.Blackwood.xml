@@ -111,9 +111,6 @@
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsSupportStopLoss">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.SecurityLookupRequired">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>

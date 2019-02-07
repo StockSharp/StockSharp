@@ -35,9 +35,6 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.SecurityLookupRequired">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.CreateOrderCondition">
       <inheritdoc />
     </member>
@@ -47,11 +44,11 @@
     <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.IsSupportNativeSecurityLookup">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Send message.
-            </summary>
-      <param name="message">Message.</param>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.UserName">
       <summary>
@@ -68,6 +65,11 @@
             Server address.
             </summary>
     </member>
+    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Uuid">
+      <summary>
+            Unique software ID.
+            </summary>
+    </member>
     <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.AllTimeFrames">
       <summary>
             Possible time-frames.
@@ -77,22 +79,13 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Cqg.Continuum.CqgContinuumTrader">
       <summary>

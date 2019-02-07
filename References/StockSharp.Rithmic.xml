@@ -21,9 +21,6 @@
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportStopLoss">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.SecurityLookupRequired">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportNativeSecurityLookup">
             <inheritdoc />
         </member>

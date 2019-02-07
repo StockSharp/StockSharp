@@ -47,9 +47,6 @@
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.SecurityLookupRequired">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>

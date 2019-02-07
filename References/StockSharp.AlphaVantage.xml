@@ -18,6 +18,9 @@
         <member name="P:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.TimeFrames">
             <inheritdoc />
         </member>
+        <member name="P:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.IsSupportNativeSecurityLookup">
+            <inheritdoc />
+        </member>
         <member name="P:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>

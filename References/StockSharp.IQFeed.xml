@@ -123,9 +123,6 @@
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsSupportNativeSecurityLookup">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SecurityLookupRequired">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>

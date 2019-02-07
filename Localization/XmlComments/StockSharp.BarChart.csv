@@ -7,6 +7,7 @@ P:StockSharp.BarChart.BarChartMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.BarChart.BarChartMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
+P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
 M:StockSharp.BarChart.BarChartMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.BarChart.BarChartMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.BarChart.BarChartMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

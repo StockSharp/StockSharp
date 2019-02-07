@@ -765,7 +765,7 @@ P:StockSharp.Messages.IMessageAdapter.SecurityClassInfo/summary;DocStr2499
 P:StockSharp.Messages.IMessageAdapter.TimeFrames/summary;DocStr206
 P:StockSharp.Messages.IMessageAdapter.CheckTimeFrameByRequest/summary;DocStr10487
 P:StockSharp.Messages.IMessageAdapter.ReConnectionSettings/summary;DocStr4079
-P:StockSharp.Messages.IMessageAdapter.HeartbeatInterval/summary;DocStr4080
+P:StockSharp.Messages.IMessageAdapter.HeartbeatInterval/summary;DocStr4334
 P:StockSharp.Messages.IMessageAdapter.PortfolioLookupRequired/summary;DocStr450
 P:StockSharp.Messages.IMessageAdapter.SecurityLookupRequired/summary;DocStr452
 P:StockSharp.Messages.IMessageAdapter.OrderStatusRequired/summary;DocStr451
@@ -944,11 +944,11 @@ P:StockSharp.Messages.MessageAdapter.SupportedMarketDataTypes/inheritdoc;DocStr8
 P:StockSharp.Messages.MessageAdapter.SecurityClassInfo/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.TimeFrames/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.CheckTimeFrameByRequest/inheritdoc;DocStr8459
-P:StockSharp.Messages.MessageAdapter.HeartbeatInterval/summary;DocStr4334
+P:StockSharp.Messages.MessageAdapter.HeartbeatInterval/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.PortfolioLookupRequired/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.OrderStatusRequired/inheritdoc;DocStr8459
-P:StockSharp.Messages.MessageAdapter.IsNativeIdentifiersPersistable/summary;DocStr9388
+P:StockSharp.Messages.MessageAdapter.IsNativeIdentifiersPersistable/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsFullCandlesOnly/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSupportSubscriptions/inheritdoc;DocStr8459
@@ -969,10 +969,9 @@ P:StockSharp.Messages.MessageAdapter.TransactionIdGenerator/inheritdoc;DocStr845
 P:StockSharp.Messages.MessageAdapter.LookupTimeOut/summary;DocStr4336
 P:StockSharp.Messages.MessageAdapter.LookupTimeOut/remarks;DocStr4337
 F:StockSharp.Messages.MessageAdapter.DefaultAssociatedBoardCode/summary;DocStr9884
-P:StockSharp.Messages.MessageAdapter.AssociatedBoardCode/summary;DocStr4338
+P:StockSharp.Messages.MessageAdapter.AssociatedBoardCode/inheritdoc;DocStr8459
 E:StockSharp.Messages.MessageAdapter.NewOutMessage/summary;DocStr4339
-M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)/summary;DocStr3113
-M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)/summary;DocStr2105

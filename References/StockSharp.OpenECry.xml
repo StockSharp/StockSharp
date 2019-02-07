@@ -26,22 +26,19 @@
         <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportStopLoss">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityLookupRequired">
-            <summary>
-            <see cref="T:StockSharp.Messages.SecurityLookupMessage"/> required to get securities.
-            </summary>
-        </member>
         <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativePortfolioLookup">
-            <summary>
-            Gets a value indicating whether the connector supports position lookup.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativeSecurityLookup">
-            <summary>
-            Gets a value indicating whether the connector supports security lookup.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportCandlesUpdates">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityExtendedFields">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -49,14 +46,6 @@
             Send message.
             </summary>
             <param name="message">Message.</param>
-        </member>
-        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityExtendedFields">
-            <summary>
-            Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage"/>.
-            </summary>
-        </member>
-        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportSecuritiesLookupAll">
-            <inheritdoc />
         </member>
         <member name="F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultHeartbeatInterval">
             <summary>
@@ -107,16 +96,13 @@
             <inheritdoc />
         </member>
         <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Save settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Load settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.ToString">
+            <inheritdoc />
         </member>
         <member name="T:StockSharp.OpenECry.OpenECryRemoting">
             <summary>

@@ -814,6 +814,11 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.LoadExpandedState">
+      <summary>
+            Load group state settings.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.ISecurityWindow">
       <summary>
             The interface that describes a window for trading instrument creating or editing.
@@ -4859,7 +4864,13 @@
     <member name="E:StockSharp.Xaml.GuiConnector`1.LookupSecuritiesResult">
       <inheritdoc />
     </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.LookupSecuritiesResult2">
+      <inheritdoc />
+    </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.LookupPortfoliosResult">
+      <inheritdoc />
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.LookupPortfoliosResult2">
       <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionSucceeded">
@@ -4941,6 +4952,9 @@
       <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.LookupBoardsResult">
+      <inheritdoc />
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.LookupBoardsResult2">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.TransactionIdGenerator">
