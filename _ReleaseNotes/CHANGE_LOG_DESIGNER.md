@@ -33,6 +33,9 @@ StockSharp Designer Change log
 * (bug) Heartbeat. Restore after reconnect.
 * (feature) Deribit. Extended orders.
 * (feature) More options for order registration.
+* (feature) AlphaVantage. Lookup instruments supported.
+* (bug) Quik. Fix hands while instruments lookup https://stocksharp.ru/forum/9238/zavisaet-quik-pri-podklyuchenii/
+* (bug) Fix security lookup.
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.
