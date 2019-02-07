@@ -6,7 +6,7 @@
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="400" Width="1000">
+		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="500" Width="1000">
 	<xctk:BusyIndicator x:Name="BusyIndicator">
 		<Grid>
 			<Grid.RowDefinitions>
@@ -14,7 +14,7 @@
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 
-			<StackPanel Orientation="Horizontal">
+			<WrapPanel  Orientation="Horizontal">
 				<GroupBox Padding="5" VerticalAlignment="Center">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="{x:Static loc:LocalizedStrings.Str1242}" VerticalAlignment="Center"/>
@@ -53,7 +53,7 @@
 						<Button x:Name="ModifyAnnotationBtn" Content="modify" Margin="4,0" IsEnabled="False" Click="ModifyAnnotation_Click" ToolTip="Modify annotation from code" VerticalAlignment="Center"/>
 					</StackPanel>
 				</GroupBox>
-			</StackPanel>
+			</WrapPanel>
 
 			<sx:ChartPanel x:Name="Chart" IsInteracted="True" Grid.Row="1"/>
 		</Grid>

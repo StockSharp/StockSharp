@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6069b2ef-ee49-4628-9631-e31f75930e04" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Coinigy.CoinigyTrader</codeEntityReference> демонстрирует приложение SampleCoinigy,
+        показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/Coinigy</legacyItalic>.</para>
+		<mediaLink><image placement="center" xlink:href="CoinigySample"/></mediaLink>
+    </introduction>
+    
+    <procedure>
+		<steps class="ordered">
+			<step>
+				<content>
+					<para>В самом начале необходимо создать экземпляр класса шлюза 
+					<codeEntityReference qualifyHint="false">T:StockSharp.Coinigy.CoinigyTrader</codeEntityReference>:</para>
+            		<code language="C#">
+            				<![CDATA[
+// создаем подключение
+Trader = new CoinigyTrader();// { LogLevel = LogLevels.Debug };
+							]]>
+					</code>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
+            		<code language="C#">
+            				<![CDATA[
+Trader.Restored += () => this.GuiAsync(() =>
+{
+	// разблокируем кнопку Экспорт (соединение было восстановлено)
+	ChangeConnectStatus(true);
+	MessageBox.Show(this, LocalizedStrings.Str2958);
+});
+
+// подписываемся на событие успешного соединения
+Trader.Connected += () =>
+{
+	// возводим флаг, что соединение установлено
+	_isConnected = true;
+
+	// разблокируем кнопку Экспорт
+	this.GuiAsync(() => ChangeConnectStatus(true));
+};
+Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
+
+// подписываемся на событие разрыва соединения
+Trader.ConnectionError += error => this.GuiAsync(() =>
+{
+	// заблокируем кнопку Экспорт (так как соединение было потеряно)
+	ChangeConnectStatus(false);
+
+	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+});
+
+// подписываемся на ошибку обработки данных (транзакций и маркет)
+Trader.Error += error =>
+	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+
+// подписываемся на ошибку подписки маркет-данных
+Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+
+Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+     
+							]]>
+					</code>						
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>Далее необходимо выполнить подключение к серверу <token>Coinigy</token>:</para>
+            		<code language="C#">
+            				<![CDATA[
+Trader.Connect();
+							]]>
+					</code>						
+				</content>
+			</step>
+					
+			<step>
+				<content>
+					<para>После подключения можно ожидать срабатывания событий:</para>
+						<list class="bullet">
+							<listItem>
+								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecurityChanged</codeEntityReference> – 
+								изменение инструмента (последней цены, цены спроса/предложения и т.д.) запрошенного через 
+								<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference>.</para>
+							</listItem>
+							<listItem>
+								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> – 
+									новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> инструментам.</para>
+							</listItem>
+						</list>
+				</content>
+			</step>
+
+			<step>
+				<content>
+					<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
+				</content>
+				<mediaLink><image placement="center" xlink:href="SecuritiesLookupWindow"/></mediaLink>
+			</step>
+			<step>
+				<content>
+					<para>Для получения обновлений и сделок по выбранному инструменту необходимо использовать методы
+					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> и
+					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> соответственно:</para>
+            		<code language="C#">
+            				<![CDATA[
+private void QuotesClick(object sender, RoutedEventArgs e)
+{
+	var security = SecurityPicker.SelectedSecurity;
+	var trader = MainWindow.Instance.Trader;
+
+	if (trader.RegisteredSecurities.Contains(security))
+	{
+		trader.UnRegisterSecurity(security);
+		trader.UnRegisterTrades(security);
+	}
+	else
+	{
+		trader.RegisterSecurity(security);
+		trader.RegisterTrades(security);
+	}
+}
+							]]>
+							</code>						
+						</content>
+					</step>
+
+				</steps>
+		</procedure>
+    
+  </developerConceptualDocument>
+</topic>
