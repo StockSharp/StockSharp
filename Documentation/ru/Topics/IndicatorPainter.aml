@@ -9,8 +9,7 @@
       <codeEntityReference>T:StockSharp.Algo.Indicators.Fractals</codeEntityReference> точки.
       В этом случае необходимо явно указывать в 
       <codeEntityReference>T:StockSharp.Xaml.Charting.ChartIndicatorElement</codeEntityReference>
-      графический рендерер индикаторов 
-      <codeEntityReference>T:StockSharp.Xaml.Charting.IndicatorPainters.</codeEntityReference>.</para>
+      графический рендерер индикаторов.</para>
       <code language="C#">
         <![CDATA[
 			var chartIndicatorElement = new ChartIndicatorElement()
@@ -95,7 +94,7 @@
 		<para>Переопределяем метод 
 		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.OnDraw</codeEntityReference>
 		в котором с помощью метода 
-		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.DrawValues</codeEntityReference> 
+		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.DrawValues(StockSharp.Algo.Indicators.IIndicator,StockSharp.Xaml.Charting.IChartElement)</codeEntityReference> 
 		прорисовываем индикатор.</para>
 		<code language="C#">
         <![CDATA[

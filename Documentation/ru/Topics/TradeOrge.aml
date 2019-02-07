@@ -3,8 +3,8 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     	<para>
-     		Для написания торговых роботов под торговую платформу <token>TradeOrge</token> необходимо использовать
-			<codeEntityReference qualifyHint="false">T:StockSharp.TradeOrge.TradeOrgeTrader</codeEntityReference>.
+     		Для написания торговых роботов под торговую платформу <token>TradeOgre</token> необходимо использовать
+			<codeEntityReference qualifyHint="false">T:StockSharp.TradeOgre.TradeOgreTrader</codeEntityReference>.
 		</para>
      </introduction>
      <relatedTopics>
