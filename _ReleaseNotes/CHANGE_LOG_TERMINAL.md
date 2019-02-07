@@ -32,6 +32,9 @@ StockSharp Terminal Change log
 * (feature) Order. Manual option added.
 * (bug) Heartbeat. Restore after reconnect.
 * (feature) Deribit. Extended orders.
+* (feature) AlphaVantage. Lookup instruments supported.
+* (bug) Quik. Fix hands while instruments lookup https://stocksharp.ru/forum/9238/zavisaet-quik-pri-podklyuchenii/
+* (bug) Fix security lookup.
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.
@@ -43,7 +46,7 @@ StockSharp Terminal Change log
 * (bug) Candles. Fix duplicate candles subscription.
 * (bug) Market depth. Fix build depths from OL and L1.
 * (feature) MT4, MT5 connectors.
-* (feature) Terminal. Save and load annotations for Chart.
+* (feature) Save and load annotations for Chart.
 
 ## v4.4.12:
 * (bug) Fix storage format select.
