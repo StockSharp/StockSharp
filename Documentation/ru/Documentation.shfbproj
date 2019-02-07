@@ -233,6 +233,19 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Shell_custom_strategy_panel.aml" />
+    <None Include="Topics\Shell_custom_strategy.aml" />
+    <None Include="Topics\Conceptualreeaesrsar.aml" />
+    <None Include="Topics\Shell_Programs_interface.aml" />
+    <None Include="Topics\Shell_RemoteManager.aml" />
+    <None Include="Topics\Shell_emulation.aml" />
+    <None Include="Topics\Shell_RealTime.aml" />
+    <None Include="Topics\Shell_Common.aml" />
+    <None Include="Topics\Shell_Connectors_settings.aml" />
+    <None Include="Topics\Shell_Connection_settings.aml" />
+    <None Include="Topics\Shell_Quick_start.aml" />
+    <None Include="Topics\Shell_Installation.aml" />
+    <None Include="Topics\S#Shell.aml" />
     <None Include="Topics\Designer_TradeAllowedDiagramElement.aml" />
     <None Include="Topics\Designer_MarketDepthTruncateDiagramElement.aml" />
     <None Include="Topics\Designer_StrategyPnLDiagramElement.aml" />
@@ -3648,6 +3661,102 @@
     <Image Include="Art\Designer_TradeAllowedDiagramElement_00.png">
       <ImageId>Designer_TradeAllowedDiagramElement_00</ImageId>
       <AlternateText>Designer Trade Allowed Diagram Element 00</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_Quick_start_05.png">
+      <ImageId>Shell_Quick_start_05</ImageId>
+      <AlternateText>Shell Quick start 05</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_Quick_start_04.png">
+      <ImageId>Shell_Quick_start_04</ImageId>
+      <AlternateText>Shell Quick start 04</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_Quick_start_03.png">
+      <ImageId>Shell_Quick_start_03</ImageId>
+      <AlternateText>Shell Quick start 03</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_Quick_start_02.png">
+      <ImageId>Shell_Quick_start_02</ImageId>
+      <AlternateText>Shell Quick start 02</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_Quick_start_01.png">
+      <ImageId>Shell_Quick_start_01</ImageId>
+      <AlternateText>Shell Quick start 01</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_Quick_start_00.png">
+      <ImageId>Shell_Quick_start_00</ImageId>
+      <AlternateText>Shell Quick start 00</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_Installation_01.png">
+      <ImageId>Shell_Installation_01</ImageId>
+      <AlternateText>Shell Installation 01</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_Installation_00.png">
+      <ImageId>Shell_Installation_00</ImageId>
+      <AlternateText>Shell Installation 00</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_Title_00.png">
+      <ImageId>Shell_Title_00</ImageId>
+      <AlternateText>Shell Title 00</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_11.png">
+      <ImageId>Shell_RemoteManager_11</ImageId>
+      <AlternateText>Shell Remote Manager 11</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_10.png">
+      <ImageId>Shell_RemoteManager_10</ImageId>
+      <AlternateText>Shell Remote Manager 10</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_09.png">
+      <ImageId>Shell_RemoteManager_09</ImageId>
+      <AlternateText>Shell Remote Manager 09</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_08.png">
+      <ImageId>Shell_RemoteManager_08</ImageId>
+      <AlternateText>Shell Remote Manager 08</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_07.png">
+      <ImageId>Shell_RemoteManager_07</ImageId>
+      <AlternateText>Shell Remote Manager 07</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_06.png">
+      <ImageId>Shell_RemoteManager_06</ImageId>
+      <AlternateText>Shell Remote Manager 06</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_05.png">
+      <ImageId>Shell_RemoteManager_05</ImageId>
+      <AlternateText>Shell Remote Manager 05</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_04.png">
+      <ImageId>Shell_RemoteManager_04</ImageId>
+      <AlternateText>Shell Remote Manager 04</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_03.png">
+      <ImageId>Shell_RemoteManager_03</ImageId>
+      <AlternateText>Shell Remote Manager 03</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_02.png">
+      <ImageId>Shell_RemoteManager_02</ImageId>
+      <AlternateText>Shell Remote Manager 02</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_01.png">
+      <ImageId>Shell_RemoteManager_01</ImageId>
+      <AlternateText>Shell Remote Manager 01</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_RemoteManager_00.png">
+      <ImageId>Shell_RemoteManager_00</ImageId>
+      <AlternateText>Shell Remote Manager 00</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_emulation_00.png">
+      <ImageId>Shell_emulation_00</ImageId>
+      <AlternateText>Shell emulation 00</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_realtime_00.png">
+      <ImageId>Shell_realtime_00</ImageId>
+      <AlternateText>Shell realtime 00</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_Common_00.png">
+      <ImageId>Shell_Common_00</ImageId>
+      <AlternateText>Shell Common 00</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
