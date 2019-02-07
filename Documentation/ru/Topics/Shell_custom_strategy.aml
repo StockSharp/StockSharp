@@ -122,5 +122,8 @@ public class SmaStrategy : Strategy, IHaveMonitoringControl, IHaveTestControl
 		]]>
 		</code>
 </introduction>
+<relatedTopics>
+<link xlink:href="8cea241f-fdf3-43c7-bf4d-3fdd7dcd0000" />
+</relatedTopics>
   </developerConceptualDocument>
 </topic>

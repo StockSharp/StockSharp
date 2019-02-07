@@ -325,7 +325,7 @@
       </Topic>
       <Topic id="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93" visible="True" title="FIX Server" />
     </Topic>
-    <Topic id="2bffe740-b901-40dc-9d0b-cf2600270ad4" visible="True" noFile="true" isExpanded="true" title="Коннекторы (дополнительное)">
+    <Topic id="2bffe740-b901-40dc-9d0b-cf2600270ad4" visible="True" noFile="true" title="Коннекторы (дополнительное)">
       <Topic id="293859e2-6c39-486c-afde-d9ae96243618" visible="True" title="Создание коннектора" />
       <Topic id="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" visible="True" title="Множество подключений" />
       <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Переподключение" />
@@ -478,6 +478,7 @@
     <Topic id="a8486498-a2d8-4924-b009-8b93138b268a" visible="True" title="Арифметические операции" />
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Конвертация валют" />
     <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Примеры" />
+    <Topic id="8ff5768c-8c58-4ade-8036-471fd85d1332" visible="True" isSelected="true" title="S#.RemoteManager" />
   </Topic>
   <Topic id="E4B5E112-BD08-4F40-8741-7514E7E4088E" visible="True" isExpanded="true" title="S#.Terminal">
     <Topic id="f70783b8-59e1-4ea7-9d94-c20524f3470a" visible="True" title="Установка S#.Terminal" />
@@ -510,7 +511,7 @@
         <Topic id="8898cea8-4229-475e-a31d-c88e09b2c46f" visible="True" title="Лог заявок" />
       </Topic>
     </Topic>
-    <Topic id="0f40a3ad-c627-4552-a581-7dc048f19739" visible="True" isExpanded="true" title="Настройки подключения">
+    <Topic id="0f40a3ad-c627-4552-a581-7dc048f19739" visible="True" title="Настройки подключения">
       <Topic id="6326b77f-e732-49f3-8e95-505d99bbc606" visible="True" title="Настройки коннекторов" />
       <Topic id="f12e5802-58c6-4fae-a210-37adb953ca2e" visible="True" title="Симулятор торгов" />
       <Topic id="9474580c-0867-4ba5-be79-83fe4b51b513" visible="True" title="Привязка счета к подключению" />
@@ -533,7 +534,7 @@
       <Topic id="c2495e73-82ef-4276-8576-7f99a5ea71ee" visible="True" title="Панель уведомлений" />
       <Topic id="b027b553-9842-4c2d-9b49-d01bf1394bb2" visible="True" title="Настройки уведомлений" />
     </Topic>
-    <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" title="Настройки">
+    <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" isExpanded="true" title="Настройки">
       <Topic id="bc6f0874-1c3a-49ff-b615-8c438dcea716" visible="True" title="Режим запуска" />
       <Topic id="e5994bfc-2458-41b2-a3c8-3e2b62d78ea9" visible="True" title="Сброс языка и настроек" />
       <Topic id="5db34ace-ab66-4848-b335-11402f3d96c3" visible="True" title="Обратная связь" />
@@ -880,6 +881,7 @@
       <Topic id="8ce14bdf-7573-4d6d-86c6-b838232401b2" visible="True" title="Настройки коннекторов" />
     </Topic>
     <Topic id="9d636fda-309e-4d5f-a6ed-4848fb8f4f0b" visible="True" title="Создание собственной стратегии" />
-    <Topic id="8cea241f-fdf3-43c7-bf4d-3fdd7dcd0000" visible="True" isSelected="true" title="Создание собственных панеле для стратегий" />
+    <Topic id="8cea241f-fdf3-43c7-bf4d-3fdd7dcd0000" visible="True" title="Создание собственных панеле для стратегий" />
+    <Topic id="79892a99-9f84-414c-be4a-fe677048c913" visible="True" title="Запуск стратегии созданной в S#.Designer" />
   </Topic>
 </Topics>

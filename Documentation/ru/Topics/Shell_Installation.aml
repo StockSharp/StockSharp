@@ -28,14 +28,14 @@
 				  <content>
 		  				<para>В полученной папке будут C# проект со всеми необходимыми библиотеками и небольшим количеством исторических данных.</para>
 		  				<mediaLink>
-<image placement="center" xlink:href="Shell_Installation_01.png"/>
+<image placement="center" xlink:href="Shell_Installation_01"/>
 </mediaLink>
 				  </content>
 			  </step>
 		  </steps>
     </introduction>
     <relatedTopics>
-<link xlink:href="e51b9e8f-52d3-4e16-887e-1aad12db2cc8" />
+<link xlink:href="848cd34c-1768-409f-8e82-bed1c3e25102" />
 </relatedTopics>
   </developerConceptualDocument>
 </topic>

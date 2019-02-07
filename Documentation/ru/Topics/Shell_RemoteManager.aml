@@ -42,8 +42,9 @@ public virtual void ApplyCommand(StrategyStateMessage stateMsg)
 		</code>
 
 <para>Базовый класс <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> только управляем запуском и остановкой стратегии.</para>
-
-
     </introduction>
+  <relatedTopics>
+<link xlink:href="0273c249-b962-4320-a9cb-57f1e2943f5e" />
+</relatedTopics>
   </developerConceptualDocument>
 </topic>

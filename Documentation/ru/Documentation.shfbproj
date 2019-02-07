@@ -233,6 +233,8 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API.RemoteManager.aml" />
+    <None Include="Topics\Shell_run_Designer_strategy.aml" />
     <None Include="Topics\Shell_custom_strategy_panel.aml" />
     <None Include="Topics\Shell_custom_strategy.aml" />
     <None Include="Topics\Conceptualreeaesrsar.aml" />
@@ -3757,6 +3759,38 @@
     <Image Include="Art\Shell_Common_00.png">
       <ImageId>Shell_Common_00</ImageId>
       <AlternateText>Shell Common 00</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_Common_01.png">
+      <ImageId>Shell_Common_01</ImageId>
+      <AlternateText>Shell Common 01</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_custom_strategy_panel_01.png">
+      <ImageId>Shell_custom_strategy_panel_01</ImageId>
+      <AlternateText>Shell custom strategy panel 01</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_custom_strategy_panel_00.png">
+      <ImageId>Shell_custom_strategy_panel_00</ImageId>
+      <AlternateText>Shell custom strategy panel 00</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_custom_strategy_01.png">
+      <ImageId>Shell_custom_strategy_01</ImageId>
+      <AlternateText>Shell custom strategy 01</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_custom_strategy_00.png">
+      <ImageId>Shell_custom_strategy_00</ImageId>
+      <AlternateText>Shell custom strategy 00</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_run_Designer_strategy_02.png">
+      <ImageId>Shell_run_Designer_strategy_02</ImageId>
+      <AlternateText>Shell run Designer strategy 02</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_run_Designer_strategy_01.png">
+      <ImageId>Shell_run_Designer_strategy_01</ImageId>
+      <AlternateText>Shell run Designer strategy 01</AlternateText>
+    </Image>
+    <Image Include="Art\Shell_run_Designer_strategy_00.png">
+      <ImageId>Shell_run_Designer_strategy_00</ImageId>
+      <AlternateText>Shell run Designer strategy 00</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
