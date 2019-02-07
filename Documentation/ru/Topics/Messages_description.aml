@@ -195,7 +195,7 @@
   		
   		<row>
     	<entry>
-    		<para><codeEntityReference>T:StockSharp.Messages.SessionMessage</codeEntityReference></para>
+    		<para><codeEntityReference>T:StockSharp.Messages.BoardStateMessage</codeEntityReference></para>
    		</entry>
     	<entry>
     		<para>Содержит информацию об изменении состояния торговой сессии. Доступные значения состояния сессии определены в перечислении
