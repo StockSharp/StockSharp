@@ -25,12 +25,13 @@
   		<listItem>
 <para>Коннекторы (Америка): </para>
 
-
+<para><link xlink:href="28cee4c9-f9c2-4e87-a160-991fc18221af" />, </para>
 <para><link xlink:href="1ff92943-e18d-4542-988f-254aded4cbe1" />, </para>
 <para><link xlink:href="eab815a2-65f7-46e8-9989-4ae52d234703" />, </para>
 <para><link xlink:href="69cb6aac-29fa-46e3-8d3b-af81f89bfff3" />, </para>
 <para><link xlink:href="dcd93518-1169-44d1-ab9b-2d016d727842" />, </para>
 <para><link xlink:href="add6156b-b2a9-401c-93cc-be333762da15" />, </para>
+<para><link xlink:href="f826d615-3d80-42fe-980e-985e883acdeb" />, </para>
 <para><link xlink:href="3a4f70bf-24b9-489f-8d58-5bc4f5b623b0" />, </para>
 <para><link xlink:href="3ee05287-d25f-4967-9dc0-26d9a5a9578a" />, </para>
 <para><link xlink:href="e08adf2c-8f14-4ba2-a486-0d0b0de25704" />, </para>
@@ -51,6 +52,7 @@
 <para>Коннекторы Криптовалюты: 	</para>
 
 <para><link xlink:href="a72395b7-e651-40a2-97d1-f5236bc27a4f" />, </para>
+<para><link xlink:href="46c2bb14-68dd-4c87-8390-6f968952ad77" />, </para>
 <para><link xlink:href="c5538843-8326-410e-9862-a82fbfbcb345" />, </para>
 <para><link xlink:href="eae3076b-f1ca-475a-b66c-715b998bada7" />, </para>
 <para><link xlink:href="c71fcd66-6ee2-4da9-a898-02f66fced4b2" />, </para>
@@ -62,21 +64,34 @@
 <para><link xlink:href="e08c0579-ca96-42f4-8be9-86ab1e9ad174" />, </para>
 <para><link xlink:href="cf66da6f-47cd-4596-a772-fb23e1a72b5f" />, </para>
 <para><link xlink:href="3d17039e-55d4-4ec0-80e5-1e23eb6c960e" />, </para>
+<para><link xlink:href="82e1429a-8e18-4245-bb66-a62f0e74c25d" />, </para>
+<para><link xlink:href="3bac2825-0c74-4e81-811b-6d2ff33f08e6" />, </para>
 <para><link xlink:href="d222e77d-9410-4f1a-a7cf-92d5a9305027" />, </para>
-<para><link xlink:href="cf64a6d0-e0f4-4144-b949-5c7aa3c557ab" />,</para> 
+<para><link xlink:href="cf64a6d0-e0f4-4144-b949-5c7aa3c557ab" />, </para>
+<para><link xlink:href="b3b822ae-dbe2-496c-9121-16256df0e712" />, </para>
 <para><link xlink:href="c259cacc-d0f1-4a02-9419-dbaa805cab31" />, </para>
 <para><link xlink:href="4e7930af-1aa2-4599-91de-7e9eae031fbf" />, </para>
 <para><link xlink:href="0171d5e9-b148-4b02-9d49-4c00a7c3cc3a" />, </para>
 <para><link xlink:href="ccf8139f-afb1-43ca-adfa-a74d9c9b8280" />, </para>
-<para><link xlink:href="39dac157-8de7-4dd1-ad0c-4520aa9ec953" />,</para> 
+<para><link xlink:href="0c0987c7-63ab-4e40-a95d-b0a50955261c" />, </para>
+<para><link xlink:href="39dac157-8de7-4dd1-ad0c-4520aa9ec953" />, </para>
 <para><link xlink:href="7228e2e5-eb4e-4ad7-b575-088ee696f926" />, </para>
 <para><link xlink:href="84110311-8092-4090-89ce-89c57557ee1a" />, </para>
 <para><link xlink:href="5887c466-24d7-4d50-9ae3-8a746bdecd9e" />, </para>
 <para><link xlink:href="c00c59c2-d12f-4b16-b9f5-ceb451494a6b" />, </para>
 <para><link xlink:href="1d9788e7-0f75-4993-84a2-4a331dfea2d2" />, </para>
 <para><link xlink:href="1a6b49de-05a2-44c3-8f67-b8acdec5aec0" />, </para>
-<para><link xlink:href="78aa3ef5-8eae-4c53-b7e9-85ee1f8a9137" />.</para>
-
+<para><link xlink:href="eb595ce4-5971-4032-9ee3-8586c6fcedf2" />, </para>
+<para><link xlink:href="0056264e-85e5-4415-b99b-7d9f24e59752" />, </para>
+<para><link xlink:href="78aa3ef5-8eae-4c53-b7e9-85ee1f8a9137" />, </para>
+<para><link xlink:href="658c35dd-70ab-4799-9c94-b8a42b9fc06c" />, </para>
+<para><link xlink:href="199056ed-4039-4d51-9ae7-8b9f6059902f" />, </para>
+<para><link xlink:href="7ca713af-d8b3-4616-b98a-3594bc655a93" />, </para>
+<para><link xlink:href="233f62de-500c-46a1-9cf0-00eeb550a21c" />, </para>
+<para><link xlink:href="3380fca6-bc39-403e-8dae-26e4c84a63c7" />, </para>
+<para><link xlink:href="d024edcc-a396-4859-86f3-e8517526bc17" />, </para>
+<para><link xlink:href="3e62d8d7-9490-4267-b523-b6e85b047a9b" />, </para>
+<para><link xlink:href="59d0c7b8-1371-4cc7-9c4a-919e8a994363" />, </para>
 
  		</listItem>
      		<listItem>
