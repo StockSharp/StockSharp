@@ -76,9 +76,25 @@ namespace StockSharp.Algo
 
 		private readonly List<Security> _lookupResult = new List<Security>();
 		private readonly SynchronizedQueue<SecurityLookupMessage> _lookupQueue = new SynchronizedQueue<SecurityLookupMessage>();
-		private readonly SynchronizedDictionary<long, SecurityLookupMessage> _securityLookups = new SynchronizedDictionary<long, SecurityLookupMessage>();
-		private readonly SynchronizedDictionary<long, PortfolioLookupMessage> _portfolioLookups = new SynchronizedDictionary<long, PortfolioLookupMessage>();
-		private readonly SynchronizedDictionary<long, BoardLookupMessage> _boardLookups = new SynchronizedDictionary<long, BoardLookupMessage>();
+
+		private class LookupInfo<TCriteria, TItem>
+			where TCriteria : Message
+		{
+			public TCriteria Criteria { get; }
+			public List<TItem> Items { get; } = new List<TItem>();
+
+			public LookupInfo(TCriteria criteria)
+			{
+				if (criteria == null)
+					throw new ArgumentNullException(nameof(criteria));
+
+				Criteria = (TCriteria)criteria.Clone();
+			}
+		}
+
+		private readonly SynchronizedDictionary<long, LookupInfo<SecurityLookupMessage, Security>> _securityLookups = new SynchronizedDictionary<long, LookupInfo<SecurityLookupMessage, Security>>();
+		private readonly SynchronizedDictionary<long, LookupInfo<PortfolioLookupMessage, Portfolio>> _portfolioLookups = new SynchronizedDictionary<long, LookupInfo<PortfolioLookupMessage, Portfolio>>();
+		private readonly SynchronizedDictionary<long, LookupInfo<BoardLookupMessage, ExchangeBoard>> _boardLookups = new SynchronizedDictionary<long, LookupInfo<BoardLookupMessage, ExchangeBoard>>();
 
 		private readonly SubscriptionManager _subscriptionManager;
 
@@ -701,10 +717,11 @@ namespace StockSharp.Algo
 
 			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
 
+			_securityLookups.Add(criteria.TransactionId, new LookupInfo<SecurityLookupMessage, Security>(criteria));
+
 			//если для критерия указаны код биржи и код инструмента, то сначала смотрим нет ли такого инструмента
 			if (!NeedLookupSecurities(criteria.SecurityId))
 			{
-				_securityLookups.Add(criteria.TransactionId, (SecurityLookupMessage)criteria.Clone());
 				SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = criteria.TransactionId });
 				return;
 			}
@@ -779,7 +796,7 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			_portfolioLookups.Add(criteria.TransactionId, criteria);
+			_portfolioLookups.Add(criteria.TransactionId, new LookupInfo<PortfolioLookupMessage, Portfolio>(criteria));
 
 			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
 			SendInMessage(criteria);
@@ -808,7 +825,7 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			_boardLookups.Add(criteria.TransactionId, criteria);
+			_boardLookups.Add(criteria.TransactionId, new LookupInfo<BoardLookupMessage, ExchangeBoard>(criteria));
 
 			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
 			SendInMessage(criteria);
@@ -1393,7 +1410,7 @@ namespace StockSharp.Algo
 		/// <returns>Security.</returns>
 		protected Security GetSecurity(SecurityId securityId)
 		{
-			return GetSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode), s => false);
+			return GetSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode), s => false, out _);
 		}
 
 		/// <summary>
@@ -1401,8 +1418,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="id">Security ID.</param>
 		/// <param name="changeSecurity">The handler changing the instrument. It returns <see langword="true" /> if the instrument has been changed and the <see cref="IConnector.SecuritiesChanged"/> should be called.</param>
+		/// <param name="isNew">Is newly created.</param>
 		/// <returns>Security.</returns>
-		private Security GetSecurity(string id, Func<Security, bool> changeSecurity)
+		private Security GetSecurity(string id, Func<Security, bool> changeSecurity, out bool isNew)
 		{
 			if (id.IsEmpty())
 				throw new ArgumentNullException(nameof(id));
@@ -1414,7 +1432,7 @@ namespace StockSharp.Algo
 			{
 				var idInfo = SecurityIdGenerator.Split(idStr);
 				return Tuple.Create(idInfo.SecurityCode, _entityCache.ExchangeInfoProvider.GetOrCreateBoard(GetBoardCode(idInfo.BoardCode)));
-			}, out var isNew);
+			}, out isNew);
 
 			var isChanged = changeSecurity(security);
 

@@ -3334,7 +3334,11 @@ namespace StockSharp.Algo
 					}
 					catch (Exception ex)
 					{
-						errorHandler?.Invoke(ex);
+						if (errorHandler == null)
+							ex.LogError();
+						else
+							errorHandler.Invoke(ex);
+
 						return null;
 					}
 				}
@@ -4316,11 +4320,26 @@ namespace StockSharp.Algo
 		/// <returns>Exchange board.</returns>
 		public static ExchangeBoard GetOrCreateBoard(this IExchangeInfoProvider exchangeInfoProvider, string code, Func<string, ExchangeBoard> createBoard = null)
 		{
+			return exchangeInfoProvider.GetOrCreateBoard(code, out _, createBoard);
+		}
+
+		/// <summary>
+		/// To get a board by its code. If board with the passed name does not exist, then it will be created.
+		/// </summary>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		/// <param name="code">Board code.</param>
+		/// <param name="isNew">Is newly created.</param>
+		/// <param name="createBoard">The handler creating a board, if it is not found. If the value is <see langword="null" />, then the board is created by default initialization.</param>
+		/// <returns>Exchange board.</returns>
+		public static ExchangeBoard GetOrCreateBoard(this IExchangeInfoProvider exchangeInfoProvider, string code, out bool isNew, Func<string, ExchangeBoard> createBoard = null)
+		{
 			if (exchangeInfoProvider == null)
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			if (code.IsEmpty())
 				throw new ArgumentNullException(nameof(code));
+
+			isNew = false;
 
 			//if (code.CompareIgnoreCase("RTS"))
 			//	return ExchangeBoard.Forts;
@@ -4329,6 +4348,8 @@ namespace StockSharp.Algo
 
 			if (board != null)
 				return board;
+
+			isNew = true;
 
 			if (createBoard == null)
 			{

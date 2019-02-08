@@ -196,7 +196,7 @@
   		
   		<row>
     	<entry>
-    		<para><codeEntityReference>T:StockSharp.Messages.SessionMessage</codeEntityReference></para>
+    		<para><codeEntityReference>T:StockSharp.Messages.BoardStateMessage</codeEntityReference></para>
    		</entry>
     	<entry>
     		<para>Contains information on trading session statute changes. Available values of the session statute are determined in the listing

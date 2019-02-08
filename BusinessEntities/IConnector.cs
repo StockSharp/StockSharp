@@ -300,6 +300,21 @@ namespace StockSharp.BusinessEntities
 		event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult;
 
 		/// <summary>
+		/// Lookup result <see cref="LookupSecurities(Security,IMessageAdapter,MessageOfflineModes)"/> received.
+		/// </summary>
+		event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> LookupSecuritiesResult2;
+
+		/// <summary>
+		/// Lookup result <see cref="LookupPortfolios(Portfolio,IMessageAdapter,MessageOfflineModes)"/> received.
+		/// </summary>
+		event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult2;
+
+		/// <summary>
+		/// Lookup result <see cref="LookupBoards(ExchangeBoard,IMessageAdapter,MessageOfflineModes)"/> received.
+		/// </summary>
+		event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
+
+		/// <summary>
 		/// Successful subscription market-data.
 		/// </summary>
 		event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;

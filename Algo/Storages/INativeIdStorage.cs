@@ -63,6 +63,12 @@ namespace StockSharp.Algo.Storages
 		/// <param name="securityId">Security identifier.</param>
 		/// <returns>Native (internal) trading system security id.</returns>
 		object TryGetBySecurityId(string storageName, SecurityId securityId);
+
+		/// <summary>
+		/// Clear storage.
+		/// </summary>
+		/// <param name="storageName">Storage name.</param>
+		void Clear(string storageName);
 	}
 
 	/// <summary>
@@ -151,6 +157,14 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
+		public void Clear(string storageName)
+		{
+			_inMemory.Clear(storageName);
+
+			DelayAction.DefaultGroup.Add(() => File.Delete(GetFileName(storageName)));
+		}
+
+		/// <inheritdoc />
 		public SecurityId? TryGetByNativeId(string storageName, object nativeId)
 		{
 			return _inMemory.TryGetByNativeId(storageName, nativeId);
@@ -166,7 +180,7 @@ namespace StockSharp.Algo.Storages
 		{
 			DelayAction.DefaultGroup.Add(() =>
 			{
-				var fileName = Path.Combine(_path, storageName + ".csv");
+				var fileName = GetFileName(storageName);
 
 				var appendHeader = !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
 
@@ -224,6 +238,8 @@ namespace StockSharp.Algo.Storages
 				}
 			});
 		}
+
+		private string GetFileName(string storageName) => Path.Combine(_path, storageName + ".csv");
 
 		private static string GetTypeName(Type nativeIdType)
 		{
@@ -346,6 +362,15 @@ namespace StockSharp.Algo.Storages
 
 			lock (_syncRoot)
 				return _nativeIds.TryGetValue(storageName)?.TryGetValue(securityId);
+		}
+
+		void INativeIdStorage.Clear(string storageName)
+		{
+			if (storageName.IsEmpty())
+				throw new ArgumentNullException(nameof(storageName));
+
+			lock (_syncRoot)
+				_nativeIds.Remove(storageName);
 		}
 
 		SecurityId? INativeIdStorage.TryGetByNativeId(string storageName, object nativeId)

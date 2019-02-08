@@ -21,7 +21,10 @@ StockSharp Data (Hydra) Change log
 * (feature) OpenECry. More order types supported.
 * (feature) OKEX. Position and account swap and margin supported.
 * (bug) Candles compression. Fix for non TF candles compression.
+* (feature) AlphaVantage. Lookup instruments supported.
+* (bug) Quik. Fix hands while instruments lookup https://stocksharp.ru/forum/9238/zavisaet-quik-pri-podklyuchenii/
 * (feature) Board editor redesign.
+* (feature) Finam. Reset cached ids. Fix https://stocksharp.ru/forum/10395/skachivanie-tikovyh-i-svechnyh-istoricheskih-dannyh-gidroi-s-finama/
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.

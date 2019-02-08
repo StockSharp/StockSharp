@@ -1,5 +1,9 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) INativeIdStorage. Clear method added.
+* (bug) FinamHistorySource. Fix https://stocksharp.ru/forum/10395/skachivanie-tikovyh-i-svechnyh-istoricheskih-dannyh-gidroi-s-finama/
+
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
 * (feature) ISecurityAssociationStorage added.
@@ -57,6 +61,13 @@ StockSharp API Change log
 * (bug) Heartbeat. Restore after reconnect.
 * (feature) Deribit. Extended orders.
 * (feature) Diagram. More options for order registration.
+* (feature) CurrencyTypes. MXP added.
+* (feature) IConnector. LookupXXXResult2 overloads.
+* (feature) AlphaVantage. Lookup instruments supported.
+* (bug) Quik. Fix hands while instruments lookup https://stocksharp.ru/forum/9238/zavisaet-quik-pri-podklyuchenii/
+* (bug) Fix security lookup.
+* (bug) Basket adapter. Fix lookup processing.
+* (bug) MessageAdapter. Time out fixes.
 
 ## v4.4.15:
 * (feature) LiveCoin. Candles support.

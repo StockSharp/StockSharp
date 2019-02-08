@@ -11428,22 +11428,22 @@ namespace StockSharp.Localization
 		public static string Str1175 => GetString(Str1175Key);
 
 		/// <summary>
-		/// Combine on touch
+		/// Match on touch
 		/// </summary>
 		public const string Str1176Key = nameof(Str1176);
 
 		/// <summary>
-		/// Combine on touch
+		/// Match on touch
 		/// </summary>
 		public static string Str1176 => GetString(Str1176Key);
 
 		/// <summary>
-		/// When emulating trades combination, combine orders, when trade price touched the order price (equal to order price).
+		/// When emulating trades matches, match orders, when trade price touched the order price (equal to order price).
 		/// </summary>
 		public const string Str1177Key = nameof(Str1177);
 
 		/// <summary>
-		/// When emulating trades combination, combine orders, when trade price touched the order price (equal to order price).
+		/// When emulating trades matches, match orders, when trade price touched the order price (equal to order price).
 		/// </summary>
 		public static string Str1177 => GetString(Str1177Key);
 

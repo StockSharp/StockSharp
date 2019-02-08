@@ -9,7 +9,6 @@ M:StockSharp.LMAX.LmaxMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportTakeProfit/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
-P:StockSharp.LMAX.LmaxMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
 M:StockSharp.LMAX.LmaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.LMAX.LmaxMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.LMAX.LmaxMessageAdapter.Login/summary;Login

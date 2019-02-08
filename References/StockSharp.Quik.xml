@@ -96,6 +96,11 @@
             Автоматически править коды фьючерсов для Si и Eu.
             </summary>
     </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixServer.IgnoreCyrillic">
+      <summary>
+            Игнорировать кириллические инструменты.
+            </summary>
+    </member>
     <member name="P:StockSharp.Quik.Lua.LuaFixServer.LogFile">
       <summary>
             Название текстового файла, в который будут писаться логи.
@@ -183,6 +188,8 @@
       </summary>
       <param name="secCode">
       </param>
+      <returns>
+      </returns>
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixServer.TryGetSecurityCode(System.String)">
       <summary>

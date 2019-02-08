@@ -4,9 +4,8 @@
     <introduction>
       <para><token>stocksharp</token> предоставляет возможность добавлять аннотации на график в виде текста, линий и др. </para>
       <para>Добавление аннотаций не отличается от добавления любой другой информации на график. 
-      Сначала необходимо создать 
-      <codeEntityReference>T:StockSharp.Xaml.Charting.ChartAnnotation</codeEntityReference> 
-      и добавить его на область графика</para>
+      Сначала необходимо создать <codeEntityReference>T:StockSharp.Xaml.Charting.ChartAnnotation</codeEntityReference> 
+      и добавить его на область графика:</para>
         <code language="C#">
         <![CDATA[
 	var _annotation = new ChartAnnotation { Type = ChartAnnotationTypes.BoxAnnotation };
@@ -14,10 +13,10 @@
 		]]>
 		</code>	
       <para>После чего необходимо инициализировать новый экземпляр класса 
-      <codeEntityReference>T:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData</codeEntityReference> 
+      <codeEntityReference>T:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData</codeEntityReference>, 
       в котором описать аннотацию и передать его в метод 
       <codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference> 
-      для прорисовки на графике</para>
+      для прорисовки на графике:</para>
          <code language="C#">
         <![CDATA[
 			var data = new ChartDrawData.AnnotationData

@@ -138,26 +138,14 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SecurityLookupRequired">
-      <summary>
-        <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
-            </summary>
-    </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportNativeSecurityLookup">
-      <summary>
-            Gets a value indicating whether the connector supports security lookup.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportNativePortfolioLookup">
-      <summary>
-            Gets a value indicating whether the connector supports position lookup.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Send message.
-            </summary>
-      <param name="message">Message.</param>
+      <inheritdoc />
     </member>
     <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.DefaultAddress">
       <summary>

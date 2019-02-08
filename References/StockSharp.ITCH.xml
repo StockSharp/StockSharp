@@ -15,19 +15,14 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.ITCH.ItchMessageAdapter.SecurityLookupRequired">
-            <summary>
-            <see cref="T:StockSharp.Messages.SecurityLookupMessage"/> required to get securities.
-            </summary>
-        </member>
         <member name="P:StockSharp.ITCH.ItchMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.IsSupportNativeSecurityLookup">
+            <inheritdoc />
+        </member>
         <member name="M:StockSharp.ITCH.ItchMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-            <summary>
-            Send message.
-            </summary>
-            <param name="message">Message.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.ITCH.ItchMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)">
             <summary>

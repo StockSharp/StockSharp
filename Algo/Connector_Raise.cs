@@ -196,6 +196,15 @@ namespace StockSharp.Algo
 		public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult;
 
 		/// <inheritdoc />
+		public event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> LookupSecuritiesResult2;
+
+		/// <inheritdoc />
+		public event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult2;
+
+		/// <inheritdoc />
+		public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
+
+		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
 
 		/// <inheritdoc />
@@ -515,9 +524,11 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="securities">Found instruments.</param>
-		private void RaiseLookupSecuritiesResult(SecurityLookupMessage message, Exception error, IEnumerable<Security> securities)
+		/// <param name="newSecurities">Newly created.</param>
+		private void RaiseLookupSecuritiesResult(SecurityLookupMessage message, Exception error, Security[] securities, Security[] newSecurities)
 		{
 			LookupSecuritiesResult?.Invoke(message, securities, error);
+			LookupSecuritiesResult2?.Invoke(message, securities, newSecurities, error);
 		}
 
 		/// <summary>
@@ -526,9 +537,11 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="boards">Found boards.</param>
-		private void RaiseLookupBoardsResult(BoardLookupMessage message, Exception error, IEnumerable<ExchangeBoard> boards)
+		/// <param name="newBoards">Newly created.</param>
+		private void RaiseLookupBoardsResult(BoardLookupMessage message, Exception error, ExchangeBoard[] boards, ExchangeBoard[] newBoards)
 		{
 			LookupBoardsResult?.Invoke(message, boards, error);
+			LookupBoardsResult2?.Invoke(message, boards, newBoards, error);
 		}
 
 		/// <summary>
@@ -537,9 +550,11 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="portfolios">Found portfolios.</param>
-		private void RaiseLookupPortfoliosResult(PortfolioLookupMessage message, Exception error, IEnumerable<Portfolio> portfolios)
+		/// <param name="newPortfolios">Newly created.</param>
+		private void RaiseLookupPortfoliosResult(PortfolioLookupMessage message, Exception error, Portfolio[] portfolios, Portfolio[] newPortfolios)
 		{
 			LookupPortfoliosResult?.Invoke(message, portfolios, error);
+			LookupPortfoliosResult2?.Invoke(message, portfolios, newPortfolios, error);
 		}
 
 		private void RaiseMarketDataSubscriptionSucceeded(Security security, MarketDataMessage message)

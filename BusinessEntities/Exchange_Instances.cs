@@ -932,6 +932,17 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
+		/// Information about AlphaVantage.
+		/// </summary>
+		public static Exchange AlphaVantage { get; } = new Exchange
+		{
+			Name = "ALVG",
+			EngName = "AlphaVantage",
+			RusName = "AlphaVantage",
+			CountryCode = CountryCodes.US,
+		};
+
+		/// <summary>
 		/// Information about Bitbank.
 		/// </summary>
 		public static Exchange Bitbank { get; } = new Exchange

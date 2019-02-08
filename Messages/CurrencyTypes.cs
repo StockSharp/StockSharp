@@ -1285,6 +1285,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		LUF,
+
+		/// <summary>
+		/// Old Mexican Peso.
+		/// </summary>
+		[EnumMember]
+		MXP,
 // ReSharper restore InconsistentNaming
 	}
 }

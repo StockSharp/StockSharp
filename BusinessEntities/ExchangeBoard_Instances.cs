@@ -3292,6 +3292,15 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.AlphaVantage"/>.
+		/// </summary>
+		public static ExchangeBoard AlphaVantage { get; } = new ExchangeBoard
+		{
+			Code = Exchange.AlphaVantage.Name,
+			Exchange = Exchange.AlphaVantage,
+		};
+
+		/// <summary>
 		/// Information about board <see cref="BusinessEntities.Exchange.Bitbank"/>.
 		/// </summary>
 		public static ExchangeBoard Bitbank { get; } = new ExchangeBoard

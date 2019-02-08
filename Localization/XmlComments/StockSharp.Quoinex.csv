@@ -5,12 +5,9 @@ P:StockSharp.Quoinex.QuoinexMessageAdapter.IsQryptos/summary;DocStr10582
 P:StockSharp.Quoinex.QuoinexMessageAdapter.UserId/summary;UserId
 P:StockSharp.Quoinex.QuoinexMessageAdapter.PusherAccessKey/summary;DocStr10583
 P:StockSharp.Quoinex.QuoinexMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
-M:StockSharp.Quoinex.QuoinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
-M:StockSharp.Quoinex.QuoinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Quoinex.QuoinexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
-M:StockSharp.Quoinex.QuoinexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Quoinex.QuoinexMessageAdapter.ToString/summary;DocStr49
-M:StockSharp.Quoinex.QuoinexMessageAdapter.ToString/returns;DocStr50
+M:StockSharp.Quoinex.QuoinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.Quoinex.QuoinexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.Quoinex.QuoinexMessageAdapter.ToString/inheritdoc;DocStr8459
 M:StockSharp.Quoinex.QuoinexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Quoinex.QuoinexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Quoinex.QuoinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

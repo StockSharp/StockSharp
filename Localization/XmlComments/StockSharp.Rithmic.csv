@@ -3,7 +3,6 @@ M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summar
 M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Rithmic.RithmicMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
-P:StockSharp.Rithmic.RithmicMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459

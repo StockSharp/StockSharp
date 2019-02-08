@@ -50,19 +50,11 @@
             The messages adapter for ETrade.
             </summary>
     </member>
-    <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportNativeSecurityLookup">
-      <summary>
-            Gets a value indicating whether the connector supports security lookup.
-            </summary>
-    </member>
     <member name="M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.ETrade.ETradeMessageAdapter" />.
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
-    </member>
-    <member name="P:StockSharp.ETrade.ETradeMessageAdapter.SecurityLookupRequired">
-      <inheritdoc />
     </member>
     <member name="M:StockSharp.ETrade.ETradeMessageAdapter.CreateOrderCondition">
       <inheritdoc />
@@ -71,6 +63,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportNativeSecurityLookup">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
