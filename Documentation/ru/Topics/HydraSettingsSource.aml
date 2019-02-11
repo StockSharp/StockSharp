@@ -60,51 +60,23 @@
 		<listItem>
 			<para><legacyBold>Америка:</legacyBold></para>
 			<list class="bullet">
-			        <listItem>
-        				<para><link xlink:href="89a8b34c-63cf-4623-bbb7-90251d53e8e6">Blackwood(Fusion)</link> - западная торговая платформа.</para>
-        			</listItem>
-				<listItem>
-          				<para><link xlink:href="34b9a25a-ecb2-4d82-b342-3fa46ec155ba">FinViz</link> - зарубежный сервис исторических данных.</para>
-        			</listItem>
-			        <listItem>
-            				<para><link xlink:href="0166d686-9fb0-4e78-8578-f5b706ad6a07">Google</link> - зарубежный сервис исторических данных.</para>
-				</listItem>
-				<listItem>
-        				<para><link xlink:href="bcb8050d-d330-4071-affc-b6ed5639e1fb">Interactive Brokers</link> - западный брокер.</para>
-        			</listItem>
-        			<listItem>
-          				<para><link xlink:href="f9e23239-7587-41ad-9644-c6df8e467c38">IQFeed</link> - западный источник маркет-данных.</para>
-        			</listItem>
-        			<listItem>
-          				<para><link xlink:href="4d84a1e0-fe23-4b14-8323-c5f68f117cc7">OpenECry</link> - западный брокер.</para>
-        			</listItem>
-        			<listItem>
-          				<para><link xlink:href="bb5fedcc-9226-448e-8bb9-42969fba227e">Quandle</link> - зарубежный сервис исторических данных.</para>
-        			</listItem>
-			        <listItem>
-          				<para><link xlink:href="26ff0aad-623b-47e2-a8f8-a337506cd2ff">Rithmic</link> - западная торговая платформа.</para>
-        			</listItem>
-				<listItem>
-          				<para><link xlink:href="f43591c9-c215-4dee-b297-4b9ed34fd465">Sterling</link> - западная торговая платформа.</para>
-        			</listItem>
- 				<listItem>
-          				<para><link xlink:href="c60b2dd2-518c-49e5-8ba4-edabbda04222">Yahoo Finance</link> - зарубежный сервис исторических данных.</para>
-        			</listItem>
-        			<listItem>
-          				<para><link xlink:href="1e3811a4-60e6-4f6c-bb55-0d3b3c2e246f">ITCH</link> - протокол прямого доступа к биржевым данным.</para>
-        			</listItem>
-				<listItem>
-          				<para><link xlink:href="48a0cef2-f3f7-4bf1-aa3b-043a130777c7">BarChart</link> - западный источник маркет-данных.</para>
-        			</listItem>
-			        <listItem>
-          				<para><link xlink:href="19e07661-3563-4eb2-b781-d0f0106fd769">CQG COM</link> - западная торговая платформа.</para>
-        			</listItem>
-			        <listItem>
-          				<para><link xlink:href="f3eda329-0077-4517-99f2-aabdea2a930d">CQG Continuum</link> - западная торговая платформа.</para>
-        			</listItem>
-				<listItem>
-          				<para><link xlink:href="3adf98fb-fa41-46ad-93cb-583fb67c1d6b">Xignite</link> - западный источник маркет-данных.</para>
-        			</listItem>
+<listItem><para><link xlink:href="66746dc9-3271-4430-8290-842d4647cc95" /> - западная торговая платформа.</para></listItem>
+<listItem><para><link xlink:href="89a8b34c-63cf-4623-bbb7-90251d53e8e6">Blackwood(Fusion)</link> - западная торговая платформа.</para></listItem>
+<listItem><para><link xlink:href="34b9a25a-ecb2-4d82-b342-3fa46ec155ba">FinViz</link> - зарубежный сервис исторических данных.</para></listItem>
+<listItem>  <para><link xlink:href="0166d686-9fb0-4e78-8578-f5b706ad6a07">Google</link> - зарубежный сервис исторических данных.</para></listItem>
+<listItem><para><link xlink:href="bcb8050d-d330-4071-affc-b6ed5639e1fb">Interactive Brokers</link> - западный брокер.</para></listItem>
+<listItem><para><link xlink:href="f9e23239-7587-41ad-9644-c6df8e467c38">IQFeed</link> - западный источник маркет-данных.</para></listItem>
+<listItem><para><link xlink:href="dc446be0-c642-4172-9163-27acc759ec59" /> - западный источник маркет-данных.</para></listItem>
+<listItem><para><link xlink:href="4d84a1e0-fe23-4b14-8323-c5f68f117cc7">OpenECry</link> - западный брокер.</para></listItem>
+<listItem><para><link xlink:href="bb5fedcc-9226-448e-8bb9-42969fba227e">Quandle</link> - зарубежный сервис исторических данных.</para></listItem>
+<listItem><para><link xlink:href="26ff0aad-623b-47e2-a8f8-a337506cd2ff">Rithmic</link> - западная торговая платформа.</para></listItem>
+<listItem><para><link xlink:href="f43591c9-c215-4dee-b297-4b9ed34fd465">Sterling</link> - западная торговая платформа.</para></listItem> 
+<listItem><para><link xlink:href="c60b2dd2-518c-49e5-8ba4-edabbda04222">Yahoo Finance</link> - зарубежный сервис исторических данных.</para></listItem>
+<listItem><para><link xlink:href="1e3811a4-60e6-4f6c-bb55-0d3b3c2e246f">ITCH</link> - протокол прямого доступа к биржевым данным.</para></listItem>
+<listItem><para><link xlink:href="48a0cef2-f3f7-4bf1-aa3b-043a130777c7">BarChart</link> - западный источник маркет-данных.</para></listItem>
+<listItem><para><link xlink:href="19e07661-3563-4eb2-b781-d0f0106fd769">CQG COM</link> - западная торговая платформа.</para></listItem>
+<listItem><para><link xlink:href="f3eda329-0077-4517-99f2-aabdea2a930d">CQG Continuum</link> - западная торговая платформа.</para></listItem>
+<listItem><para><link xlink:href="3adf98fb-fa41-46ad-93cb-583fb67c1d6b">Xignite</link> - западный источник маркет-данных.</para></listItem>
 			</list>
       		</listItem>
       		<listItem>
@@ -143,6 +115,7 @@
       			<para><legacyBold>Крипто-валюта:</legacyBold></para>
       			<list class="bullet">
 <listItem><link xlink:href="82177082-714f-4a6c-912d-78ab1f0855fa"/></listItem>
+<listItem><link xlink:href="50992c6f-196c-4dba-bc38-e14f74d76460"/></listItem>
 <listItem><link xlink:href="85bd184e-a4de-4e9a-8efa-d3f6f316fc85"/></listItem>
 <listItem><link xlink:href="571aaaa7-8eef-4a97-89a6-ba2b94083411"/></listItem>
 <listItem><link xlink:href="e9c53ea1-e1ec-4d82-9663-e3c860c48b11"/></listItem>
@@ -152,14 +125,18 @@
 <listItem><link xlink:href="4e435654-38af-4ede-9987-e268a6ae3b96"/></listItem>
 <listItem><link xlink:href="8415990d-0d4b-41af-a4ab-586e65bf9511"/></listItem>
 <listItem><link xlink:href="57f6e993-94be-44ea-9c2d-41ad23976311"/></listItem>
+<listItem><link xlink:href="bb38cb6b-0fbd-40f5-87ca-3ed831e6ac98"/></listItem>
 <listItem><link xlink:href="113c7194-bf76-4fb7-a139-7249dd044111"/></listItem>
 <listItem><link xlink:href="aedb5166-0a7d-49e9-85b3-9567fb734111"/></listItem>
+<listItem><link xlink:href="c231ad1b-a588-49c0-b97b-170f6113b184"/></listItem>
 <listItem><link xlink:href="8dadf9dd-9d70-4b4d-bab0-a02402b83111"/></listItem>
 <listItem><link xlink:href="997b2670-e5f7-4159-b155-2aae76e84111"/></listItem>
+<listItem><link xlink:href="71ac3afa-0de0-49fc-8aaf-5a2857769591"/></listItem>
 <listItem><link xlink:href="57d66840-d98b-47f2-afec-5aad360aa6a9"/></listItem>
 <listItem><link xlink:href="0585869f-a6ef-4e75-81b1-58f4ba513882"/></listItem>
 <listItem><link xlink:href="a861d591-bade-40d0-b051-5b5de4e9e111"/></listItem>
 <listItem><link xlink:href="75df8571-1b69-4f71-9af8-5e486d88e111"/></listItem>
+<listItem><link xlink:href="558cd2db-f9a6-44d8-a902-59b9af83462c"/></listItem>
 <listItem><link xlink:href="53e833a2-f9a4-49d8-8957-0e725807f111"/></listItem>
 <listItem><link xlink:href="bc849491-354a-4785-b19f-45af5e982111"/></listItem>
 <listItem><link xlink:href="51647de2-e0ca-4d65-b343-e3a4c97ba111"/></listItem>
@@ -167,7 +144,17 @@
 <listItem><link xlink:href="bdb79c8c-d127-47ba-b6b0-4bdede200111"/></listItem>
 <listItem><link xlink:href="5ef56e51-556e-45d0-bd91-8d144939a111"/></listItem>
 <listItem><link xlink:href="ecabd085-3287-4d14-8725-09635b7ca111"/></listItem>
+<listItem><link xlink:href="2ed49a8f-4746-4f51-978e-42787b9390b2"/></listItem>
+<listItem><link xlink:href="fbb85e89-ff87-47a7-aa02-c0be2c63876d"/></listItem>
 <listItem><link xlink:href="de19cd76-bedc-4765-8951-c4c4b5b05111"/></listItem>
+<listItem><link xlink:href="a423e584-0e94-4c30-b8d5-7056cb5a36a4"/></listItem>
+<listItem><link xlink:href="01417bdf-03d1-465e-81a4-dffbb5260072"/></listItem>
+<listItem><link xlink:href="ec9a8a20-d536-462d-b8d7-34660569dd56"/></listItem>
+<listItem><link xlink:href="bc551b11-15af-4e1e-9ef6-993d50545f6b"/></listItem>
+<listItem><link xlink:href="d73cf857-9ff7-423d-9b49-7893ff6b877f"/></listItem>
+<listItem><link xlink:href="718d7a70-562e-4a75-8897-b859d03c061b"/></listItem>
+<listItem><link xlink:href="30b14fe3-da0c-42b2-a5da-5cdc0a87474d"/></listItem>
+<listItem><link xlink:href="923cb077-0437-4459-850b-ea86b58d9131"/></listItem>
 
       			</list>
       		</listItem>

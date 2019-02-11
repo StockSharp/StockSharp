@@ -3,7 +3,7 @@
    <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     	<para>
-     		Для написания торговых роботов под торговую платформу <token>AlphaVantage</token> необходимо использовать
+     		Для работы с источником маркет-данных <token>AlphaVantage</token> необходимо использовать
 			<codeEntityReference qualifyHint="false">T:StockSharp.AlphaVantage.AlphaVantageTrader</codeEntityReference>.
 		</para>
      </introduction>

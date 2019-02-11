@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="3a5c4a94-ab01-49a5-ab41-82c85479d147" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		Для написания торговых роботов под торговую платформу <token>LBank</token> необходимо использовать
+			<codeEntityReference qualifyHint="false">T:StockSharp.LBank.LBankTrader</codeEntityReference>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="cccadabe-b3fa-4afa-badd-ca0a1633ca2d"/>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
