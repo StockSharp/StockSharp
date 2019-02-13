@@ -567,10 +567,10 @@ namespace StockSharp.Algo
 
 		private void InnerAdaptersOnAdded(IMessageAdapter adapter)
 		{
-			if (adapter.IsMessageSupported(MessageTypes.OrderRegister))
+			if (adapter.IsTransactional())
 				TransactionAdapter = adapter;
 
-			if (adapter.IsMessageSupported(MessageTypes.MarketData))
+			if (adapter.IsMarketData())
 				MarketDataAdapter = adapter;
 		}
 
