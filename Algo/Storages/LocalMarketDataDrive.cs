@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Storages
 
 			void IMarketDataStorageDrive.Delete(DateTime date)
 			{
-				date = date.ChangeKind(DateTimeKind.Utc);
+				date = date.UtcKind();
 
 				var path = GetPath(date, true);
 
@@ -139,7 +139,7 @@ namespace StockSharp.Algo.Storages
 
 			void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
 			{
-				date = date.ChangeKind(DateTimeKind.Utc);
+				date = date.UtcKind();
 
 				Directory.CreateDirectory(GetDataPath(date));
 
@@ -155,7 +155,7 @@ namespace StockSharp.Algo.Storages
 
 			Stream IMarketDataStorageDrive.LoadStream(DateTime date)
 			{
-				var path = GetPath(date.ChangeKind(DateTimeKind.Utc), true);
+				var path = GetPath(date.UtcKind(), true);
 
 				return File.Exists(path)
 					? File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read)
@@ -191,7 +191,7 @@ namespace StockSharp.Algo.Storages
 
 							//for (var i = 0; i < count; i++)
 							//{
-							//	dates[i] = file.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
+							//	dates[i] = file.Read<DateTime>().UtcKind();
 							//}
 
 							return dates;
@@ -508,7 +508,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>The date.</returns>
 		public static DateTime GetDate(string dirName)
 		{
-			return dirName.ToDateTime(_dateFormat).ChangeKind(DateTimeKind.Utc);
+			return dirName.ToDateTime(_dateFormat).UtcKind();
 		}
 
 		/// <summary>

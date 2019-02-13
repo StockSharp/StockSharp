@@ -321,8 +321,8 @@ namespace SampleHistoryTesting
 				DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
 			};
 
-			var startTime = ((DateTime)From.EditValue).ChangeKind(DateTimeKind.Utc);
-			var stopTime = ((DateTime)To.EditValue).ChangeKind(DateTimeKind.Utc);
+			var startTime = ((DateTime)From.EditValue).UtcKind();
+			var stopTime = ((DateTime)To.EditValue).UtcKind();
 
 			// (ru only) ОЛ необходимо загружать с 18.45 пред дня, чтобы стаканы строились правильно
 			if (OrderLogCheckBox.IsChecked == true)

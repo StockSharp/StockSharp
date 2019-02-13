@@ -307,8 +307,8 @@ namespace StockSharp.Algo.Storages.Binary
 			AccruedCouponIncome = ReadInfo(stream);
 			Yield = ReadInfo(stream);
 
-			FirstFieldTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
-			LastFieldTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
+			FirstFieldTime = stream.Read<DateTime>().UtcKind();
+			LastFieldTime = stream.Read<DateTime>().UtcKind();
 
 			if (Version < MarketDataVersions.Version47)
 				return;
@@ -374,8 +374,8 @@ namespace StockSharp.Algo.Storages.Binary
 			Duration = ReadInfo(stream);
 			BuyBackPrice = ReadInfo(stream);
 
-			FirstBuyBackDateTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
-			LastBuyBackDateTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
+			FirstBuyBackDateTime = stream.Read<DateTime>().UtcKind();
+			LastBuyBackDateTime = stream.Read<DateTime>().UtcKind();
 
 			FirstBuyBackDateOffset = stream.Read<TimeSpan>();
 			LastBuyBackDateOffset = stream.Read<TimeSpan>();
