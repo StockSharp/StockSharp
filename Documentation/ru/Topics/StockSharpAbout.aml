@@ -29,50 +29,12 @@ S#.API является основой всех остальных продук�
 </step>
 <step>
 <content>
-<legacyBold><link xlink:href="804b053f-e5f5-44ca-a381-6b39d6c099d5">Российский рынок</link></legacyBold> - полная поддержка Московской биржи (ММВБ, РТС), спот-рынка, фьючерсов и опционов.
-</content>
-</step>
-
-<step>
-<content>
-<legacyBold><link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e">Мировые площадки</link></legacyBold> - торговля NASDAQ, NYSE, CME и т.д. через брокеров <token>OpenECry</token>, <token>IB</token>, <token>etrade</token> и
-<externalLink>
-<linkText>других</linkText>
-<linkAlternateText>Брокеры-партнеры StockSharp</linkAlternateText>
-<linkUri>https://stocksharp.ru/broker/</linkUri>
-<linkTarget>_blank</linkTarget>
-</externalLink>.
-</content>
-</step>
-<step>
-<content>
-<legacyBold><link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9">Биржи криптовалют</link></legacyBold> - 
-		<token>Binance</token>,
-		<token>Bitexbook</token>,
-		<token>Bitfinex</token>,
-		<token>Bithumb</token>,
-		<token>Bitmex</token>,
-		<token>BitStamp</token>,
-		<token>Bittrex</token>,
-		<token>Btce</token>,
-		<token>Cex</token>,
-		<token>Coinbase</token>,
-		<token>Coincheck</token>,
-		<token>CoinExchange</token>,
-		<token>Cryptopia</token>,
-		<token>Deribit</token>,
-		<token>Exmo</token>,
-		<token>Gdax</token>,
-		<token>HitBtc</token>,
-		<token>Huobi</token>,
-		<token>Kraken</token>,
-		<token>Kucoin</token>,
-		<token>Liqui</token>,
-		<token>LiveCoin</token>,
-		<token>Okcoin</token>,
-		<token>Okex</token>,
-		<token>Poloniex</token>,
-		<token>Yobit</token>
+<para><legacyBold>Поддержка боле 70 подключений</legacyBold> различных бирж мира 
+<link xlink:href="804b053f-e5f5-44ca-a381-6b39d6c099d5" />, 
+<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />, 
+<link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b" />, 
+<link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" />, 
+<link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" />.</para>
 </content>
 </step>
 <step>

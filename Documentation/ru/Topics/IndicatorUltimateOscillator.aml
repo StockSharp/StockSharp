@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id = "98d921e3-36a3-446f-bf7c-41a345d38e39" revisionNumber = "1" >
+<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <introduction>
+<para>
+<legacyBold>Окончательный осциллятор (Ultimate Oscillator, UO)</legacyBold> создан известным финансовым аналитиком 
+Ларри Уильямсом в 1985 году. Все осцилляторы используют сравнение текущих слаженных 
+цен и цен на n-периодов назад. При этом эффективность любого осциллятора сильно зависит 
+от количества параметров используемых в расчете. Ultimate Oscillator стал первым 
+индикатором, в котором используются три взвешенных значения осцилляторов с разными 
+расчетными периодами.
+</para>
+<para>
+Для использования индикатора необходимо использовать класс
+<codeEntityReference>T:StockSharp.Algo.Indicators.UltimateOscillator</codeEntityReference>.
+</para>
+<mediaLink><image placement="left" xlink:href="IndicatorUltimateOscillator"/></mediaLink>
+ </introduction>
+
+<relatedTopics>
+<link xlink:href="ba57386f-6ea5-447b-b2d6-c4bde9c24e9e" />
+</relatedTopics>
+</developerConceptualDocument>
+</topic>

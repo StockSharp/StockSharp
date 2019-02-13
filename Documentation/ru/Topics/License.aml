@@ -21,11 +21,7 @@
   			</listItem>
   			<listItem>
 <token>stocksharpapi</token>
-			 (<token>lmax</token>, <token>oanda</token>, 
-			 <token>quik</token>, <token>alfa</token>, <token>smartcom</token>, <token>transaq</token>, <token>alor</token>,
-			 <token>openecry</token>, <token>IB</token>, <token>etrade</token>, 
-			 <token>blackwood</token>, <token>iqfeed</token>, <token>sterling</token>, <token>rithmic</token>, <token>cqg</token>, 
-			 <token>matlab</token>, BarChart и RSS)
+			 
   			</listItem>
 		</list>
 
@@ -34,46 +30,48 @@
 Крипто-трейдер
 
 </legacyBold></para>
-		<!--<list class="ordered">
-  			<listItem>
-  				<para>Пожизненно всем участникам <externalLink>
-  				<linkText>крауд кампаний</linkText>
-			<linkAlternateText>крауд кампаний</linkAlternateText>
-			<linkUri>http://crowd.stocksharp.ru</linkUri>
-			<linkTarget>_blank</linkTarget>
-			</externalLink>.
-  				Доступно:-->
-  		<para>
-		<token>Bitfinex</token>,
-		<token>Bithumb</token>,
-		<token>BitStamp</token>,
-		<token>Bittrex</token>,
-		<token>Btce</token>,
-		<token>Coinbase</token>,
-		<token>Coincheck</token>,
-		<token>Gdax</token>,
-		<token>HitBtc</token>,
-		<token>Kraken</token>,
-		<token>Okcoin</token>,
-		<token>Poloniex</token>,
-		<token>Binance</token>,
-		<token>Liqui</token>,
-		<token>CEX</token>,
-		<token>Cryptopia</token>,
-		<token>OKEx</token>,
-		<token>BitMEX</token>,
-		<token>YoBit</token>,
-		<token>Livecoin</token>,
-		<token>EXMO</token>,
-		<token>Deribit</token>,
-		<token>Huobi</token>,
-		<token>KuCoin</token>,
-		<token>BITEXBOOK</token>,
-		<token>CoinExchange</token>
-		</para>
-  				<!--</para>
-  			</listItem>
-		</list>-->
+		<para><token>Binance</token>,
+<token>Bitbank</token>,
+<token>Bitexbook</token>,
+<token>Bitfinex</token>,
+<token>Bithumb</token>,
+<token>BitStamp</token>,
+<token>Bitmex</token>,
+<token>Bittrex</token>,
+<token>Btce</token>,
+<token>Cex</token>,
+<token>Coinbase</token>,
+<token>Coincheck</token>,
+<token>CoinExchange</token>,
+<token>CoinCap</token>,
+<token>Coinigy</token>,
+<token>Cryptopia</token>,
+<token>Deribit</token>,
+<token>Exmo</token>,
+<token>Digifinex</token>,
+<token>Gdax</token>,
+<token>HitBtc</token>,
+<token>Huobi</token>,
+<token>Idax</token>,
+<token>Kraken</token>,
+<token>Kucoin</token>,
+<token>Liqui</token>,
+<token>LiveCoin</token>,
+<token>Okcoin</token>,
+<token>Okex</token>,
+<token>Poloniex</token>,
+<token>Quoinex</token>,
+<token>TradeOgre</token>,
+<token>Yobit</token>,
+<token>Zaif</token>,
+<token>LBank</token>,
+<token>BitMax</token>,
+<token>BW</token>,
+<token>Bibox</token>,
+<token>CoinBene</token>,
+<token>BitZ</token>,
+<token>ZB</token></para>
+  		
 		<para><legacyBold>Расширенная лицензия</legacyBold></para>
 		<list class="ordered">
   			<listItem>
