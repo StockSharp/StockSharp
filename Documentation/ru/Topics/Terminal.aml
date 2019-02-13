@@ -18,11 +18,13 @@
 <steps class="ordered">
 <step>
 <content>
-<legacyBold>Множество типов подключений</legacyBold>: Quik, Transaq, SmartCOM, AlfaDirect, Plaza 2 (CGate), 
-TWIME, FIX/FAST, Micex Bridge, Oanda, FXCM, LMAX, Rithmic, Fusion/Blackwood, Interactive Brokers, 
-OpenECry, Sterling, BarChart, IQFeed, E*Trade, BTCE, BitStamp, BitStamp, Bitfinex, 
-Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, ITCH,
-Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, KuCoin, BITEXBOOK, CoinExchange.</content>
+<para><legacyBold>Поддержка боле 70 подключений</legacyBold> различных бирж мира 
+<link xlink:href="804b053f-e5f5-44ca-a381-6b39d6c099d5" />, 
+<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />, 
+<link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b" />, 
+<link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" />, 
+<link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" />.</para>
+</content>
 </step>
 <step>
 <content>

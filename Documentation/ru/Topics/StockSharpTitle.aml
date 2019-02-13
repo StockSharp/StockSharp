@@ -12,66 +12,13 @@
 форекс и т.д.). Вы сможете торговать в ручном режиме или с помощью торговых 
 роботов (обычные или HFT).
  </para>
- <para>
-Доступные подключения: 
 
- </para>
-<list class="bullet">
-	<listItem>
-		<token>lmax_external</token>,
-		<token>oanda_external</token>,
-		<token>fxcm_external</token>
-	</listItem>
-	<listItem>
-		<token>Binance</token>,
-		<token>Bitexbook</token>,
-		<token>Bitfinex</token>,
-		<token>Bithumb</token>,
-		<token>Bitmex</token>,
-		<token>BitStamp</token>,
-		<token>Bittrex</token>,
-		<token>Btce</token>,
-		<token>Cex</token>,
-		<token>Coinbase</token>,
-		<token>Coincheck</token>,
-		<token>CoinExchange</token>,
-		<token>Cryptopia</token>,
-		<token>Deribit</token>,
-		<token>Exmo</token>,
-		<token>Gdax</token>,
-		<token>HitBtc</token>,
-		<token>Huobi</token>,
-		<token>Kraken</token>,
-		<token>Kucoin</token>,
-		<token>Liqui</token>,
-		<token>LiveCoin</token>,
-		<token>Okcoin</token>,
-		<token>Okex</token>,
-		<token>Poloniex</token>,
-		<token>Yobit</token>
-	</listItem>
-	<listItem>
-	<token>quik</token>, <token>quikfix</token>, <token>smartcom</token>, <token>alfa</token>, 
-		<token>plaza</token>, <token>transaq</token>, <token>micexbridge</token>, <token>alor</token>,
-		<token>spbex</token>
-	</listItem>
-	<listItem>
-		<token>OpenECry</token>,
-		<token>IB</token>,
-		<token>blackwood</token>,
-		<token>etrade</token>,
-		<token>iqfeed</token>,
-		<token>sterling</token>,
-		<token>cqg</token>,
-		<token>rithmic</token>,
-		<token>itch</token>,
-		<token>quantfeed</token>
-	</listItem>
-	<listItem>
-		<link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX</link>,
-		<link xlink:href="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93">FIX Server</link>
-	</listItem>
-</list>
+<para><legacyBold>Доступно боле 70 подключений</legacyBold> различных бирж мира 
+<link xlink:href="804b053f-e5f5-44ca-a381-6b39d6c099d5" />, 
+<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />, 
+<link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b" />, 
+<link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" />, 
+<link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" />.</para>
 
  <para>
  Вы можете работать с <token>stocksharp</token> у любого брокера или 
@@ -120,10 +67,13 @@
 <steps class="ordered">
 <step>
 <content>
-<legacyBold>Множество типов подключений</legacyBold>: Quik, Transaq, SmartCOM, AlfaDirect, Plaza 2 (CGate), 
-TWIME, FIX/FAST, Micex Bridge, Oanda, FXCM, LMAX, Rithmic, Fusion/Blackwood, Interactive Brokers, 
-OpenECry, Sterling, BarChart, IQFeed, E*Trade, BTCE, BitStamp, BitStamp, Bitfinex, 
-Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, ITCH.</content>
+<para><legacyBold>Поддержка боле 70 подключений</legacyBold> различных бирж мира 
+<link xlink:href="804b053f-e5f5-44ca-a381-6b39d6c099d5" />, 
+<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />, 
+<link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b" />, 
+<link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" />, 
+<link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" />.</para>
+</content>
 </step>
 <step>
 <content>
@@ -188,10 +138,14 @@ Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, I
 <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> - программа для автоматического скачивания исторических и реал-тайм маркет-данных:
 </para>
 <list class="bullet">
-  <listItem><para><legacyBold>Множество типов подключений</legacyBold>: Quik, Transaq, SmartCOM, AlfaDirect, Plaza 2 (CGate), 
-TWIME, FIX/FAST, Micex Bridge, Oanda, FXCM, LMAX, Rithmic, Fusion/Blackwood, Interactive Brokers, 
-OpenECry, Sterling, BarChart, IQFeed, E*Trade, BTCE, BitStamp, BitStamp, Bitfinex, 
-Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, ITCH.</para></listItem>
+  <listItem>
+<para><legacyBold>Поддержка боле 70 подключений</legacyBold> различных бирж мира 
+<link xlink:href="804b053f-e5f5-44ca-a381-6b39d6c099d5" />, 
+<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />, 
+<link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b" />, 
+<link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" />, 
+<link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" />.</para>
+</listItem>
   <listItem><para><legacyBold>Высокая степенью сжатия</legacyBold> (2 байта на сделку, 7 байтов на стакан).</para></listItem>
   <listItem><para><legacyBold>Любые типа данных</legacyBold> (свечи, тики, стаканы, ордер-лог, опционы, новости и другое).</para></listItem>
   <listItem><para><legacyBold>Программный доступ через API.</legacyBold></para></listItem>
