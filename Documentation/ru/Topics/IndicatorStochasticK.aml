@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id = "9ee25a7b-9cd7-4870-9e0f-9baad0422a0e" revisionNumber = "1" >
+<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <introduction>
+<para>
+Стохастический осциллятор  (Stochastic Oscillator) – классический осциллятор, показывающий 
+текущее положение цены закрытия в диапазоне максимальных и минимальных цен за указанный 
+период усреднения. Стохастик активно используют краткосрочные трейдеры, так как этот 
+индикатор берет в расчёт не только цены закрытия (как например RSI), но и максимумы/минимумы, 
+давая более точное положение цены на данный момент. Стохастик показывает, когда цена уже 
+достаточно перепродана в текущем диапазоне и готова пойти наверх (и наоборот). Как и 
+большинство осцилляторов, Stochastic Oscillator хорошо работает на боковом участке цены и 
+нуждается в трендовом фильтре (в качестве трендового индикатора) на участках тренда.
+</para>
+<mediaLink><image placement="left" xlink:href="IndicatorStochasticK"/></mediaLink>
+ </introduction>
+
+<relatedTopics>
+
+</relatedTopics>
+</developerConceptualDocument>
+</topic>

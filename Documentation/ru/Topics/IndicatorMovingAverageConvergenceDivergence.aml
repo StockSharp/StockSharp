@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id = "3047038b-3fa8-44c7-a3b0-15a11e18b7eb" revisionNumber = "1" >
+<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <introduction>
+<para>
+Индикатор <legacyBold>схождения-расхождения скользящих средних или MACD (Moving Averages Convergence-Divergence)</legacyBold> 
+используется в техническом анализе для проверки силы и направления тренда, а 
+также определения разворотных точек. MACD строится в виде отображения двух скользящих 
+средних и их разности. Обычно в качестве индикатора используется разность между 
+12-и 26-периодными экспоненциальными скользящими средними. 
+Эта разность называется линией MACD в узком смысле этого слова и строится в 
+виде графика в отдельном окне. Интервал для построения графиков может быть 
+любым: 5, 10, 30 минут, час, 2 и 4 часа, день или даже неделя. Все зависит от 
+используемого для анализа масштаба времени.
+</para>
+<para>
+Для использования индикатора необходимо использовать класс
+<codeEntityReference>T:StockSharp.Algo.Indicators.MovingAverageConvergenceDivergence</codeEntityReference>.
+</para>
+<mediaLink><image placement="left" xlink:href="IndicatorMovingAverageConvergenceDivergence"/></mediaLink>
+ </introduction>
+
+<relatedTopics>
+<link xlink:href="82306a6a-f478-437b-bf40-dd253a1e1156" />
+</relatedTopics>
+</developerConceptualDocument>
+</topic>

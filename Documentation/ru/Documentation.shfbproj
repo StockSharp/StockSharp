@@ -267,6 +267,111 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Shell_Indicators.aml" />
+    <None Include="Topics\Designer_Indicators.aml" />
+    <None Include="Topics\Hydra_Indicators.aml" />
+    <None Include="Topics\Terminal_Indicators.aml" />
+    <None Include="Topics\IndicatorZigZagEquis.aml" />
+    <None Include="Topics\IndicatorZigZag.aml" />
+    <None Include="Topics\IndicatorWilliamsR.aml" />
+    <None Include="Topics\IndicatorWilderMovingAverage.aml" />
+    <None Include="Topics\IndicatorWeightedMovingAverage.aml" />
+    <None Include="Topics\IndicatorVolumeWeightedMovingAverage.aml" />
+    <None Include="Topics\IndicatorVolumeProfileIndicatorValue.aml" />
+    <None Include="Topics\IndicatorVolumeProfileIndicator.aml" />
+    <None Include="Topics\IndicatorVolumeIndicator.aml" />
+    <None Include="Topics\IndicatorVidya.aml" />
+    <None Include="Topics\IndicatorVerticalHorizontalFilter.aml" />
+    <None Include="Topics\IndicatorUltimateOscillator.aml" />
+    <None Include="Topics\IndicatorTrueRange.aml" />
+    <None Include="Topics\IndicatorTroughBar.aml" />
+    <None Include="Topics\IndicatorTrough.aml" />
+    <None Include="Topics\IndicatorTrix.aml" />
+    <None Include="Topics\IndicatorTripleExponentialMovingAverage.aml" />
+    <None Include="Topics\IndicatorSum.aml" />
+    <None Include="Topics\IndicatorStochasticOscillator.aml" />
+    <None Include="Topics\IndicatorStochasticK.aml" />
+    <None Include="Topics\IndicatorStandardError.aml" />
+    <None Include="Topics\IndicatorStandardDeviation.aml" />
+    <None Include="Topics\IndicatorSmoothedMovingAverage.aml" />
+    <None Include="Topics\IndicatorSingleIndicatorValueTValue.aml" />
+    <None Include="Topics\IndicatorSimpleMovingAverage.aml" />
+    <None Include="Topics\IndicatorShiftedIndicatorValue.aml" />
+    <None Include="Topics\IndicatorRSquared.aml" />
+    <None Include="Topics\IndicatorRelativeVigorIndexSignal.aml" />
+    <None Include="Topics\IndicatorRelativeVigorIndexAverage.aml" />
+    <None Include="Topics\IndicatorRelativeVigorIndex.aml" />
+    <None Include="Topics\IndicatorRelativeStrengthIndex.aml" />
+    <None Include="Topics\IndicatorRateOfChange.aml" />
+    <None Include="Topics\IndicatorRangeActionVerificationIndex.aml" />
+    <None Include="Topics\IndicatorQStick.aml" />
+    <None Include="Topics\IndicatorPeakBar.aml" />
+    <None Include="Topics\IndicatorPeak.aml" />
+    <None Include="Topics\IndicatorParabolicSar.aml" />
+    <None Include="Topics\IndicatorPairIndicatorValueTValue.aml" />
+    <None Include="Topics\IndicatorOptimalTracking.aml" />
+    <None Include="Topics\IndicatorNickRypockTrailingReverse.aml" />
+    <None Include="Topics\IndicatorMovingAverageConvergenceDivergenceSignal.aml" />
+    <None Include="Topics\IndicatorMovingAverageConvergenceDivergenceHistogram.aml" />
+    <None Include="Topics\IndicatorMovingAverageConvergenceDivergence.aml" />
+    <None Include="Topics\IndicatorMoneyFlowIndex.aml" />
+    <None Include="Topics\IndicatorMomentum.aml" />
+    <None Include="Topics\IndicatorMedianPrice.aml" />
+    <None Include="Topics\IndicatorMeanDeviation.aml" />
+    <None Include="Topics\IndicatorMarketFacilitationIndex.aml" />
+    <None Include="Topics\IndicatorMarketDepthIndicatorValue.aml" />
+    <None Include="Topics\IndicatorLowest.aml" />
+    <None Include="Topics\IndicatorLinearRegSlope.aml" />
+    <None Include="Topics\IndicatorLinearRegression.aml" />
+    <None Include="Topics\IndicatorLinearReg.aml" />
+    <None Include="Topics\IndicatorLevel1Indicator.aml" />
+    <None Include="Topics\IndicatorLengthIndicatorTResult.aml" />
+    <None Include="Topics\IndicatorKaufmannAdaptiveMovingAverage.aml" />
+    <None Include="Topics\IndicatorJurikMovingAverage.aml" />
+    <None Include="Topics\IndicatorIndicatorValueAttribute.aml" />
+    <None Include="Topics\IndicatorIndicatorOutAttribute.aml" />
+    <None Include="Topics\IndicatorIndicatorInAttribute.aml" />
+    <None Include="Topics\IndicatorIndicatorHelper.aml" />
+    <None Include="Topics\IndicatorIndicatorContainer.aml" />
+    <None Include="Topics\IndicatorIchimokuSenkouBLine.aml" />
+    <None Include="Topics\IndicatorIchimokuSenkouALine.aml" />
+    <None Include="Topics\IndicatorIchimokuLine.aml" />
+    <None Include="Topics\IndicatorIchimokuChinkouLine.aml" />
+    <None Include="Topics\IndicatorIchimoku.aml" />
+    <None Include="Topics\IndicatorHullMovingAverage.aml" />
+    <None Include="Topics\IndicatorHighest.aml" />
+    <None Include="Topics\IndicatorGatorOscillator.aml" />
+    <None Include="Topics\IndicatorGatorHistogram.aml" />
+    <None Include="Topics\IndicatorFractals.aml" />
+    <None Include="Topics\IndicatorFractalPart.aml" />
+    <None Include="Topics\IndicatorExponentialMovingAverage.aml" />
+    <None Include="Topics\IndicatorEnvelope.aml" />
+    <None Include="Topics\IndicatorDoubleExponentialMovingAverage.aml" />
+    <None Include="Topics\IndicatorDirectionalIndex.aml" />
+    <None Include="Topics\IndicatorDiPlus.aml" />
+    <None Include="Topics\IndicatorDiPart.aml" />
+    <None Include="Topics\IndicatorDiMinus.aml" />
+    <None Include="Topics\IndicatorDetrendedPriceOscillator.aml" />
+    <None Include="Topics\IndicatorDecimalIndicatorValue.aml" />
+    <None Include="Topics\IndicatorCovariance.aml" />
+    <None Include="Topics\IndicatorCorrelation.aml" />
+    <None Include="Topics\IndicatorComplexIndicatorValue.aml" />
+    <None Include="Topics\IndicatorCommodityChannelIndex.aml" />
+    <None Include="Topics\IndicatorChandeMomentumOscillator.aml" />
+    <None Include="Topics\IndicatorChaikinVolatility.aml" />
+    <None Include="Topics\IndicatorCandleIndicatorValue.aml" />
+    <None Include="Topics\IndicatorBollingerBands.aml" />
+    <None Include="Topics\IndicatorBollingerBand.aml" />
+    <None Include="Topics\IndicatorBaseIndicatorValue.aml" />
+    <None Include="Topics\IndicatorBaseIndicator.aml" />
+    <None Include="Topics\IndicatorBaseComplexIndicator.aml" />
+    <None Include="Topics\IndicatorAwesomeOscillator.aml" />
+    <None Include="Topics\IndicatorAverageTrueRange.aml" />
+    <None Include="Topics\IndicatorAverageDirectionalIndex.aml" />
+    <None Include="Topics\IndicatorAlligatorLine.aml" />
+    <None Include="Topics\IndicatorAlligator.aml" />
+    <None Include="Topics\IndicatorAcceleration.aml" />
+    <None Include="Topics\IndicatorsAll.aml" />
     <None Include="Topics\HydraSettingsZB.aml" />
     <None Include="Topics\HydraSettingsBitZ.aml" />
     <None Include="Topics\HydraSettingsCoinBene.aml" />
@@ -3910,6 +4015,262 @@
     <Image Include="Art\ZBSample.png">
       <ImageId>ZBSample</ImageId>
       <AlternateText>ZBSample</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorZigZagEquis.png">
+      <ImageId>IndicatorZigZagEquis</ImageId>
+      <AlternateText>Indicator Zig Zag Equis</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorZigZag.png">
+      <ImageId>IndicatorZigZag</ImageId>
+      <AlternateText>Indicator Zig Zag</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorWilliamsR.png">
+      <ImageId>IndicatorWilliamsR</ImageId>
+      <AlternateText>Indicator WilliamsR</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorWilderMovingAverage.png">
+      <ImageId>IndicatorWilderMovingAverage</ImageId>
+      <AlternateText>Indicator Wilder Moving Average</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorWeightedMovingAverage.png">
+      <ImageId>IndicatorWeightedMovingAverage</ImageId>
+      <AlternateText>Indicator Weighted Moving Average</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorVolumeWeightedMovingAverage.png">
+      <ImageId>IndicatorVolumeWeightedMovingAverage</ImageId>
+      <AlternateText>Indicator Volume Weighted Moving Average</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorVolumeIndicator.png">
+      <ImageId>IndicatorVolumeIndicator</ImageId>
+      <AlternateText>Indicator Volume Indicator</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorVerticalHorizontalFilter.png">
+      <ImageId>IndicatorVerticalHorizontalFilter</ImageId>
+      <AlternateText>Indicator Vertical Horizontal Filter</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorUltimateOscillator.png">
+      <ImageId>IndicatorUltimateOscillator</ImageId>
+      <AlternateText>Indicator Ultimate Oscillator</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorTrueRange.png">
+      <ImageId>IndicatorTrueRange</ImageId>
+      <AlternateText>Indicator True Range</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorTroughBar.png">
+      <ImageId>IndicatorTroughBar</ImageId>
+      <AlternateText>Indicator Trough Bar</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorTrough.png">
+      <ImageId>IndicatorTrough</ImageId>
+      <AlternateText>Indicator Trough</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorTrix.png">
+      <ImageId>IndicatorTrix</ImageId>
+      <AlternateText>Indicator Trix</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorTripleExponentialMovingAverage.png">
+      <ImageId>IndicatorTripleExponentialMovingAverage</ImageId>
+      <AlternateText>Indicator Triple Exponential Moving Average</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorSum.png">
+      <ImageId>IndicatorSum</ImageId>
+      <AlternateText>Indicator Sum</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorStochasticOscillator.png">
+      <ImageId>IndicatorStochasticOscillator</ImageId>
+      <AlternateText>Indicator Stochastic Oscillator</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorStochasticK.png">
+      <ImageId>IndicatorStochasticK</ImageId>
+      <AlternateText>Indicator StochasticK</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorStandardError.png">
+      <ImageId>IndicatorStandardError</ImageId>
+      <AlternateText>Indicator Standard Error</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorStandardDeviation.png">
+      <ImageId>IndicatorStandardDeviation</ImageId>
+      <AlternateText>Indicator Standard Deviation</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorSmoothedMovingAverage.png">
+      <ImageId>IndicatorSmoothedMovingAverage</ImageId>
+      <AlternateText>Indicator Smoothed Moving Average</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorSimpleMovingAverage.png">
+      <ImageId>IndicatorSimpleMovingAverage</ImageId>
+      <AlternateText>Indicator Simple Moving Average</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorRSquared.png">
+      <ImageId>IndicatorRSquared</ImageId>
+      <AlternateText>IndicatorRSquared</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorRelativeVigorIndex.png">
+      <ImageId>IndicatorRelativeVigorIndex</ImageId>
+      <AlternateText>Indicator Relative Vigor Index</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorRelativeStrengthIndex.png">
+      <ImageId>IndicatorRelativeStrengthIndex</ImageId>
+      <AlternateText>Indicator Relative Strength Index</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorRateOfChange.png">
+      <ImageId>IndicatorRateOfChange</ImageId>
+      <AlternateText>Indicator Rate Of Change</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorRangeActionVerificationIndex.png">
+      <ImageId>IndicatorRangeActionVerificationIndex</ImageId>
+      <AlternateText>Indicator Range Action Verification Index</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorQStick.png">
+      <ImageId>IndicatorQStick</ImageId>
+      <AlternateText>IndicatorQStick</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorPeakBar.png">
+      <ImageId>IndicatorPeakBar</ImageId>
+      <AlternateText>Indicator Peak Bar</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorPeak.png">
+      <ImageId>IndicatorPeak</ImageId>
+      <AlternateText>Indicator Peak</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorParabolicSar.png">
+      <ImageId>IndicatorParabolicSar</ImageId>
+      <AlternateText>Indicator Parabolic Sar</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorOptimalTracking.png">
+      <ImageId>IndicatorOptimalTracking</ImageId>
+      <AlternateText>Indicator Optimal Tracking</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorNickRypockTrailingReverse.png">
+      <ImageId>IndicatorNickRypockTrailingReverse</ImageId>
+      <AlternateText>Indicator Nick Rypock Trailing Reverse</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorMovingAverageConvergenceDivergenceSignal.png">
+      <ImageId>IndicatorMovingAverageConvergenceDivergenceSignal</ImageId>
+      <AlternateText>Indicator Moving Average Convergence Divergence Signal</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorMovingAverageConvergenceDivergenceHistogram.png">
+      <ImageId>IndicatorMovingAverageConvergenceDivergenceHistogram</ImageId>
+      <AlternateText>Indicator Moving Average Convergence Divergence Histogram</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorMovingAverageConvergenceDivergence.png">
+      <ImageId>IndicatorMovingAverageConvergenceDivergence</ImageId>
+      <AlternateText>Indicator Moving Average Convergence Divergence</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorMoneyFlowIndex.png">
+      <ImageId>IndicatorMoneyFlowIndex</ImageId>
+      <AlternateText>Indicator Money Flow Index</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorMomentum.png">
+      <ImageId>IndicatorMomentum</ImageId>
+      <AlternateText>Indicator Momentum</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorMedianPrice.png">
+      <ImageId>IndicatorMedianPrice</ImageId>
+      <AlternateText>Indicator Median Price</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorMeanDeviation.png">
+      <ImageId>IndicatorMeanDeviation</ImageId>
+      <AlternateText>Indicator Mean Deviation</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorMarketFacilitationIndex.png">
+      <ImageId>IndicatorMarketFacilitationIndex</ImageId>
+      <AlternateText>Indicator Market Facilitation Index</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorLowest.png">
+      <ImageId>IndicatorLowest</ImageId>
+      <AlternateText>Indicator Lowest</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorLinearRegSlope.png">
+      <ImageId>IndicatorLinearRegSlope</ImageId>
+      <AlternateText>Indicator Linear Reg Slope</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorLinearReg.png">
+      <ImageId>IndicatorLinearReg</ImageId>
+      <AlternateText>Indicator Linear Reg</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorKaufmannAdaptiveMovingAverage.png">
+      <ImageId>IndicatorKaufmannAdaptiveMovingAverage</ImageId>
+      <AlternateText>Indicator Kaufmann Adaptive Moving Average</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorJurikMovingAverage.png">
+      <ImageId>IndicatorJurikMovingAverage</ImageId>
+      <AlternateText>Indicator Jurik Moving Average</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorIchimoku.png">
+      <ImageId>IndicatorIchimoku</ImageId>
+      <AlternateText>Indicator Ichimoku</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorHullMovingAverage.png">
+      <ImageId>IndicatorHullMovingAverage</ImageId>
+      <AlternateText>Indicator Hull Moving Average</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorHighest.png">
+      <ImageId>IndicatorHighest</ImageId>
+      <AlternateText>Indicator Highest</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorGatorOscillator.png">
+      <ImageId>IndicatorGatorOscillator</ImageId>
+      <AlternateText>Indicator Gator Oscillator</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorFractals.png">
+      <ImageId>IndicatorFractals</ImageId>
+      <AlternateText>Indicator Fractals</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorExponentialMovingAverage.png">
+      <ImageId>IndicatorExponentialMovingAverage</ImageId>
+      <AlternateText>Indicator Exponential Moving Average</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorEnvelope.png">
+      <ImageId>IndicatorEnvelope</ImageId>
+      <AlternateText>Indicator Envelope</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorDoubleExponentialMovingAverage.png">
+      <ImageId>IndicatorDoubleExponentialMovingAverage</ImageId>
+      <AlternateText>Indicator Double Exponential Moving Average</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorDirectionalIndex.png">
+      <ImageId>IndicatorDirectionalIndex</ImageId>
+      <AlternateText>Indicator Directional Index</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorDetrendedPriceOscillator.png">
+      <ImageId>IndicatorDetrendedPriceOscillator</ImageId>
+      <AlternateText>Indicator Detrended Price Oscillator</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorCommodityChannelIndex.png">
+      <ImageId>IndicatorCommodityChannelIndex</ImageId>
+      <AlternateText>Indicator Commodity Channel Index</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorChandeMomentumOscillator.png">
+      <ImageId>IndicatorChandeMomentumOscillator</ImageId>
+      <AlternateText>Indicator Chande Momentum Oscillator</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorChaikinVolatility.png">
+      <ImageId>IndicatorChaikinVolatility</ImageId>
+      <AlternateText>Indicator Chaikin Volatility</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorBollingerBands.png">
+      <ImageId>IndicatorBollingerBands</ImageId>
+      <AlternateText>Indicator Bollinger Bands</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorAwesomeOscillator.png">
+      <ImageId>IndicatorAwesomeOscillator</ImageId>
+      <AlternateText>Indicator Awesome Oscillator</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorAverageTrueRange.png">
+      <ImageId>IndicatorAverageTrueRange</ImageId>
+      <AlternateText>Indicator Average True Range</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorAverageDirectionalIndex.png">
+      <ImageId>IndicatorAverageDirectionalIndex</ImageId>
+      <AlternateText>Indicator Average Directional Index</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorAlligator.png">
+      <ImageId>IndicatorAlligator</ImageId>
+      <AlternateText>Indicator Alligator</AlternateText>
+    </Image>
+    <Image Include="Art\IndicatorAcceleration.png">
+      <ImageId>IndicatorAcceleration</ImageId>
+      <AlternateText>Indicator Acceleration</AlternateText>
     </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>

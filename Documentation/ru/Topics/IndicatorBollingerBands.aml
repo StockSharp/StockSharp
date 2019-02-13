@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id = "66e4f67b-4b0b-4cee-8573-f2512b6b2127" revisionNumber = "1" >
+<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <introduction>
+<para>
+Индикатор <legacyBold>полосы Боллинджера</legacyBold> – это осциллирующий индикатор, который используется 
+для измерения волатильности рынка.Он позволяет оценить, является ли цена высокой 
+или низкой по сравнению со скользящим средним за последнее время, а также предсказать 
+возможность падения или роста до его уровня. Полосы Боллинджера состоят из трех 
+основных полос (линий). Центральная полоса соответствует простому скользящему среднему цены. 
+Верхняя и нижняя полосы представляют собой уровни, на которых цена может 
+считаться достаточно высокой или достаточно низкой по отношению к скользящему 
+среднему за последнее время.
+</para>
+<para>
+Для использования индикатора необходимо использовать класс
+<codeEntityReference>T:StockSharp.Algo.Indicators.BollingerBands</codeEntityReference>.
+</para>
+<mediaLink><image placement="left" xlink:href="IndicatorBollingerBands"/></mediaLink>
+ </introduction>
+
+<relatedTopics>
+<link xlink:href="b598e799-8230-47a2-bb5c-0d539d138054" />
+</relatedTopics>
+</developerConceptualDocument>
+</topic>

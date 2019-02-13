@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id = "1dc26964-c4b2-499f-b007-aa9ffb6b1458" revisionNumber = "1" >
+<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <introduction>
+<para>
+Индикатор <legacyBold>Средний истинный диапазон (англ. Average True Range)</legacyBold> — индикатор технического 
+анализа, измеряющий рыночную волатильность изменения цены. Разработан Уэллсом 
+Уайлдером для анализа товарных рынков. Индикатор ничего не говорит о направлении 
+или силе тренда, а просто показывает уровень волатильности.
+</para>
+<para>
+Для использования индикатора необходимо использовать класс
+<codeEntityReference>T:StockSharp.Algo.Indicators.AverageTrueRange</codeEntityReference>.
+</para>
+<mediaLink><image placement="left" xlink:href="IndicatorAverageTrueRange"/></mediaLink>
+ </introduction>
+
+<relatedTopics>
+<link xlink:href="603f5cff-beba-4e8d-9111-9b2ab6cadfc9" />
+</relatedTopics>
+</developerConceptualDocument>
+</topic>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id = "b78ec08e-114f-4354-91a9-fa5dca91426e" revisionNumber = "1" >
+<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <introduction>
+<para>
+<legacyBold>Технический индикатор Triple Exponential Moving Average (TEMA)</legacyBold> был разработан Патриком Маллоем. Принцип 
+его расчета такой же, как и индикатора DEMA (Double Exponential Moving Average). Название тройное 
+экспоненциальное сглаживание не совсем корректно отображает заложенный в нем алгоритм. 
+Это уникальная смесь однократного, двойного и тройного экспоненциального скользящего 
+среднего, обеспечивающая меньшую задержку, нежели каждый из них по отдельности.
+</para>
+<para>
+Для использования индикатора необходимо использовать класс
+<codeEntityReference>T:StockSharp.Algo.Indicators.TripleExponentialMovingAverage</codeEntityReference>.
+</para>
+<mediaLink><image placement="left" xlink:href="IndicatorTripleExponentialMovingAverage"/></mediaLink>
+ </introduction>
+
+<relatedTopics>
+<link xlink:href="53120174-ade2-4fee-b3e5-a1e2a9f7a4be" />
+</relatedTopics>
+</developerConceptualDocument>
+</topic>
