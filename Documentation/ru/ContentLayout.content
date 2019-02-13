@@ -652,11 +652,6 @@
         <Topic id="3adf98fb-fa41-46ad-93cb-583fb67c1d6b" visible="True" title="Xignite" />
         <Topic id="eb7ea9cf-5aa5-42f8-a963-1834837ce4d4" visible="True" title="QuantFEED" />
       </Topic>
-      <Topic id="0f6a2b55-c841-45fb-96ad-a562a8cea016" visible="True" noFile="true" title="Другие">
-        <Topic id="e81b1b7f-5c96-488e-a90d-e60cb8675977" visible="True" title="Fix" />
-        <Topic id="c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f" visible="True" title="HydraServer" />
-        <Topic id="91454878-ec26-4872-9a85-1bfbc76dc77a" visible="True" title="RSS" />
-      </Topic>
       <Topic id="8cde5dc1-05c2-412b-8f29-cd7d5d8742f5" visible="True" noFile="true" title="Крипто-валюта">
         <Topic id="82177082-714f-4a6c-912d-78ab1f0855fa" visible="True" title="Binance" />
         <Topic id="50992c6f-196c-4dba-bc38-e14f74d76460" visible="True" title="Bitbank" />
@@ -726,7 +721,12 @@
         <Topic id="24a5983b-28a7-4620-b4b8-9356f683a9ba" visible="True" title="FXCM" />
         <Topic id="e81e69f8-bfcf-49f8-aefe-cd18270c1d9e" visible="True" title="FXCM (история)" />
       </Topic>
-      <Topic id="01a85a46-7510-4385-b81c-348ffb3dfc46" visible="True" title="Параметры подключения" />
+      <Topic id="0f6a2b55-c841-45fb-96ad-a562a8cea016" visible="True" noFile="true" title="Другие">
+        <Topic id="e81b1b7f-5c96-488e-a90d-e60cb8675977" visible="True" title="Fix" />
+        <Topic id="c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f" visible="True" title="HydraServer" />
+        <Topic id="91454878-ec26-4872-9a85-1bfbc76dc77a" visible="True" title="RSS" />
+      </Topic>
+      <Topic id="01a85a46-7510-4385-b81c-348ffb3dfc46" visible="True" isSelected="true" title="Параметры подключения" />
     </Topic>
     <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="Просмотр и экспорт">
       <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Сделки" />
@@ -953,7 +953,6 @@
       <Topic id="47c764fa-a28c-48f7-81b3-714c059e0e57" visible="True" title="Импорт стратегий" />
       <Topic id="6d13af11-61ae-47b7-93a3-097abe7640c9" visible="True" title="Публикация графиков и таблиц" />
     </Topic>
-    <Topic id="934f81d7-7a25-4231-8ad1-5af9c5edfdb9" visible="True" title="Индикаторы" />
     <Topic id="1d7e6d2b-b86f-4229-982a-53e326673076" visible="True" title="Опционные стратегии" />
     <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" title="Настройки">
       <Topic id="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" visible="True" title="Настройки уведомлений" />
@@ -965,7 +964,7 @@
     <Topic id="137a2b48-540c-4b65-9bc1-21994f276b27" visible="True" title="Запуск стратегий на сервере" />
   </Topic>
   <Topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" visible="True" title="S#.MatLab" />
-  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" isExpanded="true" title="S#.Shell">
+  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" title="S#.Shell">
     <Topic id="1a7843d9-c1e4-4597-b02d-9a011b24df44" visible="True" title="Установка S#.Shell" />
     <Topic id="848cd34c-1768-409f-8e82-bed1c3e25102" visible="True" title="Быстрый запуск" />
     <Topic id="1b4c10e7-34ea-4eff-b820-4d2ea04231af" visible="True" title="Интерфейс программы">
@@ -977,10 +976,9 @@
     <Topic id="0273c249-b962-4320-a9cb-57f1e2943f5e" visible="True" title="Настройки подключения">
       <Topic id="8ce14bdf-7573-4d6d-86c6-b838232401b2" visible="True" title="Настройки коннекторов" />
     </Topic>
-    <Topic id="e116a47d-fb8e-46c7-b2f9-7b7c13edd1c2" visible="True" title="Индикаторы" />
     <Topic id="9d636fda-309e-4d5f-a6ed-4848fb8f4f0b" visible="True" title="Создание собственной стратегии" />
     <Topic id="8cea241f-fdf3-43c7-bf4d-3fdd7dcd0000" visible="True" title="Создание собственных панеле для стратегий" />
     <Topic id="79892a99-9f84-414c-be4a-fe677048c913" visible="True" title="Запуск стратегии созданной в S#.Designer" />
-    <Topic id="8ff5768c-8c58-4ade-8036-471fd85d1332" visible="True" title="S#.RemoteManager" />
   </Topic>
+  <Topic id="8ff5768c-8c58-4ade-8036-471fd85d1332" visible="True" title="S#.RemoteManager" />
 </Topics>
