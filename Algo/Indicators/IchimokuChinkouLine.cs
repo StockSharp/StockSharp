@@ -15,12 +15,15 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
+	using System.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
 	/// Chinkou line.
 	/// </summary>
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Browsable(false)]
 	public class IchimokuChinkouLine : LengthIndicator<decimal>
 	{
 		/// <summary>

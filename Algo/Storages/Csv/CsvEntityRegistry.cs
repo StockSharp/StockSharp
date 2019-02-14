@@ -664,8 +664,8 @@ namespace StockSharp.Algo.Storages.Csv
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
 					State = reader.ReadNullableEnum<PortfolioStates>(),
 					Description = reader.ReadString(),
-					LastChangeTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc),
-					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc)
+					LastChangeTime = _dateTimeParser.Parse(reader.ReadString()).UtcKind(),
+					LocalTime = _dateTimeParser.Parse(reader.ReadString()).UtcKind()
 				};
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
@@ -676,7 +676,7 @@ namespace StockSharp.Algo.Storages.Csv
 					portfolio.Currency = reader.ReadString().To<CurrencyTypes?>();
 
 					var str = reader.ReadString();
-					portfolio.ExpirationDate = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).ChangeKind(DateTimeKind.Utc);
+					portfolio.ExpirationDate = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).UtcKind();
 				}
 
 				return portfolio;
@@ -760,8 +760,8 @@ namespace StockSharp.Algo.Storages.Csv
 					VariationMargin = reader.ReadNullableDecimal(),
 					Commission = reader.ReadNullableDecimal(),
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
-					LastChangeTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc),
-					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc),
+					LastChangeTime = _dateTimeParser.Parse(reader.ReadString()).UtcKind(),
+					LocalTime = _dateTimeParser.Parse(reader.ReadString()).UtcKind(),
 				};
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
@@ -772,7 +772,7 @@ namespace StockSharp.Algo.Storages.Csv
 					position.Currency = reader.ReadString().To<CurrencyTypes?>();
 
 					var str = reader.ReadString();
-					position.ExpirationDate = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).ChangeKind(DateTimeKind.Utc);
+					position.ExpirationDate = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).UtcKind();
 				}
 
 				return position;
@@ -816,7 +816,7 @@ namespace StockSharp.Algo.Storages.Csv
 			if (str == null)
 				return null;
 
-			return _dateTimeParser.Parse(str).ChangeKind(DateTimeKind.Utc);
+			return _dateTimeParser.Parse(str).UtcKind();
 		}
 
 		private readonly ExchangeCsvList _exchanges;

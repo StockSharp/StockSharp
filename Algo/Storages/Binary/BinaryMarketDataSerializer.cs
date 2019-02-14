@@ -144,8 +144,8 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < MarketDataVersions.Version40)
 				stream.Read<decimal>(); // ранее был StepPrice
 
-			FirstTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
-			LastTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
+			FirstTime = stream.Read<DateTime>().UtcKind();
+			LastTime = stream.Read<DateTime>().UtcKind();
 
 			if (Version < MarketDataVersions.Version40)
 				return;
