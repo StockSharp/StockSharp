@@ -387,68 +387,73 @@
       <Topic id="b6f4b3fb-3a34-4ba8-bcea-258613f2b455" visible="True" title="Создание свечей по корзине инструментов" />
     </Topic>
     <Topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" visible="True" isExpanded="true" title="Индикаторы">
-      <Topic id="ec4c3abe-3779-4a5f-899c-697b049254d4" visible="True" title="Собственный индикатор" />
-      <Topic id="b8e71f65-00e3-41f7-af6e-69bf38a2c5bb" visible="True" title="Добавление индикатора на график" />
       <Topic id="b106296b-f841-4cb8-bcb2-60f114b3c0d1" visible="True" title="Графический рендерер индикаторов " />
-      <Topic id="338cbc92-7525-4651-b0bc-bccf6eecbdcf" visible="True" title="Индикаторы">
-        <Topic id="f870a44c-04de-42d1-a44e-fd7c38477b9b" visible="True" title="Замедление / Ускорение" />
-        <Topic id="9c7d3c25-a8d3-4579-bc02-63f6a7321b70" visible="True" title="Аллигатор" />
-        <Topic id="56c18b4f-a151-48b6-8ebe-ed4bcf16ce3d" visible="True" title="Индекс среднего направления движения Welles Wilder" />
-        <Topic id="1dc26964-c4b2-499f-b007-aa9ffb6b1458" visible="True" title="Средний истинный диапазон TrueRange" />
-        <Topic id="603f5cff-beba-4e8d-9111-9b2ab6cadfc9" visible="True" title="Чудесный осциллятор" />
-        <Topic id="66e4f67b-4b0b-4cee-8573-f2512b6b2127" visible="True" title="Полосы Боллинджера" />
-        <Topic id="b598e799-8230-47a2-bb5c-0d539d138054" visible="True" title="Волатильность Чайкина" />
-        <Topic id="488c2845-eed8-4508-a611-6bd85951547c" visible="True" title="Осциллятор ценовых моментов Чанде" />
-        <Topic id="2a55bebe-5a68-4ab1-a9ed-03a9a6c7ab79" visible="True" title="Индекс товарного канала" />
-        <Topic id="14698387-95d3-4d65-ac1a-e064331d0d77" visible="True" title="Бестрендовый ценовой осциллятор" />
-        <Topic id="44d321ff-b935-40a5-8e0b-b7a673a2ab30" visible="True" title="Индекс направленного движения" />
-        <Topic id="721a7ed7-a749-44fe-b410-7cd3db7f190c" visible="True" title="Двойная экспоненциальная скользящая средняя" />
+      <Topic id="b8e71f65-00e3-41f7-af6e-69bf38a2c5bb" visible="True" title="Добавление индикатора на график" />
+      <Topic id="338cbc92-7525-4651-b0bc-bccf6eecbdcf" visible="True" isExpanded="true" title="Индикаторы">
+        <Topic id="cc01b008-6c9f-47e1-a0e0-2b15922db644" visible="True" title="%R" />
+        <Topic id="f870a44c-04de-42d1-a44e-fd7c38477b9b" visible="True" title="A/C" />
+        <Topic id="56c18b4f-a151-48b6-8ebe-ed4bcf16ce3d" visible="True" title="ADX" />
+        <Topic id="9c7d3c25-a8d3-4579-bc02-63f6a7321b70" visible="True" title="Alligator" />
+        <Topic id="603f5cff-beba-4e8d-9111-9b2ab6cadfc9" visible="True" title="AO" />
+        <Topic id="1dc26964-c4b2-499f-b007-aa9ffb6b1458" visible="True" title="ATR" />
+        <Topic id="66e4f67b-4b0b-4cee-8573-f2512b6b2127" visible="True" title="Bollinger Bands" />
+        <Topic id="2a55bebe-5a68-4ab1-a9ed-03a9a6c7ab79" visible="True" title="CCI" />
+        <Topic id="b598e799-8230-47a2-bb5c-0d539d138054" visible="True" title="CHV" />
+        <Topic id="488c2845-eed8-4508-a611-6bd85951547c" visible="True" title="CMO" />
+        <Topic id="721a7ed7-a749-44fe-b410-7cd3db7f190c" visible="True" title="DEMA" />
+        <Topic id="44d321ff-b935-40a5-8e0b-b7a673a2ab30" visible="True" title="DMI" />
+        <Topic id="14698387-95d3-4d65-ac1a-e064331d0d77" visible="True" title="DPO" />
+        <Topic id="ae18ed37-15c8-486d-b455-5e6a97b6098b" visible="True" title="EMA" />
         <Topic id="1bdf2806-c84b-4066-8e5a-580799d34876" visible="True" title="Envelope" />
-        <Topic id="ae18ed37-15c8-486d-b455-5e6a97b6098b" visible="True" title="Экспоненциальная скользящая средняя" />
-        <Topic id="c5d80ab0-6bf5-4884-8d3e-10cc2ac701ae" visible="True" title="Фракталы" />
-        <Topic id="5dbbd06f-08ae-474e-ba26-7b4f4d54bad5" visible="True" title="Gator осциллятор" />
-        <Topic id="728d2d13-7234-467a-bf63-4a88a74fa1d5" visible="True" title="Максимальное значение за период" />
-        <Topic id="0c24340d-2977-47d4-9010-e3783f4057c5" visible="True" title="Скользящая средняя Халла (Hull Moving Average)" />
-        <Topic id="fba3ef70-567c-4bae-b6d9-f7b5f80c7c7a" visible="True" title="Ишимоку" />
-        <Topic id="0e527062-fc7b-4890-a7b4-35cd276f894e" visible="True" title="Юриковская (Jurik's) скользящая средняя" />
-        <Topic id="afe1e21d-8dc5-4705-ac51-884fe1c524d7" visible="True" title="Адаптивная скользящая средняя Кауфмана" />
-        <Topic id="3950306c-b8fe-4919-a3e5-6af85da1b26e" visible="True" title="Минимальное значение за период" />
-        <Topic id="00cd756c-8173-4950-8b32-31270a056e3f" visible="True" title="Индекс Облегчения Рынка" />
-        <Topic id="484a7df2-08be-4f80-8452-d0070944974f" visible="True" title="Среднее отклонение" />
-        <Topic id="de5de225-ce40-4f57-a30a-8eb78c92264f" visible="True" title="Медианная цена" />
-        <Topic id="71460877-27a6-4343-89aa-2ce2c378162b" visible="True" title="Моментум" />
-        <Topic id="e266f8ac-2170-44f3-8e7d-1d89ead55a53" visible="True" title="Индекс денежных потоков" />
-        <Topic id="3047038b-3fa8-44c7-a3b0-15a11e18b7eb" visible="True" title="Схождение/расхождение скользящих средних" />
-        <Topic id="82306a6a-f478-437b-bf40-dd253a1e1156" visible="True" title="Схождение/расхождение скользящих средних. Гистограмма" />
-        <Topic id="921d80bc-8f3e-40cb-a06a-e958c8867b86" visible="True" title="Схождение/расхождение скользящих средних с сигнальной линией" />
-        <Topic id="18697340-5000-4093-a452-9afa9de49be4" visible="True" title="NickRypockTrailingReverse (Nick Rypock Trailing reverse)" />
+        <Topic id="c5d80ab0-6bf5-4884-8d3e-10cc2ac701ae" visible="True" title="Fractals" />
+        <Topic id="5dbbd06f-08ae-474e-ba26-7b4f4d54bad5" visible="True" title="Gator Oscillator" />
+        <Topic id="0c24340d-2977-47d4-9010-e3783f4057c5" visible="True" title="HMA" />
+        <Topic id="fba3ef70-567c-4bae-b6d9-f7b5f80c7c7a" visible="True" title="Ichimoku" />
+        <Topic id="0e527062-fc7b-4890-a7b4-35cd276f894e" visible="True" title="JMA" />
+        <Topic id="afe1e21d-8dc5-4705-ac51-884fe1c524d7" visible="True" title="KAMA" />
+        <Topic id="7c146fd9-0d55-4a14-a9e2-e98da6447e7b" visible="True" title="Linear Regression R-Squared" />
+        <Topic id="3047038b-3fa8-44c7-a3b0-15a11e18b7eb" visible="True" title="MACD" />
+        <Topic id="82306a6a-f478-437b-bf40-dd253a1e1156" visible="True" title="MACD Гистограмма" />
+        <Topic id="921d80bc-8f3e-40cb-a06a-e958c8867b86" visible="True" title="MACD с сигнальной линией" />
+        <Topic id="00cd756c-8173-4950-8b32-31270a056e3f" visible="True" title="Market Facilitation Index" />
+        <Topic id="728d2d13-7234-467a-bf63-4a88a74fa1d5" visible="True" title="Highest " />
+        <Topic id="484a7df2-08be-4f80-8452-d0070944974f" visible="True" title="Mean Deviation" />
+        <Topic id="de5de225-ce40-4f57-a30a-8eb78c92264f" visible="True" title="Median Price" />
+        <Topic id="3950306c-b8fe-4919-a3e5-6af85da1b26e" visible="True" isSelected="true" title="Lowest " />
+        <Topic id="71460877-27a6-4343-89aa-2ce2c378162b" visible="True" title="Momentum" />
+        <Topic id="e266f8ac-2170-44f3-8e7d-1d89ead55a53" visible="True" title="Money Flow Index" />
+        <Topic id="18697340-5000-4093-a452-9afa9de49be4" visible="True" title="NRTR" />
+        <Topic id="439b8955-2d5b-49cb-8b58-619820978e39" visible="True" title="Optimal Tracking" />
         <Topic id="815e64b0-82b9-4fc8-8efa-468429675c07" visible="True" title="Parabolic SAR" />
-        <Topic id="f274ee05-2e52-46f1-9919-cb2aa420d6f5" visible="True" title="Пик" />
+        <Topic id="f274ee05-2e52-46f1-9919-cb2aa420d6f5" visible="True" title="Peak" />
         <Topic id="e6deaa6a-b190-4954-877f-1ed7f3b8fb6c" visible="True" title="QStick" />
-        <Topic id="1ed326f3-35d9-41a6-ab84-8daa7e2a8dba" visible="True" title="Range Action Verification Index" />
-        <Topic id="43c515a1-a148-45ee-ad76-01aba1318fa2" visible="True" title="Скорость изменения" />
-        <Topic id="c473dc1a-2676-49cb-a8dd-276139e6d981" visible="True" title="Индекс относительной силы" />
-        <Topic id="1c1980ea-1575-4a24-8077-dc873499be3b" visible="True" title="Индекс Относительной Энергии RVI" />
-        <Topic id="7c146fd9-0d55-4a14-a9e2-e98da6447e7b" visible="True" title="R-квадрат в линейной регрессии" />
-        <Topic id="ce7fc434-ae07-4032-9212-8ac0bd0ec259" visible="True" title="Простая скользящая средняя" />
-        <Topic id="acc86efe-0a9f-4bbe-9215-c88636f7f51f" visible="True" title="Сглаженное скользящее среднее" />
-        <Topic id="bb02d8ab-ba71-4f88-a14b-ce3d6faf5c56" visible="True" title="Стандартное отклонение" />
-        <Topic id="51664396-fc6f-4591-96fe-404269303de9" visible="True" title="Стохастический Осциллятор" />
-        <Topic id="99b4d47a-cbc8-419d-bec0-cd22d115a823" visible="True" title="Сумма N последних значений" />
-        <Topic id="b78ec08e-114f-4354-91a9-fa5dca91426e" visible="True" title="Тройная экспоненциальная скользящая средняя" />
+        <Topic id="1ed326f3-35d9-41a6-ab84-8daa7e2a8dba" visible="True" title="RAVI" />
+        <Topic id="43c515a1-a148-45ee-ad76-01aba1318fa2" visible="True" title="RoC" />
+        <Topic id="c473dc1a-2676-49cb-a8dd-276139e6d981" visible="True" title="RSI" />
+        <Topic id="1c1980ea-1575-4a24-8077-dc873499be3b" visible="True" title="RVI" />
+        <Topic id="ce7fc434-ae07-4032-9212-8ac0bd0ec259" visible="True" title="SMA" />
+        <Topic id="acc86efe-0a9f-4bbe-9215-c88636f7f51f" visible="True" title="Smoothed MA" />
+        <Topic id="bb02d8ab-ba71-4f88-a14b-ce3d6faf5c56" visible="True" title="Standard Deviation" />
+        <Topic id="728bcc83-367c-42f6-9f1a-64d2f01f30ed" visible="True" title="Standard Error" />
+        <Topic id="51664396-fc6f-4591-96fe-404269303de9" visible="True" title="Stochastic Oscillator" />
+        <Topic id="9ee25a7b-9cd7-4870-9e0f-9baad0422a0e" visible="True" title="Stochastic Oscillator K%" />
+        <Topic id="99b4d47a-cbc8-419d-bec0-cd22d115a823" visible="True" title="Sum N" />
+        <Topic id="b78ec08e-114f-4354-91a9-fa5dca91426e" visible="True" title="TEMA" />
         <Topic id="53120174-ade2-4fee-b3e5-a1e2a9f7a4be" visible="True" title="TRIX" />
-        <Topic id="775c9e1e-4fef-41c4-ad00-fbff4454a092" visible="True" title="Впадина" />
-        <Topic id="2edc99f8-d7b7-4741-95ed-ca5aca85a6e9" visible="True" title="Средний истинный диапазон" />
-        <Topic id="98d921e3-36a3-446f-bf7c-41a345d38e39" visible="True" title="Окончательный осциллятор" />
-        <Topic id="ba57386f-6ea5-447b-b2d6-c4bde9c24e9e" visible="True" title="Вертикально-горизонтальный фильтр" />
-        <Topic id="713b9f00-1cd1-4aae-8dc9-820ca7dfddff" visible="True" title="Объем свечи" />
-        <Topic id="c0babb58-b412-4d4a-8f46-19ccc6252457" visible="True" title="Профиль объема" />
-        <Topic id="1183b27d-e8fc-40a8-a306-6215fab19ca1" visible="True" title="Взвешенная по объему скользящая средняя" />
-        <Topic id="2046825e-cbc7-4469-90c9-57543a3da584" visible="True" title="Взвешанная скользящая средняя" />
-        <Topic id="cc01b008-6c9f-47e1-a0e0-2b15922db644" visible="True" title="Процентный диапазон Уильямса" />
-        <Topic id="672f1e8f-2458-47ec-ba78-4c6beff0943a" visible="True" title="ЗигЗаг" />
-        <Topic id="81d7e366-106c-42cf-b4f9-463870760f97" visible="True" title="ЗигЗаг (Metastock)" />
+        <Topic id="775c9e1e-4fef-41c4-ad00-fbff4454a092" visible="True" title="Trough" />
+        <Topic id="2edc99f8-d7b7-4741-95ed-ca5aca85a6e9" visible="True" title="True Range" />
+        <Topic id="98d921e3-36a3-446f-bf7c-41a345d38e39" visible="True" title="UO" />
+        <Topic id="ba57386f-6ea5-447b-b2d6-c4bde9c24e9e" visible="True" title="VHF" />
+        <Topic id="713b9f00-1cd1-4aae-8dc9-820ca7dfddff" visible="True" title="Volume" />
+        <Topic id="c0babb58-b412-4d4a-8f46-19ccc6252457" visible="True" title="Volume Profile" />
+        <Topic id="1183b27d-e8fc-40a8-a306-6215fab19ca1" visible="True" title="Volume Weighted MA" />
+        <Topic id="2046825e-cbc7-4469-90c9-57543a3da584" visible="True" title="Weighted MA" />
+        <Topic id="5f223325-fef9-4fc1-b0ec-09e8128949e4" visible="True" title="WilderMA" />
+        <Topic id="672f1e8f-2458-47ec-ba78-4c6beff0943a" visible="True" title="ZigZag" />
+        <Topic id="81d7e366-106c-42cf-b4f9-463870760f97" visible="True" title="ZigZag (Metastock)" />
+        <Topic id="ec5bfbd3-e0f2-4802-a7ce-8c362423c823" visible="True" title="Linear Regression Slope" />
       </Topic>
+      <Topic id="ec4c3abe-3779-4a5f-899c-697b049254d4" visible="True" title="Собственный индикатор" />
     </Topic>
     <Topic id="82437493-cd53-41eb-b756-d913af0f4f8e" visible="True" title="Логирование">
       <Topic id="eca7454c-0532-4aaf-92bf-7a3d0cba635b" visible="True" title="Логирование Strategy" />
@@ -499,7 +504,7 @@
       <Topic id="d27245ae-abfd-4d6b-b8c4-d1a24a45116f" visible="True" title="На рыночных данных" />
       <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Настройки тестирования" />
     </Topic>
-    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Пользовательский интерфейс (GUI)">
+    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" title="Пользовательский интерфейс (GUI)">
       <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Графики">
         <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Свечной график" />
         <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="График-панель" />
@@ -612,7 +617,7 @@
       <Topic id="23380c66-45ab-44fc-b59a-ca5133da41ad" visible="True" title="Расширенная информация по инструменту" />
       <Topic id="e994c10c-b36a-44e6-95db-8a6975295140" visible="True" title="Сопоставление инструменты-подключения" />
     </Topic>
-    <Topic id="1edab5e8-9731-4c2b-b540-71db6b12b646" visible="True" isSelected="true" title="Индикаторы" />
+    <Topic id="1edab5e8-9731-4c2b-b540-71db6b12b646" visible="True" title="Индикаторы" />
     <Topic id="3d15acfa-6c54-4889-95a7-200d7fef9dae" visible="True" title="Совместная работа">
       <Topic id="28978b77-d474-420b-a54e-c492c4cd7410" visible="True" title="Чат" />
       <Topic id="b3847a6b-817e-4bf3-9007-22227263d19c" visible="True" title="Публикация графиков и таблиц" />
@@ -651,11 +656,6 @@
         <Topic id="f3eda329-0077-4517-99f2-aabdea2a930d" visible="True" title="CQG Continuum" />
         <Topic id="3adf98fb-fa41-46ad-93cb-583fb67c1d6b" visible="True" title="Xignite" />
         <Topic id="eb7ea9cf-5aa5-42f8-a963-1834837ce4d4" visible="True" title="QuantFEED" />
-      </Topic>
-      <Topic id="0f6a2b55-c841-45fb-96ad-a562a8cea016" visible="True" noFile="true" title="Другие">
-        <Topic id="e81b1b7f-5c96-488e-a90d-e60cb8675977" visible="True" title="Fix" />
-        <Topic id="c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f" visible="True" title="HydraServer" />
-        <Topic id="91454878-ec26-4872-9a85-1bfbc76dc77a" visible="True" title="RSS" />
       </Topic>
       <Topic id="8cde5dc1-05c2-412b-8f29-cd7d5d8742f5" visible="True" noFile="true" title="Крипто-валюта">
         <Topic id="82177082-714f-4a6c-912d-78ab1f0855fa" visible="True" title="Binance" />
@@ -726,7 +726,12 @@
         <Topic id="24a5983b-28a7-4620-b4b8-9356f683a9ba" visible="True" title="FXCM" />
         <Topic id="e81e69f8-bfcf-49f8-aefe-cd18270c1d9e" visible="True" title="FXCM (история)" />
       </Topic>
-      <Topic id="01a85a46-7510-4385-b81c-348ffb3dfc46" visible="True" title="Параметры подключения" />
+      <Topic id="0f6a2b55-c841-45fb-96ad-a562a8cea016" visible="True" noFile="true" title="Другие">
+        <Topic id="e81b1b7f-5c96-488e-a90d-e60cb8675977" visible="True" title="Fix" />
+        <Topic id="c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f" visible="True" title="HydraServer" />
+        <Topic id="91454878-ec26-4872-9a85-1bfbc76dc77a" visible="True" title="RSS" />
+      </Topic>
+      <Topic id="01a85a46-7510-4385-b81c-348ffb3dfc46" visible="True" isSelected="true" title="Параметры подключения" />
     </Topic>
     <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="Просмотр и экспорт">
       <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Сделки" />
@@ -953,7 +958,6 @@
       <Topic id="47c764fa-a28c-48f7-81b3-714c059e0e57" visible="True" title="Импорт стратегий" />
       <Topic id="6d13af11-61ae-47b7-93a3-097abe7640c9" visible="True" title="Публикация графиков и таблиц" />
     </Topic>
-    <Topic id="934f81d7-7a25-4231-8ad1-5af9c5edfdb9" visible="True" title="Индикаторы" />
     <Topic id="1d7e6d2b-b86f-4229-982a-53e326673076" visible="True" title="Опционные стратегии" />
     <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" title="Настройки">
       <Topic id="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" visible="True" title="Настройки уведомлений" />
@@ -965,7 +969,7 @@
     <Topic id="137a2b48-540c-4b65-9bc1-21994f276b27" visible="True" title="Запуск стратегий на сервере" />
   </Topic>
   <Topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" visible="True" title="S#.MatLab" />
-  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" isExpanded="true" title="S#.Shell">
+  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" title="S#.Shell">
     <Topic id="1a7843d9-c1e4-4597-b02d-9a011b24df44" visible="True" title="Установка S#.Shell" />
     <Topic id="848cd34c-1768-409f-8e82-bed1c3e25102" visible="True" title="Быстрый запуск" />
     <Topic id="1b4c10e7-34ea-4eff-b820-4d2ea04231af" visible="True" title="Интерфейс программы">
@@ -977,10 +981,9 @@
     <Topic id="0273c249-b962-4320-a9cb-57f1e2943f5e" visible="True" title="Настройки подключения">
       <Topic id="8ce14bdf-7573-4d6d-86c6-b838232401b2" visible="True" title="Настройки коннекторов" />
     </Topic>
-    <Topic id="e116a47d-fb8e-46c7-b2f9-7b7c13edd1c2" visible="True" title="Индикаторы" />
     <Topic id="9d636fda-309e-4d5f-a6ed-4848fb8f4f0b" visible="True" title="Создание собственной стратегии" />
     <Topic id="8cea241f-fdf3-43c7-bf4d-3fdd7dcd0000" visible="True" title="Создание собственных панеле для стратегий" />
     <Topic id="79892a99-9f84-414c-be4a-fe677048c913" visible="True" title="Запуск стратегии созданной в S#.Designer" />
-    <Topic id="8ff5768c-8c58-4ade-8036-471fd85d1332" visible="True" title="S#.RemoteManager" />
   </Topic>
+  <Topic id="8ff5768c-8c58-4ade-8036-471fd85d1332" visible="True" title="S#.RemoteManager" />
 </Topics>

@@ -2,7 +2,7 @@
 <topic id = "9c7d3c25-a8d3-4579-bc02-63f6a7321b70" revisionNumber = "1" >
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
-<para>Индикатор <legacyBold>Аллигатор</legacyBold> – индикатор технического анализа, состоящий из трех 
+<para>Индикатор <legacyBold>Аллигатор (Alligator)</legacyBold> – индикатор технического анализа, состоящий из трех 
 скользящих средних. Эти МА имеют разный период, 
 а также сдвинуты вперед на графике. 
 Быстрая МА имеет период 5, и сдвинута вперед на 3 единичных 

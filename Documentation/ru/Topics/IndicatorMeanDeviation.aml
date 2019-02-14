@@ -3,7 +3,8 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Индикатор <legacyBold>Среднее отклонение значение за период</legacyBold> показывает среднее отклонение за период
+Индикатор <legacyBold>Среднее отклонение (Mean Deviation)</legacyBold> показывает 
+среднее отклонение за период
 </para>
 <para>
 Для использования индикатора необходимо использовать класс

@@ -267,6 +267,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\IndicatorOptimalTrackingFilter.aml" />
     <None Include="Topics\Shell_Indicators.aml" />
     <None Include="Topics\Designer_Indicators.aml" />
     <None Include="Topics\Hydra_Indicators.aml" />

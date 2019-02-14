@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Скользящая средняя Халла (Hull Moving Average)</legacyBold> - индикатор показывает направление рыночного тренда и представляет 
+<legacyBold>Скользящая средняя Халла (Hull Moving Average, HMA)</legacyBold> - индикатор показывает направление рыночного тренда и представляет 
 собой усовершенствованную скользящую среднюю. Для каждой свечи берется среднее значение 
 функции за определенный период времени. 
 </para>

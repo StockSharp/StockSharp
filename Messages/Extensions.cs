@@ -959,5 +959,31 @@ namespace StockSharp.Messages
 
 			return specialDays;
 		}
+
+		/// <summary>
+		/// Is the specified adapter support market-data.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMarketData(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.IsMessageSupported(MessageTypes.MarketData) || adapter.IsMessageSupported(MessageTypes.SecurityLookup);
+		}
+
+		/// <summary>
+		/// Is the specified adapter support transactions.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsTransactional(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.IsMessageSupported(MessageTypes.OrderRegister);
+		}
 	}
 }

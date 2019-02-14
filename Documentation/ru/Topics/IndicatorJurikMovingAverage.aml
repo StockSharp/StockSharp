@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Скользящее среднее Юрика (англ. Jurik’s Moving Average, сокр. JMA)</legacyBold> – индикатор 
+<legacyBold>Скользящее среднее Юрика (англ. Jurik’s Moving Average, JMA)</legacyBold> – индикатор 
 технического анализа, разработанный Марком Юриком. Является разновидностью адаптивного 
 скользящего среднего и представляет собой один из лучших ценовых фильтров.
 Кривой индикатора свойственно хорошее сглаживание, а также минимальное опережение 

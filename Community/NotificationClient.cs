@@ -196,7 +196,7 @@ namespace StockSharp.Community
 
 			foreach (var n in news)
 			{
-				n.EndDate = n.EndDate.ChangeKind(DateTimeKind.Utc);
+				n.EndDate = n.EndDate.UtcKind();
 				NewsReceived?.Invoke(n);
 			}
 

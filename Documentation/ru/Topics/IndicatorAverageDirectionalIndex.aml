@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Индекс направленного движения</legacyBold> – это система определения существования на рынке тренда и 
+<legacyBold>Индекс среднего направления движения Welles Wilder (ADX)</legacyBold> – это система определения существования на рынке тренда и 
 его силы. </para>
 <para>Индекс направленного движения как система состоит из трех составляющих:</para>
 

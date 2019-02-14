@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Стохастический осциллятор  (Stochastic Oscillator)</legacyBold> – классический осциллятор, показывающий 
+<legacyBold>Стохастический осциллятор (Stochastic Oscillator)</legacyBold> – классический осциллятор, показывающий 
 текущее положение цены закрытия в диапазоне максимальных и минимальных цен за указанный 
 период усреднения. Стохастик активно используют краткосрочные трейдеры, так как этот 
 индикатор берет в расчёт не только цены закрытия (как например RSI), но и максимумы/минимумы, 

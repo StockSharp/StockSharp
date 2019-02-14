@@ -15,11 +15,14 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
+	using System.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
 	/// DIMinus is a component of the Directional Movement System developed by Welles Wilder.
 	/// </summary>
+	[Browsable(false)]
 	public class DiMinus : DiPart
 	{
 		/// <summary>
