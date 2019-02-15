@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("LinearRegression")]
 	[DescriptionLoc(LocalizedStrings.Str735Key)]
+	[Browsable(false)]
 	public class LinearRegression : BaseComplexIndicator
 	{
 		/// <summary>
