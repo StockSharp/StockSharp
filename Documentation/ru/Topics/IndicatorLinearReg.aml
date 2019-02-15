@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Кривая линейной регрессии (Linear Regression Curve, LRC) - это тип скользящей средней, основанный на уравнении линейной регрессии. 
+<legacyBold>Кривая линейной регрессии (Linear Regression Curve, LRC)</legacyBold> - это тип скользящей средней, основанный на уравнении линейной регрессии. 
 Расчет дает прямую линию с наилучшим соответствием для различных цен за период. Конечная точка этой 
 линии используется для построения графика LRC. 
 </para>

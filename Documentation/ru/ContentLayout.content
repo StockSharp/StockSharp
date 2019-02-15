@@ -412,7 +412,7 @@
         <Topic id="fba3ef70-567c-4bae-b6d9-f7b5f80c7c7a" visible="True" title="Ichimoku" />
         <Topic id="0e527062-fc7b-4890-a7b4-35cd276f894e" visible="True" title="JMA" />
         <Topic id="afe1e21d-8dc5-4705-ac51-884fe1c524d7" visible="True" title="KAMA" />
-        <Topic id="7c146fd9-0d55-4a14-a9e2-e98da6447e7b" visible="True" isSelected="true" title="Linear Regression R-Squared" />
+        <Topic id="7c146fd9-0d55-4a14-a9e2-e98da6447e7b" visible="True" title="Linear Regression R-Squared" />
         <Topic id="ec5bfbd3-e0f2-4802-a7ce-8c362423c823" visible="True" title="Linear Regression Slope" />
         <Topic id="3950306c-b8fe-4919-a3e5-6af85da1b26e" visible="True" title="Lowest " />
         <Topic id="94ccc4b1-fad7-4d42-8317-e8b5d3009285" visible="True" title="LRC" />
@@ -453,6 +453,8 @@
         <Topic id="5f223325-fef9-4fc1-b0ec-09e8128949e4" visible="True" title="WilderMA" />
         <Topic id="672f1e8f-2458-47ec-ba78-4c6beff0943a" visible="True" title="ZigZag" />
         <Topic id="81d7e366-106c-42cf-b4f9-463870760f97" visible="True" title="ZigZag (Metastock)" />
+        <Topic id="063a8d5c-8bd3-4aa9-abb8-0e80e07cb825" visible="True" isSelected="true" title="PeakBar" />
+        <Topic id="3bbbf433-16a7-4dd2-831a-f338fbe94b1a" visible="True" />
       </Topic>
       <Topic id="ec4c3abe-3779-4a5f-899c-697b049254d4" visible="True" title="Собственный индикатор" />
     </Topic>
