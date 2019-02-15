@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Взвешенная скользящая средняя (Weighted Moving Average, VWMA)</legacyBold>- индикатор 
+<legacyBold>Взвешенная скользящая средняя (Weighted Moving Average, WMA)</legacyBold>- индикатор 
 отображает среднезвешенную цену за определённые временной промежуток. Данный индикатор следует 
 за ценой в виде извивающейся линии, имеет определённое отклонение, относительно ценового графика.
 </para>

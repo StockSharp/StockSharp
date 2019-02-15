@@ -2,7 +2,7 @@
 <topic id = "e266f8ac-2170-44f3-8e7d-1d89ead55a53" revisionNumber = "1" >
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
-<para><legacyBold>Индекс денежного потока (MFI)</legacyBold> — технический 
+<para><legacyBold>Индекс денежного потока (Money Flow Index, MFI)</legacyBold> — технический 
 индикатор, призванный показать интенсивность, с которой деньги вкладываются в ценную 
 бумагу и выводятся из неё, анализируя объёмы торгов и соотношения типичных цен периодов. </para>
 <para>

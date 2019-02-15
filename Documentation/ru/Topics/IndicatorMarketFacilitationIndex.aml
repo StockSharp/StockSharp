@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Индекс Облегчения Рынка (Market Facilitation Index, сокращенно BW MFI)</legacyBold> — биржевой индикатор 
+<legacyBold>Индекс Облегчения Рынка (Market Facilitation Index, сокращенно MFI)</legacyBold> — биржевой индикатор 
 объема, показывающий динамику движения ценового графика. 
 В аналитическом использовании индикатора BW MFI имеет смысл учитывать только его 
 изменения, а не абсолютные величины.

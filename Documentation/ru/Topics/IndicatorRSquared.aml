@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Индикатор <legacyBold>R-квадрат в линейной регрессии</legacyBold> показывает процентное движение цены инструмента, что может 
+Индикатор <legacyBold>R-квадрат в линейной регрессии (Linear Regression R-Squared)</legacyBold> показывает процентное движение цены инструмента, что может 
 быть объяснено с помощью линейной регрессии. Остальные значения вызваны случайными факторами.
 </para>
 <para>
