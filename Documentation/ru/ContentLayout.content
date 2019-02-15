@@ -398,7 +398,7 @@
         <Topic id="1dc26964-c4b2-499f-b007-aa9ffb6b1458" visible="True" title="ATR" />
         <Topic id="66e4f67b-4b0b-4cee-8573-f2512b6b2127" visible="True" title="Bollinger Bands" />
         <Topic id="2a55bebe-5a68-4ab1-a9ed-03a9a6c7ab79" visible="True" title="CCI" />
-        <Topic id="b598e799-8230-47a2-bb5c-0d539d138054" visible="True" title="CHV" />
+        <Topic id="b598e799-8230-47a2-bb5c-0d539d138054" visible="True" isSelected="true" title="CHV" />
         <Topic id="488c2845-eed8-4508-a611-6bd85951547c" visible="True" title="CMO" />
         <Topic id="721a7ed7-a749-44fe-b410-7cd3db7f190c" visible="True" title="DEMA" />
         <Topic id="44d321ff-b935-40a5-8e0b-b7a673a2ab30" visible="True" title="DMI" />
@@ -412,7 +412,7 @@
         <Topic id="fba3ef70-567c-4bae-b6d9-f7b5f80c7c7a" visible="True" title="Ichimoku" />
         <Topic id="0e527062-fc7b-4890-a7b4-35cd276f894e" visible="True" title="JMA" />
         <Topic id="afe1e21d-8dc5-4705-ac51-884fe1c524d7" visible="True" title="KAMA" />
-        <Topic id="7c146fd9-0d55-4a14-a9e2-e98da6447e7b" visible="True" isSelected="true" title="Linear Regression R-Squared" />
+        <Topic id="7c146fd9-0d55-4a14-a9e2-e98da6447e7b" visible="True" title="Linear Regression R-Squared" />
         <Topic id="ec5bfbd3-e0f2-4802-a7ce-8c362423c823" visible="True" title="Linear Regression Slope" />
         <Topic id="3950306c-b8fe-4919-a3e5-6af85da1b26e" visible="True" title="Lowest " />
         <Topic id="94ccc4b1-fad7-4d42-8317-e8b5d3009285" visible="True" title="LRC" />
@@ -428,6 +428,7 @@
         <Topic id="439b8955-2d5b-49cb-8b58-619820978e39" visible="True" title="Optimal Tracking" />
         <Topic id="815e64b0-82b9-4fc8-8efa-468429675c07" visible="True" title="Parabolic SAR" />
         <Topic id="f274ee05-2e52-46f1-9919-cb2aa420d6f5" visible="True" title="Peak" />
+        <Topic id="063a8d5c-8bd3-4aa9-abb8-0e80e07cb825" visible="True" title="PeakBar" />
         <Topic id="e6deaa6a-b190-4954-877f-1ed7f3b8fb6c" visible="True" title="QStick" />
         <Topic id="1ed326f3-35d9-41a6-ab84-8daa7e2a8dba" visible="True" title="RAVI" />
         <Topic id="43c515a1-a148-45ee-ad76-01aba1318fa2" visible="True" title="RoC" />
@@ -443,9 +444,11 @@
         <Topic id="b78ec08e-114f-4354-91a9-fa5dca91426e" visible="True" title="TEMA" />
         <Topic id="53120174-ade2-4fee-b3e5-a1e2a9f7a4be" visible="True" title="TRIX" />
         <Topic id="775c9e1e-4fef-41c4-ad00-fbff4454a092" visible="True" title="Trough" />
+        <Topic id="3bbbf433-16a7-4dd2-831a-f338fbe94b1a" visible="True" title="TroughBar" />
         <Topic id="2edc99f8-d7b7-4741-95ed-ca5aca85a6e9" visible="True" title="True Range" />
         <Topic id="98d921e3-36a3-446f-bf7c-41a345d38e39" visible="True" title="UO" />
         <Topic id="ba57386f-6ea5-447b-b2d6-c4bde9c24e9e" visible="True" title="VHF" />
+        <Topic id="38ecdc69-2a6a-4f68-91ed-742ed3321ea3" visible="True" title="VIDYA" />
         <Topic id="713b9f00-1cd1-4aae-8dc9-820ca7dfddff" visible="True" title="Volume" />
         <Topic id="c0babb58-b412-4d4a-8f46-19ccc6252457" visible="True" title="Volume Profile" />
         <Topic id="1183b27d-e8fc-40a8-a306-6215fab19ca1" visible="True" title="Volume Weighted MA" />
