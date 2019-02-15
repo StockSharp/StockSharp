@@ -407,19 +407,21 @@
         <Topic id="1bdf2806-c84b-4066-8e5a-580799d34876" visible="True" title="Envelope" />
         <Topic id="c5d80ab0-6bf5-4884-8d3e-10cc2ac701ae" visible="True" title="Fractals" />
         <Topic id="5dbbd06f-08ae-474e-ba26-7b4f4d54bad5" visible="True" title="Gator Oscillator" />
+        <Topic id="728d2d13-7234-467a-bf63-4a88a74fa1d5" visible="True" title="Highest " />
         <Topic id="0c24340d-2977-47d4-9010-e3783f4057c5" visible="True" title="HMA" />
         <Topic id="fba3ef70-567c-4bae-b6d9-f7b5f80c7c7a" visible="True" title="Ichimoku" />
         <Topic id="0e527062-fc7b-4890-a7b4-35cd276f894e" visible="True" title="JMA" />
         <Topic id="afe1e21d-8dc5-4705-ac51-884fe1c524d7" visible="True" title="KAMA" />
-        <Topic id="7c146fd9-0d55-4a14-a9e2-e98da6447e7b" visible="True" title="Linear Regression R-Squared" />
+        <Topic id="7c146fd9-0d55-4a14-a9e2-e98da6447e7b" visible="True" isSelected="true" title="Linear Regression R-Squared" />
+        <Topic id="ec5bfbd3-e0f2-4802-a7ce-8c362423c823" visible="True" title="Linear Regression Slope" />
+        <Topic id="3950306c-b8fe-4919-a3e5-6af85da1b26e" visible="True" title="Lowest " />
+        <Topic id="94ccc4b1-fad7-4d42-8317-e8b5d3009285" visible="True" title="LRC" />
         <Topic id="3047038b-3fa8-44c7-a3b0-15a11e18b7eb" visible="True" title="MACD" />
         <Topic id="82306a6a-f478-437b-bf40-dd253a1e1156" visible="True" title="MACD Гистограмма" />
         <Topic id="921d80bc-8f3e-40cb-a06a-e958c8867b86" visible="True" title="MACD с сигнальной линией" />
         <Topic id="00cd756c-8173-4950-8b32-31270a056e3f" visible="True" title="Market Facilitation Index" />
-        <Topic id="728d2d13-7234-467a-bf63-4a88a74fa1d5" visible="True" title="Highest " />
         <Topic id="484a7df2-08be-4f80-8452-d0070944974f" visible="True" title="Mean Deviation" />
         <Topic id="de5de225-ce40-4f57-a30a-8eb78c92264f" visible="True" title="Median Price" />
-        <Topic id="3950306c-b8fe-4919-a3e5-6af85da1b26e" visible="True" isSelected="true" title="Lowest " />
         <Topic id="71460877-27a6-4343-89aa-2ce2c378162b" visible="True" title="Momentum" />
         <Topic id="e266f8ac-2170-44f3-8e7d-1d89ead55a53" visible="True" title="Money Flow Index" />
         <Topic id="18697340-5000-4093-a452-9afa9de49be4" visible="True" title="NRTR" />
@@ -451,7 +453,6 @@
         <Topic id="5f223325-fef9-4fc1-b0ec-09e8128949e4" visible="True" title="WilderMA" />
         <Topic id="672f1e8f-2458-47ec-ba78-4c6beff0943a" visible="True" title="ZigZag" />
         <Topic id="81d7e366-106c-42cf-b4f9-463870760f97" visible="True" title="ZigZag (Metastock)" />
-        <Topic id="ec5bfbd3-e0f2-4802-a7ce-8c362423c823" visible="True" title="Linear Regression Slope" />
       </Topic>
       <Topic id="ec4c3abe-3779-4a5f-899c-697b049254d4" visible="True" title="Собственный индикатор" />
     </Topic>
