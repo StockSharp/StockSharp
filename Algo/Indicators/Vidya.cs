@@ -67,7 +67,10 @@ namespace StockSharp.Algo.Indicators
 			var newValue = input.GetValue<decimal>();
 
 			// calc СMO
-			var cmoValue = _cmo.Process(input).GetValue<decimal>();
+			var cmoValue = _cmo.Process(input);
+
+			if (cmoValue.IsEmpty)
+				return new DecimalIndicatorValue(this);
 
 			// calc Vidya
 			if (!IsFormed)
@@ -82,7 +85,7 @@ namespace StockSharp.Algo.Indicators
 				return new DecimalIndicatorValue(this, _prevFinalValue);
 			}
 
-			var curValue = (newValue - _prevFinalValue) * _multiplier * Math.Abs(cmoValue / 100m) + _prevFinalValue;
+			var curValue = (newValue - _prevFinalValue) * _multiplier * Math.Abs(cmoValue.GetValue<decimal>() / 100m) + _prevFinalValue;
 				
 			if (input.IsFinal)
 				_prevFinalValue = curValue;
