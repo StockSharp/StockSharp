@@ -4273,6 +4273,10 @@
       <ImageId>IndicatorAcceleration</ImageId>
       <AlternateText>Indicator Acceleration</AlternateText>
     </Image>
+    <Image Include="Art\IndicatorVidya.png">
+      <ImageId>IndicatorVidya</ImageId>
+      <AlternateText>Indicator Vidya</AlternateText>
+    </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
       <AlternateText>hydra securities Panel 00</AlternateText>
