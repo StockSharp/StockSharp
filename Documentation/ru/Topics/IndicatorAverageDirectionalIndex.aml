@@ -3,15 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Индекс среднего направления движения Welles Wilder (ADX)</legacyBold> – это система определения существования на рынке тренда и 
-его силы. </para>
-<para>Индекс направленного движения как система состоит из трех составляющих:</para>
-
-<list class="bullet">
-  <listItem><para>усредненный индекс направленного движения (average directional movement index, ADX)</para></listItem>
-  <listItem><para>индикатор направления вверх (up directional indicator, +DI)</para></listItem>
-  <listItem><para>индикатор направления вниз (down directional indicator, -DI)</para></listItem>
-</list>
+<legacyBold>Индекс среднего направленного движения (Welles Wilder's ADX, Average Directional Index)</legacyBold> 
+представляет из себя группу индикаторов направленного движения. Линии составляют индекс 
+направленного движения (DMI): ADX , DI+ и DI-. ADX указывает на силу тренда, DI+ и DI- 
+указывают на текущее направление цены.
+</para>
 <para>
 Для использования индикатора необходимо использовать класс
 <codeEntityReference>T:StockSharp.Algo.Indicators.AverageDirectionalIndex</codeEntityReference>.
