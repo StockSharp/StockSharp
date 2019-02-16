@@ -3,10 +3,8 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Индикатор <legacyBold>Средний истинный диапазон (Average True Range, ATR)</legacyBold> — индикатор технического 
-анализа, измеряющий рыночную волатильность изменения цены. Разработан Уэллсом 
-Уайлдером для анализа товарных рынков. Индикатор ничего не говорит о направлении 
-или силе тренда, а просто показывает уровень волатильности.
+<legacyBold>Средний истинный диапазон (Average True Range, ATR)</legacyBold> — 
+индикатор показывающий уровень текущей волатильности.
 </para>
 <para>
 Для использования индикатора необходимо использовать класс

@@ -2,9 +2,8 @@
 <topic id = "f870a44c-04de-42d1-a44e-fd7c38477b9b" revisionNumber = "1" >
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
-<para>Индикатор <legacyBold>Замедления/Ускорения (A/C)</legacyBold> измеряет скорость 
-движущей силы рынка путем вычитания медленного скользящего среднего из быстрого и 
-последующего вычитания быстрого скользящего среднего от этой разности. </para>
+<para><legacyBold>Замедления/Ускорения (Acceleration/Deceleration , A/C)</legacyBold> является 
+осциллятором, который был создан Биллом Уильямсом. Измеряет ускорение и замедление импульса тренда. </para>
 <para>
 Для использования индикатора необходимо использовать класс
 <codeEntityReference>T:StockSharp.Algo.Indicators.Acceleration</codeEntityReference>.

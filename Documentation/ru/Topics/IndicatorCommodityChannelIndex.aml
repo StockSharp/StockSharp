@@ -3,9 +3,8 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Индекс товарного канала (англ. commodity channel index, CCI)</legacyBold> — технический индикатор, 
-основанный на анализе текущего изменения отклонения цены от её среднего значения за о
-пределённый период и среднестатистического абсолютного значения этого параметра. 
+<legacyBold>Индекс товарного канала (Commodity Channel Index, CCI)</legacyBold> — технический индикатор, 
+основанный на анализе текущего отклонения цены от её среднего значения и среднестатистического абсолютного значения. 
 </para>
 <para>
 Для использования индикатора необходимо использовать класс
