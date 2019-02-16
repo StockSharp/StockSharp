@@ -6,6 +6,7 @@ StockSharp API Change log
 * (bug) DiMinus, DiPlus, IchimokuChinkouLine, IchimokuLine, RelativeVigorIndexAverage, RelativeVigorIndexSignal excluded from indicators list.
 * (bug) Highest, Lowest indicators fix.
 * (bug) Vidya fix.
+* (feature) CSV storage. Save/load portfolio commissions.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

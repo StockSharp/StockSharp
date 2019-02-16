@@ -679,6 +679,12 @@ namespace StockSharp.Algo.Storages.Csv
 					portfolio.ExpirationDate = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).UtcKind();
 				}
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				{
+					portfolio.CommissionMaker = reader.ReadNullableDecimal();
+					portfolio.CommissionTaker = reader.ReadNullableDecimal();
+				}
+
 				return portfolio;
 			}
 
@@ -707,6 +713,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.ClientCode,
 					data.Currency?.To<string>(),
 					data.ExpirationDate?.UtcDateTime.ToString(_dateTimeFormat),
+					data.CommissionMaker.To<string>(),
+					data.CommissionTaker.To<string>(),
 				});
 			}
 		}
