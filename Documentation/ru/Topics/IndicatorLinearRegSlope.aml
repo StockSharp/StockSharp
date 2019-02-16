@@ -3,9 +3,9 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Интерпретация индикатора <legacyBold>Linear Regression Slope</legacyBold> аналогична 
-интерпретации индикатора скользящей средней (Moving Average): значение индекса увеличивается, 
-мы имеем дело с восходящей тенденцией, если значение индекса уменьшается – тренд нисходящий. 
+Интерпретация индикатора <legacyBold>Linear Regression Slope</legacyBold> показывает 
+значение наклона линий регрессии, которые включают текущий ценовой бар и предыдущий n-1 
+ценовой бар (где n = периоды регрессии)
 </para>
 <para>
 Для использования индикатора необходимо использовать класс

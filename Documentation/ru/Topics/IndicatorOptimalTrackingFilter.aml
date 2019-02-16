@@ -2,13 +2,11 @@
 <topic id="439b8955-2d5b-49cb-8b58-619820978e39" revisionNumber="1">
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
-<para>Индикатор <legacyBold>Optimal Tracking Filter</legacyBold> относится к классу 
-адаптивных скользящих средних и разработан Джоном 
-Эйлерсом (John Ehlers) на основе оптимального фильтра Калмана (R.E. Kalman). Как и 
-другие адаптивные скользящие, период усреднения ряда данных в Optimal Tracking Filter 
-адаптируется в зависимости от динамики движения цен. Тем самым автор попытался 
-уменьшить запаздывание в моменты быстрого движения рынка и снизить количество ложных 
-сигналов в периоды бокового движения рынка.</para>
+<para>Индикатор <legacyBold>Optimal Tracking Filter</legacyBold> индикатор корректирует быстрые изменения 
+цены и, является относительно плавным, когда цена 
+имеет боковое действие. Работа этого фильтра аналогична адаптивной 
+скользящей средней Кауфмана.
+</para>
 <para>
 Для использования индикатора необходимо использовать класс
 <codeEntityReference>T:StockSharp.Algo.Indicators.OptimalTracking</codeEntityReference>.
