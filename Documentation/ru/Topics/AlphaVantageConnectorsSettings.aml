@@ -16,7 +16,7 @@
             		<code language="C#">
             				<![CDATA[
 // создаем подключение
-Trader = newAlphaVantageTrader();// { LogLevel = LogLevels.Debug };
+Trader = new AlphaVantageTrader();// { LogLevel = LogLevels.Debug };
 							]]>
 					</code>
 				</content>

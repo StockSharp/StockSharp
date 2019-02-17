@@ -2,10 +2,12 @@
 <topic id="137a2b48-540c-4b65-9bc1-21994f276b27" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Стратегии созданные в <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" /> 
-      можно запускать в <link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" />.</para>
+      <para>Стратегии, созданные в <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />,
+      можно запускать в <link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" />. <link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" /> быстрее
+      и меньше занимает памяти, чем <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />, и поэтому стратегии будут иметь лучше производительность.
+      Такой подход идеален для размещения стратегий на сервере.</para>
       <para><link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" /> может 
-      выступать как сервер-контейнер для разного типа стратегий в том числе и созданных 
+      выступать как сервер-контейнер для разного типа стратегий, в том числе и созданных 
       в <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />.</para>
       <para>Для запуска стратегии в <link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" /> 
       необходимо экспортировать стратегию в файл как описано в пункте 

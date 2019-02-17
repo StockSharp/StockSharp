@@ -82,8 +82,8 @@
     </Topic>
     <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Коннекторы (Америка)">
       <Topic id="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" visible="True" title="AlphaVantage">
-        <Topic id="02913c08-eeab-48e3-9e62-35dccea1db59" visible="True" title="Пример работы с AlphaVantage" />
-        <Topic id="28cee4c9-f9c2-4e87-a160-991fc18221af" visible="True" title="Настройки коннектора AlphaVantage" />
+        <Topic id="02913c08-eeab-48e3-9e62-35dccea1db59" visible="True" title="Настройки коннектора AlphaVantage" />
+        <Topic id="28cee4c9-f9c2-4e87-a160-991fc18221af" visible="True" title="Пример работы с AlphaVantage" />
       </Topic>
       <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" title="BarChart">
         <Topic id="baa2df0a-ca79-4437-8b99-496f905c254e" visible="True" title="Настройки коннектора BarChart" />
@@ -387,9 +387,8 @@
       <Topic id="b6f4b3fb-3a34-4ba8-bcea-258613f2b455" visible="True" title="Создание свечей по корзине инструментов" />
     </Topic>
     <Topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" visible="True" isExpanded="true" title="Индикаторы">
-      <Topic id="b106296b-f841-4cb8-bcb2-60f114b3c0d1" visible="True" title="Графический рендерер индикаторов " />
       <Topic id="b8e71f65-00e3-41f7-af6e-69bf38a2c5bb" visible="True" title="Добавление индикатора на график" />
-      <Topic id="338cbc92-7525-4651-b0bc-bccf6eecbdcf" visible="True" isExpanded="true" title="Индикаторы">
+      <Topic id="338cbc92-7525-4651-b0bc-bccf6eecbdcf" visible="True" isExpanded="true" title="Список индикаторов">
         <Topic id="cc01b008-6c9f-47e1-a0e0-2b15922db644" visible="True" title="%R" />
         <Topic id="f870a44c-04de-42d1-a44e-fd7c38477b9b" visible="True" title="A/C" />
         <Topic id="56c18b4f-a151-48b6-8ebe-ed4bcf16ce3d" visible="True" title="ADX" />
@@ -458,6 +457,7 @@
         <Topic id="81d7e366-106c-42cf-b4f9-463870760f97" visible="True" title="ZigZag (Metastock)" />
       </Topic>
       <Topic id="ec4c3abe-3779-4a5f-899c-697b049254d4" visible="True" title="Собственный индикатор" />
+      <Topic id="b106296b-f841-4cb8-bcb2-60f114b3c0d1" visible="True" title="Графический рендерер индикаторов " />
     </Topic>
     <Topic id="82437493-cd53-41eb-b756-d913af0f4f8e" visible="True" title="Логирование">
       <Topic id="eca7454c-0532-4aaf-92bf-7a3d0cba635b" visible="True" title="Логирование Strategy" />
@@ -641,6 +641,21 @@
     <Topic id="7fc5f53a-b6b9-4f0f-8b97-983dd98f0237" visible="True" title="Обновление на новую версию" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="Первый запуск" />
     <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Настройка источников">
+      <Topic id="3b645eca-0171-49a9-ba44-e2e83507ed86" visible="True" noFile="true" title="Россия">
+        <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
+        <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" title="Алор" />
+        <Topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" visible="True" title="Finam" />
+        <Topic id="01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2" visible="True" title="МФД" />
+        <Topic id="cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49" visible="True" title="Micex" />
+        <Topic id="53930a42-ae5a-45fc-b9cf-8295584bf8fc" visible="True" title="Plaza II" />
+        <Topic id="54a1e95e-ea39-4322-9613-e74859a3a596" visible="True" title="Quik" />
+        <Topic id="0da19c49-1f11-455e-bbd5-c20e428e5149" visible="True" title="РТС" />
+        <Topic id="53c15f3a-4320-422d-850a-22ef6c90d76b" visible="True" title="ЛЧИ" />
+        <Topic id="1cca5a33-e5ab-434e-bfed-287389fea2eb" visible="True" title="SmartCom" />
+        <Topic id="065a9dec-12d0-49d0-be8c-9f9b48f6a899" visible="True" title="Transaq" />
+        <Topic id="184da0f9-29db-4397-8497-1ed4c8f7ea0d" visible="True" title="UX" />
+        <Topic id="bcf9a00f-c491-4ce1-90ef-fb67a684fd4f" visible="True" title="SPB Exchange" />
+      </Topic>
       <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" title="Америка">
         <Topic id="66746dc9-3271-4430-8290-842d4647cc95" visible="True" title="AlphaVantage" />
         <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
@@ -703,21 +718,6 @@
         <Topic id="718d7a70-562e-4a75-8897-b859d03c061b" visible="True" title="CoinBene" />
         <Topic id="30b14fe3-da0c-42b2-a5da-5cdc0a87474d" visible="True" title="BitZ" />
         <Topic id="923cb077-0437-4459-850b-ea86b58d9131" visible="True" title="ZB" />
-      </Topic>
-      <Topic id="3b645eca-0171-49a9-ba44-e2e83507ed86" visible="True" noFile="true" title="Россия">
-        <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
-        <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" title="Алор" />
-        <Topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" visible="True" title="Finam" />
-        <Topic id="01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2" visible="True" title="МФД" />
-        <Topic id="cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49" visible="True" title="Micex" />
-        <Topic id="53930a42-ae5a-45fc-b9cf-8295584bf8fc" visible="True" title="Plaza II" />
-        <Topic id="54a1e95e-ea39-4322-9613-e74859a3a596" visible="True" title="Quik" />
-        <Topic id="0da19c49-1f11-455e-bbd5-c20e428e5149" visible="True" title="РТС" />
-        <Topic id="53c15f3a-4320-422d-850a-22ef6c90d76b" visible="True" title="ЛЧИ" />
-        <Topic id="1cca5a33-e5ab-434e-bfed-287389fea2eb" visible="True" title="SmartCom" />
-        <Topic id="065a9dec-12d0-49d0-be8c-9f9b48f6a899" visible="True" title="Transaq" />
-        <Topic id="184da0f9-29db-4397-8497-1ed4c8f7ea0d" visible="True" title="UX" />
-        <Topic id="bcf9a00f-c491-4ce1-90ef-fb67a684fd4f" visible="True" title="SPB Exchange" />
       </Topic>
       <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" title="Форекс" tocTitle="Форекс">
         <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" title="Dukascopy" />
@@ -940,12 +940,13 @@
       <Topic id="a966079a-3a89-49ef-918c-d69ea3d2b240" visible="True" title="Расширенная информация по инструменту" />
       <Topic id="aa54fb3f-ed47-4291-9cc6-34840bab4fff" visible="True" title="Сопоставление инструменты-подключения" />
     </Topic>
-    <Topic id="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" visible="True" title="Live торговля">
+    <Topic id="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" visible="True" isExpanded="true" title="Live торговля">
       <Topic id="628d619b-ef20-4496-9bd1-d854d4a853e4" visible="True" title="Добавление стратегии в Live торговлю" />
       <Topic id="0dec6014-51ee-4463-b102-aed24464833e" visible="True" title="Интерфейс" />
       <Topic id="24d370d1-fd00-4914-83ac-57472eb99e93" visible="True" title="Панель стратегий" />
       <Topic id="91644d63-00b3-416f-8677-ca57dfa8032e" visible="True" title="Пример Live торговли" />
       <Topic id="3ad21487-4a9a-4ba3-bbd8-787f9573bbe5" visible="True" title="Режим прогрева стратегии" />
+      <Topic id="137a2b48-540c-4b65-9bc1-21994f276b27" visible="True" isSelected="true" title="Исполнение стратегий на сервере" />
     </Topic>
     <Topic id="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" visible="True" title="Настройки подключения">
       <Topic id="4aae45b0-37c5-4d3c-a910-08ccfc9b63ed" visible="True" title="Настройки коннекторов" />
@@ -970,7 +971,6 @@
       <Topic id="5789f207-56f6-4ee3-8040-44913ba1f2c9" visible="True" title="Редактирование данных вручную" />
       <Topic id="07223530-00cf-45ac-8aa7-d1e0550a89ce" visible="True" title="Обратная связь" />
     </Topic>
-    <Topic id="137a2b48-540c-4b65-9bc1-21994f276b27" visible="True" title="Запуск стратегий на сервере" />
   </Topic>
   <Topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" visible="True" title="S#.MatLab" />
   <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" title="S#.Shell">
