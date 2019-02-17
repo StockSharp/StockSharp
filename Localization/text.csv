@@ -14891,10 +14891,10 @@ DocStr10323;SnowGem;SnowGem
 DocStr10324;Augur;Augur
 DocStr10325;Aelf;Aelf
 DocStr10326;Withdraw types;Типы вывода
-DocStr10328;Candles series holder to create {0} instancies;Кэш серий свечей для создания объектов {0}
+DocStr10328;Candles series holder to create {0} instances;Кэш серий свечей для создания объектов {0}
 DocStr10329;Update candle by new message;Обновить свечу новым сообщением
 DocStr10330;Updated candle;Обновленная свеча
-DocStr10331;Candles holder to create {0} instancies;Кэш свечей для создания объектов {0}
+DocStr10331;Candles holder to create {0} instances;Кэш свечей для создания объектов {0}
 DocStr10332;Create new series tracking;Создать новое отслеживание серии
 DocStr10333;Remove series tracking;Удалить отслеживание серии
 DocStr10334;Get request identifier by series;Получить идентификатор запроса по серии
@@ -15552,3 +15552,5 @@ DocStr11034;Newly created;Свеже созданно
 DocStr11035;Information about AlphaVantage;Информация о AlphaVantage
 DocStr11036;Old Mexican Peso;Old Mexican Peso
 DocStr11037;Load group state settings;Загрузить настройки состояния группировки
+DocStr11038;Is the specified adapter support market-data;Поддерживает ли указанные адаптер маркет-данные
+DocStr11039;Is the specified adapter support transactions;Поддерживает ли указанные адаптер транзакции

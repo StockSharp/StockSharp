@@ -672,6 +672,12 @@ M:StockSharp.Messages.Extensions.EncodeToString(System.Collections.Generic.IDict
 M:StockSharp.Messages.Extensions.DecodeToSpecialDays(System.String)/summary;DocStr10819
 M:StockSharp.Messages.Extensions.DecodeToSpecialDays(System.String)/param/input;DocStr10818
 M:StockSharp.Messages.Extensions.DecodeToSpecialDays(System.String)/returns;SpecialDaysDesc
+M:StockSharp.Messages.Extensions.IsMarketData(StockSharp.Messages.IMessageAdapter)/summary;DocStr11038
+M:StockSharp.Messages.Extensions.IsMarketData(StockSharp.Messages.IMessageAdapter)/param/adapter;DocStr929
+M:StockSharp.Messages.Extensions.IsMarketData(StockSharp.Messages.IMessageAdapter)/returns;DocStr8659
+M:StockSharp.Messages.Extensions.IsTransactional(StockSharp.Messages.IMessageAdapter)/summary;DocStr11039
+M:StockSharp.Messages.Extensions.IsTransactional(StockSharp.Messages.IMessageAdapter)/param/adapter;DocStr929
+M:StockSharp.Messages.Extensions.IsTransactional(StockSharp.Messages.IMessageAdapter)/returns;DocStr8659
 T:StockSharp.Messages.IBasketSecurityProcessor/summary;DocStr10604
 P:StockSharp.Messages.IBasketSecurityProcessor.SecurityId/summary;SecurityId
 P:StockSharp.Messages.IBasketSecurityProcessor.BasketExpression/summary;DocStr10613

@@ -9,12 +9,12 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Candles holder to create <see cref="Candle"/> instancies.
+	/// Candles holder to create <see cref="Candle"/> instances.
 	/// </summary>
 	public class CandlesHolder
 	{
 		/// <summary>
-		/// Candles series holder to create <see cref="Candle"/> instancies.
+		/// Candles series holder to create <see cref="Candle"/> instances.
 		/// </summary>
 		private class CandlesSeriesHolder
 		{
