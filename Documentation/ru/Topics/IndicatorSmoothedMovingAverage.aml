@@ -3,8 +3,8 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Сглаженная скользящая средняя (Smoothed  Moving Average, SMA)</legacyBold>- индикатор отображает сглаженное среднее 
-направление цены за определённые временной промежуток. 
+<legacyBold>Сглаженная скользящая средняя (Smoothed  Moving Average, SMA)</legacyBold> - индикатор отображает сглаженное среднее 
+направление цены за определённые временной промежуток.
 </para>
 <para>
 Для использования индикатора необходимо использовать класс

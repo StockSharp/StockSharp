@@ -4,7 +4,7 @@
  <introduction>
 <para>
 <legacyBold>Осциллятор ценовых моментов Чанде (Chande Momentum Oscillator, CMO)</legacyBold> – модификация 
-индикатора Momentum, изобретателем которой является трейдер Тушар Чанде (Tushar Chande). 
+индикатора Momentum, изобретателем которой является трейдер Тушар Чанде (Tushar Chande).
 </para>
 <para>
 Для использования индикатора необходимо использовать класс

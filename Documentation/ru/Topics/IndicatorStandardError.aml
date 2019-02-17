@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>Индикатор <legacyBold>Стандартная ошибка (Standard Error)</legacyBold> является оценкой среднего 
-квадратичного отклонения коэффициента регрессии от его истинного значения. </para>
+квадратичного отклонения коэффициента регрессии от его истинного значения.</para>
 <para>
 Для использования индикатора необходимо использовать класс
 <codeEntityReference>T:StockSharp.Algo.Indicators.StandardError</codeEntityReference>.

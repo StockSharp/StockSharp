@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Скорость изменения (Rate of Change, RoC)</legacyBold> индикатор показывает разницу между текущей ценой и ценой за n свечей назад. 
+<legacyBold>Скорость изменения (Rate of Change, RoC)</legacyBold> индикатор показывает разницу между текущей ценой и ценой за n свечей назад.
 </para>
 <para>
 Для использования индикатора необходимо использовать класс

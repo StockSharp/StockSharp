@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Индикатор <legacyBold>Объем свечи </legacyBold>показывает Объем свечи 
+Индикатор <legacyBold>Объем свечи </legacyBold>показывает Объем свечи.
 </para>
 <para>
 Для использования индикатора необходимо использовать класс
