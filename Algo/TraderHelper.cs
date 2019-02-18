@@ -3378,7 +3378,7 @@ namespace StockSharp.Algo
 		/// <returns>Price step.</returns>
 		public static decimal GetPriceStep(this int decimals)
 		{
-			return 1m / 10.Pow(decimals);
+			return 1m / 10m.Pow(decimals);
 		}
 
 		/// <summary>
