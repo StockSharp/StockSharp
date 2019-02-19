@@ -4,14 +4,16 @@
 	<introduction>
 		<para>Currently, <token>stocksharp</token> supports the following connectors:</para>
 		<list class="ordered">
+			<listItem><codeEntityReference>T:StockSharp.AlphaVantage.AlphaVantageTrader</codeEntityReference> for <token>AlphaVantage</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> for <token>OpenECry</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference> for <token>IB</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference> for <token>blackwood</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.ETrade.ETradeTrader</codeEntityReference> for <token>etrade</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.IEX.IEXTrader</codeEntityReference> for <token>IEX</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> for <token>iqfeed</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.Sterling.SterlingTrader</codeEntityReference> for <token>sterling</token></listItem>
-			<listItem><codeEntityReference>T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference> and <codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference> for <token>cqg</token></listItem>
-			<!--<listItem><codeEntityReference>T:StockSharp.Fix.FixTrader</codeEntityReference> for <token>fix</token></listItem>-->
+			<listItem><codeEntityReference>T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference> for <token>cqg</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference> for <token>cqg</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference> for <token>rithmic</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference> for <token>itch</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.BarChart.BarChartTrader</codeEntityReference> for <token>barchart</token></listItem>

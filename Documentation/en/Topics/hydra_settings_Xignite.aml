@@ -7,6 +7,11 @@
     </summary>
     -->
    <introduction>
+   <alert class="note">
+<para>To configure the source in <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
+you will need the <legacyBold>Xignite Token (API key)</legacyBold>. You can get it in your personal account on the <legacyBold>Xignite</legacyBold> website.
+</para>
+	 </alert>
       <mediaLink>
         <image placement="left" xlink:href="hydra_settings_Xignite" />
       </mediaLink>
@@ -59,9 +64,7 @@
           <legacyBold>Logging level</legacyBold> - logging level.
 		</listItem>
       </list>
-<para>To configure the source in <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
-you will need the <legacyBold>Xignite Token (API key)</legacyBold>. You can get it in your personal account on the <legacyBold>Xignite</legacyBold> website.
-</para>
+
 
 <para>Before starting the data acquisition, it is necessary to download and select the necessary instruments, as described in the clause 
 <link xlink:href="47ebc084-6b07-4b69-8f96-ea190110111f" />.
