@@ -7,7 +7,7 @@
 <para>1. <legacyBold>CQG COM</legacyBold>, connection through the local <legacyBold>CQG Integrated Client</legacyBold>, 
 which is installed directly on the computer from which the connection will be made. <legacyBold>CQG Integrated Client</legacyBold> can be downloaded  
 <ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>на сайте разработчика.</ddue:linkText>
+    <ddue:linkText>on the developer's site.</ddue:linkText>
     <ddue:linkUri>http://www.cqg.com/products/cqg-integrated-client</ddue:linkUri>
   </ddue:externalLink>
 To connect to the <legacyBold>CQG Integrated Client</legacyBold>, you have to specify 

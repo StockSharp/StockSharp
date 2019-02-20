@@ -12,61 +12,12 @@
  You will be able to trade manually or automated trading (algorithmic trading robots, 
  conventional or HFT).
  </para>
- <para>
-Available connections:  </para>
-<list class="bullet">
-	<listItem>
-		<token>lmax_external</token>,
-		<token>oanda_external</token>,
-		<token>fxcm_external</token>
-	</listItem>
-	<listItem>
-		<token>Binance</token>,
-		<token>Bitexbook</token>,
-		<token>Bitfinex</token>,
-		<token>Bithumb</token>,
-		<token>Bitmex</token>,
-		<token>BitStamp</token>,
-		<token>Bittrex</token>,
-		<token>Btce</token>,
-		<token>Cex</token>,
-		<token>Coinbase</token>,
-		<token>Coincheck</token>,
-		<token>CoinExchange</token>,
-		<token>Cryptopia</token>,
-		<token>Deribit</token>,
-		<token>Exmo</token>,
-		<token>Gdax</token>,
-		<token>HitBtc</token>,
-		<token>Huobi</token>,
-		<token>Kraken</token>,
-		<token>Kucoin</token>,
-		<token>Liqui</token>,
-		<token>LiveCoin</token>,
-		<token>Okcoin</token>,
-		<token>Okex</token>,
-		<token>Poloniex</token>,
-		<token>Yobit</token>
-	</listItem>
-		<listItem>
-		<token>OpenECry</token>,
-		<token>IB</token>,
-		<token>blackwood</token>,
-		<token>etrade</token>,
-		<token>iqfeed</token>,
-		<token>sterling</token>,
-		<token>cqg</token>,
-		<token>cqg</token>,
-		<token>rithmic</token>,
-		<token>itch</token>,
-		<token>quantfeed</token>
-	</listItem>
-	<listItem>
-		<link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX</link>,
-		<link xlink:href="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93">FIX Server</link>
-	</listItem>
-</list>
- <para>and many other. Any broker or
+ <para><legacyBold>Supports many sources: </legacyBold> 
+<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />, 
+<link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b" />, 
+<link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" />, 
+<link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" />.</para>
+ <para>Any broker or
 <externalLink>
 <linkText>partner broker</linkText>
 <linkUri>https://stocksharp.com/broker/</linkUri>
@@ -135,8 +86,35 @@ Available connections:  </para>
  <para>
  <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f">More...</link>
  </para>
+   <title>S#.Terminal</title>
+    <mediaLink>
+<image placement="center" xlink:href="Terminal_main_00"/>
+</mediaLink>
+ <para><link xlink:href="E4B5E112-BD08-4F40-8741-7514E7E4088E" /> - trading charting application (trading terminal).</para>
  
- 
+<list class="bullet">
+  <listItem><para>Trading from charts by clicking</para></listItem>
+  <listItem><para>Arbitrary timeframes</para></listItem>
+  <listItem><para>Volume, Tick, Range, Renko candles</para></listItem>
+  <listItem><para>Cluster and box charts</para></listItem>
+</list>
+<title>S#.Shell</title>
+<para>The ready-made graphical framework with the ability to quickly change to your needs and with fully open source code in C#</para>
+
+<list class="bullet">
+  <listItem><para>Complete source code</para></listItem>
+  <listItem><para>Support for all StockSharp platform connections: Quik, SmartCom, Plaza II CGate, FIX/FAST, Crypto Exchange (+30 at the moment), etc.</para></listItem>
+  <listItem><para>Support for S#.Designer schemas</para></listItem>
+  <listItem><para>Flexible user interface</para></listItem>
+  <listItem><para>Strategy testing (statistics, equity, reports)</para></listItem>
+  <listItem><para>Save and load strategy settings</para></listItem>
+  <listItem><para>Launch strategies in parallel</para></listItem>
+  <listItem><para>Detailed information on strategy performance (orders, transactions, position, revenue, logs, etc.)</para></listItem>
+  <listItem><para>Launch strategies on schedule</para></listItem>
+</list>
+
+
+
   <title>S#.API</title>
  <para>
 <link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" /> - library for the professional 

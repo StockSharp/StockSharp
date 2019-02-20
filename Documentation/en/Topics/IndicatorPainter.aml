@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b106296b-f841-4cb8-bcb2-60f114b3c0d1" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>Некоторые индикаторы требуют особого стиля прорисовки как, например, для индикатора 
+      <codeEntityReference>T:StockSharp.Algo.Indicators.BollingerBands</codeEntityReference> 
+      это две линии. Или для индикатора <codeEntityReference>T:StockSharp.Algo.Indicators.Fractals</codeEntityReference> это точки.
+      В этом случае необходимо явно указывать в <codeEntityReference>T:StockSharp.Xaml.Charting.ChartIndicatorElement</codeEntityReference>
+      графический рендерер индикаторов.</para>
+      <code language="C#">
+        <![CDATA[
+			var chartIndicatorElement = new ChartIndicatorElement()
+			{
+				IndicatorPainter = new BollingerBandsPainter(),
+			};
+		]]>
+		</code>	  
+      <para>Рассмотрим на примере индикатора 
+      <codeEntityReference>T:StockSharp.Algo.Indicators.Fractals</codeEntityReference> как
+      создать собственный IndicatorPainter. </para>
+      <para>Все IndicatorPainter должны быть унаследованны от базового класса 
+      <codeEntityReference>T:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter</codeEntityReference> или интерфейса
+	<codeEntityReference>T:StockSharp.Xaml.Charting.IChartIndicatorPainter</codeEntityReference>:</para>
+            <code language="C#">
+        <![CDATA[
+	/// <summary>
+	/// The chart element for <see cref="Fractals"/>.
+	/// </summary>
+	[Indicator(typeof(Fractals))]
+	public class FractalsPainter : BaseChartIndicatorPainter
+	{
+	...
+	}
+		]]>
+		</code>	
+      <para>Зададим элементы графика 
+      <codeEntityReference>T:StockSharp.Xaml.Charting.ChartLineElement</codeEntityReference>
+      которые будут представлять верхний и нижний фракталы:</para>
+       <code language="C#">
+        <![CDATA[
+	/// <summary>
+	/// The chart element for <see cref="Fractals"/>.
+	/// </summary>
+	[Indicator(typeof(Fractals))]
+	public class FractalsPainter : BaseChartIndicatorPainter
+	{
+		/// <summary>
+		/// <see cref="Fractals.Up"/> dots color.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str2035Key,
+			Description = LocalizedStrings.Str2036Key)]
+		public ChartLineElement Up { get; }
+
+		/// <summary>
+		/// <see cref="Fractals.Down"/> dots color.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str2037Key,
+			Description = LocalizedStrings.Str2038Key)]
+		public ChartLineElement Down { get; }
+	...
+	}
+		]]>
+		</code>	
+		<para>В конструкторе 
+		<codeEntityReference>T:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter</codeEntityReference>
+		зададим им значения и основные свойства цвет, толщину и стиль прорисовки. 
+		После чего добавляем их как дочерний элемент графика:</para>
+		 <code language="C#">
+        <![CDATA[
+	...
+		/// <summary>
+		/// Create instance.
+		/// </summary>
+		public FractalsPainter()
+		{
+			Up = new ChartLineElement { Color = Colors.Green };
+			Down = new ChartLineElement { Color = Colors.Red };
+
+			Up.Style = Down.Style = ChartIndicatorDrawStyles.Dot;
+			Up.StrokeThickness = Down.StrokeThickness = 4;
+
+			AddChildElement(Up);
+			AddChildElement(Down);
+		}
+	...
+		]]>
+		</code>	
+		<para>Переопределяем метод 
+		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.OnDraw</codeEntityReference>
+		в котором с помощью метода 
+		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.DrawValues(StockSharp.Algo.Indicators.IIndicator,StockSharp.Xaml.Charting.IChartElement)</codeEntityReference> 
+		прорисовываем индикатор:</para>
+		<code language="C#">
+        <![CDATA[
+	...
+		/// <inheritdoc />
+		protected override bool OnDraw()
+		{
+			var ind = (Fractals)Indicator;
+			var result = false;
+
+			result |= DrawValues(ind.Down, Down);
+			result |= DrawValues(ind.Up, Up);
+
+			return result;
+		}
+	...
+		]]>
+		</code>	
+	<para>Полный код 
+	<codeEntityReference>T:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter</codeEntityReference>:</para>
+		<code language="C#">
+        <![CDATA[
+	/// <summary>
+	/// The chart element for <see cref="Fractals"/>.
+	/// </summary>
+	[Indicator(typeof(Fractals))]
+	public class FractalsPainter : BaseChartIndicatorPainter
+	{
+		/// <summary>
+		/// <see cref="Fractals.Up"/> dots color.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str2035Key,
+			Description = LocalizedStrings.Str2036Key)]
+		public ChartLineElement Up { get; }
+
+		/// <summary>
+		/// <see cref="Fractals.Down"/> dots color.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str2037Key,
+			Description = LocalizedStrings.Str2038Key)]
+		public ChartLineElement Down { get; }
+
+		/// <summary>
+		/// Create instance.
+		/// </summary>
+		public FractalsPainter()
+		{
+			Up = new ChartLineElement { Color = Colors.Green };
+			Down = new ChartLineElement { Color = Colors.Red };
+
+			Up.Style = Down.Style = ChartIndicatorDrawStyles.Dot;
+			Up.StrokeThickness = Down.StrokeThickness = 4;
+
+			AddChildElement(Up);
+			AddChildElement(Down);
+		}
+
+		/// <inheritdoc />
+		protected override bool OnDraw()
+		{
+			var ind = (Fractals)Indicator;
+			var result = false;
+
+			result |= DrawValues(ind.Down, Down);
+			result |= DrawValues(ind.Up, Up);
+
+			return result;
+		}
+
+		#region IPersistable
+
+		/// <inheritdoc />
+		public override void Load(SettingsStorage storage)
+		{
+			base.Load(storage);
+
+			Up.Load(storage.GetValue<SettingsStorage>(nameof(Up)));
+			Down.Load(storage.GetValue<SettingsStorage>(nameof(Down)));
+		}
+
+		/// <inheritdoc />
+		public override void Save(SettingsStorage storage)
+		{
+			base.Save(storage);
+
+			storage.SetValue(nameof(Up), Up.Save());
+			storage.SetValue(nameof(Down), Down.Save());
+		}
+
+		#endregion
+	}
+		]]>
+		</code>	
+    </introduction>    
+  </developerConceptualDocument>
+</topic>

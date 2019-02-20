@@ -1,11 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="0585869f-a6ef-4e75-81b1-58f4ba513882" revisionNumber="1">
-  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+        <alert class="note">
+<para>
+In addition to the source settings in <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" />, 
+you need to configure the connector, as described in the  
+<link xlink:href="4e7930af-1aa2-4599-91de-7e9eae031fbf" />
+section.
+</para>
+	 </alert>
       <mediaLink>
         <image placement="left" xlink:href="hydra_settings_GDAX" />
       </mediaLink>
-       
+      
  		<para><legacyBold>GDAX</legacyBold></para>
 	   <list class="bullet">
 	   <listItem>
@@ -15,7 +23,7 @@
 	      <legacyBold>Secret</legacyBold> - secret.
 		</listItem>
 		<listItem>
-	      <legacyBold>Passphrase</legacyBold> - passphrase.
+	      <legacyBold>Passphase</legacyBold> - passphase.
 		</listItem>
       </list>  
 	   <para><legacyBold>General</legacyBold></para>
@@ -61,11 +69,6 @@
 		</listItem>
       </list>
       <para><legacyBold>Connection</legacyBold> - connection properties (see <link xlink:href="01a85a46-7510-4385-b81c-348ffb3dfc46">Connection properties</link> section).</para>
-    <para>In addition to the source settings in 
-<link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" />, 
-the connector should be configured, as described in the clause 
-<link xlink:href="4e7930af-1aa2-4599-91de-7e9eae031fbf" />.
-</para>
 
 <para>Before starting the data acquisition, it is necessary to download and select the necessary instruments, as described in the clause 
 <link xlink:href="47ebc084-6b07-4b69-8f96-ea190110111f" />.

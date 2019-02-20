@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="5097b5fb-42fa-4418-9afc-de5b6ff69df6" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		The <codeEntityReference qualifyHint="false">T:StockSharp.Digifinex.DigifinexTrader</codeEntityReference> should be used for trading algorithms creating for <token>Digifinex</token>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="cceb78ff-4c1b-4ae4-a7c5-eba41a2d205f" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
