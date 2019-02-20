@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" revisionNumber="1">
+   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		The <codeEntityReference qualifyHint="false">T:StockSharp.AlphaVantage.AlphaVantageTrader</codeEntityReference> should be used for trading algorithms creating for <token>AlphaVantage</token>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="02913c08-eeab-48e3-9e62-35dccea1db59" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

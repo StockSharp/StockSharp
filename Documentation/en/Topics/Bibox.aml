@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8f22e760-96c8-493a-aef0-569cbc42a9da" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		The <codeEntityReference qualifyHint="false">T:StockSharp.Bibox.BiboxTrader</codeEntityReference> should be used for trading algorithms creating for <token>Bibox</token>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="cccadabe-b3fa-4afa-badd-ca0a1633ca2d"/>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

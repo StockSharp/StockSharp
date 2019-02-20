@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="886bcc99-7011-4c3c-85fe-d0fc646ee00f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		The <codeEntityReference qualifyHint="false">T:StockSharp.Idax.IdaxTrader</codeEntityReference> should be used for trading algorithms creating for <token>Idax</token>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="33c78156-0c49-4f22-a7a4-701f5a09cf69" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

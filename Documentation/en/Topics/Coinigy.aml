@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="93ab9c0b-d310-4285-b132-cdace95134dd" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		The <codeEntityReference qualifyHint="false">T:StockSharp.Coinigy.CoinigyTrader</codeEntityReference> should be used for trading algorithms creating for <token>Coinigy</token>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="6069b2ef-ee49-4628-9631-e31f75930e04" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
