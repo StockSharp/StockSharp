@@ -886,7 +886,7 @@
     </Topic>
   </Topic>
   <Topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" visible="True" title="S#.MatLab" />
-  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True">
+  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" title="S#.Shell">
     <Topic id="1a7843d9-c1e4-4597-b02d-9a011b24df44" visible="True" title="Installing S#.Shell" />
     <Topic id="848cd34c-1768-409f-8e82-bed1c3e25102" visible="True" title="Quick start" />
     <Topic id="1b4c10e7-34ea-4eff-b820-4d2ea04231af" visible="True" isExpanded="true" title="User interface">
