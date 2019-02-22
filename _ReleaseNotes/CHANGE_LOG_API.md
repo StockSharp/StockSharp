@@ -11,6 +11,8 @@ StockSharp API Change log
 * (feature) Bitfinex. Supported market data loading.
 * (feature) Bitfinex. Cancel On Disconnect.
 * (feature) Bitfinex. PostOnly, CloseOnly, ReduceOnly and OCO orders.
+* (bug) Bitmex. Fix order replace https://stocksharp.com/forum/10419/BitMEX-invalid-argument-clOrdID/
+* (feature) Bitmex. Testnet supported https://stocksharp.com/forum/10420/BitMEX-Testnet/
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

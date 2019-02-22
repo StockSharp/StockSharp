@@ -24,23 +24,19 @@
             Secret.
             </summary>
         </member>
-        <member name="M:StockSharp.Bitmex.BitmexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+        <member name="P:StockSharp.Bitmex.BitmexMessageAdapter.IsDemo">
             <summary>
-            Save settings.
+            Connect to demo trading instead of real trading server.
             </summary>
-            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Bitmex.BitmexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Bitmex.BitmexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Load settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Bitmex.BitmexMessageAdapter.ToString">
-            <summary>
-            Returns a string that represents the current object.
-            </summary>
-            <returns>A string that represents the current object.</returns>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Bitmex.BitmexMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
             <summary>
@@ -222,6 +218,11 @@
         <member name="P:StockSharp.Bitmex.BitmexTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexTrader.IsDemo">
+            <summary>
+            Connect to demo trading instead of real trading server.
             </summary>
         </member>
     </members>
