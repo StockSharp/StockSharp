@@ -24,9 +24,9 @@
             Secret.
             </summary>
         </member>
-        <member name="P:StockSharp.Bibox.BiboxMessageAdapter.BalanceCheckInterval">
+        <member name="P:StockSharp.Bibox.BiboxMessageAdapter.AdminPassword">
             <summary>
-            Balance check interval. Required in case of deposit and withdraw actions.
+            Administrative password.
             </summary>
         </member>
         <member name="M:StockSharp.Bibox.BiboxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
@@ -77,9 +77,9 @@
             Secret.
             </summary>
         </member>
-        <member name="P:StockSharp.Bibox.BiboxTrader.BalanceCheckInterval">
+        <member name="P:StockSharp.Bibox.BiboxTrader.AdminPassword">
             <summary>
-            Balance check interval. Required in case of deposit and withdraw actions.
+            Administrative password.
             </summary>
         </member>
     </members>

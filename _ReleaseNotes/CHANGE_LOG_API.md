@@ -13,6 +13,7 @@ StockSharp API Change log
 * (feature) Bitfinex. PostOnly, CloseOnly, ReduceOnly and OCO orders.
 * (bug) Bitmex. Fix order replace https://stocksharp.com/forum/10419/BitMEX-invalid-argument-clOrdID/
 * (feature) Bitmex. Testnet supported https://stocksharp.com/forum/10420/BitMEX-Testnet/
+* (bug) BitZ, BitMax, Bibox fixes.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
