@@ -4949,6 +4949,10 @@ ETrade;E*TRADE;E*TRADE
 Mark;Mark;Метка
 PostOnly;Post-only;Post-only
 PostOnlyOrder;Post-only order.;Заявка post-only.
+Reduce;Reduce;Уменьшить
+ReducePosition;Reduce position only.;Только уменьшить позицию.
+Oco;OCO;OCO
+OcoDesc;One Cancels Other.;Один отменяет другой.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14489,7 +14493,6 @@ DocStr9895;Stop order;Заявка типа Stop
 DocStr9896;Open Limit order;Заявка типа Open Limit
 DocStr9897;Close Limit order;Заявка типа Close Limit
 DocStr9899;The types of the contingent order;Типы условной заявки
-DocStr9900;One Cancels Other;One Cancels Other
 DocStr9901;One Triggers Other;One Triggers Other
 DocStr9902;Entry with Limit and Stop;Entry with Limit and Stop
 DocStr9903;One Triggers {0};One Triggers {0}
@@ -15552,5 +15555,7 @@ DocStr11034;Newly created;Свеже созданно
 DocStr11035;Information about AlphaVantage;Информация о AlphaVantage
 DocStr11036;Old Mexican Peso;Old Mexican Peso
 DocStr11037;Load group state settings;Загрузить настройки состояния группировки
-DocStr11038;Is the specified adapter support market-data;Поддерживает ли указанные адаптер маркет-данные
-DocStr11039;Is the specified adapter support transactions;Поддерживает ли указанные адаптер транзакции
+DocStr11038;Is the specified adapter support market-data;Поддерживает ли указанный адаптер маркет-данные
+DocStr11039;Is the specified adapter support transactions;Поддерживает ли указанный адаптер транзакции
+DocStr11040;Trailing price;Цена трейлинга
+DocStr11041;OCO stop price;OCO стоп цена

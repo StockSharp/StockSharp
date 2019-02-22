@@ -8,6 +8,9 @@ StockSharp API Change log
 * (bug) Vidya fix.
 * (feature) CSV storage. Save/load portfolio commissions.
 * (bug) TraderHelper. GetPriceStep fix.
+* (feature) Bitfinex. Supported market data loading.
+* (feature) Bitfinex. Cancel On Disconnect.
+* (feature) Bitfinex. PostOnly, CloseOnly, ReduceOnly and OCO orders.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

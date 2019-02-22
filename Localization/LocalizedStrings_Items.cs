@@ -49166,5 +49166,45 @@ namespace StockSharp.Localization
 		/// Post-only order.
 		/// </summary>
 		public static string PostOnlyOrder => GetString(PostOnlyOrderKey);
+
+		/// <summary>
+		/// Reduce
+		/// </summary>
+		public const string ReduceKey = nameof(Reduce);
+
+		/// <summary>
+		/// Reduce
+		/// </summary>
+		public static string Reduce => GetString(ReduceKey);
+
+		/// <summary>
+		/// Reduce position only.
+		/// </summary>
+		public const string ReducePositionKey = nameof(ReducePosition);
+
+		/// <summary>
+		/// Reduce position only.
+		/// </summary>
+		public static string ReducePosition => GetString(ReducePositionKey);
+
+		/// <summary>
+		/// OCO
+		/// </summary>
+		public const string OcoKey = nameof(Oco);
+
+		/// <summary>
+		/// OCO
+		/// </summary>
+		public static string Oco => GetString(OcoKey);
+
+		/// <summary>
+		/// One Cancels Other.
+		/// </summary>
+		public const string OcoDescKey = nameof(OcoDesc);
+
+		/// <summary>
+		/// One Cancels Other.
+		/// </summary>
+		public static string OcoDesc => GetString(OcoDescKey);
 	}
 }
