@@ -1403,12 +1403,8 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// Get security by code.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <returns>Security.</returns>
-		protected Security GetSecurity(SecurityId securityId)
+		/// <inheritdoc />
+		public Security GetSecurity(SecurityId securityId)
 		{
 			return GetSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode), s => false, out _);
 		}

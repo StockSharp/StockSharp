@@ -529,11 +529,11 @@ namespace StockSharp.BusinessEntities
 		void LookupOrders(OrderStatusMessage criteria);
 
 		/// <summary>
-		/// Lookup security by identifier.
+		/// Get security by identifier.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
 		/// <returns>Security.</returns>
-		Security LookupSecurity(SecurityId securityId);
+		Security GetSecurity(SecurityId securityId);
 
 		/// <summary>
 		/// Get filtered order book.

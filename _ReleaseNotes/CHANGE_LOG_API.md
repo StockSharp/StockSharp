@@ -15,6 +15,7 @@ StockSharp API Change log
 * (feature) Bitmex. Testnet supported https://stocksharp.com/forum/10420/BitMEX-Testnet/
 * (bug) BitZ, BitMax, Bibox fixes.
 * (bug) TraderHelper. Fix Filter securities by Id.
+* (feature) IConnector. Removed obsolete LookupSecurity.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
