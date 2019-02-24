@@ -3,12 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Индикатор <legacyBold>Чудесный Осциллятор (Awesome Oscillator, AO)</legacyBold> – классический технический индикатор, 
-построенный посредством вычитания скользящих средних (SMA) с разными периодами. 
+Awesome Oscillator (AO) is a classic technical indicator built by subtracting moving averages (SMA) with different periods.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.AwesomeOscillator</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.AwesomeOscillator</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorAwesomeOscillator"/></mediaLink>
  </introduction>

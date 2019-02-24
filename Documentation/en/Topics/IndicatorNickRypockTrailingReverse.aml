@@ -3,15 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Nick Rypock Trailing reverse (NRTR)</legacyBold> – суть индикатора заключается в том, 
-что он всегда находится на отрезке от достигнутых экстремумов цены. 
-Здесь была реализована следующая идея: небольшие коррекционные движения против 
-основного тренда должны игнорироваться, а движение против основной тенденции, 
-превышающей некоторый уровень, сигнализирует об обратной тенденции.
+<legacyBold>Nick Rypock Trailing reverse (NRTR)</legacyBold> — the indicator essence is that it is always on the segment from the reached price extremes. The following idea was implemented here: small corrective movements against the main trend should be ignored, and the movement against the main trend above some level signals an inverse trend.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.NickRypockTrailingReverse</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.NickRypockTrailingReverse</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorNickRypockTrailingReverse"/></mediaLink>
  </introduction>

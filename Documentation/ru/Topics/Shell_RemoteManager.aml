@@ -20,15 +20,15 @@
 <mediaLink><image placement="center" xlink:href="Shell_RemoteManager_05"/></mediaLink>
 <para>При подключении все имевшиеся стратегии в Shell сервере будут доступны в Shell клиенте</para>
 <mediaLink><image placement="center" xlink:href="Shell_RemoteManager_06"/></mediaLink>
-<para>По нажатию на кнопку добавить можно добавить, еще стратегию в торговлю.</para>
+<para>По нажатию на кнопку <legacyBold>Добавить</legacyBold> можно добавить, еще стратегию в торговлю.</para>
 <mediaLink><image placement="center" xlink:href="Shell_RemoteManager_07"/></mediaLink>
 <para>Так как Shell клиент поддерживает несколько серверов. То при выборе добавления 
-стратегии необходимо слева выбрать сервер, а с права будут все доступные стратегии на сервере.</para>
+стратегии необходимо слева выбрать сервер, а справа будут все доступные стратегии на сервере.</para>
 <mediaLink><image placement="center" xlink:href="Shell_RemoteManager_08"/></mediaLink>
-<para>После добавления стратегии она появиться в списке стратегий.</para>
+<para>После добавления стратегии она появится в списке стратегий.</para>
 <mediaLink><image placement="center" xlink:href="Shell_RemoteManager_09"/></mediaLink>
-<para>При выборе стратегии справа будут вкладки с настройками стратегии, а также с ее статистика.</para>
-<para>После изменения настроек стратегии обязательно нажать кнопку применить изменения иначе изменения не применятся к стратегии.</para>
+<para>При выборе стратегии справа будут вкладки с настройками стратегии, а также с ее статистикой.</para>
+<para>После изменения настроек стратегии обязательно нажать кнопку <legacyBold>Применить изменения</legacyBold>, иначе изменения не применятся к стратегии.</para>
 <mediaLink><image placement="center" xlink:href="Shell_RemoteManager_10"/></mediaLink>
 <para>Если в стратегии есть команда отличная от Start/Stop то для ее применения ее необходимо задать в следующем поле</para>
 <mediaLink><image placement="center" xlink:href="Shell_RemoteManager_11"/></mediaLink>
@@ -41,7 +41,7 @@ public virtual void ApplyCommand(StrategyStateMessage stateMsg)
 		]]>
 		</code>
 
-<para>Базовый класс <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> только управляем запуском и остановкой стратегии.</para>
+<para>Базовый класс <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> только управляет запуском и остановкой стратегии.</para>
     </introduction>
   <relatedTopics>
 <link xlink:href="0273c249-b962-4320-a9cb-57f1e2943f5e" />

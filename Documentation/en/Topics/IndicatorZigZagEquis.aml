@@ -3,14 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>ZigZag (ЗигЗаг)</legacyBold> – 
-индикатор отображает точки на графике всякий раз, когда цены меняются на процент, 
-превышающий предварительно заданное значение. Затем рисуются прямые линии, соединяющие 
-эти точки. Индикатор используется для определения ценовых трендов. 
+<legacyBold>ZigZag</legacyBold> — the indicator displays points on the chart whenever prices change by a percentage that exceeds the preset value. Then straight lines are drawn connecting these points. The indicator is used to determine price trends.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.ZigZagEquis</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.ZigZagEquis</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorZigZagEquis"/></mediaLink>
  </introduction>

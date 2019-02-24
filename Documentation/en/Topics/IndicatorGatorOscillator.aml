@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Gator Oscillator</legacyBold> – осциллятор разработанный Биллом 
-Уильямсом. Он тесно связан с аналогичным индикатором Аллигатора. Как индикатор 
-тренда, он наиболее полезен на рынках, которые демонстрируют сильное направленное действие.
+<legacyBold>Gator Oscillator</legacyBold> is an oscillator developed by Bill Williams. It is closely related to the similar Alligator indicator. As a trend indicator, it is most useful in markets that demonstrate strong directional movement.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.GatorOscillator</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.GatorOscillator</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorGatorOscillator"/></mediaLink>
  </introduction>

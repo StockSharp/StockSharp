@@ -345,7 +345,7 @@
         <Topic id="94ccc4b1-fad7-4d42-8317-e8b5d3009285" visible="True" title="LRC" />
         <Topic id="3047038b-3fa8-44c7-a3b0-15a11e18b7eb" visible="True" title="MACD" />
         <Topic id="82306a6a-f478-437b-bf40-dd253a1e1156" visible="True" title="MACD Histogram" />
-        <Topic id="921d80bc-8f3e-40cb-a06a-e958c8867b86" visible="True" title="MACD with sinal line" />
+        <Topic id="921d80bc-8f3e-40cb-a06a-e958c8867b86" visible="True" title="MACD with signal line" />
         <Topic id="00cd756c-8173-4950-8b32-31270a056e3f" visible="True" title="Market Facilitation Index" />
         <Topic id="484a7df2-08be-4f80-8452-d0070944974f" visible="True" title="Mean Deviation" />
         <Topic id="de5de225-ce40-4f57-a30a-8eb78c92264f" visible="True" title="Median Price" />
@@ -369,7 +369,7 @@
         <Topic id="9ee25a7b-9cd7-4870-9e0f-9baad0422a0e" visible="True" title="Stochastic Oscillator K%" />
         <Topic id="99b4d47a-cbc8-419d-bec0-cd22d115a823" visible="True" title="Sum N" />
         <Topic id="b78ec08e-114f-4354-91a9-fa5dca91426e" visible="True" title="TEMA" />
-        <Topic id="53120174-ade2-4fee-b3e5-a1e2a9f7a4be" visible="True" title="TEMA" />
+        <Topic id="53120174-ade2-4fee-b3e5-a1e2a9f7a4be" visible="True" title="TRIX" />
         <Topic id="775c9e1e-4fef-41c4-ad00-fbff4454a092" visible="True" title="Trough" />
         <Topic id="3bbbf433-16a7-4dd2-831a-f338fbe94b1a" visible="True" title="TroughBar" />
         <Topic id="2edc99f8-d7b7-4741-95ed-ca5aca85a6e9" visible="True" title="True Range" />
@@ -898,7 +898,7 @@
     <Topic id="0273c249-b962-4320-a9cb-57f1e2943f5e" visible="True" title="Connections settings">
       <Topic id="8ce14bdf-7573-4d6d-86c6-b838232401b2" visible="True" title="Connector settings" />
     </Topic>
-    <Topic id="79892a99-9f84-414c-be4a-fe677048c913" visible="True" title="Run strategyes from S#.Designer" />
+    <Topic id="79892a99-9f84-414c-be4a-fe677048c913" visible="True" title="Run strategies from S#.Designer" />
     <Topic id="9d636fda-309e-4d5f-a6ed-4848fb8f4f0b" visible="True" title="Create strategy" />
     <Topic id="8cea241f-fdf3-43c7-bf4d-3fdd7dcd0000" visible="True" title="Create strategy panel" />
   </Topic>

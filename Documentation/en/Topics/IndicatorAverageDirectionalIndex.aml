@@ -3,13 +3,10 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Индекс среднего направленного движения (Welles Wilder's ADX, Average Directional Index)</legacyBold> 
-представляет из себя группу индикаторов направленного движения. Линии составляют индекс 
-направленного движения (DMI): ADX , DI+ и DI-. ADX указывает на силу тренда, DI+ и DI- 
-указывают на текущее направление цены.
+<legacyBold>Welles Wilder's ADX (Average Directional Index)</legacyBold> is a group of directional movement indicators. Lines compose the Directional Movement Index (DMI): ADX, DI+ and DI-. ADX indicates the trend strength, DI+ and DI- indicate the current price direction.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
+To use the indicator, you must use the 
 <codeEntityReference>T:StockSharp.Algo.Indicators.AverageDirectionalIndex</codeEntityReference>.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorAverageDirectionalIndex"/></mediaLink>

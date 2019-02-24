@@ -3,14 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Индикатор <legacyBold>Моментум (Momentum)</legacyBold> индикатор указывает на моменты
- перекупленности и перепроданности, когда кривая достигает максимальных или 
- минимальных значений. Добавление сглаженной скользящей средней с индикатором 
- улучшает интерпретацию изменений тренда.
+<legacyBold>Momentum</legacyBold> indicator indicates overbought and oversold moments when the curve reaches its maximum or minimum values. Adding a smoothed moving average with the indicator improves the interpretation of trend changes.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.Momentum</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.Momentum</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorMomentum"/></mediaLink>
  </introduction>

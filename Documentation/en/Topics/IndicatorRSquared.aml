@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>R-квадрат в линейной регрессии (Linear Regression R-Squared)</legacyBold> - индикатор 
-показывает процент изменения цены инструмента, который может 
-быть объяснено с помощью линейной регрессии. Остальные значения вызваны случайными факторами.
+<legacyBold>Linear Regression R-Squared</legacyBold> - the indicator shows the percentage of change in the security price, which can be explained by linear regression. The remaining values are caused by random factors.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.RSquared</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.RSquared</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorRSquared"/></mediaLink>
  </introduction>

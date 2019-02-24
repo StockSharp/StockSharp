@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Взвешенная скользящая средняя (Weighted Moving Average, WMA)</legacyBold>- индикатор 
-отображает среднезвешенную цену за определённые временной промежуток. Данный индикатор следует 
-за ценой в виде извивающейся линии, имеет определённое отклонение, относительно ценового графика.
+<legacyBold>Weighted Moving Average (WMA)</legacyBold> - the indicator displays the weighted average price for a certain time period. This indicator follows the price as a wavy line, has a certain deviation relative to the price chart.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.WeightedMovingAverage</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.WeightedMovingAverage</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorWeightedMovingAverage"/></mediaLink>
  </introduction>

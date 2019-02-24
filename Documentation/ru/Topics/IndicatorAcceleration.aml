@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para><legacyBold>Замедления/Ускорения (Acceleration/Deceleration , A/C)</legacyBold> является 
-осциллятором, который был создан Биллом Уильямсом. Измеряет ускорение и замедление импульса тренда.</para>
+осциллятором, который был создан Биллом Уильямсом. Он измеряет ускорение и замедление импульса тренда.</para>
 <para>
 Для использования индикатора необходимо использовать класс
 <codeEntityReference>T:StockSharp.Algo.Indicators.Acceleration</codeEntityReference>.

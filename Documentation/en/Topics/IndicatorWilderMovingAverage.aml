@@ -2,16 +2,12 @@
 <topic id="5f223325-fef9-4fc1-b0ec-09e8128949e4" revisionNumber="1">
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
-<para><legacyBold>Скользящее среднее Уайлдера(WilderMA)</legacyBold> - это взвешенный индикатор скользящего 
-среднего. Как и все остальные индикаторы скользящей средней, индикатор WMA сглаживает 
-рыночные шумы и более четко отображает тенденции рынка. Для достижения цели индикатор 
-отфильтровывает рыночные колебания (шумы), усредняя значения цен периодов, по которым 
-он рассчитывается. При этом к средним ценам добавляется некоторая дополнительная 
-ценность (вес), как это делается при расчете всех взвешенных индикаторов, таких 
-как EMA, LWMA и SMMA.</para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.WilderMovingAverage</codeEntityReference>.
+<legacyBold>Wilder Moving Average (WilderMA)</legacyBold> is a weighted moving average indicator. Like all other moving average indicators, the WMA indicator smoothes market noises and displays market trends more clearly. To achieve the goal, the indicator filters out market fluctuations (noises), averaging the price values of the periods by which it is calculated. At the same time, some additional value (weight) is added to the average prices, as is done when calculating all weighted indicators such as EMA, LWMA and SMMA.
+</para>
+<para>
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.WilderMovingAverage</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorWilderMovingAverage"/></mediaLink>
  </introduction>

@@ -3,11 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Экспоненциальное скользящее среднее (Exponential Moving Average, EMA)</legacyBold>  это тип скользящего среднего (MA), который придает больший вес и значимость самым последним данным.
+Exponential Moving Average (EMA) is a type of moving average (MA) that gives more weight and significance to the most recent data.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.ExponentialMovingAverage</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.ExponentialMovingAverage</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorExponentialMovingAverage"/></mediaLink>
  </introduction>

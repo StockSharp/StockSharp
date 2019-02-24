@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Ишимоку (Ichimoku)</legacyBold> – индикатор, представленный сочетанием пяти линий, три из которых 
-являются скользящими средними, а две – их производными. Ichimoku определяет 
-наличие тренда, а также указывает зоны поддержки/сопротивления и откаты тренда. 
+<legacyBold>Ichimoku</legacyBold> is an indicator represented by a combination of five lines, three of which are moving averages and two are their derivatives. Ichimoku determines if there is a trend, and also indicates support/barrier zones and trend rollbacks.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.Ichimoku</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.Ichimoku</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorIchimoku"/></mediaLink>
  </introduction>

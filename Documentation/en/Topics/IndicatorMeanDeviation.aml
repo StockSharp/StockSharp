@@ -3,12 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Индикатор <legacyBold>Среднее отклонение (Mean Deviation)</legacyBold> показывает 
-среднее отклонение за период
+<legacyBold>Mean Deviation </legacyBold>indicator shows the average deviation for the period.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.MeanDeviation</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.MeanDeviation</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorMeanDeviation"/></mediaLink>
  </introduction>

@@ -3,12 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Осциллятор ценовых моментов Чанде (Chande Momentum Oscillator, CMO)</legacyBold> – модификация 
-индикатора Momentum, изобретателем которой является трейдер Тушар Чанде (Tushar Chande). 
+<legacyBold>Chande Momentum Oscillator (CMO)</legacyBold> is a modification of the Momentum indicator. The inventor of CMO is trader Tushar Chande. 
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.ChandeMomentumOscillator</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.ChandeMomentumOscillator</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorChandeMomentumOscillator"/></mediaLink>
  </introduction>

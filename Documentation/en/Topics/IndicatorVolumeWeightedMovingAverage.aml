@@ -3,14 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Взвешенная по объему скользящая средняя (Volume Weighted Moving Average, VWMA)</legacyBold>- 
-индикатор отображает среднезвешенную по объему
-цену за определённые временной промежуток. Данный индикатор следует 
-за ценой в виде извивающейся линии, имеет определённое отклонение, относительно ценового графика.
+<legacyBold>Volume Weighted Moving Average (VWMA)</legacyBold> - the indicator displays the volume weighted price for a certain time period. This indicator follows the price as a wavy line, has a certain deviation relative to the price chart.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.VolumeWeightedMovingAverage</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.VolumeWeightedMovingAverage</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorVolumeWeightedMovingAverage"/></mediaLink>
  </introduction>

@@ -5,19 +5,19 @@
 <mediaLink>
 <image xlink:href="Designer_MarketDepthTruncateDiagramElement_00"/>
 </mediaLink>
-<para>Кубик используется для получения обрезанного стакана на заданную глубину.</para>   
+<para>The cube is used to obtain an order book truncated to a specified depth.</para>   
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Стакан</legacyBold> – стакан, который надо обрезать.</para></listItem>
+  <listItem><para><legacyBold>Order book</legacyBold> is an order book that needs to be truncated.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Стакан</legacyBold> – обрезанный стакан.</para></listItem>
+  <listItem><para><legacyBold>Order book</legacyBold> is the truncated order book.</para></listItem>
 </list>
   </definition>
 

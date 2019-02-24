@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Двойная экспоненциальная скользящая средняя (DEMA)</legacyBold> – используют множественные (тройные) 
+<legacyBold>Тройная экспоненциальная скользящая средняя (TEMA)</legacyBold> – использует множественные (тройные) 
 экспоненциальные скользящие средние (EMA), чтобы устранить лаги при прогнозировании цен.
 </para>
 <para>
