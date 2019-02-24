@@ -14,6 +14,7 @@ StockSharp API Change log
 * (bug) Bitmex. Fix order replace https://stocksharp.com/forum/10419/BitMEX-invalid-argument-clOrdID/
 * (feature) Bitmex. Testnet supported https://stocksharp.com/forum/10420/BitMEX-Testnet/
 * (bug) BitZ, BitMax, Bibox fixes.
+* (bug) TraderHelper. Fix Filter securities by Id.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

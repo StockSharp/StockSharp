@@ -1178,9 +1178,6 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			if (order.OrderState != OrderStates.Done)	// для ускорения в эмуляторе
-				return false;
-
 			return order.OrderState == OrderStates.Done && order.Balance > 0;
 		}
 
@@ -1916,7 +1913,7 @@ namespace StockSharp.Algo
 				return securities.ToArray();
 
 			if (!criteria.Id.IsEmpty())
-				return securities.Where(s => s.Id == criteria.Id).ToArray();
+				return securities.Where(s => s.Id.CompareIgnoreCase(criteria.Id)).ToArray();
 
 			return securities.Where(s =>
 			{
@@ -1935,7 +1932,7 @@ namespace StockSharp.Algo
 
 				var underSecId = criteria.UnderlyingSecurityId;
 
-				if (!underSecId.IsEmpty() && s.UnderlyingSecurityId != underSecId)
+				if (!underSecId.IsEmpty() && !s.UnderlyingSecurityId.CompareIgnoreCase(underSecId))
 					return false;
 
 				if (criteria.Strike != null && s.Strike != criteria.Strike)
