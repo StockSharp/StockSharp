@@ -2,7 +2,7 @@
 <topic id="439b8955-2d5b-49cb-8b58-619820978e39" revisionNumber="1">
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
-<para>Индикатор <legacyBold>Optimal Tracking Filter</legacyBold> индикатор корректирует быстрые изменения 
+<para>Индикатор <legacyBold>Optimal Tracking Filter</legacyBold> это индикатор корректирует быстрые изменения 
 цены и, является относительно плавным, когда цена 
 имеет боковое действие. Работа этого фильтра аналогична адаптивной 
 скользящей средней Кауфмана.

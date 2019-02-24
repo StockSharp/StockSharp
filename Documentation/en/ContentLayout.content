@@ -345,7 +345,7 @@
         <Topic id="94ccc4b1-fad7-4d42-8317-e8b5d3009285" visible="True" title="LRC" />
         <Topic id="3047038b-3fa8-44c7-a3b0-15a11e18b7eb" visible="True" title="MACD" />
         <Topic id="82306a6a-f478-437b-bf40-dd253a1e1156" visible="True" title="MACD Histogram" />
-        <Topic id="921d80bc-8f3e-40cb-a06a-e958c8867b86" visible="True" title="MACD with sinal line" />
+        <Topic id="921d80bc-8f3e-40cb-a06a-e958c8867b86" visible="True" title="MACD with signal line" />
         <Topic id="00cd756c-8173-4950-8b32-31270a056e3f" visible="True" title="Market Facilitation Index" />
         <Topic id="484a7df2-08be-4f80-8452-d0070944974f" visible="True" title="Mean Deviation" />
         <Topic id="de5de225-ce40-4f57-a30a-8eb78c92264f" visible="True" title="Median Price" />
@@ -382,7 +382,7 @@
         <Topic id="2046825e-cbc7-4469-90c9-57543a3da584" visible="True" title="Weighted MA" />
         <Topic id="5f223325-fef9-4fc1-b0ec-09e8128949e4" visible="True" title="Wilder MA" />
         <Topic id="672f1e8f-2458-47ec-ba78-4c6beff0943a" visible="True" title="ZigZag" />
-        <Topic id="81d7e366-106c-42cf-b4f9-463870760f97" visible="True" isSelected="true" title="ZigZag (Metastock)" />
+        <Topic id="81d7e366-106c-42cf-b4f9-463870760f97" visible="True" title="ZigZag (Metastock)" />
       </Topic>
       <Topic id="b106296b-f841-4cb8-bcb2-60f114b3c0d1" visible="True" title="Graphic renderer of indicators" />
     </Topic>
@@ -886,19 +886,19 @@
     </Topic>
   </Topic>
   <Topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" visible="True" title="S#.MatLab" />
-  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True">
+  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" isExpanded="true">
     <Topic id="1a7843d9-c1e4-4597-b02d-9a011b24df44" visible="True" title="Installing S#.Shell" />
     <Topic id="848cd34c-1768-409f-8e82-bed1c3e25102" visible="True" title="Quick start" />
     <Topic id="1b4c10e7-34ea-4eff-b820-4d2ea04231af" visible="True" isExpanded="true" title="User interface">
-      <Topic id="6d3e7c8c-b71c-4346-acdf-b2b7424d117e" visible="True" title="RemoteManager" />
+      <Topic id="6d3e7c8c-b71c-4346-acdf-b2b7424d117e" visible="True" isSelected="true" title="RemoteManager" />
       <Topic id="7b7075d3-9a7d-450d-8fd4-fa841c5cf9da" visible="True" title="Common" />
       <Topic id="43ef3ba7-b588-43c3-a603-c5bbe8415c95" visible="True" title="Emulation" />
       <Topic id="d0744680-ba4d-44f6-8414-26fc177bbc08" visible="True" title="Real-time" />
     </Topic>
-    <Topic id="0273c249-b962-4320-a9cb-57f1e2943f5e" visible="True" title="Connections settings">
+    <Topic id="0273c249-b962-4320-a9cb-57f1e2943f5e" visible="True" isExpanded="true" title="Connections settings">
       <Topic id="8ce14bdf-7573-4d6d-86c6-b838232401b2" visible="True" title="Connector settings" />
     </Topic>
-    <Topic id="79892a99-9f84-414c-be4a-fe677048c913" visible="True" title="Run strategyes from S#.Designer" />
+    <Topic id="79892a99-9f84-414c-be4a-fe677048c913" visible="True" title="Run strategies from S#.Designer" />
     <Topic id="9d636fda-309e-4d5f-a6ed-4848fb8f4f0b" visible="True" title="Create strategy" />
     <Topic id="8cea241f-fdf3-43c7-bf4d-3fdd7dcd0000" visible="True" title="Create strategy panel" />
   </Topic>
