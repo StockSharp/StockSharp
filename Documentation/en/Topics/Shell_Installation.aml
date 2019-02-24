@@ -18,7 +18,7 @@
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Unlock (right click on the file, properties) and unpack <legacyBold>Shell.7z</legacyBold> into an empty directory (e.g. c:\S#Shell\)</para>
+		  				<para>Unlock (right click on the file, properties) and unpack <legacyBold>Shell.7z</legacyBold> into an empty directory (e.g. c:\StockSharp\Shell\)</para>
 		  				<mediaLink>
 <image placement="center" xlink:href="Terminal_Installation_01"/>
 </mediaLink>

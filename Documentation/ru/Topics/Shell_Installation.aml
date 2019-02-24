@@ -18,7 +18,7 @@
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Разблокировать (правая кнопка мышки на файле, свойства) и распаковать <legacyBold>Shell.7z</legacyBold> в пустую директорию (например, c:\S#Shell\)</para>
+		  				<para>Разблокировать (правая кнопка мышки на файле, свойства) и распаковать <legacyBold>Shell.7z</legacyBold> в пустую директорию (например, c:\StockSharp\Shell\)</para>
 		  				<mediaLink>
 <image placement="center" xlink:href="Terminal_Installation_01"/>
 </mediaLink>

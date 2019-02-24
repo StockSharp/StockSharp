@@ -344,7 +344,7 @@
         <Topic id="3950306c-b8fe-4919-a3e5-6af85da1b26e" visible="True" title="Lowest " />
         <Topic id="94ccc4b1-fad7-4d42-8317-e8b5d3009285" visible="True" title="LRC" />
         <Topic id="3047038b-3fa8-44c7-a3b0-15a11e18b7eb" visible="True" title="MACD" />
-        <Topic id="82306a6a-f478-437b-bf40-dd253a1e1156" visible="True" title="MACD Histogram" />
+        <Topic id="82306a6a-f478-437b-bf40-dd253a1e1156" visible="True" title="MACD histogram" />
         <Topic id="921d80bc-8f3e-40cb-a06a-e958c8867b86" visible="True" title="MACD with signal line" />
         <Topic id="00cd756c-8173-4950-8b32-31270a056e3f" visible="True" title="Market Facilitation Index" />
         <Topic id="484a7df2-08be-4f80-8452-d0070944974f" visible="True" title="Mean Deviation" />
