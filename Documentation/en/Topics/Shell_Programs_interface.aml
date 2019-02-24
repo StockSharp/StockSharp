@@ -5,10 +5,10 @@
 <para>Интерфейс программы состоит из вкладок: </para>
 
 <list class="ordered">
-  <listItem><para><link xlink:href="7b7075d3-9a7d-450d-8fd4-fa841c5cf9da" /> - вкладка, на которой отображается общая информация по портфелям, заявкам, сделкам, инструментам</para></listItem>
-  <listItem><para><link xlink:href="d0744680-ba4d-44f6-8414-26fc177bbc08" /> - вкладка, на которой отображается информация по стратегиям запущенным в торговлю</para></listItem>
-  <listItem><para><link xlink:href="43ef3ba7-b588-43c3-a603-c5bbe8415c95" /> - вкладка, на которой отображается информация по стратегиям, добавленным для тестирования</para></listItem>
-  <listItem><para><link xlink:href="6d3e7c8c-b71c-4346-acdf-b2b7424d117e" /> - вкладка, модуля удаленного управления другими <link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" /></para></listItem>
+  <listItem><para><link xlink:href="7b7075d3-9a7d-450d-8fd4-fa841c5cf9da" /> - tab that displays general information on portfolios, orders, trades, securities</para></listItem>
+  <listItem><para><link xlink:href="d0744680-ba4d-44f6-8414-26fc177bbc08" /> - tab that displays information on strategies launched in trade</para></listItem>
+  <listItem><para><link xlink:href="43ef3ba7-b588-43c3-a603-c5bbe8415c95" /> - tab that displays information on strategies added for testing</para></listItem>
+  <listItem><para><link xlink:href="6d3e7c8c-b71c-4346-acdf-b2b7424d117e" /> - tab of the module for remote control of other <link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" /></para></listItem>
 </list>
 
     </introduction>

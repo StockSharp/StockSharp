@@ -3,16 +3,16 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
-      <para><link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" /> может запускать стратегии сзданные в <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />.</para>
-      <para>Для запуска стратегии сзданные в <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" /> 
-      необходимо выбрать на вкладке <link xlink:href="d0744680-ba4d-44f6-8414-26fc177bbc08" /> выбрать 
-      кнопку добавить и на жать на кнопку <legacyBold>Add Designer strategy</legacyBold>. 
+      <para><link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" /> can run strategies created in <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />.</para>
+      <para>To launch a strategy created in <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />, 
+      you need to select it on the <link xlink:href="d0744680-ba4d-44f6-8414-26fc177bbc08" /> выбрать 
+      tab and click the <legacyBold>Add Designer strategy</legacyBold> button. 
       
-      В появившемся окне выбрать файл стратегии, экспортированной из <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />. </para>
+      In the window that appears, select the strategy file exported from <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />. </para>
       <mediaLink><image placement="center" xlink:href="Shell_run_Designer_strategy_00"/></mediaLink>
-      <para>После чего она появиться в списке доступных стратегий.</para>
+      <para>After that, it will appear in the list of available strategies.</para>
       <mediaLink><image placement="center" xlink:href="Shell_run_Designer_strategy_01"/></mediaLink>
-      <para>Выбрав добавленную стратегию можно задать необходимые параметры и запустить ее в торговлю.</para>
+      <para>By selecting the added strategy, you can set the necessary parameters and launch it in the trade.</para>
       <mediaLink><image placement="center" xlink:href="Shell_run_Designer_strategy_02"/></mediaLink>
     </introduction>
  <relatedTopics>
