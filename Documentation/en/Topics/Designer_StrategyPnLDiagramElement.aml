@@ -5,16 +5,16 @@
 <mediaLink>
 <image xlink:href="Designer_StrategyPnLDiagramElement_00"/>
 </mediaLink>
-<para>Кубик используется для получения изменений по прибыли/убытку и комиссии
+<para>Documetation eng RemoteManager
 </para>
 
 <definitionTable>
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>П/У нереализованная</legacyBold> – числовое значение нереализованной прибыли/убытка.</para></listItem>
-  <listItem><para><legacyBold>П/У реализованная</legacyBold> – числовое значение реализованной прибыли/убытка.</para></listItem>
-  <listItem><para><legacyBold>Комиссия</legacyBold> – числовое значение комиссии.</para></listItem>
+  <listItem><para><legacyBold>P/L unrealized</legacyBold> – is the numerical value of the unrealized profit/loss.</para></listItem>
+  <listItem><para><legacyBold>P/L realized </legacyBold> – is the numerical value of the realized profit/loss.</para></listItem>
+  <listItem><para><legacyBold>Commission fee</legacyBold> – is the numerical value of the commission fee.</para></listItem>
 </list>
   </definition>
 

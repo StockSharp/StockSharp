@@ -5,21 +5,20 @@
 <mediaLink>
 <image xlink:href="Designer_TradeAllowedDiagramElement_00"/>
 </mediaLink>
-<para>Кубик используется для проверки разрешена ли торговля в текущий момент
+<para>The cube is used to check if trade is currently allowed
 </para>
 
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Триггер</legacyBold> - сигнал, с помощью которого определяется момент, 
- когда необходимо выполнять проверку.</para></listItem>
+  <listItem><para><legacyBold>Trigger</legacyBold> - the signal that is used to determine when a check is to be performed.</para></listItem>
 </list>
   </definition>
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Флаг</legacyBold> - флаг, который определяет активна ли торговая сессия.</para></listItem>
+  <listItem><para><legacyBold>Flag</legacyBold> - the flag that determines whether a trading session is active.</para></listItem>
 </list>
   </definition>
 
