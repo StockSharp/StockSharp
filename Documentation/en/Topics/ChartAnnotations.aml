@@ -2,21 +2,21 @@
 <topic id="0fe331db-f1c5-43bb-842e-9cf6db6ccc78" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para><token>stocksharp</token> предоставляет возможность добавлять аннотации на график в виде текста, линий и др. </para>
-      <para>Добавление аннотаций не отличается от добавления любой другой информации на график. 
-      Сначала необходимо создать <codeEntityReference>T:StockSharp.Xaml.Charting.ChartAnnotation</codeEntityReference> 
-      и добавить его на область графика:</para>
+      <para><token>stocksharp</token> provides the ability to add annotations to the chart in the form of text, lines, etc.</para>
+      <para>Adding annotations is the same as adding any other information to the chart. First you need to create 
+      <codeEntityReference>T:StockSharp.Xaml.Charting.ChartAnnotation</codeEntityReference>
+      and add it to the chart area:</para>
         <code language="C#">
         <![CDATA[
 	var _annotation = new ChartAnnotation { Type = ChartAnnotationTypes.BoxAnnotation };
     Chart.AddElement(chartArea, _annotation);
 		]]>
 		</code>	
-      <para>После чего необходимо инициализировать новый экземпляр класса 
+      <para>After that, you need to initialize a new instance of the 
       <codeEntityReference>T:StockSharp.Xaml.Charting.ChartDrawData.AnnotationData</codeEntityReference>, 
-      в котором описать аннотацию и передать его в метод 
+      class, in which to describe the annotation and pass it to the
       <codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference> 
-      для прорисовки на графике:</para>
+      method for drawing on the chart:</para>
          <code language="C#">
         <![CDATA[
 			var data = new ChartDrawData.AnnotationData

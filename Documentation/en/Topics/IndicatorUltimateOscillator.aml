@@ -3,15 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Окончательный осциллятор (Ultimate Oscillator, UO)</legacyBold> это 
-технический индикатор, разработанный Ларри Уильямсом в 1976 году для измерения
- импульса на нескольких таймфреймах. Используя средневзвешенное значение для трех 
- разных таймфреймов, индикатор имеет меньшую волатильность и меньше торговых сигналов 
- по сравнению с другими индикаторами, которые полагаются на один таймфрейм.
+<legacyBold>Ultimate Oscillator (UO)</legacyBold> is a technical indicator developed by Larry Williams in 1976 to measure a momentum across multiple timeframes. Using a weighted average for three different timeframes, the indicator has less volatility and less trading signals compared to other indicators that rely on a single timeframe.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.UltimateOscillator</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.UltimateOscillator</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorUltimateOscillator"/></mediaLink>
  </introduction>

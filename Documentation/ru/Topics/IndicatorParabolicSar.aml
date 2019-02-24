@@ -3,8 +3,8 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Parabolic SAR (SAR)</legacyBold> - Индикатор является трендовым индикатором, 
-который сообщает указывает о точках остановки и разворота цены, а также о направлении тренда.
+<legacyBold>Parabolic SAR (SAR)</legacyBold> - Трендовый индикатор, 
+который указывает точки остановки и разворота цены, а также направление тренда.
 </para>
 <para>
 Для использования индикатора необходимо использовать класс

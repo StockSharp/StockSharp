@@ -5,7 +5,7 @@
 		  <steps class="ordered">
 			  <step>
 				  <content>
-		  				<para>Для установки <link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" /> необходимо перейти на страницу <token>download</token>:</para>
+		  				<para>To install <link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" />go to the <token>download</token> page:</para>
 <mediaLink>
 <image placement="center" xlink:href="Shell_Installation_00"/>
 </mediaLink>
@@ -13,12 +13,12 @@
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Скачать архив <link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" />.</para>
+		  				<para>Download the <link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" /> archive.</para>
 				  </content>
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Разблокировать (правая кнопка мышки на файле, свойства) и распаковать <legacyBold>Shell.7z</legacyBold> в пустую директорию (например, c:\S#Shell\)</para>
+		  				<para>Unlock (right click on the file, properties) and unpack <legacyBold>Shell.7z</legacyBold> into an empty directory (e.g. c:\S#Shell\)</para>
 		  				<mediaLink>
 <image placement="center" xlink:href="Terminal_Installation_01"/>
 </mediaLink>
@@ -26,7 +26,7 @@
 			  </step>
 			  			  <step>
 				  <content>
-		  				<para>В полученной папке будут C# проект со всеми необходимыми библиотеками и небольшим количеством исторических данных.</para>
+		  				<para>The resulting folder will contain a C# project with all the necessary libraries and a small amount of historical data.</para>
 		  				<mediaLink>
 <image placement="center" xlink:href="Shell_Installation_01"/>
 </mediaLink>

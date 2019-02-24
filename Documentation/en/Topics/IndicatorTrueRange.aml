@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Истинный диапазон (True Range,  TR)</legacyBold> показывает текущую 
-рыночную волатильность, определяя диапазон ценовых колебаний максимальных, минимальных 
-цен и цен закрытия. 
+<legacyBold>True Range (TR)</legacyBold> shows the current market volatility, determining the range of fluctuations of maximum, minimum and closing prices.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.TrueRange</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.TrueRange</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorTrueRange"/></mediaLink>
  </introduction>

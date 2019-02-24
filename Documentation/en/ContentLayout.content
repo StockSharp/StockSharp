@@ -313,10 +313,10 @@
       <Topic id="f71010d3-135c-4fe9-a573-abf0245b3f5d" visible="True" title="Gluing candles, history + real-time" />
       <Topic id="b6f4b3fb-3a34-4ba8-bcea-258613f2b455" visible="True" title="Candle creation by the instruments basket" />
     </Topic>
-    <Topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" visible="True" title="Indicators">
+    <Topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" visible="True" isExpanded="true" title="Indicators">
       <Topic id="ec4c3abe-3779-4a5f-899c-697b049254d4" visible="True" title="Custom indicator" />
       <Topic id="b8e71f65-00e3-41f7-af6e-69bf38a2c5bb" visible="True" title="Indicator adding to the chart" />
-      <Topic id="338cbc92-7525-4651-b0bc-bccf6eecbdcf" visible="True" title="List of indicators">
+      <Topic id="338cbc92-7525-4651-b0bc-bccf6eecbdcf" visible="True" isExpanded="true" title="List of indicators">
         <Topic id="cc01b008-6c9f-47e1-a0e0-2b15922db644" visible="True" title="%R" />
         <Topic id="f870a44c-04de-42d1-a44e-fd7c38477b9b" visible="True" title="A/C" />
         <Topic id="56c18b4f-a151-48b6-8ebe-ed4bcf16ce3d" visible="True" title="ADX" />
@@ -345,7 +345,7 @@
         <Topic id="94ccc4b1-fad7-4d42-8317-e8b5d3009285" visible="True" title="LRC" />
         <Topic id="3047038b-3fa8-44c7-a3b0-15a11e18b7eb" visible="True" title="MACD" />
         <Topic id="82306a6a-f478-437b-bf40-dd253a1e1156" visible="True" title="MACD Histogram" />
-        <Topic id="921d80bc-8f3e-40cb-a06a-e958c8867b86" visible="True" title="MACD with sinal line" />
+        <Topic id="921d80bc-8f3e-40cb-a06a-e958c8867b86" visible="True" title="MACD with signal line" />
         <Topic id="00cd756c-8173-4950-8b32-31270a056e3f" visible="True" title="Market Facilitation Index" />
         <Topic id="484a7df2-08be-4f80-8452-d0070944974f" visible="True" title="Mean Deviation" />
         <Topic id="de5de225-ce40-4f57-a30a-8eb78c92264f" visible="True" title="Median Price" />
@@ -369,7 +369,7 @@
         <Topic id="9ee25a7b-9cd7-4870-9e0f-9baad0422a0e" visible="True" title="Stochastic Oscillator K%" />
         <Topic id="99b4d47a-cbc8-419d-bec0-cd22d115a823" visible="True" title="Sum N" />
         <Topic id="b78ec08e-114f-4354-91a9-fa5dca91426e" visible="True" title="TEMA" />
-        <Topic id="53120174-ade2-4fee-b3e5-a1e2a9f7a4be" visible="True" title="TEMA" />
+        <Topic id="53120174-ade2-4fee-b3e5-a1e2a9f7a4be" visible="True" title="TRIX" />
         <Topic id="775c9e1e-4fef-41c4-ad00-fbff4454a092" visible="True" title="Trough" />
         <Topic id="3bbbf433-16a7-4dd2-831a-f338fbe94b1a" visible="True" title="TroughBar" />
         <Topic id="2edc99f8-d7b7-4741-95ed-ca5aca85a6e9" visible="True" title="True Range" />
@@ -562,13 +562,13 @@
       <Topic id="5db34ace-ab66-4848-b335-11402f3d96c3" visible="True" title="Feedback forms" />
     </Topic>
   </Topic>
-  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
+  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Installing S#.Data" />
     <Topic id="7fc5f53a-b6b9-4f0f-8b97-983dd98f0237" visible="True" title="Update to the new version" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="First start" />
     <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Configuring sources">
       <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" isExpanded="true" title="Stock, Futures and Options">
-        <Topic id="66746dc9-3271-4430-8290-842d4647cc95" visible="True" isSelected="true" title="AlphaVantage" />
+        <Topic id="66746dc9-3271-4430-8290-842d4647cc95" visible="True" title="AlphaVantage" />
         <Topic id="48a0cef2-f3f7-4bf1-aa3b-043a130777c7" visible="True" title="BarChart" />
         <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
         <Topic id="19e07661-3563-4eb2-b781-d0f0106fd769" visible="True" title="CQG COM" />
@@ -886,19 +886,19 @@
     </Topic>
   </Topic>
   <Topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" visible="True" title="S#.MatLab" />
-  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True">
+  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" isExpanded="true">
     <Topic id="1a7843d9-c1e4-4597-b02d-9a011b24df44" visible="True" title="Installing S#.Shell" />
     <Topic id="848cd34c-1768-409f-8e82-bed1c3e25102" visible="True" title="Quick start" />
     <Topic id="1b4c10e7-34ea-4eff-b820-4d2ea04231af" visible="True" isExpanded="true" title="User interface">
-      <Topic id="6d3e7c8c-b71c-4346-acdf-b2b7424d117e" visible="True" title="RemoteManager" />
+      <Topic id="6d3e7c8c-b71c-4346-acdf-b2b7424d117e" visible="True" isSelected="true" title="RemoteManager" />
       <Topic id="7b7075d3-9a7d-450d-8fd4-fa841c5cf9da" visible="True" title="Common" />
       <Topic id="43ef3ba7-b588-43c3-a603-c5bbe8415c95" visible="True" title="Emulation" />
       <Topic id="d0744680-ba4d-44f6-8414-26fc177bbc08" visible="True" title="Real-time" />
     </Topic>
-    <Topic id="0273c249-b962-4320-a9cb-57f1e2943f5e" visible="True" title="Connections settings">
+    <Topic id="0273c249-b962-4320-a9cb-57f1e2943f5e" visible="True" isExpanded="true" title="Connections settings">
       <Topic id="8ce14bdf-7573-4d6d-86c6-b838232401b2" visible="True" title="Connector settings" />
     </Topic>
-    <Topic id="79892a99-9f84-414c-be4a-fe677048c913" visible="True" title="Run strategyes from S#.Designer" />
+    <Topic id="79892a99-9f84-414c-be4a-fe677048c913" visible="True" title="Run strategies from S#.Designer" />
     <Topic id="9d636fda-309e-4d5f-a6ed-4848fb8f4f0b" visible="True" title="Create strategy" />
     <Topic id="8cea241f-fdf3-43c7-bf4d-3fdd7dcd0000" visible="True" title="Create strategy panel" />
   </Topic>

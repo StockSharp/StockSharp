@@ -3,12 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Двойная экспоненциальная скользящая средняя (DEMA)</legacyBold> – используют множественные (тройные) 
-экспоненциальные скользящие средние (EMA), чтобы устранить лаги при прогнозировании цен.
+<legacyBold>Triple Exponential Moving Average (TEMA)</legacyBold> uses multiple (triple) Exponential Moving Averages (EMA) to eliminate lags when forecasting prices.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.TripleExponentialMovingAverage</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.TripleExponentialMovingAverage</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorTripleExponentialMovingAverage"/></mediaLink>
  </introduction>

@@ -3,14 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Адаптивная скользящая средняя Кауфмана (AMA, KAMA, AMkA, Kaufman's Adaptive Moving Average)</legacyBold> — 
-был разработан Перри Кауфманом для учета шума и волатильности на рынке. 
-Индикатор KAMA можно использовать для определения точек разворота во времени, 
-определения общего тренда и фильтрации ценовых движений.
+<legacyBold>Kaufman's Adaptive Moving Average (AMA, KAMA, AMkA)</legacyBold> was developed by Perry Kaufman to account for market noise and volatility. The KAMA indicator can be used to determine reversal points in time, determine the overall trend and filter price movements.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.KaufmannAdaptiveMovingAverage</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.KaufmannAdaptiveMovingAverage</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorKaufmannAdaptiveMovingAverage"/></mediaLink>
  </introduction>

@@ -3,14 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Вертикально-горизонтальный фильтр (Vertical Horisontal Filter, VHF)</legacyBold> - 
-Индикатор вертикального горизонтального фильтра был разработан Адамом Уайтом в 1991 году. Этот 
-индикатор используется в техническом анализе для распознавания периодов, когда цена находится в 
-тренде (восходящий тренд или нисходящий тренд) или этот индикатор находится в фазе перегрузки (боковой тренд).
+<legacyBold>Vertical Horisontal Filter (VHF)</legacyBold> - The vertical horizontal filter indicator was developed by Adam White in 1991. This indicator is used in technical analysis to recognize periods when the price is in a trend (uptrend or downtrend) or this indicator is in an overload phase (side trend).
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.VerticalHorizontalFilter</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.VerticalHorizontalFilter</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorVerticalHorizontalFilter"/></mediaLink>
  </introduction>

@@ -3,29 +3,28 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 
-<para><legacyBold>S#.Shell</legacyBold> - это готовый графический каркас с возможностью оперативного изменения под ваши нужды и с полностью открытым кодом на языке C# (достаточно базовых знаний).
+<para><legacyBold>S#.Shell</legacyBold> - is a ready-made graphical framework with the ability to change quickly to your needs and with a fully open source code in C# language (enough basic knowledge).
 </para>
 
-<para>Вам не нужно тратить время на создание GUI (графического интерфейса пользователя), готовый робот создается быстрее без ущерба юзабилити приложения.
-Базовый функционал для тестирования, торговли, подключения к источникам данных, отображения графиков, портфелей, позиций, заявок и сделок уже в коробке.</para>
+<para>You don't need to waste time creating a GUI (Graphical User Interface), a ready-made robot is created faster without sacrificing application usability. Basic functionality for testing, trading, connecting to data sources, displaying charts, portfolios, positions, orders and trades is already in the box.</para>
 <mediaLink>
 <image placement="center" xlink:href="Shell_Title_00"/>
 </mediaLink>
 
-<para>Основные возможности оболочки торгового робота:</para>
+<para>The main features of the trading robot shell:</para>
 <list class="ordered">
-  <listItem><para>Полный исходный код. Идеально для роботов на заказ, или для своих решений.</para></listItem>
-  <listItem><para><legacyBold>Поддержка боле 70 подключений</legacyBold> различных бирж мира 
+  <listItem><para>Full source code. Ideal for custom robots, or for your solutions.</para></listItem>
+  <listItem><para><legacyBold>Support for more than 70 connections</legacyBold> to various exchanges of the world 
 <link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />, 
 <link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b" />, 
 <link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" />, 
 <link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" />.</para></listItem>
-  <listItem><para>Гибкий пользовательский интерфейс.</para></listItem>
-  <listItem><para>Тестирование стратегий (статистика, эквити, отчет).</para></listItem>
-  <listItem><para>Сохранение и восстановление настроек стратегии.</para></listItem>
-  <listItem><para>Параллельный запуск стратегий.</para></listItem>
-  <listItem><para>Подробная информация о работе стратегии (ордера, сделки, позиция, прибыль, логи и т.д.). Все наглядно и просто.</para></listItem>
-  <listItem><para>Запуск стратегий по расписанию.</para></listItem>
+  <listItem><para>Flexible user interface.</para></listItem>
+  <listItem><para>Testing strategies (statistics, equity, report).</para></listItem>
+  <listItem><para>Save and restore strategy settings.</para></listItem>
+  <listItem><para>Simultaneous launch of strategies.</para></listItem>
+  <listItem><para>Detailed information about the strategy operation (orders, trades, position, profit, logs, etc.). Everything is clear and simple.</para></listItem>
+  <listItem><para>Running strategies on schedule.</para></listItem>
 </list>
     </introduction>
 <relatedTopics>

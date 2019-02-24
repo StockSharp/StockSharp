@@ -3,11 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Индикатор <legacyBold>Максимальное значение за период</legacyBold> указывает на максимальное значение за период
+The indicator indicates the <legacyBold>Maximum value for the period</legacyBold>.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.Highest</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.Highest</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorHighest"/></mediaLink>
  </introduction>

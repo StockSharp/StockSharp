@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Кривая линейной регрессии (Linear Regression Curve, LRC)</legacyBold> - это тип скользящей средней, основанный на уравнении линейной регрессии. 
-Расчет дает прямую линию с наилучшим соответствием для различных цен за период. Конечная точка этой 
-линии используется для построения графика LRC. 
+<legacyBold>Linear Regression Curve (LRC)</legacyBold> is a type of moving average based on the linear regression equation. The calculation result is a straight line with the best fit for different prices for the period. The end point of this line is used to plot the LRC.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.LinearReg</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.LinearReg</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorLinearReg"/></mediaLink>
  </introduction>

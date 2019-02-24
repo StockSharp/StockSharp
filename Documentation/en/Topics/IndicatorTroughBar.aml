@@ -3,12 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Индикатор <legacyBold>TroughBar</legacyBold> возвращает минимальное значение цены, 
-основным параметром определения нового минимума является процент снижения. 
+<legacyBold>TroughBar</legacyBold> indicator returns the minimum price value, the percentage reduction is the main parameter for determining the new minimum.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.TroughBar</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.TroughBar</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorTroughBar"/></mediaLink>
  </introduction>

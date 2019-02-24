@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Индекс Облегчения Рынка (Market Facilitation Index, MFI)</legacyBold> — индикатор, 
-который оценивает готовность рынка двигать цену. Абсолютные значения индикатора 
-не могут дать никаких торговых сигналов, в отличие от его динамики по отношению к динамике объема.
+<legacyBold>Market Facilitation Index (MFI)</legacyBold> is an indicator that evaluates the market readiness to move the price. Absolute indicator values cannot give any trading signals, unlike its dynamics in relation to volume dynamics.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.MarketFacilitationIndex</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.MarketFacilitationIndex</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorMarketFacilitationIndex"/></mediaLink>
  </introduction>

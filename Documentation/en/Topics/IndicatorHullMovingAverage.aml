@@ -3,12 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Скользящая средняя Халла (Hull Moving Average, HMA)</legacyBold> - индикатор показывает направление рыночного тренда и представляет 
-собой усовершенствованную скользящую среднюю. 
+<legacyBold>Hull Moving Average (HMA)</legacyBold> - the indicator shows the direction of the market trend and represents an improved moving average.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.HullMovingAverage</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.HullMovingAverage</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorHullMovingAverage"/></mediaLink>
  </introduction>

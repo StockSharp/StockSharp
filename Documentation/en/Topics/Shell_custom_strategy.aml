@@ -2,11 +2,10 @@
 <topic id="9d636fda-309e-4d5f-a6ed-4848fb8f4f0b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">   
     <introduction>
-<para>Для создания собственной стратегии следует создать папку для своей стратегии в папке Strategies.</para>
+<para>To create your own strategy, create a folder for your strategy in the Strategies folder.</para>
 <mediaLink><image placement="center" xlink:href="Shell_custom_strategy_00"/></mediaLink>
-<para>Воспользовавшись примером стратегии SmaStrategy необходимо создать саму стратегию.</para>
-<para>Если для стратегии необходимо добавить собственную панель тестирования или мониторинга, то 
-стратегия должна реализовать интерфейсы IHaveTestControl и IHaveMonitoringControl соответственно. </para>
+<para>Using the example of SmaStrategy, you need to create the strategy itself.</para>
+<para>If you need to add your own testing or monitoring panel for a strategy, then the strategy must implement the IHaveTestControl and IHaveMonitoringControl interfaces, respectively.</para>
 
         <code language="C#">
         <![CDATA[
@@ -34,16 +33,14 @@ public class SmaStrategy : Strategy, IHaveMonitoringControl, IHaveTestControl
 	}
 		]]>
 		</code>
-		<para>А также необходимо создать сами панели. Как оздавать собственную панель тестирования или мониторинга описано в пункте <link xlink:href="8cea241f-fdf3-43c7-bf4d-3fdd7dcd0000" />.</para>
+		<para>And you also need to create the panels themselves. How to build your own testing or monitoring panel is described in <link xlink:href="8cea241f-fdf3-43c7-bf4d-3fdd7dcd0000" />.</para>
 		
 		<alert class="note">
-<para> 	Если для стратегии достаточно панелей тестирования или мониторинга которые 
-используются для стратегий по умолчанию, то реализовать интерфейсы IHaveTestControl и IHaveMonitoringControl не нужно. 
-Shell самостоятельно запустит панели тестирования или мониторинга которые используются по умолчанию.
+<para> If there are enough testing or monitoring panels for the strategy, which are used for default strategies, then you do not need to implement the IHaveTestControl and IHaveMonitoringControl interfaces. Shell will run the default testing or monitoring panels by itself.
 </para>
 	</alert>
 <mediaLink><image placement="center" xlink:href="Shell_custom_strategy_01"/></mediaLink>
-<para>Чтобы созданная стратегия была доступна в окне выбора стратегий ее необходимо добавить в словарь <legacyBold>DictionaryStrategies</legacyBold> главного окна
+<para>In order for the created strategy to be available in the strategy selection window, it must be added to the <legacyBold>DictionaryStrategies</legacyBold> dictionary of the main window.
 </para>
         <code language="C#">
         <![CDATA[
@@ -61,7 +58,7 @@ Shell самостоятельно запустит панели тестиро�
 		]]>
 		</code>
 		
-<para>Для того чтобы стратегия сохранялась и после чего загружалась, в конструкторе стратегии необходимо установить параметр стратегии</para>
+<para>In order for the strategy to be saved and then loaded, you need to set the strategy parameter in the strategy designer.</para>
         <code language="C#">
         <![CDATA[
 public class SmaStrategy : Strategy, IHaveMonitoringControl, IHaveTestControl
@@ -77,7 +74,7 @@ public class SmaStrategy : Strategy, IHaveMonitoringControl, IHaveTestControl
 	}
 		]]>
 		</code>
-<para>Для сохранения дополнительных полей необходимо переопределить методы <legacyBold>Load</legacyBold> и <legacyBold>Save</legacyBold></para>
+<para>To save additional fields, you must override the <legacyBold>Load</legacyBold> and <legacyBold>Save</legacyBold> methods</para>
         <code language="C#">
         <![CDATA[
 public class SmaStrategy : Strategy, IHaveMonitoringControl, IHaveTestControl

@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Простая скользящая средняя (Simple Moving Average, SMA)</legacyBold>- это 
-арифметическое скользящее среднее, рассчитываемое путем добавления последних цен 
-закрытия и деления этого числа на количество периодов времени.
+<legacyBold>Simple Moving Average (SMA)</legacyBold> is an arithmetic moving average calculated by adding the last closing prices and dividing this number by the number of time periods.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorSimpleMovingAverage"/></mediaLink>
  </introduction>

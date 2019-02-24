@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Скользящее среднее Юрика (англ. Jurik’s Moving Average, JMA)</legacyBold> – индикатор является разновидностью 
-скользящего среднего. Кривой индикатора свойственно хорошее сглаживание, а также минимальное опережение 
-после окончания ценовых движений и минимальное отставание от сильных движений цены. 
+<legacyBold>Jurik’s Moving Average (JMA)</legacyBold> indicator is a type of moving average. The indicator curve is characterized by a good smoothing, as well as a minimum advance after the end of price movements and a minimum lag from strong price movements.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.JurikMovingAverage</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.JurikMovingAverage</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorJurikMovingAverage"/></mediaLink>
  </introduction>

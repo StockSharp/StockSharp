@@ -3,12 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Сглаженная скользящая средняя (Smoothed  Moving Average, SMA)</legacyBold>- индикатор отображает сглаженное среднее 
-направление цены за определённые временной промежуток. 
+<legacyBold>Smoothed Moving Average (SMA)</legacyBold> - the indicator displays the smoothed average price direction for a certain time period.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.SmoothedMovingAverage</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.SmoothedMovingAverage</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorSmoothedMovingAverage"/></mediaLink>
  </introduction>

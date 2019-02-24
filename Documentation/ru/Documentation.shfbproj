@@ -4277,10 +4277,6 @@
       <ImageId>IndicatorVidya</ImageId>
       <AlternateText>Indicator Vidya</AlternateText>
     </Image>
-    <Image Include="Topics\hydra_securitiesPanel_00.png">
-      <ImageId>hydra_securitiesPanel_00</ImageId>
-      <AlternateText>hydra securities Panel 00</AlternateText>
-    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

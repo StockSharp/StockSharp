@@ -3,12 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Envelopes</legacyBold> индикатор который является каналом созданным путем 
-смещения скользящей средней на определенное значение.
+<legacyBold>Envelope</legacyBold> - indicator which is a channel created by shifting the moving average by a certain value.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.Envelope</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.Envelope</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorEnvelope"/></mediaLink>
  </introduction>

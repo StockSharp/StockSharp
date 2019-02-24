@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Интерпретация индикатора <legacyBold>Linear Regression Slope</legacyBold> показывает 
-значение наклона линий регрессии, которые включают текущий ценовой бар и предыдущий n-1 
-ценовой бар (где n = периоды регрессии)
+Interpretation of the <legacyBold>Linear Regression Slope</legacyBold> indicator shows the slope value of regression lines, which include the current price bar and the previous n-1 price bar (where n = regression periods).
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.LinearRegSlope</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.LinearRegSlope</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorLinearRegSlope"/></mediaLink>
  </introduction>

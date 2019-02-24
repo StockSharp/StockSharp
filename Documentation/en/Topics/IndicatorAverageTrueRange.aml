@@ -3,12 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Средний истинный диапазон (Average True Range, ATR)</legacyBold> — 
-индикатор показывающий уровень текущей волатильности.
+<legacyBold>Average True Range (ATR)</legacyBold> is an indicator showing the current volatility level.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.AverageTrueRange</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.AverageTrueRange</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorAverageTrueRange"/></mediaLink>
  </introduction>
