@@ -16,6 +16,7 @@ StockSharp API Change log
 * (bug) BitZ, BitMax, Bibox fixes.
 * (bug) TraderHelper. Fix Filter securities by Id.
 * (feature) IConnector. Removed obsolete LookupSecurity.
+* (bug) MarketEmulator. Fix canceled balanced processing.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
