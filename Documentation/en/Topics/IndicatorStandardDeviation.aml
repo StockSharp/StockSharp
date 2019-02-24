@@ -3,14 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Стандартное отклонение (Standard Deviation)</legacyBold> - индикатор который показывает диапазон 
-ценового разброса инструмента, характеризуя его волатильность. Обычно значение 
-индикатора  выражается в единицах цены анализируемого актива. Standard Deviation 
-является функцией стандартного отклонения цены, которая активно применяется в математической статистике.
+<legacyBold>Standard Deviation</legacyBold> is an indicator that shows the security price range, characterizing its volatility. Typically, the indicator value is expressed in price units of the analyzed asset. Standard Deviation is a function of standard price deviation, which is actively used in mathematical statistics.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.StandardDeviation</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.StandardDeviation</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorStandardDeviation"/></mediaLink>
  </introduction>

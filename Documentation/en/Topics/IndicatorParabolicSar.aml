@@ -3,12 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Parabolic SAR (SAR)</legacyBold> - Индикатор является трендовым индикатором, 
-который сообщает указывает о точках остановки и разворота цены, а также о направлении тренда.
+<legacyBold>Parabolic SAR (SAR)</legacyBold> - The trend indicator that indicates the price stop and reversal points, as well as the trend direction.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.ParabolicSar</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.ParabolicSar</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorParabolicSar"/></mediaLink>
  </introduction>

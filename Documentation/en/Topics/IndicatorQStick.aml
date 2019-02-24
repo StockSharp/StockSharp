@@ -3,14 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Qstick</legacyBold> – это технический индикатор, используемый для 
-определения трендов на графиках свечей. Он рассчитывается путем взятия скользящей 
-средней за N периодов от разницы между ценами открытия и закрытия. Положительное 
-значение Qstick означает, что давление покупателей увеличивается.
+<legacyBold>Qstick</legacyBold> is a technical indicator used to determine trends on candle charts. It is calculated by taking the moving average for N periods from the difference between open and close prices. The positive Qstick value means that the buying pressure increases.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.QStick</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.QStick</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorQStick"/></mediaLink>
  </introduction>

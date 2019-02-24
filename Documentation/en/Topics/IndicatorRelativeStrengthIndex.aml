@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Индекс относительной силы (Relative Strength Index, RSI)</legacyBold> — является индикатором импульса, 
-который измеряет величину недавних изменений цен для оценки условий перекупленности или перепроданности 
-цены акции или другого актива. 
+<legacyBold>Relative Strength Index (RSI)</legacyBold> is a momentum indicator that measures the amount of recent price changes to assess the conditions of overbought or oversold prices of a share or other asset.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.RelativeStrengthIndex</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.RelativeStrengthIndex</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorRelativeStrengthIndex"/></mediaLink>
  </introduction>

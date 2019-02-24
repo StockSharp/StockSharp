@@ -3,12 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Индекс товарного канала (Commodity Channel Index, CCI)</legacyBold> — технический индикатор, 
-основанный на анализе текущего отклонения цены от её среднего значения и среднестатистического абсолютного значения. 
+<legacyBold>Commodity Channel Index (CCI)</legacyBold> is a technical indicator based on the analysis of the current price deviation from its average value and the statistically average absolute value.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.CommodityChannelIndex</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.CommodityChannelIndex</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorCommodityChannelIndex"/></mediaLink>
  </introduction>

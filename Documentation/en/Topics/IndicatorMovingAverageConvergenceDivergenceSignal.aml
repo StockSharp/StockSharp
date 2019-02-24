@@ -3,13 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para> 
-<legacyBold>Схождения-расхождения скользящих средних (Moving Averages Convergence-Divergence, MACD)</legacyBold> 
- - индикатор импульса, который показывает взаимосвязь между двумя скользящими средними цены ценной бумаги. 
- Предсктавлен с сигнальной линией.
+<legacyBold>Moving Averages Convergence-Divergence (MACD)</legacyBold> is a momentum indicator that shows the relationship between two moving averages of a security price. It is shown with a signal line.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.MovingAverageConvergenceDivergenceSignal</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.MovingAverageConvergenceDivergenceSignal</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorMovingAverageConvergenceDivergenceSignal"/></mediaLink>
  </introduction>

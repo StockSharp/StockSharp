@@ -3,15 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Стохастический осциллятор (Stochastic Oscillator)</legacyBold> – 
-индикатор импульса, сравнивающий конкретную цену закрытия ценной бумаги с 
-диапазоном ее цен за определенный период времени. Чувствительность осциллятора к 
-рыночным движениям можно уменьшить, отрегулировав этот период времени или взяв 
-скользящее среднее от результата. 
+<legacyBold>Stochastic Oscillator</legacyBold> is a momentum indicator that compares a specific closing price of a security with a range of its prices for a certain time period. The oscillator sensitivity to market movements can be reduced by adjusting this time period or taking the moving average from the result.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.StochasticOscillator</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.StochasticOscillator</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorStochasticOscillator"/></mediaLink>
  </introduction>

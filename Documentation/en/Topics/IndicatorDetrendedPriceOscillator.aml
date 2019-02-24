@@ -3,16 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Бестрендовый ценовой осциллятор (Detrended Price Oscillator, DPO)</legacyBold> – 
-осциллятор, который отбрасывает ценовые тренды, пытаясь оценить продолжительность 
-ценовых циклов от пика до пика или от впадины к впадине. В отличие от других осцилляторов, 
-таких как сходимость стохастического или скользящего среднего (MACD), DPO не является 
-индикатором импульса. Он выделяет пики и впадины в цене, которые используются для 
-оценки точек входа и выхода.
+<legacyBold>Detrended Price Oscillator (DPO)</legacyBold> is an oscillator that discards price trends, trying to estimate the duration of price cycles from peak to peak or from trough to trough. DPO is not a momentum indicator, unlike other oscillators, such as the convergence of a stochastic or moving average (MACD). It identifies peaks and troughs in the price, which are used to evaluate entry and exit points.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.DetrendedPriceOscillator</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.DetrendedPriceOscillator</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorDetrendedPriceOscillator"/></mediaLink>
  </introduction>

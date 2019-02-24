@@ -3,15 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Полосы Боллинджера (Bollinger Bands)</legacyBold> – осциллирующий индикатор, 
-который используется для измерения волатильности рынка.Он позволяет оценить, является ли цена высокой 
-или низкой по сравнению со скользящим средним. Центральная полоса соответствует простому скользящему среднему цены. 
-Верхняя и нижняя полосы являются уровнями, на которых цена может 
-считаться высокой или низкой по отношению к скользящему среднему.
+<legacyBold>Bollinger Bands</legacyBold> is an oscillating indicator that is used to measure market volatility. It allows to assess whether the price is high or low compared to the moving average. The central band corresponds to a simple moving average price. The upper and lower bands are the levels at which the price can be considered high or low relative to the moving average.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.BollingerBands</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.BollingerBands</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorBollingerBands"/></mediaLink>
  </introduction>

@@ -3,14 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Профиль Объёма (Volume Profile)</legacyBold> является передовым индикатором, который отображает торговую активность 
-за определённый период времени и на определённых ценовых уровнях. Индикатор 
- является гистограммой на графике, которая отражает преобладающие 
-или важные ценовые уровни, основанные на объёме. 
+<legacyBold>Volume Profile</legacyBold> is an advanced indicator that displays trading activity for a certain time period and at certain price levels. The indicator is a histogram on the chart that shows prevailing or important price levels based on volume.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.VolumeProfileIndicator</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.VolumeProfileIndicator</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="Gui_ClasterChart"/></mediaLink>
  </introduction>

@@ -3,18 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>TRIX</legacyBold> – представляет собой осциллятор, используемый для 
-определения рынков перепроданности и перекупленности или как индикатор импульса. 
-Как и многие осцилляторы, TRIX колеблется вокруг нулевой линии. 
-Когда он используется в качестве осциллятора, положительное значение указывает на 
-рынок перекупленности, а отрицательное значение указывает на рынок перепроданности. 
-Когда TRIX используется в качестве индикатора импульса, положительное значение 
-указывает на увеличение импульса, а отрицательное значение указывает на уменьшение 
-импульса. 
+<legacyBold>TRIX</legacyBold> is an oscillator used to determine oversold and overbought markets or as a momentum indicator. Like many oscillators, TRIX oscillates around the zero line. When it is used as an oscillator, a positive value indicates the overbought market and a negative value indicates the oversold market. When TRIX is used as a momentum indicator, a positive value indicates an increase in the momentum and a negative value indicates a decrease in the momentum. 
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.Trix</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.Trix</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorTrix"/></mediaLink>
  </introduction>

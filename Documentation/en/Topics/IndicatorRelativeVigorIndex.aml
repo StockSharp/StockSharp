@@ -3,14 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Индикатор RVI (Relative Vigor Index – индекс относительной энергии)</legacyBold> – 
-индикатор сравнивает цену с определенным ценовым диапазоном и дает представление о некоторой 
-силе движения цены. Более высокие значения RVI указывают на увеличение 
-силы тренда, в то время как более низкие значения указывают на его уменьшение. 
+<legacyBold>Relative Vigor Index (RVI, relative energy index)</legacyBold> indicator compares the price with a specific price range and provides an indication on some strength of price movement. Higher RVI values indicate an increase in the trend strength, while lower values indicate a trend decrease.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.RelativeVigorIndex</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.RelativeVigorIndex</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorRelativeVigorIndex"/></mediaLink>
  </introduction>

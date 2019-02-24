@@ -3,11 +3,11 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Скорость изменения (Rate of Change, RoC)</legacyBold> индикатор показывает разницу между текущей ценой и ценой за n свечей назад. 
+<legacyBold>Rate of Change (RoC)</legacyBold> indicator shows the difference between the current price and the price for n candles back.
 </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.RateOfChange</codeEntityReference>.
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.RateOfChange</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorRateOfChange"/></mediaLink>
  </introduction>

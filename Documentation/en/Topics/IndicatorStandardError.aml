@@ -2,11 +2,12 @@
 <topic id="728bcc83-367c-42f6-9f1a-64d2f01f30ed" revisionNumber="1">
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
-<para>Индикатор <legacyBold>Стандартная ошибка (Standard Error)</legacyBold> является оценкой среднего 
-квадратичного отклонения коэффициента регрессии от его истинного значения. </para>
 <para>
-Для использования индикатора необходимо использовать класс
-<codeEntityReference>T:StockSharp.Algo.Indicators.StandardError</codeEntityReference>.
+<legacyBold>Standard Error</legacyBold> indicator is an estimate of the mean square deviation of the regression coefficient from its true value.
+</para>
+<para>
+To use the indicator, you must use the 
+<codeEntityReference>T:StockSharp.Algo.Indicators.StandardError</codeEntityReference> class.
 </para>
 <mediaLink><image placement="left" xlink:href="IndicatorStandardError"/></mediaLink>
  </introduction>
