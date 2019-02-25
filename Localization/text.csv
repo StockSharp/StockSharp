@@ -5765,7 +5765,7 @@ DocStr841;Portfolio. If the value is equal to {0}, then the portfolio does not m
 DocStr842;Order side. If the value is {0}, the direction does not use;Направление заявки. Если значение равно {0}, то направление не попадает в фильтр снятия заявок
 DocStr843;Trading board. If the value is equal to {0}, then the board does not match the orders cancel filter;Торговая площадка. Если значение равно {0}, то площадка не попадает в фильтр снятия заявок
 DocStr844;Instrument. If the value is equal to {0}, then the instrument does not match the orders cancel filter;Инструмент. Если значение равно {0}, то инструмент не попадает в фильтр снятия заявок
-DocStr845;Get security by code;Получить инструмент по коду
+DocStr845;Get security by identifier;Получить инструмент по идентификатору
 DocStr846;To get the instrument by the code. If the instrument is not found, then the {0} is called to create an instrument;Получить инструмент по коду. Если инструмент не найден, то для создания инструмента вызывается {0}
 DocStr847;The handler changing the instrument. It returns {0} if the instrument has been changed and the {1} should be called;Обработчик, изменяющий инструмент. Возвращает {0}, если инструмент был изменен, и необходимо вызвать {1}
 DocStr848;Get {0};Получить {0}

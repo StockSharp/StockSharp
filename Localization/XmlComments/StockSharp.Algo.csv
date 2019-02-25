@@ -4016,7 +4016,6 @@ M:StockSharp.Algo.Connector.SendOutError(System.Exception)/summary;DocStr756
 M:StockSharp.Algo.Connector.SendOutError(System.Exception)/param/error;DocStr325
 M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)/summary;DocStr80
 M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)/param/message;Str3166
-M:StockSharp.Algo.Connector.LookupSecurity(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.GetPortfolio(System.String)/summary;DocStr10879
 M:StockSharp.Algo.Connector.GetPortfolio(System.String)/remarks;DocStr849
 M:StockSharp.Algo.Connector.GetPortfolio(System.String)/param/name;DocStr3127
@@ -4339,9 +4338,7 @@ M:StockSharp.Algo.Connector.OnCancelOrders(System.Int64,System.Nullable{System.B
 M:StockSharp.Algo.Connector.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/securityType;DocStr9087
 M:StockSharp.Algo.Connector.ChangePassword(System.String)/summary;XamlStr665
 M:StockSharp.Algo.Connector.ChangePassword(System.String)/param/newPassword;XamlStr360
-M:StockSharp.Algo.Connector.GetSecurity(StockSharp.Messages.SecurityId)/summary;DocStr845
-M:StockSharp.Algo.Connector.GetSecurity(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
-M:StockSharp.Algo.Connector.GetSecurity(StockSharp.Messages.SecurityId)/returns;DocStr2831
+M:StockSharp.Algo.Connector.GetSecurity(StockSharp.Messages.SecurityId)/inheritdoc;DocStr845
 M:StockSharp.Algo.Connector.GetSecurity(System.String,System.Func{StockSharp.BusinessEntities.Security,System.Boolean},System.Boolean@)/summary;DocStr846
 M:StockSharp.Algo.Connector.GetSecurity(System.String,System.Func{StockSharp.BusinessEntities.Security,System.Boolean},System.Boolean@)/param/id;SecurityId
 M:StockSharp.Algo.Connector.GetSecurity(System.String,System.Func{StockSharp.BusinessEntities.Security,System.Boolean},System.Boolean@)/param/changeSecurity;DocStr847
