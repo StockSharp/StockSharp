@@ -18,6 +18,8 @@ StockSharp API Change log
 * (feature) IConnector. Removed obsolete LookupSecurity.
 * (bug) MarketEmulator. Fix canceled balanced processing.
 * (bug) BW fixes.
+* (feature) Kucoin. Protocol upgraded.
+* (feature) Kicoin. Sandbox supported.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

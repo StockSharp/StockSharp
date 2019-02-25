@@ -24,28 +24,29 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Kucoin.KucoinMessageAdapter.Passphrase">
+            <summary>
+            Passphrase.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kucoin.KucoinMessageAdapter.IsDemo">
+            <summary>
+            Connect to demo trading instead of real trading server.
+            </summary>
+        </member>
         <member name="P:StockSharp.Kucoin.KucoinMessageAdapter.BalanceCheckInterval">
             <summary>
             Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
         <member name="M:StockSharp.Kucoin.KucoinMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Save settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Kucoin.KucoinMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Load settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Kucoin.KucoinMessageAdapter.ToString">
-            <summary>
-            Returns a string that represents the current object.
-            </summary>
-            <returns>A string that represents the current object.</returns>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Kucoin.KucoinMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
             <summary>
@@ -66,6 +67,16 @@
             Initializes a new instance of the <see cref="T:StockSharp.Kucoin.KucoinOrderCondition"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.Kucoin.KucoinOrderCondition.StopPrice">
+            <summary>
+            Activation price, when reached an order will be placed.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kucoin.KucoinOrderCondition.PostOnly">
+            <summary>
+            Post-only order.
+            </summary>
+        </member>
         <member name="T:StockSharp.Kucoin.KucoinTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Kucoin"/>.
@@ -84,6 +95,16 @@
         <member name="P:StockSharp.Kucoin.KucoinTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kucoin.KucoinTrader.Passphrase">
+            <summary>
+            Passphrase.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kucoin.KucoinTrader.IsDemo">
+            <summary>
+            Connect to demo trading instead of real trading server.
             </summary>
         </member>
         <member name="P:StockSharp.Kucoin.KucoinTrader.BalanceCheckInterval">

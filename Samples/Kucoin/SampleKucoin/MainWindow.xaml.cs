@@ -23,6 +23,7 @@ namespace SampleKucoin
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
+		private readonly OrdersLogWindow _ordersLogWindow = new OrdersLogWindow();
 
 		private readonly LogManager _logManager = new LogManager();
 
@@ -33,6 +34,7 @@ namespace SampleKucoin
 			Title = Title.Put("Kucoin");
 
 			_ordersWindow.MakeHideable();
+			_ordersLogWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
@@ -47,6 +49,7 @@ namespace SampleKucoin
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			_ordersWindow.DeleteHideable();
+			_ordersLogWindow.DeleteHideable();
 			_myTradesWindow.DeleteHideable();
 			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
@@ -56,6 +59,7 @@ namespace SampleKucoin
 			_tradesWindow.Close();
 			_myTradesWindow.Close();
 			_ordersWindow.Close();
+			_ordersLogWindow.Close();
 			_portfoliosWindow.Close();
 
 			if (Trader != null)
@@ -127,6 +131,7 @@ namespace SampleKucoin
 					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 					Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
+					Trader.NewOrderLogItem += _ordersLogWindow.OrderLogGrid.LogItems.Add;
 
 					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
 					Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
@@ -144,11 +149,13 @@ namespace SampleKucoin
 
 					ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
 					ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = 
-					ShowPortfolios.IsEnabled = true;
+					ShowPortfolios.IsEnabled = ShowOrdersLog.IsEnabled = true;
 				}
 
 				Trader.Key = Key.Text;
 				Trader.Secret = Secret.Password;
+				Trader.Passphrase = Passphrase.Password;
+				Trader.IsDemo = IsDemo.IsChecked == true;
 
 				// clear password box for security reason
 				//Secret.Clear();
@@ -193,6 +200,11 @@ namespace SampleKucoin
 		private void ShowOrdersClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_ordersWindow);
+		}
+
+		private void ShowOrdersLogClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_ordersLogWindow);
 		}
 
 		private void ShowPortfoliosClick(object sender, RoutedEventArgs e)
