@@ -49206,5 +49206,25 @@ namespace StockSharp.Localization
 		/// One Cancels Other.
 		/// </summary>
 		public static string OcoDesc => GetString(OcoDescKey);
+
+		/// <summary>
+		/// SwissQuote
+		/// </summary>
+		public const string SwissQuoteKey = nameof(SwissQuote);
+
+		/// <summary>
+		/// SwissQuote
+		/// </summary>
+		public static string SwissQuote => GetString(SwissQuoteKey);
+
+		/// <summary>
+		/// X Open Hub
+		/// </summary>
+		public const string XOpenHubKey = nameof(XOpenHub);
+
+		/// <summary>
+		/// X Open Hub
+		/// </summary>
+		public static string XOpenHub => GetString(XOpenHubKey);
 	}
 }
