@@ -154,6 +154,8 @@ namespace StockSharp.Messages
 					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
 
 				_supportedMessages = value;
+
+				OnPropertyChanged(nameof(SupportedMessages));
 			}
 		}
 

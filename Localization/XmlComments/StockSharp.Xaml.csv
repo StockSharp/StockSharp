@@ -1131,7 +1131,7 @@ M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Po
 M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.Messages.PortfolioLookupMessage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.BusinessEntities.Order,StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.Messages.OrderStatusMessage)/inheritdoc;DocStr8459
-M:StockSharp.Xaml.GuiConnector`1.LookupSecurity(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.GetSecurity(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.GetPortfolio(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.GetMarketDepth(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459

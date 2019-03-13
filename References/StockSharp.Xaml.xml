@@ -5053,7 +5053,7 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.Messages.OrderStatusMessage)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupSecurity(StockSharp.Messages.SecurityId)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.GetSecurity(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetPortfolio(System.String)">
