@@ -26,6 +26,7 @@ StockSharp API Change log
 * (bug) Monitor. Fix LogManager freezing https://stocksharp.ru/forum/10502/logmanagerdispose()/
 * (feature) OptionPositionChart. Set own Model.
 * (feature) Sterling. Updated to 11.7 version.
+* (bug) InteractiveBrokers. Fix https://stocksharp.com/forum/10465/There-was-an-error-in-the-S-Shell-operation-strategy!/
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
