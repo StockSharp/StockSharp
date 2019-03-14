@@ -21,6 +21,9 @@ StockSharp API Change log
 * (feature) Kucoin. Protocol upgraded.
 * (feature) Kicoin. Sandbox supported.
 * (feature) FIX connector. SuperDerivatives, SwissQuote and XOpenHub dialects.
+* (feature) NewsGrid. Show Board column.
+* (bug) PortfolioEditor. SelectedPortfolio binding fixes.
+* (bug) Monitor. Fix LogManager freezing https://stocksharp.ru/forum/10502/logmanagerdispose()/
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
