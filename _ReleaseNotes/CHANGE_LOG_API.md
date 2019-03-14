@@ -20,6 +20,7 @@ StockSharp API Change log
 * (bug) BW fixes.
 * (feature) Kucoin. Protocol upgraded.
 * (feature) Kicoin. Sandbox supported.
+* (feature) FIX connector. SuperDerivatives, SwissQuote and XOpenHub dialects.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -4955,6 +4955,7 @@ Oco;OCO;OCO
 OcoDesc;One Cancels Other.;Один отменяет другой.
 SwissQuote;SwissQuote;SwissQuote
 XOpenHub;X Open Hub;X Open Hub
+SuperDerivatives;SuperDerivatives;SuperDerivatives
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

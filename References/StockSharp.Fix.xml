@@ -281,6 +281,9 @@
             Reset state.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.Write(StockSharp.Messages.Message,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
       <summary>
             Read next message from FIX protocol.
@@ -362,6 +365,15 @@
       <param name="timeMsg">Heartbeat message.</param>
       <returns>
         <see cref="T:StockSharp.Fix.Native.FixMessages" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.GetSecurityType(System.String)">
+      <summary>
+            Convert <see cref="T:System.String" /> to <see cref="T:StockSharp.Messages.SecurityTypes" /> value.
+            </summary>
+      <param name="type">
+        <see cref="T:System.String" /> value.</param>
+      <returns>
+        <see cref="T:StockSharp.Messages.SecurityTypes" /> value.</returns>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessSecurityDefinition(StockSharp.Fix.Native.FixTags,StockSharp.Fix.Native.IFixReader,StockSharp.Messages.SecurityMessage)">
       <summary>
@@ -1413,11 +1425,12 @@
       <param name="reader">The reader of data recorded in the FIX protocol format.</param>
       <param name="idGenerator">Sequence id generator.</param>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message)">
+    <member name="M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message,System.Action{StockSharp.Messages.Message})">
       <summary>
             Write the specified message into FIX protocol.
             </summary>
       <param name="message">The message.</param>
+      <param name="messageHandler">Message handler.</param>
       <returns>
         <see langword="true" /> if the specified message was processed successfully, otherwise, <see langword="false" />.</returns>
     </member>
@@ -5519,6 +5532,22 @@
             Background.
             </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.PosReqStatus">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PosReqStatus.Completed">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PosReqStatus.CompletedWarnings">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PosReqStatus.Rejected">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.Party">
       <summary>
             Party.
@@ -6675,6 +6704,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.PriceType">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.ExpireDate">
       <summary>
       </summary>
@@ -6963,6 +6996,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoUnderlyings">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.ClearingBusinessDate">
       <summary>
       </summary>
@@ -6979,7 +7016,15 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.PosReqStatus">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.NoPosAmt">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SecuritySubType">
       <summary>
       </summary>
     </member>
@@ -7000,6 +7045,14 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.OrdStatusReqID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.ApplQueueDepth">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.ApplQueueResolution">
       <summary>
       </summary>
     </member>
@@ -7056,6 +7109,14 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.UserStatusText">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MDEntryForwardPoints">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MDStreamID">
       <summary>
       </summary>
     </member>
@@ -8019,6 +8080,21 @@
     <member name="F:StockSharp.Fix.FixDialects.QuikDropCopy">
       <summary>
             QUIK (drop copy).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixDialects.SwissQuote">
+      <summary>
+            SwissQuote.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixDialects.XOpenHub">
+      <summary>
+            X Open Hub.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixDialects.SuperDerivatives">
+      <summary>
+            SuperDerivatives.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.FixTrader">

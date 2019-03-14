@@ -49226,5 +49226,15 @@ namespace StockSharp.Localization
 		/// X Open Hub
 		/// </summary>
 		public static string XOpenHub => GetString(XOpenHubKey);
+
+		/// <summary>
+		/// SuperDerivatives
+		/// </summary>
+		public const string SuperDerivativesKey = nameof(SuperDerivatives);
+
+		/// <summary>
+		/// SuperDerivatives
+		/// </summary>
+		public static string SuperDerivatives => GetString(SuperDerivativesKey);
 	}
 }
