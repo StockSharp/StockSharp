@@ -23,11 +23,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-			<Button x:Name="Find" Width="100" Click="FindClick">
-				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
-			</Button>
-
-            <Button x:Name="Trades" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.XamlStr223}" Width="100" IsEnabled="False" Click="TradesClick" />
+            <Button x:Name="Level1" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Level1}" Width="100" IsEnabled="False" Click="Level1Click" />
 			<Button x:Name="Depth" Grid.Column="3" Content="{x:Static loc:LocalizedStrings.MarketDepth}" Width="100" IsEnabled="False" Click="DepthClick" />
 			<Button x:Name="NewOrder" Grid.Column="4" Width="100" IsEnabled="False" Click="NewOrderClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>

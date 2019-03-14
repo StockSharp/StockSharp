@@ -112,6 +112,11 @@
             By last price.
             </summary>
         </member>
+        <member name="F:StockSharp.Sterling.SterlingExtendedOrderTypes.Funary">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:StockSharp.Sterling.SterlingExecutionInstructions">
             <summary>
             Execution instructions.

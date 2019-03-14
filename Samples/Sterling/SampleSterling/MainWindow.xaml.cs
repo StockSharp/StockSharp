@@ -154,7 +154,7 @@ namespace SampleSterling
 					Trader.MassOrderCancelFailed += (transId, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
-					Trader.NewNews += news =>  _newsWindow.NewsPanel.NewsGrid.News.Add(news);
+					Trader.NewNews += _newsWindow.NewsPanel.NewsGrid.News.Add;
 
 					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;

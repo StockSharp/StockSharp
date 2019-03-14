@@ -22,6 +22,7 @@ F:StockSharp.Sterling.SterlingExtendedOrderTypes.ServerStop/summary;ServerStop
 F:StockSharp.Sterling.SterlingExtendedOrderTypes.ServerStopLimit/summary;ServerStopLimit
 F:StockSharp.Sterling.SterlingExtendedOrderTypes.TrailingStop/summary;Str3446
 F:StockSharp.Sterling.SterlingExtendedOrderTypes.Last/summary;ByLastPrice
+F:StockSharp.Sterling.SterlingExtendedOrderTypes.Funary/summary;DocStr8459
 T:StockSharp.Sterling.SterlingExecutionInstructions/summary;DocStr7571
 F:StockSharp.Sterling.SterlingExecutionInstructions.SweepReserve/summary;DocStr7572
 F:StockSharp.Sterling.SterlingExecutionInstructions.NoPreference/summary;DocStr7573
