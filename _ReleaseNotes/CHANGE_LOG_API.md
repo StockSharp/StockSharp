@@ -24,6 +24,7 @@ StockSharp API Change log
 * (feature) NewsGrid. Show Board column.
 * (bug) PortfolioEditor. SelectedPortfolio binding fixes.
 * (bug) Monitor. Fix LogManager freezing https://stocksharp.ru/forum/10502/logmanagerdispose()/
+* (feature) OptionPositionChart. Set own Model.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

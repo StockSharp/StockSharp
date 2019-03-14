@@ -3752,6 +3752,11 @@
             The position provider.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.Model">
+      <summary>
+            Portfolio model for calculating the values of Greeks by the Black-Scholes formula.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.UnderlyingAsset">
       <summary>
             Underlying asset.
