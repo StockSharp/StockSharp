@@ -64,9 +64,6 @@
         <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativePortfolioLookup">
             <inheritdoc />
         </member>
-        <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.CreateOrderCondition">
-            <inheritdoc />
-        </member>
         <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>

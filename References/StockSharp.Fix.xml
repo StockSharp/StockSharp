@@ -261,15 +261,6 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.CheckTimeFrameByRequest">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportStopLoss">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportTakeProfit">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportWithdraw">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition">
       <inheritdoc />
     </member>
@@ -7815,15 +7806,6 @@
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportStopLoss">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportTakeProfit">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportWithdraw">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired">

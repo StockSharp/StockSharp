@@ -105,12 +105,6 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateOrderCondition">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsSupportStopLoss">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>

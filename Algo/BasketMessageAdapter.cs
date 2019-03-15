@@ -269,9 +269,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public override OrderCondition CreateOrderCondition() => throw new NotSupportedException();
-
-		/// <inheritdoc />
 		public override bool IsConnectionAlive() => throw new NotSupportedException();
 
 		/// <summary>

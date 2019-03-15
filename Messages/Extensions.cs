@@ -985,5 +985,50 @@ namespace StockSharp.Messages
 
 			return adapter.IsMessageSupported(MessageTypes.OrderRegister);
 		}
+
+		internal static Type GetOrderConditionType(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter
+			       .GetType()
+			       .GetAttribute<OrderConditionAttribute>()?
+			       .ConditionType;
+		}
+
+		private static bool IsOrderConditionOf(this IMessageAdapter adapter, Type interfaceType)
+		{
+			if (interfaceType == null)
+				throw new ArgumentNullException(nameof(interfaceType));
+
+			var type = adapter.GetOrderConditionType();
+
+			return type != null && interfaceType.IsAssignableFrom(type);
+		}
+
+		/// <summary>
+		/// Determines whether the adapter support stop-loss orders.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSupportStopLoss(this IMessageAdapter adapter)
+			=> adapter.IsOrderConditionOf(typeof(IStopLossOrderCondition));
+
+		/// <summary>
+		/// Determines whether the adapter support take-profit orders.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSupportTakeProfit(this IMessageAdapter adapter)
+			=> adapter.IsOrderConditionOf(typeof(ITakeProfitOrderCondition));
+
+		/// <summary>
+		/// Determines whether the adapter support withdraw orders.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSupportWithdraw(this IMessageAdapter adapter)
+			=> adapter.IsOrderConditionOf(typeof(IWithdrawOrderCondition));
 	}
 }

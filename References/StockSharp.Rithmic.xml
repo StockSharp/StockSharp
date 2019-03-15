@@ -15,12 +15,6 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.CreateOrderCondition">
-            <inheritdoc />
-        </member>
-        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportStopLoss">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportNativeSecurityLookup">
             <inheritdoc />
         </member>

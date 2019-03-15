@@ -15562,3 +15562,5 @@ DocStr11038;Is the specified adapter support market-data;Поддерживае�
 DocStr11039;Is the specified adapter support transactions;Поддерживает ли указанный адаптер транзакции
 DocStr11040;Trailing price;Цена трейлинга
 DocStr11041;OCO stop price;OCO стоп цена
+DocStr11042;Attribute, applied to {0}, to provide information about type of {1};Атрибут, применяющийся к {0} для предоставления информации о типе {1}
+DocStr11043;{0} type;{0} тип

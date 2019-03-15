@@ -42,7 +42,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Base message adapter interface which convert messages <see cref="Message"/> to native commands and back.
 	/// </summary>
-	public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver, IMessageAdapterExtension
+	public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
 	{
 		/// <summary>
 		/// Transaction id generator.

@@ -15,12 +15,6 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="M:StockSharp.Sterling.SterlingMessageAdapter.CreateOrderCondition">
-            <inheritdoc />
-        </member>
-        <member name="P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportStopLoss">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportNativePortfolioLookup">
             <inheritdoc />
         </member>

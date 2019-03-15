@@ -288,7 +288,7 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportSecuritiesLookupAll => true;
 
 		/// <inheritdoc />
-		public virtual OrderCondition CreateOrderCondition() => null;
+		public virtual OrderCondition CreateOrderCondition() => this.GetOrderConditionType()?.CreateInstance<OrderCondition>();
 
 		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
@@ -736,18 +736,6 @@ namespace StockSharp.Messages
 		{
 			_propertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual bool IsSupportStopLoss => false;
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual bool IsSupportTakeProfit => false;
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual bool IsSupportWithdraw => false;
 	}
 
 	/// <summary>

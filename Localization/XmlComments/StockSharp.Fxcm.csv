@@ -4,7 +4,6 @@ M:StockSharp.Fxcm.FxcmMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transa
 P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
 P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
 P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
-M:StockSharp.Fxcm.FxcmMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Fxcm.FxcmMessageAdapter.IsDemo/summary;Str3388
 P:StockSharp.Fxcm.FxcmMessageAdapter.Token/summary;AccessToken

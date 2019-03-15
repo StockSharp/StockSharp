@@ -24,9 +24,6 @@
     <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.CreateOrderCondition">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>

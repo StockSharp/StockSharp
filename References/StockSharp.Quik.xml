@@ -20,9 +20,6 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateOrderCondition">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
       <inheritdoc />
     </member>
@@ -209,9 +206,6 @@
             Создать <see cref="T:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter" />.
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-    </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.CreateOrderCondition">
-      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
       <inheritdoc />
@@ -3294,18 +3288,6 @@
       <summary>
             https://forum.quik.ru/forum10/topic1218/
             </summary>
-    </member>
-    <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.CreateOrderCondition">
-      <summary>
-            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
-            </summary>
-      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено <see langword="null" />.</returns>
-    </member>
-    <member name="P:StockSharp.Quik.QuikTrans2QuikAdapter.IsSupportStopLoss">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Quik.QuikTrans2QuikAdapter.IsSupportTakeProfit">
-      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>

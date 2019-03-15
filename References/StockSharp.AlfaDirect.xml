@@ -15,18 +15,6 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.CreateOrderCondition">
-      <summary>
-            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
-            </summary>
-      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено <see langword="null" />.</returns>
-    </member>
-    <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportStopLoss">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportTakeProfit">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportNativePortfolioLookup">
       <summary>
             Поддерживается ли торговой системой поиск портфелей.

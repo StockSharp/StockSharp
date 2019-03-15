@@ -35,15 +35,6 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="M:StockSharp.LMAX.LmaxMessageAdapter.CreateOrderCondition">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportStopLoss">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportTakeProfit">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
