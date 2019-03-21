@@ -49236,5 +49236,15 @@ namespace StockSharp.Localization
 		/// SuperDerivatives
 		/// </summary>
 		public static string SuperDerivatives => GetString(SuperDerivativesKey);
+
+		/// <summary>
+		/// Tradier
+		/// </summary>
+		public const string TradierKey = nameof(Tradier);
+
+		/// <summary>
+		/// Tradier
+		/// </summary>
+		public static string Tradier => GetString(TradierKey);
 	}
 }

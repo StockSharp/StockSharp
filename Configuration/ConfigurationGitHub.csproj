@@ -271,6 +271,9 @@
     <Reference Include="StockSharp.ZB">
       <HintPath>..\References\StockSharp.ZB.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Tradier">
+      <HintPath>..\References\StockSharp.Tradier.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />

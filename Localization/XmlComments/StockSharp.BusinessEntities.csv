@@ -140,6 +140,7 @@ P:StockSharp.BusinessEntities.Exchange.Bibox/summary;DocStr11026
 P:StockSharp.BusinessEntities.Exchange.CoinBene/summary;DocStr11027
 P:StockSharp.BusinessEntities.Exchange.BitZ/summary;DocStr11028
 P:StockSharp.BusinessEntities.Exchange.ZB/summary;DocStr11029
+P:StockSharp.BusinessEntities.Exchange.Tradier/summary;DocStr11044
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694
@@ -371,6 +372,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Bibox/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.CoinBene/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.BitZ/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.ZB/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.Tradier/summary;DocStr2809
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrade/summary;DocStr8546
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867

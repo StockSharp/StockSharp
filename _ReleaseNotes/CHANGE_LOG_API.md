@@ -28,6 +28,7 @@ StockSharp API Change log
 * (feature) Sterling. Updated to 11.7 version.
 * (bug) InteractiveBrokers. Fix https://stocksharp.com/forum/10465/There-was-an-error-in-the-S-Shell-operation-strategy!/
 * (feature) OrderConditionAttribute added.
+* (feature) Tradier connector.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

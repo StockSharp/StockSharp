@@ -4956,6 +4956,7 @@ OcoDesc;One Cancels Other.;Один отменяет другой.
 SwissQuote;SwissQuote;SwissQuote
 XOpenHub;X Open Hub;X Open Hub
 SuperDerivatives;SuperDerivatives;SuperDerivatives
+Tradier;Tradier;Tradier
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15564,3 +15565,6 @@ DocStr11040;Trailing price;Цена трейлинга
 DocStr11041;OCO stop price;OCO стоп цена
 DocStr11042;Attribute, applied to {0}, to provide information about type of {1};Атрибут, применяющийся к {0} для предоставления информации о типе {1}
 DocStr11043;{0} type;{0} тип
+DocStr11044;Information about Tradier;Информация о Tradier
+DocStr11045;Specifies the service pack release being applied, by default, to message at the session level;Задает номер пакета обновления, применяемый по умолчанию к сообщению на уровне сеанса
+DocStr11046;Translate quote data as {0} or {1};Транслировать котировки как {0} или {1}
