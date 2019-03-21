@@ -343,6 +343,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Coinigy", "Coinigy", "{BC92
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCoinigyGitHub", "Samples\Coinigy\SampleCoinigy\SampleCoinigyGitHub.csproj", "{3031AD56-1D75-457D-91A7-9C2BB0F2DF82}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tradier", "Tradier", "{6EEED7D9-2C81-44E0-8292-9B208381DEE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleTradierGitHub", "Samples\Tradier\SampleTradier\SampleTradierGitHub.csproj", "{006298E0-66E4-41D4-B4C4-79E847706092}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -733,6 +737,10 @@ Global
 		{3031AD56-1D75-457D-91A7-9C2BB0F2DF82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3031AD56-1D75-457D-91A7-9C2BB0F2DF82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3031AD56-1D75-457D-91A7-9C2BB0F2DF82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{006298E0-66E4-41D4-B4C4-79E847706092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{006298E0-66E4-41D4-B4C4-79E847706092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{006298E0-66E4-41D4-B4C4-79E847706092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{006298E0-66E4-41D4-B4C4-79E847706092}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -896,6 +904,8 @@ Global
 		{FF830D2C-C246-40B9-852B-004C86C8CCAC} = {15AF18CD-15C3-4B13-A423-96E70E54BA2E}
 		{BC929769-AA0C-4DD1-89F1-B7FD61910466} = {9990074D-A630-405C-BEA6-71B521D8DDA5}
 		{3031AD56-1D75-457D-91A7-9C2BB0F2DF82} = {BC929769-AA0C-4DD1-89F1-B7FD61910466}
+		{6EEED7D9-2C81-44E0-8292-9B208381DEE7} = {9990074D-A630-405C-BEA6-71B521D8DDA5}
+		{006298E0-66E4-41D4-B4C4-79E847706092} = {6EEED7D9-2C81-44E0-8292-9B208381DEE7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05C6C3D9-0063-47AB-BC11-315B396BEBD0}
