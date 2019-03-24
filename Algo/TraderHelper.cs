@@ -1482,7 +1482,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(orders));
 
 			orders = orders
-				.Where(order => order.State != OrderStates.Done && order.State != OrderStates.Failed)
+				.Where(order => !order.State.IsFinal())
 				.Where(order => isStopOrder == null || (order.Type == OrderTypes.Conditional) == isStopOrder.Value)
 				.Where(order => portfolio == null || (order.Portfolio == portfolio))
 				.Where(order => direction == null || order.Direction == direction.Value)
@@ -1493,6 +1493,14 @@ namespace StockSharp.Algo
 
 			orders.ForEach(connector.CancelOrder);
 		}
+
+		/// <summary>
+		/// Is the specified state is final (<see cref="OrderStates.Done"/> or <see cref="OrderStates.Failed"/>).
+		/// </summary>
+		/// <param name="state">Order state.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsFinal(this OrderStates state)
+			=> state == OrderStates.Done || state == OrderStates.Failed;
 
 		/// <summary>
 		/// To check whether specified instrument is used now.

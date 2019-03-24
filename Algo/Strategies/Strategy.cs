@@ -1364,7 +1364,7 @@ namespace StockSharp.Algo.Strategies
 
 			_ordersInfo.Add(order, new OrderInfo { IsOwn = true });
 
-			if (order.State != OrderStates.Failed && order.State != OrderStates.Done)
+			if (!order.State.IsFinal())
 				ApplyMonitorRules(order);
 		}
 
