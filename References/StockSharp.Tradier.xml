@@ -55,6 +55,11 @@
             Access token.
             </summary>
         </member>
+        <member name="P:StockSharp.Tradier.TradierMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
         <member name="M:StockSharp.Tradier.TradierMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <inheritdoc />
         </member>
@@ -77,6 +82,11 @@
         <member name="P:StockSharp.Tradier.TradierTrader.Token">
             <summary>
             Access token.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Tradier.TradierTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
     </members>
