@@ -109,21 +109,13 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)">
-      <summary>
-            To add an area to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.RemoveArea(StockSharp.Xaml.Charting.ChartArea)">
-      <summary>
-            To remove the area from the chart.
-            </summary>
-      <param name="area">Chart area.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.ClearAreas">
-      <summary>
-            To remove all areas from the chart.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.Elements">
       <summary>
@@ -131,58 +123,25 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.IChartElement)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="candleSeries">Candles series.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartIndicatorElement,StockSharp.Algo.Candles.CandleSeries,StockSharp.Algo.Indicators.IIndicator)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="candleSeries">Candles series.</param>
-      <param name="indicator">Indicator.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartOrderElement,StockSharp.BusinessEntities.Security)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="security">Security.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartTradeElement,StockSharp.BusinessEntities.Security)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="security">Security.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.GetIndicator(StockSharp.Xaml.Charting.ChartIndicatorElement)">
-      <summary>
-            To get an indicator which is associated with <see cref="T:StockSharp.Xaml.Charting.ChartIndicatorElement" />.
-            </summary>
-      <param name="element">The chart element.</param>
-      <returns>Indicator.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.GetSource(StockSharp.Xaml.Charting.IChartElement)">
-      <summary>
-            To get the data source for <see cref="T:StockSharp.Xaml.Charting.IChartElement" />.
-            </summary>
-      <param name="element">The chart element.</param>
-      <returns>Market-data source.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.SetSource(StockSharp.Xaml.Charting.IChartElement,System.Object)">
       <summary>
@@ -352,16 +311,10 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})">
-      <summary>
-            To reset the chart elements values drawn previously.
-            </summary>
-      <param name="elements">Chart elements.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.Draw(StockSharp.Xaml.Charting.ChartDrawData)">
-      <summary>
-            To process the new data.
-            </summary>
-      <param name="data">New data.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -539,16 +492,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartActiveOrdersElement.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartActiveOrdersElement.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartAnnotationTypes">
       <summary>
@@ -670,16 +617,10 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartArea.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartArea.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartArea.Clone">
       <summary>

@@ -30,6 +30,9 @@ StockSharp API Change log
 * (feature) OrderConditionAttribute added.
 * (feature) Tradier connector.
 * (feature) TraderHelper. IsFinal for OrderStates extension.
+* (feature) Chart. ChartActiveOrdersElement save/load supported https://stocksharp.ru/forum/10517/ne-sohranyaetsya-chartactiveorderselement/
+* (bug) Chart. Fix ChartArea.Height change from code https://stocksharp.ru/forum/10504/ustanovka-vysoty-chartarea-(programmno)/
+* (feature) Chart. ChartArea.Height changed notification added. https://stocksharp.ru/forum/10503/kak-otlovit-sobytie-izmeneniya-vysoty-chartaaria/
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
