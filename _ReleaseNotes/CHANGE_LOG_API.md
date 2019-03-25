@@ -34,6 +34,8 @@ StockSharp API Change log
 * (bug) Chart. Fix ChartArea.Height change from code https://stocksharp.ru/forum/10504/ustanovka-vysoty-chartarea-(programmno)/
 * (feature) Chart. ChartArea.Height changed notification added. https://stocksharp.ru/forum/10503/kak-otlovit-sobytie-izmeneniya-vysoty-chartaaria/
 * (feature) DukasCopyHistorySource.CandlesBuildFrom added.
+* (feature) FIX connector. IFixDialect.QuotesAsLevel1 added.
+* (bug) FIX connector. 5.XXX logon fix.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

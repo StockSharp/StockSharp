@@ -211,6 +211,9 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TickAsLevel1">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.QuotesAsLevel1">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.LoginAsPortfolioName">
       <inheritdoc />
     </member>
@@ -302,11 +305,12 @@
       <returns>
         <see cref="T:StockSharp.Fix.Native.FixMessages" /> value.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.WriteLogonRequest(StockSharp.Fix.Native.IFixWriter)">
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.WriteLogonRequest(StockSharp.Fix.Native.IFixWriter,System.String)">
       <summary>
             To record the <see cref="F:StockSharp.Fix.Native.FixMessages.Logon" /> message (request).
             </summary>
       <param name="writer">The recorder of data in the FIX protocol format.</param>
+      <param name="defaultApplVerId">Specifies the service pack release being applied, by default, to message at the session level.</param>
       <returns>
         <see cref="T:StockSharp.Fix.Native.FixMessages" /> value.</returns>
     </member>
@@ -1325,6 +1329,11 @@
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.TickAsLevel1">
       <summary>
             Translate tick data as <see cref="T:StockSharp.Messages.Level1ChangeMessage" /> or <see cref="T:StockSharp.Messages.ExecutionMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.QuotesAsLevel1">
+      <summary>
+            Translate quote data as <see cref="T:StockSharp.Messages.Level1ChangeMessage" /> or <see cref="T:StockSharp.Messages.QuoteChangeMessage" />.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.LoginAsPortfolioName">
@@ -3263,6 +3272,30 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.SecurityRequestType.RequestListSecurities">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityRequestType.Symbol">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityRequestType.SecurityTypeAndOrCfiCode">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityRequestType.Product">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityRequestType.TradingSessionId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityRequestType.AllSecurities">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityRequestType.MarketId">
       <summary>
       </summary>
     </member>
@@ -7104,6 +7137,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.MDEntryForwardPoints">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.DefaultApplVerID">
       <summary>
       </summary>
     </member>
