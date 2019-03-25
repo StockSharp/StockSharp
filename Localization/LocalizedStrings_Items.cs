@@ -49246,5 +49246,15 @@ namespace StockSharp.Localization
 		/// Tradier
 		/// </summary>
 		public static string Tradier => GetString(TradierKey);
+
+		/// <summary>
+		/// Subscribe on signal
+		/// </summary>
+		public const string SubscribeOnSignalKey = nameof(SubscribeOnSignal);
+
+		/// <summary>
+		/// Subscribe on signal
+		/// </summary>
+		public static string SubscribeOnSignal => GetString(SubscribeOnSignalKey);
 	}
 }
