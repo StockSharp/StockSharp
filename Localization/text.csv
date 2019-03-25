@@ -4957,6 +4957,7 @@ SwissQuote;SwissQuote;SwissQuote
 XOpenHub;X Open Hub;X Open Hub
 SuperDerivatives;SuperDerivatives;SuperDerivatives
 Tradier;Tradier;Tradier
+SubscribeOnSignal;Subscribe on signal;Подписка по сигналу
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
