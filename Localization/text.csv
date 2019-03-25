@@ -15569,3 +15569,5 @@ DocStr11043;{0} type;{0} тип
 DocStr11044;Information about Tradier;Информация о Tradier
 DocStr11045;Specifies the service pack release being applied, by default, to message at the session level;Задает номер пакета обновления, применяемый по умолчанию к сообщению на уровне сеанса
 DocStr11046;Translate quote data as {0} or {1};Транслировать котировки как {0} или {1}
+DocStr11047;Supported candles build sources;Источник данных построения свечей
+DocStr11048;Is the specified state is final ({0} or {1});Если указанное состояние финальное ({0} или {1})
