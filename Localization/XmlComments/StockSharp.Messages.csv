@@ -1429,7 +1429,7 @@ M:StockSharp.Messages.Level1ChangeMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.Level1ChangeMessage.Clone/returns;DocStr1116
 M:StockSharp.Messages.Level1ChangeMessage.ToString/summary;DocStr49
 M:StockSharp.Messages.Level1ChangeMessage.ToString/returns;DocStr50
-T:StockSharp.Messages.MarketDataTypes/summary;DocStr3335
+T:StockSharp.Messages.MarketDataTypes/summary;MarketDataTypes
 F:StockSharp.Messages.MarketDataTypes.Level1/summary;DocStr2230
 F:StockSharp.Messages.MarketDataTypes.MarketDepth/summary;DocStr4471
 F:StockSharp.Messages.MarketDataTypes.Trades/summary;DocStr551
