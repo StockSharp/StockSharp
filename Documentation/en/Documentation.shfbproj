@@ -177,7 +177,7 @@
 <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.ZB.dll" />
 <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.ZB.xml" /></DocumentationSources>
     <CopyrightHref>https://stocksharp.com</CopyrightHref>
-    <CopyrightText>&amp;#169%3b 2018 - StockSharp LLC</CopyrightText>
+    <CopyrightText>&amp;#169%3b 2019 - StockSharp LP</CopyrightText>
     <FeedbackEMailAddress>info%40stocksharp.com</FeedbackEMailAddress>
     <FeedbackEMailLinkText>feedback</FeedbackEMailLinkText>
     <ApiFilter>
