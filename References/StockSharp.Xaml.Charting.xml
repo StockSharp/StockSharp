@@ -338,91 +338,6 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Charting.ChartActiveOrderInfo">
-      <summary>
-            Chart element which shows information about single order.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Charting.ChartActiveOrderInfo.OrderStateChanged">
-      <summary>
-            Order state was changed.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Order">
-      <summary>
-            Order to be displayed on chart.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.State">
-      <summary>
-            Order state.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Direction">
-      <summary>
-            Order side.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Volume">
-      <summary>
-            Order volume.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.FilledVolume">
-      <summary>
-            Filled volume.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Price">
-      <summary>
-            Order price.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.PriceStep">
-      <summary>
-            Price step.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.ChartX">
-      <summary>
-            Chart X value for this element [0..1]. Default is 0.8.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.AutoRemoveFromChart">
-      <summary>
-            Auto remove this order from chart when its state is final (<see cref="F:StockSharp.Messages.OrderStates.Done" />, <see cref="F:StockSharp.Messages.OrderStates.Failed" />).
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.IsFrozen">
-      <summary>
-            Do not allow user to edit the order from chart.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Element">
-      <summary>
-            The chart element representing active orders.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.UpdateOrderState(StockSharp.BusinessEntities.Order,System.Boolean,System.Boolean)">
-      <summary>
-            Updates state of the order on a chart or replaces the order with the new one.
-            </summary>
-      <param name="order">The order.</param>
-      <param name="isError">Whether an order operation has failed.</param>
-      <param name="isFrozen">Do not allow user to edit the order from chart.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartActiveOrdersElement">
       <summary>
             The chart element representing active orders.
@@ -481,11 +396,6 @@
     <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.IsAnimationEnabled">
       <summary>
             Show chart element.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.Orders">
-      <summary>
-            Orders to display on chart.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartActiveOrdersElement.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)">
@@ -1352,15 +1262,6 @@
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartActiveOrdersElement,StockSharp.Xaml.Charting.ChartActiveOrderInfo)">
-      <summary>
-            Put the active order data.
-            </summary>
-      <param name="element">The chart element representing active orders.</param>
-      <param name="value">The active order value.</param>
-      <returns>
-        <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
-    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartLineElement,System.Double,System.Double)">
       <summary>
             Put the line data.
@@ -1420,6 +1321,20 @@
       <param name="data">Annotation draw data.</param>
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.Add(StockSharp.Xaml.Charting.ChartActiveOrdersElement,StockSharp.BusinessEntities.Order,System.Nullable{System.Boolean},System.Boolean,System.Boolean,System.Nullable{System.Boolean},System.Nullable{System.Decimal})">
+      <summary>
+            Put the active order data.
+            </summary>
+      <param name="element">The chart element representing active orders.</param>
+      <param name="order">The order.</param>
+      <param name="isFrozen">Do not allow user to edit the order from chart.</param>
+      <param name="autoRemoveFromChart">Auto remove this order from chart when its state is final (<see cref="F:StockSharp.Messages.OrderStates.Done" />, <see cref="F:StockSharp.Messages.OrderStates.Failed" />).</param>
+      <param name="isHidden">Whether an order operation has failed.</param>
+      <param name="isError">Whether an order operation has failed.</param>
+      <param name="price">Order price.</param>
+      <returns>
+        <see cref="T:StockSharp.Xaml.Charting.ChartDrawData" /> instance.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartDrawData.Group(System.Double)">
       <summary>

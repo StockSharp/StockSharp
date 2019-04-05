@@ -38,10 +38,11 @@
 
 				<DockPanel LastChildFill="True" Grid.Column="1">
 					<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
-						<Button Content="Fill" Click="Fill_Click" Margin="5,0" Width="60"/>
-						<Button Content="Remove" Click="Remove_Click" Margin="5,0" Width="60"/>
+						<Button x:Name="FillBtn" Content="Fill" IsEnabled="False" Click="Fill_Click" Margin="5,0" Width="70"/>
+						<Button x:Name="CancelBtn" Content="Cancel" IsEnabled="False" Click="Cancel_Click" Margin="5,0" Width="70"/>
+						<Button x:Name="MoveBtn" Content="Move" IsEnabled="False" Click="Move_Click" Margin="5,0" Width="70"/>
 					</StackPanel>
-					<ListBox DockPanel.Dock="Bottom" x:Name="_ordersListBox" ItemsSource="{Binding Orders}" DisplayMemberPath="Description" SelectionMode="Single" HorizontalAlignment="Stretch"/>
+					<ListBox DockPanel.Dock="Bottom" x:Name="OrdersList" SelectionChanged="OrdersList_OnSelectionChanged" DisplayMemberPath="Description" SelectionMode="Single" HorizontalAlignment="Stretch"/>
 				</DockPanel>
 
 				<GridSplitter Grid.Column="2" Width="2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Gray"/>

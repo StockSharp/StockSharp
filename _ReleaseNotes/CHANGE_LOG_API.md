@@ -38,6 +38,7 @@ StockSharp API Change log
 * (bug) FIX connector. 5.XXX logon fix.
 * (feature) IAnalyticsChart refactoring.
 * (feature) IStorageRegistry.GetSecurityStorage removed.
+* (feature) Chart. Refactoring ChartActiveOrdersElement. Removed ChartActiveOrderInfo.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
