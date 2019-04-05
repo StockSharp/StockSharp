@@ -23,7 +23,7 @@ ChartPanel.CreateOrder += (chartArea,order) =>
 
 ]]></code>
 <para>Выставленные заявки будут отображаться в виде специального элемента для отображения заявок 
-<codeEntityReference>T:StockSharp.Xaml.Charting.ChartOrderElement</codeEntityReference>.</para>
+<codeEntityReference>T:StockSharp.Xaml.Charting.ChartActiveOrdersElement</codeEntityReference>.</para>
     </introduction>
 
   </developerConceptualDocument>
