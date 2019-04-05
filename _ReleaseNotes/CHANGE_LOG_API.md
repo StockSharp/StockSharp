@@ -36,6 +36,7 @@ StockSharp API Change log
 * (feature) DukasCopyHistorySource.CandlesBuildFrom added.
 * (feature) FIX connector. IFixDialect.QuotesAsLevel1 added.
 * (bug) FIX connector. 5.XXX logon fix.
+* (feature) IAnalyticsChart refactoring.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

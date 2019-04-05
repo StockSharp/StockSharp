@@ -127,7 +127,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 					// load candles
 					var candles = storage.Load(loadDate);
 
-					// groupping candles by open time
+					// grouping candles by open time
 					var groupedCandles = candles.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)));
 
 					foreach (var group in groupedCandles.OrderBy(g => g.Key))
