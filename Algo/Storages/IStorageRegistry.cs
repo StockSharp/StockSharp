@@ -177,14 +177,6 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage GetStorage(Security security, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// To get the instruments storage.
-		/// </summary>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The instruments storage.</returns>
-		ISecurityStorage GetSecurityStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
-
-		/// <summary>
 		/// To register tick trades storage.
 		/// </summary>
 		/// <param name="storage">The storage of tick trades.</param>
