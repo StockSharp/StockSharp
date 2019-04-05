@@ -49286,5 +49286,15 @@ namespace StockSharp.Localization
 		/// To send changes by the order book. If disabled, the order book is sent entirely. The default is enabled.
 		/// </summary>
 		public static string IncrementalDepthUpdates => GetString(IncrementalDepthUpdatesKey);
+
+		/// <summary>
+		/// Indicators
+		/// </summary>
+		public const string IndicatorsKey = nameof(Indicators);
+
+		/// <summary>
+		/// Indicators
+		/// </summary>
+		public static string Indicators => GetString(IndicatorsKey);
 	}
 }

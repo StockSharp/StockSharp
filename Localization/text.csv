@@ -4961,6 +4961,7 @@ SubscribeOnSignal;Subscribe on signal;Подписка по сигналу
 DataTypes;Data types;Типы данных
 MarketDataTypes;Market-data types;Типы маркет-данных
 IncrementalDepthUpdates;To send changes by the order book. If disabled, the order book is sent entirely. The default is enabled.;Отправлять изменения по стакану. Если выключено, отправляется стакан целиком. По умолчанию, включено.
+Indicators;Indicators;Индикаторы
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14361,7 +14362,6 @@ DocStr9727;Quoting type;Тип котирования
 DocStr9729;Left offset;Сдвиг влево
 DocStr9730;Right offset;Сдвиг вправо
 DocStr9742;The variable value;Значение переменной
-DocStr9743;Indicators;Индикаторы
 DocStr9744;Remove all breakpoints from the scheme;Удалить все точки остановки из схемы
 DocStr9745;Whether the scheme contains the breakpoints;Содержит ли схема точки остановки
 DocStr9746;The root diagram element;Корневой элемент диаграммы
@@ -15571,3 +15571,7 @@ DocStr11045;Specifies the service pack release being applied, by default, to mes
 DocStr11046;Translate quote data as {0} or {1};Транслировать котировки как {0} или {1}
 DocStr11047;Supported candles build sources;Источник данных построения свечей
 DocStr11048;Is the specified state is final ({0} or {1});Если указанное состояние финальное ({0} или {1})
+DocStr11049;The diagram element which supports subscription to market data;Элемент диаграммы, которые поддерживает подписку на маркет данные
+DocStr11050;The method is called at the subscribing to market data;Метод, вызываемый при подписке на маркет данные
+DocStr11051;The method is called at the unsubscribing to market data;Метод, вызываемый при отписке от маркет данных
+DocStr11052;Security new trades receiving element;Элемент получение новых сделок
