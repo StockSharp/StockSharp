@@ -47,6 +47,8 @@ StockSharp API Change log
 * (feature) MessageConverterHelper. MarketDataMessage -> CandleSeries conversion added.
 * (feature) OpenECry. Certification passed.
 * (feature) Oanda. Level1 support removed.
+* (feature) ExchangesPanel, ExchangeBoardsPanel. IExchangeInfoProvider delay registration supported.
+* (feature) SubscriptionPanel added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

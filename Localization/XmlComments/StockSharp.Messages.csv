@@ -1471,6 +1471,8 @@ M:StockSharp.Messages.MarketDataMessage.#ctor(StockSharp.Messages.MessageTypes)/
 M:StockSharp.Messages.MarketDataMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
 M:StockSharp.Messages.MarketDataMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.MarketDataMessage.Clone/returns;DocStr1116
+M:StockSharp.Messages.MarketDataMessage.CopyTo(StockSharp.Messages.MarketDataMessage)/summary;DocStr629
+M:StockSharp.Messages.MarketDataMessage.CopyTo(StockSharp.Messages.MarketDataMessage)/param/destination;DocStr630
 M:StockSharp.Messages.MarketDataMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.RepoOrderInfo/summary;DocStr4481
 M:StockSharp.Messages.RepoOrderInfo.#ctor/summary;DocStr1

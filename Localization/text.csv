@@ -4962,6 +4962,9 @@ DataTypes;Data types;Типы данных
 MarketDataTypes;Market-data types;Типы маркет-данных
 IncrementalDepthUpdates;To send changes by the order book. If disabled, the order book is sent entirely. The default is enabled.;Отправлять изменения по стакану. Если выключено, отправляется стакан целиком. По умолчанию, включено.
 Indicators;Indicators;Индикаторы
+Subscriptions;Subscriptions;Подписки
+DataTypeMustBe;Data type must be '{0}'.;Тип данных должен быть '{0}'.
+SecurityMustBe;Security must be '{0}'.;Инструмент должен быть '{0}'.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -7443,7 +7446,7 @@ DocStr2533;To get historical ticks;Получить исторические т�
 DocStr2534;Maximum ticks count;Максимальное количество тиков
 DocStr2535;Whether all data were obtained successfully or the download process has been interrupted;Успешно ли получены все данные или процесс загрузки был прерван
 DocStr2536;To get historical candles;Получить исторические свечи
-DocStr2537;The candle parameter (for example, time-frame);Параметр свечки (например, тайм-фрейм)
+DocStr2537;The candle parameter (for example, time-frame);Параметр свечи (например, тайм-фрейм)
 DocStr2538;The message adapter for {0};Адаптер сообщений для {0}
 DocStr2539;The interface {0} implementation which provides a connection to the {1};Реализация интерфейса {0} для взаимодействия с {1}
 DocStr2540;Blackwood address list;Адреса серверов Blackwood
@@ -15575,3 +15578,13 @@ DocStr11049;The diagram element which supports subscription to market data;Эл�
 DocStr11050;The method is called at the subscribing to market data;Метод, вызываемый при подписке на маркет данные
 DocStr11051;The method is called at the unsubscribing to market data;Метод, вызываемый при отписке от маркет данных
 DocStr11052;Security new trades receiving element;Элемент получение новых сделок
+DocStr11053;Invoke {0} method;Вызвать метод {0}
+DocStr11054;The list of subscriptions;Список подписок
+DocStr11055;Throw an error if {0} isn't candle type;Выбросить ошибку если {0} не является типом свечи
+DocStr11056;Format data type into into human-readable string;Отформатировать тип данных в читаемую строку
+DocStr11057;The visual panel for modify subscriptions;Визуальная панель для редактирования подписок
+DocStr11058;To add a description of the subscription error to the table;Добавить описание ошибки подписки в таблицу
+DocStr11059;The interface for visual panel for modify subscriptions;Интерфейс визуальной панели для редактирования подписок
+DocStr11061;New subscription adding event;Событие добавления новой подписки
+DocStr11062;Existing subscription editing event;Событие изменения существующей подписки
+DocStr11063;Existing subscription removing event;Событие удаления существующей подписки

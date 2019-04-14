@@ -49296,5 +49296,35 @@ namespace StockSharp.Localization
 		/// Indicators
 		/// </summary>
 		public static string Indicators => GetString(IndicatorsKey);
+
+		/// <summary>
+		/// Subscriptions
+		/// </summary>
+		public const string SubscriptionsKey = nameof(Subscriptions);
+
+		/// <summary>
+		/// Subscriptions
+		/// </summary>
+		public static string Subscriptions => GetString(SubscriptionsKey);
+
+		/// <summary>
+		/// Data type must be '{0}'.
+		/// </summary>
+		public const string DataTypeMustBeKey = nameof(DataTypeMustBe);
+
+		/// <summary>
+		/// Data type must be '{0}'.
+		/// </summary>
+		public static string DataTypeMustBe => GetString(DataTypeMustBeKey);
+
+		/// <summary>
+		/// Security must be '{0}'.
+		/// </summary>
+		public const string SecurityMustBeKey = nameof(SecurityMustBe);
+
+		/// <summary>
+		/// Security must be '{0}'.
+		/// </summary>
+		public static string SecurityMustBe => GetString(SecurityMustBeKey);
 	}
 }
