@@ -43,6 +43,7 @@ StockSharp API Change log
 * (feature) IEntityRegistry. Subscriptions storage added.
 * (feature) EntityRegistry. Encapsulated old storage lists.
 * (feature) IExchangeInfoProvider. Init method added.
+* (feature) MarketDataMessage. CopyTo method added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
