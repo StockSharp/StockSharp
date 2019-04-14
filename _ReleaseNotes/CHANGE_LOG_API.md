@@ -45,6 +45,7 @@ StockSharp API Change log
 * (feature) IExchangeInfoProvider. Init method added.
 * (feature) MarketDataMessage. CopyTo method added.
 * (feature) MessageConverterHelper. MarketDataMessage -> CandleSeries conversion added.
+* (feature) OpenECry. Certification passed.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
