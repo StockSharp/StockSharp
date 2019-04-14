@@ -583,7 +583,7 @@ namespace StockSharp.BusinessEntities
 		void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null, long? transactionId = null);
 
 		/// <summary>
-		/// To sign up to get market data by the instrument.
+		/// To subscribe to get market data by the instrument.
 		/// </summary>
 		/// <param name="security">The instrument by which new information getting should be started.</param>
 		/// <param name="message">The message that contain subscribe info.</param>
@@ -595,6 +595,18 @@ namespace StockSharp.BusinessEntities
 		/// <param name="security">The instrument by which new information getting should be started.</param>
 		/// <param name="message">The message that contain unsubscribe info.</param>
 		void UnSubscribeMarketData(Security security, MarketDataMessage message);
+
+		/// <summary>
+		/// To subscribe to get market data.
+		/// </summary>
+		/// <param name="message">The message that contain subscribe info.</param>
+		void SubscribeMarketData(MarketDataMessage message);
+
+		/// <summary>
+		/// To unsubscribe from getting market data.
+		/// </summary>
+		/// <param name="message">The message that contain unsubscribe info.</param>
+		void UnSubscribeMarketData(MarketDataMessage message);
 
 		/// <summary>
 		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="IConnector.MarketDepthsChanged"/>.

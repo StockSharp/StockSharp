@@ -49,6 +49,7 @@ StockSharp API Change log
 * (feature) Oanda. Level1 support removed.
 * (feature) ExchangesPanel, ExchangeBoardsPanel. IExchangeInfoProvider delay registration supported.
 * (feature) SubscriptionPanel added.
+* (feature) IConnector. SubscribeMarketData/UnSubscribeMarketData overloads without Security added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
