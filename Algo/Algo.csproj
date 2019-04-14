@@ -331,7 +331,6 @@
     <Compile Include="Storages\Csv\QuoteCsvSerializer.cs" />
     <Compile Include="Storages\Csv\TickCsvSerializer.cs" />
     <Compile Include="Storages\Csv\TransactionCsvSerializer.cs" />
-    <Compile Include="Storages\ExchangeList.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="IMarketRuleContainer.cs" />
     <Compile Include="IMarketRuleList.cs" />
@@ -358,7 +357,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Storages\Binary\Level1BinarySerializer.cs" />
-    <Compile Include="Storages\NewsList.cs" />
     <Compile Include="Storages\PositionStorage.cs" />
     <Compile Include="Storages\SnapshotRegistry.cs" />
     <Compile Include="Storages\StorageEntityFactory.cs" />
@@ -382,7 +380,6 @@
     <Compile Include="Slippage\ISlippageManager.cs" />
     <Compile Include="Storages\Binary\CandleBinarySerializer.cs" />
     <Compile Include="Storages\EntityRegistry.cs" />
-    <Compile Include="Storages\ExchangeBoardList.cs" />
     <Compile Include="Storages\IEntityRegistry.cs" />
     <Compile Include="Storages\IMarketDataSerializer.cs" />
     <Compile Include="Storages\IMarketDataStorage.cs" />
@@ -444,7 +441,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProcessStates.cs" />
     <Compile Include="Storages\BaseStorageEntityList.cs" />
-    <Compile Include="Storages\OrderFailList.cs" />
     <Compile Include="Testing\BaseEmulationConnector.cs" />
     <Compile Include="Storages\BasketMarketDataStorage.cs" />
     <Compile Include="Testing\ClearingMessage.cs" />
@@ -459,11 +455,6 @@
     <Compile Include="Testing\LastMessage.cs" />
     <Compile Include="Testing\MarketDataGenerator.cs" />
     <Compile Include="Testing\MarketDepthGenerator.cs" />
-    <Compile Include="Storages\MyTradeList.cs" />
-    <Compile Include="Storages\OrderList.cs" />
-    <Compile Include="Storages\PortfolioList.cs" />
-    <Compile Include="Storages\PositionList.cs" />
-    <Compile Include="Storages\SecurityList.cs" />
     <Compile Include="Testing\ExecutionLogConverter.cs" />
     <Compile Include="Testing\MarketEmulator.cs" />
     <Compile Include="Testing\MarketEmulatorSettings.cs" />
