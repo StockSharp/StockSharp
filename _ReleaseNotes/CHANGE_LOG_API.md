@@ -46,6 +46,7 @@ StockSharp API Change log
 * (feature) MarketDataMessage. CopyTo method added.
 * (feature) MessageConverterHelper. MarketDataMessage -> CandleSeries conversion added.
 * (feature) OpenECry. Certification passed.
+* (feature) Oanda. Level1 support removed.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
