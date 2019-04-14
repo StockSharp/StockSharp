@@ -40,6 +40,7 @@ StockSharp API Change log
 * (feature) IStorageRegistry.GetSecurityStorage removed.
 * (feature) Chart. Refactoring ChartActiveOrdersElement. Removed ChartActiveOrderInfo.
 * (bug) SampleOanda. Removed level1, added order book.
+* (feature) IEntityRegistry. Subscriptions storage added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

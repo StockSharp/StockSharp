@@ -814,6 +814,85 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
+		private class SubscriptionCsvList : CsvEntityList<MarketDataMessage>
+		{
+			public SubscriptionCsvList(CsvEntityRegistry registry)
+				: base(registry, "subscription.csv")
+			{
+			}
+
+			protected override object GetKey(MarketDataMessage item) => item.TransactionId;
+
+			protected override void Write(CsvFileWriter writer, MarketDataMessage data)
+			{
+				if (data == null)
+					throw new ArgumentNullException(nameof(data));
+
+				if (!data.IsSubscribe)
+					throw new ArgumentException(nameof(data));
+
+				writer.WriteRow(new[]
+				{
+					data.TransactionId.To<string>(),
+					data.SecurityId.SecurityCode,
+					data.SecurityId.BoardCode,
+					data.DataType.To<string>(),
+					TraderHelper.CandleArgToFolderName(data.Arg),
+					data.IsCalcVolumeProfile.To<string>(),
+					data.AllowBuildFromSmallerTimeFrame.To<string>(),
+					data.IsRegularTradingHours.To<string>(),
+					data.MaxDepth.To<string>(),
+					data.NewsId,
+					data.From?.UtcDateTime.ToString(_dateTimeFormat),
+					data.To?.UtcDateTime.ToString(_dateTimeFormat),
+					data.Count.To<string>(),
+					data.BuildMode.To<string>(),
+					data.BuildFrom.To<string>(),
+					data.BuildField.To<string>(),
+				});
+			}
+
+			protected override MarketDataMessage Read(FastCsvReader reader)
+			{
+				var message = new MarketDataMessage
+				{
+					TransactionId = reader.ReadLong(),
+					SecurityId = new SecurityId
+					{
+						SecurityCode = reader.ReadString(),
+						BoardCode = reader.ReadString(),
+					},
+					DataType = reader.ReadEnum<MarketDataTypes>(),
+					IsSubscribe = true,
+				};
+
+				var argStr = reader.ReadString();
+				if (message.DataType.IsCandleDataType())
+					message.Arg = message.DataType.ToCandleMessage().ToCandleArg(argStr);
+
+				message.IsCalcVolumeProfile = reader.ReadBool();
+				message.AllowBuildFromSmallerTimeFrame = reader.ReadBool();
+				message.IsRegularTradingHours = reader.ReadBool();
+
+				message.MaxDepth = reader.ReadNullableInt();
+				message.NewsId = reader.ReadString();
+
+				var str = reader.ReadString();
+				message.From = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).UtcKind();
+
+				str = reader.ReadString();
+				message.To = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).UtcKind();
+
+				message.Count = reader.ReadNullableLong();
+
+				message.BuildMode = reader.ReadEnum<MarketDataBuildModes>();
+				message.BuildFrom = reader.ReadNullableEnum<MarketDataTypes>();
+				message.BuildField = reader.ReadNullableEnum<Level1Fields>();
+
+				return message;
+			}
+		}
+
 		private const string _dateTimeFormat = "yyyyMMddHHmmss";
 		private static readonly FastDateTimeParser _dateTimeParser = new FastDateTimeParser(_dateTimeFormat);
 
@@ -826,12 +905,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 			return _dateTimeParser.Parse(str).UtcKind();
 		}
-
-		private readonly ExchangeCsvList _exchanges;
-		private readonly ExchangeBoardCsvList _exchangeBoards;
-		private readonly SecurityCsvList _securities;
-		private readonly PortfolioCsvList _portfolios;
-		private readonly PositionCsvList _positions;
 
 		private readonly List<ICsvEntityList> _csvLists = new List<ICsvEntityList>();
 
@@ -875,23 +948,38 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
+		private readonly ExchangeCsvList _exchanges;
+
 		/// <inheritdoc />
 		public IStorageEntityList<Exchange> Exchanges => _exchanges;
+
+		private readonly ExchangeBoardCsvList _exchangeBoards;
 
 		/// <inheritdoc />
 		public IStorageEntityList<ExchangeBoard> ExchangeBoards => _exchangeBoards;
 
+		private readonly SecurityCsvList _securities;
+
 		/// <inheritdoc />
 		public IStorageSecurityList Securities => _securities;
 
+		private readonly PortfolioCsvList _portfolios;
+
 		/// <inheritdoc />
 		public IStorageEntityList<Portfolio> Portfolios => _portfolios;
+
+		private readonly PositionCsvList _positions;
 
 		/// <inheritdoc />
 		public IStoragePositionList Positions => _positions;
 
 		/// <inheritdoc />
 		public IPositionStorage PositionStorage { get; }
+
+		private readonly SubscriptionCsvList _subscriptions;
+
+		/// <inheritdoc />
+		public IStorageEntityList<MarketDataMessage> Subscriptions => _subscriptions;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CsvEntityRegistry"/>.
@@ -907,6 +995,7 @@ namespace StockSharp.Algo.Storages.Csv
 			Add(_securities = new SecurityCsvList(this));
 			Add(_portfolios = new PortfolioCsvList(this));
 			Add(_positions = new PositionCsvList(this));
+			Add(_subscriptions = new SubscriptionCsvList(this));
 
 			UpdateDelayAction();
 
