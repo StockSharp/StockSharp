@@ -5706,7 +5706,7 @@ DocStr768;The difference in the time since the last call of the event. The first
 DocStr769;Found instruments;Найденные инструменты
 DocStr770;Found portfolios;Найденные портфели
 DocStr771;A new message;Новое сообщение
-DocStr772;To sign up to get market data by the instrument;Подписаться на получение рыночных данных по инструменту
+DocStr772;To subscribe to get market data by the instrument;Подписаться на получение рыночных данных по инструменту
 DocStr773;The instrument by which new information getting should be started;Инструмент, по которому необходимо начать получать новую информацию
 DocStr775;To unsubscribe from getting market data by the instrument;Отписаться от получения рыночных данных по инструменту
 DocStr776;To start getting new information (for example, {0} or {1}) by the instrument;Начать получать новую информацию (например, {0} или {1}) по инструменту
@@ -15583,8 +15583,13 @@ DocStr11054;The list of subscriptions;Список подписок
 DocStr11055;Throw an error if {0} isn't candle type;Выбросить ошибку если {0} не является типом свечи
 DocStr11056;Format data type into into human-readable string;Отформатировать тип данных в читаемую строку
 DocStr11057;The visual panel for modify subscriptions;Визуальная панель для редактирования подписок
-DocStr11058;To add a description of the subscription error to the table;Добавить описание ошибки подписки в таблицу
 DocStr11059;The interface for visual panel for modify subscriptions;Интерфейс визуальной панели для редактирования подписок
 DocStr11061;New subscription adding event;Событие добавления новой подписки
 DocStr11062;Existing subscription editing event;Событие изменения существующей подписки
 DocStr11063;Existing subscription removing event;Событие удаления существующей подписки
+DocStr11064;To subscribe to get market data;Подписаться на получение маркет-данных
+DocStr11065;To unsubscribe from getting market data;Отписаться от получения маркет-данных
+DocStr11066;Subscription states;Состояния подписки
+DocStr11067;Get for the specified subscription current state;Получить для указанной подписки текущее состояние
+DocStr11068;Subscription;Подписка
+DocStr11069;Set for the specified subscription {0} state;Установить для указанной подписки состояние {0}

@@ -6248,11 +6248,17 @@
     <member name="E:StockSharp.Xaml.SubscriptionPanel.Removing">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.SubscriptionPanel.SetSubscriptionError(StockSharp.Messages.MarketDataMessage)">
-      <summary>
-            To add a description of the subscription error to the table.
-            </summary>
-      <param name="reply">Error.</param>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.GetState(StockSharp.Messages.MarketDataMessage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.SetSubscriptionFailed(StockSharp.Messages.MarketDataMessage,System.Exception)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.SetSubscriptionActive(StockSharp.Messages.MarketDataMessage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.SetSubscriptionStopped(StockSharp.Messages.MarketDataMessage)">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.SubscriptionPanel.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -6271,6 +6277,26 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.SubscriptionStates">
+      <summary>
+            Subscription states.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SubscriptionStates.Stopped">
+      <summary>
+            Stopped.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SubscriptionStates.Active">
+      <summary>
+            Active.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SubscriptionStates.Failed">
+      <summary>
+            Failed.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.ISubscriptionsView">
       <summary>
             The interface for visual panel for modify subscriptions.
@@ -6278,7 +6304,7 @@
     </member>
     <member name="P:StockSharp.Xaml.ISubscriptionsView.Subscriptions">
       <summary>
-            The list of all subscriptions.
+            The list of subscriptions.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.ISubscriptionsView.Adding">
@@ -6295,6 +6321,32 @@
       <summary>
             Existing subscription removing event.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ISubscriptionsView.GetState(StockSharp.Messages.MarketDataMessage)">
+      <summary>
+            Get for the specified subscription current state.
+            </summary>
+      <param name="subscription">Subscription.</param>
+      <returns>State.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionFailed(StockSharp.Messages.MarketDataMessage,System.Exception)">
+      <summary>
+            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Failed" /> state.
+            </summary>
+      <param name="subscription">Subscription.</param>
+      <param name="error">Error.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionActive(StockSharp.Messages.MarketDataMessage)">
+      <summary>
+            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Active" /> state.
+            </summary>
+      <param name="subscription">Subscription.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionStopped(StockSharp.Messages.MarketDataMessage)">
+      <summary>
+            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Stopped" /> state.
+            </summary>
+      <param name="subscription">Subscription.</param>
     </member>
     <member name="T:StockSharp.Xaml.TargetPlatformFeature">
       <summary>
