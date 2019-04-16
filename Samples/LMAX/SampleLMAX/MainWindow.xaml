@@ -24,7 +24,7 @@
 			<PasswordBox x:Name="Password" Password="" Width="100" />
 
 			<TextBlock HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Demo}" />:</TextBlock>
-            <CheckBox x:Name="IsDemo" VerticalAlignment="Center" IsChecked="True" />
+			<CheckBox x:Name="IsDemo" VerticalAlignment="Center" IsChecked="False" />
 		</StackPanel>
 		
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
