@@ -562,7 +562,7 @@ namespace StockSharp.Algo.Strategies
 
 		private Position ProcessPositionInfo(Tuple<SecurityId, string> key, decimal value)
 		{
-			var security = SafeGetConnector().LookupSecurity(key.Item1);
+			var security = SafeGetConnector().GetSecurity(key.Item1);
 			var pf = SafeGetConnector().GetPortfolio(key.Item2);
 			var position = _positions.SafeAdd(Tuple.Create(security, pf), k => new Position
 			{
@@ -1364,7 +1364,7 @@ namespace StockSharp.Algo.Strategies
 
 			_ordersInfo.Add(order, new OrderInfo { IsOwn = true });
 
-			if (order.State != OrderStates.Failed && order.State != OrderStates.Done)
+			if (!order.State.IsFinal())
 				ApplyMonitorRules(order);
 		}
 

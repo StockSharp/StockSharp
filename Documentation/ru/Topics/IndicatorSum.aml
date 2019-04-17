@@ -3,7 +3,7 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-Индикатор <legacyBold>Сумма N последних значений</legacyBold> показывает сумму N последних значений за период
+Индикатор <legacyBold>Сумма N последних значений</legacyBold> показывает сумму N последних значений за период.
 </para>
 <para>
 Для использования индикатора необходимо использовать класс

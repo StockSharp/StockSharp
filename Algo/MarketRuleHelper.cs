@@ -51,7 +51,7 @@ namespace StockSharp.Algo
 
 			protected virtual bool CheckOrderState()
 			{
-				return Order.State == OrderStates.Done || Order.State == OrderStates.Failed;
+				return Order.State.IsFinal();
 			}
 
 			protected Order Order { get; }

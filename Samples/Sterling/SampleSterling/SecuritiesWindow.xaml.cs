@@ -31,10 +31,9 @@ namespace SampleSterling
 	public partial class SecuritiesWindow
 	{
 		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
-		private readonly SynchronizedDictionary<Security, TradesWindow> _tradesWindows = new SynchronizedDictionary<Security, TradesWindow>();
 		private bool _initialized;
 
-		//public Security SelectedSecurity => SecurityPicker.SelectedSecurity;
+		private static IConnector Connector => MainWindow.Instance.Trader;
 
 		public SecuritiesWindow()
 		{
@@ -49,12 +48,6 @@ namespace SampleSterling
 				w.Close();
 			}));
 
-			_tradesWindows.SyncDo(d => d.Values.ForEach(w =>
-			{
-				w.DeleteHideable();
-				w.Close();
-			}));
-
 			base.OnClosed(e);
 		}
 
@@ -63,13 +56,13 @@ namespace SampleSterling
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = SecurityPicker.SelectedSecurity },
-				SecurityProvider = MainWindow.Instance.Trader,
-				MarketDataProvider = MainWindow.Instance.Trader,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+				SecurityProvider = Connector,
+				MarketDataProvider = Connector,
+				Portfolios = new PortfolioDataSource(Connector),
 			};
 
 			if (newOrder.ShowModal(this))
-				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+				Connector.RegisterOrder(newOrder.Order);
 		}
 
 		private void NewStopOrderClick(object sender, RoutedEventArgs e)
@@ -81,60 +74,28 @@ namespace SampleSterling
 					Security = SecurityPicker.SelectedSecurity,
 					Type = OrderTypes.Conditional,
 				},
-				SecurityProvider = MainWindow.Instance.Trader,
-				MarketDataProvider = MainWindow.Instance.Trader,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-				Adapter = MainWindow.Instance.Trader.TransactionAdapter
+				SecurityProvider = Connector,
+				MarketDataProvider = Connector,
+				Portfolios = new PortfolioDataSource(Connector),
+				Adapter = Connector.TransactionAdapter
 			};
 
 			if (newOrder.ShowModal(this))
-				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+				Connector.RegisterOrder(newOrder.Order);
 		}
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			NewOrder.IsEnabled = NewStopOrder.IsEnabled = Trades.IsEnabled = Depth.IsEnabled = security != null;
+			NewOrder.IsEnabled = NewStopOrder.IsEnabled = Level1.IsEnabled = Depth.IsEnabled = security != null;
 		}
 
-		private void FindClick(object sender, RoutedEventArgs e)
-		{
-			var wnd = new SecurityLookupWindow
-			{
-				ShowAllOption = MainWindow.Instance.Trader.MarketDataAdapter.IsSupportSecuritiesLookupAll,
-				Criteria = new Security { Code = "AAPL" }
-			};
-
-			if (!wnd.ShowModal(this))
-				return;
-
-			MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
-		}
-
-		private void TradesClick(object sender, RoutedEventArgs e)
+		private void Level1Click(object sender, RoutedEventArgs e)
 		{
 			TryInitialize();
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var window = _tradesWindows.SafeAdd(security, s =>
-				{
-					// create tick trades window
-					var wnd = new TradesWindow
-					{
-						Title = security.Code + " " + LocalizedStrings.Ticks
-					};
-
-					// subscribe on tick trades flow
-					MainWindow.Instance.Trader.RegisterTrades(security);
-
-					wnd.MakeHideable();
-					return wnd;
-				});
-
-				if (window.Visibility == Visibility.Visible)
-					window.Hide();
-				else
-					window.Show();
+				Connector.RegisterSecurity(security);
 			}
 		}
 
@@ -142,14 +103,12 @@ namespace SampleSterling
 		{
 			TryInitialize();
 
-			var trader = MainWindow.Instance.Trader;
-
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
 				var window = _quotesWindows.SafeAdd(security, s =>
 				{
 					// subscribe on order book flow
-					trader.RegisterMarketDepth(security);
+					Connector.RegisterMarketDepth(security);
 
 					// create order book window
 					var wnd = new QuotesWindow
@@ -165,30 +124,19 @@ namespace SampleSterling
 				else
 				{
 					window.Show();
-					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+					window.DepthCtrl.UpdateDepth(Connector.GetMarketDepth(security));
 				}
 			}
 		}
 
 		private void TryInitialize()
 		{
-			if (!_initialized)
-			{
-				_initialized = true;
+			if (_initialized)
+				return;
 
-				var trader = MainWindow.Instance.Trader;
+			_initialized = true;
 
-				trader.NewTrade += TraderOnNewTrade;
-				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-			}
-		}
-
-		private void TraderOnNewTrade(Trade trade)
-		{
-			var wnd = _tradesWindows.TryGetValue(trade.Security);
-
-			if (wnd != null)
-				wnd.TradeGrid.Trades.Add(trade);
+			Connector.MarketDepthChanged += TraderOnMarketDepthChanged;
 		}
 
 		private void TraderOnMarketDepthChanged(MarketDepth depth)

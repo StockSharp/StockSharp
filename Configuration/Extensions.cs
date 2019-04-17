@@ -103,6 +103,7 @@ namespace StockSharp.Configuration
 	using StockSharp.CoinCap;
 	using StockSharp.Coinigy;
 	using StockSharp.LBank;
+	using StockSharp.Tradier;
 	using StockSharp.ZB;
 
 	/// <summary>
@@ -253,6 +254,7 @@ namespace StockSharp.Configuration
 			() => typeof(CoinBeneMessageAdapter),
 			() => typeof(BitZMessageAdapter),
 			() => typeof(ZBMessageAdapter),
+			() => typeof(TradierMessageAdapter),
 		});
 
 		/// <summary>

@@ -22,7 +22,7 @@ ChartPanel.CreateOrder += (chartArea,order) =>
 
 ]]></code>
 <para>Registered orders will be displayed as a special element for displaying orders 
-<codeEntityReference>T:StockSharp.Xaml.Charting.ChartOrderElement</codeEntityReference>.</para>
+<codeEntityReference>T:StockSharp.Xaml.Charting.ChartActiveOrdersElement</codeEntityReference>.</para>
     </introduction>
 
   </developerConceptualDocument>

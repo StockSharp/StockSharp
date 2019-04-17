@@ -15,17 +15,6 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultUuid">
-            <summary>
-            Default unique software ID.
-            </summary>
-        </member>
-        <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateOrderCondition">
-            <inheritdoc />
-        </member>
-        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportStopLoss">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativePortfolioLookup">
             <inheritdoc />
         </member>
@@ -54,7 +43,7 @@
         </member>
         <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.Address">
             <summary>
-            The OpenECry server API address. The default is <see cref="F:StockSharp.OpenECry.OpenECryAddresses.Api"/>.
+            The OpenECry server API address. The default is <see cref="F:StockSharp.OpenECry.OpenECryAddresses.Prod"/>.
             </summary>
         </member>
         <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.Login">

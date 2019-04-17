@@ -47,16 +47,6 @@
         <member name="M:StockSharp.BW.BWMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>
-        <member name="T:StockSharp.BW.BWOrderCondition">
-            <summary>
-            <see cref="N:StockSharp.BW"/> order condition.
-            </summary>
-        </member>
-        <member name="M:StockSharp.BW.BWOrderCondition.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.BW.BWOrderCondition"/>.
-            </summary>
-        </member>
         <member name="T:StockSharp.BW.BWTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.BW"/>.

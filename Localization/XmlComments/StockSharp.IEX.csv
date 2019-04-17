@@ -8,6 +8,7 @@ M:StockSharp.IEX.IEXMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/
 P:StockSharp.IEX.IEXMessageAdapter.Token/summary;DocStr3145
 M:StockSharp.IEX.IEXMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.IEX.IEXMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.IEX.IEXMessageAdapter.ToString/inheritdoc;DocStr8459
 T:StockSharp.IEX.IEXTrader/summary;DocStr2539
 M:StockSharp.IEX.IEXTrader.#ctor/summary;DocStr1
 P:StockSharp.IEX.IEXTrader.Token/summary;DocStr3145

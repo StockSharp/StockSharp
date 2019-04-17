@@ -14,8 +14,6 @@ M:StockSharp.ETrade.Native.OAuthToken.Deserialize(System.String)/returns;DocStr3
 T:StockSharp.ETrade.ETradeMessageAdapter/summary;DocStr3108
 M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.ETrade.ETradeMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
-P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
 P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
 M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

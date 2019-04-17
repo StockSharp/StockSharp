@@ -21458,12 +21458,12 @@ namespace StockSharp.Localization
 		public static string Str2251 => GetString(Str2251Key);
 
 		/// <summary>
-		/// Order {0} does not have a stock exchange ID.
+		/// Order {0} does not have an exchange ID.
 		/// </summary>
 		public const string Str2252ParamsKey = nameof(Str2252Params);
 
 		/// <summary>
-		/// Order {0} does not have a stock exchange ID.
+		/// Order {0} does not have an exchange ID.
 		/// </summary>
 		public static string Str2252Params => GetString(Str2252ParamsKey);
 
@@ -49166,5 +49166,165 @@ namespace StockSharp.Localization
 		/// Post-only order.
 		/// </summary>
 		public static string PostOnlyOrder => GetString(PostOnlyOrderKey);
+
+		/// <summary>
+		/// Reduce
+		/// </summary>
+		public const string ReduceKey = nameof(Reduce);
+
+		/// <summary>
+		/// Reduce
+		/// </summary>
+		public static string Reduce => GetString(ReduceKey);
+
+		/// <summary>
+		/// Reduce position only.
+		/// </summary>
+		public const string ReducePositionKey = nameof(ReducePosition);
+
+		/// <summary>
+		/// Reduce position only.
+		/// </summary>
+		public static string ReducePosition => GetString(ReducePositionKey);
+
+		/// <summary>
+		/// OCO
+		/// </summary>
+		public const string OcoKey = nameof(Oco);
+
+		/// <summary>
+		/// OCO
+		/// </summary>
+		public static string Oco => GetString(OcoKey);
+
+		/// <summary>
+		/// One Cancels Other.
+		/// </summary>
+		public const string OcoDescKey = nameof(OcoDesc);
+
+		/// <summary>
+		/// One Cancels Other.
+		/// </summary>
+		public static string OcoDesc => GetString(OcoDescKey);
+
+		/// <summary>
+		/// SwissQuote
+		/// </summary>
+		public const string SwissQuoteKey = nameof(SwissQuote);
+
+		/// <summary>
+		/// SwissQuote
+		/// </summary>
+		public static string SwissQuote => GetString(SwissQuoteKey);
+
+		/// <summary>
+		/// X Open Hub
+		/// </summary>
+		public const string XOpenHubKey = nameof(XOpenHub);
+
+		/// <summary>
+		/// X Open Hub
+		/// </summary>
+		public static string XOpenHub => GetString(XOpenHubKey);
+
+		/// <summary>
+		/// SuperDerivatives
+		/// </summary>
+		public const string SuperDerivativesKey = nameof(SuperDerivatives);
+
+		/// <summary>
+		/// SuperDerivatives
+		/// </summary>
+		public static string SuperDerivatives => GetString(SuperDerivativesKey);
+
+		/// <summary>
+		/// Tradier
+		/// </summary>
+		public const string TradierKey = nameof(Tradier);
+
+		/// <summary>
+		/// Tradier
+		/// </summary>
+		public static string Tradier => GetString(TradierKey);
+
+		/// <summary>
+		/// Subscribe on signal
+		/// </summary>
+		public const string SubscribeOnSignalKey = nameof(SubscribeOnSignal);
+
+		/// <summary>
+		/// Subscribe on signal
+		/// </summary>
+		public static string SubscribeOnSignal => GetString(SubscribeOnSignalKey);
+
+		/// <summary>
+		/// Data types
+		/// </summary>
+		public const string DataTypesKey = nameof(DataTypes);
+
+		/// <summary>
+		/// Data types
+		/// </summary>
+		public static string DataTypes => GetString(DataTypesKey);
+
+		/// <summary>
+		/// Market-data types
+		/// </summary>
+		public const string MarketDataTypesKey = nameof(MarketDataTypes);
+
+		/// <summary>
+		/// Market-data types
+		/// </summary>
+		public static string MarketDataTypes => GetString(MarketDataTypesKey);
+
+		/// <summary>
+		/// To send changes by the order book. If disabled, the order book is sent entirely. The default is enabled.
+		/// </summary>
+		public const string IncrementalDepthUpdatesKey = nameof(IncrementalDepthUpdates);
+
+		/// <summary>
+		/// To send changes by the order book. If disabled, the order book is sent entirely. The default is enabled.
+		/// </summary>
+		public static string IncrementalDepthUpdates => GetString(IncrementalDepthUpdatesKey);
+
+		/// <summary>
+		/// Indicators
+		/// </summary>
+		public const string IndicatorsKey = nameof(Indicators);
+
+		/// <summary>
+		/// Indicators
+		/// </summary>
+		public static string Indicators => GetString(IndicatorsKey);
+
+		/// <summary>
+		/// Subscriptions
+		/// </summary>
+		public const string SubscriptionsKey = nameof(Subscriptions);
+
+		/// <summary>
+		/// Subscriptions
+		/// </summary>
+		public static string Subscriptions => GetString(SubscriptionsKey);
+
+		/// <summary>
+		/// Data type must be '{0}'.
+		/// </summary>
+		public const string DataTypeMustBeKey = nameof(DataTypeMustBe);
+
+		/// <summary>
+		/// Data type must be '{0}'.
+		/// </summary>
+		public static string DataTypeMustBe => GetString(DataTypeMustBeKey);
+
+		/// <summary>
+		/// Security must be '{0}'.
+		/// </summary>
+		public const string SecurityMustBeKey = nameof(SecurityMustBe);
+
+		/// <summary>
+		/// Security must be '{0}'.
+		/// </summary>
+		public static string SecurityMustBe => GetString(SecurityMustBeKey);
 	}
 }

@@ -18,12 +18,12 @@
 
 		<StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Orientation="Horizontal">
 			<TextBlock HorizontalAlignment="Right">
-				<Run Text="{x:Static loc:LocalizedStrings.Str3451}"/><Run Text=":"/>
+				<Run Text="{x:Static loc:LocalizedStrings.Str3451}"/>:
 			</TextBlock>
-			<PasswordBox x:Name="Token" Width="300" />
+			<PasswordBox x:Name="Token" Width="300" Password="" />
 
-			<TextBlock HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Demo}"/><Run Text=":"/></TextBlock>
-            <CheckBox x:Name="IsDemo" VerticalAlignment="Center" />
+			<TextBlock HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Demo}"/>:</TextBlock>
+			<CheckBox x:Name="IsDemo" VerticalAlignment="Center" IsChecked="False" />
 		</StackPanel>
 		
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />

@@ -42,6 +42,11 @@ namespace StockSharp.Algo.Storages
 		IEnumerable<Exchange> Exchanges { get; }
 
 		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		void Init();
+
+		/// <summary>
 		/// To get a board by the code.
 		/// </summary>
 		/// <param name="code">The board code <see cref="ExchangeBoard.Code"/>.</param>
@@ -122,6 +127,11 @@ namespace StockSharp.Algo.Storages
 
 		/// <inheritdoc />
 		public IEnumerable<Exchange> Exchanges => _exchanges.CachedValues;
+
+		/// <inheritdoc />
+		public virtual void Init()
+		{
+		}
 
 		/// <inheritdoc />
 		public ExchangeBoard GetExchangeBoard(string code)
@@ -226,14 +236,21 @@ namespace StockSharp.Algo.Storages
 		/// Initializes a new instance of the <see cref="StorageExchangeInfoProvider"/>.
 		/// </summary>
 		/// <param name="entityRegistry">The storage of trade objects.</param>
-		public StorageExchangeInfoProvider(IEntityRegistry entityRegistry)
+		/// <param name="autoInit">Invoke <see cref="Init"/> method.</param>
+		public StorageExchangeInfoProvider(IEntityRegistry entityRegistry, bool autoInit = true)
 		{
 			_entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
 
+			if (autoInit)
+				Init();
+		}
+
+		/// <inheritdoc />
+		public override void Init()
+		{
 			var boardCodes = new HashSet<string>();
 
-			boardCodes.AddRange(_entityRegistry.ExchangeBoards is ExchangeBoardList boardList
-				? boardList.GetIds() : _entityRegistry.ExchangeBoards.Select(b => b.Code));
+			boardCodes.AddRange(_entityRegistry.ExchangeBoards.Select(b => b.Code));
 
 			var boards = Boards.Where(b => !boardCodes.Contains(b.Code)).ToArray();
 
@@ -250,6 +267,8 @@ namespace StockSharp.Algo.Storages
 
 			_entityRegistry.Exchanges.ForEach(e => base.Save(e));
 			_entityRegistry.ExchangeBoards.ForEach(b => base.Save(b));
+
+			base.Init();
 		}
 
 		/// <inheritdoc />

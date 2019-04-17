@@ -24,9 +24,6 @@
     <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.CreateOrderCondition">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
@@ -49,16 +46,13 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.ToString">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fxcm.FxcmExtendedOrderTypes">
       <summary>

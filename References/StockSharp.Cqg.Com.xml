@@ -23,12 +23,6 @@
         <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
-        <member name="M:StockSharp.Cqg.Com.CqgComMessageAdapter.CreateOrderCondition">
-            <inheritdoc />
-        </member>
-        <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportStopLoss">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportCandlesUpdates">
             <inheritdoc />
         </member>

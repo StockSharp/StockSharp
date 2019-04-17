@@ -56,12 +56,6 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="M:StockSharp.ETrade.ETradeMessageAdapter.CreateOrderCondition">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportStopLoss">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>

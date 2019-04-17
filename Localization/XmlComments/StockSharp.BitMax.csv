@@ -11,6 +11,8 @@ M:StockSharp.BitMax.BitMaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tr
 M:StockSharp.BitMax.BitMaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.BitMax.BitMaxOrderCondition/summary;DocStr60
 M:StockSharp.BitMax.BitMaxOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.BitMax.BitMaxOrderCondition.StopPrice/summary;Str3460
+P:StockSharp.BitMax.BitMaxOrderCondition.PostOnly/summary;PostOnlyOrder
 T:StockSharp.BitMax.BitMaxTrader/summary;DocStr2539
 M:StockSharp.BitMax.BitMaxTrader.#ctor/summary;DocStr1
 P:StockSharp.BitMax.BitMaxTrader.Key/summary;Str3304

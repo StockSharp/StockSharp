@@ -35,12 +35,6 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.CreateOrderCondition">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.IsSupportStopLoss">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>

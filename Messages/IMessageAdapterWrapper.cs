@@ -259,15 +259,9 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual bool IsSupportSecuritiesLookupAll => InnerAdapter.IsSupportSecuritiesLookupAll;
 
-		OrderCondition IMessageAdapter.CreateOrderCondition()
-		{
-			return InnerAdapter.CreateOrderCondition();
-		}
+		OrderCondition IMessageAdapter.CreateOrderCondition() => InnerAdapter.CreateOrderCondition();
 
-		bool IMessageAdapter.IsConnectionAlive()
-		{
-			return InnerAdapter.IsConnectionAlive();
-		}
+		bool IMessageAdapter.IsConnectionAlive() => InnerAdapter.IsConnectionAlive();
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		{
@@ -293,11 +287,5 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public override string ToString() => InnerAdapter.ToString();
-
-		bool IMessageAdapterExtension.IsSupportStopLoss => InnerAdapter.IsSupportStopLoss;
-
-		bool IMessageAdapterExtension.IsSupportTakeProfit => InnerAdapter.IsSupportTakeProfit;
-
-		bool IMessageAdapterExtension.IsSupportWithdraw => InnerAdapter.IsSupportWithdraw;
 	}
 }

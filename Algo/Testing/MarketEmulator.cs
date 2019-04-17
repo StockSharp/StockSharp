@@ -657,13 +657,19 @@ namespace StockSharp.Algo.Testing
 
 							// изменяем текущие котировки, добавляя туда наши цену и объем
 							UpdateQuote(replyMsg, true);
-
-							// отправляем измененный стакан
-							result.Add(CreateQuoteMessage(
-								replyMsg.SecurityId,
-								time,
-								GetServerTime(time)));
 						}
+						else if (replyMsg.IsCanceled())
+						{
+							_parent
+								.GetPortfolioInfo(execution.PortfolioName)
+								.ProcessOrder(replyMsg, replyMsg.Balance.Value, result);
+						}
+
+						// отправляем измененный стакан
+						result.Add(CreateQuoteMessage(
+							replyMsg.SecurityId,
+							time,
+							GetServerTime(time)));
 					}
 					else
 					{
@@ -949,7 +955,7 @@ namespace StockSharp.Algo.Testing
 							result.Add(ToOrder(time, order));
 						}
 							
-						if (order.OrderType == OrderTypes.Market)
+						if (isMarket)
 						{
 							if (leftBalance > 0)
 							{

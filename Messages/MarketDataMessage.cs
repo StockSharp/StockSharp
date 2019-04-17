@@ -292,32 +292,41 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new MarketDataMessage
-			{
-				Arg = Arg,
-				DataType = DataType,
-				Error = Error,
-				From = From,
-				To = To,
-				IsSubscribe = IsSubscribe,
-				TransactionId = TransactionId,
-				Count = Count,
-				MaxDepth = MaxDepth,
-				NewsId = NewsId,
-				LocalTime = LocalTime,
-				IsNotSupported = IsNotSupported,
-				BuildMode = BuildMode,
-				BuildFrom = BuildFrom,
-				BuildField = BuildField,
-				IsCalcVolumeProfile = IsCalcVolumeProfile,
-				IsHistory = IsHistory,
-				AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame,
-				IsRegularTradingHours = IsRegularTradingHours,
-			};
-
+			var clone = new MarketDataMessage();
 			CopyTo(clone);
-
 			return clone;
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		public void CopyTo(MarketDataMessage destination)
+		{
+			if (destination == null)
+				throw new ArgumentNullException(nameof(destination));
+
+			destination.Arg = Arg;
+			destination.DataType = DataType;
+			destination.Error = Error;
+			destination.From = From;
+			destination.To = To;
+			destination.IsSubscribe = IsSubscribe;
+			destination.TransactionId = TransactionId;
+			destination.Count = Count;
+			destination.MaxDepth = MaxDepth;
+			destination.NewsId = NewsId;
+			destination.LocalTime = LocalTime;
+			destination.IsNotSupported = IsNotSupported;
+			destination.BuildMode = BuildMode;
+			destination.BuildFrom = BuildFrom;
+			destination.BuildField = BuildField;
+			destination.IsCalcVolumeProfile = IsCalcVolumeProfile;
+			destination.IsHistory = IsHistory;
+			destination.AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame;
+			destination.IsRegularTradingHours = IsRegularTradingHours;
+
+			base.CopyTo(destination);
 		}
 
 		/// <inheritdoc />

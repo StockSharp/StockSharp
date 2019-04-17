@@ -1,5 +1,13 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.17:
+* (feature) Task pane redesign.
+* (feature) CandlesBuildFrom separated for each candles series.
+* (bug) DukasCopy source. CandlesBuildFrom fix.
+* (feature) Tradier source.
+* (feature) Bitmex. Testnet supported.
+* (feature) Finam. Reset cached ids.
+
 ## v4.4.16:
 * (feature) SQLite->CSV migrated.
 * (feature) Bithumb. Prime service supported.

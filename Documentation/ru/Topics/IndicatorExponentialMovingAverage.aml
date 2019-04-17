@@ -3,7 +3,8 @@
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <introduction>
 <para>
-<legacyBold>Экспоненциальное скользящее среднее (Exponential Moving Average, EMA)</legacyBold>  это тип скользящего среднего (MA), который придает больший вес и значимость самым последним данным.
+<legacyBold>Экспоненциальное скользящее среднее (Exponential Moving Average, EMA)</legacyBold> - это тип скользящего среднего (MA),
+который придает больший вес и значимость самым последним данным.
 </para>
 <para>
 Для использования индикатора необходимо использовать класс

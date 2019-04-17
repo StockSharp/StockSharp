@@ -165,6 +165,11 @@
       <param name="date">The time is specified up to date.</param>
       <returns>Historical ticks.</returns>
     </member>
+    <member name="P:StockSharp.Algo.History.Forex.DukasCopyHistorySource.CandlesBuildFrom">
+      <summary>
+            Supported candles build sources.
+            </summary>
+    </member>
     <member name="M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Level1Fields)">
       <summary>
             To download historical timeframe candles.

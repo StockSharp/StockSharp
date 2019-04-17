@@ -61,6 +61,7 @@ M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadTickMessages(StockSha
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadTickMessages(StockSharp.BusinessEntities.Security,System.DateTime)/param/security;DocStr2831
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadTickMessages(StockSharp.BusinessEntities.Security,System.DateTime)/param/date;DocStr118
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadTickMessages(StockSharp.BusinessEntities.Security,System.DateTime)/returns;DocStr119
+P:StockSharp.Algo.History.Forex.DukasCopyHistorySource.CandlesBuildFrom/summary;DocStr11047
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Level1Fields)/summary;DocStr120
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Level1Fields)/param/security;DocStr2831
 M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Level1Fields)/param/timeFrame;DocStr121
@@ -307,12 +308,12 @@ M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetDates(System.Guid,System.Strin
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetDates(System.Guid,System.String,System.String,System.String,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr146
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableSecurities(System.Guid)/summary;DocStr2512
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableSecurities(System.Guid)/param/sessionId;DocStr138
-M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableSecurities(System.Guid)/returns;DocStr8483
+M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableSecurities(System.Guid)/returns;DataTypes
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableDataTypes(System.Guid,System.String,StockSharp.Algo.Storages.StorageFormats)/summary;DocStr8484
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableDataTypes(System.Guid,System.String,StockSharp.Algo.Storages.StorageFormats)/param/sessionId;DocStr138
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableDataTypes(System.Guid,System.String,StockSharp.Algo.Storages.StorageFormats)/param/securityId;DocStr8485
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableDataTypes(System.Guid,System.String,StockSharp.Algo.Storages.StorageFormats)/param/format;DocStr145
-M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableDataTypes(System.Guid,System.String,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr8483
+M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableDataTypes(System.Guid,System.String,StockSharp.Algo.Storages.StorageFormats)/returns;DataTypes
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.Save(System.Guid,System.String,System.String,System.String,System.DateTime,StockSharp.Algo.Storages.StorageFormats,System.Byte[])/summary;DocStr149
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.Save(System.Guid,System.String,System.String,System.String,System.DateTime,StockSharp.Algo.Storages.StorageFormats,System.Byte[])/param/sessionId;DocStr138
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.Save(System.Guid,System.String,System.String,System.String,System.DateTime,StockSharp.Algo.Storages.StorageFormats,System.Byte[])/param/securityId;SecurityId
@@ -425,7 +426,7 @@ M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetRemoteStorage(StockSharp.
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/summary;DocStr8484
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/param/securityId;DocStr8485
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/param/format;DocStr145
-M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr8483
+M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/returns;DataTypes
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Login/summary;DocStr2963
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Invoke``1(System.Func{StockSharp.Algo.History.Hydra.IRemoteStorage,``0})/summary;DocStr183
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Invoke``1(System.Func{StockSharp.Algo.History.Hydra.IRemoteStorage,``0})/typeparam/TResult;DocStr184
@@ -702,7 +703,7 @@ P:StockSharp.Algo.Storages.RemoteMarketDataDrive.AvailableSecurities/summary;Doc
 M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/summary;DocStr8484
 M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/param/securityId;DocStr8485
 M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/param/format;DocStr145
-M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/returns;DocStr8483
+M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/returns;DataTypes
 M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/summary;DocStr272
 M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/securityId;SecurityId
 M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/dataType;Str1670

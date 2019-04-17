@@ -1178,9 +1178,6 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			if (order.OrderState != OrderStates.Done)	// для ускорения в эмуляторе
-				return false;
-
 			return order.OrderState == OrderStates.Done && order.Balance > 0;
 		}
 
@@ -1485,7 +1482,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(orders));
 
 			orders = orders
-				.Where(order => order.State != OrderStates.Done && order.State != OrderStates.Failed)
+				.Where(order => !order.State.IsFinal())
 				.Where(order => isStopOrder == null || (order.Type == OrderTypes.Conditional) == isStopOrder.Value)
 				.Where(order => portfolio == null || (order.Portfolio == portfolio))
 				.Where(order => direction == null || order.Direction == direction.Value)
@@ -1496,6 +1493,14 @@ namespace StockSharp.Algo
 
 			orders.ForEach(connector.CancelOrder);
 		}
+
+		/// <summary>
+		/// Is the specified state is final (<see cref="OrderStates.Done"/> or <see cref="OrderStates.Failed"/>).
+		/// </summary>
+		/// <param name="state">Order state.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsFinal(this OrderStates state)
+			=> state == OrderStates.Done || state == OrderStates.Failed;
 
 		/// <summary>
 		/// To check whether specified instrument is used now.
@@ -1916,7 +1921,7 @@ namespace StockSharp.Algo
 				return securities.ToArray();
 
 			if (!criteria.Id.IsEmpty())
-				return securities.Where(s => s.Id == criteria.Id).ToArray();
+				return securities.Where(s => s.Id.CompareIgnoreCase(criteria.Id)).ToArray();
 
 			return securities.Where(s =>
 			{
@@ -1935,7 +1940,7 @@ namespace StockSharp.Algo
 
 				var underSecId = criteria.UnderlyingSecurityId;
 
-				if (!underSecId.IsEmpty() && s.UnderlyingSecurityId != underSecId)
+				if (!underSecId.IsEmpty() && !s.UnderlyingSecurityId.CompareIgnoreCase(underSecId))
 					return false;
 
 				if (criteria.Strike != null && s.Strike != criteria.Strike)
@@ -3378,7 +3383,7 @@ namespace StockSharp.Algo
 		/// <returns>Price step.</returns>
 		public static decimal GetPriceStep(this int decimals)
 		{
-			return 1m / 10.Pow(decimals);
+			return 1m / 10m.Pow(decimals);
 		}
 
 		/// <summary>

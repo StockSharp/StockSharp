@@ -1101,5 +1101,15 @@ namespace StockSharp.BusinessEntities
 			EngName = "ZB",
 			RusName = "ZB",
 		};
+
+		/// <summary>
+		/// Information about Tradier.
+		/// </summary>
+		public static Exchange Tradier { get; } = new Exchange
+		{
+			Name = "TRDR",
+			EngName = "Tradier",
+			RusName = "Tradier",
+		};
 	}
 }

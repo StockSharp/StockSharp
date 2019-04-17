@@ -17,11 +17,14 @@
 		</Grid.RowDefinitions>
 
 		<StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Orientation="Horizontal" HorizontalAlignment="Stretch">
-			<Label Content="{x:Static loc:LocalizedStrings.XamlStr234}" HorizontalAlignment="Right" />
+			<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr234}" VerticalAlignment="Center" />
 			<TextBox x:Name="Key" Text="" Width="170" />
 
-			<Label Content="{x:Static loc:LocalizedStrings.XamlStr646}" HorizontalAlignment="Right" />
+			<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr646}" VerticalAlignment="Center" />
 			<PasswordBox x:Name="Secret" Password="" Width="170" />
+
+			<TextBlock  VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Demo}" />:</TextBlock>
+			<CheckBox x:Name="IsDemo" VerticalAlignment="Center" IsChecked="False" />
 		</StackPanel>
 		
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />

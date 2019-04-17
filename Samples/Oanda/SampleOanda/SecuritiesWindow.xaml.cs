@@ -16,20 +16,26 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleOanda
 {
 	using System;
-	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
 
+	using Ecng.Collections;
 	using Ecng.Xaml;
+
+	using MoreLinq;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Oanda;
 	using StockSharp.Xaml;
 
 	public partial class SecuritiesWindow
 	{
+		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
+		private bool _initialized;
+
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
@@ -38,9 +44,27 @@ namespace SampleOanda
 			CandlesPeriods.SelectedIndex = 0;
 		}
 
+		protected override void OnClosed(EventArgs e)
+		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
+			var trader = MainWindow.Instance.Trader;
+			if (trader != null)
+			{
+				if (_initialized)
+					trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
+			}
+
+			base.OnClosed(e);
+		}
+
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Level1.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled = security != null;
+			NewStopOrder.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
 			TryEnableCandles();
 		}
 
@@ -77,21 +101,48 @@ namespace SampleOanda
 				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 		}
 
-		private void Level1Click(object sender, RoutedEventArgs e)
+		private void DepthClick(object sender, RoutedEventArgs e)
 		{
 			var trader = MainWindow.Instance.Trader;
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				if (trader.RegisteredSecurities.Contains(security))
+				var window = _quotesWindows.SafeAdd(security, s =>
 				{
-					trader.UnRegisterSecurity(security);
-				}
+					// subscribe on order book flow
+					trader.RegisterMarketDepth(security);
+
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
+
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
 				else
 				{
-					trader.RegisterSecurity(security);
+					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
+
+				if (!_initialized)
+				{
+					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
 				}
 			}
+		}
+
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
+		{
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
+
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)

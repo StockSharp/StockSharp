@@ -829,6 +829,26 @@
             Security.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.BuildCandlesFieldEditor">
+      <summary>
+        <see cref="P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesField" /> editor.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.BuildCandlesFieldEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.BuildCandlesFieldEditor" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.BuildCandlesFromEditor">
+      <summary>
+        <see cref="P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesFrom" /> editor.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.BuildCandlesFromEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.BuildCandlesFromEditor" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.SpecialDaysControl">
       <summary>
             Editor for <see cref="P:StockSharp.Messages.WorkingTime.SpecialDays" />.
@@ -5053,7 +5073,7 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.Messages.OrderStatusMessage)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupSecurity(StockSharp.Messages.SecurityId)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.GetSecurity(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetPortfolio(System.String)">
@@ -5072,6 +5092,12 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.SubscribeMarketData(StockSharp.Messages.MarketDataMessage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.Messages.MarketDataMessage)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})">
@@ -6163,6 +6189,164 @@
       <summary>
             InitializeComponent
             </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.SubscriptionCreateWindow">
+      <summary>
+            The window for creating and editing <see cref="T:StockSharp.Messages.MarketDataMessage" />.
+            </summary>
+      <summary>
+            SubscriptionCreateWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionCreateWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SubscriptionCreateWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SubscriptionCreateWindow.Subscription">
+      <summary>
+            Market data subscription.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionCreateWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.SubscriptionPanel">
+      <summary>
+            The visual panel for modify subscriptions.
+            </summary>
+      <summary>
+            SubscriptionPanel
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SubscriptionPanel" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SubscriptionPanel.Subscriptions">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Xaml.SubscriptionPanel.SelectedSubscription">
+      <summary>
+            The selected message.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SubscriptionPanel.SelectedSubscriptions">
+      <summary>
+            Selected messages.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.SubscriptionPanel.Adding">
+      <inheritdoc />
+    </member>
+    <member name="E:StockSharp.Xaml.SubscriptionPanel.Editing">
+      <inheritdoc />
+    </member>
+    <member name="E:StockSharp.Xaml.SubscriptionPanel.Removing">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.GetState(StockSharp.Messages.MarketDataMessage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.SetSubscriptionFailed(StockSharp.Messages.MarketDataMessage,System.Exception)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.SetSubscriptionActive(StockSharp.Messages.MarketDataMessage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.SetSubscriptionStopped(StockSharp.Messages.MarketDataMessage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.SubscriptionPanel.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.SubscriptionStates">
+      <summary>
+            Subscription states.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SubscriptionStates.Stopped">
+      <summary>
+            Stopped.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SubscriptionStates.Active">
+      <summary>
+            Active.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SubscriptionStates.Failed">
+      <summary>
+            Failed.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.ISubscriptionsView">
+      <summary>
+            The interface for visual panel for modify subscriptions.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ISubscriptionsView.Subscriptions">
+      <summary>
+            The list of subscriptions.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.ISubscriptionsView.Adding">
+      <summary>
+            New subscription adding event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.ISubscriptionsView.Editing">
+      <summary>
+            Existing subscription editing event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.ISubscriptionsView.Removing">
+      <summary>
+            Existing subscription removing event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ISubscriptionsView.GetState(StockSharp.Messages.MarketDataMessage)">
+      <summary>
+            Get for the specified subscription current state.
+            </summary>
+      <param name="subscription">Subscription.</param>
+      <returns>State.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionFailed(StockSharp.Messages.MarketDataMessage,System.Exception)">
+      <summary>
+            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Failed" /> state.
+            </summary>
+      <param name="subscription">Subscription.</param>
+      <param name="error">Error.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionActive(StockSharp.Messages.MarketDataMessage)">
+      <summary>
+            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Active" /> state.
+            </summary>
+      <param name="subscription">Subscription.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionStopped(StockSharp.Messages.MarketDataMessage)">
+      <summary>
+            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Stopped" /> state.
+            </summary>
+      <param name="subscription">Subscription.</param>
     </member>
     <member name="T:StockSharp.Xaml.TargetPlatformFeature">
       <summary>

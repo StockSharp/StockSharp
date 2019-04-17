@@ -1,9 +1,6 @@
 T:StockSharp.OpenECry.OpenECryMessageAdapter/summary;DocStr5926
 M:StockSharp.OpenECry.OpenECryMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.OpenECry.OpenECryMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultUuid/summary;DocStr8849
-M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
-P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
 P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
 P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
 P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459

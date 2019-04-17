@@ -262,6 +262,10 @@
       <Project>{D138E571-EAEE-4F78-B317-A155D038A69E}</Project>
       <Name>TradeOgre</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Tradier\Tradier.csproj">
+      <Project>{425D6A06-7B6F-47A3-B389-CB3C80F66D53}</Project>
+      <Name>Tradier</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Twime\Twime.csproj">
       <Project>{2C3ADA93-249E-4EEB-A1B7-CE5DA8DC4E33}</Project>
       <Name>Twime</Name>

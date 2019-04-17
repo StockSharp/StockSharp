@@ -22,6 +22,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
@@ -1749,20 +1750,15 @@ namespace StockSharp.Algo
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <param name="count">Candles count.</param>
+		/// <param name="throwIfInvalidType">Throw an error if <see cref="MarketDataMessage.DataType"/> isn't candle type.</param>
 		/// <returns>Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</returns>
-		public static MarketDataMessage ToMarketDataMessage(this CandleSeries series, bool isSubscribe, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null)
+		public static MarketDataMessage ToMarketDataMessage(this CandleSeries series, bool isSubscribe, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, bool throwIfInvalidType = true)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
-			var dataType = series
-				.CandleType
-				.ToCandleMessageType()
-				.ToCandleMarketDataType();
-
 			var mdMsg = new MarketDataMessage
 			{
-				DataType = dataType,
 				Arg = series.Arg,
 				IsSubscribe = isSubscribe,
 				From = from ?? series.From,
@@ -1777,9 +1773,93 @@ namespace StockSharp.Algo
 				//ExtensionInfo = extensionInfo
 			};
 
+			if (series.CandleType == null)
+			{
+				if (throwIfInvalidType)
+					throw new ArgumentException(LocalizedStrings.WrongCandleType);
+			}
+			else
+			{
+				mdMsg.DataType = series
+					.CandleType
+					.ToCandleMessageType()
+					.ToCandleMarketDataType();
+			}
+
 			mdMsg.ValidateBounds().FillSecurityInfo(series.Security);
 
 			return mdMsg;
+		}
+
+		/// <summary>
+		/// Cast <see cref="MarketDataMessage"/> to <see cref="CandleSeries"/>.
+		/// </summary>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <param name="security">Security.</param>
+		/// <param name="throwIfInvalidType">Throw an error if <see cref="MarketDataMessage.DataType"/> isn't candle type.</param>
+		/// <returns>Candles series.</returns>
+		public static CandleSeries ToCandleSeries(this MarketDataMessage message, Security security, bool throwIfInvalidType)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			var series = new CandleSeries { Security = security };
+			message.ToCandleSeries(series, throwIfInvalidType);
+			return series;
+		}
+
+		/// <summary>
+		/// Cast <see cref="MarketDataMessage"/> to <see cref="CandleSeries"/>.
+		/// </summary>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="throwIfInvalidType">Throw an error if <see cref="MarketDataMessage.DataType"/> isn't candle type.</param>
+		public static void ToCandleSeries(this MarketDataMessage message, CandleSeries series, bool throwIfInvalidType)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (series == null)
+				throw new ArgumentNullException(nameof(series));
+
+			if (message.DataType.IsCandleDataType())
+			{
+				series.CandleType = message.DataType.ToCandleMessage().ToCandleType();
+				series.Arg = message.Arg;
+			}
+			else
+			{
+				if (throwIfInvalidType)
+					throw new ArgumentException(LocalizedStrings.UnknownCandleType.Put(message.DataType), nameof(message));
+			}
+			
+			series.From = message.From;
+			series.To = message.To;
+			series.Count = message.Count;
+			series.BuildCandlesMode = message.BuildMode;
+			series.BuildCandlesFrom = message.BuildFrom;
+			series.BuildCandlesField = message.BuildField;
+			series.IsCalcVolumeProfile = message.IsCalcVolumeProfile;
+			series.AllowBuildFromSmallerTimeFrame = message.AllowBuildFromSmallerTimeFrame;
+			series.IsRegularTradingHours = message.IsRegularTradingHours;
+		}
+
+		/// <summary>
+		/// Format data type into into human-readable string.
+		/// </summary>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <returns>String.</returns>
+		public static string ToDataTypeString(this MarketDataMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var str = message.DataType.GetDisplayName();
+
+			if (message.DataType.IsCandleDataType())
+				str += " " + message.Arg;
+
+			return str;
 		}
 	}
 }

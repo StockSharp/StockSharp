@@ -15,12 +15,6 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="M:StockSharp.Sterling.SterlingMessageAdapter.CreateOrderCondition">
-            <inheritdoc />
-        </member>
-        <member name="P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportStopLoss">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportNativePortfolioLookup">
             <inheritdoc />
         </member>
@@ -110,6 +104,11 @@
         <member name="F:StockSharp.Sterling.SterlingExtendedOrderTypes.Last">
             <summary>
             By last price.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Sterling.SterlingExtendedOrderTypes.Funary">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:StockSharp.Sterling.SterlingExecutionInstructions">

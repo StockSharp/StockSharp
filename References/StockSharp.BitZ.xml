@@ -24,6 +24,11 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.BitZ.BitZMessageAdapter.AdminPassword">
+            <summary>
+            Administrative password.
+            </summary>
+        </member>
         <member name="P:StockSharp.BitZ.BitZMessageAdapter.BalanceCheckInterval">
             <summary>
             Balance check interval. Required in case of deposit and withdraw actions.
@@ -47,16 +52,6 @@
         <member name="M:StockSharp.BitZ.BitZMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>
-        <member name="T:StockSharp.BitZ.BitZOrderCondition">
-            <summary>
-            <see cref="N:StockSharp.BitZ"/> order condition.
-            </summary>
-        </member>
-        <member name="M:StockSharp.BitZ.BitZOrderCondition.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.BitZ.BitZOrderCondition"/>.
-            </summary>
-        </member>
         <member name="T:StockSharp.BitZ.BitZTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.BitZ"/>.
@@ -75,6 +70,11 @@
         <member name="P:StockSharp.BitZ.BitZTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitZ.BitZTrader.AdminPassword">
+            <summary>
+            Administrative password.
             </summary>
         </member>
         <member name="P:StockSharp.BitZ.BitZTrader.BalanceCheckInterval">

@@ -9,8 +9,6 @@ M:StockSharp.BW.BWMessageAdapter.ToString/inheritdoc;DocStr8459
 M:StockSharp.BW.BWMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.BW.BWMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.BW.BWMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-T:StockSharp.BW.BWOrderCondition/summary;DocStr60
-M:StockSharp.BW.BWOrderCondition.#ctor/summary;DocStr1
 T:StockSharp.BW.BWTrader/summary;DocStr2539
 M:StockSharp.BW.BWTrader.#ctor/summary;DocStr1
 P:StockSharp.BW.BWTrader.Key/summary;Str3304

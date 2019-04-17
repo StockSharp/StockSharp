@@ -1115,7 +1115,7 @@ namespace StockSharp.Algo
 			{
 				var toRemove = _orders.SyncGet(d =>
 				{
-					var tmp = d.Where(o => o.State == OrderStates.Done || o.State == OrderStates.Failed).Take(countToRemove).ToHashSet();
+					var tmp = d.Where(o => o.State.IsFinal()).Take(countToRemove).ToHashSet();
 					d.RemoveRange(tmp);
 					return tmp;
 				});

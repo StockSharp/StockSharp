@@ -1,11 +1,55 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.17:
 * (feature) INativeIdStorage. Clear method added.
 * (bug) FinamHistorySource. Fix https://stocksharp.ru/forum/10395/skachivanie-tikovyh-i-svechnyh-istoricheskih-dannyh-gidroi-s-finama/
 * (bug) DiMinus, DiPlus, IchimokuChinkouLine, IchimokuLine, RelativeVigorIndexAverage, RelativeVigorIndexSignal excluded from indicators list.
 * (bug) Highest, Lowest indicators fix.
 * (bug) Vidya fix.
+* (feature) CSV storage. Save/load portfolio commissions.
+* (bug) TraderHelper. GetPriceStep fix.
+* (feature) Bitfinex. Supported market data loading.
+* (feature) Bitfinex. Cancel On Disconnect.
+* (feature) Bitfinex. PostOnly, CloseOnly, ReduceOnly and OCO orders.
+* (bug) Bitmex. Fix order replace https://stocksharp.com/forum/10419/BitMEX-invalid-argument-clOrdID/
+* (feature) Bitmex. Testnet supported https://stocksharp.com/forum/10420/BitMEX-Testnet/
+* (bug) BitZ, BitMax, Bibox fixes.
+* (bug) TraderHelper. Fix Filter securities by Id.
+* (feature) IConnector. Removed obsolete LookupSecurity.
+* (bug) MarketEmulator. Fix canceled balanced processing.
+* (bug) BW fixes.
+* (feature) Kucoin. Protocol upgraded.
+* (feature) Kicoin. Sandbox supported.
+* (feature) FIX connector. SuperDerivatives, SwissQuote and XOpenHub dialects.
+* (feature) NewsGrid. Show Board column.
+* (bug) PortfolioEditor. SelectedPortfolio binding fixes.
+* (bug) Monitor. Fix LogManager freezing https://stocksharp.ru/forum/10502/logmanagerdispose()/
+* (feature) OptionPositionChart. Set own Model.
+* (feature) Sterling. Updated to 11.7 version.
+* (bug) InteractiveBrokers. Fix https://stocksharp.com/forum/10465/There-was-an-error-in-the-S-Shell-operation-strategy!/
+* (feature) OrderConditionAttribute added.
+* (feature) Tradier connector.
+* (feature) TraderHelper. IsFinal for OrderStates extension.
+* (feature) Chart. ChartActiveOrdersElement save/load supported https://stocksharp.ru/forum/10517/ne-sohranyaetsya-chartactiveorderselement/
+* (bug) Chart. Fix ChartArea.Height change from code https://stocksharp.ru/forum/10504/ustanovka-vysoty-chartarea-(programmno)/
+* (feature) Chart. ChartArea.Height changed notification added. https://stocksharp.ru/forum/10503/kak-otlovit-sobytie-izmeneniya-vysoty-chartaaria/
+* (feature) DukasCopyHistorySource.CandlesBuildFrom added.
+* (feature) FIX connector. IFixDialect.QuotesAsLevel1 added.
+* (bug) FIX connector. 5.XXX logon fix.
+* (feature) IAnalyticsChart refactoring.
+* (feature) IStorageRegistry.GetSecurityStorage removed.
+* (feature) Chart. Refactoring ChartActiveOrdersElement. Removed ChartActiveOrderInfo.
+* (bug) SampleOanda. Removed level1, added order book.
+* (feature) IEntityRegistry. Subscriptions storage added.
+* (feature) EntityRegistry. Encapsulated old storage lists.
+* (feature) IExchangeInfoProvider. Init method added.
+* (feature) MarketDataMessage. CopyTo method added.
+* (feature) MessageConverterHelper. MarketDataMessage -> CandleSeries conversion added.
+* (feature) OpenECry. Certification passed.
+* (feature) Oanda. Level1 support removed.
+* (feature) ExchangesPanel, ExchangeBoardsPanel. IExchangeInfoProvider delay registration supported.
+* (feature) SubscriptionPanel added.
+* (feature) IConnector. SubscribeMarketData/UnSubscribeMarketData overloads without Security added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

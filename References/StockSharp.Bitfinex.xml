@@ -24,23 +24,19 @@
             Secret.
             </summary>
         </member>
-        <member name="M:StockSharp.Bitfinex.BitfinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+        <member name="P:StockSharp.Bitfinex.BitfinexMessageAdapter.CancelOnDisconnect">
             <summary>
-            Save settings.
+            Cancel On Disconnect.
             </summary>
-            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Bitfinex.BitfinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Bitfinex.BitfinexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Load settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Bitfinex.BitfinexMessageAdapter.ToString">
-            <summary>
-            Returns a string that represents the current object.
-            </summary>
-            <returns>A string that represents the current object.</returns>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Bitfinex.BitfinexMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
             <summary>
@@ -71,6 +67,36 @@
             Trailing stop-loss.
             </summary>
         </member>
+        <member name="P:StockSharp.Bitfinex.BitfinexOrderCondition.TrailingPrice">
+            <summary>
+            Trailing price.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitfinex.BitfinexOrderCondition.OcoPrice">
+            <summary>
+            OCO stop price.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitfinex.BitfinexOrderCondition.PostOnly">
+            <summary>
+            Post-only order.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitfinex.BitfinexOrderCondition.Close">
+            <summary>
+            Close position.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitfinex.BitfinexOrderCondition.ReduceOnly">
+            <summary>
+            Reduce position only.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitfinex.BitfinexOrderCondition.OneCancelOther">
+            <summary>
+            One Cancels Other.
+            </summary>
+        </member>
         <member name="T:StockSharp.Bitfinex.BitfinexTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Bitfinex"/>.
@@ -89,6 +115,11 @@
         <member name="P:StockSharp.Bitfinex.BitfinexTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitfinex.BitfinexTrader.CancelOnDisconnect">
+            <summary>
+            Cancel On Disconnect.
             </summary>
         </member>
     </members>

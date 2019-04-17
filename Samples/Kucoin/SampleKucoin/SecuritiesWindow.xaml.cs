@@ -50,7 +50,7 @@ namespace SampleKucoin
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Quotes.IsEnabled = NewOrder.IsEnabled = NewStopOrder.IsEnabled = NewStopOrder.IsEnabled = Depth.IsEnabled = security != null;
+			Quotes.IsEnabled = NewOrder.IsEnabled = NewStopOrder.IsEnabled = NewStopOrder.IsEnabled = Depth.IsEnabled = OrderLog.IsEnabled = security != null;
 
 			TryEnableCandles();
 		}
@@ -160,6 +160,23 @@ namespace SampleKucoin
 				{
 					trader.RegisterSecurity(security);
 					trader.RegisterTrades(security);
+				}
+			}
+		}
+
+		private void OrderLogClick(object sender, RoutedEventArgs e)
+		{
+			var trader = MainWindow.Instance.Trader;
+
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				if (trader.RegisteredOrderLogs.Contains(security))
+				{
+					trader.UnRegisterOrderLog(security);
+				}
+				else
+				{
+					trader.RegisterOrderLog(security);
 				}
 			}
 		}

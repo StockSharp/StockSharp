@@ -5,9 +5,6 @@ F:StockSharp.LMAX.LmaxLocations.Tokyo/summary;Tokyo
 T:StockSharp.LMAX.LmaxMessageAdapter/summary;DocStr3904
 M:StockSharp.LMAX.LmaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.LMAX.LmaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.LMAX.LmaxMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
-P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportStopLoss/inheritdoc;DocStr8459
-P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportTakeProfit/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.LMAX.LmaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.LMAX.LmaxMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884

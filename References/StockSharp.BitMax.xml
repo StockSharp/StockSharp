@@ -57,6 +57,16 @@
             Initializes a new instance of the <see cref="T:StockSharp.BitMax.BitMaxOrderCondition"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.BitMax.BitMaxOrderCondition.StopPrice">
+            <summary>
+            Activation price, when reached an order will be placed.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BitMax.BitMaxOrderCondition.PostOnly">
+            <summary>
+            Post-only order.
+            </summary>
+        </member>
         <member name="T:StockSharp.BitMax.BitMaxTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.BitMax"/>.

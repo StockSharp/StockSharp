@@ -126,7 +126,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 					// load candles
 					var candles = storage.Load(loadDate);
 
-					// groupping candles by candle's middle price
+					// grouping candles by candle's middle price
 					var groupedCandles = candles.GroupBy(c => c.LowPrice + c.GetLength() / 2);
 
 					foreach (var group in groupedCandles.OrderBy(g => g.Key))
@@ -147,7 +147,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 							rows.Add(price, row = new GridRow { Price = price, Volume = sumVol });
 
 							// draw on chart
-							chart?.Append(price, sumVol);
+							chart?.Append(loadDate, price, sumVol);
 
 							// draw on table
 							gridSeries?.Add(row);
@@ -158,7 +158,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 							row.Volume += sumVol;
 
 							// update chart
-							chart?.Update(price, row.Volume);
+							chart?.Update(loadDate, price, row.Volume);
 						}
 					}
 

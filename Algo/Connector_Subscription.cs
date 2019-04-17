@@ -34,7 +34,7 @@ namespace StockSharp.Algo
 	{
 		private sealed class SubscriptionManager
 		{
-			private readonly SynchronizedDictionary<long, Tuple<MarketDataMessage, Security>> _pendingSubscriptions = new SynchronizedDictionary<long, Tuple<MarketDataMessage, Security>>();
+			private readonly SynchronizedDictionary<long, Tuple<MarketDataMessage, Security>> _requests = new SynchronizedDictionary<long, Tuple<MarketDataMessage, Security>>();
 			private readonly SynchronizedDictionary<MarketDataTypes, CachedSynchronizedSet<Security>> _subscribers = new SynchronizedDictionary<MarketDataTypes, CachedSynchronizedSet<Security>>();
 			private readonly Connector _connector;
 
@@ -47,7 +47,7 @@ namespace StockSharp.Algo
 			{
 				_subscribers.Clear();
 				_registeredPortfolios.Clear();
-				_pendingSubscriptions.Clear();
+				_requests.Clear();
 			}
 
 			private IEnumerable<Security> GetSubscribers(MarketDataTypes type)
@@ -69,14 +69,42 @@ namespace StockSharp.Algo
 
 			public void ProcessRequest(Security security, MarketDataMessage message, bool tryAdd)
 			{
+				if (message == null)
+					throw new ArgumentNullException(nameof(message));
+
+				if (!tryAdd)
+				{
+					var msg = (message.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent)
+						.Put(security?.Id, message.ToDataTypeString());
+
+					if (message.From != null && message.To != null)
+						msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
+
+					_connector.AddDebugLog(msg + ".");
+				}
+
+				if (security == null)
+				{
+					if (!message.IsSubscribe)
+					{
+						if (message.OriginalTransactionId != 0)
+							security = TryGetSecurity(message.OriginalTransactionId);
+					}
+				}
+
 				if (security == null)
 				{
 					if (message.DataType != MarketDataTypes.News)
-						throw new ArgumentNullException(nameof(security));
-				}
+					{
+						if (message.SecurityId.IsDefault())
+							throw new ArgumentNullException(nameof(security));
 
-				if (message == null)
-					throw new ArgumentNullException(nameof(message));
+						security = _connector.LookupById(message.SecurityId);
+
+						if (security == null)
+							throw new ArgumentException(LocalizedStrings.Str704Params.Put(message.SecurityId));
+					}
+				}
 
 				if (message.TransactionId == 0)
 					message.TransactionId = _connector.TransactionIdGenerator.GetNextId();
@@ -89,10 +117,10 @@ namespace StockSharp.Algo
 				if (tryAdd)
 				{
 					// if the message was looped back via IsBack=true
-					_pendingSubscriptions.TryAdd(message.TransactionId, value);
+					_requests.TryAdd(message.TransactionId, value);
 				}
 				else
-					_pendingSubscriptions.Add(message.TransactionId, value);
+					_requests.Add(message.TransactionId, value);
 
 				_connector.SendInMessage(message);
 			}
@@ -127,20 +155,20 @@ namespace StockSharp.Algo
 
 			public Security TryGetSecurity(long originalTransactionId)
 			{
-				return _pendingSubscriptions.TryGetValue(originalTransactionId)?.Item2;
+				return _requests.TryGetValue(originalTransactionId)?.Item2;
 			}
 
 			public Security ProcessResponse(MarketDataMessage response, out MarketDataMessage originalMsg, out bool unexpectedCancelled)
 			{
 				unexpectedCancelled = false;
 
-				if (!_pendingSubscriptions.TryGetValue(response.OriginalTransactionId, out var tuple))
+				if (!_requests.TryGetValue(response.OriginalTransactionId, out var tuple))
 				{
 					originalMsg = null;
 					return null;
 				}
 
-				_pendingSubscriptions.Remove(response.OriginalTransactionId);
+				//_requests.Remove(response.OriginalTransactionId);
 
 				var subscriber = tuple.Item2;
 				originalMsg = tuple.Item1;
@@ -203,30 +231,26 @@ namespace StockSharp.Algo
 		public IEnumerable<CandleSeries> SubscribedCandleSeries => _entityCache.AllCandleSeries;
 
 		/// <inheritdoc />
+		public virtual void SubscribeMarketData(MarketDataMessage message)
+		{
+			SubscribeMarketData(null, message);
+		}
+
+		/// <inheritdoc />
 		public virtual void SubscribeMarketData(Security security, MarketDataMessage message)
 		{
-			var msg = LocalizedStrings.SubscriptionSent.Put(security?.Id,
-				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
-
-			if (message.From != null && message.To != null)
-				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
-
-			this.AddDebugLog(msg + ".");
-
 			_subscriptionManager.ProcessRequest(security, message, false);
+		}
+
+		/// <inheritdoc />
+		public virtual void UnSubscribeMarketData(MarketDataMessage message)
+		{
+			UnSubscribeMarketData(null, message);
 		}
 
 		/// <inheritdoc />
 		public virtual void UnSubscribeMarketData(Security security, MarketDataMessage message)
 		{
-			var msg = LocalizedStrings.UnSubscriptionSent.Put(security?.Id,
-				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
-
-			if (message.From != null && message.To != null)
-				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
-
-			this.AddDebugLog(msg + ".");
-
 			_subscriptionManager.ProcessRequest(security, message, false);
 		}
 

@@ -149,6 +149,7 @@ namespace SampleBitmex
 
 				Trader.Key = Key.Text;
 				Trader.Secret = Secret.Password;
+				Trader.IsDemo = IsDemo.IsChecked == true;
 
 				// clear password box for security reason
 				//Secret.Clear();
