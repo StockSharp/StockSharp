@@ -17,10 +17,10 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 		[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Unicode)]
 		private struct PositionSnapshot
 		{
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string SecurityId;
 
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string Portfolio;
 
 			public long LastChangeServerTime;
@@ -55,8 +55,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			var snapshot = new PositionSnapshot
 			{
-				SecurityId = message.SecurityId.ToStringId(),
-				Portfolio = message.PortfolioName,
+				SecurityId = message.SecurityId.ToStringId().VerifySize(Sizes.S100),
+				Portfolio = message.PortfolioName.VerifySize(Sizes.S100),
 				LastChangeServerTime = message.ServerTime.To<long>(),
 				LastChangeLocalTime = message.LocalTime.To<long>(),
 			};
