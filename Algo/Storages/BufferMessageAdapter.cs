@@ -452,8 +452,6 @@ namespace StockSharp.Algo.Storages
 						UserOrderId = regMsg.UserOrderId,
 						OrderState = OrderStates.Pending,
 						Condition = regMsg.Condition?.Clone(),
-						//RepoInfo = regMsg.RepoInfo?.Clone(),
-						//RpsInfo = regMsg.RpsInfo?.Clone(),
 					});
 					break;
 				case MessageTypes.OrderCancel:

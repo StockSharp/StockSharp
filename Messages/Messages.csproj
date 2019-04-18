@@ -142,7 +142,7 @@
     <Compile Include="Level1ChangeMessage.cs" />
     <Compile Include="MarketDataMessage.cs" />
     <Compile Include="RepoOrderInfo.cs" />
-    <Compile Include="RpsOrderInfo.cs" />
+    <Compile Include="NtmOrderInfo.cs" />
     <Compile Include="SecurityId.cs" />
     <Compile Include="SecurityLookupMessage.cs" />
     <Compile Include="SecurityLookupResultMessage.cs" />

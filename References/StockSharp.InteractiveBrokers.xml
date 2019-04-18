@@ -1215,21 +1215,6 @@
             Aim of clearing.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OptionExerciseCondition">
-      <summary>
-            Order condition <see cref="F:StockSharp.Messages.OrderTypes.Execute" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OptionExerciseCondition.IsExercise">
-      <summary>
-            Exercise the option.
-            </summary>
-    </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OptionExerciseCondition.IsOverride">
-      <summary>
-            Replace action.
-            </summary>
-    </member>
     <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ActiveCondition">
       <summary>
             The condition for GTC orders.
@@ -1478,9 +1463,14 @@
             Condition for hedge-orders.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OptionExercise">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.IsOptionsExercise">
       <summary>
-            Order condition <see cref="F:StockSharp.Messages.OrderTypes.Execute" />.
+            Exercise the option.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.IsOptionsOverride">
+      <summary>
+            Replace action.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Active">

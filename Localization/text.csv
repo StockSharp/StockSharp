@@ -280,17 +280,18 @@ Str229;Portfolio name, for which an order must be placed/cancelled.;Назван
 TimeInForce;Time in force;Время жизни
 Str232;Limit order time in force.;Время жизни лимитной заявки.
 Str233;REPO\REPO-M information;Информация РЕПО\РЕПО-М
-Str234;Information for REPO\REPO-M orders.;Информация для РЕПО\РЕПО-М заявок.
-Str235;Negotiate Trades Mode information;Информация РПС
-Str236;Information for Negotiate Deals Mode orders.;Информация для РПС заявок.
+RepoInfo;Information for REPO\REPO-M orders.;Информация для РЕПО\РЕПО-М заявок.
+NtmInfo;Negotiated Trades Mode information;Информация РПС
+Str236;Information for Negotiated Trades Mode orders.;Информация для заявок РПС.
 Str237;Without state;Без состояния
 Str238;Active;Активна
 Str239;Not active;Не активна
 Str241;Market;Рыночная
 Str242;Stop;Стоп
-Str243;REPO;РЕПО
-Str244;REPO-M;РЕПО-М
-Str245;Negotiable Trades Mode;РПС
+Repo;REPO;РЕПО
+RepoM;REPO-M;РЕПО-М
+Ntm;NTM;РПС
+NtmDesc;Negotiated Trades Mode;Режим переговорных сделок
 Str246;Filling;Исполнение
 Str247;Portfolio code name.;Кодовое название портфеля.
 Str248;Active;Активен
@@ -9308,7 +9309,7 @@ DocStr4483;REPO expiration;Срок РЕПО. Параметр сделок РЕ
 DocStr4484;Repo rate, in percentage;Ставка РЕПО, в процентах
 DocStr4485;Blocking code;Признак блокировки бумаг на время операции РЕПО («YES», «NO»)
 DocStr4486;The rate of fixed compensation payable in the event that the second part of the repo, the percentage;Ставка фиксированного возмещения, выплачиваемого в случае неисполнения второй части РЕПО, в процентах
-DocStr4487;REPO RPS reference;Ссылка, которая связывает две сделки РЕПО или РПС
+DocStr4487;REPO NTM reference;Ссылка, которая связывает две сделки РЕПО или РПС
 DocStr4488;Settlement code;Код расчетов при исполнении внебиржевых заявок
 DocStr4489;REPO second price part;Цена второй части РЕПО
 DocStr4490;Execution date OTC;Дата исполнения внебиржевой сделки
@@ -9316,7 +9317,6 @@ DocStr4491;REPO-M the begin value of the discount;Начальное значе�
 DocStr4492;REPO-M the lower limit value of the discount;Нижнее предельное значение дисконта в заявке на сделку РЕПО-М
 DocStr4493;REPO-M the upper limit value of the discount;Верхнее предельное значение дисконта в заявке на сделку РЕПО-М
 DocStr4494;REPO-M volume;Объем сделки РЕПО-М в рублях
-DocStr4495;RPS order info;Информация, необходимая для создания РПС-заявки
 DocStr4496;Owner of transaction (OTC trade);Лицо, от имени которого и за чей счет регистрируется сделка (параметр внебиржевой сделки)
 DocStr4497;Currency code in ISO 4217 standard (OTC trade). Non-system trade parameter;Код валюты расчетов по внебиржевой сделке в формате ISO 4217. Параметр внебиржевой сделки
 DocStr4498;Get the hash code of the object;Рассчитать хэш-код объекта
@@ -15593,3 +15593,5 @@ DocStr11066;Subscription states;Состояния подписки
 DocStr11067;Get for the specified subscription current state;Получить для указанной подписки текущее состояние
 DocStr11068;Subscription;Подписка
 DocStr11069;Set for the specified subscription {0} state;Установить для указанной подписки состояние {0}
+DocStr11070;The interface describing REPO order condition;Интерфейс, описывающий условие РЕПО у заявки
+DocStr11071;The interface describing NTM order condition;Интерфейс, описывающий условие РПС у заявки

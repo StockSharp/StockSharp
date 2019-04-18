@@ -398,6 +398,18 @@
             До какого момента времени действительна.
             </summary>
     </member>
+    <member name="P:StockSharp.Transaq.TransaqOrderCondition.IsRepo">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Transaq.TransaqOrderCondition.RepoInfo">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Transaq.TransaqOrderCondition.IsNtm">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Transaq.TransaqOrderCondition.NtmInfo">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Transaq.Proxy">
       <summary>
             Прокси.

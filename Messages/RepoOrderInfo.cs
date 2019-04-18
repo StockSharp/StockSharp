@@ -15,25 +15,27 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Messages
 {
-    using System;
-    using System.Runtime.Serialization;
+	using System;
+	using System.ComponentModel;
+	using System.Runtime.Serialization;
 
-    using Ecng.Common;
-    using Ecng.Serialization;
+	using Ecng.Common;
+	using Ecng.Serialization;
 
-    /// <summary>
-    /// REPO info.
-    /// </summary>
-    [Serializable]
-    [System.Runtime.Serialization.DataContract]
-	public class RepoOrderInfo : Cloneable<RepoOrderInfo>
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepoOrderInfo"/>.
-        /// </summary>
-        public RepoOrderInfo()
-        {
-        }
+	/// <summary>
+	/// REPO info.
+	/// </summary>
+	[Serializable]
+	[System.Runtime.Serialization.DataContract]
+	[TypeConverter(typeof(ExpandableObjectConverter))]
+	public class RepoOrderInfo : Cloneable<RepoOrderInfo>, IPersistable
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RepoOrderInfo"/>.
+		/// </summary>
+		public RepoOrderInfo()
+		{
+		}
 
 		/// <summary>
 		/// Partner-organization.
@@ -46,14 +48,14 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		public int? Term { get; set; }
+		public decimal? Term { get; set; }
 
 		/// <summary>
 		/// Repo rate, in percentage.
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		public int? Rate { get; set; }
+		public decimal? Rate { get; set; }
 
 		/// <summary>
 		/// Blocking code.
@@ -67,14 +69,14 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		public int? RefundRate { get; set; }
+		public decimal? RefundRate { get; set; }
 
 		/// <summary>
-		/// REPO RPS reference.
+		/// REPO NTM reference.
 		/// </summary>
 		[DataMember]
 		public string MatchRef { get; set; }
-        
+
 		/// <summary>
 		/// Settlement code.
 		/// </summary>
@@ -100,21 +102,21 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		public int? StartDiscount { get; set; }
+		public decimal? StartDiscount { get; set; }
 
 		/// <summary>
 		/// REPO-M the lower limit value of the discount.
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		public int? LowerDiscount { get; set; }
+		public decimal? LowerDiscount { get; set; }
 
 		/// <summary>
 		/// REPO-M the upper limit value of the discount.
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		public int? UpperDiscount { get; set; }
+		public decimal? UpperDiscount { get; set; }
 
 		/// <summary>
 		/// REPO-M volume.
@@ -122,6 +124,11 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Nullable]
 		public decimal? Value { get; set; }
+
+		/// <summary>
+		/// REPO-M.
+		/// </summary>
+		public bool IsModified { get; set; }
 
 		/// <summary>
 		/// Create a copy of <see cref="RepoOrderInfo"/>.
@@ -143,8 +150,53 @@ namespace StockSharp.Messages
 				SecondPrice = SecondPrice,
 				StartDiscount = StartDiscount,
 				Term = Term,
-				UpperDiscount = UpperDiscount
+				UpperDiscount = UpperDiscount,
+				IsModified = IsModified
 			};
 		}
-    }
+
+		/// <summary>
+		/// Load settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Load(SettingsStorage storage)
+		{
+			MatchRef = storage.GetValue<string>(nameof(MatchRef));
+			Partner = storage.GetValue<string>(nameof(Partner));
+			SettleCode = storage.GetValue<string>(nameof(SettleCode));
+			SettleDate = storage.GetValue<DateTimeOffset?>(nameof(SettleDate));
+			Value = storage.GetValue<decimal?>(nameof(Value));
+			BlockSecurities = storage.GetValue<bool?>(nameof(BlockSecurities));
+			LowerDiscount = storage.GetValue<decimal?>(nameof(LowerDiscount));
+			Rate = storage.GetValue<decimal?>(nameof(Rate));
+			RefundRate = storage.GetValue<decimal?>(nameof(RefundRate));
+			SecondPrice = storage.GetValue<decimal?>(nameof(SecondPrice));
+			StartDiscount = storage.GetValue<decimal?>(nameof(StartDiscount));
+			Term = storage.GetValue<decimal?>(nameof(Term));
+			UpperDiscount = storage.GetValue<decimal?>(nameof(UpperDiscount));
+			IsModified = storage.GetValue<bool>(nameof(IsModified));
+		}
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Save(SettingsStorage storage)
+		{
+			storage.SetValue(nameof(MatchRef), MatchRef);
+			storage.SetValue(nameof(Partner), Partner);
+			storage.SetValue(nameof(SettleCode), SettleCode);
+			storage.SetValue(nameof(SettleDate), SettleDate);
+			storage.SetValue(nameof(Value), Value);
+			storage.SetValue(nameof(BlockSecurities), BlockSecurities);
+			storage.SetValue(nameof(LowerDiscount), LowerDiscount);
+			storage.SetValue(nameof(Rate), Rate);
+			storage.SetValue(nameof(RefundRate), RefundRate);
+			storage.SetValue(nameof(SecondPrice), SecondPrice);
+			storage.SetValue(nameof(StartDiscount), StartDiscount);
+			storage.SetValue(nameof(Term), Term);
+			storage.SetValue(nameof(UpperDiscount), UpperDiscount);
+			storage.SetValue(nameof(IsModified), IsModified);
+		}
+	}
 }

@@ -447,8 +447,6 @@ namespace StockSharp.Algo
 				Condition = order.Condition,
 				TimeInForce = order.TimeInForce,
 				TillDate = order.ExpiryDate,
-				RepoInfo = order.RepoInfo,
-				RpsInfo = order.RpsInfo,
 				//IsSystem = order.IsSystem,
 				UserOrderId = order.UserOrderId,
 				BrokerCode = order.BrokerCode,
@@ -526,8 +524,6 @@ namespace StockSharp.Algo
 				Condition = newOrder.Condition,
 				TimeInForce = newOrder.TimeInForce,
 				TillDate = newOrder.ExpiryDate,
-				RepoInfo = newOrder.RepoInfo,
-				RpsInfo = newOrder.RpsInfo,
 				//IsSystem = newOrder.IsSystem,
 
 				OldOrderId = oldOrder.Id,

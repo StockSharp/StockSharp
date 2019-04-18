@@ -1182,7 +1182,7 @@ namespace StockSharp.Algo
 			if (order.Price < 0)
 				throw new ArgumentOutOfRangeException(nameof(order), order.Price, LocalizedStrings.Str892);
 
-			if (order.Price == 0 && (order.Type == OrderTypes.Limit || order.Type == OrderTypes.ExtRepo || order.Type == OrderTypes.Repo || order.Type == OrderTypes.Rps))
+			if (order.Price == 0 && order.Type == OrderTypes.Limit)
 				throw new ArgumentException(LocalizedStrings.Str893, nameof(order));
 		}
 

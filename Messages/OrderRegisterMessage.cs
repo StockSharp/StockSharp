@@ -97,22 +97,6 @@ namespace StockSharp.Messages
 		public TimeInForce? TimeInForce { get; set; }
 
 		/// <summary>
-		/// Information for REPO\REPO-M orders.
-		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str233Key)]
-		[DescriptionLoc(LocalizedStrings.Str234Key)]
-		[MainCategory]
-		public RepoOrderInfo RepoInfo { get; set; }
-
-		/// <summary>
-		/// Information for Negotiate Deals Mode orders.
-		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str235Key)]
-		[DescriptionLoc(LocalizedStrings.Str236Key)]
-		[MainCategory]
-		public RpsOrderInfo RpsInfo { get; set; }
-
-		/// <summary>
 		/// Is the order of market-maker.
 		/// </summary>
 		[DataMember]
@@ -191,8 +175,6 @@ namespace StockSharp.Messages
 			destination.OrderType = OrderType;
 			destination.PortfolioName = PortfolioName;
 			destination.Price = Price;
-			destination.RepoInfo = RepoInfo?.Clone();
-			destination.RpsInfo = RpsInfo?.Clone();
 			//destination.SecurityId = SecurityId;
 			//destination.SecurityType = SecurityType;
 			destination.Side = Side;

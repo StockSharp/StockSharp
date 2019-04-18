@@ -132,12 +132,6 @@ namespace StockSharp.Algo.Strategies.Reporting
 					return LocalizedStrings.Str1353;
 				case OrderTypes.Market:
 					return LocalizedStrings.Str241;
-				case OrderTypes.Repo:
-					return LocalizedStrings.Str243;
-				case OrderTypes.Rps:
-					return LocalizedStrings.Str1354;
-				case OrderTypes.ExtRepo:
-					return LocalizedStrings.Str244;
 				case null:
 					return string.Empty;
 				default:

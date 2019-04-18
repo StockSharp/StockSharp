@@ -477,24 +477,6 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		/// <summary>
-		/// Information for REPO\REPO-M orders.
-		/// </summary>
-		[Ignore]
-		[DisplayNameLoc(LocalizedStrings.Str233Key)]
-		[DescriptionLoc(LocalizedStrings.Str234Key)]
-		[MainCategory]
-		public RepoOrderInfo RepoInfo { get; set; }
-
-		/// <summary>
-		/// Information for Negotiate Deals Mode orders.
-		/// </summary>
-		[Ignore]
-		[DisplayNameLoc(LocalizedStrings.Str235Key)]
-		[DescriptionLoc(LocalizedStrings.Str236Key)]
-		[MainCategory]
-		public RpsOrderInfo RpsInfo { get; set; }
-
 		[field: NonSerialized]
 		private SynchronizedDictionary<string, object> _extensionInfo;
 

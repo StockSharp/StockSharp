@@ -2840,30 +2840,30 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Information for REPO\REPO-M orders.
 		/// </summary>
-		public const string Str234Key = nameof(Str234);
+		public const string RepoInfoKey = nameof(RepoInfo);
 
 		/// <summary>
 		/// Information for REPO\REPO-M orders.
 		/// </summary>
-		public static string Str234 => GetString(Str234Key);
+		public static string RepoInfo => GetString(RepoInfoKey);
 
 		/// <summary>
-		/// Negotiate Trades Mode information
+		/// Negotiated Trades Mode information
 		/// </summary>
-		public const string Str235Key = nameof(Str235);
+		public const string NtmInfoKey = nameof(NtmInfo);
 
 		/// <summary>
-		/// Negotiate Trades Mode information
+		/// Negotiated Trades Mode information
 		/// </summary>
-		public static string Str235 => GetString(Str235Key);
+		public static string NtmInfo => GetString(NtmInfoKey);
 
 		/// <summary>
-		/// Information for Negotiate Deals Mode orders.
+		/// Information for Negotiated Trades Mode orders.
 		/// </summary>
 		public const string Str236Key = nameof(Str236);
 
 		/// <summary>
-		/// Information for Negotiate Deals Mode orders.
+		/// Information for Negotiated Trades Mode orders.
 		/// </summary>
 		public static string Str236 => GetString(Str236Key);
 
@@ -2920,32 +2920,42 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// REPO
 		/// </summary>
-		public const string Str243Key = nameof(Str243);
+		public const string RepoKey = nameof(Repo);
 
 		/// <summary>
 		/// REPO
 		/// </summary>
-		public static string Str243 => GetString(Str243Key);
+		public static string Repo => GetString(RepoKey);
 
 		/// <summary>
 		/// REPO-M
 		/// </summary>
-		public const string Str244Key = nameof(Str244);
+		public const string RepoMKey = nameof(RepoM);
 
 		/// <summary>
 		/// REPO-M
 		/// </summary>
-		public static string Str244 => GetString(Str244Key);
+		public static string RepoM => GetString(RepoMKey);
 
 		/// <summary>
-		/// Negotiable Trades Mode
+		/// NTM
 		/// </summary>
-		public const string Str245Key = nameof(Str245);
+		public const string NtmKey = nameof(Ntm);
 
 		/// <summary>
-		/// Negotiable Trades Mode
+		/// NTM
 		/// </summary>
-		public static string Str245 => GetString(Str245Key);
+		public static string Ntm => GetString(NtmKey);
+
+		/// <summary>
+		/// Negotiated Trades Mode
+		/// </summary>
+		public const string NtmDescKey = nameof(NtmDesc);
+
+		/// <summary>
+		/// Negotiated Trades Mode
+		/// </summary>
+		public static string NtmDesc => GetString(NtmDescKey);
 
 		/// <summary>
 		/// Filling
