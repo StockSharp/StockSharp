@@ -267,6 +267,8 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API_Connectors_SaveConnectorSettings.aml" />
+    <None Include="Topics\API_Connectors_SaveConnectorSettings.aml" />
     <None Include="Topics\IndicatorOptimalTrackingFilter.aml" />
     <None Include="Topics\Shell_Indicators.aml" />
     <None Include="Topics\Designer_Indicators.aml" />
@@ -4276,6 +4278,10 @@
     <Image Include="Art\IndicatorVidya.png">
       <ImageId>IndicatorVidya</ImageId>
       <AlternateText>Indicator Vidya</AlternateText>
+    </Image>
+    <Image Include="Art\API_ConnectionWindow.png">
+      <ImageId>API_ConnectionWindow</ImageId>
+      <AlternateText>API Connection Window</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
