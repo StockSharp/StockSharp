@@ -10,8 +10,6 @@ M:StockSharp.TradeOgre.TradeOgreMessageAdapter.#ctor(Ecng.Common.IdGenerator)/pa
 M:StockSharp.TradeOgre.TradeOgreMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.TradeOgre.TradeOgreOrderCondition/summary;DocStr60
 M:StockSharp.TradeOgre.TradeOgreOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.TradeOgre.TradeOgreOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.TradeOgre.TradeOgreOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.TradeOgre.TradeOgreTrader/summary;DocStr2539
 M:StockSharp.TradeOgre.TradeOgreTrader.#ctor/summary;DocStr1
 P:StockSharp.TradeOgre.TradeOgreTrader.Key/summary;Str3304
