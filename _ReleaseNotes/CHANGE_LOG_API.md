@@ -51,6 +51,7 @@ StockSharp API Change log
 * (feature) SubscriptionPanel added.
 * (feature) IConnector. SubscribeMarketData/UnSubscribeMarketData overloads without Security added.
 * (feature) OrderTypes. Repo and Rps moved to IXXXOrderCondition
+* (bug) TransactionBinarySnapshotSerializer fix.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

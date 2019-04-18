@@ -7,6 +7,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using System.Text;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Interop;
 	using Ecng.Serialization;
 
@@ -19,21 +20,21 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	/// </summary>
 	public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, ExecutionMessage>
 	{
-		//private const int _snapshotSize = 1024 * 10; // 10kb
-
-		[StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = _snapshotSize*/, CharSet = CharSet.Unicode)]
+		[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Unicode)]
 		private struct TransactionSnapshot
 		{
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string SecurityId;
 
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
-			public string Portfolio;
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
+			public string PortfolioName;
 
 			public long LastChangeServerTime;
 			public long LastChangeLocalTime;
 
-			public long OriginalTransactionId;
+			[Obsolete]
+			public long Obsolete2;
+
 			public long TransactionId;
 
 			public bool HasOrderInfo;
@@ -49,41 +50,42 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			public byte? IsSystem;
 
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string OrderStringId;
 
 			public long? TradeId;
 			public decimal? TradePrice;
 			public decimal? TradeVolume;
 
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string BrokerCode;
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string ClientCode;
 
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string Comment;
 
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string SystemComment;
 
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 200)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S200)]
 			public string Error;
 
 			public short? Currency;
 			
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string DepoName;
 
 			public long? ExpiryDate;
 			
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
-			public string PortfolioName;
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
+			[Obsolete]
+			public string Obsolete1;
 
 			public byte? IsMarketMaker;
 			public byte Side;
 			
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string OrderBoardId;
 
 			public decimal? VisibleVolume;
@@ -91,7 +93,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public long? OrderStatus;
 			public decimal? Balance;
 			
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string UserOrderId;
 
 			public byte? OriginSide;
@@ -102,25 +104,25 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public decimal? Commission;
 			public int? TradeStatus;
 			
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string TradeStringId;
 
 			public decimal? OpenInterest;
 			public byte? IsMargin;
 
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S256)]
 			public string ConditionType;
 
 			public int ConditionParamsCount;
 		}
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
-		private struct TransactionConditionParam
+		private struct TransactionConditionParamV20
 		{
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S32)]
 			public string Name;
 
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S256)]
 			public string ValueType;
 
 			public long? NumValue;
@@ -128,14 +130,24 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public bool? BoolValue;
 
 			public int StringValueLen;
-
-			//[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-			//public string StringValue;
 		}
 
-		Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = new Version(2, 0);
+		[StructLayout(LayoutKind.Sequential, Pack = 1)]
+		private struct TransactionConditionParamV21
+		{
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S32)]
+			public string Name;
 
-		//int ISnapshotSerializer<long, ExecutionMessage>.GetSnapshotSize(Version version) => _snapshotSize;
+			public int ValueTypeLen;
+
+			public long? NumValue;
+			public decimal? DecimalValue;
+			public bool? BoolValue;
+
+			public int StringValueLen;
+		}
+
+		Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = SnapshotVersions.V21;
 
 		string ISnapshotSerializer<string, ExecutionMessage>.Name => "Transactions";
 
@@ -155,8 +167,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			var snapshot = new TransactionSnapshot
 			{
-				SecurityId = message.SecurityId.ToStringId(),
-				Portfolio = message.PortfolioName,
+				SecurityId = message.SecurityId.ToStringId().VerifySize(Sizes.S100),
+				PortfolioName = message.PortfolioName.VerifySize(Sizes.S100),
 				LastChangeServerTime = message.ServerTime.To<long>(),
 				LastChangeLocalTime = message.LocalTime.To<long>(),
 
@@ -166,21 +178,21 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				HasOrderInfo = message.HasOrderInfo,
 				HasTradeInfo = message.HasTradeInfo,
 
-				BrokerCode = message.BrokerCode,
-				ClientCode = message.ClientCode,
-				Comment = message.Comment,
-				SystemComment = message.SystemComment,
+				BrokerCode = message.BrokerCode.VerifySize(Sizes.S100),
+				ClientCode = message.ClientCode.VerifySize(Sizes.S100),
+				Comment = message.Comment.VerifySize(Sizes.S100),
+				SystemComment = message.SystemComment.VerifySize(Sizes.S100),
 				Currency = message.Currency == null ? (short?)null : (short)message.Currency.Value,
-				DepoName = message.DepoName,
-				Error = message.Error?.Message,
+				DepoName = message.DepoName.VerifySize(Sizes.S100),
+				Error = (message.Error?.Message).VerifySize(Sizes.S200),
 				ExpiryDate = message.ExpiryDate?.To<long>(),
-				PortfolioName = message.PortfolioName,
+				//Obsolete1 = message.PortfolioName,
 				IsMarketMaker = message.IsMarketMaker == null ? (byte?)null : (byte)(message.IsMarketMaker.Value ? 1 : 0),
 				IsMargin = message.IsMargin == null ? (byte?)null : (byte)(message.IsMargin.Value ? 1 : 0),
 				Side = (byte)message.Side,
 				OrderId = message.OrderId,
-				OrderStringId = message.OrderStringId,
-				OrderBoardId = message.OrderBoardId,
+				OrderStringId = message.OrderStringId.VerifySize(Sizes.S100),
+				OrderBoardId = message.OrderBoardId.VerifySize(Sizes.S100),
 				OrderPrice = message.OrderPrice,
 				OrderVolume = message.OrderVolume,
 				VisibleVolume = message.VisibleVolume,
@@ -188,7 +200,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				OrderState = message.OrderState == null ? (byte?)null : (byte)message.OrderState.Value,
 				OrderStatus = message.OrderStatus,
 				Balance = message.Balance,
-				UserOrderId = message.UserOrderId,
+				UserOrderId = message.UserOrderId.VerifySize(Sizes.S100),
 				OriginSide = message.OriginSide == null ? (byte?)null : (byte)message.OriginSide.Value,
 				Latency = message.Latency?.Ticks,
 				PnL = message.PnL,
@@ -199,18 +211,18 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				TradeVolume = message.TradeVolume,
 				TradeStatus = message.TradeStatus,
 				TradeId = message.TradeId,
-				TradeStringId = message.TradeStringId,
+				TradeStringId = message.TradeStringId.VerifySize(Sizes.S100),
 				OpenInterest = message.OpenInterest,
 				IsSystem = message.IsSystem == null ? (byte?)null : (byte)(message.IsSystem.Value ? 1 : 0),
 				OrderTif = message.TimeInForce == null ? (byte?)null : (byte)message.TimeInForce.Value,
-				ConditionType = message.Condition?.GetType().GetTypeName(false),
+				ConditionType = (message.Condition?.GetType().GetTypeName(false)).VerifySize(Sizes.S256),
 			};
 
 			var conParams = message.Condition?.Parameters.Where(p => p.Value != null).ToArray() ?? ArrayHelper.Empty<KeyValuePair<string, object>>();
 
 			snapshot.ConditionParamsCount = conParams.Length;
 
-			var paramSize = typeof(TransactionConditionParam).SizeOf();
+			var paramSize = (version > SnapshotVersions.V20 ? typeof(TransactionConditionParamV21) : typeof(TransactionConditionParamV20)).SizeOf();
 			var snapshotSize = typeof(TransactionSnapshot).SizeOf();
 
 			var result = new List<byte>();
@@ -225,13 +237,28 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			foreach (var conParam in conParams)
 			{
-				buffer = new byte[paramSize];
+				var paramType = conParam.Value.GetType();
 
-				var param = new TransactionConditionParam
+				var paramTypeName = paramType.GetTypeAsString(false);
+
+				dynamic param;
+
+				if (version > SnapshotVersions.V20)
 				{
-					Name = conParam.Key,
-					ValueType = conParam.Value.GetType().GetTypeAsString(false),
-				};
+					param = new TransactionConditionParamV21
+					{
+						ValueTypeLen = Encoding.UTF8.GetBytes(paramTypeName).Length
+					};
+				}
+				else
+				{
+					param = new TransactionConditionParamV20
+					{
+						ValueType = paramTypeName.VerifySize(Sizes.S256),
+					};
+				}
+
+				param.Name = conParam.Key.VerifySize(Sizes.S32);
 
 				byte[] stringValue = null;
 
@@ -285,11 +312,32 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					case Enum e:
 						param.NumValue = e.To<long>();
 						break;
-					case IPersistable p:
-						stringValue = new XmlSerializer<SettingsStorage>().Serialize(p.Save());
+					case IRange r:
+					{
+						var storage = new SettingsStorage();
+
+						if (r.HasMinValue)
+							storage.SetValue(nameof(r.Min), r.Min);
+
+						if (r.HasMaxValue)
+							storage.SetValue(nameof(r.Max), r.Max);
+
+						if (storage.Count > 0)
+							stringValue = new XmlSerializer<SettingsStorage>().Serialize(storage);
+
 						break;
+					}
+					case IPersistable p:
+					{
+						var storage = p.Save();
+
+						if (storage.Count > 0)
+							stringValue = new XmlSerializer<SettingsStorage>().Serialize(storage);
+
+						break;
+					}
 					default:
-						stringValue = Encoding.UTF8.GetBytes(conParam.Value.To<string>());
+						stringValue = typeof(XmlSerializer<>).MakeGenericType(paramType).CreateInstance<ISerializer>().Serialize(conParam.Value);
 						break;
 				}
 
@@ -298,11 +346,16 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					param.StringValueLen = stringValue.Length;
 				}
 
-				var rowPtr = param.StructToPtr();
-				Marshal.Copy(rowPtr, buffer, 0, paramSize);
+				var paramBuff = new byte[paramSize];
+
+				var rowPtr = version > SnapshotVersions.V20 ? ((TransactionConditionParamV21)param).StructToPtr() : ((TransactionConditionParamV20)param).StructToPtr();
+				Marshal.Copy(rowPtr, paramBuff, 0, paramSize);
 				Marshal.FreeHGlobal(rowPtr);
 
-				result.AddRange(buffer);
+				result.AddRange(paramBuff);
+
+				if (version > SnapshotVersions.V20)
+					result.AddRange(Encoding.UTF8.GetBytes(paramTypeName));
 
 				if (stringValue == null)
 					continue;
@@ -328,7 +381,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				var execMsg = new ExecutionMessage
 				{
 					SecurityId = snapshot.SecurityId.ToSecurityId(),
-					PortfolioName = snapshot.Portfolio,
+					PortfolioName = snapshot.PortfolioName,
 					ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
 					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
 
@@ -383,7 +436,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				ptr += typeof(TransactionSnapshot).SizeOf();
 
-				var paramSize = typeof(TransactionConditionParam).SizeOf();
+				var paramSize = (version > SnapshotVersions.V20 ? typeof(TransactionConditionParamV21) : typeof(TransactionConditionParamV20)).SizeOf();
 
 				if (!snapshot.ConditionType.IsEmpty())
 				{
@@ -393,44 +446,84 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				for (var i = 0; i < snapshot.ConditionParamsCount; i++)
 				{
-					var param = ptr.ToStruct<TransactionConditionParam>();
-					var paramType = param.ValueType.To<Type>();
+					dynamic param;
+					string paramTypeName;
 
-					ptr += paramSize;
-
-					object value;
-
-					if (param.NumValue != null)
-						value = param.NumValue.Value;
-					else if (param.DecimalValue != null)
-						value = param.DecimalValue.Value;
-					else if (param.BoolValue != null)
-						value = param.BoolValue.Value;
-					//else if (paramType == typeof(Unit))
-					//	value = param.StringValue.ToUnit();
-					else if (param.StringValueLen > 0)
+					if (version > SnapshotVersions.V20)
 					{
-						var strBuffer = new byte[param.StringValueLen];
-						Marshal.Copy(ptr, strBuffer, 0, strBuffer.Length);
+						var s = ptr.ToStruct<TransactionConditionParamV21>();
 
-						if (typeof(IPersistable).IsAssignableFrom(paramType))
-						{
-							var persistable = paramType.CreateInstance<IPersistable>();
-							persistable.Load(new XmlSerializer<SettingsStorage>().Deserialize(strBuffer));
-							value = persistable;
-						}
-						else
-							value = Encoding.UTF8.GetString(strBuffer);
-						
-						ptr += param.StringValueLen;
+						ptr += paramSize;
+
+						var typeBuffer = new byte[s.ValueTypeLen];
+						Marshal.Copy(ptr, typeBuffer, 0, typeBuffer.Length);
+
+						paramTypeName = Encoding.UTF8.GetString(typeBuffer);
+
+						ptr += s.ValueTypeLen;
+
+						param = s;
 					}
 					else
-						value = null;
+					{
+						var s = ptr.ToStruct<TransactionConditionParamV20>();
+						paramTypeName = s.ValueType;
+
+						ptr += paramSize;
+
+						param = s;
+					}
 
 					try
 					{
+						var paramType = paramTypeName.To<Type>();
+
+						object value;
+
+						if (param.NumValue != null)
+							value = (long)param.NumValue;
+						else if (param.DecimalValue != null)
+							value = (decimal)param.DecimalValue;
+						else if (param.BoolValue != null)
+							value = (bool)param.BoolValue;
+						//else if (paramType == typeof(Unit))
+						//	value = param.StringValue.ToUnit();
+						else if (param.StringValueLen > 0)
+						{
+							var strBuffer = new byte[(int)param.StringValueLen];
+							Marshal.Copy(ptr, strBuffer, 0, strBuffer.Length);
+							ptr += strBuffer.Length;
+
+							if (typeof(IPersistable).IsAssignableFrom(paramType))
+							{
+								var persistable = paramType.CreateInstance<IPersistable>();
+								persistable.Load(new XmlSerializer<SettingsStorage>().Deserialize(strBuffer));
+								value = persistable;
+							}
+							else if (typeof(IRange).IsAssignableFrom(paramType))
+							{
+								var range = paramType.CreateInstance<IRange>();
+
+								var storage = new XmlSerializer<SettingsStorage>().Deserialize(strBuffer);
+
+								if (storage.ContainsKey(nameof(range.Min)))
+									range.Min = storage.GetValue<object>(nameof(range.Min));
+
+								if (storage.ContainsKey(nameof(range.Max)))
+									range.Max = storage.GetValue<object>(nameof(range.Max));
+
+								value = range;
+							}
+							else
+							{
+								value = typeof(XmlSerializer<>).MakeGenericType(paramType).CreateInstance<ISerializer>().Deserialize(strBuffer);
+							}
+						}
+						else
+							value = null;
+					
 						value = value.To(paramType);
-						execMsg.Condition.Parameters.Add(param.Name, value);
+						execMsg.Condition.Parameters.Add((string)param.Name, value);
 					}
 					catch (Exception ex)
 					{
