@@ -189,6 +189,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual IEnumerable<Level1Fields> CandlesBuildFrom => Enumerable.Empty<Level1Fields>();
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool CheckTimeFrameByRequest { get; set; }
 
 		private TimeSpan _heartbeatInterval = TimeSpan.Zero;

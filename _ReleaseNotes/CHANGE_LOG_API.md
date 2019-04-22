@@ -52,6 +52,7 @@ StockSharp API Change log
 * (feature) IConnector. SubscribeMarketData/UnSubscribeMarketData overloads without Security added.
 * (feature) OrderTypes. Repo and Rps moved to IXXXOrderCondition
 * (bug) TransactionBinarySnapshotSerializer fix.
+* (feature) IMessageAdapter. CandlesBuildFrom property added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

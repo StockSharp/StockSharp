@@ -70,6 +70,11 @@ namespace StockSharp.Messages
 		IEnumerable<TimeSpan> TimeFrames { get; }
 
 		/// <summary>
+		/// Possible options for candles building.
+		/// </summary>
+		IEnumerable<Level1Fields> CandlesBuildFrom { get; }
+
+		/// <summary>
 		/// Check possible time-frame by request.
 		/// </summary>
 		bool CheckTimeFrameByRequest { get; set; }
