@@ -53,6 +53,7 @@ StockSharp API Change log
 * (feature) OrderTypes. Repo and Rps moved to IXXXOrderCondition
 * (bug) TransactionBinarySnapshotSerializer fix.
 * (feature) IMessageAdapter. CandlesBuildFrom property added.
+* (bug) Envelope and MACD fixes.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

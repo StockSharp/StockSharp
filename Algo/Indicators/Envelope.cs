@@ -121,10 +121,10 @@ namespace StockSharp.Algo.Indicators
 			var value = (ComplexIndicatorValue)base.OnProcess(input);
 
 			var upper = value.InnerValues[Upper];
-			value.InnerValues[Upper] = upper.SetValue(this, upper.GetValue<decimal>() * (1 + Shift));
+			value.InnerValues[Upper] = upper.SetValue(Upper, upper.GetValue<decimal>() * (1 + Shift));
 
 			var lower = value.InnerValues[Lower];
-			value.InnerValues[Lower] = lower.SetValue(this, lower.GetValue<decimal>() * (1 - Shift));
+			value.InnerValues[Lower] = lower.SetValue(Lower, lower.GetValue<decimal>() * (1 - Shift));
 
 			return value;
 		}
