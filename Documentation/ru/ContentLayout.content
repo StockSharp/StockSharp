@@ -9,7 +9,7 @@
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Установка S#.API" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
     <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (Россия)">
-      <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" title="Quik">
+      <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" isExpanded="true" title="Quik">
         <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
         <Topic id="d79f3357-6bdf-4a6f-92d6-c9b45e820f1a" visible="True" title="Пример использования Quik Lua" />
         <Topic id="a82865dd-98ed-4579-8f48-dd8f806c39e7" visible="True" title="Стоп-заявки" />
@@ -179,7 +179,7 @@
       </Topic>
     </Topic>
     <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" isExpanded="true" title="Коннекторы Криптовалюты">
-      <Topic id="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" visible="True" title="Binance">
+      <Topic id="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" visible="True" isExpanded="true" title="Binance">
         <Topic id="a72395b7-e651-40a2-97d1-f5236bc27a4f" visible="True" title="Настройки коннектора Binance" />
         <Topic id="31525854-5ff3-4219-a61c-631480c3dbbf" visible="True" title="Пример работы с BinanceTrader" />
       </Topic>
@@ -275,9 +275,9 @@
         <Topic id="39dac157-8de7-4dd1-ad0c-4520aa9ec953" visible="True" title="Настройки коннектора Kraken" />
         <Topic id="ffca8f50-baa6-4719-9ad3-1efe6a9716a2" visible="True" title="Пример работы с KrakenTrader" />
       </Topic>
-      <Topic id="d2379d21-9bea-4199-8432-c25f73cb1594" visible="True" title="Kucoin">
+      <Topic id="d2379d21-9bea-4199-8432-c25f73cb1594" visible="True" isExpanded="true" title="Kucoin">
         <Topic id="7228e2e5-eb4e-4ad7-b575-088ee696f926" visible="True" title="Настройки коннектора Kucoin" />
-        <Topic id="e237cc0e-6470-4cf0-81cf-5fd8594a567a" visible="True" title="Пример работы с KucoinTrader" />
+        <Topic id="e237cc0e-6470-4cf0-81cf-5fd8594a567a" visible="True" isSelected="true" title="Пример работы" />
       </Topic>
       <Topic id="70ecf683-4336-4848-a05d-8edbcc730af4" visible="True" title="Liqui">
         <Topic id="84110311-8092-4090-89ce-89c57557ee1a" visible="True" title="Настройки коннектора Liqui" />
@@ -354,7 +354,7 @@
       <Topic id="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93" visible="True" title="FIX Server" />
     </Topic>
     <Topic id="2bffe740-b901-40dc-9d0b-cf2600270ad4" visible="True" noFile="true" isExpanded="true" title="Коннекторы (дополнительное)">
-      <Topic id="c23300a1-bf38-444a-b103-28350766477f" visible="True" isSelected="true" title="Инициализация подключений" />
+      <Topic id="c23300a1-bf38-444a-b103-28350766477f" visible="True" title="Сохранение и загрузка настроек коннектора" />
       <Topic id="293859e2-6c39-486c-afde-d9ae96243618" visible="True" title="Создание коннектора" />
       <Topic id="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" visible="True" title="Множество подключений" />
       <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Переподключение" />
@@ -509,7 +509,7 @@
       <Topic id="d27245ae-abfd-4d6b-b8c4-d1a24a45116f" visible="True" title="На рыночных данных" />
       <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Настройки тестирования" />
     </Topic>
-    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" title="Пользовательский интерфейс (GUI)">
+    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Пользовательский интерфейс (GUI)">
       <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" isExpanded="true" title="Графики">
         <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Свечной график" />
         <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="График-панель" />
@@ -804,7 +804,7 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Установка S#.Designer" />
     <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Обновление на новую версию" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Быстрый запуск" />
