@@ -42228,22 +42228,22 @@ namespace StockSharp.Localization
 		public static string BitStamp => GetString(BitStampKey);
 
 		/// <summary>
-		/// Fusion
+		/// Fusion (Blackwood)
 		/// </summary>
 		public const string FusionKey = nameof(Fusion);
 
 		/// <summary>
-		/// Fusion
+		/// Fusion (Blackwood)
 		/// </summary>
 		public static string Fusion => GetString(FusionKey);
 
 		/// <summary>
-		/// BTCE
+		/// WEX (BTC-e)
 		/// </summary>
 		public const string BtceKey = nameof(Btce);
 
 		/// <summary>
-		/// BTCE
+		/// WEX (BTC-e)
 		/// </summary>
 		public static string Btce => GetString(BtceKey);
 
@@ -42428,12 +42428,12 @@ namespace StockSharp.Localization
 		public static string HFT => GetString(HFTKey);
 
 		/// <summary>
-		/// SmartCOM
+		/// SmartCOM (ITI Capital)
 		/// </summary>
 		public const string SmartCOMKey = nameof(SmartCOM);
 
 		/// <summary>
-		/// SmartCOM
+		/// SmartCOM (ITI Capital)
 		/// </summary>
 		public static string SmartCOM => GetString(SmartCOMKey);
 
@@ -49336,5 +49336,15 @@ namespace StockSharp.Localization
 		/// Security must be '{0}'.
 		/// </summary>
 		public static string SecurityMustBe => GetString(SecurityMustBeKey);
+
+		/// <summary>
+		/// TWIME
+		/// </summary>
+		public const string TwimeKey = nameof(Twime);
+
+		/// <summary>
+		/// TWIME
+		/// </summary>
+		public static string Twime => GetString(TwimeKey);
 	}
 }

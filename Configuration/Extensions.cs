@@ -32,6 +32,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
+	using StockSharp.AlorHistory;
 	using StockSharp.AlphaVantage;
 	using StockSharp.BarChart;
 	using StockSharp.Bibox;
@@ -102,8 +103,15 @@ namespace StockSharp.Configuration
 	using StockSharp.Zaif;
 	using StockSharp.CoinCap;
 	using StockSharp.Coinigy;
+	using StockSharp.DukasCopy;
+	using StockSharp.Finam;
+	using StockSharp.Google;
 	using StockSharp.LBank;
+	using StockSharp.Mfd;
+	using StockSharp.Quandl;
 	using StockSharp.Tradier;
+	using StockSharp.Xignite;
+	using StockSharp.Yahoo;
 	using StockSharp.ZB;
 
 	/// <summary>
@@ -255,6 +263,14 @@ namespace StockSharp.Configuration
 			() => typeof(BitZMessageAdapter),
 			() => typeof(ZBMessageAdapter),
 			() => typeof(TradierMessageAdapter),
+			() => typeof(DukasCopyMessageAdapter),
+			() => typeof(FinamMessageAdapter),
+			() => typeof(AlorHistoryMessageAdapter),
+			() => typeof(MfdMessageAdapter),
+			() => typeof(QuandlMessageAdapter),
+			() => typeof(XigniteMessageAdapter),
+			() => typeof(YahooMessageAdapter),
+			() => typeof(GoogleMessageAdapter),
 		});
 
 		/// <summary>

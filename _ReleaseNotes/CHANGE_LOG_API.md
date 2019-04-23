@@ -54,6 +54,7 @@ StockSharp API Change log
 * (bug) TransactionBinarySnapshotSerializer fix.
 * (feature) IMessageAdapter. CandlesBuildFrom property added.
 * (bug) Envelope and MACD fixes.
+* (feature) DukasCopy, FxcmHistory, GainCapital, MBTrading, TrueFX, Google, Yahoo, MFD, Finam, AlorHistory, RTS FTP, UX, Xignite refactored into connectors.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
