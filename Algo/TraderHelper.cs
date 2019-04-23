@@ -575,8 +575,6 @@ namespace StockSharp.Algo
 				VisibleVolume = oldOrder.VisibleVolume,
 				BrokerCode = oldOrder.BrokerCode,
 				ClientCode = oldOrder.ClientCode,
-				RepoInfo = oldOrder.RepoInfo?.Clone(),
-				RpsInfo = oldOrder.RpsInfo?.Clone(),
 			};
 		}
 

@@ -52,16 +52,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.TradeOgre.TradeOgreOrderCondition"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.TradeOgre.TradeOgreOrderCondition.IsWithdraw">
-            <summary>
-            Withdraw.
-            </summary>
-        </member>
-        <member name="P:StockSharp.TradeOgre.TradeOgreOrderCondition.WithdrawInfo">
-            <summary>
-            Withdraw info.
-            </summary>
-        </member>
         <member name="T:StockSharp.TradeOgre.TradeOgreTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.TradeOgre"/>.

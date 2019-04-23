@@ -783,8 +783,6 @@ P:StockSharp.BusinessEntities.Order.ExpiryDate/remarks;DocStr2919
 P:StockSharp.BusinessEntities.Order.Condition/summary;Str155
 P:StockSharp.BusinessEntities.Order.TimeInForce/summary;Str232
 P:StockSharp.BusinessEntities.Order.DerivedOrder/summary;DocStr2920
-P:StockSharp.BusinessEntities.Order.RepoInfo/summary;Str234
-P:StockSharp.BusinessEntities.Order.RpsInfo/summary;Str236
 P:StockSharp.BusinessEntities.Order.ExtensionInfo/summary;DocStr2921
 P:StockSharp.BusinessEntities.Order.ExtensionInfo/remarks;DocStr2922
 P:StockSharp.BusinessEntities.Order.Commission/summary;Str160

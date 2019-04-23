@@ -13,8 +13,6 @@ M:StockSharp.Cex.CexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transact
 M:StockSharp.Cex.CexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Cex.CexOrderCondition/summary;DocStr60
 M:StockSharp.Cex.CexOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Cex.CexOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Cex.CexOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Cex.CexTrader/summary;DocStr2539
 M:StockSharp.Cex.CexTrader.#ctor/summary;DocStr1
 P:StockSharp.Cex.CexTrader.Key/summary;Str3304

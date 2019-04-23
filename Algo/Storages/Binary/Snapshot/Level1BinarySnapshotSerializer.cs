@@ -14,12 +14,10 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	/// </summary>
 	public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Level1ChangeMessage>
 	{
-		//private const int _snapshotSize = 1024 * 10; // 10kb
-
-		[StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = _snapshotSize*/, CharSet = CharSet.Unicode)]
+		[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Unicode)]
 		private struct Level1Snapshot
 		{
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string SecurityId;
 
 			public long LastChangeServerTime;
@@ -117,11 +115,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public decimal? BeforeSplit;
 		}
 
-		Version ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Version { get; } = new Version(2, 0);
+		Version ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Version { get; } = SnapshotVersions.V20;
 
 		string ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Name => "Level1";
-
-		//int ISnapshotSerializer<SecurityId, Level1ChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
 		byte[] ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Serialize(Version version, Level1ChangeMessage message)
 		{
@@ -133,13 +129,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			var snapshot = new Level1Snapshot
 			{
-				SecurityId = message.SecurityId.ToStringId(),
+				SecurityId = message.SecurityId.ToStringId().VerifySize(Sizes.S100),
 				LastChangeServerTime = message.ServerTime.To<long>(),
 				LastChangeLocalTime = message.LocalTime.To<long>(),
-
-				//LastTradeUpDown = -1,
-				//LastTradeOrigin = -1,
-				//State = -1,
 			};
 
 			foreach (var change in message.Changes)

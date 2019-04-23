@@ -16,8 +16,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	/// </summary>
 	public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, QuoteChangeMessage>
 	{
-		//private const int _snapshotSize = 1024 * 10; // 10kb
-
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		private struct QuotesSnapshotRow
 		{
@@ -25,10 +23,10 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public decimal Volume;
 		}
 
-		[StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = _snapshotSize*/, CharSet = CharSet.Unicode)]
+		[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Unicode)]
 		private struct QuotesSnapshot
 		{
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string SecurityId;
 
 			public long LastChangeServerTime;
@@ -37,8 +35,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public int BidCount;
 			public int AskCount;
 		}
-
-		//private const int _rowsOffset = 224;
 
 		private int? _maxDepth;
 
@@ -57,9 +53,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		Version ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Version { get; } = new Version(2, 0);
-
-		//int ISnapshotSerializer<SecurityId, QuoteChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
+		Version ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Version { get; } = SnapshotVersions.V20;
 
 		string ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Name => "OrderBook";
 
@@ -73,7 +67,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			var snapshot = new QuotesSnapshot
 			{
-				SecurityId = message.SecurityId.ToStringId(),
+				SecurityId = message.SecurityId.ToStringId().VerifySize(Sizes.S100),
 				
 				LastChangeServerTime = message.ServerTime.To<long>(),
 				LastChangeLocalTime = message.LocalTime.To<long>(),

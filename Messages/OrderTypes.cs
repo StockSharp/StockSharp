@@ -48,33 +48,5 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str242Key)]
 		Conditional,
-
-		/// <summary>
-		/// The order for REPO.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str243Key)]
-		Repo,
-
-		/// <summary>
-		/// The order for modified REPO (REPO-M).
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str244Key)]
-		ExtRepo,
-
-		/// <summary>
-		/// Order for OTC trade.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str245Key)]
-		Rps,
-
-		/// <summary>
-		/// Execution order to settlement contracts (such as options).
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str246Key)]
-		Execute,
 	}
 }

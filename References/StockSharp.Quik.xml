@@ -2660,21 +2660,17 @@
             Признак исполнения заявки «Тэйк-профит» по рыночной цене.
             </summary>
     </member>
-    <member name="M:StockSharp.Quik.QuikOrderCondition.Clone">
-      <summary>
-            Создать копию <see cref="T:StockSharp.Quik.QuikOrderCondition" />.
-            </summary>
-      <returns>Копия.</returns>
+    <member name="P:StockSharp.Quik.QuikOrderCondition.IsRepo">
+      <inheritdoc />
     </member>
-    <member name="E:StockSharp.Quik.QuikOrderCondition.PropertiesChanged">
-      <summary>
-            The available properties change event.
-            </summary>
+    <member name="P:StockSharp.Quik.QuikOrderCondition.RepoInfo">
+      <inheritdoc />
     </member>
-    <member name="M:StockSharp.Quik.QuikOrderCondition.RaisePropertiesChanged">
-      <summary>
-            To call the available properties change event.
-            </summary>
+    <member name="P:StockSharp.Quik.QuikOrderCondition.IsNtm">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Quik.QuikOrderCondition.NtmInfo">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Quik.QuikTrader">
       <summary>

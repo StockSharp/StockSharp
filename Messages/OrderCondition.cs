@@ -77,6 +77,38 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
+	/// The interface describing REPO order condition.
+	/// </summary>
+	public interface IRepoOrderCondition
+	{
+		/// <summary>
+		/// REPO.
+		/// </summary>
+		bool IsRepo { get; set; }
+
+		/// <summary>
+		/// Information for REPO\REPO-M orders.
+		/// </summary>
+		RepoOrderInfo RepoInfo { get; set; }
+	}
+
+	/// <summary>
+	/// The interface describing NTM order condition.
+	/// </summary>
+	public interface INtmOrderCondition
+	{
+		/// <summary>
+		/// NTM.
+		/// </summary>
+		bool IsNtm { get; set; }
+
+		/// <summary>
+		/// Information for Negotiated Trades Mode orders.
+		/// </summary>
+		NtmOrderInfo NtmInfo { get; set; }
+	}
+
+	/// <summary>
 	/// The interface describing take-profit order condition.
 	/// </summary>
 	public interface ITakeProfitOrderCondition
@@ -146,6 +178,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		protected BaseWithdrawOrderCondition()
 		{
+			IsWithdraw = false;
 			WithdrawInfo = new WithdrawInfo(); 
 		}
 
@@ -159,7 +192,7 @@ namespace StockSharp.Messages
 			Order = 10)]
 		public bool IsWithdraw
 		{
-			get => (bool?)Parameters.TryGetValue(nameof(IsWithdraw)) ?? false;
+			get => (bool)Parameters[nameof(IsWithdraw)];
 			set => Parameters[nameof(IsWithdraw)] = value;
 		}
 
@@ -174,7 +207,7 @@ namespace StockSharp.Messages
 		public WithdrawInfo WithdrawInfo
 		{
 			get => (WithdrawInfo)Parameters[nameof(WithdrawInfo)];
-			set => Parameters[nameof(WithdrawInfo)] = value;
+			set => Parameters[nameof(WithdrawInfo)] = value ?? throw new ArgumentNullException(nameof(value));
 		}
 	}
 
