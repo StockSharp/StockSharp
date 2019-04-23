@@ -649,7 +649,7 @@ namespace StockSharp.Algo
 			return new SecurityLookupMessage
 			{
 				//LocalTime = CurrentTime,
-				SecurityId = securityId ?? (criteria.Id.IsEmpty() && criteria.Code.IsEmpty() ? default(SecurityId) : criteria.ToSecurityId()),
+				SecurityId = securityId ?? (criteria.Id.IsEmpty() && criteria.Code.IsEmpty() ? default(SecurityId) : criteria.ToSecurityId(boardIsRequired: false)),
 				Name = criteria.Name,
 				Class = criteria.Class,
 				SecurityType = criteria.Type,
@@ -1458,8 +1458,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="idGenerator">The instrument identifiers generator <see cref="Security.Id"/>.</param>
+		/// <param name="boardIsRequired"><see cref="Security.Board"/> is required.</param>
 		/// <returns>Security ID.</returns>
-		public static SecurityId ToSecurityId(this Security security, SecurityIdGenerator idGenerator = null)
+		public static SecurityId ToSecurityId(this Security security, SecurityIdGenerator idGenerator = null, bool boardIsRequired = true)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -1499,11 +1500,11 @@ namespace StockSharp.Algo
 					throw new ArgumentException(LocalizedStrings.Str1123);
 				}
 
-				if (security.Board == null)
+				if (security.Board == null && boardIsRequired)
 					throw new ArgumentException(LocalizedStrings.Str1124Params.Put(security.Code));
 
 				secCode = security.Code;
-				boardCode = security.Board.Code;
+				boardCode = security.Board?.Code;
 			}
 
 			return security.ExternalId.ToSecurityId(secCode, boardCode, security.Type);
