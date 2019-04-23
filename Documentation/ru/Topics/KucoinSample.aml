@@ -2,7 +2,7 @@
 <topic id="e237cc0e-6470-4cf0-81cf-5fd8594a567a" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Kucoin.KucoinTrader</codeEntityReference> демонстрирует приложение SampleKucoin,
+      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Kucoin.KucoinMessageAdapter</codeEntityReference> демонстрирует приложение SampleKucoin,
         показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/Kucoin</legacyItalic>.</para>
 		<mediaLink><image placement="center" xlink:href="KucoinSample"/></mediaLink>
     </introduction>
@@ -11,17 +11,30 @@
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>В самом начале необходимо создать экземпляр класса шлюза 
-					<codeEntityReference qualifyHint="false">T:StockSharp.Kucoin.KucoinTrader</codeEntityReference>:</para>
+					<para>В самом начале необходимо создать экземпляр класса <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>:</para>
             		<code language="C#">
             				<![CDATA[
-// создаем подключение
-Trader = new KucoinTrader();// { LogLevel = LogLevels.Debug };
-.....
-Trader.Key = Key.Text;
-Trader.Secret = Secret.Password;
+Connector Connector = new Connector();
 							]]>
 					</code>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>Далее необходимо создать экземпляр класса адаптера 
+					<codeEntityReference qualifyHint="false">T:StockSharp.Kucoin.KucoinMessageAdapter</codeEntityReference> 
+					и передать его в <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>:</para>
+            		<code language="C#">
+            				<![CDATA[
+            var messageAdapter = new KucoinMessageAdapter(_connector.TransactionIdGenerator)
+            {
+                Key = "qwerapeiruWEXBQFWMPWRLTNty".To<SecureString>(),
+                Secret = "qwPOEIUXNQVEIRYERNVBWRIVIWBVMPQWM".To<SecureString>(),
+            };
+            Connector.Adapter.InnerAdapters.Add(messageAdapter);
+							]]>
+					</code>
+	<para>Также <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> можно настроить с помощью <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" /></para>
 				</content>
 			</step>
 			<step>
@@ -29,7 +42,7 @@ Trader.Secret = Secret.Password;
 					<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
             		<code language="C#">
             				<![CDATA[
-Trader.Restored += () => this.GuiAsync(() =>
+Connector.Restored += () => this.GuiAsync(() =>
 {
 	// разблокируем кнопку Экспорт (соединение было восстановлено)
 	ChangeConnectStatus(true);
@@ -37,7 +50,7 @@ Trader.Restored += () => this.GuiAsync(() =>
 });
 
 // подписываемся на событие успешного соединения
-Trader.Connected += () =>
+Connector.Connected += () =>
 {
 	// возводим флаг, что соединение установлено
 	_isConnected = true;
@@ -45,10 +58,10 @@ Trader.Connected += () =>
 	// разблокируем кнопку Экспорт
 	this.GuiAsync(() => ChangeConnectStatus(true));
 };
-Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
+Connector.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 // подписываемся на событие разрыва соединения
-Trader.ConnectionError += error => this.GuiAsync(() =>
+Connector.ConnectionError += error => this.GuiAsync(() =>
 {
 	// заблокируем кнопку Экспорт (так как соединение было потеряно)
 	ChangeConnectStatus(false);
@@ -57,31 +70,31 @@ Trader.ConnectionError += error => this.GuiAsync(() =>
 });
 
 // подписываемся на ошибку обработки данных (транзакций и маркет)
-Trader.Error += error =>
+Connector.Error += error =>
 	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 // подписываемся на ошибку подписки маркет-данных
-Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
 	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+Connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+Connector.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+Connector.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+Connector.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
 
-Trader.NewPortfolio += portfolio =>
+Connector.NewPortfolio += portfolio =>
 {
 	// регистрирует портфели на обновление данных
-	Trader.RegisterPortfolio(portfolio);
+	Connector.RegisterPortfolio(portfolio);
 
 	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
 };
-Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+Connector.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 // subscribe on error of order registration event
-Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
+Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 // subscribe on error of order cancelling event
-Trader.OrderCancelFailed += OrderFailed;          
+Connector.OrderCancelFailed += OrderFailed;          
 							]]>
 					</code>						
 				</content>
@@ -91,7 +104,7 @@ Trader.OrderCancelFailed += OrderFailed;
 					<para>Далее необходимо выполнить подключение к серверу <token>Kucoin</token>:</para>
             		<code language="C#">
             				<![CDATA[
-Trader.Connect();
+Connector.Connect();
 							]]>
 					</code>						
 				</content>
@@ -138,7 +151,7 @@ Trader.Connect();
 private void QuotesClick(object sender, RoutedEventArgs e)
 {
 	var security = SecurityPicker.SelectedSecurity;
-	var trader = MainWindow.Instance.Trader;
+	var trader = MainWindow.Instance.Connector;
 
 	if (trader.RegisteredSecurities.Contains(security))
 	{
@@ -163,7 +176,7 @@ private void QuotesClick(object sender, RoutedEventArgs e)
             				<![CDATA[
 private void DepthClick(object sender, RoutedEventArgs e)
 {
-	var trader = MainWindow.Instance.Trader;
+	var trader = MainWindow.Instance.Connector;
 
 	var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
 	{
@@ -205,13 +218,13 @@ private void NewOrderClick(object sender, RoutedEventArgs e)
 	var newOrder = new OrderWindow
 	{
 		Order = new Order { Security = SecurityPicker.SelectedSecurity },
-		SecurityProvider = MainWindow.Instance.Trader,
-		MarketDataProvider = MainWindow.Instance.Trader,
-		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		SecurityProvider = MainWindow.Instance.Connector,
+		MarketDataProvider = MainWindow.Instance.Connector,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Connector),
 	};
 
 	if (newOrder.ShowModal(this))
-		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+		MainWindow.Instance.Connector.RegisterOrder(newOrder.Order);
 }
 							]]>
 							</code>						
@@ -239,7 +252,7 @@ var order = new Order
 	Security = new Security() { Code = "BTC" },
 };
 
-Trader.RegisterOrder(order);
+Connector.RegisterOrder(order);
 
 							]]>
 							</code>						
