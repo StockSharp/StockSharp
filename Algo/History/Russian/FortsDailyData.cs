@@ -52,7 +52,7 @@ namespace StockSharp.Algo.History.Russian
 		public static IEnumerable<Level1ChangeMessage> GetSecurityEndOfDay(SecurityId securityId, string securityName, DateTime fromDate, DateTime toDate)
 		{
 			if (fromDate > toDate)
-				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.Str2111Params.Put(fromDate, toDate));
+				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.Str1119Params.Put(fromDate, toDate));
 
 			using (var client = new WebClient())
 			{
@@ -125,7 +125,7 @@ namespace StockSharp.Algo.History.Russian
 				throw new ArgumentNullException(nameof(security));
 
 			if (fromDate > toDate)
-				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.Str2111Params.Put(fromDate, toDate));
+				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.Str1119Params.Put(fromDate, toDate));
 
 			using (var client = new WebClient())
 			{

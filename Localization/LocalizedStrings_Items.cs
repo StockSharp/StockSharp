@@ -20318,16 +20318,6 @@ namespace StockSharp.Localization
 		public static string Str2110Params => GetString(Str2110ParamsKey);
 
 		/// <summary>
-		/// Period starting date {0} is greater than ending date {1}.
-		/// </summary>
-		public const string Str2111ParamsKey = nameof(Str2111Params);
-
-		/// <summary>
-		/// Period starting date {0} is greater than ending date {1}.
-		/// </summary>
-		public static string Str2111Params => GetString(Str2111ParamsKey);
-
-		/// <summary>
 		/// Failed to get data.
 		/// </summary>
 		public const string Str2112Key = nameof(Str2112);
