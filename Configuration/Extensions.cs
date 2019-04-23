@@ -105,11 +105,13 @@ namespace StockSharp.Configuration
 	using StockSharp.Coinigy;
 	using StockSharp.DukasCopy;
 	using StockSharp.Finam;
+	using StockSharp.FinViz;
 	using StockSharp.Google;
 	using StockSharp.LBank;
 	using StockSharp.Mfd;
 	using StockSharp.Quandl;
 	using StockSharp.Tradier;
+	using StockSharp.UkrExh;
 	using StockSharp.Xignite;
 	using StockSharp.Yahoo;
 	using StockSharp.ZB;
@@ -271,6 +273,8 @@ namespace StockSharp.Configuration
 			() => typeof(XigniteMessageAdapter),
 			() => typeof(YahooMessageAdapter),
 			() => typeof(GoogleMessageAdapter),
+			() => typeof(FinVizMessageAdapter),
+			() => typeof(UkrExhMessageAdapter),
 		});
 
 		/// <summary>

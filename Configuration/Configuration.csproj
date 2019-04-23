@@ -186,6 +186,10 @@
       <Project>{CA9992B3-58D1-4BD9-B24A-54149B9A92CA}</Project>
       <Name>Finam</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\FinViz\FinViz.csproj">
+      <Project>{A0198C4B-C905-4BD8-B14E-9C570479AED3}</Project>
+      <Name>FinViz</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Gdax\Gdax.csproj">
       <Project>{51134FC5-2DAB-4905-9E41-A3E8E754AF7C}</Project>
       <Name>Gdax</Name>
@@ -305,6 +309,10 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Fxcm\Fxcm.csproj">
       <Project>{358B4D44-CB92-4DED-AFD4-3DAC72D167E5}</Project>
       <Name>Fxcm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\UkrExh\UkrExh.csproj">
+      <Project>{57015126-7323-46F5-AD15-9BEBFB627D8B}</Project>
+      <Name>UkrExh</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Xignite\Xignite.csproj">
       <Project>{8C7F287B-67DF-48D7-A233-947EDB95F22D}</Project>

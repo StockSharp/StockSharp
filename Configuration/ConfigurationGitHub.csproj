@@ -61,6 +61,9 @@
     <Reference Include="StockSharp.AlfaDirect">
       <HintPath>..\References\StockSharp.AlfaDirect.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.AlorHistory">
+      <HintPath>..\References\StockSharp.AlorHistory.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.BarChart">
       <HintPath>..\References\StockSharp.BarChart.dll</HintPath>
     </Reference>
@@ -121,8 +124,17 @@
     <Reference Include="StockSharp.Digifinex">
       <HintPath>..\References\StockSharp.Digifinex.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.DukasCopy">
+      <HintPath>..\References\StockSharp.DukasCopy.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.ETrade">
       <HintPath>..\References\StockSharp.ETrade.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Finam">
+      <HintPath>..\References\StockSharp.Finam.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.FinViz">
+      <HintPath>..\References\StockSharp.FinViz.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Fix">
       <HintPath>..\References\StockSharp.Fix.dll</HintPath>
@@ -130,8 +142,14 @@
     <Reference Include="StockSharp.Fxcm">
       <HintPath>..\References\StockSharp.Fxcm.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.GainCapital">
+      <HintPath>..\References\StockSharp.GainCapital.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Gdax">
       <HintPath>..\References\StockSharp.Gdax.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Google">
+      <HintPath>..\References\StockSharp.Google.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.HitBtc">
       <HintPath>..\References\StockSharp.HitBtc.dll</HintPath>
@@ -157,6 +175,12 @@
     <Reference Include="StockSharp.LMAX">
       <HintPath>..\References\StockSharp.LMAX.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.MBTrading">
+      <HintPath>..\References\StockSharp.MBTrading.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Mfd">
+      <HintPath>..\References\StockSharp.Mfd.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Micex">
       <HintPath>..\References\StockSharp.Micex.dll</HintPath>
     </Reference>
@@ -175,6 +199,9 @@
     <Reference Include="StockSharp.Poloniex">
       <HintPath>..\References\StockSharp.Poloniex.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Quandl">
+      <HintPath>..\References\StockSharp.Quandl.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.QuantHouse">
       <HintPath>..\References\StockSharp.QuantHouse.dll</HintPath>
     </Reference>
@@ -190,6 +217,9 @@
     <Reference Include="StockSharp.Rss">
       <HintPath>..\References\StockSharp.Rss.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.RtsHistory">
+      <HintPath>..\References\StockSharp.RtsHistory.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.SmartCom">
       <HintPath>..\References\StockSharp.SmartCom.dll</HintPath>
     </Reference>
@@ -204,6 +234,9 @@
     </Reference>
     <Reference Include="StockSharp.Transaq">
       <HintPath>..\References\StockSharp.Transaq.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.TrueFX">
+      <HintPath>..\References\StockSharp.TrueFX.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Twime">
       <HintPath>..\References\StockSharp.Twime.dll</HintPath>
@@ -247,6 +280,9 @@
     <Reference Include="StockSharp.Okex">
       <HintPath>..\References\StockSharp.Okex.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.UkrExh">
+      <HintPath>..\References\StockSharp.UkrExh.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Xaml">
       <HintPath>..\References\StockSharp.Xaml.dll</HintPath>
     </Reference>
@@ -255,6 +291,12 @@
     </Reference>
     <Reference Include="StockSharp.Xaml.Diagram">
       <HintPath>..\References\StockSharp.Xaml.Diagram.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xignite">
+      <HintPath>..\References\StockSharp.Xignite.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Yahoo">
+      <HintPath>..\References\StockSharp.Yahoo.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Yobit">
       <HintPath>..\References\StockSharp.Yobit.dll</HintPath>
