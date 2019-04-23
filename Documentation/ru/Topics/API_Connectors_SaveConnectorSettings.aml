@@ -2,54 +2,41 @@
 <topic id="c23300a1-bf38-444a-b103-28350766477f" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Для инициализации подключений рекомендуется следующий способ 
-      работы. В первую очередь объявим объект 
-      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
-      и строковую
-      переменну которая будет содежать имя файла, в котором будут 
-      сохраняться настройки коннектора.</para>
-      				<code language="C#">
+<para>
+      Для сохранения и загрузки настроек <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> используются переопределения методов
+      <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Connector.Save(Ecng.Serialization.SettingsStorage)</codeEntityReference> и 
+      <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Connector.Load(Ecng.Serialization.SettingsStorage)</codeEntityReference>
+      соответственно.
+</para>
+      <para>
+      Для сохранения и загрузки настроек из внешнего файла можно воспользоваться соответственно сериализацией и десериализацией, 
+      реализованной в <token>stocksharp</token>.
+      </para>
+       				<code language="C#">
 				<![CDATA[
 ...
 private readonly Connector _connector = new Connector();
 private const string _connectorFile = "ConnectorFile";
 ...
-		]]>
-				</code>
-<para>После чего в WPF приложении создаем кнопку, а в обработчике события нажатия этой кнопки 
-вызовем метод расширения <legacyBold>Configure</legacyBold> у 
-<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>. </para>
-<para>После нажатия на кнопку появиться окно 
-<codeEntityReference>T:StockSharp.Xaml.ConnectorWindow</codeEntityReference>, в 
-котором можно будет выбрать необходимое подключение.</para> 
-<para>Если в окне будет нажата кнопа <legacyBold>OK</legacyBold>, то сохраняем настройки коннектора в файл.</para>		
-      				<code language="C#">
-				<![CDATA[
-...
-if (_connector.Configure(this))
+
+public void Load()
 {
+	if (File.Exists(_connectorFile))
+	{
+		//Загрузка настроек коннектора из существующего конфигурационного файла
+		_connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_connectorFile));
+	}
+}
+...
+
+public void Save()
+{
+	//Сохранение настроек коннектора в конфигурационный файл
 	new XmlSerializer<SettingsStorage>().Serialize(_connector.Save(), _connectorFile);
 }
 ...
 		]]>
 				</code>
-<mediaLink><image placement="left" xlink:href="API_ConnectionWindow" /></mediaLink>
-
-			
-<para>Для загрузки настроек коннектора проверяем наличие файла с настройками и если 
-файл присутствует, то загружаем настройки из файла.</para>
-      				<code language="C#">
-				<![CDATA[
-...
-if (File.Exists(_connectorFile))
-{
-	_connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_connectorFile));
-}
-...
-		]]>
-				</code>
-<para>Данный способ позволяет легко переходить с между разными видами 
-подключений и использовать несколько подключений одновременно.</para>
     </introduction>
     <relatedTopics>
     <link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />
