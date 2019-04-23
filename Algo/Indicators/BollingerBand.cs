@@ -50,6 +50,8 @@ namespace StockSharp.Algo.Indicators
 		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
+			IsFormed = _ma.IsFormed && _dev.IsFormed;
+
 			return new DecimalIndicatorValue(this, _ma.GetCurrentValue() + (Width * _dev.GetCurrentValue()));
 		}
 
