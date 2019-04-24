@@ -3625,22 +3625,7 @@ namespace StockSharp.Algo
 			if (criteria == LookupAllCriteria)
 				return true;
 
-			return
-				criteria.Id.IsEmpty() &&
-				criteria.Code.IsEmpty() &&
-				criteria.Board == null &&
-				criteria.ExpiryDate == null &&
-				criteria.Type == null &&
-				criteria.OptionType == null &&
-				criteria.Strike == null &&
-				criteria.CfiCode.IsEmpty() &&
-				criteria.Class.IsEmpty() &&
-				criteria.Currency == null &&
-				criteria.Decimals == null &&
-				criteria.Name.IsEmpty() &&
-				criteria.UnderlyingSecurityType == null &&
-				criteria.UnderlyingSecurityId.IsEmpty() &&
-				criteria.BinaryOptionType.IsEmpty();
+			return criteria.ToLookupMessage().IsLookupAll();
 		}
 
 		/// <summary>
@@ -3658,14 +3643,22 @@ namespace StockSharp.Algo
 
 			return
 				criteria.SecurityId.IsDefault() &&
-				criteria.SecurityType == null &&
+				criteria.GetSecurityTypes().Count == 0 &&
 				criteria.Name.IsEmpty() &&
 				criteria.ShortName.IsEmpty() &&
 				criteria.UnderlyingSecurityCode.IsEmpty() &&
 				criteria.UnderlyingSecurityType == null &&
 				criteria.ExpiryDate == null &&
 				criteria.OptionType == null &&
-				criteria.Strike == null;
+				criteria.Strike == null &&
+				criteria.Currency == null &&
+				criteria.Decimals == null &&
+				criteria.Multiplier == null &&
+				criteria.PriceStep == null &&
+				criteria.VolumeStep == null &&
+				criteria.IssueDate == null &&
+				criteria.IssueSize == null &&
+				criteria.BinaryOptionType.IsEmpty();
 		}
 
 		/// <summary>
