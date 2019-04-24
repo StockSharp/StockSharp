@@ -694,7 +694,7 @@ namespace StockSharp.Algo
 
 			var security = new Security
 			{
-				Id = message.SecurityId.IsDefault() ? null : message.SecurityId.ToStringId()
+				Id = message.SecurityId.IsDefault() ? null : message.SecurityId.ToStringId(nullIfEmpty: message is SecurityLookupMessage)
 			};
 
 			security.ApplyChanges(message, exchangeInfoProvider);
