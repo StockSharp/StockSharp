@@ -261,10 +261,13 @@
 				{
 					var secMsg = (SecurityMessage)message;
 
-					if (secMsg.NotRequiredSecurityId())
+					var securityId = secMsg.SecurityId;
+
+					if (securityId.Native != null)
 						break;
 
-					var securityId = secMsg.SecurityId;
+					if (secMsg.NotRequiredSecurityId())
+						break;
 
 					var native = GetNativeId(secMsg, securityId);
 
@@ -283,6 +286,9 @@
 
 					var securityId1 = pairMsg.Message1.SecurityId;
 					var securityId2 = pairMsg.Message2.SecurityId;
+
+					if (securityId1.Native != null && securityId2.Native != null)
+						break;
 
 					var nativeId1 = GetNativeId(pairMsg, securityId1);
 
