@@ -24,7 +24,7 @@
     <member name="P:StockSharp.Mfd.MfdMessageAdapter.TimeFrames">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Mfd.MfdMessageAdapter.StorageName">
+    <member name="P:StockSharp.Mfd.MfdMessageAdapter.IsNativeIdentifiers">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Mfd.MfdMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
