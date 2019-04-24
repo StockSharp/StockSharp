@@ -190,14 +190,7 @@ namespace StockSharp.Algo.History.Hydra
 			if (type == null)
 				throw new InvalidOperationException(LocalizedStrings.Str2082Params.Put(dataType));
 
-			object typedArg = arg;
-
-			if (type == typeof(ExecutionMessage))
-				typedArg = arg.To<ExecutionTypes>();
-			else if (type.IsCandleMessage())
-				typedArg = type.ToCandleArg(arg);
-
-			return StorageRegistry.GetStorage(security, type, typedArg, drive, format);
+			return StorageRegistry.GetStorage(security, type, type.StringToMessageArg(arg), drive, format);
 		}
 
 		Guid IAuthenticationService.Login(string email, string password)
@@ -248,12 +241,7 @@ namespace StockSharp.Algo.History.Hydra
 			return securities.Select(s => s.Id).ToArray();
 		}
 
-		string[] IRemoteStorage.LookupSecurityIds(Guid sessionId, Security criteria)
-		{
-			return ((IRemoteStorage)this).LookupSecurityIds2(sessionId, criteria.ToLookupMessage());
-		}
-
-		string[] IRemoteStorage.LookupSecurityIds2(Guid sessionId, SecurityLookupMessage criteria)
+		string[] IRemoteStorage.LookupSecurityIds(Guid sessionId, SecurityLookupMessage criteria)
 		{
 			CheckSession(sessionId, UserPermissions.SecurityLookup);
 			this.AddInfoLog(LocalizedStrings.Str2086Params, sessionId);
@@ -348,7 +336,7 @@ namespace StockSharp.Algo.History.Hydra
 						.ToArray();
 		}
 
-		Tuple<string, object>[] IRemoteStorage.GetAvailableDataTypes(Guid sessionId, string securityId, StorageFormats format)
+		Tuple<string, string>[] IRemoteStorage.GetAvailableDataTypes(Guid sessionId, string securityId, StorageFormats format)
 		{
 			CheckSession(sessionId, UserPermissions.Load);
 			this.AddInfoLog(LocalizedStrings.Str2090Params, sessionId, securityId);
@@ -356,11 +344,11 @@ namespace StockSharp.Algo.History.Hydra
 			var security = ToSecurity(securityId, false);
 
 			if (security == null)
-				return ArrayHelper.Empty<Tuple<string, object>>();
+				return ArrayHelper.Empty<Tuple<string, string>>();
 
 			return GetDrives()
 						.SelectMany(drive => drive.GetAvailableDataTypes(security.ToSecurityId(), format))
-						.Select(t => Tuple.Create(t.MessageType.Name, t.Arg))
+						.Select(t => Tuple.Create(t.MessageType.Name, TraderHelper.CandleArgToFolderName(t.Arg)))
 						.Distinct()
 						.ToArray();
 		}

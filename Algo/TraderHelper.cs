@@ -3495,6 +3495,9 @@ namespace StockSharp.Algo
 		/// <returns>Directory name.</returns>
 		public static string CandleArgToFolderName(object arg)
 		{
+			if (arg is string s)
+				return s;
+
 			switch (arg)
 			{
 				case null:
@@ -3504,6 +3507,25 @@ namespace StockSharp.Algo
 				default:
 					return arg.ToString().Replace(':', '-');
 			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="string"/> to <see cref="MarketDataMessage.Arg"/> value.
+		/// </summary>
+		/// <param name="messageType">Message type.</param>
+		/// <param name="strValue">String value.</param>
+		/// <returns><see cref="MarketDataMessage.Arg"/> value.</returns>
+		public static object StringToMessageArg(this Type messageType, string strValue)
+		{
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
+
+			if (messageType == typeof(ExecutionMessage))
+				return strValue.To<ExecutionTypes>();
+			else if (messageType.IsCandleMessage())
+				return messageType.ToCandleArg(strValue);
+			else
+				return strValue;
 		}
 
 		/// <summary>

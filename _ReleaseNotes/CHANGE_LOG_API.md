@@ -60,6 +60,7 @@ StockSharp API Change log
 * (feature) SecurityLookupWindow. CriteriaMessage
 * (feature) ISecurityDownloader. Refresh method uses SecurityLookupMessage.
 * (feature) ITransactionIdMessage, IServerTimeMessage interfaces.
+* (bug) RemoteStorage. Fix available data types translation.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

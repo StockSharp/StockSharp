@@ -19,19 +19,10 @@ namespace StockSharp.Algo.History.Hydra
 		/// To find instrument identifiers that match the filter <paramref name="criteria" />.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
-		/// <param name="criteria">The instrument which fields will be used as a filter.</param>
-		/// <returns>Found IDs securities.</returns>
-		[OperationContract]
-		string[] LookupSecurityIds(Guid sessionId, Security criteria);
-
-		/// <summary>
-		/// To find instrument identifiers that match the filter <paramref name="criteria" />.
-		/// </summary>
-		/// <param name="sessionId">Session ID.</param>
 		/// <param name="criteria">Message security lookup for specified criteria.</param>
 		/// <returns>Found IDs securities.</returns>
 		[OperationContract]
-		string[] LookupSecurityIds2(Guid sessionId, SecurityLookupMessage criteria);
+		string[] LookupSecurityIds(Guid sessionId, SecurityLookupMessage criteria);
 
 		/// <summary>
 		/// To find exchange codes that match the filter <paramref name="criteria" />.
@@ -284,7 +275,7 @@ namespace StockSharp.Algo.History.Hydra
 		/// <param name="format">Format type.</param>
 		/// <returns>Data types.</returns>
 		[OperationContract]
-		Tuple<string, object>[] GetAvailableDataTypes(Guid sessionId, string securityId, StorageFormats format);
+		Tuple<string, string>[] GetAvailableDataTypes(Guid sessionId, string securityId, StorageFormats format);
 
 		/// <summary>
 		/// Save market-data into StockSharp storage format.

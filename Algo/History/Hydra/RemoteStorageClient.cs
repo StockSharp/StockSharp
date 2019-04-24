@@ -226,7 +226,7 @@ namespace StockSharp.Algo.History.Hydra
 			if (isCancelled == null)
 				throw new ArgumentNullException(nameof(isCancelled));
 
-			var ids = Invoke(f => f.LookupSecurityIds2(SessionId, criteria));
+			var ids = Invoke(f => f.LookupSecurityIds(SessionId, criteria));
 
 			var existsIds = securityStorage.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
@@ -612,7 +612,11 @@ namespace StockSharp.Algo.History.Hydra
 				throw new ArgumentNullException(nameof(securityId));
 
 			return Invoke(f => f.GetAvailableDataTypes(SessionId, securityId.ToStringId(), format))
-				.Select(t => DataType.Create(typeof(CandleMessage).To<string>().Replace(typeof(CandleMessage).Name, t.Item1).To<Type>(), t.Item2))
+				.Select(t =>
+				{
+					var messageType = typeof(CandleMessage).To<string>().Replace(typeof(CandleMessage).Name, t.Item1).To<Type>();
+					return DataType.Create(messageType, messageType.StringToMessageArg(t.Item2));
+				})
 				.ToArray();
 		}
 
