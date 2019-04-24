@@ -223,6 +223,8 @@ namespace StockSharp.Algo.History.Russian
 
 		private static IEnumerable<SecurityInfo> EnsureDownload(string code)
 		{
+			//System.Diagnostics.Debug.WriteLine(code);
+
 			var tiker = new SecurityInfo { Code = code };
 			dynamic tikerInfo = JsonConvert.DeserializeObject(DownloadMicex($"https://iss.moex.com/iss/securities/{tiker.Code}.jsonp"));
 
