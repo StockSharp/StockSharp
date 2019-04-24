@@ -3513,7 +3513,7 @@ namespace StockSharp.Algo
 		/// Convert <see cref="string"/> to <see cref="MarketDataMessage.Arg"/> value.
 		/// </summary>
 		/// <param name="messageType">Message type.</param>
-		/// <param name="strValue">String value.</param>
+		/// <param name="strValue"><see cref="string"/> value.</param>
 		/// <returns><see cref="MarketDataMessage.Arg"/> value.</returns>
 		public static object StringToMessageArg(this Type messageType, string strValue)
 		{

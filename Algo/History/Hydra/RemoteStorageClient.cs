@@ -180,10 +180,7 @@ namespace StockSharp.Algo.History.Hydra
 			}
 		}
 
-		/// <summary>
-		/// Create WCF channel.
-		/// </summary>
-		/// <returns>WCF channel.</returns>
+		/// <inheritdoc />
 		protected override ChannelFactory<IRemoteStorage> CreateChannel()
 		{
 			var f = new ChannelFactory<IRemoteStorage>(new NetTcpBinding(SecurityMode.None)
@@ -292,7 +289,7 @@ namespace StockSharp.Algo.History.Hydra
 		/// <summary>
 		/// To find exchanges that match the filter <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">The exchange which fields will be used as a filter. If the value is <see langword="null" /> then there is a search of all available exchanges.</param>
+		/// <param name="criteria">The exchange which fields will be used as a filter.</param>
 		/// <returns>Exchanges.</returns>
 		public Exchange[] LoadExchanges(Exchange criteria)
 		{
@@ -307,7 +304,7 @@ namespace StockSharp.Algo.History.Hydra
 		/// <summary>
 		/// To find exchange boards that match the filter <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">The exchange board which fields will be used as a filter. If the value is <see langword="null" /> then there is a search of all available exchange boards.</param>
+		/// <param name="criteria">The exchange board which fields will be used as a filter.</param>
 		/// <returns>Exchange boards.</returns>
 		public ExchangeBoard[] LoadExchangeBoards(ExchangeBoard criteria)
 		{
@@ -628,12 +625,7 @@ namespace StockSharp.Algo.History.Hydra
 			_sessionId = base.Invoke(f => f.Login(Credentials.Email, Credentials.Password.To<string>()));
 		}
 
-		/// <summary>
-		/// To call the service <see cref="IRemoteStorage"/> method.
-		/// </summary>
-		/// <typeparam name="TResult">The result type returning the service method.</typeparam>
-		/// <param name="handler">The handler in which the method is called.</param>
-		/// <returns>The result returning the service method.</returns>
+		/// <inheritdoc />
 		protected override TResult Invoke<TResult>(Func<IRemoteStorage, TResult> handler)
 		{
 			if (_sessionId == default(Guid))
@@ -653,9 +645,7 @@ namespace StockSharp.Algo.History.Hydra
 			}
 		}
 
-		/// <summary>
-		/// Release resources.
-		/// </summary>
+		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
 			if (_sessionId != default(Guid))

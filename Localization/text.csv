@@ -15596,3 +15596,4 @@ DocStr11074;To get order log;Получить лог заявок
 DocStr11076;{0} is required;Требуется {0}
 DocStr11077;Possible options for candles building;Возможные опциии для построения свечей
 DocStr11081;Return {0} if {1} is empty;Вернуть {0}, если значение {1} пустое
+DocStr11086;The interface describing an message with {0} property;Интерфейс, описывающий сообщение со свойством {0}

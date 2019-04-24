@@ -743,6 +743,10 @@ E:StockSharp.Messages.InMemoryMessageAdapterProvider.Changed/inheritdoc;DocStr84
 M:StockSharp.Messages.InMemoryMessageAdapterProvider.GetAdapter(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Messages.InMemoryMessageAdapterProvider.SetAdapter(System.String,StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
 M:StockSharp.Messages.InMemoryMessageAdapterProvider.RemoveAssociation(System.String)/inheritdoc;DocStr8459
+T:StockSharp.Messages.IServerTimeMessage/summary;DocStr11086
+P:StockSharp.Messages.IServerTimeMessage.ServerTime/summary;ServerTime
+T:StockSharp.Messages.ITransactionIdMessage/summary;DocStr11086
+P:StockSharp.Messages.ITransactionIdMessage.TransactionId/summary;DocStr3166
 T:StockSharp.Messages.MarketDataFinishedMessage/summary;DocStr9385
 P:StockSharp.Messages.MarketDataFinishedMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Messages.MarketDataFinishedMessage.IsHistory/summary;DocStr9664
@@ -1705,8 +1709,7 @@ M:StockSharp.Messages.TimeMessage.#ctor(StockSharp.Messages.MessageTypes)/param/
 P:StockSharp.Messages.TimeMessage.TransactionId/summary;DocStr3166
 P:StockSharp.Messages.TimeMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Messages.TimeMessage.ServerTime/summary;ServerTime
-M:StockSharp.Messages.TimeMessage.ToString/summary;DocStr49
-M:StockSharp.Messages.TimeMessage.ToString/returns;DocStr50
+M:StockSharp.Messages.TimeMessage.ToString/inheritdoc;DocStr8459
 M:StockSharp.Messages.TimeMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.TimeMessage.Clone/returns;DocStr1116
 T:StockSharp.Messages.TPlusLimits/summary;DocStr4528
