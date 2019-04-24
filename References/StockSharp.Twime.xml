@@ -28,10 +28,7 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Twime.TwimeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Отправить сообщение.
-            </summary>
-      <param name="message">Сообщение.</param>
+      <inheritdoc />
     </member>
     <member name="F:StockSharp.Twime.TwimeMessageAdapter.DefaultHeartbeatInterval">
       <summary>
@@ -59,22 +56,13 @@
             </summary>
     </member>
     <member name="M:StockSharp.Twime.TwimeMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Twime.TwimeMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Twime.TwimeMessageAdapter.ToString">
-      <summary>
-            Получить строковое представление.
-            </summary>
-      <returns>Строковое представление.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Twime.TwimeTrader">
       <summary>

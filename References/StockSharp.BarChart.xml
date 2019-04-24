@@ -51,6 +51,9 @@
         <member name="M:StockSharp.BarChart.BarChartMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
             <inheritdoc />
         </member>
+        <member name="M:StockSharp.BarChart.BarChartMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
         <member name="T:StockSharp.BarChart.BarChartTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.BarChart"/>.

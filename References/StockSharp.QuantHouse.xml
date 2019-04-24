@@ -40,16 +40,13 @@
             </summary>
     </member>
     <member name="M:StockSharp.QuantHouse.QuantFeedMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.QuantHouse.QuantFeedMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.QuantHouse.QuantFeedMessageAdapter.ToString">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.QuantHouse.QuantFeedTrader">
       <summary>

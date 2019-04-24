@@ -30,7 +30,7 @@ namespace StockSharp.Messages
 		private TimeSpan[] _timeFrames = ArrayHelper.Empty<TimeSpan>();
 
 		/// <summary>
-		/// Available timeframes of historical data.
+		/// Possible time-frames.
 		/// </summary>
 		[DataMember]
 		public TimeSpan[] TimeFrames
