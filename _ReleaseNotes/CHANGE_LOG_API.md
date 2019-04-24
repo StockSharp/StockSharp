@@ -62,6 +62,7 @@ StockSharp API Change log
 * (feature) ITransactionIdMessage, IServerTimeMessage interfaces.
 * (bug) RemoteStorage. Fix available data types translation.
 * (feature) SecurityNativeIdMessageAdapter. Skip external native ids.
+* (feature) Tradier. New urls + sandbox supported.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

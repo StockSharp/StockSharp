@@ -143,6 +143,7 @@ namespace SampleTradier
 				}
 
 				Trader.Token = Token.Password;
+				Trader.Sandbox = Sandbox.IsChecked == true;
 
 				// clear password box for security reason
 				//Secret.Clear();
