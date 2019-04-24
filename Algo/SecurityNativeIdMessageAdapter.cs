@@ -37,6 +37,7 @@
 		private readonly PairSet<object, SecurityId> _securityIds = new PairSet<object, SecurityId>();
 		private readonly Dictionary<SecurityId, List<Message>> _suspendedInMessages = new Dictionary<SecurityId, List<Message>>();
 		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = new Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>>();
+		private readonly HashSet<long> _skipTransactions = new HashSet<long>();
 		private readonly SyncObject _syncRoot = new SyncObject();
 
 		/// <summary>
@@ -63,10 +64,7 @@
 			base.Dispose();
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			if (message.IsBack)
@@ -103,6 +101,7 @@
 						_securityIds.Clear();
 						_suspendedOutMessages.Clear();
 						_suspendedInMessages.Clear();
+						_skipTransactions.Clear();
 					}
 
 					base.OnInnerAdapterNewOutMessage(message);
@@ -173,7 +172,7 @@
 				{
 					var positionMsg = (PositionChangeMessage)message;
 
-					ProcessMessage(positionMsg.SecurityId, positionMsg, true, (prev, curr) =>
+					ProcessMessage(positionMsg.SecurityId, positionMsg, positionMsg.OriginalTransactionId, true, (prev, curr) =>
 					{
 						foreach (var pair in prev.Changes)
 						{
@@ -188,7 +187,7 @@
 				case MessageTypes.Execution:
 				{
 					var execMsg = (ExecutionMessage)message;
-					ProcessMessage(execMsg.SecurityId, execMsg, execMsg.ExecutionType == ExecutionTypes.Tick && execMsg.OriginalTransactionId == 0, null);
+					ProcessMessage(execMsg.SecurityId, execMsg, execMsg.OriginalTransactionId, execMsg.ExecutionType == ExecutionTypes.Tick && execMsg.OriginalTransactionId == 0, null);
 					break;
 				}
 
@@ -196,7 +195,7 @@
 				{
 					var level1Msg = (Level1ChangeMessage)message;
 
-					ProcessMessage(level1Msg.SecurityId, level1Msg, true, (prev, curr) =>
+					ProcessMessage(level1Msg.SecurityId, level1Msg, 0, true, (prev, curr) =>
 					{
 						foreach (var pair in prev.Changes)
 						{
@@ -211,7 +210,7 @@
 				case MessageTypes.QuoteChange:
 				{
 					var quoteChangeMsg = (QuoteChangeMessage)message;
-					ProcessMessage(quoteChangeMsg.SecurityId, quoteChangeMsg, true, (prev, curr) => curr);
+					ProcessMessage(quoteChangeMsg.SecurityId, quoteChangeMsg, 0, true, (prev, curr) => curr);
 					break;
 				}
 
@@ -223,7 +222,7 @@
 				case MessageTypes.CandleVolume:
 				{
 					var candleMsg = (CandleMessage)message;
-					ProcessMessage(candleMsg.SecurityId, candleMsg, candleMsg.OriginalTransactionId == 0, null);
+					ProcessMessage(candleMsg.SecurityId, candleMsg, candleMsg.OriginalTransactionId, candleMsg.OriginalTransactionId == 0, null);
 					break;
 				}
 
@@ -232,7 +231,7 @@
 					var newsMsg = (NewsMessage)message;
 
 					if (newsMsg.SecurityId != null)
-						ProcessMessage(newsMsg.SecurityId.Value, newsMsg, true, null);
+						ProcessMessage(newsMsg.SecurityId.Value, newsMsg, newsMsg.OriginalTransactionId, true, null);
 					else
 						base.OnInnerAdapterNewOutMessage(message);
 
@@ -245,10 +244,7 @@
 			}
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public override void SendInMessage(Message message)
 		{
 			switch (message.Type)
@@ -261,18 +257,25 @@
 				{
 					var secMsg = (SecurityMessage)message;
 
-					var securityId = secMsg.SecurityId;
-
-					if (securityId.Native != null)
-						break;
-
 					if (secMsg.NotRequiredSecurityId())
 						break;
+
+					var securityId = secMsg.SecurityId;
 
 					var native = GetNativeId(secMsg, securityId);
 
 					if (native == null)
+					{
+						if (securityId.Native != null)
+						{
+							lock (_syncRoot)
+								_skipTransactions.Add(((ITransactionIdMessage)secMsg).TransactionId);
+							
+							break;
+						}
+
 						return;
+					}
 
 					securityId.Native = native;
 					message.ReplaceSecurityId(securityId);
@@ -342,9 +345,20 @@
 			return new SecurityNativeIdMessageAdapter(InnerAdapter, Storage);
 		}
 
-		private void ProcessMessage<TMessage>(SecurityId securityId, TMessage message, bool throwIfSecIdEmpty, Func<TMessage, TMessage, TMessage> processSuspend)
+		private void ProcessMessage<TMessage>(SecurityId securityId, TMessage message, long originTransId, bool throwIfSecIdEmpty, Func<TMessage, TMessage, TMessage> processSuspend)
 			where TMessage : Message
 		{
+			bool skip;
+
+			lock (_syncRoot)
+				skip = _skipTransactions.Contains(originTransId);
+
+			if (skip)
+			{
+				base.OnInnerAdapterNewOutMessage(message);
+				return;
+			}
+
 			var native = securityId.Native;
 
 			if (native != null)

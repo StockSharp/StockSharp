@@ -61,6 +61,7 @@ StockSharp API Change log
 * (feature) ISecurityDownloader. Refresh method uses SecurityLookupMessage.
 * (feature) ITransactionIdMessage, IServerTimeMessage interfaces.
 * (bug) RemoteStorage. Fix available data types translation.
+* (feature) SecurityNativeIdMessageAdapter. Skip external native ids.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
