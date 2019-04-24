@@ -125,54 +125,6 @@
             <param name="newSecurity">The handler through which a new instrument will be passed.</param>
             <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
         </member>
-        <member name="T:StockSharp.Algo.History.BaseDumpableHistorySource">
-            <summary>
-            The base source of market data, which saves the downloaded data to a temporary directory.
-            </summary>
-        </member>
-        <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
-            <summary>
-            Initialize <see cref="T:StockSharp.Algo.History.BaseDumpableHistorySource"/>.
-            </summary>
-            <param name="nativeIdStorage">Security native identifier storage.</param>
-            <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-        </member>
-        <member name="P:StockSharp.Algo.History.BaseDumpableHistorySource.CanDump">
-            <summary>
-            Is it possible to save files.
-            </summary>
-        </member>
-        <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.Process(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object,System.Func{System.String})">
-            <summary>
-            Upload or download text file.
-            </summary>
-            <param name="security">Security.</param>
-            <param name="from">Start date.</param>
-            <param name="to">End date.</param>
-            <param name="dataType">Data type.</param>
-            <param name="arg">Argument.</param>
-            <param name="download">Loader.</param>
-            <returns>Text file.</returns>
-        </member>
-        <member name="P:StockSharp.Algo.History.BaseDumpableHistorySource.DumpFolder">
-            <summary>
-            The path to the directory where the downloaded files will be saved.
-            </summary>
-            <remarks>
-            If the value is an empty string, the data will not store locally.
-            </remarks>
-        </member>
-        <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
-            <summary>
-            Get the full path to the downloaded file.
-            </summary>
-            <param name="security">Security.</param>
-            <param name="from">Start date.</param>
-            <param name="to">End date.</param>
-            <param name="dataType">Data type.</param>
-            <param name="arg">Argument.</param>
-            <returns>Full path to the downloaded file.</returns>
-        </member>
         <member name="T:StockSharp.Algo.History.FinVizHistorySource">
             <summary>
             The source for downloading historical data from FinViz.

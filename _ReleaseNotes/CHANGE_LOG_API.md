@@ -63,6 +63,7 @@ StockSharp API Change log
 * (bug) RemoteStorage. Fix available data types translation.
 * (feature) SecurityNativeIdMessageAdapter. Skip external native ids.
 * (feature) Tradier. New urls + sandbox supported.
+* (feature) BaseDumpableHistorySource removed.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
