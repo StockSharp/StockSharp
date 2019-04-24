@@ -10,7 +10,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class ActionMessage : Message
+	public class ActionMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActionMessage"/>.

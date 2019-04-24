@@ -100,6 +100,8 @@
     <Compile Include="IBasketSecurityProcessorProvider.cs" />
     <Compile Include="IDailyInfoSoap.cs" />
     <Compile Include="IPortfolioMessageAdapterProvider.cs" />
+    <Compile Include="IServerTimeMessage.cs" />
+    <Compile Include="ITransactionIdMessage.cs" />
     <Compile Include="MarketDataFinishedMessage.cs" />
     <Compile Include="IExtendableEntity.cs" />
     <Compile Include="IMessageAdapter.cs" />

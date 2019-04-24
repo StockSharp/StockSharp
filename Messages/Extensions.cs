@@ -326,28 +326,7 @@ namespace StockSharp.Messages
 		/// <returns>Server time. If the value is <see langword="null" />, the message does not contain the server time.</returns>
 		public static DateTimeOffset? TryGetServerTime(this Message message)
 		{
-			switch (message.Type)
-			{
-				case MessageTypes.Execution:
-					return ((ExecutionMessage)message).ServerTime;
-				case MessageTypes.QuoteChange:
-					return ((QuoteChangeMessage)message).ServerTime;
-				case MessageTypes.Level1Change:
-					return ((Level1ChangeMessage)message).ServerTime;
-				case MessageTypes.PositionChange:
-					return ((PositionChangeMessage)message).ServerTime;
-				case MessageTypes.PortfolioChange:
-					return ((PortfolioChangeMessage)message).ServerTime;
-				case MessageTypes.Time:
-					return ((TimeMessage)message).ServerTime;
-				case MessageTypes.Connect:
-					return ((ConnectMessage)message).LocalTime;
-				default:
-				{
-					var candleMsg = message as CandleMessage;
-					return candleMsg?.OpenTime;
-				}
-			}
+			return (message as IServerTimeMessage)?.ServerTime;
 		}
 
 		/// <summary>

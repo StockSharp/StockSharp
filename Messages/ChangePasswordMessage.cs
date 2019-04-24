@@ -24,7 +24,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class ChangePasswordMessage : Message
+	public class ChangePasswordMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="ChangePasswordMessage"/>.

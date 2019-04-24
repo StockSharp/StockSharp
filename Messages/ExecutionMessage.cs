@@ -61,7 +61,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	public sealed class ExecutionMessage : Message
+	public sealed class ExecutionMessage : Message, ITransactionIdMessage, IServerTimeMessage
 	{
 		/// <summary>
 		/// Security ID.

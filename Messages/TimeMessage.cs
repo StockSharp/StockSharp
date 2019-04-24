@@ -23,7 +23,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class TimeMessage : Message
+	public class TimeMessage : Message, ITransactionIdMessage, IServerTimeMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeMessage"/>.
@@ -60,10 +60,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public DateTimeOffset ServerTime { get; set; }
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",ID={TransactionId},Response={OriginalTransactionId}";

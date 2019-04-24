@@ -25,7 +25,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public abstract class OrderMessage : SecurityMessage
+	public abstract class OrderMessage : SecurityMessage, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Transaction ID.

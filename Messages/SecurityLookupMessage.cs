@@ -29,7 +29,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class SecurityLookupMessage : SecurityMessage
+	public class SecurityLookupMessage : SecurityMessage, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Transaction ID.
