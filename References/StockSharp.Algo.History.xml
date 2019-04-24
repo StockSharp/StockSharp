@@ -116,6 +116,15 @@
             <param name="newSecurity">The handler through which a new instrument will be passed.</param>
             <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
         </member>
+        <member name="M:StockSharp.Algo.History.BaseHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Messages.SecurityLookupMessage,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+            <summary>
+            Download new securities.
+            </summary>
+            <param name="securityStorage">Securities meta info storage.</param>
+            <param name="criteria">Message security lookup for specified criteria.</param>
+            <param name="newSecurity">The handler through which a new instrument will be passed.</param>
+            <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+        </member>
         <member name="T:StockSharp.Algo.History.BaseDumpableHistorySource">
             <summary>
             The base source of market data, which saves the downloaded data to a temporary directory.

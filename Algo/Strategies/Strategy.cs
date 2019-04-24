@@ -2707,7 +2707,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Security> Lookup(Security criteria)
+		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
 		{
 			return SafeGetConnector().Lookup(criteria);
 		}

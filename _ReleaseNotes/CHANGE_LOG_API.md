@@ -56,6 +56,9 @@ StockSharp API Change log
 * (bug) Envelope and MACD fixes.
 * (feature) DukasCopy, FxcmHistory, GainCapital, MBTrading, TrueFX, Google, Yahoo, MFD, Finam, AlorHistory, RTS FTP, UX, Xignite refactored into connectors.
 * (feature) MessageAdapter. SendOutMarketDataReply method added.
+* (feature) ISecurityProvider. Lookup method uses SecurityLookupMessage.
+* (feature) SecurityLookupWindow. CriteriaMessage
+* (feature) ISecurityDownloader. Refresh method uses SecurityLookupMessage.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

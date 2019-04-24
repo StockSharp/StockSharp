@@ -17,14 +17,11 @@ namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
-	using Ecng.Data;
-	using Ecng.Data.Sql;
 	using Ecng.Serialization;
 
 	using MoreLinq;
@@ -44,18 +41,18 @@ namespace StockSharp.Algo.Storages
 		{
 			private readonly IEntityRegistry _registry;
 
-			private readonly DatabaseCommand _readAllByCodeAndType;
-			private readonly DatabaseCommand _readAllByCodeAndTypeAndExpiryDate;
-			private readonly DatabaseCommand _readAllByType;
-			private readonly DatabaseCommand _readAllByBoardAndType;
-			private readonly DatabaseCommand _readAllByTypeAndExpiryDate;
+			//private readonly DatabaseCommand _readAllByCodeAndType;
+			//private readonly DatabaseCommand _readAllByCodeAndTypeAndExpiryDate;
+			//private readonly DatabaseCommand _readAllByType;
+			//private readonly DatabaseCommand _readAllByBoardAndType;
+			//private readonly DatabaseCommand _readAllByTypeAndExpiryDate;
 			//private readonly DatabaseCommand _readSecurityIds;
 
-			private const string _code = nameof(Security.Code);
-			private const string _type = nameof(Security.Type);
-			private const string _expiryDate = nameof(Security.ExpiryDate);
-			private const string _board = nameof(Security.Board);
-			private const string _id = nameof(Security.Id);
+			//private const string _code = nameof(Security.Code);
+			//private const string _type = nameof(Security.Type);
+			//private const string _expiryDate = nameof(Security.ExpiryDate);
+			//private const string _board = nameof(Security.Board);
+			//private const string _id = nameof(Security.Id);
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="SecurityList"/>.
@@ -66,96 +63,96 @@ namespace StockSharp.Algo.Storages
 			{
 				_registry = registry;
 
-				if (!(Storage is Database database))
-					return;
+				//if (!(Storage is Database database))
+				//	return;
 
-				var readAllByCodeAndType = database.CommandType == CommandType.StoredProcedure
-					? Query.Execute(Schema, SqlCommandTypes.ReadAll, string.Empty, "CodeAndType")
-					: Query
-					  .Select(Schema)
-					  .From(Schema)
-					  .Where()
-					  .Like(Schema.Fields[_code])
-					  .And()
-					  .OpenBracket()
-					  .IsParamNull(Schema.Fields[_type])
-					  .Or()
-					  .Equals(Schema.Fields[_type])
-					  .CloseBracket();
+				//var readAllByCodeAndType = database.CommandType == CommandType.StoredProcedure
+				//	? Query.Execute(Schema, SqlCommandTypes.ReadAll, string.Empty, "CodeAndType")
+				//	: Query
+				//	  .Select(Schema)
+				//	  .From(Schema)
+				//	  .Where()
+				//	  .Like(Schema.Fields[_code])
+				//	  .And()
+				//	  .OpenBracket()
+				//	  .IsParamNull(Schema.Fields[_type])
+				//	  .Or()
+				//	  .Equals(Schema.Fields[_type])
+				//	  .CloseBracket();
 
-				_readAllByCodeAndType = database.GetCommand(readAllByCodeAndType, Schema, new FieldList(Schema.Fields[_code], Schema.Fields[_type]), new FieldList());
+				//_readAllByCodeAndType = database.GetCommand(readAllByCodeAndType, Schema, new FieldList(Schema.Fields[_code], Schema.Fields[_type]), new FieldList());
 
-				var readAllByCodeAndTypeAndExpiryDate = database.CommandType == CommandType.StoredProcedure
-					? Query.Execute(Schema, SqlCommandTypes.ReadAll, string.Empty, "CodeAndTypeAndExpiryDate")
-					: Query
-					  .Select(Schema)
-					  .From(Schema)
-					  .Where()
-					  .Like(Schema.Fields[_code])
-					  .And()
-					  .OpenBracket()
-					  .IsParamNull(Schema.Fields[_type])
-					  .Or()
-					  .Equals(Schema.Fields[_type])
-					  .CloseBracket()
-					  .And()
-					  .OpenBracket()
-					  .IsNull(Schema.Fields[_expiryDate])
-					  .Or()
-					  .Equals(Schema.Fields[_expiryDate])
-					  .CloseBracket();
+				//var readAllByCodeAndTypeAndExpiryDate = database.CommandType == CommandType.StoredProcedure
+				//	? Query.Execute(Schema, SqlCommandTypes.ReadAll, string.Empty, "CodeAndTypeAndExpiryDate")
+				//	: Query
+				//	  .Select(Schema)
+				//	  .From(Schema)
+				//	  .Where()
+				//	  .Like(Schema.Fields[_code])
+				//	  .And()
+				//	  .OpenBracket()
+				//	  .IsParamNull(Schema.Fields[_type])
+				//	  .Or()
+				//	  .Equals(Schema.Fields[_type])
+				//	  .CloseBracket()
+				//	  .And()
+				//	  .OpenBracket()
+				//	  .IsNull(Schema.Fields[_expiryDate])
+				//	  .Or()
+				//	  .Equals(Schema.Fields[_expiryDate])
+				//	  .CloseBracket();
 
-				_readAllByCodeAndTypeAndExpiryDate = database.GetCommand(readAllByCodeAndTypeAndExpiryDate, Schema, new FieldList(Schema.Fields[_code], Schema.Fields[_type], Schema.Fields[_expiryDate]), new FieldList());
+				//_readAllByCodeAndTypeAndExpiryDate = database.GetCommand(readAllByCodeAndTypeAndExpiryDate, Schema, new FieldList(Schema.Fields[_code], Schema.Fields[_type], Schema.Fields[_expiryDate]), new FieldList());
 
-				if (database.CommandType == CommandType.Text)
-				{
-					//var readSecurityIds = Query
-					//	.Execute("SELECT group_concat(Id, ',') FROM Security");
+				//if (database.CommandType == CommandType.Text)
+				//{
+				//	//var readSecurityIds = Query
+				//	//	.Execute("SELECT group_concat(Id, ',') FROM Security");
 
-					//_readSecurityIds = database.GetCommand(readSecurityIds, null, new FieldList(), new FieldList());
+				//	//_readSecurityIds = database.GetCommand(readSecurityIds, null, new FieldList(), new FieldList());
 
-					var readAllByBoardAndType = Query
-					                            .Select(Schema)
-					                            .From(Schema)
-					                            .Where()
-					                            .Equals(Schema.Fields[_board])
-					                            .And()
-					                            .OpenBracket()
-					                            .IsParamNull(Schema.Fields[_type])
-					                            .Or()
-					                            .Equals(Schema.Fields[_type])
-					                            .CloseBracket();
+				//	var readAllByBoardAndType = Query
+				//	                            .Select(Schema)
+				//	                            .From(Schema)
+				//	                            .Where()
+				//	                            .Equals(Schema.Fields[_board])
+				//	                            .And()
+				//	                            .OpenBracket()
+				//	                            .IsParamNull(Schema.Fields[_type])
+				//	                            .Or()
+				//	                            .Equals(Schema.Fields[_type])
+				//	                            .CloseBracket();
 
-					_readAllByBoardAndType = database.GetCommand(readAllByBoardAndType, Schema, new FieldList(Schema.Fields[_board], Schema.Fields[_type]), new FieldList());
+				//	_readAllByBoardAndType = database.GetCommand(readAllByBoardAndType, Schema, new FieldList(Schema.Fields[_board], Schema.Fields[_type]), new FieldList());
 
-					var readAllByTypeAndExpiryDate = Query
-					                                 .Select(Schema)
-					                                 .From(Schema)
-					                                 .Where()
-					                                 .Equals(Schema.Fields[_type])
-					                                 .And()
-					                                 .OpenBracket()
-					                                 .IsNull(Schema.Fields[_expiryDate])
-					                                 .Or()
-					                                 .Equals(Schema.Fields[_expiryDate])
-					                                 .CloseBracket();
+				//	var readAllByTypeAndExpiryDate = Query
+				//	                                 .Select(Schema)
+				//	                                 .From(Schema)
+				//	                                 .Where()
+				//	                                 .Equals(Schema.Fields[_type])
+				//	                                 .And()
+				//	                                 .OpenBracket()
+				//	                                 .IsNull(Schema.Fields[_expiryDate])
+				//	                                 .Or()
+				//	                                 .Equals(Schema.Fields[_expiryDate])
+				//	                                 .CloseBracket();
 
-					_readAllByTypeAndExpiryDate = database.GetCommand(readAllByTypeAndExpiryDate, Schema, new FieldList(Schema.Fields[_type], Schema.Fields[_expiryDate]), new FieldList());
+				//	_readAllByTypeAndExpiryDate = database.GetCommand(readAllByTypeAndExpiryDate, Schema, new FieldList(Schema.Fields[_type], Schema.Fields[_expiryDate]), new FieldList());
 
-					var readAllByType = Query
-					                    .Select(Schema)
-					                    .From(Schema)
-					                    .Where()
-					                    .Equals(Schema.Fields[_type]);
+				//	var readAllByType = Query
+				//	                    .Select(Schema)
+				//	                    .From(Schema)
+				//	                    .Where()
+				//	                    .Equals(Schema.Fields[_type]);
 
-					_readAllByType = database.GetCommand(readAllByType, Schema, new FieldList(Schema.Fields[_type]), new FieldList());
+				//	_readAllByType = database.GetCommand(readAllByType, Schema, new FieldList(Schema.Fields[_type]), new FieldList());
 
-					RemoveQuery = Query
-					              .Delete()
-					              .From(Schema)
-					              .Where()
-					              .Equals(Schema.Fields[_id]);
-				}
+				//	RemoveQuery = Query
+				//	              .Delete()
+				//	              .From(Schema)
+				//	              .Where()
+				//	              .Equals(Schema.Fields[_id]);
+				//}
 
 				((ICollectionEx<Security>)this).AddedRange += s => _added?.Invoke(s);
 				((ICollectionEx<Security>)this).RemovedRange += s => _removed?.Invoke(s);
@@ -179,104 +176,78 @@ namespace StockSharp.Algo.Storages
 				remove => _removed -= value;
 			}
 
-			/// <summary>
-			/// Lookup securities by criteria <paramref name="criteria" />.
-			/// </summary>
-			/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
-			/// <returns>Found instruments.</returns>
-			public IEnumerable<Security> Lookup(Security criteria)
+			/// <inheritdoc />
+			public IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
 			{
-				if (criteria.IsLookupAll())
-					return this.ToArray();
+				var secId = criteria.SecurityId.ToStringId(nullIfEmpty: true);
 
-				if (!criteria.Id.IsEmpty())
-				{
-					var security = ReadById(criteria.Id);
-					return security == null ? Enumerable.Empty<Security>() : new[] { security };
-				}
+				if (secId.IsEmpty())
+					return this.Filter(criteria);
 
-				if (!criteria.Code.IsEmpty() && _readAllByCodeAndType != null)
-				{
-					return criteria.ExpiryDate == null
-						? ReadAllByCodeAndType(criteria)
-						: ReadAllByCodeAndTypeAndExpiryDate(criteria);
-				}
-
-				if (criteria.Board != null && _readAllByBoardAndType != null)
-				{
-					return ReadAllByBoardAndType(criteria);
-				}
-
-				if (criteria.Type != null && _readAllByTypeAndExpiryDate != null)
-				{
-					return criteria.ExpiryDate == null
-						? ReadAllByType(criteria)
-						: ReadAllByTypeAndExpiryDate(criteria);
-				}
-
-				return this.Filter(criteria);
+				var security = ReadById(secId);
+				return security == null ? Enumerable.Empty<Security>() : new[] { security };
 			}
 
-			private IEnumerable<Security> ReadAllByCodeAndType(Security criteria)
-			{
-				var fields = new[]
-				{
-					new SerializationItem(Schema.Fields[_code], "%" + criteria.Code + "%"),
-					new SerializationItem(Schema.Fields[_type], criteria.Type)
-				};
+			//private IEnumerable<Security> ReadAllByCodeAndType(Security criteria)
+			//{
+			//	var fields = new[]
+			//	{
+			//		new SerializationItem(Schema.Fields[_code], "%" + criteria.Code + "%"),
+			//		new SerializationItem(Schema.Fields[_type], criteria.Type)
+			//	};
 
-				return Database.ReadAll<Security>(_readAllByCodeAndType, new SerializationItemCollection(fields));
-			}
+			//	return Database.ReadAll<Security>(_readAllByCodeAndType, new SerializationItemCollection(fields));
+			//}
 
-			private IEnumerable<Security> ReadAllByCodeAndTypeAndExpiryDate(Security criteria)
-			{
-				if (criteria.ExpiryDate == null)
-					throw new ArgumentNullException(nameof(criteria), "ExpiryDate == null");
+			//private IEnumerable<Security> ReadAllByCodeAndTypeAndExpiryDate(Security criteria)
+			//{
+			//	if (criteria.ExpiryDate == null)
+			//		throw new ArgumentNullException(nameof(criteria), "ExpiryDate == null");
 
-				var fields = new[]
-				{
-					new SerializationItem(Schema.Fields[_code], "%" + criteria.Code + "%"),
-					new SerializationItem(Schema.Fields[_type], criteria.Type),
-					new SerializationItem(Schema.Fields[_expiryDate], criteria.ExpiryDate.Value)
-				};
+			//	var fields = new[]
+			//	{
+			//		new SerializationItem(Schema.Fields[_code], "%" + criteria.Code + "%"),
+			//		new SerializationItem(Schema.Fields[_type], criteria.Type),
+			//		new SerializationItem(Schema.Fields[_expiryDate], criteria.ExpiryDate.Value)
+			//	};
 
-				return Database.ReadAll<Security>(_readAllByCodeAndTypeAndExpiryDate, new SerializationItemCollection(fields));
-			}
+			//	return Database.ReadAll<Security>(_readAllByCodeAndTypeAndExpiryDate, new SerializationItemCollection(fields));
+			//}
 
-			private IEnumerable<Security> ReadAllByBoardAndType(Security criteria)
-			{
-				var fields = new[]
-				{
-					new SerializationItem(Schema.Fields[_board], criteria.Board.Code),
-					new SerializationItem(Schema.Fields[_type], criteria.Type)
-				};
+			//private IEnumerable<Security> ReadAllByBoardAndType(Security criteria)
+			//{
+			//	var fields = new[]
+			//	{
+			//		new SerializationItem(Schema.Fields[_board], criteria.Board.Code),
+			//		new SerializationItem(Schema.Fields[_type], criteria.Type)
+			//	};
 
-				return Database.ReadAll<Security>(_readAllByCodeAndType, new SerializationItemCollection(fields));
-			}
+			//	return Database.ReadAll<Security>(_readAllByCodeAndType, new SerializationItemCollection(fields));
+			//}
 
-			private IEnumerable<Security> ReadAllByTypeAndExpiryDate(Security criteria)
-			{
-				if (criteria.ExpiryDate == null)
-					throw new ArgumentNullException(nameof(criteria), "ExpiryDate == null");
+			//private IEnumerable<Security> ReadAllByTypeAndExpiryDate(Security criteria)
+			//{
+			//	if (criteria.ExpiryDate == null)
+			//		throw new ArgumentNullException(nameof(criteria), "ExpiryDate == null");
 
-				var fields = new[]
-				{
-					new SerializationItem(Schema.Fields[_type], criteria.Type),
-					new SerializationItem(Schema.Fields[_expiryDate], criteria.ExpiryDate.Value)
-				};
+			//	var fields = new[]
+			//	{
+			//		new SerializationItem(Schema.Fields[_type], criteria.Type),
+			//		new SerializationItem(Schema.Fields[_expiryDate], criteria.ExpiryDate.Value)
+			//	};
 
-				return Database.ReadAll<Security>(_readAllByTypeAndExpiryDate, new SerializationItemCollection(fields));
-			}
+			//	return Database.ReadAll<Security>(_readAllByTypeAndExpiryDate, new SerializationItemCollection(fields));
+			//}
 
-			private IEnumerable<Security> ReadAllByType(Security criteria)
-			{
-				var fields = new[]
-				{
-					new SerializationItem(Schema.Fields[_type], criteria.Type)
-				};
+			//private IEnumerable<Security> ReadAllByType(Security criteria)
+			//{
+			//	var fields = new[]
+			//	{
+			//		new SerializationItem(Schema.Fields[_type], criteria.Type)
+			//	};
 
-				return Database.ReadAll<Security>(_readAllByType, new SerializationItemCollection(fields));
-			}
+			//	return Database.ReadAll<Security>(_readAllByType, new SerializationItemCollection(fields));
+			//}
 
 			/// <inheritdoc />
 			public void Save(Security security, bool forced)

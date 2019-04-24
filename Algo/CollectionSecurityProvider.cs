@@ -7,6 +7,7 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The supplier of information on instruments, getting data from the collection.
@@ -63,16 +64,7 @@ namespace StockSharp.Algo
 		{
 		}
 
-		/// <summary>
-		/// Lookup securities by criteria <paramref name="criteria" />.
-		/// </summary>
-		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
-		/// <returns>Found instruments.</returns>
-		public IEnumerable<Security> Lookup(Security criteria)
-		{
-			//var provider = Securities as ISecurityProvider;
-			//return provider == null ? Securities.Filter(criteria) : provider.Lookup(criteria);
-			return this.Filter(criteria);
-		}
+		/// <inheritdoc />
+		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => this.Filter(criteria);
 	}
 }

@@ -243,39 +243,6 @@ namespace StockSharp.Algo.History.Hydra
 			throw new NotSupportedException();
 		}
 
-		private static bool IsEmpty(Security security)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return security.Id.IsEmpty() &&
-			       security.Code.IsEmpty() &&
-			       security.Class.IsEmpty() &&
-			       security.Name.IsEmpty() &&
-			       security.ShortName.IsEmpty() &&
-			       security.Type == null &&
-			       security.OptionType == null &&
-			       security.BinaryOptionType.IsEmpty() &&
-				   security.Strike == null &&
-			       security.ExpiryDate == null &&
-			       security.Currency == null &&
-			       security.UnderlyingSecurityId.IsEmpty() &&
-			       security.Board == null &&
-			       security.SettlementDate == null &&
-				   security.PriceStep == null &&
-				   security.VolumeStep == null &&
-				   security.Decimals == null &&
-				   security.Multiplier == null &&
-			       security.ExternalId.Bloomberg.IsEmpty() &&
-			       security.ExternalId.Cusip.IsEmpty() &&
-			       security.ExternalId.IQFeed.IsEmpty() &&
-			       security.ExternalId.InteractiveBrokers == null &&
-			       security.ExternalId.Isin.IsEmpty() &&
-			       security.ExternalId.Plaza.IsEmpty() &&
-			       security.ExternalId.Ric.IsEmpty() &&
-			       security.ExternalId.Sedol.IsEmpty();
-		}
-
 		private static string[] ToIds(IEnumerable<Security> securities)
 		{
 			return securities.Select(s => s.Id).ToArray();
@@ -283,13 +250,15 @@ namespace StockSharp.Algo.History.Hydra
 
 		string[] IRemoteStorage.LookupSecurityIds(Guid sessionId, Security criteria)
 		{
+			return ((IRemoteStorage)this).LookupSecurityIds2(sessionId, criteria.ToLookupMessage());
+		}
+
+		string[] IRemoteStorage.LookupSecurityIds2(Guid sessionId, SecurityLookupMessage criteria)
+		{
 			CheckSession(sessionId, UserPermissions.SecurityLookup);
 			this.AddInfoLog(LocalizedStrings.Str2086Params, sessionId);
 
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (IsEmpty(criteria))
+			if (criteria.IsLookupAll())
 				return ToIds(SecurityStorage.LookupAll());
 
 			this.AddInfoLog(LocalizedStrings.Str2087Params, sessionId);

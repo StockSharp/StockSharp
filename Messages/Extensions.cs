@@ -1030,5 +1030,82 @@ namespace StockSharp.Messages
 		/// <returns>Check result.</returns>
 		public static bool IsSupportWithdraw(this IMessageAdapter adapter)
 			=> adapter.IsOrderConditionOf(typeof(IWithdrawOrderCondition));
+
+		/// <summary>
+		/// Initialize <see cref="SecurityId.SecurityCode"/>.
+		/// </summary>
+		/// <param name="message">A message containing info about the security.</param>
+		/// <param name="secCode">Security code.</param>
+		public static void SetSecurityCode(this SecurityMessage message, string secCode)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var secId = message.SecurityId;
+			secId.SecurityCode = secCode;
+			message.SecurityId = secId;
+		}
+
+		/// <summary>
+		/// Initialize <see cref="SecurityId.Native"/>.
+		/// </summary>
+		/// <param name="message">A message containing info about the security.</param>
+		/// <param name="nativeId">Native (internal) trading system security id.</param>
+		public static void SetNativeId(this SecurityMessage message, object nativeId)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var secId = message.SecurityId;
+			secId.Native = nativeId;
+			message.SecurityId = secId;
+		}
+
+		/// <summary>
+		/// Initialize <see cref="SecurityLookupMessage.SecurityTypes"/>.
+		/// </summary>
+		/// <param name="message">Message security lookup for specified criteria.</param>
+		/// <param name="type">Security type.</param>
+		/// <param name="types">Securities types.</param>
+		public static void SetSecurityTypes(this SecurityLookupMessage message, SecurityTypes? type, IEnumerable<SecurityTypes> types = null)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (type != null)
+				message.SecurityType = type.Value;
+			else if (types != null)
+			{
+				var set = types.ToHashSet();
+
+				if (set.Count <= 0)
+					return;
+
+				if (set.Count == 1)
+					message.SecurityType = set.First();
+				else
+					message.SecurityTypes = set;
+			}
+		}
+
+		/// <summary>
+		/// Get <see cref="SecurityLookupMessage.SecurityTypes"/>.
+		/// </summary>
+		/// <param name="message">Message security lookup for specified criteria.</param>
+		/// <returns>Securities types.</returns>
+		public static HashSet<SecurityTypes> GetSecurityTypes(this SecurityLookupMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var types = new HashSet<SecurityTypes>();
+
+			if (message.SecurityType != null)
+				types.Add(message.SecurityType.Value);
+			else if (message.SecurityTypes != null)
+				types.AddRange(message.SecurityTypes);
+
+			return types;
+		}
 	}
 }

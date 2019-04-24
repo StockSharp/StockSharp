@@ -17,7 +17,10 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Runtime.Serialization;
+
+	using Ecng.Common;
 
 	using StockSharp.Localization;
 
@@ -26,7 +29,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class SecurityLookupMessage : SecurityMessage//, IEquatable<SecurityLookupMessage>
+	public class SecurityLookupMessage : SecurityMessage
 	{
 		/// <summary>
 		/// Transaction ID.
@@ -60,47 +63,30 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new SecurityLookupMessage
-			{
-				TransactionId = TransactionId,
-				SecurityTypes = SecurityTypes,
-			};
-			
+			var clone = new SecurityLookupMessage();
 			CopyTo(clone);
-
 			return clone;
 		}
 
-		///// <summary>
-		///// Determines whether the specified criterias are considered equal.
-		///// </summary>
-		///// <param name="other">Another search criteria with which to compare.</param>
-		///// <returns><see langword="true" />, if criterias are equal, otherwise, <see langword="false" />.</returns>
-		//public bool Equals(SecurityLookupMessage other)
-		//{
-		//	if (!SecurityId.IsDefault() && SecurityId.Equals(other.SecurityId))
-		//		return true;
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		public void CopyTo(SecurityLookupMessage destination)
+		{
+			if (destination == null)
+				throw new ArgumentNullException(nameof(destination));
 
-		//	if (Name == other.Name && 
-		//		ShortName == other.ShortName && 
-		//		Currency == other.Currency && 
-		//		ExpiryDate == other.ExpiryDate && 
-		//		OptionType == other.OptionType &&
-		//		((SecurityTypes == null && other.SecurityTypes == null) ||
-		//		(SecurityTypes != null && other.SecurityTypes != null && SecurityTypes.SequenceEqual(other.SecurityTypes))) && 
-		//		SettlementDate == other.SettlementDate &&
-		//		BinaryOptionType == other.BinaryOptionType &&
-		//		Strike == other.Strike &&
-		//		UnderlyingSecurityCode == other.UnderlyingSecurityCode && CFICode == other.CFICode)
-		//		return true;
+			destination.TransactionId = TransactionId;
+			destination.SecurityTypes = SecurityTypes;
 
-		//	return false;
-		//}
+			base.CopyTo(destination);
+		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",TransId={TransactionId},SecId={SecurityId},Name={Name},SecType={SecurityType},ExpDate={ExpiryDate}";
+			return base.ToString() + $",TransId={TransactionId},SecId={SecurityId},Name={Name},SecType={this.GetSecurityTypes().Select(t => t.To<string>()).Join("|")},ExpDate={ExpiryDate}";
 		}
 	}
 }

@@ -523,6 +523,8 @@ P:StockSharp.Xaml.SecurityLookupWindow.DataSourceItemsSource/summary;DocStr9364
 P:StockSharp.Xaml.SecurityLookupWindow.SelectedDataSource/summary;DocStr9365
 P:StockSharp.Xaml.SecurityLookupWindow.Configure/summary;DocStr9366
 P:StockSharp.Xaml.SecurityLookupWindow.Criteria/summary;DocStr8303
+P:StockSharp.Xaml.SecurityLookupWindow.CriteriaMessage/summary;DocStr8303
+P:StockSharp.Xaml.SecurityLookupWindow.ExchangeInfoProvider/summary;DocStr8914
 M:StockSharp.Xaml.SecurityLookupWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.BasketPortfolioWindow/summary;DocStr8080
 F:StockSharp.Xaml.BasketPortfolioWindow.OkCommand/summary;DocStr8081
@@ -1171,7 +1173,7 @@ M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},St
 E:StockSharp.Xaml.GuiConnector`1.ValuesChanged/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.GetSecurityValue(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.GetLevel1Fields(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
-M:StockSharp.Xaml.GuiConnector`1.Lookup(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.Lookup(StockSharp.Messages.SecurityLookupMessage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.DisposeManaged/summary;DocStr7
 T:StockSharp.Xaml.LogControl/summary;DocStr8344
 M:StockSharp.Xaml.LogControl.#ctor/summary;DocStr1

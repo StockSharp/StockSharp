@@ -211,14 +211,8 @@ namespace StockSharp.Algo.History.Hydra
 			return f;
 		}
 
-		/// <summary>
-		/// Download new securities.
-		/// </summary>
-		/// <param name="securityStorage">Securities meta info storage.</param>
-		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
-		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
-		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
-		public void Refresh(ISecurityStorage securityStorage, Security criteria, Action<Security> newSecurity, Func<bool> isCancelled)
+		/// <inheritdoc />
+		public void Refresh(ISecurityStorage securityStorage, SecurityLookupMessage criteria, Action<Security> newSecurity, Func<bool> isCancelled)
 		{
 			if (securityStorage == null)
 				throw new ArgumentNullException(nameof(securityStorage));
@@ -232,7 +226,7 @@ namespace StockSharp.Algo.History.Hydra
 			if (isCancelled == null)
 				throw new ArgumentNullException(nameof(isCancelled));
 
-			var ids = Invoke(f => f.LookupSecurityIds(SessionId, criteria));
+			var ids = Invoke(f => f.LookupSecurityIds2(SessionId, criteria));
 
 			var existsIds = securityStorage.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 

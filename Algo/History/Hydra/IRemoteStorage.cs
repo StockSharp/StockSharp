@@ -19,16 +19,25 @@ namespace StockSharp.Algo.History.Hydra
 		/// To find instrument identifiers that match the filter <paramref name="criteria" />.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
-		/// <param name="criteria">The instrument which fields will be used as a filter. If the value is <see langword="null" /> then there is a search of all available instruments.</param>
+		/// <param name="criteria">The instrument which fields will be used as a filter.</param>
 		/// <returns>Found IDs securities.</returns>
 		[OperationContract]
 		string[] LookupSecurityIds(Guid sessionId, Security criteria);
 
 		/// <summary>
+		/// To find instrument identifiers that match the filter <paramref name="criteria" />.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="criteria">Message security lookup for specified criteria.</param>
+		/// <returns>Found IDs securities.</returns>
+		[OperationContract]
+		string[] LookupSecurityIds2(Guid sessionId, SecurityLookupMessage criteria);
+
+		/// <summary>
 		/// To find exchange codes that match the filter <paramref name="criteria" />.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
-		/// <param name="criteria">The exchange which fields will be used as a filter. If the value is <see langword="null" /> then there is a search of all available exchanges.</param>
+		/// <param name="criteria">The exchange which fields will be used as a filter.</param>
 		/// <returns>Found codes.</returns>
 		[OperationContract]
 		string[] LookupExchanges(Guid sessionId, Exchange criteria);
@@ -37,7 +46,7 @@ namespace StockSharp.Algo.History.Hydra
 		/// To find exchange board codes that match the filter <paramref name="criteria" />.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
-		/// <param name="criteria">The exchange board which fields will be used as a filter. If the value is <see langword="null" /> then there is a search of all available exchange boards.</param>
+		/// <param name="criteria">The exchange board which fields will be used as a filter.</param>
 		/// <returns>Found codes.</returns>
 		[OperationContract]
 		string[] LookupExchangeBoards(Guid sessionId, ExchangeBoard criteria);
