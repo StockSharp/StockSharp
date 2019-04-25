@@ -267,6 +267,10 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API_Connectors_Cripto_Withdraw.aml" />
+    <None Include="Topics\API_Connector_GUIConfiguratiom.aml" />
+    <None Include="Topics\API_Connector_GUIConfiguratiom.aml" />
+    <None Include="Topics\S#API_Connectors.aml" />
     <None Include="Topics\API_Connectors_SaveConnectorSettings.aml" />
     <None Include="Topics\API_Connectors_SaveConnectorSettings.aml" />
     <None Include="Topics\IndicatorOptimalTrackingFilter.aml" />
