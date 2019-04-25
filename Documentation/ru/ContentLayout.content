@@ -180,7 +180,7 @@
         </Topic>
       </Topic>
       <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" isExpanded="true" title="Коннекторы Криптовалюты">
-        <Topic id="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" visible="True" isExpanded="true" isSelected="true" title="Binance">
+        <Topic id="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" visible="True" title="Binance">
           <Topic id="a72395b7-e651-40a2-97d1-f5236bc27a4f" visible="True" title="Настройки коннектора Binance" />
           <Topic id="31525854-5ff3-4219-a61c-631480c3dbbf" visible="True" title="Пример работы с BinanceTrader" />
         </Topic>
@@ -276,7 +276,7 @@
           <Topic id="39dac157-8de7-4dd1-ad0c-4520aa9ec953" visible="True" title="Настройки коннектора Kraken" />
           <Topic id="ffca8f50-baa6-4719-9ad3-1efe6a9716a2" visible="True" title="Пример работы с KrakenTrader" />
         </Topic>
-        <Topic id="d2379d21-9bea-4199-8432-c25f73cb1594" visible="True" isExpanded="true" title="Kucoin">
+        <Topic id="d2379d21-9bea-4199-8432-c25f73cb1594" visible="True" title="Kucoin">
           <Topic id="7228e2e5-eb4e-4ad7-b575-088ee696f926" visible="True" title="Настройки коннектора Kucoin" />
           <Topic id="e237cc0e-6470-4cf0-81cf-5fd8594a567a" visible="True" title="Пример работы" />
         </Topic>
@@ -340,7 +340,7 @@
           <Topic id="3e62d8d7-9490-4267-b523-b6e85b047a9b" visible="True" title="Настройки коннектора BitZ" />
           <Topic id="60367618-ceaf-4037-9b9b-f9d909518de0" visible="True" title="Пример работы с BitZ" />
         </Topic>
-        <Topic id="3502cfdf-e496-4567-ad4e-c7b195569b60" visible="True" isExpanded="true" title="ZB">
+        <Topic id="3502cfdf-e496-4567-ad4e-c7b195569b60" visible="True" title="ZB">
           <Topic id="59d0c7b8-1371-4cc7-9c4a-919e8a994363" visible="True" title="Настройки коннектора ZB" />
           <Topic id="fc059591-e778-47d4-ac73-cf94c11d79fa" visible="True" title="Пример работы с ZB" />
         </Topic>
@@ -362,8 +362,9 @@
       <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Переподключение" />
       <Topic id="08b8a9ca-6658-4088-b6b8-8715b12732ab" visible="True" title="RSS" />
     </Topic>
-    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" title="Управление заявками">
+    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" isExpanded="true" title="Управление заявками">
       <Topic id="b740e98d-7bcf-406e-aad4-75432ab3009e" visible="True" title="Создать новую заявку" />
+      <Topic id="2587051d-1e94-4fb2-b5c1-d57cb5af1b6d" visible="True" isSelected="true" title="Создать новую стоп заявку" />
       <Topic id="718fbbc7-efa5-45ed-80ef-e0a32fd4a8e2" visible="True" title="Получение информации по заявкам" />
       <Topic id="41a3b3e7-a7cd-43ba-842f-13f6a7199d26" visible="True" title="Состояния заявок" />
       <Topic id="6267fec7-64e5-4488-ba08-c72cf61fcc9e" visible="True" title="Снятие заявок" />
