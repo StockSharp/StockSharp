@@ -30,39 +30,37 @@
 				</para>
 				<code language="C#">
 				<![CDATA[
+...
 public MainWindow()
 {
 	InitializeComponent();
-	Instance = this;
-
-	Title = Title.Put("Multi connection");
-
-	_ordersWindow.MakeHideable();
-	_myTradesWindow.MakeHideable();
-	_tradesWindow.MakeHideable();
-	_securitiesWindow.MakeHideable();
-	_stopOrdersWindow.MakeHideable();
-	_portfoliosWindow.MakeHideable();
-
+...
 	var logManager = new LogManager();
 	logManager.Listeners.Add(new FileLogListener("sample.log"));
 
-	var entityRegistry = new CsvEntityRegistry("Data");
+	var path = _defaultDataPath.ToFullPath();
+
+	HistoryPath.Folder = path;
+
+	var entityRegistry = new CsvEntityRegistry(path);
+
+	var storageRegistry = new StorageRegistry
+	{
+		DefaultDrive = new LocalMarketDataDrive(path)
+	};
 
 	ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
+	ConfigManager.RegisterService<IStorageRegistry>(storageRegistry);
 	// ecng.serialization invoke in several places IStorage obj
 	ConfigManager.RegisterService(entityRegistry.Storage);
 
-	var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
+	var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
 
-	SerializationContext.DelayAction = entityRegistry.DelayAction = new DelayAction(entityRegistry.Storage, ex => ex.LogError());
-
-	Connector = new Connector(entityRegistry, storageRegistry);
+	Connector = new Connector(entityRegistry, storageRegistry, snapshotRegistry);
 	logManager.Sources.Add(Connector);
 
-	InitConnector(entityRegistry);
+	InitConnector(entityRegistry, snapshotRegistry);
 }
-
 		]]>
 				</code> 
 		 	</content>
@@ -75,7 +73,7 @@ public MainWindow()
 				</para>
 				<code language="C#">
 				<![CDATA[
-private void InitConnector(CsvEntityRegistry entityRegistry)
+private void InitConnector(CsvEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry)
 {
 	// subscribe on connection successfully event
 	Connector.Connected += () =>
@@ -98,17 +96,17 @@ private void InitConnector(CsvEntityRegistry entityRegistry)
 
 	// subscribe on error of market data subscription event
 	Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
-		this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+		this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)))
 
-	Connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-	Connector.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+	Connector.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+	Connector.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 
-	Connector.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-	Connector.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-	Connector.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+	Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
+	Connector.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+	Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 	
-	Connector.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-	Connector.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+	Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
+	Connector.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 	// subscribe on error of order registration event
 	Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
@@ -126,7 +124,13 @@ private void InitConnector(CsvEntityRegistry entityRegistry)
 	try
 	{
 		if (File.Exists(_settingsFile))
-			Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+		{
+			var ctx = new ContinueOnExceptionContext();
+			ctx.Error += ex => ex.LogError();
+
+			using (new Scope<ContinueOnExceptionContext> (ctx))
+				Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+		}
 	}
 	catch
 	{
@@ -145,11 +149,12 @@ private void InitConnector(CsvEntityRegistry entityRegistry)
 	}
 
 	Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
-	Connector.StorageAdapter.Load();
+	Connector.LookupAll();
+
+	snapshotRegistry.Init();
 
 	ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
 }
-
 ]]>
 			</code> 
 		 </content>
