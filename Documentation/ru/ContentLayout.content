@@ -8,360 +8,362 @@
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Архитектура S#.API" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Установка S#.API" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
-    <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (Россия)">
-      <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" isExpanded="true" title="Quik">
-        <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
-        <Topic id="d79f3357-6bdf-4a6f-92d6-c9b45e820f1a" visible="True" title="Пример использования Quik Lua" />
-        <Topic id="a82865dd-98ed-4579-8f48-dd8f806c39e7" visible="True" title="Стоп-заявки" />
-        <Topic id="52cb16e3-0ff0-4e82-8ad5-73a2e6e918a1" visible="True" title="Включение и выключение Quik" />
-        <Topic id="d92dd6c6-b8d6-4065-b441-091df3425e65" visible="True" title="РЕПО и РПС заявки" />
-        <Topic id="c338d4b4-ba54-4671-9206-976c07ef655e" visible="True" title="Quik DDE (старое подключение)">
-          <Topic id="5c13da7b-b6e4-4fd4-958a-66c93c58b941" visible="True" title="Настройка Quik" />
-          <Topic id="32bb7203-202c-44f7-a6c4-79791c690a3a" visible="True" title="Verifier" />
-          <Topic id="b6fea084-f43c-4eb7-ab63-ad3031d748a5" visible="True" title="Создание первого робота" />
-          <Topic id="65485c7c-0697-4e00-ac3f-bfaf4f81cc9e" visible="True" title="Портфели в Quik" />
-          <Topic id="ad145f75-a2d4-4766-af60-79489b84846c" visible="True" title="Экспорт стакана" />
-          <Topic id="4261879e-9bb3-482c-9fc5-27ecb07bdf5e" visible="True" title="Экспорт дополнительных колонок" />
-          <Topic id="7d73f7bf-ae8b-4d76-9895-cffb6342203f" visible="True" title="Экспорт произвольных таблиц" />
-          <Topic id="0e99b5a9-a20f-4650-93e0-a72ed660270e" visible="True" title="Экспорт микросекунд" />
-          <Topic id="4ef16af9-a848-418b-9685-f3de8e4b601e" visible="True" title="Таблица Инструменты (изменения)" />
-          <Topic id="a616c5a8-227a-4fe9-869c-d32af3e62710" visible="True" title="Управление окном Quik" />
-          <Topic id="0b0bd6e0-7ddf-407d-9e03-a218796163af" visible="True" title="Строка транзакции" />
-          <Topic id="9fb00dd4-4f0a-42a9-ab0f-9946b7acf6fe" visible="True" title="Работа с несколькими Quik-ами" />
+    <Topic id="05d7e437-8117-4bd1-adae-9c7002982e8e" visible="True" noFile="true" isExpanded="true" title="Коннекторы">
+      <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" title="Коннекторы (Россия)">
+        <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" title="Quik">
+          <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
+          <Topic id="d79f3357-6bdf-4a6f-92d6-c9b45e820f1a" visible="True" title="Пример использования Quik Lua" />
+          <Topic id="a82865dd-98ed-4579-8f48-dd8f806c39e7" visible="True" title="Стоп-заявки" />
+          <Topic id="52cb16e3-0ff0-4e82-8ad5-73a2e6e918a1" visible="True" title="Включение и выключение Quik" />
+          <Topic id="d92dd6c6-b8d6-4065-b441-091df3425e65" visible="True" title="РЕПО и РПС заявки" />
+          <Topic id="c338d4b4-ba54-4671-9206-976c07ef655e" visible="True" title="Quik DDE (старое подключение)">
+            <Topic id="5c13da7b-b6e4-4fd4-958a-66c93c58b941" visible="True" title="Настройка Quik" />
+            <Topic id="32bb7203-202c-44f7-a6c4-79791c690a3a" visible="True" title="Verifier" />
+            <Topic id="b6fea084-f43c-4eb7-ab63-ad3031d748a5" visible="True" title="Создание первого робота" />
+            <Topic id="65485c7c-0697-4e00-ac3f-bfaf4f81cc9e" visible="True" title="Портфели в Quik" />
+            <Topic id="ad145f75-a2d4-4766-af60-79489b84846c" visible="True" title="Экспорт стакана" />
+            <Topic id="4261879e-9bb3-482c-9fc5-27ecb07bdf5e" visible="True" title="Экспорт дополнительных колонок" />
+            <Topic id="7d73f7bf-ae8b-4d76-9895-cffb6342203f" visible="True" title="Экспорт произвольных таблиц" />
+            <Topic id="0e99b5a9-a20f-4650-93e0-a72ed660270e" visible="True" title="Экспорт микросекунд" />
+            <Topic id="4ef16af9-a848-418b-9685-f3de8e4b601e" visible="True" title="Таблица Инструменты (изменения)" />
+            <Topic id="a616c5a8-227a-4fe9-869c-d32af3e62710" visible="True" title="Управление окном Quik" />
+            <Topic id="0b0bd6e0-7ddf-407d-9e03-a218796163af" visible="True" title="Строка транзакции" />
+            <Topic id="9fb00dd4-4f0a-42a9-ab0f-9946b7acf6fe" visible="True" title="Работа с несколькими Quik-ами" />
+          </Topic>
+        </Topic>
+        <Topic id="b64a1826-58e3-4ac8-8923-099b52992e2e" visible="True" title="Quik FIX">
+          <Topic id="80d1acea-1865-4776-8db1-5fdf4ad98ac3" visible="True" title="Настройки коннектора Quik FIX" />
+        </Topic>
+        <Topic id="7f488b0b-0f59-42b4-845b-fd766f5699dc" visible="True" title="SmartCOM">
+          <Topic id="5a43d423-1c1f-470a-b32f-92c24023de2c" visible="True" title="Настройки коннектора SmartCOM" />
+          <Topic id="e5b4af10-0235-4374-9134-a878fc7ecf7f" visible="True" title="Создание первого робота" />
+          <Topic id="2c4aa060-0b11-4e32-b57a-8b8e70d67ced" visible="True" title="SmartCOM 3.X" />
+          <Topic id="9d3b0442-0633-4ba5-97e1-22829adcd025" visible="True" title="Исторические данные" />
+          <Topic id="cae38969-3e31-4180-9425-89b41b3bd6e9" visible="True" title="Стоп-заявки" />
+        </Topic>
+        <Topic id="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391" visible="True" title="Альфа-Директ">
+          <Topic id="dc7d8d3b-1d25-4f81-a043-dd4ee9f34147" visible="True" title="Настройка терминала Альфа-Директ" />
+          <Topic id="bc7a69cf-35f2-413d-a041-de705543f23c" visible="True" title="Пример использования" />
+          <Topic id="c0f3f55c-3832-46ed-90da-30129019c8f3" visible="True" title="Стоп-заявки" />
+        </Topic>
+        <Topic id="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf" visible="True" title="Plaza II">
+          <Topic id="2a606357-f716-491b-9292-64836fcac5fd" visible="True" title="Настройки коннектора Plaza II" />
+          <Topic id="81726182-1017-4eca-b349-03b77056a485" visible="True" title="Пример использования SampleGUI" />
+          <Topic id="8db87ec8-67fe-4926-b92c-0f8b0f0415ba" visible="True" title="CGate" />
+          <Topic id="838b1f44-ad42-4bf6-b862-0b0bff550482" visible="True" title="Метаданные" />
+          <Topic id="7872dcbc-abff-4112-9846-b6bf8bb0e0e6" visible="True" title="Стаканы агрегированных котировок" />
+          <Topic id="8063e30a-394a-4fea-bc49-b7661b2222b6" visible="True" title="Произвольные таблицы" />
+          <Topic id="e2759043-dd8c-40dc-837a-f314fa21163d" visible="True" title="Один логин - несколько роботов" />
+          <Topic id="034eccab-f22d-4ff1-bcc3-102bfa88cd54" visible="True" title="Ордер Лог" />
+          <Topic id="30bbb3a9-bc58-46a7-9aeb-112b69db62c8" visible="True" title="Управление ревизиями" />
+        </Topic>
+        <Topic id="a010f9bd-15bb-4858-a067-590101087dff" visible="True" title="Transaq">
+          <Topic id="6611fa9f-0e57-4378-954f-f582881d7504" visible="True" title="Настройки коннектора Transaq" />
+          <Topic id="d3ed9f9d-f5b5-4306-a542-206fa99f83c0" visible="True" title="Пример работы с TransaqTrader" />
+          <Topic id="7434ae20-4166-46e8-95a8-3f02587848df" visible="True" title="Исторические данные" />
+          <Topic id="afb77039-0acb-4964-a4b7-b8102812961d" visible="True" title="Новости" />
+          <Topic id="72fddc05-6956-405c-82ec-07c0e3649979" visible="True" title="Стоп-заявки" />
+          <Topic id="0010e72b-837f-4c9c-8ec9-8b840a03d9d7" visible="True" title="Алго-заявки" />
+        </Topic>
+        <Topic id="61692ace-225e-4ecc-845a-504021d59a8f" visible="True" title="Micex (TEAP)">
+          <Topic id="ac5713e1-b841-4ace-8e8e-6fab52fc7530" visible="True" title="Настройки коннектора Micex (TEAP)" />
+          <Topic id="356a822b-a4ed-42a9-8e7f-dfa595a15432" visible="True" title="Пример работы с MicexTrader" />
+        </Topic>
+        <Topic id="df84be76-8798-4b96-94ea-a1b106266ad5" visible="True" title="Алор Трейд">
+          <Topic id="fac9cc90-6498-47f5-9b87-5f9f876c854b" visible="True" title="Настройки коннектора Алор Трейд" />
+        </Topic>
+        <Topic id="1ee210ee-a004-4277-b8f4-91cb08d651db" visible="True" title="Twime">
+          <Topic id="29a2e2d4-af15-4340-be6d-3c77c66c1977" visible="True" title="Настройки коннектора Twime" />
+          <Topic id="01f08ac6-ce17-49a6-a531-b24eec6d7f5c" visible="True" title="Пример работы с TwimeTrader" />
+        </Topic>
+        <Topic id="2bbcaa58-0092-4603-a35f-d4a9bc7cb835" visible="True" title="SPB Exchange">
+          <Topic id="bb643f2e-d235-47ea-9a71-6dbec18d188a" visible="True" title="Настройки коннектора SPB Exchange" />
+          <Topic id="f43e0966-da3b-4709-ae47-c6c7f9546567" visible="True" title="Пример работы с SpbExTrader" />
         </Topic>
       </Topic>
-      <Topic id="b64a1826-58e3-4ac8-8923-099b52992e2e" visible="True" title="Quik FIX">
-        <Topic id="80d1acea-1865-4776-8db1-5fdf4ad98ac3" visible="True" title="Настройки коннектора Quik FIX" />
-      </Topic>
-      <Topic id="7f488b0b-0f59-42b4-845b-fd766f5699dc" visible="True" title="SmartCOM">
-        <Topic id="5a43d423-1c1f-470a-b32f-92c24023de2c" visible="True" title="Настройки коннектора SmartCOM" />
-        <Topic id="e5b4af10-0235-4374-9134-a878fc7ecf7f" visible="True" title="Создание первого робота" />
-        <Topic id="2c4aa060-0b11-4e32-b57a-8b8e70d67ced" visible="True" title="SmartCOM 3.X" />
-        <Topic id="9d3b0442-0633-4ba5-97e1-22829adcd025" visible="True" title="Исторические данные" />
-        <Topic id="cae38969-3e31-4180-9425-89b41b3bd6e9" visible="True" title="Стоп-заявки" />
-      </Topic>
-      <Topic id="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391" visible="True" title="Альфа-Директ">
-        <Topic id="dc7d8d3b-1d25-4f81-a043-dd4ee9f34147" visible="True" title="Настройка терминала Альфа-Директ" />
-        <Topic id="bc7a69cf-35f2-413d-a041-de705543f23c" visible="True" title="Пример использования" />
-        <Topic id="c0f3f55c-3832-46ed-90da-30129019c8f3" visible="True" title="Стоп-заявки" />
-      </Topic>
-      <Topic id="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf" visible="True" title="Plaza II">
-        <Topic id="2a606357-f716-491b-9292-64836fcac5fd" visible="True" title="Настройки коннектора Plaza II" />
-        <Topic id="81726182-1017-4eca-b349-03b77056a485" visible="True" title="Пример использования SampleGUI" />
-        <Topic id="8db87ec8-67fe-4926-b92c-0f8b0f0415ba" visible="True" title="CGate" />
-        <Topic id="838b1f44-ad42-4bf6-b862-0b0bff550482" visible="True" title="Метаданные" />
-        <Topic id="7872dcbc-abff-4112-9846-b6bf8bb0e0e6" visible="True" title="Стаканы агрегированных котировок" />
-        <Topic id="8063e30a-394a-4fea-bc49-b7661b2222b6" visible="True" title="Произвольные таблицы" />
-        <Topic id="e2759043-dd8c-40dc-837a-f314fa21163d" visible="True" title="Один логин - несколько роботов" />
-        <Topic id="034eccab-f22d-4ff1-bcc3-102bfa88cd54" visible="True" title="Ордер Лог" />
-        <Topic id="30bbb3a9-bc58-46a7-9aeb-112b69db62c8" visible="True" title="Управление ревизиями" />
-      </Topic>
-      <Topic id="a010f9bd-15bb-4858-a067-590101087dff" visible="True" title="Transaq">
-        <Topic id="6611fa9f-0e57-4378-954f-f582881d7504" visible="True" title="Настройки коннектора Transaq" />
-        <Topic id="d3ed9f9d-f5b5-4306-a542-206fa99f83c0" visible="True" title="Пример работы с TransaqTrader" />
-        <Topic id="7434ae20-4166-46e8-95a8-3f02587848df" visible="True" title="Исторические данные" />
-        <Topic id="afb77039-0acb-4964-a4b7-b8102812961d" visible="True" title="Новости" />
-        <Topic id="72fddc05-6956-405c-82ec-07c0e3649979" visible="True" title="Стоп-заявки" />
-        <Topic id="0010e72b-837f-4c9c-8ec9-8b840a03d9d7" visible="True" title="Алго-заявки" />
-      </Topic>
-      <Topic id="61692ace-225e-4ecc-845a-504021d59a8f" visible="True" title="Micex (TEAP)">
-        <Topic id="ac5713e1-b841-4ace-8e8e-6fab52fc7530" visible="True" title="Настройки коннектора Micex (TEAP)" />
-        <Topic id="356a822b-a4ed-42a9-8e7f-dfa595a15432" visible="True" title="Пример работы с MicexTrader" />
-      </Topic>
-      <Topic id="df84be76-8798-4b96-94ea-a1b106266ad5" visible="True" title="Алор Трейд">
-        <Topic id="fac9cc90-6498-47f5-9b87-5f9f876c854b" visible="True" title="Настройки коннектора Алор Трейд" />
-      </Topic>
-      <Topic id="1ee210ee-a004-4277-b8f4-91cb08d651db" visible="True" title="Twime">
-        <Topic id="29a2e2d4-af15-4340-be6d-3c77c66c1977" visible="True" title="Настройки коннектора Twime" />
-        <Topic id="01f08ac6-ce17-49a6-a531-b24eec6d7f5c" visible="True" title="Пример работы с TwimeTrader" />
-      </Topic>
-      <Topic id="2bbcaa58-0092-4603-a35f-d4a9bc7cb835" visible="True" title="SPB Exchange">
-        <Topic id="bb643f2e-d235-47ea-9a71-6dbec18d188a" visible="True" title="Настройки коннектора SPB Exchange" />
-        <Topic id="f43e0966-da3b-4709-ae47-c6c7f9546567" visible="True" title="Пример работы с SpbExTrader" />
-      </Topic>
-    </Topic>
-    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Коннекторы (Америка)">
-      <Topic id="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" visible="True" isExpanded="true" title="AlphaVantage">
-        <Topic id="02913c08-eeab-48e3-9e62-35dccea1db59" visible="True" title="Настройки коннектора AlphaVantage" />
-        <Topic id="28cee4c9-f9c2-4e87-a160-991fc18221af" visible="True" title="Пример работы с AlphaVantage" />
-      </Topic>
-      <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" title="BarChart">
-        <Topic id="baa2df0a-ca79-4437-8b99-496f905c254e" visible="True" title="Настройки коннектора BarChart" />
-      </Topic>
-      <Topic id="89c3f13d-2602-446a-8c3d-5615b6f901b9" visible="True" title="Blackwood (Fusion)">
-        <Topic id="69cb6aac-29fa-46e3-8d3b-af81f89bfff3" visible="True" title="Настройки коннектора Blackwood (Fusion)" />
-        <Topic id="95d01586-b798-4d38-82aa-38d8533586b5" visible="True" title="Пример работы с BlackwoodTrader" />
-        <Topic id="b643d681-0558-43ed-87ce-53ee7d3f6538" visible="True" title="Стоп-заявки" />
-        <Topic id="3f9473b3-09f2-4a04-b09d-94c9b66fff2e" visible="True" title="Исторические данные" />
-        <Topic id="4ef0c89f-cf0d-40b3-8387-aab4057ee961" visible="True" title="Новости" />
-        <Topic id="c23146af-3f08-4928-a95a-dd1173b23133" visible="True" title="Сканер" />
-      </Topic>
-      <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" title="CQG">
-        <Topic id="3ee05287-d25f-4967-9dc0-26d9a5a9578a" visible="True" title="Настройки коннектора CQG" />
-        <Topic id="436fc377-85ff-4d37-ad62-4846313a8563" visible="True" title="Пример работы с CQGTrader" />
-        <Topic id="355f6b70-c920-48b6-b2f1-31584ebb82f3" visible="True" title="Стоп-заявки" />
-        <Topic id="20bbe0ce-703e-46c3-9af4-d1b517a00e82" visible="True" title="Исторические данные" />
-      </Topic>
-      <Topic id="84d6a0fb-607f-4d87-be8a-e2b58006493e" visible="True" title="E*TRADE">
-        <Topic id="dcd93518-1169-44d1-ab9b-2d016d727842" visible="True" title="Настройки коннектора E*TRADE" />
-        <Topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" visible="True" title="Пример работы с ETradeTrader" />
-        <Topic id="df8227ff-5381-4912-b080-b58e6004480b" visible="True" title="Авторизация" />
-        <Topic id="028b3872-d610-4ca4-9127-5434764f05de" visible="True" title="Стоп-заявки" />
-      </Topic>
-      <Topic id="fb946f86-fe4b-4e30-97f7-543178e81792" visible="True" title="IEX">
-        <Topic id="f826d615-3d80-42fe-980e-985e883acdeb" visible="True" title="Настройки коннектора IEX" />
-        <Topic id="0da3d6e1-12fa-4732-9834-9008b63714ce" visible="True" title="Пример работы с IEX" />
-      </Topic>
-      <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" title="Interactive Brokers">
-        <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" title="Настройка TWS Interactive Brokers" />
-        <Topic id="7c23b480-d472-43df-aabf-f743ad09fded" visible="True" title="Пример работы с IBTrader" />
-        <Topic id="3e0f02b3-3e2f-405d-a8a2-6d44a50db166" visible="True" title="Алго-заявки" />
-        <Topic id="f7074321-9e5c-4bc0-a8a3-b2025c5b7268" visible="True" title="Исторические данные" />
-        <Topic id="9817c52a-fc3e-4fc8-a5f0-d7caf654b440" visible="True" title="Сканер" />
-      </Topic>
-      <Topic id="c7ff5937-e230-4db3-857f-4cd68583ebfc" visible="True" title="IQFeed">
-        <Topic id="add6156b-b2a9-401c-93cc-be333762da15" visible="True" title="Настройки коннектора IQFeed" />
-        <Topic id="21aa8b6b-137d-4c28-87d9-dfbc5e446d95" visible="True" title="Подключение IQFeed" />
-        <Topic id="66003162-d1b0-4f5f-8126-508055d15470" visible="True" title="Пример работы с IQFeedTrader" />
-        <Topic id="443734c7-7c88-47e0-a96a-4eec6fdfcfc7" visible="True" title="Получение инструментов" />
-        <Topic id="310155fd-ef3a-40f4-9920-179dcaf2b6bf" visible="True" title="Исторические данные" />
-        <Topic id="d315bbb3-5d00-4685-8e75-9e8e3646320a" visible="True" title="Новости" />
-      </Topic>
-      <Topic id="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" visible="True" title="ITCH">
-        <Topic id="35f9c7d1-741e-4721-8deb-1991102c0e28" visible="True" title="Настройки коннектора ITCH" />
-        <Topic id="ca67819a-60b8-42f0-a512-ad0792d544f2" visible="True" title="Пример работы с ItchTrader" />
-      </Topic>
-      <Topic id="f8cae46b-57e1-4954-a4cf-832854840981" visible="True" title="OpenECry">
-        <Topic id="1ff92943-e18d-4542-988f-254aded4cbe1" visible="True" title="Настройки коннектора OECTrader" />
-        <Topic id="1dbc72c4-cc59-4094-824a-a2b77f9623d6" visible="True" title="Пример работы с OECTrader" />
-        <Topic id="6f3be323-80bb-4823-9d27-8060c238af32" visible="True" title="Стоп-заявки" />
-        <Topic id="a1e2b191-995c-4b03-9858-8fe9d2ae1fa1" visible="True" title="Исторические данные" />
-        <Topic id="8e0967c3-d16f-427c-a9e1-5a94fa546e9b" visible="True" title="Новости" />
-        <Topic id="c56a139b-fb64-4f4f-992f-96a1480233cf" visible="True" title="Подключение нескольких роботов" />
-        <Topic id="49a7bfef-38e4-41e7-afe5-21bb8ac64258" visible="True" title="Одновременная работа терминала и робота" />
-      </Topic>
-      <Topic id="003e9486-6ed9-4afc-a325-6b2cbc382794" visible="True" title="QuantFEED">
-        <Topic id="93737846-dc53-4789-93a8-4c24da7779df" visible="True" title="Настройки коннектора QuantFEED" />
-        <Topic id="733374e6-1410-468e-b2df-c7d3f2081ef3" visible="True" title="Пример работы с QuantFeedTrader" />
-      </Topic>
-      <Topic id="777d9208-1146-4d54-b5ae-0315b4186522" visible="True" title="Rithmic">
-        <Topic id="e08adf2c-8f14-4ba2-a486-0d0b0de25704" visible="True" title="Настройки коннектора Rithmic" />
-        <Topic id="3e8732d0-71a5-44ab-be04-c482d5a41d71" visible="True" title="Пример работы с RithmicTrader" />
-        <Topic id="36d037d2-fda8-4801-9294-0dcc9891a123" visible="True" title="Стоп-заявки" />
-        <Topic id="beafeb9f-608e-4986-99ae-1bcca1500c4b" visible="True" title="Исторические данные" />
-      </Topic>
-      <Topic id="8a531942-a16c-4348-a4d0-dd4ae999d8f9" visible="True" title="Sterling">
-        <Topic id="3a4f70bf-24b9-489f-8d58-5bc4f5b623b0" visible="True" title="Настройки коннектора Sterling" />
-        <Topic id="7e828fb2-0b95-41fd-8540-17f6bdc747cf" visible="True" title="Пример работы со SterlingTrader" />
-        <Topic id="35cde593-3105-4903-974e-10d85482ec8f" visible="True" title="Стоп-заявки" />
-        <Topic id="6191a437-1a8c-451c-9a43-17daee119bb7" visible="True" title="Новости" />
-      </Topic>
-    </Topic>
-    <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" isExpanded="true" title="Коннекторы Forex">
-      <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" title="LMAX">
-        <Topic id="96e186b5-a78f-4f2d-8a1b-ea1734d9ed86" visible="True" title="Настройки коннектора LMAX" />
-        <Topic id="9cd10cbc-8534-4d44-bf3b-60b0a3f03590" visible="True" title="Пример работы с LMaxTrader" />
-        <Topic id="c6236e85-fb9e-4c4d-9585-6b4b687e8b35" visible="True" title="Стоп-заявки" />
-        <Topic id="3220f956-8ab0-43bb-b063-c6861ccceaf1" visible="True" title="Исторические данные" />
-      </Topic>
-      <Topic id="c2162c96-d12f-4107-ac96-0238b793f466" visible="True" title="Oanda">
-        <Topic id="6e81fb6e-d465-4bcc-b29a-906ea3a1b821" visible="True" title="Настройки коннектора Oanda" />
-        <Topic id="bf4d89d7-32a7-4755-beab-3bfd0581db6c" visible="True" title="Пример работы с OandaTrader" />
-        <Topic id="5389994b-68d4-456d-8ea0-52d07dbc185d" visible="True" title="Стоп-заявки" />
-        <Topic id="ad7e6528-705a-4e3f-8df6-e9b129279c08" visible="True" title="Исторические данные" />
-      </Topic>
-      <Topic id="92073cd8-8e10-498e-8de9-47d3f77d278a" visible="True" title="FXCM">
-        <Topic id="27823c36-faf5-486e-be14-15ce5c5581d2" visible="True" title="Настройки коннектора FXCM" />
-        <Topic id="59f72b02-f133-49a5-9248-b8d9bcb9f5c9" visible="True" title="Пример работы с FxcmTrader" />
-        <Topic id="17231700-6f92-4495-8b66-b3520f8c76ba" visible="True" title="Стоп-заявки" />
-        <Topic id="94c3b2be-a927-4fea-86ac-e8254321cee8" visible="True" title="Исторические данные" />
-        <Topic id="9978237f-cadb-4388-b334-7c293c080561" visible="True" title="Новости" />
-      </Topic>
-    </Topic>
-    <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" isExpanded="true" title="Коннекторы Криптовалюты">
-      <Topic id="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" visible="True" isExpanded="true" title="Binance">
-        <Topic id="a72395b7-e651-40a2-97d1-f5236bc27a4f" visible="True" title="Настройки коннектора Binance" />
-        <Topic id="31525854-5ff3-4219-a61c-631480c3dbbf" visible="True" title="Пример работы с BinanceTrader" />
-      </Topic>
-      <Topic id="02e5e6b3-4436-4c1d-ae39-776c6d398cd3" visible="True" title="Bitbank">
-        <Topic id="46c2bb14-68dd-4c87-8390-6f968952ad77" visible="True" title="Настройки коннектора Bitbank " />
-        <Topic id="14ab996a-b459-452d-8b9a-7baea8b35634" visible="True" title="Пример работы с Bitbank " />
-      </Topic>
-      <Topic id="4f6d317f-8788-48cb-b8d7-5e621481181c" visible="True" title="Bitexbook">
-        <Topic id="c5538843-8326-410e-9862-a82fbfbcb345" visible="True" title="Настройки коннектора Bitexbook" />
-        <Topic id="c06a4729-0bbb-4b09-a1a4-5a3bd1d1d893" visible="True" title="Пример работы с BitexbookTrader" />
-      </Topic>
-      <Topic id="f49aab57-c1fd-4558-9241-5b42a2e619d7" visible="True" title="Bitfinex">
-        <Topic id="eae3076b-f1ca-475a-b66c-715b998bada7" visible="True" title="Настройки коннектора Bitfinex" />
-        <Topic id="9d24ba61-6eef-4462-8913-2efb28cef633" visible="True" title="Пример работы с BitfinexTrader" />
-      </Topic>
-      <Topic id="4f431ab1-64bc-4cef-8387-c14c931f17b7" visible="True" title="Bithumb">
-        <Topic id="c71fcd66-6ee2-4da9-a898-02f66fced4b2" visible="True" title="Настройки коннектора Bithumb" />
-        <Topic id="d549da79-5872-4fb3-9a8d-19a226128a26" visible="True" title="Пример работы с BithumbTrader" />
-      </Topic>
-      <Topic id="81f33924-b166-42c1-8ced-f7e9468f86b5" visible="True" title="BitMEX">
-        <Topic id="69dc4e39-5e8f-46e1-8282-475b6b767deb" visible="True" title="Настройки коннектора BitMEX" />
-        <Topic id="b1556c87-3d25-4d95-a10d-9ef033b75b7a" visible="True" title="Пример работы с BitmexTrader" />
-      </Topic>
-      <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" title="BitStamp">
-        <Topic id="6609d974-6822-4fcd-887d-716b9d050ba8" visible="True" title="Настройки коннектора BitStamp" />
-        <Topic id="7664591a-b5b5-4f96-90c3-c1b7f59d5601" visible="True" title="Пример работы с BitStampTrader" />
-      </Topic>
-      <Topic id="0d71e2d9-6f13-435d-8697-58d41978d46b" visible="True" title="Bittrex">
-        <Topic id="f33c1001-24bb-4b5f-a184-79c75487f1cc" visible="True" title="Настройки коннектора Bittrex" />
-        <Topic id="0232a65d-ef31-43de-9643-88fd9b478461" visible="True" title="Пример работы с BittrexTrader" />
-      </Topic>
-      <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" title="BTC-E">
-        <Topic id="9621e260-1aab-4fbd-9023-13028f249f9d" visible="True" title="Настройки коннектора BTC-E" />
-        <Topic id="1f8dac56-b25a-4522-9965-4461a313f93b" visible="True" title="Пример работы с BtceTrader" />
-      </Topic>
-      <Topic id="418c4e3a-6129-4147-a3b6-a27701c15814" visible="True" title="CEX.IO">
-        <Topic id="e67f1833-2c9b-4e62-8e15-a71aab04b356" visible="True" title="Настройки коннектора CEX.IO" />
-        <Topic id="c003db77-3e6f-4ef6-bbdd-658d14e34357" visible="True" title="Пример работы с CexTrader" />
-      </Topic>
-      <Topic id="e4f12540-0650-4cf8-80a4-216b1acf37f3" visible="True" title="Coinbase">
-        <Topic id="e08c0579-ca96-42f4-8be9-86ab1e9ad174" visible="True" title="Настройки коннектора Coinbase" />
-        <Topic id="2520dc9a-779e-49b7-9e9f-f1abaec0bfff" visible="True" title="Пример работы с CoinbaseTrader" />
-      </Topic>
-      <Topic id="5bd2fb14-4391-4782-8031-55a8391d302c" visible="True" title="Coincheck">
-        <Topic id="cf66da6f-47cd-4596-a772-fb23e1a72b5f" visible="True" title="Настройки коннектора Coincheck" />
-        <Topic id="968f8291-33eb-4edb-8217-2e029b0cc887" visible="True" title="Пример работы с CoincheckTrader" />
-      </Topic>
-      <Topic id="956025d9-6a39-4bf5-a143-903c7540ff58" visible="True" title="CoinExchange">
-        <Topic id="3d17039e-55d4-4ec0-80e5-1e23eb6c960e" visible="True" title="Настройки коннектора CoinExchange" />
-        <Topic id="ed0d1fca-6686-4efd-b013-9f08c5197c7f" visible="True" title="Пример работы с CoinExchangeTrader" />
-      </Topic>
-      <Topic id="588ae84d-4ac1-4f08-a235-a194292e66ff" visible="True" title="CoinCap">
-        <Topic id="82e1429a-8e18-4245-bb66-a62f0e74c25d" visible="True" title="Настройки коннектора CoinCap " />
-        <Topic id="8e1986df-9154-4ead-9c99-2e590c44d833" visible="True" title="Пример работы с CoinCap " />
-      </Topic>
-      <Topic id="93ab9c0b-d310-4285-b132-cdace95134dd" visible="True" title="Coinigy ">
-        <Topic id="3bac2825-0c74-4e81-811b-6d2ff33f08e6" visible="True" title="Настройки коннектора Coinigy " />
-        <Topic id="6069b2ef-ee49-4628-9631-e31f75930e04" visible="True" title="Пример работы с Coinigy " />
-      </Topic>
-      <Topic id="d4fa79a6-59fd-43a9-ac61-b9b8933618c6" visible="True" title="Cryptopia">
-        <Topic id="d222e77d-9410-4f1a-a7cf-92d5a9305027" visible="True" title="Настройки коннектора Cryptopia" />
-        <Topic id="45433ea2-0192-4296-8ff2-4963a5f1f2f5" visible="True" title="Пример работы с CryptopiaTrader" />
-      </Topic>
-      <Topic id="0b4fde09-8808-4ef8-89df-39aebcdd64a1" visible="True" title="Deribit">
-        <Topic id="cf64a6d0-e0f4-4144-b949-5c7aa3c557ab" visible="True" title="Настройки коннектора Deribit" />
-        <Topic id="b73ce235-54b7-491a-b0bf-bfbd515a5b24" visible="True" title="Пример работы с DeribitTrader" />
-      </Topic>
-      <Topic id="5097b5fb-42fa-4418-9afc-de5b6ff69df6" visible="True" title="Digifinex">
-        <Topic id="b3b822ae-dbe2-496c-9121-16256df0e712" visible="True" title="Настройки коннектора Digifinex " />
-        <Topic id="cceb78ff-4c1b-4ae4-a7c5-eba41a2d205f" visible="True" title="Пример работы с Digifinex " />
-      </Topic>
-      <Topic id="601781f1-fae7-4c82-adb4-a5e7d9394cfb" visible="True" title="EXMO">
-        <Topic id="c259cacc-d0f1-4a02-9419-dbaa805cab31" visible="True" title="Настройки коннектора EXMO" />
-        <Topic id="154475d4-8b10-4181-b64f-8113f47b963f" visible="True" title="Пример работы с ExmoTrader" />
-      </Topic>
-      <Topic id="d941f537-602b-400f-91d4-d4b2b37b9767" visible="True" title="GDAX">
-        <Topic id="4e7930af-1aa2-4599-91de-7e9eae031fbf" visible="True" title="Настройки коннектора GDAX" />
-        <Topic id="cddf98a2-3ec9-4e49-9757-8b0de893fb15" visible="True" title="Пример работы с GdaxTrader" />
-      </Topic>
-      <Topic id="17ebcf40-aa25-4717-83cd-d275209ff524" visible="True" title="HitBTC">
-        <Topic id="0171d5e9-b148-4b02-9d49-4c00a7c3cc3a" visible="True" title="Настройки коннектора HitBTC" />
-        <Topic id="88e70b23-2b66-49e8-b77d-803697cee16d" visible="True" title="Пример работы с HitBtcTrader" />
-      </Topic>
-      <Topic id="16eaa615-aaf7-42a5-9de7-01762a650758" visible="True" title="Huobi">
-        <Topic id="ccf8139f-afb1-43ca-adfa-a74d9c9b8280" visible="True" title="Настройки коннектора Huobi" />
-        <Topic id="bf264fc3-127d-431a-879e-46014fd9c4ed" visible="True" title="Пример работы с HuobiTrader" />
-      </Topic>
-      <Topic id="886bcc99-7011-4c3c-85fe-d0fc646ee00f" visible="True" title="Idax">
-        <Topic id="0c0987c7-63ab-4e40-a95d-b0a50955261c" visible="True" title="Настройки коннектора Idax " />
-        <Topic id="33c78156-0c49-4f22-a7a4-701f5a09cf69" visible="True" title="Пример работы с Idax " />
-      </Topic>
-      <Topic id="cabadfac-eff9-48ab-ada6-c5856778cf68" visible="True" title="Kraken">
-        <Topic id="39dac157-8de7-4dd1-ad0c-4520aa9ec953" visible="True" title="Настройки коннектора Kraken" />
-        <Topic id="ffca8f50-baa6-4719-9ad3-1efe6a9716a2" visible="True" title="Пример работы с KrakenTrader" />
-      </Topic>
-      <Topic id="d2379d21-9bea-4199-8432-c25f73cb1594" visible="True" isExpanded="true" title="Kucoin">
-        <Topic id="7228e2e5-eb4e-4ad7-b575-088ee696f926" visible="True" title="Настройки коннектора Kucoin" />
-        <Topic id="e237cc0e-6470-4cf0-81cf-5fd8594a567a" visible="True" isSelected="true" title="Пример работы" />
-      </Topic>
-      <Topic id="70ecf683-4336-4848-a05d-8edbcc730af4" visible="True" title="Liqui">
-        <Topic id="84110311-8092-4090-89ce-89c57557ee1a" visible="True" title="Настройки коннектора Liqui" />
-        <Topic id="fa0a8e74-dd99-4a18-ac27-1a8db232c71b" visible="True" title="Пример работы с LiquiTrader" />
-      </Topic>
-      <Topic id="8e093fe9-7b2d-47f3-a95a-ece0e0033ecc" visible="True" title="Livecoin">
-        <Topic id="5887c466-24d7-4d50-9ae3-8a746bdecd9e" visible="True" title="Настройки коннектора Livecoin" />
-        <Topic id="b2ee81b7-7038-4cfa-8505-702166f214eb" visible="True" title="Пример работы с LiveCoinTrader" />
-      </Topic>
-      <Topic id="f9ec5eb4-4237-4a2a-9663-757d3d4c0689" visible="True" title="OKCoin">
-        <Topic id="c00c59c2-d12f-4b16-b9f5-ceb451494a6b" visible="True" title="Настройки коннектора OKCoin" />
-        <Topic id="553dc665-10b7-4844-8a79-e60331a3a38b" visible="True" title="Пример работы с OkcoinTrader" />
-      </Topic>
-      <Topic id="554b35f0-4110-4da0-ba30-4c450e8a996b" visible="True" title="OKEx">
-        <Topic id="1d9788e7-0f75-4993-84a2-4a331dfea2d2" visible="True" title="Настройки коннектора OKEx" />
-        <Topic id="8abd86a7-2d85-4953-adeb-c54f245db876" visible="True" title="Пример работы с OkexTrader" />
-      </Topic>
-      <Topic id="18667328-deec-46dd-8c27-fce52733e5ce" visible="True" title="Poloniex">
-        <Topic id="1a6b49de-05a2-44c3-8f67-b8acdec5aec0" visible="True" title="Настройки коннектора Poloniex" />
-        <Topic id="97baac88-b5a9-4783-b381-f38c5568810e" visible="True" title="Пример работы с PoloniexTrader" />
-      </Topic>
-      <Topic id="713a3769-b80c-4342-89d2-031a492372df" visible="True" title="Quoinex">
-        <Topic id="eb595ce4-5971-4032-9ee3-8586c6fcedf2" visible="True" title="Настройки коннектора Quoinex " />
-        <Topic id="de0ead46-bf72-4e37-99b9-15e796f0460d" visible="True" title="Пример работы с Quoinex " />
-      </Topic>
-      <Topic id="989447cf-bc05-4f6a-a736-b3a916ee1ffc" visible="True" title="TradeOgre">
-        <Topic id="0056264e-85e5-4415-b99b-7d9f24e59752" visible="True" title="Настройки коннектора TradeOrge " />
-        <Topic id="7f173ed5-5fdc-4afb-a78b-0e0aaac5c8a7" visible="True" title="Пример работы с TradeOrge " />
-      </Topic>
-      <Topic id="ea1dbc04-3c29-4fbe-91b0-260d1ded31ae" visible="True" title="Yobit">
-        <Topic id="78aa3ef5-8eae-4c53-b7e9-85ee1f8a9137" visible="True" title="Настройки коннектора Yobit" />
-        <Topic id="cccadabe-b3fa-4afa-badd-ca0a1633ca2d" visible="True" title="Пример работы с YobitTrader" />
-      </Topic>
-      <Topic id="6d22d370-721c-452b-85af-6fc9c31115ac" visible="True" title="Zaif">
-        <Topic id="658c35dd-70ab-4799-9c94-b8a42b9fc06c" visible="True" title="Настройки коннектора Zaif " />
-        <Topic id="c96cacc6-7437-4d41-8e3a-34b294b3155a" visible="True" title="Пример работы с Zaif" />
-      </Topic>
-      <Topic id="3a5c4a94-ab01-49a5-ab41-82c85479d147" visible="True" title="LBank">
-        <Topic id="199056ed-4039-4d51-9ae7-8b9f6059902f" visible="True" title="Настройки коннектора LBank" />
-        <Topic id="c5884971-c903-43be-b1b8-b30eba2bde33" visible="True" title="Пример работы с LBank" />
-      </Topic>
-      <Topic id="740cbac0-53a1-47b9-92c2-397fd7e9c97f" visible="True" title="BitMax">
-        <Topic id="7ca713af-d8b3-4616-b98a-3594bc655a93" visible="True" title="Настройки коннектора BitMax" />
-        <Topic id="9ebcdfc5-9274-4501-9e25-c404806c7444" visible="True" title="Пример работы с BitMax" />
-      </Topic>
-      <Topic id="0f66a2b6-8ad1-4331-99c8-7543be3fabb0" visible="True" title="BW">
-        <Topic id="233f62de-500c-46a1-9cf0-00eeb550a21c" visible="True" title="Настройки коннектора BW" />
-        <Topic id="15b16c0b-d396-471b-ab7c-b943f48ed261" visible="True" title="Пример работы с BW" />
-      </Topic>
-      <Topic id="8f22e760-96c8-493a-aef0-569cbc42a9da" visible="True" title="Bibox">
-        <Topic id="3380fca6-bc39-403e-8dae-26e4c84a63c7" visible="True" title="Настройки коннектора Bibox" />
-        <Topic id="d4146047-5c20-462c-b92d-e66d5680c4f4" visible="True" title="Пример работы с Bibox" />
-      </Topic>
-      <Topic id="1e7027ce-03c3-4b35-bdfd-abcceed7d249" visible="True" title="CoinBene">
-        <Topic id="d024edcc-a396-4859-86f3-e8517526bc17" visible="True" title="Настройки коннектора CoinBene" />
-        <Topic id="b7c734c5-19bd-4017-9295-9b0868760543" visible="True" title="Пример работы с CoinBene" />
-      </Topic>
-      <Topic id="66d9f9b3-1251-414a-ab9b-18060f2f62c6" visible="True" title="BitZ">
-        <Topic id="3e62d8d7-9490-4267-b523-b6e85b047a9b" visible="True" title="Настройки коннектора BitZ" />
-        <Topic id="60367618-ceaf-4037-9b9b-f9d909518de0" visible="True" title="Пример работы с BitZ" />
-      </Topic>
-      <Topic id="3502cfdf-e496-4567-ad4e-c7b195569b60" visible="True" title="ZB">
-        <Topic id="59d0c7b8-1371-4cc7-9c4a-919e8a994363" visible="True" title="Настройки коннектора ZB" />
-        <Topic id="fc059591-e778-47d4-ac73-cf94c11d79fa" visible="True" title="Пример работы с ZB" />
-      </Topic>
-    </Topic>
-    <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" title="Коннекторы FIX/FAST">
-      <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" title="FIX">
-        <Topic id="9012c95b-9858-4ee8-948d-c6f776b128eb" visible="True" title="Настройки коннекторов FIX/FAST" />
-        <Topic id="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" visible="True" title="Пример работы с FixTrader" />
-        <Topic id="55f27fed-449d-486d-b662-8ddde39ae852" visible="True" title="Стоп-заявки" />
-        <Topic id="9e6e40df-f41d-4429-bdc7-d5864dd2c1e3" visible="True" title="Новости" />
-      </Topic>
-      <Topic id="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93" visible="True" title="FIX Server" />
-    </Topic>
-    <Topic id="2bffe740-b901-40dc-9d0b-cf2600270ad4" visible="True" noFile="true" isExpanded="true" title="Коннекторы (дополнительное)">
-      <Topic id="c23300a1-bf38-444a-b103-28350766477f" visible="True" title="Сохранение и загрузка настроек коннектора" />
-      <Topic id="293859e2-6c39-486c-afde-d9ae96243618" visible="True" title="Создание коннектора" />
+      <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Коннекторы (Америка)">
+        <Topic id="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" visible="True" isExpanded="true" title="AlphaVantage">
+          <Topic id="02913c08-eeab-48e3-9e62-35dccea1db59" visible="True" title="Настройки коннектора AlphaVantage" />
+          <Topic id="28cee4c9-f9c2-4e87-a160-991fc18221af" visible="True" title="Пример работы с AlphaVantage" />
+        </Topic>
+        <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" title="BarChart">
+          <Topic id="baa2df0a-ca79-4437-8b99-496f905c254e" visible="True" title="Настройки коннектора BarChart" />
+        </Topic>
+        <Topic id="89c3f13d-2602-446a-8c3d-5615b6f901b9" visible="True" title="Blackwood (Fusion)">
+          <Topic id="69cb6aac-29fa-46e3-8d3b-af81f89bfff3" visible="True" title="Настройки коннектора Blackwood (Fusion)" />
+          <Topic id="95d01586-b798-4d38-82aa-38d8533586b5" visible="True" title="Пример работы с BlackwoodTrader" />
+          <Topic id="b643d681-0558-43ed-87ce-53ee7d3f6538" visible="True" title="Стоп-заявки" />
+          <Topic id="3f9473b3-09f2-4a04-b09d-94c9b66fff2e" visible="True" title="Исторические данные" />
+          <Topic id="4ef0c89f-cf0d-40b3-8387-aab4057ee961" visible="True" title="Новости" />
+          <Topic id="c23146af-3f08-4928-a95a-dd1173b23133" visible="True" title="Сканер" />
+        </Topic>
+        <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" title="CQG">
+          <Topic id="3ee05287-d25f-4967-9dc0-26d9a5a9578a" visible="True" title="Настройки коннектора CQG" />
+          <Topic id="436fc377-85ff-4d37-ad62-4846313a8563" visible="True" title="Пример работы с CQGTrader" />
+          <Topic id="355f6b70-c920-48b6-b2f1-31584ebb82f3" visible="True" title="Стоп-заявки" />
+          <Topic id="20bbe0ce-703e-46c3-9af4-d1b517a00e82" visible="True" title="Исторические данные" />
+        </Topic>
+        <Topic id="84d6a0fb-607f-4d87-be8a-e2b58006493e" visible="True" title="E*TRADE">
+          <Topic id="dcd93518-1169-44d1-ab9b-2d016d727842" visible="True" title="Настройки коннектора E*TRADE" />
+          <Topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" visible="True" title="Пример работы с ETradeTrader" />
+          <Topic id="df8227ff-5381-4912-b080-b58e6004480b" visible="True" title="Авторизация" />
+          <Topic id="028b3872-d610-4ca4-9127-5434764f05de" visible="True" title="Стоп-заявки" />
+        </Topic>
+        <Topic id="fb946f86-fe4b-4e30-97f7-543178e81792" visible="True" title="IEX">
+          <Topic id="f826d615-3d80-42fe-980e-985e883acdeb" visible="True" title="Настройки коннектора IEX" />
+          <Topic id="0da3d6e1-12fa-4732-9834-9008b63714ce" visible="True" title="Пример работы с IEX" />
+        </Topic>
+        <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" title="Interactive Brokers">
+          <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" title="Настройка TWS Interactive Brokers" />
+          <Topic id="7c23b480-d472-43df-aabf-f743ad09fded" visible="True" title="Пример работы с IBTrader" />
+          <Topic id="3e0f02b3-3e2f-405d-a8a2-6d44a50db166" visible="True" title="Алго-заявки" />
+          <Topic id="f7074321-9e5c-4bc0-a8a3-b2025c5b7268" visible="True" title="Исторические данные" />
+          <Topic id="9817c52a-fc3e-4fc8-a5f0-d7caf654b440" visible="True" title="Сканер" />
+        </Topic>
+        <Topic id="c7ff5937-e230-4db3-857f-4cd68583ebfc" visible="True" title="IQFeed">
+          <Topic id="add6156b-b2a9-401c-93cc-be333762da15" visible="True" title="Настройки коннектора IQFeed" />
+          <Topic id="21aa8b6b-137d-4c28-87d9-dfbc5e446d95" visible="True" title="Подключение IQFeed" />
+          <Topic id="66003162-d1b0-4f5f-8126-508055d15470" visible="True" title="Пример работы с IQFeedTrader" />
+          <Topic id="443734c7-7c88-47e0-a96a-4eec6fdfcfc7" visible="True" title="Получение инструментов" />
+          <Topic id="310155fd-ef3a-40f4-9920-179dcaf2b6bf" visible="True" title="Исторические данные" />
+          <Topic id="d315bbb3-5d00-4685-8e75-9e8e3646320a" visible="True" title="Новости" />
+        </Topic>
+        <Topic id="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" visible="True" title="ITCH">
+          <Topic id="35f9c7d1-741e-4721-8deb-1991102c0e28" visible="True" title="Настройки коннектора ITCH" />
+          <Topic id="ca67819a-60b8-42f0-a512-ad0792d544f2" visible="True" title="Пример работы с ItchTrader" />
+        </Topic>
+        <Topic id="f8cae46b-57e1-4954-a4cf-832854840981" visible="True" title="OpenECry">
+          <Topic id="1ff92943-e18d-4542-988f-254aded4cbe1" visible="True" title="Настройки коннектора OECTrader" />
+          <Topic id="1dbc72c4-cc59-4094-824a-a2b77f9623d6" visible="True" title="Пример работы с OECTrader" />
+          <Topic id="6f3be323-80bb-4823-9d27-8060c238af32" visible="True" title="Стоп-заявки" />
+          <Topic id="a1e2b191-995c-4b03-9858-8fe9d2ae1fa1" visible="True" title="Исторические данные" />
+          <Topic id="8e0967c3-d16f-427c-a9e1-5a94fa546e9b" visible="True" title="Новости" />
+          <Topic id="c56a139b-fb64-4f4f-992f-96a1480233cf" visible="True" title="Подключение нескольких роботов" />
+          <Topic id="49a7bfef-38e4-41e7-afe5-21bb8ac64258" visible="True" title="Одновременная работа терминала и робота" />
+        </Topic>
+        <Topic id="003e9486-6ed9-4afc-a325-6b2cbc382794" visible="True" title="QuantFEED">
+          <Topic id="93737846-dc53-4789-93a8-4c24da7779df" visible="True" title="Настройки коннектора QuantFEED" />
+          <Topic id="733374e6-1410-468e-b2df-c7d3f2081ef3" visible="True" title="Пример работы с QuantFeedTrader" />
+        </Topic>
+        <Topic id="777d9208-1146-4d54-b5ae-0315b4186522" visible="True" title="Rithmic">
+          <Topic id="e08adf2c-8f14-4ba2-a486-0d0b0de25704" visible="True" title="Настройки коннектора Rithmic" />
+          <Topic id="3e8732d0-71a5-44ab-be04-c482d5a41d71" visible="True" title="Пример работы с RithmicTrader" />
+          <Topic id="36d037d2-fda8-4801-9294-0dcc9891a123" visible="True" title="Стоп-заявки" />
+          <Topic id="beafeb9f-608e-4986-99ae-1bcca1500c4b" visible="True" title="Исторические данные" />
+        </Topic>
+        <Topic id="8a531942-a16c-4348-a4d0-dd4ae999d8f9" visible="True" title="Sterling">
+          <Topic id="3a4f70bf-24b9-489f-8d58-5bc4f5b623b0" visible="True" title="Настройки коннектора Sterling" />
+          <Topic id="7e828fb2-0b95-41fd-8540-17f6bdc747cf" visible="True" title="Пример работы со SterlingTrader" />
+          <Topic id="35cde593-3105-4903-974e-10d85482ec8f" visible="True" title="Стоп-заявки" />
+          <Topic id="6191a437-1a8c-451c-9a43-17daee119bb7" visible="True" title="Новости" />
+        </Topic>
+      </Topic>
+      <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" title="Коннекторы Forex">
+        <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" title="LMAX">
+          <Topic id="96e186b5-a78f-4f2d-8a1b-ea1734d9ed86" visible="True" title="Настройки коннектора LMAX" />
+          <Topic id="9cd10cbc-8534-4d44-bf3b-60b0a3f03590" visible="True" title="Пример работы с LMaxTrader" />
+          <Topic id="c6236e85-fb9e-4c4d-9585-6b4b687e8b35" visible="True" title="Стоп-заявки" />
+          <Topic id="3220f956-8ab0-43bb-b063-c6861ccceaf1" visible="True" title="Исторические данные" />
+        </Topic>
+        <Topic id="c2162c96-d12f-4107-ac96-0238b793f466" visible="True" title="Oanda">
+          <Topic id="6e81fb6e-d465-4bcc-b29a-906ea3a1b821" visible="True" title="Настройки коннектора Oanda" />
+          <Topic id="bf4d89d7-32a7-4755-beab-3bfd0581db6c" visible="True" title="Пример работы с OandaTrader" />
+          <Topic id="5389994b-68d4-456d-8ea0-52d07dbc185d" visible="True" title="Стоп-заявки" />
+          <Topic id="ad7e6528-705a-4e3f-8df6-e9b129279c08" visible="True" title="Исторические данные" />
+        </Topic>
+        <Topic id="92073cd8-8e10-498e-8de9-47d3f77d278a" visible="True" title="FXCM">
+          <Topic id="27823c36-faf5-486e-be14-15ce5c5581d2" visible="True" title="Настройки коннектора FXCM" />
+          <Topic id="59f72b02-f133-49a5-9248-b8d9bcb9f5c9" visible="True" title="Пример работы с FxcmTrader" />
+          <Topic id="17231700-6f92-4495-8b66-b3520f8c76ba" visible="True" title="Стоп-заявки" />
+          <Topic id="94c3b2be-a927-4fea-86ac-e8254321cee8" visible="True" title="Исторические данные" />
+          <Topic id="9978237f-cadb-4388-b334-7c293c080561" visible="True" title="Новости" />
+        </Topic>
+      </Topic>
+      <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" isExpanded="true" isSelected="true" title="Коннекторы Криптовалют">
+        <Topic id="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" visible="True" title="Binance">
+          <Topic id="a72395b7-e651-40a2-97d1-f5236bc27a4f" visible="True" title="Настройки коннектора Binance" />
+          <Topic id="31525854-5ff3-4219-a61c-631480c3dbbf" visible="True" title="Пример работы с BinanceTrader" />
+        </Topic>
+        <Topic id="02e5e6b3-4436-4c1d-ae39-776c6d398cd3" visible="True" title="Bitbank">
+          <Topic id="46c2bb14-68dd-4c87-8390-6f968952ad77" visible="True" title="Настройки коннектора Bitbank " />
+          <Topic id="14ab996a-b459-452d-8b9a-7baea8b35634" visible="True" title="Пример работы с Bitbank " />
+        </Topic>
+        <Topic id="4f6d317f-8788-48cb-b8d7-5e621481181c" visible="True" title="Bitexbook">
+          <Topic id="c5538843-8326-410e-9862-a82fbfbcb345" visible="True" title="Настройки коннектора Bitexbook" />
+          <Topic id="c06a4729-0bbb-4b09-a1a4-5a3bd1d1d893" visible="True" title="Пример работы с BitexbookTrader" />
+        </Topic>
+        <Topic id="f49aab57-c1fd-4558-9241-5b42a2e619d7" visible="True" title="Bitfinex">
+          <Topic id="eae3076b-f1ca-475a-b66c-715b998bada7" visible="True" title="Настройки коннектора Bitfinex" />
+          <Topic id="9d24ba61-6eef-4462-8913-2efb28cef633" visible="True" title="Пример работы с BitfinexTrader" />
+        </Topic>
+        <Topic id="4f431ab1-64bc-4cef-8387-c14c931f17b7" visible="True" title="Bithumb">
+          <Topic id="c71fcd66-6ee2-4da9-a898-02f66fced4b2" visible="True" title="Настройки коннектора Bithumb" />
+          <Topic id="d549da79-5872-4fb3-9a8d-19a226128a26" visible="True" title="Пример работы с BithumbTrader" />
+        </Topic>
+        <Topic id="81f33924-b166-42c1-8ced-f7e9468f86b5" visible="True" title="BitMEX">
+          <Topic id="69dc4e39-5e8f-46e1-8282-475b6b767deb" visible="True" title="Настройки коннектора BitMEX" />
+          <Topic id="b1556c87-3d25-4d95-a10d-9ef033b75b7a" visible="True" title="Пример работы с BitmexTrader" />
+        </Topic>
+        <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" title="BitStamp">
+          <Topic id="6609d974-6822-4fcd-887d-716b9d050ba8" visible="True" title="Настройки коннектора BitStamp" />
+          <Topic id="7664591a-b5b5-4f96-90c3-c1b7f59d5601" visible="True" title="Пример работы с BitStampTrader" />
+        </Topic>
+        <Topic id="0d71e2d9-6f13-435d-8697-58d41978d46b" visible="True" title="Bittrex">
+          <Topic id="f33c1001-24bb-4b5f-a184-79c75487f1cc" visible="True" title="Настройки коннектора Bittrex" />
+          <Topic id="0232a65d-ef31-43de-9643-88fd9b478461" visible="True" title="Пример работы с BittrexTrader" />
+        </Topic>
+        <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" title="BTC-E">
+          <Topic id="9621e260-1aab-4fbd-9023-13028f249f9d" visible="True" title="Настройки коннектора BTC-E" />
+          <Topic id="1f8dac56-b25a-4522-9965-4461a313f93b" visible="True" title="Пример работы с BtceTrader" />
+        </Topic>
+        <Topic id="418c4e3a-6129-4147-a3b6-a27701c15814" visible="True" title="CEX.IO">
+          <Topic id="e67f1833-2c9b-4e62-8e15-a71aab04b356" visible="True" title="Настройки коннектора CEX.IO" />
+          <Topic id="c003db77-3e6f-4ef6-bbdd-658d14e34357" visible="True" title="Пример работы с CexTrader" />
+        </Topic>
+        <Topic id="e4f12540-0650-4cf8-80a4-216b1acf37f3" visible="True" title="Coinbase">
+          <Topic id="e08c0579-ca96-42f4-8be9-86ab1e9ad174" visible="True" title="Настройки коннектора Coinbase" />
+          <Topic id="2520dc9a-779e-49b7-9e9f-f1abaec0bfff" visible="True" title="Пример работы с CoinbaseTrader" />
+        </Topic>
+        <Topic id="5bd2fb14-4391-4782-8031-55a8391d302c" visible="True" title="Coincheck">
+          <Topic id="cf66da6f-47cd-4596-a772-fb23e1a72b5f" visible="True" title="Настройки коннектора Coincheck" />
+          <Topic id="968f8291-33eb-4edb-8217-2e029b0cc887" visible="True" title="Пример работы с CoincheckTrader" />
+        </Topic>
+        <Topic id="956025d9-6a39-4bf5-a143-903c7540ff58" visible="True" title="CoinExchange">
+          <Topic id="3d17039e-55d4-4ec0-80e5-1e23eb6c960e" visible="True" title="Настройки коннектора CoinExchange" />
+          <Topic id="ed0d1fca-6686-4efd-b013-9f08c5197c7f" visible="True" title="Пример работы с CoinExchangeTrader" />
+        </Topic>
+        <Topic id="588ae84d-4ac1-4f08-a235-a194292e66ff" visible="True" title="CoinCap">
+          <Topic id="82e1429a-8e18-4245-bb66-a62f0e74c25d" visible="True" title="Настройки коннектора CoinCap " />
+          <Topic id="8e1986df-9154-4ead-9c99-2e590c44d833" visible="True" title="Пример работы с CoinCap " />
+        </Topic>
+        <Topic id="93ab9c0b-d310-4285-b132-cdace95134dd" visible="True" title="Coinigy ">
+          <Topic id="3bac2825-0c74-4e81-811b-6d2ff33f08e6" visible="True" title="Настройки коннектора Coinigy " />
+          <Topic id="6069b2ef-ee49-4628-9631-e31f75930e04" visible="True" title="Пример работы с Coinigy " />
+        </Topic>
+        <Topic id="d4fa79a6-59fd-43a9-ac61-b9b8933618c6" visible="True" title="Cryptopia">
+          <Topic id="d222e77d-9410-4f1a-a7cf-92d5a9305027" visible="True" title="Настройки коннектора Cryptopia" />
+          <Topic id="45433ea2-0192-4296-8ff2-4963a5f1f2f5" visible="True" title="Пример работы с CryptopiaTrader" />
+        </Topic>
+        <Topic id="0b4fde09-8808-4ef8-89df-39aebcdd64a1" visible="True" title="Deribit">
+          <Topic id="cf64a6d0-e0f4-4144-b949-5c7aa3c557ab" visible="True" title="Настройки коннектора Deribit" />
+          <Topic id="b73ce235-54b7-491a-b0bf-bfbd515a5b24" visible="True" title="Пример работы с DeribitTrader" />
+        </Topic>
+        <Topic id="5097b5fb-42fa-4418-9afc-de5b6ff69df6" visible="True" title="Digifinex">
+          <Topic id="b3b822ae-dbe2-496c-9121-16256df0e712" visible="True" title="Настройки коннектора Digifinex " />
+          <Topic id="cceb78ff-4c1b-4ae4-a7c5-eba41a2d205f" visible="True" title="Пример работы с Digifinex " />
+        </Topic>
+        <Topic id="601781f1-fae7-4c82-adb4-a5e7d9394cfb" visible="True" title="EXMO">
+          <Topic id="c259cacc-d0f1-4a02-9419-dbaa805cab31" visible="True" title="Настройки коннектора EXMO" />
+          <Topic id="154475d4-8b10-4181-b64f-8113f47b963f" visible="True" title="Пример работы с ExmoTrader" />
+        </Topic>
+        <Topic id="d941f537-602b-400f-91d4-d4b2b37b9767" visible="True" title="GDAX">
+          <Topic id="4e7930af-1aa2-4599-91de-7e9eae031fbf" visible="True" title="Настройки коннектора GDAX" />
+          <Topic id="cddf98a2-3ec9-4e49-9757-8b0de893fb15" visible="True" title="Пример работы с GdaxTrader" />
+        </Topic>
+        <Topic id="17ebcf40-aa25-4717-83cd-d275209ff524" visible="True" title="HitBTC">
+          <Topic id="0171d5e9-b148-4b02-9d49-4c00a7c3cc3a" visible="True" title="Настройки коннектора HitBTC" />
+          <Topic id="88e70b23-2b66-49e8-b77d-803697cee16d" visible="True" title="Пример работы с HitBtcTrader" />
+        </Topic>
+        <Topic id="16eaa615-aaf7-42a5-9de7-01762a650758" visible="True" title="Huobi">
+          <Topic id="ccf8139f-afb1-43ca-adfa-a74d9c9b8280" visible="True" title="Настройки коннектора Huobi" />
+          <Topic id="bf264fc3-127d-431a-879e-46014fd9c4ed" visible="True" title="Пример работы с HuobiTrader" />
+        </Topic>
+        <Topic id="886bcc99-7011-4c3c-85fe-d0fc646ee00f" visible="True" title="Idax">
+          <Topic id="0c0987c7-63ab-4e40-a95d-b0a50955261c" visible="True" title="Настройки коннектора Idax " />
+          <Topic id="33c78156-0c49-4f22-a7a4-701f5a09cf69" visible="True" title="Пример работы с Idax " />
+        </Topic>
+        <Topic id="cabadfac-eff9-48ab-ada6-c5856778cf68" visible="True" title="Kraken">
+          <Topic id="39dac157-8de7-4dd1-ad0c-4520aa9ec953" visible="True" title="Настройки коннектора Kraken" />
+          <Topic id="ffca8f50-baa6-4719-9ad3-1efe6a9716a2" visible="True" title="Пример работы с KrakenTrader" />
+        </Topic>
+        <Topic id="d2379d21-9bea-4199-8432-c25f73cb1594" visible="True" isExpanded="true" title="Kucoin">
+          <Topic id="7228e2e5-eb4e-4ad7-b575-088ee696f926" visible="True" title="Графическоя конфигурирование" />
+          <Topic id="e237cc0e-6470-4cf0-81cf-5fd8594a567a" visible="True" title="Пример работы" />
+        </Topic>
+        <Topic id="70ecf683-4336-4848-a05d-8edbcc730af4" visible="True" isExpanded="true" title="Liqui">
+          <Topic id="84110311-8092-4090-89ce-89c57557ee1a" visible="True" title="Настройки коннектора Liqui" />
+          <Topic id="fa0a8e74-dd99-4a18-ac27-1a8db232c71b" visible="True" title="Пример работы с LiquiTrader" />
+        </Topic>
+        <Topic id="8e093fe9-7b2d-47f3-a95a-ece0e0033ecc" visible="True" title="Livecoin">
+          <Topic id="5887c466-24d7-4d50-9ae3-8a746bdecd9e" visible="True" title="Настройки коннектора Livecoin" />
+          <Topic id="b2ee81b7-7038-4cfa-8505-702166f214eb" visible="True" title="Пример работы с LiveCoinTrader" />
+        </Topic>
+        <Topic id="f9ec5eb4-4237-4a2a-9663-757d3d4c0689" visible="True" title="OKCoin">
+          <Topic id="c00c59c2-d12f-4b16-b9f5-ceb451494a6b" visible="True" title="Настройки коннектора OKCoin" />
+          <Topic id="553dc665-10b7-4844-8a79-e60331a3a38b" visible="True" title="Пример работы с OkcoinTrader" />
+        </Topic>
+        <Topic id="554b35f0-4110-4da0-ba30-4c450e8a996b" visible="True" title="OKEx">
+          <Topic id="1d9788e7-0f75-4993-84a2-4a331dfea2d2" visible="True" title="Настройки коннектора OKEx" />
+          <Topic id="8abd86a7-2d85-4953-adeb-c54f245db876" visible="True" title="Пример работы с OkexTrader" />
+        </Topic>
+        <Topic id="18667328-deec-46dd-8c27-fce52733e5ce" visible="True" title="Poloniex">
+          <Topic id="1a6b49de-05a2-44c3-8f67-b8acdec5aec0" visible="True" title="Настройки коннектора Poloniex" />
+          <Topic id="97baac88-b5a9-4783-b381-f38c5568810e" visible="True" title="Пример работы с PoloniexTrader" />
+        </Topic>
+        <Topic id="713a3769-b80c-4342-89d2-031a492372df" visible="True" title="Quoinex">
+          <Topic id="eb595ce4-5971-4032-9ee3-8586c6fcedf2" visible="True" title="Настройки коннектора Quoinex " />
+          <Topic id="de0ead46-bf72-4e37-99b9-15e796f0460d" visible="True" title="Пример работы с Quoinex " />
+        </Topic>
+        <Topic id="989447cf-bc05-4f6a-a736-b3a916ee1ffc" visible="True" title="TradeOgre">
+          <Topic id="0056264e-85e5-4415-b99b-7d9f24e59752" visible="True" title="Настройки коннектора TradeOrge " />
+          <Topic id="7f173ed5-5fdc-4afb-a78b-0e0aaac5c8a7" visible="True" title="Пример работы с TradeOrge " />
+        </Topic>
+        <Topic id="ea1dbc04-3c29-4fbe-91b0-260d1ded31ae" visible="True" title="Yobit">
+          <Topic id="78aa3ef5-8eae-4c53-b7e9-85ee1f8a9137" visible="True" title="Настройки коннектора Yobit" />
+          <Topic id="cccadabe-b3fa-4afa-badd-ca0a1633ca2d" visible="True" title="Пример работы с YobitTrader" />
+        </Topic>
+        <Topic id="6d22d370-721c-452b-85af-6fc9c31115ac" visible="True" title="Zaif">
+          <Topic id="658c35dd-70ab-4799-9c94-b8a42b9fc06c" visible="True" title="Настройки коннектора Zaif " />
+          <Topic id="c96cacc6-7437-4d41-8e3a-34b294b3155a" visible="True" title="Пример работы с Zaif" />
+        </Topic>
+        <Topic id="3a5c4a94-ab01-49a5-ab41-82c85479d147" visible="True" title="LBank">
+          <Topic id="199056ed-4039-4d51-9ae7-8b9f6059902f" visible="True" title="Настройки коннектора LBank" />
+          <Topic id="c5884971-c903-43be-b1b8-b30eba2bde33" visible="True" title="Пример работы с LBank" />
+        </Topic>
+        <Topic id="740cbac0-53a1-47b9-92c2-397fd7e9c97f" visible="True" title="BitMax">
+          <Topic id="7ca713af-d8b3-4616-b98a-3594bc655a93" visible="True" title="Настройки коннектора BitMax" />
+          <Topic id="9ebcdfc5-9274-4501-9e25-c404806c7444" visible="True" title="Пример работы с BitMax" />
+        </Topic>
+        <Topic id="0f66a2b6-8ad1-4331-99c8-7543be3fabb0" visible="True" title="BW">
+          <Topic id="233f62de-500c-46a1-9cf0-00eeb550a21c" visible="True" title="Настройки коннектора BW" />
+          <Topic id="15b16c0b-d396-471b-ab7c-b943f48ed261" visible="True" title="Пример работы с BW" />
+        </Topic>
+        <Topic id="8f22e760-96c8-493a-aef0-569cbc42a9da" visible="True" title="Bibox">
+          <Topic id="3380fca6-bc39-403e-8dae-26e4c84a63c7" visible="True" title="Настройки коннектора Bibox" />
+          <Topic id="d4146047-5c20-462c-b92d-e66d5680c4f4" visible="True" title="Пример работы с Bibox" />
+        </Topic>
+        <Topic id="1e7027ce-03c3-4b35-bdfd-abcceed7d249" visible="True" title="CoinBene">
+          <Topic id="d024edcc-a396-4859-86f3-e8517526bc17" visible="True" title="Настройки коннектора CoinBene" />
+          <Topic id="b7c734c5-19bd-4017-9295-9b0868760543" visible="True" title="Пример работы с CoinBene" />
+        </Topic>
+        <Topic id="66d9f9b3-1251-414a-ab9b-18060f2f62c6" visible="True" title="BitZ">
+          <Topic id="3e62d8d7-9490-4267-b523-b6e85b047a9b" visible="True" title="Настройки коннектора BitZ" />
+          <Topic id="60367618-ceaf-4037-9b9b-f9d909518de0" visible="True" title="Пример работы с BitZ" />
+        </Topic>
+        <Topic id="3502cfdf-e496-4567-ad4e-c7b195569b60" visible="True" title="ZB">
+          <Topic id="59d0c7b8-1371-4cc7-9c4a-919e8a994363" visible="True" title="Настройки коннектора ZB" />
+          <Topic id="fc059591-e778-47d4-ac73-cf94c11d79fa" visible="True" title="Пример работы с ZB" />
+        </Topic>
+        <Topic id="925f42ba-d6d8-41bb-bb27-b1fa56e71ea8" visible="True" title="Вывод средств" />
+      </Topic>
+      <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" title="Коннекторы FIX/FAST">
+        <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" title="FIX">
+          <Topic id="9012c95b-9858-4ee8-948d-c6f776b128eb" visible="True" title="Настройки коннекторов FIX/FAST" />
+          <Topic id="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" visible="True" title="Пример работы с FixTrader" />
+          <Topic id="55f27fed-449d-486d-b662-8ddde39ae852" visible="True" title="Стоп-заявки" />
+          <Topic id="9e6e40df-f41d-4429-bdc7-d5864dd2c1e3" visible="True" title="Новости" />
+        </Topic>
+        <Topic id="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93" visible="True" title="FIX Server" />
+      </Topic>
+      <Topic id="c23300a1-bf38-444a-b103-28350766477f" visible="True" title="Сохранение и загрузка настроек" />
       <Topic id="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" visible="True" title="Множество подключений" />
+      <Topic id="293859e2-6c39-486c-afde-d9ae96243618" visible="True" title="Создание коннектора" />
       <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Переподключение" />
       <Topic id="08b8a9ca-6658-4088-b6b8-8715b12732ab" visible="True" title="RSS" />
     </Topic>
-    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" title="Управление заявками">
+    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" isExpanded="true" title="Управление заявками">
       <Topic id="b740e98d-7bcf-406e-aad4-75432ab3009e" visible="True" title="Создать новую заявку" />
+      <Topic id="2587051d-1e94-4fb2-b5c1-d57cb5af1b6d" visible="True" title="Создать новую стоп заявку" />
       <Topic id="718fbbc7-efa5-45ed-80ef-e0a32fd4a8e2" visible="True" title="Получение информации по заявкам" />
       <Topic id="41a3b3e7-a7cd-43ba-842f-13f6a7199d26" visible="True" title="Состояния заявок" />
       <Topic id="6267fec7-64e5-4488-ba08-c72cf61fcc9e" visible="True" title="Снятие заявок" />
@@ -510,7 +512,7 @@
       <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Настройки тестирования" />
     </Topic>
     <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Пользовательский интерфейс (GUI)">
-      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" isExpanded="true" title="Графики">
+      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Графики">
         <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Свечной график" />
         <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="График-панель" />
         <Topic id="da275a7f-ff6f-4dc7-8451-bf4fc22624a6" visible="True" title="График эквити" />
@@ -641,7 +643,7 @@
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Установка S#.Data" />
     <Topic id="7fc5f53a-b6b9-4f0f-8b97-983dd98f0237" visible="True" title="Обновление на новую версию" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="Первый запуск" />
-    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Настройка источников">
+    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Настройка источников">
       <Topic id="3b645eca-0171-49a9-ba44-e2e83507ed86" visible="True" noFile="true" title="Россия">
         <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
         <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" title="Алор" />
@@ -657,7 +659,7 @@
         <Topic id="184da0f9-29db-4397-8497-1ed4c8f7ea0d" visible="True" title="UX" />
         <Topic id="bcf9a00f-c491-4ce1-90ef-fb67a684fd4f" visible="True" title="SPB Exchange" />
       </Topic>
-      <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" isExpanded="true" title="Америка">
+      <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" title="Америка">
         <Topic id="66746dc9-3271-4430-8290-842d4647cc95" visible="True" title="AlphaVantage" />
         <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
         <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" title="FinViz" />
@@ -738,7 +740,7 @@
       </Topic>
       <Topic id="01a85a46-7510-4385-b81c-348ffb3dfc46" visible="True" title="Параметры подключения" />
     </Topic>
-    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" isExpanded="true" title="Просмотр и экспорт">
+    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="Просмотр и экспорт">
       <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Сделки" />
       <Topic id="6126cb15-de8b-4bcc-8b81-7354e8894239" visible="True" title="Стаканы" />
       <Topic id="0adb23fa-a295-43e0-9e75-9060b1d03388" visible="True" title="Свечи" />
@@ -753,7 +755,7 @@
     </Topic>
     <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" title="Генерация свечек" />
     <Topic id="2714f864-0d7d-4d77-8d09-a25d87981f51" visible="True" title="Индикаторы" />
-    <Topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" visible="True" title="Импорт данных">
+    <Topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" visible="True" isExpanded="true" title="Импорт данных">
       <Topic id="2a830015-5cfb-4468-8538-4e94820b3659" visible="True" title="Инструменты" />
       <Topic id="1e18851f-69f7-4fa0-a5ea-c059c7694990" visible="True" title="Сделки" />
       <Topic id="6465c049-fca8-4bb4-b00a-d3495299267d" visible="True" title="Стаканы" />
@@ -763,7 +765,7 @@
       <Topic id="649dd276-171b-483a-9cf1-8f77e4e1b577" visible="True" title="Новости" />
       <Topic id="cd5f6850-ae11-42c2-b5c8-e1b2af1c3380" visible="True" title="Транзакции" />
     </Topic>
-    <Topic id="c9491706-3750-42e8-a63f-b50184a7da1d" visible="True" noFile="true" title="Серверный режим">
+    <Topic id="c9491706-3750-42e8-a63f-b50184a7da1d" visible="True" noFile="true" isExpanded="true" title="Серверный режим">
       <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Настройки" />
       <Topic id="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" visible="True" title="Подключение через FIX протокол" />
       <Topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" visible="True" title="Подключение через WCF" />
@@ -975,7 +977,7 @@
     </Topic>
   </Topic>
   <Topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" visible="True" title="S#.MatLab" />
-  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" title="S#.Shell">
+  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" isExpanded="true" title="S#.Shell">
     <Topic id="1a7843d9-c1e4-4597-b02d-9a011b24df44" visible="True" title="Установка S#.Shell" />
     <Topic id="848cd34c-1768-409f-8e82-bed1c3e25102" visible="True" title="Быстрый запуск" />
     <Topic id="1b4c10e7-34ea-4eff-b820-4d2ea04231af" visible="True" isExpanded="true" title="Интерфейс программы">

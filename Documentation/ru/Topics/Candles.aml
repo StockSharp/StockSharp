@@ -91,6 +91,7 @@ private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, Candle 
 					</alert>
 				</content>
 			</step>
+			
 			<step>
 				<content>
 					<para>Далее передаём в коннектор созданную серию свечей и запускаем получение данных через 
@@ -108,21 +109,48 @@ _connector.SubscribeCandles(_candleSeries, DateTime.Today.Subtract(TimeSpan.From
 					<para>После этого этапа начнёт вызываться событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>.</para>
 				</content>
 			</step>
+			<step>
+				<content>
+					<para>При передаче свечи из события 
+		<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>
+		для отрисовки на графике, будут отображаться изменения текущей свечи.</para>
+		
+		<para>Если же нужно отображать только <legacyBold>"целые"</legacyBold> свечи, то необходимо проверить свойство 
+		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Candle.State</codeEntityReference> пришедшей свечи:</para>
+		
+		<code language="C#">
+		<![CDATA[
+...
+private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, Candle candle)
+{
+    if (candle.State == CandleStates.Finished) 
+    {
+       var chartData = new ChartDrawData();
+       chartData.Group(candle.OpenTime).Add(_candleElement, candle);
+       Chart.Draw(chartData);
+    }
+}
+...
+		]]>
+		</code>	
+				</content>
+			</step>
 <step>	
 				<content>
 				
 <para>Для <codeEntityReference>T:StockSharp.Algo.Candles.CandleSeries</codeEntityReference> можно задать некоторые свойства </para>
 <para><codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesMode</codeEntityReference> задает 
-режим построения свечей, по умолчанию задан LoadAndBuild, что говорит о том, 
+режим построения свечей, по умолчанию задан <legacyBold>LoadAndBuild</legacyBold>, что говорит о том, 
 что будут загружены доступные исторические свечи, а после они буду строиться из заданного в свойстве 
 <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesFrom</codeEntityReference> 
 типа данных. </para>
 <para>Если <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesMode</codeEntityReference> задан 
-как LoadAndBuild или Build то необходимо задать свойство 
+как <legacyBold>LoadAndBuild</legacyBold> или <legacyBold>Build</legacyBold> то необходимо задать свойство 
 <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesFrom</codeEntityReference> 
-указывающее из какого типа данных буду построены свечи (тиковые данные, стаканы и др.). </para>
+указывающее из какого типа данных буду построены свечи (тиковые данные, бид, аск и др.). </para>
 <para>Для прорисовки <legacyBold>профиля объема</legacyBold> необходимо установить свойство 
-<codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.IsCalcVolumeProfile</codeEntityReference> в true.</para>
+<codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.IsCalcVolumeProfile</codeEntityReference> в true, 
+а также <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesMode</codeEntityReference> в <legacyBold>Build</legacyBold></para>
 <para>Ниже приведены примеры как задать разные типы свечей</para>
 					<code language="C#">
 					<![CDATA[
@@ -169,51 +197,6 @@ _candleSeries = new CandleSeries(typeof(PnFCandle), security, new PnFArg() { Box
 			</step>
 		</steps>
 	</procedure>
-	
-	
-    
-    <procedure>
-    	<title>Работа со свечами</title>
-		<steps class="bullet">
-			<step>
-				<content>    		
-					<para>Если требуется получать уже сформированные свечи по определенным параметрам, нужно вызывать специальные методы, например, для
-					<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>,
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,Ecng.ComponentModel.Range{System.DateTimeOffset})</codeEntityReference>,
-					или для  <codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference>,
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset)</codeEntityReference>:</para>
-					<code language="C#">
-					<![CDATA[
-// получить 100 свечей-пятиминуток
-...
-
-var prev100Candles =_connector.GetCandles<TimeFrameCandle>(_candleSeries, 100);
-
-...
-					]]>
-					</code>
-				</content>    		
-			</step>
-			
-			<step>
-				<content>  			
-					<para>Если необходимо обратиться к прошедшим свечам по номеру (например, получить 5-ую с конца), то можно использовать метод
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandle``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,System.Int32)</codeEntityReference>:</para>
-					<code language="C#">
-					<![CDATA[
-// получить 5-ую свечу с конца (нумерация идет от 0, 0 - текущая свеча)
-...
-
-var prev5Candle = _connector.GetCandle<TimeFrameCandle>(_candleSeries, 5);
-
-...
-					]]>
-					</code>
-				</content>    		
-			</step>
-			
-		</steps>
-    </procedure>
     
 	<nextSteps>
 		<content>
