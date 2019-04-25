@@ -376,6 +376,16 @@
             <param name="nativeIdStorage">Security native identifier storage.</param>
             <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
         </member>
+        <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.RtsMinAvailableTime">
+            <summary>
+            The earliest date in RTS, for which there are historical data.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.UxMinAvailableTime">
+            <summary>
+            The earliest date in UX, for which there are historical data.
+            </summary>
+        </member>
         <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.TimeZone">
             <summary>
             Market-data time zone.

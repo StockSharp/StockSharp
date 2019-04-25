@@ -134,6 +134,8 @@ T:StockSharp.Algo.History.Russian.Rts.RtsHistorySource/summary;DocStr254
 M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)/summary;DocStr1
 M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)/param/nativeIdStorage;DocStr9329
 M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)/param/exchangeInfoProvider;DocStr9509
+P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.RtsMinAvailableTime/summary;DocStr255
+P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.UxMinAvailableTime/summary;DocStr256
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.TimeZone/summary;MarketDataTimeZone
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.Host/summary;DocStr260
 P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.UserName/summary;DocStr261
