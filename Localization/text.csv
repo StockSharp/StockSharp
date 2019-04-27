@@ -4648,7 +4648,7 @@ Duplicates;Duplicates;Дубликаты
 UpdateDuplicateSecurities;Update duplicate securities if they already exists.;Обновлять дубликаты инструментов, если они уже существуют.
 CreateFromSample;Create from sample;Создать из примера
 StorageAlreadyExist;Storage '{0}' already exist.;Хранилище '{0}' уже существует.
-IgnoreNonIdSecurities;Ingore non id;Игнорировать без ИД
+IgnoreNonIdSecurities;Ignore non id;Игнорировать без ИД
 IgnoreNonIdSecuritiesDesc;Ignore securities without identifiers.;Игнорировать инструменты без идентификатора.
 LineNoSecurityId;Line '{0}' does not contain security identifier.;Строка '{0}' не содержит идентификатор инструмента.
 QuantFeed;QuantFEED;QuantFEED
@@ -12208,7 +12208,7 @@ DocStr7412;Визуальный компонент выбора набора с�
 DocStr7414;Server types;Типы серверов
 DocStr7416;The drop-down list to select {0};Выпадающий список для выбора {0}
 DocStr7417;The selected server;Выбранный сервер
-DocStr7418;The market-data message adapter for Rss;Маркет-дата адаптер сообщений для Rss
+DocStr7418;The market-data message adapter for RSS;Маркет-дата адаптер сообщений для RSS
 DocStr7420;The format of dates. Should be fill in, if the format is different from ddd, dd MMM yyyy hh:mm:ss;Формат дат. Необходимо заполнить, если формат RSS потока отличается от ddd, dd MMM yyyy hh:mm:ss
 DocStr7421;The drop-down list to select the RSS feed address;Выпадающий список для выбора адреса RSS фида
 DocStr7422;The most popular RSS feeds;Адреса RSS популярных фидов

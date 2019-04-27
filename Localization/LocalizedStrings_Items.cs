@@ -46138,12 +46138,12 @@ namespace StockSharp.Localization
 		public static string StorageAlreadyExist => GetString(StorageAlreadyExistKey);
 
 		/// <summary>
-		/// Ingore non id
+		/// Ignore non id
 		/// </summary>
 		public const string IgnoreNonIdSecuritiesKey = nameof(IgnoreNonIdSecurities);
 
 		/// <summary>
-		/// Ingore non id
+		/// Ignore non id
 		/// </summary>
 		public static string IgnoreNonIdSecurities => GetString(IgnoreNonIdSecuritiesKey);
 
