@@ -23,7 +23,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioLookupMessage : PortfolioMessage
+	public class PortfolioLookupMessage : PortfolioMessage, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioLookupMessage"/>.

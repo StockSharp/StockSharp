@@ -165,22 +165,13 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodOrderConditionTypes">
       <summary>

@@ -632,6 +632,10 @@ namespace StockSharp.Algo
 
 			var criteria = new Security();
 			criteria.ApplyChanges(message, exchangeInfoProvider);
+
+			if (criteria.Type == null)
+				criteria.Type = message.GetSecurityTypes().FirstOr();
+
 			return criteria;
 		}
 
@@ -649,7 +653,7 @@ namespace StockSharp.Algo
 			return new SecurityLookupMessage
 			{
 				//LocalTime = CurrentTime,
-				SecurityId = securityId ?? (criteria.Id.IsEmpty() && criteria.Code.IsEmpty() ? default(SecurityId) : criteria.ToSecurityId()),
+				SecurityId = securityId ?? (criteria.Id.IsEmpty() && criteria.Code.IsEmpty() ? default(SecurityId) : criteria.ToSecurityId(boardIsRequired: false)),
 				Name = criteria.Name,
 				Class = criteria.Class,
 				SecurityType = criteria.Type,
@@ -690,7 +694,7 @@ namespace StockSharp.Algo
 
 			var security = new Security
 			{
-				Id = message.SecurityId.IsDefault() ? null : message.SecurityId.ToStringId()
+				Id = message.SecurityId.IsDefault() ? null : message.SecurityId.ToStringId(nullIfEmpty: message is SecurityLookupMessage)
 			};
 
 			security.ApplyChanges(message, exchangeInfoProvider);
@@ -700,15 +704,27 @@ namespace StockSharp.Algo
 
 		private static readonly SecurityIdGenerator _defaultGenerator = new SecurityIdGenerator();
 
+		private static SecurityIdGenerator GetGenerator(SecurityIdGenerator generator) => generator ?? _defaultGenerator;
+
 		/// <summary>
 		/// Convert <see cref="SecurityId"/> to <see cref="Security.Id"/> value.
 		/// </summary>
 		/// <param name="securityId"><see cref="SecurityId"/> value.</param>
 		/// <param name="generator">The instrument identifiers generator <see cref="Security.Id"/>. Can be <see langword="null"/>.</param>
+		/// <param name="nullIfEmpty">Return <see langword="null"/> if <see cref="SecurityId"/> is empty.</param>
 		/// <returns><see cref="Security.Id"/> value.</returns>
-		public static string ToStringId(this SecurityId securityId, SecurityIdGenerator generator = null)
+		public static string ToStringId(this SecurityId securityId, SecurityIdGenerator generator = null, bool nullIfEmpty = false)
 		{
-			return (generator ?? _defaultGenerator).GenerateId(securityId.SecurityCode, securityId.BoardCode);
+			var secCode = securityId.SecurityCode;
+			var boardCode = securityId.BoardCode;
+
+			if (nullIfEmpty)
+			{
+				if (secCode.IsEmpty() || boardCode.IsEmpty())
+					return null;
+			}
+
+			return GetGenerator(generator).GenerateId(secCode, boardCode);
 		}
 
 		/// <summary>
@@ -719,7 +735,7 @@ namespace StockSharp.Algo
 		/// <returns><see cref="SecurityId"/> value.</returns>
 		public static SecurityId ToSecurityId(this string id, SecurityIdGenerator generator = null)
 		{
-			return (generator ?? _defaultGenerator).Split(id);
+			return GetGenerator(generator).Split(id);
 		}
 
 		/// <summary>
@@ -1458,8 +1474,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="idGenerator">The instrument identifiers generator <see cref="Security.Id"/>.</param>
+		/// <param name="boardIsRequired"><see cref="Security.Board"/> is required.</param>
 		/// <returns>Security ID.</returns>
-		public static SecurityId ToSecurityId(this Security security, SecurityIdGenerator idGenerator = null)
+		public static SecurityId ToSecurityId(this Security security, SecurityIdGenerator idGenerator = null, bool boardIsRequired = true)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -1499,11 +1516,11 @@ namespace StockSharp.Algo
 					throw new ArgumentException(LocalizedStrings.Str1123);
 				}
 
-				if (security.Board == null)
+				if (security.Board == null && boardIsRequired)
 					throw new ArgumentException(LocalizedStrings.Str1124Params.Put(security.Code));
 
 				secCode = security.Code;
-				boardCode = security.Board.Code;
+				boardCode = security.Board?.Code;
 			}
 
 			return security.ExternalId.ToSecurityId(secCode, boardCode, security.Type);

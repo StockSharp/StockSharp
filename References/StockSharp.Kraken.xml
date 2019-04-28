@@ -35,22 +35,13 @@
             </summary>
         </member>
         <member name="M:StockSharp.Kraken.KrakenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Save settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Kraken.KrakenMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Load settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Kraken.KrakenMessageAdapter.ToString">
-            <summary>
-            Returns a string that represents the current object.
-            </summary>
-            <returns>A string that represents the current object.</returns>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Kraken.KrakenMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
             <summary>

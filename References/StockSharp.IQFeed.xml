@@ -109,10 +109,7 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>

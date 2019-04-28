@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class BoardLookupMessage : Message
+	public class BoardLookupMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// The filter for board search.

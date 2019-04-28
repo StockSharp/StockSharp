@@ -11,6 +11,7 @@ P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportNativeSecurityLookup/inher
 M:StockSharp.BarChart.BarChartMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.BarChart.BarChartMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.BarChart.BarChartMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.BarChart.BarChartMessageAdapter.ToString/inheritdoc;DocStr8459
 T:StockSharp.BarChart.BarChartTrader/summary;DocStr2539
 M:StockSharp.BarChart.BarChartTrader.#ctor/summary;DocStr1
 P:StockSharp.BarChart.BarChartTrader.Login/summary;Login

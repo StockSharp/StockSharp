@@ -28,7 +28,7 @@ namespace StockSharp.Messages
 	/// <typeparam name="TField">Changes type.</typeparam>
 	[DataContract]
 	[Serializable]
-	public abstract class BaseChangeMessage<TField> : Message
+	public abstract class BaseChangeMessage<TField> : Message, IServerTimeMessage
 	{
 		/// <summary>
 		/// Change server time.

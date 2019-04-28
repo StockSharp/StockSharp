@@ -24,12 +24,9 @@ P:StockSharp.ETrade.ETradeMessageAdapter.ConsumerSecret/summary;DocStr3146
 P:StockSharp.ETrade.ETradeMessageAdapter.Sandbox/summary;Str3369
 P:StockSharp.ETrade.ETradeMessageAdapter.AccessToken/summary;DocStr3136
 P:StockSharp.ETrade.ETradeMessageAdapter.VerificationCode/summary;Str3371
-M:StockSharp.ETrade.ETradeMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
-M:StockSharp.ETrade.ETradeMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.ETrade.ETradeMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
-M:StockSharp.ETrade.ETradeMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.ETrade.ETradeMessageAdapter.ToString/summary;DocStr49
-M:StockSharp.ETrade.ETradeMessageAdapter.ToString/returns;DocStr50
+M:StockSharp.ETrade.ETradeMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.ETrade.ETradeMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.ETrade.ETradeMessageAdapter.ToString/inheritdoc;DocStr8459
 T:StockSharp.ETrade.ETradeStopTypes/summary;DocStr3137
 F:StockSharp.ETrade.ETradeStopTypes.StopMarket/summary;DocStr3138
 F:StockSharp.ETrade.ETradeStopTypes.StopLimit/summary;DocStr3139

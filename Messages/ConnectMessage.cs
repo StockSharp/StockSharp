@@ -23,7 +23,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class ConnectMessage : BaseConnectionMessage
+	public class ConnectMessage : BaseConnectionMessage, IServerTimeMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConnectMessage"/>.
@@ -45,5 +45,7 @@ namespace StockSharp.Messages
 				LocalTime = LocalTime,
 			};
 		}
+
+		DateTimeOffset IServerTimeMessage.ServerTime => LocalTime;
 	}
 }

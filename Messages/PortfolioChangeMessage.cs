@@ -31,7 +31,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 	[DescriptionLoc(LocalizedStrings.Str541Key)]
-	public sealed class PortfolioChangeMessage : BaseChangeMessage<PositionChangeTypes>
+	public sealed class PortfolioChangeMessage : BaseChangeMessage<PositionChangeTypes>, IServerTimeMessage
 	{
 		/// <summary>
 		/// Portfolio name.

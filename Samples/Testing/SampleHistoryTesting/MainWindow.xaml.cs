@@ -308,7 +308,7 @@ namespace SampleHistoryTesting
 					YahooCandlesProgress,
 					YahooCandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource(_exchangeInfoProvider).GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles},
+					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource(_nativeIdStorage, _exchangeInfoProvider).GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles},
 					YahooCandlesChart,
 					YahooCandlesEquity,
 					YahooCandlesPosition),

@@ -52,6 +52,18 @@ StockSharp API Change log
 * (feature) IConnector. SubscribeMarketData/UnSubscribeMarketData overloads without Security added.
 * (feature) OrderTypes. Repo and Rps moved to IXXXOrderCondition
 * (bug) TransactionBinarySnapshotSerializer fix.
+* (feature) IMessageAdapter. CandlesBuildFrom property added.
+* (bug) Envelope and MACD fixes.
+* (feature) DukasCopy, FxcmHistory, GainCapital, MBTrading, TrueFX, Google, Yahoo, MFD, Finam, AlorHistory, RTS FTP, UX, Xignite refactored into connectors.
+* (feature) MessageAdapter. SendOutMarketDataReply method added.
+* (feature) ISecurityProvider. Lookup method uses SecurityLookupMessage.
+* (feature) SecurityLookupWindow. CriteriaMessage
+* (feature) ISecurityDownloader. Refresh method uses SecurityLookupMessage.
+* (feature) ITransactionIdMessage, IServerTimeMessage interfaces.
+* (bug) RemoteStorage. Fix available data types translation.
+* (feature) SecurityNativeIdMessageAdapter. Skip external native ids.
+* (feature) Tradier. New urls + sandbox supported.
+* (feature) BaseDumpableHistorySource removed.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

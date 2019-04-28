@@ -371,12 +371,8 @@ namespace StockSharp.Algo
 			remove => _cleared -= value;
 		}
 
-		/// <summary>
-		/// Lookup securities by criteria <paramref name="criteria" />.
-		/// </summary>
-		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
-		/// <returns>Found instruments.</returns>
-		public virtual IEnumerable<Security> Lookup(Security criteria)
+		/// <inheritdoc />
+		public virtual IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
 		{
 			return Securities.Filter(criteria);
 		}
@@ -702,7 +698,6 @@ namespace StockSharp.Algo
 			}
 
 			var message = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode, criteria.Type));
-			message.TransactionId = TransactionIdGenerator.GetNextId();
 			message.Adapter = adapter;
 			message.OfflineMode = offlineMode;
 
@@ -714,6 +709,9 @@ namespace StockSharp.Algo
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
+
+			if (criteria.TransactionId == 0)
+				criteria.TransactionId = TransactionIdGenerator.GetNextId();
 
 			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
 

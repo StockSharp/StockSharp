@@ -15,7 +15,7 @@ namespace StockSharp.Algo.Strategies.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class StrategyStateMessage : Message
+	public class StrategyStateMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyStateMessage"/>.

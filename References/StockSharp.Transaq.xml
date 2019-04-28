@@ -34,14 +34,9 @@
             Адаптер сообщений для Transaq.
             </summary>
     </member>
-    <member name="P:StockSharp.Transaq.TransaqMessageAdapter.CandleTimeFrames">
-      <summary>
-            Список доступных периодов свечей.
-            </summary>
-    </member>
     <member name="E:StockSharp.Transaq.TransaqMessageAdapter.CandleTimeFramesInitialized">
       <summary>
-            Событие инициализации поля <see cref="P:StockSharp.Transaq.TransaqMessageAdapter.CandleTimeFrames" />.
+            Событие инициализации поля <see cref="P:StockSharp.Transaq.TransaqMessageAdapter.TimeFrames" />.
             </summary>
     </member>
     <member name="F:StockSharp.Transaq.TransaqMessageAdapter.MaxNewsHeaderCount">
@@ -142,22 +137,13 @@
             </summary>
     </member>
     <member name="M:StockSharp.Transaq.TransaqMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Transaq.TransaqMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Transaq.TransaqMessageAdapter.ToString">
-      <summary>
-            Получить строковое представление.
-            </summary>
-      <returns>Строковое представление.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Transaq.TransaqOrderConditionTypes">
       <summary>
