@@ -64,6 +64,8 @@ StockSharp API Change log
 * (feature) SecurityNativeIdMessageAdapter. Skip external native ids.
 * (feature) Tradier. New urls + sandbox supported.
 * (feature) BaseDumpableHistorySource removed.
+* (feature) Remote storage. ExchangeBoard -> BoardMessage, Security -> SecurityMessage.
+* (feature) NewsMessage. Url property changed type from Uri to String.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.ServerTime.ToString("zzz"),
 				data.Headline,
 				data.Source,
-				data.Url?.ToString(),
+				data.Url,
 				data.Id,
 				data.BoardCode,
 				data.SecurityId?.SecurityCode,
@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Storages.Csv
 				ServerTime = reader.ReadTime(metaInfo.Date),
 				Headline = reader.ReadString(),
 				Source = reader.ReadString(),
-				Url = reader.ReadString().To<Uri>(),
+				Url = reader.ReadString(),
 				Id = reader.ReadString(),
 				BoardCode = reader.ReadString(),
 			};

@@ -20,7 +20,6 @@ namespace StockSharp.Algo.Storages.Binary
 	using System.IO;
 	using System.Linq;
 
-	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Serialization;
 
@@ -97,7 +96,7 @@ namespace StockSharp.Algo.Storages.Binary
 				writer.WriteStringEx(news.Source);
 				writer.WriteStringEx(news.BoardCode);
 				writer.WriteStringEx(news.SecurityId?.SecurityCode);
-				writer.WriteStringEx(news.Url.To<string>());
+				writer.WriteStringEx(news.Url);
 
 				var lastOffset = metaInfo.LastServerOffset;
 				metaInfo.LastTime = writer.WriteTime(news.ServerTime, metaInfo.LastTime, LocalizedStrings.News, true, true, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
@@ -126,7 +125,7 @@ namespace StockSharp.Algo.Storages.Binary
 				Source = reader.ReadStringEx(),
 				BoardCode = reader.ReadStringEx(),
 				SecurityId = reader.Read() ? new SecurityId { SecurityCode = reader.ReadString() } : (SecurityId?)null,
-				Url = reader.ReadStringEx().To<Uri>(),
+				Url = reader.ReadStringEx(),
 			};
 
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version46;
