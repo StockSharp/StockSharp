@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
 
@@ -47,7 +46,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.TypeKey)]
 		[DescriptionLoc(LocalizedStrings.Str360Key)]
 		[MainCategory]
-		public IEnumerable<SecurityTypes> SecurityTypes { get; set; }
+		public SecurityTypes[] SecurityTypes { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityLookupMessage"/>.

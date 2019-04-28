@@ -1063,7 +1063,7 @@ namespace StockSharp.Messages
 				if (set.Count == 1)
 					message.SecurityType = set.First();
 				else
-					message.SecurityTypes = set;
+					message.SecurityTypes = set.ToArray();
 			}
 		}
 
