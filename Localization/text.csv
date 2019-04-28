@@ -15597,3 +15597,4 @@ DocStr11076;{0} is required;Требуется {0}
 DocStr11077;Possible options for candles building;Возможные опциии для построения свечей
 DocStr11081;Return {0} if {1} is empty;Вернуть {0}, если значение {1} пустое
 DocStr11086;The interface describing an message with {0} property;Интерфейс, описывающий сообщение со свойством {0}
+DocStr11087;To find securities that match the filter {0};Найти инструменты, которые удовлетворяют фильтру {0}
