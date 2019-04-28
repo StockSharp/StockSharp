@@ -132,6 +132,9 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CandlesBuildFrom">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportNativeSecurityLookup">
       <inheritdoc />
     </member>

@@ -1,0 +1,6 @@
+T:StockSharp.GainCapital.GainCapitalMessageAdapter/summary;DocStr2538
+M:StockSharp.GainCapital.GainCapitalMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.GainCapital.GainCapitalMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+P:StockSharp.GainCapital.GainCapitalMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.GainCapital.GainCapitalMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
+M:StockSharp.GainCapital.GainCapitalMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

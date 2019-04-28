@@ -10,7 +10,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class TimeFrameLookupMessage : Message
+	public class TimeFrameLookupMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeFrameLookupMessage"/>.

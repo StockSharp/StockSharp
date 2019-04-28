@@ -82,6 +82,10 @@
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlorHistory\AlorHistory.csproj">
+      <Project>{A72579C7-465B-40D7-8005-1CC4FD35BE6B}</Project>
+      <Name>AlorHistory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlphaVantage\AlphaVantage.csproj">
       <Project>{C09745E8-CE51-47DF-8856-E3E3E41EF911}</Project>
       <Name>AlphaVantage</Name>
@@ -170,13 +174,29 @@
       <Project>{87EC89A6-4152-4346-A0FB-4E9B6AA23B2B}</Project>
       <Name>Digifinex</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\DukasCopy\DukasCopy.csproj">
+      <Project>{B0291E7F-A172-48BA-9DA0-6DAE1E68C74A}</Project>
+      <Name>DukasCopy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Exmo\Exmo.csproj">
       <Project>{E5396BB1-3D40-4D09-BDB3-13A4D849BC5F}</Project>
       <Name>Exmo</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Finam\Finam.csproj">
+      <Project>{CA9992B3-58D1-4BD9-B24A-54149B9A92CA}</Project>
+      <Name>Finam</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\FinViz\FinViz.csproj">
+      <Project>{A0198C4B-C905-4BD8-B14E-9C570479AED3}</Project>
+      <Name>FinViz</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Gdax\Gdax.csproj">
       <Project>{51134FC5-2DAB-4905-9E41-A3E8E754AF7C}</Project>
       <Name>Gdax</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Google\Google.csproj">
+      <Project>{BBC0A973-C58D-498F-8D4B-03C907441A0E}</Project>
+      <Name>Google</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\HitBtc\HitBtc.csproj">
       <Project>{DA6A7BFC-2787-48BA-A6FD-A047006B6901}</Project>
@@ -214,6 +234,10 @@
       <Project>{F9959529-EF8F-4B86-928F-9993BF4A0EE0}</Project>
       <Name>LiveCoin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Mfd\Mfd.csproj">
+      <Project>{1B5592DB-0EA6-4C15-A7D6-7C62E02AC20A}</Project>
+      <Name>Mfd</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Okcoin\Okcoin.csproj">
       <Project>{52364231-2047-4785-885C-90D2E20C37FA}</Project>
       <Name>Okcoin</Name>
@@ -225,6 +249,10 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Poloniex\Poloniex.csproj">
       <Project>{B8103F63-11BE-455A-89CB-2AD9A0BC07D9}</Project>
       <Name>Poloniex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quandl\Quandl.csproj">
+      <Project>{5E0866F2-3238-4B87-9A5E-414FD994CFD0}</Project>
+      <Name>Quandl</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\QuantHouse\QuantHouse.csproj">
       <Project>{E818D294-DBF6-4126-AF13-D83EF9740536}</Project>
@@ -281,6 +309,18 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Fxcm\Fxcm.csproj">
       <Project>{358B4D44-CB92-4DED-AFD4-3DAC72D167E5}</Project>
       <Name>Fxcm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\UkrExh\UkrExh.csproj">
+      <Project>{57015126-7323-46F5-AD15-9BEBFB627D8B}</Project>
+      <Name>UkrExh</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Xignite\Xignite.csproj">
+      <Project>{8C7F287B-67DF-48D7-A233-947EDB95F22D}</Project>
+      <Name>Xignite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Yahoo\Yahoo.csproj">
+      <Project>{ED89AB57-C5EF-485A-A2A4-04E807606E77}</Project>
+      <Name>Yahoo</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Yobit\Yobit.csproj">
       <Project>{E66E747C-A9AD-4FA2-99D0-143834EED83D}</Project>

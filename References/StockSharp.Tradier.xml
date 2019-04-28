@@ -55,6 +55,11 @@
             Access token.
             </summary>
         </member>
+        <member name="P:StockSharp.Tradier.TradierMessageAdapter.Sandbox">
+            <summary>
+            Demo mode.
+            </summary>
+        </member>
         <member name="P:StockSharp.Tradier.TradierMessageAdapter.BalanceCheckInterval">
             <summary>
             Balance check interval. Required in case of deposit and withdraw actions.
@@ -82,6 +87,11 @@
         <member name="P:StockSharp.Tradier.TradierTrader.Token">
             <summary>
             Access token.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Tradier.TradierTrader.Sandbox">
+            <summary>
+            Sandbox mode.
             </summary>
         </member>
         <member name="P:StockSharp.Tradier.TradierTrader.BalanceCheckInterval">

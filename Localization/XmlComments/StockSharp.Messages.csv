@@ -687,6 +687,19 @@ M:StockSharp.Messages.Extensions.IsSupportTakeProfit(StockSharp.Messages.IMessag
 M:StockSharp.Messages.Extensions.IsSupportWithdraw(StockSharp.Messages.IMessageAdapter)/summary;DocStr10570
 M:StockSharp.Messages.Extensions.IsSupportWithdraw(StockSharp.Messages.IMessageAdapter)/param/adapter;DocStr929
 M:StockSharp.Messages.Extensions.IsSupportWithdraw(StockSharp.Messages.IMessageAdapter)/returns;DocStr8659
+M:StockSharp.Messages.Extensions.SetSecurityCode(StockSharp.Messages.SecurityMessage,System.String)/summary;DocStr93
+M:StockSharp.Messages.Extensions.SetSecurityCode(StockSharp.Messages.SecurityMessage,System.String)/param/message;DocStr4378
+M:StockSharp.Messages.Extensions.SetSecurityCode(StockSharp.Messages.SecurityMessage,System.String)/param/secCode;DocStr3307
+M:StockSharp.Messages.Extensions.SetNativeId(StockSharp.Messages.SecurityMessage,System.Object)/summary;DocStr93
+M:StockSharp.Messages.Extensions.SetNativeId(StockSharp.Messages.SecurityMessage,System.Object)/param/message;DocStr4378
+M:StockSharp.Messages.Extensions.SetNativeId(StockSharp.Messages.SecurityMessage,System.Object)/param/nativeId;DocStr802
+M:StockSharp.Messages.Extensions.SetSecurityTypes(StockSharp.Messages.SecurityLookupMessage,System.Nullable{StockSharp.Messages.SecurityTypes},System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityTypes})/summary;DocStr93
+M:StockSharp.Messages.Extensions.SetSecurityTypes(StockSharp.Messages.SecurityLookupMessage,System.Nullable{StockSharp.Messages.SecurityTypes},System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityTypes})/param/message;DocStr4431
+M:StockSharp.Messages.Extensions.SetSecurityTypes(StockSharp.Messages.SecurityLookupMessage,System.Nullable{StockSharp.Messages.SecurityTypes},System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityTypes})/param/type;Str360
+M:StockSharp.Messages.Extensions.SetSecurityTypes(StockSharp.Messages.SecurityLookupMessage,System.Nullable{StockSharp.Messages.SecurityTypes},System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityTypes})/param/types;Str2539
+M:StockSharp.Messages.Extensions.GetSecurityTypes(StockSharp.Messages.SecurityLookupMessage)/summary;DocStr848
+M:StockSharp.Messages.Extensions.GetSecurityTypes(StockSharp.Messages.SecurityLookupMessage)/param/message;DocStr4431
+M:StockSharp.Messages.Extensions.GetSecurityTypes(StockSharp.Messages.SecurityLookupMessage)/returns;Str2539
 T:StockSharp.Messages.IBasketSecurityProcessor/summary;DocStr10604
 P:StockSharp.Messages.IBasketSecurityProcessor.SecurityId/summary;SecurityId
 P:StockSharp.Messages.IBasketSecurityProcessor.BasketExpression/summary;DocStr10613
@@ -730,6 +743,10 @@ E:StockSharp.Messages.InMemoryMessageAdapterProvider.Changed/inheritdoc;DocStr84
 M:StockSharp.Messages.InMemoryMessageAdapterProvider.GetAdapter(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Messages.InMemoryMessageAdapterProvider.SetAdapter(System.String,StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
 M:StockSharp.Messages.InMemoryMessageAdapterProvider.RemoveAssociation(System.String)/inheritdoc;DocStr8459
+T:StockSharp.Messages.IServerTimeMessage/summary;DocStr11086
+P:StockSharp.Messages.IServerTimeMessage.ServerTime/summary;ServerTime
+T:StockSharp.Messages.ITransactionIdMessage/summary;DocStr11086
+P:StockSharp.Messages.ITransactionIdMessage.TransactionId/summary;DocStr3166
 T:StockSharp.Messages.MarketDataFinishedMessage/summary;DocStr9385
 P:StockSharp.Messages.MarketDataFinishedMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Messages.MarketDataFinishedMessage.IsHistory/summary;DocStr9664
@@ -759,6 +776,7 @@ P:StockSharp.Messages.IMessageAdapter.SupportedMessages/summary;DocStr449
 P:StockSharp.Messages.IMessageAdapter.SupportedMarketDataTypes/summary;DocStr10120
 P:StockSharp.Messages.IMessageAdapter.SecurityClassInfo/summary;DocStr2499
 P:StockSharp.Messages.IMessageAdapter.TimeFrames/summary;DocStr206
+P:StockSharp.Messages.IMessageAdapter.CandlesBuildFrom/summary;DocStr11077
 P:StockSharp.Messages.IMessageAdapter.CheckTimeFrameByRequest/summary;DocStr10487
 P:StockSharp.Messages.IMessageAdapter.ReConnectionSettings/summary;DocStr4079
 P:StockSharp.Messages.IMessageAdapter.HeartbeatInterval/summary;DocStr4334
@@ -832,6 +850,7 @@ P:StockSharp.Messages.MessageAdapterWrapper.Categories/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.OrderCancelVolumeRequired/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.AssociatedBoardCode/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapterWrapper.CandlesBuildFrom/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.Dispose/summary;DocStr8826
 M:StockSharp.Messages.MessageAdapterWrapper.ToString/inheritdoc;DocStr8459
@@ -939,6 +958,7 @@ P:StockSharp.Messages.MessageAdapter.SupportedMessages/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.SupportedMarketDataTypes/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.SecurityClassInfo/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.TimeFrames/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapter.CandlesBuildFrom/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.CheckTimeFrameByRequest/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.HeartbeatInterval/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
@@ -980,6 +1000,8 @@ M:StockSharp.Messages.MessageAdapter.SendOutError(System.String)/summary;DocStr4
 M:StockSharp.Messages.MessageAdapter.SendOutError(System.String)/param/description;DocStr325
 M:StockSharp.Messages.MessageAdapter.SendOutError(System.Exception)/summary;DocStr4332
 M:StockSharp.Messages.MessageAdapter.SendOutError(System.Exception)/param/error;DocStr325
+M:StockSharp.Messages.MessageAdapter.SendOutMarketDataReply(System.Int64)/summary;DocStr4332
+M:StockSharp.Messages.MessageAdapter.SendOutMarketDataReply(System.Int64)/param/originalTransactionId;DocStr4333
 M:StockSharp.Messages.MessageAdapter.SendOutMarketDataNotSupported(System.Int64)/summary;DocStr4332
 M:StockSharp.Messages.MessageAdapter.SendOutMarketDataNotSupported(System.Int64)/param/originalTransactionId;DocStr4333
 M:StockSharp.Messages.MessageAdapter.IsConnectionAlive/inheritdoc;DocStr8459
@@ -1107,7 +1129,7 @@ T:StockSharp.Messages.IRepoOrderCondition/summary;DocStr11070
 P:StockSharp.Messages.IRepoOrderCondition.IsRepo/summary;Repo
 P:StockSharp.Messages.IRepoOrderCondition.RepoInfo/summary;RepoInfo
 T:StockSharp.Messages.INtmOrderCondition/summary;DocStr11071
-P:StockSharp.Messages.INtmOrderCondition.IsNtm/summary;DocStr11072
+P:StockSharp.Messages.INtmOrderCondition.IsNtm/summary;Ntm
 P:StockSharp.Messages.INtmOrderCondition.NtmInfo/summary;Str236
 T:StockSharp.Messages.ITakeProfitOrderCondition/summary;DocStr10897
 P:StockSharp.Messages.ITakeProfitOrderCondition.ClosePositionPrice/summary;DocStr10898
@@ -1489,7 +1511,7 @@ P:StockSharp.Messages.RepoOrderInfo.StartDiscount/summary;DocStr4491
 P:StockSharp.Messages.RepoOrderInfo.LowerDiscount/summary;DocStr4492
 P:StockSharp.Messages.RepoOrderInfo.UpperDiscount/summary;DocStr4493
 P:StockSharp.Messages.RepoOrderInfo.Value/summary;DocStr4494
-P:StockSharp.Messages.RepoOrderInfo.IsModified/summary;DocStr11073
+P:StockSharp.Messages.RepoOrderInfo.IsModified/summary;RepoM
 M:StockSharp.Messages.RepoOrderInfo.Clone/summary;DocStr643
 M:StockSharp.Messages.RepoOrderInfo.Clone/returns;DocStr1116
 M:StockSharp.Messages.RepoOrderInfo.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -1549,6 +1571,8 @@ P:StockSharp.Messages.SecurityLookupMessage.SecurityTypes/summary;Str2539
 M:StockSharp.Messages.SecurityLookupMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.SecurityLookupMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.SecurityLookupMessage.Clone/returns;DocStr1116
+M:StockSharp.Messages.SecurityLookupMessage.CopyTo(StockSharp.Messages.SecurityLookupMessage)/summary;DocStr629
+M:StockSharp.Messages.SecurityLookupMessage.CopyTo(StockSharp.Messages.SecurityLookupMessage)/param/destination;DocStr630
 M:StockSharp.Messages.SecurityLookupMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.SecurityLookupResultMessage/summary;DocStr4508
 P:StockSharp.Messages.SecurityLookupResultMessage.OriginalTransactionId/summary;DocStr4056
@@ -1666,7 +1690,7 @@ M:StockSharp.Messages.TimeFrameLookupMessage.CopyTo(StockSharp.Messages.TimeFram
 T:StockSharp.Messages.TimeFrameLookupResultMessage/summary;DocStr10835
 M:StockSharp.Messages.TimeFrameLookupResultMessage.#ctor/summary;DocStr1
 P:StockSharp.Messages.TimeFrameLookupResultMessage.OriginalTransactionId/summary;DocStr4056
-P:StockSharp.Messages.TimeFrameLookupResultMessage.TimeFrames/summary;DocStr123
+P:StockSharp.Messages.TimeFrameLookupResultMessage.TimeFrames/summary;DocStr206
 P:StockSharp.Messages.TimeFrameLookupResultMessage.Error/summary;DocStr10793
 M:StockSharp.Messages.TimeFrameLookupResultMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.TimeFrameLookupResultMessage.Clone/returns;DocStr1116
@@ -1685,8 +1709,7 @@ M:StockSharp.Messages.TimeMessage.#ctor(StockSharp.Messages.MessageTypes)/param/
 P:StockSharp.Messages.TimeMessage.TransactionId/summary;DocStr3166
 P:StockSharp.Messages.TimeMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Messages.TimeMessage.ServerTime/summary;ServerTime
-M:StockSharp.Messages.TimeMessage.ToString/summary;DocStr49
-M:StockSharp.Messages.TimeMessage.ToString/returns;DocStr50
+M:StockSharp.Messages.TimeMessage.ToString/inheritdoc;DocStr8459
 M:StockSharp.Messages.TimeMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.TimeMessage.Clone/returns;DocStr1116
 T:StockSharp.Messages.TPlusLimits/summary;DocStr4528

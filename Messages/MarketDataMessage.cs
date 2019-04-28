@@ -141,7 +141,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class MarketDataMessage : SecurityMessage
+	public class MarketDataMessage : SecurityMessage, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Start date, from which data needs to be retrieved.

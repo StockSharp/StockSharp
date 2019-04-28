@@ -11,7 +11,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class UserRequestMessage : Message
+	public class UserRequestMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Login.

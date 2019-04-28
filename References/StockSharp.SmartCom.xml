@@ -1105,22 +1105,13 @@
             </summary>
     </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.ToString">
-      <summary>
-            Получить строковое представление.
-            </summary>
-      <returns>Строковое представление.</returns>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.PortfolioBoardCodes">
       <summary>

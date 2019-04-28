@@ -276,15 +276,14 @@ namespace StockSharp.Algo.Storages.Csv
 				remove => _removed -= value;
 			}
 
-			IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
+			IEnumerable<Security> ISecurityProvider.Lookup(SecurityLookupMessage criteria)
 			{
-				if (criteria.IsLookupAll())
-					return ToArray();
+				var secId = criteria.SecurityId.ToStringId(nullIfEmpty: true);
 
-				if (criteria.Id.IsEmpty())
+				if (secId.IsEmpty())
 					return this.Filter(criteria);
 
-				var security = ((IStorageSecurityList)this).ReadById(criteria.Id);
+				var security = ((IStorageSecurityList)this).ReadById(secId);
 				return security == null ? Enumerable.Empty<Security>() : new[] { security };
 			}
 

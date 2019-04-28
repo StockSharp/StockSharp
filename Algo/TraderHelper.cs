@@ -1794,7 +1794,7 @@ namespace StockSharp.Algo
 		/// To filter instruments by the given criteria.
 		/// </summary>
 		/// <param name="securities">Securities.</param>
-		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <param name="criteria">Message security lookup for specified criteria.</param>
 		/// <returns>Instruments filtered.</returns>
 		public static IEnumerable<SecurityMessage> Filter(this IEnumerable<SecurityMessage> securities, SecurityLookupMessage criteria)
 		{
@@ -1811,6 +1811,8 @@ namespace StockSharp.Algo
 			//	return securities.Where(s => s.Id == criteria.Id).ToArray();
 
 			var secId = criteria.SecurityId;
+			var secTypes = criteria.GetSecurityTypes();
+			var underSecCode = criteria.UnderlyingSecurityCode;
 
 			return securities.Where(s =>
 			{
@@ -1820,23 +1822,11 @@ namespace StockSharp.Algo
 				if (!secId.BoardCode.IsEmpty() && !s.SecurityId.BoardCode.CompareIgnoreCase(secId.BoardCode))
 					return false;
 
-				var secType = criteria.SecurityType;
-
-				if (secType != null && s.SecurityType != secType)
-					return false;
-
-				var secTypes = criteria.SecurityTypes?.ToArray();
-
-				if (secTypes != null && !secTypes.IsEmpty())
+				if (secTypes.Count > 0)
 				{
-					if (s.SecurityType == null)
-						return false;
-
-					if (!secTypes.Contains(s.SecurityType.Value))
+					if (s.SecurityType == null || !secTypes.Contains(s.SecurityType.Value))
 						return false;
 				}
-
-				var underSecCode = criteria.UnderlyingSecurityCode;
 
 				if (!underSecCode.IsEmpty() && s.UnderlyingSecurityCode != underSecCode)
 					return false;
@@ -1909,6 +1899,17 @@ namespace StockSharp.Algo
 		/// <returns>Instruments filtered.</returns>
 		public static IEnumerable<Security> Filter(this IEnumerable<Security> securities, Security criteria)
 		{
+			return securities.Filter(criteria.ToLookupMessage());
+		}
+
+		/// <summary>
+		/// To filter instruments by the given criteria.
+		/// </summary>
+		/// <param name="securities">Securities.</param>
+		/// <param name="criteria">Message security lookup for specified criteria.</param>
+		/// <returns>Instruments filtered.</returns>
+		public static IEnumerable<Security> Filter(this IEnumerable<Security> securities, SecurityLookupMessage criteria)
+		{
 			if (securities == null)
 				throw new ArgumentNullException(nameof(securities));
 
@@ -1918,27 +1919,37 @@ namespace StockSharp.Algo
 			if (criteria.IsLookupAll())
 				return securities.ToArray();
 
-			if (!criteria.Id.IsEmpty())
-				return securities.Where(s => s.Id.CompareIgnoreCase(criteria.Id)).ToArray();
+			var secId = criteria.SecurityId;
+			var secCode = secId.SecurityCode;
+			var boardCode = secId.BoardCode;
+
+			if (!secCode.IsEmpty() && !boardCode.IsEmpty())
+			{
+				var id = secId.ToStringId();
+				return securities.Where(s => s.Id.CompareIgnoreCase(id)).ToArray();
+			}
+
+			var secTypes = criteria.GetSecurityTypes();
+			var underSecCode = criteria.UnderlyingSecurityCode;
 
 			return securities.Where(s =>
 			{
-				if (!criteria.Code.IsEmpty() && !s.Code.ContainsIgnoreCase(criteria.Code))
+				if (!secCode.IsEmpty() && !s.Code.ContainsIgnoreCase(secCode))
 					return false;
 
-				var board = criteria.Board;
+				if (!boardCode.IsEmpty())
+				{
+					if (s.Board != null && !s.Board.Code.CompareIgnoreCase(boardCode))
+						return false;
+				}
 
-				if (board != null && s.Board != board)
-					return false;
+				if (secTypes.Count > 0)
+				{
+					if (s.Type == null || !secTypes.Contains(s.Type.Value))
+						return false;
+				}
 
-				var type = criteria.Type;
-
-				if (type != null && s.Type != type)
-					return false;
-
-				var underSecId = criteria.UnderlyingSecurityId;
-
-				if (!underSecId.IsEmpty() && !s.UnderlyingSecurityId.CompareIgnoreCase(underSecId))
+				if (!underSecCode.IsEmpty() && !s.UnderlyingSecurityId.ContainsIgnoreCase(underSecCode))
 					return false;
 
 				if (criteria.Strike != null && s.Strike != criteria.Strike)
@@ -1962,22 +1973,22 @@ namespace StockSharp.Algo
 				if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !s.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
 					return false;
 
-				if (!criteria.ExternalId.Bloomberg.IsEmptyOrWhiteSpace() && !s.ExternalId.Bloomberg.ContainsIgnoreCase(criteria.ExternalId.Bloomberg))
+				if (!secId.Bloomberg.IsEmptyOrWhiteSpace() && !s.ExternalId.Bloomberg.ContainsIgnoreCase(secId.Bloomberg))
 					return false;
 
-				if (!criteria.ExternalId.Cusip.IsEmptyOrWhiteSpace() && !s.ExternalId.Cusip.ContainsIgnoreCase(criteria.ExternalId.Cusip))
+				if (!secId.Cusip.IsEmptyOrWhiteSpace() && !s.ExternalId.Cusip.ContainsIgnoreCase(secId.Cusip))
 					return false;
 
-				if (!criteria.ExternalId.IQFeed.IsEmptyOrWhiteSpace() && !s.ExternalId.IQFeed.ContainsIgnoreCase(criteria.ExternalId.IQFeed))
+				if (!secId.IQFeed.IsEmptyOrWhiteSpace() && !s.ExternalId.IQFeed.ContainsIgnoreCase(secId.IQFeed))
 					return false;
 
-				if (!criteria.ExternalId.Isin.IsEmptyOrWhiteSpace() && !s.ExternalId.Isin.ContainsIgnoreCase(criteria.ExternalId.Isin))
+				if (!secId.Isin.IsEmptyOrWhiteSpace() && !s.ExternalId.Isin.ContainsIgnoreCase(secId.Isin))
 					return false;
 
-				if (!criteria.ExternalId.Ric.IsEmptyOrWhiteSpace() && !s.ExternalId.Ric.ContainsIgnoreCase(criteria.ExternalId.Ric))
+				if (!secId.Ric.IsEmptyOrWhiteSpace() && !s.ExternalId.Ric.ContainsIgnoreCase(secId.Ric))
 					return false;
 
-				if (!criteria.ExternalId.Sedol.IsEmptyOrWhiteSpace() && !s.ExternalId.Sedol.ContainsIgnoreCase(criteria.ExternalId.Sedol))
+				if (!secId.Sedol.IsEmptyOrWhiteSpace() && !s.ExternalId.Sedol.ContainsIgnoreCase(secId.Sedol))
 					return false;
 
 				if (criteria.ExpiryDate != null && s.ExpiryDate != null && s.ExpiryDate != criteria.ExpiryDate)
@@ -3484,6 +3495,9 @@ namespace StockSharp.Algo
 		/// <returns>Directory name.</returns>
 		public static string CandleArgToFolderName(object arg)
 		{
+			if (arg is string s)
+				return s;
+
 			switch (arg)
 			{
 				case null:
@@ -3493,6 +3507,25 @@ namespace StockSharp.Algo
 				default:
 					return arg.ToString().Replace(':', '-');
 			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="string"/> to <see cref="MarketDataMessage.Arg"/> value.
+		/// </summary>
+		/// <param name="messageType">Message type.</param>
+		/// <param name="strValue"><see cref="string"/> value.</param>
+		/// <returns><see cref="MarketDataMessage.Arg"/> value.</returns>
+		public static object StringToMessageArg(this Type messageType, string strValue)
+		{
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
+
+			if (messageType == typeof(ExecutionMessage))
+				return strValue.To<ExecutionTypes>();
+			else if (messageType.IsCandleMessage())
+				return messageType.ToCandleArg(strValue);
+			else
+				return strValue;
 		}
 
 		/// <summary>
@@ -3507,6 +3540,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Lookup securities by criteria <paramref name="criteria" />.
+		/// </summary>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Found instruments.</returns>
+		public static IEnumerable<Security> Lookup(this ISecurityProvider provider, Security criteria)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			return provider.Lookup(criteria.ToLookupMessage());
+		}
+
+		/// <summary>
 		/// To get the instrument by the identifier.
 		/// </summary>
 		/// <param name="provider">The provider of information about instruments.</param>
@@ -3514,9 +3561,6 @@ namespace StockSharp.Algo
 		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
 		public static Security LookupById(this ISecurityProvider provider, string id)
 		{
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
-
 			if (id.IsEmpty())
 				throw new ArgumentNullException(nameof(id));
 
@@ -3603,22 +3647,7 @@ namespace StockSharp.Algo
 			if (criteria == LookupAllCriteria)
 				return true;
 
-			return
-				criteria.Id.IsEmpty() &&
-				criteria.Code.IsEmpty() &&
-				criteria.Board == null &&
-				criteria.ExpiryDate == null &&
-				criteria.Type == null &&
-				criteria.OptionType == null &&
-				criteria.Strike == null &&
-				criteria.CfiCode.IsEmpty() &&
-				criteria.Class.IsEmpty() &&
-				criteria.Currency == null &&
-				criteria.Decimals == null &&
-				criteria.Name.IsEmpty() &&
-				criteria.UnderlyingSecurityType == null &&
-				criteria.UnderlyingSecurityId.IsEmpty() &&
-				criteria.BinaryOptionType.IsEmpty();
+			return criteria.ToLookupMessage().IsLookupAll();
 		}
 
 		/// <summary>
@@ -3636,14 +3665,22 @@ namespace StockSharp.Algo
 
 			return
 				criteria.SecurityId.IsDefault() &&
-				criteria.SecurityType == null &&
+				criteria.GetSecurityTypes().Count == 0 &&
 				criteria.Name.IsEmpty() &&
 				criteria.ShortName.IsEmpty() &&
 				criteria.UnderlyingSecurityCode.IsEmpty() &&
 				criteria.UnderlyingSecurityType == null &&
 				criteria.ExpiryDate == null &&
 				criteria.OptionType == null &&
-				criteria.Strike == null;
+				criteria.Strike == null &&
+				criteria.Currency == null &&
+				criteria.Decimals == null &&
+				criteria.Multiplier == null &&
+				criteria.PriceStep == null &&
+				criteria.VolumeStep == null &&
+				criteria.IssueDate == null &&
+				criteria.IssueSize == null &&
+				criteria.BinaryOptionType.IsEmpty();
 		}
 
 		/// <summary>

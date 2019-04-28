@@ -158,12 +158,6 @@
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.IsNativeIdentifiers">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.IsNativeIdentifiersPersistable">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.StorageName">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.IsSupportSubscriptionBySecurity">
       <inheritdoc />
     </member>
@@ -212,16 +206,13 @@
             </summary>
     </member>
     <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.ToString">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.SpbEx.SpbExTrader">
       <summary>

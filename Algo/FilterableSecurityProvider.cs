@@ -24,6 +24,7 @@ namespace StockSharp.Algo
 	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Provider of information about instruments supporting search using <see cref="SecurityTrie"/>.
@@ -55,44 +56,34 @@ namespace StockSharp.Algo
 			AddSecurities(_provider.LookupAll());
 		}
 
-		/// <summary>
-		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public int Count => _trie.Count;
 
-		/// <summary>
-		/// New instruments added.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<IEnumerable<Security>> Added;
 
-		/// <summary>
-		/// Instruments removed.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<IEnumerable<Security>> Removed;
 
-		/// <summary>
-		/// The storage was cleared.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action Cleared;
 
-		/// <summary>
-		/// Lookup securities by criteria <paramref name="criteria" />.
-		/// </summary>
-		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
-		/// <returns>Found instruments.</returns>
-		public IEnumerable<Security> Lookup(Security criteria)
+		/// <inheritdoc />
+		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			var filter = criteria.Id.IsEmpty()
-				? (criteria.IsLookupAll() ? string.Empty : criteria.Code)
-				: criteria.Id;
+			var secId = criteria.SecurityId.ToStringId(nullIfEmpty: true);
+
+			var filter = secId.IsEmpty()
+				? (criteria.IsLookupAll() ? string.Empty : criteria.SecurityId.SecurityCode)
+				: secId;
 
 			var securities = _trie.Retrieve(filter);
 
-			if (!criteria.Id.IsEmpty())
-				securities = securities.Where(s => s.Id.CompareIgnoreCase(criteria.Id));
+			if (!secId.IsEmpty())
+				securities = securities.Where(s => s.Id.CompareIgnoreCase(secId));
 
 			return securities.Filter(criteria);
 		}

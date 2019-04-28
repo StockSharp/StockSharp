@@ -139,7 +139,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str360Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
-		public SecurityTypes? Type
+		public virtual SecurityTypes? Type
 		{
 			get => _type;
 			set

@@ -4,12 +4,9 @@ F:StockSharp.Kraken.KrakenMessageAdapter.DefaultHeartbeatInterval/summary;DocStr
 P:StockSharp.Kraken.KrakenMessageAdapter.Key/summary;Str3304
 P:StockSharp.Kraken.KrakenMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.Kraken.KrakenMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
-M:StockSharp.Kraken.KrakenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
-M:StockSharp.Kraken.KrakenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Kraken.KrakenMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
-M:StockSharp.Kraken.KrakenMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Kraken.KrakenMessageAdapter.ToString/summary;DocStr49
-M:StockSharp.Kraken.KrakenMessageAdapter.ToString/returns;DocStr50
+M:StockSharp.Kraken.KrakenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.Kraken.KrakenMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.Kraken.KrakenMessageAdapter.ToString/inheritdoc;DocStr8459
 M:StockSharp.Kraken.KrakenMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Kraken.KrakenMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Kraken.KrakenMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

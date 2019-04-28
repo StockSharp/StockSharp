@@ -60,22 +60,13 @@
             </summary>
     </member>
     <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.ToString">
-      <summary>
-            Получить строковое представление.
-            </summary>
-      <returns>Строковое представление.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.AlfaDirect.AlfaDirectVersions">
       <summary>

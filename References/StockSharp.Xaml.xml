@@ -2375,6 +2375,16 @@
             The filter for instrument search.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.SecurityLookupWindow.CriteriaMessage">
+      <summary>
+            The filter for instrument search.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityLookupWindow.ExchangeInfoProvider">
+      <summary>
+            The exchange info provider.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.SecurityLookupWindow.InitializeComponent">
       <summary>
             InitializeComponent
@@ -5181,7 +5191,7 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetLevel1Fields(StockSharp.BusinessEntities.Security)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.Lookup(StockSharp.BusinessEntities.Security)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.Lookup(StockSharp.Messages.SecurityLookupMessage)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.DisposeManaged">
