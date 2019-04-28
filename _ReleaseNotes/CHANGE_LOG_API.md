@@ -75,6 +75,7 @@ StockSharp API Change log
 * (feature) RemoteStorage. BE->Messages usage.
 * (bug) SecurityLookupWindow. OK enabling fix.
 * (bug) BuySellPanel. Design fix.
+* (bug) Bitfinex. Timestamp for own trade fix.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
