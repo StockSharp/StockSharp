@@ -73,6 +73,8 @@ StockSharp API Change log
 * (feature) RssMarketDataMessageAdapter -> RssMessageAdapter.
 * (feature) Configuration. QUIK DDE, QUIK Trans2Quik excluded as obsolete.
 * (feature) RemoteStorage. BE->Messages usage.
+* (bug) SecurityLookupWindow. OK enabling fix.
+* (bug) BuySellPanel. Design fix.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
