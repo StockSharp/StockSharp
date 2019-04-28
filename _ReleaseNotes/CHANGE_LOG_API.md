@@ -67,6 +67,7 @@ StockSharp API Change log
 * (feature) Remote storage. ExchangeBoard -> BoardMessage, Security -> SecurityMessage.
 * (feature) NewsMessage. Url property changed type from Uri to String.
 * (feature) SecurityLookupMessage. SecurityTypes property changed from IEnumerable to Array type.
+* (feature) Messages. Serialization improved.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

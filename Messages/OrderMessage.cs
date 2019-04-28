@@ -17,7 +17,8 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
-	
+	using System.Xml.Serialization;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -85,6 +86,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str154Key)]
 		[DescriptionLoc(LocalizedStrings.Str155Key)]
 		[CategoryLoc(LocalizedStrings.Str156Key)]
+		[XmlIgnore]
 		public OrderCondition Condition { get; set; }
 
 		/// <summary>

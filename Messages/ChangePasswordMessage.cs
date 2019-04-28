@@ -18,6 +18,7 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 	using System.Security;
+	using System.Xml.Serialization;
 
 	/// <summary>
 	/// Change password message.
@@ -65,6 +66,7 @@ namespace StockSharp.Messages
 		/// Change password error info.
 		/// </summary>
 		[DataMember]
+		[XmlIgnore]
 		public Exception Error { get; set; }
 
 		/// <summary>

@@ -18,6 +18,7 @@ namespace StockSharp.Messages
 	using System;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using Ecng.Serialization;
 
@@ -407,6 +408,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str152Key)]
 		[DescriptionLoc(LocalizedStrings.Str153Key, true)]
 		[MainCategory]
+		[XmlIgnore]
 		public Exception Error { get; set; }
 
 		/// <summary>
@@ -415,6 +417,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str154Key)]
 		[DescriptionLoc(LocalizedStrings.Str155Key)]
 		[CategoryLoc(LocalizedStrings.Str156Key)]
+		[XmlIgnore]
 		public OrderCondition Condition { get; set; }
 
 		///// <summary>

@@ -127,6 +127,7 @@ namespace StockSharp.Messages
 			Description = LocalizedStrings.SpecialDaysDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
+		[XmlIgnore]
 		public IDictionary<DateTime, Range<TimeSpan>[]> SpecialDays
 		{
 			get => _specialDays;

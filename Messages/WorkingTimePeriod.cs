@@ -19,6 +19,7 @@ namespace StockSharp.Messages
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using DevExpress.Mvvm.DataAnnotations;
 
@@ -80,6 +81,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Work schedule for days with different from <see cref="Times"/> schedules.
 		/// </summary>
+		[XmlIgnore]
 		public IDictionary<DayOfWeek, Range<TimeSpan>[]> SpecialDays
 		{
 			get => _specialDays;
