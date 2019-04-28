@@ -108,8 +108,9 @@ namespace StockSharp.Algo.History.Hydra
 		/// </summary>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		public RemoteStorageClient(IExchangeInfoProvider exchangeInfoProvider)
-			: this(exchangeInfoProvider, "net.tcp://localhost:8000".To<Uri>())
+			: this()
 		{
+			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		}
 
 		/// <summary>
@@ -119,12 +120,29 @@ namespace StockSharp.Algo.History.Hydra
 		/// <param name="address">Server address.</param>
 		/// <param name="streaming">Data transfer via WCF Streaming.</param>
 		public RemoteStorageClient(IExchangeInfoProvider exchangeInfoProvider, Uri address, bool streaming = true)
+			: this(address, streaming)
+		{
+			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
+		/// </summary>
+		public RemoteStorageClient()
+			: this("net.tcp://localhost:8000".To<Uri>())
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
+		/// </summary>
+		/// <param name="address">Server address.</param>
+		/// <param name="streaming">Data transfer via WCF Streaming.</param>
+		public RemoteStorageClient(Uri address, bool streaming = true)
 			: base(address, "hydra")
 		{
 			if (address == null)
 				throw new ArgumentNullException(nameof(address));
-
-			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			_streaming = streaming;
 			Credentials = new ServerCredentials();
@@ -136,7 +154,7 @@ namespace StockSharp.Algo.History.Hydra
 		/// <summary>
 		/// Exchanges and trading boards provider.
 		/// </summary>
-		public IExchangeInfoProvider ExchangeInfoProvider { get; }
+		public IExchangeInfoProvider ExchangeInfoProvider { get; set; }
 
 		/// <summary>
 		/// Information about the login and password for access to remote storage.
@@ -145,9 +163,7 @@ namespace StockSharp.Algo.History.Hydra
 
 		private Guid _sessionId;
 
-		/// <summary>
-		/// The session identifier received from <see cref="IAuthenticationService.Login"/>.
-		/// </summary>
+		/// <inheritdoc />
 		protected override Guid SessionId => _sessionId;
 
 		private int _securityBatchSize;
@@ -208,6 +224,35 @@ namespace StockSharp.Algo.History.Hydra
 			return f;
 		}
 
+		private IEnumerable<SecurityMessage> LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISet<string> existingIds)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (existingIds == null)
+				throw new ArgumentNullException(nameof(existingIds));
+
+			if (isCancelled == null)
+				throw new ArgumentNullException(nameof(isCancelled));
+
+			var ids = Invoke(f => f.LookupSecurityIds(SessionId, criteria));
+
+			var newSecurityIds = ids
+				.Where(id => !existingIds.Contains(id))
+				.ToArray();
+
+			foreach (var b in newSecurityIds.Batch(RemoteStorage.DefaultMaxSecurityCount))
+			{
+				if (isCancelled())
+					break;
+
+				var batch = b.ToArray();
+
+				foreach (var security in Invoke(f => f.GetSecurities(SessionId, batch)))
+					yield return security;
+			}
+		}
+
 		/// <inheritdoc />
 		public void Refresh(ISecurityStorage securityStorage, SecurityLookupMessage criteria, Action<Security> newSecurity, Func<bool> isCancelled)
 		{
@@ -223,67 +268,33 @@ namespace StockSharp.Algo.History.Hydra
 			if (isCancelled == null)
 				throw new ArgumentNullException(nameof(isCancelled));
 
-			var ids = Invoke(f => f.LookupSecurityIds(SessionId, criteria));
+			var existingIds = securityStorage.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
-			var existsIds = securityStorage.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
-
-			var newSecurityIds = ids
-				.Where(id => !existsIds.Contains(id))
-				.ToArray();
-
-			foreach (var b in newSecurityIds.Batch(RemoteStorage.DefaultMaxSecurityCount))
+			foreach (var message in LookupSecurities(criteria, isCancelled, existingIds))
 			{
 				if (isCancelled())
 					return;
 
-				var batch = b.ToArray();
+				var security = securityStorage.LookupById(message.SecurityId);
 
-				foreach (var security in Invoke(f => f.GetSecurities(SessionId, batch)))
-				{
-					if (security.Board == null)
-					{
-						var secId = security.Id.ToSecurityId();
+				if (security == null)
+					security = message.ToSecurity(ExchangeInfoProvider);
+				else
+					security.ApplyChanges(message, ExchangeInfoProvider);
 
-						security.Board = ExchangeInfoProvider.GetOrCreateBoard(secId.BoardCode);
-
-						//if (security.Board == null)
-						//	throw new InvalidOperationException();
-					}
-					else
-					{
-						var board = ExchangeInfoProvider.GetExchangeBoard(security.Board.Code);
-
-						if (board != null)
-						{
-							security.Board = board;
-						}
-						else
-						{
-							//entityRegistry.Exchanges.Save(security.Board.Exchange);
-							//entityRegistry.ExchangeBoards.Save(security.Board);
-
-							board = security.Board;
-
-							if (board.Exchange == null)
-							{
-								board.Exchange = new Exchange { Name = board.Code };
-								ExchangeInfoProvider.Save(board.Exchange);
-							}
-
-							ExchangeInfoProvider.Save(board);
-						}
-
-						if (security.Board.TimeZone == null)
-						{
-							security.Board.TimeZone = TimeZoneInfo.Utc;
-							ExchangeInfoProvider.Save(security.Board);
-						}
-					}
-
-					securityStorage.Save(security, false);
-					newSecurity(security);
-				}
+				securityStorage.Save(security, false);
+				newSecurity(security);
 			}
+		}
+
+		/// <summary>
+		/// To find securities that match the filter <paramref name="criteria" />.
+		/// </summary>
+		/// <param name="criteria">Message security lookup for specified criteria.</param>
+		/// <returns>Securities.</returns>
+		public SecurityMessage[] LoadSecurities(SecurityLookupMessage criteria)
+		{
+			return LookupSecurities(criteria, () => false, new HashSet<string>()).ToArray();
 		}
 
 		/// <summary>
@@ -304,9 +315,9 @@ namespace StockSharp.Algo.History.Hydra
 		/// <summary>
 		/// To find exchange boards that match the filter <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">The exchange board which fields will be used as a filter.</param>
+		/// <param name="criteria">Message boards lookup for specified criteria.</param>
 		/// <returns>Exchange boards.</returns>
-		public ExchangeBoard[] LoadExchangeBoards(ExchangeBoard criteria)
+		public BoardMessage[] LoadExchangeBoards(BoardLookupMessage criteria)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -322,13 +333,12 @@ namespace StockSharp.Algo.History.Hydra
 		/// <param name="securities">Securities.</param>
 		public void SaveSecurities(Security[] securities)
 		{
-			if (securities == null)
-				throw new ArgumentNullException(nameof(securities));
+			var messages = securities.Select(s => s.ToMessage()).ToArray();
 
-			if (securities.IsEmpty())
+			if (messages.IsEmpty())
 				throw new ArgumentOutOfRangeException(nameof(securities));
 
-			Invoke(f => f.SaveSecurities(SessionId, securities));
+			Invoke(f => f.SaveSecurities(SessionId, messages));
 		}
 
 		/// <summary>
@@ -382,13 +392,12 @@ namespace StockSharp.Algo.History.Hydra
 		/// <param name="boards">Boards.</param>
 		public void SaveExchangeBoards(ExchangeBoard[] boards)
 		{
-			if (boards == null)
-				throw new ArgumentNullException(nameof(boards));
+			var messages = boards.Select(b => b.ToMessage()).ToArray();
 
-			if (boards.IsEmpty())
+			if (messages.IsEmpty())
 				throw new ArgumentOutOfRangeException(nameof(boards));
 
-			Invoke(f => f.SaveExchangeBoards(SessionId, boards));
+			Invoke(f => f.SaveExchangeBoards(SessionId, messages));
 		}
 
 		/// <summary>

@@ -72,6 +72,7 @@ StockSharp API Change log
 * (feature) IQFeedMarketDataMessageAdapter -> IQFeedMessageAdapter.
 * (feature) RssMarketDataMessageAdapter -> RssMessageAdapter.
 * (feature) Configuration. QUIK DDE, QUIK Trans2Quik excluded as obsolete.
+* (feature) RemoteStorage. BE->Messages usage.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

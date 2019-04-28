@@ -37,10 +37,10 @@ namespace StockSharp.Algo.History.Hydra
 		/// To find exchange board codes that match the filter <paramref name="criteria" />.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
-		/// <param name="criteria">The exchange board which fields will be used as a filter.</param>
+		/// <param name="criteria">Message boards lookup for specified criteria.</param>
 		/// <returns>Found codes.</returns>
 		[OperationContract]
-		string[] LookupExchangeBoards(Guid sessionId, ExchangeBoard criteria);
+		string[] LookupExchangeBoards(Guid sessionId, BoardLookupMessage criteria);
 
 		/// <summary>
 		/// Get securities.
@@ -49,7 +49,7 @@ namespace StockSharp.Algo.History.Hydra
 		/// <param name="securityIds">IDs securities.</param>
 		/// <returns>Securities.</returns>
 		[OperationContract]
-		Security[] GetSecurities(Guid sessionId, string[] securityIds);
+		SecurityMessage[] GetSecurities(Guid sessionId, string[] securityIds);
 
 		/// <summary>
 		/// Get exchanges.
@@ -67,7 +67,7 @@ namespace StockSharp.Algo.History.Hydra
 		/// <param name="codes">Board codes.</param>
 		/// <returns>Exchange boards.</returns>
 		[OperationContract]
-		ExchangeBoard[] GetExchangeBoards(Guid sessionId, string[] codes);
+		BoardMessage[] GetExchangeBoards(Guid sessionId, string[] codes);
 
 		/// <summary>
 		/// Save securities.
@@ -75,7 +75,7 @@ namespace StockSharp.Algo.History.Hydra
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="securities">Securities.</param>
 		[OperationContract]
-		void SaveSecurities(Guid sessionId, Security[] securities);
+		void SaveSecurities(Guid sessionId, SecurityMessage[] securities);
 
 		/// <summary>
 		/// Save exchanges.
@@ -91,7 +91,7 @@ namespace StockSharp.Algo.History.Hydra
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="boards">Exchange boards.</param>
 		[OperationContract]
-		void SaveExchangeBoards(Guid sessionId, ExchangeBoard[] boards);
+		void SaveExchangeBoards(Guid sessionId, BoardMessage[] boards);
 
 		/// <summary>
 		/// Delete securities.
