@@ -18,6 +18,7 @@ namespace StockSharp.Messages
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Runtime.Serialization;
 
 	using Ecng.Collections;
 
@@ -26,6 +27,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Volume profile.
 	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
 	public class CandleMessageVolumeProfile
 	{
 		private readonly Dictionary<decimal, CandlePriceLevel> _volumeProfileInfo = new Dictionary<decimal, CandlePriceLevel>();
@@ -50,16 +53,19 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The upper price level.
 		/// </summary>
+		[DataMember]
 		public CandlePriceLevel High { get; private set; }
 
 		/// <summary>
 		/// The lower price level.
 		/// </summary>
+		[DataMember]
 		public CandlePriceLevel Low { get; private set; }
 
 		/// <summary>
 		/// Point of control.
 		/// </summary>
+		[DataMember]
 		public CandlePriceLevel PoC { get; private set; }
 
 		private decimal _volumePercent = 70;
@@ -67,6 +73,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The percentage of total volume (the default is 70%).
 		/// </summary>
+		[DataMember]
 		public decimal VolumePercent
 		{
 			get => _volumePercent;
@@ -82,6 +89,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Price levels.
 		/// </summary>
+		[DataMember]
 		public IEnumerable<CandlePriceLevel> PriceLevels { get; }
 
 		/// <summary>

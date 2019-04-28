@@ -16,10 +16,13 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.Runtime.Serialization;
 
 	/// <summary>
 	/// Reset state message.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public sealed class ResetMessage : Message
 	{
 		/// <summary>

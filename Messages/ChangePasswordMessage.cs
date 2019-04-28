@@ -56,11 +56,18 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
+		[field: NonSerialized]
+		private SecureString _newPassword;
+
 		/// <summary>
 		/// New password.
 		/// </summary>
 		[DataMember]
-		public SecureString NewPassword { get; set; }
+		public SecureString NewPassword
+		{
+			get => _newPassword;
+			set => _newPassword = value;
+		}
 
 		/// <summary>
 		/// Change password error info.
