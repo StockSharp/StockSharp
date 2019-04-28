@@ -140,17 +140,24 @@ private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, Candle 
 				
 <para>Для <codeEntityReference>T:StockSharp.Algo.Candles.CandleSeries</codeEntityReference> можно задать некоторые свойства </para>
 <para><codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesMode</codeEntityReference> задает 
-режим построения свечей, по умолчанию задан <legacyBold>LoadAndBuild</legacyBold>, что говорит о том, 
+режим построения свечей, по умолчанию задан 
+<codeEntityReference>F:StockSharp.Messages.MarketDataBuildModes.LoadAndBuild</codeEntityReference>, что говорит о том, 
 что будут загружены доступные исторические свечи, а после они буду строиться из заданного в свойстве 
 <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesFrom</codeEntityReference> 
 типа данных. </para>
 <para>Если <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesMode</codeEntityReference> задан 
-как <legacyBold>LoadAndBuild</legacyBold> или <legacyBold>Build</legacyBold> то необходимо задать свойство 
+как 
+<codeEntityReference>F:StockSharp.Messages.MarketDataBuildModes.LoadAndBuild</codeEntityReference> 
+или 
+<codeEntityReference>F:StockSharp.Messages.MarketDataBuildModes.Build</codeEntityReference> 
+то необходимо задать свойство 
 <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesFrom</codeEntityReference> 
 указывающее из какого типа данных буду построены свечи (тиковые данные, бид, аск и др.). </para>
 <para>Для прорисовки <legacyBold>профиля объема</legacyBold> необходимо установить свойство 
 <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.IsCalcVolumeProfile</codeEntityReference> в true, 
-а также <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesMode</codeEntityReference> в <legacyBold>Build</legacyBold></para>
+а также <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesMode</codeEntityReference> в 
+<codeEntityReference>F:StockSharp.Messages.MarketDataBuildModes.Build</codeEntityReference>
+</para>
 <para>Ниже приведены примеры как задать разные типы свечей</para>
 					<code language="C#">
 					<![CDATA[
