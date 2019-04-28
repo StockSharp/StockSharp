@@ -971,7 +971,7 @@ namespace StockSharp.Algo
 		/// <param name="to">Second quotes.</param>
 		/// <param name="side">The direction, showing the type of quotes.</param>
 		/// <returns>Changes.</returns>
-		public static IEnumerable<QuoteChange> GetDelta(this IEnumerable<QuoteChange> from, IEnumerable<QuoteChange> to, Sides side)
+		public static QuoteChange[] GetDelta(this IEnumerable<QuoteChange> from, IEnumerable<QuoteChange> to, Sides side)
 		{
 			if (from == null)
 				throw new ArgumentNullException(nameof(from));
@@ -1058,7 +1058,7 @@ namespace StockSharp.Algo
 		/// <param name="deltaQuotes">Changes.</param>
 		/// <param name="isBids">The indication of quotes direction.</param>
 		/// <returns>Changed quotes.</returns>
-		public static IEnumerable<QuoteChange> AddDelta(this IEnumerable<QuoteChange> fromQuotes, IEnumerable<QuoteChange> deltaQuotes, bool isBids)
+		public static QuoteChange[] AddDelta(this IEnumerable<QuoteChange> fromQuotes, IEnumerable<QuoteChange> deltaQuotes, bool isBids)
 		{
 			var result = new List<QuoteChange>();
 
@@ -1123,7 +1123,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			return result;
+			return result.ToArray();
 		}
 
 		/// <summary>
@@ -4209,8 +4209,8 @@ namespace StockSharp.Algo
 							SecurityId = level1.SecurityId,
 							LocalTime = level1.LocalTime,
 							ServerTime = level1.ServerTime,
-							Bids = _prevBidPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Buy, _prevBidPrice.Value, _prevBidVolume ?? 0) },
-							Asks = _prevAskPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Sell, _prevAskPrice.Value, _prevAskVolume ?? 0) },
+							Bids = _prevBidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Buy, _prevBidPrice.Value, _prevBidVolume ?? 0) },
+							Asks = _prevAskPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Sell, _prevAskPrice.Value, _prevAskVolume ?? 0) },
 						};
 
 						return true;

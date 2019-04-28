@@ -418,8 +418,8 @@ namespace StockSharp.Algo.Testing
 				askPrice = quote.Price;
 			}
 
-			depth.Bids = bids;
-			depth.Asks = asks;
+			depth.Bids = bids.ToArray();
+			depth.Asks = asks.ToArray();
 
 			_newTrades = false;
 

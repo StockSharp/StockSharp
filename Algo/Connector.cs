@@ -54,7 +54,7 @@ namespace StockSharp.Algo
 			MemoryStatistics.Instance.Values.Add(_messageStat);
 		}
 
-		private class MarketDepthInfo : RefTriple<MarketDepth, IEnumerable<QuoteChange>, IEnumerable<QuoteChange>>
+		private class MarketDepthInfo : RefTriple<MarketDepth, QuoteChange[], QuoteChange[]>
 		{
 			public MarketDepthInfo(MarketDepth depth)
 				: base(depth, null, null)
