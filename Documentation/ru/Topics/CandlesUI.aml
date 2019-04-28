@@ -10,7 +10,36 @@
 	  
 		<para>Для отображения, поступающие свечи передаются в метод
 		<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference>.</para>
-		
+			
+		<code language="C#">
+		<![CDATA[
+// CandlesChart - StockSharp.Xaml.Chart
+private ChartArea _areaComb;
+private ChartCandleElement _candleElement;
+...
+var series = new CandleSeries(typeof(TimeFrameCandle),_security,TimeSpan.FromMinutes(_timeframe));
+
+_candleElement = new ChartCandleElement() { FullTitle = "Candles" };
+Chart.AddElement(_areaComb, _candleElement, series);
+
+...
+
+_connector.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(5)), DateTime.Now);		
+_connector.CandleSeriesProcessing += Connector_CandleSeriesProcessing;
+
+...
+
+private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, Candle candle)
+{
+    if (candle.State == CandleStates.Finished) 
+    {
+       var chartData = new ChartDrawData();
+       chartData.Group(candle.OpenTime).Add(_candleElement, candle);
+       Chart.Draw(chartData);
+    }
+}
+		]]>
+		</code>
 		<para>Пример отображения свечей на графике приведен в пункте <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792" />.</para>
 	
 	</introduction>
