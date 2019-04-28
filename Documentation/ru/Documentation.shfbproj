@@ -4288,6 +4288,10 @@
       <ImageId>API_ConnectionWindow</ImageId>
       <AlternateText>API Connection Window</AlternateText>
     </Image>
+    <Image Include="Art\ChartAnnotations.png">
+      <ImageId>ChartAnnotations</ImageId>
+      <AlternateText>Chart Annotations</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
