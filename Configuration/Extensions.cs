@@ -85,7 +85,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Plaza;
 	using StockSharp.Poloniex;
 	using StockSharp.QuantHouse;
-	using StockSharp.Quik;
+	//using StockSharp.Quik;
 	using StockSharp.Quik.Lua;
 	using StockSharp.Quoinex;
 	using StockSharp.Rithmic;
@@ -212,8 +212,8 @@ namespace StockSharp.Configuration
 			() => typeof(PlazaMessageAdapter),
 			() => typeof(LuaFixTransactionMessageAdapter),
 			() => typeof(LuaFixMarketDataMessageAdapter),
-			() => typeof(QuikTrans2QuikAdapter),
-			() => typeof(QuikDdeAdapter),
+			//() => typeof(QuikTrans2QuikAdapter),
+			//() => typeof(QuikDdeAdapter),
 			() => typeof(RithmicMessageAdapter),
 			() => typeof(RssMessageAdapter),
 			() => typeof(SmartComMessageAdapter),

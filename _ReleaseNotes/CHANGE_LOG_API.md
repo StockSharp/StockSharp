@@ -71,6 +71,7 @@ StockSharp API Change log
 * (feature) QuoteChangeMessage. Quotes properties types changed from IEnumerable to Array.
 * (feature) IQFeedMarketDataMessageAdapter -> IQFeedMessageAdapter.
 * (feature) RssMarketDataMessageAdapter -> RssMessageAdapter.
+* (feature) Configuration. QUIK DDE, QUIK Trans2Quik excluded as obsolete.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
