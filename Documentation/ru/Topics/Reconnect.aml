@@ -56,26 +56,22 @@
         <step>
           <content>
 			  <para>
-				  В качестве демонстрации взят пример SampleSmart,
-				  работающий с <token>smartcom</token>.
-			  </para>
-			  <para>
 				  При создании шлюза необходимо проинициализировать настройки механизма переподключений через свойство
 				  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference>:
 			  </para>
 			<code language="C#"><![CDATA[// инициализируем механизм переподключения (будет автоматически соединяться
 // каждые 10 секунд, если шлюз потеряется связь с сервером)
-Trader.ReConnectionSettings.Interval = TimeSpan.FromSeconds(10);
+Connector.ReConnectionSettings.Interval = TimeSpan.FromSeconds(10);
 
 // переподключение будет работать только во время работы биржи РТС
 // (чтобы отключить переподключение когда торгов нет штатно, например, ночью)
-Trader.ReConnectionSettings.WorkingTime = Exchange.Rts.WorkingTime;
+Connector.ReConnectionSettings.WorkingTime = Exchange.Rts.WorkingTime;
 
 // подписываемся на событие об успешном восстановлении соединения
-Trader.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() => MessageBox.Show(this, "Соединение восстановлено"));
+Connector.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() => MessageBox.Show(this, "Соединение восстановлено"));
 
 // подписываемся на событие разрыва соединения
-Trader.ConnectionError += error => this.Sync(() => MessageBox.Show(this, error.ToString()));]]></code>
+Connector.ConnectionError += error => this.Sync(() => MessageBox.Show(this, error.ToString()));]]></code>
 
           </content>
         </step>
