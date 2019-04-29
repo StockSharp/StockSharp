@@ -7,7 +7,7 @@
 		который содержит информацию о заявке и зарегистрировать его на бирже.</para>
 		<para>В отличии от обычной заявки для стоп заявки необходимо указать свойство 
 		<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Type</codeEntityReference> 
-		как <legacyBold>OrderTypes.Conditional</legacyBold> и задать свойство 
+		как <codeEntityReference>F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference> и задать свойство 
 		<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Condition</codeEntityReference> 
 		с необходимыми условиями заявки.</para>
 		<para>В дальнейшем, если требуется работа с заявкой (например, отменить ее или изменить),
@@ -42,6 +42,15 @@ private void StopOrder_Click(object sender, RoutedEventArgs e)
 ...
 							]]>
 							</code>	
+<para>
+Для каждого подключения есть собственная реализация класса 
+<codeEntityReference>T:StockSharp.Messages.OrderCondition</codeEntityReference> так 
+как каждое подключение имеет свои уникальные особенности. Например, для 
+<link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636" /> это 
+<codeEntityReference>T:StockSharp.Quik.QuikOrderCondition</codeEntityReference>
+, для <link xlink:href="d2379d21-9bea-4199-8432-c25f73cb1594" /> это 
+<codeEntityReference>T:StockSharp.Kucoin.KucoinOrderCondition</codeEntityReference> и т. д.
+</para>
     </introduction>
 
     <relatedTopics>

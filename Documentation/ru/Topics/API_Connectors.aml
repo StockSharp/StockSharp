@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="db1de349-84ef-4e59-a30b-c34a9d47bed2" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    <para>
+Для работы с биржами и источниками данных в <token>stocksharp</token> рекомендуется работать через базовый класс 
+<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>. </para>
+<para>
+Для конфигурирования <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> у <legacyBold>S#.API</legacyBold>
+есть специальный графический интерфей в котором можно настроить сразу несколько подключений одновременно, 
+как им воспользоваться описано в пункте <link xlink:href="554da27b-900a-462a-a2c2-d2b6cb1330ae" />.
+</para>
+<para>Как сохранять и загружать настройки <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
+в файл можно ознакомиться в пункте <link xlink:href="c23300a1-bf38-444a-b103-28350766477f" />.</para>
+<para>Как работать с рыночными данными и подписываться на события 
+<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> можно ознакомиться в пункте <link xlink:href="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" />.</para>
+<para>О создании собственного <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> можно ознакомиться в пункте <link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />.</para>
+	<para>
+	Выставление заявок описаны в пунктах 
+	<link xlink:href="1c3c9835-b65b-48d5-8abf-70986c666ef4" />,
+	<link xlink:href="b740e98d-7bcf-406e-aad4-75432ab3009e" />,
+	<link xlink:href="2587051d-1e94-4fb2-b5c1-d57cb5af1b6d" />.
+	</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="554da27b-900a-462a-a2c2-d2b6cb1330ae" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
