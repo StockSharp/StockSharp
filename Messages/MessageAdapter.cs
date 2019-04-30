@@ -694,7 +694,10 @@ namespace StockSharp.Messages
 		{
 			Id = storage.GetValue(nameof(Id), Id);
 			HeartbeatInterval = storage.GetValue<TimeSpan>(nameof(HeartbeatInterval));
-			SupportedMessages = storage.GetValue<string[]>(nameof(SupportedMessages)).Select(i => i.To<MessageTypes>()).ToArray();
+
+			if (storage.ContainsKey(nameof(SupportedMessages)))
+				SupportedMessages = storage.GetValue<string[]>(nameof(SupportedMessages)).Select(i => i.To<MessageTypes>()).ToArray();
+			
 			AssociatedBoardCode = storage.GetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
 			CheckTimeFrameByRequest = storage.GetValue(nameof(CheckTimeFrameByRequest), CheckTimeFrameByRequest);
 

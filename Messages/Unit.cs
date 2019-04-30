@@ -18,6 +18,7 @@ namespace StockSharp.Messages
 	using System;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -146,6 +147,7 @@ namespace StockSharp.Messages
 		/// The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).
 		/// </summary>
 		[Ignore]
+		[XmlIgnore]
 		public Func<UnitTypes, decimal?> GetTypeValue
 		{
 			get => _getTypeValue;

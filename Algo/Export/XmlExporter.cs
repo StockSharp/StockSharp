@@ -290,8 +290,8 @@ namespace StockSharp.Algo.Export
 				if (!n.Source.IsEmpty())
 					writer.WriteAttribute("source", n.Source);
 
-				if (n.Url != null)
-					writer.WriteAttribute("board", n.Url);
+				if (!n.Url.IsEmpty())
+					writer.WriteAttribute("url", n.Url);
 
 				if (n.Priority != null)
 					writer.WriteAttribute("priority", n.Priority.Value);

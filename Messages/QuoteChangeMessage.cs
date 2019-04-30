@@ -16,11 +16,11 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -41,7 +41,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public SecurityId SecurityId { get; set; }
 
-		private IEnumerable<QuoteChange> _bids = Enumerable.Empty<QuoteChange>();
+		private QuoteChange[] _bids = ArrayHelper.Empty<QuoteChange>();
 
 		/// <summary>
 		/// Quotes to buy.
@@ -50,13 +50,13 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str281Key)]
 		[DescriptionLoc(LocalizedStrings.Str282Key)]
 		[MainCategory]
-		public IEnumerable<QuoteChange> Bids
+		public QuoteChange[] Bids
 		{
 			get => _bids;
 			set => _bids = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		private IEnumerable<QuoteChange> _asks = Enumerable.Empty<QuoteChange>();
+		private QuoteChange[] _asks = ArrayHelper.Empty<QuoteChange>();
 
 		/// <summary>
 		/// Quotes to sell.
@@ -65,7 +65,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str283Key)]
 		[DescriptionLoc(LocalizedStrings.Str284Key)]
 		[MainCategory]
-		public IEnumerable<QuoteChange> Asks
+		public QuoteChange[] Asks
 		{
 			get => _asks;
 			set => _asks = value ?? throw new ArgumentNullException(nameof(value));

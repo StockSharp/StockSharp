@@ -128,8 +128,8 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str221Key)]
 		[DescriptionLoc(LocalizedStrings.Str222Key)]
 		[MainCategory]
-		[Url]
-		public Uri Url { get; set; }
+		//[Url]
+		public string Url { get; set; }
 
 		/// <summary>
 		/// News priority.

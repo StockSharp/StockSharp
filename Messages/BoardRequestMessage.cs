@@ -2,6 +2,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	/// <summary>
 	/// Board request message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).
@@ -38,6 +39,7 @@ namespace StockSharp.Messages
 		/// Subscribe or unsubscribe error info. To be set if the answer.
 		/// </summary>
 		[DataMember]
+		[XmlIgnore]
 		public Exception Error { get; set; }
 
 		/// <summary>

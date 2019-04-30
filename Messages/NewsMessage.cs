@@ -129,7 +129,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str221Key)]
 		[DescriptionLoc(LocalizedStrings.Str222Key)]
 		[MainCategory]
-		public Uri Url { get; set; }
+		public string Url { get; set; }
 
 		/// <summary>
 		/// ID of the original message <see cref="MarketDataMessage.TransactionId"/> for which this message is a response.

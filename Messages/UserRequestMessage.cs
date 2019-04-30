@@ -3,6 +3,7 @@ namespace StockSharp.Messages
 	using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using StockSharp.Localization;
 
@@ -47,6 +48,7 @@ namespace StockSharp.Messages
 		/// Subscribe or unsubscribe error info. To be set if the answer.
 		/// </summary>
 		[DataMember]
+		[XmlIgnore]
 		public Exception Error { get; set; }
 
 		/// <summary>

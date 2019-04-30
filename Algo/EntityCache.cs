@@ -783,7 +783,7 @@ namespace StockSharp.Algo
 			if (!message.BoardCode.IsEmpty())
 				news.Board = ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
 
-			if (message.Url != null)
+			if (!message.Url.IsEmpty())
 				news.Url = message.Url;
 
 			if (message.Priority != null)

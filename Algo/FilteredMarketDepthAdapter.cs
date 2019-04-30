@@ -33,7 +33,7 @@ namespace StockSharp.Algo
 				orders.ForEach(Process);
 			}
 
-			private IEnumerable<QuoteChange> Filter(IEnumerable<QuoteChange> quotes)
+			private QuoteChange[] Filter(IEnumerable<QuoteChange> quotes)
 			{
 				return quotes
 					.Select(quote =>

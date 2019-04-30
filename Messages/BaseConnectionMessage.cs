@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	/// <summary>
 	/// Base connect/disconnect message.
@@ -38,6 +39,7 @@ namespace StockSharp.Messages
 		/// Information about the error connection or disconnection.
 		/// </summary>
 		[DataMember]
+		[XmlIgnore]
 		public Exception Error { get; set; }
 
 		/// <summary>

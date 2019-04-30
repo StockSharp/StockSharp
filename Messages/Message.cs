@@ -93,16 +93,22 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Is loopback message.
 		/// </summary>
+		[Ignore]
+		[XmlIgnore]
 		public bool IsBack { get; set; }
 
 		/// <summary>
 		/// Offline mode handling message.
 		/// </summary>
+		[Ignore]
+		[XmlIgnore]
 		public MessageOfflineModes OfflineMode { get; set; }
 
 		/// <summary>
 		/// Source adapter. Can be <see langword="null" />.
 		/// </summary>
+		[Ignore]
+		[XmlIgnore]
 		public IMessageAdapter Adapter { get; set; }
 
 		/// <summary>

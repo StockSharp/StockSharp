@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(NewsMessage.Headline), value.Headline },
 				{ nameof(NewsMessage.Story), value.Story },
 				{ nameof(NewsMessage.Source), value.Source },
-				{ nameof(NewsMessage.Url), value.Url.To<string>() },
+				{ nameof(NewsMessage.Url), value.Url },
 				{ nameof(NewsMessage.Priority), value.Priority.To<int?>() },
 			};
 			return result;

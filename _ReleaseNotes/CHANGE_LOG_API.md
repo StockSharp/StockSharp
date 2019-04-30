@@ -64,6 +64,18 @@ StockSharp API Change log
 * (feature) SecurityNativeIdMessageAdapter. Skip external native ids.
 * (feature) Tradier. New urls + sandbox supported.
 * (feature) BaseDumpableHistorySource removed.
+* (feature) Remote storage. ExchangeBoard -> BoardMessage, Security -> SecurityMessage.
+* (feature) NewsMessage. Url property changed type from Uri to String.
+* (feature) SecurityLookupMessage. SecurityTypes property changed from IEnumerable to Array type.
+* (bug) Messages. Serialization fixed.
+* (feature) QuoteChangeMessage. Quotes properties types changed from IEnumerable to Array.
+* (feature) IQFeedMarketDataMessageAdapter -> IQFeedMessageAdapter.
+* (feature) RssMarketDataMessageAdapter -> RssMessageAdapter.
+* (feature) Configuration. QUIK DDE, QUIK Trans2Quik excluded as obsolete.
+* (feature) RemoteStorage. BE->Messages usage.
+* (bug) SecurityLookupWindow. OK enabling fix.
+* (bug) BuySellPanel. Design fix.
+* (bug) Bitfinex. Timestamp for own trade fix.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

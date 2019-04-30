@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Collections;
 
@@ -78,8 +79,8 @@ namespace StockSharp.Messages
 			foreach (var ask in depth.Asks)
 				_asks.Add(ask.Price, ask);
 
-			_depth.Bids = _bids.Values;
-			_depth.Asks = _asks.Values;
+			_depth.Bids = _bids.Values.ToArray();
+			_depth.Asks = _asks.Values.ToArray();
 		}
 
 		private readonly QuoteChangeMessage _depth;

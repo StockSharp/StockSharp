@@ -254,7 +254,7 @@ namespace StockSharp.Algo.History.Hydra
 			return ToIds(SecurityStorage.Lookup(criteria).Where(s => s.Board != ExchangeBoard.Test));
 		}
 
-		Security[] IRemoteStorage.GetSecurities(Guid sessionId, string[] securityIds)
+		SecurityMessage[] IRemoteStorage.GetSecurities(Guid sessionId, string[] securityIds)
 		{
 			CheckSession(sessionId, UserPermissions.SecurityLookup);
 			this.AddInfoLog(LocalizedStrings.Str2088Params, sessionId);
@@ -266,12 +266,12 @@ namespace StockSharp.Algo.History.Hydra
 				throw new ArgumentOutOfRangeException(nameof(securityIds));
 
 			return securityIds
-				.Select(id => ToSecurity(id, false))
+				.Select(id => ToSecurity(id, false)?.ToMessage())
 				.Where(s => s != null)
 				.ToArray();
 		}
 
-		void IRemoteStorage.SaveSecurities(Guid sessionId, Security[] securities)
+		void IRemoteStorage.SaveSecurities(Guid sessionId, SecurityMessage[] securities)
 		{
 			CheckSession(sessionId, UserPermissions.EditSecurities);
 			this.AddInfoLog(LocalizedStrings.Str2088Params, sessionId);
@@ -285,8 +285,17 @@ namespace StockSharp.Algo.History.Hydra
 			if (securities.Length > MaxSecurityCount)
 				throw new ArgumentOutOfRangeException(nameof(securities));
 
-			foreach (var security in securities)
+			foreach (var message in securities)
+			{
+				var security = SecurityStorage.LookupById(message.SecurityId);
+
+				if (security == null)
+					security = message.ToSecurity(ExchangeInfoProvider);
+				else
+					security.ApplyChanges(message, ExchangeInfoProvider);
+
 				SecurityStorage.Save(security, false);
+			}
 		}
 
 		void IRemoteStorage.DeleteSecurities(Guid sessionId, string[] securityIds)
@@ -400,7 +409,7 @@ namespace StockSharp.Algo.History.Hydra
 			return exchanges.Select(e => e.Name).ToArray();
 		}
 
-		string[] IRemoteStorage.LookupExchangeBoards(Guid sessionId, ExchangeBoard criteria)
+		string[] IRemoteStorage.LookupExchangeBoards(Guid sessionId, BoardLookupMessage criteria)
 		{
 			CheckSession(sessionId, UserPermissions.ExchangeBoardLookup);
 
@@ -409,7 +418,7 @@ namespace StockSharp.Algo.History.Hydra
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			return ExchangeInfoProvider.LookupBoards(criteria.Code).Select(b => b.Code).ToArray();
+			return ExchangeInfoProvider.LookupBoards(criteria.Like).Select(b => b.Code).ToArray();
 		}
 
 		Exchange[] IRemoteStorage.GetExchanges(Guid sessionId, string[] codes)
@@ -427,7 +436,7 @@ namespace StockSharp.Algo.History.Hydra
 				.ToArray();
 		}
 
-		ExchangeBoard[] IRemoteStorage.GetExchangeBoards(Guid sessionId, string[] codes)
+		BoardMessage[] IRemoteStorage.GetExchangeBoards(Guid sessionId, string[] codes)
 		{
 			CheckSession(sessionId, UserPermissions.ExchangeBoardLookup);
 
@@ -439,6 +448,7 @@ namespace StockSharp.Algo.History.Hydra
 			return codes
 				.Select(ExchangeInfoProvider.GetExchangeBoard)
 				.Where(b => b != null)
+				.Select(b => b.ToMessage())
 				.ToArray();
 		}
 
@@ -446,18 +456,34 @@ namespace StockSharp.Algo.History.Hydra
 		{
 			CheckSession(sessionId, UserPermissions.EditExchanges);
 
+			if (exchanges == null)
+				throw new ArgumentNullException(nameof(exchanges));
+
 			this.AddInfoLog(LocalizedStrings.RemoteStorageSaveExchanges, sessionId);
 
 			exchanges.ForEach(ExchangeInfoProvider.Save);
 		}
 
-		void IRemoteStorage.SaveExchangeBoards(Guid sessionId, ExchangeBoard[] boards)
+		void IRemoteStorage.SaveExchangeBoards(Guid sessionId, BoardMessage[] boards)
 		{
 			CheckSession(sessionId, UserPermissions.EditBoards);
 
+			if (boards == null)
+				throw new ArgumentNullException(nameof(boards));
+
 			this.AddInfoLog(LocalizedStrings.RemoteStorageSaveExchangeBoards, sessionId);
 
-			boards.ForEach(ExchangeInfoProvider.Save);
+			foreach (var message in boards)
+			{
+				var board = ExchangeInfoProvider.GetExchangeBoard(message.Code);
+
+				if (board == null)
+					board = message.ToBoard();
+				else
+					board.ApplyChanges(message);
+
+				ExchangeInfoProvider.Save(board);
+			}
 		}
 
 		void IRemoteStorage.DeleteExchanges(Guid sessionId, string[] codes)

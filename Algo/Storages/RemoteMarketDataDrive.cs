@@ -54,48 +54,29 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		/// <summary>
-		/// Path to market data.
-		/// </summary>
+		/// <inheritdoc />
 		public override string Path
 		{
 			get => Client.Address.ToString();
 			set => Client = new RemoteStorageClient(_client.ExchangeInfoProvider, value.To<Uri>());
 		}
 
-		/// <summary>
-		/// Get all available instruments.
-		/// </summary>
+		/// <inheritdoc />
 		public override IEnumerable<SecurityId> AvailableSecurities => Client.AvailableSecurities;
 
-		/// <summary>
-		/// Get all available data types.
-		/// </summary>
-		/// <param name="securityId">Instrument identifier.</param>
-		/// <param name="format">Format type.</param>
-		/// <returns>Data types.</returns>
+		/// <inheritdoc />
 		public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
 			return Client.GetAvailableDataTypes(securityId, format);
 		}
 
-		/// <summary>
-		/// Create storage for <see cref="IMarketDataStorage"/>.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-		/// <param name="format">Format type.</param>
-		/// <returns>Storage for <see cref="IMarketDataStorage"/>.</returns>
+		/// <inheritdoc />
 		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
 		{
 			return Client.GetRemoteStorage(securityId, dataType, arg, format);
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -103,10 +84,7 @@ namespace StockSharp.Algo.Storages
 			Client.Credentials.Load(storage.GetValue<SettingsStorage>(nameof(Client.Credentials)));
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);

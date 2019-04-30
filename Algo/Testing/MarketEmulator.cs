@@ -695,10 +695,10 @@ namespace StockSharp.Algo.Testing
 				};
 			}
 
-			private static IEnumerable<QuoteChange> BuildQuoteChanges(SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes)
+			private static QuoteChange[] BuildQuoteChanges(SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes)
 			{
 				return quotes.Count == 0
-					? Enumerable.Empty<QuoteChange>()
+					? ArrayHelper.Empty<QuoteChange>()
 					: quotes.Select(p => p.Value.Second.Clone()).ToArray();
 			}
 

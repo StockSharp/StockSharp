@@ -19,6 +19,7 @@ namespace StockSharp.Messages
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -244,6 +245,7 @@ namespace StockSharp.Messages
 		/// Price levels.
 		/// </summary>
 		[DataMember]
+		[XmlIgnore]
 		public IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
 
 		private CandleMessageVolumeProfile _volumeProfile;
@@ -252,6 +254,7 @@ namespace StockSharp.Messages
 		/// Volume profile.
 		/// </summary>
 		[Ignore]
+		[XmlIgnore]
 		public CandleMessageVolumeProfile VolumeProfile
 		{
 			get => _volumeProfile;

@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using StockSharp.Localization;
 
@@ -112,6 +113,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.TimeZoneKey)]
 		[DescriptionLoc(LocalizedStrings.Str68Key)]
 		[MainCategory]
+		[XmlIgnore]
 		public TimeZoneInfo TimeZone
 		{
 			get => _timeZone;

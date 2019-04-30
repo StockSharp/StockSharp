@@ -34,6 +34,9 @@ namespace StockSharp.Messages
 			Order = 0)]
 		public string Login { get; set; }
 
+		[field: NonSerialized]
+		private SecureString _password;
+
 		/// <summary>
 		/// Portfolio currency.
 		/// </summary>
@@ -44,7 +47,11 @@ namespace StockSharp.Messages
 			Description = LocalizedStrings.PasswordKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
-		public SecureString Password { get; set; }
+		public SecureString Password
+		{
+			get => _password;
+			set => _password = value;
+		}
 
 		/// <summary>
 		/// ID of the original message <see cref="UserLookupMessage.TransactionId"/> for which this message is a response.

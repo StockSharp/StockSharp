@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.InteropServices;
 
@@ -126,18 +125,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				var snapshot = ptr.ToStruct<QuotesSnapshot>();
 
-				var bids = new List<QuoteChange>();
-				var asks = new List<QuoteChange>();
-
-				var quotesMsg = new QuoteChangeMessage
-				{
-					SecurityId = snapshot.SecurityId.ToSecurityId(),
-					ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
-					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
-					Bids = bids,
-					Asks = asks,
-					IsSorted = true,
-				};
+				var bids = new QuoteChange[snapshot.BidCount];
+				var asks = new QuoteChange[snapshot.AskCount];
 
 				ptr += typeof(QuotesSnapshot).SizeOf();
 
@@ -146,18 +135,26 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				for (var i = 0; i < snapshot.BidCount; i++)
 				{
 					var row = ptr.ToStruct<QuotesSnapshotRow>();
-					bids.Add(new QuoteChange(Sides.Buy, row.Price, row.Volume));
+					bids[i] = new QuoteChange(Sides.Buy, row.Price, row.Volume);
 					ptr += rowSize;
 				}
 
 				for (var i = 0; i < snapshot.AskCount; i++)
 				{
 					var row = ptr.ToStruct<QuotesSnapshotRow>();
-					asks.Add(new QuoteChange(Sides.Sell, row.Price, row.Volume));
+					asks[i] = new QuoteChange(Sides.Sell, row.Price, row.Volume);
 					ptr += rowSize;
 				}
 
-				return quotesMsg;
+				return new QuoteChangeMessage
+				{
+					SecurityId = snapshot.SecurityId.ToSecurityId(),
+					ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
+					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
+					Bids = bids,
+					Asks = asks,
+					IsSorted = true,
+				};
 			}
 		}
 

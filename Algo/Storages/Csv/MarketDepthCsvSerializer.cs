@@ -42,6 +42,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 					Sides? side = null;
 
+					var bids = new List<QuoteChange>();
+					var asks = new List<QuoteChange>();
+
 					do
 					{
 						var quote = _enumerator.Current;
@@ -56,8 +59,6 @@ namespace StockSharp.Algo.Storages.Csv
 								SecurityId = _securityId,
 								ServerTime = quote.ServerTime,
 								LocalTime = quote.LocalTime,
-								Bids = new List<QuoteChange>(),
-								Asks = new List<QuoteChange>(),
 								IsSorted = true,
 							};
 						}
@@ -66,6 +67,9 @@ namespace StockSharp.Algo.Storages.Csv
 							_resetCurrent = true;
 							_needMoveNext = false;
 
+							Current.Bids = bids.ToArray();
+							Current.Asks = asks.ToArray();
+
 							return true;
 						}
 
@@ -73,7 +77,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 						if (quote.Price != null)
 						{
-							var quotes = (List<QuoteChange>)(quote.Side == Sides.Buy ? Current.Bids : Current.Asks);
+							var quotes = quote.Side == Sides.Buy ? bids : asks;
 							quotes.Add(new QuoteChange(quote.Side, quote.Price.Value, quote.Volume));
 						}
 					}
@@ -81,6 +85,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 					if (Current == null)
 						return false;
+
+					Current.Bids = bids.ToArray();
+					Current.Asks = asks.ToArray();
 
 					_resetCurrent = true;
 					_needMoveNext = true;

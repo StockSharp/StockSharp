@@ -233,8 +233,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (metaInfo.Version < MarketDataVersions.Version48)
 			{
-				diff.Bids = diff.Bids.OrderByDescending(q => q.Price);
-				diff.Asks = diff.Asks.OrderBy(q => q.Price);
+				diff.Bids = diff.Bids.OrderByDescending(q => q.Price).ToArray();
+				diff.Asks = diff.Asks.OrderBy(q => q.Price).ToArray();
 			}
 
 			var quoteMsg = isFull ? diff : prevDepth.AddDelta(diff);
@@ -310,7 +310,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		private static IEnumerable<QuoteChange> DeserializeQuotes(BitArrayReader reader, QuoteMetaInfo metaInfo, Sides side, bool useLong, bool nonAdjustPrice)
+		private static QuoteChange[] DeserializeQuotes(BitArrayReader reader, QuoteMetaInfo metaInfo, Sides side, bool useLong, bool nonAdjustPrice)
 		{
 			if (reader == null)
 				throw new ArgumentNullException(nameof(reader));
@@ -318,12 +318,12 @@ namespace StockSharp.Algo.Storages.Binary
 			if (metaInfo == null)
 				throw new ArgumentNullException(nameof(metaInfo));
 
-			var list = new List<QuoteChange>();
-
 			var deltaCount = reader.ReadInt();
 
 			if (deltaCount == 0)
-				return list;
+				return ArrayHelper.Empty<QuoteChange>();
+
+			var quotes = new QuoteChange[deltaCount];
 
 			for (var i = 0; i < deltaCount; i++)
 			{
@@ -333,10 +333,10 @@ namespace StockSharp.Algo.Storages.Binary
 
 				var volume = reader.ReadVolume(metaInfo);
 
-				list.Add(new QuoteChange(side, price, volume));
+				quotes[i] = new QuoteChange(side, price, volume);
 			}
 
-			return list;
+			return quotes;
 		}
 
 		//private static decimal GetDepthPrice(QuoteChangeMessage message)

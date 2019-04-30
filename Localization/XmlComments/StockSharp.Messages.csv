@@ -947,8 +947,7 @@ M:StockSharp.Messages.BaseChangeMessage`1.ToString/returns;DocStr50
 T:StockSharp.Messages.ErrorMessage/summary;DocStr4329
 M:StockSharp.Messages.ErrorMessage.#ctor/summary;DocStr1
 P:StockSharp.Messages.ErrorMessage.Error/summary;DocStr4509
-M:StockSharp.Messages.ErrorMessage.ToString/summary;DocStr49
-M:StockSharp.Messages.ErrorMessage.ToString/returns;DocStr50
+M:StockSharp.Messages.ErrorMessage.ToString/inheritdoc;DocStr8459
 M:StockSharp.Messages.ErrorMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.ErrorMessage.Clone/returns;DocStr1116
 T:StockSharp.Messages.MessageAdapter/summary;DocStr4330

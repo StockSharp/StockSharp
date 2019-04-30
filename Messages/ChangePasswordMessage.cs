@@ -18,6 +18,7 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 	using System.Security;
+	using System.Xml.Serialization;
 
 	/// <summary>
 	/// Change password message.
@@ -55,16 +56,24 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
+		[field: NonSerialized]
+		private SecureString _newPassword;
+
 		/// <summary>
 		/// New password.
 		/// </summary>
 		[DataMember]
-		public SecureString NewPassword { get; set; }
+		public SecureString NewPassword
+		{
+			get => _newPassword;
+			set => _newPassword = value;
+		}
 
 		/// <summary>
 		/// Change password error info.
 		/// </summary>
 		[DataMember]
+		[XmlIgnore]
 		public Exception Error { get; set; }
 
 		/// <summary>
