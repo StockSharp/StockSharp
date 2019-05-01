@@ -1,21 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" revisionNumber="1">
-  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-
-	<introduction>
-		<para>Для написания торговых роботов для <token>IB_external</token> необходимо использовать <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>. 
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
+<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
+		</para>
+		<para>Для написания торговых роботов для <token>IB_external</token> необходимо использовать 
+		<codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter</codeEntityReference>.
 		Механизм взаимодействия показан на данном рисунке:</para>
 		
 		<mediaLink><image placement="center" xlink:href="IBTrader"/></mediaLink>
 		
 		<para>Как видно из рисунка, взаимодействует происходит через терминал <token>IB_TWS</token> или <token>IB_Gate</token>, которые должны быть заранее установлены и настроены.</para>
-	</introduction>
-	<relatedTopics>
-		<link xlink:href="eab815a2-65f7-46e8-9989-4ae52d234703">Настройка TWS</link>
-		<link xlink:href="7c23b480-d472-43df-aabf-f743ad09fded">Пример работы с InteractiveBrokersTrader</link>
-		<link xlink:href="3e0f02b3-3e2f-405d-a8a2-6d44a50db166">Алго-заявки</link>
-		<link xlink:href="f7074321-9e5c-4bc0-a8a3-b2025c5b7268">Исторические данные</link>
-		<link xlink:href="9817c52a-fc3e-4fc8-a5f0-d7caf654b440">Сканер</link>
+
+     </introduction>
+     <relatedTopics>
+<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />
+<link xlink:href="554da27b-900a-462a-a2c2-d2b6cb1330ae" />
+<link xlink:href="c23300a1-bf38-444a-b103-28350766477f" />
+<link xlink:href="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" />
+<link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />
+<link xlink:href="1c3c9835-b65b-48d5-8abf-70986c666ef4" />
+<link xlink:href="b740e98d-7bcf-406e-aad4-75432ab3009e" />
+<link xlink:href="2587051d-1e94-4fb2-b5c1-d57cb5af1b6d" />
+<link xlink:href="eab815a2-65f7-46e8-9989-4ae52d234703" />
+<link xlink:href="7c23b480-d472-43df-aabf-f743ad09fded" />
+<link xlink:href="3e0f02b3-3e2f-405d-a8a2-6d44a50db166" />
+<link xlink:href="f7074321-9e5c-4bc0-a8a3-b2025c5b7268" />
+<link xlink:href="9817c52a-fc3e-4fc8-a5f0-d7caf654b440" />
     </relatedTopics>
-	</developerWalkthroughDocument>
+  </developerConceptualDocument>
 </topic>

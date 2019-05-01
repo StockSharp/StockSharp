@@ -295,6 +295,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\FastSample.aml" />
     <None Include="Topics\API_ConnectorsUIConfiguration.aml" />
     <None Include="Topics\API_Connectors.aml" />
     <None Include="Topics\API_StopOrders.aml" />

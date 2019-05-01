@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7f488b0b-0f59-42b4-845b-fd766f5699dc" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
     <introduction>
+    	<para>
+До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
+<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
+		</para>
 		  <para>
-			  Для написания торговых роботов под <token>smartcom_external</token> необходимо использовать <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>.
+			  Для написания торговых роботов под <token>smartcom_external</token> необходимо использовать <codeEntityReference>T:StockSharp.SmartCom.SmartComMessageAdapter</codeEntityReference>.
 			  Механизм взаимодействия показан на данном рисунке:
 		  </para>
 		  <para>
@@ -16,80 +16,25 @@
 			  </mediaLink>
 		  </para>
 		  <para>
-			  В отличие от <token>quik</token>-а, для работы <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> не нужно устанавливать
+			  В отличие от <token>quik</token>-а, для работы <codeEntityReference>T:StockSharp.SmartCom.SmartComMessageAdapter</codeEntityReference> не нужно устанавливать
 			  и запускать торговый терминал, чтобы робот мог торговать. Достаточно скачать и установить <token>smartcom_external</token>. При создании объекта
-			  <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> будет автоматически запущен процесс SmartCom2.exe, который
-			  регистрируется при установке как <token>ntservice</token>. Все взаимодействие между <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>
+			  <codeEntityReference>T:StockSharp.SmartCom.SmartComMessageAdapter</codeEntityReference> будет автоматически запущен процесс SmartCom2.exe, который
+			  регистрируется при установке как <token>ntservice</token>. Все взаимодействие между <codeEntityReference>T:StockSharp.SmartCom.SmartComMessageAdapter</codeEntityReference>
 			  и <token>smartcom_external</token> идет через технологию <token>com</token>.
 		  </para>
-    </introduction>
-
-    <!--<section>
-      <title>A topic section</title>
-
-      <content>
-        <para>Some topic content</para>
-      </content>
-    </section>-->
-
-    <relatedTopics>
-		<link xlink:href="e5b4af10-0235-4374-9134-a878fc7ecf7f"/>
-		<link xlink:href="9d3b0442-0633-4ba5-97e1-22829adcd025"/>
-		<link xlink:href="cae38969-3e31-4180-9425-89b41b3bd6e9"/>
-		<!--<link xlink:href="535227b6-0338-44c9-9a9b-9baf9bab10b4"/>-->
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-        
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
+     </introduction>
+     <relatedTopics>
+<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />
+<link xlink:href="554da27b-900a-462a-a2c2-d2b6cb1330ae" />
+<link xlink:href="c23300a1-bf38-444a-b103-28350766477f" />
+<link xlink:href="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" />
+<link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />
+<link xlink:href="1c3c9835-b65b-48d5-8abf-70986c666ef4" />
+<link xlink:href="b740e98d-7bcf-406e-aad4-75432ab3009e" />
+<link xlink:href="2587051d-1e94-4fb2-b5c1-d57cb5af1b6d" />
+<link xlink:href="e5b4af10-0235-4374-9134-a878fc7ecf7f"/>
+<link xlink:href="9d3b0442-0633-4ba5-97e1-22829adcd025"/>
+<link xlink:href="cae38969-3e31-4180-9425-89b41b3bd6e9"/>
     </relatedTopics>
-
   </developerConceptualDocument>
 </topic>

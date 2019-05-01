@@ -1,230 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="e5b4af10-0235-4374-9134-a878fc7ecf7f" revisionNumber="0">
-  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-		<para>
-			Создание торговых роботов под <token>smartcom</token> практически ничем не отличается от создания под <token>quik</token>. Для демонстрации
-			взят пример из раздела <link xlink:href="b6fea084-f43c-4eb7-ab63-ad3031d748a5"/>, где показано как создавать торговое приложение под <token>quik</token>.
-			Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/SmartCom</legacyItalic>.
-		</para>
-		<alert class="caution">
-			<para>
-				<token>smartcom</token> 2 имеет те же ограничения на разрядность операционной системы, что и <token>quik</token>. Приложение необходимо компилировать
-				под 32 бита. Как это сделать показано в <link xlink:href="b6fea084-f43c-4eb7-ab63-ad3031d748a5"/>. В <token>smartcom</token> 3 режим компиляции выбирается в зависимости от установленной сборки (32- или 64-битной).
-			</para>
-		</alert>
-    </introduction>
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>     
+      <para>Код ниже демонстрирует как инициализировать 
+      <codeEntityReference>T:StockSharp.SmartCom.SmartComMessageAdapter</codeEntityReference>
+      и передать его в
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new SmartComMessageAdapter(Connector.TransactionIdGenerator)
+{
+    Login = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+    Address = SmartComAddresses.Demo,
+};
 
-    <prerequisites>
-      <content>
-        <para>
-			<link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc"/>
-		</para>
-      </content>
-    </prerequisites>
-    
-    <!-- One or more procedure or section elements -->
-
-    <procedure>
-      <title>Пример робота под SmartCOM</title>
-
-      <steps class="ordered">
-		  <step>
-			  <content>
-				  <para>
-					  В самом начале необходимо заменить шлюз с <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>
-					  на <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>:
-				  </para>
-				  <code language="C#">
-using (var trader = new SmartTrader { Login = login, Password = password, Address = SmartComAddresses.Demo })
-		{
-			// ...
-		}
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
 					</code>
-			  </content>
-		  </step>
-		  <step>
-			  <content>
-				  <para>
-					  После создания шлюза необходимо подключиться к торговой системе. В случае с <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>
-					  такой системой выступает <token>smartcom</token>:
-				  </para>
-<code language="C#">
-// подписываемся на событие успешного подключения
-// все действия необходимо производить только после подключения
-trader.Connected += () =>
-{
-	Console.WriteLine("Подключение было произведено успешно.");
 
-	// извещаем об успешном соединении
-	waitHandle.Set();
-};
-
-Console.WriteLine("Производим подключение...");
-
-trader.Connect();
-
-// дожидаемся события об успешном соединении
-waitHandle.WaitOne();</code>
-			  </content>
-		  </step>
-		  <step>
-			  <content>
-				  <para>
-					  Далее, необходимо подписаться на события появления информации по инструментам (так программа получит сведения по бумаге Лукойл),
-					  и портфелям (для выставления заявок). А также на событие появления Моих Сделок (сигнал пользователю о том, что произошла сделка по его
-					  заявке):
-				  </para>
-				  <code language="C#"><![CDATA[
-// подписываемся на все портфели-счета
-trader.NewPortfolio += portfolio =>
-{
-    if (_portfolio != null)
-        return;
-
-    // находим нужный портфель и присваиваем его переменной _portfolio
-
-    if (portfolio.Name != account)
-        return;
-
-    _portfolio = portfolio;
-    Console.WriteLine("Портфель {0} появился.", account);
-
-    if (_lkoh != null)
-        waitHandle.Set();
-};
-
-// подписываемся на событие появление инструментов
-trader.NewSecurity += security =>
-{
-    if (_lkoh == null)
-    {
-        if (security.Code != secCode || security.Type != SecurityTypes.Stock)
-            return;
-
-        // находим Лукойл и присваиваем ее переменной lkoh
-        _lkoh = security;
-
-        if (_lkoh != null)
-        {
-            Console.WriteLine("Инструмент Лукойл появился.");
-
-            if (_portfolio != null)
-                waitHandle.Set();
-        }
-    }
-};
-
-// подписываемся на событие появления моих новых сделок
-trader.NewMyTrade += myTrade =>
-{
-    var trade = myTrade.Trade;
-    Console.WriteLine("Сделка {0} по цене {1} по бумаге {2} по объему {3} в {4}.", trade.Id, trade.Price, trade.Security.Code, trade.Volume, trade.Time);
-};
-]]></code>
-			  </content>
-		  </step>
-		  <step>
-			  <content>
-				  <para>
-					  Дожидаемся появления портфеля и инструмента и запускаем обновления по инструменту:
-				  </para>
-<code language="C#"><![CDATA[
-Console.WriteLine("Дожидаемся появления в программе инструмента Лукойл и портфеля {0}...".Put(account));
-
-// дожидаемся появления портфеля и инструмента
-waitHandle.WaitOne();
-
-trader.SecurityChanged += security =>
-{
-	// если инструмент хоть раз изменился (по нему пришли актуальные данные)
-	if (security == _lkoh && _lkoh.BestBid != null && _lkoh.BestAsk != null)
-		waitHandle.Set();
-};
-
-
-Console.WriteLine("Дожидаемся обновления данных по инструменту Лукойл...");
-
-// запускаем обновление по инструменту
-trader.RegisterSecurity(_lkoh);
-waitHandle.WaitOne();
-]]></code>
-				  <para>
-					  Когда данные начнут приходить в <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, то будут вызываться
-					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>,
-					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> и т.д. Для тех данных,
-					  которые изменяются, вызывается другое событие. Например, для заявок, у которых изменяются значения Состояние, Остаток и т.д. будет
-					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderChanged</codeEntityReference>.
-				  </para>
-			  </content>
-		  </step>
-		  <step>
-			  <content>
-				  <para>Торговый алгоритм робота:</para>
-				  <code language="C#"><![CDATA[// 0.1% от изменения цены
-const decimal delta = 0.001m;
-
-// запоминаем первоначальное значение середины спреда
-var firstMid = lkoh.BestPair.SpreadPrice / 2;
-if (_lkoh.BestBid == null)
-	throw new Exception("Нет лучшего бида для котировки.");
-
-Console.WriteLine("Первоначальное значение середины спреда {0:0.##}", _lkoh.BestBid.Price + firstMid);
-
-while (true)
-{
-	var mid = _lkoh.BestPair.SpreadPrice / 2;
-
-	// если спред вышел за пределы нашего диапазона
-	if (mid != null &&
-		((firstMid + firstMid * delta) <= mid ||
-		(firstMid - firstMid * delta) >= mid)
-		)
-	{
-		var order = new Order
-		{
-			Portfolio = _portfolio,
-			Price = _lkoh.ShrinkPrice(_lkoh.BestBid.Price + mid.Value),
-			Security = _lkoh,
-			Volume = 1,
-			Direction = Sides.Buy,
-		};
-		trader.RegisterOrder(order);
-		Console.WriteLine("Заявка {0} зарегистрирована", order.Id);
-		break;
-	}
-	else
-		Console.WriteLine("Текущее значение середины спреда {0:0.##}", _lkoh.BestBid.Price + mid);
-
-	// ждем 1 секунду
-	Thread.Sleep(1000);
-}]]></code>
-			  </content>
-		  </step>
-		  <step>
-			  <content>
-				  <para>Освобождение занятых ресурсов:</para>
-				  <para>Освобождение ресурсов произойдет автоматически, т.к. код заключен в конструкцию <legacyItalic>using</legacyItalic>.</para>
-				  <code language="C#">
-					using (SmartTrader trader = new SmartTrader { Login = login, Password = password, Address = SmartComAddresses.Demo })
-					{
-					   // ...
-					}
-				  </code>
-			  </content>
-		  </step>
-      </steps>
-    </procedure>
-    
-
-    <nextSteps>
-      <content>
-        <para>
-			<link xlink:href="9d3b0442-0633-4ba5-97e1-22829adcd025"/>
-		</para>
-      </content>
-    </nextSteps>
-    
-    
-  </developerWalkthroughDocument>
+    </introduction>
+  
+        <relatedTopics>
+        <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />
+    </relatedTopics>
+  </developerConceptualDocument>
 </topic>

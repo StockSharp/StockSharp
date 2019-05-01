@@ -100,11 +100,10 @@ Connector.ReConnectionSettings.WorkingTime = Exchange.Rts.WorkingTime;
 		  <content>
 			<para>
 Так как в <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> может использоваться несколько подключений, 
-то по умолчанию события связанные с подключением такие как  
-<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.ConnectionError</codeEntityReference>, 
-<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.StockSharp.Algo.Connector.Restored</codeEntityReference> и др. 
+то по умолчанию события связанные с переподключением такие как  
+<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.Restored</codeEntityReference> 
 не вызываются, а адаптеры подключений самостоятельно пытаются переподключиться. 
-Для того чтобы события начали вызываться необходимо у адаптера выставить свойство 
+Для того чтобы событие начало вызываться необходимо у адаптера выставить свойство 
 <codeEntityReference qualifyHint="true">P:StockSharp.Algo.BasketMessageAdapter.SuppressReconnectingErrors</codeEntityReference> в <legacyBold>false</legacyBold>.
 			</para>
 						<code language="C#"><![CDATA[
