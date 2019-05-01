@@ -4322,6 +4322,10 @@
       <ImageId>ChartAnnotations</ImageId>
       <AlternateText>Chart Annotations</AlternateText>
     </Image>
+    <Image Include="Art\API_ReconnectionLog.png">
+      <ImageId>API_ReconnectionLog</ImageId>
+      <AlternateText>API Reconnection Log</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

@@ -55,9 +55,10 @@
       <steps class="ordered">
         <step>
           <content>
-			  <para>
+          	<para>Для примера рассмотрим приложение описанное в пункте <link xlink:href="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" />.</para>
+			  <para> 
 				  При создании шлюза необходимо проинициализировать настройки механизма переподключений через свойство
-				  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference>:
+				  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference>, для пр:
 			  </para>
 			<code language="C#"><![CDATA[// инициализируем механизм переподключения (будет автоматически соединяться
 // каждые 10 секунд, если шлюз потеряется связь с сервером)
@@ -66,18 +67,13 @@ Connector.ReConnectionSettings.Interval = TimeSpan.FromSeconds(10);
 // переподключение будет работать только во время работы биржи РТС
 // (чтобы отключить переподключение когда торгов нет штатно, например, ночью)
 Connector.ReConnectionSettings.WorkingTime = Exchange.Rts.WorkingTime;
-
-// подписываемся на событие об успешном восстановлении соединения
-Connector.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() => MessageBox.Show(this, "Соединение восстановлено"));
-
-// подписываемся на событие разрыва соединения
-Connector.ConnectionError += error => this.Sync(() => MessageBox.Show(this, error.ToString()));]]></code>
+]]></code>
 
           </content>
         </step>
 		<step>
 		  <content>
-			<para>Чтобы проверить, как работает механизм, можно, к примеру, выключить подключение к Интернету:
+			<para>Чтобы проверить, как работает механизм контроля соединения, можно выключить подключение к Интернету:
 			</para>
 			<para>
 			  <mediaLink>
@@ -89,11 +85,13 @@ Connector.ConnectionError += error => this.Sync(() => MessageBox.Show(this, erro
 		<step>
 		  <content>
 			<para>
-			  Программа просигнализирует о потере соединения:
+			  Ниже приведен лог программы, в котором видно, что приложение изначально находиться 
+			  в подключенном состоянии, а после выключения интернета приложение пытается переподключиться. 
+			  После восстановления интернета восстанавливается подключение приложения:
 			</para>
 			<para>
 			  <mediaLink>
-				<image placement="center" xlink:href="sampleconnectionerror" />
+				<image placement="center" xlink:href="API_ReconnectionLog" />
 			  </mediaLink>
 			</para>
 		  </content>
@@ -101,9 +99,23 @@ Connector.ConnectionError += error => this.Sync(() => MessageBox.Show(this, erro
 		<step>
 		  <content>
 			<para>
-			  После включения внешних транзакций обратно, программа выведет сообщение об успешном восстановлении соединения:
+Так как в <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> может использоваться несколько подключений, 
+то по умолчанию события связанные с подключением такие как  
+<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.ConnectionError</codeEntityReference>, 
+<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.StockSharp.Algo.Connector.Restored</codeEntityReference> и др. 
+не вызываются, а адаптеры подключений самостоятельно пытаются переподключиться. 
+Для того чтобы события начали вызываться необходимо у адаптера выставить свойство 
+<codeEntityReference qualifyHint="true">P:StockSharp.Algo.BasketMessageAdapter.SuppressReconnectingErrors</codeEntityReference> в <legacyBold>false</legacyBold>.
 			</para>
+						<code language="C#"><![CDATA[
+Connector.Adapter.SuppressReconnectingErrors = false;
+Connector.ConnectionError += error => this.Sync(() => MessageBox.Show(this, "Соединение потеряно"));
+Connector.Restored += () => this.Sync(() => MessageBox.Show(this, "Соединение восстановлено"));
+]]></code>
 			<para>
+			  <mediaLink>
+				<image placement="center" xlink:href="sampleconnectionerror" />
+			  </mediaLink>
 			  <mediaLink>
 				<image placement="center" xlink:href="sampleconnectionrestore" />
 			  </mediaLink>
