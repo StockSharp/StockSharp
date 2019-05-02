@@ -1,138 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="01f08ac6-ce17-49a6-a531-b24eec6d7f5c" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-     <introduction>
-      <para>
-      	Пример работы с <codeEntityReference>T:StockSharp.Twime.TwimeTrader</codeEntityReference> демонстрирует приложение SampleTwime, показанное на рисунке ниже.
-      	Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/Twime</legacyItalic>.
-      </para>
-      
-      <mediaLink><image placement="center" xlink:href="TwimeSample"/></mediaLink>
-      
+    <introduction>     
+      <para>Код ниже демонстрирует как инициализировать 
+      <codeEntityReference>T:StockSharp.Twime.TwimeMessageAdapter</codeEntityReference>
+      и передать его в
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new TwimeMessageAdapter(Connector.TransactionIdGenerator)
+{
+    Login = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+};
+
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
+					</code>
+
     </introduction>
-    <procedure>
-		<steps class="ordered">
-			<step>
-				<content>
-					<para>
-					В области определений переменных создаем экземпляр коннектора <codeEntityReference qualifyHint="false">T:StockSharp.Twime.TwimeTrader</codeEntityReference>.
-					</para>
-            		<code language="C#">
-            				<![CDATA[
- public TwimeTrader Trader = new TwimeTrader();
-]]>
-					</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>
-					Для корректной работы коннектор должен содержать адаптер рыночных данных, которые отсутствуют в протоколе <token>twime</token>. Поэтому в
-					в конструкторе главного окна создается экземпляр <legacyItalic>пустого</legacyItalic> адаптера
-					<codeEntityReference qualifyHint="false">T:StockSharp.Messages.PassThroughMessageAdapter</codeEntityReference> и добавляется к коннектору.
-					</para>
-            		<code language="C#">
-            				<![CDATA[
-public MainWindow()
-{
-    ..................................................    
-	var mdAdapter = new PlazaMessageAdapter(Trader.TransactionIdGenerator)
-    {
-    	IsCGate = true,
-    };
-    mdAdapter.RemoveTransactionalSupport();
-    Trader.Adapter.InnerAdapters.Add(mdAdapter);
-}
-]]>
-					</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Далее устанавливаем необходимые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>.
-					 Если соединение не установлено, то устанавливаем логин и адреса соединения:
-					 </para>				 
-						<list class="ordered">
-  							<listItem>
-  								<para><codeEntityReference>P:StockSharp.Twime.TwimeTrader.TransactionAddress</codeEntityReference>;</para>
-  							</listItem>
-  							<listItem>
-  								<para><codeEntityReference>P:StockSharp.Twime.TwimeTrader.RecoveryAddress</codeEntityReference>.</para>
-  							</listItem>
-						</list>
-						<para>
-						И устанавливаем соединение.
-						</para>
-					<code language="C#">
-            				<![CDATA[
-private void ConnectClick(object sender, RoutedEventArgs e)
-{
-	if (!_isInitialized)
-	{
-		_isInitialized = true;
-
-		Trader.Restored += () => this.GuiAsync(() =>
-		{
-			// обновляем метки GUI
-			ChangeConnectStatus(true);
-			MessageBox.Show(this, LocalizedStrings.Str2958);
-		});
-
-		Trader.Connected += () =>
-		{
-			this.GuiAsync(() => ChangeConnectStatus(true));
-		};
-
-		Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
-
-		// подписываемся на событие ошибки соединения
-		Trader.ConnectionError += error => this.GuiAsync(() =>
-		{
-			// обновляем метки GUI
-			ChangeConnectStatus(false);
-			MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
-		});
-
-		// подписываемся на событие ошибки
-		Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
-
-		// подписываемся на событие ошибки подписки на рыночные данные
-		Trader.MarketDataSubscriptionFailed += (security, type, error) => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
-
-        Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-        Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-        Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-        Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-        Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-        Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-         .................................................
-		_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
-		.................................................
-	}
-
-	switch (Trader.ConnectionState)
-	{
-		case ConnectionStates.Failed:
-		case ConnectionStates.Disconnected:
-			Trader.TransactionAddress = TransactionAddress.EndPoint;
-			Trader.RecoveryAddress = RecoveryAddress.EndPoint;
-			Trader.Login = Login.Text;
-			Trader.PortfolioName = PortfolioName.Text;
-
-			((PlazaMessageAdapter)Trader.MarketDataAdapter).IsDemo = IsDemo.IsChecked == true;
-
-			Trader.Connect();
-			break;
-		case ConnectionStates.Connected:
-			Trader.Disconnect();
-			break;
-	}
-}
-			]]>
-					</code>						
-				</content>
-			</step>
-		</steps>
-    </procedure>
+  
+        <relatedTopics>
+        <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

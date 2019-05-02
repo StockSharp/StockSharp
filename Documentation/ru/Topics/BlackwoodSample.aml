@@ -1,210 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="95d01586-b798-4d38-82aa-38d8533586b5" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference> демонстрирует приложение SampleBlackwood,
-        показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/Blackwood</legacyItalic>.</para>
-		
-		<mediaLink><image placement="center" xlink:href="blackwood_main_window"/></mediaLink>
+    <introduction>     
+      <para>Код ниже демонстрирует как инициализировать 
+      <codeEntityReference>T:StockSharp.Blackwood.BlackwoodMessageAdapter</codeEntityReference>
+      и передать его в
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var address = "<Address>".To<IPAddress>();
+var messageAdapter = new BlackwoodMessageAdapter(Connector.TransactionIdGenerator)
+{
+    Login = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+    ExecutionAddress = new IPEndPoint(address, BlackwoodAddresses.ExecutionPort),
+    MarketDataAddress = new IPEndPoint(address, BlackwoodAddresses.MarketDataPort),
+    HistoricalDataAddress = new IPEndPoint(address, BlackwoodAddresses.HistoricalDataPort)
+};
+
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
+					</code>
+
     </introduction>
-    <procedure>
-				<steps class="ordered">
-					<step>
-						<content>
-							<para>В самом начале необходимо создать экземпляр класса шлюза <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference>:</para>
-            				<code language="C#">
-            				<![CDATA[
-var address = Address.Text.To<IPAddress>();
-
-// создаем шлюз
-Trader = new BlackwoodTrader
-{
-	Login = Login.Text,
-	Password = Password.Password,
-	ExecutionAddress = new IPEndPoint(address, BlackwoodAddresses.ExecutionPort),
-	MarketDataAddress = new IPEndPoint(address, BlackwoodAddresses.MarketDataPort),
-	HistoricalDataAddress = new IPEndPoint(address, BlackwoodAddresses.HistoricalDataPort),
-};
-							]]>
-							</code>
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
-            				<code language="C#">
-            				<![CDATA[
-// подписываемся на событие успешного соединения
-Trader.Connected += () =>
-{
-	// set flag (connection is established)
-	_isConnected = true;
-
-	// update gui labes
-	this.GuiAsync(() => ChangeConnectStatus(true));
-
-	// запускаем подписку на новости
-	Trader.RegisterNews();
-
-	Trader.SubscribeHighLow(true);
-
-	Trader.SubscribeImbalance();
-	Trader.SubscribeCrossLock();
-	Trader.RequestPreMarketIndications();
-};
-
-
-// подписываемся на событие разрыва соединения
-Trader.ConnectionError += error => this.GuiAsync(() =>
-{
-	ChangeConnectStatus(false);
-	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
-});
-
-// подписываемся на событие успешного отключения
-Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
-
-Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
-Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-
-Trader.NewPortfolio += portfolio =>
-{
-	// подписываемся на обновление портфеля
-	Trader.RegisterPortfolio(portfolio);
-	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-};
-Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-
-// подписываемся на событие о неудачной регистрации заявок
-Trader.OrdersRegisterFailed += OrdersFailed;
-
-// подписываемся на событие о неудачном снятии заявок
-Trader.OrdersCancelFailed += OrdersFailed;
-
-							]]>
-							</code>						
-						</content>
-					</step>
-					
-					<step>
-						<content>
-							<para>Далее необходимо выполнить подключение к серверу <token>blackwood</token>:</para>
-            				<code language="C#">
-            				<![CDATA[
-Trader.Connect();
-							]]>
-							</code>						
-						</content>
-					</step>
-					
-					<step>
-						<content>
-							<para>При успешном подключении можно ожидать срабатывания событий:</para>
-							<list class="bullet">
-								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecurityChanged</codeEntityReference> – 
-									изменение инструмента (последней цены, цены спроса/предложения и т.д.) запрошенного через 
-									<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference>.</para>
-								</listItem>
-								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthChanged</codeEntityReference> – 
-									изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference>.</para>
-								</listItem>
-								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> – 
-									новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> инструментам.</para>
-								</listItem>
-								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.PortfolioChanged</codeEntityReference> – 
-									изменение портфелей, запрошенное с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
-								</listItem>
-							</list>
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
-							
-							<mediaLink><image placement="center" xlink:href="blackwood_securities"/></mediaLink>
-            				
-            				<code language="C#">
-            				<![CDATA[
-private void FindClick(object sender, RoutedEventArgs e)
-{
-	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
-	if (!wnd.ShowModal(this)) return;
-
-	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
-}
-
-							]]>
-							</code>
-							
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>Для получения обновлений по выбранному инструменту необходимо вызвать метод
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference>:</para>
-            				<code language="C#">
-            				<![CDATA[
-Trader.RegisterSecurity(SelectedSecurity);
-							]]>
-							</code>						
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>Для запроса обновлений по стаканам необходимо воспользоваться методом 
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference>:</para>
-            				<code language="C#">
-            				<![CDATA[
-private void Level2Click(object sender, RoutedEventArgs e)
-{
-	ShowLevel1();
-
-	// начинаем получать котировки стакана
-	MainWindow.Instance.Trader.RegisterMarketDepth(SecurityPicker.SelectedSecurity);
-}
-							]]>
-							</code>
-							<mediaLink><image placement="center" xlink:href="blackwood_market_depth"/></mediaLink>
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>Для регистрации заявок предусмотрена кнопка «Новая заявка». Метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> отправляет заявку на сервер:</para>
-            				<code language="C#">
-            				<![CDATA[
-private void NewOrderClick(object sender, RoutedEventArgs e)
-{
-	var newOrder = new OrderWindow
-	{
-		Order = new Order { Security = SecurityPicker.SelectedSecurity },
-		SecurityProvider = MainWindow.Instance.Trader,
-		MarketDataProvider = MainWindow.Instance.Trader,
-		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-	};
-
-	if (newOrder.ShowModal(this))
-		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
-}
-							]]>
-							</code>						
-						</content>
-					</step>
-
-				</steps>
-		</procedure>
+  
+        <relatedTopics>
+        <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

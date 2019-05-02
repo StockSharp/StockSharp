@@ -9,7 +9,7 @@
      <para>Стоит обратить внимание что <legacyBold>Ключ и Секрет</legacyBold> - это 
      не <legacyBold>Логин и Пароль</legacyBold>.
 	<legacyBold>Ключ и Секрет</legacyBold> генерируются отдельно в личном кабинете. 
-	Для работы с коннектором Логин и Пароль не требуется и их нигде указывать не нужно.</para>	  
+	Для работы с коннектором Логин и Пароль не требуются и их нигде указывать не нужно.</para>	  
 	</alert>
 
 
@@ -20,16 +20,6 @@
      <mediaLink><image placement="center" xlink:href="APIConnectorsSettingsWindow" /></mediaLink>
      <para>А для <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" />:</para>
      <mediaLink><image placement="center" xlink:href="APIConnectorsSettingsHydraWindow" /></mediaLink>
-     <para>В коде <legacyBold>Ключ</legacyBold> и <legacyBold>Секрет</legacyBold> 
-     можно указать в соответствующих свойствах коннектора:</para>
-                 		<code language="C#">
-            				<![CDATA[
-.....
-Trader.Key = Key.Text;
-Trader.Secret = Secret.Password;
-.....
-							]]>
-					</code>
     </introduction>
   </developerConceptualDocument>
 </topic>

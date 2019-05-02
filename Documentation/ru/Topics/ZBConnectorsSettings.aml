@@ -20,16 +20,6 @@
      <mediaLink><image placement="center" xlink:href="APIConnectorsSettingsWindow" /></mediaLink>
      <para>А для <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" />:</para>
      <mediaLink><image placement="center" xlink:href="APIConnectorsSettingsHydraWindow" /></mediaLink>
-     <para>В коде <legacyBold>Ключ</legacyBold> и <legacyBold>Секрет</legacyBold> 
-     можно указать в соответствующих свойствах коннектора:</para>
-                 		<code language="C#">
-            				<![CDATA[
-.....
-Trader.Key = Key.Text;
-Trader.Secret = Secret.Password;
-.....
-							]]>
-					</code>
     </introduction>
   </developerConceptualDocument>
 </topic>
