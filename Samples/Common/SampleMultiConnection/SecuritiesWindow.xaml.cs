@@ -85,6 +85,8 @@ namespace SampleMultiConnection
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
 			Quotes.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
+
+			TryEnableCandles();
 		}
 
 		private void DepthClick(object sender, RoutedEventArgs e)
