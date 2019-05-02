@@ -95,7 +95,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="storageName">Storage name.</param>
 		/// <param name="fields">Extended fields (names and types).</param>
 		/// <returns>Storage.</returns>
-		IExtendedInfoStorageItem Create(string storageName, Tuple<string, Type>[] fields);
+		IExtendedInfoStorageItem Create(string storageName, IEnumerable<Tuple<string, Type>> fields);
 
 		/// <summary>
 		/// Delete storage.
@@ -137,16 +137,16 @@ namespace StockSharp.Algo.Storages
 				_fileName = fileName;
 			}
 
-			public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, Tuple<string, Type>[] fields)
+			public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, IEnumerable<Tuple<string, Type>> fields)
 				: this(storage, fileName)
 			{
 				if (fields == null)
 					throw new ArgumentNullException(nameof(fields));
 
-				if (fields.IsEmpty())
-					throw new ArgumentOutOfRangeException(nameof(fields));
+				_fields = fields.ToArray();
 
-				_fields = fields;
+				if (_fields.IsEmpty())
+					throw new ArgumentOutOfRangeException(nameof(fields));
 			}
 
 			public string StorageName => Path.GetFileNameWithoutExtension(_fileName);
@@ -339,7 +339,7 @@ namespace StockSharp.Algo.Storages
 			set => _delayAction = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		IExtendedInfoStorageItem IExtendedInfoStorage.Create(string storageName, Tuple<string, Type>[] fields)
+		IExtendedInfoStorageItem IExtendedInfoStorage.Create(string storageName, IEnumerable<Tuple<string, Type>> fields)
 		{
 			if (storageName.IsEmpty())
 				throw new ArgumentNullException(nameof(storageName));

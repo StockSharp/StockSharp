@@ -52,12 +52,12 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Supported by adapter message types.
 		/// </summary>
-		MessageTypes[] SupportedMessages { get; set; }
+		IEnumerable<MessageTypes> SupportedMessages { get; set; }
 
 		/// <summary>
 		/// Supported by adapter market data types.
 		/// </summary>
-		MarketDataTypes[] SupportedMarketDataTypes { get; set; }
+		IEnumerable<MarketDataTypes> SupportedMarketDataTypes { get; set; }
 
 		/// <summary>
 		/// Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.
@@ -162,7 +162,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Names of extended security fields in <see cref="SecurityMessage"/>.
 		/// </summary>
-		Tuple<string, Type>[] SecurityExtendedFields { get; }
+		IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; }
 
 		/// <summary>
 		/// Support lookup all securities.

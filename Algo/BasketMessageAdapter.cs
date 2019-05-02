@@ -214,7 +214,7 @@ namespace StockSharp.Algo
 		public CandleBuilderProvider CandleBuilderProvider { get; }
 
 		/// <inheritdoc />
-		public override MessageTypes[] SupportedMessages => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct().ToArray();
+		public override IEnumerable<MessageTypes> SupportedMessages => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct();
 
 		/// <inheritdoc />
 		public override bool PortfolioLookupRequired => GetSortedAdapters().Any(a => a.PortfolioLookupRequired);

@@ -187,14 +187,14 @@ namespace StockSharp.Messages
 		public IdGenerator TransactionIdGenerator => InnerAdapter.TransactionIdGenerator;
 
 		/// <inheritdoc />
-		public virtual MessageTypes[] SupportedMessages
+		public virtual IEnumerable<MessageTypes> SupportedMessages
 		{
 			get => InnerAdapter.SupportedMessages;
 			set => InnerAdapter.SupportedMessages = value;
 		}
 
 		/// <inheritdoc />
-		public virtual MarketDataTypes[] SupportedMarketDataTypes
+		public virtual IEnumerable<MarketDataTypes> SupportedMarketDataTypes
 		{
 			get => InnerAdapter.SupportedMarketDataTypes;
 			set => InnerAdapter.SupportedMarketDataTypes = value;
@@ -254,7 +254,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public string AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;
 
-		Tuple<string, Type>[] IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
+		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
 
 		/// <inheritdoc />
 		public virtual bool IsSupportSecuritiesLookupAll => InnerAdapter.IsSupportSecuritiesLookupAll;

@@ -77,6 +77,7 @@ StockSharp API Change log
 * (bug) BuySellPanel. Design fix.
 * (bug) Bitfinex. Timestamp for own trade fix.
 * (feature) CsvImporter. Uses Message as output parameter.
+* (feature) IMessageAdapter. Changed property types Array -> IEnumerable.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

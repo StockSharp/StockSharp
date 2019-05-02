@@ -137,11 +137,11 @@ namespace StockSharp.Messages
 				Categories = attr.Categories;
 		}
 
-		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
+		private IEnumerable<MessageTypes> _supportedMessages = Enumerable.Empty<MessageTypes>();
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual MessageTypes[] SupportedMessages
+		public virtual IEnumerable<MessageTypes> SupportedMessages
 		{
 			get => _supportedMessages;
 			set
@@ -159,11 +159,11 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private MarketDataTypes[] _supportedMarketDataTypes = ArrayHelper.Empty<MarketDataTypes>();
+		private IEnumerable<MarketDataTypes> _supportedMarketDataTypes = Enumerable.Empty<MarketDataTypes>();
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual MarketDataTypes[] SupportedMarketDataTypes
+		public virtual IEnumerable<MarketDataTypes> SupportedMarketDataTypes
 		{
 			get => _supportedMarketDataTypes;
 			set
@@ -285,7 +285,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual Tuple<string, Type>[] SecurityExtendedFields { get; } = ArrayHelper.Empty<Tuple<string, Type>>();
+		public virtual IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; } = Enumerable.Empty<Tuple<string, Type>>();
 
 		/// <inheritdoc />
 		[Browsable(false)]
