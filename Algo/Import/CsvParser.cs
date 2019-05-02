@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Import
 		/// <param name="fileName">File name.</param>
 		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <returns>Parsed instances.</returns>
-		public IEnumerable<dynamic> Parse(string fileName, Func<bool> isCancelled = null)
+		public IEnumerable<Message> Parse(string fileName, Func<bool> isCancelled = null)
 		{
 			var columnSeparator = ColumnSeparator.ReplaceIgnoreCase("TAB", "\t");
 
@@ -129,6 +129,33 @@ namespace StockSharp.Algo.Import
 
 				var cells = new List<string>();
 
+				var isDepth = DataType == DataType.MarketDepth;
+				var isSecurities = DataType == DataType.Securities;
+
+				var quoteMsg = isDepth ? new QuoteChangeMessage() : null;
+				var bids = isDepth ? new List<QuoteChange>() : null;
+				var asks = isDepth ? new List<QuoteChange>() : null;
+
+				void AddQuote(TimeQuoteChange quote)
+				{
+					(quote.Side == Sides.Buy ? bids : asks).Add(quote);
+				}
+
+				void FillQuote(TimeQuoteChange quote)
+				{
+					quoteMsg.ServerTime = quote.ServerTime;
+					quoteMsg.SecurityId = quote.SecurityId;
+					quoteMsg.LocalTime = quote.LocalTime;
+
+					AddQuote(quote);
+				}
+
+				void FlushQuotes()
+				{
+					quoteMsg.Bids = bids.ToArray();
+					quoteMsg.Asks = asks.ToArray();
+				}
+
 				while (reader.ReadRow(cells))
 				{
 					if (isCancelled?.Invoke() == true)
@@ -140,9 +167,7 @@ namespace StockSharp.Algo.Import
 						continue;
 					}
 
-					var msgType = DataType.MessageType;
-
-					dynamic instance = CreateInstance(msgType);
+					dynamic instance = CreateInstance(isDepth, isSecurities);
 
 					foreach (var field in fields)
 					{
@@ -167,11 +192,15 @@ namespace StockSharp.Algo.Import
 
 					if (!(instance is SecurityMessage secMsg))
 					{
-						if (instance is ExecutionMessage execMsg)
-							execMsg.ExecutionType = (ExecutionTypes)DataType.Arg;
-
-						if (instance is CandleMessage candleMsg)
-							candleMsg.State = CandleStates.Finished;
+						switch (instance)
+						{
+							case ExecutionMessage execMsg:
+								execMsg.ExecutionType = (ExecutionTypes)DataType.Arg;
+								break;
+							case CandleMessage candleMsg:
+								candleMsg.State = CandleStates.Finished;
+								break;
+						}
 					}
 					else if (secMsg.SecurityId.SecurityCode.IsEmpty() || secMsg.SecurityId.BoardCode.IsEmpty())
 					{
@@ -181,7 +210,40 @@ namespace StockSharp.Algo.Import
 						continue;
 					}
 
-					yield return instance;
+					if (quoteMsg != null)
+					{
+						var quote = (TimeQuoteChange)instance;
+
+						if (bids.IsEmpty() && asks.IsEmpty())
+						{
+							FillQuote(quote);
+						}
+						else
+						{
+							if (quoteMsg.ServerTime == quote.ServerTime && quoteMsg.SecurityId == quote.SecurityId)
+							{
+								AddQuote(quote);
+							}
+							else
+							{
+								FlushQuotes();
+								yield return quoteMsg;
+
+								quoteMsg = new QuoteChangeMessage();
+								bids = new List<QuoteChange>();
+								asks = new List<QuoteChange>();
+								FillQuote(quote);
+							}
+						}
+					}
+					else
+						yield return instance;
+				}
+
+				if (quoteMsg != null && !bids.IsEmpty() && !asks.IsEmpty())
+				{
+					FlushQuotes();
+					yield return quoteMsg;
 				}
 			}
 		}
@@ -189,15 +251,14 @@ namespace StockSharp.Algo.Import
 		/// <summary>
 		/// Create instance for the specified type.
 		/// </summary>
-		/// <param name="msgType">Message type.</param>
 		/// <returns>Instance.</returns>
-		protected virtual object CreateInstance(Type msgType)
+		private object CreateInstance(bool isDepth, bool isSecurities)
 		{
-			var instance = msgType == typeof(QuoteChangeMessage)
+			var instance = isDepth
 				? new TimeQuoteChange()
-				: msgType.CreateInstance<object>();
+				: DataType.MessageType.CreateInstance<object>();
 
-			if (msgType == typeof(SecurityMessage) && ExtendedInfoStorageItem != null)
+			if (isSecurities && ExtendedInfoStorageItem != null)
 				((SecurityMessage)instance).ExtensionInfo = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
 			return instance;
