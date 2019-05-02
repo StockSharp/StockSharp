@@ -114,5 +114,10 @@ namespace StockSharp.Algo
 		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
 		/// </summary>
 		public static IExtendedInfoStorage ExtendedInfoStorage => ConfigManager.GetService<IExtendedInfoStorage>();
+
+		/// <summary>
+		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
+		/// </summary>
+		public static IExtendedInfoStorage TryExtendedInfoStorage => ConfigManager.TryGetService<IExtendedInfoStorage>();
 	}
 }
