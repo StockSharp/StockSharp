@@ -202,38 +202,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Convert to <see cref="MarketDataTypes"/>.
-		/// </summary>
-		/// <returns><see cref="MarketDataTypes"/> value or <see langword="null"/> if cannot be converted.</returns>
-		public MarketDataTypes? ToMarketDataType()
-		{
-			if (this == Ticks)
-				return MarketDataTypes.Trades;
-			else if (this == Level1)
-				return MarketDataTypes.Level1;
-			else if (this == OrderLog)
-				return MarketDataTypes.OrderLog;
-			else if (this == MarketDepth)
-				return MarketDataTypes.MarketDepth;
-			else if (this == News)
-				return MarketDataTypes.News;
-			else if (MessageType == typeof(TimeFrameCandleMessage))
-				return MarketDataTypes.CandleTimeFrame;
-			else if (MessageType == typeof(TickCandleMessage))
-				return MarketDataTypes.CandleTick;
-			else if (MessageType == typeof(VolumeCandleMessage))
-				return MarketDataTypes.CandleVolume;
-			else if (MessageType == typeof(RangeCandleMessage))
-				return MarketDataTypes.CandleRange;
-			else if (MessageType == typeof(RenkoCandleMessage))
-				return MarketDataTypes.CandleRenko;
-			else if (MessageType == typeof(PnFCandleMessage))
-				return MarketDataTypes.CandlePnF;
-			else
-				return null;
-		}
-
-		/// <summary>
 		/// Determines whether the specified message type is derived from <see cref="CandleMessage"/>.
 		/// </summary>
 		/// <returns><see langword="true"/> if the specified message type is derived from <see cref="CandleMessage"/>, otherwise, <see langword="false"/>.</returns>
