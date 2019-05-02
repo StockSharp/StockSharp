@@ -1,144 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="ca67819a-60b8-42f0-a512-ad0792d544f2" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-      <para>
-      	Пример работы с <codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference> демонстрирует приложение SampleITCH, показанное на рисунке ниже.
-      	Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/ITCH</legacyItalic>.
-      </para>
-      <mediaLink><image placement="center" xlink:href="ITCHSettings"/></mediaLink>
-    </introduction>
-    <procedure>
-		<steps class="ordered">
-			<step>
-				<content>
-				
-					<para>В конструкторе главного окна: 1) создаем экземпляр коннектора и, чтобы получать стаканы, устанавливаем
-					для свойства
-					<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Connector.CreateDepthFromOrdersLog</codeEntityReference>
-					значение true, 2) передаем в элемент Settings (PropertyGridEx) адаптер рыночных данных коннектора. 
-					Настройка свойств адаптера проводится в графическом интерфейсе см. рисунок выше.
-					</para>
-            		<code language="C#">
+    <introduction>     
+      <para>Код ниже демонстрирует как инициализировать 
+      <codeEntityReference>T:StockSharp.ITCH.ItchMessageAdapter</codeEntityReference>
+      и передать его в
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+      <code language="C#">
             				<![CDATA[
-public MainWindow()
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new ItchMessageAdapter(Connector.TransactionIdGenerator)
 {
-    ..................................................
-    
-	_logManager.Listeners.Add(new FileLogListener { LogDirectory = "StockSharp_ITCH" });
-	_logManager.Listeners.Add(new GuiLogListener(Monitor));
+    Login = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+};
 
-	// create connector
-	Trader = new ItchTrader
-	{
-		LogLevel = LogLevels.Debug,
-		CreateDepthFromOrdersLog = true
-	};
-
-	_logManager.Sources.Add(Trader);
-
-	Settings.SelectedObject = Trader.MarketDataAdapter;
-}
-]]>
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
 					</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Далее устанавливаем необходимые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>.
-					В обработчике события <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.LookupSecuritiesResult</codeEntityReference> подписываемся
-					на получение лога заявок. Потоки инструментов, заявок, сделок и лога заявок подключаем к соответствующим графическим элементам. Устанавливаем соединение.</para>
-					<code language="C#">
-            				<![CDATA[
-private void ConnectClick(object sender, RoutedEventArgs e)
-{
-	if (!_isConnected)
-	{
-		.....................
 
-		if (!_initialized)
-		{
-			_initialized = true;
-
-			// subscribe on connection successfully event
-			Trader.Connected += () =>
-			{
-				// set flag (connection is established)
-				_isConnected = true;
-
-				// update gui labes
-				this.GuiAsync(() => ChangeConnectStatus(true));
-			};
-			Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
-
-			// subscribe on connection error event
-			Trader.ConnectionError += error => this.GuiAsync(() =>
-			{
-				// update gui labes
-				ChangeConnectStatus(false);
-
-				MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);	
-			});
-
-			// subscribe on error event
-			Trader.Error += error =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
-
-			// subscribe on error of market data subscription event
-			Trader.MarketDataSubscriptionFailed += (security, type, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
-
-			Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
-			Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
-			Trader.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
-
-
-			var subscribed = false;
-			//if (AllDepths.IsChecked == true)
-			{
-				Trader.LookupSecuritiesResult += securities =>
-				{
-					if (subscribed)
-						return;
-
-					subscribed = true;
-
-					Trader.SendInMessage(new MarketDataMessage
-					{
-						IsSubscribe = true,
-						DataType = MarketDataTypes.OrderLog,
-						TransactionId = Trader.TransactionIdGenerator.GetNextId(),
-					});
-				};	
-			}
-					
-			// set market data provider
-			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
-
-			ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowOrdersLog.IsEnabled = true;
-		}
-
-		Trader.Connect();
-	}
-	else
-	{
-		Trader.Disconnect();
-	}
-}
-
-			]]>
-					</code>						
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Для вывода сделок и логов заявок нужно открыть окна при помощи кнопок <legacyBold>Тики</legacyBold> и <legacyBold>Лог заявок</legacyBold> соответственно. 
-					Для получения стакана нужно открыть окно инструментов, выбрать нужный инструмент
-					и открыть стакан при помощи кнопки <legacyBold>Стакан..</legacyBold> .</para>
-				</content>
-			</step>
-		</steps>
-    </procedure>
-   
+    </introduction>
+  
+        <relatedTopics>
+        <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

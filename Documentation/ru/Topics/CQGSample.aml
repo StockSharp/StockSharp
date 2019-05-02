@@ -1,221 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="436fc377-85ff-4d37-ad62-4846313a8563" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-     <para>
-      	Пример работы с <codeEntityReference>T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference> демонстрирует приложение SampleCQG, показанное на рисунке ниже.
-      	Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/CQG</legacyItalic>.
-      </para>
-      <mediaLink><image placement="center" xlink:href="CQGTraderSample"/></mediaLink>
-    
+    <introduction>     
+      <para>Код ниже демонстрирует как инициализировать 
+      <codeEntityReference>T:StockSharp.Cqg.Com.CqgComMessageAdapter</codeEntityReference> и 
+      <codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter</codeEntityReference> и
+      передать их в
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+      <para>1. <legacyBold>CQG COM</legacyBold>, подключение через локальный 
+<legacyBold>CQG Integrated Client</legacyBold>:</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new CqgComMessageAdapter(Connector.TransactionIdGenerator)
+{
+    UserName = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+};
+
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
+					</code>
+<para>2. <legacyBold>CQG Continuum</legacyBold>, подключение напрямую к серверу:</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new CqgContinuumMessageAdapter(Connector.TransactionIdGenerator)
+{
+    UserName = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+    Address = "<Address>".To<IPAddress>(),
+};
+
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
+					</code>
+
     </introduction>
-   
-    <procedure>
-		<steps class="ordered">
-			<step>
-				<content>
-<para>В самом начале создаем экземпляр класса шлюза 
-<codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference> или  
-<codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference> в зависимости от используемого подключения:</para>
-            		<code language="C#">
-            				<![CDATA[
-// создаем коннектор
-//  при работе с сервером
-Connector = new.CqgContinuumTrader { LogLevel = LogLevels.Debug };
-...
-// при работе с теминалом
-Connector = new.CqgComTrader { LogLevel = LogLevels.Debug };
-							]]>
-					</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Далее устанавливаем необходимые обработчики событий 
-<codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
-					<code language="C#">
-            				<![CDATA[
-// подписываемся на событие успешного соединения
-Connector.Connected += () =>
-{
-	this.GuiAsync(() => OnConnectionChanged(true));
-};
-// подписываемся на событие ошибки соединения
-Connector.ConnectionError += error => this.GuiAsync(() =>
-{
-	OnConnectionChanged(Connector.ConnectionState == ConnectionStates.Connected);
-	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
-});
-
-Connector.Disconnected += () => this.GuiAsync(() => OnConnectionChanged(false));
-
-// подписываемся на событие ошибки
-Connector.Error += error =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
-
-// подписываемся на событие ошибки при подписке на рыночные данные
-Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
-
-Connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-Connector.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-Connector.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-Connector.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-Connector.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-Connector.NewPortfolio += portfolio =>
-{
-	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-	// подписываемся на событие обновления портфелей
-	Connector.RegisterPortfolio(portfolio);
-};
-Connector.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-// подписываемся на событие ошибки регистрации заявки
-Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-
-// подписываемся на событие ошибки отмены заявки
-Connector.OrderCancelFailed += OrderFailed;
-
-// подписываемся на событие ошибки регистрации стоп-заявки
-Connector.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-
-// подписываемся на событие ошибки отмены стоп-заявки
-Connector.StopOrderCancelFailed += OrderFailed;
-
-Connector.MassOrderCancelFailed += (transId, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
-
-							]]>
-					</code>						
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Далее необходимо выполнить подключение к серверу <token>cqg</token>:</para>
-            		<code language="C#">
-            				<![CDATA[
-Connector.Connect();
-							]]>
-					</code>						
-				</content>
-			</step>
-			
-			<step>
-				<content>
-					<para>При успешном подключении можно ожидать срабатывания события 
-					<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio</codeEntityReference>. В обработчике этого события подписываемся
-					на изменения портфелей <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.PortfolioChanged</codeEntityReference> при помощи метода 
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
-				</content>
-			</step>
-			<!--step>
-				<content>
-					<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
-         			<code language="C#">
-<![CDATA[
-private void Ok_Click(object sender, RoutedEventArgs e)
-{
-    var criteria = new Security
-    {
-     Code = SecCode.Text,
-     Type = SecType.SelectedType
-    };
-
-    MainWindow.Instance.Trader.LookupSecurities(criteria);
-    DialogResult = true;
-}]]>
-					</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Для получения сделок по выбранному инструменту необходимо вызвать метод
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference>:</para>
-            		<code language="C#">
-<![CDATA[
-private void TradesClick(object sender, RoutedEventArgs e)
-{
-   TryInitialize();
-
-   var window = _tradesWindows.SafeAdd(SelectedSecurity, security =>
-   {
-     // create tick trades window
-     var wnd = new TradesWindow { Title = security.Code + " сделки" };
-
-     // subscribe on tick trades flow
-     MainWindow.Instance.Trader.RegisterTrades(security);
-
-     wnd.MakeHideable();
-     return wnd;
-   });
-
-   if (window.Visibility == Visibility.Visible)
-       window.Hide();
-   else
-       window.Show();
-}]]>
-					</code>
-					<para>Сделки будут приходить в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference>.</para>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Для запроса обновлений по стаканам необходимо воспользоваться методом 
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference>:</para>
-            		<code language="C#">
-<![CDATA[
-private void DepthClick(object sender, RoutedEventArgs e)
-{
-	TryInitialize();
-
-	var trader = MainWindow.Instance.Trader;
-
-	var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
-	{
-		// subscribe on order book flow
-		trader.RegisterMarketDepth(security);
-
-		// create order book window
-		var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-		wnd.MakeHideable();
-		return wnd;
-	});
-
-	if (window.Visibility == Visibility.Visible)
-		window.Hide();
-	else
-		window.Show();
-}]]>
-					</code>
-					<para>Стаканы появляются в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference>.</para>
-				</content>
-			</step-->
-			<step>
-				<content>
-					<para>Для регистрации заявок предусмотрена кнопка <legacyBold>Новая заявка...</legacyBold> . Метод 
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> отправляет заявку на сервер:</para>
-            		<code language="C#">
-            				<![CDATA[
-private void NewOrderClick(object sender, RoutedEventArgs e)
-{
-	var newOrder = new OrderWindow
-	{
-		Order = new Order { Security = SecurityPicker.SelectedSecurity },
-		SecurityProvider = Connector,
-		MarketDataProvider = Connector,
-		Portfolios = new PortfolioDataSource(Connector)
-	};
-
-	if (newOrder.ShowModal(this))
-		Connector.RegisterOrder(newOrder.Order);
-}
-
-							]]>
-					</code>						
-				</content>
-			</step>
-		</steps>
-    </procedure>
-   
+  
+        <relatedTopics>
+        <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

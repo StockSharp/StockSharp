@@ -295,6 +295,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\FastSample.aml" />
     <None Include="Topics\API_ConnectorsUIConfiguration.aml" />
     <None Include="Topics\API_Connectors.aml" />
     <None Include="Topics\API_StopOrders.aml" />
@@ -4321,6 +4322,10 @@
     <Image Include="Art\ChartAnnotations.png">
       <ImageId>ChartAnnotations</ImageId>
       <AlternateText>Chart Annotations</AlternateText>
+    </Image>
+    <Image Include="Art\API_ReconnectionLog.png">
+      <ImageId>API_ReconnectionLog</ImageId>
+      <AlternateText>API Reconnection Log</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

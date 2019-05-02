@@ -194,8 +194,50 @@ _candleSeries = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.Fro
 					]]>
 					</code>
   </listItem>
+    <listItem><para>
+Если необходимо просто загрузить готовые свечи, то необходимо задать свойство 
+<codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesMode</codeEntityReference> в
+<codeEntityReference>F:StockSharp.Messages.MarketDataBuildModes.Load</codeEntityReference>:
+  </para>
+  <code language="C#">
+					<![CDATA[
+_candleSeries = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromMinutes(5))
+{
+	BuildCandlesMode = MarketDataBuildModes.Load,
+};	
+					]]>
+					</code>
+  </listItem>
+    <listItem><para>Если источник не предоставляет свечей необходимого таймфрейма, 
+    то их можно построить из других маркет данных. Ниже приведен приме построения свечей с таймфреймом 21 секунда из сделок:
+  </para>
+  <code language="C#">
+					<![CDATA[
+_candleSeries = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromSeconds(21))
+{
+	BuildCandlesMode = MarketDataBuildModes.Build,
+	BuildCandlesFrom = MarketDataTypes.Trades,
+};	
+					]]>
+					</code>
+  </listItem>
+ 
+     <listItem><para>Если источник данных не предоставляет ни свечей, ни сделок свечи можно построить из спреда стакана:
+  </para>
+  <code language="C#">
+					<![CDATA[
+_candleSeries = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromSeconds(21))
+{
+	BuildCandlesMode = MarketDataBuildModes.Build,
+	BuildCandlesFrom = MarketDataTypes.MarketDepth,
+	BuildCandlesField = Level1Fields.SpreadMiddle,
+};	
+					]]>
+					</code>
+  </listItem>
+ 
   <listItem><para>Так как не существует источников, предоставляющих готового <legacyBold>профиля объема</legacyBold>,
-  его необходимо строить из другого типа данных. Для прорисовки <legacyBold>профиля объема</legacyBold> 
+  его тоже необходимо строить из другого типа данных. Для прорисовки <legacyBold>профиля объема</legacyBold> 
   необходимо установить свойство
 <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.IsCalcVolumeProfile</codeEntityReference> в true, 
 а также <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesMode</codeEntityReference> в 
@@ -232,7 +274,7 @@ _candleSeries = new CandleSeries(typeof(VolumeCandle), security, 10000m)
 {
 	BuildCandlesMode = MarketDataBuildModes.LoadAndBuild,
 	BuildCandlesFrom = MarketDataTypes.MarketDepth,
-	BuildCandlesField = Level1Fields.BestAskPrice,
+	BuildCandlesField = Level1Fields.SpreadMiddle,
 };
 //----------------------------------Tick candle------------------------------------------------------------------------		   
 _candleSeries = new CandleSeries(typeof(TickCandle), security, 1000)
@@ -245,7 +287,7 @@ _candleSeries = new CandleSeries(typeof(RangeCandle), security, new Unit(0.1m))
 {
 	BuildCandlesMode = MarketDataBuildModes.LoadAndBuild,
     BuildCandlesFrom = MarketDataTypes.Level1,
-    BuildCandlesField = Level1Fields.BestAskPrice,
+    BuildCandlesField = Level1Fields.SpreadMiddle,
 };
 //----------------------------------Renko candle-----------------------------------------------------------------------
 _candleSeries = new CandleSeries(typeof(RenkoCandle), security, new Unit(0.1m))

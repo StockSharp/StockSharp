@@ -3,37 +3,32 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
-    Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight">
-	
+    xmlns:xaml1="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+    Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="500" Width="800" >
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="10" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-
-
-        <Button x:Name="SettingsBtn" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" />
-        <Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="1" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
-
-        <Label Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
-        <xaml:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" FolderChanged="HistoryPath_OnFolderChanged"/>
-
-        <Button x:Name="ShowSecurities" Grid.Column="0" Grid.Row="4" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
-        <Button x:Name="ShowPortfolios" Grid.Column="1" Grid.Row="4" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" />
-        <Button x:Name="ShowStopOrders" Grid.Column="2" Grid.Row="4" Content="{x:Static loc:LocalizedStrings.StopOrders}" Click="ShowStopOrdersClick" />
-
-        <Button x:Name="ShowTrades" Grid.Column="0" Grid.Row="5" Content="{x:Static loc:LocalizedStrings.Ticks}" Click="ShowTradesClick" />
-        <Button x:Name="ShowMyTrades" Grid.Column="1" Grid.Row="5" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" />
-        <Button x:Name="ShowOrders" Grid.Column="2" Grid.Row="5" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
+        <WrapPanel Grid.Row="0">
+            <Button x:Name="SettingsBtn"  Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" Width="100"/>
+            <Button x:Name="ConnectBtn" Background="LightPink"  Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" Width="100"/>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{x:Static loc:LocalizedStrings.XamlStr593}" Width="100" HorizontalContentAlignment="Right"/>
+                <xaml:FolderBrowserPicker x:Name="HistoryPath" FolderChanged="HistoryPath_OnFolderChanged" Width="300"/>
+            </StackPanel>
+        </WrapPanel>
+        <WrapPanel Grid.Row="2">
+            <Button x:Name="ShowSecurities" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" Width="100"/>
+            <Button x:Name="ShowPortfolios" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" Width="100"/>
+            <Button x:Name="ShowStopOrders" Content="{x:Static loc:LocalizedStrings.StopOrders}" Click="ShowStopOrdersClick" Width="100"/>
+            <Button x:Name="ShowTrades" Content="{x:Static loc:LocalizedStrings.Ticks}" Click="ShowTradesClick" Width="100"/>
+            <Button x:Name="ShowMyTrades" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" Width="100"/>
+            <Button x:Name="ShowOrders"  Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" Width="100"/>
+        </WrapPanel>
+        <xaml1:Monitor x:Name="Monitor" Grid.Row="4"/>
     </Grid>
 </Window>

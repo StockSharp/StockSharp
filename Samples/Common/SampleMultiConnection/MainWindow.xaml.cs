@@ -65,8 +65,8 @@ namespace SampleMultiConnection
 
 			var logManager = new LogManager();
 			logManager.Listeners.Add(new FileLogListener("sample.log"));
-
-			var path = _defaultDataPath.ToFullPath();
+            logManager.Listeners.Add(Monitor);
+            var path = _defaultDataPath.ToFullPath();
 
 			HistoryPath.Folder = path;
 
