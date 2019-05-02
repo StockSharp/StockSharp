@@ -819,6 +819,232 @@
             Load group state settings.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.ImportPreviewWindow">
+      <summary>
+            Window to show preview of importing data.
+            </summary>
+      <summary>
+            ImportPreviewWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportPreviewWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ImportPreviewWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportPreviewWindow.Init(StockSharp.Xaml.ImportSettings)">
+      <summary>
+            Initialize.
+            </summary>
+      <param name="settings">Settings of importing data process.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportPreviewWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.ImportSettings">
+      <summary>
+            Settings of importing data process.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettings.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ImportSettings" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.DataType">
+      <summary>
+            Data type info.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.FileName">
+      <summary>
+            Full path to CSV file.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.Directory">
+      <summary>
+            Data directory.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.FileMask">
+      <summary>
+            File mask that uses for scanning in directory. For example, candles_*.csv.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.IncludeSubDirectories">
+      <summary>
+            Include subdirectories.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.ColumnSeparator">
+      <summary>
+            Column separator. Tabulation is denoted by TAB.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.SkipFromHeader">
+      <summary>
+            Number of lines to be skipped from the beginning of the file (if they contain meta information).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.TimeZone">
+      <summary>
+            Time zone.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.ExtendedStorage">
+      <summary>
+            Extended information.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.UpdateDuplicateSecurities">
+      <summary>
+            Update duplicate securities if they already exists.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.IgnoreNonIdSecurities">
+      <summary>
+            Ignore securities without identifiers.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.AllFields">
+      <summary>
+            All fields.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.UnSelectedFields">
+      <summary>
+            Unselected fields.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.ExtendedFields">
+      <summary>
+            Extended fields.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.SelectedFields">
+      <summary>
+            Selected fields.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettings.GetFiles">
+      <summary>
+            Found files for importing.
+            </summary>
+      <returns>Found files.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettings.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettings.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettings.ToString">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettings.FillParser(StockSharp.Algo.Import.CsvParser)">
+      <summary>
+            Fill <see cref="T:StockSharp.Algo.Import.CsvImporter" />.
+            </summary>
+      <param name="parser">Messages parser from text file in CSV format.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettings.FillImporter(StockSharp.Algo.Import.CsvImporter)">
+      <summary>
+            Fill <see cref="T:StockSharp.Algo.Import.CsvImporter" />.
+            </summary>
+      <param name="importer">Messages importer from text file in CSV format into storage.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.ImportSettingsListEditor">
+      <summary>
+            Editor to modify <see cref="T:StockSharp.Xaml.ImportSettings" /> collection.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsListEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ImportSettingsListEditor" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.ImportSettingsListWindow">
+      <summary>
+            Window for edit <see cref="T:StockSharp.Xaml.ImportSettings" />.
+            </summary>
+      <summary>
+            ImportSettingsListWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsListWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ImportSettingsListWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettingsListWindow.Settings">
+      <summary>
+            All available settings.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettingsListWindow.SelectedSettings">
+      <summary>
+            The selected settings.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettingsListWindow.SelectedSettingsList">
+      <summary>
+            Selected settings list.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsListWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.ImportSettingsEditor">
+      <summary>
+            Editor to modify <see cref="T:StockSharp.Xaml.ImportSettings" />.
+            </summary>
+      <summary>
+            ImportSettingsEditor
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ImportSettingsEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.ImportSettingsWindow">
+      <summary>
+            Window for edit <see cref="T:StockSharp.Xaml.ImportSettings" />.
+            </summary>
+      <summary>
+            ImportSettingsWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ImportSettingsWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettingsWindow.Settings">
+      <summary>
+            Settings of importing data process.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.ISecurityWindow">
       <summary>
             The interface that describes a window for trading instrument creating or editing.
@@ -847,6 +1073,16 @@
     <member name="M:StockSharp.Xaml.PropertyGrid.BuildCandlesFromEditor.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.BuildCandlesFromEditor" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.DataTypeEditor">
+      <summary>
+            Editor for <see cref="T:StockSharp.Algo.DataType" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.DataTypeEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.DataTypeEditor" />.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.SpecialDaysControl">
@@ -998,7 +1234,7 @@
     </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor.#ctor">
       <summary>
-            Create <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor">
@@ -1032,7 +1268,7 @@
     </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.RiskRulesEditor.#ctor">
       <summary>
-            Create <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.RiskRulesEditor" />.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow">
@@ -1283,6 +1519,28 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.DataTypeWindow">
+      <summary>
+            Window for edit <see cref="P:StockSharp.Xaml.DataTypeWindow.DataType" /></summary>
+      <summary>
+            DataTypeWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.DataTypeWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.DataTypeWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.DataTypeWindow.DataType">
+      <summary>
+            Candles settings.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.DataTypeWindow.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>
@@ -1690,6 +1948,17 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.ImportSettingsPanel" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.ImportSettingsPanel.Settings">
+      <summary>
+            Settings of importing data process.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsPanel.HasErrors">
+      <summary>
+            Verify.
+            </summary>
+      <returns>Check result.</returns>
+    </member>
     <member name="P:StockSharp.Xaml.ImportSettingsPanel.SelectedFields">
       <summary>
             Selected fields.
@@ -1699,19 +1968,6 @@
       <summary>
             All fields.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.ImportSettingsPanel.SelectFields(System.Collections.Generic.IEnumerable{StockSharp.Algo.Import.FieldMapping},System.Boolean)">
-      <summary>
-            Select fields.
-            </summary>
-      <param name="items">Fields.</param>
-      <param name="autoSetOrders">Auto set fields order.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.ImportSettingsPanel.UnselectFields(System.Collections.Generic.IEnumerable{StockSharp.Algo.Import.FieldMapping})">
-      <summary>
-            Unselect fields.
-            </summary>
-      <param name="items">Fields.</param>
     </member>
     <member name="M:StockSharp.Xaml.ImportSettingsPanel.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -4783,7 +5039,7 @@
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.#ctor(`0)">
       <summary>
-            To create the synchronized connection.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GuiConnector`1" />.
             </summary>
       <param name="connector">The connection that should be wrapped in <see cref="T:StockSharp.Xaml.GuiConnector`1" />.</param>
     </member>

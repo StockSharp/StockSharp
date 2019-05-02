@@ -207,12 +207,14 @@ P:StockSharp.Logging.LogManager.Application/summary;DocStr3987
 P:StockSharp.Logging.LogManager.Listeners/summary;DocStr3988
 P:StockSharp.Logging.LogManager.Sources/summary;DocStr3989
 P:StockSharp.Logging.LogManager.FlushInterval/summary;DocStr3990
+P:StockSharp.Logging.LogManager.ClearPendingOnDispose/summary;DocStr11100
 M:StockSharp.Logging.LogManager.DisposeManaged/summary;DocStr7
 M:StockSharp.Logging.LogManager.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Logging.LogManager.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Logging.LogManager.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Logging.LogManager.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Logging.LogMessage/summary;DocStr1653
+P:StockSharp.Logging.LogMessage.IsDispose/summary;DocStr11101
 M:StockSharp.Logging.LogMessage.#ctor(StockSharp.Logging.ILogSource,System.DateTimeOffset,StockSharp.Logging.LogLevels,System.String,System.Object[])/summary;DocStr1
 M:StockSharp.Logging.LogMessage.#ctor(StockSharp.Logging.ILogSource,System.DateTimeOffset,StockSharp.Logging.LogLevels,System.String,System.Object[])/param/source;DocStr3978
 M:StockSharp.Logging.LogMessage.#ctor(StockSharp.Logging.ILogSource,System.DateTimeOffset,StockSharp.Logging.LogLevels,System.String,System.Object[])/param/time;DocStr3992
