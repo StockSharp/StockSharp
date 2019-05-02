@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.CSV</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.CSV.CSVMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.CSV"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CSV.CSVMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.CSV.CSVMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportNativeSecurityLookup">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportSecuritiesLookupAll">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportNativePortfolioLookup">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.CSV.CSVMessageAdapter.TimeFrames">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.CSV.CSVMessageAdapter.SupportedMarketDataTypes">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.CSV.CSVMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.CSV.CSVMessageAdapter.Settings">
+            <summary>
+            Settings of importing data process.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CSV.CSVMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.CSV.CSVMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

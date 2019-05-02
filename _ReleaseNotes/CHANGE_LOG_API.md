@@ -82,6 +82,7 @@ StockSharp API Change log
 * (feature) CandleSeries <-> DataType conversion added.
 * (bug) UI log controls. Fix Message.IsDispose processing.
 * (feature) ImportSettings controls.
+* (feature) CSV connector.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

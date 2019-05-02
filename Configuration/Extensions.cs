@@ -103,6 +103,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Zaif;
 	using StockSharp.CoinCap;
 	using StockSharp.Coinigy;
+	using StockSharp.CSV;
 	using StockSharp.DukasCopy;
 	using StockSharp.Finam;
 	using StockSharp.FinViz;
@@ -275,6 +276,7 @@ namespace StockSharp.Configuration
 			() => typeof(GoogleMessageAdapter),
 			() => typeof(FinVizMessageAdapter),
 			() => typeof(UkrExhMessageAdapter),
+			() => typeof(CSVMessageAdapter),
 		});
 
 		/// <summary>
