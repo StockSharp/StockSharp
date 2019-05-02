@@ -155,12 +155,7 @@ namespace StockSharp.Algo
 			_hashCode = ((h1 << 5) + h1) ^ h2;
 		}
 
-		/// <summary>
-		/// Serves as a hash function for a particular type. 
-		/// </summary>
-		/// <returns>
-		/// A hash code for the current <see cref="T:System.Object"/>.
-		/// </returns>
+		/// <inheritdoc />
 		public override int GetHashCode()
 		{
 			return _hashCode;
@@ -179,12 +174,7 @@ namespace StockSharp.Algo
 			};
 		}
 
-		/// <summary>
-		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			if (this == Ticks)
@@ -209,6 +199,38 @@ namespace StockSharp.Algo
 			}
 			else
 				return $"{MessageType}: {Arg}";
+		}
+
+		/// <summary>
+		/// Convert to <see cref="MarketDataTypes"/>.
+		/// </summary>
+		/// <returns><see cref="MarketDataTypes"/> value or <see langword="null"/> if cannot be converted.</returns>
+		public MarketDataTypes? ToMarketDataType()
+		{
+			if (this == Ticks)
+				return MarketDataTypes.Trades;
+			else if (this == Level1)
+				return MarketDataTypes.Level1;
+			else if (this == OrderLog)
+				return MarketDataTypes.OrderLog;
+			else if (this == MarketDepth)
+				return MarketDataTypes.MarketDepth;
+			else if (this == News)
+				return MarketDataTypes.News;
+			else if (MessageType == typeof(TimeFrameCandleMessage))
+				return MarketDataTypes.CandleTimeFrame;
+			else if (MessageType == typeof(TickCandleMessage))
+				return MarketDataTypes.CandleTick;
+			else if (MessageType == typeof(VolumeCandleMessage))
+				return MarketDataTypes.CandleVolume;
+			else if (MessageType == typeof(RangeCandleMessage))
+				return MarketDataTypes.CandleRange;
+			else if (MessageType == typeof(RenkoCandleMessage))
+				return MarketDataTypes.CandleRenko;
+			else if (MessageType == typeof(PnFCandleMessage))
+				return MarketDataTypes.CandlePnF;
+			else
+				return null;
 		}
 
 		/// <summary>
