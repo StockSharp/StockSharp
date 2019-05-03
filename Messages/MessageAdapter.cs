@@ -268,14 +268,14 @@ namespace StockSharp.Messages
 		public virtual OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; } = null;
 
 		/// <summary>
-		/// Gets a value indicating whether the connector supports security lookup.
+		/// Gets a value indicating whether the adapter translates <see cref="SecurityLookupResultMessage"/>.
 		/// </summary>
-		protected virtual bool IsSupportNativeSecurityLookup => false;
+		protected virtual bool IsSupportSecurityLookupResult => false;
 
 		/// <summary>
-		/// Gets a value indicating whether the connector supports position lookup.
+		/// Gets a value indicating whether the adapter translates <see cref="PortfolioLookupResultMessage"/>.
 		/// </summary>
-		protected virtual bool IsSupportNativePortfolioLookup => false;
+		protected virtual bool IsSupportPortfolioLookupResult => false;
 
 		/// <summary>
 		/// Bit process, which can run the adapter.
@@ -379,14 +379,14 @@ namespace StockSharp.Messages
 
 				case MessageTypes.PortfolioLookup:
 				{
-					if (!IsSupportNativePortfolioLookup)
+					if (!IsSupportPortfolioLookupResult)
 						_pfLookupTimeOut.StartTimeOut(((PortfolioLookupMessage)message).TransactionId);
 
 					break;
 				}
 				case MessageTypes.SecurityLookup:
 				{
-					if (!IsSupportNativeSecurityLookup)
+					if (!IsSupportSecurityLookupResult)
 						_secLookupTimeOut.StartTimeOut(((SecurityLookupMessage)message).TransactionId);
 
 					break;
@@ -440,7 +440,7 @@ namespace StockSharp.Messages
 					{
 						var lookupMsg = (SecurityLookupMessage)message;
 						
-						if (!IsSupportNativeSecurityLookup)
+						if (!IsSupportSecurityLookupResult)
 							_secLookupTimeOut.RemoveTimeOut(lookupMsg.TransactionId);
 
 						SendOutMessage(new SecurityLookupResultMessage
@@ -477,7 +477,7 @@ namespace StockSharp.Messages
 					{
 						var lookupMsg = (PortfolioLookupMessage)message;
 
-						if (!IsSupportNativePortfolioLookup)
+						if (!IsSupportPortfolioLookupResult)
 							_pfLookupTimeOut.RemoveTimeOut(lookupMsg.TransactionId);
 
 						SendOutMessage(new PortfolioLookupResultMessage
@@ -563,25 +563,25 @@ namespace StockSharp.Messages
 			switch (message.Type)
 			{
 				case MessageTypes.Security:
-					if (!IsSupportNativeSecurityLookup)
+					if (!IsSupportSecurityLookupResult)
 						_secLookupTimeOut.UpdateTimeOut(((SecurityMessage)message).OriginalTransactionId);
 
 					break;
 
 				case MessageTypes.Portfolio:
-					if (!IsSupportNativePortfolioLookup)
+					if (!IsSupportPortfolioLookupResult)
 						_pfLookupTimeOut.UpdateTimeOut(((PortfolioMessage)message).OriginalTransactionId);
 
 					break;
 
 				case MessageTypes.SecurityLookupResult:
-					if (!IsSupportNativeSecurityLookup)
+					if (!IsSupportSecurityLookupResult)
 						_secLookupTimeOut.RemoveTimeOut(((SecurityLookupResultMessage)message).OriginalTransactionId);
 
 					break;
 
 				case MessageTypes.PortfolioLookupResult:
-					if (!IsSupportNativePortfolioLookup)
+					if (!IsSupportPortfolioLookupResult)
 						_pfLookupTimeOut.RemoveTimeOut(((PortfolioLookupResultMessage)message).OriginalTransactionId);
 
 					break;

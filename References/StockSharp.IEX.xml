@@ -15,7 +15,7 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.IEX.IEXMessageAdapter.IsSupportNativeSecurityLookup">
+        <member name="P:StockSharp.IEX.IEXMessageAdapter.IsSupportSecurityLookupResult">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.IEX.IEXMessageAdapter.IsSupportSecuritiesLookupAll">

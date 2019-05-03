@@ -15,7 +15,7 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="P:StockSharp.GainCapital.GainCapitalMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.GainCapital.GainCapitalMessageAdapter.IsSupportSecurityLookupResult">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.GainCapital.GainCapitalMessageAdapter.IsSupportSecuritiesLookupAll">

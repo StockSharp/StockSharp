@@ -1039,7 +1039,7 @@
             Адаптер сообщений для SmartCOM.
             </summary>
     </member>
-    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportSecurityLookupResult">
       <summary>
             Поддерживается ли торговой системой поиск инструментов.
             </summary>
@@ -1055,7 +1055,7 @@
             Возможные тайм-фреймы.
             </summary>
     </member>
-    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportNativePortfolioLookup">
+    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportPortfolioLookupResult">
       <summary>
             Поддерживается ли торговой системой поиск портфелей.
             </summary>

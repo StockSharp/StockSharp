@@ -15,7 +15,7 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.DukasCopy.DukasCopyMessageAdapter.IsSupportNativeSecurityLookup">
+        <member name="P:StockSharp.DukasCopy.DukasCopyMessageAdapter.IsSupportSecurityLookupResult">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.DukasCopy.DukasCopyMessageAdapter.IsSupportSecuritiesLookupAll">

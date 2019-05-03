@@ -5007,8 +5007,6 @@ DocStr45;Order condition. If the connection does not support the order type {0},
 DocStr46;Send message;Отправить сообщение
 DocStr49;Returns a string that represents the current object;Получить строковое представление
 DocStr50;A string that represents the current object;Строковое представление
-DocStr51;Gets a value indicating whether the connector supports position lookup;Поддерживается ли торговой системой поиск портфелей
-DocStr52;Gets a value indicating whether the connector supports security lookup;Поддерживается ли торговой системой поиск инструментов
 DocStr53;The parameters validity check;Проверить введенные параметры на валидность
 DocStr54;Error codes;Коды ошибок
 DocStr55;Critical client error;Критическая ошибка клиента
@@ -15610,3 +15608,4 @@ DocStr11100;Clear pending messages on dispose;Очищать обрабатыв�
 DocStr11101;Special message initiated from {0} method;Специальное сообщение, инициированное из метода {0}
 DocStr11102;The method is called at the processing of the new incoming values;The method is called at the processing of the new incoming values
 DocStr11103;Window for preview of importing data;Окно для предпосмотра импортируемых данных
+DocStr11104;Gets a value indicating whether the adapter translates {0};Поддерживается ли адаптером трансляция {0}

@@ -973,8 +973,8 @@ P:StockSharp.Messages.MessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr84
 P:StockSharp.Messages.MessageAdapter.Categories/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.StorageName/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.OrderCancelVolumeRequired/inheritdoc;DocStr8459
-P:StockSharp.Messages.MessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
-P:StockSharp.Messages.MessageAdapter.IsSupportNativePortfolioLookup/summary;DocStr51
+P:StockSharp.Messages.MessageAdapter.IsSupportSecurityLookupResult/summary;DocStr11104
+P:StockSharp.Messages.MessageAdapter.IsSupportPortfolioLookupResult/summary;DocStr11104
 P:StockSharp.Messages.MessageAdapter.Platform/summary;DocStr4335
 P:StockSharp.Messages.MessageAdapter.SecurityExtendedFields/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459

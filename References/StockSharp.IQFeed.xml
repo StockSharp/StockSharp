@@ -117,7 +117,7 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportSecurityLookupResult">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportSecuritiesLookupAll">

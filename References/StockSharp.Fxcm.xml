@@ -15,10 +15,10 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportSecurityLookupResult">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativePortfolioLookup">
+    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportPortfolioLookupResult">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportSecuritiesLookupAll">

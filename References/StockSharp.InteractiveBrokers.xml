@@ -135,10 +135,10 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CandlesBuildFrom">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportSecurityLookupResult">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportNativePortfolioLookup">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportPortfolioLookupResult">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

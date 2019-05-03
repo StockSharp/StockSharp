@@ -15,10 +15,10 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativePortfolioLookup">
+        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportPortfolioLookupResult">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativeSecurityLookup">
+        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportSecurityLookupResult">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportCandlesUpdates">

@@ -39,7 +39,7 @@
         <member name="P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportNativeSecurityLookup">
+        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportSecurityLookupResult">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.BarChart.BarChartMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

@@ -83,6 +83,7 @@ StockSharp API Change log
 * (bug) UI log controls. Fix Message.IsDispose processing.
 * (feature) ImportSettings controls.
 * (feature) CSV connector.
+* (feature) MessageAdapter. IsSupportNativeSecurityLookup -> IsSupportSecurityLookupResult, IsSupportNativePortfolioLookup -> IsSupportPortfolioLookupResult.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

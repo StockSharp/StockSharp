@@ -19,7 +19,7 @@ P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.LMAX.LmaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.LMAX.LmaxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.LMAX.LmaxMessageAdapter.ToString/inheritdoc;DocStr8459
-P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.StorageName/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459

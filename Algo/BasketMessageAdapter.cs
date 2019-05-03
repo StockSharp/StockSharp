@@ -226,10 +226,10 @@ namespace StockSharp.Algo
 		public override bool SecurityLookupRequired => GetSortedAdapters().Any(a => a.SecurityLookupRequired);
 
 		/// <inheritdoc />
-		protected override bool IsSupportNativePortfolioLookup => true;
+		protected override bool IsSupportPortfolioLookupResult => true;
 
 		/// <inheritdoc />
-		protected override bool IsSupportNativeSecurityLookup => true;
+		protected override bool IsSupportSecurityLookupResult => true;
 
 		/// <inheritdoc />
 		public override bool IsSupportSecuritiesLookupAll => GetSortedAdapters().Any(a => a.IsSupportSecuritiesLookupAll);

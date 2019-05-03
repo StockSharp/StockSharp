@@ -93,7 +93,7 @@
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.ToString">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportSecurityLookupResult">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsNativeIdentifiers">

@@ -23,7 +23,7 @@ M:StockSharp.IQFeed.IQFeedMessageAdapter.Save(Ecng.Serialization.SettingsStorage
 M:StockSharp.IQFeed.IQFeedMessageAdapter.ToString/inheritdoc;DocStr8459
 M:StockSharp.IQFeed.IQFeedMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.IQFeed.IQFeedMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.IQFeed.IQFeedMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

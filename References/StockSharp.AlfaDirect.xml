@@ -15,12 +15,12 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportNativePortfolioLookup">
+    <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportPortfolioLookupResult">
       <summary>
             Поддерживается ли торговой системой поиск портфелей.
             </summary>
     </member>
-    <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportSecurityLookupResult">
       <summary>
             Поддерживается ли торговой системой поиск инструментов.
             </summary>

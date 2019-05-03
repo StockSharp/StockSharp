@@ -15,13 +15,13 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportNativeSecurityLookup">
+        <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportSecurityLookupResult">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportNativePortfolioLookup">
+        <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportPortfolioLookupResult">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.CSV.CSVMessageAdapter.TimeFrames">
@@ -35,7 +35,7 @@
         </member>
         <member name="P:StockSharp.CSV.CSVMessageAdapter.Settings">
             <summary>
-            Settings of importing data process.
+            Settings of import.
             </summary>
         </member>
         <member name="M:StockSharp.CSV.CSVMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
