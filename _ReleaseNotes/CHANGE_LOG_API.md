@@ -84,6 +84,7 @@ StockSharp API Change log
 * (feature) ImportSettings controls.
 * (feature) CSV connector.
 * (feature) MessageAdapter. IsSupportNativeSecurityLookup -> IsSupportSecurityLookupResult, IsSupportNativePortfolioLookup -> IsSupportPortfolioLookupResult.
+* (bug) Charting. Fix active orders element after chart loading. https://stocksharp.ru/posts/m/47302/
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
