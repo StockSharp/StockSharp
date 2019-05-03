@@ -2690,7 +2690,7 @@ Str2838;Path to data.;Путь к данным.
 Str2839;Intraday volume;Объем внутри дня
 VolumeProfile;Volume profile;Профиль объема
 VolumeProfileCalc;Calculate volume profile. Tick market data is required.;Вычислять профиль объема. Требуется тиковый источник данных.
-Str2842;CSV import settings;Настройки импорта из CSV
+Str2842;Settings of import;Настройки импорта
 Str2843;Full path to CSV file.;Полный путь к CSV файлу.
 Str2844;Column separator;Разделитель колонок
 Str2845;Column separator. Tabulation is denoted by TAB.;Разделитель колонок. Табуляция обозначается TAB.
@@ -15598,3 +15598,15 @@ DocStr11077;Possible options for candles building;Возможные опции�
 DocStr11081;Return {0} if {1} is empty;Вернуть {0}, если значение {1} пустое
 DocStr11086;The interface describing an message with {0} property;Интерфейс, описывающий сообщение со свойством {0}
 DocStr11087;To find securities that match the filter {0};Найти инструменты, которые удовлетворяют фильтру {0}
+DocStr11088;"Looks up a localized string similar to SPFB.ALSI SPFB.AUDU SPFB.BR SPFB.BR-11.08 SPFB.CHMF SPFB.CHMF-9.08 SPFB.CRN SPFB.CRNU SPFB.CTN SPFB.CTNU SPFB.CU SPFB.DIZL-10.07 SPFB.DIZL-10.08 SPFB.DIZL-11.07 SPFB.DIZL-11.08 SPFB.DIZL-12.07 SPFB.DIZL-2.08 SPFB.DIZL-3.08 SPFB.DIZL-4.07 SPFB.DIZL-4.08 SPFB.DIZL-5.07 SPFB.DIZL-5.08 SPFB.DIZL-6.07 SPFB.DIZL-6.08 SPFB.DIZL-7.07 SPFB.DIZL-7.08 SPFB.DIZL-8.07 SPFB.DIZL-8.08 SPFB.DIZL-9.07 SPFB.DIZL-9.08 SPFB.DS SPFB.EB30-12.06 SPFB.EB30-3.07 SPFB.EB30-6.06 SPFB.EB30-6.07 SPFB. [rest of string was truncated]"";";"Looks up a localized string similar to SPFB.ALSI SPFB.AUDU SPFB.BR SPFB.BR-11.08 SPFB.CHMF SPFB.CHMF-9.08 SPFB.CRN SPFB.CRNU SPFB.CTN SPFB.CTNU SPFB.CU SPFB.DIZL-10.07 SPFB.DIZL-10.08 SPFB.DIZL-11.07 SPFB.DIZL-11.08 SPFB.DIZL-12.07 SPFB.DIZL-2.08 SPFB.DIZL-3.08 SPFB.DIZL-4.07 SPFB.DIZL-4.08 SPFB.DIZL-5.07 SPFB.DIZL-5.08 SPFB.DIZL-6.07 SPFB.DIZL-6.08 SPFB.DIZL-7.07 SPFB.DIZL-7.08 SPFB.DIZL-8.07 SPFB.DIZL-8.08 SPFB.DIZL-9.07 SPFB.DIZL-9.08 SPFB.DS SPFB.EB30-12.06 SPFB.EB30-3.07 SPFB.EB30-6.06 SPFB.EB30-6.07 SPFB. [rest of string was truncated]"";"
+DocStr11089;{0} value or {1} if cannot be converted;{0} значение, или {1} если невозможно сконвертировать
+DocStr11091;Unselected fields;Невыбранные поля
+DocStr11092;Find files for importing;Найти файлы для импортирования
+DocStr11094;Editor for {0} collection;Редактор для коллекции {0}
+DocStr11096;All available settings;Все доступные настройки
+DocStr11097;The selected settings;Выбранные настройки
+DocStr11098;Selected settings list;Список выбранных настроек
+DocStr11100;Clear pending messages on dispose;Очищать обрабатываемые сообщения при освобождении ресурсов
+DocStr11101;Special message initiated from {0} method;Специальное сообщение, инициированное из метода {0}
+DocStr11102;The method is called at the processing of the new incoming values;The method is called at the processing of the new incoming values
+DocStr11103;Window for preview of importing data;Окно для предпосмотра импортируемых данных
