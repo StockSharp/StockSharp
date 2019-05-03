@@ -821,7 +821,7 @@
     </member>
     <member name="T:StockSharp.Xaml.ImportPreviewWindow">
       <summary>
-            Window to show preview of importing data.
+            Window for preview of importing data.
             </summary>
       <summary>
             ImportPreviewWindow
@@ -834,9 +834,9 @@
     </member>
     <member name="M:StockSharp.Xaml.ImportPreviewWindow.Init(StockSharp.Xaml.ImportSettings)">
       <summary>
-            Initialize.
+            Initialize <see cref="T:StockSharp.Xaml.ImportPreviewWindow" />.
             </summary>
-      <param name="settings">Settings of importing data process.</param>
+      <param name="settings">Settings of import.</param>
     </member>
     <member name="M:StockSharp.Xaml.ImportPreviewWindow.InitializeComponent">
       <summary>
@@ -845,7 +845,7 @@
     </member>
     <member name="T:StockSharp.Xaml.ImportSettings">
       <summary>
-            Settings of importing data process.
+            Settings of import.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.ImportSettings.#ctor">
@@ -930,9 +930,9 @@
     </member>
     <member name="M:StockSharp.Xaml.ImportSettings.GetFiles">
       <summary>
-            Found files for importing.
+            Find files for importing.
             </summary>
-      <returns>Found files.</returns>
+      <returns>File list.</returns>
     </member>
     <member name="M:StockSharp.Xaml.ImportSettings.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -963,7 +963,7 @@
     </member>
     <member name="T:StockSharp.Xaml.ImportSettingsListEditor">
       <summary>
-            Editor to modify <see cref="T:StockSharp.Xaml.ImportSettings" /> collection.
+            Editor for <see cref="T:StockSharp.Xaml.ImportSettings" /> collection.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.ImportSettingsListEditor.#ctor">
@@ -973,7 +973,7 @@
     </member>
     <member name="T:StockSharp.Xaml.ImportSettingsListWindow">
       <summary>
-            Window for edit <see cref="T:StockSharp.Xaml.ImportSettings" />.
+            The window for the list editing <see cref="T:StockSharp.Xaml.ImportSettings" />.
             </summary>
       <summary>
             ImportSettingsListWindow
@@ -1006,7 +1006,7 @@
     </member>
     <member name="T:StockSharp.Xaml.ImportSettingsEditor">
       <summary>
-            Editor to modify <see cref="T:StockSharp.Xaml.ImportSettings" />.
+            Editor for <see cref="T:StockSharp.Xaml.ImportSettings" />.
             </summary>
       <summary>
             ImportSettingsEditor
@@ -1024,7 +1024,7 @@
     </member>
     <member name="T:StockSharp.Xaml.ImportSettingsWindow">
       <summary>
-            Window for edit <see cref="T:StockSharp.Xaml.ImportSettings" />.
+            The window for editing <see cref="T:StockSharp.Xaml.ImportSettings" />.
             </summary>
       <summary>
             ImportSettingsWindow
@@ -1037,7 +1037,7 @@
     </member>
     <member name="P:StockSharp.Xaml.ImportSettingsWindow.Settings">
       <summary>
-            Settings of importing data process.
+            Settings of import.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.ImportSettingsWindow.InitializeComponent">
@@ -1525,7 +1525,7 @@
     </member>
     <member name="T:StockSharp.Xaml.DataTypeWindow">
       <summary>
-            Window for edit <see cref="P:StockSharp.Xaml.DataTypeWindow.DataType" /></summary>
+            The window for editing <see cref="P:StockSharp.Xaml.DataTypeWindow.DataType" /></summary>
       <summary>
             DataTypeWindow
             </summary>
@@ -1950,7 +1950,7 @@
     </member>
     <member name="P:StockSharp.Xaml.ImportSettingsPanel.Settings">
       <summary>
-            Settings of importing data process.
+            Settings of import.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.ImportSettingsPanel.HasErrors">

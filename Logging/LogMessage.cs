@@ -25,7 +25,7 @@ namespace StockSharp.Logging
 	public class LogMessage
 	{
 		/// <summary>
-		/// Special message initiated from <see cref="LogManager.Dispose"/> method.
+		/// Special message initiated from <see cref="IDisposable.Dispose"/> method.
 		/// </summary>
 		public bool IsDispose { get; internal set; }
 
