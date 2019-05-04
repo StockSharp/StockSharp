@@ -29,6 +29,7 @@ namespace SampleMultiConnection
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 
@@ -46,7 +47,7 @@ namespace SampleMultiConnection
 
 		private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			CandlesPeriods.ItemsSource = Connector.Adapter.TimeFrames;
+			CandlesPeriods.ItemsSource = Connector.Adapter.GetTimeFrames(default(SecurityId));
 			CandlesPeriods.SelectedIndex = 0;
 		}
 

@@ -99,7 +99,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedMessageAdapter.TimeFrames">
+    <member name="M:StockSharp.IQFeed.IQFeedMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">

@@ -263,10 +263,8 @@ namespace StockSharp.Algo
 		public bool SupportOffline { get; set; }
 
 		/// <inheritdoc />
-		public override IEnumerable<TimeSpan> TimeFrames
-		{
-			get { return GetSortedAdapters().SelectMany(a => a.TimeFrames); }
-		}
+		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+			=> GetSortedAdapters().SelectMany(a => a.GetTimeFrames(securityId)).Distinct().OrderBy();
 
 		/// <inheritdoc />
 		public override bool IsConnectionAlive() => throw new NotSupportedException();

@@ -81,7 +81,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames">
+    <member name="M:StockSharp.LMAX.LmaxMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">

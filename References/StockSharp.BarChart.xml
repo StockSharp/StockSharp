@@ -30,7 +30,7 @@
             Possible time-frames.
             </summary>
         </member>
-        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.TimeFrames">
+        <member name="M:StockSharp.BarChart.BarChartMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportCandlesUpdates">

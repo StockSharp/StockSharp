@@ -219,9 +219,6 @@ namespace StockSharp.Messages
 		public virtual bool OrderStatusRequired => InnerAdapter.OrderStatusRequired;
 
 		/// <inheritdoc />
-		public virtual IEnumerable<TimeSpan> TimeFrames => InnerAdapter.TimeFrames;
-
-		/// <inheritdoc />
 		public string StorageName => InnerAdapter.StorageName;
 
 		/// <inheritdoc />

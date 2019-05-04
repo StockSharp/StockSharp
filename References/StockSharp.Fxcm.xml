@@ -42,7 +42,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.TimeFrames">
+    <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">

@@ -21,7 +21,7 @@
     <member name="P:StockSharp.UkrExh.UkrExhMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.UkrExh.UkrExhMessageAdapter.TimeFrames">
+    <member name="M:StockSharp.UkrExh.UkrExhMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.UkrExh.UkrExhMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

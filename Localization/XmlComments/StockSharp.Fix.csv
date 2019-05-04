@@ -2010,7 +2010,7 @@ P:StockSharp.Fix.FixMessageAdapter.SecurityExtendedFields/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.SupportedMarketDataTypes/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
-P:StockSharp.Fix.FixMessageAdapter.TimeFrames/inheritdoc;DocStr8459
+M:StockSharp.Fix.FixMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.CheckTimeFrameByRequest/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)/summary;DocStr8804

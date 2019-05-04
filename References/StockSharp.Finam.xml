@@ -21,7 +21,7 @@
     <member name="P:StockSharp.Finam.FinamMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Finam.FinamMessageAdapter.TimeFrames">
+    <member name="M:StockSharp.Finam.FinamMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Finam.FinamMessageAdapter.IsNativeIdentifiers">

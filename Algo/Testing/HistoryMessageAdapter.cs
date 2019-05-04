@@ -211,23 +211,6 @@ namespace StockSharp.Algo.Testing
 		public override bool IsFullCandlesOnly => false;
 
 		/// <inheritdoc />
-		public override IEnumerable<TimeSpan> TimeFrames
-		{
-			get
-			{
-				if (DriveInternal == null)
-					return Enumerable.Empty<TimeSpan>();
-				
-				return DriveInternal
-					.AvailableSecurities
-					.SelectMany(GetTimeFrames)
-					.Distinct()
-					.OrderBy()
-					.ToArray();
-			}
-		}
-
-		/// <inheritdoc />
 		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
 		{
 			if (DriveInternal == null)

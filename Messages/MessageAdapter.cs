@@ -185,10 +185,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual IEnumerable<TimeSpan> TimeFrames => Enumerable.Empty<TimeSpan>();
-
-		/// <inheritdoc />
-		[Browsable(false)]
 		public virtual IEnumerable<Level1Fields> CandlesBuildFrom => Enumerable.Empty<Level1Fields>();
 
 		/// <inheritdoc />
@@ -681,7 +677,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
-			=> TimeFrames;
+			=> Enumerable.Empty<TimeSpan>();
 
 		/// <inheritdoc />
 		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request)

@@ -39,7 +39,7 @@
         <member name="P:StockSharp.Tradier.TradierMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.Tradier.TradierMessageAdapter.TimeFrames">
+        <member name="M:StockSharp.Tradier.TradierMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.Tradier.TradierMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

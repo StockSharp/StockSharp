@@ -21,7 +21,7 @@
     <member name="P:StockSharp.Mfd.MfdMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Mfd.MfdMessageAdapter.TimeFrames">
+    <member name="M:StockSharp.Mfd.MfdMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Mfd.MfdMessageAdapter.IsNativeIdentifiers">

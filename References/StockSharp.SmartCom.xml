@@ -1050,10 +1050,8 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.TimeFrames">
-      <summary>
-            Возможные тайм-фреймы.
-            </summary>
+    <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportPortfolioLookupResult">
       <summary>

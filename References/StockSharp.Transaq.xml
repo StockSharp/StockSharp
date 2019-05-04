@@ -36,7 +36,7 @@
     </member>
     <member name="E:StockSharp.Transaq.TransaqMessageAdapter.CandleTimeFramesInitialized">
       <summary>
-            Событие инициализации поля <see cref="P:StockSharp.Transaq.TransaqMessageAdapter.TimeFrames" />.
+            Событие инициализации поля <see cref="M:StockSharp.Transaq.TransaqMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)" />.
             </summary>
     </member>
     <member name="F:StockSharp.Transaq.TransaqMessageAdapter.MaxNewsHeaderCount">
@@ -55,10 +55,8 @@
             Освободить занятые ресурсы.
             </summary>
     </member>
-    <member name="P:StockSharp.Transaq.TransaqMessageAdapter.TimeFrames">
-      <summary>
-            Возможные тайм-фреймы.
-            </summary>
+    <member name="M:StockSharp.Transaq.TransaqMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Transaq.TransaqMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>

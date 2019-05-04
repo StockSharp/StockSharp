@@ -21,7 +21,7 @@
         <member name="P:StockSharp.DukasCopy.DukasCopyMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.DukasCopy.DukasCopyMessageAdapter.TimeFrames">
+        <member name="M:StockSharp.DukasCopy.DukasCopyMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.DukasCopy.DukasCopyMessageAdapter.CandlesBuildFrom">

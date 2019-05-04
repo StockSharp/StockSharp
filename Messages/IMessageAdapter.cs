@@ -65,11 +65,6 @@ namespace StockSharp.Messages
 		IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
 
 		/// <summary>
-		/// Possible time-frames.
-		/// </summary>
-		IEnumerable<TimeSpan> TimeFrames { get; }
-
-		/// <summary>
 		/// Possible options for candles building.
 		/// </summary>
 		IEnumerable<Level1Fields> CandlesBuildFrom { get; }
@@ -198,7 +193,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Get maximum size step allowed for historical download.
 		/// </summary>
-		/// <returns>Step size.</returns>
+		/// <returns>Step.</returns>
 		TimeSpan GetHistoryStepSize(MarketDataMessage request);
 	}
 }

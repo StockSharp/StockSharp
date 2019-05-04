@@ -15609,3 +15609,5 @@ DocStr11101;Special message initiated from {0} method;Специальное с�
 DocStr11102;The method is called at the processing of the new incoming values;The method is called at the processing of the new incoming values
 DocStr11103;Window for preview of importing data;Окно для предпосмотра импортируемых данных
 DocStr11104;Gets a value indicating whether the adapter translates {0};Поддерживается ли адаптером трансляция {0}
+DocStr11105;Message adapter that splits large market data requests on smaller;Адаптер сообщений, который разбивает большие запросы скачивания маркет-данных на меньшие
+DocStr11106;Get maximum size step allowed for historical download;Получить максимальный размер шага, доступный для скачивания истории

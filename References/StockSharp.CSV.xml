@@ -24,10 +24,13 @@
         <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportPortfolioLookupResult">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.CSV.CSVMessageAdapter.TimeFrames">
+        <member name="M:StockSharp.CSV.CSVMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.CSV.CSVMessageAdapter.SupportedMarketDataTypes">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.CSV.CSVMessageAdapter.GetHistoryStepSize(StockSharp.Messages.MarketDataMessage)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.CSV.CSVMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

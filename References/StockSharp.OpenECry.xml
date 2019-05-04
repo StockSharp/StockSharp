@@ -81,7 +81,7 @@
             Possible time-frames.
             </summary>
         </member>
-        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.TimeFrames">
+        <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
