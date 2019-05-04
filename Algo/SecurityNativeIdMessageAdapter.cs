@@ -23,9 +23,9 @@
 			public ProcessSuspendedSecurityMessage(IMessageAdapter adapter, SecurityId securityId)
 				: base(ExtendedMessageTypes.ProcessSuspendedSecurityMessages)
 			{
+				IsBack = true;
 				Adapter = adapter;
 				SecurityId = securityId;
-				IsBack = true;
 			}
 
 			public override Message Clone()
@@ -247,6 +247,12 @@
 		/// <inheritdoc />
 		public override void SendInMessage(Message message)
 		{
+			if (message.IsBack && message.Adapter == this)
+			{
+				message.IsBack = false;
+				message.Adapter = null;
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.OrderRegister:
@@ -331,7 +337,10 @@
 				if (native != null)
 					return native;
 
-				_suspendedInMessages.SafeAdd(securityId).Add(message.Clone());
+				var clone = message.Clone();
+				clone.IsBack = true;
+				clone.Adapter = this;
+				_suspendedInMessages.SafeAdd(securityId).Add(clone);
 				return null;
 			}
 		}
