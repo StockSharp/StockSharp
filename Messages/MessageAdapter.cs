@@ -680,10 +680,12 @@ namespace StockSharp.Messages
 			=> Enumerable.Empty<TimeSpan>();
 
 		/// <inheritdoc />
-		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request)
+		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
+
+			iterationInterval = TimeSpan.FromSeconds(2);
 
 			switch (request.DataType)
 			{

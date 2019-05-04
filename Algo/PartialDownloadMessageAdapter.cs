@@ -68,22 +68,24 @@
 		private class DownloadInfo
 		{
 			public MarketDataMessage Origin { get; }
-			public TimeSpan Step { get; }
 
 			public long CurrTransId { get; private set; }
-			public DateTimeOffset NextFrom { get; private set; }
 			public bool LastIteration { get; private set; }
 
 			private readonly PartialDownloadMessageAdapter _adapter;
+			private readonly TimeSpan _iterationInterval;
+			private readonly TimeSpan _step;
 
 			private DateTimeOffset _currFrom;
 			private bool _firstIteration;
+			private DateTimeOffset _nextFrom;
 
-			public DownloadInfo(PartialDownloadMessageAdapter adapter, MarketDataMessage origin, TimeSpan step)
+			public DownloadInfo(PartialDownloadMessageAdapter adapter, MarketDataMessage origin, TimeSpan step, TimeSpan iterationInterval)
 			{
 				_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 				Origin = origin ?? throw new ArgumentNullException(nameof(origin));
-				Step = step;
+				_step = step;
+				_iterationInterval = iterationInterval;
 
 				var from = origin.From;
 
@@ -106,27 +108,29 @@
 					var mdMsg = (MarketDataMessage)Origin.Clone();
 					mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
 					mdMsg.From = _currFrom;
-					mdMsg.To = _currFrom + Step;
+					mdMsg.To = _currFrom + _step;
 
 					CurrTransId = mdMsg.TransactionId;
-					NextFrom = mdMsg.To.Value;
+					_nextFrom = mdMsg.To.Value;
 
 					if (Origin.To == null)
-						LastIteration = NextFrom > DateTimeOffset.Now;
+						LastIteration = _nextFrom > DateTimeOffset.Now;
 					else
-						LastIteration = NextFrom >= Origin.To.Value;
+						LastIteration = _nextFrom >= Origin.To.Value;
 
 					return mdMsg;
 				}
 				else
 				{
-					_currFrom = NextFrom;
-					NextFrom += Step;
+					_iterationInterval.Sleep();
+
+					_currFrom = _nextFrom;
+					_nextFrom += _step;
 
 					if (Origin.To == null)
-						LastIteration = NextFrom > DateTimeOffset.Now;
+						LastIteration = _nextFrom > DateTimeOffset.Now;
 					else
-						LastIteration = NextFrom >= Origin.To.Value;
+						LastIteration = _nextFrom >= Origin.To.Value;
 
 					if (LastIteration)
 					{
@@ -139,7 +143,7 @@
 						var mdMsg = (MarketDataMessage)Origin.Clone();
 						mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
 						mdMsg.From = _currFrom;
-						mdMsg.To = NextFrom;
+						mdMsg.To = _nextFrom;
 
 						CurrTransId = mdMsg.TransactionId;
 
@@ -202,11 +206,11 @@
 						if (from != null)
 						{
 							var length = (mdMsg.To ?? DateTimeOffset.Now) - from.Value;
-							var step = InnerAdapter.GetHistoryStepSize(mdMsg);
+							var step = InnerAdapter.GetHistoryStepSize(mdMsg, out var iterationInterval);
 
 							if (length > step)
 							{
-								var info = new DownloadInfo(this, (MarketDataMessage)mdMsg.Clone(), step);
+								var info = new DownloadInfo(this, (MarketDataMessage)mdMsg.Clone(), step, iterationInterval);
 
 								message = info.InitNext();
 

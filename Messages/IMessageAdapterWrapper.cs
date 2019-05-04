@@ -271,8 +271,8 @@ namespace StockSharp.Messages
 			=> InnerAdapter.GetTimeFrames(securityId);
 
 		/// <inheritdoc />
-		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request)
-			=> InnerAdapter.GetHistoryStepSize(request);
+		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)
+			=> InnerAdapter.GetHistoryStepSize(request, out iterationInterval);
 
 		/// <inheritdoc />
 		public virtual bool IsAllDownloadingSupported(MarketDataTypes dataType)
