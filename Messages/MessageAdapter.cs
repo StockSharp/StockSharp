@@ -713,6 +713,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public virtual bool IsAllDownloadingSupported(MarketDataTypes dataType) => false;
+
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			Id = storage.GetValue(nameof(Id), Id);

@@ -275,6 +275,10 @@ namespace StockSharp.Messages
 			=> InnerAdapter.GetHistoryStepSize(request);
 
 		/// <inheritdoc />
+		public virtual bool IsAllDownloadingSupported(MarketDataTypes dataType)
+			=> InnerAdapter.IsAllDownloadingSupported(dataType);
+
+		/// <inheritdoc />
 		public virtual void Dispose()
 		{
 			InnerAdapter.NewOutMessage -= OnInnerAdapterNewOutMessage;

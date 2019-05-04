@@ -195,5 +195,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <returns>Step.</returns>
 		TimeSpan GetHistoryStepSize(MarketDataMessage request);
+
+		/// <summary>
+		/// Is for the specified <paramref name="dataType"/> all securities downloading enabled.
+		/// </summary>
+		/// <param name="dataType">Market data type.</param>
+		/// <returns>Check result.</returns>
+		bool IsAllDownloadingSupported(MarketDataTypes dataType);
 	}
 }
