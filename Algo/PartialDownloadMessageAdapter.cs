@@ -168,8 +168,13 @@
 		{
 			if (message.IsBack)
 			{
-				base.SendInMessage(message);
-				return;
+				if (message.Adapter == this)
+					message.IsBack = false;
+				else
+				{
+					base.SendInMessage(message);
+					return;
+				}
 			}
 
 			switch (message.Type)
