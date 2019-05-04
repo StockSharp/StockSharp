@@ -72,6 +72,8 @@
 			public long CurrTransId { get; private set; }
 			public bool LastIteration { get; private set; }
 
+			public bool ReplyReceived { get; set; }
+
 			private readonly PartialDownloadMessageAdapter _adapter;
 			private readonly TimeSpan _iterationInterval;
 			private readonly TimeSpan _step;
@@ -292,9 +294,17 @@
 						}
 						else
 						{
+							var info = _original[requestId];
+
+							if (info.ReplyReceived)
+								return;
+
+							info.ReplyReceived = true;
+
 							if (responseMsg.Error != null || responseMsg.IsNotSupported)
 							{
-								// TODO
+								_original.Remove(requestId);
+								_partialRequests.RemoveWhere(p => p.Value == requestId);
 							}
 						}
 						
