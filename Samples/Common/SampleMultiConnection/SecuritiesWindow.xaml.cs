@@ -24,6 +24,7 @@ namespace SampleMultiConnection
 
 	using MoreLinq;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
@@ -41,9 +42,11 @@ namespace SampleMultiConnection
 			InitializeComponent();
 		}
 
+		private static Connector Connector => MainWindow.Instance.Connector;
+
 		private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			CandlesPeriods.ItemsSource = MainWindow.Instance.Connector.Adapter.TimeFrames;
+			CandlesPeriods.ItemsSource = Connector.Adapter.TimeFrames;
 			CandlesPeriods.SelectedIndex = 0;
 		}
 
@@ -55,7 +58,7 @@ namespace SampleMultiConnection
 				w.Close();
 			}));
 
-			var connector = MainWindow.Instance.Connector;
+			var connector = Connector;
 
 			if (connector != null)
 			{
@@ -68,7 +71,7 @@ namespace SampleMultiConnection
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
 		{
-			var connector = MainWindow.Instance.Connector;
+			var connector = Connector;
 
 			var newOrder = new OrderWindow
 			{
@@ -84,14 +87,14 @@ namespace SampleMultiConnection
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Quotes.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
+			Quotes.IsEnabled = Ticks.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
 
 			TryEnableCandles();
 		}
 
 		private void DepthClick(object sender, RoutedEventArgs e)
 		{
-			var connector = MainWindow.Instance.Connector;
+			var connector = Connector;
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
@@ -127,7 +130,7 @@ namespace SampleMultiConnection
 
 		private void QuotesClick(object sender, RoutedEventArgs e)
 		{
-			var connector = MainWindow.Instance.Connector;
+			var connector = Connector;
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
@@ -150,14 +153,14 @@ namespace SampleMultiConnection
 		{
 			var wnd = new SecurityLookupWindow
 			{
-				ShowAllOption = MainWindow.Instance.Connector.Adapter.IsSupportSecuritiesLookupAll,
+				ShowAllOption = Connector.Adapter.IsSupportSecuritiesLookupAll,
 				Criteria = new Security { Code = "IS" }
 			};
 
 			if (!wnd.ShowModal(this))
 				return;
 
-			MainWindow.Instance.Connector.LookupSecurities(wnd.Criteria);
+			Connector.LookupSecurities(wnd.Criteria);
 		}
 
 		private void CandlesClick(object sender, RoutedEventArgs e)
@@ -179,6 +182,19 @@ namespace SampleMultiConnection
 		private void TryEnableCandles()
 		{
 			Candles.IsEnabled = CandlesPeriods.SelectedItem != null && SecurityPicker.SelectedSecurity != null;
+		}
+
+		private void TicksClick(object sender, RoutedEventArgs e)
+		{
+			var connector = Connector;
+
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				if (connector.RegisteredTrades.Contains(security))
+					connector.UnRegisterTrades(security);
+				else
+					connector.RegisterTrades(security);
+			}
 		}
 	}
 }
