@@ -8,7 +8,7 @@
 		</para>
 		<para>
 			Для работы с источником маркет-данных <token>iqfeed_external</token> необходимо использовать 
-			<codeEntityReference>T:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter</codeEntityReference>.
+			<codeEntityReference>T:StockSharp.IQFeed.IQFeedMessageAdapter</codeEntityReference>.
 			Механизм взаимодействия показан на данном рисунке:
 		</para>
 		
@@ -16,7 +16,7 @@
 		
 		<alert class="caution">
 			<para>
-				<codeEntityReference>T:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter</codeEntityReference> поддерживает только получение маркет-данных и не предоставляет возможности для отправления торговых приказов.
+				<codeEntityReference>T:StockSharp.IQFeed.IQFeedMessageAdapter</codeEntityReference> поддерживает только получение маркет-данных и не предоставляет возможности для отправления торговых приказов.
 			</para>
 		</alert>
      </introduction>
