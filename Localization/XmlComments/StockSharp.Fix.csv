@@ -80,6 +80,7 @@ M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition/inheritdoc;DocStr8
 M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.OnReset/summary;Str3282
 M:StockSharp.Fix.Dialects.BaseFixDialect.Write(StockSharp.Messages.Message,System.Action{StockSharp.Messages.Message})/inheritdoc;DocStr8459
+M:StockSharp.Fix.Dialects.BaseFixDialect.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/summary;DocStr8753
 M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/param/reader;DocStr3327
 M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/param/msgType;DocStr9
@@ -381,6 +382,9 @@ M:StockSharp.Fix.Dialects.IFixDialect.Read(System.String,System.Action{StockShar
 M:StockSharp.Fix.Dialects.IFixDialect.Read(System.String,System.Action{StockSharp.Messages.Message})/param/messageType;DocStr9
 M:StockSharp.Fix.Dialects.IFixDialect.Read(System.String,System.Action{StockSharp.Messages.Message})/param/messageHandler;DocStr10483
 M:StockSharp.Fix.Dialects.IFixDialect.Read(System.String,System.Action{StockSharp.Messages.Message})/returns;DocStr10345
+M:StockSharp.Fix.Dialects.IFixDialect.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)/summary;DocStr11107
+M:StockSharp.Fix.Dialects.IFixDialect.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)/param/dataType;Str1670
+M:StockSharp.Fix.Dialects.IFixDialect.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)/returns;DocStr8659
 T:StockSharp.Fix.FastFeedGroup/summary;DocStr9951
 T:StockSharp.Fix.FastFeedGroup.FastFeedGroupAddress/summary;DocStr9952
 P:StockSharp.Fix.FastFeedGroup.FastFeedGroupAddress.Incremental/summary;Incremental
@@ -2012,6 +2016,7 @@ P:StockSharp.Fix.FixMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.CheckTimeFrameByRequest/inheritdoc;DocStr8459
+M:StockSharp.Fix.FixMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)/summary;DocStr8804
 M:StockSharp.Fix.FixMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)/param/dialect;DocStr9454

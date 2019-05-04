@@ -30,7 +30,7 @@
         <member name="P:StockSharp.CSV.CSVMessageAdapter.SupportedMarketDataTypes">
             <inheritdoc />
         </member>
-        <member name="M:StockSharp.CSV.CSVMessageAdapter.GetHistoryStepSize(StockSharp.Messages.MarketDataMessage)">
+        <member name="M:StockSharp.CSV.CSVMessageAdapter.GetHistoryStepSize(StockSharp.Messages.MarketDataMessage,System.TimeSpan@)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.CSV.CSVMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
