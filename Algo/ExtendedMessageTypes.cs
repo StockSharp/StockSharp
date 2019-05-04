@@ -73,5 +73,7 @@
 		public const MessageTypes StrategyState = (MessageTypes)(-19);
 
 		internal const MessageTypes ReconnectingStarted = (MessageTypes)(-20);
+
+		internal const MessageTypes PartialDownload = (MessageTypes)(-21);
 	}
 }

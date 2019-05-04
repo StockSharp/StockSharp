@@ -267,19 +267,17 @@ namespace StockSharp.Messages
 		bool IMessageAdapter.IsConnectionAlive() => InnerAdapter.IsConnectionAlive();
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
-		{
-			return InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
-		}
+			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 
 		/// <inheritdoc />
 		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
-		{
-			return InnerAdapter.GetTimeFrames(securityId);
-		}
+			=> InnerAdapter.GetTimeFrames(securityId);
 
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
+		/// <inheritdoc />
+		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request)
+			=> InnerAdapter.GetHistoryStepSize(request);
+
+		/// <inheritdoc />
 		public virtual void Dispose()
 		{
 			InnerAdapter.NewOutMessage -= OnInnerAdapterNewOutMessage;

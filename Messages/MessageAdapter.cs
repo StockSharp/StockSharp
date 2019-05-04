@@ -673,20 +673,47 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public virtual bool IsConnectionAlive()
-		{
-			return true;
-		}
+			=> true;
 
 		/// <inheritdoc />
 		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
-		{
-			return new OrderLogMarketDepthBuilder(securityId);
-		}
+			=> new OrderLogMarketDepthBuilder(securityId);
 
 		/// <inheritdoc />
 		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+			=> TimeFrames;
+
+		/// <inheritdoc />
+		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request)
 		{
-			return TimeFrames;
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			switch (request.DataType)
+			{
+				case MarketDataTypes.Level1:
+				case MarketDataTypes.MarketDepth:
+				case MarketDataTypes.Trades:
+				case MarketDataTypes.OrderLog:
+					return TimeSpan.FromDays(1);
+				case MarketDataTypes.CandleTimeFrame:
+				{
+					var tf = (TimeSpan)request.Arg;
+
+					if (tf.TotalDays <= 1)
+						return TimeSpan.FromDays(30);
+
+					return TimeSpan.MaxValue;
+				}
+				case MarketDataTypes.CandleTick:
+				case MarketDataTypes.CandleVolume:
+				case MarketDataTypes.CandleRange:
+				case MarketDataTypes.CandlePnF:
+				case MarketDataTypes.CandleRenko:
+					return TimeSpan.FromDays(30);
+				default:
+					return TimeSpan.MaxValue;
+			}
 		}
 
 		/// <inheritdoc />

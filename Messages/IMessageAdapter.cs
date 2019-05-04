@@ -194,5 +194,11 @@ namespace StockSharp.Messages
 		/// <param name="securityId">Security ID.</param>
 		/// <returns>Possible time-frames.</returns>
 		IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId);
+
+		/// <summary>
+		/// Get maximum size step allowed for historical download.
+		/// </summary>
+		/// <returns>Step size.</returns>
+		TimeSpan GetHistoryStepSize(MarketDataMessage request);
 	}
 }
