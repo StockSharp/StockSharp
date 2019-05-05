@@ -6,29 +6,29 @@
 		
 		<list class="bullet">
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> - событие появления новых заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> - событие появления новой заявок.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersCancelFailed</codeEntityReference> - событие об ошибках, связанных со снятием заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrderCancelFailed</codeEntityReference> - событие ошибки отмены заявки.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference> - событие изменения состояния заявок (снята, удовлетворена).
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrderChanged</codeEntityReference> - событие изменения состояния заявки (снята, удовлетворена).
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersRegisterFailed</codeEntityReference> - событие об ошибках, связанных с регистрацией заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrderRegisterFailed</codeEntityReference> - событие ошибки регистрации заявки.
 			</listItem>
 			
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewStopOrder</codeEntityReference> - событие появления новых стоп-заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewStopOrder</codeEntityReference> - событие появления новой стоп-заявки.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersCancelFailed</codeEntityReference> - событие об ошибках, связанных со снятием стоп-заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrderCancelFailed</codeEntityReference> - событие ошибки отмены стоп-заявки.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersChanged</codeEntityReference> - событие изменения состояния стоп-заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrderChanged</codeEntityReference> - событие изменения состояния стоп-заявки.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersRegisterFailed</codeEntityReference> - событие об ошибках, связанных с регистрацией стоп-заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrderRegisterFailed</codeEntityReference> - событие ошибки регистрации стоп-заявки.
 			</listItem>
 		</list>
 
@@ -41,8 +41,8 @@
 			Чтобы узнать в программе, когда биржа присвоила заявке <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Id</codeEntityReference>,
 			необходимо подписаться на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>
 			(или для стоп-заявок <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.StopOrdersChanged</codeEntityReference>).
-			Для определения неудачной регистрации используется событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersRegisterFailed</codeEntityReference>
-			(или для стоп-заявок <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.StopOrdersRegisterFailed</codeEntityReference>).
+			Для определения неудачной регистрации используется событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderRegisterFailed</codeEntityReference>
+			(или для стоп-заявок <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.StopOrderRegisterFailed</codeEntityReference>).
 		</para>
 		<alert class="caution">
 			<para>
