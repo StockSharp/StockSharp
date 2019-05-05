@@ -266,37 +266,74 @@ _candleSeries = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.Fro
   <codeEntityReference>F:StockSharp.Messages.MarketDataBuildModes.LoadAndBuild</codeEntityReference>. А также
   задать свойство 
   <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesFrom</codeEntityReference> и свойство 
-  <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesField</codeEntityReference> если необходимо:</para>
+  <codeEntityReference>P:StockSharp.Algo.Candles.CandleSeries.BuildCandlesField</codeEntityReference> если необходимо.
+</para>
+<para>
+  Следующий код демонстрирует построение 
+  <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference> 
+  с объемом в 1000 контрактов. 
+  В качестве источника данных для построения используется середина спреда стакана.</para>
   					<code language="C#">
 					<![CDATA[
-//----------------------------------Volume candle---------------------------------------------------------------------
-_candleSeries = new CandleSeries(typeof(VolumeCandle), security, 10000m)
+_candleSeries = new CandleSeries(typeof(VolumeCandle), security, 1000m)
 {
 	BuildCandlesMode = MarketDataBuildModes.LoadAndBuild,
 	BuildCandlesFrom = MarketDataTypes.MarketDepth,
 	BuildCandlesField = Level1Fields.SpreadMiddle,
 };
-//----------------------------------Tick candle------------------------------------------------------------------------		   
+					]]>
+					</code>
+  </listItem>
+    <listItem><para>
+ Следующий код демонстрирует построение 
+ <codeEntityReference>T:StockSharp.Algo.Candles.TickCandle</codeEntityReference> в 1000 сделок.
+ В качестве источника данных для построения используются сделки.</para>
+  					<code language="C#">
+					<![CDATA[	   
 _candleSeries = new CandleSeries(typeof(TickCandle), security, 1000)
 {
 	BuildCandlesMode = MarketDataBuildModes.Build,
 	BuildCandlesFrom = MarketDataTypes.Trades,
 };
-//----------------------------------Range candle-----------------------------------------------------------------------
+					]]>
+					</code>
+  </listItem>
+    <listItem><para>
+  Следующий код демонстрирует построение 
+  <codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference> с диапазоном в 0.1 у.е.
+  В качестве источника данных для построения используется лучшая покупка стакана:</para>
+  					<code language="C#">
+					<![CDATA[
 _candleSeries = new CandleSeries(typeof(RangeCandle), security, new Unit(0.1m))
 {
 	BuildCandlesMode = MarketDataBuildModes.LoadAndBuild,
-    BuildCandlesFrom = MarketDataTypes.Level1,
-    BuildCandlesField = Level1Fields.SpreadMiddle,
+    BuildCandlesFrom = MarketDataTypes.MarketDepth,
+    BuildCandlesField = Level1Fields.BestBid,
 };
-//----------------------------------Renko candle-----------------------------------------------------------------------
+					]]>
+					</code>
+  </listItem>
+    <listItem><para>
+Следующий код демонстрирует построение 
+<codeEntityReference>T:StockSharp.Algo.Candles.RenkoCandle</codeEntityReference>. 
+В качестве источника данных для построения используется цена последней сделки из Level1:</para>
+  					<code language="C#">
+					<![CDATA[
 _candleSeries = new CandleSeries(typeof(RenkoCandle), security, new Unit(0.1m))
 {
 	BuildCandlesMode = MarketDataBuildModes.LoadAndBuild,
     BuildCandlesFrom = MarketDataTypes.Level1,
     BuildCandlesField = Level1Fields.LastTradePrice,
 };
-//----------------------------------PnF candle--------------------------------------------------------------------------
+					]]>
+					</code>
+  </listItem>
+    <listItem><para>
+  Следующий код демонстрирует построение 
+  <codeEntityReference>T:StockSharp.Algo.Candles.PnFCandle</codeEntityReference>. 
+   В качестве источника данных для построения используются сделки.</para>
+  					<code language="C#">
+					<![CDATA[
 _candleSeries = new CandleSeries(typeof(PnFCandle), security, new PnFArg() { BoxSize = 0.1m, ReversalAmount =1})
 {
 	BuildCandlesMode = MarketDataBuildModes.Build,

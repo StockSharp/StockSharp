@@ -64,7 +64,7 @@
 <code language="C#">
 					<![CDATA[
 // Создаем коннектор
-var connector = new QuikTrader();
+var connector = new Connector();
 
 // Путь к корневой папке хранилища
 var storagePath = @"....";
@@ -82,7 +82,7 @@ IMarketDataStorage<ExecutionMessage> tranStorage = null;
 connector.NewSecurity += security =>
 {
 		if (security.Id == securityId)
-			tranStorage = _storage.GetTransactionStorage(security);
+			tranStorage = storage.GetTransactionStorage(security);
 };
 
  ]]>
@@ -93,7 +93,7 @@ connector.NewSecurity += security =>
 		<content>
 
 			<para>Сохранение собственных сделок будет выполняться в обработчике события
-			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrades</codeEntityReference> при помощи метода
+			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrade</codeEntityReference> при помощи метода
 			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IMarketDataStorage.Save(System.Collections.IEnumerable)</codeEntityReference>. 
 			Перед сохранением список собственных сделок приводится к типу IEnumerable&lt;ExecutionMessage&gt;.
 			Сама процедура выставления заявок в этим примере опущена. 
@@ -101,9 +101,9 @@ connector.NewSecurity += security =>
 					<code language="C#">
 					<![CDATA[
 // сохраняем сделки в хранилище
-connector.NewMyTrades += trades =>
+connector.NewMyTrade += trade =>
 {
-	tranStorage.Save((IEnumerable<ExecutionMessage>)trades);
+    tranStorage.Save(new[] {trade.ToMessage()});
 };
 ]]>
 					</code>

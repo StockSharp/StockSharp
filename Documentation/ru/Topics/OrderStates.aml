@@ -15,7 +15,7 @@
 				  В случае успеха принятия  будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderChanged</codeEntityReference>,
 				  и заявка будет переведена в состояние <codeEntityReference>F:StockSharp.Messages.OrderStates.Active</codeEntityReference>. Также будут проинициализированы
 				  свойства <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Id</codeEntityReference> и <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Time</codeEntityReference>.
-				  В случае отвержения заявки будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersRegisterFailed</codeEntityReference>
+				  В случае отвержения заявки будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderRegisterFailed</codeEntityReference>
 				  с описанием ошибки, и заявка будет переведена в состояние <codeEntityReference>F:StockSharp.Messages.OrderStates.Failed</codeEntityReference>.
 			  </listItem>
 			  <listItem>

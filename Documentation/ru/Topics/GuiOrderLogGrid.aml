@@ -65,7 +65,7 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 			.................................................
 			
 			
-			Trader.NewOrderLogItems += _orderLogWindow.OrderLogGrid.LogItems.AddRange;
+			Trader.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
 
 			.................................................
 
