@@ -4966,6 +4966,7 @@ Subscriptions;Subscriptions;Подписки
 DataTypeMustBe;Data type must be '{0}'.;Тип данных должен быть '{0}'.
 SecurityMustBe;Security must be '{0}'.;Инструмент должен быть '{0}'.
 Twime;TWIME;TWIME
+FileNameFormat;File name format;Формат имени файла
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
