@@ -15,13 +15,13 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.Yahoo.YahooMessageAdapter.IsSupportNativeSecurityLookup">
+        <member name="P:StockSharp.Yahoo.YahooMessageAdapter.IsSupportSecurityLookupResult">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.Yahoo.YahooMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.Yahoo.YahooMessageAdapter.TimeFrames">
+        <member name="M:StockSharp.Yahoo.YahooMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.Yahoo.YahooMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

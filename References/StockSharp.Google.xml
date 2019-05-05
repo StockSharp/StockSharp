@@ -15,7 +15,7 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.Google.GoogleMessageAdapter.TimeFrames">
+        <member name="M:StockSharp.Google.GoogleMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.Google.GoogleMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

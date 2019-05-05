@@ -28,6 +28,7 @@
 				<Button x:Name="Depth" Width="100" IsEnabled="False" Click="DepthClick">
 					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
 				</Button>
+				<Button x:Name="Ticks" Content="{x:Static loc:LocalizedStrings.Ticks}" Width="100" IsEnabled="False" Click="TicksClick" />
 				<Button x:Name="NewOrder" Width="100" IsEnabled="False" Click="NewOrderClick">
 					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
 				</Button>

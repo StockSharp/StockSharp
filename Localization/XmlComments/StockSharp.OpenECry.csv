@@ -1,8 +1,8 @@
 T:StockSharp.OpenECry.OpenECryMessageAdapter/summary;DocStr5926
 M:StockSharp.OpenECry.OpenECryMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.OpenECry.OpenECryMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
-P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportPortfolioLookupResult/inheritdoc;DocStr8459
+P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityExtendedFields/inheritdoc;DocStr8459
 P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
@@ -17,7 +17,7 @@ P:StockSharp.OpenECry.OpenECryMessageAdapter.Remoting/summary;DocStr5928
 P:StockSharp.OpenECry.OpenECryMessageAdapter.UseNativeReconnect/summary;DocStr5929
 P:StockSharp.OpenECry.OpenECryMessageAdapter.EnableOECLogging/summary;Str2568
 P:StockSharp.OpenECry.OpenECryMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.OpenECry.OpenECryMessageAdapter.TimeFrames/inheritdoc;DocStr8459
+M:StockSharp.OpenECry.OpenECryMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.OpenECry.OpenECryMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.OpenECry.OpenECryMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.OpenECry.OpenECryMessageAdapter.ToString/inheritdoc;DocStr8459

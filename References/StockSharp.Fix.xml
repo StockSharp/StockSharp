@@ -278,6 +278,9 @@
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.Write(StockSharp.Messages.Message,System.Action{StockSharp.Messages.Message})">
       <inheritdoc />
     </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
       <summary>
             Read next message from FIX protocol.
@@ -1442,6 +1445,13 @@
       <param name="messageHandler">Message handler.</param>
       <returns>
         <see langword="true" /> if incoming messages was processed successfully, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.IFixDialect.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)">
+      <summary>
+            Is for the specified <paramref name="dataType" /> all securities downloading enabled.
+            </summary>
+      <param name="dataType">Market data type.</param>
+      <returns>Check result.</returns>
     </member>
     <member name="T:StockSharp.Fix.FastFeedGroup">
       <summary>
@@ -7881,10 +7891,13 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFrames">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.CheckTimeFrameByRequest">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

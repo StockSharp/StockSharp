@@ -1,12 +1,22 @@
 StockSharp Data (Hydra) Change log
 ========================
 ## v4.4.17:
+* (feature) Plugins refactoring. Hydra now uses IMessageAdapter directly.
 * (feature) Task pane redesign.
 * (feature) CandlesBuildFrom separated for each candles series.
 * (bug) DukasCopy source. CandlesBuildFrom fix.
 * (feature) Tradier source.
 * (feature) Bitmex. Testnet supported.
 * (feature) Finam. Reset cached ids.
+* (bug) Analytics. Fix histogram chart.
+* (feature) File format preview for multiples securities export. https://stocksharp.ru/posts/m/47202/
+* (feature) Backup and HydraServer tasks implemented connect Verify
+* (feature) Added default option for txt export. https://stocksharp.ru/posts/m/47207/
+* (feature) OpenECry. Certification passed.
+* (bug) Highest, Lowest, Vidya, Envelope, MACD indicators fix.
+* (feature) Sterling. Updated to 11.7 version.
+* (feature) Oanda. Level1 support removed.
+* (feature) QUIK DDE, QUIK Trans2Quik excluded.
 
 ## v4.4.16:
 * (feature) SQLite->CSV migrated.

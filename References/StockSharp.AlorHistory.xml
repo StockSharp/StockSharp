@@ -15,7 +15,7 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.AlorHistory.AlorHistoryMessageAdapter.TimeFrames">
+        <member name="M:StockSharp.AlorHistory.AlorHistoryMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.AlorHistory.AlorHistoryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

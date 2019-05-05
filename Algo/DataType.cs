@@ -155,12 +155,7 @@ namespace StockSharp.Algo
 			_hashCode = ((h1 << 5) + h1) ^ h2;
 		}
 
-		/// <summary>
-		/// Serves as a hash function for a particular type. 
-		/// </summary>
-		/// <returns>
-		/// A hash code for the current <see cref="T:System.Object"/>.
-		/// </returns>
+		/// <inheritdoc />
 		public override int GetHashCode()
 		{
 			return _hashCode;
@@ -179,12 +174,7 @@ namespace StockSharp.Algo
 			};
 		}
 
-		/// <summary>
-		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			if (this == Ticks)

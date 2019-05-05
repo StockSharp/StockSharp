@@ -15,10 +15,10 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportSecurityLookupResult">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativePortfolioLookup">
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportPortfolioLookupResult">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportSecuritiesLookupAll">
@@ -57,7 +57,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="P:StockSharp.Oanda.OandaMessageAdapter.TimeFrames">
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Oanda.OandaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">

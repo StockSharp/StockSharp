@@ -38,9 +38,7 @@ M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnSocketDisconnected(StockSh
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStop/summary;DocStr7894
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnReseted/summary;DocStr7896
-M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/summary;DocStr7882
-M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/param/socket;DocStr8883
-M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/param/value;Str3099
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.SuspendUndoManager/summary;DocStr10046
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.ResumeUndoManager/summary;DocStr10047
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.CanUndo/summary;DocStr9267
@@ -289,9 +287,9 @@ M:StockSharp.Xaml.Diagram.DiagramElement.Init(StockSharp.Xaml.Diagram.DiagramStr
 M:StockSharp.Xaml.Diagram.DiagramElement.OnInit/summary;DocStr7880
 M:StockSharp.Xaml.Diagram.DiagramElement.Process(StockSharp.Xaml.Diagram.DiagramSocketValue)/summary;DocStr7881
 M:StockSharp.Xaml.Diagram.DiagramElement.Process(StockSharp.Xaml.Diagram.DiagramSocketValue)/param/value;Str3099
-M:StockSharp.Xaml.Diagram.DiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/summary;DocStr7882
-M:StockSharp.Xaml.Diagram.DiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/param/socket;DocStr8883
-M:StockSharp.Xaml.Diagram.DiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/param/value;Str3099
+M:StockSharp.Xaml.Diagram.DiagramElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})/summary;DocStr11102
+M:StockSharp.Xaml.Diagram.DiagramElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})/param/time;Time
+M:StockSharp.Xaml.Diagram.DiagramElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})/param/values;DocStr7837
 M:StockSharp.Xaml.Diagram.DiagramElement.UnInit/summary;DocStr7884
 M:StockSharp.Xaml.Diagram.DiagramElement.OnUnInit/summary;DocStr7885
 M:StockSharp.Xaml.Diagram.DiagramElement.Start/summary;DocStr7891
@@ -724,8 +722,7 @@ P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.LeftValue/summary;Le
 P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.Operator/summary;Operator
 P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.RightValue/summary;RightOperand
 M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.#ctor/summary;DocStr1
-M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.OnStart/summary;DocStr7892
-M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.OnStop/summary;DocStr7894
+M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})/inheritdoc;DocStr8459
 T:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement/summary;DocStr8049
 P:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.IconName/summary;DocStr9214
@@ -756,8 +753,7 @@ M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Save(Ecng.Seri
 M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnStart/summary;DocStr7892
-M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnStop/summary;DocStr7894
+M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})/inheritdoc;DocStr8459
 T:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement/summary;Str3114
 P:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.IconName/summary;DocStr9214
@@ -781,12 +777,14 @@ P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.IconName/summa
 P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.Function/summary;DocStr10104
 M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.OnStart/summary;DocStr7892
+M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})/inheritdoc;DocStr8459
 T:StockSharp.Xaml.Diagram.Elements.MathDiagramElement/summary;Str3122
 P:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.IconName/summary;DocStr9214
 P:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.Expression/summary;Expression
 M:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.OnStart/summary;DocStr7892
+M:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})/inheritdoc;DocStr8459
 T:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement/summary;DocStr9778
 P:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.IconName/summary;DocStr9214
@@ -814,7 +812,7 @@ P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.TimeInForce/summa
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ExpiryDate/summary;DocStr2918
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Slippage/summary;Str164
 M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.#ctor/summary;DocStr1
-M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.OnStop/summary;DocStr7894
+M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement/summary;Str3130

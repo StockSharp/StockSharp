@@ -23,6 +23,9 @@
     <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
       <inheritdoc />
     </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>

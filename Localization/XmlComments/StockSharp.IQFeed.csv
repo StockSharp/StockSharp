@@ -17,13 +17,13 @@ F:StockSharp.IQFeed.IQFeedMessageAdapter.DefaultVersion/summary;DocStr9884
 P:StockSharp.IQFeed.IQFeedMessageAdapter.Version/summary;DocStr9384
 P:StockSharp.IQFeed.IQFeedMessageAdapter.Level1ColumnRegistry/summary;DocStr3699
 P:StockSharp.IQFeed.IQFeedMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.IQFeed.IQFeedMessageAdapter.TimeFrames/inheritdoc;DocStr8459
+M:StockSharp.IQFeed.IQFeedMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.IQFeed.IQFeedMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.IQFeed.IQFeedMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.IQFeed.IQFeedMessageAdapter.ToString/inheritdoc;DocStr8459
 M:StockSharp.IQFeed.IQFeedMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.IQFeed.IQFeedMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.IQFeed.IQFeedMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

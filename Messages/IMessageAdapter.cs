@@ -52,22 +52,17 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Supported by adapter message types.
 		/// </summary>
-		MessageTypes[] SupportedMessages { get; set; }
+		IEnumerable<MessageTypes> SupportedMessages { get; set; }
 
 		/// <summary>
 		/// Supported by adapter market data types.
 		/// </summary>
-		MarketDataTypes[] SupportedMarketDataTypes { get; set; }
+		IEnumerable<MarketDataTypes> SupportedMarketDataTypes { get; set; }
 
 		/// <summary>
 		/// Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.
 		/// </summary>
 		IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
-
-		/// <summary>
-		/// Possible time-frames.
-		/// </summary>
-		IEnumerable<TimeSpan> TimeFrames { get; }
 
 		/// <summary>
 		/// Possible options for candles building.
@@ -162,7 +157,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Names of extended security fields in <see cref="SecurityMessage"/>.
 		/// </summary>
-		Tuple<string, Type>[] SecurityExtendedFields { get; }
+		IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; }
 
 		/// <summary>
 		/// Support lookup all securities.
@@ -194,5 +189,20 @@ namespace StockSharp.Messages
 		/// <param name="securityId">Security ID.</param>
 		/// <returns>Possible time-frames.</returns>
 		IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId);
+
+		/// <summary>
+		/// Get maximum size step allowed for historical download.
+		/// </summary>
+		/// <param name="request">Market data request.</param>
+		/// <param name="iterationInterval">Interval between iterations.</param>
+		/// <returns>Step.</returns>
+		TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval);
+
+		/// <summary>
+		/// Is for the specified <paramref name="dataType"/> all securities downloading enabled.
+		/// </summary>
+		/// <param name="dataType">Market data type.</param>
+		/// <returns>Check result.</returns>
+		bool IsAllDownloadingSupported(MarketDataTypes dataType);
 	}
 }

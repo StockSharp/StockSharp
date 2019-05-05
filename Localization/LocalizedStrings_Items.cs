@@ -49336,5 +49336,15 @@ namespace StockSharp.Localization
 		/// TWIME
 		/// </summary>
 		public static string Twime => GetString(TwimeKey);
+
+		/// <summary>
+		/// File name format
+		/// </summary>
+		public const string FileNameFormatKey = nameof(FileNameFormat);
+
+		/// <summary>
+		/// File name format
+		/// </summary>
+		public static string FileNameFormat => GetString(FileNameFormatKey);
 	}
 }

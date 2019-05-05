@@ -161,7 +161,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.TimeFrames">
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">

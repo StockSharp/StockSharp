@@ -59,9 +59,24 @@
 		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		public void Import(string fileName, Action<int> updateProgress, Func<bool> isCancelled)
 		{
-			var buffer = new List<dynamic>();
+			var buffer = new List<Message>();
 
 			this.AddInfoLog(LocalizedStrings.Str2870Params.Put(fileName, DataType.MessageType.Name));
+
+			Func<Message, SecurityId> getSecurityId = null;
+
+			if (DataType == DataType.Securities)
+				getSecurityId = m => ((SecurityMessage)m).SecurityId;
+			else if (DataType == DataType.MarketDepth)
+				getSecurityId = m => ((QuoteChangeMessage)m).SecurityId;
+			else if (DataType == DataType.Level1)
+				getSecurityId = m => ((Level1ChangeMessage)m).SecurityId;
+			else if (DataType == DataType.PositionChanges)
+				getSecurityId = m => ((PositionChangeMessage)m).SecurityId;
+			else if (DataType == DataType.Ticks || DataType == DataType.OrderLog || DataType == DataType.Transactions)
+				getSecurityId = m => ((ExecutionMessage)m).SecurityId;
+			else if (DataType.IsCandles())
+				getSecurityId = m => ((CandleMessage)m).SecurityId;
 
 			try
 			{
@@ -69,14 +84,14 @@
 				var prevPercent = 0;
 				var lineIndex = 0;
 
-				foreach (var instance in Parse(fileName, isCancelled))
+				foreach (var msg in Parse(fileName, isCancelled))
 				{
-					if (!(instance is SecurityMessage secMsg))
+					if (!(msg is SecurityMessage secMsg))
 					{
-						buffer.Add(instance);
+						buffer.Add(msg);
 
 						if (buffer.Count > 1000)
-							FlushBuffer(buffer);
+							FlushBuffer(buffer, getSecurityId);
 					}
 					else
 					{
@@ -121,7 +136,7 @@
 			}
 
 			if (buffer.Count > 0)
-				FlushBuffer(buffer);
+				FlushBuffer(buffer, getSecurityId);
 		}
 
 		private Security InitSecurity(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
@@ -146,7 +161,7 @@
 			return security;
 		}
 
-		private void FlushBuffer(List<dynamic> buffer)
+		private void FlushBuffer(List<Message> buffer, Func<Message, SecurityId> getSecurityId)
 		{
 			var registry = ServicesRegistry.StorageRegistry;
 
@@ -156,13 +171,15 @@
 			}
 			else
 			{
+				if (getSecurityId == null)
+					throw new ArgumentNullException(nameof(getSecurityId));
+
 				foreach (var typeGroup in buffer.GroupBy(i => i.GetType()))
 				{
-					var dataType = (Type)typeGroup.Key;
+					var dataType = typeGroup.Key;
 
-					foreach (var secGroup in typeGroup.GroupBy(i => (SecurityId)i.SecurityId))
+					foreach (var secGroup in typeGroup.GroupBy(getSecurityId))
 					{
-						var secId = secGroup.Key;
 						var security = InitSecurity(secGroup.Key, _exchangeInfoProvider);
 
 						if (dataType.IsCandleMessage())
@@ -203,18 +220,8 @@
 						}
 						else if (dataType == typeof(TimeQuoteChange))
 						{
-							registry
-								.GetQuoteMessageStorage(security, _drive, _storageFormat)
-								.Save(secGroup
-									.GroupBy(i => i.Time)
-									.Select(g => new QuoteChangeMessage
-									{
-										SecurityId = secId,
-										ServerTime = g.Key,
-										Bids = g.Cast<QuoteChange>().Where(q => q.Side == Sides.Buy).ToArray(),
-										Asks = g.Cast<QuoteChange>().Where(q => q.Side == Sides.Sell).ToArray(),
-									})
-									.OrderBy(md => md.ServerTime));
+							var storage = registry.GetQuoteMessageStorage(security, _drive, _storageFormat);
+							storage.Save(secGroup.Cast<QuoteChangeMessage>().OrderBy(md => md.ServerTime));
 						}
 						else
 						{

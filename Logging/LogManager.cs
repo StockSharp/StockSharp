@@ -286,6 +286,11 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
+		/// Clear pending messages on dispose.
+		/// </summary>
+		public bool ClearPendingOnDispose { get; set; } = true;
+
+		/// <summary>
 		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
@@ -294,7 +299,9 @@ namespace StockSharp.Logging
 
 			lock (_syncRoot)
 			{
-				_pendingMessages.Clear();
+				if (ClearPendingOnDispose)
+					_pendingMessages.Clear();
+
 				_pendingMessages.Add(_disposeMessage);
 			}
 
