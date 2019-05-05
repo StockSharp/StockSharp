@@ -1874,5 +1874,61 @@ namespace StockSharp.Algo
 
 			return str;
 		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to <see cref="MarketDataTypes"/> value.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns><see cref="MarketDataTypes"/> value or <see langword="null"/> if cannot be converted.</returns>
+		public static MarketDataTypes? ToMarketDataType(this DataType dataType)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			if (dataType == DataType.Ticks)
+				return MarketDataTypes.Trades;
+			else if (dataType == DataType.Level1)
+				return MarketDataTypes.Level1;
+			else if (dataType == DataType.OrderLog)
+				return MarketDataTypes.OrderLog;
+			else if (dataType == DataType.MarketDepth)
+				return MarketDataTypes.MarketDepth;
+			else if (dataType == DataType.News)
+				return MarketDataTypes.News;
+			else if (dataType.IsCandles())
+				return dataType.MessageType.ToCandleMarketDataType();
+			else
+				return null;
+		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to <see cref="CandleSeries"/> value.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Candles series.</returns>
+		public static CandleSeries ToCandleSeries(this DataType dataType)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			return new CandleSeries
+			{
+				CandleType = dataType.MessageType.ToCandleType(),
+				Arg = dataType.Arg,
+			};
+		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to <see cref="CandleSeries"/> value.
+		/// </summary>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this CandleSeries series)
+		{
+			if (series == null)
+				throw new ArgumentNullException(nameof(series));
+
+			return DataType.Create(series.CandleType.ToCandleMessageType(), series.Arg);
+		}
 	}
 }

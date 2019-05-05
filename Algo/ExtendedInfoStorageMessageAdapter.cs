@@ -1,6 +1,7 @@
 namespace StockSharp.Algo
 {
 	using System;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 
@@ -14,7 +15,7 @@ namespace StockSharp.Algo
 	{
 		private readonly IExtendedInfoStorage _extendedInfoStorage;
 		private readonly string _storageName;
-		private readonly Tuple<string, Type>[] _fields;
+		private readonly IEnumerable<Tuple<string, Type>> _fields;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MessageAdapterWrapper"/>.
@@ -23,7 +24,7 @@ namespace StockSharp.Algo
 		/// <param name="extendedInfoStorage">Extended info <see cref="Message.ExtensionInfo"/> storage.</param>
 		/// <param name="storageName">Storage name.</param>
 		/// <param name="fields">Extended fields (names and types).</param>
-		public ExtendedInfoStorageMessageAdapter(IMessageAdapter innerAdapter, IExtendedInfoStorage extendedInfoStorage, string storageName, Tuple<string, Type>[] fields)
+		public ExtendedInfoStorageMessageAdapter(IMessageAdapter innerAdapter, IExtendedInfoStorage extendedInfoStorage, string storageName, IEnumerable<Tuple<string, Type>> fields)
 			: base(innerAdapter)
 		{
 			_extendedInfoStorage = extendedInfoStorage;

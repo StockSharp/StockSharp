@@ -1039,7 +1039,7 @@
             Адаптер сообщений для SmartCOM.
             </summary>
     </member>
-    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportSecurityLookupResult">
       <summary>
             Поддерживается ли торговой системой поиск инструментов.
             </summary>
@@ -1050,12 +1050,10 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.TimeFrames">
-      <summary>
-            Возможные тайм-фреймы.
-            </summary>
+    <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
+      <inheritdoc />
     </member>
-    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportNativePortfolioLookup">
+    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportPortfolioLookupResult">
       <summary>
             Поддерживается ли торговой системой поиск портфелей.
             </summary>

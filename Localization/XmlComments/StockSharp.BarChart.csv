@@ -4,10 +4,10 @@ M:StockSharp.BarChart.BarChartMessageAdapter.#ctor(Ecng.Common.IdGenerator)/para
 P:StockSharp.BarChart.BarChartMessageAdapter.Login/summary;Login
 P:StockSharp.BarChart.BarChartMessageAdapter.Password/summary;Password
 P:StockSharp.BarChart.BarChartMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.BarChart.BarChartMessageAdapter.TimeFrames/inheritdoc;DocStr8459
+M:StockSharp.BarChart.BarChartMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
-P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 M:StockSharp.BarChart.BarChartMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.BarChart.BarChartMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.BarChart.BarChartMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

@@ -187,14 +187,14 @@ namespace StockSharp.Messages
 		public IdGenerator TransactionIdGenerator => InnerAdapter.TransactionIdGenerator;
 
 		/// <inheritdoc />
-		public virtual MessageTypes[] SupportedMessages
+		public virtual IEnumerable<MessageTypes> SupportedMessages
 		{
 			get => InnerAdapter.SupportedMessages;
 			set => InnerAdapter.SupportedMessages = value;
 		}
 
 		/// <inheritdoc />
-		public virtual MarketDataTypes[] SupportedMarketDataTypes
+		public virtual IEnumerable<MarketDataTypes> SupportedMarketDataTypes
 		{
 			get => InnerAdapter.SupportedMarketDataTypes;
 			set => InnerAdapter.SupportedMarketDataTypes = value;
@@ -217,9 +217,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public virtual bool OrderStatusRequired => InnerAdapter.OrderStatusRequired;
-
-		/// <inheritdoc />
-		public virtual IEnumerable<TimeSpan> TimeFrames => InnerAdapter.TimeFrames;
 
 		/// <inheritdoc />
 		public string StorageName => InnerAdapter.StorageName;
@@ -254,7 +251,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public string AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;
 
-		Tuple<string, Type>[] IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
+		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
 
 		/// <inheritdoc />
 		public virtual bool IsSupportSecuritiesLookupAll => InnerAdapter.IsSupportSecuritiesLookupAll;
@@ -267,19 +264,21 @@ namespace StockSharp.Messages
 		bool IMessageAdapter.IsConnectionAlive() => InnerAdapter.IsConnectionAlive();
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
-		{
-			return InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
-		}
+			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 
 		/// <inheritdoc />
 		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
-		{
-			return InnerAdapter.GetTimeFrames(securityId);
-		}
+			=> InnerAdapter.GetTimeFrames(securityId);
 
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
+		/// <inheritdoc />
+		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)
+			=> InnerAdapter.GetHistoryStepSize(request, out iterationInterval);
+
+		/// <inheritdoc />
+		public virtual bool IsAllDownloadingSupported(MarketDataTypes dataType)
+			=> InnerAdapter.IsAllDownloadingSupported(dataType);
+
+		/// <inheritdoc />
 		public virtual void Dispose()
 		{
 			InnerAdapter.NewOutMessage -= OnInnerAdapterNewOutMessage;

@@ -15,7 +15,7 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.Xignite.XigniteMessageAdapter.IsSupportNativeSecurityLookup">
+        <member name="P:StockSharp.Xignite.XigniteMessageAdapter.IsSupportSecurityLookupResult">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.Xignite.XigniteMessageAdapter.IsSupportSecuritiesLookupAll">

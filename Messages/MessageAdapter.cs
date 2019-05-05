@@ -137,11 +137,11 @@ namespace StockSharp.Messages
 				Categories = attr.Categories;
 		}
 
-		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
+		private IEnumerable<MessageTypes> _supportedMessages = Enumerable.Empty<MessageTypes>();
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual MessageTypes[] SupportedMessages
+		public virtual IEnumerable<MessageTypes> SupportedMessages
 		{
 			get => _supportedMessages;
 			set
@@ -159,11 +159,11 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private MarketDataTypes[] _supportedMarketDataTypes = ArrayHelper.Empty<MarketDataTypes>();
+		private IEnumerable<MarketDataTypes> _supportedMarketDataTypes = Enumerable.Empty<MarketDataTypes>();
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual MarketDataTypes[] SupportedMarketDataTypes
+		public virtual IEnumerable<MarketDataTypes> SupportedMarketDataTypes
 		{
 			get => _supportedMarketDataTypes;
 			set
@@ -182,10 +182,6 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[Browsable(false)]
 		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual IEnumerable<TimeSpan> TimeFrames => Enumerable.Empty<TimeSpan>();
 
 		/// <inheritdoc />
 		[Browsable(false)]
@@ -268,14 +264,14 @@ namespace StockSharp.Messages
 		public virtual OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; } = null;
 
 		/// <summary>
-		/// Gets a value indicating whether the connector supports security lookup.
+		/// Gets a value indicating whether the adapter translates <see cref="SecurityLookupResultMessage"/>.
 		/// </summary>
-		protected virtual bool IsSupportNativeSecurityLookup => false;
+		protected virtual bool IsSupportSecurityLookupResult => false;
 
 		/// <summary>
-		/// Gets a value indicating whether the connector supports position lookup.
+		/// Gets a value indicating whether the adapter translates <see cref="PortfolioLookupResultMessage"/>.
 		/// </summary>
-		protected virtual bool IsSupportNativePortfolioLookup => false;
+		protected virtual bool IsSupportPortfolioLookupResult => false;
 
 		/// <summary>
 		/// Bit process, which can run the adapter.
@@ -285,7 +281,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual Tuple<string, Type>[] SecurityExtendedFields { get; } = ArrayHelper.Empty<Tuple<string, Type>>();
+		public virtual IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; } = Enumerable.Empty<Tuple<string, Type>>();
 
 		/// <inheritdoc />
 		[Browsable(false)]
@@ -379,14 +375,14 @@ namespace StockSharp.Messages
 
 				case MessageTypes.PortfolioLookup:
 				{
-					if (!IsSupportNativePortfolioLookup)
+					if (!IsSupportPortfolioLookupResult)
 						_pfLookupTimeOut.StartTimeOut(((PortfolioLookupMessage)message).TransactionId);
 
 					break;
 				}
 				case MessageTypes.SecurityLookup:
 				{
-					if (!IsSupportNativeSecurityLookup)
+					if (!IsSupportSecurityLookupResult)
 						_secLookupTimeOut.StartTimeOut(((SecurityLookupMessage)message).TransactionId);
 
 					break;
@@ -440,7 +436,7 @@ namespace StockSharp.Messages
 					{
 						var lookupMsg = (SecurityLookupMessage)message;
 						
-						if (!IsSupportNativeSecurityLookup)
+						if (!IsSupportSecurityLookupResult)
 							_secLookupTimeOut.RemoveTimeOut(lookupMsg.TransactionId);
 
 						SendOutMessage(new SecurityLookupResultMessage
@@ -477,7 +473,7 @@ namespace StockSharp.Messages
 					{
 						var lookupMsg = (PortfolioLookupMessage)message;
 
-						if (!IsSupportNativePortfolioLookup)
+						if (!IsSupportPortfolioLookupResult)
 							_pfLookupTimeOut.RemoveTimeOut(lookupMsg.TransactionId);
 
 						SendOutMessage(new PortfolioLookupResultMessage
@@ -563,25 +559,25 @@ namespace StockSharp.Messages
 			switch (message.Type)
 			{
 				case MessageTypes.Security:
-					if (!IsSupportNativeSecurityLookup)
+					if (!IsSupportSecurityLookupResult)
 						_secLookupTimeOut.UpdateTimeOut(((SecurityMessage)message).OriginalTransactionId);
 
 					break;
 
 				case MessageTypes.Portfolio:
-					if (!IsSupportNativePortfolioLookup)
+					if (!IsSupportPortfolioLookupResult)
 						_pfLookupTimeOut.UpdateTimeOut(((PortfolioMessage)message).OriginalTransactionId);
 
 					break;
 
 				case MessageTypes.SecurityLookupResult:
-					if (!IsSupportNativeSecurityLookup)
+					if (!IsSupportSecurityLookupResult)
 						_secLookupTimeOut.RemoveTimeOut(((SecurityLookupResultMessage)message).OriginalTransactionId);
 
 					break;
 
 				case MessageTypes.PortfolioLookupResult:
-					if (!IsSupportNativePortfolioLookup)
+					if (!IsSupportPortfolioLookupResult)
 						_pfLookupTimeOut.RemoveTimeOut(((PortfolioLookupResultMessage)message).OriginalTransactionId);
 
 					break;
@@ -673,21 +669,53 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public virtual bool IsConnectionAlive()
-		{
-			return true;
-		}
+			=> true;
 
 		/// <inheritdoc />
 		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
-		{
-			return new OrderLogMarketDepthBuilder(securityId);
-		}
+			=> new OrderLogMarketDepthBuilder(securityId);
 
 		/// <inheritdoc />
 		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+			=> Enumerable.Empty<TimeSpan>();
+
+		/// <inheritdoc />
+		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)
 		{
-			return TimeFrames;
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			iterationInterval = TimeSpan.FromSeconds(2);
+
+			switch (request.DataType)
+			{
+				case MarketDataTypes.Level1:
+				case MarketDataTypes.MarketDepth:
+				case MarketDataTypes.Trades:
+				case MarketDataTypes.OrderLog:
+					return TimeSpan.FromDays(1);
+				case MarketDataTypes.CandleTimeFrame:
+				{
+					var tf = (TimeSpan)request.Arg;
+
+					if (tf.TotalDays <= 1)
+						return TimeSpan.FromDays(30);
+
+					return TimeSpan.MaxValue;
+				}
+				case MarketDataTypes.CandleTick:
+				case MarketDataTypes.CandleVolume:
+				case MarketDataTypes.CandleRange:
+				case MarketDataTypes.CandlePnF:
+				case MarketDataTypes.CandleRenko:
+					return TimeSpan.FromDays(30);
+				default:
+					return TimeSpan.MaxValue;
+			}
 		}
+
+		/// <inheritdoc />
+		public virtual bool IsAllDownloadingSupported(MarketDataTypes dataType) => false;
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)

@@ -59,7 +59,7 @@
     <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportSecurityLookupResult">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

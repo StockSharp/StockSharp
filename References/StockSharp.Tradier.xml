@@ -30,16 +30,16 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.Tradier.TradierMessageAdapter.IsSupportNativeSecurityLookup">
+        <member name="P:StockSharp.Tradier.TradierMessageAdapter.IsSupportSecurityLookupResult">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.Tradier.TradierMessageAdapter.IsSupportNativePortfolioLookup">
+        <member name="P:StockSharp.Tradier.TradierMessageAdapter.IsSupportPortfolioLookupResult">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.Tradier.TradierMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.Tradier.TradierMessageAdapter.TimeFrames">
+        <member name="M:StockSharp.Tradier.TradierMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.Tradier.TradierMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

@@ -166,6 +166,10 @@
       <Project>{42C7D967-5AFB-4BA5-A2F4-DB232BDF7D20}</Project>
       <Name>Cryptopia</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CSV\CSV.csproj">
+      <Project>{63F20E8F-E1F2-4FAD-A8A8-D62F0501C261}</Project>
+      <Name>CSV</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Deribit\Deribit.csproj">
       <Project>{DA9C9641-6113-4F0B-AEF0-A70D1C4C059E}</Project>
       <Name>Deribit</Name>

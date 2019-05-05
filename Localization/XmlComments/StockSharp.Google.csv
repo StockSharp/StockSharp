@@ -1,6 +1,6 @@
 T:StockSharp.Google.GoogleMessageAdapter/summary;DocStr2538
 M:StockSharp.Google.GoogleMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Google.GoogleMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.Google.GoogleMessageAdapter.TimeFrames/inheritdoc;DocStr8459
+M:StockSharp.Google.GoogleMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Google.GoogleMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Google.GoogleMessageAdapter.AllTimeFrames/summary;DocStr206

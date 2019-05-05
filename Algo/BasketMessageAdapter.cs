@@ -214,7 +214,7 @@ namespace StockSharp.Algo
 		public CandleBuilderProvider CandleBuilderProvider { get; }
 
 		/// <inheritdoc />
-		public override MessageTypes[] SupportedMessages => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct().ToArray();
+		public override IEnumerable<MessageTypes> SupportedMessages => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct();
 
 		/// <inheritdoc />
 		public override bool PortfolioLookupRequired => GetSortedAdapters().Any(a => a.PortfolioLookupRequired);
@@ -226,10 +226,10 @@ namespace StockSharp.Algo
 		public override bool SecurityLookupRequired => GetSortedAdapters().Any(a => a.SecurityLookupRequired);
 
 		/// <inheritdoc />
-		protected override bool IsSupportNativePortfolioLookup => true;
+		protected override bool IsSupportPortfolioLookupResult => true;
 
 		/// <inheritdoc />
-		protected override bool IsSupportNativeSecurityLookup => true;
+		protected override bool IsSupportSecurityLookupResult => true;
 
 		/// <inheritdoc />
 		public override bool IsSupportSecuritiesLookupAll => GetSortedAdapters().Any(a => a.IsSupportSecuritiesLookupAll);
@@ -263,10 +263,8 @@ namespace StockSharp.Algo
 		public bool SupportOffline { get; set; }
 
 		/// <inheritdoc />
-		public override IEnumerable<TimeSpan> TimeFrames
-		{
-			get { return GetSortedAdapters().SelectMany(a => a.TimeFrames); }
-		}
+		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+			=> GetSortedAdapters().SelectMany(a => a.GetTimeFrames(securityId)).Distinct().OrderBy();
 
 		/// <inheritdoc />
 		public override bool IsConnectionAlive() => throw new NotSupportedException();
@@ -304,6 +302,8 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 		{
+			adapter = new PartialDownloadMessageAdapter(adapter);
+
 			if (LatencyManager != null)
 			{
 				adapter = new LatencyMessageAdapter(adapter) { LatencyManager = LatencyManager.Clone() };

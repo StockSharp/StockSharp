@@ -41,6 +41,9 @@ namespace StockSharp.Algo
 			if (quote == null)
 				throw new ArgumentNullException(nameof(quote));
 
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
 			SecurityId = message.SecurityId;
 			ServerTime = message.ServerTime;
 			LocalTime = message.LocalTime;

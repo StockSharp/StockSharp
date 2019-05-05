@@ -264,10 +264,5 @@ namespace StockSharp.Messages
 		/// Time-frames search result.
 		/// </summary>
 		TimeFrameLookupResult,
-
-		/// <summary>
-		/// Iterate action.
-		/// </summary>
-		Action
 	}
 }

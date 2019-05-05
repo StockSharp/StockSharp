@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Testing
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 
 	using Ecng.Common;
@@ -52,7 +53,7 @@ namespace StockSharp.Algo.Testing
 
 			public EmulationEntityFactory(Portfolio portfolio)
 			{
-				_portfolio = portfolio;
+				_portfolio = portfolio ?? throw new ArgumentNullException(nameof(portfolio));
 			}
 
 			public override Portfolio CreatePortfolio(string name)
@@ -68,7 +69,7 @@ namespace StockSharp.Algo.Testing
 			public RealTimeEmulationMarketDataAdapter(RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> connector, IMessageAdapter innerAdapter)
 				: base(innerAdapter)
 			{
-				_connector = connector;
+				_connector = connector ?? throw new ArgumentNullException(nameof(connector));
 			}
 
 			public override bool SecurityLookupRequired => _connector._ownAdapter && base.SecurityLookupRequired;
@@ -76,7 +77,7 @@ namespace StockSharp.Algo.Testing
 			public override bool OrderStatusRequired => false;
 			public override bool IsSupportSubscriptionByPortfolio => false;
 			public override OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired => null;
-			public override MessageTypes[] SupportedMessages => InnerAdapter.SupportedMessages.Except(new[] { MessageTypes.OrderStatus, MessageTypes.OrderRegister, MessageTypes.OrderCancel, MessageTypes.OrderGroupCancel, MessageTypes.OrderReplace, MessageTypes.OrderPairReplace, MessageTypes.Portfolio, MessageTypes.PortfolioLookup }).ToArray();
+			public override IEnumerable<MessageTypes> SupportedMessages => InnerAdapter.SupportedMessages.Except(new[] { MessageTypes.OrderStatus, MessageTypes.OrderRegister, MessageTypes.OrderCancel, MessageTypes.OrderGroupCancel, MessageTypes.OrderReplace, MessageTypes.OrderPairReplace, MessageTypes.Portfolio, MessageTypes.PortfolioLookup }).ToArray();
 
 			private ILogSource _parent;
 

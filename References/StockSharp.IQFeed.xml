@@ -99,7 +99,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedMessageAdapter.TimeFrames">
+    <member name="M:StockSharp.IQFeed.IQFeedMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
@@ -117,7 +117,7 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportSecurityLookupResult">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportSecuritiesLookupAll">

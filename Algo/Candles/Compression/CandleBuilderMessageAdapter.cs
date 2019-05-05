@@ -546,7 +546,7 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					var isLoadOnly = series.Original.BuildMode == MarketDataBuildModes.Load;
 
-					// upgrate to smaller tf only in case failed subscription
+					// upgrade to smaller tf only in case failed subscription
 					if (response != null && original.DataType == MarketDataTypes.CandleTimeFrame && original.AllowBuildFromSmallerTimeFrame)
 					{
 						if (isLoadOnly)
@@ -556,7 +556,7 @@ namespace StockSharp.Algo.Candles.Compression
 						}
 
 						var smaller = InnerAdapter
-										.TimeFrames
+										.GetTimeFrames(original.SecurityId)
 						                .FilterSmallerTimeFrames((TimeSpan)original.Arg)
 						                .OrderByDescending()
 						                .FirstOr();

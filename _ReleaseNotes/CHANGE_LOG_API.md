@@ -76,6 +76,19 @@ StockSharp API Change log
 * (bug) SecurityLookupWindow. OK enabling fix.
 * (bug) BuySellPanel. Design fix.
 * (bug) Bitfinex. Timestamp for own trade fix.
+* (feature) CsvImporter. Uses Message as output parameter.
+* (feature) IMessageAdapter. Changed property types Array -> IEnumerable.
+* (feature) DataType. ToMarketDataType conversion method added.
+* (feature) CandleSeries <-> DataType conversion added.
+* (bug) UI log controls. Fix Message.IsDispose processing.
+* (feature) ImportSettings controls.
+* (feature) CSV connector.
+* (feature) MessageAdapter. IsSupportNativeSecurityLookup -> IsSupportSecurityLookupResult, IsSupportNativePortfolioLookup -> IsSupportPortfolioLookupResult.
+* (bug) Charting. Fix active orders element after chart loading. https://stocksharp.ru/posts/m/47302/
+* (feature) PartialDownloadMessageAdapter added.
+* (feature) IMessageAdapter. Removed TimeFrames property.
+* (feature) IMessageAdapter. IsAllDownloadingSupported method added.
+* (bug) SecurityNativeIdMessageAdapter. Fix processing suspended incoming messages.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

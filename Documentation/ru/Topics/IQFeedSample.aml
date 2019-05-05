@@ -3,14 +3,14 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>     
       <para>Код ниже демонстрирует как инициализировать 
-      <codeEntityReference>T:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter</codeEntityReference>
+      <codeEntityReference>T:StockSharp.IQFeed.IQFeedMessageAdapter</codeEntityReference>
       и передать его в
       <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
       <code language="C#">
             				<![CDATA[
 Connector Connector = new Connector();				
 ...				
-var messageAdapter = new IQFeedMarketDataMessageAdapter(Connector.TransactionIdGenerator)
+var messageAdapter = new IQFeedMessageAdapter(Connector.TransactionIdGenerator)
 {
 	Level1Address = "127.0.0.1:5009".To<EndPoint>(),
 	Level2Address = "127.0.0.1:9200".To<EndPoint>(),

@@ -15,13 +15,18 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.IEX.IEXMessageAdapter.IsSupportNativeSecurityLookup">
+        <member name="P:StockSharp.IEX.IEXMessageAdapter.IsSupportSecurityLookupResult">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.IEX.IEXMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.IEX.IEXMessageAdapter.TimeFrames">
+        <member name="P:StockSharp.IEX.IEXMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="M:StockSharp.IEX.IEXMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.IEX.IEXMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

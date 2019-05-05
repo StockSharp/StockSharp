@@ -38,7 +38,7 @@
     <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.IsSupportSecurityLookupResult">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -69,7 +69,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.TimeFrames">
+    <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">

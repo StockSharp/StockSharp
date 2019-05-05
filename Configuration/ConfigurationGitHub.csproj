@@ -121,6 +121,9 @@
     <Reference Include="StockSharp.Cqg.Continuum">
       <HintPath>..\References\StockSharp.Cqg.Continuum.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.CSV">
+      <HintPath>..\References\StockSharp.CSV.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Digifinex">
       <HintPath>..\References\StockSharp.Digifinex.dll</HintPath>
     </Reference>

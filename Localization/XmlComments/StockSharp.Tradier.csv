@@ -4,10 +4,10 @@ P:StockSharp.Tradier.TradierOrderCondition.StopPrice/summary;Str3460
 T:StockSharp.Tradier.TradierMessageAdapter/summary;DocStr2538
 M:StockSharp.Tradier.TradierMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Tradier.TradierMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.Tradier.TradierMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
-P:StockSharp.Tradier.TradierMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
+P:StockSharp.Tradier.TradierMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
+P:StockSharp.Tradier.TradierMessageAdapter.IsSupportPortfolioLookupResult/inheritdoc;DocStr8459
 P:StockSharp.Tradier.TradierMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
-P:StockSharp.Tradier.TradierMessageAdapter.TimeFrames/inheritdoc;DocStr8459
+M:StockSharp.Tradier.TradierMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Tradier.TradierMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Tradier.TradierMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Tradier.TradierMessageAdapter.Token/summary;AccessToken

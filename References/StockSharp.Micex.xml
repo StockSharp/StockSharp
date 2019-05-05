@@ -63,12 +63,12 @@
       <returns>
         <see langword="true" />, если соединение еще установлено, <see langword="false" />, если торговая система разорвала подключение.</returns>
     </member>
-    <member name="P:StockSharp.Micex.MicexMessageAdapter.IsSupportNativePortfolioLookup">
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.IsSupportPortfolioLookupResult">
       <summary>
             Поддерживается ли торговой системой поиск портфелей.
             </summary>
     </member>
-    <member name="P:StockSharp.Micex.MicexMessageAdapter.IsSupportNativeSecurityLookup">
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.IsSupportSecurityLookupResult">
       <summary>
             Поддерживается ли торговой системой поиск инструментов.
             </summary>

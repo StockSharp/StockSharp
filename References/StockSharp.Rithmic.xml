@@ -15,7 +15,7 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportNativeSecurityLookup">
+        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportSecurityLookupResult">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportCandlesUpdates">
@@ -127,7 +127,7 @@
             Possible time-frames.
             </summary>
         </member>
-        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.TimeFrames">
+        <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">

@@ -15,7 +15,7 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="P:StockSharp.Twime.TwimeMessageAdapter.IsSupportNativePortfolioLookup">
+    <member name="P:StockSharp.Twime.TwimeMessageAdapter.IsSupportPortfolioLookupResult">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Twime.TwimeMessageAdapter.IsNativeIdentifiers">

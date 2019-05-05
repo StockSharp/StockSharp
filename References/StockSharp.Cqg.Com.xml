@@ -45,7 +45,7 @@
             Possible time-frames.
             </summary>
         </member>
-        <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.TimeFrames">
+        <member name="M:StockSharp.Cqg.Com.CqgComMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.Cqg.Com.CqgComMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">

@@ -15,11 +15,11 @@ P:StockSharp.LMAX.LmaxMessageAdapter.IsDownloadSecurityFromSite/summary;Str3389
 P:StockSharp.LMAX.LmaxMessageAdapter.SecuritiesLocation/summary;LmaxLocation
 P:StockSharp.LMAX.LmaxMessageAdapter.CandleDownloadInterval/summary;DocStr9347
 P:StockSharp.LMAX.LmaxMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames/inheritdoc;DocStr8459
+M:StockSharp.LMAX.LmaxMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.LMAX.LmaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.LMAX.LmaxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.LMAX.LmaxMessageAdapter.ToString/inheritdoc;DocStr8459
-P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.StorageName/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
