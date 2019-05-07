@@ -368,6 +368,18 @@ namespace StockSharp.Messages
 
 			if (Strike != null)
 				str += $",Strike={Strike}";
+
+			if (CfiCode != null)
+				str += $",CFI={CfiCode}";
+
+			if (UnderlyingSecurityCode != null)
+				str += $",Under={UnderlyingSecurityCode}";
+
+			if (Class != null)
+				str += $",Class={Class}";
+
+			if (BinaryOptionType != null)
+				str += $",Bin={BinaryOptionType}";
 			
 			if (Shortable != null)
 				str += $",Strike={Shortable}";
