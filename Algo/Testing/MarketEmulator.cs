@@ -528,6 +528,9 @@ namespace StockSharp.Algo.Testing
 							_securityDefinition.VolumeStep = (decimal)change.Value;
 							_volumeDecimals = GetVolumeStep().GetCachedDecimals();
 							break;
+						case Level1Fields.MinVolume:
+							_securityDefinition.MinVolume = (decimal)change.Value;
+							break;
 						case Level1Fields.Multiplier:
 							_securityDefinition.Multiplier = (decimal)change.Value;
 							break;

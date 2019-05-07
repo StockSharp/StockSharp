@@ -317,6 +317,7 @@ namespace StockSharp.Algo.Storages.Csv
 				public string UnderlyingSecurityId { get; set; }
 				public decimal? PriceStep { get; set; }
 				public decimal? VolumeStep { get; set; }
+				public decimal? MinVolume { get; set; }
 				public decimal? Multiplier { get; set; }
 				public int? Decimals { get; set; }
 				public SecurityTypes? Type { get; set; }
@@ -331,6 +332,7 @@ namespace StockSharp.Algo.Storages.Csv
 				public string CfiCode { get; set; }
 				public DateTimeOffset? IssueDate { get; set; }
 				public decimal? IssueSize { get; set; }
+				public bool? Shortable { get; set; }
 				public string BasketCode { get; set; }
 				public string BasketExpression { get; set; }
 
@@ -347,6 +349,7 @@ namespace StockSharp.Algo.Storages.Csv
 						UnderlyingSecurityId = UnderlyingSecurityId,
 						PriceStep = PriceStep,
 						VolumeStep = VolumeStep,
+						MinVolume = MinVolume,
 						Multiplier = Multiplier,
 						Decimals = Decimals,
 						Type = Type,
@@ -361,6 +364,7 @@ namespace StockSharp.Algo.Storages.Csv
 						CfiCode = CfiCode,
 						IssueDate = IssueDate,
 						IssueSize = IssueSize,
+						Shortable = Shortable,
 						BasketCode = BasketCode,
 						BasketExpression = BasketExpression,
 					};
@@ -376,6 +380,7 @@ namespace StockSharp.Algo.Storages.Csv
 					UnderlyingSecurityId = security.UnderlyingSecurityId;
 					PriceStep = security.PriceStep;
 					VolumeStep = security.VolumeStep;
+					MinVolume = security.MinVolume;
 					Multiplier = security.Multiplier;
 					Decimals = security.Decimals;
 					Type = security.Type;
@@ -390,6 +395,7 @@ namespace StockSharp.Algo.Storages.Csv
 					CfiCode = security.CfiCode;
 					IssueDate = security.IssueDate;
 					IssueSize = security.IssueSize;
+					Shortable = security.Shortable;
 					BasketCode = security.BasketCode;
 					BasketExpression = security.BasketExpression;
 				}
@@ -445,6 +451,9 @@ namespace StockSharp.Algo.Storages.Csv
 				if (IsChanged(security.VolumeStep, liteSec.VolumeStep, forced))
 					return true;
 
+				if (IsChanged(security.MinVolume, liteSec.MinVolume, forced))
+					return true;
+
 				if (IsChanged(security.Multiplier, liteSec.Multiplier, forced))
 					return true;
 
@@ -473,6 +482,9 @@ namespace StockSharp.Algo.Storages.Csv
 					return true;
 
 				if (IsChanged(security.CfiCode, liteSec.CfiCode, forced))
+					return true;
+
+				if (IsChanged(security.Shortable, liteSec.Shortable, forced))
 					return true;
 
 				if (IsChanged(security.IssueDate, liteSec.IssueDate, forced))
@@ -580,6 +592,12 @@ namespace StockSharp.Algo.Storages.Csv
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					liteSec.BasketExpression = reader.ReadString();
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				{
+					liteSec.MinVolume = reader.ReadNullableDecimal();
+					liteSec.Shortable = reader.ReadNullableBool();
+				}
+
 				return liteSec.ToSecurity(this);
 			}
 
@@ -619,6 +637,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.IssueSize.To<string>(),
 					data.BasketCode,
 					data.BasketExpression,
+					data.MinVolume.To<string>(),
+					data.Shortable.To<string>(),
 				});
 			}
 
@@ -866,8 +886,7 @@ namespace StockSharp.Algo.Storages.Csv
 				};
 
 				var argStr = reader.ReadString();
-				if (message.DataType.IsCandleDataType())
-					message.Arg = message.DataType.ToCandleMessage().ToCandleArg(argStr);
+				message.Arg = message.DataType.IsCandleDataType() ? message.DataType.ToCandleMessage().ToCandleArg(argStr) : argStr;
 
 				message.IsCalcVolumeProfile = reader.ReadBool();
 				message.AllowBuildFromSmallerTimeFrame = reader.ReadBool();

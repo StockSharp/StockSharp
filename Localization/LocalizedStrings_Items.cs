@@ -49346,5 +49346,45 @@ namespace StockSharp.Localization
 		/// File name format
 		/// </summary>
 		public static string FileNameFormat => GetString(FileNameFormatKey);
+
+		/// <summary>
+		/// Min volume
+		/// </summary>
+		public const string MinVolumeKey = nameof(MinVolume);
+
+		/// <summary>
+		/// Min volume
+		/// </summary>
+		public static string MinVolume => GetString(MinVolumeKey);
+
+		/// <summary>
+		/// Minimum volume allowed in order.
+		/// </summary>
+		public const string MinVolumeDescKey = nameof(MinVolumeDesc);
+
+		/// <summary>
+		/// Minimum volume allowed in order.
+		/// </summary>
+		public static string MinVolumeDesc => GetString(MinVolumeDescKey);
+
+		/// <summary>
+		/// Shortable
+		/// </summary>
+		public const string ShortableKey = nameof(Shortable);
+
+		/// <summary>
+		/// Shortable
+		/// </summary>
+		public static string Shortable => GetString(ShortableKey);
+
+		/// <summary>
+		/// Can have short positions.
+		/// </summary>
+		public const string ShortableDescKey = nameof(ShortableDesc);
+
+		/// <summary>
+		/// Can have short positions.
+		/// </summary>
+		public static string ShortableDesc => GetString(ShortableDescKey);
 	}
 }

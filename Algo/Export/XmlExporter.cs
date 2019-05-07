@@ -325,6 +325,9 @@ namespace StockSharp.Algo.Export
 				if (security.VolumeStep != null)
 					writer.WriteAttribute("volumeStep", security.VolumeStep.Value);
 
+				if (security.MinVolume != null)
+					writer.WriteAttribute("minVolume", security.MinVolume.Value);
+
 				if (security.Multiplier != null)
 					writer.WriteAttribute("multiplier", security.Multiplier.Value);
 
@@ -339,6 +342,9 @@ namespace StockSharp.Algo.Export
 				
 				if (!security.CfiCode.IsEmpty())
 					writer.WriteAttribute("cfiCode", security.CfiCode);
+				
+				if (security.Shortable != null)
+					writer.WriteAttribute("shortable", security.Shortable.Value);
 
 				if (security.OptionType != null)
 					writer.WriteAttribute("optionType", security.OptionType.Value);

@@ -41,6 +41,7 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.PriceStep), LocalizedStrings.PriceStep, LocalizedStrings.MinPriceStep, (i, v) => i.PriceStep = v));
 				fields.Add(new FieldMapping<SecurityMessage, int>(nameof(SecurityMessage.Decimals), LocalizedStrings.Decimals, LocalizedStrings.Str548, (i, v) => i.Decimals = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.VolumeStep), LocalizedStrings.VolumeStep, LocalizedStrings.Str366, (i, v) => i.VolumeStep = v));
+				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.MinVolume), LocalizedStrings.MinVolume, LocalizedStrings.MinVolumeDesc, (i, v) => i.MinVolume = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.Multiplier), LocalizedStrings.Str330, LocalizedStrings.LotVolume, (i, v) => i.Multiplier = v));
 				fields.Add(new FieldMapping<SecurityMessage, SecurityTypes>(nameof(SecurityMessage.SecurityType), LocalizedStrings.Type, LocalizedStrings.Str360, (i, v) => i.SecurityType = v));
 				fields.Add(new FieldMapping<SecurityMessage, CurrencyTypes>(nameof(SecurityMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382, (i, v) => i.Currency = v));
@@ -55,6 +56,7 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<SecurityMessage, DateTimeOffset>(nameof(SecurityMessage.IssueDate), LocalizedStrings.IssueDate, LocalizedStrings.IssueDate, (i, v) => i.IssueDate = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.CfiCode), LocalizedStrings.CfiCode, LocalizedStrings.CfiCodeDesc, (i, v) => i.CfiCode = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.ShortName), LocalizedStrings.Str363, LocalizedStrings.Str364, (i, v) => i.ShortName = v));
+				fields.Add(new FieldMapping<SecurityMessage, bool>(nameof(SecurityMessage.Shortable), LocalizedStrings.Shortable, LocalizedStrings.ShortableDesc, (i, v) => i.Shortable = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BasketCode), LocalizedStrings.Basket, LocalizedStrings.BasketCode, (i, v) => i.BasketCode = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BasketExpression), LocalizedStrings.Expression, LocalizedStrings.ExpressionDesc, (i, v) => i.BasketExpression = v));
 			}
