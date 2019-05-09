@@ -7262,6 +7262,14 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MinVolume">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.Shortable">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FixBase">
       <summary>
             Data reader/writer base class.

@@ -1843,6 +1843,8 @@ F:StockSharp.Fix.Native.FixTags.StrategyParameterName/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.StrategyParameterType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.StrategyParameterValue/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.StrategyCommand/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.MinVolume/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Shortable/summary;DocStr8459
 T:StockSharp.Fix.Native.FixBase/summary;DocStr3186
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr93
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr1295
