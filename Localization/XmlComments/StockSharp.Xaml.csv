@@ -205,6 +205,7 @@ P:StockSharp.Xaml.ImportSettings.IncludeSubDirectories/summary;SubDirectoriesInc
 P:StockSharp.Xaml.ImportSettings.ColumnSeparator/summary;Str2845
 P:StockSharp.Xaml.ImportSettings.SkipFromHeader/summary;Str2847
 P:StockSharp.Xaml.ImportSettings.TimeZone/summary;TimeZone
+P:StockSharp.Xaml.ImportSettings.Interval/summary;Str175
 P:StockSharp.Xaml.ImportSettings.ExtendedStorage/summary;ExtendedInfo
 P:StockSharp.Xaml.ImportSettings.UpdateDuplicateSecurities/summary;UpdateDuplicateSecurities
 P:StockSharp.Xaml.ImportSettings.IgnoreNonIdSecurities/summary;IgnoreNonIdSecuritiesDesc

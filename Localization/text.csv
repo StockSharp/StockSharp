@@ -4971,6 +4971,7 @@ MinVolume;Min volume;Мин объем
 MinVolumeDesc;Minimum volume allowed in order.;Минимальный объем, допустимый в заявке.
 Shortable;Shortable;Шортовый
 ShortableDesc;Can have short positions.;Можно ли открывать шортовые позиции.
+IntervalDataUpdates;The interval between data updates.;Периодичность обновления данных.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5556,7 +5557,6 @@ DocStr611;The connection implementing {0};Подключение, реализу
 DocStr612;All registered candles series;Все зарегистрированные серии свечей
 DocStr613;The time shift for the new request to obtain a new candle. It is needed for the server will have time to create data in its candles storage;Временной отступ для нового запроса получение новой свечи. Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечей
 DocStr614;The handler getting new candles;Обработчик, получающий новые свечи
-DocStr615;The interval between data updates;Периодичность обновления данных
 DocStr616;Created timer;Созданный таймер
 DocStr617;The base data source for {0} which convert data from the {1} type to the {2};Базовый источник данных для {0}, который переводит данные из типа {1} в {2}
 DocStr618;The source data type (for example, {0});Тип исходных данных (например, {0})

@@ -49386,5 +49386,15 @@ namespace StockSharp.Localization
 		/// Can have short positions.
 		/// </summary>
 		public static string ShortableDesc => GetString(ShortableDescKey);
+
+		/// <summary>
+		/// The interval between data updates.
+		/// </summary>
+		public const string IntervalDataUpdatesKey = nameof(IntervalDataUpdates);
+
+		/// <summary>
+		/// The interval between data updates.
+		/// </summary>
+		public static string IntervalDataUpdates => GetString(IntervalDataUpdatesKey);
 	}
 }

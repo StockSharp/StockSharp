@@ -893,6 +893,11 @@
             Time zone.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.ImportSettings.Interval">
+      <summary>
+            Interval.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.ImportSettings.ExtendedStorage">
       <summary>
             Extended information.
