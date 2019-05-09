@@ -70,7 +70,7 @@
 			public MarketDataMessage Origin { get; }
 
 			public long CurrTransId { get; private set; }
-			public bool LastIteration { get; private set; }
+			public bool LastIteration => Origin.To != null && _nextFrom >= Origin.To.Value;
 
 			public bool ReplyReceived { get; set; }
 
@@ -81,6 +81,7 @@
 			private DateTimeOffset _currFrom;
 			private bool _firstIteration;
 			private DateTimeOffset _nextFrom;
+			private readonly DateTimeOffset _maxFrom;
 
 			public DownloadInfo(PartialDownloadMessageAdapter adapter, MarketDataMessage origin, TimeSpan step, TimeSpan iterationInterval)
 			{
@@ -96,6 +97,14 @@
 
 				_currFrom = from.Value;
 				_firstIteration = true;
+
+				_maxFrom = Origin.To ?? DateTimeOffset.Now;
+			}
+
+			public void TryUpdateNextFrom(DateTimeOffset last)
+			{
+				if (_nextFrom < last)
+					_nextFrom = last;
 			}
 
 			public MarketDataMessage InitNext()
@@ -115,11 +124,6 @@
 					CurrTransId = mdMsg.TransactionId;
 					_nextFrom = mdMsg.To.Value;
 
-					if (Origin.To == null)
-						LastIteration = _nextFrom > DateTimeOffset.Now;
-					else
-						LastIteration = _nextFrom >= Origin.To.Value;
-
 					return mdMsg;
 				}
 				else
@@ -129,12 +133,7 @@
 					_currFrom = _nextFrom;
 					_nextFrom += _step;
 
-					if (Origin.To == null)
-						LastIteration = _nextFrom > DateTimeOffset.Now;
-					else
-						LastIteration = _nextFrom >= Origin.To.Value;
-
-					if (LastIteration)
+					if (Origin.To == null && (_currFrom + _step) >= _maxFrom)
 					{
 						var mdMsg = (MarketDataMessage)Origin.Clone();
 						mdMsg.From = _currFrom;
@@ -253,12 +252,17 @@
 							if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
 								break;
 
-							message = info.InitNext();
+							var mdMsg = info.InitNext();
 
-							if (info.LastIteration)
+							if (mdMsg.To == null)
+							{
 								_original.Remove(partialMsg.OriginalTransactionId);
+								_partialRequests.RemoveWhere(p => p.Value == info);
+							}
 							else
 								_partialRequests.Add(info.CurrTransId, info);
+
+							message = mdMsg;
 						}
 					}
 
@@ -364,6 +368,7 @@
 						if (!_partialRequests.TryGetValue(candleMsg.OriginalTransactionId, out var info))
 							break;
 
+						info.TryUpdateNextFrom(candleMsg.OpenTime);
 						candleMsg.OriginalTransactionId = info.Origin.TransactionId;
 					}
 
@@ -383,6 +388,7 @@
 						if (!_partialRequests.TryGetValue(execMsg.OriginalTransactionId, out var info))
 							break;
 
+						info.TryUpdateNextFrom(execMsg.ServerTime);
 						execMsg.OriginalTransactionId = info.Origin.TransactionId;
 					}
 
