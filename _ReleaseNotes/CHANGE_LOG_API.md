@@ -90,6 +90,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter. IsAllDownloadingSupported method added.
 * (bug) SecurityNativeIdMessageAdapter. Fix processing suspended incoming messages.
 * (feature) Security. MinVolume and Shortable properties added.
+* (bug) QuikLua. Position average price fix.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
