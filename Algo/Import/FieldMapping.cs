@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Import
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -15,8 +14,6 @@ namespace StockSharp.Algo.Import
 	/// </summary>
 	public abstract class FieldMapping : NotifiableObject, IPersistable
 	{
-		//private readonly Settings _settings;
-
 		private FastDateTimeParser _dateParser;
 		private FastTimeSpanParser _timeParser;
 
@@ -41,21 +38,16 @@ namespace StockSharp.Algo.Import
 			if (displayName.IsEmpty())
 				throw new ArgumentNullException(nameof(displayName));
 
-			if (type == null)
-				throw new ArgumentNullException(nameof(type));
-
 			if (description.IsEmpty())
 				description = displayName;
 
-			//_settings = settings;
+			Type = type ?? throw new ArgumentNullException(nameof(type));
 			Name = name;
 			DisplayName = displayName;
 			Description = description;
-			Type = type;
 			IsExtended = isExtended;
 			IsEnabled = true;
 
-			Values = new ObservableCollection<FieldMappingValue>();
 			//Number = -1;
 
 			if (Type == typeof(DateTimeOffset))
@@ -151,10 +143,16 @@ namespace StockSharp.Algo.Import
 			}
 		}
 
+		private IEnumerable<FieldMappingValue> _values = Enumerable.Empty<FieldMappingValue>();
+
 		/// <summary>
 		/// Mapping values.
 		/// </summary>
-		public ObservableCollection<FieldMappingValue> Values { get; }
+		public IEnumerable<FieldMappingValue> Values
+		{
+			get => _values;
+			set => _values = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
 		/// <summary>
 		/// Default value.
@@ -169,7 +167,7 @@ namespace StockSharp.Algo.Import
 		{
 			Name = storage.GetValue<string>(nameof(Name));
 			IsExtended = storage.GetValue<bool>(nameof(IsExtended));
-			Values.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => s.Load<FieldMappingValue>()));
+			Values = storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => s.Load<FieldMappingValue>()).ToArray();
 			DefaultValue = storage.GetValue<string>(nameof(DefaultValue));
 			Format = storage.GetValue<string>(nameof(Format));
 
@@ -206,7 +204,7 @@ namespace StockSharp.Algo.Import
 				return;
 			}
 
-			if (Values.Count > 0)
+			if (Values.Any())
 			{
 				var v = Values.FirstOrDefault(vl => vl.ValueFile.CompareIgnoreCase(value));
 
