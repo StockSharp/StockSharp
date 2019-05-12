@@ -263,7 +263,7 @@ namespace StockSharp.Algo
 		public bool SupportOffline { get; set; }
 
 		/// <inheritdoc />
-		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
 			=> GetSortedAdapters().SelectMany(a => a.GetTimeFrames(securityId)).Distinct().OrderBy();
 
 		/// <inheritdoc />

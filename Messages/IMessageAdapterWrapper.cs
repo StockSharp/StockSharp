@@ -267,7 +267,7 @@ namespace StockSharp.Messages
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 
 		/// <inheritdoc />
-		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
 			=> InnerAdapter.GetTimeFrames(securityId);
 
 		/// <inheritdoc />

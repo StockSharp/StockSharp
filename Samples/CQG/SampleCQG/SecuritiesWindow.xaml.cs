@@ -44,7 +44,7 @@ namespace SampleCQG
 
 		private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			CandlesPeriods.ItemsSource = Connector.Adapter.GetTimeFrames(default(SecurityId));
+			CandlesPeriods.ItemsSource = Connector.Adapter.GetTimeFrames();
 		}
 
 		protected override void OnClosed(EventArgs e)

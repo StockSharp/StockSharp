@@ -47,7 +47,7 @@ namespace SampleMultiConnection
 
 		private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			CandlesPeriods.ItemsSource = Connector.Adapter.GetTimeFrames(default(SecurityId));
+			CandlesPeriods.ItemsSource = Connector.Adapter.GetTimeFrames();
 			CandlesPeriods.SelectedIndex = 0;
 		}
 
