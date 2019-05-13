@@ -110,6 +110,9 @@
     <Reference Include="DevExpress.Xpf.LayoutControl.v18.1">
       <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v18.1.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Xpf.PropertyGrid.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v18.1.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -120,6 +123,12 @@
     </ApplicationDefinition>
     <Compile Include="ChartWindow.xaml.cs">
       <DependentUpon>ChartWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DatesWindow.xaml.cs">
+      <DependentUpon>DatesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrdersLogWindow.xaml.cs">
+      <DependentUpon>OrdersLogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PortfoliosWindow.xaml.cs">
       <DependentUpon>PortfoliosWindow.xaml</DependentUpon>
@@ -133,6 +142,14 @@
     <Page Include="ChartWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DatesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OrdersLogWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

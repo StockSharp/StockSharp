@@ -45,6 +45,7 @@ namespace SampleMultiConnection
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
+		private readonly OrdersLogWindow _orderLogWindow = new OrdersLogWindow();
 
 		private const string _settingsFile = "connection.xml";
 		private const string _defaultDataPath = "Data";
@@ -62,6 +63,7 @@ namespace SampleMultiConnection
 			_securitiesWindow.MakeHideable();
 			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
+			_orderLogWindow.MakeHideable();
 
 			var logManager = new LogManager();
 			logManager.Listeners.Add(new FileLogListener("sample.log"));
@@ -117,6 +119,7 @@ namespace SampleMultiConnection
 
 			Connector.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
 			Connector.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+			Connector.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
 
 			Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
 			Connector.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
@@ -181,6 +184,7 @@ namespace SampleMultiConnection
 			_securitiesWindow.DeleteHideable();
 			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
+			_orderLogWindow.DeleteHideable();
 
 			_securitiesWindow.Close();
 			_tradesWindow.Close();
@@ -188,6 +192,7 @@ namespace SampleMultiConnection
 			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
+			_orderLogWindow.Close();
 
 			Connector.Dispose();
 
@@ -258,6 +263,11 @@ namespace SampleMultiConnection
 		private void ShowMyTradesClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_myTradesWindow);
+		}
+
+		private void ShowOrderLogClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_orderLogWindow);
 		}
 
 		private static void ShowOrHide(Window window)

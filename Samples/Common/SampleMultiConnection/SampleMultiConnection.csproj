@@ -80,6 +80,9 @@
     <Reference Include="DevExpress.Xpf.Grid.v18.1.Core">
       <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v18.1.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Xpf.PropertyGrid.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v18.1.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Xpf.Themes.Office2016White.v18.1">
       <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v18.1.dll</HintPath>
     </Reference>
@@ -128,6 +131,12 @@
     <Compile Include="ChartWindow.xaml.cs">
       <DependentUpon>ChartWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DatesWindow.xaml.cs">
+      <DependentUpon>DatesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrdersLogWindow.xaml.cs">
+      <DependentUpon>OrdersLogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StopOrdersWindow.xaml.cs">
       <DependentUpon>StopOrdersWindow.xaml</DependentUpon>
     </Compile>
@@ -135,6 +144,14 @@
       <DependentUpon>TradesWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="ChartWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DatesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OrdersLogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

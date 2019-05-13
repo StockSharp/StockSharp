@@ -26,6 +26,7 @@
             <Button x:Name="ShowPortfolios" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" Width="100"/>
             <Button x:Name="ShowStopOrders" Content="{x:Static loc:LocalizedStrings.StopOrders}" Click="ShowStopOrdersClick" Width="100"/>
             <Button x:Name="ShowTrades" Content="{x:Static loc:LocalizedStrings.Ticks}" Click="ShowTradesClick" Width="100"/>
+	        <Button x:Name="ShowOrderLog" Content="{x:Static loc:LocalizedStrings.OrderLog}" Click="ShowOrderLogClick" Width="100"/>
             <Button x:Name="ShowMyTrades" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" Width="100"/>
             <Button x:Name="ShowOrders"  Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" Width="100"/>
         </WrapPanel>
