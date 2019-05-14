@@ -93,6 +93,7 @@ StockSharp API Change log
 * (bug) QuikLua. Position average price fix.
 * (feature) SampleMultiConnection. Order log, historical ticks and news requests supported.
 * (feature) Deribit. V2 protocol supported.
+* (feature) BitStamp. V2 web sockets supported.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
