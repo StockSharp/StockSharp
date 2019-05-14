@@ -217,6 +217,9 @@ namespace StockSharp.Algo
 		public override IEnumerable<MessageTypes> SupportedMessages => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct();
 
 		/// <inheritdoc />
+		public override IEnumerable<MarketDataTypes> SupportedMarketDataTypes => GetSortedAdapters().SelectMany(a => a.SupportedMarketDataTypes).Distinct();
+
+		/// <inheritdoc />
 		public override bool PortfolioLookupRequired => GetSortedAdapters().Any(a => a.PortfolioLookupRequired);
 
 		/// <inheritdoc />
