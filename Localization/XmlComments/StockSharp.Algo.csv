@@ -4245,6 +4245,7 @@ M:StockSharp.Algo.BasketMessageAdapter.#ctor(Ecng.Common.IdGenerator,StockSharp.
 P:StockSharp.Algo.BasketMessageAdapter.AdapterProvider/summary;DocStr9328
 P:StockSharp.Algo.BasketMessageAdapter.CandleBuilderProvider/summary;DocStr10629
 P:StockSharp.Algo.BasketMessageAdapter.SupportedMessages/inheritdoc;DocStr8459
+P:StockSharp.Algo.BasketMessageAdapter.SupportedMarketDataTypes/inheritdoc;DocStr8459
 P:StockSharp.Algo.BasketMessageAdapter.PortfolioLookupRequired/inheritdoc;DocStr8459
 P:StockSharp.Algo.BasketMessageAdapter.OrderStatusRequired/inheritdoc;DocStr8459
 P:StockSharp.Algo.BasketMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
