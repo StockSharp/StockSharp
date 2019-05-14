@@ -94,6 +94,8 @@ StockSharp API Change log
 * (feature) SampleMultiConnection. Order log, historical ticks and news requests supported.
 * (feature) Deribit. V2 protocol supported.
 * (feature) BitStamp. V2 web sockets supported.
+* (feature) FieldMapping. ZeroAsNull added.
+* (feature) CandleMessageGrid added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

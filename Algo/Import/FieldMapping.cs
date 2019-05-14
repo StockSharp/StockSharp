@@ -160,6 +160,11 @@ namespace StockSharp.Algo.Import
 		public string DefaultValue { get; set; }
 
 		/// <summary>
+		/// Zero as <see langword="null"/>.
+		/// </summary>
+		public bool ZeroAsNull { get; set; }
+
+		/// <summary>
 		/// Load settings.
 		/// </summary>
 		/// <param name="storage">Settings storage.</param>
@@ -170,6 +175,7 @@ namespace StockSharp.Algo.Import
 			Values = storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => s.Load<FieldMappingValue>()).ToArray();
 			DefaultValue = storage.GetValue<string>(nameof(DefaultValue));
 			Format = storage.GetValue<string>(nameof(Format));
+			ZeroAsNull = storage.GetValue<bool>(nameof(ZeroAsNull));
 
 			//IsEnabled = storage.GetValue(nameof(IsEnabled), IsEnabled);
 
@@ -186,9 +192,9 @@ namespace StockSharp.Algo.Import
 			storage.SetValue(nameof(Values), Values.Select(v => v.Save()).ToArray());
 			storage.SetValue(nameof(DefaultValue), DefaultValue);
 			storage.SetValue(nameof(Format), Format);
-
 			//storage.SetValue(nameof(IsEnabled), IsEnabled);
 			storage.SetValue(nameof(Order), Order);
+			storage.SetValue(nameof(ZeroAsNull), ZeroAsNull);
 		}
 
 		/// <summary>
@@ -279,7 +285,14 @@ namespace StockSharp.Algo.Import
 			}
 
 			if (value != null)
-				OnApply(instance, value.To(Type));
+			{
+				value = value.To(Type);
+
+				if (ZeroAsNull && Type.IsNumeric() && value.To<decimal>() == 0)
+					return;
+
+				OnApply(instance, value);
+			}
 		}
 
 		/// <summary>

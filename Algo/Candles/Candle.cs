@@ -47,21 +47,13 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.SecurityKey, true)]
 		public Security Security { get; set; }
 
-		private DateTimeOffset _openTime;
-
 		/// <summary>
 		/// Open time.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleOpenTimeKey)]
 		[DescriptionLoc(LocalizedStrings.CandleOpenTimeKey, true)]
-		public DateTimeOffset OpenTime
-		{
-			get => _openTime;
-			set => _openTime = value;
-		}
-
-		private DateTimeOffset _closeTime;
+		public DateTimeOffset OpenTime { get; set; }
 
 		/// <summary>
 		/// Close time.
@@ -69,13 +61,7 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleCloseTimeKey)]
 		[DescriptionLoc(LocalizedStrings.CandleCloseTimeKey, true)]
-		public DateTimeOffset CloseTime
-		{
-			get => _closeTime;
-			set => _closeTime = value;
-		}
-
-		private DateTimeOffset _highTime;
+		public DateTimeOffset CloseTime { get; set; }
 
 		/// <summary>
 		/// High time.
@@ -83,13 +69,7 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleHighTimeKey)]
 		[DescriptionLoc(LocalizedStrings.CandleHighTimeKey, true)]
-		public DateTimeOffset HighTime
-		{
-			get => _highTime;
-			set => _highTime = value;
-		}
-
-		private DateTimeOffset _lowTime;
+		public DateTimeOffset HighTime { get; set; }
 
 		/// <summary>
 		/// Low time.
@@ -97,13 +77,7 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleLowTimeKey)]
 		[DescriptionLoc(LocalizedStrings.CandleLowTimeKey, true)]
-		public DateTimeOffset LowTime
-		{
-			get => _lowTime;
-			set => _lowTime = value;
-		}
-
-		private decimal _openPrice;
+		public DateTimeOffset LowTime { get; set; }
 
 		/// <summary>
 		/// Opening price.
@@ -111,13 +85,7 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str79Key)]
 		[DescriptionLoc(LocalizedStrings.Str80Key)]
-		public decimal OpenPrice
-		{
-			get => _openPrice;
-			set => _openPrice = value;
-		}
-
-		private decimal _closePrice;
+		public decimal OpenPrice { get; set; }
 
 		/// <summary>
 		/// Closing price.
@@ -125,13 +93,7 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ClosingPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str86Key)]
-		public decimal ClosePrice
-		{
-			get => _closePrice;
-			set => _closePrice = value;
-		}
-
-		private decimal _highPrice;
+		public decimal ClosePrice { get; set; }
 
 		/// <summary>
 		/// Highest price.
@@ -139,13 +101,7 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.HighestPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str82Key)]
-		public decimal HighPrice
-		{
-			get => _highPrice;
-			set => _highPrice = value;
-		}
-
-		private decimal _lowPrice;
+		public decimal HighPrice { get; set; }
 
 		/// <summary>
 		/// Lowest price.
@@ -153,78 +109,42 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.LowestPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str84Key)]
-		public decimal LowPrice
-		{
-			get => _lowPrice;
-			set => _lowPrice = value;
-		}
-
-		private decimal _totalPrice;
+		public decimal LowPrice { get; set; }
 
 		/// <summary>
 		/// Total price size.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TotalPriceKey)]
-		public decimal TotalPrice
-		{
-			get => _totalPrice;
-			set => _totalPrice = value;
-		}
-
-		private decimal? _openVolume;
+		public decimal TotalPrice { get; set; }
 
 		/// <summary>
 		/// Volume at open.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OpenVolumeKey)]
-		public decimal? OpenVolume
-		{
-			get => _openVolume;
-			set => _openVolume = value;
-		}
-
-		private decimal? _closeVolume;
+		public decimal? OpenVolume { get; set; }
 
 		/// <summary>
 		/// Volume at close.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CloseVolumeKey)]
-		public decimal? CloseVolume
-		{
-			get => _closeVolume;
-			set => _closeVolume = value;
-		}
-
-		private decimal? _highVolume;
+		public decimal? CloseVolume { get; set; }
 
 		/// <summary>
 		/// Volume at high.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.HighVolumeKey)]
-		public decimal? HighVolume
-		{
-			get => _highVolume;
-			set => _highVolume = value;
-		}
-
-		private decimal? _lowVolume;
+		public decimal? HighVolume { get; set; }
 
 		/// <summary>
 		/// Volume at low.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.LowVolumeKey)]
-		public decimal? LowVolume
-		{
-			get => _lowVolume;
-			set => _lowVolume = value;
-		}
-
-		private decimal _totalVolume;
+		public decimal? LowVolume { get; set; }
 
 		/// <summary>
 		/// Total volume.
@@ -232,55 +152,19 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
 		[DescriptionLoc(LocalizedStrings.TotalCandleVolumeKey)]
-		public decimal TotalVolume
-		{
-			get => _totalVolume;
-			set => _totalVolume = value;
-		}
-
-		private decimal? _relativeVolume;
+		public decimal TotalVolume { get; set; }
 
 		/// <summary>
 		/// Relative volume.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.RelativeVolumeKey)]
-		public decimal? RelativeVolume
-		{
-			get => _relativeVolume;
-			set => _relativeVolume = value;
-		}
-
-		//[field: NonSerialized]
-		//private CandleSeries _series;
-
-		///// <summary>
-		///// Candles series.
-		///// </summary>
-		//public CandleSeries Series
-		//{
-		//	get { return _series; }
-		//	set { _series = value; }
-		//}
-
-		//[field: NonSerialized]
-		//private ICandleManagerSource _source;
-
-		///// <summary>
-		///// Candle's source.
-		///// </summary>
-		//public ICandleManagerSource Source
-		//{
-		//	get { return _source; }
-		//	set { _source = value; }
-		//}
+		public decimal? RelativeVolume { get; set; }
 
 		/// <summary>
 		/// Candle arg.
 		/// </summary>
 		public abstract object Arg { get; set; }
-
-		private int? _totalTicks;
 
 		/// <summary>
 		/// Number of ticks.
@@ -288,13 +172,7 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TicksKey)]
 		[DescriptionLoc(LocalizedStrings.TickCountKey)]
-		public int? TotalTicks
-		{
-			get => _totalTicks;
-			set => _totalTicks = value;
-		}
-
-		private int? _upTicks;
+		public int? TotalTicks { get; set; }
 
 		/// <summary>
 		/// Number of up trending ticks.
@@ -302,13 +180,7 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickUpKey)]
 		[DescriptionLoc(LocalizedStrings.TickUpCountKey)]
-		public int? UpTicks
-		{
-			get => _upTicks;
-			set => _upTicks = value;
-		}
-
-		private int? _downTicks;
+		public int? UpTicks { get; set; }
 
 		/// <summary>
 		/// Number of down trending ticks.
@@ -316,11 +188,7 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickDownKey)]
 		[DescriptionLoc(LocalizedStrings.TickDownCountKey)]
-		public int? DownTicks
-		{
-			get => _downTicks;
-			set => _downTicks = value;
-		}
+		public int? DownTicks { get; set; }
 
 		private CandleStates _state;
 

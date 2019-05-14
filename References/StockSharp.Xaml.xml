@@ -423,6 +423,44 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.CandleMessageGrid">
+      <summary>
+            Table showing (<see cref="T:StockSharp.Messages.CandleMessage" />.
+            </summary>
+      <summary>
+            CandleMessageGrid
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.CandleMessageGrid.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.CandleMessageGrid" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.CandleMessageGrid.MaxCount">
+      <summary>
+            The maximum number of rows to display. The -1 value means an unlimited amount. The default is 1000000.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.CandleMessageGrid.Messages">
+      <summary>
+            The list of messages added to the table.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.CandleMessageGrid.SelectedMessage">
+      <summary>
+            The selected message.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.CandleMessageGrid.SelectedMessages">
+      <summary>
+            Selected messages.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.CandleMessageGrid.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Code.CodeExtensions">
       <summary>
             Extension class.
@@ -539,6 +577,11 @@
     <member name="M:StockSharp.Xaml.Code.CodeReferencesWindow.InitializeComponent">
       <summary>
             InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Converters.CandleStateToStringConverter">
+      <summary>
+        <see cref="T:StockSharp.Messages.CandleStates" /> to <see cref="T:System.String" /> converter.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Converters.ColoredIconConverter">

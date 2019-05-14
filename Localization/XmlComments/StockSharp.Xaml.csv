@@ -85,6 +85,13 @@ M:StockSharp.Xaml.BuySellPanel.Load(Ecng.Serialization.SettingsStorage)/param/st
 M:StockSharp.Xaml.BuySellPanel.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.BuySellPanel.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.BuySellPanel.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.CandleMessageGrid/summary;DocStr8133
+M:StockSharp.Xaml.CandleMessageGrid.#ctor/summary;DocStr1
+P:StockSharp.Xaml.CandleMessageGrid.MaxCount/summary;DocStr8136
+P:StockSharp.Xaml.CandleMessageGrid.Messages/summary;DocStr8137
+P:StockSharp.Xaml.CandleMessageGrid.SelectedMessage/summary;DocStr8138
+P:StockSharp.Xaml.CandleMessageGrid.SelectedMessages/summary;DocStr8139
+M:StockSharp.Xaml.CandleMessageGrid.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Code.CodeExtensions/summary;DocStr4290
 M:StockSharp.Xaml.Code.CodeExtensions.CompileCode(Ecng.Common.ICompiler,System.String,System.String,System.Collections.Generic.IEnumerable{StockSharp.Xaml.Code.CodeReference})/summary;DocStr8110
 M:StockSharp.Xaml.Code.CodeExtensions.CompileCode(Ecng.Common.ICompiler,System.String,System.String,System.Collections.Generic.IEnumerable{StockSharp.Xaml.Code.CodeReference})/param/compiler;DocStr9836
@@ -118,6 +125,7 @@ M:StockSharp.Xaml.Code.CodeReferencesWindow.Load(Ecng.Serialization.SettingsStor
 M:StockSharp.Xaml.Code.CodeReferencesWindow.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Code.CodeReferencesWindow.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Code.CodeReferencesWindow.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.Converters.CandleStateToStringConverter/summary;DocStr9307
 T:StockSharp.Xaml.Converters.ColoredIconConverter/summary;DocStr10740
 T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1/summary;DocStr9842
 T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1/typeparam/T;DocStr10030

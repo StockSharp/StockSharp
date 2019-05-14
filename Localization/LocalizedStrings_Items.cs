@@ -49396,5 +49396,15 @@ namespace StockSharp.Localization
 		/// The interval between data updates.
 		/// </summary>
 		public static string IntervalDataUpdates => GetString(IntervalDataUpdatesKey);
+
+		/// <summary>
+		/// Zero
+		/// </summary>
+		public const string ZeroKey = nameof(Zero);
+
+		/// <summary>
+		/// Zero
+		/// </summary>
+		public static string Zero => GetString(ZeroKey);
 	}
 }

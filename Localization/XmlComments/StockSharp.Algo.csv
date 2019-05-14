@@ -1507,6 +1507,7 @@ P:StockSharp.Algo.Import.FieldMapping.IsEnabled/summary;DocStr9985
 P:StockSharp.Algo.Import.FieldMapping.Order/summary;FieldOrder
 P:StockSharp.Algo.Import.FieldMapping.Values/summary;DocStr9986
 P:StockSharp.Algo.Import.FieldMapping.DefaultValue/summary;DocStr9987
+P:StockSharp.Algo.Import.FieldMapping.ZeroAsNull/summary;DocStr11110
 M:StockSharp.Algo.Import.FieldMapping.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Algo.Import.FieldMapping.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Algo.Import.FieldMapping.ApplyFileValue(System.Object,System.String)/summary;DocStr9988

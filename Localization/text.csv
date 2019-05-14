@@ -4972,6 +4972,7 @@ MinVolumeDesc;Minimum volume allowed in order.;Минимальный объем
 Shortable;Shortable;Шортовый
 ShortableDesc;Can have short positions.;Можно ли открывать шортовые позиции.
 IntervalDataUpdates;The interval between data updates.;Периодичность обновления данных.
+Zero;Zero;Ноль
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15619,3 +15620,4 @@ DocStr11106;Get maximum size step allowed for historical download;Получит
 DocStr11107;Is for the specified {0} all securities downloading enabled;Доступно ли для указанного {0} загрузка всех инструментов
 DocStr11108;Market data request;Запрос маркет данных
 DocStr11109;Interval between iterations;Интервал между итерациями
+DocStr11110;Zero as {0};Zero as {0}
