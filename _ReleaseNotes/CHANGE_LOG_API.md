@@ -92,6 +92,7 @@ StockSharp API Change log
 * (feature) Security. MinVolume and Shortable properties added.
 * (bug) QuikLua. Position average price fix.
 * (feature) SampleMultiConnection. Order log, historical ticks and news requests supported.
+* (feature) Deribit. V2 protocol supported.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
