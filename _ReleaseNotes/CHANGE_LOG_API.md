@@ -91,7 +91,7 @@ StockSharp API Change log
 * (bug) SecurityNativeIdMessageAdapter. Fix processing suspended incoming messages.
 * (feature) Security. MinVolume and Shortable properties added.
 * (bug) QuikLua. Position average price fix.
-* (feature) SampleMultiConnection. Order log and historical ticks requests supported.
+* (feature) SampleMultiConnection. Order log, historical ticks and news requests supported.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -32,6 +32,7 @@ namespace SampleMultiConnection
 	using StockSharp.Logging;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	public partial class MainWindow
 	{
@@ -46,9 +47,10 @@ namespace SampleMultiConnection
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
 		private readonly OrdersLogWindow _orderLogWindow = new OrdersLogWindow();
+		private readonly NewsWindow _newsWindow = new NewsWindow();
 
-		private const string _settingsFile = "connection.xml";
 		private const string _defaultDataPath = "Data";
+		private readonly string _settingsFile;
 
 		public MainWindow()
 		{
@@ -64,11 +66,15 @@ namespace SampleMultiConnection
 			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 			_orderLogWindow.MakeHideable();
+			_newsWindow.MakeHideable();
+
+			var path = _defaultDataPath.ToFullPath();
+
+			_settingsFile = Path.Combine(path, "connection.xml");
 
 			var logManager = new LogManager();
-			logManager.Listeners.Add(new FileLogListener("sample.log"));
+			logManager.Listeners.Add(new FileLogListener { LogDirectory = Path.Combine(path, "Logs") });
             logManager.Listeners.Add(Monitor);
-            var path = _defaultDataPath.ToFullPath();
 
 			HistoryPath.Folder = path;
 
@@ -98,6 +104,9 @@ namespace SampleMultiConnection
 			Connector.Connected += () =>
 			{
 				this.GuiAsync(() => ChangeConnectStatus(true));
+
+				if (Connector.Adapter.IsMarketDataTypeSupported(MarketDataTypes.News))
+					Connector.RegisterNews();
 			};
 
 			// subscribe on connection error event
@@ -140,6 +149,9 @@ namespace SampleMultiConnection
 
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
+
+			// set news provider
+			_newsWindow.NewsPanel.NewsProvider = Connector;
 
 			try
 			{
@@ -185,6 +197,7 @@ namespace SampleMultiConnection
 			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			_orderLogWindow.DeleteHideable();
+			_newsWindow.DeleteHideable();
 
 			_securitiesWindow.Close();
 			_tradesWindow.Close();
@@ -193,6 +206,7 @@ namespace SampleMultiConnection
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 			_orderLogWindow.Close();
+			_newsWindow.Close();
 
 			Connector.Dispose();
 
@@ -268,6 +282,11 @@ namespace SampleMultiConnection
 		private void ShowOrderLogClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_orderLogWindow);
+		}
+
+		private void ShowNewsClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_newsWindow);
 		}
 
 		private static void ShowOrHide(Window window)
