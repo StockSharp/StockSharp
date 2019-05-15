@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Import
 
 			//Number = -1;
 
-			if (Type == typeof(DateTimeOffset))
+			if (Type.IsDateTime())
 				Format = "yyyyMMdd";
 			else if (Type == typeof(TimeSpan))
 				Format = "hh:mm:ss";
@@ -253,24 +253,31 @@ namespace StockSharp.Algo.Import
 					value = str;
 				}
 			}
-			else if (Type == typeof(DateTimeOffset))
+			else if (Type.IsDateTime())
 			{
 				if (value is string str)
 				{
 					if (_dateParser == null)
 						_dateParser = new FastDateTimeParser(Format);
 
-					var dto = _dateParser.ParseDto(str);
-
-					if (dto.Offset.IsDefault())
+					if (Type == typeof(DateTimeOffset))
 					{
-						var tz = Scope<TimeZoneInfo>.Current?.Value;
+						var dto = _dateParser.ParseDto(str);
 
-						if (tz != null)
-							dto = dto.UtcDateTime.ApplyTimeZone(tz);
+						if (dto.Offset.IsDefault())
+						{
+							var tz = Scope<TimeZoneInfo>.Current?.Value;
+
+							if (tz != null)
+								dto = dto.UtcDateTime.ApplyTimeZone(tz);
+						}
+
+						value = dto;
 					}
-
-					value = dto;
+					else
+					{
+						value = _dateParser.Parse(str);
+					}
 				}
 			}
 			else if (Type == typeof(TimeSpan))
