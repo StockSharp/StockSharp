@@ -90,15 +90,21 @@ namespace SampleMultiConnection
 			// ecng.serialization invoke in several places IStorage obj
 			ConfigManager.RegisterService(entityRegistry.Storage);
 
+			INativeIdStorage nativeIdStorage = new CsvNativeIdStorage(Path.Combine(path, "NativeId"))
+			{
+				DelayAction = entityRegistry.DelayAction
+			};
+			ConfigManager.RegisterService(nativeIdStorage);
+
 			var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
 
 			Connector = new Connector(entityRegistry, storageRegistry, snapshotRegistry);
 			logManager.Sources.Add(Connector);
 
-			InitConnector(entityRegistry, snapshotRegistry);
+			InitConnector(entityRegistry, snapshotRegistry, nativeIdStorage);
 		}
 
-		private void InitConnector(CsvEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry)
+		private void InitConnector(CsvEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry, INativeIdStorage nativeIdStorage)
 		{
 			// subscribe on connection successfully event
 			Connector.Connected += () =>
@@ -166,6 +172,17 @@ namespace SampleMultiConnection
 			}
 			catch
 			{
+			}
+
+			Connector.Adapter.NativeIdStorage = nativeIdStorage;
+
+			try
+			{
+				nativeIdStorage.Init();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(this, ex.ToString());
 			}
 
 			if (Connector.StorageAdapter == null)
