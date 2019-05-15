@@ -96,6 +96,7 @@ StockSharp API Change log
 * (feature) BitStamp. V2 web sockets supported.
 * (feature) FieldMapping. ZeroAsNull added.
 * (feature) CandleMessageGrid added.
+* (feature) FIX connector. LMAX dialect added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
