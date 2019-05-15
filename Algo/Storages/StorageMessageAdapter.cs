@@ -423,7 +423,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
 		{
 			if (DriveInternal == null)
 				return Enumerable.Empty<TimeSpan>();
