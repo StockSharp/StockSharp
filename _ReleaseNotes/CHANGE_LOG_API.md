@@ -97,6 +97,7 @@ StockSharp API Change log
 * (feature) FieldMapping. ZeroAsNull added.
 * (feature) CandleMessageGrid added.
 * (feature) FIX connector. LMAX dialect added.
+* (feature) ConnectorWindow. Allow change connector's name.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

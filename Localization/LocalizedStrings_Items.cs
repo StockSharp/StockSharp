@@ -49406,5 +49406,15 @@ namespace StockSharp.Localization
 		/// Zero
 		/// </summary>
 		public static string Zero => GetString(ZeroKey);
+
+		/// <summary>
+		/// Connector
+		/// </summary>
+		public const string ConnectorKey = nameof(Connector);
+
+		/// <summary>
+		/// Connector
+		/// </summary>
+		public static string Connector => GetString(ConnectorKey);
 	}
 }
