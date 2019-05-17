@@ -49416,5 +49416,15 @@ namespace StockSharp.Localization
 		/// Connector
 		/// </summary>
 		public static string Connector => GetString(ConnectorKey);
+
+		/// <summary>
+		/// Volume {0} of order '{1}' is less than minimum allowed {2}.
+		/// </summary>
+		public const string OrderVolumeLessMinKey = nameof(OrderVolumeLessMin);
+
+		/// <summary>
+		/// Volume {0} of order '{1}' is less than minimum allowed {2}.
+		/// </summary>
+		public static string OrderVolumeLessMin => GetString(OrderVolumeLessMinKey);
 	}
 }

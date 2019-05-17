@@ -2037,6 +2037,7 @@ namespace StockSharp.Algo.Testing
 
 			var priceStep = securityDefinition?.PriceStep;
 			var volumeStep = securityDefinition?.VolumeStep;
+			var minVolume = securityDefinition?.MinVolume;
 
 			if (state != null && execMsg.OrderType != OrderTypes.Market)
 			{
@@ -2061,6 +2062,9 @@ namespace StockSharp.Algo.Testing
 
 			if (volumeStep != null && volumeStep > 0 && execMsg.OrderVolume % volumeStep != 0)
 				return LocalizedStrings.OrderVolumeNotMultipleOfVolumeStep.Put(execMsg.OrderVolume, execMsg.TransactionId, volumeStep);
+
+			if (minVolume != null && execMsg.OrderVolume < minVolume)
+				return LocalizedStrings.OrderVolumeLessMin.Put(execMsg.OrderVolume, execMsg.TransactionId, minVolume);
 
 			var info = GetPortfolioInfo(execMsg.PortfolioName);
 

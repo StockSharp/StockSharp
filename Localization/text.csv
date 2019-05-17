@@ -4974,6 +4974,7 @@ ShortableDesc;Can have short positions.;Можно ли открывать шо�
 IntervalDataUpdates;The interval between data updates.;Периодичность обновления данных.
 Zero;Zero;Ноль
 Connector;Connector;Коннектор
+OrderVolumeLessMin;Volume {0} of order '{1}' is less than minimum allowed {2}.;Объем {0} заявки '{1}' меньше минимально допустимого {2}.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
