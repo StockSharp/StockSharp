@@ -783,6 +783,7 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.SettlementPrice:
 						case Level1Fields.HighBidPrice:
 						case Level1Fields.LowAskPrice:
+						case Level1Fields.SpreadMiddle:
 						{
 							SerializePrice(writer, metaInfo, (decimal)value, useLong, nonAdjustPrice);
 							break;
@@ -800,6 +801,7 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.LastTradeVolume:
 						case Level1Fields.BestBidVolume:
 						case Level1Fields.BestAskVolume:
+						case Level1Fields.MinVolume:
 						{
 							writer.WriteVolume((decimal)value, metaInfo, SecurityId);
 							break;
@@ -1048,6 +1050,15 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.BuyBackPrice:
 						{
 							SerializeChange(writer, metaInfo.BuyBackPrice, (decimal)value);
+							break;
+						}
+						case Level1Fields.Dividend:
+						case Level1Fields.BeforeSplit:
+						case Level1Fields.AfterSplit:
+						case Level1Fields.CommissionMaker:
+						case Level1Fields.CommissionTaker:
+						{
+							writer.WriteDecimal((decimal)value, 0);
 							break;
 						}
 						default:
@@ -1300,6 +1311,7 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.SettlementPrice:
 					case Level1Fields.HighBidPrice:
 					case Level1Fields.LowAskPrice:
+					case Level1Fields.SpreadMiddle:
 					{
 						var price = DeserializePrice(reader, metaInfo, useLong, nonAdjustPrice);
 						l1Msg.Add(field, price);
@@ -1321,6 +1333,7 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.LastTradeVolume:
 					case Level1Fields.BestBidVolume:
 					case Level1Fields.BestAskVolume:
+					case Level1Fields.MinVolume:
 					{
 						l1Msg.Add(field, reader.ReadVolume(metaInfo));
 						break;
@@ -1549,6 +1562,15 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.BuyBackPrice:
 					{
 						l1Msg.Add(field, DeserializeChange(reader, metaInfo.BuyBackPrice));
+						break;
+					}
+					case Level1Fields.Dividend:
+					case Level1Fields.BeforeSplit:
+					case Level1Fields.AfterSplit:
+					case Level1Fields.CommissionMaker:
+					case Level1Fields.CommissionTaker:
+					{
+						l1Msg.Add(field, reader.ReadDecimal(0));
 						break;
 					}
 					default:

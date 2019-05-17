@@ -99,6 +99,7 @@ StockSharp API Change log
 * (feature) FIX connector. LMAX dialect added.
 * (feature) ConnectorWindow. Allow change connector's name.
 * (feature) IMessageAdapter. PossibleSupportedMessages property added.
+* (feature) Level1BinarySerializer. Support Dividend, MinVolume, SpreadMiddle, Commission, Splits.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
