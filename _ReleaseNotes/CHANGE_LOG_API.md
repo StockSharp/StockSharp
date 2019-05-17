@@ -100,6 +100,7 @@ StockSharp API Change log
 * (feature) ConnectorWindow. Allow change connector's name.
 * (feature) IMessageAdapter. PossibleSupportedMessages property added.
 * (feature) Level1BinarySerializer. Support Dividend, MinVolume, SpreadMiddle, Commission, Splits.
+* (feature) PositionBinarySerializer. Support Commissions, SettlementPrice.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

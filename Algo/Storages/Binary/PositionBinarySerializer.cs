@@ -28,6 +28,7 @@ namespace StockSharp.Algo.Storages.Binary
 			Leverage = new RefPair<decimal, decimal>();
 			Commission = new RefPair<decimal, decimal>();
 			CurrentValueInLots = new RefPair<decimal, decimal>();
+			SettlementPrice = new RefPair<decimal, decimal>();
 			
 			Portfolios = new List<string>();
 			ClientCodes = new List<string>();
@@ -45,7 +46,8 @@ namespace StockSharp.Algo.Storages.Binary
 		public RefPair<decimal, decimal> Leverage { get; private set; }
 		public RefPair<decimal, decimal> Commission { get; private set; }
 		public RefPair<decimal, decimal> CurrentValueInLots { get; private set; }
-		
+		public RefPair<decimal, decimal> SettlementPrice { get; private set; }
+
 		public IList<string> Portfolios { get; }
 		public IList<string> ClientCodes { get; }
 		public IList<string> DepoNames { get; }
@@ -83,6 +85,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 			foreach (var depoName in DepoNames)
 				stream.Write(depoName);
+
+			if (Version < MarketDataVersions.Version33)
+				return;
+
+			Write(stream, SettlementPrice);
 		}
 
 		public override void Read(Stream stream)
@@ -115,6 +122,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 			for (var i = 0; i < dnCount; i++)
 				DepoNames.Add(stream.Read<string>());
+
+			if (Version < MarketDataVersions.Version33)
+				return;
+
+			SettlementPrice = ReadInfo(stream);
 		}
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
@@ -154,6 +166,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 			DepoNames.Clear();
 			DepoNames.AddRange(posInfo.DepoNames);
+
+			SettlementPrice = Clone(posInfo.SettlementPrice);
 		}
 
 		private static RefPair<decimal, decimal> Clone(RefPair<decimal, decimal> info)
@@ -165,7 +179,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class PositionBinarySerializer : BinaryMarketDataSerializer<PositionChangeMessage, PositionMetaInfo>
 	{
 		public PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 20, MarketDataVersions.Version31, exchangeInfoProvider)
+			: base(securityId, 20, MarketDataVersions.Version33, exchangeInfoProvider)
 		{
 		}
 
@@ -280,6 +294,13 @@ namespace StockSharp.Algo.Storages.Binary
 						case PositionChangeTypes.ExpirationDate:
 							writer.WriteDto((DateTimeOffset)change.Value);
 							break;
+						case PositionChangeTypes.CommissionMaker:
+						case PositionChangeTypes.CommissionTaker:
+							writer.WriteDecimal((decimal)change.Value, 0);
+							break;
+						case PositionChangeTypes.SettlementPrice:
+							SerializeChange(writer, metaInfo.SettlementPrice, (decimal)change.Value);
+							break;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
@@ -373,6 +394,13 @@ namespace StockSharp.Algo.Storages.Binary
 						break;
 					case PositionChangeTypes.ExpirationDate:
 						posMsg.Add(type, reader.ReadDto().Value);
+						break;
+					case PositionChangeTypes.CommissionMaker:
+					case PositionChangeTypes.CommissionTaker:
+						posMsg.Add(type, reader.ReadDecimal(0));
+						break;
+					case PositionChangeTypes.SettlementPrice:
+						posMsg.Add(type, DeserializeChange(reader, metaInfo.SettlementPrice));
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
