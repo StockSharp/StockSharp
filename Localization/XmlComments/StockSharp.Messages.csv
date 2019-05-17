@@ -763,6 +763,7 @@ F:StockSharp.Messages.OrderCancelVolumeRequireTypes.Balance/summary;DocStr9224
 F:StockSharp.Messages.OrderCancelVolumeRequireTypes.Volume/summary;DocStr9225
 T:StockSharp.Messages.IMessageAdapter/summary;DocStr4074
 P:StockSharp.Messages.IMessageAdapter.TransactionIdGenerator/summary;DocStr3311
+P:StockSharp.Messages.IMessageAdapter.PossibleSupportedMessages/summary;DocStr11113
 P:StockSharp.Messages.IMessageAdapter.SupportedMessages/summary;DocStr449
 P:StockSharp.Messages.IMessageAdapter.SupportedMarketDataTypes/summary;DocStr10120
 P:StockSharp.Messages.IMessageAdapter.SecurityClassInfo/summary;DocStr2499
@@ -828,6 +829,7 @@ P:StockSharp.Messages.MessageAdapterWrapper.CurrentTime/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.CheckTimeFrameByRequest/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.ReConnectionSettings/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.TransactionIdGenerator/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapterWrapper.PossibleSupportedMessages/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.SupportedMessages/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.SupportedMarketDataTypes/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.HeartbeatInterval/inheritdoc;DocStr8459
@@ -952,6 +954,7 @@ T:StockSharp.Messages.MessageAdapter/summary;DocStr4330
 M:StockSharp.Messages.MessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr93
 M:StockSharp.Messages.MessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.Messages.MessageAdapter.SupportedMessages/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapter.PossibleSupportedMessages/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.SupportedMarketDataTypes/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.SecurityClassInfo/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.CandlesBuildFrom/inheritdoc;DocStr8459
@@ -1035,7 +1038,7 @@ F:StockSharp.Messages.MessageTypes.PositionChange/summary;Str1250
 F:StockSharp.Messages.MessageTypes.PortfolioChange/summary;DocStr4358
 F:StockSharp.Messages.MessageTypes.MarketData/summary;DocStr4359
 F:StockSharp.Messages.MessageTypes.NativeSecurityId/summary;DocStr4360
-F:StockSharp.Messages.MessageTypes.Connect/summary;ConnectionString
+F:StockSharp.Messages.MessageTypes.Connect/summary;XamlStr666
 F:StockSharp.Messages.MessageTypes.Disconnect/summary;DocStr4361
 F:StockSharp.Messages.MessageTypes.SecurityLookup/summary;Str3657
 F:StockSharp.Messages.MessageTypes.PortfolioLookup/summary;DocStr4362

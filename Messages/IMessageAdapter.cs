@@ -50,6 +50,11 @@ namespace StockSharp.Messages
 		IdGenerator TransactionIdGenerator { get; }
 
 		/// <summary>
+		/// Possible supported by adapter message types.
+		/// </summary>
+		IEnumerable<MessageTypes> PossibleSupportedMessages { get; }
+
+		/// <summary>
 		/// Supported by adapter message types.
 		/// </summary>
 		IEnumerable<MessageTypes> SupportedMessages { get; set; }
