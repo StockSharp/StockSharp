@@ -121,7 +121,7 @@ namespace StockSharp.Messages
 		NativeSecurityId,
 
 		/// <summary>
-		/// Connection string.
+		/// Connect.
 		/// </summary>
 		Connect,
 

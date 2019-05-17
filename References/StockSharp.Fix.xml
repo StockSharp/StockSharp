@@ -30,24 +30,16 @@
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.StorageName">
-      <summary>
-            The storage name, associated with the adapter.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsNativeIdentifiers">
-      <summary>
-            Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.SecurityExtendedFields">
-      <summary>
-            Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsNativeIdentifiersPersistable">
-      <summary>
-            Native identifier can be stored.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.SupportedMarketDataTypes">
       <inheritdoc />
@@ -87,14 +79,10 @@
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.Login">
-      <summary>
-            Login.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.Password">
-      <summary>
-            Password.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Clone">
       <summary>
@@ -115,9 +103,7 @@
       <inheritdoc />
     </member>
     <member name="E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage">
-      <summary>
-            New message event.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportSubscriptionBySecurity">
       <inheritdoc />
@@ -144,16 +130,10 @@
       <param name="error">Error details.</param>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.Dialects.BaseFixDialect">
       <summary>

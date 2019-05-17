@@ -388,7 +388,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To get the strategy getting <see cref="Connector"/>. If it is not initialized, the exception will be discarded.
 		/// </summary>
-		/// <returns>Connection string.</returns>
+		/// <returns>Connector.</returns>
 		public IConnector SafeGetConnector()
 		{
 			var connector = Connector;

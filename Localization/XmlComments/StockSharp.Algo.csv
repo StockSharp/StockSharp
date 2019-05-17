@@ -2686,8 +2686,8 @@ P:StockSharp.Algo.ServicesRegistry.TrySecurityProvider/summary;DocStr972
 P:StockSharp.Algo.ServicesRegistry.MarketDataProvider/summary;DocStr973
 P:StockSharp.Algo.ServicesRegistry.TryMarketDataProvider/summary;DocStr973
 P:StockSharp.Algo.ServicesRegistry.StorageRegistry/summary;DocStr8561
-P:StockSharp.Algo.ServicesRegistry.Connector/summary;DocStr10881
-P:StockSharp.Algo.ServicesRegistry.IConnector/summary;DocStr10881
+P:StockSharp.Algo.ServicesRegistry.Connector/summary;Connector
+P:StockSharp.Algo.ServicesRegistry.IConnector/summary;Connector
 P:StockSharp.Algo.ServicesRegistry.LogManager/summary;DocStr10882
 P:StockSharp.Algo.ServicesRegistry.EntityRegistry/summary;DocStr1309
 P:StockSharp.Algo.ServicesRegistry.NativeIdStorage/summary;DocStr9329
@@ -5774,7 +5774,7 @@ P:StockSharp.Algo.Strategies.Strategy.Name/summary;Str1359
 P:StockSharp.Algo.Strategies.Strategy.NameGenerator/summary;DocStr1680
 P:StockSharp.Algo.Strategies.Strategy.Connector/summary;DocStr1681
 M:StockSharp.Algo.Strategies.Strategy.SafeGetConnector/summary;DocStr1642
-M:StockSharp.Algo.Strategies.Strategy.SafeGetConnector/returns;ConnectionString
+M:StockSharp.Algo.Strategies.Strategy.SafeGetConnector/returns;Connector
 P:StockSharp.Algo.Strategies.Strategy.Portfolio/summary;Portfolio
 P:StockSharp.Algo.Strategies.Strategy.Security/summary;DocStr2831
 P:StockSharp.Algo.Strategies.Strategy.Slippage/summary;Str1363
