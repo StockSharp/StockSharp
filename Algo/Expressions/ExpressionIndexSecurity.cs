@@ -15,7 +15,7 @@ namespace StockSharp.Algo.Expressions
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// The index, built of combination of several instruments through mathematic formula <see cref="Expression"/>.
+	/// The index, built of combination of several instruments through mathematical formula <see cref="Expression"/>.
 	/// </summary>
 	#region Ignore
 	//[Ignore(FieldName = nameof(Code))]
@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Expressions
 		public ExpressionFormula Formula { get; private set; } = ExpressionHelper.CreateError(LocalizedStrings.ExpressionNotSet);
 
 		/// <summary>
-		/// The mathematic formula of index.
+		/// The mathematical formula of index.
 		/// </summary>
 		[Browsable(false)]
 		public string Expression
