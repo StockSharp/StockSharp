@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Expressions
 		}
 
 		/// <summary>
-		/// Undo escape on mathematical formula with instruments identifiers <see cref="Security.Id"/>.
+		/// Undo escape mathematical formula with instruments identifiers <see cref="Security.Id"/>.
 		/// </summary>
 		/// <param name="expression">Escaped text.</param>
 		/// <returns>Unescaped text.</returns>
