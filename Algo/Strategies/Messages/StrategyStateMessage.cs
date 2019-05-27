@@ -15,7 +15,7 @@ namespace StockSharp.Algo.Strategies.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class StrategyStateMessage : Message, ITransactionIdMessage
+	public class StrategyStateMessage : BaseResultMessage<StrategyStateMessage>, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyStateMessage"/>.
@@ -44,22 +44,10 @@ namespace StockSharp.Algo.Strategies.Messages
 		public string Command { get; set; }
 
 		/// <summary>
-		/// Error.
-		/// </summary>
-		[DataMember]
-		public Exception Error { get; set; }
-
-		/// <summary>
 		/// Transaction ID.
 		/// </summary>
 		[DataMember]
 		public long TransactionId { get; set; }
-
-		/// <summary>
-		/// ID of the original message <see cref="TransactionId"/> for which this message is a response.
-		/// </summary>
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
 		/// Statistics.
@@ -87,33 +75,16 @@ namespace StockSharp.Algo.Strategies.Messages
 			return str;
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="StrategyStateMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
+		/// <inheritdoc />
+		protected override void CopyTo(StrategyStateMessage destination)
 		{
-			return CopyTo(new StrategyStateMessage());
-		}
+			base.CopyTo(destination);
 
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		/// <returns>The object, to which copied information.</returns>
-		protected StrategyStateMessage CopyTo(StrategyStateMessage destination)
-		{
 			destination.TransactionId = TransactionId;
-			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.StrategyId = StrategyId;
 			destination.StrategyTypeId = StrategyTypeId;
 			destination.Statistics = Statistics.ToDictionary();
 			destination.Command = Command;
-			destination.Error = Error;
-
-			this.CopyExtensionInfo(destination);
-
-			return destination;
 		}
 	}
 }
