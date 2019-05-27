@@ -1,18 +1,3 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: StockSharp.Algo.Storages.Algo
-File: MarketDataStorage.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
 namespace StockSharp.Algo.Storages
 {
 	using System;
@@ -20,7 +5,6 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
-	using System.Reflection;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -40,7 +24,6 @@ namespace StockSharp.Algo.Storages
 		DateTimeOffset GetTime(TData data);
 	}
 
-	[Obfuscation(Feature = "Apply to member * when abstract: renaming", Exclude = true)]
 	abstract class MarketDataStorage<TData, TId> : IMarketDataStorage<TData>, IMarketDataStorageInfo<TData>
 	{
 		private readonly Func<TData, DateTimeOffset> _getTime;
