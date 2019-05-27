@@ -47,6 +47,7 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<SecurityMessage, CurrencyTypes>(nameof(SecurityMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382, (i, v) => i.Currency = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.UnderlyingSecurityCode), LocalizedStrings.UnderlyingAsset, LocalizedStrings.UnderlyingAssetCode, (i, v) => i.UnderlyingSecurityCode = v));
 				fields.Add(new FieldMapping<SecurityMessage, SecurityTypes>(nameof(SecurityMessage.UnderlyingSecurityType), LocalizedStrings.UnderlyingSecurityType, LocalizedStrings.UnderlyingSecurityType, (i, v) => i.UnderlyingSecurityType = v));
+				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.UnderlyingSecurityMinVolume), LocalizedStrings.UnderlyingMinVolume, LocalizedStrings.UnderlyingMinVolumeDesc, (i, v) => i.UnderlyingSecurityMinVolume = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.Strike), LocalizedStrings.Strike, LocalizedStrings.OptionStrikePrice, (i, v) => i.Strike = v));
 				fields.Add(new FieldMapping<SecurityMessage, OptionTypes>(nameof(SecurityMessage.OptionType), LocalizedStrings.OptionsContract, LocalizedStrings.OptionContractType, (i, v) => i.OptionType = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BinaryOptionType), LocalizedStrings.BinaryOption, LocalizedStrings.TypeBinaryOption, (i, v) => i.BinaryOptionType = v));

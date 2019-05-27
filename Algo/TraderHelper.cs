@@ -2680,6 +2680,9 @@ namespace StockSharp.Algo
 						case Level1Fields.MinVolume:
 							security.MinVolume = (decimal)value;
 							break;
+						case Level1Fields.UnderlyingMinVolume:
+							security.UnderlyingSecurityMinVolume = (decimal)value;
+							break;
 						//default:
 						//	throw new ArgumentOutOfRangeException();
 					}
@@ -2905,6 +2908,12 @@ namespace StockSharp.Algo
 			{
 				if (isOverride || security.UnderlyingSecurityType == null)
 					security.UnderlyingSecurityType = message.UnderlyingSecurityType.Value;
+			}
+
+			if (message.UnderlyingSecurityMinVolume != null)
+			{
+				if (isOverride || security.UnderlyingSecurityMinVolume == null)
+					security.UnderlyingSecurityMinVolume = message.UnderlyingSecurityMinVolume.Value;
 			}
 
 			if (!message.BasketCode.IsEmpty())

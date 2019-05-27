@@ -158,6 +158,16 @@ namespace StockSharp.Messages
 		public string UnderlyingSecurityCode { get; set; }
 
 		/// <summary>
+		/// Minimum volume allowed in order for underlying security.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.UnderlyingMinVolumeKey)]
+		[DescriptionLoc(LocalizedStrings.UnderlyingMinVolumeDescKey)]
+		[MainCategory]
+		[Nullable]
+		public decimal? UnderlyingSecurityMinVolume { get; set; }
+
+		/// <summary>
 		/// Option strike price.
 		/// </summary>
 		[DataMember]
@@ -317,6 +327,7 @@ namespace StockSharp.Messages
 			destination.IssueSize = IssueSize;
 			destination.IssueDate = IssueDate;
 			destination.UnderlyingSecurityType = UnderlyingSecurityType;
+			destination.UnderlyingSecurityMinVolume = UnderlyingSecurityMinVolume;
 			destination.Shortable = Shortable;
 			destination.BasketCode = BasketCode;
 			destination.BasketExpression = BasketExpression;

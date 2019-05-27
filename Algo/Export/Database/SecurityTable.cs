@@ -95,6 +95,11 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
+			yield return new ColumnDescription(nameof(SecurityMessage.UnderlyingSecurityMinVolume))
+			{
+				DbType = typeof(decimal?),
+				ValueRestriction = new DecimalRestriction { Scale = 1 }
+			};
 			yield return new ColumnDescription(nameof(SecurityMessage.ExpiryDate))
 			{
 				DbType = typeof(DateTimeOffset?),
@@ -204,6 +209,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(SecurityMessage.Strike), value.Strike },
 				{ nameof(SecurityMessage.UnderlyingSecurityCode), value.UnderlyingSecurityCode },
 				{ nameof(SecurityMessage.UnderlyingSecurityType), value.UnderlyingSecurityType.ToString() },
+				{ nameof(SecurityMessage.UnderlyingSecurityMinVolume), value.UnderlyingSecurityMinVolume },
 				{ nameof(SecurityMessage.ExpiryDate), value.ExpiryDate },
 				{ nameof(SecurityMessage.Currency), value.Currency.ToString() },
 				{ nameof(SecurityMessage.Name), value.Name },

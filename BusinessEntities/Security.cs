@@ -1795,6 +1795,29 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private decimal? _underlyingSecurityMinVolume;
+
+		/// <summary>
+		/// Minimum volume allowed in order for underlying security.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.UnderlyingMinVolumeKey,
+			Description = LocalizedStrings.UnderlyingMinVolumeDescKey,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 104)]
+		[DataMember]
+		[Nullable]
+		public decimal? UnderlyingSecurityMinVolume
+		{
+			get => _underlyingSecurityMinVolume;
+			set
+			{
+				_underlyingSecurityMinVolume = value;
+				Notify(nameof(UnderlyingSecurityMinVolume));
+			}
+		}
+
 		private decimal? _buyBackPrice;
 
 		/// <summary>
@@ -1966,6 +1989,7 @@ namespace StockSharp.BusinessEntities
 			destination.IssueSize = IssueSize;
 			destination.IssueDate = IssueDate;
 			destination.UnderlyingSecurityType = UnderlyingSecurityType;
+			destination.UnderlyingSecurityMinVolume = UnderlyingSecurityMinVolume;
 			destination.BuyBackDate = BuyBackDate;
 			destination.BuyBackPrice = BuyBackPrice;
 			destination.Shortable = Shortable;

@@ -328,6 +328,7 @@ namespace StockSharp.Algo.Storages.Csv
 				public CurrencyTypes? Currency { get; set; }
 				public SecurityExternalId ExternalId { get; set; }
 				public SecurityTypes? UnderlyingSecurityType { get; set; }
+				public decimal? UnderlyingSecurityMinVolume { get; set; }
 				public string BinaryOptionType { get; set; }
 				public string CfiCode { get; set; }
 				public DateTimeOffset? IssueDate { get; set; }
@@ -360,6 +361,7 @@ namespace StockSharp.Algo.Storages.Csv
 						Currency = Currency,
 						ExternalId = ExternalId.Clone(),
 						UnderlyingSecurityType = UnderlyingSecurityType,
+						UnderlyingSecurityMinVolume = UnderlyingSecurityMinVolume,
 						BinaryOptionType = BinaryOptionType,
 						CfiCode = CfiCode,
 						IssueDate = IssueDate,
@@ -391,6 +393,7 @@ namespace StockSharp.Algo.Storages.Csv
 					Currency = security.Currency;
 					ExternalId = security.ExternalId.Clone();
 					UnderlyingSecurityType = security.UnderlyingSecurityType;
+					UnderlyingSecurityMinVolume = security.UnderlyingSecurityMinVolume;
 					BinaryOptionType = security.BinaryOptionType;
 					CfiCode = security.CfiCode;
 					IssueDate = security.IssueDate;
@@ -443,6 +446,9 @@ namespace StockSharp.Algo.Storages.Csv
 					return true;
 
 				if (IsChanged(security.UnderlyingSecurityType, liteSec.UnderlyingSecurityType, forced))
+					return true;
+
+				if (IsChanged(security.UnderlyingSecurityMinVolume, liteSec.UnderlyingSecurityMinVolume, forced))
 					return true;
 
 				if (IsChanged(security.PriceStep, liteSec.PriceStep, forced))
@@ -598,6 +604,9 @@ namespace StockSharp.Algo.Storages.Csv
 					liteSec.Shortable = reader.ReadNullableBool();
 				}
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					liteSec.UnderlyingSecurityMinVolume = reader.ReadNullableDecimal();
+
 				return liteSec.ToSecurity(this);
 			}
 
@@ -639,6 +648,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.BasketExpression,
 					data.MinVolume.To<string>(),
 					data.Shortable.To<string>(),
+					data.UnderlyingSecurityMinVolume.To<string>(),
 				});
 			}
 

@@ -1057,6 +1057,7 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.AfterSplit:
 						case Level1Fields.CommissionMaker:
 						case Level1Fields.CommissionTaker:
+						case Level1Fields.UnderlyingMinVolume:
 						{
 							writer.WriteDecimal((decimal)value, 0);
 							break;
@@ -1569,6 +1570,7 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.AfterSplit:
 					case Level1Fields.CommissionMaker:
 					case Level1Fields.CommissionTaker:
+					case Level1Fields.UnderlyingMinVolume:
 					{
 						l1Msg.Add(field, reader.ReadDecimal(0));
 						break;

@@ -921,6 +921,7 @@ P:StockSharp.BusinessEntities.Security.IssueSize/summary;DocStr10219
 P:StockSharp.BusinessEntities.Security.IssueDate/summary;IssueDate
 P:StockSharp.BusinessEntities.Security.Shortable/summary;ShortableDesc
 P:StockSharp.BusinessEntities.Security.UnderlyingSecurityType/summary;UnderlyingSecurityType
+P:StockSharp.BusinessEntities.Security.UnderlyingSecurityMinVolume/summary;UnderlyingMinVolumeDesc
 P:StockSharp.BusinessEntities.Security.BuyBackPrice/summary;BuyBackPrice
 P:StockSharp.BusinessEntities.Security.BuyBackDate/summary;BuyBackDate
 P:StockSharp.BusinessEntities.Security.BasketCode/summary;DocStr10646
