@@ -49426,5 +49426,45 @@ namespace StockSharp.Localization
 		/// Volume {0} of order '{1}' is less than minimum allowed {2}.
 		/// </summary>
 		public static string OrderVolumeLessMin => GetString(OrderVolumeLessMinKey);
+
+		/// <summary>
+		/// Encrypted scheme
+		/// </summary>
+		public const string EncryptedSchemaKey = nameof(EncryptedSchema);
+
+		/// <summary>
+		/// Encrypted scheme
+		/// </summary>
+		public static string EncryptedSchema => GetString(EncryptedSchemaKey);
+
+		/// <summary>
+		/// Standalone app
+		/// </summary>
+		public const string StandaloneAppKey = nameof(StandaloneApp);
+
+		/// <summary>
+		/// Standalone app
+		/// </summary>
+		public static string StandaloneApp => GetString(StandaloneAppKey);
+
+		/// <summary>
+		/// Min volume (under)
+		/// </summary>
+		public const string UnderlyingMinVolumeKey = nameof(UnderlyingMinVolume);
+
+		/// <summary>
+		/// Min volume (under)
+		/// </summary>
+		public static string UnderlyingMinVolume => GetString(UnderlyingMinVolumeKey);
+
+		/// <summary>
+		/// Minimum volume allowed in order for underlying security.
+		/// </summary>
+		public const string UnderlyingMinVolumeDescKey = nameof(UnderlyingMinVolumeDesc);
+
+		/// <summary>
+		/// Minimum volume allowed in order for underlying security.
+		/// </summary>
+		public static string UnderlyingMinVolumeDesc => GetString(UnderlyingMinVolumeDescKey);
 	}
 }
