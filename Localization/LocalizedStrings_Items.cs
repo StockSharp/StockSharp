@@ -49428,6 +49428,26 @@ namespace StockSharp.Localization
 		public static string OrderVolumeLessMin => GetString(OrderVolumeLessMinKey);
 
 		/// <summary>
+		/// Show strategy socket
+		/// </summary>
+		public const string ShowStrategySocketKey = nameof(ShowStrategySocket);
+
+		/// <summary>
+		/// Show strategy socket
+		/// </summary>
+		public static string ShowStrategySocket => GetString(ShowStrategySocketKey);
+
+		/// <summary>
+		/// Show position socket
+		/// </summary>
+		public const string ShowPositionSocketKey = nameof(ShowPositionSocket);
+
+		/// <summary>
+		/// Show position socket
+		/// </summary>
+		public static string ShowPositionSocket => GetString(ShowPositionSocketKey);
+
+		/// <summary>
 		/// Encrypted scheme
 		/// </summary>
 		public const string EncryptedSchemaKey = nameof(EncryptedSchema);
