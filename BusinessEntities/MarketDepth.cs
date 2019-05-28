@@ -18,6 +18,8 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -53,6 +55,7 @@ namespace StockSharp.BusinessEntities
 		/// The default value is 100. If the exceeded the maximum depth the event <see cref="MarketDepth.QuoteOutOfDepth"/> will triggered.
 		/// </remarks>
 		[DisplayNameLoc(LocalizedStrings.Str1660Key)]
+		[Browsable(false)]
 		[Obsolete]
 		public int MaxDepth
 		{
@@ -107,11 +110,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Last change time.
 		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ServerTimeKey,
+			Description = LocalizedStrings.Str168Key,
+			GroupName = LocalizedStrings.Str1559Key,
+			Order = 2)]
 		public DateTimeOffset LastChangeTime { get; set; }
 
 		/// <summary>
 		/// The order book local time stamp.
 		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str203Key,
+			Description = LocalizedStrings.Str204Key,
+			GroupName = LocalizedStrings.Str1559Key,
+			Order = 3)]
 		public DateTimeOffset LocalTime { get; set; }
 
 		private Quote[] _bids;
@@ -119,8 +134,12 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get the array of bids sorted by descending price. The first (best) bid will be the maximum price.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str281Key)]
-		[DescriptionLoc(LocalizedStrings.Str282Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str281Key,
+			Description = LocalizedStrings.Str282Key,
+			GroupName = LocalizedStrings.Str1559Key,
+			Order = 0)]
 		public Quote[] Bids 
 		{
 			get => _bids;
@@ -133,8 +152,12 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get the array of asks sorted by ascending price. The first (best) ask will be the minimum price.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str283Key)]
-		[DescriptionLoc(LocalizedStrings.Str284Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str283Key,
+			Description = LocalizedStrings.Str284Key,
+			GroupName = LocalizedStrings.Str1559Key,
+			Order = 1)]
 		public Quote[] Asks 
 		{ 
 			get => _asks;

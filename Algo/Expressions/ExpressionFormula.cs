@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Expressions
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExpressionFormula"/>.
 		/// </summary>
-		/// <param name="expression">The mathematic formula.</param>
+		/// <param name="expression">Mathematical formula.</param>
 		/// <param name="securityIds">IDs securities.</param>
 		protected ExpressionFormula(string expression, IEnumerable<string> securityIds)
 		{
@@ -41,7 +41,7 @@ namespace StockSharp.Algo.Expressions
 		}
 
 		/// <summary>
-		/// The mathematic formula.
+		/// Mathematical formula.
 		/// </summary>
 		public string Expression { get; }
 

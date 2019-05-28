@@ -48548,12 +48548,12 @@ namespace StockSharp.Localization
 		public static string Expression => GetString(ExpressionKey);
 
 		/// <summary>
-		/// The mathematic formula of index.
+		/// The mathematical formula of index.
 		/// </summary>
 		public const string ExpressionDescKey = nameof(ExpressionDesc);
 
 		/// <summary>
-		/// The mathematic formula of index.
+		/// The mathematical formula of index.
 		/// </summary>
 		public static string ExpressionDesc => GetString(ExpressionDescKey);
 

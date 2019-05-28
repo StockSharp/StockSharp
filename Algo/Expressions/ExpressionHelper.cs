@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Expressions
 		private static readonly Regex _decodeRegex = new Regex($@"\[{_secIdPattern}\]");
 
 		/// <summary>
-		/// To get all <see cref="Security.Id"/> from mathematic formula.
+		/// To get all <see cref="Security.Id"/> from mathematical formula.
 		/// </summary>
 		/// <param name="expression">Mathematical formula.</param>
 		/// <returns>IDs securities.</returns>
@@ -46,10 +46,10 @@ namespace StockSharp.Algo.Expressions
 		}
 
 		/// <summary>
-		/// To screen off mathematic formula from instruments identifiers <see cref="Security.Id"/>.
+		/// Escape mathematical formula from instruments identifiers <see cref="Security.Id"/>.
 		/// </summary>
-		/// <param name="expression">The source text.</param>
-		/// <returns>The screened text.</returns>
+		/// <param name="expression">Unescaped text.</param>
+		/// <returns>Escaped text.</returns>
 		public static string Encode(string expression)
 		{
 			foreach (var secId in GetSecurityIds(expression).Distinct(StringComparer.InvariantCultureIgnoreCase))
@@ -61,10 +61,10 @@ namespace StockSharp.Algo.Expressions
 		}
 
 		/// <summary>
-		/// To screen on mathematic formula with instruments identifiers <see cref="Security.Id"/>.
+		/// Undo escape mathematical formula with instruments identifiers <see cref="Security.Id"/>.
 		/// </summary>
-		/// <param name="expression">The source text.</param>
-		/// <returns>The unscreened text.</returns>
+		/// <param name="expression">Escaped text.</param>
+		/// <returns>Unescaped text.</returns>
 		public static string Decode(string expression)
 		{
 			foreach (var match in _decodeRegex.Matches(expression).Cast<Match>().OrderByDescending(m => m.Index))

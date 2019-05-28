@@ -102,6 +102,7 @@ StockSharp API Change log
 * (feature) Level1BinarySerializer. Support Dividend, MinVolume, SpreadMiddle, Commission, Splits.
 * (feature) PositionBinarySerializer. Support Commissions, SettlementPrice.
 * (feature) Emulator. Security.MinVolume supported.
+* (feature) Kraken. WebSocket supported.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
