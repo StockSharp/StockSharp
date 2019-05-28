@@ -2938,8 +2938,8 @@ Str3119;Formula with one argument element.;Элемент формулы с од
 Str3120;Formula with a single argument.;Формула с одним аргументом.
 Str3121;Formula with two arguments;Формула с двумя аргументами
 Str3122;Formula with two arguments element.;Элемент формулы с двумя аргументами.
-Str3123;Position opening;Открытие позиции
-Str3124;Position opening element.;Элемент открытия позиции.
+Str3123;Order registering;Регистрация заявки
+Str3124;Order registering element.;Элемент регистрации заявки.
 Str3125;Portfolio, in which the position will be created. If the value is not specified, then strategy portfolio will be used.;Портфель, в котором будет создана позиция. Если значение не указано, то будет использоваться портфель стратегии.
 Str3126;Position direction (short or long).;Направление позиции (короткая или длинная).
 Str3127;Should position be created with a market order.;Создавать ли позицию рыночной заявкой.

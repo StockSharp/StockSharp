@@ -29328,22 +29328,22 @@ namespace StockSharp.Localization
 		public static string Str3122 => GetString(Str3122Key);
 
 		/// <summary>
-		/// Position opening
+		/// Order registering
 		/// </summary>
 		public const string Str3123Key = nameof(Str3123);
 
 		/// <summary>
-		/// Position opening
+		/// Order registering
 		/// </summary>
 		public static string Str3123 => GetString(Str3123Key);
 
 		/// <summary>
-		/// Position opening element.
+		/// Order registering element.
 		/// </summary>
 		public const string Str3124Key = nameof(Str3124);
 
 		/// <summary>
-		/// Position opening element.
+		/// Order registering element.
 		/// </summary>
 		public static string Str3124 => GetString(Str3124Key);
 
