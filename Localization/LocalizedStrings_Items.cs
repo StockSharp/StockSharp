@@ -29568,12 +29568,12 @@ namespace StockSharp.Localization
 		public static string Str3146 => GetString(Str3146Key);
 
 		/// <summary>
-		/// Weekend order
+		/// Order (out)
 		/// </summary>
 		public const string Str3147Key = nameof(Str3147);
 
 		/// <summary>
-		/// Weekend order
+		/// Order (out)
 		/// </summary>
 		public static string Str3147 => GetString(Str3147Key);
 

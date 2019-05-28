@@ -2962,7 +2962,7 @@ Str3143;Connection;Соединение
 Str3144;Connection type.;Тип соединения.
 Str3145;Position protection;Защита позиции
 Str3146;Open position protection element.;Элемент защиты открытой позиции.
-Str3147;Weekend order;Заявка вых
+Str3147;Order (out);Заявка вых
 Str3148;Active;Включен
 Str3149;Is take-profit active.;Включен ли тейк-профит.
 Str3150;Protection level for take-profit.;Защитный уровень для тейк-профита.
