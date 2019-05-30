@@ -39,8 +39,8 @@
 		</para>
 		<para>
 			Чтобы узнать в программе, когда биржа присвоила заявке <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Id</codeEntityReference>,
-			необходимо подписаться на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>
-			(или для стоп-заявок <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.StopOrdersChanged</codeEntityReference>).
+			необходимо подписаться на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderChanged</codeEntityReference>
+			(или для стоп-заявок <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.StopOrderChanged</codeEntityReference>).
 			Для определения неудачной регистрации используется событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderRegisterFailed</codeEntityReference>
 			(или для стоп-заявок <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.StopOrderRegisterFailed</codeEntityReference>).
 		</para>
