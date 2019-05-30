@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Unable to change group name of axis while it is attached to a chart area.
+		/// </summary>
+		public const string ErrorChangingGroupNameKey = nameof(ErrorChangingGroupName);
+
+		/// <summary>
+		/// Unable to change group name of axis while it is attached to a chart area.
+		/// </summary>
+		public static string ErrorChangingGroupName => GetString(ErrorChangingGroupNameKey);
+
+		/// <summary>
 		/// Element axis is not set.
 		/// </summary>
 		public const string AxisIsNotSetKey = nameof(AxisIsNotSet);
