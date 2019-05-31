@@ -104,6 +104,7 @@ StockSharp API Change log
 * (feature) Emulator. Security.MinVolume supported.
 * (feature) Kraken. WebSocket supported.
 * (feature) Adapter and subscription messages added.
+* (feature) CandleBuilderMessageAdapter. Forced Finish prev non-finished candles.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

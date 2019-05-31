@@ -49,6 +49,8 @@ namespace StockSharp.Algo.Candles.Compression
 			public DateTimeOffset? LastTime { get; set; }
 
 			public CandleMessage CurrentCandleMessage { get; set; }
+
+			public CandleMessage NonFinishedCandle { get; set; }
 		}
 
 		private readonly SynchronizedDictionary<long, SeriesInfo> _seriesByTransactionId = new SynchronizedDictionary<long, SeriesInfo>();
@@ -569,6 +571,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 							series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(MarketDataTypes.CandleTimeFrame));
 							series.State = SeriesStates.SmallTimeFrame;
+							series.NonFinishedCandle = null;
 
 							// loopback
 							series.Current.IsBack = true;
@@ -607,6 +610,8 @@ namespace StockSharp.Algo.Candles.Compression
 			if (series.State != SeriesStates.Compress)
 				throw new InvalidOperationException(series.State.ToString());
 
+			series.NonFinishedCandle = null;
+
 			var current = TryCreateBuildSubscription(original, series.LastTime, TransactionIdGenerator.GetNextId);
 
 			if (current == null)
@@ -628,7 +633,20 @@ namespace StockSharp.Algo.Candles.Compression
 			if (info.LastTime != null && info.LastTime > candleMsg.OpenTime)
 				return true;
 
+			var nonFinished = info.NonFinishedCandle;
+
+			if (nonFinished != null && nonFinished.OpenTime < candleMsg.OpenTime)
+			{
+				nonFinished.State = CandleStates.Finished;
+				RaiseNewOutMessage(nonFinished);
+				info.NonFinishedCandle = null;
+			}
+
 			SendCandle(info, candleMsg);
+
+			if (candleMsg.State != CandleStates.Finished)
+				info.NonFinishedCandle = (CandleMessage)candleMsg.Clone();
+
 			return true;
 		}
 
