@@ -571,7 +571,7 @@ namespace StockSharp.Algo.Storages
 				return;
 			}
 
-			foreach (var security in _securityStorage.Lookup(msg.ToLookupCriteria(ExchangeInfoProvider)))
+			foreach (var security in _securityStorage.Lookup(msg))
 				RaiseStorageMessage(security.ToMessage(originalTransactionId: msg.TransactionId));
 
 			base.SendInMessage(msg);
