@@ -49496,5 +49496,35 @@ namespace StockSharp.Localization
 		/// Minimum volume allowed in order for underlying security.
 		/// </summary>
 		public static string UnderlyingMinVolumeDesc => GetString(UnderlyingMinVolumeDescKey);
+
+		/// <summary>
+		/// Shift {0}
+		/// </summary>
+		public const string ShiftIsKey = nameof(ShiftIs);
+
+		/// <summary>
+		/// Shift {0}
+		/// </summary>
+		public static string ShiftIs => GetString(ShiftIsKey);
+
+		/// <summary>
+		/// Take {0}
+		/// </summary>
+		public const string TakeIsKey = nameof(TakeIs);
+
+		/// <summary>
+		/// Take {0}
+		/// </summary>
+		public static string TakeIs => GetString(TakeIsKey);
+
+		/// <summary>
+		/// Stop {0}
+		/// </summary>
+		public const string StopIsKey = nameof(StopIs);
+
+		/// <summary>
+		/// Stop {0}
+		/// </summary>
+		public static string StopIs => GetString(StopIsKey);
 	}
 }
