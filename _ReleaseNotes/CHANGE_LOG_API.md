@@ -59,7 +59,7 @@ StockSharp API Change log
 * (feature) ISecurityProvider. Lookup method uses SecurityLookupMessage.
 * (feature) SecurityLookupWindow. CriteriaMessage
 * (feature) ISecurityDownloader. Refresh method uses SecurityLookupMessage.
-* (feature) ITransactionIdMessage, IServerTimeMessage interfaces.
+* (feature) ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage interfaces.
 * (bug) RemoteStorage. Fix available data types translation.
 * (feature) SecurityNativeIdMessageAdapter. Skip external native ids.
 * (feature) Tradier. New urls + sandbox supported.

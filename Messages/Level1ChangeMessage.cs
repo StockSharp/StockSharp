@@ -691,7 +691,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Level1Key)]
 	[DescriptionLoc(LocalizedStrings.Level1MarketDataKey)]
-	public class Level1ChangeMessage : BaseChangeMessage<Level1Fields>
+	public class Level1ChangeMessage : BaseChangeMessage<Level1Fields>, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Security ID.

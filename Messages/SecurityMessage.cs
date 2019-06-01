@@ -30,7 +30,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public class SecurityMessage : Message
+	public class SecurityMessage : Message, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Security ID.

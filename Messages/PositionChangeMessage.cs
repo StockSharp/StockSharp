@@ -177,7 +177,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str862Key)]
 	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
-	public sealed class PositionChangeMessage : BaseChangeMessage<PositionChangeTypes>, IServerTimeMessage
+	public sealed class PositionChangeMessage : BaseChangeMessage<PositionChangeTypes>, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Security ID.
