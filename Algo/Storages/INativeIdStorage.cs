@@ -113,11 +113,9 @@ namespace StockSharp.Algo.Storages
 			if (!Directory.Exists(_path))
 				Directory.CreateDirectory(_path);
 
-			_inMemory.Init();
+			var errors = _inMemory.Init();
 
 			var files = Directory.GetFiles(_path, "*.csv");
-
-			var errors = new Dictionary<string, Exception>();
 
 			foreach (var fileName in files)
 			{
