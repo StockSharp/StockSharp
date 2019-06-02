@@ -867,6 +867,7 @@ P:StockSharp.BusinessEntities.Security.ExternalId/summary;Str554
 P:StockSharp.BusinessEntities.Security.Class/summary;SecurityClass
 P:StockSharp.BusinessEntities.Security.PriceStep/summary;Str306
 P:StockSharp.BusinessEntities.Security.VolumeStep/summary;Str307
+P:StockSharp.BusinessEntities.Security.MinVolume/summary;MinVolumeDesc
 P:StockSharp.BusinessEntities.Security.Multiplier/summary;DocStr2623
 P:StockSharp.BusinessEntities.Security.Decimals/summary;Str548
 P:StockSharp.BusinessEntities.Security.ExpiryDate/summary;Str371
@@ -918,7 +919,9 @@ P:StockSharp.BusinessEntities.Security.Volume/summary;Str310
 P:StockSharp.BusinessEntities.Security.Turnover/summary;Turnover
 P:StockSharp.BusinessEntities.Security.IssueSize/summary;DocStr10219
 P:StockSharp.BusinessEntities.Security.IssueDate/summary;IssueDate
+P:StockSharp.BusinessEntities.Security.Shortable/summary;ShortableDesc
 P:StockSharp.BusinessEntities.Security.UnderlyingSecurityType/summary;UnderlyingSecurityType
+P:StockSharp.BusinessEntities.Security.UnderlyingSecurityMinVolume/summary;UnderlyingMinVolumeDesc
 P:StockSharp.BusinessEntities.Security.BuyBackPrice/summary;BuyBackPrice
 P:StockSharp.BusinessEntities.Security.BuyBackDate/summary;BuyBackDate
 P:StockSharp.BusinessEntities.Security.BasketCode/summary;DocStr10646

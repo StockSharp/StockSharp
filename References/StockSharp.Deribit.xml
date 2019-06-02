@@ -67,6 +67,11 @@
             Mark price.
             </summary>
         </member>
+        <member name="F:StockSharp.Deribit.DeribitOrderTriggers.Last">
+            <summary>
+            By last price.
+            </summary>
+        </member>
         <member name="T:StockSharp.Deribit.DeribitOrderCondition">
             <summary>
             <see cref="N:StockSharp.Deribit"/> order condition.
@@ -95,6 +100,11 @@
         <member name="P:StockSharp.Deribit.DeribitOrderCondition.PostOnly">
             <summary>
             Post-only order.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Deribit.DeribitOrderCondition.ReduceOnly">
+            <summary>
+            Reduce position only.
             </summary>
         </member>
         <member name="T:StockSharp.Deribit.DeribitTrader">

@@ -70,7 +70,7 @@
 			public MarketDataMessage Origin { get; }
 
 			public long CurrTransId { get; private set; }
-			public bool LastIteration { get; private set; }
+			public bool LastIteration => Origin.To != null && _nextFrom >= Origin.To.Value;
 
 			public bool ReplyReceived { get; set; }
 
@@ -81,6 +81,7 @@
 			private DateTimeOffset _currFrom;
 			private bool _firstIteration;
 			private DateTimeOffset _nextFrom;
+			private readonly DateTimeOffset _maxFrom;
 
 			public DownloadInfo(PartialDownloadMessageAdapter adapter, MarketDataMessage origin, TimeSpan step, TimeSpan iterationInterval)
 			{
@@ -96,6 +97,14 @@
 
 				_currFrom = from.Value;
 				_firstIteration = true;
+
+				_maxFrom = Origin.To ?? DateTimeOffset.Now;
+			}
+
+			public void TryUpdateNextFrom(DateTimeOffset last)
+			{
+				if (_nextFrom < last)
+					_nextFrom = last;
 			}
 
 			public MarketDataMessage InitNext()
@@ -115,11 +124,6 @@
 					CurrTransId = mdMsg.TransactionId;
 					_nextFrom = mdMsg.To.Value;
 
-					if (Origin.To == null)
-						LastIteration = _nextFrom > DateTimeOffset.Now;
-					else
-						LastIteration = _nextFrom >= Origin.To.Value;
-
 					return mdMsg;
 				}
 				else
@@ -129,12 +133,7 @@
 					_currFrom = _nextFrom;
 					_nextFrom += _step;
 
-					if (Origin.To == null)
-						LastIteration = _nextFrom > DateTimeOffset.Now;
-					else
-						LastIteration = _nextFrom >= Origin.To.Value;
-
-					if (LastIteration)
+					if (Origin.To == null && (_currFrom + _step) >= _maxFrom)
 					{
 						var mdMsg = (MarketDataMessage)Origin.Clone();
 						mdMsg.From = _currFrom;
@@ -157,7 +156,7 @@
 
 		private readonly SyncObject _syncObject = new SyncObject();
 		private readonly Dictionary<long, DownloadInfo> _original = new Dictionary<long, DownloadInfo>();
-		private readonly Dictionary<long, long> _partialRequests = new Dictionary<long, long>();
+		private readonly Dictionary<long, DownloadInfo> _partialRequests = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, Tuple<long, DownloadInfo>> _unsubscribeRequests = new Dictionary<long, Tuple<long, DownloadInfo>>();
 
 		/// <summary>
@@ -219,7 +218,7 @@
 								lock (_syncObject)
 								{
 									_original.Add(info.Origin.TransactionId, info);
-									_partialRequests.Add(info.CurrTransId, info.Origin.TransactionId);
+									_partialRequests.Add(info.CurrTransId, info);
 								}
 							}
 						}
@@ -253,12 +252,17 @@
 							if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
 								break;
 
-							message = info.InitNext();
+							var mdMsg = info.InitNext();
 
-							if (info.LastIteration)
+							if (mdMsg.To == null)
+							{
 								_original.Remove(partialMsg.OriginalTransactionId);
+								_partialRequests.RemoveWhere(p => p.Value == info);
+							}
 							else
-								_partialRequests.Add(info.CurrTransId, info.Origin.TransactionId);
+								_partialRequests.Add(info.CurrTransId, info);
+
+							message = mdMsg;
 						}
 					}
 
@@ -280,31 +284,34 @@
 
 					lock (_syncObject)
 					{
-						if (!_partialRequests.TryGetValue(responseMsg.OriginalTransactionId, out var requestId))
+						long requestId;
+
+						if (!_partialRequests.TryGetValue(responseMsg.OriginalTransactionId, out var info))
 						{
 							if (!_unsubscribeRequests.TryGetValue(responseMsg.OriginalTransactionId, out var tuple))
 								break;
 							
 							requestId = tuple.Item1;
+							info = tuple.Item2;
 
-							var originId = tuple.Item2.Origin.TransactionId;
+							var originId = info.Origin.TransactionId;
 							_original.Remove(originId);
-							_partialRequests.RemoveWhere(p => p.Value == originId);
+							_partialRequests.RemoveWhere(p => p.Value == info);
 							_unsubscribeRequests.Remove(responseMsg.OriginalTransactionId);
 						}
 						else
 						{
-							var info = _original[requestId];
-
 							if (info.ReplyReceived)
 								return;
 
 							info.ReplyReceived = true;
 
+							requestId = info.Origin.TransactionId;
+
 							if (responseMsg.Error != null || responseMsg.IsNotSupported)
 							{
 								_original.Remove(requestId);
-								_partialRequests.RemoveWhere(p => p.Value == requestId);
+								_partialRequests.RemoveWhere(p => p.Value == info);
 							}
 						}
 						
@@ -320,17 +327,16 @@
 
 					lock (_syncObject)
 					{
-						if (_partialRequests.TryGetValue(finishMsg.OriginalTransactionId, out var originId))
+						if (_partialRequests.TryGetValue(finishMsg.OriginalTransactionId, out var info))
 						{
-							var info = _original[originId];
 							var origin = info.Origin;
 
 							if (info.LastIteration)
 							{
-								_original.Remove(originId);
-								_partialRequests.RemoveWhere(p => p.Value == originId);
+								_original.Remove(origin.TransactionId);
+								_partialRequests.RemoveWhere(p => p.Value == info);
 
-								finishMsg.OriginalTransactionId = originId;
+								finishMsg.OriginalTransactionId = origin.TransactionId;
 								break;
 							}
 							
@@ -357,15 +363,14 @@
 				{
 					var candleMsg = (CandleMessage)message;
 
-					long originId;
-
 					lock (_syncObject)
 					{
-						if (!_partialRequests.TryGetValue(candleMsg.OriginalTransactionId, out originId))
+						if (!_partialRequests.TryGetValue(candleMsg.OriginalTransactionId, out var info))
 							break;
-					}
 
-					candleMsg.OriginalTransactionId = originId;
+						info.TryUpdateNextFrom(candleMsg.OpenTime);
+						candleMsg.OriginalTransactionId = info.Origin.TransactionId;
+					}
 
 					break;
 				}
@@ -378,15 +383,14 @@
 					if (execMsg.OriginalTransactionId == 0 || (execType != ExecutionTypes.OrderLog && execType != ExecutionTypes.Tick))
 						break;
 
-					long originId;
-
 					lock (_syncObject)
 					{
-						if (!_partialRequests.TryGetValue(execMsg.OriginalTransactionId, out originId))
+						if (!_partialRequests.TryGetValue(execMsg.OriginalTransactionId, out var info))
 							break;
-					}
 
-					execMsg.OriginalTransactionId = originId;
+						info.TryUpdateNextFrom(execMsg.ServerTime);
+						execMsg.OriginalTransactionId = info.Origin.TransactionId;
+					}
 
 					break;
 				}

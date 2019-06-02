@@ -668,6 +668,20 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CommissionMakerKey)]
 		CommissionMaker,
+
+		/// <summary>
+		/// Minimum volume allowed in order.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MinVolumeKey)]
+		MinVolume,
+
+		/// <summary>
+		/// Minimum volume allowed in order for underlying security.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UnderlyingMinVolumeKey)]
+		UnderlyingMinVolume,
 	}
 
 	/// <summary>

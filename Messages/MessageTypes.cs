@@ -121,7 +121,7 @@ namespace StockSharp.Messages
 		NativeSecurityId,
 
 		/// <summary>
-		/// Connection string.
+		/// Connect.
 		/// </summary>
 		Connect,
 
@@ -264,5 +264,65 @@ namespace StockSharp.Messages
 		/// Time-frames search result.
 		/// </summary>
 		TimeFrameLookupResult,
+
+		/// <summary>
+		/// <see cref="SecurityMappingRequestMessage"/>.
+		/// </summary>
+		SecurityMappingRequest,
+
+		/// <summary>
+		/// <see cref="SecurityMappingResultMessage"/>.
+		/// </summary>
+		SecurityMappingResult,
+
+		/// <summary>
+		/// <see cref="SecurityAssociationRequestMessage"/>.
+		/// </summary>
+		SecurityAssociationRequest,
+
+		/// <summary>
+		/// <see cref="SecurityAssociationResultMessage"/>.
+		/// </summary>
+		SecurityAssociationResult,
+
+		/// <summary>
+		/// <see cref="SecurityLegsRequestMessage"/>.
+		/// </summary>
+		SecurityLegsRequest,
+
+		/// <summary>
+		/// <see cref="SecurityLegsResultMessage"/>.
+		/// </summary>
+		SecurityLegsResult,
+
+		/// <summary>
+		/// <see cref="AdapterListRequestMessage"/>.
+		/// </summary>
+		AdapterListRequest,
+
+		/// <summary>
+		/// <see cref="AdapterListFinishedMessage"/>.
+		/// </summary>
+		AdapterListFinished,
+
+		/// <summary>
+		/// <see cref="AdapterCommandMessage"/>.
+		/// </summary>
+		AdapterCommand,
+
+		/// <summary>
+		/// <see cref="AdapterResponseMessage"/>.
+		/// </summary>
+		AdapterResponse,
+
+		/// <summary>
+		/// <see cref="SubscriptionListRequestMessage"/>.
+		/// </summary>
+		SubscriptionListRequest,
+
+		/// <summary>
+		/// <see cref="SubscriptionListFinishedMessage"/>.
+		/// </summary>
+		SubscriptionListFinished,
 	}
 }

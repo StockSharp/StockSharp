@@ -98,13 +98,7 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 		protected override string GetDbType(Type type, object restriction)
 		{
 			//anothar:SQLite не поддерживает datetime2, а только datetime то есть округляет до трех знаков в миллисекундах-нам не подходит.
-			if (type == typeof(DateTime))
-				return "TEXT";
-
-			if (type == typeof(DateTimeOffset))
-				return "TEXT";
-
-			if (type == typeof(TimeSpan))
+			if (type.IsDateOrTime())
 				return "TEXT";
 
 			if (type == typeof(bool))

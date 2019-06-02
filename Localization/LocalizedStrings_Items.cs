@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Unable to change group name of axis while it is attached to a chart area.
+		/// </summary>
+		public const string ErrorChangingGroupNameKey = nameof(ErrorChangingGroupName);
+
+		/// <summary>
+		/// Unable to change group name of axis while it is attached to a chart area.
+		/// </summary>
+		public static string ErrorChangingGroupName => GetString(ErrorChangingGroupNameKey);
+
+		/// <summary>
 		/// Element axis is not set.
 		/// </summary>
 		public const string AxisIsNotSetKey = nameof(AxisIsNotSet);
@@ -29328,22 +29338,22 @@ namespace StockSharp.Localization
 		public static string Str3122 => GetString(Str3122Key);
 
 		/// <summary>
-		/// Position opening
+		/// Order registering
 		/// </summary>
 		public const string Str3123Key = nameof(Str3123);
 
 		/// <summary>
-		/// Position opening
+		/// Order registering
 		/// </summary>
 		public static string Str3123 => GetString(Str3123Key);
 
 		/// <summary>
-		/// Position opening element.
+		/// Order registering element.
 		/// </summary>
 		public const string Str3124Key = nameof(Str3124);
 
 		/// <summary>
-		/// Position opening element.
+		/// Order registering element.
 		/// </summary>
 		public static string Str3124 => GetString(Str3124Key);
 
@@ -29568,12 +29578,12 @@ namespace StockSharp.Localization
 		public static string Str3146 => GetString(Str3146Key);
 
 		/// <summary>
-		/// Weekend order
+		/// Order (out)
 		/// </summary>
 		public const string Str3147Key = nameof(Str3147);
 
 		/// <summary>
-		/// Weekend order
+		/// Order (out)
 		/// </summary>
 		public static string Str3147 => GetString(Str3147Key);
 
@@ -48548,12 +48558,12 @@ namespace StockSharp.Localization
 		public static string Expression => GetString(ExpressionKey);
 
 		/// <summary>
-		/// The mathematic formula of index.
+		/// The mathematical formula of index.
 		/// </summary>
 		public const string ExpressionDescKey = nameof(ExpressionDesc);
 
 		/// <summary>
-		/// The mathematic formula of index.
+		/// The mathematical formula of index.
 		/// </summary>
 		public static string ExpressionDesc => GetString(ExpressionDescKey);
 
@@ -49346,5 +49356,175 @@ namespace StockSharp.Localization
 		/// File name format
 		/// </summary>
 		public static string FileNameFormat => GetString(FileNameFormatKey);
+
+		/// <summary>
+		/// Min volume
+		/// </summary>
+		public const string MinVolumeKey = nameof(MinVolume);
+
+		/// <summary>
+		/// Min volume
+		/// </summary>
+		public static string MinVolume => GetString(MinVolumeKey);
+
+		/// <summary>
+		/// Minimum volume allowed in order.
+		/// </summary>
+		public const string MinVolumeDescKey = nameof(MinVolumeDesc);
+
+		/// <summary>
+		/// Minimum volume allowed in order.
+		/// </summary>
+		public static string MinVolumeDesc => GetString(MinVolumeDescKey);
+
+		/// <summary>
+		/// Shortable
+		/// </summary>
+		public const string ShortableKey = nameof(Shortable);
+
+		/// <summary>
+		/// Shortable
+		/// </summary>
+		public static string Shortable => GetString(ShortableKey);
+
+		/// <summary>
+		/// Can have short positions.
+		/// </summary>
+		public const string ShortableDescKey = nameof(ShortableDesc);
+
+		/// <summary>
+		/// Can have short positions.
+		/// </summary>
+		public static string ShortableDesc => GetString(ShortableDescKey);
+
+		/// <summary>
+		/// The interval between data updates.
+		/// </summary>
+		public const string IntervalDataUpdatesKey = nameof(IntervalDataUpdates);
+
+		/// <summary>
+		/// The interval between data updates.
+		/// </summary>
+		public static string IntervalDataUpdates => GetString(IntervalDataUpdatesKey);
+
+		/// <summary>
+		/// Zero
+		/// </summary>
+		public const string ZeroKey = nameof(Zero);
+
+		/// <summary>
+		/// Zero
+		/// </summary>
+		public static string Zero => GetString(ZeroKey);
+
+		/// <summary>
+		/// Connector
+		/// </summary>
+		public const string ConnectorKey = nameof(Connector);
+
+		/// <summary>
+		/// Connector
+		/// </summary>
+		public static string Connector => GetString(ConnectorKey);
+
+		/// <summary>
+		/// Volume {0} of order '{1}' is less than minimum allowed {2}.
+		/// </summary>
+		public const string OrderVolumeLessMinKey = nameof(OrderVolumeLessMin);
+
+		/// <summary>
+		/// Volume {0} of order '{1}' is less than minimum allowed {2}.
+		/// </summary>
+		public static string OrderVolumeLessMin => GetString(OrderVolumeLessMinKey);
+
+		/// <summary>
+		/// Show strategy socket
+		/// </summary>
+		public const string ShowStrategySocketKey = nameof(ShowStrategySocket);
+
+		/// <summary>
+		/// Show strategy socket
+		/// </summary>
+		public static string ShowStrategySocket => GetString(ShowStrategySocketKey);
+
+		/// <summary>
+		/// Show position socket
+		/// </summary>
+		public const string ShowPositionSocketKey = nameof(ShowPositionSocket);
+
+		/// <summary>
+		/// Show position socket
+		/// </summary>
+		public static string ShowPositionSocket => GetString(ShowPositionSocketKey);
+
+		/// <summary>
+		/// Encrypted scheme
+		/// </summary>
+		public const string EncryptedSchemaKey = nameof(EncryptedSchema);
+
+		/// <summary>
+		/// Encrypted scheme
+		/// </summary>
+		public static string EncryptedSchema => GetString(EncryptedSchemaKey);
+
+		/// <summary>
+		/// Standalone app
+		/// </summary>
+		public const string StandaloneAppKey = nameof(StandaloneApp);
+
+		/// <summary>
+		/// Standalone app
+		/// </summary>
+		public static string StandaloneApp => GetString(StandaloneAppKey);
+
+		/// <summary>
+		/// Min volume (under)
+		/// </summary>
+		public const string UnderlyingMinVolumeKey = nameof(UnderlyingMinVolume);
+
+		/// <summary>
+		/// Min volume (under)
+		/// </summary>
+		public static string UnderlyingMinVolume => GetString(UnderlyingMinVolumeKey);
+
+		/// <summary>
+		/// Minimum volume allowed in order for underlying security.
+		/// </summary>
+		public const string UnderlyingMinVolumeDescKey = nameof(UnderlyingMinVolumeDesc);
+
+		/// <summary>
+		/// Minimum volume allowed in order for underlying security.
+		/// </summary>
+		public static string UnderlyingMinVolumeDesc => GetString(UnderlyingMinVolumeDescKey);
+
+		/// <summary>
+		/// Shift {0}
+		/// </summary>
+		public const string ShiftIsKey = nameof(ShiftIs);
+
+		/// <summary>
+		/// Shift {0}
+		/// </summary>
+		public static string ShiftIs => GetString(ShiftIsKey);
+
+		/// <summary>
+		/// Take {0}
+		/// </summary>
+		public const string TakeIsKey = nameof(TakeIs);
+
+		/// <summary>
+		/// Take {0}
+		/// </summary>
+		public static string TakeIs => GetString(TakeIsKey);
+
+		/// <summary>
+		/// Stop {0}
+		/// </summary>
+		public const string StopIsKey = nameof(StopIs);
+
+		/// <summary>
+		/// Stop {0}
+		/// </summary>
+		public static string StopIs => GetString(StopIsKey);
 	}
 }

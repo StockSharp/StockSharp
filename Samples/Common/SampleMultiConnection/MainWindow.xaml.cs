@@ -32,6 +32,7 @@ namespace SampleMultiConnection
 	using StockSharp.Logging;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	public partial class MainWindow
 	{
@@ -45,9 +46,11 @@ namespace SampleMultiConnection
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
+		private readonly OrdersLogWindow _orderLogWindow = new OrdersLogWindow();
+		private readonly NewsWindow _newsWindow = new NewsWindow();
 
-		private const string _settingsFile = "connection.xml";
 		private const string _defaultDataPath = "Data";
+		private readonly string _settingsFile;
 
 		public MainWindow()
 		{
@@ -62,11 +65,16 @@ namespace SampleMultiConnection
 			_securitiesWindow.MakeHideable();
 			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
+			_orderLogWindow.MakeHideable();
+			_newsWindow.MakeHideable();
+
+			var path = _defaultDataPath.ToFullPath();
+
+			_settingsFile = Path.Combine(path, "connection.xml");
 
 			var logManager = new LogManager();
-			logManager.Listeners.Add(new FileLogListener("sample.log"));
+			logManager.Listeners.Add(new FileLogListener { LogDirectory = Path.Combine(path, "Logs") });
             logManager.Listeners.Add(Monitor);
-            var path = _defaultDataPath.ToFullPath();
 
 			HistoryPath.Folder = path;
 
@@ -82,20 +90,29 @@ namespace SampleMultiConnection
 			// ecng.serialization invoke in several places IStorage obj
 			ConfigManager.RegisterService(entityRegistry.Storage);
 
+			INativeIdStorage nativeIdStorage = new CsvNativeIdStorage(Path.Combine(path, "NativeId"))
+			{
+				DelayAction = entityRegistry.DelayAction
+			};
+			ConfigManager.RegisterService(nativeIdStorage);
+
 			var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
 
 			Connector = new Connector(entityRegistry, storageRegistry, snapshotRegistry);
 			logManager.Sources.Add(Connector);
 
-			InitConnector(entityRegistry, snapshotRegistry);
+			InitConnector(entityRegistry, snapshotRegistry, nativeIdStorage);
 		}
 
-		private void InitConnector(CsvEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry)
+		private void InitConnector(CsvEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry, INativeIdStorage nativeIdStorage)
 		{
 			// subscribe on connection successfully event
 			Connector.Connected += () =>
 			{
 				this.GuiAsync(() => ChangeConnectStatus(true));
+
+				if (Connector.Adapter.IsMarketDataTypeSupported(MarketDataTypes.News))
+					Connector.RegisterNews();
 			};
 
 			// subscribe on connection error event
@@ -117,6 +134,7 @@ namespace SampleMultiConnection
 
 			Connector.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
 			Connector.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+			Connector.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
 
 			Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
 			Connector.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
@@ -138,6 +156,9 @@ namespace SampleMultiConnection
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
 
+			// set news provider
+			_newsWindow.NewsPanel.NewsProvider = Connector;
+
 			try
 			{
 				if (File.Exists(_settingsFile))
@@ -151,6 +172,17 @@ namespace SampleMultiConnection
 			}
 			catch
 			{
+			}
+
+			Connector.Adapter.NativeIdStorage = nativeIdStorage;
+
+			try
+			{
+				nativeIdStorage.Init();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(this, ex.ToString());
 			}
 
 			if (Connector.StorageAdapter == null)
@@ -181,6 +213,8 @@ namespace SampleMultiConnection
 			_securitiesWindow.DeleteHideable();
 			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
+			_orderLogWindow.DeleteHideable();
+			_newsWindow.DeleteHideable();
 
 			_securitiesWindow.Close();
 			_tradesWindow.Close();
@@ -188,6 +222,8 @@ namespace SampleMultiConnection
 			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
+			_orderLogWindow.Close();
+			_newsWindow.Close();
 
 			Connector.Dispose();
 
@@ -258,6 +294,16 @@ namespace SampleMultiConnection
 		private void ShowMyTradesClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_myTradesWindow);
+		}
+
+		private void ShowOrderLogClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_orderLogWindow);
+		}
+
+		private void ShowNewsClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_newsWindow);
 		}
 
 		private static void ShowOrHide(Window window)

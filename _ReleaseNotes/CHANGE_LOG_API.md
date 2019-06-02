@@ -89,6 +89,21 @@ StockSharp API Change log
 * (feature) IMessageAdapter. Removed TimeFrames property.
 * (feature) IMessageAdapter. IsAllDownloadingSupported method added.
 * (bug) SecurityNativeIdMessageAdapter. Fix processing suspended incoming messages.
+* (feature) Security. MinVolume, Shortable and UnderlyingSecuityMinVolume properties added.
+* (bug) QuikLua. Position average price fix.
+* (feature) SampleMultiConnection. Order log, historical ticks and news requests supported.
+* (feature) Deribit. V2 protocol supported.
+* (feature) BitStamp. V2 web sockets supported.
+* (feature) FieldMapping. ZeroAsNull added.
+* (feature) CandleMessageGrid added.
+* (feature) FIX connector. LMAX dialect added.
+* (feature) ConnectorWindow. Allow change connector's name.
+* (feature) IMessageAdapter. PossibleSupportedMessages property added.
+* (feature) Level1BinarySerializer. Support Dividend, MinVolume, UnderlyingMinVolume, SpreadMiddle, Commission, Splits.
+* (feature) PositionBinarySerializer. Support Commissions, SettlementPrice.
+* (feature) Emulator. Security.MinVolume supported.
+* (feature) Kraken. WebSocket supported.
+* (feature) Adapter and subscription messages added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

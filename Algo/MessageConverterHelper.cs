@@ -593,6 +593,7 @@ namespace StockSharp.Algo
 				PriceStep = security.PriceStep,
 				Decimals = security.Decimals,
 				VolumeStep = security.VolumeStep,
+				MinVolume = security.MinVolume,
 				Multiplier = security.Multiplier,
 				Currency = security.Currency,
 				SecurityType = security.Type,
@@ -606,6 +607,8 @@ namespace StockSharp.Algo
 				IssueSize = security.IssueSize,
 				IssueDate = security.IssueDate,
 				UnderlyingSecurityType = security.UnderlyingSecurityType,
+				UnderlyingSecurityMinVolume = security.UnderlyingSecurityMinVolume,
+				Shortable = security.Shortable,
 				BasketCode = security.BasketCode,
 				BasketExpression = security.BasketExpression,
 
@@ -660,6 +663,7 @@ namespace StockSharp.Algo
 				ExpiryDate = criteria.ExpiryDate,
 				ShortName = criteria.ShortName,
 				VolumeStep = criteria.VolumeStep,
+				MinVolume = criteria.MinVolume,
 				Multiplier = criteria.Multiplier,
 				PriceStep = criteria.PriceStep,
 				Decimals = criteria.Decimals,
@@ -673,6 +677,8 @@ namespace StockSharp.Algo
 				IssueSize = criteria.IssueSize,
 				IssueDate = criteria.IssueDate,
 				UnderlyingSecurityType = criteria.UnderlyingSecurityType,
+				UnderlyingSecurityMinVolume = criteria.UnderlyingSecurityMinVolume,
+				Shortable = criteria.Shortable,
 				BasketCode = criteria.BasketCode,
 				BasketExpression = criteria.BasketExpression,
 			};

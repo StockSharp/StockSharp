@@ -2,13 +2,12 @@ namespace StockSharp.Algo.History.Russian
 {
 	using System;
 	using System.Globalization;
-	using System.IO;
-	using System.IO.Compression;
 	using System.Linq;
 	using System.Xml.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.IO;
 
 	using StockSharp.Algo.Properties;
 
@@ -19,48 +18,45 @@ namespace StockSharp.Algo.History.Russian
 
 		static SecurityInfoCache()
 		{
-			using (var zip = new ZipArchive(Resources.Securities.To<MemoryStream>()))
+			foreach (var stream in Resources.Securities.Unzip())
 			{
-				using (var s = zip.Entries.First().Open())
+				var root = XDocument.Load(stream).Root;
+
+				if (root == null)
+					throw new InvalidOperationException();
+
+				var securities = CultureInfo.InvariantCulture.DoInCulture(() =>
+					root.Elements().Select(
+						    elem => new SecurityInfo
+						    {
+							    Board = elem.GetAttributeValue<string>("board"),
+							    Multiplier = elem.GetAttributeValue<decimal?>("multiplier"),
+							    Decimals = elem.GetAttributeValue<int?>("decimals"),
+							    PriceStep = elem.GetAttributeValue<decimal?>("priceStep"),
+							    Code = elem.GetAttributeValue<string>("code"),
+							    ShortName = elem.GetAttributeValue<string>("shortName"),
+							    Name = elem.GetAttributeValue<string>("name"),
+							    Isin = elem.GetAttributeValue<string>("isin"),
+							    Asset = elem.GetAttributeValue<string>("asset"),
+							    Type = elem.GetAttributeValue<string>("type"),
+							    Currency = elem.GetAttributeValue<string>("currency"),
+							    IssueSize = elem.GetAttributeValue<decimal?>("issueSize"),
+							    IssueDate = elem.GetAttributeValue<string>("issueDate").TryToDateTime("yyyyMMdd"),
+							    LastDate = elem.GetAttributeValue<string>("lastDate").TryToDateTime("yyyyMMdd"),
+						    })
+					    .ToArray());
+
+				foreach (var info in securities)
 				{
-					var root = XDocument.Load(s).Root;
+					_securitiesByCode.SafeAdd(info.Code).Add(info);
+				}
 
-					if (root == null)
-						throw new InvalidOperationException();
-
-					var securities = CultureInfo.InvariantCulture.DoInCulture(() =>
-						root.Elements().Select(
-							elem => new SecurityInfo
-							{
-								Board = elem.GetAttributeValue<string>("board"),
-								Multiplier = elem.GetAttributeValue<decimal?>("multiplier"),
-								Decimals = elem.GetAttributeValue<int?>("decimals"),
-								PriceStep = elem.GetAttributeValue<decimal?>("priceStep"),
-								Code = elem.GetAttributeValue<string>("code"),
-								ShortName = elem.GetAttributeValue<string>("shortName"),
-								Name = elem.GetAttributeValue<string>("name"),
-								Isin = elem.GetAttributeValue<string>("isin"),
-								Asset = elem.GetAttributeValue<string>("asset"),
-								Type = elem.GetAttributeValue<string>("type"),
-								Currency = elem.GetAttributeValue<string>("currency"),
-								IssueSize = elem.GetAttributeValue<decimal?>("issueSize"),
-								IssueDate = elem.GetAttributeValue<string>("issueDate").TryToDateTime("yyyyMMdd"),
-								LastDate = elem.GetAttributeValue<string>("lastDate").TryToDateTime("yyyyMMdd"),
-							})
-							.ToArray());
-
-					foreach (var info in securities)
-					{
-						_securitiesByCode.SafeAdd(info.Code).Add(info);
-					}
-
-					foreach (var info in securities)
-					{
-						if (!info.ShortName.IsEmpty())
-							_securitiesByShortName.TryAdd(info.ShortName, info);
-						else if (!info.Name.IsEmpty())
-							_securitiesByShortName.TryAdd(info.Name, info);
-					}
+				foreach (var info in securities)
+				{
+					if (!info.ShortName.IsEmpty())
+						_securitiesByShortName.TryAdd(info.ShortName, info);
+					else if (!info.Name.IsEmpty())
+						_securitiesByShortName.TryAdd(info.Name, info);
 				}
 			}
 		}

@@ -17,59 +17,20 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
 
 	/// <summary>
 	/// Portfolio lookup result message.
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioLookupResultMessage : Message
+	public class PortfolioLookupResultMessage : BaseResultMessage<PortfolioLookupResultMessage>
 	{
-		/// <summary>
-		/// ID of the original message <see cref="PortfolioMessage.TransactionId"/> for which this message is a response.
-		/// </summary>
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
-
-		/// <summary>
-		/// Lookup error info.
-		/// </summary>
-		[DataMember]
-		[XmlIgnore]
-		public Exception Error { get; set; }
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioLookupResultMessage"/>.
 		/// </summary>
 		public PortfolioLookupResultMessage()
 			: base(MessageTypes.PortfolioLookupResult)
 		{
-		}
-
-		/// <summary>
-		/// Create a copy of <see cref="PortfolioLookupResultMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			return new PortfolioLookupResultMessage
-			{
-				OriginalTransactionId = OriginalTransactionId,
-				LocalTime = LocalTime,
-				Error = Error
-			};
-		}
-
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			var str = base.ToString() + $",Orig={OriginalTransactionId}";
-
-			if (Error != null)
-				str += $",Error={Error.Message}";
-
-			return str;
 		}
 	}
 }

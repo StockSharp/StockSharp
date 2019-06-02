@@ -91,7 +91,9 @@
     <Compile Include="ServerCredentials.cs" />
     <Compile Include="ServerCredentialsExtensions.cs" />
     <Compile Include="StrategyClient.cs" />
+    <Compile Include="StrategyContentTypes.cs" />
     <Compile Include="StrategyData.cs" />
+    <Compile Include="StrategyPriceTypes.cs" />
     <Compile Include="StrategySubscription.cs" />
     <Compile Include="Products.cs" />
     <Compile Include="ISessionService.cs" />

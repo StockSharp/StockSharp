@@ -159,6 +159,10 @@ namespace StockSharp.Messages
 			}
 		}
 
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual IEnumerable<MessageTypes> PossibleSupportedMessages => SupportedMessages;
+
 		private IEnumerable<MarketDataTypes> _supportedMarketDataTypes = Enumerable.Empty<MarketDataTypes>();
 
 		/// <inheritdoc />
@@ -676,7 +680,7 @@ namespace StockSharp.Messages
 			=> new OrderLogMarketDepthBuilder(securityId);
 
 		/// <inheritdoc />
-		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
 			=> Enumerable.Empty<TimeSpan>();
 
 		/// <inheritdoc />

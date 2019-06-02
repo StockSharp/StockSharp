@@ -142,7 +142,11 @@ namespace StockSharp.Messages
 
 		Guid ILogSource.Id => InnerAdapter.Id;
 
-		string ILogSource.Name => InnerAdapter.Name;
+		string ILogSource.Name
+		{
+			get => InnerAdapter.Name;
+			set => InnerAdapter.Name = value;
+		}
 
 		/// <inheritdoc />
 		public virtual ILogSource Parent
@@ -185,6 +189,9 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public IdGenerator TransactionIdGenerator => InnerAdapter.TransactionIdGenerator;
+
+		/// <inheritdoc />
+		public virtual IEnumerable<MessageTypes> PossibleSupportedMessages => InnerAdapter.PossibleSupportedMessages;
 
 		/// <inheritdoc />
 		public virtual IEnumerable<MessageTypes> SupportedMessages
@@ -267,7 +274,7 @@ namespace StockSharp.Messages
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 
 		/// <inheritdoc />
-		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
 			=> InnerAdapter.GetTimeFrames(securityId);
 
 		/// <inheritdoc />

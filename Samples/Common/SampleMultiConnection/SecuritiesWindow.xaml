@@ -29,6 +29,8 @@
 					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
 				</Button>
 				<Button x:Name="Ticks" Content="{x:Static loc:LocalizedStrings.Ticks}" Width="100" IsEnabled="False" Click="TicksClick" />
+				<Button x:Name="HistTicks" Content="{x:Static loc:LocalizedStrings.XamlStr223}" IsEnabled="False" Width="100" Click="HistTicksClick" />
+				<Button x:Name="OrderLog" Content="{x:Static loc:LocalizedStrings.OrderLog}" Width="100" IsEnabled="False" Click="OrderLogClick" />
 				<Button x:Name="NewOrder" Width="100" IsEnabled="False" Click="NewOrderClick">
 					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
 				</Button>

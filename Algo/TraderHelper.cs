@@ -2677,6 +2677,12 @@ namespace StockSharp.Algo
 						case Level1Fields.CommissionMaker:
 							security.CommissionMaker = (decimal)value;
 							break;
+						case Level1Fields.MinVolume:
+							security.MinVolume = (decimal)value;
+							break;
+						case Level1Fields.UnderlyingMinVolume:
+							security.UnderlyingSecurityMinVolume = (decimal)value;
+							break;
 						//default:
 						//	throw new ArgumentOutOfRangeException();
 					}
@@ -2773,6 +2779,12 @@ namespace StockSharp.Algo
 					security.VolumeStep = message.VolumeStep.Value;
 			}
 
+			if (message.MinVolume != null)
+			{
+				if (isOverride || security.MinVolume == null)
+					security.MinVolume = message.MinVolume.Value;
+			}
+
 			if (message.Multiplier != null)
 			{
 				if (isOverride || security.Multiplier == null)
@@ -2845,6 +2857,12 @@ namespace StockSharp.Algo
 					security.Type = message.SecurityType.Value;
 			}
 
+			if (message.Shortable != null)
+			{
+				if (isOverride || security.Shortable == null)
+					security.Shortable = message.Shortable.Value;
+			}
+
 			if (!message.CfiCode.IsEmpty())
 			{
 				if (isOverride || security.CfiCode.IsEmpty())
@@ -2890,6 +2908,12 @@ namespace StockSharp.Algo
 			{
 				if (isOverride || security.UnderlyingSecurityType == null)
 					security.UnderlyingSecurityType = message.UnderlyingSecurityType.Value;
+			}
+
+			if (message.UnderlyingSecurityMinVolume != null)
+			{
+				if (isOverride || security.UnderlyingSecurityMinVolume == null)
+					security.UnderlyingSecurityMinVolume = message.UnderlyingSecurityMinVolume.Value;
 			}
 
 			if (!message.BasketCode.IsEmpty())

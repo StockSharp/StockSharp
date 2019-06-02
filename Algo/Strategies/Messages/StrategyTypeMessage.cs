@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Strategies.Messages
 {
 	using System;
+	using System.Linq;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Messages;
@@ -38,10 +39,16 @@ namespace StockSharp.Algo.Strategies.Messages
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
+		/// <summary>
+		/// Assembly.
+		/// </summary>
+		[DataMember]
+		public byte[] Assembly { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Id={StrategyTypeId},Name={StrategyName}";
+			return base.ToString() + $",Id={StrategyTypeId},Name={StrategyName},Asm={Assembly?.Length}";
 		}
 
 		/// <summary>
@@ -63,6 +70,7 @@ namespace StockSharp.Algo.Strategies.Messages
 			destination.StrategyName = StrategyName;
 			destination.StrategyTypeId = StrategyTypeId;
 			destination.OriginalTransactionId = OriginalTransactionId;
+			destination.Assembly = Assembly?.ToArray();
 
 			this.CopyExtensionInfo(destination);
 

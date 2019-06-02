@@ -67,7 +67,6 @@
       <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="System" />

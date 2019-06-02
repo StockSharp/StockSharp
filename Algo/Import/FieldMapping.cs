@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Import
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -15,8 +14,6 @@ namespace StockSharp.Algo.Import
 	/// </summary>
 	public abstract class FieldMapping : NotifiableObject, IPersistable
 	{
-		//private readonly Settings _settings;
-
 		private FastDateTimeParser _dateParser;
 		private FastTimeSpanParser _timeParser;
 
@@ -41,24 +38,19 @@ namespace StockSharp.Algo.Import
 			if (displayName.IsEmpty())
 				throw new ArgumentNullException(nameof(displayName));
 
-			if (type == null)
-				throw new ArgumentNullException(nameof(type));
-
 			if (description.IsEmpty())
 				description = displayName;
 
-			//_settings = settings;
+			Type = type ?? throw new ArgumentNullException(nameof(type));
 			Name = name;
 			DisplayName = displayName;
 			Description = description;
-			Type = type;
 			IsExtended = isExtended;
 			IsEnabled = true;
 
-			Values = new ObservableCollection<FieldMappingValue>();
 			//Number = -1;
 
-			if (Type == typeof(DateTimeOffset))
+			if (Type.IsDateTime())
 				Format = "yyyyMMdd";
 			else if (Type == typeof(TimeSpan))
 				Format = "hh:mm:ss";
@@ -151,15 +143,26 @@ namespace StockSharp.Algo.Import
 			}
 		}
 
+		private IEnumerable<FieldMappingValue> _values = Enumerable.Empty<FieldMappingValue>();
+
 		/// <summary>
 		/// Mapping values.
 		/// </summary>
-		public ObservableCollection<FieldMappingValue> Values { get; }
+		public IEnumerable<FieldMappingValue> Values
+		{
+			get => _values;
+			set => _values = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
 		/// <summary>
 		/// Default value.
 		/// </summary>
 		public string DefaultValue { get; set; }
+
+		/// <summary>
+		/// Zero as <see langword="null"/>.
+		/// </summary>
+		public bool ZeroAsNull { get; set; }
 
 		/// <summary>
 		/// Load settings.
@@ -169,9 +172,10 @@ namespace StockSharp.Algo.Import
 		{
 			Name = storage.GetValue<string>(nameof(Name));
 			IsExtended = storage.GetValue<bool>(nameof(IsExtended));
-			Values.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => s.Load<FieldMappingValue>()));
+			Values = storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => s.Load<FieldMappingValue>()).ToArray();
 			DefaultValue = storage.GetValue<string>(nameof(DefaultValue));
 			Format = storage.GetValue<string>(nameof(Format));
+			ZeroAsNull = storage.GetValue<bool>(nameof(ZeroAsNull));
 
 			//IsEnabled = storage.GetValue(nameof(IsEnabled), IsEnabled);
 
@@ -188,9 +192,9 @@ namespace StockSharp.Algo.Import
 			storage.SetValue(nameof(Values), Values.Select(v => v.Save()).ToArray());
 			storage.SetValue(nameof(DefaultValue), DefaultValue);
 			storage.SetValue(nameof(Format), Format);
-
 			//storage.SetValue(nameof(IsEnabled), IsEnabled);
 			storage.SetValue(nameof(Order), Order);
+			storage.SetValue(nameof(ZeroAsNull), ZeroAsNull);
 		}
 
 		/// <summary>
@@ -206,7 +210,7 @@ namespace StockSharp.Algo.Import
 				return;
 			}
 
-			if (Values.Count > 0)
+			if (Values.Any())
 			{
 				var v = Values.FirstOrDefault(vl => vl.ValueFile.CompareIgnoreCase(value));
 
@@ -249,24 +253,31 @@ namespace StockSharp.Algo.Import
 					value = str;
 				}
 			}
-			else if (Type == typeof(DateTimeOffset))
+			else if (Type.IsDateTime())
 			{
 				if (value is string str)
 				{
 					if (_dateParser == null)
 						_dateParser = new FastDateTimeParser(Format);
 
-					var dto = _dateParser.ParseDto(str);
-
-					if (dto.Offset.IsDefault())
+					if (Type == typeof(DateTimeOffset))
 					{
-						var tz = Scope<TimeZoneInfo>.Current?.Value;
+						var dto = _dateParser.ParseDto(str);
 
-						if (tz != null)
-							dto = dto.UtcDateTime.ApplyTimeZone(tz);
+						if (dto.Offset.IsDefault())
+						{
+							var tz = Scope<TimeZoneInfo>.Current?.Value;
+
+							if (tz != null)
+								dto = dto.UtcDateTime.ApplyTimeZone(tz);
+						}
+
+						value = dto;
 					}
-
-					value = dto;
+					else
+					{
+						value = _dateParser.Parse(str);
+					}
 				}
 			}
 			else if (Type == typeof(TimeSpan))
@@ -281,7 +292,14 @@ namespace StockSharp.Algo.Import
 			}
 
 			if (value != null)
-				OnApply(instance, value.To(Type));
+			{
+				value = value.To(Type);
+
+				if (ZeroAsNull && Type.IsNumeric() && value.To<decimal>() == 0)
+					return;
+
+				OnApply(instance, value);
+			}
 		}
 
 		/// <summary>

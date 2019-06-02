@@ -58,6 +58,9 @@
     <Reference Include="Ecng.Interop">
       <HintPath>..\References\Ecng.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.IO">
+      <HintPath>..\References\Ecng.IO.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Net">
       <HintPath>..\References\Ecng.Net.dll</HintPath>
     </Reference>
@@ -99,7 +102,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />

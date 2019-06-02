@@ -71,6 +71,16 @@ namespace StockSharp.Messages
 		public decimal? VolumeStep { get; set; }
 
 		/// <summary>
+		/// Minimum volume allowed in order.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.MinVolumeKey)]
+		[DescriptionLoc(LocalizedStrings.MinVolumeDescKey)]
+		[MainCategory]
+		[Nullable]
+		public decimal? MinVolume { get; set; }
+
+		/// <summary>
 		/// Lot multiplier.
 		/// </summary>
 		[DataMember]
@@ -148,6 +158,16 @@ namespace StockSharp.Messages
 		public string UnderlyingSecurityCode { get; set; }
 
 		/// <summary>
+		/// Minimum volume allowed in order for underlying security.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.UnderlyingMinVolumeKey)]
+		[DescriptionLoc(LocalizedStrings.UnderlyingMinVolumeDescKey)]
+		[MainCategory]
+		[Nullable]
+		public decimal? UnderlyingSecurityMinVolume { get; set; }
+
+		/// <summary>
 		/// Option strike price.
 		/// </summary>
 		[DataMember]
@@ -216,6 +236,13 @@ namespace StockSharp.Messages
 		[DataMember]
 		[MainCategory]
 		public SecurityTypes? UnderlyingSecurityType { get; set; }
+
+		/// <summary>
+		/// Can have short positions.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		public bool? Shortable { get; set; }
 
 		/// <summary>
 		/// Basket security type. Can be <see langword="null"/> in case of regular security.
@@ -292,6 +319,7 @@ namespace StockSharp.Messages
 			destination.Strike = Strike;
 			destination.UnderlyingSecurityCode = UnderlyingSecurityCode;
 			destination.VolumeStep = VolumeStep;
+			destination.MinVolume = MinVolume;
 			destination.Multiplier = Multiplier;
 			destination.Class = Class;
 			destination.BinaryOptionType = BinaryOptionType;
@@ -299,6 +327,8 @@ namespace StockSharp.Messages
 			destination.IssueSize = IssueSize;
 			destination.IssueDate = IssueDate;
 			destination.UnderlyingSecurityType = UnderlyingSecurityType;
+			destination.UnderlyingSecurityMinVolume = UnderlyingSecurityMinVolume;
+			destination.Shortable = Shortable;
 			destination.BasketCode = BasketCode;
 			destination.BasketExpression = BasketExpression;
 
@@ -329,6 +359,9 @@ namespace StockSharp.Messages
 			if (VolumeStep != null)
 				str += $",Vol={VolumeStep}";
 
+			if (MinVolume != null)
+				str += $",MinVol={MinVolume}";
+
 			if (Decimals != null)
 				str += $",Dec={Decimals}";
 
@@ -346,6 +379,21 @@ namespace StockSharp.Messages
 
 			if (Strike != null)
 				str += $",Strike={Strike}";
+
+			if (CfiCode != null)
+				str += $",CFI={CfiCode}";
+
+			if (UnderlyingSecurityCode != null)
+				str += $",Under={UnderlyingSecurityCode}";
+
+			if (Class != null)
+				str += $",Class={Class}";
+
+			if (BinaryOptionType != null)
+				str += $",Bin={BinaryOptionType}";
+			
+			if (Shortable != null)
+				str += $",Strike={Shortable}";
 
 			if (BasketCode != null)
 				str += $",Basket={BasketCode}/{BasketExpression}";

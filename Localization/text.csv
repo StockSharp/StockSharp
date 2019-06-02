@@ -1,4 +1,5 @@
-﻿AxisIsNotSet;Element axis is not set.;Ось элемента не задана.
+﻿ErrorChangingGroupName;Unable to change group name of axis while it is attached to a chart area.;Невозможно изменить имя группы у оси, добавленной в область графика.
+AxisIsNotSet;Element axis is not set.;Ось элемента не задана.
 ErrorRemovingDefaultAxis;Unable to remove default axis.;Нельзя удалить ось по умолчанию.
 SourceValues;Source values;Исходные значения
 ChartPainterAlreadySet;Indicator painter can only be set once.;Рендерер чарт элемента индикатора может быть установлен лишь единожды.
@@ -2938,8 +2939,8 @@ Str3119;Formula with one argument element.;Элемент формулы с од
 Str3120;Formula with a single argument.;Формула с одним аргументом.
 Str3121;Formula with two arguments;Формула с двумя аргументами
 Str3122;Formula with two arguments element.;Элемент формулы с двумя аргументами.
-Str3123;Position opening;Открытие позиции
-Str3124;Position opening element.;Элемент открытия позиции.
+Str3123;Order registering;Регистрация заявки
+Str3124;Order registering element.;Элемент регистрации заявки.
 Str3125;Portfolio, in which the position will be created. If the value is not specified, then strategy portfolio will be used.;Портфель, в котором будет создана позиция. Если значение не указано, то будет использоваться портфель стратегии.
 Str3126;Position direction (short or long).;Направление позиции (короткая или длинная).
 Str3127;Should position be created with a market order.;Создавать ли позицию рыночной заявкой.
@@ -2962,7 +2963,7 @@ Str3143;Connection;Соединение
 Str3144;Connection type.;Тип соединения.
 Str3145;Position protection;Защита позиции
 Str3146;Open position protection element.;Элемент защиты открытой позиции.
-Str3147;Weekend order;Заявка вых
+Str3147;Order (out);Заявка вых
 Str3148;Active;Включен
 Str3149;Is take-profit active.;Включен ли тейк-профит.
 Str3150;Protection level for take-profit.;Защитный уровень для тейк-профита.
@@ -4887,7 +4888,7 @@ SecurityDoNotContainsLegs;Basket security '{0}' do not contains legs.;Корзи
 Basket;Basket;Basket
 BasketCode;Basket type code.;Код типа корзины.
 Expression;Expression;Выражение
-ExpressionDesc;The mathematic formula of index.;Математическая формула индекса.
+ExpressionDesc;The mathematical formula of index.;Математическая формула индекса.
 VolumeTrigger;Volume trigger causes switch to the next contract.;Триггер объема, вызывающий переход на следующий контракт.
 AddFolder;Add folder;Добавить папку
 AssetType;Asset type;Тип актива
@@ -4967,6 +4968,23 @@ DataTypeMustBe;Data type must be '{0}'.;Тип данных должен быт�
 SecurityMustBe;Security must be '{0}'.;Инструмент должен быть '{0}'.
 Twime;TWIME;TWIME
 FileNameFormat;File name format;Формат имени файла
+MinVolume;Min volume;Мин объем
+MinVolumeDesc;Minimum volume allowed in order.;Минимальный объем, допустимый в заявке.
+UnderlyingMinVolume;Min volume (under);Мин объем (базов)
+UnderlyingMinVolumeDesc;Minimum volume allowed in order for underlying security.;Минимальный объем базового инструмента, допустимый в заявке.
+Shortable;Shortable;Шортовый
+ShortableDesc;Can have short positions.;Можно ли открывать шортовые позиции.
+IntervalDataUpdates;The interval between data updates.;Периодичность обновления данных.
+Zero;Zero;Ноль
+Connector;Connector;Коннектор
+OrderVolumeLessMin;Volume {0} of order '{1}' is less than minimum allowed {2}.;Объем {0} заявки '{1}' меньше минимально допустимого {2}.
+ShowStrategySocket;Show strategy socket;Показывать сокет стратегии
+ShowPositionSocket;Show position socket;Показывать сокет позиции
+EncryptedSchema;Encrypted scheme;Зашифрованная схема
+StandaloneApp;Standalone app;Автономная программа
+ShiftIs;Shift {0};Сдвиг {0}
+TakeIs;Take {0};Тейк {0}
+StopIs;Stop {0};Стоп {0}
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5552,7 +5570,6 @@ DocStr611;The connection implementing {0};Подключение, реализу
 DocStr612;All registered candles series;Все зарегистрированные серии свечей
 DocStr613;The time shift for the new request to obtain a new candle. It is needed for the server will have time to create data in its candles storage;Временной отступ для нового запроса получение новой свечи. Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечей
 DocStr614;The handler getting new candles;Обработчик, получающий новые свечи
-DocStr615;The interval between data updates;Периодичность обновления данных
 DocStr616;Created timer;Созданный таймер
 DocStr617;The base data source for {0} which convert data from the {1} type to the {2};Базовый источник данных для {0}, который переводит данные из типа {1} в {2}
 DocStr618;The source data type (for example, {0});Тип исходных данных (например, {0})
@@ -6032,12 +6049,12 @@ DocStr1102;The processor, which will be called if maximal value of strings is ex
 DocStr1103;The export into text file;Экспорт в текстовый файл
 DocStr1104;The string formatting template;Шаблон форматирование строки
 DocStr1105;The export into xml;Экспорт в xml
-DocStr1106;To screen off mathematic formula from instruments identifiers {0};Экранировать математическую формулу от идентификаторов инструментов {0}
-DocStr1107;The source text;Исходные текст
-DocStr1108;The screened text;Экранированный текст
-DocStr1109;To get all {0} from mathematic formula;Получить все {0} из математической формулы
+DocStr1106;Escape mathematical formula from instruments identifiers {0};Экранировать математическую формулу от идентификаторов инструментов {0}
+DocStr1107;Unescaped text;Исходные текст
+DocStr1108;Escaped text;Экранированный текст
+DocStr1109;To get all {0} from mathematical formula;Получить все {0} из математической формулы
 DocStr1110;Mathematical formula;Математическая формула
-DocStr1111;The index, built of combination of several instruments through mathematic formula {0};Индекс, построенный из комбинации нескольких инструментов через математическую формулу {0}
+DocStr1111;The index, built of combination of several instruments through mathematical formula {0};Индекс, построенный из комбинации нескольких инструментов через математическую формулу {0}
 DocStr1112;The index, built of instruments. For example, to specify spread at arbitrage or pair trading;Индекс, построенный из инструментов. Например, для задания спреда при арбитраже или парном трейдинге
 DocStr1113;To calculate the basket value;Вычислить значение корзины
 DocStr1114;Values of basket composite instruments {0};Значения составных инструментов корзины {0}
@@ -13228,11 +13245,10 @@ DocStr8472;To delete all instruments;Удалить все инструмент�
 DocStr8473;Online doc url attribute;Атрибут установления страницы документации
 DocStr8475;Online doc url;Страница документации
 DocStr8476;Compiled mathematical formula;Скомпилированная математическая формула
-DocStr8477;The mathematic formula;Математическая формула
 DocStr8478;Compilation error;Ошибка компиляции
 DocStr8479;Compile mathematical formula;Скомпилировать математическую формулу
 DocStr8480;Text expression;Текстовое выражение
-DocStr8481;To screen on mathematic formula with instruments identifiers {0};Экранировать выражение от идентификаторов инструментов {0}
+DocStr8481;Undo escape mathematical formula with instruments identifiers {0};Отменить экранирование от идентификаторов инструментов {0}
 DocStr8482;The unscreened text;Дэ-экранировать выражение
 DocStr8484;Get all available data types;Получить все доступные типы данных
 DocStr8485;Instrument identifier;Идентификатор инструмента
@@ -13891,7 +13907,6 @@ DocStr9195;Request news on English;Запросить новости на анг
 DocStr9196;Instance of the root section {0};Объект корневой секции {0}
 DocStr9197;Scheme types;Типы схемы
 DocStr9198;Regular scheme;Обычная схема
-DocStr9199;Encrypted scheme;Зашифрованная схема
 DocStr9200;Scheme type;Тип схемы
 DocStr9201;Path icon;Путь к иконке
 DocStr9202;The color of text;Цвет текста
@@ -15402,7 +15417,6 @@ DocStr10877;Position storage;Хранилище позиций
 DocStr10878;Track positions;Отслеживать позиции
 DocStr10879;To get the portfolio by the name;Получить портфель по названию
 DocStr10880;Services registry;Реестр сервисов
-DocStr10881;Connector;Коннектор
 DocStr10882;Log manager;Менеджер логирования
 DocStr10883;Filter portfolios by the specified criteria;Отфильтровать портфели по указанному критерию
 DocStr10884;All portfolios;Все портфели
@@ -15607,7 +15621,7 @@ DocStr11097;The selected settings;Выбранные настройки
 DocStr11098;Selected settings list;Список выбранных настроек
 DocStr11100;Clear pending messages on dispose;Очищать обрабатываемые сообщения при освобождении ресурсов
 DocStr11101;Special message initiated from {0} method;Специальное сообщение, инициированное из метода {0}
-DocStr11102;The method is called at the processing of the new incoming values;The method is called at the processing of the new incoming values
+DocStr11102;The method is called at the processing of the new incoming values;Метод вызывается при обработке новых входящих значений
 DocStr11103;Window for preview of importing data;Окно для предпосмотра импортируемых данных
 DocStr11104;Gets a value indicating whether the adapter translates {0};Поддерживается ли адаптером трансляция {0}
 DocStr11105;Message adapter that splits large market data requests on smaller;Адаптер сообщений, который разбивает большие запросы скачивания маркет-данных на меньшие
@@ -15615,3 +15629,19 @@ DocStr11106;Get maximum size step allowed for historical download;Получит
 DocStr11107;Is for the specified {0} all securities downloading enabled;Доступно ли для указанного {0} загрузка всех инструментов
 DocStr11108;Market data request;Запрос маркет данных
 DocStr11109;Interval between iterations;Интервал между итерациями
+DocStr11110;Zero as {0};Ноль как {0}
+DocStr11111;Get synthetic portfolio name for {0} mode;Получить синтетическое имя портфеля для режима {0}
+DocStr11112;Is the specified portfolio name generated by {0};Является ли указанное имя портфеля сгенерированным через {0}
+DocStr11113;Possible supported by adapter message types;Возможные поддерживаемые адаптером типы сообщений
+DocStr11115;Adapter command message;Сообщение с командой адаптера
+DocStr11116;Adapters result message;Результирующее сообщение адаптеров
+DocStr11117;Adapters list request message;Сообщение запроса списка адаптеров
+DocStr11118;Adapter response message;Сообщение ответа адаптера
+DocStr11119;Base result message;Базовое сообщение результата
+DocStr11120;Subscriptions result message;Результирующее сообщение подписок
+DocStr11121;Subscriptions list request message;Сообщение запроса списка подписок
+DocStr11122;Use price management algorithm;Use price management algorithm
+DocStr11123;The diagram element which supports subscription to strategy;The diagram element which supports subscription to strategy
+DocStr11124;Use custom strategy;Use custom strategy
+DocStr11125;The method is called at the subscribing to strategy;The method is called at the subscribing to strategy
+DocStr11126;AddRemoteStrategyWindow;AddRemoteStrategyWindow
