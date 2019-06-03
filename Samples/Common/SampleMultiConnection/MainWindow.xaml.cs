@@ -198,6 +198,7 @@ namespace SampleMultiConnection
 			}
 
 			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
+			Connector.StorageAdapter.Mode = StorageModes.Snapshot;
 			Connector.LookupAll();
 
 			snapshotRegistry.Init();
