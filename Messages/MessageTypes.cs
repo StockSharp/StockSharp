@@ -276,16 +276,6 @@ namespace StockSharp.Messages
 		SecurityMappingResult,
 
 		/// <summary>
-		/// <see cref="SecurityAssociationRequestMessage"/>.
-		/// </summary>
-		SecurityAssociationRequest,
-
-		/// <summary>
-		/// <see cref="SecurityAssociationResultMessage"/>.
-		/// </summary>
-		SecurityAssociationResult,
-
-		/// <summary>
 		/// <see cref="SecurityLegsRequestMessage"/>.
 		/// </summary>
 		SecurityLegsRequest,

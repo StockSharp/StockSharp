@@ -44,12 +44,12 @@ namespace StockSharp.Algo.Storages
 		IEnumerable<SecurityIdMapping> Get(string storageName);
 
 		/// <summary>
-		/// Add security identifier mapping.
+		/// Save security identifier mapping.
 		/// </summary>
 		/// <param name="storageName">Storage name.</param>
 		/// <param name="mapping">Security identifier mapping.</param>
 		/// <returns><see langword="true"/> if security mapping was added. If was changed, <see langword="false" />.</returns>
-		bool Add(string storageName, SecurityIdMapping mapping);
+		bool Save(string storageName, SecurityIdMapping mapping);
 
 		/// <summary>
 		/// Remove security mapping.
@@ -95,12 +95,12 @@ namespace StockSharp.Algo.Storages
 				return _mappings.TryGetValue(storageName)?.Select(p => (SecurityIdMapping)p).ToArray() ?? Enumerable.Empty<SecurityIdMapping>();
 		}
 
-		bool ISecurityMappingStorage.Add(string storageName, SecurityIdMapping mapping)
+		bool ISecurityMappingStorage.Save(string storageName, SecurityIdMapping mapping)
 		{
-			return Add(storageName, mapping, out _);
+			return Save(storageName, mapping, out _);
 		}
 
-		internal bool Add(string storageName, SecurityIdMapping mapping, out IEnumerable<SecurityIdMapping> all)
+		internal bool Save(string storageName, SecurityIdMapping mapping, out IEnumerable<SecurityIdMapping> all)
 		{
 			if (storageName.IsEmpty())
 				throw new ArgumentNullException(nameof(storageName));
@@ -254,7 +254,7 @@ namespace StockSharp.Algo.Storages
 		public IEnumerable<SecurityIdMapping> Get(string storageName) => _inMemory.Get(storageName);
 
 		/// <inheritdoc />
-		public bool Add(string storageName, SecurityIdMapping mapping)
+		public bool Save(string storageName, SecurityIdMapping mapping)
 		{
 			if (storageName.IsEmpty())
 				throw new ArgumentNullException(nameof(storageName));
@@ -262,7 +262,7 @@ namespace StockSharp.Algo.Storages
 			if (mapping.IsDefault())
 				throw new ArgumentNullException(nameof(mapping));
 
-			var added = ((InMemorySecurityMappingStorage)_inMemory).Add(storageName, mapping, out var all);
+			var added = ((InMemorySecurityMappingStorage)_inMemory).Save(storageName, mapping, out var all);
 
 			if (added)
 				Save(storageName, false, new[] { mapping });

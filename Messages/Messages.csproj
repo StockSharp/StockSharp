@@ -104,6 +104,7 @@
     <Compile Include="IBasketSecurityProcessorProvider.cs" />
     <Compile Include="IDailyInfoSoap.cs" />
     <Compile Include="IPortfolioMessageAdapterProvider.cs" />
+    <Compile Include="ISecurityIdMessage.cs" />
     <Compile Include="IServerTimeMessage.cs" />
     <Compile Include="ITransactionIdMessage.cs" />
     <Compile Include="MarketDataFinishedMessage.cs" />
@@ -149,8 +150,6 @@
     <Compile Include="MarketDataMessage.cs" />
     <Compile Include="RepoOrderInfo.cs" />
     <Compile Include="NtmOrderInfo.cs" />
-    <Compile Include="SecurityAssociationRequestMessage.cs" />
-    <Compile Include="SecurityAssociationResultMessage.cs" />
     <Compile Include="SecurityId.cs" />
     <Compile Include="SecurityIdMapping.cs" />
     <Compile Include="SecurityLegsRequestMessage.cs" />

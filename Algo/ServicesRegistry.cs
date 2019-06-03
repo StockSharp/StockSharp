@@ -36,11 +36,6 @@ namespace StockSharp.Algo
 		public static ISecurityStorage SecurityStorage => ConfigManager.GetService<ISecurityStorage>();
 		
 		/// <summary>
-		/// Associations storage.
-		/// </summary>
-		public static ISecurityAssociationStorage AssociationStorage => ConfigManager.GetService<ISecurityAssociationStorage>();
-		
-		/// <summary>
 		/// Security identifier mappings storage.
 		/// </summary>
 		public static ISecurityMappingStorage MappingStorage => ConfigManager.GetService<ISecurityMappingStorage>();
