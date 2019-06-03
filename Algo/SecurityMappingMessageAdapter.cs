@@ -106,48 +106,6 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				case MessageTypes.PositionChange:
-				{
-					var positionMsg = (PositionChangeMessage)message;
-
-					ProcessMessage(positionMsg.SecurityId, positionMsg);
-					break;
-				}
-
-				case MessageTypes.Execution:
-				{
-					var execMsg = (ExecutionMessage)message;
-					ProcessMessage(execMsg.SecurityId, execMsg);
-					break;
-				}
-
-				case MessageTypes.Level1Change:
-				{
-					var level1Msg = (Level1ChangeMessage)message;
-
-					ProcessMessage(level1Msg.SecurityId, level1Msg);
-					break;
-				}
-
-				case MessageTypes.QuoteChange:
-				{
-					var quoteChangeMsg = (QuoteChangeMessage)message;
-					ProcessMessage(quoteChangeMsg.SecurityId, quoteChangeMsg);
-					break;
-				}
-
-				case MessageTypes.CandleTimeFrame:
-				case MessageTypes.CandleRange:
-				case MessageTypes.CandlePnF:
-				case MessageTypes.CandleRenko:
-				case MessageTypes.CandleTick:
-				case MessageTypes.CandleVolume:
-				{
-					var candleMsg = (CandleMessage)message;
-					ProcessMessage(candleMsg.SecurityId, candleMsg);
-					break;
-				}
-
 				case MessageTypes.News:
 				{
 					var newsMsg = (NewsMessage)message;
@@ -161,33 +119,29 @@ namespace StockSharp.Algo
 				}
 
 				default:
-					base.OnInnerAdapterNewOutMessage(message);
+				{
+					if (message is ISecurityIdMessage secIdMsg)
+						ProcessMessage(secIdMsg.SecurityId, message);
+					else
+						base.OnInnerAdapterNewOutMessage(message);
+
 					break;
+				}
 			}
 		}
 
 		/// <inheritdoc />
 		public override void SendInMessage(Message message)
 		{
-			switch (message.Type)
+			switch (message)
 			{
-				case MessageTypes.OrderRegister:
-				case MessageTypes.OrderReplace:
-				case MessageTypes.OrderCancel:
-				case MessageTypes.OrderGroupCancel:
-				case MessageTypes.MarketData:
-				{
+				case ISecurityIdMessage _:
 					ReplaceSecurityId(message);
 					break;
-				}
-
-				case MessageTypes.OrderPairReplace:
-				{
-					var pairMsg = (OrderPairReplaceMessage)message;
+				case OrderPairReplaceMessage pairMsg:
 					ReplaceSecurityId(pairMsg.Message1);
 					ReplaceSecurityId(pairMsg.Message2);
 					break;
-				}
 			}
 
 			base.SendInMessage(message);
@@ -219,8 +173,7 @@ namespace StockSharp.Algo
 				message.ReplaceSecurityId(adapterId.Value);
 		}
 
-		private void ProcessMessage<TMessage>(SecurityId adapterId, TMessage message)
-			where TMessage : Message
+		private void ProcessMessage(SecurityId adapterId, Message message)
 		{
 			if (!adapterId.IsDefault())
 			{

@@ -352,7 +352,7 @@ namespace StockSharp.Algo
 				adapter = new CandleBuilderMessageAdapter(adapter, CandleBuilderProvider);
 			}
 
-			if (SecurityMappingStorage != null && !adapter.StorageName.IsEmpty())
+			if (SecurityMappingStorage != null)
 			{
 				adapter = new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage);
 			}
