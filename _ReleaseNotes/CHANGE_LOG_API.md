@@ -106,6 +106,7 @@ StockSharp API Change log
 * (feature) Adapter and subscription messages added.
 * (feature) CandleBuilderMessageAdapter. Forced Finish prev non-finished candles.
 * (feature) OrderPairReplaceMessage. Removed SecurityMessage inheritance.
+* (feature) OfflineMessageAdapter. Support OrderPairReplaceMessage processing.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
