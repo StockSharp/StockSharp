@@ -1028,6 +1028,18 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Initialize <see cref="SecurityId.Native"/>.
 		/// </summary>
+		/// <param name="secId">Security ID.</param>
+		/// <param name="nativeId">Native (internal) trading system security id.</param>
+		/// <returns>Security ID.</returns>
+		public static SecurityId SetNativeId(this SecurityId secId, object nativeId)
+		{
+			secId.Native = nativeId;
+			return secId;
+		}
+
+		/// <summary>
+		/// Initialize <see cref="SecurityId.Native"/>.
+		/// </summary>
 		/// <param name="message">A message containing info about the security.</param>
 		/// <param name="nativeId">Native (internal) trading system security id.</param>
 		public static void SetNativeId(this SecurityMessage message, object nativeId)
@@ -1035,9 +1047,7 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			var secId = message.SecurityId;
-			secId.Native = nativeId;
-			message.SecurityId = secId;
+			message.SecurityId = message.SecurityId.SetNativeId(nativeId);
 		}
 
 		/// <summary>

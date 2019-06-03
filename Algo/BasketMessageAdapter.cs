@@ -317,6 +317,11 @@ namespace StockSharp.Algo
 				adapter = new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage);
 			}
 
+			if (SecurityMappingStorage != null)
+			{
+				adapter = new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage);
+			}
+
 			if (SlippageManager != null)
 			{
 				adapter = new SlippageMessageAdapter(adapter) { SlippageManager = SlippageManager.Clone() };
@@ -350,11 +355,6 @@ namespace StockSharp.Algo
 			if (SupportCandlesCompression)
 			{
 				adapter = new CandleBuilderMessageAdapter(adapter, CandleBuilderProvider);
-			}
-
-			if (SecurityMappingStorage != null)
-			{
-				adapter = new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage);
 			}
 
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())

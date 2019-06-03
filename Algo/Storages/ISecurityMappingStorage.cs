@@ -39,9 +39,9 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Get security identifier mappings for storage. 
 		/// </summary>
-		/// <param name="name">Storage name.</param>
+		/// <param name="storageName">Storage name.</param>
 		/// <returns>Security identifiers mapping.</returns>
-		IEnumerable<SecurityIdMapping> Get(string name);
+		IEnumerable<SecurityIdMapping> Get(string storageName);
 
 		/// <summary>
 		/// Add security identifier mapping.
@@ -86,18 +86,23 @@ namespace StockSharp.Algo.Storages
 				return _mappings.Keys.ToArray();
 		}
 
-		IEnumerable<SecurityIdMapping> ISecurityMappingStorage.Get(string name)
+		IEnumerable<SecurityIdMapping> ISecurityMappingStorage.Get(string storageName)
 		{
-			if (CollectionHelper.IsEmpty(name))
-				throw new ArgumentNullException(nameof(name));
+			if (storageName.IsEmpty())
+				throw new ArgumentNullException(nameof(storageName));
 
 			lock (_mappings.SyncRoot)
-				return _mappings.TryGetValue(name)?.Select(p => (SecurityIdMapping)p).ToArray() ?? ArrayHelper.Empty<SecurityIdMapping>();
+				return _mappings.TryGetValue(storageName)?.Select(p => (SecurityIdMapping)p).ToArray() ?? Enumerable.Empty<SecurityIdMapping>();
 		}
 
 		bool ISecurityMappingStorage.Add(string storageName, SecurityIdMapping mapping)
 		{
-			if (CollectionHelper.IsEmpty(storageName))
+			return Add(storageName, mapping, out _);
+		}
+
+		internal bool Add(string storageName, SecurityIdMapping mapping, out IEnumerable<SecurityIdMapping> all)
+		{
+			if (storageName.IsEmpty())
 				throw new ArgumentNullException(nameof(storageName));
 
 			if (mapping.IsDefault())
@@ -119,6 +124,8 @@ namespace StockSharp.Algo.Storages
 					added = true;
 
 				mappings.Add(stockSharpId, mapping.AdapterId);
+
+				all = added ? null : mappings.Select(p => (SecurityIdMapping)p).ToArray();
 			}
 
 			_changed?.Invoke(storageName, mapping);
@@ -128,11 +135,18 @@ namespace StockSharp.Algo.Storages
 
 		bool ISecurityMappingStorage.Remove(string storageName, SecurityId stockSharpId)
 		{
+			return Remove(storageName, stockSharpId, out _);
+		}
+
+		internal bool Remove(string storageName, SecurityId stockSharpId, out IEnumerable<SecurityIdMapping> all)
+		{
 			if (storageName.IsEmpty())
 				throw new ArgumentNullException(nameof(storageName));
 
 			if (stockSharpId.IsDefault())
 				throw new ArgumentNullException(nameof(storageName));
+
+			all = null;
 
 			lock (_mappings.SyncRoot)
 			{
@@ -145,11 +159,30 @@ namespace StockSharp.Algo.Storages
 
 				if (!removed)
 					return false;
+
+				all = mappings.Select(p => (SecurityIdMapping)p).ToArray();
 			}
 
 			_changed?.Invoke(storageName, new SecurityIdMapping { StockSharpId = stockSharpId });
 
 			return true;
+		}
+
+		internal void Load(string storageName, List<Tuple<SecurityId, SecurityId>> pairs)
+		{
+			if (storageName.IsEmpty())
+				throw new ArgumentNullException(nameof(storageName));
+
+			if (pairs == null)
+				throw new ArgumentNullException(nameof(pairs));
+
+			lock (_mappings.SyncRoot)
+			{
+				var mappings = _mappings.SafeAdd(storageName);
+
+				foreach (var tuple in pairs)
+					mappings.Add(tuple.Item1, tuple.Item2);
+			}
 		}
 	}
 
@@ -158,7 +191,7 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 	{
-		private readonly SynchronizedDictionary<string, PairSet<SecurityId, SecurityId>> _mappings = new SynchronizedDictionary<string, PairSet<SecurityId, SecurityId>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly ISecurityMappingStorage _inMemory = new InMemorySecurityMappingStorage();
 
 		private readonly string _path;
 
@@ -195,9 +228,9 @@ namespace StockSharp.Algo.Storages
 			if (!Directory.Exists(_path))
 				Directory.CreateDirectory(_path);
 
-			var files = Directory.GetFiles(_path, "*.csv");
+			var errors = _inMemory.Init();
 
-			var errors = new Dictionary<string, Exception>();
+			var files = Directory.GetFiles(_path, "*.csv");
 
 			foreach (var fileName in files)
 			{
@@ -215,21 +248,10 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<string> GetStorageNames()
-		{
-			lock (_mappings.SyncRoot)
-				return _mappings.Keys.ToArray();
-		}
+		public IEnumerable<string> GetStorageNames() => _inMemory.GetStorageNames();
 
 		/// <inheritdoc />
-		public IEnumerable<SecurityIdMapping> Get(string name)
-		{
-			if (name.IsEmpty())
-				throw new ArgumentNullException(nameof(name));
-
-			lock (_mappings.SyncRoot)
-				return _mappings.TryGetValue(name)?.Select(p => (SecurityIdMapping)p).ToArray() ?? ArrayHelper.Empty<SecurityIdMapping>();
-		}
+		public IEnumerable<SecurityIdMapping> Get(string storageName) => _inMemory.Get(storageName);
 
 		/// <inheritdoc />
 		public bool Add(string storageName, SecurityIdMapping mapping)
@@ -240,36 +262,12 @@ namespace StockSharp.Algo.Storages
 			if (mapping.IsDefault())
 				throw new ArgumentNullException(nameof(mapping));
 
-			PairSet<SecurityId, SecurityId> mappings;
-			var added = false;
+			var added = ((InMemorySecurityMappingStorage)_inMemory).Add(storageName, mapping, out var all);
 
-			lock (_mappings.SyncRoot)
-			{
-				mappings = _mappings.SafeAdd(storageName);
-
-				var stockSharpId = mapping.StockSharpId;
-
-				if (mappings.ContainsKey(stockSharpId))
-				{
-					mappings.Remove(stockSharpId);
-				}
-				else
-					added = true;
-
-				mappings.Add(stockSharpId, mapping.AdapterId);
-			}
-
-			if (!added)
-			{
-				SecurityIdMapping[] items;
-
-				lock (_mappings.SyncRoot)
-					items = mappings.Select(p => (SecurityIdMapping)p).ToArray();
-
-				Save(storageName, true, items);
-			}
-			else
+			if (added)
 				Save(storageName, false, new[] { mapping });
+			else
+				Save(storageName, true, all);
 
 			Changed?.Invoke(storageName, mapping);
 
@@ -279,33 +277,10 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public bool Remove(string storageName, SecurityId stockSharpId)
 		{
-			if (storageName.IsEmpty())
-				throw new ArgumentNullException(nameof(storageName));
+			if (!((InMemorySecurityMappingStorage)_inMemory).Remove(storageName, stockSharpId, out var all))
+				return false;
 
-			if (stockSharpId.IsDefault())
-				throw new ArgumentNullException(nameof(stockSharpId));
-
-			PairSet<SecurityId, SecurityId> mappings;
-
-			lock (_mappings.SyncRoot)
-			{
-				mappings = _mappings.TryGetValue(storageName);
-
-				if (mappings == null)
-					return false;
-
-				var removed = mappings.Remove(stockSharpId);
-
-				if (!removed)
-					return false;
-			}
-
-			SecurityIdMapping[] items;
-
-			lock (_mappings.SyncRoot)
-				items = mappings.Select(p => (SecurityIdMapping)p).ToArray();
-
-			Save(storageName, true, items);
+			Save(storageName, true, all);
 
 			Changed?.Invoke(storageName, new SecurityIdMapping { StockSharpId = stockSharpId });
 
@@ -318,8 +293,6 @@ namespace StockSharp.Algo.Storages
 			{
 				if (!File.Exists(fileName))
 					return;
-
-				var name = Path.GetFileNameWithoutExtension(fileName);
 
 				var pairs = new List<Tuple<SecurityId, SecurityId>>();
 
@@ -346,13 +319,7 @@ namespace StockSharp.Algo.Storages
 					}
 				}
 
-				lock (_mappings.SyncRoot)
-				{
-					var mappings = _mappings.SafeAdd(name);
-
-					foreach (var tuple in pairs)
-						mappings.Add(tuple.Item1, tuple.Item2);
-				}
+				((InMemorySecurityMappingStorage)_inMemory).Load(Path.GetFileNameWithoutExtension(fileName), pairs);
 			});
 		}
 

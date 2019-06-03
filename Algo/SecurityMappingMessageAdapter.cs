@@ -30,13 +30,13 @@ namespace StockSharp.Algo
 			: base(innerAdapter)
 		{
 			Storage = storage ?? throw new ArgumentNullException(nameof(storage));
-			Storage.Changed += OnStorageMappingChanged;
+			Storage.Changed += OnStorageChanged;
 		}
 
 		/// <inheritdoc />
 		public override void Dispose()
 		{
-			Storage.Changed -= OnStorageMappingChanged;
+			Storage.Changed -= OnStorageChanged;
 			base.Dispose();
 		}
 
@@ -82,25 +82,16 @@ namespace StockSharp.Algo
 				{
 					var secMsg = (SecurityMessage)message;
 
-					var securityCode = secMsg.SecurityId.SecurityCode;
-					var boardCode = secMsg.SecurityId.BoardCode;
+					var adapterId = secMsg.SecurityId.SetNativeId(null);
 
-					if (securityCode.IsEmpty() || boardCode.IsEmpty())
-						throw new InvalidOperationException();
-
-					var adapterId = new SecurityId
-					{
-						SecurityCode = securityCode,
-						BoardCode = boardCode
-					};
-
-					SecurityId? stockSharpId;
+					if (adapterId.IsDefault())
+						throw new InvalidOperationException(secMsg.ToString());
 
 					lock (_syncRoot)
-						stockSharpId = _securityIds.TryGetValue2(adapterId);
-
-					if (stockSharpId != null)
-						secMsg.SecurityId = stockSharpId.Value;
+					{
+						if (_securityIds.TryGetValue(adapterId, out var stockSharpId))
+							secMsg.SecurityId = stockSharpId;
+					}
 
 					base.OnInnerAdapterNewOutMessage(message);
 					break;
@@ -138,6 +129,7 @@ namespace StockSharp.Algo
 				case ISecurityIdMessage _:
 					ReplaceSecurityId(message);
 					break;
+
 				case OrderPairReplaceMessage pairMsg:
 					ReplaceSecurityId(pairMsg.Message1);
 					ReplaceSecurityId(pairMsg.Message2);
@@ -164,7 +156,7 @@ namespace StockSharp.Algo
 				return;
 
 			SecurityId? adapterId;
-			var stockSharpId = secMsg.SecurityId;
+			var stockSharpId = secMsg.SecurityId.SetNativeId(null);
 
 			lock (_syncRoot)
 				adapterId = _securityIds.TryGetValue2(stockSharpId);
@@ -175,6 +167,8 @@ namespace StockSharp.Algo
 
 		private void ProcessMessage(SecurityId adapterId, Message message)
 		{
+			adapterId.SetNativeId(null);
+
 			if (!adapterId.IsDefault())
 			{
 				SecurityId? stockSharpId;
@@ -189,7 +183,7 @@ namespace StockSharp.Algo
 			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		private void OnStorageMappingChanged(string storageName, SecurityIdMapping mapping)
+		private void OnStorageChanged(string storageName, SecurityIdMapping mapping)
 		{
 			if (!StorageName.CompareIgnoreCase(storageName))
 				return;
@@ -200,9 +194,7 @@ namespace StockSharp.Algo
 			lock (_syncRoot)
 			{
 				_securityIds.RemoveByValue(mapping.StockSharpId);
-
-				if (!mapping.AdapterId.IsDefault())
-					_securityIds.Add(mapping.StockSharpId, mapping.AdapterId);	
+				_securityIds.Add(mapping.StockSharpId, mapping.AdapterId);	
 			}
 		}
 	}
