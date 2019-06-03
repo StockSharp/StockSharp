@@ -23,7 +23,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class OrderPairReplaceMessage : SecurityMessage
+	public class OrderPairReplaceMessage : Message
 	{
 		/// <summary>
 		/// The message containing the information for modify the first order.
@@ -58,15 +58,12 @@ namespace StockSharp.Messages
 				Message2 = (OrderReplaceMessage)Message2?.Clone(),
 			};
 
-			CopyTo(clone);
+			//CopyTo(clone);
 
 			return clone;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",{Message1},{Message2}";

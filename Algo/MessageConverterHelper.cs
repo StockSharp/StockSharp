@@ -568,7 +568,7 @@ namespace StockSharp.Algo
 				Message2 = oldOrder2.CreateReplaceMessage(newOrder2, security2)
 			};
 
-			oldOrder1.Security.ToMessage(security1).CopyTo(msg, false);
+			oldOrder1.Security.ToMessage(security1).CopyTo(msg.Message1, false);
 
 			return msg;
 		}

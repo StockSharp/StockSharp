@@ -105,6 +105,7 @@ StockSharp API Change log
 * (feature) Kraken. WebSocket supported.
 * (feature) Adapter and subscription messages added.
 * (feature) CandleBuilderMessageAdapter. Forced Finish prev non-finished candles.
+* (feature) OrderPairReplaceMessage. Removed SecurityMessage inheritance.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
