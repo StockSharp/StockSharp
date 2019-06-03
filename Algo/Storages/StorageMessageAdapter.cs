@@ -708,12 +708,17 @@ namespace StockSharp.Algo.Storages
 
 					Subscribe(msg);
 
-					var clone = (MarketDataMessage)msg.Clone();
-
 					if (lastTime != null)
-						clone.From = lastTime;
+					{
+						if (!(msg.DataType == MarketDataTypes.MarketDepth && msg.From == null && msg.To == null))
+						{
+							var clone = (MarketDataMessage)msg.Clone();
+							clone.From = lastTime;
+							msg = clone;
+						}
+					}
 
-					base.SendInMessage(clone.ValidateBounds());	
+					base.SendInMessage(msg.ValidateBounds());	
 				}
 				else
 				{
