@@ -6,9 +6,16 @@ namespace StockSharp.Messages
 	using Ecng.Collections;
 
 	/// <summary>
-	/// In memory implementation of <see cref="IMappingMessageAdapterProvider{String}"/>.
+	/// The portfolio based message adapter's provider interface.
 	/// </summary>
-	public class InMemoryPortfolioMessageAdapterProvider : IMappingMessageAdapterProvider<string>
+	public interface IPortfolioMessageAdapterProvider : IMappingMessageAdapterProvider<string>
+	{
+	}
+
+	/// <summary>
+	/// In memory implementation of <see cref="IPortfolioMessageAdapterProvider"/>.
+	/// </summary>
+	public class InMemoryPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvider
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryPortfolioMessageAdapterProvider"/>.

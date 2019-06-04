@@ -202,8 +202,8 @@ namespace StockSharp.Algo
 		/// <param name="portfolioAdapterProvider">The portfolio based message adapter's provider.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		public BasketMessageAdapter(IdGenerator transactionIdGenerator,
-			IMappingMessageAdapterProvider<SecurityId> securityAdapterProvider,
-			IMappingMessageAdapterProvider<string> portfolioAdapterProvider,
+			ISecurityMessageAdapterProvider securityAdapterProvider,
+			IPortfolioMessageAdapterProvider portfolioAdapterProvider,
 			CandleBuilderProvider candleBuilderProvider)
 			: base(transactionIdGenerator)
 		{
@@ -221,12 +221,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The portfolio based message adapter's provider.
 		/// </summary>
-		public IMappingMessageAdapterProvider<string> PortfolioAdapterProvider { get; }
+		public IPortfolioMessageAdapterProvider PortfolioAdapterProvider { get; }
 
 		/// <summary>
 		/// The security based message adapter's provider.
 		/// </summary>
-		public IMappingMessageAdapterProvider<SecurityId> SecurityAdapterProvider { get; }
+		public ISecurityMessageAdapterProvider SecurityAdapterProvider { get; }
 
 		/// <summary>
 		/// Candle builders provider.
@@ -820,7 +820,7 @@ namespace StockSharp.Algo
 					var key = mdMsg.CreateKey();
 
 					var adapter = mdMsg.IsSubscribe
-							? SecurityAdapterProvider.TryGetAdapter(mdMsg.SecurityId) ?? GetSubscriptionAdapters(mdMsg).FirstOrDefault()
+							? SecurityAdapterProvider.TryGetAdapter(mdMsg.SecurityId, mdMsg.DataType) ?? GetSubscriptionAdapters(mdMsg).FirstOrDefault()
 							: (_subscriptionsById.TryGetValue(mdMsg.OriginalTransactionId) ?? _subscriptionsByKey.TryGetValue(key));
 
 					if (adapter != null)
@@ -914,7 +914,7 @@ namespace StockSharp.Algo
 
 					case MessageTypes.Security:
 						var secMsg = (SecurityMessage)message;
-						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, GetUnderlyingAdapter(innerAdapter));
+						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, null, GetUnderlyingAdapter(innerAdapter));
 						break;
 
 					case MessageTypes.SecurityLookupResult:
@@ -1193,7 +1193,13 @@ namespace StockSharp.Algo
 				var secPairs = SecurityAdapterProvider
 		            .Adapters
 		            .Where(p => InnerAdapters.Contains(p.Value))
-		            .Select(p => RefTuple.Create(p.Key.Save(), p.Value.Id))
+		            .Select(p =>
+					{
+						var s = new SettingsStorage();
+						s.SetValue(nameof(SecurityId), p.Key.Item1.Save());
+						s.SetValue(nameof(DataType), p.Key.Item2);
+						return RefTuple.Create(s, p.Value.Id);
+					})
 		            .ToArray();
 
 				storage.SetValue(nameof(SecurityAdapterProvider), secPairs);
@@ -1258,7 +1264,10 @@ namespace StockSharp.Algo
 					foreach (var tuple in mapping)
 					{
 						if (adapters.TryGetValue(tuple.Second, out var adapter))
-							SecurityAdapterProvider.SetAdapter(tuple.First.Load<SecurityId>(), adapter);
+						{
+							var s = tuple.First;
+							SecurityAdapterProvider.SetAdapter(s.GetValue<SettingsStorage>(nameof(SecurityId)).Load<SecurityId>(), s.GetValue<MarketDataTypes?>(nameof(DataType)), adapter);
+						}
 					}
 				}
 			}

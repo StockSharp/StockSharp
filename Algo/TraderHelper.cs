@@ -4747,7 +4747,7 @@ namespace StockSharp.Algo
 		/// <param name="provider">The message adapter's provider.</param>
 		/// <param name="portfolio">Portfolio.</param>
 		/// <returns>The found adapter or <see langword="null"/>.</returns>
-		public static IMessageAdapter TryGetAdapter(this IMappingMessageAdapterProvider<string> provider, Portfolio portfolio)
+		public static IMessageAdapter TryGetAdapter(this IPortfolioMessageAdapterProvider provider, Portfolio portfolio)
 		{
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
