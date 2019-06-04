@@ -6,46 +6,9 @@ namespace StockSharp.Messages
 	using Ecng.Collections;
 
 	/// <summary>
-	/// The security based message adapter's provider interface. 
+	/// In memory implementation of <see cref="IMappingMessageAdapterProvider{SecurityId}"/>.
 	/// </summary>
-	public interface ISecurityMessageAdapterProvider
-	{
-		/// <summary>
-		/// All available adapters.
-		/// </summary>
-		IEnumerable<KeyValuePair<SecurityId, IMessageAdapter>> Adapters { get; }
-
-		/// <summary>
-		/// Association changed.
-		/// </summary>
-		event Action Changed;
-
-		/// <summary>
-		/// Get adapter by security id.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <returns>The found adapter.</returns>
-		IMessageAdapter GetAdapter(SecurityId securityId);
-
-		/// <summary>
-		/// Make association adapter and security id.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="adapter">The adapter.</param>
-		void SetAdapter(SecurityId securityId, IMessageAdapter adapter);
-
-		/// <summary>
-		/// Remove association between security id and adapter.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <returns><see langword="true"/> if the association is successfully removed, otherwise, <see langword="false"/>.</returns>
-		bool RemoveAssociation(SecurityId securityId);
-	}
-
-	/// <summary>
-	/// In memory implementation of <see cref="ISecurityMessageAdapterProvider"/>.
-	/// </summary>
-	public class InMemorySecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
+	public class InMemorySecurityMessageAdapterProvider : IMappingMessageAdapterProvider<SecurityId>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemorySecurityMessageAdapterProvider"/>.
@@ -63,7 +26,7 @@ namespace StockSharp.Messages
 		public event Action Changed;
 
 		/// <inheritdoc />
-		public virtual IMessageAdapter GetAdapter(SecurityId securityId)
+		public virtual IMessageAdapter TryGetAdapter(SecurityId securityId)
 		{
 			return _adapters.TryGetValue(securityId);
 		}

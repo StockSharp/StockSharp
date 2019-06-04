@@ -6,46 +6,9 @@ namespace StockSharp.Messages
 	using Ecng.Collections;
 
 	/// <summary>
-	/// The portfolio based message adapter's provider interface. 
+	/// In memory implementation of <see cref="IMappingMessageAdapterProvider{String}"/>.
 	/// </summary>
-	public interface IPortfolioMessageAdapterProvider
-	{
-		/// <summary>
-		/// All available adapters.
-		/// </summary>
-		IEnumerable<KeyValuePair<string, IMessageAdapter>> Adapters { get; }
-
-		/// <summary>
-		/// Association changed.
-		/// </summary>
-		event Action Changed;
-
-		/// <summary>
-		/// Get adapter by portfolio name.
-		/// </summary>
-		/// <param name="portfolioName">Portfolio name.</param>
-		/// <returns>The found adapter.</returns>
-		IMessageAdapter GetAdapter(string portfolioName);
-
-		/// <summary>
-		/// Make association adapter and portfolio name.
-		/// </summary>
-		/// <param name="portfolioName">Portfolio name.</param>
-		/// <param name="adapter">The adapter.</param>
-		void SetAdapter(string portfolioName, IMessageAdapter adapter);
-
-		/// <summary>
-		/// Remove association between portfolio name and adapter.
-		/// </summary>
-		/// <param name="portfolioName">Portfolio name.</param>
-		/// <returns><see langword="true"/> if the association is successfully removed, otherwise, <see langword="false"/>.</returns>
-		bool RemoveAssociation(string portfolioName);
-	}
-
-	/// <summary>
-	/// In memory implementation of <see cref="IPortfolioMessageAdapterProvider"/>.
-	/// </summary>
-	public class InMemoryPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvider
+	public class InMemoryPortfolioMessageAdapterProvider : IMappingMessageAdapterProvider<string>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryPortfolioMessageAdapterProvider"/>.
@@ -63,7 +26,7 @@ namespace StockSharp.Messages
 		public event Action Changed;
 
 		/// <inheritdoc />
-		public virtual IMessageAdapter GetAdapter(string portfolioName)
+		public virtual IMessageAdapter TryGetAdapter(string portfolioName)
 		{
 			if (portfolioName.IsEmpty())
 				throw new ArgumentNullException(nameof(portfolioName));

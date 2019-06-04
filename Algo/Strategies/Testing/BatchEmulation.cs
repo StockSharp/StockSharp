@@ -513,7 +513,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			foreach (var strategy in _batch)
 			{
-				var strategyAdapter = adapter.PortfolioAdapterProvider.GetAdapter(strategy.Portfolio);
+				var strategyAdapter = adapter.PortfolioAdapterProvider.TryGetAdapter(strategy.Portfolio);
 
 				if (strategyAdapter != null)
 				{

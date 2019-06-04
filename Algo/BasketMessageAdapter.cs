@@ -202,8 +202,8 @@ namespace StockSharp.Algo
 		/// <param name="portfolioAdapterProvider">The portfolio based message adapter's provider.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		public BasketMessageAdapter(IdGenerator transactionIdGenerator,
-			ISecurityMessageAdapterProvider securityAdapterProvider,
-			IPortfolioMessageAdapterProvider portfolioAdapterProvider,
+			IMappingMessageAdapterProvider<SecurityId> securityAdapterProvider,
+			IMappingMessageAdapterProvider<string> portfolioAdapterProvider,
 			CandleBuilderProvider candleBuilderProvider)
 			: base(transactionIdGenerator)
 		{
@@ -221,12 +221,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The portfolio based message adapter's provider.
 		/// </summary>
-		public IPortfolioMessageAdapterProvider PortfolioAdapterProvider { get; }
+		public IMappingMessageAdapterProvider<string> PortfolioAdapterProvider { get; }
 
 		/// <summary>
 		/// The security based message adapter's provider.
 		/// </summary>
-		public ISecurityMessageAdapterProvider SecurityAdapterProvider { get; }
+		public IMappingMessageAdapterProvider<SecurityId> SecurityAdapterProvider { get; }
 
 		/// <summary>
 		/// Candle builders provider.
@@ -820,7 +820,7 @@ namespace StockSharp.Algo
 					var key = mdMsg.CreateKey();
 
 					var adapter = mdMsg.IsSubscribe
-							? SecurityAdapterProvider.GetAdapter(mdMsg.SecurityId) ?? GetSubscriptionAdapters(mdMsg).FirstOrDefault()
+							? SecurityAdapterProvider.TryGetAdapter(mdMsg.SecurityId) ?? GetSubscriptionAdapters(mdMsg).FirstOrDefault()
 							: (_subscriptionsById.TryGetValue(mdMsg.OriginalTransactionId) ?? _subscriptionsByKey.TryGetValue(key));
 
 					if (adapter != null)
@@ -847,7 +847,7 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioMessage(string portfolioName, Message message)
 		{
-			var adapter = portfolioName.IsEmpty() ? null : PortfolioAdapterProvider.GetAdapter(portfolioName);
+			var adapter = portfolioName.IsEmpty() ? null : PortfolioAdapterProvider.TryGetAdapter(portfolioName);
 
 			if (adapter == null)
 			{
