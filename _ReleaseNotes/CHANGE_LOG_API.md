@@ -109,6 +109,7 @@ StockSharp API Change log
 * (feature) OfflineMessageAdapter. Support OrderPairReplaceMessage processing.
 * (feature) ISecurityAssociationStorage removed.
 * (feature) BasketMessageAdapter. SecurityAdapterProvider added.
+* (bug) CandleBuilder. Fill CandleMessage.TotalTicks.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
