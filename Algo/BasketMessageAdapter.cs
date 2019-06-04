@@ -680,12 +680,17 @@ namespace StockSharp.Algo
 
 		private IEnumerable<IMessageAdapter> GetSubscriptionAdapters(MarketDataMessage mdMsg)
 		{
-			if (mdMsg.Adapter != null)
-			{
-				var wrapper = _activeAdapters.TryGetValue(mdMsg.Adapter);
+			var adapter = mdMsg.Adapter;
 
-				if (wrapper != null)
-					return new[] { wrapper };
+			if (adapter == null && mdMsg.DataType != MarketDataTypes.News)
+				adapter = SecurityAdapterProvider.TryGetAdapter(mdMsg.SecurityId, mdMsg.DataType);
+
+			if (adapter != null)
+			{
+				adapter = _activeAdapters.TryGetValue(adapter);
+
+				if (adapter != null)
+					return new[] { adapter };
 			}
 
 			var adapters = GetAdapters(mdMsg, out var isPended).Where(a =>
@@ -820,7 +825,7 @@ namespace StockSharp.Algo
 					var key = mdMsg.CreateKey();
 
 					var adapter = mdMsg.IsSubscribe
-							? SecurityAdapterProvider.TryGetAdapter(mdMsg.SecurityId, mdMsg.DataType) ?? GetSubscriptionAdapters(mdMsg).FirstOrDefault()
+							? GetSubscriptionAdapters(mdMsg).FirstOrDefault()
 							: (_subscriptionsById.TryGetValue(mdMsg.OriginalTransactionId) ?? _subscriptionsByKey.TryGetValue(key));
 
 					if (adapter != null)
