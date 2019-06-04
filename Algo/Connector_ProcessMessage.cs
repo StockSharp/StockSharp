@@ -993,11 +993,11 @@ namespace StockSharp.Algo
 				return;
 
 			var portfolioNames = Adapter
-			                     .AdapterProvider
-			                     .PortfolioAdapters
-			                     .Where(p => p.Value == adapter)
-			                     .Select(p => p.Key)
-			                     .ToArray();
+				.PortfolioAdapterProvider
+				.Adapters
+				.Where(p => p.Value == adapter)
+				.Select(p => p.Key)
+				.ToArray();
 
 			foreach (var portfolioName in portfolioNames)
 			{
@@ -1310,7 +1310,7 @@ namespace StockSharp.Algo
 
 				if (AutoPortfoliosSubscribe)
 				{
-					var adapter = Adapter.AdapterProvider.GetAdapter(portfolio);
+					var adapter = Adapter.PortfolioAdapterProvider.GetAdapter(portfolio);
 
 					if (adapter?.IsSupportSubscriptionByPortfolio == true && Adapter.InnerAdapters[adapter] != -1)
 					{

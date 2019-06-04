@@ -29,7 +29,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public struct SecurityId : IEquatable<SecurityId>
+	public struct SecurityId : IEquatable<SecurityId>, IPersistable
 	{
 		private string _securityCode;
 
@@ -207,7 +207,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Compare <see cref="Currency"/> on the equivalence.
+		/// Compare <see cref="SecurityId"/> on the equivalence.
 		/// </summary>
 		/// <param name="other">Another value with which to compare.</param>
 		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
@@ -265,6 +265,26 @@ namespace StockSharp.Messages
 				id += $",IB:{InteractiveBrokers}";
 
 			return id;
+		}
+
+		/// <summary>
+		/// Load settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Load(SettingsStorage storage)
+		{
+			SecurityCode = storage.GetValue<string>(nameof(SecurityCode));
+			BoardCode = storage.GetValue<string>(nameof(BoardCode));
+		}
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Save(SettingsStorage storage)
+		{
+			storage.SetValue(nameof(SecurityCode), SecurityCode);
+			storage.SetValue(nameof(BoardCode), BoardCode);
 		}
 	}
 }

@@ -108,6 +108,7 @@ StockSharp API Change log
 * (feature) OrderPairReplaceMessage. Removed SecurityMessage inheritance.
 * (feature) OfflineMessageAdapter. Support OrderPairReplaceMessage processing.
 * (feature) ISecurityAssociationStorage removed.
+* (feature) BasketMessageAdapter. SecurityAdapterProvider added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

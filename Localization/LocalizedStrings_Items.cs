@@ -49526,5 +49526,15 @@ namespace StockSharp.Localization
 		/// Stop {0}
 		/// </summary>
 		public static string StopIs => GetString(StopIsKey);
+
+		/// <summary>
+		/// Identifiers '{0}' and '{1}' are the same.
+		/// </summary>
+		public const string IdentifiersAreSameKey = nameof(IdentifiersAreSame);
+
+		/// <summary>
+		/// Identifiers '{0}' and '{1}' are the same.
+		/// </summary>
+		public static string IdentifiersAreSame => GetString(IdentifiersAreSameKey);
 	}
 }

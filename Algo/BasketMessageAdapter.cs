@@ -188,14 +188,29 @@ namespace StockSharp.Algo
 		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
 		/// </summary>
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
-		/// <param name="adapterProvider">The message adapter's provider.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
-		public BasketMessageAdapter(IdGenerator transactionIdGenerator, IPortfolioMessageAdapterProvider adapterProvider, CandleBuilderProvider candleBuilderProvider)
+		public BasketMessageAdapter(IdGenerator transactionIdGenerator, CandleBuilderProvider candleBuilderProvider)
+			: this(transactionIdGenerator, new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider(), candleBuilderProvider)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
+		/// </summary>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
+		/// <param name="securityAdapterProvider">The security based message adapter's provider.</param>
+		/// <param name="portfolioAdapterProvider">The portfolio based message adapter's provider.</param>
+		/// <param name="candleBuilderProvider">Candle builders provider.</param>
+		public BasketMessageAdapter(IdGenerator transactionIdGenerator,
+			ISecurityMessageAdapterProvider securityAdapterProvider,
+			IPortfolioMessageAdapterProvider portfolioAdapterProvider,
+			CandleBuilderProvider candleBuilderProvider)
 			: base(transactionIdGenerator)
 		{
 			_innerAdapters = new InnerAdapterList();
-			AdapterProvider = adapterProvider ?? throw new ArgumentNullException(nameof(adapterProvider));
-			CandleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(adapterProvider));
+			SecurityAdapterProvider = securityAdapterProvider ?? throw new ArgumentNullException(nameof(securityAdapterProvider));
+			PortfolioAdapterProvider = portfolioAdapterProvider ?? throw new ArgumentNullException(nameof(portfolioAdapterProvider));
+			CandleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(portfolioAdapterProvider));
 
 			LatencyManager = new LatencyManager();
 			CommissionManager = new CommissionManager();
@@ -204,9 +219,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// The message adapter's provider.
+		/// The portfolio based message adapter's provider.
 		/// </summary>
-		public IPortfolioMessageAdapterProvider AdapterProvider { get; }
+		public IPortfolioMessageAdapterProvider PortfolioAdapterProvider { get; }
+
+		/// <summary>
+		/// The security based message adapter's provider.
+		/// </summary>
+		public ISecurityMessageAdapterProvider SecurityAdapterProvider { get; }
 
 		/// <summary>
 		/// Candle builders provider.
@@ -800,7 +820,7 @@ namespace StockSharp.Algo
 					var key = mdMsg.CreateKey();
 
 					var adapter = mdMsg.IsSubscribe
-							? GetSubscriptionAdapters(mdMsg).FirstOrDefault()
+							? SecurityAdapterProvider.GetAdapter(mdMsg.SecurityId) ?? GetSubscriptionAdapters(mdMsg).FirstOrDefault()
 							: (_subscriptionsById.TryGetValue(mdMsg.OriginalTransactionId) ?? _subscriptionsByKey.TryGetValue(key));
 
 					if (adapter != null)
@@ -827,7 +847,7 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioMessage(string portfolioName, Message message)
 		{
-			var adapter = portfolioName.IsEmpty() ? null : AdapterProvider.GetAdapter(portfolioName);
+			var adapter = portfolioName.IsEmpty() ? null : PortfolioAdapterProvider.GetAdapter(portfolioName);
 
 			if (adapter == null)
 			{
@@ -874,12 +894,12 @@ namespace StockSharp.Algo
 
 					case MessageTypes.Portfolio:
 						var pfMsg = (PortfolioMessage)message;
-						AdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
+						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
 						break;
 
 					case MessageTypes.PortfolioChange:
 						var pfChangeMsg = (PortfolioChangeMessage)message;
-						AdapterProvider.SetAdapter(pfChangeMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
+						PortfolioAdapterProvider.SetAdapter(pfChangeMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
 						break;
 
 					//case MessageTypes.Position:
@@ -889,7 +909,12 @@ namespace StockSharp.Algo
 
 					case MessageTypes.PositionChange:
 						var posChangeMsg = (PositionChangeMessage)message;
-						AdapterProvider.SetAdapter(posChangeMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
+						PortfolioAdapterProvider.SetAdapter(posChangeMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
+						break;
+
+					case MessageTypes.Security:
+						var secMsg = (SecurityMessage)message;
+						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, GetUnderlyingAdapter(innerAdapter));
 						break;
 
 					case MessageTypes.SecurityLookupResult:
@@ -1157,13 +1182,21 @@ namespace StockSharp.Algo
 					return s;
 				}).ToArray());
 
-				var pairs = AdapterProvider
-					.PortfolioAdapters
+				var pfPairs = PortfolioAdapterProvider
+					.Adapters
 					.Where(p => InnerAdapters.Contains(p.Value))
 					.Select(p => RefTuple.Create(p.Key, p.Value.Id))
 					.ToArray();
 
-				storage.SetValue(nameof(AdapterProvider), pairs);
+				storage.SetValue(nameof(PortfolioAdapterProvider), pfPairs);
+
+				var secPairs = SecurityAdapterProvider
+		            .Adapters
+		            .Where(p => InnerAdapters.Contains(p.Value))
+		            .Select(p => RefTuple.Create(p.Key.Save(), p.Value.Id))
+		            .ToArray();
+
+				storage.SetValue(nameof(SecurityAdapterProvider), secPairs);
 			}
 
 			if (LatencyManager != null)
@@ -1206,14 +1239,26 @@ namespace StockSharp.Algo
 					}
 				}
 
-				if (storage.ContainsKey(nameof(AdapterProvider)))
+				if (storage.ContainsKey("AdapterProvider") || storage.ContainsKey(nameof(PortfolioAdapterProvider)))
 				{
-					var mapping = storage.GetValue<RefPair<string, Guid>[]>(nameof(AdapterProvider));
+					var mapping = storage.GetValue<RefPair<string, Guid>[]>(nameof(PortfolioAdapterProvider))
+					              ?? storage.GetValue<RefPair<string, Guid>[]>("AdapterProvider");
 
 					foreach (var tuple in mapping)
 					{
 						if (adapters.TryGetValue(tuple.Second, out var adapter))
-							AdapterProvider.SetAdapter(tuple.First, adapter);
+							PortfolioAdapterProvider.SetAdapter(tuple.First, adapter);
+					}
+				}
+
+				if (storage.ContainsKey(nameof(SecurityAdapterProvider)))
+				{
+					var mapping = storage.GetValue<RefPair<SettingsStorage, Guid>[]>(nameof(SecurityAdapterProvider));
+
+					foreach (var tuple in mapping)
+					{
+						if (adapters.TryGetValue(tuple.Second, out var adapter))
+							SecurityAdapterProvider.SetAdapter(tuple.First.Load<SecurityId>(), adapter);
 					}
 				}
 			}
@@ -1249,7 +1294,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			var clone = new BasketMessageAdapter(TransactionIdGenerator, AdapterProvider, CandleBuilderProvider)
+			var clone = new BasketMessageAdapter(TransactionIdGenerator, SecurityAdapterProvider, PortfolioAdapterProvider, CandleBuilderProvider)
 			{
 				ExtendedInfoStorage = ExtendedInfoStorage,
 				SupportCandlesCompression = SupportCandlesCompression,

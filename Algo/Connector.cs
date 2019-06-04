@@ -199,9 +199,6 @@ namespace StockSharp.Algo
 		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
 		public void InitializeStorage(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
 			EntityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
 			InitializeStorage(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry, snapshotRegistry);
 		}
@@ -263,7 +260,7 @@ namespace StockSharp.Algo
 
 		private void InitAdapter()
 		{
-			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new InMemoryMessageAdapterProvider(), new CandleBuilderProvider(_entityCache.ExchangeInfoProvider));
+			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new CandleBuilderProvider(_entityCache.ExchangeInfoProvider));
 		}
 
 		/// <summary>

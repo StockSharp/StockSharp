@@ -73,6 +73,52 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.Converters.CandleStateToStringConverter">
+      <summary>
+        <see cref="T:StockSharp.Messages.CandleStates" /> to <see cref="T:System.String" /> converter.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Converters.ColoredIconConverter">
+      <summary>
+            Used to convert <see cref="T:System.Windows.Media.Brush" /> and icon resource key to <see cref="T:System.Windows.Media.DrawingImage" />, colored with corresponding brush.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1">
+      <summary>
+        <see cref="T:DevExpress.Xpf.Editors.ComboBoxEdit" /> value converter.
+            </summary>
+      <typeparam name="T">Convertible type.</typeparam>
+    </member>
+    <member name="T:StockSharp.Xaml.Converters.ProcessStatesToImageConverter">
+      <summary>
+        <see cref="T:StockSharp.Algo.ProcessStates" /> to <see cref="T:System.Windows.Media.ImageSource" /> converter.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StartedImage">
+      <summary>
+        <see cref="T:System.Windows.Media.ImageSource" /> for the <see cref="F:StockSharp.Algo.ProcessStates.Started" /> state.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppingImage">
+      <summary>
+        <see cref="T:System.Windows.Media.ImageSource" /> for the <see cref="F:StockSharp.Algo.ProcessStates.Stopping" /> state.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppedImage">
+      <summary>
+        <see cref="T:System.Windows.Media.ImageSource" /> for the <see cref="F:StockSharp.Algo.ProcessStates.Stopped" /> state.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Converters.SelectedItemsCountTextConverter">
+      <summary>
+            Items count to string converter.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Converters.SeriesToStringConverter">
+      <summary>
+        <see cref="T:System.TimeSpan" /> to <see cref="T:System.String" /> converter.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.AdvertisePanel">
       <summary>
             Panel for advertising action displaying.
@@ -579,52 +625,6 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Converters.CandleStateToStringConverter">
-      <summary>
-        <see cref="T:StockSharp.Messages.CandleStates" /> to <see cref="T:System.String" /> converter.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Converters.ColoredIconConverter">
-      <summary>
-            Used to convert <see cref="T:System.Windows.Media.Brush" /> and icon resource key to <see cref="T:System.Windows.Media.DrawingImage" />, colored with corresponding brush.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1">
-      <summary>
-        <see cref="T:DevExpress.Xpf.Editors.ComboBoxEdit" /> value converter.
-            </summary>
-      <typeparam name="T">Convertible type.</typeparam>
-    </member>
-    <member name="T:StockSharp.Xaml.Converters.ProcessStatesToImageConverter">
-      <summary>
-        <see cref="T:StockSharp.Algo.ProcessStates" /> to <see cref="T:System.Windows.Media.ImageSource" /> converter.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StartedImage">
-      <summary>
-        <see cref="T:System.Windows.Media.ImageSource" /> for the <see cref="F:StockSharp.Algo.ProcessStates.Started" /> state.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppingImage">
-      <summary>
-        <see cref="T:System.Windows.Media.ImageSource" /> for the <see cref="F:StockSharp.Algo.ProcessStates.Stopping" /> state.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppedImage">
-      <summary>
-        <see cref="T:System.Windows.Media.ImageSource" /> for the <see cref="F:StockSharp.Algo.ProcessStates.Stopped" /> state.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Converters.SelectedItemsCountTextConverter">
-      <summary>
-            Items count to string converter.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Converters.SeriesToStringConverter">
-      <summary>
-        <see cref="T:System.TimeSpan" /> to <see cref="T:System.String" /> converter.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.GridControl.IPriceChartDataProvider">
       <summary>
             Price chart data provider interface.
@@ -1101,6 +1101,61 @@
     <member name="P:StockSharp.Xaml.ISecurityWindow.Security">
       <summary>
             Security.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.SecurityMessageAdaptersWindow">
+      <summary>
+            The window for creation and editing of securities and adapters mapping.
+            </summary>
+      <summary>
+            SecurityMessageAdaptersWindow
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.RemoveCommand">
+      <summary>
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to remove comparison.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.AddCommand">
+      <summary>
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to add comparison.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.Adapter">
+      <summary>
+            Adapter aggregator.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProviderProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProvider" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityMessageAdaptersWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.BuildCandlesFieldEditor">
@@ -1627,49 +1682,6 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.RangeListEditor.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.SecurityAssociationWindow">
-      <summary>
-            The window for edit securities associations.
-            </summary>
-      <summary>
-            SecurityAssociationWindow
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.SecurityAssociationWindow.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityAssociationWindow" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SecurityAssociationWindow.ConnectorsInfoProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SecurityAssociationWindow.ConnectorsInfo" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.SecurityAssociationWindow.ConnectorsInfo">
-      <summary>
-            Visual description of available connections.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SecurityAssociationWindow.SecurityProviderProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SecurityAssociationWindow.SecurityProvider" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.SecurityAssociationWindow.SecurityProvider">
-      <summary>
-            The provider of information about instruments.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.SecurityAssociationWindow.AssociationStorage">
-      <summary>
-            Associations storage.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.SecurityAssociationWindow.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>
@@ -2900,6 +2912,9 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.ConnectorInfo" />.
             </summary>
       <param name="adapterType">The type of transaction or market data adapter.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ConnectorInfo.ToString">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.ConnectorSupportedMessagesPanel">
       <summary>
@@ -4553,7 +4568,7 @@
     </member>
     <member name="T:StockSharp.Xaml.PortfolioMessageAdaptersWindow">
       <summary>
-            The window for creation and editing of portfolios and adapters comparisons.
+            The window for creation and editing of portfolios and adapters mapping.
             </summary>
       <summary>
             PortfolioMessageAdaptersWindow
@@ -4561,12 +4576,12 @@
     </member>
     <member name="F:StockSharp.Xaml.PortfolioMessageAdaptersWindow.RemoveCommand">
       <summary>
-        <see cref="T:System.Windows.Input.RoutedCommand" /> to remove comparison.
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to remove mapping.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.PortfolioMessageAdaptersWindow.AddCommand">
       <summary>
-        <see cref="T:System.Windows.Input.RoutedCommand" /> to add comparison.
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to add mapping.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.PortfolioMessageAdaptersWindow.Adapter">

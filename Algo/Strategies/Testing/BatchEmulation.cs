@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
 
 			public BasketEmulationAdapter(HistoryEmulationConnector parent)
-				: base(parent.TransactionIdGenerator, new InMemoryMessageAdapterProvider(), new CandleBuilderProvider(new InMemoryExchangeInfoProvider()))
+				: base(parent.TransactionIdGenerator, new CandleBuilderProvider(new InMemoryExchangeInfoProvider()))
 			{
 				_parent = parent;
 			}
@@ -414,7 +414,7 @@ namespace StockSharp.Algo.Strategies.Testing
 				strategyAdapter.Emulator.Settings.Load(EmulationSettings.Save());
 
 				adapter.InnerAdapters.Add(strategyAdapter);
-				adapter.AdapterProvider.SetAdapter(portfolio.Name, strategyAdapter);
+				adapter.PortfolioAdapterProvider.SetAdapter(portfolio.Name, strategyAdapter);
 
 				strategy.Connector = EmulationConnector;
 				strategy.Portfolio = portfolio;
@@ -513,14 +513,14 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			foreach (var strategy in _batch)
 			{
-				var strategyAdapter = adapter.AdapterProvider.GetAdapter(strategy.Portfolio);
+				var strategyAdapter = adapter.PortfolioAdapterProvider.GetAdapter(strategy.Portfolio);
 
 				if (strategyAdapter != null)
 				{
 					adapter.InnerAdapters.Remove(strategyAdapter);
 
 					adapter
-						.AdapterProvider
+						.PortfolioAdapterProvider
 						.RemoveAssociation(strategy.Portfolio.Name);
 				}
 

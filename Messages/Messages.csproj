@@ -105,6 +105,7 @@
     <Compile Include="IDailyInfoSoap.cs" />
     <Compile Include="IPortfolioMessageAdapterProvider.cs" />
     <Compile Include="ISecurityIdMessage.cs" />
+    <Compile Include="ISecurityMessageAdapterProvider.cs" />
     <Compile Include="IServerTimeMessage.cs" />
     <Compile Include="ITransactionIdMessage.cs" />
     <Compile Include="MarketDataFinishedMessage.cs" />

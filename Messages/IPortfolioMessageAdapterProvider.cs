@@ -6,14 +6,14 @@ namespace StockSharp.Messages
 	using Ecng.Collections;
 
 	/// <summary>
-	/// The message adapter's provider interface. 
+	/// The portfolio based message adapter's provider interface. 
 	/// </summary>
 	public interface IPortfolioMessageAdapterProvider
 	{
 		/// <summary>
 		/// All available adapters.
 		/// </summary>
-		IEnumerable<KeyValuePair<string, IMessageAdapter>> PortfolioAdapters { get; }
+		IEnumerable<KeyValuePair<string, IMessageAdapter>> Adapters { get; }
 
 		/// <summary>
 		/// Association changed.
@@ -43,24 +43,21 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// In memory message adapter's provider.
+	/// In memory implementation of <see cref="IPortfolioMessageAdapterProvider"/>.
 	/// </summary>
-	public class InMemoryMessageAdapterProvider : IPortfolioMessageAdapterProvider
+	public class InMemoryPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvider
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="InMemoryMessageAdapterProvider"/>.
+		/// Initializes a new instance of the <see cref="InMemoryPortfolioMessageAdapterProvider"/>.
 		/// </summary>
-		public InMemoryMessageAdapterProvider()
+		public InMemoryPortfolioMessageAdapterProvider()
 		{
 		}
 
-		private readonly CachedSynchronizedDictionary<string, IMessageAdapter> _adapters = new CachedSynchronizedDictionary<string, IMessageAdapter>();
-
-		///// <inheritdoc />
-		//public IEnumerable<IMessageAdapter> Adapters => _adapters.CachedValues;
+		private readonly CachedSynchronizedDictionary<string, IMessageAdapter> _adapters = new CachedSynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <inheritdoc />
-		public virtual IEnumerable<KeyValuePair<string, IMessageAdapter>> PortfolioAdapters => _adapters.CachedPairs;
+		public virtual IEnumerable<KeyValuePair<string, IMessageAdapter>> Adapters => _adapters.CachedPairs;
 
 		/// <inheritdoc />
 		public event Action Changed;
