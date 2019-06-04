@@ -633,6 +633,8 @@ namespace StockSharp.Algo.Candles.Compression
 			if (info.LastTime != null && info.LastTime > candleMsg.OpenTime)
 				return true;
 
+			info.LastTime = candleMsg.OpenTime;
+
 			var nonFinished = info.NonFinishedCandle;
 
 			if (nonFinished != null && nonFinished.OpenTime < candleMsg.OpenTime)
@@ -697,11 +699,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void SendCandle(SeriesInfo info, CandleMessage candleMsg)
 		{
-			//if (info.LastTime > candleMsg.OpenTime)
-			//	return;
-
-			info.LastTime = candleMsg.OpenTime;
-
 			var clone = (CandleMessage)candleMsg.Clone();
 			clone.Adapter = candleMsg.Adapter;
 			clone.OriginalTransactionId = info.Original.TransactionId;
