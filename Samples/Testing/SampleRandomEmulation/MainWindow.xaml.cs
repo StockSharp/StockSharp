@@ -118,12 +118,10 @@ namespace SampleRandomEmulation
 
 			_logManager.Sources.Add(_connector);
 
-			var candleManager = new CandleManager(_connector);
-
 			var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 			// create strategy based on 80 5-min и 10 5-min
-			_strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
+			_strategy = new SmaStrategy(_connector, series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
 			{
 				Volume = 1,
 				Security = security,
@@ -144,7 +142,7 @@ namespace SampleRandomEmulation
 
 				// start strategy before emulation started
 				_strategy.Start();
-				candleManager.Start(series);
+				_connector.SubscribeCandles(series);
 
 				// start historical data loading when connection established successfully and all data subscribed
 				_connector.Start();

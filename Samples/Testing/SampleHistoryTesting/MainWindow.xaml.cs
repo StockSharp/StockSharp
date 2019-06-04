@@ -431,8 +431,6 @@ namespace SampleHistoryTesting
 
 				logManager.Sources.Add(connector);
 
-				var candleManager = new CandleManager(connector);
-
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
 				{
 					BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? MarketDataBuildModes.Build : MarketDataBuildModes.Load,
@@ -460,7 +458,7 @@ namespace SampleHistoryTesting
 				chart.AddElement(_area, _longElem);
 
 				// create strategy based on 80 5-min и 10 5-min
-				var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, candleManager, series)
+				var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, connector, series)
 				{
 					Volume = 1,
 					Portfolio = portfolio,
@@ -558,7 +556,7 @@ namespace SampleHistoryTesting
 
 					// start strategy before emulation started
 					strategy.Start();
-					candleManager.Start(series);
+					connector.SubscribeCandles(series);
 
 					// start historical data loading when connection established successfully and all data subscribed
 					connector.Start();
@@ -617,7 +615,7 @@ namespace SampleHistoryTesting
 				{
 					if (connector.State == EmulationStates.Stopped)
 					{
-						candleManager.Stop(series);
+						connector.UnSubscribeCandles(series);
 						strategy.Stop();
 
 						SetIsChartEnabled(chart, false);

@@ -170,11 +170,10 @@ namespace SampleHistoryTestingParallel
 			var strategies = periods
 				.Select(period =>
 				{
-					var candleManager = new CandleManager(connector);
 					var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 					// create strategy based SMA
-					var strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
+					var strategy = new SmaStrategy(connector, series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
 					{
 						Volume = 1,
 						Security = security,
@@ -186,7 +185,7 @@ namespace SampleHistoryTestingParallel
 						UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
 					};
 
-					strategy.SetCandleManager(candleManager);
+					strategy.SetCandleManager(connector);
 
 					var curveElem = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3, ChartIndicatorDrawStyles.Line);
 					

@@ -41,7 +41,6 @@ namespace SampleRealTimeEmulation
 		private readonly SynchronizedList<Candle> _buffer = new SynchronizedList<Candle>();
 		private readonly ChartCandleElement _candlesElem;
 		private readonly LogManager _logManager;
-		private CandleManager _candleManager;
 		private CandleSeries _candleSeries;
 		private readonly Connector _realConnector = new Connector();
 		private RealTimeEmulationTrader<IMessageAdapter> _emuConnector;
@@ -124,8 +123,6 @@ namespace SampleRealTimeEmulation
 			SecurityPicker.SecurityProvider = new FilterableSecurityProvider(_emuConnector);
 			SecurityPicker.MarketDataProvider = _emuConnector;
 
-			_candleManager = new CandleManager(_emuConnector);
-
 			// subscribe on connection successfully event
 			_emuConnector.Connected += () =>
 			{
@@ -161,7 +158,7 @@ namespace SampleRealTimeEmulation
 			// subscribe on error of order registration event
 			_emuConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
 
-			_candleManager.Processing += (s, candle) =>
+			_emuConnector.CandleSeriesProcessing += (s, candle) =>
 			{
 				if (candle.State == CandleStates.Finished)
 					_buffer.Add(candle);
@@ -256,7 +253,7 @@ namespace SampleRealTimeEmulation
 				return;
 
 			if (_candleSeries != null)
-				_candleManager.Stop(_candleSeries); // give back series memory
+				_emuConnector.UnSubscribeCandles(_candleSeries); // give back series memory
 
 			_security = security;
 
@@ -267,7 +264,7 @@ namespace SampleRealTimeEmulation
 			_emuConnector.RegisterSecurity(security);
 
 			_candleSeries = new CandleSeries(CandleSettingsEditor.Settings.CandleType, security, CandleSettingsEditor.Settings.Arg);
-			_candleManager.Start(_candleSeries);
+			_emuConnector.SubscribeCandles(_candleSeries);
 		}
 
 		private void NewOrder_OnClick(object sender, RoutedEventArgs e)
