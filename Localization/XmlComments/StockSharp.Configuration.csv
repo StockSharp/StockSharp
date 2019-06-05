@@ -6,14 +6,6 @@ M:StockSharp.Configuration.CandleElementCollection.CreateNewElement/returns;DocS
 M:StockSharp.Configuration.CandleElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/summary;DocStr8708
 M:StockSharp.Configuration.CandleElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/returns;DocStr8709
 M:StockSharp.Configuration.CandleElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/param/element;DocStr8710
-T:StockSharp.Configuration.ConnectionElement/summary;DocStr8711
-P:StockSharp.Configuration.ConnectionElement.Type/summary;DocStr8712
-T:StockSharp.Configuration.ConnectionElementCollection/summary;DocStr8713
-M:StockSharp.Configuration.ConnectionElementCollection.CreateNewElement/summary;DocStr8706
-M:StockSharp.Configuration.ConnectionElementCollection.CreateNewElement/returns;DocStr8707
-M:StockSharp.Configuration.ConnectionElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/summary;DocStr8708
-M:StockSharp.Configuration.ConnectionElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/returns;DocStr8709
-M:StockSharp.Configuration.ConnectionElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/param/element;DocStr8710
 T:StockSharp.Configuration.DiagramElement/summary;DocStr8714
 P:StockSharp.Configuration.DiagramElement.Type/summary;DocStr8715
 T:StockSharp.Configuration.DiagramElementCollection/summary;DocStr8716
@@ -59,7 +51,6 @@ M:StockSharp.Configuration.IndicatorElementCollection.GetElementKey(System.Confi
 T:StockSharp.Configuration.InMemoryConfigurationMessageAdapterProvider/summary;DocStr9833
 M:StockSharp.Configuration.InMemoryConfigurationMessageAdapterProvider.#ctor/summary;DocStr93
 T:StockSharp.Configuration.StockSharpSection/summary;DocStr8737
-P:StockSharp.Configuration.StockSharpSection.CustomConnections/summary;DocStr8738
 P:StockSharp.Configuration.StockSharpSection.CustomCandles/summary;DocStr8739
 P:StockSharp.Configuration.StockSharpSection.CustomIndicators/summary;DocStr8740
 P:StockSharp.Configuration.StockSharpSection.CustomDiagramElements/summary;DocStr8741

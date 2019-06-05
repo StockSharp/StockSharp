@@ -250,8 +250,8 @@ M:StockSharp.Xaml.ImportSettingsWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ISecurityWindow/summary;DocStr8180
 P:StockSharp.Xaml.ISecurityWindow.Security/summary;DocStr2831
 T:StockSharp.Xaml.SecurityMessageAdaptersWindow/summary;DocStr11143
-F:StockSharp.Xaml.SecurityMessageAdaptersWindow.RemoveCommand/summary;DocStr11144
-F:StockSharp.Xaml.SecurityMessageAdaptersWindow.AddCommand/summary;DocStr11145
+F:StockSharp.Xaml.SecurityMessageAdaptersWindow.RemoveCommand/summary;DocStr8269
+F:StockSharp.Xaml.SecurityMessageAdaptersWindow.AddCommand/summary;DocStr8270
 P:StockSharp.Xaml.SecurityMessageAdaptersWindow.Adapter/summary;DocStr8271
 F:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProviderProperty/summary;DocStr29
 P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProvider/summary;DocStr972
@@ -527,8 +527,8 @@ P:StockSharp.Xaml.RatingWindow.Comment/summary;Str135
 M:StockSharp.Xaml.RatingWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.RatingWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityMappingWindow/summary;DocStr9961
-F:StockSharp.Xaml.SecurityMappingWindow.RemoveCommand/summary;DocStr11144
-F:StockSharp.Xaml.SecurityMappingWindow.AddCommand/summary;DocStr11145
+F:StockSharp.Xaml.SecurityMappingWindow.RemoveCommand/summary;DocStr8269
+F:StockSharp.Xaml.SecurityMappingWindow.AddCommand/summary;DocStr8270
 P:StockSharp.Xaml.SecurityMappingWindow.ConnectorsInfo/summary;DocStr8314
 P:StockSharp.Xaml.SecurityMappingWindow.Storage/summary;DocStr9935
 M:StockSharp.Xaml.SecurityMappingWindow.#ctor/summary;DocStr1

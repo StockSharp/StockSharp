@@ -1113,12 +1113,12 @@
     </member>
     <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.RemoveCommand">
       <summary>
-        <see cref="T:System.Windows.Input.RoutedCommand" /> to remove comparison.
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to remove mapping.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.AddCommand">
       <summary>
-        <see cref="T:System.Windows.Input.RoutedCommand" /> to add comparison.
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to add mapping.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.Adapter">
@@ -2419,12 +2419,12 @@
     </member>
     <member name="F:StockSharp.Xaml.SecurityMappingWindow.RemoveCommand">
       <summary>
-        <see cref="T:System.Windows.Input.RoutedCommand" /> to remove comparison.
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to remove mapping.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.SecurityMappingWindow.AddCommand">
       <summary>
-        <see cref="T:System.Windows.Input.RoutedCommand" /> to add comparison.
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to add mapping.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.SecurityMappingWindow.ConnectorsInfo">

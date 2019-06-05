@@ -1046,8 +1046,8 @@ Str1068Params;Decreasing close price of candle {0} below {1};Понижение 
 Str1069Params; - volume exceeding {0}; - превышение объема выше {0}
 Str1070;Registration ID does not contain information about current candle.;Идентификатор регистрации не содержит информацию о текущей свече.
 Str1071Params; - current candle exceeding {0}; - превышения объема текущей свечи выше {0}
-Str1072;Started candles;Начатые свечи
-Str1073;Finished candles;Законченные свечи
+Str1072;Started candles.;Начатые свечи.
+Str1073;Finished candles.;Законченные свечи.
 Str1075Params;{0}% of current candle is completed.;Завершение текущей свечи на {0}%.
 Str1076Params;{0}% of current candles is completed.;Завершение текущих свечей на {0}%.
 Str1077;Percentage change must be positive.;Процент изменения должен быть положительным.
@@ -4986,6 +4986,7 @@ ShiftIs;Shift {0};Сдвиг {0}
 TakeIs;Take {0};Тейк {0}
 StopIs;Stop {0};Стоп {0}
 IdentifiersAreSame;Identifiers '{0}' and '{1}' are the same.;Идентификаторы '{0}' и '{1}' одинаковые.
+SecIdDataTypeAlreadyAdapter;For security {0} and type {1} adapter is already specified.;Для инструмента {0} и типа данных {1} уже указан адаптер.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14015,7 +14016,7 @@ DocStr9321;The delimiter, replacing '|' in the path for instruments with id like
 DocStr9322;The message adapter's provider interface;Интерфейс провайдера адаптеров сообщений
 DocStr9323;All available adapters;Все доступные адаптеры
 DocStr9324;Get adapter by portfolio name;Получить адаптер по имени портфеля
-DocStr9325;The found adapter;Найденный адаптер
+DocStr9325;The found adapter or {0};Найденный адаптер или {0}
 DocStr9326;Make association adapter and portfolio name;Ассоциировать адаптер и имя портфеля
 DocStr9327;The adapter;Адаптер
 DocStr9328;The message adapter's provider;Провайдер адаптеров сообщений
@@ -15647,3 +15648,10 @@ DocStr11140;Get adapter by security id;Получить адаптер по ид
 DocStr11141;Make association adapter and security id;Сделать ассоциацию адаптера и идентификатора инструмента
 DocStr11142;Remove association between security id and adapter;Удалить ассоциации идентификатора инструмента и адаптера
 DocStr11143;The window for creation and editing of securities and adapters mapping;Окно для создания и редактирования ассоциаций инструментов и адаптеров
+DocStr11144;Request {0} only candles;Request {0} only candles
+DocStr11145;The mapping message adapter's provider interface;The mapping message adapter's provider interface
+DocStr11146;Type of key;Type of key
+DocStr11147;Get adapter by the specified key;Get adapter by the specified key
+DocStr11148;Make association with adapter;Make association with adapter
+DocStr11149;Remove association with adapter;Remove association with adapter
+DocStr11150;Get adapter by the specified security id;Get adapter by the specified security id

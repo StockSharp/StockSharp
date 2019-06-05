@@ -49536,5 +49536,15 @@ namespace StockSharp.Localization
 		/// Identifiers '{0}' and '{1}' are the same.
 		/// </summary>
 		public static string IdentifiersAreSame => GetString(IdentifiersAreSameKey);
+
+		/// <summary>
+		/// For security {0} and type {1} adapter is already specified.
+		/// </summary>
+		public const string SecIdDataTypeAlreadyAdapterKey = nameof(SecIdDataTypeAlreadyAdapter);
+
+		/// <summary>
+		/// For security {0} and type {1} adapter is already specified.
+		/// </summary>
+		public static string SecIdDataTypeAlreadyAdapter => GetString(SecIdDataTypeAlreadyAdapterKey);
 	}
 }
