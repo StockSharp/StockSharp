@@ -692,6 +692,10 @@ namespace StockSharp.Algo.Candles.Compression
 				foreach (var candleMessage in result)
 				{
 					series.CurrentCandleMessage = candleMessage;
+
+					if (series.Original.IsFinished && candleMessage.State != CandleStates.Finished)
+						continue;
+
 					SendCandle(series, candleMessage);
 				}
 			}

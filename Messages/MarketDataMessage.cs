@@ -267,6 +267,12 @@ namespace StockSharp.Messages
 		public bool IsRegularTradingHours { get; set; }
 
 		/// <summary>
+		/// Request <see cref="CandleStates.Finished"/> only candles.
+		/// </summary>
+		[DataMember]
+		public bool IsFinished { get; set; }
+
+		/// <summary>
 		/// The default depth of order book.
 		/// </summary>
 		public const int DefaultMaxDepth = 50;
@@ -327,6 +333,7 @@ namespace StockSharp.Messages
 			destination.IsHistory = IsHistory;
 			destination.AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame;
 			destination.IsRegularTradingHours = IsRegularTradingHours;
+			destination.IsFinished = IsFinished;
 
 			base.CopyTo(destination);
 		}
@@ -355,7 +362,10 @@ namespace StockSharp.Messages
 				str += $",SmallTF={AllowBuildFromSmallerTimeFrame}";
 
 			if (IsRegularTradingHours)
-				str += $",RegularTH={IsRegularTradingHours}";
+				str += $",RTH={IsRegularTradingHours}";
+
+			if (IsFinished)
+				str += $",Fin={IsFinished}";
 
 			if (IsHistory)
 				str += $",Hist={IsHistory}";

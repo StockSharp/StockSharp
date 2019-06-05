@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
@@ -37,18 +38,21 @@ namespace StockSharp.Messages
 		/// Empty state (candle doesn't exist).
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1658Key)]
 		None,
 
 		/// <summary>
 		/// Candle active.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str238Key)]
 		Active,
 
 		/// <summary>
 		/// Candle finished.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FinishedKey)]
 		Finished,
 	}
 

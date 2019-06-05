@@ -110,6 +110,7 @@ StockSharp API Change log
 * (feature) ISecurityAssociationStorage removed.
 * (feature) BasketMessageAdapter. SecurityAdapterProvider added.
 * (bug) CandleBuilder. Fill CandleMessage.TotalTicks.
+* (feature) CandleSeries. IsFinished filter added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

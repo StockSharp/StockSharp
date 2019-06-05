@@ -878,6 +878,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.BuildMode.To<string>(),
 					data.BuildFrom.To<string>(),
 					data.BuildField.To<string>(),
+					data.IsFinished.To<string>(),
 				});
 			}
 
@@ -916,6 +917,9 @@ namespace StockSharp.Algo.Storages.Csv
 				message.BuildMode = reader.ReadEnum<MarketDataBuildModes>();
 				message.BuildFrom = reader.ReadNullableEnum<MarketDataTypes>();
 				message.BuildField = reader.ReadNullableEnum<Level1Fields>();
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					message.IsFinished = reader.ReadBool();
 
 				return message;
 			}
