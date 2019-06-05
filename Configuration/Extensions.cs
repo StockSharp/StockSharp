@@ -19,19 +19,27 @@ namespace StockSharp.Configuration
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.IO;
 	using System.Linq;
+	using System.Reflection;
 	using System.Windows;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
+	using Ecng.Reflection;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
-	using StockSharp.AlfaDirect;
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
+	using StockSharp.Xaml;
+	using StockSharp.Xaml.Charting;
+	using StockSharp.Xaml.Charting.IndicatorPainters;
+	using StockSharp.Logging;
+	using StockSharp.Messages;
+	using StockSharp.AlfaDirect;
 	using StockSharp.AlorHistory;
 	using StockSharp.AlphaVantage;
 	using StockSharp.BarChart;
@@ -76,7 +84,6 @@ namespace StockSharp.Configuration
 	using StockSharp.Liqui;
 	using StockSharp.LiveCoin;
 	using StockSharp.LMAX;
-	using StockSharp.Logging;
 	using StockSharp.Micex;
 	using StockSharp.Oanda;
 	using StockSharp.Okcoin;
@@ -85,7 +92,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Plaza;
 	using StockSharp.Poloniex;
 	using StockSharp.QuantHouse;
-	//using StockSharp.Quik;
+	using StockSharp.Quik;
 	using StockSharp.Quik.Lua;
 	using StockSharp.Quoinex;
 	using StockSharp.Rithmic;
@@ -96,9 +103,6 @@ namespace StockSharp.Configuration
 	using StockSharp.TradeOgre;
 	using StockSharp.Transaq;
 	using StockSharp.Twime;
-	using StockSharp.Xaml;
-	using StockSharp.Xaml.Charting;
-	using StockSharp.Xaml.Charting.IndicatorPainters;
 	using StockSharp.Yobit;
 	using StockSharp.Zaif;
 	using StockSharp.CoinCap;
@@ -122,7 +126,6 @@ namespace StockSharp.Configuration
 	/// </summary>
 	public static class Extensions
 	{
-		private static readonly Type[] _customAdapters = ArrayHelper.Empty<Type>();
 		private static readonly IndicatorType[] _customIndicators = ArrayHelper.Empty<IndicatorType>();
 		private static readonly Type[] _customCandles = ArrayHelper.Empty<Type>();
 		private static readonly Type[] _customDiagramElements = ArrayHelper.Empty<Type>();
@@ -134,7 +137,6 @@ namespace StockSharp.Configuration
 			if (section == null)
 				return;
 
-			_customAdapters = SafeAdd<ConnectionElement, Type>(section.CustomConnections, elem => elem.Type.To<Type>());
 			_customIndicators = SafeAdd<IndicatorElement, IndicatorType>(section.CustomIndicators, elem => new IndicatorType(elem.Type.To<Type>(), elem.Painter.To<Type>()));
 			_customCandles = SafeAdd<CandleElement, Type>(section.CustomCandles, elem => elem.Type.To<Type>());
 			_customDiagramElements = SafeAdd<DiagramElement, Type>(section.CustomDiagramElements, elem => elem.Type.To<Type>());
@@ -191,7 +193,7 @@ namespace StockSharp.Configuration
 			return adapter.Configure(owner, ref autoConnect, ref settings);
 		}
 
-		private static readonly Lazy<Func<Type>[]> _adapters = new Lazy<Func<Type>[]>(() => new[]
+		private static readonly Lazy<Func<Type>[]> _standardAdapters = new Lazy<Func<Type>[]>(() => new[]
 		{
 			(Func<Type>)(() => typeof(AlfaDirectMessageAdapter)),
 			() => typeof(BarChartMessageAdapter),
@@ -213,8 +215,8 @@ namespace StockSharp.Configuration
 			() => typeof(PlazaMessageAdapter),
 			() => typeof(LuaFixTransactionMessageAdapter),
 			() => typeof(LuaFixMarketDataMessageAdapter),
-			//() => typeof(QuikTrans2QuikAdapter),
-			//() => typeof(QuikDdeAdapter),
+			() => typeof(QuikTrans2QuikAdapter),
+			() => typeof(QuikDdeAdapter),
 			() => typeof(RithmicMessageAdapter),
 			() => typeof(RssMessageAdapter),
 			() => typeof(SmartComMessageAdapter),
@@ -278,22 +280,96 @@ namespace StockSharp.Configuration
 			() => typeof(UkrExhMessageAdapter),
 			() => typeof(CSVMessageAdapter),
 		});
+		
+		private static readonly SyncObject _adaptersLock = new SyncObject();
+		private static Type[] _adapters;
 
 		/// <summary>
 		/// All available adapters.
 		/// </summary>
-		public static IEnumerable<Type> Adapters => _customAdapters.Concat(_adapters.Value.Select(v =>
+		public static IEnumerable<Type> Adapters
 		{
-			try
+			get
 			{
-				return v();
+				lock (_adaptersLock)
+				{
+					if (_adapters == null)
+					{
+						var exceptions = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
+						{
+							"StockSharp.Alerts",
+							"StockSharp.Algo",
+							"StockSharp.Algo.History",
+							"StockSharp.Algo.Strategies",
+							"StockSharp.BusinessEntities",
+							"StockSharp.Community",
+							"StockSharp.Configuration",
+							"StockSharp.Licensing",
+							"StockSharp.Localization",
+							"StockSharp.Logging",
+							"StockSharp.Messages",
+							"StockSharp.Xaml",
+							"StockSharp.Xaml.Actipro",
+							"StockSharp.Xaml.Charting",
+							"StockSharp.Xaml.Diagram",
+							"StockSharp.Studio.Core",
+							"StockSharp.Studio.Controls"
+						};
+
+						var adapters = new List<Type>();
+
+						foreach (var func in _standardAdapters.Value)
+						{
+							try
+							{
+								var type = func();
+
+								exceptions.Add(type.Assembly.GetName().Name);
+
+								if (type == typeof(QuikDdeAdapter) || type == typeof(QuikTrans2QuikAdapter))
+									continue;
+
+								adapters.Add(type);
+							}
+							catch (Exception e)
+							{
+								e.LogError();
+							}
+						}
+
+						var assemblies = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dll").Where(p =>
+						{
+							var name = Path.GetFileNameWithoutExtension(p);
+							return !exceptions.Contains(name) && name.StartsWithIgnoreCase("StockSharp.");
+						});
+
+						foreach (var assembly in assemblies)
+						{
+							if (!assembly.IsAssembly())
+								continue;
+
+							try
+							{
+								var asm = Assembly.Load(AssemblyName.GetAssemblyName(assembly));
+
+								adapters.AddRange(asm
+									.GetTypes()
+									.Where(t => typeof(IMessageAdapter).IsAssignableFrom(t) && !t.IsAbstract)
+									.ToArray());
+							}
+							catch (Exception e)
+							{
+								e.LogError();
+							}
+						}
+
+						_adapters = adapters.ToArray();
+					}
+				}
+
+				return _adapters;
 			}
-			catch (Exception e)
-			{
-				e.LogError();
-				return null;
-			}
-		}).Where(t => t != null));
+		}
 
 		/// <summary>
 		/// Configure connection using <see cref="ConnectorWindow"/>.

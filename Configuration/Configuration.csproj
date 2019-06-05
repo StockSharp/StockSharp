@@ -48,6 +48,9 @@
     <Reference Include="Ecng.Configuration">
       <HintPath>..\References\Ecng.Configuration.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.Reflection">
+      <HintPath>..\References\Ecng.Reflection.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Serialization">
       <HintPath>..\References\Ecng.Serialization.dll</HintPath>
     </Reference>
@@ -70,8 +73,6 @@
     </Compile>
     <Compile Include="CandleElement.cs" />
     <Compile Include="CandleElementCollection.cs" />
-    <Compile Include="ConnectionElement.cs" />
-    <Compile Include="ConnectionElementCollection.cs" />
     <Compile Include="DiagramElement.cs" />
     <Compile Include="DiagramElementCollection.cs" />
     <Compile Include="Extensions.cs" />

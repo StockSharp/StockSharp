@@ -22,15 +22,6 @@ namespace StockSharp.Configuration
 	/// </summary>
 	public class StockSharpSection : ConfigurationSection
 	{
-		private const string _connectionsKey = "customConnections";
-
-		/// <summary>
-		/// Custom message adapters.
-		/// </summary>
-		[ConfigurationProperty(_connectionsKey, IsDefaultCollection = true)]
-		[ConfigurationCollection(typeof(ConnectionElementCollection), AddItemName = "connection", ClearItemsName = "clear", RemoveItemName = "remove")]
-		public ConnectionElementCollection CustomConnections => (ConnectionElementCollection)base[_connectionsKey];
-
 		private const string _candlesKey = "customCandles";
 
 		/// <summary>
