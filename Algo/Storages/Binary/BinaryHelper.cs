@@ -280,7 +280,7 @@ namespace StockSharp.Algo.Storages.Binary
 					if (timeDiff <= TimeSpan.FromHours(32))
 					{
 						writer.Write(true);
-						writer.WriteBits(timeDiff.Hours, 5);
+						writer.WriteBits(timeDiff.Days * 24 + timeDiff.Hours, 5);
 					}
 					else
 					{

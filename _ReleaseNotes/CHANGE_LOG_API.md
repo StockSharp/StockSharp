@@ -113,6 +113,7 @@ StockSharp API Change log
 * (feature) CandleSeries. IsFinished filter added.
 * (feature) Configuration. Auto scan new adapters from local assemblies.
 * (bug) CandleBinarySerializer. Fix diff time zone times.
+* (bug) Storage. Fix binary more 1 days range.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
