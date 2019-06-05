@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 					if (!first.IsDefault())
 					{
-						if (first.Offset != lastOffset)
+						if (first.Offset != lastOffset && !allowDiffOffsets)
 							throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(first, lastOffset));
 
 						if (!candle.CloseTime.IsDefault() && first > candle.CloseTime)
@@ -229,7 +229,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 					if (!second.IsDefault())
 					{
-						if (second.Offset != lastOffset)
+						if (second.Offset != lastOffset && !allowDiffOffsets)
 							throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(second, lastOffset));
 
 						if (!candle.CloseTime.IsDefault() && second > candle.CloseTime)
@@ -245,7 +245,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 					if (!candle.CloseTime.IsDefault())
 					{
-						if (candle.CloseTime.Offset != lastOffset)
+						if (candle.CloseTime.Offset != lastOffset && !allowDiffOffsets)
 							throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(candle.CloseTime, lastOffset));
 
 						metaInfo.LastTime = writer.WriteTime(candle.CloseTime, metaInfo.LastTime, LocalizedStrings.Str1001, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, bigRange);
