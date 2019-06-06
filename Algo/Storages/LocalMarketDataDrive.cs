@@ -46,15 +46,15 @@ namespace StockSharp.Algo.Storages
 			private readonly string _path;
 			private readonly string _fileNameWithExtension;
 			private readonly string _datesPath;
+			private readonly DataType _dataType;
 
 			private readonly SyncObject _cacheSync = new SyncObject();
 
 			//private static readonly Version _dateVersion = new Version(1, 0);
 
-			public LocalMarketDataStorageDrive(string fileName, string path, StorageFormats format, IMarketDataDrive drive)
+			public LocalMarketDataStorageDrive(Type dataType, object arg, string path, StorageFormats format, LocalMarketDataDrive drive)
 			{
-				if (fileName.IsEmpty())
-					throw new ArgumentNullException(nameof(fileName));
+				var fileName = GetFileName(dataType, arg);
 
 				if (path.IsEmpty())
 					throw new ArgumentNullException(nameof(path));
@@ -63,6 +63,8 @@ namespace StockSharp.Algo.Storages
 				_drive = drive ?? throw new ArgumentNullException(nameof(drive));
 				_fileNameWithExtension = fileName + GetExtension(format);
 				_datesPath = IOPath.Combine(_path, fileName + format + "Dates.txt");
+
+				_dataType = DataType.Create(dataType, arg);
 
 				_datesDict = new Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>>(() =>
 				{
@@ -90,7 +92,7 @@ namespace StockSharp.Algo.Storages
 				}).Track();
 			}
 
-			private readonly IMarketDataDrive _drive;
+			private readonly LocalMarketDataDrive _drive;
 
 			IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
 
@@ -135,6 +137,8 @@ namespace StockSharp.Algo.Storages
 				dates.Remove(date);
 
 				SaveDates(Dates.ToArray());
+
+				_availableDataTypes.Remove(_drive.Path);
 			}
 
 			void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
@@ -151,6 +155,16 @@ namespace StockSharp.Algo.Storages
 				dates[date] = date;
 
 				SaveDates(Dates.ToArray());
+
+				lock (_availableDataTypes.SyncRoot)
+				{
+					var tuple = _availableDataTypes.TryGetValue(_drive.Path);
+
+					if (tuple == null || !tuple.Second)
+						return;
+
+					tuple.First.Add(_dataType);
+				}
 			}
 
 			Stream IMarketDataStorageDrive.LoadStream(DateTime date)
@@ -361,6 +375,8 @@ namespace StockSharp.Algo.Storages
 				.Where(t => !t.IsDefault());
 		}
 
+		private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>>(StringComparer.InvariantCultureIgnoreCase);
+
 		/// <inheritdoc />
 		public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
@@ -379,11 +395,22 @@ namespace StockSharp.Algo.Storages
 
 			if (securityId.IsDefault())
 			{
-				return Directory
-				       .EnumerateDirectories(Path)
-				       .SelectMany(Directory.EnumerateDirectories)
-				       .SelectMany(GetDataTypes)
-				       .Distinct();
+				lock (_availableDataTypes.SyncRoot)
+				{
+					var tuple = _availableDataTypes.SafeAdd(Path, key => RefTuple.Create(new HashSet<DataType>(), false));
+				
+					if (!tuple.Second)
+					{
+						tuple.First.AddRange(Directory
+		                     .EnumerateDirectories(Path)
+		                     .SelectMany(Directory.EnumerateDirectories)
+		                     .SelectMany(GetDataTypes));
+
+						tuple.Second = true;
+					}
+
+					return tuple.First.ToArray();
+				}
 			}
 
 			var s = GetSecurityPath(securityId);
@@ -398,7 +425,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(securityId));
 
 			return _drives.SafeAdd(Tuple.Create(securityId, dataType, arg, format),
-				key => new LocalMarketDataStorageDrive(GetFileName(dataType, arg), GetSecurityPath(securityId), format, this));
+				key => new LocalMarketDataStorageDrive(dataType, arg, GetSecurityPath(securityId), format, this));
 		}
 
 		/// <summary>
