@@ -556,7 +556,7 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			var adapters = GetAdapters(message, out var isPended);
+			var adapters = GetAdapters(message, out var isPended, out _);
 
 			if (isPended)
 				return;
@@ -620,15 +620,33 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private IMessageAdapter[] GetAdapters(Message message, out bool isPended)
+		private IMessageAdapter[] GetAdapters(Message message, out bool isPended, out bool skipSupportedMessages)
 		{
 			isPended = false;
+			skipSupportedMessages = false;
 
-			IMessageAdapter[] adapters;
+			IMessageAdapter[] adapters = null;
+
+			var adapter = GetUnderlyingAdapter(message.Adapter);
+
+			if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType != MarketDataTypes.News)
+				adapter = SecurityAdapterProvider.TryGetAdapter(mdMsg.SecurityId, mdMsg.DataType);
+
+			if (adapter != null)
+			{
+				adapter = _activeAdapters.TryGetValue(adapter);
+
+				if (adapter != null)
+				{
+					adapters = new[] { adapter };
+					skipSupportedMessages = true;
+				}
+			}
 
 			lock (_connectedResponseLock)
 			{
-				adapters = _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
+				if (adapters == null)
+					adapters = _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
 
 				if (adapters != null)
 				{
@@ -680,21 +698,11 @@ namespace StockSharp.Algo
 
 		private IEnumerable<IMessageAdapter> GetSubscriptionAdapters(MarketDataMessage mdMsg)
 		{
-			var adapter = mdMsg.Adapter;
-
-			if (adapter == null && mdMsg.DataType != MarketDataTypes.News)
-				adapter = SecurityAdapterProvider.TryGetAdapter(mdMsg.SecurityId, mdMsg.DataType);
-
-			if (adapter != null)
+			var adapters = GetAdapters(mdMsg, out var isPended, out var skipSupportedMessages).Where(a =>
 			{
-				adapter = _activeAdapters.TryGetValue(adapter);
+				if (skipSupportedMessages)
+					return true;
 
-				if (adapter != null)
-					return new[] { adapter };
-			}
-
-			var adapters = GetAdapters(mdMsg, out var isPended).Where(a =>
-			{
 				if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
 				{
 					var isCandles = mdMsg.DataType.IsCandleDataType();
@@ -856,7 +864,7 @@ namespace StockSharp.Algo
 
 			if (adapter == null)
 			{
-				adapter = GetAdapters(message, out _).FirstOrDefault();
+				adapter = GetAdapters(message, out _, out _).FirstOrDefault();
 
 				if (adapter == null)
 					return;
