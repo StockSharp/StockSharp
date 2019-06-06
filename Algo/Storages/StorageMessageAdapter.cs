@@ -430,7 +430,7 @@ namespace StockSharp.Algo.Storages
 
 			return DriveInternal
 			       .GetAvailableDataTypes(securityId, Format)
-			       .FilterCandles()
+			       .Where(t => t.MessageType == candleType)
 			       .Select(t => t.Arg)
 			       .Distinct()
 			       .OrderBy()

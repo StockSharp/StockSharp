@@ -233,8 +233,10 @@ namespace StockSharp.Algo.Testing
 			if (drive == null)
 				return Enumerable.Empty<object>();
 
+			var dataType = candleType.ToCandleMarketDataType();
+
 			var args = _historySources
-	             .Where(t => t.Key.Item2 == MarketDataTypes.CandleTimeFrame && (t.Key.Item1 == securityId || t.Key.Item1.IsDefault()))
+	             .Where(t => t.Key.Item2 == dataType && (t.Key.Item1 == securityId || t.Key.Item1.IsDefault()))
 	             .Select(s => s.Key.Item3)
 	             .ToArray();
 
@@ -242,7 +244,7 @@ namespace StockSharp.Algo.Testing
 				return args;
 
 			args = _generators
-	             .Where(t => t.Key.Item2 == MarketDataTypes.CandleTimeFrame && (t.Key.Item1 == securityId || t.Key.Item1.IsDefault()))
+	             .Where(t => t.Key.Item2 == dataType && (t.Key.Item1 == securityId || t.Key.Item1.IsDefault()))
 	             .Select(s => s.Key.Item3)
 	             .ToArray();
 
@@ -251,7 +253,7 @@ namespace StockSharp.Algo.Testing
 
 			return drive
 			       .GetAvailableDataTypes(securityId, StorageFormat)
-			       .FilterCandles()
+			       .Where(t => t.MessageType == candleType)
 			       .Select(t => t.Arg)
 			       .Distinct()
 			       .OrderBy()

@@ -4759,16 +4759,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Get available candles types.
-		/// </summary>
-		/// <param name="dataTypes">Data types.</param>
-		/// <returns>Candles types.</returns>
-		public static IEnumerable<DataType> FilterCandles(this IEnumerable<DataType> dataTypes)
-		{
-			return dataTypes.Where(t => t.IsCandles());
-		}
-
-		/// <summary>
 		/// Convert inner securities messages to basket.
 		/// </summary>
 		/// <typeparam name="TMessage">Message type.</typeparam>
