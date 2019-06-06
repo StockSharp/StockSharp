@@ -697,8 +697,10 @@ namespace StockSharp.Algo
 			{
 				if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
 				{
-					if (a.IsMarketDataTypeSupported(mdMsg.DataType))
-						return !mdMsg.DataType.IsCandleDataType() || a.IsCandlesSupported(mdMsg) || a.TryGetCandlesBuildFrom(mdMsg, CandleBuilderProvider) != null;
+					var isCandles = mdMsg.DataType.IsCandleDataType();
+
+					if (a.IsMarketDataTypeSupported(mdMsg.DataType) && (!isCandles || a.IsCandlesSupported(mdMsg)))
+						return true;
 					else
 					{
 						switch (mdMsg.DataType)
@@ -726,6 +728,9 @@ namespace StockSharp.Algo
 								return a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog);
 							default:
 							{
+								if (isCandles && a.TryGetCandlesBuildFrom(mdMsg, CandleBuilderProvider) != null)
+									return true;
+								
 								throw new ArgumentOutOfRangeException(mdMsg.DataType.ToString());
 							}
 						}
