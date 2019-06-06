@@ -614,10 +614,10 @@ namespace StockSharp.Algo.History.Hydra
 		/// <returns>Data types.</returns>
 		public IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
-			if (securityId.IsDefault())
-				throw new ArgumentNullException(nameof(securityId));
+			//if (securityId.IsDefault())
+			//	throw new ArgumentNullException(nameof(securityId));
 
-			return Invoke(f => f.GetAvailableDataTypes(SessionId, securityId.ToStringId(), format))
+			return Invoke(f => f.GetAvailableDataTypes(SessionId, securityId.ToStringId(nullIfEmpty: true), format))
 				.Select(t =>
 				{
 					var messageType = typeof(CandleMessage).To<string>().Replace(typeof(CandleMessage).Name, t.Item1).To<Type>();

@@ -115,6 +115,7 @@ StockSharp API Change log
 * (bug) CandleBinarySerializer. Fix diff time zone times.
 * (bug) Storage. Fix binary more 1 days range.
 * (feature) IMessageAdapter. GetCandleArgs added.
+* (feature) IMarketDataDrive. GetAvailableDataTypes returns all types for all securities.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

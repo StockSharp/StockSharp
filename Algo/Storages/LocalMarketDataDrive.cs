@@ -295,9 +295,7 @@ namespace StockSharp.Algo.Storages
 
 		private string _path;
 
-		/// <summary>
-		/// The path to the directory with data.
-		/// </summary>
+		/// <inheritdoc />
 		public override string Path
 		{
 			get => _path;
@@ -339,9 +337,7 @@ namespace StockSharp.Algo.Storages
 				_drives.Values.ForEach(d => d.ResetCache());
 		}
 
-		/// <summary>
-		/// Get all available instruments.
-		/// </summary>
+		/// <inheritdoc />
 		public override IEnumerable<SecurityId> AvailableSecurities => GetAvailableSecurities(Path);
 
 		/// <summary>
@@ -365,38 +361,37 @@ namespace StockSharp.Algo.Storages
 				.Where(t => !t.IsDefault());
 		}
 
-		/// <summary>
-		/// Get all available data types.
-		/// </summary>
-		/// <param name="securityId">Instrument identifier.</param>
-		/// <param name="format">Format type.</param>
-		/// <returns>Data types.</returns>
+		/// <inheritdoc />
 		public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
-			var secPath = GetSecurityPath(securityId);
-
-			if (!Directory.Exists(secPath))
-				return Enumerable.Empty<DataType>();
-
 			var ext = GetExtension(format);
 
-			return InteropHelper
-				.GetDirectories(secPath)
-			    .SelectMany(dir => Directory.GetFiles(dir, "*" + ext))
-				.Select(IOPath.GetFileNameWithoutExtension)
-				.Distinct()
-				.Select(GetDataType)
-				.Where(t => t != null);
+			IEnumerable<DataType> GetDataTypes(string secPath)
+			{
+				return InteropHelper
+				       .GetDirectories(secPath)
+				       .SelectMany(dateDir => Directory.GetFiles(dateDir, "*" + ext))
+				       .Select(IOPath.GetFileNameWithoutExtension)
+				       .Distinct()
+				       .Select(GetDataType)
+				       .Where(t => t != null);
+			}
+
+			if (securityId.IsDefault())
+			{
+				return Directory
+				       .EnumerateDirectories(Path)
+				       .SelectMany(Directory.EnumerateDirectories)
+				       .SelectMany(GetDataTypes)
+				       .Distinct();
+			}
+
+			var s = GetSecurityPath(securityId);
+
+			return Directory.Exists(s) ? GetDataTypes(s) : Enumerable.Empty<DataType>();
 		}
 
-		/// <summary>
-		/// Create storage for <see cref="IMarketDataStorage"/>.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-		/// <param name="format">Format type.</param>
-		/// <returns>Storage for <see cref="IMarketDataStorage"/>.</returns>
+		/// <inheritdoc />
 		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
 		{
 			if (securityId.IsDefault())

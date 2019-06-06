@@ -345,18 +345,15 @@ namespace StockSharp.Algo.History.Hydra
 						.ToArray();
 		}
 
-		Tuple<string, string>[] IRemoteStorage.GetAvailableDataTypes(Guid sessionId, string securityId, StorageFormats format)
+		Tuple<string, string>[] IRemoteStorage.GetAvailableDataTypes(Guid sessionId, string securityIdStr, StorageFormats format)
 		{
 			CheckSession(sessionId, UserPermissions.Load);
-			this.AddInfoLog(LocalizedStrings.Str2090Params, sessionId, securityId);
+			this.AddInfoLog(LocalizedStrings.Str2090Params, sessionId, securityIdStr.IsEmpty(LocalizedStrings.Str1569));
 
-			var security = ToSecurity(securityId, false);
-
-			if (security == null)
-				return ArrayHelper.Empty<Tuple<string, string>>();
+			var securityId = securityIdStr.IsEmpty() ? default(SecurityId) : securityIdStr.ToSecurityId();
 
 			return GetDrives()
-						.SelectMany(drive => drive.GetAvailableDataTypes(security.ToSecurityId(), format))
+						.SelectMany(drive => drive.GetAvailableDataTypes(securityId, format))
 						.Select(t => Tuple.Create(t.MessageType.Name, TraderHelper.CandleArgToFolderName(t.Arg)))
 						.Distinct()
 						.ToArray();
