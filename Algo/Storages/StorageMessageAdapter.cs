@@ -423,15 +423,15 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
+		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId))
 		{
 			if (DriveInternal == null)
-				return Enumerable.Empty<TimeSpan>();
+				return Enumerable.Empty<object>();
 
 			return DriveInternal
 			       .GetAvailableDataTypes(securityId, Format)
-			       .TimeFrameCandles()
-			       .Select(t => (TimeSpan)t.Arg)
+			       .FilterCandles()
+			       .Select(t => t.Arg)
 			       .Distinct()
 			       .OrderBy()
 			       .ToArray();

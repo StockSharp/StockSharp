@@ -4763,9 +4763,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="dataTypes">Data types.</param>
 		/// <returns>Candles types.</returns>
-		public static IEnumerable<DataType> TimeFrameCandles(this IEnumerable<DataType> dataTypes)
+		public static IEnumerable<DataType> FilterCandles(this IEnumerable<DataType> dataTypes)
 		{
-			return dataTypes.Where(t => t.MessageType == typeof(TimeFrameCandleMessage));
+			return dataTypes.Where(t => t.IsCandles());
 		}
 
 		/// <summary>

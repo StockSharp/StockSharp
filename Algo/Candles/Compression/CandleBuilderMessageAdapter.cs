@@ -181,7 +181,7 @@ namespace StockSharp.Algo.Candles.Compression
 						}
 						else
 						{
-							if (InnerAdapter.IsMarketDataTypeSupported(mdMsg.DataType))
+							if (InnerAdapter.IsCandlesSupported(mdMsg))
 							{
 								this.AddInfoLog("Origin arg: {0}", mdMsg.Arg);
 

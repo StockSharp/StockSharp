@@ -684,6 +684,14 @@ namespace StockSharp.Messages
 			=> Enumerable.Empty<TimeSpan>();
 
 		/// <inheritdoc />
+		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId))
+		{
+			return candleType == typeof(TimeFrameCandleMessage)
+				? GetTimeFrames(securityId).Cast<object>()
+				: Enumerable.Empty<object>();
+		}
+
+		/// <inheritdoc />
 		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)
 		{
 			if (request == null)

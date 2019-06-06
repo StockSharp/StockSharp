@@ -454,6 +454,114 @@ namespace StockSharp.Messages
 			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Except(new[] { type }).ToArray();
 		}
 
+		private static readonly PairSet<MessageTypes, MarketDataTypes> _candleDataTypes = new PairSet<MessageTypes, MarketDataTypes>
+		{
+			{ MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame },
+			{ MessageTypes.CandleTick, MarketDataTypes.CandleTick },
+			{ MessageTypes.CandleVolume, MarketDataTypes.CandleVolume },
+			{ MessageTypes.CandleRange, MarketDataTypes.CandleRange },
+			{ MessageTypes.CandlePnF, MarketDataTypes.CandlePnF },
+			{ MessageTypes.CandleRenko, MarketDataTypes.CandleRenko },
+		};
+
+		/// <summary>
+		/// Determine the <paramref name="type"/> is candle data type.
+		/// </summary>
+		/// <param name="type">The data type.</param>
+		/// <returns><see langword="true" />, if data type is candle, otherwise, <see langword="false" />.</returns>
+		public static bool IsCandleDataType(this MarketDataTypes type)
+		{
+			return _candleDataTypes.ContainsValue(type);
+		}
+
+		/// <summary>
+		/// To convert the type of candles <see cref="MarketDataTypes"/> into type of message <see cref="MessageTypes"/>.
+		/// </summary>
+		/// <param name="type">Candles type.</param>
+		/// <returns>Message type.</returns>
+		public static MessageTypes ToCandleMessageType(this MarketDataTypes type)
+		{
+			return _candleDataTypes[type];
+		}
+
+		/// <summary>
+		/// To convert the type of message <see cref="MessageTypes"/> into type of candles <see cref="MarketDataTypes"/>.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <returns>Candles type.</returns>
+		public static MarketDataTypes ToCandleMarketDataType(this MessageTypes type)
+		{
+			return _candleDataTypes[type];
+		}
+
+		private static readonly PairSet<Type, MarketDataTypes> _candleMarketDataTypes = new PairSet<Type, MarketDataTypes>
+		{
+			{ typeof(TimeFrameCandleMessage), MarketDataTypes.CandleTimeFrame },
+			{ typeof(TickCandleMessage), MarketDataTypes.CandleTick },
+			{ typeof(VolumeCandleMessage), MarketDataTypes.CandleVolume },
+			{ typeof(RangeCandleMessage), MarketDataTypes.CandleRange },
+			{ typeof(PnFCandleMessage), MarketDataTypes.CandlePnF },
+			{ typeof(RenkoCandleMessage), MarketDataTypes.CandleRenko },
+		};
+
+		/// <summary>
+		/// Cast candle type <see cref="MarketDataTypes"/> to the message <see cref="CandleMessage"/>.
+		/// </summary>
+		/// <param name="type">Candle type.</param>
+		/// <returns>Message type <see cref="CandleMessage"/>.</returns>
+		public static Type ToCandleMessage(this MarketDataTypes type)
+		{
+			var messageType = _candleMarketDataTypes.TryGetKey(type);
+
+			if (messageType == null)
+				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.WrongCandleType);
+
+			return messageType;
+		}
+
+		/// <summary>
+		/// Cast message type <see cref="CandleMessage"/> to the <see cref="MarketDataTypes"/>.
+		/// </summary>
+		/// <param name="messageType">The type of the message <see cref="CandleMessage"/>.</param>
+		/// <returns><see cref="MarketDataTypes"/>.</returns>
+		public static MarketDataTypes ToCandleMarketDataType(this Type messageType)
+		{
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
+
+			var dataType = _candleMarketDataTypes.TryGetValue2(messageType);
+
+			if (dataType == null)
+				throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
+
+			return dataType.Value;
+		}
+
+		/// <summary>
+		/// Determines whether the specified subscription request is supported by the adapter.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="subscription">Subscription.</param>
+		/// <returns><see langword="true"/> if the specified subscription request is supported, otherwise, <see langword="false"/>.</returns>
+		public static bool IsCandlesSupported(this IMessageAdapter adapter, MarketDataMessage subscription)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			if (!adapter.SupportedMarketDataTypes.Contains(subscription.DataType))
+				return false;
+
+			var args = adapter.GetCandleArgs(subscription.DataType.ToCandleMessage(), subscription.SecurityId).ToArray();
+
+			if (args.IsEmpty())
+				return true;
+
+			return args.Contains(subscription.Arg);
+		}
+
 		/// <summary>
 		/// Determines whether the specified market-data type is supported by the adapter.
 		/// </summary>

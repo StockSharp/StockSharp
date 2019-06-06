@@ -196,6 +196,14 @@ namespace StockSharp.Messages
 		IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId));
 
 		/// <summary>
+		/// Get possible args for the specified candle type and instrument.
+		/// </summary>
+		/// <param name="candleType">The type of the message <see cref="CandleMessage"/>.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Possible args.</returns>
+		IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId));
+
+		/// <summary>
 		/// Get maximum size step allowed for historical download.
 		/// </summary>
 		/// <param name="request">Market data request.</param>

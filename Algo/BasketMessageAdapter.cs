@@ -286,8 +286,8 @@ namespace StockSharp.Algo
 		public bool SupportOffline { get; set; }
 
 		/// <inheritdoc />
-		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
-			=> GetSortedAdapters().SelectMany(a => a.GetTimeFrames(securityId)).Distinct().OrderBy();
+		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId))
+			=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId)).Distinct().OrderBy();
 
 		/// <inheritdoc />
 		public override bool IsConnectionAlive() => throw new NotSupportedException();
@@ -698,7 +698,7 @@ namespace StockSharp.Algo
 				if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
 				{
 					if (a.IsMarketDataTypeSupported(mdMsg.DataType))
-						return true;
+						return !mdMsg.DataType.IsCandleDataType() || a.IsCandlesSupported(mdMsg);
 					else
 					{
 						switch (mdMsg.DataType)

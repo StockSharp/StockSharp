@@ -278,6 +278,10 @@ namespace StockSharp.Messages
 			=> InnerAdapter.GetTimeFrames(securityId);
 
 		/// <inheritdoc />
+		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId))
+			=> InnerAdapter.GetCandleArgs(candleType, securityId);
+
+		/// <inheritdoc />
 		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)
 			=> InnerAdapter.GetHistoryStepSize(request, out iterationInterval);
 
