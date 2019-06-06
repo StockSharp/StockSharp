@@ -116,6 +116,7 @@ StockSharp API Change log
 * (bug) Storage. Fix binary more 1 days range.
 * (feature) IMessageAdapter. GetCandleArgs added.
 * (feature) IMarketDataDrive. GetAvailableDataTypes returns all types for all securities.
+* (feature) HistoryMessageAdapter. SupportedMarketDataTypes overload uses storage data types.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

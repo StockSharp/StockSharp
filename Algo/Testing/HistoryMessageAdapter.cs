@@ -132,13 +132,6 @@ namespace StockSharp.Algo.Testing
 			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource);
 			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 			this.AddSupportedMessage(ExtendedMessageTypes.ChangeTimeInterval);
-
-			this.AddSupportedMarketDataType(MarketDataTypes.Trades);
-			this.AddSupportedMarketDataType(MarketDataTypes.MarketDepth);
-			this.AddSupportedMarketDataType(MarketDataTypes.Level1);
-			this.AddSupportedMarketDataType(MarketDataTypes.CandleTimeFrame);
-			this.AddSupportedMarketDataType(MarketDataTypes.News);
-			this.AddSupportedMarketDataType(MarketDataTypes.OrderLog);
 		}
 
 		/// <summary>
@@ -202,6 +195,31 @@ namespace StockSharp.Algo.Testing
 			_basketStorage.Dispose();
 
 			base.DisposeManaged();
+		}
+
+		private IEnumerable<MarketDataTypes> _supportedMarketDataTypes;
+
+		/// <inheritdoc />
+		public override IEnumerable<MarketDataTypes> SupportedMarketDataTypes
+		{
+			get
+			{
+				if (_supportedMarketDataTypes == null)
+				{
+					var drive = DriveInternal;
+
+					var dataTypes = drive.GetAvailableDataTypes(default(SecurityId), StorageFormat);
+
+					_supportedMarketDataTypes = dataTypes
+						.Select(dt => dt.ToMarketDataType())
+						.Where(t => t != null)
+						.Select(t => t.Value)
+						.Distinct()
+						.ToArray();
+				}
+				
+				return _supportedMarketDataTypes;
+			}
 		}
 
 		/// <inheritdoc />
