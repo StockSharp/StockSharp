@@ -58,14 +58,24 @@ namespace StockSharp.Algo.History.Hydra
 
 			IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
 
+			private IEnumerable<DateTime> _dates;
+			private DateTime _prevDatesSync;
+
 			IEnumerable<DateTime> IMarketDataStorageDrive.Dates
 			{
 				get
 				{
-					return _parent
-						.Invoke(f => f.GetDates(_parent.SessionId, _securityId, _dataType, _arg, _format))
-						.Select(d => d.UtcKind())
-						.ToArray();
+					if (_prevDatesSync.IsDefault() || (DateTime.Now - _prevDatesSync).TotalSeconds > 3)
+					{
+						_dates = _parent
+						       .Invoke(f => f.GetDates(_parent.SessionId, _securityId, _dataType, _arg, _format))
+						       .Select(d => d.UtcKind())
+						       .ToArray();
+
+						_prevDatesSync = DateTime.Now;
+					}
+
+					return _dates;
 				}
 			}
 
