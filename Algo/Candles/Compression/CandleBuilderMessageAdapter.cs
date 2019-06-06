@@ -196,7 +196,7 @@ namespace StockSharp.Algo.Candles.Compression
 							}
 							else
 							{
-								if (!TrySubscribeBuild(mdMsg, transactionId))
+								if (isLoadOnly || !TrySubscribeBuild(mdMsg, transactionId))
 								{
 									RaiseNewOutMessage(new MarketDataMessage
 									{
@@ -253,25 +253,9 @@ namespace StockSharp.Algo.Candles.Compression
 			if (getTransactionId == null)
 				throw new ArgumentNullException(nameof(getTransactionId));
 
-			var buildFrom = original.BuildFrom ?? InnerAdapter.SupportedMarketDataTypes.Intersect(CandleHelper.CandleDataSources).OrderBy(t =>
-			{
-				// make priority
-				switch (t)
-				{
-					case MarketDataTypes.Trades:
-						return 0;
-					case MarketDataTypes.Level1:
-						return 1;
-					case MarketDataTypes.OrderLog:
-						return 2;
-					case MarketDataTypes.MarketDepth:
-						return 3;
-					default:
-						return 4;
-				}
-			}).FirstOr();
+			var buildFrom = InnerAdapter.TryGetCandlesBuildFrom(original, _candleBuilderProvider);
 
-			if (buildFrom == null || !InnerAdapter.SupportedMarketDataTypes.Contains(buildFrom.Value))
+			if (buildFrom == null)
 				return null;
 
 			var current = new MarketDataMessage

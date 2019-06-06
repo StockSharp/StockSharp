@@ -41,6 +41,54 @@ namespace StockSharp.Algo.Candles
 		public static IEnumerable<MarketDataTypes> CandleDataSources { get; } = new[] { MarketDataTypes.Level1, MarketDataTypes.Trades, MarketDataTypes.MarketDepth, MarketDataTypes.OrderLog };
 
 		/// <summary>
+		/// Try get suitable market-data type for candles compression.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="subscription">Subscription.</param>
+		/// <param name="provider">Candle builders provider.</param>
+		/// <returns>Which market-data type is used as a source value. <see langword="null"/> is compression is impossible.</returns>
+		public static MarketDataTypes? TryGetCandlesBuildFrom(this IMessageAdapter adapter, MarketDataMessage subscription, CandleBuilderProvider provider)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			if (!provider.IsRegistered(subscription.DataType))
+				return null;
+
+			if (subscription.BuildMode == MarketDataBuildModes.Load)
+				return null;
+
+			var buildFrom = subscription.BuildFrom ?? adapter.SupportedMarketDataTypes.Intersect(CandleDataSources).OrderBy(t =>
+			{
+				// by priority
+				switch (t)
+				{
+					case MarketDataTypes.Trades:
+						return 0;
+					case MarketDataTypes.Level1:
+						return 1;
+					case MarketDataTypes.OrderLog:
+						return 2;
+					case MarketDataTypes.MarketDepth:
+						return 3;
+					default:
+						return 4;
+				}
+			}).FirstOr();
+
+			if (buildFrom == null || !adapter.SupportedMarketDataTypes.Contains(buildFrom.Value))
+				return null;
+
+			return buildFrom.Value;
+		}
+
+		/// <summary>
 		/// Determines whether the specified type is derived from <see cref="Candle"/>.
 		/// </summary>
 		/// <param name="candleType">The candle type.</param>

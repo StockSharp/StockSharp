@@ -698,7 +698,7 @@ namespace StockSharp.Algo
 				if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
 				{
 					if (a.IsMarketDataTypeSupported(mdMsg.DataType))
-						return !mdMsg.DataType.IsCandleDataType() || a.IsCandlesSupported(mdMsg);
+						return !mdMsg.DataType.IsCandleDataType() || a.IsCandlesSupported(mdMsg) || a.TryGetCandlesBuildFrom(mdMsg, CandleBuilderProvider) != null;
 					else
 					{
 						switch (mdMsg.DataType)
@@ -726,10 +726,7 @@ namespace StockSharp.Algo
 								return a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog);
 							default:
 							{
-								if (CandleBuilderProvider.IsRegistered(mdMsg.DataType))
-									return mdMsg.BuildMode != MarketDataBuildModes.Load;
-								else
-									throw new ArgumentOutOfRangeException(mdMsg.DataType.ToString());
+								throw new ArgumentOutOfRangeException(mdMsg.DataType.ToString());
 							}
 						}
 					}
@@ -752,9 +749,7 @@ namespace StockSharp.Algo
 						return true;
 				}
 
-				var buildFrom = mdMsg.BuildFrom ?? a.SupportedMarketDataTypes.Intersect(CandleHelper.CandleDataSources).FirstOr();
-
-				return buildFrom != null && a.SupportedMarketDataTypes.Contains(buildFrom.Value);
+				return a.TryGetCandlesBuildFrom(mdMsg, CandleBuilderProvider) != null;
 			}).ToArray();
 
 			if (!isPended && adapters.Length == 0)
