@@ -2535,7 +2535,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsFinal">
       <summary>
-            Process only formed candles.
+            Send only formed candles.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IsCalcVolumeProfile">
@@ -2800,6 +2800,16 @@
     <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Indicator">
       <summary>
             The indicator parameters.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.IsFinal">
+      <summary>
+            Send only final values.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.IsFormed">
+      <summary>
+            Send values only when the indicator is formed.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.#ctor">
@@ -3119,6 +3129,11 @@
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IsMarket">
       <summary>
             Market order type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ZeroAsMarket">
+      <summary>
+            Zero price makes market order.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ClientCode">

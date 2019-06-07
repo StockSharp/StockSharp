@@ -743,6 +743,8 @@ P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.TypeId/summary;DocStr
 P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.IconName/summary;DocStr9214
 P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Type/summary;IndicatorType
 P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Indicator/summary;DocStr8050
+P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.IsFinal/summary;SendOnlyFinal
+P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.IsFormed/summary;SendOnlyFormedIndicators
 M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.OnReseted/summary;DocStr7896
 M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.OnStart/summary;DocStr7892
@@ -812,6 +814,7 @@ P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.TypeId/summary;Do
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IconName/summary;DocStr9214
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Direction/summary;Str128
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IsMarket/summary;XamlStr623
+P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ZeroAsMarket/summary;ZeroAsMarket
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ClientCode/summary;ClientCodeDesc
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.BrokerCode/summary;Str2619
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ShrinkPrice/summary;DocStr10091

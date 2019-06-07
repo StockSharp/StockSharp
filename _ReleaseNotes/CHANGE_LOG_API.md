@@ -118,6 +118,10 @@ StockSharp API Change log
 * (feature) IMarketDataDrive. GetAvailableDataTypes returns all types for all securities.
 * (feature) HistoryMessageAdapter. SupportedMarketDataTypes overload uses storage data types.
 * (bug) Connector. Fix order's fail processing.
+* (feature) Diagram. IndicatorDiagramElement. IsFinal and IsFormed params added.
+* (feature) Diagram. OrderRegisterDiagramElement. ZeroAsMarket param added.
+* (feature) Diagram. Converter show DateTimeOffset properties.
+* (feature) Diagram. Position, Strategy, StrategyTrades Strategy socket added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
