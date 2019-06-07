@@ -226,6 +226,12 @@ namespace StockSharp.Algo.Testing
 		public override bool IsFullCandlesOnly => false;
 
 		/// <inheritdoc />
+		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
+		{
+			return this.GetCandleArgs<TimeSpan>(typeof(TimeFrameCandleMessage), securityId);
+		}
+
+		/// <inheritdoc />
 		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId))
 		{
 			var drive = DriveInternal;

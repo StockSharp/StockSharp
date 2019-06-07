@@ -563,6 +563,22 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Get possible args for the specified candle type and instrument.
+		/// </summary>
+		/// <typeparam name="TArg">Type of <see cref="CandleMessage.Arg"/>.</typeparam>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="candleType">The type of the message <see cref="CandleMessage"/>.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Possible args.</returns>
+		public static IEnumerable<TArg> GetCandleArgs<TArg>(this IMessageAdapter adapter, Type candleType, SecurityId securityId = default(SecurityId))
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.GetCandleArgs(candleType, securityId).Cast<TArg>();
+		}
+
+		/// <summary>
 		/// Determines whether the specified market-data type is supported by the adapter.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
