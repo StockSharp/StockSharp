@@ -496,7 +496,7 @@ namespace StockSharp.Algo.Candles
 		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="arg">Candle arg.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<Trade> trades, object arg, bool onlyFormed = true)
 			where TCandle : Candle
@@ -514,7 +514,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="series">Candles series.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<Candle> ToCandles(this IEnumerable<Trade> trades, CandleSeries series, bool onlyFormed = true)
 		{
@@ -529,7 +529,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="series">Candles series.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> trades, CandleSeries series, bool onlyFormed = true, CandleBuilderProvider candleBuilderProvider = null)
@@ -542,7 +542,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="executions">Tick data.</param>
 		/// <param name="mdMsg">Market data subscription.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> executions, MarketDataMessage mdMsg, bool onlyFormed = true, CandleBuilderProvider candleBuilderProvider = null)
@@ -556,7 +556,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="depths">Market depths.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="type">Type of candle depth based data.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<Candle> ToCandles(this IEnumerable<MarketDepth> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true, CandleBuilderProvider candleBuilderProvider = null)
@@ -573,7 +573,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="depths">Market depths.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="type">Type of candle depth based data.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true, CandleBuilderProvider candleBuilderProvider = null)
@@ -587,7 +587,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="depths">Market depths.</param>
 		/// <param name="mdMsg">Market data subscription.</param>
 		/// <param name="type">Type of candle depth based data.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, MarketDataMessage mdMsg, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true, CandleBuilderProvider candleBuilderProvider = null)

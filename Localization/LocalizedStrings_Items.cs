@@ -28918,12 +28918,12 @@ namespace StockSharp.Localization
 		public static string OnlyFormed => GetString(OnlyFormedKey);
 
 		/// <summary>
-		/// Process only formed candles.
+		/// Send only formed candles.
 		/// </summary>
 		public const string ProcessOnlyFormedKey = nameof(ProcessOnlyFormed);
 
 		/// <summary>
-		/// Process only formed candles.
+		/// Send only formed candles.
 		/// </summary>
 		public static string ProcessOnlyFormed => GetString(ProcessOnlyFormedKey);
 
@@ -49586,5 +49586,45 @@ namespace StockSharp.Localization
 		/// Zero price makes market order.
 		/// </summary>
 		public static string ZeroAsMarket => GetString(ZeroAsMarketKey);
+
+		/// <summary>
+		/// Send values only when the indicator is formed.
+		/// </summary>
+		public const string SendOnlyFormedIndicatorsKey = nameof(SendOnlyFormedIndicators);
+
+		/// <summary>
+		/// Send values only when the indicator is formed.
+		/// </summary>
+		public static string SendOnlyFormedIndicators => GetString(SendOnlyFormedIndicatorsKey);
+
+		/// <summary>
+		/// Final
+		/// </summary>
+		public const string FinalKey = nameof(Final);
+
+		/// <summary>
+		/// Final
+		/// </summary>
+		public static string Final => GetString(FinalKey);
+
+		/// <summary>
+		/// Formed
+		/// </summary>
+		public const string FormedKey = nameof(Formed);
+
+		/// <summary>
+		/// Formed
+		/// </summary>
+		public static string Formed => GetString(FormedKey);
+
+		/// <summary>
+		/// Send only final values.
+		/// </summary>
+		public const string SendOnlyFinalKey = nameof(SendOnlyFinal);
+
+		/// <summary>
+		/// Send only final values.
+		/// </summary>
+		public static string SendOnlyFinal => GetString(SendOnlyFinalKey);
 	}
 }
