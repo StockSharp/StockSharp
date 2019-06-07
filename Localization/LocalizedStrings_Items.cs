@@ -49566,5 +49566,25 @@ namespace StockSharp.Localization
 		/// Order {0} has state {1}.
 		/// </summary>
 		public static string OrderHasState => GetString(OrderHasStateKey);
+
+		/// <summary>
+		/// Zero price
+		/// </summary>
+		public const string ZeroPriceKey = nameof(ZeroPrice);
+
+		/// <summary>
+		/// Zero price
+		/// </summary>
+		public static string ZeroPrice => GetString(ZeroPriceKey);
+
+		/// <summary>
+		/// Zero price makes market order.
+		/// </summary>
+		public const string ZeroAsMarketKey = nameof(ZeroAsMarket);
+
+		/// <summary>
+		/// Zero price makes market order.
+		/// </summary>
+		public static string ZeroAsMarket => GetString(ZeroAsMarketKey);
 	}
 }
