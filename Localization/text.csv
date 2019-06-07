@@ -4987,6 +4987,8 @@ TakeIs;Take {0};Тейк {0}
 StopIs;Stop {0};Стоп {0}
 IdentifiersAreSame;Identifiers '{0}' and '{1}' are the same.;Идентификаторы '{0}' и '{1}' одинаковые.
 SecIdDataTypeAlreadyAdapter;For security {0} and type {1} adapter is already specified.;Для инструмента {0} и типа данных {1} уже указан адаптер.
+OrderHasBalance;Order {0} has balance {1}.;Заявка {0} имеет баланс {1}.
+OrderHasState;Order {0} has state {1}.;Заявка {0} имеет состояние {1}.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

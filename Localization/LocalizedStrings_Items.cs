@@ -49546,5 +49546,25 @@ namespace StockSharp.Localization
 		/// For security {0} and type {1} adapter is already specified.
 		/// </summary>
 		public static string SecIdDataTypeAlreadyAdapter => GetString(SecIdDataTypeAlreadyAdapterKey);
+
+		/// <summary>
+		/// Order {0} has balance {1}.
+		/// </summary>
+		public const string OrderHasBalanceKey = nameof(OrderHasBalance);
+
+		/// <summary>
+		/// Order {0} has balance {1}.
+		/// </summary>
+		public static string OrderHasBalance => GetString(OrderHasBalanceKey);
+
+		/// <summary>
+		/// Order {0} has state {1}.
+		/// </summary>
+		public const string OrderHasStateKey = nameof(OrderHasState);
+
+		/// <summary>
+		/// Order {0} has state {1}.
+		/// </summary>
+		public static string OrderHasState => GetString(OrderHasStateKey);
 	}
 }

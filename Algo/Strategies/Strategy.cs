@@ -1410,7 +1410,7 @@ namespace StockSharp.Algo.Strategies
 
 					if (order.State != OrderStates.Done)
 					{
-						this.AddWarningLog("Order {0} has state {1}. Rule cannot be stopped.", order.GetTraceId(), order.State);
+						this.AddWarningLog(LocalizedStrings.OrderHasState, order.GetTraceId(), order.State);
 						return false;
 					}
 
@@ -1426,16 +1426,19 @@ namespace StockSharp.Algo.Strategies
 
 					if (info == null)
 					{
-						this.AddWarningLog("Order {0} info not found.", order.GetTraceId(), order.State);
+						this.AddWarningLog(LocalizedStrings.Str1156Params, order.GetTraceId());
 						return false;
 					}
 
 					var leftVolume = order.Volume - info.ReceivedVolume;
 
 					if (leftVolume != 0)
-						this.AddDebugLog("Order {0} has left trade volume {1}.", order.GetTraceId(), leftVolume);
+					{					
+						this.AddDebugLog(LocalizedStrings.OrderHasBalance, order.GetTraceId(), leftVolume);
+						return false;
+					}
 
-					return leftVolume == 0;
+					return true;
 				})
 				.Apply(this);
 
