@@ -117,6 +117,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter. GetCandleArgs added.
 * (feature) IMarketDataDrive. GetAvailableDataTypes returns all types for all securities.
 * (feature) HistoryMessageAdapter. SupportedMarketDataTypes overload uses storage data types.
+* (bug) Connector. Fix order's fail processing.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
