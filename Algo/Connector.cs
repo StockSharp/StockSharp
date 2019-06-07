@@ -953,7 +953,12 @@ namespace StockSharp.Algo
 			}
 			catch (Exception ex)
 			{
-				SendOrderFailed(order, ex, order.TransactionId);
+				var transactionId = order.TransactionId;
+
+				if (transactionId == 0 || order.State != OrderStates.None)
+					transactionId = TransactionIdGenerator.GetNextId();
+
+				SendOrderFailed(order, false, ex, transactionId);
 			}
 		}
 
@@ -1016,8 +1021,13 @@ namespace StockSharp.Algo
 			}
 			catch (Exception ex)
 			{
-				SendOrderFailed(oldOrder, ex, newOrder.TransactionId);
-				SendOrderFailed(newOrder, ex, newOrder.TransactionId);
+				var transactionId = newOrder.TransactionId;
+
+				if (transactionId == 0 || newOrder.State != OrderStates.None)
+					transactionId = TransactionIdGenerator.GetNextId();
+
+				SendOrderFailed(oldOrder, true, ex, transactionId);
+				SendOrderFailed(newOrder, false, ex, transactionId);
 			}
 		}
 
@@ -1083,11 +1093,16 @@ namespace StockSharp.Algo
 			}
 			catch (Exception ex)
 			{
-				SendOrderFailed(oldOrder1, ex, newOrder1.TransactionId);
-				SendOrderFailed(newOrder1, ex, newOrder1.TransactionId);
+				var transactionId = newOrder1.TransactionId;
 
-				SendOrderFailed(oldOrder2, ex, newOrder2.TransactionId);
-				SendOrderFailed(newOrder2, ex, newOrder2.TransactionId);
+				if (transactionId == 0)
+					transactionId = TransactionIdGenerator.GetNextId();
+
+				SendOrderFailed(oldOrder1, true, ex, transactionId);
+				SendOrderFailed(newOrder1, false, ex, transactionId);
+
+				SendOrderFailed(oldOrder2, true, ex, transactionId);
+				SendOrderFailed(newOrder2, false, ex, transactionId);
 			}
 		}
 
@@ -1112,18 +1127,21 @@ namespace StockSharp.Algo
 			}
 			catch (Exception ex)
 			{
-				SendOrderFailed(order, ex, transactionId);
+				if (transactionId == 0)
+					transactionId = TransactionIdGenerator.GetNextId();
+
+				SendOrderFailed(order, true, ex, transactionId);
 			}
 		}
 
-		private void SendOrderFailed(Order order, Exception error, long originalTransactionId)
+		private void SendOrderFailed(Order order, bool isCancel, Exception error, long originalTransactionId)
 		{
-			SendOutMessage(new OrderFail
-			{
-				Order = order,
-				Error = error,
-				ServerTime = CurrentTime,
-			}.ToMessage(originalTransactionId));
+			var fail = EntityFactory.CreateOrderFail(order, error);
+			fail.ServerTime = CurrentTime;
+
+			_entityCache.AddOrderFailById(fail, isCancel, originalTransactionId);
+
+			SendOutMessage(fail.ToMessage(originalTransactionId));
 		}
 
 		private static void CheckOnNew(Order order, bool checkVolume = true, bool checkTransactionId = true)

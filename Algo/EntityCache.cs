@@ -185,6 +185,7 @@ namespace StockSharp.Algo
 		}
 
 		private readonly SynchronizedDictionary<Tuple<long, bool>, Order> _allOrdersByTransactionId = new SynchronizedDictionary<Tuple<long, bool>, Order>();
+		private readonly SynchronizedDictionary<Tuple<long, bool>, OrderFail> _allOrdersByFailedId = new SynchronizedDictionary<Tuple<long, bool>, OrderFail>();
 		private readonly SynchronizedDictionary<long, Order> _allOrdersById = new SynchronizedDictionary<long, Order>();
 		private readonly SynchronizedDictionary<string, Order> _allOrdersByStringId = new SynchronizedDictionary<string, Order>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -321,6 +322,7 @@ namespace StockSharp.Algo
 			_allOrdersById.Clear();
 			_allOrdersByStringId.Clear();
 			_allOrdersByTransactionId.Clear();
+			_allOrdersByFailedId.Clear();
 			_orders.Clear();
 
 			_newsById.Clear();
@@ -377,6 +379,11 @@ namespace StockSharp.Algo
 		{
 			AddOrder(order);
 			AddOrderByTransactionId(order, order.TransactionId, false);
+		}
+
+		public void AddOrderFailById(OrderFail fail, bool isCancel, long transactionId)
+		{
+			_allOrdersByFailedId.TryAdd(Tuple.Create(transactionId, isCancel), fail);
 		}
 
 		private void AddOrderByTransactionId(Order order, long transactionId, bool isCancel)
@@ -617,7 +624,40 @@ namespace StockSharp.Algo
 			}
 
 			if (orders.Count == 0)
-				return Enumerable.Empty<Tuple<OrderFail, bool>>();
+			{
+				var fails = new List<Tuple<OrderFail, bool>>();
+
+				lock (_allOrdersByFailedId.SyncRoot)
+				{
+					var cancelFail = _allOrdersByFailedId.TryGetAndRemove(Tuple.Create(message.OriginalTransactionId, true));
+
+					if (cancelFail != null)
+						fails.Add(Tuple.Create(cancelFail, true));
+				}
+
+				Order regOrder = null;
+
+				lock (_allOrdersByFailedId.SyncRoot)
+				{
+					var regFail = _allOrdersByFailedId.TryGetAndRemove(Tuple.Create(message.OriginalTransactionId, false));
+
+					if (regFail != null)
+					{
+						regOrder = regFail.Order;
+						fails.Add(Tuple.Create(regFail, false));
+					}
+				}
+
+				if (regOrder != null && regOrder.State == OrderStates.None)
+				{
+					regOrder.State = OrderStates.Failed;
+
+					regOrder.LastChangeTime = message.ServerTime;
+					regOrder.LocalTime = message.LocalTime;
+				}
+				
+				return fails;
+			}
 
 			return orders.Select(t =>
 			{
