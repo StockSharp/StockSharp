@@ -30,14 +30,20 @@ namespace StockSharp.Community
 	public class CommunityAuthorization : IAuthorization
 	{
 		private readonly Products _product;
+		private readonly Version _version;
+		private readonly IAuthenticationClient _client;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CommunityAuthorization"/>.
 		/// </summary>
 		/// <param name="product">Product.</param>
-		public CommunityAuthorization(Products product)
+		/// <param name="version">Version.</param>
+		/// <param name="client">The client for access to the StockSharp authentication service.</param>
+		public CommunityAuthorization(Products product, Version version, IAuthenticationClient client)
 		{
 			_product = product;
+			_version = version ?? throw new ArgumentNullException(nameof(version));
+			_client = client ?? throw new ArgumentNullException(nameof(client));
 		}
 
 		/// <summary>
@@ -51,7 +57,7 @@ namespace StockSharp.Community
 		{
 			try
 			{
-				AuthenticationClient.Instance.Login(_product, login, password);
+				_client.Login(_product, _version, login, password);
 				return Guid.NewGuid();
 			}
 			catch (Exception ex)

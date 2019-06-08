@@ -4,6 +4,7 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Community;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
@@ -114,5 +115,25 @@ namespace StockSharp.Algo
 		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
 		/// </summary>
 		public static IExtendedInfoStorage TryExtendedInfoStorage => ConfigManager.TryGetService<IExtendedInfoStorage>();
+
+		/// <summary>
+		/// The client for access to the service of work with files and documents.
+		/// </summary>
+		public static IFileClient FileClient => ConfigManager.GetService<FileClient>();
+
+		/// <summary>
+		/// The client for access to the registration service.
+		/// </summary>
+		public static IProfileClient ProfileClient => ConfigManager.GetService<IProfileClient>();
+
+		/// <summary>
+		/// The client for access to <see cref="IStrategyService"/>.
+		/// </summary>
+		public static IStrategyClient StrategyClient => ConfigManager.GetService<IStrategyClient>();
+
+		/// <summary>
+		/// The client for access to the StockSharp authentication service.
+		/// </summary>
+		public static IAuthenticationClient AuthenticationClient => ConfigManager.GetService<IAuthenticationClient>();
 	}
 }

@@ -30,7 +30,7 @@ namespace StockSharp.Community
 	/// The client for access to <see cref="IStrategyService"/>.
 	/// </summary>
 	[CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
-	public class StrategyClient : BaseCommunityClient<IStrategyService>
+	public class StrategyClient : BaseCommunityClient<IStrategyService>, IStrategyClient
 	{
 		private Timer _refreshTimer;
 
@@ -58,9 +58,7 @@ namespace StockSharp.Community
 		{
 		}
 
-		/// <summary>
-		/// All strategies.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<StrategyData> Strategies
 		{
 			get
@@ -70,9 +68,7 @@ namespace StockSharp.Community
 			}
 		}
 
-		/// <summary>
-		/// Strategy subscriptions signed by <see cref="Subscribe"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<StrategySubscription> Subscriptions
 		{
 			get
@@ -82,9 +78,7 @@ namespace StockSharp.Community
 			}
 		}
 
-		/// <summary>
-		/// All strategy backtests.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<StrategyBacktest> StrategyBacktests
 		{
 			get
@@ -94,39 +88,25 @@ namespace StockSharp.Community
 			}
 		}
 
-		/// <summary>
-		/// A new strategy was created in the store.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<StrategyData> StrategyCreated;
 
-		/// <summary>
-		/// Existing strategy was updated in the store.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<StrategyData> StrategyUpdated;
 
-		/// <summary>
-		/// Existing strategy was deleted from the store.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<StrategyData> StrategyDeleted;
 
-		/// <summary>
-		/// Strategy was subscribed.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<StrategySubscription> StrategySubscribed;
 
-		/// <summary>
-		/// Strategy was unsubscribed.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<StrategySubscription> StrategyUnSubscribed;
 
-		/// <summary>
-		/// Backtesting process has changed.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<StrategyBacktest, int> BacktestProgressChanged;
 
-		/// <summary>
-		/// Backtesting process has stopped.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<StrategyBacktest> BacktestStopped;
 
 		private readonly SyncObject _syncObject = new SyncObject();
@@ -277,10 +257,7 @@ namespace StockSharp.Community
 			destination.ContentType = source.ContentType;
 		}
 
-		/// <summary>
-		/// To add the strategy to the store.
-		/// </summary>
-		/// <param name="strategy">The strategy data.</param>
+		/// <inheritdoc />
 		public void CreateStrategy(StrategyData strategy)
 		{
 			var id = Invoke(f => f.CreateStrategy(SessionId, IsEnglish, strategy));
@@ -294,20 +271,14 @@ namespace StockSharp.Community
 			StrategyCreated?.Invoke(strategy);
 		}
 
-		/// <summary>
-		/// To update the strategy in the store.
-		/// </summary>
-		/// <param name="strategy">The strategy data.</param>
+		/// <inheritdoc />
 		public void UpdateStrategy(StrategyData strategy)
 		{
 			ValidateError(Invoke(f => f.UpdateStrategy(SessionId, strategy)), strategy.Id);
 			StrategyUpdated?.Invoke(strategy);
 		}
 
-		/// <summary>
-		/// To remove the strategy from the store.
-		/// </summary>
-		/// <param name="strategy">The strategy data.</param>
+		/// <inheritdoc />
 		public void DeleteStrategy(StrategyData strategy)
 		{
 			if (strategy == null)
@@ -319,28 +290,7 @@ namespace StockSharp.Community
 			StrategyDeleted?.Invoke(strategy);
 		}
 
-		///// <summary>
-		///// To get the source or executable codes.
-		///// </summary>
-		///// <param name="strategy">The strategy data.</param>
-		//public void Download(StrategyData strategy)
-		//{
-		//	if (strategy == null)
-		//		throw new ArgumentNullException(nameof(strategy));
-
-		//	var content = Invoke(f => f.GetContent(SessionId, strategy.Id));
-
-		//	strategy.Revision = content.Revision;
-		//	strategy.Content = content.Content;
-		//	strategy.ContentName = content.ContentName;
-		//}
-
-		/// <summary>
-		/// To subscribe for the strategy.
-		/// </summary>
-		/// <param name="isAutoRenew">Is auto renewable subscription.</param>
-		/// <param name="strategy">The strategy data.</param>
-		/// <returns>The strategy subscription.</returns>
+		/// <inheritdoc />
 		public StrategySubscription Subscribe(StrategyData strategy, bool isAutoRenew)
 		{
 			if (strategy == null)
@@ -368,10 +318,7 @@ namespace StockSharp.Community
 			return subscription;
 		}
 
-		/// <summary>
-		/// To unsubscribe from the strategy.
-		/// </summary>
-		/// <param name="subscription">The strategy subscription.</param>
+		/// <inheritdoc />
 		public void UnSubscribe(StrategySubscription subscription)
 		{
 			if (subscription == null)
@@ -383,20 +330,13 @@ namespace StockSharp.Community
 			_subscriptions.Remove(subscription.Id);
 		}
 
-		/// <summary>
-		/// To get an approximate of money to spend for the specified backtesting configuration.
-		/// </summary>
-		/// <param name="backtest">Backtesting session.</param>
-		/// <returns>An approximate of money.</returns>
+		/// <inheritdoc />
 		public decimal GetApproximateAmount(StrategyBacktest backtest)
 		{
 			return Invoke(f => f.GetApproximateAmount(SessionId, backtest));
 		}
 
-		/// <summary>
-		/// To start backtesing.
-		/// </summary>
-		/// <param name="backtest">Backtesting session.</param>
+		/// <inheritdoc />
 		public void StartBacktest(StrategyBacktest backtest)
 		{
 			backtest.Id = Invoke(f => f.StartBacktest(SessionId, backtest));
@@ -404,20 +344,13 @@ namespace StockSharp.Community
 			_startedBacktests.Add(backtest, 0);
 		}
 
-		/// <summary>
-		/// To stop the backtesing.
-		/// </summary>
-		/// <param name="backtest">Backtesting session.</param>
+		/// <inheritdoc />
 		public void StopBacktest(StrategyBacktest backtest)
 		{
 			ValidateError(Invoke(f => f.StopBacktest(SessionId, backtest.Id)));
 		}
 
-		/// <summary>
-		/// Get strategy info.
-		/// </summary>
-		/// <param name="id">Identifier.</param>
-		/// <returns>The strategy data.</returns>
+		/// <inheritdoc />
 		public StrategyData GetDescription(long id)
 		{
 			return Invoke(f => f.GetDescription(new[] { id }))?.FirstOrDefault();
@@ -428,9 +361,7 @@ namespace StockSharp.Community
 			((ErrorCodes)errorCode).ThrowIfError(args);
 		}
 
-		/// <summary>
-		/// Release resources.
-		/// </summary>
+		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
 			lock (_syncObject)

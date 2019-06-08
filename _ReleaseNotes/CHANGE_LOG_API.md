@@ -122,6 +122,7 @@ StockSharp API Change log
 * (feature) Diagram. OrderRegisterDiagramElement. ZeroAsMarket param added.
 * (feature) Diagram. Converter show DateTimeOffset properties.
 * (feature) Diagram. Position, Strategy, StrategyTrades Strategy socket added.
+* (feature) IProfileClient, IAuthenticationClient, IFileClient, IStrategyClient interfaces created.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
