@@ -36,7 +36,6 @@ namespace StockSharp.Configuration
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
-	using StockSharp.Xaml.Charting.IndicatorPainters;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.AlfaDirect;
@@ -313,7 +312,8 @@ namespace StockSharp.Configuration
 							"StockSharp.Xaml.Charting",
 							"StockSharp.Xaml.Diagram",
 							"StockSharp.Studio.Core",
-							"StockSharp.Studio.Controls"
+							"StockSharp.Studio.Controls",
+							"StockSharp.QuikLua",
 						};
 
 						var adapters = new List<Type>();
@@ -435,7 +435,7 @@ namespace StockSharp.Configuration
 
 				var rendererTypes = typeof(Chart).Assembly
 					.GetTypes()
-					.Where(t => !t.IsAbstract && typeof(BaseChartIndicatorPainter).IsAssignableFrom(t) && t.GetAttribute<IndicatorAttribute>() != null)
+					.Where(t => !t.IsAbstract && typeof(IChartIndicatorPainter).IsAssignableFrom(t) && t.GetAttribute<IndicatorAttribute>() != null)
 					.ToDictionary(t => t.GetAttribute<IndicatorAttribute>().Type);
 
 				_indicatorTypes = typeof(IIndicator).Assembly
