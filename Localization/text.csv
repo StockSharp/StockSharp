@@ -1474,7 +1474,6 @@ Str1518;Move higher;Переместить выше
 Str1519;Save;Сохранить
 Str1520;Reset settings;Сбросить настройки
 Str1521;< Choose >;< Выберите >
-Str1522Params;Security with code {0} not found;Инструмент с кодом {0} не найден
 Str1523Params;Error in index '{0}' format.;Ошибка в формате индекса '{0}'.
 Str1524;Options have different underlying assets.;Опционы имеют разные базовые активы.
 Str1525;Pair options;Пара опционов
@@ -4995,6 +4994,8 @@ SendOnlyFormedIndicators;Send values only when the indicator is formed.;Выда
 Final;Final;Финальные
 Formed;Formed;Сформирован
 SendOnlyFinal;Send only final values.;Отправлять только финальные значения.
+NonFormed;Non formed;Не сформированные
+ShowNonFormedIndicators;Show non formed indicators values.;Показывать значения не сформированного индикатора.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

@@ -14738,16 +14738,6 @@ namespace StockSharp.Localization
 		public static string Str1521 => GetString(Str1521Key);
 
 		/// <summary>
-		/// Security with code {0} not found
-		/// </summary>
-		public const string Str1522ParamsKey = nameof(Str1522Params);
-
-		/// <summary>
-		/// Security with code {0} not found
-		/// </summary>
-		public static string Str1522Params => GetString(Str1522ParamsKey);
-
-		/// <summary>
 		/// Error in index '{0}' format.
 		/// </summary>
 		public const string Str1523ParamsKey = nameof(Str1523Params);
@@ -49626,5 +49616,25 @@ namespace StockSharp.Localization
 		/// Send only final values.
 		/// </summary>
 		public static string SendOnlyFinal => GetString(SendOnlyFinalKey);
+
+		/// <summary>
+		/// Show non formed indicators values.
+		/// </summary>
+		public const string ShowNonFormedIndicatorsKey = nameof(ShowNonFormedIndicators);
+
+		/// <summary>
+		/// Show non formed indicators values.
+		/// </summary>
+		public static string ShowNonFormedIndicators => GetString(ShowNonFormedIndicatorsKey);
+
+		/// <summary>
+		/// Non formed
+		/// </summary>
+		public const string NonFormedKey = nameof(NonFormed);
+
+		/// <summary>
+		/// Non formed
+		/// </summary>
+		public static string NonFormed => GetString(NonFormedKey);
 	}
 }
