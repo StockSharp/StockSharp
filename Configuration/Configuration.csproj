@@ -78,7 +78,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IndicatorElement.cs" />
     <Compile Include="IndicatorElementCollection.cs" />
-    <Compile Include="InMemoryConfigurationMessageAdapterProvider.cs" />
+    <Compile Include="InMemoryMessageAdapterProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>

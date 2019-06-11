@@ -8,8 +8,13 @@ namespace StockSharp.Messages
 	public interface IMessageAdapterProvider
 	{
 		/// <summary>
-		/// All available adapters.
+		/// All currently available adapters.
 		/// </summary>
-		IEnumerable<IMessageAdapter> Adapters { get; }
+		IEnumerable<IMessageAdapter> CurrentAdapters { get; }
+
+		/// <summary>
+		/// All possible available adapters.
+		/// </summary>
+		IEnumerable<IMessageAdapter> PossibleAdapters { get; }
 	}
 }
