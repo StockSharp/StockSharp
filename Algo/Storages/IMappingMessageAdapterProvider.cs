@@ -1,4 +1,4 @@
-namespace StockSharp.Messages
+namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
@@ -12,26 +12,32 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// All available adapters.
 		/// </summary>
-		IEnumerable<KeyValuePair<TKey, IMessageAdapter>> Adapters { get; }
+		IEnumerable<KeyValuePair<TKey, Guid>> Adapters { get; }
+
+		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		void Init();
 
 		/// <summary>
 		/// Association changed.
 		/// </summary>
-		event Action Changed;
+		event Action<TKey, Guid, bool> Changed;
 
 		/// <summary>
 		/// Get adapter by the specified key.
 		/// </summary>
 		/// <param name="key">Key.</param>
-		/// <returns>The found adapter or <see langword="null"/>.</returns>
-		IMessageAdapter TryGetAdapter(TKey key);
+		/// <returns>Found adapter identifier or <see langword="null"/>.</returns>
+		Guid? TryGetAdapter(TKey key);
 
 		/// <summary>
 		/// Make association with adapter.
 		/// </summary>
 		/// <param name="key">Key.</param>
-		/// <param name="adapter">The adapter.</param>
-		void SetAdapter(TKey key, IMessageAdapter adapter);
+		/// <param name="adapterId">Adapter identifier.</param>
+		/// <returns><see langword="true"/> if the association is successfully changed, otherwise, <see langword="false"/>.</returns>
+		bool SetAdapter(TKey key, Guid adapterId);
 
 		/// <summary>
 		/// Remove association with adapter.

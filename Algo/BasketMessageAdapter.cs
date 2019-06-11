@@ -132,6 +132,9 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>> _newsSubscriptions = new SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>>();
 		private readonly SynchronizedDictionary<Tuple<MessageTypes, long>, HashSet<IMessageAdapter>> _lookups = new SynchronizedDictionary<Tuple<MessageTypes, long>, HashSet<IMessageAdapter>>();
 
+		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter> _securityAdapters = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter>();
+
 		/// <summary>
 		/// Adapters with which the aggregator operates.
 		/// </summary>
@@ -216,6 +219,9 @@ namespace StockSharp.Algo
 			CommissionManager = new CommissionManager();
 			//PnLManager = new PnLManager();
 			SlippageManager = new SlippageManager();
+
+			SecurityAdapterProvider.Changed += SecurityAdapterProviderOnChanged;
+			PortfolioAdapterProvider.Changed += PortfolioAdapterProviderOnChanged;
 		}
 
 		/// <summary>
@@ -630,7 +636,7 @@ namespace StockSharp.Algo
 			var adapter = GetUnderlyingAdapter(message.Adapter);
 
 			if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType != MarketDataTypes.News)
-				adapter = SecurityAdapterProvider.TryGetAdapter(mdMsg.SecurityId, mdMsg.DataType);
+				adapter = _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)mdMsg.DataType)) ?? _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)null));
 
 			if (adapter != null)
 			{
@@ -860,7 +866,7 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioMessage(string portfolioName, Message message)
 		{
-			var adapter = portfolioName.IsEmpty() ? null : PortfolioAdapterProvider.TryGetAdapter(portfolioName);
+			var adapter = portfolioName.IsEmpty() ? null : _portfolioAdapters.TryGetValue(portfolioName);
 
 			if (adapter == null)
 			{
@@ -907,12 +913,12 @@ namespace StockSharp.Algo
 
 					case MessageTypes.Portfolio:
 						var pfMsg = (PortfolioMessage)message;
-						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
+						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
 						break;
 
 					case MessageTypes.PortfolioChange:
 						var pfChangeMsg = (PortfolioChangeMessage)message;
-						PortfolioAdapterProvider.SetAdapter(pfChangeMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
+						PortfolioAdapterProvider.SetAdapter(pfChangeMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
 						break;
 
 					//case MessageTypes.Position:
@@ -922,12 +928,12 @@ namespace StockSharp.Algo
 
 					case MessageTypes.PositionChange:
 						var posChangeMsg = (PositionChangeMessage)message;
-						PortfolioAdapterProvider.SetAdapter(posChangeMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
+						PortfolioAdapterProvider.SetAdapter(posChangeMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
 						break;
 
 					case MessageTypes.Security:
 						var secMsg = (SecurityMessage)message;
-						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, null, GetUnderlyingAdapter(innerAdapter));
+						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, null, GetUnderlyingAdapter(innerAdapter).Id);
 						break;
 
 					case MessageTypes.SecurityLookupResult:
@@ -1179,6 +1185,36 @@ namespace StockSharp.Algo
 			});
 		}
 
+		private void SecurityAdapterProviderOnChanged(Tuple<SecurityId, MarketDataTypes?> key, Guid adapterId, bool changeType)
+		{
+			if (changeType)
+			{
+				var adapter = InnerAdapters.SyncGet(c => c.FindById(adapterId));
+
+				if (adapter == null)
+					_securityAdapters.Remove(key);
+				else
+					_securityAdapters[key] = adapter;
+			}
+			else
+				_securityAdapters.Remove(key);
+		}
+
+		private void PortfolioAdapterProviderOnChanged(string key, Guid adapterId, bool changeType)
+		{
+			if (changeType)
+			{
+				var adapter = InnerAdapters.SyncGet(c => c.FindById(adapterId));
+
+				if (adapter == null)
+					_portfolioAdapters.Remove(key);
+				else
+					_portfolioAdapters[key] = adapter;
+			}
+			else
+				_portfolioAdapters.Remove(key);
+		}
+
 		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
@@ -1194,28 +1230,6 @@ namespace StockSharp.Algo
 
 					return s;
 				}).ToArray());
-
-				var pfPairs = PortfolioAdapterProvider
-					.Adapters
-					.Where(p => InnerAdapters.Contains(p.Value))
-					.Select(p => RefTuple.Create(p.Key, p.Value.Id))
-					.ToArray();
-
-				storage.SetValue(nameof(PortfolioAdapterProvider), pfPairs);
-
-				var secPairs = SecurityAdapterProvider
-		            .Adapters
-		            .Where(p => InnerAdapters.Contains(p.Value))
-		            .Select(p =>
-					{
-						var s = new SettingsStorage();
-						s.SetValue(nameof(SecurityId), p.Key.Item1.Save());
-						s.SetValue(nameof(DataType), p.Key.Item2);
-						return RefTuple.Create(s, p.Value.Id);
-					})
-		            .ToArray();
-
-				storage.SetValue(nameof(SecurityAdapterProvider), secPairs);
 			}
 
 			if (LatencyManager != null)
@@ -1258,30 +1272,24 @@ namespace StockSharp.Algo
 					}
 				}
 
-				if (storage.ContainsKey("AdapterProvider") || storage.ContainsKey(nameof(PortfolioAdapterProvider)))
-				{
-					var mapping = storage.GetValue<RefPair<string, Guid>[]>(nameof(PortfolioAdapterProvider))
-					              ?? storage.GetValue<RefPair<string, Guid>[]>("AdapterProvider");
+				_securityAdapters.Clear();
 
-					foreach (var tuple in mapping)
-					{
-						if (adapters.TryGetValue(tuple.Second, out var adapter))
-							PortfolioAdapterProvider.SetAdapter(tuple.First, adapter);
-					}
+				foreach (var pair in SecurityAdapterProvider.Adapters)
+				{
+					if (!adapters.TryGetValue(pair.Value, out var adapter))
+						continue;
+
+					_securityAdapters.Add(pair.Key, adapter);
 				}
 
-				if (storage.ContainsKey(nameof(SecurityAdapterProvider)))
-				{
-					var mapping = storage.GetValue<RefPair<SettingsStorage, Guid>[]>(nameof(SecurityAdapterProvider));
+				_portfolioAdapters.Clear();
 
-					foreach (var tuple in mapping)
-					{
-						if (adapters.TryGetValue(tuple.Second, out var adapter))
-						{
-							var s = tuple.First;
-							SecurityAdapterProvider.SetAdapter(s.GetValue<SettingsStorage>(nameof(SecurityId)).Load<SecurityId>(), s.GetValue<MarketDataTypes?>(nameof(DataType)), adapter);
-						}
-					}
+				foreach (var pair in PortfolioAdapterProvider.Adapters)
+				{
+					if (!adapters.TryGetValue(pair.Value, out var adapter))
+						continue;
+
+					_portfolioAdapters.Add(pair.Key, adapter);
 				}
 			}
 
@@ -1305,6 +1313,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected override void DisposeManaged()
 		{
+			SecurityAdapterProvider.Changed -= SecurityAdapterProviderOnChanged;
+			PortfolioAdapterProvider.Changed -= PortfolioAdapterProviderOnChanged;
+
 			_activeAdapters.Values.ForEach(a => a.Parent = null);
 
 			base.DisposeManaged();

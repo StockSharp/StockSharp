@@ -252,7 +252,8 @@ P:StockSharp.Xaml.ISecurityWindow.Security/summary;DocStr2831
 T:StockSharp.Xaml.SecurityMessageAdaptersWindow/summary;DocStr11143
 F:StockSharp.Xaml.SecurityMessageAdaptersWindow.RemoveCommand/summary;DocStr8269
 F:StockSharp.Xaml.SecurityMessageAdaptersWindow.AddCommand/summary;DocStr8270
-P:StockSharp.Xaml.SecurityMessageAdaptersWindow.Adapter/summary;DocStr8271
+P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityAdapterProvider/summary;DocStr11135
+P:StockSharp.Xaml.SecurityMessageAdaptersWindow.AdapterProvider/summary;DocStr9328
 F:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProviderProperty/summary;DocStr29
 P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProvider/summary;DocStr972
 M:StockSharp.Xaml.SecurityMessageAdaptersWindow.#ctor/summary;DocStr1
@@ -455,11 +456,11 @@ M:StockSharp.Xaml.ImportSettingsPanel.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.IndexEditor/summary;DocStr8204
 M:StockSharp.Xaml.IndexEditor.#ctor/summary;DocStr1
 P:StockSharp.Xaml.IndexEditor.Securities/summary;DocStr2513
+P:StockSharp.Xaml.IndexEditor.SecurityProvider/summary;DocStr972
 P:StockSharp.Xaml.IndexEditor.Formula/summary;DocStr1110
 P:StockSharp.Xaml.IndexEditor.Text/summary;Str217
 P:StockSharp.Xaml.IndexEditor.HasError/summary;DocStr8205
 P:StockSharp.Xaml.IndexEditor.HighligthFunctions/summary;DocStr8206
-P:StockSharp.Xaml.IndexEditor.HighligthFunctions/remarks;DocStr8207
 P:StockSharp.Xaml.IndexEditor.HighligthForeColor/summary;DocStr8208
 P:StockSharp.Xaml.IndexEditor.HighligthBackColor/summary;DocStr8209
 E:StockSharp.Xaml.IndexEditor.SecurityClicked/summary;DocStr8210
@@ -978,7 +979,8 @@ M:StockSharp.Xaml.OrderConditionalWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.OrderConditionalWindow.Portfolios/summary;DocStr8362
 P:StockSharp.Xaml.OrderConditionalWindow.SecurityProvider/summary;DocStr972
 P:StockSharp.Xaml.OrderConditionalWindow.MarketDataProvider/summary;DocStr973
-P:StockSharp.Xaml.OrderConditionalWindow.MessageAdapterProvider/summary;DocStr9328
+P:StockSharp.Xaml.OrderConditionalWindow.AdapterProvider/summary;DocStr9328
+P:StockSharp.Xaml.OrderConditionalWindow.PortfolioAdapterProvider/summary;DocStr11136
 P:StockSharp.Xaml.OrderConditionalWindow.Adapters/summary;DocStr9801
 P:StockSharp.Xaml.OrderConditionalWindow.Adapter/summary;DocStr8912
 P:StockSharp.Xaml.OrderConditionalWindow.Order/summary;Str504
@@ -988,7 +990,8 @@ M:StockSharp.Xaml.OrderWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.OrderWindow.Portfolios/summary;DocStr8362
 P:StockSharp.Xaml.OrderWindow.MarketDataProvider/summary;DocStr973
 P:StockSharp.Xaml.OrderWindow.SecurityProvider/summary;DocStr972
-P:StockSharp.Xaml.OrderWindow.PortfolioMessageAdapterProvider/summary;DocStr9328
+P:StockSharp.Xaml.OrderWindow.PortfolioAdapterProvider/summary;DocStr11136
+P:StockSharp.Xaml.OrderWindow.AdapterProvider/summary;DocStr9328
 P:StockSharp.Xaml.OrderWindow.Order/summary;Str504
 P:StockSharp.Xaml.OrderWindow.SecurityEnabled/summary;DocStr10546
 P:StockSharp.Xaml.OrderWindow.PortfolioEnabled/summary;DocStr10546
@@ -997,7 +1000,8 @@ M:StockSharp.Xaml.OrderWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PortfolioMessageAdaptersWindow/summary;DocStr8268
 F:StockSharp.Xaml.PortfolioMessageAdaptersWindow.RemoveCommand/summary;DocStr8269
 F:StockSharp.Xaml.PortfolioMessageAdaptersWindow.AddCommand/summary;DocStr8270
-P:StockSharp.Xaml.PortfolioMessageAdaptersWindow.Adapter/summary;DocStr8271
+P:StockSharp.Xaml.PortfolioMessageAdaptersWindow.PortfolioAdapterProvider/summary;DocStr11136
+P:StockSharp.Xaml.PortfolioMessageAdaptersWindow.AdapterProvider/summary;DocStr9328
 M:StockSharp.Xaml.PortfolioMessageAdaptersWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.PortfolioMessageAdaptersWindow.Portfolios/summary;DocStr8362
 M:StockSharp.Xaml.PortfolioMessageAdaptersWindow.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2

@@ -4744,18 +4744,48 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Get adapter by portfolio.
 		/// </summary>
-		/// <param name="provider">The message adapter's provider.</param>
+		/// <param name="portfolioProvider">The portfolio based message adapter's provider.</param>
+		/// <param name="adapterProvider">The message adapter's provider.</param>
 		/// <param name="portfolio">Portfolio.</param>
-		/// <returns>The found adapter or <see langword="null"/>.</returns>
-		public static IMessageAdapter TryGetAdapter(this IPortfolioMessageAdapterProvider provider, Portfolio portfolio)
+		/// <returns>Found adapter or <see langword="null"/>.</returns>
+		public static IMessageAdapter TryGetAdapter(this IPortfolioMessageAdapterProvider portfolioProvider, IMessageAdapterProvider adapterProvider, Portfolio portfolio)
 		{
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
+			if (portfolioProvider == null)
+				throw new ArgumentNullException(nameof(portfolioProvider));
+
+			if (adapterProvider == null)
+				throw new ArgumentNullException(nameof(adapterProvider));
 
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
 
-			return provider.TryGetAdapter(portfolio.Name);
+			return portfolioProvider.TryGetAdapter(adapterProvider.CurrentAdapters, portfolio);
+		}
+
+		/// <summary>
+		/// Get adapter by portfolio.
+		/// </summary>
+		/// <param name="portfolioProvider">The portfolio based message adapter's provider.</param>
+		/// <param name="adapters">All available adapters.</param>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <returns>Found adapter or <see langword="null"/>.</returns>
+		public static IMessageAdapter TryGetAdapter(this IPortfolioMessageAdapterProvider portfolioProvider, IEnumerable<IMessageAdapter> adapters, Portfolio portfolio)
+		{
+			if (portfolioProvider == null)
+				throw new ArgumentNullException(nameof(portfolioProvider));
+
+			if (adapters == null)
+				throw new ArgumentNullException(nameof(adapters));
+
+			if (portfolio == null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			var id = portfolioProvider.TryGetAdapter(portfolio.Name);
+
+			if (id == null)
+				return null;
+
+			return adapters.FindById(id.Value);
 		}
 
 		/// <summary>

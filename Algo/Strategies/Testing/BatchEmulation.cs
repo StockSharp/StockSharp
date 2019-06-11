@@ -414,7 +414,7 @@ namespace StockSharp.Algo.Strategies.Testing
 				strategyAdapter.Emulator.Settings.Load(EmulationSettings.Save());
 
 				adapter.InnerAdapters.Add(strategyAdapter);
-				adapter.PortfolioAdapterProvider.SetAdapter(portfolio.Name, strategyAdapter);
+				adapter.PortfolioAdapterProvider.SetAdapter(portfolio.Name, strategyAdapter.Id);
 
 				strategy.Connector = EmulationConnector;
 				strategy.Portfolio = portfolio;
@@ -513,7 +513,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			foreach (var strategy in _batch)
 			{
-				var strategyAdapter = adapter.PortfolioAdapterProvider.TryGetAdapter(strategy.Portfolio);
+				var strategyAdapter = adapter.PortfolioAdapterProvider.TryGetAdapter(adapter.InnerAdapters, strategy.Portfolio);
 
 				if (strategyAdapter != null)
 				{

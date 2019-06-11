@@ -1121,9 +1121,14 @@
         <see cref="T:System.Windows.Input.RoutedCommand" /> to add mapping.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.Adapter">
+    <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityAdapterProvider">
       <summary>
-            Adapter aggregator.
+            The security based message adapter's provider.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.AdapterProvider">
+      <summary>
+            The message adapter's provider.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProviderProperty">
@@ -2064,6 +2069,11 @@
             All available instruments.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.IndexEditor.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.IndexEditor.Formula">
       <summary>
             Mathematical formula.
@@ -2083,9 +2093,6 @@
       <summary>
             The list of highlighted features.
             </summary>
-      <remarks>
-            By default, it includes: abs, acos, asin, atan, ceiling, cos, exp, floor, ieeeremainder, log, log10, max, min, pow, round, sign, sin, sqrt, tan, truncate.
-            </remarks>
     </member>
     <member name="P:StockSharp.Xaml.IndexEditor.HighligthForeColor">
       <summary>
@@ -4483,9 +4490,14 @@
             The market data provider.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.OrderConditionalWindow.MessageAdapterProvider">
+    <member name="P:StockSharp.Xaml.OrderConditionalWindow.AdapterProvider">
       <summary>
             The message adapter's provider.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OrderConditionalWindow.PortfolioAdapterProvider">
+      <summary>
+            The portfolio based message adapter's provider.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.OrderConditionalWindow.Adapters">
@@ -4536,7 +4548,12 @@
             The provider of information about instruments.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.OrderWindow.PortfolioMessageAdapterProvider">
+    <member name="P:StockSharp.Xaml.OrderWindow.PortfolioAdapterProvider">
+      <summary>
+            The portfolio based message adapter's provider.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OrderWindow.AdapterProvider">
       <summary>
             The message adapter's provider.
             </summary>
@@ -4584,9 +4601,14 @@
         <see cref="T:System.Windows.Input.RoutedCommand" /> to add mapping.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.PortfolioMessageAdaptersWindow.Adapter">
+    <member name="P:StockSharp.Xaml.PortfolioMessageAdaptersWindow.PortfolioAdapterProvider">
       <summary>
-            Adapter aggregator.
+            The portfolio based message adapter's provider.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PortfolioMessageAdaptersWindow.AdapterProvider">
+      <summary>
+            The message adapter's provider.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PortfolioMessageAdaptersWindow.#ctor">

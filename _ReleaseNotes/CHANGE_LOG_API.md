@@ -124,6 +124,7 @@ StockSharp API Change log
 * (feature) Diagram. Position, Strategy, StrategyTrades Strategy socket added.
 * (feature) IProfileClient, IAuthenticationClient, IFileClient, IStrategyClient interfaces created.
 * (feature) Backtesting. Check shortable position option added.
+* (feature) BasketMessageAdapter. Extracted mapping storage into CsvSecurityMessageAdapterProvider, CsvPortfolioMessageAdapterProvider.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

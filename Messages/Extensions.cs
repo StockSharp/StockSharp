@@ -1220,5 +1220,16 @@ namespace StockSharp.Messages
 
 			return types;
 		}
+
+		/// <summary>
+		/// Get adapter by the specified key.
+		/// </summary>
+		/// <param name="adapters">All available adapters.</param>
+		/// <param name="id">Adapter identifier.</param>
+		/// <returns>Found adapter or <see langword="null"/>.</returns>
+		public static IMessageAdapter FindById(this IEnumerable<IMessageAdapter> adapters, Guid id)
+		{
+			return adapters.FirstOrDefault(a => a.Id == id);
+		}
 	}
 }

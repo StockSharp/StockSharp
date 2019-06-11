@@ -14026,7 +14026,7 @@ DocStr9321;The delimiter, replacing '|' in the path for instruments with id like
 DocStr9322;The message adapter's provider interface;Интерфейс провайдера адаптеров сообщений
 DocStr9323;All available adapters;Все доступные адаптеры
 DocStr9324;Get adapter by portfolio name;Получить адаптер по имени портфеля
-DocStr9325;The found adapter or {0};Найденный адаптер или {0}
+DocStr9325;Found adapter identifier or {0};Найденный идентификатор адаптера или {0}
 DocStr9326;Make association adapter and portfolio name;Ассоциировать адаптер и имя портфеля
 DocStr9327;The adapter;Адаптер
 DocStr9328;The message adapter's provider;Провайдер адаптеров сообщений
@@ -15671,3 +15671,17 @@ DocStr11154;Determines whether the specified subscription request is supported b
 DocStr11155;{0} if the specified subscription request is supported, otherwise, {1};{0} если указанный запрос на подписку поддерживается, иначе, {1}
 DocStr11156;Get possible args for the specified candle type and instrument;Получить возможные аргументы для указанного типа свечи и инструмента
 DocStr11157;Possible args;Возможные аргументы
+DocStr11158;Adapter identifier;Идентификатор адаптера
+DocStr11159;{0} if the association is successfully changed, otherwise, {1};{0} если ассоциация была успешно изменена, иначе, {1}
+DocStr11160;CSV implementation of {0};CSV реализация {0}
+DocStr11161;Found adapter or {0};Найденный адаптер или {0}
+DocStr11162;The interface describing a client for access to the StockSharp authentication service;Интерфейс, описывающий клиента для доступа к StockSharp сервису авторизации
+DocStr11163;The interface describing a client for access to the service of work with files and documents;Интерфейс, описывающий клиента для доступа к сервису по работу с файлами и документами
+DocStr11164;The interface describing a client for access to the registration service;Интерфейс, описывающий клиента для доступа к сервису регистрации
+DocStr11165;The interface describing a client for access to {0};Интерфейс, описывающий клиента для доступа к {0}
+DocStr11166;All currently available adapters;Все доступные в текущий момент адаптеры
+DocStr11167;All possible available adapters;Все возможные адаптеры
+DocStr11168;{0} if the data was successfully drawn, otherwise, returns {1};{0} если данные были успешно отрисованы, иначе, возвращается {1}
+DocStr11169;Values 1;Значения 1
+DocStr11170;Values 2;Значения 2
+DocStr11171;Operation;Операция
