@@ -329,7 +329,7 @@ namespace StockSharp.Algo.Storages
 			{
 				var fileName = Path.Combine(_path, name + ".csv");
 
-				var appendHeader = overwrite || !File.Exists(fileName);
+				var appendHeader = overwrite || !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
 				var mode = overwrite ? FileMode.Create : FileMode.Append;
 
 				using (var writer = new CsvFileWriter(new TransactionFileStream(fileName, mode)))
