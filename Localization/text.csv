@@ -4996,6 +4996,7 @@ Formed;Formed;Сформирован
 SendOnlyFinal;Send only final values.;Отправлять только финальные значения.
 NonFormed;Non formed;Не сформированные
 ShowNonFormedIndicators;Show non formed indicators values.;Показывать значения не сформированного индикатора.
+CannotShortPosition;Cannot provide short position on account {0} to register order {1}. Currently position is {2}, order size is {3}.;На счету {0} невозможно произвести короткую позицию для регистрации заявки {1}. Текущая позиция {2}, размер заявки {3}.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

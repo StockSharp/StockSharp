@@ -49636,5 +49636,15 @@ namespace StockSharp.Localization
 		/// Non formed
 		/// </summary>
 		public static string NonFormed => GetString(NonFormedKey);
+
+		/// <summary>
+		/// Cannot provide short position on account {0} to register order {1}. Currently position is {2}, order size is {3}.
+		/// </summary>
+		public const string CannotShortPositionKey = nameof(CannotShortPosition);
+
+		/// <summary>
+		/// Cannot provide short position on account {0} to register order {1}. Currently position is {2}, order size is {3}.
+		/// </summary>
+		public static string CannotShortPosition => GetString(CannotShortPositionKey);
 	}
 }
