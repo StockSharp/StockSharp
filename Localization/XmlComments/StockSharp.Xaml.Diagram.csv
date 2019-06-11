@@ -709,6 +709,7 @@ P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.OrderElements/summary;Ord
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.TradeElements/summary;Str985
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.XAxes/summary;DocStr7759
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.YAxes/summary;DocStr7760
+P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ShowNonFormedIndicators/summary;ShowNonFormedIndicators
 M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3

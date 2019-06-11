@@ -215,6 +215,9 @@
             Local time zone for all <see cref="T:System.DateTimeOffset" /> values conversion.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.Chart.ShowNonFormedIndicators">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IndicatorTypes">
       <summary>
             The list of available indicators types.
@@ -1479,7 +1482,12 @@
       <summary>Reset element.</summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)">
-      <summary>Draw on root element.</summary>
+      <summary>
+            Draw on root element.
+            </summary>
+      <param name="data">Chart drawing data.</param>
+      <returns>
+        <see langword="true" /> if the data was successfully drawn, otherwise, returns <see langword="false" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -2063,9 +2071,10 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.IndicatorTypes">
-      <summary>
-            The list of available indicators types.
-            </summary>
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartPanel.ShowNonFormedIndicators">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.#ctor">
       <summary>
@@ -2709,8 +2718,8 @@
             Default indicator line element.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.DefaultPainter.OnDraw">
-      <summary>Draw new values.</summary>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.DefaultPainter.OnDraw(StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.DefaultPainter.Load(Ecng.Serialization.SettingsStorage)">
       <inheritdoc />
@@ -2738,7 +2747,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.OnDraw(StockSharp.Algo.Indicators.Envelope,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -2767,7 +2776,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.OnDraw(StockSharp.Algo.Indicators.GatorOscillator,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.GatorOscillatorPainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -2796,7 +2805,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.OnDraw(StockSharp.Algo.Indicators.RelativeVigorIndex,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.RelativeVigorIndexPainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -2825,7 +2834,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter.OnDraw(StockSharp.Algo.Indicators.StochasticOscillator,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -2859,7 +2868,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.OnDraw(StockSharp.Algo.Indicators.Alligator,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -2893,7 +2902,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.OnDraw(StockSharp.Algo.Indicators.AverageDirectionalIndex,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -2902,82 +2911,97 @@
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Save(Ecng.Serialization.SettingsStorage)">
       <inheritdoc />
     </member>
-    <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter">
+    <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1">
       <summary>
             The indicator renderer base class on the chart (for example, lines, histograms, etc.).
             </summary>
+      <typeparam name="TIndicator">Type of <see cref="T:StockSharp.Algo.Indicators.IIndicator" />.</typeparam>
     </member>
-    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Element">
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.Element">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.InnerElements">
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.InnerElements">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Indicator">
-      <summary>Indicator which is being drawn.</summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.IsAttached">
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.IsAttached">
       <summary>
             Whether this painter is currently attached to chart element.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.OnDraw">
-      <summary>Draw values on chart.</summary>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.OnDraw(`0,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
+      <summary>
+            Draw values on chart.
+            </summary>
+      <param name="indicator">Indicator.</param>
+      <param name="data">Indicator values to draw on chart.</param>
+      <returns>
+        <see langword="true" /> if the data was successfully drawn, otherwise, returns <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Draw(StockSharp.Xaml.Charting.ChartDrawData)">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.Draw(StockSharp.Xaml.Charting.ChartDrawData)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Reset">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.Reset">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.OnAttached(StockSharp.Xaml.Charting.ChartIndicatorElement)">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.OnAttached(StockSharp.Xaml.Charting.ChartIndicatorElement)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.OnDetached">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.OnDetached">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.DrawValues(StockSharp.Algo.Indicators.IIndicator,StockSharp.Xaml.Charting.IChartElement,System.Func{StockSharp.Algo.Indicators.IIndicatorValue,System.Double})">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.DrawValues(System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData},StockSharp.Xaml.Charting.IChartElement,System.Func{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData,System.Double})">
       <summary>
             Draw indicator values using value getter.
             </summary>
+      <param name="vals">Values.</param>
+      <param name="element">Element.</param>
+      <param name="getValue">Converter.</param>
+      <returns>
+        <see langword="true" /> if the data was successfully drawn, otherwise, returns <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.DrawValues(StockSharp.Algo.Indicators.IIndicator,StockSharp.Xaml.Charting.IChartElement)">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.DrawValues(System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData},StockSharp.Xaml.Charting.IChartElement)">
       <summary>
             Draw indicator single double values.
             </summary>
+      <param name="vals">Values.</param>
+      <param name="element">Element.</param>
+      <returns>
+        <see langword="true" /> if the data was successfully drawn, otherwise, returns <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.DrawValues(StockSharp.Algo.Indicators.IIndicator,StockSharp.Algo.Indicators.IIndicator,StockSharp.Xaml.Charting.IChartElement)">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.DrawValues(System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData},System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData},StockSharp.Xaml.Charting.IChartElement)">
       <summary>
             Draw indicator band values (2 doubles).
             </summary>
+      <param name="vals1">Values 1.</param>
+      <param name="vals2">Values 2.</param>
+      <param name="element">Element.</param>
+      <returns>
+        <see langword="true" /> if the data was successfully drawn, otherwise, returns <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.DrawValues(StockSharp.Algo.Indicators.IIndicator,StockSharp.Algo.Indicators.IIndicator,StockSharp.Xaml.Charting.IChartElement,System.Func{System.Double,System.Double,System.Double})">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.DrawValues(System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData},System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData},StockSharp.Xaml.Charting.IChartElement,System.Func{System.Double,System.Double,System.Double})">
       <summary>
             Draw indicator converting from 2 doubles to one with converter.
             </summary>
+      <param name="vals1">Values 1.</param>
+      <param name="vals2">Values 2.</param>
+      <param name="element">Element.</param>
+      <param name="op">Operation.</param>
+      <returns>
+        <see langword="true" /> if the data was successfully drawn, otherwise, returns <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.AddChildElement(StockSharp.Xaml.Charting.IChartElement)">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.AddChildElement(StockSharp.Xaml.Charting.IChartElement)">
       <summary>
             Add inner chart element.
             </summary>
+      <param name="element">Element.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Clone">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.CopyTo(System.Object)">
-      <summary>
-            To fill out a copy of the element.
-            </summary>
-      <param name="o">Object of the same type to copy to.</param>
-      <returns>Copy.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Load(Ecng.Serialization.SettingsStorage)">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Save(Ecng.Serialization.SettingsStorage)">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
             Save settings.
             </summary>
@@ -3003,7 +3027,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.OnDraw(StockSharp.Algo.Indicators.BollingerBands,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -3032,7 +3056,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.OnDraw(StockSharp.Algo.Indicators.Fractals,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -3071,7 +3095,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.OnDraw(StockSharp.Algo.Indicators.Ichimoku,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -3105,7 +3129,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.OnDraw(StockSharp.Algo.Indicators.MovingAverageConvergenceDivergenceHistogram,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -3134,7 +3158,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter.OnDraw(StockSharp.Algo.Indicators.MovingAverageConvergenceDivergenceSignal,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -3173,7 +3197,7 @@
             Create instance.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.OnDraw">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.OnDraw(StockSharp.Algo.Indicators.VolumeIndicator,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.Load(Ecng.Serialization.SettingsStorage)">
@@ -3265,6 +3289,11 @@
     <member name="P:StockSharp.Xaml.Charting.IChart.IndicatorTypes">
       <summary>
             The list of available indicators types.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IChart.ShowNonFormedIndicators">
+      <summary>
+            Show non formed indicators.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)">
@@ -3377,6 +3406,8 @@
             To process the new data.
             </summary>
       <param name="data">New data.</param>
+      <returns>
+        <see langword="true" /> if the data was successfully drawn, otherwise, returns <see langword="false" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Reset">
       <summary>

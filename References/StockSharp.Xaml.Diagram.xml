@@ -2644,6 +2644,11 @@
             The list of vertical axes.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ShowNonFormedIndicators">
+      <summary>
+            Show non formed indicators values.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement" />.
