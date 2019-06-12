@@ -126,6 +126,7 @@ StockSharp API Change log
 * (feature) Backtesting. Check shortable position option added.
 * (feature) BasketMessageAdapter. Extracted mapping storage into CsvSecurityMessageAdapterProvider, CsvPortfolioMessageAdapterProvider.
 * (feature) BaseChartIndicatorPainter refactoring.
+* (feature) CollectionSecurityProvider. Check input nullable values.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

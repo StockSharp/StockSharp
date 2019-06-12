@@ -31,6 +31,8 @@ namespace StockSharp.Algo
 			if (securities == null)
 				throw new ArgumentNullException(nameof(securities));
 
+			CheckNullableItems = true;
+
 			AddRange(securities);
 
 			AddedRange += s => _added?.Invoke(s);
