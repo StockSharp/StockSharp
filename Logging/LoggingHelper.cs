@@ -16,11 +16,14 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Logging
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
 
 	using Ecng.Common;
 	using Ecng.Configuration;
+
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// Extension class for <see cref="ILogSource"/>.
@@ -273,6 +276,32 @@ namespace StockSharp.Logging
 			{
 				ex.LogError();
 				return default(T);
+			}
+		}
+
+		/// <summary>
+		/// Wrap the specified action in try/catch clause with logging.
+		/// </summary>
+		/// <typeparam name="T">The type of returned result.</typeparam>
+		/// <param name="action">The action.</param>
+		/// <returns>The resulting value.</returns>
+		public static void DoWithLog<T>(Func<IDictionary<T, Exception>> action)
+		{
+			if (action == null)
+				throw new ArgumentNullException(nameof(action));
+
+			try
+			{
+				var dict = action();
+
+				foreach (var pair in dict)
+				{
+					new InvalidOperationException(pair.Key.ToString()).LogError(LocalizedStrings.CorruptedFile);
+				}
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
 			}
 		}
 	}
