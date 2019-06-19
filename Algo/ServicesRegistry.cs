@@ -119,7 +119,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The client for access to the service of work with files and documents.
 		/// </summary>
-		public static IFileClient FileClient => ConfigManager.GetService<FileClient>();
+		public static IFileClient FileClient => ConfigManager.GetService<IFileClient>();
 
 		/// <summary>
 		/// The client for access to the registration service.
