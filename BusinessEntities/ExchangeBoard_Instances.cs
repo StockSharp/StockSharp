@@ -3452,5 +3452,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Tradier.Name,
 			Exchange = Exchange.Tradier,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.SwSq"/>.
+		/// </summary>
+		public static ExchangeBoard SwSq { get; } = new ExchangeBoard
+		{
+			Code = Exchange.SwSq.Name,
+			Exchange = Exchange.SwSq,
+		};
 	}
 }

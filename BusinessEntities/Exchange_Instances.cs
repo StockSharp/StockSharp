@@ -1111,5 +1111,15 @@ namespace StockSharp.BusinessEntities
 			EngName = "Tradier",
 			RusName = "Tradier",
 		};
+
+		/// <summary>
+		/// Information about SwissQuote.
+		/// </summary>
+		public static Exchange SwSq { get; } = new Exchange
+		{
+			Name = "SWSQ",
+			EngName = "SwissQuote",
+			RusName = "SwissQuote",
+		};
 	}
 }
