@@ -98,6 +98,23 @@ namespace StockSharp.Community
 		long FinishUpload(Guid operationId, bool isCancel);
 
 		/// <summary>
+		/// Share file.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="id">File ID.</param>
+		/// <returns>Public token.</returns>
+		[OperationContract]
+		string Share(Guid sessionId, long id);
+
+		/// <summary>
+		/// Undo <see cref="Share"/> operation.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="id">File ID.</param>
+		[OperationContract]
+		void UnShare(Guid sessionId, long id);
+
+		/// <summary>
 		/// To delete the file.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>

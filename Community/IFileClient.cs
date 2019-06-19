@@ -56,5 +56,18 @@ namespace StockSharp.Community
 		/// </summary>
 		/// <returns>Upload size limit.</returns>
 		long GetUploadLimit();
+
+		/// <summary>
+		/// Share file.
+		/// </summary>
+		/// <param name="id">File ID.</param>
+		/// <returns>Public token.</returns>
+		string Share(long id);
+
+		/// <summary>
+		/// Undo <see cref="Share"/> operation.
+		/// </summary>
+		/// <param name="id">File ID.</param>
+		void UnShare(long id);
 	}
 }

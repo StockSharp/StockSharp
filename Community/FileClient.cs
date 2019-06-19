@@ -178,6 +178,18 @@ namespace StockSharp.Community
 			return Invoke(f => f.GetUploadLimit(SessionId));
 		}
 
+		/// <inheritdoc />
+		public string Share(long id)
+		{
+			return Invoke(f => f.Share(SessionId, id));
+		}
+
+		/// <inheritdoc />
+		public void UnShare(long id)
+		{
+			Invoke(f => f.UnShare(SessionId, id));
+		}
+
 		private static void ValidateError(byte errorCode)
 		{
 			((ErrorCodes)errorCode).ThrowIfError();
