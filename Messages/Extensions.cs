@@ -1231,5 +1231,26 @@ namespace StockSharp.Messages
 		{
 			return adapters.FirstOrDefault(a => a.Id == id);
 		}
+
+		/// <summary>
+		/// Create <see cref="IMessageAdapter"/> instance.
+		/// </summary>
+		/// <param name="adapterType">Adapter type.</param>
+		/// <returns><see cref="IMessageAdapter"/> instance.</returns>
+		public static IMessageAdapter CreateAdapter(this Type adapterType)
+		{
+			return adapterType.CreateAdapter(new IncrementalIdGenerator());
+		}
+
+		/// <summary>
+		/// Create <see cref="IMessageAdapter"/> instance.
+		/// </summary>
+		/// <param name="adapterType">Adapter type.</param>
+		/// <param name="idGenerator">Transaction id generator.</param>
+		/// <returns><see cref="IMessageAdapter"/> instance.</returns>
+		public static IMessageAdapter CreateAdapter(this Type adapterType, IdGenerator idGenerator)
+		{
+			return adapterType.CreateInstance<IMessageAdapter>(idGenerator);
+		}
 	}
 }

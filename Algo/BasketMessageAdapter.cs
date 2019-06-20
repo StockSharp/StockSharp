@@ -1260,7 +1260,7 @@ namespace StockSharp.Algo
 				{
 					try
 					{
-						var adapter = s.GetValue<Type>("AdapterType").CreateInstance<IMessageAdapter>(TransactionIdGenerator);
+						var adapter = s.GetValue<Type>("AdapterType").CreateAdapter(TransactionIdGenerator);
 						adapter.Load(s.GetValue<SettingsStorage>("AdapterSettings"));
 						InnerAdapters[adapter] = s.GetValue<int>("Priority");
 
