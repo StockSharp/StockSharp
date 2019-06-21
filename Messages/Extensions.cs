@@ -1243,7 +1243,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Create <see cref="IMessageAdapter"/> instance.
+		/// Create <see cref="IMessageAdapter"/>.
 		/// </summary>
 		/// <param name="adapterType">Adapter type.</param>
 		/// <param name="idGenerator">Transaction id generator.</param>
@@ -1256,9 +1256,9 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Find adapter by the specified type.
 		/// </summary>
-		/// <typeparam name="TAdapter">Adapter type.</typeparam>
+		/// <typeparam name="TAdapter">The adapter type.</typeparam>
 		/// <param name="wrapper">Wrapping based adapter.</param>
-		/// <returns>Found adapter.</returns>
+		/// <returns>Found adapter or <see langword="null"/>.</returns>
 		public static TAdapter FindAdapter<TAdapter>(this IMessageAdapterWrapper wrapper)
 			where TAdapter : IMessageAdapter
 		{

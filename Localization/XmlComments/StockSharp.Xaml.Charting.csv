@@ -897,7 +897,7 @@ P:StockSharp.Xaml.Charting.IChart.IsAutoScroll/summary;DocStr7717
 P:StockSharp.Xaml.Charting.IChart.IsAutoRange/summary;DocStr7718
 P:StockSharp.Xaml.Charting.IChart.XAxisType/summary;DocStr10676
 P:StockSharp.Xaml.Charting.IChart.IndicatorTypes/summary;DocStr7740
-P:StockSharp.Xaml.Charting.IChart.ShowNonFormedIndicators/summary;DocStr11172
+P:StockSharp.Xaml.Charting.IChart.ShowNonFormedIndicators/summary;ShowNonFormedIndicators
 M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)/summary;DocStr7706
 M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)/param/area;Str1903
 M:StockSharp.Xaml.Charting.IChart.RemoveArea(StockSharp.Xaml.Charting.ChartArea)/summary;DocStr7707

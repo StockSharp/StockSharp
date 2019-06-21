@@ -21,7 +21,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Delete mapping.
+		/// Remove security mapping.
 		/// </summary>
 		public bool IsDelete { get; set; }
 

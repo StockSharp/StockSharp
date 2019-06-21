@@ -13,7 +13,7 @@ namespace StockSharp.Messages
 		IEnumerable<IMessageAdapter> CurrentAdapters { get; }
 
 		/// <summary>
-		/// All possible available adapters.
+		/// All possible adapters.
 		/// </summary>
 		IEnumerable<IMessageAdapter> PossibleAdapters { get; }
 	}

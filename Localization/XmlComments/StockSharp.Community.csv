@@ -79,6 +79,8 @@ M:StockSharp.Community.FileClient.Download(StockSharp.Community.FileData,System.
 M:StockSharp.Community.FileClient.Update(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/inheritdoc;DocStr8459
 M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/inheritdoc;DocStr8459
 M:StockSharp.Community.FileClient.GetUploadLimit/inheritdoc;DocStr8459
+M:StockSharp.Community.FileClient.Share(System.Int64)/inheritdoc;DocStr8459
+M:StockSharp.Community.FileClient.UnShare(System.Int64)/inheritdoc;DocStr8459
 T:StockSharp.Community.IAuthenticationClient/summary;DocStr11162
 P:StockSharp.Community.IAuthenticationClient.Credentials/summary;DocStr2968
 P:StockSharp.Community.IAuthenticationClient.Product/summary;Product
@@ -147,6 +149,11 @@ M:StockSharp.Community.IFileClient.Upload(System.String,System.Byte[],System.Boo
 M:StockSharp.Community.IFileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/returns;DocStr10238
 M:StockSharp.Community.IFileClient.GetUploadLimit/summary;DocStr10166
 M:StockSharp.Community.IFileClient.GetUploadLimit/returns;DocStr10167
+M:StockSharp.Community.IFileClient.Share(System.Int64)/summary;ShareFile
+M:StockSharp.Community.IFileClient.Share(System.Int64)/param/id;DocStr9031
+M:StockSharp.Community.IFileClient.Share(System.Int64)/returns;DocStr11190
+M:StockSharp.Community.IFileClient.UnShare(System.Int64)/summary;DocStr11191
+M:StockSharp.Community.IFileClient.UnShare(System.Int64)/param/id;DocStr9031
 T:StockSharp.Community.IFileService/summary;DocStr3013
 M:StockSharp.Community.IFileService.GetFileInfo(System.Guid,System.Int64)/summary;DocStr9030
 M:StockSharp.Community.IFileService.GetFileInfo(System.Guid,System.Int64)/param/sessionId;DocStr138
@@ -181,6 +188,13 @@ M:StockSharp.Community.IFileService.FinishUpload(System.Guid,System.Boolean)/sum
 M:StockSharp.Community.IFileService.FinishUpload(System.Guid,System.Boolean)/param/operationId;DocStr9101
 M:StockSharp.Community.IFileService.FinishUpload(System.Guid,System.Boolean)/param/isCancel;DocStr9103
 M:StockSharp.Community.IFileService.FinishUpload(System.Guid,System.Boolean)/returns;DocStr9031
+M:StockSharp.Community.IFileService.Share(System.Guid,System.Int64)/summary;ShareFile
+M:StockSharp.Community.IFileService.Share(System.Guid,System.Int64)/param/sessionId;DocStr138
+M:StockSharp.Community.IFileService.Share(System.Guid,System.Int64)/param/id;DocStr9031
+M:StockSharp.Community.IFileService.Share(System.Guid,System.Int64)/returns;DocStr11190
+M:StockSharp.Community.IFileService.UnShare(System.Guid,System.Int64)/summary;DocStr11191
+M:StockSharp.Community.IFileService.UnShare(System.Guid,System.Int64)/param/sessionId;DocStr138
+M:StockSharp.Community.IFileService.UnShare(System.Guid,System.Int64)/param/id;DocStr9031
 M:StockSharp.Community.IFileService.Delete(System.Guid,System.Int64)/summary;DocStr9104
 M:StockSharp.Community.IFileService.Delete(System.Guid,System.Int64)/param/sessionId;DocStr138
 M:StockSharp.Community.IFileService.Delete(System.Guid,System.Int64)/param/id;DocStr9031

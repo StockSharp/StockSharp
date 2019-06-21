@@ -49676,5 +49676,15 @@ namespace StockSharp.Localization
 		/// Adapter
 		/// </summary>
 		public static string Adapter => GetString(AdapterKey);
+
+		/// <summary>
+		/// Adapter for field {0} isn't specified.
+		/// </summary>
+		public const string AdapterNotSpecifiedKey = nameof(AdapterNotSpecified);
+
+		/// <summary>
+		/// Adapter for field {0} isn't specified.
+		/// </summary>
+		public static string AdapterNotSpecified => GetString(AdapterNotSpecifiedKey);
 	}
 }

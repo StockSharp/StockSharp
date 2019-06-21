@@ -4997,6 +4997,10 @@ SendOnlyFinal;Send only final values.;Отправлять только фина
 NonFormed;Non formed;Не сформированные
 ShowNonFormedIndicators;Show non formed indicators values.;Показывать значения не сформированного индикатора.
 CannotShortPosition;Cannot provide short position on account {0} to register order {1}. Currently position is {2}, order size is {3}.;На счету {0} невозможно произвести короткую позицию для регистрации заявки {1}. Текущая позиция {2}, размер заявки {3}.
+NativeId;Native ID;ID (внутренний)
+NativeIdDesc;Native (internal) trading system security id.;Внутренний идентификатор торговой системы.
+Adapter;Adapter;Адаптер
+AdapterNotSpecified;Adapter for field {0} isn't specified.;Адаптер для поля {0} не указан.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5759,7 +5763,6 @@ DocStr798;Unsubscribe from news;Остановить получение ново
 DocStr799;Request news {0} body. After receiving the event {1} will be triggered;Запросить текст новости {0}. После получения текста будет вызвано событие {1}
 DocStr800;Lookup securities by criteria {0};Найти инструменты, соответствующие фильтру {0}
 DocStr801;Get native id;Получить внутренний идентификатор торговой системы
-DocStr802;Native (internal) trading system security id;Внутренний идентификатор торговой системы
 DocStr803;Get session state for required board;Получить состояние сессии для заданной площадки
 DocStr804;Electronic board;Биржевая площадка электронных торгов
 DocStr805;Session state. If the information about session state does not exist, then {0} will be returned;Состояние сессии. Если информация о состоянии сессии отсутствует, то будет возвращено {0}
@@ -5885,7 +5888,6 @@ DocStr925;To update the order book for the instrument when the {0} message appea
 DocStr926;The number of errors passed through the {0} event;Число ошибок, переданное через событие {0}
 DocStr927;The {0} message generating Interval. The default is 10 milliseconds;Интервал генерации сообщения {0}. По умолчанию равно 10 миллисекундам
 DocStr928;The messages adapter controlling the connection;Адаптер сообщений, контролирующий соединение
-DocStr929;Adapter;Адаптер
 DocStr930;To get the instrument that trades for the specified exchange time;Получить инструмент, который торгуется для указанного биржевого времени
 DocStr931;The exchange time;Биржевое время
 DocStr932;The instrument. If there is no instrument for the specified time then the {0} will be returned;Инструмент. Если не существует инструмента для указанного времени, то будет возвращено {0}
@@ -15680,8 +15682,31 @@ DocStr11163;The interface describing a client for access to the service of work 
 DocStr11164;The interface describing a client for access to the registration service;Интерфейс, описывающий клиента для доступа к сервису регистрации
 DocStr11165;The interface describing a client for access to {0};Интерфейс, описывающий клиента для доступа к {0}
 DocStr11166;All currently available adapters;Все доступные в текущий момент адаптеры
-DocStr11167;All possible available adapters;Все возможные адаптеры
+DocStr11167;All possible adapters;Все возможные адаптеры
 DocStr11168;{0} if the data was successfully drawn, otherwise, returns {1};{0} если данные были успешно отрисованы, иначе, возвращается {1}
 DocStr11169;Values 1;Значения 1
 DocStr11170;Values 2;Значения 2
 DocStr11171;Operation;Операция
+DocStr11172;Strategy commands;Strategy commands
+DocStr11173;Request current state;Request current state
+DocStr11174;Register order;Register order
+DocStr11175;Information about SwissQuote;Информация SwissQuote
+DocStr11176;Adapter commands;Adapter commands
+DocStr11177;Enable;Включить
+DocStr11178;Disable;Выключить
+DocStr11179;Update settings;Update settings
+DocStr11180;Remove;Удалить
+DocStr11181;Security route response message;Security route response message
+DocStr11182;Portfolio routes result message;Portfolio routes result message
+DocStr11183;Portfolio routes list request message;Portfolio routes list request message
+DocStr11184;Portfolio route response message;Portfolio route response message
+DocStr11185;Security routes result message;Security routes result message
+DocStr11186;Security routes list request message;Security routes list request message
+DocStr11187;Multiple field's instancies allowed;Multiple field's instancies allowed
+DocStr11188;{0} required;{0} обязателен
+DocStr11189;Get {0} instance or clone dependent on {1};Получить объект {0} или склонировать, в зависимости от {1}
+DocStr11190;Public token;Публичный токен
+DocStr11191;Undo {0} operation;Отменить операцию {0}
+DocStr11194;Find adapter by the specified type;Найти адаптер по указанному типу
+DocStr11197;Select adapter window;Окно выбора адаптера
+DocStr11199;Selected adapter;Выбранный адаптер

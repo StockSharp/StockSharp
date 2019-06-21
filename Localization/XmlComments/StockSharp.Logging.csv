@@ -175,6 +175,10 @@ M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{``0})/summary;DocStr
 M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{``0})/typeparam/T;DocStr1837
 M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{``0})/param/action;DocStr9174
 M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{``0})/returns;DocStr1131
+M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{System.Collections.Generic.IDictionary{``0,System.Exception}})/summary;DocStr9173
+M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{System.Collections.Generic.IDictionary{``0,System.Exception}})/typeparam/T;DocStr1837
+M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{System.Collections.Generic.IDictionary{``0,System.Exception}})/param/action;DocStr9174
+M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{System.Collections.Generic.IDictionary{``0,System.Exception}})/returns;DocStr1131
 T:StockSharp.Logging.LogLevels/summary;DocStr3979
 F:StockSharp.Logging.LogLevels.Inherit/summary;DocStr3980
 F:StockSharp.Logging.LogLevels.Verbose/summary;DocStr10027
