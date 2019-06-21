@@ -131,6 +131,8 @@ StockSharp API Change log
 * (feature) CSV importing. Supported native system identifier importing.
 * (feature) Security and portfolio route messages. Security mapping message.
 * (feature) StorageMessageAdapter. Support subscriptions persistence.
+* (feature) IndexEditor. Uses ISecurityProvider https://stocksharp.ru/posts/m/47693/
+* (bug) ProxySettings fix https://stocksharp.ru/forum/10804/ne-rabotaet-soedinenie-cherez-proksi-server/
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

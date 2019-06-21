@@ -203,6 +203,11 @@ M:StockSharp.Xaml.ImportPreviewWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.ImportPreviewWindow.Init(StockSharp.Xaml.ImportSettings)/summary;DocStr93
 M:StockSharp.Xaml.ImportPreviewWindow.Init(StockSharp.Xaml.ImportSettings)/param/settings;Str2842
 M:StockSharp.Xaml.ImportPreviewWindow.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.ImportSelectAdapterWindow/summary;DocStr11197
+M:StockSharp.Xaml.ImportSelectAdapterWindow.#ctor/summary;DocStr1
+P:StockSharp.Xaml.ImportSelectAdapterWindow.Adapters/summary;DocStr11198
+P:StockSharp.Xaml.ImportSelectAdapterWindow.SelectedAdapter/summary;DocStr11199
+M:StockSharp.Xaml.ImportSelectAdapterWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ImportSettings/summary;Str2842
 M:StockSharp.Xaml.ImportSettings.#ctor/summary;DocStr1
 P:StockSharp.Xaml.ImportSettings.DataType/summary;DocStr8490
@@ -218,7 +223,6 @@ P:StockSharp.Xaml.ImportSettings.ExtendedStorage/summary;ExtendedInfo
 P:StockSharp.Xaml.ImportSettings.UpdateDuplicateSecurities/summary;UpdateDuplicateSecurities
 P:StockSharp.Xaml.ImportSettings.IgnoreNonIdSecurities/summary;IgnoreNonIdSecuritiesDesc
 P:StockSharp.Xaml.ImportSettings.AllFields/summary;DocStr10398
-P:StockSharp.Xaml.ImportSettings.UnSelectedFields/summary;DocStr11091
 P:StockSharp.Xaml.ImportSettings.ExtendedFields/summary;DocStr9997
 P:StockSharp.Xaml.ImportSettings.SelectedFields/summary;DocStr10397
 M:StockSharp.Xaml.ImportSettings.GetFiles/summary;DocStr11092
@@ -424,12 +428,8 @@ P:StockSharp.Xaml.FileProgressWindow.File/summary;DocStr9032
 M:StockSharp.Xaml.FileProgressWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ImportDataMappingButton/summary;DocStr10403
 M:StockSharp.Xaml.ImportDataMappingButton.#ctor/summary;DocStr1
-F:StockSharp.Xaml.ImportDataMappingButton.DataTypeProperty/summary;DocStr29
-P:StockSharp.Xaml.ImportDataMappingButton.DataType/summary;Str2133
-F:StockSharp.Xaml.ImportDataMappingButton.ValuesProperty/summary;DocStr29
-P:StockSharp.Xaml.ImportDataMappingButton.Values/summary;DocStr9986
-F:StockSharp.Xaml.ImportDataMappingButton.FieldNameProperty/summary;DocStr29
-P:StockSharp.Xaml.ImportDataMappingButton.FieldName/summary;DocStr10394
+F:StockSharp.Xaml.ImportDataMappingButton.FieldProperty/summary;DocStr29
+P:StockSharp.Xaml.ImportDataMappingButton.Field/summary;Str2133
 M:StockSharp.Xaml.ImportDataMappingButton.OnClick/inheritdoc;DocStr8459
 M:StockSharp.Xaml.ImportDataMappingButton.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ImportDataMappingWindow/summary;DocStr10395
