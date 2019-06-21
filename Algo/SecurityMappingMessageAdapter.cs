@@ -112,7 +112,12 @@ namespace StockSharp.Algo
 				case MessageTypes.SecurityMapping:
 				{
 					var mappingMsg = (SecurityMappingMessage)message;
-					Storage.Save(mappingMsg.StorageName, mappingMsg.Mapping);
+
+					if (mappingMsg.IsDelete)
+						Storage.Remove(mappingMsg.StorageName, mappingMsg.Mapping.StockSharpId);
+					else
+						Storage.Save(mappingMsg.StorageName, mappingMsg.Mapping);
+
 					return;
 				}
 

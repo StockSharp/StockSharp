@@ -21,6 +21,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Delete mapping.
+		/// </summary>
+		public bool IsDelete { get; set; }
+
+		/// <summary>
 		/// Security identifier mapping.
 		/// </summary>
 		[DataMember]
@@ -42,11 +47,12 @@ namespace StockSharp.Messages
 			{
 				Mapping = Mapping.Clone(),
 				StorageName = StorageName,
+				IsDelete = IsDelete,
 			};
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
-			=> base.ToString() + $"Storage={StorageName},Mapping={Mapping}";
+			=> base.ToString() + $"Storage={StorageName},Mapping={Mapping},Del={IsDelete}";
 	}
 }
