@@ -85,6 +85,7 @@
     <Compile Include="AdapterResponseMessage.cs" />
     <Compile Include="BaseConnectionMessage.cs" />
     <Compile Include="BaseResultMessage.cs" />
+    <Compile Include="BaseRouteMessage.cs" />
     <Compile Include="BoardLookupMessage.cs" />
     <Compile Include="BoardLookupResultMessage.cs" />
     <Compile Include="BoardMessage.cs" />
@@ -114,6 +115,9 @@
     <Compile Include="InMemoryMessageChannel.cs" />
     <Compile Include="IOrderLogMarketDepthBuilder.cs" />
     <Compile Include="MessagePriorityQueue.cs" />
+    <Compile Include="PortfolioRouteListFinishedMessage.cs" />
+    <Compile Include="PortfolioRouteListRequestMessage.cs" />
+    <Compile Include="PortfolioRouteMessage.cs" />
     <Compile Include="ReConnectionSettings.cs" />
     <Compile Include="RemoveMessage.cs" />
     <Compile Include="ResetMessage.cs" />
@@ -155,9 +159,13 @@
     <Compile Include="SecurityLegsResultMessage.cs" />
     <Compile Include="SecurityLookupMessage.cs" />
     <Compile Include="SecurityLookupResultMessage.cs" />
+    <Compile Include="SecurityMappingMessage.cs" />
     <Compile Include="SecurityMappingRequestMessage.cs" />
     <Compile Include="SecurityMappingResultMessage.cs" />
     <Compile Include="SecurityMessage.cs" />
+    <Compile Include="SecurityRouteListFinishedMessage.cs" />
+    <Compile Include="SecurityRouteListRequestMessage.cs" />
+    <Compile Include="SecurityRouteMessage.cs" />
     <Compile Include="SecurityStates.cs" />
     <Compile Include="SecurityTypes.cs" />
     <Compile Include="BoardStateMessage.cs" />

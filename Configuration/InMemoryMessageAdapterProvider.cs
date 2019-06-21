@@ -21,7 +21,7 @@ namespace StockSharp.Configuration
 		{
 			var idGenerator = new IncrementalIdGenerator();
 
-			PossibleAdapters = Extensions.Adapters.Select(type => type.CreateInstance<IMessageAdapter>(idGenerator)).ToArray();
+			PossibleAdapters = Extensions.Adapters.Select(type => type.CreateAdapter(idGenerator)).ToArray();
 			CurrentAdapters = currentAdapters ?? throw new ArgumentNullException(nameof(currentAdapters));
 		}
 

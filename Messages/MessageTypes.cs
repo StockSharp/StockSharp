@@ -314,5 +314,40 @@ namespace StockSharp.Messages
 		/// <see cref="SubscriptionListFinishedMessage"/>.
 		/// </summary>
 		SubscriptionListFinished,
+
+		/// <summary>
+		/// <see cref="SecurityRouteListRequestMessage"/>.
+		/// </summary>
+		SecurityRouteListRequest,
+
+		/// <summary>
+		/// <see cref="SecurityRouteMessage"/>.
+		/// </summary>
+		SecurityRoute,
+
+		/// <summary>
+		/// <see cref="SecurityRouteListFinishedMessage"/>.
+		/// </summary>
+		SecurityRouteListFinished,
+
+		/// <summary>
+		/// <see cref="PortfolioRouteListRequestMessage"/>.
+		/// </summary>
+		PortfolioRouteListRequest,
+
+		/// <summary>
+		/// <see cref="PortfolioRouteMessage"/>.
+		/// </summary>
+		PortfolioRoute,
+
+		/// <summary>
+		/// <see cref="PortfolioRouteListFinishedMessage"/>.
+		/// </summary>
+		PortfolioRouteListFinished,
+
+		/// <summary>
+		/// <see cref="SecurityMappingMessage"/>.
+		/// </summary>
+		SecurityMapping
 	}
 }
