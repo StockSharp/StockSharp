@@ -341,6 +341,15 @@ namespace StockSharp.Algo.Import
 			_dateParser = null;
 			_timeParser = null;
 		}
+
+		/// <summary>
+		/// Get <see cref="FieldMapping"/> instance or clone dependent on <see cref="IsMultiple"/>.
+		/// </summary>
+		/// <returns>Field.</returns>
+		public FieldMapping GetOrClone()
+		{
+			return IsMultiple ? (FieldMapping)Clone() : this;
+		}
 	}
 
 	/// <summary>
