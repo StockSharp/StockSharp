@@ -12,7 +12,7 @@ namespace StockSharp.Algo.Import
 	/// <summary>
 	/// Importing field description.
 	/// </summary>
-	public abstract class FieldMapping : NotifiableObject, IPersistable
+	public abstract class FieldMapping : NotifiableObject, IPersistable, ICloneable
 	{
 		private FastDateTimeParser _dateParser;
 		private FastTimeSpanParser _timeParser;
@@ -26,8 +26,7 @@ namespace StockSharp.Algo.Import
 		/// <param name="displayName">Display name.</param>
 		/// <param name="description">Description.</param>
 		/// <param name="type">Field type.</param>
-		/// <param name="isExtended">Is field extended.</param>
-		protected FieldMapping(string name, string displayName, string description, Type type, bool isExtended)
+		protected FieldMapping(string name, string displayName, string description, Type type)
 		{
 			//if (settings == null)
 			//	throw new ArgumentNullException(nameof(settings));
@@ -45,7 +44,6 @@ namespace StockSharp.Algo.Import
 			Name = name;
 			DisplayName = displayName;
 			Description = description;
-			IsExtended = isExtended;
 			IsEnabled = true;
 
 			//Number = -1;
@@ -67,7 +65,7 @@ namespace StockSharp.Algo.Import
 		/// <summary>
 		/// Is field extended.
 		/// </summary>
-		public bool IsExtended { get; private set; }
+		public bool IsExtended { get; set; }
 		
 		/// <summary>
 		/// Display name.
@@ -165,6 +163,21 @@ namespace StockSharp.Algo.Import
 		public bool ZeroAsNull { get; set; }
 
 		/// <summary>
+		/// Multiple field's instancies allowed.
+		/// </summary>
+		public bool IsMultiple => IsAdapter;
+
+		/// <summary>
+		/// <see cref="AdapterType"/> required.
+		/// </summary>
+		public bool IsAdapter { get; set; }
+
+		/// <summary>
+		/// Adapter.
+		/// </summary>
+		public Type AdapterType { get; set; }
+
+		/// <summary>
 		/// Load settings.
 		/// </summary>
 		/// <param name="storage">Settings storage.</param>
@@ -183,6 +196,9 @@ namespace StockSharp.Algo.Import
 				IsEnabled = storage.GetValue<bool>(nameof(IsEnabled));
 			else
 				Order = storage.GetValue<int?>(nameof(Order));
+
+			IsAdapter = storage.GetValue(nameof(IsAdapter), IsAdapter);
+			AdapterType = storage.GetValue<string>(nameof(AdapterType)).To<Type>();
 		}
 
 		void IPersistable.Save(SettingsStorage storage)
@@ -195,6 +211,8 @@ namespace StockSharp.Algo.Import
 			//storage.SetValue(nameof(IsEnabled), IsEnabled);
 			storage.SetValue(nameof(Order), Order);
 			storage.SetValue(nameof(ZeroAsNull), ZeroAsNull);
+			storage.SetValue(nameof(IsAdapter), IsAdapter);
+			storage.SetValue(nameof(AdapterType), AdapterType.To<string>());
 		}
 
 		/// <summary>
@@ -310,10 +328,10 @@ namespace StockSharp.Algo.Import
 		protected abstract void OnApply(object instance, object value);
 
 		/// <inheritdoc />
-		public override string ToString()
-		{
-			return Name;
-		}
+		public override string ToString() => Name;
+
+		/// <inheritdoc />
+		public abstract object Clone();
 
 		/// <summary>
 		/// Reset state.
@@ -341,9 +359,8 @@ namespace StockSharp.Algo.Import
 		/// <param name="displayName">Display name.</param>
 		/// <param name="description">Description.</param>
 		/// <param name="apply">Apply field value action.</param>
-		/// <param name="isExtended">Is field extended.</param>
-		public FieldMapping(string name, string displayName, string description, Action<TInstance, TValue> apply, bool isExtended = false)
-			: base(name, displayName, description, typeof(TValue), isExtended)
+		public FieldMapping(string name, string displayName, string description, Action<TInstance, TValue> apply)
+			: base(name, displayName, description, typeof(TValue))
 		{
 			_apply = apply ?? throw new ArgumentNullException(nameof(apply));
 		}
@@ -352,6 +369,14 @@ namespace StockSharp.Algo.Import
 		protected override void OnApply(object instance, object value)
 		{
 			_apply((TInstance)instance, (TValue)value);
+		}
+
+		/// <inheritdoc />
+		public override object Clone()
+		{
+			var clone = new FieldMapping<TInstance, TValue>(Name, DisplayName, Description, _apply);
+			clone.Load(this.Save());
+			return clone;
 		}
 	}
 }

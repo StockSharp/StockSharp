@@ -86,6 +86,9 @@
 
 				foreach (var msg in Parse(fileName, isCancelled))
 				{
+					if (msg is SecurityMappingMessage)
+						continue;
+
 					if (!(msg is SecurityMessage secMsg))
 					{
 						buffer.Add(msg);

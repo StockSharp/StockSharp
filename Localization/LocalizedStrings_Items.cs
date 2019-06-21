@@ -49646,5 +49646,35 @@ namespace StockSharp.Localization
 		/// Cannot provide short position on account {0} to register order {1}. Currently position is {2}, order size is {3}.
 		/// </summary>
 		public static string CannotShortPosition => GetString(CannotShortPositionKey);
+
+		/// <summary>
+		/// Native ID
+		/// </summary>
+		public const string NativeIdKey = nameof(NativeId);
+
+		/// <summary>
+		/// Native ID
+		/// </summary>
+		public static string NativeId => GetString(NativeIdKey);
+
+		/// <summary>
+		/// Native (internal) trading system security id.
+		/// </summary>
+		public const string NativeIdDescKey = nameof(NativeIdDesc);
+
+		/// <summary>
+		/// Native (internal) trading system security id.
+		/// </summary>
+		public static string NativeIdDesc => GetString(NativeIdDescKey);
+
+		/// <summary>
+		/// Adapter
+		/// </summary>
+		public const string AdapterKey = nameof(Adapter);
+
+		/// <summary>
+		/// Adapter
+		/// </summary>
+		public static string Adapter => GetString(AdapterKey);
 	}
 }
