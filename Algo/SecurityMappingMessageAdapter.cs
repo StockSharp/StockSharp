@@ -109,6 +109,13 @@ namespace StockSharp.Algo
 					break;
 				}
 
+				case MessageTypes.SecurityMapping:
+				{
+					var mappingMsg = (SecurityMappingMessage)message;
+					Storage.Save(mappingMsg.StorageName, mappingMsg.Mapping);
+					return;
+				}
+
 				default:
 				{
 					if (message is ISecurityIdMessage secIdMsg)
