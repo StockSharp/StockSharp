@@ -1252,5 +1252,26 @@ namespace StockSharp.Messages
 		{
 			return adapterType.CreateInstance<IMessageAdapter>(idGenerator);
 		}
+
+		/// <summary>
+		/// Find adapter by the specified type.
+		/// </summary>
+		/// <typeparam name="TAdapter">Adapter type.</typeparam>
+		/// <param name="wrapper">Wrapping based adapter.</param>
+		/// <returns>Found adapter.</returns>
+		public static TAdapter FindAdapter<TAdapter>(this IMessageAdapterWrapper wrapper)
+			where TAdapter : IMessageAdapter
+		{
+			if (wrapper == null)
+				throw new ArgumentNullException(nameof(wrapper));
+
+			if (wrapper is TAdapter adapter)
+				return adapter;
+
+			if (wrapper.InnerAdapter is IMessageAdapterWrapper w)
+				return w.FindAdapter<TAdapter>();
+
+			return default(TAdapter);
+		}
 	}
 }
