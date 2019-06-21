@@ -2793,33 +2793,25 @@ namespace StockSharp.Algo.Strategies
 
 			switch (stateMsg.Command)
 			{
-				case nameof(ProcessState):
+				case StrategyCommands.Start:
 				{
-					var state = stateMsg.Statistics[nameof(ProcessState)].Item2.To<ProcessStates>();
-
-					switch (state)
-					{
-						case ProcessStates.Stopped:
-						case ProcessStates.Stopping:
-							Stop();
-							break;
-						case ProcessStates.Started:
-							Start();
-							break;
-						default:
-							throw new ArgumentOutOfRangeException(state.ToString());
-					}
-
+					Start();
 					break;
 				}
 
-				case nameof(CancelActiveOrders):
+				case StrategyCommands.Stop:
+				{
+					Stop();
+					break;
+				}
+
+				case StrategyCommands.CancelOrders:
 				{
 					CancelActiveOrders();
 					break;
 				}
 
-				case nameof(RegisterOrder):
+				case StrategyCommands.RegisterOrder:
 				{
 					var secId = stateMsg.Statistics.TryGetValue(nameof(Order.Security))?.Item2;
 					var pfName = stateMsg.Statistics.TryGetValue(nameof(Order.Portfolio))?.Item2;
@@ -2847,7 +2839,7 @@ namespace StockSharp.Algo.Strategies
 					break;
 				}
 
-				case nameof(CancelOrder):
+				case StrategyCommands.CancelOrder:
 				{
 					var orderId = stateMsg.Statistics[nameof(Order.Id)].Item2.To<long>();
 
@@ -2856,7 +2848,7 @@ namespace StockSharp.Algo.Strategies
 					break;
 				}
 
-				case nameof(StrategyHelper.ClosePosition):
+				case StrategyCommands.ClosePosition:
 				{
 					var slippage = stateMsg.Statistics.TryGetValue(nameof(Order.Slippage))?.Item2.To<decimal?>();
 					

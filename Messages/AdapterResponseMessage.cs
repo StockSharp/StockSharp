@@ -22,6 +22,12 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Adapter identifier.
+		/// </summary>
+		[DataMember]
+		public Guid AdapterId { get; set; }
+
+		/// <summary>
 		/// Parameters.
 		/// </summary>
 		[DataMember]
@@ -32,6 +38,7 @@ namespace StockSharp.Messages
 		{
 			base.CopyTo(destination);
 
+			destination.AdapterId = AdapterId;
 			destination.Parameters = Parameters.ToDictionary();
 		}
 	}

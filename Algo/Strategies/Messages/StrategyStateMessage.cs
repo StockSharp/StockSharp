@@ -11,6 +11,47 @@ namespace StockSharp.Algo.Strategies.Messages
 	using StockSharp.Messages;
 
 	/// <summary>
+	/// Strategy commands.
+	/// </summary>
+	public enum StrategyCommands
+	{
+		/// <summary>
+		/// Request current state.
+		/// </summary>
+		RequestState,
+
+		/// <summary>
+		/// Cancel orders.
+		/// </summary>
+		CancelOrders,
+
+		/// <summary>
+		/// Register order.
+		/// </summary>
+		RegisterOrder,
+
+		/// <summary>
+		/// Cancel order.
+		/// </summary>
+		CancelOrder,
+		
+		/// <summary>
+		/// Close position.
+		/// </summary>
+		ClosePosition,
+
+		/// <summary>
+		/// Start.
+		/// </summary>
+		Start,
+
+		/// <summary>
+		/// Stop.
+		/// </summary>
+		Stop,
+	}
+
+	/// <summary>
 	/// The message contains information about strategy state or command to change state.
 	/// </summary>
 	[DataContract]
@@ -41,7 +82,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Command.
 		/// </summary>
 		[DataMember]
-		public string Command { get; set; }
+		public StrategyCommands? Command { get; set; }
 
 		/// <summary>
 		/// Transaction ID.
@@ -66,7 +107,7 @@ namespace StockSharp.Algo.Strategies.Messages
 			if (!StrategyTypeId.IsDefault())
 				str += $",TypeId={StrategyTypeId}";
 
-			if (!Command.IsEmpty())
+			if (Command != null)
 				str += $",Command={Command}";
 
 			if (Error != null)
