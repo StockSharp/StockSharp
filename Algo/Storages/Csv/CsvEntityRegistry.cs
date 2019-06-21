@@ -850,7 +850,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 			}
 
-			protected override object GetKey(MarketDataMessage item) => item.TransactionId;
+			protected override object GetKey(MarketDataMessage item) => Tuple.Create(item.SecurityId, item.DataType, item.Arg);
 
 			protected override void Write(CsvFileWriter writer, MarketDataMessage data)
 			{
@@ -862,7 +862,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 				writer.WriteRow(new[]
 				{
-					data.TransactionId.To<string>(),
+					string.Empty,//data.TransactionId.To<string>(),
 					data.SecurityId.SecurityCode,
 					data.SecurityId.BoardCode,
 					data.DataType.To<string>(),
@@ -884,9 +884,10 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override MarketDataMessage Read(FastCsvReader reader)
 			{
+				reader.Skip();
 				var message = new MarketDataMessage
 				{
-					TransactionId = reader.ReadLong(),
+					//TransactionId = reader.ReadLong(),
 					SecurityId = new SecurityId
 					{
 						SecurityCode = reader.ReadString(),

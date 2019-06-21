@@ -128,8 +128,9 @@ StockSharp API Change log
 * (feature) BaseChartIndicatorPainter refactoring.
 * (feature) CollectionSecurityProvider. Check input nullable values.
 * (feature) IFileService. Share and UnShare operations added.
-* (feature) CSV importings. Supported native system identifier importing.
+* (feature) CSV importing. Supported native system identifier importing.
 * (feature) Security and portfolio route messages. Security mapping message.
+* (feature) StorageMessageAdapter. Support subscriptions persistence.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
