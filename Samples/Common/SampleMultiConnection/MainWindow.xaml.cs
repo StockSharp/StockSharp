@@ -204,6 +204,7 @@ namespace SampleMultiConnection
 			snapshotRegistry.Init();
 
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
+			ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
