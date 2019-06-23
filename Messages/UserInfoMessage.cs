@@ -1,9 +1,14 @@
 namespace StockSharp.Messages
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
+	using System.Linq;
+	using System.Net;
 	using System.Runtime.Serialization;
 	using System.Security;
+
+	using Ecng.Collections;
 
 	using StockSharp.Localization;
 
@@ -12,7 +17,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class UserInfoMessage : Message
+	public class UserInfoMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
@@ -53,6 +58,9 @@ namespace StockSharp.Messages
 			set => _password = value;
 		}
 
+		/// <inheritdoc />
+		public long TransactionId { get; set; }
+
 		/// <summary>
 		/// ID of the original message <see cref="UserLookupMessage.TransactionId"/> for which this message is a response.
 		/// </summary>
@@ -62,7 +70,24 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Is blocked.
 		/// </summary>
+		[DataMember]
 		public bool IsBlocked { get; set; }
+
+		private IEnumerable<IPAddress> _ipRestrictions = Enumerable.Empty<IPAddress>();
+
+		/// <summary>
+		/// IP address restrictions.
+		/// </summary>
+		public IEnumerable<IPAddress> IpRestrictions
+		{
+			get => _ipRestrictions;
+			set => _ipRestrictions = value ?? throw new ArgumentNullException(nameof(value));
+		}
+
+		/// <summary>
+		/// Permission set.
+		/// </summary>
+		public IDictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>> Permissions { get; } = new Dictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>>();
 
 		/// <inheritdoc />
 		public override string ToString()
@@ -90,6 +115,8 @@ namespace StockSharp.Messages
 			destination.Password = Password;
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.IsBlocked = IsBlocked;
+			destination.IpRestrictions = IpRestrictions.ToArray();
+			destination.Permissions.AddRange(Permissions.ToDictionary());
 
 			this.CopyExtensionInfo(destination);
 

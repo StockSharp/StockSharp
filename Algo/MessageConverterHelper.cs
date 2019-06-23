@@ -1855,5 +1855,61 @@ namespace StockSharp.Algo
 
 			return DataType.Create(series.CandleType.ToCandleMessageType(), series.Arg);
 		}
+
+		/// <summary>
+		/// Convert <see cref="UserInfoMessage"/> to <see cref="PermissionCredentials"/> value.
+		/// </summary>
+		/// <param name="message">The message contains information about user.</param>
+		/// <returns>Credentials with set of permissions.</returns>
+		public static PermissionCredentials ToCredentials(this UserInfoMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var credentials = new PermissionCredentials
+			{
+				Email = message.Login,
+				Password = message.Password,
+			};
+					
+			credentials.IpRestrictions.AddRange(message.IpRestrictions);
+					
+			foreach (var permission in message.Permissions)
+			{
+				var dict = new SynchronizedDictionary<Tuple<string, string, object, DateTime?>, bool>();
+				dict.AddRange(permission.Value);
+				credentials.Permissions.Add(permission.Key, dict);
+			}
+
+			return credentials;
+		}
+
+		/// <summary>
+		/// Convert <see cref="PermissionCredentials"/> to <see cref="UserInfoMessage"/> value.
+		/// </summary>
+		/// <param name="credentials">Credentials with set of permissions..</param>
+		/// <param name="copyPassword">Copy <see cref="PermissionCredentials.Password"/> value.</param>
+		/// <returns>The message contains information about user.</returns>
+		public static UserInfoMessage ToUserInfoMessage(this PermissionCredentials credentials, bool copyPassword)
+		{
+			if (credentials == null)
+				throw new ArgumentNullException(nameof(credentials));
+
+			var message = new UserInfoMessage
+			{
+				Login = credentials.Email,
+				IpRestrictions = credentials.IpRestrictions.Cache,
+			};
+
+			if (copyPassword)
+				message.Password = credentials.Password;
+
+			foreach (var permission in credentials.Permissions)
+			{
+				message.Permissions.Add(permission.Key, permission.Value.ToDictionary());
+			}
+
+			return message;
+		}
 	}
 }
