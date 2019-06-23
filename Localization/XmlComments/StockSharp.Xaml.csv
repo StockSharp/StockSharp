@@ -205,7 +205,7 @@ M:StockSharp.Xaml.ImportPreviewWindow.Init(StockSharp.Xaml.ImportSettings)/param
 M:StockSharp.Xaml.ImportPreviewWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ImportSelectAdapterWindow/summary;DocStr11197
 M:StockSharp.Xaml.ImportSelectAdapterWindow.#ctor/summary;DocStr1
-P:StockSharp.Xaml.ImportSelectAdapterWindow.Adapters/summary;DocStr11198
+P:StockSharp.Xaml.ImportSelectAdapterWindow.Adapters/summary;DocStr11167
 P:StockSharp.Xaml.ImportSelectAdapterWindow.SelectedAdapter/summary;DocStr11199
 M:StockSharp.Xaml.ImportSelectAdapterWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ImportSettings/summary;Str2842
@@ -375,6 +375,7 @@ F:StockSharp.Xaml.PermissionCredentialsWindow.SelectAllCommand/summary;DocStr845
 F:StockSharp.Xaml.PermissionCredentialsWindow.UnSelectAllCommand/summary;DocStr8459
 M:StockSharp.Xaml.PermissionCredentialsWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.PermissionCredentialsWindow.Credentials/summary;DocStr10444
+P:StockSharp.Xaml.PermissionCredentialsWindow.ChangedCredentials/summary;DocStr11203
 M:StockSharp.Xaml.PermissionCredentialsWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.DataSourcePanel/summary;DocStr9358
 P:StockSharp.Xaml.DataSourcePanel.ItemsSource/summary;DocStr9159

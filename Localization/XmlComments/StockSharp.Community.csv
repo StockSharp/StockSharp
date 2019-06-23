@@ -65,6 +65,10 @@ M:StockSharp.Community.CommunityAuthorization.SaveUser(System.String,System.Secu
 M:StockSharp.Community.CommunityAuthorization.SaveUser(System.String,System.Security.SecureString,System.Collections.Generic.IEnumerable{System.Net.IPAddress})/param/login;Login
 M:StockSharp.Community.CommunityAuthorization.SaveUser(System.String,System.Security.SecureString,System.Collections.Generic.IEnumerable{System.Net.IPAddress})/param/password;Password
 M:StockSharp.Community.CommunityAuthorization.SaveUser(System.String,System.Security.SecureString,System.Collections.Generic.IEnumerable{System.Net.IPAddress})/param/possibleAddresses;DocStr9684
+M:StockSharp.Community.CommunityAuthorization.ChangePassword(System.String,System.Security.SecureString,System.Security.SecureString)/summary;XamlStr665
+M:StockSharp.Community.CommunityAuthorization.ChangePassword(System.String,System.Security.SecureString,System.Security.SecureString)/param/login;Login
+M:StockSharp.Community.CommunityAuthorization.ChangePassword(System.String,System.Security.SecureString,System.Security.SecureString)/param/oldPassword;DocStr9872
+M:StockSharp.Community.CommunityAuthorization.ChangePassword(System.String,System.Security.SecureString,System.Security.SecureString)/param/newPassword;XamlStr360
 M:StockSharp.Community.CommunityAuthorization.DeleteUser(System.String)/summary;DocStr9685
 M:StockSharp.Community.CommunityAuthorization.DeleteUser(System.String)/param/login;Login
 M:StockSharp.Community.CommunityAuthorization.DeleteUser(System.String)/returns;DocStr9686

@@ -1522,14 +1522,14 @@ F:StockSharp.Fix.Native.FixExtendedMessages.SecurityListUpload/summary;DocStr104
 F:StockSharp.Fix.Native.FixExtendedMessages.SecurityListDelete/summary;DocStr10435
 F:StockSharp.Fix.Native.FixExtendedMessages.Board/summary;DocStr10816
 F:StockSharp.Fix.Native.FixExtendedMessages.BoardUpdate/summary;DocStr10436
-F:StockSharp.Fix.Native.FixExtendedMessages.BoardDelete/summary;DocStr10437
 F:StockSharp.Fix.Native.FixExtendedMessages.HistoryStart/summary;DocStr10484
 F:StockSharp.Fix.Native.FixExtendedMessages.HistoryEnd/summary;DocStr10485
 F:StockSharp.Fix.Native.FixExtendedMessages.HistoryInterval/summary;DocStr10486
 F:StockSharp.Fix.Native.FixExtendedMessages.UserLookupResult/summary;DocStr10753
 F:StockSharp.Fix.Native.FixExtendedMessages.BoardLookup/summary;DocStr10787
 F:StockSharp.Fix.Native.FixExtendedMessages.BoardLookupResult/summary;DocStr10788
-F:StockSharp.Fix.Native.FixExtendedMessages.UserRequest/summary;DocStr10789
+F:StockSharp.Fix.Native.FixExtendedMessages.UserRequest/summary;DocStr10846
+F:StockSharp.Fix.Native.FixExtendedMessages.UserInfo/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.TimeFramesRequest/summary;DocStr10830
 F:StockSharp.Fix.Native.FixExtendedMessages.TimeFramesResponse/summary;DocStr10831
 F:StockSharp.Fix.Native.FixExtendedMessages.StrategyInfo/summary;DocStr10846
@@ -1555,6 +1555,7 @@ F:StockSharp.Fix.Native.FixExtendedMessages.SecurityRoute/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.PortfolioRoute/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.SecurityRouteListFinished/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.PortfolioRouteListFinished/summary;DocStr10846
+F:StockSharp.Fix.Native.FixExtendedMessages.Remove/summary;DocStr10846
 T:StockSharp.Fix.Native.FixTags/summary;DocStr3321
 F:StockSharp.Fix.Native.FixTags.Account/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.AvgPx/summary;DocStr8459
@@ -1835,6 +1836,11 @@ F:StockSharp.Fix.Native.FixTags.MarketDataBuildFrom/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MarketDataBuildField/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.RegularTradingHours/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MarketDataCount/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.NoIpRestrictions/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.IpRestrictions/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.NoPermissions/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Permissions/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.NoPermissionsValues/summary;DocStr8459
 T:StockSharp.Fix.Native.FixBase/summary;DocStr3186
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr93
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr1295

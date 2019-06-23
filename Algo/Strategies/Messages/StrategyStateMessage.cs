@@ -26,7 +26,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		CancelOrders,
 
 		/// <summary>
-		/// Register order.
+		/// Register new order.
 		/// </summary>
 		RegisterOrder,
 

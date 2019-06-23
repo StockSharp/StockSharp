@@ -15687,22 +15687,21 @@ DocStr11168;{0} if the data was successfully drawn, otherwise, returns {1};{0} �
 DocStr11169;Values 1;Значения 1
 DocStr11170;Values 2;Значения 2
 DocStr11171;Operation;Операция
-DocStr11172;Strategy commands;Strategy commands
-DocStr11173;Request current state;Request current state
-DocStr11174;Register order;Register order
+DocStr11172;Strategy commands;Команды стратегии
+DocStr11173;Request current state;Запросить текущее состояние
 DocStr11175;Information about SwissQuote;Информация SwissQuote
-DocStr11176;Adapter commands;Adapter commands
+DocStr11176;Adapter commands;Команды адаптера
 DocStr11177;Enable;Включить
 DocStr11178;Disable;Выключить
-DocStr11179;Update settings;Update settings
+DocStr11179;Update settings;Обновить настройки
 DocStr11180;Remove;Удалить
-DocStr11181;Security route response message;Security route response message
-DocStr11182;Portfolio routes result message;Portfolio routes result message
-DocStr11183;Portfolio routes list request message;Portfolio routes list request message
-DocStr11184;Portfolio route response message;Portfolio route response message
-DocStr11185;Security routes result message;Security routes result message
-DocStr11186;Security routes list request message;Security routes list request message
-DocStr11187;Multiple field's instancies allowed;Multiple field's instancies allowed
+DocStr11181;Security route response message;Сообщение о маршрутизации инструмента
+DocStr11182;Portfolio routes result message;Сообщение результата запроса списка маршрутов портфелей
+DocStr11183;Portfolio routes list request message;Сообщение запроса списка маршрутов портфелей
+DocStr11184;Portfolio route response message;Сообщение о маршрутизации портфеля
+DocStr11185;Security routes result message;Сообщение результата запроса списка маршрутов инструментов
+DocStr11186;Security routes list request message;Сообщение запроса списка маршрутов инструментов
+DocStr11187;Multiple field's instancies allowed;Доступно множественное количество объектов поля
 DocStr11188;{0} required;{0} обязателен
 DocStr11189;Get {0} instance or clone dependent on {1};Получить объект {0} или склонировать, в зависимости от {1}
 DocStr11190;Public token;Публичный токен
@@ -15710,3 +15709,7 @@ DocStr11191;Undo {0} operation;Отменить операцию {0}
 DocStr11194;Find adapter by the specified type;Найти адаптер по указанному типу
 DocStr11197;Select adapter window;Окно выбора адаптера
 DocStr11199;Selected adapter;Выбранный адаптер
+DocStr11200;Copy {0} value;Скопировать {0} значение
+DocStr11201;Create {0} instance;Создать объект {0}
+DocStr11202;Adapter type;Тип адаптера
+DocStr11203;Changed credentials;Измененные доступы
