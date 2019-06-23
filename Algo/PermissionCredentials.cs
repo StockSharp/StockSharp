@@ -9,6 +9,8 @@ namespace StockSharp.Algo
 	using Ecng.Serialization;
 
 	using StockSharp.Community;
+	using StockSharp.Messages;
+
 	using Pair = System.Tuple<string, string, object, System.DateTime?>;
 
 	/// <summary>
@@ -21,10 +23,10 @@ namespace StockSharp.Algo
 		/// </summary>
 		public PermissionCredentials()
 		{
-			Permissions.SafeAdd(UserPermissions.Load);
-			Permissions.SafeAdd(UserPermissions.SecurityLookup);
-			Permissions.SafeAdd(UserPermissions.ExchangeLookup);
-			Permissions.SafeAdd(UserPermissions.ExchangeBoardLookup);
+			//Permissions.SafeAdd(UserPermissions.Load);
+			//Permissions.SafeAdd(UserPermissions.SecurityLookup);
+			//Permissions.SafeAdd(UserPermissions.ExchangeLookup);
+			//Permissions.SafeAdd(UserPermissions.ExchangeBoardLookup);
 		}
 
 		/// <summary>
@@ -50,6 +52,9 @@ namespace StockSharp.Algo
 						IpRestrictions.AddRange(ipRestrictions.Split(",").Select(s => s.To<IPAddress>()));
 					}
 				}
+
+				NotifyChanged(nameof(IpRestrictions));
+				NotifyChanged(nameof(IpRestrictionsStr));
 			}
 		}
 

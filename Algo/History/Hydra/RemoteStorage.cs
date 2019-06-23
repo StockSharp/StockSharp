@@ -642,7 +642,7 @@ namespace StockSharp.Algo.History.Hydra
 
 			this.AddInfoLog(LocalizedStrings.RemoteStorageGetUsers, sessionId);
 
-			return _authorization.AllRemoteUsers.Select(t => Tuple.Create(t.Item1, t.Item2.Select(a => a.To<string>()).ToArray(), t.Item3)).ToArray();
+			return _authorization.AllRemoteUsers.Select(c => Tuple.Create(c.Email, c.IpRestrictions.Cache.Select(a => a.To<string>()).ToArray(), c.Permissions.SyncGet(d => d.Keys.JoinMask()))).ToArray();
 		}
 
 		void IRemoteStorage.SaveUser(Guid sessionId, string login, string password, string[] ipAddresses, UserPermissions permissions)

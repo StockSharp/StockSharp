@@ -11,6 +11,7 @@ namespace StockSharp.Algo
 	using Ecng.Security;
 
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The connection access check module based on the <see cref="PermissionCredentialsStorage"/> authentication.
@@ -18,7 +19,6 @@ namespace StockSharp.Algo
 	public class PermissionCredentialsRemoteAuthorization : AnonymousRemoteAuthorization
 	{
 		private readonly SynchronizedDictionary<Guid, PermissionCredentials> _sessions = new SynchronizedDictionary<Guid, PermissionCredentials>();
-		private readonly PermissionCredentialsStorage _storage;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PermissionCredentialsRemoteAuthorization"/>.
@@ -26,8 +26,13 @@ namespace StockSharp.Algo
 		/// <param name="storage">Storage for <see cref="PermissionCredentials"/>.</param>
 		public PermissionCredentialsRemoteAuthorization(PermissionCredentialsStorage storage)
 		{
-			_storage = storage ?? throw new ArgumentNullException(nameof(storage));
+			Storage = storage ?? throw new ArgumentNullException(nameof(storage));
 		}
+
+		/// <summary>
+		/// Storage for <see cref="PermissionCredentials"/>.
+		/// </summary>
+		public PermissionCredentialsStorage Storage { get; }
 
 		private IAuthorization _authorization = new AnonymousAuthorization();
 
@@ -43,31 +48,8 @@ namespace StockSharp.Algo
 		private bool IsAnonymous => Authorization is AnonymousAuthorization;
 
 		/// <inheritdoc />
-		public override IEnumerable<Tuple<string, IEnumerable<IPAddress>, UserPermissions>> AllRemoteUsers
-		{
-			get
-			{
-				if (IsAnonymous)
-					return base.AllRemoteUsers;
-				else
-				{
-					return _storage.Credentials.Select(c =>
-					{
-						IEnumerable<IPAddress> addresses;
-
-						lock (c.IpRestrictions.SyncRoot)
-							addresses = c.IpRestrictions.ToArray();
-
-						UserPermissions permissions;
-
-						lock (c.Permissions.SyncRoot)
-							permissions = c.Permissions.Keys.JoinMask();
-
-						return Tuple.Create(c.Email, addresses, permissions);
-					}).ToArray();
-				}
-			}
-		}
+		public override IEnumerable<PermissionCredentials> AllRemoteUsers
+			=> IsAnonymous ? base.AllRemoteUsers : Storage.Credentials;
 
 		/// <inheritdoc />
 		public override void SaveRemoteUser(string login, SecureString password, IEnumerable<IPAddress> possibleAddresses, UserPermissions permissions)
@@ -79,7 +61,7 @@ namespace StockSharp.Algo
 
 			_authorization.SaveUser(login, password, possibleAddresses);
 
-			var user = _storage.TryGetByLogin(login);
+			var user = Storage.TryGetByLogin(login);
 
 			if (user == null)
 			{
@@ -88,7 +70,7 @@ namespace StockSharp.Algo
 					Email = login
 				};
 
-				_storage.Add(user);
+				Storage.Add(user);
 			}
 
 			lock (user.IpRestrictions.SyncRoot)
@@ -107,7 +89,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			_storage.SaveCredentials();
+			Storage.SaveCredentials();
 		}
 
 		/// <inheritdoc />
@@ -119,8 +101,8 @@ namespace StockSharp.Algo
 			if (!_authorization.DeleteUser(login))
 				return false;
 
-			_storage.DeleteByLogin(login);
-			_storage.SaveCredentials();
+			Storage.DeleteByLogin(login);
+			Storage.SaveCredentials();
 			return true;
 		}
 
@@ -132,7 +114,7 @@ namespace StockSharp.Algo
 			if (IsAnonymous)
 				return sessionId;
 
-			var credentials = _storage.TryGetByLogin(login);
+			var credentials = Storage.TryGetByLogin(login);
 
 			if (credentials == null)
 				throw new UnauthorizedAccessException(LocalizedStrings.UserNotFound.Put(login));

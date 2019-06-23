@@ -19,7 +19,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// All available users.
 		/// </summary>
-		IEnumerable<Tuple<string, IEnumerable<IPAddress>, UserPermissions>> AllRemoteUsers { get; }
+		IEnumerable<PermissionCredentials> AllRemoteUsers { get; }
 
 		/// <summary>
 		/// Save user.
@@ -62,16 +62,7 @@ namespace StockSharp.Algo
 		{
 		}
 
-		/// <summary>
-		/// Get permission for request.
-		/// </summary>
-		/// <param name="sessionId">Session ID.</param>
-		/// <param name="requiredPermissions">Required permissions.</param>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-		/// <param name="date">Date.</param>
-		/// <returns>Possible permissions.</returns>
+		/// <inheritdoc />
 		public virtual bool HasPermissions(Guid sessionId, UserPermissions requiredPermissions, string securityId, string dataType, object arg, DateTime? date)
 		{
 			switch (requiredPermissions)
@@ -101,7 +92,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public virtual IEnumerable<Tuple<string, IEnumerable<IPAddress>, UserPermissions>> AllRemoteUsers => Enumerable.Empty<Tuple<string, IEnumerable<IPAddress>, UserPermissions>>();
+		public virtual IEnumerable<PermissionCredentials> AllRemoteUsers => Enumerable.Empty<PermissionCredentials>();
 
 		/// <inheritdoc />
 		public virtual void SaveRemoteUser(string login, SecureString password, IEnumerable<IPAddress> possibleAddresses, UserPermissions permissions)
@@ -115,94 +106,4 @@ namespace StockSharp.Algo
 			return DeleteUser(login);
 		}
 	}
-
-	///// <summary>
-	///// The connection to <see cref="RemoteStorage"/> access check module based on Windows authentication.
-	///// </summary>
-	//public class WindowsRemoteStorageAuthorization : WindowsAuthorization, IRemoteStorageAuthorization
-	//{
-	//	/// <summary>
-	//	/// Initializes a new instance of the <see cref="WindowsRemoteStorageAuthorization"/>.
-	//	/// </summary>
-	//	public WindowsRemoteStorageAuthorization()
-	//	{
-	//	}
-
-	//	/// <summary>
-	//	/// Get permission for request.
-	//	/// </summary>
-	//	/// <param name="sessionId">Session ID.</param>
-	//	/// <param name="requiredPermissions">Required permissions.</param>
-	//	/// <param name="securityId">Security ID.</param>
-	//	/// <param name="dataType">Market data type.</param>
-	//	/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-	//	/// <param name="date">Date.</param>
-	//	/// <returns>Possible permissions.</returns>
-	//	public bool HasPermissions(Guid sessionId, UserPermissions requiredPermissions, string securityId, string dataType, object arg, DateTime? date)
-	//	{
-	//		switch (requiredPermissions)
-	//		{
-	//			case UserPermissions.Save:
-	//			case UserPermissions.Delete:
-	//			case UserPermissions.SecuritySave:
-	//			case UserPermissions.ExchangeSave:
-	//			case UserPermissions.ExchangeBoardSave:
-	//			case UserPermissions.SecurityDelete:
-	//			case UserPermissions.ExchangeDelete:
-	//				return false;
-	//			case UserPermissions.Load:
-	//			case UserPermissions.SecurityLookup:
-	//			case UserPermissions.ExchangeLookup:
-	//			case UserPermissions.ExchangeBoardLookup:
-	//				return true;
-	//			default:
-	//				throw new ArgumentOutOfRangeException(nameof(requiredPermissions), requiredPermissions, null);
-	//		}
-	//	}
-	//}
-
-	///// <summary>
-	///// The connection to <see cref="RemoteStorage"/> access check module based on the <see cref="IAuthenticationService"/> authentication.
-	///// </summary>
-	//public class CommunityRemoteStorageAuthorization : CommunityAuthorization, IRemoteStorageAuthorization
-	//{
-	//	/// <summary>
-	//	/// Initializes a new instance of the <see cref="CommunityRemoteStorageAuthorization"/>.
-	//	/// </summary>
-	//	public CommunityRemoteStorageAuthorization()
-	//	{
-	//	}
-
-	//	/// <summary>
-	//	/// Get permission for request.
-	//	/// </summary>
-	//	/// <param name="sessionId">Session ID.</param>
-	//	/// <param name="requiredPermissions">Required permissions.</param>
-	//	/// <param name="securityId">Security ID.</param>
-	//	/// <param name="dataType">Market data type.</param>
-	//	/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-	//	/// <param name="date">Date.</param>
-	//	/// <returns>Possible permissions.</returns>
-	//	public bool HasPermissions(Guid sessionId, UserPermissions requiredPermissions, string securityId, string dataType, object arg, DateTime? date)
-	//	{
-	//		switch (requiredPermissions)
-	//		{
-	//			case UserPermissions.Save:
-	//			case UserPermissions.Delete:
-	//			case UserPermissions.SecuritySave:
-	//			case UserPermissions.ExchangeSave:
-	//			case UserPermissions.ExchangeBoardSave:
-	//			case UserPermissions.SecurityDelete:
-	//			case UserPermissions.ExchangeDelete:
-	//				return false;
-	//			case UserPermissions.Load:
-	//			case UserPermissions.SecurityLookup:
-	//			case UserPermissions.ExchangeLookup:
-	//			case UserPermissions.ExchangeBoardLookup:
-	//				return true;
-	//			default:
-	//				throw new ArgumentOutOfRangeException(nameof(requiredPermissions), requiredPermissions, null);
-	//		}
-	//	}
-	//}
 }

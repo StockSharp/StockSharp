@@ -1,4 +1,4 @@
-namespace StockSharp.Algo
+namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel.DataAnnotations;

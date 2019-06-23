@@ -78,6 +78,17 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
+		/// Change password.
+		/// </summary>
+		/// <param name="login">Login.</param>
+		/// <param name="oldPassword">Old password.</param>
+		/// <param name="newPassword">New password.</param>
+		public void ChangePassword(string login, SecureString oldPassword, SecureString newPassword)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
 		/// Delete user by login.
 		/// </summary>
 		/// <param name="login">Login.</param>

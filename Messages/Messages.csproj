@@ -183,6 +183,7 @@
     <Compile Include="UserInfoMessage.cs" />
     <Compile Include="UserLookupMessage.cs" />
     <Compile Include="UserLookupResultMessage.cs" />
+    <Compile Include="UserPermissions.cs" />
     <Compile Include="UserRequestMessage.cs" />
     <Compile Include="WithdrawInfo.cs" />
     <Compile Include="WorkingTime.cs" />
