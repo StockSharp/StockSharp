@@ -2683,6 +2683,9 @@ namespace StockSharp.Algo
 						case Level1Fields.UnderlyingMinVolume:
 							security.UnderlyingSecurityMinVolume = (decimal)value;
 							break;
+						case Level1Fields.IssueSize:
+							security.IssueSize = (decimal)value;
+							break;
 						//default:
 						//	throw new ArgumentOutOfRangeException();
 					}

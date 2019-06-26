@@ -133,6 +133,7 @@ StockSharp API Change log
 * (feature) StorageMessageAdapter. Support subscriptions persistence.
 * (feature) IndexEditor. Uses ISecurityProvider https://stocksharp.ru/posts/m/47693/
 * (bug) ProxySettings fix https://stocksharp.ru/forum/10804/ne-rabotaet-soedinenie-cherez-proksi-server/
+* (feature) Level1. Fill Security.IssueSize from level1.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
