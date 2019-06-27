@@ -797,6 +797,9 @@ P:StockSharp.BusinessEntities.Order.IsMarketMaker/summary;MarketMakerOrder
 P:StockSharp.BusinessEntities.Order.IsMargin/summary;IsMargin
 P:StockSharp.BusinessEntities.Order.Slippage/summary;Str164
 P:StockSharp.BusinessEntities.Order.IsManual/summary;IsOrderManual
+P:StockSharp.BusinessEntities.Order.AveragePrice/summary;DocStr11205
+P:StockSharp.BusinessEntities.Order.Yield/summary;Str321
+P:StockSharp.BusinessEntities.Order.MinVolume/summary;DocStr11206
 M:StockSharp.BusinessEntities.Order.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Order.ToString/returns;DocStr50
 T:StockSharp.BusinessEntities.OrderFail/summary;DocStr2924
@@ -875,6 +878,7 @@ P:StockSharp.BusinessEntities.Security.Decimals/summary;Str548
 P:StockSharp.BusinessEntities.Security.ExpiryDate/summary;Str371
 P:StockSharp.BusinessEntities.Security.SettlementDate/summary;Str373
 P:StockSharp.BusinessEntities.Security.CfiCode/summary;CfiCodeDesc
+P:StockSharp.BusinessEntities.Security.FaceValue/summary;FaceValue
 P:StockSharp.BusinessEntities.Security.ExtensionInfo/summary;DocStr2624
 P:StockSharp.BusinessEntities.Security.ExtensionInfo/remarks;DocStr2625
 P:StockSharp.BusinessEntities.Security.StepPrice/summary;Str290

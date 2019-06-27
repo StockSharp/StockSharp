@@ -3078,16 +3078,6 @@ namespace StockSharp.Localization
 		public static string Str256 => GetString(Str256Key);
 
 		/// <summary>
-		/// Average price
-		/// </summary>
-		public const string Str257Key = nameof(Str257);
-
-		/// <summary>
-		/// Average price
-		/// </summary>
-		public static string Str257 => GetString(Str257Key);
-
-		/// <summary>
 		/// Unrealized profit
 		/// </summary>
 		public const string Str258Key = nameof(Str258);

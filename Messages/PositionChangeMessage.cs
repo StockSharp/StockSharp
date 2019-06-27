@@ -66,7 +66,7 @@ namespace StockSharp.Messages
 		/// Average price.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str257Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AveragePriceKey)]
 		AveragePrice,
 
 		/// <summary>

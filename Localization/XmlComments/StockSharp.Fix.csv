@@ -1460,6 +1460,8 @@ F:StockSharp.Fix.Native.ExecutionReport.Text/summary;DocStr8802
 F:StockSharp.Fix.Native.ExecutionReport.ExecId/summary;DocStr8803
 F:StockSharp.Fix.Native.ExecutionReport.OrdStatusReqId/summary;DocStr9461
 F:StockSharp.Fix.Native.ExecutionReport.LastLiquidityInd/summary;DocStr10107
+P:StockSharp.Fix.Native.ExecutionReport.MinQty/summary;DocStr11206
+P:StockSharp.Fix.Native.ExecutionReport.Yield/summary;Str321
 T:StockSharp.Fix.Native.FastPMap/summary;DocStr8938
 M:StockSharp.Fix.Native.FastPMap.#ctor/summary;DocStr1
 M:StockSharp.Fix.Native.FastPMap.Reset/summary;Str3282
@@ -1637,6 +1639,7 @@ F:StockSharp.Fix.Native.FixTags.SecurityExchange/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.PegOffsetValue/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.IssueDate/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ContractMultiplier/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Yield/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.RedemptionDate/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.LegIssueDate/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MDReqID/summary;DocStr8459
@@ -1825,7 +1828,6 @@ F:StockSharp.Fix.Native.FixTags.ParameterName/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ParameterType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ParameterValue/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Command/summary;DocStr8459
-F:StockSharp.Fix.Native.FixTags.MinVolume/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Shortable/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.StrategyTypeAssembly/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.AllowBuildFromSmallerTimeFrame/summary;DocStr8459
@@ -1841,6 +1843,7 @@ F:StockSharp.Fix.Native.FixTags.IpRestrictions/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoPermissions/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Permissions/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoPermissionsValues/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.FaceValue/summary;DocStr8459
 T:StockSharp.Fix.Native.FixBase/summary;DocStr3186
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr93
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr1295

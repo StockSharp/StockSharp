@@ -304,7 +304,6 @@ Str253;Initial value;Начальное значение
 Str254;Current value;Текущая значение
 Str255;Blocked;Заблокировано
 Str256;Position price;Стоимость позиции
-Str257;Average price;Средневзвешенная цена
 Str258;Unrealized profit;Нереализованная прибыль
 Str259;Realized profit;Реализованная прибыль
 Str260;Variation margin;Вариационная маржа
@@ -12395,7 +12394,6 @@ DocStr7574;Execution instruction;Инструкция исполнения
 DocStr7575;Execution brokerage;Исполняющий брокер
 DocStr7576;Limit price;Лимит цены исполнения
 DocStr7577;Trailing stop price step;Шаг увеличения цены скользящего стопа
-DocStr7578;Average price;Средняя цена исполнения
 DocStr7579;Covered option;Покрытый опцион
 DocStr7581;Strike price;Страйк-цена
 DocStr7583;Уровни логирования;Уровни логирования
@@ -15723,3 +15721,6 @@ DocStr11200;Copy {0} value;Скопировать {0} значение
 DocStr11201;Create {0} instance;Создать объект {0}
 DocStr11202;Adapter type;Тип адаптера
 DocStr11203;Changed credentials;Измененные доступы
+DocStr11204;Default handler;Обработчик по умолчанию
+DocStr11205;Average execution price;Средняя цена исполнения
+DocStr11206;Minimum quantity of an order to be executed;Минимальный объем заявки, который может быть исполнен
