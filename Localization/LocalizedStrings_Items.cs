@@ -49706,5 +49706,85 @@ namespace StockSharp.Localization
 		/// Face value.
 		/// </summary>
 		public static string FaceValueDesc => GetString(FaceValueDescKey);
+
+		/// <summary>
+		/// Coupon value.
+		/// </summary>
+		public const string CouponValueKey = nameof(CouponValue);
+
+		/// <summary>
+		/// Coupon value.
+		/// </summary>
+		public static string CouponValue => GetString(CouponValueKey);
+
+		/// <summary>
+		/// Coupon date.
+		/// </summary>
+		public const string CouponDateKey = nameof(CouponDate);
+
+		/// <summary>
+		/// Coupon date.
+		/// </summary>
+		public static string CouponDate => GetString(CouponDateKey);
+
+		/// <summary>
+		/// Coupon period.
+		/// </summary>
+		public const string CouponPeriodKey = nameof(CouponPeriod);
+
+		/// <summary>
+		/// Coupon period.
+		/// </summary>
+		public static string CouponPeriod => GetString(CouponPeriodKey);
+
+		/// <summary>
+		/// Market price (yesterday).
+		/// </summary>
+		public const string MarketPriceYesterdayKey = nameof(MarketPriceYesterday);
+
+		/// <summary>
+		/// Market price (yesterday).
+		/// </summary>
+		public static string MarketPriceYesterday => GetString(MarketPriceYesterdayKey);
+
+		/// <summary>
+		/// Market price (today).
+		/// </summary>
+		public const string MarketPriceTodayKey = nameof(MarketPriceToday);
+
+		/// <summary>
+		/// Market price (today).
+		/// </summary>
+		public static string MarketPriceToday => GetString(MarketPriceTodayKey);
+
+		/// <summary>
+		/// VWAP (prev).
+		/// </summary>
+		public const string VWAPPrevKey = nameof(VWAPPrev);
+
+		/// <summary>
+		/// VWAP (prev).
+		/// </summary>
+		public static string VWAPPrev => GetString(VWAPPrevKey);
+
+		/// <summary>
+		/// Yield by VWAP.
+		/// </summary>
+		public const string YieldVWAPKey = nameof(YieldVWAP);
+
+		/// <summary>
+		/// Yield by VWAP.
+		/// </summary>
+		public static string YieldVWAP => GetString(YieldVWAPKey);
+
+		/// <summary>
+		/// Yield by VWAP (prev).
+		/// </summary>
+		public const string YieldVWAPPrevKey = nameof(YieldVWAPPrev);
+
+		/// <summary>
+		/// Yield by VWAP (prev).
+		/// </summary>
+		public static string YieldVWAPPrev => GetString(YieldVWAPPrevKey);
 	}
 }
