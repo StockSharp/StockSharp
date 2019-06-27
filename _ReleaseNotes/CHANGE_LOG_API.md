@@ -139,6 +139,8 @@ StockSharp API Change log
 * (feature) QuikLua. Securities. FaceValue, Dividend, Duration, CouponDate, CouponPeriod, CouponValue, MarketPriceToday, MarketPriceYesterday, YieldVWAP, YieldVWAPPrev, VWAPPrev translation added.
 * (feature) QuikLua. Orders. Yield, MinVolume, AveragePrice translation added.
 * (feature) QuikLua. VC++ 2019 runtime usage.
+* (feature) SecurityGrid. Dividend, Duration, CouponDate, CouponPeriod, CouponValue, MarketPriceToday, MarketPriceYesterday, YieldVWAP, YieldVWAPPrev, VWAPPrev columns added.
+* (feature) OrderGrid. AveragePrice, MinVolume and Yield columns added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

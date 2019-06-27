@@ -1752,6 +1752,11 @@
             Credentials.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.PermissionCredentialsWindow.ChangedCredentials">
+      <summary>
+            Changed credentials.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.PermissionCredentialsWindow.InitializeComponent">
       <summary>
             InitializeComponent
