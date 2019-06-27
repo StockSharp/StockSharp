@@ -499,6 +499,7 @@ namespace StockSharp.Algo.Export
 					.SetCell(colIndex, 0, LocalizedStrings.Shortable).SetStyle(colIndex++, typeof(bool))
 					.SetCell(colIndex, 0, LocalizedStrings.Basket).SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, LocalizedStrings.Expression).SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, LocalizedStrings.FaceValue).SetStyle(colIndex++, typeof(decimal))
 
 					.SetCell(colIndex, 0, "Bloomberg").SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, "CUSIP").SetStyle(colIndex++, typeof(string))
@@ -541,6 +542,7 @@ namespace StockSharp.Algo.Export
 						.SetCell(colIndex++, rowIndex, security.Shortable)
 						.SetCell(colIndex++, rowIndex, security.BasketCode)
 						.SetCell(colIndex++, rowIndex, security.BasketExpression)
+						.SetCell(colIndex++, rowIndex, security.FaceValue)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.Bloomberg)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.Cusip)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.IQFeed)

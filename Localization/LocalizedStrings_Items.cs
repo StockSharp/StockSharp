@@ -49686,5 +49686,25 @@ namespace StockSharp.Localization
 		/// Adapter for field {0} isn't specified.
 		/// </summary>
 		public static string AdapterNotSpecified => GetString(AdapterNotSpecifiedKey);
+
+		/// <summary>
+		/// Face value
+		/// </summary>
+		public const string FaceValueKey = nameof(FaceValue);
+
+		/// <summary>
+		/// Face value
+		/// </summary>
+		public static string FaceValue => GetString(FaceValueKey);
+
+		/// <summary>
+		/// Face value.
+		/// </summary>
+		public const string FaceValueDescKey = nameof(FaceValueDesc);
+
+		/// <summary>
+		/// Face value.
+		/// </summary>
+		public static string FaceValueDesc => GetString(FaceValueDescKey);
 	}
 }

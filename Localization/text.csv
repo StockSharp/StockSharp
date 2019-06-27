@@ -5001,6 +5001,8 @@ NativeId;Native ID;ID (внутренний)
 NativeIdDesc;Native (internal) trading system security id.;Внутренний идентификатор торговой системы.
 Adapter;Adapter;Адаптер
 AdapterNotSpecified;Adapter for field {0} isn't specified.;Адаптер для поля {0} не указан.
+FaceValue;Face value;Номинал
+FaceValueDesc;Face value.;Номинальная стоимость.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

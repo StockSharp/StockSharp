@@ -151,6 +151,11 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(int.MaxValue)
 			};
+			yield return new ColumnDescription(nameof(SecurityMessage.FaceValue))
+			{
+				DbType = typeof(decimal?),
+				ValueRestriction = new DecimalRestriction()
+			};
 			yield return new ColumnDescription(nameof(SecurityId.Bloomberg))
 			{
 				DbType = typeof(string),
@@ -221,6 +226,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(SecurityMessage.Shortable), value.Shortable },
 				{ nameof(SecurityMessage.BasketCode), value.BasketCode },
 				{ nameof(SecurityMessage.BasketExpression), value.BasketExpression },
+				{ nameof(SecurityMessage.FaceValue), value.FaceValue },
 				{ nameof(SecurityId.Bloomberg), value.SecurityId.Bloomberg },
 				{ nameof(SecurityId.Cusip), value.SecurityId.Cusip },
 				{ nameof(SecurityId.IQFeed), value.SecurityId.IQFeed },

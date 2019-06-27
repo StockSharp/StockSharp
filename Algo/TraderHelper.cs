@@ -1994,6 +1994,12 @@ namespace StockSharp.Algo
 				if (criteria.ExpiryDate != null && s.ExpiryDate != null && s.ExpiryDate != criteria.ExpiryDate)
 					return false;
 
+				if (criteria.Shortable != null && s.Shortable != null && s.Shortable != criteria.Shortable)
+					return false;
+
+				if (criteria.FaceValue != null && s.FaceValue != null && s.FaceValue != criteria.FaceValue)
+					return false;
+
 				if (criteria.ExtensionInfo != null && criteria.ExtensionInfo.Count > 0)
 				{
 					if (s.ExtensionInfo == null)
@@ -2929,6 +2935,12 @@ namespace StockSharp.Algo
 			{
 				if (isOverride || security.BasketExpression.IsEmpty())
 					security.BasketExpression = message.BasketExpression;
+			}
+
+			if (message.FaceValue != null)
+			{
+				if (isOverride || security.FaceValue == null)
+					security.FaceValue = message.FaceValue;
 			}
 
 			message.CopyExtensionInfo(security);

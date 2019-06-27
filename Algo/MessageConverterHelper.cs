@@ -27,6 +27,7 @@ namespace StockSharp.Algo
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Community;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -528,6 +529,7 @@ namespace StockSharp.Algo
 				Shortable = security.Shortable,
 				BasketCode = security.BasketCode,
 				BasketExpression = security.BasketExpression,
+				FaceValue = security.FaceValue,
 
 				OriginalTransactionId = originalTransactionId,
 			};
@@ -598,6 +600,7 @@ namespace StockSharp.Algo
 				Shortable = criteria.Shortable,
 				BasketCode = criteria.BasketCode,
 				BasketExpression = criteria.BasketExpression,
+				FaceValue = criteria.FaceValue,
 			};
 		}
 
@@ -1888,7 +1891,7 @@ namespace StockSharp.Algo
 		/// Convert <see cref="PermissionCredentials"/> to <see cref="UserInfoMessage"/> value.
 		/// </summary>
 		/// <param name="credentials">Credentials with set of permissions..</param>
-		/// <param name="copyPassword">Copy <see cref="PermissionCredentials.Password"/> value.</param>
+		/// <param name="copyPassword">Copy <see cref="ServerCredentials.Password"/> value.</param>
 		/// <returns>The message contains information about user.</returns>
 		public static UserInfoMessage ToUserInfoMessage(this PermissionCredentials credentials, bool copyPassword)
 		{

@@ -267,6 +267,13 @@ namespace StockSharp.Messages
 			GroupName = LocalizedStrings.BasketKey,
 			Order = 201)]
 		public string BasketExpression { get; set; }
+
+		/// <summary>
+		/// Face value.
+		/// </summary>
+		[DataMember]
+		public decimal? FaceValue { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityMessage"/>.
 		/// </summary>
@@ -331,6 +338,7 @@ namespace StockSharp.Messages
 			destination.Shortable = Shortable;
 			destination.BasketCode = BasketCode;
 			destination.BasketExpression = BasketExpression;
+			destination.FaceValue = FaceValue;
 
 			if (copyOriginalTransactionId)
 				destination.OriginalTransactionId = OriginalTransactionId;
@@ -397,6 +405,9 @@ namespace StockSharp.Messages
 
 			if (BasketCode != null)
 				str += $",Basket={BasketCode}/{BasketExpression}";
+
+			if (FaceValue != null)
+				str += $",FaceValue={FaceValue}";
 
 			return str;
 		}

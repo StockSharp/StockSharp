@@ -89,7 +89,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter. Removed TimeFrames property.
 * (feature) IMessageAdapter. IsAllDownloadingSupported method added.
 * (bug) SecurityNativeIdMessageAdapter. Fix processing suspended incoming messages.
-* (feature) Security. MinVolume, Shortable and UnderlyingSecuityMinVolume properties added.
+* (feature) Security. MinVolume, Shortable, UnderlyingSecuityMinVolume and FaceValue properties added.
 * (bug) QuikLua. Position average price fix.
 * (feature) SampleMultiConnection. Order log, historical ticks and news requests supported.
 * (feature) Deribit. V2 protocol supported.

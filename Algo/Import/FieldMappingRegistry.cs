@@ -60,7 +60,8 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<SecurityMessage, bool>(nameof(SecurityMessage.Shortable), LocalizedStrings.Shortable, LocalizedStrings.ShortableDesc, (i, v) => i.Shortable = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BasketCode), LocalizedStrings.Basket, LocalizedStrings.BasketCode, (i, v) => i.BasketCode = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BasketExpression), LocalizedStrings.Expression, LocalizedStrings.ExpressionDesc, (i, v) => i.BasketExpression = v));
-				
+				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.FaceValue), LocalizedStrings.FaceValue, LocalizedStrings.FaceValueDesc, (i, v) => i.FaceValue = v));
+
 				//fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.SecurityId.Native), LocalizedStrings.NativeId, LocalizedStrings.NativeIdDesc, (i, v) => { }));
 				fields.Add(new FieldMapping<SecurityIdMapping, string>(GetSecurityCodeField(LocalizedStrings.Adapter), LocalizedStrings.AdapterCode, secCodeDescr, (i, v) =>
 				{
