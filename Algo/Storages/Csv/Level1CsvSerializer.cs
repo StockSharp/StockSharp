@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Storages.Csv
 	/// </summary>
 	public class Level1CsvSerializer : CsvMarketDataSerializer<Level1ChangeMessage>
 	{
-		private static readonly Level1Fields[] _level1Fields = Enumerator.GetValues<Level1Fields>().Where(l1 => !l1.IsObsolete()).OrderBy(l1 => (int)l1).ToArray();
+		private static readonly Dictionary<Level1Fields, Type> _level1Fields = Enumerator.GetValues<Level1Fields>().Where(l1 => !l1.IsObsolete()).OrderBy(l1 => (int)l1).ToDictionary(f => f, f => f.ToType());
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1CsvSerializer"/>.
@@ -54,20 +54,18 @@ namespace StockSharp.Algo.Storages.Csv
 
 			row.AddRange(new[] { data.ServerTime.WriteTimeMls(), data.ServerTime.ToString("zzz") });
 
-			foreach (var field in _level1Fields)
+			foreach (var pair in _level1Fields)
 			{
-				switch (field)
+				var field = pair.Key;
+
+				if (pair.Value == typeof(DateTimeOffset))
 				{
-					case Level1Fields.BestAskTime:
-					case Level1Fields.BestBidTime:
-					case Level1Fields.LastTradeTime:
-					case Level1Fields.BuyBackDate:
-						var date = (DateTimeOffset?)data.Changes.TryGetValue(field);
-						row.AddRange(new[] { date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz") });
-						break;
-					default:
-						row.Add(data.Changes.TryGetValue(field)?.ToString());
-						break;
+					var date = (DateTimeOffset?)data.Changes.TryGetValue(field);
+					row.AddRange(new[] { date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz") });
+				}
+				else
+				{
+					row.Add(data.Changes.TryGetValue(field)?.ToString());
                 }
 			}
 
@@ -90,76 +88,68 @@ namespace StockSharp.Algo.Storages.Csv
 				ServerTime = reader.ReadTime(metaInfo.Date),
 			};
 
-			foreach (var field in _level1Fields)
+			foreach (var pair in _level1Fields)
 			{
 				// backward compatibility
 				if (reader.ColumnCurr == reader.ColumnCount)
 					break;
 
-				switch (field)
+				var field = pair.Key;
+
+				if (pair.Value == typeof(DateTimeOffset))
 				{
-					case Level1Fields.BestAskTime:
-					case Level1Fields.BestBidTime:
-					case Level1Fields.LastTradeTime:
-					case Level1Fields.BuyBackDate:
-						var dtStr = reader.ReadString();
+					var dtStr = reader.ReadString();
 
-						if (dtStr != null)
-						{
-							level1.Changes.Add(field, (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))));
-						}
-						else
-						{
-							reader.Skip(2);
-						}
+					if (dtStr != null)
+					{
+						level1.Changes.Add(field, (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))));
+					}
+					else
+					{
+						reader.Skip(2);
+					}
+				}
+				else if (pair.Value == typeof(int))
+				{
+					var value = reader.ReadNullableInt();
 
-                        break;
-					case Level1Fields.LastTradeId:
-						var id = reader.ReadNullableLong();
+					if (value != null)
+						level1.Changes.Add(field, value.Value);
+				}
+				else if (pair.Value == typeof(long))
+				{
+					var value = reader.ReadNullableLong();
 
-						if (id != null)
-							level1.Changes.Add(field, id.Value);
+					if (value != null)
+						level1.Changes.Add(field, value.Value);
+				}
+				else if (pair.Value == typeof(bool))
+				{
+					var value = reader.ReadNullableBool();
 
-						break;
-					case Level1Fields.AsksCount:
-					case Level1Fields.BidsCount:
-					case Level1Fields.TradesCount:
-					case Level1Fields.Decimals:
-						var count = reader.ReadNullableInt();
+					if (value != null)
+						level1.Changes.Add(field, value.Value);
+				}
+				else if (pair.Value == typeof(SecurityStates))
+				{
+					var value = reader.ReadNullableEnum<SecurityStates>();
 
-						if (count != null)
-							level1.Changes.Add(field, count.Value);
+					if (value != null)
+						level1.Changes.Add(field, value.Value);
+				}
+				else if (pair.Value == typeof(Sides))
+				{
+					var value = reader.ReadNullableEnum<Sides>();
 
-						break;
-					case Level1Fields.LastTradeUpDown:
-					case Level1Fields.IsSystem:
-						var flag = reader.ReadNullableBool();
+					if (value != null)
+						level1.Changes.Add(field, value.Value);
+				}
+				else
+				{
+					var value = reader.ReadNullableDecimal();
 
-						if (flag != null)
-							level1.Changes.Add(field, flag.Value);
-
-						break;
-					case Level1Fields.State:
-						var state = reader.ReadNullableEnum<SecurityStates>();
-
-						if (state != null)
-							level1.Changes.Add(field, state.Value);
-
-						break;
-					case Level1Fields.LastTradeOrigin:
-						var side = reader.ReadNullableEnum<Sides>();
-
-						if (side != null)
-							level1.Changes.Add(field, side.Value);
-
-						break;
-					default:
-						var value = reader.ReadNullableDecimal();
-
-						if (value != null)
-							level1.Changes.Add(field, value.Value);
-
-						break;
+					if (value != null)
+						level1.Changes.Add(field, value.Value);
 				}
 			}
 

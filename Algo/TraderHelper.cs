@@ -4626,6 +4626,7 @@ namespace StockSharp.Algo
 				case Level1Fields.BestBidTime:
 				case Level1Fields.LastTradeTime:
 				case Level1Fields.BuyBackDate:
+				case Level1Fields.CouponDate:
 					return typeof(DateTimeOffset);
 
 				case Level1Fields.LastTradeUpDown:
