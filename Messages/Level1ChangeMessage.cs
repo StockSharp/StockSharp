@@ -682,6 +682,62 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UnderlyingMinVolumeKey)]
 		UnderlyingMinVolume,
+
+		/// <summary>
+		/// Coupon value.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CouponValueKey)]
+		CouponValue,
+
+		/// <summary>
+		/// Coupon date.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CouponDateKey)]
+		CouponDate,
+
+		/// <summary>
+		/// Coupon period.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CouponPeriodKey)]
+		CouponPeriod,
+
+		/// <summary>
+		/// Market price (yesterday).
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MarketPriceYesterdayKey)]
+		MarketPriceYesterday,
+
+		/// <summary>
+		/// Market price (today).
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MarketPriceTodayKey)]
+		MarketPriceToday,
+
+		/// <summary>
+		/// VWAP (prev).
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VWAPPrevKey)]
+		VWAPPrev,
+
+		/// <summary>
+		/// Yield by VWAP.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.YieldVWAPKey)]
+		YieldVWAP,
+
+		/// <summary>
+		/// Yield by VWAP (prev).
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.YieldVWAPPrevKey)]
+		YieldVWAPPrev,
 	}
 
 	/// <summary>
@@ -728,10 +784,7 @@ namespace StockSharp.Messages
 			return msg;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",Sec={SecurityId},Changes={Changes.Select(c => c.ToString()).Join(",")}";

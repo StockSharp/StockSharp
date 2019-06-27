@@ -2486,7 +2486,8 @@ namespace StockSharp.Algo
 		/// <param name="changes">Changes.</param>
 		/// <param name="serverTime">Change server time.</param>
 		/// <param name="localTime">Local timestamp when a message was received/created.</param>
-		public static void ApplyChanges(this Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
+		/// <param name="defaultHandler">Default handler.</param>
+		public static void ApplyChanges(this Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime, Action<Security, Level1Fields, object> defaultHandler = null)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -2707,8 +2708,12 @@ namespace StockSharp.Algo
 						case Level1Fields.IssueSize:
 							security.IssueSize = (decimal)value;
 							break;
-						//default:
-						//	throw new ArgumentOutOfRangeException();
+						default:
+						{
+							defaultHandler?.Invoke(security, pair.Key, pair.Value);
+							break;
+							//throw new ArgumentOutOfRangeException();
+						}
 					}
 				}
 				catch (Exception ex)

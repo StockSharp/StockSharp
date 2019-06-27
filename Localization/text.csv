@@ -5003,6 +5003,14 @@ Adapter;Adapter;Адаптер
 AdapterNotSpecified;Adapter for field {0} isn't specified.;Адаптер для поля {0} не указан.
 FaceValue;Face value;Номинал
 FaceValueDesc;Face value.;Номинальная стоимость.
+CouponValue;Coupon value;Размер купона
+CouponDate;Coupon date;Дата купона
+CouponPeriod;Coupon period;Период купона
+MarketPriceYesterday;Market price (yesterday);Рын цена (вчера)
+MarketPriceToday;Market price (today);Рын цена (сегодня)
+VWAPPrev;VWAP (prev);VWAP (пред)
+YieldVWAP;Yield by VWAP;Дох-ть по VWAP
+YieldVWAPPrev;Yield by VWAP (prev);Дох-ть по VWAP (пред)
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

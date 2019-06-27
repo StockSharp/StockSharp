@@ -135,6 +135,7 @@ StockSharp API Change log
 * (bug) ProxySettings fix https://stocksharp.ru/forum/10804/ne-rabotaet-soedinenie-cherez-proksi-server/
 * (feature) Level1. Fill Security.IssueSize from level1.
 * (feature) Order. MinVolume, AveragePrice, Yield properties added.
+* (feature) CouponDate, CouponPeriod, CouponValue, MarketPriceToday, MarketPriceYesterday, YieldVWAP, YieldVWAPPrev, VWAPPrev fields added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
