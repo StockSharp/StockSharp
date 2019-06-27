@@ -149,6 +149,12 @@ namespace StockSharp.Algo
 					}
 				}
 
+				if (message.AveragePrice != null)
+					order.AveragePrice = message.AveragePrice;
+
+				if (message.Yield != null)
+					order.Yield = message.Yield;
+
 				message.CopyExtensionInfo(order);
 
 				retVal = OrderChangeInfo.Create(order, _raiseNewOrder, true);
@@ -526,7 +532,8 @@ namespace StockSharp.Algo
 					o.IsMargin = message.IsMargin;
 					o.Slippage = message.Slippage;
 					o.IsManual = message.IsManual;
-
+					o.MinVolume = message.MinVolume;
+					
 					if (message.PortfolioName.IsEmpty())
 						o.Portfolio = _portfolios.FirstOrDefault().Value;
 					else

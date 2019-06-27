@@ -610,6 +610,24 @@ namespace StockSharp.BusinessEntities
 		public bool? IsManual { get; set; }
 
 		/// <summary>
+		/// Average execution price.
+		/// </summary>
+		[DataMember]
+		public decimal? AveragePrice { get; set; }
+
+		/// <summary>
+		/// Yield.
+		/// </summary>
+		[DataMember]
+		public decimal? Yield { get; set; }
+
+		/// <summary>
+		/// Minimum quantity of an order to be executed.
+		/// </summary>
+		[DataMember]
+		public decimal? MinVolume { get; set; }
+
+		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>

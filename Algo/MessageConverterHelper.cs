@@ -1218,6 +1218,9 @@ namespace StockSharp.Algo
 			order.IsMargin = message.IsMargin;
 			order.Slippage = message.Slippage;
 			order.IsManual = message.IsManual;
+			order.AveragePrice = message.AveragePrice;
+			order.Yield = message.Yield;
+			order.MinVolume = message.MinVolume;
 
 			if (message.OrderState != null)
 				order.State = order.State.CheckModification((OrderStates)message.OrderState);
