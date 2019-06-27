@@ -18,9 +18,9 @@
         <step>
           <content>
           	<para>Скачать и установить <externalLink>
-			<linkText>Visual C++ 2015</linkText>
-			<linkAlternateText>Пакет Visual C++ для Visual Studio 2015</linkAlternateText>
-			<linkUri>https://www.microsoft.com/ru-RU/download/details.aspx?id=48145</linkUri>
+			<linkText>Visual C++ Runtime x86</linkText>
+			<linkAlternateText>Пакет Visual C++ x86</linkAlternateText>
+			<linkUri>https://aka.ms/vs/16/release/vc_redist.x86.exe</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
  (необходимо скачать vcredist_x86.exe).</para>

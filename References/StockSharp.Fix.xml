@@ -29,6 +29,11 @@
             Base class describing the dialect of the FAST protocol.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Fix.Dialects.BaseFastDialect" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.StorageName">
       <inheritdoc />
     </member>
@@ -264,6 +269,12 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.CheckTimeFrameByRequest">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSecurityLookupResult">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportPortfolioLookupResult">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition">
@@ -1422,6 +1433,16 @@
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.CheckTimeFrameByRequest">
       <summary>
             Check possible time-frame by request.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSecurityLookupResult">
+      <summary>
+            Gets a value indicating whether the adapter translates <see cref="T:StockSharp.Messages.SecurityLookupResultMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportPortfolioLookupResult">
+      <summary>
+            Gets a value indicating whether the adapter translates <see cref="T:StockSharp.Messages.PortfolioLookupResultMessage" />.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition">
@@ -5625,6 +5646,16 @@
             3 = Liquidity Routed Out
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.MinQty">
+      <summary>
+            Minimum quantity of an order to be executed.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.Yield">
+      <summary>
+            Yield.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FastPMap">
       <summary>
             FAST Presence Map.
@@ -5825,6 +5856,11 @@
             Information about quotes.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixMessages.MassQuote">
+      <summary>
+            Quotes for multiple securities.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixMessages.MarketDataRequestReject">
       <summary>
             The response with error to <see cref="F:StockSharp.Fix.Native.FixMessages.MarketDataRequest" />.
@@ -5905,11 +5941,6 @@
             The request for board update.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.BoardDelete">
-      <summary>
-            The request for board delete.
-            </summary>
-    </member>
     <member name="F:StockSharp.Fix.Native.FixExtendedMessages.HistoryStart">
       <summary>
             The request for start historical data.
@@ -5942,7 +5973,12 @@
     </member>
     <member name="F:StockSharp.Fix.Native.FixExtendedMessages.UserRequest">
       <summary>
-            The request for user's info subscription.
+            Message type for <see cref="T:StockSharp.Messages.UserRequestMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.UserInfo">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.UserInfoMessage" />.
             </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixExtendedMessages.TimeFramesRequest">
@@ -5990,16 +6026,6 @@
             Message type for <see cref="T:StockSharp.Messages.SecurityMappingResultMessage" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityAssociationRequest">
-      <summary>
-            Message type for <see cref="T:StockSharp.Messages.SecurityAssociationRequestMessage" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityAssociationResult">
-      <summary>
-            Message type for <see cref="T:StockSharp.Messages.SecurityAssociationResultMessage" />.
-            </summary>
-    </member>
     <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityLegsRequest">
       <summary>
             Message type for <see cref="T:StockSharp.Messages.SecurityLegsRequestMessage" />.
@@ -6035,9 +6061,54 @@
             Message type for <see cref="T:StockSharp.Messages.SubscriptionListRequestMessage" />.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.Subscription">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.MarketDataMessage" />.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SubscriptionListFinished">
       <summary>
             Message type for <see cref="T:StockSharp.Messages.SubscriptionListFinishedMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityMapping">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.SecurityMappingMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityRouteListRequest">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.SecurityRouteListRequestMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.PortfolioRouteListRequest">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.PortfolioRouteListRequestMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityRoute">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.SecurityRouteMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.PortfolioRoute">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.PortfolioRouteMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityRouteListFinished">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.SecurityRouteListFinishedMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.PortfolioRouteListFinished">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.PortfolioRouteListFinishedMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.Remove">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.RemoveMessage" />.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.FixTags">
@@ -6365,6 +6436,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.Yield">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.RedemptionDate">
       <summary>
       </summary>
@@ -6441,11 +6516,27 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoQuoteEntries">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoQuoteSets">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.QuoteCancelType">
       <summary>
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.QuoteEntryID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.QuoteSetID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.TotNoQuoteEntries">
       <summary>
       </summary>
     </member>
@@ -7077,31 +7168,27 @@
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.FixTags.StrategyId">
+    <member name="F:StockSharp.Fix.Native.FixTags.Id">
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.FixTags.NoStrategyParameters">
+    <member name="F:StockSharp.Fix.Native.FixTags.NoParameters">
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.FixTags.StrategyParameterName">
+    <member name="F:StockSharp.Fix.Native.FixTags.ParameterName">
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.FixTags.StrategyParameterType">
+    <member name="F:StockSharp.Fix.Native.FixTags.ParameterType">
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.FixTags.StrategyParameterValue">
+    <member name="F:StockSharp.Fix.Native.FixTags.ParameterValue">
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.FixTags.StrategyCommand">
-      <summary>
-      </summary>
-    </member>
-    <member name="F:StockSharp.Fix.Native.FixTags.MinVolume">
+    <member name="F:StockSharp.Fix.Native.FixTags.Command">
       <summary>
       </summary>
     </member>
@@ -7110,6 +7197,62 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.StrategyTypeAssembly">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.AllowBuildFromSmallerTimeFrame">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.CalcVolumeProfile">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.FinishedCandles">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MarketDataBuildMode">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MarketDataBuildFrom">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MarketDataBuildField">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.RegularTradingHours">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MarketDataCount">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoIpRestrictions">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.IpRestrictions">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoPermissions">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.Permissions">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoPermissionsValues">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.FaceValue">
       <summary>
       </summary>
     </member>
@@ -7742,13 +7885,19 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.CheckTimeFrameByRequest">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportSecurityLookupResult">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportPortfolioLookupResult">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

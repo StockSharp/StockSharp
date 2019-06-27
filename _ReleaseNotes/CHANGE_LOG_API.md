@@ -136,6 +136,9 @@ StockSharp API Change log
 * (feature) Level1. Fill Security.IssueSize from level1.
 * (feature) Order. MinVolume, AveragePrice, Yield properties added.
 * (feature) CouponDate, CouponPeriod, CouponValue, MarketPriceToday, MarketPriceYesterday, YieldVWAP, YieldVWAPPrev, VWAPPrev fields added.
+* (feature) QuikLua. Securities. FaceValue, Dividend, Duration, CouponDate, CouponPeriod, CouponValue, MarketPriceToday, MarketPriceYesterday, YieldVWAP, YieldVWAPPrev, VWAPPrev translation added.
+* (feature) QuikLua. Orders. Yield, MinVolume, AveragePrice translation added.
+* (feature) QuikLua. VC++ 2019 runtime usage.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
