@@ -1994,6 +1994,21 @@ namespace StockSharp.Algo
 				if (criteria.ExpiryDate != null && s.ExpiryDate != null && s.ExpiryDate != criteria.ExpiryDate)
 					return false;
 
+				if (criteria.IssueDate != null && s.IssueDate != null && s.IssueDate != criteria.IssueDate)
+					return false;
+
+				if (criteria.IssueSize != null && s.IssueSize != null && s.IssueSize != criteria.IssueSize)
+					return false;
+
+				if (criteria.UnderlyingSecurityType != null && s.UnderlyingSecurityType != null && s.UnderlyingSecurityType != criteria.UnderlyingSecurityType)
+					return false;
+
+				if (criteria.MinVolume != null && s.MinVolume != null && s.MinVolume != criteria.MinVolume)
+					return false;
+
+				if (criteria.UnderlyingSecurityMinVolume != null && s.UnderlyingSecurityMinVolume != null && s.UnderlyingSecurityMinVolume != criteria.UnderlyingSecurityMinVolume)
+					return false;
+
 				if (criteria.Shortable != null && s.Shortable != null && s.Shortable != criteria.Shortable)
 					return false;
 

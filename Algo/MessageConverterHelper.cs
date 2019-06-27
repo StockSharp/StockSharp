@@ -503,36 +503,56 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return new SecurityMessage
+			return security.FillMessage(new SecurityMessage
 			{
 				SecurityId = securityId ?? security.ToSecurityId(),
-				Name = security.Name,
-				ShortName = security.ShortName,
-				PriceStep = security.PriceStep,
-				Decimals = security.Decimals,
-				VolumeStep = security.VolumeStep,
-				MinVolume = security.MinVolume,
-				Multiplier = security.Multiplier,
-				Currency = security.Currency,
-				SecurityType = security.Type,
-				CfiCode = security.CfiCode,
-				OptionType = security.OptionType,
-				Strike = security.Strike,
-				BinaryOptionType = security.BinaryOptionType,
-				UnderlyingSecurityCode = security.UnderlyingSecurityId.IsEmpty() ? null : security.UnderlyingSecurityId.ToSecurityId().SecurityCode,
-				SettlementDate = security.SettlementDate,
-				ExpiryDate = security.ExpiryDate,
-				IssueSize = security.IssueSize,
-				IssueDate = security.IssueDate,
-				UnderlyingSecurityType = security.UnderlyingSecurityType,
-				UnderlyingSecurityMinVolume = security.UnderlyingSecurityMinVolume,
-				Shortable = security.Shortable,
-				BasketCode = security.BasketCode,
-				BasketExpression = security.BasketExpression,
-				FaceValue = security.FaceValue,
-
 				OriginalTransactionId = originalTransactionId,
-			};
+			});
+		}
+
+		/// <summary>
+		/// To convert the instrument into message.
+		/// </summary>
+		/// <typeparam name="TMessage">Message type.</typeparam>
+		/// <param name="security">Security.</param>
+		/// <param name="message">Message.</param>
+		/// <returns>Message.</returns>
+		public static TMessage FillMessage<TMessage>(this Security security, TMessage message)
+			where TMessage : SecurityMessage
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			message.Name = security.Name;
+			message.ShortName = security.ShortName;
+			message.PriceStep = security.PriceStep;
+			message.Decimals = security.Decimals;
+			message.VolumeStep = security.VolumeStep;
+			message.MinVolume = security.MinVolume;
+			message.Multiplier = security.Multiplier;
+			message.Currency = security.Currency;
+			message.SecurityType = security.Type;
+			message.Class = security.Class;
+			message.CfiCode = security.CfiCode;
+			message.OptionType = security.OptionType;
+			message.Strike = security.Strike;
+			message.BinaryOptionType = security.BinaryOptionType;
+			message.UnderlyingSecurityCode = security.UnderlyingSecurityId.IsEmpty() ? null : security.UnderlyingSecurityId.ToSecurityId().SecurityCode;
+			message.SettlementDate = security.SettlementDate;
+			message.ExpiryDate = security.ExpiryDate;
+			message.IssueSize = security.IssueSize;
+			message.IssueDate = security.IssueDate;
+			message.UnderlyingSecurityType = security.UnderlyingSecurityType;
+			message.UnderlyingSecurityMinVolume = security.UnderlyingSecurityMinVolume;
+			message.Shortable = security.Shortable;
+			message.BasketCode = security.BasketCode;
+			message.BasketExpression = security.BasketExpression;
+			message.FaceValue = security.FaceValue;
+
+			return message;
 		}
 
 		/// <summary>
@@ -572,36 +592,10 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			return new SecurityLookupMessage
+			return criteria.FillMessage(new SecurityLookupMessage
 			{
-				//LocalTime = CurrentTime,
 				SecurityId = securityId ?? (criteria.Id.IsEmpty() && criteria.Code.IsEmpty() ? default(SecurityId) : criteria.ToSecurityId(boardIsRequired: false)),
-				Name = criteria.Name,
-				Class = criteria.Class,
-				SecurityType = criteria.Type,
-				ExpiryDate = criteria.ExpiryDate,
-				ShortName = criteria.ShortName,
-				VolumeStep = criteria.VolumeStep,
-				MinVolume = criteria.MinVolume,
-				Multiplier = criteria.Multiplier,
-				PriceStep = criteria.PriceStep,
-				Decimals = criteria.Decimals,
-				Currency = criteria.Currency,
-				CfiCode = criteria.CfiCode,
-				SettlementDate = criteria.SettlementDate,
-				OptionType = criteria.OptionType,
-				Strike = criteria.Strike,
-				BinaryOptionType = criteria.BinaryOptionType,
-				UnderlyingSecurityCode = criteria.UnderlyingSecurityId.IsEmpty() ? null : _defaultGenerator.Split(criteria.UnderlyingSecurityId).SecurityCode,
-				IssueSize = criteria.IssueSize,
-				IssueDate = criteria.IssueDate,
-				UnderlyingSecurityType = criteria.UnderlyingSecurityType,
-				UnderlyingSecurityMinVolume = criteria.UnderlyingSecurityMinVolume,
-				Shortable = criteria.Shortable,
-				BasketCode = criteria.BasketCode,
-				BasketExpression = criteria.BasketExpression,
-				FaceValue = criteria.FaceValue,
-			};
+			});
 		}
 
 		/// <summary>
