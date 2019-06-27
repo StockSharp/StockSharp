@@ -3293,7 +3293,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IChart.ShowNonFormedIndicators">
       <summary>
-            Show non formed indicators.
+            Show non formed indicators values.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)">
