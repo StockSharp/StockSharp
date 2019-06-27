@@ -219,6 +219,8 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(SecurityMessage.IssueDate), value.IssueDate },
 				{ nameof(SecurityMessage.CfiCode), value.CfiCode },
 				{ nameof(SecurityMessage.Shortable), value.Shortable },
+				{ nameof(SecurityMessage.BasketCode), value.BasketCode },
+				{ nameof(SecurityMessage.BasketExpression), value.BasketExpression },
 				{ nameof(SecurityId.Bloomberg), value.SecurityId.Bloomberg },
 				{ nameof(SecurityId.Cusip), value.SecurityId.Cusip },
 				{ nameof(SecurityId.IQFeed), value.SecurityId.IQFeed },
