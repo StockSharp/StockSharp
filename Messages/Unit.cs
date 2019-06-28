@@ -731,7 +731,7 @@ namespace StockSharp.Messages
 
 			UnitTypes type;
 
-			switch (lastSymbol)
+			switch (char.ToLowerInvariant(lastSymbol))
 			{
 				case 'ш':
 				case 's':
