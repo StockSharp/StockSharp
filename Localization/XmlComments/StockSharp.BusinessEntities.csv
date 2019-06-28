@@ -12,7 +12,7 @@ P:StockSharp.BusinessEntities.BasePosition.BlockedValue/summary;Str426
 P:StockSharp.BusinessEntities.BasePosition.ExtensionInfo/summary;ExtendedInfo
 P:StockSharp.BusinessEntities.BasePosition.ExtensionInfo/remarks;DocStr2617
 P:StockSharp.BusinessEntities.BasePosition.CurrentPrice/summary;Str256
-P:StockSharp.BusinessEntities.BasePosition.AveragePrice/summary;DocStr7578
+P:StockSharp.BusinessEntities.BasePosition.AveragePrice/summary;AveragePrice
 P:StockSharp.BusinessEntities.BasePosition.UnrealizedPnL/summary;Str258
 P:StockSharp.BusinessEntities.BasePosition.RealizedPnL/summary;Str259
 P:StockSharp.BusinessEntities.BasePosition.VariationMargin/summary;Str260
@@ -918,7 +918,7 @@ P:StockSharp.BusinessEntities.Security.TradesCount/summary;NumOfTrades
 P:StockSharp.BusinessEntities.Security.HighBidPrice/summary;Str594
 P:StockSharp.BusinessEntities.Security.LowAskPrice/summary;Str595
 P:StockSharp.BusinessEntities.Security.Yield/summary;Str321
-P:StockSharp.BusinessEntities.Security.VWAP/summary;DocStr7578
+P:StockSharp.BusinessEntities.Security.VWAP/summary;AveragePrice
 P:StockSharp.BusinessEntities.Security.SettlementPrice/summary;Str312
 P:StockSharp.BusinessEntities.Security.AveragePrice/summary;Str311
 P:StockSharp.BusinessEntities.Security.Volume/summary;Str310

@@ -1387,7 +1387,7 @@ F:StockSharp.Messages.PositionChangeTypes.BeginValue/summary;Str253
 F:StockSharp.Messages.PositionChangeTypes.CurrentValue/summary;Str254
 F:StockSharp.Messages.PositionChangeTypes.BlockedValue/summary;Str255
 F:StockSharp.Messages.PositionChangeTypes.CurrentPrice/summary;Str256
-F:StockSharp.Messages.PositionChangeTypes.AveragePrice/summary;DocStr7578
+F:StockSharp.Messages.PositionChangeTypes.AveragePrice/summary;AveragePrice
 F:StockSharp.Messages.PositionChangeTypes.UnrealizedPnL/summary;Str258
 F:StockSharp.Messages.PositionChangeTypes.RealizedPnL/summary;Str259
 F:StockSharp.Messages.PositionChangeTypes.VariationMargin/summary;Str260
@@ -1496,7 +1496,7 @@ F:StockSharp.Messages.Level1Fields.LowAskPrice/summary;Str595
 F:StockSharp.Messages.Level1Fields.Yield/summary;Str321
 F:StockSharp.Messages.Level1Fields.LastTradeTime/summary;Str322
 F:StockSharp.Messages.Level1Fields.TradesCount/summary;NumOfTrades
-F:StockSharp.Messages.Level1Fields.VWAP/summary;DocStr7578
+F:StockSharp.Messages.Level1Fields.VWAP/summary;AveragePrice
 F:StockSharp.Messages.Level1Fields.LastTradeId/summary;Str325
 F:StockSharp.Messages.Level1Fields.BestBidTime/summary;Str326
 F:StockSharp.Messages.Level1Fields.BestAskTime/summary;Str327
