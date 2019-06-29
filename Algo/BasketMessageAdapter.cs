@@ -134,6 +134,7 @@ namespace StockSharp.Algo
 
 		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter> _securityAdapters = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter>();
+		private readonly SynchronizedSet<long> _subscriptionListRequests = new SynchronizedSet<long>();
 
 		/// <summary>
 		/// Adapters with which the aggregator operates.
@@ -291,6 +292,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportOffline { get; set; }
 
+		/// <summary>
+		/// Do not add extra adapters.
+		/// </summary>
+		public bool IgnoreExtraAdapters { get; set; }
+
 		/// <inheritdoc />
 		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId))
 			=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId)).Distinct().OrderBy();
@@ -327,6 +333,7 @@ namespace StockSharp.Algo
 			_subscriptionMessages.Clear();
 			_newsSubscriptions.Clear();
 			_lookups.Clear();
+			_subscriptionListRequests.Clear();
 		}
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
@@ -367,6 +374,9 @@ namespace StockSharp.Algo
 			{
 				adapter = new OrderLogMessageAdapter(adapter);
 			}
+
+			if (IgnoreExtraAdapters)
+				return adapter;
 
 			if (adapter.IsFullCandlesOnly)
 			{
@@ -621,6 +631,9 @@ namespace StockSharp.Algo
 							_lookups.Add(key, new HashSet<IMessageAdapter>(adapters.Select(GetUnderlyingAdapter)));
 					}
 				}
+
+				if (message is SubscriptionListRequestMessage listRequest)
+					_subscriptionListRequests.Add(listRequest.TransactionId);
 
 				adapters.ForEach(a => a.SendInMessage(message));
 			}
@@ -1089,6 +1102,9 @@ namespace StockSharp.Algo
 
 			if (originMsg == null)
 			{
+				if (_subscriptionListRequests.Contains(originalTransactionId))
+					_subscriptionsById.TryAdd(message.TransactionId, adapter);
+
 				SendOutMessage(message);
 				return;
 			}
@@ -1335,6 +1351,7 @@ namespace StockSharp.Algo
 				IsRestoreSubscriptionOnReconnect = IsRestoreSubscriptionOnReconnect,
 				SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
 				SupportOffline = SupportOffline,
+				IgnoreExtraAdapters = IgnoreExtraAdapters,
 			};
 
 			clone.Load(this.Save());
