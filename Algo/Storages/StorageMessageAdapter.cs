@@ -407,11 +407,6 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public bool OverrideSecurityData { get; set; }
 
-		/// <summary>
-		/// The list of subscriptions.
-		/// </summary>
-		public IStorageEntityList<MarketDataMessage> Subscriptions { get; set; }
-
 		private StorageModes _mode = StorageModes.Incremental;
 
 		/// <summary>
@@ -699,8 +694,6 @@ namespace StockSharp.Algo.Storages
 
 				if (Enabled)
 				{
-					Subscriptions?.Save((MarketDataMessage)msg.Clone());
-
 					RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId });
 
 					var lastTime = LoadMessages(msg, msg.From, msg.To, transactionId);

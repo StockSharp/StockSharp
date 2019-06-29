@@ -130,7 +130,6 @@ StockSharp API Change log
 * (feature) IFileService. Share and UnShare operations added.
 * (feature) CSV importing. Supported native system identifier importing.
 * (feature) Security and portfolio route messages. Security mapping message.
-* (feature) StorageMessageAdapter. Support subscriptions persistence.
 * (feature) IndexEditor. Uses ISecurityProvider https://stocksharp.ru/posts/m/47693/
 * (bug) ProxySettings fix https://stocksharp.ru/forum/10804/ne-rabotaet-soedinenie-cherez-proksi-server/
 * (feature) Level1. Fill Security.IssueSize from level1.
