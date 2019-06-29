@@ -1121,5 +1121,15 @@ namespace StockSharp.BusinessEntities
 			EngName = "SwissQuote",
 			RusName = "SwissQuote",
 		};
+
+		/// <summary>
+		/// Information about StockSharp.
+		/// </summary>
+		public static Exchange StockSharp { get; } = new Exchange
+		{
+			Name = "STSH",
+			EngName = "StockSharp",
+			RusName = "StockSharp",
+		};
 	}
 }
