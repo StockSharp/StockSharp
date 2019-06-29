@@ -125,6 +125,7 @@
     <Compile Include="Candles\Compression\CandleBuilderProvider.cs" />
     <Compile Include="Candles\Compression\CandleHolderMessageAdapter.cs" />
     <Compile Include="Candles\Compression\ICandleBuilderValueTransform.cs" />
+    <Compile Include="CollectionPortfolioProvider.cs" />
     <Compile Include="CollectionSecurityProvider.cs" />
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
     <Compile Include="DataType.cs" />
@@ -491,7 +492,6 @@
     <Compile Include="Testing\TradeGenerator.cs" />
     <Compile Include="TraderHelper.cs" />
     <Compile Include="TraderHelper_Obsolete.cs" />
-    <Compile Include="UserPermissions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

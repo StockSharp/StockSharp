@@ -141,6 +141,7 @@ StockSharp API Change log
 * (feature) SecurityGrid. Dividend, Duration, CouponDate, CouponPeriod, CouponValue, MarketPriceToday, MarketPriceYesterday, YieldVWAP, YieldVWAPPrev, VWAPPrev columns added.
 * (feature) OrderGrid. AveragePrice, MinVolume and Yield columns added.
 * (feature) Unit. Parse case insensitive.
+* (feature) RealTimeEmulationTrader. Uses IPortfolioProvider.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

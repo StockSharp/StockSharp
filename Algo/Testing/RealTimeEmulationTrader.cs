@@ -49,16 +49,16 @@ namespace StockSharp.Algo.Testing
 	{
 		private sealed class EmulationEntityFactory : EntityFactory
 		{
-			private readonly Portfolio _portfolio;
+			private readonly IPortfolioProvider _portfolioProvider;
 
-			public EmulationEntityFactory(Portfolio portfolio)
+			public EmulationEntityFactory(IPortfolioProvider portfolioProvider)
 			{
-				_portfolio = portfolio ?? throw new ArgumentNullException(nameof(portfolio));
+				_portfolioProvider = portfolioProvider ?? throw new ArgumentNullException(nameof(portfolioProvider));
 			}
 
 			public override Portfolio CreatePortfolio(string name)
 			{
-				return _portfolio.Name.CompareIgnoreCase(name) ? _portfolio : base.CreatePortfolio(name);
+				return _portfolioProvider.GetPortfolio(name) ?? base.CreatePortfolio(name);
 			}
 		}
 
@@ -191,7 +191,7 @@ namespace StockSharp.Algo.Testing
 			bool IRealTimeEmulationMarketDataAdapter.OwnAdapter => _connector._ownAdapter;
 		}
 
-		private readonly Portfolio _portfolio;
+		private readonly IPortfolioProvider _portfolioProvider;
 		private readonly bool _ownAdapter;
 
 		/// <summary>
@@ -214,14 +214,25 @@ namespace StockSharp.Algo.Testing
 		/// <param name="portfolio">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 		/// <param name="ownAdapter">Track the connection <paramref name="underlyngMarketDataAdapter" /> lifetime.</param>
 		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, Portfolio portfolio, bool ownAdapter = true)
+			: this(underlyngMarketDataAdapter, new CollectionPortfolioProvider(new[] { portfolio }), ownAdapter)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RealTimeEmulationTrader{T}"/>.
+		/// </summary>
+		/// <param name="underlyngMarketDataAdapter"><see cref="IMessageAdapter"/>, through which market data will be got.</param>
+		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
+		/// <param name="ownAdapter">Track the connection <paramref name="underlyngMarketDataAdapter" /> lifetime.</param>
+		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, IPortfolioProvider portfolioProvider, bool ownAdapter = true)
 		{
 			UnderlyngMarketDataAdapter = underlyngMarketDataAdapter ?? throw new ArgumentNullException(nameof(underlyngMarketDataAdapter));
 
 			UpdateSecurityByLevel1 = false;
 			UpdateSecurityLastQuotes = false;
 
-			_portfolio = portfolio ?? throw new ArgumentNullException(nameof(portfolio));
-			EntityFactory = new EmulationEntityFactory(_portfolio);
+			_portfolioProvider = portfolioProvider ?? throw new ArgumentNullException(nameof(portfolioProvider));
+			EntityFactory = new EmulationEntityFactory(_portfolioProvider);
 
 			_ownAdapter = ownAdapter;
 
@@ -244,22 +255,22 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public TUnderlyingMarketDataAdapter UnderlyngMarketDataAdapter { get; }
 
-		/// <summary>
-		/// To process the message, containing market data.
-		/// </summary>
-		/// <param name="message">The message, containing market data.</param>
+		/// <inheritdoc />
 		protected override void OnProcessMessage(Message message)
 		{
 			if (message.Adapter == TransactionAdapter)
 			{
 				if (message.Type == MessageTypes.Connect)
 				{
-					// passing into initial values
-					TransactionAdapter.SendInMessage(_portfolio.ToMessage());
-					TransactionAdapter.SendInMessage(new PortfolioChangeMessage
+					foreach (var portfolio in _portfolioProvider.Portfolios)
 					{
-						PortfolioName = _portfolio.Name
-					}.TryAdd(PositionChangeTypes.BeginValue, _portfolio.BeginValue, true));
+						// passing into initial values
+						TransactionAdapter.SendInMessage(portfolio.ToMessage());
+						TransactionAdapter.SendInMessage(new PortfolioChangeMessage
+						{
+							PortfolioName = portfolio.Name
+						}.TryAdd(PositionChangeTypes.BeginValue, portfolio.BeginValue, true));	
+					}
 				}
 			}
 			else
@@ -300,10 +311,7 @@ namespace StockSharp.Algo.Testing
 			base.OnProcessMessage(message);
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			if (_ownAdapter)
@@ -312,10 +320,7 @@ namespace StockSharp.Algo.Testing
 			base.Load(storage);
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			if (_ownAdapter)
@@ -324,9 +329,7 @@ namespace StockSharp.Algo.Testing
 			base.Save(storage);
 		}
 
-		/// <summary>
-		/// Release resources.
-		/// </summary>
+		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
 			if (_ownAdapter)
