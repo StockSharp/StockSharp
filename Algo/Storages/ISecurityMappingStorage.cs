@@ -58,6 +58,22 @@ namespace StockSharp.Algo.Storages
 		/// <param name="stockSharpId">StockSharp format.</param>
 		/// <returns><see langword="true"/> if mapping was added. Otherwise, <see langword="false" />.</returns>
 		bool Remove(string storageName, SecurityId stockSharpId);
+
+		/// <summary>
+		/// Try get <see cref="SecurityIdMapping.StockSharpId"/>.
+		/// </summary>
+		/// <param name="storageName">Storage name.</param>
+		/// <param name="adapterId">Adapter format.</param>
+		/// <returns><see cref="SecurityIdMapping.StockSharpId"/> if identifier exists. Otherwise, <see langword="null" />.</returns>
+		SecurityId? TryGetStockSharpId(string storageName, SecurityId adapterId);
+
+		/// <summary>
+		/// Try get <see cref="SecurityIdMapping.AdapterId"/>.
+		/// </summary>
+		/// <param name="storageName">Storage name.</param>
+		/// <param name="stockSharpId">StockSharp format.</param>
+		/// <returns><see cref="SecurityIdMapping.AdapterId"/> if identifier exists. Otherwise, <see langword="null" />.</returns>
+		SecurityId? TryGetAdapterId(string storageName, SecurityId stockSharpId);
 	}
 
 	/// <summary>
@@ -115,15 +131,20 @@ namespace StockSharp.Algo.Storages
 				var mappings = _mappings.SafeAdd(storageName);
 
 				var stockSharpId = mapping.StockSharpId;
+				var adapterId = mapping.AdapterId;
 
 				if (mappings.ContainsKey(stockSharpId))
 				{
 					mappings.Remove(stockSharpId);
 				}
+				else if (mappings.ContainsValue(adapterId))
+				{
+					mappings.RemoveByValue(adapterId);
+				}
 				else
 					added = true;
 
-				mappings.Add(stockSharpId, mapping.AdapterId);
+				mappings.Add(stockSharpId, adapterId);
 
 				all = added ? null : mappings.Select(p => (SecurityIdMapping)p).ToArray();
 			}
@@ -136,6 +157,34 @@ namespace StockSharp.Algo.Storages
 		bool ISecurityMappingStorage.Remove(string storageName, SecurityId stockSharpId)
 		{
 			return Remove(storageName, stockSharpId, out _);
+		}
+
+		SecurityId? ISecurityMappingStorage.TryGetStockSharpId(string storageName, SecurityId adapterId)
+		{
+			lock (_mappings.SyncRoot)
+			{
+				if (!_mappings.TryGetValue(storageName, out var mappings))
+					return null;
+
+				if (!mappings.TryGetKey(adapterId, out var stockSharpId))
+					return null;
+
+				return stockSharpId;
+			}
+		}
+
+		SecurityId? ISecurityMappingStorage.TryGetAdapterId(string storageName, SecurityId stockSharpId)
+		{
+			lock (_mappings.SyncRoot)
+			{
+				if (!_mappings.TryGetValue(storageName, out var mappings))
+					return null;
+
+				if (!mappings.TryGetValue(stockSharpId, out var adapterId))
+					return null;
+
+				return adapterId;
+			}
 		}
 
 		internal bool Remove(string storageName, SecurityId stockSharpId, out IEnumerable<SecurityIdMapping> all)
@@ -285,6 +334,18 @@ namespace StockSharp.Algo.Storages
 			Changed?.Invoke(storageName, new SecurityIdMapping { StockSharpId = stockSharpId });
 
 			return true;
+		}
+
+		/// <inheritdoc />
+		public SecurityId? TryGetStockSharpId(string storageName, SecurityId adapterId)
+		{
+			return _inMemory.TryGetStockSharpId(storageName, adapterId);
+		}
+
+		/// <inheritdoc />
+		public SecurityId? TryGetAdapterId(string storageName, SecurityId stockSharpId)
+		{
+			return _inMemory.TryGetAdapterId(storageName, stockSharpId);
 		}
 
 		private void LoadFile(string fileName)
