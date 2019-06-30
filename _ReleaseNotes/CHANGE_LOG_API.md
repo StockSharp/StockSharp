@@ -142,6 +142,7 @@ StockSharp API Change log
 * (feature) OrderGrid. AveragePrice, MinVolume and Yield columns added.
 * (feature) Unit. Parse case insensitive.
 * (feature) RealTimeEmulationTrader. Uses IPortfolioProvider.
+* (bug) RealTimeEmulationTrader. Fix subscriptions processing.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
