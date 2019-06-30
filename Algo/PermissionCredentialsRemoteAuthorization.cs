@@ -114,14 +114,24 @@ namespace StockSharp.Algo
 			if (IsAnonymous)
 				return sessionId;
 
+			_sessions.Add(sessionId, GetCredentials(login));
+
+			return sessionId;
+		}
+
+		/// <summary>
+		/// Get credentials by specified login.
+		/// </summary>
+		/// <param name="login">Login.</param>
+		/// <returns>Credentials with set of permissions.</returns>
+		protected virtual PermissionCredentials GetCredentials(string login)
+		{
 			var credentials = Storage.TryGetByLogin(login);
 
 			if (credentials == null)
 				throw new UnauthorizedAccessException(LocalizedStrings.UserNotFound.Put(login));
 
-			_sessions.Add(sessionId, credentials);
-
-			return sessionId;
+			return credentials;
 		}
 
 		/// <inheritdoc />
