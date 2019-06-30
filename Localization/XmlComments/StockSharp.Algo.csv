@@ -1417,6 +1417,9 @@ P:StockSharp.Algo.PermissionCredentialsRemoteAuthorization.AllRemoteUsers/inheri
 M:StockSharp.Algo.PermissionCredentialsRemoteAuthorization.SaveRemoteUser(System.String,System.Security.SecureString,System.Collections.Generic.IEnumerable{System.Net.IPAddress},StockSharp.Messages.UserPermissions)/inheritdoc;DocStr8459
 M:StockSharp.Algo.PermissionCredentialsRemoteAuthorization.DeleteRemoteUser(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Algo.PermissionCredentialsRemoteAuthorization.ValidateCredentials(System.String,System.Security.SecureString,System.Net.IPAddress)/inheritdoc;DocStr8459
+M:StockSharp.Algo.PermissionCredentialsRemoteAuthorization.GetCredentials(System.String)/summary;DocStr11228
+M:StockSharp.Algo.PermissionCredentialsRemoteAuthorization.GetCredentials(System.String)/param/login;Login
+M:StockSharp.Algo.PermissionCredentialsRemoteAuthorization.GetCredentials(System.String)/returns;DocStr10446
 M:StockSharp.Algo.PermissionCredentialsRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Messages.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/inheritdoc;DocStr8459
 T:StockSharp.Algo.PermissionCredentialsStorage/summary;DocStr273
 M:StockSharp.Algo.PermissionCredentialsStorage.#ctor(System.String)/summary;DocStr1

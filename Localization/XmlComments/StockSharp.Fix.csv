@@ -570,10 +570,10 @@ M:StockSharp.Fix.IFixSessionTransactionIdStorage.CreateRequestId/returns;DocStr8
 M:StockSharp.Fix.IFixSessionTransactionIdStorage.CreateTransactionId(System.String)/summary;DocStr11224
 M:StockSharp.Fix.IFixSessionTransactionIdStorage.CreateTransactionId(System.String)/param/requestId;DocStr8779
 M:StockSharp.Fix.IFixSessionTransactionIdStorage.CreateTransactionId(System.String)/returns;TransactionId
-M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveRequestId(System.String)/summary;DocStr11225
+M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveRequestId(System.String)/summary;XamlStr784
 M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveRequestId(System.String)/param/requestId;DocStr8779
 M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveRequestId(System.String)/returns;DocStr11226
-M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveTransactionId(System.Int64)/summary;DocStr11225
+M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveTransactionId(System.Int64)/summary;XamlStr784
 M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveTransactionId(System.Int64)/param/transactionId;TransactionId
 M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveTransactionId(System.Int64)/returns;DocStr11226
 T:StockSharp.Fix.InMemoryFixServerTransactionIdStorage/summary;DocStr11138

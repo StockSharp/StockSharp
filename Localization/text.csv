@@ -15744,3 +15744,4 @@ DocStr11223;Create request identifier;Создать идентификатор 
 DocStr11224;Create association;Создать ассоциацию
 DocStr11226;{0} if association was removed successfully, otherwise, returns {1};{0} если ассоциация была успешно удалена, иначе, возвращается {1}
 DocStr11227;Plain implementation of {0};Плоская реализация {0}
+DocStr11228;Get credentials by specified login;Получить доступы для указанного логина

@@ -2137,7 +2137,7 @@
     </member>
     <member name="M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveRequestId(System.String)">
       <summary>
-            Remove association.
+            Delete association.
             </summary>
       <param name="requestId">The request identifier.</param>
       <returns>
@@ -2145,7 +2145,7 @@
     </member>
     <member name="M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveTransactionId(System.Int64)">
       <summary>
-            Remove association.
+            Delete association.
             </summary>
       <param name="transactionId">Transaction ID.</param>
       <returns>
