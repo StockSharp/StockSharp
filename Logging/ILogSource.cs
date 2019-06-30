@@ -92,7 +92,7 @@ namespace StockSharp.Logging
 			Name = LocalizedStrings.NameKey,
 			Description = LocalizedStrings.Str7Key,
 			GroupName = LocalizedStrings.LoggingKey,
-			Order = 0)]
+			Order = 1000)]
 		public virtual string Name
 		{
 			get => _name;
@@ -133,7 +133,7 @@ namespace StockSharp.Logging
 			Name = LocalizedStrings.Str9Key,
 			Description = LocalizedStrings.Str9Key + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.LoggingKey,
-			Order = 1)]
+			Order = 1001)]
 		public virtual LogLevels LogLevel { get; set; } = LogLevels.Inherit;
 
 		/// <inheritdoc />

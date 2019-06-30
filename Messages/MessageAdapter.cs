@@ -202,7 +202,8 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str192Key,
 			Description = LocalizedStrings.Str193Key,
-			GroupName = LocalizedStrings.Str186Key)]
+			GroupName = LocalizedStrings.Str186Key,
+			Order = 300)]
 		public TimeSpan HeartbeatInterval
 		{
 			get => _heartbeatInterval;
@@ -331,9 +332,12 @@ namespace StockSharp.Messages
 		public const string DefaultAssociatedBoardCode = "ALL";
 
 		/// <inheritdoc />
-		[CategoryLoc(LocalizedStrings.Str186Key)]
-		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
-		[DescriptionLoc(LocalizedStrings.Str199Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.AssociatedSecurityBoardKey,
+			Description = LocalizedStrings.Str199Key,
+			GroupName = LocalizedStrings.Str186Key,
+			Order = 301)]
 		public string AssociatedBoardCode { get; set; } = DefaultAssociatedBoardCode;
 
 		/// <summary>
