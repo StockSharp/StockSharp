@@ -15724,3 +15724,23 @@ DocStr11203;Changed credentials;Измененные доступы
 DocStr11204;Default handler;Обработчик по умолчанию
 DocStr11205;Average execution price;Средняя цена исполнения
 DocStr11206;Minimum quantity of an order to be executed;Минимальный объем заявки, который может быть исполнен
+DocStr11207;Collection based implementation of {0};Реализация {0}, основанная на коллекции
+DocStr11208;The portfolios collection;Коллекция портфелей
+DocStr11209;Try get {0};Попытаться получить {0}
+DocStr11210;{0} if identifier exists. Otherwise, {1};{0} если идентификатор существует. Иначе, {1}
+DocStr11211;Do not add extra adapters;Не добавлять дополнительные адаптеры
+DocStr11212;Information about StockSharp;Информация о StockSharp
+DocStr11213;Transaction and request identifiers storage;Хранилище идентификаторов транзакций и запросов
+DocStr11214;Keep subscriptions on disconnect;Сохранять подписки при отключении
+DocStr11215;The interface describing the transaction and request identifiers storage;Интерфейс, описывающий хранилище идентификаторов транзакций и запросов
+DocStr11216;Get session based transaction and request identifiers storage;Получить сессионное хранилище идентификаторов транзакций и запросов
+DocStr11217;Session based transaction and request identifiers storage;Сессионное хранилище идентификаторов транзакций и запросов
+DocStr11218;The interface describing the session based transaction and request identifiers storage;Интерфейс, описывающий сессионное хранилище идентификаторов транзакций и запросов
+DocStr11219;Find request id by the specified transaction id;Найти идентификатор запроса по переданному идентификатору транзакции
+DocStr11220;The request identifier. {0} if the specified id doesn't exist;Идентификатор запроса. {0} если указанный идентификатор не существует
+DocStr11221;Find transaction id by the specified request id;Найти идентификатор транзакции по переданному идентификатору запроса
+DocStr11222;Transaction ID. {0} if the specified request doesn't exist;Идентификатор транзакции. {0} если указанный идентификатор не существует
+DocStr11223;Create request identifier;Создать идентификатор запроса
+DocStr11224;Create association;Создать ассоциацию
+DocStr11226;{0} if association was removed successfully, otherwise, returns {1};{0} если ассоциация была успешно удалена, иначе, возвращается {1}
+DocStr11227;Plain implementation of {0};Плоская реализация {0}

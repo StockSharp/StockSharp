@@ -1849,20 +1849,21 @@
       <param name="reader">Data reader.</param>
       <returns>Whether the data was successfully processed.</returns>
     </member>
-    <member name="M:StockSharp.Fix.FixServer.#ctor(StockSharp.Algo.IRemoteAuthorization)">
+    <member name="M:StockSharp.Fix.FixServer.#ctor(StockSharp.Algo.IRemoteAuthorization,StockSharp.Fix.IFixServerTransactionIdStorage)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixServer" />.
             </summary>
       <param name="authorization">The customer authentication.</param>
+      <param name="transactionIdStorage">Transaction and request identifiers storage.</param>
     </member>
     <member name="P:StockSharp.Fix.FixServer.Authorization">
       <summary>
             The customer authentication.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixServer.InitialTransactionId">
+    <member name="P:StockSharp.Fix.FixServer.TransactionIdStorage">
       <summary>
-            The <see cref="T:StockSharp.Fix.FixServer" /> number from which transaction numbers will be generated.
+            Transaction and request identifiers storage.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixServer.ConvertToLatin">
@@ -1890,6 +1891,11 @@
             Is the server online.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixServer.KeepSubscriptionsOnDisconnect">
+      <summary>
+            Keep subscriptions on disconnect.
+            </summary>
+    </member>
     <member name="E:StockSharp.Fix.FixServer.StateChanged">
       <summary>
         <see cref="P:StockSharp.Fix.FixServer.State" /> change event.
@@ -1904,38 +1910,6 @@
       <summary>
             Stop the server.
             </summary>
-    </member>
-    <member name="M:StockSharp.Fix.FixServer.TryGetRequestId(StockSharp.Fix.FixSession,System.Int64)">
-      <summary>
-            Get the request identifier.
-            </summary>
-      <param name="session">The session.</param>
-      <param name="transactionId">Transaction ID.</param>
-      <returns>Request identifier.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.FixServer.GetTransactionId(StockSharp.Fix.FixSession,System.String)">
-      <summary>
-            Get the transaction ID.
-            </summary>
-      <param name="session">The session.</param>
-      <param name="requestId">The request identifier.</param>
-      <returns>Transaction ID.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.FixServer.CreateTransactionId(StockSharp.Fix.FixSession,System.String)">
-      <summary>
-            Generate a new request identifier.
-            </summary>
-      <param name="session">Session.</param>
-      <param name="requestId">Request identifier.</param>
-      <returns>Transaction ID.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.FixServer.OnCreateTransactionId(StockSharp.Fix.FixSession,System.String)">
-      <summary>
-            Generate a new request identifier.
-            </summary>
-      <param name="session">Session.</param>
-      <param name="requestId">Request identifier.</param>
-      <returns>Transaction ID.</returns>
     </member>
     <member name="M:StockSharp.Fix.FixServer.DisposeManaged">
       <inheritdoc />
@@ -2114,6 +2088,83 @@
     <member name="F:StockSharp.Fix.FixVersions.Fix50Sp2">
       <summary>
             FIX 5.0 SP2.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.IFixServerTransactionIdStorage">
+      <summary>
+            The interface describing the transaction and request identifiers storage.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.IFixServerTransactionIdStorage.Get(System.String)">
+      <summary>
+            Get session based transaction and request identifiers storage.
+            </summary>
+      <param name="sessionId">
+        <see cref="P:StockSharp.Fix.FixSession.SenderCompId" /> value.</param>
+      <returns>Session based transaction and request identifiers storage.</returns>
+    </member>
+    <member name="T:StockSharp.Fix.IFixSessionTransactionIdStorage">
+      <summary>
+            The interface describing the session based transaction and request identifiers storage.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.IFixSessionTransactionIdStorage.TryGetRequestId(System.Int64)">
+      <summary>
+            Find request id by the specified transaction id.
+            </summary>
+      <param name="transactionId">Transaction ID.</param>
+      <returns>The request identifier. <see langword="null" /> if the specified id doesn't exist.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.IFixSessionTransactionIdStorage.TryGetTransactionId(System.String)">
+      <summary>
+            Find transaction id by the specified request id.
+            </summary>
+      <param name="requestId">The request identifier.</param>
+      <returns>Transaction ID. <see langword="null" /> if the specified request doesn't exist.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.IFixSessionTransactionIdStorage.CreateRequestId">
+      <summary>
+            Create request identifier.
+            </summary>
+      <returns>The request identifier.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.IFixSessionTransactionIdStorage.CreateTransactionId(System.String)">
+      <summary>
+            Create association.
+            </summary>
+      <param name="requestId">The request identifier.</param>
+      <returns>Transaction ID.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveRequestId(System.String)">
+      <summary>
+            Remove association.
+            </summary>
+      <param name="requestId">The request identifier.</param>
+      <returns>
+        <see langword="true" /> if association was removed successfully, otherwise, returns <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.IFixSessionTransactionIdStorage.RemoveTransactionId(System.Int64)">
+      <summary>
+            Remove association.
+            </summary>
+      <param name="transactionId">Transaction ID.</param>
+      <returns>
+        <see langword="true" /> if association was removed successfully, otherwise, returns <see langword="false" />.</returns>
+    </member>
+    <member name="T:StockSharp.Fix.InMemoryFixServerTransactionIdStorage">
+      <summary>
+            In memory implementation of <see cref="T:StockSharp.Fix.IFixServerTransactionIdStorage" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.InMemoryFixServerTransactionIdStorage.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.InMemoryFixServerTransactionIdStorage" />.
+            </summary>
+      <param name="idGenerator">Transaction id generator.</param>
+    </member>
+    <member name="T:StockSharp.Fix.PlainFixServerTransactionIdStorage">
+      <summary>
+            Plain implementation of <see cref="T:StockSharp.Fix.IFixServerTransactionIdStorage" />.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.BaseFixReader">
@@ -7253,6 +7304,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.FaceValue">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MDResponseID">
       <summary>
       </summary>
     </member>

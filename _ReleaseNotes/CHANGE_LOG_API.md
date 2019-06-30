@@ -144,6 +144,7 @@ StockSharp API Change log
 * (feature) RealTimeEmulationTrader. Uses IPortfolioProvider.
 * (bug) RealTimeEmulationTrader. Fix subscriptions processing.
 * (feature) MarketEmulator. OrderStatusMessage and PortfolioLookupMessage supported.
+* (feature) FixServer. IFixServerTransactionIdStorage usage added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
