@@ -21,7 +21,9 @@ namespace StockSharp.Configuration
 	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
+	using System.Net;
 	using System.Reflection;
+	using System.Security;
 	using System.Windows;
 
 	using Ecng.Collections;
@@ -501,6 +503,61 @@ namespace StockSharp.Configuration
 				.Where(t => !t.IsAbstract && t.IsCandle())
 				.Concat(_customCandles)
 				.ToArray());
+		}
+
+		/// <summary>
+		/// Create adapters for StockSharp server connections.
+		/// </summary>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
+		/// <param name="login">Login.</param>
+		/// <param name="password">Password.</param>
+		/// <returns>Adapters for StockSharp server connections.</returns>
+		public static IEnumerable<IMessageAdapter> CreateStockSharpAdapters(IdGenerator transactionIdGenerator, string login, SecureString password)
+		{
+			if (transactionIdGenerator == null)
+				throw new ArgumentNullException(nameof(transactionIdGenerator));
+
+			IMessageAdapter CreateAdapter(bool isTransactional)
+			{
+				var port = isTransactional ? 24020 : 24021;
+
+				var adapter = new FixMessageAdapter(transactionIdGenerator)
+				{
+					SupportedMessages = Enumerable.Empty<MessageTypes>(),
+					Login = login,
+					Password = password,
+					SenderCompId = login,
+					TargetCompId = isTransactional ? "StockSharpTS" : "StockSharpMD",
+					Address = $"stocksharp.com:{port}".To<EndPoint>(),
+				};
+
+				if (isTransactional)
+				{
+					adapter.RequestAllPortfolios = true;
+					adapter.AddTransactionalSupport();
+				}
+				else
+				{
+					adapter.RequestAllSecurities = true;
+					adapter.AddMarketDataSupport();
+
+					adapter.SupportedMarketDataTypes = new[]
+					{
+						MarketDataTypes.MarketDepth,
+						MarketDataTypes.Trades,
+						MarketDataTypes.Level1,
+						MarketDataTypes.CandleTimeFrame,
+					};
+				}
+
+				return adapter;
+			}
+
+			return new[]
+			{
+				CreateAdapter(true),
+				CreateAdapter(false),
+			};
 		}
 	}
 }

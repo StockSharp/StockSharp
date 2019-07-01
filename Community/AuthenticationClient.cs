@@ -52,14 +52,10 @@ namespace StockSharp.Community
 		/// <inheritdoc />
 		public ServerCredentials Credentials { get; }
 
-		/// <summary>
-		/// Product.
-		/// </summary>
+		/// <inheritdoc />
 		public Products? Product { get; set; }
 
-		/// <summary>
-		/// Version.
-		/// </summary>
+		/// <inheritdoc />
 		public Version Version { get; set; }
 
 		/// <inheritdoc />
@@ -83,9 +79,7 @@ namespace StockSharp.Community
 		/// <inheritdoc />
 		public long UserId { get; private set; }
 
-		/// <summary>
-		/// To log in.
-		/// </summary>
+		/// <inheritdoc />
 		public void Login()
 		{
 			Login(Product, Version, Credentials.Email, Credentials.Password);

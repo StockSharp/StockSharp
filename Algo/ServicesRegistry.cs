@@ -137,9 +137,19 @@ namespace StockSharp.Algo
 		public static IAuthenticationClient AuthenticationClient => ConfigManager.GetService<IAuthenticationClient>();
 
 		/// <summary>
+		/// The client for access to the StockSharp authentication service.
+		/// </summary>
+		public static IAuthenticationClient TryAuthenticationClient => ConfigManager.TryGetService<IAuthenticationClient>();
+
+		/// <summary>
 		/// The message adapter's provider.
 		/// </summary>
 		public static IMessageAdapterProvider AdapterProvider => ConfigManager.GetService<IMessageAdapterProvider>();
+
+		/// <summary>
+		/// The message adapter's provider.
+		/// </summary>
+		public static IMessageAdapterProvider TryAdapterProvider => ConfigManager.TryGetService<IMessageAdapterProvider>();
 
 		/// <summary>
 		/// The portfolio based message adapter's provider.

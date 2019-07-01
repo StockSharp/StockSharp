@@ -49776,5 +49776,15 @@ namespace StockSharp.Localization
 		/// Yield by VWAP (prev).
 		/// </summary>
 		public static string YieldVWAPPrev => GetString(YieldVWAPPrevKey);
+
+		/// <summary>
+		/// You are running the application the first time. Would you like establish a connection with our simulation server and start trading now?
+		/// </summary>
+		public const string SetupStockSharpConnectionFirstTimeKey = nameof(SetupStockSharpConnectionFirstTime);
+
+		/// <summary>
+		/// You are running the application the first time. Would you like establish a connection with our simulation server and start trading now?
+		/// </summary>
+		public static string SetupStockSharpConnectionFirstTime => GetString(SetupStockSharpConnectionFirstTimeKey);
 	}
 }

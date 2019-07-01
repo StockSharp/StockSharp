@@ -5010,6 +5010,7 @@ MarketPriceToday;Market price (today);Рын цена (сегодня)
 VWAPPrev;VWAP (prev);VWAP (пред)
 YieldVWAP;Yield by VWAP;Дох-ть по VWAP
 YieldVWAPPrev;Yield by VWAP (prev);Дох-ть по VWAP (пред)
+SetupStockSharpConnectionFirstTime;You are running the application the first time. Would you like establish a connection with our simulation server and start trading now?;Вы запускаете приложение в первый раз. Хотите установить соединение с нашим сервером симуляции и начать торговать сейчас?
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

@@ -3,9 +3,12 @@ namespace StockSharp.Configuration
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Security;
 
 	using Ecng.Common;
 
+	using StockSharp.Fix;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -30,5 +33,19 @@ namespace StockSharp.Configuration
 
 		/// <inheritdoc />
 		public IEnumerable<IMessageAdapter> PossibleAdapters { get; }
+
+		/// <inheritdoc />
+		public IEnumerable<IMessageAdapter> CreateStockSharpAdapters(IdGenerator transactionIdGenerator, string login, SecureString password)
+		{
+			try
+			{
+				return Extensions.CreateStockSharpAdapters(transactionIdGenerator, login, password);
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+				return Enumerable.Empty<IMessageAdapter>();
+			}
+		}
 	}
 }
