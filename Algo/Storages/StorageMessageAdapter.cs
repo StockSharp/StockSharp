@@ -673,7 +673,8 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			_cancellationTransactions.Add(msg.TransactionId, msg.OrderTransactionId);
+			// can be looped back from offline
+			_cancellationTransactions.TryAdd(msg.TransactionId, msg.OrderTransactionId);
 			base.SendInMessage(msg);
 		}
 
