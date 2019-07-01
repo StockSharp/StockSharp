@@ -147,6 +147,7 @@ StockSharp API Change log
 * (feature) FixServer. IFixServerTransactionIdStorage usage added.
 * (feature) Diagram. Bring link to front on mouse over.
 * (bug) Diagram. Update composition item names in palette fixes.
+* (bug) StorageMessageAdapter. Fix processing offline cancel order requests.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
