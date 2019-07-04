@@ -264,6 +264,9 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportSecuritiesLookupAll => InnerAdapter.IsSupportSecuritiesLookupAll;
 
 		/// <inheritdoc />
+		public virtual bool IsSupportOrderBookDepths => InnerAdapter.IsSupportOrderBookDepths;
+
+		/// <inheritdoc />
 		public IEnumerable<Level1Fields> CandlesBuildFrom => InnerAdapter.CandlesBuildFrom;
 
 		OrderCondition IMessageAdapter.CreateOrderCondition() => InnerAdapter.CreateOrderCondition();
