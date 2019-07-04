@@ -297,6 +297,10 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportOrderBookDepths => false;
 
 		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsSupportExecutionsPnL => false;
+
+		/// <inheritdoc />
 		public virtual OrderCondition CreateOrderCondition() => this.GetOrderConditionType()?.CreateInstance<OrderCondition>();
 
 		/// <inheritdoc />

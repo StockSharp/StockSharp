@@ -175,6 +175,11 @@ namespace StockSharp.Messages
 		bool IsSupportOrderBookDepths { get; }
 
 		/// <summary>
+		/// Adapter fills <see cref="ExecutionMessage.PnL"/>.
+		/// </summary>
+		bool IsSupportExecutionsPnL { get; }
+
+		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
 		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>

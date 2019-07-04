@@ -360,7 +360,7 @@ namespace StockSharp.Algo
 				adapter = new SlippageMessageAdapter(adapter) { SlippageManager = SlippageManager.Clone() };
 			}
 
-			if (PnLManager != null)
+			if (PnLManager != null && !adapter.IsSupportExecutionsPnL)
 			{
 				adapter = new PnLMessageAdapter(adapter) { PnLManager = PnLManager.Clone() };
 			}
