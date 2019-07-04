@@ -361,10 +361,7 @@ namespace StockSharp.Algo
 			});
 		}
 
-		/// <summary>
-		/// Unsubscribe from the portfolio changes.
-		/// </summary>
-		/// <param name="portfolio">Portfolio for unsubscription.</param>
+		/// <inheritdoc />
 		public void UnRegisterPortfolio(Portfolio portfolio)
 		{
 			_subscriptionManager.UnRegisterPortfolio(portfolio);

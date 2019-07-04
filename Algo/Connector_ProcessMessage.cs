@@ -591,14 +591,10 @@ namespace StockSharp.Algo
 			MarketDataAdapter = null;
 		}
 
-		/// <summary>
-		/// Transactional adapter.
-		/// </summary>
+		/// <inheritdoc />
 		public IMessageAdapter TransactionAdapter { get; private set; }
 
-		/// <summary>
-		/// Market-data adapter.
-		/// </summary>
+		/// <inheritdoc />
 		public IMessageAdapter MarketDataAdapter { get; private set; }
 
 		/// <summary>
@@ -606,10 +602,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public StorageMessageAdapter StorageAdapter { get; private set; }
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public void SendInMessage(Message message)
 		{
 			message.TryInitLocalTime(this);
@@ -620,10 +613,7 @@ namespace StockSharp.Algo
 			InMessageChannel.SendInMessage(message);
 		}
 
-		/// <summary>
-		/// Send outgoing message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public void SendOutMessage(Message message)
 		{
 			message.TryInitLocalTime(this);
