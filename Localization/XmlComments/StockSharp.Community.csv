@@ -3,13 +3,13 @@ M:StockSharp.Community.AuthenticationClient.#ctor/summary;DocStr1
 M:StockSharp.Community.AuthenticationClient.#ctor(System.Uri)/summary;DocStr1
 M:StockSharp.Community.AuthenticationClient.#ctor(System.Uri)/param/address;DocStr2962
 P:StockSharp.Community.AuthenticationClient.Credentials/inheritdoc;DocStr8459
-P:StockSharp.Community.AuthenticationClient.Product/summary;Product
-P:StockSharp.Community.AuthenticationClient.Version/summary;Version
+P:StockSharp.Community.AuthenticationClient.Product/inheritdoc;DocStr8459
+P:StockSharp.Community.AuthenticationClient.Version/inheritdoc;DocStr8459
 P:StockSharp.Community.AuthenticationClient.IsLoggedIn/inheritdoc;DocStr8459
 P:StockSharp.Community.AuthenticationClient.SessionId/inheritdoc;DocStr8459
 P:StockSharp.Community.AuthenticationClient.NullableSessionId/inheritdoc;DocStr8459
 P:StockSharp.Community.AuthenticationClient.UserId/inheritdoc;DocStr8459
-M:StockSharp.Community.AuthenticationClient.Login/summary;DocStr2963
+M:StockSharp.Community.AuthenticationClient.Login/inheritdoc;DocStr8459
 M:StockSharp.Community.AuthenticationClient.Login(System.Nullable{StockSharp.Community.Products},System.Version,System.String,System.Security.SecureString)/inheritdoc;DocStr8459
 M:StockSharp.Community.AuthenticationClient.Logout/inheritdoc;DocStr8459
 M:StockSharp.Community.AuthenticationClient.GetId(System.Guid)/inheritdoc;DocStr8459

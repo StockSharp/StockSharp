@@ -4,6 +4,7 @@ M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tran
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportPortfolioLookupResult/inheritdoc;DocStr8459
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
+P:StockSharp.Oanda.OandaMessageAdapter.IsSupportExecutionsPnL/inheritdoc;DocStr8459
 M:StockSharp.Oanda.OandaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.Oanda.OandaMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Oanda.OandaMessageAdapter.Server/summary;Str3416

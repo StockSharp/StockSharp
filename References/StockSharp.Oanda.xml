@@ -24,6 +24,9 @@
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportExecutionsPnL">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Oanda.OandaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>

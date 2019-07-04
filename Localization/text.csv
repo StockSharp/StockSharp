@@ -15746,3 +15746,10 @@ DocStr11224;Create association;Создать ассоциацию
 DocStr11226;{0} if association was removed successfully, otherwise, returns {1};{0} если ассоциация была успешно удалена, иначе, возвращается {1}
 DocStr11227;Plain implementation of {0};Плоская реализация {0}
 DocStr11228;Get credentials by specified login;Получить доступы для указанного логина
+DocStr11229;The profit-loss manager, related for specified {0};Менеджер прибыли-убытка, относящийся к указанному {0}
+DocStr11230;{0} was changed;{0} был изменен
+DocStr11231;Changed {0} list;Список измененных {0}
+DocStr11232;Create adapters for StockSharp server connections;Создать адаптеры для соединения со StockSharp сервером
+DocStr11233;Adapters for StockSharp server connections;Адаптеры для соединения со StockSharp сервером
+DocStr11234;Adapter can handle {0};Адаптер может обрабатывать {0}
+DocStr11235;Adapter fills {0};Адаптер заполняет {0}

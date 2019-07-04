@@ -58,6 +58,9 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.SecurityLookupRequired">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportOrderBookDepths">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxRestores">
       <summary>
             Max possible restores.
@@ -275,6 +278,12 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportPortfolioLookupResult">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportExecutionsPnL">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition">
@@ -572,6 +581,11 @@
     <member name="P:StockSharp.Fix.Dialects.IFastDialect.SecurityLookupRequired">
       <summary>
         <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFastDialect.IsSupportOrderBookDepths">
+      <summary>
+            Adapter can handle <see cref="P:StockSharp.Messages.MarketDataMessage.MaxDepth" />.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
@@ -1147,6 +1161,9 @@
             Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.IsSupportOrderBookDepths">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.IsNativeIdentifiers">
       <inheritdoc />
     </member>
@@ -1445,6 +1462,16 @@
             Gets a value indicating whether the adapter translates <see cref="T:StockSharp.Messages.PortfolioLookupResultMessage" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportOrderBookDepths">
+      <summary>
+            Adapter can handle <see cref="P:StockSharp.Messages.MarketDataMessage.MaxDepth" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportExecutionsPnL">
+      <summary>
+            Adapter fills <see cref="P:StockSharp.Messages.ExecutionMessage.PnL" />.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition">
       <summary>
             Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
@@ -1588,6 +1615,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportSecuritiesLookupAll">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportOrderBookDepths">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FastMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -7953,6 +7983,12 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportPortfolioLookupResult">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportExecutionsPnL">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
