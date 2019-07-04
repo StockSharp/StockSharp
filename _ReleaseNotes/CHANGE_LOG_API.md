@@ -150,6 +150,7 @@ StockSharp API Change log
 * (bug) StorageMessageAdapter. Fix processing offline cancel order requests.
 * (feature) IMessageAdapter. IsSupportOrderBookDepths, IsSupportExecutionsPnL properties added.
 * (feature) PnLMessageAdapter. Translates PortfolioChangeMessage.
+* (feature) Plaza. Spectra 6.2.20 supported.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
