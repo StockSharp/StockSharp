@@ -151,6 +151,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter. IsSupportOrderBookDepths, IsSupportExecutionsPnL properties added.
 * (feature) PnLMessageAdapter. Translates PortfolioChangeMessage.
 * (feature) Plaza. Spectra 6.2.20 supported.
+* (feature) InteractiveBrokers. V9.76.01
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -132,6 +132,9 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportOrderBookDepths">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CandlesBuildFrom">
       <inheritdoc />
     </member>
@@ -1605,6 +1608,46 @@
             Convert order of type 'Primary Peg' to 'D-Peg'.
             </summary>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.UsePriceManagementAlgo">
+      <summary>
+            Use price management algorithm.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AutoCancelDate">
+      <summary>
+            Auto cancel date.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.RefFuturesContractId">
+      <summary>
+            Futures contract id.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AutoCancelParent">
+      <summary>
+            Auto cancel parent.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Shareholder">
+      <summary>
+            Shareholder.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ImbalanceOnly">
+      <summary>
+            Imbalance only.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.RouteMarketableToBbo">
+      <summary>
+            Route marketable to bbo.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ParentPermId">
+      <summary>
+            Parent perm id.
+            </summary>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.ExchangeNewsTypes">
       <summary>
             News types.
@@ -1744,70 +1787,56 @@
             The helper class that is used to access to specific Interactive Brokers information via <see cref="P:StockSharp.Messages.IExtendableEntity.ExtensionInfo" />.
             </summary>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetClientId(StockSharp.BusinessEntities.MyTrade)">
+    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetClientId(StockSharp.Messages.ExecutionMessage)">
       <summary>
             To get the customer identifier.
             </summary>
       <param name="trade">Own trade.</param>
       <returns>The customer identifier. If the identifier does not exist then <see langword="null" /> will be returned.</returns>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetLiquidation(StockSharp.BusinessEntities.MyTrade)">
+    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetLiquidation(StockSharp.Messages.ExecutionMessage)">
       <summary>
             To get the liquidation position.
             </summary>
       <param name="trade">Own trade.</param>
       <returns>The liquidation position. If the position does not exist then <see langword="null" /> will be returned.</returns>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetCumulativeQuantity(StockSharp.BusinessEntities.MyTrade)">
+    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetCumulativeQuantity(StockSharp.Messages.ExecutionMessage)">
       <summary>
             To get a number of profitable contracts in the trade.
             </summary>
       <param name="trade">Own trade.</param>
       <returns>A number of profitable contracts in the trade. If a number does not exist then <see langword="null" /> will be returned.</returns>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetAveragePrice(StockSharp.BusinessEntities.MyTrade)">
+    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetAveragePrice(StockSharp.Messages.ExecutionMessage)">
       <summary>
             To get the average price of matched order.
             </summary>
       <param name="trade">Own trade.</param>
       <returns>The average price of the matched order. If the price does not exist then <see langword="null" /> will be returned.</returns>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetOrderRef(StockSharp.BusinessEntities.MyTrade)">
-      <summary>
-            To get the order description.
-            </summary>
-      <param name="trade">Own trade.</param>
-      <returns>The order description. If the description does not exist then <see langword="null" /> will be returned.</returns>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetEvRule(StockSharp.BusinessEntities.MyTrade)">
+    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetEvRule(StockSharp.Messages.ExecutionMessage)">
       <summary>
             To get the Economic Value rule.
             </summary>
       <param name="trade">Own trade.</param>
       <returns>The Economic Value rule. If the rule does not exist then <see langword="null" /> will be returned.</returns>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetEvMultiplier(StockSharp.BusinessEntities.MyTrade)">
+    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetEvMultiplier(StockSharp.Messages.ExecutionMessage)">
       <summary>
             To get the contract market price factor when the price changes by 1.
             </summary>
       <param name="trade">Own trade.</param>
       <returns>The market price factor. If the factor does not exist then <see langword="null" /> will be returned.</returns>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetClientId(StockSharp.BusinessEntities.Order)">
-      <summary>
-            To get the customer identifier.
-            </summary>
-      <param name="order">Order.</param>
-      <returns>The customer identifier. If the identifier does not exist then <see langword="null" /> will be returned.</returns>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetLastTradePrice(StockSharp.BusinessEntities.Order)">
+    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetLastTradePrice(StockSharp.Messages.ExecutionMessage)">
       <summary>
             To get the last trade price.
             </summary>
       <param name="order">Order.</param>
       <returns>The last trade price. If the price does not exist then <see langword="null" /> will be returned.</returns>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetWhyHeld(StockSharp.BusinessEntities.Order)">
+    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetWhyHeld(StockSharp.Messages.ExecutionMessage)">
       <summary>
             To get the order retention reason.
             </summary>
