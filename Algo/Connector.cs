@@ -295,9 +295,7 @@ namespace StockSharp.Algo
 			set => _entityCache.OrdersKeepCount = value;
 		}
 
-		/// <summary>
-		/// Transaction id generator.
-		/// </summary>
+		/// <inheritdoc />
 		public IdGenerator TransactionIdGenerator
 		{
 			get => Adapter.TransactionIdGenerator;
@@ -332,14 +330,10 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// List of all exchange boards, for which instruments are loaded <see cref="IConnector.Securities"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<ExchangeBoard> ExchangeBoards => _entityCache.ExchangeBoards;
 
-		/// <summary>
-		/// List of all loaded instruments. It should be called after event <see cref="IConnector.NewSecurities"/> arisen. Otherwise the empty set will be returned.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual IEnumerable<Security> Securities => _entityCache.Securities;
 
 		int ISecurityProvider.Count => _entityCache.SecurityCount;
@@ -376,67 +370,40 @@ namespace StockSharp.Algo
 
 		private DateTimeOffset _currentTime;
 
-		/// <summary>
-		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public override DateTimeOffset CurrentTime => _currentTime;
 
-		/// <summary>
-		/// Get session state for required board.
-		/// </summary>
-		/// <param name="board">Electronic board.</param>
-		/// <returns>Session state. If the information about session state does not exist, then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		public SessionStates? GetSessionState(ExchangeBoard board)
 		{
 			return _boardStates.TryGetValue2(board);
 		}
 
-		/// <summary>
-		/// Get all orders.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<Order> Orders => _entityCache.Orders;
 
-		/// <summary>
-		/// Get all stop-orders.
-		/// </summary>
-		public IEnumerable<Order> StopOrders
-		{
-			get { return Orders.Where(o => o.Type == OrderTypes.Conditional); }
-		}
+		/// <inheritdoc />
+		public IEnumerable<Order> StopOrders => Orders.Where(o => o.Type == OrderTypes.Conditional);
 
-		/// <summary>
-		/// Get all registration errors.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<OrderFail> OrderRegisterFails => _entityCache.OrderRegisterFails;
 
-		/// <summary>
-		/// Get all cancellation errors.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<OrderFail> OrderCancelFails => _entityCache.OrderCancelFails;
 
-		/// <summary>
-		/// Get all tick trades.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<Trade> Trades => _entityCache.Trades;
 
-		/// <summary>
-		/// Get all own trades.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<MyTrade> MyTrades => _entityCache.MyTrades;
 
-		/// <summary>
-		/// Get all portfolios.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual IEnumerable<Portfolio> Portfolios => _entityCache.Portfolios;
 
-		/// <summary>
-		/// Get all positions.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<Position> Positions => _entityCache.Positions;
 
-		/// <summary>
-		/// All news.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<News> News => _entityCache.News;
 
 		/// <summary>
@@ -480,9 +447,7 @@ namespace StockSharp.Algo
 			set => Adapter.SlippageManager = value;
 		}
 
-		/// <summary>
-		/// Connection state.
-		/// </summary>
+		/// <inheritdoc />
 		public ConnectionStates ConnectionState { get; private set; }
 
 		///// <summary>
@@ -544,12 +509,6 @@ namespace StockSharp.Algo
 		/// </summary>
 		public int ErrorCount { get; private set; }
 
-		///// <summary>
-		///// Временной сдвиг от текущего времени. Используется в случае, если сервер брокера самостоятельно
-		///// указывает сдвиг во времени.
-		///// </summary>
-		//public TimeSpan? TimeShift { get; private set; }
-
 		private TimeSpan _marketTimeChangedInterval = TimeSpan.FromMilliseconds(10);
 
 		/// <summary>
@@ -592,9 +551,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// Connect to trading system.
-		/// </summary>
+		/// <inheritdoc />
 		public void Connect()
 		{
 			this.AddInfoLog("Connect");
@@ -633,9 +590,7 @@ namespace StockSharp.Algo
 			SendInMessage(new ConnectMessage());
 		}
 
-		/// <summary>
-		/// Disconnect from trading system.
-		/// </summary>
+		/// <inheritdoc />
 		public void Disconnect()
 		{
 			this.AddInfoLog("Disconnect");
@@ -826,14 +781,7 @@ namespace StockSharp.Algo
 			SendInMessage(criteria);
 		}
 
-		/// <summary>
-		/// To get the position by portfolio and instrument.
-		/// </summary>
-		/// <param name="portfolio">The portfolio on which the position should be found.</param>
-		/// <param name="security">The instrument on which the position should be found.</param>
-		/// <param name="clientCode">The client code.</param>
-		/// <param name="depoName">The depository name where the stock is located physically. By default, an empty string is passed, which means the total position by all depositories.</param>
-		/// <returns>Position.</returns>
+		/// <inheritdoc />
 		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "")
 		{
 			return GetPosition(portfolio, security, clientCode, depoName, null, string.Empty);
@@ -904,30 +852,19 @@ namespace StockSharp.Algo
 			return info.First;
 		}
 
-		/// <summary>
-		/// To get the quotes order book.
-		/// </summary>
-		/// <param name="security">The instrument by which an order book should be got.</param>
-		/// <returns>Order book.</returns>
+		/// <inheritdoc />
 		public MarketDepth GetMarketDepth(Security security)
 		{
 			return GetMarketDepth(security, false);
 		}
 
-		/// <summary>
-		/// Get filtered order book.
-		/// </summary>
-		/// <param name="security">The instrument by which an order book should be got.</param>
-		/// <returns>Filtered order book.</returns>
+		/// <inheritdoc />
 		public MarketDepth GetFilteredMarketDepth(Security security)
 		{
 			return GetMarketDepth(security, true);
 		}
 
-		/// <summary>
-		/// Register new order.
-		/// </summary>
-		/// <param name="order">Registration details.</param>
+		/// <inheritdoc />
 		public void RegisterOrder(Order order)
 		{
 			RegisterOrder(order, true);
@@ -962,16 +899,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// Reregister the order.
-		/// </summary>
-		/// <param name="oldOrder">Changing order.</param>
-		/// <param name="price">Price of the new order.</param>
-		/// <param name="volume">Volume of the new order.</param>
-		/// <returns>New order.</returns>
-		/// <remarks>
-		/// If the volume is not set, only the price changes.
-		/// </remarks>
+		/// <inheritdoc />
 		public Order ReRegisterOrder(Order oldOrder, decimal price, decimal volume = 0)
 		{
 			if (oldOrder == null)
@@ -982,11 +910,7 @@ namespace StockSharp.Algo
 			return newOrder;
 		}
 
-		/// <summary>
-		/// Reregister the order.
-		/// </summary>
-		/// <param name="oldOrder">Cancelling order.</param>
-		/// <param name="newOrder">New order to register.</param>
+		/// <inheritdoc />
 		public void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
 			if (oldOrder == null)
@@ -1031,13 +955,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// Reregister of pair orders.
-		/// </summary>
-		/// <param name="oldOrder1">First order to cancel.</param>
-		/// <param name="newOrder1">First new order to register.</param>
-		/// <param name="oldOrder2">Second order to cancel.</param>
-		/// <param name="newOrder2">Second new order to register.</param>
+		/// <inheritdoc />
 		public void ReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 		{
 			if (oldOrder1 == null)
@@ -1106,10 +1024,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// Cancel the order.
-		/// </summary>
-		/// <param name="order">Order to cancel.</param>
+		/// <inheritdoc />
 		public void CancelOrder(Order order)
 		{
 			long transactionId = 0;
@@ -1306,16 +1221,7 @@ namespace StockSharp.Algo
 			SendInMessage(cancelMsg);
 		}
 
-		/// <summary>
-		/// Cancel orders by filter.
-		/// </summary>
-		/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
-		/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
-		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
-		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
-		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
-		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
-		/// <param name="transactionId">Order cancellation transaction id.</param>
+		/// <inheritdoc />
 		public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null, long? transactionId = null)
 		{
 			if (transactionId == null)
@@ -1459,11 +1365,7 @@ namespace StockSharp.Algo
 			return security;
 		}
 
-		/// <summary>
-		/// Get <see cref="SecurityId"/>.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <returns>Security ID.</returns>
+		/// <inheritdoc />
 		public SecurityId GetSecurityId(Security security)
 		{
 			if (security == null)
@@ -1489,12 +1391,7 @@ namespace StockSharp.Algo
 			return SecurityIdGenerator.GenerateId(secCode, GetBoardCode(secClass));
 		}
 
-		/// <summary>
-		/// To get the value of market data for the instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="field">Market-data field.</param>
-		/// <returns>The field value. If no data, the <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		public object GetSecurityValue(Security security, Level1Fields field)
 		{
 			if (security == null)
@@ -1504,11 +1401,7 @@ namespace StockSharp.Algo
 			return values?[(int)field];
 		}
 
-		/// <summary>
-		/// To get a set of available fields <see cref="Level1Fields"/>, for which there is a market data for the instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <returns>Possible fields.</returns>
+		/// <inheritdoc />
 		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
 		{
 			if (security == null)
@@ -1610,10 +1503,7 @@ namespace StockSharp.Algo
 			CloseTimer();
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			if (storage == null)
@@ -1646,10 +1536,7 @@ namespace StockSharp.Algo
 			base.Load(storage);
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			if (storage == null)
