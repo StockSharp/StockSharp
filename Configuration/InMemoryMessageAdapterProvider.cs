@@ -7,7 +7,6 @@ namespace StockSharp.Configuration
 
 	using Ecng.Common;
 
-	using StockSharp.Fix;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 

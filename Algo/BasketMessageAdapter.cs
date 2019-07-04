@@ -380,9 +380,6 @@ namespace StockSharp.Algo
 				adapter = new OrderBookMessageAdapter(adapter);
 			}
 
-			if (IgnoreExtraAdapters)
-				return adapter;
-
 			if (adapter.IsFullCandlesOnly)
 			{
 				adapter = new CandleHolderMessageAdapter(adapter);
@@ -463,7 +460,7 @@ namespace StockSharp.Algo
 						lock (_connectedResponseLock)
 							_pendingConnectAdapters.Add(a);
 
-						var wrapper = CreateWrappers(a);
+						var wrapper = IgnoreExtraAdapters ? a : CreateWrappers(a);
 
 						var adapter = wrapper;
 
