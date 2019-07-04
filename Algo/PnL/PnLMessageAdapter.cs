@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.PnL
 {
 	using System;
+	using System.Collections.Generic;
 
 	using StockSharp.Messages;
 
@@ -62,10 +63,22 @@ namespace StockSharp.Algo.PnL
 		{
 			if (!message.IsBack)
 			{
-				var info = PnLManager.ProcessMessage(message);
+				var list = new List<PortfolioPnLManager>();
+				var info = PnLManager.ProcessMessage(message, list);
 
 				if (info != null && info.PnL != 0)
-					((ExecutionMessage)message).PnL = info.PnL;	
+					((ExecutionMessage)message).PnL = info.PnL;
+
+				foreach (var manager in list)
+				{
+					base.OnInnerAdapterNewOutMessage(new PortfolioChangeMessage
+					{
+						ServerTime = message.LocalTime,
+						PortfolioName = manager.PortfolioName,
+					}
+					.Add(PositionChangeTypes.RealizedPnL, manager.RealizedPnL)
+					.TryAdd(PositionChangeTypes.UnrealizedPnL, manager.UnrealizedPnL));
+				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);

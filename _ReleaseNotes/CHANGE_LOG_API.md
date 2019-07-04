@@ -149,6 +149,7 @@ StockSharp API Change log
 * (bug) Diagram. Update composition item names in palette fixes.
 * (bug) StorageMessageAdapter. Fix processing offline cancel order requests.
 * (feature) IMessageAdapter. IsSupportOrderBookDepths, IsSupportExecutionsPnL properties added.
+* (feature) PnLMessageAdapter. Translates PortfolioChangeMessage.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

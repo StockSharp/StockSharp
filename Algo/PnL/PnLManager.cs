@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.PnL
 {
 	using System;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -37,21 +38,15 @@ namespace StockSharp.Algo.PnL
 		{
 		}
 
-		/// <summary>
-		/// Total profit-loss.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual decimal PnL => RealizedPnL + UnrealizedPnL ?? 0;
 
 		private decimal _realizedPnL;
 
-		/// <summary>
-		/// The relative value of profit-loss without open position accounting.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual decimal RealizedPnL => _realizedPnL;
 
-		/// <summary>
-		/// The value of unrealized profit-loss.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual decimal? UnrealizedPnL
 		{
 			get
@@ -60,14 +55,14 @@ namespace StockSharp.Algo.PnL
 
 				foreach (var manager in _portfolioManagers.CachedValues)
 				{
-					var manPnl = manager.UnrealizedPnL;
+					var pnl = manager.UnrealizedPnL;
 
-					if (manPnl != null)
+					if (pnl != null)
 					{
 						if (retVal == null)
 							retVal = 0;
 
-						retVal += manPnl.Value;
+						retVal += pnl.Value;
 					}
 				}
 
@@ -75,9 +70,7 @@ namespace StockSharp.Algo.PnL
 			}
 		}
 
-		/// <summary>
-		/// To zero <see cref="PnL"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public void Reset()
 		{
 			lock (_portfolioManagers.SyncRoot)
@@ -87,12 +80,8 @@ namespace StockSharp.Algo.PnL
 			}
 		}
 
-		/// <summary>
-		/// To process the message, containing market data or trade. If the trade was already processed earlier, previous information returns.
-		/// </summary>
-		/// <param name="message">The message, containing market data or trade.</param>
-		/// <returns>Information on new trade.</returns>
-		public PnLInfo ProcessMessage(Message message)
+		/// <inheritdoc />
+		public PnLInfo ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -120,7 +109,11 @@ namespace StockSharp.Algo.PnL
 							var manager = _portfolioManagers.SafeAdd(trade.PortfolioName, pf => new PortfolioPnLManager(pf));
 
 							if (manager.ProcessMyTrade(trade, out var info))
+							{
 								_realizedPnL += info.PnL;
+
+								changedPortfolios?.Add(manager);
+							}
 
 							return info;
 						}
@@ -131,7 +124,10 @@ namespace StockSharp.Algo.PnL
 			}
 
 			foreach (var pnLManager in _portfolioManagers.CachedValues)
-				pnLManager.ProcessMessage(message);
+			{
+				if (pnLManager.ProcessMessage(message))
+					changedPortfolios?.Add(pnLManager);
+			}
 
 			return null;
 		}
