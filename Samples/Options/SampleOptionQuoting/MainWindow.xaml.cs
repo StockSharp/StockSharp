@@ -122,6 +122,220 @@ namespace SampleOptionQuoting
 				};
 			}
 
+			event Action<Trade> IMarketDataProvider.NewTrade
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<Security> IMarketDataProvider.NewSecurity
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<Security> IMarketDataProvider.SecurityChanged
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<MarketDepth> IMarketDataProvider.NewMarketDepth
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<MarketDepth> IMarketDataProvider.MarketDepthChanged
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<OrderLogItem> IMarketDataProvider.NewOrderLogItem
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<News> IMarketDataProvider.NewNews
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<News> IMarketDataProvider.NewsChanged
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult2
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult2
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionSucceeded
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataSubscriptionFailed
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataUnSubscriptionSucceeded
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnSubscriptionFailed
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<Security, MarketDataFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnexpectedCancelled
+			{
+				add => throw new NotSupportedException();
+				remove => throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria)
+			{
+				throw new NotSupportedException();
+			}
+
+			MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.SubscribeMarketData(Security security, MarketDataMessage message)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.UnSubscribeMarketData(Security security, MarketDataMessage message)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.SubscribeMarketData(MarketDataMessage message)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.UnSubscribeMarketData(MarketDataMessage message)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.RegisterMarketDepth(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom,
+				int? maxDepth)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.UnRegisterMarketDepth(Security security)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.RegisterFilteredMarketDepth(Security security)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.UnRegisterFilteredMarketDepth(Security security)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.RegisterTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.UnRegisterTrades(Security security)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.RegisterSecurity(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.UnRegisterSecurity(Security security)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.RegisterOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.UnRegisterOrderLog(Security security)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.RegisterNews()
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.UnRegisterNews()
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.SubscribeBoard(ExchangeBoard board)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataProvider.UnSubscribeBoard(ExchangeBoard board)
+			{
+				throw new NotSupportedException();
+			}
+
 			private readonly IEnumerable<Position> _positions;
 
 			IEnumerable<Position> IPositionProvider.Positions => _positions;
