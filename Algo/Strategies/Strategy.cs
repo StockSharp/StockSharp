@@ -28,6 +28,7 @@ namespace StockSharp.Algo.Strategies
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Positions;
 	using StockSharp.Algo.Risk;
@@ -41,7 +42,7 @@ namespace StockSharp.Algo.Strategies
 	/// <summary>
 	/// The base class for all trade strategies.
 	/// </summary>
-	public class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer, ICloneable<Strategy>, IMarketDataProvider, ISecurityProvider, IPositionProvider
+	public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer, ICloneable<Strategy>, IMarketDataProvider, ISecurityProvider, IPositionProvider, ICandleManager
 	{
 		private class StrategyChangeStateMessage : Message
 		{
@@ -427,7 +428,6 @@ namespace StockSharp.Algo.Strategies
 				}
 
 				RaiseParametersChanged(nameof(Portfolio));
-				PortfolioChanged?.Invoke();
 			}
 		}
 
@@ -459,7 +459,6 @@ namespace StockSharp.Algo.Strategies
 				}
 				
 				RaiseParametersChanged(nameof(Security));
-				SecurityChanged?.Invoke();
 
 				PositionManager.SecurityId = value?.ToSecurityId();
 			}
@@ -1205,16 +1204,6 @@ namespace StockSharp.Algo.Strategies
 		public event Action ConnectorChanged;
 
 		/// <summary>
-		/// The event of strategy instrument change.
-		/// </summary>
-		public event Action SecurityChanged;
-
-		/// <summary>
-		/// The event of strategy portfolio change.
-		/// </summary>
-		public event Action PortfolioChanged;
-
-		/// <summary>
 		/// The event of strategy position change.
 		/// </summary>
 		public event Action<Position> PositionChanged2;
@@ -1225,7 +1214,7 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Strategy, Exception> Error;
 
 		/// <summary>
-		/// The method is called when the <see cref="Start"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
+		/// The method is called when the <see cref="Start()"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
 		/// </summary>
 		protected virtual void OnStarted()
 		{
@@ -2322,7 +2311,7 @@ namespace StockSharp.Algo.Strategies
 			UpdatePnLManager(trade.Trade.Security);
 
 			var tradeInfo = PnLManager.ProcessMessage(trade.ToMessage());
-			if (tradeInfo.PnL != 0)
+			if (tradeInfo != null && tradeInfo.PnL != 0)
 				isPnLChanged = true;
 
 			var pos = PositionManager.ProcessMessage(trade.ToMessage());
@@ -2336,7 +2325,8 @@ namespace StockSharp.Algo.Strategies
 				isSlipChanged = true;
 			}
 
-			StatisticManager.AddMyTrade(tradeInfo);
+			if (tradeInfo != null)
+				StatisticManager.AddMyTrade(tradeInfo);
 
 			TryInvoke(() =>
 			{
@@ -2660,33 +2650,6 @@ namespace StockSharp.Algo.Strategies
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-		}
-
-		/// <inheritdoc />
-		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
-
-		/// <inheritdoc />
-		public MarketDepth GetMarketDepth(Security security)
-		{
-			return SafeGetConnector().GetMarketDepth(security);
-		}
-
-		/// <inheritdoc />
-		public object GetSecurityValue(Security security, Level1Fields field)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return SafeGetConnector().GetSecurityValue(security, field);
-		}
-
-		/// <inheritdoc />
-		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return SafeGetConnector().GetLevel1Fields(security);
 		}
 
 		int ISecurityProvider.Count => SafeGetConnector().Count;
