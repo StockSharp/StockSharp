@@ -18,7 +18,6 @@ namespace StockSharp.Algo.PnL
 	using System;
 	using System.Collections.Generic;
 
-	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Serialization;
 
@@ -29,7 +28,10 @@ namespace StockSharp.Algo.PnL
 	/// </summary>
 	public class PnLManager : IPnLManager
 	{
-		private readonly CachedSynchronizedDictionary<string, PortfolioPnLManager> _portfolioManagers = new CachedSynchronizedDictionary<string, PortfolioPnLManager>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly CachedSynchronizedDictionary<string, PortfolioPnLManager> _managersByPf = new CachedSynchronizedDictionary<string, PortfolioPnLManager>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<long, PortfolioPnLManager> _managersByTransId = new Dictionary<long, PortfolioPnLManager>();
+		private readonly Dictionary<long, long> _orderIds = new Dictionary<long, long>();
+		private readonly HashSet<long> _orderTransactions = new HashSet<long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PnLManager"/>.
@@ -39,21 +41,21 @@ namespace StockSharp.Algo.PnL
 		}
 
 		/// <inheritdoc />
-		public virtual decimal PnL => RealizedPnL + UnrealizedPnL ?? 0;
+		public decimal PnL => RealizedPnL + UnrealizedPnL ?? 0;
 
 		private decimal _realizedPnL;
 
 		/// <inheritdoc />
-		public virtual decimal RealizedPnL => _realizedPnL;
+		public decimal RealizedPnL => _realizedPnL;
 
 		/// <inheritdoc />
-		public virtual decimal? UnrealizedPnL
+		public decimal? UnrealizedPnL
 		{
 			get
 			{
 				decimal? retVal = null;
 
-				foreach (var manager in _portfolioManagers.CachedValues)
+				foreach (var manager in _managersByPf.CachedValues)
 				{
 					var pnl = manager.UnrealizedPnL;
 
@@ -73,10 +75,13 @@ namespace StockSharp.Algo.PnL
 		/// <inheritdoc />
 		public void Reset()
 		{
-			lock (_portfolioManagers.SyncRoot)
+			lock (_managersByPf.SyncRoot)
 			{
 				_realizedPnL = 0;
-				_portfolioManagers.Clear();	
+				_managersByPf.Clear();
+				_managersByTransId.Clear();
+				_orderIds.Clear();
+				_orderTransactions.Clear();
 			}
 		}
 
@@ -94,39 +99,78 @@ namespace StockSharp.Algo.PnL
 					return null;
 				}
 
+				case MessageTypes.OrderRegister:
+				{
+					var regMsg = (OrderRegisterMessage)message;
+
+					lock (_managersByPf.SyncRoot)
+					{
+						var manager = _managersByPf.SafeAdd(regMsg.PortfolioName, pf => new PortfolioPnLManager(pf));
+						_managersByTransId.Add(regMsg.TransactionId, manager);
+
+						_orderTransactions.Add(regMsg.TransactionId);
+					}
+					
+					return null;
+				}
+
 				case MessageTypes.Execution:
 				{
-					var trade = (ExecutionMessage)message;
+					var execMsg = (ExecutionMessage)message;
 
-					if (trade.HasTradeInfo())
+					var transId = execMsg.OriginalTransactionId;
+					var orderId = execMsg.OrderId;
+
+					if (transId != 0 && execMsg.HasOrderInfo())
 					{
-						// TODO
-						if (trade.PortfolioName.IsEmpty())
-							return null;
-
-						lock (_portfolioManagers.SyncRoot)
+						lock (_managersByPf.SyncRoot)
 						{
-							var manager = _portfolioManagers.SafeAdd(trade.PortfolioName, pf => new PortfolioPnLManager(pf));
+							if (orderId != null && _orderTransactions.Contains(transId))
+								_orderIds[orderId.Value] = transId;
+						}
+					}
 
-							if (manager.ProcessMyTrade(trade, out var info))
+					if (execMsg.HasTradeInfo())
+					{
+						lock (_managersByPf.SyncRoot)
+						{
+							if (transId == 0)
 							{
-								_realizedPnL += info.PnL;
-
-								changedPortfolios?.Add(manager);
+								if (orderId == null || !_orderIds.TryGetValue(orderId.Value, out transId))
+									return null;
 							}
 
+							if (!_managersByTransId.TryGetValue(transId, out var manager))
+								return null;
+
+							if (!manager.ProcessMyTrade(execMsg, out var info))
+								return null;
+
+							_realizedPnL += info.PnL;
+							changedPortfolios?.Add(manager);
 							return info;
 						}
 					}
 
 					break;
 				}
+
+				case MessageTypes.Level1Change:
+				case MessageTypes.QuoteChange:
+				case MessageTypes.PortfolioChange:
+				case MessageTypes.PositionChange:
+				{
+					break;
+				}
+
+				default:
+					return null;
 			}
 
-			foreach (var pnLManager in _portfolioManagers.CachedValues)
+			foreach (var manager in _managersByPf.CachedValues)
 			{
-				if (pnLManager.ProcessMessage(message))
-					changedPortfolios?.Add(pnLManager);
+				if (manager.ProcessMessage(message))
+					changedPortfolios?.Add(manager);
 			}
 
 			return null;
