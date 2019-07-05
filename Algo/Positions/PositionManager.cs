@@ -46,9 +46,7 @@ namespace StockSharp.Algo.Positions
 
 		private SecurityId? _securityId;
 
-		/// <summary>
-		/// The security for which <see cref="Position"/> will be calculated.
-		/// </summary>
+		/// <inheritdoc />
 		public SecurityId? SecurityId
 		{
 			get => _securityId;
@@ -63,16 +61,12 @@ namespace StockSharp.Algo.Positions
 			}
 		}
 
-		/// <summary>
-		/// The position aggregate value.
-		/// </summary>
+		/// <inheritdoc />
 		public decimal Position { get; set; }
 
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, string>, decimal> _positions = new CachedSynchronizedDictionary<Tuple<SecurityId, string>, decimal>();
 
-		/// <summary>
-		/// Positions, grouped by instruments and portfolios.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> Positions
 		{
 			get => _positions.CachedPairs;
@@ -102,29 +96,19 @@ namespace StockSharp.Algo.Positions
 				: positions.Where(p => p.Key.Item1 == secId.Value).Sum(p => p.Value);
 		}
 
-		/// <summary>
-		/// The event of new position occurrence in <see cref="IPositionManager.Positions"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<Tuple<SecurityId, string>, decimal> NewPosition;
 
-		/// <summary>
-		/// The event of position change in <see cref="IPositionManager.Positions"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<Tuple<SecurityId, string>, decimal> PositionChanged;
 
-		/// <summary>
-		/// To null position.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual void Reset()
 		{
 			Positions = Enumerable.Empty<KeyValuePair<Tuple<SecurityId, string>, decimal>>();
 		}
 
-		/// <summary>
-		/// To calculate position.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns>The position by order or trade.</returns>
+		/// <inheritdoc />
 		public decimal? ProcessMessage(Message message)
 		{
 			switch (message.Type)

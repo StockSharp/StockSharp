@@ -39,9 +39,7 @@ namespace StockSharp.Algo.Slippage
 			CalculateNegative = true;
 		}
 
-		/// <summary>
-		/// Total slippage.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual decimal Slippage { get; private set; }
 
 		/// <summary>
@@ -49,9 +47,7 @@ namespace StockSharp.Algo.Slippage
 		/// </summary>
 		public bool CalculateNegative { get; set; }
 
-		/// <summary>
-		/// To zero <see cref="ISlippageManager.Slippage"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual void Reset()
 		{
 			Slippage = 0;
@@ -59,11 +55,7 @@ namespace StockSharp.Algo.Slippage
 			_plannedPrices.Clear();
 		}
 
-		/// <summary>
-		/// To calculate slippage.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns>The slippage. If it is impossible to calculate slippage, <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		public decimal? ProcessMessage(Message message)
 		{
 			switch (message.Type)

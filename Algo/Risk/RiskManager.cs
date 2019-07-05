@@ -49,24 +49,16 @@ namespace StockSharp.Algo.Risk
 
 		private readonly CachedSynchronizedSet<IRiskRule> _rules = new CachedSynchronizedSet<IRiskRule>();
 
-		/// <summary>
-		/// Rule list.
-		/// </summary>
+		/// <inheritdoc />
 		public SynchronizedSet<IRiskRule> Rules => _rules;
 
-		/// <summary>
-		/// To reset the state.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual void Reset()
 		{
 			_rules.Cache.ForEach(r => r.Reset());
 		}
 
-		/// <summary>
-		/// To process the trade message.
-		/// </summary>
-		/// <param name="message">The trade message.</param>
-		/// <returns>List of rules, activated by the message.</returns>
+		/// <inheritdoc />
 		public IEnumerable<IRiskRule> ProcessRules(Message message)
 		{
 			if (message.Type == MessageTypes.Reset)
@@ -78,10 +70,7 @@ namespace StockSharp.Algo.Risk
 			return _rules.Cache.Where(r => r.ProcessMessage(message)).ToArray();
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			Rules.Clear();
@@ -90,10 +79,7 @@ namespace StockSharp.Algo.Risk
 			base.Load(storage);
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
