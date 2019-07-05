@@ -111,7 +111,6 @@ namespace StockSharp.Algo.Testing
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
-					
 					SendOutMessage(new ConnectMessage());
 					return;
 
@@ -121,7 +120,7 @@ namespace StockSharp.Algo.Testing
 					if (TransactionIdGenerator is IncrementalIdGenerator incGen)
 						incGen.Current = Emulator.Settings.InitialTransactionId;
 
-					_currentTime = default(DateTimeOffset);
+					_currentTime = default;
 					break;
 
 				case MessageTypes.Disconnect:
@@ -134,7 +133,7 @@ namespace StockSharp.Algo.Testing
 			}
 
 			ProcessedMessageCount++;
-			_emulator.SendInMessage(message);
+			Emulator.SendInMessage(message);
 		}
 	}
 }
