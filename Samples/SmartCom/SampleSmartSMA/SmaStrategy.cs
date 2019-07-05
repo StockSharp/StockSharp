@@ -15,6 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleSmartSMA
 {
+	using System;
+
 	using Ecng.Common;
 
 	using StockSharp.Algo;
