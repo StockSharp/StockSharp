@@ -68,9 +68,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public Strategy FirstFinishStrategy { get; private set; }
 
-		/// <summary>
-		/// The method is called when the <see cref="Strategy.Start"/> method has been called and the <see cref="Strategy.ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
-		/// </summary>
+		/// <inheritdoc />
 		protected override void OnStarted()
 		{
 			if (FinishMode != BasketStrategyFinishModes.None && ChildStrategies.Count == 0)
@@ -105,9 +103,7 @@ namespace StockSharp.Algo.Strategies
 			rule.UpdateName(rule.Name + " (BasketStrategy.OnChildStrategiesAdded)");
 		}
 
-		/// <summary>
-		/// Release resources.
-		/// </summary>
+		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
 			if (FinishMode != BasketStrategyFinishModes.None)

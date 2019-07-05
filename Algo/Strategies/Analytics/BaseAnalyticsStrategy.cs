@@ -136,16 +136,12 @@ namespace StockSharp.Algo.Strategies.Analytics
 			_resultType = this.Param(nameof(ResultType), AnalyticsResultTypes.Bubble);
 		}
 
-		/// <summary>
-		/// To cancel all active orders (to stop and regular).
-		/// </summary>
+		/// <inheritdoc />
 		protected override void ProcessCancelActiveOrders()
 		{
 		}
 
-		/// <summary>
-		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public override DateTimeOffset CurrentTime => TimeHelper.NowWithOffset;
 
 		/// <summary>
@@ -158,9 +154,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// </summary>
 		protected StorageFormats StorageFormat => Environment.GetValue<StorageFormats>(nameof(StorageFormat));
 
-		/// <summary>
-		/// The method is called when the <see cref="Strategy.Start"/> method has been called and the <see cref="Strategy.ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
-		/// </summary>
+		/// <inheritdoc />
 		protected override void OnStarted()
 		{
 			InitStartValues();
