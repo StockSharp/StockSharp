@@ -815,33 +815,33 @@ namespace StockSharp.Algo
 
 		private abstract class SecurityRule<TArg> : MarketRule<Security, TArg>
 		{
-			protected SecurityRule(Security security, IConnector connector)
+			protected SecurityRule(Security security, IMarketDataProvider provider)
 				: base(security)
 			{
 				Security = security ?? throw new ArgumentNullException(nameof(security));
-				Connector = connector ?? throw new ArgumentNullException(nameof(connector));
+				Provider = provider ?? throw new ArgumentNullException(nameof(provider));
 			}
 
 			protected Security Security { get; }
-			protected IConnector Connector { get; }
+			protected IMarketDataProvider Provider { get; }
 		}
 
 		private sealed class SecurityChangedRule : SecurityRule<Security>
 		{
 			private readonly Func<Security, bool> _condition;
 
-			public SecurityChangedRule(Security security, IConnector connector)
-				: this(security, connector, s => true)
+			public SecurityChangedRule(Security security, IMarketDataProvider provider)
+				: this(security, provider, s => true)
 			{
 			}
 
-			public SecurityChangedRule(Security security, IConnector connector, Func<Security, bool> condition)
-				: base(security, connector)
+			public SecurityChangedRule(Security security, IMarketDataProvider provider, Func<Security, bool> condition)
+				: base(security, provider)
 			{
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Name = LocalizedStrings.Str1046 + " " + security;
-				Connector.SecurityChanged += OnSecurityChanged;
+				Provider.SecurityChanged += OnSecurityChanged;
 			}
 
 			private void OnSecurityChanged(Security security)
@@ -860,18 +860,18 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				Connector.SecurityChanged -= OnSecurityChanged;
+				Provider.SecurityChanged -= OnSecurityChanged;
 				base.DisposeManaged();
 			}
 		}
 
 		private sealed class SecurityNewTradeRule : SecurityRule<Trade>
 		{
-			public SecurityNewTradeRule(Security security, IConnector connector)
-				: base(security, connector)
+			public SecurityNewTradeRule(Security security, IMarketDataProvider provider)
+				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1047 + " " + security;
-				Connector.NewTrade += OnNewTrade;
+				Provider.NewTrade += OnNewTrade;
 			}
 
 			private void OnNewTrade(Trade trade)
@@ -888,18 +888,18 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				Connector.NewTrade -= OnNewTrade;
+				Provider.NewTrade -= OnNewTrade;
 				base.DisposeManaged();
 			}
 		}
 
 		private sealed class SecurityNewOrderLogItemRule : SecurityRule<OrderLogItem>
 		{
-			public SecurityNewOrderLogItemRule(Security security, IConnector connector)
-				: base(security, connector)
+			public SecurityNewOrderLogItemRule(Security security, IMarketDataProvider provider)
+				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1048 + " " + security;
-				Connector.NewOrderLogItem += OnNewOrderLogItem;
+				Provider.NewOrderLogItem += OnNewOrderLogItem;
 			}
 
 			private void OnNewOrderLogItem(OrderLogItem item)
@@ -916,7 +916,7 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				Connector.NewOrderLogItem -= OnNewOrderLogItem;
+				Provider.NewOrderLogItem -= OnNewOrderLogItem;
 				base.DisposeManaged();
 			}
 		}
@@ -925,15 +925,15 @@ namespace StockSharp.Algo
 		{
 			private readonly Func<Security, bool> _condition;
 
-			public SecurityLastTradeRule(Security security, IConnector connector, Func<Security, bool> condition)
-				: base(security, connector)
+			public SecurityLastTradeRule(Security security, IMarketDataProvider provider, Func<Security, bool> condition)
+				: base(security, provider)
 			{
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Name = LocalizedStrings.Str1049 + " " + security;
 
-				Connector.SecurityChanged += OnSecurityChanged;
-				Connector.NewTrade += OnNewTrade;
+				Provider.SecurityChanged += OnSecurityChanged;
+				Provider.NewTrade += OnNewTrade;
 			}
 
 			private void OnSecurityChanged(Security security)
@@ -969,8 +969,8 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				Connector.NewTrade -= OnNewTrade;
-				Connector.SecurityChanged -= OnSecurityChanged;
+				Provider.NewTrade -= OnNewTrade;
+				Provider.SecurityChanged -= OnSecurityChanged;
 
 				base.DisposeManaged();
 			}
@@ -978,11 +978,11 @@ namespace StockSharp.Algo
 
 		private sealed class SecurityMarketDepthChangedRule : SecurityRule<MarketDepth>
 		{
-			public SecurityMarketDepthChangedRule(Security security, IConnector connector)
-				: base(security, connector)
+			public SecurityMarketDepthChangedRule(Security security, IMarketDataProvider provider)
+				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1050 + " " + security;
-				Connector.MarketDepthChanged += OnMarketDepthChanged;
+				Provider.MarketDepthChanged += OnMarketDepthChanged;
 			}
 
 			private void OnMarketDepthChanged(MarketDepth depth)
@@ -995,18 +995,18 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				Connector.MarketDepthChanged -= OnMarketDepthChanged;
+				Provider.MarketDepthChanged -= OnMarketDepthChanged;
 				base.DisposeManaged();
 			}
 		}
 
 		private sealed class BasketSecurityMarketDepthChangedRule : SecurityRule<MarketDepth>
 		{
-			public BasketSecurityMarketDepthChangedRule(BasketSecurity security, IConnector connector)
-				: base(security, connector)
+			public BasketSecurityMarketDepthChangedRule(BasketSecurity security, IMarketDataProvider provider)
+				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1050 + " " + security;
-				Connector.MarketDepthChanged += OnMarketDepthChanged;
+				Provider.MarketDepthChanged += OnMarketDepthChanged;
 			}
 
 			private void OnMarketDepthChanged(MarketDepth depth)
@@ -1024,7 +1024,7 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				Connector.MarketDepthChanged -= OnMarketDepthChanged;
+				Provider.MarketDepthChanged -= OnMarketDepthChanged;
 				base.DisposeManaged();
 			}
 		}
@@ -1033,132 +1033,130 @@ namespace StockSharp.Algo
 		/// To create a rule for the instrument change event.
 		/// </summary>
 		/// <param name="security">The instrument to be traced for changes.</param>
-		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, Security> WhenChanged(this Security security, IConnector connector)
+		public static MarketRule<Security, Security> WhenChanged(this Security security, IMarketDataProvider provider)
 		{
-			return new SecurityChangedRule(security, connector);
+			return new SecurityChangedRule(security, provider);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of new trade occurrence for the instrument.
 		/// </summary>
 		/// <param name="security">The instrument to be traced for new trade occurrence event.</param>
-		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, Trade> WhenNewTrade(this Security security, IConnector connector)
+		public static MarketRule<Security, Trade> WhenNewTrade(this Security security, IMarketDataProvider provider)
 		{
-			return new SecurityNewTradeRule(security, connector);
+			return new SecurityNewTradeRule(security, provider);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of new notes occurrence in the orders log for instrument.
 		/// </summary>
 		/// <param name="security">The instrument to be traced for the event of new notes occurrence in the orders log.</param>
-		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, OrderLogItem> WhenNewOrderLogItem(this Security security, IConnector connector)
+		public static MarketRule<Security, OrderLogItem> WhenNewOrderLogItem(this Security security, IMarketDataProvider provider)
 		{
-			return new SecurityNewOrderLogItemRule(security, connector);
+			return new SecurityNewOrderLogItemRule(security, provider);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of order book change by instrument.
 		/// </summary>
 		/// <param name="security">The instrument to be traced for the event of order book change by instrument.</param>
-		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, MarketDepth> WhenMarketDepthChanged(this Security security, IConnector connector)
+		public static MarketRule<Security, MarketDepth> WhenMarketDepthChanged(this Security security, IMarketDataProvider provider)
 		{
-			return new SecurityMarketDepthChangedRule(security, connector);
+			return new SecurityMarketDepthChangedRule(security, provider);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of order book change by instruments basket.
 		/// </summary>
 		/// <param name="security">Instruments basket to be traced for the event of order books change by internal instruments.</param>
-		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, MarketDepth> WhenMarketDepthChanged(this BasketSecurity security, IConnector connector)
+		public static MarketRule<Security, MarketDepth> WhenMarketDepthChanged(this BasketSecurity security, IMarketDataProvider provider)
 		{
-			return new BasketSecurityMarketDepthChangedRule(security, connector);
+			return new BasketSecurityMarketDepthChangedRule(security, provider);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of excess of the best bid of specific level.
 		/// </summary>
 		/// <param name="security">The instrument to be traced for the event of excess of the best bid of specific level.</param>
-		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, Security> WhenBestBidPriceMore(this Security security, IConnector connector, Unit price)
+		public static MarketRule<Security, Security> WhenBestBidPriceMore(this Security security, IMarketDataProvider provider, Unit price)
 		{
-			return CreateSecurityCondition(security, connector, Level1Fields.BestBidPrice, price, false);
+			return CreateSecurityCondition(security, provider, Level1Fields.BestBidPrice, price, false);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of dropping the best bid below the specific level.
 		/// </summary>
 		/// <param name="security">The instrument to be traced for the event of dropping the best bid below the specific level.</param>
-		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, Security> WhenBestBidPriceLess(this Security security, IConnector connector, Unit price)
+		public static MarketRule<Security, Security> WhenBestBidPriceLess(this Security security, IMarketDataProvider provider, Unit price)
 		{
-			return CreateSecurityCondition(security, connector, Level1Fields.BestBidPrice, price, true);
+			return CreateSecurityCondition(security, provider, Level1Fields.BestBidPrice, price, true);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of excess of the best offer of the specific level.
 		/// </summary>
 		/// <param name="security">The instrument to be traced for the event of excess of the best offer of the specific level.</param>
-		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, Security> WhenBestAskPriceMore(this Security security, IConnector connector, Unit price)
+		public static MarketRule<Security, Security> WhenBestAskPriceMore(this Security security, IMarketDataProvider provider, Unit price)
 		{
-			return CreateSecurityCondition(security, connector, Level1Fields.BestAskPrice, price, false);
+			return CreateSecurityCondition(security, provider, Level1Fields.BestAskPrice, price, false);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of dropping the best offer below the specific level.
 		/// </summary>
 		/// <param name="security">The instrument to be traced for the event of dropping the best offer below the specific level.</param>
-		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, Security> WhenBestAskPriceLess(this Security security, IConnector connector, Unit price)
+		public static MarketRule<Security, Security> WhenBestAskPriceLess(this Security security, IMarketDataProvider provider, Unit price)
 		{
-			return CreateSecurityCondition(security, connector, Level1Fields.BestAskPrice, price, true);
+			return CreateSecurityCondition(security, provider, Level1Fields.BestAskPrice, price, true);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of increase of the last trade price above the specific level.
 		/// </summary>
 		/// <param name="security">The instrument to be traced for the event of increase of the last trade price above the specific level.</param>
-		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, Security> WhenLastTradePriceMore(this Security security, IConnector connector, IMarketDataProvider provider, Unit price)
+		public static MarketRule<Security, Security> WhenLastTradePriceMore(this Security security, IMarketDataProvider provider, Unit price)
 		{
-			return CreateLastTradeCondition(security, connector, provider, price, false);
+			return CreateLastTradeCondition(security, provider, price, false);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of reduction of the last trade price below the specific level.
 		/// </summary>
 		/// <param name="security">The instrument to be traced for the event of reduction of the last trade price below the specific level.</param>
-		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, Security> WhenLastTradePriceLess(this Security security, IConnector connector, IMarketDataProvider provider, Unit price)
+		public static MarketRule<Security, Security> WhenLastTradePriceLess(this Security security, IMarketDataProvider provider, Unit price)
 		{
-			return CreateLastTradeCondition(security, connector, provider, price, true);
+			return CreateLastTradeCondition(security, provider, price, true);
 		}
 
-		private static SecurityChangedRule CreateSecurityCondition(Security security, IConnector connector, Level1Fields field, Unit offset, bool isLess)
+		private static SecurityChangedRule CreateSecurityCondition(Security security, IMarketDataProvider provider, Level1Fields field, Unit offset, bool isLess)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -1172,7 +1170,7 @@ namespace StockSharp.Algo
 			if (offset.Value < 0)
 				throw new ArgumentException(LocalizedStrings.Str1052, nameof(offset));
 
-			var price = (decimal?)connector.GetSecurityValue(security, field);
+			var price = (decimal?)provider.GetSecurityValue(security, field);
 
 			if (price == null && offset.Type != UnitTypes.Limit)
 				throw new InvalidOperationException(LocalizedStrings.Str1053);
@@ -1180,24 +1178,24 @@ namespace StockSharp.Algo
 			if (isLess)
 			{
 				var finishPrice = (decimal)(offset.Type == UnitTypes.Limit ? offset : price - offset);
-				return new SecurityChangedRule(security, connector, s =>
+				return new SecurityChangedRule(security, provider, s =>
 				{
-					var quote = (decimal?)connector.GetSecurityValue(s, field);
+					var quote = (decimal?)provider.GetSecurityValue(s, field);
 					return quote != null && quote < finishPrice;
 				});
 			}
 			else
 			{
 				var finishPrice = (decimal)(offset.Type == UnitTypes.Limit ? offset : price + offset);
-				return new SecurityChangedRule(security, connector, s =>
+				return new SecurityChangedRule(security, provider, s =>
 				{
-					var quote = (decimal?)connector.GetSecurityValue(s, field);
+					var quote = (decimal?)provider.GetSecurityValue(s, field);
 					return quote != null && quote > finishPrice;
 				});
 			}
 		}
 
-		private static SecurityLastTradeRule CreateLastTradeCondition(Security security, IConnector connector, IMarketDataProvider provider, Unit offset, bool isLess)
+		private static SecurityLastTradeRule CreateLastTradeCondition(Security security, IMarketDataProvider provider, Unit offset, bool isLess)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -1222,12 +1220,12 @@ namespace StockSharp.Algo
 			if (isLess)
 			{
 				var finishPrice = (decimal)(offset.Type == UnitTypes.Limit ? offset : price - offset);
-				return new SecurityLastTradeRule(security, connector, s => (decimal?)provider.GetSecurityValue(s, Level1Fields.LastTradePrice) < finishPrice);
+				return new SecurityLastTradeRule(security, provider, s => (decimal?)provider.GetSecurityValue(s, Level1Fields.LastTradePrice) < finishPrice);
 			}
 			else
 			{
 				var finishPrice = (decimal)(offset.Type == UnitTypes.Limit ? offset : price + offset);
-				return new SecurityLastTradeRule(security, connector, s => (decimal?)provider.GetSecurityValue(s, Level1Fields.LastTradePrice) > finishPrice);
+				return new SecurityLastTradeRule(security, provider, s => (decimal?)provider.GetSecurityValue(s, Level1Fields.LastTradePrice) > finishPrice);
 			}
 		}
 

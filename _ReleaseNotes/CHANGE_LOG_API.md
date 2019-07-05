@@ -153,6 +153,7 @@ StockSharp API Change log
 * (feature) Plaza. Spectra 6.2.20 supported.
 * (feature) InteractiveBrokers. V9.76.01
 * (bug) PnLMessageAdapter. Fix processing for empty portfolio name trades.
+* (feature) IConnector. Moved market data members to IMarketDataProvider.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
