@@ -183,6 +183,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <returns>The candles manager.</returns>
+		[Obsolete("Use Strategy direct.")]
 		public static ICandleManager GetCandleManager(this Strategy strategy)
 		{
 			if (strategy == null)
@@ -196,6 +197,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="candleManager">The candles manager.</param>
+		[Obsolete("Use Strategy direct.")]
 		public static void SetCandleManager(this Strategy strategy, ICandleManager candleManager)
 		{
 			if (strategy == null)

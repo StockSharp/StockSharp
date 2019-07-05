@@ -25,13 +25,11 @@ namespace SampleRandomEmulation
 
 	class SmaStrategy : Strategy
 	{
-		private readonly ICandleManager _candleManager;
 		private readonly CandleSeries _series;
 		private bool _isShortLessThenLong;
 
-		public SmaStrategy(ICandleManager candleManager, CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
+		public SmaStrategy(CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
 		{
-			_candleManager = candleManager;
 			_series = series;
 
 			LongSma = longSma;
@@ -43,7 +41,7 @@ namespace SampleRandomEmulation
 
 		protected override void OnStarted()
 		{
-			_candleManager
+			this
 				.WhenCandlesFinished(_series)
 				.Do(ProcessCandle)
 				.Apply(this);
@@ -51,7 +49,16 @@ namespace SampleRandomEmulation
 			// store current values for short and long
 			_isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
 
+			Start(_series);
+
 			base.OnStarted();
+		}
+
+		protected override void OnStopped()
+		{
+			Stop(_series);
+
+			base.OnStopped();
 		}
 
 		private void ProcessCandle(Candle candle)

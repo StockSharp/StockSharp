@@ -442,6 +442,8 @@
     <Compile Include="Strategies\StrategyNameGenerator.cs" />
     <Compile Include="Strategies\StrategyParam.cs" />
     <Compile Include="Strategies\StrategyParamHelper.cs" />
+    <Compile Include="Strategies\Strategy_Candles.cs" />
+    <Compile Include="Strategies\Strategy_MarketDataProvider.cs" />
     <Compile Include="Strategies\Testing\BatchEmulation.cs" />
     <Compile Include="Strategies\Testing\EmulationMarketModes.cs" />
     <Compile Include="Strategies\Testing\EmulationSettings.cs" />

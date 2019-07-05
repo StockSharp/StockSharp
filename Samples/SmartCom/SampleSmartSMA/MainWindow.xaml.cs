@@ -248,7 +248,7 @@ namespace SampleSmartSMA
 				var series = new CandleSeries(typeof(TimeFrameCandle), _lkoh, _timeFrame);
 
 				// создаем торговую стратегию
-				_strategy = new SmaStrategy(_candleManager, series, longSma, shortSma)
+				_strategy = new SmaStrategy(series, longSma, shortSma)
 				{
 					Volume = 1,
 					Security = _lkoh,
@@ -277,9 +277,6 @@ namespace SampleSmartSMA
 				_area.Elements.Add(_shortMaElem);
 
 				var marketTime = _trader.CurrentTime;
-
-				// начинаем получать свечи за период в 5 дней
-				_candleManager.Start(series, DateTime.Today - TimeSpan.FromDays(5), marketTime);
 
 				_lastHistoryCandle = _timeFrame.GetCandleBounds(marketTime).Min;
 

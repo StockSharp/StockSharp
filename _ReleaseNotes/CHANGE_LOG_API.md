@@ -155,6 +155,7 @@ StockSharp API Change log
 * (bug) PnLMessageAdapter. Fix processing for empty portfolio name trades.
 * (feature) IConnector. Moved market data members to IMarketDataProvider.
 * (feature) Strategy implemented IMarketDataProvider interface.
+* (feature) Strategy implemented ICandleManager interface.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

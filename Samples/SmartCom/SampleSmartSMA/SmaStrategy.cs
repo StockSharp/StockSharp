@@ -26,13 +26,11 @@ namespace SampleSmartSMA
 
 	class SmaStrategy : Strategy
 	{
-		private readonly ICandleManager _candleManager;
 		private readonly CandleSeries _series;
 		private bool _isShortLessThenLong;
 
-		public SmaStrategy(ICandleManager candleManager, CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
+		public SmaStrategy(CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
 		{
-			_candleManager = candleManager;
 			_series = series;
 
 			LongSma = longSma;
@@ -44,7 +42,7 @@ namespace SampleSmartSMA
 
 		protected override void OnStarted()
 		{
-			_candleManager
+			this
 				.WhenCandlesFinished(_series)
 				.Do(ProcessCandle)
 				.Apply(this);
@@ -52,7 +50,17 @@ namespace SampleSmartSMA
 			// запоминаем текущее положение относительно друг друга
 			_isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
 
+			// начинаем получать свечи за период в 5 дней
+			Start(_series, DateTime.Today - TimeSpan.FromDays(5), CurrentTime);
+
 			base.OnStarted();
+		}
+
+		protected override void OnStopped()
+		{
+			Stop(_series);
+
+			base.OnStopped();
 		}
 
 		private void ProcessCandle(Candle candle)

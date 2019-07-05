@@ -52,7 +52,6 @@ namespace SampleSMA
 		private QuikTrader _trader;
 		private SmaStrategy _strategy;
 		private bool _isTodaySmaDrawn;
-		private CandleManager _candleManager;
 		private Security _lkoh;
 		private readonly ChartArea _area;
 		private ChartCandleElement _candlesElem;
@@ -113,8 +112,6 @@ namespace SampleSMA
 
 					_trader.Connected += () =>
 					{
-						_candleManager = new CandleManager(_trader);
-
 						_trader.NewSecurity += security =>
 						{
 							if (!security.Code.CompareIgnoreCase("LKOH"))
@@ -141,7 +138,7 @@ namespace SampleSMA
 							}
 						};
 
-						_candleManager.Processing += (series, candle) =>
+						_trader.CandleSeriesProcessing += (series, candle) =>
 						{
 							// если скользящие за сегодняшний день отрисованы, то рисуем в реальном времени текущие скользящие
 							if (_isTodaySmaDrawn && candle.State == CandleStates.Finished)
@@ -206,7 +203,7 @@ namespace SampleSMA
 				var series = new CandleSeries(typeof(TimeFrameCandle), _lkoh, _timeFrame);
 
 				// создаем торговую стратегию, скользящие средние на 80 5-минуток и 10 5-минуток
-				_strategy = new SmaStrategy(_candleManager, series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
+				_strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
 				{
 					Volume = 1,
 					Security = _lkoh,
@@ -261,12 +258,10 @@ namespace SampleSMA
 					lastCandleTime = candle.OpenTime;
 				}
 
-				_candleManager.Start(series);
-
 				// вычисляем временные отрезки текущей свечи
 				var bounds = _timeFrame.GetCandleBounds(_trader.CurrentTime);
 
-				candles = _candleManager.Container.GetCandles(series, new Range<DateTimeOffset>(lastCandleTime + _timeFrame, bounds.Min));
+				candles = ((ICandleManager)_trader).Container.GetCandles(series, new Range<DateTimeOffset>(lastCandleTime + _timeFrame, bounds.Min));
 
 				foreach (var candle in candles)
 				{
