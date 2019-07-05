@@ -259,9 +259,9 @@ namespace StockSharp.Algo.Strategies.Reporting
 					rowIndex = 2;
 					foreach (var trade in strategy.MyTrades.ToArray())
 					{
-						var info = strategy.PnLManager.ProcessMessage(trade.ToMessage());
+						var tradePnL = strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL ?? 0;
 
-						totalPnL += info.PnL;
+						totalPnL += tradePnL;
 						position += trade.GetPosition() ?? 0;
 
 						var queue = queues.SafeAdd(trade.Trade.Security, key => new PnLQueue(key.ToSecurityId()));
@@ -279,7 +279,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 							.SetCell(columnShift + 7, rowIndex, trade.Order.Id)
 							.SetCell(columnShift + 8, rowIndex, trade.Slippage)
 							.SetCell(columnShift + 9, rowIndex, trade.Order.Comment)
-							.SetCell(columnShift + 10, rowIndex, MathHelper.Round(info.PnL, Decimals))
+							.SetCell(columnShift + 10, rowIndex, MathHelper.Round(tradePnL, Decimals))
 							.SetCell(columnShift + 11, rowIndex, MathHelper.Round(localInfo.PnL, Decimals))
 							.SetCell(columnShift + 12, rowIndex, MathHelper.Round(totalPnL, Decimals))
 							.SetCell(columnShift + 13, rowIndex, MathHelper.Round(queue.RealizedPnL, Decimals))
