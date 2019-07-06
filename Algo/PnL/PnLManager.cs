@@ -40,6 +40,26 @@ namespace StockSharp.Algo.PnL
 		{
 		}
 
+		/// <summary>
+		/// Use <see cref="ExecutionTypes.Tick"/> for <see cref="UnrealizedPnL"/> calculation.
+		/// </summary>
+		public bool UseTick { get; set; } = true;
+
+		/// <summary>
+		/// Use <see cref="ExecutionTypes.OrderLog"/> for <see cref="UnrealizedPnL"/> calculation.
+		/// </summary>
+		public bool UseOrderLog { get; set; }
+
+		/// <summary>
+		/// Use <see cref="QuoteChangeMessage"/> for <see cref="UnrealizedPnL"/> calculation.
+		/// </summary>
+		public bool UseOrderBook { get; set; }
+
+		/// <summary>
+		/// Use <see cref="Level1ChangeMessage"/> for <see cref="UnrealizedPnL"/> calculation.
+		/// </summary>
+		public bool UseLevel1 { get; set; } = true;
+
 		/// <inheritdoc />
 		public decimal PnL => RealizedPnL + UnrealizedPnL ?? 0;
 
@@ -118,6 +138,29 @@ namespace StockSharp.Algo.PnL
 				{
 					var execMsg = (ExecutionMessage)message;
 
+					switch (execMsg.ExecutionType)
+					{
+						case ExecutionTypes.Transaction:
+							break;
+
+						case ExecutionTypes.Tick:
+						{
+							if (!UseTick)
+								return null;
+
+							break;
+						}
+						case ExecutionTypes.OrderLog:
+						{
+							if (!UseOrderLog)
+								return null;
+
+							break;
+						}
+						default:
+							return null;
+					}
+
 					var transId = execMsg.OriginalTransactionId;
 					var orderId = execMsg.OrderId;
 
@@ -156,7 +199,19 @@ namespace StockSharp.Algo.PnL
 				}
 
 				case MessageTypes.Level1Change:
+				{
+					if (!UseLevel1)
+						return null;
+
+					break;
+				}
 				case MessageTypes.QuoteChange:
+				{
+					if (!UseOrderBook)
+						return null;
+
+					break;
+				}
 				case MessageTypes.PortfolioChange:
 				case MessageTypes.PositionChange:
 				{
