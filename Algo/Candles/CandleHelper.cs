@@ -636,7 +636,7 @@ namespace StockSharp.Algo.Candles
 			if (candleMsg == null)
 				throw new ArgumentNullException(nameof(candleMsg));
 
-			var vol = MathHelper.Round(candleMsg.TotalVolume / 4, volumeStep, decimals, MidpointRounding.AwayFromZero);
+			var vol = (candleMsg.TotalVolume / 4).Round(volumeStep, decimals, MidpointRounding.AwayFromZero);
 			var isUptrend = candleMsg.ClosePrice >= candleMsg.OpenPrice;
 
 			ExecutionMessage o = null;

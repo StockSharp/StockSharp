@@ -642,7 +642,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			if (currentPnFCandle == null)
 			{
-				var openPrice = MathHelper.Floor(price, pnfStep);
+				var openPrice = price.Floor(pnfStep);
 				var highPrice = openPrice + pnfStep;
 
 				changes.Add(CreateCandle(message, pnf, openPrice, highPrice, openPrice, highPrice, price, volume, side, time, oi));
@@ -662,7 +662,7 @@ namespace StockSharp.Algo.Candles.Compression
 					{
 						if (price > currentPnFCandle.HighPrice)
 						{
-							currentPnFCandle.HighPrice = currentPnFCandle.ClosePrice = MathHelper.Floor(price, pnfStep) + pnfStep;
+							currentPnFCandle.HighPrice = currentPnFCandle.ClosePrice = price.Floor(pnfStep) + pnfStep;
 							UpdateCandle(currentPnFCandle, price, volume, time, side, oi);
 							changes.Add(currentPnFCandle);
 						}
@@ -672,7 +672,7 @@ namespace StockSharp.Algo.Candles.Compression
 							changes.Add(currentPnFCandle);
 
 							var highPrice = currentPnFCandle.HighPrice - pnfStep;
-							var lowPrice = MathHelper.Floor(price, pnfStep);
+							var lowPrice = price.Floor(pnfStep);
 
 							currentPnFCandle = CreateCandle(message, pnf, highPrice, highPrice, lowPrice, lowPrice, price, volume, side, time, oi);
 							changes.Add(currentPnFCandle);
@@ -687,7 +687,7 @@ namespace StockSharp.Algo.Candles.Compression
 					{
 						if (price < currentPnFCandle.LowPrice)
 						{
-							currentPnFCandle.LowPrice = currentPnFCandle.ClosePrice = MathHelper.Floor(price, pnfStep);
+							currentPnFCandle.LowPrice = currentPnFCandle.ClosePrice = price.Floor(pnfStep);
 							UpdateCandle(currentPnFCandle, price, volume, time, side, oi);
 							changes.Add(currentPnFCandle);
 						}
@@ -696,7 +696,7 @@ namespace StockSharp.Algo.Candles.Compression
 							currentPnFCandle.State = CandleStates.Finished;
 							changes.Add(currentPnFCandle);
 
-							var highPrice = MathHelper.Floor(price, pnfStep) + pnfStep;
+							var highPrice = price.Floor(pnfStep) + pnfStep;
 							var lowPrice = currentPnFCandle.LowPrice + pnfStep;
 
 							currentPnFCandle = CreateCandle(message, pnf, lowPrice, highPrice, lowPrice, highPrice, price, volume, side, time, oi);
@@ -797,7 +797,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			if (currentRenkoCandle == null)
 			{
-				var openPrice = MathHelper.Floor(price, renkoStep);
+				var openPrice = price.Floor(renkoStep);
 
 				changes.Add(CreateCandle(message, boxSize, openPrice, renkoStep, price, volume, side, time, oi));
 			}

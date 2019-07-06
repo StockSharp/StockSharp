@@ -954,12 +954,10 @@ namespace StockSharp.Algo
 
 					default:
 					{
-						var candleMsg = message as CandleMessage;
+						if (message is CandleMessage candleMsg)
+							return candleMsg.ToCandle(_security).To<TEntity>();
 
-						if (candleMsg == null)
-							throw new ArgumentOutOfRangeException();
-
-						return candleMsg.ToCandle(_security).To<TEntity>();
+						throw new ArgumentOutOfRangeException();
 					}
 				}
 			}

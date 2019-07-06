@@ -932,9 +932,9 @@ namespace StockSharp.Algo
 			decimal priceLevel;
 
 			if (priceRange.Type == UnitTypes.Percent)
-				priceLevel = (decimal)(firstPrice + MathHelper.Floor((((price - firstPrice) * 100) / firstPrice), priceRange.Value).Percents());
+				priceLevel = (decimal)(firstPrice + (((price - firstPrice) * 100) / firstPrice).Floor(priceRange.Value).Percents());
 			else
-				priceLevel = MathHelper.Floor(price, (decimal)priceRange);
+				priceLevel = price.Floor((decimal)priceRange);
 
 			return priceLevel;
 		}

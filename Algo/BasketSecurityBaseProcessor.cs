@@ -632,7 +632,7 @@ namespace StockSharp.Algo
 				var step = Security.VolumeStep;
 
 				if (step != null)
-					value = MathHelper.Round(value, step.Value, step.Value.GetCachedDecimals());
+					value = value.Round(step.Value, step.Value.GetCachedDecimals());
 			}
 
 			return value;
