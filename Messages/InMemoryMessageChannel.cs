@@ -74,25 +74,17 @@ namespace StockSharp.Messages
 			NewOutMessage?.Invoke(message);
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public void SendInMessage(Message message)
 		{
 			if (!IsOpened)
 				throw new InvalidOperationException();
 
-			//if (!(message is TimeMessage) && message.GetType().Name != "BasketMessage")
-			//	Console.WriteLine(">> ({0}) {1}", System.Threading.Thread.CurrentThread.Name, message);
-
 			_msgStat.Add(message);
 			SendIn(new KeyValuePair<long, Message>(message.LocalTime.UtcTicks, message));
 		}
 
-		/// <summary>
-		/// New message event.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<Message> NewOutMessage;
 
 		/// <summary>

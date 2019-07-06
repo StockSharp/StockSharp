@@ -17,8 +17,6 @@ namespace StockSharp.Algo.Testing
 {
 	using System;
 
-	//using StockSharp.BusinessEntities;
-
 	/// <summary>
 	/// The base connection of emulation.
 	/// </summary>
