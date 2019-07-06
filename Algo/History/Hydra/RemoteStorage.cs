@@ -350,12 +350,12 @@ namespace StockSharp.Algo.History.Hydra
 			CheckSession(sessionId, UserPermissions.Load);
 			this.AddInfoLog(LocalizedStrings.Str2090Params, sessionId, securityIdStr.IsEmpty(LocalizedStrings.Str1569));
 
-			var securityId = securityIdStr.IsEmpty() ? default(SecurityId) : securityIdStr.ToSecurityId();
+			var securityId = securityIdStr.IsEmpty() ? default : securityIdStr.ToSecurityId();
 
 			return GetDrives()
 						.SelectMany(drive => drive.GetAvailableDataTypes(securityId, format))
-						.Select(t => Tuple.Create(t.MessageType.Name, TraderHelper.CandleArgToFolderName(t.Arg)))
 						.Distinct()
+						.Select(t => Tuple.Create(t.MessageType.Name, TraderHelper.CandleArgToFolderName(t.Arg)))
 						.ToArray();
 		}
 

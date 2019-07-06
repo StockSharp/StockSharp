@@ -390,7 +390,15 @@ namespace StockSharp.Algo.Storages
 				       .Select(IOPath.GetFileNameWithoutExtension)
 				       .Distinct()
 				       .Select(GetDataType)
-				       .Where(t => t != null);
+				       .Where(t => t != null)
+				       .OrderBy(d =>
+				       {
+					       if (!d.IsCandles())
+						       return 0;
+
+					       return d.MessageType == typeof(TimeFrameCandleMessage)
+						       ? ((TimeSpan)d.Arg).Ticks : long.MaxValue;
+				       });
 			}
 
 			if (securityId.IsDefault())
