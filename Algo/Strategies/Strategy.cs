@@ -357,6 +357,7 @@ namespace StockSharp.Algo.Strategies
 					_connector.ValuesChanged -= OnConnectorValuesChanged;
 					//_connector.NewTrades -= OnConnectorNewTrades;
 					//_connector.MarketDepthsChanged -= OnConnectorMarketDepthsChanged;
+					_connector.OrderInitialized -= OnConnectorOrderInitialized;
 				}
 
 				_connector = value;
@@ -377,6 +378,7 @@ namespace StockSharp.Algo.Strategies
 					_connector.ValuesChanged += OnConnectorValuesChanged;
 					//_connector.NewTrades += OnConnectorNewTrades;
 					//_connector.MarketDepthsChanged += OnConnectorMarketDepthsChanged;
+					_connector.OrderInitialized += OnConnectorOrderInitialized;
 				}
 
 				foreach (var strategy in ChildStrategies)
@@ -482,7 +484,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public event Action SlippageChanged;
 
-		private IPnLManager _pnLManager = new PnLManager();
+		private IPnLManager _pnLManager = new PnLManager { UseOrderBook = true };
 
 		/// <summary>
 		/// The profit-loss manager. It accounts trades of this strategy, as well as of its subsidiary strategies <see cref="Strategy.ChildStrategies"/>.
@@ -508,7 +510,7 @@ namespace StockSharp.Algo.Strategies
 		public decimal PnL => PnLManager.PnL;
 
 		/// <summary>
-		/// <see cref="Strategy.PnL"/> change event.
+		/// <see cref="PnL"/> change event.
 		/// </summary>
 		public event Action PnLChanged;
 
@@ -1335,6 +1337,18 @@ namespace StockSharp.Algo.Strategies
 			});
 		}
 
+		private void OnConnectorOrderInitialized(Order order)
+		{
+			if (_ordersInfo.TryGetValue(order, out var info) && info.IsOwn)
+			{
+				PnLManager.ProcessMessage(new OrderRegisterMessage
+				{
+					TransactionId = order.TransactionId,
+					PortfolioName = order.Portfolio.Name,
+				});
+			}
+		}
+
 		private void ProcessRisk(Order order)
 		{
 			ProcessRisk(order.CreateRegisterMessage());
@@ -2113,7 +2127,7 @@ namespace StockSharp.Algo.Strategies
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.HasTradeInfo())
+					if (execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog)
 						PnLManager.ProcessMessage(execMsg);
 
 					msgTime = execMsg.ServerTime;

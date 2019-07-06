@@ -248,6 +248,14 @@ namespace StockSharp.Algo
 		/// </summary>
 		public event Action<CandleSeries> CandleSeriesStopped;
 
+		/// <inheritdoc />
+		public event Action<Order> OrderInitialized;
+
+		private void RaiseOrderInitialized(Order order)
+		{
+			OrderInitialized?.Invoke(order);
+		}
+
 		private void RaiseNewMyTrade(MyTrade trade)
 		{
 			this.AddInfoLog("New own trade: {0}", trade);
