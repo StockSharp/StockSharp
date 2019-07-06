@@ -27,13 +27,8 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// The main interface providing the connection to the trading systems.
 	/// </summary>
-	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider, INewsProvider, IPortfolioProvider, IPositionProvider, IMessageSender
+	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ITransactionProvider, ISecurityProvider, INewsProvider, IPortfolioProvider, IPositionProvider, IMessageSender
 	{
-		/// <summary>
-		/// Own trade received.
-		/// </summary>
-		event Action<MyTrade> NewMyTrade;
-
 		/// <summary>
 		/// Own trades received.
 		/// </summary>
@@ -45,34 +40,14 @@ namespace StockSharp.BusinessEntities
 		event Action<IEnumerable<Trade>> NewTrades;
 
 		/// <summary>
-		/// Order received.
-		/// </summary>
-		event Action<Order> NewOrder;
-
-		/// <summary>
 		/// Orders received.
 		/// </summary>
 		event Action<IEnumerable<Order>> NewOrders;
 
 		/// <summary>
-		/// Order changed (cancelled, matched).
-		/// </summary>
-		event Action<Order> OrderChanged;
-
-		/// <summary>
 		/// Orders changed (cancelled, matched).
 		/// </summary>
 		event Action<IEnumerable<Order>> OrdersChanged;
-
-		/// <summary>
-		/// Order registration error event.
-		/// </summary>
-		event Action<OrderFail> OrderRegisterFailed;
-
-		/// <summary>
-		/// Order cancellation error event.
-		/// </summary>
-		event Action<OrderFail> OrderCancelFailed;
 
 		/// <summary>
 		/// Order registration errors event.
@@ -83,21 +58,6 @@ namespace StockSharp.BusinessEntities
 		/// Order cancellation errors event.
 		/// </summary>
 		event Action<IEnumerable<OrderFail>> OrdersCancelFailed;
-
-		/// <summary>
-		/// Mass order cancellation event.
-		/// </summary>
-		event Action<long> MassOrderCanceled;
-
-		/// <summary>
-		/// Mass order cancellation errors event.
-		/// </summary>
-		event Action<long, Exception> MassOrderCancelFailed;
-
-		/// <summary>
-		/// Failed order status request event.
-		/// </summary>
-		event Action<long, Exception> OrderStatusFailed;
 
 		/// <summary>
 		/// Stop-order registration errors event.
@@ -120,26 +80,6 @@ namespace StockSharp.BusinessEntities
 		event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <summary>
-		/// Stop-order registration error event.
-		/// </summary>
-		event Action<OrderFail> StopOrderRegisterFailed;
-
-		/// <summary>
-		/// Stop-order cancellation error event.
-		/// </summary>
-		event Action<OrderFail> StopOrderCancelFailed;
-
-		/// <summary>
-		/// Stop-order received.
-		/// </summary>
-		event Action<Order> NewStopOrder;
-
-		/// <summary>
-		/// Stop order state change event.
-		/// </summary>
-		event Action<Order> StopOrderChanged;
-
-		/// <summary>
 		/// Securities received.
 		/// </summary>
 		event Action<IEnumerable<Security>> NewSecurities;
@@ -154,30 +94,15 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> NewPortfolios;
 
-		///// <summary>
-		///// Portfolio changed.
-		///// </summary>
-		//event Action<Portfolio> PortfolioChanged;
-
 		/// <summary>
 		/// Portfolios changed.
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
-		///// <summary>
-		///// Position received.
-		///// </summary>
-		//event Action<Position> NewPosition;
-
 		/// <summary>
 		/// Positions received.
 		/// </summary>
 		event Action<IEnumerable<Position>> NewPositions;
-
-		///// <summary>
-		///// Position changed.
-		///// </summary>
-		//event Action<Position> PositionChanged;
 
 		/// <summary>
 		/// Positions changed.
@@ -243,16 +168,6 @@ namespace StockSharp.BusinessEntities
 		/// Server time changed <see cref="IConnector.ExchangeBoards"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
 		/// </summary>
 		event Action<TimeSpan> MarketTimeChanged;
-
-		/// <summary>
-		/// Lookup result <see cref="LookupPortfolios(Portfolio,IMessageAdapter,MessageOfflineModes)"/> received.
-		/// </summary>
-		event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult;
-
-		/// <summary>
-		/// Lookup result <see cref="LookupPortfolios(Portfolio,IMessageAdapter,MessageOfflineModes)"/> received.
-		/// </summary>
-		event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult2;
 
 		/// <summary>
 		/// Session changed.
@@ -352,7 +267,7 @@ namespace StockSharp.BusinessEntities
 		IEnumerable<Security> RegisteredOrderLogs { get; }
 
 		/// <summary>
-		/// List of all portfolios, subscribed via <see cref="RegisterPortfolio"/>.
+		/// List of all portfolios, subscribed via <see cref="ITransactionProvider.RegisterPortfolio"/>.
 		/// </summary>
 		IEnumerable<Portfolio> RegisteredPortfolios { get; }
 
@@ -400,7 +315,7 @@ namespace StockSharp.BusinessEntities
 		void LookupBoards(ExchangeBoard criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
 
 		/// <summary>
-		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
+		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="ITransactionProvider.LookupPortfoliosResult"/>.
 		/// </summary>
 		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
@@ -408,23 +323,11 @@ namespace StockSharp.BusinessEntities
 		void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
 
 		/// <summary>
-		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
-		/// </summary>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-		void LookupPortfolios(PortfolioLookupMessage criteria);
-
-		/// <summary>
-		/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="NewOrder"/>.
+		/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="ITransactionProvider.NewOrder"/>.
 		/// </summary>
 		/// <param name="criteria">The order which fields will be used as a filter.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		void LookupOrders(Order criteria, IMessageAdapter adapter = null);
-
-		/// <summary>
-		/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="NewOrder"/>.
-		/// </summary>
-		/// <param name="criteria">The order which fields will be used as a filter.</param>
-		void LookupOrders(OrderStatusMessage criteria);
 
 		/// <summary>
 		/// Get security by identifier.
@@ -434,55 +337,8 @@ namespace StockSharp.BusinessEntities
 		Security GetSecurity(SecurityId securityId);
 
 		/// <summary>
-		/// Register new order.
+		/// The order was initialized and ready to send for registration.
 		/// </summary>
-		/// <param name="order">Registration details.</param>
-		void RegisterOrder(Order order);
-
-		/// <summary>
-		/// Reregister the order.
-		/// </summary>
-		/// <param name="oldOrder">Cancelling order.</param>
-		/// <param name="newOrder">New order to register.</param>
-		void ReRegisterOrder(Order oldOrder, Order newOrder);
-
-		/// <summary>
-		/// Reregister the order.
-		/// </summary>
-		/// <param name="oldOrder">Changing order.</param>
-		/// <param name="price">Price of the new order.</param>
-		/// <param name="volume">Volume of the new order.</param>
-		/// <returns>New order.</returns>
-		Order ReRegisterOrder(Order oldOrder, decimal price, decimal volume);
-
-		/// <summary>
-		/// Cancel the order.
-		/// </summary>
-		/// <param name="order">The order which should be canceled.</param>
-		void CancelOrder(Order order);
-
-		/// <summary>
-		/// Cancel orders by filter.
-		/// </summary>
-		/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
-		/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
-		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
-		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
-		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
-		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
-		/// <param name="transactionId">Order cancellation transaction id.</param>
-		void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null, long? transactionId = null);
-
-		/// <summary>
-		/// Subscribe on the portfolio changes.
-		/// </summary>
-		/// <param name="portfolio">Portfolio for subscription.</param>
-		void RegisterPortfolio(Portfolio portfolio);
-
-		/// <summary>
-		/// Unsubscribe from the portfolio changes.
-		/// </summary>
-		/// <param name="portfolio">Portfolio for unsubscription.</param>
-		void UnRegisterPortfolio(Portfolio portfolio);
+		event Action<Order> OrderInitialized;
 	}
 }

@@ -900,17 +900,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public Order ReRegisterOrder(Order oldOrder, decimal price, decimal volume = 0)
-		{
-			if (oldOrder == null)
-				throw new ArgumentNullException(nameof(oldOrder));
-
-			var newOrder = oldOrder.ReRegisterClone(price, volume);
-			ReRegisterOrder(oldOrder, newOrder);
-			return newOrder;
-		}
-
-		/// <inheritdoc />
 		public void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
 			if (oldOrder == null)
@@ -1139,6 +1128,8 @@ namespace StockSharp.Algo
 			_entityCache.AddOrderByRegistrationId(order);
 
 			SendOutMessage(order.ToMessage());
+
+			RaiseOrderInitialized(order);
 		}
 
 		/// <summary>
@@ -1327,7 +1318,6 @@ namespace StockSharp.Algo
 		{
 			return GetSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode), s => false, out _);
 		}
-
 		/// <summary>
 		/// To get the instrument by the code. If the instrument is not found, then the <see cref="IEntityFactory.CreateSecurity"/> is called to create an instrument.
 		/// </summary>

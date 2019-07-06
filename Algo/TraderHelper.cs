@@ -5054,5 +5054,23 @@ namespace StockSharp.Algo
 
 			return positions;
 		}
+
+		/// <summary>
+		/// Reregister the order.
+		/// </summary>
+		/// <param name="provider">Transactional provider.</param>
+		/// <param name="oldOrder">Changing order.</param>
+		/// <param name="price">Price of the new order.</param>
+		/// <param name="volume">Volume of the new order.</param>
+		/// <returns>New order.</returns>
+		public static Order ReRegisterOrder(this ITransactionProvider provider, Order oldOrder, decimal price, decimal volume)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			var newOrder = oldOrder.ReRegisterClone(price, volume);
+			provider.ReRegisterOrder(oldOrder, newOrder);
+			return newOrder;
+		}
 	}
 }

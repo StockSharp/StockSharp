@@ -89,6 +89,7 @@
     <Compile Include="IPortfolioProvider.cs" />
     <Compile Include="IPositionProvider.cs" />
     <Compile Include="ISecurityProvider.cs" />
+    <Compile Include="ITransactionProvider.cs" />
     <Compile Include="MarketDepth.cs" />
     <Compile Include="MarketDepthPair.cs" />
     <Compile Include="MyTrade.cs" />
