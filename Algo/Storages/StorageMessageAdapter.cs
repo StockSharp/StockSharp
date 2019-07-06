@@ -423,18 +423,12 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId))
+		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			if (DriveInternal == null)
 				return Enumerable.Empty<object>();
 
-			return DriveInternal
-			       .GetAvailableDataTypes(securityId, Format)
-			       .Where(t => t.MessageType == candleType)
-			       .Select(t => t.Arg)
-			       .Distinct()
-			       .OrderBy()
-			       .ToArray();
+			return DriveInternal.GetCandleArgs(Format, candleType, securityId, from, to);
 		}
 
 		private ISnapshotStorage GetSnapshotStorage(Type messageType, object arg)

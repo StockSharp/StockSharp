@@ -72,6 +72,25 @@ namespace StockSharp.Algo.Testing
 
 			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
 
+			protected override void OnSendInMessage(Message message)
+			{
+				if (!message.IsBack && message.Type == MessageTypes.MarketData)
+				{
+					var mdMsg = (MarketDataMessage)message;
+
+					if (mdMsg.IsSubscribe)
+					{
+						if (mdMsg.From == null)
+							mdMsg.From = _parent.HistoryMessageAdapter.StartDate;
+
+						if (mdMsg.To == null)
+							mdMsg.To = _parent.HistoryMessageAdapter.StopDate;
+					}
+				}
+
+				base.OnSendInMessage(message);
+			}
+
 			protected override void OnInnerAdapterNewOutMessage(IMessageAdapter innerAdapter, Message message)
 			{
 				switch (message.Type)
@@ -361,9 +380,7 @@ namespace StockSharp.Algo.Testing
 			set => HistoryMessageAdapter.MarketTimeChangedInterval = value;
 		}
 
-		/// <summary>
-		/// Clear cache.
-		/// </summary>
+		/// <inheritdoc />
 		public override void ClearCache()
 		{
 			base.ClearCache();
@@ -374,18 +391,14 @@ namespace StockSharp.Algo.Testing
 			IsFinished = false;
 		}
 
-		/// <summary>
-		/// Disconnect from trading system.
-		/// </summary>
+		/// <inheritdoc />
 		protected override void OnDisconnect()
 		{
 			if (State != EmulationStates.Stopped && State != EmulationStates.Stopping)
 				SendEmulationState(EmulationStates.Stopping);
 		}
 
-		/// <summary>
-		/// To release allocated resources. In particular, to disconnect from the trading system via <see cref="Connector.Disconnect"/>.
-		/// </summary>
+		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
 			base.DisposeManaged();
@@ -414,10 +427,7 @@ namespace StockSharp.Algo.Testing
 			SendInMessage(new EmulationStateMessage { State = state });
 		}
 
-		/// <summary>
-		/// To process the message, containing market data.
-		/// </summary>
-		/// <param name="message">The message, containing market data.</param>
+		/// <inheritdoc />
 		protected override void OnProcessMessage(Message message)
 		{
 			try

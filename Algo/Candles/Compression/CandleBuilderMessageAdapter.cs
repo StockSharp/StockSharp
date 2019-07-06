@@ -115,7 +115,7 @@ namespace StockSharp.Algo.Candles.Compression
 						if (mdMsg.DataType == MarketDataTypes.CandleTimeFrame)
 						{
 							var originalTf = (TimeSpan)mdMsg.Arg;
-							var timeFrames = InnerAdapter.GetTimeFrames(mdMsg.SecurityId).ToArray();
+							var timeFrames = InnerAdapter.GetTimeFrames(mdMsg.SecurityId, mdMsg.From, mdMsg.To).ToArray();
 
 							if (timeFrames.Contains(originalTf) || InnerAdapter.CheckTimeFrameByRequest)
 							{
@@ -542,7 +542,7 @@ namespace StockSharp.Algo.Candles.Compression
 						}
 
 						var smaller = InnerAdapter
-										.GetTimeFrames(original.SecurityId)
+										.GetTimeFrames(original.SecurityId, series.LastTime, original.To)
 						                .FilterSmallerTimeFrames((TimeSpan)original.Arg)
 						                .OrderByDescending()
 						                .FirstOr();

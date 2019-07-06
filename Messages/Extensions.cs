@@ -554,7 +554,7 @@ namespace StockSharp.Messages
 			if (!adapter.SupportedMarketDataTypes.Contains(subscription.DataType))
 				return false;
 
-			var args = adapter.GetCandleArgs(subscription.DataType.ToCandleMessage(), subscription.SecurityId).ToArray();
+			var args = adapter.GetCandleArgs(subscription.DataType.ToCandleMessage(), subscription.SecurityId, subscription.From, subscription.To).ToArray();
 
 			if (args.IsEmpty())
 				return true;
@@ -569,13 +569,15 @@ namespace StockSharp.Messages
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="candleType">The type of the message <see cref="CandleMessage"/>.</param>
 		/// <param name="securityId">Security ID.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		/// <returns>Possible args.</returns>
-		public static IEnumerable<TArg> GetCandleArgs<TArg>(this IMessageAdapter adapter, Type candleType, SecurityId securityId = default(SecurityId))
+		public static IEnumerable<TArg> GetCandleArgs<TArg>(this IMessageAdapter adapter, Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			return adapter.GetCandleArgs(candleType, securityId).Cast<TArg>();
+			return adapter.GetCandleArgs(candleType, securityId, from, to).Cast<TArg>();
 		}
 
 		/// <summary>

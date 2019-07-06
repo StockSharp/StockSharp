@@ -202,16 +202,20 @@ namespace StockSharp.Messages
 		/// Get possible time-frames for the specified instrument.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		/// <returns>Possible time-frames.</returns>
-		IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId));
+		IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null);
 
 		/// <summary>
 		/// Get possible args for the specified candle type and instrument.
 		/// </summary>
 		/// <param name="candleType">The type of the message <see cref="CandleMessage"/>.</param>
 		/// <param name="securityId">Security ID.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		/// <returns>Possible args.</returns>
-		IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId));
+		IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null);
 
 		/// <summary>
 		/// Get maximum size step allowed for historical download.

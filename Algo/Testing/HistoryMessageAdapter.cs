@@ -226,13 +226,13 @@ namespace StockSharp.Algo.Testing
 		public override bool IsFullCandlesOnly => false;
 
 		/// <inheritdoc />
-		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
+		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
-			return this.GetCandleArgs<TimeSpan>(typeof(TimeFrameCandleMessage), securityId);
+			return this.GetCandleArgs<TimeSpan>(typeof(TimeFrameCandleMessage), securityId, from, to);
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId))
+		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			var drive = DriveInternal;
 
@@ -257,13 +257,7 @@ namespace StockSharp.Algo.Testing
 			if (args.Length > 0)
 				return args;
 
-			return drive
-			       .GetAvailableDataTypes(securityId, StorageFormat)
-			       .Where(t => t.MessageType == candleType)
-			       .Select(t => t.Arg)
-			       .Distinct()
-			       .OrderBy()
-			       .ToArray();
+			return drive.GetCandleArgs(StorageFormat, candleType, securityId, from, to);
 		}
 
 		/// <inheritdoc />

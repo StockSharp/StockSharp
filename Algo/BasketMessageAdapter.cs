@@ -298,8 +298,8 @@ namespace StockSharp.Algo
 		public bool IgnoreExtraAdapters { get; set; }
 
 		/// <inheritdoc />
-		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId))
-			=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId)).Distinct().OrderBy();
+		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
+			=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId, from, to)).Distinct().OrderBy();
 
 		/// <inheritdoc />
 		public override bool IsConnectionAlive() => throw new NotSupportedException();
@@ -767,7 +767,7 @@ namespace StockSharp.Algo
 				}
 
 				var original = (TimeSpan)mdMsg.Arg;
-				var timeFrames = a.GetTimeFrames(mdMsg.SecurityId).ToArray();
+				var timeFrames = a.GetTimeFrames(mdMsg.SecurityId, mdMsg.From, mdMsg.To).ToArray();
 
 				if (timeFrames.Contains(original) || a.CheckTimeFrameByRequest)
 					return true;

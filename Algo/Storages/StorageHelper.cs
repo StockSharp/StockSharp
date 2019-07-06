@@ -830,5 +830,47 @@ namespace StockSharp.Algo.Storages
 		{
 			return new CandleMessageBuildableStorage(registry, security, timeFrame, drive, format);
 		}
+
+		/// <summary>
+		/// Get possible args for the specified candle type and instrument.
+		/// </summary>
+		/// <param name="drive">The storage (database, file etc.).</param>
+		/// <param name="format">Format type.</param>
+		/// <param name="candleType">The type of the message <see cref="CandleMessage"/>.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <returns>Possible args.</returns>
+		public static IEnumerable<object> GetCandleArgs(this IMarketDataDrive drive, StorageFormats format, Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
+		{
+			var dataTypes = drive.GetAvailableDataTypes(securityId, format);
+
+			var args = new HashSet<object>();
+
+			foreach (var dataType in dataTypes.Where(t => t.MessageType == candleType))
+			{
+				var arg = dataType.Arg;
+
+				if (securityId.IsDefault())
+					args.Add(arg);
+				else if (from == null && to == null)
+					args.Add(arg);
+				else
+				{
+					var dates = drive.GetStorageDrive(securityId, candleType, arg, format).Dates;
+					
+					if (from != null)
+						dates = dates.Where(d => d >= from.Value);
+
+					if (to != null)
+						dates = dates.Where(d => d <= to.Value);
+
+					if (dates.Any())
+						args.Add(arg);
+				}
+			}
+
+			return args.OrderBy().ToArray();
+		}
 	}
 }

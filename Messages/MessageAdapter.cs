@@ -692,14 +692,14 @@ namespace StockSharp.Messages
 			=> new OrderLogMarketDepthBuilder(securityId);
 
 		/// <inheritdoc />
-		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
+		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
 			=> Enumerable.Empty<TimeSpan>();
 
 		/// <inheritdoc />
-		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId))
+		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			return candleType == typeof(TimeFrameCandleMessage)
-				? GetTimeFrames(securityId).Cast<object>()
+				? GetTimeFrames(securityId, from, to).Cast<object>()
 				: Enumerable.Empty<object>();
 		}
 

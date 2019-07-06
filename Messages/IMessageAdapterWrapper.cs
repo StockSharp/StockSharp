@@ -280,12 +280,12 @@ namespace StockSharp.Messages
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 
 		/// <inheritdoc />
-		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
-			=> InnerAdapter.GetTimeFrames(securityId);
+		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
+			=> InnerAdapter.GetTimeFrames(securityId, from, to);
 
 		/// <inheritdoc />
-		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default(SecurityId))
-			=> InnerAdapter.GetCandleArgs(candleType, securityId);
+		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
+			=> InnerAdapter.GetCandleArgs(candleType, securityId, from, to);
 
 		/// <inheritdoc />
 		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)
