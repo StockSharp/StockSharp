@@ -216,6 +216,16 @@ namespace StockSharp.Algo.Candles
 		public IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
 
 		/// <summary>
+		/// <see cref="PriceLevels"/> with minimum <see cref="CandlePriceLevel.TotalVolume"/>.
+		/// </summary>
+		public CandlePriceLevel MinPriceLevel => PriceLevels?.OrderBy(l => l.TotalVolume).FirstOrDefault();
+
+		/// <summary>
+		/// <see cref="PriceLevels"/> with maximum <see cref="CandlePriceLevel.TotalVolume"/>.
+		/// </summary>
+		public CandlePriceLevel MaxPriceLevel => PriceLevels?.OrderByDescending(l => l.TotalVolume).FirstOrDefault();
+
+		/// <summary>
 		/// Open interest.
 		/// </summary>
 		[DataMember]
