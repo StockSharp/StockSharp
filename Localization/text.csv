@@ -284,7 +284,6 @@ Str233;REPO\REPO-M information;Информация РЕПО\РЕПО-М
 RepoInfo;Information for REPO\REPO-M orders.;Информация для РЕПО\РЕПО-М заявок.
 NtmInfo;Negotiated Trades Mode information;Информация РПС
 Str236;Information for Negotiated Trades Mode orders.;Информация для заявок РПС.
-Str237;Without state;Без состояния
 Str238;Active;Активна
 Str239;Not active;Не активна
 Str241;Market;Рыночная
@@ -5011,6 +5010,9 @@ VWAPPrev;VWAP (prev);VWAP (пред)
 YieldVWAP;Yield by VWAP;Дох-ть по VWAP
 YieldVWAPPrev;Yield by VWAP (prev);Дох-ть по VWAP (пред)
 SetupStockSharpConnectionFirstTime;You are running the application the first time. Would you like establish a connection with our simulation server and start trading now?;Вы запускаете приложение в первый раз. Хотите установить соединение с нашим сервером симуляции и начать торговать сейчас?
+OrderState;Order state;Состояние заявки
+Pending;Pending;Ожидание
+OrderNotPassed;Order not passed.;Заявка не передана.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -6702,7 +6704,6 @@ DocStr1744;To format the date in string;Отформатировать врем�
 DocStr1745;The formatted string;Отформатированная строка
 DocStr1746;Convert order side into string;Отформатировать направление заявки в строку
 DocStr1747;Convert order state into string;Отформатировать состояние заявки в строку
-DocStr1748;Order state;Состояние заявки
 DocStr1749;To format the order type in string;Отформатировать тип заявки в строку
 DocStr1750;The strategy, requiring the report generation;Стратегия, для которой необходимо сгенерировать отчет
 DocStr1751;The name of the file for the report generation in the csv format;Название файла, в котором сгенерируется отчет в формате csv

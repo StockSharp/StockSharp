@@ -2878,16 +2878,6 @@ namespace StockSharp.Localization
 		public static string Str236 => GetString(Str236Key);
 
 		/// <summary>
-		/// Without state
-		/// </summary>
-		public const string Str237Key = nameof(Str237);
-
-		/// <summary>
-		/// Without state
-		/// </summary>
-		public static string Str237 => GetString(Str237Key);
-
-		/// <summary>
 		/// Active
 		/// </summary>
 		public const string Str238Key = nameof(Str238);
@@ -49786,5 +49776,35 @@ namespace StockSharp.Localization
 		/// You are running the application the first time. Would you like establish a connection with our simulation server and start trading now?
 		/// </summary>
 		public static string SetupStockSharpConnectionFirstTime => GetString(SetupStockSharpConnectionFirstTimeKey);
+
+		/// <summary>
+		/// Order state
+		/// </summary>
+		public const string OrderStateKey = nameof(OrderState);
+
+		/// <summary>
+		/// Order state
+		/// </summary>
+		public static string OrderState => GetString(OrderStateKey);
+
+		/// <summary>
+		/// Pending
+		/// </summary>
+		public const string PendingKey = nameof(Pending);
+
+		/// <summary>
+		/// Adapter
+		/// </summary>
+		public static string Pending => GetString(PendingKey);
+
+		/// <summary>
+		/// Order not passed.
+		/// </summary>
+		public const string OrderNotPassedKey = nameof(OrderNotPassed);
+
+		/// <summary>
+		/// Order not passed.
+		/// </summary>
+		public static string OrderNotPassed => GetString(OrderNotPassedKey);
 	}
 }

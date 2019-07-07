@@ -35,7 +35,7 @@ namespace StockSharp.Messages
 		/// The original state of the order, when the transaction is not sent to the trading system.
 		/// </remarks>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str237Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1658Key)]
 		None,
 
 		/// <summary>
@@ -63,7 +63,7 @@ namespace StockSharp.Messages
 		/// Pending registration.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str538Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PendingKey)]
 		Pending,
 	}
 }
