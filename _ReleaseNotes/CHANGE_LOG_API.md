@@ -165,6 +165,8 @@ StockSharp API Change log
 * (feature) Diagrams. DiagramSocketType for OrderState added.
 * (feature) Diagrams. OrderBaseDiagramElement. Trigger for all order's diagram elements.
 * (feature) Diagrams. Font weight set to bold.
+* (bug) StrategiesDashboard. Fix CanExecute handling.
+* (feature) BaseGridControl. Copy context menu added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
