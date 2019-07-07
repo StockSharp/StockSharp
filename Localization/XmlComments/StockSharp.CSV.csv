@@ -4,7 +4,7 @@ M:StockSharp.CSV.CSVMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transact
 P:StockSharp.CSV.CSVMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.CSV.CSVMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 P:StockSharp.CSV.CSVMessageAdapter.IsSupportPortfolioLookupResult/inheritdoc;DocStr8459
-M:StockSharp.CSV.CSVMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
+M:StockSharp.CSV.CSVMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.CSV.CSVMessageAdapter.SupportedMarketDataTypes/inheritdoc;DocStr8459
 P:StockSharp.CSV.CSVMessageAdapter.PossibleSupportedMessages/inheritdoc;DocStr8459
 M:StockSharp.CSV.CSVMessageAdapter.GetHistoryStepSize(StockSharp.Messages.MarketDataMessage,System.TimeSpan@)/inheritdoc;DocStr8459

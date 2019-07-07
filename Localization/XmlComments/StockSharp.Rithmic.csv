@@ -25,7 +25,7 @@ P:StockSharp.Rithmic.RithmicMessageAdapter.LoggerAddress/summary;Str3493
 P:StockSharp.Rithmic.RithmicMessageAdapter.HistoricalUserName/summary;HistoricalUserNameDesc
 P:StockSharp.Rithmic.RithmicMessageAdapter.HistoricalPassword/summary;HistoricalPasswordDesc
 P:StockSharp.Rithmic.RithmicMessageAdapter.AllTimeFrames/summary;DocStr206
-M:StockSharp.Rithmic.RithmicMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
+M:StockSharp.Rithmic.RithmicMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Rithmic.RithmicMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Rithmic.RithmicMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Rithmic.RithmicMessageAdapter.ToString/inheritdoc;DocStr8459

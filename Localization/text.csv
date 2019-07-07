@@ -15753,3 +15753,8 @@ DocStr11232;Create adapters for StockSharp server connections;Создать а�
 DocStr11233;Adapters for StockSharp server connections;Адаптеры для соединения со StockSharp сервером
 DocStr11234;Adapter can handle {0};Адаптер может обрабатывать {0}
 DocStr11235;Adapter fills {0};Адаптер заполняет {0}
+DocStr11236;Use {0} for {1} calculation;Использовать {0} для вычисления {1}
+DocStr11237;Transactional provider;Транзакционный провайдер
+DocStr11238;The order was initialized and ready to send for registration;Заявка была инициализирована готова для отправки на регистрацию
+DocStr11239;Transactional operations provider interface;Интерфейс провайдера транзакционный операций
+DocStr11240;Throw {0} if the specified string is empty;Выбрасывать ошибку {0} если указанная строка пустая

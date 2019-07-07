@@ -5336,6 +5336,9 @@
     <member name="E:StockSharp.Xaml.GuiConnector`1.LookupBoardsResult2">
       <inheritdoc />
     </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.OrderInitialized">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.TransactionIdGenerator">
       <inheritdoc />
     </member>
@@ -5520,9 +5523,6 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.CancelOrder(StockSharp.BusinessEntities.Order)">

@@ -3,6 +3,6 @@ M:StockSharp.Yahoo.YahooMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;Do
 M:StockSharp.Yahoo.YahooMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.Yahoo.YahooMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.Yahoo.YahooMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
-M:StockSharp.Yahoo.YahooMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
+M:StockSharp.Yahoo.YahooMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Yahoo.YahooMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Yahoo.YahooMessageAdapter.AllTimeFrames/summary;DocStr206

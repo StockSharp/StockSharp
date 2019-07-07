@@ -2036,7 +2036,7 @@ P:StockSharp.Fix.FixMessageAdapter.SecurityExtendedFields/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.SupportedMarketDataTypes/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
-M:StockSharp.Fix.FixMessageAdapter.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
+M:StockSharp.Fix.FixMessageAdapter.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.CheckTimeFrameByRequest/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459

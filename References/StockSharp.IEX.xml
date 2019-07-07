@@ -26,7 +26,7 @@
             Possible time-frames.
             </summary>
         </member>
-        <member name="M:StockSharp.IEX.IEXMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
+        <member name="M:StockSharp.IEX.IEXMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.IEX.IEXMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

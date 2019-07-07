@@ -2142,31 +2142,19 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.OnStarted">
-      <summary>
-            The method is called when the <see cref="M:StockSharp.Algo.Strategies.Strategy.Start" /> method has been called and the <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState" /> state has been taken the <see cref="F:StockSharp.Algo.ProcessStates.Started" /> value.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.OnStopped">
-      <summary>
-            The method is called when the <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState" /> process state has been taken the <see cref="F:StockSharp.Algo.ProcessStates.Stopped" /> value.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.OnReseted">
-      <summary>
-            It is called from the <see cref="M:StockSharp.Algo.Strategies.Strategy.Reset" /> method.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.Clone">
       <summary>
@@ -3859,14 +3847,10 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.IconName">
-      <summary>
-            Icon resource name.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.Value">
       <summary>
@@ -3879,9 +3863,7 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.TypeChanged">
-      <summary>
-            The method is called when the data type is changed.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnInputSocketConnected">
       <inheritdoc />
@@ -3890,25 +3872,16 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnReseted">
-      <summary>
-            The method is called at re-initialisation of the diagram element state.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnStart">
-      <summary>
-            The method is called at the start of the diagram element algorithm.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnStop">
-      <summary>
-            The method is called at the stop of the diagram element algorithm.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement">
       <summary>
