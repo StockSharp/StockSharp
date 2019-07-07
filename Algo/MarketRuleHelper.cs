@@ -682,7 +682,7 @@ namespace StockSharp.Algo
 		/// To create a rule for the event of change portfolio .
 		/// </summary>
 		/// <param name="portfolio">The portfolio to be traced for the event of change.</param>
-		/// <param name="provider">The portfolio provider.</param>
+		/// <param name="provider">The provider of information about portfolios.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Portfolio, Portfolio> WhenChanged(this Portfolio portfolio, IPortfolioProvider provider)
 		{
@@ -699,7 +699,7 @@ namespace StockSharp.Algo
 		/// To create a rule for the event of money decrease in portfolio below the specific level.
 		/// </summary>
 		/// <param name="portfolio">The portfolio to be traced for the event of money decrease below the specific level.</param>
-		/// <param name="provider">The portfolio provider.</param>
+		/// <param name="provider">The provider of information about portfolios.</param>
 		/// <param name="money">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Portfolio, Portfolio> WhenMoneyLess(this Portfolio portfolio, IPortfolioProvider provider, Unit money)
@@ -722,7 +722,7 @@ namespace StockSharp.Algo
 		/// To create a rule for the event of money increase in portfolio above the specific level.
 		/// </summary>
 		/// <param name="portfolio">The portfolio to be traced for the event of money increase above the specific level.</param>
-		/// <param name="provider">The portfolio provider.</param>
+		/// <param name="provider">The provider of information about portfolios.</param>
 		/// <param name="money">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Portfolio, Portfolio> WhenMoneyMore(this Portfolio portfolio, IPortfolioProvider provider, Unit money)

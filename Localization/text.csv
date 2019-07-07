@@ -5013,6 +5013,7 @@ SetupStockSharpConnectionFirstTime;You are running the application the first tim
 OrderState;Order state;Состояние заявки
 Pending;Pending;Ожидание
 OrderNotPassed;Order not passed.;Заявка не передана.
+TimeOut;Time out;Тайм-аут
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15755,7 +15756,11 @@ DocStr11233;Adapters for StockSharp server connections;Адаптеры для �
 DocStr11234;Adapter can handle {0};Адаптер может обрабатывать {0}
 DocStr11235;Adapter fills {0};Адаптер заполняет {0}
 DocStr11236;Use {0} for {1} calculation;Использовать {0} для вычисления {1}
-DocStr11237;Transactional provider;Транзакционный провайдер
+DocStr11237;The transactional provider;Транзакционный провайдер
 DocStr11238;The order was initialized and ready to send for registration;Заявка была инициализирована готова для отправки на регистрацию
 DocStr11239;Transactional operations provider interface;Интерфейс провайдера транзакционный операций
 DocStr11240;Throw {0} if the specified string is empty;Выбрасывать ошибку {0} если указанная строка пустая
+DocStr11241;{0} with minimum {1};{0} с минимальным {1}
+DocStr11242;{0} with maximum {1};{0} с максимальным {1}
+DocStr11245;Order base element;Базовай элемент заявок
+DocStr11246;Can process order action;Можно ли обработать действие заявок

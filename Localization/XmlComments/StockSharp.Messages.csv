@@ -508,7 +508,7 @@ P:StockSharp.Messages.ExecutionMessage.Side/summary;Str129
 P:StockSharp.Messages.ExecutionMessage.Balance/summary;Str131
 P:StockSharp.Messages.ExecutionMessage.OrderType/summary;Str132
 P:StockSharp.Messages.ExecutionMessage.OrderStatus/summary;DocStr2917
-P:StockSharp.Messages.ExecutionMessage.OrderState/summary;DocStr1748
+P:StockSharp.Messages.ExecutionMessage.OrderState/summary;OrderState
 P:StockSharp.Messages.ExecutionMessage.Comment/summary;Str136
 P:StockSharp.Messages.ExecutionMessage.SystemComment/summary;Str138
 P:StockSharp.Messages.ExecutionMessage.IsSystem/summary;IsSystemTrade

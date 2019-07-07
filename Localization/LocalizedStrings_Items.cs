@@ -49793,7 +49793,7 @@ namespace StockSharp.Localization
 		public const string PendingKey = nameof(Pending);
 
 		/// <summary>
-		/// Adapter
+		/// Pending
 		/// </summary>
 		public static string Pending => GetString(PendingKey);
 
@@ -49806,5 +49806,15 @@ namespace StockSharp.Localization
 		/// Order not passed.
 		/// </summary>
 		public static string OrderNotPassed => GetString(OrderNotPassedKey);
+
+		/// <summary>
+		/// Time out
+		/// </summary>
+		public const string TimeOutKey = nameof(TimeOut);
+
+		/// <summary>
+		/// Time out
+		/// </summary>
+		public static string TimeOut => GetString(TimeOutKey);
 	}
 }

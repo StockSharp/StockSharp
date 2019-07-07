@@ -5058,7 +5058,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Reregister the order.
 		/// </summary>
-		/// <param name="provider">Transactional provider.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <param name="oldOrder">Changing order.</param>
 		/// <param name="price">Price of the new order.</param>
 		/// <param name="volume">Volume of the new order.</param>

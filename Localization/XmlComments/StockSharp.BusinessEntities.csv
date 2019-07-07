@@ -765,7 +765,7 @@ P:StockSharp.BusinessEntities.Order.BoardId/summary;DocStr2915
 P:StockSharp.BusinessEntities.Order.Time/summary;Str523
 P:StockSharp.BusinessEntities.Order.TransactionId/summary;DocStr2916
 P:StockSharp.BusinessEntities.Order.Security/summary;Str524
-P:StockSharp.BusinessEntities.Order.State/summary;DocStr1748
+P:StockSharp.BusinessEntities.Order.State/summary;OrderState
 P:StockSharp.BusinessEntities.Order.Portfolio/summary;Str525
 P:StockSharp.BusinessEntities.Order.Messages/summary;Str527
 P:StockSharp.BusinessEntities.Order.LastChangeTime/summary;Str529

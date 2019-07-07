@@ -89,6 +89,7 @@ M:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.#ctor(StockSharp.Mess
 M:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectiveVolume;DocStr393
 M:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectiveLevel;DocStr394
 T:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy/summary;DocStr302
+M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.#ctor/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/param/quotingDirection;DocStr304
 M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/param/quotingVolume;DocStr305
@@ -98,6 +99,7 @@ M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.#ctor(StockSharp
 P:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.BestPriceOffset/summary;DocStr345
 M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)/inheritdoc;DocStr8459
 T:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy/summary;DocStr346
+M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.#ctor/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/param/quotingDirection;DocStr304
 M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/param/quotingVolume;DocStr305
@@ -108,6 +110,7 @@ M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.#ctor(StockShar
 P:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.VolumeExchange/summary;DocStr347
 M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)/inheritdoc;DocStr8459
 T:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy/summary;DocStr383
+M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/param/quotingDirection;DocStr304
 M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/param/quotingVolume;DocStr305
@@ -117,6 +120,7 @@ M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor(StockSharp.B
 M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit)/returns;Strategy
 P:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.BestPrice/inheritdoc;DocStr8459
 T:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy/summary;DocStr385
+M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.#ctor/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/param/quotingDirection;DocStr304
 M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/param/quotingVolume;DocStr305
@@ -124,6 +128,7 @@ P:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.Level/summary;DocStr38
 P:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.OwnLevel/summary;DocStr387
 M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)/inheritdoc;DocStr8459
 T:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy/summary;DocStr388
+M:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.#ctor/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal)/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/quotingDirection;DocStr304
 M:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/quotingVolume;DocStr305
@@ -131,6 +136,7 @@ M:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.#ctor(StockSharp.Messa
 P:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.LimitPrice/summary;DocStr389
 P:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.BestPrice/inheritdoc;DocStr8459
 T:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy/summary;DocStr390
+M:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.#ctor/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/summary;DocStr1
 M:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/param/quotingDirection;DocStr304
 M:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)/param/quotingVolume;DocStr305
