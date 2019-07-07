@@ -161,6 +161,10 @@ StockSharp API Change log
 * (feature) IConnector. Moved transactional members to ITransactionProvider interface.
 * (feature) UnitHelper. Parse method for empty string return null for the specified option.
 * (bug) Unit. Limit values comparison fix.
+* (feature) Diagrams. ProtectPositionDiagramElement. More options added.
+* (feature) Diagrams. DiagramSocketType for OrderState added.
+* (feature) Diagrams. OrderBaseDiagramElement. Trigger for all order's diagram elements.
+* (feature) Diagrams. Font weight set to bold.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

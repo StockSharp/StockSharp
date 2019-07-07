@@ -2051,6 +2051,11 @@
             Position.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.OrderState">
+      <summary>
+            Order state.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)">
       <summary>
             Get <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" /> for <see cref="T:System.Type" />.
@@ -2491,25 +2496,41 @@
     <member name="M:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.OnUnSubscribe">
       <inheritdoc />
     </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.OrderBaseDiagramElement">
+      <summary>
+            Order base element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderBaseDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderBaseDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderBaseDiagramElement.CanProcess(System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})">
+      <summary>
+            Can process order action.
+            </summary>
+      <param name="values">Values.</param>
+      <returns>Check result.</returns>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OrderCancelElement">
       <summary>
             Order cancelling element.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderCancelElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderCancelElement.IconName">
-      <summary>
-            Icon resource name.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OrderCancelElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderCancelElement" />.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderCancelElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement">
       <summary>
@@ -2710,14 +2731,10 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.IconName">
-      <summary>
-            Icon resource name.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.LeftValue">
       <summary>
@@ -3045,14 +3062,10 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.IconName">
-      <summary>
-            Icon resource name.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.#ctor">
       <summary>
@@ -3060,14 +3073,13 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.OnStart">
-      <summary>
-            The method is called at the start of the diagram element algorithm.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.OnStop">
-      <summary>
-            The method is called at the stop of the diagram element algorithm.
-            </summary>
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement">
       <summary>
@@ -3075,18 +3087,19 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.IconName">
-      <summary>
-            Icon resource name.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.ShrinkPrice">
       <summary>
             Shrink order price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.ZeroAsMarket">
+      <summary>
+            Zero price makes market order.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.#ctor">
@@ -3094,10 +3107,8 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.OnStop">
-      <summary>
-            The method is called at the stop of the diagram element algorithm.
-            </summary>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement">
       <summary>
@@ -3105,14 +3116,10 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IconName">
-      <summary>
-            Icon resource name.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Direction">
       <summary>
@@ -3183,10 +3190,7 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement">
       <summary>
@@ -3379,14 +3383,10 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.IconName">
-      <summary>
-            Icon resource name.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.TakeValue">
       <summary>
@@ -3406,20 +3406,36 @@
             It is disabled by default.
             </remarks>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.IsTrailingTakeProfit">
+      <summary>
+            Whether to use a trailing technique for <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy" />. The default is off.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.TakeProfitTimeOut">
+      <summary>
+            Time limit for <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy" />. If protection has not worked by this time, the position will be closed on the market. The default is off.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.IsTrailingStopLoss">
+      <summary>
+            Whether to use a trailing technique for <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy" />. The default is off.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.StopLossTimeOut">
+      <summary>
+            Time limit for <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy" />. If protection has not worked by this time, the position will be closed on the market. The default is off.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStart">
-      <summary>
-            The method is called at the start of the diagram element algorithm.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStop">
-      <summary>
-            The method is called at the stop of the diagram element algorithm.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement">
       <summary>
