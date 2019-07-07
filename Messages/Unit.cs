@@ -424,6 +424,9 @@ namespace StockSharp.Messages
 			if (Type == UnitTypes.Percent || other.Type == UnitTypes.Percent)
 				return false;
 
+			if (Type == UnitTypes.Limit || other.Type == UnitTypes.Limit)
+				return false;
+
 			var curr = this;
 
 			if (other.Type == UnitTypes.Absolute)

@@ -160,6 +160,7 @@ StockSharp API Change log
 * (feature) PnLManager. UseXXX options added.
 * (feature) IConnector. Moved transactional members to ITransactionProvider interface.
 * (feature) UnitHelper. Parse method for empty string return null for the specified option.
+* (bug) Unit. Limit values comparison fix.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
