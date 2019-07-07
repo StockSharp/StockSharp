@@ -292,9 +292,7 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		public TimeSpan TimeFrame { get; set; }
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => TimeFrame;
@@ -319,15 +317,25 @@ namespace StockSharp.Algo.Candles
 	[DisplayNameLoc(LocalizedStrings.TickCandleKey)]
 	public class TickCandle : Candle
 	{
+		private int _maxTradeCount;
+
 		/// <summary>
 		/// Maximum tick count.
 		/// </summary>
 		[DataMember]
-		public int MaxTradeCount { get; set; }
+		public int MaxTradeCount
+		{
+			get => _maxTradeCount;
+			set
+			{
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+				_maxTradeCount = value;
+			}
+		}
+
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => MaxTradeCount;
@@ -352,15 +360,25 @@ namespace StockSharp.Algo.Candles
 	[DisplayNameLoc(LocalizedStrings.VolumeCandleKey)]
 	public class VolumeCandle : Candle
 	{
+		private decimal _volume;
+
 		/// <summary>
 		/// Maximum volume.
 		/// </summary>
 		[DataMember]
-		public decimal Volume { get; set; }
+		public decimal Volume
+		{
+			get => _volume;
+			set
+			{
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+				_volume = value;
+			}
+		}
+
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => Volume;
@@ -385,15 +403,19 @@ namespace StockSharp.Algo.Candles
 	[DisplayNameLoc(LocalizedStrings.RangeCandleKey)]
 	public class RangeCandle : Candle
 	{
+		private Unit _priceRange;
+
 		/// <summary>
 		/// Range of price.
 		/// </summary>
 		[DataMember]
-		public Unit PriceRange { get; set; }
+		public Unit PriceRange
+		{
+			get => _priceRange;
+			set => _priceRange = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => PriceRange;
@@ -418,11 +440,17 @@ namespace StockSharp.Algo.Candles
 	[DisplayNameLoc(LocalizedStrings.PnFCandleKey)]
 	public class PnFCandle : Candle
 	{
+		private PnFArg _pnFArg;
+
 		/// <summary>
 		/// Value of arguments.
 		/// </summary>
 		[DataMember]
-		public PnFArg PnFArg { get; set; }
+		public PnFArg PnFArg
+		{
+			get => _pnFArg;
+			set => _pnFArg = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
 		///// <summary>
 		///// Type of symbols.
@@ -430,9 +458,7 @@ namespace StockSharp.Algo.Candles
 		//[DataMember]
 		//public PnFTypes Type { get; set; }
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => PnFArg;
@@ -457,15 +483,19 @@ namespace StockSharp.Algo.Candles
 	[DisplayNameLoc(LocalizedStrings.RenkoCandleKey)]
 	public class RenkoCandle : Candle
 	{
+		private Unit _boxSize;
+
 		/// <summary>
 		/// Possible price change range.
 		/// </summary>
 		[DataMember]
-		public Unit BoxSize { get; set; }
+		public Unit BoxSize
+		{
+			get => _boxSize;
+			set => _boxSize = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => BoxSize;

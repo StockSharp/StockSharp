@@ -369,9 +369,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => TimeFrame;
@@ -413,9 +411,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => MaxTradeCount;
@@ -457,9 +453,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => Volume;
@@ -501,9 +495,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => PriceRange;
@@ -550,13 +542,7 @@ namespace StockSharp.Messages
 		public Unit BoxSize
 		{
 			get => _boxSize;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_boxSize = value;
-			}
+			set => _boxSize = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private int _reversalAmount = 1;
@@ -577,10 +563,7 @@ namespace StockSharp.Messages
 			}
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return $"Box = {BoxSize} RA = {ReversalAmount}";
@@ -660,9 +643,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => PnFArg;
@@ -707,9 +688,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => BoxSize;
