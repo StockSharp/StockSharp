@@ -37,11 +37,11 @@ namespace StockSharp.Algo
 
 		private abstract class OrderRule<TArg> : MarketRule<Order, TArg>
 		{
-			protected OrderRule(Order order, IConnector connector)
+			protected OrderRule(Order order, ITransactionProvider provider)
 				: base(order)
 			{
 				Order = order ?? throw new ArgumentNullException(nameof(order));
-				Connector = connector ?? throw new ArgumentNullException(nameof(connector));
+				Provider = provider ?? throw new ArgumentNullException(nameof(provider));
 			}
 
 			protected override bool CanFinish()
@@ -56,7 +56,7 @@ namespace StockSharp.Algo
 
 			protected Order Order { get; }
 
-			protected IConnector Connector { get; }
+			protected ITransactionProvider Provider { get; }
 
 			protected void TrySubscribe()
 			{
@@ -119,8 +119,8 @@ namespace StockSharp.Algo
 
 		private sealed class RegisterFailedOrderRule : OrderRule<OrderFail>
 		{
-			public RegisterFailedOrderRule(Order order, IConnector connector)
-				: base(order, connector)
+			public RegisterFailedOrderRule(Order order, ITransactionProvider provider)
+				: base(order, provider)
 			{
 				Name = LocalizedStrings.Str717 + " ";
 				TrySubscribe();
@@ -129,17 +129,17 @@ namespace StockSharp.Algo
 			protected override void Subscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
-					Connector.StopOrderRegisterFailed += OnOrderRegisterFailed;
+					Provider.StopOrderRegisterFailed += OnOrderRegisterFailed;
 				else
-					Connector.OrderRegisterFailed += OnOrderRegisterFailed;
+					Provider.OrderRegisterFailed += OnOrderRegisterFailed;
 			}
 
 			protected override void UnSubscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
-					Connector.StopOrderRegisterFailed -= OnOrderRegisterFailed;
+					Provider.StopOrderRegisterFailed -= OnOrderRegisterFailed;
 				else
-					Connector.OrderRegisterFailed -= OnOrderRegisterFailed;
+					Provider.OrderRegisterFailed -= OnOrderRegisterFailed;
 			}
 
 			private void OnOrderRegisterFailed(OrderFail fail)
@@ -151,8 +151,8 @@ namespace StockSharp.Algo
 
 		private sealed class CancelFailedOrderRule : OrderRule<OrderFail>
 		{
-			public CancelFailedOrderRule(Order order, IConnector connector)
-				: base(order, connector)
+			public CancelFailedOrderRule(Order order, ITransactionProvider provider)
+				: base(order, provider)
 			{
 				Name = LocalizedStrings.Str1030;
 				TrySubscribe();
@@ -161,17 +161,17 @@ namespace StockSharp.Algo
 			protected override void Subscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
-					Connector.StopOrderCancelFailed += OnOrderCancelFailed;
+					Provider.StopOrderCancelFailed += OnOrderCancelFailed;
 				else
-					Connector.OrderCancelFailed += OnOrderCancelFailed;
+					Provider.OrderCancelFailed += OnOrderCancelFailed;
 			}
 
 			protected override void UnSubscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
-					Connector.StopOrderCancelFailed -= OnOrderCancelFailed;
+					Provider.StopOrderCancelFailed -= OnOrderCancelFailed;
 				else
-					Connector.OrderCancelFailed -= OnOrderCancelFailed;
+					Provider.OrderCancelFailed -= OnOrderCancelFailed;
 			}
 
 			private void OnOrderCancelFailed(OrderFail fail)
@@ -186,13 +186,13 @@ namespace StockSharp.Algo
 			private readonly Func<Order, bool> _condition;
 			private bool _activated;
 
-			public ChangedOrNewOrderRule(Order order, IConnector connector)
-				: this(order, connector, o => true)
+			public ChangedOrNewOrderRule(Order order, ITransactionProvider provider)
+				: this(order, provider, o => true)
 			{
 			}
 
-			public ChangedOrNewOrderRule(Order order, IConnector connector, Func<Order, bool> condition)
-				: base(order, connector)
+			public ChangedOrNewOrderRule(Order order, ITransactionProvider provider, Func<Order, bool> condition)
+				: base(order, provider)
 			{
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
@@ -205,13 +205,13 @@ namespace StockSharp.Algo
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrderChanged += OnOrderChanged;
-					Connector.NewStopOrder += OnOrderChanged;
+					Provider.StopOrderChanged += OnOrderChanged;
+					Provider.NewStopOrder += OnOrderChanged;
 				}
 				else
 				{
-					Connector.OrderChanged += OnOrderChanged;
-					Connector.NewOrder += OnOrderChanged;
+					Provider.OrderChanged += OnOrderChanged;
+					Provider.NewOrder += OnOrderChanged;
 				}
 			}
 
@@ -219,13 +219,13 @@ namespace StockSharp.Algo
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrderChanged -= OnOrderChanged;
-					Connector.NewStopOrder -= OnOrderChanged;
+					Provider.StopOrderChanged -= OnOrderChanged;
+					Provider.NewStopOrder -= OnOrderChanged;
 				}
 				else
 				{
-					Connector.OrderChanged -= OnOrderChanged;
-					Connector.NewOrder -= OnOrderChanged;
+					Provider.OrderChanged -= OnOrderChanged;
+					Provider.NewOrder -= OnOrderChanged;
 				}
 			}
 
@@ -245,8 +245,8 @@ namespace StockSharp.Algo
 
 			private bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
 
-			public NewTradeOrderRule(Order order, IConnector connector)
-				: base(order, connector)
+			public NewTradeOrderRule(Order order, ITransactionProvider provider)
+				: base(order, provider)
 			{
 				Name = LocalizedStrings.Str1032;
 				TrySubscribe();
@@ -254,12 +254,12 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
-				Connector.NewMyTrade += OnNewMyTrade;
+				Provider.NewMyTrade += OnNewMyTrade;
 			}
 
 			protected override void UnSubscribe()
 			{
-				Connector.NewMyTrade -= OnNewMyTrade;
+				Provider.NewMyTrade -= OnNewMyTrade;
 			}
 
 			protected override bool CheckOrderState()
@@ -283,8 +283,8 @@ namespace StockSharp.Algo
 
 			private readonly CachedSynchronizedList<MyTrade> _trades = new CachedSynchronizedList<MyTrade>();
 
-			public AllTradesOrderRule(Order order, IConnector connector)
-				: base(order, connector)
+			public AllTradesOrderRule(Order order, ITransactionProvider provider)
+				: base(order, provider)
 			{
 				Name = LocalizedStrings.Str1033;
 				TrySubscribe();
@@ -296,32 +296,32 @@ namespace StockSharp.Algo
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrderChanged += OnOrderChanged;
-					Connector.NewStopOrder += OnOrderChanged;
+					Provider.StopOrderChanged += OnOrderChanged;
+					Provider.NewStopOrder += OnOrderChanged;
 				}
 				else
 				{
-					Connector.OrderChanged += OnOrderChanged;
-					Connector.NewOrder += OnOrderChanged;
+					Provider.OrderChanged += OnOrderChanged;
+					Provider.NewOrder += OnOrderChanged;
 				}
 
-				Connector.NewMyTrade += OnNewMyTrade;
+				Provider.NewMyTrade += OnNewMyTrade;
 			}
 
 			protected override void UnSubscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrderChanged -= OnOrderChanged;
-					Connector.NewStopOrder -= OnOrderChanged;
+					Provider.StopOrderChanged -= OnOrderChanged;
+					Provider.NewStopOrder -= OnOrderChanged;
 				}
 				else
 				{
-					Connector.OrderChanged -= OnOrderChanged;
-					Connector.NewOrder -= OnOrderChanged;
+					Provider.OrderChanged -= OnOrderChanged;
+					Provider.NewOrder -= OnOrderChanged;
 				}
 
-				Connector.NewMyTrade -= OnNewMyTrade;
+				Provider.NewMyTrade -= OnNewMyTrade;
 			}
 
 			private void OnOrderChanged(Order order)
@@ -356,14 +356,15 @@ namespace StockSharp.Algo
 		{
 			private readonly Unit _offset;
 			private readonly bool _isTake;
+			private readonly IMarketDataProvider _marketDataProvider;
 			private decimal? _bestBidPrice;
 			private decimal? _bestAskPrice;
 			private decimal _averagePrice;
 
 			private readonly List<Tuple<decimal, decimal>> _trades = new List<Tuple<decimal, decimal>>();
 
-			public OrderTakeProfitStopLossRule(Order order, Unit offset, bool isTake, IConnector connector)
-				: base(order, connector)
+			public OrderTakeProfitStopLossRule(Order order, Unit offset, bool isTake, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
+				: base(order, transactionProvider)
 			{
 				if (offset == null)
 					throw new ArgumentNullException(nameof(offset));
@@ -373,6 +374,7 @@ namespace StockSharp.Algo
 
 				_offset = offset;
 				_isTake = isTake;
+				_marketDataProvider = marketDataProvider ?? throw new ArgumentNullException(nameof(marketDataProvider));
 
 				Name = _isTake ? LocalizedStrings.TakeProfit : LocalizedStrings.StopLoss;
 
@@ -381,14 +383,14 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
-				Connector.MarketDepthChanged += OnMarketDepthChanged;
-				Connector.NewMyTrade += OnNewMyTrade;
+				_marketDataProvider.MarketDepthChanged += OnMarketDepthChanged;
+				Provider.NewMyTrade += OnNewMyTrade;
 			}
 
 			protected override void UnSubscribe()
 			{
-				Connector.MarketDepthChanged -= OnMarketDepthChanged;
-				Connector.NewMyTrade -= OnNewMyTrade;
+				_marketDataProvider.MarketDepthChanged -= OnMarketDepthChanged;
+				Provider.NewMyTrade -= OnNewMyTrade;
 			}
 
 			private void OnMarketDepthChanged(MarketDepth depth)
@@ -460,14 +462,14 @@ namespace StockSharp.Algo
 		/// To create a rule for the event of successful order registration on exchange.
 		/// </summary>
 		/// <param name="order">The order to be traced for the event of successful registration.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenRegistered(this Order order, IConnector connector)
+		public static MarketRule<Order, Order> WhenRegistered(this Order order, ITransactionProvider provider)
 		{
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			return new ChangedOrNewOrderRule(order, connector, o => o.State == OrderStates.Active || o.State == OrderStates.Done) { Name = LocalizedStrings.Str1034 }.Once();
+			return new ChangedOrNewOrderRule(order, provider, o => o.State == OrderStates.Active || o.State == OrderStates.Done) { Name = LocalizedStrings.Str1034 }.Once();
 		}
 
 		///// <summary>
@@ -488,9 +490,9 @@ namespace StockSharp.Algo
 		/// To create a rule for the event of order partial matching.
 		/// </summary>
 		/// <param name="order">The order to be traced for partial matching event.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenPartiallyMatched(this Order order, IConnector connector)
+		public static MarketRule<Order, Order> WhenPartiallyMatched(this Order order, ITransactionProvider provider)
 		{
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
@@ -498,7 +500,7 @@ namespace StockSharp.Algo
 			var balance = order.Volume;
 			var hasVolume = balance != 0;
 
-			return new ChangedOrNewOrderRule(order, connector, o =>
+			return new ChangedOrNewOrderRule(order, provider, o =>
 			{
 				if (!hasVolume)
 				{
@@ -520,77 +522,77 @@ namespace StockSharp.Algo
 		/// To create a for the event of order unsuccessful registration on exchange.
 		/// </summary>
 		/// <param name="order">The order to be traced for unsuccessful registration event.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Order, OrderFail> WhenRegisterFailed(this Order order, IConnector connector)
+		public static MarketRule<Order, OrderFail> WhenRegisterFailed(this Order order, ITransactionProvider provider)
 		{
-			return new RegisterFailedOrderRule(order, connector).Once();
+			return new RegisterFailedOrderRule(order, provider).Once();
 		}
 
 		/// <summary>
 		/// To create a rule for the event of unsuccessful order cancelling on exchange.
 		/// </summary>
 		/// <param name="order">The order to be traced for unsuccessful cancelling event.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Order, OrderFail> WhenCancelFailed(this Order order, IConnector connector)
+		public static MarketRule<Order, OrderFail> WhenCancelFailed(this Order order, ITransactionProvider provider)
 		{
-			return new CancelFailedOrderRule(order, connector);
+			return new CancelFailedOrderRule(order, provider);
 		}
 
 		/// <summary>
 		/// To create a rule for the order cancelling event.
 		/// </summary>
 		/// <param name="order">The order to be traced for cancelling event.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenCanceled(this Order order, IConnector connector)
+		public static MarketRule<Order, Order> WhenCanceled(this Order order, ITransactionProvider provider)
 		{
-			return new ChangedOrNewOrderRule(order, connector, o => o.IsCanceled()) { Name = LocalizedStrings.Str1037 }.Once();
+			return new ChangedOrNewOrderRule(order, provider, o => o.IsCanceled()) { Name = LocalizedStrings.Str1037 }.Once();
 		}
 
 		/// <summary>
 		/// To create a rule for the event of order fully matching.
 		/// </summary>
 		/// <param name="order">The order to be traced for the fully matching event.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenMatched(this Order order, IConnector connector)
+		public static MarketRule<Order, Order> WhenMatched(this Order order, ITransactionProvider provider)
 		{
-			return new ChangedOrNewOrderRule(order, connector, o => o.IsMatched()) { Name = LocalizedStrings.Str1038 }.Once();
+			return new ChangedOrNewOrderRule(order, provider, o => o.IsMatched()) { Name = LocalizedStrings.Str1038 }.Once();
 		}
 
 		/// <summary>
 		/// To create a rule for the order change event.
 		/// </summary>
 		/// <param name="order">The order to be traced for the change event.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenChanged(this Order order, IConnector connector)
+		public static MarketRule<Order, Order> WhenChanged(this Order order, ITransactionProvider provider)
 		{
-			return new ChangedOrNewOrderRule(order, connector);
+			return new ChangedOrNewOrderRule(order, provider);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of trade occurrence for the order.
 		/// </summary>
 		/// <param name="order">The order to be traced for trades occurrence events.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Order, MyTrade> WhenNewTrade(this Order order, IConnector connector)
+		public static MarketRule<Order, MyTrade> WhenNewTrade(this Order order, ITransactionProvider provider)
 		{
-			return new NewTradeOrderRule(order, connector);
+			return new NewTradeOrderRule(order, provider);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of all trades occurrence for the order.
 		/// </summary>
 		/// <param name="order">The order to be traced for all trades occurrence event.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Order, IEnumerable<MyTrade>> WhenAllTrades(this Order order, IConnector connector)
+		public static MarketRule<Order, IEnumerable<MyTrade>> WhenAllTrades(this Order order, ITransactionProvider provider)
 		{
-			return new AllTradesOrderRule(order, connector);
+			return new AllTradesOrderRule(order, provider);
 		}
 
 		/// <summary>
@@ -598,11 +600,24 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="order">The order to be traced for profit.</param>
 		/// <param name="profitOffset">Profit offset.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="connector">Connection to the trading system.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Order, Order> WhenProfitMore(this Order order, Unit profitOffset, IConnector connector)
 		{
-			return new OrderTakeProfitStopLossRule(order, profitOffset, true, connector);
+			return WhenProfitMore(order, profitOffset, connector, connector);
+		}
+
+		/// <summary>
+		/// To create a rule for the order's profit more on offset.
+		/// </summary>
+		/// <param name="order">The order to be traced for profit.</param>
+		/// <param name="profitOffset">Profit offset.</param>
+		/// <param name="transactionProvider">The transactional provider.</param>
+		/// <param name="marketDataProvider">The market data provider.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Order, Order> WhenProfitMore(this Order order, Unit profitOffset, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
+		{
+			return new OrderTakeProfitStopLossRule(order, profitOffset, true, transactionProvider, marketDataProvider);
 		}
 
 		/// <summary>
@@ -610,11 +625,24 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="order">The order to be traced for loss.</param>
 		/// <param name="profitOffset">Loss offset.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="connector">Connection to the trading system.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Order, Order> WhenLossMore(this Order order, Unit profitOffset, IConnector connector)
 		{
-			return new OrderTakeProfitStopLossRule(order, profitOffset, false, connector);
+			return WhenLossMore(order, profitOffset, connector, connector);
+		}
+
+		/// <summary>
+		/// To create a rule for the order's loss more on offset.
+		/// </summary>
+		/// <param name="order">The order to be traced for loss.</param>
+		/// <param name="profitOffset">Loss offset.</param>
+		/// <param name="transactionProvider">The transactional provider.</param>
+		/// <param name="marketDataProvider">The market data provider.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Order, Order> WhenLossMore(this Order order, Unit profitOffset, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
+		{
+			return new OrderTakeProfitStopLossRule(order, profitOffset, false, transactionProvider, marketDataProvider);
 		}
 
 		#endregion
@@ -625,16 +653,16 @@ namespace StockSharp.Algo
 		{
 			private readonly Func<Portfolio, bool> _changed;
 			private readonly Portfolio _portfolio;
-			private readonly IConnector _connector;
+			private readonly IPortfolioProvider _provider;
 
-			public PortfolioRule(Portfolio portfolio, IConnector connector, Func<Portfolio, bool> changed)
+			public PortfolioRule(Portfolio portfolio, IPortfolioProvider provider, Func<Portfolio, bool> changed)
 				: base(portfolio)
 			{
 				_changed = changed ?? throw new ArgumentNullException(nameof(changed));
 
 				_portfolio = portfolio ?? throw new ArgumentNullException(nameof(portfolio));
-				_connector = connector ?? throw new ArgumentNullException(nameof(connector));
-				_connector.PortfolioChanged += OnPortfolioChanged;
+				_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+				_provider.PortfolioChanged += OnPortfolioChanged;
 			}
 
 			private void OnPortfolioChanged(Portfolio portfolio)
@@ -645,7 +673,7 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				_connector.PortfolioChanged -= OnPortfolioChanged;
+				_provider.PortfolioChanged -= OnPortfolioChanged;
 				base.DisposeManaged();
 			}
 		}
@@ -654,14 +682,14 @@ namespace StockSharp.Algo
 		/// To create a rule for the event of change portfolio .
 		/// </summary>
 		/// <param name="portfolio">The portfolio to be traced for the event of change.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The portfolio provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Portfolio, Portfolio> WhenChanged(this Portfolio portfolio, IConnector connector)
+		public static MarketRule<Portfolio, Portfolio> WhenChanged(this Portfolio portfolio, IPortfolioProvider provider)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
 
-			return new PortfolioRule(portfolio, connector, pf => true)
+			return new PortfolioRule(portfolio, provider, pf => true)
 			{
 				Name = "Pf {0} change".Put(portfolio)
 			};
@@ -671,10 +699,10 @@ namespace StockSharp.Algo
 		/// To create a rule for the event of money decrease in portfolio below the specific level.
 		/// </summary>
 		/// <param name="portfolio">The portfolio to be traced for the event of money decrease below the specific level.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The portfolio provider.</param>
 		/// <param name="money">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Portfolio, Portfolio> WhenMoneyLess(this Portfolio portfolio, IConnector connector, Unit money)
+		public static MarketRule<Portfolio, Portfolio> WhenMoneyLess(this Portfolio portfolio, IPortfolioProvider provider, Unit money)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -684,7 +712,7 @@ namespace StockSharp.Algo
 
 			var finishMoney = money.Type == UnitTypes.Limit ? money : portfolio.CurrentValue - money;
 
-			return new PortfolioRule(portfolio, connector, pf => pf.CurrentValue < finishMoney)
+			return new PortfolioRule(portfolio, provider, pf => pf.CurrentValue < finishMoney)
 			{
 				Name = LocalizedStrings.Str1040Params.Put(portfolio, finishMoney)
 			};
@@ -694,10 +722,10 @@ namespace StockSharp.Algo
 		/// To create a rule for the event of money increase in portfolio above the specific level.
 		/// </summary>
 		/// <param name="portfolio">The portfolio to be traced for the event of money increase above the specific level.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The portfolio provider.</param>
 		/// <param name="money">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Portfolio, Portfolio> WhenMoneyMore(this Portfolio portfolio, IConnector connector, Unit money)
+		public static MarketRule<Portfolio, Portfolio> WhenMoneyMore(this Portfolio portfolio, IPortfolioProvider provider, Unit money)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -707,7 +735,7 @@ namespace StockSharp.Algo
 
 			var finishMoney = money.Type == UnitTypes.Limit ? money : portfolio.CurrentValue + money;
 
-			return new PortfolioRule(portfolio, connector, pf => pf.CurrentValue > finishMoney)
+			return new PortfolioRule(portfolio, provider, pf => pf.CurrentValue > finishMoney)
 			{
 				Name = LocalizedStrings.Str1041Params.Put(portfolio, finishMoney)
 			};
@@ -721,22 +749,22 @@ namespace StockSharp.Algo
 		{
 			private readonly Func<Position, bool> _changed;
 			private readonly Position _position;
-			private readonly IConnector _connector;
+			private readonly IPositionProvider _provider;
 
-			public PositionRule(Position position, IConnector connector)
-				: this(position, connector, p => true)
+			public PositionRule(Position position, IPositionProvider provider)
+				: this(position, provider, p => true)
 			{
 				Name = LocalizedStrings.Str1042 + " " + position.Portfolio.Name;
 			}
 
-			public PositionRule(Position position, IConnector connector, Func<Position, bool> changed)
+			public PositionRule(Position position, IPositionProvider provider, Func<Position, bool> changed)
 				: base(position)
 			{
 				_changed = changed ?? throw new ArgumentNullException(nameof(changed));
 
 				_position = position ?? throw new ArgumentNullException(nameof(position));
-				_connector = connector ?? throw new ArgumentNullException(nameof(connector));
-				_connector.PositionChanged += OnPositionChanged;
+				_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+				_provider.PositionChanged += OnPositionChanged;
 			}
 
 			private void OnPositionChanged(Position position)
@@ -747,7 +775,7 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				_connector.PositionChanged -= OnPositionChanged;
+				_provider.PositionChanged -= OnPositionChanged;
 				base.DisposeManaged();
 			}
 		}
@@ -756,10 +784,10 @@ namespace StockSharp.Algo
 		/// To create a rule for the event of position decrease below the specific level.
 		/// </summary>
 		/// <param name="position">The position to be traced for the event of decrease below the specific level.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The position provider.</param>
 		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Position, Position> WhenLess(this Position position, IConnector connector, Unit value)
+		public static MarketRule<Position, Position> WhenLess(this Position position, IPositionProvider provider, Unit value)
 		{
 			if (position == null)
 				throw new ArgumentNullException(nameof(position));
@@ -769,7 +797,7 @@ namespace StockSharp.Algo
 
 			var finishPosition = value.Type == UnitTypes.Limit ? value : position.CurrentValue - value;
 
-			return new PositionRule(position, connector, pf => pf.CurrentValue < finishPosition)
+			return new PositionRule(position, provider, pf => pf.CurrentValue < finishPosition)
 			{
 				Name = LocalizedStrings.Str1044Params.Put(position, finishPosition)
 			};
@@ -779,10 +807,10 @@ namespace StockSharp.Algo
 		/// To create a rule for the event of position increase above the specific level.
 		/// </summary>
 		/// <param name="position">The position to be traced of the event of increase above the specific level.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The position provider.</param>
 		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Position, Position> WhenMore(this Position position, IConnector connector, Unit value)
+		public static MarketRule<Position, Position> WhenMore(this Position position, IPositionProvider provider, Unit value)
 		{
 			if (position == null)
 				throw new ArgumentNullException(nameof(position));
@@ -792,7 +820,7 @@ namespace StockSharp.Algo
 
 			var finishPosition = value.Type == UnitTypes.Limit ? value : position.CurrentValue + value;
 
-			return new PositionRule(position, connector, pf => pf.CurrentValue > finishPosition)
+			return new PositionRule(position, provider, pf => pf.CurrentValue > finishPosition)
 			{
 				Name = LocalizedStrings.Str1045Params.Put(position, finishPosition)
 			};
@@ -802,11 +830,11 @@ namespace StockSharp.Algo
 		/// To create a rule for the position change event.
 		/// </summary>
 		/// <param name="position">The position to be traced for the change event.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="provider">The position provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Position, Position> Changed(this Position position, IConnector connector)
+		public static MarketRule<Position, Position> Changed(this Position position, IPositionProvider provider)
 		{
-			return new PositionRule(position, connector);
+			return new PositionRule(position, provider);
 		}
 
 		#endregion

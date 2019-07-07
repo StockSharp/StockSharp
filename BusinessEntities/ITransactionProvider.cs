@@ -8,7 +8,7 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// Transactional operations provider interface.
 	/// </summary>
-	public interface ITransactionProvider
+	public interface ITransactionProvider : IPortfolioProvider, IPositionProvider
 	{
 		/// <summary>
 		/// Own trade received.
