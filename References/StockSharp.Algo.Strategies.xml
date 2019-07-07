@@ -297,6 +297,11 @@
             The quoting by the best price. For this quoting the shift from the best price <see cref="P:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.BestPriceOffset"/> is specified, on which quoted order can be changed.
             </summary>
         </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy"/>.
+            </summary>
+        </member>
         <member name="M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy"/>.
@@ -322,6 +327,11 @@
         <member name="T:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy">
             <summary>
             The quoting according to the Best By Volume rule. For this quoting the volume delta <see cref="P:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.VolumeExchange"/> is specified, which can stand in front of the quoted order.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
@@ -352,6 +362,11 @@
             The quoting by the last trade price.
             </summary>
         </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy"/>.
+            </summary>
+        </member>
         <member name="M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy"/>.
@@ -373,6 +388,11 @@
         <member name="T:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy">
             <summary>
             The quoting by specified level in the order book.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
@@ -400,6 +420,11 @@
             The strategy realizing volume quoting algorithm by the limited price.
             </summary>
         </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy"/>.
+            </summary>
+        </member>
         <member name="M:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal)">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy"/>.
@@ -419,6 +444,11 @@
         <member name="T:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy">
             <summary>
             The quoting by the market price.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
