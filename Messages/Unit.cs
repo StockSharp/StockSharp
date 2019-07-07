@@ -715,12 +715,18 @@ namespace StockSharp.Messages
 		/// Convert string to <see cref="Unit"/>.
 		/// </summary>
 		/// <param name="str">String value of <see cref="Unit"/>.</param>
+		/// <param name="throwIfNull">Throw <see cref="ArgumentNullException"/> if the specified string is empty.</param>
 		/// <param name="getTypeValue">The handler returns a value associated with <see cref="Type"/> (price or volume steps).</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
-		public static Unit ToUnit(this string str, Func<UnitTypes, decimal?> getTypeValue = null)
+		public static Unit ToUnit(this string str, bool throwIfNull = true, Func<UnitTypes, decimal?> getTypeValue = null)
 		{
 			if (str.IsEmpty())
-				throw new ArgumentNullException(nameof(str));
+			{
+				if (throwIfNull)
+					throw new ArgumentNullException(nameof(str));
+
+				return null;
+			}
 
 			var lastSymbol = str.Last();
 

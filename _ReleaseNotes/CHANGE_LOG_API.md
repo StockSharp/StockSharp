@@ -159,6 +159,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter. GetCandleArgs, GetTimeFrames handle From and To parameters.
 * (feature) PnLManager. UseXXX options added.
 * (feature) IConnector. Moved transactional members to ITransactionProvider interface.
+* (feature) UnitHelper. Parse method for empty string return null for the specified option.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

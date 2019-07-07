@@ -103,11 +103,12 @@ namespace StockSharp.BusinessEntities
 		/// Convert string to <see cref="Unit"/>.
 		/// </summary>
 		/// <param name="str">String value of <see cref="Unit"/>.</param>
+		/// <param name="throwIfNull">Throw <see cref="ArgumentNullException"/> if the specified string is empty.</param>
 		/// <param name="security">Information about the instrument. Required when using <see cref="UnitTypes.Point"/> и <see cref="UnitTypes.Step"/>.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
-		public static Unit ToUnit2(this string str, Security security = null)
+		public static Unit ToUnit2(this string str, bool throwIfNull = true, Security security = null)
 		{
-			return str.ToUnit(t => GetTypeValue(security, t));
+			return str.ToUnit(throwIfNull, t => GetTypeValue(security, t));
 		}
 
 		/// <summary>
