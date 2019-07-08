@@ -167,6 +167,7 @@ StockSharp API Change log
 * (feature) Diagrams. Font weight set to bold.
 * (bug) StrategiesDashboard. Fix CanExecute handling.
 * (feature) BaseGridControl. Copy context menu added.
+* (bug) ContinuousSecurityBaseProcessor. Fix SecurityId for generated messages.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

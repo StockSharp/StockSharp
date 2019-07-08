@@ -152,6 +152,8 @@ namespace StockSharp.Algo
 					throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str2142Params.Put(message.Type));
 			}
 
+			message = message.Clone();
+			message.ReplaceSecurityId(SecurityId);
 			yield return message;
 		}
 
