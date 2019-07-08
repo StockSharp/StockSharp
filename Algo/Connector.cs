@@ -1361,7 +1361,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return security.ToSecurityId(SecurityIdGenerator);
+			return security.ToSecurityId(SecurityIdGenerator, copyExtended: true);
 		}
 
 		private string GetBoardCode(string secClass)

@@ -575,7 +575,7 @@ namespace StockSharp.Algo.Testing
 			SendInMessage(new HistorySourceMessage
 			{
 				IsSubscribe = getMessages != null,
-				SecurityId = security?.ToSecurityId() ?? default(SecurityId),
+				SecurityId = security?.ToSecurityId(copyExtended: true) ?? default,
 				DataType = dataType,
 				Arg = arg,
 				GetMessages = getMessages

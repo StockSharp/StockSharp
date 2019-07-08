@@ -594,7 +594,7 @@ namespace StockSharp.Algo
 
 			return criteria.FillMessage(new SecurityLookupMessage
 			{
-				SecurityId = securityId ?? (criteria.Id.IsEmpty() && criteria.Code.IsEmpty() ? default(SecurityId) : criteria.ToSecurityId(boardIsRequired: false)),
+				SecurityId = securityId ?? (criteria.Id.IsEmpty() && criteria.Code.IsEmpty() ? default : criteria.ToSecurityId(boardIsRequired: false, copyExtended: true)),
 			});
 		}
 
@@ -1396,8 +1396,9 @@ namespace StockSharp.Algo
 		/// <param name="security">Security.</param>
 		/// <param name="idGenerator">The instrument identifiers generator <see cref="Security.Id"/>.</param>
 		/// <param name="boardIsRequired"><see cref="Security.Board"/> is required.</param>
+		/// <param name="copyExtended">Copy <see cref="Security.ExternalId"/> and <see cref="Security.Type"/>.</param>
 		/// <returns>Security ID.</returns>
-		public static SecurityId ToSecurityId(this Security security, SecurityIdGenerator idGenerator = null, bool boardIsRequired = true)
+		public static SecurityId ToSecurityId(this Security security, SecurityIdGenerator idGenerator = null, bool boardIsRequired = true, bool copyExtended = false)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -1444,7 +1445,14 @@ namespace StockSharp.Algo
 				boardCode = security.Board?.Code;
 			}
 
-			return security.ExternalId.ToSecurityId(secCode, boardCode, security.Type);
+			if (copyExtended)
+				return security.ExternalId.ToSecurityId(secCode, boardCode, security.Type);
+			
+			return new SecurityId
+			{
+				SecurityCode = secCode,
+				BoardCode = boardCode,
+			};
 		}
 
 		/// <summary>
@@ -1521,7 +1529,7 @@ namespace StockSharp.Algo
 		/// <returns>The message for market data subscription.</returns>
 		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, Security security)
 		{
-			return message.FillSecurityInfo(security.ToSecurityId(), security);
+			return message.FillSecurityInfo(security.ToSecurityId(copyExtended: true), security);
 		}
 
 		/// <summary>
