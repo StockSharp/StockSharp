@@ -348,9 +348,7 @@ namespace StockSharp.Messages
 			Order = 301)]
 		public string AssociatedBoardCode { get; set; } = DefaultAssociatedBoardCode;
 
-		/// <summary>
-		/// Outgoing message event.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<Message> NewOutMessage;
 
 		bool IMessageChannel.IsOpened => true;
@@ -361,6 +359,12 @@ namespace StockSharp.Messages
 
 		void IMessageChannel.Close()
 		{
+		}
+
+		event Action IMessageChannel.StateChanged
+		{
+			add { }
+			remove { }
 		}
 
 		/// <inheritdoc />

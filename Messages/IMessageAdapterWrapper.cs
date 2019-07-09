@@ -50,9 +50,7 @@ namespace StockSharp.Messages
 			InnerAdapter = innerAdapter ?? throw new ArgumentNullException(nameof(innerAdapter));
 		}
 
-		/// <summary>
-		/// Underlying adapter.
-		/// </summary>
+		/// <inheritdoc />
 		public IMessageAdapter InnerAdapter
 		{
 			get => _innerAdapter;
@@ -108,18 +106,19 @@ namespace StockSharp.Messages
 			InnerAdapter.Close();
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		event Action IMessageChannel.StateChanged
+		{
+			add => InnerAdapter.StateChanged += value;
+			remove => InnerAdapter.StateChanged -= value;
+		}
+
+		/// <inheritdoc />
 		public virtual void SendInMessage(Message message)
 		{
 			InnerAdapter.SendInMessage(message);
 		}
 
-		/// <summary>
-		/// New message event.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual event Action<Message> NewOutMessage;
 
 		/// <summary>

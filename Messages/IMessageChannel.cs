@@ -48,6 +48,11 @@ namespace StockSharp.Messages
 		bool IsOpened { get; }
 
 		/// <summary>
+		/// <see cref="IsOpened"/> change event.
+		/// </summary>
+		event Action StateChanged;
+
+		/// <summary>
 		/// Open channel.
 		/// </summary>
 		void Open();
@@ -86,6 +91,12 @@ namespace StockSharp.Messages
 		}
 
 		bool IMessageChannel.IsOpened => true;
+
+		event Action IMessageChannel.StateChanged
+		{
+			add { }
+			remove { }
+		}
 
 		void IMessageChannel.Open()
 		{

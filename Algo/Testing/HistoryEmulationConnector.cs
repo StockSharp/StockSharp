@@ -146,9 +146,12 @@ namespace StockSharp.Algo.Testing
 
 			public bool IsOpened => !_messageQueue.IsClosed;
 
+			public event Action StateChanged;
+
 			public void Open()
 			{
 				_messageQueue.Open();
+				StateChanged?.Invoke();
 
 				ThreadingHelper
 					.Thread(() => CultureInfo.InvariantCulture.DoInCulture(() =>
@@ -174,6 +177,8 @@ namespace StockSharp.Algo.Testing
 								_errorHandler(ex);
 							}
 						}
+
+						StateChanged?.Invoke();
 					}))
 					.Name("History emulation channel thread.")
 					.Launch();

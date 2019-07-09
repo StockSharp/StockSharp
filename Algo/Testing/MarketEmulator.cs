@@ -2193,6 +2193,12 @@ namespace StockSharp.Algo.Testing
 		{
 		}
 
+		event Action IMessageChannel.StateChanged
+		{
+			add { }
+			remove { }
+		}
+
 		IMessageChannel ICloneable<IMessageChannel>.Clone()
 		{
 			return new MarketEmulator();
