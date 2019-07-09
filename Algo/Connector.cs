@@ -74,7 +74,7 @@ namespace StockSharp.Algo
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new Dictionary<string, List<ExecutionMessage>>();
 		//private readonly MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>> _orderStopOrderAssociations = new MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>>(false);
 
-		private readonly List<Security> _lookupResult = new List<Security>();
+		private readonly HashSet<Security> _lookupResult = new HashSet<Security>();
 		private readonly SynchronizedQueue<SecurityLookupMessage> _lookupQueue = new SynchronizedQueue<SecurityLookupMessage>();
 
 		private class LookupInfo<TCriteria, TItem>
