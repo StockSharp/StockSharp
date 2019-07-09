@@ -168,6 +168,7 @@ StockSharp API Change log
 * (bug) StrategiesDashboard. Fix CanExecute handling.
 * (feature) BaseGridControl. Copy context menu added.
 * (bug) ContinuousSecurityBaseProcessor. Fix SecurityId for generated messages.
+* (feature) IMessageListener interface added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

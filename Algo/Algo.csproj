@@ -169,6 +169,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Server\ITransactionIdStorage.cs" />
+    <Compile Include="Server\IMessageListener.cs" />
+    <Compile Include="Server\IMessageListenerSession.cs" />
     <Compile Include="ServicesRegistry.cs" />
     <Compile Include="Storages\Binary\Snapshot\PositionBinarySnapshotSerializer.cs" />
     <Compile Include="Storages\Binary\Snapshot\QuotesBinarySnapshotSerializer.cs" />
