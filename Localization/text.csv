@@ -15767,3 +15767,7 @@ DocStr11246;Can process order action;Можно ли обработать дей
 DocStr11247;Copy {0} and {1};Копировать {0} и {1}
 DocStr11248;The interface describing a message listening component;Интерфейс, описывающий компоненту для слушания сообщений
 DocStr11249;The interface describing a session, create by {0};Интерфейс, описывающий сессию, созданная {0}
+DocStr11250;To handle the incoming {0};Обработать входящее {0}
+DocStr11251;The method is called at the processing of the new incoming {0};Метод вызывается при обработке нового входящего {0}
+DocStr11252;To handle the current step processed for the diagram element;Обработать текущий шаг элемента диаграммы
+DocStr11253;The method is called at current step processed for the diagram element;Метод вызывается на текущем шаге элемента диаграммы

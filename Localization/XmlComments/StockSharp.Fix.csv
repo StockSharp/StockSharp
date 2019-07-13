@@ -173,6 +173,9 @@ M:StockSharp.Fix.Dialects.DefaultFixDialect.#ctor(Ecng.Common.IdGenerator,System
 P:StockSharp.Fix.Dialects.DefaultFixDialect.SupportedMessages/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.DefaultFixDialect.ConvertToLatin/summary;DocStr9080
 P:StockSharp.Fix.Dialects.DefaultFixDialect.CheckTimeFrameByRequest/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportPortfolioLookupResult/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportMarketDataResponse/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.DefaultFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.DefaultFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.DefaultFixDialect.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage)/summary;DocStr3168

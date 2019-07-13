@@ -501,6 +501,15 @@
     <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.CheckTimeFrameByRequest">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportSecurityLookupResult">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportPortfolioLookupResult">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportMarketDataResponse">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
       <inheritdoc />
     </member>
