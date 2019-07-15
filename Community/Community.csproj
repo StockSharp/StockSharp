@@ -80,12 +80,14 @@
     <Compile Include="BaseServiceClient.cs" />
     <Compile Include="CommunityNews.cs" />
     <Compile Include="CommunityAuthorization.cs" />
+    <Compile Include="CommunityUrls.cs" />
     <Compile Include="ErrorCodes.cs" />
     <Compile Include="FileClient.cs" />
     <Compile Include="IAuthenticationClient.cs" />
     <Compile Include="IAuthenticationService.cs" />
     <Compile Include="IFileClient.cs" />
     <Compile Include="IFileService.cs" />
+    <Compile Include="INotificationClient.cs" />
     <Compile Include="INotificationService.cs" />
     <Compile Include="IProfileClient.cs" />
     <Compile Include="IProfileService.cs" />

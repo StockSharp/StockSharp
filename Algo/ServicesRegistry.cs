@@ -117,6 +117,16 @@ namespace StockSharp.Algo
 		public static IExtendedInfoStorage TryExtendedInfoStorage => ConfigManager.TryGetService<IExtendedInfoStorage>();
 
 		/// <summary>
+		/// The client for access to the StockSharp notification service.
+		/// </summary>
+		public static INotificationClient NotificationClient => ConfigManager.GetService<INotificationClient>();
+
+		/// <summary>
+		/// The client for access to the StockSharp notification service.
+		/// </summary>
+		public static INotificationClient TryNotificationClient => ConfigManager.GetService<INotificationClient>();
+
+		/// <summary>
 		/// The client for access to the service of work with files and documents.
 		/// </summary>
 		public static IFileClient FileClient => ConfigManager.GetService<IFileClient>();
