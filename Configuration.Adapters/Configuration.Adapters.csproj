@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7D6C7AD7-2735-4BC0-8E37-B21584E43264}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.Configuration</RootNamespace>
+    <AssemblyName>StockSharp.Configuration.Adapters</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\StockSharp.Configuration.Adapters.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\StockSharp.Configuration.Adapters.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\References\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\References\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Reflection">
+      <HintPath>..\References\Ecng.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="InMemoryMessageAdapterProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\ConnectorsStub\QuoinexStub\QuoinexStub.csproj">
+      <Project>{00B19CDD-5647-42D2-84FF-7AC82D12E4C8}</Project>
+      <Name>QuoinexStub</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlfaDirect\AlfaDirect.csproj">
+      <Project>{AAA445E0-AA85-4B49-AD45-EDD1B4839137}</Project>
+      <Name>AlfaDirect</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlorHistory\AlorHistory.csproj">
+      <Project>{A72579C7-465B-40D7-8005-1CC4FD35BE6B}</Project>
+      <Name>AlorHistory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlphaVantage\AlphaVantage.csproj">
+      <Project>{C09745E8-CE51-47DF-8856-E3E3E41EF911}</Project>
+      <Name>AlphaVantage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BarChart\BarChart.csproj">
+      <Project>{99B84E0C-D035-4BD9-8A42-8232ED6BA3F4}</Project>
+      <Name>BarChart</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bibox\Bibox.csproj">
+      <Project>{CA38A429-99DF-44CB-9C5A-44276B6CB724}</Project>
+      <Name>Bibox</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Binance\Binance.csproj">
+      <Project>{E8577520-E582-4409-9287-4D0859F64EE7}</Project>
+      <Name>Binance</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitbank\Bitbank.csproj">
+      <Project>{21000430-C80E-47F8-AD9A-1376BBA03E6D}</Project>
+      <Name>Bitbank</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitexbook\Bitexbook.csproj">
+      <Project>{F98F430B-D6F2-418C-BB52-B7B02A073D97}</Project>
+      <Name>Bitexbook</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitfinex\Bitfinex.csproj">
+      <Project>{5D5F59F8-2136-42D1-90B5-B6C41D4C3964}</Project>
+      <Name>Bitfinex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bithumb\Bithumb.csproj">
+      <Project>{4FD21E37-BD2D-4AEF-8297-CEA4C7EBEF01}</Project>
+      <Name>Bithumb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BitMax\BitMax.csproj">
+      <Project>{EC2A187C-2E2A-4E28-8C1A-73AB596E9EE3}</Project>
+      <Name>BitMax</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitmex\Bitmex.csproj">
+      <Project>{4E875AEF-166E-44C5-BB3C-FB80AA1C0046}</Project>
+      <Name>Bitmex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BitStamp\BitStamp.csproj">
+      <Project>{90B93AF4-3168-4415-B916-9E078F192696}</Project>
+      <Name>BitStamp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bittrex\Bittrex.csproj">
+      <Project>{302F3C2A-EB95-4AF7-BE22-E7BE567B2DAB}</Project>
+      <Name>Bittrex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BitZ\BitZ.csproj">
+      <Project>{9D5E2881-23E5-48D5-BD36-F42E8668B127}</Project>
+      <Name>BitZ</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Blackwood\Blackwood.csproj">
+      <Project>{C0D530DD-1E5A-4BE4-9AC6-FF11E5FC9B26}</Project>
+      <Name>Blackwood</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Btce\Btce.csproj">
+      <Project>{AF225452-1CF1-48A2-B381-C02BEBE643D7}</Project>
+      <Name>Btce</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BW\BW.csproj">
+      <Project>{F1D480C2-351F-41B3-9E58-B82A02D421C6}</Project>
+      <Name>BW</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cex\Cex.csproj">
+      <Project>{86A35D77-6FE9-497F-A9C9-86A4789F813A}</Project>
+      <Name>Cex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Coinbase\Coinbase.csproj">
+      <Project>{AB948D64-73B2-4BDC-972C-337E51A67265}</Project>
+      <Name>Coinbase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CoinBene\CoinBene.csproj">
+      <Project>{4ED59879-963C-43F5-99FC-E2BC1713706C}</Project>
+      <Name>CoinBene</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CoinCap\CoinCap.csproj">
+      <Project>{6C63BF6A-28F2-4C5E-ADD9-55CD1126DE4B}</Project>
+      <Name>CoinCap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Coincheck\Coincheck.csproj">
+      <Project>{1D19F91C-214C-44CD-9064-A22BD89D7AB1}</Project>
+      <Name>Coincheck</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CoinExchange\CoinExchange.csproj">
+      <Project>{E0C2FC7C-581A-4B05-B6BE-331D0DF45153}</Project>
+      <Name>CoinExchange</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Coinigy\Coinigy.csproj">
+      <Project>{EC468653-253E-4D5C-8E91-4CDCF06898B9}</Project>
+      <Name>Coinigy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cqg.Com\Cqg.Com.csproj">
+      <Project>{34984B57-9200-47B9-AC78-0D93FDFA437A}</Project>
+      <Name>Cqg.Com</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cqg.Continuum\Cqg.Continuum.csproj">
+      <Project>{3EDD3BF7-3F1E-4192-87AA-54DFAA17340C}</Project>
+      <Name>Cqg.Continuum</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cryptopia\Cryptopia.csproj">
+      <Project>{42C7D967-5AFB-4BA5-A2F4-DB232BDF7D20}</Project>
+      <Name>Cryptopia</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CSV\CSV.csproj">
+      <Project>{63F20E8F-E1F2-4FAD-A8A8-D62F0501C261}</Project>
+      <Name>CSV</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Deribit\Deribit.csproj">
+      <Project>{DA9C9641-6113-4F0B-AEF0-A70D1C4C059E}</Project>
+      <Name>Deribit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Digifinex\Digifinex.csproj">
+      <Project>{87EC89A6-4152-4346-A0FB-4E9B6AA23B2B}</Project>
+      <Name>Digifinex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\DukasCopy\DukasCopy.csproj">
+      <Project>{B0291E7F-A172-48BA-9DA0-6DAE1E68C74A}</Project>
+      <Name>DukasCopy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\ETrade\ETrade.csproj">
+      <Project>{480539A8-CA30-4B87-B038-6AD854DA0C6A}</Project>
+      <Name>ETrade</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Exmo\Exmo.csproj">
+      <Project>{E5396BB1-3D40-4D09-BDB3-13A4D849BC5F}</Project>
+      <Name>Exmo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Finam\Finam.csproj">
+      <Project>{CA9992B3-58D1-4BD9-B24A-54149B9A92CA}</Project>
+      <Name>Finam</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\FinViz\FinViz.csproj">
+      <Project>{A0198C4B-C905-4BD8-B14E-9C570479AED3}</Project>
+      <Name>FinViz</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Fix\Fix.csproj">
+      <Project>{DE2DC640-FA5B-46F2-92E7-E5A53232185F}</Project>
+      <Name>Fix</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Fxcm\Fxcm.csproj">
+      <Project>{358B4D44-CB92-4DED-AFD4-3DAC72D167E5}</Project>
+      <Name>Fxcm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Gdax\Gdax.csproj">
+      <Project>{51134FC5-2DAB-4905-9E41-A3E8E754AF7C}</Project>
+      <Name>Gdax</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Google\Google.csproj">
+      <Project>{BBC0A973-C58D-498F-8D4B-03C907441A0E}</Project>
+      <Name>Google</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\HitBtc\HitBtc.csproj">
+      <Project>{DA6A7BFC-2787-48BA-A6FD-A047006B6901}</Project>
+      <Name>HitBtc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Huobi\Huobi.csproj">
+      <Project>{1B76C578-6A8C-4CE2-8556-A8F32FB5FB85}</Project>
+      <Name>Huobi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Idax\Idax.csproj">
+      <Project>{1220BAC4-35A3-4230-B600-10893067C573}</Project>
+      <Name>Idax</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\IEX\IEX.csproj">
+      <Project>{76FD8C86-E4BA-4B86-A966-29C13D085EE7}</Project>
+      <Name>IEX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
+      <Project>{F17D780E-6F82-40FD-84E1-C4EB09853BBD}</Project>
+      <Name>InteractiveBrokers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\IQFeed\IQFeed.csproj">
+      <Project>{F3068408-9764-432E-8FB4-596B308EDB4F}</Project>
+      <Name>IQFeed</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\ITCH\ITCH.csproj">
+      <Project>{5E66A118-9D37-4F93-9598-A8B56A6BE1CA}</Project>
+      <Name>ITCH</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Kraken\Kraken.csproj">
+      <Project>{8F90DE0D-C2A2-4C86-A66E-EEA01F830C70}</Project>
+      <Name>Kraken</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Kucoin\Kucoin.csproj">
+      <Project>{0694E03C-F9B2-4001-AC64-E33C061D40FC}</Project>
+      <Name>Kucoin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\LBank\LBank.csproj">
+      <Project>{36C9E446-2518-4E00-869D-F30C955A0415}</Project>
+      <Name>LBank</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Liqui\Liqui.csproj">
+      <Project>{E8A86950-D42E-48E7-8728-18F5C1ADC812}</Project>
+      <Name>Liqui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\LiveCoin\LiveCoin.csproj">
+      <Project>{F9959529-EF8F-4B86-928F-9993BF4A0EE0}</Project>
+      <Name>LiveCoin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\LMAX\LMAX.csproj">
+      <Project>{4B37342E-9A01-499B-9E32-2E9948A6D0C4}</Project>
+      <Name>LMAX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Mfd\Mfd.csproj">
+      <Project>{1B5592DB-0EA6-4C15-A7D6-7C62E02AC20A}</Project>
+      <Name>Mfd</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Micex\Micex.csproj">
+      <Project>{E0C3BDD6-E75F-48C9-BF8C-05EFECE3E0B2}</Project>
+      <Name>Micex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Oanda\Oanda.csproj">
+      <Project>{9188D051-7FAA-4CF7-9D93-6D59E2FAEDD0}</Project>
+      <Name>Oanda</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Okcoin\Okcoin.csproj">
+      <Project>{52364231-2047-4785-885C-90D2E20C37FA}</Project>
+      <Name>Okcoin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Okex\Okex.csproj">
+      <Project>{FE15D88A-A8F0-4D24-8C1A-FD70591049D7}</Project>
+      <Name>Okex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\OpenECry\OpenECry.csproj">
+      <Project>{17EAE926-C9A9-40C7-8D54-3545077B4AB7}</Project>
+      <Name>OpenECry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Plaza\Plaza.csproj">
+      <Project>{7EABA894-FC98-4F5E-A212-C40550260886}</Project>
+      <Name>Plaza</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Poloniex\Poloniex.csproj">
+      <Project>{B8103F63-11BE-455A-89CB-2AD9A0BC07D9}</Project>
+      <Name>Poloniex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quandl\Quandl.csproj">
+      <Project>{5E0866F2-3238-4B87-9A5E-414FD994CFD0}</Project>
+      <Name>Quandl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\QuantHouse\QuantHouse.csproj">
+      <Project>{E818D294-DBF6-4126-AF13-D83EF9740536}</Project>
+      <Name>QuantHouse</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quik\Quik.csproj">
+      <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
+      <Name>Quik</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Rithmic\Rithmic.csproj">
+      <Project>{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}</Project>
+      <Name>Rithmic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Rss\Rss.csproj">
+      <Project>{FBC5BE61-E6D9-47DF-9515-900184DDEBA0}</Project>
+      <Name>Rss</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\SmartCom\SmartCom.csproj">
+      <Project>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</Project>
+      <Name>SmartCom</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\SpbEx\SpbEx.csproj">
+      <Project>{EF303E28-DCD1-4FA4-B10D-BF3506FDF9B8}</Project>
+      <Name>SpbEx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Sterling\Sterling.csproj">
+      <Project>{9ADD140B-1C43-4077-B32E-0EBA81648C4D}</Project>
+      <Name>Sterling</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\TradeOgre\TradeOgre.csproj">
+      <Project>{D138E571-EAEE-4F78-B317-A155D038A69E}</Project>
+      <Name>TradeOgre</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Tradier\Tradier.csproj">
+      <Project>{425D6A06-7B6F-47A3-B389-CB3C80F66D53}</Project>
+      <Name>Tradier</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Transaq\Transaq.csproj">
+      <Project>{A00E5A4B-CB24-474A-8F2B-06A2E370C4F6}</Project>
+      <Name>Transaq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Twime\Twime.csproj">
+      <Project>{2C3ADA93-249E-4EEB-A1B7-CE5DA8DC4E33}</Project>
+      <Name>Twime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\UkrExh\UkrExh.csproj">
+      <Project>{57015126-7323-46F5-AD15-9BEBFB627D8B}</Project>
+      <Name>UkrExh</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Xignite\Xignite.csproj">
+      <Project>{8C7F287B-67DF-48D7-A233-947EDB95F22D}</Project>
+      <Name>Xignite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Yahoo\Yahoo.csproj">
+      <Project>{ED89AB57-C5EF-485A-A2A4-04E807606E77}</Project>
+      <Name>Yahoo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Yobit\Yobit.csproj">
+      <Project>{E66E747C-A9AD-4FA2-99D0-143834EED83D}</Project>
+      <Name>Yobit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Zaif\Zaif.csproj">
+      <Project>{63C3ABE0-9E3C-4354-A3D1-22359FD34489}</Project>
+      <Name>Zaif</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\ZB\ZB.csproj">
+      <Project>{3D584F59-FC33-4C2B-85EA-24A116BEDCB4}</Project>
+      <Name>ZB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
