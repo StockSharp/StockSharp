@@ -1424,6 +1424,17 @@
       <param name="value">Value.</param>
       <returns>The diagram element parameter.</returns>
     </member>
+    <member name="T:StockSharp.Xaml.Diagram.DiagramHelper">
+      <summary>
+            Extension class for <see cref="N:StockSharp.Xaml.Diagram" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramHelper.GetDiagramElements">
+      <summary>
+            Get all diagram elements.
+            </summary>
+      <returns>All diagram elements.</returns>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.PaletteTreeItem">
       <summary>
             Palette element.
