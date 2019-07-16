@@ -413,28 +413,5 @@
       <returns>
         <see langword="true" />, if the license if trial, otherwise, <see langword="false" />.</returns>
     </member>
-    <member name="T:StockSharp.Licensing.Xaml.LicensePanel">
-      <summary>
-            UI component for <see cref="T:StockSharp.Licensing.License" />.
-            </summary>
-      <summary>
-            LicensePanel
-            </summary>
-    </member>
-    <member name="M:StockSharp.Licensing.Xaml.LicensePanel.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Licensing.Xaml.LicensePanel" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Licensing.Xaml.LicensePanel.Licenses">
-      <summary>
-            Licenses.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Licensing.Xaml.LicensePanel.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
   </members>
 </doc>

@@ -172,6 +172,7 @@ StockSharp API Change log
 * (feature) SoundLogListener, SpeechLogListener moved from Logging to Xaml.
 * (feature) Configuration.Adapters project added.
 * (feature) Configure method moved from Configuration to Xaml.
+* (feature) LicensePanel. Moved from Licensing to Xaml.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
