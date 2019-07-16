@@ -31,6 +31,7 @@ namespace SampleStrategies
 	using StockSharp.Logging;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 	using StockSharp.Xaml;
 
 	public partial class MainWindow
@@ -153,6 +154,7 @@ namespace SampleStrategies
 			snapshotRegistry.Init();
 
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
+			ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

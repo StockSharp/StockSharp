@@ -212,6 +212,10 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.Adapters.csproj">
+      <Project>{7D6C7AD7-2735-4BC0-8E37-B21584E43264}</Project>
+      <Name>Configuration.Adapters</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Configuration\Configuration.csproj">
       <Project>{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}</Project>
       <Name>Configuration</Name>

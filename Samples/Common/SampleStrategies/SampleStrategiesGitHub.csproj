@@ -208,6 +208,10 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.AdaptersGitHub.csproj">
+      <Project>{7D6C7AD7-2735-4BC0-8E37-B21584E43264}</Project>
+      <Name>Configuration.AdaptersGitHub</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Configuration\ConfigurationGitHub.csproj">
       <Project>{2cff1903-4ef5-46f8-ab5d-bb623ca75ce6}</Project>
       <Name>ConfigurationGitHub</Name>

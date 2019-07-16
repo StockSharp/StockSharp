@@ -49,6 +49,9 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ecng.Configuration">
+      <HintPath>..\..\..\References\Ecng.Configuration.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
     </Reference>
@@ -159,6 +162,10 @@
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.Adapters.csproj">
+      <Project>{7D6C7AD7-2735-4BC0-8E37-B21584E43264}</Project>
+      <Name>Configuration.Adapters</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Configuration\Configuration.csproj">
       <Project>{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}</Project>

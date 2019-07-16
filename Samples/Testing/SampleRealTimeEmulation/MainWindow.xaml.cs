@@ -24,6 +24,7 @@ namespace SampleRealTimeEmulation
 	using Ecng.Common;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
+	using Ecng.Configuration;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -104,6 +105,8 @@ namespace SampleRealTimeEmulation
 
 			_realConnector.Error += error =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+
+			ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_realConnector.Adapter.InnerAdapters));
 		}
 
 		private void InitEmuConnector()
