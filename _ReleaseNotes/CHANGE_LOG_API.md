@@ -170,6 +170,8 @@ StockSharp API Change log
 * (bug) ContinuousSecurityBaseProcessor. Fix SecurityId for generated messages.
 * (feature) IMessageListener interface added.
 * (feature) SoundLogListener, SpeechLogListener moved from Logging to Xaml.
+* (feature) Configuration.Adapters project added.
+* (feature) Configure method moved from Configuration to Xaml.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

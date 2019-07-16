@@ -33,6 +33,7 @@ namespace SampleMultiConnection
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
+	using StockSharp.Xaml;
 
 	public partial class MainWindow
 	{
