@@ -49816,5 +49816,15 @@ namespace StockSharp.Localization
 		/// Time out
 		/// </summary>
 		public static string TimeOut => GetString(TimeOutKey);
+
+		/// <summary>
+		/// Sign in
+		/// </summary>
+		public const string SignInKey = nameof(SignIn);
+
+		/// <summary>
+		/// Sign in
+		/// </summary>
+		public static string SignIn => GetString(SignInKey);
 	}
 }
