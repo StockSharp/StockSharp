@@ -55,5 +55,32 @@ namespace StockSharp.Community
 		{
 			return $"https://doc.stocksharp.{LocalizedStrings.Domain}/html/{docUrl}";
 		}
+
+		/// <summary>
+		/// Get open account url.
+		/// </summary>
+		/// <returns>Localized url.</returns>
+		public static string GetOpenAccountUrl()
+		{
+			return $"{GetWebSiteUrl()}/broker/openaccount/";
+		}
+
+		/// <summary>
+		/// Get sign up url.
+		/// </summary>
+		/// <returns>Localized url.</returns>
+		public static string GetSignUpUrl()
+		{
+			return $"{GetWebSiteUrl()}/register/";
+		}
+
+		/// <summary>
+		/// Get forgot password url.
+		/// </summary>
+		/// <returns>Localized url.</returns>
+		public static string GetForgotUrl()
+		{
+			return $"{GetWebSiteUrl()}/forgot/";
+		}
 	}
 }
