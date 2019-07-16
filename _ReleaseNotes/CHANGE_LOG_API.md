@@ -169,6 +169,7 @@ StockSharp API Change log
 * (feature) BaseGridControl. Copy context menu added.
 * (bug) ContinuousSecurityBaseProcessor. Fix SecurityId for generated messages.
 * (feature) IMessageListener interface added.
+* (feature) SoundLogListener, SpeechLogListener moved from Logging to Xaml.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

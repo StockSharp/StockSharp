@@ -142,16 +142,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.AdvertisePanel" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.AdvertisePanel.ClientProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.AdvertisePanel.Client" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.AdvertisePanel.Client">
-      <summary>
-            The client for access to the StockSharp notification service.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.AdvertisePanel.InitializeComponent">
       <summary>
             InitializeComponent
@@ -240,41 +230,6 @@
     <member name="P:StockSharp.Xaml.BaseApplication.ExtendedFeatures">
       <summary>
             The extended functionality that will be displayed in the window <see cref="T:StockSharp.Xaml.TargetPlatformWindow" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.BaseApplication.AppDataPath">
-      <summary>
-            The path to the settings directory.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.BaseApplication.PlatformConfigurationFile">
-      <summary>
-            The path to the configuration file of platform definition.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.BaseApplication.ProxyConfigurationFile">
-      <summary>
-            The path to the configuration file of proxy settings.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.BaseApplication.SecurityNativeIdDir">
-      <summary>
-            The path to the directory with native security identifiers.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.BaseApplication.SecurityMappingDir">
-      <summary>
-            The path to the directory with securities id mapping.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.BaseApplication.SecurityExtendedInfo">
-      <summary>
-            The path to the directory with securities extended info.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.BaseApplication.StorageDir">
-      <summary>
-            The path to the directory with market data.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.BaseApplication.ProxySettings">
@@ -1126,6 +1081,29 @@
             Security.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.LicensePanel">
+      <summary>
+            UI component for <see cref="T:StockSharp.Licensing.License" />.
+            </summary>
+      <summary>
+            LicensePanel
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.LicensePanel.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.LicensePanel" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.LicensePanel.Licenses">
+      <summary>
+            Licenses.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.LicensePanel.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.SecurityMessageAdaptersWindow">
       <summary>
             The window for creation and editing of securities and adapters mapping.
@@ -1903,6 +1881,36 @@
       <param name="security">Security.</param>
       <returns>Volume format.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)">
+      <summary>
+            Configure connection using <see cref="T:StockSharp.Xaml.ConnectorWindow" />.
+            </summary>
+      <param name="connector">The connection.</param>
+      <param name="owner">UI thread owner.</param>
+      <returns>
+        <see langword="true" /> if the specified connection was configured, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window)">
+      <summary>
+            Configure connection using <see cref="T:StockSharp.Xaml.ConnectorWindow" />.
+            </summary>
+      <param name="adapter">The connection.</param>
+      <param name="owner">UI thread owner.</param>
+      <returns>
+        <see langword="true" /> if the specified connection was configured, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@,Ecng.Serialization.SettingsStorage@)">
+      <summary>
+            Configure connection using <see cref="T:StockSharp.Xaml.ConnectorWindow" />.
+            </summary>
+      <param name="adapter">The connection.</param>
+      <param name="owner">UI thread owner.</param>
+      <param name="autoConnect">Auto connect.</param>
+      <param name="windowSettings">
+        <see cref="T:StockSharp.Xaml.ConnectorWindow" /> settings.</param>
+      <returns>
+        <see langword="true" /> if the specified connection was configured, otherwise, <see langword="false" />.</returns>
+    </member>
     <member name="T:StockSharp.Xaml.FileProgressWindow">
       <summary>
             File uploading/downloading progress bar window.
@@ -2474,6 +2482,54 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.SoundLogListener">
+      <summary>
+            Logger playing the music when a message received.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SoundLogListener.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SoundLogListener" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SoundLogListener.FileName">
+      <summary>
+            The path to the file with the sound that will be played when a message received.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SoundLogListener.OnWriteMessages(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SoundLogListener.Load(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SoundLogListener.Save(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Xaml.SpeechLogListener">
+      <summary>
+            Logger speaking words when a message received.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SpeechLogListener.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SpeechLogListener" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SpeechLogListener.Volume">
+      <summary>
+            The volume level.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SpeechLogListener.OnWriteMessages(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SpeechLogListener.Load(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.SpeechLogListener.Save(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Xaml.StrategiesDashboard">
       <summary>
             Strategies dashboard.
@@ -2629,11 +2685,6 @@
     <member name="F:StockSharp.Xaml.QuestionWindow.OkCommand">
       <summary>
       </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.QuestionWindow.NotificationClient">
-      <summary>
-            The client for access to the StockSharp notification service.
-            </summary>
     </member>
     <member name="P:StockSharp.Xaml.QuestionWindow.Link">
       <summary>
@@ -2921,6 +2972,12 @@
       <summary>
             Storage name.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ConnectorInfo.#ctor(StockSharp.Messages.IMessageAdapter)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ConnectorInfo" />.
+            </summary>
+      <param name="adapter">Adapter.</param>
     </member>
     <member name="M:StockSharp.Xaml.ConnectorInfo.#ctor(System.Type)">
       <summary>
