@@ -772,6 +772,10 @@ M:StockSharp.Messages.Extensions.CreateAdapter(System.Type,Ecng.Common.IdGenerat
 M:StockSharp.Messages.Extensions.CreateAdapter(System.Type,Ecng.Common.IdGenerator)/param/adapterType;DocStr11202
 M:StockSharp.Messages.Extensions.CreateAdapter(System.Type,Ecng.Common.IdGenerator)/param/idGenerator;DocStr3311
 M:StockSharp.Messages.Extensions.CreateAdapter(System.Type,Ecng.Common.IdGenerator)/returns;DocStr8766
+M:StockSharp.Messages.Extensions.FindAdapter``1(StockSharp.Messages.IMessageAdapter)/summary;DocStr11194
+M:StockSharp.Messages.Extensions.FindAdapter``1(StockSharp.Messages.IMessageAdapter)/typeparam/TAdapter;DocStr2517
+M:StockSharp.Messages.Extensions.FindAdapter``1(StockSharp.Messages.IMessageAdapter)/param/adapter;Adapter
+M:StockSharp.Messages.Extensions.FindAdapter``1(StockSharp.Messages.IMessageAdapter)/returns;DocStr11161
 M:StockSharp.Messages.Extensions.FindAdapter``1(StockSharp.Messages.IMessageAdapterWrapper)/summary;DocStr11194
 M:StockSharp.Messages.Extensions.FindAdapter``1(StockSharp.Messages.IMessageAdapterWrapper)/typeparam/TAdapter;DocStr2517
 M:StockSharp.Messages.Extensions.FindAdapter``1(StockSharp.Messages.IMessageAdapterWrapper)/param/wrapper;DocStr8845

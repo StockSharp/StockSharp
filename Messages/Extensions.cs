@@ -1259,6 +1259,26 @@ namespace StockSharp.Messages
 		/// Find adapter by the specified type.
 		/// </summary>
 		/// <typeparam name="TAdapter">The adapter type.</typeparam>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Found adapter or <see langword="null"/>.</returns>
+		public static TAdapter FindAdapter<TAdapter>(this IMessageAdapter adapter)
+			where TAdapter : IMessageAdapter
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			if (adapter is TAdapter t)
+				return t;
+			else if (adapter is IMessageAdapterWrapper wrapper)
+				return wrapper.FindAdapter<TAdapter>();
+
+			return default;
+		}
+
+		/// <summary>
+		/// Find adapter by the specified type.
+		/// </summary>
+		/// <typeparam name="TAdapter">The adapter type.</typeparam>
 		/// <param name="wrapper">Wrapping based adapter.</param>
 		/// <returns>Found adapter or <see langword="null"/>.</returns>
 		public static TAdapter FindAdapter<TAdapter>(this IMessageAdapterWrapper wrapper)
@@ -1273,7 +1293,7 @@ namespace StockSharp.Messages
 			if (wrapper.InnerAdapter is IMessageAdapterWrapper w)
 				return w.FindAdapter<TAdapter>();
 
-			return default(TAdapter);
+			return default;
 		}
 	}
 }
