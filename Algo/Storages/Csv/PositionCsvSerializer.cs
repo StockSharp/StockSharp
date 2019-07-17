@@ -1,5 +1,6 @@
 namespace StockSharp.Algo.Storages.Csv
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
@@ -41,9 +42,17 @@ namespace StockSharp.Algo.Storages.Csv
 				data.LimitType.To<string>(),
 			});
 
-			foreach (var types in _types)
+			foreach (var type in _types)
 			{
-				row.Add(data.Changes.TryGetValue(types)?.ToString());
+				var value = data.Changes.TryGetValue(type);
+
+				if (type == PositionChangeTypes.ExpirationDate)
+				{
+					var date = (DateTimeOffset?)value;
+					row.AddRange(new[] { date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz") });
+				}
+				else
+					row.Add(value?.ToString());
 			}
 
 			writer.WriteRow(row);
@@ -83,6 +92,21 @@ namespace StockSharp.Algo.Storages.Csv
 
 						if (state != null)
 							posMsg.Changes.Add(type, state);
+
+						break;
+					}
+					case PositionChangeTypes.ExpirationDate:
+					{
+						var dtStr = reader.ReadString();
+
+						if (dtStr != null)
+						{
+							posMsg.Changes.Add(type, (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))));
+						}
+						else
+						{
+							reader.Skip(2);
+						}
 
 						break;
 					}
