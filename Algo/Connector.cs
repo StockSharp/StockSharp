@@ -1424,8 +1424,8 @@ namespace StockSharp.Algo
 		public virtual void ClearCache()
 		{
 			_entityCache.Clear();
-			_prevTime = default(DateTimeOffset);
-			_currentTime = default(DateTimeOffset);
+			_prevTime = default;
+			_currentTime = default;
 
 			_securityLookups.Clear();
 			_boardLookups.Clear();

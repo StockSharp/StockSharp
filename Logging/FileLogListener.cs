@@ -286,7 +286,7 @@ namespace StockSharp.Logging
 		{
 			// pyh: эмуляция года данных происходит за 5 секунд. На выходе 365 файлов лога? Бред.
 			//var date = SeparateByDates != SeparateByDateModes.None ? message.Time.Date : default(DateTime);
-			var date = SeparateByDates != SeparateByDateModes.None ? DateTime.Today : default(DateTime);
+			var date = SeparateByDates != SeparateByDateModes.None ? DateTime.Today : default;
 
 			string prevFileName = null;
 			StreamWriter prevWriter = null;

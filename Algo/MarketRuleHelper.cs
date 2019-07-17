@@ -2554,7 +2554,7 @@ namespace StockSharp.Algo
 			private readonly List<IMarketRule> _innerRules = new List<IMarketRule>();
 
 			protected BaseComplexRule(IEnumerable<IMarketRule> innerRules)
-				: base(default(TToken))
+				: base(default)
 			{
 				if (innerRules == null)
 					throw new ArgumentNullException(nameof(innerRules));

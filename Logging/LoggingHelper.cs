@@ -276,7 +276,7 @@ namespace StockSharp.Logging
 			catch (Exception ex)
 			{
 				ex.LogError();
-				return default(T);
+				return default;
 			}
 		}
 

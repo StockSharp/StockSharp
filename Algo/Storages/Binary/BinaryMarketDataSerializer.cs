@@ -392,7 +392,7 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				Index = -1;
 				MetaInfo = null;
-				Previous = Current = default(TData);
+				Previous = Current = default;
 				PartSize = 0;
 
 				if (Reader != null)

@@ -196,7 +196,7 @@ namespace StockSharp.Algo
 						MoveNext();
 					}
 
-					return default(SecurityId);
+					return default;
 				}
 			}
 

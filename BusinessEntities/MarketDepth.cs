@@ -427,7 +427,7 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// The old quotes will be removed from the book.
 		/// </remarks>
-		public MarketDepth Update(IEnumerable<Quote> quotes, DateTimeOffset lastChangeTime = default(DateTimeOffset))
+		public MarketDepth Update(IEnumerable<Quote> quotes, DateTimeOffset lastChangeTime = default)
 		{
 			if (quotes == null)
 				throw new ArgumentNullException(nameof(quotes));
@@ -457,7 +457,7 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// The old quotes will be removed from the book.
 		/// </remarks>
-		public MarketDepth Update(IEnumerable<Quote> bids, IEnumerable<Quote> asks, bool isSorted = false, DateTimeOffset lastChangeTime = default(DateTimeOffset))
+		public MarketDepth Update(IEnumerable<Quote> bids, IEnumerable<Quote> asks, bool isSorted = false, DateTimeOffset lastChangeTime = default)
 		{
 			if (bids == null)
 				throw new ArgumentNullException(nameof(bids));
@@ -722,7 +722,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="quote">The quote to remove.</param>
 		/// <param name="lastChangeTime">Order book change time.</param>
-		public void Remove(Quote quote, DateTimeOffset lastChangeTime = default(DateTimeOffset))
+		public void Remove(Quote quote, DateTimeOffset lastChangeTime = default)
 		{
 			if (quote == null)
 				throw new ArgumentNullException(nameof(quote));
@@ -736,7 +736,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="price">Remove the quote for the price.</param>
 		/// <param name="volume">The volume to be deleted. If it is not specified, then all the quote is removed.</param>
 		/// <param name="lastChangeTime">Order book change time.</param>
-		public void Remove(decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default(DateTimeOffset))
+		public void Remove(decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default)
 		{
 			var dir = GetDirection(price);
 
@@ -753,7 +753,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="price">Remove the quote for the price.</param>
 		/// <param name="volume">The volume to be deleted. If it is not specified, then all the quote is removed.</param>
 		/// <param name="lastChangeTime">Order book change time.</param>
-		public void Remove(Sides direction, decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default(DateTimeOffset))
+		public void Remove(Sides direction, decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default)
 		{
 			if (price <= 0)
 				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str488);
@@ -933,7 +933,7 @@ namespace StockSharp.BusinessEntities
 				throw new ArgumentOutOfRangeException(nameof(quote), quote.Volume, LocalizedStrings.Str489);
 		}
 
-		private void UpdateDepthAndTime(DateTimeOffset lastChangeTime = default(DateTimeOffset), bool depthChangedEventNeeded = true)
+		private void UpdateDepthAndTime(DateTimeOffset lastChangeTime = default, bool depthChangedEventNeeded = true)
 		{
 			if (depthChangedEventNeeded)
 			{
@@ -952,7 +952,7 @@ namespace StockSharp.BusinessEntities
 
 		private void UpdateTime(DateTimeOffset lastChangeTime)
 		{
-			if (lastChangeTime != default(DateTimeOffset))
+			if (lastChangeTime != default)
 			{
 				LastChangeTime = lastChangeTime;
 			}

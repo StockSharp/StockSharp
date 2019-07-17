@@ -647,7 +647,7 @@ namespace StockSharp.Algo.History.Hydra
 		/// <inheritdoc />
 		protected override TResult Invoke<TResult>(Func<IRemoteStorage, TResult> handler)
 		{
-			if (_sessionId == default(Guid))
+			if (_sessionId == default)
 				Login();
 
 			try
@@ -667,10 +667,10 @@ namespace StockSharp.Algo.History.Hydra
 		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
-			if (_sessionId != default(Guid))
+			if (_sessionId != default)
 			{
 				Invoke(f => f.Logout(_sessionId));
-				_sessionId = default(Guid);
+				_sessionId = default;
 			}
 
 			base.DisposeManaged();

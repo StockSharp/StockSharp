@@ -263,7 +263,7 @@ namespace StockSharp.Algo
 				OrderStringId = order.StringId,
 				TransactionId = order.TransactionId,
 				OriginalTransactionId = originalTransactionId,
-				SecurityId = order.Security?.ToSecurityId() ?? default(SecurityId),
+				SecurityId = order.Security?.ToSecurityId() ?? default,
 				PortfolioName = order.Portfolio?.Name,
 				Error = fail.Error,
 				ExecutionType = ExecutionTypes.Transaction,

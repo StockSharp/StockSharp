@@ -388,7 +388,7 @@ namespace StockSharp.Messages
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					_prevTime = default(DateTimeOffset);
+					_prevTime = default;
 					_secLookupTimeOut.Clear();
 					_pfLookupTimeOut.Clear();
 					break;

@@ -237,7 +237,7 @@ namespace StockSharp.Algo
 						StopTimer();
 
 						_connectingAttemptCount = 0;
-						_connectionTimeOut = default(TimeSpan);
+						_connectionTimeOut = default;
 						_canSendTime = false;
 						_suppressDisconnectError = false;
 					}
