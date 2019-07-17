@@ -29,7 +29,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// Get strategy url.
 		/// </summary>
-		/// <param name="robotId">Strategy id.</param>
+		/// <param name="robotId">The strategy identifier.</param>
 		/// <returns>Localized url.</returns>
 		public static string GetRobotLink(long robotId)
 		{
@@ -39,7 +39,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// Get file url.
 		/// </summary>
-		/// <param name="fileId">File id.</param>
+		/// <param name="fileId">File ID.</param>
 		/// <returns>Localized url.</returns>
 		public static string GetFileLink(object fileId)
 		{

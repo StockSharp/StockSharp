@@ -13957,7 +13957,7 @@ DocStr9222;A format string;Форматирующая строка
 DocStr9223;Types of {0} required to cancel orders;Типы {0} необходимые для отмены заявок
 DocStr9224;Non filled balance;Неисполненный баланс
 DocStr9225;Initial volume;Первоначальный объем
-DocStr9226;Independed scheme;Независимая схема
+DocStr9226;Independent scheme;Независимая схема
 DocStr9227;Update {0} for composition elements;Обновление {0} для композитных элементов
 DocStr9228;The current error;Текущая ошибка
 DocStr9229;The action with the element at error;Действие с элементом при ошибке
@@ -15772,3 +15772,19 @@ DocStr11250;To handle the incoming {0};Обработать входящее {0}
 DocStr11251;The method is called at the processing of the new incoming {0};Метод вызывается при обработке нового входящего {0}
 DocStr11252;To handle the current step processed for the diagram element;Обработать текущий шаг элемента диаграммы
 DocStr11253;The method is called at current step processed for the diagram element;Метод вызывается на текущем шаге элемента диаграммы
+DocStr11254;Community urls;Адреса сообщества
+DocStr11255;Get website url;Получить адрес сайта
+DocStr11256;Get user url;Получить адрес пользователя
+DocStr11257;Get strategy url;Получить адрес стратегии
+DocStr11259;Get file url;Получить адрес файла
+DocStr11261;Get open account url;Получить адрес на открытие счёта
+DocStr11262;Get sign up url;Получить адрес на регистрацию
+DocStr11263;Get forgot password url;Получить адрес на восстановление пароля
+DocStr11264;System paths;Системные пути
+DocStr11265;App title;Название приложения
+DocStr11266;The path to directory with all applications;Путь к директории со времи приложениями
+DocStr11267;The type of source values;Тип исходных значений
+DocStr11268;Download data;Скачать данные
+DocStr11269;Result message;Результирующие сообщение
+DocStr11270;Request;Запрос
+DocStr11271;Downloaded data;Скаченные данные

@@ -21,7 +21,7 @@
     </member>
     <member name="F:StockSharp.Xaml.Diagram.SchemeTypes.Independent">
       <summary>
-            Independed scheme.
+            Independent scheme.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.CompositionDiagramElement">
