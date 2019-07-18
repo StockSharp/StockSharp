@@ -173,6 +173,7 @@ StockSharp API Change log
 * (feature) Configuration.Adapters project added.
 * (feature) Configure method moved from Configuration to Xaml.
 * (feature) LicensePanel. Moved from Licensing to Xaml.
+* (bug) PortfolioPnLManager. Fix processing trades with string id.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

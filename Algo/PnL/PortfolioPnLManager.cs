@@ -32,7 +32,8 @@ namespace StockSharp.Algo.PnL
 	/// </summary>
 	public class PortfolioPnLManager : IPnLManager
 	{
-		private readonly Dictionary<long, PnLInfo> _tradeInfos = new Dictionary<long, PnLInfo>();
+		private readonly Dictionary<string, PnLInfo> _tradeByStringIdInfos = new Dictionary<string, PnLInfo>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<long, PnLInfo> _tradeByIdInfos = new Dictionary<long, PnLInfo>();
 		private readonly CachedSynchronizedDictionary<SecurityId, PnLQueue> _securityPnLs = new CachedSynchronizedDictionary<SecurityId, PnLQueue>();
 
 		/// <summary>
@@ -65,6 +66,9 @@ namespace StockSharp.Algo.PnL
 		{
 			_realizedPnL = 0;
 			_securityPnLs.Clear();
+
+			_tradeByStringIdInfos.Clear();
+			_tradeByIdInfos.Clear();
 		}
 
 		PnLInfo IPnLManager.ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios)
@@ -86,19 +90,39 @@ namespace StockSharp.Algo.PnL
 			if (trade == null)
 				throw new ArgumentNullException(nameof(trade));
 
-			var tradeId = trade.GetTradeId();
+			info = null;
 
-			if (_tradeInfos.TryGetValue(tradeId, out info))
-				return false;
+			var tradeId = trade.TradeId;
+			var tradeStringId = trade.TradeStringId;
 
-			var queue = _securityPnLs.SafeAdd(trade.SecurityId, security => new PnLQueue(security));
+			if (tradeId != null)
+			{
+				if (_tradeByIdInfos.TryGetValue(tradeId.Value, out info))
+					return false;
 
-			info = queue.Process(trade);
+				var queue = _securityPnLs.SafeAdd(trade.SecurityId, security => new PnLQueue(security));
 
-			_tradeInfos.Add(tradeId, info);
-			_realizedPnL += info.PnL;
+				info = queue.Process(trade);
 
-			return true;
+				_tradeByIdInfos.Add(tradeId.Value, info);
+				_realizedPnL += info.PnL;
+				return true;
+			}
+			else if (!tradeStringId.IsEmpty())
+			{
+				if (_tradeByStringIdInfos.TryGetValue(tradeStringId, out info))
+					return false;
+
+				var queue = _securityPnLs.SafeAdd(trade.SecurityId, security => new PnLQueue(security));
+
+				info = queue.Process(trade);
+
+				_tradeByStringIdInfos.Add(tradeStringId, info);
+				_realizedPnL += info.PnL;
+				return true;
+			}
+
+			return false;
 		}
 
 		/// <summary>
