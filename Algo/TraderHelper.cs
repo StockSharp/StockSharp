@@ -4782,7 +4782,7 @@ namespace StockSharp.Algo
 			connector.LookupBoards(new ExchangeBoard(), offlineMode: offlineMode);
 			connector.LookupSecurities(LookupAllCriteria, offlineMode: offlineMode);
 			connector.LookupPortfolios(new Portfolio(), offlineMode: offlineMode);
-			connector.LookupOrders(new Order());
+			connector.LookupOrders(new Order(), offlineMode: offlineMode);
 		}
 
 		/// <summary>

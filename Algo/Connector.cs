@@ -708,7 +708,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void LookupOrders(Order criteria, IMessageAdapter adapter = null)
+		public void LookupOrders(Order criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
 
@@ -716,6 +716,7 @@ namespace StockSharp.Algo
 			{
 				TransactionId = transactionId,
 				Adapter = adapter,
+				OfflineMode = offlineMode,
 			});
 		}
 
