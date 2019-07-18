@@ -1724,7 +1724,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public virtual void Start()
 		{
-			GetCurrentMessageSender().SendOutMessage(new StrategyChangeStateMessage(this, ProcessStates.Started));
+			SafeGetConnector().SendOutMessage(new StrategyChangeStateMessage(this, ProcessStates.Started));
 		}
 
 		/// <summary>
@@ -1732,12 +1732,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public virtual void Stop()
 		{
-			GetCurrentMessageSender().SendOutMessage(new StrategyChangeStateMessage(this, ProcessStates.Stopping));
-		}
-
-		private IMessageSender GetCurrentMessageSender()
-		{
-			return this.GetMessageSender() ?? SafeGetConnector();
+			SafeGetConnector().SendOutMessage(new StrategyChangeStateMessage(this, ProcessStates.Stopping));
 		}
 
 		/// <summary>
