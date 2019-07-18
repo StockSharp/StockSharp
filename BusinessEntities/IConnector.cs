@@ -27,7 +27,7 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// The main interface providing the connection to the trading systems.
 	/// </summary>
-	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ITransactionProvider, ISecurityProvider, INewsProvider, IMessageSender
+	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ITransactionProvider, ISecurityProvider, INewsProvider, IMessageChannel
 	{
 		/// <summary>
 		/// Own trades received.
@@ -340,5 +340,11 @@ namespace StockSharp.BusinessEntities
 		/// The order was initialized and ready to send for registration.
 		/// </summary>
 		event Action<Order> OrderInitialized;
+
+		/// <summary>
+		/// Send outgoing message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		void SendOutMessage(Message message);
 	}
 }

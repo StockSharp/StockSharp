@@ -447,8 +447,18 @@ namespace StockSharp.Algo
 			set => Adapter.SlippageManager = value;
 		}
 
+		private ConnectionStates _connectionState;
+
 		/// <inheritdoc />
-		public ConnectionStates ConnectionState { get; private set; }
+		public ConnectionStates ConnectionState
+		{
+			get => _connectionState;
+			private set
+			{
+				_connectionState = value;
+				_stateChanged?.Invoke();
+			}
+		}
 
 		///// <summary>
 		///// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction. The default is enabled.
@@ -554,7 +564,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void Connect()
 		{
-			this.AddInfoLog("Connect");
+			this.AddInfoLog(nameof(Connect));
 
 			try
 			{
@@ -593,7 +603,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void Disconnect()
 		{
-			this.AddInfoLog("Disconnect");
+			this.AddInfoLog(nameof(Disconnect));
 
 			if (ConnectionState != ConnectionStates.Connected)
 			{

@@ -22,6 +22,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using MoreLinq;
 
@@ -1954,6 +1955,44 @@ namespace StockSharp.Algo
 			var series = ProcessCandleSeriesStopped(message.OriginalTransactionId);
 			var security = series?.Security ?? _subscriptionManager.TryGetSecurity(message.OriginalTransactionId);
 			RaiseMarketDataSubscriptionFinished(security, message);
+		}
+
+		private Action<Message> _newOutMessage;
+
+		event Action<Message> IMessageChannel.NewOutMessage
+		{
+			add => _newOutMessage += value;
+			remove => _newOutMessage -= value;
+		}
+
+		bool IMessageChannel.IsOpened => ConnectionState == ConnectionStates.Connected;
+
+		private Action _stateChanged;
+
+		event Action IMessageChannel.StateChanged
+		{
+			add => _stateChanged += value;
+			remove => _stateChanged -= value;
+		}
+
+		void IMessageChannel.Open()
+		{
+			Connect();
+		}
+
+		void IMessageChannel.Close()
+		{
+			Disconnect();
+		}
+
+		IMessageChannel ICloneable<IMessageChannel>.Clone()
+		{
+			return this.Clone();
+		}
+
+		object ICloneable.Clone()
+		{
+			return this.Clone();
 		}
 	}
 }

@@ -616,12 +616,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.NewMessage"/>.
+		/// To call the event <see cref="NewMessage"/>.
 		/// </summary>
 		/// <param name="message">A new message.</param>
 		private void RaiseNewMessage(Message message)
 		{
 			NewMessage?.Invoke(message);
+			_newOutMessage?.Invoke(message);
 		}
 
 		private void RaiseValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
