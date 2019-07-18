@@ -49826,5 +49826,15 @@ namespace StockSharp.Localization
 		/// Sign in
 		/// </summary>
 		public static string SignIn => GetString(SignInKey);
+
+		/// <summary>
+		/// Copyright
+		/// </summary>
+		public const string CopyrightKey = nameof(Copyright);
+
+		/// <summary>
+		/// Copyright
+		/// </summary>
+		public static string Copyright => GetString(CopyrightKey);
 	}
 }

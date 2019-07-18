@@ -5015,6 +5015,7 @@ Pending;Pending;Ожидание
 OrderNotPassed;Order not passed.;Заявка не передана.
 TimeOut;Time out;Тайм-аут
 SignIn;Sign in;Войти
+Copyright;Copyright;Авторское право
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
