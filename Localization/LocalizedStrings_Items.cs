@@ -49836,5 +49836,15 @@ namespace StockSharp.Localization
 		/// Copyright
 		/// </summary>
 		public static string Copyright => GetString(CopyrightKey);
+
+		/// <summary>
+		/// Subscription '{0}' not supported by established connection.
+		/// </summary>
+		public const string SubscriptionNotSupportedKey = nameof(SubscriptionNotSupported);
+
+		/// <summary>
+		/// Subscription '{0}' not supported by established connection.
+		/// </summary>
+		public static string SubscriptionNotSupported => GetString(SubscriptionNotSupportedKey);
 	}
 }

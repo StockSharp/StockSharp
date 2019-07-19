@@ -175,6 +175,7 @@ StockSharp API Change log
 * (feature) LicensePanel. Moved from Licensing to Xaml.
 * (bug) PortfolioPnLManager. Fix processing trades with string id.
 * (feature) IMarketDataProvider. MarketDataSubscriptionFailed2, MarketDataUnSubscriptionFailed2 events added.
+* (feature) Subscriptions. Interpret non supported and non exist subscriptions as warning.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
