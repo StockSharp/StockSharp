@@ -1295,5 +1295,15 @@ namespace StockSharp.Messages
 
 			return default;
 		}
+
+		/// <summary>
+		/// Determines whether the reply contains an error <see cref="MarketDataMessage.Error"/> or has <see cref="MarketDataMessage.IsNotSupported"/>.
+		/// </summary>
+		/// <param name="message">Reply.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsOk(this MarketDataMessage message)
+		{
+			return message.Error == null && !message.IsNotSupported;
+		}
 	}
 }

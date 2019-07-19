@@ -179,7 +179,7 @@ namespace StockSharp.Algo
 					{
 						if (originalMsg.IsSubscribe)
 						{
-							if (response.Error == null)
+							if (response.IsOk())
 								_subscribers.SafeAdd(originalMsg.DataType).Add(subscriber);
 							else
 							{

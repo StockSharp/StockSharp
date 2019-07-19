@@ -477,9 +477,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (!_seriesByTransactionId.TryGetValue(message.OriginalTransactionId, out var series))
 				return false;
 
-			var isOk = !message.IsNotSupported && message.Error == null;
-
-			if (isOk)
+			if (message.IsOk())
 			{
 				if (series.Current.TransactionId == message.OriginalTransactionId)
 					RaiseNewOutMessage(message);
@@ -510,7 +508,7 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				RemoveSeries(series);
 
-				if (response != null && (response.Error != null || response.IsNotSupported))
+				if (response != null && !response.IsOk())
 				{
 					response = (MarketDataMessage)response.Clone();
 					response.OriginalTransactionId = original.TransactionId;
