@@ -134,6 +134,13 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataSubscriptionFailed2
+		{
+			add => SafeGetConnector().MarketDataSubscriptionFailed2 += value;
+			remove => SafeGetConnector().MarketDataSubscriptionFailed2 -= value;
+		}
+
+		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded
 		{
 			add => SafeGetConnector().MarketDataUnSubscriptionSucceeded += value;
@@ -145,6 +152,13 @@ namespace StockSharp.Algo.Strategies
 		{
 			add => SafeGetConnector().MarketDataUnSubscriptionFailed += value;
 			remove => SafeGetConnector().MarketDataUnSubscriptionFailed -= value;
+		}
+
+		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataUnSubscriptionFailed2
+		{
+			add => SafeGetConnector().MarketDataUnSubscriptionFailed2 += value;
+			remove => SafeGetConnector().MarketDataUnSubscriptionFailed2 -= value;
 		}
 
 		/// <inheritdoc />

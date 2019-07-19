@@ -123,6 +123,11 @@ namespace StockSharp.BusinessEntities
 		event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
 
 		/// <summary>
+		/// Error subscription market-data.
+		/// </summary>
+		event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataSubscriptionFailed2;
+
+		/// <summary>
 		/// Successful unsubscription market-data.
 		/// </summary>
 		event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
@@ -131,6 +136,11 @@ namespace StockSharp.BusinessEntities
 		/// Error unsubscription market-data.
 		/// </summary>
 		event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
+
+		/// <summary>
+		/// Error unsubscription market-data.
+		/// </summary>
+		event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataUnSubscriptionFailed2;
 
 		/// <summary>
 		/// Subscription market-data finished.

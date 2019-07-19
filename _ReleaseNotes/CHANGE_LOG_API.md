@@ -174,6 +174,7 @@ StockSharp API Change log
 * (feature) Configure method moved from Configuration to Xaml.
 * (feature) LicensePanel. Moved from Licensing to Xaml.
 * (bug) PortfolioPnLManager. Fix processing trades with string id.
+* (feature) IMarketDataProvider. MarketDataSubscriptionFailed2, MarketDataUnSubscriptionFailed2 events added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

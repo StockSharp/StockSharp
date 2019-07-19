@@ -211,10 +211,16 @@ namespace StockSharp.Algo
 		public event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
 
 		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataSubscriptionFailed2;
+
+		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
+
+		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataUnSubscriptionFailed2;
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataFinishedMessage> MarketDataSubscriptionFinished;
@@ -578,10 +584,17 @@ namespace StockSharp.Algo
 			MarketDataSubscriptionSucceeded?.Invoke(security, message);
 		}
 
-		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
+		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage origin, MarketDataMessage reply)
 		{
-			this.AddErrorLog(LocalizedStrings.SubscribedError, security?.Id, message.DataType, error.Message);
-			MarketDataSubscriptionFailed?.Invoke(security, message, error);
+			var error = reply.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(origin));
+
+			if (reply.IsNotSupported)
+				this.AddWarningLog(LocalizedStrings.SubscriptionNotSupported, origin);
+			else
+				this.AddErrorLog(LocalizedStrings.SubscribedError, security?.Id, origin.DataType, error.Message);
+
+			MarketDataSubscriptionFailed?.Invoke(security, origin, error);
+			MarketDataSubscriptionFailed2?.Invoke(security, origin, reply);
 		}
 
 		private void RaiseMarketDataUnSubscriptionSucceeded(Security security, MarketDataMessage message)
@@ -597,10 +610,12 @@ namespace StockSharp.Algo
 			MarketDataUnSubscriptionSucceeded?.Invoke(security, message);
 		}
 
-		private void RaiseMarketDataUnSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
+		private void RaiseMarketDataUnSubscriptionFailed(Security security, MarketDataMessage origin, MarketDataMessage reply)
 		{
-			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security?.Id, message.DataType, error.Message);
-			MarketDataUnSubscriptionFailed?.Invoke(security, message, error);
+			var error = reply.Error ?? new NotSupportedException();
+			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security?.Id, origin.DataType, error.Message);
+			MarketDataUnSubscriptionFailed?.Invoke(security, origin, error);
+			MarketDataUnSubscriptionFailed2?.Invoke(security, origin, reply);
 		}
 
 		private void RaiseMarketDataSubscriptionFinished(Security security, MarketDataFinishedMessage message)

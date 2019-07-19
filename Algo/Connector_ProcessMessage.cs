@@ -774,44 +774,42 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
+		private void ProcessMarketDataMessage(MarketDataMessage replyMsg)
 		{
-			var error = mdMsg.Error;
-
-			var security = _subscriptionManager.ProcessResponse(mdMsg, out var originalMsg, out var unexpectedCancelled);
+			var security = _subscriptionManager.ProcessResponse(replyMsg, out var originalMsg, out var unexpectedCancelled);
 
 			if (security == null && originalMsg?.DataType != MarketDataTypes.News)
 			{
-				if (error != null)
-					RaiseError(error);
+				if (replyMsg.Error != null)
+					RaiseError(replyMsg.Error);
 
 				return;
 			}
 
 			if (originalMsg.IsSubscribe)
 			{
-				if (error == null)
+				if (replyMsg.IsOk())
 					RaiseMarketDataSubscriptionSucceeded(security, originalMsg);
 				else
 				{
 					if (unexpectedCancelled)
 					{
-						RaiseMarketDataUnexpectedCancelled(security, originalMsg, error);
-						ProcessCandleSeriesStopped(mdMsg.OriginalTransactionId);
+						RaiseMarketDataUnexpectedCancelled(security, originalMsg, replyMsg.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)));
+						ProcessCandleSeriesStopped(replyMsg.OriginalTransactionId);
 					}
 					else
-						RaiseMarketDataSubscriptionFailed(security, originalMsg, error);
+						RaiseMarketDataSubscriptionFailed(security, originalMsg, replyMsg);
 				}
 			}
 			else
 			{
-				if (error == null)
+				if (replyMsg.IsOk())
 				{
 					RaiseMarketDataUnSubscriptionSucceeded(security, originalMsg);
 					ProcessCandleSeriesStopped(originalMsg.OriginalTransactionId);
 				}
 				else
-					RaiseMarketDataUnSubscriptionFailed(security, originalMsg, error);
+					RaiseMarketDataUnSubscriptionFailed(security, originalMsg, replyMsg);
 			}
 		}
 
