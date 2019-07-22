@@ -177,6 +177,7 @@ StockSharp API Change log
 * (feature) IMarketDataProvider. MarketDataSubscriptionFailed2, MarketDataUnSubscriptionFailed2 events added.
 * (feature) Subscriptions. Interpret non supported and non exist subscriptions as warning.
 * (feature) Strategy implemented ITransactionProvider interface.
+* (feature) Portfolio. CreateSimulator method added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -182,6 +182,23 @@ namespace StockSharp.BusinessEntities
 		public static Portfolio AnonymousPortfolio { get; } = new Portfolio { Name = LocalizedStrings.Str545 };
 
 		/// <summary>
+		/// Simulator.
+		/// </summary>
+		[Browsable(false)]
+		public bool IsSimulator { get; set; }
+
+		/// <summary>
+		/// Create virtual portfolio for simulation.
+		/// </summary>
+		/// <returns>Simulator.</returns>
+		public static Portfolio CreateSimulator() => new Portfolio
+		{
+			Name = LocalizedStrings.Str1209,
+			BeginValue = 1000000,
+			IsSimulator = true,
+		};
+
+		/// <summary>
 		/// Create a copy of <see cref="Portfolio"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
@@ -208,12 +225,10 @@ namespace StockSharp.BusinessEntities
 			destination.State = State;
 			destination.CommissionMaker = CommissionMaker;
 			destination.CommissionTaker = CommissionTaker;
+			destination.IsSimulator = IsSimulator;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return Name;

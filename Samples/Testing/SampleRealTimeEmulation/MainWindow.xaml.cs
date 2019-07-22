@@ -51,11 +51,7 @@ namespace SampleRealTimeEmulation
 
 		private const string _settingsFile = "connection.xml";
 
-		private readonly Portfolio _emuPf = new Portfolio
-		{
-			Name = LocalizedStrings.Str1209,
-			BeginValue = 1000000
-		};
+		private readonly Portfolio _emuPf = Portfolio.CreateSimulator();
 
 		public MainWindow()
 		{

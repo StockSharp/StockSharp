@@ -107,11 +107,7 @@ namespace SampleHistoryTestingParallel
 			.TryAdd(Level1Fields.MarginSell, 10000m);
 
 			// test portfolio
-			var portfolio = new Portfolio
-			{
-				Name = "test account",
-				BeginValue = 1000000,
-			};
+			var portfolio = Portfolio.CreateSimulator();
 
 			// create backtesting connector
 			var batchEmulation = new BatchEmulation(new[] { security }, new[] { portfolio }, storageRegistry)
