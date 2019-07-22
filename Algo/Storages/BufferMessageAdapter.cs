@@ -568,7 +568,7 @@ namespace StockSharp.Algo.Storages
 				}
 				case MessageTypes.News:
 				{
-					if (CanStore<NewsMessage>(default(SecurityId)))
+					if (CanStore<NewsMessage>(default))
 						_newsBuffer.Add((NewsMessage)message.Clone());
 
 					break;

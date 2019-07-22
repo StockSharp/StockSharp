@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="name">Parameter name.</param>
 		/// <param name="initialValue">The initial value.</param>
 		/// <returns>The strategy parameter.</returns>
-		public static StrategyParam<T> Param<T>(this Strategy strategy, string name, T initialValue = default(T))
+		public static StrategyParam<T> Param<T>(this Strategy strategy, string name, T initialValue = default)
 		{
 			return new StrategyParam<T>(strategy, name, initialValue);
 		}
@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="name">Parameter name.</param>
 		/// <param name="initialValue">The initial value.</param>
 		/// <returns>The strategy parameter.</returns>
-		public static StrategyParam<T> Param<T>(this Strategy strategy, string id, string name, T initialValue = default(T))
+		public static StrategyParam<T> Param<T>(this Strategy strategy, string id, string name, T initialValue = default)
 		{
 			return new StrategyParam<T>(strategy, id, name, initialValue);
 		}
@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="optimizeTo">The To value at optimization.</param>
 		/// <param name="optimizeStep">The Increment value at optimization.</param>
 		/// <returns>The strategy parameter.</returns>
-		public static StrategyParam<T> Optimize<T>(this StrategyParam<T> param, T optimizeFrom = default(T), T optimizeTo = default(T), T optimizeStep = default(T))
+		public static StrategyParam<T> Optimize<T>(this StrategyParam<T> param, T optimizeFrom = default, T optimizeTo = default, T optimizeStep = default)
 		{
 			if (param == null)
 				throw new ArgumentNullException(nameof(param));

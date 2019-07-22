@@ -376,7 +376,7 @@ namespace StockSharp.Algo
 			return null;
 		}
 
-		private SecurityId GetSecurityId(SecurityId securityId) => IsSupportSubscriptionBySecurity ? securityId : default(SecurityId);
+		private SecurityId GetSecurityId(SecurityId securityId) => IsSupportSubscriptionBySecurity ? securityId : default;
 
 		private void ProcessInMarketDataMessage(MarketDataMessage message)
 		{

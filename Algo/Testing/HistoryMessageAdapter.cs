@@ -208,7 +208,7 @@ namespace StockSharp.Algo.Testing
 				{
 					var drive = DriveInternal;
 
-					var dataTypes = drive.GetAvailableDataTypes(default(SecurityId), StorageFormat);
+					var dataTypes = drive.GetAvailableDataTypes(default, StorageFormat);
 
 					_supportedMarketDataTypes = dataTypes
 						.Select(dt => dt.ToMarketDataType())
@@ -268,7 +268,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Reset:
 				{
 					_isSuspended = false;
-					_currentTime = default(DateTimeOffset);
+					_currentTime = default;
 
 					_generators.Clear();
 					_historySources.Clear();
@@ -446,7 +446,7 @@ namespace StockSharp.Algo.Testing
 					return _historySources.TryGetValue(Tuple.Create(s, message.DataType, message.Arg));
 				}
 
-				return GetHistorySource2(message.SecurityId) ?? GetHistorySource2(default(SecurityId));
+				return GetHistorySource2(message.SecurityId) ?? GetHistorySource2(default);
 			}
 
 			Exception error = null;

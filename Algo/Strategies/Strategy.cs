@@ -786,7 +786,7 @@ namespace StockSharp.Algo.Strategies
 						case ProcessStates.Stopped:
 						{
 							TotalWorkingTime += CurrentTime - StartedTime;
-							StartedTime = default(DateTimeOffset);
+							StartedTime = default;
 							LogProcessState(value);
 							OnStopped();
 							break;
@@ -1032,7 +1032,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				var retVal = _totalWorkingTime;
 
-				if (StartedTime != default(DateTimeOffset) && Connector != null)
+				if (StartedTime != default && Connector != null)
 					retVal += CurrentTime - StartedTime;
 
 				return retVal;
@@ -1580,7 +1580,7 @@ namespace StockSharp.Algo.Strategies
 							RaisePositionChanged();
 					}
 
-					if (_firstOrderTime == default(DateTimeOffset))
+					if (_firstOrderTime == default)
 						_firstOrderTime = order.Time;
 
 					_lastOrderTime = order.Time;
@@ -1789,7 +1789,7 @@ namespace StockSharp.Algo.Strategies
 			ErrorState = LogLevels.Info;
 			ErrorCount = 0;
 
-			_firstOrderTime = _lastOrderTime = _lastPnlRefreshTime = _prevTradeDate = default(DateTimeOffset);
+			_firstOrderTime = _lastOrderTime = _lastPnlRefreshTime = _prevTradeDate = default;
 			_idStr = null;
 
 			_positions.Clear();

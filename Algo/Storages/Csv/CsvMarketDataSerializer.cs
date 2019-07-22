@@ -121,7 +121,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="encoding">Encoding.</param>
 		protected CsvMarketDataSerializer(Encoding encoding = null)
-			: this(default(SecurityId), encoding)
+			: this(default, encoding)
 		{
 		}
 

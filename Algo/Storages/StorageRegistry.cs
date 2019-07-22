@@ -414,7 +414,7 @@ namespace StockSharp.Algo.Storages
 		private sealed class NewsStorage : ConvertableStorage<NewsMessage, News, VoidType>
 		{
 			public NewsStorage(StorageRegistry parent, Security security, SecurityId securityId, IMarketDataSerializer<NewsMessage> serializer, IMarketDataStorageDrive drive)
-				: base(parent, security, securityId, null, m => m.ServerTime, m => default(SecurityId), m => null, serializer, drive)
+				: base(parent, security, securityId, null, m => m.ServerTime, m => default, m => null, serializer, drive)
 			{
 			}
 
