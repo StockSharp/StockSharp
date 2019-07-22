@@ -176,6 +176,7 @@ StockSharp API Change log
 * (bug) PortfolioPnLManager. Fix processing trades with string id.
 * (feature) IMarketDataProvider. MarketDataSubscriptionFailed2, MarketDataUnSubscriptionFailed2 events added.
 * (feature) Subscriptions. Interpret non supported and non exist subscriptions as warning.
+* (feature) Strategy implemented ITransactionProvider interface.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
