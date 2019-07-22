@@ -432,7 +432,7 @@ namespace SamplePerformance
 		{
 		}
 
-		Guid IIndicator.Id { get; } = default(Guid);
+		Guid IIndicator.Id { get; } = default;
 		public string Name { get; set; }
 		bool IIndicator.IsFormed => true;
 		IIndicatorContainer IIndicator.Container { get; } = null;

@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Storages
 	{
 		private readonly SynchronizedDictionary<string, PairSet<SecurityId, SecurityId>> _mappings = new SynchronizedDictionary<string, PairSet<SecurityId, SecurityId>>(StringComparer.InvariantCultureIgnoreCase);
 
-		private event Action<string, SecurityIdMapping> _changed;
+		private Action<string, SecurityIdMapping> _changed;
 
 		event Action<string, SecurityIdMapping> ISecurityMappingStorage.Changed
 		{
