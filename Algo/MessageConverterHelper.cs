@@ -692,7 +692,7 @@ namespace StockSharp.Algo
 			return new PortfolioChangeMessage
 			{
 				PortfolioName = portfolio.Name,
-				BoardCode = portfolio.Board == null ? null : portfolio.Board.Code,
+				BoardCode = portfolio.Board?.Code,
 				LocalTime = portfolio.LocalTime,
 				ServerTime = portfolio.LastChangeTime,
 				ClientCode = portfolio.ClientCode,
@@ -1410,7 +1410,7 @@ namespace StockSharp.Algo
 			// иногда в Security.Code может быть записано неправильное, и необходимо опираться на Security.Id
 			if (!security.Id.IsEmpty())
 			{
-				var id = (idGenerator ?? new SecurityIdGenerator()).Split(security.Id);
+				var id = GetGenerator(idGenerator).Split(security.Id);
 
 				secCode = id.SecurityCode;
 

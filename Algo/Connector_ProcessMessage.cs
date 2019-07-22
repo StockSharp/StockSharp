@@ -1487,7 +1487,7 @@ namespace StockSharp.Algo
 					RaiseSecurityChanged(security);
 
 					// стаканы по ALL обновляют BestXXX по конкретным инструментам
-					if (security.Board.Code == AssociatedBoardCode)
+					if (security.Board?.Code == AssociatedBoardCode)
 					{
 						var changedSecurities = new Dictionary<Security, RefPair<bool, bool>>();
 
