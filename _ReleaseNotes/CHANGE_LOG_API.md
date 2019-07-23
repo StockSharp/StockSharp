@@ -183,6 +183,7 @@ StockSharp API Change log
 * (feature) SampleSync removed as obsolete.
 * (feature) Portfolio. InternalId added.
 * (feature) Connector. CandleSeriesError event added.
+* (feature) IMarketDataProvider. Added adapter parameter to subscription methods.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

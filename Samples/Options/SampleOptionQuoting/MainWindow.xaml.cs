@@ -277,8 +277,7 @@ namespace SampleOptionQuoting
 				throw new NotSupportedException();
 			}
 
-			void IMarketDataProvider.RegisterMarketDepth(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom,
-				int? maxDepth)
+			void IMarketDataProvider.RegisterMarketDepth(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter)
 			{
 				throw new NotSupportedException();
 			}
@@ -298,7 +297,7 @@ namespace SampleOptionQuoting
 				throw new NotSupportedException();
 			}
 
-			void IMarketDataProvider.RegisterTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom)
+			void IMarketDataProvider.RegisterTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
 			{
 				throw new NotSupportedException();
 			}
@@ -308,7 +307,7 @@ namespace SampleOptionQuoting
 				throw new NotSupportedException();
 			}
 
-			void IMarketDataProvider.RegisterSecurity(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom)
+			void IMarketDataProvider.RegisterSecurity(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
 			{
 				throw new NotSupportedException();
 			}
@@ -318,7 +317,7 @@ namespace SampleOptionQuoting
 				throw new NotSupportedException();
 			}
 
-			void IMarketDataProvider.RegisterOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count)
+			void IMarketDataProvider.RegisterOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 			{
 				throw new NotSupportedException();
 			}
@@ -328,7 +327,7 @@ namespace SampleOptionQuoting
 				throw new NotSupportedException();
 			}
 
-			void IMarketDataProvider.RegisterNews()
+			void IMarketDataProvider.RegisterNews(IMessageAdapter adapter)
 			{
 				throw new NotSupportedException();
 			}
@@ -338,7 +337,7 @@ namespace SampleOptionQuoting
 				throw new NotSupportedException();
 			}
 
-			void IMarketDataProvider.SubscribeBoard(ExchangeBoard board)
+			void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter)
 			{
 				throw new NotSupportedException();
 			}

@@ -254,7 +254,7 @@ namespace StockSharp.Algo
 			_subscriptionManager.ProcessRequest(security, message, false);
 		}
 
-		private void SubscribeMarketData(Security security, MarketDataTypes type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null)
+		private void SubscribeMarketData(Security security, MarketDataTypes type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null, IMessageAdapter adapter = null)
 		{
 			SubscribeMarketData(security, new MarketDataMessage
 			{
@@ -267,6 +267,7 @@ namespace StockSharp.Algo
 				BuildFrom = buildFrom,
 				BuildField = buildField,
 				MaxDepth = maxDepth,
+				Adapter = adapter
 			});
 		}
 
@@ -280,9 +281,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null)
+		public void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.Level1, from, to, count, buildMode, buildFrom);
+			SubscribeMarketData(security, MarketDataTypes.Level1, from, to, count, buildMode, buildFrom, adapter: adapter);
 		}
 
 		/// <inheritdoc />
@@ -292,9 +293,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null)
+		public void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.MarketDepth, from, to, count, buildMode, buildFrom, null, maxDepth);
+			SubscribeMarketData(security, MarketDataTypes.MarketDepth, from, to, count, buildMode, buildFrom, null, maxDepth, adapter);
 		}
 
 		/// <inheritdoc />
@@ -330,9 +331,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null)
+		public void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.Trades, from, to, count, buildMode, buildFrom);
+			SubscribeMarketData(security, MarketDataTypes.Trades, from, to, count, buildMode, buildFrom, adapter: adapter);
 		}
 
 		/// <inheritdoc />
@@ -382,9 +383,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null)
+		public void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.OrderLog, from, to, count);
+			SubscribeMarketData(security, MarketDataTypes.OrderLog, from, to, count, adapter: adapter);
 		}
 
 		/// <inheritdoc />
@@ -394,7 +395,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterNews()
+		public void RegisterNews(IMessageAdapter adapter = null)
 		{
 			OnRegisterNews();
 		}
@@ -402,9 +403,9 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Subscribe on news.
 		/// </summary>
-		protected virtual void OnRegisterNews()
+		protected virtual void OnRegisterNews(IMessageAdapter adapter = null)
 		{
-			SubscribeMarketData(null, MarketDataTypes.News);
+			SubscribeMarketData(null, MarketDataTypes.News, adapter: adapter);
 		}
 
 		/// <inheritdoc />
@@ -414,7 +415,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void SubscribeBoard(ExchangeBoard board)
+		public void SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter = null)
 		{
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
@@ -424,6 +425,7 @@ namespace StockSharp.Algo
 				IsSubscribe = true,
 				BoardCode = board.Code,
 				TransactionId = TransactionIdGenerator.GetNextId(),
+				Adapter = adapter,
 			});
 		}
 
@@ -442,7 +444,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public virtual void RequestNewsStory(News news)
+		public virtual void RequestNewsStory(News news, IMessageAdapter adapter = null)
 		{
 			if (news == null)
 				throw new ArgumentNullException(nameof(news));
@@ -453,6 +455,7 @@ namespace StockSharp.Algo
 				DataType = MarketDataTypes.News,
 				IsSubscribe = true,
 				NewsId = news.Id.To<string>(),
+				Adapter = adapter,
 			});
 		}
 
@@ -473,8 +476,9 @@ namespace StockSharp.Algo
 		/// <param name="count">Candles count.</param>
 		/// <param name="transactionId">Transaction ID.</param>
 		/// <param name="extensionInfo">Extended information.</param>
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		public virtual void SubscribeCandles(CandleSeries series, DateTimeOffset? from = null, DateTimeOffset? to = null,
-			long? count = null, long? transactionId = null, IDictionary<string, object> extensionInfo = null)
+			long? count = null, long? transactionId = null, IDictionary<string, object> extensionInfo = null, IMessageAdapter adapter = null)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
@@ -482,6 +486,7 @@ namespace StockSharp.Algo
 			var mdMsg = series.ToMarketDataMessage(true, from, to, count);
 			mdMsg.TransactionId = transactionId ?? TransactionIdGenerator.GetNextId();
 			mdMsg.ExtensionInfo = extensionInfo;
+			mdMsg.Adapter = adapter;
 
 			_entityCache.CreateCandleSeries(mdMsg, series);
 
