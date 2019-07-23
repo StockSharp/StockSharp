@@ -64,6 +64,11 @@ E:StockSharp.Xaml.BuySellGrid.PanelAdded/summary;DocStr10053
 E:StockSharp.Xaml.BuySellGrid.PanelRemoved/summary;DocStr10052
 P:StockSharp.Xaml.BuySellGrid.Panels/summary;DocStr10070
 M:StockSharp.Xaml.BuySellGrid.ClearPanels/summary;DocStr10054
+M:StockSharp.Xaml.BuySellGrid.AddPanel(StockSharp.BusinessEntities.Security)/summary;XamlStr143
+M:StockSharp.Xaml.BuySellGrid.AddPanel(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
+M:StockSharp.Xaml.BuySellGrid.AddPanel(StockSharp.BusinessEntities.Security)/returns;DocStr10055
+M:StockSharp.Xaml.BuySellGrid.RemovePanel(StockSharp.Xaml.BuySellPanel)/summary;DocStr11276
+M:StockSharp.Xaml.BuySellGrid.RemovePanel(StockSharp.Xaml.BuySellPanel)/param/panel;DocStr10055
 M:StockSharp.Xaml.BuySellGrid.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.BuySellGrid.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.BuySellGrid.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -1172,8 +1177,10 @@ E:StockSharp.Xaml.GuiConnector`1.LookupPortfoliosResult/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.LookupPortfoliosResult2/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionSucceeded/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFailed/inheritdoc;DocStr8459
+E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFailed2/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionSucceeded/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionFailed/inheritdoc;DocStr8459
+E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionFailed2/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFinished/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MarketDataUnexpectedCancelled/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.SessionStateChanged/inheritdoc;DocStr8459
@@ -1229,7 +1236,7 @@ M:StockSharp.Xaml.GuiConnector`1.LookupBoards(StockSharp.BusinessEntities.Exchan
 M:StockSharp.Xaml.GuiConnector`1.LookupBoards(StockSharp.Messages.BoardLookupMessage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.Messages.PortfolioLookupMessage)/inheritdoc;DocStr8459
-M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.BusinessEntities.Order,StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.BusinessEntities.Order,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.Messages.OrderStatusMessage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.GetSecurity(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.GetPortfolio(System.String)/inheritdoc;DocStr8459
@@ -1253,7 +1260,12 @@ M:StockSharp.Xaml.GuiConnector`1.UnRegisterNews/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.UnSubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.SendOutMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+P:StockSharp.Xaml.GuiConnector`1.IsOpened/inheritdoc;DocStr8459
+E:StockSharp.Xaml.GuiConnector`1.StateChanged/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.Open/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.Close/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+E:StockSharp.Xaml.GuiConnector`1.NewOutMessage/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.RequestNewsStory(StockSharp.BusinessEntities.News)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.RegisterOrderLog(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterOrderLog(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
@@ -1268,6 +1280,7 @@ M:StockSharp.Xaml.GuiConnector`1.GetSecurityValue(StockSharp.BusinessEntities.Se
 M:StockSharp.Xaml.GuiConnector`1.GetLevel1Fields(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.Lookup(StockSharp.Messages.SecurityLookupMessage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.DisposeManaged/summary;DocStr7
+M:StockSharp.Xaml.GuiConnector`1.Clone/inheritdoc;DocStr8459
 T:StockSharp.Xaml.LogControl/summary;DocStr8344
 M:StockSharp.Xaml.LogControl.#ctor/summary;DocStr1
 F:StockSharp.Xaml.LogControl.AutoScrollProperty/summary;DocStr29

@@ -327,6 +327,19 @@
             Remove all <see cref="T:StockSharp.Xaml.BuySellPanel" />.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.BuySellGrid.AddPanel(StockSharp.BusinessEntities.Security)">
+      <summary>
+            Add panel.
+            </summary>
+      <param name="security">Security.</param>
+      <returns>Buy/sell operations panel.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.BuySellGrid.RemovePanel(StockSharp.Xaml.BuySellPanel)">
+      <summary>
+            Remove panel.
+            </summary>
+      <param name="panel">Buy/sell operations panel.</param>
+    </member>
     <member name="M:StockSharp.Xaml.BuySellGrid.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
@@ -5315,10 +5328,16 @@
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFailed">
       <inheritdoc />
     </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFailed2">
+      <inheritdoc />
+    </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionSucceeded">
       <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionFailed">
+      <inheritdoc />
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionFailed2">
       <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFinished">
@@ -5486,7 +5505,7 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.Messages.PortfolioLookupMessage)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.BusinessEntities.Order,StockSharp.Messages.IMessageAdapter)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.BusinessEntities.Order,StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageOfflineModes)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.LookupOrders(StockSharp.Messages.OrderStatusMessage)">
@@ -5558,7 +5577,22 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.SendOutMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Xaml.GuiConnector`1.IsOpened">
+      <inheritdoc />
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.StateChanged">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.Open">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.Close">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.SendInMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.NewOutMessage">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RequestNewsStory(StockSharp.BusinessEntities.News)">
@@ -5604,6 +5638,9 @@
       <summary>
             Release resources.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.Clone">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.LogControl">
       <summary>

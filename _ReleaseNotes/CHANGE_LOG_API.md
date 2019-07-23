@@ -178,6 +178,8 @@ StockSharp API Change log
 * (feature) Subscriptions. Interpret non supported and non exist subscriptions as warning.
 * (feature) Strategy implemented ITransactionProvider interface.
 * (feature) Portfolio. CreateSimulator method added.
+* (feature) BuySellGrid. AddPanel, RemovePanel methods added.
+* (feature) GuiConnector marked as obsolete.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
