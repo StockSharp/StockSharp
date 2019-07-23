@@ -180,6 +180,7 @@ StockSharp API Change log
 * (feature) Portfolio. CreateSimulator method added.
 * (feature) BuySellGrid. AddPanel, RemovePanel methods added.
 * (feature) GuiConnector marked as obsolete.
+* (feature) SampleSync removed as obsolete.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
