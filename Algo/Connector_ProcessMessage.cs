@@ -798,7 +798,10 @@ namespace StockSharp.Algo
 						ProcessCandleSeriesStopped(replyMsg.OriginalTransactionId);
 					}
 					else
+					{
 						RaiseMarketDataSubscriptionFailed(security, originalMsg, replyMsg);
+						ProcessCandleSeriesError(replyMsg);
+					}
 				}
 			}
 			else
@@ -1946,6 +1949,14 @@ namespace StockSharp.Algo
 				RaiseCandleSeriesStopped(series);
 
 			return series;
+		}
+
+		private void ProcessCandleSeriesError(MarketDataMessage reply)
+		{
+			var series = _entityCache.RemoveCandleSeries(reply.OriginalTransactionId);
+
+			if (series != null)
+				RaiseCandleSeriesError(series, reply);
 		}
 
 		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)

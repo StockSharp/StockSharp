@@ -254,6 +254,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		public event Action<CandleSeries> CandleSeriesStopped;
 
+		/// <summary>
+		/// The series error event.
+		/// </summary>
+		public event Action<CandleSeries, MarketDataMessage> CandleSeriesError;
+
 		/// <inheritdoc />
 		public event Action<Order> OrderInitialized;
 
@@ -663,6 +668,11 @@ namespace StockSharp.Algo
 		private void RaiseCandleSeriesStopped(CandleSeries series)
 		{
 			CandleSeriesStopped?.Invoke(series);
+		}
+
+		private void RaiseCandleSeriesError(CandleSeries series, MarketDataMessage reply)
+		{
+			CandleSeriesError?.Invoke(series, reply);
 		}
 	}
 }

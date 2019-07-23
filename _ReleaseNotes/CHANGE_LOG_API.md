@@ -182,6 +182,7 @@ StockSharp API Change log
 * (feature) GuiConnector marked as obsolete.
 * (feature) SampleSync removed as obsolete.
 * (feature) Portfolio. InternalId added.
+* (feature) Connector. CandleSeriesError event added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
