@@ -20,6 +20,7 @@ namespace StockSharp.BusinessEntities
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
+	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
@@ -179,13 +180,18 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Portfolio associated with the orders received through the orders log.
 		/// </summary>
-		public static Portfolio AnonymousPortfolio { get; } = new Portfolio { Name = LocalizedStrings.Str545 };
+		public static Portfolio AnonymousPortfolio { get; } = new Portfolio
+		{
+			Name = LocalizedStrings.Str545,
+			InternalId = "00000000-0000-0000-0000-000000000001".To<Guid>(),
+		};
 
 		/// <summary>
-		/// Simulator.
+		/// Internal identifier.
 		/// </summary>
 		[Browsable(false)]
-		public bool IsSimulator { get; set; }
+		[DataMember]
+		public Guid? InternalId { get; set; }
 
 		/// <summary>
 		/// Create virtual portfolio for simulation.
@@ -195,7 +201,7 @@ namespace StockSharp.BusinessEntities
 		{
 			Name = LocalizedStrings.Str1209,
 			BeginValue = 1000000,
-			IsSimulator = true,
+			InternalId = "00000000-0000-0000-0000-000000000002".To<Guid>(),
 		};
 
 		/// <summary>
@@ -225,7 +231,7 @@ namespace StockSharp.BusinessEntities
 			destination.State = State;
 			destination.CommissionMaker = CommissionMaker;
 			destination.CommissionTaker = CommissionTaker;
-			destination.IsSimulator = IsSimulator;
+			destination.InternalId = InternalId;
 		}
 
 		/// <inheritdoc />

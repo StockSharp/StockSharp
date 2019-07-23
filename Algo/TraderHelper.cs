@@ -1339,7 +1339,7 @@ namespace StockSharp.Algo
 			order.LastChangeTime = depth.LastChangeTime = DateTimeOffset.Now;
 			order.LocalTime = depth.LocalTime = DateTime.Now;
 
-			var testPf = new Portfolio { Name = "test account", BeginValue = decimal.MaxValue / 2 };
+			var testPf = Portfolio.CreateSimulator();
 			order.Portfolio = testPf;
 
 			var trades = new List<MyTrade>();
@@ -3641,7 +3641,7 @@ namespace StockSharp.Algo
 			if (id.IsEmpty())
 				throw new ArgumentNullException(nameof(id));
 
-			return provider.Portfolios.SingleOrDefault(s => s.Name.CompareIgnoreCase(id));
+			return provider.Portfolios.SingleOrDefault(pf => pf.IsSame(id));
 		}
 
 		/// <summary>
@@ -5319,6 +5319,33 @@ namespace StockSharp.Algo
 			};
 
 			return adapter.Download<TimeFrameCandleMessage, MarketDataMessage>(mdMsg, mdMsg.SecurityId);
+		}
+
+		/// <summary>
+		/// Get portfolio identifier.
+		/// </summary>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <returns>Portfolio identifier.</returns>
+		public static string GetUniqueId(this Portfolio portfolio)
+		{
+			if (portfolio == null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			return portfolio.InternalId?.To<string>() ?? portfolio.Name;
+		}
+
+		/// <summary>
+		/// Determines the specified portfolio is required.
+		/// </summary>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="uniqueId">Portfolio identifier.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSame(this Portfolio portfolio, string uniqueId)
+		{
+			if (portfolio == null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			return portfolio.Name.CompareIgnoreCase(uniqueId) || (portfolio.InternalId != null && Guid.TryParse(uniqueId, out var indernalId) && portfolio.InternalId == indernalId);
 		}
 	}
 }

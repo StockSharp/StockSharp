@@ -719,6 +719,9 @@ namespace StockSharp.Algo.Storages.Csv
 					portfolio.CommissionTaker = reader.ReadNullableDecimal();
 				}
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					portfolio.InternalId = reader.ReadString().To<Guid?>();
+
 				return portfolio;
 			}
 
@@ -749,6 +752,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.ExpirationDate?.UtcDateTime.ToString(_dateTimeFormat),
 					data.CommissionMaker.To<string>(),
 					data.CommissionTaker.To<string>(),
+					data.InternalId.To<string>(),
 				});
 			}
 		}
