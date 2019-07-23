@@ -163,6 +163,9 @@ M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessExecutionReport(StockSharp.Fix.N
 M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},System.Action{StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage})/param/report;DocStr8766
 M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},System.Action{StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage})/param/messageHandler;DocStr10483
 M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},System.Action{StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage})/param/processExecMsg;DocStr8769
+M:StockSharp.Fix.Dialects.BaseFixDialect.GetOrderState(StockSharp.Fix.Native.ExecutionReport)/summary;DocStr8644
+M:StockSharp.Fix.Dialects.BaseFixDialect.GetOrderState(StockSharp.Fix.Native.ExecutionReport)/param/report;DocStr65
+M:StockSharp.Fix.Dialects.BaseFixDialect.GetOrderState(StockSharp.Fix.Native.ExecutionReport)/returns;DocStr65
 T:StockSharp.Fix.Dialects.DefaultFastDialect/summary;DocStr8770
 M:StockSharp.Fix.Dialects.DefaultFastDialect.Open/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.DefaultFastDialect.Close/inheritdoc;DocStr8459

@@ -80,10 +80,10 @@ M:StockSharp.Community.CommunityUrls.GetUserUrl(System.Int64)/summary;DocStr1125
 M:StockSharp.Community.CommunityUrls.GetUserUrl(System.Int64)/param/userId;UserId
 M:StockSharp.Community.CommunityUrls.GetUserUrl(System.Int64)/returns;DocStr9248
 M:StockSharp.Community.CommunityUrls.GetRobotLink(System.Int64)/summary;DocStr11257
-M:StockSharp.Community.CommunityUrls.GetRobotLink(System.Int64)/param/robotId;DocStr11258
+M:StockSharp.Community.CommunityUrls.GetRobotLink(System.Int64)/param/robotId;DocStr3053
 M:StockSharp.Community.CommunityUrls.GetRobotLink(System.Int64)/returns;DocStr9248
 M:StockSharp.Community.CommunityUrls.GetFileLink(System.Object)/summary;DocStr11259
-M:StockSharp.Community.CommunityUrls.GetFileLink(System.Object)/param/fileId;DocStr11260
+M:StockSharp.Community.CommunityUrls.GetFileLink(System.Object)/param/fileId;DocStr9031
 M:StockSharp.Community.CommunityUrls.GetFileLink(System.Object)/returns;DocStr9248
 M:StockSharp.Community.CommunityUrls.GetDocUrl(System.String)/summary;DocStr9246
 M:StockSharp.Community.CommunityUrls.GetDocUrl(System.String)/param/docUrl;DocStr9247

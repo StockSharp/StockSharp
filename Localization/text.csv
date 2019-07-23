@@ -15790,3 +15790,8 @@ DocStr11268;Download data;Скачать данные
 DocStr11269;Result message;Результирующие сообщение
 DocStr11270;Request;Запрос
 DocStr11271;Downloaded data;Скаченные данные
+DocStr11272;Send back reply for non existing unsubscription requests with filled {0} property;Отправить обратно ответ на запрос к несуществующей отписке с заполненным свойством {0}
+DocStr11273;Create virtual portfolio for simulation;Создать виртуальный портфель для симуляции
+DocStr11274;Determines whether the reply contains an error {0} or has {1};Определить, содержит ли ответ ошибку {0} или установлено {1}
+DocStr11275;Reply;Ответ
+DocStr11276;Remove panel;Удалить панель
