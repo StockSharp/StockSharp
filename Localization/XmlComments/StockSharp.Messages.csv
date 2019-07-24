@@ -1389,6 +1389,7 @@ P:StockSharp.Messages.PortfolioMessage.ClientCode/summary;ClientCodeDesc
 P:StockSharp.Messages.PortfolioMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Messages.PortfolioMessage.TransactionId/summary;DocStr4433
 P:StockSharp.Messages.PortfolioMessage.IsSubscribe/summary;DocStr4434
+P:StockSharp.Messages.PortfolioMessage.InternalId/summary;DocStr11281
 M:StockSharp.Messages.PortfolioMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.PortfolioMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.PortfolioMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9

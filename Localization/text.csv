@@ -2724,7 +2724,7 @@ Str2876;Path to copied data in bin format should not be same as path to source d
 Str2879;Data erasing;Очистка данных
 Str2881;Select at least one security.;Выберите хотя бы один инструмент.
 Str2882;for all securities;по всем инструментам
-Str2884Params;Do you really want to delete {0} data?;Вы действительно хотите удалить данные{0}?
+Str2884Params;Do you really want to delete {0} data?;Вы действительно хотите удалить данные {0}?
 Str2887;Must select type of data being glued.;Необходимо выбрать тип склеиваемых данных.
 Str2888;Continuous futures contract must be created.;Необходимо создать непрерывный фьючерс.
 Str2889;No data to combine.;Нет данных для склеивания.
@@ -5017,6 +5017,7 @@ TimeOut;Time out;Тайм-аут
 SignIn;Sign in;Войти
 Copyright;Copyright;Авторское право
 SubscriptionNotSupported;Subscription '{0}' not supported by established connection.;Подписка '{0}' не поддерживается установленным соединением.
+CodesMapping;Codes mapping;Сопоставление кодов
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15795,3 +15796,9 @@ DocStr11273;Create virtual portfolio for simulation;Создать виртуа�
 DocStr11274;Determines whether the reply contains an error {0} or has {1};Определить, содержит ли ответ ошибку {0} или установлено {1}
 DocStr11275;Reply;Ответ
 DocStr11276;Remove panel;Удалить панель
+DocStr11277;The series error event;Событие ошибки серии
+DocStr11278;Get portfolio identifier;Получить идентификатор портфеля
+DocStr11279;Portfolio identifier;Идентификатор портфеля
+DocStr11280;Determines the specified portfolio is required;Определять, является ли указанный портфель требуемым
+DocStr11281;Internal identifier;Внутренний идентификатор
+DocStr11282;Is valid;Валидно

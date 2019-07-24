@@ -49846,5 +49846,15 @@ namespace StockSharp.Localization
 		/// Subscription '{0}' not supported by established connection.
 		/// </summary>
 		public static string SubscriptionNotSupported => GetString(SubscriptionNotSupportedKey);
+
+		/// <summary>
+		/// Codes mapping
+		/// </summary>
+		public const string CodesMappingKey = nameof(CodesMapping);
+
+		/// <summary>
+		/// Codes mapping
+		/// </summary>
+		public static string CodesMapping => GetString(CodesMappingKey);
 	}
 }
