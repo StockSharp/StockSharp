@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Runtime.Serialization;
@@ -177,7 +176,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str862Key)]
 	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
-	public sealed class PositionChangeMessage : BaseChangeMessage<PositionChangeTypes>, ISecurityIdMessage
+	public sealed class PositionChangeMessage : BasePositionChangeMessage, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Security ID.
@@ -187,25 +186,6 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
 		[MainCategory]
 		public SecurityId SecurityId { get; set; }
-
-		/// <summary>
-		/// Portfolio name.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
-		[DescriptionLoc(LocalizedStrings.PortfolioNameKey)]
-		[MainCategory]
-		[ReadOnly(true)]
-		public string PortfolioName { get; set; }
-
-		/// <summary>
-		/// Client code assigned by the broker.
-		/// </summary>
-		[DataMember]
-		[MainCategory]
-		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
-		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
-		public string ClientCode { get; set; }
 
 		/// <summary>
 		/// The depositary where the physical security.

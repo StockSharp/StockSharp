@@ -31,17 +31,8 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 	[DescriptionLoc(LocalizedStrings.Str541Key)]
-	public sealed class PortfolioChangeMessage : BaseChangeMessage<PositionChangeTypes>
+	public sealed class PortfolioChangeMessage : BasePositionChangeMessage
 	{
-		/// <summary>
-		/// Portfolio name.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.NameKey)]
-		[DescriptionLoc(LocalizedStrings.Str247Key)]
-		[MainCategory]
-		public string PortfolioName { get; set; }
-
 		/// <summary>
 		/// Electronic board code.
 		/// </summary>
@@ -50,15 +41,6 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[MainCategory]
 		public string BoardCode { get; set; }
-
-		/// <summary>
-		/// Client code assigned by the broker.
-		/// </summary>
-		[DataMember]
-		[MainCategory]
-		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
-		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
-		public string ClientCode { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioChangeMessage"/>.

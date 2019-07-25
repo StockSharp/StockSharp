@@ -567,7 +567,7 @@ namespace StockSharp.Messages
 			//{
 			//	if (message is Level1ChangeMessage l1Msg && l1Msg.Changes.Count == 0)
 			//		return;
-			//	else if (message is BaseChangeMessage<PositionChangeTypes> posMsg && posMsg.Changes.Count == 0)
+			//	else if (message is BasePositionChangeMessage posMsg && posMsg.Changes.Count == 0)
 			//		return;
 			//}
 
@@ -630,7 +630,7 @@ namespace StockSharp.Messages
 
 			switch (message)
 			{
-				case BaseChangeMessage<PositionChangeTypes> posMsg when posMsg.ServerTime.IsDefault():
+				case BasePositionChangeMessage posMsg when posMsg.ServerTime.IsDefault():
 					posMsg.ServerTime = CurrentTime;
 					break;
 				case ExecutionMessage execMsg when execMsg.ExecutionType == ExecutionTypes.Transaction && execMsg.ServerTime.IsDefault():
