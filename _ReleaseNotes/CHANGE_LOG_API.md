@@ -184,6 +184,7 @@ StockSharp API Change log
 * (feature) Portfolio. InternalId added.
 * (feature) Connector. CandleSeriesError event added.
 * (feature) IMarketDataProvider. Added adapter parameter to subscription methods.
+* (feature) Micex TEAP. Stock32, Stock33, Stock34, Currency32, Currency33, Currency34 interfaces added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
