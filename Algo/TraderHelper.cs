@@ -4512,6 +4512,11 @@ namespace StockSharp.Algo
 		public const string AllSecurityId = "ALL@ALL";
 
 		/// <summary>
+		/// Identifier of <see cref="AllSecurity"/>.
+		/// </summary>
+		public static readonly SecurityId AllSecurityId2 = AllSecurityId.ToSecurityId();
+
+		/// <summary>
 		/// "All securities" instance.
 		/// </summary>
 		public static Security AllSecurity { get; } = new Security
