@@ -467,6 +467,15 @@
       <param name="messageHandler">Message handler.</param>
       <param name="processExecMsg">Post handle an <see cref="T:StockSharp.Messages.ExecutionMessage" /> instance.</param>
     </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.GetOrderState(StockSharp.Fix.Native.ExecutionReport)">
+      <summary>
+            Convert <see cref="F:StockSharp.Fix.Native.ExecutionReport.OrdStatus" /> to <see cref="T:StockSharp.Messages.OrderStates" /> value.
+            </summary>
+      <param name="report">
+        <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> value.</param>
+      <returns>
+        <see cref="T:StockSharp.Messages.OrderStates" /> value.</returns>
+    </member>
     <member name="T:StockSharp.Fix.Dialects.DefaultFastDialect">
       <summary>
             The default implementation of <see cref="T:StockSharp.Fix.Dialects.IFastDialect" />.
@@ -6106,6 +6115,11 @@
             Message type for <see cref="T:StockSharp.Messages.RemoveMessage" />.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.PortfolioLookupResult">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.PortfolioLookupResultMessage" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FixTags">
       <summary>
             FIX protocol tags.
@@ -6764,6 +6778,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.LegCurrency">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoSecurityTypes">
       <summary>
       </summary>
     </member>

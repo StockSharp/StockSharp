@@ -1554,6 +1554,7 @@ F:StockSharp.Fix.Native.FixExtendedMessages.PortfolioRoute/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.SecurityRouteListFinished/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.PortfolioRouteListFinished/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.Remove/summary;DocStr10846
+F:StockSharp.Fix.Native.FixExtendedMessages.PortfolioLookupResult/summary;DocStr10846
 T:StockSharp.Fix.Native.FixTags/summary;DocStr3321
 F:StockSharp.Fix.Native.FixTags.Account/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.AvgPx/summary;DocStr8459
@@ -1719,6 +1720,7 @@ F:StockSharp.Fix.Native.FixTags.Username/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Password/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoLegs/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.LegCurrency/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.NoSecurityTypes/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SecurityListRequestType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SecurityRequestResult/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.RoundLot/summary;DocStr8459

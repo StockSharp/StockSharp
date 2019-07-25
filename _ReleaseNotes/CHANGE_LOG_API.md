@@ -187,6 +187,9 @@ StockSharp API Change log
 * (feature) Micex TEAP. Stock32, Stock33, Stock34, Currency32, Currency33, Currency34 interfaces added.
 * (feature) SecurityId. SecurityType marked as obsolete.
 * (feature) QuikLua. Translates T+N money positions.
+* (feature) FixServer. SecurityLookupMessage.SecurityTypes supported.
+* (bug) FixServer. Fix SecurityStatusRequest handling.
+* (feature) FixServer. Sends PortfolioLookupResultMessage.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
