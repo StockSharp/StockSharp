@@ -4559,7 +4559,7 @@ OrderVolumeNotSpecified;Order volume is not specified;Объем заявки н
 OrderSideNotSpecified;Order side is not specified;Направление заявки не указано
 RaiseOnStart;Raise on start;Обрабатывать при запуске
 DeleteAll;Delete all;Удалить все
-Next;Next;Далее
+Next;Next;Следующий
 StepIn;Step in;Войти
 StepOut;Step out;Выйти
 Microseconds;Microseconds;Микросекунды
@@ -5018,6 +5018,7 @@ SignIn;Sign in;Войти
 Copyright;Copyright;Авторское право
 SubscriptionNotSupported;Subscription '{0}' not supported by established connection.;Подписка '{0}' не поддерживается установленным соединением.
 CodesMapping;Codes mapping;Сопоставление кодов
+ExtraConditions;Extra conditions;Доп условия
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14257,7 +14258,6 @@ DocStr9552;Used with conditional orders to submit or cancel an order based on a 
 DocStr9553;Percent change;Изменение в процентах
 DocStr9554;Define the Soft Dollar Tier used for the order. Only provided for registered professional advisors and hedge and mutual funds;Определить Soft Dollar Tier, используемых в заявках. Предоставляется только для зарегистрированных профессиональных советников и хедж фондов
 DocStr9555;The native cash quantity;Размер наличных
-DocStr9556;Extra conditions;Дополнительные условия
 DocStr9557;Request scanner parameters. The results will come through the {0} event;Запросить параметры сканера. Результаты будут приходить через событие {0}
 DocStr9558;Is parameters request;Запрос параметров
 DocStr9559;Scanner filter types;Типы фильтра сканнера
@@ -15802,3 +15802,4 @@ DocStr11279;Portfolio identifier;Идентификатор портфеля
 DocStr11280;Determines the specified portfolio is required;Определять, является ли указанный портфель требуемым
 DocStr11281;Internal identifier;Внутренний идентификатор
 DocStr11282;Is valid;Валидно
+DocStr11283;Base class for messages contains information about the position changes;Базовый класс сообщений, содержащий информация об изменениях позиций

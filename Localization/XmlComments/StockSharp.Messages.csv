@@ -34,6 +34,11 @@ M:StockSharp.Messages.BaseConnectionMessage.#ctor(StockSharp.Messages.MessageTyp
 P:StockSharp.Messages.BaseConnectionMessage.Error/summary;DocStr4047
 M:StockSharp.Messages.BaseConnectionMessage.ToString/summary;DocStr49
 M:StockSharp.Messages.BaseConnectionMessage.ToString/returns;DocStr50
+T:StockSharp.Messages.BasePositionChangeMessage/summary;DocStr11283
+M:StockSharp.Messages.BasePositionChangeMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr1
+M:StockSharp.Messages.BasePositionChangeMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
+P:StockSharp.Messages.BasePositionChangeMessage.PortfolioName/summary;DocStr3127
+P:StockSharp.Messages.BasePositionChangeMessage.ClientCode/summary;ClientCodeDesc
 T:StockSharp.Messages.BaseResultMessage`1/summary;DocStr11119
 T:StockSharp.Messages.BaseResultMessage`1/typeparam/TMessage;DocStr9
 M:StockSharp.Messages.BaseResultMessage`1.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr1
@@ -1363,9 +1368,7 @@ F:StockSharp.Messages.OrderTypes.Limit/summary;Str1353
 F:StockSharp.Messages.OrderTypes.Market/summary;Str241
 F:StockSharp.Messages.OrderTypes.Conditional/summary;DocStr4424
 T:StockSharp.Messages.PortfolioChangeMessage/summary;DocStr4429
-P:StockSharp.Messages.PortfolioChangeMessage.PortfolioName/summary;DocStr3127
 P:StockSharp.Messages.PortfolioChangeMessage.BoardCode/summary;DocStr4375
-P:StockSharp.Messages.PortfolioChangeMessage.ClientCode/summary;ClientCodeDesc
 M:StockSharp.Messages.PortfolioChangeMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.PortfolioChangeMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.PortfolioChangeMessage.Clone/returns;DocStr1116
@@ -1421,8 +1424,6 @@ F:StockSharp.Messages.PositionChangeTypes.CommissionMaker/summary;CommissionMake
 F:StockSharp.Messages.PositionChangeTypes.SettlementPrice/summary;Str312
 T:StockSharp.Messages.PositionChangeMessage/summary;DocStr4439
 P:StockSharp.Messages.PositionChangeMessage.SecurityId/summary;SecurityId
-P:StockSharp.Messages.PositionChangeMessage.PortfolioName/summary;DocStr3127
-P:StockSharp.Messages.PositionChangeMessage.ClientCode/summary;ClientCodeDesc
 P:StockSharp.Messages.PositionChangeMessage.DepoName/summary;DocStr2933
 P:StockSharp.Messages.PositionChangeMessage.LimitType/summary;DocStr2934
 P:StockSharp.Messages.PositionChangeMessage.Description/summary;Str269
@@ -1430,8 +1431,7 @@ P:StockSharp.Messages.PositionChangeMessage.OriginalTransactionId/summary;DocStr
 M:StockSharp.Messages.PositionChangeMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.PositionChangeMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.PositionChangeMessage.Clone/returns;DocStr1116
-M:StockSharp.Messages.PositionChangeMessage.ToString/summary;DocStr49
-M:StockSharp.Messages.PositionChangeMessage.ToString/returns;DocStr50
+M:StockSharp.Messages.PositionChangeMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.QuoteChange/summary;Str274
 M:StockSharp.Messages.QuoteChange.#ctor/summary;DocStr1
 M:StockSharp.Messages.QuoteChange.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal)/summary;DocStr1

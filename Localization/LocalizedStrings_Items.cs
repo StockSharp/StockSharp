@@ -49856,5 +49856,15 @@ namespace StockSharp.Localization
 		/// Codes mapping
 		/// </summary>
 		public static string CodesMapping => GetString(CodesMappingKey);
+
+		/// <summary>
+		/// Extra conditions
+		/// </summary>
+		public const string ExtraConditionsKey = nameof(ExtraConditions);
+
+		/// <summary>
+		/// Extra conditions
+		/// </summary>
+		public static string ExtraConditions => GetString(ExtraConditionsKey);
 	}
 }
