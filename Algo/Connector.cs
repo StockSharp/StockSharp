@@ -659,7 +659,7 @@ namespace StockSharp.Algo
 					securityCode = id.SecurityCode;
 			}
 
-			var message = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode, criteria.Type));
+			var message = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode));
 			message.Adapter = adapter;
 			message.OfflineMode = offlineMode;
 

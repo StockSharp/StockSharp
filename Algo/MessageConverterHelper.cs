@@ -1447,7 +1447,7 @@ namespace StockSharp.Algo
 			}
 
 			if (copyExtended)
-				return security.ExternalId.ToSecurityId(secCode, boardCode, security.Type);
+				return security.ExternalId.ToSecurityId(secCode, boardCode);
 			
 			return new SecurityId
 			{
@@ -1499,9 +1499,8 @@ namespace StockSharp.Algo
 		/// <param name="externalId"><see cref="SecurityExternalId"/>.</param>
 		/// <param name="securityCode">Security code.</param>
 		/// <param name="boardCode">Board code.</param>
-		/// <param name="securityType">Security type.</param>
 		/// <returns><see cref="SecurityId"/>.</returns>
-		public static SecurityId ToSecurityId(this SecurityExternalId externalId, string securityCode, string boardCode, SecurityTypes? securityType)
+		public static SecurityId ToSecurityId(this SecurityExternalId externalId, string securityCode, string boardCode)
 		{
 			//if (externalId == null)
 			//	throw new ArgumentNullException(nameof(externalId));
@@ -1510,7 +1509,6 @@ namespace StockSharp.Algo
 			{
 				SecurityCode = securityCode,
 				BoardCode = boardCode,
-				SecurityType = securityType,
 				Bloomberg = externalId.Bloomberg,
 				Cusip = externalId.Cusip,
 				IQFeed = externalId.IQFeed,

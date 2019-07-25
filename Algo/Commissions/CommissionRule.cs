@@ -430,8 +430,9 @@ namespace StockSharp.Algo.Commissions
 		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
-			if (message.HasTradeInfo() && message.SecurityId.SecurityType == SecurityType)
-				return GetValue(message.TradePrice);
+			// TODO
+			//if (message.HasTradeInfo() && message.SecurityId.SecurityType == SecurityType)
+			//	return GetValue(message.TradePrice);
 			
 			return null;
 		}

@@ -96,6 +96,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Security type.
 		/// </summary>
+		[Obsolete]
 		public SecurityTypes? SecurityType
 		{
 			get => _securityType;
@@ -255,8 +256,8 @@ namespace StockSharp.Messages
 			if (Native != null)
 				id += $",Native:{Native}";
 
-			if (SecurityType != null)
-				id += $",Type:{SecurityType.Value}";
+			//if (SecurityType != null)
+			//	id += $",Type:{SecurityType.Value}";
 
 			if (!Isin.IsEmpty())
 				id += $",ISIN:{Isin}";

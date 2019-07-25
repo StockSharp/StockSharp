@@ -120,9 +120,6 @@
 					if (securityCode.IsEmpty())
 						throw new InvalidOperationException();
 
-					if (securityId.SecurityType == null)
-						securityId.SecurityType = secMsg.SecurityType;
-
 					// external code shouldn't receive native ids
 					securityId.Native = null;
 					
@@ -431,8 +428,8 @@
 							if (!id.SecurityCode.CompareIgnoreCase(securityCode))
 								continue;
 
-							if (securityId.SecurityType != null && securityId.SecurityType != id.SecurityType)
-								continue;
+							//if (securityId.SecurityType != null && securityId.SecurityType != id.SecurityType)
+							//	continue;
 
 							foundId = id;
 						}
@@ -502,8 +499,8 @@
 				var pair = _suspendedOutMessages
 					.FirstOrDefault(p =>
 						p.Key.SecurityCode.CompareIgnoreCase(securityId.SecurityCode) &&
-						p.Key.BoardCode.IsEmpty() &&
-						(securityId.SecurityType == null || p.Key.SecurityType == securityId.SecurityType));
+						p.Key.BoardCode.IsEmpty() /*&&
+						(securityId.SecurityType == null || p.Key.SecurityType == securityId.SecurityType)*/);
 
 				var value = pair.Value;
 

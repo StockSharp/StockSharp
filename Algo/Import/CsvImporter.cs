@@ -155,7 +155,6 @@
 				Id = id,
 				Code = securityId.SecurityCode,
 				Board = exchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode),
-				Type = securityId.SecurityType,
 			};
 
 			_securityStorage.Save(security, false);
