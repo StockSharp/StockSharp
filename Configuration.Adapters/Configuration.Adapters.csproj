@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StockSharp.Configuration</RootNamespace>
     <AssemblyName>StockSharp.Configuration.Adapters</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,10 +54,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\ConnectorsStub\QuoinexStub\QuoinexStub.csproj">
-      <Project>{00B19CDD-5647-42D2-84FF-7AC82D12E4C8}</Project>
-      <Name>QuoinexStub</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlfaDirect\AlfaDirect.csproj">
       <Project>{AAA445E0-AA85-4B49-AD45-EDD1B4839137}</Project>
       <Name>AlfaDirect</Name>
@@ -312,6 +309,10 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quik\Quik.csproj">
       <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
       <Name>Quik</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quoinex\Quoinex.csproj">
+      <Project>{c307bb36-5f18-4bb9-8812-4051c9e7962a}</Project>
+      <Name>Quoinex</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Rithmic\Rithmic.csproj">
       <Project>{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}</Project>
