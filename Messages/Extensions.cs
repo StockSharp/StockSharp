@@ -384,6 +384,7 @@ namespace StockSharp.Messages
 			adapter.RemoveSupportedMessage(MessageTypes.MarketData);
 			adapter.RemoveSupportedMessage(MessageTypes.SecurityLookup);
 			adapter.RemoveSupportedMessage(MessageTypes.TimeFrameLookup);
+			adapter.RemoveSupportedMessage(MessageTypes.BoardLookup);
 
 			adapter.RemoveSupportedAllMarketDataTypes();
 		}

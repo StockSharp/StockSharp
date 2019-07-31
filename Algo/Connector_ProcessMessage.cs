@@ -1052,9 +1052,17 @@ namespace StockSharp.Algo
 
 		private void ProcessBoardStateMessage(BoardStateMessage message)
 		{
-			var board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
-			_boardStates[board] = message.State;
-			SessionStateChanged?.Invoke(board, message.State);
+			ExchangeBoard board;
+
+			if (message.BoardCode.IsEmpty())
+				board = null;
+			else
+			{
+				board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
+				_boardStates[board] = message.State;
+			}
+
+			RaiseSessionStateChanged(board, message.State);
 		}
 
 		private void ProcessBoardMessage(BoardMessage message)

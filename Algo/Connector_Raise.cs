@@ -674,5 +674,10 @@ namespace StockSharp.Algo
 		{
 			CandleSeriesError?.Invoke(series, reply);
 		}
+
+		private void RaiseSessionStateChanged(ExchangeBoard board, SessionStates state)
+		{
+			SessionStateChanged?.Invoke(board, state);
+		}
 	}
 }
