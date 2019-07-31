@@ -1831,8 +1831,7 @@ P:StockSharp.Messages.BoardStateMessage.BoardCode/summary;BoardCode
 P:StockSharp.Messages.BoardStateMessage.State/summary;SessionState
 M:StockSharp.Messages.BoardStateMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.BoardStateMessage.Clone/returns;DocStr1116
-M:StockSharp.Messages.BoardStateMessage.ToString/summary;DocStr49
-M:StockSharp.Messages.BoardStateMessage.ToString/returns;DocStr50
+M:StockSharp.Messages.BoardStateMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.Sides/summary;DocStr4526
 F:StockSharp.Messages.Sides.Buy/summary;XamlStr259
 F:StockSharp.Messages.Sides.Sell/summary;XamlStr581

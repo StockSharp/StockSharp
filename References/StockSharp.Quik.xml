@@ -220,26 +220,6 @@
     <member name="M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
       <inheritdoc />
     </member>
-    <member name="T:StockSharp.Quik.Lua.LuaFlushCandlesMessage">
-      <summary>
-      </summary>
-    </member>
-    <member name="F:StockSharp.Quik.Lua.LuaFlushCandlesMessage.FlushCandlesType">
-      <summary>
-            Тип сообщения.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFlushCandlesMessage.#ctor">
-      <summary>
-            Создать <see cref="T:StockSharp.Quik.Lua.LuaFlushCandlesMessage" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.Lua.LuaFlushCandlesMessage.TransactionId">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFlushCandlesMessage.Clone">
-      <inheritdoc />
-    </member>
     <member name="T:StockSharp.Quik.Native.Codes">
       <summary>
             Системные коды (успешные и ошибочные) библиотеки TRANS2QUIK.dll, которые возвращает Quik.

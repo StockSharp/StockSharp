@@ -1505,7 +1505,6 @@ F:StockSharp.Fix.Native.FixMessages.QuoteRequest/summary;DocStr3275
 F:StockSharp.Fix.Native.FixMessages.Quote/summary;DocStr3276
 F:StockSharp.Fix.Native.FixMessages.MassQuote/summary;DocStr11127
 F:StockSharp.Fix.Native.FixMessages.MarketDataRequestReject/summary;DocStr3261
-F:StockSharp.Fix.Native.FixMessages.MarketDataRequestResponse/summary;DocStr10263
 F:StockSharp.Fix.Native.FixMessages.SecurityList/summary;DocStr211
 F:StockSharp.Fix.Native.FixMessages.MarketDataRequest/summary;DocStr3277
 F:StockSharp.Fix.Native.FixMessages.MarketDataIncrementalRefresh/summary;DocStr3278
@@ -1516,6 +1515,8 @@ F:StockSharp.Fix.Native.FixMessages.OrderMassCancelReport/summary;DocStr3264
 F:StockSharp.Fix.Native.FixMessages.SecurityStatusRequest/summary;DocStr11000
 F:StockSharp.Fix.Native.FixMessages.SecurityStatus/summary;DocStr11001
 T:StockSharp.Fix.Native.FixExtendedMessages/summary;DocStr10433
+F:StockSharp.Fix.Native.FixExtendedMessages.MarketDataRequestResponse/summary;DocStr10263
+F:StockSharp.Fix.Native.FixExtendedMessages.MarketDataFinished/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.SecurityListUpload/summary;DocStr10434
 F:StockSharp.Fix.Native.FixExtendedMessages.SecurityListDelete/summary;DocStr10435
 F:StockSharp.Fix.Native.FixExtendedMessages.Board/summary;DocStr10816

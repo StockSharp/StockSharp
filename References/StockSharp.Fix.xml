@@ -5870,11 +5870,6 @@
             The response with error to <see cref="F:StockSharp.Fix.Native.FixMessages.MarketDataRequest" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.FixMessages.MarketDataRequestResponse">
-      <summary>
-            The response with success to <see cref="F:StockSharp.Fix.Native.FixMessages.MarketDataRequest" />.
-            </summary>
-    </member>
     <member name="F:StockSharp.Fix.Native.FixMessages.SecurityList">
       <summary>
             Information about securities.
@@ -5923,6 +5918,16 @@
     <member name="T:StockSharp.Fix.Native.FixExtendedMessages">
       <summary>
             FIX extended messages codes.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.MarketDataRequestResponse">
+      <summary>
+            The response with success to <see cref="F:StockSharp.Fix.Native.FixMessages.MarketDataRequest" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixExtendedMessages.MarketDataFinished">
+      <summary>
+            Message type for <see cref="T:StockSharp.Messages.MarketDataFinishedMessage" />.
             </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixExtendedMessages.SecurityListUpload">
