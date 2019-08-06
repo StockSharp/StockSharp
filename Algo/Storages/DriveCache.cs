@@ -11,28 +11,43 @@
 
 	using MoreLinq;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.History.Hydra;
+
+	using PathPair = System.Tuple<string, System.Net.EndPoint>;
 
 	/// <summary>
 	/// <see cref="IMarketDataDrive"/> cache.
 	/// </summary>
 	public class DriveCache : Disposable, IPersistable
 	{
-		private class PathComparer : IEqualityComparer<string>
+		private class PathComparer : IEqualityComparer<PathPair>
 		{
-			bool IEqualityComparer<string>.Equals(string x, string y)
+			bool IEqualityComparer<PathPair>.Equals(PathPair x, PathPair y)
 			{
-				return x.ComparePaths(y);
+				if (x == null && y == null)
+					return true;
+
+				if (x == null || y == null)
+					return false;
+
+				if (x.Item2 == y.Item2)
+				{
+					if (x.Item2 != null)
+						return true;
+					else
+						return x.Item1.ComparePaths(y.Item1);
+				}
+				else
+					return false;
 			}
 
-			int IEqualityComparer<string>.GetHashCode(string path)
+			int IEqualityComparer<PathPair>.GetHashCode(PathPair obj)
 			{
-				return path.ToFullPath().TrimEnd('\\').ToLowerInvariant().GetHashCode();
+				return obj.Item2?.GetHashCode() ?? obj.Item1.ToFullPath().TrimEnd('\\').ToLowerInvariant().GetHashCode();
 			}
 		}
 
-		private readonly CachedSynchronizedDictionary<string, IMarketDataDrive> _drives = new CachedSynchronizedDictionary<string, IMarketDataDrive>(new PathComparer());
+		private readonly CachedSynchronizedDictionary<PathPair, IMarketDataDrive> _drives = new CachedSynchronizedDictionary<PathPair, IMarketDataDrive>(new PathComparer());
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DriveCache"/>.
@@ -41,7 +56,7 @@
 		public DriveCache(IMarketDataDrive defaultDrive)
 		{
 			DefaultDrive = defaultDrive ?? throw new ArgumentNullException(nameof(defaultDrive));
-			_drives.Add(DefaultDrive.Path, DefaultDrive);
+			_drives.Add(CreatePair(DefaultDrive.Path), DefaultDrive);
 		}
 
 		/// <summary>
@@ -67,7 +82,22 @@
 		/// <summary>
 		/// Cache changed event.
 		/// </summary>
-		public event Action Changed; 
+		public event Action Changed;
+
+		private static PathPair CreatePair(string path)
+		{
+			EndPoint addr = null;
+
+			try
+			{
+				addr = path.To<EndPoint>();
+			}
+			catch
+			{
+			}
+
+			return new PathPair(path, addr);
+		}
 
 		/// <summary>
 		/// To get the storage for <paramref name="path"/>.
@@ -76,22 +106,19 @@
 		/// <returns>Market data storage.</returns>
 		public IMarketDataDrive GetDrive(string path)
 		{
-			if (path.IsEmpty() && Guid.TryParse(path, out _))
+			if (path.IsEmpty() || Guid.TryParse(path, out _)/* TODO remove few versions later 2019-08-06 */)
 				return DefaultDrive;
 
-			return _drives.SafeAdd(path ?? string.Empty, key =>
+			var pair = CreatePair(path);
+
+			return _drives.SafeAdd(pair, key =>
 			{
 				IMarketDataDrive drive;
 
-				try
-				{
-					var addr = path.To<EndPoint>();
-					drive = new RemoteMarketDataDrive(new RemoteStorageClient(ServicesRegistry.ExchangeInfoProvider, new Uri(addr.To<string>())));
-				}
-				catch
-				{
+				if (pair.Item2 == null)
 					drive = new LocalMarketDataDrive(path);
-				}
+				else
+					drive = new RemoteMarketDataDrive(new RemoteStorageClient(new Uri(pair.Item2.To<string>())));
 
 				NewDriveCreated?.Invoke(drive);
 
@@ -111,7 +138,7 @@
 			if (drive == DefaultDrive)
 				throw new ArgumentException(nameof(drive));
 
-			if (_drives.Remove(drive.Path))
+			if (_drives.Remove(CreatePair(drive.Path)))
 				DriveDeleted?.Invoke(drive);
 		}
 
@@ -137,11 +164,16 @@
 			lock (_drives.SyncRoot)
 			{
 				foreach (var drive in drives)
-					_drives.TryAdd(drive.Path, drive);	
+					_drives.TryAdd(CreatePair(drive.Path), drive);	
 			}
 
 			if (storage.ContainsKey(nameof(DefaultDrive)))
-				DefaultDrive = _drives[storage.GetValue<string>(nameof(DefaultDrive))];
+			{
+				var pair = CreatePair(storage.GetValue<string>(nameof(DefaultDrive)));
+
+				if (_drives.TryGetValue(pair, out var drive))
+					DefaultDrive = drive;
+			}
 		}
 
 		/// <summary>

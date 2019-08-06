@@ -178,10 +178,5 @@ namespace StockSharp.Algo.Storages
 
 		/// <inheritdoc />
 		public override string ToString() => Path;
-
-		/// <inheritdoc />
-		public virtual void Dispose()
-		{
-		}
 	}
 }
