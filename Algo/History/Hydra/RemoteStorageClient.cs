@@ -111,6 +111,11 @@ namespace StockSharp.Algo.History.Hydra
 			}
 		}
 
+		/// <summary>
+		/// Default address.
+		/// </summary>
+		public static readonly Uri DefaultUrl = "net.tcp://localhost:8000".To<Uri>();
+
 		private readonly SynchronizedDictionary<Tuple<SecurityId, Type, object, StorageFormats>, RemoteStorageDrive> _remoteStorages = new SynchronizedDictionary<Tuple<SecurityId, Type, object, StorageFormats>, RemoteStorageDrive>();
 
 		/// <summary>
@@ -139,7 +144,7 @@ namespace StockSharp.Algo.History.Hydra
 		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
 		/// </summary>
 		public RemoteStorageClient()
-			: this("net.tcp://localhost:8000".To<Uri>())
+			: this(DefaultUrl)
 		{
 		}
 

@@ -455,9 +455,7 @@ namespace StockSharp.Algo.Storages
 
 		private IMarketDataDrive _defaultDrive = new LocalMarketDataDrive();
 
-		/// <summary>
-		/// The storage used by default.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual IMarketDataDrive DefaultDrive
 		{
 			get => _defaultDrive;
@@ -476,9 +474,7 @@ namespace StockSharp.Algo.Storages
 
 		private IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
-		/// <summary>
-		/// Exchanges and trading boards provider.
-		/// </summary>
+		/// <inheritdoc />
 		public IExchangeInfoProvider ExchangeInfoProvider
 		{
 			get => _exchangeInfoProvider;
