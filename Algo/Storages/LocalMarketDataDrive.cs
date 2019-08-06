@@ -436,6 +436,13 @@ namespace StockSharp.Algo.Storages
 				key => new LocalMarketDataStorageDrive(dataType, arg, GetSecurityPath(securityId), format, this));
 		}
 
+		/// <inheritdoc />
+		public override void Verify()
+		{
+			if (!Directory.Exists(Path))
+				throw new InvalidOperationException(LocalizedStrings.DirectoryNotExist.Put(Path));
+		}
+
 		/// <summary>
 		/// To get the file extension for the format.
 		/// </summary>

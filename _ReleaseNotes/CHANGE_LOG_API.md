@@ -190,6 +190,10 @@ StockSharp API Change log
 * (feature) FixServer. SecurityLookupMessage.SecurityTypes supported.
 * (bug) FixServer. Fix SecurityStatusRequest handling.
 * (feature) FixServer. Sends PortfolioLookupResultMessage.
+* (feature) QUIK. 64 bit support.
+* (feature) QUIK. Candles BuildFrom mode supported.
+* (feature) QUIK. Terminal connection lost notification supported.
+* (feature) IMarketDataDrive. Verify method added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

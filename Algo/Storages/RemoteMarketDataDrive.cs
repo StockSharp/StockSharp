@@ -77,6 +77,12 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
+		public override void Verify()
+		{
+			Client.Login();
+		}
+
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
