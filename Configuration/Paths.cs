@@ -27,6 +27,7 @@
 			SecurityMappingDir = Path.Combine(AppDataPath, "Symbol mapping");
 			SecurityExtendedInfo = Path.Combine(AppDataPath, "Extended info");
 			StorageDir = Path.Combine(AppDataPath, "Storage");
+			SnapshotsDir = Path.Combine(AppDataPath, "Snapshots");
 		}
 
 		/// <summary>
@@ -73,5 +74,10 @@
 		/// The path to the directory with market data.
 		/// </summary>
 		public static readonly string StorageDir;
+
+		/// <summary>
+		/// The path to the directory with snapshots of market data.
+		/// </summary>
+		public static readonly string SnapshotsDir;
 	}
 }
