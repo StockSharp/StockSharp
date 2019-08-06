@@ -17,9 +17,8 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteMarketDataDrive"/>.
 		/// </summary>
-		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		public RemoteMarketDataDrive(IExchangeInfoProvider exchangeInfoProvider)
-			: this(new RemoteStorageClient(exchangeInfoProvider))
+		public RemoteMarketDataDrive()
+			: this(new RemoteStorageClient())
 		{
 		}
 
@@ -58,7 +57,7 @@ namespace StockSharp.Algo.Storages
 		public override string Path
 		{
 			get => Client.Address.ToString();
-			set => Client = new RemoteStorageClient(_client.ExchangeInfoProvider, value.To<Uri>());
+			set => Client = new RemoteStorageClient(value.To<Uri>());
 		}
 
 		/// <inheritdoc />

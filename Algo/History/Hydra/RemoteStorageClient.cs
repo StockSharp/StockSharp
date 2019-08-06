@@ -22,7 +22,7 @@ namespace StockSharp.Algo.History.Hydra
 	/// <summary>
 	/// The client for access to the history server <see cref="IRemoteStorage"/>.
 	/// </summary>
-	public class RemoteStorageClient : BaseCommunityClient<IRemoteStorage>, ISecurityDownloader
+	public class RemoteStorageClient : BaseCommunityClient<IRemoteStorage>
 	{
 		private readonly bool _streaming;
 
@@ -121,28 +121,6 @@ namespace StockSharp.Algo.History.Hydra
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
 		/// </summary>
-		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		public RemoteStorageClient(IExchangeInfoProvider exchangeInfoProvider)
-			: this()
-		{
-			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
-		/// </summary>
-		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		/// <param name="address">Server address.</param>
-		/// <param name="streaming">Data transfer via WCF Streaming.</param>
-		public RemoteStorageClient(IExchangeInfoProvider exchangeInfoProvider, Uri address, bool streaming = true)
-			: this(address, streaming)
-		{
-			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
-		/// </summary>
 		public RemoteStorageClient()
 			: this(DefaultUrl)
 		{
@@ -165,11 +143,6 @@ namespace StockSharp.Algo.History.Hydra
 		}
 
 		internal RemoteMarketDataDrive Drive { get; set; }
-
-		/// <summary>
-		/// Exchanges and trading boards provider.
-		/// </summary>
-		public IExchangeInfoProvider ExchangeInfoProvider { get; set; }
 
 		/// <summary>
 		/// Information about the login and password for access to remote storage.
@@ -239,7 +212,28 @@ namespace StockSharp.Algo.History.Hydra
 			return f;
 		}
 
-		private IEnumerable<SecurityMessage> LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISet<string> existingIds)
+		/// <summary>
+		/// Download securities by the specified criteria.
+		/// </summary>
+		/// <param name="criteria">Message security lookup for specified criteria.</param>
+		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
+		public void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity)
+		{
+			var existingIds = securityProvider.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+			
+			LookupSecurities(criteria, isCancelled, existingIds, newSecurity);
+		}
+
+		/// <summary>
+		/// Download securities by the specified criteria.
+		/// </summary>
+		/// <param name="criteria">Message security lookup for specified criteria.</param>
+		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+		/// <param name="existingIds">Existing securities.</param>
+		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
+		public void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISet<string> existingIds, Action<SecurityMessage> newSecurity)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -249,6 +243,9 @@ namespace StockSharp.Algo.History.Hydra
 
 			if (isCancelled == null)
 				throw new ArgumentNullException(nameof(isCancelled));
+
+			if (newSecurity == null)
+				throw new ArgumentNullException(nameof(newSecurity));
 
 			var ids = Invoke(f => f.LookupSecurityIds(SessionId, criteria));
 
@@ -264,41 +261,7 @@ namespace StockSharp.Algo.History.Hydra
 				var batch = b.ToArray();
 
 				foreach (var security in Invoke(f => f.GetSecurities(SessionId, batch)))
-					yield return security;
-			}
-		}
-
-		/// <inheritdoc />
-		public void Refresh(ISecurityStorage securityStorage, SecurityLookupMessage criteria, Action<Security> newSecurity, Func<bool> isCancelled)
-		{
-			if (securityStorage == null)
-				throw new ArgumentNullException(nameof(securityStorage));
-
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (newSecurity == null)
-				throw new ArgumentNullException(nameof(newSecurity));
-
-			if (isCancelled == null)
-				throw new ArgumentNullException(nameof(isCancelled));
-
-			var existingIds = securityStorage.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
-
-			foreach (var message in LookupSecurities(criteria, isCancelled, existingIds))
-			{
-				if (isCancelled())
-					return;
-
-				var security = securityStorage.LookupById(message.SecurityId);
-
-				if (security == null)
-					security = message.ToSecurity(ExchangeInfoProvider);
-				else
-					security.ApplyChanges(message, ExchangeInfoProvider);
-
-				securityStorage.Save(security, false);
-				newSecurity(security);
+					newSecurity(security);
 			}
 		}
 
@@ -309,7 +272,9 @@ namespace StockSharp.Algo.History.Hydra
 		/// <returns>Securities.</returns>
 		public SecurityMessage[] LoadSecurities(SecurityLookupMessage criteria)
 		{
-			return LookupSecurities(criteria, () => false, new HashSet<string>()).ToArray();
+			var securities = new List<SecurityMessage>();
+			LookupSecurities(criteria, () => false, new HashSet<string>(), securities.Add);
+			return securities.ToArray();
 		}
 
 		/// <summary>

@@ -145,7 +145,6 @@
     <Compile Include="History\Hydra\ISecurityRemoteExtendedStorage.cs" />
     <Compile Include="History\Hydra\RemoteStorage.cs" />
     <Compile Include="History\Hydra\RemoteStorageClient.cs" />
-    <Compile Include="History\ISecurityDownloader.cs" />
     <Compile Include="History\Russian\FortsDailyData.cs" />
     <Compile Include="History\Russian\MoexDownloader.cs" />
     <Compile Include="History\Russian\SecurityInfo.cs" />
