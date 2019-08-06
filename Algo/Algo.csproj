@@ -169,9 +169,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Server\HostInfo.cs" />
     <Compile Include="Server\ITransactionIdStorage.cs" />
     <Compile Include="Server\IMessageListener.cs" />
     <Compile Include="Server\IMessageListenerSession.cs" />
+    <Compile Include="Server\ModuleInfo.cs" />
+    <Compile Include="Server\ModuleInstanceConfig.cs" />
+    <Compile Include="Server\UniServerConfig.cs" />
+    <Compile Include="Server\UniServerModuleAttribute.cs" />
     <Compile Include="ServicesRegistry.cs" />
     <Compile Include="Storages\Binary\Snapshot\PositionBinarySnapshotSerializer.cs" />
     <Compile Include="Storages\Binary\Snapshot\QuotesBinarySnapshotSerializer.cs" />
