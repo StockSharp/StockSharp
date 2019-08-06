@@ -34138,12 +34138,12 @@ namespace StockSharp.Localization
 		public static string Str3654 => GetString(Str3654Key);
 
 		/// <summary>
-		/// Securities search
+		/// Search
 		/// </summary>
 		public const string Str3657Key = nameof(Str3657);
 
 		/// <summary>
-		/// Securities search
+		/// Search
 		/// </summary>
 		public static string Str3657 => GetString(Str3657Key);
 
@@ -49866,5 +49866,15 @@ namespace StockSharp.Localization
 		/// Extra conditions
 		/// </summary>
 		public static string ExtraConditions => GetString(ExtraConditionsKey);
+
+		/// <summary>
+		/// Suspicious action.
+		/// </summary>
+		public const string SuspiciousActionKey = nameof(SuspiciousAction);
+
+		/// <summary>
+		/// Suspicious action.
+		/// </summary>
+		public static string SuspiciousAction => GetString(SuspiciousActionKey);
 	}
 }
