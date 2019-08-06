@@ -538,9 +538,6 @@ namespace StockSharp.Algo.Storages
 				}
 
 				updateProgress(progress++, iterCount);
-
-				//if (isNew)
-				//	logsReceiver.AddInfoLog(LocalizedStrings.Str2930Params, security);
 			}
 		}
 

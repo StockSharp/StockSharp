@@ -260,6 +260,8 @@ namespace StockSharp.Algo.History.Hydra
 
 			updateProgress(0, newSecurityIds.Length);
 
+			var count = 0;
+
 			foreach (var b in newSecurityIds.Batch(RemoteStorage.DefaultMaxSecurityCount))
 			{
 				if (isCancelled())
@@ -270,7 +272,9 @@ namespace StockSharp.Algo.History.Hydra
 				foreach (var security in Invoke(f => f.GetSecurities(SessionId, batch)))
 					newSecurity(security);
 
-				updateProgress(0, batch.Length);
+				count += batch.Length;
+
+				updateProgress(count, newSecurityIds.Length);
 			}
 		}
 
