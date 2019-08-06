@@ -170,5 +170,10 @@ namespace StockSharp.Algo
 		/// The security based message adapter's provider.
 		/// </summary>
 		public static ISecurityMessageAdapterProvider SecurityAdapterProvider => ConfigManager.GetService<ISecurityMessageAdapterProvider>();
+
+		/// <summary>
+		/// <see cref="IMarketDataDrive"/> cache.
+		/// </summary>
+		public static DriveCache DriveCache => ConfigManager.GetService<DriveCache>();
 	}
 }

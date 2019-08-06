@@ -194,6 +194,7 @@ StockSharp API Change log
 * (feature) QUIK. Candles BuildFrom mode supported.
 * (feature) QUIK. Terminal connection lost notification supported.
 * (feature) IMarketDataDrive. Verify method added.
+* (feature) DriveCache. Moved from Hydra to Algo.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -180,6 +180,7 @@
     <Compile Include="Storages\Binary\Snapshot\TransactionBinarySnapshotSerializer.cs" />
     <Compile Include="Storages\CacheableMarketDataStorage.cs" />
     <Compile Include="Storages\Csv\MarketDepthCsvSerializer.cs" />
+    <Compile Include="Storages\DriveCache.cs" />
     <Compile Include="Storages\IMappingMessageAdapterProvider.cs" />
     <Compile Include="Storages\IPortfolioMessageAdapterProvider.cs" />
     <Compile Include="Storages\ISecurityMessageAdapterProvider.cs" />
