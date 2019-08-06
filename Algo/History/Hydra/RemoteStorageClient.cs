@@ -219,11 +219,12 @@ namespace StockSharp.Algo.History.Hydra
 		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
-		public void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity)
+		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
+		public void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Action<int, int> updateProgress)
 		{
 			var existingIds = securityProvider.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 			
-			LookupSecurities(criteria, isCancelled, existingIds, newSecurity);
+			LookupSecurities(criteria, isCancelled, existingIds, newSecurity, updateProgress);
 		}
 
 		/// <summary>
@@ -233,7 +234,8 @@ namespace StockSharp.Algo.History.Hydra
 		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
 		/// <param name="existingIds">Existing securities.</param>
 		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
-		public void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISet<string> existingIds, Action<SecurityMessage> newSecurity)
+		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
+		public void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISet<string> existingIds, Action<SecurityMessage> newSecurity, Action<int, int> updateProgress)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -247,11 +249,16 @@ namespace StockSharp.Algo.History.Hydra
 			if (newSecurity == null)
 				throw new ArgumentNullException(nameof(newSecurity));
 
+			if (updateProgress == null)
+				throw new ArgumentNullException(nameof(updateProgress));
+
 			var ids = Invoke(f => f.LookupSecurityIds(SessionId, criteria));
 
 			var newSecurityIds = ids
 				.Where(id => !existingIds.Contains(id))
 				.ToArray();
+
+			updateProgress(0, newSecurityIds.Length);
 
 			foreach (var b in newSecurityIds.Batch(RemoteStorage.DefaultMaxSecurityCount))
 			{
@@ -262,6 +269,8 @@ namespace StockSharp.Algo.History.Hydra
 
 				foreach (var security in Invoke(f => f.GetSecurities(SessionId, batch)))
 					newSecurity(security);
+
+				updateProgress(0, batch.Length);
 			}
 		}
 
@@ -273,7 +282,7 @@ namespace StockSharp.Algo.History.Hydra
 		public SecurityMessage[] LoadSecurities(SecurityLookupMessage criteria)
 		{
 			var securities = new List<SecurityMessage>();
-			LookupSecurities(criteria, () => false, new HashSet<string>(), securities.Add);
+			LookupSecurities(criteria, () => false, new HashSet<string>(), securities.Add, (i, c) => { });
 			return securities.ToArray();
 		}
 

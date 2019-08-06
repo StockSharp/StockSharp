@@ -1792,6 +1792,91 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Determines the specified security is matched lookup criteria.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="criteria">Message security lookup for specified criteria.</param>
+		/// <param name="secTypes">Securities types.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMatch(this SecurityMessage security, SecurityLookupMessage criteria, HashSet<SecurityTypes> secTypes)
+		{
+			var secId = criteria.SecurityId;
+
+			if (!secId.SecurityCode.IsEmpty() && !security.SecurityId.SecurityCode.ContainsIgnoreCase(secId.SecurityCode))
+				return false;
+
+			if (!secId.BoardCode.IsEmpty() && !security.SecurityId.BoardCode.CompareIgnoreCase(secId.BoardCode))
+				return false;
+
+			if (secTypes.Count > 0)
+			{
+				if (security.SecurityType == null || !secTypes.Contains(security.SecurityType.Value))
+					return false;
+			}
+
+			if (!criteria.UnderlyingSecurityCode.IsEmpty() && security.UnderlyingSecurityCode != criteria.UnderlyingSecurityCode)
+				return false;
+
+			if (criteria.Strike != null && security.Strike != criteria.Strike)
+				return false;
+
+			if (criteria.OptionType != null && security.OptionType != criteria.OptionType)
+				return false;
+
+			if (criteria.Currency != null && security.Currency != criteria.Currency)
+				return false;
+
+			if (!criteria.Class.IsEmptyOrWhiteSpace() && !security.Class.ContainsIgnoreCase(criteria.Class))
+				return false;
+
+			if (!criteria.Name.IsEmptyOrWhiteSpace() && !security.Name.ContainsIgnoreCase(criteria.Name))
+				return false;
+
+			if (!criteria.ShortName.IsEmptyOrWhiteSpace() && !security.ShortName.ContainsIgnoreCase(criteria.ShortName))
+				return false;
+
+			if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !security.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
+				return false;
+
+			if (!secId.Bloomberg.IsEmptyOrWhiteSpace() && !security.SecurityId.Bloomberg.ContainsIgnoreCase(secId.Bloomberg))
+				return false;
+
+			if (!secId.Cusip.IsEmptyOrWhiteSpace() && !security.SecurityId.Cusip.ContainsIgnoreCase(secId.Cusip))
+				return false;
+
+			if (!secId.IQFeed.IsEmptyOrWhiteSpace() && !security.SecurityId.IQFeed.ContainsIgnoreCase(secId.IQFeed))
+				return false;
+
+			if (!secId.Isin.IsEmptyOrWhiteSpace() && !security.SecurityId.Isin.ContainsIgnoreCase(secId.Isin))
+				return false;
+
+			if (!secId.Ric.IsEmptyOrWhiteSpace() && !security.SecurityId.Ric.ContainsIgnoreCase(secId.Ric))
+				return false;
+
+			if (!secId.Sedol.IsEmptyOrWhiteSpace() && !security.SecurityId.Sedol.ContainsIgnoreCase(secId.Sedol))
+				return false;
+
+			if (criteria.ExpiryDate != null && security.ExpiryDate != null && security.ExpiryDate != criteria.ExpiryDate)
+				return false;
+
+			if (criteria.ExtensionInfo != null && criteria.ExtensionInfo.Count > 0)
+			{
+				if (security.ExtensionInfo == null)
+					return false;
+
+				foreach (var pair in criteria.ExtensionInfo)
+				{
+					var value = security.ExtensionInfo.TryGetValue(pair.Key);
+
+					if (!pair.Value.Equals(value))
+						return false;
+				}
+			}
+
+			return true;
+		}
+
+		/// <summary>
 		/// To filter instruments by the given criteria.
 		/// </summary>
 		/// <param name="securities">Securities.</param>
@@ -1811,85 +1896,7 @@ namespace StockSharp.Algo
 			//if (!criteria.SecurityId.IsDefault())
 			//	return securities.Where(s => s.Id == criteria.Id).ToArray();
 
-			var secId = criteria.SecurityId;
-			var secTypes = criteria.GetSecurityTypes();
-			var underSecCode = criteria.UnderlyingSecurityCode;
-
-			return securities.Where(s =>
-			{
-				if (!secId.SecurityCode.IsEmpty() && !s.SecurityId.SecurityCode.ContainsIgnoreCase(secId.SecurityCode))
-					return false;
-
-				if (!secId.BoardCode.IsEmpty() && !s.SecurityId.BoardCode.CompareIgnoreCase(secId.BoardCode))
-					return false;
-
-				if (secTypes.Count > 0)
-				{
-					if (s.SecurityType == null || !secTypes.Contains(s.SecurityType.Value))
-						return false;
-				}
-
-				if (!underSecCode.IsEmpty() && s.UnderlyingSecurityCode != underSecCode)
-					return false;
-
-				if (criteria.Strike != null && s.Strike != criteria.Strike)
-					return false;
-
-				if (criteria.OptionType != null && s.OptionType != criteria.OptionType)
-					return false;
-
-				if (criteria.Currency != null && s.Currency != criteria.Currency)
-					return false;
-
-				if (!criteria.Class.IsEmptyOrWhiteSpace() && !s.Class.ContainsIgnoreCase(criteria.Class))
-					return false;
-
-				if (!criteria.Name.IsEmptyOrWhiteSpace() && !s.Name.ContainsIgnoreCase(criteria.Name))
-					return false;
-
-				if (!criteria.ShortName.IsEmptyOrWhiteSpace() && !s.ShortName.ContainsIgnoreCase(criteria.ShortName))
-					return false;
-
-				if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !s.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
-					return false;
-
-				if (!secId.Bloomberg.IsEmptyOrWhiteSpace() && !s.SecurityId.Bloomberg.ContainsIgnoreCase(secId.Bloomberg))
-					return false;
-
-				if (!secId.Cusip.IsEmptyOrWhiteSpace() && !s.SecurityId.Cusip.ContainsIgnoreCase(secId.Cusip))
-					return false;
-
-				if (!secId.IQFeed.IsEmptyOrWhiteSpace() && !s.SecurityId.IQFeed.ContainsIgnoreCase(secId.IQFeed))
-					return false;
-
-				if (!secId.Isin.IsEmptyOrWhiteSpace() && !s.SecurityId.Isin.ContainsIgnoreCase(secId.Isin))
-					return false;
-
-				if (!secId.Ric.IsEmptyOrWhiteSpace() && !s.SecurityId.Ric.ContainsIgnoreCase(secId.Ric))
-					return false;
-
-				if (!secId.Sedol.IsEmptyOrWhiteSpace() && !s.SecurityId.Sedol.ContainsIgnoreCase(secId.Sedol))
-					return false;
-
-				if (criteria.ExpiryDate != null && s.ExpiryDate != null && s.ExpiryDate != criteria.ExpiryDate)
-					return false;
-
-				if (criteria.ExtensionInfo != null && criteria.ExtensionInfo.Count > 0)
-				{
-					if (s.ExtensionInfo == null)
-						return false;
-
-					foreach (var pair in criteria.ExtensionInfo)
-					{
-						var value = s.ExtensionInfo.TryGetValue(pair.Key);
-
-						if (!pair.Value.Equals(value))
-							return false;
-					}
-				}
-
-				return true;
-			}).ToArray();
+			return securities.Where(s => s.IsMatch(criteria, criteria.GetSecurityTypes())).ToArray();
 		}
 
 		/// <summary>

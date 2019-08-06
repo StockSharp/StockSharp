@@ -19,13 +19,11 @@ namespace StockSharp.Algo.Storages
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
-	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Interop;
 
 	using MoreLinq;
 
@@ -452,139 +450,6 @@ namespace StockSharp.Algo.Storages
 		internal static DateTimeOffset StorageBinaryOldTruncate(this DateTimeOffset time)
 		{
 			return time.StorageTruncate(TimeSpan.FromMilliseconds(1));
-		}
-
-		/// <summary>
-		/// Synchronize securities with storage.
-		/// </summary>
-		/// <param name="drives">Storage drives.</param>
-		/// <param name="securityStorage">Securities meta info storage.</param>
-		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
-		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
-		/// <param name="logsReceiver">Logs receiver.</param>
-		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
-		public static void SynchronizeSecurities(this IEnumerable<IMarketDataDrive> drives,
-			ISecurityStorage securityStorage, IExchangeInfoProvider exchangeInfoProvider,
-			Action<Security> newSecurity, Action<int, int> updateProgress,
-			Func<bool> isCancelled, ILogReceiver logsReceiver)
-		{
-			if (drives == null)
-				throw new ArgumentNullException(nameof(drives));
-
-			if (securityStorage == null)
-				throw new ArgumentNullException(nameof(securityStorage));
-
-			if (exchangeInfoProvider == null)
-				throw new ArgumentNullException(nameof(exchangeInfoProvider));
-
-			if (newSecurity == null)
-				throw new ArgumentNullException(nameof(newSecurity));
-
-			if (updateProgress == null)
-				throw new ArgumentNullException(nameof(updateProgress));
-
-			if (isCancelled == null)
-				throw new ArgumentNullException(nameof(isCancelled));
-
-			if (logsReceiver == null)
-				throw new ArgumentNullException(nameof(logsReceiver));
-
-			var securityPaths = new List<string>();
-			var progress = 0;
-
-			foreach (var dir in drives.Select(drive => drive.Path).Distinct())
-			{
-				foreach (var letterDir in InteropHelper.GetDirectories(dir))
-				{
-					if (isCancelled())
-						break;
-
-					var name = Path.GetFileName(letterDir);
-
-					if (name == null || name.Length != 1)
-						continue;
-
-					securityPaths.AddRange(InteropHelper.GetDirectories(letterDir));
-				}
-
-				if (isCancelled())
-					break;
-			}
-
-			if (isCancelled())
-				return;
-
-			// кол-во проходов по директории для создания инструмента
-			var iterCount = securityPaths.Count;
-
-			updateProgress(0, iterCount);
-
-			var securities = securityStorage.LookupAll().ToDictionary(s => s.Id, s => s, StringComparer.InvariantCultureIgnoreCase);
-
-			foreach (var securityPath in securityPaths)
-			{
-				if (isCancelled())
-					break;
-
-				var securityId = Path.GetFileName(securityPath).FolderNameToSecurityId();
-
-				var isNew = false;
-
-				var security = securities.TryGetValue(securityId);
-
-				if (security == null)
-				{
-					var firstDataFile =
-						Directory.EnumerateDirectories(securityPath)
-							.SelectMany(d => Directory.EnumerateFiles(d, "*.bin")
-								.Concat(Directory.EnumerateFiles(d, "*.csv"))
-								.OrderBy(f => Path.GetExtension(f).CompareIgnoreCase(".bin") ? 0 : 1))
-							.FirstOrDefault();
-
-					if (firstDataFile != null)
-					{
-						var id = securityId.ToSecurityId();
-
-						decimal priceStep;
-
-						if (Path.GetExtension(firstDataFile).CompareIgnoreCase(".bin"))
-						{
-							try
-							{
-								priceStep = File.ReadAllBytes(firstDataFile).Range(6, 16).To<decimal>();
-							}
-							catch (Exception ex)
-							{
-								throw new InvalidOperationException(LocalizedStrings.Str2929Params.Put(firstDataFile), ex);
-							}
-						}
-						else
-							priceStep = 0.01m;
-
-						security = new Security
-						{
-							Id = securityId,
-							PriceStep = priceStep,
-							Name = id.SecurityCode,
-							Code = id.SecurityCode,
-							Board = exchangeInfoProvider.GetOrCreateBoard(id.BoardCode),
-						};
-
-						securities.Add(securityId, security);
-
-						securityStorage.Save(security, false);
-						newSecurity(security);
-
-						isNew = true;
-					}
-				}
-
-				updateProgress(progress++, iterCount);
-
-				if (isNew)
-					logsReceiver.AddInfoLog(LocalizedStrings.Str2930Params, security);
-			}
 		}
 
 		/// <summary>

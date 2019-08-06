@@ -32,6 +32,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.ComponentModel;
 	using Ecng.Configuration;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -441,6 +442,106 @@ namespace StockSharp.Algo.Storages
 		{
 			if (!Directory.Exists(Path))
 				throw new InvalidOperationException(LocalizedStrings.DirectoryNotExist.Put(Path));
+		}
+
+		/// <inheritdoc />
+		public override void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Action<int, int> updateProgress)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (isCancelled == null)
+				throw new ArgumentNullException(nameof(isCancelled));
+
+			if (newSecurity == null)
+				throw new ArgumentNullException(nameof(newSecurity));
+
+			if (updateProgress == null)
+				throw new ArgumentNullException(nameof(updateProgress));
+
+			if (securityProvider == null)
+				throw new ArgumentNullException(nameof(securityProvider));
+
+			var securityPaths = new List<string>();
+			var progress = 0;
+
+			foreach (var letterDir in InteropHelper.GetDirectories(Path))
+			{
+				if (isCancelled())
+					break;
+
+				var name = IOPath.GetFileName(letterDir);
+
+				if (name == null || name.Length != 1)
+					continue;
+
+				securityPaths.AddRange(InteropHelper.GetDirectories(letterDir));
+			}
+
+			if (isCancelled())
+				return;
+
+			var iterCount = securityPaths.Count;
+
+			updateProgress(0, iterCount);
+
+			var existingIds = securityProvider.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+			foreach (var securityPath in securityPaths)
+			{
+				if (isCancelled())
+					break;
+
+				var securityId = IOPath.GetFileName(securityPath).FolderNameToSecurityId();
+
+				if (!existingIds.Contains(securityId))
+				{
+					var firstDataFile =
+						Directory.EnumerateDirectories(securityPath)
+							.SelectMany(d => Directory.EnumerateFiles(d, "*.bin")
+								.Concat(Directory.EnumerateFiles(d, "*.csv"))
+								.OrderBy(f => IOPath.GetExtension(f).CompareIgnoreCase(".bin") ? 0 : 1))
+							.FirstOrDefault();
+
+					if (firstDataFile != null)
+					{
+						var id = securityId.ToSecurityId();
+
+						decimal priceStep;
+
+						if (IOPath.GetExtension(firstDataFile).CompareIgnoreCase(".bin"))
+						{
+							try
+							{
+								priceStep = File.ReadAllBytes(firstDataFile).Range(6, 16).To<decimal>();
+							}
+							catch (Exception ex)
+							{
+								throw new InvalidOperationException(LocalizedStrings.Str2929Params.Put(firstDataFile), ex);
+							}
+						}
+						else
+							priceStep = 0.01m;
+
+						var security = new SecurityMessage
+						{
+							SecurityId = securityId.ToSecurityId(),
+							PriceStep = priceStep,
+							Name = id.SecurityCode,
+						};
+
+						if (security.IsMatch(criteria, criteria.GetSecurityTypes()))
+							newSecurity(security);
+
+						existingIds.Add(securityId);
+					}
+				}
+
+				updateProgress(progress++, iterCount);
+
+				//if (isNew)
+				//	logsReceiver.AddInfoLog(LocalizedStrings.Str2930Params, security);
+			}
 		}
 
 		/// <summary>

@@ -7,6 +7,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.History.Hydra;
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -79,6 +80,17 @@ namespace StockSharp.Algo.Storages
 		public override void Verify()
 		{
 			Client.Login();
+		}
+
+		/// <inheritdoc />
+		public override void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Action<int, int> updateProgress)
+		{
+			using (var client = new RemoteStorageClient(new Uri(Path)))
+			{
+				client.Credentials.Load(Client.Credentials.Save());
+
+				client.LookupSecurities(criteria, isCancelled, securityProvider, newSecurity, updateProgress);
+			}
 		}
 
 		/// <inheritdoc />
