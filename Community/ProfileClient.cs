@@ -48,9 +48,9 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void SendEmail(string email)
+		public void SendEmail()
 		{
-			ValidateError(Invoke(f => f.SendEmail(email)));
+			ValidateError(Invoke(f => f.SendEmail()));
 		}
 
 		/// <inheritdoc />

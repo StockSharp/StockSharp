@@ -14,8 +14,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To send an e-mail message.
 		/// </summary>
-		/// <param name="email">E-mail address.</param>
-		void SendEmail(string email);
+		void SendEmail();
 
 		/// <summary>
 		/// To confirm the e-mail address.
