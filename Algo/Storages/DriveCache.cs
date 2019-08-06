@@ -30,9 +30,9 @@
 				if (x == null || y == null)
 					return false;
 
-				if (x.Item2 == y.Item2)
+				if (Equals(x.Item2, y.Item2))
 				{
-					if (x.Item2 != null)
+					if (!ReferenceEquals(x.Item2, null))
 						return true;
 					else
 						return x.Item1.ComparePaths(y.Item1);
