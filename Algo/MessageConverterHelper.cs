@@ -263,7 +263,7 @@ namespace StockSharp.Algo
 				OrderStringId = order.StringId,
 				TransactionId = order.TransactionId,
 				OriginalTransactionId = originalTransactionId,
-				SecurityId = order.Security?.ToSecurityId() ?? default(SecurityId),
+				SecurityId = order.Security?.ToSecurityId() ?? default,
 				PortfolioName = order.Portfolio?.Name,
 				Error = fail.Error,
 				ExecutionType = ExecutionTypes.Transaction,
@@ -675,6 +675,7 @@ namespace StockSharp.Algo
 				BoardCode = portfolio.Board?.Code,
 				Currency = portfolio.Currency,
 				ClientCode = portfolio.ClientCode,
+				InternalId = portfolio.InternalId,
 				OriginalTransactionId = originalTransactionId,
 			};
 		}
@@ -692,7 +693,7 @@ namespace StockSharp.Algo
 			return new PortfolioChangeMessage
 			{
 				PortfolioName = portfolio.Name,
-				BoardCode = portfolio.Board == null ? null : portfolio.Board.Code,
+				BoardCode = portfolio.Board?.Code,
 				LocalTime = portfolio.LocalTime,
 				ServerTime = portfolio.LastChangeTime,
 				ClientCode = portfolio.ClientCode,
@@ -1410,7 +1411,7 @@ namespace StockSharp.Algo
 			// иногда в Security.Code может быть записано неправильное, и необходимо опираться на Security.Id
 			if (!security.Id.IsEmpty())
 			{
-				var id = (idGenerator ?? new SecurityIdGenerator()).Split(security.Id);
+				var id = GetGenerator(idGenerator).Split(security.Id);
 
 				secCode = id.SecurityCode;
 
@@ -1446,7 +1447,7 @@ namespace StockSharp.Algo
 			}
 
 			if (copyExtended)
-				return security.ExternalId.ToSecurityId(secCode, boardCode, security.Type);
+				return security.ExternalId.ToSecurityId(secCode, boardCode);
 			
 			return new SecurityId
 			{
@@ -1498,9 +1499,8 @@ namespace StockSharp.Algo
 		/// <param name="externalId"><see cref="SecurityExternalId"/>.</param>
 		/// <param name="securityCode">Security code.</param>
 		/// <param name="boardCode">Board code.</param>
-		/// <param name="securityType">Security type.</param>
 		/// <returns><see cref="SecurityId"/>.</returns>
-		public static SecurityId ToSecurityId(this SecurityExternalId externalId, string securityCode, string boardCode, SecurityTypes? securityType)
+		public static SecurityId ToSecurityId(this SecurityExternalId externalId, string securityCode, string boardCode)
 		{
 			//if (externalId == null)
 			//	throw new ArgumentNullException(nameof(externalId));
@@ -1509,7 +1509,6 @@ namespace StockSharp.Algo
 			{
 				SecurityCode = securityCode,
 				BoardCode = boardCode,
-				SecurityType = securityType,
 				Bloomberg = externalId.Bloomberg,
 				Cusip = externalId.Cusip,
 				IQFeed = externalId.IQFeed,
@@ -1635,6 +1634,9 @@ namespace StockSharp.Algo
 
 			if (!message.ClientCode.IsEmpty())
 				portfolio.ClientCode = message.ClientCode;
+
+			if (message.InternalId != null)
+				portfolio.InternalId = message.InternalId;
 
 			//if (message.State != null)
 			//	portfolio.State = message.State;
@@ -1830,6 +1832,34 @@ namespace StockSharp.Algo
 				return dataType.MessageType.ToCandleMarketDataType();
 			else
 				return null;
+		}
+
+		/// <summary>
+		/// Convert <see cref="MarketDataTypes"/> to <see cref="Type"/> value.
+		/// </summary>
+		/// <param name="type"><see cref="MarketDataTypes"/> value.</param>
+		/// <returns>Message type.</returns>
+		public static Type ToMessageType(this MarketDataTypes type)
+		{
+			switch (type)
+			{
+				case MarketDataTypes.Level1:
+					return typeof(Level1ChangeMessage);
+				case MarketDataTypes.MarketDepth:
+					return typeof(QuoteChangeMessage);
+				case MarketDataTypes.Trades:
+				case MarketDataTypes.OrderLog:
+					return typeof(ExecutionMessage);
+				case MarketDataTypes.News:
+					return typeof(NewsMessage);
+				default:
+				{
+					if (type.IsCandleDataType())
+						return type.ToCandleMessage();
+					else 
+						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+				}
+			}
 		}
 
 		/// <summary>

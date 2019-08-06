@@ -447,8 +447,18 @@ namespace StockSharp.Algo
 			set => Adapter.SlippageManager = value;
 		}
 
+		private ConnectionStates _connectionState;
+
 		/// <inheritdoc />
-		public ConnectionStates ConnectionState { get; private set; }
+		public ConnectionStates ConnectionState
+		{
+			get => _connectionState;
+			private set
+			{
+				_connectionState = value;
+				_stateChanged?.Invoke();
+			}
+		}
 
 		///// <summary>
 		///// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction. The default is enabled.
@@ -554,7 +564,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void Connect()
 		{
-			this.AddInfoLog("Connect");
+			this.AddInfoLog(nameof(Connect));
 
 			try
 			{
@@ -593,7 +603,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void Disconnect()
 		{
-			this.AddInfoLog("Disconnect");
+			this.AddInfoLog(nameof(Disconnect));
 
 			if (ConnectionState != ConnectionStates.Connected)
 			{
@@ -649,7 +659,7 @@ namespace StockSharp.Algo
 					securityCode = id.SecurityCode;
 			}
 
-			var message = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode, criteria.Type));
+			var message = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode));
 			message.Adapter = adapter;
 			message.OfflineMode = offlineMode;
 
@@ -698,7 +708,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void LookupOrders(Order criteria, IMessageAdapter adapter = null)
+		public void LookupOrders(Order criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
 
@@ -706,6 +716,7 @@ namespace StockSharp.Algo
 			{
 				TransactionId = transactionId,
 				Adapter = adapter,
+				OfflineMode = offlineMode,
 			});
 		}
 
@@ -1424,8 +1435,8 @@ namespace StockSharp.Algo
 		public virtual void ClearCache()
 		{
 			_entityCache.Clear();
-			_prevTime = default(DateTimeOffset);
-			_currentTime = default(DateTimeOffset);
+			_prevTime = default;
+			_currentTime = default;
 
 			_securityLookups.Clear();
 			_boardLookups.Clear();

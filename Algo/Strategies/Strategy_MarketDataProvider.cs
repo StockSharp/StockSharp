@@ -134,6 +134,13 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataSubscriptionFailed2
+		{
+			add => SafeGetConnector().MarketDataSubscriptionFailed2 += value;
+			remove => SafeGetConnector().MarketDataSubscriptionFailed2 -= value;
+		}
+
+		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded
 		{
 			add => SafeGetConnector().MarketDataUnSubscriptionSucceeded += value;
@@ -145,6 +152,13 @@ namespace StockSharp.Algo.Strategies
 		{
 			add => SafeGetConnector().MarketDataUnSubscriptionFailed += value;
 			remove => SafeGetConnector().MarketDataUnSubscriptionFailed -= value;
+		}
+
+		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataUnSubscriptionFailed2
+		{
+			add => SafeGetConnector().MarketDataUnSubscriptionFailed2 += value;
+			remove => SafeGetConnector().MarketDataUnSubscriptionFailed2 -= value;
 		}
 
 		/// <inheritdoc />
@@ -204,9 +218,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null)
+		public void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().RegisterMarketDepth(security, from, to, count, buildMode, buildFrom, maxDepth);
+			SafeGetConnector().RegisterMarketDepth(security, from, to, count, buildMode, buildFrom, maxDepth, adapter);
 		}
 
 		/// <inheritdoc />
@@ -228,9 +242,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null)
+		public void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().RegisterTrades(security, from, to, count, buildMode, buildFrom);
+			SafeGetConnector().RegisterTrades(security, from, to, count, buildMode, buildFrom, adapter);
 		}
 
 		/// <inheritdoc />
@@ -240,9 +254,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null)
+		public void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().RegisterSecurity(security, from, to, count, buildMode, buildFrom);
+			SafeGetConnector().RegisterSecurity(security, from, to, count, buildMode, buildFrom, adapter);
 		}
 
 		/// <inheritdoc />
@@ -252,9 +266,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null)
+		public void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().RegisterOrderLog(security, from, to, count);
+			SafeGetConnector().RegisterOrderLog(security, from, to, count, adapter);
 		}
 
 		/// <inheritdoc />
@@ -264,9 +278,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void RegisterNews()
+		public void RegisterNews(IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().RegisterNews();
+			SafeGetConnector().RegisterNews(adapter);
 		}
 
 		/// <inheritdoc />
@@ -276,9 +290,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void SubscribeBoard(ExchangeBoard board)
+		public void SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().SubscribeBoard(board);
+			SafeGetConnector().SubscribeBoard(board, adapter);
 		}
 
 		/// <inheritdoc />

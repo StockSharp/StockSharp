@@ -221,7 +221,7 @@ namespace StockSharp.Algo
 		/// <param name="interval">The interval of the order book generation. The default is <see cref="TimeSpan.Zero"/>, which means order books generation at each new string of orders log.</param>
 		/// <param name="maxDepth">The maximal depth of order book. The default is <see cref="Int32.MaxValue"/>, which means endless depth.</param>
 		/// <returns>Market depths.</returns>
-		public static IEnumerable<MarketDepth> ToMarketDepths(this IEnumerable<OrderLogItem> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
+		public static IEnumerable<MarketDepth> ToMarketDepths(this IEnumerable<OrderLogItem> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default, int maxDepth = int.MaxValue)
 		{
 			var first = items.FirstOrDefault();
 
@@ -241,7 +241,7 @@ namespace StockSharp.Algo
 		/// <param name="interval">The interval of the order book generation. The default is <see cref="TimeSpan.Zero"/>, which means order books generation at each new string of orders log.</param>
 		/// <param name="maxDepth">The maximal depth of order book. The default is <see cref="Int32.MaxValue"/>, which means endless depth.</param>
 		/// <returns>Market depths.</returns>
-		public static IEnumerable<QuoteChangeMessage> ToMarketDepths(this IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
+		public static IEnumerable<QuoteChangeMessage> ToMarketDepths(this IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default, int maxDepth = int.MaxValue)
 		{
 			return new DepthEnumerable(items, builder, interval, maxDepth);
 		}

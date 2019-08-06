@@ -717,9 +717,9 @@ namespace StockSharp.Algo
 			return adapters;
 		}
 
-		private IEnumerable<IMessageAdapter> GetSubscriptionAdapters(MarketDataMessage mdMsg)
+		private IMessageAdapter[] GetSubscriptionAdapters(MarketDataMessage mdMsg)
 		{
-			var adapters = GetAdapters(mdMsg, out var isPended, out var skipSupportedMessages).Where(a =>
+			var adapters = GetAdapters(mdMsg, out _, out var skipSupportedMessages).Where(a =>
 			{
 				if (skipSupportedMessages)
 					return true;
@@ -786,8 +786,8 @@ namespace StockSharp.Algo
 				return a.TryGetCandlesBuildFrom(mdMsg, CandleBuilderProvider) != null;
 			}).ToArray();
 
-			if (!isPended && adapters.Length == 0)
-				throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(mdMsg));
+			//if (!isPended && adapters.Length == 0)
+			//	throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(mdMsg));
 
 			return adapters;
 		}
@@ -806,6 +806,12 @@ namespace StockSharp.Algo
 					if (mdMsg.IsSubscribe)
 					{
 						var adapters = GetSubscriptionAdapters(mdMsg);
+
+						if (adapters.Length == 0)
+						{
+							SendOutMarketDataNotSupported(mdMsg.TransactionId);
+							break;
+						}
 
 						lock (_newsSubscriptions.SyncRoot)
 						{
@@ -862,6 +868,11 @@ namespace StockSharp.Algo
 						// if the message was looped back via IsBack=true
 						_subscriptionMessages.TryAdd(mdMsg.TransactionId, (MarketDataMessage)mdMsg.Clone());
 						adapter.SendInMessage(mdMsg);
+					}
+					else
+					{
+						if (mdMsg.IsSubscribe)
+							SendOutMarketDataNotSupported(mdMsg.TransactionId);
 					}
 
 					break;
@@ -1111,7 +1122,6 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			var error = message.Error;
 			var isSubscribe = originMsg.IsSubscribe;
 
 			if (originMsg.DataType == MarketDataTypes.News)
@@ -1124,7 +1134,7 @@ namespace StockSharp.Algo
 					var tuple = _newsSubscriptions.TryGetValue(originalTransactionId);
 
 					transId = tuple.First;
-					tuple.Second = error == null && !message.IsNotSupported;
+					tuple.Second = message.IsOk();
 
 					foreach (var pair in _newsSubscriptions)
 					{
@@ -1180,7 +1190,7 @@ namespace StockSharp.Algo
 				return;
 			}
 			
-			if (error == null && isSubscribe)
+			if (message.Error == null && isSubscribe)
 			{
 				// we can initiate multiple subscriptions with unique request id and same params
 				_subscriptionsByKey.TryAdd(key, adapter);
@@ -1189,7 +1199,7 @@ namespace StockSharp.Algo
 				_subscriptionsById.TryAdd(originalTransactionId, adapter);
 			}
 
-			RaiseMarketDataMessage(adapter, originalTransactionId, error, isSubscribe);
+			RaiseMarketDataMessage(adapter, originalTransactionId, message.Error, isSubscribe);
 		}
 
 		private void RaiseMarketDataMessage(IMessageAdapter adapter, long originalTransactionId, Exception error, bool isSubscribe)

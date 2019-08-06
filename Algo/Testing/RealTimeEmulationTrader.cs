@@ -23,7 +23,6 @@ namespace StockSharp.Algo.Testing
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using StockSharp.Localization;
 	using StockSharp.Logging;
 
 	using EntityFactory = StockSharp.Algo.EntityFactory;
@@ -200,11 +199,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		/// <param name="underlyngMarketDataAdapter"><see cref="IMessageAdapter"/>, through which market data will be got.</param>
 		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter)
-			: this(underlyngMarketDataAdapter, new Portfolio
-			{
-				Name = LocalizedStrings.Str1209,
-				BeginValue = 1000000
-			})
+			: this(underlyngMarketDataAdapter, Portfolio.CreateSimulator())
 		{
 		}
 

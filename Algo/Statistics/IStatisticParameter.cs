@@ -161,7 +161,7 @@ namespace StockSharp.Algo.Statistics
 		/// <inheritdoc />
 		public virtual void Reset()
 		{
-			Value = default(TValue);
+			Value = default;
 		}
 
 		/// <summary>

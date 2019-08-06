@@ -341,7 +341,16 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe},Arg={Arg},TransId={TransactionId},OrigId={OriginalTransactionId}";
+			var str = base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe}";
+
+			if (Arg != null)
+				str += $",Arg={Arg}";
+
+			if (TransactionId != default)
+				str += $",TransId={TransactionId}";
+
+			if (OriginalTransactionId != default)
+				str += $",OrigId={OriginalTransactionId}";
 
 			if (MaxDepth != null)
 				str += $",MaxDepth={MaxDepth}";

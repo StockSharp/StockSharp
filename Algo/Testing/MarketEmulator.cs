@@ -2108,16 +2108,19 @@ namespace StockSharp.Algo.Testing
 
 		private string CheckRegistration(ExecutionMessage execMsg, SecurityMessage securityDefinition/*, ICollection<Message> result*/)
 		{
-			var board = _boardDefinitions.TryGetValue(execMsg.SecurityId.BoardCode);
-
-			if (board != null)
+			if (Settings.CheckTradingState)
 			{
-				//if (execMsg.OrderType == OrderTypes.Market && !board.IsSupportMarketOrders)
-				//if (!Settings.IsSupportAtomicReRegister)
-				//	return LocalizedStrings.Str1170Params.Put(board.Code);
+				var board = _boardDefinitions.TryGetValue(execMsg.SecurityId.BoardCode);
 
-				if (!board.IsTradeTime(execMsg.ServerTime))
-					return LocalizedStrings.Str1171;
+				if (board != null)
+				{
+					//if (execMsg.OrderType == OrderTypes.Market && !board.IsSupportMarketOrders)
+					//if (!Settings.IsSupportAtomicReRegister)
+					//	return LocalizedStrings.Str1170Params.Put(board.Code);
+
+					if (!board.IsTradeTime(execMsg.ServerTime))
+						return LocalizedStrings.Str1171;
+				}
 			}
 
 			var state = _secStates.TryGetValue(execMsg.SecurityId);

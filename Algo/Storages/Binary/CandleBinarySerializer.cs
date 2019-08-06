@@ -204,16 +204,8 @@ namespace StockSharp.Algo.Storages.Binary
 						writer.Write(!candle.HighTime.IsDefault());
 						writer.Write(!candle.LowTime.IsDefault());
 
-						if (candle.HighTime.IsDefault())
-						{
-							first = candle.LowTime;
-							second = default(DateTimeOffset);
-						}
-						else
-						{
-							first = candle.HighTime;
-							second = default(DateTimeOffset);
-						}
+						first = candle.HighTime.IsDefault() ? candle.LowTime : candle.HighTime;
+						second = default;
 					}
 
 					if (!first.IsDefault())

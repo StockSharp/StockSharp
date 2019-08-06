@@ -358,7 +358,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected void Activate()
 		{
-			Activate(default(TArg));
+			Activate(default);
 		}
 
 		/// <summary>

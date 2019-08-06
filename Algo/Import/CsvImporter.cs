@@ -155,7 +155,6 @@
 				Id = id,
 				Code = securityId.SecurityCode,
 				Board = exchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode),
-				Type = securityId.SecurityType,
 			};
 
 			_securityStorage.Save(security, false);
@@ -195,7 +194,7 @@
 								if (candle.CloseTime < candle.OpenTime)
 								{
 									// close time doesn't exist in importing file
-									candle.CloseTime = default(DateTimeOffset);
+									candle.CloseTime = default;
 								}
 								else if (candle.CloseTime > candle.OpenTime)
 								{

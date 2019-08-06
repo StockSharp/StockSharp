@@ -71,16 +71,6 @@
             <param name="fields">Market data fields.</param>
             <returns>Level1 market data.</returns>
         </member>
-        <member name="M:StockSharp.Algo.History.BaseHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})">
-            <summary>
-            To get level1 market data.
-            </summary>
-            <param name="securityId">Security ID.</param>
-            <param name="beginDate">Start date.</param>
-            <param name="endDate">End date.</param>
-            <param name="fields">Market data fields.</param>
-            <returns>Level1 market data.</returns>
-        </member>
         <member name="M:StockSharp.Algo.History.BaseHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
             <summary>
             To get tick data.
@@ -90,23 +80,6 @@
             <param name="endDate">End date.</param>
             <returns>Tick data.</returns>
         </member>
-        <member name="M:StockSharp.Algo.History.BaseHistorySource.GetTicks(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime)">
-            <summary>
-            To get tick data.
-            </summary>
-            <param name="securityId">Security ID.</param>
-            <param name="beginDate">Start date.</param>
-            <param name="endDate">End date.</param>
-            <returns>Tick data.</returns>
-        </member>
-        <member name="M:StockSharp.Algo.History.BaseHistorySource.GetSecurities(StockSharp.Messages.SecurityLookupMessage,System.String@)">
-            <summary>
-            Download all securities.
-            </summary>
-            <param name="lookupMsg">Message security lookup for specified criteria.</param>
-            <param name="storageName">Storage name.</param>
-            <returns>All securities.</returns>
-        </member>
         <member name="M:StockSharp.Algo.History.BaseHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
             <summary>
             Download new securities.
@@ -115,6 +88,13 @@
             <param name="criteria">The instrument whose fields will be used as a filter.</param>
             <param name="newSecurity">The handler through which a new instrument will be passed.</param>
             <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+        </member>
+        <member name="M:StockSharp.Algo.History.BaseHistorySource.GetSecurities(StockSharp.Messages.SecurityLookupMessage)">
+            <summary>
+            Download all securities.
+            </summary>
+            <param name="lookupMsg">Message security lookup for specified criteria.</param>
+            <returns>All securities.</returns>
         </member>
         <member name="M:StockSharp.Algo.History.BaseHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Messages.SecurityLookupMessage,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
             <summary>

@@ -20,6 +20,7 @@ namespace StockSharp.BusinessEntities
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
+	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
@@ -179,7 +180,29 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Portfolio associated with the orders received through the orders log.
 		/// </summary>
-		public static Portfolio AnonymousPortfolio { get; } = new Portfolio { Name = LocalizedStrings.Str545 };
+		public static Portfolio AnonymousPortfolio { get; } = new Portfolio
+		{
+			Name = LocalizedStrings.Str545,
+			InternalId = "00000000-0000-0000-0000-000000000001".To<Guid>(),
+		};
+
+		/// <summary>
+		/// Internal identifier.
+		/// </summary>
+		[Browsable(false)]
+		[DataMember]
+		public Guid? InternalId { get; set; }
+
+		/// <summary>
+		/// Create virtual portfolio for simulation.
+		/// </summary>
+		/// <returns>Simulator.</returns>
+		public static Portfolio CreateSimulator() => new Portfolio
+		{
+			Name = LocalizedStrings.Str1209,
+			BeginValue = 1000000,
+			InternalId = "00000000-0000-0000-0000-000000000002".To<Guid>(),
+		};
 
 		/// <summary>
 		/// Create a copy of <see cref="Portfolio"/>.
@@ -208,12 +231,10 @@ namespace StockSharp.BusinessEntities
 			destination.State = State;
 			destination.CommissionMaker = CommissionMaker;
 			destination.CommissionTaker = CommissionTaker;
+			destination.InternalId = InternalId;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return Name;

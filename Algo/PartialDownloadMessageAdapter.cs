@@ -308,7 +308,7 @@
 
 							requestId = info.Origin.TransactionId;
 
-							if (responseMsg.Error != null || responseMsg.IsNotSupported)
+							if (!responseMsg.IsOk())
 							{
 								_original.Remove(requestId);
 								_partialRequests.RemoveWhere(p => p.Value == info);

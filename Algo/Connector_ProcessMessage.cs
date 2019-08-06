@@ -22,6 +22,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using MoreLinq;
 
@@ -773,44 +774,45 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
+		private void ProcessMarketDataMessage(MarketDataMessage replyMsg)
 		{
-			var error = mdMsg.Error;
-
-			var security = _subscriptionManager.ProcessResponse(mdMsg, out var originalMsg, out var unexpectedCancelled);
+			var security = _subscriptionManager.ProcessResponse(replyMsg, out var originalMsg, out var unexpectedCancelled);
 
 			if (security == null && originalMsg?.DataType != MarketDataTypes.News)
 			{
-				if (error != null)
-					RaiseError(error);
+				if (replyMsg.Error != null)
+					RaiseError(replyMsg.Error);
 
 				return;
 			}
 
 			if (originalMsg.IsSubscribe)
 			{
-				if (error == null)
+				if (replyMsg.IsOk())
 					RaiseMarketDataSubscriptionSucceeded(security, originalMsg);
 				else
 				{
 					if (unexpectedCancelled)
 					{
-						RaiseMarketDataUnexpectedCancelled(security, originalMsg, error);
-						ProcessCandleSeriesStopped(mdMsg.OriginalTransactionId);
+						RaiseMarketDataUnexpectedCancelled(security, originalMsg, replyMsg.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)));
+						ProcessCandleSeriesStopped(replyMsg.OriginalTransactionId);
 					}
 					else
-						RaiseMarketDataSubscriptionFailed(security, originalMsg, error);
+					{
+						RaiseMarketDataSubscriptionFailed(security, originalMsg, replyMsg);
+						ProcessCandleSeriesError(replyMsg);
+					}
 				}
 			}
 			else
 			{
-				if (error == null)
+				if (replyMsg.IsOk())
 				{
 					RaiseMarketDataUnSubscriptionSucceeded(security, originalMsg);
 					ProcessCandleSeriesStopped(originalMsg.OriginalTransactionId);
 				}
 				else
-					RaiseMarketDataUnSubscriptionFailed(security, originalMsg, error);
+					RaiseMarketDataUnSubscriptionFailed(security, originalMsg, replyMsg);
 			}
 		}
 
@@ -1050,9 +1052,17 @@ namespace StockSharp.Algo
 
 		private void ProcessBoardStateMessage(BoardStateMessage message)
 		{
-			var board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
-			_boardStates[board] = message.State;
-			SessionStateChanged?.Invoke(board, message.State);
+			ExchangeBoard board;
+
+			if (message.BoardCode.IsEmpty())
+				board = null;
+			else
+			{
+				board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
+				_boardStates[board] = message.State;
+			}
+
+			RaiseSessionStateChanged(board, message.State);
 		}
 
 		private void ProcessBoardMessage(BoardMessage message)
@@ -1488,7 +1498,7 @@ namespace StockSharp.Algo
 					RaiseSecurityChanged(security);
 
 					// стаканы по ALL обновляют BestXXX по конкретным инструментам
-					if (security.Board.Code == AssociatedBoardCode)
+					if (security.Board?.Code == AssociatedBoardCode)
 					{
 						var changedSecurities = new Dictionary<Security, RefPair<bool, bool>>();
 
@@ -1949,11 +1959,57 @@ namespace StockSharp.Algo
 			return series;
 		}
 
+		private void ProcessCandleSeriesError(MarketDataMessage reply)
+		{
+			var series = _entityCache.RemoveCandleSeries(reply.OriginalTransactionId);
+
+			if (series != null)
+				RaiseCandleSeriesError(series, reply);
+		}
+
 		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
 		{
 			var series = ProcessCandleSeriesStopped(message.OriginalTransactionId);
 			var security = series?.Security ?? _subscriptionManager.TryGetSecurity(message.OriginalTransactionId);
 			RaiseMarketDataSubscriptionFinished(security, message);
+		}
+
+		private Action<Message> _newOutMessage;
+
+		event Action<Message> IMessageChannel.NewOutMessage
+		{
+			add => _newOutMessage += value;
+			remove => _newOutMessage -= value;
+		}
+
+		bool IMessageChannel.IsOpened => ConnectionState == ConnectionStates.Connected;
+
+		private Action _stateChanged;
+
+		event Action IMessageChannel.StateChanged
+		{
+			add => _stateChanged += value;
+			remove => _stateChanged -= value;
+		}
+
+		void IMessageChannel.Open()
+		{
+			Connect();
+		}
+
+		void IMessageChannel.Close()
+		{
+			Disconnect();
+		}
+
+		IMessageChannel ICloneable<IMessageChannel>.Clone()
+		{
+			return this.Clone();
+		}
+
+		object ICloneable.Clone()
+		{
+			return this.Clone();
 		}
 	}
 }

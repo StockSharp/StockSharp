@@ -62,7 +62,7 @@ namespace StockSharp.Messages
 			var info = entity.GetExtInfo(false);
 
 			if (info == null)
-				return default(T);
+				return default;
 
 			return (T)(info.TryGetValue(key) ?? default(T));
 		}

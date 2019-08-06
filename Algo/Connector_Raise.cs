@@ -211,10 +211,16 @@ namespace StockSharp.Algo
 		public event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
 
 		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataSubscriptionFailed2;
+
+		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
+
+		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataUnSubscriptionFailed2;
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataFinishedMessage> MarketDataSubscriptionFinished;
@@ -247,6 +253,11 @@ namespace StockSharp.Algo
 		/// The series processing end event.
 		/// </summary>
 		public event Action<CandleSeries> CandleSeriesStopped;
+
+		/// <summary>
+		/// The series error event.
+		/// </summary>
+		public event Action<CandleSeries, MarketDataMessage> CandleSeriesError;
 
 		/// <inheritdoc />
 		public event Action<Order> OrderInitialized;
@@ -578,10 +589,17 @@ namespace StockSharp.Algo
 			MarketDataSubscriptionSucceeded?.Invoke(security, message);
 		}
 
-		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
+		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage origin, MarketDataMessage reply)
 		{
-			this.AddErrorLog(LocalizedStrings.SubscribedError, security?.Id, message.DataType, error.Message);
-			MarketDataSubscriptionFailed?.Invoke(security, message, error);
+			var error = reply.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(origin));
+
+			if (reply.IsNotSupported)
+				this.AddWarningLog(LocalizedStrings.SubscriptionNotSupported, origin);
+			else
+				this.AddErrorLog(LocalizedStrings.SubscribedError, security?.Id, origin.DataType, error.Message);
+
+			MarketDataSubscriptionFailed?.Invoke(security, origin, error);
+			MarketDataSubscriptionFailed2?.Invoke(security, origin, reply);
 		}
 
 		private void RaiseMarketDataUnSubscriptionSucceeded(Security security, MarketDataMessage message)
@@ -597,10 +615,12 @@ namespace StockSharp.Algo
 			MarketDataUnSubscriptionSucceeded?.Invoke(security, message);
 		}
 
-		private void RaiseMarketDataUnSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
+		private void RaiseMarketDataUnSubscriptionFailed(Security security, MarketDataMessage origin, MarketDataMessage reply)
 		{
-			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security?.Id, message.DataType, error.Message);
-			MarketDataUnSubscriptionFailed?.Invoke(security, message, error);
+			var error = reply.Error ?? new NotSupportedException();
+			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security?.Id, origin.DataType, error.Message);
+			MarketDataUnSubscriptionFailed?.Invoke(security, origin, error);
+			MarketDataUnSubscriptionFailed2?.Invoke(security, origin, reply);
 		}
 
 		private void RaiseMarketDataSubscriptionFinished(Security security, MarketDataFinishedMessage message)
@@ -616,12 +636,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.NewMessage"/>.
+		/// To call the event <see cref="NewMessage"/>.
 		/// </summary>
 		/// <param name="message">A new message.</param>
 		private void RaiseNewMessage(Message message)
 		{
 			NewMessage?.Invoke(message);
+			_newOutMessage?.Invoke(message);
 		}
 
 		private void RaiseValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
@@ -647,6 +668,16 @@ namespace StockSharp.Algo
 		private void RaiseCandleSeriesStopped(CandleSeries series)
 		{
 			CandleSeriesStopped?.Invoke(series);
+		}
+
+		private void RaiseCandleSeriesError(CandleSeries series, MarketDataMessage reply)
+		{
+			CandleSeriesError?.Invoke(series, reply);
+		}
+
+		private void RaiseSessionStateChanged(ExchangeBoard board, SessionStates state)
+		{
+			SessionStateChanged?.Invoke(board, state);
 		}
 	}
 }

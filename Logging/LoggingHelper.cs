@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Logging
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
@@ -275,7 +276,7 @@ namespace StockSharp.Logging
 			catch (Exception ex)
 			{
 				ex.LogError();
-				return default(T);
+				return default;
 			}
 		}
 
@@ -303,6 +304,36 @@ namespace StockSharp.Logging
 			{
 				ex.LogError();
 			}
+		}
+
+		/// <summary>
+		/// Wrap the specified action in try/catch clause with logging.
+		/// </summary>
+		/// <typeparam name="T1">The type of source values.</typeparam>
+		/// <typeparam name="T2">The type of returned result.</typeparam>
+		/// <param name="from">Source values</param>
+		/// <param name="func">Converter.</param>
+		/// <returns>Result.</returns>
+		public static T2[] SafeAdd<T1, T2>(this IEnumerable from, Func<T1, T2> func)
+		{
+			if (from == null)
+				throw new ArgumentNullException(nameof(from));
+
+			var list = new List<T2>();
+
+			foreach (T1 item in from)
+			{
+				try
+				{
+					list.Add(func(item));
+				}
+				catch (Exception e)
+				{
+					e.LogError();
+				}
+			}
+
+			return list.ToArray();
 		}
 	}
 }

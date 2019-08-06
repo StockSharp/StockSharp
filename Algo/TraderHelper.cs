@@ -18,6 +18,7 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 
 	using Ecng.Common;
@@ -1338,7 +1339,7 @@ namespace StockSharp.Algo
 			order.LastChangeTime = depth.LastChangeTime = DateTimeOffset.Now;
 			order.LocalTime = depth.LocalTime = DateTime.Now;
 
-			var testPf = new Portfolio { Name = "test account", BeginValue = decimal.MaxValue / 2 };
+			var testPf = Portfolio.CreateSimulator();
 			order.Portfolio = testPf;
 
 			var trades = new List<MyTrade>();
@@ -3640,7 +3641,7 @@ namespace StockSharp.Algo
 			if (id.IsEmpty())
 				throw new ArgumentNullException(nameof(id));
 
-			return provider.Portfolios.SingleOrDefault(s => s.Name.CompareIgnoreCase(id));
+			return provider.Portfolios.SingleOrDefault(pf => pf.IsSame(id));
 		}
 
 		/// <summary>
@@ -4511,6 +4512,11 @@ namespace StockSharp.Algo
 		public const string AllSecurityId = "ALL@ALL";
 
 		/// <summary>
+		/// Identifier of <see cref="AllSecurity"/>.
+		/// </summary>
+		public static readonly SecurityId AllSecurityId2 = AllSecurityId.ToSecurityId();
+
+		/// <summary>
 		/// "All securities" instance.
 		/// </summary>
 		public static Security AllSecurity { get; } = new Security
@@ -4645,6 +4651,29 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Convert <see cref="PositionChangeTypes"/> to <see cref="Type"/> value.
+		/// </summary>
+		/// <param name="type"><see cref="PositionChangeTypes"/> value.</param>
+		/// <returns><see cref="Type"/> value.</returns>
+		public static Type ToType(this PositionChangeTypes type)
+		{
+			switch (type)
+			{
+				case PositionChangeTypes.ExpirationDate:
+					return typeof(DateTimeOffset);
+
+				case PositionChangeTypes.State:
+					return typeof(PortfolioStates);
+
+				case PositionChangeTypes.Currency:
+					return typeof(Currency);
+
+				default:
+					return type.IsObsolete() ? null : typeof(decimal);
+			}
+		}
+
+		/// <summary>
 		/// Convert <see cref="QuoteChangeMessage"/> to <see cref="Level1ChangeMessage"/> value.
 		/// </summary>
 		/// <param name="message"><see cref="QuoteChangeMessage"/> instance.</param>
@@ -4758,7 +4787,7 @@ namespace StockSharp.Algo
 			connector.LookupBoards(new ExchangeBoard(), offlineMode: offlineMode);
 			connector.LookupSecurities(LookupAllCriteria, offlineMode: offlineMode);
 			connector.LookupPortfolios(new Portfolio(), offlineMode: offlineMode);
-			connector.LookupOrders(new Order());
+			connector.LookupOrders(new Order(), offlineMode: offlineMode);
 		}
 
 		/// <summary>
@@ -5071,6 +5100,257 @@ namespace StockSharp.Algo
 			var newOrder = oldOrder.ReRegisterClone(price, volume);
 			provider.ReRegisterOrder(oldOrder, newOrder);
 			return newOrder;
+		}
+
+		/// <summary>
+		/// Download data.
+		/// </summary>
+		/// <typeparam name="TResult">Result message.</typeparam>
+		/// <typeparam name="TRequest">Request type.</typeparam>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="request">Request.</param>
+		/// <param name="secId">Security ID.</param>
+		/// <returns>Downloaded data.</returns>
+		public static IEnumerable<TResult> Download<TResult, TRequest>(this IMessageAdapter adapter, TRequest request, SecurityId? secId)
+			where TResult : Message
+			where TRequest : Message
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			var retVal = new List<TResult>();
+
+			Exception error = null;
+
+			var sync = new SyncObject();
+			var responseReceived = false;
+			
+			adapter.NewOutMessage += msg =>
+			{
+				if (msg is TResult typedMsg)
+					retVal.Add(typedMsg);
+				else if (msg is MarketDataMessage mdMsg)
+				{
+					lock (sync)
+					{
+						responseReceived = true;
+						error = mdMsg.Error;
+
+						if (error != null)
+							sync.PulseSignal();
+					}
+				}
+				else if (msg is MarketDataFinishedMessage)
+				{
+					lock (sync)
+					{
+						responseReceived = true;
+
+						sync.PulseSignal();
+					}
+				}
+				else if (msg is SecurityLookupResultMessage resMsg)
+				{
+					lock (sync)
+					{
+						responseReceived = true;
+						error = resMsg.Error;
+
+						sync.PulseSignal();
+					}
+				}
+				else if (msg is ConnectMessage conMsg)
+				{
+					lock (sync)
+					{
+						responseReceived = true;
+						error = conMsg.Error;
+
+						sync.PulseSignal();
+					}
+				}
+			};
+
+			if (request is ITransactionIdMessage transMsg)
+				transMsg.TransactionId = adapter.TransactionIdGenerator.GetNextId();
+
+			if (secId != null && adapter.IsNativeIdentifiers && !adapter.StorageName.IsEmpty() && request is SecurityMessage secMsg)
+			{
+				var nativeIdAdapter = adapter.FindAdapter<SecurityNativeIdMessageAdapter>();
+				
+				if (nativeIdAdapter != null)
+				{
+					var native = nativeIdAdapter.Storage.TryGetBySecurityId(adapter.StorageName, secId.Value);
+					secMsg.SetNativeId(native);
+				}
+			}
+
+			CultureInfo.InvariantCulture.DoInCulture(() =>
+			{
+				adapter.SendInMessage(new ConnectMessage());
+
+				lock (sync)
+				{
+					if (!responseReceived)
+						sync.WaitSignal();
+
+					if (error != null)
+						throw error;
+
+					responseReceived = false;
+				}
+
+				adapter.SendInMessage(request);
+
+				lock (sync)
+				{
+					if (!responseReceived)
+						sync.WaitSignal();
+
+					if (error != null)
+						throw error;
+
+					responseReceived = false;
+				}
+
+				adapter.SendInMessage(new DisconnectMessage());
+			});
+
+			return retVal;
+		}
+
+		/// <summary>
+		/// To get level1 market data.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="beginDate">Start date.</param>
+		/// <param name="endDate">End date.</param>
+		/// <param name="fields">Market data fields.</param>
+		/// <returns>Level1 market data.</returns>
+		public static IEnumerable<Level1ChangeMessage> GetLevel1(this IMessageAdapter adapter, SecurityId securityId, DateTime beginDate, DateTime endDate, IEnumerable<Level1Fields> fields = null)
+		{
+			var mdMsg = new MarketDataMessage
+			{
+				SecurityId = securityId,
+				IsSubscribe = true,
+				DataType = MarketDataTypes.Level1,
+				From = beginDate,
+				To = endDate,
+				BuildField = fields?.FirstOr(),
+			};
+			
+			return adapter.Download<Level1ChangeMessage, MarketDataMessage>(mdMsg, mdMsg.SecurityId);
+		}
+
+		/// <summary>
+		/// To get tick data.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="beginDate">Start date.</param>
+		/// <param name="endDate">End date.</param>
+		/// <returns>Tick data.</returns>
+		public static IEnumerable<ExecutionMessage> GetTicks(this IMessageAdapter adapter, SecurityId securityId, DateTime beginDate, DateTime endDate)
+		{
+			var mdMsg = new MarketDataMessage
+			{
+				SecurityId = securityId,
+				IsSubscribe = true,
+				DataType = MarketDataTypes.Trades,
+				From = beginDate,
+				To = endDate,
+			};
+			
+			return adapter.Download<ExecutionMessage, MarketDataMessage>(mdMsg, mdMsg.SecurityId);
+		}
+
+		/// <summary>
+		/// To get order log.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="beginDate">Start date.</param>
+		/// <param name="endDate">End date.</param>
+		/// <returns>Order log.</returns>
+		public static IEnumerable<ExecutionMessage> GetOrderLog(this IMessageAdapter adapter, SecurityId securityId, DateTime beginDate, DateTime endDate)
+		{
+			var mdMsg = new MarketDataMessage
+			{
+				SecurityId = securityId,
+				IsSubscribe = true,
+				DataType = MarketDataTypes.OrderLog,
+				From = beginDate,
+				To = endDate,
+			};
+			
+			return adapter.Download<ExecutionMessage, MarketDataMessage>(mdMsg, mdMsg.SecurityId);
+		}
+
+		/// <summary>
+		/// Download all securities.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="lookupMsg">Message security lookup for specified criteria.</param>
+		/// <returns>All securities.</returns>
+		public static IEnumerable<SecurityMessage> GetSecurities(this IMessageAdapter adapter, SecurityLookupMessage lookupMsg)
+		{
+			return adapter.Download<SecurityMessage, SecurityLookupMessage>(lookupMsg, null);
+		}
+
+		/// <summary>
+		/// To download candles.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="timeFrame">Time-frame.</param>
+		/// <param name="from">Begin period.</param>
+		/// <param name="to">End period.</param>
+		/// <param name="count">Candles count.</param>
+		/// <param name="buildField">Extra info for the <see cref="MarketDataMessage.BuildFrom"/>.</param>
+		/// <returns>Downloaded candles.</returns>
+		public static IEnumerable<TimeFrameCandleMessage> GetCandles(this IMessageAdapter adapter, SecurityId securityId, TimeSpan timeFrame, DateTimeOffset from, DateTimeOffset to, long? count = null, Level1Fields? buildField = null)
+		{
+			var mdMsg = new MarketDataMessage
+			{
+				SecurityId = securityId,
+				IsSubscribe = true,
+				DataType = MarketDataTypes.CandleTimeFrame,
+				Arg = timeFrame,
+				From = from,
+				To = to,
+				Count = count,
+				BuildField = buildField,
+			};
+
+			return adapter.Download<TimeFrameCandleMessage, MarketDataMessage>(mdMsg, mdMsg.SecurityId);
+		}
+
+		/// <summary>
+		/// Get portfolio identifier.
+		/// </summary>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <returns>Portfolio identifier.</returns>
+		public static string GetUniqueId(this Portfolio portfolio)
+		{
+			if (portfolio == null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			return portfolio.InternalId?.To<string>() ?? portfolio.Name;
+		}
+
+		/// <summary>
+		/// Determines the specified portfolio is required.
+		/// </summary>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="uniqueId">Portfolio identifier.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSame(this Portfolio portfolio, string uniqueId)
+		{
+			if (portfolio == null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			return portfolio.Name.CompareIgnoreCase(uniqueId) || (portfolio.InternalId != null && Guid.TryParse(uniqueId, out var indernalId) && portfolio.InternalId == indernalId);
 		}
 	}
 }

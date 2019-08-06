@@ -92,11 +92,7 @@ namespace SampleRandomEmulation
 			.TryAdd(Level1Fields.MarginSell, 10000m);
 
 			// test portfolio
-			var portfolio = new Portfolio
-			{
-				Name = "test account",
-				BeginValue = 1000000,
-			};
+			var portfolio = Portfolio.CreateSimulator();
 
 			var timeFrame = TimeSpan.FromMinutes(5);
 

@@ -21,7 +21,7 @@
     </member>
     <member name="F:StockSharp.Xaml.Diagram.SchemeTypes.Independent">
       <summary>
-            Independed scheme.
+            Independent scheme.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.CompositionDiagramElement">
@@ -167,6 +167,12 @@
       <summary>
             The method is called at re-initialisation of the diagram element state.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStepProcessed">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(StockSharp.Messages.Message)">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(System.DateTimeOffset,System.Collections.Generic.IReadOnlyDictionary{StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue})">
       <inheritdoc />
@@ -989,6 +995,18 @@
       <param name="time">Time.</param>
       <param name="values">Values.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Process(StockSharp.Messages.Message)">
+      <summary>
+            To handle the incoming <see cref="T:StockSharp.Messages.Message" />.
+            </summary>
+      <param name="message">Message.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnProcess(StockSharp.Messages.Message)">
+      <summary>
+            The method is called at the processing of the new incoming <see cref="T:StockSharp.Messages.Message" />.
+            </summary>
+      <param name="message">Message.</param>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.UnInit">
       <summary>
             The deinitialization of the element.
@@ -1027,6 +1045,16 @@
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnReseted">
       <summary>
             The method is called at re-initialisation of the diagram element state.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.StepProcessed">
+      <summary>
+            To handle the current step processed for the diagram element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnStepProcessed">
+      <summary>
+            The method is called at current step processed for the diagram element.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElement.PropertyChanging">
@@ -1395,6 +1423,17 @@
       <param name="param">The diagram element parameter.</param>
       <param name="value">Value.</param>
       <returns>The diagram element parameter.</returns>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.DiagramHelper">
+      <summary>
+            Extension class for <see cref="N:StockSharp.Xaml.Diagram" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramHelper.GetDiagramElements">
+      <summary>
+            Get all diagram elements.
+            </summary>
+      <returns>All diagram elements.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.PaletteTreeItem">
       <summary>
@@ -3897,6 +3936,9 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnProcess(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement">

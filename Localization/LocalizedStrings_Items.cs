@@ -49816,5 +49816,55 @@ namespace StockSharp.Localization
 		/// Time out
 		/// </summary>
 		public static string TimeOut => GetString(TimeOutKey);
+
+		/// <summary>
+		/// Sign in
+		/// </summary>
+		public const string SignInKey = nameof(SignIn);
+
+		/// <summary>
+		/// Sign in
+		/// </summary>
+		public static string SignIn => GetString(SignInKey);
+
+		/// <summary>
+		/// Copyright
+		/// </summary>
+		public const string CopyrightKey = nameof(Copyright);
+
+		/// <summary>
+		/// Copyright
+		/// </summary>
+		public static string Copyright => GetString(CopyrightKey);
+
+		/// <summary>
+		/// Subscription '{0}' not supported by established connection.
+		/// </summary>
+		public const string SubscriptionNotSupportedKey = nameof(SubscriptionNotSupported);
+
+		/// <summary>
+		/// Subscription '{0}' not supported by established connection.
+		/// </summary>
+		public static string SubscriptionNotSupported => GetString(SubscriptionNotSupportedKey);
+
+		/// <summary>
+		/// Codes mapping
+		/// </summary>
+		public const string CodesMappingKey = nameof(CodesMapping);
+
+		/// <summary>
+		/// Codes mapping
+		/// </summary>
+		public static string CodesMapping => GetString(CodesMappingKey);
+
+		/// <summary>
+		/// Extra conditions
+		/// </summary>
+		public const string ExtraConditionsKey = nameof(ExtraConditions);
+
+		/// <summary>
+		/// Extra conditions
+		/// </summary>
+		public static string ExtraConditions => GetString(ExtraConditionsKey);
 	}
 }

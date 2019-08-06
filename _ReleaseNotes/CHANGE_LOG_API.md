@@ -169,6 +169,27 @@ StockSharp API Change log
 * (feature) BaseGridControl. Copy context menu added.
 * (bug) ContinuousSecurityBaseProcessor. Fix SecurityId for generated messages.
 * (feature) IMessageListener interface added.
+* (feature) SoundLogListener, SpeechLogListener moved from Logging to Xaml.
+* (feature) Configuration.Adapters project added.
+* (feature) Configure method moved from Configuration to Xaml.
+* (feature) LicensePanel. Moved from Licensing to Xaml.
+* (bug) PortfolioPnLManager. Fix processing trades with string id.
+* (feature) IMarketDataProvider. MarketDataSubscriptionFailed2, MarketDataUnSubscriptionFailed2 events added.
+* (feature) Subscriptions. Interpret non supported and non exist subscriptions as warning.
+* (feature) Strategy implemented ITransactionProvider interface.
+* (feature) Portfolio. CreateSimulator method added.
+* (feature) BuySellGrid. AddPanel, RemovePanel methods added.
+* (feature) GuiConnector marked as obsolete.
+* (feature) SampleSync removed as obsolete.
+* (feature) Portfolio. InternalId added.
+* (feature) Connector. CandleSeriesError event added.
+* (feature) IMarketDataProvider. Added adapter parameter to subscription methods.
+* (feature) Micex TEAP. Stock32, Stock33, Stock34, Currency32, Currency33, Currency34 interfaces added.
+* (feature) SecurityId. SecurityType marked as obsolete.
+* (feature) QuikLua. Translates T+N money positions.
+* (feature) FixServer. SecurityLookupMessage.SecurityTypes supported.
+* (bug) FixServer. Fix SecurityStatusRequest handling.
+* (feature) FixServer. Sends PortfolioLookupResultMessage.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

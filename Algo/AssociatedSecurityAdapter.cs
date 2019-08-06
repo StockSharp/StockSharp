@@ -156,7 +156,6 @@ namespace StockSharp.Algo
 			{
 				SecurityCode = securityId.SecurityCode,
 				BoardCode = AssociatedBoardCode,
-				SecurityType = securityId.SecurityType,
 				Bloomberg = securityId.Bloomberg,
 				Cusip = securityId.Cusip,
 				IQFeed = securityId.IQFeed,

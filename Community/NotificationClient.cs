@@ -26,7 +26,7 @@ namespace StockSharp.Community
 	/// <summary>
 	/// The client for access to the StockSharp notification service.
 	/// </summary>
-	public class NotificationClient : BaseCommunityClient<INotificationService>
+	public class NotificationClient : BaseCommunityClient<INotificationService>, INotificationClient
 	{
 		private Timer _newsTimer;
 		//private long _lastNewsId;
@@ -50,9 +50,7 @@ namespace StockSharp.Community
 
 		private int? _smsCount;
 
-		/// <summary>
-		/// The available number of SMS-messages.
-		/// </summary>
+		/// <inheritdoc />
 		public int SmsCount
 		{
 			get
@@ -67,9 +65,7 @@ namespace StockSharp.Community
 
 		private int? _emailCount;
 
-		/// <summary>
-		/// The available number of email messages.
-		/// </summary>
+		/// <inheritdoc />
 		public int EmailCount
 		{
 			get
@@ -82,33 +78,21 @@ namespace StockSharp.Community
 			private set => _emailCount = value;
 		}
 
-		/// <summary>
-		/// To send a SMS message.
-		/// </summary>
-		/// <param name="message">Message body.</param>
+		/// <inheritdoc />
 		public void SendSms(string message)
 		{
 			ValidateError(Invoke(f => f.SendSms(SessionId, message)));
 			SmsCount--;
 		}
 
-		/// <summary>
-		/// To send an email message.
-		/// </summary>
-		/// <param name="title">The message title.</param>
-		/// <param name="body">Message body.</param>
+		/// <inheritdoc />
 		public void SendEmail(string title, string body)
 		{
 			ValidateError(Invoke(f => f.SendEmail(SessionId, title, body)));
 			EmailCount--;
 		}
 
-		/// <summary>
-		/// To send a message.
-		/// </summary>
-		/// <param name="title">The message title.</param>
-		/// <param name="body">Message body.</param>
-		/// <param name="attachments">Attachments.</param>
+		/// <inheritdoc />
 		public void SendMessage(string title, string body, FileData[] attachments)
 		{
 			if (attachments == null)
@@ -117,38 +101,25 @@ namespace StockSharp.Community
 			ValidateError(Invoke(f => f.SendMessage(SessionId, title, body, attachments.Select(a => a.Id).ToArray(), IsEnglish)));
 		}
 
-		/// <summary>
-		/// Send feedback for specified product.
-		/// </summary>
-		/// <param name="product">Product.</param>
-		/// <param name="rating">Rating.</param>
-		/// <param name="comment">Comment.</param>
+		/// <inheritdoc />
 		public void SendFeedback(Products product, int rating, string comment)
 		{
 			ValidateError(Invoke(f => f.SendFeedback(SessionId, product, rating, comment)));
 		}
 
-		/// <summary>
-		/// Has feedback for specified product.
-		/// </summary>
-		/// <param name="product">Product.</param>
-		/// <returns>Check result.</returns>
+		/// <inheritdoc />
 		public bool HasFeedback(Products product)
 		{
 			return Invoke(f => f.HasFeedback(SessionId, product));
 		}
 
-		/// <summary>
-		/// News received.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<CommunityNews> NewsReceived;
 
 		private readonly SyncObject _syncObject = new SyncObject();
 		private bool _isProcessing;
 
-		/// <summary>
-		/// To subscribe for news.
-		/// </summary>
+		/// <inheritdoc />
 		public void SubscribeNews()
 		{
 			_newsTimer = ThreadingHelper.Timer(() =>
@@ -177,9 +148,7 @@ namespace StockSharp.Community
 			}).Interval(TimeSpan.Zero, TimeSpan.FromDays(1));
 		}
 
-		/// <summary>
-		/// To unsubscribe from news.
-		/// </summary>
+		/// <inheritdoc />
 		public void UnSubscribeNews()
 		{
 			_newsTimer?.Dispose();
@@ -206,9 +175,7 @@ namespace StockSharp.Community
 			//}
 		}
 
-		/// <summary>
-		/// Release resources.
-		/// </summary>
+		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
 			UnSubscribeNews();

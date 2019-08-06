@@ -2724,7 +2724,7 @@ Str2876;Path to copied data in bin format should not be same as path to source d
 Str2879;Data erasing;Очистка данных
 Str2881;Select at least one security.;Выберите хотя бы один инструмент.
 Str2882;for all securities;по всем инструментам
-Str2884Params;Do you really want to delete {0} data?;Вы действительно хотите удалить данные{0}?
+Str2884Params;Do you really want to delete {0} data?;Вы действительно хотите удалить данные {0}?
 Str2887;Must select type of data being glued.;Необходимо выбрать тип склеиваемых данных.
 Str2888;Continuous futures contract must be created.;Необходимо создать непрерывный фьючерс.
 Str2889;No data to combine.;Нет данных для склеивания.
@@ -4559,7 +4559,7 @@ OrderVolumeNotSpecified;Order volume is not specified;Объем заявки н
 OrderSideNotSpecified;Order side is not specified;Направление заявки не указано
 RaiseOnStart;Raise on start;Обрабатывать при запуске
 DeleteAll;Delete all;Удалить все
-Next;Next;Далее
+Next;Next;Следующий
 StepIn;Step in;Войти
 StepOut;Step out;Выйти
 Microseconds;Microseconds;Микросекунды
@@ -5014,6 +5014,11 @@ OrderState;Order state;Состояние заявки
 Pending;Pending;Ожидание
 OrderNotPassed;Order not passed.;Заявка не передана.
 TimeOut;Time out;Тайм-аут
+SignIn;Sign in;Войти
+Copyright;Copyright;Авторское право
+SubscriptionNotSupported;Subscription '{0}' not supported by established connection.;Подписка '{0}' не поддерживается установленным соединением.
+CodesMapping;Codes mapping;Сопоставление кодов
+ExtraConditions;Extra conditions;Доп условия
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13956,7 +13961,7 @@ DocStr9222;A format string;Форматирующая строка
 DocStr9223;Types of {0} required to cancel orders;Типы {0} необходимые для отмены заявок
 DocStr9224;Non filled balance;Неисполненный баланс
 DocStr9225;Initial volume;Первоначальный объем
-DocStr9226;Independed scheme;Независимая схема
+DocStr9226;Independent scheme;Независимая схема
 DocStr9227;Update {0} for composition elements;Обновление {0} для композитных элементов
 DocStr9228;The current error;Текущая ошибка
 DocStr9229;The action with the element at error;Действие с элементом при ошибке
@@ -14253,7 +14258,6 @@ DocStr9552;Used with conditional orders to submit or cancel an order based on a 
 DocStr9553;Percent change;Изменение в процентах
 DocStr9554;Define the Soft Dollar Tier used for the order. Only provided for registered professional advisors and hedge and mutual funds;Определить Soft Dollar Tier, используемых в заявках. Предоставляется только для зарегистрированных профессиональных советников и хедж фондов
 DocStr9555;The native cash quantity;Размер наличных
-DocStr9556;Extra conditions;Дополнительные условия
 DocStr9557;Request scanner parameters. The results will come through the {0} event;Запросить параметры сканера. Результаты будут приходить через событие {0}
 DocStr9558;Is parameters request;Запрос параметров
 DocStr9559;Scanner filter types;Типы фильтра сканнера
@@ -15767,3 +15771,35 @@ DocStr11246;Can process order action;Можно ли обработать дей
 DocStr11247;Copy {0} and {1};Копировать {0} и {1}
 DocStr11248;The interface describing a message listening component;Интерфейс, описывающий компоненту для слушания сообщений
 DocStr11249;The interface describing a session, create by {0};Интерфейс, описывающий сессию, созданная {0}
+DocStr11250;To handle the incoming {0};Обработать входящее {0}
+DocStr11251;The method is called at the processing of the new incoming {0};Метод вызывается при обработке нового входящего {0}
+DocStr11252;To handle the current step processed for the diagram element;Обработать текущий шаг элемента диаграммы
+DocStr11253;The method is called at current step processed for the diagram element;Метод вызывается на текущем шаге элемента диаграммы
+DocStr11254;Community urls;Адреса сообщества
+DocStr11255;Get website url;Получить адрес сайта
+DocStr11256;Get user url;Получить адрес пользователя
+DocStr11257;Get strategy url;Получить адрес стратегии
+DocStr11259;Get file url;Получить адрес файла
+DocStr11261;Get open account url;Получить адрес на открытие счёта
+DocStr11262;Get sign up url;Получить адрес на регистрацию
+DocStr11263;Get forgot password url;Получить адрес на восстановление пароля
+DocStr11264;System paths;Системные пути
+DocStr11265;App title;Название приложения
+DocStr11266;The path to directory with all applications;Путь к директории со времи приложениями
+DocStr11267;The type of source values;Тип исходных значений
+DocStr11268;Download data;Скачать данные
+DocStr11269;Result message;Результирующие сообщение
+DocStr11270;Request;Запрос
+DocStr11271;Downloaded data;Скаченные данные
+DocStr11272;Send back reply for non existing unsubscription requests with filled {0} property;Отправить обратно ответ на запрос к несуществующей отписке с заполненным свойством {0}
+DocStr11273;Create virtual portfolio for simulation;Создать виртуальный портфель для симуляции
+DocStr11274;Determines whether the reply contains an error {0} or has {1};Определить, содержит ли ответ ошибку {0} или установлено {1}
+DocStr11275;Reply;Ответ
+DocStr11276;Remove panel;Удалить панель
+DocStr11277;The series error event;Событие ошибки серии
+DocStr11278;Get portfolio identifier;Получить идентификатор портфеля
+DocStr11279;Portfolio identifier;Идентификатор портфеля
+DocStr11280;Determines the specified portfolio is required;Определять, является ли указанный портфель требуемым
+DocStr11281;Internal identifier;Внутренний идентификатор
+DocStr11282;Is valid;Валидно
+DocStr11283;Base class for messages contains information about the position changes;Базовый класс сообщений, содержащий информация об изменениях позиций

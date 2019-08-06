@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Commissions
 	public interface ICommissionRule : IPersistable
 	{
 		/// <summary>
-		/// Header.
+		/// Title.
 		/// </summary>
 		string Title { get; }
 

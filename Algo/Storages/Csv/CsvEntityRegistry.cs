@@ -339,6 +339,11 @@ namespace StockSharp.Algo.Storages.Csv
 
 				public Security ToSecurity(SecurityCsvList list)
 				{
+					var board = Board;
+
+					if (board.IsEmpty())
+						board = Id.ToSecurityId().BoardCode;
+
 					return new Security
 					{
 						Id = Id,
@@ -346,7 +351,7 @@ namespace StockSharp.Algo.Storages.Csv
 						Code = Code,
 						Class = Class,
 						ShortName = ShortName,
-						Board = list.Registry.GetBoard(Board),
+						Board = list.Registry.GetBoard(board),
 						UnderlyingSecurityId = UnderlyingSecurityId,
 						PriceStep = PriceStep,
 						VolumeStep = VolumeStep,
@@ -378,7 +383,7 @@ namespace StockSharp.Algo.Storages.Csv
 					Code = security.Code;
 					Class = security.Class;
 					ShortName = security.ShortName;
-					Board = security.Board.Code;
+					Board = security.Board?.Code;
 					UnderlyingSecurityId = security.UnderlyingSecurityId;
 					PriceStep = security.PriceStep;
 					VolumeStep = security.VolumeStep;
@@ -506,7 +511,7 @@ namespace StockSharp.Algo.Storages.Csv
 				}
 				else
 				{
-					if (liteSec.Board.IsEmpty() || (forced && !liteSec.Board.CompareIgnoreCase(security.Board.Code)))
+					if (liteSec.Board.IsEmpty() || (forced && !liteSec.Board.CompareIgnoreCase(security.Board?.Code)))
 						return true;
 				}
 
@@ -619,7 +624,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.Code,
 					data.Class,
 					data.ShortName,
-					data.Board.Code,
+					data.Board?.Code,
 					data.UnderlyingSecurityId,
 					data.PriceStep.To<string>(),
 					data.VolumeStep.To<string>(),
@@ -714,6 +719,9 @@ namespace StockSharp.Algo.Storages.Csv
 					portfolio.CommissionTaker = reader.ReadNullableDecimal();
 				}
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					portfolio.InternalId = reader.ReadString().To<Guid?>();
+
 				return portfolio;
 			}
 
@@ -744,6 +752,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.ExpirationDate?.UtcDateTime.ToString(_dateTimeFormat),
 					data.CommissionMaker.To<string>(),
 					data.CommissionTaker.To<string>(),
+					data.InternalId.To<string>(),
 				});
 			}
 		}

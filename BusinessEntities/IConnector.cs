@@ -27,7 +27,7 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// The main interface providing the connection to the trading systems.
 	/// </summary>
-	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ITransactionProvider, ISecurityProvider, INewsProvider, IMessageSender
+	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ITransactionProvider, ISecurityProvider, INewsProvider, IMessageChannel
 	{
 		/// <summary>
 		/// Own trades received.
@@ -327,7 +327,8 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="criteria">The order which fields will be used as a filter.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void LookupOrders(Order criteria, IMessageAdapter adapter = null);
+		/// <param name="offlineMode">Offline mode handling message.</param>
+		void LookupOrders(Order criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
 
 		/// <summary>
 		/// Get security by identifier.
@@ -340,5 +341,11 @@ namespace StockSharp.BusinessEntities
 		/// The order was initialized and ready to send for registration.
 		/// </summary>
 		event Action<Order> OrderInitialized;
+
+		/// <summary>
+		/// Send outgoing message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		void SendOutMessage(Message message);
 	}
 }

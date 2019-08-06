@@ -209,37 +209,6 @@ namespace StockSharp.Algo.Strategies
 			strategy.Environment.SetValue(_candleManagerKey, candleManager);
 		}
 
-		private const string _messageSenderKey = "MessageSender";
-
-		/// <summary>
-		/// To get the message sender, associated with the passed strategy.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <returns>Message sender.</returns>
-		public static IMessageSender GetMessageSender(this Strategy strategy)
-		{
-			if (strategy == null)
-				throw new ArgumentNullException(nameof(strategy));
-
-			return strategy.Environment.GetValue<IMessageSender>(_messageSenderKey);
-		}
-
-		/// <summary>
-		/// To set the message sender for the strategy.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="messageSender">Message sender.</param>
-		public static void SetMessageSender(this Strategy strategy, IMessageSender messageSender)
-		{
-			if (strategy == null)
-				throw new ArgumentNullException(nameof(strategy));
-
-			if (messageSender == null)
-				throw new ArgumentNullException(nameof(messageSender));
-
-			strategy.Environment.SetValue(_messageSenderKey, messageSender);
-		}
-
 		private const string _isEmulationModeKey = "IsEmulationMode";
 
 		/// <summary>

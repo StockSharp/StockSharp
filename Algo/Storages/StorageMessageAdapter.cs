@@ -1122,7 +1122,6 @@ namespace StockSharp.Algo.Storages
 			var security = !securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty() ? _securityStorage.LookupById(securityId) : _securityStorage.Lookup(new Security
 			{
 				Code = securityId.SecurityCode,
-				Type = securityId.SecurityType
 			}).FirstOrDefault();
 
 			if (security == null)

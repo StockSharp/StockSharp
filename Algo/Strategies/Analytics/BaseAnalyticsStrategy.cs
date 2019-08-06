@@ -23,7 +23,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Logging;
 	using StockSharp.Localization;
 
 	/// <summary>

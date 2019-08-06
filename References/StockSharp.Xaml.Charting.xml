@@ -1622,6 +1622,18 @@
       <param name="style">Style.</param>
       <returns>Check result.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartHelper.GetIndicatorTypes">
+      <summary>
+            Get all indicator types.
+            </summary>
+      <returns>All indicator types.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartHelper.FillIndicators(StockSharp.Xaml.Charting.IChart)">
+      <summary>
+            Fill <see cref="P:StockSharp.Xaml.Charting.IChart.IndicatorTypes" /> using <see cref="M:StockSharp.Xaml.Charting.ChartHelper.GetIndicatorTypes" />.
+            </summary>
+      <param name="chart">Chart.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles">
       <summary>
             Indicator chart drawing styles.

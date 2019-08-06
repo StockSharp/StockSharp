@@ -105,7 +105,7 @@ namespace StockSharp.Algo.Indicators
 
 			if (index >= container.Count)
 			{
-				return default(T);
+				return default;
 				//if (index == 0 && typeof(decimal) == typeof(T))
 				//	return 0m.To<T>();
 				//else
@@ -119,7 +119,7 @@ namespace StockSharp.Algo.Indicators
 				if (value is T t)
 					return t;
 
-				return default(T);
+				return default;
 			}
 
 			return typeof(IIndicatorValue).IsAssignableFrom(typeof(T)) ? value.To<T>() : value.GetValue<T>();
@@ -183,7 +183,7 @@ namespace StockSharp.Algo.Indicators
 				input = input.InputValue;
 			}
 
-			return input == null ? default(T) : input.GetValue<T>();
+			return input == null ? default : input.GetValue<T>();
 		}
 
 		/// <summary>

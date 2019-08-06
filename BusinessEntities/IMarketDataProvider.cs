@@ -123,6 +123,11 @@ namespace StockSharp.BusinessEntities
 		event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
 
 		/// <summary>
+		/// Error subscription market-data.
+		/// </summary>
+		event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataSubscriptionFailed2;
+
+		/// <summary>
 		/// Successful unsubscription market-data.
 		/// </summary>
 		event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
@@ -131,6 +136,11 @@ namespace StockSharp.BusinessEntities
 		/// Error unsubscription market-data.
 		/// </summary>
 		event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
+
+		/// <summary>
+		/// Error unsubscription market-data.
+		/// </summary>
+		event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataUnSubscriptionFailed2;
 
 		/// <summary>
 		/// Subscription market-data finished.
@@ -197,7 +207,8 @@ namespace StockSharp.BusinessEntities
 		/// <param name="buildMode">Build mode.</param>
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="maxDepth">Max depth of requested order book.</param>
-		void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null);
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting quotes by the instrument.
@@ -226,7 +237,8 @@ namespace StockSharp.BusinessEntities
 		/// <param name="count">Max count.</param>
 		/// <param name="buildMode">Build mode.</param>
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
-		void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null);
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting trades (tick data) by the instrument.
@@ -243,7 +255,8 @@ namespace StockSharp.BusinessEntities
 		/// <param name="count">Max count.</param>
 		/// <param name="buildMode">Build mode.</param>
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
-		void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null);
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting new information.
@@ -258,7 +271,8 @@ namespace StockSharp.BusinessEntities
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <param name="count">Max count.</param>
-		void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null);
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// Unsubscribe from order log for the security.
@@ -269,7 +283,8 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Subscribe on news.
 		/// </summary>
-		void RegisterNews();
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void RegisterNews(IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// Unsubscribe from news.
@@ -280,7 +295,8 @@ namespace StockSharp.BusinessEntities
 		/// Subscribe on the board changes.
 		/// </summary>
 		/// <param name="board">Board for subscription.</param>
-		void SubscribeBoard(ExchangeBoard board);
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// Unsubscribe from the board changes.

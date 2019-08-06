@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7D6C7AD7-2735-4BC0-8E37-B21584E43264}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.Configuration</RootNamespace>
+    <AssemblyName>StockSharp.Configuration.Adapters</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\StockSharp.Configuration.Adapters.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\StockSharp.Configuration.Adapters.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\References\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\References\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Reflection">
+      <HintPath>..\References\Ecng.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="StockSharp.AlfaDirect">
+      <HintPath>..\References\StockSharp.AlfaDirect.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.AlorHistory">
+      <HintPath>..\References\StockSharp.AlorHistory.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BarChart">
+      <HintPath>..\References\StockSharp.BarChart.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bibox">
+      <HintPath>..\References\StockSharp.Bibox.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bitbank">
+      <HintPath>..\References\StockSharp.Bitbank.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bitfinex">
+      <HintPath>..\References\StockSharp.Bitfinex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bithumb">
+      <HintPath>..\References\StockSharp.Bithumb.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BitMax">
+      <HintPath>..\References\StockSharp.BitMax.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BitStamp">
+      <HintPath>..\References\StockSharp.BitStamp.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bittrex">
+      <HintPath>..\References\StockSharp.Bittrex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BitZ">
+      <HintPath>..\References\StockSharp.BitZ.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Blackwood">
+      <HintPath>..\References\StockSharp.Blackwood.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Btce">
+      <HintPath>..\References\StockSharp.Btce.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BW">
+      <HintPath>..\References\StockSharp.BW.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Coinbase">
+      <HintPath>..\References\StockSharp.Coinbase.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.CoinBene">
+      <HintPath>..\References\StockSharp.CoinBene.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.CoinCap">
+      <HintPath>..\References\StockSharp.CoinCap.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Coincheck">
+      <HintPath>..\References\StockSharp.Coincheck.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Coinigy">
+      <HintPath>..\References\StockSharp.Coinigy.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Cqg.Com">
+      <HintPath>..\References\StockSharp.Cqg.Com.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Cqg.Continuum">
+      <HintPath>..\References\StockSharp.Cqg.Continuum.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.CSV">
+      <HintPath>..\References\StockSharp.CSV.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Digifinex">
+      <HintPath>..\References\StockSharp.Digifinex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.DukasCopy">
+      <HintPath>..\References\StockSharp.DukasCopy.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.ETrade">
+      <HintPath>..\References\StockSharp.ETrade.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Finam">
+      <HintPath>..\References\StockSharp.Finam.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.FinViz">
+      <HintPath>..\References\StockSharp.FinViz.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Fix">
+      <HintPath>..\References\StockSharp.Fix.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Fxcm">
+      <HintPath>..\References\StockSharp.Fxcm.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.GainCapital">
+      <HintPath>..\References\StockSharp.GainCapital.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Gdax">
+      <HintPath>..\References\StockSharp.Gdax.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Google">
+      <HintPath>..\References\StockSharp.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.HitBtc">
+      <HintPath>..\References\StockSharp.HitBtc.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Idax">
+      <HintPath>..\References\StockSharp.Idax.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.InteractiveBrokers">
+      <HintPath>..\References\StockSharp.InteractiveBrokers.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.IQFeed">
+      <HintPath>..\References\StockSharp.IQFeed.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.ITCH">
+      <HintPath>..\References\StockSharp.ITCH.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Kraken">
+      <HintPath>..\References\StockSharp.Kraken.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.LBank">
+      <HintPath>..\References\StockSharp.LBank.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.LMAX">
+      <HintPath>..\References\StockSharp.LMAX.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.MBTrading">
+      <HintPath>..\References\StockSharp.MBTrading.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Mfd">
+      <HintPath>..\References\StockSharp.Mfd.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Micex">
+      <HintPath>..\References\StockSharp.Micex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Oanda">
+      <HintPath>..\References\StockSharp.Oanda.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Okcoin">
+      <HintPath>..\References\StockSharp.Okcoin.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.OpenECry">
+      <HintPath>..\References\StockSharp.OpenECry.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Plaza">
+      <HintPath>..\References\StockSharp.Plaza.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Poloniex">
+      <HintPath>..\References\StockSharp.Poloniex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Quandl">
+      <HintPath>..\References\StockSharp.Quandl.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.QuantHouse">
+      <HintPath>..\References\StockSharp.QuantHouse.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Quik">
+      <HintPath>..\References\StockSharp.Quik.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Quoinex">
+      <HintPath>..\References\StockSharp.Quoinex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Rithmic">
+      <HintPath>..\References\StockSharp.Rithmic.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Rss">
+      <HintPath>..\References\StockSharp.Rss.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.RtsHistory">
+      <HintPath>..\References\StockSharp.RtsHistory.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.SmartCom">
+      <HintPath>..\References\StockSharp.SmartCom.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.SpbEx">
+      <HintPath>..\References\StockSharp.SpbEx.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Sterling">
+      <HintPath>..\References\StockSharp.Sterling.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.TradeOgre">
+      <HintPath>..\References\StockSharp.TradeOgre.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Transaq">
+      <HintPath>..\References\StockSharp.Transaq.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.TrueFX">
+      <HintPath>..\References\StockSharp.TrueFX.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Twime">
+      <HintPath>..\References\StockSharp.Twime.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Binance">
+      <HintPath>..\References\StockSharp.Binance.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bitexbook">
+      <HintPath>..\References\StockSharp.Bitexbook.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bitmex">
+      <HintPath>..\References\StockSharp.Bitmex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Cex">
+      <HintPath>..\References\StockSharp.Cex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.CoinExchange">
+      <HintPath>..\References\StockSharp.CoinExchange.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Cryptopia">
+      <HintPath>..\References\StockSharp.Cryptopia.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Deribit">
+      <HintPath>..\References\StockSharp.Deribit.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Exmo">
+      <HintPath>..\References\StockSharp.Exmo.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Huobi">
+      <HintPath>..\References\StockSharp.Huobi.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Kucoin">
+      <HintPath>..\References\StockSharp.Kucoin.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Liqui">
+      <HintPath>..\References\StockSharp.Liqui.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.LiveCoin">
+      <HintPath>..\References\StockSharp.LiveCoin.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Okex">
+      <HintPath>..\References\StockSharp.Okex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.UkrExh">
+      <HintPath>..\References\StockSharp.UkrExh.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml">
+      <HintPath>..\References\StockSharp.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\References\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Diagram">
+      <HintPath>..\References\StockSharp.Xaml.Diagram.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xignite">
+      <HintPath>..\References\StockSharp.Xignite.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Yahoo">
+      <HintPath>..\References\StockSharp.Yahoo.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Yobit">
+      <HintPath>..\References\StockSharp.Yobit.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.AlphaVantage">
+      <HintPath>..\References\StockSharp.AlphaVantage.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.IEX">
+      <HintPath>..\References\StockSharp.IEX.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Zaif">
+      <HintPath>..\References\StockSharp.Zaif.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.ZB">
+      <HintPath>..\References\StockSharp.ZB.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Tradier">
+      <HintPath>..\References\StockSharp.Tradier.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="InMemoryMessageAdapterProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

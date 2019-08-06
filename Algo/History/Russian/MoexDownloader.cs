@@ -173,7 +173,7 @@ namespace StockSharp.Algo.History.Russian
 		private static T Get<T>(dynamic item, int index)
 		{
 			if (index == -1)
-				return default(T);
+				return default;
 
 			return (T)item[index];
 		}

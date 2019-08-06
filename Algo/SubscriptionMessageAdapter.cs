@@ -8,6 +8,7 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -72,6 +73,11 @@ namespace StockSharp.Algo
 		/// Support multiple subscriptions with duplicate parameters.
 		/// </summary>
 		public bool SupportMultipleSubscriptions { get; set; }
+
+		/// <summary>
+		/// Send back reply for non existing unsubscription requests with filled <see cref="MarketDataMessage.Error"/> property.
+		/// </summary>
+		public bool NonExistSubscriptionAsError { get; set; }
 
 		private void ClearSubscribers()
 		{
@@ -370,7 +376,7 @@ namespace StockSharp.Algo
 			return null;
 		}
 
-		private SecurityId GetSecurityId(SecurityId securityId) => IsSupportSubscriptionBySecurity ? securityId : default(SecurityId);
+		private SecurityId GetSecurityId(SecurityId securityId) => IsSupportSubscriptionBySecurity ? securityId : default;
 
 		private void ProcessInMarketDataMessage(MarketDataMessage message)
 		{
@@ -451,9 +457,9 @@ namespace StockSharp.Algo
 				return null;
 
 			var isSubscribe = info.Message.IsSubscribe;
-			var removeInfo = !isSubscribe || message.Error != null || message.IsNotSupported;
+			var removeInfo = !isSubscribe || !message.IsOk();
 
-			info.IsSubscribed = isSubscribe && message.Error == null && !message.IsNotSupported;
+			info.IsSubscribed = isSubscribe && message.IsOk();
 
 			var replies = new List<MarketDataMessage>();
 
@@ -541,15 +547,18 @@ namespace StockSharp.Algo
 			return info;
 		}
 
-		private static MarketDataMessage NonExist(MarketDataMessage message)
+		private MarketDataMessage NonExist(MarketDataMessage message)
 		{
+			if (!NonExistSubscriptionAsError)
+				this.AddInfoLog(LocalizedStrings.SubscriptionNonExist);
+
 			return new MarketDataMessage
 			{
-				DataType = message.DataType,
-				IsSubscribe = false,
-				SecurityId = message.SecurityId,
+				//DataType = message.DataType,
+				//IsSubscribe = false,
+				//SecurityId = message.SecurityId,
 				OriginalTransactionId = message.TransactionId,
-				Error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist),
+				Error = NonExistSubscriptionAsError ? new InvalidOperationException(LocalizedStrings.SubscriptionNonExist) : null,
 			};
 		}
 
@@ -614,6 +623,7 @@ namespace StockSharp.Algo
 				IsRestoreOnErrorReconnect = IsRestoreOnErrorReconnect,
 				IsRestoreOnNormalReconnect = IsRestoreOnNormalReconnect,
 				SupportMultipleSubscriptions = SupportMultipleSubscriptions,
+				NonExistSubscriptionAsError = NonExistSubscriptionAsError,
 			};
 		}
 	}
