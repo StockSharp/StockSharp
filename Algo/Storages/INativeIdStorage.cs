@@ -280,7 +280,7 @@ namespace StockSharp.Algo.Storages
 						if (isTuple)
 						{
 							var nativeId2 = reader.ReadString().To(type2);
-							nativeId = typeof(Tuple<,>).MakeGenericType(type1, type2).CreateInstance(new[] { nativeId, nativeId2 });
+							nativeId = typeof(Tuple<,>).Make(type1, type2).CreateInstance(new[] { nativeId, nativeId2 });
 						}
 						
 						pairs.Add(Tuple.Create(securityId, nativeId));

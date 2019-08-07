@@ -336,7 +336,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						break;
 					}
 					default:
-						stringValue = typeof(XmlSerializer<>).MakeGenericType(paramType).CreateInstance<ISerializer>().Serialize(conParam.Value);
+						stringValue = typeof(XmlSerializer<>).Make(paramType).CreateInstance<ISerializer>().Serialize(conParam.Value);
 						break;
 				}
 
@@ -515,7 +515,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 							}
 							else
 							{
-								value = typeof(XmlSerializer<>).MakeGenericType(paramType).CreateInstance<ISerializer>().Deserialize(strBuffer);
+								value = typeof(XmlSerializer<>).Make(paramType).CreateInstance<ISerializer>().Deserialize(strBuffer);
 							}
 						}
 						else
