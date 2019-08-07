@@ -12,6 +12,7 @@
 	using MoreLinq;
 
 	using StockSharp.Algo.History.Hydra;
+	using StockSharp.Localization;
 
 	using PathPair = System.Tuple<string, System.Net.EndPoint>;
 
@@ -86,14 +87,23 @@
 
 		private static PathPair CreatePair(string path)
 		{
+			if (path.IsEmpty())
+				throw new ArgumentNullException(nameof(path));
+
+			if (path.Length < 3)
+				throw new ArgumentOutOfRangeException(nameof(path), path, LocalizedStrings.Str3014);
+
 			EndPoint addr = null;
 
-			try
+			if (!(path[0] >= 'A' && path[1] <= 'z' && path[1] == ':' && path[2] == '\\'))
 			{
-				addr = path.To<EndPoint>();
-			}
-			catch
-			{
+				try
+				{
+					addr = path.To<EndPoint>();
+				}
+				catch
+				{
+				}
 			}
 
 			return new PathPair(path, addr);
