@@ -2469,25 +2469,13 @@ namespace StockSharp.Algo
 			if (rule == null)
 				throw new ArgumentNullException(nameof(rule));
 
-			// не блокируем выполнение, если правило активно в данный момент
-			// оно в последствии само удалится, так как стратегия уже перешла в состояние Stopping
-			//if (!rule.SyncRoot.TryEnter())
-			//	return false;
-
 			var isRemoved = false;
 
-			//try
-			//{
 			if ((!checkCanFinish && !rule.IsActive && rule.IsReady) || rule.CanFinish())
 			{
 				container.Rules.Remove(rule);
 				isRemoved = true;
 			}
-			//}
-			//finally
-			//{
-			//	rule.SyncRoot.Exit();
-			//}
 
 			if (isRemoved)
 			{
