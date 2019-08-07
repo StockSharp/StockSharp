@@ -5,6 +5,7 @@ namespace StockSharp.Algo.Strategies
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -72,6 +73,8 @@ namespace StockSharp.Algo.Strategies
 			add => _portfolioChanged += value;
 			remove => _portfolioChanged -= value;
 		}
+
+		IdGenerator ITransactionProvider.TransactionIdGenerator => SafeGetConnector().TransactionIdGenerator;
 
 		private Action<Order> _newOrder;
 

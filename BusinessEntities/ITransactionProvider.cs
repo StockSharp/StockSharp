@@ -3,6 +3,8 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -10,6 +12,11 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	public interface ITransactionProvider : IPortfolioProvider, IPositionProvider
 	{
+		/// <summary>
+		/// Transaction id generator.
+		/// </summary>
+		IdGenerator TransactionIdGenerator { get; }
+
 		/// <summary>
 		/// Own trade received.
 		/// </summary>

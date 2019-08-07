@@ -18,7 +18,6 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 
-	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Logging;
@@ -173,11 +172,6 @@ namespace StockSharp.BusinessEntities
 		/// Session changed.
 		/// </summary>
 		event Action<ExchangeBoard, SessionStates> SessionStateChanged;
-
-		/// <summary>
-		/// Transaction id generator.
-		/// </summary>
-		IdGenerator TransactionIdGenerator { get; }
 
 		/// <summary>
 		/// Get session state for required board.
