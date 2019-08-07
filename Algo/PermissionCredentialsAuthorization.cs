@@ -28,11 +28,11 @@ namespace StockSharp.Algo
 
 		Guid IAuthorization.ValidateCredentials(string login, SecureString password, IPAddress clientAddress)
 		{
-			if (login == null)
-				throw new ArgumentNullException(nameof(login));
+			if (login.IsEmpty())
+				throw new ArgumentNullException(nameof(login), LocalizedStrings.Str1896);
 
-			if (password == null)
-				throw new ArgumentNullException(nameof(password));
+			if (password.IsEmpty())
+				throw new ArgumentNullException(nameof(password), LocalizedStrings.Str1897);
 
 			var credentials = _storage.TryGetByLogin(login);
 
