@@ -198,6 +198,7 @@ StockSharp API Change log
 * (feature) BatchEmulation. Accept storage drive and format.
 * (feature) IMarketDataDrive. LookupSecurities method added.
 * (feature) ITransactionProvider. MassOrderCanceled2, MassOrderCancelFailed2, OrderStatusFailed2 events added.
+* (feature) DriveComboBox, StorageSettingsWindow added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

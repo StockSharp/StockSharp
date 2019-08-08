@@ -598,6 +598,36 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.DriveComboBox">
+      <summary>
+            Combo box to select market data storage.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.DriveComboBox.Changed">
+      <summary>
+            Storage changed event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.DriveComboBox.CreateEditorSettings">
+      <summary>
+      </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:StockSharp.Xaml.DriveComboBox.OnLoadedInternal">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.DriveComboBox.SelectedDriveProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.DriveComboBox.SelectedDrive" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.DriveComboBox.SelectedDrive">
+      <summary>
+            Selected storage.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.GridControl.IPriceChartDataProvider">
       <summary>
             Price chart data provider interface.
@@ -1122,62 +1152,46 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.SecurityMessageAdaptersWindow">
+    <member name="T:StockSharp.Xaml.PropertyGrid.DriveComboBoxEditor">
       <summary>
-            The window for creation and editing of securities and adapters mapping.
+            Editor for <see cref="T:StockSharp.Algo.Storages.IMarketDataDrive" />.
             </summary>
       <summary>
-            SecurityMessageAdaptersWindow
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.RemoveCommand">
-      <summary>
-        <see cref="T:System.Windows.Input.RoutedCommand" /> to remove mapping.
+            DriveComboBoxEditor
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.AddCommand">
+    <member name="M:StockSharp.Xaml.PropertyGrid.DriveComboBoxEditor.#ctor">
       <summary>
-        <see cref="T:System.Windows.Input.RoutedCommand" /> to add mapping.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.DriveComboBoxEditor" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityAdapterProvider">
+    <member name="P:StockSharp.Xaml.PropertyGrid.DriveComboBoxEditor.Changed">
       <summary>
-            The security based message adapter's provider.
+            Storage changed event.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.AdapterProvider">
+    <member name="P:StockSharp.Xaml.PropertyGrid.DriveComboBoxEditor.ShowSearchButton">
       <summary>
-            The message adapter's provider.
+            Show Edit button.
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProviderProperty">
+    <member name="P:StockSharp.Xaml.PropertyGrid.DriveComboBoxEditor.ShowEditButton">
       <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProvider" />.
+            Show Edit button.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProvider">
+    <member name="P:StockSharp.Xaml.PropertyGrid.DriveComboBoxEditor.ShowDeleteButton">
       <summary>
-            The provider of information about instruments.
+            Show Delete button.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.#ctor">
+    <member name="M:StockSharp.Xaml.PropertyGrid.DriveComboBoxEditor.AssignToEditCore(DevExpress.Xpf.Editors.IBaseEdit)">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityMessageAdaptersWindow" />.
-            </summary>
+      </summary>
+      <param name="edit">
+      </param>
     </member>
-    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.InitializeComponent">
+    <member name="M:StockSharp.Xaml.PropertyGrid.DriveComboBoxEditor.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>
@@ -1646,6 +1660,66 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.SecurityMessageAdaptersWindow">
+      <summary>
+            The window for creation and editing of securities and adapters mapping.
+            </summary>
+      <summary>
+            SecurityMessageAdaptersWindow
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.RemoveCommand">
+      <summary>
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to remove mapping.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.AddCommand">
+      <summary>
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to add mapping.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityAdapterProvider">
+      <summary>
+            The security based message adapter's provider.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.AdapterProvider">
+      <summary>
+            The message adapter's provider.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProviderProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProvider" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityMessageAdaptersWindow.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityMessageAdaptersWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMessageAdaptersWindow.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>
@@ -2547,6 +2621,29 @@
     </member>
     <member name="M:StockSharp.Xaml.SpeechLogListener.Save(Ecng.Serialization.SettingsStorage)">
       <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Xaml.StorageSettingsWindow">
+      <summary>
+            The window with hosted <see cref="T:StockSharp.Xaml.StorageSettingsPanel" />.
+            </summary>
+      <summary>
+            StorageSettingsWindow
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StorageSettingsWindow.Drive">
+      <summary>
+            Selected storage.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.StorageSettingsWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.StorageSettingsWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.StorageSettingsWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
     </member>
     <member name="T:StockSharp.Xaml.StrategiesDashboard">
       <summary>
@@ -6476,14 +6573,24 @@
         <see cref="P:StockSharp.Xaml.StorageSettingsPanel.Login" /> and <see cref="P:StockSharp.Xaml.StorageSettingsPanel.Password" /> are only available for editing. The default value is <see langword="true" />.
             </summary>
     </member>
-    <member name="E:StockSharp.Xaml.StorageSettingsPanel.RemotePathChanged">
+    <member name="E:StockSharp.Xaml.StorageSettingsPanel.SettingsChanged">
       <summary>
-            The remote storage address change event.
+            Settings changed event.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.StorageSettingsPanel.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.StorageSettingsPanel" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StorageSettingsPanel.IsLocalEnabled">
+      <summary>
+            Is local settings enabled.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StorageSettingsPanel.IsRemoteEnabled">
+      <summary>
+            Is remote settings enabled.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.StorageSettingsPanel.IsLocal">
