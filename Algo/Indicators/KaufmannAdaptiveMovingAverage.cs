@@ -60,14 +60,10 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int SlowSCPeriod { get; set; }
 
-		/// <summary>
-		/// Whether the indicator is set.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFormed => Buffer.Count > Length;
 
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			_prevFinalValue = 0;
@@ -76,11 +72,7 @@ namespace StockSharp.Algo.Indicators
 			base.Reset();
 		}
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();
@@ -138,10 +130,7 @@ namespace StockSharp.Algo.Indicators
 			return new DecimalIndicatorValue(this, curValue);
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="settings">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -149,10 +138,7 @@ namespace StockSharp.Algo.Indicators
 			FastSCPeriod = settings.GetValue<int>(nameof(FastSCPeriod));
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="settings">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

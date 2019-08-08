@@ -60,14 +60,10 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		/// <summary>
-		/// Whether the indicator is set.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFormed => _wmaResult.IsFormed;
 
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			base.Reset();
@@ -77,11 +73,7 @@ namespace StockSharp.Algo.Indicators
 			_wmaResult.Length = SqrtPeriod == 0 ? (int)Math.Sqrt(Length) : SqrtPeriod;
 		}
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			_wmaSlow.Process(input);
@@ -96,20 +88,14 @@ namespace StockSharp.Algo.Indicators
 			return new DecimalIndicatorValue(this, _wmaResult.GetCurrentValue());
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="settings">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
 			SqrtPeriod = settings.GetValue<int>(nameof(SqrtPeriod));
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="settings">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

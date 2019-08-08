@@ -43,25 +43,17 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public SimpleMovingAverage Sma { get; }
 
-		/// <summary>
-		/// Whether the indicator is set.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFormed => Sma.IsFormed;
 
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			Sma.Length = Length;
 			base.Reset();
 		}
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var val = input.GetValue<decimal>();

@@ -37,20 +37,14 @@ namespace StockSharp.Algo.Indicators
 			Length = 32;
 		}
 
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			_prevFinalValue = 0;
 			base.Reset();
 		}
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

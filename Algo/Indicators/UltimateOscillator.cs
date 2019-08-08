@@ -65,18 +65,12 @@ namespace StockSharp.Algo.Indicators
 			_period28TrSum = new Sum { Length = _period28 };
 		}
 
-		/// <summary>
-		/// Whether the indicator is set.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFormed => _period7BpSum.IsFormed && _period14BpSum.IsFormed &&
 		                                 _period28BpSum.IsFormed && _period7TrSum.IsFormed &&
 		                                 _period14TrSum.IsFormed && _period28TrSum.IsFormed;
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();

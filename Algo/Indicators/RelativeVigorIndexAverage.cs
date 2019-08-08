@@ -37,9 +37,7 @@ namespace StockSharp.Algo.Indicators
 			Length = 4;
 		}
 
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			base.Reset();
@@ -48,11 +46,7 @@ namespace StockSharp.Algo.Indicators
 			Buffer.Clear();
 		}
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<Candle>();
@@ -102,9 +96,7 @@ namespace StockSharp.Algo.Indicators
 			return new DecimalIndicatorValue(this);
 		}
 
-		/// <summary>
-		/// Whether the indicator is set.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFormed => _buffer.Count >= Length;
 	}
 }

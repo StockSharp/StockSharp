@@ -37,11 +37,7 @@ namespace StockSharp.Algo.Indicators
 			Length = 5;
 		}
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.IsSupport(typeof(Candle)) ? input.GetValue<Candle>().LowPrice : input.GetValue<decimal>();

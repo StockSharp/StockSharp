@@ -104,9 +104,7 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 		
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			base.Reset();
@@ -116,24 +114,22 @@ namespace StockSharp.Algo.Indicators
 			//LowBand.Reset();
 		}
 
-		/// <summary>
-		/// Whether the indicator is set.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFormed => MovingAverage.IsFormed;
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			_dev.Process(input);
+
 			var maValue = MovingAverage.Process(input);
+
 			var value = new ComplexIndicatorValue(this);
+
 			value.InnerValues.Add(MovingAverage, maValue);
 			value.InnerValues.Add(UpBand, UpBand.Process(input));
 			value.InnerValues.Add(LowBand, LowBand.Process(input));
+
 			return value;
 		}
 	}

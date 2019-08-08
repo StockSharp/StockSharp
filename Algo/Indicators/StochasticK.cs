@@ -42,25 +42,17 @@ namespace StockSharp.Algo.Indicators
 			Length = 14;
 		}
 
-		/// <summary>
-		/// The indicator is formed.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFormed => _high.IsFormed;
 
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			_high.Length = _low.Length = Length;
 			base.Reset();
 		}
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();

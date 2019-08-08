@@ -34,9 +34,7 @@ namespace StockSharp.Algo.Indicators
 			Kijun = kijun ?? throw new ArgumentNullException(nameof(kijun));
 		}
 
-		/// <summary>
-		/// Whether the indicator is set.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFormed => Buffer.Count >= Kijun.Length;
 
 		/// <summary>
@@ -51,11 +49,7 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public IchimokuLine Kijun { get; }
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			decimal? result = null;

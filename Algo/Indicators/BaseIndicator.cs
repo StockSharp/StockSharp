@@ -41,17 +41,13 @@ namespace StockSharp.Algo.Indicators
 			ResultType = type.GetValueType(false);
 		}
 
-		/// <summary>
-		/// Unique ID.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public Guid Id { get; private set; } = Guid.NewGuid();
 
 		private string _name;
 
-		/// <summary>
-		/// Indicator name.
-		/// </summary>
+		/// <inheritdoc />
 		[DisplayNameLoc(LocalizedStrings.NameKey)]
 		[DescriptionLoc(LocalizedStrings.Str908Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -67,9 +63,7 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public virtual void Reset()
 		{
 			IsFormed = false;
@@ -97,45 +91,29 @@ namespace StockSharp.Algo.Indicators
 			Name = storage.GetValue<string>(nameof(Name));
 		}
 
-		/// <summary>
-		/// Whether the indicator is set.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual bool IsFormed { get; protected set; }
 
-		/// <summary>
-		/// The container storing indicator data.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public IIndicatorContainer Container { get; } = new IndicatorContainer();
 
-		/// <summary>
-		/// Input values type.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual Type InputType { get; }
 
-		/// <summary>
-		/// Result values type.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual Type ResultType { get; }
 
-		/// <summary>
-		/// The indicator change event (for example, a new value is added).
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<IIndicatorValue, IIndicatorValue> Changed;
 
-		/// <summary>
-		/// The event of resetting the indicator status to initial. The event is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public event Action Reseted;
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		public virtual IIndicatorValue Process(IIndicatorValue input)
 		{
 			var result = OnProcess(input);
@@ -187,13 +165,7 @@ namespace StockSharp.Algo.Indicators
 			return PersistableHelper.Clone(this);
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
-		public override string ToString()
-		{
-			return Name;
-		}
+		/// <inheritdoc />
+		public override string ToString() => Name;
 	}
 }

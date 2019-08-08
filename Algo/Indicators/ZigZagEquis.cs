@@ -97,9 +97,7 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public decimal CurrentValue { get; private set; }
 
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			_needAdd = true;
@@ -109,11 +107,7 @@ namespace StockSharp.Algo.Indicators
 			base.Reset();
 		}
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var value = _byPrice(input.GetValue<Candle>());
@@ -224,10 +218,7 @@ namespace StockSharp.Algo.Indicators
 			return new ShiftedIndicatorValue(this, valueId - 1, input.SetValue(this, lastButOne));
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="settings">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -235,10 +226,7 @@ namespace StockSharp.Algo.Indicators
 			Deviation = settings.GetValue<decimal>(nameof(Deviation));
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="settings">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);
