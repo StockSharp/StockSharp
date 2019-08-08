@@ -1148,7 +1148,7 @@ F:StockSharp.Messages.MessageTypes.MarketData/summary;DocStr4359
 F:StockSharp.Messages.MessageTypes.NativeSecurityId/summary;DocStr4360
 F:StockSharp.Messages.MessageTypes.Connect/summary;XamlStr666
 F:StockSharp.Messages.MessageTypes.Disconnect/summary;DocStr4361
-F:StockSharp.Messages.MessageTypes.SecurityLookup/summary;Str3657
+F:StockSharp.Messages.MessageTypes.SecurityLookup/summary;DocStr11295
 F:StockSharp.Messages.MessageTypes.PortfolioLookup/summary;DocStr4362
 F:StockSharp.Messages.MessageTypes.SecurityLookupResult/summary;DocStr4363
 F:StockSharp.Messages.MessageTypes.Error/summary;Str152

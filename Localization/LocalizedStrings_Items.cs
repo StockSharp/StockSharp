@@ -49876,5 +49876,15 @@ namespace StockSharp.Localization
 		/// Suspicious action.
 		/// </summary>
 		public static string SuspiciousAction => GetString(SuspiciousActionKey);
+
+		/// <summary>
+		/// Cont-ue
+		/// </summary>
+		public const string Continue2Key = nameof(Continue2);
+
+		/// <summary>
+		/// Cont-ue
+		/// </summary>
+		public static string Continue2 => GetString(Continue2Key);
 	}
 }

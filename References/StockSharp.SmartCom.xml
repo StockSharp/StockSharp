@@ -1040,9 +1040,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportSecurityLookupResult">
-      <summary>
-            Поддерживается ли торговой системой поиск инструментов.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
@@ -1054,23 +1052,16 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportPortfolioLookupResult">
-      <summary>
-            Поддерживается ли торговой системой поиск портфелей.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsNativeIdentifiers">
-      <summary>
-            Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Отправить сообщение.
-            </summary>
-      <param name="message">Сообщение.</param>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.Version">
       <summary>
@@ -1334,22 +1325,10 @@
             </summary>
     </member>
     <member name="M:StockSharp.SmartCom.SmartTrader.OnConnect">
-      <summary>
-            Подключиться к торговой системе.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.SmartTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
-      <summary>
-            Отменить группу заявок на бирже по фильтру.
-            </summary>
-      <param name="transactionId">Идентификатор транзакции отмены.</param>
-      <param name="isStopOrder">
-        <see langword="true" />, если нужно отменить только стоп-заявки, <see langword="false" /> - если только обычный и <see langword="null" /> - если оба типа.</param>
-      <param name="portfolio">Портфель. Если значение равно <see langword="null" />, то портфель не попадает в фильтр снятия заявок.</param>
-      <param name="direction">Направление заявки. Если значение равно <see langword="null" />, то направление не попадает в фильтр снятия заявок.</param>
-      <param name="board">Торговая площадка. Если значение равно <see langword="null" />, то площадка не попадает в фильтр снятия заявок.</param>
-      <param name="security">Инструмент. Если значение равно <see langword="null" />, то инструмент не попадает в фильтр снятия заявок.</param>
-      <param name="securityType">Тип инструмента. Если значение равно <see langword="null" />, то тип не попадает в фильтр снятия заявок.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox">
       <summary>

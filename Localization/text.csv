@@ -5020,6 +5020,7 @@ SubscriptionNotSupported;Subscription '{0}' not supported by established connect
 CodesMapping;Codes mapping;Сопоставление кодов
 ExtraConditions;Extra conditions;Доп условия
 SuspiciousAction;Suspicious action.;Подозрительное действие.
+Continue2;Cont-ue;Прод-ть
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15772,10 +15773,6 @@ DocStr11246;Can process order action;Можно ли обработать дей
 DocStr11247;Copy {0} and {1};Копировать {0} и {1}
 DocStr11248;The interface describing a message listening component;Интерфейс, описывающий компоненту для слушания сообщений
 DocStr11249;The interface describing a session, create by {0};Интерфейс, описывающий сессию, созданная {0}
-DocStr11250;To handle the incoming {0};Обработать входящее {0}
-DocStr11251;The method is called at the processing of the new incoming {0};Метод вызывается при обработке нового входящего {0}
-DocStr11252;To handle the current step processed for the diagram element;Обработать текущий шаг элемента диаграммы
-DocStr11253;The method is called at current step processed for the diagram element;Метод вызывается на текущем шаге элемента диаграммы
 DocStr11254;Community urls;Адреса сообщества
 DocStr11255;Get website url;Получить адрес сайта
 DocStr11256;Get user url;Получить адрес пользователя
@@ -15804,3 +15801,26 @@ DocStr11280;Determines the specified portfolio is required;Определять,
 DocStr11281;Internal identifier;Внутренний идентификатор
 DocStr11282;Is valid;Валидно
 DocStr11283;Base class for messages contains information about the position changes;Базовый класс сообщений, содержащий информация об изменениях позиций
+DocStr11284;Default address;Адрес по-умолчанию
+DocStr11285;Download securities by the specified criteria;Скачать инструменты по указанному критерию
+DocStr11286;Existing securities;Существующие инструменты
+DocStr11287;{0} cache;Кэш {0}
+DocStr11288;New storage created event;Событие создания нового хранилища
+DocStr11289;Storage removed event;Событие удаления хранилища
+DocStr11290;Cache changed event;Событие изменения кэша
+DocStr11291;Invoke {0} event;Вызвать событие {0}
+DocStr11292;Verify settings;Проверить настройки
+DocStr11293;Determines the specified security is matched lookup criteria;Определить, удовлетворяет ли указанный инструмент критерию поиска
+DocStr11294;The path to the directory with snapshots of market data;Путь к директории со снимками маркет данных
+DocStr11295;Securities search;Поиск инструментов
+DocStr11296;Process double click event;Обработать событие двойного клика
+DocStr11297;Is need flush state (-1 means No);Если нужно сбросить состояние (-1 означает Нет)
+DocStr11298;Flush non trigger (root) elements;Сбросить не триггерные (корневые) элементы
+DocStr11300;Combo box to select market data storage;Список для выбора хранилища маркет данных
+DocStr11301;Storage changed event;Событие изменения хранилища
+DocStr11302;Show Edit button;Показывать кнопку Редактировать
+DocStr11303;Show Delete button;Показывать кнопку Удалить
+DocStr11304;The window with hosted {0};Окно с распологающимся {0}
+DocStr11305;Is local settings enabled;Доступны ли локальные настройки
+DocStr11306;Is remote settings enabled;Доступны ли удаленные настройки
+DocStr11307;Clear socket values;Очистить значения сокетов

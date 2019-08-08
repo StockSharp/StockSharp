@@ -43,6 +43,7 @@ F:StockSharp.Configuration.Paths.SecurityNativeIdDir/summary;DocStr9672
 F:StockSharp.Configuration.Paths.SecurityMappingDir/summary;DocStr9959
 F:StockSharp.Configuration.Paths.SecurityExtendedInfo/summary;DocStr9960
 F:StockSharp.Configuration.Paths.StorageDir/summary;DocStr10050
+F:StockSharp.Configuration.Paths.SnapshotsDir/summary;DocStr11294
 T:StockSharp.Configuration.StockSharpSection/summary;DocStr8737
 P:StockSharp.Configuration.StockSharpSection.CustomCandles/summary;DocStr8739
 P:StockSharp.Configuration.StockSharpSection.CustomIndicators/summary;DocStr8740

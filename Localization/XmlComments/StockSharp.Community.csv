@@ -290,8 +290,7 @@ M:StockSharp.Community.INotificationService.SendFeedback(System.Guid,StockSharp.
 T:StockSharp.Community.IProfileClient/summary;DocStr11164
 M:StockSharp.Community.IProfileClient.CreateProfile(StockSharp.Community.Profile)/summary;DocStr3038
 M:StockSharp.Community.IProfileClient.CreateProfile(StockSharp.Community.Profile)/param/profile;DocStr3028
-M:StockSharp.Community.IProfileClient.SendEmail(System.String)/summary;DocStr3039
-M:StockSharp.Community.IProfileClient.SendEmail(System.String)/param/email;EmailAddress
+M:StockSharp.Community.IProfileClient.SendEmail/summary;DocStr3039
 M:StockSharp.Community.IProfileClient.ValidateEmail(System.String,System.String)/summary;DocStr3040
 M:StockSharp.Community.IProfileClient.ValidateEmail(System.String,System.String)/param/email;EmailAddress
 M:StockSharp.Community.IProfileClient.ValidateEmail(System.String,System.String)/param/emailCode;DocStr3041
@@ -312,9 +311,8 @@ T:StockSharp.Community.IProfileService/summary;DocStr3037
 M:StockSharp.Community.IProfileService.CreateProfile(StockSharp.Community.Profile)/summary;DocStr3038
 M:StockSharp.Community.IProfileService.CreateProfile(StockSharp.Community.Profile)/param/profile;DocStr3028
 M:StockSharp.Community.IProfileService.CreateProfile(StockSharp.Community.Profile)/returns;DocStr3021
-M:StockSharp.Community.IProfileService.SendEmail(System.String)/summary;DocStr3039
-M:StockSharp.Community.IProfileService.SendEmail(System.String)/param/email;EmailAddress
-M:StockSharp.Community.IProfileService.SendEmail(System.String)/returns;DocStr3021
+M:StockSharp.Community.IProfileService.SendEmail/summary;DocStr3039
+M:StockSharp.Community.IProfileService.SendEmail/returns;DocStr3021
 M:StockSharp.Community.IProfileService.ValidateEmail(System.String,System.String)/summary;DocStr3040
 M:StockSharp.Community.IProfileService.ValidateEmail(System.String,System.String)/param/email;EmailAddress
 M:StockSharp.Community.IProfileService.ValidateEmail(System.String,System.String)/param/emailCode;DocStr3041
@@ -464,7 +462,7 @@ M:StockSharp.Community.ProfileClient.#ctor/summary;DocStr1
 M:StockSharp.Community.ProfileClient.#ctor(System.Uri)/summary;DocStr1
 M:StockSharp.Community.ProfileClient.#ctor(System.Uri)/param/address;DocStr2962
 M:StockSharp.Community.ProfileClient.CreateProfile(StockSharp.Community.Profile)/inheritdoc;DocStr8459
-M:StockSharp.Community.ProfileClient.SendEmail(System.String)/inheritdoc;DocStr8459
+M:StockSharp.Community.ProfileClient.SendEmail/inheritdoc;DocStr8459
 M:StockSharp.Community.ProfileClient.ValidateEmail(System.String,System.String)/inheritdoc;DocStr8459
 M:StockSharp.Community.ProfileClient.SendSms(System.String,System.String)/inheritdoc;DocStr8459
 M:StockSharp.Community.ProfileClient.ValidatePhone(System.String,System.String)/inheritdoc;DocStr8459

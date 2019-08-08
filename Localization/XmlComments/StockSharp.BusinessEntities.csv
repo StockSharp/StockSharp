@@ -407,7 +407,6 @@ E:StockSharp.BusinessEntities.IConnector.ConnectionErrorEx/summary;DocStr892
 E:StockSharp.BusinessEntities.IConnector.Error/summary;DocStr893
 E:StockSharp.BusinessEntities.IConnector.MarketTimeChanged/summary;DocStr886
 E:StockSharp.BusinessEntities.IConnector.SessionStateChanged/summary;DocStr897
-P:StockSharp.BusinessEntities.IConnector.TransactionIdGenerator/summary;DocStr3311
 M:StockSharp.BusinessEntities.IConnector.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/summary;DocStr803
 M:StockSharp.BusinessEntities.IConnector.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/param/board;DocStr804
 M:StockSharp.BusinessEntities.IConnector.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/returns;DocStr805
@@ -585,6 +584,7 @@ M:StockSharp.BusinessEntities.ISecurityProvider.Lookup(StockSharp.Messages.Secur
 M:StockSharp.BusinessEntities.ISecurityProvider.Lookup(StockSharp.Messages.SecurityLookupMessage)/param/criteria;DocStr4431
 M:StockSharp.BusinessEntities.ISecurityProvider.Lookup(StockSharp.Messages.SecurityLookupMessage)/returns;DocStr8518
 T:StockSharp.BusinessEntities.ITransactionProvider/summary;DocStr11239
+P:StockSharp.BusinessEntities.ITransactionProvider.TransactionIdGenerator/summary;DocStr3311
 E:StockSharp.BusinessEntities.ITransactionProvider.NewMyTrade/summary;DocStr8546
 E:StockSharp.BusinessEntities.ITransactionProvider.NewOrder/summary;DocStr8548
 E:StockSharp.BusinessEntities.ITransactionProvider.OrderChanged/summary;DocStr8549
