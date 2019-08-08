@@ -361,10 +361,13 @@ namespace StockSharp.Algo.Strategies
 					//_connector.MarketDepthsChanged -= OnConnectorMarketDepthsChanged;
 					_connector.OrderInitialized -= OnConnectorOrderInitialized;
 					_connector.OrderStatusFailed -= OnConnectorOrderStatusFailed;
+					_connector.OrderStatusFailed2 -= OnConnectorOrderStatusFailed2;
 					_connector.LookupPortfoliosResult -= OnConnectorLookupPortfoliosResult;
 					_connector.LookupPortfoliosResult2 -= OnConnectorLookupPortfoliosResult2;
 					_connector.MassOrderCancelFailed -= OnConnectorMassOrderCancelFailed;
+					_connector.MassOrderCancelFailed2 -= OnConnectorMassOrderCancelFailed2;
 					_connector.MassOrderCanceled -= OnConnectorMassOrderCanceled;
+					_connector.MassOrderCanceled2 -= OnConnectorMassOrderCanceled2;
 					_connector.NewPortfolio -= OnConnectorNewPortfolio;
 					_connector.PortfolioChanged -= OnConnectorPortfolioChanged;
 				}
@@ -388,10 +391,13 @@ namespace StockSharp.Algo.Strategies
 					//_connector.MarketDepthsChanged += OnConnectorMarketDepthsChanged;
 					_connector.OrderInitialized += OnConnectorOrderInitialized;
 					_connector.OrderStatusFailed += OnConnectorOrderStatusFailed;
+					_connector.OrderStatusFailed2 += OnConnectorOrderStatusFailed2;
 					_connector.LookupPortfoliosResult += OnConnectorLookupPortfoliosResult;
 					_connector.LookupPortfoliosResult2 += OnConnectorLookupPortfoliosResult2;
 					_connector.MassOrderCancelFailed += OnConnectorMassOrderCancelFailed;
+					_connector.MassOrderCancelFailed2 += OnConnectorMassOrderCancelFailed2;
 					_connector.MassOrderCanceled += OnConnectorMassOrderCanceled;
+					_connector.MassOrderCanceled2 += OnConnectorMassOrderCanceled2;
 					_connector.NewPortfolio += OnConnectorNewPortfolio;
 					_connector.PortfolioChanged += OnConnectorPortfolioChanged;
 				}

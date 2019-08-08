@@ -1877,9 +1877,9 @@ namespace StockSharp.Algo
 					if (_entityCache.IsMassCancelation(originId))
 					{
 						if (message.Error == null)
-							RaiseMassOrderCanceled(originId);
+							RaiseMassOrderCanceled(originId, message.ServerTime);
 						else
-							RaiseMassOrderCancelFailed(originId, message.Error);
+							RaiseMassOrderCancelFailed(originId, message.Error, message.ServerTime);
 
 						break;
 					}
@@ -1891,7 +1891,7 @@ namespace StockSharp.Algo
 						// TransId != 0 means contains failed order info (not just status response)
 						if (message.TransactionId == 0)
 						{
-							RaiseOrderStatusFailed(originId, message.Error);
+							RaiseOrderStatusFailed(originId, message.Error, message.ServerTime);
 							break;
 						}
 					}

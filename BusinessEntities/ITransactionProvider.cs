@@ -48,14 +48,29 @@ namespace StockSharp.BusinessEntities
 		event Action<long> MassOrderCanceled;
 
 		/// <summary>
+		/// Mass order cancellation event.
+		/// </summary>
+		event Action<long, DateTimeOffset> MassOrderCanceled2;
+
+		/// <summary>
 		/// Mass order cancellation errors event.
 		/// </summary>
 		event Action<long, Exception> MassOrderCancelFailed;
 
 		/// <summary>
+		/// Mass order cancellation errors event.
+		/// </summary>
+		event Action<long, Exception, DateTimeOffset> MassOrderCancelFailed2;
+
+		/// <summary>
 		/// Failed order status request event.
 		/// </summary>
 		event Action<long, Exception> OrderStatusFailed;
+
+		/// <summary>
+		/// Failed order status request event.
+		/// </summary>
+		event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
 
 		/// <summary>
 		/// Stop-order registration error event.

@@ -92,6 +92,14 @@ namespace StockSharp.Algo.Strategies
 			remove => _massOrderCanceled -= value;
 		}
 
+		private Action<long, DateTimeOffset> _massOrderCanceled2;
+
+		event Action<long, DateTimeOffset> ITransactionProvider.MassOrderCanceled2
+		{
+			add => _massOrderCanceled2 += value;
+			remove => _massOrderCanceled2 -= value;
+		}
+
 		private Action<long, Exception> _massOrderCancelFailed;
 
 		event Action<long, Exception> ITransactionProvider.MassOrderCancelFailed
@@ -100,12 +108,28 @@ namespace StockSharp.Algo.Strategies
 			remove => _massOrderCancelFailed -= value;
 		}
 
+		private Action<long, Exception, DateTimeOffset> _massOrderCancelFailed2;
+
+		event Action<long, Exception, DateTimeOffset> ITransactionProvider.MassOrderCancelFailed2
+		{
+			add => _massOrderCancelFailed2 += value;
+			remove => _massOrderCancelFailed2 -= value;
+		}
+
 		private Action<long, Exception> _orderStatusFailed;
 
 		event Action<long, Exception> ITransactionProvider.OrderStatusFailed
 		{
 			add => _orderStatusFailed += value;
 			remove => _orderStatusFailed -= value;
+		}
+
+		private Action<long, Exception, DateTimeOffset> _orderStatusFailed2;
+
+		event Action<long, Exception, DateTimeOffset> ITransactionProvider.OrderStatusFailed2
+		{
+			add => _orderStatusFailed2 += value;
+			remove => _orderStatusFailed2 -= value;
 		}
 
 		private Action<Order> _newStopOrder;
@@ -172,9 +196,19 @@ namespace StockSharp.Algo.Strategies
 			_massOrderCancelFailed?.Invoke(transactionId, error);
 		}
 
+		private void OnConnectorMassOrderCancelFailed2(long transactionId, Exception error, DateTimeOffset time)
+		{
+			_massOrderCancelFailed2?.Invoke(transactionId, error, time);
+		}
+
 		private void OnConnectorMassOrderCanceled(long transactionId)
 		{
 			_massOrderCanceled?.Invoke(transactionId);
+		}
+
+		private void OnConnectorMassOrderCanceled2(long transactionId, DateTimeOffset time)
+		{
+			_massOrderCanceled2?.Invoke(transactionId, time);
 		}
 
 		private void OnConnectorPortfolioChanged(Portfolio portfolio)
@@ -190,6 +224,11 @@ namespace StockSharp.Algo.Strategies
 		private void OnConnectorOrderStatusFailed(long transactionId, Exception error)
 		{
 			_orderStatusFailed?.Invoke(transactionId, error);
+		}
+
+		private void OnConnectorOrderStatusFailed2(long transactionId, Exception error, DateTimeOffset time)
+		{
+			_orderStatusFailed2?.Invoke(transactionId, error, time);
 		}
 	}
 }

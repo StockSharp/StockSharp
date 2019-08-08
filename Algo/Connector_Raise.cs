@@ -65,6 +65,9 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <inheritdoc />
+		public event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
+
+		/// <inheritdoc />
 		public event Action<OrderFail> StopOrderRegisterFailed;
 
 		/// <inheritdoc />
@@ -89,7 +92,13 @@ namespace StockSharp.Algo
 		public event Action<long> MassOrderCanceled;
 
 		/// <inheritdoc />
+		public event Action<long, DateTimeOffset> MassOrderCanceled2;
+
+		/// <inheritdoc />
 		public event Action<long, Exception> MassOrderCancelFailed;
+
+		/// <inheritdoc />
+		public event Action<long, Exception, DateTimeOffset> MassOrderCancelFailed2;
 
 		/// <inheritdoc />
 		public event Action<long, Exception> OrderStatusFailed;
@@ -345,19 +354,22 @@ namespace StockSharp.Algo
 			StopOrdersCancelFailed?.Invoke(new[] { fail });
 		}
 
-		private void RaiseMassOrderCanceled(long transactionId)
+		private void RaiseMassOrderCanceled(long transactionId, DateTimeOffset time)
 		{
 			MassOrderCanceled?.Invoke(transactionId);
+			MassOrderCanceled2?.Invoke(transactionId, time);
 		}
 
-		private void RaiseMassOrderCancelFailed(long transactionId, Exception error)
+		private void RaiseMassOrderCancelFailed(long transactionId, Exception error, DateTimeOffset time)
 		{
 			MassOrderCancelFailed?.Invoke(transactionId, error);
+			MassOrderCancelFailed2?.Invoke(transactionId, error, time);
 		}
 
-		private void RaiseOrderStatusFailed(long transactionId, Exception error)
+		private void RaiseOrderStatusFailed(long transactionId, Exception error, DateTimeOffset time)
 		{
 			OrderStatusFailed?.Invoke(transactionId, error);
+			OrderStatusFailed2?.Invoke(transactionId, error, time);
 		}
 
 		private void RaiseNewSecurity(Security security)
