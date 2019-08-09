@@ -49886,5 +49886,25 @@ namespace StockSharp.Localization
 		/// Cont-ue
 		/// </summary>
 		public static string Continue2 => GetString(Continue2Key);
+
+		/// <summary>
+		/// Overflow
+		/// </summary>
+		public const string OverflowKey = nameof(Overflow);
+
+		/// <summary>
+		/// Overflow
+		/// </summary>
+		public static string Overflow => GetString(OverflowKey);
+
+		/// <summary>
+		/// Max allowed elements per iteration to prevent stack overflow.
+		/// </summary>
+		public const string OverflowLimitKey = nameof(OverflowLimit);
+
+		/// <summary>
+		/// Max allowed elements per iteration to prevent stack overflow.
+		/// </summary>
+		public static string OverflowLimit => GetString(OverflowLimitKey);
 	}
 }

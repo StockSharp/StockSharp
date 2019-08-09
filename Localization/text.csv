@@ -5021,6 +5021,8 @@ CodesMapping;Codes mapping;Сопоставление кодов
 ExtraConditions;Extra conditions;Доп условия
 SuspiciousAction;Suspicious action.;Подозрительное действие.
 Continue2;Cont-ue;Прод-ть
+Overflow;Overflow;Переполнение
+OverflowLimit;Max allowed elements per iteration to prevent stack overflow.;Максимально допустимое количество элементов за итерацию для предотвращения переполнения стека.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
