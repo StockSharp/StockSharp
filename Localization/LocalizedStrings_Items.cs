@@ -49906,5 +49906,45 @@ namespace StockSharp.Localization
 		/// Max allowed elements per iteration to prevent stack overflow.
 		/// </summary>
 		public static string OverflowLimit => GetString(OverflowLimitKey);
+
+		/// <summary>
+		/// Input as trigger
+		/// </summary>
+		public const string InputAsTriggerKey = nameof(InputAsTrigger);
+
+		/// <summary>
+		/// Input as trigger
+		/// </summary>
+		public static string InputAsTrigger => GetString(InputAsTriggerKey);
+
+		/// <summary>
+		/// Raise output value when input updated.
+		/// </summary>
+		public const string InputAsTriggerDescKey = nameof(InputAsTriggerDesc);
+
+		/// <summary>
+		/// Raise output value when input updated.
+		/// </summary>
+		public static string InputAsTriggerDesc => GetString(InputAsTriggerDescKey);
+
+		/// <summary>
+		/// NOT
+		/// </summary>
+		public const string NOTKey = nameof(NOT);
+
+		/// <summary>
+		/// NOT
+		/// </summary>
+		public static string NOT => GetString(NOTKey);
+
+		/// <summary>
+		/// Value for '{0}' wasn't passed.
+		/// </summary>
+		public const string ValueForWasNotPassedKey = nameof(ValueForWasNotPassed);
+
+		/// <summary>
+		/// Value for '{0}' wasn't passed.
+		/// </summary>
+		public static string ValueForWasNotPassed => GetString(ValueForWasNotPassedKey);
 	}
 }

@@ -5023,6 +5023,10 @@ SuspiciousAction;Suspicious action.;Подозрительное действи�
 Continue2;Cont-ue;Прод-ть
 Overflow;Overflow;Переполнение
 OverflowLimit;Max allowed elements per iteration to prevent stack overflow.;Максимально допустимое количество элементов за итерацию для предотвращения переполнения стека.
+InputAsTrigger;Input as trigger;Входящее - триггер
+InputAsTriggerDesc;Raise output value when input updated.;Передавать исходящее значение когда обновилось входящее.
+NOT;NOT;NOT
+ValueForWasNotPassed;Value for '{0}' wasn't passed.;Значение для '{0}' не было передано.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
