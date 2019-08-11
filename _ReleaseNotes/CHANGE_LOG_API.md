@@ -19,7 +19,7 @@ StockSharp API Change log
 * (bug) MarketEmulator. Fix canceled balanced processing.
 * (bug) BW fixes.
 * (feature) Kucoin. Protocol upgraded.
-* (feature) Kicoin. Sandbox supported.
+* (feature) Kucoin. Sandbox supported.
 * (feature) FIX connector. SuperDerivatives, SwissQuote and XOpenHub dialects.
 * (feature) NewsGrid. Show Board column.
 * (bug) PortfolioEditor. SelectedPortfolio binding fixes.
