@@ -1628,6 +1628,13 @@
             </summary>
       <returns>All indicator types.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartHelper.ExcludeObsolete(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IndicatorType})">
+      <summary>
+            Exclude obsolete indicators.
+            </summary>
+      <param name="types">All indicator types.</param>
+      <returns>Filtered collection.</returns>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartHelper.FillIndicators(StockSharp.Xaml.Charting.IChart)">
       <summary>
             Fill <see cref="P:StockSharp.Xaml.Charting.IChart.IndicatorTypes" /> using <see cref="M:StockSharp.Xaml.Charting.ChartHelper.GetIndicatorTypes" />.

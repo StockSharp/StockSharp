@@ -199,6 +199,7 @@ StockSharp API Change log
 * (feature) IMarketDataDrive. LookupSecurities method added.
 * (feature) ITransactionProvider. MassOrderCanceled2, MassOrderCancelFailed2, OrderStatusFailed2 events added.
 * (feature) DriveComboBox, StorageSettingsWindow added.
+* (feature) ChartHelper. ExcludeObsolete for IndicatorTypes.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
