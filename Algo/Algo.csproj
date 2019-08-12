@@ -147,7 +147,8 @@
     <Compile Include="History\Russian\MoexDownloader.cs" />
     <Compile Include="History\Russian\SecurityInfo.cs" />
     <Compile Include="History\Russian\SecurityInfoCache.cs" />
-    <Compile Include="OrderBookMessageAdapter.cs" />
+    <Compile Include="OrderBookInrementMessageAdapter.cs" />
+    <Compile Include="OrderBookTruncateMessageAdapter.cs" />
     <Compile Include="OrderLogMessageAdapter.cs" />
     <Compile Include="PartialDownloadMessageAdapter.cs" />
     <Compile Include="PermissionCredentialsAuthorization.cs" />
