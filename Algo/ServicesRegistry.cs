@@ -1,5 +1,6 @@
 namespace StockSharp.Algo
 {
+	using Ecng.Common;
 	using Ecng.Configuration;
 
 	using StockSharp.Algo.Storages;
@@ -175,5 +176,15 @@ namespace StockSharp.Algo
 		/// <see cref="IMarketDataDrive"/> cache.
 		/// </summary>
 		public static DriveCache DriveCache => ConfigManager.GetService<DriveCache>();
+
+		/// <summary>
+		/// Compiler service.
+		/// </summary>
+		public static ICompilerService CompilerService => ConfigManager.GetService<ICompilerService>();
+
+		/// <summary>
+		/// Compiler service.
+		/// </summary>
+		public static ICompilerService TryCompilerService => ConfigManager.TryGetService<ICompilerService>();
 	}
 }

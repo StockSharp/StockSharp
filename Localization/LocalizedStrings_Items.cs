@@ -43698,14 +43698,14 @@ namespace StockSharp.Localization
 		public static string ModelCode => GetString(ModelCodeKey);
 
 		/// <summary>
-		/// Expression '{0}' do not contains any security identifiers. Format should be AAPL@NASDAQ.
+		/// Expression '{0}' do not contains any identifiers.
 		/// </summary>
-		public const string NoSecIdsFoundKey = nameof(NoSecIdsFound);
+		public const string NoIdsFoundKey = nameof(NoIdsFound);
 
 		/// <summary>
-		/// Expression '{0}' do not contains any security identifiers. Format should be AAPL@NASDAQ.
+		/// Expression '{0}' do not contains any identifiers.
 		/// </summary>
-		public static string NoSecIdsFound => GetString(NoSecIdsFoundKey);
+		public static string NoIdsFound => GetString(NoIdsFoundKey);
 
 		/// <summary>
 		/// New version of the application available. Download updates?

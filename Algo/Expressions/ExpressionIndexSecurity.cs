@@ -6,7 +6,7 @@ namespace StockSharp.Algo.Expressions
 
 	using Ecng.Common;
 	using Ecng.Collections;
-	using Ecng.Configuration;
+	using Ecng.ComponentModel.Expressions;
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
@@ -90,7 +90,7 @@ namespace StockSharp.Algo.Expressions
 				if (value == null)
 					throw new ArgumentNullException(nameof(value));
 
-				var service = ConfigManager.TryGetService<ICompilerService>();
+				var service = ServicesRegistry.TryCompilerService;
 
 				if (service != null)
 				{
@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Expressions
 
 					if (Formula.Error.IsEmpty())
 					{
-						foreach (var id in Formula.SecurityIds)
+						foreach (var id in Formula.Identifiers)
 						{
 							_innerSecurityIds.Add(id.ToSecurityId());
 						}

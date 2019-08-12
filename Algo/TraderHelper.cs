@@ -23,6 +23,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.ComponentModel.Expressions;
 
 	using MoreLinq;
 
@@ -5358,6 +5359,17 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(portfolio));
 
 			return portfolio.Name.CompareIgnoreCase(uniqueId) || (portfolio.InternalId != null && Guid.TryParse(uniqueId, out var indernalId) && portfolio.InternalId == indernalId);
+		}
+
+		/// <summary>
+		/// Compile mathematical formula.
+		/// </summary>
+		/// <param name="expression">Text expression.</param>
+		/// <param name="useIds">Use ids as variables.</param>
+		/// <returns>Compiled mathematical formula.</returns>
+		public static ExpressionFormula Compile(this string expression, bool useIds = true)
+		{
+			return ServicesRegistry.CompilerService.Compile(expression, useIds);
 		}
 	}
 }
