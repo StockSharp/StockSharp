@@ -201,6 +201,7 @@ StockSharp API Change log
 * (feature) DriveComboBox, StorageSettingsWindow added.
 * (feature) ChartHelper. ExcludeObsolete for IndicatorTypes.
 * (feature) QuoteChangeStates added.
+* (feature) IMessageAdapter. IsSupportOrderBookIncrements property added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
