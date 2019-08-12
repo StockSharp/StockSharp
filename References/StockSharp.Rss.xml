@@ -16,10 +16,7 @@
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
         <member name="M:StockSharp.Rss.RssMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-            <summary>
-            Send message.
-            </summary>
-            <param name="message">Message.</param>
+            <inheritdoc />
         </member>
         <member name="F:StockSharp.Rss.RssMessageAdapter.DefaultHeartbeatInterval">
             <summary>
@@ -37,22 +34,13 @@
             </summary>
         </member>
         <member name="M:StockSharp.Rss.RssMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Load settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Rss.RssMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-            <summary>
-            Save settings.
-            </summary>
-            <param name="storage">Settings storage.</param>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Rss.RssMessageAdapter.ToString">
-            <summary>
-            Returns a string that represents the current object.
-            </summary>
-            <returns>A string that represents the current object.</returns>
+            <inheritdoc />
         </member>
         <member name="T:StockSharp.Rss.RssTrader">
             <summary>

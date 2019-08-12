@@ -1172,8 +1172,11 @@ E:StockSharp.Xaml.GuiConnector`1.OrdersChanged/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.OrdersRegisterFailed/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.OrdersCancelFailed/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MassOrderCanceled/inheritdoc;DocStr8459
+E:StockSharp.Xaml.GuiConnector`1.MassOrderCanceled2/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.MassOrderCancelFailed/inheritdoc;DocStr8459
+E:StockSharp.Xaml.GuiConnector`1.MassOrderCancelFailed2/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.OrderStatusFailed/inheritdoc;DocStr8459
+E:StockSharp.Xaml.GuiConnector`1.OrderStatusFailed2/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.NewStopOrders/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.StopOrdersChanged/inheritdoc;DocStr8459
 E:StockSharp.Xaml.GuiConnector`1.StopOrdersRegisterFailed/inheritdoc;DocStr8459

@@ -49946,5 +49946,15 @@ namespace StockSharp.Localization
 		/// Value for '{0}' wasn't passed.
 		/// </summary>
 		public static string ValueForWasNotPassed => GetString(ValueForWasNotPassedKey);
+
+		/// <summary>
+		/// Sova Capital
+		/// </summary>
+		public const string SovaCapitalKey = nameof(SovaCapital);
+
+		/// <summary>
+		/// Sova Capital
+		/// </summary>
+		public static string SovaCapital => GetString(SovaCapitalKey);
 	}
 }

@@ -50,7 +50,7 @@ namespace StockSharp.Messages
 		SnapshotComplete,
 
 		/// <summary>
-		/// Increment.
+		/// Incremental.
 		/// </summary>
 		[EnumMember]
 		Increment,

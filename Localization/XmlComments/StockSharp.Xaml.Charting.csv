@@ -448,6 +448,9 @@ M:StockSharp.Xaml.Charting.ChartHelper.IsVolumeProfileChart(StockSharp.Xaml.Char
 M:StockSharp.Xaml.Charting.ChartHelper.IsVolumeProfileChart(StockSharp.Xaml.Charting.ChartCandleDrawStyles)/returns;DocStr8659
 M:StockSharp.Xaml.Charting.ChartHelper.GetIndicatorTypes/summary;DocStr8721
 M:StockSharp.Xaml.Charting.ChartHelper.GetIndicatorTypes/returns;DocStr8722
+M:StockSharp.Xaml.Charting.ChartHelper.ExcludeObsolete(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IndicatorType})/summary;DocStr11308
+M:StockSharp.Xaml.Charting.ChartHelper.ExcludeObsolete(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IndicatorType})/param/types;DocStr8722
+M:StockSharp.Xaml.Charting.ChartHelper.ExcludeObsolete(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IndicatorType})/returns;DocStr11309
 M:StockSharp.Xaml.Charting.ChartHelper.FillIndicators(StockSharp.Xaml.Charting.IChart)/summary;DocStr8723
 M:StockSharp.Xaml.Charting.ChartHelper.FillIndicators(StockSharp.Xaml.Charting.IChart)/param/chart;Str3200
 T:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles/summary;DocStr7790

@@ -5027,6 +5027,7 @@ InputAsTrigger;Input as trigger;Входящее - триггер
 InputAsTriggerDesc;Raise output value when input updated.;Передавать исходящее значение когда обновилось входящее.
 NOT;NOT;NOT
 ValueForWasNotPassed;Value for '{0}' wasn't passed.;Значение для '{0}' не было передано.
+SovaCapital;Sova Capital;Sova Capital
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14742,7 +14743,7 @@ DocStr10096;Check if the specified identifier is {0};Проверить, явл�
 DocStr10097;{0}, if the specified identifier is {1}, otherwise, {2};{0}, если переданный идентификатор является {1}, иначе, {2}
 DocStr10098;Create data type info for {0};Создать информацию о данных для {0}
 DocStr10099;Check the specified style is volume profile based;Проверить, что указанный стиль основан на профиле объема
-DocStr10100;Use security ids as variables;Использовать идентификаторы инструментов как переменные
+DocStr10100;Use ids as variables;Использовать идентификаторы как переменные
 DocStr10101;Support portfolio subscriptions;Поддерживается ли подписки по портфелям
 DocStr10102;Occurs when a property value changes;Вызывается при изменении значения свойства
 DocStr10103;The chart area creation event;Событие создания области графика
@@ -15836,3 +15837,13 @@ DocStr11310;Create socket by the specified id;Создать сокет по у�
 DocStr11311;Socket or {0} if dynamic sockets are not supported;Socket or {0} if dynamic sockets are not supported
 DocStr11312;Determine the specified type is browsable;Определить, отображаем ли указанные тип
 DocStr11313;Get connection count;Получить количество подключений
+DocStr11314;The messages adapter build order book from incremental updates {0};Адаптер сообщений, строящий стаканы из инкрементальных обновлений {0}
+DocStr11316;Adapter translates incremental order books;Адаптер транслирует инкрементальные стаканы
+DocStr11317;Special set mean any depth for {0} option;Специальное множество обозначающее любую глубину для опции {0}
+DocStr11318;Get the nearest supported depth for the specified;Получить ближайшую поддерживаемую глубину для указанной
+DocStr11319;Supported depth;Поддерживаемая глубина
+DocStr11320;Order book states;Состояния стакана
+DocStr11321;Snapshot started;Начало снимка
+DocStr11322;Snapshot building;Формирование снимка
+DocStr11323;Snapshot complete;Окончание снимка
+DocStr11325;Order book state;Состояние стакана
