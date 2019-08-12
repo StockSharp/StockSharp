@@ -203,6 +203,7 @@ StockSharp API Change log
 * (feature) QuoteChangeStates added.
 * (feature) IMessageAdapter. IsSupportOrderBookIncrements property added.
 * (feature) IMessageAdapter. IsSupportOrderBookDepths -> SupportedOrderBookDepths.
+* (bug) ITCH, Plaza. Fix OL->OB local time stamp.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
