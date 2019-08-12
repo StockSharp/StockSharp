@@ -175,6 +175,11 @@ namespace StockSharp.Messages
 		bool IsSupportOrderBookDepths { get; }
 
 		/// <summary>
+		/// Adapter translates incremental order books.
+		/// </summary>
+		bool IsSupportOrderBookIncrements { get; }
+
+		/// <summary>
 		/// Adapter fills <see cref="ExecutionMessage.PnL"/>.
 		/// </summary>
 		bool IsSupportExecutionsPnL { get; }

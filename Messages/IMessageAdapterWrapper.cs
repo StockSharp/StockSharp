@@ -266,6 +266,9 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportOrderBookDepths => InnerAdapter.IsSupportOrderBookDepths;
 
 		/// <inheritdoc />
+		public virtual bool IsSupportOrderBookIncrements => InnerAdapter.IsSupportOrderBookIncrements;
+
+		/// <inheritdoc />
 		public virtual bool IsSupportExecutionsPnL => InnerAdapter.IsSupportExecutionsPnL;
 
 		/// <inheritdoc />

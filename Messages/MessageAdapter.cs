@@ -298,6 +298,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual bool IsSupportOrderBookIncrements => false;
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool IsSupportExecutionsPnL => false;
 
 		/// <inheritdoc />

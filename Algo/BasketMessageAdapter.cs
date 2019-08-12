@@ -375,7 +375,7 @@ namespace StockSharp.Algo
 				adapter = new OrderLogMessageAdapter(adapter);
 			}
 
-			if (!adapter.IsSupportOrderBookDepths)
+			if (!adapter.IsSupportOrderBookDepths || adapter.IsSupportOrderBookIncrements)
 			{
 				adapter = new OrderBookMessageAdapter(adapter);
 			}
