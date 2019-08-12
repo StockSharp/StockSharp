@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.History.Hydra
+namespace StockSharp.Algo.Storages.Remote
 {
 	using StockSharp.Messages;
 

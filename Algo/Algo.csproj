@@ -138,11 +138,11 @@
     <Compile Include="Expressions\ExpressionIndexSecurityProcessor.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
-    <Compile Include="History\Hydra\IRemoteExtendedStorage.cs" />
-    <Compile Include="History\Hydra\IRemoteStorage.cs" />
-    <Compile Include="History\Hydra\ISecurityRemoteExtendedStorage.cs" />
-    <Compile Include="History\Hydra\RemoteStorage.cs" />
-    <Compile Include="History\Hydra\RemoteStorageClient.cs" />
+    <Compile Include="Storages\Remote\IRemoteExtendedStorage.cs" />
+    <Compile Include="Storages\Remote\IRemoteStorage.cs" />
+    <Compile Include="Storages\Remote\ISecurityRemoteExtendedStorage.cs" />
+    <Compile Include="Storages\Remote\RemoteStorage.cs" />
+    <Compile Include="Storages\Remote\RemoteStorageClient.cs" />
     <Compile Include="History\Russian\FortsDailyData.cs" />
     <Compile Include="History\Russian\MoexDownloader.cs" />
     <Compile Include="History\Russian\SecurityInfo.cs" />

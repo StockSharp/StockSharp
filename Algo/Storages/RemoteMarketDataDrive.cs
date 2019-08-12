@@ -6,7 +6,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.History.Hydra;
+	using StockSharp.Algo.Storages.Remote;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 

@@ -11,7 +11,7 @@
 
 	using MoreLinq;
 
-	using StockSharp.Algo.History.Hydra;
+	using StockSharp.Algo.Storages.Remote;
 	using StockSharp.Localization;
 
 	using PathPair = System.Tuple<string, System.Net.EndPoint>;
