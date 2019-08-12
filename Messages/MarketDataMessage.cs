@@ -273,11 +273,6 @@ namespace StockSharp.Messages
 		public bool IsFinished { get; set; }
 
 		/// <summary>
-		/// The default depth of order book.
-		/// </summary>
-		public const int DefaultMaxDepth = 50;
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDataMessage"/>.
 		/// </summary>
 		public MarketDataMessage()

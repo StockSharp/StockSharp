@@ -15765,7 +15765,7 @@ DocStr11230;{0} was changed;{0} был изменен
 DocStr11231;Changed {0} list;Список измененных {0}
 DocStr11232;Create adapters for StockSharp server connections;Создать адаптеры для соединения со StockSharp сервером
 DocStr11233;Adapters for StockSharp server connections;Адаптеры для соединения со StockSharp сервером
-DocStr11234;Adapter can handle {0};Адаптер может обрабатывать {0}
+DocStr11234;Available options for {0};Доступные варианты для {0}
 DocStr11235;Adapter fills {0};Адаптер заполняет {0}
 DocStr11236;Use {0} for {1} calculation;Использовать {0} для вычисления {1}
 DocStr11237;The transactional provider;Транзакционный провайдер

@@ -294,7 +294,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool IsSupportOrderBookDepths => false;
+		public virtual IEnumerable<int> SupportedOrderBookDepths => Enumerable.Empty<int>();
 
 		/// <inheritdoc />
 		[Browsable(false)]

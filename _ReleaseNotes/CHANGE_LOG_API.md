@@ -148,7 +148,7 @@ StockSharp API Change log
 * (feature) Diagram. Bring link to front on mouse over.
 * (bug) Diagram. Update composition item names in palette fixes.
 * (bug) StorageMessageAdapter. Fix processing offline cancel order requests.
-* (feature) IMessageAdapter. IsSupportOrderBookDepths, IsSupportExecutionsPnL properties added.
+* (feature) IMessageAdapter. IsSupportExecutionsPnL properties added.
 * (feature) PnLMessageAdapter. Translates PortfolioChangeMessage.
 * (feature) Plaza. Spectra 6.2.20 supported.
 * (feature) InteractiveBrokers. V9.76.01
@@ -202,6 +202,7 @@ StockSharp API Change log
 * (feature) ChartHelper. ExcludeObsolete for IndicatorTypes.
 * (feature) QuoteChangeStates added.
 * (feature) IMessageAdapter. IsSupportOrderBookIncrements property added.
+* (feature) IMessageAdapter. IsSupportOrderBookDepths -> SupportedOrderBookDepths.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

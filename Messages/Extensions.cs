@@ -1306,5 +1306,35 @@ namespace StockSharp.Messages
 		{
 			return message.Error == null && !message.IsNotSupported;
 		}
+
+		/// <summary>
+		/// Special set mean any depth for <see cref="IMessageAdapter.SupportedOrderBookDepths"/> option.
+		/// </summary>
+		public static IEnumerable<int> AnyDepths = Array.AsReadOnly(new[] { -1 });
+
+		/// <summary>
+		/// Get the nearest supported depth for the specified.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="depth">Depth.</param>
+		/// <returns>Supported depth.</returns>
+		public static int? NearestSupportedDepth(this IMessageAdapter adapter, int depth)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			if (depth <= 0)
+				throw new ArgumentOutOfRangeException(nameof(depth));
+
+			var supported = adapter.SupportedOrderBookDepths;
+
+			if (supported == AnyDepths)
+				return depth;
+
+			if (supported.IsEmpty())
+				return null;
+
+			return supported.Where(d => d >= depth).OrderBy().FirstOr() ?? supported.Max();
+		}
 	}
 }

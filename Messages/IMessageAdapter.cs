@@ -170,9 +170,9 @@ namespace StockSharp.Messages
 		bool IsSupportSecuritiesLookupAll { get; }
 
 		/// <summary>
-		/// Adapter can handle <see cref="MarketDataMessage.MaxDepth"/>.
+		/// Available options for <see cref="MarketDataMessage.MaxDepth"/>.
 		/// </summary>
-		bool IsSupportOrderBookDepths { get; }
+		IEnumerable<int> SupportedOrderBookDepths { get; }
 
 		/// <summary>
 		/// Adapter translates incremental order books.
