@@ -132,7 +132,7 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportOrderBookDepths">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SupportedOrderBookDepths">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CandlesBuildFrom">

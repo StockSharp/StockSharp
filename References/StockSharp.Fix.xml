@@ -58,7 +58,10 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.SecurityLookupRequired">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportOrderBookDepths">
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportOrderBookIncrements">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.MaxRestores">
@@ -280,7 +283,10 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportPortfolioLookupResult">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportOrderBookDepths">
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportOrderBookIncrements">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportExecutionsPnL">
@@ -601,9 +607,14 @@
         <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFastDialect.IsSupportOrderBookDepths">
+    <member name="P:StockSharp.Fix.Dialects.IFastDialect.SupportedOrderBookDepths">
       <summary>
-            Adapter can handle <see cref="P:StockSharp.Messages.MarketDataMessage.MaxDepth" />.
+            Available options for <see cref="P:StockSharp.Messages.MarketDataMessage.MaxDepth" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFastDialect.IsSupportOrderBookIncrements">
+      <summary>
+            Adapter translates incremental order books.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
@@ -1179,7 +1190,7 @@
             Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.IsSupportOrderBookDepths">
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.SupportedOrderBookDepths">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.IsNativeIdentifiers">
@@ -1480,9 +1491,14 @@
             Gets a value indicating whether the adapter translates <see cref="T:StockSharp.Messages.PortfolioLookupResultMessage" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportOrderBookDepths">
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.SupportedOrderBookDepths">
       <summary>
-            Adapter can handle <see cref="P:StockSharp.Messages.MarketDataMessage.MaxDepth" />.
+            Available options for <see cref="P:StockSharp.Messages.MarketDataMessage.MaxDepth" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportOrderBookIncrements">
+      <summary>
+            Adapter translates incremental order books.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportExecutionsPnL">
@@ -1635,7 +1651,10 @@
     <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportOrderBookDepths">
+    <member name="P:StockSharp.Fix.FastMessageAdapter.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportOrderBookIncrements">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FastMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -7922,7 +7941,10 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportPortfolioLookupResult">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportOrderBookDepths">
+    <member name="P:StockSharp.Fix.FixMessageAdapter.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportOrderBookIncrements">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportExecutionsPnL">
@@ -8099,7 +8121,7 @@
     </member>
     <member name="F:StockSharp.Fix.FixDialects.Otkritie">
       <summary>
-            Otkritie.
+            Sova Capital.
             </summary>
     </member>
     <member name="F:StockSharp.Fix.FixDialects.QuikServer">
