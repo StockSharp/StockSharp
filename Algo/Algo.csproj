@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StockSharp.Algo</RootNamespace>
     <AssemblyName>StockSharp.Algo</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -58,9 +58,6 @@
     <Reference Include="Ecng.Interop">
       <HintPath>..\References\Ecng.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.IO">
-      <HintPath>..\References\Ecng.IO.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Net">
       <HintPath>..\References\Ecng.Net.dll</HintPath>
     </Reference>
@@ -89,9 +86,6 @@
     <Reference Include="MoreLinq">
       <HintPath>..\References\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\References\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -101,9 +95,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
@@ -143,10 +135,7 @@
     <Compile Include="Storages\Remote\ISecurityRemoteExtendedStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorageClient.cs" />
-    <Compile Include="History\Russian\FortsDailyData.cs" />
-    <Compile Include="History\Russian\MoexDownloader.cs" />
-    <Compile Include="History\Russian\SecurityInfo.cs" />
-    <Compile Include="History\Russian\SecurityInfoCache.cs" />
+    <Compile Include="TraderHelper_FORTS.cs" />
     <Compile Include="OrderBookInrementMessageAdapter.cs" />
     <Compile Include="OrderBookTruncateMessageAdapter.cs" />
     <Compile Include="OrderLogMessageAdapter.cs" />
@@ -162,11 +151,6 @@
     <Compile Include="Indicators\IndicatorValueAttribute.cs" />
     <Compile Include="IRemoteAuthorization.cs" />
     <Compile Include="PermissionCredentials.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Server\ITransactionIdStorage.cs" />
     <Compile Include="Server\IMessageListener.cs" />
     <Compile Include="Server\IMessageListenerSession.cs" />
@@ -537,15 +521,6 @@
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="History\Russian\Securities.zip" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
