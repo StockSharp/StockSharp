@@ -99,6 +99,8 @@ namespace StockSharp.Algo
 			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Active] = false;
 			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Done] = false;
 			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Failed] = true;
+
+			UsdRateMinAvailableTime = new DateTime(2009, 11, 2);
 		}
 
 		/// <summary>

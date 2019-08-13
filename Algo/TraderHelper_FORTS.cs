@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.History.Russian
+namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
@@ -11,45 +11,34 @@ namespace StockSharp.Algo.History.Russian
 	using Ecng.Common;
 	using Ecng.Collections;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	/// <summary>
-	/// The class for access to the historical daily data of the FORTS market.
-	/// </summary>
-	public static class FortsDailyData
+	partial class TraderHelper
 	{
-		static FortsDailyData()
-		{
-			UsdRateMinAvailableTime = new DateTime(2009, 11, 2);
-		}
-
 		/// <summary>
 		/// It returns yesterday's data at the end of day (EOD, End-Of-Day) by the selected instrument.
 		/// </summary>
-		/// <param name="securityId">Security ID.</param>
 		/// <param name="securityName">Security name.</param>
 		/// <returns>Yesterday's market-data.</returns>
 		/// <remarks>
 		/// Date is determined by the system time.
 		/// </remarks>
-		public static Level1ChangeMessage GetSecurityYesterdayEndOfDay(SecurityId securityId, string securityName)
+		public static Level1ChangeMessage GetFortsYesterdayEndOfDay(this string securityName)
 		{
 			var time = TimeHelper.Now;
 			time -= TimeSpan.FromDays(1);
-			return GetSecurityEndOfDay(securityId, securityName, time, time).FirstOrDefault();
+			return GetFortsEndOfDay(securityName, time, time).FirstOrDefault();
 		}
 
 		/// <summary>
 		/// It returns a list of the data at the end of day (EOD, End-Of-Day) by the selected instrument for the specified period.
 		/// </summary>
-		/// <param name="securityId">Security ID.</param>
 		/// <param name="securityName">Security name.</param>
 		/// <param name="fromDate">Begin period.</param>
 		/// <param name="toDate">End period.</param>
 		/// <returns>Historical market-data.</returns>
-		public static IEnumerable<Level1ChangeMessage> GetSecurityEndOfDay(SecurityId securityId, string securityName, DateTime fromDate, DateTime toDate)
+		public static IEnumerable<Level1ChangeMessage> GetFortsEndOfDay(this string securityName, DateTime fromDate, DateTime toDate)
 		{
 			if (fromDate > toDate)
 				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.Str1119Params.Put(fromDate, toDate));
@@ -82,7 +71,11 @@ namespace StockSharp.Algo.History.Russian
 							message.Add(new Level1ChangeMessage
 							{
 								ServerTime = time.EndOfDay().ApplyTimeZone(TimeHelper.Moscow),
-								SecurityId = securityId,
+								SecurityId = new SecurityId
+								{
+									SecurityCode = securityName,
+									BoardCode = BusinessEntities.ExchangeBoard.Forts.Code,
+								},
 							}
 							.TryAdd(Level1Fields.SettlementPrice, GetPart(row[1]))
 							.TryAdd(Level1Fields.AveragePrice, GetPart(row[2]))
@@ -115,22 +108,19 @@ namespace StockSharp.Algo.History.Russian
 		/// <summary>
 		/// To get an indicative exchange rate of a currency pair.
 		/// </summary>
-		/// <param name="security">Currency pair.</param>
+		/// <param name="securityId">Security ID.</param>
 		/// <param name="fromDate">Begin period.</param>
 		/// <param name="toDate">End period.</param>
 		/// <returns>The indicative rate of US dollar to the Russian ruble.</returns>
-		public static IDictionary<DateTimeOffset, decimal> GetRate(Security security, DateTime fromDate, DateTime toDate)
+		public static IDictionary<DateTimeOffset, decimal> GetFortsRate(this SecurityId securityId, DateTime fromDate, DateTime toDate)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
 			if (fromDate > toDate)
 				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.Str1119Params.Put(fromDate, toDate));
 
 			using (var client = new WebClient())
 			{
 				var url = "https://moex.com/export/derivatives/currency-rate.aspx?language=en&currency={0}&moment_start={1:yyyy-MM-dd}&moment_end={2:yyyy-MM-dd}"
-					.Put(security.Id.ToSecurityId().SecurityCode.Replace("/", TraderHelper.SecurityPairSeparator), fromDate, toDate);
+					.Put(securityId.SecurityCode.Replace("/", TraderHelper.SecurityPairSeparator), fromDate, toDate);
 
 				var stream = client.OpenRead(url);
 
