@@ -293,9 +293,9 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <summary>
 		/// To find exchanges that match the filter <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">The exchange which fields will be used as a filter.</param>
+		/// <param name="criteria">Message boards lookup for specified criteria.</param>
 		/// <returns>Exchanges.</returns>
-		public Exchange[] LoadExchanges(Exchange criteria)
+		public string[] LoadExchanges(BoardLookupMessage criteria)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -326,12 +326,22 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <param name="securities">Securities.</param>
 		public void SaveSecurities(Security[] securities)
 		{
-			var messages = securities.Select(s => s.ToMessage()).ToArray();
+			SaveSecurities(securities.Select(s => s.ToMessage()).ToArray());
+		}
 
-			if (messages.IsEmpty())
+		/// <summary>
+		/// Save securities.
+		/// </summary>
+		/// <param name="securities">Securities.</param>
+		public void SaveSecurities(SecurityMessage[] securities)
+		{
+			if (securities == null)
+				throw new ArgumentNullException(nameof(securities));
+
+			if (securities.IsEmpty())
 				throw new ArgumentOutOfRangeException(nameof(securities));
 
-			Invoke(f => f.SaveSecurities(SessionId, messages));
+			Invoke(f => f.SaveSecurities(SessionId, securities));
 		}
 
 		/// <summary>
@@ -361,7 +371,7 @@ namespace StockSharp.Algo.Storages.Remote
 			if (exchanges.IsEmpty())
 				throw new ArgumentOutOfRangeException(nameof(exchanges));
 
-			Invoke(f => f.SaveExchanges(SessionId, exchanges));
+			Invoke(f => f.SaveExchanges(SessionId, exchanges.Select(e => e.Name).ToArray()));
 		}
 
 		/// <summary>
@@ -630,7 +640,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <inheritdoc />
 		protected override TResult Invoke<TResult>(Func<IRemoteStorage, TResult> handler)
 		{
-			if (_sessionId == default)
+			if (SessionId == default)
 				Login();
 
 			try
@@ -650,9 +660,9 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
-			if (_sessionId != default)
+			if (SessionId != default)
 			{
-				Invoke(f => f.Logout(_sessionId));
+				Invoke(f => f.Logout(SessionId));
 				_sessionId = default;
 			}
 

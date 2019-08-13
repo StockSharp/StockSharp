@@ -11,8 +11,6 @@ namespace StockSharp.Algo.Storages.Remote
 	using Ecng.Common;
 	using Ecng.Net;
 
-	using MoreLinq;
-
 	using StockSharp.Community;
 	using StockSharp.Logging;
 	using StockSharp.Algo.Storages;
@@ -387,7 +385,7 @@ namespace StockSharp.Algo.Storages.Remote
 			return storage == null ? Stream.Null : storage.Drive.LoadStream(date);
 		}
 
-		string[] IRemoteStorage.LookupExchanges(Guid sessionId, Exchange criteria)
+		string[] IRemoteStorage.LookupExchanges(Guid sessionId, BoardLookupMessage criteria)
 		{
 			CheckSession(sessionId, UserPermissions.ExchangeLookup);
 
@@ -396,12 +394,12 @@ namespace StockSharp.Algo.Storages.Remote
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			var code = criteria.Name;
+			var code = criteria.Like;
 
 			var exchanges = ExchangeInfoProvider.Exchanges;
 
 			if (!code.IsEmpty())
-				exchanges = exchanges.Where(e => e.Name.ContainsIgnoreCase(code));
+				exchanges = exchanges.Where(e => e.Name.ContainsIgnoreCase(code) || e.RusName.ContainsIgnoreCase(code) || e.EngName.ContainsIgnoreCase(code));
 
 			return exchanges.Select(e => e.Name).ToArray();
 		}
@@ -418,7 +416,7 @@ namespace StockSharp.Algo.Storages.Remote
 			return ExchangeInfoProvider.LookupBoards(criteria.Like).Select(b => b.Code).ToArray();
 		}
 
-		Exchange[] IRemoteStorage.GetExchanges(Guid sessionId, string[] codes)
+		string[] IRemoteStorage.GetExchanges(Guid sessionId, string[] codes)
 		{
 			CheckSession(sessionId, UserPermissions.ExchangeLookup);
 
@@ -430,6 +428,7 @@ namespace StockSharp.Algo.Storages.Remote
 			return codes
 				.Select(ExchangeInfoProvider.GetExchange)
 				.Where(e => e != null)
+				.Select(e => e.Name)
 				.ToArray();
 		}
 
@@ -449,7 +448,7 @@ namespace StockSharp.Algo.Storages.Remote
 				.ToArray();
 		}
 
-		void IRemoteStorage.SaveExchanges(Guid sessionId, Exchange[] exchanges)
+		void IRemoteStorage.SaveExchanges(Guid sessionId, string[] exchanges)
 		{
 			CheckSession(sessionId, UserPermissions.EditExchanges);
 
@@ -458,7 +457,10 @@ namespace StockSharp.Algo.Storages.Remote
 
 			this.AddInfoLog(LocalizedStrings.RemoteStorageSaveExchanges, sessionId);
 
-			exchanges.ForEach(ExchangeInfoProvider.Save);
+			foreach (var exchange in exchanges)
+			{
+				ExchangeInfoProvider.GetOrCreateBoard(exchange);
+			}
 		}
 
 		void IRemoteStorage.SaveExchangeBoards(Guid sessionId, BoardMessage[] boards)

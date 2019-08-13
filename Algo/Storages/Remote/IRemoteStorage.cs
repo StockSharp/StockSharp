@@ -5,7 +5,6 @@ namespace StockSharp.Algo.Storages.Remote
 	using System.ServiceModel;
 
 	using StockSharp.Algo.Storages;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Community;
 	using StockSharp.Messages;
 
@@ -28,10 +27,10 @@ namespace StockSharp.Algo.Storages.Remote
 		/// To find exchange codes that match the filter <paramref name="criteria" />.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
-		/// <param name="criteria">The exchange which fields will be used as a filter.</param>
+		/// <param name="criteria">Message boards lookup for specified criteria.</param>
 		/// <returns>Found codes.</returns>
 		[OperationContract]
-		string[] LookupExchanges(Guid sessionId, Exchange criteria);
+		string[] LookupExchanges(Guid sessionId, BoardLookupMessage criteria);
 
 		/// <summary>
 		/// To find exchange board codes that match the filter <paramref name="criteria" />.
@@ -58,7 +57,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <param name="codes">Exchange codes.</param>
 		/// <returns>Exchanges.</returns>
 		[OperationContract]
-		Exchange[] GetExchanges(Guid sessionId, string[] codes);
+		string[] GetExchanges(Guid sessionId, string[] codes);
 
 		/// <summary>
 		/// Get exchange boards.
@@ -83,7 +82,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="exchanges">Exchanges.</param>
 		[OperationContract]
-		void SaveExchanges(Guid sessionId, Exchange[] exchanges);
+		void SaveExchanges(Guid sessionId, string[] exchanges);
 
 		/// <summary>
 		/// Save exchange boards.
