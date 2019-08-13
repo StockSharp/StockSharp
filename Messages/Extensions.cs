@@ -1336,5 +1336,16 @@ namespace StockSharp.Messages
 
 			return supported.Where(d => d >= depth).OrderBy().FirstOr() ?? supported.Max();
 		}
+
+		/// <summary>
+		/// Create <see cref="IOrderLogMarketDepthBuilder"/> instance.
+		/// </summary>
+		/// <param name="builderType">Builder type.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns><see cref="IOrderLogMarketDepthBuilder"/> instance.</returns>
+		public static IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(this Type builderType, SecurityId securityId)
+		{
+			return builderType.CreateInstance<IOrderLogMarketDepthBuilder>(securityId);
+		}
 	}
 }
