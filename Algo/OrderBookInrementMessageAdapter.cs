@@ -6,6 +6,7 @@
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -25,6 +26,23 @@
 		public OrderBookInrementMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
+		}
+
+		private int? _maxDepth;
+
+		/// <summary>
+		/// Max depth of requested order book.
+		/// </summary>
+		public int? MaxDepth
+		{
+			get => _maxDepth;
+			set
+			{
+				if (value != null && value < 1)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
+				_maxDepth = value;
+			}
 		}
 
 		/// <inheritdoc />
@@ -156,6 +174,23 @@
 							Apply(currState.First, quoteMsg.Bids);
 							Apply(currState.Second, quoteMsg.Asks);
 
+							if (MaxDepth != null)
+							{
+								var maxDepth = MaxDepth.Value;
+
+								void Truncate(QuotesDict dict)
+								{
+									if (dict.Count <= maxDepth)
+										return;
+
+									foreach (var key in dict.Keys.Skip(maxDepth).ToArray())
+										dict.Remove(key);
+								}
+
+								Truncate(currState.First);
+								Truncate(currState.Second);
+							}
+
 							message = CreateOrderBook(currState.First, currState.Second);
 							break;
 						}
@@ -176,7 +211,23 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new OrderBookInrementMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new OrderBookInrementMessageAdapter((IMessageAdapter)InnerAdapter.Clone()) { MaxDepth = MaxDepth };
+		}
+
+		/// <inheritdoc />
+		public override void Save(SettingsStorage storage)
+		{
+			base.Save(storage);
+
+			storage.SetValue(nameof(MaxDepth), MaxDepth);
+		}
+
+		/// <inheritdoc />
+		public override void Load(SettingsStorage storage)
+		{
+			base.Load(storage);
+			
+			MaxDepth = storage.GetValue<int?>(nameof(MaxDepth));
 		}
 	}
 }
