@@ -35,13 +35,16 @@ namespace StockSharp.Algo.Strategies.Reporting
 	/// </summary>
 	public class ExcelStrategyReport : StrategyReport
 	{
+		private readonly IExcelWorkerProvider _provider;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExcelStrategyReport"/>.
 		/// </summary>
+		/// <param name="provider">Excel provider.</param>
 		/// <param name="strategy">The strategy, requiring the report generation.</param>
 		/// <param name="fileName">The name of the file, in which report is generated in the Excel format.</param>
-		public ExcelStrategyReport(Strategy strategy, string fileName)
-			: this(new[] { strategy }, fileName)
+		public ExcelStrategyReport(IExcelWorkerProvider provider, Strategy strategy, string fileName)
+			: this(provider, new[] { strategy }, fileName)
 		{
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
@@ -50,11 +53,14 @@ namespace StockSharp.Algo.Strategies.Reporting
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExcelStrategyReport"/>.
 		/// </summary>
+		/// <param name="provider">Excel provider.</param>
 		/// <param name="strategies">Strategies, requiring the report generation.</param>
 		/// <param name="fileName">The name of the file, in which report is generated in the Excel format.</param>
-		public ExcelStrategyReport(IEnumerable<Strategy> strategies, string fileName)
+		public ExcelStrategyReport(IExcelWorkerProvider provider, IEnumerable<Strategy> strategies, string fileName)
 			: base(strategies, fileName)
 		{
+			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+
 			ExcelVersion = 2007;
 			IncludeOrders = true;
 			Decimals = 2;
@@ -63,11 +69,12 @@ namespace StockSharp.Algo.Strategies.Reporting
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExcelStrategyReport"/>.
 		/// </summary>
+		/// <param name="provider">Excel provider.</param>
 		/// <param name="strategies">Strategies, requiring the report generation.</param>
 		/// <param name="fileName">The name of the file, in which report is generated in the Excel format.</param>
 		/// <param name="template">The template file, to be copied into <see cref="StrategyReport.FileName"/>.</param>
-		public ExcelStrategyReport(IEnumerable<Strategy> strategies, string fileName, string template)
-			: this(strategies, fileName)
+		public ExcelStrategyReport(IExcelWorkerProvider provider, IEnumerable<Strategy> strategies, string fileName, string template)
+			: this(provider, strategies, fileName)
 		{
 			if (template.IsEmpty())
 				throw new ArgumentNullException(nameof(template));
@@ -95,14 +102,12 @@ namespace StockSharp.Algo.Strategies.Reporting
 		/// </summary>
 		public int Decimals { get; set; }
 
-		/// <summary>
-		/// To generate the report.
-		/// </summary>
+		/// <inheritdoc />
 		public override void Generate()
 		{
 			var hasTemplate = Template.IsEmpty();
 
-			using (var worker = hasTemplate ? new ExcelWorker() : new ExcelWorker(Template))
+			using (var worker = hasTemplate ? _provider.Create() : _provider.Create(Template))
 			{
 				foreach (var strategy in Strategies)
 				{

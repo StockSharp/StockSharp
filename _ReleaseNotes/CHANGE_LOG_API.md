@@ -208,6 +208,7 @@ StockSharp API Change log
 * (feature) FortsDailyData moved to TraderHelper.
 * (feature) Algo. Downgraded to .NET 4.0.
 * (feature) Algo. Removed instruments cache.
+* (feature) ExcelWorker -> IExcelWorkerProvider.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

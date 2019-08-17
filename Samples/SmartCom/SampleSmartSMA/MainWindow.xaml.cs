@@ -17,7 +17,6 @@ namespace SampleSmartSMA
 {
 	using System;
 	using System.ComponentModel;
-	using System.Diagnostics;
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Media;
@@ -30,7 +29,6 @@ namespace SampleSmartSMA
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Strategies.Reporting;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
@@ -279,8 +277,6 @@ namespace SampleSmartSMA
 				var marketTime = _trader.CurrentTime;
 
 				_lastHistoryCandle = _timeFrame.GetCandleBounds(marketTime).Min;
-
-				Report.IsEnabled = true;
 			}
 
 			if (_strategy.ProcessState == ProcessStates.Stopped)
@@ -312,15 +308,6 @@ namespace SampleSmartSMA
 					.Add(_shortMaElem, shortValue);
 
 			Chart.Draw(chartData);
-		}
-
-		private void ReportClick(object sender, RoutedEventArgs e)
-		{
-			// сгерерировать отчет по прошедшему тестированию
-			new ExcelStrategyReport(_strategy, "sma.xlsx").Generate();
-
-			// открыть отчет
-			Process.Start("sma.xlsx");
 		}
 	}
 }

@@ -34,19 +34,22 @@ namespace StockSharp.Algo.Export
 	/// </summary>
 	public class ExcelExporter : BaseExporter
 	{
+		private readonly IExcelWorkerProvider _provider;
 		private readonly Action _breaked;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExcelExporter"/>.
 		/// </summary>
+		/// <param name="provider">Excel provider.</param>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
 		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="fileName">The path to file.</param>
 		/// <param name="breaked">The processor, which will be called if maximal value of strings is exceeded.</param>
-		public ExcelExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName, Action breaked)
+		public ExcelExporter(IExcelWorkerProvider provider, Security security, object arg, Func<int, bool> isCancelled, string fileName, Action breaked)
 			: base(security, arg, isCancelled, fileName)
 		{
+			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
 			_breaked = breaked ?? throw new ArgumentNullException(nameof(breaked));
 		}
 
@@ -304,7 +307,7 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		private static void ApplyCellStyle(ExcelWorker worker, Level1Fields field, int column)
+		private static void ApplyCellStyle(IExcelWorker worker, Level1Fields field, int column)
 		{
 			var type = field.ToType();
 
@@ -379,7 +382,7 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		private static void ApplyCellStyle(ExcelWorker worker, PositionChangeTypes type, int column)
+		private static void ApplyCellStyle(IExcelWorker worker, PositionChangeTypes type, int column)
 		{
 			switch (type)
 			{
@@ -560,12 +563,12 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		private void Do(Action<ExcelWorker> action)
+		private void Do(Action<IExcelWorker> action)
 		{
 			if (action == null)
 				throw new ArgumentNullException(nameof(action));
 
-			using (var worker = new ExcelWorker())
+			using (var worker = _provider.Create())
 			{
 				action(worker);
 				worker.Save(Path, false);

@@ -2,6 +2,7 @@ namespace StockSharp.Algo
 {
 	using Ecng.Common;
 	using Ecng.Configuration;
+	using Ecng.Interop;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -186,5 +187,10 @@ namespace StockSharp.Algo
 		/// Compiler service.
 		/// </summary>
 		public static ICompilerService TryCompilerService => ConfigManager.TryGetService<ICompilerService>();
+
+		/// <summary>
+		/// Excel provider.
+		/// </summary>
+		public static IExcelWorkerProvider ExcelProvider => ConfigManager.TryGetService<IExcelWorkerProvider>();
 	}
 }

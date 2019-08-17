@@ -23,6 +23,7 @@ namespace SampleRandomEmulation
 	using Ecng.Common;
 	using Ecng.Xaml;
 	using Ecng.Collections;
+	using Ecng.Xaml.DevExp.Excel;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -212,7 +213,7 @@ namespace SampleRandomEmulation
 			// generate report for backtested strategy
 			// Warning! For the huge order or trade count,
 			// generation will be extremely slow
-			new ExcelStrategyReport(_strategy, "sma.xlsx").Generate();
+			new ExcelStrategyReport(new DevExpExcelWorkerProvider(), _strategy, "sma.xlsx").Generate();
 
 			// order excel file
 			Process.Start("sma.xlsx");
