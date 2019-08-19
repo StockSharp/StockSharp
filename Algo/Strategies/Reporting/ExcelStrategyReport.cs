@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 {
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Linq;
 	using System.Windows.Media;
 
@@ -105,9 +106,13 @@ namespace StockSharp.Algo.Strategies.Reporting
 		/// <inheritdoc />
 		public override void Generate()
 		{
-			var hasTemplate = Template.IsEmpty();
+			var hasTemplate = !Template.IsEmpty();
 
-			using (var worker = hasTemplate ? _provider.Create() : _provider.Create(Template))
+			if (hasTemplate)
+				File.Copy(Template, FileName);
+			
+			using (var stream = File.OpenWrite(FileName))
+			using (var worker = hasTemplate ? _provider.OpenExist(stream) : _provider.CreateNew(stream))
 			{
 				foreach (var strategy in Strategies)
 				{
@@ -117,8 +122,10 @@ namespace StockSharp.Algo.Strategies.Reporting
 					}
 					else
 					{
-						if (worker.ContainsSheet(strategy.Name))
-							worker.AddSheet(strategy.Name);
+						if (!worker.ContainsSheet(strategy.Name))
+						{
+							worker.AddSheet().RenameSheet(strategy.Name);
+						}
 					}
 
 					worker
@@ -356,8 +363,6 @@ namespace StockSharp.Algo.Strategies.Reporting
 						}
 					}
 				}
-
-				worker.Save(FileName, true);
 			}
 		}
 	}

@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Export
 {
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Linq;
 	using System.Windows.Media;
 
@@ -405,13 +406,12 @@ namespace StockSharp.Algo.Export
 
 				worker
 					.SetCell(0, row, LocalizedStrings.Str726).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff")
-					.SetCell(1, row, LocalizedStrings.Str727).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
-					.SetCell(2, row, "O").SetStyle(2, typeof(decimal))
-					.SetCell(3, row, "H").SetStyle(3, typeof(decimal))
-					.SetCell(4, row, "L").SetStyle(4, typeof(decimal))
-					.SetCell(5, row, "C").SetStyle(5, typeof(decimal))
-					.SetCell(6, row, "V").SetStyle(6, typeof(decimal))
-					.SetCell(7, row, LocalizedStrings.OI).SetStyle(7, typeof(decimal));
+					.SetCell(1, row, "O").SetStyle(2, typeof(decimal))
+					.SetCell(2, row, "H").SetStyle(3, typeof(decimal))
+					.SetCell(3, row, "L").SetStyle(4, typeof(decimal))
+					.SetCell(4, row, "C").SetStyle(5, typeof(decimal))
+					.SetCell(5, row, "V").SetStyle(6, typeof(decimal))
+					.SetCell(6, row, LocalizedStrings.OI).SetStyle(7, typeof(decimal));
 
 				row++;
 
@@ -419,13 +419,12 @@ namespace StockSharp.Algo.Export
 				{
 					worker
 						.SetCell(0, row, candle.OpenTime)
-						.SetCell(1, row, candle.CloseTime)
-						.SetCell(2, row, candle.OpenPrice)
-						.SetCell(3, row, candle.HighPrice)
-						.SetCell(4, row, candle.LowPrice)
-						.SetCell(5, row, candle.ClosePrice)
-						.SetCell(6, row, candle.TotalVolume)
-						.SetCell(7, row, candle.OpenInterest);
+						.SetCell(1, row, candle.OpenPrice)
+						.SetCell(2, row, candle.HighPrice)
+						.SetCell(3, row, candle.LowPrice)
+						.SetCell(4, row, candle.ClosePrice)
+						.SetCell(5, row, candle.TotalVolume)
+						.SetCell(6, row, candle.OpenInterest);
 
 					if (!Check(++row))
 						break;
@@ -568,10 +567,14 @@ namespace StockSharp.Algo.Export
 			if (action == null)
 				throw new ArgumentNullException(nameof(action));
 
-			using (var worker = _provider.Create())
+			using (var stream = File.OpenWrite(Path))
+			using (var worker = _provider.CreateNew(stream))
 			{
+				worker
+					.AddSheet()
+					.RenameSheet(LocalizedStrings.Export);
+
 				action(worker);
-				worker.Save(Path, false);
 			}
 		}
 
