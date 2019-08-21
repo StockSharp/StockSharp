@@ -209,6 +209,7 @@ StockSharp API Change log
 * (feature) Algo. Downgraded to .NET 4.0.
 * (feature) Algo. Removed instruments cache.
 * (feature) ExcelWorker -> IExcelWorkerProvider.
+* (feature) ShrinkPrice. Uses 0.01 as default price step.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -350,9 +350,9 @@ namespace StockSharp.Algo
 		/// <returns>The multiple price.</returns>
 		public static decimal ShrinkPrice(this Security security, decimal price, ShrinkRules rule = ShrinkRules.Auto)
 		{
-			security.CheckPriceStep();
+			//var priceStep = security.CheckPriceStep();
 
-			return price.Round(security.PriceStep ?? 1m, security.Decimals ?? 0,
+			return price.Round(security.PriceStep ?? 0.01m, security.Decimals ?? 0,
 				rule == ShrinkRules.Auto
 					? (MidpointRounding?)null
 					: (rule == ShrinkRules.Less ? MidpointRounding.AwayFromZero : MidpointRounding.ToEven)).RemoveTrailingZeros();
@@ -3683,15 +3683,16 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="provider">The provider of information about instruments.</param>
 		/// <param name="code">Security code.</param>
+		/// <param name="type">Security type.</param>
 		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
-		public static IEnumerable<Security> LookupByCode(this ISecurityProvider provider, string code)
+		public static IEnumerable<Security> LookupByCode(this ISecurityProvider provider, string code, SecurityTypes? type = null)
 		{
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			return code.IsEmpty()
+			return code.IsEmpty() && type == null
 				? provider.LookupAll()
-				: provider.Lookup(new Security { Code = code });
+				: provider.Lookup(new Security { Code = code, Type = type });
 		}
 
 		/// <summary>

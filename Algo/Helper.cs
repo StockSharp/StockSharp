@@ -54,16 +54,18 @@ namespace StockSharp.Algo
 			return security.Board;
 		}
 
-		public static Security CheckPriceStep(this Security security)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
+		//public static decimal CheckPriceStep(this Security security)
+		//{
+		//	if (security == null)
+		//		throw new ArgumentNullException(nameof(security));
 
-			if (security.PriceStep == null)
-				throw new ArgumentException(LocalizedStrings.Str905Params.Put(security.Id));
+		//	var priceStep = security.PriceStep;
 
-			return security;
-		}
+		//	if (priceStep == null)
+		//		throw new ArgumentException(LocalizedStrings.Str905Params.Put(security.Id));
+
+		//	return priceStep.Value;
+		//}
 
 		public static long GetTradeId(this ExecutionMessage message)
 		{
