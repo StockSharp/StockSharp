@@ -132,11 +132,8 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <param name="address">Server address.</param>
 		/// <param name="streaming">Data transfer via WCF Streaming.</param>
 		public RemoteStorageClient(Uri address, bool streaming = true)
-			: base(address, "hydra")
+			: base(address, "remoteStorage")
 		{
-			if (address == null)
-				throw new ArgumentNullException(nameof(address));
-
 			_streaming = streaming;
 			Credentials = new ServerCredentials();
 			SecurityBatchSize = 1000;
@@ -222,7 +219,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
 		public void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Action<int, int> updateProgress)
 		{
-			var existingIds = securityProvider.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+			var existingIds = securityProvider?.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase) ?? new HashSet<string>();
 			
 			LookupSecurities(criteria, isCancelled, existingIds, newSecurity, updateProgress);
 		}
