@@ -59,9 +59,6 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\References\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\References\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\References\MoreLinq.dll</HintPath>
     </Reference>
@@ -86,7 +83,6 @@
     <Compile Include="ILogListener.cs" />
     <Compile Include="ILogReceiver.cs" />
     <Compile Include="ILogSource.cs" />
-    <Compile Include="Log4NetLogListener.cs" />
     <Compile Include="LoggingHelper.cs" />
     <Compile Include="LogLevels.cs" />
     <Compile Include="LogListener.cs" />

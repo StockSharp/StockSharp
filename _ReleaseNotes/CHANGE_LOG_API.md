@@ -210,6 +210,7 @@ StockSharp API Change log
 * (feature) Algo. Removed instruments cache.
 * (feature) ExcelWorker -> IExcelWorkerProvider.
 * (feature) ShrinkPrice. Uses 0.01 as default price step.
+* (feature) log4net excluded.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
