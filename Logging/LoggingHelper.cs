@@ -147,7 +147,6 @@ namespace StockSharp.Logging
 			{
 				var msg = exception.ToString();
 
-
 				if (exception is ReflectionTypeLoadException refExc)
 				{
 					msg += Environment.NewLine
@@ -334,6 +333,30 @@ namespace StockSharp.Logging
 			}
 
 			return list.ToArray();
+		}
+
+		/// <summary>
+		/// The filter that only accepts messages of <see cref="LogLevels.Warning"/> type.
+		/// </summary>
+		public static readonly Func<LogMessage, bool> OnlyWarning = message => message.Level == LogLevels.Warning;
+
+		/// <summary>
+		/// The filter that only accepts messages of <see cref="LogLevels.Error"/> type.
+		/// </summary>
+		public static readonly Func<LogMessage, bool> OnlyError = message => message.Level == LogLevels.Error;
+
+		/// <summary>
+		/// Filter messages.
+		/// </summary>
+		/// <param name="messages">Incoming messages.</param>
+		/// <param name="filters">Messages filters that specify which messages should be handled.</param>
+		/// <returns>Filtered collection.</returns>
+		public static IEnumerable<LogMessage> Filter(this IEnumerable<LogMessage> messages, ICollection<Func<LogMessage, bool>> filters)
+		{
+			if (filters.Count > 0)
+				messages = messages.Where(m => filters.Any(f => f(m)));
+
+			return messages;
 		}
 	}
 }

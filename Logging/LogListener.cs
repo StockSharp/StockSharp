@@ -17,7 +17,6 @@ namespace StockSharp.Logging
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -31,12 +30,6 @@ namespace StockSharp.Logging
 	/// </summary>
 	public abstract class LogListener : Disposable, ILogListener
 	{
-		static LogListener()
-		{
-			AllWarningFilter = message => message.Level == LogLevels.Warning;
-			AllErrorFilter = message => message.Level == LogLevels.Error;
-		}
-
 		/// <summary>
 		/// Initialize <see cref="LogListener"/>.
 		/// </summary>
@@ -44,16 +37,6 @@ namespace StockSharp.Logging
 		{
 			Filters = new List<Func<LogMessage, bool>>();
 		}
-
-		/// <summary>
-		/// The filter that only accepts messages of <see cref="LogLevels.Warning"/> type.
-		/// </summary>
-		public static readonly Func<LogMessage, bool> AllWarningFilter;
-
-		/// <summary>
-		/// The filter that only accepts messages of <see cref="LogLevels.Error"/> type.
-		/// </summary>
-		public static readonly Func<LogMessage, bool> AllErrorFilter;
 
 		/// <summary>
 		/// Messages filters that specify which messages should be handled.
@@ -94,16 +77,10 @@ namespace StockSharp.Logging
 			}
 		}
 
-		/// <summary>
-		/// To record messages.
-		/// </summary>
-		/// <param name="messages">Debug messages.</param>
+		/// <inheritdoc />
 		public void WriteMessages(IEnumerable<LogMessage> messages)
 		{
-			if (Filters.Count > 0)
-				messages = messages.Where(m => Filters.Any(f => f(m)));
-
-			OnWriteMessages(messages);
+			OnWriteMessages(messages.Filter(Filters));
 		}
 
 		/// <summary>
