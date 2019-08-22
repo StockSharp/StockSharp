@@ -122,10 +122,8 @@ namespace SamplePlaza
 				if (!_isConnected)
 				{
 					Trader.Address = Address.Text.To<EndPoint>();
-					Trader.IsCGate = IsCGate.IsChecked == true;
 					Trader.IsDemo = IsDemo.IsChecked == true;
 					Trader.AppName = AppName.Text;
-					Trader.TableRegistry.StreamRegistry.IsFastRepl = IsFastRepl.IsChecked == true;
 
 					if (IsAutorization.IsChecked == true)
 					{
@@ -265,7 +263,7 @@ namespace SamplePlaza
 
 			ShowOrdersLog.IsEnabled = isConnected;
 
-			IsCGate.IsEnabled = IsDemo.IsEnabled = IsStorage.IsEnabled = IsFastRepl.IsEnabled
+			IsDemo.IsEnabled = IsStorage.IsEnabled
 				= IsAutorization.IsEnabled = Tables.IsEnabled = !isConnected;
 		}
 

@@ -212,6 +212,7 @@ StockSharp API Change log
 * (feature) ShrinkPrice. Uses 0.01 as default price step.
 * (feature) log4net excluded.
 * (feature) MoreLinq merged with Ecng.Collections.
+* (feature) Plaza. Excluded ClientGate option.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

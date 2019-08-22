@@ -6242,11 +6242,6 @@
             Операция не поддерживается.
             </summary>
     </member>
-    <member name="T:StockSharp.Plaza.Native.ClientGate.MessageDispatcher">
-      <summary>
-            Внутренний класс для обработки Plaza сообщений.
-            </summary>
-    </member>
     <member name="T:StockSharp.Plaza.PlazaBaseManager">
       <summary>
             Базовый менеджер.
@@ -6276,15 +6271,9 @@
             Если планируется подключать несколько <see cref="T:StockSharp.Plaza.PlazaTrader" /> к одному роутеру, они должны иметь уникальные <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.AppName" />.
             </remarks>
     </member>
-    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsCGate">
-      <summary>
-            Использовать ли CGate для торговли через Plaza или использовать старый COM.
-            По-умолчанию, включено.
-            </summary>
-    </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.CGateKey">
       <summary>
-            Идентификатор клиентского ПО. Используется при режиме <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.IsCGate" />.
+            Идентификатор клиентского ПО.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsDemo">
@@ -6548,11 +6537,6 @@
     <member name="T:StockSharp.Plaza.PlazaStreamRegistry">
       <summary>
             Реестр всех потоков данных сервера Плазы.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamRegistry.IsFastRepl">
-      <summary>
-            Используется ли быстрая репликация. По-умолчанию выключено.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.PlazaStreamRegistry.AllStreams">
