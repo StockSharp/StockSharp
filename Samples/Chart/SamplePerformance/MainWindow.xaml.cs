@@ -1,20 +1,4 @@
-﻿#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: SamplePerformance.SamplePerformancePublic
-File: MainWindow.xaml.cs
-Created: 2015, 12, 2, 8:18 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-
-namespace SamplePerformance
+﻿namespace SamplePerformance
 {
 	using System;
 	using System.Collections.Generic;
@@ -171,7 +155,7 @@ namespace SamplePerformance
 
 			var maxDays = 50;
 
-			BusyIndicator.IsBusy = true;
+			//BusyIndicator.IsBusy = true;
 
 			var path = _historyPath;
 
@@ -187,8 +171,8 @@ namespace SamplePerformance
 					{
 						date = tick.ServerTime.Date;
 
-						var str = $"Loading ticks for {date:dd MMM yyyy}...";
-						this.GuiAsync(() => BusyIndicator.BusyContent = str);
+						//var str = $"Loading ticks for {date:dd MMM yyyy}...";
+						//this.GuiAsync(() => BusyIndicator.BusyContent = str);
 
 						if (--maxDays == 0)
 							break;
@@ -199,7 +183,7 @@ namespace SamplePerformance
 			})
 			.ContinueWith(t =>
 			{
-				this.GuiAsync(() => BusyIndicator.IsBusy = false);
+				//this.GuiAsync(() => BusyIndicator.IsBusy = false);
 
 				for (var i = 0; i < _candles.Count; i += _candlesPacketSize)
 				{
@@ -229,7 +213,7 @@ namespace SamplePerformance
 
 				_dataIsLoaded = true;
 
-				this.GuiAsync(() => BusyIndicator.IsBusy = false);
+				//this.GuiAsync(() => BusyIndicator.IsBusy = false);
 
 				Chart.IsAutoRange = false;
 				//_area.YAxises.FirstOrDefault().Do(a => a.AutoRange = false);

@@ -36,9 +36,9 @@
 		private const decimal _priceStep = 10m;
 		private const int _timeframe = 1;
 
-		private bool NeedToDelay => _chkDelay.IsChecked == true;
-		private bool NeedToFail => _chkFail.IsChecked == true;
-		private bool NeedToConfirm => _chkConfirm.IsChecked == true;
+		private bool NeedToDelay => DelayCtrl.IsChecked == true;
+		private bool NeedToFail => FailCtrl.IsChecked == true;
+		private bool NeedToConfirm => ConfirmCtrl.IsChecked == true;
 
 		private readonly Security _security = new Security
 		{
@@ -124,7 +124,7 @@
 
 			var maxDays = 2;
 
-			BusyIndicator.IsBusy = true;
+			//BusyIndicator.IsBusy = true;
 
 			Task.Factory.StartNew(() =>
 			{
@@ -139,8 +139,8 @@
 
 					date = tick.ServerTime.Date;
 
-					var str = date.To<string>();
-					this.GuiAsync(() => BusyIndicator.BusyContent = str);
+					//var str = date.To<string>();
+					//this.GuiAsync(() => BusyIndicator.BusyContent = str);
 
 					maxDays--;
 
@@ -155,7 +155,7 @@
 
 				this.GuiAsync(() =>
 				{
-					BusyIndicator.IsBusy = false;
+					//BusyIndicator.IsBusy = false;
 					Chart.IsAutoRange = false;
 					_area.YAxises.First().AutoRange = false;
 
@@ -432,8 +432,8 @@
 
 		private void Log(string msg)
 		{
-			_logBox.AppendText($"{DateTime.Now:HH:mm:ss.fff}: {msg}\n");
-			_logBox.ScrollToEnd();
+			LogBox.AppendText($"{DateTime.Now:HH:mm:ss.fff}: {msg}\n");
+			LogBox.ScrollToEnd();
 		}
 
 		private static bool IsInFinalState(Order o)

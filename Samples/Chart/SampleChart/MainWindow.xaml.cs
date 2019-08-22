@@ -1,20 +1,4 @@
-﻿#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: SampleChart.SampleChartPublic
-File: MainWindow.xaml.cs
-Created: 2015, 12, 2, 8:18 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-
-namespace SampleChart
+﻿namespace SampleChart
 {
 	using System;
 	using System.Collections.Generic;
@@ -255,7 +239,7 @@ namespace SampleChart
 
 			var storage = new StorageRegistry();
 
-			BusyIndicator.IsBusy = true;
+			//BusyIndicator.IsBusy = true;
 
 			var path = HistoryPath.Folder;
 			var isBuild = BuildFromTicks.IsChecked == true;
@@ -294,8 +278,8 @@ namespace SampleChart
 						{
 							date = tick.ServerTime.Date;
 
-							var str = date.To<string>();
-							this.GuiAsync(() => BusyIndicator.BusyContent = str);
+							//var str = date.To<string>();
+							//this.GuiAsync(() => BusyIndicator.BusyContent = str);
 
 							maxDays--;
 
@@ -331,8 +315,8 @@ namespace SampleChart
 						{
 							date = candleMsg.OpenTime.Date;
 
-							var str = date.To<string>();
-							this.GuiAsync(() => BusyIndicator.BusyContent = str);
+							//var str = date.To<string>();
+							//this.GuiAsync(() => BusyIndicator.BusyContent = str);
 
 							maxDays--;
 
@@ -349,7 +333,7 @@ namespace SampleChart
 				if (t.Exception != null)
 					Error(t.Exception.Message);
 
-				BusyIndicator.IsBusy = false;
+				//BusyIndicator.IsBusy = false;
 				Chart.IsAutoRange = false;
 				ModifyAnnotationBtn.IsEnabled = true;
 				NewAnnotationBtn.IsEnabled = true;
