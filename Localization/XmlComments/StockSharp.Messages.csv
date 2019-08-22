@@ -792,6 +792,10 @@ M:StockSharp.Messages.Extensions.NearestSupportedDepth(StockSharp.Messages.IMess
 M:StockSharp.Messages.Extensions.NearestSupportedDepth(StockSharp.Messages.IMessageAdapter,System.Int32)/param/adapter;Adapter
 M:StockSharp.Messages.Extensions.NearestSupportedDepth(StockSharp.Messages.IMessageAdapter,System.Int32)/param/depth;Str1660
 M:StockSharp.Messages.Extensions.NearestSupportedDepth(StockSharp.Messages.IMessageAdapter,System.Int32)/returns;DocStr11319
+M:StockSharp.Messages.Extensions.CreateOrderLogMarketDepthBuilder(System.Type,StockSharp.Messages.SecurityId)/summary;DocStr11201
+M:StockSharp.Messages.Extensions.CreateOrderLogMarketDepthBuilder(System.Type,StockSharp.Messages.SecurityId)/param/builderType;DocStr11329
+M:StockSharp.Messages.Extensions.CreateOrderLogMarketDepthBuilder(System.Type,StockSharp.Messages.SecurityId)/param/securityId;SecurityId
+M:StockSharp.Messages.Extensions.CreateOrderLogMarketDepthBuilder(System.Type,StockSharp.Messages.SecurityId)/returns;DocStr8766
 T:StockSharp.Messages.IBasketSecurityProcessor/summary;DocStr10604
 P:StockSharp.Messages.IBasketSecurityProcessor.SecurityId/summary;SecurityId
 P:StockSharp.Messages.IBasketSecurityProcessor.BasketExpression/summary;DocStr10613
@@ -1465,7 +1469,7 @@ T:StockSharp.Messages.QuoteChangeStates/summary;DocStr11320
 F:StockSharp.Messages.QuoteChangeStates.SnapshotStarted/summary;DocStr11321
 F:StockSharp.Messages.QuoteChangeStates.SnapshotBuilding/summary;DocStr11322
 F:StockSharp.Messages.QuoteChangeStates.SnapshotComplete/summary;DocStr11323
-F:StockSharp.Messages.QuoteChangeStates.Increment/summary;DocStr11324
+F:StockSharp.Messages.QuoteChangeStates.Increment/summary;Incremental
 T:StockSharp.Messages.QuoteChangeMessage/summary;DocStr4444
 P:StockSharp.Messages.QuoteChangeMessage.SecurityId/inheritdoc;DocStr8459
 P:StockSharp.Messages.QuoteChangeMessage.Bids/summary;Str282

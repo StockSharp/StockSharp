@@ -5028,6 +5028,7 @@ InputAsTriggerDesc;Raise output value when input updated.;Передавать �
 NOT;NOT;NOT
 ValueForWasNotPassed;Value for '{0}' wasn't passed.;Значение для '{0}' не было передано.
 SovaCapital;Sova Capital;Sova Capital
+Etf;ETF;ETF
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15847,3 +15848,7 @@ DocStr11321;Snapshot started;Начало снимка
 DocStr11322;Snapshot building;Формирование снимка
 DocStr11323;Snapshot complete;Окончание снимка
 DocStr11325;Order book state;Состояние стакана
+DocStr11326;Excel provider;Excel поставщик
+DocStr11327;Filter messages;Отфильтрованные сообщения
+DocStr11328;Incoming messages;Входящие сообщения
+DocStr11329;Builder type;Тип построителя
