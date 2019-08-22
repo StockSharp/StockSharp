@@ -49956,5 +49956,15 @@ namespace StockSharp.Localization
 		/// Sova Capital
 		/// </summary>
 		public static string SovaCapital => GetString(SovaCapitalKey);
+
+		/// <summary>
+		/// ETF
+		/// </summary>
+		public const string EtfKey = nameof(Etf);
+
+		/// <summary>
+		/// ETF
+		/// </summary>
+		public static string Etf => GetString(EtfKey);
 	}
 }
