@@ -213,26 +213,26 @@ namespace StockSharp.Algo.Storages.Remote
 		/// Download securities by the specified criteria.
 		/// </summary>
 		/// <param name="criteria">Message security lookup for specified criteria.</param>
-		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
+		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
 		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
-		public void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Action<int, int> updateProgress)
+		public void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
 		{
-			var existingIds = securityProvider?.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase) ?? new HashSet<string>();
+			var existingIds = securityProvider?.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase) ?? new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 			
-			LookupSecurities(criteria, isCancelled, existingIds, newSecurity, updateProgress);
+			LookupSecurities(criteria, existingIds, newSecurity, isCancelled, updateProgress);
 		}
 
 		/// <summary>
 		/// Download securities by the specified criteria.
 		/// </summary>
 		/// <param name="criteria">Message security lookup for specified criteria.</param>
-		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
 		/// <param name="existingIds">Existing securities.</param>
 		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
+		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
 		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
-		public void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISet<string> existingIds, Action<SecurityMessage> newSecurity, Action<int, int> updateProgress)
+		public void LookupSecurities(SecurityLookupMessage criteria, ISet<string> existingIds, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -240,11 +240,11 @@ namespace StockSharp.Algo.Storages.Remote
 			if (existingIds == null)
 				throw new ArgumentNullException(nameof(existingIds));
 
-			if (isCancelled == null)
-				throw new ArgumentNullException(nameof(isCancelled));
-
 			if (newSecurity == null)
 				throw new ArgumentNullException(nameof(newSecurity));
+
+			if (isCancelled == null)
+				throw new ArgumentNullException(nameof(isCancelled));
 
 			if (updateProgress == null)
 				throw new ArgumentNullException(nameof(updateProgress));
@@ -283,7 +283,7 @@ namespace StockSharp.Algo.Storages.Remote
 		public SecurityMessage[] LoadSecurities(SecurityLookupMessage criteria)
 		{
 			var securities = new List<SecurityMessage>();
-			LookupSecurities(criteria, () => false, new HashSet<string>(), securities.Add, (i, c) => { });
+			LookupSecurities(criteria, new HashSet<string>(), securities.Add, () => false, (i, c) => { });
 			return securities.ToArray();
 		}
 

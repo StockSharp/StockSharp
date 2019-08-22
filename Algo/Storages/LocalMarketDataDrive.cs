@@ -445,22 +445,22 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Action<int, int> updateProgress)
+		public override void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			if (isCancelled == null)
-				throw new ArgumentNullException(nameof(isCancelled));
+			if (securityProvider == null)
+				throw new ArgumentNullException(nameof(securityProvider));
 
 			if (newSecurity == null)
 				throw new ArgumentNullException(nameof(newSecurity));
 
+			if (isCancelled == null)
+				throw new ArgumentNullException(nameof(isCancelled));
+
 			if (updateProgress == null)
 				throw new ArgumentNullException(nameof(updateProgress));
-
-			if (securityProvider == null)
-				throw new ArgumentNullException(nameof(securityProvider));
 
 			var securityPaths = new List<string>();
 			var progress = 0;

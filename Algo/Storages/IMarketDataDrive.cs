@@ -122,11 +122,11 @@ namespace StockSharp.Algo.Storages
 		/// Download securities by the specified criteria.
 		/// </summary>
 		/// <param name="criteria">Message security lookup for specified criteria.</param>
-		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
+		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
 		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
-		void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Action<int, int> updateProgress);
+		void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress);
 	}
 
 	/// <summary>
@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Storages
 		public abstract void Verify();
 
 		/// <inheritdoc />
-		public abstract void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Action<int, int> updateProgress);
+		public abstract void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress);
 
 		/// <summary>
 		/// Load settings.

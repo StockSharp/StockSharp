@@ -83,13 +83,13 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override void LookupSecurities(SecurityLookupMessage criteria, Func<bool> isCancelled, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Action<int, int> updateProgress)
+		public override void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
 		{
 			using (var client = new RemoteStorageClient(new Uri(Path)))
 			{
 				client.Credentials.Load(Client.Credentials.Save());
 
-				client.LookupSecurities(criteria, isCancelled, securityProvider, newSecurity, updateProgress);
+				client.LookupSecurities(criteria, securityProvider, newSecurity, isCancelled, updateProgress);
 			}
 		}
 
