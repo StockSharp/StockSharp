@@ -24,7 +24,6 @@ namespace SampleSmart
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.SmartCom;
-	using StockSharp.SmartCom.Native;
 	using StockSharp.Localization;
 
 	public partial class MainWindow
@@ -171,7 +170,7 @@ namespace SampleSmart
 				Trader.Address = Address.SelectedAddress;
 
 				// применить нужную версию SmartCOM
-				Trader.Version = IsSmartCom4.IsChecked == true ? SmartComVersions.V4 : SmartComVersions.V3;
+				//Trader.Version = IsSmartCom4.IsChecked == true ? SmartComVersions.V4 : SmartComVersions.V3;
 
 				// очищаем из текстового поля в целях безопасности
 				//Password.Clear();

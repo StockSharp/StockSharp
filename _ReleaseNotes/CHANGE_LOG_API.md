@@ -213,6 +213,7 @@ StockSharp API Change log
 * (feature) log4net excluded.
 * (feature) MoreLinq merged with Ecng.Collections.
 * (feature) Plaza. Excluded ClientGate option.
+* (feature) SmartCom. Excluded V3 version.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
