@@ -55,10 +55,7 @@ namespace SampleTwime
 			_securitiesWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 
-			var mdAdapter = new PlazaMessageAdapter(Trader.TransactionIdGenerator)
-			{
-				IsCGate = true,
-			};
+			var mdAdapter = new PlazaMessageAdapter(Trader.TransactionIdGenerator);
 			mdAdapter.RemoveTransactionalSupport();
 			Trader.Adapter.InnerAdapters.Add(mdAdapter);
 
