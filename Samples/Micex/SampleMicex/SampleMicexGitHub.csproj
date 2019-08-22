@@ -44,9 +44,6 @@
     <StartupObject>SampleMicex.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Micex">
       <HintPath>..\..\..\References\StockSharp.Micex.dll</HintPath>
     </Reference>

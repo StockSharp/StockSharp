@@ -63,9 +63,6 @@
     <Reference Include="DevExpress.Xpf.PropertyGrid.v18.1">
       <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Fix">
       <HintPath>..\..\..\References\StockSharp.Fix.dll</HintPath>
     </Reference>

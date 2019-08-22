@@ -86,9 +86,6 @@
     <Reference Include="Ecng.Common">
       <HintPath>..\..\..\References\Ecng.Common.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\References\Ecng.Collections.dll</HintPath>
     </Reference>

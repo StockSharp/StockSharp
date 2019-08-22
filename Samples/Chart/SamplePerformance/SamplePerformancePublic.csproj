@@ -62,9 +62,6 @@
     <Reference Include="Ecng.Xaml.Charting">
       <HintPath>..\..\..\References\Ecng.Xaml.Charting.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />

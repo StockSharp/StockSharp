@@ -40,9 +40,6 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Rithmic">
       <HintPath>..\..\..\References\StockSharp.Rithmic.dll</HintPath>
     </Reference>

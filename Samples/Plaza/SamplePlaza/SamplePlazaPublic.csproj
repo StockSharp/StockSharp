@@ -41,9 +41,6 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Plaza">
       <HintPath>..\..\..\References\StockSharp.Plaza.dll</HintPath>
     </Reference>

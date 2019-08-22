@@ -60,9 +60,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Algo.Strategies">
       <HintPath>..\..\..\References\StockSharp.Algo.Strategies.dll</HintPath>
     </Reference>

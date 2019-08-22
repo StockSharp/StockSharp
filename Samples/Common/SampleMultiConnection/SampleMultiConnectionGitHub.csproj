@@ -63,9 +63,6 @@
     <Reference Include="Ecng.Configuration">
       <HintPath>..\..\..\References\Ecng.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Xaml">
       <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>
     </Reference>

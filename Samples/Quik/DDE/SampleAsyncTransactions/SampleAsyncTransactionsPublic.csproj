@@ -102,9 +102,6 @@
     <Reference Include="DevExpress.Xpf.LayoutControl.v18.1">
       <HintPath>..\..\..\..\References\DevExpress.Xpf.LayoutControl.v18.1.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

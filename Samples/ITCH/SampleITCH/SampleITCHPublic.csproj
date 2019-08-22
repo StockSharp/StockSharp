@@ -66,9 +66,6 @@
     <Reference Include="Ecng.Net">
       <HintPath>..\..\..\References\Ecng.Net.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.ITCH">
       <HintPath>..\..\..\References\StockSharp.ITCH.dll</HintPath>
     </Reference>

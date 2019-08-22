@@ -41,9 +41,6 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="StockSharp.AlfaDirect">
       <HintPath>..\..\..\References\StockSharp.AlfaDirect.dll</HintPath>

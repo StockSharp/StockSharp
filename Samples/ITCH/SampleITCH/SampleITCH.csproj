@@ -81,9 +81,6 @@
     <Reference Include="Ecng.Net">
       <HintPath>..\..\..\References\Ecng.Net.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />

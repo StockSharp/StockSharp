@@ -63,9 +63,6 @@
     <Reference Include="CommLib">
       <HintPath>..\..\..\References\CommLib.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.OpenECry">
       <HintPath>..\..\..\References\StockSharp.OpenECry.dll</HintPath>
     </Reference>

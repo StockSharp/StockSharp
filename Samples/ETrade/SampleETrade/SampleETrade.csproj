@@ -69,9 +69,6 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="DevExpress.Data.v18.1">
       <HintPath>..\..\..\References\DevExpress.Data.v18.1.dll</HintPath>
     </Reference>
