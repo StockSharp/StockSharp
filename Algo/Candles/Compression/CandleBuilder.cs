@@ -463,7 +463,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		protected override TimeFrameCandleMessage CreateCandle(MarketDataMessage message, TimeFrameCandleMessage currentCandle, ICandleBuilderValueTransform transform)
 		{
-			var timeFrame = (TimeSpan)message.Arg;
+			var timeFrame = message.GetTimeFrame();
 
 			var board = ExchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode);
 			var bounds = timeFrame.GetCandleBounds(transform.Time, board, board.WorkingTime);

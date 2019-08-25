@@ -1347,5 +1347,18 @@ namespace StockSharp.Messages
 		{
 			return builderType.CreateInstance<IOrderLogMarketDepthBuilder>(securityId);
 		}
+
+		/// <summary>
+		/// Get time from the specified market-data message.
+		/// </summary>
+		/// <param name="mdMsg">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <returns>Time-frame.</returns>
+		public static TimeSpan GetTimeFrame(this MarketDataMessage mdMsg)
+		{
+			if (mdMsg == null)
+				throw new ArgumentNullException(nameof(mdMsg));
+
+			return (TimeSpan)mdMsg.Arg;
+		}
 	}
 }

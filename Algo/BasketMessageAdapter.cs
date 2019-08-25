@@ -776,7 +776,7 @@ namespace StockSharp.Algo
 					}
 				}
 
-				var original = (TimeSpan)mdMsg.Arg;
+				var original = mdMsg.GetTimeFrame();
 				var timeFrames = a.GetTimeFrames(mdMsg.SecurityId, mdMsg.From, mdMsg.To).ToArray();
 
 				if (timeFrames.Contains(original) || a.CheckTimeFrameByRequest)

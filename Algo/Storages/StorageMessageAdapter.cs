@@ -793,7 +793,7 @@ namespace StockSharp.Algo.Storages
 					break;
 
 				case MarketDataTypes.CandleTimeFrame:
-					var tf = (TimeSpan)msg.Arg;
+					var tf = msg.GetTimeFrame();
 
 					if (msg.IsCalcVolumeProfile)
 					{

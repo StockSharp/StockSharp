@@ -728,7 +728,7 @@ namespace StockSharp.Messages
 					return TimeSpan.FromDays(1);
 				case MarketDataTypes.CandleTimeFrame:
 				{
-					var tf = (TimeSpan)request.Arg;
+					var tf = request.GetTimeFrame();
 
 					if (tf.TotalDays <= 1)
 						return TimeSpan.FromDays(30);
