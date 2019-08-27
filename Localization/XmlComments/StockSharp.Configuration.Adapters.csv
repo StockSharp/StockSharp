@@ -1,0 +1,7 @@
+T:StockSharp.Configuration.InMemoryMessageAdapterProvider/summary;DocStr9833
+M:StockSharp.Configuration.InMemoryMessageAdapterProvider.#ctor(System.Collections.Generic.IEnumerable{StockSharp.Messages.IMessageAdapter})/summary;DocStr93
+M:StockSharp.Configuration.InMemoryMessageAdapterProvider.#ctor(System.Collections.Generic.IEnumerable{StockSharp.Messages.IMessageAdapter})/param/currentAdapters;DocStr11166
+P:StockSharp.Configuration.InMemoryMessageAdapterProvider.CurrentAdapters/inheritdoc;DocStr8459
+P:StockSharp.Configuration.InMemoryMessageAdapterProvider.PossibleAdapters/inheritdoc;DocStr8459
+M:StockSharp.Configuration.InMemoryMessageAdapterProvider.CreateStockSharpAdapters(Ecng.Common.IdGenerator,System.String,System.Security.SecureString)/inheritdoc;DocStr8459
+P:StockSharp.Configuration.InMemoryMessageAdapterProvider.Adapters/summary;DocStr9801
