@@ -796,6 +796,9 @@ M:StockSharp.Messages.Extensions.CreateOrderLogMarketDepthBuilder(System.Type,St
 M:StockSharp.Messages.Extensions.CreateOrderLogMarketDepthBuilder(System.Type,StockSharp.Messages.SecurityId)/param/builderType;DocStr11329
 M:StockSharp.Messages.Extensions.CreateOrderLogMarketDepthBuilder(System.Type,StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 M:StockSharp.Messages.Extensions.CreateOrderLogMarketDepthBuilder(System.Type,StockSharp.Messages.SecurityId)/returns;DocStr8766
+M:StockSharp.Messages.Extensions.GetTimeFrame(StockSharp.Messages.MarketDataMessage)/summary;DocStr11331
+M:StockSharp.Messages.Extensions.GetTimeFrame(StockSharp.Messages.MarketDataMessage)/param/mdMsg;DocStr4473
+M:StockSharp.Messages.Extensions.GetTimeFrame(StockSharp.Messages.MarketDataMessage)/returns;Str1242
 T:StockSharp.Messages.IBasketSecurityProcessor/summary;DocStr10604
 P:StockSharp.Messages.IBasketSecurityProcessor.SecurityId/summary;SecurityId
 P:StockSharp.Messages.IBasketSecurityProcessor.BasketExpression/summary;DocStr10613
@@ -1836,6 +1839,7 @@ F:StockSharp.Messages.SecurityTypes.Weather/summary;Weather
 F:StockSharp.Messages.SecurityTypes.Fund/summary;DocStr4516
 F:StockSharp.Messages.SecurityTypes.Adr/summary;DocStr4517
 F:StockSharp.Messages.SecurityTypes.CryptoCurrency/summary;Cryptocurrency
+F:StockSharp.Messages.SecurityTypes.Etf/summary;Etf
 T:StockSharp.Messages.SessionStates/summary;DocStr4518
 F:StockSharp.Messages.SessionStates.Assigned/summary;DocStr4519
 F:StockSharp.Messages.SessionStates.Active/summary;DocStr4520

@@ -189,6 +189,8 @@ M:StockSharp.Logging.LogListener.Save(Ecng.Serialization.SettingsStorage)/summar
 M:StockSharp.Logging.LogListener.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Logging.LogManager/summary;DocStr3986
 M:StockSharp.Logging.LogManager.#ctor/summary;DocStr1
+M:StockSharp.Logging.LogManager.#ctor(System.Boolean)/summary;DocStr1
+M:StockSharp.Logging.LogManager.#ctor(System.Boolean)/param/asyncMode;Str1781
 P:StockSharp.Logging.LogManager.LocalTimeZone/summary;DocStr9142
 P:StockSharp.Logging.LogManager.Application/summary;DocStr3987
 P:StockSharp.Logging.LogManager.Listeners/summary;DocStr3988
