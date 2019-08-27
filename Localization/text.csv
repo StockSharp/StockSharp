@@ -15852,3 +15852,4 @@ DocStr11326;Excel provider;Excel поставщик
 DocStr11327;Filter messages;Отфильтрованные сообщения
 DocStr11328;Incoming messages;Входящие сообщения
 DocStr11329;Builder type;Тип построителя
+DocStr11331;Get time-frame from the specified market-data message;Получить тайм-фрейм из указанного сообщения с данными

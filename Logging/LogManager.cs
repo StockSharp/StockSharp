@@ -108,21 +108,21 @@ namespace StockSharp.Logging
 		private readonly List<LogMessage> _pendingMessages = new List<LogMessage>();
 		private readonly Timer _flushTimer;
 		private bool _isFlusing;
-		private readonly bool _syncMode;
+		private readonly bool _asyncMode;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LogManager"/>.
 		/// </summary>
 		public LogManager()
-			: this(false)
+			: this(true)
 		{
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LogManager"/>.
 		/// </summary>
-		/// <param name="syncMode">Sync mode.</param>
-		public LogManager(bool syncMode)
+		/// <param name="asyncMode">Asynchronous mode.</param>
+		public LogManager(bool asyncMode)
 		{
 			ConfigManager.TryRegisterService(this);
 
@@ -132,9 +132,9 @@ namespace StockSharp.Logging
 				new UnhandledExceptionSource()
 			};
 
-			_syncMode = syncMode;
+			_asyncMode = asyncMode;
 
-			if (_syncMode)
+			if (!_asyncMode)
 				return;
 
 			_flushTimer = ThreadingHelper.Timer(Flush);
@@ -252,7 +252,7 @@ namespace StockSharp.Logging
 			get => _flushTimer?.Interval() ?? TimeSpan.MaxValue;
 			set
 			{
-				if (_syncMode)
+				if (!_asyncMode)
 					return;
 
 				if (value < TimeSpan.FromMilliseconds(1))
@@ -273,7 +273,7 @@ namespace StockSharp.Logging
 			{
 				_pendingMessages.Add(message);
 
-				if (_syncMode)
+				if (!_asyncMode)
 					Flush();
 				else
 				{
@@ -301,7 +301,7 @@ namespace StockSharp.Logging
 		{
 			Sources.Clear();
 
-			if (!_syncMode)
+			if (_asyncMode)
 			{
 				lock (_syncRoot)
 				{

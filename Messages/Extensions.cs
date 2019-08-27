@@ -1349,7 +1349,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Get time from the specified market-data message.
+		/// Get time-frame from the specified market-data message.
 		/// </summary>
 		/// <param name="mdMsg">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <returns>Time-frame.</returns>
