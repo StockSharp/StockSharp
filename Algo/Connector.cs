@@ -168,7 +168,7 @@ namespace StockSharp.Algo
 
 			UpdateSecurityLastQuotes = UpdateSecurityByLevel1 = UpdateSecurityByDefinition = true;
 
-			CreateDepthFromLevel1 = true;
+			SupportLevel1DepthBuilder = true;
 			SupportFilteredMarketDepth = true;
 
 			if (initManagers)
@@ -497,6 +497,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str200Key)]
 		[DescriptionLoc(LocalizedStrings.Str201Key)]
+		[Obsolete]
 		public bool CreateDepthFromLevel1
 		{
 			get => SupportLevel1DepthBuilder;
@@ -508,6 +509,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str197Key)]
 		[DescriptionLoc(LocalizedStrings.Str198Key)]
+		[Obsolete]
 		public bool CreateAssociatedSecurity
 		{
 			get => SupportAssociatedSecurity;
@@ -1526,10 +1528,10 @@ namespace StockSharp.Algo
 
 			//CreateDepthFromOrdersLog = storage.GetValue<bool>(nameof(CreateDepthFromOrdersLog));
 			//CreateTradesFromOrdersLog = storage.GetValue<bool>(nameof(CreateTradesFromOrdersLog));
-			CreateDepthFromLevel1 = storage.GetValue(nameof(CreateDepthFromLevel1), CreateDepthFromLevel1);
+			SupportLevel1DepthBuilder = storage.GetValue(nameof(SupportLevel1DepthBuilder), SupportLevel1DepthBuilder);
 
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
-			CreateAssociatedSecurity = storage.GetValue(nameof(CreateAssociatedSecurity), CreateAssociatedSecurity);
+			SupportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
 			LookupMessagesOnConnect = storage.GetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
 			AutoPortfoliosSubscribe = storage.GetValue(nameof(AutoPortfoliosSubscribe), AutoPortfoliosSubscribe);
@@ -1559,10 +1561,10 @@ namespace StockSharp.Algo
 
 			//storage.SetValue(nameof(CreateDepthFromOrdersLog), CreateDepthFromOrdersLog);
 			//storage.SetValue(nameof(CreateTradesFromOrdersLog), CreateTradesFromOrdersLog);
-			storage.SetValue(nameof(CreateDepthFromLevel1), CreateDepthFromLevel1);
+			storage.SetValue(nameof(SupportLevel1DepthBuilder), SupportLevel1DepthBuilder);
 
 			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
-			storage.SetValue(nameof(CreateAssociatedSecurity), CreateAssociatedSecurity);
+			storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
 			storage.SetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
 			storage.SetValue(nameof(AutoPortfoliosSubscribe), AutoPortfoliosSubscribe);
