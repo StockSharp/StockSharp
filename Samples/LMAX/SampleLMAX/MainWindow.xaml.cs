@@ -25,6 +25,7 @@ namespace SampleLMAX
 	using StockSharp.BusinessEntities;
 	using StockSharp.LMAX;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	public partial class MainWindow
 	{
@@ -38,6 +39,8 @@ namespace SampleLMAX
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
+
+		private readonly LogManager _logManager = new LogManager();
 
 		public MainWindow()
 		{
@@ -53,6 +56,8 @@ namespace SampleLMAX
 			_portfoliosWindow.MakeHideable();
 
 			Instance = this;
+
+			_logManager.Listeners.Add(new FileLogListener { LogDirectory = "StockSharp_LMAX" });
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -99,11 +104,13 @@ namespace SampleLMAX
 					// create connector
 					Trader = new LmaxTrader();
 
+					_logManager.Sources.Add(Trader);
+
 					Trader.Restored += () => this.GuiAsync(() =>
 					{
 						// update gui labels
 						ChangeConnectStatus(true);
-						MessageBox.Show(this, LocalizedStrings.Str2958);
+						//MessageBox.Show(this, LocalizedStrings.Str2958);
 					});
 
 					// subscribe on connection successfully event
@@ -123,16 +130,16 @@ namespace SampleLMAX
 						// update gui labels
 						ChangeConnectStatus(false);
 
-						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+						//MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 					});
 
 					// subscribe on error event
-					Trader.Error += error =>
-						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+					//Trader.Error += error =>
+					//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					// subscribe on error of market data subscription event
-					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
-						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+					//Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+					//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
 					Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
 					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
