@@ -95,9 +95,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="ClrPatch">
-      <HintPath>..\..\..\..\References\ClrPatch.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\..\References\Ecng.Collections.dll</HintPath>
     </Reference>
