@@ -278,15 +278,15 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void RegisterNews(IMessageAdapter adapter = null)
+		public void RegisterNews(Security security = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().RegisterNews(adapter);
+			SafeGetConnector().RegisterNews(security, adapter);
 		}
 
 		/// <inheritdoc />
-		public void UnRegisterNews()
+		public void UnRegisterNews(Security security = null)
 		{
-			SafeGetConnector().UnRegisterNews();
+			SafeGetConnector().UnRegisterNews(security);
 		}
 
 		/// <inheritdoc />

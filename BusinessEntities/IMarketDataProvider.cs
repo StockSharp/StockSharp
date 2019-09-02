@@ -283,13 +283,15 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Subscribe on news.
 		/// </summary>
+		/// <param name="security">Security for subscription.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void RegisterNews(IMessageAdapter adapter = null);
+		void RegisterNews(Security security = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// Unsubscribe from news.
 		/// </summary>
-		void UnRegisterNews();
+		/// <param name="security">Security for subscription.</param>
+		void UnRegisterNews(Security security = null);
 
 		/// <summary>
 		/// Subscribe on the board changes.

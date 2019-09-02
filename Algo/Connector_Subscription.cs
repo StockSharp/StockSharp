@@ -395,23 +395,25 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterNews(IMessageAdapter adapter = null)
+		public void RegisterNews(Security security = null, IMessageAdapter adapter = null)
 		{
-			OnRegisterNews();
+			OnRegisterNews(security, adapter);
 		}
 
 		/// <summary>
 		/// Subscribe on news.
 		/// </summary>
-		protected virtual void OnRegisterNews(IMessageAdapter adapter = null)
+		/// <param name="security">Security for subscription.</param>
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		protected virtual void OnRegisterNews(Security security = null, IMessageAdapter adapter = null)
 		{
-			SubscribeMarketData(null, MarketDataTypes.News, adapter: adapter);
+			SubscribeMarketData(security, MarketDataTypes.News, adapter: adapter);
 		}
 
 		/// <inheritdoc />
-		public void UnRegisterNews()
+		public void UnRegisterNews(Security security = null)
 		{
-			OnUnRegisterNews();
+			OnUnRegisterNews(security);
 		}
 
 		/// <inheritdoc />
@@ -462,9 +464,10 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Unsubscribe from news.
 		/// </summary>
-		protected virtual void OnUnRegisterNews()
+		/// <param name="security">Security for subscription.</param>
+		protected virtual void OnUnRegisterNews(Security security = null)
 		{
-			UnSubscribeMarketData(null, MarketDataTypes.News);
+			UnSubscribeMarketData(security, MarketDataTypes.News);
 		}
 
 		/// <summary>
