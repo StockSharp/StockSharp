@@ -303,7 +303,7 @@ namespace StockSharp.Algo
 		public bool IgnoreExtraAdapters { get; set; }
 
 		/// <inheritdoc />
-		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
+		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 			=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId, from, to)).Distinct().OrderBy();
 
 		/// <inheritdoc />

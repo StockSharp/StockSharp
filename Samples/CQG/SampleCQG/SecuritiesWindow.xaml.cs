@@ -30,6 +30,7 @@ namespace SampleCQG
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Xaml;
+	using StockSharp.Messages;
 
 	public partial class SecuritiesWindow
 	{

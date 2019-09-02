@@ -423,7 +423,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
+		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			if (DriveInternal == null)
 				return Enumerable.Empty<object>();

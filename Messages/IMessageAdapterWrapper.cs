@@ -282,11 +282,7 @@ namespace StockSharp.Messages
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 
 		/// <inheritdoc />
-		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
-			=> InnerAdapter.GetTimeFrames(securityId, from, to);
-
-		/// <inheritdoc />
-		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
+		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 			=> InnerAdapter.GetCandleArgs(candleType, securityId, from, to);
 
 		/// <inheritdoc />

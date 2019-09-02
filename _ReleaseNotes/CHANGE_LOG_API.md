@@ -156,7 +156,6 @@ StockSharp API Change log
 * (feature) IConnector. Moved market data members to IMarketDataProvider.
 * (feature) Strategy implemented IMarketDataProvider interface.
 * (feature) Strategy implemented ICandleManager interface.
-* (feature) IMessageAdapter. GetCandleArgs, GetTimeFrames handle From and To parameters.
 * (feature) PnLManager. UseXXX options added.
 * (feature) IConnector. Moved transactional members to ITransactionProvider interface.
 * (feature) UnitHelper. Parse method for empty string return null for the specified option.

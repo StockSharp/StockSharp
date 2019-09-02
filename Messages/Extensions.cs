@@ -564,6 +564,17 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Get possible time-frames for the specified instrument.
+		/// </summary>
+		/// <param name="adapter">Trading system adapter.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <returns>Possible time-frames.</returns>
+		public static IEnumerable<TimeSpan> GetTimeFrames(this IMessageAdapter adapter, SecurityId securityId = default, DateTimeOffset? from = null, DateTimeOffset? to = null)
+			=> adapter.GetCandleArgs<TimeSpan>(typeof(TimeFrameCandleMessage), securityId, from, to);
+
+		/// <summary>
 		/// Get possible args for the specified candle type and instrument.
 		/// </summary>
 		/// <typeparam name="TArg">Type of <see cref="CandleMessage.Arg"/>.</typeparam>

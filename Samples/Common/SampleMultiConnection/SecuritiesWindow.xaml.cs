@@ -29,6 +29,7 @@ namespace SampleMultiConnection
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 
