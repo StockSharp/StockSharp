@@ -2,13 +2,6 @@ namespace StockSharp.Configuration
 {
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
-	using System.Linq;
-	using System.Reflection;
-	using System.Security;
-
-	using Ecng.Common;
-	using Ecng.Reflection;
 
 	using StockSharp.AlfaDirect;
 	using StockSharp.AlorHistory;
@@ -97,28 +90,41 @@ namespace StockSharp.Configuration
 	/// <summary>
 	/// In memory configuration message adapter's provider.
 	/// </summary>
-	public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
+	public class FullInMemoryMessageAdapterProvider : InMemoryMessageAdapterProvider
 	{
 		/// <summary>
-		/// Initialize <see cref="InMemoryMessageAdapterProvider"/>.
+		/// Initialize <see cref="FullInMemoryMessageAdapterProvider"/>.
 		/// </summary>
 		/// <param name="currentAdapters">All currently available adapters.</param>
-		public InMemoryMessageAdapterProvider(IEnumerable<IMessageAdapter> currentAdapters)
+		public FullInMemoryMessageAdapterProvider(IEnumerable<IMessageAdapter> currentAdapters)
+			: base(currentAdapters)
 		{
-			CurrentAdapters = currentAdapters ?? throw new ArgumentNullException(nameof(currentAdapters));
-
-			var idGenerator = new IncrementalIdGenerator();
-			PossibleAdapters = Adapters.Select(t => t.CreateAdapter(idGenerator)).ToArray();
 		}
 
 		/// <inheritdoc />
-		public virtual IEnumerable<IMessageAdapter> CurrentAdapters { get; }
+		protected override IEnumerable<Type> GetAdapters()
+		{
+			var adapters = new HashSet<Type>(base.GetAdapters());
 
-		/// <inheritdoc />
-		public virtual IEnumerable<IMessageAdapter> PossibleAdapters { get; }
+			foreach (var func in _standardAdapters.Value)
+			{
+				try
+				{
+					var type = func();
 
-		/// <inheritdoc />
-		public virtual IEnumerable<IMessageAdapter> CreateStockSharpAdapters(IdGenerator transactionIdGenerator, string login, SecureString password) => Enumerable.Empty<IMessageAdapter>();
+					if (type == typeof(QuikDdeAdapter) || type == typeof(QuikTrans2QuikAdapter))
+						adapters.Remove(type);
+					else
+						adapters.Add(type);
+				}
+				catch (Exception e)
+				{
+					e.LogError();
+				}
+			}
+
+			return adapters;
+		}
 
 		private static readonly Lazy<Func<Type>[]> _standardAdapters = new Lazy<Func<Type>[]>(() => new[]
 		{
@@ -207,96 +213,5 @@ namespace StockSharp.Configuration
 			() => typeof(UkrExhMessageAdapter),
 			() => typeof(CSVMessageAdapter),
 		});
-		
-		private static readonly SyncObject _adaptersLock = new SyncObject();
-		private static Type[] _adapters;
-
-		/// <summary>
-		/// All available adapters.
-		/// </summary>
-		private static IEnumerable<Type> Adapters
-		{
-			get
-			{
-				lock (_adaptersLock)
-				{
-					if (_adapters == null)
-					{
-						var exceptions = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
-						{
-							"StockSharp.Alerts",
-							"StockSharp.Algo",
-							"StockSharp.Algo.History",
-							"StockSharp.Algo.Strategies",
-							"StockSharp.BusinessEntities",
-							"StockSharp.Community",
-							"StockSharp.Configuration",
-							"StockSharp.Licensing",
-							"StockSharp.Localization",
-							"StockSharp.Logging",
-							"StockSharp.Messages",
-							"StockSharp.Xaml",
-							"StockSharp.Xaml.Actipro",
-							"StockSharp.Xaml.Charting",
-							"StockSharp.Xaml.Diagram",
-							"StockSharp.Studio.Core",
-							"StockSharp.Studio.Controls",
-							"StockSharp.QuikLua",
-						};
-
-						var adapters = new List<Type>();
-
-						foreach (var func in _standardAdapters.Value)
-						{
-							try
-							{
-								var type = func();
-
-								exceptions.Add(type.Assembly.GetName().Name);
-
-								if (type == typeof(QuikDdeAdapter) || type == typeof(QuikTrans2QuikAdapter))
-									continue;
-
-								adapters.Add(type);
-							}
-							catch (Exception e)
-							{
-								e.LogError();
-							}
-						}
-
-						var assemblies = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dll").Where(p =>
-						{
-							var name = Path.GetFileNameWithoutExtension(p);
-							return !exceptions.Contains(name) && name.StartsWithIgnoreCase("StockSharp.");
-						});
-
-						foreach (var assembly in assemblies)
-						{
-							if (!assembly.IsAssembly())
-								continue;
-
-							try
-							{
-								var asm = Assembly.Load(AssemblyName.GetAssemblyName(assembly));
-
-								adapters.AddRange(asm
-									.GetTypes()
-									.Where(t => typeof(IMessageAdapter).IsAssignableFrom(t) && !t.IsAbstract)
-									.ToArray());
-							}
-							catch (Exception e)
-							{
-								e.LogError();
-							}
-						}
-
-						_adapters = adapters.ToArray();
-					}
-				}
-
-				return _adapters;
-			}
-		}
 	}
 }

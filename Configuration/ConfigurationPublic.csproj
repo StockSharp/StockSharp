@@ -59,6 +59,9 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.Reflection">
+      <HintPath>..\References\Ecng.Reflection.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="StockSharp.AlfaDirect">

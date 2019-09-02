@@ -14461,7 +14461,6 @@ DocStr9792;Length of result buffer;Длина результирующего б�
 DocStr9793;The default value;Значение по-умолчанию
 DocStr9794;Result buffer;Результирующий буфер
 DocStr9800;Spb exchange;СПб биржа
-DocStr9801;All available adapters;Все доступные адаптеры
 DocStr9802;Users info;Информация о пользователях
 DocStr9803;Type of builder;Тип построителя
 DocStr9804;{0} derived type;Производный тип {0}
@@ -15853,3 +15852,4 @@ DocStr11327;Filter messages;Отфильтрованные сообщения
 DocStr11328;Incoming messages;Входящие сообщения
 DocStr11329;Builder type;Тип построителя
 DocStr11331;Get time-frame from the specified market-data message;Получить тайм-фрейм из указанного сообщения с данными
+DocStr11332;Get all available adapters;Get all available adapters

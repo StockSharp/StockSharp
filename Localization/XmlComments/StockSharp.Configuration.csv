@@ -33,6 +33,14 @@ M:StockSharp.Configuration.IndicatorElementCollection.CreateNewElement/returns;D
 M:StockSharp.Configuration.IndicatorElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/summary;DocStr8708
 M:StockSharp.Configuration.IndicatorElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/returns;DocStr8709
 M:StockSharp.Configuration.IndicatorElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/param/element;DocStr8710
+T:StockSharp.Configuration.InMemoryMessageAdapterProvider/summary;DocStr9833
+M:StockSharp.Configuration.InMemoryMessageAdapterProvider.#ctor(System.Collections.Generic.IEnumerable{StockSharp.Messages.IMessageAdapter})/summary;DocStr93
+M:StockSharp.Configuration.InMemoryMessageAdapterProvider.#ctor(System.Collections.Generic.IEnumerable{StockSharp.Messages.IMessageAdapter})/param/currentAdapters;DocStr11166
+P:StockSharp.Configuration.InMemoryMessageAdapterProvider.CurrentAdapters/inheritdoc;DocStr8459
+P:StockSharp.Configuration.InMemoryMessageAdapterProvider.PossibleAdapters/inheritdoc;DocStr8459
+M:StockSharp.Configuration.InMemoryMessageAdapterProvider.GetAdapters/summary;DocStr11332
+M:StockSharp.Configuration.InMemoryMessageAdapterProvider.GetAdapters/returns;DocStr9801
+M:StockSharp.Configuration.InMemoryMessageAdapterProvider.CreateStockSharpAdapters(Ecng.Common.IdGenerator,System.String,System.Security.SecureString)/inheritdoc;DocStr8459
 T:StockSharp.Configuration.Paths/summary;DocStr11264
 P:StockSharp.Configuration.Paths.Title/summary;DocStr11265
 F:StockSharp.Configuration.Paths.CompanyPath/summary;DocStr11266
