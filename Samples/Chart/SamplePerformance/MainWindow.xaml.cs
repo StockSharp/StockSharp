@@ -3,7 +3,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Threading.Tasks;
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Media;
@@ -11,6 +10,7 @@
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Xaml;
 	using Ecng.Serialization;
 
@@ -19,20 +19,34 @@
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Configuration;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
 
 	public partial class MainWindow
 	{
+		private class LoadingContext : NotifiableObject
+		{
+			private string _title;
+
+			public string Title
+			{
+				get => _title;
+				set
+				{
+					_title = value;
+					NotifyChanged(nameof(Title));
+				}
+			}
+		}
+
 		private static readonly string _historyPath = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
 		private const string _securityId = "RIZ2@FORTS";
 		private const int _timeframe = 1; //minutes
 		private const int _priceStep = 10;
-		private const int _candlesPacketSize = 10; // количество свечей в одном вызове Draw()
+		private const int _candlesPacketSize = 10;
 		private const bool _addIndicator = true;
-		private const int _tradeEveryNCandles = 100;
+		//private const int _tradeEveryNCandles = 100;
 
 		private ChartArea _area;
 		private ChartCandleElement _candleElement;
@@ -48,9 +62,9 @@
 		private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
 		private MyMovingAverage _indicator;
-		private readonly MyMovingAverage _fpsAverage;
+		//private readonly MyMovingAverage _fpsAverage;
 
-		private volatile int _curCandleNum;
+		//private volatile int _curCandleNum;
 
 		private Security _security = new Security
 		{
@@ -59,13 +73,18 @@
 			Board = ExchangeBoard.Forts
 		};
 
+		private readonly LoadingContext _loadingContext;
+
 		public MainWindow()
 		{
 			InitializeComponent();
 
 			Title = Title.Put(LocalizedStrings.Str3200);
 
-			_fpsAverage = new MyMovingAverage(10);
+			_loadingContext = new LoadingContext();
+			BusyIndicator.SplashScreenDataContext = _loadingContext;
+
+			//_fpsAverage = new MyMovingAverage(10);
 
 			Loaded += OnLoaded;
 
@@ -155,69 +174,74 @@
 
 			var maxDays = 50;
 
-			//BusyIndicator.IsBusy = true;
+			BusyIndicator.IsSplashScreenShown = true;
 
 			var path = _historyPath;
 
-			_curCandleNum = 0;
+			//_curCandleNum = 0;
 
-			Task.Factory.StartNew(() =>
+			ThreadingHelper.Thread(() =>
 			{
-				var date = DateTime.MinValue;
-
-				foreach (var tick in storage.GetTickMessageStorage(_security, new LocalMarketDataDrive(path)).Load())
+				try
 				{
-					if (date != tick.ServerTime.Date)
+					var date = DateTime.MinValue;
+
+					foreach (var tick in storage.GetTickMessageStorage(_security, new LocalMarketDataDrive(path)).Load())
 					{
-						date = tick.ServerTime.Date;
+						if (date != tick.ServerTime.Date)
+						{
+							date = tick.ServerTime.Date;
 
-						//var str = $"Loading ticks for {date:dd MMM yyyy}...";
-						//this.GuiAsync(() => BusyIndicator.BusyContent = str);
+							var str = $"Loading ticks for {date:dd MMM yyyy}...";
+							this.GuiAsync(() => _loadingContext.Title = str);
 
-						if (--maxDays == 0)
-							break;
+							if (--maxDays == 0)
+								break;
+						}
+
+						AppendTick(tick);
 					}
 
-					AppendTick(tick);
-				}
-			})
-			.ContinueWith(t =>
-			{
-				//this.GuiAsync(() => BusyIndicator.IsBusy = false);
+					this.GuiAsync(() => BusyIndicator.IsSplashScreenShown = false);
 
-				for (var i = 0; i < _candles.Count; i += _candlesPacketSize)
-				{
-					var data = new ChartDrawData();
-
-					var candles = _candles.GetRange(i, Math.Min(_candlesPacketSize, _candles.Count - i)).Select(c => c.ToCandle(_tfSpan, _security));
-
-					foreach (var candle in candles)
+					for (var i = 0; i < _candles.Count; i += _candlesPacketSize)
 					{
-						candle.State = CandleStates.Finished;
+						var data = new ChartDrawData();
 
-						var group = data.Group(candle.OpenTime);
+						var candles = _candles.GetRange(i, Math.Min(_candlesPacketSize, _candles.Count - i)).Select(c => c.ToCandle(_tfSpan, _security));
 
-						group.Add(_candleElement, candle);
+						foreach (var candle in candles)
+						{
+							candle.State = CandleStates.Finished;
 
-						if (_indicatorElement != null)
-							group.Add(_indicatorElement, _indicator.Process((double)candle.ClosePrice));
+							var group = data.Group(candle.OpenTime);
+
+							group.Add(_candleElement, candle);
+
+							if (_indicatorElement != null)
+								group.Add(_indicatorElement, _indicator.Process((double)candle.ClosePrice));
+						}
+
+						Chart.Draw(data);
 					}
-
-					Chart.Draw(data);
 				}
-			})
-			.ContinueWith(t =>
-			{
-				if (t.Exception != null)
-					Error(t.Exception.Message);
+				catch (Exception e)
+				{
+					this.GuiAsync(() => Error(e.Message));
+				}
+				finally
+				{
+					this.GuiAsync(() =>
+					{
+						_dataIsLoaded = true;
 
-				_dataIsLoaded = true;
+						BusyIndicator.IsSplashScreenShown = false;
 
-				//this.GuiAsync(() => BusyIndicator.IsBusy = false);
-
-				Chart.IsAutoRange = false;
-				//_area.YAxises.FirstOrDefault().Do(a => a.AutoRange = false);
-			}, TaskScheduler.FromCurrentSynchronizationContext());
+						Chart.IsAutoRange = false;
+						//_area.YAxises.FirstOrDefault().Do(a => a.AutoRange = false);
+					});
+				}
+			}).Launch();
 		}
 
 		public static decimal Round(decimal value, decimal nearest)
