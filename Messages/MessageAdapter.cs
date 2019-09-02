@@ -305,6 +305,10 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportExecutionsPnL => false;
 
 		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsSecurityNewsOnly => false;
+
+		/// <inheritdoc />
 		public virtual OrderCondition CreateOrderCondition() => this.GetOrderConditionType()?.CreateInstance<OrderCondition>();
 
 		/// <inheritdoc />

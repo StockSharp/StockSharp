@@ -216,6 +216,7 @@ StockSharp API Change log
 * (feature) AlfaDirect. Excluded 3.5 version.
 * (feature) SecurityTypes. Etf added.
 * (feature) OrderConditionalGrid, OrderConditionalWindows marked as obsolete.
+* (feature) IMessageAdapter. IsSecurityNewsOnly property added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

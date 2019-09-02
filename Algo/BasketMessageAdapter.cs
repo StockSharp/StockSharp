@@ -66,7 +66,7 @@ namespace StockSharp.Algo
 
 			public IEnumerable<IMessageAdapter> SortedAdapters
 			{
-				get { return Cache.Where(t => this[t] != -1).OrderBy(t => this[t]); }
+				get => Cache.Where(t => this[t] != -1).OrderBy(t => this[t]);
 			}
 
 			protected override bool OnAdding(IMessageAdapter item)
@@ -305,6 +305,9 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 			=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId, from, to)).Distinct().OrderBy();
+
+		/// <inheritdoc />
+		public override bool IsSecurityNewsOnly => GetSortedAdapters().All(a => a.IsSecurityNewsOnly);
 
 		/// <inheritdoc />
 		public override bool IsConnectionAlive() => throw new NotSupportedException();
@@ -683,15 +686,20 @@ namespace StockSharp.Algo
 				{
 					if (message.Type == MessageTypes.MarketData)
 					{
-						var set = _subscriptionNonSupportedAdapters.TryGetValue(((MarketDataMessage)message).TransactionId);
+						var mdMsg1 = (MarketDataMessage)message;
+						var set = _subscriptionNonSupportedAdapters.TryGetValue(mdMsg1.TransactionId);
 
 						if (set != null)
 						{
 							adapters = adapters.Where(a => !set.Contains(GetUnderlyingAdapter(a))).ToArray();
-
-							if (adapters.Length == 0)
-								adapters = null;
 						}
+						else if (mdMsg1.DataType == MarketDataTypes.News && mdMsg1.SecurityId == default)
+						{
+							adapters = adapters.Where(a => !a.IsSecurityNewsOnly).ToArray();
+						}
+
+						if (adapters.Length == 0)
+							adapters = null;
 					}
 					else if (message.Type == MessageTypes.SecurityLookup)
 					{
