@@ -17,7 +17,7 @@ namespace SampleBW
 			InitializeComponent();
 		}
 
-		private static IConnector Connector => MainWindow.Instance.Trader;
+		private static Connector Connector => MainWindow.Instance.Trader;
 
 		private void OrderGrid_OnOrderCanceling(Order order)
 		{
@@ -29,11 +29,8 @@ namespace SampleBW
 			var window = new OrderWindow
 			{
 				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
-				SecurityProvider = Connector,
-				MarketDataProvider = Connector,
-				Portfolios = new PortfolioDataSource(Connector),
 				Order = order.ReRegisterClone(newVolume: order.Balance),
-			};
+			}.Init(Connector);
 
 			if (window.ShowModal(this))
 			{

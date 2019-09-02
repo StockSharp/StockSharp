@@ -216,6 +216,7 @@ StockSharp API Change log
 * (feature) SmartCom. Excluded V3 version.
 * (feature) AlfaDirect. Excluded 3.5 version.
 * (feature) SecurityTypes. Etf added.
+* (feature) OrderConditionalGrid, OrderConditionalWindows marked as obsolete.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

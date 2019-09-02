@@ -451,6 +451,10 @@ M:StockSharp.Xaml.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,Syst
 M:StockSharp.Xaml.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@,Ecng.Serialization.SettingsStorage@)/param/autoConnect;XamlStr16
 M:StockSharp.Xaml.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@,Ecng.Serialization.SettingsStorage@)/param/windowSettings;DocStr9964
 M:StockSharp.Xaml.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@,Ecng.Serialization.SettingsStorage@)/returns;DocStr8720
+M:StockSharp.Xaml.Extensions.Init(StockSharp.Xaml.OrderWindow,StockSharp.Algo.Connector)/summary;DocStr93
+M:StockSharp.Xaml.Extensions.Init(StockSharp.Xaml.OrderWindow,StockSharp.Algo.Connector)/param/window;DocStr8267
+M:StockSharp.Xaml.Extensions.Init(StockSharp.Xaml.OrderWindow,StockSharp.Algo.Connector)/param/connector;DocStr754
+M:StockSharp.Xaml.Extensions.Init(StockSharp.Xaml.OrderWindow,StockSharp.Algo.Connector)/returns;DocStr8267
 T:StockSharp.Xaml.FileProgressWindow/summary;DocStr9782
 M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/summary;DocStr1
 M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/param/fileId;DocStr10239
@@ -757,12 +761,9 @@ F:StockSharp.Xaml.NewsMessagePanel.NewsGrid/summary;DocStr8149
 M:StockSharp.Xaml.NewsMessagePanel.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.OrderConditionalGrid/summary;DocStr8150
 M:StockSharp.Xaml.OrderConditionalGrid.#ctor/summary;DocStr1
-M:StockSharp.Xaml.OrderConditionalGrid.OnOrderAdded(StockSharp.BusinessEntities.Order)/summary;DocStr8156
-M:StockSharp.Xaml.OrderConditionalGrid.OnOrderAdded(StockSharp.BusinessEntities.Order)/param/order;Str504
-M:StockSharp.Xaml.OrderConditionalGrid.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
-M:StockSharp.Xaml.OrderConditionalGrid.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Xaml.OrderConditionalGrid.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
-M:StockSharp.Xaml.OrderConditionalGrid.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.OrderConditionalGrid.OnOrderAdded(StockSharp.BusinessEntities.Order)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.OrderConditionalGrid.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.OrderConditionalGrid.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 T:StockSharp.Xaml.PortfolioDataSource/summary;DocStr8922
 M:StockSharp.Xaml.PortfolioDataSource.#ctor/summary;DocStr1
 M:StockSharp.Xaml.PortfolioDataSource.#ctor(StockSharp.BusinessEntities.IPortfolioProvider)/summary;DocStr1

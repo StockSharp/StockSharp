@@ -40,7 +40,6 @@ namespace SampleIB
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
 		private readonly NewsWindow _newsWindow = new NewsWindow();
 		private readonly ScannerWindow _scannerWindow;
 
@@ -58,7 +57,6 @@ namespace SampleIB
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
-			_stopOrdersWindow.MakeHideable();
 			_newsWindow.MakeHideable();
 
 			_scannerWindow = new ScannerWindow();
@@ -78,7 +76,6 @@ namespace SampleIB
 			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
-			_stopOrdersWindow.DeleteHideable();
 			_newsWindow.DeleteHideable();
 			_scannerWindow.DeleteHideable();
 
@@ -87,7 +84,6 @@ namespace SampleIB
 			_myTradesWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
-			_stopOrdersWindow.Close();
 			_newsWindow.Close();
 
 			if (Trader != null)
@@ -138,7 +134,7 @@ namespace SampleIB
 						Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 						Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 						Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-						Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+						Trader.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 						Trader.CandleSeriesProcessing += _securitiesWindow.AddCandle;
 
 						Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
@@ -192,7 +188,7 @@ namespace SampleIB
 			ConnectionStatus.Content = isConnected ? LocalizedStrings.Connected : LocalizedStrings.Disconnected;
 
 			ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowNews.IsEnabled =
-            ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = ShowConditionOrders.IsEnabled =
+            ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
             ShowPortfolios.IsEnabled = ShowScanner.IsEnabled = isConnected;
 		}
 
@@ -219,11 +215,6 @@ namespace SampleIB
 		private void ShowPortfoliosClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_portfoliosWindow);
-		}
-
-		private void ShowConditionOrdersClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_stopOrdersWindow);
 		}
 
 		private void ShowNewsClick(object sender, RoutedEventArgs e)

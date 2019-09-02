@@ -25,7 +25,6 @@ namespace SampleSterling
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
-	using StockSharp.Messages;
 	using StockSharp.Xaml;
 
 	public partial class SecuritiesWindow
@@ -56,29 +55,7 @@ namespace SampleSterling
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = SecurityPicker.SelectedSecurity },
-				SecurityProvider = Connector,
-				MarketDataProvider = Connector,
-				Portfolios = new PortfolioDataSource(Connector),
-			};
-
-			if (newOrder.ShowModal(this))
-				Connector.RegisterOrder(newOrder.Order);
-		}
-
-		private void NewStopOrderClick(object sender, RoutedEventArgs e)
-		{
-			var newOrder = new OrderConditionalWindow
-			{
-				Order = new Order
-				{
-					Security = SecurityPicker.SelectedSecurity,
-					Type = OrderTypes.Conditional,
-				},
-				SecurityProvider = Connector,
-				MarketDataProvider = Connector,
-				Portfolios = new PortfolioDataSource(Connector),
-				Adapter = Connector.TransactionAdapter
-			};
+			}.Init(MainWindow.Instance.Trader);
 
 			if (newOrder.ShowModal(this))
 				Connector.RegisterOrder(newOrder.Order);
@@ -86,7 +63,7 @@ namespace SampleSterling
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			NewOrder.IsEnabled = NewStopOrder.IsEnabled = Level1.IsEnabled = Depth.IsEnabled = security != null;
+			NewOrder.IsEnabled = Level1.IsEnabled = Depth.IsEnabled = security != null;
 		}
 
 		private void Level1Click(object sender, RoutedEventArgs e)

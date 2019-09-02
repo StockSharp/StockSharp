@@ -38,7 +38,6 @@ namespace SampleOanda
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
 
 		public MainWindow()
 		{
@@ -50,7 +49,6 @@ namespace SampleOanda
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
-			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 
 			Instance = this;
@@ -62,13 +60,11 @@ namespace SampleOanda
 			_myTradesWindow.DeleteHideable();
 			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
-			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			
 			_securitiesWindow.Close();
 			_tradesWindow.Close();
 			_myTradesWindow.Close();
-			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 
@@ -134,7 +130,7 @@ namespace SampleOanda
 					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 					Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-					Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+					Trader.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 
 					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
 					Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
@@ -145,7 +141,7 @@ namespace SampleOanda
 					Trader.OrderCancelFailed += OrderFailed;
 
 					// subscribe on error of stop-order registration event
-					Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+					Trader.StopOrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 					// subscribe on error of stop-order cancelling event
 					Trader.StopOrderCancelFailed += OrderFailed;
 
@@ -157,7 +153,7 @@ namespace SampleOanda
 
 					ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
 					ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = 
-					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
+					ShowPortfolios.IsEnabled = true;
 				}
 
 				Trader.Token = Token.Password.To<SecureString>();
@@ -211,11 +207,6 @@ namespace SampleOanda
 		private void ShowPortfoliosClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_portfoliosWindow);
-		}
-
-		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_stopOrdersWindow);
 		}
 
 		private static void ShowOrHide(Window window)

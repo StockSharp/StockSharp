@@ -63,14 +63,8 @@ namespace SampleStrategies
 
 			var newOrder = new OrderWindow
 			{
-				Order = new Order
-				{
-					Security = SecurityPicker.SelectedSecurity
-				},
-				SecurityProvider = connector,
-				MarketDataProvider = connector,
-				Portfolios = new PortfolioDataSource(connector),
-			};
+				Order = new Order { Security = SecurityPicker.SelectedSecurity },
+			}.Init(connector);
 
 			if (newOrder.ShowModal(this))
 				connector.RegisterOrder(newOrder.Order);

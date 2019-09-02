@@ -66,10 +66,7 @@ namespace SampleTwime
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = SecurityPicker.SelectedSecurity },
-				SecurityProvider = MainWindow.Instance.Trader,
-				MarketDataProvider = MainWindow.Instance.Trader,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-			};
+			}.Init(MainWindow.Instance.Trader);
 
 			if (newOrder.ShowModal(this))
 				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);

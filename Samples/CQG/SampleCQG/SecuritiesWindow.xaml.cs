@@ -29,7 +29,6 @@ namespace SampleCQG
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
-	using StockSharp.Messages;
 	using StockSharp.Xaml;
 
 	public partial class SecuritiesWindow
@@ -71,29 +70,7 @@ namespace SampleCQG
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = SecurityPicker.SelectedSecurity },
-				SecurityProvider = Connector,
-				MarketDataProvider = Connector,
-				Portfolios = new PortfolioDataSource(Connector)
-			};
-
-			if (newOrder.ShowModal(this))
-				Connector.RegisterOrder(newOrder.Order);
-		}
-
-		private void NewStopOrderClick(object sender, RoutedEventArgs e)
-		{
-			var newOrder = new OrderConditionalWindow
-			{
-				Order = new Order
-				{
-					Security = SecurityPicker.SelectedSecurity,
-					Type = OrderTypes.Conditional,
-				},
-				SecurityProvider = Connector,
-				MarketDataProvider = Connector,
-				Portfolios = new PortfolioDataSource(Connector),
-				Adapter = Connector.TransactionAdapter
-			};
+			}.Init(Connector);
 
 			if (newOrder.ShowModal(this))
 				Connector.RegisterOrder(newOrder.Order);
@@ -101,7 +78,7 @@ namespace SampleCQG
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Quotes.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = NewStopOrder.IsEnabled = security != null;
+			Quotes.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)

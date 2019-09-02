@@ -9,7 +9,6 @@
 			<ColumnDefinition />
 			<ColumnDefinition />
 			<ColumnDefinition />
-			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -18,7 +17,7 @@
             <RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-        <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Margin="0,0,0,10">
+        <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Margin="0,0,0,10">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="120" />
 				<ColumnDefinition Width="*" />
@@ -39,11 +38,10 @@
 		
 		<Button x:Name="ShowSecurities" Grid.Column="0" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
 		<Button x:Name="ShowPortfolios" Grid.Column="1" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" />
-		<Button x:Name="ShowMyTrades" Grid.Column="0" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" />
-        <Button x:Name="ShowOrders" Grid.Column="1" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
-        <Button x:Name="ShowStopOrders" Grid.Column="2" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.StopOrders}" Click="ShowStopOrdersClick" />
-        <Button x:Name="ShowNews" Grid.Column="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.News}" Click="ShowNewsClick" />
-		<Button x:Name="ShowTrades" Grid.Column="3" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Ticks}" Click="ShowTradesClick" />
+		<Button x:Name="ShowMyTrades" Grid.Column="2" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" />
+        <Button x:Name="ShowOrders" Grid.Column="0" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
+        <Button x:Name="ShowNews" Grid.Column="1" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.News}" Click="ShowNewsClick" />
+		<Button x:Name="ShowTrades" Grid.Column="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Ticks}" Click="ShowTradesClick" />
 
 		<StatusBar Grid.Column="0" Grid.Row="3" Height="23" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top">
             <StatusBarItem Name="ConnectionStatus" Content="{x:Static loc:LocalizedStrings.Disconnected}" VerticalAlignment="Stretch" Background="LightPink" Margin="0"></StatusBarItem>

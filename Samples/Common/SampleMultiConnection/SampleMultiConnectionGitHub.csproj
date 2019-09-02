@@ -142,9 +142,6 @@
     <Compile Include="PortfoliosWindow.xaml.cs">
       <DependentUpon>PortfoliosWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StopOrdersWindow.xaml.cs">
-      <DependentUpon>StopOrdersWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="TradesWindow.xaml.cs">
       <DependentUpon>TradesWindow.xaml</DependentUpon>
     </Compile>
@@ -203,10 +200,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="StopOrdersWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="TradesWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

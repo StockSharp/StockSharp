@@ -102,7 +102,7 @@ namespace SampleRealTimeEmulation
 			_realConnector.Error += error =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
-			ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_realConnector.Adapter.InnerAdapters));
+			ConfigManager.RegisterService<IMessageAdapterProvider>(new FullInMemoryMessageAdapterProvider(_realConnector.Adapter.InnerAdapters));
 		}
 
 		private void InitEmuConnector()

@@ -2003,6 +2003,14 @@
       <returns>
         <see langword="true" /> if the specified connection was configured, otherwise, <see langword="false" />.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Extensions.Init(StockSharp.Xaml.OrderWindow,StockSharp.Algo.Connector)">
+      <summary>
+            Initialize <paramref name="window" />.
+            </summary>
+      <param name="window">The window for the order creating.</param>
+      <param name="connector">The class to create connections to trading systems.</param>
+      <returns>The window for the order creating.</returns>
+    </member>
     <member name="T:StockSharp.Xaml.FileProgressWindow">
       <summary>
             File uploading/downloading progress bar window.
@@ -3460,22 +3468,13 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.OrderConditionalGrid.OnOrderAdded(StockSharp.BusinessEntities.Order)">
-      <summary>
-            The method is called when a new order added.
-            </summary>
-      <param name="order">Order.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.OrderConditionalGrid.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.OrderConditionalGrid.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.PortfolioDataSource">
       <summary>
@@ -5352,10 +5351,19 @@
     <member name="E:StockSharp.Xaml.GuiConnector`1.MassOrderCanceled">
       <inheritdoc />
     </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.MassOrderCanceled2">
+      <inheritdoc />
+    </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MassOrderCancelFailed">
       <inheritdoc />
     </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.MassOrderCancelFailed2">
+      <inheritdoc />
+    </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.OrderStatusFailed">
+      <inheritdoc />
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.OrderStatusFailed2">
       <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewStopOrders">

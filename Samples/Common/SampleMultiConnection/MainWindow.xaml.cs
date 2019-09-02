@@ -43,7 +43,6 @@ namespace SampleMultiConnection
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
-		private readonly StopOrderWindow _stopOrdersWindow = new StopOrderWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
@@ -64,7 +63,6 @@ namespace SampleMultiConnection
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
-			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 			_orderLogWindow.MakeHideable();
 			_newsWindow.MakeHideable();
@@ -138,7 +136,7 @@ namespace SampleMultiConnection
 			Connector.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
 
 			Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-			Connector.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+			Connector.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 			
 			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
@@ -150,7 +148,7 @@ namespace SampleMultiConnection
 			Connector.OrderCancelFailed += OrderFailed;
 
 			// subscribe on error of stop-order registration event
-			Connector.OrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 			// subscribe on error of stop-order cancelling event
 			Connector.StopOrderCancelFailed += OrderFailed;
 
@@ -214,7 +212,6 @@ namespace SampleMultiConnection
 			_myTradesWindow.DeleteHideable();
 			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
-			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			_orderLogWindow.DeleteHideable();
 			_newsWindow.DeleteHideable();
@@ -222,7 +219,6 @@ namespace SampleMultiConnection
 			_securitiesWindow.Close();
 			_tradesWindow.Close();
 			_myTradesWindow.Close();
-			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 			_orderLogWindow.Close();
@@ -282,11 +278,6 @@ namespace SampleMultiConnection
 		private void ShowOrdersClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_ordersWindow);
-		}
-
-		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_stopOrdersWindow);
 		}
 
 		private void ShowTradesClick(object sender, RoutedEventArgs e)

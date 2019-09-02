@@ -68,10 +68,7 @@ namespace SampleBlackwood
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = SecurityPicker.SelectedSecurity },
-				SecurityProvider = MainWindow.Instance.Trader,
-				MarketDataProvider = MainWindow.Instance.Trader,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-			};
+			}.Init(MainWindow.Instance.Trader);
 
 			if (newOrder.ShowModal(this))
 				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
@@ -79,28 +76,9 @@ namespace SampleBlackwood
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Level1.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled = Level2.IsEnabled = Depth.IsEnabled = security != null;
+			Level1.IsEnabled = NewOrder.IsEnabled = Level2.IsEnabled = Depth.IsEnabled = security != null;
 
 			TryEnableCandles();
-		}
-
-		private void NewStopOrderClick(object sender, RoutedEventArgs e)
-		{
-			var newOrder = new OrderConditionalWindow
-			{
-				Order = new Order
-				{
-					Security = SecurityPicker.SelectedSecurity,
-					Type = OrderTypes.Conditional,
-				},
-				SecurityProvider = MainWindow.Instance.Trader,
-				MarketDataProvider = MainWindow.Instance.Trader,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-				Adapter = MainWindow.Instance.Trader.TransactionAdapter
-			};
-
-			if (newOrder.ShowModal(this))
-				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 		}
 
 		private void ShowLevel1(Security security)

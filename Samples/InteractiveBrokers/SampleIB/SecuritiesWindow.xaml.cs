@@ -86,10 +86,7 @@ namespace SampleIB
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = SelectedSecurity },
-				SecurityProvider = Trader,
-				MarketDataProvider = Trader,
-				Portfolios = new PortfolioDataSource(Trader),
-			};
+			}.Init(Trader);
 
 			if (newOrder.ShowModal(this))
 				Trader.RegisterOrder(newOrder.Order);

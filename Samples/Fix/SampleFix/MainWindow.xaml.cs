@@ -43,7 +43,6 @@ namespace SampleFix
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
 		private readonly OrdersLogWindow _ordersLogWindow = new OrdersLogWindow();
 		private readonly NewsWindow _newsWindow = new NewsWindow();
 
@@ -61,7 +60,6 @@ namespace SampleFix
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
-			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 			_ordersLogWindow.MakeHideable();
 			_newsWindow.MakeHideable();
@@ -94,7 +92,6 @@ namespace SampleFix
 			_myTradesWindow.DeleteHideable();
 			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
-			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			_ordersLogWindow.DeleteHideable();
 			_newsWindow.DeleteHideable();
@@ -102,7 +99,6 @@ namespace SampleFix
 			_securitiesWindow.Close();
 			_tradesWindow.Close();
 			_myTradesWindow.Close();
-			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 			_ordersLogWindow.Close();
@@ -157,7 +153,7 @@ namespace SampleFix
 				Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 				Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 				Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-				Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+				Trader.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 
 				Trader.NewOrderLogItem += _ordersLogWindow.OrderLogGrid.LogItems.Add;
 
@@ -170,7 +166,7 @@ namespace SampleFix
 				Trader.OrderCancelFailed += OrderFailed;
 
 				// subscribe on error of stop-order registration event
-				Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+				Trader.StopOrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 				// subscribe on error of stop-order cancelling event
 				Trader.StopOrderCancelFailed += OrderFailed;
 
@@ -187,7 +183,7 @@ namespace SampleFix
 
 				ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowNews.IsEnabled =
 				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = ShowOrdersLog.IsEnabled =
-				ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
+				ShowPortfolios.IsEnabled = true;
 			}
 
 			if (Trader.ConnectionState == ConnectionStates.Failed || Trader.ConnectionState == ConnectionStates.Disconnected)
@@ -262,11 +258,6 @@ namespace SampleFix
 		private void ShowPortfoliosClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_portfoliosWindow);
-		}
-
-		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_stopOrdersWindow);
 		}
 
 		private void ShowNewsClick(object sender, RoutedEventArgs e)

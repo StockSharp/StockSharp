@@ -49,7 +49,6 @@ namespace SampleETrade
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 
 		//private Security[] _securities;
@@ -71,7 +70,6 @@ namespace SampleETrade
 
 			_ordersWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
-			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 
@@ -92,12 +90,10 @@ namespace SampleETrade
 			Properties.Settings.Default.Save();
 			_ordersWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
-			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			_myTradesWindow.DeleteHideable();
 
 			_securitiesWindow.Close();
-			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 			_myTradesWindow.Close();
@@ -172,7 +168,7 @@ namespace SampleETrade
 					Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
 					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-					Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+					Trader.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
 					Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
@@ -182,7 +178,7 @@ namespace SampleETrade
 					Trader.OrderCancelFailed += OrderFailed;
 
 					// subscribe on error of stop-order registration event
-					Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+					Trader.StopOrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 					// subscribe on error of stop-order cancelling event
 					Trader.StopOrderCancelFailed += OrderFailed;
 
@@ -238,11 +234,6 @@ namespace SampleETrade
 		private void ShowOrdersClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_ordersWindow);
-		}
-
-		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_stopOrdersWindow);
 		}
 
 		private static void ShowOrHide(Window window)

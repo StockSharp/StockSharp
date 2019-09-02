@@ -76,10 +76,7 @@ namespace SampleMultiConnection
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = SecurityPicker.SelectedSecurity },
-				SecurityProvider = connector,
-				MarketDataProvider = connector,
-				Portfolios = new PortfolioDataSource(connector),
-			};
+			}.Init(connector);
 
 			if (newOrder.ShowModal(this))
 				connector.RegisterOrder(newOrder.Order);

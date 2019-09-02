@@ -25,9 +25,6 @@
 			<Button x:Name="NewOrder" Grid.Column="1" Width="100" IsEnabled="False" Click="NewOrderClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
 			</Button>
-			<Button x:Name="NewStopOrder" Grid.Column="2" Width="120" IsEnabled="False" Click="NewStopOrderClick">
-				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewStopOrder}" />...</TextBlock>
-			</Button>
 		</Grid>
     </Grid>
 </Window>

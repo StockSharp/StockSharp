@@ -69,7 +69,6 @@
 					<Button Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" />
 					<Button Grid.Column="1" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
 					<Button Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" />
-					<Button Grid.Column="1" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.Str226}" Click="ShowStopOrdersClick" />
 	                <Button Grid.Column="0" Grid.Row="3" Content="{x:Static loc:LocalizedStrings.News}" Click="ShowNewsClick" />
 	                <Button Grid.Column="1" Grid.Row="3" Content="{x:Static loc:LocalizedStrings.OrderLog}" Click="ShowOrdersLogClick" />
 				</Grid>

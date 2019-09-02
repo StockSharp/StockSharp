@@ -39,7 +39,6 @@ namespace SampleAlfa
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
 		private readonly NewsWindow _newsWindow = new NewsWindow();
 
 		private readonly LogManager _logManager = new LogManager();
@@ -56,7 +55,6 @@ namespace SampleAlfa
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
-			_stopOrdersWindow.MakeHideable();
 			_newsWindow.MakeHideable();
 
 			_logManager.Listeners.Add(new FileLogListener());
@@ -69,7 +67,6 @@ namespace SampleAlfa
 			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
-			_stopOrdersWindow.DeleteHideable();
 			_newsWindow.DeleteHideable();
 			
 			_securitiesWindow.Close();
@@ -77,7 +74,6 @@ namespace SampleAlfa
 			_myTradesWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
-			_stopOrdersWindow.Close();
 			_newsWindow.Close();
 
 			if (Trader != null)
@@ -144,7 +140,7 @@ namespace SampleAlfa
 						Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 						Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 						Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-						Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+						Trader.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 						Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
 						Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
@@ -154,7 +150,7 @@ namespace SampleAlfa
 						Trader.OrderCancelFailed += OrderFailed;
 
 						// подписываемся на событие о неудачной регистрации стоп-заявок
-						Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+						Trader.StopOrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 						// подписываемся на событие о неудачном снятии стоп-заявок
 						Trader.StopOrderCancelFailed += OrderFailed;
 
@@ -168,7 +164,7 @@ namespace SampleAlfa
 						_newsWindow.NewsPanel.NewsProvider = Trader;
 
 						ShowSecurities.IsEnabled = ShowNews.IsEnabled =
-						ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = ShowStopOrders.IsEnabled =
+						ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
 						ShowPortfolios.IsEnabled = ShowTrades.IsEnabled = true;
 
 						Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
@@ -231,11 +227,6 @@ namespace SampleAlfa
 		private void ShowPortfoliosClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_portfoliosWindow);
-		}
-
-		void ShowStopOrdersClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_stopOrdersWindow);
 		}
 
 		private void ShowNewsClick(object sender, RoutedEventArgs e)

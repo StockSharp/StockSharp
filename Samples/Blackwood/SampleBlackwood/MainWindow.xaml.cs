@@ -39,7 +39,6 @@ namespace SampleBlackwood
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
 		private readonly NewsWindow _newsWindow = new NewsWindow();
 
 		private readonly LogManager _logManager = new LogManager();
@@ -54,7 +53,6 @@ namespace SampleBlackwood
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
-			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 			_newsWindow.MakeHideable();
 
@@ -75,14 +73,12 @@ namespace SampleBlackwood
 			_myTradesWindow.DeleteHideable();
 			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
-			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			_newsWindow.DeleteHideable();
 			
 			_securitiesWindow.Close();
 			_tradesWindow.Close();
 			_myTradesWindow.Close();
-			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 			_newsWindow.Close();
@@ -172,7 +168,7 @@ namespace SampleBlackwood
 					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 					Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-					Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+					Trader.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 					
 					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
 					Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
@@ -183,7 +179,7 @@ namespace SampleBlackwood
 					Trader.OrderCancelFailed += OrderFailed;
 
 					// subscribe on error of stop-order registration event
-					Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+					Trader.StopOrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 					// subscribe on error of stop-order cancelling event
 					Trader.StopOrderCancelFailed += OrderFailed;
 
@@ -200,7 +196,7 @@ namespace SampleBlackwood
 
 					ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowNews.IsEnabled =
 					ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = 
-					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
+					ShowPortfolios.IsEnabled = true;
 				}
 
 				var address = Address.Text.To<IPAddress>();
@@ -263,11 +259,6 @@ namespace SampleBlackwood
 		private void ShowPortfoliosClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_portfoliosWindow);
-		}
-
-		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_stopOrdersWindow);
 		}
 
 		private void ShowNewsClick(object sender, RoutedEventArgs e)

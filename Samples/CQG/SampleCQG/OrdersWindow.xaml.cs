@@ -32,7 +32,7 @@ namespace SampleCQG
 			InitializeComponent();
 		}
 
-		private static IConnector Connector => MainWindow.Instance.Connector;
+		private static Connector Connector => MainWindow.Instance.Connector;
 
 		private void OrderGrid_OnOrderCanceling(Order order)
 		{
@@ -44,11 +44,8 @@ namespace SampleCQG
 			var window = new OrderWindow
 			{
 				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
-				SecurityProvider = Connector,
-				MarketDataProvider = Connector,
-				Portfolios = new PortfolioDataSource(Connector),
 				Order = order.ReRegisterClone(newVolume: order.Balance),
-			};
+			}.Init(Connector);
 
 			if (window.ShowModal(this))
 			{

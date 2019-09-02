@@ -38,7 +38,6 @@ namespace SampleQuik
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly StopOrderWindow _stopOrdersWindow = new StopOrderWindow();
 
 		private readonly LogManager _logManager = new LogManager();
 
@@ -53,7 +52,6 @@ namespace SampleQuik
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
-			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
@@ -68,13 +66,11 @@ namespace SampleQuik
 			_myTradesWindow.DeleteHideable();
 			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
-			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			
 			_securitiesWindow.Close();
 			_tradesWindow.Close();
 			_myTradesWindow.Close();
-			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 
@@ -167,9 +163,9 @@ namespace SampleQuik
 					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 					Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-					Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+					Trader.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 					Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-					Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+					Trader.StopOrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 					Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981));
 					Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981));
 					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
@@ -183,7 +179,7 @@ namespace SampleQuik
 
 					ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
 						ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
-							ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
+							ShowPortfolios.IsEnabled = true;
 				}
 
 				Trader.Connect();
@@ -223,11 +219,6 @@ namespace SampleQuik
 		private void ShowPortfoliosClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_portfoliosWindow);
-		}
-
-		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_stopOrdersWindow);
 		}
 
 		private static void ShowOrHide(Window window)

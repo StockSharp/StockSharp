@@ -51,7 +51,6 @@ namespace SampleCQG
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
 
@@ -70,7 +69,6 @@ namespace SampleCQG
 
 			_ordersWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
-			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();
@@ -88,13 +86,11 @@ namespace SampleCQG
 
 			_ordersWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
-			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			_myTradesWindow.DeleteHideable();
 			_tradesWindow.DeleteHideable();
 
 			_securitiesWindow.Close();
-			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 			_myTradesWindow.Close();
@@ -169,7 +165,7 @@ namespace SampleCQG
 					Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 					Connector.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 					Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-					Connector.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+					Connector.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 					Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
 					Connector.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
@@ -179,7 +175,7 @@ namespace SampleCQG
 					Connector.OrderCancelFailed += OrderFailed;
 
 					// subscribe on error of stop-order registration event
-					Connector.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+					Connector.StopOrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 					// subscribe on error of stop-order cancelling event
 					Connector.StopOrderCancelFailed += OrderFailed;
 
@@ -241,11 +237,6 @@ namespace SampleCQG
 		private void ShowOrdersClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_ordersWindow);
-		}
-
-		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_stopOrdersWindow);
 		}
 
 		private void ShowTradesClick(object sender, RoutedEventArgs e)
