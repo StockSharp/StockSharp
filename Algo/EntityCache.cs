@@ -168,6 +168,12 @@ namespace StockSharp.Algo
 			public readonly CachedSynchronizedDictionary<Tuple<long, long>, MyTrade> MyTrades = new CachedSynchronizedDictionary<Tuple<long, long>, MyTrade>();
 			public readonly CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo> Orders = new CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo>();
 
+			public OrderInfo TryGetOrder(OrderTypes? type, long transactionId, bool isCancel)
+			{
+				return Orders.TryGetValue(CreateOrderKey(type, transactionId, isCancel))
+					?? (type == null ? Orders.TryGetValue(CreateOrderKey(OrderTypes.Conditional, transactionId, isCancel)) : null);
+			}
+
 			public readonly SynchronizedDictionary<long, Trade> TradesById = new SynchronizedDictionary<long, Trade>();
 			public readonly SynchronizedDictionary<string, Trade> TradesByStringId = new SynchronizedDictionary<string, Trade>(StringComparer.InvariantCultureIgnoreCase);
 			public readonly SynchronizedList<Trade> Trades = new SynchronizedList<Trade>();
@@ -436,11 +442,9 @@ namespace StockSharp.Algo
 
 			pfInfo = null;
 
-			var orders = securityData.Orders;
-
 			if (transactionId == 0)
 			{
-				var info = orders.CachedValues.FirstOrDefault(i =>
+				var info = securityData.Orders.CachedValues.FirstOrDefault(i =>
 				{
 					if (order != null)
 						return i.Order == order;
@@ -463,11 +467,8 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				var cancelKey = CreateOrderKey(message.OrderType, transactionId, true);
-				var registerKey = CreateOrderKey(message.OrderType, transactionId, false);
-
-				var cancelledInfo = orders.TryGetValue(cancelKey);
-				var registeredInfo = orders.TryGetValue(registerKey);
+				var cancelledInfo = securityData.TryGetOrder(message.OrderType, transactionId, true);
+				var registeredInfo = securityData.TryGetOrder(message.OrderType, transactionId, false);
 
 				// проверяем не отмененная ли заявка пришла
 				if (cancelledInfo != null) // && (cancelledOrder.Id == orderId || (!cancelledOrder.StringId.IsEmpty() && cancelledOrder.StringId.CompareIgnoreCase(orderStringId))))
@@ -512,10 +513,10 @@ namespace StockSharp.Algo
 
 				if (registeredInfo == null)
 				{
-					var o = EntityFactory.CreateOrder(security, message.OrderType, registerKey.Item1);
+					var o = EntityFactory.CreateOrder(security, message.OrderType, transactionId);
 
 					if (o == null)
-						throw new InvalidOperationException(LocalizedStrings.Str720Params.Put(registerKey.Item1));
+						throw new InvalidOperationException(LocalizedStrings.Str720Params.Put(transactionId));
 
 					o.Time = message.ServerTime;
 					o.LastChangeTime = message.ServerTime;
@@ -549,7 +550,7 @@ namespace StockSharp.Algo
 					_allOrdersByTransactionId.Add(Tuple.Create(transactionId, false), o);
 
 					registeredInfo = new OrderInfo(o);
-					orders.Add(registerKey, registeredInfo);
+					securityData.Orders.Add(CreateOrderKey(o.Type, transactionId, false), registeredInfo);
 				}
 
 				var orderInfo = registeredInfo.ApplyChanges(message, false);
@@ -583,23 +584,15 @@ namespace StockSharp.Algo
 
 			if (order == null)
 			{
-				var cancelledOrder = data.Orders.TryGetValue(CreateOrderKey(orderType, message.OriginalTransactionId, true))?.Order;
+				var cancelledOrder = data.TryGetOrder(orderType, message.OriginalTransactionId, true)?.Order;
 
-				if (cancelledOrder == null && orderType == null)
-				{
-					cancelledOrder = data.Orders.TryGetValue(CreateOrderKey(OrderTypes.Conditional, message.OriginalTransactionId, true))?.Order;
-
-					if (cancelledOrder != null)
-						orderType = OrderTypes.Conditional;
-				}
+				if (cancelledOrder != null && orderType == null)
+					orderType = cancelledOrder.Type;
 
 				if (cancelledOrder != null /*&& order.Id == message.OrderId*/)
 					orders.Add(Tuple.Create(cancelledOrder, true));
 
-				var registeredOrder = data.Orders.TryGetValue(CreateOrderKey(orderType, message.OriginalTransactionId, false))?.Order;
-
-				if (registeredOrder == null && orderType == null)
-					registeredOrder = data.Orders.TryGetValue(CreateOrderKey(OrderTypes.Conditional, message.OriginalTransactionId, false))?.Order;
+				var registeredOrder = data.TryGetOrder(orderType, message.OriginalTransactionId, false)?.Order;
 
 				if (registeredOrder != null)
 					orders.Add(Tuple.Create(registeredOrder, false));
@@ -622,10 +615,10 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				if (data.Orders.ContainsKey(CreateOrderKey(order.Type, message.OriginalTransactionId, true)))
+				if (data.TryGetOrder(order.Type, message.OriginalTransactionId, true) != null)
 					orders.Add(Tuple.Create(order, true));
 
-				var registeredOrder = data.Orders.TryGetValue(CreateOrderKey(order.Type, message.OriginalTransactionId, false))?.Order;
+				var registeredOrder = data.TryGetOrder(order.Type, message.OriginalTransactionId, false)?.Order;
 				if (registeredOrder != null)
 					orders.Add(Tuple.Create(registeredOrder, false));
 			}
@@ -862,7 +855,7 @@ namespace StockSharp.Algo
 			Order order = null;
 
 			if (transactionId != 0)
-				order = data.Orders.TryGetValue(CreateOrderKey(orderType, transactionId, isCancel))?.Order;
+				order = data.TryGetOrder(orderType, transactionId, isCancel)?.Order;
 
 			if (order != null)
 				return order;
