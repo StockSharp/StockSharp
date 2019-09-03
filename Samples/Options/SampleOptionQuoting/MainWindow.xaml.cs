@@ -327,12 +327,12 @@ namespace SampleOptionQuoting
 				throw new NotSupportedException();
 			}
 
-			void IMarketDataProvider.RegisterNews(IMessageAdapter adapter)
+			void IMarketDataProvider.RegisterNews(Security security, IMessageAdapter adapter)
 			{
 				throw new NotSupportedException();
 			}
 
-			void IMarketDataProvider.UnRegisterNews()
+			void IMarketDataProvider.UnRegisterNews(Security security)
 			{
 				throw new NotSupportedException();
 			}
