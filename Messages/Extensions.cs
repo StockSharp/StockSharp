@@ -1369,7 +1369,10 @@ namespace StockSharp.Messages
 			if (mdMsg == null)
 				throw new ArgumentNullException(nameof(mdMsg));
 
-			return (TimeSpan)mdMsg.Arg;
+			if (!(mdMsg.Arg is TimeSpan timeFrame))
+				throw new InvalidOperationException(LocalizedStrings.WrongCandleArg.Put(mdMsg.Arg));
+
+			return timeFrame;
 		}
 	}
 }

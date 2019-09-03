@@ -778,7 +778,7 @@ namespace StockSharp.Algo
 		{
 			var security = _subscriptionManager.ProcessResponse(replyMsg, out var originalMsg, out var unexpectedCancelled);
 
-			if (security == null && originalMsg?.DataType != MarketDataTypes.News)
+			if (originalMsg == null)
 			{
 				if (replyMsg.Error != null)
 					RaiseError(replyMsg.Error);

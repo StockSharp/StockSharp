@@ -777,8 +777,9 @@ namespace StockSharp.Algo
 							{
 								if (isCandles && a.TryGetCandlesBuildFrom(mdMsg, CandleBuilderProvider) != null)
 									return true;
-								
-								throw new ArgumentOutOfRangeException(mdMsg.DataType.ToString());
+
+								return false;
+								//throw new ArgumentOutOfRangeException(mdMsg.DataType.ToString());
 							}
 						}
 					}

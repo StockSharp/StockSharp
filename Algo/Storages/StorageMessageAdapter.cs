@@ -938,8 +938,8 @@ namespace StockSharp.Algo.Storages
 					lastTime = LoadMessages(GetStorage<VolumeCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
-				default:
-					throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str721);
+				//default:
+				//	throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str721);
 			}
 
 			return lastTime;

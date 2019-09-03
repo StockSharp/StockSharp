@@ -218,6 +218,7 @@ StockSharp API Change log
 * (feature) OrderConditionalGrid, OrderConditionalWindows marked as obsolete.
 * (feature) IMessageAdapter. IsSecurityNewsOnly property added.
 * (feature) IMarketDataProvider. RegisterNews accepts Security arg.
+* (bug) Fix handling custom data type subscriptions.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

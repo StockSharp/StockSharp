@@ -94,11 +94,13 @@ namespace StockSharp.Algo
 
 				if (security == null)
 				{
-					if (message.DataType != MarketDataTypes.News)
-					{
-						if (message.SecurityId.IsDefault())
-							throw new ArgumentNullException(nameof(security));
+					//if (message.DataType != MarketDataTypes.News)
+					//{
+						
+					//}
 
+					if (message.SecurityId != default)
+					{
 						security = _connector.LookupById(message.SecurityId);
 
 						if (security == null)
