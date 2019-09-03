@@ -57,11 +57,13 @@ namespace StockSharp.Algo
 
 		private sealed class OrderInfo
 		{
+			private readonly EntityCache _parent;
 			private bool _raiseNewOrder;
 
-			public OrderInfo(Order order, bool raiseNewOrder = true)
+			public OrderInfo(EntityCache parent, Order order, bool raiseNewOrder)
 			{
 				Order = order ?? throw new ArgumentNullException(nameof(order));
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 				_raiseNewOrder = raiseNewOrder;
 			}
 
@@ -100,19 +102,14 @@ namespace StockSharp.Algo
 				if (!message.OrderBoardId.IsEmpty())
 					order.BoardId = message.OrderBoardId;
 
-				//// некоторые коннекторы не транслируют при отмене отмененный объем
-				//// esper. при перерегистрации заявок необходимо обновлять баланс
-				//if (message.Balance > 0 || !isCancelled || isReRegisterCancelled)
-				//{
-				//	// BTCE коннектор не транслирует баланс заявки
-				//	if (!(message.OrderState == OrderStates.Active && message.Balance == 0))
-				//		order.Balance = message.Balance;
-				//}
-
 				if (message.Balance != null)
-					order.Balance = message.Balance.Value;
+				{
+					if (order.Balance < message.Balance.Value)
+						_parent._logReceiver.AddErrorLog($"Order {order.TransactionId}: bal_old{order.Balance}->bal_new{message.Balance.Value}");
 
-				// IB коннектор не транслирует состояние заявки в одном из своих сообщений
+					order.Balance = message.Balance.Value;
+				}
+
 				if (message.OrderState != null)
 					order.State = order.State.CheckModification(message.OrderState.Value);
 
@@ -322,6 +319,12 @@ namespace StockSharp.Algo
 		}
 
 		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position>();
+		private readonly ILogReceiver _logReceiver;
+
+		public EntityCache(ILogReceiver logReceiver)
+		{
+			_logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
+		}
 
 		public IEnumerable<Position> Positions => _positions.CachedValues;
 
@@ -403,7 +406,7 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			GetData(order.Security).Orders.Add(CreateOrderKey(order.Type, transactionId, isCancel), new OrderInfo(order, !isCancel));
+			GetData(order.Security).Orders.Add(CreateOrderKey(order.Type, transactionId, isCancel), new OrderInfo(this, order, !isCancel));
 			_allOrdersByTransactionId.Add(Tuple.Create(transactionId, isCancel), order);
 		}
 
@@ -549,7 +552,7 @@ namespace StockSharp.Algo
 					AddOrder(o);
 					_allOrdersByTransactionId.Add(Tuple.Create(transactionId, false), o);
 
-					registeredInfo = new OrderInfo(o);
+					registeredInfo = new OrderInfo(this, o, true);
 					securityData.Orders.Add(CreateOrderKey(o.Type, transactionId, false), registeredInfo);
 				}
 

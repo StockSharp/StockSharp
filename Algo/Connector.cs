@@ -64,7 +64,7 @@ namespace StockSharp.Algo
 			public bool HasChanges => Second != null;
 		}
 
-		private readonly EntityCache _entityCache = new EntityCache();
+		private readonly EntityCache _entityCache;
 
 		private readonly SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo> _marketDepths = new SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
@@ -158,7 +158,10 @@ namespace StockSharp.Algo
 		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true,
 			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnReconnect = true)
 		{
-			_entityCache.ExchangeInfoProvider = new InMemoryExchangeInfoProvider();
+			_entityCache = new EntityCache(this)
+			{
+				ExchangeInfoProvider = new InMemoryExchangeInfoProvider()
+			};
 
 			_supportOffline = supportOffline;
 			_supportSubscriptionTracking = supportSubscriptionTracking;
