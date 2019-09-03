@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Strategy type ID.
 		/// </summary>
 		[DataMember]
-		public Guid StrategyTypeId { get; set; }
+		public string StrategyTypeId { get; set; }
 
 		/// <summary>
 		/// Strategy name.

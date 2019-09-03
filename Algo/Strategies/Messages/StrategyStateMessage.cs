@@ -76,7 +76,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Strategy type ID.
 		/// </summary>
 		[DataMember]
-		public Guid StrategyTypeId { get; set; }
+		public string StrategyTypeId { get; set; }
 
 		/// <summary>
 		/// Command.
@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Strategies.Messages
 			if (!StrategyId.IsDefault())
 				str += $",Id={StrategyId}";
 
-			if (!StrategyTypeId.IsDefault())
+			if (!StrategyTypeId.IsEmpty())
 				str += $",TypeId={StrategyTypeId}";
 
 			if (Command != null)

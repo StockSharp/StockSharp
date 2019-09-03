@@ -951,7 +951,7 @@ namespace StockSharp.Algo.Strategies
 
 			return new StrategyTypeMessage
 			{
-				StrategyTypeId = strategyType.GUID,
+				StrategyTypeId = strategyType.GetTypeName(false),
 				StrategyName = strategyType.Name,
 				OriginalTransactionId = transactionId,
 			};
