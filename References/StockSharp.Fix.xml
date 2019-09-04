@@ -255,6 +255,11 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TimeFrames">
+      <summary>
+            Possible time-frames.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedMessages">
@@ -290,6 +295,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportExecutionsPnL">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSecurityNewsOnly">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition">
@@ -1446,10 +1454,15 @@
             Support market-data response.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeFrames">
+    <member name="M:StockSharp.Fix.Dialects.IFixDialect.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
       <summary>
-            Possible time-frames.
+            Get possible args for the specified candle type and instrument.
             </summary>
+      <param name="candleType">The type of the message <see cref="T:StockSharp.Messages.CandleMessage" />.</param>
+      <param name="securityId">Security ID.</param>
+      <param name="from">The initial date from which you need to get data.</param>
+      <param name="to">The final date by which you need to get data.</param>
+      <returns>Possible args.</returns>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.SupportedMessages">
       <summary>
@@ -1504,6 +1517,11 @@
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportExecutionsPnL">
       <summary>
             Adapter fills <see cref="P:StockSharp.Messages.ExecutionMessage.PnL" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSecurityNewsOnly">
+      <summary>
+            Adapter provides news related with specified security.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition">
@@ -7948,6 +7966,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportExecutionsPnL">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSecurityNewsOnly">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
