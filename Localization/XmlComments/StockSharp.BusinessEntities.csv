@@ -546,9 +546,11 @@ M:StockSharp.BusinessEntities.IMarketDataProvider.RegisterOrderLog(StockSharp.Bu
 M:StockSharp.BusinessEntities.IMarketDataProvider.RegisterOrderLog(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.IMessageAdapter)/param/adapter;DocStr10512
 M:StockSharp.BusinessEntities.IMarketDataProvider.UnRegisterOrderLog(StockSharp.BusinessEntities.Security)/summary;DocStr795
 M:StockSharp.BusinessEntities.IMarketDataProvider.UnRegisterOrderLog(StockSharp.BusinessEntities.Security)/param/security;DocStr796
-M:StockSharp.BusinessEntities.IMarketDataProvider.RegisterNews(StockSharp.Messages.IMessageAdapter)/summary;DocStr797
-M:StockSharp.BusinessEntities.IMarketDataProvider.RegisterNews(StockSharp.Messages.IMessageAdapter)/param/adapter;DocStr10512
-M:StockSharp.BusinessEntities.IMarketDataProvider.UnRegisterNews/summary;DocStr798
+M:StockSharp.BusinessEntities.IMarketDataProvider.RegisterNews(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter)/summary;DocStr797
+M:StockSharp.BusinessEntities.IMarketDataProvider.RegisterNews(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter)/param/security;DocStr794
+M:StockSharp.BusinessEntities.IMarketDataProvider.RegisterNews(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter)/param/adapter;DocStr10512
+M:StockSharp.BusinessEntities.IMarketDataProvider.UnRegisterNews(StockSharp.BusinessEntities.Security)/summary;DocStr798
+M:StockSharp.BusinessEntities.IMarketDataProvider.UnRegisterNews(StockSharp.BusinessEntities.Security)/param/security;DocStr794
 M:StockSharp.BusinessEntities.IMarketDataProvider.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard,StockSharp.Messages.IMessageAdapter)/summary;DocStr10783
 M:StockSharp.BusinessEntities.IMarketDataProvider.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard,StockSharp.Messages.IMessageAdapter)/param/board;DocStr10784
 M:StockSharp.BusinessEntities.IMarketDataProvider.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard,StockSharp.Messages.IMessageAdapter)/param/adapter;DocStr10512

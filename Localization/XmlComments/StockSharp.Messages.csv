@@ -631,6 +631,12 @@ M:StockSharp.Messages.Extensions.IsCandlesSupported(StockSharp.Messages.IMessage
 M:StockSharp.Messages.Extensions.IsCandlesSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataMessage)/param/adapter;Adapter
 M:StockSharp.Messages.Extensions.IsCandlesSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataMessage)/param/subscription;DocStr11068
 M:StockSharp.Messages.Extensions.IsCandlesSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataMessage)/returns;DocStr11155
+M:StockSharp.Messages.Extensions.GetTimeFrames(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/summary;DocStr10391
+M:StockSharp.Messages.Extensions.GetTimeFrames(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/adapter;DocStr4291
+M:StockSharp.Messages.Extensions.GetTimeFrames(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/securityId;SecurityId
+M:StockSharp.Messages.Extensions.GetTimeFrames(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/from;DocStr84
+M:StockSharp.Messages.Extensions.GetTimeFrames(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/to;DocStr85
+M:StockSharp.Messages.Extensions.GetTimeFrames(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/returns;DocStr206
 M:StockSharp.Messages.Extensions.GetCandleArgs``1(StockSharp.Messages.IMessageAdapter,System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/summary;DocStr11156
 M:StockSharp.Messages.Extensions.GetCandleArgs``1(StockSharp.Messages.IMessageAdapter,System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/typeparam/TArg;DocStr9067
 M:StockSharp.Messages.Extensions.GetCandleArgs``1(StockSharp.Messages.IMessageAdapter,System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/adapter;Adapter
@@ -766,7 +772,7 @@ M:StockSharp.Messages.Extensions.GetSecurityTypes(StockSharp.Messages.SecurityLo
 M:StockSharp.Messages.Extensions.GetSecurityTypes(StockSharp.Messages.SecurityLookupMessage)/param/message;DocStr4431
 M:StockSharp.Messages.Extensions.GetSecurityTypes(StockSharp.Messages.SecurityLookupMessage)/returns;Str2539
 M:StockSharp.Messages.Extensions.FindById(System.Collections.Generic.IEnumerable{StockSharp.Messages.IMessageAdapter},System.Guid)/summary;DocStr11147
-M:StockSharp.Messages.Extensions.FindById(System.Collections.Generic.IEnumerable{StockSharp.Messages.IMessageAdapter},System.Guid)/param/adapters;DocStr9801
+M:StockSharp.Messages.Extensions.FindById(System.Collections.Generic.IEnumerable{StockSharp.Messages.IMessageAdapter},System.Guid)/param/adapters;DocStr9323
 M:StockSharp.Messages.Extensions.FindById(System.Collections.Generic.IEnumerable{StockSharp.Messages.IMessageAdapter},System.Guid)/param/id;DocStr11158
 M:StockSharp.Messages.Extensions.FindById(System.Collections.Generic.IEnumerable{StockSharp.Messages.IMessageAdapter},System.Guid)/returns;DocStr11161
 M:StockSharp.Messages.Extensions.CreateAdapter(System.Type)/summary;DocStr11201
@@ -881,6 +887,7 @@ P:StockSharp.Messages.IMessageAdapter.IsSupportSecuritiesLookupAll/summary;DocSt
 P:StockSharp.Messages.IMessageAdapter.SupportedOrderBookDepths/summary;DocStr11234
 P:StockSharp.Messages.IMessageAdapter.IsSupportOrderBookIncrements/summary;DocStr11316
 P:StockSharp.Messages.IMessageAdapter.IsSupportExecutionsPnL/summary;DocStr11235
+P:StockSharp.Messages.IMessageAdapter.IsSecurityNewsOnly/summary;DocStr11333
 M:StockSharp.Messages.IMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.Messages.IMessageAdapter.CreateOrderCondition/returns;DocStr45
 M:StockSharp.Messages.IMessageAdapter.IsConnectionAlive/summary;DocStr441
@@ -888,11 +895,6 @@ M:StockSharp.Messages.IMessageAdapter.IsConnectionAlive/returns;DocStr442
 M:StockSharp.Messages.IMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/summary;DocStr3790
 M:StockSharp.Messages.IMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 M:StockSharp.Messages.IMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/returns;DocStr1450
-M:StockSharp.Messages.IMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/summary;DocStr10391
-M:StockSharp.Messages.IMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/securityId;SecurityId
-M:StockSharp.Messages.IMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/from;DocStr84
-M:StockSharp.Messages.IMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/to;DocStr85
-M:StockSharp.Messages.IMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/returns;DocStr206
 M:StockSharp.Messages.IMessageAdapter.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/summary;DocStr11156
 M:StockSharp.Messages.IMessageAdapter.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/candleType;DocStr2129
 M:StockSharp.Messages.IMessageAdapter.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/securityId;SecurityId
@@ -958,8 +960,8 @@ P:StockSharp.Messages.MessageAdapterWrapper.IsSupportSecuritiesLookupAll/inherit
 P:StockSharp.Messages.MessageAdapterWrapper.SupportedOrderBookDepths/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.IsSupportExecutionsPnL/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapterWrapper.IsSecurityNewsOnly/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.CandlesBuildFrom/inheritdoc;DocStr8459
-M:StockSharp.Messages.MessageAdapterWrapper.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.GetHistoryStepSize(StockSharp.Messages.MarketDataMessage,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)/inheritdoc;DocStr8459
@@ -1100,6 +1102,7 @@ P:StockSharp.Messages.MessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;Doc
 P:StockSharp.Messages.MessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSupportExecutionsPnL/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapter.IsSecurityNewsOnly/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.ReConnectionSettings/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.TransactionIdGenerator/inheritdoc;DocStr8459
@@ -1127,7 +1130,11 @@ M:StockSharp.Messages.MessageAdapter.SendOutMarketDataNotSupported(System.Int64)
 M:StockSharp.Messages.MessageAdapter.SendOutMarketDataNotSupported(System.Int64)/param/originalTransactionId;DocStr4333
 M:StockSharp.Messages.MessageAdapter.IsConnectionAlive/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
-M:StockSharp.Messages.MessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+M:StockSharp.Messages.MessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/summary;DocStr10391
+M:StockSharp.Messages.MessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/securityId;SecurityId
+M:StockSharp.Messages.MessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/from;DocStr84
+M:StockSharp.Messages.MessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/to;DocStr85
+M:StockSharp.Messages.MessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/returns;DocStr206
 M:StockSharp.Messages.MessageAdapter.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.GetHistoryStepSize(StockSharp.Messages.MarketDataMessage,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)/inheritdoc;DocStr8459

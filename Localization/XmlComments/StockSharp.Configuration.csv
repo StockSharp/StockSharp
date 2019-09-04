@@ -39,7 +39,7 @@ M:StockSharp.Configuration.InMemoryMessageAdapterProvider.#ctor(System.Collectio
 P:StockSharp.Configuration.InMemoryMessageAdapterProvider.CurrentAdapters/inheritdoc;DocStr8459
 P:StockSharp.Configuration.InMemoryMessageAdapterProvider.PossibleAdapters/inheritdoc;DocStr8459
 M:StockSharp.Configuration.InMemoryMessageAdapterProvider.GetAdapters/summary;DocStr11332
-M:StockSharp.Configuration.InMemoryMessageAdapterProvider.GetAdapters/returns;DocStr9801
+M:StockSharp.Configuration.InMemoryMessageAdapterProvider.GetAdapters/returns;DocStr9323
 M:StockSharp.Configuration.InMemoryMessageAdapterProvider.CreateStockSharpAdapters(Ecng.Common.IdGenerator,System.String,System.Security.SecureString)/inheritdoc;DocStr8459
 T:StockSharp.Configuration.Paths/summary;DocStr11264
 P:StockSharp.Configuration.Paths.Title/summary;DocStr11265

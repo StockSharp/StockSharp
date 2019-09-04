@@ -1031,7 +1031,7 @@ P:StockSharp.Xaml.OrderConditionalWindow.SecurityProvider/summary;DocStr972
 P:StockSharp.Xaml.OrderConditionalWindow.MarketDataProvider/summary;DocStr973
 P:StockSharp.Xaml.OrderConditionalWindow.AdapterProvider/summary;DocStr9328
 P:StockSharp.Xaml.OrderConditionalWindow.PortfolioAdapterProvider/summary;DocStr11136
-P:StockSharp.Xaml.OrderConditionalWindow.Adapters/summary;DocStr9801
+P:StockSharp.Xaml.OrderConditionalWindow.Adapters/summary;DocStr9323
 P:StockSharp.Xaml.OrderConditionalWindow.Adapter/summary;DocStr8912
 P:StockSharp.Xaml.OrderConditionalWindow.Order/summary;Str504
 M:StockSharp.Xaml.OrderConditionalWindow.InitializeComponent/summary;DocStr8
@@ -1280,8 +1280,8 @@ M:StockSharp.Xaml.GuiConnector`1.RegisterTrades(StockSharp.BusinessEntities.Secu
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterTrades(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterPortfolio(StockSharp.BusinessEntities.Portfolio)/inheritdoc;DocStr8459
-M:StockSharp.Xaml.GuiConnector`1.RegisterNews(StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
-M:StockSharp.Xaml.GuiConnector`1.UnRegisterNews/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.RegisterNews(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.UnRegisterNews(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard,StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.UnSubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.SendOutMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

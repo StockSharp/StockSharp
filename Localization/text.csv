@@ -15852,4 +15852,5 @@ DocStr11327;Filter messages;Отфильтрованные сообщения
 DocStr11328;Incoming messages;Входящие сообщения
 DocStr11329;Builder type;Тип построителя
 DocStr11331;Get time-frame from the specified market-data message;Получить тайм-фрейм из указанного сообщения с данными
-DocStr11332;Get all available adapters;Get all available adapters
+DocStr11332;Get all available adapters;Получить все доступные адаптеры
+DocStr11333;Adapter provides news related with specified security;Адаптер предоставляет новости, относящиеся к указанному инструменту
