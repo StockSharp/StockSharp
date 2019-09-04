@@ -222,9 +222,12 @@ StockSharp API Change log
 * (feature) SmartCOM. Replaced SmartComTimeFrames by TimeSpan.
 * (feature) Oanda. Removed News support (deprecated).
 * (feature) InteractiveBrokers. Live candles supported.
-* (feature) InteractiveBrokers. Fix options calc subscriptions.
-* (feature) InteractiveBrokers. Fix handling extended market data types.
+* (bug) InteractiveBrokers. Fix options calc subscriptions.
+* (bug) InteractiveBrokers. Fix handling extended market data types.
 * (feature) InteractiveBrokers. Replaced InteractiveBrokersTimeFrames by TimeSpan.
+* (bug) FXCM. Fix connection error/drop handling.
+* (bug) FXCM. Fix change order's trailing step.
+* (bug) FXCM. Fix order state tracking.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
