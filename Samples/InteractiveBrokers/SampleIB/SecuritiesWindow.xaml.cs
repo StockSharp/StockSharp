@@ -48,8 +48,8 @@ namespace SampleIB
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = InteractiveBrokersTimeFrames.AllTimeFrames;
-			CandlesPeriods.SelectedItem = InteractiveBrokersTimeFrames.Hour1;
+			CandlesPeriods.ItemsSource = InteractiveBrokersMessageAdapter.AllTimeFrames;
+			CandlesPeriods.SelectedItem = TimeSpan.FromHours(1);
 		}
 
 		protected override void OnClosed(EventArgs e)
@@ -198,34 +198,35 @@ namespace SampleIB
 			wnd?.ProcessCandles(candle);
 		}
 
+		private TimeSpan SelectedTimeFrame => (TimeSpan)CandlesPeriods.SelectedItem;
+
 		private void HistoryCandlesClick(object sender, RoutedEventArgs e)
 		{
+			var tf = SelectedTimeFrame;
+
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var series = new CandleSeries
-				{
-					CandleType = typeof(TimeFrameCandle),
-					Security = security,
-					Arg = CandlesPeriods.SelectedItem,
-				};
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
 
 				var wnd = new CandlesWindow
 				{
 					Title = series.ToString()
 				};
 				_historyCandles.Add(series, wnd);
-				Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromTicks(((TimeSpan)series.Arg).Ticks * 30)), DateTime.Now);
+				Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromTicks(tf.Ticks * 30)), DateTime.Now);
 				wnd.Show();
 			}
 		}
 
 		private void RealTimeCandlesClick(object sender, RoutedEventArgs e)
 		{
+			var tf = SelectedTimeFrame;
+
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var series = new CandleSeries(typeof(TimeFrameCandle), security, InteractiveBrokersTimeFrames.Second5);
+				var series = _realTimeCandles.Keys.FirstOrDefault(s => s.Security == security && (TimeSpan)s.Arg == tf);
 
-				if (_realTimeCandles.Keys.Any(s => s.Security == security))
+				if (series != null)
 				{
 					Trader.UnSubscribeCandles(series);
 					_realTimeCandles.GetAndRemove(series).Close();
@@ -234,12 +235,14 @@ namespace SampleIB
 				}
 				else
 				{
+					series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
+
 					var wnd = new CandlesWindow
 					{
-						Title = security.Id + LocalizedStrings.Str2973
+						Title = series.ToString()
 					};
 					_realTimeCandles.Add(series, wnd);
-					Trader.SubscribeCandles(series);
+					Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromTicks(tf.Ticks * 30)));
 					wnd.Show();
 
 					RealTimeCandles.IsChecked = true;
