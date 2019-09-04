@@ -66,7 +66,7 @@
     <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper32.RequestHistoryTrades(System.String,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper32.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
+    <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper32.RequestHistoryBars(System.String,StockSharp.SmartCom.Native.SmartBarInterval,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper32.SubscribeEvents">
@@ -137,7 +137,7 @@
     <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper64.RequestHistoryTrades(System.String,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper64.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
+    <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper64.RequestHistoryBars(System.String,StockSharp.SmartCom.Native.SmartBarInterval,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper64.SubscribeEvents">
@@ -687,7 +687,7 @@
       <param name="from">Временная точка отсчета.</param>
       <param name="count">Количество сделок.</param>
     </member>
-    <member name="M:StockSharp.SmartCom.Native.ISmartComWrapper.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
+    <member name="M:StockSharp.SmartCom.Native.ISmartComWrapper.RequestHistoryBars(System.String,StockSharp.SmartCom.Native.SmartBarInterval,System.DateTime,System.Int32)">
       <summary>
             Начать получать исторические временные свечи от сервера SmartCOM через событие <see cref="E:StockSharp.SmartCom.Native.ISmartComWrapper.NewBar" />.
             </summary>
@@ -856,7 +856,7 @@
     <member name="M:StockSharp.SmartCom.Native.SmartComWrapper`1.RequestHistoryTrades(System.String,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartComWrapper`1.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
+    <member name="M:StockSharp.SmartCom.Native.SmartComWrapper`1.RequestHistoryBars(System.String,StockSharp.SmartCom.Native.SmartBarInterval,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
     <member name="T:StockSharp.SmartCom.SmartComService">
@@ -888,6 +888,11 @@
             Создать <see cref="T:StockSharp.SmartCom.SmartComMessageAdapter" />.
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+    </member>
+    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.AllTimeFrames">
+      <summary>
+            Возможные тайм-фреймы.
+            </summary>
     </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
       <inheritdoc />
@@ -1028,102 +1033,6 @@
       <summary>
             Стоп-цена заявки.
             </summary>
-    </member>
-    <member name="T:StockSharp.SmartCom.SmartComTimeFrames">
-      <summary>
-            Тайм-фреймы для исторических свечек SmartCOM.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.AllTimeFrames">
-      <summary>
-            Возможные тайм-фреймы.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Tick">
-      <summary>
-            Тиковый тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Minute1">
-      <summary>
-            Минутный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Minute5">
-      <summary>
-            Пяти минутный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Minute10">
-      <summary>
-            Десяти минутный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Minute15">
-      <summary>
-            Пятнадцати минутный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Minute30">
-      <summary>
-            Тридцати минутный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Hour1">
-      <summary>
-            Часовой тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Hour2">
-      <summary>
-            Двухчасовой тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Hour4">
-      <summary>
-            Четырехчасовой тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Day">
-      <summary>
-            Дневной тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Week">
-      <summary>
-            Недельный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Month1">
-      <summary>
-            Месячный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Month3">
-      <summary>
-            Трех месячный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Year">
-      <summary>
-            Годовой тайм-фрейм.
-            </summary>
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartComTimeFrames.op_Implicit(System.TimeSpan)~StockSharp.SmartCom.SmartComTimeFrames">
-      <summary>
-            Привести <see cref="T:System.TimeSpan" /> значение к объекту <see cref="T:StockSharp.SmartCom.SmartComTimeFrames" />.
-            </summary>
-      <param name="value">
-        <see cref="T:System.TimeSpan" /> значение.</param>
-      <returns>Объект <see cref="T:StockSharp.SmartCom.SmartComTimeFrames" />.</returns>
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartComTimeFrames.op_Explicit(StockSharp.SmartCom.SmartComTimeFrames)~System.TimeSpan">
-      <summary>
-            Привести объект <see cref="T:StockSharp.SmartCom.SmartComTimeFrames" /> к <see cref="T:System.TimeSpan" /> значению.
-            </summary>
-      <param name="timeFrame">Объект <see cref="T:StockSharp.SmartCom.SmartComTimeFrames" />.</param>
-      <returns>
-        <see cref="T:System.TimeSpan" /> значение.</returns>
     </member>
     <member name="T:StockSharp.SmartCom.SmartTrader">
       <summary>

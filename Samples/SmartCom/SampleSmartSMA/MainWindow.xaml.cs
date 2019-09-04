@@ -41,7 +41,7 @@ namespace SampleSmartSMA
 	public partial class MainWindow
 	{
 		private bool _isConnected;
-		private readonly TimeSpan _timeFrame = SmartComTimeFrames.Minute5;
+		private readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(5);
 		private readonly SynchronizedList<TimeFrameCandle> _historyCandles = new SynchronizedList<TimeFrameCandle>();
 		private readonly LogManager _logManager = new LogManager();
 		private CandleManager _candleManager;

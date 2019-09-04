@@ -40,7 +40,7 @@ namespace SampleSmart
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = SmartComTimeFrames.AllTimeFrames;
+			CandlesPeriods.ItemsSource = SmartComMessageAdapter.AllTimeFrames;
 			CandlesPeriods.SelectedIndex = 1;
 		}
 

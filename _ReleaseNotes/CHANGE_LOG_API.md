@@ -219,6 +219,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter. IsSecurityNewsOnly property added.
 * (feature) IMarketDataProvider. RegisterNews accepts Security arg.
 * (bug) Fix handling custom data type subscriptions.
+* (feature) SmartCOM. Replaced SmartComTimeFrames by TimeSpan.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
