@@ -220,6 +220,7 @@ StockSharp API Change log
 * (feature) IMarketDataProvider. RegisterNews accepts Security arg.
 * (bug) Fix handling custom data type subscriptions.
 * (feature) SmartCOM. Replaced SmartComTimeFrames by TimeSpan.
+* (feature) Oanda. Removed News support (deprecated).
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
