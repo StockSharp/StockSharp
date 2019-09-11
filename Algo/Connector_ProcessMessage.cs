@@ -1586,7 +1586,10 @@ namespace StockSharp.Algo
 					values[(int)Level1Fields.LastTradePrice] = message.TradePrice.Value;
 
 				if (message.IsSystem != null)
+				{
 					values[(int)Level1Fields.IsSystem] = message.IsSystem.Value;
+					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.IsSystem, message.IsSystem.Value));
+				}
 
 				if (message.TradeId != null)
 				{
@@ -1596,8 +1599,20 @@ namespace StockSharp.Algo
 
 				if (message.TradeVolume != null)
 				{
-					values[(int)Level1Fields.Volume] = message.TradeVolume.Value;
+					values[(int)Level1Fields.LastTradeVolume] = message.TradeVolume.Value;
 					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeVolume, message.TradeVolume.Value));
+				}
+
+				if (message.OriginSide != null)
+				{
+					values[(int)Level1Fields.LastTradeOrigin] = message.OriginSide.Value;
+					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeOrigin, message.OriginSide.Value));
+				}
+
+				if (message.IsUpTick != null)
+				{
+					values[(int)Level1Fields.LastTradeUpDown] = message.IsUpTick.Value;
+					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeOrigin, message.IsUpTick.Value));
 				}
 			}
 

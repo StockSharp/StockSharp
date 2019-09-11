@@ -228,6 +228,7 @@ StockSharp API Change log
 * (bug) FXCM. Fix connection error/drop handling.
 * (bug) FXCM. Fix change order's trailing step.
 * (bug) FXCM. Fix order state tracking.
+* (bug) Connector. Fix ValuesChanged event processing for tick data.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

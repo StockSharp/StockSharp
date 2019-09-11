@@ -865,7 +865,8 @@ namespace StockSharp.Messages
 		public static bool IsLastTradeField(this Level1Fields field) =>
 			field == Level1Fields.LastTradeId || field == Level1Fields.LastTradeTime ||
 			field == Level1Fields.LastTradeOrigin || field == Level1Fields.LastTradePrice ||
-			field == Level1Fields.LastTradeUpDown || field == Level1Fields.LastTradeVolume;
+			field == Level1Fields.LastTradeUpDown || field == Level1Fields.LastTradeVolume ||
+			field == Level1Fields.IsSystem;
 
 		/// <summary>
 		/// Is the specified <see cref="Level1Fields"/> is related to best bid.
