@@ -858,7 +858,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Specified <see cref="Level1Fields"/> related to last trade.
+		/// Fields related to last trade.
 		/// </summary>
 		public static CachedSynchronizedSet<Level1Fields> LastTradeFields { get; } = new CachedSynchronizedSet<Level1Fields>(new[]
 		{
@@ -879,7 +879,7 @@ namespace StockSharp.Messages
 		public static bool IsLastTradeField(this Level1Fields field) => LastTradeFields.Contains(field);
 
 		/// <summary>
-		/// Specified <see cref="Level1Fields"/> related to best bid.
+		/// Fields related to best bid.
 		/// </summary>
 		public static CachedSynchronizedSet<Level1Fields> BestBidFields { get; } = new CachedSynchronizedSet<Level1Fields>(new[]
 		{
@@ -896,7 +896,7 @@ namespace StockSharp.Messages
 		public static bool IsBestBidField(this Level1Fields field) => BestBidFields.Contains(field);
 		
 		/// <summary>
-		/// Specified <see cref="Level1Fields"/> related to best ask.
+		/// Fields related to best ask.
 		/// </summary>
 		public static CachedSynchronizedSet<Level1Fields> BestAskFields { get; } = new CachedSynchronizedSet<Level1Fields>(new[]
 		{

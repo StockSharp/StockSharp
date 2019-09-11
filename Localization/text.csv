@@ -15649,6 +15649,6 @@ DocStr11331;Get time-frame from the specified market-data message;Получит
 DocStr11332;Get all available adapters;Получить все доступные адаптеры
 DocStr11333;Adapter provides news related with specified security;Адаптер предоставляет новости, относящиеся к указанному инструменту
 DocStr11334;Information about {0};Информация о {0}
-DocStr11335;Specified {0} related to last trade;Specified {0} related to last trade
-DocStr11336;Specified {0} related to best bid;Specified {0} related to best bid
-DocStr11337;Specified {0} related to best ask;Specified {0} related to best ask
+DocStr11335;Fields related to last trade;Поля, относящиеся к последней сделке
+DocStr11336;Fields related to best bid;Поля, относящиеся к лучшей покупке
+DocStr11337;Fields related to best ask;Поля, относящиеся к лучшей продаже
