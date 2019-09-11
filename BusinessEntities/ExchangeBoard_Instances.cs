@@ -3470,5 +3470,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.StockSharp.Name,
 			Exchange = Exchange.StockSharp,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Upbit"/>.
+		/// </summary>
+		public static ExchangeBoard Upbit { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Upbit.Name,
+			Exchange = Exchange.Upbit,
+		};
 	}
 }

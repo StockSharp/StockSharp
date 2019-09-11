@@ -5029,6 +5029,7 @@ NOT;NOT;NOT
 ValueForWasNotPassed;Value for '{0}' wasn't passed.;Значение для '{0}' не было передано.
 SovaCapital;Sova Capital;Sova Capital
 Etf;ETF;ETF
+Upbit;Upbit;Upbit
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15854,3 +15855,7 @@ DocStr11329;Builder type;Тип построителя
 DocStr11331;Get time-frame from the specified market-data message;Получить тайм-фрейм из указанного сообщения с данными
 DocStr11332;Get all available adapters;Получить все доступные адаптеры
 DocStr11333;Adapter provides news related with specified security;Адаптер предоставляет новости, относящиеся к указанному инструменту
+DocStr11334;Information about {0};Information about {0}
+DocStr11335;Specified {0} related to last trade;Specified {0} related to last trade
+DocStr11336;Specified {0} related to best bid;Specified {0} related to best bid
+DocStr11337;Specified {0} related to best ask;Specified {0} related to best ask

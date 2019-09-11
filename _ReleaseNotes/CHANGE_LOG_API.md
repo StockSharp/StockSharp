@@ -230,6 +230,7 @@ StockSharp API Change log
 * (bug) FXCM. Fix order state tracking.
 * (bug) Connector. Fix ValuesChanged event processing for tick data.
 * (feature) Connector. Updated level1 values until order book and tick trades received.
+* (feature) Upbit connector.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

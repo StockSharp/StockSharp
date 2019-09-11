@@ -351,6 +351,10 @@
       <Project>{57015126-7323-46F5-AD15-9BEBFB627D8B}</Project>
       <Name>UkrExh</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Upbit\Upbit.csproj">
+      <Project>{93E062C7-93E1-4045-83C1-66A922AFD4D6}</Project>
+      <Name>Upbit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Xignite\Xignite.csproj">
       <Project>{8C7F287B-67DF-48D7-A233-947EDB95F22D}</Project>
       <Name>Xignite</Name>

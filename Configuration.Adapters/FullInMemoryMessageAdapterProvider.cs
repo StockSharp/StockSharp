@@ -81,6 +81,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Transaq;
 	using StockSharp.Twime;
 	using StockSharp.UkrExh;
+	using StockSharp.Upbit;
 	using StockSharp.Xignite;
 	using StockSharp.Yahoo;
 	using StockSharp.Yobit;
@@ -212,6 +213,7 @@ namespace StockSharp.Configuration
 			() => typeof(FinVizMessageAdapter),
 			() => typeof(UkrExhMessageAdapter),
 			() => typeof(CSVMessageAdapter),
+			() => typeof(UpbitMessageAdapter),
 		});
 	}
 }

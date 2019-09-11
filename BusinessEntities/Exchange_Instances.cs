@@ -1131,5 +1131,15 @@ namespace StockSharp.BusinessEntities
 			EngName = "StockSharp",
 			RusName = "StockSharp",
 		};
+
+		/// <summary>
+		/// Information about <see cref="Upbit"/>.
+		/// </summary>
+		public static Exchange Upbit { get; } = new Exchange
+		{
+			Name = "UPBT",
+			EngName = "Upbit",
+			RusName = "Upbit",
+		};
 	}
 }

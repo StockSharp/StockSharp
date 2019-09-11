@@ -49966,5 +49966,15 @@ namespace StockSharp.Localization
 		/// ETF
 		/// </summary>
 		public static string Etf => GetString(EtfKey);
+
+		/// <summary>
+		/// Upbit
+		/// </summary>
+		public const string UpbitKey = nameof(Upbit);
+
+		/// <summary>
+		/// Upbit
+		/// </summary>
+		public static string Upbit => GetString(UpbitKey);
 	}
 }

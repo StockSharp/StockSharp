@@ -302,6 +302,9 @@
     <Reference Include="StockSharp.Tradier">
       <HintPath>..\References\StockSharp.Tradier.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Upbit">
+      <HintPath>..\References\StockSharp.Upbit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">
