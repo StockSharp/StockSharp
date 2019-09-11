@@ -414,252 +414,252 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Information about the test exchange, which has no limitations in work schedule.
+		/// Information about <see cref="Test"/>.
 		/// </summary>
 		public static Exchange Test { get; }
 
 		/// <summary>
-		/// Information about MOEX (Moscow Exchange).
+		/// Information about <see cref="Moex"/>.
 		/// </summary>
 		public static Exchange Moex { get; }
 
 		/// <summary>
-		/// Saint-Petersburg Exchange (SPB).
+		/// Information about <see cref="Spb"/>.
 		/// </summary>
 		public static Exchange Spb { get; }
 
 		/// <summary>
-		/// Information about UX.
+		/// Information about <see cref="Ux"/>.
 		/// </summary>
 		public static Exchange Ux { get; }
 
 		/// <summary>
-		/// Information about AMEX (American Stock Exchange).
+		/// Information about <see cref="Amex"/>.
 		/// </summary>
 		public static Exchange Amex { get; }
 
 		/// <summary>
-		/// Information about CME (Chicago Mercantile Exchange).
+		/// Information about <see cref="Cme"/>.
 		/// </summary>
 		public static Exchange Cme { get; }
 
 		/// <summary>
-		/// Information about CBOT (Chicago Board of Trade).
+		/// Information about <see cref="Cbot"/>.
 		/// </summary>
 		public static Exchange Cbot { get; }
 
 		/// <summary>
-		/// Information about CCE (Chicago Climate Exchange).
+		/// Information about <see cref="Cce"/>.
 		/// </summary>
 		public static Exchange Cce { get; }
 
 		/// <summary>
-		/// Information about NYMEX (New York Mercantile Exchange).
+		/// Information about <see cref="Nymex"/>.
 		/// </summary>
 		public static Exchange Nymex { get; }
 
 		/// <summary>
-		/// Information about NYSE (New York Stock Exchange).
+		/// Information about <see cref="Nyse"/>.
 		/// </summary>
 		public static Exchange Nyse { get; }
 
 		/// <summary>
-		/// Information about NASDAQ.
+		/// Information about <see cref="Nasdaq"/>.
 		/// </summary>
 		public static Exchange Nasdaq { get; }
 
 		/// <summary>
-		/// Information about NQLX.
+		/// Information about <see cref="Nqlx"/>.
 		/// </summary>
 		public static Exchange Nqlx { get; }
 
 		/// <summary>
-		/// Information about LSE (London Stock Exchange).
+		/// Information about <see cref="Lse"/>.
 		/// </summary>
 		public static Exchange Lse { get; }
 
 		/// <summary>
-		/// Information about LME (London Metal Exchange).
+		/// Information about <see cref="Lme"/>.
 		/// </summary>
 		public static Exchange Lme { get; }
 
 		/// <summary>
-		/// Information about TSE (Tokyo Stock Exchange).
+		/// Information about <see cref="Tse"/>.
 		/// </summary>
 		public static Exchange Tse { get; }
 
 		/// <summary>
-		/// Information about HKEX (Hong Kong Stock Exchange).
+		/// Information about <see cref="Hkex"/>.
 		/// </summary>
 		public static Exchange Hkex { get; }
 
 		/// <summary>
-		/// Information about HKFE (Hong Kong Futures Exchange).
+		/// Information about <see cref="Hkfe"/>.
 		/// </summary>
 		public static Exchange Hkfe { get; }
 
 		/// <summary>
-		/// Information about Sse (Shanghai Stock Exchange).
+		/// Information about <see cref="Sse"/>.
 		/// </summary>
 		public static Exchange Sse { get; }
 
 		/// <summary>
-		/// Information about SZSE (Shenzhen Stock Exchange).
+		/// Information about <see cref="Szse"/>.
 		/// </summary>
 		public static Exchange Szse { get; }
 
 		/// <summary>
-		/// Information about TSX (Toronto Stock Exchange).
+		/// Information about <see cref="Tsx"/>.
 		/// </summary>
 		public static Exchange Tsx { get; }
 
 		/// <summary>
-		/// Information about FWB (Frankfurt Stock Exchange).
+		/// Information about <see cref="Fwb"/>.
 		/// </summary>
 		public static Exchange Fwb { get; }
 
 		/// <summary>
-		/// Information about ASX (Australian Securities Exchange).
+		/// Information about <see cref="Asx"/>.
 		/// </summary>
 		public static Exchange Asx { get; }
 
 		/// <summary>
-		/// Information about NZX (New Zealand Exchange).
+		/// Information about <see cref="Nzx"/>.
 		/// </summary>
 		public static Exchange Nzx { get; }
 
 		/// <summary>
-		/// Information about BSE (Bombay Stock Exchange).
+		/// Information about <see cref="Bse"/>.
 		/// </summary>
 		public static Exchange Bse { get; }
 
 		/// <summary>
-		/// Information about NSE (National Stock Exchange of India).
+		/// Information about <see cref="Nse"/>.
 		/// </summary>
 		public static Exchange Nse { get; }
 
 		/// <summary>
-		/// Information about SWX (Swiss Exchange).
+		/// Information about <see cref="Swx"/>.
 		/// </summary>
 		public static Exchange Swx { get; }
 
 		/// <summary>
-		/// Information about KRX (Korea Exchange).
+		/// Information about <see cref="Krx"/>.
 		/// </summary>
 		public static Exchange Krx { get; }
 
 		/// <summary>
-		/// Information about MSE (Madrid Stock Exchange).
+		/// Information about <see cref="Mse"/>.
 		/// </summary>
 		public static Exchange Mse { get; }
 
 		/// <summary>
-		/// Information about JSE (Johannesburg Stock Exchange).
+		/// Information about <see cref="Jse"/>.
 		/// </summary>
 		public static Exchange Jse { get; }
 
 		/// <summary>
-		/// Information about SGX (Singapore Exchange).
+		/// Information about <see cref="Sgx"/>.
 		/// </summary>
 		public static Exchange Sgx { get; }
 
 		/// <summary>
-		/// Information about TSEC (Taiwan Stock Exchange).
+		/// Information about <see cref="Tsec"/>.
 		/// </summary>
 		public static Exchange Tsec { get; }
 
 		/// <summary>
-		/// Information about PSE (Philippine Stock Exchange).
+		/// Information about <see cref="Pse"/>.
 		/// </summary>
 		public static Exchange Pse { get; }
 
 		/// <summary>
-		/// Information about KLSE (Bursa Malaysia).
+		/// Information about <see cref="Klse"/>.
 		/// </summary>
 		public static Exchange Klse { get; }
 
 		/// <summary>
-		/// Information about IDX (Indonesia Stock Exchange).
+		/// Information about <see cref="Idx"/>.
 		/// </summary>
 		public static Exchange Idx { get; }
 
 		/// <summary>
-		/// Information about SET (Stock Exchange of Thailand).
+		/// Information about <see cref="Set"/>.
 		/// </summary>
 		public static Exchange Set { get; }
 
 		/// <summary>
-		/// Information about CSE (Colombo Stock Exchange).
+		/// Information about <see cref="Cse"/>.
 		/// </summary>
 		public static Exchange Cse { get; }
 
 		/// <summary>
-		/// Information about TASE (Tel Aviv Stock Exchange).
+		/// Information about <see cref="Tase"/>.
 		/// </summary>
 		public static Exchange Tase { get; }
 
 		/// <summary>
-		/// Information about LMAX (LMAX Exchange).
+		/// Information about <see cref="Lmax"/>.
 		/// </summary>
 		public static Exchange Lmax { get; }
 
 		/// <summary>
-		/// Information about DukasCopy.
+		/// Information about <see cref="DukasCopy"/>.
 		/// </summary>
 		public static Exchange DukasCopy { get; }
 
 		/// <summary>
-		/// Information about GAIN Capital.
+		/// Information about <see cref="GainCapital"/>.
 		/// </summary>
 		public static Exchange GainCapital { get; }
 
 		/// <summary>
-		/// Information about MB Trading.
+		/// Information about <see cref="MBTrading"/>.
 		/// </summary>
 		public static Exchange MBTrading { get; }
 
 		/// <summary>
-		/// Information about TrueFX.
+		/// Information about <see cref="TrueFX"/>.
 		/// </summary>
 		public static Exchange TrueFX { get; }
 
 		/// <summary>
-		/// Information about CFH.
+		/// Information about <see cref="Cfh"/>.
 		/// </summary>
 		public static Exchange Cfh { get; }
 
 		/// <summary>
-		/// Information about OANDA.
+		/// Information about <see cref="Ond"/>.
 		/// </summary>
 		public static Exchange Ond { get; }
 
 		/// <summary>
-		/// Information about Integral.
+		/// Information about <see cref="Integral"/>.
 		/// </summary>
 		public static Exchange Integral { get; }
 
 		/// <summary>
-		/// Information about BTCE.
+		/// Information about <see cref="Btce"/>.
 		/// </summary>
 		public static Exchange Btce { get; }
 
 		/// <summary>
-		/// Information about BitStamp.
+		/// Information about <see cref="BitStamp"/>.
 		/// </summary>
 		public static Exchange BitStamp { get; }
 
 		/// <summary>
-		/// Information about BtcChina.
+		/// Information about <see cref="BtcChina"/>.
 		/// </summary>
 		public static Exchange BtcChina { get; }
 
 		/// <summary>
-		/// Information about Icbit.
+		/// Information about <see cref="Icbit"/>.
 		/// </summary>
 		public static Exchange Icbit { get; }
 
 		/// <summary>
-		/// Information about Currenex.
+		/// Information about <see cref="Currenex"/>.
 		/// </summary>
 		public static Exchange Currenex { get; } = new Exchange
 		{
@@ -670,7 +670,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about FXCM.
+		/// Information about <see cref="Fxcm"/>.
 		/// </summary>
 		public static Exchange Fxcm { get; } = new Exchange
 		{
@@ -681,7 +681,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Poloniex.
+		/// Information about <see cref="Poloniex"/>.
 		/// </summary>
 		public static Exchange Poloniex { get; } = new Exchange
 		{
@@ -691,7 +691,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Kraken.
+		/// Information about <see cref="Kraken"/>.
 		/// </summary>
 		public static Exchange Kraken { get; } = new Exchange
 		{
@@ -701,7 +701,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Bittrex.
+		/// Information about <see cref="Bittrex"/>.
 		/// </summary>
 		public static Exchange Bittrex { get; } = new Exchange
 		{
@@ -711,7 +711,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Bitfinex.
+		/// Information about <see cref="Bitfinex"/>.
 		/// </summary>
 		public static Exchange Bitfinex { get; } = new Exchange
 		{
@@ -721,7 +721,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Coinbase.
+		/// Information about <see cref="Coinbase"/>.
 		/// </summary>
 		public static Exchange Coinbase { get; } = new Exchange
 		{
@@ -731,7 +731,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about GDAX.
+		/// Information about <see cref="Gdax"/>.
 		/// </summary>
 		public static Exchange Gdax { get; } = new Exchange
 		{
@@ -741,7 +741,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Bithumb.
+		/// Information about <see cref="Bithumb"/>.
 		/// </summary>
 		public static Exchange Bithumb { get; } = new Exchange
 		{
@@ -751,7 +751,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about HitBTC.
+		/// Information about <see cref="HitBtc"/>.
 		/// </summary>
 		public static Exchange HitBtc { get; } = new Exchange
 		{
@@ -761,7 +761,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about OKCoin.
+		/// Information about <see cref="OkCoin"/>.
 		/// </summary>
 		public static Exchange OkCoin { get; } = new Exchange
 		{
@@ -771,7 +771,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Coincheck.
+		/// Information about <see cref="Coincheck"/>.
 		/// </summary>
 		public static Exchange Coincheck { get; } = new Exchange
 		{
@@ -781,7 +781,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Binance.
+		/// Information about <see cref="Binance"/>.
 		/// </summary>
 		public static Exchange Binance { get; } = new Exchange
 		{
@@ -791,7 +791,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Bitexbook.
+		/// Information about <see cref="Bitexbook"/>.
 		/// </summary>
 		public static Exchange Bitexbook { get; } = new Exchange
 		{
@@ -801,7 +801,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about BitMEX.
+		/// Information about <see cref="Bitmex"/>.
 		/// </summary>
 		public static Exchange Bitmex { get; } = new Exchange
 		{
@@ -811,7 +811,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about CEX.IO.
+		/// Information about <see cref="Cex"/>.
 		/// </summary>
 		public static Exchange Cex { get; } = new Exchange
 		{
@@ -821,7 +821,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Cryptopia.
+		/// Information about <see cref="Cryptopia"/>.
 		/// </summary>
 		public static Exchange Cryptopia { get; } = new Exchange
 		{
@@ -831,7 +831,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about OKEx.
+		/// Information about <see cref="Okex"/>.
 		/// </summary>
 		public static Exchange Okex { get; } = new Exchange
 		{
@@ -841,7 +841,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about YoBit.
+		/// Information about <see cref="Yobit"/>.
 		/// </summary>
 		public static Exchange Yobit { get; } = new Exchange
 		{
@@ -851,7 +851,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about CoinExchange.
+		/// Information about <see cref="CoinExchange"/>.
 		/// </summary>
 		public static Exchange CoinExchange { get; } = new Exchange
 		{
@@ -861,7 +861,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Livecoin.
+		/// Information about <see cref="LiveCoin"/>.
 		/// </summary>
 		public static Exchange LiveCoin { get; } = new Exchange
 		{
@@ -871,7 +871,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Exmo.
+		/// Information about <see cref="Exmo"/>.
 		/// </summary>
 		public static Exchange Exmo { get; } = new Exchange
 		{
@@ -881,7 +881,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Deribit.
+		/// Information about <see cref="Deribit"/>.
 		/// </summary>
 		public static Exchange Deribit { get; } = new Exchange
 		{
@@ -891,7 +891,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Kucoin.
+		/// Information about <see cref="Kucoin"/>.
 		/// </summary>
 		public static Exchange Kucoin { get; } = new Exchange
 		{
@@ -901,7 +901,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Liqui.
+		/// Information about <see cref="Liqui"/>.
 		/// </summary>
 		public static Exchange Liqui { get; } = new Exchange
 		{
@@ -911,7 +911,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Huobi.
+		/// Information about <see cref="Huobi"/>.
 		/// </summary>
 		public static Exchange Huobi { get; } = new Exchange
 		{
@@ -921,7 +921,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about IEX.
+		/// Information about <see cref="IEX"/>.
 		/// </summary>
 		public static Exchange IEX { get; } = new Exchange
 		{
@@ -932,7 +932,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about AlphaVantage.
+		/// Information about <see cref="AlphaVantage"/>.
 		/// </summary>
 		public static Exchange AlphaVantage { get; } = new Exchange
 		{
@@ -943,7 +943,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Bitbank.
+		/// Information about <see cref="Bitbank"/>.
 		/// </summary>
 		public static Exchange Bitbank { get; } = new Exchange
 		{
@@ -953,7 +953,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Zaif.
+		/// Information about <see cref="Zaif"/>.
 		/// </summary>
 		public static Exchange Zaif { get; } = new Exchange
 		{
@@ -963,7 +963,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about QUOINEX.
+		/// Information about <see cref="Quoinex"/>.
 		/// </summary>
 		public static Exchange Quoinex { get; } = new Exchange
 		{
@@ -973,7 +973,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about WIKI.
+		/// Information about <see cref="Wiki"/>.
 		/// </summary>
 		public static Exchange Wiki { get; } = new Exchange
 		{
@@ -983,7 +983,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about IDAX.
+		/// Information about <see cref="Idax"/>.
 		/// </summary>
 		public static Exchange Idax { get; } = new Exchange
 		{
@@ -993,7 +993,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about DigiFinex.
+		/// Information about <see cref="Digifinex"/>.
 		/// </summary>
 		public static Exchange Digifinex { get; } = new Exchange
 		{
@@ -1003,7 +1003,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about TradeOgre.
+		/// Information about <see cref="TradeOgre"/>.
 		/// </summary>
 		public static Exchange TradeOgre { get; } = new Exchange
 		{
@@ -1013,7 +1013,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about CoinCap.
+		/// Information about <see cref="CoinCap"/>.
 		/// </summary>
 		public static Exchange CoinCap { get; } = new Exchange
 		{
@@ -1023,7 +1023,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Coinigy.
+		/// Information about <see cref="Coinigy"/>.
 		/// </summary>
 		public static Exchange Coinigy { get; } = new Exchange
 		{
@@ -1033,7 +1033,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about LBank.
+		/// Information about <see cref="LBank"/>.
 		/// </summary>
 		public static Exchange LBank { get; } = new Exchange
 		{
@@ -1043,7 +1043,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about BitMax.
+		/// Information about <see cref="BitMax"/>.
 		/// </summary>
 		public static Exchange BitMax { get; } = new Exchange
 		{
@@ -1053,7 +1053,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about BW.
+		/// Information about <see cref="BW"/>.
 		/// </summary>
 		public static Exchange BW { get; } = new Exchange
 		{
@@ -1063,7 +1063,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Bibox.
+		/// Information about <see cref="Bibox"/>.
 		/// </summary>
 		public static Exchange Bibox { get; } = new Exchange
 		{
@@ -1073,7 +1073,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about CoinBene.
+		/// Information about <see cref="CoinBene"/>.
 		/// </summary>
 		public static Exchange CoinBene { get; } = new Exchange
 		{
@@ -1083,7 +1083,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about BitZ.
+		/// Information about <see cref="BitZ"/>.
 		/// </summary>
 		public static Exchange BitZ { get; } = new Exchange
 		{
@@ -1093,7 +1093,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about ZB.
+		/// Information about <see cref="ZB"/>.
 		/// </summary>
 		public static Exchange ZB { get; } = new Exchange
 		{
@@ -1103,7 +1103,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Tradier.
+		/// Information about <see cref="Tradier"/>.
 		/// </summary>
 		public static Exchange Tradier { get; } = new Exchange
 		{
@@ -1113,7 +1113,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about SwissQuote.
+		/// Information about <see cref="SwSq"/>.
 		/// </summary>
 		public static Exchange SwSq { get; } = new Exchange
 		{
@@ -1123,7 +1123,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about StockSharp.
+		/// Information about <see cref="StockSharp"/>.
 		/// </summary>
 		public static Exchange StockSharp { get; } = new Exchange
 		{
