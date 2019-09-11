@@ -1227,6 +1227,7 @@ namespace StockSharp.Algo
 							values[(int)Level1Fields.LastTradeOrigin] = null;
 							values[(int)Level1Fields.LastTradePrice] = null;
 							values[(int)Level1Fields.LastTradeVolume] = null;
+							values[(int)Level1Fields.IsSystem] = null;
 
 							lastTradeFound = true;
 						}
@@ -1572,18 +1573,18 @@ namespace StockSharp.Algo
 
 			var values = GetSecurityValues(security);
 
+			var price = message.TradePrice ?? 0;
+
 			var changes = new List<KeyValuePair<Level1Fields, object>>(4)
 			{
 				new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeTime, message.ServerTime),
-				new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradePrice, message.TradePrice)
+				new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradePrice, price)
 			};
 
 			lock (values.SyncRoot)
 			{
 				values[(int)Level1Fields.LastTradeTime] = message.ServerTime;
-
-				if (message.TradePrice != null)
-					values[(int)Level1Fields.LastTradePrice] = message.TradePrice.Value;
+				values[(int)Level1Fields.LastTradePrice] = price;
 
 				if (message.IsSystem != null)
 				{
