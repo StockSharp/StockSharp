@@ -98,8 +98,60 @@ namespace StockSharp.Algo
 
 		private readonly SubscriptionManager _subscriptionManager;
 
+		private class Level1Info
+		{
+			public readonly object[] Values = new object[Enumerator.GetValues<Level1Fields>().Count()];
+			public bool CanBestQuotes { get; private set; } = true;
+			public bool CanLastTrade { get; private set; } = true;
+
+			public void SetValue(Level1Fields field, object value)
+			{
+				var idx = (int)field;
+
+				if (idx >= Values.Length)
+					return;
+
+				Values[idx] = value;
+			}
+
+			public object GetValue(Level1Fields field)
+			{
+				var idx = (int)field;
+
+				if (idx >= Values.Length)
+					return null;
+
+				return Values[idx];
+			}
+
+			public void ClearBestQuotes()
+			{
+				if (!CanBestQuotes)
+					return;
+
+				foreach (var field in Messages.Extensions.BestBidFields.Cache)
+					SetValue(field, null);
+
+				foreach (var field in Messages.Extensions.BestAskFields.Cache)
+					SetValue(field, null);
+
+				CanBestQuotes = false;
+			}
+
+			public void ClearLastTrade()
+			{
+				if (!CanLastTrade)
+					return;
+
+				foreach (var field in Messages.Extensions.LastTradeFields.Cache)
+					SetValue(field, null);
+
+				CanLastTrade = false;
+			}
+		}
+
 		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _boardStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
-		private readonly SynchronizedDictionary<Security, object[]> _securityValues = new SynchronizedDictionary<Security, object[]>();
+		private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = new SynchronizedDictionary<Security, Level1Info>();
 
 		private bool _isDisposing;
 
@@ -1403,8 +1455,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			var values = _securityValues.TryGetValue(security);
-			return values?[(int)field];
+			return _securityValues.TryGetValue(security)?.GetValue(field);
 		}
 
 		/// <inheritdoc />
@@ -1413,25 +1464,25 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			var values = _securityValues.TryGetValue(security);
+			var info = _securityValues.TryGetValue(security);
 
-			if (values == null)
+			if (info == null)
 				return Enumerable.Empty<Level1Fields>();
 
 			var fields = new List<Level1Fields>(30);
 
-			for (var i = 0; i < values.Length; i++)
+			for (var i = 0; i < info.Values.Length; i++)
 			{
-				if (values[i] != null)
+				if (info.Values[i] != null)
 					fields.Add((Level1Fields)i);
 			}
 
 			return fields;
 		}
 
-		private object[] GetSecurityValues(Security security)
+		private Level1Info GetSecurityValues(Security security)
 		{
-			return _securityValues.SafeAdd(security, key => new object[Enumerator.GetValues<Level1Fields>().Count()]);
+			return _securityValues.SafeAdd(security, key => new Level1Info());
 		}
 
 		/// <summary>

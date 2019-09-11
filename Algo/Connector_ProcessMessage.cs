@@ -1205,73 +1205,49 @@ namespace StockSharp.Algo
 				RaiseSecurityChanged(security);
 			}
 
-			var values = GetSecurityValues(security);
+			var info = GetSecurityValues(security);
 
-			var lastTradeFound = false;
-			var bestBidFound = false;
-			var bestAskFound = false;
+			var changes = message.Changes;
+			var cloned = false;
 
-			lock (values.SyncRoot)
+			foreach (var change in message.Changes)
 			{
-				foreach (var change in message.Changes)
+				var field = change.Key;
+
+				if (!info.CanLastTrade && field.IsLastTradeField())
 				{
-					var field = change.Key;
-
-					if (!lastTradeFound)
+					if (!cloned)
 					{
-						if (field.IsLastTradeField())
-						{
-							values[(int)Level1Fields.LastTradeUpDown] = null;
-							values[(int)Level1Fields.LastTradeTime] = null;
-							values[(int)Level1Fields.LastTradeId] = null;
-							values[(int)Level1Fields.LastTradeOrigin] = null;
-							values[(int)Level1Fields.LastTradePrice] = null;
-							values[(int)Level1Fields.LastTradeVolume] = null;
-							values[(int)Level1Fields.IsSystem] = null;
-
-							lastTradeFound = true;
-						}
+						changes = changes.ToDictionary();
+						cloned = true;
 					}
 
-					if (!bestBidFound)
-					{
-						if (field.IsBestBidField())
-						{
-							values[(int)Level1Fields.BestBidPrice] = null;
-							values[(int)Level1Fields.BestBidTime] = null;
-							values[(int)Level1Fields.BestBidVolume] = null;
+					changes.Remove(field);
 
-							bestBidFound = true;
-						}
+					continue;
+				}
+
+				if (!info.CanBestQuotes && (field.IsBestBidField() || field.IsBestAskField()))
+				{
+					if (!cloned)
+					{
+						changes = changes.ToDictionary();
+						cloned = true;
 					}
 
-					if (!bestAskFound)
-					{
-						if (field.IsBestAskField())
-						{
-							values[(int)Level1Fields.BestAskPrice] = null;
-							values[(int)Level1Fields.BestAskTime] = null;
-							values[(int)Level1Fields.BestAskVolume] = null;
+					changes.Remove(field);
 
-							bestAskFound = true;
-						}
-					}
+					continue;
+				}
 
-					values[(int)field] = change.Value;
-				}	
+				info.SetValue(field, change.Value);
 			}
 
-			RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
+			if (changes.Count > 0)
+				RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
 		}
 
-		/// <summary>
-		/// To get the portfolio by the name.
-		/// </summary>
-		/// <remarks>
-		/// If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
-		/// </remarks>
-		/// <param name="name">Portfolio name.</param>
-		/// <returns>Portfolio.</returns>
+		/// <inheritdoc />
 		public Portfolio GetPortfolio(string name)
 		{
 			return GetPortfolio(name, null, out _);
@@ -1442,33 +1418,33 @@ namespace StockSharp.Algo
 
 			if (!fromLevel1 && (bestBid != null || bestAsk != null))
 			{
-				var values = GetSecurityValues(security);
+				var info = GetSecurityValues(security);
+
+				info.ClearBestQuotes();
+
 				var changes = new List<KeyValuePair<Level1Fields, object>>(4);
 
-				lock (values.SyncRoot)
+				if (bestBid != null)
 				{
-					if (bestBid != null)
-					{
-						values[(int)Level1Fields.BestBidPrice] = bestBid.Price;
-						changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidPrice, bestBid.Price));
+					info.SetValue(Level1Fields.BestBidPrice, bestBid.Price);
+					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidPrice, bestBid.Price));
 
-						if (bestBid.Volume != 0)
-						{
-							values[(int)Level1Fields.BestBidVolume] = bestBid.Volume;
-							changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidVolume, bestBid.Volume));
-						}
+					if (bestBid.Volume != 0)
+					{
+						info.SetValue(Level1Fields.BestBidVolume, bestBid.Volume);
+						changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidVolume, bestBid.Volume));
 					}
+				}
 
-					if (bestAsk != null)
+				if (bestAsk != null)
+				{
+					info.SetValue(Level1Fields.BestAskPrice, bestAsk.Price);
+					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskPrice, bestAsk.Price));
+
+					if (bestAsk.Volume != 0)
 					{
-						values[(int)Level1Fields.BestAskPrice] = bestAsk.Price;
-						changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskPrice, bestAsk.Price));
-
-						if (bestAsk.Volume != 0)
-						{
-							values[(int)Level1Fields.BestAskVolume] = bestAsk.Volume;
-							changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskVolume, bestAsk.Volume));
-						}
+						info.SetValue(Level1Fields.BestAskVolume, bestAsk.Volume);
+						changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskVolume, bestAsk.Volume));
 					}
 				}
 
@@ -1571,7 +1547,9 @@ namespace StockSharp.Algo
 		{
 			var tuple = _entityCache.ProcessTradeMessage(security, message);
 
-			var values = GetSecurityValues(security);
+			var info = GetSecurityValues(security);
+
+			info.ClearLastTrade();
 
 			var price = message.TradePrice ?? 0;
 
@@ -1581,40 +1559,37 @@ namespace StockSharp.Algo
 				new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradePrice, price)
 			};
 
-			lock (values.SyncRoot)
+			info.SetValue(Level1Fields.LastTradeTime, message.ServerTime);
+			info.SetValue(Level1Fields.LastTradePrice, price);
+
+			if (message.IsSystem != null)
 			{
-				values[(int)Level1Fields.LastTradeTime] = message.ServerTime;
-				values[(int)Level1Fields.LastTradePrice] = price;
+				info.SetValue(Level1Fields.IsSystem, message.IsSystem.Value);
+				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.IsSystem, message.IsSystem.Value));
+			}
 
-				if (message.IsSystem != null)
-				{
-					values[(int)Level1Fields.IsSystem] = message.IsSystem.Value;
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.IsSystem, message.IsSystem.Value));
-				}
+			if (message.TradeId != null)
+			{
+				info.SetValue(Level1Fields.LastTradeId, message.TradeId.Value);
+				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeId, message.TradeId.Value));
+			}
 
-				if (message.TradeId != null)
-				{
-					values[(int)Level1Fields.LastTradeId] = message.TradeId.Value;
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeId, message.TradeId.Value));
-				}
+			if (message.TradeVolume != null)
+			{
+				info.SetValue(Level1Fields.LastTradeVolume, message.TradeVolume.Value);
+				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeVolume, message.TradeVolume.Value));
+			}
 
-				if (message.TradeVolume != null)
-				{
-					values[(int)Level1Fields.LastTradeVolume] = message.TradeVolume.Value;
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeVolume, message.TradeVolume.Value));
-				}
+			if (message.OriginSide != null)
+			{
+				info.SetValue(Level1Fields.LastTradeOrigin, message.OriginSide.Value);
+				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeOrigin, message.OriginSide.Value));
+			}
 
-				if (message.OriginSide != null)
-				{
-					values[(int)Level1Fields.LastTradeOrigin] = message.OriginSide.Value;
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeOrigin, message.OriginSide.Value));
-				}
-
-				if (message.IsUpTick != null)
-				{
-					values[(int)Level1Fields.LastTradeUpDown] = message.IsUpTick.Value;
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeOrigin, message.IsUpTick.Value));
-				}
+			if (message.IsUpTick != null)
+			{
+				info.SetValue(Level1Fields.LastTradeUpDown, message.IsUpTick.Value);
+				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeOrigin, message.IsUpTick.Value));
 			}
 
 			if (tuple.Item2)

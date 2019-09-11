@@ -858,31 +858,59 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Specified <see cref="Level1Fields"/> related to last trade.
+		/// </summary>
+		public static CachedSynchronizedSet<Level1Fields> LastTradeFields { get; } = new CachedSynchronizedSet<Level1Fields>(new[]
+		{
+			Level1Fields.LastTradeId,
+			Level1Fields.LastTradeTime,
+			Level1Fields.LastTradeOrigin,
+			Level1Fields.LastTradePrice,
+			Level1Fields.LastTradeUpDown,
+			Level1Fields.LastTradeVolume,
+			Level1Fields.IsSystem
+		});
+
+		/// <summary>
 		/// Is the specified <see cref="Level1Fields"/> is related to last trade.
 		/// </summary>
 		/// <param name="field">Field.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsLastTradeField(this Level1Fields field) =>
-			field == Level1Fields.LastTradeId || field == Level1Fields.LastTradeTime ||
-			field == Level1Fields.LastTradeOrigin || field == Level1Fields.LastTradePrice ||
-			field == Level1Fields.LastTradeUpDown || field == Level1Fields.LastTradeVolume ||
-			field == Level1Fields.IsSystem;
+		public static bool IsLastTradeField(this Level1Fields field) => LastTradeFields.Contains(field);
+
+		/// <summary>
+		/// Specified <see cref="Level1Fields"/> related to best bid.
+		/// </summary>
+		public static CachedSynchronizedSet<Level1Fields> BestBidFields { get; } = new CachedSynchronizedSet<Level1Fields>(new[]
+		{
+			Level1Fields.BestBidPrice,
+			Level1Fields.BestBidTime,
+			Level1Fields.BestBidVolume
+		});
 
 		/// <summary>
 		/// Is the specified <see cref="Level1Fields"/> is related to best bid.
 		/// </summary>
 		/// <param name="field">Field.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsBestBidField(this Level1Fields field) =>
-			field == Level1Fields.BestBidPrice || field == Level1Fields.BestBidTime || field == Level1Fields.BestBidVolume;
+		public static bool IsBestBidField(this Level1Fields field) => BestBidFields.Contains(field);
 		
+		/// <summary>
+		/// Specified <see cref="Level1Fields"/> related to best ask.
+		/// </summary>
+		public static CachedSynchronizedSet<Level1Fields> BestAskFields { get; } = new CachedSynchronizedSet<Level1Fields>(new[]
+		{
+			Level1Fields.BestAskPrice,
+			Level1Fields.BestAskTime,
+			Level1Fields.BestAskVolume
+		});
+
 		/// <summary>
 		/// Is the specified <see cref="Level1Fields"/> is related to best ask.
 		/// </summary>
 		/// <param name="field">Field.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsBestAskField(this Level1Fields field) =>
-			field == Level1Fields.BestAskPrice || field == Level1Fields.BestAskTime || field == Level1Fields.BestAskVolume;
+		public static bool IsBestAskField(this Level1Fields field) => BestAskFields.Contains(field);
 
 		/// <summary>
 		/// Fill default <see cref="SecurityTypes.CryptoCurrency"/> price and volume step by 0.00000001 value.
