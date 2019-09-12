@@ -17,6 +17,8 @@ namespace StockSharp.BusinessEntities
 {
 	using Ecng.Common;
 
+	using StockSharp.Localization;
+
 	partial class Exchange
 	{
 		static Exchange()
@@ -24,391 +26,342 @@ namespace StockSharp.BusinessEntities
 			Test = new Exchange
 			{
 				Name = "TEST",
-				RusName = "Тестовая биржа",
-				EngName = "Test Exchange",
+				FullNameLoc = LocalizedStrings.TestExchangeKey,
 			};
 
 			Moex = new Exchange
 			{
 				Name = "MOEX",
-				RusName = "Московская биржа",
-				EngName = "Moscow Exchange",
+				FullNameLoc = LocalizedStrings.MoscowExchangeKey,
 				CountryCode = CountryCodes.RU,
 			};
 
 			Spb = new Exchange
 			{
 				Name = "SPB",
-				RusName = "Санкт-Петербургская биржа",
-				EngName = "Saint-Petersburg Exchange",
+				FullNameLoc = LocalizedStrings.SaintPetersburgExchangeKey,
 				CountryCode = CountryCodes.RU,
 			};
 
 			Ux = new Exchange
 			{
 				Name = "UX",
-				RusName = "Украинская биржа",
-				EngName = "Ukrain Exchange",
+				FullNameLoc = LocalizedStrings.UkrainExchangeKey,
 				CountryCode = CountryCodes.UA,
 			};
 
 			Amex = new Exchange
 			{
 				Name = "AMEX",
-				RusName = "Американская фондовая биржа",
-				EngName = "American Stock Exchange",
+				FullNameLoc = LocalizedStrings.AmericanStockExchangeKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			Cme = new Exchange
 			{
 				Name = "CME",
-				RusName = "Чикагская товарная биржа",
-				EngName = "Chicago Mercantile Exchange",
+				FullNameLoc = LocalizedStrings.ChicagoMercantileExchangeKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			Cce = new Exchange
 			{
 				Name = "CCE",
-				RusName = "Чикагская климатическая биржа",
-				EngName = "Chicago Climate Exchange",
+				FullNameLoc = LocalizedStrings.ChicagoClimateExchangeKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			Cbot = new Exchange
 			{
 				Name = "CBOT",
-				RusName = "Чикагская торговая палата",
-				EngName = "Chicago Board of Trade",
+				FullNameLoc = LocalizedStrings.ChicagoBoardofTradeKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			Nymex = new Exchange
 			{
 				Name = "NYMEX",
-				RusName = "Нью-Йоркская товарная биржа",
-				EngName = "New York Mercantile Exchange",
+				FullNameLoc = LocalizedStrings.NewYorkMercantileExchangeKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			Nyse = new Exchange
 			{
 				Name = "NYSE",
-				RusName = "Нью-Йоркская фондовая биржа",
-				EngName = "New York Stock Exchange",
+				FullNameLoc = LocalizedStrings.NewYorkStockExchangeKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			Nasdaq = new Exchange
 			{
 				Name = "NASDAQ",
-				RusName = "Насдак",
-				EngName = "NASDAQ",
+				FullNameLoc = LocalizedStrings.NASDAQKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			Nqlx = new Exchange
 			{
 				Name = "NQLX",
-				RusName = "Насдак LM",
-				EngName = "Nasdaq-Liffe Markets",
+				FullNameLoc = LocalizedStrings.NasdaqLiffeMarketsKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			Tsx = new Exchange
 			{
 				Name = "TSX",
-				RusName = "Фондовая биржа Торонто",
-				EngName = "Toronto Stock Exchange",
+				FullNameLoc = LocalizedStrings.TorontoStockExchangeKey,
 				CountryCode = CountryCodes.CA,
 			};
 
 			Lse = new Exchange
 			{
 				Name = "LSE",
-				RusName = "Лондонская фондовая биржа",
-				EngName = "London Stock Exchange",
+				FullNameLoc = LocalizedStrings.LondonStockExchangeKey,
 				CountryCode = CountryCodes.GB,
 			};
 
 			Lme = new Exchange
 			{
 				Name = "LME",
-				RusName = "Лондонская биржа металлов",
-				EngName = "London Metal Exchange",
+				FullNameLoc = LocalizedStrings.LondonMetalExchangeKey,
 				CountryCode = CountryCodes.GB,
 			};
 
 			Tse = new Exchange
 			{
 				Name = "TSE",
-				RusName = "Токийская фондовая биржа",
-				EngName = "Tokyo Stock Exchange",
+				FullNameLoc = LocalizedStrings.TokyoStockExchangeKey,
 				CountryCode = CountryCodes.JP,
 			};
 
 			Hkex = new Exchange
 			{
 				Name = "HKEX",
-				RusName = "Гонконгская фондовая биржа",
-				EngName = "Hong Kong Stock Exchange",
+				FullNameLoc = LocalizedStrings.HongKongStockExchangeKey,
 				CountryCode = CountryCodes.HK,
 			};
 
 			Hkfe = new Exchange
 			{
 				Name = "HKFE",
-				RusName = "Гонконгская фьючерсная биржа",
-				EngName = "Hong Kong Futures Exchange",
+				FullNameLoc = LocalizedStrings.HongKongFuturesExchangeKey,
 				CountryCode = CountryCodes.HK,
 			};
 
 			Sse = new Exchange
 			{
 				Name = "SSE",
-				RusName = "Шанхаская фондовая биржа",
-				EngName = "Shanghai Stock Exchange",
+				FullNameLoc = LocalizedStrings.ShanghaiStockExchangeKey,
 				CountryCode = CountryCodes.CN,
 			};
 
 			Szse = new Exchange
 			{
 				Name = "SZSE",
-				RusName = "Шэньчжэньская фондовая биржа",
-				EngName = "Shenzhen Stock Exchange",
+				FullNameLoc = LocalizedStrings.ShenzhenStockExchangeKey,
 				CountryCode = CountryCodes.CN,
 			};
 
 			Tsec = new Exchange
 			{
 				Name = "TSEC",
-				RusName = "Тайваньская фондовая биржа",
-				EngName = "Taiwan Stock Exchange",
+				FullNameLoc = LocalizedStrings.TaiwanStockExchangeKey,
 				CountryCode = CountryCodes.TW,
 			};
 
 			Sgx = new Exchange
 			{
 				Name = "SGX",
-				RusName = "Сингапурская биржа",
-				EngName = "Singapore Exchange",
+				FullNameLoc = LocalizedStrings.SingaporeExchangeKey,
 				CountryCode = CountryCodes.SG,
 			};
 
 			Pse = new Exchange
 			{
 				Name = "PSE",
-				RusName = "Филиппинская фондовая биржа",
-				EngName = "Philippine Stock Exchange",
+				FullNameLoc = LocalizedStrings.PhilippineStockExchangeKey,
 				CountryCode = CountryCodes.PH,
 			};
 
 			Klse = new Exchange
 			{
 				Name = "MYX",
-				RusName = "Малайзийская биржа",
-				EngName = "Bursa Malaysia",
+				FullNameLoc = LocalizedStrings.BursaMalaysiaKey,
 				CountryCode = CountryCodes.MY,
 			};
 
 			Idx = new Exchange
 			{
 				Name = "IDX",
-				RusName = "Индонезийская фондовая биржа",
-				EngName = "Indonesia Stock Exchange",
+				FullNameLoc = LocalizedStrings.IndonesiaStockExchangeKey,
 				CountryCode = CountryCodes.ID,
 			};
 
 			Set = new Exchange
 			{
 				Name = "SET",
-				RusName = "Фондовая биржа Таиланда",
-				EngName = "Stock Exchange of Thailand",
+				FullNameLoc = LocalizedStrings.StockExchangeofThailandKey,
 				CountryCode = CountryCodes.TH,
 			};
 
 			Bse = new Exchange
 			{
 				Name = "BSE",
-				RusName = "Бомбейская фондовая биржа",
-				EngName = "Bombay Stock Exchange",
+				FullNameLoc = LocalizedStrings.BombayStockExchangeKey,
 				CountryCode = CountryCodes.IN,
 			};
 
 			Nse = new Exchange
 			{
 				Name = "NSE",
-				RusName = "Национальная фондовая биржа Индии",
-				EngName = "National Stock Exchange of India",
+				FullNameLoc = LocalizedStrings.NationalStockExchangeofIndiaKey,
 				CountryCode = CountryCodes.IN,
 			};
 
 			Cse = new Exchange
 			{
 				Name = "CSE",
-				RusName = "Колумбийская фондовая биржа",
-				EngName = "Colombo Stock Exchange",
+				FullNameLoc = LocalizedStrings.ColomboStockExchangeKey,
 				CountryCode = CountryCodes.CO,
 			};
 
 			Krx = new Exchange
 			{
 				Name = "KRX",
-				RusName = "Корейская биржа",
-				EngName = "Korea Exchange",
+				FullNameLoc = LocalizedStrings.KoreaExchangeKey,
 				CountryCode = CountryCodes.KR,
 			};
 
 			Asx = new Exchange
 			{
 				Name = "ASX",
-				RusName = "Австралийская фондовая биржа",
-				EngName = "Australian Securities Exchange",
+				FullNameLoc = LocalizedStrings.AustralianSecuritiesExchangeKey,
 				CountryCode = CountryCodes.AU,
 			};
 
 			Nzx = new Exchange
 			{
 				Name = "NZSX",
-				RusName = "Новозеландская биржа",
-				EngName = "New Zealand Exchange",
+				FullNameLoc = LocalizedStrings.NewZealandExchangeKey,
 				CountryCode = CountryCodes.NZ,
 			};
 
 			Tase = new Exchange
 			{
 				Name = "TASE",
-				RusName = "Тель-Авивская фондовая биржа",
-				EngName = "Tel Aviv Stock Exchange",
+				FullNameLoc = LocalizedStrings.TelAvivStockExchangeKey,
 				CountryCode = CountryCodes.IL,
 			};
 
 			Fwb = new Exchange
 			{
 				Name = "FWB",
-				RusName = "Франкфуртская фондовая биржа",
-				EngName = "Frankfurt Stock Exchange",
+				FullNameLoc = LocalizedStrings.FrankfurtStockExchangeKey,
 				CountryCode = CountryCodes.DE,
 			};
 
 			Mse = new Exchange
 			{
 				Name = "MSE",
-				RusName = "Мадридская фондовая биржа",
-				EngName = "Madrid Stock Exchange",
+				FullNameLoc = LocalizedStrings.MadridStockExchangeKey,
 				CountryCode = CountryCodes.ES,
 			};
 
 			Swx = new Exchange
 			{
 				Name = "SWX",
-				RusName = "Швейцарская биржа",
-				EngName = "Swiss Exchange",
+				FullNameLoc = LocalizedStrings.SwissExchangeKey,
 				CountryCode = CountryCodes.CH,
 			};
 
 			Jse = new Exchange
 			{
 				Name = "JSE",
-				RusName = "Йоханнесбургская фондовая биржа",
-				EngName = "Johannesburg Stock Exchange",
+				FullNameLoc = LocalizedStrings.JohannesburgStockExchangeKey,
 				CountryCode = CountryCodes.ZA,
 			};
 
 			Lmax = new Exchange
 			{
 				Name = "LMAX",
-				RusName = "Форекс брокер LMAX",
-				EngName = "LMAX",
+				FullNameLoc = LocalizedStrings.LmaxKey,
 				CountryCode = CountryCodes.GB,
 			};
 
 			DukasCopy = new Exchange
 			{
 				Name = "DUKAS",
-				RusName = "Форекс брокер DukasCopy",
-				EngName = "DukasCopy",
+				FullNameLoc = LocalizedStrings.DukasCopyKey,
 				CountryCode = CountryCodes.CH,
 			};
 
 			GainCapital = new Exchange
 			{
 				Name = "GAIN",
-				RusName = "Форекс брокер GAIN Capital",
-				EngName = "GAIN Capital",
+				FullNameLoc = LocalizedStrings.GainCapitalKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			MBTrading = new Exchange
 			{
 				Name = "MBT",
-				RusName = "Форекс брокер MB Trading",
-				EngName = "MB Trading",
+				FullNameLoc = LocalizedStrings.MBTradingKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			TrueFX = new Exchange
 			{
 				Name = "TRUEFX",
-				RusName = "Форекс брокер TrueFX",
-				EngName = "TrueFX",
+				FullNameLoc = LocalizedStrings.TrueFXKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			Cfh = new Exchange
 			{
 				Name = "CFH",
-				RusName = "CFH",
-				EngName = "CFH",
+				FullNameLoc = LocalizedStrings.CFHKey,
 				CountryCode = CountryCodes.GB,
 			};
 
 			Ond = new Exchange
 			{
 				Name = "OANDA",
-				RusName = "Форекс брокер OANDA",
-				EngName = "OANDA",
+				FullNameLoc = LocalizedStrings.OandaKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			Integral = new Exchange
 			{
 				Name = "INTGRL",
-				RusName = "Integral",
-				EngName = "Integral",
+				FullNameLoc = LocalizedStrings.IntegralKey,
 				CountryCode = CountryCodes.US,
 			};
 
 			Btce = new Exchange
 			{
 				Name = "BTCE",
-				RusName = "BTCE",
-				EngName = "BTCE",
+				FullNameLoc = LocalizedStrings.BtceKey,
 				CountryCode = CountryCodes.RU,
 			};
 
 			BitStamp = new Exchange
 			{
 				Name = "BITSTAMP",
-				RusName = "BitStamp",
-				EngName = "BitStamp",
+				FullNameLoc = LocalizedStrings.BitStampKey,
 				CountryCode = CountryCodes.GB,
 			};
 
 			BtcChina = new Exchange
 			{
 				Name = "BTCCHINA",
-				RusName = "BTCChina",
-				EngName = "BTCChina",
+				FullNameLoc = LocalizedStrings.BtcChinaKey,
 				CountryCode = CountryCodes.CN,
 			};
 
 			Icbit = new Exchange
 			{
 				Name = "ICBIT",
-				RusName = "iCBIT",
-				EngName = "iCBIT",
+				FullNameLoc = LocalizedStrings.IcBitKey,
 				CountryCode = CountryCodes.RU,
 			};
 		}
@@ -664,8 +617,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Currenex { get; } = new Exchange
 		{
 			Name = "CURRENEX",
-			EngName = "Currenex",
-			RusName = "Currenex",
+			FullNameLoc = LocalizedStrings.CurrenexKey,
 			CountryCode = CountryCodes.US,
 		};
 
@@ -675,8 +627,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Fxcm { get; } = new Exchange
 		{
 			Name = "FXCM",
-			EngName = "FXCM",
-			RusName = "FXCM",
+			FullNameLoc = LocalizedStrings.FxcmKey,
 			CountryCode = CountryCodes.US,
 		};
 
@@ -686,8 +637,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Poloniex { get; } = new Exchange
 		{
 			Name = "PLNX",
-			EngName = "Poloniex",
-			RusName = "Poloniex",
+			FullNameLoc = LocalizedStrings.PoloniexKey,
 		};
 
 		/// <summary>
@@ -696,8 +646,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Kraken { get; } = new Exchange
 		{
 			Name = "KRKN",
-			EngName = "Kraken",
-			RusName = "Kraken",
+			FullNameLoc = LocalizedStrings.KrakenKey,
 		};
 
 		/// <summary>
@@ -706,8 +655,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Bittrex { get; } = new Exchange
 		{
 			Name = "BTRX",
-			EngName = "Bittrex",
-			RusName = "Bittrex",
+			FullNameLoc = LocalizedStrings.BittrexKey,
 		};
 
 		/// <summary>
@@ -716,8 +664,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Bitfinex { get; } = new Exchange
 		{
 			Name = "BTFX",
-			EngName = "Bitfinex",
-			RusName = "Bitfinex",
+			FullNameLoc = LocalizedStrings.BitfinexKey,
 		};
 
 		/// <summary>
@@ -726,8 +673,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Coinbase { get; } = new Exchange
 		{
 			Name = "CNBS",
-			EngName = "Coinbase",
-			RusName = "Coinbase",
+			FullNameLoc = LocalizedStrings.CoinbaseKey,
 		};
 
 		/// <summary>
@@ -736,8 +682,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Gdax { get; } = new Exchange
 		{
 			Name = "GDAX",
-			EngName = "GDAX",
-			RusName = "GDAX",
+			FullNameLoc = LocalizedStrings.GdaxKey,
 		};
 
 		/// <summary>
@@ -746,8 +691,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Bithumb { get; } = new Exchange
 		{
 			Name = "BTHB",
-			EngName = "Bithumb",
-			RusName = "Bithumb",
+			FullNameLoc = LocalizedStrings.BithumbKey,
 		};
 
 		/// <summary>
@@ -756,8 +700,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange HitBtc { get; } = new Exchange
 		{
 			Name = "HTBTC",
-			EngName = "HitBTC",
-			RusName = "HitBTC",
+			FullNameLoc = LocalizedStrings.HitBtcKey,
 		};
 
 		/// <summary>
@@ -766,8 +709,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange OkCoin { get; } = new Exchange
 		{
 			Name = "OKCN",
-			EngName = "OKCoin",
-			RusName = "OKCoin",
+			FullNameLoc = LocalizedStrings.OkcoinKey,
 		};
 
 		/// <summary>
@@ -776,8 +718,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Coincheck { get; } = new Exchange
 		{
 			Name = "CNCK",
-			EngName = "Coincheck",
-			RusName = "Coincheck",
+			FullNameLoc = LocalizedStrings.CoincheckKey,
 		};
 
 		/// <summary>
@@ -786,8 +727,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Binance { get; } = new Exchange
 		{
 			Name = "BNB",
-			EngName = "Binance",
-			RusName = "Binance",
+			FullNameLoc = LocalizedStrings.BinanceKey,
 		};
 
 		/// <summary>
@@ -796,8 +736,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Bitexbook { get; } = new Exchange
 		{
 			Name = "BTXB",
-			EngName = "Bitexbook",
-			RusName = "Bitexbook",
+			FullNameLoc = LocalizedStrings.BitexbookKey,
 		};
 
 		/// <summary>
@@ -806,8 +745,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Bitmex { get; } = new Exchange
 		{
 			Name = "BMEX",
-			EngName = "BitMEX",
-			RusName = "BitMEX",
+			FullNameLoc = LocalizedStrings.BitmexKey,
 		};
 
 		/// <summary>
@@ -816,8 +754,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Cex { get; } = new Exchange
 		{
 			Name = "CEXIO",
-			EngName = "CEX.IO",
-			RusName = "CEX.IO",
+			FullNameLoc = LocalizedStrings.CexKey,
 		};
 
 		/// <summary>
@@ -826,8 +763,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Cryptopia { get; } = new Exchange
 		{
 			Name = "CRTP",
-			EngName = "Cryptopia",
-			RusName = "Cryptopia",
+			FullNameLoc = LocalizedStrings.CryptopiaKey,
 		};
 
 		/// <summary>
@@ -836,8 +772,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Okex { get; } = new Exchange
 		{
 			Name = "OKEX",
-			EngName = "OKEx",
-			RusName = "OKEx",
+			FullNameLoc = LocalizedStrings.OkexKey,
 		};
 
 		/// <summary>
@@ -846,8 +781,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Yobit { get; } = new Exchange
 		{
 			Name = "YBIT",
-			EngName = "YoBit",
-			RusName = "YoBit",
+			FullNameLoc = LocalizedStrings.YobitKey,
 		};
 
 		/// <summary>
@@ -856,8 +790,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange CoinExchange { get; } = new Exchange
 		{
 			Name = "CNEX",
-			EngName = "CoinExchange",
-			RusName = "CoinExchange",
+			FullNameLoc = LocalizedStrings.CoinExchangeKey,
 		};
 
 		/// <summary>
@@ -866,8 +799,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange LiveCoin { get; } = new Exchange
 		{
 			Name = "LVCN",
-			EngName = "Livecoin",
-			RusName = "Livecoin",
+			FullNameLoc = LocalizedStrings.LiveCoinKey,
 		};
 
 		/// <summary>
@@ -876,8 +808,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Exmo { get; } = new Exchange
 		{
 			Name = "EXMO",
-			EngName = "Exmo",
-			RusName = "Exmo",
+			FullNameLoc = LocalizedStrings.ExmoKey,
 		};
 
 		/// <summary>
@@ -886,8 +817,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Deribit { get; } = new Exchange
 		{
 			Name = "DRBT",
-			EngName = "Deribit",
-			RusName = "Deribit",
+			FullNameLoc = LocalizedStrings.DeribitKey,
 		};
 
 		/// <summary>
@@ -896,8 +826,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Kucoin { get; } = new Exchange
 		{
 			Name = "KUCN",
-			EngName = "Kucoin",
-			RusName = "Kucoin",
+			FullNameLoc = LocalizedStrings.KucoinKey,
 		};
 
 		/// <summary>
@@ -906,8 +835,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Liqui { get; } = new Exchange
 		{
 			Name = "LIQI",
-			EngName = "Liqui",
-			RusName = "Liqui",
+			FullNameLoc = LocalizedStrings.LiquiKey,
 		};
 
 		/// <summary>
@@ -916,8 +844,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Huobi { get; } = new Exchange
 		{
 			Name = "HUBI",
-			EngName = "Huobi",
-			RusName = "Huobi",
+			FullNameLoc = LocalizedStrings.HuobiKey,
 		};
 
 		/// <summary>
@@ -926,8 +853,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange IEX { get; } = new Exchange
 		{
 			Name = "IEX",
-			EngName = "IEX",
-			RusName = "IEX",
+			FullNameLoc = LocalizedStrings.IEXKey,
 			CountryCode = CountryCodes.US,
 		};
 
@@ -937,8 +863,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange AlphaVantage { get; } = new Exchange
 		{
 			Name = "ALVG",
-			EngName = "AlphaVantage",
-			RusName = "AlphaVantage",
+			FullNameLoc = LocalizedStrings.AlphaVantageKey,
 			CountryCode = CountryCodes.US,
 		};
 
@@ -948,8 +873,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Bitbank { get; } = new Exchange
 		{
 			Name = "BTBN",
-			EngName = "Bitbank",
-			RusName = "Bitbank",
+			FullNameLoc = LocalizedStrings.BitbankKey,
 		};
 
 		/// <summary>
@@ -958,8 +882,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Zaif { get; } = new Exchange
 		{
 			Name = "ZAIF",
-			EngName = "Zaif",
-			RusName = "Zaif",
+			FullNameLoc = LocalizedStrings.ZaifKey,
 		};
 
 		/// <summary>
@@ -968,8 +891,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Quoinex { get; } = new Exchange
 		{
 			Name = "QINX",
-			EngName = "QUOINEX",
-			RusName = "QUOINEX",
+			FullNameLoc = LocalizedStrings.QuoinexKey,
 		};
 
 		/// <summary>
@@ -978,8 +900,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Wiki { get; } = new Exchange
 		{
 			Name = "WIKI",
-			EngName = "WIKI",
-			RusName = "WIKI",
+			FullNameLoc = LocalizedStrings.WIKIKey,
 		};
 
 		/// <summary>
@@ -988,8 +909,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Idax { get; } = new Exchange
 		{
 			Name = "IDAX",
-			EngName = "IDAX",
-			RusName = "IDAX",
+			FullNameLoc = LocalizedStrings.IdaxKey,
 		};
 
 		/// <summary>
@@ -998,8 +918,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Digifinex { get; } = new Exchange
 		{
 			Name = "DGFX",
-			EngName = "DigiFinex",
-			RusName = "DigiFinex",
+			FullNameLoc = LocalizedStrings.DigifinexKey,
 		};
 
 		/// <summary>
@@ -1008,8 +927,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange TradeOgre { get; } = new Exchange
 		{
 			Name = "TOGR",
-			EngName = "TradeOgre",
-			RusName = "TradeOgre",
+			FullNameLoc = LocalizedStrings.TradeOgreKey,
 		};
 
 		/// <summary>
@@ -1018,8 +936,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange CoinCap { get; } = new Exchange
 		{
 			Name = "CNCP",
-			EngName = "CoinCap",
-			RusName = "CoinCap",
+			FullNameLoc = LocalizedStrings.CoinCapKey,
 		};
 
 		/// <summary>
@@ -1028,8 +945,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Coinigy { get; } = new Exchange
 		{
 			Name = "CNGY",
-			EngName = "Coinigy",
-			RusName = "Coinigy",
+			FullNameLoc = LocalizedStrings.CoinigyKey,
 		};
 
 		/// <summary>
@@ -1038,8 +954,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange LBank { get; } = new Exchange
 		{
 			Name = "LBNK",
-			EngName = "LBank",
-			RusName = "LBank",
+			FullNameLoc = LocalizedStrings.LBankKey,
 		};
 
 		/// <summary>
@@ -1048,8 +963,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange BitMax { get; } = new Exchange
 		{
 			Name = "BMAX",
-			EngName = "BitMax",
-			RusName = "BitMax",
+			FullNameLoc = LocalizedStrings.BitMaxKey,
 		};
 
 		/// <summary>
@@ -1058,8 +972,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange BW { get; } = new Exchange
 		{
 			Name = "BW",
-			EngName = "BW",
-			RusName = "BW",
+			FullNameLoc = LocalizedStrings.BWKey,
 		};
 
 		/// <summary>
@@ -1068,8 +981,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Bibox { get; } = new Exchange
 		{
 			Name = "BBOX",
-			EngName = "Bibox",
-			RusName = "Bibox",
+			FullNameLoc = LocalizedStrings.BiboxKey,
 		};
 
 		/// <summary>
@@ -1078,8 +990,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange CoinBene { get; } = new Exchange
 		{
 			Name = "CNBN",
-			EngName = "CoinBene",
-			RusName = "CoinBene",
+			FullNameLoc = LocalizedStrings.CoinBeneKey,
 		};
 
 		/// <summary>
@@ -1088,8 +999,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange BitZ { get; } = new Exchange
 		{
 			Name = "BITZ",
-			EngName = "BitZ",
-			RusName = "BitZ",
+			FullNameLoc = LocalizedStrings.BitZKey,
 		};
 
 		/// <summary>
@@ -1098,8 +1008,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange ZB { get; } = new Exchange
 		{
 			Name = "ZB",
-			EngName = "ZB",
-			RusName = "ZB",
+			FullNameLoc = LocalizedStrings.ZBKey,
 		};
 
 		/// <summary>
@@ -1108,8 +1017,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Tradier { get; } = new Exchange
 		{
 			Name = "TRDR",
-			EngName = "Tradier",
-			RusName = "Tradier",
+			FullNameLoc = LocalizedStrings.TradierKey,
 		};
 
 		/// <summary>
@@ -1118,8 +1026,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange SwSq { get; } = new Exchange
 		{
 			Name = "SWSQ",
-			EngName = "SwissQuote",
-			RusName = "SwissQuote",
+			FullNameLoc = LocalizedStrings.SwissQuoteKey,
 		};
 
 		/// <summary>
@@ -1128,8 +1035,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange StockSharp { get; } = new Exchange
 		{
 			Name = "STSH",
-			EngName = "StockSharp",
-			RusName = "StockSharp",
+			FullNameLoc = LocalizedStrings.StockSharpKey,
 		};
 
 		/// <summary>
@@ -1138,8 +1044,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Upbit { get; } = new Exchange
 		{
 			Name = "UPBT",
-			EngName = "Upbit",
-			RusName = "Upbit",
+			FullNameLoc = LocalizedStrings.UpbitKey,
 		};
 	}
 }

@@ -116,10 +116,21 @@ namespace StockSharp.Algo.Storages.Csv
 				{
 					Name = reader.ReadString(),
 					CountryCode = reader.ReadNullableEnum<CountryCodes>(),
-					EngName = reader.ReadString(),
-					RusName = reader.ReadString(),
+					//EngName = reader.ReadString(),
+					//RusName = reader.ReadString(),
 					//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 				};
+
+				var engName = reader.ReadString();
+
+				reader.Skip();
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					board.FullNameLoc = reader.ReadString();
+				else
+				{
+					board.FullNameLoc = LocalizedStrings.LocalizationManager.GetResourceId(engName) ?? engName;
+				}
 
 				return board;
 			}
@@ -130,9 +141,10 @@ namespace StockSharp.Algo.Storages.Csv
 				{
 					data.Name,
 					data.CountryCode.To<string>(),
-					data.EngName,
-					data.RusName,
-					//Serialize(data.ExtensionInfo)
+					string.Empty/*data.EngName*/,
+					string.Empty/*data.RusName*/,
+					//Serialize(data.ExtensionInfo),
+					data.FullNameLoc,
 				});
 			}
 		}

@@ -399,7 +399,7 @@ namespace StockSharp.Algo.Storages.Remote
 			var exchanges = ExchangeInfoProvider.Exchanges;
 
 			if (!code.IsEmpty())
-				exchanges = exchanges.Where(e => e.Name.ContainsIgnoreCase(code) || e.RusName.ContainsIgnoreCase(code) || e.EngName.ContainsIgnoreCase(code));
+				exchanges = exchanges.Where(e => e.Name.ContainsIgnoreCase(code) || e.FullName?.ContainsIgnoreCase(code) == true);
 
 			return exchanges.Select(e => e.Name).ToArray();
 		}

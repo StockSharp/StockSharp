@@ -3578,7 +3578,6 @@ XamlStr17;Auto scroll;Автопрокрутка
 XamlStr19;E*TRADE authorization;Авторизация в системе E*TRADE
 XamlStr21;Quik Fix Server address:;Адрес Quik Fix Server:
 XamlStr23;Active;Активные
-XamlStr27;English name:;Англоязычное название:
 XamlStr28;Associations;Ассоциации
 XamlStr29;Associations for field '{0}';Ассоциации для поля '{0}'
 XamlStr35;Bid (time);Бид (время)
@@ -3962,7 +3961,6 @@ XamlStr612;Optimization results;Результаты оптимизации
 XamlStr613;Risk;Риски
 XamlStr614;Risk management;Риск-менеджмент
 XamlStr616;Parent room:;Родительская комната:
-XamlStr619;Russian name:;Русскоязычное название:
 XamlStr620;Manual selection mode when the application starts;Ручной выбор режима при запуске приложения
 XamlStr623;Market order type;Рыночный тип заявок
 XamlStr624;From;С
@@ -5029,6 +5027,49 @@ NOT;NOT;NOT
 ValueForWasNotPassed;Value for '{0}' wasn't passed.;Значение для '{0}' не было передано.
 SovaCapital;Sova Capital;Sova Capital
 Etf;ETF;ETF
+TestExchange;Test Exchange;Тестовая биржа
+MoscowExchange;Moscow Exchange;Московская биржа
+SaintPetersburgExchange;Saint-Petersburg Exchange;Санкт-Петербургская биржа
+UkrainExchange;Ukrain Exchange;Украинская биржа
+AmericanStockExchange;American Stock Exchange;Американская фондовая биржа
+ChicagoMercantileExchange;Chicago Mercantile Exchange;Чикагская товарная биржа
+ChicagoBoardofTrade;Chicago Board of Trade;Чикагская торговая палата
+ChicagoClimateExchange;Chicago Climate Exchange;Чикагская климатическая биржа
+NewYorkMercantileExchange;New York Mercantile Exchange;Нью-Йоркская товарная биржа
+NewYorkStockExchange;New York Stock Exchange;Нью-Йоркская фондовая биржа
+NASDAQ;NASDAQ;Насдак
+NasdaqLiffeMarkets;Nasdaq-Liffe Markets;Насдак LM
+LondonStockExchange;London Stock Exchange;Лондонская фондовая биржа
+LondonMetalExchange;London Metal Exchange;Лондонская биржа металлов
+TokyoStockExchange;Tokyo Stock Exchange;Токийская фондовая биржа
+HongKongStockExchange;Hong Kong Stock Exchange;Гонконгская фондовая биржа
+HongKongFuturesExchange;Hong Kong Futures Exchange;Гонконгская фьючерсная биржа
+ShanghaiStockExchange;Shanghai Stock Exchange;Шанхаская фондовая биржа
+ShenzhenStockExchange;Shenzhen Stock Exchange;Шэньчжэньская фондовая биржа
+TorontoStockExchange;Toronto Stock Exchange;Фондовая биржа Торонто
+FrankfurtStockExchange;Frankfurt Stock Exchange;Франкфуртская фондовая биржа
+AustralianSecuritiesExchange;Australian Securities Exchange;Австралийская фондовая биржа
+NewZealandExchange;New Zealand Exchange;Новозеландская биржа
+BombayStockExchange;Bombay Stock Exchange;Бомбейская фондовая биржа
+NationalStockExchangeofIndia;National Stock Exchange of India;Национальная фондовая биржа Индии
+SwissExchange;Swiss Exchange;Швейцарская биржа
+KoreaExchange;Korea Exchange;Корейская биржа
+MadridStockExchange;Madrid Stock Exchange;Мадридская фондовая биржа
+JohannesburgStockExchange;Johannesburg Stock Exchange;Йоханнесбургская фондовая биржа
+SingaporeExchange;Singapore Exchange;Сингапурская биржа
+TaiwanStockExchange;Taiwan Stock Exchange;Тайваньская фондовая биржа
+PhilippineStockExchange;Philippine Stock Exchange;Филиппинская фондовая биржа
+BursaMalaysia;Bursa Malaysia;Малайзийская биржа
+IndonesiaStockExchange;Indonesia Stock Exchange;Индонезийская фондовая биржа
+StockExchangeofThailand;Stock Exchange of Thailand;Фондовая биржа Таиланда
+ColomboStockExchange;Colombo Stock Exchange;Колумбийская фондовая биржа
+TelAvivStockExchange;Tel Aviv Stock Exchange;Тель-Авивская фондовая биржа
+Integral;Integral;Integral
+BtcChina;BTCChina;BTCChina
+IcBit;iCBIT;iCBIT
+Currenex;Currenex;Currenex
+WIKI;WIKI;WIKI
+StockSharp;StockSharp;StockSharp
 Upbit;Upbit;Upbit
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
@@ -6239,7 +6280,6 @@ DocStr1258;Base risk-rule;Базовое риск-правило
 DocStr1259;Types of authorization;Виды авторизаций
 DocStr1260;Anonymous;Анонимный
 DocStr1261;Windows authorization;Windows авторизация
-DocStr1262;StockSharp;StockSharp
 DocStr1263;The interface, describing the storage of market data (ticks, order books etc.);Интерфейс, описывающий хранилище маркет-данных (тики, стаканы и т.д.)
 DocStr1264;To save market data in storage;Сохранить маркет-данные в хранилище
 DocStr1265;To delete market data from storage;Удалить маркет-данные из хранилища

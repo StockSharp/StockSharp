@@ -14118,24 +14118,14 @@ namespace StockSharp.Localization
 		public static string Str1461 => GetString(Str1461Key);
 
 		/// <summary>
-		/// To save data, enter the Russian name of the stock exchange.
+		/// To save data, enter the full name of the stock exchange.
 		/// </summary>
 		public const string Str1462Key = nameof(Str1462);
 
 		/// <summary>
-		/// To save data, enter the Russian name of the stock exchange.
+		/// To save data, enter the full name of the stock exchange.
 		/// </summary>
 		public static string Str1462 => GetString(Str1462Key);
-
-		/// <summary>
-		/// To save data, enter the English name of the stock exchange.
-		/// </summary>
-		public const string Str1463Key = nameof(Str1463);
-
-		/// <summary>
-		/// To save data, enter the English name of the stock exchange.
-		/// </summary>
-		public static string Str1463 => GetString(Str1463Key);
 
 		/// <summary>
 		/// To save data, enter the country of the stock exchange.
@@ -35698,16 +35688,6 @@ namespace StockSharp.Localization
 		public static string XamlStr23 => GetString(XamlStr23Key);
 
 		/// <summary>
-		/// English name:
-		/// </summary>
-		public const string XamlStr27Key = nameof(XamlStr27);
-
-		/// <summary>
-		/// English name:
-		/// </summary>
-		public static string XamlStr27 => GetString(XamlStr27Key);
-
-		/// <summary>
 		/// Associations
 		/// </summary>
 		public const string XamlStr28Key = nameof(XamlStr28);
@@ -39496,16 +39476,6 @@ namespace StockSharp.Localization
 		/// Parent room:
 		/// </summary>
 		public static string XamlStr616 => GetString(XamlStr616Key);
-
-		/// <summary>
-		/// Russian name:
-		/// </summary>
-		public const string XamlStr619Key = nameof(XamlStr619);
-
-		/// <summary>
-		/// Russian name:
-		/// </summary>
-		public static string XamlStr619 => GetString(XamlStr619Key);
 
 		/// <summary>
 		/// Manual selection mode when the application starts
@@ -49966,6 +49936,436 @@ namespace StockSharp.Localization
 		/// ETF
 		/// </summary>
 		public static string Etf => GetString(EtfKey);
+
+		/// <summary>
+		/// Test Exchange
+		/// </summary>
+		public const string TestExchangeKey = nameof(TestExchange);
+
+		/// <summary>
+		/// Test Exchange
+		/// </summary>
+		public static string TestExchange => GetString(TestExchangeKey);
+
+		/// <summary>
+		/// Moscow Exchange
+		/// </summary>
+		public const string MoscowExchangeKey = nameof(MoscowExchange);
+
+		/// <summary>
+		/// Moscow Exchange
+		/// </summary>
+		public static string MoscowExchange => GetString(MoscowExchangeKey);
+
+		/// <summary>
+		/// Saint-Petersburg Exchange
+		/// </summary>
+		public const string SaintPetersburgExchangeKey = nameof(SaintPetersburgExchange);
+
+		/// <summary>
+		/// Saint-Petersburg Exchange
+		/// </summary>
+		public static string SaintPetersburgExchange => GetString(SaintPetersburgExchangeKey);
+
+		/// <summary>
+		/// Ukrain Exchange
+		/// </summary>
+		public const string UkrainExchangeKey = nameof(UkrainExchange);
+
+		/// <summary>
+		/// Ukrain Exchange
+		/// </summary>
+		public static string UkrainExchange => GetString(UkrainExchangeKey);
+
+		/// <summary>
+		/// American Stock Exchange
+		/// </summary>
+		public const string AmericanStockExchangeKey = nameof(AmericanStockExchange);
+
+		/// <summary>
+		/// American Stock Exchange
+		/// </summary>
+		public static string AmericanStockExchange => GetString(AmericanStockExchangeKey);
+
+		/// <summary>
+		/// Chicago Mercantile Exchange
+		/// </summary>
+		public const string ChicagoMercantileExchangeKey = nameof(ChicagoMercantileExchange);
+
+		/// <summary>
+		/// Chicago Mercantile Exchange
+		/// </summary>
+		public static string ChicagoMercantileExchange => GetString(ChicagoMercantileExchangeKey);
+
+		/// <summary>
+		/// Chicago Board of Trade
+		/// </summary>
+		public const string ChicagoBoardofTradeKey = nameof(ChicagoBoardofTrade);
+
+		/// <summary>
+		/// Chicago Board of Trade
+		/// </summary>
+		public static string ChicagoBoardofTrade => GetString(ChicagoBoardofTradeKey);
+
+		/// <summary>
+		/// Chicago Climate Exchange
+		/// </summary>
+		public const string ChicagoClimateExchangeKey = nameof(ChicagoClimateExchange);
+
+		/// <summary>
+		/// Chicago Climate Exchange
+		/// </summary>
+		public static string ChicagoClimateExchange => GetString(ChicagoClimateExchangeKey);
+
+		/// <summary>
+		/// New York Mercantile Exchange
+		/// </summary>
+		public const string NewYorkMercantileExchangeKey = nameof(NewYorkMercantileExchange);
+
+		/// <summary>
+		/// New York Mercantile Exchange
+		/// </summary>
+		public static string NewYorkMercantileExchange => GetString(NewYorkMercantileExchangeKey);
+
+		/// <summary>
+		/// New York Stock Exchange
+		/// </summary>
+		public const string NewYorkStockExchangeKey = nameof(NewYorkStockExchange);
+
+		/// <summary>
+		/// New York Stock Exchange
+		/// </summary>
+		public static string NewYorkStockExchange => GetString(NewYorkStockExchangeKey);
+
+		/// <summary>
+		/// NASDAQ
+		/// </summary>
+		public const string NASDAQKey = nameof(NASDAQ);
+
+		/// <summary>
+		/// NASDAQ
+		/// </summary>
+		public static string NASDAQ => GetString(NASDAQKey);
+
+		/// <summary>
+		/// Nasdaq-Liffe Markets
+		/// </summary>
+		public const string NasdaqLiffeMarketsKey = nameof(NasdaqLiffeMarkets);
+
+		/// <summary>
+		/// Nasdaq-Liffe Markets
+		/// </summary>
+		public static string NasdaqLiffeMarkets => GetString(NasdaqLiffeMarketsKey);
+
+		/// <summary>
+		/// London Stock Exchange
+		/// </summary>
+		public const string LondonStockExchangeKey = nameof(LondonStockExchange);
+
+		/// <summary>
+		/// London Stock Exchange
+		/// </summary>
+		public static string LondonStockExchange => GetString(LondonStockExchangeKey);
+
+		/// <summary>
+		/// London Metal Exchange
+		/// </summary>
+		public const string LondonMetalExchangeKey = nameof(LondonMetalExchange);
+
+		/// <summary>
+		/// London Metal Exchange
+		/// </summary>
+		public static string LondonMetalExchange => GetString(LondonMetalExchangeKey);
+
+		/// <summary>
+		/// Tokyo Stock Exchange
+		/// </summary>
+		public const string TokyoStockExchangeKey = nameof(TokyoStockExchange);
+
+		/// <summary>
+		/// Tokyo Stock Exchange
+		/// </summary>
+		public static string TokyoStockExchange => GetString(TokyoStockExchangeKey);
+
+		/// <summary>
+		/// Hong Kong Stock Exchange
+		/// </summary>
+		public const string HongKongStockExchangeKey = nameof(HongKongStockExchange);
+
+		/// <summary>
+		/// Hong Kong Stock Exchange
+		/// </summary>
+		public static string HongKongStockExchange => GetString(HongKongStockExchangeKey);
+
+		/// <summary>
+		/// Hong Kong Futures Exchange
+		/// </summary>
+		public const string HongKongFuturesExchangeKey = nameof(HongKongFuturesExchange);
+
+		/// <summary>
+		/// Hong Kong Futures Exchange
+		/// </summary>
+		public static string HongKongFuturesExchange => GetString(HongKongFuturesExchangeKey);
+
+		/// <summary>
+		/// Shanghai Stock Exchange
+		/// </summary>
+		public const string ShanghaiStockExchangeKey = nameof(ShanghaiStockExchange);
+
+		/// <summary>
+		/// Shanghai Stock Exchange
+		/// </summary>
+		public static string ShanghaiStockExchange => GetString(ShanghaiStockExchangeKey);
+
+		/// <summary>
+		/// Shenzhen Stock Exchange
+		/// </summary>
+		public const string ShenzhenStockExchangeKey = nameof(ShenzhenStockExchange);
+
+		/// <summary>
+		/// Shenzhen Stock Exchange
+		/// </summary>
+		public static string ShenzhenStockExchange => GetString(ShenzhenStockExchangeKey);
+
+		/// <summary>
+		/// Toronto Stock Exchange
+		/// </summary>
+		public const string TorontoStockExchangeKey = nameof(TorontoStockExchange);
+
+		/// <summary>
+		/// Toronto Stock Exchange
+		/// </summary>
+		public static string TorontoStockExchange => GetString(TorontoStockExchangeKey);
+
+		/// <summary>
+		/// Frankfurt Stock Exchange
+		/// </summary>
+		public const string FrankfurtStockExchangeKey = nameof(FrankfurtStockExchange);
+
+		/// <summary>
+		/// Frankfurt Stock Exchange
+		/// </summary>
+		public static string FrankfurtStockExchange => GetString(FrankfurtStockExchangeKey);
+
+		/// <summary>
+		/// Australian Securities Exchange
+		/// </summary>
+		public const string AustralianSecuritiesExchangeKey = nameof(AustralianSecuritiesExchange);
+
+		/// <summary>
+		/// Australian Securities Exchange
+		/// </summary>
+		public static string AustralianSecuritiesExchange => GetString(AustralianSecuritiesExchangeKey);
+
+		/// <summary>
+		/// New Zealand Exchange
+		/// </summary>
+		public const string NewZealandExchangeKey = nameof(NewZealandExchange);
+
+		/// <summary>
+		/// New Zealand Exchange
+		/// </summary>
+		public static string NewZealandExchange => GetString(NewZealandExchangeKey);
+
+		/// <summary>
+		/// Bombay Stock Exchange
+		/// </summary>
+		public const string BombayStockExchangeKey = nameof(BombayStockExchange);
+
+		/// <summary>
+		/// Bombay Stock Exchange
+		/// </summary>
+		public static string BombayStockExchange => GetString(BombayStockExchangeKey);
+
+		/// <summary>
+		/// National Stock Exchange of India
+		/// </summary>
+		public const string NationalStockExchangeofIndiaKey = nameof(NationalStockExchangeofIndia);
+
+		/// <summary>
+		/// National Stock Exchange of India
+		/// </summary>
+		public static string NationalStockExchangeofIndia => GetString(NationalStockExchangeofIndiaKey);
+
+		/// <summary>
+		/// Swiss Exchange
+		/// </summary>
+		public const string SwissExchangeKey = nameof(SwissExchange);
+
+		/// <summary>
+		/// Swiss Exchange
+		/// </summary>
+		public static string SwissExchange => GetString(SwissExchangeKey);
+
+		/// <summary>
+		/// Korea Exchange
+		/// </summary>
+		public const string KoreaExchangeKey = nameof(KoreaExchange);
+
+		/// <summary>
+		/// Korea Exchange
+		/// </summary>
+		public static string KoreaExchange => GetString(KoreaExchangeKey);
+
+		/// <summary>
+		/// Madrid Stock Exchange
+		/// </summary>
+		public const string MadridStockExchangeKey = nameof(MadridStockExchange);
+
+		/// <summary>
+		/// Madrid Stock Exchange
+		/// </summary>
+		public static string MadridStockExchange => GetString(MadridStockExchangeKey);
+
+		/// <summary>
+		/// Johannesburg Stock Exchange
+		/// </summary>
+		public const string JohannesburgStockExchangeKey = nameof(JohannesburgStockExchange);
+
+		/// <summary>
+		/// Johannesburg Stock Exchange
+		/// </summary>
+		public static string JohannesburgStockExchange => GetString(JohannesburgStockExchangeKey);
+
+		/// <summary>
+		/// Singapore Exchange
+		/// </summary>
+		public const string SingaporeExchangeKey = nameof(SingaporeExchange);
+
+		/// <summary>
+		/// Singapore Exchange
+		/// </summary>
+		public static string SingaporeExchange => GetString(SingaporeExchangeKey);
+
+		/// <summary>
+		/// Taiwan Stock Exchange
+		/// </summary>
+		public const string TaiwanStockExchangeKey = nameof(TaiwanStockExchange);
+
+		/// <summary>
+		/// Taiwan Stock Exchange
+		/// </summary>
+		public static string TaiwanStockExchange => GetString(TaiwanStockExchangeKey);
+
+		/// <summary>
+		/// Philippine Stock Exchange
+		/// </summary>
+		public const string PhilippineStockExchangeKey = nameof(PhilippineStockExchange);
+
+		/// <summary>
+		/// Philippine Stock Exchange
+		/// </summary>
+		public static string PhilippineStockExchange => GetString(PhilippineStockExchangeKey);
+
+		/// <summary>
+		/// Bursa Malaysia
+		/// </summary>
+		public const string BursaMalaysiaKey = nameof(BursaMalaysia);
+
+		/// <summary>
+		/// Bursa Malaysia
+		/// </summary>
+		public static string BursaMalaysia => GetString(BursaMalaysiaKey);
+
+		/// <summary>
+		/// Indonesia Stock Exchange
+		/// </summary>
+		public const string IndonesiaStockExchangeKey = nameof(IndonesiaStockExchange);
+
+		/// <summary>
+		/// Indonesia Stock Exchange
+		/// </summary>
+		public static string IndonesiaStockExchange => GetString(IndonesiaStockExchangeKey);
+
+		/// <summary>
+		/// Stock Exchange of Thailand
+		/// </summary>
+		public const string StockExchangeofThailandKey = nameof(StockExchangeofThailand);
+
+		/// <summary>
+		/// Stock Exchange of Thailand
+		/// </summary>
+		public static string StockExchangeofThailand => GetString(StockExchangeofThailandKey);
+
+		/// <summary>
+		/// Colombo Stock Exchange
+		/// </summary>
+		public const string ColomboStockExchangeKey = nameof(ColomboStockExchange);
+
+		/// <summary>
+		/// Colombo Stock Exchange
+		/// </summary>
+		public static string ColomboStockExchange => GetString(ColomboStockExchangeKey);
+
+		/// <summary>
+		/// Tel Aviv Stock Exchange
+		/// </summary>
+		public const string TelAvivStockExchangeKey = nameof(TelAvivStockExchange);
+
+		/// <summary>
+		/// Tel Aviv Stock Exchange
+		/// </summary>
+		public static string TelAvivStockExchange => GetString(TelAvivStockExchangeKey);
+
+		/// <summary>
+		/// Integral
+		/// </summary>
+		public const string IntegralKey = nameof(Integral);
+
+		/// <summary>
+		/// Integral
+		/// </summary>
+		public static string Integral => GetString(IntegralKey);
+
+		/// <summary>
+		/// BTCChina
+		/// </summary>
+		public const string BtcChinaKey = nameof(BtcChina);
+
+		/// <summary>
+		/// BTCChina
+		/// </summary>
+		public static string BtcChina => GetString(BtcChinaKey);
+
+		/// <summary>
+		/// iCBIT
+		/// </summary>
+		public const string IcBitKey = nameof(IcBit);
+
+		/// <summary>
+		/// iCBIT
+		/// </summary>
+		public static string IcBit => GetString(IcBitKey);
+
+		/// <summary>
+		/// Currenex
+		/// </summary>
+		public const string CurrenexKey = nameof(Currenex);
+
+		/// <summary>
+		/// Currenex
+		/// </summary>
+		public static string Currenex => GetString(CurrenexKey);
+
+		/// <summary>
+		/// WIKI
+		/// </summary>
+		public const string WIKIKey = nameof(WIKI);
+
+		/// <summary>
+		/// WIKI
+		/// </summary>
+		public static string WIKI => GetString(WIKIKey);
+
+		/// <summary>
+		/// StockSharp
+		/// </summary>
+		public const string StockSharpKey = nameof(StockSharp);
+
+		/// <summary>
+		/// StockSharp
+		/// </summary>
+		public static string StockSharp => GetString(StockSharpKey);
 
 		/// <summary>
 		/// Upbit
