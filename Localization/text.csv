@@ -15692,3 +15692,5 @@ DocStr11334;Information about {0};Информация о {0}
 DocStr11335;Fields related to last trade;Поля, относящиеся к последней сделке
 DocStr11336;Fields related to best bid;Поля, относящиеся к лучшей покупке
 DocStr11337;Fields related to best ask;Поля, относящиеся к лучшей продаже
+DocStr11338;Full name;Полное имя
+DocStr11339;Full name (localization key);Полное имя (ключ локализации)

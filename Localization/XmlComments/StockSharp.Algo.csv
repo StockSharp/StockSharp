@@ -4827,10 +4827,7 @@ M:StockSharp.Algo.Connector.SendOutError(System.Exception)/summary;DocStr756
 M:StockSharp.Algo.Connector.SendOutError(System.Exception)/param/error;DocStr325
 M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)/summary;DocStr80
 M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)/param/message;Str3166
-M:StockSharp.Algo.Connector.GetPortfolio(System.String)/summary;DocStr10879
-M:StockSharp.Algo.Connector.GetPortfolio(System.String)/remarks;DocStr849
-M:StockSharp.Algo.Connector.GetPortfolio(System.String)/param/name;DocStr3127
-M:StockSharp.Algo.Connector.GetPortfolio(System.String)/returns;Portfolio
+M:StockSharp.Algo.Connector.GetPortfolio(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.GetPortfolio(System.String,System.Func{StockSharp.BusinessEntities.Portfolio,System.Boolean},System.Boolean@)/summary;DocStr10879
 M:StockSharp.Algo.Connector.GetPortfolio(System.String,System.Func{StockSharp.BusinessEntities.Portfolio,System.Boolean},System.Boolean@)/remarks;DocStr849
 M:StockSharp.Algo.Connector.GetPortfolio(System.String,System.Func{StockSharp.BusinessEntities.Portfolio,System.Boolean},System.Boolean@)/param/name;DocStr3127
@@ -5706,7 +5703,7 @@ T:StockSharp.Algo.AuthorizationModes/summary;DocStr1259
 F:StockSharp.Algo.AuthorizationModes.Anonymous/summary;DocStr1260
 F:StockSharp.Algo.AuthorizationModes.Windows/summary;DocStr1261
 F:StockSharp.Algo.AuthorizationModes.Custom/summary;Custom
-F:StockSharp.Algo.AuthorizationModes.Community/summary;DocStr1262
+F:StockSharp.Algo.AuthorizationModes.Community/summary;StockSharp
 T:StockSharp.Algo.IMarketRuleContainer/summary;DocStr1362
 P:StockSharp.Algo.IMarketRuleContainer.ProcessState/summary;DocStr1367
 M:StockSharp.Algo.IMarketRuleContainer.ActivateRule(StockSharp.Algo.IMarketRule,System.Func{System.Boolean})/summary;DocStr1363
