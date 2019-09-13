@@ -234,6 +234,7 @@ StockSharp API Change log
 * (feature) Exchange. EngName and RusName marked as obsolete.
 * (feature) SampleHistoryTesting. Using FinamMessageAdapter and YahooMessageAdapter.
 * (bug) Coinbase, Digifinex, IEX fixes.
+* (feature) Samples. Removed connector specific samples.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
