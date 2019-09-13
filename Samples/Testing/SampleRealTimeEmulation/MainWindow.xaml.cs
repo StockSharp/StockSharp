@@ -83,15 +83,6 @@ namespace SampleRealTimeEmulation
 
 		private void InitRealConnector()
 		{
-			try
-			{
-				if (File.Exists(_settingsFile))
-					_realConnector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
-			}
-			catch
-			{
-			}
-
 			_realConnector.NewOrder += OrderGrid.Orders.Add;
 			_realConnector.NewMyTrade += TradeGrid.Trades.Add;
 			_realConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
@@ -103,6 +94,21 @@ namespace SampleRealTimeEmulation
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			ConfigManager.RegisterService<IMessageAdapterProvider>(new FullInMemoryMessageAdapterProvider(_realConnector.Adapter.InnerAdapters));
+
+			try
+			{
+				if (File.Exists(_settingsFile))
+				{
+					var ctx = new ContinueOnExceptionContext();
+					ctx.Error += ex => ex.LogError();
+
+					using (new Scope<ContinueOnExceptionContext>(ctx))
+						_realConnector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+				}
+			}
+			catch
+			{
+			}
 		}
 
 		private void InitEmuConnector()

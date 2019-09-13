@@ -662,7 +662,7 @@ namespace SampleOptionQuoting
 					var ctx = new ContinueOnExceptionContext();
 					ctx.Error += ex => ex.LogError();
 
-					using (new Scope<ContinueOnExceptionContext> (ctx))
+					using (new Scope<ContinueOnExceptionContext>(ctx))
 						Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 				}
 			}
