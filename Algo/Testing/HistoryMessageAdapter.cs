@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Testing
 	/// <summary>
 	/// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 	/// </summary>
-	public class HistoryMessageAdapter : MessageAdapter
+	public class HistoryMessageAdapter : MessageAdapter, IHistoryMessageAdapter
 	{
 		private readonly Dictionary<SourceKey, MarketDataGenerator> _generators = new Dictionary<SourceKey, MarketDataGenerator>();
 		private readonly Dictionary<SourceKey, Func<DateTimeOffset, IEnumerable<Message>>> _historySources = new Dictionary<SourceKey, Func<DateTimeOffset, IEnumerable<Message>>>();
@@ -83,9 +83,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public ISecurityProvider SecurityProvider { get; }
 
-		/// <summary>
-		/// The interval of message <see cref="TimeMessage"/> generation. By default, it is equal to 1 sec.
-		/// </summary>
+		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str186Key)]
 		[DisplayNameLoc(LocalizedStrings.TimeIntervalKey)]
 		[DescriptionLoc(LocalizedStrings.Str195Key)]
@@ -150,14 +148,10 @@ namespace StockSharp.Algo.Testing
 				.Distinct();
 		}
 
-		/// <summary>
-		/// Date in history for starting the paper trading.
-		/// </summary>
+		/// <inheritdoc />
 		public DateTimeOffset StartDate { get; set; }
 
-		/// <summary>
-		/// Date in history to stop the paper trading (date is included).
-		/// </summary>
+		/// <inheritdoc />
 		public DateTimeOffset StopDate { get; set; }
 
 		/// <summary>
@@ -182,9 +176,7 @@ namespace StockSharp.Algo.Testing
 
 		private DateTimeOffset _currentTime;
 		
-		/// <summary>
-		/// The current time.
-		/// </summary>
+		/// <inheritdoc />
 		public override DateTimeOffset CurrentTime => _currentTime;
 
 		/// <summary>
@@ -591,10 +583,7 @@ namespace StockSharp.Algo.Testing
 			SendOutMessage(reply);
 		}
 
-		/// <summary>
-		/// Send next outgoing message.
-		/// </summary>
-		/// <returns><see langword="true" />, if message was sent, otherwise, <see langword="false" />.</returns>
+		/// <inheritdoc />
 		public bool SendOutMessage()
 		{
 			if (!_isStarted || _isSuspended)
@@ -610,10 +599,7 @@ namespace StockSharp.Algo.Testing
 			return true;
 		}
 
-		/// <summary>
-		/// Send outgoing message and raise <see cref="MessageAdapter.NewOutMessage"/> event.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc cref="MessageAdapter" />
 		public override void SendOutMessage(Message message)
 		{
 			LoadedMessageCount++;
@@ -626,10 +612,7 @@ namespace StockSharp.Algo.Testing
 			base.SendOutMessage(message);
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return LocalizedStrings.Str1127Params.Put(StartDate, StopDate);

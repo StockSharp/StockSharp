@@ -209,9 +209,7 @@ namespace StockSharp.Algo.Storages
 			return true;
 		}
 
-		/// <summary>
-		/// Sets the enumerator to its initial position, which is before the first element in the collection.
-		/// </summary>
+		/// <inheritdoc />
 		public void Reset()
 		{
 			Current = null;
@@ -220,9 +218,7 @@ namespace StockSharp.Algo.Storages
             _basketStorage.InnerStorages.Clear();
 		}
 
-		/// <summary>
-		/// Gets the current element in the collection.
-		/// </summary>
+		/// <inheritdoc />
 		public T Current { get; private set; }
 
 		object IEnumerator.Current => Current;
