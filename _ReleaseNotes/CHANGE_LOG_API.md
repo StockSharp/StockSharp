@@ -232,6 +232,7 @@ StockSharp API Change log
 * (feature) Connector. Updated level1 values until order book and tick trades received.
 * (feature) Upbit connector.
 * (feature) Exchange. EngName and RusName marked as obsolete.
+* (feature) SampleHistoryTesting. Using FinamMessageAdapter and YahooMessageAdapter.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

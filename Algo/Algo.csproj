@@ -132,6 +132,7 @@
     <Compile Include="Storages\Remote\ISecurityRemoteExtendedStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorageClient.cs" />
+    <Compile Include="Testing\IHistoryMessageAdapter.cs" />
     <Compile Include="TraderHelper_FORTS.cs" />
     <Compile Include="OrderBookInrementMessageAdapter.cs" />
     <Compile Include="OrderBookTruncateMessageAdapter.cs" />

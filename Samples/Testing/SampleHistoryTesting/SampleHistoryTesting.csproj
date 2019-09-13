@@ -164,9 +164,13 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.History\Algo.History.csproj">
-      <Project>{5814D093-FA6D-44A5-B75B-4CC7E8F11EB0}</Project>
-      <Name>Algo.History</Name>
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Finam\Finam.csproj">
+      <Project>{CA9992B3-58D1-4BD9-B24A-54149B9A92CA}</Project>
+      <Name>Finam</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Yahoo\Yahoo.csproj">
+      <Project>{ED89AB57-C5EF-485A-A2A4-04E807606E77}</Project>
+      <Name>Yahoo</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj">
       <Project>{FCB47C52-E1EA-4020-B88C-E750924F5716}</Project>

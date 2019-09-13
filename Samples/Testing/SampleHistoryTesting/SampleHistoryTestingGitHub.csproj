@@ -61,8 +61,11 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Algo.History">
-      <HintPath>..\..\..\References\StockSharp.Algo.History.dll</HintPath>
+    <Reference Include="StockSharp.Finam">
+      <HintPath>..\..\..\References\StockSharp.Finam.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Yahoo">
+      <HintPath>..\..\..\References\StockSharp.Yahoo.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Xaml">
       <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>
