@@ -1,4 +1,4 @@
-﻿<Window x:Class="SampleMultiConnection.DatesWindow"
+﻿<Window x:Class="SampleConnection.DatesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"

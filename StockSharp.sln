@@ -24,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{AE4A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCurrencyGitHub", "Samples\Misc\SampleCurrency\SampleCurrencyGitHub.csproj", "{76EB6796-F693-4EA8-BFC6-5CD7478EE85A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleMultiConnectionGitHub", "Samples\Connectors\SampleMultiConnection\SampleMultiConnectionGitHub.csproj", "{DDEE1CE2-7283-4394-8FCF-514E8581F10F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleConnectionWithStorageGitHub", "Samples\Connectors\SampleConnectionWithStorage\SampleConnectionWithStorageGitHub.csproj", "{DDEE1CE2-7283-4394-8FCF-514E8581F10F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleStrategiesGitHub", "Samples\Misc\SampleStrategies\SampleStrategiesGitHub.csproj", "{04A22C35-9D49-41FA-9E09-881680D658AF}"
 EndProject
@@ -55,6 +55,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration.AdaptersGitHub", "Configuration.Adapters\Configuration.AdaptersGitHub.csproj", "{7D6C7AD7-2735-4BC0-8E37-B21584E43264}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Connectors", "Connectors", "{95016DD0-E34D-4006-9EBF-7048C5F35E04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleConnectionGitHub", "Samples\Connectors\SampleConnection\SampleConnectionGitHub.csproj", "{9E26FE45-AE68-4374-8A2F-94E43BD8400F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,6 +152,10 @@ Global
 		{7D6C7AD7-2735-4BC0-8E37-B21584E43264}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D6C7AD7-2735-4BC0-8E37-B21584E43264}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D6C7AD7-2735-4BC0-8E37-B21584E43264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E26FE45-AE68-4374-8A2F-94E43BD8400F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E26FE45-AE68-4374-8A2F-94E43BD8400F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E26FE45-AE68-4374-8A2F-94E43BD8400F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E26FE45-AE68-4374-8A2F-94E43BD8400F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,6 +179,7 @@ Global
 		{81A84C3B-EC88-4746-AA4D-247DD1F66EB6} = {223279C5-1EB1-4978-B9AC-152A1C1D563E}
 		{B50ADCF8-CD33-46BE-902D-359A4EDFECA7} = {223279C5-1EB1-4978-B9AC-152A1C1D563E}
 		{95016DD0-E34D-4006-9EBF-7048C5F35E04} = {9990074D-A630-405C-BEA6-71B521D8DDA5}
+		{9E26FE45-AE68-4374-8A2F-94E43BD8400F} = {95016DD0-E34D-4006-9EBF-7048C5F35E04}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05C6C3D9-0063-47AB-BC11-315B396BEBD0}

@@ -1,4 +1,4 @@
-﻿namespace SampleMultiConnection
+﻿namespace SampleConnection
 {
 	using System;
 
