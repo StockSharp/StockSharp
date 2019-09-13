@@ -1,4 +1,4 @@
-﻿namespace SamplePerformance
+﻿namespace SampleChartPerformance
 {
 	using System;
 	using System.Collections.Generic;

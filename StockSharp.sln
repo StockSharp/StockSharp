@@ -50,7 +50,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chart", "Chart", "{223279C5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleChartGitHub", "Samples\Chart\SampleChart\SampleChartGitHub.csproj", "{8B430A27-B392-4129-9AA2-731A52427E40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePerformanceGitHub", "Samples\Chart\SamplePerformance\SamplePerformanceGitHub.csproj", "{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleChartPerformanceGitHub", "Samples\Chart\SampleChartPerformance\SampleChartPerformanceGitHub.csproj", "{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleChartActiveOrdersGitHub", "Samples\Chart\SampleChartActiveOrders\SampleChartActiveOrdersGitHub.csproj", "{B50ADCF8-CD33-46BE-902D-359A4EDFECA7}"
 EndProject
