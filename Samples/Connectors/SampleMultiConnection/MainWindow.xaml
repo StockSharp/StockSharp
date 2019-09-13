@@ -4,7 +4,7 @@
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
     xmlns:xaml1="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
-    Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="500" Width="850" >
+    Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="500" Width="850">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -14,8 +14,8 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0">
-            <Button x:Name="SettingsBtn"  Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" Width="100"/>
-            <Button x:Name="ConnectBtn" Background="LightPink" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" Width="100"/>
+            <Button x:Name="SettingsBtn" Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" Width="100"/>
+            <Button x:Name="ConnectBtn" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" Width="100" Background="LightPink" />
             <StackPanel Orientation="Horizontal">
                 <Label Content="{x:Static loc:LocalizedStrings.XamlStr593}" Width="100" HorizontalContentAlignment="Right"/>
                 <xaml:FolderBrowserPicker x:Name="HistoryPath" FolderChanged="HistoryPath_OnFolderChanged" Width="300"/>

@@ -103,7 +103,7 @@ namespace SampleMultiConnection
 			InitConnector(entityRegistry, snapshotRegistry, nativeIdStorage);
 		}
 
-		private void InitConnector(CsvEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry, INativeIdStorage nativeIdStorage)
+		private void InitConnector(IEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry, INativeIdStorage nativeIdStorage)
 		{
 			// subscribe on connection successfully event
 			Connector.Connected += () =>
