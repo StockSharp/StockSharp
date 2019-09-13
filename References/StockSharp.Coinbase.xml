@@ -9,6 +9,11 @@
             The message adapter for <see cref="N:StockSharp.Coinbase"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.Coinbase.CoinbaseMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
         <member name="P:StockSharp.Coinbase.CoinbaseMessageAdapter.Key">
             <summary>
             Key.
@@ -17,6 +22,11 @@
         <member name="P:StockSharp.Coinbase.CoinbaseMessageAdapter.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinbase.CoinbaseMessageAdapter.Passphrase">
+            <summary>
+            Passphrase.
             </summary>
         </member>
         <member name="P:StockSharp.Coinbase.CoinbaseMessageAdapter.BalanceCheckInterval">
@@ -52,6 +62,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Coinbase.CoinbaseOrderCondition"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.Coinbase.CoinbaseOrderCondition.StopPrice">
+            <summary>
+            Activation price, when reached an order will be placed.
+            </summary>
+        </member>
         <member name="T:StockSharp.Coinbase.CoinbaseTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Coinbase"/>.
@@ -70,6 +85,11 @@
         <member name="P:StockSharp.Coinbase.CoinbaseTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinbase.CoinbaseTrader.Passphrase">
+            <summary>
+            Passphrase.
             </summary>
         </member>
         <member name="P:StockSharp.Coinbase.CoinbaseTrader.BalanceCheckInterval">

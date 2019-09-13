@@ -21,12 +21,7 @@
         <member name="P:StockSharp.IEX.IEXMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.IEX.IEXMessageAdapter.AllTimeFrames">
-            <summary>
-            Possible time-frames.
-            </summary>
-        </member>
-        <member name="M:StockSharp.IEX.IEXMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
+        <member name="P:StockSharp.IEX.IEXMessageAdapter.IsSecurityNewsOnly">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.IEX.IEXMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

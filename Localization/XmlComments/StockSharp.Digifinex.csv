@@ -2,6 +2,7 @@ T:StockSharp.Digifinex.DigifinexMessageAdapter/summary;DocStr2538
 P:StockSharp.Digifinex.DigifinexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Digifinex.DigifinexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Digifinex.DigifinexMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Digifinex.DigifinexMessageAdapter.Domain/summary;Str3486
 P:StockSharp.Digifinex.DigifinexMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Digifinex.DigifinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Digifinex.DigifinexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
@@ -13,4 +14,5 @@ T:StockSharp.Digifinex.DigifinexTrader/summary;DocStr2539
 M:StockSharp.Digifinex.DigifinexTrader.#ctor/summary;DocStr1
 P:StockSharp.Digifinex.DigifinexTrader.Key/summary;Str3304
 P:StockSharp.Digifinex.DigifinexTrader.Secret/summary;DocStr3146
+P:StockSharp.Digifinex.DigifinexTrader.Domain/summary;Str3486
 P:StockSharp.Digifinex.DigifinexTrader.BalanceCheckInterval/summary;BalanceCheckInterval
