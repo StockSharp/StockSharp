@@ -236,6 +236,7 @@ StockSharp API Change log
 * (bug) Coinbase, Digifinex, IEX fixes.
 * (feature) Samples. Removed connector specific samples.
 * (feature) Samples. Folders reorganization.
+* (feature) SampleMultiConnection -> SampleConnectionWithStorage.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

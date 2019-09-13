@@ -8,8 +8,8 @@
     <ProjectGuid>{DDEE1CE2-7283-4394-8FCF-514E8581F10F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SampleMultiConnection</RootNamespace>
-    <AssemblyName>SampleMultiConnection</AssemblyName>
+    <RootNamespace>SampleConnectionWithStorage</RootNamespace>
+    <AssemblyName>SampleConnectionWithStorage</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -42,31 +42,17 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Data.v18.1.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v18.1.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v18.1.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v18.1.Core">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v18.1.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.PropertyGrid.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v18.1.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v18.1.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Configuration">
       <HintPath>..\..\..\References\Ecng.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
+    <Reference Include="StockSharp.Xaml">
+      <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -76,6 +62,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\References\Ecng.Collections.dll</HintPath>
     </Reference>
@@ -90,6 +79,27 @@
     </Reference>
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\..\References\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v18.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.PropertyGrid.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v18.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Data.v18.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Core.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v18.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v18.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v18.1.Core">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v18.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v18.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v18.1.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -109,12 +119,15 @@
     <Compile Include="OrdersLogWindow.xaml.cs">
       <DependentUpon>OrdersLogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PortfoliosWindow.xaml.cs">
+      <DependentUpon>PortfoliosWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TradesWindow.xaml.cs">
       <DependentUpon>TradesWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="ChartWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DatesWindow.xaml">
       <SubType>Designer</SubType>
@@ -152,10 +165,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TradesWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
@@ -163,6 +172,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="TradesWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindow.xaml.cs">
@@ -173,9 +186,6 @@
     </Compile>
     <Compile Include="OrdersWindow.xaml.cs">
       <DependentUpon>OrdersWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PortfoliosWindow.xaml.cs">
-      <DependentUpon>PortfoliosWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -222,40 +232,32 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">
-      <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
+      <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
       <Name>Algo</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
-      <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.Adapters.csproj">
+    <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.AdaptersGitHub.csproj">
       <Project>{7D6C7AD7-2735-4BC0-8E37-B21584E43264}</Project>
-      <Name>Configuration.Adapters</Name>
+      <Name>Configuration.AdaptersGitHub</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Configuration\Configuration.csproj">
+    <ProjectReference Include="..\..\..\Configuration\ConfigurationGitHub.csproj">
       <Project>{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}</Project>
-      <Name>Configuration</Name>
+      <Name>ConfigurationGitHub</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
       <Name>Localization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Logging\Logging.csproj">
-      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
+      <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
       <Name>Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Messages\Messages.csproj">
       <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
-      <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
-      <Name>Xaml.Charting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
-      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
-      <Name>Xaml</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

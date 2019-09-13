@@ -1,19 +1,4 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: SampleMultiConnection.SampleMultiConnectionPublic
-File: MainWindow.xaml.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace SampleMultiConnection
+namespace SampleConnectionWithStorage
 {
 	using System;
 	using System.ComponentModel;
@@ -57,7 +42,7 @@ namespace SampleMultiConnection
 			InitializeComponent();
 			Instance = this;
 
-			Title = Title.Put("Multi connection");
+			Title = Title.Put("Connections with storage");
 
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
@@ -158,21 +143,6 @@ namespace SampleMultiConnection
 			// set news provider
 			_newsWindow.NewsPanel.NewsProvider = Connector;
 
-			try
-			{
-				if (File.Exists(_settingsFile))
-				{
-					var ctx = new ContinueOnExceptionContext();
-					ctx.Error += ex => ex.LogError();
-
-					using (new Scope<ContinueOnExceptionContext> (ctx))
-						Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
-				}
-			}
-			catch
-			{
-			}
-
 			Connector.Adapter.NativeIdStorage = nativeIdStorage;
 
 			try
@@ -204,6 +174,21 @@ namespace SampleMultiConnection
 
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
 			ConfigManager.RegisterService<IMessageAdapterProvider>(new FullInMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
+
+			try
+			{
+				if (File.Exists(_settingsFile))
+				{
+					var ctx = new ContinueOnExceptionContext();
+					ctx.Error += ex => ex.LogError();
+
+					using (new Scope<ContinueOnExceptionContext>(ctx))
+						Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+				}
+			}
+			catch
+			{
+			}
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
