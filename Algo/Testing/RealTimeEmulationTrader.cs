@@ -32,10 +32,6 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public interface IRealTimeEmulationMarketDataAdapter : IMessageAdapterWrapper
 	{
-		/// <summary>
-		/// Track the connection <see cref="IMessageAdapterWrapper.InnerAdapter" /> lifetime.
-		/// </summary>
-		bool OwnAdapter { get; }
 	}
 
 	/// <summary>
@@ -187,8 +183,6 @@ namespace StockSharp.Algo.Testing
 			{
 				return new RealTimeEmulationMarketDataAdapter(_connector, InnerAdapter);
 			}
-
-			bool IRealTimeEmulationMarketDataAdapter.OwnAdapter => _connector._ownAdapter;
 		}
 
 		private readonly IPortfolioProvider _portfolioProvider;
