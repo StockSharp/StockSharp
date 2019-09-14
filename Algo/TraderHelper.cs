@@ -5374,5 +5374,27 @@ namespace StockSharp.Algo
 		{
 			return ServicesRegistry.CompilerService.Compile(expression, useIds);
 		}
+
+		/// <summary>
+		/// Create <see cref="IMessageAdapter"/>.
+		/// </summary>
+		/// <typeparam name="TAdapter">Adapter type.</typeparam>
+		/// <param name="connector">The class to create connections to trading systems.</param>
+		/// <param name="init">Initialize <typeparamref name="TAdapter"/>.</param>
+		/// <returns>The class to create connections to trading systems.</returns>
+		public static Connector AddAdapter<TAdapter>(this Connector connector, Action<TAdapter> init)
+			where TAdapter : IMessageAdapter
+		{
+			if (connector == null)
+				throw new ArgumentNullException(nameof(connector));
+
+			if (init == null)
+				throw new ArgumentNullException(nameof(init));
+
+			var adapter = (TAdapter)typeof(TAdapter).CreateAdapter(connector.TransactionIdGenerator);
+			init(adapter);
+			connector.Adapter.InnerAdapters.Add(adapter);
+			return connector;
+		}
 	}
 }
