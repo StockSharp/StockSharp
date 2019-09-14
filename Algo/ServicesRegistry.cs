@@ -4,6 +4,7 @@ namespace StockSharp.Algo
 	using Ecng.Configuration;
 	using Ecng.Interop;
 
+	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Community;
@@ -53,6 +54,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		public static IPortfolioProvider PortfolioProvider => ConfigManager.GetService<IPortfolioProvider>();
 		
+		/// <summary>
+		/// The provider of information about portfolios.
+		/// </summary>
+		public static IPortfolioProvider TryPortfolioProvider => ConfigManager.TryGetService<IPortfolioProvider>();
+
 		/// <summary>
 		/// The position provider.
 		/// </summary>
@@ -192,5 +198,20 @@ namespace StockSharp.Algo
 		/// Excel provider.
 		/// </summary>
 		public static IExcelWorkerProvider ExcelProvider => ConfigManager.TryGetService<IExcelWorkerProvider>();
+
+		/// <summary>
+		/// Snapshot storage registry.
+		/// </summary>
+		public static SnapshotRegistry SnapshotRegistry => ConfigManager.GetService<SnapshotRegistry>();
+		
+		/// <summary>
+		/// News provider.
+		/// </summary>
+		public static INewsProvider NewsProvider => ConfigManager.GetService<INewsProvider>();
+
+		/// <summary>
+		/// The risks control manager.
+		/// </summary>
+		public static IRiskManager RiskManager => ConfigManager.GetService<IRiskManager>();
 	}
 }

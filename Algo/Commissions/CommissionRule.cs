@@ -22,10 +22,8 @@ namespace StockSharp.Algo.Commissions
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Configuration;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -505,7 +503,7 @@ namespace StockSharp.Algo.Commissions
 			var boardCode = storage.GetValue<string>(nameof(Board));
 
 			if (!boardCode.IsEmpty())
-				Board = ConfigManager.TryGetService<IExchangeInfoProvider>()?.GetExchangeBoard(boardCode);
+				Board = ServicesRegistry.TryExchangeInfoProvider?.GetExchangeBoard(boardCode);
 		}
 	}
 
