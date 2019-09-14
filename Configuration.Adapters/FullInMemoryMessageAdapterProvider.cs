@@ -68,7 +68,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Poloniex;
 	using StockSharp.Quandl;
 	using StockSharp.QuantHouse;
-	using StockSharp.Quik;
+	//using StockSharp.Quik;
 	using StockSharp.Quik.Lua;
 	using StockSharp.Quoinex;
 	using StockSharp.Rithmic;
@@ -113,10 +113,10 @@ namespace StockSharp.Configuration
 				{
 					var type = func();
 
-					if (type == typeof(QuikDdeAdapter) || type == typeof(QuikTrans2QuikAdapter))
-						adapters.Remove(type);
-					else
-						adapters.Add(type);
+					//if (type == typeof(QuikDdeAdapter) || type == typeof(QuikTrans2QuikAdapter))
+					//	adapters.Remove(type);
+					//else
+					adapters.Add(type);
 				}
 				catch (Exception e)
 				{
@@ -149,8 +149,8 @@ namespace StockSharp.Configuration
 			() => typeof(PlazaMessageAdapter),
 			() => typeof(LuaFixTransactionMessageAdapter),
 			() => typeof(LuaFixMarketDataMessageAdapter),
-			() => typeof(QuikTrans2QuikAdapter),
-			() => typeof(QuikDdeAdapter),
+			//() => typeof(QuikTrans2QuikAdapter),
+			//() => typeof(QuikDdeAdapter),
 			() => typeof(RithmicMessageAdapter),
 			() => typeof(RssMessageAdapter),
 			() => typeof(SmartComMessageAdapter),
