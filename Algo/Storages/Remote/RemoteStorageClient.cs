@@ -549,7 +549,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <param name="permissions">Permissions.</param>
 		public void SaveUser(string login, SecureString password, IPAddress[] ipAddresses, UserPermissions permissions)
 		{
-			Invoke(f => f.SaveUser(SessionId, login, password.To<string>(), ipAddresses.Select(i => i.To<string>()).ToArray(), permissions));
+			Invoke(f => f.SaveUser(SessionId, login, password.UnSecure(), ipAddresses.Select(i => i.To<string>()).ToArray(), permissions));
 		}
 
 		/// <summary>
@@ -631,7 +631,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// </summary>
 		public void Login()
 		{
-			_sessionId = base.Invoke(f => f.Login(Credentials.Email, Credentials.Password.To<string>()));
+			_sessionId = base.Invoke(f => f.Login(Credentials.Email, Credentials.Password.UnSecure()));
 		}
 
 		/// <inheritdoc />

@@ -18,7 +18,6 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Security;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -1343,7 +1342,7 @@ namespace StockSharp.Algo
 		{
 			var msg = new ChangePasswordMessage
 			{
-				NewPassword = newPassword.To<SecureString>(),
+				NewPassword = newPassword.Secure(),
 				TransactionId = TransactionIdGenerator.GetNextId()
 			};
 

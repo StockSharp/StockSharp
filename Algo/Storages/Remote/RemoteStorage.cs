@@ -5,7 +5,6 @@ namespace StockSharp.Algo.Storages.Remote
 	using System.IO;
 	using System.Linq;
 	using System.Net;
-	using System.Security;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -203,7 +202,7 @@ namespace StockSharp.Algo.Storages.Remote
 
 		Tuple<Guid, long> IAuthenticationService.Login3(Products product, string version, string email, string password)
 		{
-			var sessionId = Authorization.ValidateCredentials(email, password.To<SecureString>(), NetworkHelper.UserAddress);
+			var sessionId = Authorization.ValidateCredentials(email, password.Secure(), NetworkHelper.UserAddress);
 
 			_sessions.Add(sessionId, new SynchronizedDictionary<UserPermissions, SynchronizedDictionary<Tuple<string, string, string, DateTime?>, bool>>());
 
@@ -653,7 +652,7 @@ namespace StockSharp.Algo.Storages.Remote
 
 			this.AddInfoLog(LocalizedStrings.RemoteStorageSaveUser, sessionId, login, ipAddresses.Join(","), permissions);
 
-			_authorization.SaveRemoteUser(login, password.To<SecureString>(), ipAddresses.Select(s => s.To<IPAddress>()).ToArray(), permissions);
+			_authorization.SaveRemoteUser(login, password.Secure(), ipAddresses.Select(s => s.To<IPAddress>()).ToArray(), permissions);
 		}
 
 		void IRemoteStorage.DeleteUser(Guid sessionId, string login)

@@ -98,7 +98,7 @@ namespace StockSharp.Community
 
 			if (product == null)
 			{
-				sessionId = Invoke(f => f.Login(login, password.To<string>()));
+				sessionId = Invoke(f => f.Login(login, password.UnSecure()));
 				sessionId.ToErrorCode().ThrowIfError();
 
 				NullableSessionId = sessionId;
@@ -107,8 +107,8 @@ namespace StockSharp.Community
 			else
 			{
 				var tuple = Invoke(f => version == null
-					? f.Login2(product.Value, login, password.To<string>())
-					: f.Login3(product.Value, version.To<string>(), login, password.To<string>()));
+					? f.Login2(product.Value, login, password.UnSecure())
+					: f.Login3(product.Value, version.To<string>(), login, password.UnSecure()));
 
 				tuple.Item1.ToErrorCode().ThrowIfError();
 
