@@ -92,6 +92,7 @@
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DummyProvider.cs" />
     <Compile Include="QuotesWindow.xaml.cs">
       <DependentUpon>QuotesWindow.xaml</DependentUpon>
     </Compile>

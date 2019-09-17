@@ -25,7 +25,6 @@ namespace SampleOptionQuoting
 	using System.Windows.Media;
 	using System.Windows.Threading;
 
-	using DevExpress.Xpf.Core;
 	using DevExpress.Xpf.Editors;
 
 	using Ecng.Collections;
@@ -46,327 +45,6 @@ namespace SampleOptionQuoting
 
 	public partial class MainWindow
 	{
-		private class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPositionProvider
-		{
-			public DummyProvider(IEnumerable<Security> securities, IEnumerable<Position> positions)
-				: base(securities)
-			{
-				_positions = positions ?? throw new ArgumentNullException(nameof(positions));
-			}
-
-			event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> IMarketDataProvider.ValuesChanged
-			{
-				add { }
-				remove { }
-			}
-
-			MarketDepth IMarketDataProvider.GetMarketDepth(Security security)
-			{
-				return null;
-			}
-
-			object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field)
-			{
-				switch (field)
-				{
-					case Level1Fields.OpenInterest:
-						return security.OpenInterest;
-
-					case Level1Fields.ImpliedVolatility:
-						return security.ImpliedVolatility;
-
-					case Level1Fields.HistoricalVolatility:
-						return security.HistoricalVolatility;
-
-					case Level1Fields.Volume:
-						return security.Volume;
-
-					case Level1Fields.LastTradePrice:
-						return security.LastTrade?.Price;
-
-					case Level1Fields.LastTradeVolume:
-						return security.LastTrade?.Volume;
-
-					case Level1Fields.BestBidPrice:
-						return security.BestBid?.Price;
-
-					case Level1Fields.BestBidVolume:
-						return security.BestBid?.Volume;
-
-					case Level1Fields.BestAskPrice:
-						return security.BestAsk?.Price;
-
-					case Level1Fields.BestAskVolume:
-						return security.BestAsk?.Volume;
-				}
-
-				return null;
-			}
-
-			IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security)
-			{
-				return new[]
-				{
-					Level1Fields.OpenInterest,
-					Level1Fields.ImpliedVolatility,
-					Level1Fields.HistoricalVolatility,
-					Level1Fields.Volume,
-					Level1Fields.LastTradePrice,
-					Level1Fields.LastTradeVolume,
-					Level1Fields.BestBidPrice,
-					Level1Fields.BestAskPrice,
-					Level1Fields.BestBidVolume,
-					Level1Fields.BestAskVolume
-				};
-			}
-
-			event Action<Trade> IMarketDataProvider.NewTrade
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<Security> IMarketDataProvider.NewSecurity
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<Security> IMarketDataProvider.SecurityChanged
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<MarketDepth> IMarketDataProvider.NewMarketDepth
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<MarketDepth> IMarketDataProvider.MarketDepthChanged
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<OrderLogItem> IMarketDataProvider.NewOrderLogItem
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<News> IMarketDataProvider.NewNews
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<News> IMarketDataProvider.NewsChanged
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult2
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult2
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionSucceeded
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataSubscriptionFailed
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<Security, MarketDataMessage, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionFailed2
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataUnSubscriptionSucceeded
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnSubscriptionFailed
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<Security, MarketDataMessage, MarketDataMessage> IMarketDataProvider.MarketDataUnSubscriptionFailed2
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<Security, MarketDataFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnexpectedCancelled
-			{
-				add => throw new NotSupportedException();
-				remove => throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria)
-			{
-				throw new NotSupportedException();
-			}
-
-			MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.SubscribeMarketData(Security security, MarketDataMessage message)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.UnSubscribeMarketData(Security security, MarketDataMessage message)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.SubscribeMarketData(MarketDataMessage message)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.UnSubscribeMarketData(MarketDataMessage message)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.RegisterMarketDepth(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.UnRegisterMarketDepth(Security security)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.RegisterFilteredMarketDepth(Security security)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.UnRegisterFilteredMarketDepth(Security security)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.RegisterTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.UnRegisterTrades(Security security)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.RegisterSecurity(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.UnRegisterSecurity(Security security)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.RegisterOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.UnRegisterOrderLog(Security security)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.RegisterNews(Security security, IMessageAdapter adapter)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.UnRegisterNews(Security security)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter)
-			{
-				throw new NotSupportedException();
-			}
-
-			void IMarketDataProvider.UnSubscribeBoard(ExchangeBoard board)
-			{
-				throw new NotSupportedException();
-			}
-
-			private readonly IEnumerable<Position> _positions;
-
-			IEnumerable<Position> IPositionProvider.Positions => _positions;
-
-			event Action<Position> IPositionProvider.NewPosition
-			{
-				add { }
-				remove { }
-			}
-
-			event Action<Position> IPositionProvider.PositionChanged
-			{
-				add { }
-				remove { }
-			}
-
-			Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName)
-			{
-				return _positions.FirstOrDefault(p => p.Security == security && p.Portfolio == portfolio);
-			}
-		}
-
 		private const string _settingsFile = "connection.xml";
 
 		public readonly Connector Connector = new Connector();
@@ -383,6 +61,8 @@ namespace SampleOptionQuoting
 
 		private bool _isDirty;
 		private bool _isConnected;
+
+		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
 
 		private Security SelectedOption => (Security)Options.SelectedItem;
 		private Security SelectedAsset => (Security)Assets.SelectedItem;
@@ -655,6 +335,8 @@ namespace SampleOptionQuoting
 					RefreshChart();
 			});
 
+			Connector.MarketDepthChanged += TryUpdateDepth;
+
 			try
 			{
 				if (File.Exists(_settingsFile))
@@ -682,9 +364,8 @@ namespace SampleOptionQuoting
 
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
-			ApplicationThemeHelper.ApplicationThemeName = ThemeExtensions.DefaultTheme;
-			//if (Connector.Configure(this))
-			//	new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
+			if (Connector.Configure(this))
+				new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
 		}
 
 		private void Level1FieldsCtrl_OnEditValueChanged(object sender, EditValueChangedEventArgs e)
@@ -750,13 +431,13 @@ namespace SampleOptionQuoting
 				if (strike == null)
 					continue;
 
-				if(_callBidSmile != null) TryAddSmileItem(_callBidSmile, strike.Value, row.Call?.ImpliedVolatilityBestBid);
-				if(_callAskSmile != null) TryAddSmileItem(_callAskSmile, strike.Value, row.Call?.ImpliedVolatilityBestAsk);
-				if(_callLastSmile != null) TryAddSmileItem(_callLastSmile, strike.Value, row.Call?.ImpliedVolatilityLastTrade);
+				if (_callBidSmile != null) TryAddSmileItem(_callBidSmile, strike.Value, row.Call?.ImpliedVolatilityBestBid);
+				if (_callAskSmile != null) TryAddSmileItem(_callAskSmile, strike.Value, row.Call?.ImpliedVolatilityBestAsk);
+				if (_callLastSmile != null) TryAddSmileItem(_callLastSmile, strike.Value, row.Call?.ImpliedVolatilityLastTrade);
 
-				if(_putBidSmile != null) TryAddSmileItem(_putBidSmile, strike.Value, row.Put?.ImpliedVolatilityBestBid);
-				if(_putAskSmile != null) TryAddSmileItem(_putAskSmile, strike.Value, row.Put?.ImpliedVolatilityBestAsk);
-				if(_putLastSmile != null) TryAddSmileItem(_putLastSmile, strike.Value, row.Put?.ImpliedVolatilityLastTrade);
+				if (_putBidSmile != null) TryAddSmileItem(_putBidSmile, strike.Value, row.Put?.ImpliedVolatilityBestBid);
+				if (_putAskSmile != null) TryAddSmileItem(_putAskSmile, strike.Value, row.Put?.ImpliedVolatilityBestAsk);
+				if (_putLastSmile != null) TryAddSmileItem(_putLastSmile, strike.Value, row.Put?.ImpliedVolatilityLastTrade);
 			}
 		}
 
@@ -841,7 +522,9 @@ namespace SampleOptionQuoting
 
 			// create DOM window
 			var wnd = new QuotesWindow { Title = option.Name };
-			wnd.Init(option);
+			_quotesWindows.Add(option, wnd);
+
+			TryUpdateDepth(Connector.GetMarketDepth(option));
 
 			// create delta hedge strategy
 			var hedge = new DeltaHedgeStrategy
@@ -862,10 +545,10 @@ namespace SampleOptionQuoting
 				Connector = Connector,
 			};
 
-			// link quoting and hending
+			// link quoting and hedging
 			hedge.ChildStrategies.Add(quoting);
 
-			// start henging
+			// start hedging
 			hedge.Start();
 
 			wnd.Closed += (s1, e1) =>
@@ -876,6 +559,14 @@ namespace SampleOptionQuoting
 
 			// show DOM
 			wnd.Show();
+		}
+
+		private void TryUpdateDepth(MarketDepth depth)
+		{
+			if (!_quotesWindows.TryGetValue(depth.Security, out var wnd))
+				return;
+
+			wnd.Update(depth.ImpliedVolatility(Connector, Connector, depth.LastChangeTime));
 		}
 	}
 }
