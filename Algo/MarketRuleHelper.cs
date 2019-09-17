@@ -1364,19 +1364,37 @@ namespace StockSharp.Algo
 		private sealed class MarketDepthChangedRule : MarketDepthRule
 		{
 			private readonly Func<MarketDepth, bool> _condition;
+			private readonly IMarketDataProvider _provider;
 
-			public MarketDepthChangedRule(MarketDepth depth)
-				: this(depth, d => true)
+			public MarketDepthChangedRule(MarketDepth depth, IMarketDataProvider provider)
+				: this(depth, provider, d => true)
 			{
 			}
 
-			public MarketDepthChangedRule(MarketDepth depth, Func<MarketDepth, bool> condition)
+			public MarketDepthChangedRule(MarketDepth depth, IMarketDataProvider provider, Func<MarketDepth, bool> condition)
 				: base(depth)
 			{
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Name = LocalizedStrings.Str1056 + " " + depth.Security;
-				Depth.QuotesChanged += OnQuotesChanged;
+
+				if (provider == null)
+				{
+#pragma warning disable 612
+					Depth.QuotesChanged += OnQuotesChanged;
+#pragma warning restore 612
+				}
+				else
+				{
+					_provider = provider;
+					_provider.MarketDepthChanged += ProviderOnMarketDepthChanged;
+				}
+			}
+
+			private void ProviderOnMarketDepthChanged(MarketDepth depth)
+			{
+				if (Depth == depth)
+					OnQuotesChanged();
 			}
 
 			private void OnQuotesChanged()
@@ -1387,7 +1405,15 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				Depth.QuotesChanged -= OnQuotesChanged;
+				if (_provider == null)
+				{
+#pragma warning disable 612
+					Depth.QuotesChanged -= OnQuotesChanged;
+#pragma warning restore 612
+				}
+				else
+					_provider.MarketDepthChanged -= ProviderOnMarketDepthChanged;
+
 				base.DisposeManaged();
 			}
 		}
@@ -1396,10 +1422,11 @@ namespace StockSharp.Algo
 		/// To create a rule for the order book change event.
 		/// </summary>
 		/// <param name="depth">The order book to be traced for change event.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenChanged(this MarketDepth depth)
+		public static MarketRule<MarketDepth, MarketDepth> WhenChanged(this MarketDepth depth, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth);
+			return new MarketDepthChangedRule(depth, provider);
 		}
 
 		/// <summary>
@@ -1407,12 +1434,13 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="depth">The order book to be traced for the spread change event.</param>
 		/// <param name="price">The shift value.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadMore(this MarketDepth depth, Unit price)
+		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadMore(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
 			var pair = depth.BestPair;
 			var firstPrice = pair?.SpreadPrice ?? 0;
-			return new MarketDepthChangedRule(depth, d => d.BestPair != null && d.BestPair.SpreadPrice > (firstPrice + price))
+			return new MarketDepthChangedRule(depth, provider, d => d.BestPair != null && d.BestPair.SpreadPrice > (firstPrice + price))
 			{
 				Name = LocalizedStrings.Str1057Params.Put(depth.Security, price)
 			};
@@ -1423,12 +1451,13 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="depth">The order book to be traced for the spread change event.</param>
 		/// <param name="price">The shift value.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadLess(this MarketDepth depth, Unit price)
+		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadLess(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
 			var pair = depth.BestPair;
 			var firstPrice = pair?.SpreadPrice ?? 0;
-			return new MarketDepthChangedRule(depth, d => d.BestPair != null && d.BestPair.SpreadPrice < (firstPrice - price))
+			return new MarketDepthChangedRule(depth, provider, d => d.BestPair != null && d.BestPair.SpreadPrice < (firstPrice - price))
 			{
 				Name = LocalizedStrings.Str1058Params.Put(depth.Security, price)
 			};
@@ -1439,10 +1468,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="depth">The order book to be traced for the event of the best bid increase on a specific value.</param>
 		/// <param name="price">The shift value.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceMore(this MarketDepth depth, Unit price)
+		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, CreateDepthCondition(price, () => depth.BestBid, false))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid, false))
 			{
 				Name = LocalizedStrings.Str1059Params.Put(depth.Security, price)
 			};
@@ -1453,10 +1483,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="depth">The order book to be traced for the event of the best bid decrease on a specific value.</param>
 		/// <param name="price">The shift value.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceLess(this MarketDepth depth, Unit price)
+		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, CreateDepthCondition(price, () => depth.BestBid, true))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid, true))
 			{
 				Name = LocalizedStrings.Str1060Params.Put(depth.Security, price)
 			};
@@ -1467,10 +1498,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="depth">The order book to be traced for the event of the best offer increase on a specific value.</param>
 		/// <param name="price">The shift value.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceMore(this MarketDepth depth, Unit price)
+		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, CreateDepthCondition(price, () => depth.BestAsk, false))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk, false))
 			{
 				Name = LocalizedStrings.Str1061Params.Put(depth.Security, price)
 			};
@@ -1481,10 +1513,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="depth">The order book to be traced for the event of the best offer decrease on a specific value.</param>
 		/// <param name="price">The shift value.</param>
+		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceLess(this MarketDepth depth, Unit price)
+		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, CreateDepthCondition(price, () => depth.BestAsk, true))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk, true))
 			{
 				Name = LocalizedStrings.Str1062Params.Put(depth.Security, price)
 			};
@@ -2090,13 +2123,24 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private sealed class NewMyTradeTraderRule : ConnectorRule<MyTrade>
+		private abstract class TransactionProviderRule<TArg> : MarketRule<ITransactionProvider, TArg>
 		{
-			public NewMyTradeTraderRule(IConnector connector)
-				: base(connector)
+			protected TransactionProviderRule(ITransactionProvider provider)
+				: base(provider)
+			{
+				Provider = provider ?? throw new ArgumentNullException(nameof(provider));
+			}
+
+			protected ITransactionProvider Provider { get; }
+		}
+
+		private sealed class NewMyTradeTraderRule : TransactionProviderRule<MyTrade>
+		{
+			public NewMyTradeTraderRule(ITransactionProvider provider)
+				: base(provider)
 			{
 				Name = LocalizedStrings.Str1080;
-				Connector.NewMyTrade += OnNewMyTrade;
+				Provider.NewMyTrade += OnNewMyTrade;
 			}
 
 			private void OnNewMyTrade(MyTrade trade)
@@ -2106,18 +2150,18 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				Connector.NewMyTrade -= OnNewMyTrade;
+				Provider.NewMyTrade -= OnNewMyTrade;
 				base.DisposeManaged();
 			}
 		}
 
-		private sealed class NewOrderTraderRule : ConnectorRule<Order>
+		private sealed class NewOrderTraderRule : TransactionProviderRule<Order>
 		{
-			public NewOrderTraderRule(IConnector connector)
-				: base(connector)
+			public NewOrderTraderRule(ITransactionProvider provider)
+				: base(provider)
 			{
 				Name = LocalizedStrings.Str1081;
-				Connector.NewOrder += OnNewOrder;
+				Provider.NewOrder += OnNewOrder;
 			}
 
 			private void OnNewOrder(Order order)
@@ -2127,7 +2171,7 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				Connector.NewOrder -= OnNewOrder;
+				Provider.NewOrder -= OnNewOrder;
 				base.DisposeManaged();
 			}
 		}
@@ -2214,21 +2258,21 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To create a rule for the event of new trade occurrences.
 		/// </summary>
-		/// <param name="connector">The connection to be traced for trades occurrences.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<IConnector, MyTrade> WhenNewMyTrade(this IConnector connector)
+		public static MarketRule<ITransactionProvider, MyTrade> WhenNewMyTrade(this ITransactionProvider provider)
 		{
-			return new NewMyTradeTraderRule(connector);
+			return new NewMyTradeTraderRule(provider);
 		}
 
 		/// <summary>
 		/// To create a rule for the event of new orders occurrences.
 		/// </summary>
-		/// <param name="connector">The connection to be traced for orders occurrences.</param>
+		/// <param name="provider">The transactional provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<IConnector, Order> WhenNewOrder(this IConnector connector)
+		public static MarketRule<ITransactionProvider, Order> WhenNewOrder(this ITransactionProvider provider)
 		{
-			return new NewOrderTraderRule(connector);
+			return new NewOrderTraderRule(provider);
 		}
 
 		/// <summary>

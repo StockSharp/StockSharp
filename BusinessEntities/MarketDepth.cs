@@ -245,7 +245,9 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_depth = value;
+#pragma warning disable 612
 				DepthChanged?.Invoke();
+#pragma warning restore 612
 			}
 		}
 
@@ -258,13 +260,15 @@ namespace StockSharp.BusinessEntities
 #pragma warning restore 67
 
 		/// <summary>
-		/// Depth <see cref="MarketDepth.Depth"/> changed.
+		/// Depth <see cref="Depth"/> changed.
 		/// </summary>
+		[Obsolete]
 		public event Action DepthChanged;
 
 		/// <summary>
 		/// Quotes changed.
 		/// </summary>
+		[Obsolete]
 		public event Action QuotesChanged;
 
 		/// <summary>
@@ -538,9 +542,7 @@ namespace StockSharp.BusinessEntities
 			_asks = asks;
 
 			UpdateDepthAndTime(lastChangeTime, false);
-
-			QuotesChanged?.Invoke();
-			//RaiseQuotesChanged();
+			RaiseQuotesChanged();
 		}
 
 		/// <summary>
@@ -960,7 +962,9 @@ namespace StockSharp.BusinessEntities
 
 		private void RaiseQuotesChanged()
 		{
+#pragma warning disable 612
 			QuotesChanged?.Invoke();
+#pragma warning restore 612
 		}
 
 		/// <summary>
