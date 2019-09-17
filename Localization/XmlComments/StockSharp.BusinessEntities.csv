@@ -39,7 +39,9 @@ M:StockSharp.BusinessEntities.Exchange.ToString/inheritdoc;DocStr8459
 M:StockSharp.BusinessEntities.Exchange.OnEquals(StockSharp.BusinessEntities.Exchange)/summary;DocStr2634
 M:StockSharp.BusinessEntities.Exchange.OnEquals(StockSharp.BusinessEntities.Exchange)/param/other;DocStr1157
 M:StockSharp.BusinessEntities.Exchange.OnEquals(StockSharp.BusinessEntities.Exchange)/returns;DocStr2636
-M:StockSharp.BusinessEntities.Exchange.GetHashCode/inheritdoc;DocStr8459
+M:StockSharp.BusinessEntities.Exchange.GetHashCode/summary;DocStr8492
+M:StockSharp.BusinessEntities.Exchange.GetHashCode/returns;DocStr8493
+M:StockSharp.BusinessEntities.Exchange.GetHashCode/filterpriority;DocStr11344
 M:StockSharp.BusinessEntities.Exchange.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Exchange.Clone/returns;DocStr1116
 M:StockSharp.BusinessEntities.Exchange.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2

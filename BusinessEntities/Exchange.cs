@@ -176,7 +176,6 @@ namespace StockSharp.BusinessEntities
 
 		/// <summary>Serves as a hash function for a particular type. </summary>
 		/// <returns>A hash code for the current <see cref="T:System.Object" />.</returns>
-		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode() => Name.GetHashCode();
 
 		/// <summary>

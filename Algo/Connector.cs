@@ -1011,7 +1011,13 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Replace orders.
+		/// </summary>
+		/// <param name="oldOrder1">Cancelling order.</param>
+		/// <param name="newOrder1">New order to register.</param>
+		/// <param name="oldOrder2">Cancelling order.</param>
+		/// <param name="newOrder2">New order to register.</param>
 		public void ReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 		{
 			if (oldOrder1 == null)

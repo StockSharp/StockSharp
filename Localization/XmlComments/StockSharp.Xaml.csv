@@ -1519,7 +1519,7 @@ P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowStrategyName/summary;DocStr8420
 P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowSecurity/summary;DocStr9773
 P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowPnLChart/summary;DocStr10155
 P:StockSharp.Xaml.StrategiesStatisticsPanel.SelectedStrategy/summary;DocStr8421
-P:StockSharp.Xaml.StrategiesStatisticsPanel.SelectedStrategies/summary;DocStr8422
+P:StockSharp.Xaml.StrategiesStatisticsPanel.SelectedStrategies/summary;SelectedStrategies
 E:StockSharp.Xaml.StrategiesStatisticsPanel.StrategyDoubleClick/summary;DocStr8423
 E:StockSharp.Xaml.StrategiesStatisticsPanel.SelectionChanged/summary;DocStr8424
 M:StockSharp.Xaml.StrategiesStatisticsPanel.#ctor/summary;DocStr1

@@ -536,7 +536,7 @@ P:StockSharp.Fix.FixServer.KeepSubscriptionsOnDisconnect/inheritdoc;DocStr8459
 E:StockSharp.Fix.FixServer.StateChanged/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixServer.Start/summary;DocStr3163
 M:StockSharp.Fix.FixServer.Stop/summary;DocStr3164
-M:StockSharp.Fix.FixServer.DisposeManaged/inheritdoc;DocStr8459
+M:StockSharp.Fix.FixServer.DisposeManaged/summary;DocStr7
 M:StockSharp.Fix.FixServer.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixServer.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixServer.SendInMessage(StockSharp.Algo.Server.IMessageListenerSession,System.String,StockSharp.Messages.Message)/inheritdoc;DocStr8459

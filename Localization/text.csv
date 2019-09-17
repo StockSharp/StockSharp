@@ -5071,6 +5071,7 @@ Currenex;Currenex;Currenex
 WIKI;WIKI;WIKI
 StockSharp;StockSharp;StockSharp
 Upbit;Upbit;Upbit
+SelectedStrategies;Selected strategies;Выбранные стратегии
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13121,7 +13122,6 @@ DocStr8418;Parameters of the strategy which is excluded from the display;Пар�
 DocStr8419;To show the Test Progress column;Показывать столбец Прогресс тестирования
 DocStr8420;To show the Name Strategy column;Показывать столбец Название стратегии
 DocStr8421;The selected strategy;Выбранная стратегия
-DocStr8422;Selected strategies;Выбранные стратегии
 DocStr8423;Event of double-clicking the mouse on the selected strategy;События двойного нажатия мышкой на выбранную стратегию
 DocStr8424;The selected strategies change event;Событие изменения выбранных стратегий
 DocStr8425;The key for {0}, by which a localized name will be obtained;Ключ для {0}, по которому будет получено локализованное название
@@ -14914,7 +14914,7 @@ DocStr10441;Removing object id;Идентификатор удаляемого �
 DocStr10442;Prevent updates;Выключить обновление
 DocStr10444;Credentials;Доступ
 DocStr10445;Get credentials by login;Получить доступ по логину
-DocStr10446;Credentials with set of permissions;Доступы с набором правам
+DocStr10446;Credentials with set of permissions;Доступы с набором прав
 DocStr10447;Add new credentials;Добавить новые доступ
 DocStr10448;Delete credentials by login;Удалить доступ по логину
 DocStr10449;Operation result;Результат операции
@@ -15694,3 +15694,8 @@ DocStr11336;Fields related to best bid;Поля, относящиеся к лу�
 DocStr11337;Fields related to best ask;Поля, относящиеся к лучшей продаже
 DocStr11338;Full name;Полное имя
 DocStr11339;Full name (localization key);Полное имя (ключ локализации)
+DocStr11341;Custom implementation of the {0};Произвольная реализация {0}
+DocStr11342;Historical message adapter;Адаптер исторических сообщений
+DocStr11343;News provider;Провайдер новостей
+DocStr11345;Validate credentials;Проверить доступ
+DocStr11346;IP address;IP адрес

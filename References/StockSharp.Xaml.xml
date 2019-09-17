@@ -5672,10 +5672,10 @@
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterPortfolio(StockSharp.BusinessEntities.Portfolio)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterNews(StockSharp.Messages.IMessageAdapter)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterNews(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterNews">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterNews(StockSharp.BusinessEntities.Security)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard,StockSharp.Messages.IMessageAdapter)">

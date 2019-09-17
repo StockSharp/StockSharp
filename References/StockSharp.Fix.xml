@@ -1987,7 +1987,9 @@
             </summary>
     </member>
     <member name="M:StockSharp.Fix.FixServer.DisposeManaged">
-      <inheritdoc />
+      <summary>
+            Release resources.
+            </summary>
     </member>
     <member name="M:StockSharp.Fix.FixServer.Load(Ecng.Serialization.SettingsStorage)">
       <inheritdoc />
