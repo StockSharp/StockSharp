@@ -93,7 +93,7 @@ connector.NewSecurity += security =>
 		<content>
 
 			<para>Сохранение собственных сделок будет выполняться в обработчике события
-			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrade</codeEntityReference> при помощи метода
+			<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.NewMyTrade</codeEntityReference> при помощи метода
 			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IMarketDataStorage.Save(System.Collections.IEnumerable)</codeEntityReference>. 
 			Перед сохранением список собственных сделок приводится к типу IEnumerable&lt;ExecutionMessage&gt;.
 			Сама процедура выставления заявок в этим примере опущена. 

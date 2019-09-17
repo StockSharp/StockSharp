@@ -13,7 +13,7 @@
 		Для первого случая необходимо реализовать в Вашем классе интерфейс <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference> или наследовать его
 		от <codeEntityReference>T:StockSharp.Logging.BaseLogReceiver</codeEntityReference>. Во второй ситуации можно использовать источник 
 		<codeEntityReference>T:StockSharp.Logging.TraceSource</codeEntityReference>, использующий систему трассировки .NET.
-		Как это сделать показано в примере <legacyItalic>Samples/Common/SampleLogging</legacyItalic>.
+		Как это сделать показано в примере <legacyItalic>Samples/Misc/SampleLogging</legacyItalic>.
 	</para>
 	</introduction>
 	

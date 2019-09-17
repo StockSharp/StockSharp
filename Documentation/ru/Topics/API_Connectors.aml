@@ -5,11 +5,10 @@
     <para>
 Для работы с биржами и источниками данных в <token>stocksharp</token> рекомендуется работать через базовый класс 
 <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>. </para>
-<para>Рассмотрим работу с <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
-более подробно на примере описанном в пункте <link xlink:href="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" />. 
-Исходные коды примера находятся в проекте Samples/Common/SampleMultiConnection.</para>
-<para>Создаём экземпляр класса <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.	
-В конструкторе главного окна вызываем метод <legacyItalic>InitConnector</legacyItalic>, в котором выполняется конфигурирование коннектора: </para>
+<para>Рассмотрим работу с <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>. 
+Исходные коды примера находятся в проекте Samples/Common/SampleConnection.</para>
+<mediaLink><image placement="left" xlink:href="multiconnection_main" /></mediaLink>
+<para>Создаём экземпляр класса <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>:</para>
        				<code language="C#">
 				<![CDATA[
 ...
@@ -18,23 +17,16 @@ public Connector Connector;
 public MainWindow()
 {
 	InitializeComponent();
-...
-	var entityRegistry = new CsvEntityRegistry(path);
-	var storageRegistry = new StorageRegistry
-	{
-		DefaultDrive = new LocalMarketDataDrive(path)
-	};
-	var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
-...
-	Connector = new Connector(entityRegistry, storageRegistry, snapshotRegistry);
-	InitConnector(entityRegistry, snapshotRegistry);
+
+	Connector = new Connector();
+	InitConnector();
 }
 		]]>
 				</code>
 <para>
 Для конфигурирования <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> у <legacyBold>S#.API</legacyBold>
-есть специальный графический интерфей в котором можно настроить сразу несколько подключений одновременно, 
-как им воспользоваться описано в пункте <link xlink:href="554da27b-900a-462a-a2c2-d2b6cb1330ae" />.
+есть специальный графический интерфейс, в котором можно настроить сразу несколько подключений одновременно. 
+Как им воспользоваться описано в пункте <link xlink:href="554da27b-900a-462a-a2c2-d2b6cb1330ae" />.
 </para>
       <code title="C#" language="C#">
 <![CDATA[
@@ -50,10 +42,21 @@ private void Setting_Click(object sender, RoutedEventArgs e)
 }
 	  				]]>
 				   </code>
+				   <mediaLink><image placement="left" xlink:href="API_GUI_ConnectorWindow" /></mediaLink>
+<para>Аналогично можно добавлять подключения напрямую из кода (без графических окон), воспользовавшись методом расширением <codeEntityReference qualifyHint="true">M:StockSharp.Algo.TraderHelper.AddAdapter``1(StockSharp.Algo.Connector,System.Action{``0})</codeEntityReference>:</para>
+<code title="C#" language="C#">
+<![CDATA[
+...
+// добавляем два подключения к QUIK (цены и заявки)
+connector.AddAdapter<LuaFixMarketDataMessageAdapter>(a => { });
+connector.AddAdapter<LuaFixTransactionMessageAdapter>(a => { });
+	  				]]>
+				   </code>
+<para>В один объект <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> можно добавлять неограниченное количество подключений. Поэтому одновременно из программы можно подключаться сразу к нескольким биржам и брокерам.</para>
 <para>В методе <legacyItalic>InitConnector</legacyItalic> устанавливаем требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
 <code language="C#">
 				<![CDATA[
-private void InitConnector(CsvEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry)
+private void InitConnector()
 {
 	// subscribe on connection successfully event
 	Connector.Connected += () =>
@@ -116,24 +119,10 @@ private void InitConnector(CsvEntityRegistry entityRegistry, SnapshotRegistry sn
 	{
 	}
 
-	if (Connector.StorageAdapter == null)
-		return;
-
-	try
-	{
-		entityRegistry.Init();
-	}
-	catch (Exception ex)
-	{
-		MessageBox.Show(this, ex.ToString());
-	}
-
-	Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
-	Connector.LookupAll();
-
-	snapshotRegistry.Init();
-
-	ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
+	ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
+	
+	// нужен для графического конфигурирования
+	ConfigManager.RegisterService<IMessageAdapterProvider>(new FullInMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
 }
 ]]>
 			</code> 

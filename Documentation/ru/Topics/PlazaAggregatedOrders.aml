@@ -44,14 +44,14 @@
       		(см. <codeEntityReference qualifyHint="true">F:StockSharp.Plaza.PlazaStreamRegistry.Aggregation5Option</codeEntityReference>)
       	</listItem>
       </list>
-      <para><codeEntityReference qualifyHint="false">P:StockSharp.Plaza.PlazaTrader.DefaultFutureDepthTable</codeEntityReference>
-        По умолчанию в шлюзе <codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference> используются стаканы глубиной в 5 котировок.
-        Чтобы изменить глубину стакана, необходимо в шлюзе <codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference> 
-        свойству <codeEntityReference>P:StockSharp.Plaza.PlazaTrader.DefaultFutureDepthTable</codeEntityReference> (для фьючерсов) 
-        или <codeEntityReference>P:StockSharp.Plaza.PlazaTrader.DefaultOptionDepthTable</codeEntityReference> (для опционов)
+      <para><codeEntityReference qualifyHint="false">P:StockSharp.Plaza.PlazaMessageAdapter.DefaultFutureDepthTable</codeEntityReference>
+        По умолчанию в шлюзе <codeEntityReference>T:StockSharp.Plaza.PlazaMessageAdapter</codeEntityReference> используются стаканы глубиной в 5 котировок.
+        Чтобы изменить глубину стакана, необходимо в шлюзе <codeEntityReference>T:StockSharp.Plaza.PlazaMessageAdapter</codeEntityReference> 
+        свойству <codeEntityReference>P:StockSharp.Plaza.PlazaMessageAdapter.DefaultFutureDepthTable</codeEntityReference> (для фьючерсов) 
+        или <codeEntityReference>P:StockSharp.Plaza.PlazaMessageAdapter.DefaultOptionDepthTable</codeEntityReference> (для опционов)
         присвоить новое значение:
       </para>
-      <code language="C#">this.Trader.DefaultFutureDepthTable = this.Trader.TableRegistry.Aggregation20Future;</code>
+      <code language="C#">adapter.DefaultFutureDepthTable = adapter.TableRegistry.Aggregation20Future;</code>
     </introduction>
     <nextSteps>
       <content>

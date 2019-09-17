@@ -32,7 +32,7 @@
 				  <para>
 Исторические свечи можно получить напрямую из <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, подписавшись на событие
 <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>. Для начала получения свечей необходимо вызвать метод
-<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})</codeEntityReference>.				  </para>
+<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object},StockSharp.Messages.IMessageAdapter)</codeEntityReference>.</para>
 				  <code language="C#"><![CDATA[// создаем шлюз
 ...
 _trader = new SmartTrader(this.Login.Text, this.Password.Password);

@@ -90,7 +90,7 @@
 		]]>
 		</code>	
 		<para>Переопределяем метод 
-		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.OnDraw</codeEntityReference>
+		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.OnDraw(`0,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})</codeEntityReference>
 		в котором с помощью метода 
 		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.DrawValues(System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData},StockSharp.Xaml.Charting.IChartElement,System.Func{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData,System.Double})</codeEntityReference> 
 		прорисовываем индикатор:</para>

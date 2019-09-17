@@ -12,7 +12,7 @@
 		В дальнейшем, если требуется работа с заявкой (например, отменить ее или изменить),
 		то необходимо использовать именно этот объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>.
 		Для регистрации заявок на бирже предусмотрен 
-		метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> который 
+		метод <codeEntityReference>M:StockSharp.Algo.Connector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> который 
 		отправляет заявку на сервер.</para>
 
 		<para>В примере ниже показано создание заявки и регистрация ее на бирже:</para>

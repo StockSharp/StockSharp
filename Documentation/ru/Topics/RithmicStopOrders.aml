@@ -2,7 +2,7 @@
 <topic id="36d037d2-fda8-4801-9294-0dcc9891a123" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
    <introduction>
-       <para>Для регистрации стоп-заявок используется тот же метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>, 
+       <para>Для регистрации стоп-заявок используется тот же метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Connector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>, 
 		но с указанием типа заявки <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference>:</para>
         <code language="C#">
         <![CDATA[

@@ -3,7 +3,7 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
 		<para>Для регистрации алго-заявки используется тот же метод 
-		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
+		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Connector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
 		но с указанием условия 
 		<codeEntityReference qualifyHint="false">T:StockSharp.Transaq.TransaqOrderCondition</codeEntityReference></para>
     

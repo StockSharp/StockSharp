@@ -8,15 +8,15 @@
 		<codeEntityReference qualifyHint="true">P:StockSharp.Plaza.PlazaRevisionManager.Tables</codeEntityReference>:</para>
 		<code language="C#">
 		<![CDATA[
-public PlazaTrader Trader;
+public PlazaMessageAdapter Adapter;
 
 ...
 		
-var revisionManager = Trader.StreamManager.RevisionManager;
+var revisionManager = Adapter.StreamManager.RevisionManager;
 
-revisionManager.Tables.Add(Trader.TableRegistry.IndexLog);
-revisionManager.Tables.Add(Trader.TableRegistry.TradeFuture);
-revisionManager.Tables.Add(Trader.TableRegistry.TradeOption);
+revisionManager.Tables.Add(Adapter.TableRegistry.IndexLog);
+revisionManager.Tables.Add(Adapter.TableRegistry.TradeFuture);
+revisionManager.Tables.Add(Adapter.TableRegistry.TradeOption);
 		]]>
 		</code>
 		<para>После переконнекта, данные начнут скачиваться с номера последней сохраненной ревизии. 

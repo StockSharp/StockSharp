@@ -4,7 +4,7 @@
 
 	<introduction>
 		<para>Для регистрации стоп-заявок используется тот же метод 
-		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
+		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Connector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
 		но с указанием стоп-условия 
 		<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryOrderCondition</codeEntityReference>
 		и типа заявки 

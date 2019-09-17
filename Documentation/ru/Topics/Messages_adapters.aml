@@ -172,18 +172,18 @@ public SmartAdapter(IdGenerator transactionIdGenerator)
 					<legacyBold>Свойства адаптера.</legacyBold>
 					</para>
 						<para>
-						 	Переопределяем свойства <codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportNativePortfolioLookup</codeEntityReference> и
-						 	<codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportNativeSecurityLookup</codeEntityReference>.
+						 	Переопределяем свойства <codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportPortfolioLookupResult</codeEntityReference> и
+						 	<codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportSecurityLookupResult</codeEntityReference>.
 						 	Поскольку <token>smartcom</token> поддерживает поиск портфелей и инструментов делаем, чтобы свойства возвращали <legacyBold>true</legacyBold>.
 						 	Также добавляем свойства для логина, пароля, адреса и порта сервера <token>smartcom</token>.
 						</para>
 						<code language="C#">
-protected override bool IsSupportNativePortfolioLookup
+protected override bool IsSupportPortfolioLookupResult
 {
 	get { return true; }
 }
 
-protected override bool IsSupportNativeSecurityLookup
+protected override bool IsSupportSecurityLookupResult
 {
 	get { return true; }
 }
@@ -599,7 +599,7 @@ private void smartCom_AddSymbol(int row, int rowCount, string smartId, string na
 				 <legacyBold>Регистрация/отмена регистрации сделок.</legacyBold>
 				</para>
 				<para>
-				 При вызове методов <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> или
+				 При вызове методов <codeEntityReference>M:StockSharp.Algo.Connector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},StockSharp.Messages.IMessageAdapter)</codeEntityReference> или
 				 <codeEntityReference>M:StockSharp.Algo.Connector.UnRegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> будет получено исходящее
 				 сообщение <codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference>.
 				 </para>

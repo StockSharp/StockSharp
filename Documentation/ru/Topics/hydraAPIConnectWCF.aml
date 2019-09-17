@@ -8,7 +8,7 @@
 Включение серверного режима <token>hydra</token> описано в 
 пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" />.</para>
      <para>Для подключения к <token>hydra</token> через WCF в <token>stocksharpapi</token> есть 
-класс <codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference>. 
+класс <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.Remote.RemoteStorageClient</codeEntityReference>. 
 Ниже приведен пример подключения к <token>hydra</token> с настроенным <legacyBold>Локальным пользователем</legacyBold> с
  логином "hydra_user" и паролем "qwerty", добавление 
 <legacyBold>Локального пользователя</legacyBold> описано в пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /></para>

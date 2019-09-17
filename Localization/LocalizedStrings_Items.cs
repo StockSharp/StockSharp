@@ -50376,5 +50376,15 @@ namespace StockSharp.Localization
 		/// Upbit
 		/// </summary>
 		public static string Upbit => GetString(UpbitKey);
+
+		/// <summary>
+		/// Selected strategies
+		/// </summary>
+		public const string SelectedStrategiesKey = nameof(SelectedStrategies);
+
+		/// <summary>
+		/// Selected strategies
+		/// </summary>
+		public static string SelectedStrategies => GetString(SelectedStrategiesKey);
 	}
 }
