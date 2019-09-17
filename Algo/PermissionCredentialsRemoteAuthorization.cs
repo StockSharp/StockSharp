@@ -106,7 +106,13 @@ namespace StockSharp.Algo
 			return true;
 		}
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Validate credentials.
+		/// </summary>
+		/// <param name="login">Login.</param>
+		/// <param name="password">Password.</param>
+		/// <param name="clientAddress">IP address.</param>
+		/// <returns>Session ID.</returns>
 		public override Guid ValidateCredentials(string login, SecureString password, IPAddress clientAddress)
 		{
 			var sessionId = _authorization.ValidateCredentials(login, password, clientAddress);

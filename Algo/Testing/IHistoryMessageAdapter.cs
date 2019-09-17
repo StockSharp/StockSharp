@@ -6,7 +6,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Base message, described market data adapter for backtesting.
+	/// Historical message adapter.
 	/// </summary>
 	public interface IHistoryMessageAdapter : IMessageAdapter
 	{
@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Testing
 		bool SendOutMessage();
 
 		/// <summary>
-		/// Send outgoing message and raise <see cref="IMessageAdapter.NewOutMessage"/> event.
+		/// Send outgoing message and raise <see cref="IMessageChannel.NewOutMessage"/> event.
 		/// </summary>
 		/// <param name="message">Message.</param>
 		void SendOutMessage(Message message);
@@ -85,7 +85,10 @@ namespace StockSharp.Algo.Testing
 			_outMessages.Enqueue(message);
 		}
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Create a copy of <see cref="CustomHistoryMessageAdapter"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
 			return new CustomHistoryMessageAdapter(InnerAdapter);

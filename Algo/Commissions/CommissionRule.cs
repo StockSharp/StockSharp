@@ -103,13 +103,19 @@ namespace StockSharp.Algo.Commissions
 		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected abstract decimal? OnProcessExecution(ExecutionMessage message);
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Load settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
 			Value = storage.GetValue<Unit>(nameof(Value));
 		}
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Value), Value);
