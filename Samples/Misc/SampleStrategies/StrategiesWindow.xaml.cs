@@ -78,12 +78,12 @@
 
 		private bool Dashboard_OnCanExecuteStart(StrategiesDashboardItem item)
 		{
-			return item?.Strategy.ProcessState == ProcessStates.Stopped;
+			return item.Strategy?.ProcessState == ProcessStates.Stopped;
 		}
 
 		private bool Dashboard_OnCanExecuteStop(StrategiesDashboardItem item)
 		{
-			return item?.Strategy.ProcessState == ProcessStates.Started;
+			return item.Strategy?.ProcessState == ProcessStates.Started;
 		}
 
 		private void Dashboard_OnExecuteStart(StrategiesDashboardItem item)

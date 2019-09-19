@@ -25,9 +25,9 @@ namespace StockSharp.Algo.Storages.Csv
 	{
 		private class FakeStorage : IStorage
 		{
-			private readonly CsvEntityRegistry _registry;
+			private readonly IEntityRegistry _registry;
 
-			public FakeStorage(CsvEntityRegistry registry)
+			public FakeStorage(IEntityRegistry registry)
 			{
 				_registry = registry ?? throw new ArgumentNullException(nameof(registry));
 			}
