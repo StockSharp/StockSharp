@@ -271,6 +271,9 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public event Action<Order> OrderInitialized;
 
+		/// <inheritdoc />
+		public event Action<long, Exception> ChangePasswordResult;
+
 		private void RaiseOrderInitialized(Order order)
 		{
 			OrderInitialized?.Invoke(order);
@@ -690,6 +693,11 @@ namespace StockSharp.Algo
 		private void RaiseSessionStateChanged(ExchangeBoard board, SessionStates state)
 		{
 			SessionStateChanged?.Invoke(board, state);
+		}
+
+		private void RaiseChangePassword(long transactionId, Exception error)
+		{
+			ChangePasswordResult?.Invoke(transactionId, error);
 		}
 	}
 }

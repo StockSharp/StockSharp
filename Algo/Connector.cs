@@ -18,6 +18,7 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Security;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -1344,11 +1345,11 @@ namespace StockSharp.Algo
 		/// Change password.
 		/// </summary>
 		/// <param name="newPassword">New password.</param>
-		public void ChangePassword(string newPassword)
+		public void ChangePassword(SecureString newPassword)
 		{
 			var msg = new ChangePasswordMessage
 			{
-				NewPassword = newPassword.Secure(),
+				NewPassword = newPassword,
 				TransactionId = TransactionIdGenerator.GetNextId()
 			};
 
@@ -1660,6 +1661,48 @@ namespace StockSharp.Algo
 		IEnumerable<CandleSeries> ICandleManager.Series => SubscribedCandleSeries;
 
 		IList<ICandleSource<Candle>> ICandleManager.Sources => ArrayHelper.Empty<ICandleSource<Candle>>();
+
+		#endregion
+
+		#region IMessageChannel implementation
+
+		private Action<Message> _newOutMessage;
+
+		event Action<Message> IMessageChannel.NewOutMessage
+		{
+			add => _newOutMessage += value;
+			remove => _newOutMessage -= value;
+		}
+
+		bool IMessageChannel.IsOpened => ConnectionState == ConnectionStates.Connected;
+
+		private Action _stateChanged;
+
+		event Action IMessageChannel.StateChanged
+		{
+			add => _stateChanged += value;
+			remove => _stateChanged -= value;
+		}
+
+		void IMessageChannel.Open()
+		{
+			Connect();
+		}
+
+		void IMessageChannel.Close()
+		{
+			Disconnect();
+		}
+
+		IMessageChannel ICloneable<IMessageChannel>.Clone()
+		{
+			return this.Clone();
+		}
+
+		object ICloneable.Clone()
+		{
+			return this.Clone();
+		}
 
 		#endregion
 	}

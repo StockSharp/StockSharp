@@ -239,6 +239,7 @@ StockSharp API Change log
 * (feature) SampleMultiConnection -> SampleConnectionWithStorage.
 * (feature) SampleConnection added.
 * (feature) MarketDepth. QuotesChanged marked as obsolete.
+* (feature) IConnector. ChangePasswordResult event added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

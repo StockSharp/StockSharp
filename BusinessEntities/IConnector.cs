@@ -164,6 +164,11 @@ namespace StockSharp.BusinessEntities
 		event Action<Exception> Error;
 
 		/// <summary>
+		/// Change password result.
+		/// </summary>
+		event Action<long, Exception> ChangePasswordResult;
+
+		/// <summary>
 		/// Server time changed <see cref="IConnector.ExchangeBoards"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
 		/// </summary>
 		event Action<TimeSpan> MarketTimeChanged;

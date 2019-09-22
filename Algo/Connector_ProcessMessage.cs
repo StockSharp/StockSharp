@@ -763,6 +763,10 @@ namespace StockSharp.Algo
 						ProcessRestoringSubscription(message.Adapter);
 						break;
 
+					case MessageTypes.ChangePassword:
+						ProcessChangePasswordMessage((ChangePasswordMessage)message);
+						break;
+
 					// если адаптеры передают специфичные сообщения
 					//default:
 					//	throw new ArgumentOutOfRangeException(LocalizedStrings.Str2142Params.Put(message.Type));
@@ -1965,42 +1969,9 @@ namespace StockSharp.Algo
 			RaiseMarketDataSubscriptionFinished(security, message);
 		}
 
-		private Action<Message> _newOutMessage;
-
-		event Action<Message> IMessageChannel.NewOutMessage
+		private void ProcessChangePasswordMessage(ChangePasswordMessage message)
 		{
-			add => _newOutMessage += value;
-			remove => _newOutMessage -= value;
-		}
-
-		bool IMessageChannel.IsOpened => ConnectionState == ConnectionStates.Connected;
-
-		private Action _stateChanged;
-
-		event Action IMessageChannel.StateChanged
-		{
-			add => _stateChanged += value;
-			remove => _stateChanged -= value;
-		}
-
-		void IMessageChannel.Open()
-		{
-			Connect();
-		}
-
-		void IMessageChannel.Close()
-		{
-			Disconnect();
-		}
-
-		IMessageChannel ICloneable<IMessageChannel>.Clone()
-		{
-			return this.Clone();
-		}
-
-		object ICloneable.Clone()
-		{
-			return this.Clone();
+			RaiseChangePassword(message.OriginalTransactionId, message.Error);
 		}
 	}
 }
