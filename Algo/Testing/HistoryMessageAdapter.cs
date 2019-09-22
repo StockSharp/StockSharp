@@ -126,10 +126,10 @@ namespace StockSharp.Algo.Testing
 			StopDate = DateTimeOffset.MaxValue;
 
 			this.AddMarketDataSupport();
-			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
-			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource);
-			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
-			this.AddSupportedMessage(ExtendedMessageTypes.ChangeTimeInterval);
+			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState, null);
+			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource, true);
+			this.AddSupportedMessage(ExtendedMessageTypes.Generator, true);
+			this.AddSupportedMessage(ExtendedMessageTypes.ChangeTimeInterval, null);
 		}
 
 		/// <summary>

@@ -190,7 +190,11 @@ namespace StockSharp.Messages
 		public IdGenerator TransactionIdGenerator => InnerAdapter.TransactionIdGenerator;
 
 		/// <inheritdoc />
-		public virtual IEnumerable<MessageTypes> PossibleSupportedMessages => InnerAdapter.PossibleSupportedMessages;
+		public virtual IEnumerable<MessageTypeInfo> PossibleSupportedMessages
+		{
+			get => InnerAdapter.PossibleSupportedMessages;
+			set => InnerAdapter.PossibleSupportedMessages = value;
+		}
 
 		/// <inheritdoc />
 		public virtual IEnumerable<MessageTypes> SupportedMessages

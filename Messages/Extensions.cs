@@ -330,20 +330,44 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Convert <see cref="MessageTypes"/> to <see cref="MessageTypeInfo"/> value.
+		/// </summary>
+		/// <param name="type"><see cref="MessageTypes"/> value.</param>
+		/// <param name="isMarketData">Market data.</param>
+		/// <returns><see cref="MessageTypeInfo"/> value.</returns>
+		public static MessageTypeInfo ToInfo(this MessageTypes type, bool? isMarketData = null)
+		{
+			if (isMarketData == null)
+				isMarketData = IsMarketData(type);
+
+			return new MessageTypeInfo(type, isMarketData);
+		}
+
+		private static readonly CachedSynchronizedSet<MessageTypes> _transactionalTypes = new CachedSynchronizedSet<MessageTypes>(new[]
+		{
+			MessageTypes.OrderRegister,
+			MessageTypes.OrderCancel,
+			MessageTypes.OrderStatus,
+			MessageTypes.OrderGroupCancel,
+			MessageTypes.OrderReplace,
+			MessageTypes.OrderPairReplace,
+			MessageTypes.Portfolio,
+			MessageTypes.PortfolioLookup
+		});
+
+		/// <summary>
+		/// Transactional message types.
+		/// </summary>
+		public static IEnumerable<MessageTypes> TransactionalMessageTypes => _transactionalTypes.Cache;
+
+		/// <summary>
 		/// Fill the <see cref="IMessageAdapter.SupportedMessages"/> message types related to transactional.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		public static void AddTransactionalSupport(this IMessageAdapter adapter)
 		{
-			adapter.AddSupportedMessage(MessageTypes.OrderCancel);
-			adapter.AddSupportedMessage(MessageTypes.OrderGroupCancel);
-			adapter.AddSupportedMessage(MessageTypes.OrderPairReplace);
-			adapter.AddSupportedMessage(MessageTypes.OrderRegister);
-			adapter.AddSupportedMessage(MessageTypes.OrderReplace);
-			adapter.AddSupportedMessage(MessageTypes.OrderStatus);
-			adapter.AddSupportedMessage(MessageTypes.Portfolio);
-			adapter.AddSupportedMessage(MessageTypes.PortfolioLookup);
-			//adapter.AddSupportedMessage(MessageTypes.Position);
+			foreach (var type in TransactionalMessageTypes)
+				adapter.AddSupportedMessage(type, false);
 		}
 
 		/// <summary>
@@ -352,16 +376,20 @@ namespace StockSharp.Messages
 		/// <param name="adapter">Adapter.</param>
 		public static void RemoveTransactionalSupport(this IMessageAdapter adapter)
 		{
-			adapter.RemoveSupportedMessage(MessageTypes.OrderCancel);
-			adapter.RemoveSupportedMessage(MessageTypes.OrderGroupCancel);
-			adapter.RemoveSupportedMessage(MessageTypes.OrderPairReplace);
-			adapter.RemoveSupportedMessage(MessageTypes.OrderRegister);
-			adapter.RemoveSupportedMessage(MessageTypes.OrderReplace);
-			adapter.RemoveSupportedMessage(MessageTypes.OrderStatus);
-			adapter.RemoveSupportedMessage(MessageTypes.Portfolio);
-			adapter.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
-			//adapter.RemoveSupportedMessage(MessageTypes.Position);
+			foreach (var type in TransactionalMessageTypes)
+				adapter.RemoveSupportedMessage(type);
 		}
+
+		private static readonly CachedSynchronizedSet<MessageTypes> _marketDataTypes = new CachedSynchronizedSet<MessageTypes>(new[]
+		{
+			MessageTypes.MarketData,
+			MessageTypes.SecurityLookup,
+		});
+
+		/// <summary>
+		/// Market-data message types.
+		/// </summary>
+		public static IEnumerable<MessageTypes> MarketDataMessageTypes => _marketDataTypes.Cache;
 
 		/// <summary>
 		/// Fill the <see cref="IMessageAdapter.SupportedMessages"/> message types related to market-data.
@@ -369,10 +397,8 @@ namespace StockSharp.Messages
 		/// <param name="adapter">Adapter.</param>
 		public static void AddMarketDataSupport(this IMessageAdapter adapter)
 		{
-			adapter.AddSupportedMessage(MessageTypes.MarketData);
-			adapter.AddSupportedMessage(MessageTypes.SecurityLookup);
-
-			//adapter.AddSupportedAllMarketDataTypes();
+			foreach (var type in MarketDataMessageTypes)
+				adapter.AddSupportedMessage(type, true);
 		}
 
 		/// <summary>
@@ -381,12 +407,20 @@ namespace StockSharp.Messages
 		/// <param name="adapter">Adapter.</param>
 		public static void RemoveMarketDataSupport(this IMessageAdapter adapter)
 		{
-			adapter.RemoveSupportedMessage(MessageTypes.MarketData);
-			adapter.RemoveSupportedMessage(MessageTypes.SecurityLookup);
-			adapter.RemoveSupportedMessage(MessageTypes.TimeFrameLookup);
-			adapter.RemoveSupportedMessage(MessageTypes.BoardLookup);
+			foreach (var type in MarketDataMessageTypes)
+				adapter.RemoveSupportedMessage(type);
 
 			adapter.RemoveSupportedAllMarketDataTypes();
+		}
+
+		private static bool? IsMarketData(MessageTypes type)
+		{
+			if (MarketDataMessageTypes.Contains(type))
+				return true;
+			else if (TransactionalMessageTypes.Contains(type))
+				return false;
+
+			return (bool?)null;
 		}
 
 		/// <summary>
@@ -394,12 +428,40 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
+		[Obsolete]
 		public static void AddSupportedMessage(this IMessageAdapter adapter, MessageTypes type)
+		{
+			AddSupportedMessage(adapter, type, IsMarketData(type));
+		}
+
+		/// <summary>
+		/// Add the message type info <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		/// <param name="isMarketData"><paramref name="type"/> is market-data type.</param>
+		public static void AddSupportedMessage(this IMessageAdapter adapter, MessageTypes type, bool? isMarketData)
+		{
+			adapter.AddSupportedMessage(new MessageTypeInfo(type, isMarketData));
+		}
+
+		/// <summary>
+		/// Add the message type info <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="info">Extended info for <see cref="MessageTypes"/>.</param>
+		public static void AddSupportedMessage(this IMessageAdapter adapter, MessageTypeInfo info)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.SupportedMessages = adapter.SupportedMessages.Concat(type).Distinct().ToArray();
+			if (info == null)
+				throw new ArgumentNullException(nameof(info));
+
+			var dict = adapter.PossibleSupportedMessages.ToDictionary(i => i.Type);
+			dict.TryAdd(info.Type, info);
+
+			adapter.PossibleSupportedMessages = dict.Values.ToArray();
 		}
 
 		/// <summary>
@@ -412,7 +474,7 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.SupportedMessages = adapter.SupportedMessages.Except(new[] { type }).ToArray();
+			adapter.PossibleSupportedMessages = adapter.PossibleSupportedMessages.Where(i => i.Type != type).ToArray();
 		}
 
 		/// <summary>
@@ -604,27 +666,6 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(adapter));
 
 			return adapter.SupportedMarketDataTypes.Contains(type);
-		}
-
-		/// <summary>
-		/// Add all market data types into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		public static void AddSupportedAllMarketDataTypes(this IMessageAdapter adapter)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			//adapter.AddSupportedMarketDataType(MarketDataTypes.OrderLog);
-			adapter.AddSupportedMarketDataType(MarketDataTypes.Trades);
-			adapter.AddSupportedMarketDataType(MarketDataTypes.MarketDepth);
-			adapter.AddSupportedMarketDataType(MarketDataTypes.Level1);
-			adapter.AddSupportedMarketDataType(MarketDataTypes.CandleTimeFrame);
-			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleTick);
-			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleVolume);
-			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleRange);
-			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandlePnF);
-			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleRenko);
 		}
 
 		/// <summary>

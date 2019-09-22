@@ -159,9 +159,28 @@ namespace StockSharp.Messages
 			}
 		}
 
+		private IEnumerable<MessageTypeInfo> _possibleSupportedMessages = Enumerable.Empty<MessageTypeInfo>();
+
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual IEnumerable<MessageTypes> PossibleSupportedMessages => SupportedMessages;
+		public virtual IEnumerable<MessageTypeInfo> PossibleSupportedMessages
+		{
+			get => _possibleSupportedMessages;
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				var duplicate = value.GroupBy(m => m.Type).FirstOrDefault(g => g.Count() > 1);
+				if (duplicate != null)
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
+
+				_possibleSupportedMessages = value;
+				OnPropertyChanged(nameof(PossibleSupportedMessages));
+
+				SupportedMessages = value.Select(t => t.Type).ToArray();
+			}
+		}
 
 		private IEnumerable<MarketDataTypes> _supportedMarketDataTypes = Enumerable.Empty<MarketDataTypes>();
 
