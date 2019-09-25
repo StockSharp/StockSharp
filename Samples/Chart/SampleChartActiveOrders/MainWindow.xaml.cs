@@ -5,6 +5,7 @@
 	using System.Threading.Tasks;
 	using System.Windows;
 	using System.Collections.ObjectModel;
+	using System.IO;
 	using System.Windows.Controls;
 	using System.Windows.Threading;
 
@@ -12,6 +13,7 @@
 	using Ecng.Common;
 	using Ecng.Xaml;
 	using Ecng.Configuration;
+	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
@@ -126,6 +128,8 @@
 
 			//BusyIndicator.IsBusy = true;
 
+			Chart.IsAutoRange = true;
+
 			Task.Factory.StartNew(() =>
 			{
 				var date = DateTime.MinValue;
@@ -157,7 +161,6 @@
 				{
 					//BusyIndicator.IsBusy = false;
 					Chart.IsAutoRange = false;
-					_area.YAxises.First().AutoRange = false;
 
 					Log($"Loaded {_allCandles.Count} candles");
 				});
@@ -271,6 +274,28 @@
 			}
 
 			Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order));
+		}
+
+		private void Load_Click(object sender, RoutedEventArgs e)
+		{
+			if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/SettingsStorage.xml"))
+			{
+				var settingsStorage =
+					new XmlSerializer<SettingsStorage>().Deserialize(
+						AppDomain.CurrentDomain.BaseDirectory + "/SettingsStorage.xml");
+				Chart.Load(settingsStorage);
+
+				_area = Chart.Areas.First();
+				_candleElement = Chart.Elements.OfType<ChartCandleElement>().First();
+				_activeOrdersElement = Chart.Elements.OfType<ChartActiveOrdersElement>().First();
+			}
+		}
+
+		private void Save_Click(object sender, RoutedEventArgs e)
+		{
+			var settingsStorage = new SettingsStorage();
+			Chart.Save(settingsStorage);
+			new XmlSerializer<SettingsStorage>().Serialize(settingsStorage, AppDomain.CurrentDomain.BaseDirectory + "/SettingsStorage.xml");
 		}
 
 		private void Cancel_Click(object sender, RoutedEventArgs e)

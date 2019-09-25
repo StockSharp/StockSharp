@@ -40,6 +40,11 @@
 				<StackPanel Orientation="Vertical">
 					<CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="3,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center" Checked="IsRealtime_OnChecked" Unchecked="IsRealtime_OnChecked" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.CustomColors}" Margin="3,0,0,0" x:Name="CustomColors" Checked="CustomColors_Changed" Unchecked="CustomColors_Changed" VerticalAlignment="Center"/>
+					<CheckBox Margin="3,0,0,0" x:Name="CustomColors2" Checked="CustomColors2_Changed" Unchecked="CustomColors2_Changed" VerticalAlignment="Center">
+						<CheckBox.Content>
+							<TextBlock><Run Text="{x:Static loc:LocalizedStrings.CustomColors}"/><Run Text="2"/></TextBlock>
+						</CheckBox.Content>
+					</CheckBox>
 				</StackPanel>
 			</GroupBox>
 
