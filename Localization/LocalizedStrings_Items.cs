@@ -18,6 +18,126 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Draw size
+		/// </summary>
+		public const string  DrawSizeKey = nameof(DrawSize);
+
+		/// <summary>
+		/// Draw size
+		/// </summary>
+		public static string DrawSize => GetString(DrawSizeKey);
+
+		/// <summary>
+		/// Order display filter.
+		/// </summary>
+		public const string  OrdersDisplayFilterKey = nameof(OrdersDisplayFilter);
+
+		/// <summary>
+		/// Order display filter.
+		/// </summary>
+		public static string OrdersDisplayFilter => GetString(OrdersDisplayFilterKey);
+
+		/// <summary>
+		/// All orders
+		/// </summary>
+		public const string  AllOrdersKey = nameof(AllOrders);
+
+		/// <summary>
+		/// All orders
+		/// </summary>
+		public static string AllOrders => GetString(AllOrdersKey);
+
+		/// <summary>
+		/// Orders with errors
+		/// </summary>
+		public const string  ErrorOrdersOnlyKey = nameof(ErrorOrdersOnly);
+
+		/// <summary>
+		/// Orders with errors
+		/// </summary>
+		public static string ErrorOrdersOnly => GetString(ErrorOrdersOnlyKey);
+
+		/// <summary>
+		/// Orders with no errors
+		/// </summary>
+		public const string  NoErrorOrdersOnlyKey = nameof(NoErrorOrdersOnly);
+		
+		/// <summary>
+		/// Orders with no errors
+		/// </summary>
+		public static string NoErrorOrdersOnly => GetString(NoErrorOrdersOnlyKey);
+
+		/// <summary>
+		/// Order errors color
+		/// </summary>
+		public const string TransactionErrorColorKey = nameof(TransactionErrorColor);
+
+		/// <summary>
+		/// Order errors color
+		/// </summary>
+		public static string TransactionErrorColor => GetString(TransactionErrorColorKey);
+
+		/// <summary>
+		/// Use alternative icon.
+		/// </summary>
+		public const string UseAltIconKey = nameof(UseAltIcon);
+
+		/// <summary>
+		/// Use alternative icon.
+		/// </summary>
+		public static string UseAltIcon => GetString(UseAltIconKey);
+
+		/// <summary>
+		/// Days letter.
+		/// </summary>
+		public const string DaysLetterKey = nameof(DaysLetter);
+
+		/// <summary>
+		/// Days letter.
+		/// </summary>
+		public static string DaysLetter => GetString(DaysLetterKey);
+
+		/// <summary>
+		/// Hours letter.
+		/// </summary>
+		public const string HoursLetterKey = nameof(HoursLetter);
+
+		/// <summary>
+		/// Hours letter.
+		/// </summary>
+		public static string HoursLetter => GetString(HoursLetterKey);
+
+		/// <summary>
+		/// Minutes letter.
+		/// </summary>
+		public const string MinutesLetterKey = nameof(MinutesLetter);
+
+		/// <summary>
+		/// Minutes letter.
+		/// </summary>
+		public static string MinutesLetter => GetString(MinutesLetterKey);
+
+		/// <summary>
+		/// Seconds letter.
+		/// </summary>
+		public const string SecondsLetterKey = nameof(SecondsLetter);
+
+		/// <summary>
+		/// Seconds letter.
+		/// </summary>
+		public static string SecondsLetter => GetString(SecondsLetterKey);
+
+		/// <summary>
+		/// Ruler.
+		/// </summary>
+		public const string RulerKey = nameof(Ruler);
+
+		/// <summary>
+		/// Ruler.
+		/// </summary>
+		public static string Ruler => GetString(RulerKey);
+
+		/// <summary>
 		/// Unable to change group name of axis while it is attached to a chart area.
 		/// </summary>
 		public const string ErrorChangingGroupNameKey = nameof(ErrorChangingGroupName);

@@ -1,4 +1,16 @@
-﻿ErrorChangingGroupName;Unable to change group name of axis while it is attached to a chart area.;Невозможно изменить имя группы у оси, добавленной в область графика.
+﻿DrawSize;Draw size;Размер отрисовки
+OrdersDisplayFilter;Order display filter;Фильтр отображения 
+AllOrders;All orders;Все заявки
+ErrorOrdersOnly;Orders with errors;Заявки с ошибками
+NoErrorOrdersOnly;Orders with no errors;Заявки без ошибок
+TransactionErrorColor;Order errors color;Цвет заявок с ошибками
+UseAltIcon;Use alternative icon;Использовать альтернативные иконки
+DaysLetter;d;д
+HoursLetter;h;ч
+MinutesLetter;m;м
+SecondsLetter;s;с
+Ruler;Ruler;Линейка
+ErrorChangingGroupName;Unable to change group name of axis while it is attached to a chart area.;Невозможно изменить имя группы у оси, добавленной в область графика.
 AxisIsNotSet;Element axis is not set.;Ось элемента не задана.
 ErrorRemovingDefaultAxis;Unable to remove default axis.;Нельзя удалить ось по умолчанию.
 SourceValues;Source values;Исходные значения
