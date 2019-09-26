@@ -240,6 +240,11 @@ StockSharp API Change log
 * (feature) SampleConnection added.
 * (feature) MarketDepth. QuotesChanged marked as obsolete.
 * (feature) IConnector. ChangePasswordResult event added.
+* (feature) ConnectorWindow. Change password options added.
+* (feature) ConnectorWindow. Enabled/disable market-data/transaction messages.
+* (feature) StrategiesDashboard. ClosePosition, RevertPosition, RiskRules commands added.
+* (feature) CandleSettingsEditor refactoring.
+* (feature) QuickOrderPanel added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
