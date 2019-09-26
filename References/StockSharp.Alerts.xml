@@ -201,7 +201,6 @@
     <member name="M:StockSharp.Alerts.AlertRuleField.GetHashCode">
       <summary>Serves as a hash function for a particular type. </summary>
       <returns>A hash code for the current <see cref="T:System.Object" />.</returns>
-      <filterpriority>2</filterpriority>
     </member>
     <member name="M:StockSharp.Alerts.AlertRuleField.OnEquals(StockSharp.Alerts.AlertRuleField)">
       <summary>

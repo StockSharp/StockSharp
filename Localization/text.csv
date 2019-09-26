@@ -1,5 +1,5 @@
 ﻿DrawSize;Draw size;Размер отрисовки
-OrdersDisplayFilter;Order display filter;Фильтр отображения 
+OrdersDisplayFilter;Orders display filter;Фильтр отображения заявок
 AllOrders;All orders;Все заявки
 ErrorOrdersOnly;Orders with errors;Заявки с ошибками
 NoErrorOrdersOnly;Orders with no errors;Заявки без ошибок
@@ -5084,6 +5084,8 @@ WIKI;WIKI;WIKI
 StockSharp;StockSharp;StockSharp
 Upbit;Upbit;Upbit
 SelectedStrategies;Selected strategies;Выбранные стратегии
+Pips;Pips;Пипсы
+Points;Points;Пункты
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -7798,10 +7800,8 @@ DocStr2938;Required if additional information associated with the trade is store
 DocStr2939;Extension class for {0};Вспомогательный класс для {0}
 DocStr2940;To create from {0} the pips values;Создать из {0} значения пипсы
 DocStr2941;The instrument from which information about the price increment is taken;Инструмент, из которого берется информация по шагу цены
-DocStr2942;Pips;Пипсы
 DocStr2943;To create from {0} the points values;Создать из {0} значения пункты
 DocStr2944;The instrument from which information about the price increment cost is taken;Инструмент, из которого берется информация по стоимости шага цены
-DocStr2945;Points;Пункты
 DocStr2946;Convert string to {0};Преобразовать строку в {0}
 DocStr2947;String value of {0};Строковое представление {0}
 DocStr2948;Information about the instrument. Required when using {0} и {1};Информация по инструменту. Необходима при использовании {0} и {1}
@@ -12538,7 +12538,7 @@ DocStr7808;The command to add candles to the chart;Команда добавле
 DocStr7809;The command to add the indicator to the chart;Команда добавления индикатора на график
 DocStr7810;To re-subscribe to getting data for all elements;Переподписаться на получение данных для всех элементов
 DocStr7811;The chart settings change event;Событие изменения настроек графика
-DocStr7812;The event of the order registration from the chart;Событие регистрации заявки с графика
+DocStr7812;The event of the order registration;Событие регистрации заявки
 DocStr7813;The event of the subscription to getting data for the element;Событие подписки на получение данных для элемента
 DocStr7814;The event of the unsubscribe from getting data for the element;Событие отписки от получения данных для элемента
 DocStr7815;The chart element representing trades;Элемент графика, представляющий сделки
@@ -13637,8 +13637,8 @@ DocStr8977;Put the active order data;Добавить данные активн�
 DocStr8978;The active order value;Данные активной заявки
 DocStr8979;Put the chart data;Добавить данные графика
 DocStr8980;The chart value;Данные графика
-DocStr8982;The event of the order re-registration from the chart;Событие изменения заявки на графике
-DocStr8983;The event of the order cancelation from the chart;Событие отмена заявки на графике
+DocStr8982;The event of the order re-registration;Событие изменения заявки
+DocStr8983;The event of the order cancellation;Событие отмена заявки
 DocStr8984;Select data template by item type;Выбрать шаблон данных по типу элемента
 DocStr8985;Template for {0} item type;Шаблон {0} для типа элемента
 DocStr8986;When overridden in a derived class, returns a {0} based on custom logic;When overridden in a derived class, returns a {0} based on custom logic
@@ -15711,3 +15711,33 @@ DocStr11342;Historical message adapter;Адаптер исторических �
 DocStr11343;News provider;Провайдер новостей
 DocStr11345;Validate credentials;Проверить доступ
 DocStr11346;IP address;IP адрес
+DocStr11347;Replace orders;Заменить заявки
+DocStr11348;Change password result;Результат изменения пароля
+DocStr11349;Transactional message types;Транзакционные типы сообщений
+DocStr11350;Market-data message types;Типы сообщений маркет-данных
+DocStr11351;{0} is market-data type;Является ли {0} типом маркет-данных
+DocStr11352;Extended info for {0};Расширенная информация для {0}
+DocStr11353;Rebuild candles event;Событие перестроения свечей
+DocStr11354;Put candle color data;Передать цвет данных свечи
+DocStr11355;Candle draw color;Цвет отрисовки свечи
+DocStr11358;Fill color of transaction errors;Цвет ошибок транзакций
+DocStr11359;Use alternative icons;Использовать альтернативные иконки
+DocStr11360;Ruler annotation;Аннотация линейки
+DocStr11361;Ruler width;Ширина линейки
+DocStr11362;Ruler height;Высота линейки
+DocStr11363;First line of ruler text;Текст первой линии линейки
+DocStr11364;Second line of ruler text;Текст второй линии линейки
+DocStr11365;Auto-remove on any mouse click;Авто-удаление по любому клику мышки
+DocStr11367;Panel for quick orders transactions;Панель быстрой регистрации заявок
+DocStr11368;Grey part of price on buy button;Grey part of price on buy button
+DocStr11369;Colored part of price on buy button;Colored part of price on buy button
+DocStr11370;Grey part of price on sell button;Grey part of price on sell button
+DocStr11371;Colored part of price on sell button;Colored part of price on sell button
+DocStr11372;Color of the colored buy text (green/red);Color of the colored buy text (green/red)
+DocStr11373;Color of the colored sell text (green/red);Color of the colored sell text (green/red)
+DocStr11374;Spread text;Текст спреда
+DocStr11375;Selected volume value;Значение выбранного объема
+DocStr11376;Buy button background;Фон кнопки покупки
+DocStr11377;Sell button background;Фон кнопки продажи
+DocStr11378;BUY;BUY
+DocStr11379;SELL;SELL

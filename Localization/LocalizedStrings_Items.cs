@@ -28,12 +28,12 @@ namespace StockSharp.Localization
 		public static string DrawSize => GetString(DrawSizeKey);
 
 		/// <summary>
-		/// Order display filter.
+		/// Orders display filter.
 		/// </summary>
 		public const string  OrdersDisplayFilterKey = nameof(OrdersDisplayFilter);
 
 		/// <summary>
-		/// Order display filter.
+		/// Orders display filter.
 		/// </summary>
 		public static string OrdersDisplayFilter => GetString(OrdersDisplayFilterKey);
 
@@ -50506,5 +50506,25 @@ namespace StockSharp.Localization
 		/// Selected strategies
 		/// </summary>
 		public static string SelectedStrategies => GetString(SelectedStrategiesKey);
+
+		/// <summary>
+		/// Pips
+		/// </summary>
+		public const string PipsKey = nameof(Pips);
+
+		/// <summary>
+		/// Pips
+		/// </summary>
+		public static string Pips => GetString(PipsKey);
+
+		/// <summary>
+		/// Points
+		/// </summary>
+		public const string PointsKey = nameof(Points);
+
+		/// <summary>
+		/// Points
+		/// </summary>
+		public static string Points => GetString(PointsKey);
 	}
 }

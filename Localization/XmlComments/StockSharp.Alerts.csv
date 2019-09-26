@@ -46,7 +46,6 @@ M:StockSharp.Alerts.AlertRuleField.Save(Ecng.Serialization.SettingsStorage)/para
 M:StockSharp.Alerts.AlertRuleField.ToString/inheritdoc;DocStr8459
 M:StockSharp.Alerts.AlertRuleField.GetHashCode/summary;DocStr8492
 M:StockSharp.Alerts.AlertRuleField.GetHashCode/returns;DocStr8493
-M:StockSharp.Alerts.AlertRuleField.GetHashCode/filterpriority;DocStr11344
 M:StockSharp.Alerts.AlertRuleField.OnEquals(StockSharp.Alerts.AlertRuleField)/summary;DocStr2634
 M:StockSharp.Alerts.AlertRuleField.OnEquals(StockSharp.Alerts.AlertRuleField)/param/other;DocStr1157
 M:StockSharp.Alerts.AlertRuleField.OnEquals(StockSharp.Alerts.AlertRuleField)/returns;DocStr2636

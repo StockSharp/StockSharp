@@ -41,7 +41,6 @@ M:StockSharp.BusinessEntities.Exchange.OnEquals(StockSharp.BusinessEntities.Exch
 M:StockSharp.BusinessEntities.Exchange.OnEquals(StockSharp.BusinessEntities.Exchange)/returns;DocStr2636
 M:StockSharp.BusinessEntities.Exchange.GetHashCode/summary;DocStr8492
 M:StockSharp.BusinessEntities.Exchange.GetHashCode/returns;DocStr8493
-M:StockSharp.BusinessEntities.Exchange.GetHashCode/filterpriority;DocStr11344
 M:StockSharp.BusinessEntities.Exchange.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Exchange.Clone/returns;DocStr1116
 M:StockSharp.BusinessEntities.Exchange.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -408,6 +407,7 @@ E:StockSharp.BusinessEntities.IConnector.ConnectedEx/summary;DocStr890
 E:StockSharp.BusinessEntities.IConnector.DisconnectedEx/summary;DocStr891
 E:StockSharp.BusinessEntities.IConnector.ConnectionErrorEx/summary;DocStr892
 E:StockSharp.BusinessEntities.IConnector.Error/summary;DocStr893
+E:StockSharp.BusinessEntities.IConnector.ChangePasswordResult/summary;DocStr11348
 E:StockSharp.BusinessEntities.IConnector.MarketTimeChanged/summary;DocStr886
 E:StockSharp.BusinessEntities.IConnector.SessionStateChanged/summary;DocStr897
 M:StockSharp.BusinessEntities.IConnector.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/summary;DocStr803

@@ -860,7 +860,6 @@ M:StockSharp.Algo.DataType.OnEquals(StockSharp.Algo.DataType)/param/other;DocStr
 M:StockSharp.Algo.DataType.OnEquals(StockSharp.Algo.DataType)/returns;DocStr2636
 M:StockSharp.Algo.DataType.GetHashCode/summary;DocStr8492
 M:StockSharp.Algo.DataType.GetHashCode/returns;DocStr8493
-M:StockSharp.Algo.DataType.GetHashCode/filterpriority;DocStr11344
 M:StockSharp.Algo.DataType.Clone/summary;DocStr643
 M:StockSharp.Algo.DataType.Clone/returns;DocStr1116
 M:StockSharp.Algo.DataType.ToString/inheritdoc;DocStr8459
@@ -5242,6 +5241,7 @@ E:StockSharp.Algo.Connector.CandleSeriesProcessing/summary;DocStr464
 E:StockSharp.Algo.Connector.CandleSeriesStopped/summary;DocStr91
 E:StockSharp.Algo.Connector.CandleSeriesError/summary;DocStr11277
 E:StockSharp.Algo.Connector.OrderInitialized/inheritdoc;DocStr8459
+E:StockSharp.Algo.Connector.ChangePasswordResult/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.RaiseNewStopOrder(StockSharp.BusinessEntities.Order)/summary;DocStr466
 M:StockSharp.Algo.Connector.RaiseNewStopOrder(StockSharp.BusinessEntities.Order)/param/stopOrder;DocStr9319
 M:StockSharp.Algo.Connector.RaiseStopOrderChanged(StockSharp.BusinessEntities.Order)/summary;DocStr466
@@ -5427,7 +5427,11 @@ M:StockSharp.Algo.Connector.GetMarketDepth(StockSharp.BusinessEntities.Security)
 M:StockSharp.Algo.Connector.GetFilteredMarketDepth(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.RegisterOrder(StockSharp.BusinessEntities.Order)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)/inheritdoc;DocStr8459
-M:StockSharp.Algo.Connector.ReRegisterOrderPair(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Connector.ReRegisterOrderPair(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)/summary;DocStr11347
+M:StockSharp.Algo.Connector.ReRegisterOrderPair(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)/param/oldOrder1;DocStr828
+M:StockSharp.Algo.Connector.ReRegisterOrderPair(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)/param/newOrder1;DocStr829
+M:StockSharp.Algo.Connector.ReRegisterOrderPair(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)/param/oldOrder2;DocStr828
+M:StockSharp.Algo.Connector.ReRegisterOrderPair(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)/param/newOrder2;DocStr829
 M:StockSharp.Algo.Connector.CancelOrder(StockSharp.BusinessEntities.Order)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.InitNewOrder(StockSharp.BusinessEntities.Order)/summary;DocStr837
 M:StockSharp.Algo.Connector.InitNewOrder(StockSharp.BusinessEntities.Order)/param/order;NewOrder
@@ -5453,8 +5457,8 @@ M:StockSharp.Algo.Connector.OnCancelOrders(System.Int64,System.Nullable{System.B
 M:StockSharp.Algo.Connector.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/board;DocStr843
 M:StockSharp.Algo.Connector.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/security;DocStr844
 M:StockSharp.Algo.Connector.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/securityType;DocStr9087
-M:StockSharp.Algo.Connector.ChangePassword(System.String)/summary;XamlStr665
-M:StockSharp.Algo.Connector.ChangePassword(System.String)/param/newPassword;XamlStr360
+M:StockSharp.Algo.Connector.ChangePassword(System.Security.SecureString)/summary;XamlStr665
+M:StockSharp.Algo.Connector.ChangePassword(System.Security.SecureString)/param/newPassword;XamlStr360
 M:StockSharp.Algo.Connector.GetSecurity(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.GetSecurity(System.String,System.Func{StockSharp.BusinessEntities.Security,System.Boolean},System.Boolean@)/summary;DocStr846
 M:StockSharp.Algo.Connector.GetSecurity(System.String,System.Func{StockSharp.BusinessEntities.Security,System.Boolean},System.Boolean@)/param/id;SecurityId
