@@ -253,6 +253,11 @@
             The chart element removal event.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.RebuildCandles">
+      <summary>
+            Rebuild candles event.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Charting.Chart.CreateOrder">
       <summary>
             The new order creation event.
@@ -448,6 +453,11 @@
     <member name="F:StockSharp.Xaml.Charting.ChartAnnotationTypes.VerticalLineAnnotation">
       <summary>
             Vertical line.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartAnnotationTypes.RulerAnnotation">
+      <summary>
+            Ruler.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartAnnotation">
@@ -1160,6 +1170,15 @@
             Value of X coordinate for <see cref="T:StockSharp.Xaml.Charting.ChartLineElement" />.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartCandleElement,System.Nullable{System.Windows.Media.Color})">
+      <summary>
+            Put candle color data.
+            </summary>
+      <param name="element">The chart element representing a candle.</param>
+      <param name="color">Candle draw color.</param>
+      <returns>
+        <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)">
       <summary>
             Put the candle data.
@@ -1221,16 +1240,17 @@
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartOrderElement,StockSharp.BusinessEntities.Order)">
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartOrderElement,StockSharp.BusinessEntities.Order,System.String)">
       <summary>
             Put the order data.
             </summary>
       <param name="element">The chart element representing orders.</param>
       <param name="order">The order value.</param>
+      <param name="errorMessage">Order error message.</param>
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartOrderElement,System.Int64,System.String,StockSharp.Messages.Sides,System.Decimal,System.Decimal)">
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartOrderElement,System.Int64,System.String,StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.String)">
       <summary>
             Put the trade data.
             </summary>
@@ -1240,6 +1260,7 @@
       <param name="side">Order side (buy or sell).</param>
       <param name="price">Order price.</param>
       <param name="volume">Number of contracts in the order.</param>
+      <param name="errorMessage">Order error message.</param>
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
@@ -1404,14 +1425,10 @@
       <typeparam name="T">The chart element type.</typeparam>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.Chart">
-      <summary>
-            The chart on which the element is drawn.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.ChartArea">
-      <summary>
-            The chart area on which the element is drawn.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.FullTitle">
       <summary>
@@ -1419,24 +1436,16 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.IsVisible">
-      <summary>
-            Show chart element.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.IsLegend">
-      <summary>
-            Should this element be shown in the legend.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.XAxisId">
-      <summary>
-            X-axis.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.YAxisId">
-      <summary>
-            Y-axis.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.Colorer">
       <summary>
@@ -1454,14 +1463,10 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.ParentElement">
-      <summary>
-            Parent chart element.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartElement`1.ChildElements">
-      <summary>
-            Child chart elements.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.AddChildElement(StockSharp.Xaml.Charting.IChartElement,System.Boolean)">
       <summary>
@@ -1507,7 +1512,10 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.Clone">
-      <inheritdoc />
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Xaml.Charting.ChartElement`1" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.CheckAxesCompatible(System.Nullable{StockSharp.Xaml.Charting.ChartAxisType},System.Nullable{StockSharp.Xaml.Charting.ChartAxisType})">
       <summary>
@@ -1838,6 +1846,30 @@
             The chart element representing orders.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.Charting.ChartOrderElement.DisplayFilter">
+      <summary>
+            Orders display filter.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartOrderElement.DisplayFilter.All">
+      <summary>All orders.</summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartOrderElement.DisplayFilter.ErrorsOnly">
+      <summary>Orders with errors.</summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartOrderElement.DisplayFilter.NoErrorsOnly">
+      <summary>Orders with no errors.</summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartOrderElement.ErrorColor">
+      <summary>
+            Fill color of transaction errors.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartOrderElement.Filter">
+      <summary>
+            Orders display filter.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartOrderElement.#ctor">
       <summary>
             Initialize <see cref="T:StockSharp.Xaml.Charting.ChartOrderElement" />.
@@ -1845,6 +1877,18 @@
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartOrderElement.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)">
       <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartOrderElement.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartOrderElement.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartPanel">
       <summary>
@@ -2387,6 +2431,16 @@
     <member name="P:StockSharp.Xaml.Charting.ChartTransactionElement`1.SellStrokeColor">
       <summary>
             Border color of graphics element on chart, indicating sell.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartTransactionElement`1.UseAltIcon">
+      <summary>
+            Use alternative icons.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartTransactionElement`1.DrawSize">
+      <summary>
+            Draw size.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Load(Ecng.Serialization.SettingsStorage)">
@@ -3877,6 +3931,65 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ToString">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation">
+      <summary>
+            Ruler annotation.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.RulerWidthProperty">
+      <summary>Ruler width.</summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.RulerHeightProperty">
+      <summary>Ruler height.</summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.Text1Property">
+      <summary>First line of ruler text.</summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.Text2Property">
+      <summary>Second line of ruler text.</summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.RulerWidth">
+      <summary>Ruler width.</summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.RulerHeight">
+      <summary>Ruler height.</summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.Text1">
+      <summary>First line of ruler text.</summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.Text2">
+      <summary>Second line of ruler text.</summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.#ctor(System.Double)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.OnApplyTemplate">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.GetSelectedCursor">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.MakeInvisible">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.MakeVisible(Ecng.Xaml.Charting.Visuals.Annotations.AnnotationCoordinates)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.AttachInteractionHandlersTo(System.Windows.FrameworkElement)">
+      <summary>Auto-remove on any mouse click.</summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.DetachInteractionHandlersFrom(System.Windows.FrameworkElement)">
+      <summary>Auto-remove on any mouse click.</summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.IsPointWithinBounds(System.Windows.Point)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.FromCoordinate(System.Double,Ecng.Xaml.Charting.Visuals.Axes.IAxis)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation.GetCurrentPlacementStrategy">
       <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.Ultrachart.AreaAxesToTooltipConverter">

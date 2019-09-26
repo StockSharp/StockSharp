@@ -245,6 +245,12 @@ StockSharp API Change log
 * (feature) StrategiesDashboard. ClosePosition, RevertPosition, RiskRules commands added.
 * (feature) CandleSettingsEditor refactoring.
 * (feature) QuickOrderPanel added.
+* (feature) Charting. Ruler annotation.
+* (feature) Charting. Order error messages.
+* (feature) Charting. Candle custom drawing.
+* (feature) Charting. Orders/trades alternative icons.
+* (feature) Charting. Quick orders panel.
+* (feature) Charting. Quick time-frame and candle type switch.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
