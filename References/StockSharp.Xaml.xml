@@ -1594,16 +1594,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsTextProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsText" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsText">
-      <summary>
-            Description of currently selected settings.
-            </summary>
-    </member>
     <member name="F:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsProperty">
       <summary>
         <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings" />.
@@ -1732,7 +1722,7 @@
     </member>
     <member name="E:StockSharp.Xaml.QuickOrderPanel.RegisterOrder">
       <summary>
-            The event invoked when user pressed order register button.
+            The event of the order registration.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.QuickOrderPanel.#ctor">

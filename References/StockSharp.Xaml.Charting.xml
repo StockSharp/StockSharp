@@ -1000,16 +1000,10 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartCandleElement.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartCandleElement.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartCandleElement.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)">
       <inheritdoc />
@@ -1246,7 +1240,7 @@
             </summary>
       <param name="element">The chart element representing orders.</param>
       <param name="order">The order value.</param>
-      <param name="errorMessage">Order error message.</param>
+      <param name="errorMessage">Error registering/cancelling order.</param>
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
@@ -1260,7 +1254,7 @@
       <param name="side">Order side (buy or sell).</param>
       <param name="price">Order price.</param>
       <param name="volume">Number of contracts in the order.</param>
-      <param name="errorMessage">Order error message.</param>
+      <param name="errorMessage">Error registering/cancelling order.</param>
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
@@ -1495,16 +1489,10 @@
         <see langword="true" /> if the data was successfully drawn, otherwise, returns <see langword="false" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartElement`1.CreateClone">
       <summary>
@@ -1879,16 +1867,10 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartOrderElement.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartOrderElement.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartPanel">
       <summary>
@@ -1930,17 +1912,17 @@
     </member>
     <member name="E:StockSharp.Xaml.Charting.ChartPanel.RegisterOrder">
       <summary>
-            The event of the order registration from the chart.
+            The event of the order registration.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Charting.ChartPanel.MoveOrder">
       <summary>
-            The event of the order re-registration from the chart.
+            The event of the order re-registration.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Charting.ChartPanel.CancelOrder">
       <summary>
-            The event of the order cancelation from the chart.
+            The event of the order cancellation.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Charting.ChartPanel.AnnotationCreated">
@@ -1994,19 +1976,13 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.IsAutoRange">
-      <summary>
-            To use automatic range for the X-axis. The default is off.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.XAxisType">
-      <summary>
-            Default type of X axis.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.ChartTheme">
-      <summary>
-            The name of the graphic theme.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.OrderSettings">
       <summary>
@@ -2024,82 +2000,37 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.AddArea(StockSharp.Xaml.Charting.ChartArea)">
-      <summary>
-            To add an area to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.RemoveArea(StockSharp.Xaml.Charting.ChartArea)">
-      <summary>
-            To remove the area from the chart.
-            </summary>
-      <param name="area">Chart area.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.ClearAreas">
-      <summary>
-            To remove all areas from the chart.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.IChartElement)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="candleSeries">Candles series.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartIndicatorElement,StockSharp.Algo.Candles.CandleSeries,StockSharp.Algo.Indicators.IIndicator)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="candleSeries">Candles series.</param>
-      <param name="indicator">Indicator.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartOrderElement,StockSharp.BusinessEntities.Security)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="security">Security.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartTradeElement,StockSharp.BusinessEntities.Security)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="security">Security.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.RemoveElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.IChartElement)">
-      <summary>
-            To remove the element from the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.GetIndicator(StockSharp.Xaml.Charting.ChartIndicatorElement)">
-      <summary>
-            To get an indicator which is associated with <see cref="T:StockSharp.Xaml.Charting.ChartIndicatorElement" />.
-            </summary>
-      <param name="element">The chart element.</param>
-      <returns>Indicator.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.GetSource(StockSharp.Xaml.Charting.IChartElement)">
-      <summary>
-            To get the data source for <see cref="T:StockSharp.Xaml.Charting.IChartElement" />.
-            </summary>
-      <param name="element">The chart element.</param>
-      <returns>Market-data source.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.SetSource(StockSharp.Xaml.Charting.IChartElement,System.Object)">
       <summary>
@@ -2444,16 +2375,10 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.CandleSettingsWindow">
       <summary>

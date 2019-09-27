@@ -487,13 +487,12 @@ F:StockSharp.Fix.FixUserResponseTypes.UserBlocked/summary;Str2581
 F:StockSharp.Fix.FixUserResponseTypes.OldPasswordIncorrect/summary;DocStr9877
 F:StockSharp.Fix.FixUserResponseTypes.NewPasswordIncorrect/summary;DocStr9878
 F:StockSharp.Fix.FixUserResponseTypes.NotSupported/summary;DocStr9879
+F:StockSharp.Fix.FixUserResponseTypes.UnknownError/summary;UnknownServerError
 T:StockSharp.Fix.FixUserResponseMessage/summary;DocStr9880
 M:StockSharp.Fix.FixUserResponseMessage.#ctor/summary;DocStr93
 P:StockSharp.Fix.FixUserResponseMessage.UserName/summary;DocStr3319
 P:StockSharp.Fix.FixUserResponseMessage.ResponseType/summary;DocStr9881
-P:StockSharp.Fix.FixUserResponseMessage.OriginalTransactionId/summary;DocStr4056
-M:StockSharp.Fix.FixUserResponseMessage.Clone/summary;DocStr643
-M:StockSharp.Fix.FixUserResponseMessage.Clone/returns;DocStr1116
+M:StockSharp.Fix.FixUserResponseMessage.CopyTo(StockSharp.Fix.FixUserResponseMessage)/inheritdoc;DocStr8459
 T:StockSharp.Fix.FixUserForceLogoffMessage/summary;DocStr9882
 M:StockSharp.Fix.FixUserForceLogoffMessage.#ctor/summary;DocStr93
 P:StockSharp.Fix.FixUserForceLogoffMessage.OriginalTransactionId/summary;DocStr4056

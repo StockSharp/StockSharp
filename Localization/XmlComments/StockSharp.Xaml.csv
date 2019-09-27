@@ -377,7 +377,7 @@ P:StockSharp.Xaml.QuickOrderPanel.SellBackground/summary;DocStr11377
 P:StockSharp.Xaml.QuickOrderPanel.Security/summary;DocStr2831
 P:StockSharp.Xaml.QuickOrderPanel.BuyCaps/summary;DocStr11378
 P:StockSharp.Xaml.QuickOrderPanel.SellCaps/summary;DocStr11379
-E:StockSharp.Xaml.QuickOrderPanel.RegisterOrder/summary;DocStr11380
+E:StockSharp.Xaml.QuickOrderPanel.RegisterOrder/summary;DocStr7812
 M:StockSharp.Xaml.QuickOrderPanel.#ctor/summary;DocStr1
 M:StockSharp.Xaml.QuickOrderPanel.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.QuickOrderPanel.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3

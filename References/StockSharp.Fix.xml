@@ -1827,6 +1827,11 @@
             Not supported.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.FixUserResponseTypes.UnknownError">
+      <summary>
+            Unknown server error.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.FixUserResponseMessage">
       <summary>
             FIX server extended message for user based action result.
@@ -1847,16 +1852,8 @@
             Response type.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixUserResponseMessage.OriginalTransactionId">
-      <summary>
-            ID of the original message <see cref="P:StockSharp.Messages.ChangePasswordMessage.TransactionId" /> for which this message is a response.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Fix.FixUserResponseMessage.Clone">
-      <summary>
-            Create a copy of <see cref="T:StockSharp.Fix.FixUserResponseMessage" />.
-            </summary>
-      <returns>Copy.</returns>
+    <member name="M:StockSharp.Fix.FixUserResponseMessage.CopyTo(StockSharp.Fix.FixUserResponseMessage)">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.FixUserForceLogoffMessage">
       <summary>

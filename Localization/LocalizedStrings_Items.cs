@@ -50526,5 +50526,15 @@ namespace StockSharp.Localization
 		/// Points
 		/// </summary>
 		public static string Points => GetString(PointsKey);
+
+		/// <summary>
+		/// Show quick orders panel.
+		/// </summary>
+		public const string ShowQuickOrdersPanelKey = nameof(ShowQuickOrdersPanel);
+
+		/// <summary>
+		/// Show quick orders panel.
+		/// </summary>
+		public static string ShowQuickOrdersPanel => GetString(ShowQuickOrdersPanelKey);
 	}
 }

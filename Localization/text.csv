@@ -5086,6 +5086,7 @@ Upbit;Upbit;Upbit
 SelectedStrategies;Selected strategies;Выбранные стратегии
 Pips;Pips;Пипсы
 Points;Points;Пункты
+ShowQuickOrdersPanel;Show quick orders panel.;Показывать панель для быстрого ввода заявок.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
