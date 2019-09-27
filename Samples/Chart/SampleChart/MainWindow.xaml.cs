@@ -210,8 +210,6 @@
 				return;
 			}
 
-			CandleSeries series = null;
-
 			this.GuiSync(() =>
 			{
 				Chart.ClearAreas();
@@ -246,7 +244,7 @@
 				_tradeGenerator.Init();
 				_tradeGenerator.Process(_security.ToMessage());
 
-				series = new CandleSeries(
+				var series = new CandleSeries(
 											 SeriesEditor.Settings.CandleType,
 											 _security,
 											 SeriesEditor.Settings.Arg) { IsCalcVolumeProfile = true };
@@ -737,80 +735,64 @@
 
 			#region not implemented
 
-			public event Action<Trade> NewTrade;
-			public event Action<Security> NewSecurity;
-			public event Action<MarketDepth> NewMarketDepth;
-			public event Action<MarketDepth> MarketDepthChanged;
-			public event Action<OrderLogItem> NewOrderLogItem;
-			public event Action<News> NewNews;
-			public event Action<News> NewsChanged;
-			public event Action<Security> SecurityChanged;
-			public event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> LookupSecuritiesResult;
-			public event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> LookupSecuritiesResult2;
-			public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult;
-			public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
-			public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
-			public event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
-			public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataSubscriptionFailed2;
+			event Action<Trade> IMarketDataProvider.NewTrade { add { } remove { } }
+			event Action<Security> IMarketDataProvider.NewSecurity { add { } remove { } }
+			event Action<MarketDepth> IMarketDataProvider.NewMarketDepth { add { } remove { } }
+			event Action<MarketDepth> IMarketDataProvider.MarketDepthChanged { add { } remove { } }
+			event Action<OrderLogItem> IMarketDataProvider.NewOrderLogItem { add { } remove { } }
+			event Action<News> IMarketDataProvider.NewNews { add { } remove { } }
+			event Action<News> IMarketDataProvider.NewsChanged { add { } remove { } }
+			event Action<Security> IMarketDataProvider.SecurityChanged { add { } remove { } }
+			event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult { add { } remove { } }
+			event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult2 { add { } remove { } }
+			event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult { add { } remove { } }
+			event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult2 { add { } remove { } }
+			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionSucceeded { add { } remove { } }
+			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataSubscriptionFailed { add { } remove { } }
+			event Action<Security, MarketDataMessage, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionFailed2 { add { } remove { } }
 
-			public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
-			public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
-			public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataUnSubscriptionFailed2;
+			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataUnSubscriptionSucceeded { add { } remove { } }
+			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnSubscriptionFailed { add { } remove { } }
+			event Action<Security, MarketDataMessage, MarketDataMessage> IMarketDataProvider.MarketDataUnSubscriptionFailed2 { add { } remove { } }
 
-			public event Action<Security, MarketDataFinishedMessage> MarketDataSubscriptionFinished;
-			public event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled;
-			public void LookupSecurities(SecurityLookupMessage criteria) { }
-			public void LookupBoards(BoardLookupMessage criteria) { }
-			public MarketDepth GetFilteredMarketDepth(Security security) => null;
-			public IEnumerable<Level1Fields> GetLevel1Fields(Security security) { yield break; }
-			public object GetSecurityValue(Security security, Level1Fields field) => null;
-			public MarketDepth GetMarketDepth(Security security) => null;
+			event Action<Security, MarketDataFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished { add { } remove { } }
+			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnexpectedCancelled { add { } remove { } }
+			
+			void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria) { }
+			void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria) { }
+			
+			IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security) { yield break; }
+			object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field) => null;
+			
+			MarketDepth IMarketDataProvider.GetMarketDepth(Security security) => null;
+			MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security) => null;
 
-			public void SubscribeMarketData(Security security, MarketDataMessage message) { }
-			public void UnSubscribeMarketData(Security security, MarketDataMessage message) { }
-			public void SubscribeMarketData(MarketDataMessage message) { }
-			public void UnSubscribeMarketData(MarketDataMessage message) { }
+			void IMarketDataProvider.SubscribeMarketData(Security security, MarketDataMessage message) { }
+			void IMarketDataProvider.UnSubscribeMarketData(Security security, MarketDataMessage message) { }
+			
+			void IMarketDataProvider.SubscribeMarketData(MarketDataMessage message) { }
+			void IMarketDataProvider.UnSubscribeMarketData(MarketDataMessage message) { }
 
-			void IMarketDataProvider.RegisterMarketDepth(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom,
-				int? maxDepth, IMessageAdapter adapter)
-			{
-			}
+			void IMarketDataProvider.RegisterMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter) { }
+			void IMarketDataProvider.UnRegisterMarketDepth(Security security) { }
 
-			public void UnRegisterMarketDepth(Security security) { }
-			public void RegisterFilteredMarketDepth(Security security) { }
-			public void UnRegisterFilteredMarketDepth(Security security) { }
+			void IMarketDataProvider.RegisterFilteredMarketDepth(Security security) { }
+			void IMarketDataProvider.UnRegisterFilteredMarketDepth(Security security) { }
 
-			void IMarketDataProvider.RegisterTrades(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom,
-				IMessageAdapter adapter)
-			{
-			}
+			void IMarketDataProvider.RegisterTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter) { }
+			void IMarketDataProvider.UnRegisterTrades(Security security) { }
 
-			public void UnRegisterTrades(Security security) { }
+			void IMarketDataProvider.RegisterSecurity(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter) { }
+			void IMarketDataProvider.UnRegisterSecurity(Security security) { }
 
-			void IMarketDataProvider.RegisterSecurity(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom,
-				IMessageAdapter adapter)
-			{
-			}
+			void IMarketDataProvider.RegisterOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) { }
+			void IMarketDataProvider.UnRegisterOrderLog(Security security) { }
+			
+			void IMarketDataProvider.RegisterNews(Security security, IMessageAdapter adapter) { }
+			void IMarketDataProvider.UnRegisterNews(Security security) { }
 
-			void IMarketDataProvider.RegisterOrderLog(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
-			{
-			}
-
-			public void UnRegisterOrderLog(Security security) { }
-			void IMarketDataProvider.RegisterNews(Security security, IMessageAdapter adapter)
-			{
-			}
-
-			void IMarketDataProvider.UnRegisterNews(Security security)
-			{
-			}
-
-			void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter)
-			{
-			}
-
-			public void UnSubscribeBoard(ExchangeBoard board) { }
-			public void UnRegisterSecurity(Security security) { }
+			void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter) { }
+			void IMarketDataProvider.UnSubscribeBoard(ExchangeBoard board) { }
 
 			#endregion
 		}
