@@ -50536,5 +50536,25 @@ namespace StockSharp.Localization
 		/// Show quick orders panel.
 		/// </summary>
 		public static string ShowQuickOrdersPanel => GetString(ShowQuickOrdersPanelKey);
+
+		/// <summary>
+		/// Size
+		/// </summary>
+		public const string SizeKey = nameof(Size);
+
+		/// <summary>
+		/// Size
+		/// </summary>
+		public static string Size => GetString(SizeKey);
+
+		/// <summary>
+		/// Rev
+		/// </summary>
+		public const string RevKey = nameof(Rev);
+
+		/// <summary>
+		/// Rev
+		/// </summary>
+		public static string Rev => GetString(RevKey);
 	}
 }
