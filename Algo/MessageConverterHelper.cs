@@ -1828,7 +1828,7 @@ namespace StockSharp.Algo
 				return MarketDataTypes.MarketDepth;
 			else if (dataType == DataType.News)
 				return MarketDataTypes.News;
-			else if (dataType.IsCandles())
+			else if (dataType.IsCandles)
 				return dataType.MessageType.ToCandleMarketDataType();
 			else
 				return null;

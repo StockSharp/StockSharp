@@ -394,7 +394,7 @@ namespace StockSharp.Algo.Storages
 				       .Where(t => t != null)
 				       .OrderBy(d =>
 				       {
-					       if (!d.IsCandles())
+					       if (!d.IsCandles)
 						       return 0;
 
 					       return d.MessageType == typeof(TimeFrameCandleMessage)

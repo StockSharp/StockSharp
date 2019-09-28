@@ -75,7 +75,7 @@
 				getSecurityId = m => ((PositionChangeMessage)m).SecurityId;
 			else if (DataType == DataType.Ticks || DataType == DataType.OrderLog || DataType == DataType.Transactions)
 				getSecurityId = m => ((ExecutionMessage)m).SecurityId;
-			else if (DataType.IsCandles())
+			else if (DataType.IsCandles)
 				getSecurityId = m => ((CandleMessage)m).SecurityId;
 
 			try
