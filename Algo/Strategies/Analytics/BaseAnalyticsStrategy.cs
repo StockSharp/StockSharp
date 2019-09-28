@@ -71,6 +71,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			Description = LocalizedStrings.Str1222Key,
 			GroupName = LocalizedStrings.AnalyticsKey,
 			Order = 0)]
+		[Browsable(false)]
 		public DateTime From
 		{
 			get => _from.Value;
@@ -88,6 +89,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			Description = LocalizedStrings.Str345Key + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.AnalyticsKey,
 			Order = 1)]
+		[Browsable(false)]
 		public DateTime To
 		{
 			get => _to.Value;
@@ -104,7 +106,8 @@ namespace StockSharp.Algo.Strategies.Analytics
 			Name = LocalizedStrings.Str1738Key,
 			Description = LocalizedStrings.ResultTypeKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.AnalyticsKey,
-			Order = 1)]
+			Order = 2)]
+		[Browsable(false)]
 		public AnalyticsResultTypes ResultType
 		{
 			get => _resultType.Value;
