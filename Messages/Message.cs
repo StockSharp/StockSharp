@@ -113,7 +113,10 @@ namespace StockSharp.Messages
 		protected Message(MessageTypes type)
 		{
 			_type = type;
+			//StackTrace = Environment.StackTrace;
 		}
+
+		//internal readonly string StackTrace;
 
 		/// <inheritdoc />
 		public override string ToString() => Type + $",T(L)={LocalTime:yyyy/MM/dd HH:mm:ss.fff}";

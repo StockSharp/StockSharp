@@ -3452,6 +3452,9 @@ namespace StockSharp.Algo
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
+			if (secClass.IsEmpty())
+				throw new ArgumentNullException(nameof(secClass));
+
 			return adapter.SecurityClassInfo.GetSecurityClassInfo(secClass).Item2;
 		}
 
