@@ -62,12 +62,15 @@ namespace StockSharp.Algo
 	{
 		private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
 		{
+			private readonly BasketMessageAdapter _parent;
 			private readonly Dictionary<IMessageAdapter, int> _enables = new Dictionary<IMessageAdapter, int>();
 
-			public IEnumerable<IMessageAdapter> SortedAdapters
+			public InnerAdapterList(BasketMessageAdapter parent)
 			{
-				get => Cache.Where(t => this[t] != -1).OrderBy(t => this[t]);
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 			}
+
+			public IEnumerable<IMessageAdapter> SortedAdapters => Cache.Where(t => this[t] != -1).OrderBy(t => this[t]);
 
 			protected override bool OnAdding(IMessageAdapter item)
 			{
@@ -84,12 +87,14 @@ namespace StockSharp.Algo
 			protected override bool OnRemoving(IMessageAdapter item)
 			{
 				_enables.Remove(item);
+				_parent._activeAdapters.Remove(item);
 				return base.OnRemoving(item);
 			}
 
 			protected override bool OnClearing()
 			{
 				_enables.Clear();
+				_parent._activeAdapters.Clear();
 				return base.OnClearing();
 			}
 
@@ -211,7 +216,7 @@ namespace StockSharp.Algo
 			CandleBuilderProvider candleBuilderProvider)
 			: base(transactionIdGenerator)
 		{
-			_innerAdapters = new InnerAdapterList();
+			_innerAdapters = new InnerAdapterList(this);
 			SecurityAdapterProvider = securityAdapterProvider ?? throw new ArgumentNullException(nameof(securityAdapterProvider));
 			PortfolioAdapterProvider = portfolioAdapterProvider ?? throw new ArgumentNullException(nameof(portfolioAdapterProvider));
 			CandleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(portfolioAdapterProvider));
