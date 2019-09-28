@@ -49,21 +49,12 @@ namespace StockSharp.Algo.Indicators
 		public int Shift { get; }
 
 		/// <inheritdoc />
-		public override bool IsSupport(Type valueType)
-		{
-			return !IsEmpty && Value.IsSupport(valueType);
-		}
+		public override bool IsSupport(Type valueType) => !IsEmpty && Value.IsSupport(valueType);
 
 		/// <inheritdoc />
-		public override T GetValue<T>()
-		{
-			return base.GetValue<IIndicatorValue>().GetValue<T>();
-		}
+		public override T GetValue<T>() => base.GetValue<IIndicatorValue>().GetValue<T>();
 
 		/// <inheritdoc />
-		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-		{
-			throw new NotSupportedException();
-		}
+		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();
 	}
 }

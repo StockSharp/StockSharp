@@ -177,10 +177,7 @@ namespace StockSharp.Algo.Indicators
 		public override IIndicatorValue InputValue { get; set; }
 
 		/// <inheritdoc />
-		public override bool IsSupport(Type valueType)
-		{
-			return valueType == typeof(TValue);
-		}
+		public override bool IsSupport(Type valueType) => valueType == typeof(TValue);
 
 		/// <inheritdoc />
 		public override T GetValue<T>()
@@ -202,10 +199,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override int CompareTo(IIndicatorValue other)
-		{
-			return Value.Compare(other.GetValue<TValue>());
-		}
+		public override int CompareTo(IIndicatorValue other) => Value.Compare(other.GetValue<TValue>());
 
 		/// <inheritdoc />
 		public override string ToString() => IsEmpty ? "Empty" : Value.ToString();
@@ -303,10 +297,7 @@ namespace StockSharp.Algo.Indicators
 		public static readonly Func<Candle, decimal> ByMiddle = c => (c.ClosePrice + c.OpenPrice) / 2;
 
 		/// <inheritdoc />
-		public override bool IsSupport(Type valueType)
-		{
-			return valueType == typeof(decimal) || base.IsSupport(valueType);
-		}
+		public override bool IsSupport(Type valueType) => valueType == typeof(decimal) || base.IsSupport(valueType);
 
 		/// <inheritdoc />
 		public override T GetValue<T>()
@@ -461,27 +452,15 @@ namespace StockSharp.Algo.Indicators
 		public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; }
 
 		/// <inheritdoc />
-		public override bool IsSupport(Type valueType)
-		{
-			return InnerValues.Any(v => v.Value.IsSupport(valueType));
-		}
+		public override bool IsSupport(Type valueType) => InnerValues.Any(v => v.Value.IsSupport(valueType));
 
 		/// <inheritdoc />
-		public override T GetValue<T>()
-		{
-			throw new NotSupportedException();
-		}
+		public override T GetValue<T>() => throw new NotSupportedException();
 
 		/// <inheritdoc />
-		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-		{
-			throw new NotSupportedException();
-		}
+		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();
 
 		/// <inheritdoc />
-		public override int CompareTo(IIndicatorValue other)
-		{
-			throw new NotSupportedException();
-		}
+		public override int CompareTo(IIndicatorValue other) => throw new NotSupportedException();
 	}
 }

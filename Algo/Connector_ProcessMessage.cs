@@ -22,7 +22,6 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using MoreLinq;
 

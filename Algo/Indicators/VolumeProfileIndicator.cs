@@ -114,27 +114,15 @@ namespace StockSharp.Algo.Indicators
 		public IDictionary<decimal, decimal> Levels { get; }
 
 		/// <inheritdoc />
-		public override bool IsSupport(Type valueType)
-		{
-			return valueType == typeof(decimal);
-		}
+		public override bool IsSupport(Type valueType) => valueType == typeof(decimal);
 
 		/// <inheritdoc />
-		public override T GetValue<T>()
-		{
-			throw new NotSupportedException();
-		}
+		public override T GetValue<T>() => throw new NotSupportedException();
 
 		/// <inheritdoc />
-		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-		{
-			throw new NotSupportedException();
-		}
+		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();
 
 		/// <inheritdoc />
-		public override int CompareTo(IIndicatorValue other)
-		{
-			throw new NotSupportedException();
-		}
+		public override int CompareTo(IIndicatorValue other) => throw new NotSupportedException();
 	}
 }

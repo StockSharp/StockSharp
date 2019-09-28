@@ -52,9 +52,7 @@ namespace StockSharp.Algo.Export.Database
 		}
 
 		protected virtual IDictionary<string, object> ConvertToParameters(T value)
-		{
-			throw new NotSupportedException();
-		}
+			=> throw new NotSupportedException();
 	}
 
 	class ColumnDescription
