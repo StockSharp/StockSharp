@@ -198,21 +198,13 @@ namespace StockSharp.BusinessEntities
 			};
 		}
 
-		/// <summary>
-		/// Creates a new object that is a copy of the current instance.
-		/// </summary>
-		/// <returns>
-		/// A new object that is a copy of this instance.
-		/// </returns>
+		/// <inheritdoc />
 		object ICloneable.Clone()
 		{
 			return Clone();
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			var str = string.Empty;

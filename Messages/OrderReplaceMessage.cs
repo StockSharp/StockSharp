@@ -69,10 +69,7 @@ namespace StockSharp.Messages
 			return clone;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",OldTransId={OldTransactionId},OldOrdId={OldOrderId},NewTransId={TransactionId}";

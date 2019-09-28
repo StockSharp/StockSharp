@@ -103,10 +103,7 @@ namespace StockSharp.Logging
 			}
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return "{0} {1}".Put(Time, Message);

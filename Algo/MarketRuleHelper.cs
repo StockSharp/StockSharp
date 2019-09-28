@@ -75,10 +75,7 @@ namespace StockSharp.Algo
 				base.DisposeManaged();
 			}
 
-			/// <summary>
-			/// Returns a string that represents the current object.
-			/// </summary>
-			/// <returns>A string that represents the current object.</returns>
+			/// <inheritdoc />
 			public override string ToString()
 			{
 				return "{0} {2}/{3} (0x{1:X})".Put(Name, GetHashCode(), Order.TransactionId, (Order.Id == null ? Order.StringId : Order.Id.To<string>()));
@@ -2673,15 +2670,9 @@ namespace StockSharp.Algo
 
 			bool IMarketRuleContainer.IsRulesSuspended => Container.IsRulesSuspended;
 
-			void IMarketRuleContainer.SuspendRules()
-			{
-				throw new NotSupportedException();
-			}
+			void IMarketRuleContainer.SuspendRules() => throw new NotSupportedException();
 
-			void IMarketRuleContainer.ResumeRules()
-			{
-				throw new NotSupportedException();
-			}
+			void IMarketRuleContainer.ResumeRules() => throw new NotSupportedException();
 
 			IMarketRuleList IMarketRuleContainer.Rules => throw new NotSupportedException();
 

@@ -233,10 +233,7 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.OpenInterestKey)]
 		public decimal? OpenInterest { get; set; }
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return "{0:HH:mm:ss} {1} (O:{2}, H:{3}, L:{4}, C:{5}, V:{6})"

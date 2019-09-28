@@ -30,23 +30,19 @@ namespace StockSharp.Messages
 	[Serializable]
 	public abstract class BaseChangeMessage<TField> : Message, IServerTimeMessage
 	{
-		/// <summary>
-		/// Change server time.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ServerTimeKey)]
 		[DescriptionLoc(LocalizedStrings.Str168Key)]
 		[MainCategory]
 		public DateTimeOffset ServerTime { get; set; }
 
-		private readonly IDictionary<TField, object> _changes = new Dictionary<TField, object>();
-
 		/// <summary>
 		/// Changes.
 		/// </summary>
 		[Browsable(false)]
 		[DataMember]
-		public IDictionary<TField, object> Changes => _changes;
+		public IDictionary<TField, object> Changes { get; } = new Dictionary<TField, object>();
 
 		/// <summary>
 		/// Initialize <see cref="BaseChangeMessage{T}"/>.
@@ -57,10 +53,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff}";
