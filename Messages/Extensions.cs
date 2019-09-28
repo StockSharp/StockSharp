@@ -420,7 +420,7 @@ namespace StockSharp.Messages
 			else if (TransactionalMessageTypes.Contains(type))
 				return false;
 
-			return (bool?)null;
+			return null;
 		}
 
 		/// <summary>

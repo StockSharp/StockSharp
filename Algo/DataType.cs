@@ -212,6 +212,17 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Determines whether the specified message type is market-data.
+		/// </summary>
+		public bool IsMarketData =>
+			MessageType?.IsCandleMessage() == true ||
+			MessageType == typeof(QuoteChangeMessage) ||
+			MessageType == typeof(Level1ChangeMessage) ||
+			MessageType == typeof(NewsMessage) ||
+			MessageType == typeof(SecurityMessage) ||
+			MessageType == typeof(ExecutionMessage) && (Arg is ExecutionTypes execType && (execType == ExecutionTypes.Tick || execType == ExecutionTypes.OrderLog));
+
+		/// <summary>
 		/// Load settings.
 		/// </summary>
 		/// <param name="storage">Settings storage.</param>
