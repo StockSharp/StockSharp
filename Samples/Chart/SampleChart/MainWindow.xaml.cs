@@ -720,17 +720,17 @@
 			public void UpdateData(Security sec, decimal price)
 			{
 				var ps = sec.PriceStep ?? 1;
-				var ask = price + RandomGen.GetInt(1, 10) * ps;
-				var bid = price - RandomGen.GetInt(1, 10) * ps;
 
-				var arr = new[]
-				{
-					new KeyValuePair<Level1Fields, object>(Level1Fields.BestBid, new Quote(sec, bid, 1, Sides.Buy)),
-					new KeyValuePair<Level1Fields, object>(Level1Fields.BestAsk, new Quote(sec, ask, 1, Sides.Sell)),
-				};
+				var list = new List<KeyValuePair<Level1Fields, object>>();
+
+				if (RandomGen.GetBool())
+					list.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidPrice, price - RandomGen.GetInt(1, 10) * ps));
+				
+				if (RandomGen.GetBool())
+					list.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskPrice, price + RandomGen.GetInt(1, 10) * ps));
 
 				var now = DateTimeOffset.Now;
-				ValuesChanged?.Invoke(sec, arr, now, now);
+				ValuesChanged?.Invoke(sec, list, now, now);
 			}
 
 			#region not implemented
