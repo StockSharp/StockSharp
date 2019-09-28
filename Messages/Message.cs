@@ -73,12 +73,7 @@ namespace StockSharp.Messages
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
-		/// <summary>
-		/// Extended information.
-		/// </summary>
-		/// <remarks>
-		/// Necessary to keep additional information associated with the message.
-		/// </remarks>
+		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
@@ -120,23 +115,13 @@ namespace StockSharp.Messages
 			_type = type;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
-		public override string ToString()
-		{
-			return Type + $",T(L)={LocalTime:yyyy/MM/dd HH:mm:ss.fff}";
-		}
+		/// <inheritdoc />
+		public override string ToString() => Type + $",T(L)={LocalTime:yyyy/MM/dd HH:mm:ss.fff}";
 
 		/// <summary>
 		/// Create a copy of <see cref="Message"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public abstract override Message Clone();
-
-		//{
-		//	throw new NotSupportedException(LocalizedStrings.Str17 + " " + GetType().FullName);
-		//}
 	}
 }

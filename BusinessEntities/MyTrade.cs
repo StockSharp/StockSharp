@@ -146,12 +146,7 @@ namespace StockSharp.BusinessEntities
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
-		/// <summary>
-		/// Extended trade info.
-		/// </summary>
-		/// <remarks>
-		/// Required if additional information associated with the own trade is stored in the program. For example, the commission amount, the currency, the trade type.
-		/// </remarks>
+		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
 		[Display(
@@ -166,10 +161,7 @@ namespace StockSharp.BusinessEntities
 			set => _extensionInfo = value;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return LocalizedStrings.Str509Params.Put(Trade, Order);

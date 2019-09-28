@@ -237,12 +237,7 @@ namespace StockSharp.BusinessEntities
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
-		/// <summary>
-		/// Extended exchange info.
-		/// </summary>
-		/// <remarks>
-		/// Required if additional information associated with the exchange is stored in the program.
-		/// </remarks>
+		/// <inheritdoc />
 		[XmlIgnore]
 		[Browsable(false)]
 		[DataMember]
@@ -277,10 +272,7 @@ namespace StockSharp.BusinessEntities
 			_propertyChanged?.Invoke(this, info);
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return "{0} ({1})".Put(Code, Exchange);

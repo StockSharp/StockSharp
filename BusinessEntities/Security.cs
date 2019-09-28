@@ -531,12 +531,7 @@ namespace StockSharp.BusinessEntities
 		[field: NonSerialized]
 		private SynchronizedDictionary<string, object> _extensionInfo;
 
-		/// <summary>
-		/// Extended security info.
-		/// </summary>
-		/// <remarks>
-		/// Required if additional information associated with the instrument is stored in the program. For example, the date of instrument expiration (if it is option) or information about the underlying asset if it is the futures contract.
-		/// </remarks>
+		/// <inheritdoc />
 		[XmlIgnore]
 		//[DataMember]
 		[Display(

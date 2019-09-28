@@ -7628,7 +7628,6 @@ DocStr2607;Возвращает количество проблемных зап
 DocStr2608;Aggregate quote;Агрегированная котировка
 DocStr2609;The instrument by which the quote is received;Инструмент, по которому получена котировка
 DocStr2610;Extended quote info;Расширенная информация по котировке
-DocStr2611;Uses in case of keep additional information associated with the quotation. For example, the number of contracts in its own order book, the amount of the best buying and selling;Необходима в случае хранения в программе дополнительной информации, ассоциированной с котировкой. Например, количество собственных контрактов в стакане, сумму лучшей покупки-продажи
 DocStr2612;Whether to check the internal quote price;Проверять ли цену внутренней котировки
 DocStr2613;Collection of enclosed quotes, which are combined into a single quote;Коллекция вложенных котировок, объединенных в одну единую котировку
 DocStr2614;The base class describes the cash position and the position on the instrument;Базовый класс, описывающий денежную позицию и позицию по инструменту
@@ -7642,7 +7641,6 @@ DocStr2621;The instrument in which you should to copy fields;Инструмен�
 DocStr2622;Property name;Название свойства
 DocStr2623;Lot multiplier;Коэффициент объема между лотом и активом
 DocStr2624;Extended security info;Расширенная информация по инструменту
-DocStr2625;Required if additional information associated with the instrument is stored in the program. For example, the date of instrument expiration (if it is option) or information about the underlying asset if it is the futures contract;Необходима в случае хранения в программе дополнительной информации, ассоциированной с инструментом. Например, дата экспирации инструмента (если это опцион) или информация о базовом активе, если это фьючерсный контракт
 DocStr2626;Information about the last trade. If during the session on the instrument there were no trades, the value equals to {0};Информация о последней сделке. Если за сессию по инструменту не было сделок, то значение равно {0}
 DocStr2627;Best pair quotes;Лучшая пара котировок
 DocStr2628;Connection to the trading system, through which this instrument has been downloaded;Подключение к торговой системе, через которое был загружен данный инструмент
@@ -7660,7 +7658,6 @@ DocStr2640;Russian exchange name;Русскоязычное название б�
 DocStr2641;English exchange name;Англоязычное название биржи
 DocStr2642;ISO country code;ISO код страны
 DocStr2690;Extended exchange info;Расширенная информация по бирже
-DocStr2691;Required if additional information associated with the exchange is stored in the program;Необходима в случае хранения в программе дополнительной информации, ассоциированной с биржей
 DocStr2692;Information about electronic board;Информация о биржевой площадке
 DocStr2693;To get a list of exchanges;Получить список бирж
 DocStr2694;Exchanges;Биржи
@@ -7774,7 +7771,6 @@ DocStr2909;The middle of spread. Is {0}, if quotes are empty;Середина с
 DocStr2910;Quotes pair has {0} and {1};Пара котировок содержит {0} и {1}
 DocStr2911;Trade info;Информация о сделке
 DocStr2912;Extended trade info;Расширенная информация по собственной сделке
-DocStr2913;Required if additional information associated with the own trade is stored in the program. For example, the commission amount, the currency, the trade type;Необходима в случае хранения в программе дополнительной информации, ассоциированной с собственной сделкой. Например, размер комиссии, валюту, тип сделки
 DocStr2914;Exchange board for which the news is published;Биржевая площадка, для которой опубликована новость
 DocStr2915;Board order id. Uses in case of {0} and {1} is a brokerage system ids;Идентификатор заявки электронной площадки. Используется, если {0} или {1} содержат идентификаторы брокерской системы
 DocStr2916;Transaction ID. Automatically set when the {0} method called;Идентификатор транзакции. Автоматически устанавливается при вызове метода {0}
@@ -7783,7 +7779,6 @@ DocStr2918;Order expiry time. The default is {0}, which mean (GTC);Время э
 DocStr2919;If the value is {0}, then the order is registered until cancel. Otherwise, the period is specified;Если значение равно {0}, то заявка выставляется до отмены. Иначе, указывается конкретный срок
 DocStr2920;Exchange order that was created by the stop-order when the condition is activated ({0} if a stop condition has not been activated);Биржевая заявка, которая была создана стоп-заявкой при активации условия ({0}, если стоп-условие еще не было активировано)
 DocStr2921;Extended information on order;Расширенная информация по заявке
-DocStr2922;Required if additional information associated with the order is stored in the program. For example, the activation time, the yield for usual orders or the condition order ID for a stop order;Необходима в случае хранения в программе дополнительной информации, ассоциированной с заявкой. Например, время активации, доходность для обычных заявок, или идентификатор заявки-условия для стоп-заявки
 DocStr2923;Connection to the trading system, through which this order has been registered;Подключение к торговой системе, через которое была зарегистрирована данная заявка
 DocStr2924;Description of the error that occurred during the registration or cancellation of the order;Описание ошибки, которая произошла при регистрации или отмене заявки
 DocStr2925;The order which was not registered or was canceled due to an error;Заявка, которая не была зарегистрирована или отменена из-за ошибки
@@ -7799,7 +7794,6 @@ DocStr2934;Limit type for Т+ market;Вид лимита для Т+ рынка
 DocStr2935;The instrument, on which the trade was completed;Инструмент, по которому была совершена сделка
 DocStr2936;System trade status;Системный статус сделки
 DocStr2937;Extended trade info;Расширенная информация по сделке
-DocStr2938;Required if additional information associated with the trade is stored in the program. For example, the operation that results to the trade;Необходима в случае хранения в программе дополнительной информации, ассоциированной со сделкой. Например, операция, приведшая к сделке
 DocStr2939;Extension class for {0};Вспомогательный класс для {0}
 DocStr2940;To create from {0} the pips values;Создать из {0} значения пипсы
 DocStr2941;The instrument from which information about the price increment is taken;Инструмент, из которого берется информация по шагу цены

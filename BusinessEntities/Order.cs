@@ -480,12 +480,7 @@ namespace StockSharp.BusinessEntities
 		[field: NonSerialized]
 		private SynchronizedDictionary<string, object> _extensionInfo;
 
-		/// <summary>
-		/// Extended information on order.
-		/// </summary>
-		/// <remarks>
-		/// Required if additional information associated with the order is stored in the program. For example, the activation time, the yield for usual orders or the condition order ID for a stop order.
-		/// </remarks>
+		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
@@ -515,30 +510,6 @@ namespace StockSharp.BusinessEntities
 		/// Commission currency. Can be <see lnagword="null"/>.
 		/// </summary>
 		public string CommissionCurrency { get; set; }
-
-		//[field: NonSerialized]
-		//private IConnector _connector;
-
-		///// <summary>
-		///// Connection to the trading system, through which this order has been registered.
-		///// </summary>
-		//[Ignore]
-		//[XmlIgnore]
-		//[Browsable(false)]
-		//[Obsolete("The property Connector was obsoleted and is always null.")]
-		//public IConnector Connector
-		//{
-		//	get { return _connector; }
-		//	set
-		//	{
-		//		if (_connector == value)
-		//			return;
-
-		//		_connector = value;
-
-		//		NotifyChanged(nameof(Connector));
-		//	}
-		//}
 
 		/// <summary>
 		/// User's order ID.
@@ -627,10 +598,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public decimal? MinVolume { get; set; }
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return LocalizedStrings.Str534Params
