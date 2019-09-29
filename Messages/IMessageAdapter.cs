@@ -52,7 +52,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Possible supported by adapter message types.
 		/// </summary>
-		IEnumerable<MessageTypes> PossibleSupportedMessages { get; }
+		IEnumerable<MessageTypeInfo> PossibleSupportedMessages { get; set; }
 
 		/// <summary>
 		/// Supported by adapter message types.
@@ -170,6 +170,26 @@ namespace StockSharp.Messages
 		bool IsSupportSecuritiesLookupAll { get; }
 
 		/// <summary>
+		/// Available options for <see cref="MarketDataMessage.MaxDepth"/>.
+		/// </summary>
+		IEnumerable<int> SupportedOrderBookDepths { get; }
+
+		/// <summary>
+		/// Adapter translates incremental order books.
+		/// </summary>
+		bool IsSupportOrderBookIncrements { get; }
+
+		/// <summary>
+		/// Adapter fills <see cref="ExecutionMessage.PnL"/>.
+		/// </summary>
+		bool IsSupportExecutionsPnL { get; }
+
+		/// <summary>
+		/// Adapter provides news related with specified security.
+		/// </summary>
+		bool IsSecurityNewsOnly { get; }
+
+		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
 		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
@@ -189,11 +209,14 @@ namespace StockSharp.Messages
 		IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId);
 
 		/// <summary>
-		/// Get possible time-frames for the specified instrument.
+		/// Get possible args for the specified candle type and instrument.
 		/// </summary>
+		/// <param name="candleType">The type of the message <see cref="CandleMessage"/>.</param>
 		/// <param name="securityId">Security ID.</param>
-		/// <returns>Possible time-frames.</returns>
-		IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId));
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <returns>Possible args.</returns>
+		IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to);
 
 		/// <summary>
 		/// Get maximum size step allowed for historical download.

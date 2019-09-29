@@ -5,6 +5,7 @@
 	using System.Threading.Tasks;
 	using System.Windows;
 	using System.Collections.ObjectModel;
+	using System.IO;
 	using System.Windows.Controls;
 	using System.Windows.Threading;
 
@@ -12,11 +13,11 @@
 	using Ecng.Common;
 	using Ecng.Xaml;
 	using Ecng.Configuration;
+	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Configuration;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
@@ -37,9 +38,9 @@
 		private const decimal _priceStep = 10m;
 		private const int _timeframe = 1;
 
-		private bool NeedToDelay => _chkDelay.IsChecked == true;
-		private bool NeedToFail => _chkFail.IsChecked == true;
-		private bool NeedToConfirm => _chkConfirm.IsChecked == true;
+		private bool NeedToDelay => DelayCtrl.IsChecked == true;
+		private bool NeedToFail => FailCtrl.IsChecked == true;
+		private bool NeedToConfirm => ConfirmCtrl.IsChecked == true;
 
 		private readonly Security _security = new Security
 		{
@@ -125,7 +126,9 @@
 
 			var maxDays = 2;
 
-			BusyIndicator.IsBusy = true;
+			//BusyIndicator.IsBusy = true;
+
+			Chart.IsAutoRange = true;
 
 			Task.Factory.StartNew(() =>
 			{
@@ -140,8 +143,8 @@
 
 					date = tick.ServerTime.Date;
 
-					var str = date.To<string>();
-					this.GuiAsync(() => BusyIndicator.BusyContent = str);
+					//var str = date.To<string>();
+					//this.GuiAsync(() => BusyIndicator.BusyContent = str);
 
 					maxDays--;
 
@@ -156,9 +159,8 @@
 
 				this.GuiAsync(() =>
 				{
-					BusyIndicator.IsBusy = false;
+					//BusyIndicator.IsBusy = false;
 					Chart.IsAutoRange = false;
-					_area.YAxises.First().AutoRange = false;
 
 					Log($"Loaded {_allCandles.Count} candles");
 				});
@@ -272,6 +274,28 @@
 			}
 
 			Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order));
+		}
+
+		private void Load_Click(object sender, RoutedEventArgs e)
+		{
+			if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/SettingsStorage.xml"))
+			{
+				var settingsStorage =
+					new XmlSerializer<SettingsStorage>().Deserialize(
+						AppDomain.CurrentDomain.BaseDirectory + "/SettingsStorage.xml");
+				Chart.Load(settingsStorage);
+
+				_area = Chart.Areas.First();
+				_candleElement = Chart.Elements.OfType<ChartCandleElement>().First();
+				_activeOrdersElement = Chart.Elements.OfType<ChartActiveOrdersElement>().First();
+			}
+		}
+
+		private void Save_Click(object sender, RoutedEventArgs e)
+		{
+			var settingsStorage = new SettingsStorage();
+			Chart.Save(settingsStorage);
+			new XmlSerializer<SettingsStorage>().Serialize(settingsStorage, AppDomain.CurrentDomain.BaseDirectory + "/SettingsStorage.xml");
 		}
 
 		private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -433,8 +457,8 @@
 
 		private void Log(string msg)
 		{
-			_logBox.AppendText($"{DateTime.Now:HH:mm:ss.fff}: {msg}\n");
-			_logBox.ScrollToEnd();
+			LogBox.AppendText($"{DateTime.Now:HH:mm:ss.fff}: {msg}\n");
+			LogBox.ScrollToEnd();
 		}
 
 		private static bool IsInFinalState(Order o)

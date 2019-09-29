@@ -27,7 +27,6 @@ namespace SampleHistoryTestingParallel
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
-	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Strategies.Testing;
 	using StockSharp.Algo.Testing;
 	using StockSharp.Algo.Indicators;
@@ -108,11 +107,7 @@ namespace SampleHistoryTestingParallel
 			.TryAdd(Level1Fields.MarginSell, 10000m);
 
 			// test portfolio
-			var portfolio = new Portfolio
-			{
-				Name = "test account",
-				BeginValue = 1000000,
-			};
+			var portfolio = Portfolio.CreateSimulator();
 
 			// create backtesting connector
 			var batchEmulation = new BatchEmulation(new[] { security }, new[] { portfolio }, storageRegistry)
@@ -170,11 +165,10 @@ namespace SampleHistoryTestingParallel
 			var strategies = periods
 				.Select(period =>
 				{
-					var candleManager = new CandleManager(connector);
 					var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 					// create strategy based SMA
-					var strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
+					var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
 					{
 						Volume = 1,
 						Security = security,
@@ -185,8 +179,6 @@ namespace SampleHistoryTestingParallel
 						// it is excessively for time range with several months
 						UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
 					};
-
-					strategy.SetCandleManager(candleManager);
 
 					var curveElem = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3, ChartIndicatorDrawStyles.Line);
 					

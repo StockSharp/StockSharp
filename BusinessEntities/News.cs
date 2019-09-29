@@ -146,12 +146,7 @@ namespace StockSharp.BusinessEntities
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
-		/// <summary>
-		/// Extended information.
-		/// </summary>
-		/// <remarks>
-		/// Required when extra information is stored in the program.
-		/// </remarks>
+		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]

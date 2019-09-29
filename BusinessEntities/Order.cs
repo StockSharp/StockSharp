@@ -174,7 +174,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Transaction ID. Automatically set when the <see cref="IConnector.RegisterOrder"/> method called.
+		/// Transaction ID. Automatically set when the <see cref="ITransactionProvider.RegisterOrder"/> method called.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -480,12 +480,7 @@ namespace StockSharp.BusinessEntities
 		[field: NonSerialized]
 		private SynchronizedDictionary<string, object> _extensionInfo;
 
-		/// <summary>
-		/// Extended information on order.
-		/// </summary>
-		/// <remarks>
-		/// Required if additional information associated with the order is stored in the program. For example, the activation time, the yield for usual orders or the condition order ID for a stop order.
-		/// </remarks>
+		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
@@ -515,30 +510,6 @@ namespace StockSharp.BusinessEntities
 		/// Commission currency. Can be <see lnagword="null"/>.
 		/// </summary>
 		public string CommissionCurrency { get; set; }
-
-		//[field: NonSerialized]
-		//private IConnector _connector;
-
-		///// <summary>
-		///// Connection to the trading system, through which this order has been registered.
-		///// </summary>
-		//[Ignore]
-		//[XmlIgnore]
-		//[Browsable(false)]
-		//[Obsolete("The property Connector was obsoleted and is always null.")]
-		//public IConnector Connector
-		//{
-		//	get { return _connector; }
-		//	set
-		//	{
-		//		if (_connector == value)
-		//			return;
-
-		//		_connector = value;
-
-		//		NotifyChanged(nameof(Connector));
-		//	}
-		//}
 
 		/// <summary>
 		/// User's order ID.
@@ -610,9 +581,24 @@ namespace StockSharp.BusinessEntities
 		public bool? IsManual { get; set; }
 
 		/// <summary>
-		/// Returns a string that represents the current object.
+		/// Average execution price.
 		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		[DataMember]
+		public decimal? AveragePrice { get; set; }
+
+		/// <summary>
+		/// Yield.
+		/// </summary>
+		[DataMember]
+		public decimal? Yield { get; set; }
+
+		/// <summary>
+		/// Minimum quantity of an order to be executed.
+		/// </summary>
+		[DataMember]
+		public decimal? MinVolume { get; set; }
+
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return LocalizedStrings.Str534Params

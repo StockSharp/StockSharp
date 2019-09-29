@@ -115,10 +115,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<IndicatorValue> values)
-		{
-			throw new NotSupportedException();
-		}
+		protected override void Export(IEnumerable<IndicatorValue> values) => throw new NotSupportedException();
 
 		/// <inheritdoc />
 		protected override void Export(IEnumerable<CandleMessage> messages)
@@ -139,9 +136,6 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<SecurityMessage> messages)
-		{
-			throw new NotSupportedException();
-		}
+		protected override void Export(IEnumerable<SecurityMessage> messages) => throw new NotSupportedException();
 	}
 }

@@ -1,9 +1,0 @@
-<Window x:Class="SampleIB.CandlesWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-        xmlns:charting="http://schemas.stocksharp.com/xaml"
-        Title="{x:Static loc:LocalizedStrings.Candles}" Height="600" Width="800">
-
-    <charting:Chart x:Name="Chart" x:FieldModifier="public" />
-</Window>

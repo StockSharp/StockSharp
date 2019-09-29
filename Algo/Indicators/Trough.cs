@@ -34,11 +34,7 @@ namespace StockSharp.Algo.Indicators
 			ByPrice = c => c.LowPrice;
 		}
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var value = base.OnProcess(input);

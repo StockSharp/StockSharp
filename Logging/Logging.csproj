@@ -59,23 +59,13 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\References\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\References\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\References\MoreLinq.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Speech" />
     <Reference Include="System.XML" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">
@@ -90,7 +80,6 @@
     <Compile Include="ILogListener.cs" />
     <Compile Include="ILogReceiver.cs" />
     <Compile Include="ILogSource.cs" />
-    <Compile Include="Log4NetLogListener.cs" />
     <Compile Include="LoggingHelper.cs" />
     <Compile Include="LogLevels.cs" />
     <Compile Include="LogListener.cs" />
@@ -98,8 +87,6 @@
     <Compile Include="LogMessage.cs" />
     <Compile Include="MemoryStatistics.cs" />
     <Compile Include="MemoryStatisticsValue.cs" />
-    <Compile Include="SoundLogListener.cs" />
-    <Compile Include="SpeechLogListener.cs" />
     <Compile Include="TraceSource.cs" />
     <Compile Include="UnhandledExceptionSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

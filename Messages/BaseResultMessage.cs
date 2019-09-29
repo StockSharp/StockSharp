@@ -20,7 +20,6 @@ namespace StockSharp.Messages
 		protected BaseResultMessage(MessageTypes type)
 			: base(type)
 		{
-			
 		}
 
 		/// <summary>

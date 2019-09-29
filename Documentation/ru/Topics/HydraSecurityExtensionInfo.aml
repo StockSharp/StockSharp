@@ -8,7 +8,7 @@
 Включение серверного режима <token>hydra</token> описано в 
 пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" />.</para>
 <para>Для подключения к <token>hydra</token> через WCF в <token>stocksharpapi</token> есть 
-класс <codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference>.</para>
+класс <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.Remote.RemoteStorageClient</codeEntityReference>.</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri("net.tcp://localhost:8000"))

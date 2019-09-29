@@ -23,7 +23,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioLookupMessage : PortfolioMessage, ITransactionIdMessage
+	public class PortfolioLookupMessage : PortfolioMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioLookupMessage"/>.
@@ -42,10 +42,7 @@ namespace StockSharp.Messages
 			return CopyTo(new PortfolioLookupMessage());
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",TransId={TransactionId},Curr={Currency},Board={BoardCode},IsSubscribe={IsSubscribe}";

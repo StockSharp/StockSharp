@@ -294,7 +294,7 @@ namespace StockSharp.Algo.Candles
 		protected override void DisposeManaged()
 		{
 			lock (_info.SyncRoot)
-				_info.Values.ForEach(i => i.Reset(default(DateTimeOffset)));
+				_info.Values.ForEach(i => i.Reset(default));
 
 			base.DisposeManaged();
 		}

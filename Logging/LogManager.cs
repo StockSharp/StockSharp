@@ -108,11 +108,21 @@ namespace StockSharp.Logging
 		private readonly List<LogMessage> _pendingMessages = new List<LogMessage>();
 		private readonly Timer _flushTimer;
 		private bool _isFlusing;
+		private readonly bool _asyncMode;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LogManager"/>.
 		/// </summary>
 		public LogManager()
+			: this(true)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LogManager"/>.
+		/// </summary>
+		/// <param name="asyncMode">Asynchronous mode.</param>
+		public LogManager(bool asyncMode)
 		{
 			ConfigManager.TryRegisterService(this);
 
@@ -121,6 +131,11 @@ namespace StockSharp.Logging
 				Application,
 				new UnhandledExceptionSource()
 			};
+
+			_asyncMode = asyncMode;
+
+			if (!_asyncMode)
+				return;
 
 			_flushTimer = ThreadingHelper.Timer(Flush);
 
@@ -220,7 +235,7 @@ namespace StockSharp.Logging
 		private readonly CachedSynchronizedSet<ILogListener> _listeners = new CachedSynchronizedSet<ILogListener>();
 
 		/// <summary>
-		/// Messages loggers arriving from <see cref="LogManager.Sources"/>.
+		/// Messages loggers arriving from <see cref="Sources"/>.
 		/// </summary>
 		public IList<ILogListener> Listeners => _listeners;
 
@@ -230,38 +245,22 @@ namespace StockSharp.Logging
 		public IList<ILogSource> Sources { get; }
 
 		/// <summary>
-		/// Sending interval of messages collected from <see cref="LogManager.Sources"/> to the <see cref="LogManager.Listeners"/>. The default is 500 ms.
+		/// Sending interval of messages collected from <see cref="Sources"/> to the <see cref="Listeners"/>. The default is 500 ms.
 		/// </summary>
 		public TimeSpan FlushInterval
 		{
-			get => _flushTimer.Interval();
+			get => _flushTimer?.Interval() ?? TimeSpan.MaxValue;
 			set
 			{
+				if (!_asyncMode)
+					return;
+
 				if (value < TimeSpan.FromMilliseconds(1))
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.IntervalMustBePositive);
 
 				_flushTimer.Interval(value);
 			}
 		}
-
-		//private int _maxMessageCount = 1000;
-
-		///// <summary>
-		///// Максимальное количество накопленных от <see cref="Sources"/> сообщений, прежде чем они будут отправлены в <see cref="Listeners"/>.
-		///// По умолчанию равно 1000.
-		///// </summary>
-		///// <remarks>Значение 0 означает бесконечный размер буфера. Значение -1 означает отсутствие буферизации.</remarks>
-		//public int MaxMessageCount
-		//{
-		//	get { return _maxMessageCount; }
-		//	set
-		//	{
-		//		if (value < -1) 
-		//			throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str2796);
-
-		//		_maxMessageCount = value;
-		//	}
-		//}
 
 		private void SourceLog(LogMessage message)
 		{
@@ -273,10 +272,15 @@ namespace StockSharp.Logging
 			lock (_syncRoot)
 			{
 				_pendingMessages.Add(message);
-				
-				// mika: force flush in case too many messages
-				if (_pendingMessages.Count > 1000000)
-					ImmediateFlush();
+
+				if (!_asyncMode)
+					Flush();
+				else
+				{
+					// mika: force flush in case too many messages
+					if (_pendingMessages.Count > 1000000)
+						ImmediateFlush();
+				}
 			}
 		}
 
@@ -297,20 +301,23 @@ namespace StockSharp.Logging
 		{
 			Sources.Clear();
 
-			lock (_syncRoot)
+			if (_asyncMode)
 			{
-				if (ClearPendingOnDispose)
-					_pendingMessages.Clear();
+				lock (_syncRoot)
+				{
+					if (ClearPendingOnDispose)
+						_pendingMessages.Clear();
 
-				_pendingMessages.Add(_disposeMessage);
+					_pendingMessages.Add(_disposeMessage);
+				}
+			
+				// flushing accumulated messages and closing the timer
+
+				ImmediateFlush();
+
+				_disposeMessage.Wait();
+				_flushTimer.Dispose();
 			}
-
-			// flushing accumulated messages and closing the timer
-
-			ImmediateFlush();
-
-			_disposeMessage.Wait();
-			_flushTimer.Dispose();
 
 			base.DisposeManaged();
 		}

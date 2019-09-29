@@ -46,14 +46,14 @@ namespace StockSharp.Algo.Testing
 			Emulator = emulator;
 
 			this.AddTransactionalSupport();
-			this.AddSupportedMessage(MessageTypes.Security);
-			this.AddSupportedMessage(MessageTypes.Board);
-			this.AddSupportedMessage(MessageTypes.Level1Change);
-			this.AddSupportedMessage(MessageTypes.PortfolioChange);
-			this.AddSupportedMessage(MessageTypes.PositionChange);
-			this.AddSupportedMessage(ExtendedMessageTypes.CommissionRule);
-			this.AddSupportedMessage(ExtendedMessageTypes.Clearing);
-			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
+			this.AddSupportedMessage(MessageTypes.Security, true);
+			this.AddSupportedMessage(MessageTypes.Board, true);
+			this.AddSupportedMessage(MessageTypes.Level1Change, true);
+			this.AddSupportedMessage(MessageTypes.PortfolioChange, false);
+			this.AddSupportedMessage(MessageTypes.PositionChange, false);
+			this.AddSupportedMessage(ExtendedMessageTypes.CommissionRule, false);
+			this.AddSupportedMessage(ExtendedMessageTypes.Clearing, null);
+			this.AddSupportedMessage(ExtendedMessageTypes.Generator, true);
 		}
 
 		private IMarketEmulator _emulator;
@@ -111,7 +111,6 @@ namespace StockSharp.Algo.Testing
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
-					
 					SendOutMessage(new ConnectMessage());
 					return;
 
@@ -121,7 +120,7 @@ namespace StockSharp.Algo.Testing
 					if (TransactionIdGenerator is IncrementalIdGenerator incGen)
 						incGen.Current = Emulator.Settings.InitialTransactionId;
 
-					_currentTime = default(DateTimeOffset);
+					_currentTime = default;
 					break;
 
 				case MessageTypes.Disconnect:
@@ -134,7 +133,7 @@ namespace StockSharp.Algo.Testing
 			}
 
 			ProcessedMessageCount++;
-			_emulator.SendInMessage(message);
+			Emulator.SendInMessage(message);
 		}
 	}
 }

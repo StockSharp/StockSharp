@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 {
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Linq;
 	using System.Windows.Media;
 
@@ -35,13 +36,16 @@ namespace StockSharp.Algo.Strategies.Reporting
 	/// </summary>
 	public class ExcelStrategyReport : StrategyReport
 	{
+		private readonly IExcelWorkerProvider _provider;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExcelStrategyReport"/>.
 		/// </summary>
+		/// <param name="provider">Excel provider.</param>
 		/// <param name="strategy">The strategy, requiring the report generation.</param>
 		/// <param name="fileName">The name of the file, in which report is generated in the Excel format.</param>
-		public ExcelStrategyReport(Strategy strategy, string fileName)
-			: this(new[] { strategy }, fileName)
+		public ExcelStrategyReport(IExcelWorkerProvider provider, Strategy strategy, string fileName)
+			: this(provider, new[] { strategy }, fileName)
 		{
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
@@ -50,12 +54,14 @@ namespace StockSharp.Algo.Strategies.Reporting
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExcelStrategyReport"/>.
 		/// </summary>
+		/// <param name="provider">Excel provider.</param>
 		/// <param name="strategies">Strategies, requiring the report generation.</param>
 		/// <param name="fileName">The name of the file, in which report is generated in the Excel format.</param>
-		public ExcelStrategyReport(IEnumerable<Strategy> strategies, string fileName)
+		public ExcelStrategyReport(IExcelWorkerProvider provider, IEnumerable<Strategy> strategies, string fileName)
 			: base(strategies, fileName)
 		{
-			//SheetName = "Отчет по " + strategy;
+			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+
 			ExcelVersion = 2007;
 			IncludeOrders = true;
 			Decimals = 2;
@@ -64,11 +70,12 @@ namespace StockSharp.Algo.Strategies.Reporting
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExcelStrategyReport"/>.
 		/// </summary>
+		/// <param name="provider">Excel provider.</param>
 		/// <param name="strategies">Strategies, requiring the report generation.</param>
 		/// <param name="fileName">The name of the file, in which report is generated in the Excel format.</param>
 		/// <param name="template">The template file, to be copied into <see cref="StrategyReport.FileName"/>.</param>
-		public ExcelStrategyReport(IEnumerable<Strategy> strategies, string fileName, string template)
-			: this(strategies, fileName)
+		public ExcelStrategyReport(IExcelWorkerProvider provider, IEnumerable<Strategy> strategies, string fileName, string template)
+			: this(provider, strategies, fileName)
 		{
 			if (template.IsEmpty())
 				throw new ArgumentNullException(nameof(template));
@@ -76,31 +83,10 @@ namespace StockSharp.Algo.Strategies.Reporting
 			Template = template;
 		}
 
-		///// <summary>
-		///// Создать генератор Excel отчетов.
-		///// </summary>
-		///// <param name="strategy">Стратегия, для которой необходимо сгенерировать отчет.</param>
-		///// <param name="fileName">Название файла, в котором сгенерируется отчет в формате Excel.</param>
-		///// <param name="template">Файл-шаблон, который будет скопирован в <see cref="FileName"/> и дозаполнен листом <see cref="SheetName"/>.</param>
-		///// <param name="sheetName">Названия листа, в который будет записан отчет.</param>
-		//public ExcelStrategyReport(Strategy strategy, string fileName, string template, string sheetName)
-		//	: this(strategy, fileName, template)
-		//{
-		//	if (sheetName.IsEmpty())
-		//		throw new ArgumentNullException(nameof(sheetName));
-
-		//	SheetName = sheetName;
-		//}
-
 		/// <summary>
 		/// The template file, to be copied into <see cref="StrategyReport.FileName"/> and filled up with Strategy, Orders and Trades sheets.
 		/// </summary>
 		public string Template { get; }
-
-		///// <summary>
-		///// Названия листа, в который будет записан отчет.
-		///// </summary>
-		//public string SheetName { get; private set; }
 
 		/// <summary>
 		/// The Excel version. It affects the maximal number of strings. The default value is 2007.
@@ -117,14 +103,16 @@ namespace StockSharp.Algo.Strategies.Reporting
 		/// </summary>
 		public int Decimals { get; set; }
 
-		/// <summary>
-		/// To generate the report.
-		/// </summary>
+		/// <inheritdoc />
 		public override void Generate()
 		{
-			var hasTemplate = Template.IsEmpty();
+			var hasTemplate = !Template.IsEmpty();
 
-			using (var worker = hasTemplate ? new ExcelWorker() : new ExcelWorker(Template))
+			if (hasTemplate)
+				File.Copy(Template, FileName);
+			
+			using (var stream = File.OpenWrite(FileName))
+			using (var worker = hasTemplate ? _provider.OpenExist(stream) : _provider.CreateNew(stream))
 			{
 				foreach (var strategy in Strategies)
 				{
@@ -134,8 +122,10 @@ namespace StockSharp.Algo.Strategies.Reporting
 					}
 					else
 					{
-						if (worker.ContainsSheet(strategy.Name))
-							worker.AddSheet(strategy.Name);
+						if (!worker.ContainsSheet(strategy.Name))
+						{
+							worker.AddSheet().RenameSheet(strategy.Name);
+						}
 					}
 
 					worker
@@ -174,10 +164,10 @@ namespace StockSharp.Algo.Strategies.Reporting
 					{
 						var value = parameter.Value;
 
-						if (value is TimeSpan)
-							value = Format((TimeSpan)value);
-						else if (value is decimal)
-							value = MathHelper.Round((decimal)value, Decimals);
+						if (value is TimeSpan ts)
+							value = Format(ts);
+						else if (value is decimal dec)
+							value = dec.Round(Decimals);
 
 						worker
 							.SetCell(0, rowIndex, parameter.Name)
@@ -194,10 +184,10 @@ namespace StockSharp.Algo.Strategies.Reporting
 					{
 						var value = strategyParam.Value;
 
-						if (value is TimeSpan)
-							value = Format((TimeSpan)value);
-						else if (value is decimal)
-							value = MathHelper.Round((decimal)value, Decimals);
+						if (value is TimeSpan span)
+							value = Format(span);
+						else if (value is decimal dec)
+							value = dec.Round(Decimals);
 
 						worker
 							.SetCell(0, rowIndex, strategyParam.Name)
@@ -205,24 +195,6 @@ namespace StockSharp.Algo.Strategies.Reporting
 
 						rowIndex++;
 					}
-
-					//rowIndex += 2;
-					//worker.SetCell(0, rowIndex, "Комиссия по типам:");
-					//rowIndex++;
-
-					//foreach (var group in Strategy.CommissionManager.Rules.SyncGet(c => c.ToArray()).GroupBy(c => c.GetType().GetDisplayName()))
-					//{
-					//	var commission = group.Sum(r => r.Commission);
-
-					//	if (commission == 0)
-					//		continue;
-
-					//	worker
-					//		.SetCell(0, rowIndex, group.Key)
-					//		.SetCell(1, rowIndex, commission);
-
-					//	rowIndex++;
-					//}
 
 					var columnShift = 3;
 
@@ -259,9 +231,9 @@ namespace StockSharp.Algo.Strategies.Reporting
 					rowIndex = 2;
 					foreach (var trade in strategy.MyTrades.ToArray())
 					{
-						var info = strategy.PnLManager.ProcessMessage(trade.ToMessage());
+						var tradePnL = strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL ?? 0;
 
-						totalPnL += info.PnL;
+						totalPnL += tradePnL;
 						position += trade.GetPosition() ?? 0;
 
 						var queue = queues.SafeAdd(trade.Trade.Security, key => new PnLQueue(key.ToSecurityId()));
@@ -279,10 +251,10 @@ namespace StockSharp.Algo.Strategies.Reporting
 							.SetCell(columnShift + 7, rowIndex, trade.Order.Id)
 							.SetCell(columnShift + 8, rowIndex, trade.Slippage)
 							.SetCell(columnShift + 9, rowIndex, trade.Order.Comment)
-							.SetCell(columnShift + 10, rowIndex, MathHelper.Round(info.PnL, Decimals))
-							.SetCell(columnShift + 11, rowIndex, MathHelper.Round(localInfo.PnL, Decimals))
-							.SetCell(columnShift + 12, rowIndex, MathHelper.Round(totalPnL, Decimals))
-							.SetCell(columnShift + 13, rowIndex, MathHelper.Round(queue.RealizedPnL, Decimals))
+							.SetCell(columnShift + 10, rowIndex, tradePnL.Round(Decimals))
+							.SetCell(columnShift + 11, rowIndex, localInfo.PnL.Round(Decimals))
+							.SetCell(columnShift + 12, rowIndex, totalPnL.Round(Decimals))
+							.SetCell(columnShift + 13, rowIndex, queue.RealizedPnL.Round(Decimals))
 							.SetCell(columnShift + 14, rowIndex, position);
 
 						rowIndex++;
@@ -327,7 +299,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 								.SetCell(columnShift + 4, rowIndex, Format(order.LastChangeTime))
 								.SetCell(columnShift + 5, rowIndex, Format(order.LastChangeTime - order.Time))
 								.SetCell(columnShift + 6, rowIndex, order.Price)
-								.SetCell(columnShift + 7, rowIndex, MathHelper.Round(order.GetAveragePrice(strategy.Connector), Decimals))
+								.SetCell(columnShift + 7, rowIndex, order.GetAveragePrice(strategy.Connector).Round(Decimals))
 								.SetCell(columnShift + 8, rowIndex, Format(order.State))
 								.SetCell(columnShift + 9, rowIndex, order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : LocalizedStrings.Str238))
 								.SetCell(columnShift + 10, rowIndex, order.Balance)
@@ -391,8 +363,6 @@ namespace StockSharp.Algo.Strategies.Reporting
 						}
 					}
 				}
-
-				worker.Save(FileName, true);
 			}
 		}
 	}

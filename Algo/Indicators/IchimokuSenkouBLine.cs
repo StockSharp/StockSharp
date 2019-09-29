@@ -41,18 +41,14 @@ namespace StockSharp.Algo.Indicators
 			Kijun = kijun ?? throw new ArgumentNullException(nameof(kijun));
 		}
 
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			base.Reset();
 			_buffer.Clear();
 		}
 
-		/// <summary>
-		/// Whether the indicator is set.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFormed => _buffer.Count >= Length && Buffer.Count >= Kijun.Length;
 
 		//_buffer.Count >= Length &&
@@ -63,11 +59,7 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public IchimokuLine Kijun { get; }
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();

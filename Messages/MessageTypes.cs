@@ -17,6 +17,8 @@ namespace StockSharp.Messages
 {
 	using System;
 
+	using Ecng.ComponentModel;
+
 	/// <summary>
 	/// The types of messages.
 	/// </summary>
@@ -276,16 +278,6 @@ namespace StockSharp.Messages
 		SecurityMappingResult,
 
 		/// <summary>
-		/// <see cref="SecurityAssociationRequestMessage"/>.
-		/// </summary>
-		SecurityAssociationRequest,
-
-		/// <summary>
-		/// <see cref="SecurityAssociationResultMessage"/>.
-		/// </summary>
-		SecurityAssociationResult,
-
-		/// <summary>
 		/// <see cref="SecurityLegsRequestMessage"/>.
 		/// </summary>
 		SecurityLegsRequest,
@@ -324,5 +316,94 @@ namespace StockSharp.Messages
 		/// <see cref="SubscriptionListFinishedMessage"/>.
 		/// </summary>
 		SubscriptionListFinished,
+
+		/// <summary>
+		/// <see cref="SecurityRouteListRequestMessage"/>.
+		/// </summary>
+		SecurityRouteListRequest,
+
+		/// <summary>
+		/// <see cref="SecurityRouteMessage"/>.
+		/// </summary>
+		SecurityRoute,
+
+		/// <summary>
+		/// <see cref="SecurityRouteListFinishedMessage"/>.
+		/// </summary>
+		SecurityRouteListFinished,
+
+		/// <summary>
+		/// <see cref="PortfolioRouteListRequestMessage"/>.
+		/// </summary>
+		PortfolioRouteListRequest,
+
+		/// <summary>
+		/// <see cref="PortfolioRouteMessage"/>.
+		/// </summary>
+		PortfolioRoute,
+
+		/// <summary>
+		/// <see cref="PortfolioRouteListFinishedMessage"/>.
+		/// </summary>
+		PortfolioRouteListFinished,
+
+		/// <summary>
+		/// <see cref="SecurityMappingMessage"/>.
+		/// </summary>
+		SecurityMapping
+	}
+
+	/// <summary>
+	/// Extended info for <see cref="MessageTypes"/>.
+	/// </summary>
+	public class MessageTypeInfo
+	{
+		/// <summary>
+		/// Message type.
+		/// </summary>
+		public MessageTypes Type { get; }
+
+		/// <summary>
+		/// <see cref="Type"/> is market-data type.
+		/// </summary>
+		public bool? IsMarketData { get; }
+
+		/// <summary>
+		/// Display name.
+		/// </summary>
+		public string DisplayName { get; }
+
+		/// <summary>
+		/// Description.
+		/// </summary>
+		public string Description { get; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MessageTypeInfo"/>.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <param name="isMarketData"><see cref="Type"/> is market-data type.</param>
+		public MessageTypeInfo(MessageTypes type, bool? isMarketData)
+			: this(type, isMarketData, type.GetDisplayName(), null)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MessageTypeInfo"/>.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <param name="isMarketData"><see cref="Type"/> is market-data type.</param>
+		/// <param name="displayName">Display name.</param>
+		/// <param name="description">Description.</param>
+		public MessageTypeInfo(MessageTypes type, bool? isMarketData, string displayName, string description)
+		{
+			Type = type;
+			IsMarketData = isMarketData;
+			DisplayName = displayName;
+			Description = description;
+		}
+
+		/// <inheritdoc />
+		public override string ToString() => DisplayName;
 	}
 }

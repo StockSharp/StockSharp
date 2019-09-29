@@ -139,5 +139,12 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CryptocurrencyKey)]
 		CryptoCurrency,
+
+		/// <summary>
+		/// ETF.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EtfKey)]
+		Etf,
 	}
 }

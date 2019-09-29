@@ -27,9 +27,12 @@ namespace StockSharp.Algo
 		public ExtendedInfoStorageMessageAdapter(IMessageAdapter innerAdapter, IExtendedInfoStorage extendedInfoStorage, string storageName, IEnumerable<Tuple<string, Type>> fields)
 			: base(innerAdapter)
 		{
-			_extendedInfoStorage = extendedInfoStorage;
+			if (storageName.IsEmpty())
+				throw new ArgumentNullException(nameof(storageName));
+
+			_extendedInfoStorage = extendedInfoStorage ?? throw new ArgumentNullException(nameof(extendedInfoStorage));
 			_storageName = storageName;
-			_fields = fields;
+			_fields = fields ?? throw new ArgumentNullException(nameof(fields));
 		}
 
 		private readonly SyncObject _sync = new SyncObject();
@@ -49,10 +52,7 @@ namespace StockSharp.Algo
 			return _storage;
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			if (!message.IsBack)

@@ -39,11 +39,11 @@ namespace StockSharp.Logging
 
 			public static ErrorHandler Instance => _instance.Value;
 
-			public void ProvideFault(Exception error, MessageVersion version, ref Message fault)
+			void IErrorHandler.ProvideFault(Exception error, MessageVersion version, ref Message fault)
 			{
 			}
 
-			public bool HandleError(Exception error)
+			bool IErrorHandler.HandleError(Exception error)
 			{
 				error.LogError();
 				return true;

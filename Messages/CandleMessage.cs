@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
@@ -37,18 +38,21 @@ namespace StockSharp.Messages
 		/// Empty state (candle doesn't exist).
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1658Key)]
 		None,
 
 		/// <summary>
 		/// Candle active.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str238Key)]
 		Active,
 
 		/// <summary>
 		/// Candle finished.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FinishedKey)]
 		Finished,
 	}
 
@@ -57,7 +61,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public abstract class CandleMessage : Message, IServerTimeMessage
+	public abstract class CandleMessage : Message, IServerTimeMessage, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Security ID.
@@ -365,9 +369,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => TimeFrame;
@@ -409,9 +411,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => MaxTradeCount;
@@ -453,9 +453,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => Volume;
@@ -497,9 +495,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => PriceRange;
@@ -546,13 +542,7 @@ namespace StockSharp.Messages
 		public Unit BoxSize
 		{
 			get => _boxSize;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_boxSize = value;
-			}
+			set => _boxSize = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		private int _reversalAmount = 1;
@@ -573,10 +563,7 @@ namespace StockSharp.Messages
 			}
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return $"Box = {BoxSize} RA = {ReversalAmount}";
@@ -656,9 +643,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => PnFArg;
@@ -703,9 +688,7 @@ namespace StockSharp.Messages
 			});
 		}
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public override object Arg
 		{
 			get => BoxSize;

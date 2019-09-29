@@ -117,6 +117,12 @@ namespace StockSharp.Messages
 		public bool IsSubscribe { get; set; }
 
 		/// <summary>
+		/// Internal identifier.
+		/// </summary>
+		[DataMember]
+		public Guid? InternalId { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
 		/// </summary>
 		public PortfolioMessage()
@@ -163,6 +169,7 @@ namespace StockSharp.Messages
 			//destination.State = State;
 			destination.TransactionId = TransactionId;
 			destination.ClientCode = ClientCode;
+			destination.InternalId = InternalId;
 
 			this.CopyExtensionInfo(destination);
 

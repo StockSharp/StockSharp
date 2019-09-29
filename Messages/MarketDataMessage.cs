@@ -267,9 +267,10 @@ namespace StockSharp.Messages
 		public bool IsRegularTradingHours { get; set; }
 
 		/// <summary>
-		/// The default depth of order book.
+		/// Request <see cref="CandleStates.Finished"/> only candles.
 		/// </summary>
-		public const int DefaultMaxDepth = 50;
+		[DataMember]
+		public bool IsFinished { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDataMessage"/>.
@@ -327,6 +328,7 @@ namespace StockSharp.Messages
 			destination.IsHistory = IsHistory;
 			destination.AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame;
 			destination.IsRegularTradingHours = IsRegularTradingHours;
+			destination.IsFinished = IsFinished;
 
 			base.CopyTo(destination);
 		}
@@ -334,7 +336,16 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe},Arg={Arg},TransId={TransactionId},OrigId={OriginalTransactionId}";
+			var str = base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe}";
+
+			if (Arg != null)
+				str += $",Arg={Arg}";
+
+			if (TransactionId != default)
+				str += $",TransId={TransactionId}";
+
+			if (OriginalTransactionId != default)
+				str += $",OrigId={OriginalTransactionId}";
 
 			if (MaxDepth != null)
 				str += $",MaxDepth={MaxDepth}";
@@ -355,7 +366,10 @@ namespace StockSharp.Messages
 				str += $",SmallTF={AllowBuildFromSmallerTimeFrame}";
 
 			if (IsRegularTradingHours)
-				str += $",RegularTH={IsRegularTradingHours}";
+				str += $",RTH={IsRegularTradingHours}";
+
+			if (IsFinished)
+				str += $",Fin={IsFinished}";
 
 			if (IsHistory)
 				str += $",Hist={IsHistory}";

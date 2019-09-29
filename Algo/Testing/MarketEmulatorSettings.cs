@@ -493,6 +493,17 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
+		/// Can have short positions.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ShortableKey,
+			Description = LocalizedStrings.ShortableDescKey,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 218)]
+		public bool CheckShortable { get; set; }
+
+		/// <summary>
 		/// To save the state of paper trading parameters.
 		/// </summary>
 		/// <param name="storage">Storage.</param>
@@ -517,6 +528,7 @@ namespace StockSharp.Algo.Testing
 			storage.SetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
 			storage.SetValue(nameof(CheckTradingState), CheckTradingState);
 			storage.SetValue(nameof(CheckMoney), CheckMoney);
+			storage.SetValue(nameof(CheckShortable), CheckShortable);
 
 			if (TimeZone != null)
 				storage.SetValue(nameof(TimeZone), TimeZone);
@@ -547,6 +559,7 @@ namespace StockSharp.Algo.Testing
 			IncreaseDepthVolume = storage.GetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
 			CheckTradingState = storage.GetValue(nameof(CheckTradingState), CheckTradingState);
 			CheckMoney = storage.GetValue(nameof(CheckMoney), CheckMoney);
+			CheckShortable = storage.GetValue(nameof(CheckShortable), CheckShortable);
 
 			if (storage.Contains(nameof(TimeZone)))
 				TimeZone = storage.GetValue<TimeZoneInfo>(nameof(TimeZone));

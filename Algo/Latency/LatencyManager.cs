@@ -19,7 +19,6 @@ namespace StockSharp.Algo.Latency
 	using System.Collections.Generic;
 
 	using Ecng.Common;
-	using Ecng.Collections;
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
@@ -41,21 +40,13 @@ namespace StockSharp.Algo.Latency
 		{
 		}
 
-		/// <summary>
-		/// The aggregate value of registration delay by all orders.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual TimeSpan LatencyRegistration { get; private set; }
 
-		/// <summary>
-		/// The aggregate value of cancelling delay by all orders.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual TimeSpan LatencyCancellation { get; private set; }
 
-		/// <summary>
-		/// To process the message for transaction delay calculation. Messages of types <see cref="OrderRegisterMessage"/>, <see cref="OrderReplaceMessage"/>, <see cref="OrderPairReplaceMessage"/>, <see cref="OrderCancelMessage"/> and <see cref="ExecutionMessage"/> are accepted.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns>Transaction delay.</returns>
+		/// <inheritdoc />
 		public TimeSpan? ProcessMessage(Message message)
 		{
 			switch (message.Type)
@@ -117,38 +108,36 @@ namespace StockSharp.Algo.Latency
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.HasOrderInfo())
+					if (!execMsg.HasOrderInfo())
+						break;
+
+					if (execMsg.OrderState == OrderStates.Pending)
+						break;
+
+					var transId = execMsg.OriginalTransactionId;
+
+					lock (_syncObject)
 					{
-						if (execMsg.OrderState == OrderStates.Pending)
-							return null;
-
-						lock (_syncObject)
+						if (!_register.TryGetValue(transId, out var time))
 						{
-							var time = _register.TryGetValue2(execMsg.OriginalTransactionId);
-
-							if (time == null)
+							if (_cancel.TryGetValue(transId, out time))
 							{
-								time = _cancel.TryGetValue2(execMsg.OriginalTransactionId);
-
-								if (time != null)
-								{
-									_cancel.Remove(execMsg.OriginalTransactionId);
-
-									if (execMsg.OrderState == OrderStates.Failed)
-										return null;
-
-									return execMsg.LocalTime - time;
-								}
-							}
-							else
-							{
-								_register.Remove(execMsg.OriginalTransactionId);
+								_cancel.Remove(transId);
 
 								if (execMsg.OrderState == OrderStates.Failed)
-									return null;
+									break;
 
 								return execMsg.LocalTime - time;
 							}
+						}
+						else
+						{
+							_register.Remove(transId);
+
+							if (execMsg.OrderState == OrderStates.Failed)
+								break;
+
+							return execMsg.LocalTime - time;
 						}
 					}
 
@@ -187,9 +176,7 @@ namespace StockSharp.Algo.Latency
 			_cancel.Add(transactionId, localTime);
 		}
 
-		/// <summary>
-		/// To zero calculations.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual void Reset()
 		{
 			LatencyRegistration = LatencyCancellation = TimeSpan.Zero;

@@ -1,5 +1,38 @@
 StockSharp Designer Change log
 ========================
+## v4.4.17:
+* (bug) Many bug fixes and improvements.
+* (feature) S# paper trading auto connection.
+* (feature) Finam, DukasCopy (history), Oanda (history), MFD supported.
+* (feature) Ability to download historical data.
+* (feature) Tradier source.
+* (feature) Bitmex. Testnet supported.
+* (feature) OpenECry. Certification passed.
+* (bug) Highest, Lowest, Vidya, Envelope, MACD indicators fix.
+* (feature) Sterling. Updated to 11.7 version.
+* (feature) Oanda. Level1 support removed.
+* (feature) QUIK DDE, QUIK Trans2Quik excluded.
+* (feature) CSV connector.
+* (feature) Security. MinVolume, Shortable, UnderlyingSecuityMinVolume and FaceValue properties added.
+* (feature) Deribit. V2 protocol supported.
+* (feature) BitStamp. V2 web sockets supported.
+* (feature) Plaza. Spectra 6.2.20 supported.
+* (feature) InteractiveBrokers. V9.76.01
+* (feature) Diagrams. ProtectPositionDiagramElement. More options added.
+* (feature) Diagrams. DiagramSocketType for OrderState added.
+* (feature) Diagrams. OrderBaseDiagramElement. Trigger for all order's diagram elements.
+* (feature) Diagrams. Font weight set to bold.
+* (bug) Diagram. Update composition item names in palette fixes.
+* (feature) Diagram. Bring link to front on mouse over.
+* (feature) Diagram. IndicatorDiagramElement. IsFinal and IsFormed params added.
+* (feature) Diagram. OrderRegisterDiagramElement. ZeroAsMarket param added.
+* (feature) Diagram. Converter show DateTimeOffset properties.
+* (feature) Diagram. Position, Strategy, StrategyTrades Strategy socket added.
+* (feature) Micex TEAP. Stock32, Stock33, Stock34, Currency32, Currency33, Currency34 interfaces added.
+* (feature) QUIK. 64 bit support.
+* (feature) QUIK. Candles BuildFrom mode supported.
+* (feature) QUIK. Terminal connection lost notification supported.
+
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
 * (feature) Bithumb. Prime service supported.

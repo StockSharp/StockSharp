@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SampleHistoryTesting</RootNamespace>
     <AssemblyName>SampleHistoryTesting</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -101,6 +101,12 @@
     <Reference Include="DevExpress.Xpf.LayoutControl.v18.1">
       <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v18.1.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Finam">
+      <HintPath>..\..\..\References\StockSharp.Finam.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Yahoo">
+      <HintPath>..\..\..\References\StockSharp.Yahoo.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -155,10 +161,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.History\Algo.History.csproj">
-      <Project>{5814D093-FA6D-44A5-B75B-4CC7E8F11EB0}</Project>
-      <Name>Algo.History</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>

@@ -20,7 +20,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Message adapter, forward messages through a transport channel <see cref="IMessageChannel"/>.
 	/// </summary>
-	public class ChannelMessageAdapter : MessageAdapterWrapper, IMessageSender
+	public class ChannelMessageAdapter : MessageAdapterWrapper
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ChannelMessageAdapter"/>.
@@ -63,10 +63,7 @@ namespace StockSharp.Messages
 			RaiseNewOutMessage(message);
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			if (!OutputChannel.IsOpened)
@@ -80,9 +77,7 @@ namespace StockSharp.Messages
 			InnerAdapter.SendInMessage(message);
 		}
 
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
+		/// <inheritdoc />
 		public override void Dispose()
 		{
 			InputChannel.NewOutMessage -= InputChannelOnNewOutMessage;
@@ -97,10 +92,7 @@ namespace StockSharp.Messages
 			base.Dispose();
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public override void SendInMessage(Message message)
 		{
 			if (!InputChannel.IsOpened)
@@ -109,7 +101,10 @@ namespace StockSharp.Messages
 			InputChannel.SendInMessage(message);
 		}
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Send outgoing message.
+		/// </summary>
+		/// <param name="message">Message.</param>
 		public void SendOutMessage(Message message)
 		{
 			if (!OutputChannel.IsOpened)

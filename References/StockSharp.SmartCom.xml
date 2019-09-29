@@ -66,7 +66,7 @@
     <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper32.RequestHistoryTrades(System.String,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper32.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
+    <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper32.RequestHistoryBars(System.String,StockSharp.SmartCom.Native.SmartBarInterval,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper32.SubscribeEvents">
@@ -137,7 +137,7 @@
     <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper64.RequestHistoryTrades(System.String,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper64.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
+    <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper64.RequestHistoryBars(System.String,StockSharp.SmartCom.Native.SmartBarInterval,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.Native.SmartCom4Wrapper64.SubscribeEvents">
@@ -389,11 +389,6 @@
     <member name="T:StockSharp.SmartCom.Native.SmartComVersions">
       <summary>
             Версии SmartCOM API.
-            </summary>
-    </member>
-    <member name="F:StockSharp.SmartCom.Native.SmartComVersions.V3">
-      <summary>
-            Третья версия.
             </summary>
     </member>
     <member name="F:StockSharp.SmartCom.Native.SmartComVersions.V4">
@@ -692,7 +687,7 @@
       <param name="from">Временная точка отсчета.</param>
       <param name="count">Количество сделок.</param>
     </member>
-    <member name="M:StockSharp.SmartCom.Native.ISmartComWrapper.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
+    <member name="M:StockSharp.SmartCom.Native.ISmartComWrapper.RequestHistoryBars(System.String,StockSharp.SmartCom.Native.SmartBarInterval,System.DateTime,System.Int32)">
       <summary>
             Начать получать исторические временные свечи от сервера SmartCOM через событие <see cref="E:StockSharp.SmartCom.Native.ISmartComWrapper.NewBar" />.
             </summary>
@@ -700,160 +695,6 @@
       <param name="timeFrame">Тайм-фрейм.</param>
       <param name="from">Временная точка отсчета.</param>
       <param name="count">Количество свечек.</param>
-    </member>
-    <member name="T:StockSharp.SmartCom.Native.SmartCom3Wrapper32">
-      <summary>
-            Обертка над SmartCOM 3.X API (32 бита).
-            </summary>
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.#ctor">
-      <summary>
-            Создать <see cref="T:StockSharp.SmartCom.Native.SmartCom3Wrapper32" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.Native.SmartCom3Wrapper32.IsSupportCancelAllOrders">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.SmartCom.Native.SmartCom3Wrapper32.Version">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.OnConnect(System.String,System.Int16,System.String,System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.OnDisconnect">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.LookupSecurities">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.LookupPortfolios">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.RegisterOrder(System.String,System.String,StockSharp.SmartCom.Native.SmartOrderAction,StockSharp.SmartCom.Native.SmartOrderType,StockSharp.SmartCom.Native.SmartOrderValidity,System.Double,System.Int32,System.Double,System.Int32)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.ReRegisterOrder(System.String,System.String,System.Double,System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.CancelOrder(System.String,System.String,System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.CancelAllOrders">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.SubscribeSecurity(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.UnSubscribeSecurity(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.SubscribeMarketDepth(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.UnSubscribeMarketDepth(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.SubscribeTrades(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.UnSubscribeTrades(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.SubscribePortfolio(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.UnSubscribePortfolio(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.RequestHistoryTrades(System.String,System.DateTime,System.Int32)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.SubscribeEvents">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper32.UnSubscribeEvents">
-      <summary>
-            Отписаться от событий.
-            </summary>
-    </member>
-    <member name="T:StockSharp.SmartCom.Native.SmartCom3Wrapper64">
-      <summary>
-            Обертка над SmartCOM 3.X API (64 бита).
-            </summary>
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.#ctor">
-      <summary>
-            Создать <see cref="T:StockSharp.SmartCom.Native.SmartCom3Wrapper64" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.Native.SmartCom3Wrapper64.IsSupportCancelAllOrders">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.SmartCom.Native.SmartCom3Wrapper64.Version">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.OnConnect(System.String,System.Int16,System.String,System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.OnDisconnect">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.LookupSecurities">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.LookupPortfolios">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.RegisterOrder(System.String,System.String,StockSharp.SmartCom.Native.SmartOrderAction,StockSharp.SmartCom.Native.SmartOrderType,StockSharp.SmartCom.Native.SmartOrderValidity,System.Double,System.Int32,System.Double,System.Int32)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.ReRegisterOrder(System.String,System.String,System.Double,System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.CancelOrder(System.String,System.String,System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.CancelAllOrders">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.SubscribeSecurity(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.UnSubscribeSecurity(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.SubscribeMarketDepth(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.UnSubscribeMarketDepth(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.SubscribeTrades(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.UnSubscribeTrades(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.SubscribePortfolio(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.UnSubscribePortfolio(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.RequestHistoryTrades(System.String,System.DateTime,System.Int32)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.SubscribeEvents">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom3Wrapper64.UnSubscribeEvents">
-      <inheritdoc />
     </member>
     <member name="T:StockSharp.SmartCom.Native.SmartComWrapper`1">
       <summary>
@@ -1015,7 +856,7 @@
     <member name="M:StockSharp.SmartCom.Native.SmartComWrapper`1.RequestHistoryTrades(System.String,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartComWrapper`1.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
+    <member name="M:StockSharp.SmartCom.Native.SmartComWrapper`1.RequestHistoryBars(System.String,StockSharp.SmartCom.Native.SmartBarInterval,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
     <member name="T:StockSharp.SmartCom.SmartComService">
@@ -1040,9 +881,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportSecurityLookupResult">
-      <summary>
-            Поддерживается ли торговой системой поиск инструментов.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
@@ -1050,27 +889,25 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
+    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.AllTimeFrames">
+      <summary>
+            Возможные тайм-фреймы.
+            </summary>
+    </member>
+    <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportPortfolioLookupResult">
-      <summary>
-            Поддерживается ли торговой системой поиск портфелей.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsNativeIdentifiers">
-      <summary>
-            Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Отправить сообщение.
-            </summary>
-      <param name="message">Сообщение.</param>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.Version">
       <summary>
@@ -1197,102 +1034,6 @@
             Стоп-цена заявки.
             </summary>
     </member>
-    <member name="T:StockSharp.SmartCom.SmartComTimeFrames">
-      <summary>
-            Тайм-фреймы для исторических свечек SmartCOM.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.AllTimeFrames">
-      <summary>
-            Возможные тайм-фреймы.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Tick">
-      <summary>
-            Тиковый тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Minute1">
-      <summary>
-            Минутный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Minute5">
-      <summary>
-            Пяти минутный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Minute10">
-      <summary>
-            Десяти минутный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Minute15">
-      <summary>
-            Пятнадцати минутный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Minute30">
-      <summary>
-            Тридцати минутный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Hour1">
-      <summary>
-            Часовой тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Hour2">
-      <summary>
-            Двухчасовой тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Hour4">
-      <summary>
-            Четырехчасовой тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Day">
-      <summary>
-            Дневной тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Week">
-      <summary>
-            Недельный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Month1">
-      <summary>
-            Месячный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Month3">
-      <summary>
-            Трех месячный тайм-фрейм.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Year">
-      <summary>
-            Годовой тайм-фрейм.
-            </summary>
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartComTimeFrames.op_Implicit(System.TimeSpan)~StockSharp.SmartCom.SmartComTimeFrames">
-      <summary>
-            Привести <see cref="T:System.TimeSpan" /> значение к объекту <see cref="T:StockSharp.SmartCom.SmartComTimeFrames" />.
-            </summary>
-      <param name="value">
-        <see cref="T:System.TimeSpan" /> значение.</param>
-      <returns>Объект <see cref="T:StockSharp.SmartCom.SmartComTimeFrames" />.</returns>
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartComTimeFrames.op_Explicit(StockSharp.SmartCom.SmartComTimeFrames)~System.TimeSpan">
-      <summary>
-            Привести объект <see cref="T:StockSharp.SmartCom.SmartComTimeFrames" /> к <see cref="T:System.TimeSpan" /> значению.
-            </summary>
-      <param name="timeFrame">Объект <see cref="T:StockSharp.SmartCom.SmartComTimeFrames" />.</param>
-      <returns>
-        <see cref="T:System.TimeSpan" /> значение.</returns>
-    </member>
     <member name="T:StockSharp.SmartCom.SmartTrader">
       <summary>
             Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" />, предоставляющая подключение к брокеру IT Invest через SmartCOM.
@@ -1305,7 +1046,7 @@
     </member>
     <member name="P:StockSharp.SmartCom.SmartTrader.Version">
       <summary>
-            Версия SmartCOM API. По-умолчанию равна <see cref="F:StockSharp.SmartCom.Native.SmartComVersions.V3" />.
+            Версия SmartCOM API. По-умолчанию равна <see cref="F:StockSharp.SmartCom.Native.SmartComVersions.V4" />.
             </summary>
     </member>
     <member name="P:StockSharp.SmartCom.SmartTrader.Login">
@@ -1334,22 +1075,10 @@
             </summary>
     </member>
     <member name="M:StockSharp.SmartCom.SmartTrader.OnConnect">
-      <summary>
-            Подключиться к торговой системе.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.SmartTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
-      <summary>
-            Отменить группу заявок на бирже по фильтру.
-            </summary>
-      <param name="transactionId">Идентификатор транзакции отмены.</param>
-      <param name="isStopOrder">
-        <see langword="true" />, если нужно отменить только стоп-заявки, <see langword="false" /> - если только обычный и <see langword="null" /> - если оба типа.</param>
-      <param name="portfolio">Портфель. Если значение равно <see langword="null" />, то портфель не попадает в фильтр снятия заявок.</param>
-      <param name="direction">Направление заявки. Если значение равно <see langword="null" />, то направление не попадает в фильтр снятия заявок.</param>
-      <param name="board">Торговая площадка. Если значение равно <see langword="null" />, то площадка не попадает в фильтр снятия заявок.</param>
-      <param name="security">Инструмент. Если значение равно <see langword="null" />, то инструмент не попадает в фильтр снятия заявок.</param>
-      <param name="securityType">Тип инструмента. Если значение равно <see langword="null" />, то тип не попадает в фильтр снятия заявок.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox">
       <summary>

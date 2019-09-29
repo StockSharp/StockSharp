@@ -23,7 +23,7 @@
 					Рекомендуется использовать для уже сделанного робота, и использовать логи в форс-мажорных ситуациях.
 				</listItem>
 				<listItem>
-					<codeEntityReference>T:StockSharp.Logging.SoundLogListener</codeEntityReference> - проигрывает звуковое сообщение когда приходит
+					<codeEntityReference>T:StockSharp.Xaml.SoundLogListener</codeEntityReference> - проигрывает звуковое сообщение когда приходит
 					новое сообщение. Рекомендуется использовать, если за роботом нет постоянного внимания.
 				</listItem>
 				<listItem>
@@ -49,16 +49,16 @@
 					все сообщения пишутся в одно окно, и когда для каждого <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference> создается
 					отдельное окно. Рекомендуется использовать, если робот обладает графическим интерфейсом.
 				</listItem>
-				<listItem>
+				<!--listItem>
 					<codeEntityReference>T:StockSharp.Logging.Log4NetLogListener</codeEntityReference> - записывает сообщения через специальную
 					библиотеку <token>log4net</token>. Рекомендуется для тех, кто уже знаком с данной библиотекой.
-				</listItem>
+				</listItem-->
 			</list>
 			<para>
 				<codeEntityReference>T:StockSharp.Logging.LogListener</codeEntityReference> можно настроить на фильтрацию сообщений через
 				свойство <codeEntityReference>P:StockSharp.Logging.LogListener.Filters</codeEntityReference>. Например, через фильтры
 				можно задать, какой тип сообщений стоит обрабатывать. Это особенно полезно в случаях использования
-				<codeEntityReference>T:StockSharp.Logging.SoundLogListener</codeEntityReference> или
+				<codeEntityReference>T:StockSharp.Xaml.SoundLogListener</codeEntityReference> или
 				<codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference>, чтобы, к примеру, посылать e-mail только 
 				в критических ситуациях (ошибка алгоритма торговли), а не на каждое отладочное сообщение.
 			</para>

@@ -8,6 +8,11 @@ M:StockSharp.Alerts.AlertButton.Save(Ecng.Serialization.SettingsStorage)/summary
 M:StockSharp.Alerts.AlertButton.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Alerts.AlertButton.Dispose/summary;DocStr7
 M:StockSharp.Alerts.AlertButton.InitializeComponent/summary;DocStr8
+T:StockSharp.Alerts.AlertHelper/summary;DocStr4290
+P:StockSharp.Alerts.AlertHelper.NotificationService/summary;DocStr9186
+P:StockSharp.Alerts.AlertHelper.TryNotificationService/summary;DocStr9186
+P:StockSharp.Alerts.AlertHelper.ProcessingService/summary;DocStr9185
+P:StockSharp.Alerts.AlertHelper.TryProcessingService/summary;DocStr9185
 T:StockSharp.Alerts.AlertMessageTypePickerWindow/summary;DocStr10515
 M:StockSharp.Alerts.AlertMessageTypePickerWindow.#ctor/summary;DocStr1
 P:StockSharp.Alerts.AlertMessageTypePickerWindow.MessageType/summary;DocStr9
@@ -39,7 +44,8 @@ M:StockSharp.Alerts.AlertRuleField.Load(Ecng.Serialization.SettingsStorage)/para
 M:StockSharp.Alerts.AlertRuleField.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Alerts.AlertRuleField.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Alerts.AlertRuleField.ToString/inheritdoc;DocStr8459
-M:StockSharp.Alerts.AlertRuleField.GetHashCode/inheritdoc;DocStr8459
+M:StockSharp.Alerts.AlertRuleField.GetHashCode/summary;DocStr8492
+M:StockSharp.Alerts.AlertRuleField.GetHashCode/returns;DocStr8493
 M:StockSharp.Alerts.AlertRuleField.OnEquals(StockSharp.Alerts.AlertRuleField)/summary;DocStr2634
 M:StockSharp.Alerts.AlertRuleField.OnEquals(StockSharp.Alerts.AlertRuleField)/param/other;DocStr1157
 M:StockSharp.Alerts.AlertRuleField.OnEquals(StockSharp.Alerts.AlertRuleField)/returns;DocStr2636

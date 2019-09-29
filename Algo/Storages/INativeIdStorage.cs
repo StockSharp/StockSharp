@@ -113,11 +113,9 @@ namespace StockSharp.Algo.Storages
 			if (!Directory.Exists(_path))
 				Directory.CreateDirectory(_path);
 
-			_inMemory.Init();
+			var errors = _inMemory.Init();
 
 			var files = Directory.GetFiles(_path, "*.csv");
-
-			var errors = new Dictionary<string, Exception>();
 
 			foreach (var fileName in files)
 			{
@@ -282,7 +280,7 @@ namespace StockSharp.Algo.Storages
 						if (isTuple)
 						{
 							var nativeId2 = reader.ReadString().To(type2);
-							nativeId = typeof(Tuple<,>).MakeGenericType(type1, type2).CreateInstance(new[] { nativeId, nativeId2 });
+							nativeId = typeof(Tuple<,>).Make(type1, type2).CreateInstance(new[] { nativeId, nativeId2 });
 						}
 						
 						pairs.Add(Tuple.Create(securityId, nativeId));

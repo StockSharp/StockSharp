@@ -2,7 +2,6 @@ namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Net;
 	using System.Security;
 
@@ -29,11 +28,11 @@ namespace StockSharp.Algo
 
 		Guid IAuthorization.ValidateCredentials(string login, SecureString password, IPAddress clientAddress)
 		{
-			if (login == null)
-				throw new ArgumentNullException(nameof(login));
+			if (login.IsEmpty())
+				throw new ArgumentNullException(nameof(login), LocalizedStrings.Str1896);
 
-			if (password == null)
-				throw new ArgumentNullException(nameof(password));
+			if (password.IsEmpty())
+				throw new ArgumentNullException(nameof(password), LocalizedStrings.Str1897);
 
 			var credentials = _storage.TryGetByLogin(login);
 
@@ -67,6 +66,21 @@ namespace StockSharp.Algo
 			_storage.SaveCredentials();
 		}
 
+		void IAuthorization.ChangePassword(string login, SecureString oldPassword, SecureString newPassword)
+		{
+			var user = _storage.TryGetByLogin(login);
+
+			if (user == null)
+				throw new ArgumentException(LocalizedStrings.Str1637Params.Put(login));
+
+			if (!user.Password.IsEqualTo(oldPassword))
+				throw new ArgumentException(LocalizedStrings.UserNotFound.Put(login));
+
+			user.Password = newPassword;
+
+			_storage.SaveCredentials();
+		}
+
 		bool IAuthorization.DeleteUser(string login)
 		{
 			if (!_storage.DeleteByLogin(login))
@@ -75,11 +89,5 @@ namespace StockSharp.Algo
 			_storage.SaveCredentials();
 			return true;
 		}
-
-		IEnumerable<Tuple<string, IEnumerable<IPAddress>>> IAuthorization.AllUsers =>
-			_storage
-				.Credentials
-		        .Select(c => Tuple.Create(c.Email, (IEnumerable<IPAddress>)c.IpRestrictions.Cache))
-		        .ToArray();
 	}
 }

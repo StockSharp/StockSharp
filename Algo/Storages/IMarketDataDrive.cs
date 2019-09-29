@@ -112,6 +112,21 @@ namespace StockSharp.Algo.Storages
 		/// <param name="format">Format type.</param>
 		/// <returns>Storage for <see cref="IMarketDataStorage"/>.</returns>
 		IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format);
+
+		/// <summary>
+		/// Verify settings.
+		/// </summary>
+		void Verify();
+
+		/// <summary>
+		/// Download securities by the specified criteria.
+		/// </summary>
+		/// <param name="criteria">Message security lookup for specified criteria.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
+		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
+		void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress);
 	}
 
 	/// <summary>
@@ -126,53 +141,35 @@ namespace StockSharp.Algo.Storages
 		{
 		}
 
-		/// <summary>
-		/// Path to market data.
-		/// </summary>
+		/// <inheritdoc />
 		public abstract string Path { get; set; }
 
-		/// <summary>
-		/// To get news storage.
-		/// </summary>
-		/// <param name="serializer">The serializer.</param>
-		/// <returns>The news storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataSerializer<NewsMessage> serializer)
 		{
 			throw new NotImplementedException();
 		}
 
-		/// <summary>
-		/// To get the storage for the instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <returns>The storage for the instrument.</returns>
+		/// <inheritdoc />
 		public ISecurityMarketDataDrive GetSecurityDrive(Security security)
 		{
 			return new SecurityMarketDataDrive(this, security);
 		}
 
-		/// <summary>
-		/// Get all available instruments.
-		/// </summary>
+		/// <inheritdoc />
 		public abstract IEnumerable<SecurityId> AvailableSecurities { get; }
 
-		/// <summary>
-		/// Get all available data types.
-		/// </summary>
-		/// <param name="securityId">Instrument identifier.</param>
-		/// <param name="format">Format type.</param>
-		/// <returns>Data types.</returns>
+		/// <inheritdoc />
 		public abstract IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format);
 
-		/// <summary>
-		/// Create storage for <see cref="IMarketDataStorage"/>.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-		/// <param name="format">Format type.</param>
-		/// <returns>Storage for <see cref="IMarketDataStorage"/>.</returns>
+		/// <inheritdoc />
 		public abstract IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format);
+
+		/// <inheritdoc />
+		public abstract void Verify();
+
+		/// <inheritdoc />
+		public abstract void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress);
 
 		/// <summary>
 		/// Load settings.
@@ -192,13 +189,7 @@ namespace StockSharp.Algo.Storages
 			storage.SetValue(nameof(Path), Path);
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
-		public override string ToString()
-		{
-			return Path;
-		}
+		/// <inheritdoc />
+		public override string ToString() => Path;
 	}
 }

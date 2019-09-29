@@ -147,7 +147,7 @@ trader.MarketDepthChanged += depth =>
 };
 ]]></code>
 				<para>
-					В обработчике <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference> запускается
+					В обработчике <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.NewSecurity</codeEntityReference> запускается
 					экспорт стакана для того, чтобы начали обновляться такие поля как
 					<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestBid</codeEntityReference>,
 					<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestAsk</codeEntityReference> и
@@ -162,14 +162,14 @@ trader.MarketDepthChanged += depth =>
 				</alert>
 				 <para>
 					  Когда данные начнут приходить в <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>, то будут вызываться
-					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>,
-					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> и т.д. Для тех данных,
+					  события <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.NewSecurity</codeEntityReference>,
+					  <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.NewOrder</codeEntityReference> и т.д. Для тех данных,
 					  которые изменяются, вызывается другое событие. Например, для заявок, у которых изменяются значения Состояние, Остаток и т.д. будет
-					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderChanged</codeEntityReference>.
+					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.OrderChanged</codeEntityReference>.
 				  </para>
 				  <para>
 					  Независимо от того, созданы ли данные программно, например, заявки, или же пользователь сам вручную зарегистрировал заявку, для новых
-					  данных в таблице Заявки будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference>.
+					  данных в таблице Заявки будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITransactionProvider.NewOrder</codeEntityReference>.
 					  Это очень удобно в случае, когда пользователь отменяет выставленную заявку, и программа продолжает работать с актуальными данными.
 				  </para>
 				

@@ -7,6 +7,47 @@ namespace StockSharp.Messages
 	using Ecng.Collections;
 
 	/// <summary>
+	/// Adapter commands.
+	/// </summary>
+	public enum AdapterCommands
+	{
+		/// <summary>
+		/// Connect.
+		/// </summary>
+		Connect,
+
+		/// <summary>
+		/// Disconnect.
+		/// </summary>
+		Disconnect,
+
+		/// <summary>
+		/// Enable.
+		/// </summary>
+		Enable,
+
+		/// <summary>
+		/// Disable.
+		/// </summary>
+		Disable,
+
+		/// <summary>
+		/// Update settings.
+		/// </summary>
+		Update,
+
+		/// <summary>
+		/// Remove.
+		/// </summary>
+		Remove,
+
+		/// <summary>
+		/// Request current state.
+		/// </summary>
+		RequestState,
+	}
+
+	/// <summary>
 	/// Adapter command message.
 	/// </summary>
 	[Serializable]
@@ -28,10 +69,16 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
+		/// Adapter identifier.
+		/// </summary>
+		[DataMember]
+		public Guid AdapterId { get; set; }
+
+		/// <summary>
 		/// Command.
 		/// </summary>
 		[DataMember]
-		public string Command { get; set; }
+		public AdapterCommands Command { get; set; }
 
 		/// <summary>
 		/// Parameters.
@@ -50,10 +97,11 @@ namespace StockSharp.Messages
 				TransactionId = TransactionId,
 				Command = Command,
 				Parameters = Parameters.ToDictionary(),
+				AdapterId = AdapterId,
 			};
 		}
 
 		/// <inheritdoc />
-		public override string ToString() => base.ToString() + $",TrId={TransactionId}";
+		public override string ToString() => base.ToString() + $",TrId={TransactionId},Cmd={Command}";
 	}
 }

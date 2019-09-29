@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
 
 			public BasketEmulationAdapter(HistoryEmulationConnector parent)
-				: base(parent.TransactionIdGenerator, new InMemoryMessageAdapterProvider(), new CandleBuilderProvider(new InMemoryExchangeInfoProvider()))
+				: base(parent.TransactionIdGenerator, new CandleBuilderProvider(new InMemoryExchangeInfoProvider()))
 			{
 				_parent = parent;
 			}
@@ -115,7 +115,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private sealed class OptimizationEmulationConnector : HistoryEmulationConnector
 		{
-			public OptimizationEmulationConnector(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry) 
+			public OptimizationEmulationConnector(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry, StorageFormats format, IMarketDataDrive drive) 
 				: base(securityProvider, portfolios, storageRegistry)
 			{
 				Adapter = new BasketEmulationAdapter(this);
@@ -126,6 +126,9 @@ namespace StockSharp.Algo.Strategies.Testing
 				Adapter.CommissionManager = null;
 				Adapter.PnLManager = null;
 				Adapter.SlippageManager = null;
+
+				HistoryMessageAdapter.StorageFormat = format;
+				HistoryMessageAdapter.Drive = drive;
 			}
 		}
 
@@ -230,7 +233,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
 		/// <param name="storageRegistry">Market data storage.</param>
 		public BatchEmulation(IEnumerable<Security> securities, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
-			: this((ISecurityProvider)new CollectionSecurityProvider(securities), portfolios, storageRegistry)
+			: this(new CollectionSecurityProvider(securities), portfolios, storageRegistry, StorageFormats.Binary, storageRegistry.DefaultDrive)
 		{
 		}
 
@@ -240,7 +243,9 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
 		/// <param name="storageRegistry">Market data storage.</param>
-		public BatchEmulation(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
+		/// <param name="storageFormat">The format of market data. <see cref="StorageFormats.Binary"/> is used by default.</param>
+		/// <param name="drive">The storage which is used by default. By default, <see cref="IStorageRegistry.DefaultDrive"/> is used.</param>
+		public BatchEmulation(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry, StorageFormats storageFormat = StorageFormats.Binary, IMarketDataDrive drive = null)
 		{
 			if (securityProvider == null)
 				throw new ArgumentNullException(nameof(securityProvider));
@@ -254,7 +259,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			Strategies = Enumerable.Empty<Strategy>();
 
 			EmulationSettings = new EmulationSettings();
-			EmulationConnector = new OptimizationEmulationConnector(securityProvider, portfolios, storageRegistry)
+			EmulationConnector = new OptimizationEmulationConnector(securityProvider, portfolios, storageRegistry, storageFormat, drive)
 			{
 				UpdateSecurityLastQuotes = false,
 				UpdateSecurityByLevel1 = false
@@ -414,7 +419,7 @@ namespace StockSharp.Algo.Strategies.Testing
 				strategyAdapter.Emulator.Settings.Load(EmulationSettings.Save());
 
 				adapter.InnerAdapters.Add(strategyAdapter);
-				adapter.AdapterProvider.SetAdapter(portfolio.Name, strategyAdapter);
+				adapter.PortfolioAdapterProvider.SetAdapter(portfolio.Name, strategyAdapter.Id);
 
 				strategy.Connector = EmulationConnector;
 				strategy.Portfolio = portfolio;
@@ -513,14 +518,14 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			foreach (var strategy in _batch)
 			{
-				var strategyAdapter = adapter.AdapterProvider.GetAdapter(strategy.Portfolio);
+				var strategyAdapter = adapter.PortfolioAdapterProvider.TryGetAdapter(adapter.InnerAdapters, strategy.Portfolio);
 
 				if (strategyAdapter != null)
 				{
 					adapter.InnerAdapters.Remove(strategyAdapter);
 
 					adapter
-						.AdapterProvider
+						.PortfolioAdapterProvider
 						.RemoveAssociation(strategy.Portfolio.Name);
 				}
 

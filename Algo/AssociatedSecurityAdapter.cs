@@ -60,10 +60,7 @@ namespace StockSharp.Algo
 		{
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			if (message.IsBack)
@@ -159,7 +156,6 @@ namespace StockSharp.Algo
 			{
 				SecurityCode = securityId.SecurityCode,
 				BoardCode = AssociatedBoardCode,
-				SecurityType = securityId.SecurityType,
 				Bloomberg = securityId.Bloomberg,
 				Cusip = securityId.Cusip,
 				IQFeed = securityId.IQFeed,

@@ -29,6 +29,11 @@
             Administrative password.
             </summary>
         </member>
+        <member name="P:StockSharp.BitZ.BitZMessageAdapter.Domain">
+            <summary>
+            Domain address.
+            </summary>
+        </member>
         <member name="P:StockSharp.BitZ.BitZMessageAdapter.BalanceCheckInterval">
             <summary>
             Balance check interval. Required in case of deposit and withdraw actions.

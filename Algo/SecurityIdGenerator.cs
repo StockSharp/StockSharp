@@ -85,7 +85,7 @@ namespace StockSharp.Algo
 			var index = securityId.LastIndexOf(Delimiter, StringComparison.InvariantCulture);
 
 			return index == -1
-				? nullIfInvalid ? default(SecurityId) : new SecurityId { SecurityCode = securityId, BoardCode = ExchangeBoard.Associated.Code }
+				? nullIfInvalid ? default : new SecurityId { SecurityCode = securityId, BoardCode = ExchangeBoard.Associated.Code }
 				: new SecurityId { SecurityCode = securityId.Substring(0, index), BoardCode = securityId.Substring(index + Delimiter.Length, securityId.Length - index - Delimiter.Length) };
 		}
 	}

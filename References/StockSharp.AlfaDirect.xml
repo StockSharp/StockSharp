@@ -24,7 +24,7 @@
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
+    <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsNativeIdentifiers">
@@ -62,59 +62,9 @@
             Версии AlfaDirect API.
             </summary>
     </member>
-    <member name="F:StockSharp.AlfaDirect.AlfaDirectVersions.V3">
-      <summary>
-            Третья версия.
-            </summary>
-    </member>
     <member name="F:StockSharp.AlfaDirect.AlfaDirectVersions.V4">
       <summary>
             Четвертая версия.
-            </summary>
-    </member>
-    <member name="T:StockSharp.AlfaDirect.AlfaExceptionCodes">
-      <summary>
-            Коды ошибок.
-            </summary>
-    </member>
-    <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.CriticalClientError">
-      <summary>
-            Критическая ошибка клиента.
-            </summary>
-    </member>
-    <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.ClientError">
-      <summary>
-            Ошибка клиента.
-            </summary>
-    </member>
-    <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.NotConnected">
-      <summary>
-            Нет соединения.
-            </summary>
-    </member>
-    <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.ServerError">
-      <summary>
-            Ошибка сервера.
-            </summary>
-    </member>
-    <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.Timeout">
-      <summary>
-            Тайм-аут.
-            </summary>
-    </member>
-    <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.Warning">
-      <summary>
-            Предупреждение.
-            </summary>
-    </member>
-    <member name="T:StockSharp.AlfaDirect.AlfaException">
-      <summary>
-            Исключение, содержащее код и текст ошибки.
-            </summary>
-    </member>
-    <member name="P:StockSharp.AlfaDirect.AlfaException.Code">
-      <summary>
-            Код ошибки.
             </summary>
     </member>
     <member name="T:StockSharp.AlfaDirect.AlfaOrderCondition">
@@ -249,24 +199,6 @@
       <summary>
             Пароль для входа в терминал.
             </summary>
-    </member>
-    <member name="P:StockSharp.AlfaDirect.AlfaTrader.RealTimeCandleOffset">
-      <summary>
-            Временной отступ для нового запроса получение новой свечи. По-умолчанию равен 5 секундам.
-            </summary>
-      <remarks>Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечек.</remarks>
-    </member>
-    <member name="M:StockSharp.AlfaDirect.AlfaTrader.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.AlfaDirect.AlfaTrader.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
     </member>
   </members>
 </doc>

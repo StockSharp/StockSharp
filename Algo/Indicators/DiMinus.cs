@@ -32,12 +32,7 @@ namespace StockSharp.Algo.Indicators
 		{
 		}
 
-		/// <summary>
-		/// To get the part value.
-		/// </summary>
-		/// <param name="current">The current candle.</param>
-		/// <param name="prev">The previous candle.</param>
-		/// <returns>Value.</returns>
+		/// <inheritdoc />
 		protected override decimal GetValue(Candle current, Candle prev)
 		{
 			if (current.LowPrice < prev.LowPrice && current.HighPrice - prev.HighPrice < prev.LowPrice - current.LowPrice)

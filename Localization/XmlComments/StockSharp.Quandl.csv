@@ -3,7 +3,7 @@ M:StockSharp.Quandl.QuandlMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;
 M:StockSharp.Quandl.QuandlMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.Quandl.QuandlMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.Quandl.QuandlMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
-M:StockSharp.Quandl.QuandlMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
+M:StockSharp.Quandl.QuandlMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Quandl.QuandlMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Quandl.QuandlMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Quandl.QuandlMessageAdapter.Token/summary;AccessToken

@@ -192,7 +192,12 @@ namespace StockSharp.Algo.Storages
 						dataType = DataType.Create(typeof(TimeFrameCandleMessage), message.Arg);
 				}
 				else
+				{
 					dataType = CreateDataType(message);
+
+					if (dataType == null)
+						return;
+				}
 
 				var subscription = Tuple.Create(message.SecurityId, dataType);
 
@@ -270,7 +275,8 @@ namespace StockSharp.Algo.Storages
 					return DataType.Create(typeof(RenkoCandleMessage), msg.Arg);
 
 				default:
-					throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str1219);
+					return null;
+					//throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str1219);
 			}
 		}
 
@@ -391,10 +397,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public override void SendInMessage(Message message)
 		{
 			switch (message.Type)
@@ -483,10 +486,7 @@ namespace StockSharp.Algo.Storages
 			base.SendInMessage(message);
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			if (message.IsBack)
@@ -568,7 +568,7 @@ namespace StockSharp.Algo.Storages
 				}
 				case MessageTypes.News:
 				{
-					if (CanStore<NewsMessage>(default(SecurityId)))
+					if (CanStore<NewsMessage>(default))
 						_newsBuffer.Add((NewsMessage)message.Clone());
 
 					break;

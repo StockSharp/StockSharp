@@ -7,23 +7,13 @@
     </summary>
     -->
     <introduction>
-      <para>Помимо стандартного набора таблиц шлюз <codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference>
+      <para>Помимо стандартного набора таблиц шлюз <codeEntityReference>T:StockSharp.Plaza.PlazaMessageAdapter</codeEntityReference>
       поддерживает дополнительные таблицы. Таблицы, по которым возможно получение данных, описаны в 
       пространстве имен <codeEntityReference>N:StockSharp.Plaza.Metadata</codeEntityReference>.
       Для получения информации по таблице необходимо добавить поток данных, соответствующий данной таблице, в 
-      <codeEntityReference qualifyHint="false">P:StockSharp.Plaza.PlazaTrader.Tables</codeEntityReference>. Все потоки данных описаны в классе
+      <codeEntityReference qualifyHint="false">P:StockSharp.Plaza.PlazaMessageAdapter.Tables</codeEntityReference>. Все потоки данных описаны в классе
       <codeEntityReference>T:StockSharp.Plaza.PlazaStreamRegistry</codeEntityReference>.
       </para>
-      <!--
-	  <alert class="caution">
-		<para>
-			Добавлять новые потоки данных можно только, когда не запущен экспорт данных, т.е. 
-      		до вызова метода <codeEntityReference>M:StockSharp.Plaza.PlazaTrader.StartExport</codeEntityReference> или после 
-      		вызова метода <codeEntityReference>M:StockSharp.Plaza.PlazaTrader.StopExport</codeEntityReference>.
-      		В противном случае <codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference> сгенерит исключение.
-		</para>
-	  </alert>
-	  -->
 	  <code language="C#"><![CDATA[// Добавление таблицы об обязательствах маркетмейкера по фьючерсам
 var Trader = new PlazaTrader();
 Trader.Tables.Add(Trader.TableRegistry.MarketMakingFuture);]]></code>

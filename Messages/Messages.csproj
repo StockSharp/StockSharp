@@ -62,9 +62,6 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\References\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\References\MoreLinq.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -84,7 +81,9 @@
     <Compile Include="AdapterListRequestMessage.cs" />
     <Compile Include="AdapterResponseMessage.cs" />
     <Compile Include="BaseConnectionMessage.cs" />
+    <Compile Include="BasePositionChangeMessage.cs" />
     <Compile Include="BaseResultMessage.cs" />
+    <Compile Include="BaseRouteMessage.cs" />
     <Compile Include="BoardLookupMessage.cs" />
     <Compile Include="BoardLookupResultMessage.cs" />
     <Compile Include="BoardMessage.cs" />
@@ -103,7 +102,7 @@
     <Compile Include="IBasketSecurityProcessor.cs" />
     <Compile Include="IBasketSecurityProcessorProvider.cs" />
     <Compile Include="IDailyInfoSoap.cs" />
-    <Compile Include="IPortfolioMessageAdapterProvider.cs" />
+    <Compile Include="ISecurityIdMessage.cs" />
     <Compile Include="IServerTimeMessage.cs" />
     <Compile Include="ITransactionIdMessage.cs" />
     <Compile Include="MarketDataFinishedMessage.cs" />
@@ -114,6 +113,9 @@
     <Compile Include="InMemoryMessageChannel.cs" />
     <Compile Include="IOrderLogMarketDepthBuilder.cs" />
     <Compile Include="MessagePriorityQueue.cs" />
+    <Compile Include="PortfolioRouteListFinishedMessage.cs" />
+    <Compile Include="PortfolioRouteListRequestMessage.cs" />
+    <Compile Include="PortfolioRouteMessage.cs" />
     <Compile Include="ReConnectionSettings.cs" />
     <Compile Include="RemoveMessage.cs" />
     <Compile Include="ResetMessage.cs" />
@@ -149,17 +151,19 @@
     <Compile Include="MarketDataMessage.cs" />
     <Compile Include="RepoOrderInfo.cs" />
     <Compile Include="NtmOrderInfo.cs" />
-    <Compile Include="SecurityAssociationRequestMessage.cs" />
-    <Compile Include="SecurityAssociationResultMessage.cs" />
     <Compile Include="SecurityId.cs" />
     <Compile Include="SecurityIdMapping.cs" />
     <Compile Include="SecurityLegsRequestMessage.cs" />
     <Compile Include="SecurityLegsResultMessage.cs" />
     <Compile Include="SecurityLookupMessage.cs" />
     <Compile Include="SecurityLookupResultMessage.cs" />
+    <Compile Include="SecurityMappingMessage.cs" />
     <Compile Include="SecurityMappingRequestMessage.cs" />
     <Compile Include="SecurityMappingResultMessage.cs" />
     <Compile Include="SecurityMessage.cs" />
+    <Compile Include="SecurityRouteListFinishedMessage.cs" />
+    <Compile Include="SecurityRouteListRequestMessage.cs" />
+    <Compile Include="SecurityRouteMessage.cs" />
     <Compile Include="SecurityStates.cs" />
     <Compile Include="SecurityTypes.cs" />
     <Compile Include="BoardStateMessage.cs" />
@@ -177,6 +181,7 @@
     <Compile Include="UserInfoMessage.cs" />
     <Compile Include="UserLookupMessage.cs" />
     <Compile Include="UserLookupResultMessage.cs" />
+    <Compile Include="UserPermissions.cs" />
     <Compile Include="UserRequestMessage.cs" />
     <Compile Include="WithdrawInfo.cs" />
     <Compile Include="WorkingTime.cs" />

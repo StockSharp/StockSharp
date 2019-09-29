@@ -54,7 +54,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class RemoveMessage : Message
+	public class RemoveMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoveMessage"/>.
@@ -76,6 +76,10 @@ namespace StockSharp.Messages
 		[DataMember]
 		public string RemoveId { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		public long TransactionId { get; set; }
+
 		/// <summary>
 		/// Create a copy of <see cref="RemoveMessage"/>.
 		/// </summary>
@@ -87,6 +91,7 @@ namespace StockSharp.Messages
 				RemoveType = RemoveType,
 				RemoveId = RemoveId,
 				LocalTime = LocalTime,
+				TransactionId = TransactionId,
 			};
 		}
 	}

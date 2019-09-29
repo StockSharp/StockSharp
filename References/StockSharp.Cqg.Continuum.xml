@@ -69,7 +69,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
+    <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">

@@ -155,7 +155,8 @@ namespace StockSharp.Algo
 			_hashCode = ((h1 << 5) + h1) ^ h2;
 		}
 
-		/// <inheritdoc />
+		/// <summary>Serves as a hash function for a particular type. </summary>
+		/// <returns>A hash code for the current <see cref="T:System.Object" />.</returns>
 		public override int GetHashCode()
 		{
 			return _hashCode;
@@ -204,11 +205,18 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Determines whether the specified message type is derived from <see cref="CandleMessage"/>.
 		/// </summary>
-		/// <returns><see langword="true"/> if the specified message type is derived from <see cref="CandleMessage"/>, otherwise, <see langword="false"/>.</returns>
-		public bool IsCandles()
-		{
-			return MessageType?.IsCandleMessage() == true;
-		}
+		public bool IsCandles => MessageType?.IsCandleMessage() == true;
+
+		/// <summary>
+		/// Determines whether the specified message type is market-data.
+		/// </summary>
+		public bool IsMarketData =>
+			MessageType?.IsCandleMessage() == true ||
+			MessageType == typeof(QuoteChangeMessage) ||
+			MessageType == typeof(Level1ChangeMessage) ||
+			MessageType == typeof(NewsMessage) ||
+			MessageType == typeof(SecurityMessage) ||
+			MessageType == typeof(ExecutionMessage) && (Arg is ExecutionTypes execType && (execType == ExecutionTypes.Tick || execType == ExecutionTypes.OrderLog));
 
 		/// <summary>
 		/// Load settings.

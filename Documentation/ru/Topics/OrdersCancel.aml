@@ -8,7 +8,7 @@
     <introduction>
 		<para>
 			Снятие заявки необходимо в том случае, если ситуация на рынке изменилась не в пользу выставленной заявки. Для снятия заявок в <token>stocksharp</token>
-			предусмотрен метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>.
+			предусмотрен метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.CancelOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>.
 		</para>
     </introduction>
 

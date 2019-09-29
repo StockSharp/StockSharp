@@ -21,20 +21,49 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.Localization;
+
+	/// <summary>
+	/// Order book states.
+	/// </summary>
+	[DataContract]
+	[Serializable]
+	public enum QuoteChangeStates
+	{
+		/// <summary>
+		/// Snapshot started.
+		/// </summary>
+		[EnumMember]
+		SnapshotStarted,
+
+		/// <summary>
+		/// Snapshot building.
+		/// </summary>
+		[EnumMember]
+		SnapshotBuilding,
+
+		/// <summary>
+		/// Snapshot complete.
+		/// </summary>
+		[EnumMember]
+		SnapshotComplete,
+
+		/// <summary>
+		/// Incremental.
+		/// </summary>
+		[EnumMember]
+		Increment,
+	}
 
 	/// <summary>
 	/// Messages containing quotes.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public sealed class QuoteChangeMessage : Message, IServerTimeMessage
+	public sealed class QuoteChangeMessage : Message, IServerTimeMessage, ISecurityIdMessage
 	{
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
 		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
@@ -71,9 +100,7 @@ namespace StockSharp.Messages
 			set => _asks = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		/// <summary>
-		/// Change server time.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ServerTimeKey)]
 		[DescriptionLoc(LocalizedStrings.Str168Key)]
@@ -108,8 +135,14 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str382Key)]
 		[MainCategory]
-		[Nullable]
+		[Ecng.Serialization.Nullable]
 		public CurrencyTypes? Currency { get; set; }
+
+		/// <summary>
+		/// Order book state.
+		/// </summary>
+		[DataMember]
+		public QuoteChangeStates? State { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="QuoteChangeMessage"/>.
@@ -136,6 +169,7 @@ namespace StockSharp.Messages
 				Currency = Currency,
 				IsByLevel1 = IsByLevel1,
 				IsFiltered = IsFiltered,
+				State = State,
 			};
 
 			this.CopyExtensionInfo(clone);
@@ -143,10 +177,7 @@ namespace StockSharp.Messages
 			return clone;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff}";

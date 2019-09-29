@@ -19,7 +19,7 @@
       <codeEntityReference>T:StockSharp.Algo.Indicators.Fractals</codeEntityReference> как
       создать собственный IndicatorPainter. </para>
       <para>Все IndicatorPainter должны быть унаследованны от базового класса 
-      <codeEntityReference>T:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter</codeEntityReference> или интерфейса
+      <codeEntityReference>T:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1</codeEntityReference> или интерфейса
 	<codeEntityReference>T:StockSharp.Xaml.Charting.IChartIndicatorPainter</codeEntityReference>:</para>
             <code language="C#">
         <![CDATA[
@@ -27,7 +27,7 @@
 	/// The chart element for <see cref="Fractals"/>.
 	/// </summary>
 	[Indicator(typeof(Fractals))]
-	public class FractalsPainter : BaseChartIndicatorPainter
+	public class FractalsPainter : BaseChartIndicatorPainter<Fractals>
 	{
 	...
 	}
@@ -42,7 +42,7 @@
 	/// The chart element for <see cref="Fractals"/>.
 	/// </summary>
 	[Indicator(typeof(Fractals))]
-	public class FractalsPainter : BaseChartIndicatorPainter
+	public class FractalsPainter : BaseChartIndicatorPainter<Fractals>
 	{
 		/// <summary>
 		/// <see cref="Fractals.Up"/> dots color.
@@ -90,21 +90,20 @@
 		]]>
 		</code>	
 		<para>Переопределяем метод 
-		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.OnDraw</codeEntityReference>
+		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.OnDraw(`0,System.Collections.Generic.IDictionary{StockSharp.Algo.Indicators.IIndicator,System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData}})</codeEntityReference>
 		в котором с помощью метода 
-		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.DrawValues(StockSharp.Algo.Indicators.IIndicator,StockSharp.Xaml.Charting.IChartElement)</codeEntityReference> 
+		<codeEntityReference>M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter`1.DrawValues(System.Collections.Generic.IList{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData},StockSharp.Xaml.Charting.IChartElement,System.Func{StockSharp.Xaml.Charting.ChartDrawData.IndicatorData,System.Double})</codeEntityReference> 
 		прорисовываем индикатор:</para>
 		<code language="C#">
         <![CDATA[
 	...
 		/// <inheritdoc />
-		protected override bool OnDraw()
+		protected override bool OnDraw(Fractals ind, IDictionary<IIndicator, IList<ChartDrawData.IndicatorData>> data)
 		{
-			var ind = (Fractals)Indicator;
 			var result = false;
 
-			result |= DrawValues(ind.Down, Down);
-			result |= DrawValues(ind.Up, Up);
+			result |= DrawValues(data[ind.Down], Down);
+			result |= DrawValues(data[ind.Up], Up);
 
 			return result;
 		}
@@ -119,7 +118,7 @@
 	/// The chart element for <see cref="Fractals"/>.
 	/// </summary>
 	[Indicator(typeof(Fractals))]
-	public class FractalsPainter : BaseChartIndicatorPainter
+	public class FractalsPainter : BaseChartIndicatorPainter<Fractals>
 	{
 		/// <summary>
 		/// <see cref="Fractals.Up"/> dots color.
@@ -155,13 +154,12 @@
 		}
 
 		/// <inheritdoc />
-		protected override bool OnDraw()
+		protected override bool OnDraw(Fractals ind, IDictionary<IIndicator, IList<ChartDrawData.IndicatorData>> data)
 		{
-			var ind = (Fractals)Indicator;
 			var result = false;
 
-			result |= DrawValues(ind.Down, Down);
-			result |= DrawValues(ind.Up, Up);
+			result |= DrawValues(data[ind.Down], Down);
+			result |= DrawValues(data[ind.Up], Up);
 
 			return result;
 		}

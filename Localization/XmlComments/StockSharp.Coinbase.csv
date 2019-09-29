@@ -1,6 +1,8 @@
 T:StockSharp.Coinbase.CoinbaseMessageAdapter/summary;DocStr2538
+P:StockSharp.Coinbase.CoinbaseMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Coinbase.CoinbaseMessageAdapter.Key/summary;Str3304
 P:StockSharp.Coinbase.CoinbaseMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Coinbase.CoinbaseMessageAdapter.Passphrase/summary;Passphrase
 P:StockSharp.Coinbase.CoinbaseMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Coinbase.CoinbaseMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Coinbase.CoinbaseMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
@@ -10,8 +12,10 @@ M:StockSharp.Coinbase.CoinbaseMessageAdapter.#ctor(Ecng.Common.IdGenerator)/para
 M:StockSharp.Coinbase.CoinbaseMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Coinbase.CoinbaseOrderCondition/summary;DocStr60
 M:StockSharp.Coinbase.CoinbaseOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.Coinbase.CoinbaseOrderCondition.StopPrice/summary;Str3460
 T:StockSharp.Coinbase.CoinbaseTrader/summary;DocStr2539
 M:StockSharp.Coinbase.CoinbaseTrader.#ctor/summary;DocStr1
 P:StockSharp.Coinbase.CoinbaseTrader.Key/summary;Str3304
 P:StockSharp.Coinbase.CoinbaseTrader.Secret/summary;DocStr3146
+P:StockSharp.Coinbase.CoinbaseTrader.Passphrase/summary;Passphrase
 P:StockSharp.Coinbase.CoinbaseTrader.BalanceCheckInterval/summary;BalanceCheckInterval

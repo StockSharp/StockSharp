@@ -23,6 +23,7 @@ namespace SampleRandomEmulation
 	using Ecng.Common;
 	using Ecng.Xaml;
 	using Ecng.Collections;
+	using Ecng.Xaml.DevExp.Excel;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -92,11 +93,7 @@ namespace SampleRandomEmulation
 			.TryAdd(Level1Fields.MarginSell, 10000m);
 
 			// test portfolio
-			var portfolio = new Portfolio
-			{
-				Name = "test account",
-				BeginValue = 1000000,
-			};
+			var portfolio = Portfolio.CreateSimulator();
 
 			var timeFrame = TimeSpan.FromMinutes(5);
 
@@ -118,12 +115,10 @@ namespace SampleRandomEmulation
 
 			_logManager.Sources.Add(_connector);
 
-			var candleManager = new CandleManager(_connector);
-
 			var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 			// create strategy based on 80 5-min и 10 5-min
-			_strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
+			_strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
 			{
 				Volume = 1,
 				Security = security,
@@ -144,7 +139,6 @@ namespace SampleRandomEmulation
 
 				// start strategy before emulation started
 				_strategy.Start();
-				candleManager.Start(series);
 
 				// start historical data loading when connection established successfully and all data subscribed
 				_connector.Start();
@@ -219,7 +213,7 @@ namespace SampleRandomEmulation
 			// generate report for backtested strategy
 			// Warning! For the huge order or trade count,
 			// generation will be extremely slow
-			new ExcelStrategyReport(_strategy, "sma.xlsx").Generate();
+			new ExcelStrategyReport(new DevExpExcelWorkerProvider(), _strategy, "sma.xlsx").Generate();
 
 			// order excel file
 			Process.Start("sma.xlsx");

@@ -41,6 +41,54 @@ namespace StockSharp.Algo.Candles
 		public static IEnumerable<MarketDataTypes> CandleDataSources { get; } = new[] { MarketDataTypes.Level1, MarketDataTypes.Trades, MarketDataTypes.MarketDepth, MarketDataTypes.OrderLog };
 
 		/// <summary>
+		/// Try get suitable market-data type for candles compression.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="subscription">Subscription.</param>
+		/// <param name="provider">Candle builders provider.</param>
+		/// <returns>Which market-data type is used as a source value. <see langword="null"/> is compression is impossible.</returns>
+		public static MarketDataTypes? TryGetCandlesBuildFrom(this IMessageAdapter adapter, MarketDataMessage subscription, CandleBuilderProvider provider)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			if (!provider.IsRegistered(subscription.DataType))
+				return null;
+
+			if (subscription.BuildMode == MarketDataBuildModes.Load)
+				return null;
+
+			var buildFrom = subscription.BuildFrom ?? adapter.SupportedMarketDataTypes.Intersect(CandleDataSources).OrderBy(t =>
+			{
+				// by priority
+				switch (t)
+				{
+					case MarketDataTypes.Trades:
+						return 0;
+					case MarketDataTypes.Level1:
+						return 1;
+					case MarketDataTypes.OrderLog:
+						return 2;
+					case MarketDataTypes.MarketDepth:
+						return 3;
+					default:
+						return 4;
+				}
+			}).FirstOr();
+
+			if (buildFrom == null || !adapter.SupportedMarketDataTypes.Contains(buildFrom.Value))
+				return null;
+
+			return buildFrom.Value;
+		}
+
+		/// <summary>
 		/// Determines whether the specified type is derived from <see cref="Candle"/>.
 		/// </summary>
 		/// <param name="candleType">The candle type.</param>
@@ -448,7 +496,7 @@ namespace StockSharp.Algo.Candles
 		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="arg">Candle arg.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<Trade> trades, object arg, bool onlyFormed = true)
 			where TCandle : Candle
@@ -466,7 +514,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="series">Candles series.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<Candle> ToCandles(this IEnumerable<Trade> trades, CandleSeries series, bool onlyFormed = true)
 		{
@@ -481,7 +529,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="series">Candles series.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> trades, CandleSeries series, bool onlyFormed = true, CandleBuilderProvider candleBuilderProvider = null)
@@ -494,7 +542,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="executions">Tick data.</param>
 		/// <param name="mdMsg">Market data subscription.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> executions, MarketDataMessage mdMsg, bool onlyFormed = true, CandleBuilderProvider candleBuilderProvider = null)
@@ -508,7 +556,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="depths">Market depths.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="type">Type of candle depth based data.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<Candle> ToCandles(this IEnumerable<MarketDepth> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true, CandleBuilderProvider candleBuilderProvider = null)
@@ -525,7 +573,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="depths">Market depths.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="type">Type of candle depth based data.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true, CandleBuilderProvider candleBuilderProvider = null)
@@ -539,7 +587,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="depths">Market depths.</param>
 		/// <param name="mdMsg">Market data subscription.</param>
 		/// <param name="type">Type of candle depth based data.</param>
-		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, MarketDataMessage mdMsg, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true, CandleBuilderProvider candleBuilderProvider = null)
@@ -588,7 +636,7 @@ namespace StockSharp.Algo.Candles
 			if (candleMsg == null)
 				throw new ArgumentNullException(nameof(candleMsg));
 
-			var vol = MathHelper.Round(candleMsg.TotalVolume / 4, volumeStep, decimals, MidpointRounding.AwayFromZero);
+			var vol = (candleMsg.TotalVolume / 4).Round(volumeStep, decimals, MidpointRounding.AwayFromZero);
 			var isUptrend = candleMsg.ClosePrice >= candleMsg.OpenPrice;
 
 			ExecutionMessage o = null;

@@ -22,10 +22,8 @@ namespace StockSharp.Algo.Commissions
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Configuration;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -45,9 +43,7 @@ namespace StockSharp.Algo.Commissions
 
 		private Unit _value = new Unit();
 
-		/// <summary>
-		/// Commission value.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
 		[DescriptionLoc(LocalizedStrings.CommissionValueKey)]
@@ -65,17 +61,13 @@ namespace StockSharp.Algo.Commissions
 			}
 		}
 
-		/// <summary>
-		/// Total commission.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public decimal Commission { get; private set; }
 
 		private string _title;
 
-		/// <summary>
-		/// Header.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public string Title
 		{
@@ -87,19 +79,13 @@ namespace StockSharp.Algo.Commissions
 			}
 		}
 
-		/// <summary>
-		/// To reset the state.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual void Reset()
 		{
 			Commission = 0;
 		}
 
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		public decimal? Process(Message message)
 		{
 			var commission = OnProcessExecution((ExecutionMessage)message);
@@ -120,7 +106,7 @@ namespace StockSharp.Algo.Commissions
 		/// <summary>
 		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
 			Value = storage.GetValue<Unit>(nameof(Value));
@@ -129,7 +115,7 @@ namespace StockSharp.Algo.Commissions
 		/// <summary>
 		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Value), Value);
@@ -154,11 +140,7 @@ namespace StockSharp.Algo.Commissions
 	[DescriptionLoc(LocalizedStrings.Str660Key)]
 	public class CommissionPerOrderRule : CommissionRule
 	{
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasOrderInfo())
@@ -175,11 +157,7 @@ namespace StockSharp.Algo.Commissions
 	[DescriptionLoc(LocalizedStrings.Str661Key)]
 	public class CommissionPerTradeRule : CommissionRule
 	{
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo())
@@ -196,11 +174,7 @@ namespace StockSharp.Algo.Commissions
 	[DescriptionLoc(LocalizedStrings.Str663Key)]
 	public class CommissionPerOrderVolumeRule : CommissionRule
 	{
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasOrderInfo())
@@ -217,11 +191,7 @@ namespace StockSharp.Algo.Commissions
 	[DescriptionLoc(LocalizedStrings.Str665Key)]
 	public class CommissionPerTradeVolumeRule : CommissionRule
 	{
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo())
@@ -257,20 +227,14 @@ namespace StockSharp.Algo.Commissions
 			}
 		}
 
-		/// <summary>
-		/// To reset the state.
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			_currentCount = 0;
 			base.Reset();
 		}
 
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (!message.HasOrderInfo())
@@ -283,10 +247,7 @@ namespace StockSharp.Algo.Commissions
 			return (decimal)Value;
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -294,10 +255,7 @@ namespace StockSharp.Algo.Commissions
 			storage.SetValue(nameof(Count), Count);
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -332,20 +290,14 @@ namespace StockSharp.Algo.Commissions
 			}
 		}
 
-		/// <summary>
-		/// To reset the state.
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			_currentCount = 0;
 			base.Reset();
 		}
 
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (!message.HasTradeInfo())
@@ -358,10 +310,7 @@ namespace StockSharp.Algo.Commissions
 			return (decimal)Value;
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -369,10 +318,7 @@ namespace StockSharp.Algo.Commissions
 			storage.SetValue(nameof(Count), Count);
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -388,11 +334,7 @@ namespace StockSharp.Algo.Commissions
 	[DescriptionLoc(LocalizedStrings.Str673Key)]
 	public class CommissionPerTradePriceRule : CommissionRule
 	{
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo())
@@ -429,11 +371,7 @@ namespace StockSharp.Algo.Commissions
 			}
 		}
 
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && message.SecurityId == _securityId)
@@ -442,10 +380,7 @@ namespace StockSharp.Algo.Commissions
 			return null;
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -454,10 +389,7 @@ namespace StockSharp.Algo.Commissions
 				storage.SetValue(nameof(Security), Security);
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -499,23 +431,17 @@ namespace StockSharp.Algo.Commissions
 			}
 		}
 
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
-			if (message.HasTradeInfo() && message.SecurityId.SecurityType == SecurityType)
-				return GetValue(message.TradePrice);
+			// TODO
+			//if (message.HasTradeInfo() && message.SecurityId.SecurityType == SecurityType)
+			//	return GetValue(message.TradePrice);
 			
 			return null;
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -523,10 +449,7 @@ namespace StockSharp.Algo.Commissions
 			storage.SetValue(nameof(SecurityType), SecurityType);
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -560,11 +483,7 @@ namespace StockSharp.Algo.Commissions
 			}
 		}
 
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && Board != null && message.SecurityId.BoardCode.CompareIgnoreCase(Board.Code))
@@ -573,10 +492,7 @@ namespace StockSharp.Algo.Commissions
 			return null;
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -585,10 +501,7 @@ namespace StockSharp.Algo.Commissions
 				storage.SetValue(nameof(Board), Board.Code);
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -596,7 +509,7 @@ namespace StockSharp.Algo.Commissions
 			var boardCode = storage.GetValue<string>(nameof(Board));
 
 			if (!boardCode.IsEmpty())
-				Board = ConfigManager.TryGetService<IExchangeInfoProvider>()?.GetExchangeBoard(boardCode);
+				Board = ServicesRegistry.TryExchangeInfoProvider?.GetExchangeBoard(boardCode);
 		}
 	}
 
@@ -626,20 +539,14 @@ namespace StockSharp.Algo.Commissions
 			}
 		}
 
-		/// <summary>
-		/// To reset the state.
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			_turnOver = 0;
 			base.Reset();
 		}
 
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (!message.HasTradeInfo())
@@ -653,10 +560,7 @@ namespace StockSharp.Algo.Commissions
 			return (decimal)Value;
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -664,10 +568,7 @@ namespace StockSharp.Algo.Commissions
 			storage.SetValue(nameof(TurnOver), TurnOver);
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);

@@ -32,6 +32,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.ComponentModel;
 	using Ecng.Configuration;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -46,15 +47,15 @@ namespace StockSharp.Algo.Storages
 			private readonly string _path;
 			private readonly string _fileNameWithExtension;
 			private readonly string _datesPath;
+			private readonly DataType _dataType;
 
 			private readonly SyncObject _cacheSync = new SyncObject();
 
 			//private static readonly Version _dateVersion = new Version(1, 0);
 
-			public LocalMarketDataStorageDrive(string fileName, string path, StorageFormats format, IMarketDataDrive drive)
+			public LocalMarketDataStorageDrive(Type dataType, object arg, string path, StorageFormats format, LocalMarketDataDrive drive)
 			{
-				if (fileName.IsEmpty())
-					throw new ArgumentNullException(nameof(fileName));
+				var fileName = GetFileName(dataType, arg);
 
 				if (path.IsEmpty())
 					throw new ArgumentNullException(nameof(path));
@@ -63,6 +64,8 @@ namespace StockSharp.Algo.Storages
 				_drive = drive ?? throw new ArgumentNullException(nameof(drive));
 				_fileNameWithExtension = fileName + GetExtension(format);
 				_datesPath = IOPath.Combine(_path, fileName + format + "Dates.txt");
+
+				_dataType = DataType.Create(dataType, arg);
 
 				_datesDict = new Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>>(() =>
 				{
@@ -90,7 +93,7 @@ namespace StockSharp.Algo.Storages
 				}).Track();
 			}
 
-			private readonly IMarketDataDrive _drive;
+			private readonly LocalMarketDataDrive _drive;
 
 			IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
 
@@ -135,6 +138,8 @@ namespace StockSharp.Algo.Storages
 				dates.Remove(date);
 
 				SaveDates(Dates.ToArray());
+
+				_availableDataTypes.Remove(_drive.Path);
 			}
 
 			void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
@@ -151,6 +156,16 @@ namespace StockSharp.Algo.Storages
 				dates[date] = date;
 
 				SaveDates(Dates.ToArray());
+
+				lock (_availableDataTypes.SyncRoot)
+				{
+					var tuple = _availableDataTypes.TryGetValue(_drive.Path);
+
+					if (tuple == null || !tuple.Second)
+						return;
+
+					tuple.First.Add(_dataType);
+				}
 			}
 
 			Stream IMarketDataStorageDrive.LoadStream(DateTime date)
@@ -295,9 +310,7 @@ namespace StockSharp.Algo.Storages
 
 		private string _path;
 
-		/// <summary>
-		/// The path to the directory with data.
-		/// </summary>
+		/// <inheritdoc />
 		public override string Path
 		{
 			get => _path;
@@ -339,9 +352,7 @@ namespace StockSharp.Algo.Storages
 				_drives.Values.ForEach(d => d.ResetCache());
 		}
 
-		/// <summary>
-		/// Get all available instruments.
-		/// </summary>
+		/// <inheritdoc />
 		public override IEnumerable<SecurityId> AvailableSecurities => GetAvailableSecurities(Path);
 
 		/// <summary>
@@ -365,45 +376,169 @@ namespace StockSharp.Algo.Storages
 				.Where(t => !t.IsDefault());
 		}
 
-		/// <summary>
-		/// Get all available data types.
-		/// </summary>
-		/// <param name="securityId">Instrument identifier.</param>
-		/// <param name="format">Format type.</param>
-		/// <returns>Data types.</returns>
+		private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>>(StringComparer.InvariantCultureIgnoreCase);
+
+		/// <inheritdoc />
 		public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
-			var secPath = GetSecurityPath(securityId);
-
-			if (!Directory.Exists(secPath))
-				return Enumerable.Empty<DataType>();
-
 			var ext = GetExtension(format);
 
-			return InteropHelper
-				.GetDirectories(secPath)
-			    .SelectMany(dir => Directory.GetFiles(dir, "*" + ext))
-				.Select(IOPath.GetFileNameWithoutExtension)
-				.Distinct()
-				.Select(GetDataType)
-				.Where(t => t != null);
+			IEnumerable<DataType> GetDataTypes(string secPath)
+			{
+				return InteropHelper
+				       .GetDirectories(secPath)
+				       .SelectMany(dateDir => Directory.GetFiles(dateDir, "*" + ext))
+				       .Select(IOPath.GetFileNameWithoutExtension)
+				       .Distinct()
+				       .Select(GetDataType)
+				       .Where(t => t != null)
+				       .OrderBy(d =>
+				       {
+					       if (!d.IsCandles)
+						       return 0;
+
+					       return d.MessageType == typeof(TimeFrameCandleMessage)
+						       ? ((TimeSpan)d.Arg).Ticks : long.MaxValue;
+				       });
+			}
+
+			if (securityId.IsDefault())
+			{
+				lock (_availableDataTypes.SyncRoot)
+				{
+					var tuple = _availableDataTypes.SafeAdd(Path, key => RefTuple.Create(new HashSet<DataType>(), false));
+				
+					if (!tuple.Second)
+					{
+						tuple.First.AddRange(Directory
+		                     .EnumerateDirectories(Path)
+		                     .SelectMany(Directory.EnumerateDirectories)
+		                     .SelectMany(GetDataTypes));
+
+						tuple.Second = true;
+					}
+
+					return tuple.First.ToArray();
+				}
+			}
+
+			var s = GetSecurityPath(securityId);
+
+			return Directory.Exists(s) ? GetDataTypes(s) : Enumerable.Empty<DataType>();
 		}
 
-		/// <summary>
-		/// Create storage for <see cref="IMarketDataStorage"/>.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-		/// <param name="format">Format type.</param>
-		/// <returns>Storage for <see cref="IMarketDataStorage"/>.</returns>
+		/// <inheritdoc />
 		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
 		{
 			if (securityId.IsDefault())
 				throw new ArgumentNullException(nameof(securityId));
 
 			return _drives.SafeAdd(Tuple.Create(securityId, dataType, arg, format),
-				key => new LocalMarketDataStorageDrive(GetFileName(dataType, arg), GetSecurityPath(securityId), format, this));
+				key => new LocalMarketDataStorageDrive(dataType, arg, GetSecurityPath(securityId), format, this));
+		}
+
+		/// <inheritdoc />
+		public override void Verify()
+		{
+			if (!Directory.Exists(Path))
+				throw new InvalidOperationException(LocalizedStrings.DirectoryNotExist.Put(Path));
+		}
+
+		/// <inheritdoc />
+		public override void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (securityProvider == null)
+				throw new ArgumentNullException(nameof(securityProvider));
+
+			if (newSecurity == null)
+				throw new ArgumentNullException(nameof(newSecurity));
+
+			if (isCancelled == null)
+				throw new ArgumentNullException(nameof(isCancelled));
+
+			if (updateProgress == null)
+				throw new ArgumentNullException(nameof(updateProgress));
+
+			var securityPaths = new List<string>();
+			var progress = 0;
+
+			foreach (var letterDir in InteropHelper.GetDirectories(Path))
+			{
+				if (isCancelled())
+					break;
+
+				var name = IOPath.GetFileName(letterDir);
+
+				if (name == null || name.Length != 1)
+					continue;
+
+				securityPaths.AddRange(InteropHelper.GetDirectories(letterDir));
+			}
+
+			if (isCancelled())
+				return;
+
+			var iterCount = securityPaths.Count;
+
+			updateProgress(0, iterCount);
+
+			var existingIds = securityProvider.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+			foreach (var securityPath in securityPaths)
+			{
+				if (isCancelled())
+					break;
+
+				var securityId = IOPath.GetFileName(securityPath).FolderNameToSecurityId();
+
+				if (!existingIds.Contains(securityId))
+				{
+					var firstDataFile =
+						Directory.EnumerateDirectories(securityPath)
+							.SelectMany(d => Directory.EnumerateFiles(d, "*.bin")
+								.Concat(Directory.EnumerateFiles(d, "*.csv"))
+								.OrderBy(f => IOPath.GetExtension(f).CompareIgnoreCase(".bin") ? 0 : 1))
+							.FirstOrDefault();
+
+					if (firstDataFile != null)
+					{
+						var id = securityId.ToSecurityId();
+
+						decimal priceStep;
+
+						if (IOPath.GetExtension(firstDataFile).CompareIgnoreCase(".bin"))
+						{
+							try
+							{
+								priceStep = File.ReadAllBytes(firstDataFile).Range(6, 16).To<decimal>();
+							}
+							catch (Exception ex)
+							{
+								throw new InvalidOperationException(LocalizedStrings.Str2929Params.Put(firstDataFile), ex);
+							}
+						}
+						else
+							priceStep = 0.01m;
+
+						var security = new SecurityMessage
+						{
+							SecurityId = securityId.ToSecurityId(),
+							PriceStep = priceStep,
+							Name = id.SecurityCode,
+						};
+
+						if (security.IsMatch(criteria, criteria.GetSecurityTypes()))
+							newSecurity(security);
+
+						existingIds.Add(securityId);
+					}
+				}
+
+				updateProgress(progress++, iterCount);
+			}
 		}
 
 		/// <summary>

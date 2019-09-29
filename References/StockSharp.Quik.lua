@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------
---  StockSharp QUIK Lua Fix Server (c) 2019 https://stocksharp.ru      --
+--  StockSharp QUIK Lua (c) 2019 https://stocksharp.ru                 --
 -------------------------------------------------------------------------
 
 -- Для изменения настроек раскоментируйте строку параметра.
@@ -64,8 +64,17 @@ LogLevel=3
 -------------------------------------------------------------------------
 --  Общие настройки Lua (не изменять)
 -------------------------------------------------------------------------
+
+local dllFile
+
+if (getInfoParam("VERSION"):sub(1, 2) == "7.") then
+  dllFile = "\\StockSharp.QuikLua32.dll"
+else
+  dllFile = "\\StockSharp.QuikLua.dll"
+end
+
 package.path = ""
-package.cpath = getScriptPath() .. "\\StockSharp.QuikLua.dll"
+package.cpath = getScriptPath() .. dllFile;
 
 require("StockSharp")
 -------------------------------------------------------------------------

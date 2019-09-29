@@ -22,7 +22,7 @@ namespace StockSharp.Community
 	/// <summary>
 	/// The client for access to the registration service.
 	/// </summary>
-	public class ProfileClient : BaseCommunityClient<IProfileService>
+	public class ProfileClient : BaseCommunityClient<IProfileService>, IProfileClient
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProfileClient"/>.
@@ -41,77 +41,49 @@ namespace StockSharp.Community
 		{
 		}
 
-		/// <summary>
-		/// To start the registration.
-		/// </summary>
-		/// <param name="profile">The profile information.</param>
+		/// <inheritdoc />
 		public void CreateProfile(Profile profile)
 		{
 			ValidateError(Invoke(f => f.CreateProfile(profile)));
 		}
 
-		/// <summary>
-		/// To send an e-mail message.
-		/// </summary>
-		/// <param name="email">E-mail address.</param>
-		public void SendEmail(string email)
+		/// <inheritdoc />
+		public void SendEmail()
 		{
-			ValidateError(Invoke(f => f.SendEmail(email)));
+			ValidateError(Invoke(f => f.SendEmail()));
 		}
 
-		/// <summary>
-		/// To confirm the e-mail address.
-		/// </summary>
-		/// <param name="email">E-mail address.</param>
-		/// <param name="emailCode">The e-mail confirmation code.</param>
+		/// <inheritdoc />
 		public void ValidateEmail(string email, string emailCode)
 		{
 			ValidateError(Invoke(f => f.ValidateEmail(email, emailCode)));
 		}
 
-		/// <summary>
-		/// To send SMS.
-		/// </summary>
-		/// <param name="email">E-mail address.</param>
-		/// <param name="phone">Phone.</param>
+		/// <inheritdoc />
 		public void SendSms(string email, string phone)
 		{
 			ValidateError(Invoke(f => f.SendSms(email, phone)));
 		}
 
-		/// <summary>
-		/// To confirm the phone number.
-		/// </summary>
-		/// <param name="email">E-mail address.</param>
-		/// <param name="smsCode">SMS verification code.</param>
+		/// <inheritdoc />
 		public void ValidatePhone(string email, string smsCode)
 		{
 			ValidateError(Invoke(f => f.ValidatePhone(email, smsCode)));
 		}
 
-		/// <summary>
-		/// To update profile information.
-		/// </summary>
-		/// <param name="profile">The profile information.</param>
+		/// <inheritdoc />
 		public void UpdateProfile(Profile profile)
 		{
 			ValidateError(Invoke(f => f.UpdateProfile(SessionId, profile)));
 		}
 
-		/// <summary>
-		/// To get profile information.
-		/// </summary>
-		/// <returns>The profile information.</returns>
+		/// <inheritdoc />
 		public Profile GetProfile()
 		{
 			return Invoke(f => f.GetProfile(SessionId));
 		}
 
-		/// <summary>
-		/// To get user information.
-		/// </summary>
-		/// <param name="userId">User ID.</param>
-		/// <returns>The user information.</returns>
+		/// <inheritdoc />
 		public Profile GetUserProfile(long userId)
 		{
 			return Invoke(f => f.GetUserProfile(userId));

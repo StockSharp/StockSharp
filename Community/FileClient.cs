@@ -27,7 +27,7 @@ namespace StockSharp.Community
 	/// <summary>
 	/// The client for access to the service of work with files and documents.
 	/// </summary>
-	public class FileClient : BaseCommunityClient<IFileService>
+	public class FileClient : BaseCommunityClient<IFileService>, IFileClient
 	{
 		private const int _partSize = 20 * 1024; // 10kb
 
@@ -50,13 +50,7 @@ namespace StockSharp.Community
 		{
 		}
 
-		/// <summary>
-		/// To get the file data.
-		/// </summary>
-		/// <param name="id">File ID.</param>
-		/// <param name="progress">Progress callback.</param>
-		/// <param name="cancel">Cancel callback.</param>
-		/// <returns>The file data.</returns>
+		/// <inheritdoc />
 		public FileData GetFile(long id, Action<int> progress = null, Func<bool> cancel = null)
 		{
 			var data = GetFileInfo(id);
@@ -64,23 +58,13 @@ namespace StockSharp.Community
 			return data;
 		}
 
-		/// <summary>
-		/// To get the file data.
-		/// </summary>
-		/// <param name="id">File ID.</param>
-		/// <returns>The file data.</returns>
+		/// <inheritdoc />
 		public FileData GetFileInfo(long id)
 		{
 			return _cache.SafeAdd(id, key => Invoke(f => f.GetFileInfo(NullableSessionId ?? Guid.Empty, id)));
 		}
 
-		/// <summary>
-		/// Download file.
-		/// </summary>
-		/// <param name="data">The file data.</param>
-		/// <param name="progress">Progress callback.</param>
-		/// <param name="cancel">Cancel callback.</param>
-		/// <returns>If the operation was cancelled by <paramref name="cancel"/>, <see langword="false"/> will return.</returns>
+		/// <inheritdoc />
 		public bool Download(FileData data, Action<int> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
@@ -89,7 +73,7 @@ namespace StockSharp.Community
 			if (data.Body != null)
 				return true;
 
-			var operationId = Invoke(f => f.BeginDownload(AuthenticationClient.Instance.SessionId, data.Id));
+			var operationId = Invoke(f => f.BeginDownload(SessionId, data.Id));
 
 			var body = new List<byte>();
 
@@ -110,12 +94,7 @@ namespace StockSharp.Community
 			return true;
 		}
 
-		/// <summary>
-		/// To upload the existing file.
-		/// </summary>
-		/// <param name="data">File data.</param>
-		/// <param name="progress">Progress callback.</param>
-		/// <param name="cancel">Cancel callback.</param>
+		/// <inheritdoc />
 		public void Update(FileData data, Action<int> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
@@ -127,7 +106,7 @@ namespace StockSharp.Community
 			if (data.Body.Length == 0)
 				throw new ArgumentOutOfRangeException(nameof(data));
 
-			var operationId = Invoke(f => f.BeginUploadExisting(AuthenticationClient.Instance.SessionId, data.Id));
+			var operationId = Invoke(f => f.BeginUploadExisting(SessionId, data.Id));
 			Upload(operationId, data.Body, progress, cancel);
 		}
 
@@ -159,15 +138,7 @@ namespace StockSharp.Community
 			return id;
 		}
 
-		/// <summary>
-		/// To upload the file to the site.
-		/// </summary>
-		/// <param name="fileName">File name.</param>
-		/// <param name="body">File body.</param>
-		/// <param name="isPublic">Is the file available for public.</param>
-		/// <param name="progress">Progress callback.</param>
-		/// <param name="cancel">Cancel callback.</param>
-		/// <returns>File data. If the operation was cancelled by <paramref name="cancel"/>, <see langword="null"/> will return.</returns>
+		/// <inheritdoc />
 		public FileData Upload(string fileName, byte[] body, bool isPublic, Action<int> progress = null, Func<bool> cancel = null)
 		{
 			if (fileName.IsEmpty())
@@ -179,7 +150,7 @@ namespace StockSharp.Community
 			if (body.Length == 0)
 				throw new ArgumentOutOfRangeException(nameof(body));
 
-			var operationId = Invoke(f => f.BeginUpload(AuthenticationClient.Instance.SessionId, fileName, isPublic));
+			var operationId = Invoke(f => f.BeginUpload(SessionId, fileName, isPublic));
 
 			var id = Upload(operationId, body, progress, cancel);
 
@@ -201,13 +172,22 @@ namespace StockSharp.Community
 			return data;
 		}
 
-		/// <summary>
-		/// To get a upload size limit.
-		/// </summary>
-		/// <returns>Upload size limit.</returns>
+		/// <inheritdoc />
 		public long GetUploadLimit()
 		{
-			return Invoke(f => f.GetUploadLimit(AuthenticationClient.Instance.SessionId));
+			return Invoke(f => f.GetUploadLimit(SessionId));
+		}
+
+		/// <inheritdoc />
+		public string Share(long id)
+		{
+			return Invoke(f => f.Share(SessionId, id));
+		}
+
+		/// <inheritdoc />
+		public void UnShare(long id)
+		{
+			Invoke(f => f.UnShare(SessionId, id));
 		}
 
 		private static void ValidateError(byte errorCode)

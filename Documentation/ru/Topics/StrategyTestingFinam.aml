@@ -12,7 +12,7 @@
      </para>
      <para>
      Рассмотрим работу этого механизма на примере получения данных с сервиса Финам. Для работы с Финам в <token>stocksharp</token>
-     существует специальный класс <codeEntityReference>T:StockSharp.Algo.History.Russian.Finam.FinamHistorySource</codeEntityReference>, который
+     существует специальный класс <codeEntityReference>T:StockSharp.Finam.FinamMessageAdapter</codeEntityReference>, который
      позволяет получать свечи, тики и информацию об инструментах.
      <!--Func<DateTimeOffset, IEnumerable<Message>-->
      
@@ -46,64 +46,16 @@ var security = new Security
 				</code>
 			    </listItem>
   					<listItem>
-  					<para>Создаем экземпляры классов хранилища инструментов и загрузчика данных с Финама. Обратите внимание, что в данном примере
-  					мы передаем в конструктор <legacyBold>FinamSecurityStorage</legacyBold> один инструмент. Если необходимо работать с несколькими инструментами, то Вы можете
-  					модифицировать код конструктора и передать массив инструментов.</para>
+  					<para>Создаем экземпляр класса загрузчика данных с Финама:</para>
   					<code>
 				<![CDATA[
-var finamSecurityStorage = new FinamSecurityStorage(security);
-var finamHistorySource = new FinamHistorySource();
- ]]>
-  					</code>
-  					</listItem>
-  					<listItem>
-  					<para>
-  					Далее необходимо обновить хранилище инструментов. Для этого используется метод
-  					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})</codeEntityReference>
-  					Фактически этот метод записывает в свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.ExtensionInfo</codeEntityReference>
-  					коды инструмента и площадки, используемые в Финам, которые будут использованы при загрузке данных по инструменту. 
-  					Обратите внимание, что первый аргумент метода имеет
-  					тип <codeEntityReference>T:StockSharp.Algo.Storages.ISecurityStorage</codeEntityReference> - этот интерфейс был реализован
-  					в <legacyBold>FinamSecurityStorage</legacyBold>.
-  					Также нужно иметь ввиду, что второй аргумент (<codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>) при обновлении инструментов хранилища выполняет функцию шаблона.
-  					</para>
-  					<code>
-				<![CDATA[
-finamHistorySource.Refresh(finamSecurityStorage, security, s => {}, () => false);
- ]]>
+// удаляем старый адаптер маркет-данных и добавляем новый от Финам
+connector.Adapter.InnerAdapters.Remove(connector.MarketDataAdapter);
+connector.Adapter.InnerAdapters.Add(new CustomHistoryMessageAdapter(new FinamMessageAdapter(connector.TransactionIdGenerator)));
+]]>
   					</code>
   					</listItem>
 				</list>
-				</content>
-			</step>
-			<step>
-				<content>
-				<para>
-					Теперь нужно зарегистрировать в <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> новый источник данных. Это делается при помощи
-					метода 
-					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Testing.HistoryEmulationConnector.RegisterHistorySource(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes,System.Object,System.Func{System.DateTimeOffset,System.Collections.Generic.IEnumerable{StockSharp.Messages.Message}})</codeEntityReference>.
-					Первый аргумент метода - это инструмент. Далее указывается тип данных источника. В нашем случае - это 
-					обычные свечи <codeEntityReference>F:StockSharp.Messages.MarketDataTypes.CandleTimeFrame</codeEntityReference>. Третий аргумент - параметр, связанный с типом рыночных данных. Для обычных свечей - это таймфрейм свечи.  
-				</para>			
-				<para>
-				В последнем аргументе нужно указать функцию, которая возвращает рыночные данные. Причем функция должна возвращать значение 
-				типа <legacyBold>IEnumerable&lt;Message&gt;</legacyBold> и принимать параметр типа
-				<codeEntityReference>T:System.DateTimeOffset</codeEntityReference>. В нашем случае используется метод, который
-				запрашивает свечи с Финама - 
-				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)</codeEntityReference>
-				</para>
-				<para>
-				Данные будут загружены после старта коннектора, причем в качестве начальной и конечной дат загрузки будут использованы значения свойств 
-				<codeEntityReference>P:StockSharp.Algo.Testing.HistoryMessageAdapter.StartDate</codeEntityReference> и
-				<codeEntityReference>P:StockSharp.Algo.Testing.HistoryMessageAdapter.StopDate</codeEntityReference> из <codeEntityReference>T:StockSharp.Algo.Testing.HistoryMessageAdapter</codeEntityReference>.
-				</para>
-				
-				<code >
-				<![CDATA[
-connector.RegisterHistorySource(security, MarketDataTypes.CandleTimeFrame, TimeSpan.FromMinutes(1), d =>
-          _finamHistorySource.GetCandles(security, TimeSpan.FromMinutes(1), d.Date, d.Date));
-					  ]]>
-				</code>
 				</content>
 			</step>
 		  </steps>

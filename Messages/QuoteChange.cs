@@ -93,12 +93,7 @@ namespace StockSharp.Messages
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
-		/// <summary>
-		/// Extended quote info.
-		/// </summary>
-		/// <remarks>
-		/// Uses in case of keep additional information associated with the quotation. For example, the number of contracts in its own order book, the amount of the best buying and selling.
-		/// </remarks>
+		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
@@ -140,10 +135,7 @@ namespace StockSharp.Messages
 			return Price.GetHashCode() ^ Side.GetHashCode();
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			var side = Side == Sides.Buy ? LocalizedStrings.Bid : LocalizedStrings.Ask;

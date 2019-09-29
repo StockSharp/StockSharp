@@ -423,18 +423,12 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
+		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			if (DriveInternal == null)
-				return Enumerable.Empty<TimeSpan>();
+				return Enumerable.Empty<object>();
 
-			return DriveInternal
-			       .GetAvailableDataTypes(securityId, Format)
-			       .TimeFrameCandles()
-			       .Select(t => (TimeSpan)t.Arg)
-			       .Distinct()
-			       .OrderBy()
-			       .ToArray();
+			return DriveInternal.GetCandleArgs(Format, candleType, securityId, from, to);
 		}
 
 		private ISnapshotStorage GetSnapshotStorage(Type messageType, object arg)
@@ -571,7 +565,7 @@ namespace StockSharp.Algo.Storages
 				return;
 			}
 
-			foreach (var security in _securityStorage.Lookup(msg.ToLookupCriteria(ExchangeInfoProvider)))
+			foreach (var security in _securityStorage.Lookup(msg))
 				RaiseStorageMessage(security.ToMessage(originalTransactionId: msg.TransactionId));
 
 			base.SendInMessage(msg);
@@ -673,7 +667,8 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			_cancellationTransactions.Add(msg.TransactionId, msg.OrderTransactionId);
+			// can be looped back from offline
+			_cancellationTransactions.TryAdd(msg.TransactionId, msg.OrderTransactionId);
 			base.SendInMessage(msg);
 		}
 
@@ -708,12 +703,17 @@ namespace StockSharp.Algo.Storages
 
 					Subscribe(msg);
 
-					var clone = (MarketDataMessage)msg.Clone();
-
 					if (lastTime != null)
-						clone.From = lastTime;
+					{
+						if (!(msg.DataType == MarketDataTypes.MarketDepth && msg.From == null && msg.To == null))
+						{
+							var clone = (MarketDataMessage)msg.Clone();
+							clone.From = lastTime;
+							msg = clone;
+						}
+					}
 
-					base.SendInMessage(clone.ValidateBounds());	
+					base.SendInMessage(msg.ValidateBounds());	
 				}
 				else
 				{
@@ -793,7 +793,7 @@ namespace StockSharp.Algo.Storages
 					break;
 
 				case MarketDataTypes.CandleTimeFrame:
-					var tf = (TimeSpan)msg.Arg;
+					var tf = msg.GetTimeFrame();
 
 					if (msg.IsCalcVolumeProfile)
 					{
@@ -938,8 +938,8 @@ namespace StockSharp.Algo.Storages
 					lastTime = LoadMessages(GetStorage<VolumeCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
-				default:
-					throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str721);
+				//default:
+				//	throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str721);
 			}
 
 			return lastTime;
@@ -1122,7 +1122,6 @@ namespace StockSharp.Algo.Storages
 			var security = !securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty() ? _securityStorage.LookupById(securityId) : _securityStorage.Lookup(new Security
 			{
 				Code = securityId.SecurityCode,
-				Type = securityId.SecurityType
 			}).FirstOrDefault();
 
 			if (security == null)

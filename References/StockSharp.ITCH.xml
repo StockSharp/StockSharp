@@ -113,16 +113,10 @@
             <param name="depth">Market depth.</param>
         </member>
         <member name="P:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Depth">
-            <summary>
-            Market depth.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Update(StockSharp.Messages.ExecutionMessage)">
-            <summary>
-            Process order log item.
-            </summary>
-            <param name="item">Order log item.</param>
-            <returns>Order book was changed.</returns>
+            <inheritdoc />
         </member>
         <member name="T:StockSharp.ITCH.ItchTrader">
             <summary>

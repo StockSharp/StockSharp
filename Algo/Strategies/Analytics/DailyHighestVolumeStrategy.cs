@@ -63,9 +63,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			_timeFrame = this.Param(nameof(TimeFrame), TimeSpan.FromMinutes(5));
 		}
 
-		/// <summary>
-		/// To analyze.
-		/// </summary>
+		/// <inheritdoc />
 		protected override void OnAnalyze()
 		{
 			// clear prev values

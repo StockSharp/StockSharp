@@ -24,6 +24,11 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Digifinex.DigifinexMessageAdapter.Domain">
+            <summary>
+            Domain address.
+            </summary>
+        </member>
         <member name="P:StockSharp.Digifinex.DigifinexMessageAdapter.BalanceCheckInterval">
             <summary>
             Balance check interval. Required in case of deposit and withdraw actions.
@@ -65,6 +70,11 @@
         <member name="P:StockSharp.Digifinex.DigifinexTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Digifinex.DigifinexTrader.Domain">
+            <summary>
+            Domain address.
             </summary>
         </member>
         <member name="P:StockSharp.Digifinex.DigifinexTrader.BalanceCheckInterval">

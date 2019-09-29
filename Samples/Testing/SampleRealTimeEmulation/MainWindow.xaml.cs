@@ -24,6 +24,7 @@ namespace SampleRealTimeEmulation
 	using Ecng.Common;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
+	using Ecng.Configuration;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -41,7 +42,6 @@ namespace SampleRealTimeEmulation
 		private readonly SynchronizedList<Candle> _buffer = new SynchronizedList<Candle>();
 		private readonly ChartCandleElement _candlesElem;
 		private readonly LogManager _logManager;
-		private CandleManager _candleManager;
 		private CandleSeries _candleSeries;
 		private readonly Connector _realConnector = new Connector();
 		private RealTimeEmulationTrader<IMessageAdapter> _emuConnector;
@@ -51,11 +51,7 @@ namespace SampleRealTimeEmulation
 
 		private const string _settingsFile = "connection.xml";
 
-		private readonly Portfolio _emuPf = new Portfolio
-		{
-			Name = LocalizedStrings.Str1209,
-			BeginValue = 1000000
-		};
+		private readonly Portfolio _emuPf = Portfolio.CreateSimulator();
 
 		public MainWindow()
 		{
@@ -87,15 +83,6 @@ namespace SampleRealTimeEmulation
 
 		private void InitRealConnector()
 		{
-			try
-			{
-				if (File.Exists(_settingsFile))
-					_realConnector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
-			}
-			catch
-			{
-			}
-
 			_realConnector.NewOrder += OrderGrid.Orders.Add;
 			_realConnector.NewMyTrade += TradeGrid.Trades.Add;
 			_realConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
@@ -105,6 +92,23 @@ namespace SampleRealTimeEmulation
 
 			_realConnector.Error += error =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+
+			ConfigManager.RegisterService<IMessageAdapterProvider>(new FullInMemoryMessageAdapterProvider(_realConnector.Adapter.InnerAdapters));
+
+			try
+			{
+				if (File.Exists(_settingsFile))
+				{
+					var ctx = new ContinueOnExceptionContext();
+					ctx.Error += ex => ex.LogError();
+
+					using (new Scope<ContinueOnExceptionContext>(ctx))
+						_realConnector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+				}
+			}
+			catch
+			{
+			}
 		}
 
 		private void InitEmuConnector()
@@ -123,8 +127,6 @@ namespace SampleRealTimeEmulation
 
 			SecurityPicker.SecurityProvider = new FilterableSecurityProvider(_emuConnector);
 			SecurityPicker.MarketDataProvider = _emuConnector;
-
-			_candleManager = new CandleManager(_emuConnector);
 
 			// subscribe on connection successfully event
 			_emuConnector.Connected += () =>
@@ -161,7 +163,7 @@ namespace SampleRealTimeEmulation
 			// subscribe on error of order registration event
 			_emuConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
 
-			_candleManager.Processing += (s, candle) =>
+			_emuConnector.CandleSeriesProcessing += (s, candle) =>
 			{
 				if (candle.State == CandleStates.Finished)
 					_buffer.Add(candle);
@@ -256,7 +258,7 @@ namespace SampleRealTimeEmulation
 				return;
 
 			if (_candleSeries != null)
-				_candleManager.Stop(_candleSeries); // give back series memory
+				_emuConnector.UnSubscribeCandles(_candleSeries); // give back series memory
 
 			_security = security;
 
@@ -267,7 +269,7 @@ namespace SampleRealTimeEmulation
 			_emuConnector.RegisterSecurity(security);
 
 			_candleSeries = new CandleSeries(CandleSettingsEditor.Settings.CandleType, security, CandleSettingsEditor.Settings.Arg);
-			_candleManager.Start(_candleSeries);
+			_emuConnector.SubscribeCandles(_candleSeries);
 		}
 
 		private void NewOrder_OnClick(object sender, RoutedEventArgs e)

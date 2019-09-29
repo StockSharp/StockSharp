@@ -57,9 +57,7 @@ namespace StockSharp.Algo.Indicators
 			set => _roc.Length = value;
 		}
 
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			_ema3.Length = _ema2.Length = _ema1.Length = Length;
@@ -67,16 +65,10 @@ namespace StockSharp.Algo.Indicators
 			base.Reset();
 		}
 
-		/// <summary>
-		/// Whether the indicator is set.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFormed => _ema1.IsFormed && _ema2.IsFormed && _ema3.IsFormed && _roc.IsFormed;
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var ema1Value = _ema1.Process(input);

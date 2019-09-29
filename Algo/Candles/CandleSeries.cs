@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Candles
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Configuration;
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
@@ -223,9 +222,17 @@ namespace StockSharp.Algo.Candles
 		public Level1Fields? BuildCandlesField { get; set; }
 
 		/// <summary>
-		/// Returns a string that represents the current object.
+		/// Request <see cref="CandleStates.Finished"/> only candles.
 		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.FinishedKey,
+			Description = LocalizedStrings.Str1073Key,
+			GroupName = LocalizedStrings.BuildKey,
+			Order = 23)]
+		public bool IsFinished { get; set; }
+
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return CandleType?.Name + "_" + Security + "_" + TraderHelper.CandleArgToFolderName(Arg);
@@ -237,7 +244,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			var secProvider = ConfigManager.TryGetService<ISecurityProvider>();
+			var secProvider = ServicesRegistry.TrySecurityProvider;
 			if (secProvider != null)
 			{
 				var securityId = storage.GetValue<string>(nameof(SecurityId));
@@ -260,6 +267,7 @@ namespace StockSharp.Algo.Candles
 			AllowBuildFromSmallerTimeFrame = storage.GetValue(nameof(AllowBuildFromSmallerTimeFrame), AllowBuildFromSmallerTimeFrame);
 			IsRegularTradingHours = storage.GetValue(nameof(IsRegularTradingHours), IsRegularTradingHours);
 			Count = storage.GetValue(nameof(Count), Count);
+			IsFinished = storage.GetValue(nameof(IsFinished), IsFinished);
 		}
 
 		/// <summary>
@@ -291,6 +299,7 @@ namespace StockSharp.Algo.Candles
 			storage.SetValue(nameof(AllowBuildFromSmallerTimeFrame), AllowBuildFromSmallerTimeFrame);
 			storage.SetValue(nameof(IsRegularTradingHours), IsRegularTradingHours);
 			storage.SetValue(nameof(Count), Count);
+			storage.SetValue(nameof(IsFinished), IsFinished);
 		}
 	}
 }

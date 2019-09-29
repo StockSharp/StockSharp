@@ -18,7 +18,7 @@
 	  <para>Основное ограничение визуального API под Windows состоит в том, что нельзя обращаться из другого потока к элементам окна. Это связанно с ограничениями архитектуры Windows (подробнее описано здесь
 	  <token>messagepump</token>). Реализации шлюза <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> в целях повышения
 	  производительности работают в многопоточном режиме. Поэтому, подписываясь на событие, например, 
-	  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>,
+	  <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.NewSecurity</codeEntityReference>,
 	  нельзя напрямую выводить полученные данные в окно пользователя. Для этого нужно провести операцию синхронизации при помощи специального объекта
 	  <externalLink>
 		<linkText>Dispatcher</linkText>

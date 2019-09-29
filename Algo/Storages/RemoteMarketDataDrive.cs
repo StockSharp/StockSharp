@@ -6,7 +6,8 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.History.Hydra;
+	using StockSharp.Algo.Storages.Remote;
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -17,9 +18,8 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteMarketDataDrive"/>.
 		/// </summary>
-		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		public RemoteMarketDataDrive(IExchangeInfoProvider exchangeInfoProvider)
-			: this(new RemoteStorageClient(exchangeInfoProvider))
+		public RemoteMarketDataDrive()
+			: this(new RemoteStorageClient())
 		{
 		}
 
@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Storages
 		public override string Path
 		{
 			get => Client.Address.ToString();
-			set => Client = new RemoteStorageClient(_client.ExchangeInfoProvider, value.To<Uri>());
+			set => Client = new RemoteStorageClient(value.To<Uri>());
 		}
 
 		/// <inheritdoc />
@@ -74,6 +74,23 @@ namespace StockSharp.Algo.Storages
 		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
 		{
 			return Client.GetRemoteStorage(securityId, dataType, arg, format);
+		}
+
+		/// <inheritdoc />
+		public override void Verify()
+		{
+			Client.Login();
+		}
+
+		/// <inheritdoc />
+		public override void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
+		{
+			using (var client = new RemoteStorageClient(new Uri(Path)))
+			{
+				client.Credentials.Load(Client.Credentials.Save());
+
+				client.LookupSecurities(criteria, securityProvider, newSecurity, isCancelled, updateProgress);
+			}
 		}
 
 		/// <inheritdoc />

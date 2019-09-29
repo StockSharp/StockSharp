@@ -8,8 +8,7 @@
 	<introduction>
 		<para>
 			Замена заявок при написании торговых алгоритмов более продвинутый способ, чем <link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Снятие заявок</link> и последующая регистрация.
-			Чтобы заменить заявку необходимо вызывать метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)</codeEntityReference>,
-		   или сразу передать объект новой заявки <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>.
+			Чтобы заменить заявку необходимо вызывать метод и передать объект новой заявки <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>.
 			<!--При этом, регистрируемый объем <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Volume</codeEntityReference> новой заявки будет равен
 			нереализованному балансу <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Balance</codeEntityReference> старой.-->
 		</para>

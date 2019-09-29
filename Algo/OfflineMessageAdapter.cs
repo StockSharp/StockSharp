@@ -68,6 +68,35 @@
 				//return;
 			}
 
+			void ProcessOrderReplaceMessage(OrderReplaceMessage replaceMsg)
+			{
+				var originOrderMsg = _pendingRegistration.TryGetAndRemove(replaceMsg.OldTransactionId);
+
+				if (originOrderMsg == null)
+					_pendingMessages.Add(replaceMsg);
+				else
+				{
+					_pendingMessages.Remove(originOrderMsg);
+
+					RaiseNewOutMessage(new ExecutionMessage
+					{
+						ExecutionType = ExecutionTypes.Transaction,
+						HasOrderInfo = true,
+						OriginalTransactionId = replaceMsg.OldTransactionId,
+						ServerTime = DateTimeOffset.Now,
+						OrderState = OrderStates.Done,
+						OrderType = originOrderMsg.OrderType,
+					});
+
+					var orderMsg = new OrderRegisterMessage();
+
+					replaceMsg.CopyTo(orderMsg);
+
+					_pendingRegistration.Add(replaceMsg.TransactionId, orderMsg);
+					StoreMessage(orderMsg);
+				}
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -160,34 +189,23 @@
 					{
 						if (!_connected)
 						{
-							var replaceMsg = (OrderReplaceMessage)message.Clone();
+							ProcessOrderReplaceMessage((OrderReplaceMessage)message.Clone());
+							return;
+						}
+					}
 
-							var originOrderMsg = _pendingRegistration.TryGetAndRemove(replaceMsg.OldTransactionId);
+					break;
+				}
+				case MessageTypes.OrderPairReplace:
+				{
+					lock (_syncObject)
+					{
+						if (!_connected)
+						{
+							var pairMsg = (OrderPairReplaceMessage)message.Clone();
 
-							if (originOrderMsg == null)
-								_pendingMessages.Add(replaceMsg);
-							else
-							{
-								_pendingMessages.Remove(originOrderMsg);
-
-								RaiseNewOutMessage(new ExecutionMessage
-								{
-									ExecutionType = ExecutionTypes.Transaction,
-									HasOrderInfo = true,
-									OriginalTransactionId = replaceMsg.OldTransactionId,
-									ServerTime = DateTimeOffset.Now,
-									OrderState = OrderStates.Done,
-									OrderType = originOrderMsg.OrderType,
-								});
-
-								var orderMsg = new OrderRegisterMessage();
-
-								replaceMsg.CopyTo(orderMsg);
-
-								_pendingRegistration.Add(replaceMsg.TransactionId, orderMsg);
-								StoreMessage(orderMsg);
-							}
-
+							ProcessOrderReplaceMessage(pairMsg.Message1);
+							ProcessOrderReplaceMessage(pairMsg.Message2);
 							return;
 						}
 					}

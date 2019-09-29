@@ -7,9 +7,9 @@
 		Например, для задания спреда при арбитраже или парном трейдинге. Имеет следующие реализации.</para>
 		<para>1.	<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> - 
 		индекс, построенный из комбинации нескольких инструментов через математическую 
-		формулу <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionFormula</codeEntityReference>.</para>
+		формулу <codeEntityReference>P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Formula</codeEntityReference>.</para>
 		<para>2.	<codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> - 
-		индекс, построенный из инструментов с применением весовых коэффициентов.</para>
+		индекс, построенный из инструментов с применением весовых коэффициентов <codeEntityReference>P:StockSharp.Algo.WeightedIndexSecurity.Weights</codeEntityReference>.</para>
 	</introduction>
 <procedure>
 			<title>Создание ExpressionIndexSecurity</title>
@@ -20,6 +20,7 @@
 и сам <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
+// необходимо для компиляции формулы
 ConfigManager.RegisterService<ICompilerService>(new RoslynCompilerService());
 
 private Security _instr1;

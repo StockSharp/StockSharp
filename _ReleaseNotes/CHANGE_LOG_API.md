@@ -19,7 +19,7 @@ StockSharp API Change log
 * (bug) MarketEmulator. Fix canceled balanced processing.
 * (bug) BW fixes.
 * (feature) Kucoin. Protocol upgraded.
-* (feature) Kicoin. Sandbox supported.
+* (feature) Kucoin. Sandbox supported.
 * (feature) FIX connector. SuperDerivatives, SwissQuote and XOpenHub dialects.
 * (feature) NewsGrid. Show Board column.
 * (bug) PortfolioEditor. SelectedPortfolio binding fixes.
@@ -59,7 +59,7 @@ StockSharp API Change log
 * (feature) ISecurityProvider. Lookup method uses SecurityLookupMessage.
 * (feature) SecurityLookupWindow. CriteriaMessage
 * (feature) ISecurityDownloader. Refresh method uses SecurityLookupMessage.
-* (feature) ITransactionIdMessage, IServerTimeMessage interfaces.
+* (feature) ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage interfaces.
 * (bug) RemoteStorage. Fix available data types translation.
 * (feature) SecurityNativeIdMessageAdapter. Skip external native ids.
 * (feature) Tradier. New urls + sandbox supported.
@@ -89,7 +89,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter. Removed TimeFrames property.
 * (feature) IMessageAdapter. IsAllDownloadingSupported method added.
 * (bug) SecurityNativeIdMessageAdapter. Fix processing suspended incoming messages.
-* (feature) Security. MinVolume, Shortable and UnderlyingSecuityMinVolume properties added.
+* (feature) Security. MinVolume, Shortable, UnderlyingSecuityMinVolume and FaceValue properties added.
 * (bug) QuikLua. Position average price fix.
 * (feature) SampleMultiConnection. Order log, historical ticks and news requests supported.
 * (feature) Deribit. V2 protocol supported.
@@ -104,6 +104,153 @@ StockSharp API Change log
 * (feature) Emulator. Security.MinVolume supported.
 * (feature) Kraken. WebSocket supported.
 * (feature) Adapter and subscription messages added.
+* (feature) CandleBuilderMessageAdapter. Forced Finish prev non-finished candles.
+* (feature) OrderPairReplaceMessage. Removed SecurityMessage inheritance.
+* (feature) OfflineMessageAdapter. Support OrderPairReplaceMessage processing.
+* (feature) ISecurityAssociationStorage removed.
+* (feature) BasketMessageAdapter. SecurityAdapterProvider added.
+* (bug) CandleBuilder. Fill CandleMessage.TotalTicks.
+* (feature) CandleSeries. IsFinished filter added.
+* (feature) Configuration. Auto scan new adapters from local assemblies.
+* (bug) CandleBinarySerializer. Fix diff time zone times.
+* (bug) Storage. Fix binary more 1 days range.
+* (feature) IMessageAdapter. GetCandleArgs added.
+* (feature) IMarketDataDrive. GetAvailableDataTypes returns all types for all securities.
+* (feature) HistoryMessageAdapter. SupportedMarketDataTypes overload uses storage data types.
+* (bug) Connector. Fix order's fail processing.
+* (feature) Diagram. IndicatorDiagramElement. IsFinal and IsFormed params added.
+* (feature) Diagram. OrderRegisterDiagramElement. ZeroAsMarket param added.
+* (feature) Diagram. Converter show DateTimeOffset properties.
+* (feature) Diagram. Position, Strategy, StrategyTrades Strategy socket added.
+* (feature) IProfileClient, IAuthenticationClient, IFileClient, IStrategyClient interfaces created.
+* (feature) Backtesting. Check shortable position option added.
+* (feature) BasketMessageAdapter. Extracted mapping storage into CsvSecurityMessageAdapterProvider, CsvPortfolioMessageAdapterProvider.
+* (feature) BaseChartIndicatorPainter refactoring.
+* (feature) CollectionSecurityProvider. Check input nullable values.
+* (feature) IFileService. Share and UnShare operations added.
+* (feature) CSV importing. Supported native system identifier importing.
+* (feature) Security and portfolio route messages. Security mapping message.
+* (feature) IndexEditor. Uses ISecurityProvider https://stocksharp.ru/posts/m/47693/
+* (bug) ProxySettings fix https://stocksharp.ru/forum/10804/ne-rabotaet-soedinenie-cherez-proksi-server/
+* (feature) Level1. Fill Security.IssueSize from level1.
+* (feature) Order. MinVolume, AveragePrice, Yield properties added.
+* (feature) CouponDate, CouponPeriod, CouponValue, MarketPriceToday, MarketPriceYesterday, YieldVWAP, YieldVWAPPrev, VWAPPrev fields added.
+* (feature) QuikLua. Securities. FaceValue, Dividend, Duration, CouponDate, CouponPeriod, CouponValue, MarketPriceToday, MarketPriceYesterday, YieldVWAP, YieldVWAPPrev, VWAPPrev translation added.
+* (feature) QuikLua. Orders. Yield, MinVolume, AveragePrice translation added.
+* (feature) QuikLua. VC++ 2019 runtime usage.
+* (feature) SecurityGrid. Dividend, Duration, CouponDate, CouponPeriod, CouponValue, MarketPriceToday, MarketPriceYesterday, YieldVWAP, YieldVWAPPrev, VWAPPrev columns added.
+* (feature) OrderGrid. AveragePrice, MinVolume and Yield columns added.
+* (feature) Unit. Parse case insensitive.
+* (feature) RealTimeEmulationTrader. Uses IPortfolioProvider.
+* (bug) RealTimeEmulationTrader. Fix subscriptions processing.
+* (feature) MarketEmulator. OrderStatusMessage and PortfolioLookupMessage supported.
+* (feature) FixServer. IFixServerTransactionIdStorage usage added.
+* (feature) Diagram. Bring link to front on mouse over.
+* (bug) Diagram. Update composition item names in palette fixes.
+* (bug) StorageMessageAdapter. Fix processing offline cancel order requests.
+* (feature) IMessageAdapter. IsSupportExecutionsPnL properties added.
+* (feature) PnLMessageAdapter. Translates PortfolioChangeMessage.
+* (feature) Plaza. Spectra 6.2.20 supported.
+* (feature) InteractiveBrokers. V9.76.01
+* (bug) PnLMessageAdapter. Fix processing for empty portfolio name trades.
+* (feature) IConnector. Moved market data members to IMarketDataProvider.
+* (feature) Strategy implemented IMarketDataProvider interface.
+* (feature) Strategy implemented ICandleManager interface.
+* (feature) PnLManager. UseXXX options added.
+* (feature) IConnector. Moved transactional members to ITransactionProvider interface.
+* (feature) UnitHelper. Parse method for empty string return null for the specified option.
+* (bug) Unit. Limit values comparison fix.
+* (feature) Diagrams. ProtectPositionDiagramElement. More options added.
+* (feature) Diagrams. DiagramSocketType for OrderState added.
+* (feature) Diagrams. OrderBaseDiagramElement. Trigger for all order's diagram elements.
+* (feature) Diagrams. Font weight set to bold.
+* (bug) StrategiesDashboard. Fix CanExecute handling.
+* (feature) BaseGridControl. Copy context menu added.
+* (bug) ContinuousSecurityBaseProcessor. Fix SecurityId for generated messages.
+* (feature) IMessageListener interface added.
+* (feature) SoundLogListener, SpeechLogListener moved from Logging to Xaml.
+* (feature) Configuration.Adapters project added.
+* (feature) Configure method moved from Configuration to Xaml.
+* (feature) LicensePanel. Moved from Licensing to Xaml.
+* (bug) PortfolioPnLManager. Fix processing trades with string id.
+* (feature) IMarketDataProvider. MarketDataSubscriptionFailed2, MarketDataUnSubscriptionFailed2 events added.
+* (feature) Subscriptions. Interpret non supported and non exist subscriptions as warning.
+* (feature) Strategy implemented ITransactionProvider interface.
+* (feature) Portfolio. CreateSimulator method added.
+* (feature) BuySellGrid. AddPanel, RemovePanel methods added.
+* (feature) GuiConnector marked as obsolete.
+* (feature) SampleSync removed as obsolete.
+* (feature) Portfolio. InternalId added.
+* (feature) Connector. CandleSeriesError event added.
+* (feature) IMarketDataProvider. Added adapter parameter to subscription methods.
+* (feature) Micex TEAP. Stock32, Stock33, Stock34, Currency32, Currency33, Currency34 interfaces added.
+* (feature) SecurityId. SecurityType marked as obsolete.
+* (feature) QuikLua. Translates T+N money positions.
+* (feature) FixServer. SecurityLookupMessage.SecurityTypes supported.
+* (bug) FixServer. Fix SecurityStatusRequest handling.
+* (feature) FixServer. Sends PortfolioLookupResultMessage.
+* (feature) QUIK. 64 bit support.
+* (feature) QUIK. Candles BuildFrom mode supported.
+* (feature) QUIK. Terminal connection lost notification supported.
+* (feature) IMarketDataDrive. Verify method added.
+* (feature) DriveCache. Moved from Hydra to Algo.
+* (feature) BatchEmulation. Accept storage drive and format.
+* (feature) IMarketDataDrive. LookupSecurities method added.
+* (feature) ITransactionProvider. MassOrderCanceled2, MassOrderCancelFailed2, OrderStatusFailed2 events added.
+* (feature) DriveComboBox, StorageSettingsWindow added.
+* (feature) ChartHelper. ExcludeObsolete for IndicatorTypes.
+* (feature) QuoteChangeStates added.
+* (feature) IMessageAdapter. IsSupportOrderBookIncrements property added.
+* (feature) IMessageAdapter. IsSupportOrderBookDepths -> SupportedOrderBookDepths.
+* (bug) ITCH, Plaza. Fix OL->OB local time stamp.
+* (feature) Remote storage files moved from Algo.History.Hydra to Algo.Storages.Remote namespace.
+* (feature) FortsDailyData moved to TraderHelper.
+* (feature) Algo. Downgraded to .NET 4.0.
+* (feature) Algo. Removed instruments cache.
+* (feature) ExcelWorker -> IExcelWorkerProvider.
+* (feature) ShrinkPrice. Uses 0.01 as default price step.
+* (feature) log4net excluded.
+* (feature) MoreLinq merged with Ecng.Collections.
+* (feature) Plaza. Excluded ClientGate option.
+* (feature) SmartCom. Excluded V3 version.
+* (feature) AlfaDirect. Excluded 3.5 version.
+* (feature) SecurityTypes. Etf added.
+* (feature) OrderConditionalGrid, OrderConditionalWindows marked as obsolete.
+* (feature) IMessageAdapter. IsSecurityNewsOnly property added.
+* (feature) IMarketDataProvider. RegisterNews accepts Security arg.
+* (bug) Fix handling custom data type subscriptions.
+* (feature) SmartCOM. Replaced SmartComTimeFrames by TimeSpan.
+* (feature) Oanda. Removed News support (deprecated).
+* (feature) InteractiveBrokers. Live candles supported.
+* (bug) InteractiveBrokers. Fix options calc subscriptions.
+* (bug) InteractiveBrokers. Fix handling extended market data types.
+* (feature) InteractiveBrokers. Replaced InteractiveBrokersTimeFrames by TimeSpan.
+* (bug) FXCM. Fix connection error/drop handling.
+* (bug) FXCM. Fix change order's trailing step.
+* (bug) FXCM. Fix order state tracking.
+* (bug) Connector. Fix ValuesChanged event processing for tick data.
+* (feature) Connector. Updated level1 values until order book and tick trades received.
+* (feature) Upbit connector.
+* (feature) Exchange. EngName and RusName marked as obsolete.
+* (feature) SampleHistoryTesting. Using FinamMessageAdapter and YahooMessageAdapter.
+* (bug) Coinbase, Digifinex, IEX fixes.
+* (feature) Samples. Removed connector specific samples.
+* (feature) Samples. Folders reorganization.
+* (feature) SampleMultiConnection -> SampleConnectionWithStorage.
+* (feature) SampleConnection added.
+* (feature) MarketDepth. QuotesChanged marked as obsolete.
+* (feature) IConnector. ChangePasswordResult event added.
+* (feature) ConnectorWindow. Change password options added.
+* (feature) ConnectorWindow. Enabled/disable market-data/transaction messages.
+* (feature) StrategiesDashboard. ClosePosition, RevertPosition, RiskRules commands added.
+* (feature) CandleSettingsEditor refactoring.
+* (feature) QuickOrderPanel added.
+* (feature) Charting. Ruler annotation.
+* (feature) Charting. Order error messages.
+* (feature) Charting. Candle custom drawing.
+* (feature) Charting. Orders/trades alternative icons.
+* (feature) Charting. Quick orders panel.
+* (feature) Charting. Quick time-frame and candle type switch.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

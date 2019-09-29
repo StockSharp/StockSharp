@@ -31,12 +31,12 @@ namespace SampleHistoryTesting
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Commissions;
-	using StockSharp.Algo.History;
-	using StockSharp.Algo.History.Russian.Finam;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Finam;
+	using StockSharp.Yahoo;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
@@ -44,49 +44,6 @@ namespace SampleHistoryTesting
 
 	public partial class MainWindow
 	{
-		//private class TradeCandleBuilderSourceEx : TradeCandleBuilderSource
-		//{
-		//	public TradeCandleBuilderSourceEx(IConnector connector)
-		//		: base(connector)
-		//	{
-		//	}
-
-		//	protected override void RegisterSecurity(Security security)
-		//	{
-		//	}
-
-		//	protected override void UnRegisterSecurity(Security security)
-		//	{
-		//	}
-		//}
-
-		private class FinamSecurityStorage : CollectionSecurityProvider, ISecurityStorage
-		{
-			public FinamSecurityStorage(Security security)
-				: base(new[] { security })
-			{
-			}
-
-			void ISecurityStorage.Save(Security security, bool forced)
-			{
-			}
-
-			void ISecurityStorage.Delete(Security security)
-			{
-				throw new NotSupportedException();
-			}
-
-			void ISecurityStorage.DeleteBy(Security criteria)
-			{
-				throw new NotSupportedException();
-			}
-
-			//IEnumerable<string> ISecurityStorage.GetSecurityIds()
-			//{
-			//	return Enumerable.Empty<string>();
-			//}
-		}
-
 		// emulation settings
 		private sealed class EmulationInfo
 		{
@@ -97,7 +54,7 @@ namespace SampleHistoryTesting
 			public string StrategyName { get; set; }
 			public bool UseOrderLog { get; set; }
 			public bool UseLevel1 { get; set; }
-			public Func<DateTimeOffset, IEnumerable<Message>> HistorySource { get; set; }
+			public Func<IdGenerator, IMessageAdapter> CustomHistoryAdapter { get; set; }
 		}
 
 		private readonly List<ProgressBar> _progressBars = new List<ProgressBar>();
@@ -113,10 +70,7 @@ namespace SampleHistoryTesting
 		private SimpleMovingAverage _longMa;
 		private ChartArea _area;
 
-		private readonly InMemoryNativeIdStorage _nativeIdStorage = new InMemoryNativeIdStorage();
 		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
-
-		private readonly FinamHistorySource _finamHistorySource;
 
 		public MainWindow()
 		{
@@ -168,8 +122,6 @@ namespace SampleHistoryTesting
 				FinamCandlesCheckBox,
 				YahooCandlesCheckBox,
 			});
-
-			_finamHistorySource = new FinamHistorySource(_nativeIdStorage, _exchangeInfoProvider);
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
@@ -215,11 +167,6 @@ namespace SampleHistoryTesting
 				Board = board,
 			};
 
-			if (FinamCandlesCheckBox.IsChecked == true)
-			{
-				_finamHistorySource.Refresh(new FinamSecurityStorage(security), security, s => {}, () => false);
-			}
-
 			// create backtesting modes
 			var settings = new[]
 			{
@@ -228,7 +175,12 @@ namespace SampleHistoryTesting
 					TicksProgress,
 					TicksParameterGrid,
 					// ticks
-					new EmulationInfo {UseTicks = true, CurveColor = Colors.DarkGreen, StrategyName = LocalizedStrings.Ticks},
+					new EmulationInfo
+					{
+						UseTicks = true,
+						CurveColor = Colors.DarkGreen,
+						StrategyName = LocalizedStrings.Ticks
+					},
 					TicksChart,
 					TicksEquity,
 					TicksPosition),
@@ -238,7 +190,13 @@ namespace SampleHistoryTesting
 					TicksAndDepthsProgress,
 					TicksAndDepthsParameterGrid,
 					// ticks + order book
-					new EmulationInfo {UseTicks = true, UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = LocalizedStrings.XamlStr757},
+					new EmulationInfo
+					{
+						UseTicks = true,
+						UseMarketDepth = true,
+						CurveColor = Colors.Red,
+						StrategyName = LocalizedStrings.XamlStr757
+					},
 					TicksAndDepthsChart,
 					TicksAndDepthsEquity,
 					TicksAndDepthsPosition),
@@ -248,7 +206,12 @@ namespace SampleHistoryTesting
 					DepthsProgress,
 					DepthsParameterGrid,
 					// order book
-					new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.OrangeRed, StrategyName = LocalizedStrings.MarketDepths},
+					new EmulationInfo
+					{
+						UseMarketDepth = true,
+						CurveColor = Colors.OrangeRed,
+						StrategyName = LocalizedStrings.MarketDepths
+					},
 					DepthsChart,
 					DepthsEquity,
 					DepthsPosition),
@@ -258,7 +221,12 @@ namespace SampleHistoryTesting
 					CandlesProgress,
 					CandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.Candles},
+					new EmulationInfo
+					{
+						UseCandleTimeFrame = timeFrame,
+						CurveColor = Colors.DarkBlue,
+						StrategyName = LocalizedStrings.Candles
+					},
 					CandlesChart,
 					CandlesEquity,
 					CandlesPosition),
@@ -268,7 +236,13 @@ namespace SampleHistoryTesting
 					CandlesAndDepthsProgress,
 					CandlesAndDepthsParameterGrid,
 					// candles + orderbook
-					new EmulationInfo {UseMarketDepth = true, UseCandleTimeFrame = timeFrame, CurveColor = Colors.Cyan, StrategyName = LocalizedStrings.XamlStr635},
+					new EmulationInfo
+					{
+						UseMarketDepth = true,
+						UseCandleTimeFrame = timeFrame,
+						CurveColor = Colors.Cyan,
+						StrategyName = LocalizedStrings.XamlStr635
+					},
 					CandlesAndDepthsChart,
 					CandlesAndDepthsEquity,
 					CandlesAndDepthsPosition),
@@ -278,7 +252,12 @@ namespace SampleHistoryTesting
 					OrderLogProgress,
 					OrderLogParameterGrid,
 					// order log
-					new EmulationInfo {UseOrderLog = true, CurveColor = Colors.CornflowerBlue, StrategyName = LocalizedStrings.OrderLog},
+					new EmulationInfo
+					{
+						UseOrderLog = true,
+						CurveColor = Colors.CornflowerBlue,
+						StrategyName = LocalizedStrings.OrderLog
+					},
 					OrderLogChart,
 					OrderLogEquity,
 					OrderLogPosition),
@@ -288,7 +267,12 @@ namespace SampleHistoryTesting
 					Level1Progress,
 					Level1ParameterGrid,
 					// order log
-					new EmulationInfo {UseLevel1 = true, CurveColor = Colors.Aquamarine, StrategyName = LocalizedStrings.Level1},
+					new EmulationInfo
+					{
+						UseLevel1 = true,
+						CurveColor = Colors.Aquamarine,
+						StrategyName = LocalizedStrings.Level1
+					},
 					Level1Chart,
 					Level1Equity,
 					Level1Position),
@@ -298,7 +282,13 @@ namespace SampleHistoryTesting
 					FinamCandlesProgress,
 					FinamCandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles},
+					new EmulationInfo
+					{
+						UseCandleTimeFrame = timeFrame,
+						CustomHistoryAdapter = g => new FinamMessageAdapter(g),
+						CurveColor = Colors.DarkBlue,
+						StrategyName = LocalizedStrings.FinamCandles
+					},
 					FinamCandlesChart,
 					FinamCandlesEquity,
 					FinamCandlesPosition),
@@ -308,7 +298,13 @@ namespace SampleHistoryTesting
 					YahooCandlesProgress,
 					YahooCandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource(_nativeIdStorage, _exchangeInfoProvider).GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles},
+					new EmulationInfo
+					{
+						UseCandleTimeFrame = timeFrame,
+						CustomHistoryAdapter = g => new YahooMessageAdapter(g),
+						CurveColor = Colors.DarkBlue,
+						StrategyName = LocalizedStrings.YahooCandles
+					},
 					YahooCandlesChart,
 					YahooCandlesEquity,
 					YahooCandlesPosition),
@@ -376,11 +372,7 @@ namespace SampleHistoryTesting
 				.TryAdd(Level1Fields.MarginSell, 10000m);
 
 				// test portfolio
-				var portfolio = new Portfolio
-				{
-					Name = "test account",
-					BeginValue = 1000000,
-				};
+				var portfolio = Portfolio.CreateSimulator();
 
 				// create backtesting connector
 				var connector = new HistoryEmulationConnector(
@@ -410,10 +402,6 @@ namespace SampleHistoryTesting
 					{
 						StorageRegistry = storageRegistry,
 
-						// set history range
-						StartDate = startTime,
-						StopDate = stopTime,
-
 						OrderLogMarketDepthBuilders =
 						{
 							{
@@ -430,8 +418,6 @@ namespace SampleHistoryTesting
 				((ILogSource)connector).LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info;
 
 				logManager.Sources.Add(connector);
-
-				var candleManager = new CandleManager(connector);
 
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
 				{
@@ -460,7 +446,7 @@ namespace SampleHistoryTesting
 				chart.AddElement(_area, _longElem);
 
 				// create strategy based on 80 5-min и 10 5-min
-				var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, candleManager, series)
+				var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, series)
 				{
 					Volume = 1,
 					Portfolio = portfolio,
@@ -475,33 +461,15 @@ namespace SampleHistoryTesting
 
 				logManager.Sources.Add(strategy);
 
-				connector.Connected += () =>
+				if (emulationInfo.CustomHistoryAdapter != null)
 				{
-					if (emulationInfo.HistorySource != null)
-					{
-						// passing null value as security to register the source for all securities
+					connector.Adapter.InnerAdapters.Remove(connector.MarketDataAdapter);
+					connector.Adapter.InnerAdapters.Add(new CustomHistoryMessageAdapter(emulationInfo.CustomHistoryAdapter(connector.TransactionIdGenerator)));
+				}
 
-						if (emulationInfo.UseCandleTimeFrame != null)
-						{
-							connector.RegisterHistorySource(null, MarketDataTypes.CandleTimeFrame, emulationInfo.UseCandleTimeFrame.Value, emulationInfo.HistorySource);
-						}
-
-						if (emulationInfo.UseTicks)
-						{
-							connector.RegisterHistorySource(null, MarketDataTypes.Trades, null, emulationInfo.HistorySource);
-						}
-
-						if (emulationInfo.UseLevel1)
-						{
-							connector.RegisterHistorySource(null, MarketDataTypes.Level1, null, emulationInfo.HistorySource);
-						}
-
-						if (emulationInfo.UseMarketDepth)
-						{
-							connector.RegisterHistorySource(null, MarketDataTypes.MarketDepth, null, emulationInfo.HistorySource);
-						}
-					}
-				};
+				// set history range
+				connector.HistoryMessageAdapterEx.StartDate = startTime;
+				connector.HistoryMessageAdapterEx.StopDate = stopTime;
 
 				connector.NewSecurity += s =>
 				{
@@ -509,56 +477,52 @@ namespace SampleHistoryTesting
 						return;
 
 					// fill level1 values
-					connector.HistoryMessageAdapter.SendOutMessage(level1Info);
+					connector.HistoryMessageAdapterEx.SendOutMessage(level1Info);
 
-					if (emulationInfo.HistorySource == null)
+					if (emulationInfo.UseMarketDepth)
 					{
-						if (emulationInfo.UseMarketDepth)
-						{
-							connector.RegisterMarketDepth(security);
+						connector.RegisterMarketDepth(security);
 
-							if (
+						if	(
 								// if order book will be generated
-									generateDepths ||
-								// of backtesting will be on candles
-									emulationInfo.UseCandleTimeFrame != TimeSpan.Zero
-								)
+								generateDepths ||
+								// or backtesting will be on candles
+								emulationInfo.UseCandleTimeFrame != TimeSpan.Zero
+							)
+						{
+							// if no have order book historical data, but strategy is required,
+							// use generator based on last prices
+							connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
 							{
-								// if no have order book historical data, but strategy is required,
-								// use generator based on last prices
-								connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
-								{
-									Interval = TimeSpan.FromSeconds(1), // order book freq refresh is 1 sec
-									MaxAsksDepth = maxDepth,
-									MaxBidsDepth = maxDepth,
-									UseTradeVolume = true,
-									MaxVolume = maxVolume,
-									MinSpreadStepCount = 2,	// min spread generation is 2 pips
-									MaxSpreadStepCount = 5,	// max spread generation size (prevent extremely size)
-									MaxPriceStepCount = 3	// pips size,
-								});
-							}
+								Interval = TimeSpan.FromSeconds(1), // order book freq refresh is 1 sec
+								MaxAsksDepth = maxDepth,
+								MaxBidsDepth = maxDepth,
+								UseTradeVolume = true,
+								MaxVolume = maxVolume,
+								MinSpreadStepCount = 2,	// min spread generation is 2 pips
+								MaxSpreadStepCount = 5,	// max spread generation size (prevent extremely size)
+								MaxPriceStepCount = 3	// pips size,
+							});
 						}
+					}
 
-						if (emulationInfo.UseOrderLog)
-						{
-							connector.RegisterOrderLog(security);
-						}
+					if (emulationInfo.UseOrderLog)
+					{
+						connector.RegisterOrderLog(security);
+					}
 
-						if (emulationInfo.UseTicks)
-						{
-							connector.RegisterTrades(security);
-						}
+					if (emulationInfo.UseTicks)
+					{
+						connector.RegisterTrades(security);
+					}
 
-						if (emulationInfo.UseLevel1)
-						{
-							connector.RegisterSecurity(security);
-						}
+					if (emulationInfo.UseLevel1)
+					{
+						connector.RegisterSecurity(security);
 					}
 
 					// start strategy before emulation started
 					strategy.Start();
-					candleManager.Start(series);
 
 					// start historical data loading when connection established successfully and all data subscribed
 					connector.Start();
@@ -617,7 +581,6 @@ namespace SampleHistoryTesting
 				{
 					if (connector.State == EmulationStates.Stopped)
 					{
-						candleManager.Stop(series);
 						strategy.Stop();
 
 						SetIsChartEnabled(chart, false);

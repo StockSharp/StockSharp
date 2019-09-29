@@ -27,7 +27,7 @@
 		<para>
 			В виде дерева показывается вложенность источников. Каждая родительская вершина содержит сообщения всех вложенных и так далее, до самого нижнего уровня.
 			Для стратегий такая иерархия позволяет увидеть <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">дочерние стратегии</link>.
-			Для подключений это также полезно в случае использования <link xlink:href="1cfb4f7c-b9fc-43da-a958-b0e0f881479d">BasketTrader</link>.
+			Для подключений это также полезно в случае использования <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2">множественных подключений</link>.
 			Аналогично, такую же вложенность можно организовать и для собственного робота, реализовав свойство
 			<codeEntityReference qualifyHint="true">P:StockSharp.Logging.ILogSource.Parent</codeEntityReference>.
 			<!--<codeEntityReference qualifyHint="true">P:StockSharp.Logging.ILogSource.Childs</codeEntityReference>.-->

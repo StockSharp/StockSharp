@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Upbit</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Upbit.UpbitMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Upbit"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Upbit.UpbitMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Upbit.UpbitMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Upbit.UpbitMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Upbit.UpbitMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Upbit.UpbitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Upbit.UpbitMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Upbit.UpbitMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Upbit.UpbitMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Upbit.UpbitMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Upbit.UpbitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Upbit.UpbitOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Upbit"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Upbit.UpbitOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Upbit.UpbitOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Upbit.UpbitTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Upbit"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Upbit.UpbitTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Upbit.UpbitTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Upbit.UpbitTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Upbit.UpbitTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Upbit.UpbitTrader.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+    </members>
+</doc>

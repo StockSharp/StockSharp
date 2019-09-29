@@ -4,11 +4,11 @@
     <introduction>
       	<para>
       		<codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> позволяет получать новости.
-      		Список полученных новостей можно получить через <codeEntityReference>P:StockSharp.BusinessEntities.IConnector.News</codeEntityReference>.
+      		Список полученных новостей можно получить через <codeEntityReference>P:StockSharp.Algo.Connector.News</codeEntityReference>.
       	</para>
 		<para>
-			Для того чтобы начать получить новости, необходимо подписаться на событие <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference> и вызвать
-			метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterNews</codeEntityReference>.
+			Для того чтобы начать получить новости, необходимо подписаться на событие <codeEntityReference>E:StockSharp.Algo.Connector.NewNews</codeEntityReference> и вызвать
+			метод <codeEntityReference>M:StockSharp.Algo.Connector.RegisterNews(StockSharp.BusinessEntities.Security,StockSharp.Messages.IMessageAdapter)</codeEntityReference>.
 		</para>
 		<!-- <para>
 			По умолчанию для каждой новости приходит только ее заголовок, чтобы получить полный текст новости необходимо использовать метод <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetNewsStory(System.Int64)</codeEntityReference>.

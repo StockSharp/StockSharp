@@ -129,7 +129,3 @@ M:StockSharp.Licensing.LicenseHelper.Remove(StockSharp.Licensing.License)/param/
 M:StockSharp.Licensing.LicenseHelper.IsTrial(StockSharp.Licensing.License)/summary;DocStr3898
 M:StockSharp.Licensing.LicenseHelper.IsTrial(StockSharp.Licensing.License)/param/license;License
 M:StockSharp.Licensing.LicenseHelper.IsTrial(StockSharp.Licensing.License)/returns;DocStr3899
-T:StockSharp.Licensing.Xaml.LicensePanel/summary;DocStr3903
-M:StockSharp.Licensing.Xaml.LicensePanel.#ctor/summary;DocStr1
-P:StockSharp.Licensing.Xaml.LicensePanel.Licenses/summary;Str3489
-M:StockSharp.Licensing.Xaml.LicensePanel.InitializeComponent/summary;DocStr8

@@ -8,7 +8,7 @@
       </para>
       <para>
       	Ниже приведен пример построения графика при помощи компонета <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>. За основу взят
-      	пример из Samples/Quik/SampleCandles, в который внесены некоторые изменения. 
+      	пример из Samples/Common/SampleConnection, в который внесены некоторые изменения. 
       </para>
     </introduction>
     

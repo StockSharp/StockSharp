@@ -385,6 +385,9 @@ namespace StockSharp.Algo.Export
 				if (!security.BasketExpression.IsEmpty())
 					writer.WriteAttribute("basketExpression", security.BasketExpression);
 
+				if (security.FaceValue != null)
+					writer.WriteAttribute("faceValue", security.FaceValue.Value);
+
 				if (!security.SecurityId.Bloomberg.IsEmpty())
 					writer.WriteAttribute("bloomberg", security.SecurityId.Bloomberg);
 

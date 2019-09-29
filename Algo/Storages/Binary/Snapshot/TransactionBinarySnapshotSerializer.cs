@@ -4,7 +4,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.InteropServices;
-	using System.Text;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -247,7 +246,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				{
 					param = new TransactionConditionParamV21
 					{
-						ValueTypeLen = Encoding.UTF8.GetBytes(paramTypeName).Length
+						ValueTypeLen = paramTypeName.UTF8().Length
 					};
 				}
 				else
@@ -337,7 +336,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						break;
 					}
 					default:
-						stringValue = typeof(XmlSerializer<>).MakeGenericType(paramType).CreateInstance<ISerializer>().Serialize(conParam.Value);
+						stringValue = typeof(XmlSerializer<>).Make(paramType).CreateInstance<ISerializer>().Serialize(conParam.Value);
 						break;
 				}
 
@@ -355,7 +354,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				result.AddRange(paramBuff);
 
 				if (version > SnapshotVersions.V20)
-					result.AddRange(Encoding.UTF8.GetBytes(paramTypeName));
+					result.AddRange(paramTypeName.UTF8());
 
 				if (stringValue == null)
 					continue;
@@ -458,7 +457,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						var typeBuffer = new byte[s.ValueTypeLen];
 						Marshal.Copy(ptr, typeBuffer, 0, typeBuffer.Length);
 
-						paramTypeName = Encoding.UTF8.GetString(typeBuffer);
+						paramTypeName = typeBuffer.UTF8();
 
 						ptr += s.ValueTypeLen;
 
@@ -516,7 +515,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 							}
 							else
 							{
-								value = typeof(XmlSerializer<>).MakeGenericType(paramType).CreateInstance<ISerializer>().Deserialize(strBuffer);
+								value = typeof(XmlSerializer<>).Make(paramType).CreateInstance<ISerializer>().Deserialize(strBuffer);
 							}
 						}
 						else

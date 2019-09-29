@@ -2,10 +2,12 @@ namespace StockSharp.Messages
 {
 	using System.Collections.Generic;
 
+	using Ecng.Serialization;
+
 	/// <summary>
 	/// Security identifier mapping.
 	/// </summary>
-	public struct SecurityIdMapping
+	public class SecurityIdMapping : IPersistable
 	{
 		/// <summary>
 		/// StockSharp format.
@@ -45,6 +47,26 @@ namespace StockSharp.Messages
 		public override string ToString()
 		{
 			return $"{StockSharpId}<->{AdapterId}";
+		}
+
+		/// <summary>
+		/// Load settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Load(SettingsStorage storage)
+		{
+			StockSharpId = storage.GetValue<SettingsStorage>(nameof(StockSharpId)).Load<SecurityId>();
+			AdapterId = storage.GetValue<SettingsStorage>(nameof(AdapterId)).Load<SecurityId>();
+		}
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Save(SettingsStorage storage)
+		{
+			storage.SetValue(nameof(StockSharpId), StockSharpId.Save());
+			storage.SetValue(nameof(AdapterId), AdapterId.Save());
 		}
 	}
 }

@@ -168,7 +168,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.Str257Key)]
+		[DisplayNameLoc(LocalizedStrings.AveragePriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str429Key)]
 		[StatisticsCategory]
 		[Browsable(false)]

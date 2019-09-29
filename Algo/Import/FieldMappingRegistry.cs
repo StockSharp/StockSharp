@@ -60,6 +60,21 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<SecurityMessage, bool>(nameof(SecurityMessage.Shortable), LocalizedStrings.Shortable, LocalizedStrings.ShortableDesc, (i, v) => i.Shortable = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BasketCode), LocalizedStrings.Basket, LocalizedStrings.BasketCode, (i, v) => i.BasketCode = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BasketExpression), LocalizedStrings.Expression, LocalizedStrings.ExpressionDesc, (i, v) => i.BasketExpression = v));
+				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.FaceValue), LocalizedStrings.FaceValue, LocalizedStrings.FaceValueDesc, (i, v) => i.FaceValue = v));
+
+				//fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.SecurityId.Native), LocalizedStrings.NativeId, LocalizedStrings.NativeIdDesc, (i, v) => { }));
+				fields.Add(new FieldMapping<SecurityIdMapping, string>(GetSecurityCodeField(LocalizedStrings.Adapter), LocalizedStrings.AdapterCode, secCodeDescr, (i, v) =>
+				{
+					var adapterId = i.AdapterId;
+					adapterId.SecurityCode = v;
+					i.AdapterId = adapterId;
+				}) { IsAdapter = true });
+				fields.Add(new FieldMapping<SecurityIdMapping, string>(GetBoardCodeField(LocalizedStrings.Adapter), LocalizedStrings.AdapterBoard, boardCodeDescr, (i, v) =>
+				{
+					var adapterId = i.AdapterId;
+					adapterId.BoardCode = v;
+					i.AdapterId = adapterId;
+				}) { IsAdapter = true });
 			}
 			else if (msgType == typeof(ExecutionMessage))
 			{
@@ -183,6 +198,7 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<Level1ChangeMessage, TimeSpan>(GetChangesField(Level1Fields.BestBidTime), Level1Fields.BestBidTime.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.BestBidTime, i.ServerTime - i.ServerTime.TimeOfDay + v)));
 				fields.Add(new FieldMapping<Level1ChangeMessage, TimeSpan>(GetChangesField(Level1Fields.BestAskTime), Level1Fields.BestAskTime.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.BestAskTime, i.ServerTime - i.ServerTime.TimeOfDay + v)));
 				fields.Add(new FieldMapping<Level1ChangeMessage, DateTimeOffset>(GetChangesField(Level1Fields.BuyBackDate), Level1Fields.BuyBackDate.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.BuyBackDate, v)));
+				fields.Add(new FieldMapping<Level1ChangeMessage, DateTimeOffset>(GetChangesField(Level1Fields.CouponDate), Level1Fields.CouponDate.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.CouponDate, v)));
 				fields.Add(new FieldMapping<Level1ChangeMessage, int>(GetChangesField(Level1Fields.BidsCount), Level1Fields.BidsCount.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.BidsCount, v)));
 				fields.Add(new FieldMapping<Level1ChangeMessage, int>(GetChangesField(Level1Fields.AsksCount), Level1Fields.AsksCount.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.AsksCount, v)));
 				fields.Add(new FieldMapping<Level1ChangeMessage, int>(GetChangesField(Level1Fields.TradesCount), Level1Fields.TradesCount.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.TradesCount, v)));
@@ -303,7 +319,7 @@ namespace StockSharp.Algo.Import
 		{
 			return storage
 				.Fields
-				.Select(t => (FieldMapping)new FieldMapping<SecurityMessage, object>($"{nameof(SecurityMessage.ExtensionInfo)}[{t.Item1}]", t.Item1, string.Empty, (s, v) => s.ExtensionInfo[t.Item1] = v, true))
+				.Select(t => (FieldMapping)new FieldMapping<SecurityMessage, object>($"{nameof(SecurityMessage.ExtensionInfo)}[{t.Item1}]", t.Item1, string.Empty, (s, v) => s.ExtensionInfo[t.Item1] = v) { IsExtended = true })
 				.ToArray();
 		}
 

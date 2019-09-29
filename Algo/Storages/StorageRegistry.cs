@@ -414,7 +414,7 @@ namespace StockSharp.Algo.Storages
 		private sealed class NewsStorage : ConvertableStorage<NewsMessage, News, VoidType>
 		{
 			public NewsStorage(StorageRegistry parent, Security security, SecurityId securityId, IMarketDataSerializer<NewsMessage> serializer, IMarketDataStorageDrive drive)
-				: base(parent, security, securityId, null, m => m.ServerTime, m => default(SecurityId), m => null, serializer, drive)
+				: base(parent, security, securityId, null, m => m.ServerTime, m => default, m => null, serializer, drive)
 			{
 			}
 
@@ -455,9 +455,7 @@ namespace StockSharp.Algo.Storages
 
 		private IMarketDataDrive _defaultDrive = new LocalMarketDataDrive();
 
-		/// <summary>
-		/// The storage used by default.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual IMarketDataDrive DefaultDrive
 		{
 			get => _defaultDrive;
@@ -476,9 +474,7 @@ namespace StockSharp.Algo.Storages
 
 		private IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
-		/// <summary>
-		/// Exchanges and trading boards provider.
-		/// </summary>
+		/// <inheritdoc />
 		public IExchangeInfoProvider ExchangeInfoProvider
 		{
 			get => _exchangeInfoProvider;

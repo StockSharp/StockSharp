@@ -156,6 +156,8 @@ namespace StockSharp.Algo.Import
 					quoteMsg.Asks = asks.ToArray();
 				}
 
+				var adapters = new Dictionary<Type, IMessageAdapter>();
+
 				while (reader.ReadRow(cells))
 				{
 					if (isCancelled?.Invoke() == true)
@@ -168,6 +170,8 @@ namespace StockSharp.Algo.Import
 					}
 
 					dynamic instance = CreateInstance(isDepth, isSecurities);
+
+					var mappings = new Dictionary<string, SecurityIdMapping>(StringComparer.InvariantCultureIgnoreCase);
 
 					foreach (var field in fields)
 					{
@@ -182,7 +186,19 @@ namespace StockSharp.Algo.Import
 									field.ApplyDefaultValue(instance);
 							}
 							else
-								field.ApplyFileValue(instance, cells[field.Order.Value]);
+							{
+								var cell = cells[field.Order.Value];
+
+								if (field.IsAdapter)
+								{
+									var adapter = adapters.SafeAdd(field.AdapterType, key => key.CreateAdapter());
+									var info = mappings.SafeAdd(adapter.StorageName, key => new SecurityIdMapping());
+									
+									field.ApplyFileValue(info, cell);
+								}
+								else
+									field.ApplyFileValue(instance, cell);
+							}
 						}
 						catch (Exception ex)
 						{
@@ -202,12 +218,40 @@ namespace StockSharp.Algo.Import
 								break;
 						}
 					}
-					else if (secMsg.SecurityId.SecurityCode.IsEmpty() || secMsg.SecurityId.BoardCode.IsEmpty())
+					else
 					{
-						if (!IgnoreNonIdSecurities)
-							this.AddErrorLog(LocalizedStrings.LineNoSecurityId.Put(reader.CurrLine));
+						if (secMsg.SecurityId.SecurityCode.IsEmpty() || secMsg.SecurityId.BoardCode.IsEmpty())
+						{
+							if (!IgnoreNonIdSecurities)
+								this.AddErrorLog(LocalizedStrings.LineNoSecurityId.Put(reader.CurrLine));
 
-						continue;
+							continue;
+						}
+						else
+						{
+							foreach (var pair in mappings)
+							{
+								var info = pair.Value;
+
+								if (info.AdapterId.SecurityCode.IsEmpty())
+									continue;
+
+								if (info.AdapterId.BoardCode.IsEmpty())
+								{
+									var adapterId = info.AdapterId;
+									adapterId.BoardCode = secMsg.SecurityId.BoardCode;
+									info.AdapterId = adapterId;
+								}
+
+								info.StockSharpId = secMsg.SecurityId;
+
+								yield return new SecurityMappingMessage
+								{
+									StorageName = pair.Key,
+									Mapping = info,
+								};
+							}
+						}
 					}
 
 					if (quoteMsg != null)

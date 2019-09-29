@@ -113,7 +113,13 @@ var settings = new[]
 		FinamCandlesProgress,
 		FinamCandlesParameterGrid,
 		// candles
-		new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, nativeIdStorage, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles},
+		new EmulationInfo
+		{
+			UseCandleTimeFrame = timeFrame,
+			CustomHistoryAdapter = g => new FinamMessageAdapter(g),
+			CurveColor = Colors.DarkBlue,
+			StrategyName = LocalizedStrings.FinamCandles
+		},
 		FinamCandlesChart,
 		FinamCandlesEquity,
 		FinamCandlesPosition),
@@ -123,7 +129,13 @@ var settings = new[]
 		YahooCandlesProgress,
 		YahooCandlesParameterGrid,
 		// candles
-		new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource().GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles},
+		new EmulationInfo
+		{
+			UseCandleTimeFrame = timeFrame,
+			CustomHistoryAdapter = g => new YahooMessageAdapter(g),
+			CurveColor = Colors.DarkBlue,
+			StrategyName = LocalizedStrings.YahooCandles
+		},
 		YahooCandlesChart,
 		YahooCandlesEquity,
 		YahooCandlesPosition),
@@ -390,7 +402,7 @@ trader.Connect();
 					</code>
 					  <para>
 						  Для переданных в конструктор <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> инструментов
-						  и портфелей вызываются <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>
+						  и портфелей вызываются <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.NewSecurity</codeEntityReference>
 						  и <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio</codeEntityReference>.
 					  </para>
 				  </content>

@@ -26,13 +26,8 @@ namespace StockSharp.Community
 	/// <summary>
 	/// The client for access to the StockSharp authentication service.
 	/// </summary>
-	public class AuthenticationClient : BaseServiceClient<IAuthenticationService>
+	public class AuthenticationClient : BaseServiceClient<IAuthenticationService>, IAuthenticationClient
 	{
-		static AuthenticationClient()
-		{
-			_instance = new Lazy<AuthenticationClient>(() => new AuthenticationClient());
-		}
-
 		private Timer _pingTimer;
 		private readonly SyncObject _pingSync = new SyncObject();
 
@@ -54,36 +49,19 @@ namespace StockSharp.Community
 			Credentials = new ServerCredentials();
 		}
 
-		private static readonly Lazy<AuthenticationClient> _instance;
-
-		/// <summary>
-		/// The common authorization client for the whole application.
-		/// </summary>
-		public static AuthenticationClient Instance => _instance.Value;
-
-		/// <summary>
-		/// Information about the login and password for access to the StockSharp.
-		/// </summary>
+		/// <inheritdoc />
 		public ServerCredentials Credentials { get; }
 
-		/// <summary>
-		/// Product.
-		/// </summary>
+		/// <inheritdoc />
 		public Products? Product { get; set; }
 
-		/// <summary>
-		/// Product.
-		/// </summary>
+		/// <inheritdoc />
 		public Version Version { get; set; }
 
-		/// <summary>
-		/// Has the client successfully authenticated.
-		/// </summary>
+		/// <inheritdoc />
 		public bool IsLoggedIn => NullableSessionId != null;
 
-		/// <summary>
-		/// Session ID.
-		/// </summary>
+		/// <inheritdoc />
 		public Guid SessionId
 		{
 			get
@@ -95,31 +73,20 @@ namespace StockSharp.Community
 			}
 		}
 
-		/// <summary>
-		/// To get the <see cref="SessionId"/> if the user was authorized.
-		/// </summary>
+		/// <inheritdoc />
 		public Guid? NullableSessionId { get; private set; }
 
-		/// <summary>
-		/// The user identifier for <see cref="SessionId"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public long UserId { get; private set; }
 
-		/// <summary>
-		/// To log in.
-		/// </summary>
+		/// <inheritdoc />
 		public void Login()
 		{
-			Login(Product, Credentials.Email, Credentials.Password);
+			Login(Product, Version, Credentials.Email, Credentials.Password);
 		}
 
-		/// <summary>
-		/// To log in.
-		/// </summary>
-		/// <param name="product">Product.</param>
-		/// <param name="login">Login.</param>
-		/// <param name="password">Password.</param>
-		public void Login(Products? product, string login, SecureString password)
+		/// <inheritdoc />
+		public void Login(Products? product, Version version, string login, SecureString password)
 		{
 			if (login.IsEmpty())
 				throw new ArgumentNullException(nameof(login));
@@ -131,7 +98,7 @@ namespace StockSharp.Community
 
 			if (product == null)
 			{
-				sessionId = Invoke(f => f.Login(login, password.To<string>()));
+				sessionId = Invoke(f => f.Login(login, password.UnSecure()));
 				sessionId.ToErrorCode().ThrowIfError();
 
 				NullableSessionId = sessionId;
@@ -139,9 +106,9 @@ namespace StockSharp.Community
 			}
 			else
 			{
-				var tuple = Invoke(f => Version == null
-					? f.Login2(product.Value, login, password.To<string>())
-					: f.Login3(product.Value, Version.To<string>(), login, password.To<string>()));
+				var tuple = Invoke(f => version == null
+					? f.Login2(product.Value, login, password.UnSecure())
+					: f.Login3(product.Value, version.To<string>(), login, password.UnSecure()));
 
 				tuple.Item1.ToErrorCode().ThrowIfError();
 
@@ -173,9 +140,7 @@ namespace StockSharp.Community
 			}
 		}
 
-		/// <summary>
-		/// Logout.
-		/// </summary>
+		/// <inheritdoc />
 		public void Logout()
 		{
 			Invoke(f => f.Logout(SessionId));
@@ -185,19 +150,13 @@ namespace StockSharp.Community
 			_pingTimer.Dispose();
 		}
 
-		/// <summary>
-		/// Get a user id.
-		/// </summary>
-		/// <param name="sessionId">Session ID.</param>
-		/// <returns>User id.</returns>
+		/// <inheritdoc />
 		public long GetId(Guid sessionId)
 		{
 			return Invoke(f => f.GetId(sessionId));
 		}
 
-		/// <summary>
-		/// Release resources.
-		/// </summary>
+		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
 			if (IsLoggedIn)

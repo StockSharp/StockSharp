@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			if (message is ResetMessage)
 			{
-				_time = default(DateTimeOffset);
+				_time = default;
 				_price = 0;
 				_volume = null;
 				_side = null;

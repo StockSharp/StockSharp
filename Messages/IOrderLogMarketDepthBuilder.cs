@@ -184,7 +184,13 @@ namespace StockSharp.Messages
 			finally
 			{
 				if (changed)
+				{
 					_depth.ServerTime = item.ServerTime;
+					_depth.LocalTime = item.LocalTime;
+
+					_depth.Bids = _bids.Values.ToArray();
+					_depth.Asks = _asks.Values.ToArray();
+				}
 			}
 
 			return changed;

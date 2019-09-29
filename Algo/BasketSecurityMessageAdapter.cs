@@ -235,7 +235,10 @@ namespace StockSharp.Algo
 			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Create a copy of <see cref="BasketSecurityMessageAdapter"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
 			return new BasketSecurityMessageAdapter(_securityProvider, _processorProvider, _exchangeInfoProvider, InnerAdapter);

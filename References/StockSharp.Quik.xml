@@ -44,6 +44,13 @@
             Создать <see cref="T:StockSharp.Quik.Lua.LuaFixServer" />.
             </summary>
     </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixServer.GetLuaString(StockSharp.Messages.OrderMessage)">
+      <summary>
+            Получить LUA строку для транзакции.
+            </summary>
+      <param name="message">Транзакция.</param>
+      <returns>LUA строка.</returns>
+    </member>
     <member name="P:StockSharp.Quik.Lua.LuaFixServer.TransactionAddress">
       <summary>
             Адрес, на котором FIX сервер будет обрабатывать транзакции.
@@ -150,17 +157,17 @@
             Описание классов инструментов, в зависимости от которых будут проставляться параметры в <see cref="P:StockSharp.Messages.SecurityMessage.SecurityType" /> и <see cref="P:StockSharp.Messages.SecurityId.BoardCode" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixServer.GetNextRequest">
+    <member name="M:StockSharp.Quik.Lua.LuaFixServer.GetNextMessage">
       <summary>
             Получить пользовательский запрос.
             </summary>
       <returns>Пользовательский запрос.</returns>
     </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixServer.AddRequest(StockSharp.Quik.Lua.LuaRequest)">
+    <member name="M:StockSharp.Quik.Lua.LuaFixServer.AddMessage(StockSharp.Messages.Message)">
       <summary>
             Добавить пользовательский запрос.
             </summary>
-      <param name="request">Пользовательский запрос.</param>
+      <param name="message">Пользовательский запрос.</param>
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixServer.GetNextTransactionId">
       <summary>
@@ -212,72 +219,6 @@
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
       <inheritdoc />
-    </member>
-    <member name="T:StockSharp.Quik.Lua.LuaRequest">
-      <summary>
-            Пользовательский запрос.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Quik.Lua.LuaRequest.#ctor">
-      <summary>
-            Создать <see cref="T:StockSharp.Quik.Lua.LuaRequest" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.Lua.LuaRequest.MessageType">
-      <summary>
-            Тип сообщения.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.Lua.LuaRequest.TransactionId">
-      <summary>
-            Идентификатор транзакции.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.Lua.LuaRequest.Value">
-      <summary>
-            Значение запроса.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.Lua.LuaRequest.SecurityId">
-      <summary>
-            Идентификатор инструмента.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.Lua.LuaRequest.OrderType">
-      <summary>
-            Тип заявки.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.Lua.LuaRequest.IsSubscribe">
-      <summary>
-            Является ли сообщение подпиской на маркет-данные.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.Lua.LuaRequest.DataType">
-      <summary>
-            Тип маркет-данных.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.Lua.LuaRequest.Arg">
-      <summary>
-            Дополнительный аргумент, ассоциированный с типом данных. Например, параметр свечи.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.Lua.LuaRequest.From">
-      <summary>
-            Дата начала, с которой необходимо получать данные.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.Lua.LuaRequest.To">
-      <summary>
-            Дата окончания, до которой необходимо получать данные.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Quik.Lua.LuaRequest.ToString">
-      <summary>
-            Получить строковое представление.
-            </summary>
-      <returns>Строковое представление.</returns>
     </member>
     <member name="T:StockSharp.Quik.Native.Codes">
       <summary>
@@ -2752,8 +2693,8 @@
     </member>
     <member name="P:StockSharp.Quik.QuikTrader.IsAsyncMode">
       <summary>
-            Асинхронный режим. Если <see langword="true" />, то все транзакции, такие как <see cref="M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)" />
-            или <see cref="M:StockSharp.BusinessEntities.IConnector.CancelOrder(StockSharp.BusinessEntities.Order)" /> будут отправляться в асинхронном режиме.
+            Асинхронный режим. Если <see langword="true" />, то все транзакции, такие как <see cref="M:StockSharp.BusinessEntities.ITransactionProvider.RegisterOrder(StockSharp.BusinessEntities.Order)" />
+            или <see cref="M:StockSharp.BusinessEntities.ITransactionProvider.CancelOrder(StockSharp.BusinessEntities.Order)" /> будут отправляться в асинхронном режиме.
             </summary>
       <remarks>
             Значение по умолчанию <see langword="true" />.

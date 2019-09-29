@@ -503,15 +503,35 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private decimal? _faceValue;
+
+		/// <summary>
+		/// Face value.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.FaceValueKey,
+			Description = LocalizedStrings.FaceValueDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 16)]
+		public decimal? FaceValue
+		{
+			get => _faceValue;
+			set
+			{
+				if (_faceValue == value)
+					return;
+
+				_faceValue = value;
+				Notify(nameof(FaceValue));
+			}
+		}
+
 		[field: NonSerialized]
 		private SynchronizedDictionary<string, object> _extensionInfo;
 
-		/// <summary>
-		/// Extended security info.
-		/// </summary>
-		/// <remarks>
-		/// Required if additional information associated with the instrument is stored in the program. For example, the date of instrument expiration (if it is option) or information about the underlying asset if it is the futures contract.
-		/// </remarks>
+		/// <inheritdoc />
 		[XmlIgnore]
 		//[DataMember]
 		[Display(
@@ -1997,6 +2017,7 @@ namespace StockSharp.BusinessEntities
 			destination.BasketExpression = BasketExpression;
 			destination.CommissionTaker = CommissionTaker;
 			destination.CommissionMaker = CommissionMaker;
+			destination.FaceValue = FaceValue;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();

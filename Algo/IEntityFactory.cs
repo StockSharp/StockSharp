@@ -286,20 +286,11 @@ namespace StockSharp.Algo
 			return new ExchangeBoard { Code = code, Exchange = exchange };
 		}
 
-		long IStorage.GetCount<TEntity>()
-		{
-			throw new NotSupportedException();
-		}
+		long IStorage.GetCount<TEntity>() => throw new NotSupportedException();
 
-		TEntity IStorage.Add<TEntity>(TEntity entity)
-		{
-			return entity;
-		}
+		TEntity IStorage.Add<TEntity>(TEntity entity) => entity;
 
-		TEntity IStorage.GetBy<TEntity>(SerializationItemCollection by)
-		{
-			throw new NotSupportedException();
-		}
+		TEntity IStorage.GetBy<TEntity>(SerializationItemCollection by) => throw new NotSupportedException();
 
 		TEntity IStorage.GetById<TEntity>(object id)
 		{
@@ -312,14 +303,9 @@ namespace StockSharp.Algo
 		}
 
 		IEnumerable<TEntity> IStorage.GetGroup<TEntity>(long startIndex, long count, Field orderBy, ListSortDirection direction)
-		{
-			throw new NotSupportedException();
-		}
+			=> throw new NotSupportedException();
 
-		TEntity IStorage.Update<TEntity>(TEntity entity)
-		{
-			return entity;
-		}
+		TEntity IStorage.Update<TEntity>(TEntity entity) => entity;
 
 		void IStorage.Remove<TEntity>(TEntity entity)
 		{
@@ -329,25 +315,13 @@ namespace StockSharp.Algo
 		{
 		}
 
-		void IStorage.ClearCache()
-		{
-			throw new NotSupportedException();
-		}
+		void IStorage.ClearCache() => throw new NotSupportedException();
 
-		IBatchContext IStorage.BeginBatch()
-		{
-			throw new NotSupportedException();
-		}
+		IBatchContext IStorage.BeginBatch() => throw new NotSupportedException();
 
-		void IStorage.CommitBatch()
-		{
-			throw new NotSupportedException();
-		}
+		void IStorage.CommitBatch() => throw new NotSupportedException();
 
-		void IStorage.EndBatch()
-		{
-			throw new NotSupportedException();
-		}
+		void IStorage.EndBatch() => throw new NotSupportedException();
 
 		event Action<object> IStorage.Added
 		{

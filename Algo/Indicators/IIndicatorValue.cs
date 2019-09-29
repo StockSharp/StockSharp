@@ -95,66 +95,34 @@ namespace StockSharp.Algo.Indicators
 			IsFormed = indicator.IsFormed;
 		}
 
-		/// <summary>
-		/// Indicator.
-		/// </summary>
+		/// <inheritdoc />
 		public IIndicator Indicator { get; }
 
-		/// <summary>
-		/// No indicator value.
-		/// </summary>
+		/// <inheritdoc />
 		public abstract bool IsEmpty { get; set; }
 
-		/// <summary>
-		/// Is the value final (indicator finalizes its value and will not be changed anymore in the given point of time).
-		/// </summary>
+		/// <inheritdoc />
 		public abstract bool IsFinal { get; set; }
 
-		/// <summary>
-		/// Whether the indicator is set.
-		/// </summary>
+		/// <inheritdoc />
 		public bool IsFormed { get; }
 
-		/// <summary>
-		/// The input value.
-		/// </summary>
+		/// <inheritdoc />
 		public abstract IIndicatorValue InputValue { get; set; }
 
-		/// <summary>
-		/// Does value support data type, required for the indicator.
-		/// </summary>
-		/// <param name="valueType">The data type, operated by indicator.</param>
-		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
+		/// <inheritdoc />
 		public abstract bool IsSupport(Type valueType);
 
-		/// <summary>
-		/// To get the value by the data type.
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <returns>Value.</returns>
+		/// <inheritdoc />
 		public abstract T GetValue<T>();
 
-		/// <summary>
-		/// To replace the indicator input value by new one (for example it is received from another indicator).
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="value">Value.</param>
-		/// <returns>New object, containing input value.</returns>
+		/// <inheritdoc />
 		public abstract IIndicatorValue SetValue<T>(IIndicator indicator, T value);
 
-		/// <summary>
-		/// Compare <see cref="IIndicatorValue"/> on the equivalence.
-		/// </summary>
-		/// <param name="other">Another value with which to compare.</param>
-		/// <returns>The result of the comparison.</returns>
+		/// <inheritdoc />
 		public abstract int CompareTo(IIndicatorValue other);
 
-		/// <summary>
-		/// Compare <see cref="IIndicatorValue"/> on the equivalence.
-		/// </summary>
-		/// <param name="other">Another value with which to compare.</param>
-		/// <returns>The result of the comparison.</returns>
+		/// <inheritdoc />
 		int IComparable.CompareTo(object other)
 		{
 			var value = other as IIndicatorValue;
@@ -199,49 +167,26 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public TValue Value { get; }
 
-		/// <summary>
-		/// No indicator value.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsEmpty { get; set; }
 
-		/// <summary>
-		/// Is the value final (indicator finalizes its value and will not be changed anymore in the given point of time).
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFinal { get; set; }
 
-		/// <summary>
-		/// The input value.
-		/// </summary>
+		/// <inheritdoc />
 		public override IIndicatorValue InputValue { get; set; }
 
-		/// <summary>
-		/// Does value support data type, required for the indicator.
-		/// </summary>
-		/// <param name="valueType">The data type, operated by indicator.</param>
-		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
-		public override bool IsSupport(Type valueType)
-		{
-			return valueType == typeof(TValue);
-		}
+		/// <inheritdoc />
+		public override bool IsSupport(Type valueType) => valueType == typeof(TValue);
 
-		/// <summary>
-		/// To get the value by the data type.
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <returns>Value.</returns>
+		/// <inheritdoc />
 		public override T GetValue<T>()
 		{
 			ThrowIfEmpty();
 			return Value.To<T>();
 		}
 
-		/// <summary>
-		/// To replace the indicator input value by new one (for example it is received from another indicator).
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="value">Value.</param>
-		/// <returns>New object, containing input value.</returns>
+		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			return new SingleIndicatorValue<T>(indicator, value) { IsFinal = IsFinal, InputValue = this };
@@ -253,24 +198,11 @@ namespace StockSharp.Algo.Indicators
 				throw new InvalidOperationException(LocalizedStrings.Str910);
 		}
 
-		/// <summary>
-		/// Compare <see cref="SingleIndicatorValue{T}"/> on the equivalence.
-		/// </summary>
-		/// <param name="other">Another value with which to compare.</param>
-		/// <returns>The result of the comparison.</returns>
-		public override int CompareTo(IIndicatorValue other)
-		{
-			return Value.Compare(other.GetValue<TValue>());
-		}
+		/// <inheritdoc />
+		public override int CompareTo(IIndicatorValue other) => Value.Compare(other.GetValue<TValue>());
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
-		public override string ToString()
-		{
-			return IsEmpty ? "Empty" : Value.ToString();
-		}
+		/// <inheritdoc />
+		public override string ToString() => IsEmpty ? "Empty" : Value.ToString();
 	}
 
 	/// <summary>
@@ -297,13 +229,7 @@ namespace StockSharp.Algo.Indicators
 		{
 		}
 
-		/// <summary>
-		/// To replace the indicator input value by new one (for example it is received from another indicator).
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="value">Value.</param>
-		/// <returns>New object, containing input value.</returns>
+		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			return typeof(T) == typeof(decimal)
@@ -370,39 +296,20 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public static readonly Func<Candle, decimal> ByMiddle = c => (c.ClosePrice + c.OpenPrice) / 2;
 
-		/// <summary>
-		/// Does value support data type, required for the indicator.
-		/// </summary>
-		/// <param name="valueType">The data type, operated by indicator.</param>
-		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
-		public override bool IsSupport(Type valueType)
-		{
-			return valueType == typeof(decimal) || base.IsSupport(valueType);
-		}
+		/// <inheritdoc />
+		public override bool IsSupport(Type valueType) => valueType == typeof(decimal) || base.IsSupport(valueType);
 
-		/// <summary>
-		/// To get the value by the data type.
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <returns>Value.</returns>
+		/// <inheritdoc />
 		public override T GetValue<T>()
 		{
 			var candle = base.GetValue<Candle>();
 			return typeof(T) == typeof(decimal) ? _getPart(candle).To<T>() : candle.To<T>();
 		}
 
-		/// <summary>
-		/// To replace the indicator input value by new one (for example it is received from another indicator).
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="value">Value.</param>
-		/// <returns>New object, containing input value.</returns>
+		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
-			var candle = value as Candle;
-
-			return candle != null
+			return value is Candle candle
 					? new CandleIndicatorValue(indicator, candle) { InputValue = this }
 					: value.IsNull() ? new CandleIndicatorValue(indicator) : base.SetValue(indicator, value);
 		}
@@ -455,34 +362,20 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public static readonly Func<MarketDepth, decimal?> ByMiddle = d => d.BestPair?.MiddlePrice;
 
-		/// <summary>
-		/// Does value support data type, required for the indicator.
-		/// </summary>
-		/// <param name="valueType">The data type, operated by indicator.</param>
-		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
+		/// <inheritdoc />
 		public override bool IsSupport(Type valueType)
 		{
 			return valueType == typeof(decimal) || base.IsSupport(valueType);
 		}
 
-		/// <summary>
-		/// To get the value by the data type.
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <returns>Value.</returns>
+		/// <inheritdoc />
 		public override T GetValue<T>()
 		{
 			var depth = base.GetValue<MarketDepth>();
 			return typeof(T) == typeof(decimal) ? (_getPart(depth) ?? 0).To<T>() : depth.To<T>();
 		}
 
-		/// <summary>
-		/// To replace the indicator input value by new one (for example it is received from another indicator).
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="value">Value.</param>
-		/// <returns>New object, containing input value.</returns>
+		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			return new MarketDepthIndicatorValue(indicator, base.GetValue<MarketDepth>(), _getPart)
@@ -518,13 +411,7 @@ namespace StockSharp.Algo.Indicators
 		{
 		}
 
-		/// <summary>
-		/// To replace the indicator input value by new one (for example it is received from another indicator).
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="value">Value.</param>
-		/// <returns>New object, containing input value.</returns>
+		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			return new PairIndicatorValue<TValue>(indicator, GetValue<Tuple<TValue, TValue>>())
@@ -550,19 +437,13 @@ namespace StockSharp.Algo.Indicators
 			InnerValues = new Dictionary<IIndicator, IIndicatorValue>();
 		}
 
-		/// <summary>
-		/// No indicator value.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsEmpty { get; set; }
 
-		/// <summary>
-		/// Is the value final (indicator finalizes its value and will not be changed anymore in the given point of time).
-		/// </summary>
+		/// <inheritdoc />
 		public override bool IsFinal { get; set; }
 
-		/// <summary>
-		/// The input value.
-		/// </summary>
+		/// <inheritdoc />
 		public override IIndicatorValue InputValue { get; set; }
 
 		/// <summary>
@@ -570,46 +451,16 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; }
 
-		/// <summary>
-		/// Does value support data type, required for the indicator.
-		/// </summary>
-		/// <param name="valueType">The data type, operated by indicator.</param>
-		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
-		public override bool IsSupport(Type valueType)
-		{
-			return InnerValues.Any(v => v.Value.IsSupport(valueType));
-		}
+		/// <inheritdoc />
+		public override bool IsSupport(Type valueType) => InnerValues.Any(v => v.Value.IsSupport(valueType));
 
-		/// <summary>
-		/// To get the value by the data type.
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <returns>Value.</returns>
-		public override T GetValue<T>()
-		{
-			throw new NotSupportedException();
-		}
+		/// <inheritdoc />
+		public override T GetValue<T>() => throw new NotSupportedException();
 
-		/// <summary>
-		/// To replace the indicator input value by new one (for example it is received from another indicator).
-		/// </summary>
-		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
-		/// <param name="indicator">Indicator.</param>
-		/// <param name="value">Value.</param>
-		/// <returns>Replaced copy of the input value.</returns>
-		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
-		{
-			throw new NotSupportedException();
-		}
+		/// <inheritdoc />
+		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();
 
-		/// <summary>
-		/// Compare <see cref="ComplexIndicatorValue"/> on the equivalence.
-		/// </summary>
-		/// <param name="other">Another value with which to compare.</param>
-		/// <returns>The result of the comparison.</returns>
-		public override int CompareTo(IIndicatorValue other)
-		{
-			throw new NotSupportedException();
-		}
+		/// <inheritdoc />
+		public override int CompareTo(IIndicatorValue other) => throw new NotSupportedException();
 	}
 }

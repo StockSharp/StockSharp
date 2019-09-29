@@ -50,9 +50,7 @@ namespace StockSharp.Messages
 			InnerAdapter = innerAdapter ?? throw new ArgumentNullException(nameof(innerAdapter));
 		}
 
-		/// <summary>
-		/// Underlying adapter.
-		/// </summary>
+		/// <inheritdoc />
 		public IMessageAdapter InnerAdapter
 		{
 			get => _innerAdapter;
@@ -108,18 +106,19 @@ namespace StockSharp.Messages
 			InnerAdapter.Close();
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		event Action IMessageChannel.StateChanged
+		{
+			add => InnerAdapter.StateChanged += value;
+			remove => InnerAdapter.StateChanged -= value;
+		}
+
+		/// <inheritdoc />
 		public virtual void SendInMessage(Message message)
 		{
 			InnerAdapter.SendInMessage(message);
 		}
 
-		/// <summary>
-		/// New message event.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual event Action<Message> NewOutMessage;
 
 		/// <summary>
@@ -191,7 +190,11 @@ namespace StockSharp.Messages
 		public IdGenerator TransactionIdGenerator => InnerAdapter.TransactionIdGenerator;
 
 		/// <inheritdoc />
-		public virtual IEnumerable<MessageTypes> PossibleSupportedMessages => InnerAdapter.PossibleSupportedMessages;
+		public virtual IEnumerable<MessageTypeInfo> PossibleSupportedMessages
+		{
+			get => InnerAdapter.PossibleSupportedMessages;
+			set => InnerAdapter.PossibleSupportedMessages = value;
+		}
 
 		/// <inheritdoc />
 		public virtual IEnumerable<MessageTypes> SupportedMessages
@@ -264,6 +267,18 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportSecuritiesLookupAll => InnerAdapter.IsSupportSecuritiesLookupAll;
 
 		/// <inheritdoc />
+		public virtual IEnumerable<int> SupportedOrderBookDepths => InnerAdapter.SupportedOrderBookDepths;
+
+		/// <inheritdoc />
+		public virtual bool IsSupportOrderBookIncrements => InnerAdapter.IsSupportOrderBookIncrements;
+
+		/// <inheritdoc />
+		public virtual bool IsSupportExecutionsPnL => InnerAdapter.IsSupportExecutionsPnL;
+
+		/// <inheritdoc />
+		public virtual bool IsSecurityNewsOnly => InnerAdapter.IsSecurityNewsOnly;
+
+		/// <inheritdoc />
 		public IEnumerable<Level1Fields> CandlesBuildFrom => InnerAdapter.CandlesBuildFrom;
 
 		OrderCondition IMessageAdapter.CreateOrderCondition() => InnerAdapter.CreateOrderCondition();
@@ -274,8 +289,8 @@ namespace StockSharp.Messages
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 
 		/// <inheritdoc />
-		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
-			=> InnerAdapter.GetTimeFrames(securityId);
+		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+			=> InnerAdapter.GetCandleArgs(candleType, securityId, from, to);
 
 		/// <inheritdoc />
 		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)

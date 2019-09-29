@@ -17,7 +17,6 @@ namespace StockSharp.Algo.Storages.Binary
 {
 	using System;
 	using System.Collections;
-	using System.Text;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -280,7 +279,7 @@ namespace StockSharp.Algo.Storages.Binary
 					if (timeDiff <= TimeSpan.FromHours(32))
 					{
 						writer.Write(true);
-						writer.WriteBits(timeDiff.Hours, 5);
+						writer.WriteBits(timeDiff.Days * 24 + timeDiff.Hours, 5);
 					}
 					else
 					{
@@ -497,7 +496,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 		public static void WriteString(this BitArrayWriter writer, string value)
 		{
-			var bits = Encoding.UTF8.GetBytes(value).To<BitArray>().To<bool[]>();
+			var bits = value.UTF8().To<BitArray>().To<bool[]>();
 			writer.WriteInt(bits.Length);
 			bits.ForEach(writer.Write);
 		}
@@ -510,7 +509,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public static string ReadString(this BitArrayReader reader)
 		{
 			var len = reader.ReadInt();
-			return Encoding.UTF8.GetString(reader.ReadArray(len).To<BitArray>().To<byte[]>());
+			return reader.ReadArray(len).To<BitArray>().To<byte[]>().UTF8();
 		}
 
 		public static TimeSpan GetTimeZone(this BinaryMetaInfo metaInfo, bool isUtc, SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)

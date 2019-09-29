@@ -75,7 +75,7 @@
 				getSecurityId = m => ((PositionChangeMessage)m).SecurityId;
 			else if (DataType == DataType.Ticks || DataType == DataType.OrderLog || DataType == DataType.Transactions)
 				getSecurityId = m => ((ExecutionMessage)m).SecurityId;
-			else if (DataType.IsCandles())
+			else if (DataType.IsCandles)
 				getSecurityId = m => ((CandleMessage)m).SecurityId;
 
 			try
@@ -86,6 +86,9 @@
 
 				foreach (var msg in Parse(fileName, isCancelled))
 				{
+					if (msg is SecurityMappingMessage)
+						continue;
+
 					if (!(msg is SecurityMessage secMsg))
 					{
 						buffer.Add(msg);
@@ -152,7 +155,6 @@
 				Id = id,
 				Code = securityId.SecurityCode,
 				Board = exchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode),
-				Type = securityId.SecurityType,
 			};
 
 			_securityStorage.Save(security, false);
@@ -192,7 +194,7 @@
 								if (candle.CloseTime < candle.OpenTime)
 								{
 									// close time doesn't exist in importing file
-									candle.CloseTime = default(DateTimeOffset);
+									candle.CloseTime = default;
 								}
 								else if (candle.CloseTime > candle.OpenTime)
 								{

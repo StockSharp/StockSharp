@@ -218,6 +218,8 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Yahoo.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Tradier.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Tradier.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Upbit.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Upbit.xml" />
     </DocumentationSources>
     <CopyrightHref>https://stocksharp.ru</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2019 - StockSharp LP</CopyrightText>
@@ -984,7 +986,6 @@
     <None Include="Topics\AlfaFirstStrategy.aml" />
     <None Include="Topics\AlfaStopOrders.aml" />
     <None Include="Topics\BasicAlgo.aml" />
-    <None Include="Topics\BasketTrader.aml" />
     <None Include="Topics\Candles.aml" />
     <None Include="Topics\CandlesCandleFactory.aml" />
     <None Include="Topics\CandlesPatterns.aml" />

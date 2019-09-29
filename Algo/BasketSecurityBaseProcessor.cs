@@ -152,6 +152,8 @@ namespace StockSharp.Algo
 					throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str2142Params.Put(message.Type));
 			}
 
+			message = message.Clone();
+			message.ReplaceSecurityId(SecurityId);
 			yield return message;
 		}
 
@@ -632,7 +634,7 @@ namespace StockSharp.Algo
 				var step = Security.VolumeStep;
 
 				if (step != null)
-					value = MathHelper.Round(value, step.Value, step.Value.GetCachedDecimals());
+					value = value.Round(step.Value, step.Value.GetCachedDecimals());
 			}
 
 			return value;

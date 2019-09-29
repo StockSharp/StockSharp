@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Strategies
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Configuration;
 	using Ecng.Serialization;
 
 	using MoreLinq;
@@ -183,6 +182,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <returns>The candles manager.</returns>
+		[Obsolete("Use Strategy direct.")]
 		public static ICandleManager GetCandleManager(this Strategy strategy)
 		{
 			if (strategy == null)
@@ -196,6 +196,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="candleManager">The candles manager.</param>
+		[Obsolete("Use Strategy direct.")]
 		public static void SetCandleManager(this Strategy strategy, ICandleManager candleManager)
 		{
 			if (strategy == null)
@@ -205,37 +206,6 @@ namespace StockSharp.Algo.Strategies
 				throw new ArgumentNullException(nameof(candleManager));
 
 			strategy.Environment.SetValue(_candleManagerKey, candleManager);
-		}
-
-		private const string _messageSenderKey = "MessageSender";
-
-		/// <summary>
-		/// To get the message sender, associated with the passed strategy.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <returns>Message sender.</returns>
-		public static IMessageSender GetMessageSender(this Strategy strategy)
-		{
-			if (strategy == null)
-				throw new ArgumentNullException(nameof(strategy));
-
-			return strategy.Environment.GetValue<IMessageSender>(_messageSenderKey);
-		}
-
-		/// <summary>
-		/// To set the message sender for the strategy.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="messageSender">Message sender.</param>
-		public static void SetMessageSender(this Strategy strategy, IMessageSender messageSender)
-		{
-			if (strategy == null)
-				throw new ArgumentNullException(nameof(strategy));
-
-			if (messageSender == null)
-				throw new ArgumentNullException(nameof(messageSender));
-
-			strategy.Environment.SetValue(_messageSenderKey, messageSender);
 		}
 
 		private const string _isEmulationModeKey = "IsEmulationMode";
@@ -306,7 +276,7 @@ namespace StockSharp.Algo.Strategies
 			var settings = storage.GetValue<SettingsStorage>("Settings");
 			if (settings != null && settings.Count != 0)
 			{
-				var connector = strategy.Connector ?? ConfigManager.TryGetService<IConnector>();
+				var connector = strategy.Connector ?? ServicesRegistry.IConnector;
 
 				if (connector != null && settings.Contains("security"))
 					strategy.Security = connector.LookupById(settings.GetValue<string>("security"));
@@ -980,7 +950,7 @@ namespace StockSharp.Algo.Strategies
 
 			return new StrategyTypeMessage
 			{
-				StrategyTypeId = strategyType.GUID,
+				StrategyTypeId = strategyType.GetTypeName(false),
 				StrategyName = strategyType.Name,
 				OriginalTransactionId = transactionId,
 			};

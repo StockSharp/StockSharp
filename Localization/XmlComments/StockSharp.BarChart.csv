@@ -4,7 +4,7 @@ M:StockSharp.BarChart.BarChartMessageAdapter.#ctor(Ecng.Common.IdGenerator)/para
 P:StockSharp.BarChart.BarChartMessageAdapter.Login/summary;Login
 P:StockSharp.BarChart.BarChartMessageAdapter.Password/summary;Password
 P:StockSharp.BarChart.BarChartMessageAdapter.AllTimeFrames/summary;DocStr206
-M:StockSharp.BarChart.BarChartMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
+M:StockSharp.BarChart.BarChartMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459

@@ -11,17 +11,13 @@
     <Topic id="db1de349-84ef-4e59-a30b-c34a9d47bed2" visible="True" isExpanded="true" title="Коннекторы">
       <Topic id="554da27b-900a-462a-a2c2-d2b6cb1330ae" visible="True" title="Графическое конфигурирование" />
       <Topic id="c23300a1-bf38-444a-b103-28350766477f" visible="True" title="Сохранение и загрузка настроек" />
-      <Topic id="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" visible="True" title="Множество подключений" />
       <Topic id="293859e2-6c39-486c-afde-d9ae96243618" visible="True" title="Создание собственного коннектора" />
       <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Переподключение" />
-      <Topic id="08b8a9ca-6658-4088-b6b8-8715b12732ab" visible="True" title="RSS" />
       <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (Россия)">
         <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" isExpanded="true" title="Quik">
           <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
           <Topic id="d79f3357-6bdf-4a6f-92d6-c9b45e820f1a" visible="True" title="Инициализация адаптера Quik Lua" />
           <Topic id="a82865dd-98ed-4579-8f48-dd8f806c39e7" visible="True" title="Стоп-заявки" />
-          <Topic id="52cb16e3-0ff0-4e82-8ad5-73a2e6e918a1" visible="True" title="Включение и выключение Quik" />
-          <Topic id="d92dd6c6-b8d6-4065-b441-091df3425e65" visible="True" title="РЕПО и РПС заявки" />
           <Topic id="c338d4b4-ba54-4671-9206-976c07ef655e" visible="True" title="Quik DDE (старое подключение)">
             <Topic id="5c13da7b-b6e4-4fd4-958a-66c93c58b941" visible="True" title="Настройка Quik" />
             <Topic id="32bb7203-202c-44f7-a6c4-79791c690a3a" visible="True" title="Verifier" />
@@ -35,6 +31,8 @@
             <Topic id="a616c5a8-227a-4fe9-869c-d32af3e62710" visible="True" title="Управление окном Quik" />
             <Topic id="0b0bd6e0-7ddf-407d-9e03-a218796163af" visible="True" title="Строка транзакции" />
             <Topic id="9fb00dd4-4f0a-42a9-ab0f-9946b7acf6fe" visible="True" title="Работа с несколькими Quik-ами" />
+            <Topic id="d92dd6c6-b8d6-4065-b441-091df3425e65" visible="True" title="РЕПО и РПС заявки" />
+            <Topic id="52cb16e3-0ff0-4e82-8ad5-73a2e6e918a1" visible="True" title="Включение и выключение Quik" />
           </Topic>
         </Topic>
         <Topic id="b64a1826-58e3-4ac8-8923-099b52992e2e" visible="True" isExpanded="true" title="Quik FIX">
@@ -43,7 +41,6 @@
         <Topic id="7f488b0b-0f59-42b4-845b-fd766f5699dc" visible="True" isExpanded="true" title="SmartCOM">
           <Topic id="5a43d423-1c1f-470a-b32f-92c24023de2c" visible="True" title="Настройки коннектора SmartCOM" />
           <Topic id="e5b4af10-0235-4374-9134-a878fc7ecf7f" visible="True" title="Инициализация адаптера SmartCOM" />
-          <Topic id="2c4aa060-0b11-4e32-b57a-8b8e70d67ced" visible="True" title="SmartCOM 3.X" />
           <Topic id="9d3b0442-0633-4ba5-97e1-22829adcd025" visible="True" title="Исторические данные" />
           <Topic id="cae38969-3e31-4180-9425-89b41b3bd6e9" visible="True" title="Стоп-заявки" />
         </Topic>
@@ -55,7 +52,6 @@
         <Topic id="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf" visible="True" isExpanded="true" title="Plaza II">
           <Topic id="2a606357-f716-491b-9292-64836fcac5fd" visible="True" title="Настройки коннектора Plaza II" />
           <Topic id="81726182-1017-4eca-b349-03b77056a485" visible="True" title="Инициализация адаптера Plaza II" />
-          <Topic id="8db87ec8-67fe-4926-b92c-0f8b0f0415ba" visible="True" title="CGate" />
           <Topic id="838b1f44-ad42-4bf6-b862-0b0bff550482" visible="True" title="Метаданные" />
           <Topic id="7872dcbc-abff-4112-9846-b6bf8bb0e0e6" visible="True" title="Стаканы агрегированных котировок" />
           <Topic id="8063e30a-394a-4fea-bc49-b7661b2222b6" visible="True" title="Произвольные таблицы" />
@@ -163,6 +159,7 @@
           <Topic id="35cde593-3105-4903-974e-10d85482ec8f" visible="True" title="Стоп-заявки" />
           <Topic id="6191a437-1a8c-451c-9a43-17daee119bb7" visible="True" title="Новости" />
         </Topic>
+        <Topic id="08b8a9ca-6658-4088-b6b8-8715b12732ab" visible="True" title="RSS" />
       </Topic>
       <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" isExpanded="true" title="Коннекторы Forex">
         <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" isExpanded="true" title="LMAX">

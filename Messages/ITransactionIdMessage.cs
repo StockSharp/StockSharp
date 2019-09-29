@@ -8,6 +8,6 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Request identifier.
 		/// </summary>
-		long TransactionId { get; }
+		long TransactionId { get; set; }
 	}
 }

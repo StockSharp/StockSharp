@@ -159,9 +159,28 @@ namespace StockSharp.Messages
 			}
 		}
 
+		private IEnumerable<MessageTypeInfo> _possibleSupportedMessages = Enumerable.Empty<MessageTypeInfo>();
+
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual IEnumerable<MessageTypes> PossibleSupportedMessages => SupportedMessages;
+		public virtual IEnumerable<MessageTypeInfo> PossibleSupportedMessages
+		{
+			get => _possibleSupportedMessages;
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				var duplicate = value.GroupBy(m => m.Type).FirstOrDefault(g => g.Count() > 1);
+				if (duplicate != null)
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
+
+				_possibleSupportedMessages = value;
+				OnPropertyChanged(nameof(PossibleSupportedMessages));
+
+				SupportedMessages = value.Select(t => t.Type).ToArray();
+			}
+		}
 
 		private IEnumerable<MarketDataTypes> _supportedMarketDataTypes = Enumerable.Empty<MarketDataTypes>();
 
@@ -202,7 +221,8 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str192Key,
 			Description = LocalizedStrings.Str193Key,
-			GroupName = LocalizedStrings.Str186Key)]
+			GroupName = LocalizedStrings.Str186Key,
+			Order = 300)]
 		public TimeSpan HeartbeatInterval
 		{
 			get => _heartbeatInterval;
@@ -292,6 +312,22 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportSecuritiesLookupAll => true;
 
 		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual IEnumerable<int> SupportedOrderBookDepths => Enumerable.Empty<int>();
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsSupportOrderBookIncrements => false;
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsSupportExecutionsPnL => false;
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsSecurityNewsOnly => false;
+
+		/// <inheritdoc />
 		public virtual OrderCondition CreateOrderCondition() => this.GetOrderConditionType()?.CreateInstance<OrderCondition>();
 
 		/// <inheritdoc />
@@ -331,14 +367,15 @@ namespace StockSharp.Messages
 		public const string DefaultAssociatedBoardCode = "ALL";
 
 		/// <inheritdoc />
-		[CategoryLoc(LocalizedStrings.Str186Key)]
-		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
-		[DescriptionLoc(LocalizedStrings.Str199Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.AssociatedSecurityBoardKey,
+			Description = LocalizedStrings.Str199Key,
+			GroupName = LocalizedStrings.Str186Key,
+			Order = 301)]
 		public string AssociatedBoardCode { get; set; } = DefaultAssociatedBoardCode;
 
-		/// <summary>
-		/// Outgoing message event.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<Message> NewOutMessage;
 
 		bool IMessageChannel.IsOpened => true;
@@ -349,6 +386,12 @@ namespace StockSharp.Messages
 
 		void IMessageChannel.Close()
 		{
+		}
+
+		event Action IMessageChannel.StateChanged
+		{
+			add { }
+			remove { }
 		}
 
 		/// <inheritdoc />
@@ -372,7 +415,7 @@ namespace StockSharp.Messages
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					_prevTime = default(DateTimeOffset);
+					_prevTime = default;
 					_secLookupTimeOut.Clear();
 					_pfLookupTimeOut.Clear();
 					break;
@@ -551,7 +594,7 @@ namespace StockSharp.Messages
 			//{
 			//	if (message is Level1ChangeMessage l1Msg && l1Msg.Changes.Count == 0)
 			//		return;
-			//	else if (message is BaseChangeMessage<PositionChangeTypes> posMsg && posMsg.Changes.Count == 0)
+			//	else if (message is BasePositionChangeMessage posMsg && posMsg.Changes.Count == 0)
 			//		return;
 			//}
 
@@ -614,7 +657,7 @@ namespace StockSharp.Messages
 
 			switch (message)
 			{
-				case BaseChangeMessage<PositionChangeTypes> posMsg when posMsg.ServerTime.IsDefault():
+				case BasePositionChangeMessage posMsg when posMsg.ServerTime.IsDefault():
 					posMsg.ServerTime = CurrentTime;
 					break;
 				case ExecutionMessage execMsg when execMsg.ExecutionType == ExecutionTypes.Transaction && execMsg.ServerTime.IsDefault():
@@ -679,9 +722,23 @@ namespace StockSharp.Messages
 		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);
 
-		/// <inheritdoc />
-		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId = default(SecurityId))
+		/// <summary>
+		/// Get possible time-frames for the specified instrument.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <returns>Possible time-frames.</returns>
+		protected virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 			=> Enumerable.Empty<TimeSpan>();
+
+		/// <inheritdoc />
+		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+		{
+			return candleType == typeof(TimeFrameCandleMessage)
+				? GetTimeFrames(securityId, from, to).Cast<object>()
+				: Enumerable.Empty<object>();
+		}
 
 		/// <inheritdoc />
 		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)
@@ -700,7 +757,7 @@ namespace StockSharp.Messages
 					return TimeSpan.FromDays(1);
 				case MarketDataTypes.CandleTimeFrame:
 				{
-					var tf = (TimeSpan)request.Arg;
+					var tf = request.GetTimeFrame();
 
 					if (tf.TotalDays <= 1)
 						return TimeSpan.FromDays(30);

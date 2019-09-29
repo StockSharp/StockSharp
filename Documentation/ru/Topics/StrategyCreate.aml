@@ -158,7 +158,7 @@ class SmaStrategy : Strategy
 			<para>
 			  После проверки идет сам код работы со скользящими. <legacyBold>Важно!</legacyBold> У класса <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
 			  есть метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
-			  который необходимо вызывать вместо регистрации напрямую через шлюз (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>).
+			  который необходимо вызывать вместо регистрации напрямую через шлюз (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>).
 			  Все сделки, которые произошли по такой заявке, будут перехватываться <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>,
 			  и на основе них будет производиться расчет позиции, проскальзывания, P&amp;L и т.д.. Также, такие заявки и сделки будут добавляется в коллекции
 			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Orders</codeEntityReference> и
@@ -168,7 +168,7 @@ class SmaStrategy : Strategy
 			<alert class-="note">
 			  <para>
 				Если необходимо изменить зарегистрированную заявку, то также нужно вызывать метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>,
-				а не обращаться напрямую к шлюзу через метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>.
+				а не обращаться напрямую к шлюзу через метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>.
 			  </para>
 			</alert>
 			<para>

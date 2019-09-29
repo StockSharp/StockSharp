@@ -17,10 +17,10 @@
       <steps class="ordered">
         <step>
           <content>
-          	<para>Скачать и установить <externalLink>
-			<linkText>Visual C++ 2015</linkText>
-			<linkAlternateText>Пакет Visual C++ для Visual Studio 2015</linkAlternateText>
-			<linkUri>https://www.microsoft.com/ru-RU/download/details.aspx?id=48145</linkUri>
+          	<para><legacyBold>Только для QUIK 7!</legacyBold> Скачать и установить <externalLink>
+			<linkText>Visual C++ Runtime x86</linkText>
+			<linkAlternateText>Пакет Visual C++ x86</linkAlternateText>
+			<linkUri>https://aka.ms/vs/16/release/vc_redist.x86.exe</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
  (необходимо скачать vcredist_x86.exe).</para>
@@ -62,7 +62,7 @@
           	<para>Далее необходимо загрузить скрипт в терминале Quik.</para>
          	
 			<list class="ordered">
-  				<listItem><para>Открываем таблицу доступных скриптов (Таблицы - Lua - Доступные скрипты).</para></listItem>
+  				<listItem><para>Открываем таблицу доступных скриптов (Сервисы - Lua скрипты - Доступные скрипты).</para></listItem>
   				<listItem><para>Выбираем кнопку "Добавить".</para></listItem>
   				<listItem><para>После добавления скрипта, его необходимо запустить.</para></listItem>
 			</list>
@@ -72,7 +72,7 @@
 			<para>Запуск скрипта выполняется один раз, при следующем запуске терминала скрипт будет запущен автоматически.</para>
           </content>
         </step>
-        <step>
+        <!--step>
           <content>
           	<para>Настройка таблиц в терминале Quik.</para>
           	<para>Коннектор QuikLua не требуется специальной настройки названий таблиц и их содержимого, кроме таблицы инструментов,
@@ -124,7 +124,7 @@
   				с использованием Dde, перенесены в папку <legacyItalic>Quik\Dde</legacyItalic>.</para>
 			</alert>
 	          	</content>
-        	</step>
+        	</step-->
 			
 			<step>
           		<content>

@@ -2237,737 +2237,732 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// ALL board with no schedule limits.
+		/// Information about board <see cref="Associated"/>.
 		/// </summary>
 		public static ExchangeBoard Associated { get; }
 
 		/// <summary>
-		/// Test board with no schedule limits.
+		/// Information about board <see cref="Test"/>.
 		/// </summary>
 		public static ExchangeBoard Test { get; }
 
 		/// <summary>
-		/// Information about FORTS board of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="Forts"/>.
 		/// </summary>
 		public static ExchangeBoard Forts { get; }
 
 		/// <summary>
-		/// Information about indices of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="Micex"/>.
 		/// </summary>
 		public static ExchangeBoard Micex { get; }
 
 		/// <summary>
-		/// Information about AUCT of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexAuct"/>.
 		/// </summary>
 		public static ExchangeBoard MicexAuct { get; }
 
 		/// <summary>
-		/// Information about AUBB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexAubb"/>.
 		/// </summary>
 		public static ExchangeBoard MicexAubb { get; }
 
 		/// <summary>
-		/// Information about CASF of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexCasf"/>.
 		/// </summary>
 		public static ExchangeBoard MicexCasf { get; }
 
 		/// <summary>
-		/// Information about EQBR of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqbr"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqbr { get; }
 
 		/// <summary>
-		/// Information about EQBS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqbs"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqbs { get; }
 
 		/// <summary>
-		/// Information about EQDP of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqdp"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqdp { get; }
 
 		/// <summary>
-		/// Information about EQEU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqeu"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqeu { get; }
 
 		/// <summary>
-		/// Information about EQUS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqus"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqus { get; }
 
 		/// <summary>
-		/// Information about EQNB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqnb"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqnb { get; }
 
 		/// <summary>
-		/// Information about EQNE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqne"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqne { get; }
 
 		/// <summary>
-		/// Information about EQNL of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqnl"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqnl { get; }
 
 		/// <summary>
-		/// Information about EQNO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqno"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqno { get; }
 
 		/// <summary>
-		/// Information about EQOB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqob"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqob { get; }
 
 		/// <summary>
-		/// Information about EQOS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqos"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqos { get; }
 
 		/// <summary>
-		/// Information about EQOV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqov"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqov { get; }
 
 		/// <summary>
-		/// Information about EQLV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqlv"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqlv { get; }
 
 		/// <summary>
-		/// Information about EQDB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqdb"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqdb { get; }
 
 		/// <summary>
-		/// Information about EQDE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqde"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqde { get; }
 
 		/// <summary>
-		/// Information about EQLI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqli"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqli { get; }
 
 		/// <summary>
-		/// Information about EQQI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqqi"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqqi { get; }
 
 		/// <summary>
-		/// Information about SMAL of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexSmal"/>.
 		/// </summary>
 		public static ExchangeBoard MicexSmal { get; }
 
 		/// <summary>
-		/// Information about SPOB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexSpob"/>.
 		/// </summary>
 		public static ExchangeBoard MicexSpob { get; }
 
 		/// <summary>
-		/// Information about TQBR of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqbr"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqbr { get; }
 
 		/// <summary>
-		/// Information about TQDE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqde"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqde { get; }
 
 		/// <summary>
-		/// Information about TQBS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqbs"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqbs { get; }
 
 		/// <summary>
-		/// Information about TQEU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqeu"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqeu { get; }
 
 		/// <summary>
-		/// Information about TQUS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqus"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqus { get; }
 
 		/// <summary>
-		/// Information about TQNB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqnb"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqnb { get; }
 
 		/// <summary>
-		/// Information about TQNE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqne"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqne { get; }
 
 		/// <summary>
-		/// Information about TQNL of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqnl"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqnl { get; }
 
 		/// <summary>
-		/// Information about TQNO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqno"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqno { get; }
 
 		/// <summary>
-		/// Information about TQOB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqob"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqob { get; }
 
 		/// <summary>
-		/// Information about TQOS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqos"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqos { get; }
 
 		/// <summary>
-		/// Information about TQOV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqov"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqov { get; }
 
 		/// <summary>
-		/// Information about TQLV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqlv"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqlv { get; }
 
 		/// <summary>
-		/// Information about TQLI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqli"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqli { get; }
 
 		/// <summary>
-		/// Information about TQQI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTqqi"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTqqi { get; }
 
 		/// <summary>
-		/// Information about EQRP of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexEqrp"/>.
 		/// </summary>
 		public static ExchangeBoard MicexEqrp { get; }
 
 		/// <summary>
-		/// Information about PSRP of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsrp"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsrp { get; }
 
 		/// <summary>
-		/// Information about RFND of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexRfnd"/>.
 		/// </summary>
 		public static ExchangeBoard MicexRfnd { get; }
 
 		/// <summary>
-		/// Information about TADM of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTadm"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTadm { get; }
 
 		/// <summary>
-		/// Information about NADM of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexNadm"/>.
 		/// </summary>
 		public static ExchangeBoard MicexNadm { get; }
 
-		///// <summary>
-		///// Информация о площадке TRAN биржи <see cref="BusinessEntities.Exchange.Moex"/>.
-		///// </summary>
-		//public static ExchangeBoard MicexTran { get; }
-
 		/// <summary>
-		/// Information about PSAU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsau"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsau { get; }
 
 		/// <summary>
-		/// Information about PAUS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPaus"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPaus { get; }
 
 		/// <summary>
-		/// Information about PSBB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsbb"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsbb { get; }
 
 		/// <summary>
-		/// Information about PSEQ of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPseq"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPseq { get; }
 
 		/// <summary>
-		/// Information about PSES of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPses"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPses { get; }
 
 		/// <summary>
-		/// Information about PSEU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPseu"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPseu { get; }
 
 		/// <summary>
-		/// Information about PSDB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsdb"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsdb { get; }
 
 		/// <summary>
-		/// Information about PSDE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsde"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsde { get; }
 
 		/// <summary>
-		/// Information about PSUS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsus"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsus { get; }
 
 		/// <summary>
-		/// Information about PSNB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsnb"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsnb { get; }
 
 		/// <summary>
-		/// Information about PSNE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsne"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsne { get; }
 
 		/// <summary>
-		/// Information about PSNL of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsnl"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsnl { get; }
 
 		/// <summary>
-		/// Information about PSNO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsno"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsno { get; }
 
 		/// <summary>
-		/// Information about PSOB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsob"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsob { get; }
 
 		/// <summary>
-		/// Information about PSOS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsos"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsos { get; }
 
 		/// <summary>
-		/// Information about PSOV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsov"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsov { get; }
 
 		/// <summary>
-		/// Information about PSLV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPslv"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPslv { get; }
 
 		/// <summary>
-		/// Information about PSLI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsli"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsli { get; }
 
 		/// <summary>
-		/// Information about PSQI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPsqi"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPsqi { get; }
 
 		/// <summary>
-		/// Information about RPEU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexRpeu"/>.
 		/// </summary>
 		public static ExchangeBoard MicexRpeu { get; }
 
 		/// <summary>
-		/// Information about RPMA of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexRpma"/>.
 		/// </summary>
 		public static ExchangeBoard MicexRpma { get; }
 
 		/// <summary>
-		/// Information about RPMO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexRpmo"/>.
 		/// </summary>
 		public static ExchangeBoard MicexRpmo { get; }
 
 		/// <summary>
-		/// Information about RPUA of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexRpua"/>.
 		/// </summary>
 		public static ExchangeBoard MicexRpua { get; }
 
 		/// <summary>
-		/// Information about RPUO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexRpuo"/>.
 		/// </summary>
 		public static ExchangeBoard MicexRpuo { get; }
 
 		/// <summary>
-		/// Information about RPUQ of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexRpuq"/>.
 		/// </summary>
 		public static ExchangeBoard MicexRpuq { get; }
 
 		/// <summary>
-		/// Information about FBCB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexFbcb"/>.
 		/// </summary>
 		public static ExchangeBoard MicexFbcb { get; }
 
 		/// <summary>
-		/// Information about FBFX of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexFbfx"/>.
 		/// </summary>
 		public static ExchangeBoard MicexFbfx { get; }
 
 		/// <summary>
-		/// Information about IRK2 of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexIrk2"/>.
 		/// </summary>
 		public static ExchangeBoard MicexIrk2 { get; }
 
 		/// <summary>
-		/// Information about RPQI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexRpqi"/>.
 		/// </summary>
 		public static ExchangeBoard MicexRpqi { get; }
 
 		/// <summary>
-		/// Information about PTEQ of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPteq"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPteq { get; }
 
 		/// <summary>
-		/// Information about PTES of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtes"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtes { get; }
 
 		/// <summary>
-		/// Information about PTEU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPteu"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPteu { get; }
 
 		/// <summary>
-		/// Information about PTUS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtus"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtus { get; }
 
 		/// <summary>
-		/// Information about PTNB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtnb"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtnb { get; }
 
 		/// <summary>
-		/// Information about PTNE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtne"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtne { get; }
 
 		/// <summary>
-		/// Information about PTNL of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtnl"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtnl { get; }
 
 		/// <summary>
-		/// Information about PTNO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtno"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtno { get; }
 
 		/// <summary>
-		/// Information about PTOB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtob"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtob { get; }
 
 		/// <summary>
-		/// Information about PTOS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtos"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtos { get; }
 
 		/// <summary>
-		/// Information about PTOV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtov"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtov { get; }
 
 		/// <summary>
-		/// Information about PTLV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtlv"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtlv { get; }
 
 		/// <summary>
-		/// Information about PTLI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtli"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtli { get; }
 
 		/// <summary>
-		/// Information about PTQI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexPtqi"/>.
 		/// </summary>
 		public static ExchangeBoard MicexPtqi { get; }
 
 		/// <summary>
-		/// Information about SCVC of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexScvc"/>.
 		/// </summary>
 		public static ExchangeBoard MicexScvc { get; }
 
 		/// <summary>
-		/// Information about RPNG of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexRpng"/>.
 		/// </summary>
 		public static ExchangeBoard MicexRpng { get; }
 
 		/// <summary>
-		/// Information about RPFG of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexRpfg"/>.
 		/// </summary>
 		public static ExchangeBoard MicexRpfg { get; }
 
 		/// <summary>
-		/// Information about CDCR of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexCbcr"/>.
 		/// </summary>
 		public static ExchangeBoard MicexCbcr { get; }
 
 		/// <summary>
-		/// Information about CRED of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexCred"/>.
 		/// </summary>
 		public static ExchangeBoard MicexCred { get; }
 
 		/// <summary>
-		/// Information about DEPZ of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexDepz"/>.
 		/// </summary>
 		public static ExchangeBoard MicexDepz { get; }
 
 		/// <summary>
-		/// Information about DPVB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexDpvb"/>.
 		/// </summary>
 		public static ExchangeBoard MicexDpvb { get; }
 
 		/// <summary>
-		/// Information about DPFK of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexDpfk"/>.
 		/// </summary>
 		public static ExchangeBoard MicexDpfk { get; }
 
 		/// <summary>
-		/// Information about DPFO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexDpfo"/>.
 		/// </summary>
 		public static ExchangeBoard MicexDpfo { get; }
 
 		/// <summary>
-		/// Information about DPPF of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexDppf"/>.
 		/// </summary>
 		public static ExchangeBoard MicexDppf { get; }
 
 		/// <summary>
-		/// Information about CETS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexCets"/>.
 		/// </summary>
 		public static ExchangeBoard MicexCets { get; }
 
 		/// <summary>
-		/// Information about AETS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexAets"/>.
 		/// </summary>
 		public static ExchangeBoard MicexAets { get; }
 
 		/// <summary>
-		/// Information about CNGD of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexCngd"/>.
 		/// </summary>
 		public static ExchangeBoard MicexCngd { get; }
 
 		/// <summary>
-		/// Information about TRAN of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexTran"/>.
 		/// </summary>
 		public static ExchangeBoard MicexTran { get; }
 
 		/// <summary>
-		/// Information about QJSIM of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
+		/// Information about board <see cref="MicexJunior"/>.
 		/// </summary>
 		public static ExchangeBoard MicexJunior { get; }
 
 		/// <summary>
-		/// Information about SPB of <see cref="BusinessEntities.Exchange.Spb"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Spb"/>.
 		/// </summary>
 		public static ExchangeBoard Spb { get; }
 
 		/// <summary>
-		/// Information about derivatives market of <see cref="BusinessEntities.Exchange.Ux"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Ux"/>.
 		/// </summary>
 		public static ExchangeBoard Ux { get; }
 
 		/// <summary>
-		/// Information about stock market of <see cref="BusinessEntities.Exchange.Ux"/> exchange.
+		/// Information about board <see cref="UxStock"/>.
 		/// </summary>
 		public static ExchangeBoard UxStock { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Cme"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Cme"/>.
 		/// </summary>
 		public static ExchangeBoard Cme { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Cme"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Cme"/>.
 		/// </summary>
 		public static ExchangeBoard CmeMini { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Cce"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Cce"/>.
 		/// </summary>
 		public static ExchangeBoard Cce { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Cbot"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Cbot"/>.
 		/// </summary>
 		public static ExchangeBoard Cbot { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Nymex"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Nymex"/>.
 		/// </summary>
 		public static ExchangeBoard Nymex { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Amex"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Amex"/>.
 		/// </summary>
 		public static ExchangeBoard Amex { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Nyse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Nyse"/>.
 		/// </summary>
 		public static ExchangeBoard Nyse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Nasdaq"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Nasdaq"/>.
 		/// </summary>
 		public static ExchangeBoard Nasdaq { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Nqlx"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Nqlx"/>.
 		/// </summary>
 		public static ExchangeBoard Nqlx { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Lse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Lse"/>.
 		/// </summary>
 		public static ExchangeBoard Lse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Lme"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Lme"/>.
 		/// </summary>
 		public static ExchangeBoard Lme { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Tse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Tse"/>.
 		/// </summary>
 		public static ExchangeBoard Tse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Hkex"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Hkex"/>.
 		/// </summary>
 		public static ExchangeBoard Hkex { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Hkfe"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Hkfe"/>.
 		/// </summary>
 		public static ExchangeBoard Hkfe { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Sse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Sse"/>.
 		/// </summary>
 		public static ExchangeBoard Sse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Szse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Szse"/>.
 		/// </summary>
 		public static ExchangeBoard Szse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Tsx"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Tsx"/>.
 		/// </summary>
 		public static ExchangeBoard Tsx { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Fwb"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Fwb"/>.
 		/// </summary>
 		public static ExchangeBoard Fwb { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Asx"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Asx"/>.
 		/// </summary>
 		public static ExchangeBoard Asx { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Nzx"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Nzx"/>.
 		/// </summary>
 		public static ExchangeBoard Nzx { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Bse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Bse"/>.
 		/// </summary>
 		public static ExchangeBoard Bse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Nse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Nse"/>.
 		/// </summary>
 		public static ExchangeBoard Nse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Swx"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Swx"/>.
 		/// </summary>
 		public static ExchangeBoard Swx { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Krx"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Krx"/>.
 		/// </summary>
 		public static ExchangeBoard Krx { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Mse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Mse"/>.
 		/// </summary>
 		public static ExchangeBoard Mse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Jse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Jse"/>.
 		/// </summary>
 		public static ExchangeBoard Jse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Sgx"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Sgx"/>.
 		/// </summary>
 		public static ExchangeBoard Sgx { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Tsec"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Tsec"/>.
 		/// </summary>
 		public static ExchangeBoard Tsec { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Pse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Pse"/>.
 		/// </summary>
 		public static ExchangeBoard Pse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Klse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Klse"/>.
 		/// </summary>
 		public static ExchangeBoard Klse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Idx"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Idx"/>.
 		/// </summary>
 		public static ExchangeBoard Idx { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Set"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Set"/>.
 		/// </summary>
 		public static ExchangeBoard Set { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Cse"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Cse"/>.
 		/// </summary>
 		public static ExchangeBoard Cse { get; }
 
 		/// <summary>
-		/// Information about board of <see cref="BusinessEntities.Exchange.Tase"/> exchange.
+		/// Information about board <see cref="BusinessEntities.Exchange.Tase"/>.
 		/// </summary>
 		public static ExchangeBoard Tase { get; }
 
 		/// <summary>
-		/// Information about brokerage board <see cref="BusinessEntities.Exchange.Lmax"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.Lmax"/>.
 		/// </summary>
 		public static ExchangeBoard Lmax { get; }
 
 		/// <summary>
-		/// Information about brokerage board <see cref="BusinessEntities.Exchange.DukasCopy"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.DukasCopy"/>.
 		/// </summary>
 		public static ExchangeBoard DukasCopy { get; }
 
 		/// <summary>
-		/// Information about brokerage board <see cref="BusinessEntities.Exchange.GainCapital"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.GainCapital"/>.
 		/// </summary>
 		public static ExchangeBoard GainCapital { get; }
 
 		/// <summary>
-		/// Information about brokerage board <see cref="BusinessEntities.Exchange.MBTrading"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.MBTrading"/>.
 		/// </summary>
 		public static ExchangeBoard MBTrading { get; }
 
 		/// <summary>
-		/// Information about brokerage board <see cref="BusinessEntities.Exchange.TrueFX"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.TrueFX"/>.
 		/// </summary>
 		public static ExchangeBoard TrueFX { get; }
 
@@ -3012,17 +3007,17 @@ namespace StockSharp.BusinessEntities
 		public static ExchangeBoard Icbit { get; }
 
 		/// <summary>
-		/// Information about virtual board Finam.
+		/// Information about board <see cref="Finam"/>.
 		/// </summary>
 		public static ExchangeBoard Finam { get; }
 
 		/// <summary>
-		/// Information about virtual board Mfd.
+		/// Information about board <see cref="Mfd"/>.
 		/// </summary>
 		public static ExchangeBoard Mfd { get; }
 
 		/// <summary>
-		/// Information about board Arca.
+		/// Information about board <see cref="Arca"/>.
 		/// </summary>
 		public static ExchangeBoard Arca { get; } = new ExchangeBoard
 		{
@@ -3031,7 +3026,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board BATS.
+		/// Information about board <see cref="Bats"/>.
 		/// </summary>
 		public static ExchangeBoard Bats { get; } = new ExchangeBoard
 		{
@@ -3040,7 +3035,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board BATS.
+		/// Information about board <see cref="Currenex"/>.
 		/// </summary>
 		public static ExchangeBoard Currenex { get; } = new ExchangeBoard
 		{
@@ -3274,7 +3269,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Globex board of <see cref="BusinessEntities.Exchange.Cme"/> exchange.
+		/// Information about board <see cref="Globex"/>.
 		/// </summary>
 		public static ExchangeBoard Globex { get; } = new ExchangeBoard
 		{
@@ -3451,6 +3446,33 @@ namespace StockSharp.BusinessEntities
 		{
 			Code = Exchange.Tradier.Name,
 			Exchange = Exchange.Tradier,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.SwSq"/>.
+		/// </summary>
+		public static ExchangeBoard SwSq { get; } = new ExchangeBoard
+		{
+			Code = Exchange.SwSq.Name,
+			Exchange = Exchange.SwSq,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.StockSharp"/>.
+		/// </summary>
+		public static ExchangeBoard StockSharp { get; } = new ExchangeBoard
+		{
+			Code = Exchange.StockSharp.Name,
+			Exchange = Exchange.StockSharp,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Upbit"/>.
+		/// </summary>
+		public static ExchangeBoard Upbit { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Upbit.Name,
+			Exchange = Exchange.Upbit,
 		};
 	}
 }

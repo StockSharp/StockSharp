@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.PnL
 {
 	using System;
+	using System.Collections.Generic;
 
 	using StockSharp.Messages;
 
@@ -44,10 +45,7 @@ namespace StockSharp.Algo.PnL
 			set => _pnLManager = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public override void SendInMessage(Message message)
 		{
 			if (message.IsBack)
@@ -60,18 +58,27 @@ namespace StockSharp.Algo.PnL
 			base.SendInMessage(message);
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			if (!message.IsBack)
 			{
-				var info = PnLManager.ProcessMessage(message);
+				var list = new List<PortfolioPnLManager>();
+				var info = PnLManager.ProcessMessage(message, list);
 
 				if (info != null && info.PnL != 0)
-					((ExecutionMessage)message).PnL = info.PnL;	
+					((ExecutionMessage)message).PnL = info.PnL;
+
+				foreach (var manager in list)
+				{
+					base.OnInnerAdapterNewOutMessage(new PortfolioChangeMessage
+					{
+						ServerTime = message.LocalTime,
+						PortfolioName = manager.PortfolioName,
+					}
+					.Add(PositionChangeTypes.RealizedPnL, manager.RealizedPnL)
+					.TryAdd(PositionChangeTypes.UnrealizedPnL, manager.UnrealizedPnL));
+				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);

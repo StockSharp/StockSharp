@@ -97,11 +97,7 @@ namespace StockSharp.Algo.Indicators
 			Length = 50;
 		}
 
-		/// <summary>
-		/// To handle the input value.
-		/// </summary>
-		/// <param name="input">The input value.</param>
-		/// <returns>The resulting value.</returns>
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			if (_isInitialized == false)
@@ -175,9 +171,7 @@ namespace StockSharp.Algo.Indicators
 			return new DecimalIndicatorValue(this, newValue);
 		}
 
-		/// <summary>
-		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
-		/// </summary>
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			_isInitialized = false;
@@ -191,10 +185,7 @@ namespace StockSharp.Algo.Indicators
 			_newTrend = 0;
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="settings">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -202,10 +193,7 @@ namespace StockSharp.Algo.Indicators
 			Multiple = settings.GetValue<decimal>(nameof(Multiple));
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="settings">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

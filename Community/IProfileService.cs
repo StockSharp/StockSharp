@@ -35,10 +35,9 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To send an e-mail message.
 		/// </summary>
-		/// <param name="email">E-mail address.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
-		byte SendEmail(string email);
+		byte SendEmail();
 
 		/// <summary>
 		/// To confirm the e-mail address.

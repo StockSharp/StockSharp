@@ -155,9 +155,7 @@ namespace StockSharp.Algo
 
 		private string _name;
 
-		/// <summary>
-		/// The name of the rule.
-		/// </summary>
+		/// <inheritdoc />
 		public string Name
 		{
 			get => _name;
@@ -170,16 +168,12 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// The level, at which logging of this rule is performed. The default is <see cref="LogLevels.Inherit"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual LogLevels LogLevel { get; set; } = LogLevels.Inherit;
 
 		private bool _isSuspended;
 
-		/// <summary>
-		/// Is the rule suspended.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual bool IsSuspended
 		{
 			get => _isSuspended;
@@ -193,23 +187,17 @@ namespace StockSharp.Algo
 
 		private readonly TToken _token;
 
-		/// <summary>
-		/// Token-rules, it is associated with (for example, for rule <see cref="MarketRuleHelper.WhenRegistered"/> the order will be a token). If rule is not associated with anything, <see langword="null" /> will be returned.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual object Token => _token;
 
 		private readonly SynchronizedSet<IMarketRule> _exclusiveRules = new SynchronizedSet<IMarketRule>();
 
-		/// <summary>
-		/// Rules, opposite to given rule. They are deleted automatically at activation of this rule.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual ISynchronizedCollection<IMarketRule> ExclusiveRules => _exclusiveRules;
 
 		private IMarketRuleContainer _container;
 
-		/// <summary>
-		/// The rules container.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual IMarketRuleContainer Container
 		{
 			get => _container;
@@ -219,8 +207,6 @@ namespace StockSharp.Algo
 					throw new ArgumentException(LocalizedStrings.Str1091Params.Put(Name, Container));
 
 				_container = value ?? throw new ArgumentNullException(nameof(value));
-
-				//_container.AddRuleLog(LogLevels.Info, this, "Добавлено.");
 			}
 		}
 
@@ -358,7 +344,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected void Activate()
 		{
-			Activate(default(TArg));
+			Activate(default);
 		}
 
 		/// <summary>
@@ -389,14 +375,8 @@ namespace StockSharp.Algo
 			return _canFinish();
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
-		public override string ToString()
-		{
-			return "{0} (0x{1:X})".Put(Name, GetHashCode());
-		}
+		/// <inheritdoc />
+		public override string ToString() => $"{Name} (0x{GetHashCode():X})";
 
 		/// <summary>
 		/// Release resources.
@@ -416,14 +396,10 @@ namespace StockSharp.Algo
 			return !IsActive && IsReady && _canFinish();
 		}
 
-		/// <summary>
-		/// Is the rule formed.
-		/// </summary>
+		/// <inheritdoc />
 		public bool IsReady => !IsDisposed && !ReferenceEquals(_container, null);
 
-		/// <summary>
-		/// Is the rule currently activated.
-		/// </summary>
+		/// <inheritdoc />
 		public bool IsActive { get; set; }
 
 		IMarketRule IMarketRule.Until(Func<bool> canFinish)

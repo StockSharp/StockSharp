@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Export
 {
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Linq;
 	using System.Windows.Media;
 
@@ -34,19 +35,22 @@ namespace StockSharp.Algo.Export
 	/// </summary>
 	public class ExcelExporter : BaseExporter
 	{
+		private readonly IExcelWorkerProvider _provider;
 		private readonly Action _breaked;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExcelExporter"/>.
 		/// </summary>
+		/// <param name="provider">Excel provider.</param>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
 		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="fileName">The path to file.</param>
 		/// <param name="breaked">The processor, which will be called if maximal value of strings is exceeded.</param>
-		public ExcelExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName, Action breaked)
+		public ExcelExporter(IExcelWorkerProvider provider, Security security, object arg, Func<int, bool> isCancelled, string fileName, Action breaked)
 			: base(security, arg, isCancelled, fileName)
 		{
+			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
 			_breaked = breaked ?? throw new ArgumentNullException(nameof(breaked));
 		}
 
@@ -304,7 +308,7 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		private static void ApplyCellStyle(ExcelWorker worker, Level1Fields field, int column)
+		private static void ApplyCellStyle(IExcelWorker worker, Level1Fields field, int column)
 		{
 			var type = field.ToType();
 
@@ -379,7 +383,7 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		private static void ApplyCellStyle(ExcelWorker worker, PositionChangeTypes type, int column)
+		private static void ApplyCellStyle(IExcelWorker worker, PositionChangeTypes type, int column)
 		{
 			switch (type)
 			{
@@ -402,13 +406,12 @@ namespace StockSharp.Algo.Export
 
 				worker
 					.SetCell(0, row, LocalizedStrings.Str726).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff")
-					.SetCell(1, row, LocalizedStrings.Str727).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
-					.SetCell(2, row, "O").SetStyle(2, typeof(decimal))
-					.SetCell(3, row, "H").SetStyle(3, typeof(decimal))
-					.SetCell(4, row, "L").SetStyle(4, typeof(decimal))
-					.SetCell(5, row, "C").SetStyle(5, typeof(decimal))
-					.SetCell(6, row, "V").SetStyle(6, typeof(decimal))
-					.SetCell(7, row, LocalizedStrings.OI).SetStyle(7, typeof(decimal));
+					.SetCell(1, row, "O").SetStyle(2, typeof(decimal))
+					.SetCell(2, row, "H").SetStyle(3, typeof(decimal))
+					.SetCell(3, row, "L").SetStyle(4, typeof(decimal))
+					.SetCell(4, row, "C").SetStyle(5, typeof(decimal))
+					.SetCell(5, row, "V").SetStyle(6, typeof(decimal))
+					.SetCell(6, row, LocalizedStrings.OI).SetStyle(7, typeof(decimal));
 
 				row++;
 
@@ -416,13 +419,12 @@ namespace StockSharp.Algo.Export
 				{
 					worker
 						.SetCell(0, row, candle.OpenTime)
-						.SetCell(1, row, candle.CloseTime)
-						.SetCell(2, row, candle.OpenPrice)
-						.SetCell(3, row, candle.HighPrice)
-						.SetCell(4, row, candle.LowPrice)
-						.SetCell(5, row, candle.ClosePrice)
-						.SetCell(6, row, candle.TotalVolume)
-						.SetCell(7, row, candle.OpenInterest);
+						.SetCell(1, row, candle.OpenPrice)
+						.SetCell(2, row, candle.HighPrice)
+						.SetCell(3, row, candle.LowPrice)
+						.SetCell(4, row, candle.ClosePrice)
+						.SetCell(5, row, candle.TotalVolume)
+						.SetCell(6, row, candle.OpenInterest);
 
 					if (!Check(++row))
 						break;
@@ -499,6 +501,7 @@ namespace StockSharp.Algo.Export
 					.SetCell(colIndex, 0, LocalizedStrings.Shortable).SetStyle(colIndex++, typeof(bool))
 					.SetCell(colIndex, 0, LocalizedStrings.Basket).SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, LocalizedStrings.Expression).SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, LocalizedStrings.FaceValue).SetStyle(colIndex++, typeof(decimal))
 
 					.SetCell(colIndex, 0, "Bloomberg").SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, "CUSIP").SetStyle(colIndex++, typeof(string))
@@ -541,6 +544,7 @@ namespace StockSharp.Algo.Export
 						.SetCell(colIndex++, rowIndex, security.Shortable)
 						.SetCell(colIndex++, rowIndex, security.BasketCode)
 						.SetCell(colIndex++, rowIndex, security.BasketExpression)
+						.SetCell(colIndex++, rowIndex, security.FaceValue)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.Bloomberg)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.Cusip)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.IQFeed)
@@ -558,15 +562,19 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		private void Do(Action<ExcelWorker> action)
+		private void Do(Action<IExcelWorker> action)
 		{
 			if (action == null)
 				throw new ArgumentNullException(nameof(action));
 
-			using (var worker = new ExcelWorker())
+			using (var stream = File.OpenWrite(Path))
+			using (var worker = _provider.CreateNew(stream))
 			{
+				worker
+					.AddSheet()
+					.RenameSheet(LocalizedStrings.Export);
+
 				action(worker);
-				worker.Save(Path, false);
 			}
 		}
 

@@ -152,7 +152,7 @@
 		{
 			return InnerAdapter.IsSupportSubscriptionBySecurity
 				? securityId
-				: default(SecurityId);
+				: default;
 		}
 
 		private void ProcessBuilders(ExecutionMessage execMsg)

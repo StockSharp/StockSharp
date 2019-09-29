@@ -64,7 +64,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="login">Login.</param>
 		/// <returns>Credentials with set of permissions.</returns>
-		public PermissionCredentials TryGetByLogin(string login) => _credentials.TryGetValue(login);
+		public virtual PermissionCredentials TryGetByLogin(string login) => _credentials.TryGetValue(login);
 
 		/// <summary>
 		/// Add new credentials.
@@ -102,7 +102,8 @@ namespace StockSharp.Algo
 					// TODO удалить после нескольких версий
 					var str = File.ReadAllText(_fileName);
 
-					str = str.Replace("StockSharp.Algo.History.Hydra.RemoteStoragePermissions, StockSharp.Algo.History", "StockSharp.Algo.UserPermissions, StockSharp.Algo");
+					str = str.ReplaceIgnoreCase("StockSharp.Algo.History.Hydra.RemoteStoragePermissions, StockSharp.Algo.History", "StockSharp.Algo.UserPermissions, StockSharp.Algo");
+					str = str.ReplaceIgnoreCase("StockSharp.Algo.UserPermissions, StockSharp.Algo", "StockSharp.Messages.UserPermissions, StockSharp.Messages");
 
 					File.WriteAllText(_fileName, str);
 

@@ -71,7 +71,7 @@ namespace StockSharp.Algo
 		/// <returns>The timer.</returns>
 		public MarketTimer Start()
 		{
-			if (_interval == default(TimeSpan))
+			if (_interval == default)
 				throw new InvalidOperationException(LocalizedStrings.Str945);
 
 			lock (_syncLock)

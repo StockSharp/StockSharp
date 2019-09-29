@@ -55,7 +55,7 @@
       <steps class="ordered">
         <step>
           <content>
-          	<para>Для примера рассмотрим приложение описанное в пункте <link xlink:href="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" />.</para>
+          	<para>Для примера рассмотрим приложение описанное в пункте <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.</para>
 			  <para> 
 				  При создании шлюза необходимо проинициализировать настройки механизма переподключений через свойство
 				  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference>, для пр:

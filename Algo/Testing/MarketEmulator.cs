@@ -154,12 +154,7 @@ namespace StockSharp.Algo.Testing
 				_execLogConverter = new ExecutionLogConverter(securityId, _bids, _asks, _parent.Settings, GetServerTime);
 			}
 
-			public IEnumerable<Message> Process(Message message)
-			{
-				var result = new List<Message>();
-				Process(message, result);
-				return result;
-			}
+			public SecurityMessage SecurityDefinition => _securityDefinition;
 
 			private void LogMessage(Message message, bool isInput)
 			{
@@ -175,7 +170,7 @@ namespace StockSharp.Algo.Testing
 					this.AddDebugLog((isInput ? " --> {0}" : " <-- {0}"), message);
 			}
 
-			private void Process(Message message, ICollection<Message> result)
+			public void Process(Message message, ICollection<Message> result)
 			{
 				if (_prevTime == DateTimeOffset.MinValue)
 					_prevTime = message.LocalTime;
@@ -315,6 +310,26 @@ namespace StockSharp.Algo.Testing
 
 								this.AddErrorLog(LocalizedStrings.Str1148Params, orderMsg.OldTransactionId);
 							}
+						}
+
+						break;
+					}
+
+					case MessageTypes.OrderStatus:
+					{
+						var statusMsg = (OrderStatusMessage)message;
+
+						foreach (var order in _activeOrders.Values)
+						{
+							if (!statusMsg.PortfolioName.IsEmpty())
+							{
+								if (!order.PortfolioName.CompareIgnoreCase(statusMsg.PortfolioName))
+									continue;
+							}
+
+							var clone = (ExecutionMessage)order.Clone();
+							clone.OriginalTransactionId = statusMsg.TransactionId;
+							result.Add(clone);
 						}
 
 						break;
@@ -1410,6 +1425,31 @@ namespace StockSharp.Algo.Testing
 				PnLManager = new PortfolioPnLManager(name);
 			}
 
+			public void RequestState(PortfolioLookupMessage pfMsg, ICollection<Message> result)
+			{
+				var time = pfMsg.LocalTime;
+
+				AddPortfolioChangeMessage(time, result);
+
+				foreach (var pair in _moneys)
+				{
+					var money = pair.Value;
+
+					result.Add(
+						new PositionChangeMessage
+						{
+							LocalTime = time,
+							ServerTime = time,
+							PortfolioName = _name,
+							SecurityId = pair.Key,
+							OriginalTransactionId = pfMsg.TransactionId,
+						}
+						.Add(PositionChangeTypes.CurrentValue, money.PositionCurrentValue)
+						.TryAdd(PositionChangeTypes.AveragePrice, money.PositionAveragePrice)
+					);
+				}
+			}
+
 			public void ProcessPositionChange(PositionChangeMessage posMsg, ICollection<Message> result)
 			{
 				var beginValue = posMsg.Changes.TryGetValue(PositionChangeTypes.BeginValue).To<decimal?>() ?? 0m;
@@ -1617,17 +1657,34 @@ namespace StockSharp.Algo.Testing
 
 			public string CheckRegistration(ExecutionMessage execMsg)
 			{
-				// если задан баланс, то проверям по нему (для частично исполненных заявок)
-				var volume = execMsg.Balance ?? execMsg.SafeGetVolume();
-
-				var money = GetMoney(execMsg.SecurityId/*, execMsg.LocalTime, result*/);
-
-				var needBlock = money.GetPrice(execMsg.Side == Sides.Buy ? volume : 0, execMsg.Side == Sides.Sell ? volume : 0);
-
-				if (_currentMoney < needBlock)
+				if (_parent.Settings.CheckMoney)
 				{
-					return LocalizedStrings.Str1169Params
-							.Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentMoney, money.TotalPrice);
+					// если задан баланс, то проверям по нему (для частично исполненных заявок)
+					var volume = execMsg.Balance ?? execMsg.SafeGetVolume();
+
+					var money = GetMoney(execMsg.SecurityId/*, execMsg.LocalTime, result*/);
+
+					var needBlock = money.GetPrice(execMsg.Side == Sides.Buy ? volume : 0, execMsg.Side == Sides.Sell ? volume : 0);
+
+					if (_currentMoney < needBlock)
+					{
+						return LocalizedStrings.Str1169Params
+						                       .Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentMoney, money.TotalPrice);
+					}
+				}
+				else if (_parent.Settings.CheckShortable && execMsg.Side == Sides.Sell &&
+				         _parent._securityEmulators.TryGetValue(execMsg.SecurityId, out var secEmu) &&
+						 secEmu.SecurityDefinition?.Shortable == false)
+				{
+					var money = GetMoney(execMsg.SecurityId/*, execMsg.LocalTime, result*/);
+
+					var potentialPosition = money.PositionCurrentValue - execMsg.OrderVolume;
+
+					if (potentialPosition < 0)
+					{
+						return LocalizedStrings.CannotShortPosition
+						                       .Put(execMsg.PortfolioName, execMsg.TransactionId, money.PositionCurrentValue, execMsg.OrderVolume);
+					}
 				}
 
 				return null;
@@ -1684,7 +1741,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Time:
 				{
 					foreach (var securityEmulator in _securityEmulators.Values)
-						retVal.AddRange(securityEmulator.Process(message));
+						securityEmulator.Process(message, retVal);
 
 					// время у TimeMsg может быть больше времени сообщений из эмулятора
 					//retVal.Add(message);
@@ -1695,14 +1752,14 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Execution:
 				{
 					var execMsg = (ExecutionMessage)message;
-					retVal.AddRange(GetEmulator(execMsg.SecurityId).Process(message));
+					GetEmulator(execMsg.SecurityId).Process(message, retVal);
 					break;
 				}
 
 				case MessageTypes.QuoteChange:
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
-					retVal.AddRange(GetEmulator(quoteMsg.SecurityId).Process(message));
+					GetEmulator(quoteMsg.SecurityId).Process(message, retVal);
 					break;
 				}
 
@@ -1743,7 +1800,7 @@ namespace StockSharp.Algo.Testing
 					}
 
 					if (canRegister)
-						retVal.AddRange(GetEmulator(secId).Process(message));
+						GetEmulator(secId).Process(message, retVal);
 
 					break;
 				}
@@ -1765,8 +1822,8 @@ namespace StockSharp.Algo.Testing
 					_buffer.Clear();
 					_needBuffer = null;
 
-					_bufferPrevFlush = default(DateTimeOffset);
-					_portfoliosPrevRecalc = default(DateTimeOffset);
+					_bufferPrevFlush = default;
+					_portfoliosPrevRecalc = default;
 
 					retVal.Add(new ResetMessage());
 					break;
@@ -1817,7 +1874,7 @@ namespace StockSharp.Algo.Testing
 					if (emulators != null)
 					{
 						foreach (var securityEmulator in emulators)
-							securityEmulator.Process(boardMsg);
+							securityEmulator.Process(boardMsg, retVal);
 					}
 					
 					break;
@@ -1826,9 +1883,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Level1Change:
 				{
 					var level1Msg = (Level1ChangeMessage)message;
-
-					retVal.AddRange(GetEmulator(level1Msg.SecurityId).Process(message));
-
+					GetEmulator(level1Msg.SecurityId).Process(level1Msg, retVal);
 					UpdateLevel1Info(level1Msg, retVal, false);
 					break;
 				}
@@ -1841,7 +1896,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.CandleVolume:
 				{
 					var candleMsg = (CandleMessage)message;
-					retVal.AddRange(GetEmulator(candleMsg.SecurityId).Process(candleMsg));
+					GetEmulator(candleMsg.SecurityId).Process(candleMsg, retVal);
 					break;
 				}
 
@@ -1855,9 +1910,46 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
+				case MessageTypes.OrderStatus:
+				{
+					foreach (var pair in _securityEmulators)
+					{
+						pair.Value.Process(message, retVal);
+					}
+
+					break;
+				}
+
 				case MessageTypes.PortfolioLookup:
 				{
 					var pfMsg = (PortfolioLookupMessage)message;
+
+					if (pfMsg.PortfolioName.IsEmpty())
+					{
+						foreach (var pair in _portfolios)
+						{
+							retVal.Add(new PortfolioMessage
+							{
+								PortfolioName = pair.Key,
+								OriginalTransactionId = pfMsg.TransactionId
+							});
+
+							pair.Value.RequestState(pfMsg, retVal);
+						}
+					}
+					else
+					{
+						retVal.Add(new PortfolioMessage
+						{
+							PortfolioName = pfMsg.PortfolioName,
+							OriginalTransactionId = pfMsg.TransactionId
+						});
+
+						if (_portfolios.TryGetValue(pfMsg.PortfolioName, out var pfEmu))
+						{
+							pfEmu.RequestState(pfMsg, retVal);
+						}
+					}
 
 					retVal.Add(new PortfolioLookupResultMessage { OriginalTransactionId = pfMsg.TransactionId });
 
@@ -1868,14 +1960,14 @@ namespace StockSharp.Algo.Testing
 				{
 					var secMsg = (SecurityMessage)message;
 					//retVal.Add(secMsg);
-					retVal.AddRange(GetEmulator(secMsg.SecurityId).Process(secMsg));
+					GetEmulator(secMsg.SecurityId).Process(secMsg, retVal);
 					break;
 				}
 
 				case ExtendedMessageTypes.Generator:
 				{
 					var generatorMsg = (GeneratorMessage)message;
-					retVal.AddRange(GetEmulator(generatorMsg.SecurityId).Process(generatorMsg));
+					GetEmulator(generatorMsg.SecurityId).Process(generatorMsg, retVal);
 					break;
 				}
 
@@ -1934,7 +2026,7 @@ namespace StockSharp.Algo.Testing
 				var board = _boardDefinitions.TryGetValue(securityId.BoardCode);
 
 				if (board != null)
-					emulator.Process(board);
+					emulator.Process(board, new List<Message>());
 
 				return emulator;
 			});
@@ -2016,16 +2108,19 @@ namespace StockSharp.Algo.Testing
 
 		private string CheckRegistration(ExecutionMessage execMsg, SecurityMessage securityDefinition/*, ICollection<Message> result*/)
 		{
-			var board = _boardDefinitions.TryGetValue(execMsg.SecurityId.BoardCode);
-
-			if (board != null)
+			if (Settings.CheckTradingState)
 			{
-				//if (execMsg.OrderType == OrderTypes.Market && !board.IsSupportMarketOrders)
-				//if (!Settings.IsSupportAtomicReRegister)
-				//	return LocalizedStrings.Str1170Params.Put(board.Code);
+				var board = _boardDefinitions.TryGetValue(execMsg.SecurityId.BoardCode);
 
-				if (!board.IsTradeTime(execMsg.ServerTime))
-					return LocalizedStrings.Str1171;
+				if (board != null)
+				{
+					//if (execMsg.OrderType == OrderTypes.Market && !board.IsSupportMarketOrders)
+					//if (!Settings.IsSupportAtomicReRegister)
+					//	return LocalizedStrings.Str1170Params.Put(board.Code);
+
+					if (!board.IsTradeTime(execMsg.ServerTime))
+						return LocalizedStrings.Str1171;
+				}
 			}
 
 			var state = _secStates.TryGetValue(execMsg.SecurityId);
@@ -2066,9 +2161,7 @@ namespace StockSharp.Algo.Testing
 			if (minVolume != null && execMsg.OrderVolume < minVolume)
 				return LocalizedStrings.OrderVolumeLessMin.Put(execMsg.OrderVolume, execMsg.TransactionId, minVolume);
 
-			var info = GetPortfolioInfo(execMsg.PortfolioName);
-
-			return Settings.CheckMoney ? info.CheckRegistration(execMsg/*, result*/) : null;
+			return GetPortfolioInfo(execMsg.PortfolioName).CheckRegistration(execMsg/*, result*/);
 		}
 
 		private void RecalcPnL(DateTimeOffset time, ICollection<Message> messages)
@@ -2101,6 +2194,12 @@ namespace StockSharp.Algo.Testing
 
 		void IMessageChannel.Close()
 		{
+		}
+
+		event Action IMessageChannel.StateChanged
+		{
+			add { }
+			remove { }
 		}
 
 		IMessageChannel ICloneable<IMessageChannel>.Clone()

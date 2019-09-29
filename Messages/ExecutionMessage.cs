@@ -62,7 +62,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	public sealed class ExecutionMessage : Message, ITransactionIdMessage, IServerTimeMessage
+	public sealed class ExecutionMessage : Message, ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Security ID.
@@ -538,6 +538,24 @@ namespace StockSharp.Messages
 		public bool? IsManual { get; set; }
 
 		/// <summary>
+		/// Average execution price.
+		/// </summary>
+		[DataMember]
+		public decimal? AveragePrice { get; set; }
+
+		/// <summary>
+		/// Yield.
+		/// </summary>
+		[DataMember]
+		public decimal? Yield { get; set; }
+
+		/// <summary>
+		/// Minimum quantity of an order to be executed.
+		/// </summary>
+		[DataMember]
+		public decimal? MinVolume { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -545,10 +563,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},({ExecutionType}),Sec={SecurityId},Ord={OrderId}/{TransactionId}/{OriginalTransactionId},Fail={Error},Price={OrderPrice},OrdVol={OrderVolume},TrVol={TradeVolume},Bal={Balance},TId={TradeId},Pf={PortfolioName},TPrice={TradePrice},UId={UserOrderId},State={OrderState}";
@@ -621,6 +636,10 @@ namespace StockSharp.Messages
 				IsManual = IsManual,
 
 				CommissionCurrency = CommissionCurrency,
+
+				AveragePrice = AveragePrice,
+				Yield = Yield,
+				MinVolume = MinVolume,
 			};
 
 			this.CopyExtensionInfo(clone);

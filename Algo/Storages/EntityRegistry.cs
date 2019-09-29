@@ -571,7 +571,7 @@ namespace StockSharp.Algo.Storages
 				return new SerializationItemCollection
 				{
 					new SerializationItem<string>(new VoidField<string>(nameof(Security)), security.Id),
-					new SerializationItem<string>(new VoidField<string>(nameof(Portfolio)), portfolio.Name)
+					new SerializationItem<string>(new VoidField<string>(nameof(Portfolio)), portfolio.GetUniqueId())
 				};
 			}
 		}

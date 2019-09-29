@@ -41,10 +41,7 @@ namespace StockSharp.Community
 		/// <param name="hasCallbacks">Whether the <typeparamref name="TService" /> has events.</param>
 		protected BaseServiceClient(Uri address, string endpointName, bool hasCallbacks = false)
 		{
-			if (address == null)
-				throw new ArgumentNullException(nameof(address));
-
-			Address = address;
+			Address = address ?? throw new ArgumentNullException(nameof(address));
 			_endpointName = endpointName;
 			_hasCallbacks = hasCallbacks;
 		}

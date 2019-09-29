@@ -63,9 +63,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public DateTimeOffset LocalTime { get; set; }
 
-		/// <summary>
-		/// Extended information on the order with an error.
-		/// </summary>
+		/// <inheritdoc />
 		[XmlIgnore]
 		public IDictionary<string, object> ExtensionInfo
 		{
@@ -73,10 +71,7 @@ namespace StockSharp.BusinessEntities
 			set => Order.ExtensionInfo = value;
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return $"{Error?.Message}/{Order}";

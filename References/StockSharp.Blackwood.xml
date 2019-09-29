@@ -161,7 +161,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
@@ -435,17 +435,11 @@
             Subscribe to receive information about the best and worst instruments per session.
             </summary>
     </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestNewsStory(StockSharp.BusinessEntities.News)">
-      <summary>
-            Request news <see cref="P:StockSharp.BusinessEntities.News.Story" /> body. After receiving the event <see cref="E:StockSharp.Algo.Connector.NewsChanged" /> will be triggered.
-            </summary>
-      <param name="news">News.</param>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestNewsStory(StockSharp.BusinessEntities.News,StockSharp.Messages.IMessageAdapter)">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.OnProcessMessage(StockSharp.Messages.Message)">
-      <summary>
-            Process message.
-            </summary>
-      <param name="message">Message.</param>
+      <inheritdoc />
     </member>
   </members>
 </doc>

@@ -16,11 +16,15 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Logging
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
 
 	using Ecng.Common;
 	using Ecng.Configuration;
+
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// Extension class for <see cref="ILogSource"/>.
@@ -142,7 +146,6 @@ namespace StockSharp.Logging
 			receiver.AddLog(new LogMessage(receiver, receiver.CurrentTime, LogLevels.Error, () =>
 			{
 				var msg = exception.ToString();
-
 
 				if (exception is ReflectionTypeLoadException refExc)
 				{
@@ -272,8 +275,88 @@ namespace StockSharp.Logging
 			catch (Exception ex)
 			{
 				ex.LogError();
-				return default(T);
+				return default;
 			}
+		}
+
+		/// <summary>
+		/// Wrap the specified action in try/catch clause with logging.
+		/// </summary>
+		/// <typeparam name="T">The type of returned result.</typeparam>
+		/// <param name="action">The action.</param>
+		/// <returns>The resulting value.</returns>
+		public static void DoWithLog<T>(Func<IDictionary<T, Exception>> action)
+		{
+			if (action == null)
+				throw new ArgumentNullException(nameof(action));
+
+			try
+			{
+				var dict = action();
+
+				foreach (var pair in dict)
+				{
+					new InvalidOperationException(pair.Key.ToString()).LogError(LocalizedStrings.CorruptedFile);
+				}
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+			}
+		}
+
+		/// <summary>
+		/// Wrap the specified action in try/catch clause with logging.
+		/// </summary>
+		/// <typeparam name="T1">The type of source values.</typeparam>
+		/// <typeparam name="T2">The type of returned result.</typeparam>
+		/// <param name="from">Source values</param>
+		/// <param name="func">Converter.</param>
+		/// <returns>Result.</returns>
+		public static T2[] SafeAdd<T1, T2>(this IEnumerable from, Func<T1, T2> func)
+		{
+			if (from == null)
+				throw new ArgumentNullException(nameof(from));
+
+			var list = new List<T2>();
+
+			foreach (T1 item in from)
+			{
+				try
+				{
+					list.Add(func(item));
+				}
+				catch (Exception e)
+				{
+					e.LogError();
+				}
+			}
+
+			return list.ToArray();
+		}
+
+		/// <summary>
+		/// The filter that only accepts messages of <see cref="LogLevels.Warning"/> type.
+		/// </summary>
+		public static readonly Func<LogMessage, bool> OnlyWarning = message => message.Level == LogLevels.Warning;
+
+		/// <summary>
+		/// The filter that only accepts messages of <see cref="LogLevels.Error"/> type.
+		/// </summary>
+		public static readonly Func<LogMessage, bool> OnlyError = message => message.Level == LogLevels.Error;
+
+		/// <summary>
+		/// Filter messages.
+		/// </summary>
+		/// <param name="messages">Incoming messages.</param>
+		/// <param name="filters">Messages filters that specify which messages should be handled.</param>
+		/// <returns>Filtered collection.</returns>
+		public static IEnumerable<LogMessage> Filter(this IEnumerable<LogMessage> messages, ICollection<Func<LogMessage, bool>> filters)
+		{
+			if (filters.Count > 0)
+				messages = messages.Where(m => filters.Any(f => f(m)));
+
+			return messages;
 		}
 	}
 }

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StockSharp.Algo</RootNamespace>
     <AssemblyName>StockSharp.Algo</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -58,9 +58,6 @@
     <Reference Include="Ecng.Interop">
       <HintPath>..\References\Ecng.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.IO">
-      <HintPath>..\References\Ecng.IO.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Net">
       <HintPath>..\References\Ecng.Net.dll</HintPath>
     </Reference>
@@ -82,16 +79,10 @@
     <Reference Include="Ecng.Xaml.DevExp">
       <HintPath>..\References\Ecng.Xaml.DevExp.dll</HintPath>
     </Reference>
-    <Reference Include="MathNet.Numerics">
-      <HintPath>..\References\MathNet.Numerics.dll</HintPath>
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\References\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MoreLinq">
-      <HintPath>..\References\MoreLinq.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\References\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -101,9 +92,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
@@ -125,6 +114,7 @@
     <Compile Include="Candles\Compression\CandleBuilderProvider.cs" />
     <Compile Include="Candles\Compression\CandleHolderMessageAdapter.cs" />
     <Compile Include="Candles\Compression\ICandleBuilderValueTransform.cs" />
+    <Compile Include="CollectionPortfolioProvider.cs" />
     <Compile Include="CollectionSecurityProvider.cs" />
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
     <Compile Include="DataType.cs" />
@@ -133,22 +123,19 @@
     <Compile Include="Export\Database\PositionChangeTable.cs" />
     <Compile Include="Export\Database\SecurityTable.cs" />
     <Compile Include="Export\IndicatorValue.cs" />
-    <Compile Include="Expressions\ExpressionFormula.cs" />
-    <Compile Include="Expressions\ExpressionHelper.cs" />
     <Compile Include="Expressions\ExpressionIndexSecurity.cs" />
     <Compile Include="Expressions\ExpressionIndexSecurityProcessor.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
-    <Compile Include="History\Hydra\IRemoteExtendedStorage.cs" />
-    <Compile Include="History\Hydra\IRemoteStorage.cs" />
-    <Compile Include="History\Hydra\ISecurityRemoteExtendedStorage.cs" />
-    <Compile Include="History\Hydra\RemoteStorage.cs" />
-    <Compile Include="History\Hydra\RemoteStorageClient.cs" />
-    <Compile Include="History\ISecurityDownloader.cs" />
-    <Compile Include="History\Russian\FortsDailyData.cs" />
-    <Compile Include="History\Russian\MoexDownloader.cs" />
-    <Compile Include="History\Russian\SecurityInfo.cs" />
-    <Compile Include="History\Russian\SecurityInfoCache.cs" />
+    <Compile Include="Storages\Remote\IRemoteExtendedStorage.cs" />
+    <Compile Include="Storages\Remote\IRemoteStorage.cs" />
+    <Compile Include="Storages\Remote\ISecurityRemoteExtendedStorage.cs" />
+    <Compile Include="Storages\Remote\RemoteStorage.cs" />
+    <Compile Include="Storages\Remote\RemoteStorageClient.cs" />
+    <Compile Include="Testing\IHistoryMessageAdapter.cs" />
+    <Compile Include="TraderHelper_FORTS.cs" />
+    <Compile Include="OrderBookInrementMessageAdapter.cs" />
+    <Compile Include="OrderBookTruncateMessageAdapter.cs" />
     <Compile Include="OrderLogMessageAdapter.cs" />
     <Compile Include="PartialDownloadMessageAdapter.cs" />
     <Compile Include="PermissionCredentialsAuthorization.cs" />
@@ -162,11 +149,9 @@
     <Compile Include="Indicators\IndicatorValueAttribute.cs" />
     <Compile Include="IRemoteAuthorization.cs" />
     <Compile Include="PermissionCredentials.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+    <Compile Include="Server\ITransactionIdStorage.cs" />
+    <Compile Include="Server\IMessageListener.cs" />
+    <Compile Include="Server\IMessageListenerSession.cs" />
     <Compile Include="ServicesRegistry.cs" />
     <Compile Include="Storages\Binary\Snapshot\PositionBinarySnapshotSerializer.cs" />
     <Compile Include="Storages\Binary\Snapshot\QuotesBinarySnapshotSerializer.cs" />
@@ -175,7 +160,10 @@
     <Compile Include="Storages\Binary\Snapshot\TransactionBinarySnapshotSerializer.cs" />
     <Compile Include="Storages\CacheableMarketDataStorage.cs" />
     <Compile Include="Storages\Csv\MarketDepthCsvSerializer.cs" />
-    <Compile Include="Storages\ISecurityAssociationStorage.cs" />
+    <Compile Include="Storages\DriveCache.cs" />
+    <Compile Include="Storages\IMappingMessageAdapterProvider.cs" />
+    <Compile Include="Storages\IPortfolioMessageAdapterProvider.cs" />
+    <Compile Include="Storages\ISecurityMessageAdapterProvider.cs" />
     <Compile Include="Storages\ISnapshotSerializer.cs" />
     <Compile Include="Storages\ISecurityMappingStorage.cs" />
     <Compile Include="SecurityMappingMessageAdapter.cs" />
@@ -438,6 +426,9 @@
     <Compile Include="Strategies\StrategyNameGenerator.cs" />
     <Compile Include="Strategies\StrategyParam.cs" />
     <Compile Include="Strategies\StrategyParamHelper.cs" />
+    <Compile Include="Strategies\Strategy_Candles.cs" />
+    <Compile Include="Strategies\Strategy_MarketDataProvider.cs" />
+    <Compile Include="Strategies\Strategy_TransactionProvider.cs" />
     <Compile Include="Strategies\Testing\BatchEmulation.cs" />
     <Compile Include="Strategies\Testing\EmulationMarketModes.cs" />
     <Compile Include="Strategies\Testing\EmulationSettings.cs" />
@@ -489,7 +480,6 @@
     <Compile Include="Testing\TradeGenerator.cs" />
     <Compile Include="TraderHelper.cs" />
     <Compile Include="TraderHelper_Obsolete.cs" />
-    <Compile Include="UserPermissions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -529,15 +519,6 @@
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="History\Russian\Securities.zip" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

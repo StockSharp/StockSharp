@@ -200,12 +200,7 @@ namespace StockSharp.BusinessEntities
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
-		/// <summary>
-		/// Extended trade info.
-		/// </summary>
-		/// <remarks>
-		/// Required if additional information associated with the trade is stored in the program. For example, the operation that results to the trade.
-		/// </remarks>
+		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
 		[Display(
@@ -253,10 +248,7 @@ namespace StockSharp.BusinessEntities
 			return (Security?.GetHashCode() ?? 0) ^ Id.GetHashCode();
 		}
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			var idStr = Id == 0 ? StringId : Id.To<string>();

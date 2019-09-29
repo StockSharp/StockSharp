@@ -24,6 +24,9 @@
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportExecutionsPnL">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Oanda.OandaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
@@ -57,7 +60,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Oanda.OandaMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId)">
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Oanda.OandaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">

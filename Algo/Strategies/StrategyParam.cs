@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="name">Parameter name.</param>
 		public StrategyParam(Strategy strategy, string name)
-			: this(strategy, name, name, default(T))
+			: this(strategy, name, name, default)
 		{
 		}
 
@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="id">Parameter identifier.</param>
 		/// <param name="name">Parameter name.</param>
 		public StrategyParam(Strategy strategy, string id, string name)
-			: this(strategy, id, name, default(T))
+			: this(strategy, id, name, default)
 		{
 		}
 

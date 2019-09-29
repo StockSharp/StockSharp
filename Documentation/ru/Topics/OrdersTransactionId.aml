@@ -6,7 +6,7 @@
 			При работе с заявками главным идентификатором является <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.TransactionId</codeEntityReference>,
 			а не <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Id</codeEntityReference>. Это сделано по причине того, что <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Id</codeEntityReference>
 			генерируется биржей. Из-за этого сразу после выполнения	метода 
-			<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
+			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
 			еще какое-то время может не быть инициализирован <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Id</codeEntityReference>.
 			Поэтому сразу после отправки транзакции торговая программа генерирует
 			<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.TransactionId</codeEntityReference>. 
