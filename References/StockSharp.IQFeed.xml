@@ -180,10 +180,7 @@
             </summary>
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedLevel1Column.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry">
       <summary>

@@ -37,8 +37,7 @@ T:StockSharp.IQFeed.IQFeedLevel1Column/summary;DocStr3706
 P:StockSharp.IQFeed.IQFeedLevel1Column.Name/summary;DocStr3707
 P:StockSharp.IQFeed.IQFeedLevel1Column.Type/summary;Str2133
 P:StockSharp.IQFeed.IQFeedLevel1Column.Format/summary;DocStr3708
-M:StockSharp.IQFeed.IQFeedLevel1Column.ToString/summary;DocStr49
-M:StockSharp.IQFeed.IQFeedLevel1Column.ToString/returns;DocStr50
+M:StockSharp.IQFeed.IQFeedLevel1Column.ToString/inheritdoc;DocStr8459
 T:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry/summary;DocStr3699
 P:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Instance/summary;DocStr9763
 P:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Item(System.String)/summary;DocStr3751
