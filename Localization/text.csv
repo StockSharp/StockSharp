@@ -15738,3 +15738,5 @@ DocStr11376;Buy button background;Фон кнопки покупки
 DocStr11377;Sell button background;Фон кнопки продажи
 DocStr11378;BUY;BUY
 DocStr11379;SELL;SELL
+DocStr11380;Determines whether the specified message type is market-data;Определить, является ли указанные тип маркет-данными
+DocStr11381;The panel settings change event;Событие изменения настроек панели
