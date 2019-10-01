@@ -396,4 +396,12 @@
   <item id="Yobit"><ddue:link xlink:href="ea1dbc04-3c29-4fbe-91b0-260d1ded31ae" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="Zaif"><ddue:link xlink:href="6d22d370-721c-452b-85af-6fc9c31115ac" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="ZB"><ddue:link xlink:href="3502cfdf-e496-4567-ad4e-c7b195569b60" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="DukasCopy"><ddue:link xlink:href="4e2b91c9-624d-4a4c-b71f-41de89ad032b" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Finam"><ddue:link xlink:href="19c2bdbe-15ab-4b41-9d87-e838b5f17c8e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="AlorHistory"><ddue:link xlink:href="87880b45-6311-42af-9d37-2f4ad9597658" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Mfd"><ddue:link xlink:href="3f8e07ed-6fc1-4145-8532-2a960735f112" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Quandl"><ddue:link xlink:href="2da31578-dd6d-4682-a9de-42f7bf892681" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Xignite"><ddue:link xlink:href="f119fa3f-2ce2-4924-acb8-e97f1b9e4b5b" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Yahoo"><ddue:link xlink:href="d73e788c-9915-402f-ba27-47217539979e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Google"><ddue:link xlink:href="eba96e4f-8f29-4fc2-8011-5d38b415281b" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
 </content>
