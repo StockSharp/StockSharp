@@ -37,6 +37,20 @@
         </step>
         <step>
           <content>
+            <para>Результирующее и входящее значение индикатора имеют свойство 
+            <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.IIndicatorValue.IsFinal</codeEntityReference>, 
+            которое говорит о том, что значение  является окончательным и индикатор не будет изменяться в данной точке времени. 
+            Например, индикатор <codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference> 
+            формируется по цене закрытия свечи, но в текущий момент времени окончательная цена закрытия свечи неизвестна и меняется. 
+            В таком случае результирующее значение индикатора буде иметь свойство 
+            <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.IIndicatorValue.IsFinal</codeEntityReference>==false, а если в
+            индикатор передать законченную свечу то результирующее значение индикатора буде иметь свойство 
+            <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.IIndicatorValue.IsFinal</codeEntityReference>==true.</para>
+			
+          </content>
+        </step>
+        <step>
+          <content>
             <para>Для того, чтобы получить текущее значение индикатора, используется метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Indicators.IIndicatorValue.GetValue``1</codeEntityReference>:</para>
 			<code language="C#"><![CDATA[// вычисляем новое положение относительно друг друга
 var isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
@@ -57,67 +71,21 @@ if (_isShortLessThenLong != isShortLessThenLong)
 }]]></code>
           </content>
         </step>
+                <step>
+          <content>
+          <para>У всех индикаторов есть свойство 
+          <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.BaseIndicator.IsFormed</codeEntityReference>,
+          которое говорит о том готов ли индикатор к использованию. Например, индикатор 
+          <codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference> 
+          имеет период, и пока индикатор не обработает количество
+          свечей равное периоду индикатора, индикатор будет считаться не готовым 
+          к использованию, а свойство 
+          <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.BaseIndicator.IsFormed</codeEntityReference> == false.</para>
+          </content>
+        </step>
       </steps>
-      <!-- <conclusion>Optional conclusion</conclusion> -->
     </procedure>
-    <!-- Optional additional procedure or section with procedure -->
-    <!--section address="Section1">
-      <title>Optional section title</title>
-      <content>
-        <procedure>
-          <title>Procedure #2</title>
-          <steps class="ordered">
-            <step>
-              <content>
-                <para>First step</para>
-              </content>
-            </step>
-            <step>
-              <content>
-                <para>Second step</para>
-              </content>
-            </step>
-          </steps>
-        </procedure>
-      </content>
-    </section-->
-    <!-- Optional next steps info
-    <nextSteps>
-      <content><para>Next steps info goes here</para></content>
-    </nextSteps>
-    -->
     <relatedTopics>
-      <!-- One or more of the following:
-           - A local link
-           - An external link
-           - A code entity reference
-
-      <link xlink:href="Other Topic's ID">Link text</link>
-      <externalLink>
-          <linkText>Link text</linkText>
-          <linkAlternateText>Optional alternate link text</linkAlternateText>
-          <linkUri>URI</linkUri>
-      </externalLink>
-      <codeEntityReference>API member ID</codeEntityReference>
-
-      Examples:
-
-      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
-
-      <externalLink>
-          <linkText>SHFB on CodePlex</linkText>
-          <linkAlternateText>Go to CodePlex</linkAlternateText>
-          <linkUri>http://shfb.codeplex.com</linkUri>
-      </externalLink>
-
-      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
-      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
-      -->
     </relatedTopics>
   </developerWalkthroughDocument>
 </topic>
