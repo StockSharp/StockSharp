@@ -10,13 +10,7 @@
       	<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> -
       	специальный тип индексного инструмента, в основе которого лежит комбинирование нескольких инструментов при помощи математических формул. Этот тип имеет свойство  
       	<codeEntityReference>P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Expression</codeEntityReference>, в котором хранится формула в текстовом виде и список подлежащих инструментов 
-       <codeEntityReference>P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.InnerSecurityIds</codeEntityReference>. Для вычисления математического выражения используется библиотека 
-       <externalLink>
-<linkText>NCalc</linkText>
-<linkAlternateText>Mathematical expressions evaluator in .NET</linkAlternateText>
-<linkUri>http://ncalc.codeplex.com/</linkUri>
-<linkTarget>_blank</linkTarget>
-</externalLink>.      
+       <codeEntityReference>P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.InnerSecurityIds</codeEntityReference>.   
       </para>
       <mediaLink>
 <image placement="center" xlink:href="GUI_IndexSecurityWindow"/>
@@ -34,22 +28,29 @@
   				<para><codeEntityReference>P:StockSharp.Xaml.IndexEditor.Formula</codeEntityReference> - математическая формула индекса.</para>
   			</listItem>
 		</list>
-		
-	 <!-- <para>
-      	Ниже приведен внешний вид компонента и фрагмент кода с его использованием. 
-      </para>
-      
-      <mediaLink><image placement="left" xlink:href="HydraGluingCSCustom" /></mediaLink>
-
-		
-  <code title="C#" language="C#">
+<para>Для использования <codeEntityReference>T:StockSharp.Xaml.IndexEditor</codeEntityReference> 
+предварительно необходимо зарегистрировать специальную службу:</para>
+ <code title="C#" language="C#">
   <![CDATA[
-
+...
+ConfigManager.RegisterService<ICompilerService>(new RoslynCompilerService());
+...
 ]]>
- </code>  -->
-		
-
-
+ </code> 
+ <para>Далее в <codeEntityReference>T:StockSharp.Xaml.IndexEditor</codeEntityReference> 
+ следует передать инструменты необходимые для расчета индекса:</para>
+ <code title="C#" language="C#">
+  <![CDATA[
+...
+IndexEditor.Securities.AddRange(SecurityProvider.LookupAll());
+SecurityProvider.Added += OnAdded;
+...
+private void OnAdded(IEnumerable<Security> securities)
+     {
+         IndexEditor.Securities.AddRange(securities);
+     }
+]]>
+ </code>
     </introduction>
   </developerConceptualDocument>
 </topic>
