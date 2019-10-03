@@ -297,6 +297,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Designer_Universal_formula.aml" />
     <None Include="Topics\Terminal_connector_security_mapping.aml" />
     <None Include="Topics\Designer_connector_security_mapping.aml" />
     <None Include="Topics\GoogleHistory.aml" />
@@ -4369,6 +4370,10 @@
     <Image Include="Art\Designer_connector_security_mapping_00.png">
       <ImageId>Designer_connector_security_mapping_00</ImageId>
       <AlternateText>Designer connector security mapping 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Universal_formula_00.png">
+      <ImageId>Designer_Universal_formula_00</ImageId>
+      <AlternateText>Designer Universal formula 00</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
