@@ -628,6 +628,11 @@ namespace StockSharp.Messages
 						_pfLookupTimeOut.RemoveTimeOut(((PortfolioLookupResultMessage)message).OriginalTransactionId);
 
 					break;
+
+				case MessageTypes.TimeFrameLookupResult:
+					_timeFrames = ((TimeFrameLookupResultMessage)message).TimeFrames;
+
+					break;
 			}
 
 			if (_prevTime != DateTimeOffset.MinValue)
@@ -722,6 +727,8 @@ namespace StockSharp.Messages
 		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);
 
+		private IEnumerable<TimeSpan> _timeFrames = Enumerable.Empty<TimeSpan>();
+
 		/// <summary>
 		/// Get possible time-frames for the specified instrument.
 		/// </summary>
@@ -730,7 +737,7 @@ namespace StockSharp.Messages
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <returns>Possible time-frames.</returns>
 		protected virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
-			=> Enumerable.Empty<TimeSpan>();
+			=> _timeFrames;
 
 		/// <inheritdoc />
 		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
