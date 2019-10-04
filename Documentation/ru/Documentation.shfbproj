@@ -297,6 +297,10 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\TradierHistory.aml" />
+    <None Include="Topics\TradierSample.aml" />
+    <None Include="Topics\TradierConnectorsSettings.aml" />
+    <None Include="Topics\Tradier.aml" />
     <None Include="Topics\Designer_Universal_formula.aml" />
     <None Include="Topics\Terminal_connector_security_mapping.aml" />
     <None Include="Topics\Designer_connector_security_mapping.aml" />

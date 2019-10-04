@@ -8,14 +8,14 @@
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Архитектура S#.API" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Установка S#.API" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
-    <Topic id="db1de349-84ef-4e59-a30b-c34a9d47bed2" visible="True" title="Коннекторы">
+    <Topic id="db1de349-84ef-4e59-a30b-c34a9d47bed2" visible="True" isExpanded="true" title="Коннекторы">
       <Topic id="554da27b-900a-462a-a2c2-d2b6cb1330ae" visible="True" title="Графическое конфигурирование" />
       <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" isExpanded="true" title="Коннекторы (Америка)">
-        <Topic id="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" visible="True" title="AlphaVantage">
+        <Topic id="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" visible="True" isExpanded="true" title="AlphaVantage">
           <Topic id="02913c08-eeab-48e3-9e62-35dccea1db59" visible="True" title="Настройки коннектора AlphaVantage" />
           <Topic id="28cee4c9-f9c2-4e87-a160-991fc18221af" visible="True" title="Инициализация адаптера AlphaVantage" />
         </Topic>
-        <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" title="BarChart">
+        <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" isExpanded="true" title="BarChart">
           <Topic id="baa2df0a-ca79-4437-8b99-496f905c254e" visible="True" title="Настройки коннектора BarChart" />
         </Topic>
         <Topic id="89c3f13d-2602-446a-8c3d-5615b6f901b9" visible="True" title="Blackwood (Fusion)">
@@ -38,11 +38,11 @@
           <Topic id="df8227ff-5381-4912-b080-b58e6004480b" visible="True" title="Авторизация" />
           <Topic id="028b3872-d610-4ca4-9127-5434764f05de" visible="True" title="Стоп-заявки" />
         </Topic>
-        <Topic id="fb946f86-fe4b-4e30-97f7-543178e81792" visible="True" title="IEX">
+        <Topic id="fb946f86-fe4b-4e30-97f7-543178e81792" visible="True" isExpanded="true" title="IEX">
           <Topic id="f826d615-3d80-42fe-980e-985e883acdeb" visible="True" title="Настройки коннектора IEX" />
           <Topic id="0da3d6e1-12fa-4732-9834-9008b63714ce" visible="True" title="Инициализация адаптера IEX" />
         </Topic>
-        <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" title="Interactive Brokers">
+        <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" isExpanded="true" title="Interactive Brokers">
           <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" title="Настройка TWS Interactive Brokers" />
           <Topic id="7c23b480-d472-43df-aabf-f743ad09fded" visible="True" title="Инициализация адаптера Interactive Brokers" />
           <Topic id="3e0f02b3-3e2f-405d-a8a2-6d44a50db166" visible="True" title="Алго-заявки" />
@@ -92,7 +92,7 @@
           <Topic id="29183d0f-bbed-4cc1-bcd1-ff9d9411f5cf" visible="True" title="Настройки коннектора Quandl" />
           <Topic id="0b3dfde0-aa7f-4809-a310-74b402964d52" visible="True" title="Исторические данные" />
         </Topic>
-        <Topic id="f119fa3f-2ce2-4924-acb8-e97f1b9e4b5b" visible="True">
+        <Topic id="f119fa3f-2ce2-4924-acb8-e97f1b9e4b5b" visible="True" isExpanded="true">
           <Topic id="fa6c41ca-bf70-4c31-88b3-b3ff0355a4db" visible="True" title="Инициализация адаптера Xignite" />
           <Topic id="e03d1dd8-3df7-4a14-93c3-9db9c693f008" visible="True" title="Настройки коннектора Xignite" />
           <Topic id="13b747c2-1718-4b2d-b83b-b2ebb58ad54b" visible="True" title="Исторические данные" />
@@ -104,6 +104,11 @@
         <Topic id="eba96e4f-8f29-4fc2-8011-5d38b415281b" visible="True">
           <Topic id="ddbfc076-9092-40b8-8625-91500654e4f2" visible="True" title="Инициализация адаптера Google" />
           <Topic id="ffc1662b-1574-417f-82fc-57f69c9ad085" visible="True" title="Исторические данные" />
+        </Topic>
+        <Topic id="113c8f3e-3145-4899-bd5b-60ceac995be2" visible="True" isExpanded="true" isSelected="true">
+          <Topic id="921163d1-59dc-4553-bc0c-b9ba40e10b8a" visible="True" title="Настройки коннектора Tradier" />
+          <Topic id="737ea804-1876-447c-a57d-4015c57cf4c0" visible="True" title="Инициализация адаптера Tradier" />
+          <Topic id="43cf547f-4f8b-49a5-8e34-7d2a1c6b1638" visible="True" title="Исторические данные" />
         </Topic>
       </Topic>
       <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (Россия)">
@@ -198,7 +203,7 @@
         </Topic>
         <Topic id="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93" visible="True" title="FIX Server" />
       </Topic>
-      <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" isExpanded="true" title="Коннекторы Forex">
+      <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" title="Коннекторы Forex">
         <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" title="LMAX">
           <Topic id="96e186b5-a78f-4f2d-8a1b-ea1734d9ed86" visible="True" title="Настройки коннектора LMAX" />
           <Topic id="9cd10cbc-8534-4d44-bf3b-60b0a3f03590" visible="True" title="Инициализация адаптера LMAX" />
@@ -544,7 +549,7 @@
       <Topic id="d27245ae-abfd-4d6b-b8c4-d1a24a45116f" visible="True" title="На рыночных данных" />
       <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Настройки тестирования" />
     </Topic>
-    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Пользовательский интерфейс (GUI)">
+    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" title="Пользовательский интерфейс (GUI)">
       <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Графики">
         <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Свечной график" />
         <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="График-панель" />
@@ -611,7 +616,7 @@
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Конвертация валют" />
     <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Примеры" />
   </Topic>
-  <Topic id="E4B5E112-BD08-4F40-8741-7514E7E4088E" visible="True" isExpanded="true" title="S#.Terminal">
+  <Topic id="E4B5E112-BD08-4F40-8741-7514E7E4088E" visible="True" title="S#.Terminal">
     <Topic id="f70783b8-59e1-4ea7-9d94-c20524f3470a" visible="True" title="Установка S#.Terminal" />
     <Topic id="e51b9e8f-52d3-4e16-887e-1aad12db2cc8" visible="True" title="Обновление на новую версию" />
     <Topic id="b7809562-d829-42d2-95c9-cbca8bf5549e" visible="True" title="Быстрый запуск" />
@@ -840,7 +845,7 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Установка S#.Designer" />
     <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Обновление на новую версию" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Быстрый запуск" />
@@ -878,7 +883,7 @@
             <Topic id="08ebe03d-a446-4738-98fb-44cff38ddfda" visible="True" title="Сравнение" />
             <Topic id="b5a47771-4584-403b-b812-61f8bf0e9ac5" visible="True" title="Индикатор" />
             <Topic id="50685c1a-72e3-443d-9b0d-6c71055cc56c" visible="True" title="Логическое условие" />
-            <Topic id="423ed6e3-f955-4eb2-9824-5a2aa3b6bb0b" visible="True" isSelected="true" title="Формула" />
+            <Topic id="423ed6e3-f955-4eb2-9824-5a2aa3b6bb0b" visible="True" title="Формула" />
             <Topic id="18f61c09-d6f3-4765-b180-11e9d3e74d33" visible="True" title="Отмена заявки" />
             <Topic id="18f61c09-d6f3-4765-b180-11e9d3e74133" visible="True" title="Массовая отмена заявок" />
             <Topic id="33d15f2c-5d73-4c95-8e67-2612d34f14a2" visible="True" title="Открытие позиции" />
