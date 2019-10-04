@@ -8,7 +8,7 @@
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Архитектура S#.API" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Установка S#.API" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
-    <Topic id="db1de349-84ef-4e59-a30b-c34a9d47bed2" visible="True" isExpanded="true" title="Коннекторы">
+    <Topic id="db1de349-84ef-4e59-a30b-c34a9d47bed2" visible="True" title="Коннекторы">
       <Topic id="554da27b-900a-462a-a2c2-d2b6cb1330ae" visible="True" title="Графическое конфигурирование" />
       <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" isExpanded="true" title="Коннекторы (Америка)">
         <Topic id="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" visible="True" isExpanded="true" title="AlphaVantage">
@@ -105,7 +105,7 @@
           <Topic id="ddbfc076-9092-40b8-8625-91500654e4f2" visible="True" title="Инициализация адаптера Google" />
           <Topic id="ffc1662b-1574-417f-82fc-57f69c9ad085" visible="True" title="Исторические данные" />
         </Topic>
-        <Topic id="113c8f3e-3145-4899-bd5b-60ceac995be2" visible="True" isExpanded="true" isSelected="true">
+        <Topic id="113c8f3e-3145-4899-bd5b-60ceac995be2" visible="True" isExpanded="true">
           <Topic id="921163d1-59dc-4553-bc0c-b9ba40e10b8a" visible="True" title="Настройки коннектора Tradier" />
           <Topic id="737ea804-1876-447c-a57d-4015c57cf4c0" visible="True" title="Инициализация адаптера Tradier" />
           <Topic id="43cf547f-4f8b-49a5-8e34-7d2a1c6b1638" visible="True" title="Исторические данные" />
@@ -845,7 +845,7 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Установка S#.Designer" />
     <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Обновление на новую версию" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Быстрый запуск" />
@@ -884,11 +884,6 @@
             <Topic id="b5a47771-4584-403b-b812-61f8bf0e9ac5" visible="True" title="Индикатор" />
             <Topic id="50685c1a-72e3-443d-9b0d-6c71055cc56c" visible="True" title="Логическое условие" />
             <Topic id="423ed6e3-f955-4eb2-9824-5a2aa3b6bb0b" visible="True" title="Формула" />
-            <Topic id="18f61c09-d6f3-4765-b180-11e9d3e74d33" visible="True" title="Отмена заявки" />
-            <Topic id="18f61c09-d6f3-4765-b180-11e9d3e74133" visible="True" title="Массовая отмена заявок" />
-            <Topic id="33d15f2c-5d73-4c95-8e67-2612d34f14a2" visible="True" title="Открытие позиции" />
-            <Topic id="538b6ea4-bf0f-4833-9fb6-a3b1f0a59039" visible="True" title="Перемещение заявки" />
-            <Topic id="d24ceb19-8e17-48fa-88c4-be64efa3a93e" visible="True" title="Сделки по заявке" />
             <Topic id="b596ee27-a887-4814-9ad7-56cd62cec38f" visible="True" title="Объединение" />
             <Topic id="71724b03-e1aa-4a8d-8f0c-e1c0b55c2b64" visible="True" title="Позиция" />
             <Topic id="5d869a7b-616f-4e40-92de-576fd0206c91" visible="True" title="Предыдущее значение" />
@@ -897,6 +892,7 @@
             <Topic id="6971235a-c9e5-4606-a266-5df4a3b9da94" visible="True" title="DLL стратегия" />
             <Topic id="412aebdc-2700-4172-bde5-cb749cba64c0" visible="True" title="Изменение П/У" />
             <Topic id="250003df-48b4-4211-9c8e-25ac3f6a45be" visible="True" title="Сделки стратегии" />
+            <Topic id="d24ceb19-8e17-48fa-88c4-be64efa3a93e" visible="True" title="Сделки по заявке" />
             <Topic id="211ccab1-174c-476e-a726-1c6525b39533" visible="True" title="Разрешена ли торговля" />
           </Topic>
           <Topic id="fe04d489-8a1d-422f-8d35-17ee08a6feae" visible="True" noFile="true" title="Источники данных">
@@ -931,6 +927,12 @@
           <Topic id="5d6d4bd8-a693-4704-b403-1ae9b84faa66" visible="True" noFile="true" title="Составные элементы">
             <Topic id="317b6393-19eb-424b-84ea-ccf70b0c9c18" visible="True" title="Пересечение" />
             <Topic id="6f701cdc-b61c-42ed-a003-fdbb3da37f3c" visible="True" title="Условный оператор" />
+          </Topic>
+          <Topic id="53e20a89-30e4-4c1a-9a35-e7eba06f85cb" visible="True" noFile="true" isExpanded="true" title="Торговые">
+            <Topic id="18f61c09-d6f3-4765-b180-11e9d3e74d33" visible="True" title="Отмена заявки" />
+            <Topic id="18f61c09-d6f3-4765-b180-11e9d3e74133" visible="True" title="Массовая отмена заявок" />
+            <Topic id="33d15f2c-5d73-4c95-8e67-2612d34f14a2" visible="True" isSelected="true" title="Регистрация заявки" />
+            <Topic id="538b6ea4-bf0f-4833-9fb6-a3b1f0a59039" visible="True" title="Перемещение заявки" />
           </Topic>
         </Topic>
         <Topic id="5cc82796-a8cc-4dd8-9cdc-3cb68b890042" visible="True" title="Линии" />
