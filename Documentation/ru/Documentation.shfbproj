@@ -297,6 +297,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\HydraCreatTask.aml" />
     <None Include="Topics\TradierHistory.aml" />
     <None Include="Topics\TradierSample.aml" />
     <None Include="Topics\TradierConnectorsSettings.aml" />
