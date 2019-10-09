@@ -364,6 +364,7 @@
    <ddue:linkUri>http://youtube.com/user/StockSharp/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="TradeOgre"><ddue:link xlink:href="989447cf-bc05-4f6a-a736-b3a916ee1ffc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Tradier"><ddue:link xlink:href="113c8f3e-3145-4899-bd5b-60ceac995be2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="transaq"><ddue:link xlink:href="a010f9bd-15bb-4858-a067-590101087dff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Transaq</ddue:link></item>
   <item id="transaq_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Transaq</ddue:linkText>
@@ -404,5 +405,6 @@
   <item id="Yobit"><ddue:link xlink:href="ea1dbc04-3c29-4fbe-91b0-260d1ded31ae" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="Zaif"><ddue:link xlink:href="6d22d370-721c-452b-85af-6fc9c31115ac" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="ZB"><ddue:link xlink:href="3502cfdf-e496-4567-ad4e-c7b195569b60" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
-  <item id="Tradier"><ddue:link xlink:href="113c8f3e-3145-4899-bd5b-60ceac995be2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Rss"><ddue:link xlink:href="08b8a9ca-6658-4088-b6b8-8715b12732ab" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="CsvConnector"><ddue:link xlink:href="9695b29f-2b7b-4a9b-b915-b8c4f9b50eab" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
 </content>

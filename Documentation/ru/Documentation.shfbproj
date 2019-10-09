@@ -297,6 +297,12 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\CsvHistory.aml" />
+    <None Include="Topics\CsvSample.aml" />
+    <None Include="Topics\Csv.aml" />
+    <None Include="Topics\RssHistory.aml" />
+    <None Include="Topics\RssSample.aml" />
+    <None Include="Topics\RssConnectorsSettings.aml" />
     <None Include="Topics\HydraCreatTask.aml" />
     <None Include="Topics\TradierHistory.aml" />
     <None Include="Topics\TradierSample.aml" />
