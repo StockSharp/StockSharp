@@ -328,7 +328,12 @@ namespace StockSharp.Messages
 		public virtual bool IsSecurityNewsOnly => false;
 
 		/// <inheritdoc />
-		public virtual OrderCondition CreateOrderCondition() => this.GetOrderConditionType()?.CreateInstance<OrderCondition>();
+		public virtual Type OrderConditionType => GetType()
+			.GetAttribute<OrderConditionAttribute>()?
+			.ConditionType;
+
+		/// <inheritdoc />
+		public virtual OrderCondition CreateOrderCondition() => OrderConditionType?.CreateInstance<OrderCondition>();
 
 		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]

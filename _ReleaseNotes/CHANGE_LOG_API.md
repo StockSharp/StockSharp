@@ -251,6 +251,7 @@ StockSharp API Change log
 * (feature) Charting. Orders/trades alternative icons.
 * (feature) Charting. Quick orders panel.
 * (feature) Charting. Quick time-frame and candle type switch.
+* (feature) IMessageAdapter. OrderConditionType property added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

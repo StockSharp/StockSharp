@@ -190,6 +190,11 @@ namespace StockSharp.Messages
 		bool IsSecurityNewsOnly { get; }
 
 		/// <summary>
+		/// <see cref="CreateOrderCondition"/> type. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.
+		/// </summary>
+		Type OrderConditionType { get; }
+
+		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
 		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
