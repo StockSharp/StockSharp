@@ -897,8 +897,11 @@ P:StockSharp.Messages.IMessageAdapter.SupportedOrderBookDepths/summary;DocStr112
 P:StockSharp.Messages.IMessageAdapter.IsSupportOrderBookIncrements/summary;DocStr11316
 P:StockSharp.Messages.IMessageAdapter.IsSupportExecutionsPnL/summary;DocStr11235
 P:StockSharp.Messages.IMessageAdapter.IsSecurityNewsOnly/summary;DocStr11333
+P:StockSharp.Messages.IMessageAdapter.OrderConditionType/summary;DocStr11043
+P:StockSharp.Messages.IMessageAdapter.OrderConditionType/remarks;DocStr11382
 M:StockSharp.Messages.IMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.Messages.IMessageAdapter.CreateOrderCondition/returns;DocStr45
+M:StockSharp.Messages.IMessageAdapter.CreateOrderCondition/remarks;DocStr11382
 M:StockSharp.Messages.IMessageAdapter.IsConnectionAlive/summary;DocStr441
 M:StockSharp.Messages.IMessageAdapter.IsConnectionAlive/returns;DocStr442
 M:StockSharp.Messages.IMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/summary;DocStr3790
@@ -1111,6 +1114,7 @@ P:StockSharp.Messages.MessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8
 P:StockSharp.Messages.MessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSupportExecutionsPnL/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSecurityNewsOnly/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapter.OrderConditionType/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.ReConnectionSettings/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.TransactionIdGenerator/inheritdoc;DocStr8459

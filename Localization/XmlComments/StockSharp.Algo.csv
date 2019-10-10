@@ -2995,11 +2995,11 @@ M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,Stock
 M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/order;Orders
 M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398
 M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/returns;Str985
-M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector,System.Boolean)/summary;DocStr2374
-M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector,System.Boolean)/param/order;DocStr2375
-M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector,System.Boolean)/param/connector;DocStr2398
-M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector,System.Boolean)/param/byOrder;DocStr2376
-M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector,System.Boolean)/returns;DocStr2377
+M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,System.Boolean,StockSharp.BusinessEntities.IConnector)/summary;DocStr2374
+M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,System.Boolean,StockSharp.BusinessEntities.IConnector)/param/order;DocStr2375
+M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,System.Boolean,StockSharp.BusinessEntities.IConnector)/param/byOrder;DocStr2376
+M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,System.Boolean,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398
+M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,System.Boolean,StockSharp.BusinessEntities.IConnector)/returns;DocStr2377
 M:StockSharp.Algo.TraderHelper.GetAveragePrice(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/summary;DocStr2378
 M:StockSharp.Algo.TraderHelper.GetAveragePrice(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/order;DocStr2379
 M:StockSharp.Algo.TraderHelper.GetAveragePrice(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398
@@ -6850,9 +6850,6 @@ M:StockSharp.Algo.Strategies.StrategyHelper.GetSecurityValue``1(StockSharp.Algo.
 M:StockSharp.Algo.Strategies.StrategyHelper.GetSecurityValue``1(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Level1Fields)/param/strategy;Strategy
 M:StockSharp.Algo.Strategies.StrategyHelper.GetSecurityValue``1(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Level1Fields)/param/field;DocStr854
 M:StockSharp.Algo.Strategies.StrategyHelper.GetSecurityValue``1(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Level1Fields)/returns;DocStr855
-M:StockSharp.Algo.Strategies.StrategyHelper.GetTraceId(StockSharp.BusinessEntities.Order)/summary;DocStr1789
-M:StockSharp.Algo.Strategies.StrategyHelper.GetTraceId(StockSharp.BusinessEntities.Order)/param/order;Str504
-M:StockSharp.Algo.Strategies.StrategyHelper.GetTraceId(StockSharp.BusinessEntities.Order)/returns;DocStr1790
 M:StockSharp.Algo.Strategies.StrategyHelper.EmulateOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},StockSharp.Algo.Storages.IStorageRegistry,System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,System.Decimal})/summary;DocStr1791
 M:StockSharp.Algo.Strategies.StrategyHelper.EmulateOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},StockSharp.Algo.Storages.IStorageRegistry,System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,System.Decimal})/param/orders;DocStr1792
 M:StockSharp.Algo.Strategies.StrategyHelper.EmulateOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},StockSharp.Algo.Storages.IStorageRegistry,System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,System.Decimal})/param/storageRegistry;DocStr1793
