@@ -424,14 +424,14 @@ namespace StockSharp.Algo.Strategies
 
 				var strategy = new EquityStrategy(array, openedPositions) { Connector = connector };
 
-				var waitHandle = new SyncObject();
+				//var waitHandle = new SyncObject();
 
-				//connector.UnderlyngMarketDataAdapter.StateChanged += () =>
+				//connector.MarketDataAdapter.StateChanged += () =>
 				//{
-				//	if (connector.UnderlyngMarketDataAdapter.State == EmulationStates.Started)
+				//	if (connector.MarketDataAdapter.State == EmulationStates.Started)
 				//		strategy.Start();
 
-				//	if (connector.UnderlyngMarketDataAdapter.State == EmulationStates.Stopped)
+				//	if (connector.MarketDataAdapter.State == EmulationStates.Stopped)
 				//	{
 				//		strategy.Stop();
 
@@ -446,7 +446,7 @@ namespace StockSharp.Algo.Strategies
 
 				//lock (waitHandle)
 				//{
-				//	if (connector.UnderlyngMarketDataAdapter.State != EmulationStates.Stopped)
+				//	if (connector.MarketDataAdapter.State != EmulationStates.Stopped)
 				//		waitHandle.Wait();
 				//}
 
@@ -932,7 +932,7 @@ namespace StockSharp.Algo.Strategies
 				throw new ArgumentNullException(nameof(rule));
 
 			if (!(rule.Container is Strategy strategy))
-				throw new ArgumentException(LocalizedStrings.Str1263Params.Put(rule.Name), nameof(rule));
+				throw new ArgumentException(LocalizedStrings.Str1263Params.Put(rule), nameof(rule));
 
 			return strategy;
 		}

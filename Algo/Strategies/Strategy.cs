@@ -141,7 +141,7 @@ namespace StockSharp.Algo.Strategies
 							.Once()
 							.Apply(_parent);
 
-					rule.UpdateName(rule.Name + " (ChildStrategyList.OnChildProcessStateChanged)");
+					rule.UpdateName(rule.Name + $" ({nameof(ChildStrategyList)}.{nameof(OnChildProcessStateChanged)})");
 
 					_childStrategyRules.Add(child, rule);
 				}
@@ -1785,7 +1785,7 @@ namespace StockSharp.Algo.Strategies
 			if (!Rules.IsEmpty())
 			{
 				this.AddLog(LogLevels.Debug,
-					() => LocalizedStrings.Str1396Params.Put(Rules.Count, Rules.Select(r => r.Name).Join(", ")));
+					() => LocalizedStrings.Str1396Params.Put(Rules.Count, Rules.Select(r => r.ToString()).Join(", ")));
 
 				return;
 			}

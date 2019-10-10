@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Strategies
 				.Once()
 				.Apply(this);
 
-			rule.UpdateName(rule.Name + " (BasketStrategy.OnChildStrategiesAdded)");
+			rule.UpdateName(rule.Name + $" ({nameof(BasketStrategy)}.{nameof(OnChildStrategiesAdded)})");
 		}
 
 		/// <inheritdoc />

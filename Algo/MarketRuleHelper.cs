@@ -78,7 +78,8 @@ namespace StockSharp.Algo
 			/// <inheritdoc />
 			public override string ToString()
 			{
-				return "{0} {2}/{3} (0x{1:X})".Put(Name, GetHashCode(), Order.TransactionId, (Order.Id == null ? Order.StringId : Order.Id.To<string>()));
+				var strId = Order.Id == null ? Order.StringId : Order.Id.To<string>();
+				return $"{this} {Order.TransactionId}/{strId}";
 			}
 		}
 
