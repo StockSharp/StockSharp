@@ -2,6 +2,8 @@ T:StockSharp.Sterling.SterlingMessageAdapter/summary;DocStr2538
 M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportPortfolioLookupResult/inheritdoc;DocStr8459
+P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
+P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.Sterling.SterlingMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Sterling.SterlingExtendedOrderTypes/summary;DocStr7559
 F:StockSharp.Sterling.SterlingExtendedOrderTypes.MarketOnClose/summary;Str2312
