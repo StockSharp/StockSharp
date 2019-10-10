@@ -6,7 +6,12 @@
       	<codeEntityReference>T:StockSharp.Xaml.OrderWindow</codeEntityReference> - окно для создания заявки.
       </para>
       <mediaLink><image placement="left" xlink:href="GUI_OrderWindow" /></mediaLink>
+      
+            <para>Если подключение поддерживает выставление условной заявки (стоп-лосс, тейк-профи), 
+      то в этом окне можно выставить условную заявку с расширенными условиями установив 
+      флаг <legacyBold>Расширенные условия</legacyBold>.</para>
       <para>
+
        <legacyBold>Основные свойства</legacyBold>
        </para>
       

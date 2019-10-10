@@ -1,62 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
     <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
-           titles.  Specify a numeric value as the inner text to limit it to
-           a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
       <para>На текущий момент <token>stocksharp</token> поддерживает следующие подключения к биржам криптовалют:</para>
-		<list class="ordered">
-<listItem><token>Binance</token></listItem>
-<listItem><token>Bitbank</token></listItem>
-<listItem><token>Bitexbook</token></listItem>
-<listItem><token>Bitfinex</token></listItem>
-<listItem><token>Bithumb</token></listItem>
-<listItem><token>Bitmex</token></listItem>
-<listItem><token>BitStamp</token></listItem>
-<listItem><token>Bittrex</token></listItem>
-<listItem><token>Btce</token></listItem>
-<listItem><token>Cex</token></listItem>
-<listItem><token>Coinbase</token></listItem>
-<listItem><token>Coincheck</token></listItem>
-<listItem><token>CoinExchange</token></listItem>
-<listItem><token>CoinCap</token></listItem>
-<listItem><token>Coinigy</token></listItem>
-<listItem><token>Cryptopia</token></listItem>
-<listItem><token>Deribit</token></listItem>
-<listItem><token>Exmo</token></listItem>
-<listItem><token>Digifinex</token></listItem>
-<listItem><token>Gdax</token></listItem>
-<listItem><token>HitBtc</token></listItem>
-<listItem><token>Huobi</token></listItem>
-<listItem><token>Idax</token></listItem>
-<listItem><token>Kraken</token></listItem>
-<listItem><token>Kucoin</token></listItem>
-<listItem><token>Liqui</token></listItem>
-<listItem><token>LiveCoin</token></listItem>
-<listItem><token>Okcoin</token></listItem>
-<listItem><token>Okex</token></listItem>
-<listItem><token>Poloniex</token></listItem>
-<listItem><token>Quoinex</token></listItem>
-<listItem><token>TradeOgre</token></listItem>
-<listItem><token>Yobit</token></listItem>
-<listItem><token>Zaif</token></listItem>
-<listItem><token>LBank</token></listItem>
-<listItem><token>BitMax</token></listItem>
-<listItem><token>BW</token></listItem>
-<listItem><token>Bibox</token></listItem>
-<listItem><token>CoinBene</token></listItem>
-<listItem><token>BitZ</token></listItem>
-<listItem><token>ZB</token></listItem>
+	<list class="ordered">
+      <listItem><token>Bibox</token></listItem>
+      <listItem><token>Binance</token></listItem>
+      <listItem><token>Bitbank</token></listItem>
+      <listItem><token>Bitexbook</token></listItem>
+      <listItem><token>Bitfinex</token></listItem>
+      <listItem><token>Bithumb</token></listItem>
+      <listItem><token>BitMax</token></listItem>
+      <listItem><token>BitMEX</token></listItem>
+      <listItem><token>BitStamp</token></listItem>
+      <listItem><token>Bittrex</token></listItem>
+      <listItem><token>BitZ</token></listItem>
+      <listItem><token>BTC-E</token></listItem>
+      <listItem><token>BW</token></listItem>
+      <listItem><token>CEX.IO</token></listItem>
+      <listItem><token>Coinbase</token></listItem>
+      <listItem><token>CoinBene</token></listItem>
+      <listItem><token>CoinCap</token></listItem>
+      <listItem><token>Coincheck</token></listItem>
+      <listItem><token>CoinExchange</token></listItem>
+      <listItem><token>Coinigy</token></listItem>
+      <listItem><token>Cryptopia</token></listItem>
+      <listItem><token>Deribit</token></listItem>
+      <listItem><token>Digifinex</token></listItem>
+      <listItem><token>EXMO</token></listItem>
+      <listItem><token>GDAX</token></listItem>
+      <listItem><token>HitBTC</token></listItem>
+      <listItem><token>Huobi</token></listItem>
+      <listItem><token>Idax</token></listItem>
+      <listItem><token>Kraken</token></listItem>
+      <listItem><token>Kucoin</token></listItem>
+      <listItem><token>LBank</token></listItem>
+      <listItem><token>Liqui</token></listItem>
+      <listItem><token>Livecoin</token></listItem>
+      <listItem><token>OKCoin</token></listItem>
+      <listItem><token>OKEx</token></listItem>
+      <listItem><token>Poloniex</token></listItem>
+      <listItem><token>Quoinex</token></listItem>
+      <listItem><token>TradeOgre</token></listItem>
+      <listItem><token>Yobit</token></listItem>
+      <listItem><token>Zaif</token></listItem>
+      <listItem><token>ZB</token></listItem>
 		</list>
-
     </introduction>
   </developerConceptualDocument>
 </topic>

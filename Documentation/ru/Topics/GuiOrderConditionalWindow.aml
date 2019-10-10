@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="94e71651-8964-41fc-866d-3ff65f513440" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
+    <introduction>    
+    <alert class="note">
+  		<para>Данный контролл устарел, вместо него следует использовать <codeEntityReference>T:StockSharp.Xaml.OrderWindow</codeEntityReference>. 
+  		Как описано в пункте <link xlink:href="cfc729e7-65e7-4ec3-b215-57031be290c7" />.</para>
+	</alert>
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference> - окно для создания условной заявки.
       </para>

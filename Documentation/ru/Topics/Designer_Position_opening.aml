@@ -5,13 +5,14 @@
 <mediaLink>
 <image xlink:href="Designer_Position_opening_00"/>
 </mediaLink>
-<para>Кубик используется для открытия позиции по инструменту.</para>
+<para>Кубик используется для регистрации заявки по инструменту.</para>
 <definitionTable>
   <definedTerm>Входящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
   <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого надо выставить заявку.</para></listItem>
   <listItem><para><legacyBold>Направление</legacyBold> – направление заявки (покупка или продажа), является сигналом выставления заявки.</para></listItem>
+  <listItem><para><legacyBold>Триггер</legacyBold> - сигнал, с помощью которого определяется момент, когда необходимо выствить заявку.</para></listItem>
   <listItem><para><legacyBold>Цена</legacyBold> – числовое значение цены, если выставляется не рыночная заявка.</para></listItem>
   <listItem><para><legacyBold>Объем</legacyBold> – числовое значение объема.</para></listItem>
   <listItem><para><legacyBold>Портфель</legacyBold> – портфель, для которого надо выставить заявку.</para></listItem>
@@ -21,22 +22,30 @@
   <definedTerm>Исходящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Заявка</legacyBold> – выставленная заявка, 
-которая может использоваться для получения сделок по ней с помощью элемента 
-<legacyBold>Сделки</legacyBold> по заявке и отображения на графике с помощью 
-кубика <legacyBold>Панель графика</legacyBold></para></listItem>
+  <listItem><para><legacyBold>Заявка</legacyBold> – выставленная заявка, которая может использоваться для получения сделок по ней с помощью элемента 
+<legacyBold>Сделки</legacyBold> по заявке и отображения на графике с помощью кубика <legacyBold>Панель графика</legacyBold></para></listItem>
+<listItem><para><legacyBold>Заявка-ошибка</legacyBold> – заявка, не прошедшая регистрацию из-за ошибки.</para></listItem>
 </list>
   </definition>
   
     <definedTerm>Параметры</definedTerm>
   <definition>
 <list class="bullet">
+  <listItem><para><legacyBold>Направление</legacyBold> – направление заявки (покупка или продажа), является сигналом выставления заявки.</para></listItem>
   <listItem><para><legacyBold>Рыночная</legacyBold> – признак рыночной заявки.</para></listItem>
-  <listItem><para><legacyBold>Код клиента</legacyBold> – код клиента присвоенный дрокером,
+  <listItem><para><legacyBold>Цена ноль</legacyBold> – Нулевая цена регистрирует рыночную заявку.</para></listItem>
+  <listItem><para><legacyBold>Код клиента</legacyBold> – код клиента присвоенный брокером,
   если значение не указано и установлен флажок <legacyBold>Параметры</legacyBold>, то берется значение из стратегии.</para></listItem>
   <listItem><para><legacyBold>Брокер</legacyBold> – код брокерской фирмы,
   если значение не указано и установлен флажок <legacyBold>Параметры</legacyBold>, то берется значение из стратегии.</para></listItem>
   <listItem><para><legacyBold>Условная заявка</legacyBold> – добавить условную заявку.</para></listItem>
+  <listItem><para><legacyBold>Обрезать цену для заявки</legacyBold> – Обрезать цену для заявки.</para></listItem>
+  <listItem><para><legacyBold>Маржинальность</legacyBold> – Включена ли маржинальность.</para></listItem>
+  <listItem><para><legacyBold>Маркет-мейкер</legacyBold> – Является ли заявка маркет-мейкерской.</para></listItem>
+  <listItem><para><legacyBold>Ручная</legacyBold> – Является ли заявка ручной.</para></listItem>
+  <listItem><para><legacyBold>Время жизни</legacyBold> – Время жизни лимитной заявки.</para></listItem>
+  <listItem><para><legacyBold>Время экспирации заявки</legacyBold> – Время истечения срока действия заявки.</para></listItem>
+  <listItem><para><legacyBold>Проскальзывание</legacyBold> – Проскальзывание в цене сделки.</para></listItem>
 </list>
   </definition>
 </definitionTable>

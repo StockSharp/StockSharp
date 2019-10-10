@@ -12,6 +12,7 @@
 	  <ddue:linkTarget>_blank</ddue:linkTarget>
 </ddue:externalLink></item>
   <item id="alor"><ddue:link xlink:href="df84be76-8798-4b96-94ea-a1b106266ad5" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Алор Трейд</ddue:link></item>
+  <item id="AlorHistory"><ddue:link xlink:href="87880b45-6311-42af-9d37-2f4ad9597658" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="alortrader">Add token content here</item>
   <item id="AlphaVantage"><ddue:link xlink:href="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="barchart"><ddue:link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BarChart</ddue:link></item>
@@ -91,6 +92,7 @@
     <ddue:linkText>Скачать</ddue:linkText>
     <ddue:linkUri>https://stocksharp.ru/products/download/</ddue:linkUri>
   </ddue:externalLink></item>
+  <item id="DukasCopy"><ddue:link xlink:href="4e2b91c9-624d-4a4c-b71f-41de89ad032b" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="etrade"><ddue:link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">E*TRADE</ddue:link></item>
   <item id="etrade_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>E*TRADE</ddue:linkText>
@@ -106,6 +108,7 @@
     <ddue:linkUri>https://en.wikipedia.org/wiki/FAST_protocol</ddue:linkUri>
     <ddue:linkAlternateText>Fix Adapted for STreaming protocol</ddue:linkAlternateText>
   </ddue:externalLink></item>
+  <item id="Finam"><ddue:link xlink:href="19c2bdbe-15ab-4b41-9d87-e838b5f17c8e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="fix"><ddue:link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link></item>
   <item id="fix_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>FIX</ddue:linkText>
@@ -126,6 +129,7 @@
     <ddue:linkText>GitHub</ddue:linkText>
     <ddue:linkUri>https://github.com/</ddue:linkUri>
   </ddue:externalLink></item>
+  <item id="Google"><ddue:link xlink:href="eba96e4f-8f29-4fc2-8011-5d38b415281b" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="HitBtc"><ddue:link xlink:href="17ebcf40-aa25-4717-83cd-d275209ff524" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="Huobi"><ddue:link xlink:href="16eaa615-aaf7-42a5-9de7-01762a650758" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="hydra"><ddue:link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Data</ddue:link></item>
@@ -177,6 +181,7 @@
 		  <ddue:linkText>https://msdn.microsoft.com/ru-ru/library/ms741870.aspx</ddue:linkText>
 		  <ddue:linkUri>https://msdn.microsoft.com/ru-ru/library/ms741870.aspx</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="Mfd"><ddue:link xlink:href="3f8e07ed-6fc1-4145-8532-2a960735f112" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="micex"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>ММВБ</ddue:linkText>
 		  <ddue:linkUri>http://moex.com/ru/markets/currency/</ddue:linkUri>
@@ -237,6 +242,7 @@
 	<ddue:linkUri>ftp://ftp.moex.com/pub/FORTS/Plaza2/</ddue:linkUri>
 </ddue:externalLink></item>
   <item id="Poloniex"><ddue:link xlink:href="18667328-deec-46dd-8c27-fce52733e5ce" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Quandl"><ddue:link xlink:href="2da31578-dd6d-4682-a9de-42f7bf892681" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="quantfeed"><ddue:link xlink:href="003e9486-6ed9-4afc-a325-6b2cbc382794" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">QuantFEED</ddue:link></item>
   <item id="quantfeed_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>QuantFEED</ddue:linkText>
@@ -358,6 +364,7 @@
    <ddue:linkUri>http://youtube.com/user/StockSharp/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="TradeOgre"><ddue:link xlink:href="989447cf-bc05-4f6a-a736-b3a916ee1ffc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Tradier"><ddue:link xlink:href="113c8f3e-3145-4899-bd5b-60ceac995be2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="transaq"><ddue:link xlink:href="a010f9bd-15bb-4858-a067-590101087dff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Transaq</ddue:link></item>
   <item id="transaq_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Transaq</ddue:linkText>
@@ -385,6 +392,7 @@
 		  <ddue:linkText>WPF</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/Windows_Presentation_Foundation</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="Xignite"><ddue:link xlink:href="f119fa3f-2ce2-4924-acb8-e97f1b9e4b5b" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="xml"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>Xml</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/Xml</ddue:linkUri>
@@ -393,7 +401,10 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="Yahoo"><ddue:link xlink:href="d73e788c-9915-402f-ba27-47217539979e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="Yobit"><ddue:link xlink:href="ea1dbc04-3c29-4fbe-91b0-260d1ded31ae" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="Zaif"><ddue:link xlink:href="6d22d370-721c-452b-85af-6fc9c31115ac" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="ZB"><ddue:link xlink:href="3502cfdf-e496-4567-ad4e-c7b195569b60" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Rss"><ddue:link xlink:href="08b8a9ca-6658-4088-b6b8-8715b12732ab" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="CsvConnector"><ddue:link xlink:href="9695b29f-2b7b-4a9b-b915-b8c4f9b50eab" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
 </content>

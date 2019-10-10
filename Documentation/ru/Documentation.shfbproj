@@ -297,6 +297,55 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\AlorSample.aml" />
+    <None Include="Topics\API_Getting_news_data.aml" />
+    <None Include="Topics\API_Getting_historical_data.aml" />
+    <None Include="Topics\CsvHistory.aml" />
+    <None Include="Topics\CsvSample.aml" />
+    <None Include="Topics\Csv.aml" />
+    <None Include="Topics\RssHistory.aml" />
+    <None Include="Topics\RssSample.aml" />
+    <None Include="Topics\RssConnectorsSettings.aml" />
+    <None Include="Topics\HydraCreatTask.aml" />
+    <None Include="Topics\TradierHistory.aml" />
+    <None Include="Topics\TradierSample.aml" />
+    <None Include="Topics\TradierConnectorsSettings.aml" />
+    <None Include="Topics\Tradier.aml" />
+    <None Include="Topics\Designer_Universal_formula.aml" />
+    <None Include="Topics\Terminal_connector_security_mapping.aml" />
+    <None Include="Topics\Designer_connector_security_mapping.aml" />
+    <None Include="Topics\GoogleHistory.aml" />
+    <None Include="Topics\GoogleConnectorsSettings.aml" />
+    <None Include="Topics\GoogleSample.aml" />
+    <None Include="Topics\Google.aml" />
+    <None Include="Topics\YahooHistory.aml" />
+    <None Include="Topics\YahooConnectorsSettings.aml" />
+    <None Include="Topics\YahooSample.aml" />
+    <None Include="Topics\Yahoo.aml" />
+    <None Include="Topics\XigniteHistory.aml" />
+    <None Include="Topics\XigniteConnectorsSettings.aml" />
+    <None Include="Topics\XigniteCopySample.aml" />
+    <None Include="Topics\Xignite.aml" />
+    <None Include="Topics\QuandlHistory.aml" />
+    <None Include="Topics\QuandlConnectorsSettings.aml" />
+    <None Include="Topics\QuandlSample.aml" />
+    <None Include="Topics\Quandl.aml" />
+    <None Include="Topics\MfdHistory.aml" />
+    <None Include="Topics\MfdConnectorsSettings.aml" />
+    <None Include="Topics\MfdSample.aml" />
+    <None Include="Topics\Mfd.aml" />
+    <None Include="Topics\AlorHistoryHistory.aml" />
+    <None Include="Topics\AlorHistoryConnectorsSettings.aml" />
+    <None Include="Topics\AlorHistorySample.aml" />
+    <None Include="Topics\AlorHistory.aml" />
+    <None Include="Topics\FinamCopyHistory.aml" />
+    <None Include="Topics\FinamConnectorsSettings.aml" />
+    <None Include="Topics\FinamSample.aml" />
+    <None Include="Topics\Finam.aml" />
+    <None Include="Topics\DukasCopyHistory.aml" />
+    <None Include="Topics\DukasCopySample.aml" />
+    <None Include="Topics\DukasCopyConnectorsSettings.aml" />
+    <None Include="Topics\DukasCopy.aml" />
     <None Include="Topics\FastSample.aml" />
     <None Include="Topics\API_ConnectorsUIConfiguration.aml" />
     <None Include="Topics\API_Connectors.aml" />
@@ -4327,6 +4376,18 @@
     <Image Include="Art\API_ReconnectionLog.png">
       <ImageId>API_ReconnectionLog</ImageId>
       <AlternateText>API Reconnection Log</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_connector_security_mapping_01.png">
+      <ImageId>Designer_connector_security_mapping_01</ImageId>
+      <AlternateText>Designer connector security mapping 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_connector_security_mapping_00.png">
+      <ImageId>Designer_connector_security_mapping_00</ImageId>
+      <AlternateText>Designer connector security mapping 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Universal_formula_00.png">
+      <ImageId>Designer_Universal_formula_00</ImageId>
+      <AlternateText>Designer Universal formula 00</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,8 @@
 		<list class="bullet">
   			<listItem><link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX</link></listItem>
   			<listItem><link xlink:href="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93">FIX Server</link></listItem>
+  			<listItem><link xlink:href="9695b29f-2b7b-4a9b-b915-b8c4f9b50eab" /></listItem>
+  			<listItem><link xlink:href="08b8a9ca-6658-4088-b6b8-8715b12732ab" /></listItem>
 		</list>
     </introduction>
   </developerConceptualDocument>

@@ -2,7 +2,7 @@
 <topic id="5bb4f6f0-9057-4a88-b968-a5fd60641d4d" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para><codeEntityReference>T:StockSharp.Xaml.OrderGrid</codeEntityReference> - таблица для отображения заявок. 
+      <para><codeEntityReference>T:StockSharp.Xaml.OrderGrid</codeEntityReference> - таблица для отображения заявок и условных заявок. 
       Кроме того контекстное меню этой таблицы содержит команды для операций с заявками: регистрация, замена и отмена заявок. Выбор пункта меню приводит к генерации
       событий: <codeEntityReference qualifyHint="true">E:StockSharp.Xaml.OrderGrid.OrderRegistering</codeEntityReference>, 
       <codeEntityReference qualifyHint="true">E:StockSharp.Xaml.OrderGrid.OrderReRegistering</codeEntityReference> или 
