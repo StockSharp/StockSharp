@@ -252,6 +252,7 @@ StockSharp API Change log
 * (feature) Charting. Quick orders panel.
 * (feature) Charting. Quick time-frame and candle type switch.
 * (feature) IMessageAdapter. OrderConditionType property added.
+* (feature) CoinEx, FatBTC, LATOKEN connectors.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.FatBTC</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.FatBTC.FatBtcMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.FatBTC"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.FatBTC.FatBtcMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.FatBTC.FatBtcMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.FatBTC.FatBtcMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.FatBTC.FatBtcMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.FatBTC.FatBtcMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.FatBTC.FatBtcMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.FatBTC.FatBtcMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.FatBTC.FatBtcMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.FatBTC.FatBtcMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.FatBTC.FatBtcMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.FatBTC.FatBtcOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.FatBTC"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.FatBTC.FatBtcOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.FatBTC.FatBtcOrderCondition"/>.
+            </summary>
+        </member>
+    </members>
+</doc>

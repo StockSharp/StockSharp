@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.LATOKEN</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.LATOKEN.LatokenMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.LATOKEN"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.LATOKEN.LatokenMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.LATOKEN.LatokenMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.LATOKEN.LatokenMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.LATOKEN.LatokenMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.LATOKEN.LatokenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.LATOKEN.LatokenMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.LATOKEN.LatokenMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.LATOKEN.LatokenMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.LATOKEN.LatokenMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.LATOKEN.LatokenMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.LATOKEN.LatokenOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.LATOKEN"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.LATOKEN.LatokenOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.LATOKEN.LatokenOrderCondition"/>.
+            </summary>
+        </member>
+    </members>
+</doc>
