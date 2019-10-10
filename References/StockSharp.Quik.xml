@@ -217,6 +217,9 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
       <inheritdoc />
     </member>
@@ -2619,11 +2622,6 @@
     <member name="T:StockSharp.Quik.QuikTrader">
       <summary>
             Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" />, предоставляющая подключение к терминалу Quik.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Quik.QuikTrader.DefaultLuaAddress">
-      <summary>
-            Адрес по-умолчанию к LUA FIX серверу. Равен localhost:5001
             </summary>
     </member>
     <member name="M:StockSharp.Quik.QuikTrader.#ctor">
