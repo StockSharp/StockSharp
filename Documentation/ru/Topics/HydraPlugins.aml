@@ -7,12 +7,10 @@
 
     <introduction>
       <para>
-      Все источники <token>hydra</token> это <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" /> из 
-      <link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" />. Для добавления собственного
-      источника необходимо создать собственный 
+      Для добавления собственного источника необходимо создать собственный 
       <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>, 
       как это сделать описано в пункте
-      <link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />.
+      <link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />, и добавить получившийся dll файл в папку с <token>hydra</token>.
 	  </para>
     </introduction>
   </developerConceptualDocument>
