@@ -241,7 +241,7 @@ namespace StockSharp.Algo
 		{
 			private decimal _receivedVolume;
 
-			private bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
+			private bool AllTradesReceived => Order.State == OrderStates.Done && Order.GetMatchedVolume() == _receivedVolume;
 
 			public NewTradeOrderRule(Order order, ITransactionProvider provider)
 				: base(order, provider)
@@ -288,7 +288,7 @@ namespace StockSharp.Algo
 				TrySubscribe();
 			}
 
-			private bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
+			private bool AllTradesReceived => Order.State == OrderStates.Done && Order.GetMatchedVolume() == _receivedVolume;
 
 			protected override void Subscribe()
 			{

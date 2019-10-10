@@ -253,6 +253,7 @@ StockSharp API Change log
 * (feature) Charting. Quick time-frame and candle type switch.
 * (feature) IMessageAdapter. OrderConditionType property added.
 * (feature) CoinEx, FatBTC, LATOKEN connectors.
+* (bug) Strategies. Fix stopping with non filled orders https://stocksharp.ru/forum/11068/strategiya-kotirovaniya-ne-ostanavlivaetsya-pri-polucheniya-oshibki-snyatiya-zayavki/
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -1375,20 +1375,13 @@ namespace StockSharp.Algo.Strategies
 					if (!WaitAllTrades)
 						return true;
 
-					//var leftVolume = order.Volume - order.GetMatchedVolume(Connector, true);
-
-					//if (leftVolume == 0)
-					//	return true;
-
-					var info = _ordersInfo.TryGetValue(order);
-
-					if (info == null)
+					if (!_ordersInfo.TryGetValue(order, out var info))
 					{
 						this.AddWarningLog(LocalizedStrings.Str1156Params, order.TransactionId);
 						return false;
 					}
 
-					var leftVolume = order.Volume - info.ReceivedVolume;
+					var leftVolume = order.GetMatchedVolume() - info.ReceivedVolume;
 
 					if (leftVolume != 0)
 					{					
@@ -2209,8 +2202,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				lock (_ordersInfo.SyncRoot)
 				{
-					var info = _ordersInfo.TryGetValue(trade.Order);
-					if (info?.IsOwn == true)
+					if (_ordersInfo.TryGetValue(trade.Order, out var info) && info.IsOwn)
 						info.ReceivedVolume += trade.Trade.Volume;
 				}
 			}

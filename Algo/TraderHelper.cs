@@ -1243,25 +1243,16 @@ namespace StockSharp.Algo
 		/// To calculate the implemented part of volume for order.
 		/// </summary>
 		/// <param name="order">The order, for which the implemented part of volume shall be calculated.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <param name="byOrder">To check implemented volume by order balance (<see cref="Order.Balance"/>) or by received trades. The default is checked by the order.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <returns>The implemented part of volume.</returns>
-		public static decimal GetMatchedVolume(this Order order, IConnector connector, bool byOrder)
+		public static decimal GetMatchedVolume(this Order order, bool byOrder = true, IConnector connector = null)
 		{
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
 			if (order.Type == OrderTypes.Conditional)
-			{
-				//throw new ArgumentException("Стоп-заявки не могут иметь реализованный объем.", "order");
-
 				throw new ArgumentException(nameof(order));
-
-				//order = order.DerivedOrder;
-
-				//if (order == null)
-				//	return 0;
-			}
 
 			return byOrder ? order.Volume - order.Balance : order.GetTrades(connector).Sum(o => o.Trade.Volume);
 		}
