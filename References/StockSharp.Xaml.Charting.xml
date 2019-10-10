@@ -74,24 +74,16 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.Areas">
-      <summary>
-            Chart areas.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IsAutoScroll">
-      <summary>
-            To scroll <see cref="P:StockSharp.Xaml.Charting.Chart.Areas" /> areas automatically when new data occurred. The default is off.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IsAutoRange">
-      <summary>
-            To use automatic range for the X-axis. The default is off.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.XAxisType">
-      <summary>
-            Type of X axis for this chart.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.AutoRangeInterval">
       <summary>
@@ -219,9 +211,7 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IndicatorTypes">
-      <summary>
-            The list of available indicators types.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="E:StockSharp.Xaml.Charting.Chart.AreaAdded">
       <summary>
@@ -552,10 +542,7 @@
       <returns>Copy.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartArea.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartArea.Dispose">
       <inheritdoc />
@@ -2093,26 +2080,16 @@
       <param name="storage">Settings storage.</param>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.Areas">
-      <summary>
-            Chart areas.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.IsAutoScroll">
-      <summary>
-            To scroll <see cref="P:StockSharp.Xaml.Charting.IChart.Areas" /> areas automatically when new data occurred. The default is enabled.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})">
-      <summary>
-            To reset the chart elements values drawn previously.
-            </summary>
-      <param name="elements">Chart elements.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.Draw(StockSharp.Xaml.Charting.ChartDrawData)">
-      <summary>
-            To process the new data.
-            </summary>
-      <param name="data">New data.</param>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.BackupService">
       <summary>
