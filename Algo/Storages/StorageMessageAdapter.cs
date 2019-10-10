@@ -1119,13 +1119,10 @@ namespace StockSharp.Algo.Storages
 
 		private Position GetPosition(SecurityId securityId, string portfolioName)
 		{
-			var security = !securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty() ? _securityStorage.LookupById(securityId) : _securityStorage.Lookup(new Security
+			var security = (!securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty() ? _securityStorage.LookupById(securityId) : _securityStorage.Lookup(new Security
 			{
 				Code = securityId.SecurityCode,
-			}).FirstOrDefault();
-
-			if (security == null)
-				security = TryCreateSecurity(securityId);
+			}).FirstOrDefault()) ?? TryCreateSecurity(securityId);
 
 			if (security == null)
 				return null;
