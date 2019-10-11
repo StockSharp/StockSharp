@@ -5,6 +5,7 @@ namespace SampleConnectionWithStorage
 	using System.Windows;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 	using Ecng.Xaml;
 
 	using MoreLinq;
@@ -189,10 +190,25 @@ namespace SampleConnectionWithStorage
 
 		private void CandlesClick(object sender, RoutedEventArgs e)
 		{
+			var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+
+			var range = TimeSpan.FromTicks(tf.Ticks * 10000);
+
+			if (range.TotalYears() > 5)
+				range = TimeSpan.FromTicks(TimeHelper.TicksPerYear * 5);
+
+			var wnd = new DatesWindow { From = DateTime.Today - range };
+
+			if (!wnd.ShowModal(this))
+				return;
+
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var t = (TimeSpan)CandlesPeriods.SelectedItem;
-				var series = new CandleSeries(typeof(TimeFrameCandle), security, t);
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf)
+				{
+					From = wnd.From,
+					To = wnd.To
+				};
 
 				new ChartWindow(series).Show();
 			}

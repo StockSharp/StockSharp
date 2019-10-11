@@ -40,7 +40,7 @@
 			area.Elements.Add(_candleElem);
 
 			_connector.CandleSeriesProcessing += ProcessNewCandle;
-			_connector.SubscribeCandles(_candleSeries, DateTime.Today - TimeSpan.FromTicks(((TimeSpan)candleSeries.Arg).Ticks * 10000));
+			_connector.SubscribeCandles(_candleSeries);
 		}
 
 		private void ProcessNewCandle(CandleSeries series, Candle candle)
