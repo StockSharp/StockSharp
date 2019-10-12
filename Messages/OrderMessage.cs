@@ -90,6 +90,23 @@ namespace StockSharp.Messages
 		public OrderCondition Condition { get; set; }
 
 		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected virtual void CopyTo(OrderMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.TransactionId = TransactionId;
+			destination.PortfolioName = PortfolioName;
+			destination.OrderType = OrderType;
+			destination.UserOrderId = UserOrderId;
+			destination.BrokerCode = BrokerCode;
+			destination.ClientCode = ClientCode;
+			destination.Condition = Condition?.Clone();
+		}
+
+		/// <summary>
 		/// Initialize <see cref="OrderMessage"/>.
 		/// </summary>
 		/// <param name="type">Message type.</param>

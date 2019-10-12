@@ -53,11 +53,14 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new ErrorMessage
+			var clone = new ErrorMessage
 			{
 				Error = Error,
-				LocalTime = LocalTime,
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 	}
 }

@@ -45,9 +45,9 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// <returns>The object, to which copied information.</returns>
 		protected StrategyLookupMessage CopyTo(StrategyLookupMessage destination)
 		{
-			destination.TransactionId = TransactionId;
+			base.CopyTo(destination);
 
-			this.CopyExtensionInfo(destination);
+			destination.TransactionId = TransactionId;
 
 			return destination;
 		}

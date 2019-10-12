@@ -588,7 +588,6 @@ namespace StockSharp.Messages
 				Error = Error,
 				ExpiryDate = ExpiryDate,
 				IsSystem = IsSystem,
-				LocalTime = LocalTime,
 				OpenInterest = OpenInterest,
 				OrderId = OrderId,
 				OrderStringId = OrderStringId,
@@ -642,7 +641,7 @@ namespace StockSharp.Messages
 				MinVolume = MinVolume,
 			};
 
-			this.CopyExtensionInfo(clone);
+			CopyTo(clone);
 
 			return clone;
 		}

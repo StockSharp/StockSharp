@@ -306,8 +306,7 @@ namespace StockSharp.Messages
 		/// <param name="destination">The object, to which copied information.</param>
 		public void CopyTo(MarketDataMessage destination)
 		{
-			if (destination == null)
-				throw new ArgumentNullException(nameof(destination));
+			base.CopyTo(destination);
 
 			destination.Arg = Arg;
 			destination.DataType = DataType;
@@ -319,7 +318,6 @@ namespace StockSharp.Messages
 			destination.Count = Count;
 			destination.MaxDepth = MaxDepth;
 			destination.NewsId = NewsId;
-			destination.LocalTime = LocalTime;
 			destination.IsNotSupported = IsNotSupported;
 			destination.BuildMode = BuildMode;
 			destination.BuildFrom = BuildFrom;
@@ -329,8 +327,6 @@ namespace StockSharp.Messages
 			destination.AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame;
 			destination.IsRegularTradingHours = IsRegularTradingHours;
 			destination.IsFinished = IsFinished;
-
-			base.CopyTo(destination);
 		}
 
 		/// <inheritdoc />

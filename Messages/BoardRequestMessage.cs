@@ -66,13 +66,13 @@ namespace StockSharp.Messages
 		/// <returns>The object, to which copied information.</returns>
 		protected BoardRequestMessage CopyTo(BoardRequestMessage destination)
 		{
+			base.CopyTo(destination);
+
 			destination.BoardCode = BoardCode;
 			destination.IsSubscribe = IsSubscribe;
 			destination.TransactionId = TransactionId;
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.Error = Error;
-
-			this.CopyExtensionInfo(destination);
 
 			return destination;
 		}

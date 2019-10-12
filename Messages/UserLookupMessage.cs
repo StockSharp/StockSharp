@@ -57,10 +57,10 @@ namespace StockSharp.Messages
 		/// <returns>The object, to which copied information.</returns>
 		protected UserLookupMessage CopyTo(UserLookupMessage destination)
 		{
+			base.CopyTo(destination);
+
 			destination.Like = Like;
 			destination.TransactionId = TransactionId;
-
-			this.CopyExtensionInfo(destination);
 
 			return destination;
 		}

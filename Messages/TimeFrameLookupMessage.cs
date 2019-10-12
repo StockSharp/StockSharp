@@ -51,9 +51,9 @@ namespace StockSharp.Messages
 		/// <returns>The object, to which copied information.</returns>
 		protected TimeFrameLookupMessage CopyTo(TimeFrameLookupMessage destination)
 		{
-			destination.TransactionId = TransactionId;
+			base.CopyTo(destination);
 
-			this.CopyExtensionInfo(destination);
+			destination.TransactionId = TransactionId;
 
 			return destination;
 		}

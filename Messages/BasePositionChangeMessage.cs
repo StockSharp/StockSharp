@@ -35,5 +35,17 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
 		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
 		public string ClientCode { get; set; }
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected virtual void CopyTo(BasePositionChangeMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.PortfolioName = PortfolioName;
+			destination.ClientCode = ClientCode;
+		}
 	}
 }

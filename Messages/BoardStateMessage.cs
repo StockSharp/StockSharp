@@ -92,17 +92,26 @@ namespace StockSharp.Messages
 		public SessionStates State { get; set; }
 
 		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected virtual void CopyTo(BoardStateMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.BoardCode = BoardCode;
+			destination.State = State;
+		}
+
+		/// <summary>
 		/// Create a copy of <see cref="BoardStateMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new BoardStateMessage
-			{
-				BoardCode = BoardCode,
-				State = State,
-				LocalTime = LocalTime
-			};
+			var clone = new BoardStateMessage();
+			CopyTo(clone);
+			return clone;
 		}
 
 		/// <inheritdoc />

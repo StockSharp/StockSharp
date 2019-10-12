@@ -20,6 +20,8 @@ namespace StockSharp.Messages
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
+	using Ecng.Collections;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -51,6 +53,18 @@ namespace StockSharp.Messages
 		protected BaseChangeMessage(MessageTypes type)
 			: base(type)
 		{
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected virtual void CopyTo(BaseChangeMessage<TField> destination)
+		{
+			base.CopyTo(destination);
+
+			destination.ServerTime = ServerTime;
+			destination.Changes.AddRange(Changes);
 		}
 
 		/// <inheritdoc />

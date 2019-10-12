@@ -161,6 +161,8 @@ namespace StockSharp.Messages
 		/// <returns>The object, to which copied information.</returns>
 		protected PortfolioMessage CopyTo(PortfolioMessage destination)
 		{
+			base.CopyTo(destination);
+
 			destination.PortfolioName = PortfolioName;
 			destination.Currency = Currency;
 			destination.BoardCode = BoardCode;
@@ -170,8 +172,6 @@ namespace StockSharp.Messages
 			destination.TransactionId = TransactionId;
 			destination.ClientCode = ClientCode;
 			destination.InternalId = InternalId;
-
-			this.CopyExtensionInfo(destination);
 
 			return destination;
 		}

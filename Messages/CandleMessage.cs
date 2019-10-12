@@ -296,10 +296,8 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		protected CandleMessage CopyTo(CandleMessage copy)
 		{
-			if (copy == null)
-				throw new ArgumentNullException(nameof(copy));
+			CopyTo(copy);
 
-			copy.LocalTime = LocalTime;
 			copy.OpenPrice = OpenPrice;
 			copy.OpenTime = OpenTime;
 			copy.OpenVolume = OpenVolume;

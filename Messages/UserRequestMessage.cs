@@ -75,13 +75,13 @@ namespace StockSharp.Messages
 		/// <returns>The object, to which copied information.</returns>
 		protected UserRequestMessage CopyTo(UserRequestMessage destination)
 		{
+			base.CopyTo(destination);
+
 			destination.Login = Login;
 			destination.IsSubscribe = IsSubscribe;
 			destination.TransactionId = TransactionId;
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.Error = Error;
-
-			this.CopyExtensionInfo(destination);
 
 			return destination;
 		}

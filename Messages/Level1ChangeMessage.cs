@@ -749,9 +749,7 @@ namespace StockSharp.Messages
 	[DescriptionLoc(LocalizedStrings.Level1MarketDataKey)]
 	public class Level1ChangeMessage : BaseChangeMessage<Level1Fields>, ISecurityIdMessage
 	{
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
@@ -772,16 +770,14 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var msg = new Level1ChangeMessage
+			var clone = new Level1ChangeMessage
 			{
-				LocalTime = LocalTime,
 				SecurityId = SecurityId,
-				ServerTime = ServerTime,
 			};
 
-			msg.Changes.AddRange(Changes);
+			CopyTo(clone);
 
-			return msg;
+			return clone;
 		}
 
 		/// <inheritdoc />
