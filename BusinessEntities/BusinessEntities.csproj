@@ -76,6 +76,7 @@
     <Compile Include="AggregatedQuote.cs" />
     <Compile Include="BasePosition.cs" />
     <Compile Include="CategoryAttributes.cs" />
+    <Compile Include="DataType.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="ExchangeBoard.cs" />
     <Compile Include="ExchangeBoard_Instances.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="IPortfolioProvider.cs" />
     <Compile Include="IPositionProvider.cs" />
     <Compile Include="ISecurityProvider.cs" />
+    <Compile Include="ISubscriptionProvider.cs" />
     <Compile Include="ITransactionProvider.cs" />
     <Compile Include="MarketDepth.cs" />
     <Compile Include="MarketDepthPair.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="Quote.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="SecurityExternalId.cs" />
+    <Compile Include="Subscription.cs" />
     <Compile Include="Trade.cs" />
     <Compile Include="UnitHelper.cs" />
   </ItemGroup>
