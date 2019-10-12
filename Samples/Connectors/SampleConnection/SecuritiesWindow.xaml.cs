@@ -85,7 +85,7 @@ namespace SampleConnection
 				var window = _quotesWindows.SafeAdd(security, s =>
 				{
 					// subscribe on order book flow
-					connector.RegisterMarketDepth(security);
+					connector.SubscribeMarketDepth(security);
 
 					// create order book window
 					var wnd = new QuotesWindow
@@ -119,9 +119,9 @@ namespace SampleConnection
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
 				if (connector.RegisteredSecurities.Contains(security))
-					connector.UnRegisterSecurity(security);
+					connector.UnSubscribeLevel1(security);
 				else
-					connector.RegisterSecurity(security);
+					connector.SubscribeLevel1(security);
 			}
 		}
 
@@ -132,9 +132,9 @@ namespace SampleConnection
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
 				if (connector.RegisteredTrades.Contains(security))
-					connector.UnRegisterTrades(security);
+					connector.UnSubscribeTrades(security);
 				else
-					connector.RegisterTrades(security);
+					connector.SubscribeTrades(security);
 			}
 		}
 
@@ -149,7 +149,7 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				connector.RegisterTrades(security, wnd.From, wnd.To);
+				connector.SubscribeTrades(security, wnd.From, wnd.To);
 			}
 		}
 
@@ -160,9 +160,9 @@ namespace SampleConnection
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
 				if (connector.RegisteredOrderLogs.Contains(security))
-					connector.UnRegisterOrderLog(security);
+					connector.UnSubscribeOrderLog(security);
 				else
-					connector.RegisterOrderLog(security);
+					connector.SubscribeOrderLog(security);
 			}
 		}
 

@@ -283,30 +283,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
-		{
-			SubscribeMarketData(security, MarketDataTypes.Level1, from, to, count, buildMode, buildFrom, adapter: adapter);
-		}
-
-		/// <inheritdoc />
-		public void UnRegisterSecurity(Security security)
-		{
-			UnSubscribeMarketData(security, MarketDataTypes.Level1);
-		}
-
-		/// <inheritdoc />
-		public void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
-		{
-			SubscribeMarketData(security, MarketDataTypes.MarketDepth, from, to, count, buildMode, buildFrom, null, maxDepth, adapter);
-		}
-
-		/// <inheritdoc />
-		public void UnRegisterMarketDepth(Security security)
-		{
-			UnSubscribeMarketData(security, MarketDataTypes.MarketDepth);
-		}
-
-		/// <inheritdoc />
 		public void RegisterFilteredMarketDepth(Security security)
 		{
 			if (security == null)
@@ -333,15 +309,143 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		public void SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
+		{
+			SubscribeMarketData(security, MarketDataTypes.MarketDepth, from, to, count, buildMode, buildFrom, null, maxDepth, adapter);
+		}
+
+		/// <inheritdoc />
+		public void UnSubscribeMarketDepth(Security security)
+		{
+			UnSubscribeMarketData(security, MarketDataTypes.MarketDepth);
+		}
+
+		/// <inheritdoc />
+		public void SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
 		{
 			SubscribeMarketData(security, MarketDataTypes.Trades, from, to, count, buildMode, buildFrom, adapter: adapter);
 		}
 
 		/// <inheritdoc />
-		public void UnRegisterTrades(Security security)
+		public void UnSubscribeTrades(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.Trades);
+		}
+
+		/// <inheritdoc />
+		public void SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		{
+			SubscribeMarketData(security, MarketDataTypes.Level1, from, to, count, buildMode, buildFrom, adapter: adapter);
+		}
+
+		/// <inheritdoc />
+		public void UnSubscribeLevel1(Security security)
+		{
+			UnSubscribeMarketData(security, MarketDataTypes.Level1);
+		}
+
+		/// <inheritdoc />
+		public void SubscribeOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		{
+			SubscribeMarketData(security, MarketDataTypes.OrderLog, from, to, count, adapter: adapter);
+		}
+
+		/// <inheritdoc />
+		public void UnSubscribeOrderLog(Security security)
+		{
+			UnSubscribeMarketData(security, MarketDataTypes.OrderLog);
+		}
+
+		/// <inheritdoc />
+		public void SubscribeNews(Security security = null, IMessageAdapter adapter = null)
+		{
+			SubscribeMarketData(security, MarketDataTypes.News, adapter: adapter);
+		}
+
+		/// <inheritdoc />
+		public void UnSubscribeNews(Security security = null)
+		{
+			OnUnSubscribeNews(security);
+		}
+
+		/// <inheritdoc />
+		[Obsolete("Use SubscribeLevel1 method instead.")]
+		public void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		{
+			SubscribeLevel1(security, from, to, count, buildMode, buildFrom, adapter);
+		}
+
+		/// <inheritdoc />
+		[Obsolete("Use UnSubscribeLevel1 method instead.")]
+		public void UnRegisterSecurity(Security security)
+		{
+			UnSubscribeLevel1(security);
+		}
+
+		/// <inheritdoc />
+		[Obsolete("Use SubscribeMarketDepth method instead.")]
+		public void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
+		{
+			SubscribeMarketDepth(security, from, to, count, buildMode, buildFrom, maxDepth, adapter);
+		}
+
+		/// <inheritdoc />
+		[Obsolete("Use UnSubscribeMarketDepth method instead.")]
+		public void UnRegisterMarketDepth(Security security)
+		{
+			UnSubscribeMarketDepth(security);
+		}
+
+		/// <inheritdoc />
+		[Obsolete("Use SubscribeTrades method instead.")]
+		public void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		{
+			SubscribeTrades(security, from, to, count, buildMode, buildFrom, adapter);
+		}
+
+		/// <inheritdoc />
+		[Obsolete("Use UnSubscribeTrades method instead.")]
+		public void UnRegisterTrades(Security security)
+		{
+			UnSubscribeTrades(security);
+		}
+
+		/// <inheritdoc />
+		[Obsolete("Use SubscribeOrderLog method instead.")]
+		public void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		{
+			SubscribeOrderLog(security, from, to, count, adapter);
+		}
+
+		/// <inheritdoc />
+		[Obsolete("Use UnSubscribeOrderLog method instead.")]
+		public void UnRegisterOrderLog(Security security)
+		{
+			UnSubscribeOrderLog(security);
+		}
+
+		/// <inheritdoc />
+		[Obsolete("Use SubscribeNews method instead.")]
+		public void RegisterNews(Security security = null, IMessageAdapter adapter = null)
+		{
+			OnRegisterNews(security, adapter);
+		}
+
+		/// <summary>
+		/// Subscribe on news.
+		/// </summary>
+		/// <param name="security">Security for subscription.</param>
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		protected virtual void OnRegisterNews(Security security = null, IMessageAdapter adapter = null)
+		{
+			SubscribeNews(security, adapter);
+		}
+
+		/// <inheritdoc />
+		[Obsolete("Use UnSubscribeNews method instead.")]
+		public void UnRegisterNews(Security security = null)
+		{
+			UnSubscribeNews(security);
 		}
 
 		/// <inheritdoc />
@@ -382,40 +486,6 @@ namespace StockSharp.Algo
 				TransactionId = TransactionIdGenerator.GetNextId(),
 				IsSubscribe = false
 			});
-		}
-
-		/// <inheritdoc />
-		public void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
-		{
-			SubscribeMarketData(security, MarketDataTypes.OrderLog, from, to, count, adapter: adapter);
-		}
-
-		/// <inheritdoc />
-		public void UnRegisterOrderLog(Security security)
-		{
-			UnSubscribeMarketData(security, MarketDataTypes.OrderLog);
-		}
-
-		/// <inheritdoc />
-		public void RegisterNews(Security security = null, IMessageAdapter adapter = null)
-		{
-			OnRegisterNews(security, adapter);
-		}
-
-		/// <summary>
-		/// Subscribe on news.
-		/// </summary>
-		/// <param name="security">Security for subscription.</param>
-		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		protected virtual void OnRegisterNews(Security security = null, IMessageAdapter adapter = null)
-		{
-			SubscribeMarketData(security, MarketDataTypes.News, adapter: adapter);
-		}
-
-		/// <inheritdoc />
-		public void UnRegisterNews(Security security = null)
-		{
-			OnUnRegisterNews(security);
 		}
 
 		/// <inheritdoc />
@@ -467,7 +537,7 @@ namespace StockSharp.Algo
 		/// Unsubscribe from news.
 		/// </summary>
 		/// <param name="security">Security for subscription.</param>
-		protected virtual void OnUnRegisterNews(Security security = null)
+		protected virtual void OnUnSubscribeNews(Security security = null)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.News);
 		}

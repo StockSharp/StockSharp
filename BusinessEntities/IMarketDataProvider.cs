@@ -198,25 +198,6 @@ namespace StockSharp.BusinessEntities
 		void UnSubscribeMarketData(MarketDataMessage message);
 
 		/// <summary>
-		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="IConnector.MarketDepthsChanged"/>.
-		/// </summary>
-		/// <param name="security">The instrument by which quotes getting should be started.</param>
-		/// <param name="from">The initial date from which you need to get data.</param>
-		/// <param name="to">The final date by which you need to get data.</param>
-		/// <param name="count">Max count.</param>
-		/// <param name="buildMode">Build mode.</param>
-		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
-		/// <param name="maxDepth">Max depth of requested order book.</param>
-		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null);
-
-		/// <summary>
-		/// To stop getting quotes by the instrument.
-		/// </summary>
-		/// <param name="security">The instrument by which quotes getting should be stopped.</param>
-		void UnRegisterMarketDepth(Security security);
-
-		/// <summary>
 		/// To start getting filtered quotes (order book) by the instrument. Quotes values are available through the event <see cref="GetFilteredMarketDepth"/>.
 		/// </summary>
 		/// <param name="security">The instrument by which quotes getting should be started.</param>
@@ -229,6 +210,25 @@ namespace StockSharp.BusinessEntities
 		void UnRegisterFilteredMarketDepth(Security security);
 
 		/// <summary>
+		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="IConnector.MarketDepthsChanged"/>.
+		/// </summary>
+		/// <param name="security">The instrument by which quotes getting should be started.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Max count.</param>
+		/// <param name="buildMode">Build mode.</param>
+		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
+		/// <param name="maxDepth">Max depth of requested order book.</param>
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null);
+
+		/// <summary>
+		/// To stop getting quotes by the instrument.
+		/// </summary>
+		/// <param name="security">The instrument by which quotes getting should be stopped.</param>
+		void UnSubscribeMarketDepth(Security security);
+
+		/// <summary>
 		/// To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="IConnector.NewTrades"/>.
 		/// </summary>
 		/// <param name="security">The instrument by which trades getting should be started.</param>
@@ -238,13 +238,13 @@ namespace StockSharp.BusinessEntities
 		/// <param name="buildMode">Build mode.</param>
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
+		void SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting trades (tick data) by the instrument.
 		/// </summary>
 		/// <param name="security">The instrument by which trades getting should be stopped.</param>
-		void UnRegisterTrades(Security security);
+		void UnSubscribeTrades(Security security);
 
 		/// <summary>
 		/// To start getting new information (for example, <see cref="Security.LastTrade"/> or <see cref="Security.BestBid"/>) by the instrument.
@@ -256,13 +256,13 @@ namespace StockSharp.BusinessEntities
 		/// <param name="buildMode">Build mode.</param>
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
+		void SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting new information.
 		/// </summary>
 		/// <param name="security">The instrument by which new information getting should be stopped.</param>
-		void UnRegisterSecurity(Security security);
+		void UnSubscribeLevel1(Security security);
 
 		/// <summary>
 		/// Subscribe on order log for the security.
@@ -272,26 +272,26 @@ namespace StockSharp.BusinessEntities
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <param name="count">Max count.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
+		void SubscribeOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// Unsubscribe from order log for the security.
 		/// </summary>
 		/// <param name="security">Security for unsubscription.</param>
-		void UnRegisterOrderLog(Security security);
+		void UnSubscribeOrderLog(Security security);
 
 		/// <summary>
 		/// Subscribe on news.
 		/// </summary>
 		/// <param name="security">Security for subscription.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void RegisterNews(Security security = null, IMessageAdapter adapter = null);
+		void SubscribeNews(Security security = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// Unsubscribe from news.
 		/// </summary>
 		/// <param name="security">Security for subscription.</param>
-		void UnRegisterNews(Security security = null);
+		void UnSubscribeNews(Security security = null);
 
 		/// <summary>
 		/// Subscribe on the board changes.
