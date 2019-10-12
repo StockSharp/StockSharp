@@ -61,7 +61,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public abstract class CandleMessage : Message, IServerTimeMessage, ISecurityIdMessage
+	public abstract class CandleMessage : Message, IServerTimeMessage, ISecurityIdMessage, ISubscriptionIdMessage
 	{
 		/// <summary>
 		/// Security ID.
@@ -296,7 +296,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		protected CandleMessage CopyTo(CandleMessage copy)
 		{
-			CopyTo(copy);
+			base.CopyTo(copy);
 
 			copy.OpenPrice = OpenPrice;
 			copy.OpenTime = OpenTime;
@@ -331,6 +331,14 @@ namespace StockSharp.Messages
 		}
 
 		DateTimeOffset IServerTimeMessage.ServerTime => OpenTime;
+
+		long ISubscriptionIdMessage.SubscriptionId
+		{
+			get => OriginalTransactionId;
+			set => OriginalTransactionId = value;
+		}
+
+		IEnumerable<long> ISubscriptionIdMessage.SubscriptionIds { get; set; }
 	}
 
 	/// <summary>

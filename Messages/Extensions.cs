@@ -1570,5 +1570,12 @@ namespace StockSharp.Messages
 
 			return false;
 		}
+
+		internal static void CopySubscriptionIds<TMessage>(this TMessage source, TMessage destination)
+			where TMessage : ISubscriptionIdMessage
+		{
+			destination.SubscriptionId = source.SubscriptionId;
+			destination.SubscriptionIds = source.SubscriptionIds?.ToArray();
+		}
 	}
 }
