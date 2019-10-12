@@ -45,16 +45,16 @@ namespace StockSharp.Algo.Positions
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			if (message.IsBack)
 			{
-				base.SendInMessage(message);
+				base.OnSendInMessage(message);
 				return;
 			}
 
 			PositionManager.ProcessMessage(message);
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

@@ -242,7 +242,7 @@
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			if (message.IsBack && message.Adapter == this)
 			{
@@ -319,7 +319,7 @@
 					break;
 			}
 
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		private object GetNativeId(Message message, SecurityId securityId)

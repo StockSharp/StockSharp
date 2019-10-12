@@ -214,7 +214,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			var isStartTimer = false;
 
@@ -244,7 +244,7 @@ namespace StockSharp.Algo
 					if (_isFirstTimeConnect)
 						_isFirstTimeConnect = false;
 					else
-						base.SendInMessage(new ResetMessage());
+						base.OnSendInMessage(new ResetMessage());
 
 					lock (_timeSync)
 					{
@@ -279,14 +279,14 @@ namespace StockSharp.Algo
 
 				case ExtendedMessageTypes.Reconnect:
 				{
-					SendInMessage(new ConnectMessage());
+					OnSendInMessage(new ConnectMessage());
 					return;
 				}
 			}
 
 			try
 			{
-				base.SendInMessage(message);
+				base.OnSendInMessage(message);
 
 				lock (_timeSync)
 				{

@@ -398,7 +398,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -483,7 +483,7 @@ namespace StockSharp.Algo.Storages
 					break;
 			}
 
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

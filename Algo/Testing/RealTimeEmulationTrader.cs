@@ -87,7 +87,7 @@ namespace StockSharp.Algo.Testing
 				}
 			}
 
-			public override void SendInMessage(Message message)
+			protected override void OnSendInMessage(Message message)
 			{
 				switch (message.Type)
 				{

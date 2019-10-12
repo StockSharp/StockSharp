@@ -51,7 +51,7 @@
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			if (message.IsBack)
 			{
@@ -61,7 +61,7 @@
 					message.IsBack = false;
 				}
 
-				//base.SendInMessage(message);
+				//base.OnSendInMessage(message);
 				//return;
 			}
 
@@ -279,7 +279,7 @@
 				}
 			}
 
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		private void ProcessSubscriptionMessage<TMessage>(TMessage message, bool isSubscribe, long transactionId, long originalTransactionId, PairSet<long, TMessage> subscriptions)

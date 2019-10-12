@@ -509,7 +509,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -546,7 +546,7 @@ namespace StockSharp.Algo.Storages
 					break;
 
 				default:
-					base.SendInMessage(message);
+					base.OnSendInMessage(message);
 					break;
 			}
 		}
@@ -558,14 +558,14 @@ namespace StockSharp.Algo.Storages
 
 			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
-				base.SendInMessage(msg);
+				base.OnSendInMessage(msg);
 				return;
 			}
 
 			foreach (var security in _securityStorage.Lookup(msg))
 				RaiseStorageMessage(security.ToMessage(originalTransactionId: msg.TransactionId));
 
-			base.SendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessBoardLookup(BoardLookupMessage msg)
@@ -575,14 +575,14 @@ namespace StockSharp.Algo.Storages
 
 			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
-				base.SendInMessage(msg);
+				base.OnSendInMessage(msg);
 				return;
 			}
 
 			foreach (var board in ExchangeInfoProvider.LookupBoards(msg.Like))
 				RaiseStorageMessage(board.ToMessage(msg.TransactionId));
 
-			base.SendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessPortfolioLookup(PortfolioLookupMessage msg)
@@ -592,7 +592,7 @@ namespace StockSharp.Algo.Storages
 
 			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
-				base.SendInMessage(msg);
+				base.OnSendInMessage(msg);
 				return;
 			}
 
@@ -607,7 +607,7 @@ namespace StockSharp.Algo.Storages
 				RaiseStorageMessage(position.ToChangeMessage(msg.TransactionId));
 			}
 
-			base.SendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessOrderStatus(OrderStatusMessage msg)
@@ -619,7 +619,7 @@ namespace StockSharp.Algo.Storages
 
 			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
-				base.SendInMessage(msg);
+				base.OnSendInMessage(msg);
 				return;
 			}
 
@@ -656,7 +656,7 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			base.SendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessOrderCancel(OrderCancelMessage msg)
@@ -666,7 +666,7 @@ namespace StockSharp.Algo.Storages
 
 			// can be looped back from offline
 			_cancellationTransactions.TryAdd(msg.TransactionId, msg.OrderTransactionId);
-			base.SendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessMarketDataRequest(MarketDataMessage msg)
@@ -676,7 +676,7 @@ namespace StockSharp.Algo.Storages
 
 			if (msg.IsBack || (msg.From == null && DaysLoad == TimeSpan.Zero))
 			{
-				base.SendInMessage(msg);
+				base.OnSendInMessage(msg);
 				return;
 			}
 
@@ -710,7 +710,7 @@ namespace StockSharp.Algo.Storages
 						}
 					}
 
-					base.SendInMessage(msg.ValidateBounds());	
+					base.OnSendInMessage(msg.ValidateBounds());	
 				}
 				else
 				{
@@ -720,7 +720,7 @@ namespace StockSharp.Algo.Storages
 						RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId });
 					}
 					else
-						base.SendInMessage(msg);
+						base.OnSendInMessage(msg);
 				}
 			}
 			else
@@ -735,7 +735,7 @@ namespace StockSharp.Algo.Storages
 					});
 				}
 				else
-					base.SendInMessage(msg);
+					base.OnSendInMessage(msg);
 			}
 		}
 

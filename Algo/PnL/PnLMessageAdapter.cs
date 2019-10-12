@@ -46,16 +46,16 @@ namespace StockSharp.Algo.PnL
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			if (message.IsBack)
 			{
-				base.SendInMessage(message);
+				base.OnSendInMessage(message);
 				return;
 			}
 
 			PnLManager.ProcessMessage(message);
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

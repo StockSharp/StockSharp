@@ -88,7 +88,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			if (message.IsBack)
 			{
@@ -99,7 +99,7 @@ namespace StockSharp.Algo
 				}
 				else
 				{
-					base.SendInMessage(message);
+					base.OnSendInMessage(message);
 					return;
 				}
 			}
@@ -117,7 +117,7 @@ namespace StockSharp.Algo
 						_passThroughtIds.Clear();
 					}
 
-					base.SendInMessage(message);
+					base.OnSendInMessage(message);
 					break;
 				}
 
@@ -157,10 +157,10 @@ namespace StockSharp.Algo
 								_passThroughtIds.Add(pfMsg.TransactionId);
 						}
 
-						base.SendInMessage(msg);
+						base.OnSendInMessage(msg);
 					}
 
-					base.SendInMessage(message);
+					base.OnSendInMessage(message);
 					break;
 				}
 
@@ -173,7 +173,7 @@ namespace StockSharp.Algo
 					break;
 
 				default:
-					base.SendInMessage(message);
+					base.OnSendInMessage(message);
 					break;
 			}
 		}
@@ -382,7 +382,7 @@ namespace StockSharp.Algo
 		{
 			if (_passThroughtIds.Contains(message.TransactionId))
 			{
-				base.SendInMessage(message);
+				base.OnSendInMessage(message);
 				return;
 			}
 
@@ -410,7 +410,7 @@ namespace StockSharp.Algo
 						_onlyHistorySubscriptions.Add(message.TransactionId);
 				}
 
-				base.SendInMessage(message);
+				base.OnSendInMessage(message);
 			}
 
 			if (sendOutMsg != null)
@@ -608,7 +608,7 @@ namespace StockSharp.Algo
 				if (!message.IsSubscribe && message.OriginalTransactionId == 0)
 					message.OriginalTransactionId = info.Message.TransactionId;
 
-				base.SendInMessage(message);
+				base.OnSendInMessage(message);
 			}
 		}
 

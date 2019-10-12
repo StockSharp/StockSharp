@@ -52,7 +52,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -106,7 +106,7 @@ namespace StockSharp.Algo
 						}
 
 						foreach (var inner in inners)
-							base.SendInMessage(inner);
+							base.OnSendInMessage(inner);
 					}
 					else
 					{
@@ -117,7 +117,7 @@ namespace StockSharp.Algo
 
 						foreach (var id in info.LegsSubscriptions)
 						{
-							base.SendInMessage(new MarketDataMessage
+							base.OnSendInMessage(new MarketDataMessage
 							{
 								TransactionId = TransactionIdGenerator.GetNextId(),
 								IsSubscribe = false,
@@ -135,7 +135,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />
