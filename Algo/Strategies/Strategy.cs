@@ -2725,7 +2725,10 @@ namespace StockSharp.Algo.Strategies
 				{
 					var orderId = stateMsg.Statistics[nameof(Order.Id)].Item2.To<long>();
 
+					// TODO
+#pragma warning disable 618
 					CancelOrder(Connector.Orders.First(o => o.Id == orderId));
+#pragma warning restore 618
 
 					break;
 				}

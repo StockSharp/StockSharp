@@ -435,31 +435,38 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use NewOrder event to collect data.")]
 		public IEnumerable<Order> Orders => _entityCache.Orders;
 
 		/// <inheritdoc />
+		[Obsolete("Use NewStopOrder event to collect data.")]
 		public IEnumerable<Order> StopOrders => Orders.Where(o => o.Type == OrderTypes.Conditional);
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderRegisterFailed event to collect data.")]
 		public IEnumerable<OrderFail> OrderRegisterFails => _entityCache.OrderRegisterFails;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderCancelFailed event to collect data.")]
 		public IEnumerable<OrderFail> OrderCancelFails => _entityCache.OrderCancelFails;
 
 		/// <inheritdoc />
+		[Obsolete("Use NewTrade event to collect data.")]
 		public IEnumerable<Trade> Trades => _entityCache.Trades;
 
 		/// <inheritdoc />
+		[Obsolete("Use NewMyTrade event to collect data.")]
 		public IEnumerable<MyTrade> MyTrades => _entityCache.MyTrades;
+
+		/// <inheritdoc />
+		[Obsolete("Use NewNews event to collect data.")]
+		public IEnumerable<News> News => _entityCache.News;
 
 		/// <inheritdoc />
 		public virtual IEnumerable<Portfolio> Portfolios => _entityCache.Portfolios;
 
 		/// <inheritdoc />
 		public IEnumerable<Position> Positions => _entityCache.Positions;
-
-		/// <inheritdoc />
-		public IEnumerable<News> News => _entityCache.News;
 
 		/// <summary>
 		/// Risk control manager.

@@ -1223,30 +1223,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get order trades.
-		/// </summary>
-		/// <param name="order">Orders.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
-		/// <returns>Trades.</returns>
-		public static IEnumerable<MyTrade> GetTrades(this Order order, IConnector connector)
-		{
-			if (order == null)
-				throw new ArgumentNullException(nameof(order));
-
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			return connector.MyTrades.Filter(order);
-		}
-
-		/// <summary>
 		/// To calculate the implemented part of volume for order.
 		/// </summary>
 		/// <param name="order">The order, for which the implemented part of volume shall be calculated.</param>
-		/// <param name="byOrder">To check implemented volume by order balance (<see cref="Order.Balance"/>) or by received trades. The default is checked by the order.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <returns>The implemented part of volume.</returns>
-		public static decimal GetMatchedVolume(this Order order, bool byOrder = true, IConnector connector = null)
+		public static decimal GetMatchedVolume(this Order order)
 		{
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
@@ -1254,18 +1235,7 @@ namespace StockSharp.Algo
 			if (order.Type == OrderTypes.Conditional)
 				throw new ArgumentException(nameof(order));
 
-			return byOrder ? order.Volume - order.Balance : order.GetTrades(connector).Sum(o => o.Trade.Volume);
-		}
-
-		/// <summary>
-		/// To get weighted mean price of order matching.
-		/// </summary>
-		/// <param name="order">The order, for which the weighted mean matching price shall be got.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
-		/// <returns>The weighted mean price. If no order exists no trades, 0 is returned.</returns>
-		public static decimal GetAveragePrice(this Order order, IConnector connector)
-		{
-			return order.GetTrades(connector).GetAveragePrice();
+			return order.Volume - order.Balance;
 		}
 
 		/// <summary>

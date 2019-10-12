@@ -1,5 +1,12 @@
 namespace StockSharp.Algo
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+
+	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
+
 	partial class TraderHelper
 	{
 		///// <summary>
@@ -351,5 +358,53 @@ namespace StockSharp.Algo
 		//		return lsu.Wait();
 		//	}
 		//}
+
+		/// <summary>
+		/// To get order trades.
+		/// </summary>
+		/// <param name="order">Orders.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <returns>Trades.</returns>
+		[Obsolete]
+		public static IEnumerable<MyTrade> GetTrades(this Order order, IConnector connector)
+		{
+			if (order == null)
+				throw new ArgumentNullException(nameof(order));
+
+			if (connector == null)
+				throw new ArgumentNullException(nameof(connector));
+
+			return connector.MyTrades.Filter(order);
+		}
+
+		/// <summary>
+		/// To get weighted mean price of order matching.
+		/// </summary>
+		/// <param name="order">The order, for which the weighted mean matching price shall be got.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <returns>The weighted mean price. If no order exists no trades, 0 is returned.</returns>
+		[Obsolete]
+		public static decimal GetAveragePrice(this Order order, IConnector connector)
+		{
+			return order.GetTrades(connector).GetAveragePrice();
+		}
+
+		/// <summary>
+		/// To calculate the implemented part of volume for order.
+		/// </summary>
+		/// <param name="order">The order, for which the implemented part of volume shall be calculated.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <returns>The implemented part of volume.</returns>
+		[Obsolete]
+		public static decimal GetMatchedVolume(this Order order, IConnector connector)
+		{
+			if (order == null)
+				throw new ArgumentNullException(nameof(order));
+
+			if (order.Type == OrderTypes.Conditional)
+				throw new ArgumentException(nameof(order));
+
+			return order.GetTrades(connector).Sum(o => o.Trade.Volume);
+		}
 	}
 }
