@@ -50,10 +50,7 @@
 			}
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public override void SendInMessage(Message message)
 		{
 			if (message.IsBack)
@@ -326,10 +323,7 @@
 			_pendingMessages.Add(message);
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			ConnectMessage connectMessage = null;

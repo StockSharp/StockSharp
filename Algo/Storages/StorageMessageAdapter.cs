@@ -508,10 +508,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public override void SendInMessage(Message message)
 		{
 			switch (message.Type)
@@ -988,10 +985,7 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			switch (message.Type)

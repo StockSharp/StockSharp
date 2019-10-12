@@ -107,10 +107,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SuppressReconnectingErrors { get; set; }
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			switch (message.Type)
@@ -216,10 +213,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public override void SendInMessage(Message message)
 		{
 			var isStartTimer = false;
