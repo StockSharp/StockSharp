@@ -833,6 +833,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.BaseGridControl" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.PopupMenu">
+      <summary>
+            Popup menu.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)">
       <summary>
             Called when the ItemsSource property changes.
@@ -1723,6 +1728,11 @@
     <member name="E:StockSharp.Xaml.QuickOrderPanel.RegisterOrder">
       <summary>
             The event of the order registration.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.QuickOrderPanel.SettingsChanged">
+      <summary>
+            The panel settings change event.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.QuickOrderPanel.#ctor">
@@ -3687,10 +3697,7 @@
       <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.ProxySettings.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.ProxyEditorWindow">
       <summary>
@@ -4284,10 +4291,7 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToLevel1">
       <summary>
@@ -6522,12 +6526,6 @@
       <param name="name">The field name.</param>
       <param name="visibility">The visibility.</param>
     </member>
-    <member name="M:StockSharp.Xaml.SecurityPicker.AddContextMenuItem(System.Windows.Controls.Control)">
-      <summary>
-            To add a menu item for the table.
-            </summary>
-      <param name="menuItem">The menu item.</param>
-    </member>
     <member name="M:StockSharp.Xaml.SecurityPicker.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
@@ -6677,10 +6675,7 @@
       <param name="node">Node.</param>
     </member>
     <member name="M:StockSharp.Xaml.LogSourceNode.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.StorageSettingsPanel">
       <summary>
@@ -6846,6 +6841,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.StrategiesStatisticsPanel" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.StrategiesStatisticsPanel.UnderlyingGrid">
+      <summary>
+            The grid control.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.StrategiesStatisticsPanel.AddStrategies(System.Collections.Generic.IEnumerable{StockSharp.Algo.Strategies.Strategy})">
       <summary>
             To add strategies to the table.
@@ -6856,12 +6856,6 @@
       <summary>
             To clear the table.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.StrategiesStatisticsPanel.AddContextMenuItem(System.Object)">
-      <summary>
-            To add a menu item for the table.
-            </summary>
-      <param name="menuItem">The menu item.</param>
     </member>
     <member name="M:StockSharp.Xaml.StrategiesStatisticsPanel.SetColumnVisibility(System.String,System.Windows.Visibility)">
       <summary>
@@ -7069,10 +7063,7 @@
       <param name="platform">Platform.</param>
     </member>
     <member name="M:StockSharp.Xaml.TargetPlatformFeature.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.TargetPlatformWindow">
       <summary>

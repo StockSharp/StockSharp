@@ -291,13 +291,7 @@
       <param name="dumpDir">Temp files directory.</param>
     </member>
     <member name="M:StockSharp.Alerts.AlertNotificationService.Notify(StockSharp.Alerts.AlertNotifications,System.String,System.String,System.DateTimeOffset)">
-      <summary>
-            Add alert at the output.
-            </summary>
-      <param name="type">Alert type.</param>
-      <param name="caption">Signal header.</param>
-      <param name="message">Alert text.</param>
-      <param name="time">Creation time.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Alerts.AlertNotificationService.DisposeManaged">
       <summary>

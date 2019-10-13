@@ -3474,5 +3474,32 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Upbit.Name,
 			Exchange = Exchange.Upbit,
 		};
+		
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.CoinEx"/>.
+		/// </summary>
+		public static ExchangeBoard CoinEx { get; } = new ExchangeBoard
+		{
+			Code = Exchange.CoinEx.Name,
+			Exchange = Exchange.CoinEx,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.FatBtc"/>.
+		/// </summary>
+		public static ExchangeBoard FatBtc { get; } = new ExchangeBoard
+		{
+			Code = Exchange.FatBtc.Name,
+			Exchange = Exchange.FatBtc,
+		};
+		
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Latoken"/>.
+		/// </summary>
+		public static ExchangeBoard Latoken { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Latoken.Name,
+			Exchange = Exchange.Latoken,
+		};
 	}
 }

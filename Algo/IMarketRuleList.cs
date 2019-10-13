@@ -88,7 +88,7 @@ namespace StockSharp.Algo
 		protected override bool OnRemoving(IMarketRule item)
 		{
 			if (!Contains(item))
-				throw new InvalidOperationException(LocalizedStrings.Str906Params.Put(item.Name, _container.Name));
+				throw new InvalidOperationException(LocalizedStrings.Str906Params.Put(item, _container.Name));
 
 			return base.OnRemoving(item);
 		}

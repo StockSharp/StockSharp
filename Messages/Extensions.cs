@@ -1173,23 +1173,12 @@ namespace StockSharp.Messages
 			return adapter.IsMessageSupported(MessageTypes.OrderRegister);
 		}
 
-		internal static Type GetOrderConditionType(this IMessageAdapter adapter)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			return adapter
-			       .GetType()
-			       .GetAttribute<OrderConditionAttribute>()?
-			       .ConditionType;
-		}
-
 		private static bool IsOrderConditionOf(this IMessageAdapter adapter, Type interfaceType)
 		{
 			if (interfaceType == null)
 				throw new ArgumentNullException(nameof(interfaceType));
 
-			var type = adapter.GetOrderConditionType();
+			var type = adapter.OrderConditionType;
 
 			return type != null && interfaceType.IsAssignableFrom(type);
 		}

@@ -300,6 +300,9 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSecurityNewsOnly">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.OrderConditionType">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition">
       <inheritdoc />
     </member>
@@ -1524,11 +1527,22 @@
             Adapter provides news related with specified security.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.OrderConditionType">
+      <summary>
+        <see cref="M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition" /> type.
+            </summary>
+      <remarks>
+            If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.
+            </remarks>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition">
       <summary>
             Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
             </summary>
-      <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
+      <returns>Order condition.</returns>
+      <remarks>
+            If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.
+            </remarks>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
       <summary>
@@ -7903,6 +7917,9 @@
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixMessageAdapter" />.
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.OrderConditionType">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition">
       <inheritdoc />

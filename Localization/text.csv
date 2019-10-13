@@ -5089,6 +5089,9 @@ Points;Points;Пункты
 ShowQuickOrdersPanel;Show quick orders panel.;Показывать панель для быстрого ввода заявок.
 Size;Size;Разм
 Rev;Rev;Рев
+FatBtc;FatBTC;FatBTC
+Latoken;LATOKEN;LATOKEN
+CoinEx;CoinEx;CoinEx
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5126,7 +5129,7 @@ DocStr41;Looks up a localized resource of type System.Byte[];Looks up a localize
 DocStr42;AlfaDirect message adapter;Адаптер сообщений для AlfaDirect
 DocStr43;Transaction id generator;Генератор идентификаторов транзакций
 DocStr44;Create condition for order type {0}, that supports the adapter;Создать для заявки типа {0} условие, которое поддерживается подключением
-DocStr45;Order condition. If the connection does not support the order type {0}, it will be returned {1};Условие для заявки. Если подключение не поддерживает заявки типа {0}, то будет возвращено {1}
+DocStr45;Order condition;Условие для заявки
 DocStr46;Send message;Отправить сообщение
 DocStr49;Returns a string that represents the current object;Получить строковое представление
 DocStr50;A string that represents the current object;Строковое представление
@@ -15036,7 +15039,6 @@ DocStr10570;Determines whether the adapter support withdraw orders;Опреде�
 DocStr10571;Create stop-loss order condition;Создать стоп-лосс условие
 DocStr10572;Is take-profit of stop-loss;Является ли тейк-профитом или стоп-лоссом
 DocStr10573;Limit price for activated order. Can be {0} for {1};Лимитная цена для активированной заявки. Может быть {0} для {1}
-DocStr10574;Order condition. If the connection does not support the order type, the exception {0} will be thrown;Условие заявки. Если соединение не поддерживает тип заявки, будет выброшено исключение {0}
 DocStr10575;Create withdraw order condition;Создать условие заявки на вывод
 DocStr10576;Association changed;Ассоциация изменилась
 DocStr10577;Volatility smile draw step;Шаг отрисовки улыбки волатильности
@@ -15738,3 +15740,7 @@ DocStr11376;Buy button background;Фон кнопки покупки
 DocStr11377;Sell button background;Фон кнопки продажи
 DocStr11378;BUY;BUY
 DocStr11379;SELL;SELL
+DocStr11380;Determines whether the specified message type is market-data;Определить, является ли указанные тип маркет-данными
+DocStr11381;The panel settings change event;Событие изменения настроек панели
+DocStr11382;If the connection does not support the order type {0}, it will be returned {1};Если подключение не поддерживает заявки типа {0}, то будет возвращено {1}
+DocStr11383;Popup menu;Всплывающее меню

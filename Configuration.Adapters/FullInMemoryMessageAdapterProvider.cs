@@ -26,6 +26,7 @@ namespace StockSharp.Configuration
 	using StockSharp.CoinBene;
 	using StockSharp.CoinCap;
 	using StockSharp.Coincheck;
+	using StockSharp.CoinEx;
 	using StockSharp.CoinExchange;
 	using StockSharp.Coinigy;
 	using StockSharp.Cqg.Com;
@@ -37,6 +38,7 @@ namespace StockSharp.Configuration
 	using StockSharp.DukasCopy;
 	using StockSharp.ETrade;
 	using StockSharp.Exmo;
+	using StockSharp.FatBTC;
 	using StockSharp.Finam;
 	using StockSharp.FinViz;
 	using StockSharp.Fix;
@@ -52,6 +54,7 @@ namespace StockSharp.Configuration
 	using StockSharp.ITCH;
 	using StockSharp.Kraken;
 	using StockSharp.Kucoin;
+	using StockSharp.LATOKEN;
 	using StockSharp.LBank;
 	using StockSharp.Liqui;
 	using StockSharp.LiveCoin;
@@ -214,6 +217,9 @@ namespace StockSharp.Configuration
 			() => typeof(UkrExhMessageAdapter),
 			() => typeof(CSVMessageAdapter),
 			() => typeof(UpbitMessageAdapter),
+			() => typeof(CoinExMessageAdapter),
+			() => typeof(FatBtcMessageAdapter),
+			() => typeof(LatokenMessageAdapter),
 		});
 	}
 }

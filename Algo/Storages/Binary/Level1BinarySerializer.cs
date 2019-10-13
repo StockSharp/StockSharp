@@ -1322,11 +1322,7 @@ namespace StockSharp.Algo.Storages.Binary
 					}
 					case Level1Fields.VolumeStep:
 					{
-						if (storeSteps)
-							l1Msg.Add(field, reader.ReadVolume(metaInfo));
-						else
-							l1Msg.Add(field, metaInfo.VolumeStep);
-
+						l1Msg.Add(field, storeSteps ? reader.ReadVolume(metaInfo) : metaInfo.VolumeStep);
 						break;
 					}
 					case Level1Fields.Multiplier:

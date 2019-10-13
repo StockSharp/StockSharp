@@ -87,8 +87,7 @@ P:StockSharp.Logging.BaseLogSource.IsRoot/inheritdoc;DocStr8459
 E:StockSharp.Logging.BaseLogSource.Log/inheritdoc;DocStr8459
 M:StockSharp.Logging.BaseLogSource.RaiseLog(StockSharp.Logging.LogMessage)/summary;DocStr466
 M:StockSharp.Logging.BaseLogSource.RaiseLog(StockSharp.Logging.LogMessage)/param/message;DocStr1653
-M:StockSharp.Logging.BaseLogSource.ToString/summary;DocStr49
-M:StockSharp.Logging.BaseLogSource.ToString/returns;DocStr50
+M:StockSharp.Logging.BaseLogSource.ToString/inheritdoc;DocStr8459
 M:StockSharp.Logging.BaseLogSource.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Logging.BaseLogSource.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Logging.BaseLogSource.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -219,8 +218,7 @@ P:StockSharp.Logging.LogMessage.Source/summary;DocStr3978
 P:StockSharp.Logging.LogMessage.Time/summary;DocStr3992
 P:StockSharp.Logging.LogMessage.Level/summary;DocStr2044
 P:StockSharp.Logging.LogMessage.Message/summary;Str3166
-M:StockSharp.Logging.LogMessage.ToString/summary;DocStr49
-M:StockSharp.Logging.LogMessage.ToString/returns;DocStr50
+M:StockSharp.Logging.LogMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Logging.MemoryStatistics/summary;DocStr3993
 P:StockSharp.Logging.MemoryStatistics.Instance/summary;DocStr3997
 M:StockSharp.Logging.MemoryStatistics.DisposeManaged/summary;DocStr7
@@ -232,8 +230,7 @@ M:StockSharp.Logging.MemoryStatistics.Load(Ecng.Serialization.SettingsStorage)/s
 M:StockSharp.Logging.MemoryStatistics.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Logging.MemoryStatistics.Clear(System.Boolean)/summary;DocStr3994
 M:StockSharp.Logging.MemoryStatistics.Clear(System.Boolean)/param/resetCounter;DocStr3995
-M:StockSharp.Logging.MemoryStatistics.ToString/summary;DocStr49
-M:StockSharp.Logging.MemoryStatistics.ToString/returns;DocStr50
+M:StockSharp.Logging.MemoryStatistics.ToString/inheritdoc;DocStr8459
 P:StockSharp.Logging.MemoryStatistics.IsEnabled/summary;DocStr4000
 M:StockSharp.Logging.MemoryStatistics.AddOrRemove/summary;DocStr3996
 T:StockSharp.Logging.IMemoryStatisticsValue/summary;DocStr4001

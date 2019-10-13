@@ -204,7 +204,7 @@ namespace StockSharp.Algo
 			set
 			{
 				if (Container != null)
-					throw new ArgumentException(LocalizedStrings.Str1091Params.Put(Name, Container));
+					throw new ArgumentException(LocalizedStrings.Str1091Params.Put(this, Container));
 
 				_container = value ?? throw new ArgumentNullException(nameof(value));
 			}

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.CoinEx</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.CoinEx.CoinExMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.CoinEx"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinEx.CoinExMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinEx.CoinExMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinEx.CoinExMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CoinEx.CoinExMessageAdapter.BalanceCheckInterval">
+            <summary>
+            Balance check interval. Required in case of deposit and withdraw actions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CoinEx.CoinExMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.CoinEx.CoinExMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.CoinEx.CoinExMessageAdapter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.CoinEx.CoinExMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.CoinEx.CoinExMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.CoinEx.CoinExMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.CoinEx.CoinExOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.CoinEx"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CoinEx.CoinExOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.CoinEx.CoinExOrderCondition"/>.
+            </summary>
+        </member>
+    </members>
+</doc>
