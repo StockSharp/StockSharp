@@ -69,11 +69,7 @@ M:StockSharp.Alerts.AlertSchema.Save(Ecng.Serialization.SettingsStorage)/param/s
 T:StockSharp.Alerts.AlertNotificationService/summary;DocStr9186
 M:StockSharp.Alerts.AlertNotificationService.#ctor(System.String)/summary;DocStr1
 M:StockSharp.Alerts.AlertNotificationService.#ctor(System.String)/param/dumpDir;DocStr27
-M:StockSharp.Alerts.AlertNotificationService.Notify(StockSharp.Alerts.AlertNotifications,System.String,System.String,System.DateTimeOffset)/summary;DocStr22
-M:StockSharp.Alerts.AlertNotificationService.Notify(StockSharp.Alerts.AlertNotifications,System.String,System.String,System.DateTimeOffset)/param/type;AlertType
-M:StockSharp.Alerts.AlertNotificationService.Notify(StockSharp.Alerts.AlertNotifications,System.String,System.String,System.DateTimeOffset)/param/caption;Str3165
-M:StockSharp.Alerts.AlertNotificationService.Notify(StockSharp.Alerts.AlertNotifications,System.String,System.String,System.DateTimeOffset)/param/message;DocStr13
-M:StockSharp.Alerts.AlertNotificationService.Notify(StockSharp.Alerts.AlertNotifications,System.String,System.String,System.DateTimeOffset)/param/time;DocStr23
+M:StockSharp.Alerts.AlertNotificationService.Notify(StockSharp.Alerts.AlertNotifications,System.String,System.String,System.DateTimeOffset)/inheritdoc;DocStr8459
 M:StockSharp.Alerts.AlertNotificationService.DisposeManaged/summary;DocStr7
 T:StockSharp.Alerts.AlertFieldPanel/summary;DocStr28
 M:StockSharp.Alerts.AlertFieldPanel.#ctor/summary;DocStr1

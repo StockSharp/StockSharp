@@ -346,16 +346,6 @@ namespace StockSharp.Algo.Strategies
 		//	return strategy.Security.GetMarketPrice(strategy.SafeGetConnector(), side);
 		//}
 
-		/// <summary>
-		/// To get the tracing-based order identifier.
-		/// </summary>
-		/// <param name="order">Order.</param>
-		/// <returns>The tracing-based order identifier.</returns>
-		public static string GetTraceId(this Order order)
-		{
-			return "{0} (0x{1:X})".Put(order.TransactionId, order.GetHashCode());
-		}
-
 		private sealed class EquityStrategy : Strategy
 		{
 			private readonly Dictionary<DateTimeOffset, Order[]> _orders;
@@ -424,14 +414,14 @@ namespace StockSharp.Algo.Strategies
 
 				var strategy = new EquityStrategy(array, openedPositions) { Connector = connector };
 
-				var waitHandle = new SyncObject();
+				//var waitHandle = new SyncObject();
 
-				//connector.UnderlyngMarketDataAdapter.StateChanged += () =>
+				//connector.MarketDataAdapter.StateChanged += () =>
 				//{
-				//	if (connector.UnderlyngMarketDataAdapter.State == EmulationStates.Started)
+				//	if (connector.MarketDataAdapter.State == EmulationStates.Started)
 				//		strategy.Start();
 
-				//	if (connector.UnderlyngMarketDataAdapter.State == EmulationStates.Stopped)
+				//	if (connector.MarketDataAdapter.State == EmulationStates.Stopped)
 				//	{
 				//		strategy.Stop();
 
@@ -446,7 +436,7 @@ namespace StockSharp.Algo.Strategies
 
 				//lock (waitHandle)
 				//{
-				//	if (connector.UnderlyngMarketDataAdapter.State != EmulationStates.Stopped)
+				//	if (connector.MarketDataAdapter.State != EmulationStates.Stopped)
 				//		waitHandle.Wait();
 				//}
 
@@ -932,7 +922,7 @@ namespace StockSharp.Algo.Strategies
 				throw new ArgumentNullException(nameof(rule));
 
 			if (!(rule.Container is Strategy strategy))
-				throw new ArgumentException(LocalizedStrings.Str1263Params.Put(rule.Name), nameof(rule));
+				throw new ArgumentException(LocalizedStrings.Str1263Params.Put(rule), nameof(rule));
 
 			return strategy;
 		}

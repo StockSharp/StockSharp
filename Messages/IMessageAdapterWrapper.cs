@@ -281,6 +281,8 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public IEnumerable<Level1Fields> CandlesBuildFrom => InnerAdapter.CandlesBuildFrom;
 
+		Type IMessageAdapter.OrderConditionType => InnerAdapter.OrderConditionType;
+
 		OrderCondition IMessageAdapter.CreateOrderCondition() => InnerAdapter.CreateOrderCondition();
 
 		bool IMessageAdapter.IsConnectionAlive() => InnerAdapter.IsConnectionAlive();

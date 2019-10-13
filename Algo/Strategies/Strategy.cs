@@ -141,7 +141,7 @@ namespace StockSharp.Algo.Strategies
 							.Once()
 							.Apply(_parent);
 
-					rule.UpdateName(rule.Name + " (ChildStrategyList.OnChildProcessStateChanged)");
+					rule.UpdateName(rule.Name + $" ({nameof(ChildStrategyList)}.{nameof(OnChildProcessStateChanged)})");
 
 					_childStrategyRules.Add(child, rule);
 				}
@@ -1255,7 +1255,7 @@ namespace StockSharp.Algo.Strategies
 			if (newOrder == null)
 				throw new ArgumentNullException(nameof(newOrder));
 
-			this.AddInfoLog(LocalizedStrings.Str1384Params, oldOrder.GetTraceId(), oldOrder.Price, newOrder.Price, oldOrder.Comment);
+			this.AddInfoLog(LocalizedStrings.Str1384Params, oldOrder.TransactionId, oldOrder.Price, newOrder.Price, oldOrder.Comment);
 
 			if (ProcessState != ProcessStates.Started)
 			{
@@ -1360,7 +1360,7 @@ namespace StockSharp.Algo.Strategies
 			var successRule = order
 				.WhenCanceled(Connector)
 				.Or(matchedRule, order.WhenRegisterFailed(Connector))
-				.Do(() => this.AddInfoLog(LocalizedStrings.Str1386Params.Put(order.GetTraceId())))
+				.Do(() => this.AddInfoLog(LocalizedStrings.Str1386Params.Put(order.TransactionId)))
 				.Until(() =>
 				{
 					if (order.State == OrderStates.Failed)
@@ -1368,31 +1368,24 @@ namespace StockSharp.Algo.Strategies
 
 					if (order.State != OrderStates.Done)
 					{
-						this.AddWarningLog(LocalizedStrings.OrderHasState, order.GetTraceId(), order.State);
+						this.AddWarningLog(LocalizedStrings.OrderHasState, order.TransactionId, order.State);
 						return false;
 					}
 
 					if (!WaitAllTrades)
 						return true;
 
-					//var leftVolume = order.Volume - order.GetMatchedVolume(Connector, true);
-
-					//if (leftVolume == 0)
-					//	return true;
-
-					var info = _ordersInfo.TryGetValue(order);
-
-					if (info == null)
+					if (!_ordersInfo.TryGetValue(order, out var info))
 					{
-						this.AddWarningLog(LocalizedStrings.Str1156Params, order.GetTraceId());
+						this.AddWarningLog(LocalizedStrings.Str1156Params, order.TransactionId);
 						return false;
 					}
 
-					var leftVolume = order.Volume - info.ReceivedVolume;
+					var leftVolume = order.GetMatchedVolume() - info.ReceivedVolume;
 
 					if (leftVolume != 0)
 					{					
-						this.AddDebugLog(LocalizedStrings.OrderHasBalance, order.GetTraceId(), leftVolume);
+						this.AddDebugLog(LocalizedStrings.OrderHasBalance, order.TransactionId, leftVolume);
 						return false;
 					}
 
@@ -1410,7 +1403,7 @@ namespace StockSharp.Algo.Strategies
 						return;
 
 					canFinish = true;
-					this.AddInfoLog(LocalizedStrings.Str1387Params.Put(order.GetTraceId()));
+					this.AddInfoLog(LocalizedStrings.Str1387Params.Put(order.TransactionId));
 				})
 				.Until(() => canFinish)
 				.Apply(this)
@@ -1434,11 +1427,11 @@ namespace StockSharp.Algo.Strategies
 				var info = _ordersInfo.TryGetValue(order);
 
 				if (info == null || !info.IsOwn)
-					throw new ArgumentException(LocalizedStrings.Str1389Params.Put(order.GetTraceId(), Name));
+					throw new ArgumentException(LocalizedStrings.Str1389Params.Put(order.TransactionId, Name));
 
 				if (info.IsCanceled)
 				{
-					this.AddWarningLog(LocalizedStrings.Str1390Params, order.GetTraceId());
+					this.AddWarningLog(LocalizedStrings.Str1390Params, order.TransactionId);
 					return;
 				}
 
@@ -1453,7 +1446,7 @@ namespace StockSharp.Algo.Strategies
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			this.AddInfoLog(LocalizedStrings.Str1315Params, order.GetTraceId());
+			this.AddInfoLog(LocalizedStrings.Str1315Params, order.TransactionId);
 
 			if (order.Type == OrderTypes.Conditional)
 				OnStopOrderCanceling(order);
@@ -1785,7 +1778,7 @@ namespace StockSharp.Algo.Strategies
 			if (!Rules.IsEmpty())
 			{
 				this.AddLog(LogLevels.Debug,
-					() => LocalizedStrings.Str1396Params.Put(Rules.Count, Rules.Select(r => r.Name).Join(", ")));
+					() => LocalizedStrings.Str1396Params.Put(Rules.Count, Rules.Select(r => r.ToString()).Join(", ")));
 
 				return;
 			}
@@ -2209,8 +2202,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				lock (_ordersInfo.SyncRoot)
 				{
-					var info = _ordersInfo.TryGetValue(trade.Order);
-					if (info?.IsOwn == true)
+					if (_ordersInfo.TryGetValue(trade.Order, out var info) && info.IsOwn)
 						info.ReceivedVolume += trade.Trade.Volume;
 				}
 			}
@@ -2412,7 +2404,7 @@ namespace StockSharp.Algo.Strategies
 
 				if (info.IsCanceled)
 				{
-					this.AddWarningLog(LocalizedStrings.Str1390Params, o.GetTraceId());
+					this.AddWarningLog(LocalizedStrings.Str1390Params, o.TransactionId);
 					return;
 				}
 
@@ -2468,7 +2460,7 @@ namespace StockSharp.Algo.Strategies
 				info.IsCanceled = false;
 			}
 
-			this.AddErrorLog(LocalizedStrings.Str1402Params, order.GetTraceId(), fail.Error);
+			this.AddErrorLog(LocalizedStrings.Str1402Params, order.TransactionId, fail.Error);
 
 			if (order.Type == OrderTypes.Conditional)
 				StopOrderCancelFailed?.Invoke(fail);
@@ -2490,7 +2482,7 @@ namespace StockSharp.Algo.Strategies
 				info.RegistrationFail = fail;
 			}
 
-			this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.GetTraceId(), fail.Error.Message);
+			this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.TransactionId, fail.Error.Message);
 			//SlippageManager.RegisterFailed(fail);
 
 			TryInvoke(() => evt?.Invoke(fail));

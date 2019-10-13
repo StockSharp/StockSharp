@@ -4,7 +4,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using Ecng.Collections;
 
-	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -193,7 +192,8 @@ namespace StockSharp.Algo.Candles.Compression
 					return true;
 				}
 
-				case Level1Fields.SpreadMiddle:
+				//case Level1Fields.SpreadMiddle:
+				default:
 				{
 					var price = md.GetSpreadMiddle();
 
@@ -204,8 +204,8 @@ namespace StockSharp.Algo.Candles.Compression
 					return true;
 				}
 
-				default:
-					throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);
+				//default:
+				//	throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);
 			}
 		}
 	}
@@ -270,7 +270,8 @@ namespace StockSharp.Algo.Candles.Compression
 					return true;
 				}
 
-				case Level1Fields.SpreadMiddle:
+				//case Level1Fields.SpreadMiddle:
+				default:
 				{
 					var price = l1.GetSpreadMiddle();
 					if (price == null)
@@ -280,8 +281,8 @@ namespace StockSharp.Algo.Candles.Compression
 					return true;
 				}
 
-				default:
-					throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);
+				//default:
+				//	throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);
 			}
 		}
 	}
@@ -317,7 +318,9 @@ namespace StockSharp.Algo.Candles.Compression
 					Update(ol.ServerTime, ol.OrderPrice, ol.OrderVolume, ol.Side, ol.OpenInterest);
 					return true;
 				}
-				case Level1Fields.LastTradePrice:
+
+				//case Level1Fields.LastTradePrice:
+				default:
 				{
 					var price = ol.TradePrice;
 
@@ -328,8 +331,8 @@ namespace StockSharp.Algo.Candles.Compression
 					return true;
 				}
 
-				default:
-					throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);	
+				//default:
+				//	throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);	
 			}
 		}
 	}

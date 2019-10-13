@@ -305,6 +305,15 @@
     <Reference Include="StockSharp.Upbit">
       <HintPath>..\References\StockSharp.Upbit.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.CoinEx">
+      <HintPath>..\References\StockSharp.CoinEx.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.FatBtc">
+      <HintPath>..\References\StockSharp.FatBtc.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Latoken">
+      <HintPath>..\References\StockSharp.Latoken.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">

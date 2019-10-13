@@ -78,7 +78,8 @@ namespace StockSharp.Algo
 			/// <inheritdoc />
 			public override string ToString()
 			{
-				return "{0} {2}/{3} (0x{1:X})".Put(Name, GetHashCode(), Order.TransactionId, (Order.Id == null ? Order.StringId : Order.Id.To<string>()));
+				var strId = Order.Id == null ? Order.StringId : Order.Id.To<string>();
+				return $"{this} {Order.TransactionId}/{strId}";
 			}
 		}
 
@@ -240,7 +241,7 @@ namespace StockSharp.Algo
 		{
 			private decimal _receivedVolume;
 
-			private bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
+			private bool AllTradesReceived => Order.State == OrderStates.Done && Order.GetMatchedVolume() == _receivedVolume;
 
 			public NewTradeOrderRule(Order order, ITransactionProvider provider)
 				: base(order, provider)
@@ -287,7 +288,7 @@ namespace StockSharp.Algo
 				TrySubscribe();
 			}
 
-			private bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
+			private bool AllTradesReceived => Order.State == OrderStates.Done && Order.GetMatchedVolume() == _receivedVolume;
 
 			protected override void Subscribe()
 			{

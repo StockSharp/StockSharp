@@ -18,6 +18,12 @@
         <member name="P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportPortfolioLookupResult">
             <inheritdoc />
         </member>
+        <member name="P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportSecurityLookupResult">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.Sterling.SterlingMessageAdapter.IsSupportSecuritiesLookupAll">
+            <inheritdoc />
+        </member>
         <member name="M:StockSharp.Sterling.SterlingMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>

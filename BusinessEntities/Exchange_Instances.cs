@@ -1046,5 +1046,32 @@ namespace StockSharp.BusinessEntities
 			Name = "UPBT",
 			FullNameLoc = LocalizedStrings.UpbitKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="CoinEx"/>.
+		/// </summary>
+		public static Exchange CoinEx { get; } = new Exchange
+		{
+			Name = "CIEX",
+			FullNameLoc = LocalizedStrings.CoinExKey,
+		};
+
+		/// <summary>
+		/// Information about <see cref="FatBtc"/>.
+		/// </summary>
+		public static Exchange FatBtc { get; } = new Exchange
+		{
+			Name = "FTBT",
+			FullNameLoc = LocalizedStrings.FatBtcKey,
+		};
+
+		/// <summary>
+		/// Information about <see cref="Latoken"/>.
+		/// </summary>
+		public static Exchange Latoken { get; } = new Exchange
+		{
+			Name = "LTKN",
+			FullNameLoc = LocalizedStrings.LatokenKey,
+		};
 	}
 }

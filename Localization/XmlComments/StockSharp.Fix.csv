@@ -88,6 +88,7 @@ P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedOrderBookDepths/inheritdoc;Doc
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportExecutionsPnL/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsSecurityNewsOnly/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFixDialect.OrderConditionType/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.OnReset/summary;Str3282
@@ -404,8 +405,11 @@ P:StockSharp.Fix.Dialects.IFixDialect.SupportedOrderBookDepths/summary;DocStr112
 P:StockSharp.Fix.Dialects.IFixDialect.IsSupportOrderBookIncrements/summary;DocStr11316
 P:StockSharp.Fix.Dialects.IFixDialect.IsSupportExecutionsPnL/summary;DocStr11235
 P:StockSharp.Fix.Dialects.IFixDialect.IsSecurityNewsOnly/summary;DocStr11333
+P:StockSharp.Fix.Dialects.IFixDialect.OrderConditionType/summary;DocStr11043
+P:StockSharp.Fix.Dialects.IFixDialect.OrderConditionType/remarks;DocStr11382
 M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition/summary;DocStr44
 M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition/returns;DocStr45
+M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition/remarks;DocStr11382
 M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/summary;DocStr9453
 M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/param/writer;DocStr8757
 M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/param/reader;DocStr3327
@@ -2014,6 +2018,7 @@ F:StockSharp.Fix.FixFormats.Binary/summary;DocStr3324
 T:StockSharp.Fix.FixMessageAdapter/summary;DocStr3325
 M:StockSharp.Fix.FixMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Fix.FixMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+P:StockSharp.Fix.FixMessageAdapter.OrderConditionType/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459

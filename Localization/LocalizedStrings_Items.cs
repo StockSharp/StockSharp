@@ -50556,5 +50556,35 @@ namespace StockSharp.Localization
 		/// Rev
 		/// </summary>
 		public static string Rev => GetString(RevKey);
+
+		/// <summary>
+		/// FatBTC
+		/// </summary>
+		public const string FatBtcKey = nameof(FatBtc);
+
+		/// <summary>
+		/// FatBTC
+		/// </summary>
+		public static string FatBtc => GetString(FatBtcKey);
+
+		/// <summary>
+		/// LATOKEN
+		/// </summary>
+		public const string LatokenKey = nameof(Latoken);
+
+		/// <summary>
+		/// LATOKEN
+		/// </summary>
+		public static string Latoken => GetString(LatokenKey);
+
+		/// <summary>
+		/// CoinEx
+		/// </summary>
+		public const string CoinExKey = nameof(CoinEx);
+
+		/// <summary>
+		/// CoinEx
+		/// </summary>
+		public static string CoinEx => GetString(CoinExKey);
 	}
 }
