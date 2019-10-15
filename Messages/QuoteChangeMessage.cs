@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
 	using System.Runtime.Serialization;
@@ -62,7 +61,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public sealed class QuoteChangeMessage : Message, IServerTimeMessage, ISecurityIdMessage, ISubscriptionIdMessage
+	public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -145,14 +144,6 @@ namespace StockSharp.Messages
 		[DataMember]
 		public QuoteChangeStates? State { get; set; }
 
-		/// <inheritdoc />
-		[DataMember]
-		public long SubscriptionId { get; set; }
-
-		/// <inheritdoc />
-		[DataMember]
-		public IEnumerable<long> SubscriptionIds { get; set; }
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="QuoteChangeMessage"/>.
 		/// </summary>
@@ -179,8 +170,6 @@ namespace StockSharp.Messages
 				IsFiltered = IsFiltered,
 				State = State,
 			};
-
-			this.CopySubscriptionIds(clone);
 
 			CopyTo(clone);
 

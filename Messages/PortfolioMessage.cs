@@ -48,7 +48,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioMessage : Message, ITransactionIdMessage
+	public class PortfolioMessage : BaseSubscriptionIdMessage, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Portfolio code name.

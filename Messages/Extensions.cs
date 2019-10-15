@@ -1571,11 +1571,22 @@ namespace StockSharp.Messages
 			return false;
 		}
 
-		internal static void CopySubscriptionIds<TMessage>(this TMessage source, TMessage destination)
-			where TMessage : ISubscriptionIdMessage
+		/// <summary>
+		/// Get subscription identifiers from the specified message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <returns>Identifiers.</returns>
+		public static IEnumerable<long> GetSubscriptionIds(this ISubscriptionIdMessage message)
 		{
-			destination.SubscriptionId = source.SubscriptionId;
-			destination.SubscriptionIds = source.SubscriptionIds?.ToArray();
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (message.SubscriptionIds != null)
+				return message.SubscriptionIds;
+			else if (message.SubscriptionId > 0)
+				return new[] { message.SubscriptionId };
+			else
+				return Enumerable.Empty<long>();
 		}
 	}
 }

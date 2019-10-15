@@ -19,7 +19,7 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Message security lookup for specified criteria.
+	/// Message portfolio lookup for specified criteria.
 	/// </summary>
 	[DataContract]
 	[Serializable]

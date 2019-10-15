@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
 	using System.Runtime.Serialization;
@@ -64,7 +63,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	public sealed class ExecutionMessage : Message, ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage, ISubscriptionIdMessage
+	public sealed class ExecutionMessage : BaseSubscriptionIdMessage, ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Security ID.
@@ -557,14 +556,6 @@ namespace StockSharp.Messages
 		[DataMember]
 		public decimal? MinVolume { get; set; }
 
-		/// <inheritdoc />
-		[DataMember]
-		public long SubscriptionId { get; set; }
-
-		/// <inheritdoc />
-		[DataMember]
-		public IEnumerable<long> SubscriptionIds { get; set; }
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
@@ -653,8 +644,6 @@ namespace StockSharp.Messages
 				SubscriptionId = SubscriptionId,
 				SubscriptionIds = SubscriptionIds?.ToArray()
 			};
-
-			this.CopySubscriptionIds(clone);
 
 			CopyTo(clone);
 

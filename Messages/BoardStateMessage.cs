@@ -69,7 +69,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class BoardStateMessage : Message
+	public class BoardStateMessage : BaseSubscriptionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BoardStateMessage"/>.

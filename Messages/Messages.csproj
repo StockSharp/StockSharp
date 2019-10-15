@@ -84,6 +84,7 @@
     <Compile Include="BasePositionChangeMessage.cs" />
     <Compile Include="BaseResultMessage.cs" />
     <Compile Include="BaseRouteMessage.cs" />
+    <Compile Include="BaseSubscriptionIdMessage.cs" />
     <Compile Include="BoardLookupMessage.cs" />
     <Compile Include="BoardLookupResultMessage.cs" />
     <Compile Include="BoardMessage.cs" />

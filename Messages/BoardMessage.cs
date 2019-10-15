@@ -26,7 +26,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class BoardMessage : Message
+	public class BoardMessage : BaseSubscriptionIdMessage
 	{
 		/// <summary>
 		/// Exchange code, which owns the board. Maybe be the same <see cref="Code"/>.
@@ -143,7 +143,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new BoardMessage
+			var clone = new BoardMessage
 			{
 				Code = Code,
 				ExchangeCode = ExchangeCode,
@@ -154,6 +154,10 @@ namespace StockSharp.Messages
 				TimeZone = TimeZone,
 				OriginalTransactionId = OriginalTransactionId,
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 
 		/// <inheritdoc />

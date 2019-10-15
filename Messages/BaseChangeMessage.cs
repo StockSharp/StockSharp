@@ -30,7 +30,7 @@ namespace StockSharp.Messages
 	/// <typeparam name="TField">Changes type.</typeparam>
 	[DataContract]
 	[Serializable]
-	public abstract class BaseChangeMessage<TField> : Message, IServerTimeMessage, ISubscriptionIdMessage
+	public abstract class BaseChangeMessage<TField> : BaseSubscriptionIdMessage, IServerTimeMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -45,14 +45,6 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		[DataMember]
 		public IDictionary<TField, object> Changes { get; } = new Dictionary<TField, object>();
-
-		/// <inheritdoc />
-		[DataMember]
-		public long SubscriptionId { get; set; }
-
-		/// <inheritdoc />
-		[DataMember]
-		public IEnumerable<long> SubscriptionIds { get; set; }
 
 		/// <summary>
 		/// Initialize <see cref="BaseChangeMessage{T}"/>.
@@ -70,8 +62,6 @@ namespace StockSharp.Messages
 		protected virtual void CopyTo(BaseChangeMessage<TField> destination)
 		{
 			base.CopyTo(destination);
-
-			this.CopySubscriptionIds(destination);
 
 			destination.ServerTime = ServerTime;
 			destination.Changes.AddRange(Changes);

@@ -55,7 +55,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class NewsMessage : Message
+	public class NewsMessage : BaseSubscriptionIdMessage
 	{
 		/// <summary>
 		/// News ID.
