@@ -702,24 +702,44 @@ namespace StockSharp.Algo
 			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.CurrentValue, true);
 		}
 
-		///// <summary>
-		///// To convert the position into message.
-		///// </summary>
-		///// <param name="position">Position.</param>
-		///// <returns>Message.</returns>
-		//public static PositionMessage ToMessage(this Position position)
-		//{
-		//	if (position == null)
-		//		throw new ArgumentNullException(nameof(position));
+		/// <summary>
+		/// Convert <see cref="Portfolio"/> to <see cref="PortfolioLookupMessage"/> value.
+		/// </summary>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <returns>Message portfolio lookup for specified criteria.</returns>
+		public static PortfolioLookupMessage ToLookupCriteria(this Portfolio criteria)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
 
-		//	return new PositionMessage
-		//	{
-		//		PortfolioName = position.Portfolio.Name,
-		//		SecurityId = position.Security.ToSecurityId(),
-		//		DepoName = position.DepoName,
-		//		LimitType = position.LimitType,
-		//	};
-		//}
+			return new PortfolioLookupMessage
+			{
+				BoardCode = criteria.Board?.Code,
+				Currency = criteria.Currency,
+				PortfolioName = criteria.Name,
+				ClientCode = criteria.ClientCode,
+				InternalId = criteria.InternalId,
+			};
+		}
+
+		/// <summary>
+		/// Convert <see cref="Order"/> to <see cref="OrderStatusMessage"/> value.
+		/// </summary>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <returns>A message requesting current registered orders and trades.</returns>
+		public static OrderStatusMessage ToLookupCriteria(this Order criteria)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			return new OrderStatusMessage
+			{
+				PortfolioName = criteria.Portfolio?.Name,
+				SecurityId = criteria.Security?.ToSecurityId() ?? default,
+				OrderId = criteria.Id,
+				OrderType = criteria.Type,
+			};
+		}
 
 		/// <summary>
 		/// To convert the position into message.
@@ -1923,7 +1943,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Convert <see cref="PermissionCredentials"/> to <see cref="UserInfoMessage"/> value.
 		/// </summary>
-		/// <param name="credentials">Credentials with set of permissions..</param>
+		/// <param name="credentials">Credentials with set of permissions.</param>
 		/// <param name="copyPassword">Copy <see cref="ServerCredentials.Password"/> value.</param>
 		/// <returns>The message contains information about user.</returns>
 		public static UserInfoMessage ToUserInfoMessage(this PermissionCredentials credentials, bool copyPassword)

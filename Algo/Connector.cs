@@ -774,14 +774,12 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void LookupOrders(Order criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 		{
-			var transactionId = TransactionIdGenerator.GetNextId();
+			var msg = criteria.ToLookupCriteria();
 
-			LookupOrders(new OrderStatusMessage
-			{
-				TransactionId = transactionId,
-				Adapter = adapter,
-				OfflineMode = offlineMode,
-			});
+			msg.Adapter = adapter;
+			msg.OfflineMode = offlineMode;
+
+			LookupOrders(msg);
 		}
 
 		/// <inheritdoc />
@@ -789,6 +787,9 @@ namespace StockSharp.Algo
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
+
+			if (criteria.TransactionId == 0)
+				criteria.TransactionId = TransactionIdGenerator.GetNextId();
 
 			_entityCache.AddOrderStatusTransactionId(criteria.TransactionId);
 			
@@ -802,15 +803,10 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			var msg = new PortfolioLookupMessage
-			{
-				TransactionId = TransactionIdGenerator.GetNextId(),
-				BoardCode = criteria.Board?.Code,
-				Currency = criteria.Currency,
-				PortfolioName = criteria.Name,
-				Adapter = adapter,
-				OfflineMode = offlineMode,
-			};
+			var msg = criteria.ToLookupCriteria();
+
+			msg.Adapter = adapter;
+			msg.OfflineMode = offlineMode;
 
 			LookupPortfolios(msg);
 		}
@@ -820,6 +816,9 @@ namespace StockSharp.Algo
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
+
+			if (criteria.TransactionId == 0)
+				criteria.TransactionId = TransactionIdGenerator.GetNextId();
 
 			_portfolioLookups.Add(criteria.TransactionId, new LookupInfo<PortfolioLookupMessage, Portfolio>(criteria));
 
