@@ -1,5 +1,6 @@
 namespace StockSharp.Messages
 {
+	using System;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -7,6 +8,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Base class for messages contains information about the position changes.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public abstract class BasePositionChangeMessage : BaseChangeMessage<PositionChangeTypes>
 	{
 		/// <summary>

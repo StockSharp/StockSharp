@@ -1,20 +1,26 @@
 namespace StockSharp.Messages
 {
+	using System;
 	using System.Collections.Generic;
-	using System.Linq;
-	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
+
+	using Ecng.Serialization;
 
 	/// <summary>
 	/// A message containing subscription identifiers.
 	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
 	public abstract class BaseSubscriptionIdMessage : Message, ISubscriptionIdMessage
 	{
 		/// <inheritdoc />
-		[DataMember]
+		[Ignore]
+		[XmlIgnore]
 		public long SubscriptionId { get; set; }
 
 		/// <inheritdoc />
-		[DataMember]
+		[Ignore]
+		[XmlIgnore]
 		public IEnumerable<long> SubscriptionIds { get; set; }
 
 		/// <summary>

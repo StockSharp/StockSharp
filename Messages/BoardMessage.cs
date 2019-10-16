@@ -114,6 +114,7 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str68Key)]
 		[MainCategory]
 		[XmlIgnore]
+		[Ecng.Serialization.TimeZoneInfo]
 		public TimeZoneInfo TimeZone
 		{
 			get => _timeZone;

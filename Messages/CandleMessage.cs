@@ -272,6 +272,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Candle arg.
 		/// </summary>
+		[Ignore]
 		public abstract object Arg { get; set; }
 
 		/// <summary>
@@ -368,6 +369,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => TimeFrame;
@@ -410,6 +412,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => MaxTradeCount;
@@ -452,6 +455,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => Volume;
@@ -494,6 +498,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => PriceRange;
@@ -642,6 +647,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => PnFArg;
@@ -687,6 +693,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => BoxSize;

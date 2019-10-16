@@ -19,6 +19,7 @@ namespace StockSharp.Messages
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using Ecng.Collections;
 
@@ -43,7 +44,8 @@ namespace StockSharp.Messages
 		/// Changes.
 		/// </summary>
 		[Browsable(false)]
-		[DataMember]
+		//[DataMember]
+		[XmlIgnore]
 		public IDictionary<TField, object> Changes { get; } = new Dictionary<TField, object>();
 
 		/// <summary>

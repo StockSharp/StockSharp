@@ -7,6 +7,7 @@ namespace StockSharp.Messages
 	using System.Net;
 	using System.Runtime.Serialization;
 	using System.Security;
+	using System.Xml.Serialization;
 
 	using Ecng.Collections;
 
@@ -78,6 +79,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// IP address restrictions.
 		/// </summary>
+		[XmlIgnore]
 		public IEnumerable<IPAddress> IpRestrictions
 		{
 			get => _ipRestrictions;
