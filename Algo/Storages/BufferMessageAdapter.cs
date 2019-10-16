@@ -260,6 +260,9 @@ namespace StockSharp.Algo.Storages
 				case MarketDataTypes.News:
 					return DataType.News;
 
+				case MarketDataTypes.Board:
+					return DataType.Board;
+
 				case MarketDataTypes.CandleTick:
 					return DataType.Create(typeof(TickCandleMessage), msg.Arg);
 

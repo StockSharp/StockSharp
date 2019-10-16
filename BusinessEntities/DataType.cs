@@ -78,6 +78,11 @@ namespace StockSharp.BusinessEntities
 		public static DataType Transactions { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Transaction).Immutable();
 
 		/// <summary>
+		/// Board info.
+		/// </summary>
+		public static DataType Board { get; } = Create(typeof(BoardStateMessage), null).Immutable();
+
+		/// <summary>
 		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		/// <param name="tf">Candle arg.</param>
@@ -196,12 +201,19 @@ namespace StockSharp.BusinessEntities
 		/// Determines whether the specified message type is market-data.
 		/// </summary>
 		public bool IsMarketData =>
-			MessageType?.IsCandleMessage() == true ||
-			MessageType == typeof(QuoteChangeMessage) ||
-			MessageType == typeof(Level1ChangeMessage) ||
-			MessageType == typeof(NewsMessage) ||
-			MessageType == typeof(SecurityMessage) ||
-			MessageType == typeof(ExecutionMessage) && (Arg is ExecutionTypes execType && (execType == ExecutionTypes.Tick || execType == ExecutionTypes.OrderLog));
+			IsCandles			||
+			this == MarketDepth ||
+			this == Level1		||
+			this == News		||
+			this == Securities	||
+			this == Ticks		||
+			this == OrderLog	||
+			this == Board;
+
+		/// <summary>
+		/// Is the data type required security info.
+		/// </summary>
+		public bool IsSecurityRequired => this != News && this == Board;
 
 		/// <summary>
 		/// Load settings.

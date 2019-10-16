@@ -668,7 +668,7 @@ namespace StockSharp.Algo
 
 			var adapter = GetUnderlyingAdapter(message.Adapter);
 
-			if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType != MarketDataTypes.News)
+			if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType.IsSecurityRequired())
 				adapter = _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)mdMsg.DataType)) ?? _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)null));
 
 			if (adapter != null)
@@ -760,6 +760,7 @@ namespace StockSharp.Algo
 							case MarketDataTypes.Level1:
 							case MarketDataTypes.OrderLog:
 							case MarketDataTypes.News:
+							case MarketDataTypes.Board:
 								return false;
 							case MarketDataTypes.MarketDepth:
 							{

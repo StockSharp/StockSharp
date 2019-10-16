@@ -258,6 +258,7 @@ StockSharp API Change log
 * (feature) ContextMenu -> PopupMenu.
 * (feature) IMarketDataProvider. RegisterXXX renamed into SubscribeXXX.
 * (feature) ISubscriptionProvider interface created.
+* (feature) Boards subscription unified with MarketDataMessage.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -88,7 +88,6 @@
     <Compile Include="BoardLookupMessage.cs" />
     <Compile Include="BoardLookupResultMessage.cs" />
     <Compile Include="BoardMessage.cs" />
-    <Compile Include="BoardRequestMessage.cs" />
     <Compile Include="CandleMessage.cs" />
     <Compile Include="CandlePriceLevel.cs" />
     <Compile Include="ChangePasswordMessage.cs" />

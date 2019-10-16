@@ -240,6 +240,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Board subscription request.
 		/// </summary>
+		[Obsolete]
 		BoardRequest,
 
 		/// <summary>

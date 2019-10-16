@@ -973,6 +973,9 @@ namespace StockSharp.Algo
 					case MessageTypes.News:
 						return message.To<NewsMessage>().ToNews(_exchangeInfoProvider).To<TEntity>();
 
+					case MessageTypes.BoardState:
+						return message.To<TEntity>();
+
 					default:
 					{
 						if (message is CandleMessage candleMsg)
@@ -1848,10 +1851,38 @@ namespace StockSharp.Algo
 				return MarketDataTypes.MarketDepth;
 			else if (dataType == DataType.News)
 				return MarketDataTypes.News;
+			else if (dataType == DataType.Board)
+				return MarketDataTypes.Board;
 			else if (dataType.IsCandles)
 				return dataType.MessageType.ToCandleMarketDataType();
 			else
 				return null;
+		}
+
+		/// <summary>
+		/// Convert <see cref="MarketDataTypes"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="type">Market data type.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this MarketDataTypes type)
+		{
+			switch (type)
+			{
+				case MarketDataTypes.Level1:
+					return DataType.Level1;
+				case MarketDataTypes.MarketDepth:
+					return DataType.MarketDepth;
+				case MarketDataTypes.Trades:
+					return DataType.Ticks;
+				case MarketDataTypes.OrderLog:
+					return DataType.OrderLog;
+				case MarketDataTypes.News:
+					return DataType.News;
+				case MarketDataTypes.Board:
+					return DataType.Board;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+			}
 		}
 
 		/// <summary>
@@ -1872,6 +1903,8 @@ namespace StockSharp.Algo
 					return typeof(ExecutionMessage);
 				case MarketDataTypes.News:
 					return typeof(NewsMessage);
+				case MarketDataTypes.Board:
+					return typeof(BoardStateMessage);
 				default:
 				{
 					if (type.IsCandleDataType())

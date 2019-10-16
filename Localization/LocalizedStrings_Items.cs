@@ -41688,6 +41688,16 @@ namespace StockSharp.Localization
 		public static string TemplateTxtNews => GetString(TemplateTxtNewsKey);
 
 		/// <summary>
+		/// Board state txt export template.
+		/// </summary>
+		public const string TemplateTxtBoardKey = nameof(TemplateTxtBoard);
+
+		/// <summary>
+		/// Board state txt export template.
+		/// </summary>
+		public static string TemplateTxtBoard => GetString(TemplateTxtBoardKey);
+
+		/// <summary>
 		/// Indicator's value txt export template.
 		/// </summary>
 		public const string TemplateTxtIndicatorKey = nameof(TemplateTxtIndicator);
@@ -41786,6 +41796,16 @@ namespace StockSharp.Localization
 		/// News template
 		/// </summary>
 		public static string TemplateNews => GetString(TemplateNewsKey);
+
+		/// <summary>
+		/// Board template.
+		/// </summary>
+		public const string TemplateBoardKey = nameof(TemplateBoard);
+
+		/// <summary>
+		/// Board template
+		/// </summary>
+		public static string TemplateBoard => GetString(TemplateBoardKey);
 
 		/// <summary>
 		/// Indicator template.

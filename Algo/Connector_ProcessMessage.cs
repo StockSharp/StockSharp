@@ -107,7 +107,7 @@ namespace StockSharp.Algo
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					var security = mdMsg.DataType == MarketDataTypes.News ? null : GetSecurity(mdMsg.SecurityId);
+					var security = !mdMsg.DataType.IsSecurityRequired() ? null : GetSecurity(mdMsg.SecurityId);
 					_subscriptionManager.ProcessRequest(security, mdMsg, true);
 				}
 				else if (message.Type == MessageTypes.OrderGroupCancel)

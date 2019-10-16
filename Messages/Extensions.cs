@@ -1512,17 +1512,6 @@ namespace StockSharp.Messages
 					return true;
 				}
 
-				case MessageTypes.BoardRequest:
-				{
-					var requestMsg = (BoardRequestMessage)message;
-					sendOut(new BoardRequestMessage
-					{
-						OriginalTransactionId = requestMsg.TransactionId,
-						Error = ex
-					});
-					return true;
-				}
-
 				case MessageTypes.PortfolioLookup:
 				{
 					var lookupMsg = (PortfolioLookupMessage)message;
@@ -1588,5 +1577,13 @@ namespace StockSharp.Messages
 			else
 				return Enumerable.Empty<long>();
 		}
+
+		/// <summary>
+		/// Is the data type required security info.
+		/// </summary>
+		/// <param name="type">Market data type.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSecurityRequired(this MarketDataTypes type)
+			=> type != MarketDataTypes.News && type != MarketDataTypes.Board;
 	}
 }

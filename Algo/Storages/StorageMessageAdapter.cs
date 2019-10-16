@@ -796,6 +796,10 @@ namespace StockSharp.Algo.Storages
 					lastTime = LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
+				case MarketDataTypes.Board:
+					lastTime = LoadMessages(_storageRegistry.GetBoardStateMessageStorage(Drive, Format), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
+					break;
+
 				case MarketDataTypes.CandleTimeFrame:
 					var tf = msg.GetTimeFrame();
 
@@ -1195,6 +1199,13 @@ namespace StockSharp.Algo.Storages
 		}
 
 		private static DateTimeOffset SetTransactionId(NewsMessage msg, long transactionId)
+		{
+			msg.OriginalTransactionId = transactionId;
+			msg.SubscriptionId = transactionId;
+			return msg.ServerTime;
+		}
+
+		private static DateTimeOffset SetTransactionId(BoardStateMessage msg, long transactionId)
 		{
 			msg.OriginalTransactionId = transactionId;
 			msg.SubscriptionId = transactionId;

@@ -175,7 +175,7 @@ namespace StockSharp.Algo
 				var subscriber = tuple.Item2;
 				originalMsg = tuple.Item1;
 
-				if (originalMsg.DataType != MarketDataTypes.News)
+				if (originalMsg.DataType.IsSecurityRequired())
 				{
 					lock (_subscribers.SyncRoot)
 					{
@@ -357,9 +357,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void SubscribeNews(Security security = null, IMessageAdapter adapter = null)
+		public void SubscribeNews(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
-			SubscribeMarketData(security, MarketDataTypes.News, adapter: adapter);
+			SubscribeMarketData(security, MarketDataTypes.News, from, to, count, adapter: adapter);
 		}
 
 		/// <inheritdoc />
@@ -428,7 +428,7 @@ namespace StockSharp.Algo
 		[Obsolete("Use SubscribeNews method instead.")]
 		public void RegisterNews(Security security = null, IMessageAdapter adapter = null)
 		{
-			SubscribeNews(security, adapter);
+			SubscribeNews(security, adapter: adapter);
 		}
 
 		/// <inheritdoc />
@@ -436,6 +436,24 @@ namespace StockSharp.Algo
 		public void UnRegisterNews(Security security = null)
 		{
 			UnSubscribeNews(security);
+		}
+
+		/// <inheritdoc />
+		public void SubscribeBoard(ExchangeBoard board, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			SubscribeMarketData(null, MarketDataTypes.Board, from, to, count, adapter: adapter);
+		}
+
+		/// <inheritdoc />
+		public void UnSubscribeBoard(ExchangeBoard board)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			UnSubscribeMarketData(null, MarketDataTypes.Board);
 		}
 
 		/// <inheritdoc />
@@ -475,35 +493,6 @@ namespace StockSharp.Algo
 				PortfolioName = portfolio.Name,
 				TransactionId = TransactionIdGenerator.GetNextId(),
 				IsSubscribe = false
-			});
-		}
-
-		/// <inheritdoc />
-		public void SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter = null)
-		{
-			if (board == null)
-				throw new ArgumentNullException(nameof(board));
-
-			SendInMessage(new BoardRequestMessage
-			{
-				IsSubscribe = true,
-				BoardCode = board.Code,
-				TransactionId = TransactionIdGenerator.GetNextId(),
-				Adapter = adapter,
-			});
-		}
-
-		/// <inheritdoc />
-		public void UnSubscribeBoard(ExchangeBoard board)
-		{
-			if (board == null)
-				throw new ArgumentNullException(nameof(board));
-
-			SendInMessage(new BoardRequestMessage
-			{
-				IsSubscribe = false,
-				BoardCode = board.Code,
-				TransactionId = TransactionIdGenerator.GetNextId(),
 			});
 		}
 

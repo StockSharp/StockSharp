@@ -261,6 +261,7 @@ namespace StockSharp.Algo
 				case MessageTypes.CandleVolume:
 
 				case MessageTypes.News:
+				case MessageTypes.BoardState:
 				case MessageTypes.Execution:
 				{
 					ApplySubscriptionIds((ISubscriptionIdMessage)message);
@@ -313,12 +314,16 @@ namespace StockSharp.Algo
 							originTransId = execMsg.OriginalTransactionId;
 							break;
 						default:
-							break;
+							throw new ArgumentOutOfRangeException(nameof(message), message.ToString());
 					}
 
 					break;
 				case NewsMessage newsMsg:
 					originTransId = newsMsg.OriginalTransactionId;
+					break;
+
+				case BoardStateMessage boardStateMsg:
+					originTransId = boardStateMsg.OriginalTransactionId;
 					break;
 
 				default:
