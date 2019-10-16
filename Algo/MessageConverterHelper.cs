@@ -714,6 +714,7 @@ namespace StockSharp.Algo
 
 			return new PortfolioLookupMessage
 			{
+				IsSubscribe = true,
 				BoardCode = criteria.Board?.Code,
 				Currency = criteria.Currency,
 				PortfolioName = criteria.Name,
@@ -734,6 +735,7 @@ namespace StockSharp.Algo
 
 			return new OrderStatusMessage
 			{
+				IsSubscribe = true,
 				PortfolioName = criteria.Portfolio?.Name,
 				SecurityId = criteria.Security?.ToSecurityId() ?? default,
 				OrderId = criteria.Id,

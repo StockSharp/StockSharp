@@ -265,7 +265,10 @@
 
 								case MessageTypes.PortfolioLookup:
 									var pfLookup = (PortfolioLookupMessage)message;
-									RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = pfLookup.TransactionId });
+
+									if (pfLookup.IsSubscribe)
+										RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = pfLookup.TransactionId });
+									
 									break;
 							}
 

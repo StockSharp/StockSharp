@@ -46,6 +46,12 @@ namespace StockSharp.Messages
 		public DateTimeOffset? To { get; set; }
 
 		/// <summary>
+		/// Is the message subscription orders changes.
+		/// </summary>
+		[DataMember]
+		public bool IsSubscribe { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderStatusMessage"/>.
 		/// </summary>
 		public OrderStatusMessage()
@@ -71,7 +77,8 @@ namespace StockSharp.Messages
 				SecurityId = SecurityId,
 				Side = Side,
 				From = From,
-				To = To
+				To = To,
+				IsSubscribe = IsSubscribe,
 			};
 
 			CopyTo(clone);

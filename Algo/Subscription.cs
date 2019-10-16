@@ -93,9 +93,9 @@ namespace StockSharp.Algo
 					MarketDataMessage.FillSecurityInfo(Security);
 			}
 			else if (dataType == DataType.Transactions)
-				OrderStatusMessage = new OrderStatusMessage();
+				OrderStatusMessage = new OrderStatusMessage { IsSubscribe = true };
 			else if (dataType == DataType.PositionChanges)
-				PortfolioLookupMessage = new PortfolioLookupMessage();
+				PortfolioLookupMessage = new PortfolioLookupMessage { IsSubscribe = true };
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
 		}

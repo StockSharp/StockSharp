@@ -590,7 +590,7 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			if (!SupportLookupMessages || msg.IsBack || !msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.OnSendInMessage(msg);
 				return;
@@ -619,7 +619,7 @@ namespace StockSharp.Algo.Storages
 
 			_orderStatusIds.Add(transId);
 
-			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			if (!SupportLookupMessages || msg.IsBack || !msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.OnSendInMessage(msg);
 				return;

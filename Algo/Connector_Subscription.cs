@@ -457,6 +457,37 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
+		public void SubscribeOrders(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		{
+			var lookupMsg = new OrderStatusMessage
+			{
+				IsSubscribe = true,
+				TransactionId = TransactionIdGenerator.GetNextId(),
+				SecurityId = security?.ToSecurityId() ?? default,
+				From = from,
+				To = to,
+				Adapter = adapter,
+			};
+			_entityCache.AddOrderStatusTransactionId(lookupMsg.TransactionId);
+			
+			this.AddInfoLog("{0} '{1}' for '{2}'.", nameof(SubscribeOrders), lookupMsg, lookupMsg.Adapter);
+			SendInMessage(lookupMsg);
+		}
+
+		/// <inheritdoc />
+		public void UnSubscribeOrders()
+		{
+			var lookupMsg = new OrderStatusMessage
+			{
+				TransactionId = TransactionIdGenerator.GetNextId(),
+				IsSubscribe = false,
+			};
+
+			this.AddInfoLog(nameof(UnSubscribeOrders));
+			SendInMessage(lookupMsg);
+		}
+
+		/// <inheritdoc />
 		public void RegisterPortfolio(Portfolio portfolio)
 		{
 			_subscriptionManager.RegisterPortfolio(portfolio);
@@ -519,11 +550,11 @@ namespace StockSharp.Algo
 			}
 			else if (subscription.DataType == DataType.Transactions)
 			{
-				LookupOrders(subscription.OrderStatusMessage);
+				SubscribeOrders();
 			}
 			else if (subscription.DataType == DataType.PositionChanges)
 			{
-				LookupPortfolios(subscription.PortfolioLookupMessage);
+				SubscribePositions();
 			}
 			else
 				throw new ArgumentOutOfRangeException(nameof(subscription), subscription.DataType, LocalizedStrings.Str1219);
@@ -546,11 +577,11 @@ namespace StockSharp.Algo
 			}
 			else if (subscription.DataType == DataType.Transactions)
 			{
-				//LookupOrders(subscription.OrderStatusMessage);
+				UnSubscribeOrders();
 			}
 			else if (subscription.DataType == DataType.PositionChanges)
 			{
-				//LookupPortfolios(subscription.PortfolioLookupMessage);
+				UnSubscribePositions();
 			}
 			else
 				throw new ArgumentOutOfRangeException(nameof(subscription), subscription.DataType, LocalizedStrings.Str1219);
@@ -613,6 +644,35 @@ namespace StockSharp.Algo
 			mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
 			mdMsg.OriginalTransactionId = originalTransId;
 			UnSubscribeMarketData(series.Security, mdMsg);
+		}
+
+		/// <inheritdoc />
+		public void SubscribePositions(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		{
+			var msg = new PortfolioLookupMessage
+			{
+				IsSubscribe = true,
+				TransactionId = TransactionIdGenerator.GetNextId(),
+				Adapter = adapter,
+			};
+			
+			_portfolioLookups.Add(msg.TransactionId, new LookupInfo<PortfolioLookupMessage, Portfolio>(msg));
+
+			this.AddInfoLog(nameof(SubscribePositions));
+			SendInMessage(msg);
+		}
+
+		/// <inheritdoc />
+		public void UnSubscribePositions()
+		{
+			var msg = new PortfolioLookupMessage
+			{
+				IsSubscribe = false,
+				TransactionId = TransactionIdGenerator.GetNextId(),
+			};
+
+			this.AddInfoLog(nameof(UnSubscribePositions));
+			SendInMessage(msg);
 		}
 	}
 }

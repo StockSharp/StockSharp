@@ -1014,10 +1014,10 @@ namespace StockSharp.Algo
 				return;
 
 			if (adapter.PortfolioLookupRequired)
-				LookupPortfolios(new Portfolio(), adapter);
+				SubscribePositions(adapter: adapter);
 
 			if (adapter.OrderStatusRequired)
-				LookupOrders(new Order(), adapter);
+				SubscribeOrders(adapter: adapter);
 
 			if (adapter.SecurityLookupRequired && adapter.IsSupportSecuritiesLookupAll)
 				LookupSecurities(new Security(), adapter);

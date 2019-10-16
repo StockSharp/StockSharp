@@ -1907,6 +1907,11 @@ namespace StockSharp.Algo.Testing
 
 				case MessageTypes.OrderStatus:
 				{
+					var statusMsg = (OrderStatusMessage)message;
+
+					if (!statusMsg.IsSubscribe)
+						break;
+
 					foreach (var pair in _securityEmulators)
 					{
 						pair.Value.Process(message, retVal);
@@ -1918,6 +1923,9 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.PortfolioLookup:
 				{
 					var pfMsg = (PortfolioLookupMessage)message;
+
+					if (!pfMsg.IsSubscribe)
+						break;
 
 					if (pfMsg.PortfolioName.IsEmpty())
 					{

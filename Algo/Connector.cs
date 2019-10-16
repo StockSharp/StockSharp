@@ -733,7 +733,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public virtual void LookupSecurities(SecurityLookupMessage criteria)
+		public void LookupSecurities(SecurityLookupMessage criteria)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -774,6 +774,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscribeOrders method.")]
 		public void LookupOrders(Order criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 		{
 			var msg = criteria.ToLookupCriteria();
@@ -785,7 +786,8 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public virtual void LookupOrders(OrderStatusMessage criteria)
+		[Obsolete("Use SubscribeOrders method.")]
+		public void LookupOrders(OrderStatusMessage criteria)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -800,6 +802,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscribePositions method.")]
 		public void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 		{
 			if (criteria == null)
@@ -814,7 +817,8 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public virtual void LookupPortfolios(PortfolioLookupMessage criteria)
+		[Obsolete("Use SubscribePositions method.")]
+		public void LookupPortfolios(PortfolioLookupMessage criteria)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
