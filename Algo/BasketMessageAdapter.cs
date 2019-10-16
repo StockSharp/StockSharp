@@ -134,7 +134,7 @@ namespace StockSharp.Algo
 		private readonly HashSet<IMessageAdapter> _connectedAdapters = new HashSet<IMessageAdapter>();
 		private bool _isFirstConnect;
 		private readonly InnerAdapterList _innerAdapters;
-		private readonly SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>> _newsSubscriptions = new SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>>();
+		private readonly SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>> _newsBoardSubscriptions = new SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>>();
 		private readonly SynchronizedDictionary<Tuple<MessageTypes, long>, HashSet<IMessageAdapter>> _lookups = new SynchronizedDictionary<Tuple<MessageTypes, long>, HashSet<IMessageAdapter>>();
 
 		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
@@ -344,7 +344,7 @@ namespace StockSharp.Algo
 			_subscriptionsById.Clear();
 			_subscriptionsByKey.Clear();
 			_subscriptionMessages.Clear();
-			_newsSubscriptions.Clear();
+			_newsBoardSubscriptions.Clear();
 			_lookups.Clear();
 			_subscriptionListRequests.Clear();
 		}
@@ -825,6 +825,7 @@ namespace StockSharp.Algo
 			switch (mdMsg.DataType)
 			{
 				case MarketDataTypes.News:
+				case MarketDataTypes.Board:
 				{
 					var dict = new Dictionary<IMessageAdapter, long>();
 
@@ -838,7 +839,7 @@ namespace StockSharp.Algo
 							break;
 						}
 
-						lock (_newsSubscriptions.SyncRoot)
+						lock (_newsBoardSubscriptions.SyncRoot)
 						{
 							foreach (var adapter in adapters)
 							{
@@ -846,15 +847,15 @@ namespace StockSharp.Algo
 
 								dict.Add(adapter, transId);
 
-								_newsSubscriptions.Add(transId, RefTuple.Create(mdMsg.TransactionId, (bool?)null, adapter));
+								_newsBoardSubscriptions.Add(transId, RefTuple.Create(mdMsg.TransactionId, (bool?)null, adapter));
 							}
 						}
 					}
 					else
 					{
-						lock (_newsSubscriptions.SyncRoot)
+						lock (_newsBoardSubscriptions.SyncRoot)
 						{
-							var adapters = _newsSubscriptions.Select(p => p.Value.Third).Where(a => a != null).ToArray();
+							var adapters = _newsBoardSubscriptions.Select(p => p.Value.Third).Where(a => a != null).ToArray();
 
 							foreach (var adapter in adapters)
 							{
@@ -862,7 +863,7 @@ namespace StockSharp.Algo
 
 								dict.Add(adapter, transId);
 
-								_newsSubscriptions.Add(transId, RefTuple.Create(mdMsg.TransactionId, (bool?)null, adapter));
+								_newsBoardSubscriptions.Add(transId, RefTuple.Create(mdMsg.TransactionId, (bool?)null, adapter));
 							}
 						}
 					}
@@ -1156,19 +1157,19 @@ namespace StockSharp.Algo
 
 			var isSubscribe = originMsg.IsSubscribe;
 
-			if (originMsg.DataType == MarketDataTypes.News)
+			if (!originMsg.DataType.IsSecurityRequired())
 			{
 				long? transId;
 				var allError = true;
 
-				lock (_newsSubscriptions.SyncRoot)
+				lock (_newsBoardSubscriptions.SyncRoot)
 				{
-					var tuple = _newsSubscriptions.TryGetValue(originalTransactionId);
+					var tuple = _newsBoardSubscriptions.TryGetValue(originalTransactionId);
 
 					transId = tuple.First;
 					tuple.Second = message.IsOk();
 
-					foreach (var pair in _newsSubscriptions)
+					foreach (var pair in _newsBoardSubscriptions)
 					{
 						var t = pair.Value;
 

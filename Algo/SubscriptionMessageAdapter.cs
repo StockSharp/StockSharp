@@ -37,7 +37,7 @@ namespace StockSharp.Algo
 		private readonly SyncObject _sync = new SyncObject();
 
 		private readonly Dictionary<Helper.SubscriptionKey, SubscriptionInfo<MarketDataMessage>> _subscribers = new Dictionary<Helper.SubscriptionKey, SubscriptionInfo<MarketDataMessage>>();
-		private readonly Dictionary<string, SubscriptionInfo<MarketDataMessage>> _newsSubscribers = new Dictionary<string, SubscriptionInfo<MarketDataMessage>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<string, SubscriptionInfo<MarketDataMessage>> _newsBoardSubscribers = new Dictionary<string, SubscriptionInfo<MarketDataMessage>>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<string, SubscriptionInfo<PortfolioMessage>> _pfSubscribers = new Dictionary<string, SubscriptionInfo<PortfolioMessage>>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<long, SubscriptionInfo<MarketDataMessage>> _subscribersById = new Dictionary<long, SubscriptionInfo<MarketDataMessage>>();
 		private readonly HashSet<long> _onlyHistorySubscriptions = new HashSet<long>();
@@ -82,7 +82,7 @@ namespace StockSharp.Algo
 		private void ClearSubscribers()
 		{
 			_subscribers.Clear();
-			_newsSubscribers.Clear();
+			_newsBoardSubscribers.Clear();
 			_pfSubscribers.Clear();
 			_subscribersById.Clear();
 		}
@@ -127,7 +127,7 @@ namespace StockSharp.Algo
 
 					lock (_sync)
 					{
-						messages.AddRange(_newsSubscribers.Values.Select(p => p.Message.Clone()));
+						messages.AddRange(_newsBoardSubscribers.Values.Select(p => p.Message.Clone()));
 						messages.AddRange(_subscribers.Values.Select(p => p.Message.Clone()));
 						messages.AddRange(_pfSubscribers.Values.Select(p => p.Message.Clone()));
 
@@ -197,7 +197,7 @@ namespace StockSharp.Algo
 				lock (_sync)
 				{
 					messages.AddRange(_subscribers.Values.Select(p => p.Message.Clone()));
-					messages.AddRange(_newsSubscribers.Values.Select(p => p.Message.Clone()));
+					messages.AddRange(_newsBoardSubscribers.Values.Select(p => p.Message.Clone()));
 					messages.AddRange(_pfSubscribers.Values.Select(p => p.Message.Clone()));
 
 					//ClearSubscribers();
@@ -357,8 +357,8 @@ namespace StockSharp.Algo
 
 			lock (_sync)
 			{
-				info = message.DataType == MarketDataTypes.News
-					? ProcessSubscription(_newsSubscribers, message.NewsId ?? string.Empty, message, ref sendIn, ref isOnlyHistory, ref sendOutMsg)
+				info = !message.DataType.IsSecurityRequired()
+					? ProcessSubscription(_newsBoardSubscribers, (message.DataType == MarketDataTypes.News ? message.NewsId : message.BoardCode) ?? string.Empty, message, ref sendIn, ref isOnlyHistory, ref sendOutMsg)
 					: ProcessSubscription(_subscribers, message.CreateKey(GetSecurityId(message.SecurityId)), message, ref sendIn, ref isOnlyHistory, ref sendOutMsg);
 			}
 
@@ -397,8 +397,8 @@ namespace StockSharp.Algo
 				if (info == null)
 					return false;
 
-				replies = info.Message.DataType == MarketDataTypes.News
-					? ProcessSubscriptionResult(_newsSubscribers, info.Message.NewsId ?? string.Empty, info, message)
+				replies = !info.Message.DataType.IsSecurityRequired()
+					? ProcessSubscriptionResult(_newsBoardSubscribers, info.Message.NewsId ?? string.Empty, info, message)
 					: ProcessSubscriptionResult(_subscribers, info.Message.CreateKey(GetSecurityId(info.Message.SecurityId)), info, message);
 			}
 
