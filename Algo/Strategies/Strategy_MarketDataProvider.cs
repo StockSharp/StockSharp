@@ -278,9 +278,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void SubscribeNews(Security security = null, IMessageAdapter adapter = null)
+		public void SubscribeNews(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().SubscribeNews(security, adapter);
+			SafeGetConnector().SubscribeNews(security, from, to, count, adapter);
 		}
 
 		/// <inheritdoc />
@@ -290,9 +290,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter = null)
+		public void SubscribeBoard(ExchangeBoard board, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().SubscribeBoard(board, adapter);
+			SafeGetConnector().SubscribeBoard(board, from, to, count, adapter);
 		}
 
 		/// <inheritdoc />

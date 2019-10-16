@@ -287,7 +287,7 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeNews(Security security, IMessageAdapter adapter)
+		void IMarketDataProvider.SubscribeNews(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
@@ -297,7 +297,7 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter)
+		void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}

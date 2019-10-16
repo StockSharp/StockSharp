@@ -284,8 +284,11 @@ namespace StockSharp.BusinessEntities
 		/// Subscribe on news.
 		/// </summary>
 		/// <param name="security">Security for subscription.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Max count.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void SubscribeNews(Security security = null, IMessageAdapter adapter = null);
+		void SubscribeNews(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// Unsubscribe from news.
@@ -297,8 +300,11 @@ namespace StockSharp.BusinessEntities
 		/// Subscribe on the board changes.
 		/// </summary>
 		/// <param name="board">Board for subscription.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Max count.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter = null);
+		void SubscribeBoard(ExchangeBoard board, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// Unsubscribe from the board changes.

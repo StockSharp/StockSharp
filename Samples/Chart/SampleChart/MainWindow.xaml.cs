@@ -788,10 +788,10 @@
 			void IMarketDataProvider.SubscribeOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) { }
 			void IMarketDataProvider.UnSubscribeOrderLog(Security security) { }
 			
-			void IMarketDataProvider.SubscribeNews(Security security, IMessageAdapter adapter) { }
+			void IMarketDataProvider.SubscribeNews(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) { }
 			void IMarketDataProvider.UnSubscribeNews(Security security) { }
 
-			void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter) { }
+			void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) { }
 			void IMarketDataProvider.UnSubscribeBoard(ExchangeBoard board) { }
 
 			#endregion
