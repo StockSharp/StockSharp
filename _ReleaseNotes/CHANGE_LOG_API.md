@@ -259,6 +259,7 @@ StockSharp API Change log
 * (feature) IMarketDataProvider. RegisterXXX renamed into SubscribeXXX.
 * (feature) ISubscriptionProvider interface created.
 * (feature) Boards subscription unified with MarketDataMessage.
+* (feature) BoardStateStorage added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
