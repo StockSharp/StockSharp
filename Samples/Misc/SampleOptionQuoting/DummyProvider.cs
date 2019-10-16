@@ -327,5 +327,13 @@ namespace SampleOptionQuoting
 		{
 			return _positions.FirstOrDefault(p => p.Security == security && p.Portfolio == portfolio);
 		}
+
+		void IPositionProvider.SubscribePositions(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		{
+		}
+
+		void IPositionProvider.UnSubscribePositions()
+		{
+		}
 	}
 }
