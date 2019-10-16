@@ -87,7 +87,6 @@
     <Compile Include="IPortfolioProvider.cs" />
     <Compile Include="IPositionProvider.cs" />
     <Compile Include="ISecurityProvider.cs" />
-    <Compile Include="ISubscriptionProvider.cs" />
     <Compile Include="ITransactionProvider.cs" />
     <Compile Include="MarketDepth.cs" />
     <Compile Include="MarketDepthPair.cs" />
@@ -102,7 +101,6 @@
     <Compile Include="Quote.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="SecurityExternalId.cs" />
-    <Compile Include="Subscription.cs" />
     <Compile Include="Trade.cs" />
     <Compile Include="UnitHelper.cs" />
   </ItemGroup>

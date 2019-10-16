@@ -257,6 +257,7 @@ StockSharp API Change log
 * (feature) Sterling. Instruments lookup supported with stub logic.
 * (feature) ContextMenu -> PopupMenu.
 * (feature) IMarketDataProvider. RegisterXXX renamed into SubscribeXXX.
+* (feature) ISubscriptionProvider interface created.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

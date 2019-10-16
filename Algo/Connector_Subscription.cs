@@ -508,6 +508,66 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
+		public IEnumerable<Subscription> Subscriptions => _subscriptions.CachedValues;
+
+		/// <inheritdoc />
+		public void Subscribe(Subscription subscription)
+		{
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			if (subscription.TransactionId == 0)
+				subscription.TransactionId = TransactionIdGenerator.GetNextId();
+
+			_subscriptions.Add(subscription.TransactionId, subscription);
+
+			if (subscription.DataType.IsMarketData)
+			{
+				if (subscription.DataType.IsCandles)
+					SubscribeCandles(subscription.CandleSeries, transactionId: subscription.TransactionId);
+				else
+					SubscribeMarketData(subscription.Security, subscription.MarketDataMessage);
+			}
+			else if (subscription.DataType == DataType.Transactions)
+			{
+				LookupOrders(subscription.OrderStatusMessage);
+			}
+			else if (subscription.DataType == DataType.PositionChanges)
+			{
+				LookupPortfolios(subscription.PortfolioLookupMessage);
+			}
+			else
+				throw new ArgumentOutOfRangeException(nameof(subscription), subscription.DataType, LocalizedStrings.Str1219);
+		}
+
+		/// <inheritdoc />
+		public void UnSubscribe(Subscription subscription)
+		{
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			var transId = subscription.TransactionId;
+
+			if (subscription.DataType.IsMarketData)
+			{
+				if (subscription.DataType.IsCandles)
+					UnSubscribeCandles(subscription.CandleSeries);
+				else
+					UnSubscribeMarketData(subscription.Security, new MarketDataMessage { OriginalTransactionId = transId });
+			}
+			else if (subscription.DataType == DataType.Transactions)
+			{
+				//LookupOrders(subscription.OrderStatusMessage);
+			}
+			else if (subscription.DataType == DataType.PositionChanges)
+			{
+				//LookupPortfolios(subscription.PortfolioLookupMessage);
+			}
+			else
+				throw new ArgumentOutOfRangeException(nameof(subscription), subscription.DataType, LocalizedStrings.Str1219);
+		}
+
+		/// <inheritdoc />
 		public virtual void RequestNewsStory(News news, IMessageAdapter adapter = null)
 		{
 			if (news == null)

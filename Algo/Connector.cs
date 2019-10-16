@@ -41,7 +41,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The class to create connections to trading systems.
 	/// </summary>
-	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager
+	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager, ISubscriptionProvider
 	{
 		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new MemoryStatisticsValue<Trade>(LocalizedStrings.Ticks);
 		private static readonly MemoryStatisticsValue<Connector> _connectorStat = new MemoryStatisticsValue<Connector>(LocalizedStrings.Str1093);
@@ -152,6 +152,8 @@ namespace StockSharp.Algo
 
 		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _boardStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
 		private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = new SynchronizedDictionary<Security, Level1Info>();
+
+		private readonly CachedSynchronizedDictionary<long, Subscription> _subscriptions = new CachedSynchronizedDictionary<long, Subscription>();
 
 		private bool _isDisposing;
 
@@ -1530,6 +1532,8 @@ namespace StockSharp.Algo
 
 			_securityValues.Clear();
 			_boardStates.Clear();
+
+			_subscriptions.Clear();
 
 			SendInMessage(new ResetMessage());
 

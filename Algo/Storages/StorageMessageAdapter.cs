@@ -615,7 +615,9 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			_orderStatusIds.Add(msg.TransactionId);
+			var transId = msg.TransactionId;
+
+			_orderStatusIds.Add(transId);
 
 			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
@@ -639,7 +641,8 @@ namespace StockSharp.Algo.Storages
 						else if (!snapshot.OrderStringId.IsEmpty())
 							_orderStringIds.TryAdd(snapshot.OrderStringId, snapshot.TransactionId);
 
-						snapshot.OriginalTransactionId = msg.TransactionId;
+						snapshot.OriginalTransactionId = transId;
+						snapshot.SubscriptionId = transId;
 						RaiseStorageMessage(snapshot);
 					}
 				}
@@ -753,6 +756,8 @@ namespace StockSharp.Algo.Storages
 						if (level1Msg != null)
 						{
 							lastTime = level1Msg.ServerTime;
+
+							level1Msg.SubscriptionId = transactionId;
 							RaiseStorageMessage(level1Msg);
 						}
 					}
@@ -769,6 +774,8 @@ namespace StockSharp.Algo.Storages
 						if (quotesMsg != null)
 						{
 							lastTime = quotesMsg.ServerTime;
+
+							quotesMsg.SubscriptionId = transactionId;
 							RaiseStorageMessage(quotesMsg);
 						}
 					}
@@ -1190,12 +1197,14 @@ namespace StockSharp.Algo.Storages
 		private static DateTimeOffset SetTransactionId(NewsMessage msg, long transactionId)
 		{
 			msg.OriginalTransactionId = transactionId;
+			msg.SubscriptionId = transactionId;
 			return msg.ServerTime;
 		}
 
 		private static DateTimeOffset SetTransactionId(ExecutionMessage msg, long transactionId)
 		{
 			msg.OriginalTransactionId = transactionId;
+			msg.SubscriptionId = transactionId;
 			return msg.ServerTime;
 		}
 

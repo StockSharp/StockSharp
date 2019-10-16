@@ -809,6 +809,8 @@ namespace StockSharp.Algo
 			}
 			else
 			{
+				_subscriptions.Remove(originalMsg.OriginalTransactionId);
+
 				if (replyMsg.IsOk())
 				{
 					RaiseMarketDataUnSubscriptionSucceeded(security, originalMsg);
@@ -1066,6 +1068,7 @@ namespace StockSharp.Algo
 			}
 
 			RaiseSessionStateChanged(board, message.State);
+			RaiseReceived(board, message, BoardReceived);
 		}
 
 		private void ProcessBoardMessage(BoardMessage message)
@@ -1086,6 +1089,7 @@ namespace StockSharp.Algo
 				info = _boardLookups.TryGetValue(message.OriginalTransactionId);
 
 			info?.Items.Add(board);
+			RaiseReceived(board, message, BoardReceived);
 		}
 
 		private void ProcessSecurityMessage(SecurityMessage message/*, string boardCode = null*/)
@@ -1115,6 +1119,8 @@ namespace StockSharp.Algo
 				info = _securityLookups.TryGetValue(message.OriginalTransactionId);
 
 			info?.Items.Add(security);
+
+			RaiseReceived(security, message, SecurityReceived);
 		}
 
 		private void ProcessSecurityLookupResultMessage(SecurityLookupResultMessage message)
@@ -1248,6 +1254,8 @@ namespace StockSharp.Algo
 
 			if (changes.Count > 0)
 				RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
+
+			RaiseReceived(message, message, Level1Received);
 		}
 
 		/// <inheritdoc />
@@ -1325,15 +1333,19 @@ namespace StockSharp.Algo
 				info = _portfolioLookups.TryGetValue(message.OriginalTransactionId);
 
 			info?.Items.Add(portfolio);
+
+			RaiseReceived(portfolio, message, PortfolioReceived);
 		}
 
 		private void ProcessPortfolioChangeMessage(PortfolioChangeMessage message)
 		{
-			GetPortfolio(message.PortfolioName, portfolio =>
+			var pf = GetPortfolio(message.PortfolioName, portfolio =>
 			{
 				portfolio.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
 				return true;
 			}, out _);
+
+			RaiseReceived(pf, message, PortfolioReceived);
 		}
 
 		//private void ProcessPositionMessage(PositionMessage message)
@@ -1366,6 +1378,7 @@ namespace StockSharp.Algo
 			position.ApplyChanges(message);
 
 			RaisePositionChanged(position);
+			RaiseReceived(position, message, PositionReceived);
 		}
 
 		private void ProcessNewsMessage(NewsMessage message)
@@ -1378,25 +1391,25 @@ namespace StockSharp.Algo
 				RaiseNewNews(news.Item1);
 			else
 				RaiseNewsChanged(news.Item1);
+
+			RaiseReceived(news.Item1, message, NewsReceived);
 		}
 
 		private void ProcessQuotesMessage(QuoteChangeMessage message)
 		{
 			var security = GetSecurity(message.SecurityId);
 
-			ProcessQuotesMessage(security, message);
-		}
-
-		private void ProcessQuotesMessage(Security security, QuoteChangeMessage message)
-		{
-			if (MarketDepthChanged != null || MarketDepthsChanged != null)
+			if (MarketDepthChanged != null || MarketDepthsChanged != null || MarketDepthReceived != null)
 			{
 				var marketDepth = GetMarketDepth(security, message.IsFiltered);
 
 				message.ToMarketDepth(marketDepth, GetSecurity);
 
 				if (!message.IsFiltered)
+				{
 					RaiseMarketDepthChanged(marketDepth);
+					RaiseReceived(marketDepth, message, MarketDepthReceived);
+				}
 			}
 			else
 			{
@@ -1544,6 +1557,7 @@ namespace StockSharp.Algo
 			//logItem.LocalTime = message.LocalTime;
 
 			RaiseNewOrderLogItem(logItem);
+			RaiseReceived(logItem, message, OrderLogItemReceived);
 		}
 
 		private void ProcessTradeMessage(Security security, ExecutionMessage message)
@@ -1598,6 +1612,8 @@ namespace StockSharp.Algo
 			if (tuple.Item2)
 				RaiseNewTrade(tuple.Item1);
 
+			RaiseReceived(tuple.Item1, message, TickTradeReceived);
+
 			RaiseValuesChanged(security, changes, message.ServerTime, message.LocalTime);
 
 			if (!UpdateSecurityLastQuotes)
@@ -1631,14 +1647,17 @@ namespace StockSharp.Algo
 			if (value.IsEmpty())
 				nonOrderedMyTrades.Remove(id);
 
-			var trades = retVal
-				.Select(t => _entityCache.ProcessMyTradeMessage(order, order.Security, t, _entityCache.GetTransactionId(t.OriginalTransactionId)))
-				.Where(t => t != null && t.Item2)
-				.Select(t => t.Item1);
-
-			foreach (var trade in trades)
+			foreach (var msg in retVal)
 			{
+				var tuple = _entityCache.ProcessMyTradeMessage(order, order.Security, msg, _entityCache.GetTransactionId(msg.OriginalTransactionId));
+
+				if (tuple?.Item2 != true)
+					continue;
+
+				var trade = tuple.Item1;
+
 				RaiseNewMyTrade(trade);
+				RaiseReceived(trade, msg, OwnTradeReceived);
 			}
 		}
 
@@ -1695,6 +1714,8 @@ namespace StockSharp.Algo
 						else
 							RaiseNewOrder(order);
 
+						RaiseReceived(order, message, OrderReceived);
+
 						if (isStatusRequest && order.State == OrderStates.Pending)
 						{
 							// TODO temp disabled (need more tests)
@@ -1709,6 +1730,8 @@ namespace StockSharp.Algo
 							RaiseStopOrderChanged(order);
 						else
 							RaiseOrderChanged(order);
+
+						RaiseReceived(order, message, OrderReceived);
 					}
 
 					if (order.Id != null)
@@ -1769,6 +1792,8 @@ namespace StockSharp.Algo
 							RaiseStopOrdersRegisterFailed(fail);
 						else
 							RaiseOrderRegisterFailed(fail);
+
+						RaiseReceived(fail, message, OrderRegisterFailReceived);
 					}
 					else
 					{
@@ -1778,6 +1803,8 @@ namespace StockSharp.Algo
 							RaiseStopOrdersCancelFailed(fail);
 						else
 							RaiseOrderCancelFailed(fail);
+
+						RaiseReceived(fail, message, OrderCancelFailReceived);
 					}
 				}
 			}
@@ -1828,13 +1855,11 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			if (!tuple.Item2)
-			{
-				this.AddWarningLog("Duplicate own trade message: {0}", message);
-				return;
-			}
+			if (tuple.Item2)
+				RaiseNewMyTrade(tuple.Item1);
 
-			RaiseNewMyTrade(tuple.Item1);
+			//this.AddWarningLog("Duplicate own trade message: {0}", message);
+			RaiseReceived(tuple.Item1, message, OwnTradeReceived);
 		}
 
 		private void ProcessTransactionMessage(Order order, Security security, ExecutionMessage message, long transactionId, bool isStatusRequest)
@@ -1941,6 +1966,7 @@ namespace StockSharp.Algo
 				return;
 
 			RaiseCandleSeriesProcessing(series, candle);
+			RaiseReceived(candle, message, CandleReceived);
 		}
 
 		private CandleSeries ProcessCandleSeriesStopped(long originalTransactionId)

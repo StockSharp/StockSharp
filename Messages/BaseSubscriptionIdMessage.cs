@@ -35,7 +35,7 @@ namespace StockSharp.Messages
 			base.CopyTo(destination);
 
 			destination.SubscriptionId = SubscriptionId;
-			destination.SubscriptionIds = SubscriptionIds?.ToArray();
+			destination.SubscriptionIds = SubscriptionIds;//?.ToArray();
 		}
 	}
 }
