@@ -578,9 +578,18 @@ namespace StockSharp.Messages
 		/// <param name="expected">Is disconnect expected.</param>
 		protected void SendOutDisconnectMessage(bool expected)
 		{
-			SendOutMessage(expected ? (BaseConnectionMessage)new DisconnectMessage() : new ConnectMessage
+			SendOutDisconnectMessage(expected ? null : new InvalidOperationException(LocalizedStrings.Str2551));
+		}
+
+		/// <summary>
+		/// Send to <see cref="SendOutMessage"/> disconnect message.
+		/// </summary>
+		/// <param name="error">Error info. Can be <see langword="null"/>.</param>
+		protected void SendOutDisconnectMessage(Exception error)
+		{
+			SendOutMessage(error == null ? (BaseConnectionMessage)new DisconnectMessage() : new ConnectMessage
 			{
-				Error = new InvalidOperationException(LocalizedStrings.Str2551)
+				Error = error
 			});
 		}
 
