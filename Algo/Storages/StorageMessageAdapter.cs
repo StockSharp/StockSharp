@@ -607,7 +607,10 @@ namespace StockSharp.Algo.Storages
 				RaiseStorageMessage(position.ToChangeMessage(msg.TransactionId));
 			}
 
-			base.OnSendInMessage(msg);
+			if (msg.IsHistory)
+				RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = msg.TransactionId });
+			else
+				base.OnSendInMessage(msg);
 		}
 
 		private void ProcessOrderStatus(OrderStatusMessage msg)
@@ -659,7 +662,12 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			base.OnSendInMessage(msg);
+			if (msg.IsHistory)
+			{
+
+			}
+			else
+				base.OnSendInMessage(msg);
 		}
 
 		private void ProcessOrderCancel(OrderCancelMessage msg)
@@ -1198,21 +1206,8 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		private static DateTimeOffset SetTransactionId(NewsMessage msg, long transactionId)
-		{
-			msg.OriginalTransactionId = transactionId;
-			msg.SubscriptionId = transactionId;
-			return msg.ServerTime;
-		}
-
-		private static DateTimeOffset SetTransactionId(BoardStateMessage msg, long transactionId)
-		{
-			msg.OriginalTransactionId = transactionId;
-			msg.SubscriptionId = transactionId;
-			return msg.ServerTime;
-		}
-
-		private static DateTimeOffset SetTransactionId(ExecutionMessage msg, long transactionId)
+		private static DateTimeOffset SetTransactionId<TMessage>(TMessage msg, long transactionId)
+			where TMessage : ISubscriptionIdMessage, IServerTimeMessage
 		{
 			msg.OriginalTransactionId = transactionId;
 			msg.SubscriptionId = transactionId;
