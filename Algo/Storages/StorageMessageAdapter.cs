@@ -392,10 +392,10 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		/// <summary>
-		/// Support lookup messages.
-		/// </summary>
-		public bool SupportLookupMessages { get; set; } = true;
+		///// <summary>
+		///// Support lookup messages.
+		///// </summary>
+		//public bool SupportLookupMessages { get; set; } = true;
 
 		/// <summary>
 		/// Cache buildable from smaller time-frames candles.
@@ -556,7 +556,7 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			if (/*!SupportLookupMessages || */msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.OnSendInMessage(msg);
 				return;
@@ -573,7 +573,7 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			if (/*!SupportLookupMessages || */msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.OnSendInMessage(msg);
 				return;
@@ -590,7 +590,7 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (!SupportLookupMessages || msg.IsBack || !msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
+			if (/*!SupportLookupMessages || */msg.IsBack || !msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.OnSendInMessage(msg);
 				return;
@@ -619,7 +619,7 @@ namespace StockSharp.Algo.Storages
 
 			_orderStatusIds.Add(transId);
 
-			if (!SupportLookupMessages || msg.IsBack || !msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
+			if (/*!SupportLookupMessages || */msg.IsBack || !msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.OnSendInMessage(msg);
 				return;
@@ -1232,7 +1232,7 @@ namespace StockSharp.Algo.Storages
 			storage.SetValue(nameof(DaysLoad), DaysLoad);
 			storage.SetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
 			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
-			storage.SetValue(nameof(SupportLookupMessages), SupportLookupMessages);
+			//storage.SetValue(nameof(SupportLookupMessages), SupportLookupMessages);
 		}
 
 		/// <inheritdoc />
@@ -1248,7 +1248,7 @@ namespace StockSharp.Algo.Storages
 			DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
 			CacheBuildableCandles = storage.GetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
 			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
-			SupportLookupMessages = storage.GetValue(nameof(SupportLookupMessages), SupportLookupMessages);
+			//SupportLookupMessages = storage.GetValue(nameof(SupportLookupMessages), SupportLookupMessages);
 		}
 
 		/// <summary>
@@ -1265,7 +1265,7 @@ namespace StockSharp.Algo.Storages
 				Format = Format,
 				Drive = Drive,
 				Mode = Mode,
-				SupportLookupMessages = SupportLookupMessages,
+				//SupportLookupMessages = SupportLookupMessages,
 			};
 		}
 	}
