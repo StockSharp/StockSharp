@@ -96,12 +96,6 @@ namespace StockSharp.Messages
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
-		/// ID of the original message <see cref="MarketDataMessage.TransactionId"/> for which this message is a response.
-		/// </summary>
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
-
-		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
@@ -112,7 +106,6 @@ namespace StockSharp.Messages
 			destination.BoardCode = BoardCode;
 			destination.State = State;
 			destination.ServerTime = ServerTime;
-			destination.OriginalTransactionId = OriginalTransactionId;
 		}
 
 		/// <summary>

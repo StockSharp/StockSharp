@@ -46,12 +46,6 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string Code { get; set; }
 
-		/// <summary>
-		/// ID of the original message <see cref="BoardLookupMessage.TransactionId"/> for which this message is a response.
-		/// </summary>
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
-
 		///// <summary>
 		///// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
 		///// </summary>
@@ -153,7 +147,6 @@ namespace StockSharp.Messages
 				//IsSupportMarketOrders = IsSupportMarketOrders,
 				WorkingTime = WorkingTime.Clone(),
 				TimeZone = TimeZone,
-				OriginalTransactionId = OriginalTransactionId,
 			};
 
 			CopyTo(clone);

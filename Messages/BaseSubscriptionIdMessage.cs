@@ -2,6 +2,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
 	using Ecng.Serialization;
@@ -13,6 +14,10 @@ namespace StockSharp.Messages
 	[Serializable]
 	public abstract class BaseSubscriptionIdMessage : Message, ISubscriptionIdMessage
 	{
+		/// <inheritdoc />
+		[DataMember]
+		public long OriginalTransactionId { get; set; }
+
 		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
@@ -40,6 +45,7 @@ namespace StockSharp.Messages
 		{
 			base.CopyTo(destination);
 
+			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.SubscriptionId = SubscriptionId;
 			destination.SubscriptionIds = SubscriptionIds;//?.ToArray();
 		}
