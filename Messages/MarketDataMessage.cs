@@ -151,7 +151,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class MarketDataMessage : SecurityMessage, ITransactionIdMessage
+	public class MarketDataMessage : SecurityMessage, ISubscriptionMessage
 	{
 		/// <summary>
 		/// Start date, from which data needs to be retrieved.
@@ -187,15 +187,11 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public object Arg { get; set; }
 
-		/// <summary>
-		/// The message is market-data subscription.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public bool IsSubscribe { get; set; }
 
-		/// <summary>
-		/// Request identifier.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
 
@@ -263,9 +259,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool AllowBuildFromSmallerTimeFrame { get; set; } = true;
 
-		/// <summary>
-		/// Request history market data only.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public bool IsHistory { get; set; }
 

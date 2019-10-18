@@ -48,7 +48,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioMessage : BaseSubscriptionIdMessage, ITransactionIdMessage
+	public class PortfolioMessage : BaseSubscriptionIdMessage, ITransactionIdMessage, ISubscriptionMessage
 	{
 		/// <summary>
 		/// Portfolio code name.
@@ -122,6 +122,10 @@ namespace StockSharp.Messages
 		[DataMember]
 		public Guid? InternalId { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		public bool IsHistory { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
 		/// </summary>
@@ -172,6 +176,7 @@ namespace StockSharp.Messages
 			destination.TransactionId = TransactionId;
 			destination.ClientCode = ClientCode;
 			destination.InternalId = InternalId;
+			destination.IsHistory = IsHistory;
 
 			return destination;
 		}
