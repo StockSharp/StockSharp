@@ -7,6 +7,7 @@ namespace StockSharp.Messages
 	using System.Net;
 	using System.Runtime.Serialization;
 	using System.Security;
+	using System.Xml.Serialization;
 
 	using Ecng.Collections;
 
@@ -78,6 +79,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// IP address restrictions.
 		/// </summary>
+		[XmlIgnore]
 		public IEnumerable<IPAddress> IpRestrictions
 		{
 			get => _ipRestrictions;
@@ -111,14 +113,14 @@ namespace StockSharp.Messages
 		/// <returns>The object, to which copied information.</returns>
 		protected UserInfoMessage CopyTo(UserInfoMessage destination)
 		{
+			base.CopyTo(destination);
+
 			destination.Login = Login;
 			destination.Password = Password;
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.IsBlocked = IsBlocked;
 			destination.IpRestrictions = IpRestrictions.ToArray();
 			destination.Permissions.AddRange(Permissions.ToDictionary());
-
-			this.CopyExtensionInfo(destination);
 
 			return destination;
 		}

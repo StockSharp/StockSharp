@@ -39,11 +39,9 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new ConnectMessage
-			{
-				Error = Error,
-				LocalTime = LocalTime,
-			};
+			var clone = new ConnectMessage();
+			CopyTo(clone);
+			return clone;
 		}
 
 		DateTimeOffset IServerTimeMessage.ServerTime => LocalTime;

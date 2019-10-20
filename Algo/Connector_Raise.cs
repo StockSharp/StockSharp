@@ -190,9 +190,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public event Action<IMessageAdapter, Exception> ConnectionErrorEx;
 
-		/// <summary>
-		/// Data process error.
-		/// </summary>
+		/// <inheritdoc cref="IConnector" />
 		public event Action<Exception> Error;
 
 		/// <inheritdoc />
@@ -242,6 +240,48 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
+
+		/// <inheritdoc />
+		public event Action<Subscription, Level1ChangeMessage> Level1Received;
+
+		/// <inheritdoc />
+		public event Action<Subscription, Trade> TickTradeReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, Security> SecurityReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, ExchangeBoard> BoardReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, MarketDepth> MarketDepthReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, OrderLogItem> OrderLogItemReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, News> NewsReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, Candle> CandleReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, MyTrade> OwnTradeReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, Order> OrderReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, OrderFail> OrderRegisterFailReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, OrderFail> OrderCancelFailReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, Portfolio> PortfolioReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, Position> PositionReceived;
 
 		/// <summary>
 		/// Connection restored.
@@ -698,6 +738,20 @@ namespace StockSharp.Algo
 		private void RaiseChangePassword(long transactionId, Exception error)
 		{
 			ChangePasswordResult?.Invoke(transactionId, error);
+		}
+
+		private void RaiseReceived<TEntity>(TEntity entity, ISubscriptionIdMessage message, Action<Subscription, TEntity> evt)
+		{
+			if (evt == null)
+				return;
+
+			foreach (var id in message.GetSubscriptionIds())
+			{
+				if (!_subscriptions.TryGetValue(id, out var subscription))
+					continue;
+
+				evt(subscription, entity);
+			}
 		}
 	}
 }

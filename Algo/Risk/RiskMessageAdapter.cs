@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			if (message.IsBack)
 			{
@@ -66,12 +66,12 @@ namespace StockSharp.Algo.Risk
 					message.IsBack = false;
 				}
 				
-				base.SendInMessage(message);
+				base.OnSendInMessage(message);
 				return;
 			}
 
 			ProcessRisk(message);
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />
@@ -97,7 +97,7 @@ namespace StockSharp.Algo.Risk
 						break;
 					}
 					//case RiskActions.StopTrading:
-					//	base.SendInMessage(new DisconnectMessage());
+					//	base.OnSendInMessage(new DisconnectMessage());
 					//	break;
 					case RiskActions.CancelOrders:
 						RaiseNewOutMessage(new OrderGroupCancelMessage

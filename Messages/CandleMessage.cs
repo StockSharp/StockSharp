@@ -61,7 +61,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public abstract class CandleMessage : Message, IServerTimeMessage, ISecurityIdMessage
+	public abstract class CandleMessage : BaseSubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Security ID.
@@ -272,6 +272,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Candle arg.
 		/// </summary>
+		[Ignore]
 		public abstract object Arg { get; set; }
 
 		/// <summary>
@@ -296,10 +297,8 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		protected CandleMessage CopyTo(CandleMessage copy)
 		{
-			if (copy == null)
-				throw new ArgumentNullException(nameof(copy));
+			base.CopyTo(copy);
 
-			copy.LocalTime = LocalTime;
 			copy.OpenPrice = OpenPrice;
 			copy.OpenTime = OpenTime;
 			copy.OpenVolume = OpenVolume;
@@ -370,6 +369,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => TimeFrame;
@@ -412,6 +412,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => MaxTradeCount;
@@ -454,6 +455,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => Volume;
@@ -496,6 +498,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => PriceRange;
@@ -644,6 +647,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => PnFArg;
@@ -689,6 +693,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Ignore]
 		public override object Arg
 		{
 			get => BoxSize;

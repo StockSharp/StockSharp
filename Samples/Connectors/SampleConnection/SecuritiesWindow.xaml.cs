@@ -5,6 +5,7 @@ namespace SampleConnection
 	using System.Windows;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 	using Ecng.Xaml;
 
 	using MoreLinq;
@@ -84,7 +85,7 @@ namespace SampleConnection
 				var window = _quotesWindows.SafeAdd(security, s =>
 				{
 					// subscribe on order book flow
-					connector.RegisterMarketDepth(security);
+					connector.SubscribeMarketDepth(security);
 
 					// create order book window
 					var wnd = new QuotesWindow
@@ -118,9 +119,9 @@ namespace SampleConnection
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
 				if (connector.RegisteredSecurities.Contains(security))
-					connector.UnRegisterSecurity(security);
+					connector.UnSubscribeLevel1(security);
 				else
-					connector.RegisterSecurity(security);
+					connector.SubscribeLevel1(security);
 			}
 		}
 
@@ -131,9 +132,9 @@ namespace SampleConnection
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
 				if (connector.RegisteredTrades.Contains(security))
-					connector.UnRegisterTrades(security);
+					connector.UnSubscribeTrades(security);
 				else
-					connector.RegisterTrades(security);
+					connector.SubscribeTrades(security);
 			}
 		}
 
@@ -148,7 +149,7 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				connector.RegisterTrades(security, wnd.From, wnd.To);
+				connector.SubscribeTrades(security, wnd.From, wnd.To);
 			}
 		}
 
@@ -159,9 +160,9 @@ namespace SampleConnection
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
 				if (connector.RegisteredOrderLogs.Contains(security))
-					connector.UnRegisterOrderLog(security);
+					connector.UnSubscribeOrderLog(security);
 				else
-					connector.RegisterOrderLog(security);
+					connector.SubscribeOrderLog(security);
 			}
 		}
 
@@ -189,10 +190,25 @@ namespace SampleConnection
 
 		private void CandlesClick(object sender, RoutedEventArgs e)
 		{
+			var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+
+			var range = TimeSpan.FromTicks(tf.Ticks * 10000);
+
+			if (range.TotalYears() > 5)
+				range = TimeSpan.FromTicks(TimeHelper.TicksPerYear * 5);
+
+			var wnd = new DatesWindow { From = DateTime.Today - range };
+
+			if (!wnd.ShowModal(this))
+				return;
+
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var t = (TimeSpan)CandlesPeriods.SelectedItem;
-				var series = new CandleSeries(typeof(TimeFrameCandle), security, t);
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf)
+				{
+					From = wnd.From,
+					To = wnd.To
+				};
 
 				new ChartWindow(series).Show();
 			}

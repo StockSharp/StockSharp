@@ -106,13 +106,30 @@ namespace StockSharp.BusinessEntities
 		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
 		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		[Obsolete("Use SubscribePositions method.")]
 		void LookupPortfolios(PortfolioLookupMessage criteria);
 
 		/// <summary>
 		/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="NewOrder"/>.
 		/// </summary>
 		/// <param name="criteria">The order which fields will be used as a filter.</param>
+		[Obsolete("Use SubscribeOrders method.")]
 		void LookupOrders(OrderStatusMessage criteria);
+
+		/// <summary>
+		/// Subscribe on orders changes.
+		/// </summary>
+		/// <param name="security">Security for subscription.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Max count.</param>
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void SubscribeOrders(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
+
+		/// <summary>
+		/// Unsubscribe from orders changes.
+		/// </summary>
+		void UnSubscribeOrders();
 
 		/// <summary>
 		/// Register new order.

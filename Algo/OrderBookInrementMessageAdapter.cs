@@ -46,8 +46,14 @@
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				base.OnSendInMessage(message);
+				return;
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -55,7 +61,7 @@
 					break;
 			}
 
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

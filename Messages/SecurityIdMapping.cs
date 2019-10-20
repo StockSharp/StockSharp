@@ -1,22 +1,28 @@
 namespace StockSharp.Messages
 {
+	using System;
 	using System.Collections.Generic;
+	using System.Runtime.Serialization;
 
 	using Ecng.Serialization;
 
 	/// <summary>
 	/// Security identifier mapping.
 	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
 	public class SecurityIdMapping : IPersistable
 	{
 		/// <summary>
 		/// StockSharp format.
 		/// </summary>
+		[DataMember]
 		public SecurityId StockSharpId { get; set; }
 
 		/// <summary>
 		/// Adapter format.
 		/// </summary>
+		[DataMember]
 		public SecurityId AdapterId { get; set; }
 
 		/// <summary>

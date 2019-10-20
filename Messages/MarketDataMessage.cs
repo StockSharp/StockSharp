@@ -21,6 +21,8 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
+	using Ecng.Common;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -106,6 +108,13 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RenkoCandleKey)]
 		CandleRenko,
+
+		/// <summary>
+		/// Board info.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BoardInfoKey)]
+		Board,
 	}
 
 	/// <summary>
@@ -273,6 +282,12 @@ namespace StockSharp.Messages
 		public bool IsFinished { get; set; }
 
 		/// <summary>
+		/// Board code.
+		/// </summary>
+		[DataMember]
+		public string BoardCode { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDataMessage"/>.
 		/// </summary>
 		public MarketDataMessage()
@@ -306,8 +321,7 @@ namespace StockSharp.Messages
 		/// <param name="destination">The object, to which copied information.</param>
 		public void CopyTo(MarketDataMessage destination)
 		{
-			if (destination == null)
-				throw new ArgumentNullException(nameof(destination));
+			base.CopyTo(destination);
 
 			destination.Arg = Arg;
 			destination.DataType = DataType;
@@ -319,7 +333,6 @@ namespace StockSharp.Messages
 			destination.Count = Count;
 			destination.MaxDepth = MaxDepth;
 			destination.NewsId = NewsId;
-			destination.LocalTime = LocalTime;
 			destination.IsNotSupported = IsNotSupported;
 			destination.BuildMode = BuildMode;
 			destination.BuildFrom = BuildFrom;
@@ -329,8 +342,7 @@ namespace StockSharp.Messages
 			destination.AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame;
 			destination.IsRegularTradingHours = IsRegularTradingHours;
 			destination.IsFinished = IsFinished;
-
-			base.CopyTo(destination);
+			destination.BoardCode = BoardCode;
 		}
 
 		/// <inheritdoc />
@@ -376,6 +388,9 @@ namespace StockSharp.Messages
 
 			if (IsCalcVolumeProfile)
 				str += $",Profile={IsCalcVolumeProfile}";
+
+			if (!BoardCode.IsEmpty())
+				str += $",BoardCode={BoardCode}";
 
 			if (Error != null)
 				str += $",Error={Error.Message}";

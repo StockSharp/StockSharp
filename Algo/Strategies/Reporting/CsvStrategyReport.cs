@@ -79,12 +79,12 @@ namespace StockSharp.Algo.Strategies.Reporting
 
 					WriteValues(writer, LocalizedStrings.Orders);
 					WriteValues(writer, LocalizedStrings.Str1190, LocalizedStrings.Transaction, LocalizedStrings.Str128, LocalizedStrings.Time, LocalizedStrings.Price,
-						LocalizedStrings.Str1323, LocalizedStrings.Str1324, LocalizedStrings.State, LocalizedStrings.Str1325,
+						LocalizedStrings.Str1324, LocalizedStrings.State, LocalizedStrings.Str1325,
 						LocalizedStrings.Volume, LocalizedStrings.Type, LocalizedStrings.Str1326, LocalizedStrings.Str1327);
 
 					foreach (var order in strategy.Orders)
 					{
-						WriteValues(writer, order.Id, order.TransactionId, Format(order.Direction), order.Time, order.Price, order.GetAveragePrice(strategy.Connector),
+						WriteValues(writer, order.Id, order.TransactionId, Format(order.Direction), order.Time, order.Price,
 							Format(order.State), order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : string.Empty), order.Balance,
 								order.Volume, Format(order.Type), Format(order.LatencyRegistration), Format(order.LatencyCancellation));
 					}

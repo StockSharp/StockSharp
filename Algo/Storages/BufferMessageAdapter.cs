@@ -23,6 +23,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -259,6 +260,9 @@ namespace StockSharp.Algo.Storages
 				case MarketDataTypes.News:
 					return DataType.News;
 
+				case MarketDataTypes.Board:
+					return DataType.Board;
+
 				case MarketDataTypes.CandleTick:
 					return DataType.Create(typeof(TickCandleMessage), msg.Arg);
 
@@ -398,7 +402,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -483,7 +487,7 @@ namespace StockSharp.Algo.Storages
 					break;
 			}
 
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

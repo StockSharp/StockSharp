@@ -42,6 +42,17 @@ namespace StockSharp.Messages
 		[XmlIgnore]
 		public Exception Error { get; set; }
 
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected virtual void CopyTo(BaseConnectionMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.Error = Error;
+		}
+
 		/// <inheritdoc />
 		public override string ToString()
 		{

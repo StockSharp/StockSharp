@@ -84,10 +84,10 @@
     <Compile Include="BasePositionChangeMessage.cs" />
     <Compile Include="BaseResultMessage.cs" />
     <Compile Include="BaseRouteMessage.cs" />
+    <Compile Include="BaseSubscriptionIdMessage.cs" />
     <Compile Include="BoardLookupMessage.cs" />
     <Compile Include="BoardLookupResultMessage.cs" />
     <Compile Include="BoardMessage.cs" />
-    <Compile Include="BoardRequestMessage.cs" />
     <Compile Include="CandleMessage.cs" />
     <Compile Include="CandlePriceLevel.cs" />
     <Compile Include="ChangePasswordMessage.cs" />
@@ -104,6 +104,7 @@
     <Compile Include="IDailyInfoSoap.cs" />
     <Compile Include="ISecurityIdMessage.cs" />
     <Compile Include="IServerTimeMessage.cs" />
+    <Compile Include="ISubscriptionIdMessage.cs" />
     <Compile Include="ITransactionIdMessage.cs" />
     <Compile Include="MarketDataFinishedMessage.cs" />
     <Compile Include="IExtendableEntity.cs" />

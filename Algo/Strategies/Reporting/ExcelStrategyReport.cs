@@ -274,19 +274,18 @@ namespace StockSharp.Algo.Strategies.Reporting
 							.SetCell(columnShift + 4, 1, LocalizedStrings.Str1347).SetStyle(columnShift + 4, "HH:mm:ss.fff")
 							.SetCell(columnShift + 5, 1, LocalizedStrings.Str1348)
 							.SetCell(columnShift + 6, 1, LocalizedStrings.Price).SetStyle(columnShift + 6, typeof(decimal))
-							.SetCell(columnShift + 7, 1, LocalizedStrings.Str1323).SetStyle(columnShift + 7, typeof(decimal))
-							.SetCell(columnShift + 8, 1, LocalizedStrings.Str1324)
-							.SetCell(columnShift + 9, 1, LocalizedStrings.State)
-							.SetCell(columnShift + 10, 1, LocalizedStrings.Str1325).SetStyle(columnShift + 10, typeof(decimal))
-							.SetCell(columnShift + 11, 1, LocalizedStrings.Volume).SetStyle(columnShift + 11, typeof(decimal))
-							.SetCell(columnShift + 12, 1, LocalizedStrings.Type)
-							.SetCell(columnShift + 13, 1, LocalizedStrings.Str1326)
-							.SetCell(columnShift + 14, 1, LocalizedStrings.Str1327)
-							.SetCell(columnShift + 15, 1, LocalizedStrings.Str135);
+							.SetCell(columnShift + 7, 1, LocalizedStrings.Str1324)
+							.SetCell(columnShift + 8, 1, LocalizedStrings.State)
+							.SetCell(columnShift + 9, 1, LocalizedStrings.Str1325).SetStyle(columnShift + 10, typeof(decimal))
+							.SetCell(columnShift + 10, 1, LocalizedStrings.Volume).SetStyle(columnShift + 11, typeof(decimal))
+							.SetCell(columnShift + 11, 1, LocalizedStrings.Type)
+							.SetCell(columnShift + 12, 1, LocalizedStrings.Str1326)
+							.SetCell(columnShift + 13, 1, LocalizedStrings.Str1327)
+							.SetCell(columnShift + 14, 1, LocalizedStrings.Str135);
 
 						worker
-							.SetConditionalFormatting(columnShift + 9, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str1329), null, Colors.Green)
-							.SetConditionalFormatting(columnShift + 9, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str238), null, Colors.Red);
+							.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str1329), null, Colors.Green)
+							.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str238), null, Colors.Red);
 
 						rowIndex = 2;
 						foreach (var order in strategy.Orders.ToArray())
@@ -299,15 +298,14 @@ namespace StockSharp.Algo.Strategies.Reporting
 								.SetCell(columnShift + 4, rowIndex, Format(order.LastChangeTime))
 								.SetCell(columnShift + 5, rowIndex, Format(order.LastChangeTime - order.Time))
 								.SetCell(columnShift + 6, rowIndex, order.Price)
-								.SetCell(columnShift + 7, rowIndex, order.GetAveragePrice(strategy.Connector).Round(Decimals))
-								.SetCell(columnShift + 8, rowIndex, Format(order.State))
-								.SetCell(columnShift + 9, rowIndex, order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : LocalizedStrings.Str238))
-								.SetCell(columnShift + 10, rowIndex, order.Balance)
-								.SetCell(columnShift + 11, rowIndex, order.Volume)
-								.SetCell(columnShift + 12, rowIndex, Format(order.Type))
-								.SetCell(columnShift + 13, rowIndex, Format(order.LatencyRegistration))
-								.SetCell(columnShift + 14, rowIndex, Format(order.LatencyCancellation))
-								.SetCell(columnShift + 15, rowIndex, order.Comment);
+								.SetCell(columnShift + 7, rowIndex, Format(order.State))
+								.SetCell(columnShift + 8, rowIndex, order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : LocalizedStrings.Str238))
+								.SetCell(columnShift + 9, rowIndex, order.Balance)
+								.SetCell(columnShift + 10, rowIndex, order.Volume)
+								.SetCell(columnShift + 11, rowIndex, Format(order.Type))
+								.SetCell(columnShift + 12, rowIndex, Format(order.LatencyRegistration))
+								.SetCell(columnShift + 13, rowIndex, Format(order.LatencyCancellation))
+								.SetCell(columnShift + 14, rowIndex, order.Comment);
 
 							rowIndex++;
 						}

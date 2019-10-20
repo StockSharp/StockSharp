@@ -1710,9 +1710,7 @@ namespace StockSharp.Algo.Testing
 		{
 		}
 
-		/// <summary>
-		/// Emulator settings.
-		/// </summary>
+		/// <inheritdoc />
 		public MarketEmulatorSettings Settings { get; } = new MarketEmulatorSettings();
 
 		/// <summary>
@@ -1725,10 +1723,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public IncrementalIdGenerator TradeIdGenerator { get; set; } = new IncrementalIdGenerator();
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
 		public void SendInMessage(Message message)
 		{
 			if (message == null) 
@@ -1912,6 +1907,11 @@ namespace StockSharp.Algo.Testing
 
 				case MessageTypes.OrderStatus:
 				{
+					var statusMsg = (OrderStatusMessage)message;
+
+					if (!statusMsg.IsSubscribe)
+						break;
+
 					foreach (var pair in _securityEmulators)
 					{
 						pair.Value.Process(message, retVal);
@@ -1923,6 +1923,9 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.PortfolioLookup:
 				{
 					var pfMsg = (PortfolioLookupMessage)message;
+
+					if (!pfMsg.IsSubscribe)
+						break;
 
 					if (pfMsg.PortfolioName.IsEmpty())
 					{
@@ -2005,9 +2008,7 @@ namespace StockSharp.Algo.Testing
 			BufferResult(retVal, message.LocalTime).ForEach(RaiseNewOutMessage);
 		}
 
-		/// <summary>
-		/// New message event.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<Message> NewOutMessage;
 
 		private void RaiseNewOutMessage(Message message)

@@ -73,7 +73,7 @@ namespace SampleConnection
 				this.GuiAsync(() => ChangeConnectStatus(true));
 
 				if (Connector.Adapter.IsMarketDataTypeSupported(MarketDataTypes.News) && !Connector.Adapter.IsSecurityNewsOnly)
-					Connector.RegisterNews();
+					Connector.SubscribeNews();
 			};
 
 			// subscribe on connection error event

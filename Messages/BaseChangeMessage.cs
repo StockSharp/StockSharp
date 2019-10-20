@@ -19,6 +19,9 @@ namespace StockSharp.Messages
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
+
+	using Ecng.Collections;
 
 	using StockSharp.Localization;
 
@@ -28,7 +31,7 @@ namespace StockSharp.Messages
 	/// <typeparam name="TField">Changes type.</typeparam>
 	[DataContract]
 	[Serializable]
-	public abstract class BaseChangeMessage<TField> : Message, IServerTimeMessage
+	public abstract class BaseChangeMessage<TField> : BaseSubscriptionIdMessage, IServerTimeMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -41,7 +44,8 @@ namespace StockSharp.Messages
 		/// Changes.
 		/// </summary>
 		[Browsable(false)]
-		[DataMember]
+		//[DataMember]
+		[XmlIgnore]
 		public IDictionary<TField, object> Changes { get; } = new Dictionary<TField, object>();
 
 		/// <summary>
@@ -51,6 +55,18 @@ namespace StockSharp.Messages
 		protected BaseChangeMessage(MessageTypes type)
 			: base(type)
 		{
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected virtual void CopyTo(BaseChangeMessage<TField> destination)
+		{
+			base.CopyTo(destination);
+
+			destination.ServerTime = ServerTime;
+			destination.Changes.AddRange(Changes);
 		}
 
 		/// <inheritdoc />

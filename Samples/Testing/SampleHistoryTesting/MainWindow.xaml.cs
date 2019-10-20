@@ -481,7 +481,7 @@ namespace SampleHistoryTesting
 
 					if (emulationInfo.UseMarketDepth)
 					{
-						connector.RegisterMarketDepth(security);
+						connector.SubscribeMarketDepth(security);
 
 						if	(
 								// if order book will be generated
@@ -508,17 +508,17 @@ namespace SampleHistoryTesting
 
 					if (emulationInfo.UseOrderLog)
 					{
-						connector.RegisterOrderLog(security);
+						connector.SubscribeOrderLog(security);
 					}
 
 					if (emulationInfo.UseTicks)
 					{
-						connector.RegisterTrades(security);
+						connector.SubscribeTrades(security);
 					}
 
 					if (emulationInfo.UseLevel1)
 					{
-						connector.RegisterSecurity(security);
+						connector.SubscribeLevel1(security);
 					}
 
 					// start strategy before emulation started

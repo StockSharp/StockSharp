@@ -4,6 +4,7 @@ namespace StockSharp.Messages
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using Ecng.Common;
 
@@ -28,6 +29,7 @@ namespace StockSharp.Messages
 		/// Security legs.
 		/// </summary>
 		[DataMember]
+		[XmlIgnore]
 		public IDictionary<SecurityId, IEnumerable<SecurityId>> Legs
 		{
 			get => _legs;

@@ -256,6 +256,10 @@ StockSharp API Change log
 * (bug) Strategies. Fix stopping with non filled orders https://stocksharp.ru/forum/11068/strategiya-kotirovaniya-ne-ostanavlivaetsya-pri-polucheniya-oshibki-snyatiya-zayavki/
 * (feature) Sterling. Instruments lookup supported with stub logic.
 * (feature) ContextMenu -> PopupMenu.
+* (feature) IMarketDataProvider. RegisterXXX renamed into SubscribeXXX.
+* (feature) ISubscriptionProvider interface created.
+* (feature) Boards subscription unified with MarketDataMessage.
+* (feature) BoardStateStorage added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

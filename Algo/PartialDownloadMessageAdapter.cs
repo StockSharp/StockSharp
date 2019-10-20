@@ -169,7 +169,7 @@
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			if (message.IsBack)
 			{
@@ -177,7 +177,7 @@
 					message.IsBack = false;
 				else
 				{
-					base.SendInMessage(message);
+					base.OnSendInMessage(message);
 					return;
 				}
 			}
@@ -270,7 +270,7 @@
 				}
 			}
 			
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

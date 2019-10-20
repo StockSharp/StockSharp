@@ -51,6 +51,16 @@ namespace StockSharp.Algo.Strategies
 			return _positions.TryGetValue(Tuple.Create(security, portfolio));
 		}
 
+		void IPositionProvider.SubscribePositions(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		{
+			SafeGetConnector().SubscribePositions(security, from, to, count, adapter);
+		}
+
+		void IPositionProvider.UnSubscribePositions()
+		{
+			SafeGetConnector().UnSubscribePositions();
+		}
+
 		Portfolio IPortfolioProvider.GetPortfolio(string name)
 		{
 			return SafeGetConnector().GetPortfolio(name);
@@ -158,12 +168,26 @@ namespace StockSharp.Algo.Strategies
 
 		void ITransactionProvider.LookupPortfolios(PortfolioLookupMessage criteria)
 		{
+#pragma warning disable 618
 			SafeGetConnector().LookupPortfolios(criteria);
+#pragma warning restore 618
 		}
 
 		void ITransactionProvider.LookupOrders(OrderStatusMessage criteria)
 		{
+#pragma warning disable 618
 			SafeGetConnector().LookupOrders(criteria);
+#pragma warning restore 618
+		}
+
+		void ITransactionProvider.SubscribeOrders(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		{
+			SafeGetConnector().SubscribeOrders(security, from, to, count, adapter);
+		}
+
+		void ITransactionProvider.UnSubscribeOrders()
+		{
+			SafeGetConnector().UnSubscribeOrders();
 		}
 
 		void ITransactionProvider.CancelOrders(bool? isStopOrder, Portfolio portfolio, Sides? direction, ExchangeBoard board, Security security, SecurityTypes? securityType, long? transactionId)

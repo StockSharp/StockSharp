@@ -218,18 +218,6 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
-		{
-			SafeGetConnector().RegisterMarketDepth(security, from, to, count, buildMode, buildFrom, maxDepth, adapter);
-		}
-
-		/// <inheritdoc />
-		public void UnRegisterMarketDepth(Security security)
-		{
-			SafeGetConnector().UnRegisterMarketDepth(security);
-		}
-
-		/// <inheritdoc />
 		public void RegisterFilteredMarketDepth(Security security)
 		{
 			SafeGetConnector().RegisterFilteredMarketDepth(security);
@@ -242,57 +230,69 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		public void SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().RegisterTrades(security, from, to, count, buildMode, buildFrom, adapter);
+			SafeGetConnector().SubscribeMarketDepth(security, from, to, count, buildMode, buildFrom, maxDepth, adapter);
 		}
 
 		/// <inheritdoc />
-		public void UnRegisterTrades(Security security)
+		public void UnSubscribeMarketDepth(Security security)
 		{
-			SafeGetConnector().UnRegisterTrades(security);
+			SafeGetConnector().UnSubscribeMarketDepth(security);
 		}
 
 		/// <inheritdoc />
-		public void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		public void SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().RegisterSecurity(security, from, to, count, buildMode, buildFrom, adapter);
+			SafeGetConnector().SubscribeTrades(security, from, to, count, buildMode, buildFrom, adapter);
 		}
 
 		/// <inheritdoc />
-		public void UnRegisterSecurity(Security security)
+		public void UnSubscribeTrades(Security security)
 		{
-			SafeGetConnector().UnRegisterSecurity(security);
+			SafeGetConnector().UnSubscribeTrades(security);
 		}
 
 		/// <inheritdoc />
-		public void RegisterOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		public void SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().RegisterOrderLog(security, from, to, count, adapter);
+			SafeGetConnector().SubscribeLevel1(security, from, to, count, buildMode, buildFrom, adapter);
 		}
 
 		/// <inheritdoc />
-		public void UnRegisterOrderLog(Security security)
+		public void UnSubscribeLevel1(Security security)
 		{
-			SafeGetConnector().UnRegisterOrderLog(security);
+			SafeGetConnector().UnSubscribeLevel1(security);
 		}
 
 		/// <inheritdoc />
-		public void RegisterNews(Security security = null, IMessageAdapter adapter = null)
+		public void SubscribeOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().RegisterNews(security, adapter);
+			SafeGetConnector().SubscribeOrderLog(security, from, to, count, adapter);
 		}
 
 		/// <inheritdoc />
-		public void UnRegisterNews(Security security = null)
+		public void UnSubscribeOrderLog(Security security)
 		{
-			SafeGetConnector().UnRegisterNews(security);
+			SafeGetConnector().UnSubscribeOrderLog(security);
 		}
 
 		/// <inheritdoc />
-		public void SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter = null)
+		public void SubscribeNews(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().SubscribeBoard(board, adapter);
+			SafeGetConnector().SubscribeNews(security, from, to, count, adapter);
+		}
+
+		/// <inheritdoc />
+		public void UnSubscribeNews(Security security = null)
+		{
+			SafeGetConnector().UnSubscribeNews(security);
+		}
+
+		/// <inheritdoc />
+		public void SubscribeBoard(ExchangeBoard board, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		{
+			SafeGetConnector().SubscribeBoard(board, from, to, count, adapter);
 		}
 
 		/// <inheritdoc />

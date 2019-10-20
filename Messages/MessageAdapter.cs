@@ -451,74 +451,14 @@ namespace StockSharp.Messages
 
 				switch (message.Type)
 				{
-					case MessageTypes.Connect:
-						SendOutMessage(new ConnectMessage { Error = ex });
-						return;
-
-					case MessageTypes.Disconnect:
-						SendOutMessage(new DisconnectMessage { Error = ex });
-						return;
-
-					case MessageTypes.OrderRegister:
-					case MessageTypes.OrderReplace:
-					case MessageTypes.OrderCancel:
-					case MessageTypes.OrderGroupCancel:
-					{
-						var replyMsg = ((OrderMessage)message).CreateReply();
-						SendOutErrorExecution(replyMsg, ex);
-						return;
-					}
-					case MessageTypes.OrderPairReplace:
-					{
-						var replyMsg = ((OrderPairReplaceMessage)message).Message1.CreateReply();
-						SendOutErrorExecution(replyMsg, ex);
-						return;
-					}
-
-					case MessageTypes.MarketData:
-					{
-						var reply = (MarketDataMessage)message.Clone();
-						reply.OriginalTransactionId = reply.TransactionId;
-						reply.Error = ex;
-						SendOutMessage(reply);
-						return;
-					}
-
 					case MessageTypes.SecurityLookup:
 					{
 						var lookupMsg = (SecurityLookupMessage)message;
-						
+					
 						if (!IsSupportSecurityLookupResult)
 							_secLookupTimeOut.RemoveTimeOut(lookupMsg.TransactionId);
 
-						SendOutMessage(new SecurityLookupResultMessage
-						{
-							OriginalTransactionId = lookupMsg.TransactionId,
-							Error = ex
-						});
-						return;
-					}
-
-					case MessageTypes.BoardLookup:
-					{
-						var lookupMsg = (BoardLookupMessage)message;
-						SendOutMessage(new BoardLookupResultMessage
-						{
-							OriginalTransactionId = lookupMsg.TransactionId,
-							Error = ex
-						});
-						return;
-					}
-
-					case MessageTypes.BoardRequest:
-					{
-						var requestMsg = (BoardRequestMessage)message;
-						SendOutMessage(new BoardRequestMessage
-						{
-							OriginalTransactionId = requestMsg.TransactionId,
-							Error = ex
-						});
-						return;
+						break;
 					}
 
 					case MessageTypes.PortfolioLookup:
@@ -528,58 +468,14 @@ namespace StockSharp.Messages
 						if (!IsSupportPortfolioLookupResult)
 							_pfLookupTimeOut.RemoveTimeOut(lookupMsg.TransactionId);
 
-						SendOutMessage(new PortfolioLookupResultMessage
-						{
-							OriginalTransactionId = lookupMsg.TransactionId,
-							Error = ex
-						});
-						return;
-					}
-
-					case MessageTypes.UserLookup:
-					{
-						var lookupMsg = (UserLookupMessage)message;
-						SendOutMessage(new UserLookupResultMessage
-						{
-							OriginalTransactionId = lookupMsg.TransactionId,
-							Error = ex
-						});
-						return;
-					}
-
-					case MessageTypes.UserRequest:
-					{
-						var requestMsg = (UserRequestMessage)message;
-						SendOutMessage(new UserRequestMessage
-						{
-							OriginalTransactionId = requestMsg.TransactionId,
-							Error = ex
-						});
-						return;
-					}
-
-					case MessageTypes.ChangePassword:
-					{
-						var pwdMsg = (ChangePasswordMessage)message;
-						SendOutMessage(new ChangePasswordMessage
-						{
-							OriginalTransactionId = pwdMsg.TransactionId,
-							Error = ex
-						});
-						return;
+						break;
 					}
 				}
 
+				message.HandleErrorResponse(ex, CurrentTime, SendOutMessage);
+
 				SendOutError(ex);
 			}
-		}
-
-		private void SendOutErrorExecution(ExecutionMessage execMsg, Exception ex)
-		{
-			execMsg.ServerTime = CurrentTime;
-			execMsg.Error = ex;
-			execMsg.OrderState = OrderStates.Failed;
-			SendOutMessage(execMsg);
 		}
 
 		/// <summary>
@@ -682,9 +578,18 @@ namespace StockSharp.Messages
 		/// <param name="expected">Is disconnect expected.</param>
 		protected void SendOutDisconnectMessage(bool expected)
 		{
-			SendOutMessage(expected ? (BaseConnectionMessage)new DisconnectMessage() : new ConnectMessage
+			SendOutDisconnectMessage(expected ? null : new InvalidOperationException(LocalizedStrings.Str2551));
+		}
+
+		/// <summary>
+		/// Send to <see cref="SendOutMessage"/> disconnect message.
+		/// </summary>
+		/// <param name="error">Error info. Can be <see langword="null"/>.</param>
+		protected void SendOutDisconnectMessage(Exception error)
+		{
+			SendOutMessage(error == null ? (BaseConnectionMessage)new DisconnectMessage() : new ConnectMessage
 			{
-				Error = new InvalidOperationException(LocalizedStrings.Str2551)
+				Error = error
 			});
 		}
 

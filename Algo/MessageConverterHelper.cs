@@ -702,24 +702,46 @@ namespace StockSharp.Algo
 			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.CurrentValue, true);
 		}
 
-		///// <summary>
-		///// To convert the position into message.
-		///// </summary>
-		///// <param name="position">Position.</param>
-		///// <returns>Message.</returns>
-		//public static PositionMessage ToMessage(this Position position)
-		//{
-		//	if (position == null)
-		//		throw new ArgumentNullException(nameof(position));
+		/// <summary>
+		/// Convert <see cref="Portfolio"/> to <see cref="PortfolioLookupMessage"/> value.
+		/// </summary>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <returns>Message portfolio lookup for specified criteria.</returns>
+		public static PortfolioLookupMessage ToLookupCriteria(this Portfolio criteria)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
 
-		//	return new PositionMessage
-		//	{
-		//		PortfolioName = position.Portfolio.Name,
-		//		SecurityId = position.Security.ToSecurityId(),
-		//		DepoName = position.DepoName,
-		//		LimitType = position.LimitType,
-		//	};
-		//}
+			return new PortfolioLookupMessage
+			{
+				IsSubscribe = true,
+				BoardCode = criteria.Board?.Code,
+				Currency = criteria.Currency,
+				PortfolioName = criteria.Name,
+				ClientCode = criteria.ClientCode,
+				InternalId = criteria.InternalId,
+			};
+		}
+
+		/// <summary>
+		/// Convert <see cref="Order"/> to <see cref="OrderStatusMessage"/> value.
+		/// </summary>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <returns>A message requesting current registered orders and trades.</returns>
+		public static OrderStatusMessage ToLookupCriteria(this Order criteria)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			return new OrderStatusMessage
+			{
+				IsSubscribe = true,
+				PortfolioName = criteria.Portfolio?.Name,
+				SecurityId = criteria.Security?.ToSecurityId() ?? default,
+				OrderId = criteria.Id,
+				OrderType = criteria.Type,
+			};
+		}
 
 		/// <summary>
 		/// To convert the position into message.
@@ -952,6 +974,9 @@ namespace StockSharp.Algo
 
 					case MessageTypes.News:
 						return message.To<NewsMessage>().ToNews(_exchangeInfoProvider).To<TEntity>();
+
+					case MessageTypes.BoardState:
+						return message.To<TEntity>();
 
 					default:
 					{
@@ -1828,10 +1853,38 @@ namespace StockSharp.Algo
 				return MarketDataTypes.MarketDepth;
 			else if (dataType == DataType.News)
 				return MarketDataTypes.News;
+			else if (dataType == DataType.Board)
+				return MarketDataTypes.Board;
 			else if (dataType.IsCandles)
 				return dataType.MessageType.ToCandleMarketDataType();
 			else
 				return null;
+		}
+
+		/// <summary>
+		/// Convert <see cref="MarketDataTypes"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="type">Market data type.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this MarketDataTypes type)
+		{
+			switch (type)
+			{
+				case MarketDataTypes.Level1:
+					return DataType.Level1;
+				case MarketDataTypes.MarketDepth:
+					return DataType.MarketDepth;
+				case MarketDataTypes.Trades:
+					return DataType.Ticks;
+				case MarketDataTypes.OrderLog:
+					return DataType.OrderLog;
+				case MarketDataTypes.News:
+					return DataType.News;
+				case MarketDataTypes.Board:
+					return DataType.Board;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+			}
 		}
 
 		/// <summary>
@@ -1852,6 +1905,8 @@ namespace StockSharp.Algo
 					return typeof(ExecutionMessage);
 				case MarketDataTypes.News:
 					return typeof(NewsMessage);
+				case MarketDataTypes.Board:
+					return typeof(BoardStateMessage);
 				default:
 				{
 					if (type.IsCandleDataType())
@@ -1923,7 +1978,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Convert <see cref="PermissionCredentials"/> to <see cref="UserInfoMessage"/> value.
 		/// </summary>
-		/// <param name="credentials">Credentials with set of permissions..</param>
+		/// <param name="credentials">Credentials with set of permissions.</param>
 		/// <param name="copyPassword">Copy <see cref="ServerCredentials.Password"/> value.</param>
 		/// <returns>The message contains information about user.</returns>
 		public static UserInfoMessage ToUserInfoMessage(this PermissionCredentials credentials, bool copyPassword)

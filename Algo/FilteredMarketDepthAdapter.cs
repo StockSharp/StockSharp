@@ -136,7 +136,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -157,7 +157,7 @@ namespace StockSharp.Algo
 						clone.DataType = MarketDataTypes.MarketDepth;
 						clone.Arg = null;
 
-						base.SendInMessage(clone);
+						base.OnSendInMessage(clone);
 
 						var data = (Tuple<QuoteChangeMessage, ExecutionMessage[]>)mdMsg.Arg;
 						var info = _filteredMarketDepths.SafeAdd(mdMsg.SecurityId, s => new FilteredMarketDepthInfo(data.Item2));
@@ -170,7 +170,7 @@ namespace StockSharp.Algo
 						var clone = (MarketDataMessage)mdMsg.Clone();
 						clone.DataType = MarketDataTypes.MarketDepth;
 
-						base.SendInMessage(clone);
+						base.OnSendInMessage(clone);
 
 						_filteredMarketDepths.Remove(mdMsg.SecurityId);
 					}
@@ -179,7 +179,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

@@ -84,7 +84,7 @@ namespace SampleStrategies
 				var window = _quotesWindows.SafeAdd(security, s =>
 				{
 					// subscribe on order book flow
-					connector.RegisterMarketDepth(security);
+					connector.SubscribeMarketDepth(security);
 
 					// create order book window
 					var wnd = new QuotesWindow
@@ -118,9 +118,9 @@ namespace SampleStrategies
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
 				if (connector.RegisteredSecurities.Contains(security))
-					connector.UnRegisterSecurity(security);
+					connector.UnSubscribeLevel1(security);
 				else
-					connector.RegisterSecurity(security);
+					connector.SubscribeLevel1(security);
 			}
 		}
 
