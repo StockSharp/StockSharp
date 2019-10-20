@@ -297,6 +297,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\HydraCommonConnectionSettings.aml" />
     <None Include="Topics\AlorSample.aml" />
     <None Include="Topics\API_Getting_news_data.aml" />
     <None Include="Topics\API_Getting_historical_data.aml" />
