@@ -21,7 +21,6 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
-	using Ecng.Collections;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -233,23 +232,18 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var msg = new PositionChangeMessage
+			var clone = new PositionChangeMessage
 			{
-				LocalTime = LocalTime,
-				PortfolioName = PortfolioName,
 				SecurityId = SecurityId,
 				DepoName = DepoName,
-				ServerTime = ServerTime,
 				LimitType = LimitType,
 				Description = Description,
 				OriginalTransactionId = OriginalTransactionId,
-				ClientCode = ClientCode,
 			};
 
-			msg.Changes.AddRange(Changes);
-			this.CopyExtensionInfo(msg);
+			CopyTo(clone);
 
-			return msg;
+			return clone;
 		}
 
 		/// <inheritdoc />

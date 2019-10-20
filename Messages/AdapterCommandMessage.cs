@@ -3,6 +3,7 @@ namespace StockSharp.Messages
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using Ecng.Collections;
 
@@ -84,6 +85,7 @@ namespace StockSharp.Messages
 		/// Parameters.
 		/// </summary>
 		[DataMember]
+		[XmlIgnore]
 		public IDictionary<string, Tuple<string, string>> Parameters { get; private set; } = new Dictionary<string, Tuple<string, string>>();
 
 		/// <summary>

@@ -773,25 +773,25 @@
 			void IMarketDataProvider.SubscribeMarketData(MarketDataMessage message) { }
 			void IMarketDataProvider.UnSubscribeMarketData(MarketDataMessage message) { }
 
-			void IMarketDataProvider.RegisterMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter) { }
-			void IMarketDataProvider.UnRegisterMarketDepth(Security security) { }
+			void IMarketDataProvider.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter) { }
+			void IMarketDataProvider.UnSubscribeMarketDepth(Security security) { }
 
 			void IMarketDataProvider.RegisterFilteredMarketDepth(Security security) { }
 			void IMarketDataProvider.UnRegisterFilteredMarketDepth(Security security) { }
 
-			void IMarketDataProvider.RegisterTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter) { }
-			void IMarketDataProvider.UnRegisterTrades(Security security) { }
+			void IMarketDataProvider.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter) { }
+			void IMarketDataProvider.UnSubscribeTrades(Security security) { }
 
-			void IMarketDataProvider.RegisterSecurity(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter) { }
-			void IMarketDataProvider.UnRegisterSecurity(Security security) { }
+			void IMarketDataProvider.SubscribeLevel1(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter) { }
+			void IMarketDataProvider.UnSubscribeLevel1(Security security) { }
 
-			void IMarketDataProvider.RegisterOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) { }
-			void IMarketDataProvider.UnRegisterOrderLog(Security security) { }
+			void IMarketDataProvider.SubscribeOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) { }
+			void IMarketDataProvider.UnSubscribeOrderLog(Security security) { }
 			
-			void IMarketDataProvider.RegisterNews(Security security, IMessageAdapter adapter) { }
-			void IMarketDataProvider.UnRegisterNews(Security security) { }
+			void IMarketDataProvider.SubscribeNews(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) { }
+			void IMarketDataProvider.UnSubscribeNews(Security security) { }
 
-			void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter) { }
+			void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) { }
 			void IMarketDataProvider.UnSubscribeBoard(ExchangeBoard board) { }
 
 			#endregion

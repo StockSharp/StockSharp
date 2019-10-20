@@ -69,7 +69,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class BoardStateMessage : Message
+	public class BoardStateMessage : BaseSubscriptionIdMessage, IServerTimeMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BoardStateMessage"/>.
@@ -91,18 +91,39 @@ namespace StockSharp.Messages
 		[DataMember]
 		public SessionStates State { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		public DateTimeOffset ServerTime { get; set; }
+
+		/// <summary>
+		/// ID of the original message <see cref="MarketDataMessage.TransactionId"/> for which this message is a response.
+		/// </summary>
+		[DataMember]
+		public long OriginalTransactionId { get; set; }
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected virtual void CopyTo(BoardStateMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.BoardCode = BoardCode;
+			destination.State = State;
+			destination.ServerTime = ServerTime;
+			destination.OriginalTransactionId = OriginalTransactionId;
+		}
+
 		/// <summary>
 		/// Create a copy of <see cref="BoardStateMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new BoardStateMessage
-			{
-				BoardCode = BoardCode,
-				State = State,
-				LocalTime = LocalTime
-			};
+			var clone = new BoardStateMessage();
+			CopyTo(clone);
+			return clone;
 		}
 
 		/// <inheritdoc />

@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel;
+	using System.Linq;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -62,7 +63,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	public sealed class ExecutionMessage : Message, ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage
+	public sealed class ExecutionMessage : BaseSubscriptionIdMessage, ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Security ID.
@@ -588,7 +589,6 @@ namespace StockSharp.Messages
 				Error = Error,
 				ExpiryDate = ExpiryDate,
 				IsSystem = IsSystem,
-				LocalTime = LocalTime,
 				OpenInterest = OpenInterest,
 				OrderId = OrderId,
 				OrderStringId = OrderStringId,
@@ -640,9 +640,12 @@ namespace StockSharp.Messages
 				AveragePrice = AveragePrice,
 				Yield = Yield,
 				MinVolume = MinVolume,
+
+				SubscriptionId = SubscriptionId,
+				SubscriptionIds = SubscriptionIds?.ToArray()
 			};
 
-			this.CopyExtensionInfo(clone);
+			CopyTo(clone);
 
 			return clone;
 		}

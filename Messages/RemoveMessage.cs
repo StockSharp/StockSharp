@@ -86,13 +86,16 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new RemoveMessage
+			var clone = new RemoveMessage
 			{
 				RemoveType = RemoveType,
 				RemoveId = RemoveId,
-				LocalTime = LocalTime,
 				TransactionId = TransactionId,
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 	}
 }

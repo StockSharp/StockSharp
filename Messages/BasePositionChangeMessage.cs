@@ -1,5 +1,6 @@
 namespace StockSharp.Messages
 {
+	using System;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -7,6 +8,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Base class for messages contains information about the position changes.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public abstract class BasePositionChangeMessage : BaseChangeMessage<PositionChangeTypes>
 	{
 		/// <summary>
@@ -35,5 +38,17 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
 		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
 		public string ClientCode { get; set; }
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected virtual void CopyTo(BasePositionChangeMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.PortfolioName = PortfolioName;
+			destination.ClientCode = ClientCode;
+		}
 	}
 }

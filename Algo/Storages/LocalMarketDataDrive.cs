@@ -568,6 +568,7 @@ namespace StockSharp.Algo.Storages
 			{ DataType.Level1, "security" },
 			{ DataType.PositionChanges, "position" },
 			{ DataType.News, "news" },
+			{ DataType.Board, "board" },
 		};
 
 		/// <summary>

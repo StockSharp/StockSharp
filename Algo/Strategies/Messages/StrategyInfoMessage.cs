@@ -41,7 +41,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Strategy parameters.
 		/// </summary>
 		[DataMember]
-		public IDictionary<string, Tuple<string, string>> Parameters { get; private set; } = new Dictionary<string, Tuple<string, string>>();
+		public IDictionary<string, Tuple<string, string>> Parameters { get; } = new Dictionary<string, Tuple<string, string>>();
 
 		/// <summary>
 		/// ID of the original message <see cref="StrategyLookupMessage.TransactionId"/> for which this message is a response.
@@ -71,12 +71,12 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// <returns>The object, to which copied information.</returns>
 		protected StrategyInfoMessage CopyTo(StrategyInfoMessage destination)
 		{
+			base.CopyTo(destination);
+
 			destination.StrategyName = StrategyName;
 			destination.StrategyId = StrategyId;
-			destination.Parameters = Parameters.ToDictionary();
+			destination.Parameters.AddRange(Parameters);
 			destination.OriginalTransactionId = OriginalTransactionId;
-
-			this.CopyExtensionInfo(destination);
 
 			return destination;
 		}

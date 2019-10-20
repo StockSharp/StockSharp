@@ -67,12 +67,12 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// <returns>The object, to which copied information.</returns>
 		protected StrategyTypeMessage CopyTo(StrategyTypeMessage destination)
 		{
+			base.CopyTo(destination);
+
 			destination.StrategyName = StrategyName;
 			destination.StrategyTypeId = StrategyTypeId;
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.Assembly = Assembly?.ToArray();
-
-			this.CopyExtensionInfo(destination);
 
 			return destination;
 		}

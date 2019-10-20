@@ -166,32 +166,19 @@ namespace StockSharp.Messages
 		/// <param name="destination">The object, to which copied information.</param>
 		public void CopyTo(OrderRegisterMessage destination)
 		{
-			if (destination == null)
-				throw new ArgumentNullException(nameof(destination));
+			base.CopyTo(destination);
 
-			destination.Comment = Comment;
-			destination.Condition = Condition?.Clone();
-			destination.TillDate = TillDate;
-			destination.OrderType = OrderType;
-			destination.PortfolioName = PortfolioName;
 			destination.Price = Price;
-			//destination.SecurityId = SecurityId;
-			//destination.SecurityType = SecurityType;
-			destination.Side = Side;
-			destination.TimeInForce = TimeInForce;
-			destination.TransactionId = TransactionId;
-			destination.VisibleVolume = VisibleVolume;
 			destination.Volume = Volume;
-			//destination.Currency = Currency;
-			destination.UserOrderId = UserOrderId;
-			destination.ClientCode = ClientCode;
-			destination.BrokerCode = BrokerCode;
+			destination.VisibleVolume = VisibleVolume;
+			destination.Side = Side;
+			destination.Comment = Comment;
+			destination.TillDate = TillDate;
+			destination.TimeInForce = TimeInForce;
 			destination.IsMarketMaker = IsMarketMaker;
 			destination.IsMargin = IsMargin;
 			destination.Slippage = Slippage;
 			destination.IsManual = IsManual;
-
-			base.CopyTo(destination);
 		}
 
 		/// <inheritdoc />

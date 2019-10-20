@@ -105,7 +105,7 @@ namespace StockSharp.Algo
 				if (message.Balance != null)
 				{
 					if (order.Balance < message.Balance.Value)
-						_parent._logReceiver.AddErrorLog($"Order {order.TransactionId}: bal_old{order.Balance}->bal_new{message.Balance.Value}");
+						_parent._logReceiver.AddErrorLog($"Order {order.TransactionId}: bal_old {order.Balance} -> bal_new {message.Balance.Value}");
 
 					order.Balance = message.Balance.Value;
 				}
@@ -537,6 +537,9 @@ namespace StockSharp.Algo
 					o.Slippage = message.Slippage;
 					o.IsManual = message.IsManual;
 					o.MinVolume = message.MinVolume;
+
+					if (message.Balance != null)
+						o.Balance = message.Balance.Value;
 					
 					if (message.PortfolioName.IsEmpty())
 						o.Portfolio = _portfolios.FirstOrDefault().Value;

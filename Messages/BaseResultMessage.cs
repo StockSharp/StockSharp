@@ -52,14 +52,10 @@ namespace StockSharp.Messages
 		/// <param name="destination">The object, to which copied information.</param>
 		protected virtual void CopyTo(TMessage destination)
 		{
-			if (destination == null)
-				throw new ArgumentNullException(nameof(destination));
+			base.CopyTo(destination);
 
 			destination.OriginalTransactionId = OriginalTransactionId;
-			destination.LocalTime = LocalTime;
 			destination.Error = Error;
-
-			this.CopyExtensionInfo(destination);
 		}
 
 		/// <inheritdoc />

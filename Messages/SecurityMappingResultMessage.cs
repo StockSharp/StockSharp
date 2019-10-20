@@ -4,6 +4,7 @@ namespace StockSharp.Messages
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -29,6 +30,7 @@ namespace StockSharp.Messages
 		/// Security identifier mapping.
 		/// </summary>
 		[DataMember]
+		[XmlIgnore]
 		public IDictionary<string, IEnumerable<SecurityIdMapping>> Mapping
 		{
 			get => _mapping;

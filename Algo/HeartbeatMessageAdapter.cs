@@ -107,10 +107,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SuppressReconnectingErrors { get; set; }
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			switch (message.Type)
@@ -216,11 +213,8 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		public override void SendInMessage(Message message)
+		/// <inheritdoc />
+		protected override void OnSendInMessage(Message message)
 		{
 			var isStartTimer = false;
 
@@ -250,7 +244,7 @@ namespace StockSharp.Algo
 					if (_isFirstTimeConnect)
 						_isFirstTimeConnect = false;
 					else
-						base.SendInMessage(new ResetMessage());
+						base.OnSendInMessage(new ResetMessage());
 
 					lock (_timeSync)
 					{
@@ -285,14 +279,14 @@ namespace StockSharp.Algo
 
 				case ExtendedMessageTypes.Reconnect:
 				{
-					SendInMessage(new ConnectMessage());
+					OnSendInMessage(new ConnectMessage());
 					return;
 				}
 			}
 
 			try
 			{
-				base.SendInMessage(message);
+				base.OnSendInMessage(message);
 
 				lock (_timeSync)
 				{

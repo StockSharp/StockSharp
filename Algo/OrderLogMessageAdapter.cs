@@ -27,8 +27,14 @@
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				base.OnSendInMessage(message);
+				return;
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -46,7 +52,7 @@
 					break;
 			}
 
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		private bool ProcessMarketDataRequest(MarketDataMessage message)
@@ -75,7 +81,7 @@
 
 							var clone = (MarketDataMessage)message.Clone();
 							clone.DataType = MarketDataTypes.OrderLog;
-							base.SendInMessage(clone);
+							base.OnSendInMessage(clone);
 
 							this.AddInfoLog("OL->MD subscribed {0}.", secId);
 
@@ -96,7 +102,7 @@
 
 							var clone = (MarketDataMessage)message.Clone();
 							clone.DataType = MarketDataTypes.OrderLog;
-							base.SendInMessage(clone);
+							base.OnSendInMessage(clone);
 
 							this.AddInfoLog("OL->TICK subscribed {0}.", secId);
 

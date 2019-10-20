@@ -2,6 +2,7 @@ namespace StockSharp.Algo.Storages
 {
 	using System;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>

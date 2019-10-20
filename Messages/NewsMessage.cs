@@ -55,7 +55,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class NewsMessage : Message
+	public class NewsMessage : BaseSubscriptionIdMessage
 	{
 		/// <summary>
 		/// News ID.
@@ -169,9 +169,8 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new NewsMessage
+			var clone = new NewsMessage
 			{
-				LocalTime = LocalTime,
 				ServerTime = ServerTime,
 				SecurityId = SecurityId,
 				BoardCode = BoardCode,
@@ -182,6 +181,10 @@ namespace StockSharp.Messages
 				Url = Url,
 				Priority = Priority,
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 	}
 }

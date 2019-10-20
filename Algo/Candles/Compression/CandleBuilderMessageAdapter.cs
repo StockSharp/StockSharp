@@ -70,11 +70,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			if (message.IsBack)
 			{
-				base.SendInMessage(message);
+				base.OnSendInMessage(message);
 				return;
 			}
 
@@ -165,7 +165,7 @@ namespace StockSharp.Algo.Candles.Compression
 										LastTime = original.From,
 									});
 
-									base.SendInMessage(current);
+									base.OnSendInMessage(current);
 									return;
 								}
 							}
@@ -232,7 +232,7 @@ namespace StockSharp.Algo.Candles.Compression
 							unsubscribe.OriginalTransactionId = series.Current.TransactionId;
 							unsubscribe.IsSubscribe = false;
 
-							base.SendInMessage(unsubscribe);
+							base.OnSendInMessage(unsubscribe);
 
 							return;
 						}
@@ -242,7 +242,7 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 			}
 
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		private MarketDataMessage TryCreateBuildSubscription(MarketDataMessage original, DateTimeOffset? lastTime, Func<long> getTransactionId)
@@ -293,7 +293,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (current == null)
 				return false;
 
-			base.SendInMessage(current);
+			base.OnSendInMessage(current);
 			return true;
 		}
 

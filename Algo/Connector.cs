@@ -41,7 +41,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The class to create connections to trading systems.
 	/// </summary>
-	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager
+	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager, ISubscriptionProvider
 	{
 		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new MemoryStatisticsValue<Trade>(LocalizedStrings.Ticks);
 		private static readonly MemoryStatisticsValue<Connector> _connectorStat = new MemoryStatisticsValue<Connector>(LocalizedStrings.Str1093);
@@ -152,6 +152,8 @@ namespace StockSharp.Algo
 
 		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _boardStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
 		private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = new SynchronizedDictionary<Security, Level1Info>();
+
+		private readonly CachedSynchronizedDictionary<long, Subscription> _subscriptions = new CachedSynchronizedDictionary<long, Subscription>();
 
 		private bool _isDisposing;
 
@@ -435,31 +437,38 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use NewOrder event to collect data.")]
 		public IEnumerable<Order> Orders => _entityCache.Orders;
 
 		/// <inheritdoc />
+		[Obsolete("Use NewStopOrder event to collect data.")]
 		public IEnumerable<Order> StopOrders => Orders.Where(o => o.Type == OrderTypes.Conditional);
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderRegisterFailed event to collect data.")]
 		public IEnumerable<OrderFail> OrderRegisterFails => _entityCache.OrderRegisterFails;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderCancelFailed event to collect data.")]
 		public IEnumerable<OrderFail> OrderCancelFails => _entityCache.OrderCancelFails;
 
 		/// <inheritdoc />
+		[Obsolete("Use NewTrade event to collect data.")]
 		public IEnumerable<Trade> Trades => _entityCache.Trades;
 
 		/// <inheritdoc />
+		[Obsolete("Use NewMyTrade event to collect data.")]
 		public IEnumerable<MyTrade> MyTrades => _entityCache.MyTrades;
+
+		/// <inheritdoc />
+		[Obsolete("Use NewNews event to collect data.")]
+		public IEnumerable<News> News => _entityCache.News;
 
 		/// <inheritdoc />
 		public virtual IEnumerable<Portfolio> Portfolios => _entityCache.Portfolios;
 
 		/// <inheritdoc />
 		public IEnumerable<Position> Positions => _entityCache.Positions;
-
-		/// <inheritdoc />
-		public IEnumerable<News> News => _entityCache.News;
 
 		/// <summary>
 		/// Risk control manager.
@@ -724,7 +733,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public virtual void LookupSecurities(SecurityLookupMessage criteria)
+		public void LookupSecurities(SecurityLookupMessage criteria)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
@@ -765,23 +774,26 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscribeOrders method.")]
 		public void LookupOrders(Order criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 		{
-			var transactionId = TransactionIdGenerator.GetNextId();
+			var msg = criteria.ToLookupCriteria();
 
-			LookupOrders(new OrderStatusMessage
-			{
-				TransactionId = transactionId,
-				Adapter = adapter,
-				OfflineMode = offlineMode,
-			});
+			msg.Adapter = adapter;
+			msg.OfflineMode = offlineMode;
+
+			LookupOrders(msg);
 		}
 
 		/// <inheritdoc />
-		public virtual void LookupOrders(OrderStatusMessage criteria)
+		[Obsolete("Use SubscribeOrders method.")]
+		public void LookupOrders(OrderStatusMessage criteria)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
+
+			if (criteria.TransactionId == 0)
+				criteria.TransactionId = TransactionIdGenerator.GetNextId();
 
 			_entityCache.AddOrderStatusTransactionId(criteria.TransactionId);
 			
@@ -790,29 +802,29 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscribePositions method.")]
 		public void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			var msg = new PortfolioLookupMessage
-			{
-				TransactionId = TransactionIdGenerator.GetNextId(),
-				BoardCode = criteria.Board?.Code,
-				Currency = criteria.Currency,
-				PortfolioName = criteria.Name,
-				Adapter = adapter,
-				OfflineMode = offlineMode,
-			};
+			var msg = criteria.ToLookupCriteria();
+
+			msg.Adapter = adapter;
+			msg.OfflineMode = offlineMode;
 
 			LookupPortfolios(msg);
 		}
 
 		/// <inheritdoc />
-		public virtual void LookupPortfolios(PortfolioLookupMessage criteria)
+		[Obsolete("Use SubscribePositions method.")]
+		public void LookupPortfolios(PortfolioLookupMessage criteria)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
+
+			if (criteria.TransactionId == 0)
+				criteria.TransactionId = TransactionIdGenerator.GetNextId();
 
 			_portfolioLookups.Add(criteria.TransactionId, new LookupInfo<PortfolioLookupMessage, Portfolio>(criteria));
 
@@ -1524,6 +1536,8 @@ namespace StockSharp.Algo
 
 			_securityValues.Clear();
 			_boardStates.Clear();
+
+			_subscriptions.Clear();
 
 			SendInMessage(new ResetMessage());
 

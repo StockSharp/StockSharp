@@ -508,11 +508,8 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		public override void SendInMessage(Message message)
+		/// <inheritdoc />
+		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -549,7 +546,7 @@ namespace StockSharp.Algo.Storages
 					break;
 
 				default:
-					base.SendInMessage(message);
+					base.OnSendInMessage(message);
 					break;
 			}
 		}
@@ -561,14 +558,14 @@ namespace StockSharp.Algo.Storages
 
 			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
-				base.SendInMessage(msg);
+				base.OnSendInMessage(msg);
 				return;
 			}
 
 			foreach (var security in _securityStorage.Lookup(msg))
 				RaiseStorageMessage(security.ToMessage(originalTransactionId: msg.TransactionId));
 
-			base.SendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessBoardLookup(BoardLookupMessage msg)
@@ -578,14 +575,14 @@ namespace StockSharp.Algo.Storages
 
 			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
 			{
-				base.SendInMessage(msg);
+				base.OnSendInMessage(msg);
 				return;
 			}
 
 			foreach (var board in ExchangeInfoProvider.LookupBoards(msg.Like))
 				RaiseStorageMessage(board.ToMessage(msg.TransactionId));
 
-			base.SendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessPortfolioLookup(PortfolioLookupMessage msg)
@@ -593,9 +590,9 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			if (!SupportLookupMessages || msg.IsBack || !msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
 			{
-				base.SendInMessage(msg);
+				base.OnSendInMessage(msg);
 				return;
 			}
 
@@ -610,7 +607,7 @@ namespace StockSharp.Algo.Storages
 				RaiseStorageMessage(position.ToChangeMessage(msg.TransactionId));
 			}
 
-			base.SendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessOrderStatus(OrderStatusMessage msg)
@@ -618,11 +615,13 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			_orderStatusIds.Add(msg.TransactionId);
+			var transId = msg.TransactionId;
 
-			if (!SupportLookupMessages || msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			_orderStatusIds.Add(transId);
+
+			if (!SupportLookupMessages || msg.IsBack || !msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
 			{
-				base.SendInMessage(msg);
+				base.OnSendInMessage(msg);
 				return;
 			}
 
@@ -642,7 +641,8 @@ namespace StockSharp.Algo.Storages
 						else if (!snapshot.OrderStringId.IsEmpty())
 							_orderStringIds.TryAdd(snapshot.OrderStringId, snapshot.TransactionId);
 
-						snapshot.OriginalTransactionId = msg.TransactionId;
+						snapshot.OriginalTransactionId = transId;
+						snapshot.SubscriptionId = transId;
 						RaiseStorageMessage(snapshot);
 					}
 				}
@@ -659,7 +659,7 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			base.SendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessOrderCancel(OrderCancelMessage msg)
@@ -669,7 +669,7 @@ namespace StockSharp.Algo.Storages
 
 			// can be looped back from offline
 			_cancellationTransactions.TryAdd(msg.TransactionId, msg.OrderTransactionId);
-			base.SendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessMarketDataRequest(MarketDataMessage msg)
@@ -679,7 +679,7 @@ namespace StockSharp.Algo.Storages
 
 			if (msg.IsBack || (msg.From == null && DaysLoad == TimeSpan.Zero))
 			{
-				base.SendInMessage(msg);
+				base.OnSendInMessage(msg);
 				return;
 			}
 
@@ -713,7 +713,7 @@ namespace StockSharp.Algo.Storages
 						}
 					}
 
-					base.SendInMessage(msg.ValidateBounds());	
+					base.OnSendInMessage(msg.ValidateBounds());	
 				}
 				else
 				{
@@ -723,7 +723,7 @@ namespace StockSharp.Algo.Storages
 						RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId });
 					}
 					else
-						base.SendInMessage(msg);
+						base.OnSendInMessage(msg);
 				}
 			}
 			else
@@ -738,7 +738,7 @@ namespace StockSharp.Algo.Storages
 					});
 				}
 				else
-					base.SendInMessage(msg);
+					base.OnSendInMessage(msg);
 			}
 		}
 
@@ -756,6 +756,8 @@ namespace StockSharp.Algo.Storages
 						if (level1Msg != null)
 						{
 							lastTime = level1Msg.ServerTime;
+
+							level1Msg.SubscriptionId = transactionId;
 							RaiseStorageMessage(level1Msg);
 						}
 					}
@@ -772,6 +774,8 @@ namespace StockSharp.Algo.Storages
 						if (quotesMsg != null)
 						{
 							lastTime = quotesMsg.ServerTime;
+
+							quotesMsg.SubscriptionId = transactionId;
 							RaiseStorageMessage(quotesMsg);
 						}
 					}
@@ -790,6 +794,10 @@ namespace StockSharp.Algo.Storages
 
 				case MarketDataTypes.News:
 					lastTime = LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
+					break;
+
+				case MarketDataTypes.Board:
+					lastTime = LoadMessages(_storageRegistry.GetBoardStateMessageStorage(Drive, Format), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleTimeFrame:
@@ -988,10 +996,7 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			switch (message.Type)
@@ -1196,12 +1201,21 @@ namespace StockSharp.Algo.Storages
 		private static DateTimeOffset SetTransactionId(NewsMessage msg, long transactionId)
 		{
 			msg.OriginalTransactionId = transactionId;
+			msg.SubscriptionId = transactionId;
+			return msg.ServerTime;
+		}
+
+		private static DateTimeOffset SetTransactionId(BoardStateMessage msg, long transactionId)
+		{
+			msg.OriginalTransactionId = transactionId;
+			msg.SubscriptionId = transactionId;
 			return msg.ServerTime;
 		}
 
 		private static DateTimeOffset SetTransactionId(ExecutionMessage msg, long transactionId)
 		{
 			msg.OriginalTransactionId = transactionId;
+			msg.SubscriptionId = transactionId;
 			return msg.ServerTime;
 		}
 

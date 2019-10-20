@@ -77,7 +77,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(destination));
 
 			destination.TransactionId = TransactionId;
-			destination.SecurityTypes = SecurityTypes;
+			destination.SecurityTypes = SecurityTypes?.ToArray();
 
 			base.CopyTo(destination);
 		}

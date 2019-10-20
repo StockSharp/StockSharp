@@ -59,7 +59,7 @@ namespace StockSharp.Messages
 				if (_innerAdapter == value)
 					return;
 
-				if(_innerAdapter != null)
+				if (_innerAdapter != null)
 					_innerAdapter.NewOutMessage -= OnInnerAdapterNewOutMessage;
 
 				_innerAdapter = value;
@@ -113,7 +113,27 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual void SendInMessage(Message message)
+		void IMessageChannel.SendInMessage(Message message)
+		{
+			try
+			{
+				OnSendInMessage(message);
+			}
+			catch (Exception ex)
+			{
+				this.AddErrorLog(ex);
+
+				message.HandleErrorResponse(ex, CurrentTime, RaiseNewOutMessage);
+
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		protected virtual void OnSendInMessage(Message message)
 		{
 			InnerAdapter.SendInMessage(message);
 		}

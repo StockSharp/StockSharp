@@ -30,7 +30,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public class SecurityMessage : Message, ISecurityIdMessage
+	public class SecurityMessage : BaseSubscriptionIdMessage, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Security ID.
@@ -309,8 +309,7 @@ namespace StockSharp.Messages
 		/// <param name="copyOriginalTransactionId">Copy <see cref="OriginalTransactionId"/>.</param>
 		public void CopyTo(SecurityMessage destination, bool copyOriginalTransactionId = true)
 		{
-			if (destination == null)
-				throw new ArgumentNullException(nameof(destination));
+			base.CopyTo(destination);
 
 			destination.SecurityId = SecurityId;
 			destination.Name = Name;
@@ -330,7 +329,6 @@ namespace StockSharp.Messages
 			destination.Multiplier = Multiplier;
 			destination.Class = Class;
 			destination.BinaryOptionType = BinaryOptionType;
-			destination.LocalTime = LocalTime;
 			destination.IssueSize = IssueSize;
 			destination.IssueDate = IssueDate;
 			destination.UnderlyingSecurityType = UnderlyingSecurityType;

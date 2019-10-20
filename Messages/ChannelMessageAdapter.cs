@@ -93,7 +93,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		protected override void OnSendInMessage(Message message)
 		{
 			if (!InputChannel.IsOpened)
 				InputChannel.Open();

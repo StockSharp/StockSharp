@@ -151,7 +151,7 @@ namespace StockSharp.Algo
 			if (secMsg == null)
 				throw new ArgumentNullException(nameof(secMsg));
 
-			if (secMsg.Type == MessageTypes.MarketData && ((MarketDataMessage)secMsg).DataType == MarketDataTypes.News)
+			if (secMsg.Type == MessageTypes.MarketData && !((MarketDataMessage)secMsg).DataType.IsSecurityRequired())
 				return secMsg.SecurityId.IsDefault();
 			else if (secMsg.Type == MessageTypes.OrderGroupCancel)
 				return secMsg.SecurityId.IsDefault();

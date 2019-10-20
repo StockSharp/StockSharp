@@ -53,6 +53,14 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
+		/// To get board state storage.
+		/// </summary>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The news storage.</returns>
+		IMarketDataStorage<BoardStateMessage> GetBoardStateMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+
+		/// <summary>
 		/// To get the storage of tick trades for the specified instrument.
 		/// </summary>
 		/// <param name="security">Security.</param>

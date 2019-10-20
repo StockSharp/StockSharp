@@ -117,7 +117,6 @@
     <Compile Include="CollectionPortfolioProvider.cs" />
     <Compile Include="CollectionSecurityProvider.cs" />
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
-    <Compile Include="DataType.cs" />
     <Compile Include="Export\Database\CandleTable.cs" />
     <Compile Include="Export\Database\IndicatorValueTable.cs" />
     <Compile Include="Export\Database\PositionChangeTable.cs" />
@@ -127,11 +126,15 @@
     <Compile Include="Expressions\ExpressionIndexSecurityProcessor.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
+    <Compile Include="ISubscriptionProvider.cs" />
+    <Compile Include="Storages\Binary\BoardStateBinarySerializer.cs" />
+    <Compile Include="Storages\Csv\BoardStateCsvSerializer.cs" />
     <Compile Include="Storages\Remote\IRemoteExtendedStorage.cs" />
     <Compile Include="Storages\Remote\IRemoteStorage.cs" />
     <Compile Include="Storages\Remote\ISecurityRemoteExtendedStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorageClient.cs" />
+    <Compile Include="Subscription.cs" />
     <Compile Include="Testing\IHistoryMessageAdapter.cs" />
     <Compile Include="TraderHelper_FORTS.cs" />
     <Compile Include="OrderBookInrementMessageAdapter.cs" />

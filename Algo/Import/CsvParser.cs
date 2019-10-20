@@ -10,6 +10,7 @@ namespace StockSharp.Algo.Import
 	using MoreLinq;
 
 	using StockSharp.Algo.Storages;
+	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;

@@ -429,12 +429,31 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		private sealed class BoardStateStorage : ConvertableStorage<BoardStateMessage, BoardStateMessage, VoidType>
+		{
+			public BoardStateStorage(StorageRegistry parent, Security security, SecurityId securityId, IMarketDataSerializer<BoardStateMessage> serializer, IMarketDataStorageDrive drive)
+				: base(parent, security, securityId, null, m => m.ServerTime, m => default, m => null, serializer, drive)
+			{
+			}
+
+			public override DateTimeOffset GetTime(BoardStateMessage data)
+			{
+				return data.ServerTime;
+			}
+
+			protected override BoardStateMessage ToMessage(BoardStateMessage entity)
+			{
+				return entity;
+			}
+		}
+
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<QuoteChangeMessage>> _depthStorages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<QuoteChangeMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<Level1ChangeMessage>> _level1Storages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<Level1ChangeMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<PositionChangeMessage>> _positionStorages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<PositionChangeMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<CandleMessage>> _candleStorages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<CandleMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>> _executionStorages = new SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>>();
 		private readonly SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<NewsMessage>> _newsStorages = new SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<NewsMessage>>();
+		private readonly SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<BoardStateMessage>> _boardStateStorages = new SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<BoardStateMessage>>();
 		private readonly SynchronizedDictionary<IMarketDataDrive, ISecurityStorage> _securityStorages = new SynchronizedDictionary<IMarketDataDrive, ISecurityStorage>();
 		
 		/// <summary>
@@ -565,7 +584,6 @@ namespace StockSharp.Algo.Storages
 
 			storages.Add(Tuple.Create(storage.Security.ToSecurityId(), type, storage.Drive), storage);
 		}
-
 
 		/// <inheritdoc />
 		public IMarketDataStorage<Trade> GetTradeStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
@@ -879,6 +897,31 @@ namespace StockSharp.Algo.Storages
 				}
 
 				return new NewsStorage(this, TraderHelper.NewsSecurity, securityId, serializer, key);
+			});
+		}
+
+		/// <inheritdoc />
+		public IMarketDataStorage<BoardStateMessage> GetBoardStateMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		{
+			var securityId = GetSecurityId(TraderHelper.AllSecurity);
+
+			return _boardStateStorages.SafeAdd((drive ?? DefaultDrive).GetStorageDrive(securityId, typeof(BoardStateMessage), null, format), key =>
+			{
+				IMarketDataSerializer<BoardStateMessage> serializer;
+
+				switch (format)
+				{
+					case StorageFormats.Binary:
+						serializer = new BoardStateBinarySerializer(ExchangeInfoProvider);
+						break;
+					case StorageFormats.Csv:
+						serializer = new BoardStateCsvSerializer();
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
+				}
+
+				return new BoardStateStorage(this, TraderHelper.AllSecurity, securityId, serializer, key);
 			});
 		}
 

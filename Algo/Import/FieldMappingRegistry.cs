@@ -8,6 +8,7 @@ namespace StockSharp.Algo.Import
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Storages;
+	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 

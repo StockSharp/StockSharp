@@ -4,6 +4,7 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	class PositionStorage : IPositionStorage
 	{
@@ -70,6 +71,14 @@ namespace StockSharp.Algo.Storages
 		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName)
 		{
 			return _entityRegistry.Positions.GetPosition(portfolio, security, clientCode, depoName);
+		}
+
+		void IPositionProvider.SubscribePositions(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		{
+		}
+
+		void IPositionProvider.UnSubscribePositions()
+		{
 		}
 	}
 }

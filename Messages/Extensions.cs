@@ -1398,13 +1398,15 @@ namespace StockSharp.Messages
 
 			var supported = adapter.SupportedOrderBookDepths;
 
-			if (supported == AnyDepths)
+			if (ReferenceEquals(supported, AnyDepths))
 				return depth;
 
-			if (supported.IsEmpty())
+			var arr = supported.ToArray();
+
+			if (arr.IsEmpty())
 				return null;
 
-			return supported.Where(d => d >= depth).OrderBy().FirstOr() ?? supported.Max();
+			return arr.Where(d => d >= depth).OrderBy().FirstOr() ?? arr.Max();
 		}
 
 		/// <summary>
@@ -1433,5 +1435,155 @@ namespace StockSharp.Messages
 
 			return timeFrame;
 		}
+
+		internal static bool HandleErrorResponse(this Message message, Exception ex, DateTimeOffset currentTime, Action<Message> sendOut)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (ex == null)
+				throw new ArgumentNullException(nameof(ex));
+
+			if (sendOut == null)
+				throw new ArgumentNullException(nameof(sendOut));
+
+			void SendOutErrorExecution(ExecutionMessage execMsg)
+			{
+				execMsg.ServerTime = currentTime;
+				execMsg.Error = ex;
+				execMsg.OrderState = OrderStates.Failed;
+				sendOut(execMsg);
+			}
+
+			switch (message.Type)
+			{
+				case MessageTypes.Connect:
+					sendOut(new ConnectMessage { Error = ex });
+					return true;
+
+				case MessageTypes.Disconnect:
+					sendOut(new DisconnectMessage { Error = ex });
+					return true;
+
+				case MessageTypes.OrderRegister:
+				case MessageTypes.OrderReplace:
+				case MessageTypes.OrderCancel:
+				case MessageTypes.OrderGroupCancel:
+				{
+					var replyMsg = ((OrderMessage)message).CreateReply();
+					SendOutErrorExecution(replyMsg);
+					return true;
+				}
+				case MessageTypes.OrderPairReplace:
+				{
+					var replyMsg = ((OrderPairReplaceMessage)message).Message1.CreateReply();
+					SendOutErrorExecution(replyMsg);
+					return true;
+				}
+
+				case MessageTypes.MarketData:
+				{
+					var reply = (MarketDataMessage)message.Clone();
+					reply.OriginalTransactionId = reply.TransactionId;
+					reply.Error = ex;
+					sendOut(reply);
+					return true;
+				}
+
+				case MessageTypes.SecurityLookup:
+				{
+					var lookupMsg = (SecurityLookupMessage)message;
+					sendOut(new SecurityLookupResultMessage
+					{
+						OriginalTransactionId = lookupMsg.TransactionId,
+						Error = ex
+					});
+					return true;
+				}
+
+				case MessageTypes.BoardLookup:
+				{
+					var lookupMsg = (BoardLookupMessage)message;
+					sendOut(new BoardLookupResultMessage
+					{
+						OriginalTransactionId = lookupMsg.TransactionId,
+						Error = ex
+					});
+					return true;
+				}
+
+				case MessageTypes.PortfolioLookup:
+				{
+					var lookupMsg = (PortfolioLookupMessage)message;
+					sendOut(new PortfolioLookupResultMessage
+					{
+						OriginalTransactionId = lookupMsg.TransactionId,
+						Error = ex
+					});
+					return true;
+				}
+
+				case MessageTypes.UserLookup:
+				{
+					var lookupMsg = (UserLookupMessage)message;
+					sendOut(new UserLookupResultMessage
+					{
+						OriginalTransactionId = lookupMsg.TransactionId,
+						Error = ex
+					});
+					return true;
+				}
+
+				case MessageTypes.UserRequest:
+				{
+					var requestMsg = (UserRequestMessage)message;
+					sendOut(new UserRequestMessage
+					{
+						OriginalTransactionId = requestMsg.TransactionId,
+						Error = ex
+					});
+					return true;
+				}
+
+				case MessageTypes.ChangePassword:
+				{
+					var pwdMsg = (ChangePasswordMessage)message;
+					sendOut(new ChangePasswordMessage
+					{
+						OriginalTransactionId = pwdMsg.TransactionId,
+						Error = ex
+					});
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Get subscription identifiers from the specified message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <returns>Identifiers.</returns>
+		public static IEnumerable<long> GetSubscriptionIds(this ISubscriptionIdMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (message.SubscriptionIds != null)
+				return message.SubscriptionIds;
+			else if (message.SubscriptionId > 0)
+				return new[] { message.SubscriptionId };
+			else
+				return Enumerable.Empty<long>();
+		}
+
+		/// <summary>
+		/// Is the data type required security info.
+		/// </summary>
+		/// <param name="type">Market data type.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSecurityRequired(this MarketDataTypes type)
+			=> type != MarketDataTypes.News && type != MarketDataTypes.Board;
 	}
 }

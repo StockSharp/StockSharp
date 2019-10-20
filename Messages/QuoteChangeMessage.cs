@@ -61,7 +61,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public sealed class QuoteChangeMessage : Message, IServerTimeMessage, ISecurityIdMessage
+	public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -160,7 +160,6 @@ namespace StockSharp.Messages
 		{
 			var clone = new QuoteChangeMessage
 			{
-				LocalTime = LocalTime,
 				SecurityId = SecurityId,
 				Bids = Bids.Select(q => q.Clone()).ToArray(),
 				Asks = Asks.Select(q => q.Clone()).ToArray(),
@@ -172,7 +171,7 @@ namespace StockSharp.Messages
 				State = State,
 			};
 
-			this.CopyExtensionInfo(clone);
+			CopyTo(clone);
 
 			return clone;
 		}

@@ -50,11 +50,8 @@
 			}
 		}
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		public override void SendInMessage(Message message)
+		/// <inheritdoc />
+		protected override void OnSendInMessage(Message message)
 		{
 			if (message.IsBack)
 			{
@@ -64,7 +61,7 @@
 					message.IsBack = false;
 				}
 
-				//base.SendInMessage(message);
+				//base.OnSendInMessage(message);
 				//return;
 			}
 
@@ -268,7 +265,10 @@
 
 								case MessageTypes.PortfolioLookup:
 									var pfLookup = (PortfolioLookupMessage)message;
-									RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = pfLookup.TransactionId });
+
+									if (pfLookup.IsSubscribe)
+										RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = pfLookup.TransactionId });
+									
 									break;
 							}
 
@@ -282,7 +282,7 @@
 				}
 			}
 
-			base.SendInMessage(message);
+			base.OnSendInMessage(message);
 		}
 
 		private void ProcessSubscriptionMessage<TMessage>(TMessage message, bool isSubscribe, long transactionId, long originalTransactionId, PairSet<long, TMessage> subscriptions)
@@ -326,10 +326,7 @@
 			_pendingMessages.Add(message);
 		}
 
-		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			ConnectMessage connectMessage = null;

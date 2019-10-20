@@ -126,5 +126,19 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public abstract override Message Clone();
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected void CopyTo(Message destination)
+		{
+			if (destination == null)
+				throw new ArgumentNullException(nameof(destination));
+
+			destination.LocalTime = LocalTime;
+
+			this.CopyExtensionInfo(destination);
+		}
 	}
 }

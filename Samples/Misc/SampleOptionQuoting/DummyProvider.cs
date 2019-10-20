@@ -237,12 +237,12 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.RegisterMarketDepth(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter)
+		void IMarketDataProvider.SubscribeMarketDepth(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.UnRegisterMarketDepth(Security security)
+		void IMarketDataProvider.UnSubscribeMarketDepth(Security security)
 		{
 			throw new NotSupportedException();
 		}
@@ -257,47 +257,47 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.RegisterTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
+		void IMarketDataProvider.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.UnRegisterTrades(Security security)
+		void IMarketDataProvider.UnSubscribeTrades(Security security)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.RegisterSecurity(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
+		void IMarketDataProvider.SubscribeLevel1(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.UnRegisterSecurity(Security security)
+		void IMarketDataProvider.UnSubscribeLevel1(Security security)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.RegisterOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		void IMarketDataProvider.SubscribeOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.UnRegisterOrderLog(Security security)
+		void IMarketDataProvider.UnSubscribeOrderLog(Security security)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.RegisterNews(Security security, IMessageAdapter adapter)
+		void IMarketDataProvider.SubscribeNews(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.UnRegisterNews(Security security)
+		void IMarketDataProvider.UnSubscribeNews(Security security)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, IMessageAdapter adapter)
+		void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
@@ -326,6 +326,14 @@ namespace SampleOptionQuoting
 		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName)
 		{
 			return _positions.FirstOrDefault(p => p.Security == security && p.Portfolio == portfolio);
+		}
+
+		void IPositionProvider.SubscribePositions(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		{
+		}
+
+		void IPositionProvider.UnSubscribePositions()
+		{
 		}
 	}
 }

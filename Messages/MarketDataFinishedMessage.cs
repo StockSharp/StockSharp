@@ -42,14 +42,15 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var msg = new MarketDataFinishedMessage
+			var clone = new MarketDataFinishedMessage
 			{
-				LocalTime = LocalTime,
 				OriginalTransactionId = OriginalTransactionId,
 				//IsHistory = IsHistory,
 			};
 
-			return msg;
+			CopyTo(clone);
+
+			return clone;
 		}
 
 		/// <inheritdoc />

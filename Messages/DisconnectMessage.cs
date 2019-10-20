@@ -39,11 +39,9 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new DisconnectMessage
-			{
-				Error = Error,
-				LocalTime = LocalTime,
-			};
+			var clone = new DisconnectMessage();
+			CopyTo(clone);
+			return clone;
 		}
 	}
 }

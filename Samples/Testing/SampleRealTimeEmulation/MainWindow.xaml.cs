@@ -264,9 +264,9 @@ namespace SampleRealTimeEmulation
 
 			Chart.Reset(new[] { _candlesElem });
 
-			_emuConnector.RegisterMarketDepth(security);
-			_emuConnector.RegisterTrades(security);
-			_emuConnector.RegisterSecurity(security);
+			_emuConnector.SubscribeMarketDepth(security);
+			_emuConnector.SubscribeTrades(security);
+			_emuConnector.SubscribeLevel1(security);
 
 			_candleSeries = new CandleSeries(CandleSettingsEditor.Settings.CandleType, security, CandleSettingsEditor.Settings.Arg);
 			_emuConnector.SubscribeCandles(_candleSeries);
