@@ -7,7 +7,7 @@
     </summary>
     -->
     <introduction>
-    	<para>Свойства подключения, которые используются во многих источниках.</para>
+    	<para>Свойства подключения, которые общие для всех источников.</para>
     	 <mediaLink>
         	<image placement="left" xlink:href="hydra_settings_connectionparams" />
       	</mediaLink>

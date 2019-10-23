@@ -297,6 +297,115 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\UpbitSample.aml" />
+    <None Include="Topics\UpbitConnectorsSettings.aml" />
+    <None Include="Topics\Upbit.aml" />
+    <None Include="Topics\TrueFXConnectorsSettings.aml" />
+    <None Include="Topics\MBTradingConnectorsSettings.aml" />
+    <None Include="Topics\TrueFXSample.aml" />
+    <None Include="Topics\MBTradingSample.aml" />
+    <None Include="Topics\FinVizSample.aml" />
+    <None Include="Topics\GAINCapitalSample.aml" />
+    <None Include="Topics\TrueFX.aml" />
+    <None Include="Topics\MB Trading.aml" />
+    <None Include="Topics\FinViz.aml" />
+    <None Include="Topics\GAIN Capital.aml" />
+    <None Include="Topics\RTSConnectorsSettings.aml" />
+    <None Include="Topics\RTSSample.aml" />
+    <None Include="Topics\LCISample.aml" />
+    <None Include="Topics\UXSample.aml" />
+    <None Include="Topics\RTS.aml" />
+    <None Include="Topics\LCI.aml" />
+    <None Include="Topics\UX.aml" />
+    <None Include="Topics\BarChartSample.aml" />
+    <None Include="Topics\API_GUI_Settings_РТС.aml" />
+    <None Include="Topics\API_GUI_Settings_ZB.COM.aml" />
+    <None Include="Topics\API_GUI_Settings_Zaif.aml" />
+    <None Include="Topics\API_GUI_Settings_Yobit.aml" />
+    <None Include="Topics\API_GUI_Settings_Yahoo.aml" />
+    <None Include="Topics\API_GUI_Settings_Xignite.aml" />
+    <None Include="Topics\API_GUI_Settings_WEX (BTC-e).aml" />
+    <None Include="Topics\API_GUI_Settings_UX .aml" />
+    <None Include="Topics\API_GUI_Settings_Upbit.aml" />
+    <None Include="Topics\API_GUI_Settings_TWIME.aml" />
+    <None Include="Topics\API_GUI_Settings_TrueFX.aml" />
+    <None Include="Topics\API_GUI_Settings_Transaq.aml" />
+    <None Include="Topics\API_GUI_Settings_Tradier.aml" />
+    <None Include="Topics\API_GUI_Settings_TradeOgre.aml" />
+    <None Include="Topics\API_GUI_Settings_Sterling.aml" />
+    <None Include="Topics\API_GUI_Settings_SPB Exchange.aml" />
+    <None Include="Topics\API_GUI_Settings_SmartCOM (ITI Capital).aml" />
+    <None Include="Topics\API_GUI_Settings_RSS.aml" />
+    <None Include="Topics\API_GUI_Settings_Rithmic.aml" />
+    <None Include="Topics\API_GUI_Settings_QUOINEX.aml" />
+    <None Include="Topics\API_GUI_Settings_Quik LUA Transactions.aml" />
+    <None Include="Topics\API_GUI_Settings_Quik LUA  Market data.aml" />
+    <None Include="Topics\API_GUI_Settings_QuantFEED.aml" />
+    <None Include="Topics\API_GUI_Settings_Quandl.aml" />
+    <None Include="Topics\API_GUI_Settings_Poloniex.aml" />
+    <None Include="Topics\API_GUI_Settings_Plaza 2.aml" />
+    <None Include="Topics\API_GUI_Settings_OpenECry_GainFutures.aml" />
+    <None Include="Topics\API_GUI_Settings_OKEx.aml" />
+    <None Include="Topics\API_GUI_Settings_OKCoin.aml" />
+    <None Include="Topics\API_GUI_Settings_OANDA.aml" />
+    <None Include="Topics\API_GUI_Settings_MMWBTEAP.aml" />
+    <None Include="Topics\API_GUI_Settings_MFD.aml" />
+    <None Include="Topics\API_GUI_Settings_MB Trading.aml" />
+    <None Include="Topics\API_GUI_Settings_LMAX.aml" />
+    <None Include="Topics\API_GUI_Settings_Livecoin.aml" />
+    <None Include="Topics\API_GUI_Settings_Liqui.aml" />
+    <None Include="Topics\API_GUI_Settings_LCI.aml" />
+    <None Include="Topics\API_GUI_Settings_LBank.aml" />
+    <None Include="Topics\API_GUI_Settings_Kucoin.aml" />
+    <None Include="Topics\API_GUI_Settings_Kraken.aml" />
+    <None Include="Topics\API_GUI_Settings_ITCH.aml" />
+    <None Include="Topics\API_GUI_Settings_IQFeed.aml" />
+    <None Include="Topics\API_GUI_Settings_Interactive Brokers.aml" />
+    <None Include="Topics\API_GUI_Settings_IEX.aml" />
+    <None Include="Topics\API_GUI_Settings_IDAX.aml" />
+    <None Include="Topics\API_GUI_Settings_Huobi.aml" />
+    <None Include="Topics\API_GUI_Settings_HitBTC.aml" />
+    <None Include="Topics\API_GUI_Settings_Google.aml" />
+    <None Include="Topics\API_GUI_Settings_GDAX.aml" />
+    <None Include="Topics\API_GUI_Settings_GAIN Capital.aml" />
+    <None Include="Topics\API_GUI_Settings_FXCM.aml" />
+    <None Include="Topics\API_GUI_Settings_Fusion (Blackwood).aml" />
+    <None Include="Topics\API_GUI_Settings_FIX.aml" />
+    <None Include="Topics\API_GUI_Settings_FinViz.aml" />
+    <None Include="Topics\API_GUI_Settings_Finam.aml" />
+    <None Include="Topics\API_GUI_Settings_FAST.aml" />
+    <None Include="Topics\API_GUI_Settings_EXMO.aml" />
+    <None Include="Topics\API_GUI_Settings_E_TRADE.aml" />
+    <None Include="Topics\API_GUI_Settings_Dukascopy.aml" />
+    <None Include="Topics\API_GUI_Settings_DigiFinex.aml" />
+    <None Include="Topics\API_GUI_Settings_Deribit.aml" />
+    <None Include="Topics\API_GUI_Settings_CSV.aml" />
+    <None Include="Topics\API_GUI_Settings_Cryptopia.aml" />
+    <None Include="Topics\API_GUI_Settings_CQG Continuum.aml" />
+    <None Include="Topics\API_GUI_Settings_CQG COM.aml" />
+    <None Include="Topics\API_GUI_Settings_Coinigy.aml" />
+    <None Include="Topics\API_GUI_Settings_CoinExchange.aml" />
+    <None Include="Topics\API_GUI_Settings_Coincheck.aml" />
+    <None Include="Topics\API_GUI_Settings_CoinCap.aml" />
+    <None Include="Topics\API_GUI_Settings_CoinBene.aml" />
+    <None Include="Topics\API_GUI_Settings_Coinbase.aml" />
+    <None Include="Topics\API_GUI_Settings_CEX.IO.aml" />
+    <None Include="Topics\API_GUI_Settings_BW.aml" />
+    <None Include="Topics\API_GUI_Settings_Bit-Z.aml" />
+    <None Include="Topics\API_GUI_Settings_Bittrex.aml" />
+    <None Include="Topics\API_GUI_Settings_Bitstamp.aml" />
+    <None Include="Topics\API_GUI_Settings_BitMEX.aml" />
+    <None Include="Topics\API_GUI_Settings_BitMax.aml" />
+    <None Include="Topics\API_GUI_Settings_Bithumb.aml" />
+    <None Include="Topics\API_GUI_Settings_Bitfinex.aml" />
+    <None Include="Topics\API_GUI_Settings_Bitexbook.aml" />
+    <None Include="Topics\API_GUI_Settings_Bitbank.aml" />
+    <None Include="Topics\API_GUI_Settings_Binance.aml" />
+    <None Include="Topics\API_GUI_Settings_Barchart.aml" />
+    <None Include="Topics\API_GUI_Settings_AlphaVantage.aml" />
+    <None Include="Topics\API_GUI_Settings_AlorHistory.aml" />
+    <None Include="Topics\API_GUI_Settings_AlfaDirect.aml" />
+    <None Include="Topics\API_GUI_Settings_Bibox.aml" />
     <None Include="Topics\HydraCommonConnectionSettings.aml" />
     <None Include="Topics\AlorSample.aml" />
     <None Include="Topics\API_Getting_news_data.aml" />
@@ -4389,6 +4498,362 @@
     <Image Include="Art\Designer_Universal_formula_00.png">
       <ImageId>Designer_Universal_formula_00</ImageId>
       <AlternateText>Designer Universal formula 00</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_TrueFX.png">
+      <ImageId>API_GUI_Settings_TrueFX</ImageId>
+      <AlternateText>API GUI Settings TrueFX</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_OANDA.png">
+      <ImageId>API_GUI_Settings_OANDA</ImageId>
+      <AlternateText>API GUI Settings OANDA</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_MB Trading.png">
+      <ImageId>API_GUI_Settings_MB Trading</ImageId>
+      <AlternateText>API GUI Settings MB Trading</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_LMAX.png">
+      <ImageId>API_GUI_Settings_LMAX</ImageId>
+      <AlternateText>API GUI Settings LMAX</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_GAIN Capital.png">
+      <ImageId>API_GUI_Settings_GAIN Capital</ImageId>
+      <AlternateText>API GUI Settings GAIN Capital</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_FXCM.png">
+      <ImageId>API_GUI_Settings_FXCM</ImageId>
+      <AlternateText>API GUI Settings FXCM</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_FinViz.png">
+      <ImageId>API_GUI_Settings_FinViz</ImageId>
+      <AlternateText>API GUI Settings Fin Viz</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Dukascopy.png">
+      <ImageId>API_GUI_Settings_Dukascopy</ImageId>
+      <AlternateText>API GUI Settings Dukascopy</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Yahoo.png">
+      <ImageId>API_GUI_Settings_Yahoo</ImageId>
+      <AlternateText>API GUI Settings Yahoo</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Xignite.png">
+      <ImageId>API_GUI_Settings_Xignite</ImageId>
+      <AlternateText>API GUI Settings Xignite</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Tradier.png">
+      <ImageId>API_GUI_Settings_Tradier</ImageId>
+      <AlternateText>API GUI Settings Tradier</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Sterling.png">
+      <ImageId>API_GUI_Settings_Sterling</ImageId>
+      <AlternateText>API GUI Settings Sterling</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Rithmic.png">
+      <ImageId>API_GUI_Settings_Rithmic</ImageId>
+      <AlternateText>API GUI Settings Rithmic</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_QuantFEED.png">
+      <ImageId>API_GUI_Settings_QuantFEED</ImageId>
+      <AlternateText>API GUI Settings QuantFEED</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Quandl.png">
+      <ImageId>API_GUI_Settings_Quandl</ImageId>
+      <AlternateText>API GUI Settings Quandl</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_OpenECry_GainFutures.png">
+      <ImageId>API_GUI_Settings_OpenECry_GainFutures</ImageId>
+      <AlternateText>API GUI Settings OpenECry Gain Futures</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_ITCH.png">
+      <ImageId>API_GUI_Settings_ITCH</ImageId>
+      <AlternateText>API GUI Settings ITCH</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_IQFeed.png">
+      <ImageId>API_GUI_Settings_IQFeed</ImageId>
+      <AlternateText>API GUI Settings IQFeed</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Interactive Brokers.png">
+      <ImageId>API_GUI_Settings_Interactive Brokers</ImageId>
+      <AlternateText>API GUI Settings Interactive Brokers</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_IEX.png">
+      <ImageId>API_GUI_Settings_IEX</ImageId>
+      <AlternateText>API GUI Settings IEX</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Google.png">
+      <ImageId>API_GUI_Settings_Google</ImageId>
+      <AlternateText>API GUI Settings Google</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_E_TRADE.png">
+      <ImageId>API_GUI_Settings_E_TRADE</ImageId>
+      <AlternateText>API GUI Settings E TRADE</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_CQG Continuum.png">
+      <ImageId>API_GUI_Settings_CQG Continuum</ImageId>
+      <AlternateText>API GUI Settings CQG Continuum</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_CQG COM.png">
+      <ImageId>API_GUI_Settings_CQG COM</ImageId>
+      <AlternateText>API GUI Settings CQG COM</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Fusion (Blackwood).png">
+      <ImageId>API_GUI_Settings_Fusion (Blackwood)</ImageId>
+      <AlternateText>API GUI Settings Fusion (Blackwood)</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Barchart.png">
+      <ImageId>API_GUI_Settings_Barchart</ImageId>
+      <AlternateText>API GUI Settings Barchart</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_AlphaVantage.png">
+      <ImageId>API_GUI_Settings_AlphaVantage</ImageId>
+      <AlternateText>API GUI Settings Alpha Vantage</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_UX.png">
+      <ImageId>API_GUI_Settings_UX</ImageId>
+      <AlternateText>API GUI Settings UX</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_TWIME.png">
+      <ImageId>API_GUI_Settings_TWIME</ImageId>
+      <AlternateText>API GUI Settings TWIME</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Transaq.png">
+      <ImageId>API_GUI_Settings_Transaq</ImageId>
+      <AlternateText>API GUI Settings Transaq</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_SPB Exchange.png">
+      <ImageId>API_GUI_Settings_SPB Exchange</ImageId>
+      <AlternateText>API GUI Settings SPB Exchange</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_SmartCOM (ITI Capital).png">
+      <ImageId>API_GUI_Settings_SmartCOM (ITI Capital)</ImageId>
+      <AlternateText>API GUI Settings SmartCOM (ITI Capital)</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_РТС.png">
+      <ImageId>API_GUI_Settings_РТС</ImageId>
+      <AlternateText>API GUI Settings РТС</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Quik LUA Transactions.png">
+      <ImageId>API_GUI_Settings_Quik LUA Transactions</ImageId>
+      <AlternateText>API GUI Settings Quik LUA Transactions</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Quik LUA  Market data.png">
+      <ImageId>API_GUI_Settings_Quik LUA  Market data</ImageId>
+      <AlternateText>API GUI Settings Quik LUA  Market data</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Plaza 2.png">
+      <ImageId>API_GUI_Settings_Plaza 2</ImageId>
+      <AlternateText>API GUI Settings Plaza 2</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_LCI.png">
+      <ImageId>API_GUI_Settings_LCI</ImageId>
+      <AlternateText>API GUI Settings LCI</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_MMWBTEAP.png">
+      <ImageId>API_GUI_Settings_MMWBTEAP</ImageId>
+      <AlternateText>API GUI Settings MMWBTEAP</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_MFD.png">
+      <ImageId>API_GUI_Settings_MFD</ImageId>
+      <AlternateText>API GUI Settings MFD</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Finam.png">
+      <ImageId>API_GUI_Settings_Finam</ImageId>
+      <AlternateText>API GUI Settings Finam</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_AlorHistory.png">
+      <ImageId>API_GUI_Settings_AlorHistory</ImageId>
+      <AlternateText>API GUI Settings Alor History</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_AlfaDirect.png">
+      <ImageId>API_GUI_Settings_AlfaDirect</ImageId>
+      <AlternateText>API GUI Settings Alfa Direct</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_RSS.png">
+      <ImageId>API_GUI_Settings_RSS</ImageId>
+      <AlternateText>API GUI Settings RSS</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_FIX.png">
+      <ImageId>API_GUI_Settings_FIX</ImageId>
+      <AlternateText>API GUI Settings FIX</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_FAST.png">
+      <ImageId>API_GUI_Settings_FAST</ImageId>
+      <AlternateText>API GUI Settings FAST</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_CSV.png">
+      <ImageId>API_GUI_Settings_CSV</ImageId>
+      <AlternateText>API GUI Settings CSV</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_ZBCOM.png">
+      <ImageId>API_GUI_Settings_ZBCOM</ImageId>
+      <AlternateText>API GUI Settings ZBCOM</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Zaif.png">
+      <ImageId>API_GUI_Settings_Zaif</ImageId>
+      <AlternateText>API GUI Settings Zaif</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Yobit.png">
+      <ImageId>API_GUI_Settings_Yobit</ImageId>
+      <AlternateText>API GUI Settings Yobit</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Upbit.png">
+      <ImageId>API_GUI_Settings_Upbit</ImageId>
+      <AlternateText>API GUI Settings Upbit</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_TradeOgre.png">
+      <ImageId>API_GUI_Settings_TradeOgre</ImageId>
+      <AlternateText>API GUI Settings Trade Ogre</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_QUOINEX.png">
+      <ImageId>API_GUI_Settings_QUOINEX</ImageId>
+      <AlternateText>API GUI Settings QUOINEX</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Poloniex.png">
+      <ImageId>API_GUI_Settings_Poloniex</ImageId>
+      <AlternateText>API GUI Settings Poloniex</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_OKEx.png">
+      <ImageId>API_GUI_Settings_OKEx</ImageId>
+      <AlternateText>API GUI Settings OKEx</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_OKCoin.png">
+      <ImageId>API_GUI_Settings_OKCoin</ImageId>
+      <AlternateText>API GUI Settings OKCoin</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Livecoin.png">
+      <ImageId>API_GUI_Settings_Livecoin</ImageId>
+      <AlternateText>API GUI Settings Livecoin</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Liqui.png">
+      <ImageId>API_GUI_Settings_Liqui</ImageId>
+      <AlternateText>API GUI Settings Liqui</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_LBank.png">
+      <ImageId>API_GUI_Settings_LBank</ImageId>
+      <AlternateText>API GUI Settings LBank</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Kucoin.png">
+      <ImageId>API_GUI_Settings_Kucoin</ImageId>
+      <AlternateText>API GUI Settings Kucoin</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Kraken.png">
+      <ImageId>API_GUI_Settings_Kraken</ImageId>
+      <AlternateText>API GUI Settings Kraken</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_IDAX.png">
+      <ImageId>API_GUI_Settings_IDAX</ImageId>
+      <AlternateText>API GUI Settings IDAX</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Huobi.png">
+      <ImageId>API_GUI_Settings_Huobi</ImageId>
+      <AlternateText>API GUI Settings Huobi</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_HitBTC.png">
+      <ImageId>API_GUI_Settings_HitBTC</ImageId>
+      <AlternateText>API GUI Settings HitBTC</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_GDAX.png">
+      <ImageId>API_GUI_Settings_GDAX</ImageId>
+      <AlternateText>API GUI Settings GDAX</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_EXMO.png">
+      <ImageId>API_GUI_Settings_EXMO</ImageId>
+      <AlternateText>API GUI Settings EXMO</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_DigiFinex.png">
+      <ImageId>API_GUI_Settings_DigiFinex</ImageId>
+      <AlternateText>API GUI Settings Digi Finex</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Deribit.png">
+      <ImageId>API_GUI_Settings_Deribit</ImageId>
+      <AlternateText>API GUI Settings Deribit</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Cryptopia.png">
+      <ImageId>API_GUI_Settings_Cryptopia</ImageId>
+      <AlternateText>API GUI Settings Cryptopia</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Coinigy.png">
+      <ImageId>API_GUI_Settings_Coinigy</ImageId>
+      <AlternateText>API GUI Settings Coinigy</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_CoinExchange.png">
+      <ImageId>API_GUI_Settings_CoinExchange</ImageId>
+      <AlternateText>API GUI Settings Coin Exchange</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Coincheck.png">
+      <ImageId>API_GUI_Settings_Coincheck</ImageId>
+      <AlternateText>API GUI Settings Coincheck</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_CoinCap.png">
+      <ImageId>API_GUI_Settings_CoinCap</ImageId>
+      <AlternateText>API GUI Settings Coin Cap</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_CoinBene.png">
+      <ImageId>API_GUI_Settings_CoinBene</ImageId>
+      <AlternateText>API GUI Settings Coin Bene</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Coinbase.png">
+      <ImageId>API_GUI_Settings_Coinbase</ImageId>
+      <AlternateText>API GUI Settings Coinbase</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_CEX.IO.png">
+      <ImageId>API_GUI_Settings_CEX.IO</ImageId>
+      <AlternateText>API GUI Settings CEX.IO</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_BW.png">
+      <ImageId>API_GUI_Settings_BW</ImageId>
+      <AlternateText>API GUI Settings BW</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_WEX (BTC-e).png">
+      <ImageId>API_GUI_Settings_WEX (BTC-e)</ImageId>
+      <AlternateText>API GUI Settings WEX (BTC-e)</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Bit-Z.png">
+      <ImageId>API_GUI_Settings_Bit-Z</ImageId>
+      <AlternateText>API GUI Settings Bit-Z</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Bittrex.png">
+      <ImageId>API_GUI_Settings_Bittrex</ImageId>
+      <AlternateText>API GUI Settings Bittrex</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Bitstamp.png">
+      <ImageId>API_GUI_Settings_Bitstamp</ImageId>
+      <AlternateText>API GUI Settings Bitstamp</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_BitMEX.png">
+      <ImageId>API_GUI_Settings_BitMEX</ImageId>
+      <AlternateText>API GUI Settings BitMEX</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_BitMax.png">
+      <ImageId>API_GUI_Settings_BitMax</ImageId>
+      <AlternateText>API GUI Settings Bit Max</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Bithumb.png">
+      <ImageId>API_GUI_Settings_Bithumb</ImageId>
+      <AlternateText>API GUI Settings Bithumb</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Bitfinex.png">
+      <ImageId>API_GUI_Settings_Bitfinex</ImageId>
+      <AlternateText>API GUI Settings Bitfinex</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Bitexbook.png">
+      <ImageId>API_GUI_Settings_Bitexbook</ImageId>
+      <AlternateText>API GUI Settings Bitexbook</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Bitbank.png">
+      <ImageId>API_GUI_Settings_Bitbank</ImageId>
+      <AlternateText>API GUI Settings Bitbank</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Binance.png">
+      <ImageId>API_GUI_Settings_Binance</ImageId>
+      <AlternateText>API GUI Settings Binance</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Bibox.png">
+      <ImageId>API_GUI_Settings_Bibox</ImageId>
+      <AlternateText>API GUI Settings Bibox</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_ReconnectionSettings.png">
+      <ImageId>API_GUI_ReconnectionSettings</ImageId>
+      <AlternateText>API GUI Reconnection Settings</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
