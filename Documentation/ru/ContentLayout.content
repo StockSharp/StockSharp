@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" isDefault="true" title="О StockSharp" />
+  <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" title="О StockSharp" />
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="Лицензирование StockSharp" />
   <Topic id="536b1c81-5336-4dc0-ab29-8bef70a162ba" visible="True" title="Исходные коды" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Справочные материалы" />
@@ -13,85 +13,126 @@
       <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Коннекторы (Америка)">
         <Topic id="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" visible="True" title="AlphaVantage">
           <Topic id="02913c08-eeab-48e3-9e62-35dccea1db59" visible="True" title="Настройки коннектора AlphaVantage" />
+          <Topic id="4091ca5f-352f-4ad8-8b7b-e017f634a486" visible="True" title="Графическое конфигурирование AlphaVantage" />
           <Topic id="28cee4c9-f9c2-4e87-a160-991fc18221af" visible="True" title="Инициализация адаптера AlphaVantage" />
         </Topic>
-        <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" title="BarChart">
+        <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" isExpanded="true" title="BarChart">
           <Topic id="baa2df0a-ca79-4437-8b99-496f905c254e" visible="True" title="Настройки коннектора BarChart" />
+          <Topic id="d6c229a0-06de-46a9-9551-e9ffd6835eab" visible="True" title="Графическое конфигурирование BarChart" />
+          <Topic id="162def79-bc07-4d24-8d16-4e04df216b08" visible="True" title="Инициализация адаптера BarChart" />
         </Topic>
         <Topic id="89c3f13d-2602-446a-8c3d-5615b6f901b9" visible="True" isExpanded="true" title="Blackwood (Fusion)">
           <Topic id="69cb6aac-29fa-46e3-8d3b-af81f89bfff3" visible="True" title="Настройки коннектора Blackwood (Fusion)" />
+          <Topic id="0bbad367-a35e-4173-b19d-602f7324ec55" visible="True" title="Графическое конфигурирование Blackwood (Fusion)" />
           <Topic id="95d01586-b798-4d38-82aa-38d8533586b5" visible="True" title="Инициализация адаптера Blackwood (Fusion)" />
           <Topic id="c23146af-3f08-4928-a95a-dd1173b23133" visible="True" title="Сканер" />
         </Topic>
         <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" isExpanded="true" title="CQG">
           <Topic id="3ee05287-d25f-4967-9dc0-26d9a5a9578a" visible="True" title="Настройки коннектора CQG" />
+          <Topic id="122ef5c0-eae9-49f4-a225-1d55c5d2636f" visible="True" title="Графическое конфигурирование CQG COM" />
+          <Topic id="246028c4-7d79-4552-b133-d419373a5d16" visible="True" title="Графическое конфигурирование CQG Continuum" />
           <Topic id="436fc377-85ff-4d37-ad62-4846313a8563" visible="True" title="Инициализация адаптера CQG" />
         </Topic>
         <Topic id="84d6a0fb-607f-4d87-be8a-e2b58006493e" visible="True" isExpanded="true" title="E*TRADE">
           <Topic id="dcd93518-1169-44d1-ab9b-2d016d727842" visible="True" title="Настройки коннектора E*TRADE" />
+          <Topic id="d36f6716-c741-4844-8e03-22774b98460f" visible="True" title="Графическое конфигурирование E*TRADE" />
           <Topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" visible="True" title="Инициализация адаптера E*TRADE" />
-          <Topic id="df8227ff-5381-4912-b080-b58e6004480b" visible="True" title="Авторизация" />
+        </Topic>
+        <Topic id="eba96e4f-8f29-4fc2-8011-5d38b415281b" visible="True" isExpanded="true" title="Google">
+          <Topic id="7aefa333-0c0c-4cd5-8a53-eb237f11ce85" visible="True" title="Графическое конфигурирование Google" />
+          <Topic id="ddbfc076-9092-40b8-8625-91500654e4f2" visible="True" title="Инициализация адаптера Google" />
         </Topic>
         <Topic id="fb946f86-fe4b-4e30-97f7-543178e81792" visible="True" isExpanded="true" title="IEX">
           <Topic id="f826d615-3d80-42fe-980e-985e883acdeb" visible="True" title="Настройки коннектора IEX" />
+          <Topic id="312233b1-e39f-4e66-982a-49113177afab" visible="True" title="Графическое конфигурирование IEX" />
           <Topic id="0da3d6e1-12fa-4732-9834-9008b63714ce" visible="True" title="Инициализация адаптера IEX" />
         </Topic>
         <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" isExpanded="true" title="Interactive Brokers">
           <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" title="Настройка TWS Interactive Brokers" />
+          <Topic id="d744f267-b4b7-42e4-9356-ba2a0c7c8dbf" visible="True" title="Графическое конфигурирование Interactive Brokers" />
           <Topic id="7c23b480-d472-43df-aabf-f743ad09fded" visible="True" title="Инициализация адаптера Interactive Brokers" />
           <Topic id="9817c52a-fc3e-4fc8-a5f0-d7caf654b440" visible="True" title="Сканер" />
         </Topic>
         <Topic id="c7ff5937-e230-4db3-857f-4cd68583ebfc" visible="True" isExpanded="true" title="IQFeed">
           <Topic id="add6156b-b2a9-401c-93cc-be333762da15" visible="True" title="Настройки коннектора IQFeed" />
           <Topic id="21aa8b6b-137d-4c28-87d9-dfbc5e446d95" visible="True" title="Подключение IQFeed" />
+          <Topic id="b158d4bd-8fa0-402f-9071-3cbbac026025" visible="True" title="Графическое конфигурирование IQFeed" />
           <Topic id="66003162-d1b0-4f5f-8126-508055d15470" visible="True" title="Инициализация адаптера IQFeed" />
           <Topic id="443734c7-7c88-47e0-a96a-4eec6fdfcfc7" visible="True" title="Получение инструментов" />
           <Topic id="310155fd-ef3a-40f4-9920-179dcaf2b6bf" visible="True" title="Исторические данные" />
         </Topic>
         <Topic id="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" visible="True" isExpanded="true" title="ITCH">
           <Topic id="35f9c7d1-741e-4721-8deb-1991102c0e28" visible="True" title="Настройки коннектора ITCH" />
+          <Topic id="3664d0ab-568c-41d9-abaf-4c1022564678" visible="True" title="Графическое конфигурирование ITCH" />
           <Topic id="ca67819a-60b8-42f0-a512-ad0792d544f2" visible="True" title="Инициализация адаптера ITCH" />
         </Topic>
         <Topic id="f8cae46b-57e1-4954-a4cf-832854840981" visible="True" isExpanded="true" title="OpenECry">
-          <Topic id="1ff92943-e18d-4542-988f-254aded4cbe1" visible="True" title="Настройки коннектора OECTrader" />
+          <Topic id="1ff92943-e18d-4542-988f-254aded4cbe1" visible="True" title="Настройки коннектора OpenECry" />
+          <Topic id="7966a24d-4c72-46e8-ab12-83ecaa7cc92d" visible="True" title="Графическое конфигурирование OpenECry" />
           <Topic id="1dbc72c4-cc59-4094-824a-a2b77f9623d6" visible="True" title="Инициализация адаптера OpenECry" />
           <Topic id="c56a139b-fb64-4f4f-992f-96a1480233cf" visible="True" title="Подключение нескольких роботов" />
           <Topic id="49a7bfef-38e4-41e7-afe5-21bb8ac64258" visible="True" title="Одновременная работа терминала и робота" />
         </Topic>
+        <Topic id="2da31578-dd6d-4682-a9de-42f7bf892681" visible="True" isExpanded="true" title="Quandl">
+          <Topic id="29183d0f-bbed-4cc1-bcd1-ff9d9411f5cf" visible="True" title="Настройки коннектора Quandl" />
+          <Topic id="2f6c450f-7793-4239-99d3-b5759ec16b06" visible="True" title="Графическое конфигурирование Quandl" />
+          <Topic id="a6335efe-dc65-43f5-87de-8f5b4673de94" visible="True" title="Инициализация адаптера Quandl" />
+        </Topic>
         <Topic id="003e9486-6ed9-4afc-a325-6b2cbc382794" visible="True" isExpanded="true" title="QuantFEED">
           <Topic id="93737846-dc53-4789-93a8-4c24da7779df" visible="True" title="Настройки коннектора QuantFEED" />
+          <Topic id="3ecbd12b-50b7-4839-b380-da89b3debaa7" visible="True" title="Графическое конфигурирование QuantFEED" />
           <Topic id="733374e6-1410-468e-b2df-c7d3f2081ef3" visible="True" title="Инициализация адаптера QuantFEED" />
         </Topic>
         <Topic id="777d9208-1146-4d54-b5ae-0315b4186522" visible="True" isExpanded="true" title="Rithmic">
           <Topic id="e08adf2c-8f14-4ba2-a486-0d0b0de25704" visible="True" title="Настройки коннектора Rithmic" />
+          <Topic id="19a2c067-b10e-4d1c-9fd3-1c977563077b" visible="True" title="Графическое конфигурирование Rithmic" />
           <Topic id="3e8732d0-71a5-44ab-be04-c482d5a41d71" visible="True" title="Инициализация адаптера Rithmic" />
         </Topic>
         <Topic id="8a531942-a16c-4348-a4d0-dd4ae999d8f9" visible="True" isExpanded="true" title="Sterling">
           <Topic id="3a4f70bf-24b9-489f-8d58-5bc4f5b623b0" visible="True" title="Настройки коннектора Sterling" />
+          <Topic id="a9dd9347-314b-4f84-9331-8903f6c3e5ff" visible="True" title="Графическое конфигурирование Sterling" />
           <Topic id="7e828fb2-0b95-41fd-8540-17f6bdc747cf" visible="True" title="Инициализация адаптера Sterling" />
         </Topic>
-        <Topic id="2da31578-dd6d-4682-a9de-42f7bf892681" visible="True" isExpanded="true">
-          <Topic id="a6335efe-dc65-43f5-87de-8f5b4673de94" visible="True" title="Инициализация адаптера Quandl" />
-          <Topic id="29183d0f-bbed-4cc1-bcd1-ff9d9411f5cf" visible="True" title="Настройки коннектора Quandl" />
-        </Topic>
-        <Topic id="f119fa3f-2ce2-4924-acb8-e97f1b9e4b5b" visible="True" isExpanded="true">
-          <Topic id="fa6c41ca-bf70-4c31-88b3-b3ff0355a4db" visible="True" title="Инициализация адаптера Xignite" />
-          <Topic id="e03d1dd8-3df7-4a14-93c3-9db9c693f008" visible="True" title="Настройки коннектора Xignite" />
-        </Topic>
-        <Topic id="d73e788c-9915-402f-ba27-47217539979e" visible="True" isExpanded="true">
-          <Topic id="7d29e4d2-5623-4898-8183-40a9ae2a0d76" visible="True" title="Инициализация адаптера Yahoo" />
-        </Topic>
-        <Topic id="eba96e4f-8f29-4fc2-8011-5d38b415281b" visible="True" isExpanded="true">
-          <Topic id="ddbfc076-9092-40b8-8625-91500654e4f2" visible="True" title="Инициализация адаптера Google" />
-        </Topic>
-        <Topic id="113c8f3e-3145-4899-bd5b-60ceac995be2" visible="True" isExpanded="true">
+        <Topic id="113c8f3e-3145-4899-bd5b-60ceac995be2" visible="True" isExpanded="true" title="Tradier">
           <Topic id="921163d1-59dc-4553-bc0c-b9ba40e10b8a" visible="True" title="Настройки коннектора Tradier" />
+          <Topic id="0edad3bc-da32-48de-8f6a-0b2e2791edd6" visible="True" title="Графическое конфигурирование Tradier" />
           <Topic id="737ea804-1876-447c-a57d-4015c57cf4c0" visible="True" title="Инициализация адаптера Tradier" />
         </Topic>
+        <Topic id="f119fa3f-2ce2-4924-acb8-e97f1b9e4b5b" visible="True" isExpanded="true" title="Xignite">
+          <Topic id="e03d1dd8-3df7-4a14-93c3-9db9c693f008" visible="True" title="Настройки коннектора Xignite" />
+          <Topic id="420c1765-eb9e-4b52-b2ff-0486a007b946" visible="True" title="Графическое конфигурирование Xignite" />
+          <Topic id="fa6c41ca-bf70-4c31-88b3-b3ff0355a4db" visible="True" title="Инициализация адаптера Xignite" />
+        </Topic>
+        <Topic id="d73e788c-9915-402f-ba27-47217539979e" visible="True" isExpanded="true" title="Yahoo">
+          <Topic id="49160faa-7913-4237-8a78-42dc272bdd2f" visible="True" title="Графическое конфигурирование Yahoo" />
+          <Topic id="7d29e4d2-5623-4898-8183-40a9ae2a0d76" visible="True" title="Инициализация адаптера Yahoo" />
+        </Topic>
       </Topic>
-      <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (Россия)">
+      <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" title="Коннекторы (Россия)">
+        <Topic id="3f8e07ed-6fc1-4145-8532-2a960735f112" visible="True" isExpanded="true" title="Mfd">
+          <Topic id="d777087e-99db-4602-892b-072877c729f8" visible="True" title="Инициализация адаптера Mfd" />
+          <Topic id="a4fd6897-b792-4cd8-b5c4-b5cf5f3b2e52" visible="True" title="Графическое конфигурирование Mfd" />
+        </Topic>
+        <Topic id="61692ace-225e-4ecc-845a-504021d59a8f" visible="True" isExpanded="true" title="Micex (TEAP)">
+          <Topic id="ac5713e1-b841-4ace-8e8e-6fab52fc7530" visible="True" title="Настройки коннектора Micex (TEAP)" />
+          <Topic id="3af423bd-44ce-436a-aa28-3688a1988174" visible="True" title="Графическое конфигурирование Micex (TEAP)" />
+          <Topic id="356a822b-a4ed-42a9-8e7f-dfa595a15432" visible="True" title="Инициализация адаптера Micex (TEAP)" />
+        </Topic>
+        <Topic id="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf" visible="True" isExpanded="true" title="Plaza II">
+          <Topic id="2a606357-f716-491b-9292-64836fcac5fd" visible="True" title="Настройки коннектора Plaza II" />
+          <Topic id="23cd63b4-e604-4b20-b08d-4e1186eed5ea" visible="True" title="Графическое конфигурирование Plaza II" />
+          <Topic id="81726182-1017-4eca-b349-03b77056a485" visible="True" title="Инициализация адаптера Plaza II" />
+          <Topic id="838b1f44-ad42-4bf6-b862-0b0bff550482" visible="True" title="Метаданные" />
+          <Topic id="7872dcbc-abff-4112-9846-b6bf8bb0e0e6" visible="True" title="Стаканы агрегированных котировок" />
+          <Topic id="8063e30a-394a-4fea-bc49-b7661b2222b6" visible="True" title="Произвольные таблицы" />
+          <Topic id="e2759043-dd8c-40dc-837a-f314fa21163d" visible="True" title="Один логин - несколько роботов" />
+          <Topic id="034eccab-f22d-4ff1-bcc3-102bfa88cd54" visible="True" title="Ордер Лог" />
+          <Topic id="30bbb3a9-bc58-46a7-9aeb-112b69db62c8" visible="True" title="Управление ревизиями" />
+        </Topic>
         <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" isExpanded="true" title="Quik">
           <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
+          <Topic id="3707af38-42ed-43f1-b657-0434807f40d6" visible="True" title="Графическое конфигурирование Quik LUA  Market data" />
+          <Topic id="4fff8af3-32e2-49df-982c-ca341f9295fa" visible="True" title="Графическое конфигурирование Quik LUA Transactions" />
           <Topic id="d79f3357-6bdf-4a6f-92d6-c9b45e820f1a" visible="True" title="Инициализация адаптера Quik Lua" />
           <Topic id="c338d4b4-ba54-4671-9206-976c07ef655e" visible="True" title="Quik DDE (старое подключение)">
             <Topic id="5c13da7b-b6e4-4fd4-958a-66c93c58b941" visible="True" title="Настройка Quik" />
@@ -115,251 +156,326 @@
         </Topic>
         <Topic id="7f488b0b-0f59-42b4-845b-fd766f5699dc" visible="True" isExpanded="true" title="SmartCOM">
           <Topic id="5a43d423-1c1f-470a-b32f-92c24023de2c" visible="True" title="Настройки коннектора SmartCOM" />
+          <Topic id="ec91b947-3a97-4e90-8261-7e0f5b6be96c" visible="True" title="Графическое конфигурирование SmartCOM" />
           <Topic id="e5b4af10-0235-4374-9134-a878fc7ecf7f" visible="True" title="Инициализация адаптера SmartCOM" />
-        </Topic>
-        <Topic id="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391" visible="True" isExpanded="true" title="Альфа-Директ">
-          <Topic id="dc7d8d3b-1d25-4f81-a043-dd4ee9f34147" visible="True" title="Настройка терминала Альфа-Директ" />
-          <Topic id="bc7a69cf-35f2-413d-a041-de705543f23c" visible="True" title="Инициализация адаптера Альфа-Директ" />
-        </Topic>
-        <Topic id="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf" visible="True" title="Plaza II">
-          <Topic id="2a606357-f716-491b-9292-64836fcac5fd" visible="True" title="Настройки коннектора Plaza II" />
-          <Topic id="81726182-1017-4eca-b349-03b77056a485" visible="True" title="Инициализация адаптера Plaza II" />
-          <Topic id="838b1f44-ad42-4bf6-b862-0b0bff550482" visible="True" title="Метаданные" />
-          <Topic id="7872dcbc-abff-4112-9846-b6bf8bb0e0e6" visible="True" title="Стаканы агрегированных котировок" />
-          <Topic id="8063e30a-394a-4fea-bc49-b7661b2222b6" visible="True" title="Произвольные таблицы" />
-          <Topic id="e2759043-dd8c-40dc-837a-f314fa21163d" visible="True" title="Один логин - несколько роботов" />
-          <Topic id="034eccab-f22d-4ff1-bcc3-102bfa88cd54" visible="True" title="Ордер Лог" />
-          <Topic id="30bbb3a9-bc58-46a7-9aeb-112b69db62c8" visible="True" title="Управление ревизиями" />
-        </Topic>
-        <Topic id="a010f9bd-15bb-4858-a067-590101087dff" visible="True" isExpanded="true" title="Transaq">
-          <Topic id="6611fa9f-0e57-4378-954f-f582881d7504" visible="True" title="Настройки коннектора Transaq" />
-          <Topic id="d3ed9f9d-f5b5-4306-a542-206fa99f83c0" visible="True" title="Инициализация адаптера Transaq" />
-        </Topic>
-        <Topic id="61692ace-225e-4ecc-845a-504021d59a8f" visible="True" isExpanded="true" title="Micex (TEAP)">
-          <Topic id="ac5713e1-b841-4ace-8e8e-6fab52fc7530" visible="True" title="Настройки коннектора Micex (TEAP)" />
-          <Topic id="356a822b-a4ed-42a9-8e7f-dfa595a15432" visible="True" title="Инициализация адаптера Micex (TEAP)" />
-        </Topic>
-        <Topic id="1ee210ee-a004-4277-b8f4-91cb08d651db" visible="True" isExpanded="true" title="Twime">
-          <Topic id="29a2e2d4-af15-4340-be6d-3c77c66c1977" visible="True" title="Настройки коннектора Twime" />
-          <Topic id="01f08ac6-ce17-49a6-a531-b24eec6d7f5c" visible="True" title="Инициализация адаптера Twime" />
         </Topic>
         <Topic id="2bbcaa58-0092-4603-a35f-d4a9bc7cb835" visible="True" isExpanded="true" title="SPB Exchange">
           <Topic id="bb643f2e-d235-47ea-9a71-6dbec18d188a" visible="True" title="Настройки коннектора SPB Exchange" />
+          <Topic id="717d8a85-0955-40db-88c3-bd0946126639" visible="True" title="Графическое конфигурирование SPB Exchange" />
           <Topic id="f43e0966-da3b-4709-ae47-c6c7f9546567" visible="True" title="Инициализация адаптера SPB Exchange" />
         </Topic>
-        <Topic id="19c2bdbe-15ab-4b41-9d87-e838b5f17c8e" visible="True" isExpanded="true">
-          <Topic id="b815e2ee-4e74-4f1b-822a-4382bf33edcb" visible="True" title="Инициализация адаптера Finam" />
+        <Topic id="a010f9bd-15bb-4858-a067-590101087dff" visible="True" isExpanded="true" title="Transaq">
+          <Topic id="6611fa9f-0e57-4378-954f-f582881d7504" visible="True" title="Настройки коннектора Transaq" />
+          <Topic id="83a5cc58-21af-4363-bd46-77e607b4a7ab" visible="True" title="Графическое конфигурирование Transaq" />
+          <Topic id="d3ed9f9d-f5b5-4306-a542-206fa99f83c0" visible="True" title="Инициализация адаптера Transaq" />
+        </Topic>
+        <Topic id="1ee210ee-a004-4277-b8f4-91cb08d651db" visible="True" isExpanded="true" title="Twime">
+          <Topic id="29a2e2d4-af15-4340-be6d-3c77c66c1977" visible="True" title="Настройки коннектора Twime" />
+          <Topic id="784afda8-65bc-428c-915a-69deae3f43dc" visible="True" title="Графическое конфигурирование Twime" />
+          <Topic id="01f08ac6-ce17-49a6-a531-b24eec6d7f5c" visible="True" title="Инициализация адаптера Twime" />
+        </Topic>
+        <Topic id="778e03c7-d639-4b5d-b874-d5bab5a1034d" visible="True" isExpanded="true" title="UX (сайт)">
+          <Topic id="87c69bac-52ed-4532-bd60-8a351bb8fe57" visible="True" title="Графическое конфигурирование UX" />
+          <Topic id="fbe46be3-7234-4815-a18f-4a3cb4bb06e8" visible="True" title="Инициализация адаптера UX" />
         </Topic>
         <Topic id="87880b45-6311-42af-9d37-2f4ad9597658" visible="True" isExpanded="true" title="Алор Трейд">
+          <Topic id="e778e24e-41c6-4978-8d88-de2f04bfdf4e" visible="True" title="Графическое конфигурирование AlorHistory" />
           <Topic id="75f3b79f-2edf-4169-8e45-243eef080250" visible="True" title="Инициализация адаптера AlorHistory" />
         </Topic>
-        <Topic id="3f8e07ed-6fc1-4145-8532-2a960735f112" visible="True" isExpanded="true">
-          <Topic id="d777087e-99db-4602-892b-072877c729f8" visible="True" title="Инициализация адаптера Mfd" />
+        <Topic id="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391" visible="True" isExpanded="true" title="Альфа-Директ">
+          <Topic id="dc7d8d3b-1d25-4f81-a043-dd4ee9f34147" visible="True" title="Настройка терминала Альфа-Директ" />
+          <Topic id="cca809c9-f777-4880-a719-8de25e6c3e67" visible="True" title="Графическое конфигурирование Альфа-Директ" />
+          <Topic id="bc7a69cf-35f2-413d-a041-de705543f23c" visible="True" title="Инициализация адаптера Альфа-Директ" />
+        </Topic>
+        <Topic id="e0fcdbe7-d595-4cf2-ae9d-4ba5b215273f" visible="True" isExpanded="true" title="ЛЧИ">
+          <Topic id="6280057b-f6c1-4fb5-9b56-b6686b5a2b4c" visible="True" title="Графическое конфигурирование ЛЧИ" />
+          <Topic id="17cd7b46-507b-48a7-9653-cb4a85447403" visible="True" title="Инициализация адаптера ЛЧИ" />
+        </Topic>
+        <Topic id="98efb1f0-107b-4442-846f-1d517330ba39" visible="True" isExpanded="true" title="РТС">
+          <Topic id="9bb0296e-ab70-4021-969f-0d2810803515" visible="True" title="Настройки коннектора РТС" />
+          <Topic id="3fd4882e-3fcc-4913-9f6a-41a4b2af6f54" visible="True" title="Графическое конфигурирование РТС" />
+          <Topic id="2762564a-8f0c-4721-abf4-441c0d4ec366" visible="True" title="Инициализация адаптера РТС" />
+        </Topic>
+        <Topic id="19c2bdbe-15ab-4b41-9d87-e838b5f17c8e" visible="True" isExpanded="true" title="Финам">
+          <Topic id="35990328-b984-41f8-aaed-c2fa057687a9" visible="True" title="Графическое конфигурирование Finam" />
+          <Topic id="b815e2ee-4e74-4f1b-822a-4382bf33edcb" visible="True" title="Инициализация адаптера Finam" />
         </Topic>
       </Topic>
-      <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" isExpanded="true" title="Коннекторы Forex">
-        <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" isExpanded="true" title="LMAX">
-          <Topic id="96e186b5-a78f-4f2d-8a1b-ea1734d9ed86" visible="True" title="Настройки коннектора LMAX" />
-          <Topic id="9cd10cbc-8534-4d44-bf3b-60b0a3f03590" visible="True" title="Инициализация адаптера LMAX" />
+      <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" title="Коннекторы Forex">
+        <Topic id="4e2b91c9-624d-4a4c-b71f-41de89ad032b" visible="True" isExpanded="true" title="DukasCopy">
+          <Topic id="e9574d73-3af9-4628-b1df-9e599660120c" visible="True" title="Графическое конфигурирование DukasCopy" />
+          <Topic id="25161329-94c1-45be-bc29-63b56cb8739b" visible="True" title="Инициализация адаптера DukasCopy" />
         </Topic>
-        <Topic id="c2162c96-d12f-4107-ac96-0238b793f466" visible="True" isExpanded="true" title="Oanda">
-          <Topic id="6e81fb6e-d465-4bcc-b29a-906ea3a1b821" visible="True" title="Настройки коннектора Oanda" />
-          <Topic id="bf4d89d7-32a7-4755-beab-3bfd0581db6c" visible="True" title="Инициализация адаптера Oanda" />
+        <Topic id="c0e87965-c0de-47c5-9e45-242c9c5b72cc" visible="True" isExpanded="true" title="FinViz">
+          <Topic id="26679a52-a7be-413e-9c3f-24536be41ee0" visible="True" title="Графическое конфигурирование FinViz" />
+          <Topic id="ef002f8a-97b5-4058-a3ef-327977335f20" visible="True" title="Инициализация адаптера FinViz" />
         </Topic>
         <Topic id="92073cd8-8e10-498e-8de9-47d3f77d278a" visible="True" isExpanded="true" title="FXCM">
           <Topic id="27823c36-faf5-486e-be14-15ce5c5581d2" visible="True" title="Настройки коннектора FXCM" />
+          <Topic id="6409e513-28d7-4c67-b823-e012205b703c" visible="True" title="Графическое конфигурирование FXCM" />
           <Topic id="59f72b02-f133-49a5-9248-b8d9bcb9f5c9" visible="True" title="Инициализация адаптера FXCM" />
         </Topic>
-        <Topic id="4e2b91c9-624d-4a4c-b71f-41de89ad032b" visible="True" isExpanded="true">
-          <Topic id="25161329-94c1-45be-bc29-63b56cb8739b" visible="True" title="Инициализация адаптера DukasCopy" />
+        <Topic id="97482eee-4ffd-4a3c-bb34-bee4cd399d40" visible="True" isExpanded="true" title="GAIN Capital">
+          <Topic id="607f38aa-ff4d-416d-b8f9-6504f410ad54" visible="True" title="Инициализация адаптера GAIN Capital" />
+          <Topic id="8fb6b655-24a6-4138-9f3f-4b997c6fc93d" visible="True" title="Графическое конфигурирование GAIN Capital" />
+        </Topic>
+        <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" isExpanded="true" title="LMAX">
+          <Topic id="96e186b5-a78f-4f2d-8a1b-ea1734d9ed86" visible="True" title="Настройки коннектора LMAX" />
+          <Topic id="b771cf52-2c28-451a-adc9-d223b1e92e69" visible="True" title="Графическое конфигурирование LMAX" />
+          <Topic id="9cd10cbc-8534-4d44-bf3b-60b0a3f03590" visible="True" title="Инициализация адаптера LMAX" />
+        </Topic>
+        <Topic id="da4d8797-6ce6-4947-af51-7c568d17e29e" visible="True" isExpanded="true" title="MB Trading">
+          <Topic id="456cba06-bac6-4b65-b6cc-b3a715b45f58" visible="True" title="Настройки коннектора MB Trading" />
+          <Topic id="2eab7290-16e8-4fc1-9be0-ae5c105df9c2" visible="True" title="Графическое конфигурирование MB Trading" />
+          <Topic id="6bb113e6-4449-4a30-a875-b0c006274561" visible="True" title="Инициализация адаптера MB Trading" />
+        </Topic>
+        <Topic id="c2162c96-d12f-4107-ac96-0238b793f466" visible="True" isExpanded="true" title="Oanda">
+          <Topic id="6e81fb6e-d465-4bcc-b29a-906ea3a1b821" visible="True" title="Настройки коннектора Oanda" />
+          <Topic id="8fa8393a-fc69-4f4b-b059-5bb54820a6a3" visible="True" title="Графическое конфигурирование Oanda" />
+          <Topic id="bf4d89d7-32a7-4755-beab-3bfd0581db6c" visible="True" title="Инициализация адаптера Oanda" />
+        </Topic>
+        <Topic id="e37be6cb-638e-445e-b0df-f40ecec74343" visible="True" isExpanded="true" title="TrueFX">
+          <Topic id="d0a72e35-759b-42fb-8f91-d695d1292331" visible="True" title="Настройки коннектора TrueFX" />
+          <Topic id="c46f00eb-f85e-4605-a4f5-4692d00a1621" visible="True" title="Графическое конфигурирование TrueFX" />
+          <Topic id="0de33529-c318-46d9-a91f-f1709304e74d" visible="True" title="Инициализация адаптера TrueFX" />
         </Topic>
       </Topic>
       <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" isExpanded="true" title="Коннекторы Криптовалют">
-        <Topic id="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" visible="True" title="Binance">
+        <Topic id="8f22e760-96c8-493a-aef0-569cbc42a9da" visible="True" isExpanded="true" title="Bibox">
+          <Topic id="3380fca6-bc39-403e-8dae-26e4c84a63c7" visible="True" title="Настройки коннектора Bibox" />
+          <Topic id="41bad19b-9ecb-47a6-8c07-8b957b7d739a" visible="True" title="Графическое конфигурирование Bibox" />
+          <Topic id="d4146047-5c20-462c-b92d-e66d5680c4f4" visible="True" title="Инициализация адаптера Bibox" />
+        </Topic>
+        <Topic id="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" visible="True" isExpanded="true" title="Binance">
           <Topic id="a72395b7-e651-40a2-97d1-f5236bc27a4f" visible="True" title="Настройки коннектора Binance" />
+          <Topic id="6bb5241d-149c-4670-9acd-4bc5b061b0af" visible="True" title="Графическое конфигурирование Binance" />
           <Topic id="31525854-5ff3-4219-a61c-631480c3dbbf" visible="True" title="Инициализация адаптера Binance" />
         </Topic>
-        <Topic id="02e5e6b3-4436-4c1d-ae39-776c6d398cd3" visible="True" title="Bitbank">
-          <Topic id="46c2bb14-68dd-4c87-8390-6f968952ad77" visible="True" title="Настройки коннектора Bitbank " />
+        <Topic id="02e5e6b3-4436-4c1d-ae39-776c6d398cd3" visible="True" isExpanded="true" title="Bitbank">
+          <Topic id="46c2bb14-68dd-4c87-8390-6f968952ad77" visible="True" title="Настройки коннектора Bitbank" />
+          <Topic id="c11e1907-c5a3-4abf-819d-dd3909d54df4" visible="True" title="Графическое конфигурирование Bitbank" />
           <Topic id="14ab996a-b459-452d-8b9a-7baea8b35634" visible="True" title="Инициализация адаптера Bitbank" />
         </Topic>
-        <Topic id="4f6d317f-8788-48cb-b8d7-5e621481181c" visible="True" title="Bitexbook">
+        <Topic id="4f6d317f-8788-48cb-b8d7-5e621481181c" visible="True" isExpanded="true" title="Bitexbook">
           <Topic id="c5538843-8326-410e-9862-a82fbfbcb345" visible="True" title="Настройки коннектора Bitexbook" />
+          <Topic id="420b7452-7497-472c-9486-54c0554c49b5" visible="True" title="Графическое конфигурирование Bitexbook" />
           <Topic id="c06a4729-0bbb-4b09-a1a4-5a3bd1d1d893" visible="True" title="Инициализация адаптера Bitexbook" />
         </Topic>
-        <Topic id="f49aab57-c1fd-4558-9241-5b42a2e619d7" visible="True" title="Bitfinex">
+        <Topic id="f49aab57-c1fd-4558-9241-5b42a2e619d7" visible="True" isExpanded="true" title="Bitfinex">
           <Topic id="eae3076b-f1ca-475a-b66c-715b998bada7" visible="True" title="Настройки коннектора Bitfinex" />
+          <Topic id="c23930c0-c5e0-489f-a2b3-91b6385a50e5" visible="True" title="Графическое конфигурирование Bitfinex" />
           <Topic id="9d24ba61-6eef-4462-8913-2efb28cef633" visible="True" title="Инициализация адаптера Bitfinex" />
         </Topic>
-        <Topic id="4f431ab1-64bc-4cef-8387-c14c931f17b7" visible="True" title="Bithumb">
+        <Topic id="4f431ab1-64bc-4cef-8387-c14c931f17b7" visible="True" isExpanded="true" title="Bithumb">
           <Topic id="c71fcd66-6ee2-4da9-a898-02f66fced4b2" visible="True" title="Настройки коннектора Bithumb" />
+          <Topic id="89b0ff72-9b40-4c36-ad54-803fb7014a91" visible="True" title="Графическое конфигурирование Bithumb" />
           <Topic id="d549da79-5872-4fb3-9a8d-19a226128a26" visible="True" title="Инициализация адаптера Bithumb" />
         </Topic>
-        <Topic id="81f33924-b166-42c1-8ced-f7e9468f86b5" visible="True" title="BitMEX">
+        <Topic id="740cbac0-53a1-47b9-92c2-397fd7e9c97f" visible="True" isExpanded="true" title="BitMax">
+          <Topic id="7ca713af-d8b3-4616-b98a-3594bc655a93" visible="True" title="Настройки коннектора BitMax" />
+          <Topic id="027c8eea-8c7d-45fe-8ce5-05d02a4271da" visible="True" title="Графическое конфигурирование BitMax" />
+          <Topic id="9ebcdfc5-9274-4501-9e25-c404806c7444" visible="True" title="Инициализация адаптера BitMax" />
+        </Topic>
+        <Topic id="81f33924-b166-42c1-8ced-f7e9468f86b5" visible="True" isExpanded="true" title="BitMEX">
           <Topic id="69dc4e39-5e8f-46e1-8282-475b6b767deb" visible="True" title="Настройки коннектора BitMEX" />
+          <Topic id="315b467a-cb6d-49f9-97ad-036d755516d5" visible="True" title="Графическое конфигурирование BitMEX" />
           <Topic id="b1556c87-3d25-4d95-a10d-9ef033b75b7a" visible="True" title="Инициализация адаптера BitMEX" />
         </Topic>
-        <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" title="BitStamp">
+        <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" isExpanded="true" title="BitStamp">
           <Topic id="6609d974-6822-4fcd-887d-716b9d050ba8" visible="True" title="Настройки коннектора BitStamp" />
+          <Topic id="a23b7c71-ac54-46e6-bd48-420e7e0bc2c1" visible="True" title="Графическое конфигурирование BitStamp" />
           <Topic id="7664591a-b5b5-4f96-90c3-c1b7f59d5601" visible="True" title="Инициализация адаптера BitStamp" />
         </Topic>
-        <Topic id="0d71e2d9-6f13-435d-8697-58d41978d46b" visible="True" title="Bittrex">
+        <Topic id="0d71e2d9-6f13-435d-8697-58d41978d46b" visible="True" isExpanded="true" title="Bittrex">
           <Topic id="f33c1001-24bb-4b5f-a184-79c75487f1cc" visible="True" title="Настройки коннектора Bittrex" />
+          <Topic id="d1d57491-b278-4b89-a1fc-bed3042be4fb" visible="True" title="Графическое конфигурирование коннектора" />
           <Topic id="0232a65d-ef31-43de-9643-88fd9b478461" visible="True" title="Инициализация адаптера Bittrex" />
         </Topic>
-        <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" title="BTC-E">
+        <Topic id="66d9f9b3-1251-414a-ab9b-18060f2f62c6" visible="True" isExpanded="true" title="BitZ">
+          <Topic id="3e62d8d7-9490-4267-b523-b6e85b047a9b" visible="True" title="Настройки коннектора BitZ" />
+          <Topic id="0219a932-0a20-44bd-bac7-6f331be4bcf4" visible="True" title="Графическое конфигурирование BitZ" />
+          <Topic id="60367618-ceaf-4037-9b9b-f9d909518de0" visible="True" title="Инициализация адаптера BitZ" />
+        </Topic>
+        <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" isExpanded="true" title="BTC-E">
           <Topic id="9621e260-1aab-4fbd-9023-13028f249f9d" visible="True" title="Настройки коннектора BTC-E" />
+          <Topic id="7bbe32c1-fcbb-4310-8b9d-f1178799bd61" visible="True" title="Графическое конфигурирование BTC-E" />
           <Topic id="1f8dac56-b25a-4522-9965-4461a313f93b" visible="True" title="Инициализация адаптера BTC-E" />
         </Topic>
-        <Topic id="418c4e3a-6129-4147-a3b6-a27701c15814" visible="True" title="CEX.IO">
+        <Topic id="0f66a2b6-8ad1-4331-99c8-7543be3fabb0" visible="True" isExpanded="true" title="BW">
+          <Topic id="233f62de-500c-46a1-9cf0-00eeb550a21c" visible="True" title="Настройки коннектора BW" />
+          <Topic id="bc9bf038-8ef8-44ca-ae43-4e287864248b" visible="True" title="Графическое конфигурирование BW" />
+          <Topic id="15b16c0b-d396-471b-ab7c-b943f48ed261" visible="True" title="Инициализация адаптера BW" />
+        </Topic>
+        <Topic id="418c4e3a-6129-4147-a3b6-a27701c15814" visible="True" isExpanded="true" title="CEX.IO">
           <Topic id="e67f1833-2c9b-4e62-8e15-a71aab04b356" visible="True" title="Настройки коннектора CEX.IO" />
+          <Topic id="cf9b5ebe-31d5-48b5-8ac9-3aad1d43135e" visible="True" title="Графическое конфигурирование CEX.IO" />
           <Topic id="c003db77-3e6f-4ef6-bbdd-658d14e34357" visible="True" title="Инициализация адаптера CEX.IO" />
         </Topic>
-        <Topic id="e4f12540-0650-4cf8-80a4-216b1acf37f3" visible="True" title="Coinbase">
+        <Topic id="e4f12540-0650-4cf8-80a4-216b1acf37f3" visible="True" isExpanded="true" title="Coinbase">
           <Topic id="e08c0579-ca96-42f4-8be9-86ab1e9ad174" visible="True" title="Настройки коннектора Coinbase" />
+          <Topic id="864919bc-5f3e-4aa4-9b5c-7c5667f93441" visible="True" title="Графическое конфигурирование Coinbase" />
           <Topic id="2520dc9a-779e-49b7-9e9f-f1abaec0bfff" visible="True" title="Инициализация адаптера Coinbase" />
         </Topic>
-        <Topic id="5bd2fb14-4391-4782-8031-55a8391d302c" visible="True" title="Coincheck">
-          <Topic id="cf66da6f-47cd-4596-a772-fb23e1a72b5f" visible="True" title="Настройки коннектора Coincheck" />
-          <Topic id="968f8291-33eb-4edb-8217-2e029b0cc887" visible="True" title="Инициализация адаптера Coincheck" />
+        <Topic id="1e7027ce-03c3-4b35-bdfd-abcceed7d249" visible="True" isExpanded="true" title="CoinBene">
+          <Topic id="d024edcc-a396-4859-86f3-e8517526bc17" visible="True" title="Настройки коннектора CoinBene" />
+          <Topic id="b78fa059-c9d1-4827-832e-d31f0fd1a9ef" visible="True" title="Графическое конфигурирование CoinBene" />
+          <Topic id="b7c734c5-19bd-4017-9295-9b0868760543" visible="True" title="Инициализация адаптера CoinBene" />
         </Topic>
-        <Topic id="956025d9-6a39-4bf5-a143-903c7540ff58" visible="True" title="CoinExchange">
-          <Topic id="3d17039e-55d4-4ec0-80e5-1e23eb6c960e" visible="True" title="Настройки коннектора CoinExchange" />
-          <Topic id="ed0d1fca-6686-4efd-b013-9f08c5197c7f" visible="True" title="Инициализация адаптера CoinExchange" />
-        </Topic>
-        <Topic id="588ae84d-4ac1-4f08-a235-a194292e66ff" visible="True" title="CoinCap">
+        <Topic id="588ae84d-4ac1-4f08-a235-a194292e66ff" visible="True" isExpanded="true" title="CoinCap">
           <Topic id="82e1429a-8e18-4245-bb66-a62f0e74c25d" visible="True" title="Настройки коннектора CoinCap " />
+          <Topic id="ecea5d1f-6ffe-4ef0-a8a2-597e8cc3c600" visible="True" title="Графическое конфигурирование CoinCap" />
           <Topic id="8e1986df-9154-4ead-9c99-2e590c44d833" visible="True" title="Инициализация адаптера CoinCap" />
         </Topic>
-        <Topic id="93ab9c0b-d310-4285-b132-cdace95134dd" visible="True" title="Coinigy ">
+        <Topic id="5bd2fb14-4391-4782-8031-55a8391d302c" visible="True" isExpanded="true" title="Coincheck">
+          <Topic id="cf66da6f-47cd-4596-a772-fb23e1a72b5f" visible="True" title="Настройки коннектора Coincheck" />
+          <Topic id="421f22ff-5e73-4709-9a48-0008c38c2e01" visible="True" title="Графическое конфигурирование Coincheck" />
+          <Topic id="968f8291-33eb-4edb-8217-2e029b0cc887" visible="True" title="Инициализация адаптера Coincheck" />
+        </Topic>
+        <Topic id="956025d9-6a39-4bf5-a143-903c7540ff58" visible="True" isExpanded="true" title="CoinExchange">
+          <Topic id="3d17039e-55d4-4ec0-80e5-1e23eb6c960e" visible="True" title="Настройки коннектора CoinExchange" />
+          <Topic id="6135f0fc-6548-4a2a-9601-6148029a5096" visible="True" title="Графическое конфигурирование CoinExchange" />
+          <Topic id="ed0d1fca-6686-4efd-b013-9f08c5197c7f" visible="True" title="Инициализация адаптера CoinExchange" />
+        </Topic>
+        <Topic id="93ab9c0b-d310-4285-b132-cdace95134dd" visible="True" isExpanded="true" title="Coinigy ">
           <Topic id="3bac2825-0c74-4e81-811b-6d2ff33f08e6" visible="True" title="Настройки коннектора Coinigy " />
+          <Topic id="ad407b79-7ede-48e8-b97e-2933d7f7682c" visible="True" title="Графическое конфигурирование Coinigy " />
           <Topic id="6069b2ef-ee49-4628-9631-e31f75930e04" visible="True" title="Инициализация адаптера Coinigy " />
         </Topic>
         <Topic id="d4fa79a6-59fd-43a9-ac61-b9b8933618c6" visible="True" isExpanded="true" title="Cryptopia">
-          <Topic id="d222e77d-9410-4f1a-a7cf-92d5a9305027" visible="True" title="Настройки коннектора Cryptopia" />
+          <Topic id="d222e77d-9410-4f1a-a7cf-92d5a9305027" visible="True" isSelected="true" title="Настройки коннектора Cryptopia" />
+          <Topic id="8996703a-ef6b-4950-86b3-d636d630fc69" visible="True" title="Графическое конфигурирование Cryptopia" />
           <Topic id="45433ea2-0192-4296-8ff2-4963a5f1f2f5" visible="True" title="Инициализация адаптера Cryptopia" />
         </Topic>
         <Topic id="0b4fde09-8808-4ef8-89df-39aebcdd64a1" visible="True" isExpanded="true" title="Deribit">
           <Topic id="cf64a6d0-e0f4-4144-b949-5c7aa3c557ab" visible="True" title="Настройки коннектора Deribit" />
+          <Topic id="ea7fe1c4-dcc2-42b1-a953-d5a92beb1409" visible="True" title="Графическое конфигурирование Deribit" />
           <Topic id="b73ce235-54b7-491a-b0bf-bfbd515a5b24" visible="True" title="Инициализация адаптера Deribit" />
         </Topic>
         <Topic id="5097b5fb-42fa-4418-9afc-de5b6ff69df6" visible="True" isExpanded="true" title="Digifinex">
           <Topic id="b3b822ae-dbe2-496c-9121-16256df0e712" visible="True" title="Настройки коннектора Digifinex " />
+          <Topic id="f293e11f-2947-4d05-be23-133898cacbd2" visible="True" title="Графическое конфигурирование Digifinex" />
           <Topic id="cceb78ff-4c1b-4ae4-a7c5-eba41a2d205f" visible="True" title="Инициализация адаптера Digifinex" />
         </Topic>
         <Topic id="601781f1-fae7-4c82-adb4-a5e7d9394cfb" visible="True" isExpanded="true" title="EXMO">
           <Topic id="c259cacc-d0f1-4a02-9419-dbaa805cab31" visible="True" title="Настройки коннектора EXMO" />
+          <Topic id="9adb84cd-98fb-4809-8bc9-511076fa3399" visible="True" title="Графическое конфигурирование EXMO" />
           <Topic id="154475d4-8b10-4181-b64f-8113f47b963f" visible="True" title="Инициализация адаптера EXMO" />
         </Topic>
         <Topic id="d941f537-602b-400f-91d4-d4b2b37b9767" visible="True" isExpanded="true" title="GDAX">
           <Topic id="4e7930af-1aa2-4599-91de-7e9eae031fbf" visible="True" title="Настройки коннектора GDAX" />
+          <Topic id="656614bc-492d-459e-86a7-1d96492c2cd2" visible="True" title="Графическое конфигурирование GDAX" />
           <Topic id="cddf98a2-3ec9-4e49-9757-8b0de893fb15" visible="True" title="Инициализация адаптера GDAX" />
         </Topic>
         <Topic id="17ebcf40-aa25-4717-83cd-d275209ff524" visible="True" isExpanded="true" title="HitBTC">
           <Topic id="0171d5e9-b148-4b02-9d49-4c00a7c3cc3a" visible="True" title="Настройки коннектора HitBTC" />
+          <Topic id="d81d7d6a-552a-4d2f-a576-4553bfb11470" visible="True" title="Графическое конфигурирование HitBTC" />
           <Topic id="88e70b23-2b66-49e8-b77d-803697cee16d" visible="True" title="Инициализация адаптера HitBTC" />
         </Topic>
         <Topic id="16eaa615-aaf7-42a5-9de7-01762a650758" visible="True" isExpanded="true" title="Huobi">
           <Topic id="ccf8139f-afb1-43ca-adfa-a74d9c9b8280" visible="True" title="Настройки коннектора Huobi" />
+          <Topic id="85065669-1ac4-42cf-98b1-d08a3a4897f9" visible="True" title="Графическое конфигурирование Huobi" />
           <Topic id="bf264fc3-127d-431a-879e-46014fd9c4ed" visible="True" title="Инициализация адаптера Huobi" />
         </Topic>
         <Topic id="886bcc99-7011-4c3c-85fe-d0fc646ee00f" visible="True" isExpanded="true" title="Idax">
           <Topic id="0c0987c7-63ab-4e40-a95d-b0a50955261c" visible="True" title="Настройки коннектора Idax " />
+          <Topic id="6c523d9d-2960-46f4-abdd-7413fd7a3e97" visible="True" title="Графическое конфигурирование Idax " />
           <Topic id="33c78156-0c49-4f22-a7a4-701f5a09cf69" visible="True" title="Инициализация адаптера Idax" />
         </Topic>
         <Topic id="cabadfac-eff9-48ab-ada6-c5856778cf68" visible="True" isExpanded="true" title="Kraken">
           <Topic id="39dac157-8de7-4dd1-ad0c-4520aa9ec953" visible="True" title="Настройки коннектора Kraken" />
+          <Topic id="7e64339c-2bc9-41e7-8a20-f043307822e6" visible="True" title="Графическое конфигурирование Kraken" />
           <Topic id="ffca8f50-baa6-4719-9ad3-1efe6a9716a2" visible="True" title="Инициализация адаптера Kraken" />
         </Topic>
         <Topic id="d2379d21-9bea-4199-8432-c25f73cb1594" visible="True" isExpanded="true" title="Kucoin">
-          <Topic id="7228e2e5-eb4e-4ad7-b575-088ee696f926" visible="True" title="Графическое конфигурирование" />
+          <Topic id="7228e2e5-eb4e-4ad7-b575-088ee696f926" visible="True" title="Настройки коннектора Kucoin" />
+          <Topic id="a91f5805-b6a3-4264-a75e-373612743fc8" visible="True" title="Графическое конфигурирование Kucoin" />
           <Topic id="e237cc0e-6470-4cf0-81cf-5fd8594a567a" visible="True" title="Инициализация адаптера Kucoin" />
+        </Topic>
+        <Topic id="3a5c4a94-ab01-49a5-ab41-82c85479d147" visible="True" isExpanded="true" title="LBank">
+          <Topic id="199056ed-4039-4d51-9ae7-8b9f6059902f" visible="True" title="Настройки коннектора LBank" />
+          <Topic id="95e33748-db21-48a4-b642-ad63698aa6d4" visible="True" title="Графическое конфигурирование LBank" />
+          <Topic id="c5884971-c903-43be-b1b8-b30eba2bde33" visible="True" title="Инициализация адаптера LBank" />
         </Topic>
         <Topic id="70ecf683-4336-4848-a05d-8edbcc730af4" visible="True" isExpanded="true" title="Liqui">
           <Topic id="84110311-8092-4090-89ce-89c57557ee1a" visible="True" title="Настройки коннектора Liqui" />
+          <Topic id="c593aa2f-23a1-45e6-8e87-b79067d6b3a7" visible="True" title="Графическое конфигурирование Liqui" />
           <Topic id="fa0a8e74-dd99-4a18-ac27-1a8db232c71b" visible="True" title="Инициализация адаптера Liqui" />
         </Topic>
         <Topic id="8e093fe9-7b2d-47f3-a95a-ece0e0033ecc" visible="True" isExpanded="true" title="Livecoin">
           <Topic id="5887c466-24d7-4d50-9ae3-8a746bdecd9e" visible="True" title="Настройки коннектора Livecoin" />
+          <Topic id="d09b86aa-54ee-4e03-8f8f-d27f19042d8c" visible="True" title="Графическое конфигурирование Livecoin" />
           <Topic id="b2ee81b7-7038-4cfa-8505-702166f214eb" visible="True" title="Инициализация адаптера Livecoin" />
         </Topic>
         <Topic id="f9ec5eb4-4237-4a2a-9663-757d3d4c0689" visible="True" isExpanded="true" title="OKCoin">
           <Topic id="c00c59c2-d12f-4b16-b9f5-ceb451494a6b" visible="True" title="Настройки коннектора OKCoin" />
+          <Topic id="43db1f40-87a0-4a45-8e2d-c7a6dc50d20d" visible="True" title="Графическое конфигурирование OKCoin" />
           <Topic id="553dc665-10b7-4844-8a79-e60331a3a38b" visible="True" title="Инициализация адаптера OKCoin" />
         </Topic>
         <Topic id="554b35f0-4110-4da0-ba30-4c450e8a996b" visible="True" isExpanded="true" title="OKEx">
           <Topic id="1d9788e7-0f75-4993-84a2-4a331dfea2d2" visible="True" title="Настройки коннектора OKEx" />
+          <Topic id="e5985578-0d8c-4120-be70-92127bffee98" visible="True" title="Графическое конфигурирование OKEx" />
           <Topic id="8abd86a7-2d85-4953-adeb-c54f245db876" visible="True" title="Инициализация адаптера OKEx" />
         </Topic>
         <Topic id="18667328-deec-46dd-8c27-fce52733e5ce" visible="True" isExpanded="true" title="Poloniex">
           <Topic id="1a6b49de-05a2-44c3-8f67-b8acdec5aec0" visible="True" title="Настройки коннектора Poloniex" />
+          <Topic id="2a4757d4-25a0-4e83-8b5c-953329b71b7c" visible="True" title="Графическое конфигурирование Poloniex" />
           <Topic id="97baac88-b5a9-4783-b381-f38c5568810e" visible="True" title="Инициализация адаптера Poloniex" />
         </Topic>
         <Topic id="713a3769-b80c-4342-89d2-031a492372df" visible="True" isExpanded="true" title="Quoinex">
           <Topic id="eb595ce4-5971-4032-9ee3-8586c6fcedf2" visible="True" title="Настройки коннектора Quoinex " />
+          <Topic id="9701ca15-1427-42be-b778-6f68ebc6a1e5" visible="True" title="Графическое конфигурирование Quoinex " />
           <Topic id="de0ead46-bf72-4e37-99b9-15e796f0460d" visible="True" title="Инициализация адаптера Quoinex" />
         </Topic>
         <Topic id="989447cf-bc05-4f6a-a736-b3a916ee1ffc" visible="True" isExpanded="true" title="TradeOgre">
           <Topic id="0056264e-85e5-4415-b99b-7d9f24e59752" visible="True" title="Настройки коннектора TradeOrge " />
+          <Topic id="b9103fe8-182f-48fb-b766-a710515fc6fc" visible="True" title="Графическое конфигурирование TradeOrge " />
           <Topic id="7f173ed5-5fdc-4afb-a78b-0e0aaac5c8a7" visible="True" title="Инициализация адаптера TradeOgre" />
+        </Topic>
+        <Topic id="c8df9244-9329-4e0d-bb80-58d0cbd0760b" visible="True" isExpanded="true" title="Upbit">
+          <Topic id="e7a4fb36-f2d7-4094-bdbc-a1b0879909ce" visible="True" title="Настройки коннектора Upbit" />
+          <Topic id="d63f522e-cf41-48c8-a240-977d59c00914" visible="True" title="Графическое конфигурирование Upbit" />
+          <Topic id="456a7c56-22d3-425e-85eb-214b2dc78386" visible="True" title="Инициализация адаптера Upbit" />
         </Topic>
         <Topic id="ea1dbc04-3c29-4fbe-91b0-260d1ded31ae" visible="True" isExpanded="true" title="Yobit">
           <Topic id="78aa3ef5-8eae-4c53-b7e9-85ee1f8a9137" visible="True" title="Настройки коннектора Yobit" />
+          <Topic id="24baaad4-fbeb-462e-9c59-485041a501c3" visible="True" title="Графическое конфигурирование Yobit" />
           <Topic id="cccadabe-b3fa-4afa-badd-ca0a1633ca2d" visible="True" title="Инициализация адаптера Yobit" />
         </Topic>
         <Topic id="6d22d370-721c-452b-85af-6fc9c31115ac" visible="True" isExpanded="true" title="Zaif">
           <Topic id="658c35dd-70ab-4799-9c94-b8a42b9fc06c" visible="True" title="Настройки коннектора Zaif " />
+          <Topic id="6d430c55-5c95-4f7c-8a4d-29ec32a8a772" visible="True" title="Графическое конфигурирование Zaif " />
           <Topic id="c96cacc6-7437-4d41-8e3a-34b294b3155a" visible="True" title="Инициализация адаптера Zaif" />
-        </Topic>
-        <Topic id="3a5c4a94-ab01-49a5-ab41-82c85479d147" visible="True" isExpanded="true" title="LBank">
-          <Topic id="199056ed-4039-4d51-9ae7-8b9f6059902f" visible="True" title="Настройки коннектора LBank" />
-          <Topic id="c5884971-c903-43be-b1b8-b30eba2bde33" visible="True" title="Инициализация адаптера LBank" />
-        </Topic>
-        <Topic id="740cbac0-53a1-47b9-92c2-397fd7e9c97f" visible="True" isExpanded="true" title="BitMax">
-          <Topic id="7ca713af-d8b3-4616-b98a-3594bc655a93" visible="True" title="Настройки коннектора BitMax" />
-          <Topic id="9ebcdfc5-9274-4501-9e25-c404806c7444" visible="True" title="Инициализация адаптера BitMax" />
-        </Topic>
-        <Topic id="0f66a2b6-8ad1-4331-99c8-7543be3fabb0" visible="True" isExpanded="true" title="BW">
-          <Topic id="233f62de-500c-46a1-9cf0-00eeb550a21c" visible="True" title="Настройки коннектора BW" />
-          <Topic id="15b16c0b-d396-471b-ab7c-b943f48ed261" visible="True" title="Инициализация адаптера BW" />
-        </Topic>
-        <Topic id="8f22e760-96c8-493a-aef0-569cbc42a9da" visible="True" isExpanded="true" title="Bibox">
-          <Topic id="3380fca6-bc39-403e-8dae-26e4c84a63c7" visible="True" title="Настройки коннектора Bibox" />
-          <Topic id="d4146047-5c20-462c-b92d-e66d5680c4f4" visible="True" title="Инициализация адаптера Bibox" />
-        </Topic>
-        <Topic id="1e7027ce-03c3-4b35-bdfd-abcceed7d249" visible="True" isExpanded="true" title="CoinBene">
-          <Topic id="d024edcc-a396-4859-86f3-e8517526bc17" visible="True" title="Настройки коннектора CoinBene" />
-          <Topic id="b7c734c5-19bd-4017-9295-9b0868760543" visible="True" title="Инициализация адаптера CoinBene" />
-        </Topic>
-        <Topic id="66d9f9b3-1251-414a-ab9b-18060f2f62c6" visible="True" isExpanded="true" title="BitZ">
-          <Topic id="3e62d8d7-9490-4267-b523-b6e85b047a9b" visible="True" title="Настройки коннектора BitZ" />
-          <Topic id="60367618-ceaf-4037-9b9b-f9d909518de0" visible="True" title="Инициализация адаптера BitZ" />
         </Topic>
         <Topic id="3502cfdf-e496-4567-ad4e-c7b195569b60" visible="True" isExpanded="true" title="ZB">
           <Topic id="59d0c7b8-1371-4cc7-9c4a-919e8a994363" visible="True" title="Настройки коннектора ZB" />
+          <Topic id="2f4e7d24-a919-4a41-b739-fe431bccfcf7" visible="True" title="Графическое конфигурирование ZB" />
           <Topic id="fc059591-e778-47d4-ac73-cf94c11d79fa" visible="True" title="Инициализация адаптера ZB" />
         </Topic>
         <Topic id="925f42ba-d6d8-41bb-bb27-b1fa56e71ea8" visible="True" title="Вывод средств" />
       </Topic>
+      <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Настройки переподключения" />
       <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" isExpanded="true" title="Общие">
         <Topic id="9695b29f-2b7b-4a9b-b915-b8c4f9b50eab" visible="True" isExpanded="true" title="CSV">
+          <Topic id="5bfbb404-1728-476b-bd07-1b90bc487c96" visible="True" title="Графическое конфигурирование CSV" />
           <Topic id="5fd956b0-0064-4081-a4d3-4d926d5b4fd9" visible="True" title="Инициализация адаптера CSV" />
         </Topic>
         <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" isExpanded="true" title="FIX">
           <Topic id="9012c95b-9858-4ee8-948d-c6f776b128eb" visible="True" title="Настройки коннекторов FIX/FAST" />
+          <Topic id="0265145f-5831-420f-8f64-99e6bb3c3ed4" visible="True" title="Графическое конфигурирование FAST" />
+          <Topic id="76bc2cb9-f6fb-41e6-a1b6-88f43f348ee3" visible="True" title="Графическое конфигурирование FIX" />
           <Topic id="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" visible="True" title="Инициализация адаптера FIX" />
           <Topic id="40b2420d-40db-492c-a66c-d5b0ea7dfc40" visible="True" title="Инициализация адаптера FAST" />
         </Topic>
         <Topic id="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93" visible="True" title="FIX Server" />
-        <Topic id="08b8a9ca-6658-4088-b6b8-8715b12732ab" visible="True" isExpanded="true" isSelected="true" title="RSS">
+        <Topic id="08b8a9ca-6658-4088-b6b8-8715b12732ab" visible="True" isExpanded="true" title="RSS">
+          <Topic id="08ac1f2f-8804-498d-9849-c147ad8087a1" visible="True" title="Графическое конфигурирование RSS" />
           <Topic id="dda99f90-0d3f-4c1d-ada4-7a4d5280c0c7" visible="True" title="Инициализация адаптера RSS" />
         </Topic>
       </Topic>
-      <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Переподключение" />
-      <Topic id="293859e2-6c39-486c-afde-d9ae96243618" visible="True" title="Создание собственного коннектора" />
-      <Topic id="c23300a1-bf38-444a-b103-28350766477f" visible="True" title="Сохранение и загрузка настроек" />
       <Topic id="1d5b1223-15ba-4364-a31f-2e5592f76fe5" visible="True" title="Получение исторических данных" />
       <Topic id="42ac3a14-98fb-4725-88c5-b15d2614b841" visible="True" title="Получение новостных данных" />
+      <Topic id="293859e2-6c39-486c-afde-d9ae96243618" visible="True" title="Создание собственного коннектора" />
+      <Topic id="c23300a1-bf38-444a-b103-28350766477f" visible="True" title="Сохранение и загрузка настроек" />
     </Topic>
     <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" title="Заявки">
       <Topic id="b740e98d-7bcf-406e-aad4-75432ab3009e" visible="True" title="Создать новую заявку" />
@@ -378,11 +494,11 @@
       <Topic id="ee8f7be8-80ad-4ab9-a5aa-14754fe024f1" visible="True" title="Индекс" />
       <Topic id="39e0b7aa-0303-438c-b347-fea21540c9f3" visible="True" title="Поиск инструмента" />
     </Topic>
-    <Topic id="7a8a9518-6270-4cfe-a829-fa6c40e5fabd" visible="True" isExpanded="true" title="Хранение данных">
+    <Topic id="7a8a9518-6270-4cfe-a829-fa6c40e5fabd" visible="True" title="Хранение данных">
       <Topic id="e4a57b52-bd14-4640-a7c7-0979dba1ad0a" visible="True" title="API" />
       <Topic id="ac584200-f06a-49e6-b2fd-141b5fc898f9" visible="True" title="Хранилище сообщений" />
     </Topic>
-    <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" isExpanded="true" title="Свечи">
+    <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" title="Свечи">
       <Topic id="287125e1-7c7e-4be3-a8ce-5018538e613f" visible="True" title="График" />
       <Topic id="ccc96909-8623-4f56-b3ee-fdc5070b3fde" visible="True" title="Паттерны" />
       <Topic id="99da6499-9ac1-4e7e-bcaf-a0c832dce4de" visible="True" title="Собственный тип свечей" />
@@ -578,7 +694,7 @@
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Конвертация валют" />
     <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Примеры" />
   </Topic>
-  <Topic id="E4B5E112-BD08-4F40-8741-7514E7E4088E" visible="True" title="S#.Terminal">
+  <Topic id="E4B5E112-BD08-4F40-8741-7514E7E4088E" visible="True" isExpanded="true" title="S#.Terminal">
     <Topic id="f70783b8-59e1-4ea7-9d94-c20524f3470a" visible="True" title="Установка S#.Terminal" />
     <Topic id="e51b9e8f-52d3-4e16-887e-1aad12db2cc8" visible="True" title="Обновление на новую версию" />
     <Topic id="b7809562-d829-42d2-95c9-cbca8bf5549e" visible="True" title="Быстрый запуск" />
@@ -640,106 +756,12 @@
       <Topic id="5db34ace-ab66-4848-b335-11402f3d96c3" visible="True" title="Обратная связь" />
     </Topic>
   </Topic>
-  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" title="S#.Data">
+  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Установка S#.Data" />
     <Topic id="7fc5f53a-b6b9-4f0f-8b97-983dd98f0237" visible="True" title="Обновление на новую версию" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="Первый запуск" />
-    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Настройка источников">
-      <Topic id="3b645eca-0171-49a9-ba44-e2e83507ed86" visible="True" noFile="true" title="Россия">
-        <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
-        <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" title="Алор" />
-        <Topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" visible="True" title="Finam" />
-        <Topic id="01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2" visible="True" title="МФД" />
-        <Topic id="cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49" visible="True" title="Micex" />
-        <Topic id="53930a42-ae5a-45fc-b9cf-8295584bf8fc" visible="True" title="Plaza II" />
-        <Topic id="54a1e95e-ea39-4322-9613-e74859a3a596" visible="True" title="Quik" />
-        <Topic id="0da19c49-1f11-455e-bbd5-c20e428e5149" visible="True" title="РТС" />
-        <Topic id="53c15f3a-4320-422d-850a-22ef6c90d76b" visible="True" title="ЛЧИ" />
-        <Topic id="1cca5a33-e5ab-434e-bfed-287389fea2eb" visible="True" title="SmartCom" />
-        <Topic id="065a9dec-12d0-49d0-be8c-9f9b48f6a899" visible="True" title="Transaq" />
-        <Topic id="184da0f9-29db-4397-8497-1ed4c8f7ea0d" visible="True" title="UX" />
-        <Topic id="bcf9a00f-c491-4ce1-90ef-fb67a684fd4f" visible="True" title="SPB Exchange" />
-      </Topic>
-      <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" title="Америка">
-        <Topic id="66746dc9-3271-4430-8290-842d4647cc95" visible="True" title="AlphaVantage" />
-        <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
-        <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" title="FinViz" />
-        <Topic id="0166d686-9fb0-4e78-8578-f5b706ad6a07" visible="True" title="Google" />
-        <Topic id="bcb8050d-d330-4071-affc-b6ed5639e1fb" visible="True" title="Interactive Brokers" />
-        <Topic id="f9e23239-7587-41ad-9644-c6df8e467c38" visible="True" title="IQFeed" />
-        <Topic id="dc446be0-c642-4172-9163-27acc759ec59" visible="True" title="IEX" />
-        <Topic id="4d84a1e0-fe23-4b14-8323-c5f68f117cc7" visible="True" title="OpenECry" />
-        <Topic id="bb5fedcc-9226-448e-8bb9-42969fba227e" visible="True" title="Quandl" />
-        <Topic id="26ff0aad-623b-47e2-a8f8-a337506cd2ff" visible="True" title="Rithmic" />
-        <Topic id="f43591c9-c215-4dee-b297-4b9ed34fd465" visible="True" title="Sterling" />
-        <Topic id="c60b2dd2-518c-49e5-8ba4-edabbda04222" visible="True" title="Yahoo Finance" />
-        <Topic id="1e3811a4-60e6-4f6c-bb55-0d3b3c2e246f" visible="True" title="ITCH" />
-        <Topic id="48a0cef2-f3f7-4bf1-aa3b-043a130777c7" visible="True" title="BarChart" />
-        <Topic id="19e07661-3563-4eb2-b781-d0f0106fd769" visible="True" title="CQG COM" />
-        <Topic id="f3eda329-0077-4517-99f2-aabdea2a930d" visible="True" title="CQG Continuum" />
-        <Topic id="3adf98fb-fa41-46ad-93cb-583fb67c1d6b" visible="True" title="Xignite" />
-        <Topic id="eb7ea9cf-5aa5-42f8-a963-1834837ce4d4" visible="True" title="QuantFEED" />
-      </Topic>
-      <Topic id="8cde5dc1-05c2-412b-8f29-cd7d5d8742f5" visible="True" noFile="true" title="Крипто-валюта">
-        <Topic id="82177082-714f-4a6c-912d-78ab1f0855fa" visible="True" title="Binance" />
-        <Topic id="50992c6f-196c-4dba-bc38-e14f74d76460" visible="True" title="Bitbank" />
-        <Topic id="85bd184e-a4de-4e9a-8efa-d3f6f316fc85" visible="True" title="Bitexbook" />
-        <Topic id="571aaaa7-8eef-4a97-89a6-ba2b94083411" visible="True" title="Bitfinex" />
-        <Topic id="e9c53ea1-e1ec-4d82-9663-e3c860c48b11" visible="True" title="Bithumb" />
-        <Topic id="5f3dbc18-06bc-47fe-91f3-034f0c04813a" visible="True" title="Bitmex" />
-        <Topic id="7a11d9ff-17c9-406b-ab88-c4b9c080912d" visible="True" title="BitStamp" />
-        <Topic id="a718fc66-3926-4535-b2f6-a069d4055011" visible="True" title="Bittrex" />
-        <Topic id="4e435654-38af-4ede-9987-e268a6ae3b96" visible="True" title="BTCE" />
-        <Topic id="8415990d-0d4b-41af-a4ab-586e65bf9511" visible="True" title="CEX.IO" />
-        <Topic id="57f6e993-94be-44ea-9c2d-41ad23976311" visible="True" title="Coinbase" />
-        <Topic id="bb38cb6b-0fbd-40f5-87ca-3ed831e6ac98" visible="True" title="CoinCap" />
-        <Topic id="113c7194-bf76-4fb7-a139-7249dd044111" visible="True" title="Coincheck" />
-        <Topic id="aedb5166-0a7d-49e9-85b3-9567fb734111" visible="True" title="CoinExchange" />
-        <Topic id="c231ad1b-a588-49c0-b97b-170f6113b184" visible="True" title="Coinigy" />
-        <Topic id="8dadf9dd-9d70-4b4d-bab0-a02402b83111" visible="True" title="Cryptopia" />
-        <Topic id="997b2670-e5f7-4159-b155-2aae76e84111" visible="True" title="Deribit" />
-        <Topic id="71ac3afa-0de0-49fc-8aaf-5a2857769591" visible="True" title="Digifinex" />
-        <Topic id="57d66840-d98b-47f2-afec-5aad360aa6a9" visible="True" title="Exmo" />
-        <Topic id="0585869f-a6ef-4e75-81b1-58f4ba513882" visible="True" title="GDAX" />
-        <Topic id="a861d591-bade-40d0-b051-5b5de4e9e111" visible="True" title="HitBtc" />
-        <Topic id="75df8571-1b69-4f71-9af8-5e486d88e111" visible="True" title="Huobi" />
-        <Topic id="558cd2db-f9a6-44d8-a902-59b9af83462c" visible="True" title="Idax" />
-        <Topic id="53e833a2-f9a4-49d8-8957-0e725807f111" visible="True" title="Kraken" />
-        <Topic id="bc849491-354a-4785-b19f-45af5e982111" visible="True" title="Kucoin" />
-        <Topic id="51647de2-e0ca-4d65-b343-e3a4c97ba111" visible="True" title="Liqui" />
-        <Topic id="6fe3c6a3-eec6-44e1-b526-0c1f2674d111" visible="True" title="LiveCoin" />
-        <Topic id="bdb79c8c-d127-47ba-b6b0-4bdede200111" visible="True" title="Okcoin" />
-        <Topic id="5ef56e51-556e-45d0-bd91-8d144939a111" visible="True" title="Okex" />
-        <Topic id="ecabd085-3287-4d14-8725-09635b7ca111" visible="True" title="Poloniex" />
-        <Topic id="2ed49a8f-4746-4f51-978e-42787b9390b2" visible="True" title="Quoinex" />
-        <Topic id="fbb85e89-ff87-47a7-aa02-c0be2c63876d" visible="True" title="TradeOrge" />
-        <Topic id="de19cd76-bedc-4765-8951-c4c4b5b05111" visible="True" title="Yobit" />
-        <Topic id="a423e584-0e94-4c30-b8d5-7056cb5a36a4" visible="True" title="Zaif" />
-        <Topic id="01417bdf-03d1-465e-81a4-dffbb5260072" visible="True" title="LBank" />
-        <Topic id="ec9a8a20-d536-462d-b8d7-34660569dd56" visible="True" title="BitMax" />
-        <Topic id="bc551b11-15af-4e1e-9ef6-993d50545f6b" visible="True" title="BW" />
-        <Topic id="d73cf857-9ff7-423d-9b49-7893ff6b877f" visible="True" title="Bibox" />
-        <Topic id="718d7a70-562e-4a75-8897-b859d03c061b" visible="True" title="CoinBene" />
-        <Topic id="30b14fe3-da0c-42b2-a5da-5cdc0a87474d" visible="True" title="BitZ" />
-        <Topic id="923cb077-0437-4459-850b-ea86b58d9131" visible="True" title="ZB" />
-      </Topic>
-      <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" title="Форекс" tocTitle="Форекс">
-        <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" title="Dukascopy" />
-        <Topic id="c1863414-25cb-4994-818f-3e4fa511f21b" visible="True" title="GainCapital" />
-        <Topic id="0b962432-d81d-4646-a818-9fa7093cbe4f" visible="True" title="LMAX" />
-        <Topic id="c3a78005-7d5d-49e6-8460-66c02109abd5" visible="True" title="MB Trading" />
-        <Topic id="6a99aea5-1142-4b2e-b183-554fcc890fad" visible="True" title="OANDA" />
-        <Topic id="21734ebc-faae-4b42-9088-1c2f4c92ead4" visible="True" title="OANDA (история)" />
-        <Topic id="a92bca75-1a0c-4581-a75a-6f13afd7975e" visible="True" title="TrueFX" />
-        <Topic id="24a5983b-28a7-4620-b4b8-9356f683a9ba" visible="True" title="FXCM" />
-        <Topic id="e81e69f8-bfcf-49f8-aefe-cd18270c1d9e" visible="True" title="FXCM (история)" />
-      </Topic>
-      <Topic id="0f6a2b55-c841-45fb-96ad-a562a8cea016" visible="True" noFile="true" title="Другие">
-        <Topic id="e81b1b7f-5c96-488e-a90d-e60cb8675977" visible="True" title="Fix" />
-        <Topic id="c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f" visible="True" title="HydraServer" />
-        <Topic id="91454878-ec26-4872-9a85-1bfbc76dc77a" visible="True" title="RSS" />
-      </Topic>
-      <Topic id="01a85a46-7510-4385-b81c-348ffb3dfc46" visible="True" title="Параметры подключения" />
+    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Настройка источников">
+      <Topic id="a4028651-96b0-48fc-950a-954995c32244" visible="True" title="Общие параметры подключения" />
     </Topic>
     <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="Просмотр и экспорт">
       <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Сделки" />

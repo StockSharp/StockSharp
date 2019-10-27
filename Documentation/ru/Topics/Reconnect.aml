@@ -6,9 +6,33 @@
     </summary>-->
 
     <introduction>
-      <para>
-		  Класс <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> реализует в своем коде механизм мониторинга соединений. Такой механизм
-		  настраивается через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference> и позволяет
+    <title>Визуальная настройка переподключения</title>
+    <para>
+    Все коннекторы предоставляют возможность настраивать переподключение на случай разрыва соединения. 
+    В графическом элементе <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" /> это выглядит следующим образом:
+    </para>
+    
+    <mediaLink><image placement="center" xlink:href="API_GUI_ReconnectionSettings" /></mediaLink>
+    <para><legacyBold>Свойтва переподключения</legacyBold></para>
+     <list class="bullet">
+	   <listItem>
+	      <legacyBold>Интервал</legacyBold> - Интервал, с которым будут происходить попытки подключения.
+		</listItem>
+	   <listItem>
+	      <legacyBold>Первоначально</legacyBold> - Количество попыток установить первоначальное соединение, если оно не было установлено (тайм-аут, сетевой сбой и тд).
+		</listItem>
+	   <listItem>
+	      <legacyBold>Переподключение</legacyBold> - Количество попыток переподключиться, если подключение было разорвано в процессе работы.
+		</listItem>
+        <listItem>
+          <legacyBold>Время ожидания</legacyBold> - Время ожидания успешного подключения/отключения.
+		</listItem>
+        <listItem>
+          <legacyBold>Режим работы</legacyBold> - Режим работы, во время которого необходимо производить подключения.
+		</listItem>
+        </list>
+        <title>Программная настройка переподключения</title>
+      <para>Механизм переподключения настраивается через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference> и позволяет
 		  отслеживать следующие сценарии ошибок:
 		  
 		  <!--<token>stocksharp</token> предоставляет возможность отслеживать состояние подключения к торговой системе через свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.ITrader.IsConnected</codeEntityReference>.
@@ -16,7 +40,7 @@
 		Чтобы переподключиться необходимо использовать методы <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.ITrader.Connect</codeEntityReference> и <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.ITrader.Disconnect</codeEntityReference>,
 		или вызывать напрямую метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.ITrader.Reconnect</codeEntityReference>.-->
 		</para>
-		<list class="ordered">
+		<list class="bullet">
 			<listItem>
 				Невозможно установить соединение (отсутствует связь, неправильный логин-пароль и т.д.). Через свойство
 				<codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.AttemptCount</codeEntityReference> задается количество
@@ -50,15 +74,13 @@
     <!-- Specify at least one procedure or section/procedure and codeExample -->
 
    <procedure>
-      <title>Использование механизма контроля соединения</title>
 
       <steps class="ordered">
         <step>
-          <content>
-          	<para>Для примера рассмотрим приложение описанное в пункте <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.</para>
+          <content>          	
 			  <para> 
 				  При создании шлюза необходимо проинициализировать настройки механизма переподключений через свойство
-				  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference>, для пр:
+				  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference>:
 			  </para>
 			<code language="C#"><![CDATA[// инициализируем механизм переподключения (будет автоматически соединяться
 // каждые 10 секунд, если шлюз потеряется связь с сервером)
