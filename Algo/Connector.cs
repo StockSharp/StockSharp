@@ -61,9 +61,6 @@ namespace StockSharp.Algo
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new Dictionary<string, List<ExecutionMessage>>();
-		//private readonly MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>> _orderStopOrderAssociations = new MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>>(false);
-
-		private readonly HashSet<Security> _lookupResult = new HashSet<Security>();
 
 		private class LookupInfo<TCriteria, TItem>
 			where TCriteria : Message
@@ -1444,8 +1441,6 @@ namespace StockSharp.Algo
 			_securityLookups.Clear();
 			_boardLookups.Clear();
 			_portfolioLookups.Clear();
-
-			_lookupResult.Clear();
 
 			_nonAssociatedByIdMyTrades.Clear();
 			_nonAssociatedByStringIdMyTrades.Clear();

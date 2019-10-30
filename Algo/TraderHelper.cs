@@ -1692,26 +1692,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To filter <see cref="Connector.Securities"/> by given criteria.
-		/// </summary>
-		/// <param name="connector">Securities.</param>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		/// <returns>Instruments filtered.</returns>
-		public static IEnumerable<Security> FilterSecurities(this Connector connector, SecurityLookupMessage criteria, IExchangeInfoProvider exchangeInfoProvider)
-		{
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			var security = connector.GetSecurityCriteria(criteria, exchangeInfoProvider);
-
-			return connector.Securities.Filter(security);
-		}
-
-		/// <summary>
 		/// To create the search criteria <see cref="Security"/> from <see cref="SecurityLookupMessage"/>.
 		/// </summary>
 		/// <param name="connector">Connection to the trading system.</param>

@@ -1022,6 +1022,7 @@ namespace StockSharp.Algo
 				info = _boardLookups.TryGetValue(message.OriginalTransactionId);
 
 			info?.Items.Add(board);
+
 			RaiseReceived(board, message, BoardReceived);
 		}
 
@@ -1041,8 +1042,6 @@ namespace StockSharp.Algo
 			if (message.OriginalTransactionId == 0)
 				return;
 
-			_lookupResult.Add(security);
-
 			if (!isNew)
 				return;
 
@@ -1061,20 +1060,17 @@ namespace StockSharp.Algo
 			if (message.Error != null)
 				RaiseError(message.Error);
 
-			var result = _lookupResult.CopyAndClear();
-			
-			LookupInfo<SecurityLookupMessage, Security> info = null;
+			LookupInfo<SecurityLookupMessage, Security> info;
 
-			if (result.Length == 0)
-			{
-				lock (_securityLookups.SyncRoot)
-					info = _securityLookups.TryGetAndRemove(message.OriginalTransactionId);
+			lock (_securityLookups.SyncRoot)
+				info = _securityLookups.TryGetAndRemove(message.OriginalTransactionId);
 
-				if (info != null)
-					result = this.FilterSecurities(info.Criteria, _entityCache.ExchangeInfoProvider).ToArray();
-			}
+			if (info == null)
+				return;
 
-			RaiseLookupSecuritiesResult(info?.Criteria, message.Error, result, info?.Items.ToArray() ?? ArrayHelper.Empty<Security>());
+			var criteria = this.GetSecurityCriteria(info.Criteria, _entityCache.ExchangeInfoProvider);
+
+			RaiseLookupSecuritiesResult(info.Criteria, message.Error, Securities.Filter(criteria).ToArray(), info.Items.ToArray());
 		}
 
 		private void ProcessBoardLookupResultMessage(BoardLookupResultMessage message)
