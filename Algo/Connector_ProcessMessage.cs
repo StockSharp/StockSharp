@@ -1304,16 +1304,7 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				lock (_marketDepths.SyncRoot)
-				{
-					var info = _marketDepths.SafeAdd(Tuple.Create(security, message.IsFiltered), key => new MarketDepthInfo(EntityFactory.CreateMarketDepth(security)));
-
-					info.First.LocalTime = message.LocalTime;
-					info.First.LastChangeTime = message.ServerTime;
-
-					info.Second = message.Bids;
-					info.Third = message.Asks;
-				}
+				_entityCache.UpdateMarketDepth(security, message);
 			}
 
 			if (message.IsFiltered)

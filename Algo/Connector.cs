@@ -54,19 +54,8 @@ namespace StockSharp.Algo
 			MemoryStatistics.Instance.Values.Add(_messageStat);
 		}
 
-		private class MarketDepthInfo : RefTriple<MarketDepth, QuoteChange[], QuoteChange[]>
-		{
-			public MarketDepthInfo(MarketDepth depth)
-				: base(depth, null, null)
-			{
-			}
-
-			public bool HasChanges => Second != null;
-		}
-
 		private readonly EntityCache _entityCache;
 
-		private readonly SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo> _marketDepths = new SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
@@ -864,51 +853,12 @@ namespace StockSharp.Algo
 
 		private MarketDepth GetMarketDepth(Security security, bool isFiltered)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			MarketDepthInfo info;
-
-			var isNew = false;
-
-			lock (_marketDepths.SyncRoot)
-			{
-				var key = Tuple.Create(security, isFiltered);
-
-				if (!_marketDepths.TryGetValue(key, out info))
-				{
-					isNew = true;
-
-					info = new MarketDepthInfo(EntityFactory.CreateMarketDepth(security));
-
-					// стакан из лога заявок бесконечен
-					//if (CreateDepthFromOrdersLog)
-					//	info.First.MaxDepth = int.MaxValue;
-
-					_marketDepths.Add(key, info);
-				}
-				else
-				{
-					if (info.HasChanges)
-					{
-						new QuoteChangeMessage
-						{
-							LocalTime = info.First.LocalTime,
-							ServerTime = info.First.LastChangeTime,
-							Bids = info.Second,
-							Asks = info.Third
-						}.ToMarketDepth(info.First, GetSecurity);
-
-						info.Second = null;
-						info.Third = null;
-					}
-				}
-			}
+			var depth = _entityCache.GetMarketDepth(security, isFiltered, GetSecurity, out var isNew);
 
 			if (isNew && !isFiltered)
-				RaiseNewMarketDepth(info.First);
+				RaiseNewMarketDepth(depth);
 
-			return info.First;
+			return depth;
 		}
 
 		/// <inheritdoc />
@@ -1496,8 +1446,6 @@ namespace StockSharp.Algo
 			_portfolioLookups.Clear();
 
 			_lookupResult.Clear();
-
-			_marketDepths.Clear();
 
 			_nonAssociatedByIdMyTrades.Clear();
 			_nonAssociatedByStringIdMyTrades.Clear();

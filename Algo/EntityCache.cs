@@ -201,12 +201,21 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<string, News> _newsById = new SynchronizedDictionary<string, News>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly SynchronizedList<News> _newsWithoutId = new SynchronizedList<News>();
 
+		private class MarketDepthInfo : RefTriple<MarketDepth, QuoteChange[], QuoteChange[]>
+		{
+			public MarketDepthInfo(MarketDepth depth)
+				: base(depth, null, null)
+			{
+			}
+
+			public bool HasChanges => Second != null;
+		}
+
+		private readonly SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo> _marketDepths = new SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo>();
+
 		private readonly CandlesHolder _candlesHolder = new CandlesHolder();
 
-		public IEnumerable<News> News
-		{
-			get { return _newsWithoutId.SyncGet(t => t.ToArray()).Concat(_newsById.SyncGet(t => t.Values.ToArray())).ToArray(); }
-		}
+		public IEnumerable<News> News => _newsWithoutId.SyncGet(t => t.ToArray()).Concat(_newsById.SyncGet(t => t.Values.ToArray())).ToArray();
 
 		private int _tradesKeepCount = 100000;
 
@@ -360,6 +369,8 @@ namespace StockSharp.Algo
 			_positions.Clear();
 
 			_candlesHolder.Clear();
+
+			_marketDepths.Clear();
 		}
 
 		public void AddOrderStatusTransactionId(long transactionId)
@@ -1202,5 +1213,65 @@ namespace StockSharp.Algo
 
 		public CandleSeries UpdateCandle(CandleMessage message, out Candle candle)
 			=> _candlesHolder.UpdateCandle(message, out candle);
+
+		public MarketDepth GetMarketDepth(Security security, bool isFiltered, Func<SecurityId, Security> getSecurity, out bool isNew)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			isNew = false;
+
+			MarketDepthInfo info;
+
+			lock (_marketDepths.SyncRoot)
+			{
+				var key = Tuple.Create(security, isFiltered);
+
+				if (!_marketDepths.TryGetValue(key, out info))
+				{
+					isNew = true;
+
+					info = new MarketDepthInfo(EntityFactory.CreateMarketDepth(security));
+
+					// стакан из лога заявок бесконечен
+					//if (CreateDepthFromOrdersLog)
+					//	info.First.MaxDepth = int.MaxValue;
+
+					_marketDepths.Add(key, info);
+				}
+				else
+				{
+					if (info.HasChanges)
+					{
+						new QuoteChangeMessage
+						{
+							LocalTime = info.First.LocalTime,
+							ServerTime = info.First.LastChangeTime,
+							Bids = info.Second,
+							Asks = info.Third
+						}.ToMarketDepth(info.First, getSecurity);
+
+						info.Second = null;
+						info.Third = null;
+					}
+				}
+			}
+
+			return info.First;
+		}
+
+		public void UpdateMarketDepth(Security security, QuoteChangeMessage message)
+		{
+			lock (_marketDepths.SyncRoot)
+			{
+				var info = _marketDepths.SafeAdd(Tuple.Create(security, message.IsFiltered), key => new MarketDepthInfo(EntityFactory.CreateMarketDepth(security)));
+
+				info.First.LocalTime = message.LocalTime;
+				info.First.LastChangeTime = message.ServerTime;
+
+				info.Second = message.Bids;
+				info.Third = message.Asks;
+			}
+		}
 	}
 }
