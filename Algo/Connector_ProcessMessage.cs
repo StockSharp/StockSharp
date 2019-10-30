@@ -758,10 +758,6 @@ namespace StockSharp.Algo
 						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
 						break;
 
-					case ExtendedMessageTypes.ReconnectingFinished:
-						ProcessRestoringSubscription(message.Adapter);
-						break;
-
 					case MessageTypes.ChangePassword:
 						ProcessChangePasswordMessage((ChangePasswordMessage)message);
 						break;
@@ -832,12 +828,6 @@ namespace StockSharp.Algo
 
 			if (removedSecurity != null)
 				_removed?.Invoke(new[] { removedSecurity });
-		}
-
-		private void ProcessRestoringSubscription(IMessageAdapter adapter)
-		{
-			TrySendLookupMessages(adapter);
-			TrySubscribePortfolios(adapter);
 		}
 
 		private void ProcessConnectMessage(BaseConnectionMessage message)

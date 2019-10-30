@@ -73,26 +73,28 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected void CopyTo(OrderCancelMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.OrderId = OrderId;
+			destination.OrderStringId = OrderStringId;
+			destination.OrderTransactionId = OrderTransactionId;
+			destination.Volume = Volume;
+			destination.Side = Side;
+		}
+
+		/// <summary>
 		/// Create a copy of <see cref="OrderCancelMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new OrderCancelMessage
-			{
-				OrderId = OrderId,
-				OrderStringId = OrderStringId,
-				TransactionId = TransactionId,
-				OrderTransactionId = OrderTransactionId,
-				Volume = Volume,
-				OrderType = OrderType,
-				PortfolioName = PortfolioName,
-				SecurityId = SecurityId,
-				Side = Side,
-			};
-
+			var clone = new OrderCancelMessage();
 			CopyTo(clone);
-
 			return clone;
 		}
 

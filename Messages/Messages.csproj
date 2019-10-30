@@ -105,6 +105,7 @@
     <Compile Include="ISecurityIdMessage.cs" />
     <Compile Include="IServerTimeMessage.cs" />
     <Compile Include="ISubscriptionIdMessage.cs" />
+    <Compile Include="ISubscriptionMessage.cs" />
     <Compile Include="ITransactionIdMessage.cs" />
     <Compile Include="MarketDataFinishedMessage.cs" />
     <Compile Include="IExtendableEntity.cs" />

@@ -48,7 +48,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioMessage : BaseSubscriptionIdMessage, ITransactionIdMessage
+	public class PortfolioMessage : BaseSubscriptionIdMessage, ISubscriptionMessage
 	{
 		/// <summary>
 		/// Portfolio code name.
@@ -95,24 +95,14 @@ namespace StockSharp.Messages
 		//[MainCategory]
 		//public PortfolioStates? State { get; set; }
 
-		/// <summary>
-		/// ID of the original message <see cref="TransactionId"/> for which this message is a response.
-		/// </summary>
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
-
-		/// <summary>
-		/// Subscription/unsubscription portfolio changes transaction id.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
 		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
 		[MainCategory]
 		public long TransactionId { get; set; }
 
-		/// <summary>
-		/// Is the message subscription portfolio changes.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public bool IsSubscribe { get; set; }
 
@@ -121,6 +111,10 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		public Guid? InternalId { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		public bool IsHistory { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
@@ -166,12 +160,12 @@ namespace StockSharp.Messages
 			destination.PortfolioName = PortfolioName;
 			destination.Currency = Currency;
 			destination.BoardCode = BoardCode;
-			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.IsSubscribe = IsSubscribe;
 			//destination.State = State;
 			destination.TransactionId = TransactionId;
 			destination.ClientCode = ClientCode;
 			destination.InternalId = InternalId;
+			destination.IsHistory = IsHistory;
 
 			return destination;
 		}
