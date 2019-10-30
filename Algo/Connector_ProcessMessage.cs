@@ -1071,36 +1071,10 @@ namespace StockSharp.Algo
 					info = _securityLookups.TryGetAndRemove(message.OriginalTransactionId);
 
 				if (info != null)
-				{
 					result = this.FilterSecurities(info.Criteria, _entityCache.ExchangeInfoProvider).ToArray();
-				}
 			}
 
 			RaiseLookupSecuritiesResult(info?.Criteria, message.Error, result, info?.Items.ToArray() ?? ArrayHelper.Empty<Security>());
-
-			lock (_lookupQueue.SyncRoot)
-			{
-				if (_lookupQueue.Count == 0)
-					return;
-
-				//удаляем текущий запрос лукапа из очереди
-				_lookupQueue.Dequeue();
-
-				var nextCriteria = _lookupQueue.TryPeek();
-
-				if (nextCriteria == null)
-					return;
-
-				_securityLookups.TryAdd(nextCriteria.TransactionId, new LookupInfo<SecurityLookupMessage, Security>(nextCriteria));
-
-				//если есть еще запросы, для которых нет инструментов, то отправляем следующий
-				if (NeedLookupSecurities(nextCriteria.SecurityId))
-					SendInMessage(nextCriteria);
-				else
-				{
-					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = nextCriteria.TransactionId });
-				}
-			}
 		}
 
 		private void ProcessBoardLookupResultMessage(BoardLookupResultMessage message)

@@ -75,7 +75,6 @@ namespace StockSharp.Algo
 		//private readonly MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>> _orderStopOrderAssociations = new MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>>(false);
 
 		private readonly HashSet<Security> _lookupResult = new HashSet<Security>();
-		private readonly SynchronizedQueue<SecurityLookupMessage> _lookupQueue = new SynchronizedQueue<SecurityLookupMessage>();
 
 		private class LookupInfo<TCriteria, TItem>
 			where TCriteria : Message
@@ -750,32 +749,7 @@ namespace StockSharp.Algo
 
 			_securityLookups.Add(criteria.TransactionId, new LookupInfo<SecurityLookupMessage, Security>(criteria));
 
-			//если для критерия указаны код биржи и код инструмента, то сначала смотрим нет ли такого инструмента
-			if (!NeedLookupSecurities(criteria.SecurityId))
-			{
-				SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = criteria.TransactionId });
-				return;
-			}
-
-			lock (_lookupQueue.SyncRoot)
-			{
-				_lookupQueue.Enqueue(criteria);
-
-				if (_lookupQueue.Count == 1)
-					SendInMessage(criteria);
-			}
-		}
-
-		private bool NeedLookupSecurities(SecurityId securityId)
-		{
-			if (securityId.SecurityCode.IsEmpty() || securityId.BoardCode.IsEmpty())
-				return true;
-
-			var id = SecurityIdGenerator.GenerateId(securityId.SecurityCode, securityId.BoardCode);
-
-			var security = Securities.FirstOrDefault(s => s.Id.CompareIgnoreCase(id));
-
-			return security == null;
+			SendInMessage(criteria);
 		}
 
 		/// <inheritdoc />
@@ -1521,7 +1495,6 @@ namespace StockSharp.Algo
 			_boardLookups.Clear();
 			_portfolioLookups.Clear();
 
-			_lookupQueue.Clear();
 			_lookupResult.Clear();
 
 			_marketDepths.Clear();

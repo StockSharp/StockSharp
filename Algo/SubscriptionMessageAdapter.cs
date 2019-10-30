@@ -45,6 +45,10 @@ namespace StockSharp.Algo
 		private readonly HashSet<long> _onlyHistorySubscriptions = new HashSet<long>();
 		private readonly List<Message> _subscriptionRequests = new List<Message>();
 		private readonly HashSet<long> _passThroughtIds = new HashSet<long>();
+		private readonly Queue<SecurityLookupMessage> _securityLookupQueue = new Queue<SecurityLookupMessage>();
+		private readonly Queue<PortfolioLookupMessage> _portfolioLookupQueue = new Queue<PortfolioLookupMessage>();
+		private readonly Queue<BoardLookupMessage> _boardLookupQueue = new Queue<BoardLookupMessage>();
+		private readonly Queue<TimeFrameLookupMessage> _timeFrameLookupQueue = new Queue<TimeFrameLookupMessage>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
@@ -119,6 +123,11 @@ namespace StockSharp.Algo
 					
 						_subscriptionRequests.Clear();
 						_passThroughtIds.Clear();
+
+						_securityLookupQueue.Clear();
+						_portfolioLookupQueue.Clear();
+						_boardLookupQueue.Clear();
+						_timeFrameLookupQueue.Clear();
 					}
 
 					base.OnSendInMessage(message);
@@ -184,6 +193,24 @@ namespace StockSharp.Algo
 					ProcessInPortfolioMessage((PortfolioMessage)message);
 					break;
 
+				case MessageTypes.SecurityLookup:
+					if (ProcessLookupMessage((SecurityLookupMessage)message, _securityLookupQueue))
+						base.OnSendInMessage(message);
+
+					break;
+
+				case MessageTypes.BoardLookup:
+					if (ProcessLookupMessage((BoardLookupMessage)message, _boardLookupQueue))
+						base.OnSendInMessage(message);
+
+					break;
+
+				case MessageTypes.TimeFrameLookup:
+					if (ProcessLookupMessage((TimeFrameLookupMessage)message, _timeFrameLookupQueue))
+						base.OnSendInMessage(message);
+
+					break;
+
 				case MessageTypes.PortfolioLookup:
 					ProcessPortfolioLookupMessage((PortfolioLookupMessage)message);
 					break;
@@ -196,6 +223,31 @@ namespace StockSharp.Algo
 					base.OnSendInMessage(message);
 					break;
 			}
+		}
+
+		private bool ProcessLookupMessage<TMessage>(TMessage message, Queue<TMessage> lookupQueue)
+			where TMessage : Message, ITransactionIdMessage
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (lookupQueue == null)
+				throw new ArgumentNullException(nameof(lookupQueue));
+
+			lock (_sync)
+			{
+				if (_passThroughtIds.Contains(message.TransactionId))
+					return true;
+
+				// not prev queued lookup
+				if (!lookupQueue.Contains(message))
+					lookupQueue.Enqueue((TMessage)message.Clone());
+
+				if (lookupQueue.Count > 1)
+					return false;
+			}
+
+			return true;
 		}
 
 		private void FillSubscriptionList(List<Message> messages)
@@ -228,9 +280,32 @@ namespace StockSharp.Algo
 
 					//ClearSubscribers();
 				}
+			}
 
-				if (messages.Count == 0)
-					messages = null;
+			void ProcessLookupResult<TMessage>(Queue<TMessage> lookupQueue)
+				where TMessage : Message
+			{
+				lock (_sync)
+				{
+					if (lookupQueue.Count == 0)
+						return;
+
+					//удаляем текущий запрос лукапа из очереди
+					lookupQueue.Dequeue();
+
+					var nextLookup = lookupQueue.TryPeek();
+
+					if (nextLookup == null)
+						return;
+
+					nextLookup.IsBack = true;
+					nextLookup.Adapter = this;
+
+					messages = new List<Message>
+					{
+						nextLookup
+					};
+				}
 			}
 
 			switch (message.Type)
@@ -275,10 +350,29 @@ namespace StockSharp.Algo
 					break;
 				}
 
+				case MessageTypes.SecurityLookupResult:
+					ProcessLookupResult(_securityLookupQueue);
+					break;
+
+				case MessageTypes.BoardLookupResult:
+					ProcessLookupResult(_boardLookupQueue);
+					break;
+
+				case MessageTypes.TimeFrameLookupResult:
+					ProcessLookupResult(_timeFrameLookupQueue);
+					break;
+
 				case MessageTypes.PortfolioLookupResult:
 				{
-					if (ProcessPortfolioLookupResultMessage((PortfolioLookupResultMessage)message))
-						return;
+					try
+					{
+						if (ProcessPortfolioLookupResultMessage((PortfolioLookupResultMessage)message))
+							return;
+					}
+					finally
+					{
+						ProcessLookupResult(_portfolioLookupQueue);
+					}
 					
 					break;
 				}
@@ -437,9 +531,9 @@ namespace StockSharp.Algo
 			}
 
 			if (message.DataType.IsSecurityRequired())
-				ProcessInSubscriptionMessage(message, message.CreateKey(GetSecurityId(message.SecurityId)), _mdSubscribers, _mdSubscribersById, CreateSendOut, CreateNonExist);
+				ProcessInSubscriptionMessage(message, message.CreateKey(GetSecurityId(message.SecurityId)), _mdSubscribers, _mdSubscribersById, CreateSendOut, CreateNonExist, null);
 			else
-				ProcessInSubscriptionMessage(message, GetNewsBoardKey(message), _newsBoardSubscribers, _mdSubscribersById, CreateSendOut, CreateNonExist);
+				ProcessInSubscriptionMessage(message, GetNewsBoardKey(message), _newsBoardSubscribers, _mdSubscribersById, CreateSendOut, CreateNonExist, null);
 		}
 
 		private static string GetNewsBoardKey(MarketDataMessage message)
@@ -447,17 +541,17 @@ namespace StockSharp.Algo
 
 		private void ProcessOrderStatusMessage(OrderStatusMessage message)
 		{
-			ProcessInSubscriptionMessage(message, message.TransactionId, _orderStatusSubscribers, null, null, null);
+			ProcessInSubscriptionMessage(message, message.TransactionId, _orderStatusSubscribers, null, null, null, null);
 		}
 
 		private void ProcessPortfolioLookupMessage(PortfolioLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, message.TransactionId, _pfLookupSubscribers, null, null, null);
+			ProcessInSubscriptionMessage(message, message.TransactionId, _pfLookupSubscribers, null, null, null, _portfolioLookupQueue);
 		}
 
 		private void ProcessInPortfolioMessage(PortfolioMessage message)
 		{
-			ProcessInSubscriptionMessage(message, message.PortfolioName, _pfSubscribers, null, null, null);
+			ProcessInSubscriptionMessage(message, message.PortfolioName, _pfSubscribers, null, null, null, null);
 		}
 
 		private SecurityId GetSecurityId(SecurityId securityId) => IsSupportSubscriptionBySecurity ? securityId : default;
@@ -465,7 +559,8 @@ namespace StockSharp.Algo
 		private void ProcessInSubscriptionMessage<TKey, TMessage>(TMessage message, TKey key,
 			Dictionary<TKey, SubscriptionInfo<TMessage>> subscriptions,
 			Dictionary<long, SubscriptionInfo<TMessage>> subscribersById,
-			Func<bool, long, TMessage> createSendOut, Func<long, TMessage> createNotExist)
+			Func<bool, long, TMessage> createSendOut, Func<long, TMessage> createNotExist,
+			Queue<TMessage> lookupQueue)
 			where TMessage : Message, ISubscriptionMessage
 		{
 			TMessage sendInMsg = null;
@@ -479,6 +574,12 @@ namespace StockSharp.Algo
 					{
 						sendInMsg = message;
 						return;
+					}
+
+					if (lookupQueue != null)
+					{
+						if (!ProcessLookupMessage(message, lookupQueue))
+							return;
 					}
 
 					var sendIn = false;
