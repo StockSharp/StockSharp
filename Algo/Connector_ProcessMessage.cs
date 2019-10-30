@@ -322,7 +322,7 @@ namespace StockSharp.Algo
 						_inAdapter = new BasketSecurityMessageAdapter(this, BasketSecurityProcessorProvider, _entityCache.ExchangeInfoProvider, _inAdapter) { OwnInnerAdapter = true };
 
 					if (SupportSubscriptionTracking)
-						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdapter = true/*, IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect*/ };
+						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdapter = true, IsRestoreOnNormalReconnect = IsRestoreSubscriptionOnNormalReconnect };
 
 					if (SupportLevel1DepthBuilder)
 						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdapter = true };
@@ -365,7 +365,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private bool _supportSubscriptionTracking;
+		private bool _supportSubscriptionTracking = true;
 
 		/// <summary>
 		/// Use <see cref="SubscriptionMessageAdapter"/>.
@@ -379,7 +379,7 @@ namespace StockSharp.Algo
 					return;
 
 				if (value)
-					EnableAdapter(a => new SubscriptionMessageAdapter(a) { OwnInnerAdapter = true }, typeof(OfflineMessageAdapter), false);
+					EnableAdapter(a => new SubscriptionMessageAdapter(a) { OwnInnerAdapter = true }, typeof(Level1DepthBuilderAdapter), false);
 				else
 					DisableAdapter<SubscriptionMessageAdapter>();
 
@@ -452,16 +452,6 @@ namespace StockSharp.Algo
 				_supportLevel1DepthBuilder = value;
 			}
 		}
-
-		/// <summary>
-		/// Send lookup messages on connect. By default is <see langword="true"/>.
-		/// </summary>
-		public bool LookupMessagesOnConnect { get; set; } = true;
-
-		/// <summary>
-		/// Send subscribe messages on connect. By default is <see langword="true"/>.
-		/// </summary>
-		public bool AutoPortfoliosSubscribe { get; set; } = true;
 
 		private Tuple<IMessageAdapter, IMessageAdapter, IMessageAdapter> GetAdapter(Type type)
 		{
@@ -957,14 +947,6 @@ namespace StockSharp.Algo
 
 			RaiseConnectedEx(adapter);
 
-			TrySendLookupMessages(adapter);
-
-			if (!isRestored)
-			{
-				TrySubscribePortfolios(adapter);
-				return;
-			}
-
 			var isAllConnected = _adapterStates.CachedValues.All(v => v == ConnectionStates.Connected);
 
 			if (!isAllConnected)
@@ -972,45 +954,6 @@ namespace StockSharp.Algo
 
 			ConnectionState = ConnectionStates.Connected;
 			RaiseRestored();
-		}
-
-		private void TrySubscribePortfolios(IMessageAdapter adapter)
-		{
-			if (!AutoPortfoliosSubscribe || !adapter.IsSupportSubscriptionByPortfolio)
-				return;
-
-			var portfolioNames = Adapter
-				.PortfolioAdapterProvider
-				.Adapters
-				.Where(p => p.Value == adapter.Id)
-				.Select(p => p.Key)
-				.ToArray();
-
-			foreach (var portfolioName in portfolioNames)
-			{
-				SendInMessage(new PortfolioMessage
-				{
-					PortfolioName = portfolioName,
-					TransactionId = TransactionIdGenerator.GetNextId(),
-					IsSubscribe = true,
-					Adapter = adapter,
-				});
-			}
-		}
-
-		private void TrySendLookupMessages(IMessageAdapter adapter)
-		{
-			if (!LookupMessagesOnConnect)
-				return;
-
-			if (adapter.PortfolioLookupRequired)
-				SubscribePositions(adapter: adapter);
-
-			if (adapter.OrderStatusRequired)
-				SubscribeOrders(adapter: adapter);
-
-			if (adapter.SecurityLookupRequired && adapter.IsSupportSecuritiesLookupAll)
-				LookupSecurities(new Security(), adapter);
 		}
 
 		private void RaiseConnectedWhenAllConnected()
@@ -1285,22 +1228,6 @@ namespace StockSharp.Algo
 			{
 				this.AddInfoLog(LocalizedStrings.Str1105Params, portfolio.Name);
 				RaiseNewPortfolio(portfolio);
-
-				if (AutoPortfoliosSubscribe)
-				{
-					var adapter = Adapter.PortfolioAdapterProvider.TryGetAdapter(Adapter.InnerAdapters, portfolio);
-
-					if (adapter?.IsSupportSubscriptionByPortfolio == true && Adapter.InnerAdapters[adapter] != -1)
-					{
-						SendInMessage(new PortfolioMessage
-						{
-							PortfolioName = portfolio.Name,
-							TransactionId = TransactionIdGenerator.GetNextId(),
-							IsSubscribe = true,
-							Adapter = adapter,
-						});
-					}
-				}
 			}
 			else if (isChanged)
 				RaisePortfolioChanged(portfolio);

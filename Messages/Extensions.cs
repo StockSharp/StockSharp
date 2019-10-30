@@ -1585,5 +1585,22 @@ namespace StockSharp.Messages
 		/// <returns>Check result.</returns>
 		public static bool IsSecurityRequired(this MarketDataTypes type)
 			=> type != MarketDataTypes.News && type != MarketDataTypes.Board;
+
+		/// <summary>
+		/// Remove lookup messages support.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		public static void RemoveLookupMessages(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.RemoveSupportedMessage(MessageTypes.SecurityLookup);
+			adapter.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
+			adapter.RemoveSupportedMessage(MessageTypes.OrderStatus);
+			adapter.RemoveSupportedMessage(MessageTypes.Portfolio);
+			adapter.RemoveSupportedMessage(MessageTypes.BoardLookup);
+			adapter.RemoveSupportedMessage(MessageTypes.TimeFrameLookup);
+		}
 	}
 }
