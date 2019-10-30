@@ -212,6 +212,12 @@ namespace StockSharp.Algo
 		public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
 
 		/// <inheritdoc />
+		public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult;
+		
+		/// <inheritdoc />
+		public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
+
+		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
 
 		/// <inheritdoc />
@@ -616,6 +622,19 @@ namespace StockSharp.Algo
 		{
 			LookupBoardsResult?.Invoke(message, boards, error);
 			LookupBoardsResult2?.Invoke(message, boards, newBoards, error);
+		}
+
+		/// <summary>
+		/// To call the event <see cref="LookupTimeFramesResult"/>.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
+		/// <param name="timeFrames">Found time-frames.</param>
+		/// <param name="newTimeFrames">Newly created.</param>
+		private void RaiseLookupTimeFramesResult(TimeFrameLookupMessage message, Exception error, TimeSpan[] timeFrames, TimeSpan[] newTimeFrames)
+		{
+			LookupTimeFramesResult?.Invoke(message, timeFrames, error);
+			LookupTimeFramesResult2?.Invoke(message, timeFrames, newTimeFrames, error);
 		}
 
 		/// <summary>

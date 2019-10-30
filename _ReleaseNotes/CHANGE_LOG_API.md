@@ -262,6 +262,7 @@ StockSharp API Change log
 * (feature) BoardStateStorage added.
 * (feature) Connector. Moved lookup auto send logic into BasketMessageAdapter.
 * (feature) Connector. SupportSubscriptionTracking enabled by default.
+* (feature) IMarketDataProvider. LookupTimeFrames added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

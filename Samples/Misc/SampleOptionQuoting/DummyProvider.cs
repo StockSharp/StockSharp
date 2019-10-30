@@ -154,6 +154,18 @@ namespace SampleOptionQuoting
 			remove => throw new NotSupportedException();
 		}
 
+		event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult
+		{
+			add => throw new NotSupportedException();
+			remove => throw new NotSupportedException();
+		}
+
+		event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult2
+		{
+			add => throw new NotSupportedException();
+			remove => throw new NotSupportedException();
+		}
+
 		event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionSucceeded
 		{
 			add => throw new NotSupportedException();
@@ -208,6 +220,11 @@ namespace SampleOptionQuoting
 		}
 
 		void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria)
+		{
+			throw new NotSupportedException();
+		}
+
+		void IMarketDataProvider.LookupTimeFrames(TimeFrameLookupMessage criteria)
 		{
 			throw new NotSupportedException();
 		}

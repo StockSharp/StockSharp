@@ -660,6 +660,10 @@ namespace StockSharp.Algo
 						ProcessBoardLookupResultMessage((BoardLookupResultMessage)message);
 						break;
 
+					case MessageTypes.TimeFrameLookupResult:
+						ProcessTimeFrameLookupResultMessage((TimeFrameLookupResultMessage)message);
+						break;
+
 					case MessageTypes.PortfolioLookupResult:
 						ProcessPortfolioLookupResultMessage((PortfolioLookupResultMessage)message);
 						break;
@@ -718,14 +722,6 @@ namespace StockSharp.Algo
 					case MessageTypes.Disconnect:
 						ProcessConnectMessage((DisconnectMessage)message);
 						break;
-
-					case MessageTypes.SecurityLookup:
-					{
-						var lookupMsg = (SecurityLookupMessage)message;
-						_securityLookups.Add(lookupMsg.TransactionId, new LookupInfo<SecurityLookupMessage, Security>(lookupMsg));
-						SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
-						break;
-					}
 
 					case MessageTypes.BoardState:
 						ProcessBoardStateMessage((BoardStateMessage)message);
@@ -1087,6 +1083,22 @@ namespace StockSharp.Algo
 				return;
 
 			RaiseLookupBoardsResult(info.Criteria, message.Error, ExchangeBoards.Filter(info.Criteria.Like).ToArray(), info.Items.ToArray());
+		}
+
+		private void ProcessTimeFrameLookupResultMessage(TimeFrameLookupResultMessage message)
+		{
+			if (message.Error != null)
+				RaiseError(message.Error);
+
+			LookupInfo<TimeFrameLookupMessage, TimeSpan> info;
+				
+			lock (_timeFrameLookups.SyncRoot)
+				info = _timeFrameLookups.TryGetAndRemove(message.OriginalTransactionId);
+
+			if (info == null)
+				return;
+
+			RaiseLookupTimeFramesResult(info.Criteria, message.Error, info.Items.ToArray(), info.Items.ToArray());
 		}
 
 		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)

@@ -80,6 +80,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<long, LookupInfo<SecurityLookupMessage, Security>> _securityLookups = new SynchronizedDictionary<long, LookupInfo<SecurityLookupMessage, Security>>();
 		private readonly SynchronizedDictionary<long, LookupInfo<PortfolioLookupMessage, Portfolio>> _portfolioLookups = new SynchronizedDictionary<long, LookupInfo<PortfolioLookupMessage, Portfolio>>();
 		private readonly SynchronizedDictionary<long, LookupInfo<BoardLookupMessage, ExchangeBoard>> _boardLookups = new SynchronizedDictionary<long, LookupInfo<BoardLookupMessage, ExchangeBoard>>();
+		private readonly SynchronizedDictionary<long, LookupInfo<TimeFrameLookupMessage, TimeSpan>> _timeFrameLookups = new SynchronizedDictionary<long, LookupInfo<TimeFrameLookupMessage, TimeSpan>>();
 
 		private readonly SubscriptionManager _subscriptionManager;
 
@@ -734,6 +735,22 @@ namespace StockSharp.Algo
 			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
 
 			_securityLookups.Add(criteria.TransactionId, new LookupInfo<SecurityLookupMessage, Security>(criteria));
+
+			SendInMessage(criteria);
+		}
+
+		/// <inheritdoc />
+		public void LookupTimeFrames(TimeFrameLookupMessage criteria)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (criteria.TransactionId == 0)
+				criteria.TransactionId = TransactionIdGenerator.GetNextId();
+
+			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
+
+			_timeFrameLookups.Add(criteria.TransactionId, new LookupInfo<TimeFrameLookupMessage, TimeSpan>(criteria));
 
 			SendInMessage(criteria);
 		}
@@ -1441,6 +1458,7 @@ namespace StockSharp.Algo
 			_securityLookups.Clear();
 			_boardLookups.Clear();
 			_portfolioLookups.Clear();
+			_timeFrameLookups.Clear();
 
 			_nonAssociatedByIdMyTrades.Clear();
 			_nonAssociatedByStringIdMyTrades.Clear();

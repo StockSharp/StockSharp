@@ -747,6 +747,9 @@
 			event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult2 { add { } remove { } }
 			event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult { add { } remove { } }
 			event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult2 { add { } remove { } }
+			event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult { add { } remove { } }
+			event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult2 { add { } remove { } }
+
 			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionSucceeded { add { } remove { } }
 			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataSubscriptionFailed { add { } remove { } }
 			event Action<Security, MarketDataMessage, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionFailed2 { add { } remove { } }
@@ -760,7 +763,8 @@
 			
 			void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria) { }
 			void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria) { }
-			
+			void IMarketDataProvider.LookupTimeFrames(TimeFrameLookupMessage criteria) { }
+
 			IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security) { yield break; }
 			object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field) => null;
 			
