@@ -185,11 +185,11 @@ namespace StockSharp.Algo
 					break;
 
 				case MessageTypes.PortfolioLookup:
-					ProcessInPortfolioLookupMessage((PortfolioLookupMessage)message);
+					ProcessPortfolioLookupMessage((PortfolioLookupMessage)message);
 					break;
 
 				case MessageTypes.OrderStatus:
-					ProcessInOrderStatusMessage((OrderStatusMessage)message);
+					ProcessOrderStatusMessage((OrderStatusMessage)message);
 					break;
 
 				default:
@@ -277,7 +277,7 @@ namespace StockSharp.Algo
 
 				case MessageTypes.PortfolioLookupResult:
 				{
-					if (ProcessOutPortfolioLookupResultMessage((PortfolioLookupResultMessage)message))
+					if (ProcessPortfolioLookupResultMessage((PortfolioLookupResultMessage)message))
 						return;
 					
 					break;
@@ -315,17 +315,23 @@ namespace StockSharp.Algo
 					if (msg is MarketDataMessage mdMsg)
 					{
 						//mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
-						_passThroughtIds.Add(mdMsg.TransactionId);
+
+						lock (_sync)
+							_passThroughtIds.Add(mdMsg.TransactionId);
 					}
 					else if (msg is PortfolioMessage pfMsg)
 					{
 						//pfMsg.TransactionId = TransactionIdGenerator.GetNextId();
-						_passThroughtIds.Add(pfMsg.TransactionId);
+
+						lock (_sync)
+							_passThroughtIds.Add(pfMsg.TransactionId);
 					}
 					else if (msg is OrderStatusMessage statusMsg)
 					{
 						//statusMsg.TransactionId = TransactionIdGenerator.GetNextId();
-						_passThroughtIds.Add(statusMsg.TransactionId);
+
+						lock (_sync)
+							_passThroughtIds.Add(statusMsg.TransactionId);
 					}
 
 					base.OnInnerAdapterNewOutMessage(msg);
@@ -397,7 +403,7 @@ namespace StockSharp.Algo
 				if (message.OriginalTransactionId > 0 && lookupSubscribers.ContainsKey(message.OriginalTransactionId))
 					message.SubscriptionId = message.OriginalTransactionId;
 					
-				if (_pfLookupSubscribers.Count == 0)
+				if (lookupSubscribers.Count == 0)
 					return;
 
 				message.SubscriptionIds = lookupSubscribers.First().Value.Subscribers.Cache;
@@ -439,12 +445,12 @@ namespace StockSharp.Algo
 		private static string GetNewsBoardKey(MarketDataMessage message)
 			=> (message.DataType == MarketDataTypes.News ? message.NewsId : message.BoardCode) ?? string.Empty;
 
-		private void ProcessInOrderStatusMessage(OrderStatusMessage message)
+		private void ProcessOrderStatusMessage(OrderStatusMessage message)
 		{
 			ProcessInSubscriptionMessage(message, message.TransactionId, _orderStatusSubscribers, null, null, null);
 		}
 
-		private void ProcessInPortfolioLookupMessage(PortfolioLookupMessage message)
+		private void ProcessPortfolioLookupMessage(PortfolioLookupMessage message)
 		{
 			ProcessInSubscriptionMessage(message, message.TransactionId, _pfLookupSubscribers, null, null, null);
 		}
@@ -579,7 +585,7 @@ namespace StockSharp.Algo
 					: ProcessSubscriptionResult(_newsBoardSubscribers, GetNewsBoardKey(info.Message), info, message));
 		}
 
-		private bool ProcessOutPortfolioLookupResultMessage(PortfolioLookupResultMessage message)
+		private bool ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)
 		{
 			return ProcessOutSubscriptionMessage(message.OriginalTransactionId, _pfLookupSubscribers, null);
 		}
@@ -615,37 +621,40 @@ namespace StockSharp.Algo
 
 		private IEnumerable<MarketDataMessage> ProcessSubscriptionResult<T>(Dictionary<T, SubscriptionInfo<MarketDataMessage>> subscriptions, T key, SubscriptionInfo<MarketDataMessage> info, MarketDataMessage message)
 		{
-			//var info = subscriptions.TryGetValue(key);
-
-			if (!subscriptions.ContainsKey(key))
-				return null;
-
-			//var isSubscribe = info.Message.IsSubscribe;
-			//var removeInfo = !isSubscribe || !message.IsOk();
-
-			info.IsSubscribed = info.Message.IsSubscribe && message.IsOk();
-
-			var replies = new List<MarketDataMessage>();
-
-			// TODO только нужная подписка
-			foreach (var requests in info.Requests)
+			lock (_sync)
 			{
-				var reply = (MarketDataMessage)requests.Clone();
-				reply.OriginalTransactionId = requests.TransactionId;
-				//reply.TransactionId = message.TransactionId;
-				reply.Error = message.Error;
-				reply.IsNotSupported = message.IsNotSupported;
+				//var info = subscriptions.TryGetValue(key);
 
-				replies.Add(reply);
+				if (!subscriptions.ContainsKey(key))
+					return null;
+
+				//var isSubscribe = info.Message.IsSubscribe;
+				//var removeInfo = !isSubscribe || !message.IsOk();
+
+				info.IsSubscribed = info.Message.IsSubscribe && message.IsOk();
+
+				var replies = new List<MarketDataMessage>();
+
+				// TODO только нужная подписка
+				foreach (var requests in info.Requests)
+				{
+					var reply = (MarketDataMessage)requests.Clone();
+					reply.OriginalTransactionId = requests.TransactionId;
+					//reply.TransactionId = message.TransactionId;
+					reply.Error = message.Error;
+					reply.IsNotSupported = message.IsNotSupported;
+
+					replies.Add(reply);
+				}
+
+				if (!info.IsSubscribed)
+				{
+					subscriptions.Remove(key);
+					_mdSubscribersById.RemoveWhere(p => p.Value == info);
+				}
+
+				return replies;
 			}
-
-			if (!info.IsSubscribed)
-			{
-				subscriptions.Remove(key);
-				_mdSubscribersById.RemoveWhere(p => p.Value == info);
-			}
-
-			return replies;
 		}
 
 		/// <summary>
