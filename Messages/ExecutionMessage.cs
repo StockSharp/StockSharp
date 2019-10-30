@@ -63,20 +63,16 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	public sealed class ExecutionMessage : BaseSubscriptionIdMessage, ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage
+	public sealed class ExecutionMessage : BaseSubscriptionIdMessage, ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage, IPortfolioNameMessage
 	{
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
 		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
 		[MainCategory]
 		public SecurityId SecurityId { get; set; }
 
-		/// <summary>
-		/// Portfolio name.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 		[DescriptionLoc(LocalizedStrings.PortfolioNameKey)]

@@ -102,6 +102,7 @@
     <Compile Include="IBasketSecurityProcessor.cs" />
     <Compile Include="IBasketSecurityProcessorProvider.cs" />
     <Compile Include="IDailyInfoSoap.cs" />
+    <Compile Include="IPortfolioNameMessage.cs" />
     <Compile Include="ISecurityIdMessage.cs" />
     <Compile Include="IServerTimeMessage.cs" />
     <Compile Include="ISubscriptionIdMessage.cs" />
