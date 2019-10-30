@@ -6,6 +6,25 @@
      <legacyBold>Пароль</legacyBold> для подключения
      к торговой площадке. <legacyBold>Логин</legacyBold> и <legacyBold>Пароль</legacyBold> 
      предоставляются брокером. Для получения API доступа рекомендуется обратиться к брокеру.</para>
+     
+     <para>
+      <token>itch</token> - протокол прямого доступа к данным (direct data-feed protocol), 
+      который позволяет подключаться к серверам данных при помощи TCP и UDP протоколов. Особенностью <token>itch</token> является то, 
+      что он позволяет отслеживать изменение статуса заявки, т.е. получать лог заявок. 
+      Этот протокол используется биржами NASDAQ (см. <externalLink>
+<linkText>TotalView-ITCH</linkText>
+<linkAlternateText>TotalView-ITCH</linkAlternateText>
+<linkUri>http://www.nasdaqtrader.com/Trader.aspx?id=Totalview2</linkUri>
+<linkTarget>_blank</linkTarget>
+</externalLink>
+) и LSE (см. <externalLink>
+<linkText>MITCH</linkText>
+<linkAlternateText>Optional alternate text</linkAlternateText>
+<linkUri>http://www.londonstockexchange.com/products-and-services/millennium-exchange/technicalinformation/technicalinformation.htm</linkUri>
+<linkTarget>_blank</linkTarget>
+</externalLink>
+).
+      </para>
     </introduction>
   </developerConceptualDocument>
 </topic>

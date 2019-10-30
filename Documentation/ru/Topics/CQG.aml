@@ -6,12 +6,6 @@
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
 		</para>
-<para>Для написания торговых роботов для <token>cqg_external</token> необходимо использовать </para>
-			
-<list class="bullet">
-  <listItem><para><codeEntityReference>T:StockSharp.Cqg.Com.CqgComMessageAdapter</codeEntityReference> - при работе с теминала. Авторизация выполняется при запуске терминала <legacyBold>CQG Integrated Client</legacyBold>.</para></listItem>
-  <listItem><para><codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter</codeEntityReference> - при работе с сервером.</para></listItem>
-</list>
      </introduction>
      <relatedTopics>
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />

@@ -6,14 +6,7 @@
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
 		</para>
-		<para>Для написания торговых роботов для <token>OpenECry_external</token> 
-		необходимо использовать <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryMessageAdapter</codeEntityReference>.
-		Механизм взаимодействия показан на данном рисунке:</para>
 		
-		<mediaLink><image placement="center" xlink:href="OECTrader"/></mediaLink>
-		
-		<para>Как видно из рисунка, <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryMessageAdapter</codeEntityReference> взаимодействует с сервером OEC посредством <token>OECApi</token>. 
-		Для использования <token>OECApi</token> не требуется наличие работающего терминала OEC Trader.</para>
      </introduction>
      <relatedTopics>
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />

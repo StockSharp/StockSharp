@@ -2,6 +2,10 @@
 <topic id="bb643f2e-d235-47ea-9a71-6dbec18d188a" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    <para>
+      <token>spbex_external</token> предоставляет бинарный протокол торговли на бирже. 
+
+      </para>
     <para>При работе с коннектором используется прямое подключение, требующее <legacyBold>VPN</legacyBold> или <legacyBold>шифрованного</legacyBold> канала.</para>
      <para>Для подключения необходимо  указать <legacyBold>Логин</legacyBold> и 
      <legacyBold>Пароль</legacyBold> подключения к торговой площадке. </para>

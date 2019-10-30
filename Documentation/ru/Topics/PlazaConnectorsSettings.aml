@@ -2,6 +2,20 @@
 <topic id="2a606357-f716-491b-9292-64836fcac5fd" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    	<para>
+			  Механизм взаимодействия показан на рисунке:
+		  </para>
+		  
+		  <para>
+			  <mediaLink><image placement="center" xlink:href="PlazaTrader" /></mediaLink>
+		  </para>
+		  
+		  <para>
+		  		Для использования роботом Торговой платформы <token>plaza_external</token> на свой компьютер необходимо установить клиентский дистрибутив шлюза Plaza II.  
+		  		Его можно скачать с FTP-сервера РТС.  Шлюз можно установить как обыкновенную программу для Windows, либо как <token>ntservice</token>.  
+		  		При установке нужно учитывать разрядность системы.  На FTP-сервере выложены 32-разрядный и 64-разрядный дистрибутивы.
+		  </para>
+    
     <mediaLink><image placement="center" xlink:href="PlazaConnection"/></mediaLink>
 <para><legacyBold>Основные настройки подключения к Plaza II</legacyBold></para>
 
