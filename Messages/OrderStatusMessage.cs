@@ -25,7 +25,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class OrderStatusMessage : OrderCancelMessage
+	public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 	{
 		/// <summary>
 		/// Start date, from which data needs to be retrieved.
@@ -45,11 +45,13 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public DateTimeOffset? To { get; set; }
 
-		/// <summary>
-		/// Is the message subscription orders changes.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public bool IsSubscribe { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		public bool IsHistory { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderStatusMessage"/>.
@@ -60,29 +62,27 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected void CopyTo(OrderStatusMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.From = From;
+			destination.To = To;
+			destination.IsSubscribe = IsSubscribe;
+			destination.IsHistory = IsHistory;
+		}
+
+		/// <summary>
 		/// Create a copy of <see cref="OrderStatusMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new OrderStatusMessage
-			{
-				OrderId = OrderId,
-				OrderStringId = OrderStringId,
-				TransactionId = TransactionId,
-				OrderTransactionId = OrderTransactionId,
-				Volume = Volume,
-				OrderType = OrderType,
-				PortfolioName = PortfolioName,
-				SecurityId = SecurityId,
-				Side = Side,
-				From = From,
-				To = To,
-				IsSubscribe = IsSubscribe,
-			};
-
+			var clone = new OrderStatusMessage();
 			CopyTo(clone);
-
 			return clone;
 		}
 

@@ -55,7 +55,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class NewsMessage : BaseSubscriptionIdMessage
+	public class NewsMessage : BaseSubscriptionIdMessage, IServerTimeMessage
 	{
 		/// <summary>
 		/// News ID.
@@ -113,9 +113,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string Story { get; set; }
 
-		/// <summary>
-		/// Time of news arrival.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TimeKey)]
 		[DescriptionLoc(LocalizedStrings.Str220Key)]
@@ -130,12 +128,6 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str222Key)]
 		[MainCategory]
 		public string Url { get; set; }
-
-		/// <summary>
-		/// ID of the original message <see cref="MarketDataMessage.TransactionId"/> for which this message is a response.
-		/// </summary>
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
 		/// News priority.
@@ -171,13 +163,13 @@ namespace StockSharp.Messages
 		{
 			var clone = new NewsMessage
 			{
-				ServerTime = ServerTime,
-				SecurityId = SecurityId,
-				BoardCode = BoardCode,
-				Headline = Headline,
 				Id = Id,
+				BoardCode = BoardCode,
+				SecurityId = SecurityId,
 				Source = Source,
+				Headline = Headline,
 				Story = Story,
+				ServerTime = ServerTime,
 				Url = Url,
 				Priority = Priority,
 			};

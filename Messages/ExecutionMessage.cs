@@ -110,32 +110,19 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string DepoName { get; set; }
 
-		/// <summary>
-		/// Server time.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ServerTimeKey)]
 		[DescriptionLoc(LocalizedStrings.ServerTimeKey, true)]
 		[MainCategory]
 		public DateTimeOffset ServerTime { get; set; }
 
-		/// <summary>
-		/// Transaction ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
 		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
 		[MainCategory]
 		public long TransactionId { get; set; }
-
-		/// <summary>
-		/// ID of original transaction, for which this message is the answer.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.OriginalTransactionKey)]
-		[DescriptionLoc(LocalizedStrings.OriginalTransactionIdKey)]
-		[MainCategory]
-		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
 		/// Data type, information about which is contained in the <see cref="ExecutionMessage"/>.
@@ -611,7 +598,6 @@ namespace StockSharp.Messages
 				TradePrice = TradePrice,
 				TradeStatus = TradeStatus,
 				TransactionId = TransactionId,
-				OriginalTransactionId = OriginalTransactionId,
 				OrderVolume = OrderVolume,
 				TradeVolume = TradeVolume,
 				//IsFinished = IsFinished,

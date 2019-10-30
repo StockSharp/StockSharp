@@ -32,9 +32,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	public class SecurityMessage : BaseSubscriptionIdMessage, ISecurityIdMessage
 	{
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str361Key)]
 		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
@@ -204,12 +202,6 @@ namespace StockSharp.Messages
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
-		/// ID of the original message <see cref="SecurityLookupMessage.TransactionId"/> for which this message is a response.
-		/// </summary>
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
-
-		/// <summary>
 		/// Security class.
 		/// </summary>
 		[DataMember]
@@ -306,10 +298,14 @@ namespace StockSharp.Messages
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
-		/// <param name="copyOriginalTransactionId">Copy <see cref="OriginalTransactionId"/>.</param>
+		/// <param name="copyOriginalTransactionId">Copy <see cref="ISubscriptionIdMessage.OriginalTransactionId"/>.</param>
 		public void CopyTo(SecurityMessage destination, bool copyOriginalTransactionId = true)
 		{
+			var originTransId = destination.OriginalTransactionId;
+
 			base.CopyTo(destination);
+
+			destination.OriginalTransactionId = copyOriginalTransactionId ? OriginalTransactionId : originTransId;
 
 			destination.SecurityId = SecurityId;
 			destination.Name = Name;
@@ -337,9 +333,6 @@ namespace StockSharp.Messages
 			destination.BasketCode = BasketCode;
 			destination.BasketExpression = BasketExpression;
 			destination.FaceValue = FaceValue;
-
-			if (copyOriginalTransactionId)
-				destination.OriginalTransactionId = OriginalTransactionId;
 		}
 
 		/// <inheritdoc />

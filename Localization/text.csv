@@ -9250,7 +9250,7 @@ DocStr4471;Market depth (order book);Глубина рынка (стаканы)
 DocStr4472;Candles (time-frame);Свечи (тайм-фрейм)
 DocStr4473;Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case);Сообщение о подписке или отписки на маркет-данные (при отправке используется как команда, при получении является событием подтверждения)
 DocStr4474;The default depth of order book;Максимальная глубина стакана по умолчанию
-DocStr4475;The message is market-data subscription;Является ли сообщение подпиской на маркет-данные
+DocStr4475;The message is subscription;Является ли сообщение подпиской
 DocStr4476;The message is not supported by adapter. To be set if the answer;Поддерживает ли торговая система запрашиваемый тип данных. Заполняется в случае ответа
 DocStr4477;Subscribe or unsubscribe error info. To be set if the answer;Информация об ошибке. Сигнализирует об ошибке подписки или отписки. Заполняется в случае ответа
 DocStr4478;Market-data count;Количество маркет-данных
@@ -15015,7 +15015,7 @@ DocStr10540;Max depth of requested order book;Максимальная глуб�
 DocStr10541;Support multiple subscriptions with duplicate parameters;Поддерживать множественные подписки с одинаковыми параметрами
 DocStr10542;Timestamp format;Формат метки времени
 DocStr10543;South Africa, Rand. The Rand is subdivided into 100 cents;South Africa, Rand. The Rand is subdivided into 100 cents
-DocStr10544;Request history market data only;Запросить только исторические маркет-данные
+DocStr10544;Request historical data only;Запросить только исторические данные
 DocStr10545;The name of the property that changed;Имя свойства, которое было изменено
 DocStr10546;Is {0} able to change;Возможность изменить {0}
 DocStr10547;Ignore offline mode and continue processing;Игнорировать оффлайн режим и продолжать обработку
