@@ -2,6 +2,12 @@
 <topic id="29a2e2d4-af15-4340-be6d-3c77c66c1977" revisionNumber="1">
    <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    <para>
+      <token>twime</token> - бинарный протокол управления заявками на срочном рынке Московской Биржи. 
+      Этот протокол поддерживает только торговую функциональность (выставление заявок, получение статусов своих заявок и сделок). Рыночные данные в данном случае
+      можно получать через FAST протокол см. <token>fix</token>. Протокол можно использовать только в зоне коллокации биржи.
+      </para>
+
     <para>При работе с коннектором используется прямое подключение, требующее <legacyBold>VPN</legacyBold> или <legacyBold>шифрованного</legacyBold> канала.</para>
      <para>Для подключения необходимо  указать <legacyBold>Логин</legacyBold> и 
      <legacyBold>Пароль</legacyBold> подключения к торговой площадке. </para>

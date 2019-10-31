@@ -1,8 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="dc7d8d3b-1d25-4f81-a043-dd4ee9f34147" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
+    		  <para>
+			  Механизм взаимодействия показан на данном рисунке:
+		  </para>
+		  <para>
+			  <mediaLink>
+				  <image placement="center" xlink:href="AlfaTrader" />
+			  </mediaLink>
+		  </para>
+		  <para>
+			  Как видно из рисунка, <codeEntityReference>T:StockSharp.AlfaDirect.AlfaDirectMessageAdapter</codeEntityReference> взаимодействует с брокером 
+			  через терминал <token>alfa_external</token>. Связь между <codeEntityReference>T:StockSharp.AlfaDirect.AlfaDirectMessageAdapter</codeEntityReference> и 
+			  <token>alfa_external</token> осуществляется по технологии <token>com</token> посредством открытого интерфейса терминала. <token>alfaapi</token>
+			  позволяет получать в режиме реального времени всю доступную в терминале табличную информацию и подавать торговые поручения.
+		  </para>
 		<para>
 			Для корректной работой с <codeEntityReference>T:StockSharp.AlfaDirect.AlfaTrader</codeEntityReference> необходимо предварительно 
 			настроить торговый терминал <token>alfa</token>.
