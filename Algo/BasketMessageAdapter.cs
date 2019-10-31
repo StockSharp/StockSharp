@@ -413,6 +413,7 @@ namespace StockSharp.Algo
 				{
 					IsRestoreOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
 					IsRestoreOnNormalReconnect = IsRestoreSubscriptionOnNormalReconnect,
+					LookupTimeOut = TimeSpan.FromSeconds(20),
 				};
 			}
 

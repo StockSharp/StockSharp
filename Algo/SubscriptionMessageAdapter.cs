@@ -34,6 +34,116 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private class LookupTimeOutTimer
+			//where T : class
+		{
+			private readonly CachedSynchronizedDictionary<long, TimeSpan> _registeredIds = new CachedSynchronizedDictionary<long, TimeSpan>();
+
+			private TimeSpan _timeOut;
+
+			public TimeSpan TimeOut
+			{
+				get => _timeOut;
+				set
+				{
+					if (value < TimeSpan.Zero)
+						throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.IntervalMustBePositive);
+
+					_timeOut = value;
+				}
+			}
+
+			public void StartTimeOut(long transactionId)
+			{
+				if (transactionId == 0)
+				{
+					//throw new ArgumentNullException(nameof(transactionId));
+					return;
+				}
+
+				if (TimeOut == default)
+					return;
+
+				_registeredIds.SafeAdd(transactionId, s => TimeOut);
+			}
+
+			public void UpdateTimeOut(long transactionId)
+			{
+				if (transactionId == 0)
+					return;
+
+				if (TimeOut == default)
+					return;
+
+				lock (_registeredIds.SyncRoot)
+				{
+					if (!_registeredIds.ContainsKey(transactionId))
+						return;
+
+					_registeredIds[transactionId] = TimeOut;
+				}
+			}
+
+			public void RemoveTimeOut(long transactionId)
+			{
+				if (transactionId == 0)
+					return;
+
+				_registeredIds.Remove(transactionId);
+			}
+
+			public IEnumerable<long> ProcessTime(TimeSpan diff)
+			{
+				if (_registeredIds.Count == 0)
+					return Enumerable.Empty<long>();
+
+				if (TimeOut == default)
+					return Enumerable.Empty<long>();
+
+				return _registeredIds.SyncGet(d =>
+				{
+					var timeOutCodes = new List<long>();
+
+					foreach (var pair in d.CachedPairs)
+					{
+						d[pair.Key] -= diff;
+
+						if (d[pair.Key] > TimeSpan.Zero)
+							continue;
+
+						timeOutCodes.Add(pair.Key);
+						d.Remove(pair.Key);
+					}
+
+					return timeOutCodes;
+				});
+			}
+
+			public void Clear()
+			{
+				_registeredIds.Clear();
+			}
+		}
+
+		private class LookupInfo<TMessage>
+		{
+			public readonly Queue<TMessage> LookupQueue = new Queue<TMessage>();
+			public readonly LookupTimeOutTimer LookupTimeOut = new LookupTimeOutTimer();
+
+			public LookupInfo(MessageTypes resultType)
+			{
+				ResultType = resultType;
+			}
+
+			public MessageTypes ResultType { get; }
+
+			public void Clear()
+			{
+				LookupQueue.Clear();
+				LookupTimeOut.Clear();
+			}
+		}
+
 		private readonly SyncObject _sync = new SyncObject();
 
 		private readonly Dictionary<Helper.SubscriptionKey, SubscriptionInfo<MarketDataMessage>> _mdSubscribers = new Dictionary<Helper.SubscriptionKey, SubscriptionInfo<MarketDataMessage>>();
@@ -45,10 +155,12 @@ namespace StockSharp.Algo
 		private readonly HashSet<long> _onlyHistorySubscriptions = new HashSet<long>();
 		private readonly List<Message> _subscriptionRequests = new List<Message>();
 		private readonly HashSet<long> _passThroughtIds = new HashSet<long>();
-		private readonly Queue<SecurityLookupMessage> _securityLookupQueue = new Queue<SecurityLookupMessage>();
-		private readonly Queue<PortfolioLookupMessage> _portfolioLookupQueue = new Queue<PortfolioLookupMessage>();
-		private readonly Queue<BoardLookupMessage> _boardLookupQueue = new Queue<BoardLookupMessage>();
-		private readonly Queue<TimeFrameLookupMessage> _timeFrameLookupQueue = new Queue<TimeFrameLookupMessage>();
+
+		private readonly LookupInfo<SecurityLookupMessage> _secLookupInfo = new LookupInfo<SecurityLookupMessage>(MessageTypes.SecurityLookupResult);
+		private readonly LookupInfo<PortfolioLookupMessage> _pfLookupInfo = new LookupInfo<PortfolioLookupMessage>(MessageTypes.PortfolioLookupResult);
+		private readonly LookupInfo<BoardLookupMessage> _boardLookupInfo = new LookupInfo<BoardLookupMessage>(MessageTypes.BoardLookupResult);
+		private readonly LookupInfo<TimeFrameLookupMessage> _timeFrameLookupInfo = new LookupInfo<TimeFrameLookupMessage>(MessageTypes.TimeFrameLookupResult);
+		private DateTimeOffset _prevTime;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
@@ -84,6 +196,24 @@ namespace StockSharp.Algo
 		/// Send back reply for non existing unsubscription requests with filled <see cref="MarketDataMessage.Error"/> property.
 		/// </summary>
 		public bool NonExistSubscriptionAsError { get; set; }
+
+		/// <summary>
+		/// Securities and portfolios lookup timeout.
+		/// </summary>
+		/// <remarks>
+		/// By default is 10 seconds.
+		/// </remarks>
+		public TimeSpan LookupTimeOut
+		{
+			get => _secLookupInfo.LookupTimeOut.TimeOut;
+			set
+			{
+				_secLookupInfo.LookupTimeOut.TimeOut = value;
+				_pfLookupInfo.LookupTimeOut.TimeOut = value;
+				_boardLookupInfo.LookupTimeOut.TimeOut = value;
+				_timeFrameLookupInfo.LookupTimeOut.TimeOut = value;
+			}
+		}
 
 		private void ClearSubscribers()
 		{
@@ -124,10 +254,11 @@ namespace StockSharp.Algo
 						_subscriptionRequests.Clear();
 						_passThroughtIds.Clear();
 
-						_securityLookupQueue.Clear();
-						_portfolioLookupQueue.Clear();
-						_boardLookupQueue.Clear();
-						_timeFrameLookupQueue.Clear();
+						_prevTime = default;
+						_secLookupInfo.Clear();
+						_pfLookupInfo.Clear();
+						_boardLookupInfo.Clear();
+						_timeFrameLookupInfo.Clear();
 					}
 
 					base.OnSendInMessage(message);
@@ -194,19 +325,19 @@ namespace StockSharp.Algo
 					break;
 
 				case MessageTypes.SecurityLookup:
-					if (ProcessLookupMessage((SecurityLookupMessage)message, _securityLookupQueue))
+					if (ProcessLookupMessage((SecurityLookupMessage)message, _secLookupInfo))
 						base.OnSendInMessage(message);
 
 					break;
 
 				case MessageTypes.BoardLookup:
-					if (ProcessLookupMessage((BoardLookupMessage)message, _boardLookupQueue))
+					if (ProcessLookupMessage((BoardLookupMessage)message, _boardLookupInfo))
 						base.OnSendInMessage(message);
 
 					break;
 
 				case MessageTypes.TimeFrameLookup:
-					if (ProcessLookupMessage((TimeFrameLookupMessage)message, _timeFrameLookupQueue))
+					if (ProcessLookupMessage((TimeFrameLookupMessage)message, _timeFrameLookupInfo))
 						base.OnSendInMessage(message);
 
 					break;
@@ -225,14 +356,14 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private bool ProcessLookupMessage<TMessage>(TMessage message, Queue<TMessage> lookupQueue)
+		private bool ProcessLookupMessage<TMessage>(TMessage message, LookupInfo<TMessage> info)
 			where TMessage : Message, ITransactionIdMessage
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			if (lookupQueue == null)
-				throw new ArgumentNullException(nameof(lookupQueue));
+			if (info == null)
+				throw new ArgumentNullException(nameof(info));
 
 			lock (_sync)
 			{
@@ -240,18 +371,24 @@ namespace StockSharp.Algo
 					return true;
 
 				// not prev queued lookup
-				if (!lookupQueue.Contains(message))
-					lookupQueue.Enqueue((TMessage)message.Clone());
+				if (!info.LookupQueue.Contains(message))
+					info.LookupQueue.Enqueue((TMessage)message.Clone());
 
-				if (lookupQueue.Count > 1)
+				if (info.LookupQueue.Count > 1)
 					return false;
 			}
+
+			if (!this.IsOutMessageSupported(info.ResultType))
+				info.LookupTimeOut.StartTimeOut(message.TransactionId);
 
 			return true;
 		}
 
 		private void FillSubscriptionList(List<Message> messages)
 		{
+			if (messages == null)
+				throw new ArgumentNullException(nameof(messages));
+
 			messages.AddRange(_mdSubscribers.Values.Select(p => p.Message.Clone()));
 			messages.AddRange(_newsBoardSubscribers.Values.Select(p => p.Message.Clone()));
 			messages.AddRange(_pfSubscribers.Values.Select(p => p.Message.Clone()));
@@ -282,18 +419,27 @@ namespace StockSharp.Algo
 				}
 			}
 
-			void ProcessLookupResult<TMessage>(Queue<TMessage> lookupQueue)
+			void ProcessLookupResult<TMessage, TResult>(LookupInfo<TMessage> info, BaseResultMessage<TResult> resultMsg)
 				where TMessage : Message
+				where TResult : BaseResultMessage<TResult>, new()
 			{
+				if (info == null)
+					throw new ArgumentNullException(nameof(info));
+
+				if (resultMsg == null)
+					throw new ArgumentNullException(nameof(resultMsg));
+
 				lock (_sync)
 				{
-					if (lookupQueue.Count == 0)
+					info.LookupTimeOut.RemoveTimeOut(resultMsg.OriginalTransactionId);
+
+					if (info.LookupQueue.Count == 0)
 						return;
 
 					//удаляем текущий запрос лукапа из очереди
-					lookupQueue.Dequeue();
+					info.LookupQueue.Dequeue();
 
-					var nextLookup = lookupQueue.TryPeek();
+					var nextLookup = info.LookupQueue.TryPeek();
 
 					if (nextLookup == null)
 						return;
@@ -350,16 +496,24 @@ namespace StockSharp.Algo
 					break;
 				}
 
+				case MessageTypes.Security:
+					_secLookupInfo.LookupTimeOut.UpdateTimeOut(((SecurityMessage)message).OriginalTransactionId);
+					break;
+
+				case MessageTypes.Board:
+					_boardLookupInfo.LookupTimeOut.UpdateTimeOut(((BoardMessage)message).OriginalTransactionId);
+					break;
+
 				case MessageTypes.SecurityLookupResult:
-					ProcessLookupResult(_securityLookupQueue);
+					ProcessLookupResult(_secLookupInfo, (SecurityLookupResultMessage)message);
 					break;
 
 				case MessageTypes.BoardLookupResult:
-					ProcessLookupResult(_boardLookupQueue);
+					ProcessLookupResult(_boardLookupInfo, (BoardLookupResultMessage)message);
 					break;
 
 				case MessageTypes.TimeFrameLookupResult:
-					ProcessLookupResult(_timeFrameLookupQueue);
+					ProcessLookupResult(_timeFrameLookupInfo, (TimeFrameLookupResultMessage)message);
 					break;
 
 				case MessageTypes.PortfolioLookupResult:
@@ -371,13 +525,20 @@ namespace StockSharp.Algo
 					}
 					finally
 					{
-						ProcessLookupResult(_portfolioLookupQueue);
+						ProcessLookupResult(_pfLookupInfo, (PortfolioLookupResultMessage)message);
 					}
 					
 					break;
 				}
 
 				case MessageTypes.Portfolio:
+				{
+					_pfLookupInfo.LookupTimeOut.UpdateTimeOut(((PortfolioMessage)message).OriginalTransactionId);
+
+					ApplySubscriptionIds((ISubscriptionIdMessage)message);
+					break;
+				}
+
 				case MessageTypes.PortfolioChange:
 				case MessageTypes.PositionChange:
 
@@ -398,6 +559,36 @@ namespace StockSharp.Algo
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+
+			if (_prevTime != DateTimeOffset.MinValue)
+			{
+				var diff = message.LocalTime - _prevTime;
+
+				void ProcessTime<TMessage, TResult>(LookupInfo<TMessage> info)
+					where TResult : BaseResultMessage<TResult>, new()
+				{
+					if (info == null)
+						throw new ArgumentNullException(nameof(info));
+
+					if (messages == null)
+						messages = new List<Message>();
+
+					foreach (var id in info.LookupTimeOut.ProcessTime(diff))
+					{
+						base.OnInnerAdapterNewOutMessage(new TResult
+						{
+							OriginalTransactionId = id
+						});
+					}
+				}
+
+				ProcessTime<SecurityLookupMessage, SecurityLookupResultMessage>(_secLookupInfo);
+				ProcessTime<PortfolioLookupMessage, PortfolioLookupResultMessage>(_pfLookupInfo);
+				ProcessTime<BoardLookupMessage, BoardLookupResultMessage>(_boardLookupInfo);
+				ProcessTime<TimeFrameLookupMessage, TimeFrameLookupResultMessage>(_timeFrameLookupInfo);
+			}
+
+			_prevTime = message.LocalTime;
 
 			if (messages != null)
 			{
@@ -546,7 +737,7 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioLookupMessage(PortfolioLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, message.TransactionId, _pfLookupSubscribers, null, null, null, _portfolioLookupQueue);
+			ProcessInSubscriptionMessage(message, message.TransactionId, _pfLookupSubscribers, null, null, null, _pfLookupInfo);
 		}
 
 		private void ProcessInPortfolioMessage(PortfolioMessage message)
@@ -560,7 +751,7 @@ namespace StockSharp.Algo
 			Dictionary<TKey, SubscriptionInfo<TMessage>> subscriptions,
 			Dictionary<long, SubscriptionInfo<TMessage>> subscribersById,
 			Func<bool, long, TMessage> createSendOut, Func<long, TMessage> createNotExist,
-			Queue<TMessage> lookupQueue)
+			LookupInfo<TMessage> lookupInfo)
 			where TMessage : Message, ISubscriptionMessage
 		{
 			TMessage sendInMsg = null;
@@ -576,9 +767,9 @@ namespace StockSharp.Algo
 						return;
 					}
 
-					if (lookupQueue != null)
+					if (lookupInfo != null)
 					{
-						if (!ProcessLookupMessage(message, lookupQueue))
+						if (!ProcessLookupMessage(message, lookupInfo))
 							return;
 					}
 
