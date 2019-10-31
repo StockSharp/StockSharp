@@ -2,10 +2,12 @@
 <topic id="eab815a2-65f7-46e8-9989-4ae52d234703" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-		<para>
-			Для корректной работы с <codeEntityReference>T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference> необходимо предварительно 
-			настроить торговый терминал <token>IB_TWS</token>.
-		</para>
+    		<para>Механизм взаимодействия показан на данном рисунке:</para>
+		
+		<mediaLink><image placement="center" xlink:href="IBTrader"/></mediaLink>
+		
+		<para>Как видно из рисунка, взаимодействует происходит через терминал <token>IB_TWS</token> или <token>IB_Gate</token>, которые должны быть заранее установлены и настроены.</para>
+
     </introduction>
     
     <procedure>

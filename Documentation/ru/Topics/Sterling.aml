@@ -6,15 +6,7 @@
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
 		</para>
-       <para>
-			Для написания торговых роботов для <token>sterling</token> необходимо использовать 
-			<codeEntityReference>T:StockSharp.Sterling.SterlingMessageAdapter</codeEntityReference>.
-			Авторизация пользователя выполняется при запуске терминала <legacyBold>Sterling Trader Pro</legacyBold>.
-		</para>
-		<mediaLink><image placement="center" xlink:href="Sterling_loging"/></mediaLink>
-		<alert class="note">
-  			<para>Для корректной работы Sterling API нужно запускать Visual Studio от имени администратора.</para>
-		</alert>
+
      </introduction>
      <relatedTopics>
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />

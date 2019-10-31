@@ -6,6 +6,11 @@
      <legacyBold>Пароль</legacyBold> для подключения
      к торговой площадке. <legacyBold>Логин</legacyBold> и <legacyBold>Пароль</legacyBold> 
      предоставляются брокером. Для получения API доступа рекомендуется обратиться к брокеру.</para>
+     		<para>
+			Механизм взаимодействия показан на данном рисунке:
+		</para>
+		
+		<mediaLink><image placement="center" xlink:href="blackwood_trader"/></mediaLink>
     </introduction>
   </developerConceptualDocument>
 </topic>

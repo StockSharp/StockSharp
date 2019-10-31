@@ -6,6 +6,10 @@
      <legacyBold>Пароль</legacyBold> для подключения
      к торговой площадке. <legacyBold>Логин</legacyBold> и <legacyBold>Пароль</legacyBold> 
      предоставляются брокером. Для получения API доступа рекомендуется обратиться к брокеру.</para>
+     		<para>
+			Механизм взаимодействия показан на рисунке:
+		</para>
+	<mediaLink><image placement="center" xlink:href="ETrade"/></mediaLink>
            <para><token>etrade</token> использует протокол авторизации OAuth 1.0a, требующий ввода логина и пароля на сайте <token>etrade_external</token> через интернет-браузер. 
       Последовательность полной процедуры авторизации показана на следующем рисунке:</para>
       

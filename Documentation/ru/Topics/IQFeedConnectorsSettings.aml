@@ -2,6 +2,11 @@
 <topic id="add6156b-b2a9-401c-93cc-be333762da15" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    		<para>
+			Механизм взаимодействия показан на рисунке:
+		</para>
+		
+		<mediaLink><image placement="center" xlink:href="IQFeed"/></mediaLink>
 <para>Для работы с коннектором <legacyBold>iQFeed</legacyBold> вам необходимо установить на 
 компьютере роутер <legacyBold>IQ Feed Client</legacyBold>, который может быть установлен как на 
 локальном компьютере, так и на удаленном. Обмен данными между клиентским 

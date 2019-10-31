@@ -6,28 +6,8 @@
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
 		</para>
-				  <para>
-			  Для написания торговых роботов под Торговую платформу <token>plaza_external</token> необходимо использовать 
-			  <codeEntityReference>T:StockSharp.Plaza.PlazaMessageAdapter</codeEntityReference>.
-			  Механизм взаимодействия показан на данном рисунке:
-		  </para>
-		  
-		  <para>
-			  <mediaLink><image placement="center" xlink:href="PlazaTrader" /></mediaLink>
-		  </para>
-		  
-		  <para>
-		  		Для использования роботом Торговой платформы <token>plaza_external</token> на свой компьютер необходимо установить клиентский дистрибутив шлюза Plaza II.  
-		  		Его можно скачать с FTP-сервера РТС.  Шлюз можно установить как обыкновенную программу для Windows, либо как <token>ntservice</token>.  
-		  		При установке нужно учитывать разрядность системы.  На FTP-сервере выложены 32-разрядный и 64-разрядный дистрибутивы.
-		  </para>
-		  
-		  <!--alert class="note">
-      		Для своей работы <codeEntityReference>T:StockSharp.Plaza.PlazaMessageAdapter</codeEntityReference> использует многопоточную библиотеку 
-      		шлюза (P2ClientGateMTA.dll).  Поэтому при установке шлюза на свой компьютер, когда инсталлятор предложит на выбор зарегистрировать
-      		однопоточную (STA-версия) или многопоточную (MTA-версия) библиотеку, выбрать нужно MTA-версию.  Вручную регистрацию можно
-      		произвести, запустив от имени администратора файл register_MTA_dll.bat, который находится в корневой папке шлюза.
-      	</alert-->
+
+
      </introduction>
      <relatedTopics>
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />
