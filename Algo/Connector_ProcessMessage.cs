@@ -365,7 +365,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private bool _supportSubscriptionTracking = true;
+		private bool _supportSubscriptionTracking;
 
 		/// <summary>
 		/// Use <see cref="SubscriptionMessageAdapter"/>.

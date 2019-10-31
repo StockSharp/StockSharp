@@ -196,7 +196,7 @@ namespace StockSharp.Algo
 		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
 		/// <param name="isRestoreSubscriptionOnErrorReconnect"><see cref="SubscriptionMessageAdapter.IsRestoreOnErrorReconnect"/>.</param>
 		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true,
-			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnErrorReconnect = true)
+			bool supportOffline = false, bool supportSubscriptionTracking = true, bool isRestoreSubscriptionOnErrorReconnect = true)
 		{
 			_entityCache = new EntityCache(this)
 			{
@@ -616,7 +616,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// <see cref="SubscriptionMessageAdapter.IsRestoreOnNormalReconnect"/>.
 		/// </summary>
-		public bool IsRestoreSubscriptionOnNormalReconnect { get; set; }
+		public bool IsRestoreSubscriptionOnNormalReconnect { get; set; } = true;
 
 		/// <inheritdoc />
 		public void Connect()
