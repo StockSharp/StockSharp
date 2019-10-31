@@ -256,6 +256,7 @@ namespace StockSharp.Messages
 		public virtual bool IsSecurityNewsOnly => false;
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual Type OrderConditionType => GetType()
 			.GetAttribute<OrderConditionAttribute>()?
 			.ConditionType;
