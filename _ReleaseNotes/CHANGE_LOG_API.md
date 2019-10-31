@@ -264,6 +264,7 @@ StockSharp API Change log
 * (feature) Connector. SupportSubscriptionTracking enabled by default.
 * (feature) IMarketDataProvider. LookupTimeFrames added.
 * (feature) IMessageAdapter. SupportedOutMessages property added.
+* (feature) IMessageAdapter. IsConnectionAlive removed.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

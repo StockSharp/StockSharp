@@ -317,9 +317,6 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override bool IsSecurityNewsOnly => GetSortedAdapters().All(a => a.IsSecurityNewsOnly);
 
-		/// <inheritdoc />
-		public override bool IsConnectionAlive() => throw new NotSupportedException();
-
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
 		/// </summary>

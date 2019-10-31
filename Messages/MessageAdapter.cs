@@ -455,10 +455,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual bool IsConnectionAlive()
-			=> true;
-
-		/// <inheritdoc />
 		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);
 

@@ -312,8 +312,6 @@ namespace StockSharp.Messages
 
 		OrderCondition IMessageAdapter.CreateOrderCondition() => InnerAdapter.CreateOrderCondition();
 
-		bool IMessageAdapter.IsConnectionAlive() => InnerAdapter.IsConnectionAlive();
-
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 

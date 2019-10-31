@@ -212,12 +212,6 @@ namespace StockSharp.Messages
 		OrderCondition CreateOrderCondition();
 
 		/// <summary>
-		/// Check the connection is alive. Uses only for connected states.
-		/// </summary>
-		/// <returns><see langword="true" />, is the connection still alive, <see langword="false" />, if the connection was rejected.</returns>
-		bool IsConnectionAlive();
-
-		/// <summary>
 		/// Create market depth builder.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
