@@ -277,6 +277,20 @@ namespace StockSharp.Algo
 					break;
 				}
 
+				case MessageTypes.Time:
+				{
+					if (_timeMessage == message)
+					{
+						lock (_timeSync)
+						{
+							if (_currState == ConnectionStates.Disconnecting || _currState == ConnectionStates.Disconnected)
+								return;
+						}
+					}
+
+					break;
+				}
+
 				case ExtendedMessageTypes.Reconnect:
 				{
 					OnSendInMessage(new ConnectMessage());
