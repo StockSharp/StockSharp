@@ -60,6 +60,11 @@ namespace StockSharp.Messages
 		IEnumerable<MessageTypes> SupportedMessages { get; set; }
 
 		/// <summary>
+		/// Supported by adapter message types.
+		/// </summary>
+		IEnumerable<MessageTypes> SupportedOutMessages { get; set; }
+
+		/// <summary>
 		/// Supported by adapter market data types.
 		/// </summary>
 		IEnumerable<MarketDataTypes> SupportedMarketDataTypes { get; set; }

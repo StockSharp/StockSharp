@@ -224,6 +224,13 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public virtual IEnumerable<MessageTypes> SupportedOutMessages
+		{
+			get => InnerAdapter.SupportedOutMessages;
+			set => InnerAdapter.SupportedOutMessages = value;
+		}
+
+		/// <inheritdoc />
 		public virtual IEnumerable<MarketDataTypes> SupportedMarketDataTypes
 		{
 			get => InnerAdapter.SupportedMarketDataTypes;

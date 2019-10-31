@@ -250,6 +250,9 @@ namespace StockSharp.Algo
 		public override IEnumerable<MessageTypes> SupportedMessages => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct();
 
 		/// <inheritdoc />
+		public override IEnumerable<MessageTypes> SupportedOutMessages => GetSortedAdapters().SelectMany(a => a.SupportedOutMessages).Distinct();
+
+		/// <inheritdoc />
 		public override IEnumerable<MarketDataTypes> SupportedMarketDataTypes => GetSortedAdapters().SelectMany(a => a.SupportedMarketDataTypes).Distinct();
 
 		/// <inheritdoc />
@@ -260,12 +263,6 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public override bool SecurityLookupRequired => GetSortedAdapters().Any(a => a.SecurityLookupRequired);
-
-		/// <inheritdoc />
-		protected override bool IsSupportPortfolioLookupResult => true;
-
-		/// <inheritdoc />
-		protected override bool IsSupportSecurityLookupResult => true;
 
 		/// <inheritdoc />
 		public override bool IsSupportSecuritiesLookupAll => GetSortedAdapters().Any(a => a.IsSupportSecuritiesLookupAll);
