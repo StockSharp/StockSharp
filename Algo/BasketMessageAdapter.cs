@@ -666,7 +666,7 @@ namespace StockSharp.Algo
 
 			IMessageAdapter[] adapters = null;
 
-			var adapter = GetUnderlyingAdapter(message.Adapter);
+			var adapter = message.Adapter == null ? null : GetUnderlyingAdapter(message.Adapter);
 
 			if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType.IsSecurityRequired())
 				adapter = _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)mdMsg.DataType)) ?? _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)null));
@@ -1125,10 +1125,10 @@ namespace StockSharp.Algo
 			if (!isError)
 			{
 				if (innerAdapter.PortfolioLookupRequired)
-					messages.Add(FillIdAndAdapter(innerAdapter, new PortfolioLookupMessage()));
+					messages.Add(FillIdAndAdapter(innerAdapter, new PortfolioLookupMessage { IsSubscribe = true }));
 
 				if (innerAdapter.OrderStatusRequired)
-					messages.Add(FillIdAndAdapter(innerAdapter, new OrderStatusMessage()));
+					messages.Add(FillIdAndAdapter(innerAdapter, new OrderStatusMessage { IsSubscribe = true }));
 
 				if (innerAdapter.SecurityLookupRequired && innerAdapter.IsSupportSecuritiesLookupAll)
 					messages.Add(FillIdAndAdapter(innerAdapter, new SecurityLookupMessage()));

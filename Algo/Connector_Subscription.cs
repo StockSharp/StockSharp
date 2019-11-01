@@ -479,8 +479,8 @@ namespace StockSharp.Algo
 		{
 			var lookupMsg = new OrderStatusMessage
 			{
-				TransactionId = TransactionIdGenerator.GetNextId(),
 				IsSubscribe = false,
+				TransactionId = TransactionIdGenerator.GetNextId(),
 			};
 
 			this.AddInfoLog(nameof(UnSubscribeOrders));
