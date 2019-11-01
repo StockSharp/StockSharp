@@ -1,7 +1,6 @@
 T:StockSharp.Xignite.XigniteMessageAdapter/summary;DocStr2538
 M:StockSharp.Xignite.XigniteMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Xignite.XigniteMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.Xignite.XigniteMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.Xignite.XigniteMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.Xignite.XigniteMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Xignite.XigniteMessageAdapter.Token/summary;AccessToken

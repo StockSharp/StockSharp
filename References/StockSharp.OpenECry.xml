@@ -15,12 +15,6 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportPortfolioLookupResult">
-            <inheritdoc />
-        </member>
-        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportSecurityLookupResult">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportCandlesUpdates">
             <inheritdoc />
         </member>
@@ -31,10 +25,7 @@
             <inheritdoc />
         </member>
         <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-            <summary>
-            Send message.
-            </summary>
-            <param name="message">Message.</param>
+            <inheritdoc />
         </member>
         <member name="F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultHeartbeatInterval">
             <summary>

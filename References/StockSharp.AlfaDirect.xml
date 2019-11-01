@@ -15,12 +15,6 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportPortfolioLookupResult">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportSecurityLookupResult">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>

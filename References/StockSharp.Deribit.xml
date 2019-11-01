@@ -9,6 +9,11 @@
             The message adapter for <see cref="N:StockSharp.Deribit"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.Deribit.DeribitMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
         <member name="P:StockSharp.Deribit.DeribitMessageAdapter.Key">
             <summary>
             Key.

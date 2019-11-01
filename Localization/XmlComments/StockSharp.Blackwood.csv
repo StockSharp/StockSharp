@@ -20,10 +20,7 @@ T:StockSharp.Blackwood.BlackwoodMessageAdapter/summary;DocStr2555
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
-M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
-M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
-M:StockSharp.Blackwood.BlackwoodMessageAdapter.IsConnectionAlive/summary;DocStr441
-M:StockSharp.Blackwood.BlackwoodMessageAdapter.IsConnectionAlive/returns;DocStr442
+M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Blackwood.BlackwoodMessageAdapter.Login/summary;Login
 P:StockSharp.Blackwood.BlackwoodMessageAdapter.Password/summary;Password
 P:StockSharp.Blackwood.BlackwoodMessageAdapter.MarketDataAddress/summary;Str3697

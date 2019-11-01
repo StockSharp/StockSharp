@@ -1,7 +1,6 @@
 T:StockSharp.Rithmic.RithmicMessageAdapter/summary;DocStr2538
 M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.Rithmic.RithmicMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

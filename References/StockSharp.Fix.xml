@@ -282,12 +282,6 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.CheckTimeFrameByRequest">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSecurityLookupResult">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportPortfolioLookupResult">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedOrderBookDepths">
       <inheritdoc />
     </member>
@@ -301,6 +295,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.OrderConditionType">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedOutMessages">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition">
@@ -519,18 +516,15 @@
     <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.SupportedMessages">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.SupportedOutMessages">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.ConvertToLatin">
       <summary>
             Convert all non-latin text messages to latin.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.CheckTimeFrameByRequest">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportSecurityLookupResult">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportPortfolioLookupResult">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportMarketDataResponse">
@@ -1497,16 +1491,6 @@
             Check possible time-frame by request.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSecurityLookupResult">
-      <summary>
-            Gets a value indicating whether the adapter translates <see cref="T:StockSharp.Messages.SecurityLookupResultMessage" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportPortfolioLookupResult">
-      <summary>
-            Gets a value indicating whether the adapter translates <see cref="T:StockSharp.Messages.PortfolioLookupResultMessage" />.
-            </summary>
-    </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.SupportedOrderBookDepths">
       <summary>
             Available options for <see cref="P:StockSharp.Messages.MarketDataMessage.MaxDepth" />.
@@ -1534,6 +1518,11 @@
       <remarks>
             If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.
             </remarks>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.SupportedOutMessages">
+      <summary>
+            Supported by adapter message types.
+            </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition">
       <summary>
@@ -7969,10 +7958,7 @@
     <member name="M:StockSharp.Fix.FixMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportSecurityLookupResult">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportPortfolioLookupResult">
+    <member name="P:StockSharp.Fix.FixMessageAdapter.SupportedOutMessages">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.SupportedOrderBookDepths">

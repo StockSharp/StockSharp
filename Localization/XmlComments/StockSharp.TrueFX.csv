@@ -1,7 +1,6 @@
 T:StockSharp.TrueFX.TrueFXMessageAdapter/summary;DocStr2538
 M:StockSharp.TrueFX.TrueFXMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.TrueFX.TrueFXMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.TrueFX.TrueFXMessageAdapter.IsSupportSecurityLookupResult/inheritdoc;DocStr8459
 P:StockSharp.TrueFX.TrueFXMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.TrueFX.TrueFXMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.TrueFX.TrueFXMessageAdapter.Login/summary;Login

@@ -6353,9 +6353,6 @@
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.IsConnectionAlive">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.ToString">
       <inheritdoc />
     </member>

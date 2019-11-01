@@ -2348,13 +2348,6 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="M:StockSharp.Quik.QuikDdeAdapter.IsConnectionAlive">
-      <summary>
-            Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
-            </summary>
-      <returns>
-        <see langword="true" />, если соединение еще установлено, <see langword="false" />, если торговая система разорвала подключение.</returns>
-    </member>
     <member name="P:StockSharp.Quik.QuikDdeAdapter.UseCurrencyPortfolios">
       <summary>
             Использовать в экспорте таблицу <see cref="P:StockSharp.Quik.QuikDdeAdapter.CurrencyPortfoliosTable" />. По-умолчанию не используется.
@@ -2444,22 +2437,13 @@
             </summary>
     </member>
     <member name="M:StockSharp.Quik.QuikDdeAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Отправить сообщение.
-            </summary>
-      <param name="message">Сообщение.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.QuikDdeAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.QuikDdeAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.QuikDdeAdapter.DisposeManaged">
       <summary>
@@ -2812,17 +2796,10 @@
             </summary>
     </member>
     <member name="M:StockSharp.Quik.QuikTrader.OnProcessMessage(StockSharp.Messages.Message)">
-      <summary>
-            Обработать сообщение.
-            </summary>
-      <param name="message">Сообщение.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.QuikTrader.OnReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)">
-      <summary>
-            Перерегистрировать заявку на бирже.
-            </summary>
-      <param name="oldOrder">Заявка, которую нужно снять.</param>
-      <param name="newOrder">Новая заявка, которую нужно зарегистрировать.</param>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Quik.QuikTrader.DdeTables">
       <summary>
@@ -2874,16 +2851,10 @@
       <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Quik.QuikTrader.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.QuikTrader.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Quik.QuikTerminal">
       <summary>
@@ -3185,13 +3156,6 @@
             Транзакционный адаптер сообщений для Quik, работающий через библиотеку Trans2Quik.dll.
             </summary>
     </member>
-    <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.IsConnectionAlive">
-      <summary>
-            Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
-            </summary>
-      <returns>
-        <see langword="true" />, если соединение еще установлено, <see langword="false" />, если торговая система разорвала подключение.</returns>
-    </member>
     <member name="E:StockSharp.Quik.QuikTrans2QuikAdapter.FormatTransaction">
       <summary>
             Отформатировать транзакцию (добавить, удалить или заменить параметры) перед тем, как она будет отправлена в Quik.
@@ -3228,10 +3192,7 @@
             </summary>
     </member>
     <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Отправить сообщение.
-            </summary>
-      <param name="message">Сообщение.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.RegisterTransaction(StockSharp.Quik.Transaction)">
       <summary>
@@ -3247,16 +3208,10 @@
       <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.DisposeManaged">
       <summary>

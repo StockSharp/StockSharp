@@ -109,17 +109,7 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Send message.
-            </summary>
-      <param name="message">Message.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.IsConnectionAlive">
-      <summary>
-            Check the connection is alive. Uses only for connected states.
-            </summary>
-      <returns>
-        <see langword="true" />, is the connection still alive, <see langword="false" />, if the connection was rejected.</returns>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.Login">
       <summary>

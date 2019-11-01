@@ -25,10 +25,7 @@
             <inheritdoc />
         </member>
         <member name="M:StockSharp.Cqg.Com.CqgComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-            <summary>
-            Send message.
-            </summary>
-            <param name="message">Message.</param>
+            <inheritdoc />
         </member>
         <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.UserName">
             <summary>

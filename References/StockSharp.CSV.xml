@@ -15,13 +15,7 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportSecurityLookupResult">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportSecuritiesLookupAll">
-            <inheritdoc />
-        </member>
-        <member name="P:StockSharp.CSV.CSVMessageAdapter.IsSupportPortfolioLookupResult">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.CSV.CSVMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">

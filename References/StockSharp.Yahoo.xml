@@ -15,9 +15,6 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.Yahoo.YahooMessageAdapter.IsSupportSecurityLookupResult">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.Yahoo.YahooMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
