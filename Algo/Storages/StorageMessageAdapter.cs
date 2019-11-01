@@ -556,7 +556,7 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (/*!SupportLookupMessages || */msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			if (msg.Adapter != null && msg.Adapter != this)
 			{
 				base.OnSendInMessage(msg);
 				return;
@@ -573,7 +573,7 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (/*!SupportLookupMessages || */msg.IsBack || (msg.Adapter != null && msg.Adapter != this))
+			if (msg.Adapter != null && msg.Adapter != this)
 			{
 				base.OnSendInMessage(msg);
 				return;
@@ -590,7 +590,7 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (/*!SupportLookupMessages || */msg.IsBack || !msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
+			if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.OnSendInMessage(msg);
 				return;
@@ -622,7 +622,7 @@ namespace StockSharp.Algo.Storages
 
 			_orderStatusIds.Add(transId);
 
-			if (/*!SupportLookupMessages || */msg.IsBack || !msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
+			if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
 			{
 				base.OnSendInMessage(msg);
 				return;
@@ -685,7 +685,7 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (msg.IsBack || (msg.From == null && DaysLoad == TimeSpan.Zero))
+			if (msg.From == null && DaysLoad == TimeSpan.Zero)
 			{
 				base.OnSendInMessage(msg);
 				return;

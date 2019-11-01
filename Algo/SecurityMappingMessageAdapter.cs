@@ -31,12 +31,6 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnInnerAdapterNewOutMessage(message);
-				return;
-			}
-
 			switch (message.Type)
 			{
 				case MessageTypes.Security:

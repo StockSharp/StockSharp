@@ -63,12 +63,6 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnInnerAdapterNewOutMessage(message);
-				return;
-			}
-
 			switch (message.Type)
 			{
 				case MessageTypes.Security:
@@ -78,7 +72,7 @@ namespace StockSharp.Algo
 					{
 						var clone = (SecurityMessage)secMsg.Clone();
 						clone.SecurityId = CreateAssociatedId(clone.SecurityId);
-						RaiseNewOutMessage(clone);
+						base.OnInnerAdapterNewOutMessage(clone);
 					}
 					break;
 				}
@@ -92,7 +86,7 @@ namespace StockSharp.Algo
 						// обновление BestXXX для ALL из конкретных тикеров
 						var clone = (Level1ChangeMessage)level1Msg.Clone();
 						clone.SecurityId = CreateAssociatedId(clone.SecurityId);
-						RaiseNewOutMessage(clone);
+						base.OnInnerAdapterNewOutMessage(clone);
 					}
 
 					break;
@@ -113,7 +107,7 @@ namespace StockSharp.Algo
 
 					quoteMsg = builder.Process(quoteMsg);
 
-					RaiseNewOutMessage(quoteMsg);
+					base.OnInnerAdapterNewOutMessage(quoteMsg);
 
 					break;
 				}
@@ -131,7 +125,7 @@ namespace StockSharp.Algo
 							{
 								var clone = (ExecutionMessage)executionMsg.Clone();
 								clone.SecurityId = CreateAssociatedId(clone.SecurityId);
-								RaiseNewOutMessage(clone);
+								base.OnInnerAdapterNewOutMessage(clone);
 							}
 
 							break;

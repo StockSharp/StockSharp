@@ -171,17 +171,6 @@
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				if (message.Adapter == this)
-					message.IsBack = false;
-				else
-				{
-					base.OnSendInMessage(message);
-					return;
-				}
-			}
-
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:

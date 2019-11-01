@@ -509,6 +509,7 @@ namespace StockSharp.Algo
 			}
 
 			_timeMessage.IsBack = true;
+			_timeMessage.Adapter = this;
 			_timeMessage.TransactionId = TransactionIdGenerator.GetNextId();
 
 			RaiseNewOutMessage(_timeMessage);

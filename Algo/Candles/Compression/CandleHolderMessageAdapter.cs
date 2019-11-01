@@ -69,12 +69,6 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnInnerAdapterNewOutMessage(message);
-				return;
-			}
-
 			switch (message.Type)
 			{
 				case MessageTypes.CandleTimeFrame:

@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		public override void SendInMessage(Message message)
 		{
 			if (message.IsBack)
 			{
@@ -64,21 +64,27 @@ namespace StockSharp.Algo.Risk
 				{
 					message.Adapter = null;
 					message.IsBack = false;
+
+					base.OnSendInMessage(message);
+					return;
 				}
-				
-				base.OnSendInMessage(message);
-				return;
 			}
 
+			base.SendInMessage(message);
+		}
+
+		/// <inheritdoc />
+		protected override void OnSendInMessage(Message message)
+		{
 			ProcessRisk(message);
+			
 			base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (!message.IsBack)
-				ProcessRisk(message);
+			ProcessRisk(message);
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}

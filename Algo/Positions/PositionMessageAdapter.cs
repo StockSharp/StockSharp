@@ -47,12 +47,6 @@ namespace StockSharp.Algo.Positions
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnSendInMessage(message);
-				return;
-			}
-
 			PositionManager.ProcessMessage(message);
 			base.OnSendInMessage(message);
 		}
@@ -60,13 +54,10 @@ namespace StockSharp.Algo.Positions
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (!message.IsBack)
-			{
-				var position = PositionManager.ProcessMessage(message);
+			var position = PositionManager.ProcessMessage(message);
 
-				if (position != null)
-					((ExecutionMessage)message).Position = position;	
-			}
+			if (position != null)
+				((ExecutionMessage)message).Position = position;
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}

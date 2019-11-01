@@ -67,12 +67,6 @@
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnInnerAdapterNewOutMessage(message);
-				return;
-			}
-
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
@@ -244,12 +238,6 @@
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
-			if (message.IsBack && message.Adapter == this)
-			{
-				message.IsBack = false;
-				message.Adapter = null;
-			}
-
 			switch (message.Type)
 			{
 				case MessageTypes.OrderRegister:

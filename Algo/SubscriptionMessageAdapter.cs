@@ -228,20 +228,6 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				if (message.Adapter == this)
-				{
-					message.Adapter = null;
-					message.IsBack = false;
-				}
-				else
-				{
-					base.OnSendInMessage(message);
-					return;
-				}
-			}
-
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -399,12 +385,6 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnInnerAdapterNewOutMessage(message);
-				return;
-			}
-
 			List<Message> messages = null;
 
 			void FillSubscriptions()

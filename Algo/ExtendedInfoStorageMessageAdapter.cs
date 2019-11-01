@@ -55,13 +55,10 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (!message.IsBack)
-			{
-				var secMsg = message as SecurityMessage;
+			var secMsg = message as SecurityMessage;
 
-				if (secMsg?.ExtensionInfo != null)
-					GetStorage().Add(secMsg.SecurityId, secMsg.ExtensionInfo);
-			}
+			if (secMsg?.ExtensionInfo != null)
+				GetStorage().Add(secMsg.SecurityId, secMsg.ExtensionInfo);
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}

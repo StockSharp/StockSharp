@@ -72,12 +72,6 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnSendInMessage(message);
-				return;
-			}
-
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
