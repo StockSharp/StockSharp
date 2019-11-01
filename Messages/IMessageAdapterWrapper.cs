@@ -364,7 +364,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual void Dispose()
 		{
-			InnerAdapter.NewOutMessage -= OnInnerAdapterNewOutMessage;
+			InnerAdapter.NewOutMessage -= InnerAdapterNewOutMessage;
 
 			if (OwnInnerAdapter)
 				InnerAdapter.Dispose();
