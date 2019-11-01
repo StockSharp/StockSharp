@@ -309,6 +309,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool IgnoreExtraAdapters { get; set; }
 
+		/// <summary>
+		/// Send lookup messages on connect. By default is <see langword="true"/>.
+		/// </summary>
+		public bool LookupMessagesOnConnect { get; set; } = true;
+
 		/// <inheritdoc />
 		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 			=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId, from, to)).Distinct().OrderBy();
@@ -970,7 +975,7 @@ namespace StockSharp.Algo
 						var pfMsg = (IPortfolioNameMessage)message;
 						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
 						
-						if (innerAdapter.IsSupportSubscriptionByPortfolio)
+						if (LookupMessagesOnConnect && innerAdapter.IsSupportSubscriptionByPortfolio)
 							extraOutMsg = CreatePortfolioSubscription(innerAdapter, pfMsg.PortfolioName);
 
 						break;
@@ -1120,7 +1125,7 @@ namespace StockSharp.Algo
 			message.Adapter = underlyingAdapter;
 			SendOutMessage(message);
 
-			if (!isError)
+			if (!isError && LookupMessagesOnConnect)
 			{
 				if (innerAdapter.PortfolioLookupRequired)
 					messages.Add(FillIdAndAdapter(innerAdapter, new PortfolioLookupMessage { IsSubscribe = true }));
@@ -1453,6 +1458,8 @@ namespace StockSharp.Algo
 				SupportOrderBookTruncate = SupportOrderBookTruncate,
 				SupportOffline = SupportOffline,
 				IgnoreExtraAdapters = IgnoreExtraAdapters,
+				LookupMessagesOnConnect = LookupMessagesOnConnect,
+				NativeIdStorage = NativeIdStorage
 			};
 
 			clone.Load(this.Save());
