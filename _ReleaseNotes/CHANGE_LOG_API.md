@@ -178,7 +178,7 @@ StockSharp API Change log
 * (feature) Strategy implemented ITransactionProvider interface.
 * (feature) Portfolio. CreateSimulator method added.
 * (feature) BuySellGrid. AddPanel, RemovePanel methods added.
-* (feature) GuiConnector marked as obsolete.
+* (feature) GuiConnector removed.
 * (feature) SampleSync removed as obsolete.
 * (feature) Portfolio. InternalId added.
 * (feature) Connector. CandleSeriesError event added.
