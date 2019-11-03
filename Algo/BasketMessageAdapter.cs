@@ -32,7 +32,6 @@ namespace StockSharp.Algo
 	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Slippage;
 	using StockSharp.Algo.Storages;
-	using StockSharp.Algo.Testing;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -513,7 +512,7 @@ namespace StockSharp.Algo
 
 					_activeAdapters.Values.ForEach(a =>
 					{
-						var u = GetUnderlyingAdapter(a);
+						var u = a.GetUnderlyingAdapter();
 						this.AddInfoLog("Connecting '{0}'.", u);
 
 						a.SendInMessage(message);
@@ -527,7 +526,7 @@ namespace StockSharp.Algo
 					{
 						_connectedAdapters.ToArray().ForEach(a =>
 						{
-							var u = GetUnderlyingAdapter(a);
+							var u = a.GetUnderlyingAdapter();
 							this.AddInfoLog("Disconnecting '{0}'.", u);
 
 							a.SendInMessage(message);
@@ -651,7 +650,7 @@ namespace StockSharp.Algo
 					lock (_lookups.SyncRoot)
 					{
 						if (!_lookups.ContainsKey(key))
-							_lookups.Add(key, new HashSet<IMessageAdapter>(adapters.Select(GetUnderlyingAdapter)));
+							_lookups.Add(key, new HashSet<IMessageAdapter>(adapters.Select(Helper.GetUnderlyingAdapter)));
 					}
 				}
 
@@ -669,7 +668,7 @@ namespace StockSharp.Algo
 
 			IMessageAdapter[] adapters = null;
 
-			var adapter = message.Adapter == null ? null : GetUnderlyingAdapter(message.Adapter);
+			var adapter = message.Adapter?.GetUnderlyingAdapter();
 
 			if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType.IsSecurityRequired())
 				adapter = _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)mdMsg.DataType)) ?? _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)null));
@@ -699,7 +698,7 @@ namespace StockSharp.Algo
 
 						if (set != null)
 						{
-							adapters = adapters.Where(a => !set.Contains(GetUnderlyingAdapter(a))).ToArray();
+							adapters = adapters.Where(a => !set.Contains(a.GetUnderlyingAdapter())).ToArray();
 						}
 						else if (mdMsg1.DataType == MarketDataTypes.News && mdMsg1.SecurityId == default)
 						{
@@ -973,7 +972,7 @@ namespace StockSharp.Algo
 					case MessageTypes.PositionChange:
 					{
 						var pfMsg = (IPortfolioNameMessage)message;
-						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
+						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, innerAdapter.GetUnderlyingAdapter().Id);
 						
 						if (LookupMessagesOnConnect && innerAdapter.IsSupportSubscriptionByPortfolio)
 							extraOutMsg = CreatePortfolioSubscription(innerAdapter, pfMsg.PortfolioName);
@@ -983,13 +982,13 @@ namespace StockSharp.Algo
 
 					case MessageTypes.Security:
 						var secMsg = (SecurityMessage)message;
-						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, null, GetUnderlyingAdapter(innerAdapter).Id);
+						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, null, innerAdapter.GetUnderlyingAdapter().Id);
 						break;
 
 					case MessageTypes.SecurityLookupResult:
 					case MessageTypes.PortfolioLookupResult:
 					case MessageTypes.BoardLookupResult:
-						if (!CanProcessLookupResult(GetUnderlyingAdapter(innerAdapter), message))
+						if (!CanProcessLookupResult(innerAdapter.GetUnderlyingAdapter(), message))
 							return;
 
 						break;
@@ -1039,21 +1038,6 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private static IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			return adapter is IMessageAdapterWrapper wrapper
-				?
-				(
-					(wrapper is IRealTimeEmulationMarketDataAdapter || wrapper is IHistoryMessageAdapter)
-						? wrapper
-						: GetUnderlyingAdapter(wrapper.InnerAdapter)
-				)
-				: adapter;
-		}
-
 		private static TMessage FillIdAndAdapter<TMessage>(IMessageAdapter adapter, TMessage m)
 			where TMessage : Message, ITransactionIdMessage
 		{
@@ -1068,7 +1052,7 @@ namespace StockSharp.Algo
 			if (portfolioName.IsEmpty())
 				throw new ArgumentNullException(nameof(portfolioName));
 
-			var underlyingAdapter = GetUnderlyingAdapter(adapter);
+			var underlyingAdapter = adapter.GetUnderlyingAdapter();
 
 			if (!_subscribedPortfolios.SafeAdd(underlyingAdapter, key => new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)).Add(portfolioName))
 				return null;
@@ -1082,7 +1066,7 @@ namespace StockSharp.Algo
 
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message)
 		{
-			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
+			var underlyingAdapter = innerAdapter.GetUnderlyingAdapter();
 			var wrapper = _activeAdapters[underlyingAdapter];
 
 			var isError = message.Error != null;
@@ -1170,7 +1154,7 @@ namespace StockSharp.Algo
 
 		private void ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message)
 		{
-			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
+			var underlyingAdapter = innerAdapter.GetUnderlyingAdapter();
 			var wrapper = _activeAdapters[underlyingAdapter];
 
 			if (message.Error == null)
@@ -1270,7 +1254,7 @@ namespace StockSharp.Algo
 					if (originMsg.IsSubscribe)
 					{
 						var set = _subscriptionNonSupportedAdapters.SafeAdd(originalTransactionId, k => new HashSet<IMessageAdapter>());
-						set.Add(GetUnderlyingAdapter(adapter));
+						set.Add(adapter.GetUnderlyingAdapter());
 
 						originMsg.Adapter = this;
 						originMsg.IsBack = true;

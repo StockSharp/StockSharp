@@ -19,6 +19,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Common;
 
+	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -157,6 +158,21 @@ namespace StockSharp.Algo
 				return secMsg.SecurityId.IsDefault();
 
 			return false;
+		}
+
+		public static IMessageAdapter GetUnderlyingAdapter(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter is IMessageAdapterWrapper wrapper
+				?
+				(
+					(wrapper is IRealTimeEmulationMarketDataAdapter || wrapper is IHistoryMessageAdapter)
+						? wrapper
+						: GetUnderlyingAdapter(wrapper.InnerAdapter)
+				)
+				: adapter;
 		}
 	}
 }
