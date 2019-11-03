@@ -5,6 +5,7 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 
 	using StockSharp.Algo.Storages;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -92,8 +93,8 @@ namespace StockSharp.Algo
 		{
 			switch (message)
 			{
-				case ISecurityIdMessage _:
-					ReplaceSecurityId(message);
+				case SecurityMessage secMsg:
+					ReplaceSecurityId(secMsg);
 					break;
 
 				case OrderPairReplaceMessage pairMsg:
@@ -114,10 +115,8 @@ namespace StockSharp.Algo
 			return new SecurityMappingMessageAdapter(InnerAdapter, Storage);
 		}
 
-		private void ReplaceSecurityId(Message message)
+		private void ReplaceSecurityId(SecurityMessage secMsg)
 		{
-			var secMsg = (SecurityMessage)message;
-
 			if (secMsg.NotRequiredSecurityId())
 				return;
 
@@ -125,7 +124,10 @@ namespace StockSharp.Algo
 			var adapterId = Storage.TryGetAdapterId(StorageName, stockSharpId);
 
 			if (adapterId != null)
-				message.ReplaceSecurityId(adapterId.Value);
+			{
+				this.AddInfoLog("{0}->{1}, {2}", stockSharpId, adapterId.Value, secMsg);
+				secMsg.ReplaceSecurityId(adapterId.Value);
+			}
 		}
 
 		private void ProcessMessage(SecurityId adapterId, Message message)

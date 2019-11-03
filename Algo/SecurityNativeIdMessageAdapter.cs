@@ -9,6 +9,7 @@
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -326,8 +327,10 @@
 				clone.IsBack = true;
 				clone.Adapter = this;
 				_suspendedInMessages.SafeAdd(securityId).Add(clone);
-				return null;
 			}
+
+			this.AddInfoLog("Suspended {0}.", message);
+			return null;
 		}
 
 		/// <summary>

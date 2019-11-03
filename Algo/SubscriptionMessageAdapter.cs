@@ -778,11 +778,17 @@ namespace StockSharp.Algo
 			finally
 			{
 				if (sendInMsg != null)
+				{
+					this.AddInfoLog("In: {0}", sendInMsg);
 					base.OnSendInMessage(sendInMsg);
+				}
 			}
 
 			if (sendOutMsg != null)
+			{
+				this.AddInfoLog("Out: {0}", sendOutMsg);
 				RaiseNewOutMessage(sendOutMsg);
+			}
 		}
 
 		private SubscriptionInfo<TMessage> ProcessInSubscription<TKey, TMessage>(
