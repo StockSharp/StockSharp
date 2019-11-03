@@ -840,9 +840,13 @@ P:StockSharp.Algo.Export.Database.DbProviders.BaseDbProvider.CheckUnique/summary
 T:StockSharp.Algo.Export.IndicatorValue/summary;DocStr9971
 P:StockSharp.Algo.Export.IndicatorValue.Security/summary;DocStr2831
 P:StockSharp.Algo.Export.IndicatorValue.Time/summary;DocStr9972
-P:StockSharp.Algo.Export.IndicatorValue.ValueAsDecimal/summary;DocStr9973
-P:StockSharp.Algo.Export.IndicatorValue.ValuesAsDecimal/summary;DocStr10061
 P:StockSharp.Algo.Export.IndicatorValue.Value/summary;Str3099
+P:StockSharp.Algo.Export.IndicatorValue.ValueAsDecimal/summary;DocStr9973
+P:StockSharp.Algo.Export.IndicatorValue.Value1/summary;DocStr9973
+P:StockSharp.Algo.Export.IndicatorValue.Value2/summary;DocStr9973
+P:StockSharp.Algo.Export.IndicatorValue.Value3/summary;DocStr9973
+P:StockSharp.Algo.Export.IndicatorValue.Value4/summary;DocStr9973
+P:StockSharp.Algo.Export.IndicatorValue.ValuesAsDecimal/summary;DocStr10061
 T:StockSharp.Algo.Export.BaseExporter/summary;DocStr1086
 M:StockSharp.Algo.Export.BaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},System.String)/summary;DocStr93
 M:StockSharp.Algo.Export.BaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},System.String)/param/security;DocStr2831
@@ -5103,7 +5107,7 @@ P:StockSharp.Algo.BasketMessageAdapter.SupportBuildingFromOrderLog/summary;DocSt
 P:StockSharp.Algo.BasketMessageAdapter.SupportOrderBookTruncate/summary;DocStr9304
 P:StockSharp.Algo.BasketMessageAdapter.SupportOffline/summary;DocStr9304
 P:StockSharp.Algo.BasketMessageAdapter.IgnoreExtraAdapters/summary;DocStr11211
-P:StockSharp.Algo.BasketMessageAdapter.LookupMessagesOnConnect/summary;DocStr11391
+P:StockSharp.Algo.BasketMessageAdapter.LookupMessagesOnConnect/summary;DocStr10063
 M:StockSharp.Algo.BasketMessageAdapter.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.Algo.BasketMessageAdapter.IsSecurityNewsOnly/inheritdoc;DocStr8459
 M:StockSharp.Algo.BasketMessageAdapter.GetSortedAdapters/summary;DocStr445
