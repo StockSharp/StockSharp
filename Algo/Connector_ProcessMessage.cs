@@ -723,6 +723,14 @@ namespace StockSharp.Algo
 						ProcessConnectMessage((DisconnectMessage)message);
 						break;
 
+					case ExtendedMessageTypes.ReconnectingStarted:
+						ProcessReconnectingStartedMessage(message);
+						break;
+
+					case ExtendedMessageTypes.ReconnectingFinished:
+						ProcessReconnectingFinishedMessage(message);
+						break;
+
 					case MessageTypes.BoardState:
 						ProcessBoardStateMessage((BoardStateMessage)message);
 						break;
@@ -820,13 +828,14 @@ namespace StockSharp.Algo
 		{
 			var isConnect = message is ConnectMessage;
 			var adapter = message.Adapter;
+			var error = message.Error;
 
 			try
 			{
 				if (adapter == null)
 				{
-					if (message.Error != null)
-						RaiseConnectionError(message.Error);
+					if (error != null)
+						RaiseConnectionError(error);
 
 					return;
 				}
@@ -839,10 +848,8 @@ namespace StockSharp.Algo
 					{
 						if (isConnect)
 						{
-							if (message.Error == null)
-							{
+							if (error == null)
 								SetAdapterConnected(adapter, message);
-							}
 							else
 								SetAdapterFailed(adapter, message, ConnectionStates.Connecting, true);
 						}
@@ -855,7 +862,7 @@ namespace StockSharp.Algo
 					{
 						if (!isConnect)
 						{
-							if (message.Error == null)
+							if (error == null)
 							{
 								_adapterStates[adapter] = ConnectionStates.Disconnected;
 
@@ -877,10 +884,10 @@ namespace StockSharp.Algo
 					}
 					case ConnectionStates.Connected:
 					{
-						if (message.Error != null)
+						if (error != null)
 						{
 							_adapterStates[adapter] = ConnectionStates.Failed;
-							var error = new InvalidOperationException(LocalizedStrings.Str683, message.Error);
+							error = new InvalidOperationException(LocalizedStrings.Str683, error);
 							RaiseConnectionError(error);
 							RaiseConnectionErrorEx(adapter, error);
 							return;
@@ -896,7 +903,7 @@ namespace StockSharp.Algo
 					{
 						if (isConnect)
 						{
-							if (message.Error == null)
+							if (error == null)
 								SetAdapterConnected(adapter, message);
 
 							return;
@@ -909,7 +916,7 @@ namespace StockSharp.Algo
 				}
 
 				// так как соединение установлено, то выдаем ошибку через Error, чтобы не сбрасывать состояние
-				var error2 = new InvalidOperationException(LocalizedStrings.Str685Params.Put(state, message.GetType().Name), message.Error);
+				var error2 = new InvalidOperationException(LocalizedStrings.Str685Params.Put(state, message.GetType().Name), error);
 				RaiseError(error2);
 				RaiseConnectionErrorEx(adapter, error2);
 			}
@@ -943,13 +950,13 @@ namespace StockSharp.Algo
 
 			RaiseConnectedEx(adapter);
 
-			var isAllConnected = _adapterStates.CachedValues.All(v => v == ConnectionStates.Connected);
+			//var isAllConnected = _adapterStates.CachedValues.All(v => v == ConnectionStates.Connected);
 
-			if (!isAllConnected)
-				return;
+			//if (!isAllConnected)
+			//	return;
 
-			ConnectionState = ConnectionStates.Connected;
-			RaiseRestored();
+			//ConnectionState = ConnectionStates.Connected;
+			//RaiseConnectionRestored();
 		}
 
 		private void RaiseConnectedWhenAllConnected()
@@ -982,6 +989,16 @@ namespace StockSharp.Algo
 				RaiseError(error);
 
 			RaiseConnectionErrorEx(adapter, error);
+		}
+
+		private void ProcessReconnectingStartedMessage(Message message)
+		{
+			RaiseConnectionLost(message.Adapter);
+		}
+
+		private void ProcessReconnectingFinishedMessage(Message message)
+		{
+			RaiseConnectionRestored(message.Adapter);
 		}
 
 		private void ProcessBoardStateMessage(BoardStateMessage message)

@@ -167,7 +167,7 @@ namespace StockSharp.Algo
 						else if (isReconnectionStarted)
 						{
 							this.AddInfoLog(LocalizedStrings.Reconnecting);
-							base.OnInnerAdapterNewOutMessage(new ReconnectingStartedMessage());
+							base.OnInnerAdapterNewOutMessage(new ReconnectingStartedMessage { Adapter = message.Adapter });
 						}
 					}
 

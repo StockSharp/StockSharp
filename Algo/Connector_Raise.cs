@@ -292,11 +292,19 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Connection restored.
 		/// </summary>
+		[Obsolete("Use ConnectionRestored event.")]
 		public event Action Restored;
+
+		/// <inheritdoc />
+		public event Action<IMessageAdapter> ConnectionRestored;
+
+		/// <inheritdoc />
+		public event Action<IMessageAdapter> ConnectionLost;
 
 		/// <summary>
 		/// Connection timed-out.
 		/// </summary>
+		[Obsolete("Use ConnectionError event.")]
 		public event Action TimeOut;
 
 		/// <summary>
@@ -724,14 +732,26 @@ namespace StockSharp.Algo
 			ValuesChanged?.Invoke(security, changes, serverTime, localTime);
 		}
 
-		private void RaiseRestored()
+		private void RaiseConnectionLost(IMessageAdapter adapter)
 		{
+			ConnectionLost?.Invoke(adapter);
+		}
+
+		private void RaiseConnectionRestored(IMessageAdapter adapter)
+		{
+#pragma warning disable 618
 			Restored?.Invoke();
+#pragma warning restore 618
+
+			if (adapter != null)
+				ConnectionRestored?.Invoke(adapter);
 		}
 
 		private void RaiseTimeOut()
 		{
+#pragma warning disable 618
 			TimeOut?.Invoke();
+#pragma warning restore 618
 		}
 
 		private void RaiseCandleSeriesProcessing(CandleSeries series, Candle candle)

@@ -266,6 +266,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter. SupportedOutMessages property added.
 * (feature) IMessageAdapter. IsConnectionAlive removed.
 * (feature) Connector. Subscription tracking on normal and error disconnects turned on by default.
+* (feature) IConnector. ConnectionLost, ConnectionRestored events added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
