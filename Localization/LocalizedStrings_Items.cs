@@ -49438,6 +49438,16 @@ namespace StockSharp.Localization
 		public static string FileNameFormat => GetString(FileNameFormatKey);
 
 		/// <summary>
+		/// File name format. For ex., 'candles_{Security.Id}_{From:yyyy_MM_dd}_{To:yyyy_MM_dd}.csv'.
+		/// </summary>
+		public const string FileNameFormatDescKey = nameof(FileNameFormatDesc);
+
+		/// <summary>
+		/// File name format. For ex., 'candles_{Security.Id}_{From:yyyy_MM_dd}_{To:yyyy_MM_dd}.csv'.
+		/// </summary>
+		public static string FileNameFormatDesc => GetString(FileNameFormatDescKey);
+
+		/// <summary>
 		/// Min volume
 		/// </summary>
 		public const string MinVolumeKey = nameof(MinVolume);
@@ -50606,5 +50616,35 @@ namespace StockSharp.Localization
 		/// CoinEx
 		/// </summary>
 		public static string CoinEx => GetString(CoinExKey);
+
+		/// <summary>
+		/// By days
+		/// </summary>
+		public const string ByDaysKey = nameof(ByDays);
+
+		/// <summary>
+		/// By days
+		/// </summary>
+		public static string ByDays => GetString(ByDaysKey);
+
+		/// <summary>
+		/// By months
+		/// </summary>
+		public const string ByMonthsKey = nameof(ByMonths);
+
+		/// <summary>
+		/// By months
+		/// </summary>
+		public static string ByMonths => GetString(ByMonthsKey);
+
+		/// <summary>
+		/// By years
+		/// </summary>
+		public const string ByYearsKey = nameof(ByYears);
+
+		/// <summary>
+		/// By years
+		/// </summary>
+		public static string ByYears => GetString(ByYearsKey);
 	}
 }
