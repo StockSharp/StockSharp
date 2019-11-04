@@ -66,7 +66,7 @@ namespace StockSharp.Algo
 			where TCriteria : Message
 		{
 			public TCriteria Criteria { get; }
-			public List<TItem> Items { get; } = new List<TItem>();
+			public IList<TItem> Items { get; } = new List<TItem>();
 
 			public LookupInfo(TCriteria criteria)
 			{

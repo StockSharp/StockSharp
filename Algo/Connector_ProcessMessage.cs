@@ -1017,6 +1017,17 @@ namespace StockSharp.Algo
 			RaiseReceived(board, message, BoardReceived);
 		}
 
+		private void ProcessLookupResponse<TCriteria, TItem>(SynchronizedDictionary<long, LookupInfo<TCriteria, TItem>> lookups, BaseSubscriptionIdMessage message, TItem item)
+			where TCriteria : Message, new()
+		{
+			LookupInfo<TCriteria, TItem> info;
+
+			lock (lookups.SyncRoot)
+				info = lookups.SafeAdd(message.OriginalTransactionId, key => new LookupInfo<TCriteria, TItem>(new TCriteria()));
+
+			info.Items.Add(item);
+		}
+
 		private void ProcessBoardMessage(BoardMessage message)
 		{
 			var board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.Code, out var isNew, code =>
@@ -1026,15 +1037,11 @@ namespace StockSharp.Algo
 				return b.ApplyChanges(message);
 			});
 
-			if (message.OriginalTransactionId == 0 || !isNew)
+			if (message.OriginalTransactionId == 0)
 				return;
 
-			LookupInfo<BoardLookupMessage, ExchangeBoard> info;
-
-			lock (_securityLookups.SyncRoot)
-				info = _boardLookups.TryGetValue(message.OriginalTransactionId);
-
-			info?.Items.Add(board);
+			if (isNew)
+				ProcessLookupResponse(_boardLookups, message, board);
 
 			RaiseReceived(board, message, BoardReceived);
 		}
@@ -1055,15 +1062,8 @@ namespace StockSharp.Algo
 			if (message.OriginalTransactionId == 0)
 				return;
 
-			if (!isNew)
-				return;
-
-			LookupInfo<SecurityLookupMessage, Security> info;
-
-			lock (_securityLookups.SyncRoot)
-				info = _securityLookups.TryGetValue(message.OriginalTransactionId);
-
-			info?.Items.Add(security);
+			if (isNew)
+				ProcessLookupResponse(_securityLookups, message, security);
 
 			RaiseReceived(security, message, SecurityReceived);
 		}
@@ -1115,7 +1115,7 @@ namespace StockSharp.Algo
 			if (info == null)
 				return;
 
-			RaiseLookupTimeFramesResult(info.Criteria, message.Error, info.Items.ToArray(), info.Items.ToArray());
+			RaiseLookupTimeFramesResult(info.Criteria, message.Error, message.TimeFrames, message.TimeFrames);
 		}
 
 		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)
@@ -1240,15 +1240,11 @@ namespace StockSharp.Algo
 				return true;
 			}, out var isNew);
 
-			if (message.OriginalTransactionId == 0 || !isNew)
+			if (message.OriginalTransactionId == 0)
 				return;
 
-			LookupInfo<PortfolioLookupMessage, Portfolio> info;
-
-			lock (_securityLookups.SyncRoot)
-				info = _portfolioLookups.TryGetValue(message.OriginalTransactionId);
-
-			info?.Items.Add(portfolio);
+			if (isNew)
+				ProcessLookupResponse(_portfolioLookups, message, portfolio);
 
 			RaiseReceived(portfolio, message, PortfolioReceived);
 		}
