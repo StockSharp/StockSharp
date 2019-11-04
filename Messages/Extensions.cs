@@ -1639,5 +1639,18 @@ namespace StockSharp.Messages
 			adapter.RemoveSupportedMessage(MessageTypes.BoardLookup);
 			adapter.RemoveSupportedMessage(MessageTypes.TimeFrameLookup);
 		}
+
+		/// <summary>
+		/// Determines whether the <paramref name="execMsg"/> contains market-data info.
+		/// </summary>
+		/// <param name="execMsg">The message contains information about the execution.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMarketData(this ExecutionMessage execMsg)
+		{
+			if (execMsg == null)
+				throw new ArgumentNullException(nameof(execMsg));
+
+			return execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog
+		}
 	}
 }

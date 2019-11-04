@@ -433,7 +433,7 @@ namespace StockSharp.Algo.Candles.Compression
 					
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog)
+					if (execMsg.IsMarketData())
 						ProcessValue(execMsg.SecurityId, execMsg.OriginalTransactionId, execMsg);
 
 					return;
