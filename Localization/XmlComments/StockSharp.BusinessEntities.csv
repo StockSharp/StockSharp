@@ -444,6 +444,8 @@ E:StockSharp.BusinessEntities.IConnector.ConnectionError/summary;DocStr892
 E:StockSharp.BusinessEntities.IConnector.ConnectedEx/summary;DocStr890
 E:StockSharp.BusinessEntities.IConnector.DisconnectedEx/summary;DocStr891
 E:StockSharp.BusinessEntities.IConnector.ConnectionErrorEx/summary;DocStr892
+E:StockSharp.BusinessEntities.IConnector.ConnectionLost/summary;DocStr11404
+E:StockSharp.BusinessEntities.IConnector.ConnectionRestored/summary;DocStr899
 E:StockSharp.BusinessEntities.IConnector.Error/summary;DocStr893
 E:StockSharp.BusinessEntities.IConnector.ChangePasswordResult/summary;DocStr11348
 E:StockSharp.BusinessEntities.IConnector.MarketTimeChanged/summary;DocStr886

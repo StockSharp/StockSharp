@@ -15769,3 +15769,4 @@ DocStr11400;Get subscription identifiers from the specified message;Получи
 DocStr11401;Remove lookup messages support;Удалить поддержку сообщения поиска
 DocStr11402;Auto send {0} messages to {1};Автоматически отправлять сообщения {0} в {1}
 DocStr11403;Error info. Can be {0};Информация об ошибке. Может быть {0}
+DocStr11404;Connection lost;Соединение потеряно

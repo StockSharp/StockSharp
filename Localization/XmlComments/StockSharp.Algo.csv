@@ -5251,6 +5251,8 @@ E:StockSharp.Algo.Connector.OrderCancelFailReceived/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.PortfolioReceived/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.PositionReceived/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.Restored/summary;DocStr899
+E:StockSharp.Algo.Connector.ConnectionRestored/inheritdoc;DocStr8459
+E:StockSharp.Algo.Connector.ConnectionLost/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.TimeOut/summary;DocStr900
 E:StockSharp.Algo.Connector.CandleSeriesProcessing/summary;DocStr464
 E:StockSharp.Algo.Connector.CandleSeriesStopped/summary;DocStr91
