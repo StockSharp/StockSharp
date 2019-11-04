@@ -1138,7 +1138,7 @@ namespace StockSharp.Algo
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
 		{
-			var security = GetSecurity(message.SecurityId);
+			var security = EnsureGetSecurity(message);
 
 			if (UpdateSecurityByLevel1)
 			{
@@ -1271,7 +1271,7 @@ namespace StockSharp.Algo
 
 		private void ProcessPositionChangeMessage(PositionChangeMessage message)
 		{
-			var security = GetSecurity(message.SecurityId);
+			var security = EnsureGetSecurity(message);
 			var portfolio = GetPortfolio(message.PortfolioName);
 
 			var valueInLots = message.Changes.TryGetValue(PositionChangeTypes.CurrentValueInLots);
@@ -1309,7 +1309,7 @@ namespace StockSharp.Algo
 
 		private void ProcessQuotesMessage(QuoteChangeMessage message)
 		{
-			var security = GetSecurity(message.SecurityId);
+			var security = EnsureGetSecurity(message);
 
 			if (MarketDepthChanged != null || MarketDepthsChanged != null || MarketDepthReceived != null)
 			{
@@ -1822,7 +1822,7 @@ namespace StockSharp.Algo
 
 					if (order == null)
 					{
-						var security = GetSecurity(message.SecurityId);
+						var security = EnsureGetSecurity(message);
 
 						if (transactionId == 0 && isStatusRequest)
 							transactionId = TransactionIdGenerator.GetNextId();
@@ -1841,7 +1841,7 @@ namespace StockSharp.Algo
 				case ExecutionTypes.OrderLog:
 				//case null:
 				{
-					var security = GetSecurity(message.SecurityId);
+					var security = EnsureGetSecurity(message);
 
 					switch (message.ExecutionType)
 					{

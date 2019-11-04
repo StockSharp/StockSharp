@@ -179,8 +179,8 @@ namespace StockSharp.Algo
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
 		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
 		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
-		public Connector(ISecurityStorage securityStorage, IPositionStorage positionStorage, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, bool initManagers = true,
-			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnReconnect = true)
+		public Connector(ISecurityStorage securityStorage, IPositionStorage positionStorage, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry,
+			bool initManagers = true, bool supportOffline = false, bool supportSubscriptionTracking = true, bool isRestoreSubscriptionOnReconnect = true)
 			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking, isRestoreSubscriptionOnReconnect)
 		{
 			InitializeStorage(securityStorage, positionStorage, storageRegistry, snapshotRegistry);
@@ -1347,6 +1347,17 @@ namespace StockSharp.Algo
 		{
 			return GetSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode), s => false, out _);
 		}
+
+		private Security EnsureGetSecurity(ISecurityIdMessage message)
+		{
+			var secId = message.SecurityId;
+
+			if (secId == default)
+				throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str1025);
+
+			return GetSecurity(secId);
+		}
+
 		/// <summary>
 		/// To get the instrument by the code. If the instrument is not found, then the <see cref="IEntityFactory.CreateSecurity"/> is called to create an instrument.
 		/// </summary>
