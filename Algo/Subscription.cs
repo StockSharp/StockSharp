@@ -86,7 +86,8 @@ namespace StockSharp.Algo
 				MarketDataMessage = new MarketDataMessage
 				{
 					DataType = dataType.ToMarketDataType().Value,
-					Arg = dataType.Arg
+					Arg = dataType.Arg,
+					IsSubscribe = true
 				};
 
 				if (Security != null)
