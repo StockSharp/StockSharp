@@ -1650,7 +1650,7 @@ namespace StockSharp.Messages
 			if (execMsg == null)
 				throw new ArgumentNullException(nameof(execMsg));
 
-			return execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog
+			return execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog;
 		}
 	}
 }
