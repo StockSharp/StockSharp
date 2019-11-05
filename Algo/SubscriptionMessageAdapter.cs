@@ -162,6 +162,8 @@ namespace StockSharp.Algo
 		private readonly LookupInfo<TimeFrameLookupMessage> _timeFrameLookupInfo = new LookupInfo<TimeFrameLookupMessage>(MessageTypes.TimeFrameLookupResult);
 		private DateTimeOffset _prevTime;
 
+		private readonly bool _isBasketAdapter;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
 		/// </summary>
@@ -169,6 +171,7 @@ namespace StockSharp.Algo
 		public SubscriptionMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
+			_isBasketAdapter = InnerAdapter.FindAdapter<BasketMessageAdapter>() != null;
 		}
 
 		/// <summary>
@@ -186,11 +189,6 @@ namespace StockSharp.Algo
 		/// Normal case connect/disconnect.
 		/// </remarks>
 		public bool IsRestoreOnNormalReconnect { get; set; }
-
-		/// <summary>
-		/// Support multiple subscriptions with duplicate parameters.
-		/// </summary>
-		public bool SupportMultipleSubscriptions { get; set; }
 
 		/// <summary>
 		/// Send back reply for non existing unsubscription requests with filled <see cref="MarketDataMessage.Error"/> property.
@@ -364,7 +362,7 @@ namespace StockSharp.Algo
 					return false;
 			}
 
-			if (!this.IsOutMessageSupported(info.ResultType))
+			if (!_isBasketAdapter && !this.IsOutMessageSupported(info.ResultType))
 				info.LookupTimeOut.StartTimeOut(message.TransactionId);
 
 			return true;
@@ -403,6 +401,9 @@ namespace StockSharp.Algo
 				where TMessage : Message
 				where TResult : BaseResultMessage<TResult>, new()
 			{
+				if (_isBasketAdapter)
+					return;
+
 				if (info == null)
 					throw new ArgumentNullException(nameof(info));
 
@@ -477,11 +478,15 @@ namespace StockSharp.Algo
 				}
 
 				case MessageTypes.Security:
-					_secLookupInfo.LookupTimeOut.UpdateTimeOut(((SecurityMessage)message).OriginalTransactionId);
+					if (!_isBasketAdapter)
+						_secLookupInfo.LookupTimeOut.UpdateTimeOut(((SecurityMessage)message).OriginalTransactionId);
+					
 					break;
 
 				case MessageTypes.Board:
-					_boardLookupInfo.LookupTimeOut.UpdateTimeOut(((BoardMessage)message).OriginalTransactionId);
+					if (!_isBasketAdapter)
+						_boardLookupInfo.LookupTimeOut.UpdateTimeOut(((BoardMessage)message).OriginalTransactionId);
+					
 					break;
 
 				case MessageTypes.SecurityLookupResult:
@@ -498,6 +503,9 @@ namespace StockSharp.Algo
 
 				case MessageTypes.PortfolioLookupResult:
 				{
+					if (_isBasketAdapter)
+						break;
+
 					try
 					{
 						if (ProcessPortfolioLookupResultMessage((PortfolioLookupResultMessage)message))
@@ -513,6 +521,9 @@ namespace StockSharp.Algo
 
 				case MessageTypes.Portfolio:
 				{
+					if (_isBasketAdapter)
+						break;
+
 					_pfLookupInfo.LookupTimeOut.UpdateTimeOut(((PortfolioMessage)message).OriginalTransactionId);
 
 					ApplySubscriptionIds((ISubscriptionIdMessage)message);
@@ -532,43 +543,50 @@ namespace StockSharp.Algo
 				case MessageTypes.News:
 				case MessageTypes.BoardState:
 				case MessageTypes.Execution:
+				case MessageTypes.Level1Change:
+				case MessageTypes.QuoteChange:
 				{
-					ApplySubscriptionIds((ISubscriptionIdMessage)message);
+					if (!_isBasketAdapter)
+						ApplySubscriptionIds((ISubscriptionIdMessage)message);
+
 					break;
 				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
 
-			if (_prevTime != DateTimeOffset.MinValue)
+			if (!_isBasketAdapter)
 			{
-				var diff = message.LocalTime - _prevTime;
-
-				void ProcessTime<TMessage, TResult>(LookupInfo<TMessage> info)
-					where TResult : BaseResultMessage<TResult>, new()
+				if (_prevTime != DateTimeOffset.MinValue)
 				{
-					if (info == null)
-						throw new ArgumentNullException(nameof(info));
+					var diff = message.LocalTime - _prevTime;
 
-					if (messages == null)
-						messages = new List<Message>();
-
-					foreach (var id in info.LookupTimeOut.ProcessTime(diff))
+					void ProcessTime<TMessage, TResult>(LookupInfo<TMessage> info)
+						where TResult : BaseResultMessage<TResult>, new()
 					{
-						base.OnInnerAdapterNewOutMessage(new TResult
+						if (info == null)
+							throw new ArgumentNullException(nameof(info));
+
+						if (messages == null)
+							messages = new List<Message>();
+
+						foreach (var id in info.LookupTimeOut.ProcessTime(diff))
 						{
-							OriginalTransactionId = id
-						});
+							base.OnInnerAdapterNewOutMessage(new TResult
+							{
+								OriginalTransactionId = id
+							});
+						}
 					}
+
+					ProcessTime<SecurityLookupMessage, SecurityLookupResultMessage>(_secLookupInfo);
+					ProcessTime<PortfolioLookupMessage, PortfolioLookupResultMessage>(_pfLookupInfo);
+					ProcessTime<BoardLookupMessage, BoardLookupResultMessage>(_boardLookupInfo);
+					ProcessTime<TimeFrameLookupMessage, TimeFrameLookupResultMessage>(_timeFrameLookupInfo);
 				}
 
-				ProcessTime<SecurityLookupMessage, SecurityLookupResultMessage>(_secLookupInfo);
-				ProcessTime<PortfolioLookupMessage, PortfolioLookupResultMessage>(_pfLookupInfo);
-				ProcessTime<BoardLookupMessage, BoardLookupResultMessage>(_boardLookupInfo);
-				ProcessTime<TimeFrameLookupMessage, TimeFrameLookupResultMessage>(_timeFrameLookupInfo);
+				_prevTime = message.LocalTime;
 			}
-
-			_prevTime = message.LocalTime;
 
 			if (messages != null)
 			{
@@ -609,45 +627,26 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			long originTransId;
+			var originTransId = message.OriginalTransactionId;
 
 			switch (message)
 			{
-				case CandleMessage candleMsg:
-					originTransId = candleMsg.OriginalTransactionId;
-					break;
-				case ExecutionMessage execMsg:
-					switch (execMsg.ExecutionType)
-					{
-						case ExecutionTypes.Tick:
-						case ExecutionTypes.OrderLog:
-							originTransId = execMsg.OriginalTransactionId;
-							break;
-						default:
-							ApplyTransactionalSubscriptionIds(execMsg, _orderStatusSubscribers);
-							return;
-					}
-
-					break;
-				case NewsMessage newsMsg:
-					originTransId = newsMsg.OriginalTransactionId;
-					break;
-
-				case BoardMessage boardStateMsg:
-					originTransId = boardStateMsg.OriginalTransactionId;
-					break;
-
-				case BoardStateMessage boardStateMsg:
-					originTransId = boardStateMsg.OriginalTransactionId;
-					break;
-
 				case PortfolioMessage _:
 				case BasePositionChangeMessage _:
 					ApplyTransactionalSubscriptionIds(message, _pfLookupSubscribers);
 					return;
 
-				default:
-					throw new ArgumentOutOfRangeException(nameof(message), message.ToString());
+				case ExecutionMessage execMsg:
+					switch (execMsg.ExecutionType)
+					{
+						case ExecutionTypes.Transaction:
+							ApplyTransactionalSubscriptionIds(execMsg, _orderStatusSubscribers);
+							return;
+					}
+					break;
+
+				//default:
+				//	throw new ArgumentOutOfRangeException(nameof(message), message.ToString());
 			}
 
 			lock (_sync)
@@ -809,7 +808,7 @@ namespace StockSharp.Algo
 				subscribers.Add(transId);
 				sendIn = subscribers.Count == 1;
 
-				if (SupportMultipleSubscriptions)
+				if (_isBasketAdapter)
 				{
 					if (!sendIn)
 					{
@@ -945,7 +944,6 @@ namespace StockSharp.Algo
 			{
 				IsRestoreOnErrorReconnect = IsRestoreOnErrorReconnect,
 				IsRestoreOnNormalReconnect = IsRestoreOnNormalReconnect,
-				SupportMultipleSubscriptions = SupportMultipleSubscriptions,
 				NonExistSubscriptionAsError = NonExistSubscriptionAsError,
 			};
 		}

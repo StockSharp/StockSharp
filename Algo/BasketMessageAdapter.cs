@@ -355,6 +355,8 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 		{
+			adapter = new OriginalTransactionMessageAdapter(adapter);
+
 			adapter = new PartialDownloadMessageAdapter(adapter);
 
 			if (LatencyManager != null)

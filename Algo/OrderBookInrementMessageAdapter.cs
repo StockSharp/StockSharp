@@ -128,6 +128,7 @@
 							Asks = asks.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value)).ToArray(),
 							IsSorted = true,
 							ServerTime = quoteMsg.ServerTime,
+							OriginalTransactionId = quoteMsg.OriginalTransactionId,
 						};
 					}
 

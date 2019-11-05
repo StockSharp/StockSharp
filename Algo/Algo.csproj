@@ -127,6 +127,7 @@
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
     <Compile Include="ISubscriptionProvider.cs" />
+    <Compile Include="OriginalTransactionMessageAdapter.cs" />
     <Compile Include="Storages\Binary\BoardStateBinarySerializer.cs" />
     <Compile Include="Storages\Csv\BoardStateCsvSerializer.cs" />
     <Compile Include="Storages\Remote\IRemoteExtendedStorage.cs" />
