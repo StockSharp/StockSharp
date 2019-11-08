@@ -28,6 +28,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Coincheck;
 	using StockSharp.CoinEx;
 	using StockSharp.CoinExchange;
+	using StockSharp.CoinHub;
 	using StockSharp.Coinigy;
 	using StockSharp.Cqg.Com;
 	using StockSharp.Cqg.Continuum;
@@ -45,7 +46,9 @@ namespace StockSharp.Configuration
 	using StockSharp.Fxcm;
 	using StockSharp.Gdax;
 	using StockSharp.Google;
+	using StockSharp.Gopax;
 	using StockSharp.HitBtc;
+	using StockSharp.Hotbit;
 	using StockSharp.Huobi;
 	using StockSharp.Idax;
 	using StockSharp.IEX;
@@ -220,6 +223,9 @@ namespace StockSharp.Configuration
 			() => typeof(CoinExMessageAdapter),
 			() => typeof(FatBtcMessageAdapter),
 			() => typeof(LatokenMessageAdapter),
+			() => typeof(GopaxMessageAdapter),
+			() => typeof(HotbitMessageAdapter),
+			() => typeof(CoinHubMessageAdapter),
 		});
 	}
 }

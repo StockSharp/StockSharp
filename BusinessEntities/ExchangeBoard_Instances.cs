@@ -3501,5 +3501,32 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Latoken.Name,
 			Exchange = Exchange.Latoken,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Gopax"/>.
+		/// </summary>
+		public static ExchangeBoard Gopax { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Gopax.Name,
+			Exchange = Exchange.Gopax,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.CoinHub"/>.
+		/// </summary>
+		public static ExchangeBoard CoinHub { get; } = new ExchangeBoard
+		{
+			Code = Exchange.CoinHub.Name,
+			Exchange = Exchange.CoinHub,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Hotbit"/>.
+		/// </summary>
+		public static ExchangeBoard Hotbit { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Hotbit.Name,
+			Exchange = Exchange.Hotbit,
+		};
 	}
 }

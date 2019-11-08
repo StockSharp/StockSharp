@@ -5098,6 +5098,9 @@ CoinEx;CoinEx;CoinEx
 ByDays;By days;По дням
 ByMonths;By months;По месяцам
 ByYears;By years;По годам
+Gopax;Gopax;Gopax
+CoinHub;CoinHub;CoinHub
+Hotbit;Hotbit;Hotbit
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15770,3 +15773,6 @@ DocStr11401;Remove lookup messages support;Удалить поддержку с�
 DocStr11402;Auto send {0} messages to {1};Автоматически отправлять сообщения {0} в {1}
 DocStr11403;Error info. Can be {0};Информация об ошибке. Может быть {0}
 DocStr11404;Connection lost;Соединение потеряно
+DocStr11405;Message adapter that initialize missed {0};Адаптер сообщений, для инициализации пропущенных {0}
+DocStr11406;V2 authentication method;V2 authentication method
+DocStr11407;Determines whether the {0} contains market-data info;Определить, содержит ли {0} информацию о маркет-данных

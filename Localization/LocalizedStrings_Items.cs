@@ -50646,5 +50646,35 @@ namespace StockSharp.Localization
 		/// By years
 		/// </summary>
 		public static string ByYears => GetString(ByYearsKey);
+
+		/// <summary>
+		/// Gopax
+		/// </summary>
+		public const string GopaxKey = nameof(Gopax);
+
+		/// <summary>
+		/// Gopax
+		/// </summary>
+		public static string Gopax => GetString(GopaxKey);
+
+		/// <summary>
+		/// CoinHub
+		/// </summary>
+		public const string CoinHubKey = nameof(CoinHub);
+
+		/// <summary>
+		/// CoinHub
+		/// </summary>
+		public static string CoinHub => GetString(CoinHubKey);
+
+		/// <summary>
+		/// Hotbit
+		/// </summary>
+		public const string HotbitKey = nameof(Hotbit);
+
+		/// <summary>
+		/// Hotbit
+		/// </summary>
+		public static string Hotbit => GetString(HotbitKey);
 	}
 }

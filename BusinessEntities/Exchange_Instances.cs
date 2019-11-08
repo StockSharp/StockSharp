@@ -1073,5 +1073,32 @@ namespace StockSharp.BusinessEntities
 			Name = "LTKN",
 			FullNameLoc = LocalizedStrings.LatokenKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="Gopax"/>.
+		/// </summary>
+		public static Exchange Gopax { get; } = new Exchange
+		{
+			Name = "GPAX",
+			FullNameLoc = LocalizedStrings.GopaxKey,
+		};
+
+		/// <summary>
+		/// Information about <see cref="CoinHub"/>.
+		/// </summary>
+		public static Exchange CoinHub { get; } = new Exchange
+		{
+			Name = "CNHB",
+			FullNameLoc = LocalizedStrings.CoinHubKey,
+		};
+
+		/// <summary>
+		/// Information about <see cref="Hotbit"/>.
+		/// </summary>
+		public static Exchange Hotbit { get; } = new Exchange
+		{
+			Name = "HTBT",
+			FullNameLoc = LocalizedStrings.HotbitKey,
+		};
 	}
 }

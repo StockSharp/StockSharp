@@ -267,6 +267,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter. IsConnectionAlive removed.
 * (feature) Connector. Subscription tracking on normal and error disconnects turned on by default.
 * (feature) IConnector. ConnectionLost, ConnectionRestored events added.
+* (feature) Gopax, Hotbit, CoinHub connectors.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
