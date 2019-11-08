@@ -78,8 +78,9 @@ namespace StockSharp.Algo
 			/// <inheritdoc />
 			public override string ToString()
 			{
-				var strId = Order.Id == null ? Order.StringId : Order.Id.To<string>();
-				return $"{this} {Order.TransactionId}/{strId}";
+				var order = Order;
+				var strId = order.Id == null ? order.StringId : order.Id.To<string>();
+				return $"{Name} {order.TransactionId}/{strId}";
 			}
 		}
 
