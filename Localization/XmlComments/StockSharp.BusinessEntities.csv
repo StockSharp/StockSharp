@@ -181,6 +181,9 @@ P:StockSharp.BusinessEntities.Exchange.Upbit/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.CoinEx/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.FatBtc/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.Latoken/summary;DocStr11334
+P:StockSharp.BusinessEntities.Exchange.Gopax/summary;DocStr11334
+P:StockSharp.BusinessEntities.Exchange.CoinHub/summary;DocStr11334
+P:StockSharp.BusinessEntities.Exchange.Hotbit/summary;DocStr11334
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694
@@ -417,6 +420,9 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Upbit/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.CoinEx/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.FatBtc/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Latoken/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.Gopax/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.CoinHub/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.Hotbit/summary;DocStr2809
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867
 E:StockSharp.BusinessEntities.IConnector.NewTrades/summary;DocStr868

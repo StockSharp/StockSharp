@@ -1008,6 +1008,13 @@ M:StockSharp.Algo.ISubscriptionProvider.Subscribe(StockSharp.Algo.Subscription)/
 M:StockSharp.Algo.ISubscriptionProvider.Subscribe(StockSharp.Algo.Subscription)/param/subscription;DocStr11068
 M:StockSharp.Algo.ISubscriptionProvider.UnSubscribe(StockSharp.Algo.Subscription)/summary;XamlStr426
 M:StockSharp.Algo.ISubscriptionProvider.UnSubscribe(StockSharp.Algo.Subscription)/param/subscription;DocStr11068
+T:StockSharp.Algo.OriginalTransactionMessageAdapter/summary;DocStr11405
+M:StockSharp.Algo.OriginalTransactionMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
+M:StockSharp.Algo.OriginalTransactionMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr8563
+M:StockSharp.Algo.OriginalTransactionMessageAdapter.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+M:StockSharp.Algo.OriginalTransactionMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+M:StockSharp.Algo.OriginalTransactionMessageAdapter.Clone/summary;DocStr643
+M:StockSharp.Algo.OriginalTransactionMessageAdapter.Clone/returns;DocStr1116
 T:StockSharp.Algo.Storages.Binary.Snapshot.PositionBinarySnapshotSerializer/summary;DocStr10199
 T:StockSharp.Algo.Storages.Binary.Snapshot.QuotesBinarySnapshotSerializer/summary;DocStr10199
 P:StockSharp.Algo.Storages.Binary.Snapshot.QuotesBinarySnapshotSerializer.MaxDepth/summary;DocStr2885
@@ -7090,7 +7097,6 @@ P:StockSharp.Algo.SubscriptionMessageAdapter.IsRestoreOnErrorReconnect/summary;D
 P:StockSharp.Algo.SubscriptionMessageAdapter.IsRestoreOnErrorReconnect/remarks;DocStr10906
 P:StockSharp.Algo.SubscriptionMessageAdapter.IsRestoreOnNormalReconnect/summary;DocStr9349
 P:StockSharp.Algo.SubscriptionMessageAdapter.IsRestoreOnNormalReconnect/remarks;DocStr10907
-P:StockSharp.Algo.SubscriptionMessageAdapter.SupportMultipleSubscriptions/summary;DocStr10541
 P:StockSharp.Algo.SubscriptionMessageAdapter.NonExistSubscriptionAsError/summary;DocStr11272
 P:StockSharp.Algo.SubscriptionMessageAdapter.LookupTimeOut/summary;DocStr4336
 P:StockSharp.Algo.SubscriptionMessageAdapter.LookupTimeOut/remarks;DocStr4337
@@ -7815,6 +7821,9 @@ M:StockSharp.Algo.MessageConverterHelper.ToMarketDataType(StockSharp.BusinessEnt
 M:StockSharp.Algo.MessageConverterHelper.ToDataType(StockSharp.Messages.MarketDataTypes)/summary;DocStr8644
 M:StockSharp.Algo.MessageConverterHelper.ToDataType(StockSharp.Messages.MarketDataTypes)/param/type;Str1670
 M:StockSharp.Algo.MessageConverterHelper.ToDataType(StockSharp.Messages.MarketDataTypes)/returns;DocStr8490
+M:StockSharp.Algo.MessageConverterHelper.ToMessageType2(StockSharp.Messages.MarketDataTypes)/summary;DocStr8644
+M:StockSharp.Algo.MessageConverterHelper.ToMessageType2(StockSharp.Messages.MarketDataTypes)/param/type;DocStr65
+M:StockSharp.Algo.MessageConverterHelper.ToMessageType2(StockSharp.Messages.MarketDataTypes)/returns;DocStr9
 M:StockSharp.Algo.MessageConverterHelper.ToMessageType(StockSharp.Messages.MarketDataTypes)/summary;DocStr8644
 M:StockSharp.Algo.MessageConverterHelper.ToMessageType(StockSharp.Messages.MarketDataTypes)/param/type;DocStr65
 M:StockSharp.Algo.MessageConverterHelper.ToMessageType(StockSharp.Messages.MarketDataTypes)/returns;DocStr9

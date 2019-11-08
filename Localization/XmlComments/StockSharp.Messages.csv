@@ -828,6 +828,9 @@ M:StockSharp.Messages.Extensions.IsSecurityRequired(StockSharp.Messages.MarketDa
 M:StockSharp.Messages.Extensions.IsSecurityRequired(StockSharp.Messages.MarketDataTypes)/returns;DocStr8659
 M:StockSharp.Messages.Extensions.RemoveLookupMessages(StockSharp.Messages.IMessageAdapter)/summary;DocStr11401
 M:StockSharp.Messages.Extensions.RemoveLookupMessages(StockSharp.Messages.IMessageAdapter)/param/adapter;Adapter
+M:StockSharp.Messages.Extensions.IsMarketData(StockSharp.Messages.ExecutionMessage)/summary;DocStr11407
+M:StockSharp.Messages.Extensions.IsMarketData(StockSharp.Messages.ExecutionMessage)/param/execMsg;DocStr4283
+M:StockSharp.Messages.Extensions.IsMarketData(StockSharp.Messages.ExecutionMessage)/returns;DocStr8659
 T:StockSharp.Messages.IBasketSecurityProcessor/summary;DocStr10604
 P:StockSharp.Messages.IBasketSecurityProcessor.SecurityId/summary;SecurityId
 P:StockSharp.Messages.IBasketSecurityProcessor.BasketExpression/summary;DocStr10613
