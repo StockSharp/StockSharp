@@ -167,7 +167,7 @@ namespace StockSharp.Algo
 						else if (isReconnectionStarted)
 						{
 							this.AddInfoLog(LocalizedStrings.Reconnecting);
-							base.OnInnerAdapterNewOutMessage(new ReconnectingStartedMessage());
+							base.OnInnerAdapterNewOutMessage(new ReconnectingStartedMessage { Adapter = message.Adapter });
 						}
 					}
 
@@ -272,6 +272,20 @@ namespace StockSharp.Algo
 
 						StopTimer();
 						_canSendTime = false;
+					}
+
+					break;
+				}
+
+				case MessageTypes.Time:
+				{
+					if (_timeMessage == message)
+					{
+						lock (_timeSync)
+						{
+							if (_currState == ConnectionStates.Disconnecting || _currState == ConnectionStates.Disconnected)
+								return;
+						}
 					}
 
 					break;
@@ -495,6 +509,7 @@ namespace StockSharp.Algo
 			}
 
 			_timeMessage.IsBack = true;
+			_timeMessage.Adapter = this;
 			_timeMessage.TransactionId = TransactionIdGenerator.GetNextId();
 
 			RaiseNewOutMessage(_timeMessage);

@@ -60,6 +60,11 @@ namespace StockSharp.Messages
 		IEnumerable<MessageTypes> SupportedMessages { get; set; }
 
 		/// <summary>
+		/// Supported by adapter message types.
+		/// </summary>
+		IEnumerable<MessageTypes> SupportedOutMessages { get; set; }
+
+		/// <summary>
 		/// Supported by adapter market data types.
 		/// </summary>
 		IEnumerable<MarketDataTypes> SupportedMarketDataTypes { get; set; }
@@ -205,12 +210,6 @@ namespace StockSharp.Messages
 		/// If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.
 		/// </remarks>
 		OrderCondition CreateOrderCondition();
-
-		/// <summary>
-		/// Check the connection is alive. Uses only for connected states.
-		/// </summary>
-		/// <returns><see langword="true" />, is the connection still alive, <see langword="false" />, if the connection was rejected.</returns>
-		bool IsConnectionAlive();
 
 		/// <summary>
 		/// Create market depth builder.

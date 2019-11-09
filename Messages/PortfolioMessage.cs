@@ -48,11 +48,9 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioMessage : BaseSubscriptionIdMessage, ISubscriptionMessage
+	public class PortfolioMessage : BaseSubscriptionIdMessage, ISubscriptionMessage, IPortfolioNameMessage
 	{
-		/// <summary>
-		/// Portfolio code name.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.NameKey)]
 		[DescriptionLoc(LocalizedStrings.Str247Key)]

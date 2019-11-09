@@ -47,12 +47,6 @@ namespace StockSharp.Algo.Commissions
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnSendInMessage(message);
-				return;
-			}
-
 			CommissionManager.Process(message);
 			base.OnSendInMessage(message);
 		}
@@ -60,7 +54,7 @@ namespace StockSharp.Algo.Commissions
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (!message.IsBack && message is ExecutionMessage execMsg && execMsg.ExecutionType == ExecutionTypes.Transaction && execMsg.Commission == null)
+			if (message is ExecutionMessage execMsg && execMsg.ExecutionType == ExecutionTypes.Transaction && execMsg.Commission == null)
 				execMsg.Commission = CommissionManager.Process(execMsg);
 
 			base.OnInnerAdapterNewOutMessage(message);

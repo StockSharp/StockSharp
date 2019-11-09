@@ -60,14 +60,14 @@ namespace StockSharp.Messages
 					return;
 
 				if (_innerAdapter != null)
-					_innerAdapter.NewOutMessage -= OnInnerAdapterNewOutMessage;
+					_innerAdapter.NewOutMessage -= InnerAdapterNewOutMessage;
 
 				_innerAdapter = value;
 
 				if (_innerAdapter == null)
 					throw new ArgumentException();
 
-				_innerAdapter.NewOutMessage += OnInnerAdapterNewOutMessage;
+				_innerAdapter.NewOutMessage += InnerAdapterNewOutMessage;
 			}
 		}
 
@@ -75,6 +75,18 @@ namespace StockSharp.Messages
 		/// Control <see cref="InnerAdapter"/> lifetime.
 		/// </summary>
 		public bool OwnInnerAdapter { get; set; }
+
+		/// <summary>
+		/// Process <see cref="InnerAdapter"/> output message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected virtual void InnerAdapterNewOutMessage(Message message)
+		{
+			if (message.IsBack)
+				RaiseNewOutMessage(message);
+			else
+				OnInnerAdapterNewOutMessage(message);
+		}
 
 		/// <summary>
 		/// Process <see cref="InnerAdapter"/> output message.
@@ -112,9 +124,31 @@ namespace StockSharp.Messages
 			remove => InnerAdapter.StateChanged -= value;
 		}
 
+		/// <summary>
+		/// Auto send <see cref="Message.IsBack"/> messages to <see cref="InnerAdapter"/>.
+		/// </summary>
+		protected virtual bool SendInBackFurther => true;
+
 		/// <inheritdoc />
-		void IMessageChannel.SendInMessage(Message message)
+		public virtual void SendInMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				if (message.Adapter == this)
+				{
+					message.Adapter = null;
+					message.IsBack = false;
+				}
+				else
+				{
+					if (SendInBackFurther)
+					{
+						InnerAdapter.SendInMessage(message);
+						return;
+					}
+				}
+			}
+
 			try
 			{
 				OnSendInMessage(message);
@@ -224,6 +258,13 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public virtual IEnumerable<MessageTypes> SupportedOutMessages
+		{
+			get => InnerAdapter.SupportedOutMessages;
+			set => InnerAdapter.SupportedOutMessages = value;
+		}
+
+		/// <inheritdoc />
 		public virtual IEnumerable<MarketDataTypes> SupportedMarketDataTypes
 		{
 			get => InnerAdapter.SupportedMarketDataTypes;
@@ -305,8 +346,6 @@ namespace StockSharp.Messages
 
 		OrderCondition IMessageAdapter.CreateOrderCondition() => InnerAdapter.CreateOrderCondition();
 
-		bool IMessageAdapter.IsConnectionAlive() => InnerAdapter.IsConnectionAlive();
-
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 
@@ -325,7 +364,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual void Dispose()
 		{
-			InnerAdapter.NewOutMessage -= OnInnerAdapterNewOutMessage;
+			InnerAdapter.NewOutMessage -= InnerAdapterNewOutMessage;
 
 			if (OwnInnerAdapter)
 				InnerAdapter.Dispose();

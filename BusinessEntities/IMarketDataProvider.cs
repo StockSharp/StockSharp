@@ -113,6 +113,16 @@ namespace StockSharp.BusinessEntities
 		event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
 
 		/// <summary>
+		/// Lookup result <see cref="LookupTimeFrames"/> received.
+		/// </summary>
+		event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult;
+
+		/// <summary>
+		/// Lookup result <see cref="LookupTimeFrames"/> received.
+		/// </summary>
+		event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
+
+		/// <summary>
 		/// Successful subscription market-data.
 		/// </summary>
 		event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
@@ -163,6 +173,12 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
 		void LookupBoards(BoardLookupMessage criteria);
+
+		/// <summary>
+		/// To find time-frames that match the filter <paramref name="criteria" />. Found time-frames will be passed through the event <see cref="LookupTimeFramesResult"/>.
+		/// </summary>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		void LookupTimeFrames(TimeFrameLookupMessage criteria);
 
 		/// <summary>
 		/// Get filtered order book.

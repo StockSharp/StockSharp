@@ -248,7 +248,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public override void Init()
 		{
-			var boardCodes = new HashSet<string>();
+			var boardCodes = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
 			boardCodes.AddRange(_entityRegistry.ExchangeBoards.Select(b => b.Code));
 

@@ -30,12 +30,6 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.Tradier.TradierMessageAdapter.IsSupportSecurityLookupResult">
-            <inheritdoc />
-        </member>
-        <member name="P:StockSharp.Tradier.TradierMessageAdapter.IsSupportPortfolioLookupResult">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.Tradier.TradierMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>

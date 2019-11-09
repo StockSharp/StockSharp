@@ -10,7 +10,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public abstract class BasePositionChangeMessage : BaseChangeMessage<PositionChangeTypes>
+	public abstract class BasePositionChangeMessage : BaseChangeMessage<PositionChangeTypes>, IPortfolioNameMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
@@ -21,9 +21,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Portfolio name.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.NameKey)]
 		[DescriptionLoc(LocalizedStrings.Str247Key)]

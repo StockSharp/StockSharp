@@ -72,12 +72,6 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnSendInMessage(message);
-				return;
-			}
-
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -439,7 +433,7 @@ namespace StockSharp.Algo.Candles.Compression
 					
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog)
+					if (execMsg.IsMarketData())
 						ProcessValue(execMsg.SecurityId, execMsg.OriginalTransactionId, execMsg);
 
 					return;

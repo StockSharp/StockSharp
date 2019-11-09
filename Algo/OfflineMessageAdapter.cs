@@ -51,20 +51,11 @@
 		}
 
 		/// <inheritdoc />
+		protected override bool SendInBackFurther => false;
+
+		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				if (message.Adapter == this)
-				{
-					message.Adapter = null;
-					message.IsBack = false;
-				}
-
-				//base.OnSendInMessage(message);
-				//return;
-			}
-
 			void ProcessOrderReplaceMessage(OrderReplaceMessage replaceMsg)
 			{
 				var originOrderMsg = _pendingRegistration.TryGetAndRemove(replaceMsg.OldTransactionId);
@@ -392,7 +383,7 @@
 					msg.IsBack = true;
 					msg.Adapter = this;
 
-					RaiseNewOutMessage(msg);
+					base.OnInnerAdapterNewOutMessage(msg);
 				}
 			}
 		}

@@ -2054,7 +2054,7 @@ namespace StockSharp.Algo.Strategies
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog)
+					if (execMsg.IsMarketData())
 						PnLManager.ProcessMessage(execMsg);
 
 					msgTime = execMsg.ServerTime;

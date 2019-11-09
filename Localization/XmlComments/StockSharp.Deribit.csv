@@ -1,4 +1,5 @@
 T:StockSharp.Deribit.DeribitMessageAdapter/summary;DocStr2538
+P:StockSharp.Deribit.DeribitMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Deribit.DeribitMessageAdapter.Key/summary;Str3304
 P:StockSharp.Deribit.DeribitMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.Deribit.DeribitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

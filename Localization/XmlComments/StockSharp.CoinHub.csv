@@ -1,0 +1,13 @@
+T:StockSharp.CoinHub.CoinHubMessageAdapter/summary;DocStr2538
+P:StockSharp.CoinHub.CoinHubMessageAdapter.AllTimeFrames/summary;DocStr206
+P:StockSharp.CoinHub.CoinHubMessageAdapter.Key/summary;Str3304
+P:StockSharp.CoinHub.CoinHubMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.CoinHub.CoinHubMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
+M:StockSharp.CoinHub.CoinHubMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.CoinHub.CoinHubMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.CoinHub.CoinHubMessageAdapter.ToString/inheritdoc;DocStr8459
+M:StockSharp.CoinHub.CoinHubMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.CoinHub.CoinHubMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.CoinHub.CoinHubMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+T:StockSharp.CoinHub.CoinHubOrderCondition/summary;DocStr60
+M:StockSharp.CoinHub.CoinHubOrderCondition.#ctor/summary;DocStr1

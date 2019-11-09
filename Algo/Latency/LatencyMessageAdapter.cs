@@ -47,12 +47,6 @@ namespace StockSharp.Algo.Latency
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnSendInMessage(message);
-				return;
-			}
-
 			message.TryInitLocalTime(this);
 
 			LatencyManager.ProcessMessage(message);
@@ -63,8 +57,7 @@ namespace StockSharp.Algo.Latency
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (!message.IsBack)
-				ProcessExecution(message);
+			ProcessExecution(message);
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}

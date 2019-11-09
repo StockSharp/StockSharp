@@ -86,8 +86,8 @@ namespace SampleConnection
 			Connector.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 			// subscribe on error event
-			Connector.Error += error =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+			//Connector.Error += error =>
+			//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			// subscribe on error of market data subscription event
 			Connector.MarketDataSubscriptionFailed += (security, msg, error) =>

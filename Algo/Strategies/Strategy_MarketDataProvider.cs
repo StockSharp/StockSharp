@@ -120,6 +120,20 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult
+		{
+			add => SafeGetConnector().LookupTimeFramesResult += value;
+			remove => SafeGetConnector().LookupTimeFramesResult -= value;
+		}
+
+		/// <inheritdoc />
+		public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2
+		{
+			add => SafeGetConnector().LookupTimeFramesResult2 += value;
+			remove => SafeGetConnector().LookupTimeFramesResult2 -= value;
+		}
+
+		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded
 		{
 			add => SafeGetConnector().MarketDataSubscriptionSucceeded += value;
@@ -185,6 +199,12 @@ namespace StockSharp.Algo.Strategies
 		public void LookupBoards(BoardLookupMessage criteria)
 		{
 			SafeGetConnector().LookupBoards(criteria);
+		}
+
+		/// <inheritdoc />
+		public void LookupTimeFrames(TimeFrameLookupMessage criteria)
+		{
+			SafeGetConnector().LookupTimeFrames(criteria);
 		}
 
 		/// <inheritdoc />

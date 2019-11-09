@@ -880,9 +880,6 @@
             Адаптер сообщений для SmartCOM.
             </summary>
     </member>
-    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportSecurityLookupResult">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
             Создать <see cref="T:StockSharp.SmartCom.SmartComMessageAdapter" />.
@@ -895,9 +892,6 @@
             </summary>
     </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportPortfolioLookupResult">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsNativeIdentifiers">

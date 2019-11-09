@@ -167,7 +167,7 @@ namespace StockSharp.Algo
 							foreach (var basketMsg in basketMsgs)
 							{
 								basketMsg.OriginalTransactionId = info.TransactionId;
-								RaiseNewOutMessage(basketMsg);
+								base.OnInnerAdapterNewOutMessage(basketMsg);
 							}
 
 							return;
@@ -220,7 +220,7 @@ namespace StockSharp.Algo
 								foreach (var basketMsg in basketMsgs)
 								{
 									basketMsg.OriginalTransactionId = info.TransactionId;
-									RaiseNewOutMessage(basketMsg);
+									base.OnInnerAdapterNewOutMessage(basketMsg);
 								}
 
 								return;

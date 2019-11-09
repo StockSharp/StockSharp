@@ -1888,6 +1888,36 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Convert <see cref="MarketDataTypes"/> to <see cref="MessageTypes"/> value.
+		/// </summary>
+		/// <param name="type"><see cref="MarketDataTypes"/> value.</param>
+		/// <returns>Message type.</returns>
+		public static MessageTypes ToMessageType2(this MarketDataTypes type)
+		{
+			switch (type)
+			{
+				case MarketDataTypes.Level1:
+					return MessageTypes.Level1Change;
+				case MarketDataTypes.MarketDepth:
+					return MessageTypes.QuoteChange;
+				case MarketDataTypes.Trades:
+				case MarketDataTypes.OrderLog:
+					return MessageTypes.Execution;
+				case MarketDataTypes.News:
+					return MessageTypes.News;
+				case MarketDataTypes.Board:
+					return MessageTypes.BoardState;
+				default:
+				{
+					if (type.IsCandleDataType())
+						return type.ToCandleMessageType();
+					else 
+						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+				}
+			}
+		}
+
+		/// <summary>
 		/// Convert <see cref="MarketDataTypes"/> to <see cref="Type"/> value.
 		/// </summary>
 		/// <param name="type"><see cref="MarketDataTypes"/> value.</param>

@@ -517,6 +517,43 @@ namespace StockSharp.Messages
 			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Except(new[] { type }).ToArray();
 		}
 
+		/// <summary>
+		/// Add the message type info <see cref="IMessageAdapter.SupportedOutMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		public static void AddSupportedOutMessage(this IMessageAdapter adapter, MessageTypes type)
+		{
+			adapter.SupportedOutMessages = adapter.SupportedOutMessages.Concat(type).Distinct();
+		}
+
+		/// <summary>
+		/// Remove the message type from <see cref="IMessageAdapter.SupportedOutMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		public static void RemoveSupportedOutMessage(this IMessageAdapter adapter, MessageTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.SupportedOutMessages = adapter.SupportedOutMessages.Where(t => t != type);
+		}
+
+		/// <summary>
+		/// Determines whether the specified message type is supported by the adapter.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		/// <returns><see langword="true"/> if the specified message type is supported, otherwise, <see langword="false"/>.</returns>
+		public static bool IsOutMessageSupported(this IMessageAdapter adapter, MessageTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.SupportedOutMessages.Contains(type);
+		}
+
 		private static readonly PairSet<MessageTypes, MarketDataTypes> _candleDataTypes = new PairSet<MessageTypes, MarketDataTypes>
 		{
 			{ MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame },
@@ -1585,5 +1622,35 @@ namespace StockSharp.Messages
 		/// <returns>Check result.</returns>
 		public static bool IsSecurityRequired(this MarketDataTypes type)
 			=> type != MarketDataTypes.News && type != MarketDataTypes.Board;
+
+		/// <summary>
+		/// Remove lookup messages support.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		public static void RemoveLookupMessages(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.RemoveSupportedMessage(MessageTypes.SecurityLookup);
+			adapter.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
+			adapter.RemoveSupportedMessage(MessageTypes.OrderStatus);
+			adapter.RemoveSupportedMessage(MessageTypes.Portfolio);
+			adapter.RemoveSupportedMessage(MessageTypes.BoardLookup);
+			adapter.RemoveSupportedMessage(MessageTypes.TimeFrameLookup);
+		}
+
+		/// <summary>
+		/// Determines whether the <paramref name="execMsg"/> contains market-data info.
+		/// </summary>
+		/// <param name="execMsg">The message contains information about the execution.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMarketData(this ExecutionMessage execMsg)
+		{
+			if (execMsg == null)
+				throw new ArgumentNullException(nameof(execMsg));
+
+			return execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog;
+		}
 	}
 }

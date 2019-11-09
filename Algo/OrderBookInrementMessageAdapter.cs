@@ -48,12 +48,6 @@
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnSendInMessage(message);
-				return;
-			}
-
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -134,6 +128,7 @@
 							Asks = asks.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value)).ToArray(),
 							IsSorted = true,
 							ServerTime = quoteMsg.ServerTime,
+							OriginalTransactionId = quoteMsg.OriginalTransactionId,
 						};
 					}
 

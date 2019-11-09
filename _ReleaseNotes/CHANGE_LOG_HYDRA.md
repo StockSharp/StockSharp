@@ -27,6 +27,10 @@ StockSharp Data (Hydra) Change log
 * (feature) QUIK. 64 bit support.
 * (feature) QUIK. Candles BuildFrom mode supported.
 * (feature) QUIK. Terminal connection lost notification supported.
+* (bug) Import, Analytics panel fixes.
+* (feature) Upbit, CoinEx, FatBTC, LATOKEN connectors.
+* (bug) ExportTask fixes.
+* (feature) Converter supports Begin/End dates.
 
 ## v4.4.16:
 * (feature) SQLite->CSV migrated.

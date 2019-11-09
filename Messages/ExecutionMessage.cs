@@ -63,20 +63,16 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	public sealed class ExecutionMessage : BaseSubscriptionIdMessage, ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage
+	public sealed class ExecutionMessage : BaseSubscriptionIdMessage, ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage, IPortfolioNameMessage
 	{
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
 		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
 		[MainCategory]
 		public SecurityId SecurityId { get; set; }
 
-		/// <summary>
-		/// Portfolio name.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 		[DescriptionLoc(LocalizedStrings.PortfolioNameKey)]
@@ -554,7 +550,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},({ExecutionType}),Sec={SecurityId},Ord={OrderId}/{TransactionId}/{OriginalTransactionId},Fail={Error},Price={OrderPrice},OrdVol={OrderVolume},TrVol={TradeVolume},Bal={Balance},TId={TradeId},Pf={PortfolioName},TPrice={TradePrice},UId={UserOrderId},State={OrderState}";
+			return base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},({ExecutionType}),Sec={SecurityId},O/T={HasOrderInfo}/{HasTradeInfo},Ord={OrderId}/{TransactionId}/{OriginalTransactionId},Fail={Error},Price={OrderPrice},OrdVol={OrderVolume},TrVol={TradeVolume},Bal={Balance},TId={TradeId},Pf={PortfolioName},TPrice={TradePrice},UId={UserOrderId},State={OrderState}";
 		}
 
 		/// <summary>
@@ -626,9 +622,6 @@ namespace StockSharp.Messages
 				AveragePrice = AveragePrice,
 				Yield = Yield,
 				MinVolume = MinVolume,
-
-				SubscriptionId = SubscriptionId,
-				SubscriptionIds = SubscriptionIds?.ToArray()
 			};
 
 			CopyTo(clone);

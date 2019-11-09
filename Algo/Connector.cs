@@ -54,34 +54,19 @@ namespace StockSharp.Algo
 			MemoryStatistics.Instance.Values.Add(_messageStat);
 		}
 
-		private class MarketDepthInfo : RefTriple<MarketDepth, QuoteChange[], QuoteChange[]>
-		{
-			public MarketDepthInfo(MarketDepth depth)
-				: base(depth, null, null)
-			{
-			}
-
-			public bool HasChanges => Second != null;
-		}
-
 		private readonly EntityCache _entityCache;
 
-		private readonly SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo> _marketDepths = new SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new Dictionary<string, List<ExecutionMessage>>();
-		//private readonly MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>> _orderStopOrderAssociations = new MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>>(false);
-
-		private readonly HashSet<Security> _lookupResult = new HashSet<Security>();
-		private readonly SynchronizedQueue<SecurityLookupMessage> _lookupQueue = new SynchronizedQueue<SecurityLookupMessage>();
 
 		private class LookupInfo<TCriteria, TItem>
 			where TCriteria : Message
 		{
 			public TCriteria Criteria { get; }
-			public List<TItem> Items { get; } = new List<TItem>();
+			public IList<TItem> Items { get; } = new List<TItem>();
 
 			public LookupInfo(TCriteria criteria)
 			{
@@ -95,6 +80,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<long, LookupInfo<SecurityLookupMessage, Security>> _securityLookups = new SynchronizedDictionary<long, LookupInfo<SecurityLookupMessage, Security>>();
 		private readonly SynchronizedDictionary<long, LookupInfo<PortfolioLookupMessage, Portfolio>> _portfolioLookups = new SynchronizedDictionary<long, LookupInfo<PortfolioLookupMessage, Portfolio>>();
 		private readonly SynchronizedDictionary<long, LookupInfo<BoardLookupMessage, ExchangeBoard>> _boardLookups = new SynchronizedDictionary<long, LookupInfo<BoardLookupMessage, ExchangeBoard>>();
+		private readonly SynchronizedDictionary<long, LookupInfo<TimeFrameLookupMessage, TimeSpan>> _timeFrameLookups = new SynchronizedDictionary<long, LookupInfo<TimeFrameLookupMessage, TimeSpan>>();
 
 		private readonly SubscriptionManager _subscriptionManager;
 
@@ -193,8 +179,8 @@ namespace StockSharp.Algo
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
 		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
 		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
-		public Connector(ISecurityStorage securityStorage, IPositionStorage positionStorage, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, bool initManagers = true,
-			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnReconnect = true)
+		public Connector(ISecurityStorage securityStorage, IPositionStorage positionStorage, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry,
+			bool initManagers = true, bool supportOffline = false, bool supportSubscriptionTracking = true, bool isRestoreSubscriptionOnReconnect = true)
 			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking, isRestoreSubscriptionOnReconnect)
 		{
 			InitializeStorage(securityStorage, positionStorage, storageRegistry, snapshotRegistry);
@@ -208,9 +194,9 @@ namespace StockSharp.Algo
 		/// <param name="initManagers">Initialize managers.</param>
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
 		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
-		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
+		/// <param name="isRestoreSubscriptionOnErrorReconnect"><see cref="SubscriptionMessageAdapter.IsRestoreOnErrorReconnect"/>.</param>
 		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true,
-			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnReconnect = true)
+			bool supportOffline = false, bool supportSubscriptionTracking = true, bool isRestoreSubscriptionOnErrorReconnect = true)
 		{
 			_entityCache = new EntityCache(this)
 			{
@@ -242,7 +228,7 @@ namespace StockSharp.Algo
 				OutMessageChannel = new InMemoryMessageChannel($"Connector Out ({Name})", RaiseError);
 			}
 
-			IsRestoreSubscriptionOnReconnect = isRestoreSubscriptionOnReconnect;
+			IsRestoreSubscriptionOnErrorReconnect = isRestoreSubscriptionOnErrorReconnect;
 
 			if (initAdapter)
 				InitAdapter();
@@ -610,22 +596,27 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool TimeChange { get; set; } = true;
 
-		private bool _isRestoreSubscriptionOnReconnect;
+		private bool _isRestoreSubscriptionOnErrorReconnect;
 
 		/// <summary>
-		/// Restore subscription on reconnect.
+		/// <see cref="SubscriptionMessageAdapter.IsRestoreOnErrorReconnect"/>.
 		/// </summary>
-		public bool IsRestoreSubscriptionOnReconnect
+		public bool IsRestoreSubscriptionOnErrorReconnect
 		{
-			get => _isRestoreSubscriptionOnReconnect;
+			get => _isRestoreSubscriptionOnErrorReconnect;
 			set
 			{
-				_isRestoreSubscriptionOnReconnect = value;
+				_isRestoreSubscriptionOnErrorReconnect = value;
 
 				if (Adapter != null)
-					Adapter.IsRestoreSubscriptionOnReconnect = value;
+					Adapter.IsRestoreSubscriptionOnErrorReconnect = value;
 			}
 		}
+
+		/// <summary>
+		/// <see cref="SubscriptionMessageAdapter.IsRestoreOnNormalReconnect"/>.
+		/// </summary>
+		public bool IsRestoreSubscriptionOnNormalReconnect { get; set; } = true;
 
 		/// <inheritdoc />
 		public void Connect()
@@ -745,32 +736,23 @@ namespace StockSharp.Algo
 
 			_securityLookups.Add(criteria.TransactionId, new LookupInfo<SecurityLookupMessage, Security>(criteria));
 
-			//если для критерия указаны код биржи и код инструмента, то сначала смотрим нет ли такого инструмента
-			if (!NeedLookupSecurities(criteria.SecurityId))
-			{
-				SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = criteria.TransactionId });
-				return;
-			}
-
-			lock (_lookupQueue.SyncRoot)
-			{
-				_lookupQueue.Enqueue(criteria);
-
-				if (_lookupQueue.Count == 1)
-					SendInMessage(criteria);
-			}
+			SendInMessage(criteria);
 		}
 
-		private bool NeedLookupSecurities(SecurityId securityId)
+		/// <inheritdoc />
+		public void LookupTimeFrames(TimeFrameLookupMessage criteria)
 		{
-			if (securityId.SecurityCode.IsEmpty() || securityId.BoardCode.IsEmpty())
-				return true;
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
 
-			var id = SecurityIdGenerator.GenerateId(securityId.SecurityCode, securityId.BoardCode);
+			if (criteria.TransactionId == 0)
+				criteria.TransactionId = TransactionIdGenerator.GetNextId();
 
-			var security = Securities.FirstOrDefault(s => s.Id.CompareIgnoreCase(id));
+			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
 
-			return security == null;
+			_timeFrameLookups.Add(criteria.TransactionId, new LookupInfo<TimeFrameLookupMessage, TimeSpan>(criteria));
+
+			SendInMessage(criteria);
 		}
 
 		/// <inheritdoc />
@@ -885,51 +867,12 @@ namespace StockSharp.Algo
 
 		private MarketDepth GetMarketDepth(Security security, bool isFiltered)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			MarketDepthInfo info;
-
-			var isNew = false;
-
-			lock (_marketDepths.SyncRoot)
-			{
-				var key = Tuple.Create(security, isFiltered);
-
-				if (!_marketDepths.TryGetValue(key, out info))
-				{
-					isNew = true;
-
-					info = new MarketDepthInfo(EntityFactory.CreateMarketDepth(security));
-
-					// стакан из лога заявок бесконечен
-					//if (CreateDepthFromOrdersLog)
-					//	info.First.MaxDepth = int.MaxValue;
-
-					_marketDepths.Add(key, info);
-				}
-				else
-				{
-					if (info.HasChanges)
-					{
-						new QuoteChangeMessage
-						{
-							LocalTime = info.First.LocalTime,
-							ServerTime = info.First.LastChangeTime,
-							Bids = info.Second,
-							Asks = info.Third
-						}.ToMarketDepth(info.First, GetSecurity);
-
-						info.Second = null;
-						info.Third = null;
-					}
-				}
-			}
+			var depth = _entityCache.GetMarketDepth(security, isFiltered, GetSecurity, out var isNew);
 
 			if (isNew && !isFiltered)
-				RaiseNewMarketDepth(info.First);
+				RaiseNewMarketDepth(depth);
 
-			return info.First;
+			return depth;
 		}
 
 		/// <inheritdoc />
@@ -1404,6 +1347,17 @@ namespace StockSharp.Algo
 		{
 			return GetSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode), s => false, out _);
 		}
+
+		private Security EnsureGetSecurity(ISecurityIdMessage message)
+		{
+			var secId = message.SecurityId;
+
+			if (secId == default)
+				throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str1025);
+
+			return GetSecurity(secId);
+		}
+
 		/// <summary>
 		/// To get the instrument by the code. If the instrument is not found, then the <see cref="IEntityFactory.CreateSecurity"/> is called to create an instrument.
 		/// </summary>
@@ -1515,11 +1469,7 @@ namespace StockSharp.Algo
 			_securityLookups.Clear();
 			_boardLookups.Clear();
 			_portfolioLookups.Clear();
-
-			_lookupQueue.Clear();
-			_lookupResult.Clear();
-
-			_marketDepths.Clear();
+			_timeFrameLookups.Clear();
 
 			_nonAssociatedByIdMyTrades.Clear();
 			_nonAssociatedByStringIdMyTrades.Clear();
@@ -1598,17 +1548,13 @@ namespace StockSharp.Algo
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
 
 			Adapter.Load(storage.GetValue<SettingsStorage>(nameof(Adapter)));
-			IsRestoreSubscriptionOnReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
+			IsRestoreSubscriptionOnErrorReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnErrorReconnect), IsRestoreSubscriptionOnErrorReconnect);
+			IsRestoreSubscriptionOnNormalReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 
-			//CreateDepthFromOrdersLog = storage.GetValue<bool>(nameof(CreateDepthFromOrdersLog));
-			//CreateTradesFromOrdersLog = storage.GetValue<bool>(nameof(CreateTradesFromOrdersLog));
 			SupportLevel1DepthBuilder = storage.GetValue(nameof(SupportLevel1DepthBuilder), SupportLevel1DepthBuilder);
 
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
 			SupportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
-
-			LookupMessagesOnConnect = storage.GetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
-			AutoPortfoliosSubscribe = storage.GetValue(nameof(AutoPortfoliosSubscribe), AutoPortfoliosSubscribe);
 
 			base.Load(storage);
 		}
@@ -1631,17 +1577,13 @@ namespace StockSharp.Algo
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
 
 			storage.SetValue(nameof(Adapter), Adapter.Save());
-			storage.SetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
+			storage.SetValue(nameof(IsRestoreSubscriptionOnErrorReconnect), IsRestoreSubscriptionOnErrorReconnect);
+			storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 
-			//storage.SetValue(nameof(CreateDepthFromOrdersLog), CreateDepthFromOrdersLog);
-			//storage.SetValue(nameof(CreateTradesFromOrdersLog), CreateTradesFromOrdersLog);
 			storage.SetValue(nameof(SupportLevel1DepthBuilder), SupportLevel1DepthBuilder);
 
 			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 			storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
-
-			storage.SetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
-			storage.SetValue(nameof(AutoPortfoliosSubscribe), AutoPortfoliosSubscribe);
 
 			base.Save(storage);
 		}

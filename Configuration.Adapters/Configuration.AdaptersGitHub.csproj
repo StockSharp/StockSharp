@@ -314,6 +314,15 @@
     <Reference Include="StockSharp.Latoken">
       <HintPath>..\References\StockSharp.Latoken.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Gopax">
+      <HintPath>..\References\StockSharp.Gopax.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.CoinHub">
+      <HintPath>..\References\StockSharp.CoinHub.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Hotbit">
+      <HintPath>..\References\StockSharp.Hotbit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">

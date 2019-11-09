@@ -159,6 +159,16 @@ namespace StockSharp.BusinessEntities
 		event Action<IMessageAdapter, Exception> ConnectionErrorEx;
 
 		/// <summary>
+		/// Connection lost.
+		/// </summary>
+		event Action<IMessageAdapter> ConnectionLost;
+
+		/// <summary>
+		/// Connection restored.
+		/// </summary>
+		event Action<IMessageAdapter> ConnectionRestored;
+
+		/// <summary>
 		/// Data process error.
 		/// </summary>
 		event Action<Exception> Error;

@@ -212,6 +212,12 @@ namespace StockSharp.Algo
 		public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
 
 		/// <inheritdoc />
+		public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult;
+		
+		/// <inheritdoc />
+		public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
+
+		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
 
 		/// <inheritdoc />
@@ -286,11 +292,19 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Connection restored.
 		/// </summary>
+		[Obsolete("Use ConnectionRestored event.")]
 		public event Action Restored;
+
+		/// <inheritdoc />
+		public event Action<IMessageAdapter> ConnectionRestored;
+
+		/// <inheritdoc />
+		public event Action<IMessageAdapter> ConnectionLost;
 
 		/// <summary>
 		/// Connection timed-out.
 		/// </summary>
+		[Obsolete("Use ConnectionError event.")]
 		public event Action TimeOut;
 
 		/// <summary>
@@ -619,6 +633,19 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// To call the event <see cref="LookupTimeFramesResult"/>.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="error">An error of lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
+		/// <param name="timeFrames">Found time-frames.</param>
+		/// <param name="newTimeFrames">Newly created.</param>
+		private void RaiseLookupTimeFramesResult(TimeFrameLookupMessage message, Exception error, TimeSpan[] timeFrames, TimeSpan[] newTimeFrames)
+		{
+			LookupTimeFramesResult?.Invoke(message, timeFrames, error);
+			LookupTimeFramesResult2?.Invoke(message, timeFrames, newTimeFrames, error);
+		}
+
+		/// <summary>
 		/// To call the event <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
 		/// <param name="message">Message.</param>
@@ -705,14 +732,26 @@ namespace StockSharp.Algo
 			ValuesChanged?.Invoke(security, changes, serverTime, localTime);
 		}
 
-		private void RaiseRestored()
+		private void RaiseConnectionLost(IMessageAdapter adapter)
 		{
+			ConnectionLost?.Invoke(adapter);
+		}
+
+		private void RaiseConnectionRestored(IMessageAdapter adapter)
+		{
+#pragma warning disable 618
 			Restored?.Invoke();
+#pragma warning restore 618
+
+			if (adapter != null)
+				ConnectionRestored?.Invoke(adapter);
 		}
 
 		private void RaiseTimeOut()
 		{
+#pragma warning disable 618
 			TimeOut?.Invoke();
+#pragma warning restore 618
 		}
 
 		private void RaiseCandleSeriesProcessing(CandleSeries series, Candle candle)

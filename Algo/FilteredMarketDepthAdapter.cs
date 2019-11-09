@@ -185,12 +185,6 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (message.IsBack)
-			{
-				base.OnInnerAdapterNewOutMessage(message);
-				return;
-			}
-
 			switch (message.Type)
 			{
 				case MessageTypes.QuoteChange:
@@ -202,7 +196,7 @@ namespace StockSharp.Algo
 					if (info != null)
 					{
 						var filteredQuoteMsg = info.Process(quoteMsg);
-						RaiseNewOutMessage(filteredQuoteMsg);
+						base.OnInnerAdapterNewOutMessage(filteredQuoteMsg);
 					}
 
 					break;
