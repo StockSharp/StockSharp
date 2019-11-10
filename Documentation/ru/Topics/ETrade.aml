@@ -2,6 +2,7 @@
 <topic id="84d6a0fb-607f-4d87-be8a-e2b58006493e" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    <para><legacyBold>E-Trade Financial Corporation (E*TRADE)</legacyBold> - торговая платформа для торговли финансовыми активами, включая обыкновенные акции, привилегированные акции, фьючерсные контракты, биржевые фонды, опционы и др.</para>
     	<para>
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.

@@ -2,6 +2,7 @@
 <topic id="f119fa3f-2ce2-4924-acb8-e97f1b9e4b5b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+     <para><legacyBold>Xignite</legacyBold> - сервис поставки маркет-данных в режиме реального времени котировок акций, Форекс, фьючерсных контрактов и др.</para>
     	<para>
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
