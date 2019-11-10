@@ -2,6 +2,7 @@
 <topic id="7f488b0b-0f59-42b4-845b-fd766f5699dc" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    <para><legacyBold>SmartCOM</legacyBold> — программный комплекс для организации доступа к биржевым торгам.</para>
     	<para>
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.

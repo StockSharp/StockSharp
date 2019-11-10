@@ -2,6 +2,7 @@
 <topic id="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    <para><legacyBold>PLAZAII</legacyBold> - программное обеспечение, обеспечивающее обмен данными между Серверной частью ПО – Торговой и клиринговой системы Срочного рынка (Торговой системой SPECTRA) и сертифицированной брокерской системой по протоколу Plaza II.</para>
     	<para>
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.

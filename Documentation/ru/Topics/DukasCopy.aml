@@ -2,6 +2,7 @@
 <topic id="4e2b91c9-624d-4a4c-b71f-41de89ad032b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+       <para><legacyBold>DukasCopy</legacyBold> - сервис поставки маркет-данных в режиме реального котировок Форекс.</para>
     	<para>
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.

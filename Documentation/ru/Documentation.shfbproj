@@ -297,6 +297,36 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API_GUI_Settings_Gopax.aml" />
+    <None Include="Topics\API_GUI_Settings_CoinHub.aml" />
+    <None Include="Topics\API_GUI_Settings_Hotbit.aml" />
+    <None Include="Topics\API_GUI_Settings_Latoken.aml" />
+    <None Include="Topics\API_GUI_Settings_FatBTC.aml" />
+    <None Include="Topics\API_GUI_Settings_CoinEx.aml" />
+    <None Include="Topics\GopaxSample.aml" />
+    <None Include="Topics\API_GUI_Settings_BiboxGopax.aml" />
+    <None Include="Topics\CoinHubSample.aml" />
+    <None Include="Topics\API_GUI_Settings_BiboxCoinHub.aml" />
+    <None Include="Topics\HotbitSample.aml" />
+    <None Include="Topics\API_GUI_Settings_BiboxHotbit.aml" />
+    <None Include="Topics\LatokenSample.aml" />
+    <None Include="Topics\API_GUI_Settings_BiboxLatoken.aml" />
+    <None Include="Topics\FatBTCSample.aml" />
+    <None Include="Topics\API_GUI_Settings_BiboxFatBTC.aml" />
+    <None Include="Topics\CoinExSample.aml" />
+    <None Include="Topics\API_GUI_Settings_BiboxCoinEx.aml" />
+    <None Include="Topics\GopaxConnectorsSettings.aml" />
+    <None Include="Topics\CoinHubConnectorsSettings.aml" />
+    <None Include="Topics\HotbitConnectorsSettings.aml" />
+    <None Include="Topics\Gopax.aml" />
+    <None Include="Topics\CoinHub.aml" />
+    <None Include="Topics\Hotbit.aml" />
+    <None Include="Topics\LatokenConnectorsSettings.aml" />
+    <None Include="Topics\FatBTCConnectorsSettings.aml" />
+    <None Include="Topics\CoinExConnectorsSettings.aml" />
+    <None Include="Topics\Latoken.aml" />
+    <None Include="Topics\FatBTC.aml" />
+    <None Include="Topics\CoinEx.aml" />
     <None Include="Topics\UpbitSample.aml" />
     <None Include="Topics\UpbitConnectorsSettings.aml" />
     <None Include="Topics\Upbit.aml" />
@@ -4854,6 +4884,30 @@
     <Image Include="Art\API_GUI_ReconnectionSettings.png">
       <ImageId>API_GUI_ReconnectionSettings</ImageId>
       <AlternateText>API GUI Reconnection Settings</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Gopax.png">
+      <ImageId>API_GUI_Settings_Gopax</ImageId>
+      <AlternateText>API GUI Settings Gopax</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_CoinHub.png">
+      <ImageId>API_GUI_Settings_CoinHub</ImageId>
+      <AlternateText>API GUI Settings Coin Hub</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Hotbit.png">
+      <ImageId>API_GUI_Settings_Hotbit</ImageId>
+      <AlternateText>API GUI Settings Hotbit</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_LATOKEN.png">
+      <ImageId>API_GUI_Settings_LATOKEN</ImageId>
+      <AlternateText>API GUI Settings LATOKEN</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_FatBTC.png">
+      <ImageId>API_GUI_Settings_FatBTC</ImageId>
+      <AlternateText>API GUI Settings FatBTC</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_CoinEx.png">
+      <ImageId>API_GUI_Settings_CoinEx</ImageId>
+      <AlternateText>API GUI Settings Coin Ex</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
