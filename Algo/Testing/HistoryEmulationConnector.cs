@@ -254,7 +254,6 @@ namespace StockSharp.Algo.Testing
 			
 			RiskManager = null;
 
-			SupportSubscriptionTracking = true;
 			SupportBasketSecurities = true;
 
 			InMessageChannel = new HistoryEmulationMessageChannel(this);

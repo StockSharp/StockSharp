@@ -205,8 +205,6 @@ namespace StockSharp.Algo
 				ExchangeInfoProvider = new InMemoryExchangeInfoProvider()
 			};
 
-			_supportOffline = supportOffline;
-			_supportSubscriptionTracking = supportSubscriptionTracking;
 			ReConnectionSettings = new ReConnectionSettings();
 
 			_subscriptionManager = new SubscriptionManager(this);
@@ -229,8 +227,6 @@ namespace StockSharp.Algo
 				InMessageChannel = new InMemoryMessageChannel($"Connector In ({Name})", RaiseError);
 				OutMessageChannel = new InMemoryMessageChannel($"Connector Out ({Name})", RaiseError);
 			}
-
-			IsRestoreSubscriptionOnErrorReconnect = isRestoreSubscriptionOnErrorReconnect;
 
 			if (initAdapter)
 				InitAdapter(storageRegistry, snapshotRegistry);
@@ -567,28 +563,6 @@ namespace StockSharp.Algo
 		/// Increment periodically <see cref="MarketTimeChangedInterval"/> value of <see cref="CurrentTime"/>.
 		/// </summary>
 		public bool TimeChange { get; set; } = true;
-
-		private bool _isRestoreSubscriptionOnErrorReconnect;
-
-		/// <summary>
-		/// <see cref="SubscriptionMessageAdapter.IsRestoreOnErrorReconnect"/>.
-		/// </summary>
-		public bool IsRestoreSubscriptionOnErrorReconnect
-		{
-			get => _isRestoreSubscriptionOnErrorReconnect;
-			set
-			{
-				_isRestoreSubscriptionOnErrorReconnect = value;
-
-				if (Adapter != null)
-					Adapter.IsRestoreSubscriptionOnErrorReconnect = value;
-			}
-		}
-
-		/// <summary>
-		/// <see cref="SubscriptionMessageAdapter.IsRestoreOnNormalReconnect"/>.
-		/// </summary>
-		public bool IsRestoreSubscriptionOnNormalReconnect { get; set; } = true;
 
 		/// <inheritdoc />
 		public void Connect()
@@ -1520,8 +1494,6 @@ namespace StockSharp.Algo
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
 
 			Adapter.Load(storage.GetValue<SettingsStorage>(nameof(Adapter)));
-			IsRestoreSubscriptionOnErrorReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnErrorReconnect), IsRestoreSubscriptionOnErrorReconnect);
-			IsRestoreSubscriptionOnNormalReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 
 			SupportLevel1DepthBuilder = storage.GetValue(nameof(SupportLevel1DepthBuilder), SupportLevel1DepthBuilder);
 
@@ -1549,8 +1521,6 @@ namespace StockSharp.Algo
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
 
 			storage.SetValue(nameof(Adapter), Adapter.Save());
-			storage.SetValue(nameof(IsRestoreSubscriptionOnErrorReconnect), IsRestoreSubscriptionOnErrorReconnect);
-			storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 
 			storage.SetValue(nameof(SupportLevel1DepthBuilder), SupportLevel1DepthBuilder);
 
