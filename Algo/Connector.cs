@@ -158,12 +158,9 @@ namespace StockSharp.Algo
 		/// <param name="storageRegistry">The storage of market data.</param>
 		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
 		/// <param name="initManagers">Initialize managers.</param>
-		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
-		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
-		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
 		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry,
-			bool initManagers = true, bool supportOffline = false, bool supportSubscriptionTracking = true, bool isRestoreSubscriptionOnReconnect = true)
-			: this(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry, snapshotRegistry, initManagers, supportOffline, supportSubscriptionTracking, isRestoreSubscriptionOnReconnect)
+			bool initManagers = true)
+			: this(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry, snapshotRegistry, initManagers)
 		{
 #pragma warning disable 612
 			EntityRegistry = entityRegistry;
@@ -178,21 +175,17 @@ namespace StockSharp.Algo
 		/// <param name="storageRegistry">The storage of market data.</param>
 		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
 		/// <param name="initManagers">Initialize managers.</param>
-		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
-		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
-		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
-		public Connector(ISecurityStorage securityStorage, IPositionStorage positionStorage, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry,
-			bool initManagers = true, bool supportOffline = false, bool supportSubscriptionTracking = true, bool isRestoreSubscriptionOnReconnect = true)
-			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking, isRestoreSubscriptionOnReconnect)
+		public Connector(ISecurityStorage securityStorage, IPositionStorage positionStorage,
+			IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry,
+			bool initManagers = true)
+			: this(false, true, storageRegistry, snapshotRegistry, initManagers)
 		{
-			SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
-			PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
-			StorageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
-			SnapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
-
 			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
 
-			InitAdapter();
+			SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
+			PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
+
+			InitAdapter(storageRegistry, snapshotRegistry);
 		}
 
 		/// <summary>
@@ -200,12 +193,12 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="initAdapter">Initialize basket adapter.</param>
 		/// <param name="initChannels">Initialize channels.</param>
+		/// <param name="storageRegistry">The storage of market data.</param>
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
 		/// <param name="initManagers">Initialize managers.</param>
-		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
-		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
-		/// <param name="isRestoreSubscriptionOnErrorReconnect"><see cref="SubscriptionMessageAdapter.IsRestoreOnErrorReconnect"/>.</param>
 		protected Connector(bool initAdapter, bool initChannels = true,
-			bool initManagers = true, bool supportOffline = false, bool supportSubscriptionTracking = true, bool isRestoreSubscriptionOnErrorReconnect = true)
+			IStorageRegistry storageRegistry = null, SnapshotRegistry snapshotRegistry = null,
+			bool initManagers = true)
 		{
 			_entityCache = new EntityCache(this)
 			{
@@ -240,7 +233,7 @@ namespace StockSharp.Algo
 			IsRestoreSubscriptionOnErrorReconnect = isRestoreSubscriptionOnErrorReconnect;
 
 			if (initAdapter)
-				InitAdapter();
+				InitAdapter(storageRegistry, snapshotRegistry);
 		}
 
 		/// <summary>
@@ -262,12 +255,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The storage of market data.
 		/// </summary>
-		public IStorageRegistry StorageRegistry { get; }
+		public IStorageRegistry StorageRegistry => Adapter?.StorageRegistry;
 
 		/// <summary>
 		/// Snapshot storage registry.
 		/// </summary>
-		public SnapshotRegistry SnapshotRegistry { get; }
+		public SnapshotRegistry SnapshotRegistry => Adapter?.SnapshotRegistry;
 
 		private IBasketSecurityProcessorProvider _basketSecurityProcessorProvider = new BasketSecurityProcessorProvider();
 
@@ -280,9 +273,9 @@ namespace StockSharp.Algo
 			set => _basketSecurityProcessorProvider = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		private void InitAdapter()
+		private void InitAdapter(IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
 		{
-			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new CandleBuilderProvider(_entityCache.ExchangeInfoProvider));
+			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider(), new CandleBuilderProvider(_entityCache.ExchangeInfoProvider), storageRegistry, snapshotRegistry);
 		}
 
 		/// <summary>

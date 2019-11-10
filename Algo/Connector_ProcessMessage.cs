@@ -233,7 +233,7 @@ namespace StockSharp.Algo
 
 				while (adapter != null)
 				{
-					if (adapter is StorageMessageAdapter storage)
+					if (adapter is StorageMetaInfoMessageAdapter storage)
 						StorageAdapter = storage;
 
 					if (adapter.InnerAdapter is BasketMessageAdapter basket)
@@ -311,7 +311,7 @@ namespace StockSharp.Algo
 
 					if (SecurityStorage != null && StorageRegistry != null && SnapshotRegistry != null)
 					{
-						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry, SnapshotRegistry, _adapter.CandleBuilderProvider)
+						_inAdapter = StorageAdapter = new StorageMetaInfoMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry.ExchangeInfoProvider)
 						{
 							OwnInnerAdapter = true,
 							OverrideSecurityData = OverrideSecurityData
@@ -590,7 +590,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Storage adapter.
 		/// </summary>
-		public StorageMessageAdapter StorageAdapter { get; private set; }
+		public StorageMetaInfoMessageAdapter StorageAdapter { get; private set; }
 
 		/// <inheritdoc />
 		public void SendInMessage(Message message)

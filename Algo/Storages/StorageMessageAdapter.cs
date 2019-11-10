@@ -25,7 +25,6 @@ namespace StockSharp.Algo.Storages
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -59,11 +58,7 @@ namespace StockSharp.Algo.Storages
 	{
 		private readonly IStorageRegistry _storageRegistry;
 		private readonly SnapshotRegistry _snapshotRegistry;
-		private readonly ISecurityStorage _securityStorage;
-		private readonly IPositionStorage _positionStorage;
 		private readonly CandleBuilderProvider _candleBuilderProvider;
-
-		private IExchangeInfoProvider ExchangeInfoProvider => _storageRegistry.ExchangeInfoProvider;
 
 		private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = new SynchronizedSet<long>();
 		private readonly SynchronizedDictionary<long, long> _orderIds = new SynchronizedDictionary<long, long>();
@@ -75,29 +70,12 @@ namespace StockSharp.Algo.Storages
 		/// Initializes a new instance of the <see cref="StorageMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
 		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
-		public StorageMessageAdapter(IMessageAdapter innerAdapter, IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, CandleBuilderProvider candleBuilderProvider)
-			: this(innerAdapter, entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry, snapshotRegistry, candleBuilderProvider)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StorageMessageAdapter"/>.
-		/// </summary>
-		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		/// <param name="securityStorage">Securities meta info storage.</param>
-		/// <param name="positionStorage">Position storage.</param>
-		/// <param name="storageRegistry">The storage of market data.</param>
-		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
-		/// <param name="candleBuilderProvider">Candle builders provider.</param>
-		public StorageMessageAdapter(IMessageAdapter innerAdapter, ISecurityStorage securityStorage, IPositionStorage positionStorage, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, CandleBuilderProvider candleBuilderProvider)
+		public StorageMessageAdapter(IMessageAdapter innerAdapter, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, CandleBuilderProvider candleBuilderProvider)
 			: base(innerAdapter)
 		{
-			_securityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
-			_positionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
 			_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
 			_snapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
 			_candleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(candleBuilderProvider));
@@ -402,11 +380,6 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public bool CacheBuildableCandles { get; set; }
 
-		/// <summary>
-		/// Override previous security data by new values.
-		/// </summary>
-		public bool OverrideSecurityData { get; set; }
-
 		private StorageModes _mode = StorageModes.Incremental;
 
 		/// <summary>
@@ -444,68 +417,20 @@ namespace StockSharp.Algo.Storages
 
 		private IMarketDataStorage GetStorage(SecurityId securityId, Type messageType, object arg)
 		{
-			return _storageRegistry.GetStorage(GetSecurity(securityId), messageType, arg, Drive, Format);
+			return _storageRegistry.GetStorage(securityId, messageType, arg, Drive, Format);
 		}
 
 		private IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(SecurityId securityId, TimeSpan timeFrame, bool allowBuildFromSmallerTimeFrame)
 		{
-			var security = GetSecurity(securityId);
-
 			if (!allowBuildFromSmallerTimeFrame)
-				return _storageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, timeFrame, Drive, Format);
+				return _storageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, timeFrame, Drive, Format);
 
-			var storage = _storageRegistry.GetCandleMessageBuildableStorage(security, timeFrame, Drive, Format);
+			var storage = _storageRegistry.GetCandleMessageBuildableStorage(securityId, timeFrame, Drive, Format);
 
 			if (CacheBuildableCandles)
-				storage = new CacheableMarketDataStorage<CandleMessage>(storage, _storageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, timeFrame, Drive, Format));
+				storage = new CacheableMarketDataStorage<CandleMessage>(storage, _storageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, timeFrame, Drive, Format));
 
 			return storage;
-		}
-
-		private Security GetSecurity(SecurityId securityId)
-		{
-			var security = _securityStorage.LookupById(securityId) ?? TryCreateSecurity(securityId);
-
-			if (security == null)
-				throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(securityId));
-
-			return security;
-		}
-
-		/// <summary>
-		/// Load save data from storage.
-		/// </summary>
-		[Obsolete("Use lookup messages.")]
-		public void Load()
-		{
-			//var requiredSecurities = new List<SecurityId>();
-			//var availableSecurities = DriveInternal.AvailableSecurities.ToHashSet();
-
-			foreach (var board in ExchangeInfoProvider.Boards)
-				RaiseStorageMessage(board.ToMessage());
-
-			foreach (var security in _securityStorage.LookupAll())
-			{
-				var msg = security.ToMessage();
-
-				//if (availableSecurities.Remove(msg.SecurityId))
-				//{
-				//	requiredSecurities.Add(msg.SecurityId);
-				//}
-
-				RaiseStorageMessage(msg);
-			}
-
-			foreach (var portfolio in _positionStorage.Portfolios)
-			{
-				RaiseStorageMessage(portfolio.ToMessage());
-				RaiseStorageMessage(portfolio.ToChangeMessage());
-			}
-
-			foreach (var position in _positionStorage.Positions)
-			{
-				RaiseStorageMessage(position.ToChangeMessage());
-			}
 		}
 
 		/// <inheritdoc />
@@ -525,18 +450,6 @@ namespace StockSharp.Algo.Storages
 					ProcessMarketDataRequest((MarketDataMessage)message);
 					break;
 
-				case MessageTypes.SecurityLookup:
-					ProcessSecurityLookup((SecurityLookupMessage)message);
-					break;
-
-				case MessageTypes.BoardLookup:
-					ProcessBoardLookup((BoardLookupMessage)message);
-					break;
-
-				case MessageTypes.PortfolioLookup:
-					ProcessPortfolioLookup((PortfolioLookupMessage)message);
-					break;
-
 				case MessageTypes.OrderStatus:
 					ProcessOrderStatus((OrderStatusMessage)message);
 					break;
@@ -549,68 +462,6 @@ namespace StockSharp.Algo.Storages
 					base.OnSendInMessage(message);
 					break;
 			}
-		}
-
-		private void ProcessSecurityLookup(SecurityLookupMessage msg)
-		{
-			if (msg == null)
-				throw new ArgumentNullException(nameof(msg));
-
-			if (msg.Adapter != null && msg.Adapter != this)
-			{
-				base.OnSendInMessage(msg);
-				return;
-			}
-
-			foreach (var security in _securityStorage.Lookup(msg))
-				RaiseStorageMessage(security.ToMessage(originalTransactionId: msg.TransactionId));
-
-			base.OnSendInMessage(msg);
-		}
-
-		private void ProcessBoardLookup(BoardLookupMessage msg)
-		{
-			if (msg == null)
-				throw new ArgumentNullException(nameof(msg));
-
-			if (msg.Adapter != null && msg.Adapter != this)
-			{
-				base.OnSendInMessage(msg);
-				return;
-			}
-
-			foreach (var board in ExchangeInfoProvider.LookupBoards(msg.Like))
-				RaiseStorageMessage(board.ToMessage(msg.TransactionId));
-
-			base.OnSendInMessage(msg);
-		}
-
-		private void ProcessPortfolioLookup(PortfolioLookupMessage msg)
-		{
-			if (msg == null)
-				throw new ArgumentNullException(nameof(msg));
-
-			if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
-			{
-				base.OnSendInMessage(msg);
-				return;
-			}
-
-			foreach (var portfolio in _positionStorage.Portfolios.Filter(msg))
-			{
-				RaiseStorageMessage(portfolio.ToMessage(msg.TransactionId));
-				RaiseStorageMessage(portfolio.ToChangeMessage());
-			}
-
-			foreach (var position in _positionStorage.Positions.Filter(msg))
-			{
-				RaiseStorageMessage(position.ToChangeMessage(msg.TransactionId));
-			}
-
-			if (msg.IsHistory)
-				RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = msg.TransactionId });
-			else
-				base.OnSendInMessage(msg);
 		}
 
 		private void ProcessOrderStatus(OrderStatusMessage msg)
@@ -1004,179 +855,6 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		/// <inheritdoc />
-		protected override void OnInnerAdapterNewOutMessage(Message message)
-		{
-			switch (message.Type)
-			{
-				case MessageTypes.Security:
-				{
-					var secMsg = (SecurityMessage)message;
-					var security = _securityStorage.LookupById(secMsg.SecurityId);
-
-					if (security == null)
-						security = secMsg.ToSecurity(_storageRegistry.ExchangeInfoProvider);
-					else
-						security.ApplyChanges(secMsg, _storageRegistry.ExchangeInfoProvider, OverrideSecurityData);
-
-					_securityStorage.Save(security, OverrideSecurityData);
-					break;
-				}
-				case MessageTypes.Board:
-				{
-					var boardMsg = (BoardMessage)message;
-					var board = ExchangeInfoProvider.GetExchangeBoard(boardMsg.Code);
-
-					if (board == null)
-					{
-						board = _storageRegistry.ExchangeInfoProvider.GetOrCreateBoard(boardMsg.Code, code =>
-						{
-							var exchange = _storageRegistry
-								.ExchangeInfoProvider
-								.GetExchange(boardMsg.ExchangeCode) ?? boardMsg.ToExchange(new Exchange
-								{
-									Name = boardMsg.ExchangeCode
-								});
-
-							return new ExchangeBoard
-							{
-								Code = code,
-								Exchange = exchange
-							};
-						});
-					}
-
-					board.ApplyChanges(boardMsg);
-
-					ExchangeInfoProvider.Save(board.Exchange);
-					ExchangeInfoProvider.Save(board);
-					break;
-				}
-
-				case MessageTypes.Portfolio:
-				{
-					var portfolioMsg = (PortfolioMessage)message;
-					var portfolio = _positionStorage.GetPortfolio(portfolioMsg.PortfolioName) ?? new Portfolio
-					{
-						Name = portfolioMsg.PortfolioName
-					};
-
-					portfolioMsg.ToPortfolio(portfolio, _storageRegistry.ExchangeInfoProvider);
-					_positionStorage.Save(portfolio);
-
-					break;
-				}
-
-				case MessageTypes.PortfolioChange:
-				{
-					var portfolioMsg = (PortfolioChangeMessage)message;
-					var portfolio = _positionStorage.GetPortfolio(portfolioMsg.PortfolioName) ?? new Portfolio
-					{
-						Name = portfolioMsg.PortfolioName
-					};
-
-					portfolio.ApplyChanges(portfolioMsg, _storageRegistry.ExchangeInfoProvider);
-					_positionStorage.Save(portfolio);
-
-					break;
-				}
-
-				//case MessageTypes.Position:
-				//{
-				//	var positionMsg = (PositionMessage)message;
-				//	var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
-
-				//	if (position == null)
-				//		break;
-
-				//	if (!positionMsg.DepoName.IsEmpty())
-				//		position.DepoName = positionMsg.DepoName;
-
-				//	if (positionMsg.LimitType != null)
-				//		position.LimitType = positionMsg.LimitType;
-
-				//	if (!positionMsg.Description.IsEmpty())
-				//		position.Description = positionMsg.Description;
-
-				//	_entityRegistry.Positions.Save(position);
-
-				//	break;
-				//}
-
-				case MessageTypes.PositionChange:
-				{
-					var positionMsg = (PositionChangeMessage)message;
-					var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
-
-					if (position == null)
-						break;
-
-					if (!positionMsg.DepoName.IsEmpty())
-						position.DepoName = positionMsg.DepoName;
-
-					if (positionMsg.LimitType != null)
-						position.LimitType = positionMsg.LimitType;
-
-					if (!positionMsg.Description.IsEmpty())
-						position.Description = positionMsg.Description;
-
-					position.ApplyChanges(positionMsg);
-					_positionStorage.Save(position);
-
-					break;
-				}
-			}
-
-			base.OnInnerAdapterNewOutMessage(message);
-		}
-
-		private Position GetPosition(SecurityId securityId, string portfolioName)
-		{
-			var security = (!securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty() ? _securityStorage.LookupById(securityId) : _securityStorage.Lookup(new Security
-			{
-				Code = securityId.SecurityCode,
-			}).FirstOrDefault()) ?? TryCreateSecurity(securityId);
-
-			if (security == null)
-				return null;
-
-			var portfolio = _positionStorage.GetPortfolio(portfolioName);
-
-			if (portfolio == null)
-			{
-				portfolio = new Portfolio
-				{
-					Name = portfolioName
-				};
-
-				_positionStorage.Save(portfolio);
-			}
-
-			return _positionStorage.GetPosition(portfolio, security) ?? new Position
-			{
-				Security = security,
-				Portfolio = portfolio
-			};
-		}
-
-		private Security TryCreateSecurity(SecurityId securityId)
-		{
-			if (securityId.SecurityCode.IsEmpty() || securityId.BoardCode.IsEmpty())
-				return null;
-
-			var security = new Security
-			{
-				Id = securityId.ToStringId(),
-				Code = securityId.SecurityCode,
-				Board = _storageRegistry.ExchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode),
-				//ExtensionInfo = new Dictionary<object, object>()
-			};
-
-			_securityStorage.Save(security, false);
-
-			return security;
-		}
-
 		private void RaiseStorageMessage(Message message)
 		{
 			message.TryInitLocalTime(this);
@@ -1226,8 +904,6 @@ namespace StockSharp.Algo.Storages
 			storage.SetValue(nameof(Format), Format);
 			storage.SetValue(nameof(DaysLoad), DaysLoad);
 			storage.SetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
-			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
-			//storage.SetValue(nameof(SupportLookupMessages), SupportLookupMessages);
 		}
 
 		/// <inheritdoc />
@@ -1242,8 +918,6 @@ namespace StockSharp.Algo.Storages
 			Format = storage.GetValue(nameof(Format), Format);
 			DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
 			CacheBuildableCandles = storage.GetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
-			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
-			//SupportLookupMessages = storage.GetValue(nameof(SupportLookupMessages), SupportLookupMessages);
 		}
 
 		/// <summary>
@@ -1252,10 +926,9 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new StorageMessageAdapter(InnerAdapter, _securityStorage, _positionStorage, _storageRegistry, _snapshotRegistry, _candleBuilderProvider)
+			return new StorageMessageAdapter(InnerAdapter, _storageRegistry, _snapshotRegistry, _candleBuilderProvider)
 			{
 				CacheBuildableCandles = CacheBuildableCandles,
-				OverrideSecurityData = OverrideSecurityData,
 				DaysLoad = DaysLoad,
 				Format = Format,
 				Drive = Drive,

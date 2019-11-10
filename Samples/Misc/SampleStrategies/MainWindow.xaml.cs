@@ -139,7 +139,7 @@ namespace SampleStrategies
 
 			entityRegistry.Init();
 
-			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
+			Connector.Adapter.StorageDaysLoad = TimeSpan.FromDays(3);
 			//Connector.LookupAll();
 
 			snapshotRegistry.Init();

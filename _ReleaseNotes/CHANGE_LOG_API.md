@@ -268,6 +268,8 @@ StockSharp API Change log
 * (feature) Connector. Subscription tracking on normal and error disconnects turned on by default.
 * (feature) IConnector. ConnectionLost, ConnectionRestored events added.
 * (feature) Gopax, Hotbit, CoinHub connectors.
+* (feature) StorageMessageAdapter. Meta-info extracted into StorageMetaInfoMessageAdapter.
+* (feature) BasketMessageAdapter. Each connection uses own StorageMessageAdapter.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
