@@ -267,10 +267,7 @@ namespace StockSharp.Algo.Storages
 				RaiseNewOutMessage(position.ToChangeMessage(msg.TransactionId));
 			}
 
-			if (msg.IsHistory)
-				RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = msg.TransactionId });
-			else
-				base.OnSendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private Position GetPosition(SecurityId securityId, string portfolioName)

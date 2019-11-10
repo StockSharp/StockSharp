@@ -370,11 +370,6 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		///// <summary>
-		///// Support lookup messages.
-		///// </summary>
-		//public bool SupportLookupMessages { get; set; } = true;
-
 		/// <summary>
 		/// Cache buildable from smaller time-frames candles.
 		/// </summary>
@@ -398,10 +393,12 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 		{
-			if (DriveInternal == null)
-				return Enumerable.Empty<object>();
+			var args = base.GetCandleArgs(candleType, securityId, from, to);
 
-			return DriveInternal.GetCandleArgs(Format, candleType, securityId, from, to);
+			if (DriveInternal == null)
+				return args;
+
+			return args.Concat(DriveInternal.GetCandleArgs(Format, candleType, securityId, from, to)).Distinct();
 		}
 
 		private ISnapshotStorage GetSnapshotStorage(Type messageType, object arg)
@@ -513,12 +510,7 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			if (msg.IsHistory)
-			{
-
-			}
-			else
-				base.OnSendInMessage(msg);
+			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessOrderCancel(OrderCancelMessage msg)
@@ -552,7 +544,7 @@ namespace StockSharp.Algo.Storages
 
 					var lastTime = LoadMessages(msg, msg.From, msg.To, transactionId);
 
-					if (msg.IsHistory || (msg.To != null && lastTime != null && msg.To <= lastTime))
+					if (msg.To != null && lastTime != null && msg.To <= lastTime)
 					{
 						_fullyProcessedSubscriptions.Add(transactionId);
 						RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId });
@@ -572,18 +564,10 @@ namespace StockSharp.Algo.Storages
 						}
 					}
 
-					base.OnSendInMessage(msg.ValidateBounds());	
+					msg.ValidateBounds();
 				}
-				else
-				{
-					if (msg.IsHistory)
-					{
-						RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId });
-						RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId });
-					}
-					else
-						base.OnSendInMessage(msg);
-				}
+
+				base.OnSendInMessage(msg);
 			}
 			else
 			{
