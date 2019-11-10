@@ -63,7 +63,7 @@ namespace SampleStorage
 				var aaplStorage = drive.GetSecurityDrive(security);
 
 				// get tick storage
-				var tradeStorage = aaplStorage.GetTickStorage(new TickCsvSerializer(aaplStorage.SecurityId)).ToEntityStorage<ExecutionMessage, Trade>(security, new InMemoryExchangeInfoProvider());
+				var tradeStorage = aaplStorage.GetTickStorage(new TickCsvSerializer(aaplStorage.SecurityId)).ToEntityStorage<ExecutionMessage, Trade>(security);
 
 				// saving ticks
 				tradeStorage.Save(trades);

@@ -835,7 +835,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="security">Security.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <returns>Entity storage.</returns>
-		public static IMarketDataStorage<TEntity> ToEntityStorage<TMessage, TEntity>(this IMarketDataStorage<TMessage> storage, Security security, IExchangeInfoProvider exchangeInfoProvider)
+		public static IMarketDataStorage<TEntity> ToEntityStorage<TMessage, TEntity>(this IMarketDataStorage<TMessage> storage, Security security, IExchangeInfoProvider exchangeInfoProvider = null)
 			where TMessage : Message
 		{
 			Func<TEntity, TMessage> toMessage;
@@ -892,7 +892,7 @@ namespace StockSharp.Algo.Storages
 			else
 				throw new ArgumentOutOfRangeException(nameof(TEntity), typeof(TEntity), LocalizedStrings.Str1219);
 
-			return (IMarketDataStorage<TEntity>)_convertedStorages.SafeAdd(storage, key => new ConvertableStorage<TMessage, TEntity>(security, storage, exchangeInfoProvider, toMessage));
+			return (IMarketDataStorage<TEntity>)_convertedStorages.SafeAdd(storage, key => new ConvertableStorage<TMessage, TEntity>(security, storage, exchangeInfoProvider ?? new InMemoryExchangeInfoProvider(), toMessage));
 		}
 	}
 }
