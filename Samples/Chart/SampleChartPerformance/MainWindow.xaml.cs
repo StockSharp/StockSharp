@@ -186,7 +186,7 @@
 				{
 					var date = DateTime.MinValue;
 
-					foreach (var tick in storage.GetTickMessageStorage(_security, new LocalMarketDataDrive(path)).Load())
+					foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(path)).Load())
 					{
 						if (date != tick.ServerTime.Date)
 						{

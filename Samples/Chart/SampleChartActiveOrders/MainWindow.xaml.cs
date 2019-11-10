@@ -15,6 +15,7 @@
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -134,7 +135,7 @@
 			{
 				var date = DateTime.MinValue;
 
-				foreach (var tick in storage.GetTickMessageStorage(_security, new LocalMarketDataDrive(path)).Load())
+				foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(path)).Load())
 				{
 					AppendTick(_security, tick);
 

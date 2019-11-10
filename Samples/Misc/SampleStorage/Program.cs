@@ -62,7 +62,7 @@ namespace SampleStorage
 				var aaplStorage = drive.GetSecurityDrive(security);
 
 				// get tick storage
-				var tradeStorage = (IMarketDataStorage<Trade>)aaplStorage.GetTickStorage(new TickCsvSerializer(aaplStorage.SecurityId));
+				var tradeStorage = aaplStorage.GetTickStorage(new TickCsvSerializer(aaplStorage.SecurityId));
 
 				// saving ticks
 				tradeStorage.Save(trades);
@@ -72,7 +72,7 @@ namespace SampleStorage
 
 				foreach (var trade in loadedTrades)
 				{
-					Console.WriteLine(LocalizedStrings.Str2968Params, trade.Id, trade);
+					Console.WriteLine(LocalizedStrings.Str2968Params, trade.TradeId, trade);
 				}
 
 				Console.ReadLine();
