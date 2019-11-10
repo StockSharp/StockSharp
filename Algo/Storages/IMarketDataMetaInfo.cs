@@ -88,8 +88,8 @@ namespace StockSharp.Algo.Storages
 		public DateTime Date { get; }
 		public int Count { get; set; }
 
-		public decimal PriceStep { get; set; }
-		public decimal VolumeStep { get; set; }
+		public decimal PriceStep { get; set; } = 0.01m;
+		public decimal VolumeStep { get; set; } = 1m;
 
 		//public decimal FirstPriceStep { get; set; }
 		public decimal LastPriceStep { get; set; }

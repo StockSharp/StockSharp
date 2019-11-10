@@ -142,25 +142,24 @@
 				FlushBuffer(buffer, getSecurityId);
 		}
 
-		private Security InitSecurity(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
+		private SecurityId TryInitSecurity(SecurityId securityId)
 		{
-			var id = securityId.ToStringId();
-			var security = _securityStorage.LookupById(id);
+			var security = _securityStorage.LookupById(securityId);
 
 			if (security != null)
-				return security;
+				return securityId;
 
 			security = new Security
 			{
-				Id = id,
+				Id = securityId.ToStringId(),
 				Code = securityId.SecurityCode,
-				Board = exchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode),
+				Board = _exchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode),
 			};
 
 			_securityStorage.Save(security, false);
-			this.AddInfoLog(LocalizedStrings.Str2871Params.Put(id));
+			this.AddInfoLog(LocalizedStrings.Str2871Params.Put(securityId));
 
-			return security;
+			return securityId;
 		}
 
 		private void FlushBuffer(List<Message> buffer, Func<Message, SecurityId> getSecurityId)
@@ -182,7 +181,7 @@
 
 					foreach (var secGroup in typeGroup.GroupBy(getSecurityId))
 					{
-						var security = InitSecurity(secGroup.Key, _exchangeInfoProvider);
+						var secId = TryInitSecurity(secGroup.Key);
 
 						if (dataType.IsCandleMessage())
 						{
@@ -217,17 +216,17 @@
 							}
 
 							registry
-								.GetCandleMessageStorage(dataType, security, DataType.Arg, _drive, _storageFormat)
+								.GetCandleMessageStorage(dataType, secId, DataType.Arg, _drive, _storageFormat)
 								.Save(candles.OrderBy(c => c.OpenTime));
 						}
 						else if (dataType == typeof(TimeQuoteChange))
 						{
-							var storage = registry.GetQuoteMessageStorage(security, _drive, _storageFormat);
+							var storage = registry.GetQuoteMessageStorage(secId, _drive, _storageFormat);
 							storage.Save(secGroup.Cast<QuoteChangeMessage>().OrderBy(md => md.ServerTime));
 						}
 						else
 						{
-							var storage = registry.GetStorage(security, dataType, DataType.Arg, _drive, _storageFormat);
+							var storage = registry.GetStorage(secId, dataType, DataType.Arg, _drive, _storageFormat);
 
 							if (dataType == typeof(ExecutionMessage))
 								((IMarketDataStorage<ExecutionMessage>)storage).Save(secGroup.Cast<ExecutionMessage>().OrderBy(m => m.ServerTime));

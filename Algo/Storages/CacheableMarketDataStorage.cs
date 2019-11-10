@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The market data storage, saving data in the cache-storage.
@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Storages
 
 		Type IMarketDataStorage.DataType => _sourceStorage.DataType;
 
-		Security IMarketDataStorage.Security => _sourceStorage.Security;
+		SecurityId IMarketDataStorage.SecurityId => _sourceStorage.SecurityId;
 
 		object IMarketDataStorage.Arg => _sourceStorage.Arg;
 

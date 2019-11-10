@@ -19,7 +19,6 @@ namespace StockSharp.Algo.Storages
 	using System.Collections;
 	using System.Collections.Generic;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -40,7 +39,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The instrument, operated by the external storage.
 		/// </summary>
-		Security Security { get; }
+		SecurityId SecurityId { get; }
 
 		/// <summary>
 		/// The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.

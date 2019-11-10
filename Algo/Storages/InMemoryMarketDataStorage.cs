@@ -20,7 +20,6 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -35,39 +34,37 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryMarketDataStorage{T}"/>.
 		/// </summary>
-		/// <param name="security">The instrument.</param>
+		/// <param name="securityId">Security ID.</param>
 		/// <param name="arg">The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.</param>
 		/// <param name="getData">Handler for retrieving in-memory data.</param>
 		/// <param name="dataType">Data type.</param>
-		public InMemoryMarketDataStorage(Security security, object arg, Func<DateTimeOffset, IEnumerable<Message>> getData, Type dataType = null)
+		public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTimeOffset, IEnumerable<Message>> getData, Type dataType = null)
+			: this(securityId, arg, d => getData(d).Cast<T>(), dataType)
 		{
 			if (getData == null)
 				throw new ArgumentNullException(nameof(getData));
-
-			_security = security;
-			_arg = arg;
-			_getData = d => getData(d).Cast<T>();
-			_dataType = dataType ?? typeof(T);
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryMarketDataStorage{T}"/>.
 		/// </summary>
-		/// <param name="security">The instrument.</param>
+		/// <param name="securityId">Security ID.</param>
 		/// <param name="arg">The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.</param>
 		/// <param name="getData">Handler for retrieving in-memory data.</param>
-		public InMemoryMarketDataStorage(Security security, object arg, Func<DateTimeOffset, IEnumerable<T>> getData)
+		/// <param name="dataType">Data type.</param>
+		public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTimeOffset, IEnumerable<T>> getData, Type dataType = null)
 		{
-			_security = security;
+			_securityId = securityId;
 			_arg = arg;
 			_getData = getData ?? throw new ArgumentNullException(nameof(getData));
+			_dataType = dataType ?? typeof(T);
 		}
 
 		IEnumerable<DateTime> IMarketDataStorage.Dates => throw new NotSupportedException();
 
-		private readonly Security _security;
+		private readonly SecurityId _securityId;
 
-		Security IMarketDataStorage.Security => _security;
+		SecurityId IMarketDataStorage.SecurityId => _securityId;
 
 		private readonly object _arg;
 
@@ -77,7 +74,7 @@ namespace StockSharp.Algo.Storages
 
 		bool IMarketDataStorage.AppendOnlyNew { get; set; }
 
-		private readonly Type _dataType = typeof(T);
+		private readonly Type _dataType;
 
 		Type IMarketDataStorage.DataType => _dataType;
 

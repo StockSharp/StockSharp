@@ -27,7 +27,6 @@ namespace StockSharp.Algo.Storages
 
 	using MoreLinq;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -91,9 +90,6 @@ namespace StockSharp.Algo.Storages
 				_storage._enumerators.Add(this);
 			}
 
-			/// <summary>
-			/// The current message.
-			/// </summary>
 			public TMessage Current { get; private set; }
 
 			bool IEnumerator.MoveNext()
@@ -369,19 +365,13 @@ namespace StockSharp.Algo.Storages
 			get { return _innerStorages.Cache.SelectMany(s => s.Dates).OrderBy().Distinct(); }
 		}
 
-		/// <summary>
-		/// The type of market-data, operated by given storage.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual Type DataType => throw new NotSupportedException();
 
-		/// <summary>
-		/// The instrument, operated by the external storage.
-		/// </summary>
-		public virtual Security Security => throw new NotSupportedException();
+		/// <inheritdoc />
+		public virtual SecurityId SecurityId => throw new NotSupportedException();
 
-		/// <summary>
-		/// The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual object Arg => throw new NotSupportedException();
 
 		IMarketDataStorageDrive IMarketDataStorage.Drive => throw new NotSupportedException();
