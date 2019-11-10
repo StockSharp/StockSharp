@@ -161,11 +161,13 @@ namespace StockSharp.Algo
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
 		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
 		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
-		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, bool initManagers = true,
-			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnReconnect = true)
-			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking, isRestoreSubscriptionOnReconnect)
+		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry,
+			bool initManagers = true, bool supportOffline = false, bool supportSubscriptionTracking = true, bool isRestoreSubscriptionOnReconnect = true)
+			: this(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry, snapshotRegistry, initManagers, supportOffline, supportSubscriptionTracking, isRestoreSubscriptionOnReconnect)
 		{
-			InitializeStorage(entityRegistry, storageRegistry, snapshotRegistry);
+#pragma warning disable 612
+			EntityRegistry = entityRegistry;
+#pragma warning restore 612
 		}
 
 		/// <summary>
@@ -183,7 +185,14 @@ namespace StockSharp.Algo
 			bool initManagers = true, bool supportOffline = false, bool supportSubscriptionTracking = true, bool isRestoreSubscriptionOnReconnect = true)
 			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking, isRestoreSubscriptionOnReconnect)
 		{
-			InitializeStorage(securityStorage, positionStorage, storageRegistry, snapshotRegistry);
+			SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
+			PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
+			StorageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
+			SnapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
+
+			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
+
+			InitAdapter();
 		}
 
 		/// <summary>
@@ -195,8 +204,8 @@ namespace StockSharp.Algo
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
 		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
 		/// <param name="isRestoreSubscriptionOnErrorReconnect"><see cref="SubscriptionMessageAdapter.IsRestoreOnErrorReconnect"/>.</param>
-		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true,
-			bool supportOffline = false, bool supportSubscriptionTracking = true, bool isRestoreSubscriptionOnErrorReconnect = true)
+		protected Connector(bool initAdapter, bool initChannels = true,
+			bool initManagers = true, bool supportOffline = false, bool supportSubscriptionTracking = true, bool isRestoreSubscriptionOnErrorReconnect = true)
 		{
 			_entityCache = new EntityCache(this)
 			{
@@ -235,60 +244,30 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Initialize <see cref="StorageAdapter"/>.
-		/// </summary>
-		/// <param name="entityRegistry">The storage of trade objects.</param>
-		/// <param name="storageRegistry">The storage of market data.</param>
-		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
-		public void InitializeStorage(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
-		{
-			EntityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
-			InitializeStorage(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry, snapshotRegistry);
-		}
-
-		/// <summary>
-		/// Initialize <see cref="StorageAdapter"/>.
-		/// </summary>
-		/// <param name="securityStorage">Securities meta info storage.</param>
-		/// <param name="positionStorage">Position storage.</param>
-		/// <param name="storageRegistry">The storage of market data.</param>
-		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
-		public void InitializeStorage(ISecurityStorage securityStorage, IPositionStorage positionStorage, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
-		{
-			SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
-			PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
-			StorageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
-			SnapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
-
-			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
-
-			InitAdapter();
-		}
-
-		/// <summary>
 		/// The storage of trade objects.
 		/// </summary>
-		public IEntityRegistry EntityRegistry { get; private set; }
+		[Obsolete]
+		public IEntityRegistry EntityRegistry { get; }
 
 		/// <summary>
 		/// Securities meta info storage.
 		/// </summary>
-		public ISecurityStorage SecurityStorage { get; private set; }
+		public ISecurityStorage SecurityStorage { get; }
 
 		/// <summary>
 		/// Position storage.
 		/// </summary>
-		public IPositionStorage PositionStorage { get; private set; }
+		public IPositionStorage PositionStorage { get; }
 
 		/// <summary>
 		/// The storage of market data.
 		/// </summary>
-		public IStorageRegistry StorageRegistry { get; private set; }
+		public IStorageRegistry StorageRegistry { get; }
 
 		/// <summary>
 		/// Snapshot storage registry.
 		/// </summary>
-		public SnapshotRegistry SnapshotRegistry { get; private set; }
+		public SnapshotRegistry SnapshotRegistry { get; }
 
 		private IBasketSecurityProcessorProvider _basketSecurityProcessorProvider = new BasketSecurityProcessorProvider();
 
@@ -547,7 +526,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str200Key)]
 		[DescriptionLoc(LocalizedStrings.Str201Key)]
-		[Obsolete]
+		[Obsolete("Use SupportLevel1DepthBuilder property.")]
 		public bool CreateDepthFromLevel1
 		{
 			get => SupportLevel1DepthBuilder;
@@ -559,7 +538,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str197Key)]
 		[DescriptionLoc(LocalizedStrings.Str198Key)]
-		[Obsolete]
+		[Obsolete("Use SupportAssociatedSecurity property.")]
 		public bool CreateAssociatedSecurity
 		{
 			get => SupportAssociatedSecurity;
