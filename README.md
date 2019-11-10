@@ -115,23 +115,23 @@ public class SimpleStrategy : Strategy
 |![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/Yahoo_logo.png) |Yahoo | [Eng](https://doc.stocksharp.com/html/d73e788c-9915-402f-ba27-47217539979e.htm) | [Ru](https://doc.stocksharp.ru/html/d73e788c-9915-402f-ba27-47217539979e.htm)|
 
 ## Russian Stock, Futures and Options
-|Logo | Name | Documentation Eng| Documentation Ru| 
-|:---:|:----:|:----------------:|:---------------:|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/Mfd_logo.png) |Mfd | [Eng](https://doc.stocksharp.com/html/3f8e07ed-6fc1-4145-8532-2a960735f112.htm) | [Ru](https://doc.stocksharp.ru/html/3f8e07ed-6fc1-4145-8532-2a960735f112.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/micex_logo.png) |Micex (TEAP) | [Eng](https://doc.stocksharp.com/html/61692ace-225e-4ecc-845a-504021d59a8f.htm) | [Ru](https://doc.stocksharp.ru/html/61692ace-225e-4ecc-845a-504021d59a8f.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/plaza_logo.png) |Plaza II | [Eng](https://doc.stocksharp.com/html/7eda6d74-d3b8-4fe5-b6a3-fab60e441daf.htm) | [Ru](https://doc.stocksharp.ru/html/7eda6d74-d3b8-4fe5-b6a3-fab60e441daf.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/Quik_logo.png) |Quik | [Eng](https://doc.stocksharp.com/html/769f74c8-6f8e-4312-a867-3dc6e8482636.htm) | [Ru](https://doc.stocksharp.ru/html/769f74c8-6f8e-4312-a867-3dc6e8482636.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/Quik_logo.png) |Quik FIX | [Eng](https://doc.stocksharp.com/html/b64a1826-58e3-4ac8-8923-099b52992e2e.htm) | [Ru](https://doc.stocksharp.ru/html/b64a1826-58e3-4ac8-8923-099b52992e2e.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/SmartCom_logo.png) |SmartCOM | [Eng](https://doc.stocksharp.com/html/7f488b0b-0f59-42b4-845b-fd766f5699dc.htm) | [Ru](https://doc.stocksharp.ru/html/7f488b0b-0f59-42b4-845b-fd766f5699dc.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/spb_logo.png) |SPB Exchange | [Eng](https://doc.stocksharp.com/html/2bbcaa58-0092-4603-a35f-d4a9bc7cb835.htm) | [Ru](https://doc.stocksharp.ru/html/2bbcaa58-0092-4603-a35f-d4a9bc7cb835.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/Transaq_logo.png) |Transaq | [Eng](https://doc.stocksharp.com/html/a010f9bd-15bb-4858-a067-590101087dff.htm) | [Ru](https://doc.stocksharp.ru/html/a010f9bd-15bb-4858-a067-590101087dff.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/micex_logo.png) |Twime | [Eng](https://doc.stocksharp.com/html/1ee210ee-a004-4277-b8f4-91cb08d651db.htm) | [Ru](https://doc.stocksharp.ru/html/1ee210ee-a004-4277-b8f4-91cb08d651db.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/UkrExh_logo.png) |UX (сайт) | [Eng](https://doc.stocksharp.com/html/778e03c7-d639-4b5d-b874-d5bab5a1034d.htm) | [Ru](https://doc.stocksharp.ru/html/778e03c7-d639-4b5d-b874-d5bab5a1034d.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/AlorHistory_logo.png) |Алор Трейд | [Eng](https://doc.stocksharp.com/html/87880b45-6311-42af-9d37-2f4ad9597658.htm) | [Ru](https://doc.stocksharp.ru/html/87880b45-6311-42af-9d37-2f4ad9597658.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/AlfaDirect_logo.png) |Альфа-Директ | [Eng](https://doc.stocksharp.com/html/fdfe3e0b-60b8-4915-8db5-8bfab7d9e391.htm) | [Ru](https://doc.stocksharp.ru/html/fdfe3e0b-60b8-4915-8db5-8bfab7d9e391.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/MoexLchi_logo.png) |ЛЧИ | [Eng](https://doc.stocksharp.com/html/e0fcdbe7-d595-4cf2-ae9d-4ba5b215273f.htm) | [Ru](https://doc.stocksharp.ru/html/e0fcdbe7-d595-4cf2-ae9d-4ba5b215273f.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/RtsHistory_logo.png) |РТС | [Eng](https://doc.stocksharp.com/html/98efb1f0-107b-4442-846f-1d517330ba39.htm) | [Ru](https://doc.stocksharp.ru/html/98efb1f0-107b-4442-846f-1d517330ba39.htm)|
-|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/Finam_logo.png) |Финам | [Eng](https://doc.stocksharp.com/html/19c2bdbe-15ab-4b41-9d87-e838b5f17c8e.htm) | [Ru](https://doc.stocksharp.ru/html/19c2bdbe-15ab-4b41-9d87-e838b5f17c8e.htm)|
+|Logo | Name |  Documentation Ru| 
+|:---:|:----:|:---------------:|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/Mfd_logo.png) |Mfd | [Ru](https://doc.stocksharp.ru/html/3f8e07ed-6fc1-4145-8532-2a960735f112.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/micex_logo.png) |Micex (TEAP) | [Ru](https://doc.stocksharp.ru/html/61692ace-225e-4ecc-845a-504021d59a8f.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/plaza_logo.png) |Plaza II | [Ru](https://doc.stocksharp.ru/html/7eda6d74-d3b8-4fe5-b6a3-fab60e441daf.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/Quik_logo.png) |Quik  | [Ru](https://doc.stocksharp.ru/html/769f74c8-6f8e-4312-a867-3dc6e8482636.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/Quik_logo.png) |Quik FIX  | [Ru](https://doc.stocksharp.ru/html/b64a1826-58e3-4ac8-8923-099b52992e2e.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/SmartCom_logo.png) |SmartCOM  | [Ru](https://doc.stocksharp.ru/html/7f488b0b-0f59-42b4-845b-fd766f5699dc.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/spb_logo.png) |SPB Exchange  | [Ru](https://doc.stocksharp.ru/html/2bbcaa58-0092-4603-a35f-d4a9bc7cb835.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/Transaq_logo.png) |Transaq  | [Ru](https://doc.stocksharp.ru/html/a010f9bd-15bb-4858-a067-590101087dff.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/micex_logo.png) |Twime  | [Ru](https://doc.stocksharp.ru/html/1ee210ee-a004-4277-b8f4-91cb08d651db.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/UkrExh_logo.png) |UX (сайт) | [Ru](https://doc.stocksharp.ru/html/778e03c7-d639-4b5d-b874-d5bab5a1034d.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/AlorHistory_logo.png) |Алор Трейд | [Ru](https://doc.stocksharp.ru/html/87880b45-6311-42af-9d37-2f4ad9597658.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/AlfaDirect_logo.png) |Альфа-Директ | [Ru](https://doc.stocksharp.ru/html/fdfe3e0b-60b8-4915-8db5-8bfab7d9e391.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/MoexLchi_logo.png) |ЛЧИ | [Ru](https://doc.stocksharp.ru/html/e0fcdbe7-d595-4cf2-ae9d-4ba5b215273f.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/RtsHistory_logo.png) |РТС | [Ru](https://doc.stocksharp.ru/html/98efb1f0-107b-4442-846f-1d517330ba39.htm)|
+|![](https://github.com/Zalutskiy/StockSharp/blob/master/Media/logos/Finam_logo.png) |Финам | [Ru](https://doc.stocksharp.ru/html/19c2bdbe-15ab-4b41-9d87-e838b5f17c8e.htm)|
 
 ## Forex
 |Logo | Name | Documentation Eng| Documentation Ru| 
