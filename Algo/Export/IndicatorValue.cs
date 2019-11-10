@@ -7,8 +7,8 @@ namespace StockSharp.Algo.Export
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Indicators;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Indicator value with time.
@@ -18,7 +18,7 @@ namespace StockSharp.Algo.Export
 		/// <summary>
 		/// Security.
 		/// </summary>
-		public Security Security { get; set; }
+		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
 		/// Value time.

@@ -41,12 +41,12 @@ namespace StockSharp.Algo.Export.Database
 
 		protected override IDictionary<string, object> ConvertToParameters(IndicatorValue value)
 		{
-			var secId = value.Security?.ToSecurityId();
+			var secId = value.SecurityId;
 
 			var result = new Dictionary<string, object>
 			{
-				{ nameof(SecurityId.SecurityCode), secId?.SecurityCode },
-				{ nameof(SecurityId.BoardCode), secId?.BoardCode },
+				{ nameof(SecurityId.SecurityCode), secId.SecurityCode },
+				{ nameof(SecurityId.BoardCode), secId.BoardCode },
 				{ nameof(IndicatorValue.Time), value.Time },
 			};
 
