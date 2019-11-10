@@ -614,7 +614,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="StorageMessageAdapter"/>.
+		/// Create a copy of <see cref="BufferMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()

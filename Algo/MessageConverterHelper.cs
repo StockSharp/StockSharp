@@ -928,8 +928,14 @@ namespace StockSharp.Algo
 
 			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider)
 			{
+				if (typeof(TMessage) != typeof(NewsMessage))
+				{
+					if (security == null)
+						throw new ArgumentNullException(nameof(security));
+				}
+
 				_messages = messages ?? throw new ArgumentNullException(nameof(messages));
-				_security = security ?? throw new ArgumentNullException(nameof(security));
+				_security = security;
 				_exchangeInfoProvider = exchangeInfoProvider;
 			}
 			
