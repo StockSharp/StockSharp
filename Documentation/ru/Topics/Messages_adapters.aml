@@ -413,7 +413,7 @@ private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
 					 А после получения всех портфелей необходимо послать входящее сообщение 
 					 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference>.
 					 Обратите внимание, что в последнем случае свойству 
-					 <codeEntityReference>P:StockSharp.Messages.PortfolioLookupResultMessage.OriginalTransactionId</codeEntityReference> нужно
+					 <codeEntityReference>P:StockSharp.Messages.BaseResultMessage`1.OriginalTransactionId</codeEntityReference> нужно
 					 присвоить значение <legacyBold>TransactionId</legacyBold> соответствующего исходящего сообщения.  
 				</para>
 				<code language="C#">
@@ -424,10 +424,6 @@ private void smartCom_AddPortfolio(int row, int nrows, string portfolioName, str
     {
 		PortfolioName = portfolioName,
 		BoardCode = PortfolioBoardCodes.TryGetValue(portfolioExch),
-        ExtensionInfo = new Dictionary<object, object>
-					{
-						{ "PortfolioStatus", portfolioStatus }
-					}
      });
 
      if ((row + 1) < nrows)
