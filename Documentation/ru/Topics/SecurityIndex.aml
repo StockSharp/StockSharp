@@ -16,12 +16,13 @@
 				<steps class="ordered">
 					<step>
 						<content>
-<para>Объявить составные инструменты, которые будут входить в <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> 
-и сам <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>:</para>
+<para>Объявить составные инструменты, которые будут входить в <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
 // необходимо для компиляции формулы
 ConfigManager.RegisterService<ICompilerService>(new RoslynCompilerService());
+// или стандартный .NET компилятор, если нет последних обновлений
+//ConfigManager.RegisterService<ICompilerService>(new Fw40CompilerService(Directory.GetCurrentDirectory(), Directory.GetCurrentDirectory()));
 
 private Security _instr1;
 private Security _instr2;

@@ -468,7 +468,6 @@
     <None Include="Topics\TradierConnectorsSettings.aml" />
     <None Include="Topics\Tradier.aml" />
     <None Include="Topics\Designer_Universal_formula.aml" />
-    <None Include="Topics\Terminal_connector_security_mapping.aml" />
     <None Include="Topics\Designer_connector_security_mapping.aml" />
     <None Include="Topics\GoogleHistory.aml" />
     <None Include="Topics\GoogleConnectorsSettings.aml" />
@@ -738,7 +737,6 @@
     <None Include="Topics\HydraSettingsSecurityEditor.aml" />
     <None Include="Topics\Terminal_Quick_start.aml" />
     <None Include="Topics\Terminal_Quick_start..aml" />
-    <None Include="Topics\Terminal_Connectors_settings.aml" />
     <None Include="Topics\Designer_Connectors_settings.aml" />
     <None Include="Topics\FIXServerConnectorsSettings.aml" />
     <None Include="Topics\FIXConnectorsSettings.aml" />
@@ -795,7 +793,6 @@
     <None Include="Topics\Terminal_contact_us.aml" />
     <None Include="Topics\Terminal_Reset_language_settings.aml" />
     <None Include="Topics\Terminal_Start_mode.aml" />
-    <None Include="Topics\Terminal_connection_mapping.aml" />
     <None Include="Topics\Terminal_notification_Setting.aml" />
     <None Include="Topics\Terminal_emulation_setting.aml" />
     <None Include="Topics\Terminal_Connection_settings.aml" />
