@@ -17,7 +17,7 @@
             	<para>Для получения свечей через <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
             	необходимо создать <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> и добавить в него соответствующий 
             	<codeEntityReference>T: StockSharp.Messages.MessageAdapter</codeEntityReference>. 
-            	Как это сделать с помощью специального контролла описано в пункте <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />.</para>
+            	Как это сделать с помощью специального контрола описано в пункте <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />.</para>
 <para>Также добавить соответствующий 
             	<codeEntityReference>T: StockSharp.Messages.MessageAdapter</codeEntityReference> в 
             	<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> можно через код. 
@@ -61,7 +61,7 @@ var series = new CandleSeries(typeof(TimeFrameCandle), SelectedSecurity, tf);
         </step>
         <step>
         	<para>
-            	Исторически свечи передаются через событие 
+            	Исторические свечи передаются через событие 
             	<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>:
        		</para>
           <code language="C#">
@@ -111,33 +111,33 @@ var messageAdapter = new InteractiveBrokersMessageAdapter(Connector.TransactionI
         </step>
                <step>
           <content>
-            	<para>Из созданного адаптера получаем адаптер сообщений, 
-            	использующих системных идентификатор инструментов <codeEntityReference>T:StockSharp.Algo.SecurityNativeIdMessageAdapter</codeEntityReference>. 
-            	А из него запрашиваем интересующие нас инструменты по критерию.</para>
+            	<para>Оборачиваем адаптер <link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" /> в адаптер системных идентификатор инструментов <codeEntityReference>T:StockSharp.Algo.SecurityNativeIdMessageAdapter</codeEntityReference>. 
+            	Это необходимо в том случае, если торговая система работает с числовыми или любыми другими идентификаторами инструментов, отличных от обычного строкового представления.</para>
           <code language="C#">
             				<![CDATA[	
 ...
 SecurityNativeIdMessageAdapter _securityAdapter;
+
 if (adapter.IsNativeIdentifiers)
-        _securityAdapter = new SecurityNativeIdMessageAdapter(adapter, new InMemoryNativeIdStorage());
+	_securityAdapter = new SecurityNativeIdMessageAdapter(adapter, new InMemoryNativeIdStorage());
 
-      var securities = _securityAdapter.GetSecurities(new SecurityLookupMessage
-      {
-        SecurityId = new SecurityId
-        {
-          SecurityCode = "EUR"
-        }
-      });
+var securities = _securityAdapter.GetSecurities(new SecurityLookupMessage
+{
+	SecurityId = new SecurityId
+	{
+		SecurityCode = "EUR"
+	}
+});
 
-      SecurityMessage eurUsd = null;
+SecurityMessage eurUsd = null;
 
-      foreach (var security in securities)
-      {
-        if (security.SecurityId.SecurityCode.CompareIgnoreCase("EURUSD"))
-          eurUsd = security;
-      }
+foreach (var security in securities)
+{
+	if (security.SecurityId.SecurityCode.CompareIgnoreCase("EURUSD"))
+		eurUsd = security;
+}
 ...
-							]]>
+							]]></![CDATA[>
 					</code>
           </content>
         </step>
@@ -148,12 +148,12 @@ if (adapter.IsNativeIdentifiers)
           <code language="C#">
             <![CDATA[
 ...
-      var candles = adapter.GetCandles(eurUsd.SecurityId, TimeSpan.FromDays(1), DateTimeOffset.Now.AddDays(-100), DateTimeOffset.Now);
+var candles = adapter.GetCandles(eurUsd.SecurityId, TimeSpan.FromDays(1), DateTimeOffset.Now.AddDays(-100), DateTimeOffset.Now);
 
-      foreach (var candle in candles)
-      {
-        Console.WriteLine(candle);
-      }
+foreach (var candle in candles)
+{
+	Console.WriteLine(candle);
+}
 ...
 			]]>
 			</code>

@@ -483,7 +483,6 @@
         </Topic>
         <Topic id="925f42ba-d6d8-41bb-bb27-b1fa56e71ea8" visible="True" title="Вывод средств" />
       </Topic>
-      <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Настройки переподключения" />
       <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" title="Общие">
         <Topic id="9695b29f-2b7b-4a9b-b915-b8c4f9b50eab" visible="True" title="CSV">
           <Topic id="5bfbb404-1728-476b-bd07-1b90bc487c96" visible="True" title="Графическое конфигурирование CSV" />
@@ -506,6 +505,7 @@
       <Topic id="42ac3a14-98fb-4725-88c5-b15d2614b841" visible="True" title="Получение новостных данных" />
       <Topic id="293859e2-6c39-486c-afde-d9ae96243618" visible="True" title="Создание собственного коннектора" />
       <Topic id="c23300a1-bf38-444a-b103-28350766477f" visible="True" title="Сохранение и загрузка настроек" />
+      <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Настройки переподключения" />
     </Topic>
     <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" title="Заявки">
       <Topic id="b740e98d-7bcf-406e-aad4-75432ab3009e" visible="True" title="Создать новую заявку" />

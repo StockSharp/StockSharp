@@ -506,7 +506,7 @@
     <None Include="Topics\API_ConnectorsUIConfiguration.aml" />
     <None Include="Topics\API_Connectors.aml" />
     <None Include="Topics\API_StopOrders.aml" />
-    <None Include="Topics\API_Connectors_Cripto_Withdraw.aml" />
+    <None Include="Topics\API_Connectors_Crypto_Withdraw.aml" />
     <None Include="Topics\API_Connector_GUIConfiguratiom.aml" />
     <None Include="Topics\API_Connector_GUIConfiguratiom.aml" />
     <None Include="Topics\S#API_Connectors.aml" />
@@ -1254,7 +1254,6 @@
     <None Include="Topics\Slippage.aml" />
     <None Include="Topics\Smart.aml" />
     <None Include="Topics\SmartFirstStrategy.aml" />
-    <None Include="Topics\SmartHistory.aml" />
     <None Include="Topics\SmartStopOrders.aml" />
     <None Include="Topics\StockSharpAbout.aml" />
     <None Include="Topics\StockSharpArchitecture.aml" />

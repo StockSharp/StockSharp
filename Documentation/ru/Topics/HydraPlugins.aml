@@ -7,10 +7,8 @@
 
     <introduction>
       <para>
-      Для добавления собственного источника необходимо создать собственный 
-      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>, 
-      как это сделать описано в пункте
-      <link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />, и добавить получившийся dll файл в папку с <token>hydra</token>.
+      Для добавления собственного источника необходимо создать собственный <codeEntityReference>T:StockSharp.Messages.IMessageAdapter</codeEntityReference>. 
+      Как это сделать описано в пункте <link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />. После создания необходимо добавить получившийся dll файл в папку с <token>hydra</token>.
 	  </para>
     </introduction>
   </developerConceptualDocument>
