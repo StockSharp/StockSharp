@@ -15776,3 +15776,9 @@ DocStr11404;Connection lost;Соединение потеряно
 DocStr11405;Message adapter that initialize missed {0};Адаптер сообщений, для инициализации пропущенных {0}
 DocStr11406;V2 authentication method;V2 authentication method
 DocStr11407;Determines whether the {0} contains market-data info;Определить, содержит ли {0} информацию о маркет-данных
+DocStr11408;The storage;Хранилище
+DocStr11409;The format type;Тип формата
+DocStr11410;Meta-info storage based message adapter;Хранилище мета-информации, основанное на адаптере
+DocStr11411;Convert message storage to entity;Преобразовать хранилище сообщений в объектное
+DocStr11412;Message storage;Хранилище сообщений
+DocStr11413;Entity storage;Хранилище объектов
