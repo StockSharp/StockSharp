@@ -2,7 +2,7 @@
 <topic id="92073cd8-8e10-498e-8de9-47d3f77d278a" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    <para><legacyBold>FXCM</legacyBold> - платформы для торговли на рынках Форекс.</para>
+    <para><legacyBold>FXCM</legacyBold> - платформа для торговли на рынке Форекс.</para>
     	<para>
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
