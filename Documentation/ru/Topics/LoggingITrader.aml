@@ -17,19 +17,19 @@
 
       <steps class="ordered">
           <step>
-			  <content>
-				  <para>
-				  	В качестве демонстрации выбраны примеры, демонстрирующие работу с <token>alfa</token>. Все примеры логируют информацию от шлюза в
-				  	текстовый файл.
-				  </para>
-			  </content>
-		  </step>
-          <step>
           	<content>
 			  	<para>
 					В самом начале необходимо создать менеджер логирования:
 			 	</para>
-				<code language="C#">private readonly LogManager _logManager = new LogManager();</code>
+				<code language="C#">
+...
+
+private readonly Connector _connector = new Connector();
+private readonly LogManager _logManager = new LogManager();
+
+...
+				
+				</code>
 			</content>
 		  </step>
 		  <step>
@@ -44,10 +44,10 @@
 			  <content>
 				  <content>
 						<para>
-							Заключительным этапом является добавление <codeEntityReference>T:StockSharp.AlfaDirect.AlfaTrader</codeEntityReference>
+							Заключительным этапом является добавление <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>
 							в <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>:
 						</para>
-						<code language="C#">_logManager.Sources.Add(_trader);</code>
+						<code language="C#">_logManager.Sources.Add(_connector);</code>
 					</content>
 			  </content>
 		  </step>

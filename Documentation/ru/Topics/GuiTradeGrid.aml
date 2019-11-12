@@ -44,72 +44,14 @@
               		<![CDATA[
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-	if (!_isConnected)
-	{
+    .......................................
 
-        .......................................
-
-		if (Trader == null)
-		{
-			// создаем подключение
-	      Trader = new QuikTrader
-	      {
-	          LuaFixServerAddress = Address.Text.To<EndPoint>(),
-	          LuaLogin = Login.Text,
-	          LuaPassword = Password.Password.To<SecureString>(),
-	          LogLevel = LogLevels.Debug
-	      };
-
-
-            .......................................			
-			
-			// Добавляем инструменты в компонент SecurityPicker
-			Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-			
-			// Добавляем свои сделки в таблицу MyTradeGrid
-			Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-			
-			// Добавляем сделки в таблицу TradeGrid
-			Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-			
-			// Добавляем заявки в таблицу OrderGrid
-			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-			
-			// Добавляем стоп-заявки в таблицу OrderGrid
-			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-			
-			Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены заявки"));
-			Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены стоп заявки"));
-			
-			
-			// Добавляем портфели в таблицу PortfolioGrid
-			Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-			
-			// Добавляем позиции в таблицу PortfolioGrid
-			Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-			// устанавливаем поставщик маркет-данных для компонента SecurityPicker
-			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
-
-			ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
-				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
-					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
-		}
-
-		Trader.Connect();
-
-		_isConnected = true;
-		ConnectBtn.Content = LocalizedStrings.Disconnect;
-	}
-	else
-	{
-		Trader.Disconnect();
-
-		_isConnected = false;
-		ConnectBtn.Content = LocalizedStrings.Connect;
-	}
+	// Добавляем свои сделки в таблицу MyTradeGrid
+	_connector.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+	
+	// Добавляем сделки в таблицу TradeGrid
+	_connector.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+	.......................................
 }            		
 	  				]]>
              </code>

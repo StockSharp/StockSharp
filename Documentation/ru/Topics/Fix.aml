@@ -3,42 +3,10 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para> <token>fix</token> позволяет создавать торговых роботов, использующих стандартные международные протоколы для доступа на биржевые рынки - <token>fix_external</token>/<token>fast_external</token>.
-	Для написания такого робота необходимо применять <codeEntityReference qualifyHint="false">T:StockSharp.Fix.FixTrader</codeEntityReference>. 
       </para>
-    </introduction>
-    
-    <!--<para>
-		  В настоящий момент поддерживаются следующие площадки:
-    </para>
-    
-    <list class="bullet">
-		<listItem>
-			MOEX ASTS (FIX/FAST);
-		</listItem>
-		<listItem>
-			MOEX RTS Spectra (FIX/FAST);
-		</listItem>
-		<listItem>
-			QUIK Server (FIX);
-		</listItem>
-		<listItem>
-			CFH (FIX);
-		</listItem>
-		<listItem>
-			Otkritie Securities (FIX);
-		</listItem>
-		<listItem>
-			Exante (FIX).
-		</listItem>
-	</list>
-	
-	<para>
-		  <legacyItalic>В случае необходимости возможно подключение дополнительной площадки.</legacyItalic>
-    </para>-->
-    
+    </introduction>   
     <relatedTopics>
-    	<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43">Пример работы с FixTrader</link>
-    	 <externalLink>
+    	 	 <externalLink>
 		<linkText>Fix Trading Community</linkText>
 			<linkAlternateText>Некоммерческая организация, формирующая стандарты отрасли.</linkAlternateText>
 			<linkUri>http://www.fixtradingcommunity.org/</linkUri>

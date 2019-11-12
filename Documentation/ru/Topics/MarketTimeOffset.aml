@@ -56,8 +56,7 @@
       <steps class="bullet">
         <step>
           <content>
-			  <code language="C#">
-					var trader = new SmartTrader(login, password);
+			  <code language="C#">				
 					
 					// выводим текущее локальное время
 					Console.WriteLine(TimeHelper.Now);

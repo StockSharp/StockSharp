@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>    
     <alert class="note">
-  		<para>Данный контрол устарел, вместо него следует использовать <codeEntityReference>T:StockSharp.Xaml.OrderWindow</codeEntityReference>. 
+  		<para>Данный контролл устарел, вместо него следует использовать <codeEntityReference>T:StockSharp.Xaml.OrderWindow</codeEntityReference>. 
   		Как описано в пункте <link xlink:href="cfc729e7-65e7-4ec3-b215-57031be290c7" />.</para>
 	</alert>
       <para>
@@ -49,7 +49,12 @@
       
       
               <code title="C#" language="C#">
-              		<![CDATA[
+					  <![CDATA[
+...
+
+private readonly Connector _connector = new Connector();
+
+...
 private void NewStopOrderClick(object sender, RoutedEventArgs e)
 {
 	var newOrder = new OrderConditionalWindow
@@ -60,14 +65,14 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 			Type = OrderTypes.Conditional,
 			ExpiryDate = DateTime.Today
 		},
-		SecurityProvider = MainWindow.Instance.Trader,
-		MarketDataProvider = MainWindow.Instance.Trader,
-		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-		Adapter = MainWindow.Instance.Trader.Adapter
+		SecurityProvider = _connector,
+		MarketDataProvider = _connector,
+		Portfolios = new PortfolioDataSource(_connector),
+		Adapter = _connector.Adapter
 	};
 
 	if (newOrder.ShowModal(this))
-		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+		_connector.RegisterOrder(newOrder.Order);
 }
               		
 	  				]]>

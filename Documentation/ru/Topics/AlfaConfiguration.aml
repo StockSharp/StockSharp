@@ -18,7 +18,7 @@
 			  позволяет получать в режиме реального времени всю доступную в терминале табличную информацию и подавать торговые поручения.
 		  </para>
 		<para>
-			Для корректной работой с <codeEntityReference>T:StockSharp.AlfaDirect.AlfaTrader</codeEntityReference> необходимо предварительно 
+			Для корректной работой с <codeEntityReference>T:StockSharp.AlfaDirect.AlfaDirectMessageAdapter</codeEntityReference> необходимо предварительно 
 			настроить торговый терминал <token>alfa</token>.
 		</para>
     </introduction>

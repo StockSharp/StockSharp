@@ -398,7 +398,7 @@ connector.NewSecurity += s =>
 						  Подключение:
 					  </para>
 					  <code language="C#">
-trader.Connect();
+						_connector.Connect();
 					</code>
 					  <para>
 						  Для переданных в конструктор <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> инструментов

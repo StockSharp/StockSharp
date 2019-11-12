@@ -24,7 +24,7 @@ var series = new CandleSeries
 	Security = SecurityPicker.SelectedSecurity,
 	Arg = (TimeSpan)CandlesPeriods.SelectedItem;
 };
-_trader.SubscribeCandles(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100)), DateTime.Now);
+_connector.SubscribeCandles(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100)), DateTime.Now);
 			]]>
 			</code>
           </content>
@@ -36,7 +36,7 @@ _trader.SubscribeCandles(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.S
        		</para>
           <code language="C#">
             <![CDATA[
-_trader.CandleSeriesProcessing += ProcessCandle;
+_connector.CandleSeriesProcessing += ProcessCandle;
 			]]>
 			</code>
         </step>

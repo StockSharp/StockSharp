@@ -30,7 +30,7 @@ public void Withdraw()
 		Security = new Security() { Code = "BTC" },
 	};
 
-	Trader.RegisterOrder(order);
+	_connector.RegisterOrder(order);
 }
 ...
 							]]>

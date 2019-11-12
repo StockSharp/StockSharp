@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="1d5b1223-15ba-4364-a31f-2e5592f76fe5" revisionNumber="1">
+<topic id="1d5b1223-15ba-4364-a31f-2e5592f76fe3" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
@@ -137,7 +137,7 @@ foreach (var security in securities)
 		eurUsd = security;
 }
 ...
-							]]></![CDATA[>
+							]]>
 					</code>
           </content>
         </step>

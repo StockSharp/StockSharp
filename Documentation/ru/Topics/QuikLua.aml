@@ -72,60 +72,6 @@
 			<para>Запуск скрипта выполняется один раз, при следующем запуске терминала скрипт будет запущен автоматически.</para>
           </content>
         </step>
-        <!--step>
-          <content>
-          	<para>Настройка таблиц в терминале Quik.</para>
-          	<para>Коннектор QuikLua не требуется специальной настройки названий таблиц и их содержимого, кроме таблицы инструментов,
-          	которая используется для автоматического открытия стаканов. Но, чтобы Quik получал все необходимые данные, все основные таблицы должны быть открыты.</para>
-			<alert class="note">
-  				<para>Проверить наличие всех необходимых таблиц в терминале можно с помощью программы <link xlink:href="32bb7203-202c-44f7-a6c4-79791c690a3a">Verifier</link>, который использует разные варианты проверки для Lua режима и Dde.
-          			Режим проверки выбирается соответствующей галочкой.</para>
-			</alert>
-			<alert class="note">
-  				<para>В качестве примера в архиве <token>stocksharp</token> находится файл настроек по умолчанию <legacyItalic>Quik\info_lua.wnd</legacyItalic>.
- 					В данной конфигурации открыты все необходимые таблицы с настройками по-умолчанию, кроме таблицы инструментов.</para>
-			</alert>
-			<para>Для поддержки автоматического открытия стакана должна присутствовать открытая таблица текущих параметров.</para>
-			<para>Таблица должна содержать колонки:</para>
-			<list class="bullet">
-  				<listItem><para>Код бумаги</para></listItem>
-  				<listItem><para>Код класса</para></listItem>
-			</list>
-			<para>Порядок столбцов таблицы может быть любым.</para>
-          </content>
-        </step>
-        <step>
-          <content>
-          	<para>Создание подключения.</para>
-          	<para>Выбор режима подключения к Quik (Lua или Dde) выполняется с помощью установки свойства <codeEntityReference qualifyHint="true">P:StockSharp.Quik.QuikTrader.IsDde</codeEntityReference>.</para> 
-			<para>При Lua подключении нет необходимости указывать путь к терминалу, но необходимо указать настройки подключения
-			к серверу (LuaFixServerAddress, LuaLogin и LuaPassword):</para>
-			<code language="C#">
-			// создаем подключение
-			Trader = new QuikTrader
-			{
-   				LuaFixServerAddress = "127.0.0.1:5001".To&lt;EndPoint&gt;(),
-   				LuaLogin = "quik",
-   				LuaPassword = "quik".To&lt;SecureStringt&gt;()
-			};
-			</code>
-			<para>Значения по умолчанию для этих полей соответствуют настройкам по умолчанию в скрипте.</para>
-			<para>Свойство <codeEntityReference qualifyHint="true">P:StockSharp.Quik.QuikTrader.IsDde</codeEntityReference> по умолчанию установлено в false, т.о. по умолчанию используется Lua подключение. 
-			Если необходимо использовать подключение через Dde, необходимо вручную выставить это свойство:</para> 
-			<code language="C#">
-				// создаем подключение
-				Trader = new QuikTrader(path)
-				{
-   					IsDde = true
-				};
-			</code>
-			<alert class="note">
-  				<para> Примеры в <legacyItalic>Quik\Sample</legacyItalic> позволяют выполнять подключение только через Lua. Старые примеры,
-  				с использованием Dde, перенесены в папку <legacyItalic>Quik\Dde</legacyItalic>.</para>
-			</alert>
-	          	</content>
-        	</step-->
-			
 			<step>
           		<content>
           			<para>Мониторинг работы Lua скрипта.</para>

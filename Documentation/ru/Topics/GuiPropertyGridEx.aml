@@ -162,7 +162,9 @@
 	  				]]>
               </code>
               <code title="C#" language="C#">
-              		<![CDATA[
+					  <![CDATA[
+private readonly Connector _connector = new Connector();
+
 public MainWindow()
 {
 	InitializeComponent();
@@ -179,17 +181,17 @@ public MainWindow()
 
 	if (File.Exists(_settingsFile))
 	{
-		Trader.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+		_connector_connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 	}
 
-	MarketDataSessionSettings.SelectedObject = ((ChannelMessageAdapter)Trader.MarketDataAdapter).InnerAdapter;
-	TransactionSessionSettings.SelectedObject = ((ChannelMessageAdapter)Trader.TransactionAdapter).InnerAdapter;
+	MarketDataSessionSettings.SelectedObject = ((ChannelMessageAdapter)_connector.MarketDataAdapter).InnerAdapter;
+	TransactionSessionSettings.SelectedObject = ((ChannelMessageAdapter)_connector.TransactionAdapter).InnerAdapter;
 
 	Instance = this;
 
-	Trader.LogLevel = LogLevels.Debug;
+	_connector.LogLevel = LogLevels.Debug;
 
-	_logManager.Sources.Add(Trader);
+	_logManager.Sources.Add(_connector);
 	_logManager.Listeners.Add(new FileLogListener { LogDirectory = "StockSharp_Fix" });
 }
 	  				]]>

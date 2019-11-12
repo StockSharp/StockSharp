@@ -45,14 +45,14 @@
 		<para>Даже если стратегия тестируется на свечах, нужно подписываться на тиковые сделки:</para>
 		<code language="C#">
 		<![CDATA[
-trader.RegisterTrades(security);
+		_connector.RegisterTrades(security);
 		]]>
 		</code>
 		
 		<para>Если для стратегии нужны стаканы, нужно подписываться на стаканы:</para>
 		<code language="C#">
 		<![CDATA[
-trader.RegisterMarketDepth(security);
+		_connector.RegisterMarketDepth(security);
 		]]>
 		</code>
 		
@@ -60,7 +60,7 @@ trader.RegisterMarketDepth(security);
 		<code language="C#">
 		<![CDATA[
 var mdGenerator = new TrendMarketDepthGenerator(connector.GetSecurityId(security));
-trader.RegisterMarketDepth(mdGenerator);
+_connector.RegisterMarketDepth(mdGenerator);
 		]]>
 		</code>
 		

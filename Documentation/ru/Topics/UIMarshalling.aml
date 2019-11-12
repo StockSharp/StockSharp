@@ -30,12 +30,12 @@
 	  <code language="C#">
 // обязательно нужно вызвать метод BeginInvoke,
 // и уже в его обработчике можно обратиться к элементу окна 'Security' (это выпадающий список)
-_trader.NewSecurity += security => this.Dispatcher.BeginInvoke((Action)(() => this.Security.ItemsSource = _trader.Securities));</code>
+_connector.NewSecurity += security => this.Dispatcher.BeginInvoke((Action)(() => this.Security.ItemsSource = _connector.Securities));</code>
 	  <para>
 		<token>stocksharp</token> уже содержит специальные методы, которые скрывают использование Dispatcher и упрощают написание кода:
 	  </para>
 	  <code language="C#">// обязательно нужно вызвать метод GuiSync, прежде чем обратиться к элементу окна 'Security' (это выпадающий список)
-_trader.NewSecurity += security => this.GuiSync(() => this.Security.ItemsSource = _trader.Securities);</code>
+_connector.NewSecurity += security => this.GuiSync(() => this.Security.ItemsSource = _connector.Securities);</code>
 
 <section address="optionalAddress">
   <title>Графические компоненты S#</title>

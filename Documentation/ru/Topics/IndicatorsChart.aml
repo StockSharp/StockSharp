@@ -6,7 +6,7 @@
 	    	
         <code language="C#">
         <![CDATA[
-private QuikTrader _trader;
+private readonly Connector _connector = new Connector();
 private Security _security;
 
 private CandleSeries _candleSeries;
@@ -38,12 +38,12 @@ _area.Elements.Add(_longMaElem);
 ...
 
 _sma = new SimpleMovingAverage() { Length = 80 };
-_trader.CandleSeriesProcessing += DrawCandle;
+_connector.CandleSeriesProcessing += DrawCandle;
 
 ...
 
 _candleSeries = new CandleSeries(typeof(TimeFrameCandle), _security, _timeFrame);
-_trader.SubscribeCandles(_candleSeries, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+_connector.SubscribeCandles(_candleSeries, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 
 ...
 

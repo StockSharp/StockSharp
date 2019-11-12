@@ -61,51 +61,18 @@
 	  				]]>
               </code>
               <code title="C#" language="C#">
-              		<![CDATA[
+					  <![CDATA[
+private readonly Connector _connector = new Connector();
+
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-	if (!_isConnected)
-	{
-
-        .......................................
-
-		if (Trader == null)
-		{
-			// создаем подключение
-		    Trader = new QuikTrader
-		    {
-		        LuaFixServerAddress = Address.Text.To<EndPoint>(),
-		        LuaLogin = Login.Text,
-		        LuaPassword = Password.Password.To<SecureString>(),
-		        LogLevel = LogLevels.Debug
-		    };
-            .......................................			
-			
-			// Добавляем заявки в таблицу OrderGrid
-			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-			
-			// Добавляем стоп-заявки в таблицу OrderGrid
-			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-			
-			.......................................			
-
-			ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
-				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
-					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
-		}
-
-		Trader.Connect();
-
-		_isConnected = true;
-		ConnectBtn.Content = LocalizedStrings.Disconnect;
-	}
-	else
-	{
-		Trader.Disconnect();
-
-		_isConnected = false;
-		ConnectBtn.Content = LocalizedStrings.Connect;
-	}
+ 	.......................................	
+	// Добавляем заявки в таблицу OrderGrid
+	_connector.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+	
+	// Добавляем стоп-заявки в таблицу OrderGrid
+	_connector.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+	.......................................			
 }
               	
 // Удаляет все выбранные заявки

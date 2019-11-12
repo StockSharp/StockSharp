@@ -10,7 +10,16 @@
       <para>Роутер <token>plaza</token> позволяет одновременно подключаться нескольким роботам. 
       Для этого необходимо, чтобы каждое из подключений имело уникальное имя. Имя для подключения задаётся через свойство
       <codeEntityReference>P:StockSharp.Plaza.PlazaMessageAdapter.AppName</codeEntityReference></para>
-	  <code language="C#"><![CDATA[var trader = new PlazaTrader() { AppName = "robot_PRADA" };]]></code>
+    <code language="C#"><![CDATA[
+
+var messageAdapter = new PlazaMessageAdapter(Connector.TransactionIdGenerator)
+{
+    Login = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+    Address = SmartComAddresses.Demo,
+    AppName = "robot_PRADA",
+};      
+      ]]></code>
     </introduction>
     <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->
     <!-- One or more procedure or section with procedure -->

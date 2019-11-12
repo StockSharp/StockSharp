@@ -47,56 +47,18 @@
 	  				]]>
               </code>
               <code title="C#" language="C#">
-              		<![CDATA[
+					  <![CDATA[					  
+private readonly Connector _connector = new Connector();
+
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-	try
-	{
-		if (!_isConnected)
-		{
-			if (Trader == null)
-			{
-				// создаем подключение
-				Trader = new AlfaTrader { LogLevel = LogLevels.Debug };
+	.................................................
+	// устанавливаем поставщика новостей
+	_newsWindow.NewsPanel.NewsProvider = _connector;
 
-                ..................................................
-
-				// подписываемся на событие успешного соединения
-				Trader.Connected += () =>
-				{
-					this.GuiAsync(() => ChangeConnectStatus(true));
-
-					// запускаем подписку на новости
-					Trader.RegisterNews();
-				};
-
-               ..................................................
-
-				// устанавливаем поставщика новостей
-				_newsWindow.NewsPanel.NewsProvider = Trader;
-
-				ShowSecurities.IsEnabled = ShowNews.IsEnabled =
-				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = ShowStopOrders.IsEnabled =
-				ShowPortfolios.IsEnabled = true;
-
-				// добавляет новости в сетку NewsGrid
-				Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
-			}
-
-			Trader.Login = TextBoxLogin.Text;
-			Trader.Password = PasswordBox.Password;
-			Trader.Connect();
-		}
-		else
-		{
-			Trader.UnRegisterNews();
-			Trader.Disconnect();
-		}
-	}
-	catch (Exception ex)
-	{
-		MessageBox.Show(this, ex.Message, LocalizedStrings.Str152);
-	}
+	// добавляет новости в сетку NewsGrid
+	_connector.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
+	.................................................
 }
 	  				]]>
              </code>

@@ -32,32 +32,31 @@
 		
 	  <para>
 Ниже показаны фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Common/SampleConnection</legacyItalic>.
-      </para>
-      
-      
+      </para>         
       
               <code title="C#" language="C#">
-              		<![CDATA[
+					  <![CDATA[
+...
+
+private readonly Connector _connector = new Connector();
+
+...
 private void NewOrderClick(object sender, RoutedEventArgs e)
 {
 	var newOrder = new OrderWindow
 	{
 		Order = new Order { Security = SecurityPicker.SelectedSecurity },
-		SecurityProvider = MainWindow.Instance.Trader,
-		MarketDataProvider = MainWindow.Instance.Trader,
-		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		SecurityProvider = _connector,
+		MarketDataProvider = _connector,
+		Portfolios = new PortfolioDataSource(_connector),
 	};
 
 	if (newOrder.ShowModal(this))
-		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+		_connector.RegisterOrder(newOrder.Order);
 }
               		
 	  				]]>
              </code>
-      
-      
-      
-      
     </introduction>
   </developerConceptualDocument>
 </topic>

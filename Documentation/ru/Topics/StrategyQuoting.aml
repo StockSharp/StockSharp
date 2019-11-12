@@ -83,7 +83,7 @@
 			  <code language="C#">if (!_isLkohOrderBookStarted)
 {
 	// для алгоритма котирования необходимо включить экспорт стакана
-	_trader.RegisterMarketDepth(lkoh);
+	_connector.RegisterMarketDepth(lkoh);
 	_isLkohOrderBookStarted = true;
 }</code>
           </content>

@@ -52,25 +52,16 @@
 	  				]]>
               </code>
               <code title="C#" language="C#">
-              		<![CDATA[
+					  <![CDATA[
+ .............................................
+ private readonly Connector _connector = new Connector();
+ .............................................
+
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-    if (Path.Text.IsEmpty())
-		MessageBox.Show(this, LocalizedStrings.Str2969);
-	else
-	{
-		Trader = new QuikTrader(Path.Text) { IsDde = true, IsAsyncMode = true };
-
-		Portfolios.Portfolios = new PortfolioDataSource(Trader);
-		
-		.............................................
-		.............................................
-
-		Trader.Connect();
-
-		ShowSecurities.IsEnabled = true;
-		ConnectBtn.IsEnabled = false;
-	}
+	.............................................
+	Portfolios.Portfolios = new PortfolioDataSource(_connector);	
+	.............................................
 }
 	  				]]>
              </code>

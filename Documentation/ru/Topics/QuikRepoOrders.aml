@@ -48,7 +48,7 @@
 				  <para>
 					  Последний шаг - стандартная регистрация заявки:
 				  </para>
-				  <code language="C#">quikTrader.RegisterOrder(order);</code>
+				  <code language="C#">_connector.RegisterOrder(order);</code>
 			  </content>
 		  </step>
       </steps>
