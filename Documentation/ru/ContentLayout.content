@@ -780,6 +780,12 @@
             <Topic id="9aa0288d-e086-4da8-bd76-98cf52cb17a7" visible="True" title="Индекс" />
             <Topic id="12a1678b-14f4-432b-8b2e-3b8af7f93348" visible="True" title="Переменная" />
           </Topic>
+          <Topic id="53e20a89-30e4-4c1a-9a35-e7eba06f85cb" visible="True" noFile="true" title="Торговые">
+            <Topic id="33d15f2c-5d73-4c95-8e67-2612d34f14a2" visible="True" title="Регистрация заявки" />
+            <Topic id="18f61c09-d6f3-4765-b180-11e9d3e74d33" visible="True" title="Отмена заявки" />
+            <Topic id="538b6ea4-bf0f-4833-9fb6-a3b1f0a59039" visible="True" title="Перемещение заявки" />
+            <Topic id="18f61c09-d6f3-4765-b180-11e9d3e74133" visible="True" title="Массовая отмена заявок" />
+          </Topic>
           <Topic id="647dcf10-b135-4714-81fa-8aabab332ba5" visible="True" noFile="true" title="Конвертеры">
             <Topic id="26be4914-b6c4-48e7-8e0e-d2f02677e747" visible="True" title="Индексатор" />
             <Topic id="d12b6321-af41-40f1-a8c6-87ea59d1b51c" visible="True" title="Конвертер" />
@@ -806,12 +812,6 @@
           <Topic id="5d6d4bd8-a693-4704-b403-1ae9b84faa66" visible="True" noFile="true" title="Составные элементы">
             <Topic id="317b6393-19eb-424b-84ea-ccf70b0c9c18" visible="True" title="Пересечение" />
             <Topic id="6f701cdc-b61c-42ed-a003-fdbb3da37f3c" visible="True" title="Условный оператор" />
-          </Topic>
-          <Topic id="53e20a89-30e4-4c1a-9a35-e7eba06f85cb" visible="True" noFile="true" title="Торговые">
-            <Topic id="18f61c09-d6f3-4765-b180-11e9d3e74d33" visible="True" title="Отмена заявки" />
-            <Topic id="18f61c09-d6f3-4765-b180-11e9d3e74133" visible="True" title="Массовая отмена заявок" />
-            <Topic id="33d15f2c-5d73-4c95-8e67-2612d34f14a2" visible="True" title="Регистрация заявки" />
-            <Topic id="538b6ea4-bf0f-4833-9fb6-a3b1f0a59039" visible="True" title="Перемещение заявки" />
           </Topic>
         </Topic>
         <Topic id="5cc82796-a8cc-4dd8-9cdc-3cb68b890042" visible="True" title="Линии" />
