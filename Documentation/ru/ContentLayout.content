@@ -925,16 +925,7 @@
       </Topic>
     </Topic>
     <Topic id="0f40a3ad-c627-4552-a581-7dc048f19739" visible="True" title="Настройки подключения" />
-    <Topic id="5a717b34-e3ed-45c7-934e-94d93b98ced8" visible="True" title="Хранилище маркет-данных">
-      <Topic id="dc4bee68-e85c-46c2-bf32-34a1c554ab65" visible="True" title="Скачивание инструментов" />
-      <Topic id="4d149f5d-351e-4348-9f29-973760caf153" visible="True" title="Создание инструмента" />
-      <Topic id="d5094488-8fe5-45cd-ba3b-a77775654950" visible="True" title="Редактирование инструмента" />
-      <Topic id="fd5e986c-9f05-4929-b9af-c8253d118eb8" visible="True" title="Индекс" />
-      <Topic id="893ab9b9-0286-4fdb-b001-98f34cc236c0" visible="True" title="Непрерывный фьючерс" />
-      <Topic id="edb17138-6fe1-4a59-bdaa-d58f1d7ec22f" visible="True" title="Создание хранилища исторических данных" />
-      <Topic id="23380c66-45ab-44fc-b59a-ca5133da41ad" visible="True" title="Расширенная информация по инструменту" />
-      <Topic id="e994c10c-b36a-44e6-95db-8a6975295140" visible="True" title="Сопоставление инструменты-подключения" />
-    </Topic>
+    <Topic id="5a717b34-e3ed-45c7-934e-94d93b98ced8" visible="True" title="Хранилище маркет-данных" />
     <Topic id="1edab5e8-9731-4c2b-b540-71db6b12b646" visible="True" title="Индикаторы" />
     <Topic id="3d15acfa-6c54-4889-95a7-200d7fef9dae" visible="True" title="Совместная работа">
       <Topic id="28978b77-d474-420b-a54e-c492c4cd7410" visible="True" title="Чат" />
