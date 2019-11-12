@@ -9,10 +9,5 @@ namespace StockSharp.Messages
 		/// The message is subscription.
 		/// </summary>
 		bool IsSubscribe { get; set; }
-
-		/// <summary>
-		/// Request historical data only.
-		/// </summary>
-		bool IsHistory { get; set; }
 	}
 }

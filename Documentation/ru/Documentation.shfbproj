@@ -220,6 +220,22 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Tradier.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Upbit.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Upbit.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.FinViz.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.FinViz.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.DukasCopy.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.DukasCopy.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.CoinEx.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.CoinEx.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.CoinHub.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.CoinHub.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.FatBtc.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.FatBtc.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Gopax.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Gopax.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Hotbit.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Hotbit.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Latoken.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Latoken.xml" />
     </DocumentationSources>
     <CopyrightHref>https://stocksharp.ru</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2019 - StockSharp LP</CopyrightText>
@@ -452,7 +468,6 @@
     <None Include="Topics\TradierConnectorsSettings.aml" />
     <None Include="Topics\Tradier.aml" />
     <None Include="Topics\Designer_Universal_formula.aml" />
-    <None Include="Topics\Terminal_connector_security_mapping.aml" />
     <None Include="Topics\Designer_connector_security_mapping.aml" />
     <None Include="Topics\GoogleHistory.aml" />
     <None Include="Topics\GoogleConnectorsSettings.aml" />
@@ -490,7 +505,7 @@
     <None Include="Topics\API_ConnectorsUIConfiguration.aml" />
     <None Include="Topics\API_Connectors.aml" />
     <None Include="Topics\API_StopOrders.aml" />
-    <None Include="Topics\API_Connectors_Cripto_Withdraw.aml" />
+    <None Include="Topics\API_Connectors_Crypto_Withdraw.aml" />
     <None Include="Topics\API_Connector_GUIConfiguratiom.aml" />
     <None Include="Topics\API_Connector_GUIConfiguratiom.aml" />
     <None Include="Topics\S#API_Connectors.aml" />
@@ -722,7 +737,6 @@
     <None Include="Topics\HydraSettingsSecurityEditor.aml" />
     <None Include="Topics\Terminal_Quick_start.aml" />
     <None Include="Topics\Terminal_Quick_start..aml" />
-    <None Include="Topics\Terminal_Connectors_settings.aml" />
     <None Include="Topics\Designer_Connectors_settings.aml" />
     <None Include="Topics\FIXServerConnectorsSettings.aml" />
     <None Include="Topics\FIXConnectorsSettings.aml" />
@@ -779,7 +793,6 @@
     <None Include="Topics\Terminal_contact_us.aml" />
     <None Include="Topics\Terminal_Reset_language_settings.aml" />
     <None Include="Topics\Terminal_Start_mode.aml" />
-    <None Include="Topics\Terminal_connection_mapping.aml" />
     <None Include="Topics\Terminal_notification_Setting.aml" />
     <None Include="Topics\Terminal_emulation_setting.aml" />
     <None Include="Topics\Terminal_Connection_settings.aml" />
@@ -1238,7 +1251,6 @@
     <None Include="Topics\Slippage.aml" />
     <None Include="Topics\Smart.aml" />
     <None Include="Topics\SmartFirstStrategy.aml" />
-    <None Include="Topics\SmartHistory.aml" />
     <None Include="Topics\SmartStopOrders.aml" />
     <None Include="Topics\StockSharpAbout.aml" />
     <None Include="Topics\StockSharpArchitecture.aml" />

@@ -175,7 +175,7 @@ namespace StockSharp.Algo.Storages
 		{
 			if (MarketTimeChangedInterval != TimeSpan.Zero && !_isTimeLineAdded)
 			{
-				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(null, null, d => GetTimeLine(d, MarketTimeChangedInterval)), _transactionIdGenerator.GetNextId());
+				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(TraderHelper.AllSecurityId2, null, d => GetTimeLine(d, MarketTimeChangedInterval)), _transactionIdGenerator.GetNextId());
 
 				_isTimeLineAdded = true;
 				_moveNextSyncRoot.WaitSignal();

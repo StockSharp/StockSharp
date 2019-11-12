@@ -259,10 +259,6 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool AllowBuildFromSmallerTimeFrame { get; set; } = true;
 
-		/// <inheritdoc />
-		[DataMember]
-		public bool IsHistory { get; set; }
-
 		/// <summary>
 		/// Use only the regular trading hours for which data will be requested.
 		/// </summary>
@@ -332,7 +328,6 @@ namespace StockSharp.Messages
 			destination.BuildFrom = BuildFrom;
 			destination.BuildField = BuildField;
 			destination.IsCalcVolumeProfile = IsCalcVolumeProfile;
-			destination.IsHistory = IsHistory;
 			destination.AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame;
 			destination.IsRegularTradingHours = IsRegularTradingHours;
 			destination.IsFinished = IsFinished;
@@ -376,9 +371,6 @@ namespace StockSharp.Messages
 
 			if (IsFinished)
 				str += $",Fin={IsFinished}";
-
-			if (IsHistory)
-				str += $",Hist={IsHistory}";
 
 			if (IsCalcVolumeProfile)
 				str += $",Profile={IsCalcVolumeProfile}";

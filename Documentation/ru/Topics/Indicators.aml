@@ -42,10 +42,9 @@
             которое говорит о том, что значение  является окончательным и индикатор не будет изменяться в данной точке времени. 
             Например, индикатор <codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference> 
             формируется по цене закрытия свечи, но в текущий момент времени окончательная цена закрытия свечи неизвестна и меняется. 
-            В таком случае результирующее значение индикатора буде иметь свойство 
-            <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.IIndicatorValue.IsFinal</codeEntityReference>==false, а если в
-            индикатор передать законченную свечу то результирующее значение индикатора буде иметь свойство 
-            <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.IIndicatorValue.IsFinal</codeEntityReference>==true.</para>
+            В таком случае результирующее значение <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.IIndicatorValue.IsFinal</codeEntityReference>
+            будет false. Eсли в индикатор передать законченную свечу, то входящее и результирующее значения  
+            <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.IIndicatorValue.IsFinal</codeEntityReference> будут true.</para>
 			
           </content>
         </step>
@@ -77,10 +76,8 @@ if (_isShortLessThenLong != isShortLessThenLong)
           <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.BaseIndicator.IsFormed</codeEntityReference>,
           которое говорит о том готов ли индикатор к использованию. Например, индикатор 
           <codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference> 
-          имеет период, и пока индикатор не обработает количество
-          свечей равное периоду индикатора, индикатор будет считаться не готовым 
-          к использованию, а свойство 
-          <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.BaseIndicator.IsFormed</codeEntityReference> == false.</para>
+          имеет период, и пока индикатор не обработает количество свечей, равное периоду индикатора, индикатор будет считаться не готовым 
+          к использованию. И свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.BaseIndicator.IsFormed</codeEntityReference> будет false.</para>
           </content>
         </step>
       </steps>

@@ -24,6 +24,7 @@ namespace SampleStorage
 	using StockSharp.Algo.Storages.Csv;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	class Program
 	{
@@ -62,7 +63,7 @@ namespace SampleStorage
 				var aaplStorage = drive.GetSecurityDrive(security);
 
 				// get tick storage
-				var tradeStorage = (IMarketDataStorage<Trade>)aaplStorage.GetTickStorage(new TickCsvSerializer(aaplStorage.SecurityId));
+				var tradeStorage = aaplStorage.GetTickStorage(new TickCsvSerializer(aaplStorage.SecurityId)).ToEntityStorage<ExecutionMessage, Trade>(security);
 
 				// saving ticks
 				tradeStorage.Save(trades);

@@ -65,7 +65,7 @@ if (File.Exists("marketProfile.xml"))
 	base.Save(settings);
 	
 	//Сохраняем настройки в файл
-	new XmlSerializer<PlazaTable>().Serialize(settings, "marketProfile.xml");
+	new XmlSerializer<SettingsStorage>().Serialize(settings, "marketProfile.xml");
 }]]></code>
     </introduction>
 

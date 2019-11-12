@@ -10,7 +10,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -24,27 +23,16 @@ namespace StockSharp.Algo.Storages
 		DateTimeOffset GetTime(TData data);
 	}
 
-	abstract class MarketDataStorage<TData, TId> : IMarketDataStorage<TData>, IMarketDataStorageInfo<TData>
+	abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>, IMarketDataStorageInfo<TMessage>
+		where TMessage : Message
 	{
-		private readonly Func<TData, DateTimeOffset> _getTime;
-		private readonly Func<TData, SecurityId> _getSecurityId;
-		private readonly Func<TData, TId> _getId;
+		private readonly Func<TMessage, DateTimeOffset> _getTime;
+		private readonly Func<TMessage, SecurityId> _getSecurityId;
+		private readonly Func<TMessage, TId> _getId;
 		private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = new SynchronizedDictionary<DateTime, SyncObject>();
 		private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = new SynchronizedDictionary<DateTime, IMarketDataMetaInfo>();
 
-		protected MarketDataStorage(Security security, SecurityId securityId, object arg, Func<TData, DateTimeOffset> getTime, Func<TData, SecurityId> getSecurity, Func<TData, TId> getId, IMarketDataSerializer<TData> serializer, IMarketDataStorageDrive drive)
-			: this(securityId, arg, getTime, getSecurity, getId, serializer, drive)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			if (security.Id.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.Str1025, nameof(security));
-
-			Security = security;
-		}
-
-		protected MarketDataStorage(SecurityId securityId, object arg, Func<TData, DateTimeOffset> getTime, Func<TData, SecurityId> getSecurityId, Func<TData, TId> getId, IMarketDataSerializer<TData> serializer, IMarketDataStorageDrive drive)
+		protected MarketDataStorage(SecurityId securityId, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive)
 		{
 			if (securityId.IsDefault())
 				throw new ArgumentException(LocalizedStrings.Str1025, nameof(securityId));
@@ -63,11 +51,9 @@ namespace StockSharp.Algo.Storages
 
 		IEnumerable<DateTime> IMarketDataStorage.Dates => Drive.Dates;
 
-		Type IMarketDataStorage.DataType => typeof(TData);
+		Type IMarketDataStorage.DataType => typeof(TMessage);
 
 		public SecurityId SecurityId { get; }
-
-		public Security Security { get; }
 
 		private readonly object _arg;
 
@@ -76,11 +62,11 @@ namespace StockSharp.Algo.Storages
 		public bool AppendOnlyNew { get; set; }
 
 		IMarketDataSerializer IMarketDataStorage.Serializer => Serializer;
-		public IMarketDataSerializer<TData> Serializer { get; }
+		public IMarketDataSerializer<TMessage> Serializer { get; }
 
 		public IMarketDataStorageDrive Drive { get; }
 
-		protected DateTime GetTruncatedTime(TData data)
+		protected DateTime GetTruncatedTime(TMessage data)
 		{
 			return _getTime(data).StorageTruncate(Serializer.TimePrecision).UtcDateTime;
 		}
@@ -100,7 +86,7 @@ namespace StockSharp.Algo.Storages
 			return securityId.SecurityCode.CompareIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.CompareIgnoreCase(SecurityId.BoardCode);
 		}
 
-		public int Save(IEnumerable<TData> data)
+		public int Save(IEnumerable<TMessage> data)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -112,7 +98,7 @@ namespace StockSharp.Algo.Storages
 				var securityId = _getSecurityId(d);
 
 				if (!securityId.IsDefault() && !SecurityIdEqual(securityId))
-					throw new ArgumentException(LocalizedStrings.Str1026Params.Put(typeof(TData).Name, securityId, SecurityId));
+					throw new ArgumentException(LocalizedStrings.Str1026Params.Put(typeof(TMessage).Name, securityId, SecurityId));
 
 				var time = _getTime(d);
 
@@ -162,7 +148,7 @@ namespace StockSharp.Algo.Storages
 			return count;
 		}
 
-		private int Save(Stream stream, IMarketDataMetaInfo metaInfo, TData[] data, bool isOverride)
+		private int Save(Stream stream, IMarketDataMetaInfo metaInfo, TMessage[] data, bool isOverride)
 		{
 			if (stream == null)
 				throw new ArgumentNullException(nameof(stream));
@@ -185,11 +171,11 @@ namespace StockSharp.Algo.Storages
 
 				var time = GetTruncatedTime(data[0]);
 
-				var priceStep = Security.PriceStep;
-				var volumeStep = Security.VolumeStep;
+				//var priceStep = Security.PriceStep;
+				//var volumeStep = Security.VolumeStep;
 
-				metaInfo.PriceStep = priceStep == null || priceStep == 0 ? 0.01m : priceStep.Value;
-				metaInfo.VolumeStep = volumeStep == null || volumeStep == 0 ? 1m : volumeStep.Value;
+				//metaInfo.PriceStep = priceStep == null || priceStep == 0 ? 0.01m : priceStep.Value;
+				//metaInfo.VolumeStep = volumeStep == null || volumeStep == 0 ? 1m : volumeStep.Value;
 				metaInfo.LastTime = time;
 				metaInfo.FirstTime = time;
 
@@ -229,7 +215,7 @@ namespace StockSharp.Algo.Storages
 			return data.Length;
 		}
 
-		protected virtual IEnumerable<TData> FilterNewData(IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
+		protected virtual IEnumerable<TMessage> FilterNewData(IEnumerable<TMessage> data, IMarketDataMetaInfo metaInfo)
 		{
 			var lastTime = metaInfo.LastTime;
 
@@ -247,15 +233,15 @@ namespace StockSharp.Algo.Storages
 
 		int IMarketDataStorage.Save(IEnumerable data)
 		{
-			return Save(data.Cast<TData>());
+			return Save(data.Cast<TMessage>());
 		}
 
 		void IMarketDataStorage.Delete(IEnumerable data)
 		{
-			Delete(data.Cast<TData>());
+			Delete(data.Cast<TMessage>());
 		}
 
-		public void Delete(IEnumerable<TData> data)
+		public void Delete(IEnumerable<TMessage> data)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -279,7 +265,7 @@ namespace StockSharp.Algo.Storages
 
 						if (count != group.Count())
 						{
-							var loadedData = new Dictionary<TId, List<TData>>();
+							var loadedData = new Dictionary<TId, List<TMessage>>();
 
 							foreach (var item in Serializer.Deserialize(stream, metaInfo))
 							{
@@ -289,7 +275,7 @@ namespace StockSharp.Algo.Storages
 
 								if (loadedItems == null)
 								{
-									loadedItems = new List<TData> { item };
+									loadedItems = new List<TMessage> { item };
 									loadedData.Add(id, loadedItems);
 								}
 								else
@@ -334,7 +320,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		public IEnumerable<TData> Load(DateTime date)
+		public IEnumerable<TMessage> Load(DateTime date)
 		{
 			date = date.Date;
 
@@ -347,7 +333,7 @@ namespace StockSharp.Algo.Storages
 					var metaInfo = GetInfo(stream, date);
 
 					if (metaInfo == null)
-						return Enumerable.Empty<TData>();
+						return Enumerable.Empty<TMessage>();
 
 					// нельзя закрывать поток, так как из него будут читаться данные через энумератор
 					//using (stream)
@@ -410,14 +396,14 @@ namespace StockSharp.Algo.Storages
 			return Load(date);
 		}
 
-		DateTimeOffset IMarketDataStorageInfo<TData>.GetTime(TData data)
+		DateTimeOffset IMarketDataStorageInfo<TMessage>.GetTime(TMessage data)
 		{
 			return _getTime(data);
 		}
 
 		DateTimeOffset IMarketDataStorageInfo.GetTime(object data)
 		{
-			return _getTime((TData)data);
+			return _getTime((TMessage)data);
 		}
 	}
 }

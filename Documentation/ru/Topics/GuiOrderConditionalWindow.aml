@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>    
     <alert class="note">
-  		<para>Данный контролл устарел, вместо него следует использовать <codeEntityReference>T:StockSharp.Xaml.OrderWindow</codeEntityReference>. 
+  		<para>Данный контрол устарел, вместо него следует использовать <codeEntityReference>T:StockSharp.Xaml.OrderWindow</codeEntityReference>. 
   		Как описано в пункте <link xlink:href="cfc729e7-65e7-4ec3-b215-57031be290c7" />.</para>
 	</alert>
       <para>

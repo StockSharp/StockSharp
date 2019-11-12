@@ -49,10 +49,6 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool IsSubscribe { get; set; }
 
-		/// <inheritdoc />
-		[DataMember]
-		public bool IsHistory { get; set; }
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderStatusMessage"/>.
 		/// </summary>
@@ -72,7 +68,6 @@ namespace StockSharp.Messages
 			destination.From = From;
 			destination.To = To;
 			destination.IsSubscribe = IsSubscribe;
-			destination.IsHistory = IsHistory;
 		}
 
 		/// <summary>

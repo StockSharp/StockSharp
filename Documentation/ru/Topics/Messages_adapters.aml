@@ -159,6 +159,10 @@ public SmartAdapter(IdGenerator transactionIdGenerator)
     this.AddSupportedMessage(MessageTypes.Portfolio);
     this.AddSupportedMessage(MessageTypes.PortfolioLookup);
     this.AddSupportedMessage(MessageTypes.Position);
+    
+    // обозначаем, что адаптер предоставляет результаты запросов поиска инструментов и портфелей
+    this.AddSupportedOutMessage(MessageTypes.SecurityLookupResult);
+	this.AddSupportedOutMessage(MessageTypes.PortfolioLookupResult);
 }
 						
 ]]>
@@ -166,36 +170,6 @@ public SmartAdapter(IdGenerator transactionIdGenerator)
 						</code>
 					</content>
 				</step>
-				<step>
-					<content>
-					<para>
-					<legacyBold>Свойства адаптера.</legacyBold>
-					</para>
-						<para>
-						 	Переопределяем свойства <codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportPortfolioLookupResult</codeEntityReference> и
-						 	<codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportSecurityLookupResult</codeEntityReference>.
-						 	Поскольку <token>smartcom</token> поддерживает поиск портфелей и инструментов делаем, чтобы свойства возвращали <legacyBold>true</legacyBold>.
-						 	Также добавляем свойства для логина, пароля, адреса и порта сервера <token>smartcom</token>.
-						</para>
-						<code language="C#">
-protected override bool IsSupportPortfolioLookupResult
-{
-	get { return true; }
-}
-
-protected override bool IsSupportSecurityLookupResult
-{
-	get { return true; }
-}
-
- public string Address {set; get;}
- public ushort Port {set; get;}
- public string Login {set; get;}
- public string Password {set; get;}
-						</code>
-					</content>
-				</step>
-
 				<step>
 					<content>
 					<para>
@@ -208,15 +182,12 @@ protected override bool IsSupportSecurityLookupResult
 					    преобразующий сообщения в команды <token>smartcom</token>.
 						</para>
 						<para>
-						При получении сообщения 
-						<codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Reset</codeEntityReference> 
+						При получении сообщения <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Reset</codeEntityReference> 
 						необходимо выполнить "обнуление" состояния и освободить ресурсы.
-						По завершении этих операций нужно отправить исходящие сообщение 
-						<codeEntityReference>T:StockSharp.Messages.ResetMessage</codeEntityReference>.
+						По завершении этих операций нужно отправить исходящие сообщение <codeEntityReference>T:StockSharp.Messages.ResetMessage</codeEntityReference>.
 						</para>
 						<para>
-						 При поступлении сообщения 
-						 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference> 
+						 При поступлении сообщения <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference> 
 						 инициализируем переменную _smartCom, подписываемся на события <token>smartcom</token> и устанавливаем соединение при помощи метода 
 						 <legacyBold>Connect</legacyBold> нативного API. В случае удачного соединения должно наступить событие 
 						 <legacyBold>StServer.Connected</legacyBold>.
@@ -442,7 +413,7 @@ private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
 					 А после получения всех портфелей необходимо послать входящее сообщение 
 					 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference>.
 					 Обратите внимание, что в последнем случае свойству 
-					 <codeEntityReference>P:StockSharp.Messages.PortfolioLookupResultMessage.OriginalTransactionId</codeEntityReference> нужно
+					 <codeEntityReference>P:StockSharp.Messages.BaseResultMessage`1.OriginalTransactionId</codeEntityReference> нужно
 					 присвоить значение <legacyBold>TransactionId</legacyBold> соответствующего исходящего сообщения.  
 				</para>
 				<code language="C#">
@@ -453,10 +424,6 @@ private void smartCom_AddPortfolio(int row, int nrows, string portfolioName, str
     {
 		PortfolioName = portfolioName,
 		BoardCode = PortfolioBoardCodes.TryGetValue(portfolioExch),
-        ExtensionInfo = new Dictionary<object, object>
-					{
-						{ "PortfolioStatus", portfolioStatus }
-					}
      });
 
      if ((row + 1) < nrows)

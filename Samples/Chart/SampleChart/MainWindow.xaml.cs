@@ -290,7 +290,7 @@
 
 				if (isBuild)
 				{
-					foreach (var tick in storage.GetTickMessageStorage(series.Security, new LocalMarketDataDrive(path), format).Load())
+					foreach (var tick in storage.GetTickMessageStorage(series.Security.ToSecurityId(), new LocalMarketDataDrive(path), format).Load())
 					{
 						_tradeGenerator.Process(tick);
 
@@ -323,7 +323,7 @@
 				}
 				else
 				{
-					foreach (var candleMsg in storage.GetCandleMessageStorage(msgType, series.Security, series.Arg, new LocalMarketDataDrive(path), format).Load())
+					foreach (var candleMsg in storage.GetCandleMessageStorage(msgType, series.Security.ToSecurityId(), series.Arg, new LocalMarketDataDrive(path), format).Load())
 					{
 						if (candleMsg.State != CandleStates.Finished)
 							candleMsg.State = CandleStates.Finished;

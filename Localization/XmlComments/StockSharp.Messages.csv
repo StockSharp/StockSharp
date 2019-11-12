@@ -867,12 +867,10 @@ P:StockSharp.Messages.ISubscriptionIdMessage.SubscriptionId/summary;DocStr9420
 P:StockSharp.Messages.ISubscriptionIdMessage.SubscriptionIds/summary;Identifiers
 T:StockSharp.Messages.ISubscriptionMessage/summary;DocStr11086
 P:StockSharp.Messages.ISubscriptionMessage.IsSubscribe/summary;DocStr10795
-P:StockSharp.Messages.ISubscriptionMessage.IsHistory/summary;DocStr10544
 T:StockSharp.Messages.ITransactionIdMessage/summary;DocStr11086
 P:StockSharp.Messages.ITransactionIdMessage.TransactionId/summary;DocStr3166
 T:StockSharp.Messages.MarketDataFinishedMessage/summary;DocStr9385
 P:StockSharp.Messages.MarketDataFinishedMessage.OriginalTransactionId/summary;DocStr4056
-P:StockSharp.Messages.MarketDataFinishedMessage.IsHistory/summary;DocStr9664
 M:StockSharp.Messages.MarketDataFinishedMessage.#ctor/summary;DocStr93
 M:StockSharp.Messages.MarketDataFinishedMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.MarketDataFinishedMessage.Clone/returns;DocStr1116
@@ -1437,7 +1435,6 @@ T:StockSharp.Messages.OrderStatusMessage/summary;DocStr4419
 P:StockSharp.Messages.OrderStatusMessage.From/summary;Str344
 P:StockSharp.Messages.OrderStatusMessage.To/summary;Str346
 P:StockSharp.Messages.OrderStatusMessage.IsSubscribe/inheritdoc;DocStr8459
-P:StockSharp.Messages.OrderStatusMessage.IsHistory/inheritdoc;DocStr8459
 M:StockSharp.Messages.OrderStatusMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.OrderStatusMessage.CopyTo(StockSharp.Messages.OrderStatusMessage)/summary;DocStr629
 M:StockSharp.Messages.OrderStatusMessage.CopyTo(StockSharp.Messages.OrderStatusMessage)/param/destination;DocStr630
@@ -1472,7 +1469,6 @@ P:StockSharp.Messages.PortfolioMessage.ClientCode/summary;ClientCodeDesc
 P:StockSharp.Messages.PortfolioMessage.TransactionId/inheritdoc;DocStr8459
 P:StockSharp.Messages.PortfolioMessage.IsSubscribe/inheritdoc;DocStr8459
 P:StockSharp.Messages.PortfolioMessage.InternalId/summary;DocStr11281
-P:StockSharp.Messages.PortfolioMessage.IsHistory/inheritdoc;DocStr8459
 M:StockSharp.Messages.PortfolioMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.PortfolioMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.PortfolioMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
@@ -1692,7 +1688,6 @@ P:StockSharp.Messages.MarketDataMessage.BuildFrom/summary;BuildFrom
 P:StockSharp.Messages.MarketDataMessage.BuildField/summary;DocStr10135
 P:StockSharp.Messages.MarketDataMessage.AllowBuildFromSmallerTimeFrame/summary;SmallerTimeFrameDesc
 P:StockSharp.Messages.MarketDataMessage.AllowBuildFromSmallerTimeFrame/remarks;DocStr10386
-P:StockSharp.Messages.MarketDataMessage.IsHistory/inheritdoc;DocStr8459
 P:StockSharp.Messages.MarketDataMessage.IsRegularTradingHours/summary;RegularTradingHours
 P:StockSharp.Messages.MarketDataMessage.IsFinished/summary;DocStr11144
 P:StockSharp.Messages.MarketDataMessage.BoardCode/summary;BoardCode

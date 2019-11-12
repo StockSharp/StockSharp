@@ -2,6 +2,7 @@
 <topic id="2bbcaa58-0092-4603-a35f-d4a9bc7cb835" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    <para><legacyBold>SpbEx</legacyBold> — прямое подключение к Санкт-Петербургской бирже.</para>
     	<para>
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.

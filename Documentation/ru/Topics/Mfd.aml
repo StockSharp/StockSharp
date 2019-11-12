@@ -2,7 +2,7 @@
 <topic id="3f8e07ed-6fc1-4145-8532-2a960735f112" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    <para><legacyBold>Mfd</legacyBold> - сервис поставки маркет-данных в режиме реального времени котировок акций, Форекс, фьючерсных контрактов и др.</para>
+    <para><legacyBold>Mfd</legacyBold> - сервис поставки исторических маркет-данных котировок акций, Форекс, фьючерсных контрактов и др.</para>
     	<para>
 До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.

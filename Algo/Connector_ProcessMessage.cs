@@ -233,7 +233,7 @@ namespace StockSharp.Algo
 
 				while (adapter != null)
 				{
-					if (adapter is StorageMessageAdapter storage)
+					if (adapter is StorageMetaInfoMessageAdapter storage)
 						StorageAdapter = storage;
 
 					if (adapter.InnerAdapter is BasketMessageAdapter basket)
@@ -306,12 +306,9 @@ namespace StockSharp.Algo
 					if (RiskManager != null)
 						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdapter = true };
 
-					if (SupportOffline)
-						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdapter = true };
-
 					if (SecurityStorage != null && StorageRegistry != null && SnapshotRegistry != null)
 					{
-						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry, SnapshotRegistry, _adapter.CandleBuilderProvider)
+						_inAdapter = StorageAdapter = new StorageMetaInfoMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry.ExchangeInfoProvider)
 						{
 							OwnInnerAdapter = true,
 							OverrideSecurityData = OverrideSecurityData
@@ -320,9 +317,6 @@ namespace StockSharp.Algo
 
 					if (SupportBasketSecurities)
 						_inAdapter = new BasketSecurityMessageAdapter(this, BasketSecurityProcessorProvider, _entityCache.ExchangeInfoProvider, _inAdapter) { OwnInnerAdapter = true };
-
-					if (SupportSubscriptionTracking)
-						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdapter = true, IsRestoreOnNormalReconnect = IsRestoreSubscriptionOnNormalReconnect };
 
 					if (SupportLevel1DepthBuilder)
 						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdapter = true };
@@ -342,50 +336,6 @@ namespace StockSharp.Algo
 		/// Use <see cref="BasketSecurityMessageAdapter"/>.
 		/// </summary>
 		public bool SupportBasketSecurities { get; set; }
-
-		private bool _supportOffline;
-
-		/// <summary>
-		/// Use <see cref="OfflineMessageAdapter"/>.
-		/// </summary>
-		public bool SupportOffline
-		{
-			get => _supportOffline;
-			set
-			{
-				if (_supportOffline == value)
-					return;
-
-				if (value)
-					EnableAdapter(a => new OfflineMessageAdapter(a) { OwnInnerAdapter = true }, typeof(StorageMessageAdapter), false);
-				else
-					DisableAdapter<OfflineMessageAdapter>();
-
-				_supportOffline = value;
-			}
-		}
-
-		private bool _supportSubscriptionTracking;
-
-		/// <summary>
-		/// Use <see cref="SubscriptionMessageAdapter"/>.
-		/// </summary>
-		public bool SupportSubscriptionTracking
-		{
-			get => _supportSubscriptionTracking;
-			set
-			{
-				if (_supportSubscriptionTracking == value)
-					return;
-
-				if (value)
-					EnableAdapter(a => new SubscriptionMessageAdapter(a) { OwnInnerAdapter = true }, typeof(Level1DepthBuilderAdapter), false);
-				else
-					DisableAdapter<SubscriptionMessageAdapter>();
-
-				_supportSubscriptionTracking = value;
-			}
-		}
 
 		private bool _supportFilteredMarketDepth;
 
@@ -590,7 +540,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Storage adapter.
 		/// </summary>
-		public StorageMessageAdapter StorageAdapter { get; private set; }
+		public StorageMetaInfoMessageAdapter StorageAdapter { get; private set; }
 
 		/// <inheritdoc />
 		public void SendInMessage(Message message)

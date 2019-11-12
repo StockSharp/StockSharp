@@ -152,7 +152,6 @@ namespace StockSharp.Algo
 		private readonly Dictionary<long, SubscriptionInfo<MarketDataMessage>> _mdSubscribersById = new Dictionary<long, SubscriptionInfo<MarketDataMessage>>();
 		private readonly Dictionary<long, SubscriptionInfo<OrderStatusMessage>> _orderStatusSubscribers = new Dictionary<long, SubscriptionInfo<OrderStatusMessage>>();
 		private readonly Dictionary<long, SubscriptionInfo<PortfolioLookupMessage>> _pfLookupSubscribers = new Dictionary<long, SubscriptionInfo<PortfolioLookupMessage>>();
-		private readonly HashSet<long> _onlyHistorySubscriptions = new HashSet<long>();
 		private readonly List<Message> _subscriptionRequests = new List<Message>();
 		private readonly HashSet<long> _passThroughtIds = new HashSet<long>();
 
@@ -162,8 +161,6 @@ namespace StockSharp.Algo
 		private readonly LookupInfo<TimeFrameLookupMessage> _timeFrameLookupInfo = new LookupInfo<TimeFrameLookupMessage>(MessageTypes.TimeFrameLookupResult);
 		private DateTimeOffset _prevTime;
 
-		private readonly bool _isBasketAdapter;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
 		/// </summary>
@@ -171,7 +168,6 @@ namespace StockSharp.Algo
 		public SubscriptionMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
-			_isBasketAdapter = InnerAdapter.FindAdapter<BasketMessageAdapter>() != null;
 		}
 
 		/// <summary>
@@ -362,7 +358,7 @@ namespace StockSharp.Algo
 					return false;
 			}
 
-			if (!_isBasketAdapter && !this.IsOutMessageSupported(info.ResultType))
+			if (!this.IsOutMessageSupported(info.ResultType))
 				info.LookupTimeOut.StartTimeOut(message.TransactionId);
 
 			return true;
@@ -401,9 +397,6 @@ namespace StockSharp.Algo
 				where TMessage : Message
 				where TResult : BaseResultMessage<TResult>, new()
 			{
-				if (_isBasketAdapter)
-					return;
-
 				if (info == null)
 					throw new ArgumentNullException(nameof(info));
 
@@ -478,15 +471,11 @@ namespace StockSharp.Algo
 				}
 
 				case MessageTypes.Security:
-					if (!_isBasketAdapter)
-						_secLookupInfo.LookupTimeOut.UpdateTimeOut(((SecurityMessage)message).OriginalTransactionId);
-					
+					_secLookupInfo.LookupTimeOut.UpdateTimeOut(((SecurityMessage)message).OriginalTransactionId);
 					break;
 
 				case MessageTypes.Board:
-					if (!_isBasketAdapter)
-						_boardLookupInfo.LookupTimeOut.UpdateTimeOut(((BoardMessage)message).OriginalTransactionId);
-					
+					_boardLookupInfo.LookupTimeOut.UpdateTimeOut(((BoardMessage)message).OriginalTransactionId);
 					break;
 
 				case MessageTypes.SecurityLookupResult:
@@ -503,9 +492,6 @@ namespace StockSharp.Algo
 
 				case MessageTypes.PortfolioLookupResult:
 				{
-					if (_isBasketAdapter)
-						break;
-
 					try
 					{
 						if (ProcessPortfolioLookupResultMessage((PortfolioLookupResultMessage)message))
@@ -521,11 +507,8 @@ namespace StockSharp.Algo
 
 				case MessageTypes.Portfolio:
 				{
-					if (_isBasketAdapter)
-						break;
-
 					_pfLookupInfo.LookupTimeOut.UpdateTimeOut(((PortfolioMessage)message).OriginalTransactionId);
-
+					
 					ApplySubscriptionIds((ISubscriptionIdMessage)message);
 					break;
 				}
@@ -546,47 +529,42 @@ namespace StockSharp.Algo
 				case MessageTypes.Level1Change:
 				case MessageTypes.QuoteChange:
 				{
-					if (!_isBasketAdapter)
-						ApplySubscriptionIds((ISubscriptionIdMessage)message);
-
+					ApplySubscriptionIds((ISubscriptionIdMessage)message);
 					break;
 				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
 
-			if (!_isBasketAdapter)
+			if (_prevTime != DateTimeOffset.MinValue)
 			{
-				if (_prevTime != DateTimeOffset.MinValue)
+				var diff = message.LocalTime - _prevTime;
+
+				void ProcessTime<TMessage, TResult>(LookupInfo<TMessage> info)
+					where TResult : BaseResultMessage<TResult>, new()
 				{
-					var diff = message.LocalTime - _prevTime;
+					if (info == null)
+						throw new ArgumentNullException(nameof(info));
 
-					void ProcessTime<TMessage, TResult>(LookupInfo<TMessage> info)
-						where TResult : BaseResultMessage<TResult>, new()
+					if (messages == null)
+						messages = new List<Message>();
+
+					foreach (var id in info.LookupTimeOut.ProcessTime(diff))
 					{
-						if (info == null)
-							throw new ArgumentNullException(nameof(info));
-
-						if (messages == null)
-							messages = new List<Message>();
-
-						foreach (var id in info.LookupTimeOut.ProcessTime(diff))
+						base.OnInnerAdapterNewOutMessage(new TResult
 						{
-							base.OnInnerAdapterNewOutMessage(new TResult
-							{
-								OriginalTransactionId = id
-							});
-						}
+							OriginalTransactionId = id
+						});
 					}
-
-					ProcessTime<SecurityLookupMessage, SecurityLookupResultMessage>(_secLookupInfo);
-					ProcessTime<PortfolioLookupMessage, PortfolioLookupResultMessage>(_pfLookupInfo);
-					ProcessTime<BoardLookupMessage, BoardLookupResultMessage>(_boardLookupInfo);
-					ProcessTime<TimeFrameLookupMessage, TimeFrameLookupResultMessage>(_timeFrameLookupInfo);
 				}
 
-				_prevTime = message.LocalTime;
+				ProcessTime<SecurityLookupMessage, SecurityLookupResultMessage>(_secLookupInfo);
+				ProcessTime<PortfolioLookupMessage, PortfolioLookupResultMessage>(_pfLookupInfo);
+				ProcessTime<BoardLookupMessage, BoardLookupResultMessage>(_boardLookupInfo);
+				ProcessTime<TimeFrameLookupMessage, TimeFrameLookupResultMessage>(_timeFrameLookupInfo);
 			}
+
+			_prevTime = message.LocalTime;
 
 			if (messages != null)
 			{
@@ -753,22 +731,14 @@ namespace StockSharp.Algo
 					}
 
 					var sendIn = false;
-					var isOnlyHistory = false;
 
 					var info = ProcessInSubscription(subscriptions, subscribersById, key, message,
-						ref sendIn, ref isOnlyHistory, ref sendOutMsg, createSendOut, createNotExist);
+						ref sendIn, ref sendOutMsg, createSendOut, createNotExist);
 
 					if (sendIn)
 					{
 						if (!message.IsSubscribe && message.OriginalTransactionId == 0)
 							message.OriginalTransactionId = info.Message.TransactionId;
-						else
-						{
-							message.IsHistory = isOnlyHistory;
-
-							if (isOnlyHistory)
-								_onlyHistorySubscriptions.Add(message.TransactionId);
-						}
 
 						sendInMsg = message;
 					}
@@ -793,7 +763,7 @@ namespace StockSharp.Algo
 		private SubscriptionInfo<TMessage> ProcessInSubscription<TKey, TMessage>(
 			Dictionary<TKey, SubscriptionInfo<TMessage>> subscriptions,
 			Dictionary<long, SubscriptionInfo<TMessage>> subscribersById,
-			TKey key, TMessage message, ref bool sendIn, ref bool isOnlyHistory, ref TMessage sendOutMsg,
+			TKey key, TMessage message, ref bool sendIn, ref TMessage sendOutMsg,
 			Func<bool, long, TMessage> createSendOut, Func<long, TMessage> createNotExist)
 			where TMessage : Message, ISubscriptionMessage
 		{
@@ -807,15 +777,6 @@ namespace StockSharp.Algo
 			{
 				subscribers.Add(transId);
 				sendIn = subscribers.Count == 1;
-
-				if (_isBasketAdapter)
-				{
-					if (!sendIn)
-					{
-						isOnlyHistory = true;
-						sendIn = true;
-					}
-				}
 			}
 			else
 			{
@@ -874,7 +835,7 @@ namespace StockSharp.Algo
 
 			lock (_sync)
 			{
-				if (_onlyHistorySubscriptions.Remove(originId) || _passThroughtIds.Remove(originId))
+				if (_passThroughtIds.Remove(originId))
 					return false;
 
 				var info = subscribersById.TryGetValue(originId);

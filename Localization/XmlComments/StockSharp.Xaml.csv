@@ -972,11 +972,11 @@ T:StockSharp.Xaml.MarketDataGrid/summary;DocStr8233
 E:StockSharp.Xaml.MarketDataGrid.DataLoading/summary;DocStr8236
 E:StockSharp.Xaml.MarketDataGrid.DataLoaded/summary;DocStr8237
 M:StockSharp.Xaml.MarketDataGrid.#ctor/summary;DocStr1
-M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)/summary;DocStr8234
-M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)/param/storageRegistry;DocStr168
-M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)/param/security;DocStr2831
-M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)/param/format;Str2240
-M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)/param/drive;Str1405
+M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,System.Nullable{StockSharp.Messages.SecurityId},StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)/summary;DocStr8234
+M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,System.Nullable{StockSharp.Messages.SecurityId},StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)/param/storageRegistry;DocStr168
+M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,System.Nullable{StockSharp.Messages.SecurityId},StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)/param/securityId;SecurityId
+M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,System.Nullable{StockSharp.Messages.SecurityId},StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)/param/format;Str2240
+M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,System.Nullable{StockSharp.Messages.SecurityId},StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)/param/drive;Str1405
 M:StockSharp.Xaml.MarketDataGrid.CancelMakeEntires/summary;DocStr8235
 M:StockSharp.Xaml.MarketDataGrid.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.MarketDepthColumns/summary;DocStr8238

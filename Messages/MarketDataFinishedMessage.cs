@@ -2,9 +2,6 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
-
-	using Ecng.Serialization;
 
 	/// <summary>
 	/// Market data request finished message.
@@ -18,15 +15,6 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
-
-		/// <summary>
-		/// Contains history market data.
-		/// </summary>
-		//[DataMember]
-		[Obsolete]
-		[XmlIgnore]
-		[Ignore]
-		public bool IsHistory { get; set; }
 
 		/// <summary>
 		/// Initialize <see cref="Message"/>.
@@ -45,7 +33,6 @@ namespace StockSharp.Messages
 			var clone = new MarketDataFinishedMessage
 			{
 				OriginalTransactionId = OriginalTransactionId,
-				//IsHistory = IsHistory,
 			};
 
 			CopyTo(clone);
