@@ -90,15 +90,10 @@
 				_step = step;
 				_iterationInterval = iterationInterval;
 
-				var from = origin.From;
+				_maxFrom = origin.To ?? DateTimeOffset.Now;
+				_currFrom = origin.From ?? _maxFrom - step;
 
-				if (from == null)
-					throw new ArgumentException(nameof(origin));
-
-				_currFrom = from.Value;
 				_firstIteration = true;
-
-				_maxFrom = Origin.To ?? DateTimeOffset.Now;
 			}
 
 			public void TryUpdateNextFrom(DateTimeOffset last)
@@ -112,45 +107,49 @@
 				if (LastIteration)
 					throw new InvalidOperationException("LastIteration == true");
 
+				var mdMsg = (MarketDataMessage)Origin.Clone();
+
 				if (_firstIteration)
 				{
 					_firstIteration = false;
 
-					var mdMsg = (MarketDataMessage)Origin.Clone();
+					_nextFrom = _currFrom + _step;
+
+					if (_nextFrom > _maxFrom)
+						_nextFrom = _maxFrom;
+
 					mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
 					mdMsg.From = _currFrom;
-					mdMsg.To = _currFrom + _step;
+					mdMsg.To = _nextFrom;
 
 					CurrTransId = mdMsg.TransactionId;
-					_nextFrom = mdMsg.To.Value;
-
-					return mdMsg;
 				}
 				else
 				{
 					_iterationInterval.Sleep();
 
-					_currFrom = _nextFrom;
-					_nextFrom += _step;
-
-					if (Origin.To == null && (_currFrom + _step) >= _maxFrom)
+					if (Origin.To == null && _nextFrom >= _maxFrom)
 					{
-						var mdMsg = (MarketDataMessage)Origin.Clone();
-						mdMsg.From = _currFrom;
-						return mdMsg;
+						// on-line
+						mdMsg.From = null;
 					}
 					else
 					{
-						var mdMsg = (MarketDataMessage)Origin.Clone();
+						_currFrom = _nextFrom;
+						_nextFrom += _step;
+
+						if (_nextFrom > _maxFrom)
+							_nextFrom = _maxFrom;
+
 						mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
 						mdMsg.From = _currFrom;
 						mdMsg.To = _nextFrom;
 
 						CurrTransId = mdMsg.TransactionId;
-
-						return mdMsg;
 					}
 				}
+
+				return mdMsg;
 			}
 		}
 
@@ -192,23 +191,20 @@
 					if (mdMsg.IsSubscribe)
 					{
 						var from = mdMsg.From;
+						var to = mdMsg.To;
 
-						if (from != null)
+						if (from != null || to != null)
 						{
-							var length = (mdMsg.To ?? DateTimeOffset.Now) - from.Value;
 							var step = InnerAdapter.GetHistoryStepSize(mdMsg, out var iterationInterval);
 
-							if (length > step)
+							var info = new DownloadInfo(this, (MarketDataMessage)mdMsg.Clone(), step, iterationInterval);
+
+							message = info.InitNext();
+
+							lock (_syncObject)
 							{
-								var info = new DownloadInfo(this, (MarketDataMessage)mdMsg.Clone(), step, iterationInterval);
-
-								message = info.InitNext();
-
-								lock (_syncObject)
-								{
-									_original.Add(info.Origin.TransactionId, info);
-									_partialRequests.Add(info.CurrTransId, info);
-								}
+								_original.Add(info.Origin.TransactionId, info);
+								_partialRequests.Add(info.CurrTransId, info);
 							}
 						}
 					}
@@ -350,17 +346,7 @@
 				case MessageTypes.CandleTick:
 				case MessageTypes.CandleVolume:
 				{
-					var candleMsg = (CandleMessage)message;
-
-					lock (_syncObject)
-					{
-						if (!_partialRequests.TryGetValue(candleMsg.OriginalTransactionId, out var info))
-							break;
-
-						info.TryUpdateNextFrom(candleMsg.OpenTime);
-						candleMsg.OriginalTransactionId = info.Origin.TransactionId;
-					}
-
+					TryUpdateSubscriptionResult((CandleMessage)message);
 					break;
 				}
 
@@ -371,19 +357,19 @@
 					if (!execMsg.IsMarketData())
 						break;
 
-					TryUpdateSubscriptionResult(execMsg, execMsg.ServerTime);
+					TryUpdateSubscriptionResult(execMsg);
 					break;
 				}
+
 				case MessageTypes.Level1Change:
 				{
-					var l1Msg = (Level1ChangeMessage)message;
-					TryUpdateSubscriptionResult(l1Msg, l1Msg.ServerTime);
+					TryUpdateSubscriptionResult((Level1ChangeMessage)message);
 					break;
 				}
+
 				case MessageTypes.QuoteChange:
 				{
-					var quotesMsg = (QuoteChangeMessage)message;
-					TryUpdateSubscriptionResult(quotesMsg, quotesMsg.ServerTime);
+					TryUpdateSubscriptionResult((QuoteChangeMessage)message);
 					break;
 				}
 			}
@@ -391,18 +377,21 @@
 			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		private void TryUpdateSubscriptionResult(ISubscriptionIdMessage subsMsg, DateTimeOffset serverTime)
+		private void TryUpdateSubscriptionResult<TMessage>(TMessage message)
+			where TMessage : ISubscriptionIdMessage, IServerTimeMessage
 		{
-			if (subsMsg.OriginalTransactionId == 0)
+			var originId = message.OriginalTransactionId;
+
+			if (originId == 0)
 				return;
 
 			lock (_syncObject)
 			{
-				if (!_partialRequests.TryGetValue(subsMsg.OriginalTransactionId, out var info))
+				if (!_partialRequests.TryGetValue(originId, out var info))
 					return;
 
-				info.TryUpdateNextFrom(serverTime);
-				subsMsg.OriginalTransactionId = info.Origin.TransactionId;
+				info.TryUpdateNextFrom(message.ServerTime);
+				message.OriginalTransactionId = info.Origin.TransactionId;
 			}
 		}
 
