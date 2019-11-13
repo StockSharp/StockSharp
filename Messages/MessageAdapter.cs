@@ -493,7 +493,8 @@ namespace StockSharp.Messages
 				case MarketDataTypes.MarketDepth:
 				case MarketDataTypes.Trades:
 				case MarketDataTypes.OrderLog:
-					return TimeSpan.FromDays(1);
+					// by default adapter do not provide historical tick level data
+					return TimeSpan.Zero;// TimeSpan.FromDays(1);
 				case MarketDataTypes.CandleTimeFrame:
 				{
 					var tf = request.GetTimeFrame();

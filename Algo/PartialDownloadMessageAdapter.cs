@@ -85,6 +85,12 @@
 
 			public DownloadInfo(PartialDownloadMessageAdapter adapter, MarketDataMessage origin, TimeSpan step, TimeSpan iterationInterval)
 			{
+				if (step <= TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(step));
+
+				if (iterationInterval < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(iterationInterval));
+
 				_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 				Origin = origin ?? throw new ArgumentNullException(nameof(origin));
 				_step = step;
@@ -196,6 +202,23 @@
 						if (from != null || to != null)
 						{
 							var step = InnerAdapter.GetHistoryStepSize(mdMsg, out var iterationInterval);
+
+							// adapter do not provide historical request
+							if (step == TimeSpan.Zero)
+							{
+								if (to != null)
+								{
+									// finishing current history request
+									RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = mdMsg.TransactionId });
+								}
+								else
+								{
+									// or sending further only live subscription
+									mdMsg.From = null;
+									mdMsg.To = null;
+									break;
+								}
+							}
 
 							var info = new DownloadInfo(this, (MarketDataMessage)mdMsg.Clone(), step, iterationInterval);
 
