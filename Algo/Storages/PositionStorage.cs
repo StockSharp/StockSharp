@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Storages
 			return _entityRegistry.Positions.GetPosition(portfolio, security, clientCode, depoName);
 		}
 
-		void IPositionProvider.SubscribePositions(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		void IPositionProvider.SubscribePositions(Security security, Portfolio portfolio, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 		{
 		}
 

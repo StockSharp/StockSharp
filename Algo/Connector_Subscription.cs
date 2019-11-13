@@ -647,13 +647,17 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void SubscribePositions(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		public void SubscribePositions(Security security = null, Portfolio portfolio = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
 			var msg = new PortfolioLookupMessage
 			{
+				Adapter = adapter,
 				IsSubscribe = true,
 				TransactionId = TransactionIdGenerator.GetNextId(),
-				Adapter = adapter,
+				SecurityId = security?.ToSecurityId(),
+				PortfolioName = portfolio?.Name,
+				From = from,
+				To = to,
 			};
 			
 			_portfolioLookups.Add(msg.TransactionId, new LookupInfo<PortfolioLookupMessage, Portfolio>(msg));

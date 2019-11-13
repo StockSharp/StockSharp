@@ -254,7 +254,7 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeMarketDepth(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter)
+		void IMarketDataProvider.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
@@ -345,7 +345,7 @@ namespace SampleOptionQuoting
 			return _positions.FirstOrDefault(p => p.Security == security && p.Portfolio == portfolio);
 		}
 
-		void IPositionProvider.SubscribePositions(Security security, DateTimeOffset? @from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		void IPositionProvider.SubscribePositions(Security security, Portfolio portfolio, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 		{
 		}
 
