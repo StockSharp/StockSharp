@@ -19,6 +19,8 @@ namespace StockSharp.Messages
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -110,6 +112,20 @@ namespace StockSharp.Messages
 		[DataMember]
 		public Guid? InternalId { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str343Key)]
+		[DescriptionLoc(LocalizedStrings.Str344Key)]
+		[MainCategory]
+		public DateTimeOffset? From { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str345Key)]
+		[DescriptionLoc(LocalizedStrings.Str346Key)]
+		[MainCategory]
+		public DateTimeOffset? To { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
 		/// </summary>
@@ -130,7 +146,21 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Name={PortfolioName}";
+			var str = base.ToString() + $",Name={PortfolioName}";
+
+			if (TransactionId > 0)
+				str += $",TransId={TransactionId}";
+
+			if (Currency != null)
+				str += $",Curr={Currency.Value}";
+
+			if (!BoardCode.IsEmpty())
+				str += $",TransId={TransactionId}";
+
+			if (IsSubscribe)
+				str += $",IsSubscribe={IsSubscribe}";
+
+			return str;
 		}
 
 		/// <summary>
@@ -159,6 +189,8 @@ namespace StockSharp.Messages
 			destination.TransactionId = TransactionId;
 			destination.ClientCode = ClientCode;
 			destination.InternalId = InternalId;
+			destination.From = From;
+			destination.To = To;
 
 			return destination;
 		}

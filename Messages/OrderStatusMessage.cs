@@ -27,18 +27,14 @@ namespace StockSharp.Messages
 	[Serializable]
 	public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 	{
-		/// <summary>
-		/// Start date, from which data needs to be retrieved.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str343Key)]
 		[DescriptionLoc(LocalizedStrings.Str344Key)]
 		[MainCategory]
 		public DateTimeOffset? From { get; set; }
 
-		/// <summary>
-		/// End date, until which data needs to be retrieved.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str345Key)]
 		[DescriptionLoc(LocalizedStrings.Str346Key)]
