@@ -367,25 +367,43 @@
 				case MessageTypes.Execution:
 				{
 					var execMsg = (ExecutionMessage)message;
-					var execType = execMsg.ExecutionType;
 
-					if (execMsg.OriginalTransactionId == 0 || (execType != ExecutionTypes.OrderLog && execType != ExecutionTypes.Tick))
+					if (!execMsg.IsMarketData())
 						break;
 
-					lock (_syncObject)
-					{
-						if (!_partialRequests.TryGetValue(execMsg.OriginalTransactionId, out var info))
-							break;
-
-						info.TryUpdateNextFrom(execMsg.ServerTime);
-						execMsg.OriginalTransactionId = info.Origin.TransactionId;
-					}
-
+					TryUpdateSubscriptionResult(execMsg, execMsg.ServerTime);
+					break;
+				}
+				case MessageTypes.Level1Change:
+				{
+					var l1Msg = (Level1ChangeMessage)message;
+					TryUpdateSubscriptionResult(l1Msg, l1Msg.ServerTime);
+					break;
+				}
+				case MessageTypes.QuoteChange:
+				{
+					var quotesMsg = (QuoteChangeMessage)message;
+					TryUpdateSubscriptionResult(quotesMsg, quotesMsg.ServerTime);
 					break;
 				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+		}
+
+		private void TryUpdateSubscriptionResult(ISubscriptionIdMessage subsMsg, DateTimeOffset serverTime)
+		{
+			if (subsMsg.OriginalTransactionId == 0)
+				return;
+
+			lock (_syncObject)
+			{
+				if (!_partialRequests.TryGetValue(subsMsg.OriginalTransactionId, out var info))
+					return;
+
+				info.TryUpdateNextFrom(serverTime);
+				subsMsg.OriginalTransactionId = info.Origin.TransactionId;
+			}
 		}
 
 		/// <summary>
