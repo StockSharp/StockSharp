@@ -52,8 +52,7 @@
             <para>
             	Далее, созданный генератор нужно передать в шлюз:
             </para>
-            <code language="C#">var trader = new PlazaTrader();
-trader.SecurityIdGenerator = new CustomSecurityIdGenerator();
+            <code language="C#">var _connector.SecurityIdGenerator = new CustomSecurityIdGenerator();
 </code>
           </content>
         </step>

@@ -19,7 +19,7 @@
             <![CDATA[
 var tf = (TimeSpan)CandlesPeriods.SelectedItem;
 var series = new CandleSeries(typeof(TimeFrameCandle), SelectedSecurity, tf);
-Trader.SubscribeCandles(SelectedSecurity, DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100)), DateTime.Now);
+_connector.SubscribeCandles(SelectedSecurity, DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100)), DateTime.Now);
 			]]>
 			</code>
           </content>
@@ -30,7 +30,7 @@ Trader.SubscribeCandles(SelectedSecurity, DateTime.Now.Subtract(TimeSpan.FromTic
        		</para>
           <code language="C#">
             <![CDATA[
-Trader.CandleSeriesProcessing += ProcessCandle;
+_connector.CandleSeriesProcessing += ProcessCandle;
 			]]>
 			</code>
         </step>

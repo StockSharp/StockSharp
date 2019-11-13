@@ -8,90 +8,95 @@
 Включение серверного режима <token>hydra</token> описано в 
 пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" />.</para>
 
-<para>Для подключения через <link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" /> необходимо создать и настроить FixTrader(<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" />).</para>
+<para>Для подключения через <link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" /> необходимо создать и настроить Fix подключение (<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" />).</para>
 <code language="C#" title="C#"><![CDATA[
 ...
-FixTrader Trader = new FixTrader();
+private readonly Connector _connector = new Connector();
 ...
-var marketDataAdapter = ((FixMessageAdapter) Trader.MarketDataAdapter);
-marketDataAdapter.Address = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5002); 
-marketDataAdapter.SenderCompId = "hydra_user";
-marketDataAdapter.TargetCompId = "StockSharpHydraMD";
-marketDataAdapter.Login = "hydra_user";
-marketDataAdapter.Password = "qwerty".To<SecureString>();
+var marketDataAdapter = new FixMessageAdapter(Connector.TransactionIdGenerator)
+{
+    Address = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5002),
+    SenderCompId = "hydra_user",
+    TargetCompId = "StockSharpHydraMD",
+    Login = "hydra_user",
+    Password = "qwerty".To<SecureString>(),
+};
+_connector.Adapter.InnerAdapters.Add(marketDataAdapter);
 
-var transactionDataAdapter = ((FixMessageAdapter) Trader.TransactionAdapter);
-transactionDataAdapter.Address = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5002);
-transactionDataAdapter.SenderCompId = "hydra_user";
-transactionDataAdapter.TargetCompId = "StockSharpHydraMD";
-transactionDataAdapter.Login = "hydra_user";
-transactionDataAdapter.Password = "qwerty".To<SecureString>();
-
+var transactionDataAdapter = new FixMessageAdapter(Connector.TransactionIdGenerator)
+{
+    Address = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5002),
+    SenderCompId = "hydra_user",
+    TargetCompId = "StockSharpHydraMD",
+    Login = "hydra_user",
+    Password = "qwerty".To<SecureString>(),
+};
+_connector.Adapter.InnerAdapters.Add(transactionDataAdapter);
 ...
 ]]></code>
 <para>Подписаться на события получения данных и подключиться</para>
 <code language="C#" title="C#"><![CDATA[
 ...
-Trader.Connected += () =>
+_connector.Connected += () =>
 {
-    Console.WriteLine("Trader.Connected");
-    Trader.LookupSecurities(new Security ());
+    Console.WriteLine("_connector.Connected");
+    _connector.LookupSecurities(new Security ());
     
     
 };
-Trader.Disconnected += () =>
+_connector.Disconnected += () =>
 {
-    Console.WriteLine("Trader.Disconnected");
+    Console.WriteLine("_connector.Disconnected");
 };
 
-Trader.NewSecurity += security =>
+_connector.NewSecurity += security =>
 {
-    Console.Write("Trader.NewSecurity: ");
+    Console.Write("_connector.NewSecurity: ");
     Console.WriteLine(security);
     BuffeSecurity.Add(security);
     if (security.Id == seid)
     {
-        Trader.RegisterMarketDepth(security);
-        Trader.RegisterTrades(security);
+        _connector.RegisterMarketDepth(security);
+        _connector.RegisterTrades(security);
         series.CandleType = typeof (TimeFrameCandle);
         series.Security = security;
         series.Arg = TimeSpan.FromMinutes(5);
-        Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+        _connector.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
     }
 };
 
-Trader.NewTrade += trade =>
+_connector.NewTrade += trade =>
 {
-    Console.WriteLine("Trader.NewTrade");
+    Console.WriteLine("_connector.NewTrade");
     Console.WriteLine(trade);
 };
-Trader.MarketDepthChanged+= depth =>
+_connector.MarketDepthChanged+= depth =>
 {
-    Console.WriteLine("Trader.MarketDepthChanged");
+    Console.WriteLine("_connector.MarketDepthChanged");
     Console.WriteLine(depth);
 };
 
-Trader.ConnectionError += error =>
+_connector.ConnectionError += error =>
 {
-    Console.WriteLine("Trader.ConnectionError");
+    Console.WriteLine("_connector.ConnectionError");
     Console.WriteLine(error.Message);
 };
 
-Trader.Error += error =>
+_connector.Error += error =>
 {
-    Console.WriteLine("Trader.Error");
+    Console.WriteLine("_connector.Error");
     Console.WriteLine(error.Message);
 };
 
-Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+_connector.MarketDataSubscriptionFailed += (security, msg, error) =>
 {
-    Console.WriteLine("Trader.MarketDataSubscriptionFailed");
+    Console.WriteLine("_connector.MarketDataSubscriptionFailed");
     Console.WriteLine(security);
     Console.WriteLine(msg);
     Console.WriteLine(error);
 };
 ...
-Trader.Connect();
+_connector.Connect();
 ...
 ]]></code>
     </introduction>

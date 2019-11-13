@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="9feaabde-52ea-4562-a666-380ce49c6df6" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
 	  <introduction>
 		  <para>
 			  Стаканы в <token>stocksharp</token> представлены типом данных <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>.
@@ -12,15 +8,6 @@
 			  по ценовым уровням.
 		  </para>
 	  </introduction>
-
-    <!--<prerequisites>
-      <content>
-        <para>Optional information on prerequisites</para>
-      </content>
-    </prerequisites>-->
-    
-    <!-- One or more procedure or section elements -->
-
 	  <procedure>
 		  <title>Модификации стакана</title>
 

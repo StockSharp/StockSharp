@@ -4,7 +4,7 @@
 
 	<introduction>
 		<para>В зависимости от конкретного пользователя/приложения сервер OEC может не поддерживать одновременное соединение нескольких приложений. 
-		В этом случае, если существуют другие соединения, они могут быть разорваны. Для обхода этого ограничения данная реализация <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> поддерживает 
+		В этом случае, если существуют другие соединения, они могут быть разорваны. Для обхода этого ограничения данная реализация <codeEntityReference>T:StockSharp.OpenECry.OpenECryMessageAdapter</codeEntityReference> поддерживает 
 		одновременную работу нескольких приложений через одно соединение с OEC сервером – <token>OECRemoting</token>.</para>
 		
 		<para>Поддерживаются следующие режимы <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryRemoting</codeEntityReference>:</para>
@@ -32,16 +32,16 @@
 			</listItem>
 		</list>
 		
-		<para>Для явного задания режима <token>OECRemoting</token> необходимо сразу после создания объекта <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> указать требуемый режим. 
+		<para>Для явного задания режима <token>OECRemoting</token> необходимо сразу после создания объекта <codeEntityReference>T:StockSharp.OpenECry.OpenECryMessageAdapter</codeEntityReference> указать требуемый режим. 
 		Например, для указания режима <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Secondary</codeEntityReference>:</para>
 
         <code language="C#">
         <![CDATA[
-Trader.RemotingRequired = OECRemoting.Secondary;
+		MessageAdapterMessageAdapter.Remoting = OECRemoting.Secondary;
 		]]>
 		</code>		
 		
-		<para>По умолчанию адаптер <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> работает в режиме 
+		<para>По умолчанию адаптер <codeEntityReference>T:StockSharp.OpenECry.OpenECryMessageAdapter</codeEntityReference> работает в режиме 
 		<codeEntityReference qualifyHint="true">F:StockSharp.OpenECry.OpenECryRemoting.None</codeEntityReference>.</para>
 	</introduction>
 

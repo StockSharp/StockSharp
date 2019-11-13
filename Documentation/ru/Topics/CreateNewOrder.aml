@@ -33,7 +33,7 @@
         Direction = Sides.Buy,
     };
 	//Метод RegisterOrder отправляет заявку на сервер
-    Trader.RegisterOrder(order);
+  _connector.RegisterOrder(order);
     
 ]]></code>
 	</introduction>

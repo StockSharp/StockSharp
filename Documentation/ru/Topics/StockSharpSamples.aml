@@ -16,575 +16,79 @@
 			  </title>
 			  <tableHeader>
 				  <row>
-					  <entry>Тип коннектора/назначение</entry>
 					  <entry>Название</entry>
 					  <entry>Описание</entry>
 				  </row>
 			  </tableHeader>
 			  <row>
-			  	  <entry>Quik</entry>
-				  <entry>SampleConsole</entry>
-				  <entry>Простейший торговый алгоритм, экспортирующий информацию об инструментах, и выставляющий заявки при изменении спреда более чем на определенную величину.</entry>
+				  <entry>SampleChart</entry>
+				  <entry>Пример работы с графиком.</entry>
 			  </row>
 			  <row>
-			  	  <entry>Quik</entry>
-				  <entry>Sample</entry>
-				  <entry>
-					  Экспорт из всех таблиц <token>quik</token>, а так же стаканов. Дополнительно, пример показывает, как создаются заявки и стоп-заявки.
-				  </entry>
+				  <entry>SampleChartActiveOrders</entry>
+				  <entry>Пример выставления заявок с графика. </entry>
 			  </row>
 			  <row>
-			  	  <entry>Quik</entry>
-				  <entry>SampleSMA</entry>
-				  <entry>Создание торговой стратегии, основанной на скользящих средних.</entry>
+				  <entry>SampleChartPerformance</entry>
+				  <entry>Пример высокой производительности работы графика.</entry>
 			  </row>
 			  <row>
-			  	 <entry>Quik</entry>
-				  <entry>SampleAsyncTransactions</entry>
-				  <entry>Работа с <token>quik</token> в асинхронном режиме.</entry>
+				  <entry>SampleConnection</entry>
+				  <entry>Пример подключений к различным коннекторам.</entry>
 			  </row>
 			  <row>
-			      <entry>Quik</entry>
-				  <entry>SampleDdeExtendedInfo</entry>
-				  <entry>Расширенный экспорт на примере таблицы с инструментами и стаканом (экспортируется собственный объем).</entry>
+				  <entry>SampleConnectionWithStorage</entry>
+				  <entry>Пример подключений к различным коннекторам с использованием исторических данных.</entry>
 			  </row>
 			  <row>
-			      <entry>Quik</entry>
-				  <entry>SampleDdeCustomTable</entry>
-				  <entry>Экспорт произвольных таблиц на примере таблицы с портфелем.</entry>
-			  </row>
-			  <row>
-			      <entry>Quik</entry>
-				  <entry>SampleFewQuiks</entry>
-				  <entry>
-					  Работа одновременно с несколькими запущенными терминалами <token>quik</token>.
-				  </entry>
-			  </row>
-			  <row>
-			      <entry>Quik</entry>
-				  <entry>SampleCandles</entry>
-				  <entry>Построение свечей (временных, объемных, ценовых и тиковых).</entry>
-			  </row>
-			  <row>
-			      <entry>Quik</entry>
-				  <entry>SampleQuikStartStop</entry>
-				  <entry>
-					  Включение и выключение <token>quik</token> с автоматической авторизацией.
-				  </entry>
-			  </row>
-			   <row>
-			   	  <entry>SmartCOM</entry>
-				  <entry>SampleSmartConsole</entry>
-				  <entry>Простейший торговый алгоритм, экспортирующий информацию об инструментах, и выставляющий заявки при изменении спреда более чем на определенную величину.</entry>
-			  </row>
-			  <row>
-			  	  <entry>SmartCOM</entry>
-				  <entry>SampleSmart</entry>
-				  <entry>
-					  Работа со <token>smartcom</token> (большинство методов). Дополнительно, пример показывает, как создаются заявки и стоп-заявки.
-				  </entry>
-			  </row>
-			  <row>
-			      <entry>SmartCOM</entry>
-				  <entry>SampleSmartSMA</entry>
-				  <entry>Построение торговой стратегии, основанной на скользящих средних.</entry>
-			  </row>
-			  <row>
-			  	  <entry>SmartCOM</entry>
-				  <entry>SampleSmartCandles</entry>
-				  <entry>Экспортирование исторических данных.</entry>
-			  </row>
-			  <row>
-			   	  <entry>AlfaDirect</entry>
-				  <entry>SampleAlfa</entry>
-				  <entry>
-					  Работа со <token>alfa</token> (большинство методов). Дополнительно, пример показывает, как создаются заявки и стоп-заявки.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>AlfaDirect</entry>
-				  <entry>SampleAlfaCandles</entry>
-				  <entry>Экспортирование исторических данных.</entry>
-			  </row>
-			  <row>
-			  	  <entry>Transaq</entry>
-				  <entry>SampleTransaq</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Transaq.TransaqTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>Plaza</entry>
-				  <entry>SamplePlaza</entry>
-				  <entry>
-					  Работа со <token>plaza</token> (большинство методов). Дополнительно, пример показывает, как создаются и снимаются заявки.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>Micex</entry>
-				  <entry>SampleMicex</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Micex.MicexTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>OEC</entry>
-				  <entry>SampleOEC</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>.
-				  </entry>
-				  
-			  </row>
-			  <row>
-			  	  <entry>Interactive Brokers</entry>
-				  <entry>SampleIB</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>BitStamp</entry>
-				  <entry>SampleBitStamp</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.BitStamp.BitStampTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>Blackwood</entry>
-				  <entry>SampleBlackwood</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>BTCE</entry>
-				  <entry>SampleBtce</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Btce.BtceTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>CQG</entry>
-				  <entry>SampleCQG</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference>, <codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>ETrade</entry>
-				  <entry>SampleETrade</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>Fix</entry>
-				  <entry>SampleFix</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Fix.FixTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>IQFeed</entry>
-				  <entry>SampleIQFeed</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>Rithmic</entry>
-				  <entry>SampleRithmic</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Rithmic.RithmicTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>Sterling</entry>
-				  <entry>SampleSterling</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Sterling.SterlingTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>LMAX</entry>
-				  <entry>SampleLMAX</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.LMAX.LmaxTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>MatLab</entry>
-				  <entry>MatLab</entry>
-				  <entry>
-					  Пример работы с MatLab.
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>RSS</entry>
-				  <entry>SampleRss</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Rss.RssTrader</codeEntityReference> (информация с новостных RSS лент).
-				  </entry>
-			  </row>
-			  <row>
-			  	  <entry>Опционы</entry>
-				  <entry>OptionCalculator</entry>
-				  <entry>Опционный калькулятор, рассчитывающий по формуле <token>bs</token> "греки".</entry>
-			  </row>
-			  <row>
-			  	  <entry>Опционы</entry>
-				  <entry>SampleOptionQuoting</entry>
-				  <entry>
-					  Котирование опционов по заданной волатильности с автоматическим дельта-хеджированием позиции.
-				  </entry>
-			  </row>
-			  <row>
-			      <entry>Тестирование</entry>
-				  <entry>SampleHistoryTesting</entry>
-				  <entry>Демонстрация тестирования стратегии из примеров SampleSMA и SampleSmartSMA на истории.</entry>
-			  </row>
-			   <row>
-			   	  <entry>Тестирование</entry>
-				  <entry>SampleRealTimeTesting</entry>
-				  <entry>Демонстрация тестирования стратегии из примеров SampleSMA и SampleSmartSMA на рыночных данных.</entry>
-			  </row>
-			  <row>
-			      <entry>Тестирование</entry>
-				  <entry>SampleEmulationTesting</entry>
-				  <entry>Демонстрация тестирования стратегии из примеров SampleSMA и SampleSmartSMA на случайных данных.</entry>
-			  </row>
-			  <row>
-			      <entry>Тестирование</entry>
-				  <entry>SampleHistoryTestingParallel</entry>
-				  <entry>Демонстрация тестирования стратегии из примеров SampleSMA и SampleSmartSMA на истории в несколько потоков.</entry>
-			  </row>
-			  <row>
-			  	  <entry>Другие примеры</entry>
-				  <entry>LciViewer</entry>
-				  <entry>Программа отображения сделок участников ЛЧИ на графиках с индикаторами.</entry>
-			  </row>
-			  <row>
-			  	  <entry>Другие примеры</entry>
 				  <entry>SampleCurrency</entry>
-				  <entry>Демонстрация работы с сервисом по конвертации валюты.</entry>
+				  <entry>Пример перевода валют.</entry>
 			  </row>
 			  <row>
-			  	  <entry>Другие примеры</entry>
-				  <entry>SampleUnit</entry>
-				  <entry>
-					  Арифметические действия с типом данных <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference>.</entry>
+				  <entry>SampleLogging</entry>
+				  <entry>Пример работы с логированием.</entry>
 			  </row>
 			  <row>
-			      <entry>Другие примеры</entry>
+				  <entry>SampleOptionQuoting</entry>
+				  <entry>Пример стратегии котирования опционов.</entry>
+			  </row>
+			  <row>
 				  <entry>SampleStorage</entry>
-				  <entry>Сохранение торговых объектов в хранилище и последующая их загрузка.</entry>
+				  <entry>Пример работы с локальным хранилищем данных.</entry>
 			  </row>
 			  <row>
-			      <entry>Другие примеры</entry>
-				  <entry>SampleSync</entry>
-				  <entry>Демонстрация работы c графическими компонентами в многопоточном режиме.</entry>
+				  <entry>SampleStrategies</entry>
+				  <entry>Пример создания стратегии.</entry>
+			  </row>
+			   <row>
+				  <entry>SampleUnit</entry>
+				  <entry>Пример работы с классом Unit.</entry>
 			  </row>
 			  <row>
-			      <entry>Другие примеры</entry>
-				  <entry>SampleQuikSmart</entry>
-				  <entry>
-					  Работа одновременно с <token>quik</token> и <token>smartcom</token>.
-				  </entry>
+				  <entry>SampleHistoryTesting</entry>
+				  <entry>Пример тестирования на истории.</entry>
 			  </row>
 			  <row>
-			      <entry>Другие примеры</entry>
-				  <entry>SpeedTest</entry>
-				  <entry>
-					  Демонстрация работы скорости различных шлюзов.
-				  </entry>
-			  </row>			  
-			  <row>
-			  	  <entry>Инструменты</entry>
-				  <entry>Verifier</entry>
-				  <entry>
-					   Проверка правильности настроек таблиц в <token>quik</token>.
-				  </entry>
+				  <entry>SampleHistoryTestingParallel</entry>
+				  <entry>Пример параллельного тестирования на истории.</entry>
 			  </row>
+			  <row>
+				  <entry>SampleRandomEmulation</entry>
+				  <entry>Пример тестирования на случайных данных.</entry>
+			  </row>
+			  <row>
+				  <entry>SampleRealTimeEmulation</entry>
+				  <entry>Пример тестирования на реальных данных.</entry>
+			  </row>
+
 
 		  </table>
     	</content>
     </section>
 	
     <section>
-      <!--<title>A topic section</title>-->
-
       <content>
-		  <!-- <table>
-			  <title>
-				  Описание примеров под Quik:
-			  </title>
-			  <tableHeader>
-				  <row>
-					  <entry>Название папки</entry>
-					  <entry>Описание примера</entry>
-				  </row>
-			  </tableHeader>
-			  <row>
-				  <entry>SampleConsole</entry>
-				  <entry>Простейший торговый алгоритм, экспортирующий информацию об инструментах, и выставляющий заявки при изменении спреда более чем на определенную величину.</entry>
-			  </row>
-			  <row>
-				  <entry>Sample</entry>
-				  <entry>
-					  Экспорт из всех таблиц <token>quik</token>, а так же стаканов. Дополнительно, пример показывает, как создаются заявки и стоп-заявки.
-				  </entry>
-			  </row>
-			  <row>
-				  <entry>SampleSMA</entry>
-				  <entry>Создание торговой стратегии, основанной на скользящих средних.</entry>
-			  </row>
-			  <row>
-				  <entry>SampleAsyncTransactions</entry>
-				  <entry>Работа с <token>quik</token> в асинхронном режиме.</entry>
-			  </row>
-			  <row>
-				  <entry>SampleDdeExtendedInfo</entry>
-				  <entry>Расширенный экспорт на примере таблицы с инструментами и стаканом (экспортируется собственный объем).</entry>
-			  </row>
-			  <row>
-				  <entry>SampleDdeCustomTable</entry>
-				  <entry>Экспорт произвольных таблиц на примере таблицы с портфелем.</entry>
-			  </row>
-			  <row>
-				  <entry>SampleFewQuiks</entry>
-				  <entry>
-					  Работа одновременно с несколькими запущенными терминалами <token>quik</token>.
-				  </entry>
-			  </row>
-			  <row>
-				  <entry>SampleCandles</entry>
-				  <entry>Построение свечей (временных, объемных, ценовых и тиковых).</entry>
-			  </row>
-			  <row>
-				  <entry>SampleQuikStartStop</entry>
-				  <entry>
-					  Включение и выключение <token>quik</token> с автоматической авторизацией.
-				  </entry>
-			  </row>
-		  </table> 
-		  <table>
-			  <title>
-				  Описание примеров под SmartCOM:
-			  </title>
-			  <tableHeader>
-				  <row>
-					  <entry>Название папки</entry>
-					  <entry>Описание примера</entry>
-				  </row>
-			  </tableHeader>
-			  <row>
-				  <entry>SampleSmartConsole</entry>
-				  <entry>Простейший торговый алгоритм, экспортирующий информацию об инструментах, и выставляющий заявки при изменении спреда более чем на определенную величину.</entry>
-			  </row>
-			  <row>
-				  <entry>SampleSmart</entry>
-				  <entry>
-					  Работа со <token>smartcom</token> (большинство методов). Дополнительно, пример показывает, как создаются заявки и стоп-заявки.
-				  </entry>
-			  </row>
-			  <row>
-				  <entry>SampleSmartSMA</entry>
-				  <entry>Построение торговой стратегии, основанной на скользящих средних.</entry>
-			  </row>
-			  <row>
-				  <entry>SampleSmartCandles</entry>
-				  <entry>Экспортирование исторических данных.</entry>
-			  </row>
-		  </table> 
-		  <table>
-			  <title>
-				  Описание примеров под AlfaDirect:
-			  </title>
-			  <tableHeader>
-				  <row>
-					  <entry>Название папки</entry>
-					  <entry>Описание примера</entry>
-				  </row>
-			  </tableHeader>
-			  <row>
-				  <entry>SampleAlfa</entry>
-				  <entry>
-					  Работа со <token>alfa</token> (большинство методов). Дополнительно, пример показывает, как создаются заявки и стоп-заявки.
-				  </entry>
-			  </row>
-			  <row>
-				  <entry>SampleAlfaCandles</entry>
-				  <entry>Экспортирование исторических данных.</entry>
-			  </row>
-		  </table> 
-		  <table>
-			  <title>
-				  Описание примеров под Plaza:
-			  </title>
-			  <tableHeader>
-				  <row>
-					  <entry>Название папки</entry>
-					  <entry>Описание примера</entry>
-				  </row>
-			  </tableHeader>
-			  <row>
-				  <entry>SamplePlaza</entry>
-				  <entry>
-					  Работа со <token>plaza</token> (большинство методов). Дополнительно, пример показывает, как создаются и снимаются заявки.
-				  </entry>
-			  </row>
-		  </table> 
-		  
 
-		  <table>
-			  <title>
-				  Описание примеров под OEC:
-			  </title>
-			  <tableHeader>
-				  <row>
-					  <entry>Название папки</entry>
-					  <entry>Описание примера</entry>
-				  </row>
-			  </tableHeader>
-			  <row>
-				  <entry>SampleOEC</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OEC.OpenECryTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-		  </table> 
-		  
-		  <table>
-			  <title>
-				  Описание примеров под Interactive Brokers:
-			  </title>
-			  <tableHeader>
-				  <row>
-					  <entry>Название папки</entry>
-					  <entry>Описание примера</entry>
-				  </row>
-			  </tableHeader>
-			  <row>
-				  <entry>SampleIB</entry>
-				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>.
-				  </entry>
-			  </row>
-		  </table> 
-
-		  <table>
-			  <title>
-				  Опционы:
-			  </title>
-			  <tableHeader>
-				  <row>
-					  <entry>Название папки</entry>
-					  <entry>Описание примера</entry>
-				  </row>
-			  </tableHeader>
-			  <row>
-				  <entry>OptionCalculator</entry>
-				  <entry>Опционный калькулятор, рассчитывающий по формуле <token>bs</token> "греки".</entry>
-			  </row>
-			  <row>
-				  <entry>SampleOptionQuoting</entry>
-				  <entry>
-					  Котирование опционов по заданной волатильности с автоматическим дельта-хеджированием позиции.
-				  </entry>
-			  </row>
-		  </table> 
-
-		  <table>
-			  <title>
-				  Описание Testing:
-			  </title>
-			  <tableHeader>
-			   <row>
-					  <entry>Название папки</entry>
-					  <entry>Описание примера</entry>
-				  </row>
-			  </tableHeader>
-			  <row>
-				  <entry>SampleHistoryTesting</entry>
-				  <entry>Демонстрация тестирования стратегии из примеров SampleSMA и SampleSmartSMA на истории.</entry>
-			  </row>
-			   <row>
-				  <entry>SampleRealTimeTesting</entry>
-				  <entry>Демонстрация тестирования стратегии из примеров SampleSMA и SampleSmartSMA на рыночных данных.</entry>
-			  </row>
-			  <row>
-				  <entry>SampleEmulationTesting</entry>
-				  <entry>Демонстрация тестирования стратегии из примеров SampleSMA и SampleSmartSMA на случайных данных.</entry>
-			  </row>
-			  <row>
-				  <entry>SampleHistoryTestingParallel</entry>
-				  <entry>Демонстрация тестирования стратегии из примеров SampleSMA и SampleSmartSMA на истории в несколько потоков.</entry>
-			  </row>
-		  </table> 
-		  
-		
-		  <table>
-			  <title>
-				  Описание других примеров:
-			  </title>
-			  <tableHeader>
-				  <row>
-					  <entry>Название папки</entry>
-					  <entry>Описание примера</entry>
-				  </row>
-			  </tableHeader>
-			  <row>
-				  <entry>SampleCurrency</entry>
-				  <entry>Демонстрация работы с сервисом по конвертации валюты.</entry>
-			  </row>
-			  <row>
-				  <entry>SampleUnit</entry>
-				  <entry>
-					  Арифметические действия с типом данных <codeEntityReference>T:StockSharp.BusinessEntities.Unit</codeEntityReference>.</entry>
-			  </row>
-			  <row>
-				  <entry>SampleStorage</entry>
-				  <entry>Сохранение торговых объектов в хранилище и последующая их загрузка.</entry>
-			  </row>
-			  <row>
-				  <entry>SampleSync</entry>
-				  <entry>Демонстрация работы c графическими компонентами в многопоточном режиме.</entry>
-			  </row>
-			  <row>
-				  <entry>SampleQuikSmart</entry>
-				  <entry>
-					  Работа одновременно с <token>quik</token> и <token>smartcom</token>.
-				  </entry>
-			  </row>
-			  <row>
-				  <entry>SpeedTest</entry>
-				  <entry>
-					  Демонстрация работы скорости различных шлюзов.
-				  </entry>
-			  </row>			  
-		  </table> 
-		  
-		  <table>
-			  <title>
-				  Описание Tools:
-			  </title>
-			  <tableHeader>
-				  <row>
-					  <entry>Название папки</entry>
-					  <entry>Описание примера</entry>
-				  </row>
-			  </tableHeader>
-			  <row>
-				  <entry>LicenseTool</entry>
-				  <entry>Утилита для получения лицензии.</entry>
-			  </row>
-			  <row>
-				  <entry>Verifier</entry>
-				  <entry>
-					   Проверка правильности настроек таблиц в <token>quik</token>.
-				  </entry>
-			  </row>
-		  </table> -->		  
       </content>
     </section>
 

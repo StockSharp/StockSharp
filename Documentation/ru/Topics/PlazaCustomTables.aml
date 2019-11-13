@@ -15,8 +15,19 @@
       <codeEntityReference>T:StockSharp.Plaza.PlazaStreamRegistry</codeEntityReference>.
       </para>
 	  <code language="C#"><![CDATA[// Добавление таблицы об обязательствах маркетмейкера по фьючерсам
-var Trader = new PlazaTrader();
-Trader.Tables.Add(Trader.TableRegistry.MarketMakingFuture);]]></code>
+Connector Connector = new Connector();				
+...				
+var address = "<Address>".To<IPAddress>();
+var messageAdapter = new PlazaMessageAdapter(Connector.TransactionIdGenerator)
+{
+    Login = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+    Address = SmartComAddresses.Demo,
+};
+
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+messageAdapter.Tables.Add(messageAdapter.TableRegistry.MarketMakingFuture);]]></code>
 
       <para>После добавления таблицы вся информация по ней будет приходить в обработчики событий
       <codeEntityReference qualifyHint="false">E:StockSharp.Plaza.Metadata.PlazaTable.Inserted</codeEntityReference> и 
@@ -24,12 +35,12 @@ Trader.Tables.Add(Trader.TableRegistry.MarketMakingFuture);]]></code>
       
 	  <code language="C#"><![CDATA[
 //Подписка на событие добавления информации по таблице
-Trader.TableRegistry.MarketMakingFuture.Inserted += OnMarketMakingFutureStreamInserted;
+messageAdapter.TableRegistry.MarketMakingFuture.Inserted += OnMarketMakingFutureStreamInserted;
 
 void OnMarketMakingFutureStreamInserted(PlazaRecord record)
 {
     //Метадата для колонок таблицы обязательств ММ по фьючерсам
-    var metadata = Trader.TableRegistry.ColumnRegistry.MarketMakingFutureParams;
+    var metadata = messageAdapter.TableRegistry.ColumnRegistry.MarketMakingFutureParams;
 
     //Получение текущего процента выполнения обязательств
     var percentTime = record.Get<decimal>(metadata.PercentTime);

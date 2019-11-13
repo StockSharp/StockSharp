@@ -47,7 +47,7 @@
 
       <code language="C#">
 // registeredOrder - это ранее зарегистрированная заявка.
-trader.CancelOrder(registeredOrder);</code>
+_connector.CancelOrder(registeredOrder);</code>
 
     <!--<buildInstructions>
       <content>

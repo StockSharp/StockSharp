@@ -13,12 +13,11 @@
 <code title="C#" language="C#"><![CDATA[
 ChartPanel.CreateOrder += (chartArea,order) =>
 {
-
 	order.Portfolio = _portfolio;
 	order.Security = _security;
 	order.Volume = 1;
 	
-	trader.RegisterOrder(order);
+	_connector.RegisterOrder(order);
 };
 
 ]]></code>

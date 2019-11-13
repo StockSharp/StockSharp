@@ -4,13 +4,13 @@
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="Лицензирование StockSharp" />
   <Topic id="536b1c81-5336-4dc0-ab29-8bef70a162ba" visible="True" title="Исходные коды" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Справочные материалы" />
-  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" title="S#.API">
+  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Архитектура S#.API" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Установка S#.API" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
     <Topic id="db1de349-84ef-4e59-a30b-c34a9d47bed2" visible="True" isExpanded="true" title="Коннекторы">
       <Topic id="554da27b-900a-462a-a2c2-d2b6cb1330ae" visible="True" title="Графическое конфигурирование" />
-      <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (Россия)">
+      <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" title="Коннекторы (Россия)">
         <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" title="QUIK">
           <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
           <Topic id="3707af38-42ed-43f1-b657-0434807f40d6" visible="True" title="Графическое конфигурирование Quik LUA  Market data" />
@@ -103,7 +103,7 @@
           <Topic id="2762564a-8f0c-4721-abf4-441c0d4ec366" visible="True" title="Инициализация адаптера РТС" />
         </Topic>
       </Topic>
-      <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" isExpanded="true" title="Коннекторы (Америка)">
+      <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Коннекторы (Америка)">
         <Topic id="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" visible="True" title="AlphaVantage">
           <Topic id="02913c08-eeab-48e3-9e62-35dccea1db59" visible="True" title="Настройки коннектора AlphaVantage" />
           <Topic id="4091ca5f-352f-4ad8-8b7b-e017f634a486" visible="True" title="Графическое конфигурирование AlphaVantage" />
@@ -501,7 +501,7 @@
           <Topic id="dda99f90-0d3f-4c1d-ada4-7a4d5280c0c7" visible="True" title="Инициализация адаптера RSS" />
         </Topic>
       </Topic>
-      <Topic id="1d5b1223-15ba-4364-a31f-2e5592f76fe5" visible="True" title="Получение исторических данных" />
+      <Topic id="1d5b1223-15ba-4364-a31f-2e5592f76fe3" visible="True" isSelected="true" title="Получение исторических данных" />
       <Topic id="42ac3a14-98fb-4725-88c5-b15d2614b841" visible="True" title="Получение новостных данных" />
       <Topic id="293859e2-6c39-486c-afde-d9ae96243618" visible="True" title="Создание собственного коннектора" />
       <Topic id="c23300a1-bf38-444a-b103-28350766477f" visible="True" title="Сохранение и загрузка настроек" />
@@ -713,7 +713,7 @@
       <Topic id="71196e37-b6ae-44ec-989d-0396e21af6fd" visible="True" title="Окно настройки оповещений" />
       <Topic id="b2d8d1c3-b486-4e4c-bc60-aaf6593fdbec" visible="True" title="Темы графических компонентов S#" />
     </Topic>
-    <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" isExpanded="true" title="Сообщения">
+    <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Сообщения">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Описание" />
       <Topic id="fb79e67d-945c-493d-bdac-85d0040af828" visible="True" title="Адаптеры" />
       <Topic id="a26fc10a-4aa5-4a3e-9494-823c43eb9c84" visible="True" title="Хранилище сообщений" />
@@ -1015,7 +1015,7 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" isSelected="true" title="S#.Shell">
+  <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" title="S#.Shell">
     <Topic id="1a7843d9-c1e4-4597-b02d-9a011b24df44" visible="True" title="Установка S#.Shell" />
     <Topic id="848cd34c-1768-409f-8e82-bed1c3e25102" visible="True" title="Быстрый запуск" />
     <Topic id="1b4c10e7-34ea-4eff-b820-4d2ea04231af" visible="True" title="Интерфейс программы">

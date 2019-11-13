@@ -53,7 +53,7 @@
               </code>
               <code title="C#" language="C#">
               		<![CDATA[
-private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+private void ConnectorOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
 {
 	foreach (var depth in depths)
 	{

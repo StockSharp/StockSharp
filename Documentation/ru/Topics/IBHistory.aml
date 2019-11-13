@@ -24,7 +24,7 @@ var series = new CandleSeries
 	Security = SelectedSecurity,
 	Arg = InteractiveBrokersTimeFrames.Minute1
 };
-Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+_connector.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 			]]>
 			</code>
           </content>
@@ -36,7 +36,7 @@ Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), 
        		</para>
           <code language="C#">
             <![CDATA[
-Trader.CandleSeriesProcessing += _securitiesWindow.ProcessCandle;
+_connector.CandleSeriesProcessing += _securitiesWindow.ProcessCandle;
 			]]>
 			</code>
         </step>

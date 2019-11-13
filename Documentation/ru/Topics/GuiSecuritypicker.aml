@@ -93,21 +93,6 @@
 
 		<xaml:SecurityPicker x:Name="SecurityPicker" x:FieldModifier="public" SecuritySelected="SecurityPicker_OnSecuritySelected" ShowCommonStatColumns="True" />
 
-		<StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
-			<Button x:Name="Find" Width="100" Click="FindClick">
-				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
-			</Button>
-            <Button x:Name="Level1" Content="Level1..." Width="100" IsEnabled="False" Click="Level1Click" />
-			<Button x:Name="Depth" Width="100" IsEnabled="False" Click="DepthClick">
-				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
-			</Button>
-			<Button x:Name="NewOrder" Width="100" IsEnabled="False" Click="NewOrderClick">
-				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
-			</Button>
-			<Button x:Name="NewStopOrder" Width="120" IsEnabled="False" Click="NewStopOrderClick">
-				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewStopOrder}" />...</TextBlock>
-			</Button>
-		</StackPanel>
 	</Grid>
 </Window>
 	  	]]>
@@ -116,82 +101,11 @@
               <![CDATA[
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-	if (!_isConnected)
-	{
-       ......................................
-
-		if (Trader == null)
-		{
-			// создаем подключение
-		    Trader = new QuikTrader
-		    {
-		        LuaFixServerAddress = Address.Text.To<EndPoint>(),
-		        LuaLogin = Login.Text,
-		        LuaPassword = Password.Password.To<SecureString>(),
-		        LogLevel = LogLevels.Debug
-		    };
-
-
-		    _logManager.Sources.Add(Trader);
-
-			// отключение автоматического запроса всех инструментов.
-			Trader.RequestAllSecurities = AllSecurities.IsChecked == true;
-
-			// возводим флаг, что соединение установлено
-			_isConnected = true;
-
-			// переподключение будет работать только во время работы биржи РТС
-			// (чтобы отключить переподключение когда торгов нет штатно, например, ночью)
-			Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
-
-			// подписываемся на событие об успешном восстановлении соединения
-			Trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
-
-			// подписываемся на событие разрыва соединения
-			Trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));
-
-			// подписываемся на ошибку обработки данных (транзакций и маркет)
-			Trader.Error += error =>this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
-
-			// подписываемся на ошибку подписки маркет-данных
-			Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
-
-			Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-			Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-			Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-			Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены заявки"));
-			Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены стоп заявки"));
-			Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-			Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-			Trader.MassOrderCancelFailed += (transId, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
-
-			// устанавливаем поставщик маркет-данных
-			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
-
-			ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
-				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
-					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
-		}
-
-		Trader.Connect();
-
-		_isConnected = true;
-		ConnectBtn.Content = LocalizedStrings.Disconnect;
-	}
-	else
-	{
-		Trader.Disconnect();
-
-		_isConnected = false;
-		ConnectBtn.Content = LocalizedStrings.Connect;
-	}
+    ......................................
+	_connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+	// устанавливаем поставщик маркет-данных
+	_securitiesWindow.SecurityPicker.MarketDataProvider = _connector;
+	......................................
 }
 
 private void SecurityPicker_OnSecuritySelected(Security security)

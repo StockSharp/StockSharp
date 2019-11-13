@@ -19,7 +19,7 @@
 			<codeEntityReference qualifyHint="true">Overload:StockSharp.Algo.TraderHelper.GetTheoreticalTrades</codeEntityReference>:
 		</para>
 		<code language="C#"><![CDATA[// получить стакан опциона
-var depth = trader.GetMarketDepth(option);
+var depth = _connector.GetMarketDepth(option);
 
 // получить теоретические сделки на покупку 100 контрактов
 var trades = depth.GetTheoreticalTrades(Sides.Buy, 100);
@@ -28,7 +28,7 @@ var trades = depth.GetTheoreticalTrades(Sides.Buy, 100);
 var matchedVolume = trades.Sum(t => t.Trade.Volume);
 
 // регистрируем заявку по основному опциону
-trader.RegisterOrder(new Order
+_connector.RegisterOrder(new Order
 {
 	Security = option,
 	Volume = matchedVolume,
@@ -49,7 +49,7 @@ if (elapsedVolume > 0)
 	// регистрируем оставшийся объем по синтетическим инструментам
 	foreach (var pair in syntheticBuy)
 	{
-		trader.RegisterOrder(new Order
+		_connector.RegisterOrder(new Order
 		{
 			Security = pair.Key,
 			Volume = elapsedVolume,

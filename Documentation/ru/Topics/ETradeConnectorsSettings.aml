@@ -16,7 +16,7 @@
       <mediaLink><image placement="center" xlink:href="etrade_autoriazation"/></mediaLink>
       
       <para>Полную процедуру авторизации необходимо выполнять только 1 раз в сутки (в полночь по EST сервер <token>etrade</token> сбрасывает выданные ранее AccessToken’ы). 
-      Если в текущий день по EST полная процедура авторизации уже проводилась, <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeTrader</codeEntityReference>
+      Если в текущий день по EST полная процедура авторизации уже проводилась, <codeEntityReference>T:StockSharp.ETrade.ETradeMessageAdapter</codeEntityReference>
       автоматически загрузит AccessToken, сохраненный в подкаталоге <token>etrade</token> робота.</para>
     </introduction>
   </developerConceptualDocument>

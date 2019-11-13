@@ -55,7 +55,7 @@
 
 var candleTimeFrame = TimeSpan.FromMinutes(10.5);
 
-Console.WriteLine(candleTimeFrame.GetCandleTime(_trader));
+Console.WriteLine(candleTimeFrame.GetCandleTime(_connector));
 					]]>
 					</code>
 				</listItem>-->

@@ -55,7 +55,7 @@
               </code>
               <code title="C#" language="C#">
 
-Connector _connector = new QuikTrader();
+private readonly Connector _connector = new Connector();
 
 // Назначаем провайдер рыночных данных
 SecurityGrid.MarketDataProvider = _connector;

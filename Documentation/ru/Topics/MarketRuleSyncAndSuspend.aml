@@ -96,7 +96,7 @@ class FirstStrategy : Strategy
 	
        this.SuspendRules(() =>
        {
-           Trader
+		_connector
                .WhenCandlesFinished(_series)
                .Do(FinishCandle)
                .Apply(this);
