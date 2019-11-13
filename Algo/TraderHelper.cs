@@ -5038,6 +5038,9 @@ namespace StockSharp.Algo
 			if (criteria.Currency != null)
 				positions = positions.Where(p => p.Currency == criteria.Currency);
 
+			if (criteria.SecurityId != null)
+				positions = positions.Where(p => p.Security.ToSecurityId() == criteria.SecurityId.Value);
+
 			if (!criteria.BoardCode.IsEmpty())
 				positions = positions.Where(p => p.Security.ToSecurityId().BoardCode.ContainsIgnoreCase(criteria.BoardCode));
 

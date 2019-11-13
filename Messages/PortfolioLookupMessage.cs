@@ -34,18 +34,28 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Security ID.
+		/// </summary>
+		public SecurityId? SecurityId { get; set; }
+
+		/// <summary>
 		/// Create a copy of <see cref="PortfolioLookupMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return CopyTo(new PortfolioLookupMessage());
+			return CopyTo(new PortfolioLookupMessage { SecurityId = SecurityId } );
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",TransId={TransactionId},Curr={Currency},Board={BoardCode},IsSubscribe={IsSubscribe}";
+			var str = base.ToString();
+
+			if (SecurityId != null)
+				str += $",Sec={SecurityId}";
+
+			return str;
 		}
 	}
 }

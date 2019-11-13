@@ -271,6 +271,7 @@ StockSharp API Change log
 * (feature) StorageMessageAdapter. Meta-info extracted into StorageMetaInfoMessageAdapter.
 * (feature) BasketMessageAdapter. Each connection uses own StorageMessageAdapter.
 * (feature) IPositionProvider. SubscribePositions filter by Portfolio added.
+* (feature) PortfolioLookupMessage. SecurityId filter added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
