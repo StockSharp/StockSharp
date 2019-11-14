@@ -118,7 +118,6 @@ namespace StockSharp.Algo.Storages
 			Drive = drive ?? throw new ArgumentNullException(nameof(drive));
 			Security = security ?? throw new ArgumentNullException(nameof(security));
 			SecurityId = security.ToSecurityId();
-			SecurityId.EnsureHashCode();
 		}
 
 		/// <summary>

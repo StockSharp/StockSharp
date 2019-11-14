@@ -149,25 +149,25 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public IMarketDataStorage<Trade> GetTradeStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			return GetTickMessageStorage(GetSecurityId(security), drive, format).ToEntityStorage<ExecutionMessage, Trade>(security, ExchangeInfoProvider);
+			return GetTickMessageStorage(security.ToSecurityId(), drive, format).ToEntityStorage<ExecutionMessage, Trade>(security, ExchangeInfoProvider);
 		}
 
 		/// <inheritdoc />
 		public IMarketDataStorage<MarketDepth> GetMarketDepthStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			return GetQuoteMessageStorage(GetSecurityId(security), drive, format).ToEntityStorage<QuoteChangeMessage, MarketDepth>(security, ExchangeInfoProvider);
+			return GetQuoteMessageStorage(security.ToSecurityId(), drive, format).ToEntityStorage<QuoteChangeMessage, MarketDepth>(security, ExchangeInfoProvider);
 		}
 
 		/// <inheritdoc />
 		public IMarketDataStorage<OrderLogItem> GetOrderLogStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			return GetOrderLogMessageStorage(GetSecurityId(security), drive, format).ToEntityStorage<ExecutionMessage, OrderLogItem>(security, ExchangeInfoProvider);
+			return GetOrderLogMessageStorage(security.ToSecurityId(), drive, format).ToEntityStorage<ExecutionMessage, OrderLogItem>(security, ExchangeInfoProvider);
 		}
 
 		/// <inheritdoc />
 		public IMarketDataStorage<Candle> GetCandleStorage(Type candleType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			return GetCandleMessageStorage(candleType.ToCandleMessageType(), GetSecurityId(security), arg, drive, format).ToEntityStorage<CandleMessage, Candle>(security, ExchangeInfoProvider);
+			return GetCandleMessageStorage(candleType.ToCandleMessageType(), security.ToSecurityId(), arg, drive, format).ToEntityStorage<CandleMessage, Candle>(security, ExchangeInfoProvider);
 		}
 
 		/// <inheritdoc />
@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public IMarketDataStorage GetStorage(Security security, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			return GetStorage(GetSecurityId(security), dataType, arg, drive, format);
+			return GetStorage(security.ToSecurityId(), dataType, arg, drive, format);
 		}
 
 		/// <inheritdoc />
@@ -470,13 +470,6 @@ namespace StockSharp.Algo.Storages
 
 				return new BoardStateStorage(securityId, serializer, key);
 			});
-		}
-
-		private static SecurityId GetSecurityId(Security security)
-		{
-			var id = security.ToSecurityId();
-			id.EnsureHashCode();
-			return id;
 		}
 	}
 }
