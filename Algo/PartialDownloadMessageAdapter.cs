@@ -190,6 +190,47 @@
 					break;
 				}
 
+				case MessageTypes.OrderStatus:
+				case MessageTypes.PortfolioLookup:
+				{
+					var subscriptionMsg = (ISubscriptionMessage)message;
+
+					if (subscriptionMsg.IsSubscribe)
+					{
+						var from = subscriptionMsg.From;
+						var to = subscriptionMsg.To;
+
+						if (from != null || to != null)
+						{
+							var step = InnerAdapter.GetHistoryStepSize(DataType.Transactions, out _);
+
+							// adapter do not provide historical request
+							if (step == TimeSpan.Zero)
+							{
+								if (to != null)
+								{
+									// finishing current history request
+
+									if (message.Type == MessageTypes.PortfolioLookup)
+									{
+										RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = subscriptionMsg.TransactionId });
+									}
+
+									return;
+								}
+								else
+								{
+									// or sending further only live subscription
+									subscriptionMsg.From = null;
+									subscriptionMsg.To = null;
+								}
+							}
+						}
+					}
+
+					break;
+				}
+
 				case MessageTypes.MarketData:
 				{
 					var mdMsg = (MarketDataMessage)message;
@@ -201,7 +242,7 @@
 
 						if (from != null || to != null)
 						{
-							var step = InnerAdapter.GetHistoryStepSize(mdMsg, out var iterationInterval);
+							var step = InnerAdapter.GetHistoryStepSize(mdMsg.DataType.ToDataType(), out var iterationInterval);
 
 							// adapter do not provide historical request
 							if (step == TimeSpan.Zero)
@@ -210,6 +251,7 @@
 								{
 									// finishing current history request
 									RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = mdMsg.TransactionId });
+									return;
 								}
 								else
 								{

@@ -354,8 +354,8 @@ namespace StockSharp.Messages
 			=> InnerAdapter.GetCandleArgs(candleType, securityId, from, to);
 
 		/// <inheritdoc />
-		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)
-			=> InnerAdapter.GetHistoryStepSize(request, out iterationInterval);
+		public virtual TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
+			=> InnerAdapter.GetHistoryStepSize(dataType, out iterationInterval);
 
 		/// <inheritdoc />
 		public virtual bool IsAllDownloadingSupported(MarketDataTypes dataType)

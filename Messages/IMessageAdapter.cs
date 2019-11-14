@@ -231,10 +231,10 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Get maximum size step allowed for historical download.
 		/// </summary>
-		/// <param name="request">Market data request.</param>
+		/// <param name="dataType">Data type info.</param>
 		/// <param name="iterationInterval">Interval between iterations.</param>
 		/// <returns>Step.</returns>
-		TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval);
+		TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval);
 
 		/// <summary>
 		/// Is for the specified <paramref name="dataType"/> all securities downloading enabled.
