@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			Length = _start + 1; //только 2 т.к текущая и пред свеча.
 			const double x = -0.25;
-			_smoothConstant1 = (decimal)System.Math.Exp(x);
+			_smoothConstant1 = (decimal)Math.Exp(x);
 			_smoothConstant = 1 - _smoothConstant1;
 		}
 

@@ -6,7 +6,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Market data request finished message.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public class MarketDataFinishedMessage : Message
 	{
@@ -17,7 +17,7 @@ namespace StockSharp.Messages
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Initialize <see cref="Message"/>.
+		/// Initialize <see cref="MarketDataFinishedMessage"/>.
 		/// </summary>
 		public MarketDataFinishedMessage()
 			: base(MessageTypes.MarketDataFinished)
@@ -41,9 +41,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
-		{
-			return base.ToString() + $",OrigTransId={OriginalTransactionId}";
-		}
+		public override string ToString() => base.ToString() + $",OrigTransId={OriginalTransactionId}";
 	}
 }
