@@ -1211,7 +1211,7 @@ namespace StockSharp.Algo
 		public CandleSeries TryGetCandleSeries(long transactionId)
 			=> _candlesHolder.TryGetCandleSeries(transactionId);
 
-		public IEnumerable<Tuple<CandleSeries, Candle>> UpdateCandles(CandleMessage message)
+		public IEnumerable<Tuple<CandleSeries, Candle, long>> UpdateCandles(CandleMessage message)
 			=> _candlesHolder.UpdateCandles(message);
 
 		public MarketDepth GetMarketDepth(Security security, bool isFiltered, Func<SecurityId, Security> getSecurity, out bool isNew)

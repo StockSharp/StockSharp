@@ -1817,13 +1817,22 @@ namespace StockSharp.Algo
 
 		private void ProcessCandleMessage(CandleMessage message)
 		{
+			var evt = CandleReceived;
+
 			foreach (var tuple in _entityCache.UpdateCandles(message))
 			{
 				var series = tuple.Item1;
 				var candle = tuple.Item2;
 
 				RaiseCandleSeriesProcessing(series, candle);
-				RaiseReceived(candle, message, CandleReceived);
+
+				if (evt == null)
+					continue;
+
+				var subscription = TryGetSubscription(tuple.Item3);
+
+				if (subscription != null)
+					evt.Invoke(subscription, candle);
 			}
 		}
 

@@ -108,7 +108,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="message">Message.</param>
 		/// <returns>Candles series.</returns>
-		public IEnumerable<Tuple<CandleSeries, Candle>> UpdateCandles(CandleMessage message)
+		public IEnumerable<Tuple<CandleSeries, Candle, long>> UpdateCandles(CandleMessage message)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -123,7 +123,7 @@ namespace StockSharp.Algo.Candles
 				if (!info.UpdateCandle(message, out var candle))
 					continue;
 				
-				yield return Tuple.Create(info.Series, candle);
+				yield return Tuple.Create(info.Series, candle, subscriptionId);
 			}
 		}
 	}
