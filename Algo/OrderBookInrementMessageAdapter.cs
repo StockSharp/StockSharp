@@ -6,18 +6,18 @@
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, decimal>;
+	using BookInfo = Ecng.Common.RefTriple<System.Collections.Generic.SortedDictionary<decimal, decimal>, System.Collections.Generic.SortedDictionary<decimal, decimal>, Messages.QuoteChangeStates>;
 
 	/// <summary>
 	/// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
 	/// </summary>
 	public class OrderBookInrementMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly SynchronizedDictionary<SecurityId, RefTriple<QuotesDict, QuotesDict, QuoteChangeStates>> _states = new SynchronizedDictionary<SecurityId, RefTriple<QuotesDict, QuotesDict, QuoteChangeStates>>();
+		private readonly SynchronizedDictionary<long, BookInfo> _states = new SynchronizedDictionary<long, BookInfo>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderBookInrementMessageAdapter"/>.
@@ -28,23 +28,6 @@
 		{
 		}
 
-		private int? _maxDepth;
-
-		/// <summary>
-		/// Max depth of requested order book.
-		/// </summary>
-		public int? MaxDepth
-		{
-			get => _maxDepth;
-			set
-			{
-				if (value != null && value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value));
-
-				_maxDepth = value;
-			}
-		}
-
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
@@ -53,157 +36,163 @@
 				case MessageTypes.Reset:
 					_states.Clear();
 					break;
-			}
 
-			base.OnSendInMessage(message);
-		}
-
-		/// <inheritdoc />
-		protected override void OnInnerAdapterNewOutMessage(Message message)
-		{
-			switch (message.Type)
-			{
-				case MessageTypes.QuoteChange:
+				case MessageTypes.MarketData:
 				{
-					var quoteMsg = (QuoteChangeMessage)message;
+					var mdMsg = (MarketDataMessage)message;
 
-					RefTriple<QuotesDict, QuotesDict, QuoteChangeStates> GetCurrState()
+					if (mdMsg.DataType == MarketDataTypes.MarketDepth)
 					{
-						var state = quoteMsg.State.Value;
-						var tuple = _states.SafeAdd(quoteMsg.SecurityId, key => RefTuple.Create(new QuotesDict(new BackwardComparer<decimal>()), new QuotesDict(), state));
-
-						if (tuple.Third != state)
+						if (mdMsg.IsSubscribe)
 						{
-							switch (tuple.Third)
-							{
-								case QuoteChangeStates.SnapshotStarted:
-								{
-									if (state != QuoteChangeStates.SnapshotBuilding && state != QuoteChangeStates.SnapshotComplete)
-										this.AddWarningLog($"{tuple.Third}->{state}");
-
-									break;
-								}
-								case QuoteChangeStates.SnapshotBuilding:
-								{
-									if (state != QuoteChangeStates.SnapshotComplete)
-										this.AddWarningLog($"{tuple.Third}->{state}");
-
-									break;
-								}
-								case QuoteChangeStates.SnapshotComplete:
-								case QuoteChangeStates.Increment:
-								{
-									if (state == QuoteChangeStates.SnapshotBuilding)
-										this.AddWarningLog($"{tuple.Third}->{state}");
-
-									break;
-								}
-								default:
-									throw new ArgumentOutOfRangeException(tuple.Third.ToString());
-							}
-
-							tuple.Third = state;
+							if (IsSupportOrderBookIncrements)
+								_states.Add(mdMsg.TransactionId, RefTuple.Create(new QuotesDict(new BackwardComparer<decimal>()), new QuotesDict(), QuoteChangeStates.SnapshotComplete));
 						}
-
-						return tuple;
-					}
-
-					void Apply(QuotesDict dict, IEnumerable<QuoteChange> quotes)
-					{
-						foreach (var quote in quotes)
+						else
 						{
-							if (quote.Volume == 0)
-								dict.Remove(quote.Price);
-							else
-								dict[quote.Price] = quote.Volume;
+							_states.Remove(mdMsg.OriginalTransactionId);
 						}
-					}
-
-					QuoteChangeMessage CreateOrderBook(QuotesDict bids, QuotesDict asks)
-					{
-						return new QuoteChangeMessage
-						{
-							SecurityId = quoteMsg.SecurityId,
-							Bids = bids.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value)).ToArray(),
-							Asks = asks.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value)).ToArray(),
-							IsSorted = true,
-							ServerTime = quoteMsg.ServerTime,
-							OriginalTransactionId = quoteMsg.OriginalTransactionId,
-						};
-					}
-
-					switch (quoteMsg.State)
-					{
-						case null:
-							break;
-
-						case QuoteChangeStates.SnapshotStarted:
-						{
-							var currState = GetCurrState();
-
-							currState.First.Clear();
-							currState.Second.Clear();
-
-							Apply(currState.First, quoteMsg.Bids);
-							Apply(currState.Second, quoteMsg.Asks);
-
-							return;
-						}
-						case QuoteChangeStates.SnapshotBuilding:
-						{
-							var currState = GetCurrState();
-
-							Apply(currState.First, quoteMsg.Bids);
-							Apply(currState.Second, quoteMsg.Asks);
-
-							return;
-						}
-						case QuoteChangeStates.SnapshotComplete:
-						{
-							var currState = GetCurrState();
-
-							Apply(currState.First, quoteMsg.Bids);
-							Apply(currState.Second, quoteMsg.Asks);
-
-							message = CreateOrderBook(currState.First, currState.Second);
-							break;
-						}
-						case QuoteChangeStates.Increment:
-						{
-							var currState = GetCurrState();
-
-							Apply(currState.First, quoteMsg.Bids);
-							Apply(currState.Second, quoteMsg.Asks);
-
-							if (MaxDepth != null)
-							{
-								var maxDepth = MaxDepth.Value;
-
-								void Truncate(QuotesDict dict)
-								{
-									if (dict.Count <= maxDepth)
-										return;
-
-									foreach (var key in dict.Keys.Skip(maxDepth).ToArray())
-										dict.Remove(key);
-								}
-
-								Truncate(currState.First);
-								Truncate(currState.Second);
-							}
-
-							message = CreateOrderBook(currState.First, currState.Second);
-							break;
-						}
-						default:
-							throw new ArgumentOutOfRangeException();
 					}
 
 					break;
 				}
 			}
 
-			base.OnInnerAdapterNewOutMessage(message);
+			base.OnSendInMessage(message);
+		}
+
+		private QuoteChangeMessage ApplyNewState(long subscriptionId, BookInfo info, QuoteChangeMessage quoteMsg, QuoteChangeStates newState)
+		{
+			var currState = info.Third;
+
+			if (currState != newState)
+			{
+				switch (currState)
+				{
+					case QuoteChangeStates.SnapshotStarted:
+					{
+						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
+							this.AddWarningLog($"{currState}->{newState}");
+
+						info.First.Clear();
+						info.Second.Clear();
+
+						break;
+					}
+					case QuoteChangeStates.SnapshotBuilding:
+					{
+						if (newState != QuoteChangeStates.SnapshotComplete)
+							this.AddWarningLog($"{currState}->{newState}");
+
+						break;
+					}
+					case QuoteChangeStates.SnapshotComplete:
+					case QuoteChangeStates.Increment:
+					{
+						if (newState == QuoteChangeStates.SnapshotBuilding)
+							this.AddWarningLog($"{currState}->{newState}");
+
+						break;
+					}
+					default:
+						throw new ArgumentOutOfRangeException(currState.ToString());
+				}
+
+				void Copy(IEnumerable<QuoteChange> from, QuotesDict to)
+				{
+					foreach (var quote in from)
+					{
+						if (quote.Volume == 0)
+							to.Remove(quote.Price);
+						else
+							to[quote.Price] = quote.Volume;
+					}
+				}
+
+				Copy(quoteMsg.Bids, info.First);
+				Copy(quoteMsg.Asks, info.Second);
+
+				info.Third = currState = newState;
+			}
+
+			if (currState == QuoteChangeStates.SnapshotStarted || currState == QuoteChangeStates.SnapshotBuilding)
+				return null;
+
+			return new QuoteChangeMessage
+			{
+				SecurityId = quoteMsg.SecurityId,
+				Bids = info.First.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value)).ToArray(),
+				Asks = info.Second.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value)).ToArray(),
+				IsSorted = true,
+				ServerTime = quoteMsg.ServerTime,
+				SubscriptionId = subscriptionId,
+				OriginalTransactionId = quoteMsg.OriginalTransactionId,
+			};
+		}
+
+		/// <inheritdoc />
+		protected override void OnInnerAdapterNewOutMessage(Message message)
+		{
+			List<QuoteChangeMessage> clones = null;
+			HashSet<long> incrSubscriptionIds = null;
+
+			switch (message.Type)
+			{
+				case MessageTypes.QuoteChange:
+				{
+					var quoteMsg = (QuoteChangeMessage)message;
+
+					var state = quoteMsg.State;
+
+					if (state == null)
+						break;
+
+					foreach (var subscriptionId in quoteMsg.GetSubscriptionIds())
+					{
+						if (!_states.TryGetValue(subscriptionId, out var info))
+							continue;
+
+						if (incrSubscriptionIds == null)
+							incrSubscriptionIds = new HashSet<long>();
+
+						incrSubscriptionIds.Add(subscriptionId);
+
+						var newQuoteMsg = ApplyNewState(subscriptionId, info, quoteMsg, state.Value);
+
+						if (newQuoteMsg == null)
+							continue;
+
+						if (clones == null)
+							clones = new List<QuoteChangeMessage>();
+
+						clones.Add(newQuoteMsg);
+					}
+
+					if (incrSubscriptionIds != null)
+					{
+						var ids = quoteMsg.GetSubscriptionIds().Except(incrSubscriptionIds).ToArray();
+
+						if (ids.Length > 0)
+						{
+							quoteMsg.SubscriptionId = 0;
+							quoteMsg.SubscriptionIds = ids;
+						}
+						else
+							message = null;
+					}
+
+					break;
+				}
+			}
+
+			if (message != null)
+				base.OnInnerAdapterNewOutMessage(message);
+
+			if (clones != null)
+			{
+				foreach (var clone in clones)
+					base.OnInnerAdapterNewOutMessage(clone);
+			}
 		}
 
 		/// <summary>
@@ -212,23 +201,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new OrderBookInrementMessageAdapter((IMessageAdapter)InnerAdapter.Clone()) { MaxDepth = MaxDepth };
-		}
-
-		/// <inheritdoc />
-		public override void Save(SettingsStorage storage)
-		{
-			base.Save(storage);
-
-			storage.SetValue(nameof(MaxDepth), MaxDepth);
-		}
-
-		/// <inheritdoc />
-		public override void Load(SettingsStorage storage)
-		{
-			base.Load(storage);
-			
-			MaxDepth = storage.GetValue<int?>(nameof(MaxDepth));
+			return new OrderBookInrementMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
 		}
 	}
 }
