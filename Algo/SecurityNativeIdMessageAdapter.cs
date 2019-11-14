@@ -339,7 +339,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new SecurityNativeIdMessageAdapter(InnerAdapter, Storage);
+			return new SecurityNativeIdMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), Storage);
 		}
 
 		private void ProcessMessage<TMessage>(SecurityId securityId, TMessage message, long originTransId, bool throwIfSecIdEmpty, Func<TMessage, TMessage, TMessage> processSuspend)

@@ -901,7 +901,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new SubscriptionMessageAdapter(InnerAdapter)
+			return new SubscriptionMessageAdapter((IMessageAdapter)InnerAdapter.Clone())
 			{
 				IsRestoreOnErrorReconnect = IsRestoreOnErrorReconnect,
 				IsRestoreOnNormalReconnect = IsRestoreOnNormalReconnect,

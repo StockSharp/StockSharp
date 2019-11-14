@@ -910,7 +910,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new StorageMessageAdapter(InnerAdapter, _storageRegistry, _snapshotRegistry, _candleBuilderProvider)
+			return new StorageMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), _storageRegistry, _snapshotRegistry, _candleBuilderProvider)
 			{
 				CacheBuildableCandles = CacheBuildableCandles,
 				DaysLoad = DaysLoad,

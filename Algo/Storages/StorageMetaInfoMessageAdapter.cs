@@ -349,7 +349,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new StorageMetaInfoMessageAdapter(InnerAdapter, _securityStorage, _positionStorage, _exchangeInfoProvider)
+			return new StorageMetaInfoMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), _securityStorage, _positionStorage, _exchangeInfoProvider)
 			{
 				OverrideSecurityData = OverrideSecurityData,
 			};

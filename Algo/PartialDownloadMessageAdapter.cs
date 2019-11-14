@@ -466,7 +466,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new PartialDownloadMessageAdapter(InnerAdapter);
+			return new PartialDownloadMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
 		}
 	}
 }

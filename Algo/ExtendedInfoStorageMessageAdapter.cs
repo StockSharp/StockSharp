@@ -69,7 +69,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new ExtendedInfoStorageMessageAdapter(InnerAdapter, _extendedInfoStorage, _storageName, _fields);
+			return new ExtendedInfoStorageMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), _extendedInfoStorage, _storageName, _fields);
 		}
 	}
 }
