@@ -14843,7 +14843,7 @@ DocStr10324;Augur;Augur
 DocStr10325;Aelf;Aelf
 DocStr10326;Withdraw types;Типы вывода
 DocStr10328;Candles series holder to create {0} instances;Кэш серий свечей для создания объектов {0}
-DocStr10329;Update candle by new message;Обновить свечу новым сообщением
+DocStr10329;Update candles by new message;Обновить свечи новым сообщением
 DocStr10330;Updated candle;Обновленная свеча
 DocStr10331;Candles holder to create {0} instances;Кэш свечей для создания объектов {0}
 DocStr10332;Create new series tracking;Создать новое отслеживание серии
