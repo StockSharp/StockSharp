@@ -459,6 +459,18 @@ namespace StockSharp.Algo
 				};
 			}
 
+			if (StorageRegistry != null)
+			{
+				adapter = new StorageMessageAdapter(adapter, StorageRegistry, SnapshotRegistry, CandleBuilderProvider)
+				{
+					FilterSubscription = StorageFilterSubscription,
+					Drive = StorageDrive,
+					DaysLoad = StorageDaysLoad,
+					Format = StorageFormat,
+					Mode = StorageMode,
+				};
+			}
+
 			if (SupportBuildingFromOrderLog)
 			{
 				adapter = new OrderLogMessageAdapter(adapter) { OwnInnerAdapter = true };
@@ -472,18 +484,6 @@ namespace StockSharp.Algo
 			if (SupportOrderBookTruncate)
 			{
 				adapter = new OrderBookTruncateMessageAdapter(adapter) { OwnInnerAdapter = true };
-			}
-
-			if (StorageRegistry != null)
-			{
-				adapter = new StorageMessageAdapter(adapter, StorageRegistry, SnapshotRegistry, CandleBuilderProvider)
-				{
-					FilterSubscription = StorageFilterSubscription,
-					Drive = StorageDrive,
-					DaysLoad = StorageDaysLoad,
-					Format = StorageFormat,
-					Mode = StorageMode,
-				};
 			}
 
 			if (SupportCandlesCompression)
