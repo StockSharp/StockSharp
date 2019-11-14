@@ -190,6 +190,13 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline
+		{
+			add => SafeGetConnector().MarketDataSubscriptionOnline += value;
+			remove => SafeGetConnector().MarketDataSubscriptionOnline -= value;
+		}
+
+		/// <inheritdoc />
 		public void LookupSecurities(SecurityLookupMessage criteria)
 		{
 			SafeGetConnector().LookupSecurities(criteria);

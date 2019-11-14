@@ -242,6 +242,9 @@ namespace StockSharp.Algo
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled;
 
 		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline;
+
+		/// <inheritdoc />
 		public event Action<ExchangeBoard, SessionStates> SessionStateChanged;
 
 		/// <inheritdoc />
@@ -288,6 +291,9 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public event Action<Subscription, Position> PositionReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription> SubscriptionOnline;
 
 		/// <summary>
 		/// Connection restored.
@@ -717,6 +723,17 @@ namespace StockSharp.Algo
 			MarketDataUnexpectedCancelled?.Invoke(security, message, error);
 		}
 
+		private void RaiseSubscriptionOnline(Subscription subscription)
+		{
+			SubscriptionOnline?.Invoke(subscription);
+		}
+
+		private void RaiseMarketDataSubscriptionOnline(Security security, MarketDataMessage message)
+		{
+			this.AddDebugLog(LocalizedStrings.SubscriptionOnline, security?.Id, message);
+			MarketDataSubscriptionOnline?.Invoke(security, message);
+		}
+
 		/// <summary>
 		/// To call the event <see cref="NewMessage"/>.
 		/// </summary>
@@ -786,11 +803,19 @@ namespace StockSharp.Algo
 
 			foreach (var id in message.GetSubscriptionIds())
 			{
-				if (!_subscriptions.TryGetValue(id, out var subscription))
-					continue;
+				var subscription = TryGetSubscription(id);
 
-				evt(subscription, entity);
+				if (subscription != null)
+					evt(subscription, entity);
 			}
+		}
+
+		private Subscription TryGetSubscription(long id)
+		{
+			if (!_subscriptions.TryGetValue(id, out var subscription))
+				this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
+
+			return subscription;
 		}
 	}
 }

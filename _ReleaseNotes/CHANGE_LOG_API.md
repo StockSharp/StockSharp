@@ -272,6 +272,7 @@ StockSharp API Change log
 * (feature) BasketMessageAdapter. Each connection uses own StorageMessageAdapter.
 * (feature) IPositionProvider. SubscribePositions filter by Portfolio added.
 * (feature) PortfolioLookupMessage. SecurityId filter added.
+* (feature) Connector. MarketDataSubscriptionOnline event added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

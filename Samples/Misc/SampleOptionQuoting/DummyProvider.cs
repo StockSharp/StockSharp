@@ -214,6 +214,12 @@ namespace SampleOptionQuoting
 			remove => throw new NotSupportedException();
 		}
 
+		event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionOnline
+		{
+			add => throw new NotSupportedException();
+			remove => throw new NotSupportedException();
+		}
+
 		void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria)
 		{
 			throw new NotSupportedException();

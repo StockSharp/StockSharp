@@ -760,6 +760,8 @@
 
 			event Action<Security, MarketDataFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished { add { } remove { } }
 			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnexpectedCancelled { add { } remove { } }
+
+			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionOnline { add { } remove { } }
 			
 			void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria) { }
 			void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria) { }

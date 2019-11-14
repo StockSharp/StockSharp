@@ -155,16 +155,16 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public Security TryGetSecurity(long originalTransactionId)
-			{
-				return _requests.TryGetValue(originalTransactionId)?.Item2;
-			}
+			public Tuple<MarketDataMessage, Security> TryGetRequest(long transId) => _requests.TryGetValue(transId);
+
+			public Security TryGetSecurity(long transId) => TryGetRequest(transId)?.Item2;
 
 			public Security ProcessResponse(MarketDataMessage response, out MarketDataMessage originalMsg, out bool unexpectedCancelled)
 			{
 				unexpectedCancelled = false;
 
-				if (!_requests.TryGetValue(response.OriginalTransactionId, out var tuple))
+				var tuple = TryGetRequest(response.OriginalTransactionId);
+				if (tuple == null)
 				{
 					originalMsg = null;
 					return null;

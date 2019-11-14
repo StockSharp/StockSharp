@@ -88,6 +88,11 @@ namespace StockSharp.Algo
 		event Action<Subscription, Position> PositionReceived;
 
 		/// <summary>
+		/// Subscription is online.
+		/// </summary>
+		event Action<Subscription> SubscriptionOnline;
+
+		/// <summary>
 		/// Subscribe.
 		/// </summary>
 		/// <param name="subscription">Subscription.</param>

@@ -258,6 +258,7 @@
 									// or sending further only live subscription
 									mdMsg.From = null;
 									mdMsg.To = null;
+									RaiseNewOutMessage(new MarketDataOnlineMessage { OriginalTransactionId = mdMsg.TransactionId });
 									break;
 								}
 							}
@@ -295,26 +296,30 @@
 				{
 					var partialMsg = (PartialDownloadMessage)message;
 
+					long? online = null;
+
 					lock (_syncObject)
 					{
-						lock (_syncObject)
+						if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
+							break;
+
+						var mdMsg = info.InitNext();
+
+						if (mdMsg.To == null)
 						{
-							if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
-								break;
+							online = mdMsg.TransactionId;
 
-							var mdMsg = info.InitNext();
-
-							if (mdMsg.To == null)
-							{
-								_original.Remove(partialMsg.OriginalTransactionId);
-								_partialRequests.RemoveWhere(p => p.Value == info);
-							}
-							else
-								_partialRequests.Add(info.CurrTransId, info);
-
-							message = mdMsg;
+							_original.Remove(partialMsg.OriginalTransactionId);
+							_partialRequests.RemoveWhere(p => p.Value == info);
 						}
+						else
+							_partialRequests.Add(info.CurrTransId, info);
+
+						message = mdMsg;
 					}
+
+					if (online != null)
+						RaiseNewOutMessage(new MarketDataOnlineMessage { OriginalTransactionId = online.Value });
 
 					break;
 				}

@@ -4402,7 +4402,8 @@ FileMaskDescription;File mask that uses for scanning in directory. For example, 
 IndicatorSelection;Indicator selection;Выбор индикатора
 SecuritiesNotFound;Securities '{0}' not found.;Инструменты '{0}' не найдены.
 CyclicDependency;Cyclic dependency of '{0}'.;Циклическая зависимость '{0}'.
-SubscriptionNonExist;Subscription does not exist.;Подписка не существует.
+SubscriptionNonExist;Subscription '{0}' does not exist.;Подписка '{0}' не существует.
+SubscriptionOnline;Subscription '{0}' for '{1}' is online.;Подписка '{0}' для '{1}' перешла в онлайн.
 CandleDownloadInterval;Sleep interval while batch candles downloading.;Интервал скачивания данных.
 DownloadSecurities;Download securities;Скачать инструменты
 NotSupportSecurityDownload;The source does not support automatically instruments downloading. Manually create an instrument?;Источник не предоставляет возможность автоматической загрузки инструментов. Создать инструмент напрямую?

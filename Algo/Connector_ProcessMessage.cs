@@ -702,6 +702,10 @@ namespace StockSharp.Algo
 						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
 						break;
 
+					case MessageTypes.MarketDataOnline:
+						ProcessMarketDataOnlineMessage((MarketDataOnlineMessage)message);
+						break;
+
 					case MessageTypes.ChangePassword:
 						ProcessChangePasswordMessage((ChangePasswordMessage)message);
 						break;
@@ -1845,6 +1849,18 @@ namespace StockSharp.Algo
 			var series = ProcessCandleSeriesStopped(message.OriginalTransactionId);
 			var security = series?.Security ?? _subscriptionManager.TryGetSecurity(message.OriginalTransactionId);
 			RaiseMarketDataSubscriptionFinished(security, message);
+		}
+
+		private void ProcessMarketDataOnlineMessage(MarketDataOnlineMessage message)
+		{
+			var tuple = _subscriptionManager.TryGetRequest(message.OriginalTransactionId);
+			if (tuple != null)
+				RaiseMarketDataSubscriptionOnline(tuple.Item2, tuple.Item1);
+
+			var subscription = TryGetSubscription(message.OriginalTransactionId);
+
+			if (subscription != null)
+				RaiseSubscriptionOnline(subscription);
 		}
 
 		private void ProcessChangePasswordMessage(ChangePasswordMessage message)
