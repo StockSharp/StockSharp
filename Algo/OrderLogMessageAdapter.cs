@@ -37,21 +37,19 @@
 				}
 
 				case MessageTypes.MarketData:
-					if (ProcessMarketDataRequest((MarketDataMessage)message))
-						return;
-
+					message = ProcessMarketDataRequest((MarketDataMessage)message);
 					break;
 			}
 
 			base.OnSendInMessage(message);
 		}
 
-		private bool ProcessMarketDataRequest(MarketDataMessage message)
+		private MarketDataMessage ProcessMarketDataRequest(MarketDataMessage message)
 		{
 			if (message.IsSubscribe)
 			{
 				if (!InnerAdapter.IsMarketDataTypeSupported(MarketDataTypes.OrderLog))
-					return false;
+					return message;
 
 				var isBuild = message.BuildMode == MarketDataBuildModes.Build && message.BuildFrom == MarketDataTypes.OrderLog;
 					
@@ -70,13 +68,10 @@
 
 							_subscriptionIds.Add(message.TransactionId, RefTuple.Create(secId, true, builder));
 
-							var clone = (MarketDataMessage)message.Clone();
-							clone.DataType = MarketDataTypes.OrderLog;
-							base.OnSendInMessage(clone);
+							message = (MarketDataMessage)message.Clone();
+							message.DataType = MarketDataTypes.OrderLog;
 
 							this.AddInfoLog("OL->MD subscribed {0}/{1}.", secId, message.TransactionId);
-
-							return true;
 						}
 
 						break;
@@ -90,13 +85,10 @@
 
 							_subscriptionIds.Add(message.TransactionId, RefTuple.Create(secId, false, (IOrderLogMarketDepthBuilder)null));
 
-							var clone = (MarketDataMessage)message.Clone();
-							clone.DataType = MarketDataTypes.OrderLog;
-							base.OnSendInMessage(clone);
+							message = (MarketDataMessage)message.Clone();
+							message.DataType = MarketDataTypes.OrderLog;
 
 							this.AddInfoLog("OL->TICK subscribed {0}/{1}.", secId, message.TransactionId);
-
-							return true;
 						}
 
 						break;
@@ -107,13 +99,11 @@
 			{
 				var tuple = _subscriptionIds.TryGetAndRemove(message.OriginalTransactionId);
 
-				if (tuple == null)
-					return false;
-
-				this.AddInfoLog("OL->{0} unsubscribed {1}/{2}.", tuple.Second ? "MD" : "TICK", tuple.First, message.OriginalTransactionId);
+				if (tuple != null)
+					this.AddInfoLog("OL->{0} unsubscribed {1}/{2}.", tuple.Second ? "MD" : "TICK", tuple.First, message.OriginalTransactionId);
 			}
 
-			return false;
+			return message;
 		}
 
 		/// <inheritdoc />

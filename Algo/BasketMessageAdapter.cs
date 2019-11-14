@@ -411,8 +411,6 @@ namespace StockSharp.Algo
 		{
 			adapter = new OriginalTransactionMessageAdapter(adapter);
 
-			adapter = new PartialDownloadMessageAdapter(adapter);
-
 			if (LatencyManager != null)
 			{
 				adapter = new LatencyMessageAdapter(adapter) { LatencyManager = LatencyManager.Clone(), OwnInnerAdapter = true };
@@ -443,20 +441,7 @@ namespace StockSharp.Algo
 				adapter = new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone(), OwnInnerAdapter = true };
 			}
 
-			if (SupportBuildingFromOrderLog)
-			{
-				adapter = new OrderLogMessageAdapter(adapter) { OwnInnerAdapter = true };
-			}
-
-			if (adapter.IsSupportOrderBookIncrements)
-			{
-				adapter = new OrderBookInrementMessageAdapter(adapter) { OwnInnerAdapter = true };
-			}
-
-			if (SupportOrderBookTruncate)
-			{
-				adapter = new OrderBookTruncateMessageAdapter(adapter) { OwnInnerAdapter = true };
-			}
+			adapter = new PartialDownloadMessageAdapter(adapter);
 
 			if (adapter.IsFullCandlesOnly)
 			{
@@ -472,6 +457,21 @@ namespace StockSharp.Algo
 					LookupTimeOut = TimeSpan.FromSeconds(20),
 					OwnInnerAdapter = true,
 				};
+			}
+
+			if (SupportBuildingFromOrderLog)
+			{
+				adapter = new OrderLogMessageAdapter(adapter) { OwnInnerAdapter = true };
+			}
+
+			if (adapter.IsSupportOrderBookIncrements)
+			{
+				adapter = new OrderBookInrementMessageAdapter(adapter) { OwnInnerAdapter = true };
+			}
+
+			if (SupportOrderBookTruncate)
+			{
+				adapter = new OrderBookTruncateMessageAdapter(adapter) { OwnInnerAdapter = true };
 			}
 
 			if (StorageRegistry != null)
@@ -493,7 +493,7 @@ namespace StockSharp.Algo
 
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
 			{
-				adapter = new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage, adapter.StorageName, adapter.SecurityExtendedFields) { OwnInnerAdapter = true };
+				adapter = new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage) { OwnInnerAdapter = true };
 			}
 
 			return adapter;
