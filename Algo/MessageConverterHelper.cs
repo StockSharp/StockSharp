@@ -1840,60 +1840,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Convert <see cref="DataType"/> to <see cref="MarketDataTypes"/> value.
-		/// </summary>
-		/// <param name="dataType">Data type info.</param>
-		/// <returns><see cref="MarketDataTypes"/> value or <see langword="null"/> if cannot be converted.</returns>
-		public static MarketDataTypes? ToMarketDataType(this DataType dataType)
-		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
-
-			if (dataType == DataType.Ticks)
-				return MarketDataTypes.Trades;
-			else if (dataType == DataType.Level1)
-				return MarketDataTypes.Level1;
-			else if (dataType == DataType.OrderLog)
-				return MarketDataTypes.OrderLog;
-			else if (dataType == DataType.MarketDepth)
-				return MarketDataTypes.MarketDepth;
-			else if (dataType == DataType.News)
-				return MarketDataTypes.News;
-			else if (dataType == DataType.Board)
-				return MarketDataTypes.Board;
-			else if (dataType.IsCandles)
-				return dataType.MessageType.ToCandleMarketDataType();
-			else
-				return null;
-		}
-
-		/// <summary>
-		/// Convert <see cref="MarketDataTypes"/> to <see cref="DataType"/> value.
-		/// </summary>
-		/// <param name="type">Market data type.</param>
-		/// <returns>Data type info.</returns>
-		public static DataType ToDataType(this MarketDataTypes type)
-		{
-			switch (type)
-			{
-				case MarketDataTypes.Level1:
-					return DataType.Level1;
-				case MarketDataTypes.MarketDepth:
-					return DataType.MarketDepth;
-				case MarketDataTypes.Trades:
-					return DataType.Ticks;
-				case MarketDataTypes.OrderLog:
-					return DataType.OrderLog;
-				case MarketDataTypes.News:
-					return DataType.News;
-				case MarketDataTypes.Board:
-					return DataType.Board;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-			}
-		}
-
-		/// <summary>
 		/// Convert <see cref="MarketDataTypes"/> to <see cref="MessageTypes"/> value.
 		/// </summary>
 		/// <param name="type"><see cref="MarketDataTypes"/> value.</param>

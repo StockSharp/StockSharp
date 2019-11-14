@@ -494,6 +494,9 @@ namespace StockSharp.Messages
 
 			if (dataType.IsCandles)
 			{
+				if (!this.IsMarketDataTypeSupported(dataType.ToMarketDataType().Value))
+					return TimeSpan.Zero;
+
 				if (dataType.MessageType == typeof(TimeFrameCandleMessage))
 				{
 					var tf = (TimeSpan)dataType.Arg;
@@ -503,14 +506,10 @@ namespace StockSharp.Messages
 
 					return TimeSpan.MaxValue;
 				}
-				else
-					return TimeSpan.FromDays(30);
 			}
-			else
-			{
-				// by default adapter do not provide historical data except candles
-				return TimeSpan.Zero;// TimeSpan.FromDays(1);
-			}
+
+			// by default adapter do not provide historical data except candles
+			return TimeSpan.Zero;
 		}
 
 		/// <inheritdoc />
