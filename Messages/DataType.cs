@@ -1,4 +1,4 @@
-namespace StockSharp.BusinessEntities
+namespace StockSharp.Messages
 {
 	using System;
 
@@ -7,7 +7,6 @@ namespace StockSharp.BusinessEntities
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Data type info.

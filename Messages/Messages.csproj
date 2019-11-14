@@ -96,6 +96,7 @@
     <Compile Include="ConnectMessage.cs" />
     <Compile Include="Currency.cs" />
     <Compile Include="CurrencyTypes.cs" />
+    <Compile Include="DataType.cs" />
     <Compile Include="DisconnectMessage.cs" />
     <Compile Include="ExecutionMessage.cs" />
     <Compile Include="Extensions.cs" />
