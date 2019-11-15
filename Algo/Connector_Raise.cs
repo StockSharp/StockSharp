@@ -675,6 +675,9 @@ namespace StockSharp.Algo
 			this.AddDebugLog(msg + ".");
 
 			MarketDataSubscriptionSucceeded?.Invoke(security, message);
+
+			if (message.IsOnline)
+				RaiseMarketDataSubscriptionOnline(security, message);
 		}
 
 		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage origin, MarketDataMessage reply)
@@ -732,6 +735,11 @@ namespace StockSharp.Algo
 		{
 			this.AddDebugLog(LocalizedStrings.SubscriptionOnline, security?.Id, message);
 			MarketDataSubscriptionOnline?.Invoke(security, message);
+
+			var subscription = TryGetSubscription(message.TransactionId);
+
+			if (subscription != null)
+				RaiseSubscriptionOnline(subscription);
 		}
 
 		/// <summary>

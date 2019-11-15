@@ -163,6 +163,7 @@
 		private readonly Dictionary<long, DownloadInfo> _original = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, DownloadInfo> _partialRequests = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, Tuple<long, DownloadInfo>> _unsubscribeRequests = new Dictionary<long, Tuple<long, DownloadInfo>>();
+		private readonly HashSet<long> _liveRequests = new HashSet<long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PartialDownloadMessageAdapter"/>.
@@ -185,6 +186,7 @@
 						_partialRequests.Clear();
 						_original.Clear();
 						_unsubscribeRequests.Clear();
+						_liveRequests.Clear();
 					}
 
 					break;
@@ -258,7 +260,8 @@
 									// or sending further only live subscription
 									mdMsg.From = null;
 									mdMsg.To = null;
-									RaiseNewOutMessage(new MarketDataOnlineMessage { OriginalTransactionId = mdMsg.TransactionId });
+
+									_liveRequests.Add(mdMsg.TransactionId);
 									break;
 								}
 							}
@@ -296,8 +299,6 @@
 				{
 					var partialMsg = (PartialDownloadMessage)message;
 
-					long? online = null;
-
 					lock (_syncObject)
 					{
 						if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
@@ -307,7 +308,7 @@
 
 						if (mdMsg.To == null)
 						{
-							online = mdMsg.TransactionId;
+							_liveRequests.Add(mdMsg.TransactionId);
 
 							_original.Remove(partialMsg.OriginalTransactionId);
 							_partialRequests.RemoveWhere(p => p.Value == info);
@@ -317,9 +318,6 @@
 
 						message = mdMsg;
 					}
-
-					if (online != null)
-						RaiseNewOutMessage(new MarketDataOnlineMessage { OriginalTransactionId = online.Value });
 
 					break;
 				}
@@ -339,6 +337,14 @@
 
 					lock (_syncObject)
 					{
+						if (_liveRequests.Contains(responseMsg.OriginalTransactionId))
+						{
+							_liveRequests.Remove(responseMsg.OriginalTransactionId);
+
+							responseMsg.IsOnline = true;
+							break;
+						}
+
 						long requestId;
 
 						if (!_partialRequests.TryGetValue(responseMsg.OriginalTransactionId, out var info))
