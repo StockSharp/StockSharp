@@ -718,6 +718,75 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Convert <see cref="MessageTypes"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <param name="execType">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this MessageTypes type, ExecutionTypes? execType = null)
+		{
+			switch (type)
+			{
+				case MessageTypes.Security:
+					return DataType.Securities;
+
+				case MessageTypes.Board:
+					return DataType.Board;
+
+				case MessageTypes.Portfolio:
+				case MessageTypes.PortfolioChange:
+				case MessageTypes.PositionChange:
+					return DataType.PositionChanges;
+
+				case MessageTypes.CandleTimeFrame:
+				case MessageTypes.CandlePnF:
+				case MessageTypes.CandleRange:
+				case MessageTypes.CandleRenko:
+				case MessageTypes.CandleTick:
+				case MessageTypes.CandleVolume:
+					return type.ToCandleMarketDataType().ToDataType();
+
+				case MessageTypes.News:
+					return DataType.News;
+
+				case MessageTypes.BoardState:
+					return DataType.Board;
+
+				case MessageTypes.Level1Change:
+					return DataType.Level1;
+
+				case MessageTypes.QuoteChange:
+					return DataType.MarketDepth;
+
+				case MessageTypes.Execution:
+					return execType.ToDataType();
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="ExecutionTypes"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this ExecutionTypes? type)
+		{
+			switch (type)
+			{
+				case ExecutionTypes.Tick:
+					return DataType.Ticks;
+				case ExecutionTypes.Transaction:
+					return DataType.Transactions;
+				case ExecutionTypes.OrderLog:
+					return DataType.OrderLog;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+			}
+		}
+
+		/// <summary>
 		/// Convert <see cref="DataType"/> to <see cref="MarketDataTypes"/> value.
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>
