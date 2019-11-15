@@ -8,11 +8,9 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class MarketDataFinishedMessage : Message
+	public class MarketDataFinishedMessage : Message, IOriginalTransactionIdMessage
 	{
-		/// <summary>
-		/// ID of the original message <see cref="MarketDataMessage.TransactionId"/> for which this message is a response.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 

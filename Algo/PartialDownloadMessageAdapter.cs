@@ -19,7 +19,7 @@
 		/// </summary>
 		[DataContract]
 		[Serializable]
-		private class PartialDownloadMessage : Message
+		private class PartialDownloadMessage : Message, IOriginalTransactionIdMessage
 		{
 			/// <summary>
 			/// Initializes a new instance of the <see cref="PartialDownloadMessage"/>.
@@ -29,9 +29,6 @@
 			{
 			}
 
-			/// <summary>
-			/// Transaction ID.
-			/// </summary>
 			[DataMember]
 			public long OriginalTransactionId { get; set; }
 

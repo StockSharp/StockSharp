@@ -5,13 +5,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The interface describing an message with <see cref="SubscriptionId"/> property.
 	/// </summary>
-	public interface ISubscriptionIdMessage
+	public interface ISubscriptionIdMessage : IOriginalTransactionIdMessage
 	{
-		/// <summary>
-		/// ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.
-		/// </summary>
-		long OriginalTransactionId { get; set; }
-
 		/// <summary>
 		/// Subscription id.
 		/// </summary>

@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Strategies.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class StrategyTypeMessage : Message
+	public class StrategyTypeMessage : Message, IOriginalTransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyTypeMessage"/>.
@@ -33,9 +33,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		[DataMember]
 		public string StrategyName { get; set; }
 
-		/// <summary>
-		/// ID of the original message <see cref="StrategyLookupMessage.TransactionId"/> for which this message is a response.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 

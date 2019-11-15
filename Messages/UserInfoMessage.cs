@@ -18,7 +18,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class UserInfoMessage : Message, ITransactionIdMessage
+	public class UserInfoMessage : Message, ITransactionIdMessage, IOriginalTransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
@@ -62,9 +62,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public long TransactionId { get; set; }
 
-		/// <summary>
-		/// ID of the original message <see cref="UserLookupMessage.TransactionId"/> for which this message is a response.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
