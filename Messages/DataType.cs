@@ -88,6 +88,19 @@ namespace StockSharp.Messages
 		/// <returns>Data type info.</returns>
 		public static DataType TimeFrame(TimeSpan tf) => Create(typeof(TimeFrameCandleMessage), tf).Immutable();
 
+		/// <summary>
+		/// Create data type info for <see cref="PortfolioMessage"/>.
+		/// </summary>
+		/// <param name="portfolioName">Portfolio name.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType Portfolio(string portfolioName)
+		{
+			if (portfolioName.IsEmpty())
+				throw new ArgumentNullException(nameof(portfolioName));
+
+			return Create(typeof(PortfolioMessage), portfolioName).Immutable();
+		}
+
 		private Type _messageType;
 
 		/// <summary>
