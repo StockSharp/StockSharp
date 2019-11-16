@@ -127,6 +127,7 @@
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
     <Compile Include="ISubscriptionProvider.cs" />
+    <Compile Include="LookupTrackingMessageAdapter.cs" />
     <Compile Include="Storages\Binary\BoardStateBinarySerializer.cs" />
     <Compile Include="Storages\Csv\BoardStateCsvSerializer.cs" />
     <Compile Include="Storages\IMessageStorageRegistry.cs" />
@@ -439,7 +440,7 @@
     <Compile Include="Strategies\Testing\EmulationMarketModes.cs" />
     <Compile Include="Strategies\Testing\EmulationSettings.cs" />
     <Compile Include="Strategies\TimeFrameStrategy.cs" />
-    <Compile Include="SubscriptionMessageAdapter.cs" />
+    <Compile Include="SubscriptionIdMessageAdapter.cs" />
     <Compile Include="Testing\ChangeTimeIntervalMessage.cs" />
     <Compile Include="Testing\CommissionRuleMessage.cs" />
     <Compile Include="Testing\HistorySourceMessage.cs" />

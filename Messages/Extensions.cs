@@ -1775,5 +1775,34 @@ namespace StockSharp.Messages
 
 			return execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog;
 		}
+
+		private static readonly PairSet<MessageTypes, MessageTypes> _lookupResults = new PairSet<MessageTypes, MessageTypes>
+		{
+			{ MessageTypes.SecurityLookup, MessageTypes.SecurityLookupResult },
+			{ MessageTypes.BoardLookup, MessageTypes.BoardLookupResult },
+			{ MessageTypes.TimeFrameLookup, MessageTypes.TimeFrameLookupResult },
+			{ MessageTypes.PortfolioLookup, MessageTypes.PortfolioLookupResult },
+			{ MessageTypes.UserLookup, MessageTypes.UserLookupResult },
+		};
+
+		/// <summary>
+		/// Convert lookup message type to result type.
+		/// </summary>
+		/// <param name="lookup">Lookup message type.</param>
+		/// <returns>Result message type.</returns>
+		public static MessageTypes ToResultType(this MessageTypes lookup)
+		{
+			return _lookupResults.GetValue(lookup);
+		}
+
+		/// <summary>
+		/// Convert result message type to lookup type.
+		/// </summary>
+		/// <param name="result">Result message type.</param>
+		/// <returns>Lookup message type.</returns>
+		public static MessageTypes ToLookupType(this MessageTypes result)
+		{
+			return _lookupResults.GetKey(result);
+		}
 	}
 }

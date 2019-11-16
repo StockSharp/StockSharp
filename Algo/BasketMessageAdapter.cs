@@ -276,14 +276,20 @@ namespace StockSharp.Algo
 		public override MessageAdapterCategories Categories => GetSortedAdapters().Select(a => a.Categories).JoinMask();
 
 		/// <summary>
-		/// <see cref="SubscriptionMessageAdapter.IsRestoreOnErrorReconnect"/>.
+		/// Restore subscription on reconnect.
 		/// </summary>
-		public bool IsRestoreSubscriptionOnErrorReconnect { get; set; }
+		/// <remarks>
+		/// Error case like connection lost etc.
+		/// </remarks>
+		public bool IsRestoreSubscriptionOnErrorReconnect { get; set; } = true;
 
 		/// <summary>
-		/// <see cref="SubscriptionMessageAdapter.IsRestoreOnNormalReconnect"/>.
+		/// Restore subscription on reconnect.
 		/// </summary>
-		public bool IsRestoreSubscriptionOnNormalReconnect { get; set; }
+		/// <remarks>
+		/// Normal case connect/disconnect.
+		/// </remarks>
+		public bool IsRestoreSubscriptionOnNormalReconnect { get; set; } = true;
 
 		/// <summary>
 		/// Suppress reconnecting errors.
@@ -414,6 +420,11 @@ namespace StockSharp.Algo
 				adapter = new LatencyMessageAdapter(adapter) { LatencyManager = LatencyManager.Clone(), OwnInnerAdapter = true };
 			}
 
+			if (SlippageManager != null)
+			{
+				adapter = new SlippageMessageAdapter(adapter) { SlippageManager = SlippageManager.Clone(), OwnInnerAdapter = true };
+			}
+
 			if (adapter.IsNativeIdentifiers)
 			{
 				adapter = new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage) { OwnInnerAdapter = true };
@@ -422,11 +433,6 @@ namespace StockSharp.Algo
 			if (SecurityMappingStorage != null)
 			{
 				adapter = new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage) { OwnInnerAdapter = true };
-			}
-
-			if (SlippageManager != null)
-			{
-				adapter = new SlippageMessageAdapter(adapter) { SlippageManager = SlippageManager.Clone(), OwnInnerAdapter = true };
 			}
 
 			if (PnLManager != null && !adapter.IsSupportExecutionsPnL)
@@ -439,28 +445,26 @@ namespace StockSharp.Algo
 				adapter = new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone(), OwnInnerAdapter = true };
 			}
 
-			adapter = new PartialDownloadMessageAdapter(adapter);
+			if (adapter.IsSupportSubscriptions)
+			{
+				adapter = new SubscriptionIdMessageAdapter(adapter) { OwnInnerAdapter = true };
+			}
+
+			adapter = new PartialDownloadMessageAdapter(adapter) { OwnInnerAdapter = true };
 
 			if (adapter.IsFullCandlesOnly)
 			{
 				adapter = new CandleHolderMessageAdapter(adapter) { OwnInnerAdapter = true };
 			}
 
-			if (adapter.IsSupportSubscriptions)
-			{
-				adapter = new SubscriptionMessageAdapter(adapter)
-				{
-					IsRestoreOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
-					IsRestoreOnNormalReconnect = IsRestoreSubscriptionOnNormalReconnect,
-					LookupTimeOut = TimeSpan.FromSeconds(20),
-					OwnInnerAdapter = true,
-				};
-			}
+			adapter = new LookupTrackingMessageAdapter(adapter) { OwnInnerAdapter = true };
 
 			if (StorageRegistry != null)
 			{
 				adapter = new StorageMessageAdapter(adapter, StorageRegistry, SnapshotRegistry, CandleBuilderProvider)
 				{
+					OwnInnerAdapter = true,
+
 					FilterSubscription = StorageFilterSubscription,
 					Drive = StorageDrive,
 					DaysLoad = StorageDaysLoad,
