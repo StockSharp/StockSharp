@@ -56,9 +56,9 @@ namespace StockSharp.Algo.Strategies
 			SafeGetConnector().SubscribePositions(security, portfolio, from, to, count, adapter);
 		}
 
-		void IPositionProvider.UnSubscribePositions()
+		void IPositionProvider.UnSubscribePositions(long originalTransactionId)
 		{
-			SafeGetConnector().UnSubscribePositions();
+			SafeGetConnector().UnSubscribePositions(originalTransactionId);
 		}
 
 		Portfolio IPortfolioProvider.GetPortfolio(string name)
@@ -185,9 +185,9 @@ namespace StockSharp.Algo.Strategies
 			SafeGetConnector().SubscribeOrders(security, from, to, count, adapter);
 		}
 
-		void ITransactionProvider.UnSubscribeOrders()
+		void ITransactionProvider.UnSubscribeOrders(long originalTransactionId)
 		{
-			SafeGetConnector().UnSubscribeOrders();
+			SafeGetConnector().UnSubscribeOrders(originalTransactionId);
 		}
 
 		void ITransactionProvider.CancelOrders(bool? isStopOrder, Portfolio portfolio, Sides? direction, ExchangeBoard board, Security security, SecurityTypes? securityType, long? transactionId)

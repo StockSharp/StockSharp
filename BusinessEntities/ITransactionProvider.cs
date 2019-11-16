@@ -129,7 +129,8 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Unsubscribe from orders changes.
 		/// </summary>
-		void UnSubscribeOrders();
+		/// <param name="originalTransactionId">ID of the original message <see cref="SubscribeOrders"/> for which this message is a response.</param>
+		void UnSubscribeOrders(long originalTransactionId = 0);
 
 		/// <summary>
 		/// Register new order.

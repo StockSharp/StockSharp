@@ -475,12 +475,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void UnSubscribeOrders()
+		public void UnSubscribeOrders(long originalTransactionId = 0)
 		{
 			var lookupMsg = new OrderStatusMessage
 			{
 				IsSubscribe = false,
 				TransactionId = TransactionIdGenerator.GetNextId(),
+				OriginalTransactionId = originalTransactionId,
 			};
 
 			this.AddInfoLog(nameof(UnSubscribeOrders));
@@ -577,11 +578,11 @@ namespace StockSharp.Algo
 			}
 			else if (subscription.DataType == DataType.Transactions)
 			{
-				UnSubscribeOrders();
+				UnSubscribeOrders(transId);
 			}
 			else if (subscription.DataType == DataType.PositionChanges)
 			{
-				UnSubscribePositions();
+				UnSubscribePositions(transId);
 			}
 			else
 				throw new ArgumentOutOfRangeException(nameof(subscription), subscription.DataType, LocalizedStrings.Str1219);
@@ -590,6 +591,8 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public virtual void RequestNewsStory(News news, IMessageAdapter adapter = null)
 		{
+			this.AddInfoLog(nameof(RequestNewsStory));
+
 			if (news == null)
 				throw new ArgumentNullException(nameof(news));
 
@@ -616,6 +619,8 @@ namespace StockSharp.Algo
 		public virtual void SubscribeCandles(CandleSeries series, DateTimeOffset? from = null, DateTimeOffset? to = null,
 			long? count = null, long? transactionId = null, IDictionary<string, object> extensionInfo = null, IMessageAdapter adapter = null)
 		{
+			this.AddInfoLog(nameof(SubscribeCandles));
+
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
@@ -635,6 +640,8 @@ namespace StockSharp.Algo
 		/// <param name="series">Candles series.</param>
 		public virtual void UnSubscribeCandles(CandleSeries series)
 		{
+			this.AddInfoLog(nameof(UnSubscribeCandles));
+
 			var originalTransId = _entityCache.TryGetTransactionId(series);
 
 			if (originalTransId == 0)
@@ -649,6 +656,8 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void SubscribePositions(Security security = null, Portfolio portfolio = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
+			this.AddInfoLog(nameof(SubscribePositions));
+
 			var msg = new PortfolioLookupMessage
 			{
 				Adapter = adapter,
@@ -662,21 +671,20 @@ namespace StockSharp.Algo
 			
 			_portfolioLookups.Add(msg.TransactionId, new LookupInfo<PortfolioLookupMessage, Portfolio>(msg));
 
-			this.AddInfoLog(nameof(SubscribePositions));
 			SendInMessage(msg);
 		}
 
 		/// <inheritdoc />
-		public void UnSubscribePositions()
+		public void UnSubscribePositions(long originalTransactionId = 0)
 		{
-			var msg = new PortfolioLookupMessage
+			this.AddInfoLog(nameof(UnSubscribePositions));
+
+			SendInMessage(new PortfolioLookupMessage
 			{
 				IsSubscribe = false,
 				TransactionId = TransactionIdGenerator.GetNextId(),
-			};
-
-			this.AddInfoLog(nameof(UnSubscribePositions));
-			SendInMessage(msg);
+				OriginalTransactionId = originalTransactionId
+			});
 		}
 	}
 }

@@ -49,6 +49,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Unsubscribe from positions changes.
 		/// </summary>
-		void UnSubscribePositions();
+		/// <param name="originalTransactionId">ID of the original message <see cref="SubscribePositions"/> for which this message is a response.</param>
+		void UnSubscribePositions(long originalTransactionId = 0);
 	}
 }
