@@ -122,9 +122,9 @@ namespace StockSharp.Algo
 		}
 
 		private readonly SynchronizedDictionary<long, MarketDataMessage> _subscriptionMessages = new SynchronizedDictionary<long, MarketDataMessage>();
-		private readonly SynchronizedDictionary<long, IMessageAdapter> _subscriptionsById = new SynchronizedDictionary<long, IMessageAdapter>();
+		private readonly SynchronizedDictionary<long, Tuple<IMessageAdapter, MarketDataMessage>> _subscriptionsById = new SynchronizedDictionary<long, Tuple<IMessageAdapter, MarketDataMessage>>();
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _subscriptionNonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
-		private readonly SynchronizedDictionary<Helper.SubscriptionKey, IMessageAdapter> _subscriptionsByKey = new SynchronizedDictionary<Helper.SubscriptionKey, IMessageAdapter>();
+		private readonly SynchronizedDictionary<Helper.SubscriptionKey, long> _keysToTransId = new SynchronizedDictionary<Helper.SubscriptionKey, long>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _activeAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly SyncObject _connectedResponseLock = new SyncObject();
 		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
@@ -405,7 +405,7 @@ namespace StockSharp.Algo
 
 			_activeAdapters.Clear();
 			_subscriptionsById.Clear();
-			_subscriptionsByKey.Clear();
+			_keysToTransId.Clear();
 			_subscriptionMessages.Clear();
 			_newsBoardSubscriptions.Clear();
 			_lookups.Clear();
@@ -607,9 +607,9 @@ namespace StockSharp.Algo
 				}
 
 				case MessageTypes.Portfolio:
-				case MessageTypes.PortfolioChange:
+				//case MessageTypes.PortfolioChange:
 				{
-					var pfMsg = (IPortfolioNameMessage)message;
+					var pfMsg = (PortfolioMessage)message;
 					ProcessPortfolioMessage(pfMsg.PortfolioName, message);
 					break;
 				}
@@ -955,11 +955,32 @@ namespace StockSharp.Algo
 
 				default:
 				{
-					var key = mdMsg.CreateKey();
+					IMessageAdapter adapter;
 
-					var adapter = mdMsg.IsSubscribe
-							? GetSubscriptionAdapters(mdMsg).FirstOrDefault()
-							: (_subscriptionsById.TryGetValue(mdMsg.OriginalTransactionId) ?? _subscriptionsByKey.TryGetValue(key));
+					if (mdMsg.IsSubscribe)
+						adapter = GetSubscriptionAdapters(mdMsg).FirstOrDefault();
+					else
+					{
+						var originTransId = mdMsg.OriginalTransactionId;
+
+						if (originTransId == 0)
+							originTransId = _keysToTransId.TryGetValue(mdMsg.CreateKey());
+
+						var tuple = _subscriptionsById.TryGetValue(originTransId);
+
+						if (tuple == null)
+							adapter = null;
+						else
+						{
+							adapter = tuple.Item1;
+
+							// copy full subscription's details into unsubscribe request
+							var transId = mdMsg.TransactionId;
+							tuple.Item2?.CopyTo(mdMsg);
+							mdMsg.TransactionId = transId;
+							mdMsg.OriginalTransactionId = originTransId;
+						}
+					}
 
 					if (adapter != null)
 					{
@@ -1262,7 +1283,7 @@ namespace StockSharp.Algo
 			if (originMsg == null)
 			{
 				if (_subscriptionListRequests.Contains(originalTransactionId))
-					_subscriptionsById.TryAdd(message.TransactionId, adapter);
+					_subscriptionsById.TryAdd(message.TransactionId, Tuple.Create(adapter, (MarketDataMessage)null));
 
 				SendOutMessage(message);
 				return;
@@ -1336,13 +1357,13 @@ namespace StockSharp.Algo
 				return;
 			}
 			
-			if (message.Error == null && isSubscribe)
+			if (message.Error == null && isSubscribe && originMsg.To == null)
 			{
 				// we can initiate multiple subscriptions with unique request id and same params
-				_subscriptionsByKey.TryAdd(key, adapter);
+				_keysToTransId.TryAdd(key, originalTransactionId);
 
 				// TODO
-				_subscriptionsById.TryAdd(originalTransactionId, adapter);
+				_subscriptionsById.TryAdd(originalTransactionId, Tuple.Create(adapter, originMsg));
 			}
 
 			RaiseMarketDataMessage(adapter, originalTransactionId, message.Error, isSubscribe);
@@ -1513,7 +1534,12 @@ namespace StockSharp.Algo
 				SupportOffline = SupportOffline,
 				IgnoreExtraAdapters = IgnoreExtraAdapters,
 				LookupMessagesOnConnect = LookupMessagesOnConnect,
-				NativeIdStorage = NativeIdStorage
+				NativeIdStorage = NativeIdStorage,
+				StorageDaysLoad = StorageDaysLoad,
+				StorageMode = StorageMode,
+				StorageFormat = StorageFormat,
+				StorageDrive = StorageDrive,
+				StorageFilterSubscription = StorageFilterSubscription,
 			};
 
 			clone.Load(this.Save());
