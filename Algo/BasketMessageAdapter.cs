@@ -124,7 +124,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<long, MarketDataMessage> _subscriptionMessages = new SynchronizedDictionary<long, MarketDataMessage>();
 		private readonly SynchronizedDictionary<long, Tuple<IMessageAdapter, MarketDataMessage>> _subscriptionsById = new SynchronizedDictionary<long, Tuple<IMessageAdapter, MarketDataMessage>>();
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _subscriptionNonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
-		private readonly SynchronizedDictionary<Helper.SubscriptionKey, long> _keysToTransId = new SynchronizedDictionary<Helper.SubscriptionKey, long>();
+		private readonly SynchronizedDictionary<Helper.SubscriptionKey, long> _subscriptionKeysToTransId = new SynchronizedDictionary<Helper.SubscriptionKey, long>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _activeAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly SyncObject _connectedResponseLock = new SyncObject();
 		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
@@ -132,7 +132,7 @@ namespace StockSharp.Algo
 		private readonly Queue<Message> _pendingMessages = new Queue<Message>();
 		private readonly HashSet<IMessageAdapter> _connectedAdapters = new HashSet<IMessageAdapter>();
 		private readonly InnerAdapterList _innerAdapters;
-		private readonly SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>> _newsBoardSubscriptions = new SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>>();
+		private readonly SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>> _parentToChildIds = new SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>>();
 		private readonly SynchronizedDictionary<Tuple<MessageTypes, long>, HashSet<IMessageAdapter>> _lookups = new SynchronizedDictionary<Tuple<MessageTypes, long>, HashSet<IMessageAdapter>>();
 
 		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
@@ -405,9 +405,9 @@ namespace StockSharp.Algo
 
 			_activeAdapters.Clear();
 			_subscriptionsById.Clear();
-			_keysToTransId.Clear();
+			_subscriptionKeysToTransId.Clear();
 			_subscriptionMessages.Clear();
-			_newsBoardSubscriptions.Clear();
+			_parentToChildIds.Clear();
 			_lookups.Clear();
 			_subscriptionListRequests.Clear();
 			_subscribedPortfolios.Clear();
@@ -855,6 +855,53 @@ namespace StockSharp.Algo
 			return adapters;
 		}
 
+		private Dictionary<IMessageAdapter, Tuple<long, long>> ToChild(ISubscriptionMessage subscrMsg, IMessageAdapter[] adapters)
+		{
+			// sending to inner adapters unique child requests
+
+			var dict = new Dictionary<IMessageAdapter, Tuple<long, long>>();
+
+			if (subscrMsg.IsSubscribe)
+			{
+				lock (_parentToChildIds.SyncRoot)
+				{
+					foreach (var adapter in adapters)
+					{
+						var transId = TransactionIdGenerator.GetNextId();
+
+						dict.Add(adapter, Tuple.Create(transId, transId));
+
+						_parentToChildIds.Add(transId, RefTuple.Create(subscrMsg.TransactionId, (bool?)null, adapter));
+					}
+				}
+			}
+			else
+			{
+				lock (_parentToChildIds.SyncRoot)
+				{
+					foreach (var pair in _parentToChildIds.Where(p => p.Value.Second == true))
+					{
+						var adapter = pair.Value.Third;
+
+						var transId = TransactionIdGenerator.GetNextId();
+
+						dict.Add(adapter, Tuple.Create(transId, pair.Value.First));
+
+						_parentToChildIds.Add(transId, RefTuple.Create(subscrMsg.TransactionId, (bool?)null, adapter));
+					}
+				}
+			}
+
+			return dict;
+		}
+
+		private void SendMarketDataRequest(MarketDataMessage mdMsg, IMessageAdapter adapter)
+		{
+			// if the message was looped back via IsBack=true
+			_subscriptionMessages.TryAdd(mdMsg.TransactionId, mdMsg);
+			adapter.SendInMessage(mdMsg);
+		}
+
 		private void ProcessMarketDataRequest(MarketDataMessage mdMsg)
 		{
 			switch (mdMsg.DataType)
@@ -862,55 +909,26 @@ namespace StockSharp.Algo
 				case MarketDataTypes.News:
 				case MarketDataTypes.Board:
 				{
-					var dict = new Dictionary<IMessageAdapter, long>();
+					IMessageAdapter[] adapters = null;
 
 					if (mdMsg.IsSubscribe)
 					{
-						var adapters = GetSubscriptionAdapters(mdMsg);
+						adapters = GetSubscriptionAdapters(mdMsg);
 
 						if (adapters.Length == 0)
 						{
 							SendOutMarketDataNotSupported(mdMsg.TransactionId);
 							break;
 						}
-
-						lock (_newsBoardSubscriptions.SyncRoot)
-						{
-							foreach (var adapter in adapters)
-							{
-								var transId = TransactionIdGenerator.GetNextId();
-
-								dict.Add(adapter, transId);
-
-								_newsBoardSubscriptions.Add(transId, RefTuple.Create(mdMsg.TransactionId, (bool?)null, adapter));
-							}
-						}
 					}
-					else
-					{
-						lock (_newsBoardSubscriptions.SyncRoot)
-						{
-							var adapters = _newsBoardSubscriptions.Select(p => p.Value.Third).Where(a => a != null).ToArray();
-
-							foreach (var adapter in adapters)
-							{
-								var transId = TransactionIdGenerator.GetNextId();
-
-								dict.Add(adapter, transId);
-
-								_newsBoardSubscriptions.Add(transId, RefTuple.Create(mdMsg.TransactionId, (bool?)null, adapter));
-							}
-						}
-					}
-
-					// sending to inner adapters unique subscriptions
-					foreach (var pair in dict)
+					
+					foreach (var pair in ToChild(mdMsg, adapters))
 					{
 						var clone = (MarketDataMessage)mdMsg.Clone();
-						clone.TransactionId = pair.Value;
+						clone.TransactionId = pair.Value.Item1;
+						clone.OriginalTransactionId = pair.Value.Item2;
 
-						_subscriptionMessages.Add(pair.Value, clone);
-						pair.Key.SendInMessage(clone);
+						SendMarketDataRequest(clone, pair.Key);
 					}
 
 					break;
@@ -927,7 +945,7 @@ namespace StockSharp.Algo
 						var originTransId = mdMsg.OriginalTransactionId;
 
 						if (originTransId == 0)
-							originTransId = _keysToTransId.TryGetValue(mdMsg.CreateKey());
+							originTransId = _subscriptionKeysToTransId.TryGetValue(mdMsg.CreateKey());
 
 						var tuple = _subscriptionsById.TryGetValue(originTransId);
 
@@ -947,9 +965,7 @@ namespace StockSharp.Algo
 
 					if (adapter != null)
 					{
-						// if the message was looped back via IsBack=true
-						_subscriptionMessages.TryAdd(mdMsg.TransactionId, (MarketDataMessage)mdMsg.Clone());
-						adapter.SendInMessage(mdMsg);
+						SendMarketDataRequest((MarketDataMessage)mdMsg.Clone(), adapter);
 					}
 					else
 					{
@@ -1244,14 +1260,14 @@ namespace StockSharp.Algo
 				long? transId;
 				var allError = true;
 
-				lock (_newsBoardSubscriptions.SyncRoot)
+				lock (_parentToChildIds.SyncRoot)
 				{
-					var tuple = _newsBoardSubscriptions.TryGetValue(originalTransactionId);
+					var tuple = _parentToChildIds.TryGetValue(originalTransactionId);
 
 					transId = tuple.First;
 					tuple.Second = message.IsOk();
 
-					foreach (var pair in _newsBoardSubscriptions)
+					foreach (var pair in _parentToChildIds)
 					{
 						var t = pair.Value;
 
@@ -1308,7 +1324,7 @@ namespace StockSharp.Algo
 			if (message.Error == null && isSubscribe && originMsg.To == null)
 			{
 				// we can initiate multiple subscriptions with unique request id and same params
-				_keysToTransId.TryAdd(key, originalTransactionId);
+				_subscriptionKeysToTransId.TryAdd(key, originalTransactionId);
 
 				// TODO
 				_subscriptionsById.TryAdd(originalTransactionId, Tuple.Create(adapter, originMsg));
