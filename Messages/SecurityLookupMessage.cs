@@ -30,9 +30,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	public class SecurityLookupMessage : SecurityMessage, ITransactionIdMessage
 	{
-		/// <summary>
-		/// Transaction ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
 		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]

@@ -28,9 +28,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	public abstract class OrderMessage : SecurityMessage, ITransactionIdMessage
 	{
-		/// <summary>
-		/// Transaction ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
 		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]

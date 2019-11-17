@@ -1,11 +1,16 @@
 namespace StockSharp.Algo
 {
+	using System;
+	using System.Runtime.Serialization;
+
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// The message, containing security id to remove.
 	/// </summary>
-	public class SecurityRemoveMessage : Message
+	[DataContract]
+	[Serializable]
+	public class SecurityRemoveMessage : Message, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityRemoveMessage"/>.
@@ -15,9 +20,8 @@ namespace StockSharp.Algo
 		{
 		}
 
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
+		[DataMember]
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>

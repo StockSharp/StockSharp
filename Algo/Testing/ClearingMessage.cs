@@ -15,6 +15,9 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Testing
 {
+	using System;
+	using System.Runtime.Serialization;
+
 	using Ecng.Common;
 
 	using StockSharp.Messages;
@@ -22,16 +25,18 @@ namespace StockSharp.Algo.Testing
 	/// <summary>
 	/// The message about performing clearing on exchange.
 	/// </summary>
-	public class ClearingMessage : Message
+	[DataContract]
+	[Serializable]
+	public class ClearingMessage : Message, ISecurityIdMessage
 	{
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
+		[DataMember]
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
 		/// Shall order book be cleared.
 		/// </summary>
+		[DataMember]
 		public bool ClearMarketDepth { get; set; }
 
 		/// <summary>

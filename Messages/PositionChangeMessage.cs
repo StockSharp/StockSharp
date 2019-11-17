@@ -177,9 +177,7 @@ namespace StockSharp.Messages
 	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
 	public sealed class PositionChangeMessage : BasePositionChangeMessage, ISecurityIdMessage
 	{
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
 		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
