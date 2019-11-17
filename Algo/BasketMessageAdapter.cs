@@ -671,49 +671,14 @@ namespace StockSharp.Algo
 
 			if (adapters.Length == 0)
 			{
-				switch (message.Type)
-				{
-					case MessageTypes.SecurityLookup:
-						SendOutMessage(new SecurityLookupResultMessage
-						{
-							OriginalTransactionId = ((SecurityLookupMessage)message).TransactionId,
-						});
-
-						break;
-
-					case MessageTypes.BoardLookup:
-						SendOutMessage(new BoardLookupResultMessage
-						{
-							OriginalTransactionId = ((BoardLookupMessage)message).TransactionId,
-						});
-
-						break;
-
-					case MessageTypes.PortfolioLookup:
-						SendOutMessage(new PortfolioLookupResultMessage
-						{
-							OriginalTransactionId = ((PortfolioLookupMessage)message).TransactionId,
-						});
-
-						break;
-				}
+				if (message.Type.IsLookup())
+					SendOutMessage(message.Type.ToResultType().CreateLookupResult(((ITransactionIdMessage)message).TransactionId));
 			}
 			else
 			{
-				Tuple<MessageTypes, long> key = null;
-
-				switch (message.Type)
-				{
-					case MessageTypes.SecurityLookup:
-						key = Tuple.Create(MessageTypes.SecurityLookupResult, ((SecurityLookupMessage)message).TransactionId);
-						break;
-					case MessageTypes.BoardLookup:
-						key = Tuple.Create(MessageTypes.BoardLookupResult, ((BoardLookupMessage)message).TransactionId);
-						break;
-					case MessageTypes.PortfolioLookup:
-						key = Tuple.Create(MessageTypes.PortfolioLookupResult, ((PortfolioLookupMessage)message).TransactionId);
-						break;
-				}
+				var key = message.Type.IsLookup()
+					? Tuple.Create(message.Type.ToResultType(), ((ITransactionIdMessage)message).TransactionId)
+					: null;
 
 				if (key != null && key.Item2 != 0)
 				{
@@ -1076,10 +1041,8 @@ namespace StockSharp.Algo
 						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, null, innerAdapter.GetUnderlyingAdapter().Id);
 						break;
 
-					case MessageTypes.SecurityLookupResult:
-					case MessageTypes.PortfolioLookupResult:
-					case MessageTypes.BoardLookupResult:
-						if (!CanProcessLookupResult(innerAdapter.GetUnderlyingAdapter(), message))
+					default:
+						if (message.Type.IsLookupResult() && !CanProcessLookupResult(innerAdapter.GetUnderlyingAdapter(), message))
 							return;
 
 						break;
@@ -1097,20 +1060,7 @@ namespace StockSharp.Algo
 
 		private bool CanProcessLookupResult(IMessageAdapter innerAdapter, Message message)
 		{
-			var transId = 0L;
-
-			switch (message.Type)
-			{
-				case MessageTypes.SecurityLookupResult:
-					transId = ((SecurityLookupResultMessage)message).OriginalTransactionId;
-					break;
-				case MessageTypes.PortfolioLookupResult:
-					transId = ((PortfolioLookupResultMessage)message).OriginalTransactionId;
-					break;
-				case MessageTypes.BoardLookupResult:
-					transId = ((BoardLookupResultMessage)message).OriginalTransactionId;
-					break;
-			}
+			var transId = ((IOriginalTransactionIdMessage)message).OriginalTransactionId;
 
 			if (transId == 0)
 				return true;

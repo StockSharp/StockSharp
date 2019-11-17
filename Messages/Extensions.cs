@@ -1804,5 +1804,44 @@ namespace StockSharp.Messages
 		{
 			return _lookupResults.GetKey(result);
 		}
+
+		/// <summary>
+		/// Determines the specified type is lookup message.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsLookup(this MessageTypes type) => _lookupResults.ContainsKey(type);
+		
+		/// <summary>
+		/// Determines the specified type is lookup result message.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsLookupResult(this MessageTypes type) => _lookupResults.ContainsValue(type);
+
+		/// <summary>
+		/// Create message by the specified type.
+		/// </summary>
+		/// <param name="type">Result message type.</param>
+		/// <param name="id">ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.</param>
+		/// <returns>Message.</returns>
+		public static Message CreateLookupResult(this MessageTypes type, long id)
+		{
+			switch (type)
+			{
+				case MessageTypes.SecurityLookupResult:
+					return new SecurityLookupResultMessage { OriginalTransactionId = id };
+				case MessageTypes.PortfolioLookupResult:
+					return new PortfolioLookupResultMessage { OriginalTransactionId = id };
+				case MessageTypes.TimeFrameLookupResult:
+					return new TimeFrameLookupResultMessage { OriginalTransactionId = id };
+				case MessageTypes.BoardLookupResult:
+					return new BoardLookupResultMessage { OriginalTransactionId = id };
+				case MessageTypes.UserLookupResult:
+					return new UserLookupResultMessage { OriginalTransactionId = id };
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type));
+			}
+		}
 	}
 }

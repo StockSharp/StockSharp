@@ -95,27 +95,7 @@ namespace StockSharp.Algo
 			public LookupInfo(MessageTypes resultType)
 			{
 				ResultType = resultType;
-
-				switch (ResultType)
-				{
-					case MessageTypes.SecurityLookupResult:
-						_createResult = id => new SecurityLookupResultMessage { OriginalTransactionId = id };
-						break;
-					case MessageTypes.PortfolioLookup:
-						_createResult = id => new PortfolioLookupResultMessage { OriginalTransactionId = id };
-						break;
-					case MessageTypes.TimeFrameLookup:
-						_createResult = id => new TimeFrameLookupResultMessage { OriginalTransactionId = id };
-						break;
-					case MessageTypes.BoardLookup:
-						_createResult = id => new BoardLookupResultMessage { OriginalTransactionId = id };
-						break;
-					case MessageTypes.UserLookup:
-						_createResult = id => new UserLookupResultMessage { OriginalTransactionId = id };
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(resultType));
-				}
+				_createResult = id => resultType.CreateLookupResult(id);
 			}
 
 			public MessageTypes ResultType { get; }
@@ -171,11 +151,8 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				case MessageTypes.SecurityLookup:
-				case MessageTypes.BoardLookup:
-				case MessageTypes.TimeFrameLookup:
-				case MessageTypes.PortfolioLookup:
-					if (!ProcessLookupMessage(message, message.Type))
+				default:
+					if (message.Type.IsLookup() && !ProcessLookupMessage(message))
 						return;
 
 					break;
@@ -184,7 +161,7 @@ namespace StockSharp.Algo
 			base.OnSendInMessage(message);
 		}
 
-		private bool ProcessLookupMessage(Message message, MessageTypes type)
+		private bool ProcessLookupMessage(Message message)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -195,7 +172,7 @@ namespace StockSharp.Algo
 
 			lock (_lookups.SyncRoot)
 			{
-				info = _lookups.SafeAdd(type, key => new LookupInfo(type.ToResultType()));
+				info = _lookups.SafeAdd(message.Type, key => new LookupInfo(message.Type.ToResultType()));
 
 				// not prev queued lookup
 				if (info.LookupQueue.All(msg => msg.TransactionId != transId))
@@ -229,43 +206,40 @@ namespace StockSharp.Algo
 				case MessageTypes.Portfolio:
 					_lookups.TryGetValue(MessageTypes.PortfolioLookup)?.LookupTimeOut.UpdateTimeOut(((PortfolioMessage)message).OriginalTransactionId);
 					break;
+
+				case MessageTypes.UserInfo:
+					_lookups.TryGetValue(MessageTypes.UserLookup)?.LookupTimeOut.UpdateTimeOut(((UserInfoMessage)message).OriginalTransactionId);
+					break;
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
 
-			switch (message.Type)
+			if (message.Type.IsLookupResult())
 			{
-				case MessageTypes.SecurityLookupResult:
-				case MessageTypes.BoardLookupResult:
-				case MessageTypes.TimeFrameLookupResult:
-				case MessageTypes.PortfolioLookupResult:
+				var info = _lookups.TryGetValue(message.Type.ToLookupType());
+
+				if (info != null)
 				{
-					var info = _lookups.TryGetValue(message.Type.ToLookupType());
-
-					if (info == null)
-						break;
-
 					info.LookupTimeOut.RemoveTimeOut(((IOriginalTransactionIdMessage)message).OriginalTransactionId);
 
-					if (info.LookupQueue.Count == 0)
-						break;
-
-					//удаляем текущий запрос лукапа из очереди
-					info.LookupQueue.Dequeue();
-
-					var nextLookup = (Message)info.LookupQueue.TryPeek();
-
-					if (nextLookup != null)
+					if (info.LookupQueue.Count > 0)
 					{
-						nextLookup.IsBack = true;
-						nextLookup.Adapter = this;
+						//удаляем текущий запрос лукапа из очереди
+						info.LookupQueue.Dequeue();
 
-						base.OnInnerAdapterNewOutMessage(nextLookup);
+						var nextLookup = (Message)info.LookupQueue.TryPeek();
+
+						if (nextLookup != null)
+						{
+							nextLookup.IsBack = true;
+							nextLookup.Adapter = this;
+
+							base.OnInnerAdapterNewOutMessage(nextLookup);
+						}
 					}
-					
-					break;
 				}
 			}
+
 
 			if (_prevTime != DateTimeOffset.MinValue)
 			{
