@@ -521,6 +521,9 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
+			if (message is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
+				throw new ArgumentException(message.ToString());
+
 			if (message.IsBack)
 			{
 				var adapter = message.Adapter;
@@ -676,12 +679,10 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				var key = message.Type.IsLookup()
-					? Tuple.Create(message.Type.ToResultType(), ((ITransactionIdMessage)message).TransactionId)
-					: null;
-
-				if (key != null && key.Item2 != 0)
+				if (message.Type.IsLookup())
 				{
+					var key = Tuple.Create(message.Type.ToResultType(), ((ITransactionIdMessage)message).TransactionId);
+
 					lock (_lookups.SyncRoot)
 					{
 						if (!_lookups.ContainsKey(key))
@@ -856,9 +857,6 @@ namespace StockSharp.Algo
 
 		private void ProcessMarketDataRequest(MarketDataMessage mdMsg)
 		{
-			if (mdMsg.TransactionId == 0)
-				throw new InvalidOperationException("TransId == 0");
-
 			switch (mdMsg.DataType)
 			{
 				case MarketDataTypes.News:
