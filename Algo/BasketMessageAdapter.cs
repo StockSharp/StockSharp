@@ -121,7 +121,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly SynchronizedDictionary<long, MarketDataMessage> _subscriptionMessages = new SynchronizedDictionary<long, MarketDataMessage>();
+		private readonly SynchronizedDictionary<long, ISubscriptionMessage> _requestsById = new SynchronizedDictionary<long, ISubscriptionMessage>();
 		private readonly SynchronizedDictionary<long, Tuple<IMessageAdapter, MarketDataMessage>> _subscriptionsById = new SynchronizedDictionary<long, Tuple<IMessageAdapter, MarketDataMessage>>();
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _subscriptionNonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
 		private readonly SynchronizedDictionary<Helper.SubscriptionKey, long> _subscriptionKeysToTransId = new SynchronizedDictionary<Helper.SubscriptionKey, long>();
@@ -406,7 +406,7 @@ namespace StockSharp.Algo
 			_activeAdapters.Clear();
 			_subscriptionsById.Clear();
 			_subscriptionKeysToTransId.Clear();
-			_subscriptionMessages.Clear();
+			_requestsById.Clear();
 			_parentToChildIds.Clear();
 			_lookups.Clear();
 			_subscriptionListRequests.Clear();
@@ -855,11 +855,11 @@ namespace StockSharp.Algo
 			return adapters;
 		}
 
-		private Dictionary<IMessageAdapter, Tuple<long, long>> ToChild(ISubscriptionMessage subscrMsg, IMessageAdapter[] adapters)
+		private IDictionary<ISubscriptionMessage, IMessageAdapter> ToChild(ISubscriptionMessage subscrMsg, IMessageAdapter[] adapters)
 		{
 			// sending to inner adapters unique child requests
 
-			var dict = new Dictionary<IMessageAdapter, Tuple<long, long>>();
+			var child = new Dictionary<ISubscriptionMessage, IMessageAdapter>();
 
 			if (subscrMsg.IsSubscribe)
 			{
@@ -867,11 +867,12 @@ namespace StockSharp.Algo
 				{
 					foreach (var adapter in adapters)
 					{
-						var transId = TransactionIdGenerator.GetNextId();
+						var clone = (ISubscriptionMessage)((Message)subscrMsg).Clone();
+						clone.TransactionId = TransactionIdGenerator.GetNextId();
 
-						dict.Add(adapter, Tuple.Create(transId, transId));
+						child.Add(clone, adapter);
 
-						_parentToChildIds.Add(transId, RefTuple.Create(subscrMsg.TransactionId, (bool?)null, adapter));
+						_parentToChildIds.Add(clone.TransactionId, RefTuple.Create(subscrMsg.TransactionId, (bool?)null, adapter));
 					}
 				}
 			}
@@ -883,23 +884,25 @@ namespace StockSharp.Algo
 					{
 						var adapter = pair.Value.Third;
 
-						var transId = TransactionIdGenerator.GetNextId();
+						var clone = (ISubscriptionMessage)((Message)subscrMsg).Clone();
+						clone.TransactionId = TransactionIdGenerator.GetNextId();
+						clone.OriginalTransactionId = pair.Value.First;
 
-						dict.Add(adapter, Tuple.Create(transId, pair.Value.First));
+						child.Add(clone, adapter);
 
-						_parentToChildIds.Add(transId, RefTuple.Create(subscrMsg.TransactionId, (bool?)null, adapter));
+						_parentToChildIds.Add(clone.TransactionId, RefTuple.Create(subscrMsg.TransactionId, (bool?)null, adapter));
 					}
 				}
 			}
 
-			return dict;
+			return child;
 		}
 
-		private void SendMarketDataRequest(MarketDataMessage mdMsg, IMessageAdapter adapter)
+		private void SendRequest(ISubscriptionMessage subscrMsg, IMessageAdapter adapter)
 		{
 			// if the message was looped back via IsBack=true
-			_subscriptionMessages.TryAdd(mdMsg.TransactionId, mdMsg);
-			adapter.SendInMessage(mdMsg);
+			_requestsById.TryAdd(subscrMsg.TransactionId, subscrMsg);
+			adapter.SendInMessage((Message)subscrMsg);
 		}
 
 		private void ProcessMarketDataRequest(MarketDataMessage mdMsg)
@@ -923,13 +926,7 @@ namespace StockSharp.Algo
 					}
 					
 					foreach (var pair in ToChild(mdMsg, adapters))
-					{
-						var clone = (MarketDataMessage)mdMsg.Clone();
-						clone.TransactionId = pair.Value.Item1;
-						clone.OriginalTransactionId = pair.Value.Item2;
-
-						SendMarketDataRequest(clone, pair.Key);
-					}
+						SendRequest(pair.Key, pair.Value);
 
 					break;
 				}
@@ -965,7 +962,7 @@ namespace StockSharp.Algo
 
 					if (adapter != null)
 					{
-						SendMarketDataRequest((MarketDataMessage)mdMsg.Clone(), adapter);
+						SendRequest((MarketDataMessage)mdMsg.Clone(), adapter);
 					}
 					else
 					{
@@ -1242,7 +1239,7 @@ namespace StockSharp.Algo
 		private void ProcessMarketDataResponse(IMessageAdapter adapter, MarketDataMessage message)
 		{
 			var originalTransactionId = message.OriginalTransactionId;
-			var originMsg = _subscriptionMessages.TryGetValue(originalTransactionId);
+			var originMsg = (MarketDataMessage)_requestsById.TryGetValue(originalTransactionId);
 
 			if (originMsg == null)
 			{
