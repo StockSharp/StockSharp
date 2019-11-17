@@ -16,9 +16,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public string Like { get; set; }
 
-		/// <summary>
-		/// Request identifier.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
 
