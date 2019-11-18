@@ -109,42 +109,17 @@ namespace StockSharp.Algo
 
 		public static void ReplaceSecurityId(this Message message, SecurityId securityId)
 		{
-			if (message is ISecurityIdMessage secIdMsg)
+			switch (message)
 			{
-				secIdMsg.SecurityId = securityId;
-				return;
-			}
-
-			switch (message.Type)
-			{
-				case MessageTypes.News:
-				{
-					var newsMsg = (NewsMessage)message;
-					newsMsg.SecurityId = securityId;
+				case ISecurityIdMessage secIdMsg:
+					secIdMsg.SecurityId = securityId;
 					break;
-				}
+				case INullableSecurityIdMessage nullSecIdMsg:
+					nullSecIdMsg.SecurityId = securityId;
+					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str2770);
 			}
-		}
-
-		public class SubscriptionKey : Tuple<MarketDataTypes, SecurityId, object, int?, Tuple<DateTimeOffset?, DateTimeOffset?, long?>>
-		{
-			public SubscriptionKey(MarketDataTypes item1, SecurityId item2, object item3, int? item4, Tuple<DateTimeOffset?, DateTimeOffset?, long?> item5)
-				: base(item1, item2, item3, item4, item5)
-			{
-			}
-		}
-
-		public static SubscriptionKey CreateKey(this MarketDataMessage message, SecurityId? securityId = null)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			var isRealTime = message.To == null;
-			var range = isRealTime ? null : Tuple.Create(message.From, message.To, message.Count);
-
-			return new SubscriptionKey(message.DataType, securityId ?? message.SecurityId, message.Arg, message.MaxDepth, range);
 		}
 
 		public static bool NotRequiredSecurityId(this SecurityMessage secMsg)

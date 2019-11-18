@@ -23,7 +23,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioLookupMessage : PortfolioMessage
+	public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioLookupMessage"/>.
@@ -33,9 +33,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
 		public SecurityId? SecurityId { get; set; }
 
 		/// <summary>
