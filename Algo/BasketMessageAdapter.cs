@@ -217,6 +217,12 @@ namespace StockSharp.Algo
 				lock (_syncObject)
 					_childToParentIds.Clear();
 			}
+
+			public bool IsChild(long childId)
+			{
+				lock (_syncObject)
+					return _childToParentIds.ContainsKey(childId);
+			}
 		}
 
 		private readonly SynchronizedDictionary<long, ISubscriptionMessage> _requestsById = new SynchronizedDictionary<long, ISubscriptionMessage>();
@@ -1211,6 +1217,9 @@ namespace StockSharp.Algo
 
 			var errorMsg = (IErrorMessage)message;
 
+			if (errorMsg.Error != null)
+				this.AddWarningLog("Lookup out: {0}", errorMsg);
+
 			var parentId = _parentChildMap.ProcessChildResponse(transId, errorMsg.Error == null, out var allError);
 
 			if (parentId == null)
@@ -1384,19 +1393,17 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			var isSubscribe = originMsg.IsSubscribe;
-
-			if (!originMsg.DataType.IsSecurityRequired())
+			if (_parentChildMap.IsChild(originalTransactionId))
 			{
+				if (!message.IsOk())
+					this.AddWarningLog("Subscription out: {0}", message);
+
 				var parentId = _parentChildMap.ProcessChildResponse(originalTransactionId, message.IsOk(), out var allError);
 
 				if (parentId != null)
 				{
-					SendOutMessage(new MarketDataMessage
-					{
-						OriginalTransactionId = parentId.Value,
-						Error = allError ? new InvalidOperationException(LocalizedStrings.Str629Params.Put(originMsg)) : null,
-					});
+					RaiseMarketDataMessage(null, parentId.Value,
+						allError ? new InvalidOperationException(LocalizedStrings.Str629Params.Put(originMsg)) : null);
 				}
 
 				return;
@@ -1422,7 +1429,7 @@ namespace StockSharp.Algo
 				return;
 			}
 			
-			if (message.Error == null && isSubscribe && originMsg.To == null)
+			if (message.Error == null && originMsg.IsSubscribe && originMsg.To == null)
 			{
 				// we can initiate multiple subscriptions with unique request id and same params
 				_subscriptionKeysToTransId.TryAdd(new SubscriptionKey(originMsg), originalTransactionId);
@@ -1431,17 +1438,16 @@ namespace StockSharp.Algo
 				_subscriptionsById.TryAdd(originalTransactionId, Tuple.Create(adapter, originMsg));
 			}
 
-			RaiseMarketDataMessage(adapter, originalTransactionId, message.Error, isSubscribe);
+			RaiseMarketDataMessage(adapter, originalTransactionId, message.Error);
 		}
 
-		private void RaiseMarketDataMessage(IMessageAdapter adapter, long originalTransactionId, Exception error, bool isSubscribe)
+		private void RaiseMarketDataMessage(IMessageAdapter adapter, long originalTransactionId, Exception error)
 		{
 			SendOutMessage(new MarketDataMessage
 			{
 				OriginalTransactionId = originalTransactionId,
 				Error = error,
 				Adapter = adapter,
-				IsSubscribe = isSubscribe,
 			});
 		}
 
