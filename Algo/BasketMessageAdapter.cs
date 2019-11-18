@@ -1080,6 +1080,8 @@ namespace StockSharp.Algo
 							SendOutMarketDataNotSupported(mdMsg.TransactionId);
 							break;
 						}
+
+						mdMsg = (MarketDataMessage)mdMsg.Clone();
 					}
 					else
 					{
@@ -1389,6 +1391,9 @@ namespace StockSharp.Algo
 				SendOutMessage(message);
 				return;
 			}
+
+			if (!message.IsOk())
+				_requestsById.Remove(originalTransactionId);
 
 			var originMsg = (MarketDataMessage)tuple.Item1;
 
