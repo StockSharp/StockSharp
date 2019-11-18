@@ -1229,6 +1229,9 @@ namespace StockSharp.Algo
 					case MessageTypes.PortfolioChange:
 					case MessageTypes.PositionChange:
 					{
+						if (message.Type == MessageTypes.Portfolio && ((PortfolioMessage)message).Error != null)
+							break;
+
 						var pfMsg = (IPortfolioNameMessage)message;
 						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
 						
