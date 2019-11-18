@@ -3,7 +3,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The interface describing an message with <see cref="SecurityId"/> property.
 	/// </summary>
-	public interface ISecurityIdMessage
+	public interface ISecurityIdMessage : IMessage
 	{
 		/// <summary>
 		/// Security ID.
@@ -14,7 +14,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The interface describing an message with <see cref="SecurityId"/> property.
 	/// </summary>
-	public interface INullableSecurityIdMessage
+	public interface INullableSecurityIdMessage : IMessage
 	{
 		/// <summary>
 		/// Security ID.

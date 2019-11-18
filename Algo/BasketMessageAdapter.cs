@@ -999,7 +999,7 @@ namespace StockSharp.Algo
 			{
 				foreach (var adapter in adapters)
 				{
-					var clone = (ISubscriptionMessage)((Message)subscrMsg).Clone();
+					var clone = (ISubscriptionMessage)subscrMsg.Clone();
 					clone.TransactionId = TransactionIdGenerator.GetNextId();
 
 					child.Add(clone, adapter);
@@ -1020,7 +1020,7 @@ namespace StockSharp.Algo
 					{
 						var adapter = pair.Value;
 
-						var clone = (ISubscriptionMessage)((Message)subscrMsg).Clone();
+						var clone = (ISubscriptionMessage)subscrMsg.Clone();
 						clone.TransactionId = TransactionIdGenerator.GetNextId();
 						clone.OriginalTransactionId = pair.Key;
 

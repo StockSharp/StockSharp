@@ -51,7 +51,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public abstract class Message : Cloneable<Message>, IExtendableEntity
+	public abstract class Message : Cloneable<Message>, IExtendableEntity, IMessage
 	{
 		/// <summary>
 		/// Local timestamp when a message was received/created.
@@ -126,6 +126,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public abstract override Message Clone();
+
+		IMessage IMessage.Clone() => Clone();
 
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
