@@ -225,8 +225,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly SynchronizedDictionary<long, ISubscriptionMessage> _requestsById = new SynchronizedDictionary<long, ISubscriptionMessage>();
-		private readonly SynchronizedDictionary<long, Tuple<IMessageAdapter, MarketDataMessage>> _subscriptionsById = new SynchronizedDictionary<long, Tuple<IMessageAdapter, MarketDataMessage>>();
+		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>>();
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _subscriptionNonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
 		private readonly SynchronizedDictionary<SubscriptionKey, long> _subscriptionKeysToTransId = new SynchronizedDictionary<SubscriptionKey, long>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _activeAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
@@ -507,7 +506,6 @@ namespace StockSharp.Algo
 			}
 
 			_activeAdapters.Clear();
-			_subscriptionsById.Clear();
 			_subscriptionKeysToTransId.Clear();
 			_requestsById.Clear();
 			_parentChildMap.Clear();
@@ -1039,7 +1037,7 @@ namespace StockSharp.Algo
 		private void SendRequest(ISubscriptionMessage subscrMsg, IMessageAdapter adapter)
 		{
 			// if the message was looped back via IsBack=true
-			_requestsById.TryAdd(subscrMsg.TransactionId, subscrMsg);
+			_requestsById.TryAdd(subscrMsg.TransactionId, Tuple.Create(subscrMsg, adapter));
 			adapter.SendInMessage((Message)subscrMsg);
 		}
 
@@ -1074,7 +1072,15 @@ namespace StockSharp.Algo
 					IMessageAdapter adapter;
 
 					if (mdMsg.IsSubscribe)
+					{
 						adapter = GetSubscriptionAdapters(mdMsg).FirstOrDefault();
+
+						if (adapter == null)
+						{
+							SendOutMarketDataNotSupported(mdMsg.TransactionId);
+							break;
+						}
+					}
 					else
 					{
 						var originTransId = mdMsg.OriginalTransactionId;
@@ -1082,32 +1088,23 @@ namespace StockSharp.Algo
 						if (originTransId == 0)
 							originTransId = _subscriptionKeysToTransId.TryGetValue(new SubscriptionKey(mdMsg));
 
-						var tuple = _subscriptionsById.TryGetValue(originTransId);
-
-						if (tuple == null)
-							adapter = null;
-						else
+						if (!_requestsById.TryGetValue(originTransId, out var tuple))
 						{
-							adapter = tuple.Item1;
-
-							// copy full subscription's details into unsubscribe request
-							var transId = mdMsg.TransactionId;
-							tuple.Item2?.CopyTo(mdMsg);
-							mdMsg.TransactionId = transId;
-							mdMsg.OriginalTransactionId = originTransId;
+							this.AddInfoLog("Unsubscribe no found: {0}/{1}", originTransId, mdMsg);
+							break;
 						}
+						
+						adapter = tuple.Item2;
+
+						// copy full subscription's details into unsubscribe request
+						var transId = mdMsg.TransactionId;
+						mdMsg = (MarketDataMessage)mdMsg.Clone();
+						((MarketDataMessage)tuple.Item1)?.CopyTo(mdMsg);
+						mdMsg.TransactionId = transId;
+						mdMsg.OriginalTransactionId = originTransId;
 					}
 
-					if (adapter != null)
-					{
-						SendRequest((MarketDataMessage)mdMsg.Clone(), adapter);
-					}
-					else
-					{
-						if (mdMsg.IsSubscribe)
-							SendOutMarketDataNotSupported(mdMsg.TransactionId);
-					}
-
+					SendRequest(mdMsg, adapter);
 					break;
 				}
 			}
@@ -1382,16 +1379,18 @@ namespace StockSharp.Algo
 		private void ProcessMarketDataResponse(IMessageAdapter adapter, MarketDataMessage message)
 		{
 			var originalTransactionId = message.OriginalTransactionId;
-			var originMsg = (MarketDataMessage)_requestsById.TryGetValue(originalTransactionId);
+			var tuple = _requestsById.TryGetValue(originalTransactionId);
 
-			if (originMsg == null)
+			if (tuple == null)
 			{
 				if (_subscriptionListRequests.Contains(originalTransactionId))
-					_subscriptionsById.TryAdd(message.TransactionId, Tuple.Create(adapter, (MarketDataMessage)null));
+					_requestsById.TryAdd(message.TransactionId, Tuple.Create((ISubscriptionMessage)null, adapter));
 
 				SendOutMessage(message);
 				return;
 			}
+
+			var originMsg = (MarketDataMessage)tuple.Item1;
 
 			if (_parentChildMap.IsChild(originalTransactionId))
 			{
@@ -1433,9 +1432,6 @@ namespace StockSharp.Algo
 			{
 				// we can initiate multiple subscriptions with unique request id and same params
 				_subscriptionKeysToTransId.TryAdd(new SubscriptionKey(originMsg), originalTransactionId);
-
-				// TODO
-				_subscriptionsById.TryAdd(originalTransactionId, Tuple.Create(adapter, originMsg));
 			}
 
 			RaiseMarketDataMessage(adapter, originalTransactionId, message.Error);
