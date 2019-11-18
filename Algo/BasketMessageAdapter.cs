@@ -720,6 +720,43 @@ namespace StockSharp.Algo
 						var u = GetUnderlyingAdapter(adapter);
 						this.AddInfoLog("Disconnecting '{0}'.", u);
 
+						var unsubscribes = new List<Message>();
+
+						lock (_requestsById.SyncRoot)
+						{
+							foreach (var pair in _requestsById)
+							{
+								if (pair.Value.Item2 != u)
+									continue;
+
+								var subscrMsg = pair.Value.Item1;
+
+								if (subscrMsg == null)
+									continue;
+
+								if (!subscrMsg.IsSubscribe)
+									continue;
+
+								var unsubscribeRequest = (ISubscriptionMessage)subscrMsg.Clone();
+								
+								unsubscribeRequest.IsSubscribe = false;
+
+								// some messages can only be subscriptions
+								if (unsubscribeRequest.IsSubscribe)
+									continue;
+
+								unsubscribeRequest.TransactionId = TransactionIdGenerator.GetNextId();
+								unsubscribeRequest.OriginalTransactionId = subscrMsg.TransactionId;
+
+								unsubscribes.Add((Message)unsubscribeRequest);
+							}
+						}
+
+						foreach (var unsubscribe in unsubscribes)
+						{
+							adapter.SendInMessage(unsubscribe);
+						}
+
 						adapter.SendInMessage(message);
 					}
 
