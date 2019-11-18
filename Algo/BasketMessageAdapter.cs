@@ -32,6 +32,7 @@ namespace StockSharp.Algo
 	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Slippage;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Testing;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -121,10 +122,107 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private class SubscriptionKey : Tuple<DataType, SecurityId?>
+		{
+			public SubscriptionKey(ISubscriptionMessage subscrMsg)
+				: base(GetDataType(subscrMsg), GetSecurityId(subscrMsg))
+			{
+			}
+
+			private static DataType GetDataType(ISubscriptionMessage subscrMsg)
+			{
+				if (subscrMsg == null)
+					throw new ArgumentNullException(nameof(subscrMsg));
+
+				if (subscrMsg is MarketDataMessage mdMsg)
+					return mdMsg.DataType.ToDataType();
+				else if (subscrMsg is PortfolioLookupMessage)
+					return DataType.PositionChanges;
+				else if (subscrMsg is OrderStatusMessage)
+					return DataType.Transactions;
+				//else if (subscrMsg is BoardLookupMessage)
+				//	return DataType.Board;
+				//else if (subscrMsg is SecurityLookupMessage)
+				//	return DataType.Securities;
+
+				throw new ArgumentException(subscrMsg.ToString());
+			}
+
+			private static SecurityId? GetSecurityId(ISubscriptionMessage subscrMsg)
+			{
+				if (subscrMsg == null)
+					throw new ArgumentNullException(nameof(subscrMsg));
+
+				if (subscrMsg is ISecurityIdMessage secIdMsg)
+					return secIdMsg.SecurityId;
+				else if (subscrMsg is INullableSecurityIdMessage nullSecIdMsg)
+					return nullSecIdMsg.SecurityId;
+
+				return null;
+			}
+		}
+
+		private class ParentChildMap
+		{
+			private readonly SyncObject _syncObject = new SyncObject();
+			private readonly Dictionary<long, RefTriple<long, bool?, IMessageAdapter>> _childToParentIds = new Dictionary<long, RefTriple<long, bool?, IMessageAdapter>>();
+
+			public void AddMapping(long childId, long parentId, IMessageAdapter adapter)
+			{
+				if (adapter == null)
+					throw new ArgumentNullException(nameof(adapter));
+
+				lock (_syncObject)
+					_childToParentIds.Add(childId, RefTuple.Create(parentId, (bool?)null, adapter));
+			}
+
+			public IDictionary<long, IMessageAdapter> GetChild(long parentId)
+			{
+				lock (_syncObject)
+					return FilterByParent(parentId).Where(p => p.Value.Second == true).ToDictionary(p => p.Key, p => p.Value.Third);
+			}
+
+			private IEnumerable<KeyValuePair<long, RefTriple<long, bool?, IMessageAdapter>>> FilterByParent(long parentId) => _childToParentIds.Where(p => p.Value.First == parentId);
+
+			public long? ProcessChildResponse(long childId, bool isOk, out bool allError)
+			{
+				allError = true;
+
+				lock (_syncObject)
+				{
+					if (!_childToParentIds.TryGetValue(childId, out var tuple))
+						return null;
+					
+					var parentId = tuple.First;
+					tuple.Second = isOk;
+
+					foreach (var pair in FilterByParent(parentId))
+					{
+						var t = pair.Value;
+
+						// one of adapter still not yet response.
+						if (t.Second == null)
+							return null;
+						
+						if (t.Second == true)
+							allError = false;
+					}
+
+					return parentId;
+				}
+			}
+
+			public void Clear()
+			{
+				lock (_syncObject)
+					_childToParentIds.Clear();
+			}
+		}
+
 		private readonly SynchronizedDictionary<long, ISubscriptionMessage> _requestsById = new SynchronizedDictionary<long, ISubscriptionMessage>();
 		private readonly SynchronizedDictionary<long, Tuple<IMessageAdapter, MarketDataMessage>> _subscriptionsById = new SynchronizedDictionary<long, Tuple<IMessageAdapter, MarketDataMessage>>();
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _subscriptionNonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
-		private readonly SynchronizedDictionary<Helper.SubscriptionKey, long> _subscriptionKeysToTransId = new SynchronizedDictionary<Helper.SubscriptionKey, long>();
+		private readonly SynchronizedDictionary<SubscriptionKey, long> _subscriptionKeysToTransId = new SynchronizedDictionary<SubscriptionKey, long>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _activeAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly SyncObject _connectedResponseLock = new SyncObject();
 		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
@@ -132,8 +230,7 @@ namespace StockSharp.Algo
 		private readonly Queue<Message> _pendingMessages = new Queue<Message>();
 		private readonly HashSet<IMessageAdapter> _connectedAdapters = new HashSet<IMessageAdapter>();
 		private readonly InnerAdapterList _innerAdapters;
-		private readonly SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>> _parentToChildIds = new SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>>();
-		private readonly SynchronizedDictionary<Tuple<MessageTypes, long>, HashSet<IMessageAdapter>> _lookups = new SynchronizedDictionary<Tuple<MessageTypes, long>, HashSet<IMessageAdapter>>();
+		private readonly ParentChildMap _parentChildMap = new ParentChildMap();
 
 		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter> _securityAdapters = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter>();
@@ -407,8 +504,7 @@ namespace StockSharp.Algo
 			_subscriptionsById.Clear();
 			_subscriptionKeysToTransId.Clear();
 			_requestsById.Clear();
-			_parentToChildIds.Clear();
-			_lookups.Clear();
+			_parentChildMap.Clear();
 			_subscriptionListRequests.Clear();
 			_subscribedPortfolios.Clear();
 		}
@@ -518,6 +614,21 @@ namespace StockSharp.Algo
 			_hearbeatFlags[adapter] = on;
 		}
 
+		private IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter is IMessageAdapterWrapper wrapper
+				?
+				(
+					(wrapper is IRealTimeEmulationMarketDataAdapter || wrapper is IHistoryMessageAdapter)
+						? wrapper
+						: GetUnderlyingAdapter(wrapper.InnerAdapter)
+				)
+				: adapter;
+		}
+
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
@@ -585,7 +696,7 @@ namespace StockSharp.Algo
 
 					_activeAdapters.Values.ForEach(a =>
 					{
-						var u = a.GetUnderlyingAdapter();
+						var u = GetUnderlyingAdapter(a);
 						this.AddInfoLog("Connecting '{0}'.", u);
 
 						a.SendInMessage(message);
@@ -599,7 +710,7 @@ namespace StockSharp.Algo
 					{
 						_connectedAdapters.ToArray().ForEach(a =>
 						{
-							var u = a.GetUnderlyingAdapter();
+							var u = GetUnderlyingAdapter(a);
 							this.AddInfoLog("Disconnecting '{0}'.", u);
 
 							a.SendInMessage(message);
@@ -667,28 +778,44 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			var adapters = GetAdapters(message, out var isPended, out _);
-
-			if (isPended)
-				return;
-
-			if (adapters.Length == 0)
+			if (message.Type.IsLookup())
 			{
-				if (message.Type.IsLookup())
-					SendOutMessage(message.Type.ToResultType().CreateLookupResult(((ITransactionIdMessage)message).TransactionId));
+				var subscrMsg = (ISubscriptionMessage)message;
+
+				IMessageAdapter[] adapters;
+
+				if (subscrMsg.IsSubscribe)
+				{
+					adapters = GetAdapters(message, out var isPended, out _);
+
+					if (isPended)
+						return;
+
+					if (adapters.Length == 0)
+					{
+						SendOutMessage(message.Type.ToResultType().CreateLookupResult(subscrMsg.TransactionId));
+						return;
+					}
+
+					// historical request do not have unsubscribe operation
+					if (subscrMsg.To == null)
+						_subscriptionKeysToTransId[new SubscriptionKey(subscrMsg)] = subscrMsg.TransactionId;
+				}
+				else
+					adapters = null;
+
+				foreach (var pair in ToChild(subscrMsg, adapters))
+					SendRequest(pair.Key, pair.Value);
 			}
 			else
 			{
-				if (message.Type.IsLookup())
-				{
-					var key = Tuple.Create(message.Type.ToResultType(), ((ITransactionIdMessage)message).TransactionId);
+				var adapters = GetAdapters(message, out var isPended, out _);
 
-					lock (_lookups.SyncRoot)
-					{
-						if (!_lookups.ContainsKey(key))
-							_lookups.Add(key, new HashSet<IMessageAdapter>(adapters.Select(Helper.GetUnderlyingAdapter)));
-					}
-				}
+				if (isPended)
+					return;
+
+				if (adapters.Length == 0)
+					return;
 
 				if (message is SubscriptionListRequestMessage listRequest)
 					_subscriptionListRequests.Add(listRequest.TransactionId);
@@ -704,7 +831,10 @@ namespace StockSharp.Algo
 
 			IMessageAdapter[] adapters = null;
 
-			var adapter = message.Adapter?.GetUnderlyingAdapter();
+			var adapter = message.Adapter;
+
+			if (adapter != null)
+				adapter = GetUnderlyingAdapter(adapter);
 
 			if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType.IsSecurityRequired())
 				adapter = _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)mdMsg.DataType)) ?? _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)null));
@@ -734,7 +864,7 @@ namespace StockSharp.Algo
 
 						if (set != null)
 						{
-							adapters = adapters.Where(a => !set.Contains(a.GetUnderlyingAdapter())).ToArray();
+							adapters = adapters.Where(a => !set.Contains(GetUnderlyingAdapter(a))).ToArray();
 						}
 						else if (mdMsg1.DataType == MarketDataTypes.News && mdMsg1.SecurityId == default)
 						{
@@ -863,34 +993,36 @@ namespace StockSharp.Algo
 
 			if (subscrMsg.IsSubscribe)
 			{
-				lock (_parentToChildIds.SyncRoot)
+				foreach (var adapter in adapters)
 				{
-					foreach (var adapter in adapters)
-					{
-						var clone = (ISubscriptionMessage)((Message)subscrMsg).Clone();
-						clone.TransactionId = TransactionIdGenerator.GetNextId();
+					var clone = (ISubscriptionMessage)((Message)subscrMsg).Clone();
+					clone.TransactionId = TransactionIdGenerator.GetNextId();
 
-						child.Add(clone, adapter);
+					child.Add(clone, adapter);
 
-						_parentToChildIds.Add(clone.TransactionId, RefTuple.Create(subscrMsg.TransactionId, (bool?)null, adapter));
-					}
+					_parentChildMap.AddMapping(clone.TransactionId, subscrMsg.TransactionId, adapter);
 				}
 			}
 			else
 			{
-				lock (_parentToChildIds.SyncRoot)
+				var originTransId = subscrMsg.OriginalTransactionId;
+
+				if (originTransId == 0)
+					originTransId = _subscriptionKeysToTransId.TryGetValue(new SubscriptionKey(subscrMsg));
+
+				if (originTransId > 0)
 				{
-					foreach (var pair in _parentToChildIds.Where(p => p.Value.Second == true))
+					foreach (var pair in _parentChildMap.GetChild(originTransId))
 					{
-						var adapter = pair.Value.Third;
+						var adapter = pair.Value;
 
 						var clone = (ISubscriptionMessage)((Message)subscrMsg).Clone();
 						clone.TransactionId = TransactionIdGenerator.GetNextId();
-						clone.OriginalTransactionId = pair.Value.First;
+						clone.OriginalTransactionId = pair.Key;
 
 						child.Add(clone, adapter);
 
-						_parentToChildIds.Add(clone.TransactionId, RefTuple.Create(subscrMsg.TransactionId, (bool?)null, adapter));
+						_parentChildMap.AddMapping(clone.TransactionId, subscrMsg.TransactionId, adapter);
 					}
 				}
 			}
@@ -942,7 +1074,7 @@ namespace StockSharp.Algo
 						var originTransId = mdMsg.OriginalTransactionId;
 
 						if (originTransId == 0)
-							originTransId = _subscriptionKeysToTransId.TryGetValue(mdMsg.CreateKey());
+							originTransId = _subscriptionKeysToTransId.TryGetValue(new SubscriptionKey(mdMsg));
 
 						var tuple = _subscriptionsById.TryGetValue(originTransId);
 
@@ -1039,7 +1171,7 @@ namespace StockSharp.Algo
 					case MessageTypes.PositionChange:
 					{
 						var pfMsg = (IPortfolioNameMessage)message;
-						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, innerAdapter.GetUnderlyingAdapter().Id);
+						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
 						
 						if (LookupMessagesOnConnect && innerAdapter.IsSupportSubscriptionByPortfolio)
 							extraOutMsg = CreatePortfolioSubscription(innerAdapter, pfMsg.PortfolioName);
@@ -1049,18 +1181,19 @@ namespace StockSharp.Algo
 
 					case MessageTypes.Security:
 						var secMsg = (SecurityMessage)message;
-						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, null, innerAdapter.GetUnderlyingAdapter().Id);
+						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, null, GetUnderlyingAdapter(innerAdapter).Id);
 						break;
 
 					default:
-						if (message.Type.IsLookupResult() && !CanProcessLookupResult(innerAdapter.GetUnderlyingAdapter(), message))
-							return;
+						if (message.Type.IsLookupResult())
+							message = ProcessLookupResult(message);
 
 						break;
 				}
 			}
 
-			SendOutMessage(message);
+			if (message != null)
+				SendOutMessage(message);
 
 			if (extraOutMsg != null)
 			{
@@ -1069,25 +1202,26 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private bool CanProcessLookupResult(IMessageAdapter innerAdapter, Message message)
+		private Message ProcessLookupResult(Message message)
 		{
 			var transId = ((IOriginalTransactionIdMessage)message).OriginalTransactionId;
 
 			if (transId == 0)
-				return true;
+				return message;
 
-			lock (_lookups.SyncRoot)
-			{
-				var adapters = _lookups.TryGetValue(Tuple.Create(message.Type, transId));
+			var errorMsg = (IErrorMessage)message;
 
-				if (adapters == null)
-					return true;
+			var parentId = _parentChildMap.ProcessChildResponse(transId, errorMsg.Error == null, out var allError);
 
-				if (!adapters.Remove(innerAdapter))
-					return true;
+			if (parentId == null)
+				return null;
 
-				return adapters.Count == 0;	
-			}
+			var parentResponse = message.Type.CreateLookupResult(parentId.Value);
+
+			if (allError)
+				((IErrorMessage)parentResponse).Error = new InvalidOperationException(LocalizedStrings.Str629Params.Put(parentId));
+				
+			return parentResponse;
 		}
 
 		private static TMessage FillIdAndAdapter<TMessage>(IMessageAdapter adapter, TMessage m)
@@ -1104,7 +1238,7 @@ namespace StockSharp.Algo
 			if (portfolioName.IsEmpty())
 				throw new ArgumentNullException(nameof(portfolioName));
 
-			var underlyingAdapter = adapter.GetUnderlyingAdapter();
+			var underlyingAdapter = GetUnderlyingAdapter(adapter);
 
 			if (!_subscribedPortfolios.SafeAdd(underlyingAdapter, key => new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)).Add(portfolioName))
 				return null;
@@ -1118,7 +1252,7 @@ namespace StockSharp.Algo
 
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message)
 		{
-			var underlyingAdapter = innerAdapter.GetUnderlyingAdapter();
+			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
 			var wrapper = _activeAdapters[underlyingAdapter];
 
 			var isError = message.Error != null;
@@ -1206,7 +1340,7 @@ namespace StockSharp.Algo
 
 		private void ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message)
 		{
-			var underlyingAdapter = innerAdapter.GetUnderlyingAdapter();
+			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
 			var wrapper = _activeAdapters[underlyingAdapter];
 
 			if (message.Error == null)
@@ -1254,49 +1388,19 @@ namespace StockSharp.Algo
 
 			if (!originMsg.DataType.IsSecurityRequired())
 			{
-				long? transId;
-				var allError = true;
+				var parentId = _parentChildMap.ProcessChildResponse(originalTransactionId, message.IsOk(), out var allError);
 
-				lock (_parentToChildIds.SyncRoot)
-				{
-					var tuple = _parentToChildIds.TryGetValue(originalTransactionId);
-
-					transId = tuple.First;
-					tuple.Second = message.IsOk();
-
-					foreach (var pair in _parentToChildIds)
-					{
-						var t = pair.Value;
-
-						if (t.First == tuple.First)
-						{
-							// one of adapter still not yet response.
-							if (t.Second == null)
-							{
-								transId = null;
-								break;
-							}
-							else if (t.Second == true)
-								allError = false;
-						}
-					}
-				}
-
-				if (transId != null)
+				if (parentId != null)
 				{
 					SendOutMessage(new MarketDataMessage
 					{
-						OriginalTransactionId = transId.Value,
-						Adapter = adapter,
-						IsSubscribe = isSubscribe,
+						OriginalTransactionId = parentId.Value,
 						Error = allError ? new InvalidOperationException(LocalizedStrings.Str629Params.Put(originMsg)) : null,
 					});
 				}
 
 				return;
 			}
-
-			var key = originMsg.CreateKey();
 
 			if (message.IsNotSupported)
 			{
@@ -1306,7 +1410,7 @@ namespace StockSharp.Algo
 					if (originMsg.IsSubscribe)
 					{
 						var set = _subscriptionNonSupportedAdapters.SafeAdd(originalTransactionId, k => new HashSet<IMessageAdapter>());
-						set.Add(adapter.GetUnderlyingAdapter());
+						set.Add(GetUnderlyingAdapter(adapter));
 
 						originMsg.Adapter = this;
 						originMsg.IsBack = true;
@@ -1321,7 +1425,7 @@ namespace StockSharp.Algo
 			if (message.Error == null && isSubscribe && originMsg.To == null)
 			{
 				// we can initiate multiple subscriptions with unique request id and same params
-				_subscriptionKeysToTransId.TryAdd(key, originalTransactionId);
+				_subscriptionKeysToTransId.TryAdd(new SubscriptionKey(originMsg), originalTransactionId);
 
 				// TODO
 				_subscriptionsById.TryAdd(originalTransactionId, Tuple.Create(adapter, originMsg));
