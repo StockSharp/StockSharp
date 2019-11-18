@@ -725,10 +725,8 @@ namespace StockSharp.Algo
 				}
 
 				case MessageTypes.Portfolio:
-				//case MessageTypes.PortfolioChange:
 				{
-					var pfMsg = (PortfolioMessage)message;
-					ProcessPortfolioMessage(pfMsg.PortfolioName, message);
+					ProcessPortfolioMessage((PortfolioMessage)message);
 					break;
 				}
 
@@ -738,14 +736,14 @@ namespace StockSharp.Algo
 				case MessageTypes.OrderGroupCancel:
 				{
 					var ordMsg = (OrderMessage)message;
-					ProcessAdapterMessage(ordMsg.PortfolioName, ordMsg);
+					ProcessPortfolioMessage(ordMsg.PortfolioName, ordMsg);
 					break;
 				}
 
 				case MessageTypes.OrderPairReplace:
 				{
 					var ordMsg = (OrderPairReplaceMessage)message;
-					ProcessAdapterMessage(ordMsg.Message1.PortfolioName, ordMsg);
+					ProcessPortfolioMessage(ordMsg.Message1.PortfolioName, ordMsg);
 					break;
 				}
 
@@ -1037,7 +1035,7 @@ namespace StockSharp.Algo
 		private void SendRequest(ISubscriptionMessage subscrMsg, IMessageAdapter adapter)
 		{
 			// if the message was looped back via IsBack=true
-			_requestsById.TryAdd(subscrMsg.TransactionId, Tuple.Create(subscrMsg, adapter));
+			_requestsById.TryAdd(subscrMsg.TransactionId, Tuple.Create(subscrMsg, GetUnderlyingAdapter(adapter)));
 			adapter.SendInMessage((Message)subscrMsg);
 		}
 
@@ -1112,35 +1110,91 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessAdapterMessage(string portfolioName, Message message)
+		private void ProcessPortfolioMessage(string portfolioName, Message message)
 		{
 			var adapter = message.Adapter;
 
 			if (adapter == null)
-				ProcessPortfolioMessage(portfolioName, message);
-			else
-				adapter.SendInMessage(message);
-		}
-
-		private void ProcessPortfolioMessage(string portfolioName, Message message)
-		{
-			var adapter = portfolioName.IsEmpty() ? null : _portfolioAdapters.TryGetValue(portfolioName);
-
-			if (adapter == null)
 			{
-				adapter = GetAdapters(message, out _, out _).FirstOrDefault();
+				adapter = GetAdapter(portfolioName, message);
 
 				if (adapter == null)
+				{
+					this.AddDebugLog("No adapter for {0}", message);
 					return;
+				}
+			}
+				
+			adapter.SendInMessage(message);
+		}
+
+		private void ProcessPortfolioMessage(PortfolioMessage message)
+		{
+			if (message.IsSubscribe)
+			{
+				var adapter = GetAdapter(message.PortfolioName, message);
+
+				if (adapter == null)
+				{
+					this.AddDebugLog("No adapter for {0}", message);
+
+					SendOutMessage(new PortfolioMessage
+					{
+						OriginalTransactionId = message.TransactionId,
+						Error = new InvalidOperationException(LocalizedStrings.Str629Params.Put(message))
+					});
+				}
+				else
+				{
+					_portfolioAdapters.TryAdd(message.PortfolioName, GetUnderlyingAdapter(adapter));
+					SendRequest((PortfolioMessage)message.Clone(), adapter);
+				}
+			}
+			else
+			{
+				var originTransId = message.OriginalTransactionId;
+
+				IMessageAdapter adapter;
+
+				if (originTransId == 0)
+					adapter = _portfolioAdapters.TryGetValue(message.PortfolioName);
+				else if (_requestsById.TryGetValue(originTransId, out var tuple))
+				{
+					adapter = tuple.Item2;
+
+					var transId = message.TransactionId;
+					message = (PortfolioMessage)message.Clone();
+					((PortfolioMessage)tuple.Item1).CopyTo(message);
+					message.TransactionId = transId;
+				}
+				else
+					adapter = null;
+
+				if (adapter == null)
+					this.AddDebugLog("No adapter for {0}", message);
+				else
+					SendRequest(message, adapter);
+			}
+		}
+
+		private IMessageAdapter GetAdapter(string portfolioName, Message message)
+		{
+			if (portfolioName.IsEmpty())
+				throw new ArgumentNullException(nameof(portfolioName));
+
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (!_portfolioAdapters.TryGetValue(portfolioName, out var adapter))
+			{
+				return GetAdapters(message, out _, out _).FirstOrDefault();
 			}
 			else
 			{
 				var a = _activeAdapters.TryGetValue(adapter);
 
-				adapter = a ?? throw new InvalidOperationException(LocalizedStrings.Str1838Params.Put(adapter.GetType()));
+				return a ?? throw new InvalidOperationException(LocalizedStrings.Str1838Params.Put(adapter.GetType()));
 			}
-
-			adapter.SendInMessage(message);
 		}
 
 		/// <summary>
@@ -1386,7 +1440,7 @@ namespace StockSharp.Algo
 			if (tuple == null)
 			{
 				if (_subscriptionListRequests.Contains(originalTransactionId))
-					_requestsById.TryAdd(message.TransactionId, Tuple.Create((ISubscriptionMessage)null, adapter));
+					_requestsById.TryAdd(message.TransactionId, Tuple.Create((ISubscriptionMessage)null, GetUnderlyingAdapter(adapter)));
 
 				SendOutMessage(message);
 				return;

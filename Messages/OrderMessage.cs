@@ -26,7 +26,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public abstract class OrderMessage : SecurityMessage, ITransactionIdMessage
+	public abstract class OrderMessage : SecurityMessage, ITransactionIdMessage, IPortfolioNameMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -35,9 +35,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public long TransactionId { get; set; }
 
-		/// <summary>
-		/// Portfolio name, for which an order must be placed/cancelled.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 		[DescriptionLoc(LocalizedStrings.Str229Key)]

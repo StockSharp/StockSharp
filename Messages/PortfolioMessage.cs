@@ -18,6 +18,7 @@ namespace StockSharp.Messages
 	using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using Ecng.Common;
 
@@ -50,7 +51,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioMessage : BaseSubscriptionIdMessage, ISubscriptionMessage, IPortfolioNameMessage
+	public class PortfolioMessage : BaseSubscriptionIdMessage,
+	        ISubscriptionMessage, IPortfolioNameMessage, IErrorMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -126,6 +128,11 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public DateTimeOffset? To { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		[XmlIgnore]
+		public Exception Error { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
 		/// </summary>
@@ -160,6 +167,9 @@ namespace StockSharp.Messages
 			if (IsSubscribe)
 				str += $",IsSubscribe={IsSubscribe}";
 
+			if (Error != null)
+				str += $",Error={Error.Message}";
+
 			return str;
 		}
 
@@ -177,7 +187,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
 		/// <returns>The object, to which copied information.</returns>
-		protected PortfolioMessage CopyTo(PortfolioMessage destination)
+		public PortfolioMessage CopyTo(PortfolioMessage destination)
 		{
 			base.CopyTo(destination);
 
@@ -191,6 +201,7 @@ namespace StockSharp.Messages
 			destination.InternalId = InternalId;
 			destination.From = From;
 			destination.To = To;
+			destination.Error = Error;
 
 			return destination;
 		}

@@ -1184,6 +1184,12 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioMessage(PortfolioMessage message)
 		{
+			if (message.Error != null)
+			{
+				// TODO
+				return;
+			}
+
 			var portfolio = GetPortfolio(message.PortfolioName, p =>
 			{
 				message.ToPortfolio(p, _entityCache.ExchangeInfoProvider);
