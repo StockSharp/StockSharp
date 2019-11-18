@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Derivatives
 
 	using Ecng.Collections;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -81,8 +82,9 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="dataProvider">The market data provider.</param>
 		/// <param name="positionProvider">The position provider.</param>
-		public BasketBlackScholes(ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IPositionProvider positionProvider)
-			: base(securityProvider, dataProvider)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public BasketBlackScholes(ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider)
+			: base(securityProvider, dataProvider, exchangeInfoProvider)
 		{
 			_innerModels = new InnerModelList(this);
 			PositionProvider = positionProvider ?? throw new ArgumentNullException(nameof(positionProvider));
@@ -94,8 +96,9 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="underlyingAsset">Underlying asset.</param>
 		/// <param name="dataProvider">The market data provider.</param>
 		/// <param name="positionProvider">The position provider.</param>
-		public BasketBlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider, IPositionProvider positionProvider)
-			: base(underlyingAsset, dataProvider)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public BasketBlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider)
+			: base(underlyingAsset, dataProvider, exchangeInfoProvider)
 		{
 			_innerModels = new InnerModelList(this);
 			UnderlyingAsset = underlyingAsset;
@@ -114,14 +117,10 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		public IInnerModelList InnerModels => _innerModels;
 
-		/// <summary>
-		/// Options contract.
-		/// </summary>
+		/// <inheritdoc />
 		public override Security Option => throw new NotSupportedException();
 
-		/// <summary>
-		/// Underlying asset.
-		/// </summary>
+		/// <inheritdoc />
 		public override Security UnderlyingAsset
 		{
 			get
@@ -140,9 +139,7 @@ namespace StockSharp.Algo.Derivatives
 			}
 		}
 
-		/// <summary>
-		/// The number of decimal places at calculated values. The default is -1, which means no values rounding.
-		/// </summary>
+		/// <inheritdoc />
 		public override int RoundDecimals
 		{
 			set
@@ -156,95 +153,50 @@ namespace StockSharp.Algo.Derivatives
 			}
 		}
 
-		/// <summary>
-		/// To calculate the option delta.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option delta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			var pos = PositionProvider.Positions.Where(p => p.Security == UnderlyingAsset).Sum(p => p.CurrentValue);
 			return ProcessOptions(bs => bs.Delta(currentTime, deviation, assetPrice)) + pos;
 		}
 
-		/// <summary>
-		/// To calculate the option gamma.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option gamma. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return ProcessOptions(bs => bs.Gamma(currentTime, deviation, assetPrice));
 		}
 
-		/// <summary>
-		/// To calculate the option vega.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option vega. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return ProcessOptions(bs => bs.Vega(currentTime, deviation, assetPrice));
 		}
 
-		/// <summary>
-		/// To calculate the option theta.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option theta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return ProcessOptions(bs => bs.Theta(currentTime, deviation, assetPrice));
 		}
 
-		/// <summary>
-		/// To calculate the option rho.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option rho. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return ProcessOptions(bs => bs.Rho(currentTime, deviation, assetPrice));
 		}
 
-		/// <summary>
-		/// To calculate the option premium.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option premium. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return ProcessOptions(bs => bs.Premium(currentTime, deviation, assetPrice));
 		}
 
-		/// <summary>
-		/// To calculate the implied volatility.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="premium">The option premium.</param>
-		/// <returns>The implied volatility. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? ImpliedVolatility(DateTimeOffset currentTime, decimal premium)
 		{
 			return ProcessOptions(bs => bs.ImpliedVolatility(currentTime, premium), false);
 		}
 
-		/// <summary>
-		/// To create the order book of volatility.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <returns>The order book volatility.</returns>
+		/// <inheritdoc />
 		public override MarketDepth ImpliedVolatility(DateTimeOffset currentTime)
 		{
 			throw new NotSupportedException();

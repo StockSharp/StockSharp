@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Derivatives
 
 	using Ecng.Common;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 
@@ -35,8 +36,9 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="option">Options contract.</param>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="dataProvider">The market data provider.</param>
-		public Black(Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
-			: base(option, securityProvider, dataProvider)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public Black(Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
+			: base(option, securityProvider, dataProvider, exchangeInfoProvider)
 		{
 		}
 
@@ -46,8 +48,9 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="option">Options contract.</param>
 		/// <param name="underlyingAsset">Underlying asset.</param>
 		/// <param name="dataProvider">The market data provider.</param>
-		public Black(Security option, Security underlyingAsset, IMarketDataProvider dataProvider)
-			: base(option, underlyingAsset, dataProvider)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public Black(Security option, Security underlyingAsset, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
+			: base(option, underlyingAsset, dataProvider, exchangeInfoProvider)
 		{
 		}
 

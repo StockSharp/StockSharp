@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Derivatives
 
 	using Ecng.Common;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -33,10 +34,12 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="dataProvider">The market data provider.</param>
-		protected BlackScholes(ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		protected BlackScholes(ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			SecurityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 			DataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
+			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		}
 
 		/// <summary>
@@ -45,8 +48,9 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="option">Options contract.</param>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="dataProvider">The market data provider.</param>
-		public BlackScholes(Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
-			: this(securityProvider, dataProvider)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public BlackScholes(Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
+			: this(securityProvider, dataProvider, exchangeInfoProvider)
 		{
 			Option = option ?? throw new ArgumentNullException(nameof(option));
 		}
@@ -56,10 +60,12 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		/// <param name="underlyingAsset">Underlying asset.</param>
 		/// <param name="dataProvider">The market data provider.</param>
-		protected BlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		protected BlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			_underlyingAsset = underlyingAsset ?? throw new ArgumentNullException(nameof(underlyingAsset));
 			DataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
+			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		}
 
 		/// <summary>
@@ -68,8 +74,9 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="option">Options contract.</param>
 		/// <param name="underlyingAsset">Underlying asset.</param>
 		/// <param name="dataProvider">The market data provider.</param>
-		public BlackScholes(Security option, Security underlyingAsset, IMarketDataProvider dataProvider)
-			: this(underlyingAsset, dataProvider)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public BlackScholes(Security option, Security underlyingAsset, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider)
+			: this(underlyingAsset, dataProvider, exchangeInfoProvider)
 		{
 			Option = option ?? throw new ArgumentNullException(nameof(option));
 		}
@@ -85,18 +92,17 @@ namespace StockSharp.Algo.Derivatives
 		public virtual IMarketDataProvider DataProvider { get; }
 
 		/// <summary>
-		/// Options contract.
+		/// Exchanges and trading boards provider.
 		/// </summary>
+		public IExchangeInfoProvider ExchangeInfoProvider { get; }
+
+		/// <inheritdoc />
 		public virtual Security Option { get; }
 
-		/// <summary>
-		/// The risk free interest rate.
-		/// </summary>
+		/// <inheritdoc />
 		public decimal RiskFree { get; set; }
 
-		/// <summary>
-		/// The dividend amount on shares.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual decimal Dividend { get; set; }
 
 		private int _roundDecimals = -1;
@@ -139,7 +145,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <returns>The time remaining until expiration. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public virtual double? GetExpirationTimeLine(DateTimeOffset currentTime)
 		{
-			return DerivativesHelper.GetExpirationTimeLine(Option.GetExpirationTime(), currentTime);
+			return DerivativesHelper.GetExpirationTimeLine(Option.GetExpirationTime(ExchangeInfoProvider), currentTime);
 		}
 
 		/// <summary>
@@ -184,13 +190,7 @@ namespace StockSharp.Algo.Derivatives
 			return value;
 		}
 
-		/// <summary>
-		/// To calculate the option premium.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option premium. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public virtual decimal? Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			deviation = deviation ?? DefaultDeviation;
@@ -207,13 +207,7 @@ namespace StockSharp.Algo.Derivatives
 			return TryRound(DerivativesHelper.Premium(OptionType, GetStrike(), assetPrice.Value, RiskFree, Dividend, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
 		}
 
-		/// <summary>
-		/// To calculate the option delta.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option delta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public virtual decimal? Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			assetPrice = GetAssetPrice(assetPrice);
@@ -229,13 +223,7 @@ namespace StockSharp.Algo.Derivatives
 			return TryRound(DerivativesHelper.Delta(OptionType, assetPrice.Value, D1(deviation ?? DefaultDeviation, assetPrice.Value, timeToExp.Value)));
 		}
 
-		/// <summary>
-		/// To calculate the option gamma.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option gamma. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public virtual decimal? Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			deviation = deviation ?? DefaultDeviation;
@@ -252,13 +240,7 @@ namespace StockSharp.Algo.Derivatives
 			return TryRound(DerivativesHelper.Gamma(assetPrice.Value, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
 		}
 
-		/// <summary>
-		/// To calculate the option vega.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option vega. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public virtual decimal? Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			assetPrice = GetAssetPrice(assetPrice);
@@ -274,13 +256,7 @@ namespace StockSharp.Algo.Derivatives
 			return TryRound(DerivativesHelper.Vega(assetPrice.Value, timeToExp.Value, D1(deviation ?? DefaultDeviation, assetPrice.Value, timeToExp.Value)));
 		}
 
-		/// <summary>
-		/// To calculate the option theta.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option theta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public virtual decimal? Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			deviation = deviation ?? DefaultDeviation;
@@ -297,13 +273,7 @@ namespace StockSharp.Algo.Derivatives
 			return TryRound(DerivativesHelper.Theta(OptionType, GetStrike(), assetPrice.Value, RiskFree, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
 		}
 
-		/// <summary>
-		/// To calculate the option rho.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option rho. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public virtual decimal? Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			deviation = deviation ?? DefaultDeviation;
@@ -320,12 +290,7 @@ namespace StockSharp.Algo.Derivatives
 			return TryRound(DerivativesHelper.Rho(OptionType, GetStrike(), assetPrice.Value, RiskFree, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
 		}
 
-		/// <summary>
-		/// To calculate the implied volatility.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="premium">The option premium.</param>
-		/// <returns>The implied volatility. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public virtual decimal? ImpliedVolatility(DateTimeOffset currentTime, decimal premium)
 		{
 			//var timeToExp = GetExpirationTimeLine();
