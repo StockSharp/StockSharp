@@ -355,7 +355,7 @@ namespace SampleOptionQuoting
 		{
 		}
 
-		void IPositionProvider.UnSubscribePositions()
+		void IPositionProvider.UnSubscribePositions(long originalTransactionId)
 		{
 		}
 	}

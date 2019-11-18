@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Storages
 		{
 		}
 
-		void IPositionProvider.UnSubscribePositions()
+		void IPositionProvider.UnSubscribePositions(long originalTransactionId)
 		{
 		}
 	}
