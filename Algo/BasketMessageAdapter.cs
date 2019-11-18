@@ -223,11 +223,17 @@ namespace StockSharp.Algo
 				lock (_syncObject)
 					return _childToParentIds.ContainsKey(childId);
 			}
+
+			public RefTriple<long, bool?, IMessageAdapter> RemoveByChild(long childId)
+			{
+				lock (_syncObject)
+					return _childToParentIds.TryGetAndRemove(childId);
+			}
 		}
 
 		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>>();
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _subscriptionNonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
-		private readonly SynchronizedDictionary<SubscriptionKey, long> _subscriptionKeysToTransId = new SynchronizedDictionary<SubscriptionKey, long>();
+		private readonly SynchronizedPairSet<SubscriptionKey, long> _subscriptionKeysToTransId = new SynchronizedPairSet<SubscriptionKey, long>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _activeAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly SyncObject _connectedResponseLock = new SyncObject();
 		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
@@ -673,9 +679,7 @@ namespace StockSharp.Algo
 						lock (_connectedResponseLock)
 							_pendingConnectAdapters.Add(a);
 
-						var wrapper = IgnoreExtraAdapters ? a : CreateWrappers(a);
-
-						var adapter = wrapper;
+						var adapter = IgnoreExtraAdapters ? a : CreateWrappers(a);
 
 						if (IsHeartbeatOn(a))
 						{
@@ -690,7 +694,7 @@ namespace StockSharp.Algo
 						if (SupportOffline)
 							adapter = new OfflineMessageAdapter(adapter) { OwnInnerAdapter = adapter != a };
 
-						adapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(wrapper, m);
+						adapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(adapter, m);
 						
 						return adapter;
 					}));
@@ -1260,6 +1264,10 @@ namespace StockSharp.Algo
 						ProcessDisconnectMessage(innerAdapter, (DisconnectMessage)message);
 						return;
 
+					case ExtendedMessageTypes.ReconnectingFinished:
+						ProcessReconnectingFinished(innerAdapter);
+						break;
+
 					case MessageTypes.MarketData:
 						ProcessMarketDataResponse(innerAdapter, (MarketDataMessage)message);
 						return;
@@ -1361,6 +1369,66 @@ namespace StockSharp.Algo
 			});
 		}
 
+		private void ProcessReconnectingFinished(IMessageAdapter innerAdapter)
+		{
+			if (!IsRestoreSubscriptionOnErrorReconnect)
+				return;
+
+			ProcessReSubscribe(innerAdapter);
+		}
+
+		private void ProcessReSubscribe(IMessageAdapter innerAdapter)
+		{
+			var underlying = GetUnderlyingAdapter(innerAdapter);
+
+			var newSubscriptions = new List<ISubscriptionMessage>();
+
+			lock (_connectedResponseLock)
+			{
+				foreach (var pair in _subscriptionNonSupportedAdapters.ToArray())
+				{
+					if (pair.Value.Remove(underlying) && pair.Value.Count == 0)
+						_subscriptionNonSupportedAdapters.Remove(pair.Key);
+				}
+			}
+
+			lock (_requestsById.SyncRoot)
+			{
+				var adapterRequests = _requestsById.Where(p => p.Value.Item2 == underlying && p.Value.Item1 != null).ToArray();
+
+				foreach (var pair in adapterRequests)
+				{
+					var transId = pair.Key;
+					var subscrMsg = pair.Value.Item1;
+
+					if (subscrMsg.IsSubscribe)
+					{
+						subscrMsg = (ISubscriptionMessage)subscrMsg.Clone();
+						subscrMsg.TransactionId = TransactionIdGenerator.GetNextId();
+
+						if (_subscriptionKeysToTransId.RemoveByValue(transId))
+							_subscriptionKeysToTransId[new SubscriptionKey(subscrMsg)] = subscrMsg.TransactionId;
+
+						var tuple = _parentChildMap.RemoveByChild(transId);
+						if (tuple != null)
+							_parentChildMap.AddMapping(subscrMsg.TransactionId, tuple.First, underlying);
+						
+						newSubscriptions.Add(subscrMsg);
+					}
+					else
+					{
+						_requestsById.Remove(transId);
+						_parentChildMap.RemoveByChild(transId);
+					}
+				}
+			}
+
+			foreach (var subscription in newSubscriptions)
+			{
+				SendRequest(subscription, innerAdapter);
+			}
+		}
+
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message)
 		{
 			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
@@ -1406,30 +1474,43 @@ namespace StockSharp.Algo
 			message.Adapter = underlyingAdapter;
 			SendOutMessage(message);
 
-			if (!isError && LookupMessagesOnConnect)
+			if (!isError)
 			{
-				if (innerAdapter.PortfolioLookupRequired)
-					messages.Add(FillIdAndAdapter(innerAdapter, new PortfolioLookupMessage { IsSubscribe = true }));
-
-				if (innerAdapter.OrderStatusRequired)
-					messages.Add(FillIdAndAdapter(innerAdapter, new OrderStatusMessage { IsSubscribe = true }));
-
-				if (innerAdapter.SecurityLookupRequired && innerAdapter.IsSupportSecuritiesLookupAll)
-					messages.Add(FillIdAndAdapter(innerAdapter, new SecurityLookupMessage()));
-
-				if (innerAdapter.IsSupportSubscriptionByPortfolio())
+				bool AnySubscription()
 				{
-					var portfolioNames = PortfolioAdapterProvider
-						.Adapters
-						.Where(p => p.Value == innerAdapter.Id)
-						.Select(p => p.Key);
+					lock (_requestsById.SyncRoot)
+						return _requestsById.Any(p => p.Value.Item2 == underlyingAdapter);
+				}
 
-					foreach (var portfolioName in portfolioNames)
+				if (IsRestoreSubscriptionOnNormalReconnect && AnySubscription())
+				{
+					ProcessReSubscribe(innerAdapter);
+				}
+				else if (LookupMessagesOnConnect)
+				{
+					if (innerAdapter.PortfolioLookupRequired)
+						messages.Add(FillIdAndAdapter(innerAdapter, new PortfolioLookupMessage { IsSubscribe = true }));
+
+					if (innerAdapter.OrderStatusRequired)
+						messages.Add(FillIdAndAdapter(innerAdapter, new OrderStatusMessage { IsSubscribe = true }));
+
+					if (innerAdapter.SecurityLookupRequired && innerAdapter.IsSupportSecuritiesLookupAll)
+						messages.Add(FillIdAndAdapter(innerAdapter, new SecurityLookupMessage()));
+
+					if (innerAdapter.IsSupportSubscriptionByPortfolio())
 					{
-						var msg = CreatePortfolioSubscription(innerAdapter, portfolioName);
+						var portfolioNames = PortfolioAdapterProvider
+						                     .Adapters
+						                     .Where(p => p.Value == innerAdapter.Id)
+						                     .Select(p => p.Key);
 
-						if (msg != null)
-							messages.Add(msg);
+						foreach (var portfolioName in portfolioNames)
+						{
+							var msg = CreatePortfolioSubscription(innerAdapter, portfolioName);
+
+							if (msg != null)
+								messages.Add(msg);
+						}
 					}
 				}
 			}
@@ -1614,6 +1695,9 @@ namespace StockSharp.Algo
 			if (SlippageManager != null)
 				storage.SetValue(nameof(SlippageManager), SlippageManager.SaveEntire(false));
 
+			storage.SetValue(nameof(IsRestoreSubscriptionOnErrorReconnect), IsRestoreSubscriptionOnErrorReconnect);
+			storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
+
 			base.Save(storage);
 		}
 
@@ -1674,6 +1758,9 @@ namespace StockSharp.Algo
 
 			if (storage.ContainsKey(nameof(SlippageManager)))
 				SlippageManager = storage.GetValue<SettingsStorage>(nameof(SlippageManager)).LoadEntire<ISlippageManager>();
+
+			IsRestoreSubscriptionOnErrorReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnErrorReconnect), IsRestoreSubscriptionOnErrorReconnect);
+			IsRestoreSubscriptionOnNormalReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 
 			base.Load(storage);
 		}
