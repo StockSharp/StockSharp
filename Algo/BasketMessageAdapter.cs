@@ -232,8 +232,8 @@ namespace StockSharp.Algo
 		}
 
 		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>>();
-		private readonly Dictionary<long, HashSet<IMessageAdapter>> _subscriptionNonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
-		private readonly SynchronizedPairSet<SubscriptionKey, long> _subscriptionKeysToTransId = new SynchronizedPairSet<SubscriptionKey, long>();
+		private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
+		private readonly SynchronizedPairSet<SubscriptionKey, long> _keysToTransId = new SynchronizedPairSet<SubscriptionKey, long>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _activeAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly SyncObject _connectedResponseLock = new SyncObject();
 		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
@@ -508,11 +508,11 @@ namespace StockSharp.Algo
 				_messageTypeAdapters.Clear();
 				_pendingConnectAdapters.Clear();
 				_pendingMessages.Clear();
-				_subscriptionNonSupportedAdapters.Clear();
+				_nonSupportedAdapters.Clear();
 			}
 
 			_activeAdapters.Clear();
-			_subscriptionKeysToTransId.Clear();
+			_keysToTransId.Clear();
 			_requestsById.Clear();
 			_parentChildMap.Clear();
 			_subscriptionListRequests.Clear();
@@ -844,7 +844,7 @@ namespace StockSharp.Algo
 
 					// historical request do not have unsubscribe operation
 					if (subscrMsg.To == null)
-						_subscriptionKeysToTransId[new SubscriptionKey(subscrMsg)] = subscrMsg.TransactionId;
+						_keysToTransId[new SubscriptionKey(subscrMsg)] = subscrMsg.TransactionId;
 				}
 				else
 					adapters = null;
@@ -905,7 +905,7 @@ namespace StockSharp.Algo
 					if (message.Type == MessageTypes.MarketData)
 					{
 						var mdMsg1 = (MarketDataMessage)message;
-						var set = _subscriptionNonSupportedAdapters.TryGetValue(mdMsg1.TransactionId);
+						var set = _nonSupportedAdapters.TryGetValue(mdMsg1.TransactionId);
 
 						if (set != null)
 						{
@@ -1053,7 +1053,7 @@ namespace StockSharp.Algo
 				var originTransId = subscrMsg.OriginalTransactionId;
 
 				if (originTransId == 0)
-					originTransId = _subscriptionKeysToTransId.TryGetValue(new SubscriptionKey(subscrMsg));
+					originTransId = _keysToTransId.TryGetValue(new SubscriptionKey(subscrMsg));
 
 				if (originTransId > 0)
 				{
@@ -1129,7 +1129,7 @@ namespace StockSharp.Algo
 						var originTransId = mdMsg.OriginalTransactionId;
 
 						if (originTransId == 0)
-							originTransId = _subscriptionKeysToTransId.TryGetValue(new SubscriptionKey(mdMsg));
+							originTransId = _keysToTransId.TryGetValue(new SubscriptionKey(mdMsg));
 
 						if (!_requestsById.TryGetValue(originTransId, out var tuple))
 						{
@@ -1385,10 +1385,10 @@ namespace StockSharp.Algo
 
 			lock (_connectedResponseLock)
 			{
-				foreach (var pair in _subscriptionNonSupportedAdapters.ToArray())
+				foreach (var pair in _nonSupportedAdapters.ToArray())
 				{
 					if (pair.Value.Remove(underlying) && pair.Value.Count == 0)
-						_subscriptionNonSupportedAdapters.Remove(pair.Key);
+						_nonSupportedAdapters.Remove(pair.Key);
 				}
 			}
 
@@ -1406,8 +1406,8 @@ namespace StockSharp.Algo
 						subscrMsg = (ISubscriptionMessage)subscrMsg.Clone();
 						subscrMsg.TransactionId = TransactionIdGenerator.GetNextId();
 
-						if (_subscriptionKeysToTransId.RemoveByValue(transId))
-							_subscriptionKeysToTransId[new SubscriptionKey(subscrMsg)] = subscrMsg.TransactionId;
+						if (_keysToTransId.RemoveByValue(transId))
+							_keysToTransId[new SubscriptionKey(subscrMsg)] = subscrMsg.TransactionId;
 
 						var tuple = _parentChildMap.RemoveByChild(transId);
 						if (tuple != null)
@@ -1604,7 +1604,7 @@ namespace StockSharp.Algo
 					// try loopback only subscribe messages
 					if (originMsg.IsSubscribe)
 					{
-						var set = _subscriptionNonSupportedAdapters.SafeAdd(originalTransactionId, k => new HashSet<IMessageAdapter>());
+						var set = _nonSupportedAdapters.SafeAdd(originalTransactionId, k => new HashSet<IMessageAdapter>());
 						set.Add(GetUnderlyingAdapter(adapter));
 
 						originMsg.Adapter = this;
@@ -1620,7 +1620,7 @@ namespace StockSharp.Algo
 			if (message.Error == null && originMsg.IsSubscribe && originMsg.To == null)
 			{
 				// we can initiate multiple subscriptions with unique request id and same params
-				_subscriptionKeysToTransId.TryAdd(new SubscriptionKey(originMsg), originalTransactionId);
+				_keysToTransId.TryAdd(new SubscriptionKey(originMsg), originalTransactionId);
 			}
 
 			RaiseMarketDataMessage(adapter, originalTransactionId, message.Error);
