@@ -133,7 +133,7 @@ namespace StockSharp.Algo
 								subscrMsg.SubscriptionId = subscrMsg.OriginalTransactionId;
 							else
 							{
-								var tuple = Tuple.Create(message.Type.ToDataType((message as ExecutionMessage)?.ExecutionType), GetSecurityId(((ISecurityIdMessage)subscrMsg).SecurityId));
+								var tuple = Tuple.Create(message.Type.ToDataType((message as ExecutionMessage)?.ExecutionType), GetSecurityId((subscrMsg as ISecurityIdMessage)?.SecurityId ?? default));
 
 								if (_subscriptionsIds.TryGetValue(tuple, out var info))
 									subscrMsg.SubscriptionIds = info.Subscribers.Cache;
