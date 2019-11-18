@@ -1917,5 +1917,18 @@ namespace StockSharp.Messages
 
 			return false;
 		}
+
+		/// <summary>
+		/// Support portfolio subscriptions.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSupportSubscriptionByPortfolio(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.SupportedMessages.Contains(MessageTypes.Portfolio);
+		}
 	}
 }

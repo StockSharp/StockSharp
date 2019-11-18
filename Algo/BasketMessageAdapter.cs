@@ -710,15 +710,17 @@ namespace StockSharp.Algo
 
 				case MessageTypes.Disconnect:
 				{
-					lock (_connectedResponseLock)
-					{
-						_connectedAdapters.ToArray().ForEach(a =>
-						{
-							var u = GetUnderlyingAdapter(a);
-							this.AddInfoLog("Disconnecting '{0}'.", u);
+					IMessageAdapter[] adapters;
 
-							a.SendInMessage(message);
-						});
+					lock (_connectedResponseLock)
+						adapters = _connectedAdapters.ToArray();
+
+					foreach (var adapter in adapters)
+					{
+						var u = GetUnderlyingAdapter(adapter);
+						this.AddInfoLog("Disconnecting '{0}'.", u);
+
+						adapter.SendInMessage(message);
 					}
 
 					break;
@@ -1229,13 +1231,20 @@ namespace StockSharp.Algo
 					case MessageTypes.PortfolioChange:
 					case MessageTypes.PositionChange:
 					{
-						if (message.Type == MessageTypes.Portfolio && ((PortfolioMessage)message).Error != null)
+						if (message.Type == MessageTypes.Portfolio)
+						{
+							var pfMsg1 = (PortfolioMessage)message;
+
+							if (pfMsg1.Error != null)
+								_requestsById.Remove(pfMsg1.OriginalTransactionId);
+
 							break;
+						}
 
 						var pfMsg = (IPortfolioNameMessage)message;
 						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
 						
-						if (LookupMessagesOnConnect && innerAdapter.IsSupportSubscriptionByPortfolio)
+						if (LookupMessagesOnConnect && innerAdapter.IsSupportSubscriptionByPortfolio())
 							extraOutMsg = CreatePortfolioSubscription(innerAdapter, pfMsg.PortfolioName);
 
 						break;
@@ -1371,7 +1380,7 @@ namespace StockSharp.Algo
 				if (innerAdapter.SecurityLookupRequired && innerAdapter.IsSupportSecuritiesLookupAll)
 					messages.Add(FillIdAndAdapter(innerAdapter, new SecurityLookupMessage()));
 
-				if (innerAdapter.IsSupportSubscriptionByPortfolio)
+				if (innerAdapter.IsSupportSubscriptionByPortfolio())
 				{
 					var portfolioNames = PortfolioAdapterProvider
 						.Adapters

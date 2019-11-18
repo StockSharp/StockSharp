@@ -308,9 +308,6 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportSubscriptionBySecurity => InnerAdapter.IsSupportSubscriptionBySecurity;
 
 		/// <inheritdoc />
-		public virtual bool IsSupportSubscriptionByPortfolio => InnerAdapter.IsSupportSubscriptionByPortfolio;
-
-		/// <inheritdoc />
 		public virtual bool IsSupportCandlesUpdates => InnerAdapter.IsSupportCandlesUpdates;
 
 		/// <inheritdoc />

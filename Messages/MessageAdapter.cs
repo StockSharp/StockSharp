@@ -207,10 +207,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool IsSupportSubscriptionByPortfolio => this.IsMessageSupported(MessageTypes.Portfolio);
-
-		/// <inheritdoc />
-		[Browsable(false)]
 		public virtual bool IsSupportCandlesUpdates => false;
 
 		/// <inheritdoc />

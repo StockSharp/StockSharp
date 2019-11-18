@@ -140,11 +140,6 @@ namespace StockSharp.Messages
 		bool IsSupportSubscriptionBySecurity { get; }
 
 		/// <summary>
-		/// Support portfolio subscriptions.
-		/// </summary>
-		bool IsSupportSubscriptionByPortfolio { get; }
-
-		/// <summary>
 		/// Support candles subscription and live updates.
 		/// </summary>
 		bool IsSupportCandlesUpdates { get; }
