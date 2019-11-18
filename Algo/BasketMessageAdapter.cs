@@ -140,10 +140,10 @@ namespace StockSharp.Algo
 					return DataType.PositionChanges;
 				else if (subscrMsg is OrderStatusMessage)
 					return DataType.Transactions;
-				//else if (subscrMsg is BoardLookupMessage)
-				//	return DataType.Board;
-				//else if (subscrMsg is SecurityLookupMessage)
-				//	return DataType.Securities;
+				else if (subscrMsg is BoardLookupMessage)
+					return DataType.Board;
+				else if (subscrMsg is SecurityLookupMessage)
+					return DataType.Securities;
 
 				throw new ArgumentException(subscrMsg.ToString());
 			}
