@@ -1843,5 +1843,79 @@ namespace StockSharp.Messages
 					throw new ArgumentOutOfRangeException(nameof(type));
 			}
 		}
+
+		/// <summary>
+		/// Get <see cref="ExecutionMessage.TradePrice"/>.
+		/// </summary>
+		/// <param name="message">The message contains information about the execution.</param>
+		/// <returns>Trade price.</returns>
+		public static decimal GetTradePrice(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var price = message.TradePrice;
+
+			if (price == null)
+				throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.Str1021Params.Put(message.TradeId));
+
+			return price.Value;
+		}
+
+		/// <summary>
+		/// Get <see cref="ExecutionMessage.Balance"/>.
+		/// </summary>
+		/// <param name="message">The message contains information about the execution.</param>
+		/// <returns>Order contracts balance.</returns>
+		public static decimal GetBalance(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var balance = message.Balance;
+
+			if (balance != null)
+				return balance.Value;
+
+			throw new ArgumentOutOfRangeException(nameof(message));
+		}
+
+		/// <summary>
+		/// Replace security id by the specified.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="securityId">Security ID.</param>
+		public static void ReplaceSecurityId(this Message message, SecurityId securityId)
+		{
+			switch (message)
+			{
+				case ISecurityIdMessage secIdMsg:
+					secIdMsg.SecurityId = securityId;
+					break;
+				case INullableSecurityIdMessage nullSecIdMsg:
+					nullSecIdMsg.SecurityId = securityId;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str2770);
+			}
+		}
+
+		/// <summary>
+		/// Determines the security id requred for the specified message.
+		/// </summary>
+		/// <param name="secMsg">A message containing info about the security.</param>
+		/// <returns>Check result.</returns>
+		public static bool NotRequiredSecurityId(this SecurityMessage secMsg)
+		{
+			if (secMsg == null)
+				throw new ArgumentNullException(nameof(secMsg));
+
+			if (secMsg.Type == MessageTypes.MarketData && !((MarketDataMessage)secMsg).DataType.IsSecurityRequired())
+				return secMsg.SecurityId.IsDefault();
+			else if (secMsg.Type == MessageTypes.OrderGroupCancel)
+				return secMsg.SecurityId.IsDefault();
+
+			return false;
+		}
 	}
 }

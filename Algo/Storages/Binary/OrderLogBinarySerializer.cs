@@ -219,9 +219,9 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (hasTrade)
 				{
-					tradeId = message.GetTradeId();
+					tradeId = message.TradeId;
 
-					if (tradeId <= 0)
+					if (tradeId == null || tradeId <= 0)
 						throw new ArgumentOutOfRangeException(nameof(messages), tradeId, LocalizedStrings.Str1012Params.Put(message.OrderId));
 
 					// execution ticks (like option execution) may be a zero cost

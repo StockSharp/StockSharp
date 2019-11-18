@@ -350,7 +350,6 @@
     <Compile Include="Storages\Csv\QuoteCsvSerializer.cs" />
     <Compile Include="Storages\Csv\TickCsvSerializer.cs" />
     <Compile Include="Storages\Csv\TransactionCsvSerializer.cs" />
-    <Compile Include="Helper.cs" />
     <Compile Include="IMarketRuleContainer.cs" />
     <Compile Include="IMarketRuleList.cs" />
     <Compile Include="IndexSecurity.cs" />
