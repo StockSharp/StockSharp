@@ -843,11 +843,20 @@ namespace StockSharp.Algo
 		{
 			try
 			{
-				this.AddOrderInfoLog(order, "RegisterOrder");
+				this.AddOrderInfoLog(order, nameof(RegisterOrder));
 
 				if (initOrder)
 				{
-					CheckOnNew(order, order.Type != OrderTypes.Conditional);
+					CheckOnNew(order);
+
+					if (order.Type != OrderTypes.Conditional)
+					{
+						if (order.Volume == 0)
+							throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
+
+						if (order.Volume < 0)
+							throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895);
+					}
 
 					if (order.Type == null)
 						order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
@@ -890,7 +899,7 @@ namespace StockSharp.Algo
 				else
 				{
 					CheckOnOld(oldOrder);
-					CheckOnNew(newOrder, false);
+					CheckOnNew(newOrder);
 
 					if (oldOrder.Comment.IsEmpty())
 						oldOrder.Comment = newOrder.Comment;
@@ -953,10 +962,10 @@ namespace StockSharp.Algo
 				else
 				{
 					CheckOnOld(oldOrder1);
-					CheckOnNew(newOrder1, false);
+					CheckOnNew(newOrder1);
 
 					CheckOnOld(oldOrder2);
-					CheckOnNew(newOrder2, false);
+					CheckOnNew(newOrder2);
 
 					if (oldOrder1.Comment.IsEmpty())
 						oldOrder1.Comment = newOrder1.Comment;
@@ -995,7 +1004,7 @@ namespace StockSharp.Algo
 
 			try
 			{
-				this.AddOrderInfoLog(order, "CancelOrder");
+				this.AddOrderInfoLog(order, nameof(CancelOrder));
 
 				CheckOnOld(order);
 
@@ -1023,37 +1032,25 @@ namespace StockSharp.Algo
 			SendOutMessage(fail.ToMessage(originalTransactionId));
 		}
 
-		private static void CheckOnNew(Order order, bool checkVolume = true, bool checkTransactionId = true)
+		private static void CheckOnNew(Order order)
 		{
 			CheckOrderState(order);
-
-			if (checkVolume)
-			{
-				if (order.Volume == 0)
-					throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
-
-				if (order.Volume < 0)
-					throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895);
-			}
-
-			if (order.Id != null || !order.StringId.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), nameof(order));
-
-			if (!checkTransactionId)
-				return;
 
 			if (order.TransactionId != 0)
 				throw new ArgumentException(LocalizedStrings.Str897Params.Put(order.TransactionId), nameof(order));
 
 			if (order.State != OrderStates.None)
 				throw new ArgumentException(LocalizedStrings.Str898Params.Put(order.State), nameof(order));
+
+			if (order.Id != null || !order.StringId.IsEmpty())
+				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), nameof(order));
 		}
 
 		private static void CheckOnOld(Order order)
 		{
 			CheckOrderState(order);
 
-			if (order.TransactionId == 0 && order.Id == null && order.StringId.IsEmpty())
+			if (order.TransactionId == 0)
 				throw new ArgumentException(LocalizedStrings.Str899, nameof(order));
 		}
 
@@ -1113,13 +1110,7 @@ namespace StockSharp.Algo
 		/// <param name="order">Registration details.</param>
 		protected virtual void OnRegisterOrder(Order order)
 		{
-			var regMsg = order.CreateRegisterMessage(GetSecurityId(order.Security));
-
-			//var depoName = order.Portfolio.GetValue<string>(nameof(PositionChangeTypes.DepoName));
-			//if (depoName != null)
-			//	regMsg.AddValue(nameof(PositionChangeTypes.DepoName), depoName);
-
-			SendInMessage(regMsg);
+			SendInMessage(order.CreateRegisterMessage(GetSecurityId(order.Security)));
 		}
 
 		/// <summary>
@@ -1129,16 +1120,7 @@ namespace StockSharp.Algo
 		/// <param name="newOrder">New order to register.</param>
 		protected virtual void OnReRegisterOrder(Order oldOrder, Order newOrder)
 		{
-			//if (IsSupportAtomicReRegister && oldOrder.Security.Board.IsSupportAtomicReRegister)
-			//{
-			var replaceMsg = oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security));
-			SendInMessage(replaceMsg);
-			//}
-			//else
-			//{
-			//	CancelOrder(oldOrder);
-			//	RegisterOrder(newOrder, false);
-			//}
+			SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
 		}
 
 		/// <summary>
@@ -1151,12 +1133,6 @@ namespace StockSharp.Algo
 		protected virtual void OnReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 		{
 			SendInMessage(oldOrder1.CreateReplaceMessage(newOrder1, GetSecurityId(newOrder1.Security), oldOrder2, newOrder2, GetSecurityId(newOrder2.Security)));
-
-			//CancelOrder(oldOrder1);
-			//RegisterOrder(newOrder1, false);
-
-			//CancelOrder(oldOrder2);
-			//RegisterOrder(newOrder2, false);
 		}
 
 		/// <summary>
