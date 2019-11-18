@@ -24,7 +24,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public abstract class BaseConnectionMessage : Message
+	public abstract class BaseConnectionMessage : Message, IErrorMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="BaseConnectionMessage"/>.
@@ -35,9 +35,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Information about the error connection or disconnection.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[XmlIgnore]
 		public Exception Error { get; set; }

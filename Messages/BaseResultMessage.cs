@@ -10,7 +10,7 @@ namespace StockSharp.Messages
 	/// <typeparam name="TMessage">Message type.</typeparam>
 	[DataContract]
 	[Serializable]
-	public abstract class BaseResultMessage<TMessage> : Message, IOriginalTransactionIdMessage
+	public abstract class BaseResultMessage<TMessage> : Message, IOriginalTransactionIdMessage, IErrorMessage
 		where TMessage : BaseResultMessage<TMessage>, new()
 	{
 		/// <summary>
@@ -26,9 +26,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
-		/// <summary>
-		/// Error info.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[XmlIgnore]
 		public Exception Error { get; set; }

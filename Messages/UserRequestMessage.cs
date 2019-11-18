@@ -12,7 +12,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class UserRequestMessage : Message, ITransactionIdMessage, IOriginalTransactionIdMessage
+	public class UserRequestMessage : Message, ITransactionIdMessage, IOriginalTransactionIdMessage, IErrorMessage
 	{
 		/// <summary>
 		/// Login.
@@ -40,9 +40,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
-		/// <summary>
-		/// Subscribe or unsubscribe error info. To be set if the answer.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[XmlIgnore]
 		public Exception Error { get; set; }

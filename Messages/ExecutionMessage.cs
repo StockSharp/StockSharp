@@ -17,7 +17,6 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel;
-	using System.Linq;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -63,7 +62,9 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	public sealed class ExecutionMessage : BaseSubscriptionIdMessage, ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage, IPortfolioNameMessage
+	public sealed class ExecutionMessage : BaseSubscriptionIdMessage,
+		ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage,
+		IPortfolioNameMessage, IErrorMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -386,9 +387,7 @@ namespace StockSharp.Messages
 		[Nullable]
 		public decimal? OpenInterest { get; set; }
 
-		/// <summary>
-		/// Error registering/cancelling order.
-		/// </summary>
+		/// <inheritdoc />
 		[DisplayNameLoc(LocalizedStrings.Str152Key)]
 		[DescriptionLoc(LocalizedStrings.Str153Key, true)]
 		[MainCategory]

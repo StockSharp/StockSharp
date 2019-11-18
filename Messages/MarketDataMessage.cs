@@ -151,7 +151,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class MarketDataMessage : SecurityMessage, ISubscriptionMessage
+	public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IErrorMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -197,9 +197,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool IsNotSupported { get; set; }
 
-		/// <summary>
-		/// Subscribe or unsubscribe error info. To be set if the answer.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[XmlIgnore]
 		public Exception Error { get; set; }
