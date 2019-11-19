@@ -10,6 +10,7 @@ namespace StockSharp.Algo.Storages.Remote
 	using Ecng.Common;
 	using Ecng.Net;
 
+	using StockSharp.Algo.Server;
 	using StockSharp.Community;
 	using StockSharp.Logging;
 	using StockSharp.Algo.Storages;

@@ -145,17 +145,17 @@
     <Compile Include="OrderBookTruncateMessageAdapter.cs" />
     <Compile Include="OrderLogMessageAdapter.cs" />
     <Compile Include="PartialDownloadMessageAdapter.cs" />
-    <Compile Include="PermissionCredentialsAuthorization.cs" />
-    <Compile Include="PermissionCredentialsRemoteAuthorization.cs" />
-    <Compile Include="PermissionCredentialsStorage.cs" />
+    <Compile Include="Server\PermissionCredentialsAuthorization.cs" />
+    <Compile Include="Server\PermissionCredentialsRemoteAuthorization.cs" />
+    <Compile Include="Server\PermissionCredentialsStorage.cs" />
     <Compile Include="Import\CsvImporter.cs" />
     <Compile Include="Import\CsvParser.cs" />
     <Compile Include="Import\FieldMapping.cs" />
     <Compile Include="Import\FieldMappingRegistry.cs" />
     <Compile Include="Import\FieldMappingValue.cs" />
     <Compile Include="Indicators\IndicatorValueAttribute.cs" />
-    <Compile Include="IRemoteAuthorization.cs" />
-    <Compile Include="PermissionCredentials.cs" />
+    <Compile Include="Server\IRemoteAuthorization.cs" />
+    <Compile Include="Server\PermissionCredentials.cs" />
     <Compile Include="Server\ITransactionIdStorage.cs" />
     <Compile Include="Server\IMessageListener.cs" />
     <Compile Include="Server\IMessageListenerSession.cs" />
@@ -335,7 +335,7 @@
     <Compile Include="Risk\RiskRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AuthorizationModes.cs" />
+    <Compile Include="Server\AuthorizationModes.cs" />
     <Compile Include="Storages\Binary\BinaryMarketDataSerializer.cs" />
     <Compile Include="Storages\BufferMessageAdapter.cs" />
     <Compile Include="Storages\CacheableMarketDataDrive.cs" />

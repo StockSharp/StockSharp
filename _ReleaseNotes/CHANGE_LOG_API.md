@@ -273,6 +273,7 @@ StockSharp API Change log
 * (feature) IPositionProvider. SubscribePositions filter by Portfolio added.
 * (feature) PortfolioLookupMessage. SecurityId filter added.
 * (feature) Connector. MarketDataSubscriptionOnline event added.
+* (feature) Algo. Remote types moved to Algo.Server namespace.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -25,6 +25,7 @@ namespace StockSharp.Algo
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Server;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Community;
