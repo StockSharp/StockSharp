@@ -425,7 +425,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			var securityId = TraderHelper.NewsSecurityId;
+			var securityId = SecurityId.News;
 
 			return _newsStorages.SafeAdd((drive ?? DefaultDrive).GetStorageDrive(securityId, typeof(NewsMessage), null, format), key =>
 			{
@@ -450,7 +450,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public IMarketDataStorage<BoardStateMessage> GetBoardStateMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			var securityId = TraderHelper.AllSecurityId2;
+			var securityId = SecurityId.All;
 
 			return _boardStateStorages.SafeAdd((drive ?? DefaultDrive).GetStorageDrive(securityId, typeof(BoardStateMessage), null, format), key =>
 			{

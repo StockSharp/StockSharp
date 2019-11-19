@@ -283,5 +283,32 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(SecurityCode), SecurityCode);
 			storage.SetValue(nameof(BoardCode), BoardCode);
 		}
+
+		/// <summary>
+		/// "Money" security id.
+		/// </summary>
+		public static readonly SecurityId Money = new SecurityId
+		{
+			SecurityCode = "MONEY",
+			BoardCode = "ALL"
+		};
+
+		/// <summary>
+		/// "News" security id.
+		/// </summary>
+		public static readonly SecurityId News = new SecurityId
+		{
+			SecurityCode = "NEWS",
+			BoardCode = "ALL"
+		};
+
+		/// <summary>
+		/// "ALL" security id.
+		/// </summary>
+		public static readonly SecurityId All = new SecurityId
+		{
+			SecurityCode = "ALL",
+			BoardCode = "ALL"
+		};
 	}
 }
