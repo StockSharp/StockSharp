@@ -81,7 +81,6 @@
     <Compile Include="AdapterListRequestMessage.cs" />
     <Compile Include="AdapterResponseMessage.cs" />
     <Compile Include="BaseConnectionMessage.cs" />
-    <Compile Include="BasePositionChangeMessage.cs" />
     <Compile Include="BaseResultMessage.cs" />
     <Compile Include="BaseRouteMessage.cs" />
     <Compile Include="BaseSubscriptionIdMessage.cs" />

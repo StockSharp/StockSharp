@@ -1342,7 +1342,7 @@ namespace StockSharp.Algo
 						return;
 
 					case MessageTypes.Portfolio:
-					case MessageTypes.PortfolioChange:
+					//case MessageTypes.PortfolioChange:
 					case MessageTypes.PositionChange:
 					{
 						if (message.Type == MessageTypes.Portfolio)
@@ -1350,9 +1350,10 @@ namespace StockSharp.Algo
 							var pfMsg1 = (PortfolioMessage)message;
 
 							if (pfMsg1.Error != null)
+							{
 								_requestsById.Remove(pfMsg1.OriginalTransactionId);
-
-							break;
+								break;
+							}
 						}
 
 						var pfMsg = (IPortfolioNameMessage)message;

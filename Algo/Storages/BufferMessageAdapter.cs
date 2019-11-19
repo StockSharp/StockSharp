@@ -559,10 +559,6 @@ namespace StockSharp.Algo.Storages
 
 					break;
 				}
-				//case MessageTypes.Position:
-				//	break;
-				//case MessageTypes.Portfolio:
-				//	break;
 				case MessageTypes.PositionChange:
 				{
 					var posMsg = (PositionChangeMessage)message;
@@ -573,9 +569,6 @@ namespace StockSharp.Algo.Storages
 
 					break;
 				}
-				case MessageTypes.PortfolioChange:
-					// TODO
-					break;
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);

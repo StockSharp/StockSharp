@@ -133,10 +133,14 @@ namespace StockSharp.Algo.Risk
 		/// <inheritdoc />
 		public override bool ProcessMessage(Message message)
 		{
-			if (message.Type != MessageTypes.PortfolioChange)
+			if (message.Type != MessageTypes.PositionChange)
 				return false;
 
-			var pfMsg = (PortfolioChangeMessage)message;
+			var pfMsg = (PositionChangeMessage)message;
+
+			if (!pfMsg.IsMoney())
+				return false;
+
 			var currValue = (decimal?)pfMsg.Changes.TryGetValue(PositionChangeTypes.CurrentValue);
 
 			if (currValue == null)
@@ -384,10 +388,14 @@ namespace StockSharp.Algo.Risk
 		/// <inheritdoc />
 		public override bool ProcessMessage(Message message)
 		{
-			if (message.Type != MessageTypes.PortfolioChange)
+			if (message.Type != MessageTypes.PositionChange)
 				return false;
 
-			var pfMsg = (PortfolioChangeMessage)message;
+			var pfMsg = (PositionChangeMessage)message;
+
+			if (!pfMsg.IsMoney())
+				return false;
+
 			var currValue = (decimal?)pfMsg.Changes.TryGetValue(PositionChangeTypes.Commission);
 
 			if (currValue == null)

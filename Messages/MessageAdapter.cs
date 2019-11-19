@@ -373,7 +373,7 @@ namespace StockSharp.Messages
 
 			switch (message)
 			{
-				case BasePositionChangeMessage posMsg when posMsg.ServerTime.IsDefault():
+				case PositionChangeMessage posMsg when posMsg.ServerTime.IsDefault():
 					posMsg.ServerTime = CurrentTime;
 					break;
 				case ExecutionMessage execMsg when execMsg.ExecutionType == ExecutionTypes.Transaction && execMsg.ServerTime.IsDefault():

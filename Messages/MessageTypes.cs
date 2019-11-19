@@ -109,6 +109,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// <see cref="PortfolioChangeMessage"/>.
 		/// </summary>
+		[Obsolete]
 		PortfolioChange,
 
 		/// <summary>

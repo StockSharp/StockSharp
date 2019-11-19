@@ -742,7 +742,6 @@ namespace StockSharp.Messages
 					return DataType.Board;
 
 				case MessageTypes.Portfolio:
-				case MessageTypes.PortfolioChange:
 				case MessageTypes.PositionChange:
 					return DataType.PositionChanges;
 
@@ -1909,7 +1908,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines the security id requred for the specified message.
+		/// Determines the security id required for the specified message.
 		/// </summary>
 		/// <param name="secMsg">A message containing info about the security.</param>
 		/// <returns>Check result.</returns>
@@ -1957,5 +1956,18 @@ namespace StockSharp.Messages
 		/// <returns>Check result.</returns>
 		public static bool IsOrderStatusRequired(this IMessageAdapter adapter)
 			=> adapter.IsMessageSupported(MessageTypes.OrderStatus);
+
+		/// <summary>
+		/// Determines the specified message contains <see cref="SecurityId.Money"/> position.
+		/// </summary>
+		/// <param name="posMsg">The message contains information about the position changes.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMoney(this PositionChangeMessage posMsg)
+		{
+			if (posMsg == null)
+				throw new ArgumentNullException(nameof(posMsg));
+
+			return posMsg.SecurityId == SecurityId.Money;
+		}
 	}
 }

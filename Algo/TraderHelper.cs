@@ -2304,7 +2304,7 @@ namespace StockSharp.Algo
 		/// <param name="portfolio">Portfolio.</param>
 		/// <param name="message">Portfolio change message.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		public static void ApplyChanges(this Portfolio portfolio, PortfolioChangeMessage message, IExchangeInfoProvider exchangeInfoProvider)
+		public static void ApplyChanges(this Portfolio portfolio, PositionChangeMessage message, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));

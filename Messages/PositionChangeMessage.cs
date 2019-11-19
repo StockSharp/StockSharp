@@ -175,8 +175,24 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str862Key)]
 	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
-	public sealed class PositionChangeMessage : BasePositionChangeMessage, ISecurityIdMessage
+	public class PositionChangeMessage : BaseChangeMessage<PositionChangeTypes>, IPortfolioNameMessage, ISecurityIdMessage
 	{
+		/// <inheritdoc />
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.NameKey)]
+		[DescriptionLoc(LocalizedStrings.Str247Key)]
+		[MainCategory]
+		public string PortfolioName { get; set; }
+
+		/// <summary>
+		/// Client code assigned by the broker.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		public string ClientCode { get; set; }
+
 		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
@@ -211,6 +227,15 @@ namespace StockSharp.Messages
 		public string Description { get; set; }
 
 		/// <summary>
+		/// Electronic board code.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.BoardKey)]
+		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
+		[MainCategory]
+		public string BoardCode { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		public PositionChangeMessage()
@@ -218,23 +243,43 @@ namespace StockSharp.Messages
 		{
 		}
 
+		///// <summary>
+		///// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
+		///// </summary>
+		///// <param name="type">Message type.</param>
+		//protected PositionChangeMessage(MessageTypes type)
+		//	: base(type)
+		//{
+		//}
+
 		/// <summary>
 		/// Create a copy of <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new PositionChangeMessage
-			{
-				SecurityId = SecurityId,
-				DepoName = DepoName,
-				LimitType = LimitType,
-				Description = Description,
-			};
+			var clone = new PositionChangeMessage();
 
 			CopyTo(clone);
 
 			return clone;
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected virtual void CopyTo(PositionChangeMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.SecurityId = SecurityId;
+			destination.DepoName = DepoName;
+			destination.LimitType = LimitType;
+			destination.Description = Description;
+			destination.PortfolioName = PortfolioName;
+			destination.ClientCode = ClientCode;
+			destination.BoardCode = BoardCode;
 		}
 
 		/// <inheritdoc />

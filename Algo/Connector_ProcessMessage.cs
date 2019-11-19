@@ -634,9 +634,9 @@ namespace StockSharp.Algo
 						ProcessPortfolioMessage((PortfolioMessage)message);
 						break;
 
-					case MessageTypes.PortfolioChange:
-						ProcessPortfolioChangeMessage((PortfolioChangeMessage)message);
-						break;
+					//case MessageTypes.PortfolioChange:
+					//	ProcessPortfolioChangeMessage((PortfolioChangeMessage)message);
+					//	break;
 
 					//case MessageTypes.Position:
 					//	ProcessPositionMessage((PositionMessage)message);
@@ -1211,17 +1211,6 @@ namespace StockSharp.Algo
 			RaiseReceived(portfolio, message, PortfolioReceived);
 		}
 
-		private void ProcessPortfolioChangeMessage(PortfolioChangeMessage message)
-		{
-			var pf = GetPortfolio(message.PortfolioName, portfolio =>
-			{
-				portfolio.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
-				return true;
-			}, out _);
-
-			RaiseReceived(pf, message, PortfolioReceived);
-		}
-
 		//private void ProcessPositionMessage(PositionMessage message)
 		//{
 		//	var security = LookupSecurity(message.SecurityId);
@@ -1233,26 +1222,39 @@ namespace StockSharp.Algo
 
 		private void ProcessPositionChangeMessage(PositionChangeMessage message)
 		{
-			var security = EnsureGetSecurity(message);
-			var portfolio = GetPortfolio(message.PortfolioName);
-
-			var valueInLots = message.Changes.TryGetValue(PositionChangeTypes.CurrentValueInLots);
-			if (valueInLots != null)
+			if (message.IsMoney())
 			{
-				if (!message.Changes.ContainsKey(PositionChangeTypes.CurrentValue))
+				var pf = GetPortfolio(message.PortfolioName, portfolio =>
 				{
-					var currValue = (decimal)valueInLots / (security.VolumeStep ?? 1);
-					message.Add(PositionChangeTypes.CurrentValue, currValue);
+					portfolio.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
+					return true;
+				}, out _);
+
+				RaiseReceived(pf, message, PortfolioReceived);
+			}
+			else
+			{
+				var security = EnsureGetSecurity(message);
+				var portfolio = GetPortfolio(message.PortfolioName);
+
+				var valueInLots = message.Changes.TryGetValue(PositionChangeTypes.CurrentValueInLots);
+				if (valueInLots != null)
+				{
+					if (!message.Changes.ContainsKey(PositionChangeTypes.CurrentValue))
+					{
+						var currValue = (decimal)valueInLots / (security.VolumeStep ?? 1);
+						message.Add(PositionChangeTypes.CurrentValue, currValue);
+					}
+
+					message.Changes.Remove(PositionChangeTypes.CurrentValueInLots);
 				}
 
-				message.Changes.Remove(PositionChangeTypes.CurrentValueInLots);
+				var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
+				position.ApplyChanges(message);
+
+				RaisePositionChanged(position);
+				RaiseReceived(position, message, PositionReceived);
 			}
-
-			var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
-			position.ApplyChanges(message);
-
-			RaisePositionChanged(position);
-			RaiseReceived(position, message, PositionReceived);
 		}
 
 		private void ProcessNewsMessage(NewsMessage message)
