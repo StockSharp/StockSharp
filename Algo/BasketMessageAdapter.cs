@@ -231,6 +231,19 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private class FirstLookupMessage : Message
+		{
+			public FirstLookupMessage()
+				: base(ExtendedMessageTypes.FirstLookup)
+			{
+			}
+
+			public override Message Clone()
+			{
+				return new FirstLookupMessage();
+			}
+		}
+
 		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>>();
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
 		private readonly SynchronizedPairSet<SubscriptionKey, long> _keysToTransId = new SynchronizedPairSet<SubscriptionKey, long>();
@@ -499,7 +512,7 @@ namespace StockSharp.Algo
 		/// <returns>Sorted adapters.</returns>
 		protected IEnumerable<IMessageAdapter> GetSortedAdapters() => _innerAdapters.SortedAdapters;
 
-		private void ProcessReset(ResetMessage message)
+		private void ProcessReset(ResetMessage message, bool clearSubscriptions)
 		{
 			_activeAdapters.Values.ForEach(a =>
 			{
@@ -517,11 +530,15 @@ namespace StockSharp.Algo
 			}
 
 			_activeAdapters.Clear();
-			_keysToTransId.Clear();
-			_requestsById.Clear();
-			_parentChildMap.Clear();
-			_subscriptionListRequests.Clear();
-			_subscribedPortfolios.Clear();
+
+			if (clearSubscriptions)
+			{
+				_keysToTransId.Clear();
+				_requestsById.Clear();
+				_parentChildMap.Clear();
+				_subscriptionListRequests.Clear();
+				_subscribedPortfolios.Clear();
+			}
 		}
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
@@ -664,7 +681,11 @@ namespace StockSharp.Algo
 				}
 				else
 				{
-					adapter.SendInMessage(message);
+					if (message.Type == ExtendedMessageTypes.FirstLookup)
+						ProcessFirstLookup(adapter);
+					else
+						adapter.SendInMessage(message);
+
 					return;	
 				}
 			}
@@ -672,12 +693,12 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					ProcessReset((ResetMessage)message);
+					ProcessReset((ResetMessage)message, true);
 					break;
 
 				case MessageTypes.Connect:
 				{
-					ProcessReset(new ResetMessage());
+					ProcessReset(new ResetMessage(), !IsRestoreSubscriptionOnNormalReconnect);
 
 					_activeAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
 					{
@@ -756,7 +777,7 @@ namespace StockSharp.Algo
 									if (unsubscribeRequest.IsSubscribe)
 										continue;
 
-									unsubscribeRequest.TransactionId = TransactionIdGenerator.GetNextId();
+									unsubscribeRequest.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 									unsubscribeRequest.OriginalTransactionId = subscrMsg.TransactionId;
 
 									unsubscribes.Add((Message)unsubscribeRequest);
@@ -819,6 +840,51 @@ namespace StockSharp.Algo
 				{
 					ProcessOtherMessage(message);
 					break;
+				}
+			}
+		}
+
+		private void ProcessFirstLookup(IMessageAdapter adapter)
+		{
+			if (adapter.PortfolioLookupRequired)
+			{
+				SendRequest(new PortfolioLookupMessage
+				{
+					TransactionId = adapter.TransactionIdGenerator.GetNextId(),
+					IsSubscribe = true
+				}, adapter);
+			}
+
+			if (adapter.OrderStatusRequired)
+			{
+				SendRequest(new OrderStatusMessage
+				{
+					TransactionId = adapter.TransactionIdGenerator.GetNextId(),
+					IsSubscribe = true
+				}, adapter);
+			}
+
+			if (adapter.SecurityLookupRequired && adapter.IsSupportSecuritiesLookupAll)
+			{
+				SendRequest(new SecurityLookupMessage
+				{
+					TransactionId = adapter.TransactionIdGenerator.GetNextId(),
+				}, adapter);
+			}
+
+			if (adapter.IsSupportSubscriptionByPortfolio())
+			{
+				var portfolioNames = PortfolioAdapterProvider
+				                     .Adapters
+				                     .Where(p => p.Value == adapter.Id)
+				                     .Select(p => p.Key);
+
+				foreach (var portfolioName in portfolioNames)
+				{
+					var msg = CreatePortfolioSubscription(adapter, portfolioName);
+
+					if (msg != null)
+						SendRequest(msg, adapter);
 				}
 			}
 		}
@@ -1049,7 +1115,7 @@ namespace StockSharp.Algo
 				foreach (var adapter in adapters)
 				{
 					var clone = (ISubscriptionMessage)subscrMsg.Clone();
-					clone.TransactionId = TransactionIdGenerator.GetNextId();
+					clone.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 
 					child.Add(clone, adapter);
 
@@ -1070,7 +1136,7 @@ namespace StockSharp.Algo
 						var adapter = pair.Value;
 
 						var clone = (ISubscriptionMessage)subscrMsg.Clone();
-						clone.TransactionId = TransactionIdGenerator.GetNextId();
+						clone.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 						clone.OriginalTransactionId = pair.Key;
 
 						child.Add(clone, adapter);
@@ -1409,24 +1475,21 @@ namespace StockSharp.Algo
 					var transId = pair.Key;
 					var subscrMsg = pair.Value.Item1;
 
+					var tuple = _parentChildMap.RemoveByChild(transId);
+					_requestsById.Remove(transId);
+
 					if (subscrMsg.IsSubscribe)
 					{
 						subscrMsg = (ISubscriptionMessage)subscrMsg.Clone();
-						subscrMsg.TransactionId = TransactionIdGenerator.GetNextId();
+						subscrMsg.TransactionId = innerAdapter.TransactionIdGenerator.GetNextId();
 
 						if (_keysToTransId.RemoveByValue(transId))
 							_keysToTransId[new SubscriptionKey(subscrMsg)] = subscrMsg.TransactionId;
 
-						var tuple = _parentChildMap.RemoveByChild(transId);
 						if (tuple != null)
 							_parentChildMap.AddMapping(subscrMsg.TransactionId, tuple.First, underlying);
 						
 						newSubscriptions.Add(subscrMsg);
-					}
-					else
-					{
-						_requestsById.Remove(transId);
-						_parentChildMap.RemoveByChild(transId);
 					}
 				}
 			}
@@ -1497,30 +1560,7 @@ namespace StockSharp.Algo
 				}
 				else if (LookupMessagesOnConnect)
 				{
-					if (innerAdapter.PortfolioLookupRequired)
-						messages.Add(FillIdAndAdapter(innerAdapter, new PortfolioLookupMessage { IsSubscribe = true }));
-
-					if (innerAdapter.OrderStatusRequired)
-						messages.Add(FillIdAndAdapter(innerAdapter, new OrderStatusMessage { IsSubscribe = true }));
-
-					if (innerAdapter.SecurityLookupRequired && innerAdapter.IsSupportSecuritiesLookupAll)
-						messages.Add(FillIdAndAdapter(innerAdapter, new SecurityLookupMessage()));
-
-					if (innerAdapter.IsSupportSubscriptionByPortfolio())
-					{
-						var portfolioNames = PortfolioAdapterProvider
-						                     .Adapters
-						                     .Where(p => p.Value == innerAdapter.Id)
-						                     .Select(p => p.Key);
-
-						foreach (var portfolioName in portfolioNames)
-						{
-							var msg = CreatePortfolioSubscription(innerAdapter, portfolioName);
-
-							if (msg != null)
-								messages.Add(msg);
-						}
-					}
+					messages.Add(new FirstLookupMessage { Adapter = innerAdapter });
 				}
 			}
 
