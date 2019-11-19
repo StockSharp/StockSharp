@@ -17,6 +17,8 @@
 	/// </summary>
 	public class OrderBookInrementMessageAdapter : MessageAdapterWrapper
 	{
+		private const QuoteChangeStates _none = (QuoteChangeStates)(-1);
+
 		private readonly SynchronizedDictionary<long, BookInfo> _states = new SynchronizedDictionary<long, BookInfo>();
 
 		/// <summary>
@@ -46,7 +48,7 @@
 						if (mdMsg.IsSubscribe)
 						{
 							if (IsSupportOrderBookIncrements)
-								_states.Add(mdMsg.TransactionId, RefTuple.Create(new QuotesDict(new BackwardComparer<decimal>()), new QuotesDict(), QuoteChangeStates.SnapshotComplete));
+								_states.Add(mdMsg.TransactionId, RefTuple.Create(new QuotesDict(new BackwardComparer<decimal>()), new QuotesDict(), _none));
 						}
 						else
 						{
@@ -69,6 +71,7 @@
 			{
 				switch (currState)
 				{
+					case _none:
 					case QuoteChangeStates.SnapshotStarted:
 					{
 						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
@@ -98,22 +101,22 @@
 						throw new ArgumentOutOfRangeException(currState.ToString());
 				}
 
-				void Copy(IEnumerable<QuoteChange> from, QuotesDict to)
-				{
-					foreach (var quote in from)
-					{
-						if (quote.Volume == 0)
-							to.Remove(quote.Price);
-						else
-							to[quote.Price] = quote.Volume;
-					}
-				}
-
-				Copy(quoteMsg.Bids, info.First);
-				Copy(quoteMsg.Asks, info.Second);
-
 				info.Third = currState = newState;
 			}
+
+			void Copy(IEnumerable<QuoteChange> from, QuotesDict to)
+			{
+				foreach (var quote in from)
+				{
+					if (quote.Volume == 0)
+						to.Remove(quote.Price);
+					else
+						to[quote.Price] = quote.Volume;
+				}
+			}
+
+			Copy(quoteMsg.Bids, info.First);
+			Copy(quoteMsg.Asks, info.Second);
 
 			if (currState == QuoteChangeStates.SnapshotStarted || currState == QuoteChangeStates.SnapshotBuilding)
 				return null;
