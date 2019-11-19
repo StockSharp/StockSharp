@@ -686,7 +686,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="portfolio">Portfolio.</param>
 		/// <returns>Message.</returns>
-		public static PortfolioChangeMessage ToChangeMessage(this Portfolio portfolio)
+		public static PositionChangeMessage ToChangeMessage(this Portfolio portfolio)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));

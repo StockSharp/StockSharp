@@ -38,12 +38,12 @@ namespace StockSharp.Messages
 	public static class Extensions
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PortfolioChangeMessage"/>.
+		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		/// <param name="adapter">Trading system adapter.</param>
 		/// <param name="pfName">Portfolio name.</param>
 		/// <returns>Portfolio change message.</returns>
-		public static PortfolioChangeMessage CreatePortfolioChangeMessage(this IMessageAdapter adapter, string pfName)
+		public static PositionChangeMessage CreatePortfolioChangeMessage(this IMessageAdapter adapter, string pfName)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
