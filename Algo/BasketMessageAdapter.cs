@@ -244,22 +244,22 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>>();
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
-		private readonly SynchronizedPairSet<SubscriptionKey, long> _keysToTransId = new SynchronizedPairSet<SubscriptionKey, long>();
-		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _activeAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
+		private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _activeAdapters = new CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly SyncObject _connectedResponseLock = new SyncObject();
 		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
 		private readonly HashSet<IMessageAdapter> _pendingConnectAdapters = new HashSet<IMessageAdapter>();
 		private readonly Queue<Message> _pendingMessages = new Queue<Message>();
 		private readonly HashSet<IMessageAdapter> _connectedAdapters = new HashSet<IMessageAdapter>();
 		private readonly InnerAdapterList _innerAdapters;
-		private readonly ParentChildMap _parentChildMap = new ParentChildMap();
 
+		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>>();
+		private readonly SynchronizedPairSet<SubscriptionKey, long> _keysToTransId = new SynchronizedPairSet<SubscriptionKey, long>();
 		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter> _securityAdapters = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter>();
 		private readonly SynchronizedSet<long> _subscriptionListRequests = new SynchronizedSet<long>();
 		private readonly SynchronizedDictionary<IMessageAdapter, HashSet<string>> _subscribedPortfolios = new SynchronizedDictionary<IMessageAdapter, HashSet<string>>();
+		private readonly ParentChildMap _parentChildMap = new ParentChildMap();
 
 		/// <summary>
 		/// Adapters with which the aggregator operates.
@@ -512,13 +512,17 @@ namespace StockSharp.Algo
 		/// <returns>Sorted adapters.</returns>
 		protected IEnumerable<IMessageAdapter> GetSortedAdapters() => _innerAdapters.SortedAdapters;
 
+		private IMessageAdapter[] ActiveAdapters => _activeAdapters.CachedValues;
+
 		private void ProcessReset(ResetMessage message, bool clearSubscriptions)
 		{
-			_activeAdapters.Values.ForEach(a =>
+			ActiveAdapters.ForEach(a =>
 			{
 				a.SendInMessage(message);
 				a.Dispose();
 			});
+
+			_activeAdapters.Clear();
 
 			lock (_connectedResponseLock)
 			{
@@ -528,8 +532,6 @@ namespace StockSharp.Algo
 				_pendingMessages.Clear();
 				_nonSupportedAdapters.Clear();
 			}
-
-			_activeAdapters.Clear();
 
 			if (clearSubscriptions)
 			{
@@ -725,10 +727,10 @@ namespace StockSharp.Algo
 						return adapter;
 					}));
 					
-					if (_activeAdapters.Count == 0)
+					if (ActiveAdapters.Length == 0)
 						throw new InvalidOperationException(LocalizedStrings.Str3650);
 
-					_activeAdapters.Values.ForEach(a =>
+					ActiveAdapters.ForEach(a =>
 					{
 						var u = GetUnderlyingAdapter(a);
 						this.AddInfoLog("Connecting '{0}'.", u);
@@ -1792,7 +1794,7 @@ namespace StockSharp.Algo
 			SecurityAdapterProvider.Changed -= SecurityAdapterProviderOnChanged;
 			PortfolioAdapterProvider.Changed -= PortfolioAdapterProviderOnChanged;
 
-			_activeAdapters.Values.ForEach(a => a.Parent = null);
+			ActiveAdapters.ForEach(a => a.Parent = null);
 
 			base.DisposeManaged();
 		}
