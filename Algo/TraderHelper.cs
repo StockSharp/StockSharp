@@ -2372,7 +2372,7 @@ namespace StockSharp.Algo
 			message.CopyExtensionInfo(position);
 		}
 
-		private static void ApplyChange(this BasePosition position, KeyValuePair<PositionChangeTypes, object> change)
+		private static void ApplyChange(this Position position, KeyValuePair<PositionChangeTypes, object> change)
 		{
 			try
 			{
