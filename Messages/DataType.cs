@@ -210,6 +210,11 @@ namespace StockSharp.Messages
 		public bool IsCandles => MessageType?.IsCandleMessage() == true;
 
 		/// <summary>
+		/// Determines whether the specified message type is derived from <see cref="PortfolioMessage"/>.
+		/// </summary>
+		public bool IsPortfolio => MessageType == typeof(PortfolioMessage);
+
+		/// <summary>
 		/// Determines whether the specified message type is market-data.
 		/// </summary>
 		public bool IsMarketData =>
