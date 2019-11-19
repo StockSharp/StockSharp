@@ -695,8 +695,9 @@ namespace StockSharp.Messages
 		/// Convert <see cref="MarketDataTypes"/> to <see cref="DataType"/> value.
 		/// </summary>
 		/// <param name="type">Market data type.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
 		/// <returns>Data type info.</returns>
-		public static DataType ToDataType(this MarketDataTypes type)
+		public static DataType ToDataType(this MarketDataTypes type, object arg)
 		{
 			switch (type)
 			{
@@ -712,6 +713,13 @@ namespace StockSharp.Messages
 					return DataType.News;
 				case MarketDataTypes.Board:
 					return DataType.Board;
+				case MarketDataTypes.CandleTimeFrame:
+				case MarketDataTypes.CandleTick:
+				case MarketDataTypes.CandleVolume:
+				case MarketDataTypes.CandleRange:
+				case MarketDataTypes.CandlePnF:
+				case MarketDataTypes.CandleRenko:
+					return DataType.Create(type.ToCandleMessage(), arg);
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 			}
@@ -721,9 +729,9 @@ namespace StockSharp.Messages
 		/// Convert <see cref="MessageTypes"/> to <see cref="DataType"/> value.
 		/// </summary>
 		/// <param name="type">Message type.</param>
-		/// <param name="execType">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
 		/// <returns>Data type info.</returns>
-		public static DataType ToDataType(this MessageTypes type, ExecutionTypes? execType = null)
+		public static DataType ToDataType(this MessageTypes type, object arg)
 		{
 			switch (type)
 			{
@@ -744,7 +752,7 @@ namespace StockSharp.Messages
 				case MessageTypes.CandleRenko:
 				case MessageTypes.CandleTick:
 				case MessageTypes.CandleVolume:
-					return type.ToCandleMarketDataType().ToDataType();
+					return type.ToCandleMarketDataType().ToDataType(arg);
 
 				case MessageTypes.News:
 					return DataType.News;
@@ -759,7 +767,7 @@ namespace StockSharp.Messages
 					return DataType.MarketDepth;
 
 				case MessageTypes.Execution:
-					return execType.ToDataType();
+					return ((ExecutionTypes)arg).ToDataType();
 
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
@@ -771,7 +779,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
 		/// <returns>Data type info.</returns>
-		public static DataType ToDataType(this ExecutionTypes? type)
+		public static DataType ToDataType(this ExecutionTypes type)
 		{
 			switch (type)
 			{

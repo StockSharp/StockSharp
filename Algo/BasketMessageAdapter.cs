@@ -135,7 +135,7 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException(nameof(subscrMsg));
 
 				if (subscrMsg is MarketDataMessage mdMsg)
-					return mdMsg.DataType.ToDataType();
+					return mdMsg.DataType.ToDataType(mdMsg.Arg);
 				else if (subscrMsg is PortfolioLookupMessage)
 					return DataType.PositionChanges;
 				else if (subscrMsg is OrderStatusMessage)

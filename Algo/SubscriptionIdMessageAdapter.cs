@@ -23,8 +23,8 @@ namespace StockSharp.Algo
 		private readonly SyncObject _sync = new SyncObject();
 
 		private readonly HashSet<long> _historicalRequests = new HashSet<long>();
-		private readonly PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo> _subscriptionsIds = new PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo>();
-		private readonly PairSet<SubscriptionInfo, long> _requests = new PairSet<SubscriptionInfo, long>();
+		private readonly PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo> _subscriptionsByKey = new PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo>();
+		private readonly PairSet<SubscriptionInfo, long> _subscriptionsById = new PairSet<SubscriptionInfo, long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionIdMessageAdapter"/>.
@@ -71,8 +71,8 @@ namespace StockSharp.Algo
 			lock (_sync)
 			{
 				_historicalRequests.Clear();
-				_subscriptionsIds.Clear();
-				_requests.Clear();
+				_subscriptionsByKey.Clear();
+				_subscriptionsById.Clear();
 			}
 
 			base.OnSendInMessage(message);
@@ -93,10 +93,10 @@ namespace StockSharp.Algo
 						{
 							if (!_historicalRequests.Remove(resMsg.OriginalTransactionId))
 							{
-								if (_requests.TryGetKey(resMsg.OriginalTransactionId, out var info))
+								if (_subscriptionsById.TryGetKey(resMsg.OriginalTransactionId, out var info))
 								{
-									_requests.Remove(info);
-									_subscriptionsIds.RemoveByValue(info);
+									_subscriptionsById.Remove(info);
+									_subscriptionsByKey.RemoveByValue(info);
 								}
 							}
 						}
@@ -133,10 +133,19 @@ namespace StockSharp.Algo
 								subscrMsg.SubscriptionId = subscrMsg.OriginalTransactionId;
 							else
 							{
-								var tuple = Tuple.Create(message.Type.ToDataType((message as ExecutionMessage)?.ExecutionType), GetSecurityId((subscrMsg as ISecurityIdMessage)?.SecurityId ?? default));
+								if (subscrMsg.OriginalTransactionId != 0 && _subscriptionsById.TryGetKey(subscrMsg.OriginalTransactionId, out var info))
+								{
+								}
+								else
+								{
+									var dataType = message.Type.ToDataType((message as CandleMessage)?.Arg ?? (message as ExecutionMessage)?.ExecutionType);
+									var secId = GetSecurityId((subscrMsg as ISecurityIdMessage)?.SecurityId ?? default);
 
-								if (_subscriptionsIds.TryGetValue(tuple, out var info))
-									subscrMsg.SubscriptionIds = info.Subscribers.Cache;
+									if (!_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, secId), out info))
+										break;
+								}
+								
+								subscrMsg.SubscriptionIds = info.Subscribers.Cache;
 							}
 						}
 					}
@@ -152,7 +161,7 @@ namespace StockSharp.Algo
 		{
 			var secId = GetSecurityId(message.SecurityId);
 
-			ProcessInSubscriptionMessage(message, message.DataType.ToDataType(), secId, (id, error) => new MarketDataMessage
+			ProcessInSubscriptionMessage(message, message.DataType.ToDataType(message.Arg), secId, (id, error) => new MarketDataMessage
 			{
 				OriginalTransactionId = id,
 				Error = error,
@@ -210,7 +219,7 @@ namespace StockSharp.Algo
 				{
 					var sendIn = false;
 
-					var info = _subscriptionsIds.TryGetValue(key);
+					var info = _subscriptionsByKey.TryGetValue(key);
 
 					if (isSubscribe)
 					{
@@ -218,8 +227,8 @@ namespace StockSharp.Algo
 						{
 							sendIn = true;
 							info = new SubscriptionInfo();
-							_subscriptionsIds.Add(key, info);
-							_requests.Add(info, message.TransactionId);
+							_subscriptionsByKey.Add(key, info);
+							_subscriptionsById.Add(info, message.TransactionId);
 						}
 						
 						info.Subscribers.Add(transId);
@@ -237,7 +246,7 @@ namespace StockSharp.Algo
 								sendIn = info.Subscribers.Count == 0;
 
 								if (sendIn)
-									_subscriptionsIds.Remove(key);
+									_subscriptionsByKey.Remove(key);
 							}
 						}
 						else
@@ -251,7 +260,7 @@ namespace StockSharp.Algo
 						if (!isSubscribe)
 						{
 							message = (TMessage)message.Clone();
-							message.OriginalTransactionId = _requests.GetAndRemove(info);
+							message.OriginalTransactionId = _subscriptionsById.GetAndRemove(info);
 						}
 
 						sendInMsg = message;
