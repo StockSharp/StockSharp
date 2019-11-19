@@ -1683,21 +1683,6 @@ namespace StockSharp.Algo
 				}).ToArray());
 			}
 
-			if (LatencyManager != null)
-				storage.SetValue(nameof(LatencyManager), LatencyManager.SaveEntire(false));
-
-			if (CommissionManager != null)
-				storage.SetValue(nameof(CommissionManager), CommissionManager.SaveEntire(false));
-
-			if (PnLManager != null)
-				storage.SetValue(nameof(PnLManager), PnLManager.SaveEntire(false));
-
-			if (SlippageManager != null)
-				storage.SetValue(nameof(SlippageManager), SlippageManager.SaveEntire(false));
-
-			storage.SetValue(nameof(IsRestoreSubscriptionOnErrorReconnect), IsRestoreSubscriptionOnErrorReconnect);
-			storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
-
 			base.Save(storage);
 		}
 
@@ -1746,21 +1731,6 @@ namespace StockSharp.Algo
 					_portfolioAdapters.Add(pair.Key, adapter);
 				}
 			}
-
-			if (storage.ContainsKey(nameof(LatencyManager)))
-				LatencyManager = storage.GetValue<SettingsStorage>(nameof(LatencyManager)).LoadEntire<ILatencyManager>();
-
-			if (storage.ContainsKey(nameof(CommissionManager)))
-				CommissionManager = storage.GetValue<SettingsStorage>(nameof(CommissionManager)).LoadEntire<ICommissionManager>();
-
-			if (storage.ContainsKey(nameof(PnLManager)))
-				PnLManager = storage.GetValue<SettingsStorage>(nameof(PnLManager)).LoadEntire<IPnLManager>();
-
-			if (storage.ContainsKey(nameof(SlippageManager)))
-				SlippageManager = storage.GetValue<SettingsStorage>(nameof(SlippageManager)).LoadEntire<ISlippageManager>();
-
-			IsRestoreSubscriptionOnErrorReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnErrorReconnect), IsRestoreSubscriptionOnErrorReconnect);
-			IsRestoreSubscriptionOnNormalReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 
 			base.Load(storage);
 		}
