@@ -22,33 +22,15 @@ namespace StockSharp.Algo
 		/// </summary>
 		public DataType DataType { get; }
 
+		private ISubscriptionMessage SubscriptionMessage { get; }
+
 		/// <summary>
 		/// Request identifier.
 		/// </summary>
 		public long TransactionId
 		{
-			get
-			{
-				if (MarketDataMessage != null)
-					return MarketDataMessage.TransactionId;
-				else if (OrderStatusMessage != null)
-					return OrderStatusMessage.TransactionId;
-				else if (PortfolioLookupMessage != null)
-					return PortfolioLookupMessage.TransactionId;
-				else
-					throw new ArgumentOutOfRangeException(nameof(DataType), DataType, LocalizedStrings.Str1219);
-			}
-			set
-			{
-				if (MarketDataMessage != null)
-					MarketDataMessage.TransactionId = value;
-				else if (OrderStatusMessage != null)
-					OrderStatusMessage.TransactionId = value;
-				else if (PortfolioLookupMessage != null)
-					PortfolioLookupMessage.TransactionId = value;
-				else
-					throw new ArgumentOutOfRangeException(nameof(DataType), DataType, LocalizedStrings.Str1219);
-			}
+			get => SubscriptionMessage.TransactionId;
+			set => SubscriptionMessage.TransactionId = value;
 		}
 
 		/// <summary>
@@ -72,6 +54,11 @@ namespace StockSharp.Algo
 		public PortfolioLookupMessage PortfolioLookupMessage { get; }
 
 		/// <summary>
+		/// The message contains information about portfolio.
+		/// </summary>
+		public PortfolioMessage PortfolioMessage { get; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="Subscription"/>.
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>
@@ -83,7 +70,7 @@ namespace StockSharp.Algo
 
 			if (dataType.IsMarketData)
 			{
-				MarketDataMessage = new MarketDataMessage
+				SubscriptionMessage = MarketDataMessage = new MarketDataMessage
 				{
 					DataType = dataType.ToMarketDataType().Value,
 					Arg = dataType.Arg,
@@ -94,9 +81,11 @@ namespace StockSharp.Algo
 					MarketDataMessage.FillSecurityInfo(Security);
 			}
 			else if (dataType == DataType.Transactions)
-				OrderStatusMessage = new OrderStatusMessage { IsSubscribe = true };
+				SubscriptionMessage = OrderStatusMessage = new OrderStatusMessage { IsSubscribe = true };
 			else if (dataType == DataType.PositionChanges)
-				PortfolioLookupMessage = new PortfolioLookupMessage { IsSubscribe = true };
+				SubscriptionMessage = PortfolioLookupMessage = new PortfolioLookupMessage { IsSubscribe = true };
+			else if (dataType.IsPortfolio)
+				SubscriptionMessage = PortfolioMessage = new PortfolioMessage { IsSubscribe = true };
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
 		}
@@ -110,5 +99,22 @@ namespace StockSharp.Algo
 		{
 			CandleSeries = candleSeries;
 		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Subscription"/>.
+		/// </summary>
+		/// <param name="portfolio">Portfolio, describing the trading account and the size of its generated commission.</param>
+		public Subscription(Portfolio portfolio)
+			: this(DataType.Portfolio(portfolio.Name), null)
+		{
+			PortfolioMessage = portfolio.ToMessage();
+			PortfolioMessage.IsSubscribe = true;
+			Portfolio = portfolio;
+		}
+
+		/// <summary>
+		/// Portfolio, describing the trading account and the size of its generated commission.
+		/// </summary>
+		public Portfolio Portfolio { get; }
 	}
 }

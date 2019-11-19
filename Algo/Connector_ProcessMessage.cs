@@ -1188,7 +1188,11 @@ namespace StockSharp.Algo
 		{
 			if (message.Error != null)
 			{
-				// TODO
+				var subscription = TryGetAndRemoveSubscription(message.OriginalTransactionId);
+				
+				if (subscription != null)
+					RaiseSubscriptionFailed(subscription, message.Error, true);
+
 				return;
 			}
 

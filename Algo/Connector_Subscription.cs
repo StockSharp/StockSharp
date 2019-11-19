@@ -557,6 +557,10 @@ namespace StockSharp.Algo
 			{
 				SubscribePositions();
 			}
+			else if (subscription.DataType.IsPortfolio)
+			{
+				RegisterPortfolio(subscription.Portfolio);
+			}
 			else
 				throw new ArgumentOutOfRangeException(nameof(subscription), subscription.DataType, LocalizedStrings.Str1219);
 		}
@@ -583,6 +587,10 @@ namespace StockSharp.Algo
 			else if (subscription.DataType == DataType.PositionChanges)
 			{
 				UnSubscribePositions(transId);
+			}
+			else if (subscription.DataType.IsPortfolio)
+			{
+				UnRegisterPortfolio(subscription.Portfolio);
 			}
 			else
 				throw new ArgumentOutOfRangeException(nameof(subscription), subscription.DataType, LocalizedStrings.Str1219);
