@@ -400,6 +400,11 @@ namespace StockSharp.Algo
 		public bool IsRestoreSubscriptionOnNormalReconnect { get; set; } = true;
 
 		/// <summary>
+		/// Send unsubscribe on disconnect command.
+		/// </summary>
+		public bool IsAutoUnSubscribeOnDisconnect { get; set; } = true;
+
+		/// <summary>
 		/// Suppress reconnecting errors.
 		/// </summary>
 		public bool SuppressReconnectingErrors { get; set; } = true;
@@ -724,41 +729,44 @@ namespace StockSharp.Algo
 						var u = GetUnderlyingAdapter(adapter);
 						this.AddInfoLog("Disconnecting '{0}'.", u);
 
-						var unsubscribes = new List<Message>();
-
-						lock (_requestsById.SyncRoot)
+						if (IsAutoUnSubscribeOnDisconnect)
 						{
-							foreach (var pair in _requestsById)
+							var unsubscribes = new List<Message>();
+
+							lock (_requestsById.SyncRoot)
 							{
-								if (pair.Value.Item2 != u)
-									continue;
+								foreach (var pair in _requestsById)
+								{
+									if (pair.Value.Item2 != u)
+										continue;
 
-								var subscrMsg = pair.Value.Item1;
+									var subscrMsg = pair.Value.Item1;
 
-								if (subscrMsg == null)
-									continue;
+									if (subscrMsg == null)
+										continue;
 
-								if (!subscrMsg.IsSubscribe)
-									continue;
+									if (!subscrMsg.IsSubscribe)
+										continue;
 
-								var unsubscribeRequest = (ISubscriptionMessage)subscrMsg.Clone();
+									var unsubscribeRequest = (ISubscriptionMessage)subscrMsg.Clone();
 								
-								unsubscribeRequest.IsSubscribe = false;
+									unsubscribeRequest.IsSubscribe = false;
 
-								// some messages can only be subscriptions
-								if (unsubscribeRequest.IsSubscribe)
-									continue;
+									// some messages can only be subscriptions
+									if (unsubscribeRequest.IsSubscribe)
+										continue;
 
-								unsubscribeRequest.TransactionId = TransactionIdGenerator.GetNextId();
-								unsubscribeRequest.OriginalTransactionId = subscrMsg.TransactionId;
+									unsubscribeRequest.TransactionId = TransactionIdGenerator.GetNextId();
+									unsubscribeRequest.OriginalTransactionId = subscrMsg.TransactionId;
 
-								unsubscribes.Add((Message)unsubscribeRequest);
+									unsubscribes.Add((Message)unsubscribeRequest);
+								}
 							}
-						}
 
-						foreach (var unsubscribe in unsubscribes)
-						{
-							adapter.SendInMessage(unsubscribe);
+							foreach (var unsubscribe in unsubscribes)
+							{
+								adapter.SendInMessage(unsubscribe);
+							}
 						}
 
 						adapter.SendInMessage(message);
@@ -1482,9 +1490,10 @@ namespace StockSharp.Algo
 						return _requestsById.Any(p => p.Value.Item2 == underlyingAdapter);
 				}
 
-				if (IsRestoreSubscriptionOnNormalReconnect && AnySubscription())
+				if (AnySubscription())
 				{
-					ProcessReSubscribe(innerAdapter);
+					if (IsRestoreSubscriptionOnNormalReconnect)
+						ProcessReSubscribe(innerAdapter);
 				}
 				else if (LookupMessagesOnConnect)
 				{
