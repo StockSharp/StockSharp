@@ -154,7 +154,7 @@ namespace SampleRealTimeEmulation
 			_emuConnector.NewMarketDepth += OnDepth;
 			_emuConnector.MarketDepthChanged += OnDepth;
 
-			_emuConnector.NewPortfolio += PortfolioGrid.Portfolios.Add;
+			_emuConnector.NewPortfolio += PortfolioGrid.Positions.Add;
 			_emuConnector.NewPosition += PortfolioGrid.Positions.Add;
 
 			_emuConnector.NewOrder += OrderGrid.Orders.Add;

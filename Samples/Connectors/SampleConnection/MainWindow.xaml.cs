@@ -101,7 +101,7 @@ namespace SampleConnection
 			Connector.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 			
-			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
+			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Positions.Add;
 			Connector.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 			// subscribe on error of order registration event
