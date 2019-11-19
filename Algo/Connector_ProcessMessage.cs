@@ -731,33 +731,35 @@ namespace StockSharp.Algo
 
 			if (originalMsg.IsSubscribe)
 			{
+				var subscription = TryGetSubscription(originalMsg.TransactionId);
+
 				if (replyMsg.IsOk())
-					RaiseMarketDataSubscriptionSucceeded(security, originalMsg);
+					RaiseMarketDataSubscriptionSucceeded(security, originalMsg, subscription);
 				else
 				{
 					if (unexpectedCancelled)
 					{
-						RaiseMarketDataUnexpectedCancelled(security, originalMsg, replyMsg.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)));
+						RaiseMarketDataUnexpectedCancelled(security, originalMsg, replyMsg.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)), subscription);
 						ProcessCandleSeriesStopped(replyMsg.OriginalTransactionId);
 					}
 					else
 					{
-						RaiseMarketDataSubscriptionFailed(security, originalMsg, replyMsg);
+						RaiseMarketDataSubscriptionFailed(security, originalMsg, replyMsg, subscription);
 						ProcessCandleSeriesError(replyMsg);
 					}
 				}
 			}
 			else
 			{
-				_subscriptions.Remove(originalMsg.OriginalTransactionId);
+				var subscription = TryGetAndRemoveSubscription(originalMsg.OriginalTransactionId);
 
 				if (replyMsg.IsOk())
 				{
-					RaiseMarketDataUnSubscriptionSucceeded(security, originalMsg);
+					RaiseMarketDataUnSubscriptionSucceeded(security, originalMsg, subscription);
 					ProcessCandleSeriesStopped(originalMsg.OriginalTransactionId);
 				}
 				else
-					RaiseMarketDataUnSubscriptionFailed(security, originalMsg, replyMsg);
+					RaiseMarketDataUnSubscriptionFailed(security, originalMsg, replyMsg, subscription);
 			}
 		}
 
@@ -1860,7 +1862,7 @@ namespace StockSharp.Algo
 		{
 			var series = ProcessCandleSeriesStopped(message.OriginalTransactionId);
 			var security = series?.Security ?? _subscriptionManager.TryGetSecurity(message.OriginalTransactionId);
-			RaiseMarketDataSubscriptionFinished(security, message);
+			RaiseMarketDataSubscriptionFinished(security, message, TryGetAndRemoveSubscription(message.OriginalTransactionId));
 		}
 
 		private void ProcessChangePasswordMessage(ChangePasswordMessage message)

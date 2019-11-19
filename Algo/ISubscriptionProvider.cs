@@ -93,6 +93,21 @@ namespace StockSharp.Algo
 		event Action<Subscription> SubscriptionOnline;
 
 		/// <summary>
+		/// Subscription is started.
+		/// </summary>
+		event Action<Subscription> SubscriptionStarted;
+
+		/// <summary>
+		/// Subscription is stopped.
+		/// </summary>
+		event Action<Subscription, Exception> SubscriptionStopped;
+
+		/// <summary>
+		/// Subscription is failed.
+		/// </summary>
+		event Action<Subscription, Exception, bool> SubscriptionFailed;
+
+		/// <summary>
 		/// Subscribe.
 		/// </summary>
 		/// <param name="subscription">Subscription.</param>
