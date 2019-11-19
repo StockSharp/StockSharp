@@ -1924,11 +1924,30 @@ namespace StockSharp.Messages
 		/// <param name="adapter">Adapter.</param>
 		/// <returns>Check result.</returns>
 		public static bool IsSupportSubscriptionByPortfolio(this IMessageAdapter adapter)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
+			=> adapter.IsMessageSupported(MessageTypes.Portfolio);
 
-			return adapter.SupportedMessages.Contains(MessageTypes.Portfolio);
-		}
+		/// <summary>
+		/// <see cref="SecurityLookupMessage"/> required to get securities.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSecurityLookupRequired(this IMessageAdapter adapter) 
+			=> adapter.IsMessageSupported(MessageTypes.SecurityLookup);
+
+		/// <summary>
+		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsPortfolioLookupRequired(this IMessageAdapter adapter)
+			=> adapter.IsMessageSupported(MessageTypes.PortfolioLookup);
+
+		/// <summary>
+		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsOrderStatusRequired(this IMessageAdapter adapter)
+			=> adapter.IsMessageSupported(MessageTypes.OrderStatus);
 	}
 }

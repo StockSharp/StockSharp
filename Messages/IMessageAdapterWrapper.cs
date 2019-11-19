@@ -281,15 +281,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual bool PortfolioLookupRequired => InnerAdapter.PortfolioLookupRequired;
-
-		/// <inheritdoc />
-		public virtual bool SecurityLookupRequired => InnerAdapter.SecurityLookupRequired;
-
-		/// <inheritdoc />
-		public virtual bool OrderStatusRequired => InnerAdapter.OrderStatusRequired;
-
-		/// <inheritdoc />
 		public string StorageName => InnerAdapter.StorageName;
 
 		/// <inheritdoc />

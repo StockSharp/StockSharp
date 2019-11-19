@@ -251,67 +251,15 @@ namespace StockSharp.Algo
 		private readonly HashSet<IMessageAdapter> _pendingConnectAdapters = new HashSet<IMessageAdapter>();
 		private readonly Queue<Message> _pendingMessages = new Queue<Message>();
 		private readonly HashSet<IMessageAdapter> _connectedAdapters = new HashSet<IMessageAdapter>();
-		private readonly InnerAdapterList _innerAdapters;
+
+		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter> _securityAdapters = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter>();
 
 		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>>();
 		private readonly SynchronizedPairSet<SubscriptionKey, long> _keysToTransId = new SynchronizedPairSet<SubscriptionKey, long>();
-		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter> _securityAdapters = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter>();
 		private readonly SynchronizedSet<long> _subscriptionListRequests = new SynchronizedSet<long>();
 		private readonly SynchronizedDictionary<IMessageAdapter, HashSet<string>> _subscribedPortfolios = new SynchronizedDictionary<IMessageAdapter, HashSet<string>>();
 		private readonly ParentChildMap _parentChildMap = new ParentChildMap();
-
-		/// <summary>
-		/// Adapters with which the aggregator operates.
-		/// </summary>
-		public IInnerAdapterList InnerAdapters => _innerAdapters;
-
-		private INativeIdStorage _nativeIdStorage = new InMemoryNativeIdStorage();
-
-		/// <summary>
-		/// Security native identifier storage.
-		/// </summary>
-		public INativeIdStorage NativeIdStorage
-		{
-			get => _nativeIdStorage;
-			set => _nativeIdStorage = value ?? throw new ArgumentNullException(nameof(value));
-		}
-
-		private ISecurityMappingStorage _securityMappingStorage;
-
-		/// <summary>
-		/// Security identifier mappings storage.
-		/// </summary>
-		public ISecurityMappingStorage SecurityMappingStorage
-		{
-			get => _securityMappingStorage;
-			set => _securityMappingStorage = value ?? throw new ArgumentNullException(nameof(value));
-		}
-
-		/// <summary>
-		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
-		/// </summary>
-		public IExtendedInfoStorage ExtendedInfoStorage { get; set; }
-
-		/// <summary>
-		/// Orders registration delay calculation manager.
-		/// </summary>
-		public ILatencyManager LatencyManager { get; set; }
-
-		/// <summary>
-		/// The profit-loss manager.
-		/// </summary>
-		public IPnLManager PnLManager { get; set; }
-
-		/// <summary>
-		/// The commission calculating manager.
-		/// </summary>
-		public ICommissionManager CommissionManager { get; set; }
-
-		/// <summary>
-		/// Slippage manager.
-		/// </summary>
-		public ISlippageManager SlippageManager { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
@@ -372,6 +320,60 @@ namespace StockSharp.Algo
 		/// </summary>
 		public CandleBuilderProvider CandleBuilderProvider { get; }
 
+		private readonly InnerAdapterList _innerAdapters;
+
+		/// <summary>
+		/// Adapters with which the aggregator operates.
+		/// </summary>
+		public IInnerAdapterList InnerAdapters => _innerAdapters;
+
+		private INativeIdStorage _nativeIdStorage = new InMemoryNativeIdStorage();
+
+		/// <summary>
+		/// Security native identifier storage.
+		/// </summary>
+		public INativeIdStorage NativeIdStorage
+		{
+			get => _nativeIdStorage;
+			set => _nativeIdStorage = value ?? throw new ArgumentNullException(nameof(value));
+		}
+
+		private ISecurityMappingStorage _securityMappingStorage;
+
+		/// <summary>
+		/// Security identifier mappings storage.
+		/// </summary>
+		public ISecurityMappingStorage SecurityMappingStorage
+		{
+			get => _securityMappingStorage;
+			set => _securityMappingStorage = value ?? throw new ArgumentNullException(nameof(value));
+		}
+
+		/// <summary>
+		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
+		/// </summary>
+		public IExtendedInfoStorage ExtendedInfoStorage { get; set; }
+
+		/// <summary>
+		/// Orders registration delay calculation manager.
+		/// </summary>
+		public ILatencyManager LatencyManager { get; set; }
+
+		/// <summary>
+		/// The profit-loss manager.
+		/// </summary>
+		public IPnLManager PnLManager { get; set; }
+
+		/// <summary>
+		/// The commission calculating manager.
+		/// </summary>
+		public ICommissionManager CommissionManager { get; set; }
+
+		/// <summary>
+		/// Slippage manager.
+		/// </summary>
+		public ISlippageManager SlippageManager { get; set; }
+
 		/// <inheritdoc />
 		public override IEnumerable<MessageTypes> SupportedMessages => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct();
 
@@ -380,15 +382,6 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public override IEnumerable<MarketDataTypes> SupportedMarketDataTypes => GetSortedAdapters().SelectMany(a => a.SupportedMarketDataTypes).Distinct();
-
-		/// <inheritdoc />
-		public override bool PortfolioLookupRequired => GetSortedAdapters().Any(a => a.PortfolioLookupRequired);
-
-		/// <inheritdoc />
-		public override bool OrderStatusRequired => GetSortedAdapters().Any(a => a.OrderStatusRequired);
-
-		/// <inheritdoc />
-		public override bool SecurityLookupRequired => GetSortedAdapters().Any(a => a.SecurityLookupRequired);
 
 		/// <inheritdoc />
 		public override bool IsSupportSecuritiesLookupAll => GetSortedAdapters().Any(a => a.IsSupportSecuritiesLookupAll);
@@ -829,7 +822,7 @@ namespace StockSharp.Algo
 
 				case MessageTypes.ChangePassword:
 				{
-					var adapter = GetSortedAdapters().FirstOrDefault(a => a.SupportedMessages.Contains(MessageTypes.ChangePassword));
+					var adapter = GetSortedAdapters().FirstOrDefault(a => a.IsMessageSupported(MessageTypes.ChangePassword));
 
 					if (adapter == null)
 						throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message.Type));
@@ -848,7 +841,7 @@ namespace StockSharp.Algo
 
 		private void ProcessFirstLookup(IMessageAdapter adapter)
 		{
-			if (adapter.PortfolioLookupRequired)
+			if (adapter.IsPortfolioLookupRequired())
 			{
 				SendRequest(new PortfolioLookupMessage
 				{
@@ -857,7 +850,7 @@ namespace StockSharp.Algo
 				}, adapter);
 			}
 
-			if (adapter.OrderStatusRequired)
+			if (adapter.IsOrderStatusRequired())
 			{
 				SendRequest(new OrderStatusMessage
 				{
@@ -866,7 +859,7 @@ namespace StockSharp.Algo
 				}, adapter);
 			}
 
-			if (adapter.SecurityLookupRequired && adapter.IsSupportSecuritiesLookupAll)
+			if (adapter.IsSecurityLookupRequired() && adapter.IsSupportSecuritiesLookupAll)
 			{
 				SendRequest(new SecurityLookupMessage
 				{

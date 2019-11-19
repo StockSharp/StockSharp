@@ -66,9 +66,6 @@ namespace StockSharp.Algo.Testing
 				_connector = connector ?? throw new ArgumentNullException(nameof(connector));
 			}
 
-			public override bool SecurityLookupRequired => _connector._ownAdapter && base.SecurityLookupRequired;
-			public override bool PortfolioLookupRequired => false;
-			public override bool OrderStatusRequired => false;
 			public override OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired => null;
 			public override IEnumerable<MessageTypes> SupportedMessages => InnerAdapter.SupportedMessages.Except(Extensions.TransactionalMessageTypes).ToArray();
 			public override IEnumerable<MessageTypes> SupportedOutMessages => InnerAdapter.SupportedOutMessages.Except(new[] { MessageTypes.Portfolio, MessageTypes.PortfolioRoute, MessageTypes.PortfolioRouteListFinished, MessageTypes.PortfolioChange, MessageTypes.PositionChange, MessageTypes.PortfolioLookupResult }).ToArray();

@@ -95,21 +95,6 @@ namespace StockSharp.Messages
 		TimeSpan HeartbeatInterval { get; set; }
 
 		/// <summary>
-		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
-		/// </summary>
-		bool PortfolioLookupRequired { get; }
-
-		/// <summary>
-		/// <see cref="SecurityLookupMessage"/> required to get securities.
-		/// </summary>
-		bool SecurityLookupRequired { get; }
-
-		/// <summary>
-		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
-		/// </summary>
-		bool OrderStatusRequired { get; }
-
-		/// <summary>
 		/// The storage name, associated with the adapter.
 		/// </summary>
 		string StorageName { get; }

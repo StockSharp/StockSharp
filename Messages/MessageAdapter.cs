@@ -175,18 +175,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool SecurityLookupRequired => this.IsMessageSupported(MessageTypes.SecurityLookup);
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual bool PortfolioLookupRequired => this.IsMessageSupported(MessageTypes.PortfolioLookup);
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual bool OrderStatusRequired => this.IsMessageSupported(MessageTypes.OrderStatus);
-
-		/// <inheritdoc />
-		[Browsable(false)]
 		public virtual bool IsNativeIdentifiersPersistable => true;
 
 		/// <inheritdoc />
