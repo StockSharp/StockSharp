@@ -382,10 +382,11 @@ namespace StockSharp.Algo
 			return GetData(security).Orders.CachedValues.Select(info => info.Order).Filter(state);
 		}
 
-		public void AddMassCancelationId(long transactionId)
+		public void TryAddMassCancelationId(long transactionId)
 		{
-			if (!_massCancelationTransactions.Add(transactionId))
-				throw new InvalidOperationException();
+			_massCancelationTransactions.TryAdd(transactionId);
+			//if (!_massCancelationTransactions.Add(transactionId))
+			//	throw new InvalidOperationException();
 		}
 
 		public bool IsMassCancelation(long transactionId) => _massCancelationTransactions.Contains(transactionId);

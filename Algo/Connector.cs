@@ -1000,7 +1000,7 @@ namespace StockSharp.Algo
 			if (transactionId == null)
 				transactionId = TransactionIdGenerator.GetNextId();
 
-			_entityCache.AddMassCancelationId(transactionId.Value);
+			_entityCache.TryAddMassCancelationId(transactionId.Value);
 			OnCancelOrders(transactionId.Value, isStopOrder, portfolio, direction, board, security, securityType);
 		}
 
