@@ -117,6 +117,18 @@ namespace StockSharp.BusinessEntities
 		void LookupOrders(OrderStatusMessage criteria);
 
 		/// <summary>
+		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
+		/// </summary>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		void SubscribePositions(PortfolioLookupMessage criteria);
+
+		/// <summary>
+		/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="NewOrder"/>.
+		/// </summary>
+		/// <param name="criteria">The order which fields will be used as a filter.</param>
+		void SubscribeOrders(OrderStatusMessage criteria);
+
+		/// <summary>
 		/// Subscribe on orders changes.
 		/// </summary>
 		/// <param name="security">Security for subscription.</param>
@@ -129,7 +141,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Unsubscribe from orders changes.
 		/// </summary>
-		/// <param name="originalTransactionId">ID of the original message <see cref="SubscribeOrders"/> for which this message is a response.</param>
+		/// <param name="originalTransactionId">ID of the original message <see cref="SubscribeOrders(StockSharp.Messages.OrderStatusMessage)"/> for which this message is a response.</param>
 		void UnSubscribeOrders(long originalTransactionId = 0);
 
 		/// <summary>

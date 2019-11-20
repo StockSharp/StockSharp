@@ -180,6 +180,16 @@ namespace StockSharp.Algo.Strategies
 #pragma warning restore 618
 		}
 
+		void ITransactionProvider.SubscribePositions(PortfolioLookupMessage criteria)
+		{
+			SafeGetConnector().SubscribePositions(criteria);
+		}
+
+		void ITransactionProvider.SubscribeOrders(OrderStatusMessage criteria)
+		{
+			SafeGetConnector().SubscribeOrders(criteria);
+		}
+
 		void ITransactionProvider.SubscribeOrders(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 		{
 			SafeGetConnector().SubscribeOrders(security, from, to, count, adapter);
