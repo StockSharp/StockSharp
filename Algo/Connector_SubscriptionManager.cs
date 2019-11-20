@@ -53,10 +53,7 @@ namespace StockSharp.Algo
 			private readonly SyncObject _syncObject = new SyncObject();
 
 			private readonly Dictionary<long, SubscriptionInfo> _subscriptions = new Dictionary<long, SubscriptionInfo>();
-			//private readonly Dictionary<long, LookupInfo> _lookups = new Dictionary<long, LookupInfo>();
 			private readonly Dictionary<long, Tuple<ISubscriptionMessage, Subscription>> _requests = new Dictionary<long, Tuple<ISubscriptionMessage, Subscription>>();
-			//private readonly Dictionary<Subscription, CandlesSeriesHolder> _candlesHolder = new Dictionary<Subscription, CandlesSeriesHolder>();
-			//private readonly HashSet<Subscription> _activeSubscriptions = new HashSet<Subscription>();
 
 			private readonly Connector _connector;
 
@@ -85,10 +82,7 @@ namespace StockSharp.Algo
 				lock (_syncObject)
 				{
 					_subscriptions.Clear();
-					//_lookups.Clear();
 					_requests.Clear();
-					//_candlesHolder.Clear();
-					//_activeSubscriptions.Clear();
 				}
 			}
 
@@ -110,10 +104,7 @@ namespace StockSharp.Algo
 					if (_subscriptions.TryGetValue(id, out var info))
 					{
 						if (remove)
-						{
 							_subscriptions.Remove(id);
-							//_candlesHolder.Remove(subscription);
-						}
 
 						return info;
 					}
@@ -271,10 +262,8 @@ namespace StockSharp.Algo
 				}
 
 				subscrMsg = (ISubscriptionMessage)subscrMsg.Clone();
-				_requests.Add(subscrMsg.TransactionId, Tuple.Create(subscrMsg, subscription));
 
-				_connector.AddInfoLog(subscrMsg.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.Security?.Id, subscription);
-				_connector.SendInMessage((Message)subscrMsg);
+				SendRequest(subscrMsg, subscription);
 			}
 
 			public void UnSubscribe(Subscription subscription)
@@ -318,8 +307,15 @@ namespace StockSharp.Algo
 				unsubscribe.OriginalTransactionId = subscription.TransactionId;
 				unsubscribe.IsSubscribe = false;
 
-				_requests.Add(unsubscribe.TransactionId, Tuple.Create(unsubscribe, subscription));
-				_connector.SendInMessage((Message)unsubscribe);
+				SendRequest(unsubscribe, subscription);
+			}
+
+			private void SendRequest(ISubscriptionMessage request, Subscription subscription)
+			{
+				_connector.AddInfoLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.Security?.Id, subscription);
+
+				_requests.Add(request.TransactionId, Tuple.Create(request, subscription));
+				_connector.SendInMessage((Message)request);
 			}
 
 			public void ProcessLookupResponse<TCriteria>(IOriginalTransactionIdMessage message, object item)
