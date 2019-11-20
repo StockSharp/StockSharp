@@ -227,5 +227,16 @@ namespace StockSharp.BusinessEntities
 		{
 			return Name;
 		}
+
+		/// <summary>
+		/// Create a copy of <see cref="Portfolio"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public new Portfolio Clone()
+		{
+			var clone = new Portfolio();
+			CopyTo(clone);
+			return clone;
+		}
 	}
 }

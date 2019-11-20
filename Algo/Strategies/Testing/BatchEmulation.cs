@@ -411,7 +411,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			{
 				_strategyInfo[strategy] = new Tuple<Portfolio, Security>(strategy.Portfolio, strategy.Security);
 
-				var portfolio = (Portfolio)strategy.Portfolio.Clone();
+				var portfolio = strategy.Portfolio.Clone();
 				portfolio.Name += "_" + ++id;
 				portfolios.Add(portfolio);
 				
