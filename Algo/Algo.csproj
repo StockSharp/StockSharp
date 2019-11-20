@@ -117,6 +117,7 @@
     <Compile Include="CollectionPortfolioProvider.cs" />
     <Compile Include="CollectionSecurityProvider.cs" />
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
+    <Compile Include="Connector_SubscriptionManager.cs" />
     <Compile Include="Export\Database\CandleTable.cs" />
     <Compile Include="Export\Database\IndicatorValueTable.cs" />
     <Compile Include="Export\Database\PositionChangeTable.cs" />

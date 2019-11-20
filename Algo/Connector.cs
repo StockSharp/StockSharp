@@ -62,26 +62,6 @@ namespace StockSharp.Algo
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new Dictionary<string, List<ExecutionMessage>>();
 
-		private class LookupInfo<TCriteria, TItem>
-			where TCriteria : Message
-		{
-			public TCriteria Criteria { get; }
-			public IList<TItem> Items { get; } = new List<TItem>();
-
-			public LookupInfo(TCriteria criteria)
-			{
-				if (criteria == null)
-					throw new ArgumentNullException(nameof(criteria));
-
-				Criteria = (TCriteria)criteria.Clone();
-			}
-		}
-
-		private readonly SynchronizedDictionary<long, LookupInfo<SecurityLookupMessage, Security>> _securityLookups = new SynchronizedDictionary<long, LookupInfo<SecurityLookupMessage, Security>>();
-		private readonly SynchronizedDictionary<long, LookupInfo<PortfolioLookupMessage, Portfolio>> _portfolioLookups = new SynchronizedDictionary<long, LookupInfo<PortfolioLookupMessage, Portfolio>>();
-		private readonly SynchronizedDictionary<long, LookupInfo<BoardLookupMessage, ExchangeBoard>> _boardLookups = new SynchronizedDictionary<long, LookupInfo<BoardLookupMessage, ExchangeBoard>>();
-		private readonly SynchronizedDictionary<long, LookupInfo<TimeFrameLookupMessage, TimeSpan>> _timeFrameLookups = new SynchronizedDictionary<long, LookupInfo<TimeFrameLookupMessage, TimeSpan>>();
-
 		private readonly SubscriptionManager _subscriptionManager;
 
 		private class Level1Info
@@ -138,8 +118,6 @@ namespace StockSharp.Algo
 
 		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _boardStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
 		private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = new SynchronizedDictionary<Security, Level1Info>();
-
-		private readonly CachedSynchronizedDictionary<long, Subscription> _subscriptions = new CachedSynchronizedDictionary<long, Subscription>();
 
 		private bool _isDisposing;
 
@@ -640,153 +618,6 @@ namespace StockSharp.Algo
 		protected virtual void OnDisconnect()
 		{
 			SendInMessage(new DisconnectMessage());
-		}
-
-		/// <inheritdoc />
-		public void LookupSecurities(Security criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			var boardCode = criteria.Board?.Code;
-			var securityCode = criteria.Code;
-
-			if (!criteria.Id.IsEmpty())
-			{
-				var id = SecurityIdGenerator.Split(criteria.Id);
-
-				if (boardCode.IsEmpty())
-					boardCode = GetBoardCode(id.BoardCode);
-
-				if (securityCode.IsEmpty())
-					securityCode = id.SecurityCode;
-			}
-
-			var message = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode));
-			message.Adapter = adapter;
-			message.OfflineMode = offlineMode;
-
-			LookupSecurities(message);
-		}
-
-		/// <inheritdoc />
-		public void LookupSecurities(SecurityLookupMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (criteria.TransactionId == 0)
-				criteria.TransactionId = TransactionIdGenerator.GetNextId();
-
-			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
-
-			_securityLookups.Add(criteria.TransactionId, new LookupInfo<SecurityLookupMessage, Security>(criteria));
-
-			SendInMessage(criteria);
-		}
-
-		/// <inheritdoc />
-		public void LookupTimeFrames(TimeFrameLookupMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (criteria.TransactionId == 0)
-				criteria.TransactionId = TransactionIdGenerator.GetNextId();
-
-			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
-
-			_timeFrameLookups.Add(criteria.TransactionId, new LookupInfo<TimeFrameLookupMessage, TimeSpan>(criteria));
-
-			SendInMessage(criteria);
-		}
-
-		/// <inheritdoc />
-		[Obsolete("Use SubscribeOrders method.")]
-		public void LookupOrders(Order criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
-		{
-			var msg = criteria.ToLookupCriteria();
-
-			msg.Adapter = adapter;
-			msg.OfflineMode = offlineMode;
-
-			LookupOrders(msg);
-		}
-
-		/// <inheritdoc />
-		[Obsolete("Use SubscribeOrders method.")]
-		public void LookupOrders(OrderStatusMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (criteria.TransactionId == 0)
-				criteria.TransactionId = TransactionIdGenerator.GetNextId();
-
-			_entityCache.AddOrderStatusTransactionId(criteria.TransactionId);
-			
-			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
-			SendInMessage(criteria);
-		}
-
-		/// <inheritdoc />
-		[Obsolete("Use SubscribePositions method.")]
-		public void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			var msg = criteria.ToLookupCriteria();
-
-			msg.Adapter = adapter;
-			msg.OfflineMode = offlineMode;
-
-			LookupPortfolios(msg);
-		}
-
-		/// <inheritdoc />
-		[Obsolete("Use SubscribePositions method.")]
-		public void LookupPortfolios(PortfolioLookupMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (criteria.TransactionId == 0)
-				criteria.TransactionId = TransactionIdGenerator.GetNextId();
-
-			_portfolioLookups.Add(criteria.TransactionId, new LookupInfo<PortfolioLookupMessage, Portfolio>(criteria));
-
-			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
-			SendInMessage(criteria);
-		}
-
-		/// <inheritdoc />
-		public void LookupBoards(ExchangeBoard criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			var msg = new BoardLookupMessage
-			{
-				TransactionId = TransactionIdGenerator.GetNextId(),
-				Like = criteria.Code,
-				Adapter = adapter,
-				OfflineMode = offlineMode,
-			};
-
-			LookupBoards(msg);
-		}
-
-		/// <inheritdoc />
-		public void LookupBoards(BoardLookupMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			_boardLookups.Add(criteria.TransactionId, new LookupInfo<BoardLookupMessage, ExchangeBoard>(criteria));
-
-			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
-			SendInMessage(criteria);
 		}
 
 		/// <inheritdoc />
@@ -1388,11 +1219,6 @@ namespace StockSharp.Algo
 			_prevTime = default;
 			_currentTime = default;
 
-			_securityLookups.Clear();
-			_boardLookups.Clear();
-			_portfolioLookups.Clear();
-			_timeFrameLookups.Clear();
-
 			_nonAssociatedByIdMyTrades.Clear();
 			_nonAssociatedByStringIdMyTrades.Clear();
 			_nonAssociatedByTransactionIdMyTrades.Clear();
@@ -1408,8 +1234,6 @@ namespace StockSharp.Algo
 
 			_securityValues.Clear();
 			_boardStates.Clear();
-
-			_subscriptions.Clear();
 
 			SendInMessage(new ResetMessage());
 

@@ -4,7 +4,6 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -22,7 +21,10 @@ namespace StockSharp.Algo
 		/// </summary>
 		public DataType DataType { get; }
 
-		private ISubscriptionMessage SubscriptionMessage { get; }
+		/// <summary>
+		/// Subscription message.
+		/// </summary>
+		public ISubscriptionMessage SubscriptionMessage { get; }
 
 		/// <summary>
 		/// Request identifier.
@@ -39,24 +41,9 @@ namespace StockSharp.Algo
 		public CandleSeries CandleSeries { get; }
 
 		/// <summary>
-		/// Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).
+		/// Portfolio, describing the trading account and the size of its generated commission.
 		/// </summary>
-		public MarketDataMessage MarketDataMessage { get; }
-
-		/// <summary>
-		/// A message requesting current registered orders and trades.
-		/// </summary>
-		public OrderStatusMessage OrderStatusMessage { get; }
-
-		/// <summary>
-		/// Message portfolio lookup for specified criteria.
-		/// </summary>
-		public PortfolioLookupMessage PortfolioLookupMessage { get; }
-
-		/// <summary>
-		/// The message contains information about portfolio.
-		/// </summary>
-		public PortfolioMessage PortfolioMessage { get; }
+		public Portfolio Portfolio { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Subscription"/>.
@@ -64,30 +51,8 @@ namespace StockSharp.Algo
 		/// <param name="dataType">Data type info.</param>
 		/// <param name="security">Security.</param>
 		public Subscription(DataType dataType, Security security)
+			: this(dataType.ToSubscriptionMessage(), security)
 		{
-			DataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
-			Security = security;
-
-			if (dataType.IsMarketData)
-			{
-				SubscriptionMessage = MarketDataMessage = new MarketDataMessage
-				{
-					DataType = dataType.ToMarketDataType().Value,
-					Arg = dataType.Arg,
-					IsSubscribe = true
-				};
-
-				if (Security != null)
-					MarketDataMessage.FillSecurityInfo(Security);
-			}
-			else if (dataType == DataType.Transactions)
-				SubscriptionMessage = OrderStatusMessage = new OrderStatusMessage { IsSubscribe = true };
-			else if (dataType == DataType.PositionChanges)
-				SubscriptionMessage = PortfolioLookupMessage = new PortfolioLookupMessage { IsSubscribe = true };
-			else if (dataType.IsPortfolio)
-				SubscriptionMessage = PortfolioMessage = new PortfolioMessage { IsSubscribe = true };
-			else
-				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
 		}
 
 		/// <summary>
@@ -95,7 +60,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="candleSeries">Candles series.</param>
 		public Subscription(CandleSeries candleSeries)
-			: this(candleSeries.ToDataType(), candleSeries.Security)
+			: this(candleSeries.ToMarketDataMessage(true), candleSeries.Security)
 		{
 			CandleSeries = candleSeries;
 		}
@@ -105,16 +70,40 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="portfolio">Portfolio, describing the trading account and the size of its generated commission.</param>
 		public Subscription(Portfolio portfolio)
-			: this(DataType.Portfolio(portfolio.Name), null)
+			: this(portfolio.ToMessage())
 		{
-			PortfolioMessage = portfolio.ToMessage();
-			PortfolioMessage.IsSubscribe = true;
 			Portfolio = portfolio;
 		}
 
 		/// <summary>
-		/// Portfolio, describing the trading account and the size of its generated commission.
+		/// Initializes a new instance of the <see cref="Subscription"/>.
 		/// </summary>
-		public Portfolio Portfolio { get; }
+		/// <param name="subscriptionMessage">Subscription message.</param>
+		/// <param name="security">Security.</param>
+		public Subscription(ISubscriptionMessage subscriptionMessage, Security security = null)
+		{
+			SubscriptionMessage = subscriptionMessage ?? throw new ArgumentNullException(nameof(subscriptionMessage));
+			SubscriptionMessage.IsSubscribe = true;
+
+			DataType = subscriptionMessage.ToDataType();
+			Security = security;
+
+			if (Security != null)
+			{
+				switch (subscriptionMessage)
+				{
+					case MarketDataMessage mdMsg:
+						mdMsg.FillSecurityInfo(Security);
+						break;
+					case ISecurityIdMessage secIdMsg:
+						secIdMsg.SecurityId = security.ToSecurityId();
+						break;
+					case INullableSecurityIdMessage nullSecIdMsg:
+						nullSecIdMsg.SecurityId = security.ToSecurityId();
+						break;
+				}
+			}
+
+		}
 	}
 }

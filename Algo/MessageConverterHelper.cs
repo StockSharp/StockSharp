@@ -1985,5 +1985,64 @@ namespace StockSharp.Algo
 
 			return message;
 		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to <see cref="ISubscriptionMessage"/> value.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Subscription message.</returns>
+		public static ISubscriptionMessage ToSubscriptionMessage(this DataType dataType)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			if (dataType.IsMarketData)
+			{
+				return new MarketDataMessage
+				{
+					DataType = dataType.ToMarketDataType().Value,
+					Arg = dataType.Arg,
+				};
+			}
+			else if (dataType == DataType.Transactions)
+				return new OrderStatusMessage();
+			else if (dataType == DataType.PositionChanges)
+				return new PortfolioLookupMessage();
+			else if (dataType == DataType.Securities)
+				return new SecurityLookupMessage();
+			else if (dataType == DataType.Board)
+				return new BoardLookupMessage();
+			else if (dataType.IsPortfolio)
+				return new PortfolioMessage();
+			else
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
+		}
+
+		/// <summary>
+		/// Convert <see cref="ISubscriptionMessage"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="message">Subscription message.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this ISubscriptionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			switch (message)
+			{
+				case MarketDataMessage mdMsg:
+					return mdMsg.DataType.ToDataType(mdMsg.Arg);
+				case SecurityLookupMessage _:
+					return DataType.Securities;
+				case BoardLookupMessage _:
+					return DataType.Board;
+				case OrderStatusMessage _:
+					return DataType.Transactions;
+				case PortfolioLookupMessage _:
+					return DataType.PositionChanges;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(message), message.GetType(), LocalizedStrings.Str1219);
+			}
+		}
 	}
 }

@@ -24,7 +24,6 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -213,8 +212,6 @@ namespace StockSharp.Algo
 
 		private readonly SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo> _marketDepths = new SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo>();
 
-		private readonly CandlesHolder _candlesHolder = new CandlesHolder();
-
 		public IEnumerable<News> News => _newsWithoutId.SyncGet(t => t.ToArray()).Concat(_newsById.SyncGet(t => t.Values.ToArray())).ToArray();
 
 		private int _tradesKeepCount = 100000;
@@ -367,8 +364,6 @@ namespace StockSharp.Algo
 			_orderRegisterFails.Clear();
 
 			_positions.Clear();
-
-			_candlesHolder.Clear();
 
 			_marketDepths.Clear();
 		}
@@ -1191,28 +1186,6 @@ namespace StockSharp.Algo
 				}
 			}
 		}
-
-		public IEnumerable<CandleSeries> AllCandleSeries => _candlesHolder.AllCandleSeries;
-
-		public void CreateCandleSeries(MarketDataMessage mdMsg, CandleSeries series)
-		{
-			if (mdMsg == null)
-				throw new ArgumentNullException(nameof(mdMsg));
-
-			_candlesHolder.CreateCandleSeries(mdMsg.TransactionId, series);
-		}
-
-		public CandleSeries RemoveCandleSeries(long transactionId)
-			=> _candlesHolder.RemoveCandleSeries(transactionId);
-
-		public long TryGetTransactionId(CandleSeries series)
-			=> _candlesHolder.TryGetTransactionId(series);
-
-		public CandleSeries TryGetCandleSeries(long transactionId)
-			=> _candlesHolder.TryGetCandleSeries(transactionId);
-
-		public IEnumerable<Tuple<CandleSeries, Candle, long>> UpdateCandles(CandleMessage message)
-			=> _candlesHolder.UpdateCandles(message);
 
 		public MarketDepth GetMarketDepth(Security security, bool isFiltered, Func<SecurityId, Security> getSecurity, out bool isNew)
 		{
