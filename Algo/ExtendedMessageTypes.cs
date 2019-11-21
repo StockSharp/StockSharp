@@ -75,7 +75,5 @@
 		internal const MessageTypes ReconnectingStarted = (MessageTypes)(-20);
 
 		internal const MessageTypes PartialDownload = (MessageTypes)(-21);
-
-		internal const MessageTypes FirstLookup = (MessageTypes)(-22);
 	}
 }
