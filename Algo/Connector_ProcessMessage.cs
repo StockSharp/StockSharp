@@ -807,7 +807,7 @@ namespace StockSharp.Algo
 			else
 			{
 				board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
-				_boardStates[board] = message.State;
+				_entityCache.SetSessionState(board, message.State);
 			}
 
 			RaiseSessionStateChanged(board, message.State);
@@ -922,7 +922,7 @@ namespace StockSharp.Algo
 				RaiseSecurityChanged(security);
 			}
 
-			var info = GetSecurityValues(security);
+			var info = _entityCache.GetSecurityValues(security);
 
 			var changes = message.Changes;
 			var cloned = false;
@@ -1115,7 +1115,7 @@ namespace StockSharp.Algo
 
 			if (!fromLevel1 && (bestBid != null || bestAsk != null))
 			{
-				var info = GetSecurityValues(security);
+				var info = _entityCache.GetSecurityValues(security);
 
 				info.ClearBestQuotes();
 
@@ -1244,8 +1244,7 @@ namespace StockSharp.Algo
 		private void ProcessTradeMessage(Security security, ExecutionMessage message)
 		{
 			var tuple = _entityCache.ProcessTradeMessage(security, message);
-
-			var info = GetSecurityValues(security);
+			var info = _entityCache.GetSecurityValues(security);
 
 			info.ClearLastTrade();
 

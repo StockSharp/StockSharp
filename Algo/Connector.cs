@@ -20,7 +20,6 @@ namespace StockSharp.Algo
 	using System.Linq;
 	using System.Security;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
@@ -63,61 +62,6 @@ namespace StockSharp.Algo
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new Dictionary<string, List<ExecutionMessage>>();
 
 		private readonly SubscriptionManager _subscriptionManager;
-
-		private class Level1Info
-		{
-			public readonly object[] Values = new object[Enumerator.GetValues<Level1Fields>().Count()];
-			public bool CanBestQuotes { get; private set; } = true;
-			public bool CanLastTrade { get; private set; } = true;
-
-			public void SetValue(Level1Fields field, object value)
-			{
-				var idx = (int)field;
-
-				if (idx >= Values.Length)
-					return;
-
-				Values[idx] = value;
-			}
-
-			public object GetValue(Level1Fields field)
-			{
-				var idx = (int)field;
-
-				if (idx >= Values.Length)
-					return null;
-
-				return Values[idx];
-			}
-
-			public void ClearBestQuotes()
-			{
-				if (!CanBestQuotes)
-					return;
-
-				foreach (var field in Messages.Extensions.BestBidFields.Cache)
-					SetValue(field, null);
-
-				foreach (var field in Messages.Extensions.BestAskFields.Cache)
-					SetValue(field, null);
-
-				CanBestQuotes = false;
-			}
-
-			public void ClearLastTrade()
-			{
-				if (!CanLastTrade)
-					return;
-
-				foreach (var field in Messages.Extensions.LastTradeFields.Cache)
-					SetValue(field, null);
-
-				CanLastTrade = false;
-			}
-		}
-
-		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _boardStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
-		private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = new SynchronizedDictionary<Security, Level1Info>();
 
 		private bool _isDisposing;
 
@@ -360,10 +304,7 @@ namespace StockSharp.Algo
 		public override DateTimeOffset CurrentTime => _currentTime;
 
 		/// <inheritdoc />
-		public SessionStates? GetSessionState(ExchangeBoard board)
-		{
-			return _boardStates.TryGetValue2(board);
-		}
+		public SessionStates? GetSessionState(ExchangeBoard board) => _entityCache.GetSessionState(board);
 
 		/// <inheritdoc />
 		[Obsolete("Use NewOrder event to collect data.")]
@@ -1129,18 +1070,11 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public SecurityId GetSecurityId(Security security)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return security.ToSecurityId(SecurityIdGenerator, copyExtended: true);
-		}
+			=> security.ToSecurityId(SecurityIdGenerator, copyExtended: true);
 
 		private string GetBoardCode(string secClass)
-		{
 			// MarketDataAdapter can be null then loading infos from StorageAdapter.
-			return MarketDataAdapter != null ? MarketDataAdapter.GetBoardCode(secClass) : secClass;
-		}
+			=> MarketDataAdapter != null ? MarketDataAdapter.GetBoardCode(secClass) : secClass;
 
 		/// <summary>
 		/// Generate <see cref="Security.Id"/> security.
@@ -1149,45 +1083,15 @@ namespace StockSharp.Algo
 		/// <param name="secClass">Security class.</param>
 		/// <returns><see cref="Security.Id"/> security.</returns>
 		protected string CreateSecurityId(string secCode, string secClass)
-		{
-			return SecurityIdGenerator.GenerateId(secCode, GetBoardCode(secClass));
-		}
+			=> SecurityIdGenerator.GenerateId(secCode, GetBoardCode(secClass));
 
 		/// <inheritdoc />
 		public object GetSecurityValue(Security security, Level1Fields field)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return _securityValues.TryGetValue(security)?.GetValue(field);
-		}
+			=> _entityCache.GetSecurityValue(security, field);
 
 		/// <inheritdoc />
 		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			var info = _securityValues.TryGetValue(security);
-
-			if (info == null)
-				return Enumerable.Empty<Level1Fields>();
-
-			var fields = new List<Level1Fields>(30);
-
-			for (var i = 0; i < info.Values.Length; i++)
-			{
-				if (info.Values[i] != null)
-					fields.Add((Level1Fields)i);
-			}
-
-			return fields;
-		}
-
-		private Level1Info GetSecurityValues(Security security)
-		{
-			return _securityValues.SafeAdd(security, key => new Level1Info());
-		}
+			=> _entityCache.GetLevel1Fields(security);
 
 		/// <summary>
 		/// Clear cache.
@@ -1195,6 +1099,7 @@ namespace StockSharp.Algo
 		public virtual void ClearCache()
 		{
 			_entityCache.Clear();
+
 			_prevTime = default;
 			_currentTime = default;
 
@@ -1208,9 +1113,6 @@ namespace StockSharp.Algo
 			ConnectionState = ConnectionStates.Disconnected;
 
 			_subscriptionManager.ClearCache();
-
-			_securityValues.Clear();
-			_boardStates.Clear();
 
 			SendInMessage(new ResetMessage());
 
