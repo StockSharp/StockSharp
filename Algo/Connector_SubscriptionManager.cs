@@ -43,9 +43,19 @@ namespace StockSharp.Algo
 
 					if (Subscription.CandleSeries != null)
 						Holder = new CandlesSeriesHolder(subscription.CandleSeries);
+
+					var type = subscription.DataType;
+
+					if (type == DataType.PositionChanges ||
+					    type == DataType.Securities ||
+					    type == DataType.Board ||
+					    subscription.SubscriptionMessage is TimeFrameLookupMessage)
+					{
+						Lookup = new LookupInfo(subscription.SubscriptionMessage);
+					}
 				}
 
-				public LookupInfo Lookup { get; set; }
+				public LookupInfo Lookup { get; }
 				public bool Active { get; set; }
 				public CandlesSeriesHolder Holder { get; }
 			}
@@ -61,8 +71,6 @@ namespace StockSharp.Algo
 			{
 				_connector = connector ?? throw new ArgumentNullException(nameof(connector));
 			}
-
-			private EntityCache EntityCache => _connector._entityCache;
 
 			public IEnumerable<Subscription> Subscriptions
 			{
@@ -114,7 +122,7 @@ namespace StockSharp.Algo
 				return null;
 			}
 
-			public Subscription TryGetSubscription(long id, bool remove = false)
+			public Subscription TryGetSubscription(long id, bool remove)
 			{
 				return TryGetInfo(id, remove)?.Subscription;
 			}
@@ -122,7 +130,7 @@ namespace StockSharp.Algo
 			public Subscription TryFindSubscription(long id, DataType dataType, Security security = null)
 			{
 				var subscription = id > 0
-					? TryGetSubscription(id)
+					? TryGetSubscription(id, false)
 					: Subscriptions.FirstOrDefault(s => s.DataType == dataType && s.Security == security);
 
 				if (subscription == null && id == 0)
@@ -179,11 +187,12 @@ namespace StockSharp.Algo
 
 				if (!_requests.TryGetValue(response.OriginalTransactionId, out var tuple))
 				{
+					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, response.OriginalTransactionId);
 					originalMsg = null;
 					return null;
 				}
 
-				//_requests.Remove(response.OriginalTransactionId);
+				_requests.Remove(response.OriginalTransactionId);
 
 				originalMsg = (MarketDataMessage)tuple.Item1;
 
@@ -226,37 +235,10 @@ namespace StockSharp.Algo
 
 				lock (_syncObject)
 				{
-					var info = new SubscriptionInfo(subscription); 
+					var info = new SubscriptionInfo(subscription);
 
-					if (subscription.DataType.IsMarketData)
-					{
-					}
-					else if (subscription.DataType == DataType.Transactions)
-					{
-						EntityCache.AddOrderStatusTransactionId(subscription.TransactionId);
-					}
-					else if (subscription.DataType == DataType.PositionChanges)
-					{
-						info.Lookup = new LookupInfo(subscrMsg);
-					}
-					else if (subscription.DataType == DataType.Securities)
-					{
-						info.Lookup = new LookupInfo(subscrMsg);
-					}
-					else if (subscription.DataType == DataType.Board)
-					{
-						info.Lookup = new LookupInfo(subscrMsg);
-					}
-					else if (subscrMsg is TimeFrameLookupMessage)
-					{
-						info.Lookup = new LookupInfo(subscrMsg);
-					}
-					else if (subscription.DataType.IsPortfolio)
-					{
-					
-					}
-					else
-						throw new ArgumentOutOfRangeException(nameof(subscription), subscription.DataType, LocalizedStrings.Str1219);
+					if (subscription.DataType == DataType.Transactions)
+						_connector._entityCache.AddOrderStatusTransactionId(subscription.TransactionId);
 
 					_subscriptions.Add(subscription.TransactionId, info);
 				}
@@ -318,16 +300,20 @@ namespace StockSharp.Algo
 				_connector.SendInMessage((Message)request);
 			}
 
-			public void ProcessLookupResponse<TCriteria>(IOriginalTransactionIdMessage message, object item)
-				where TCriteria : Message, ISubscriptionMessage, new()
+			public void ProcessLookupResponse(IOriginalTransactionIdMessage message, object item)
 			{
-				lock (_syncObject)
+				var info = TryGetInfo(message.OriginalTransactionId, false);
+
+				if (info == null)
+					return;
+
+				if (info.Lookup == null)
 				{
-					_subscriptions.SafeAdd(message.OriginalTransactionId, key => new SubscriptionInfo(new Subscription(new TCriteria()))
-					{
-						Lookup = new LookupInfo(new TCriteria())
-					}).Lookup.Items.Add(item);
+					_connector.AddWarningLog(LocalizedStrings.Str2142Params, info.Subscription.SubscriptionMessage);
+					return;
 				}
+
+				info.Lookup.Items.Add(item);
 			}
 
 			public LookupInfo TryGetAndRemoveLookup(IOriginalTransactionIdMessage result)

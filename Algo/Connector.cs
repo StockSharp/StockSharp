@@ -63,6 +63,8 @@ namespace StockSharp.Algo
 
 		private readonly SubscriptionManager _subscriptionManager;
 
+		private bool _lookupsSent;
+
 		private bool _isDisposing;
 
 		/// <summary>
@@ -473,6 +475,11 @@ namespace StockSharp.Algo
 		/// Increment periodically <see cref="MarketTimeChangedInterval"/> value of <see cref="CurrentTime"/>.
 		/// </summary>
 		public bool TimeChange { get; set; } = true;
+
+		/// <summary>
+		/// Send lookup messages on connect. By default is <see langword="true"/>.
+		/// </summary>
+		public bool LookupMessagesOnConnect { get; set; } = true;
 
 		/// <inheritdoc />
 		public void Connect()
@@ -1118,6 +1125,8 @@ namespace StockSharp.Algo
 			CloseTimer();
 
 			_cleared?.Invoke();
+
+			_lookupsSent = false;
 		}
 
 		/// <summary>
@@ -1178,6 +1187,8 @@ namespace StockSharp.Algo
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
 			SupportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
+			LookupMessagesOnConnect = storage.GetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
+
 			base.Load(storage);
 		}
 
@@ -1204,6 +1215,8 @@ namespace StockSharp.Algo
 
 			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 			storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
+
+			storage.SetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
 
 			base.Save(storage);
 		}

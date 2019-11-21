@@ -260,7 +260,6 @@ StockSharp API Change log
 * (feature) ISubscriptionProvider interface created.
 * (feature) Boards subscription unified with MarketDataMessage.
 * (feature) BoardStateStorage added.
-* (feature) Connector. Moved lookup auto send logic into BasketMessageAdapter.
 * (feature) Connector. SupportSubscriptionTracking enabled by default.
 * (feature) IMarketDataProvider. LookupTimeFrames added.
 * (feature) IMessageAdapter. SupportedOutMessages property added.

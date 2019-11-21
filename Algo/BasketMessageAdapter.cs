@@ -439,11 +439,6 @@ namespace StockSharp.Algo
 		public bool IgnoreExtraAdapters { get; set; }
 
 		/// <summary>
-		/// Send lookup messages on connect. By default is <see langword="true"/>.
-		/// </summary>
-		public bool LookupMessagesOnConnect { get; set; } = true;
-
-		/// <summary>
 		/// To call the <see cref="ConnectMessage"/> event when the first adapter connects to <see cref="InnerAdapters"/>.
 		/// </summary>
 		public bool ConnectDisconnectEventOnFirstAdapter { get; set; } = true;
@@ -1349,7 +1344,7 @@ namespace StockSharp.Algo
 						var pfMsg = (IPortfolioNameMessage)message;
 						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
 
-						if (LookupMessagesOnConnect && innerAdapter.IsSupportSubscriptionByPortfolio())
+						if (HasSubscription(DataType.PositionChanges) && innerAdapter.IsSupportSubscriptionByPortfolio())
 							extra = new List<Message> { CreatePortfolioSubscription(innerAdapter, pfMsg.PortfolioName) };
 
 						break;
@@ -1465,9 +1460,6 @@ namespace StockSharp.Algo
 						subscrMsg = (ISubscriptionMessage)subscrMsg.Clone();
 						subscrMsg.TransactionId = innerAdapter.TransactionIdGenerator.GetNextId();
 
-						if (_keysToTransId.RemoveByValue(transId))
-							_keysToTransId[new SubscriptionKey(subscrMsg)] = subscrMsg.TransactionId;
-
 						if (tuple != null)
 							_parentChildMap.AddMapping(subscrMsg.TransactionId, tuple.First, underlying);
 
@@ -1554,40 +1546,42 @@ namespace StockSharp.Algo
 				if (IsRestoreSubscriptionOnNormalReconnect)
 					ProcessReSubscribe(innerAdapter, extra);
 			}
-			else if (LookupMessagesOnConnect)
+			else
 			{
-				if (innerAdapter.IsPortfolioLookupRequired())
-				{
-					extra.Add(FillIdAndAdapter(innerAdapter, new PortfolioLookupMessage()));
-				}
-
-				if (innerAdapter.IsOrderStatusRequired())
+				if (HasSubscription(DataType.Transactions) && innerAdapter.IsOrderStatusRequired())
 				{
 					extra.Add(FillIdAndAdapter(innerAdapter, new OrderStatusMessage()));
 				}
 
-				if (innerAdapter.IsSecurityLookupRequired() && innerAdapter.IsSupportSecuritiesLookupAll)
+				if (HasSubscription(DataType.Securities) && innerAdapter.IsSecurityLookupRequired() && innerAdapter.IsSupportSecuritiesLookupAll)
 				{
 					extra.Add(FillIdAndAdapter(innerAdapter, new SecurityLookupMessage()));
 				}
 
-				if (innerAdapter.IsSupportSubscriptionByPortfolio())
+				if (HasSubscription(DataType.PositionChanges) && innerAdapter.IsPortfolioLookupRequired())
 				{
-					var portfolioNames = PortfolioAdapterProvider
-					                     .Adapters
-					                     .Where(p => p.Value == innerAdapter.Id)
-					                     .Select(p => p.Key);
+					extra.Add(FillIdAndAdapter(innerAdapter, new PortfolioLookupMessage()));
 
-					foreach (var portfolioName in portfolioNames)
+					if (innerAdapter.IsSupportSubscriptionByPortfolio())
 					{
-						var msg = CreatePortfolioSubscription(innerAdapter, portfolioName);
+						var portfolioNames = PortfolioAdapterProvider
+						                     .Adapters
+						                     .Where(p => p.Value == innerAdapter.Id)
+						                     .Select(p => p.Key);
 
-						if (msg != null)
-							extra.Add(msg);
+						foreach (var portfolioName in portfolioNames)
+						{
+							var msg = CreatePortfolioSubscription(innerAdapter, portfolioName);
+
+							if (msg != null)
+								extra.Add(msg);
+						}
 					}
 				}
 			}
 		}
+
+		private bool HasSubscription(DataType dataType) => _keysToTransId.SyncGet(c => c.Any(p => p.Key.Item1 == dataType && p.Key.Item2 == null));
 
 		private void UpdateAdapterState(IMessageAdapter adapter, BaseConnectionMessage message, List<Message> extra)
 		{
@@ -1745,10 +1739,7 @@ namespace StockSharp.Algo
 			}
 			
 			if (message.Error == null && originMsg.IsSubscribe && originMsg.To == null)
-			{
-				// we can initiate multiple subscriptions with unique request id and same params
-				_keysToTransId.TryAdd(new SubscriptionKey(originMsg), originalTransactionId);
-			}
+				_keysToTransId[new SubscriptionKey(originMsg)] = originalTransactionId;
 
 			return CreateMarketDataMessage(adapter, originalTransactionId, message.Error);
 		}
@@ -1882,7 +1873,6 @@ namespace StockSharp.Algo
 				SupportOrderBookTruncate = SupportOrderBookTruncate,
 				SupportOffline = SupportOffline,
 				IgnoreExtraAdapters = IgnoreExtraAdapters,
-				LookupMessagesOnConnect = LookupMessagesOnConnect,
 				NativeIdStorage = NativeIdStorage,
 				StorageDaysLoad = StorageDaysLoad,
 				StorageMode = StorageMode,

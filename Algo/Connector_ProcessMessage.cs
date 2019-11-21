@@ -749,7 +749,25 @@ namespace StockSharp.Algo
 			if (error == null)
 			{
 				if (adapter == null)
+				{
 					RaiseConnected();
+
+					if (!LookupMessagesOnConnect)
+						return;
+
+					if (Adapter.IsRestoreSubscriptionOnNormalReconnect)
+					{
+						// with auto restore sends lookups only first time
+						if (_lookupsSent)
+							return;
+
+						_lookupsSent = true;
+					}
+
+					LookupSecurities(TraderHelper.LookupAllCriteria);
+					SubscribePositions();
+					SubscribeOrders();
+				}
 				else
 					RaiseConnectedEx(adapter);
 			}
@@ -827,7 +845,7 @@ namespace StockSharp.Algo
 				return;
 
 			if (isNew)
-				_subscriptionManager.ProcessLookupResponse<BoardLookupMessage>(message, board);
+				_subscriptionManager.ProcessLookupResponse(message, board);
 
 			RaiseReceived(board, message, BoardReceived);
 		}
@@ -849,7 +867,7 @@ namespace StockSharp.Algo
 				return;
 
 			if (isNew)
-				_subscriptionManager.ProcessLookupResponse<SecurityLookupMessage>(message, security);
+				_subscriptionManager.ProcessLookupResponse(message, security);
 
 			RaiseReceived(security, message, SecurityReceived);
 		}
@@ -1020,7 +1038,7 @@ namespace StockSharp.Algo
 				return;
 
 			if (isNew)
-				_subscriptionManager.ProcessLookupResponse<PortfolioLookupMessage>(message, portfolio);
+				_subscriptionManager.ProcessLookupResponse(message, portfolio);
 
 			RaiseReceived(portfolio, message, PortfolioReceived);
 		}
