@@ -557,11 +557,6 @@ namespace StockSharp.Algo
 
 				ConnectionState = ConnectionStates.Connecting;
 
-				foreach (var adapter in Adapter.InnerAdapters.SortedAdapters)
-				{
-					_adapterStates[adapter] = ConnectionStates.Connecting;
-				}
-
 				OnConnect();
 			}
 			catch (Exception ex)
@@ -593,14 +588,6 @@ namespace StockSharp.Algo
 			}
 
 			ConnectionState = ConnectionStates.Disconnecting;
-
-			foreach (var adapter in Adapter.InnerAdapters.SortedAdapters)
-			{
-				var prevState = _adapterStates.TryGetValue2(adapter);
-
-				if (prevState != ConnectionStates.Failed)
-					_adapterStates[adapter] = ConnectionStates.Disconnecting;
-			}
 
 			try
 			{
@@ -1227,8 +1214,6 @@ namespace StockSharp.Algo
 			_nonAssociatedStringOrderIds.Clear();
 
 			ConnectionState = ConnectionStates.Disconnected;
-
-			_adapterStates.Clear();
 
 			_subscriptionManager.ClearCache();
 

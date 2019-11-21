@@ -75,12 +75,8 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates> _adapterStates = new CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates>();
-		
 		private readonly ResetMessage _disposeMessage = new ResetMessage();
 
-		private string AssociatedBoardCode => Adapter.AssociatedBoardCode;
-		
 		private void AdapterOnNewOutMessage(Message message)
 		{
 			if (message.IsBack)
@@ -111,11 +107,6 @@ namespace StockSharp.Algo
 			else
 				SendOutMessage(message);
 		}
-
-		/// <summary>
-		/// To call the <see cref="Connected"/> event when the first adapter connects to <see cref="Adapter"/>.
-		/// </summary>
-		public bool RaiseConnectedOnFirstAdapter { get; set; } = true;
 
 		private IMessageChannel _inMessageChannel;
 
@@ -510,8 +501,6 @@ namespace StockSharp.Algo
 
 			if (MarketDataAdapter == adapter)
 				MarketDataAdapter = null;
-
-			_adapterStates.Remove(adapter);
 		}
 
 		private void InnerAdaptersOnCleared()
@@ -659,7 +648,7 @@ namespace StockSharp.Algo
 						break;
 
 					case MessageTypes.Disconnect:
-						ProcessConnectMessage((DisconnectMessage)message);
+						ProcessDisconnectMessage((DisconnectMessage)message);
 						break;
 
 					case ExtendedMessageTypes.ReconnectingStarted:
@@ -752,171 +741,51 @@ namespace StockSharp.Algo
 				_removed?.Invoke(new[] { removedSecurity });
 		}
 
-		private void ProcessConnectMessage(BaseConnectionMessage message)
+		private void ProcessConnectMessage(ConnectMessage message)
 		{
-			var isConnect = message is ConnectMessage;
 			var adapter = message.Adapter;
 			var error = message.Error;
 
-			try
+			if (error == null)
+			{
+				if (adapter == null)
+					RaiseConnected();
+				else
+					RaiseConnectedEx(adapter);
+			}
+			else
 			{
 				if (adapter == null)
 				{
-					if (error != null)
-						RaiseConnectionError(error);
+					RaiseConnectionError(error);
 
-					return;
-				}
-
-				var state = _adapterStates[adapter];
-
-				switch (state)
-				{
-					case ConnectionStates.Connecting:
-					{
-						if (isConnect)
-						{
-							if (error == null)
-								SetAdapterConnected(adapter, message);
-							else
-								SetAdapterFailed(adapter, message, ConnectionStates.Connecting, true);
-						}
-						else
-							SetAdapterFailed(adapter, message, ConnectionStates.Connecting, false);
-
-						return;
-					}
-					case ConnectionStates.Disconnecting:
-					{
-						if (!isConnect)
-						{
-							if (error == null)
-							{
-								_adapterStates[adapter] = ConnectionStates.Disconnected;
-
-								var isLast = _adapterStates.CachedValues.All(v => v != ConnectionStates.Disconnecting);
-
-								// raise Disconnected only one time for the last adapter
-								if (isLast)
-									RaiseDisconnected();
-
-								RaiseDisconnectedEx(adapter);
-							}
-							else
-								SetAdapterFailed(adapter, message, ConnectionStates.Disconnecting, false);
-						}
-						else
-							SetAdapterFailed(adapter, message, ConnectionStates.Disconnecting, false);
-
-						return;
-					}
-					case ConnectionStates.Connected:
-					{
-						if (error != null)
-						{
-							_adapterStates[adapter] = ConnectionStates.Failed;
-							error = new InvalidOperationException(LocalizedStrings.Str683, error);
-							RaiseConnectionError(error);
-							RaiseConnectionErrorEx(adapter, error);
-							return;
-						}
-
-						break;
-					}
-					case ConnectionStates.Disconnected:
-					{
-						break;
-					}
-					case ConnectionStates.Failed:
-					{
-						if (isConnect)
-						{
-							if (error == null)
-								SetAdapterConnected(adapter, message);
-
-							return;
-						}
-
-						break;
-					}
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-
-				// так как соединение установлено, то выдаем ошибку через Error, чтобы не сбрасывать состояние
-				var error2 = new InvalidOperationException(LocalizedStrings.Str685Params.Put(state, message.GetType().Name), error);
-				RaiseError(error2);
-				RaiseConnectionErrorEx(adapter, error2);
-			}
-			finally
-			{
-				if (TimeChange && _adapterStates.Count > 0 && _adapterStates.CachedValues.All(s => s == ConnectionStates.Disconnected || s == ConnectionStates.Failed))
-					CloseTimer();
-			}
-		}
-
-		private void SetAdapterConnected(IMessageAdapter adapter, BaseConnectionMessage message)
-		{
-			_adapterStates[adapter] = ConnectionStates.Connected;
-
-			var isRestored = message is RestoredConnectMessage;
-
-			if (ConnectionState == ConnectionStates.Connecting)
-			{
-				if (RaiseConnectedOnFirstAdapter)
-				{
-					// raise Connected event only one time for the first adapter
-					RaiseConnected();
-				}
-				else
-					RaiseConnectedWhenAllConnected();
-			}
-			else if (ConnectionState == ConnectionStates.Failed && !isRestored)
-			{
-				RaiseConnectedWhenAllConnected();
-			}
-
-			RaiseConnectedEx(adapter);
-
-			//var isAllConnected = _adapterStates.CachedValues.All(v => v == ConnectionStates.Connected);
-
-			//if (!isAllConnected)
-			//	return;
-
-			//ConnectionState = ConnectionStates.Connected;
-			//RaiseConnectionRestored();
-		}
-
-		private void RaiseConnectedWhenAllConnected()
-		{
-			var isAllConnected = _adapterStates.CachedValues.All(v => v == ConnectionStates.Connected);
-
-			// raise Connected event only one time when the last adapter connection successfully
-			if (isAllConnected)
-				RaiseConnected();
-		}
-
-		private void SetAdapterFailed(IMessageAdapter adapter, BaseConnectionMessage message, ConnectionStates checkState, bool raiseTimeOut)
-		{
-			_adapterStates[adapter] = ConnectionStates.Failed;
-
-			var error = message.Error ?? new InvalidOperationException(message is ConnectMessage ? LocalizedStrings.Str683 : LocalizedStrings.Str684);
-
-			// raise ConnectionError only one time
-			if (ConnectionState == checkState)
-			{
-				RaiseConnectionError(error);
-
-				if (raiseTimeOut)
-				{
 					if (error is TimeoutException)
 						RaiseTimeOut();
 				}
+				else
+					RaiseConnectionErrorEx(adapter, error);
+			}
+		}
+
+		private void ProcessDisconnectMessage(DisconnectMessage message)
+		{
+			var adapter = message.Adapter;
+			var error = message.Error;
+
+			if (error == null)
+			{
+				if (adapter == null)
+					RaiseDisconnected();
+				else
+					RaiseDisconnectedEx(adapter);
 			}
 			else
-				RaiseError(error);
-
-			RaiseConnectionErrorEx(adapter, error);
+			{
+				if (adapter == null)
+					RaiseConnectionError(error);
+				else
+					RaiseConnectionErrorEx(adapter, error);
+			}
 		}
 
 		private void ProcessReconnectingStartedMessage(Message message)
@@ -1303,7 +1172,7 @@ namespace StockSharp.Algo
 					RaiseSecurityChanged(security);
 
 					// стаканы по ALL обновляют BestXXX по конкретным инструментам
-					if (security.Board?.Code == AssociatedBoardCode)
+					if (security.Board?.Code == Adapter.AssociatedBoardCode)
 					{
 						var changedSecurities = new Dictionary<Security, RefPair<bool, bool>>();
 
