@@ -269,13 +269,13 @@ namespace StockSharp.Algo.Testing
 			Adapter.SlippageManager = null;
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
-			ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
+			//ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
 			//MaxMessageCount = 1000;
 
 			TradesKeepCount = 0;
 
-			RaiseConnectedOnFirstAdapter = false;
+			Adapter.ConnectDisconnectEventOnFirstAdapter = false;
 		}
 
 		/// <summary>

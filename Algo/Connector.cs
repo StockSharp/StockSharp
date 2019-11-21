@@ -127,8 +127,6 @@ namespace StockSharp.Algo
 				ExchangeInfoProvider = new InMemoryExchangeInfoProvider()
 			};
 
-			ReConnectionSettings = new ReConnectionSettings();
-
 			_subscriptionManager = new SubscriptionManager(this);
 
 			UpdateSecurityLastQuotes = UpdateSecurityByLevel1 = UpdateSecurityByDefinition = true;
@@ -199,7 +197,8 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Settings of the connection control <see cref="IConnector"/> to the trading system.
 		/// </summary>
-		public ReConnectionSettings ReConnectionSettings { get; }
+		[Obsolete("Use exact IMessageAdapter to set reconnecting settings.")]
+		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
 		/// <summary>
 		/// Entity factory (<see cref="Security"/>, <see cref="Order"/> etc.).
@@ -1166,7 +1165,7 @@ namespace StockSharp.Algo
 			UpdateSecurityLastQuotes = storage.GetValue(nameof(UpdateSecurityLastQuotes), true);
 			UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), true);
 			UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), true);
-			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
+			//ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 
 			if (storage.ContainsKey(nameof(RiskManager)))
@@ -1193,7 +1192,7 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(UpdateSecurityLastQuotes), UpdateSecurityLastQuotes);
 			storage.SetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
 			storage.SetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
-			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
+			//storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 
 			if (RiskManager != null)

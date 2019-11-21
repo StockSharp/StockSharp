@@ -277,6 +277,7 @@ StockSharp API Change log
 * (feature) SecurityId. Money, News, All instances created.
 * (feature) Portfolio derived from Position.
 * (feature) Connector. All subscriptions and lookups done via Subscription class.
+* (feature) Connector. ReConnectionSettings marked as obsolete.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
