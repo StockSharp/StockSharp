@@ -566,8 +566,8 @@ private void smartCom_AddSymbol(int row, int rowCount, string smartId, string na
 				 <legacyBold>Регистрация/отмена регистрации сделок.</legacyBold>
 				</para>
 				<para>
-				 При вызове методов <codeEntityReference>M:StockSharp.Algo.Connector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},StockSharp.Messages.IMessageAdapter)</codeEntityReference> или
-				 <codeEntityReference>M:StockSharp.Algo.Connector.UnRegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> будет получено исходящее
+				 При вызове методов <codeEntityReference>M:StockSharp.Algo.Connector.SubscribeTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},StockSharp.Messages.IMessageAdapter)</codeEntityReference> или
+				 <codeEntityReference>M:StockSharp.Algo.Connector.UnSubscribeTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> будет получено исходящее
 				 сообщение <codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference>.
 				 </para>
 				 <para>

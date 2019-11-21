@@ -56,8 +56,8 @@ _connector.NewSecurity += security =>
     BuffeSecurity.Add(security);
     if (security.Id == seid)
     {
-        _connector.RegisterMarketDepth(security);
-        _connector.RegisterTrades(security);
+        _connector.SubscribeMarketDepth(security);
+        _connector.SubscribeTrades(security);
         series.CandleType = typeof (TimeFrameCandle);
         series.Security = security;
         series.Arg = TimeSpan.FromMinutes(5);
