@@ -1879,6 +1879,8 @@ namespace StockSharp.Algo
 				StorageFormat = StorageFormat,
 				StorageDrive = StorageDrive,
 				StorageFilterSubscription = StorageFilterSubscription,
+				ConnectDisconnectEventOnFirstAdapter = ConnectDisconnectEventOnFirstAdapter,
+				IsAutoUnSubscribeOnDisconnect = IsAutoUnSubscribeOnDisconnect,
 			};
 
 			clone.Load(this.Save());
