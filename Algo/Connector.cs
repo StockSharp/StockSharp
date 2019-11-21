@@ -323,7 +323,7 @@ namespace StockSharp.Algo
 		public IEnumerable<ExchangeBoard> ExchangeBoards => _entityCache.ExchangeBoards;
 
 		/// <inheritdoc />
-		public virtual IEnumerable<Security> Securities => _entityCache.Securities;
+		public IEnumerable<Security> Securities => _entityCache.Securities;
 
 		int ISecurityProvider.Count => _entityCache.SecurityCount;
 
@@ -352,10 +352,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public virtual IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
-		{
-			return Securities.Filter(criteria);
-		}
+		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => Securities.Filter(criteria);
 
 		private DateTimeOffset _currentTime;
 
@@ -397,7 +394,7 @@ namespace StockSharp.Algo
 		public IEnumerable<News> News => _entityCache.News;
 
 		/// <inheritdoc />
-		public virtual IEnumerable<Portfolio> Portfolios => _entityCache.Portfolios;
+		public IEnumerable<Portfolio> Portfolios => _entityCache.Portfolios;
 
 		/// <inheritdoc />
 		public IEnumerable<Position> Positions => _entityCache.Positions;
@@ -456,22 +453,17 @@ namespace StockSharp.Algo
 			}
 		}
 
-		///// <summary>
-		///// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction. The default is enabled.
-		///// </summary>
-		//public virtual bool IsSupportAtomicReRegister { get; protected set; } = true;
-
 		/// <summary>
 		/// Use orders log to create market depths. Disabled by default.
 		/// </summary>
 		[Obsolete("Use MarketDataMessage.BuildFrom=OrderLog instead.")]
-		public virtual bool CreateDepthFromOrdersLog { get; set; }
+		public bool CreateDepthFromOrdersLog { get; set; }
 
 		/// <summary>
 		/// Use orders log to create ticks. Disabled by default.
 		/// </summary>
 		[Obsolete("Use MarketDataMessage.BuildFrom=OrderLog instead.")]
-		public virtual bool CreateTradesFromOrdersLog { get; set; }
+		public bool CreateTradesFromOrdersLog { get; set; }
 
 		/// <summary>
 		/// To update <see cref="Security.LastTrade"/>, <see cref="Security.BestBid"/>, <see cref="Security.BestAsk"/> at each update of order book and/or trades. By default is enabled.
@@ -926,7 +918,7 @@ namespace StockSharp.Algo
 		/// Register new order.
 		/// </summary>
 		/// <param name="order">Registration details.</param>
-		protected virtual void OnRegisterOrder(Order order)
+		protected void OnRegisterOrder(Order order)
 		{
 			SendInMessage(order.CreateRegisterMessage(GetSecurityId(order.Security)));
 		}
@@ -936,7 +928,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="oldOrder">Cancelling order.</param>
 		/// <param name="newOrder">New order to register.</param>
-		protected virtual void OnReRegisterOrder(Order oldOrder, Order newOrder)
+		protected void OnReRegisterOrder(Order oldOrder, Order newOrder)
 		{
 			SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
 		}
@@ -948,7 +940,7 @@ namespace StockSharp.Algo
 		/// <param name="newOrder1">First new order to register.</param>
 		/// <param name="oldOrder2">Second order to cancel.</param>
 		/// <param name="newOrder2">Second new order to register.</param>
-		protected virtual void OnReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
+		protected void OnReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 		{
 			SendInMessage(oldOrder1.CreateReplaceMessage(newOrder1, GetSecurityId(newOrder1.Security), oldOrder2, newOrder2, GetSecurityId(newOrder2.Security)));
 		}
@@ -958,7 +950,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="order">Order to cancel.</param>
 		/// <param name="transactionId">Order cancellation transaction id.</param>
-		protected virtual void OnCancelOrder(Order order, long transactionId)
+		protected void OnCancelOrder(Order order, long transactionId)
 		{
 			decimal? volume;
 
@@ -1001,7 +993,7 @@ namespace StockSharp.Algo
 		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
 		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
 		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
-		protected virtual void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
+		protected void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
 		{
 			var cancelMsg = new OrderGroupCancelMessage
 			{
