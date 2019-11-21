@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -13,9 +14,7 @@
 	/// </summary>
 	public class OrderLogMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly Dictionary<SecurityId, IOrderLogMarketDepthBuilder> _depthBuilders = new Dictionary<SecurityId, IOrderLogMarketDepthBuilder>();
-		private readonly HashSet<SecurityId> _tickBuilders = new HashSet<SecurityId>();
-		private readonly Dictionary<long, Tuple<SecurityId, MarketDataTypes>> _subscriptionIds = new Dictionary<long, Tuple<SecurityId, MarketDataTypes>>();
+		private readonly Dictionary<long, RefTriple<SecurityId, bool, IOrderLogMarketDepthBuilder>> _subscriptionIds = new Dictionary<long, RefTriple<SecurityId, bool, IOrderLogMarketDepthBuilder>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderLogMessageAdapter"/>.
@@ -33,28 +32,24 @@
 			{
 				case MessageTypes.Reset:
 				{
-					_depthBuilders.Clear();
-					_tickBuilders.Clear();
 					_subscriptionIds.Clear();
 					break;
 				}
 
 				case MessageTypes.MarketData:
-					if (ProcessMarketDataRequest((MarketDataMessage)message))
-						return;
-
+					message = ProcessMarketDataRequest((MarketDataMessage)message);
 					break;
 			}
 
 			base.OnSendInMessage(message);
 		}
 
-		private bool ProcessMarketDataRequest(MarketDataMessage message)
+		private MarketDataMessage ProcessMarketDataRequest(MarketDataMessage message)
 		{
 			if (message.IsSubscribe)
 			{
 				if (!InnerAdapter.IsMarketDataTypeSupported(MarketDataTypes.OrderLog))
-					return false;
+					return message;
 
 				var isBuild = message.BuildMode == MarketDataBuildModes.Build && message.BuildFrom == MarketDataTypes.OrderLog;
 					
@@ -66,20 +61,17 @@
 						{
 							var secId = GetSecurityId(message.SecurityId);
 
+							IOrderLogMarketDepthBuilder builder = null;
+
 							if (InnerAdapter.IsSupportSubscriptionBySecurity)
-								_depthBuilders.Add(secId, InnerAdapter.CreateOrderLogMarketDepthBuilder(secId));
-							else
-								_depthBuilders.TryAdd(secId, (IOrderLogMarketDepthBuilder)null);
+								builder = InnerAdapter.CreateOrderLogMarketDepthBuilder(secId);
 
-							_subscriptionIds.Add(message.TransactionId, Tuple.Create(secId, message.DataType));
+							_subscriptionIds.Add(message.TransactionId, RefTuple.Create(secId, true, builder));
 
-							var clone = (MarketDataMessage)message.Clone();
-							clone.DataType = MarketDataTypes.OrderLog;
-							base.OnSendInMessage(clone);
+							message = (MarketDataMessage)message.Clone();
+							message.DataType = MarketDataTypes.OrderLog;
 
-							this.AddInfoLog("OL->MD subscribed {0}.", secId);
-
-							return true;
+							this.AddInfoLog("OL->MD subscribed {0}/{1}.", secId, message.TransactionId);
 						}
 
 						break;
@@ -91,16 +83,12 @@
 						{
 							var secId = GetSecurityId(message.SecurityId);
 
-							_tickBuilders.Add(secId);
-							_subscriptionIds.Add(message.TransactionId, Tuple.Create(secId, message.DataType));
+							_subscriptionIds.Add(message.TransactionId, RefTuple.Create(secId, false, (IOrderLogMarketDepthBuilder)null));
 
-							var clone = (MarketDataMessage)message.Clone();
-							clone.DataType = MarketDataTypes.OrderLog;
-							base.OnSendInMessage(clone);
+							message = (MarketDataMessage)message.Clone();
+							message.DataType = MarketDataTypes.OrderLog;
 
-							this.AddInfoLog("OL->TICK subscribed {0}.", secId);
-
-							return true;
+							this.AddInfoLog("OL->TICK subscribed {0}/{1}.", secId, message.TransactionId);
 						}
 
 						break;
@@ -109,24 +97,13 @@
 			}
 			else
 			{
-				if (!_subscriptionIds.TryGetValue(message.OriginalTransactionId, out var tuple))
-					return false;
+				var tuple = _subscriptionIds.TryGetAndRemove(message.OriginalTransactionId);
 
-				var secId = tuple.Item1;
-
-				if (tuple.Item2 == MarketDataTypes.MarketDepth)
-				{
-					_depthBuilders.Remove(secId);
-					this.AddInfoLog("OL->MD unsubscribed {0}.", secId);
-				}
-				else
-				{
-					_tickBuilders.Remove(secId);
-					this.AddInfoLog("OL->TICK unsubscribed {0}.", secId);
-				}
+				if (tuple != null)
+					this.AddInfoLog("OL->{0} unsubscribed {1}/{2}.", tuple.Second ? "MD" : "TICK", tuple.First, message.OriginalTransactionId);
 			}
 
-			return false;
+			return message;
 		}
 
 		/// <inheritdoc />
@@ -160,39 +137,47 @@
 			if (execMsg.IsSystem == false)
 				return;
 
-			var secId = GetSecurityId(execMsg.SecurityId);
-
-			var depthBuilder = InnerAdapter.IsSupportSubscriptionBySecurity
-				? _depthBuilders.TryGetValue(execMsg.SecurityId)
-				: _depthBuilders.ContainsKey(secId) ? _depthBuilders.SafeAdd(execMsg.SecurityId, key => new OrderLogMarketDepthBuilder(key)) : null;
-
-			if (depthBuilder != null)
+			foreach (var subscriptionId in execMsg.GetSubscriptionIds())
 			{
-				try
+				if (!_subscriptionIds.TryGetValue(subscriptionId, out var tuple))
 				{
-					var updated = depthBuilder.Update(execMsg);
+					this.AddDebugLog("OL processing {0}/{1} not found.", execMsg.SecurityId, subscriptionId);
+					continue;
+				}
 
-					this.AddDebugLog("OL->MD processing {0}={1}.", execMsg.SecurityId, updated);
+				var secId = GetSecurityId(execMsg.SecurityId);
 
-					if (updated)
+				if (tuple.Second)
+				{
+					var builder = tuple.Third;
+
+					if (builder == null)
+						tuple.Third = builder = new OrderLogMarketDepthBuilder(execMsg.SecurityId);
+
+					try
 					{
-						base.OnInnerAdapterNewOutMessage(depthBuilder.Depth.Clone());
-					}
-				}
-				catch (Exception ex)
-				{
-					// если ОЛ поврежден, то не нарушаем весь цикл обработки сообщения
-					// а только выводим сообщение в лог
-					base.OnInnerAdapterNewOutMessage(new ErrorMessage { Error = ex });
-				}
-			}
-			else
-				this.AddDebugLog("OL->MD processing {0} not found.", execMsg.SecurityId);
+						var updated = builder.Update(execMsg);
 
-			if (_tickBuilders.Contains(secId))
-			{
-				this.AddDebugLog("OL->TICK processing {0}.", secId);
-				base.OnInnerAdapterNewOutMessage(execMsg.ToTick());
+						this.AddDebugLog("OL->MD processing {0}={1}.", execMsg.SecurityId, updated);
+
+						if (updated)
+						{
+							base.OnInnerAdapterNewOutMessage(builder.Depth.Clone());
+						}
+					}
+					catch (Exception ex)
+					{
+						// если ОЛ поврежден, то не нарушаем весь цикл обработки сообщения
+						// а только выводим сообщение в лог
+						base.OnInnerAdapterNewOutMessage(new ErrorMessage { Error = ex });
+					}
+
+				}
+				else
+				{
+					this.AddDebugLog("OL->TICK processing {0}.", secId);
+					base.OnInnerAdapterNewOutMessage(execMsg.ToTick());
+				}
 			}
 		}
 

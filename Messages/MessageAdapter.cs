@@ -175,18 +175,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool SecurityLookupRequired => this.IsMessageSupported(MessageTypes.SecurityLookup);
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual bool PortfolioLookupRequired => this.IsMessageSupported(MessageTypes.PortfolioLookup);
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual bool OrderStatusRequired => this.IsMessageSupported(MessageTypes.OrderStatus);
-
-		/// <inheritdoc />
-		[Browsable(false)]
 		public virtual bool IsNativeIdentifiersPersistable => true;
 
 		/// <inheritdoc />
@@ -204,10 +192,6 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual bool IsSupportSubscriptionBySecurity => true;
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual bool IsSupportSubscriptionByPortfolio => this.IsMessageSupported(MessageTypes.Portfolio);
 
 		/// <inheritdoc />
 		[Browsable(false)]
@@ -389,7 +373,7 @@ namespace StockSharp.Messages
 
 			switch (message)
 			{
-				case BasePositionChangeMessage posMsg when posMsg.ServerTime.IsDefault():
+				case PositionChangeMessage posMsg when posMsg.ServerTime.IsDefault():
 					posMsg.ServerTime = CurrentTime;
 					break;
 				case ExecutionMessage execMsg when execMsg.ExecutionType == ExecutionTypes.Transaction && execMsg.ServerTime.IsDefault():
@@ -441,9 +425,14 @@ namespace StockSharp.Messages
 		/// Initialize a new message <see cref="MarketDataMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
 		/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
-		protected void SendOutMarketDataReply(long originalTransactionId)
+		/// <param name="error">Subscribe or unsubscribe error info. To be set if the answer.</param>
+		protected void SendOutMarketDataReply(long originalTransactionId, Exception error = null)
 		{
-			SendOutMessage(new MarketDataMessage { OriginalTransactionId = originalTransactionId });
+			SendOutMessage(new MarketDataMessage
+			{
+				OriginalTransactionId = originalTransactionId,
+				Error = error,
+			});
 		}
 
 		/// <summary>
@@ -480,38 +469,31 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)
+		public virtual TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
 		{
-			if (request == null)
-				throw new ArgumentNullException(nameof(request));
+			if (dataType == null)
+				throw new ArgumentNullException(nameof(dataType));
 
 			iterationInterval = TimeSpan.FromSeconds(2);
 
-			switch (request.DataType)
+			if (dataType.IsCandles)
 			{
-				case MarketDataTypes.Level1:
-				case MarketDataTypes.MarketDepth:
-				case MarketDataTypes.Trades:
-				case MarketDataTypes.OrderLog:
-					return TimeSpan.FromDays(1);
-				case MarketDataTypes.CandleTimeFrame:
+				if (!this.IsMarketDataTypeSupported(dataType.ToMarketDataType().Value))
+					return TimeSpan.Zero;
+
+				if (dataType.MessageType == typeof(TimeFrameCandleMessage))
 				{
-					var tf = request.GetTimeFrame();
+					var tf = (TimeSpan)dataType.Arg;
 
 					if (tf.TotalDays <= 1)
 						return TimeSpan.FromDays(30);
 
 					return TimeSpan.MaxValue;
 				}
-				case MarketDataTypes.CandleTick:
-				case MarketDataTypes.CandleVolume:
-				case MarketDataTypes.CandleRange:
-				case MarketDataTypes.CandlePnF:
-				case MarketDataTypes.CandleRenko:
-					return TimeSpan.FromDays(30);
-				default:
-					return TimeSpan.MaxValue;
 			}
+
+			// by default adapter do not provide historical data except candles
+			return TimeSpan.Zero;
 		}
 
 		/// <inheritdoc />

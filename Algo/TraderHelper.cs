@@ -2304,7 +2304,7 @@ namespace StockSharp.Algo
 		/// <param name="portfolio">Portfolio.</param>
 		/// <param name="message">Portfolio change message.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		public static void ApplyChanges(this Portfolio portfolio, PortfolioChangeMessage message, IExchangeInfoProvider exchangeInfoProvider)
+		public static void ApplyChanges(this Portfolio portfolio, PositionChangeMessage message, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -2372,7 +2372,7 @@ namespace StockSharp.Algo
 			message.CopyExtensionInfo(position);
 		}
 
-		private static void ApplyChange(this BasePosition position, KeyValuePair<PositionChangeTypes, object> change)
+		private static void ApplyChange(this Position position, KeyValuePair<PositionChangeTypes, object> change)
 		{
 			try
 			{
@@ -4462,21 +4462,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Identifier of <see cref="AllSecurity"/>.
-		/// </summary>
-		public const string AllSecurityId = "ALL@ALL";
-
-		/// <summary>
-		/// Identifier of <see cref="AllSecurity"/>.
-		/// </summary>
-		public static readonly SecurityId AllSecurityId2 = AllSecurityId.ToSecurityId();
-
-		/// <summary>
 		/// "All securities" instance.
 		/// </summary>
 		public static Security AllSecurity { get; } = new Security
 		{
-			Id = AllSecurityId,
+			Id = SecurityId.All.ToStringId(),
 			Code = MessageAdapter.DefaultAssociatedBoardCode,
 			//Class = task.GetDisplayName(),
 			Name = LocalizedStrings.Str2835,
@@ -4486,12 +4476,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// "News" security instance.
 		/// </summary>
-		public static readonly Security NewsSecurity = new Security { Id = "NEWS@NEWS" };
+		public static readonly Security NewsSecurity = new Security { Id = SecurityId.News.ToStringId() };
 
 		/// <summary>
-		/// Identifier of <see cref="NewsSecurity"/>.
+		/// "Money" security instance.
 		/// </summary>
-		public static readonly SecurityId NewsSecurityId = NewsSecurity.ToSecurityId();
+		public static readonly Security MoneySecurity = new Security { Id = SecurityId.Money.ToStringId() };
 
 		/// <summary>
 		/// Find <see cref="AllSecurity"/> instance in the specified provider.
@@ -4500,7 +4490,7 @@ namespace StockSharp.Algo
 		/// <returns>Found instance.</returns>
 		public static Security GetAllSecurity(this ISecurityProvider provider)
 		{
-			return provider.LookupById(AllSecurityId);
+			return provider.LookupById(SecurityId.All);
 		}
 
 		/// <summary>
@@ -4513,7 +4503,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return security.Id.CompareIgnoreCase(AllSecurityId);
+			return security == AllSecurity || security.Id.CompareIgnoreCase(AllSecurity.Id);
 		}
 
 		/// <summary>
@@ -5037,6 +5027,9 @@ namespace StockSharp.Algo
 
 			if (criteria.Currency != null)
 				positions = positions.Where(p => p.Currency == criteria.Currency);
+
+			if (criteria.SecurityId != null)
+				positions = positions.Where(p => p.Security.ToSecurityId() == criteria.SecurityId.Value);
 
 			if (!criteria.BoardCode.IsEmpty())
 				positions = positions.Where(p => p.Security.ToSecurityId().BoardCode.ContainsIgnoreCase(criteria.BoardCode));

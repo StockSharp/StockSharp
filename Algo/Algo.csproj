@@ -117,6 +117,7 @@
     <Compile Include="CollectionPortfolioProvider.cs" />
     <Compile Include="CollectionSecurityProvider.cs" />
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
+    <Compile Include="Connector_SubscriptionManager.cs" />
     <Compile Include="Export\Database\CandleTable.cs" />
     <Compile Include="Export\Database\IndicatorValueTable.cs" />
     <Compile Include="Export\Database\PositionChangeTable.cs" />
@@ -127,7 +128,7 @@
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
     <Compile Include="ISubscriptionProvider.cs" />
-    <Compile Include="OriginalTransactionMessageAdapter.cs" />
+    <Compile Include="LookupTrackingMessageAdapter.cs" />
     <Compile Include="Storages\Binary\BoardStateBinarySerializer.cs" />
     <Compile Include="Storages\Csv\BoardStateCsvSerializer.cs" />
     <Compile Include="Storages\IMessageStorageRegistry.cs" />
@@ -145,17 +146,17 @@
     <Compile Include="OrderBookTruncateMessageAdapter.cs" />
     <Compile Include="OrderLogMessageAdapter.cs" />
     <Compile Include="PartialDownloadMessageAdapter.cs" />
-    <Compile Include="PermissionCredentialsAuthorization.cs" />
-    <Compile Include="PermissionCredentialsRemoteAuthorization.cs" />
-    <Compile Include="PermissionCredentialsStorage.cs" />
+    <Compile Include="Server\PermissionCredentialsAuthorization.cs" />
+    <Compile Include="Server\PermissionCredentialsRemoteAuthorization.cs" />
+    <Compile Include="Server\PermissionCredentialsStorage.cs" />
     <Compile Include="Import\CsvImporter.cs" />
     <Compile Include="Import\CsvParser.cs" />
     <Compile Include="Import\FieldMapping.cs" />
     <Compile Include="Import\FieldMappingRegistry.cs" />
     <Compile Include="Import\FieldMappingValue.cs" />
     <Compile Include="Indicators\IndicatorValueAttribute.cs" />
-    <Compile Include="IRemoteAuthorization.cs" />
-    <Compile Include="PermissionCredentials.cs" />
+    <Compile Include="Server\IRemoteAuthorization.cs" />
+    <Compile Include="Server\PermissionCredentials.cs" />
     <Compile Include="Server\ITransactionIdStorage.cs" />
     <Compile Include="Server\IMessageListener.cs" />
     <Compile Include="Server\IMessageListenerSession.cs" />
@@ -335,7 +336,7 @@
     <Compile Include="Risk\RiskRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AuthorizationModes.cs" />
+    <Compile Include="Server\AuthorizationModes.cs" />
     <Compile Include="Storages\Binary\BinaryMarketDataSerializer.cs" />
     <Compile Include="Storages\BufferMessageAdapter.cs" />
     <Compile Include="Storages\CacheableMarketDataDrive.cs" />
@@ -350,7 +351,6 @@
     <Compile Include="Storages\Csv\QuoteCsvSerializer.cs" />
     <Compile Include="Storages\Csv\TickCsvSerializer.cs" />
     <Compile Include="Storages\Csv\TransactionCsvSerializer.cs" />
-    <Compile Include="Helper.cs" />
     <Compile Include="IMarketRuleContainer.cs" />
     <Compile Include="IMarketRuleList.cs" />
     <Compile Include="IndexSecurity.cs" />
@@ -440,7 +440,7 @@
     <Compile Include="Strategies\Testing\EmulationMarketModes.cs" />
     <Compile Include="Strategies\Testing\EmulationSettings.cs" />
     <Compile Include="Strategies\TimeFrameStrategy.cs" />
-    <Compile Include="SubscriptionMessageAdapter.cs" />
+    <Compile Include="SubscriptionIdMessageAdapter.cs" />
     <Compile Include="Testing\ChangeTimeIntervalMessage.cs" />
     <Compile Include="Testing\CommissionRuleMessage.cs" />
     <Compile Include="Testing\HistorySourceMessage.cs" />

@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class SecurityRouteMessage : BaseRouteMessage<SecurityRouteMessage>
+	public class SecurityRouteMessage : BaseRouteMessage<SecurityRouteMessage>, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="SecurityRouteMessage"/>.
@@ -18,9 +18,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public SecurityId SecurityId { get; set; }
 

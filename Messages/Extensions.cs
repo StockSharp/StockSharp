@@ -38,12 +38,12 @@ namespace StockSharp.Messages
 	public static class Extensions
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PortfolioChangeMessage"/>.
+		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		/// <param name="adapter">Trading system adapter.</param>
 		/// <param name="pfName">Portfolio name.</param>
 		/// <returns>Portfolio change message.</returns>
-		public static PortfolioChangeMessage CreatePortfolioChangeMessage(this IMessageAdapter adapter, string pfName)
+		public static PositionChangeMessage CreatePortfolioChangeMessage(this IMessageAdapter adapter, string pfName)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -689,6 +689,136 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(adapter));
 
 			return adapter.GetCandleArgs(candleType, securityId, from, to).Cast<TArg>();
+		}
+
+		/// <summary>
+		/// Convert <see cref="MarketDataTypes"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="type">Market data type.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this MarketDataTypes type, object arg)
+		{
+			switch (type)
+			{
+				case MarketDataTypes.Level1:
+					return DataType.Level1;
+				case MarketDataTypes.MarketDepth:
+					return DataType.MarketDepth;
+				case MarketDataTypes.Trades:
+					return DataType.Ticks;
+				case MarketDataTypes.OrderLog:
+					return DataType.OrderLog;
+				case MarketDataTypes.News:
+					return DataType.News;
+				case MarketDataTypes.Board:
+					return DataType.Board;
+				case MarketDataTypes.CandleTimeFrame:
+				case MarketDataTypes.CandleTick:
+				case MarketDataTypes.CandleVolume:
+				case MarketDataTypes.CandleRange:
+				case MarketDataTypes.CandlePnF:
+				case MarketDataTypes.CandleRenko:
+					return DataType.Create(type.ToCandleMessage(), arg);
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="MessageTypes"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this MessageTypes type, object arg)
+		{
+			switch (type)
+			{
+				case MessageTypes.Security:
+					return DataType.Securities;
+
+				case MessageTypes.Board:
+					return DataType.Board;
+
+				case MessageTypes.Portfolio:
+				case MessageTypes.PositionChange:
+					return DataType.PositionChanges;
+
+				case MessageTypes.CandleTimeFrame:
+				case MessageTypes.CandlePnF:
+				case MessageTypes.CandleRange:
+				case MessageTypes.CandleRenko:
+				case MessageTypes.CandleTick:
+				case MessageTypes.CandleVolume:
+					return type.ToCandleMarketDataType().ToDataType(arg);
+
+				case MessageTypes.News:
+					return DataType.News;
+
+				case MessageTypes.BoardState:
+					return DataType.Board;
+
+				case MessageTypes.Level1Change:
+					return DataType.Level1;
+
+				case MessageTypes.QuoteChange:
+					return DataType.MarketDepth;
+
+				case MessageTypes.Execution:
+					return ((ExecutionTypes)arg).ToDataType();
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="ExecutionTypes"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this ExecutionTypes type)
+		{
+			switch (type)
+			{
+				case ExecutionTypes.Tick:
+					return DataType.Ticks;
+				case ExecutionTypes.Transaction:
+					return DataType.Transactions;
+				case ExecutionTypes.OrderLog:
+					return DataType.OrderLog;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to <see cref="MarketDataTypes"/> value.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns><see cref="MarketDataTypes"/> value or <see langword="null"/> if cannot be converted.</returns>
+		public static MarketDataTypes? ToMarketDataType(this DataType dataType)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			if (dataType == DataType.Ticks)
+				return MarketDataTypes.Trades;
+			else if (dataType == DataType.Level1)
+				return MarketDataTypes.Level1;
+			else if (dataType == DataType.OrderLog)
+				return MarketDataTypes.OrderLog;
+			else if (dataType == DataType.MarketDepth)
+				return MarketDataTypes.MarketDepth;
+			else if (dataType == DataType.News)
+				return MarketDataTypes.News;
+			else if (dataType == DataType.Board)
+				return MarketDataTypes.Board;
+			else if (dataType.IsCandles)
+				return dataType.MessageType.ToCandleMarketDataType();
+			else
+				return null;
 		}
 
 		/// <summary>
@@ -1651,6 +1781,193 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(execMsg));
 
 			return execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog;
+		}
+
+		private static readonly PairSet<MessageTypes, MessageTypes> _lookupResults = new PairSet<MessageTypes, MessageTypes>
+		{
+			{ MessageTypes.SecurityLookup, MessageTypes.SecurityLookupResult },
+			{ MessageTypes.BoardLookup, MessageTypes.BoardLookupResult },
+			{ MessageTypes.TimeFrameLookup, MessageTypes.TimeFrameLookupResult },
+			{ MessageTypes.PortfolioLookup, MessageTypes.PortfolioLookupResult },
+			{ MessageTypes.UserLookup, MessageTypes.UserLookupResult },
+		};
+
+		/// <summary>
+		/// Convert lookup message type to result type.
+		/// </summary>
+		/// <param name="lookup">Lookup message type.</param>
+		/// <returns>Result message type.</returns>
+		public static MessageTypes ToResultType(this MessageTypes lookup)
+		{
+			return _lookupResults.GetValue(lookup);
+		}
+
+		/// <summary>
+		/// Convert result message type to lookup type.
+		/// </summary>
+		/// <param name="result">Result message type.</param>
+		/// <returns>Lookup message type.</returns>
+		public static MessageTypes ToLookupType(this MessageTypes result)
+		{
+			return _lookupResults.GetKey(result);
+		}
+
+		/// <summary>
+		/// Determines the specified type is lookup message.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsLookup(this MessageTypes type) => _lookupResults.ContainsKey(type);
+		
+		/// <summary>
+		/// Determines the specified type is lookup result message.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsLookupResult(this MessageTypes type) => _lookupResults.ContainsValue(type);
+
+		/// <summary>
+		/// Create message by the specified type.
+		/// </summary>
+		/// <param name="type">Result message type.</param>
+		/// <param name="id">ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.</param>
+		/// <returns>Message.</returns>
+		public static Message CreateLookupResult(this MessageTypes type, long id)
+		{
+			switch (type)
+			{
+				case MessageTypes.SecurityLookupResult:
+					return new SecurityLookupResultMessage { OriginalTransactionId = id };
+				case MessageTypes.PortfolioLookupResult:
+					return new PortfolioLookupResultMessage { OriginalTransactionId = id };
+				case MessageTypes.TimeFrameLookupResult:
+					return new TimeFrameLookupResultMessage { OriginalTransactionId = id };
+				case MessageTypes.BoardLookupResult:
+					return new BoardLookupResultMessage { OriginalTransactionId = id };
+				case MessageTypes.UserLookupResult:
+					return new UserLookupResultMessage { OriginalTransactionId = id };
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type));
+			}
+		}
+
+		/// <summary>
+		/// Get <see cref="ExecutionMessage.TradePrice"/>.
+		/// </summary>
+		/// <param name="message">The message contains information about the execution.</param>
+		/// <returns>Trade price.</returns>
+		public static decimal GetTradePrice(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var price = message.TradePrice;
+
+			if (price == null)
+				throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.Str1021Params.Put(message.TradeId));
+
+			return price.Value;
+		}
+
+		/// <summary>
+		/// Get <see cref="ExecutionMessage.Balance"/>.
+		/// </summary>
+		/// <param name="message">The message contains information about the execution.</param>
+		/// <returns>Order contracts balance.</returns>
+		public static decimal GetBalance(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var balance = message.Balance;
+
+			if (balance != null)
+				return balance.Value;
+
+			throw new ArgumentOutOfRangeException(nameof(message));
+		}
+
+		/// <summary>
+		/// Replace security id by the specified.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="securityId">Security ID.</param>
+		public static void ReplaceSecurityId(this Message message, SecurityId securityId)
+		{
+			switch (message)
+			{
+				case ISecurityIdMessage secIdMsg:
+					secIdMsg.SecurityId = securityId;
+					break;
+				case INullableSecurityIdMessage nullSecIdMsg:
+					nullSecIdMsg.SecurityId = securityId;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str2770);
+			}
+		}
+
+		/// <summary>
+		/// Determines the security id required for the specified message.
+		/// </summary>
+		/// <param name="secMsg">A message containing info about the security.</param>
+		/// <returns>Check result.</returns>
+		public static bool NotRequiredSecurityId(this SecurityMessage secMsg)
+		{
+			if (secMsg == null)
+				throw new ArgumentNullException(nameof(secMsg));
+
+			if (secMsg.Type == MessageTypes.MarketData && !((MarketDataMessage)secMsg).DataType.IsSecurityRequired())
+				return secMsg.SecurityId.IsDefault();
+			else if (secMsg.Type == MessageTypes.OrderGroupCancel)
+				return secMsg.SecurityId.IsDefault();
+
+			return false;
+		}
+
+		/// <summary>
+		/// Support portfolio subscriptions.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSupportSubscriptionByPortfolio(this IMessageAdapter adapter)
+			=> adapter.IsMessageSupported(MessageTypes.Portfolio);
+
+		/// <summary>
+		/// <see cref="SecurityLookupMessage"/> required to get securities.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSecurityLookupRequired(this IMessageAdapter adapter) 
+			=> adapter.IsMessageSupported(MessageTypes.SecurityLookup);
+
+		/// <summary>
+		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsPortfolioLookupRequired(this IMessageAdapter adapter)
+			=> adapter.IsMessageSupported(MessageTypes.PortfolioLookup);
+
+		/// <summary>
+		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsOrderStatusRequired(this IMessageAdapter adapter)
+			=> adapter.IsMessageSupported(MessageTypes.OrderStatus);
+
+		/// <summary>
+		/// Determines the specified message contains <see cref="SecurityId.Money"/> position.
+		/// </summary>
+		/// <param name="posMsg">The message contains information about the position changes.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMoney(this PositionChangeMessage posMsg)
+		{
+			if (posMsg == null)
+				throw new ArgumentNullException(nameof(posMsg));
+
+			return posMsg.SecurityId == SecurityId.Money;
 		}
 	}
 }

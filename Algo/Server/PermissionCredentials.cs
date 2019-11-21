@@ -1,4 +1,4 @@
-namespace StockSharp.Algo
+namespace StockSharp.Algo.Server
 {
 	using System.Collections.Generic;
 	using System.Linq;

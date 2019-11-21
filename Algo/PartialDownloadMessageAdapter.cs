@@ -19,7 +19,7 @@
 		/// </summary>
 		[DataContract]
 		[Serializable]
-		private class PartialDownloadMessage : Message
+		private class PartialDownloadMessage : Message, IOriginalTransactionIdMessage
 		{
 			/// <summary>
 			/// Initializes a new instance of the <see cref="PartialDownloadMessage"/>.
@@ -29,9 +29,6 @@
 			{
 			}
 
-			/// <summary>
-			/// Transaction ID.
-			/// </summary>
 			[DataMember]
 			public long OriginalTransactionId { get; set; }
 
@@ -85,20 +82,21 @@
 
 			public DownloadInfo(PartialDownloadMessageAdapter adapter, MarketDataMessage origin, TimeSpan step, TimeSpan iterationInterval)
 			{
+				if (step <= TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(step));
+
+				if (iterationInterval < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(iterationInterval));
+
 				_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 				Origin = origin ?? throw new ArgumentNullException(nameof(origin));
 				_step = step;
 				_iterationInterval = iterationInterval;
 
-				var from = origin.From;
+				_maxFrom = origin.To ?? DateTimeOffset.Now;
+				_currFrom = origin.From ?? _maxFrom - step;
 
-				if (from == null)
-					throw new ArgumentException(nameof(origin));
-
-				_currFrom = from.Value;
 				_firstIteration = true;
-
-				_maxFrom = Origin.To ?? DateTimeOffset.Now;
 			}
 
 			public void TryUpdateNextFrom(DateTimeOffset last)
@@ -112,45 +110,49 @@
 				if (LastIteration)
 					throw new InvalidOperationException("LastIteration == true");
 
+				var mdMsg = (MarketDataMessage)Origin.Clone();
+
 				if (_firstIteration)
 				{
 					_firstIteration = false;
 
-					var mdMsg = (MarketDataMessage)Origin.Clone();
+					_nextFrom = _currFrom + _step;
+
+					if (_nextFrom > _maxFrom)
+						_nextFrom = _maxFrom;
+
 					mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
 					mdMsg.From = _currFrom;
-					mdMsg.To = _currFrom + _step;
+					mdMsg.To = _nextFrom;
 
 					CurrTransId = mdMsg.TransactionId;
-					_nextFrom = mdMsg.To.Value;
-
-					return mdMsg;
 				}
 				else
 				{
 					_iterationInterval.Sleep();
 
-					_currFrom = _nextFrom;
-					_nextFrom += _step;
-
-					if (Origin.To == null && (_currFrom + _step) >= _maxFrom)
+					if (Origin.To == null && _nextFrom >= _maxFrom)
 					{
-						var mdMsg = (MarketDataMessage)Origin.Clone();
-						mdMsg.From = _currFrom;
-						return mdMsg;
+						// on-line
+						mdMsg.From = null;
 					}
 					else
 					{
-						var mdMsg = (MarketDataMessage)Origin.Clone();
+						_currFrom = _nextFrom;
+						_nextFrom += _step;
+
+						if (_nextFrom > _maxFrom)
+							_nextFrom = _maxFrom;
+
 						mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
 						mdMsg.From = _currFrom;
 						mdMsg.To = _nextFrom;
 
 						CurrTransId = mdMsg.TransactionId;
-
-						return mdMsg;
 					}
 				}
+
+				return mdMsg;
 			}
 		}
 
@@ -158,6 +160,7 @@
 		private readonly Dictionary<long, DownloadInfo> _original = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, DownloadInfo> _partialRequests = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, Tuple<long, DownloadInfo>> _unsubscribeRequests = new Dictionary<long, Tuple<long, DownloadInfo>>();
+		private readonly HashSet<long> _liveRequests = new HashSet<long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PartialDownloadMessageAdapter"/>.
@@ -180,6 +183,48 @@
 						_partialRequests.Clear();
 						_original.Clear();
 						_unsubscribeRequests.Clear();
+						_liveRequests.Clear();
+					}
+
+					break;
+				}
+
+				case MessageTypes.OrderStatus:
+				case MessageTypes.PortfolioLookup:
+				{
+					var subscriptionMsg = (ISubscriptionMessage)message;
+
+					if (subscriptionMsg.IsSubscribe)
+					{
+						var from = subscriptionMsg.From;
+						var to = subscriptionMsg.To;
+
+						if (from != null || to != null)
+						{
+							var step = InnerAdapter.GetHistoryStepSize(DataType.Transactions, out _);
+
+							// adapter do not provide historical request
+							if (step == TimeSpan.Zero)
+							{
+								if (to != null)
+								{
+									// finishing current history request
+
+									if (message.Type == MessageTypes.PortfolioLookup)
+									{
+										RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = subscriptionMsg.TransactionId });
+									}
+
+									return;
+								}
+								else
+								{
+									// or sending further only live subscription
+									subscriptionMsg.From = null;
+									subscriptionMsg.To = null;
+								}
+							}
+						}
 					}
 
 					break;
@@ -192,23 +237,40 @@
 					if (mdMsg.IsSubscribe)
 					{
 						var from = mdMsg.From;
+						var to = mdMsg.To;
 
-						if (from != null)
+						if (from != null || to != null)
 						{
-							var length = (mdMsg.To ?? DateTimeOffset.Now) - from.Value;
-							var step = InnerAdapter.GetHistoryStepSize(mdMsg, out var iterationInterval);
+							var step = InnerAdapter.GetHistoryStepSize(mdMsg.DataType.ToDataType(mdMsg.Arg), out var iterationInterval);
 
-							if (length > step)
+							// adapter do not provide historical request
+							if (step == TimeSpan.Zero)
 							{
-								var info = new DownloadInfo(this, (MarketDataMessage)mdMsg.Clone(), step, iterationInterval);
-
-								message = info.InitNext();
-
-								lock (_syncObject)
+								if (to != null)
 								{
-									_original.Add(info.Origin.TransactionId, info);
-									_partialRequests.Add(info.CurrTransId, info);
+									// finishing current history request
+									RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = mdMsg.TransactionId });
+									return;
 								}
+								else
+								{
+									// or sending further only live subscription
+									mdMsg.From = null;
+									mdMsg.To = null;
+
+									_liveRequests.Add(mdMsg.TransactionId);
+									break;
+								}
+							}
+
+							var info = new DownloadInfo(this, (MarketDataMessage)mdMsg.Clone(), step, iterationInterval);
+
+							message = info.InitNext();
+
+							lock (_syncObject)
+							{
+								_original.Add(info.Origin.TransactionId, info);
+								_partialRequests.Add(info.CurrTransId, info);
 							}
 						}
 					}
@@ -236,23 +298,22 @@
 
 					lock (_syncObject)
 					{
-						lock (_syncObject)
+						if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
+							break;
+
+						var mdMsg = info.InitNext();
+
+						if (mdMsg.To == null)
 						{
-							if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
-								break;
+							_liveRequests.Add(mdMsg.TransactionId);
 
-							var mdMsg = info.InitNext();
-
-							if (mdMsg.To == null)
-							{
-								_original.Remove(partialMsg.OriginalTransactionId);
-								_partialRequests.RemoveWhere(p => p.Value == info);
-							}
-							else
-								_partialRequests.Add(info.CurrTransId, info);
-
-							message = mdMsg;
+							_original.Remove(partialMsg.OriginalTransactionId);
+							_partialRequests.RemoveWhere(p => p.Value == info);
 						}
+						else
+							_partialRequests.Add(info.CurrTransId, info);
+
+						message = mdMsg;
 					}
 
 					break;
@@ -273,6 +334,14 @@
 
 					lock (_syncObject)
 					{
+						if (_liveRequests.Contains(responseMsg.OriginalTransactionId))
+						{
+							_liveRequests.Remove(responseMsg.OriginalTransactionId);
+
+							responseMsg.IsOnline = true;
+							break;
+						}
+
 						long requestId;
 
 						if (!_partialRequests.TryGetValue(responseMsg.OriginalTransactionId, out var info))
@@ -350,42 +419,53 @@
 				case MessageTypes.CandleTick:
 				case MessageTypes.CandleVolume:
 				{
-					var candleMsg = (CandleMessage)message;
-
-					lock (_syncObject)
-					{
-						if (!_partialRequests.TryGetValue(candleMsg.OriginalTransactionId, out var info))
-							break;
-
-						info.TryUpdateNextFrom(candleMsg.OpenTime);
-						candleMsg.OriginalTransactionId = info.Origin.TransactionId;
-					}
-
+					TryUpdateSubscriptionResult((CandleMessage)message);
 					break;
 				}
 
 				case MessageTypes.Execution:
 				{
 					var execMsg = (ExecutionMessage)message;
-					var execType = execMsg.ExecutionType;
 
-					if (execMsg.OriginalTransactionId == 0 || (execType != ExecutionTypes.OrderLog && execType != ExecutionTypes.Tick))
+					if (!execMsg.IsMarketData())
 						break;
 
-					lock (_syncObject)
-					{
-						if (!_partialRequests.TryGetValue(execMsg.OriginalTransactionId, out var info))
-							break;
+					TryUpdateSubscriptionResult(execMsg);
+					break;
+				}
 
-						info.TryUpdateNextFrom(execMsg.ServerTime);
-						execMsg.OriginalTransactionId = info.Origin.TransactionId;
-					}
+				case MessageTypes.Level1Change:
+				{
+					TryUpdateSubscriptionResult((Level1ChangeMessage)message);
+					break;
+				}
 
+				case MessageTypes.QuoteChange:
+				{
+					TryUpdateSubscriptionResult((QuoteChangeMessage)message);
 					break;
 				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+		}
+
+		private void TryUpdateSubscriptionResult<TMessage>(TMessage message)
+			where TMessage : ISubscriptionIdMessage, IServerTimeMessage
+		{
+			var originId = message.OriginalTransactionId;
+
+			if (originId == 0)
+				return;
+
+			lock (_syncObject)
+			{
+				if (!_partialRequests.TryGetValue(originId, out var info))
+					return;
+
+				info.TryUpdateNextFrom(message.ServerTime);
+				message.OriginalTransactionId = info.Origin.TransactionId;
+			}
 		}
 
 		/// <summary>
@@ -394,7 +474,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new PartialDownloadMessageAdapter(InnerAdapter);
+			return new PartialDownloadMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
 		}
 	}
 }

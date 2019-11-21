@@ -212,7 +212,7 @@ namespace StockSharp.Algo.PnL
 
 					break;
 				}
-				case MessageTypes.PortfolioChange:
+				//case MessageTypes.PortfolioChange:
 				case MessageTypes.PositionChange:
 				{
 					break;

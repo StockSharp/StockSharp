@@ -36,6 +36,7 @@ namespace SampleOptionQuoting
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Derivatives;
+	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies.Derivatives;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -208,10 +209,15 @@ namespace SampleOptionQuoting
 				}
 			});
 
+			_model.MarketDataProvider = dummyProvider;
+			_model.ExchangeInfoProvider = new InMemoryExchangeInfoProvider();
+			_model.UnderlyingAsset = asset;
+
 			//
 			// draw test data on the pos chart
 
 			PosChart.MarketDataProvider = dummyProvider;
+			PosChart.ExchangeInfoProvider = _model.ExchangeInfoProvider;
 			PosChart.SecurityProvider = dummyProvider;
 			PosChart.PositionProvider = dummyProvider;
 
@@ -223,9 +229,6 @@ namespace SampleOptionQuoting
 
 			//
 			// draw test data on the desk
-
-			_model.MarketDataProvider = dummyProvider;
-			_model.UnderlyingAsset = asset;
 
 			foreach (var option in securities.Where(s => s.Type == SecurityTypes.Option))
 			{
@@ -527,7 +530,7 @@ namespace SampleOptionQuoting
 			TryUpdateDepth(Connector.GetMarketDepth(option));
 
 			// create delta hedge strategy
-			var hedge = new DeltaHedgeStrategy
+			var hedge = new DeltaHedgeStrategy(_model.ExchangeInfoProvider)
 			{
 				Security = option.GetUnderlyingAsset(Connector),
 				Portfolio = Portfolio.SelectedPortfolio,
@@ -536,7 +539,7 @@ namespace SampleOptionQuoting
 
 			// create option quoting for 20 contracts
 			var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
-					new Range<decimal>((decimal?)ImpliedVolatilityMin.EditValue ?? 0, (decimal?)ImpliedVolatilityMax.EditValue ?? 100))
+					new Range<decimal>((decimal?)ImpliedVolatilityMin.EditValue ?? 0, (decimal?)ImpliedVolatilityMax.EditValue ?? 100), _model.ExchangeInfoProvider)
 			{
 				// working size is 1 contract
 				Volume = 1,
@@ -566,7 +569,7 @@ namespace SampleOptionQuoting
 			if (!_quotesWindows.TryGetValue(depth.Security, out var wnd))
 				return;
 
-			wnd.Update(depth.ImpliedVolatility(Connector, Connector, depth.LastChangeTime));
+			wnd.Update(depth.ImpliedVolatility(Connector, Connector, _model.ExchangeInfoProvider, depth.LastChangeTime));
 		}
 	}
 }

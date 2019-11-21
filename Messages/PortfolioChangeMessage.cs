@@ -30,23 +30,15 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 	[DescriptionLoc(LocalizedStrings.Str541Key)]
-	public sealed class PortfolioChangeMessage : BasePositionChangeMessage
+	public sealed class PortfolioChangeMessage : PositionChangeMessage
 	{
-		/// <summary>
-		/// Electronic board code.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
-		[MainCategory]
-		public string BoardCode { get; set; }
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioChangeMessage"/>.
 		/// </summary>
 		public PortfolioChangeMessage()
-			: base(MessageTypes.PortfolioChange)
+			//: base(MessageTypes.PortfolioChange)
 		{
+			SecurityId = SecurityId.Money;
 		}
 
 		/// <summary>
@@ -55,13 +47,8 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new PortfolioChangeMessage
-			{
-				BoardCode = BoardCode,
-			};
-
+			var clone = new PortfolioChangeMessage();
 			CopyTo(clone);
-
 			return clone;
 		}
 

@@ -43638,14 +43638,24 @@ namespace StockSharp.Localization
 		public static string CyclicDependency => GetString(CyclicDependencyKey);
 
 		/// <summary>
-		/// Subscription does not exist.
+		/// Subscription '{0}' does not exist.
 		/// </summary>
 		public const string SubscriptionNonExistKey = nameof(SubscriptionNonExist);
 
 		/// <summary>
-		/// Subscription does not exist.
+		/// Subscription '{0}' does not exist.
 		/// </summary>
 		public static string SubscriptionNonExist => GetString(SubscriptionNonExistKey);
+
+		/// <summary>
+		/// Subscription '{0}' for '{1}' is online.
+		/// </summary>
+		public const string SubscriptionOnlineKey = nameof(SubscriptionOnline);
+
+		/// <summary>
+		/// Subscription '{0}' for '{1}' is online.
+		/// </summary>
+		public static string SubscriptionOnline => GetString(SubscriptionOnlineKey);
 
 		/// <summary>
 		/// Sleep interval while batch candles downloading.

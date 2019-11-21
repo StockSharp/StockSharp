@@ -1,18 +1,3 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: StockSharp.Algo.Algo
-File: Connector_ProcessMessage.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
 namespace StockSharp.Algo
 {
 	using System;
@@ -25,13 +10,12 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
-	using StockSharp.Localization;
 
 	partial class Connector
 	{
@@ -103,21 +87,26 @@ namespace StockSharp.Algo
 			{
 				//message.IsBack = false;
 
-				if (message.Type == MessageTypes.MarketData)
-				{
-					var mdMsg = (MarketDataMessage)message;
+				// lookup messages now sends in BasketMessageAdapter
+				// nested subscription ignores by Connector
+				//
+				//if (message.Type == MessageTypes.MarketData)
+				//{
+				//	var mdMsg = (MarketDataMessage)message;
 
-					var security = !mdMsg.DataType.IsSecurityRequired() ? null : GetSecurity(mdMsg.SecurityId);
-					_subscriptionManager.ProcessRequest(security, mdMsg, true);
-				}
-				else if (message.Type == MessageTypes.OrderGroupCancel)
+				//	var security = !mdMsg.DataType.IsSecurityRequired() ? null : GetSecurity(mdMsg.SecurityId);
+				//	_subscriptionManager.ProcessRequest(security, mdMsg, true);
+				//}
+				//else
+
+				if (message.Type == MessageTypes.OrderGroupCancel)
 				{
 					var cancelMsg = (OrderGroupCancelMessage)message;
-					_entityCache.AddMassCancelationId(cancelMsg.TransactionId);
-					SendInMessage(message);
+					// offline (back) and risk managers can generate the message
+					_entityCache.TryAddMassCancelationId(cancelMsg.TransactionId);
 				}
-				else
-					SendInMessage(message);
+				
+				SendInMessage(message);
 			}
 			else
 				SendOutMessage(message);
@@ -634,9 +623,9 @@ namespace StockSharp.Algo
 						ProcessPortfolioMessage((PortfolioMessage)message);
 						break;
 
-					case MessageTypes.PortfolioChange:
-						ProcessPortfolioChangeMessage((PortfolioChangeMessage)message);
-						break;
+					//case MessageTypes.PortfolioChange:
+					//	ProcessPortfolioChangeMessage((PortfolioChangeMessage)message);
+					//	break;
 
 					//case MessageTypes.Position:
 					//	ProcessPositionMessage((PositionMessage)message);
@@ -719,7 +708,7 @@ namespace StockSharp.Algo
 
 		private void ProcessMarketDataMessage(MarketDataMessage replyMsg)
 		{
-			var security = _subscriptionManager.ProcessResponse(replyMsg, out var originalMsg, out var unexpectedCancelled);
+			var subscription = _subscriptionManager.ProcessResponse(replyMsg, out var originalMsg, out var unexpectedCancelled);
 
 			if (originalMsg == null)
 			{
@@ -732,32 +721,21 @@ namespace StockSharp.Algo
 			if (originalMsg.IsSubscribe)
 			{
 				if (replyMsg.IsOk())
-					RaiseMarketDataSubscriptionSucceeded(security, originalMsg);
+					RaiseMarketDataSubscriptionSucceeded(originalMsg, subscription);
 				else
 				{
 					if (unexpectedCancelled)
-					{
-						RaiseMarketDataUnexpectedCancelled(security, originalMsg, replyMsg.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)));
-						ProcessCandleSeriesStopped(replyMsg.OriginalTransactionId);
-					}
+						RaiseMarketDataUnexpectedCancelled(originalMsg, replyMsg.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)), subscription);
 					else
-					{
-						RaiseMarketDataSubscriptionFailed(security, originalMsg, replyMsg);
-						ProcessCandleSeriesError(replyMsg);
-					}
+						RaiseMarketDataSubscriptionFailed(originalMsg, replyMsg, subscription);
 				}
 			}
 			else
 			{
-				_subscriptions.Remove(originalMsg.OriginalTransactionId);
-
 				if (replyMsg.IsOk())
-				{
-					RaiseMarketDataUnSubscriptionSucceeded(security, originalMsg);
-					ProcessCandleSeriesStopped(originalMsg.OriginalTransactionId);
-				}
+					RaiseMarketDataUnSubscriptionSucceeded(originalMsg, subscription);
 				else
-					RaiseMarketDataUnSubscriptionFailed(security, originalMsg, replyMsg);
+					RaiseMarketDataUnSubscriptionFailed(originalMsg, replyMsg, subscription);
 			}
 		}
 
@@ -967,17 +945,6 @@ namespace StockSharp.Algo
 			RaiseReceived(board, message, BoardReceived);
 		}
 
-		private void ProcessLookupResponse<TCriteria, TItem>(SynchronizedDictionary<long, LookupInfo<TCriteria, TItem>> lookups, BaseSubscriptionIdMessage message, TItem item)
-			where TCriteria : Message, new()
-		{
-			LookupInfo<TCriteria, TItem> info;
-
-			lock (lookups.SyncRoot)
-				info = lookups.SafeAdd(message.OriginalTransactionId, key => new LookupInfo<TCriteria, TItem>(new TCriteria()));
-
-			info.Items.Add(item);
-		}
-
 		private void ProcessBoardMessage(BoardMessage message)
 		{
 			var board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.Code, out var isNew, code =>
@@ -991,7 +958,7 @@ namespace StockSharp.Algo
 				return;
 
 			if (isNew)
-				ProcessLookupResponse(_boardLookups, message, board);
+				_subscriptionManager.ProcessLookupResponse<BoardLookupMessage>(message, board);
 
 			RaiseReceived(board, message, BoardReceived);
 		}
@@ -1013,7 +980,7 @@ namespace StockSharp.Algo
 				return;
 
 			if (isNew)
-				ProcessLookupResponse(_securityLookups, message, security);
+				_subscriptionManager.ProcessLookupResponse<SecurityLookupMessage>(message, security);
 
 			RaiseReceived(security, message, SecurityReceived);
 		}
@@ -1023,17 +990,15 @@ namespace StockSharp.Algo
 			if (message.Error != null)
 				RaiseError(message.Error);
 
-			LookupInfo<SecurityLookupMessage, Security> info;
-
-			lock (_securityLookups.SyncRoot)
-				info = _securityLookups.TryGetAndRemove(message.OriginalTransactionId);
+			var info = _subscriptionManager.TryGetAndRemoveLookup(message);
 
 			if (info == null)
 				return;
 
-			var criteria = this.GetSecurityCriteria(info.Criteria, _entityCache.ExchangeInfoProvider);
+			var criteriaMsg = (SecurityLookupMessage)info.Criteria;
+			var criteria = this.GetSecurityCriteria(criteriaMsg, _entityCache.ExchangeInfoProvider);
 
-			RaiseLookupSecuritiesResult(info.Criteria, message.Error, Securities.Filter(criteria).ToArray(), info.Items.ToArray());
+			RaiseLookupSecuritiesResult(criteriaMsg, message.Error, Securities.Filter(criteria).ToArray(), info.Items.Cast<Security>().ToArray());
 		}
 
 		private void ProcessBoardLookupResultMessage(BoardLookupResultMessage message)
@@ -1041,15 +1006,13 @@ namespace StockSharp.Algo
 			if (message.Error != null)
 				RaiseError(message.Error);
 
-			LookupInfo<BoardLookupMessage, ExchangeBoard> info;
-				
-			lock (_boardLookups.SyncRoot)
-				info = _boardLookups.TryGetAndRemove(message.OriginalTransactionId);
+			var info = _subscriptionManager.TryGetAndRemoveLookup(message);
 
 			if (info == null)
 				return;
 
-			RaiseLookupBoardsResult(info.Criteria, message.Error, ExchangeBoards.Filter(info.Criteria.Like).ToArray(), info.Items.ToArray());
+			var criteria = (BoardLookupMessage)info.Criteria;
+			RaiseLookupBoardsResult(criteria, message.Error, ExchangeBoards.Filter(criteria.Like).ToArray(), info.Items.Cast<ExchangeBoard>().ToArray());
 		}
 
 		private void ProcessTimeFrameLookupResultMessage(TimeFrameLookupResultMessage message)
@@ -1057,15 +1020,12 @@ namespace StockSharp.Algo
 			if (message.Error != null)
 				RaiseError(message.Error);
 
-			LookupInfo<TimeFrameLookupMessage, TimeSpan> info;
-				
-			lock (_timeFrameLookups.SyncRoot)
-				info = _timeFrameLookups.TryGetAndRemove(message.OriginalTransactionId);
+			var info = _subscriptionManager.TryGetAndRemoveLookup(message);
 
 			if (info == null)
 				return;
 
-			RaiseLookupTimeFramesResult(info.Criteria, message.Error, message.TimeFrames, message.TimeFrames);
+			RaiseLookupTimeFramesResult((TimeFrameLookupMessage)info.Criteria, message.Error, message.TimeFrames, message.TimeFrames);
 		}
 
 		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)
@@ -1073,17 +1033,14 @@ namespace StockSharp.Algo
 			if (message.Error != null)
 				RaiseError(message.Error);
 
-			LookupInfo<PortfolioLookupMessage, Portfolio> info;
-
-			lock (_portfolioLookups.SyncRoot)
-				info = _portfolioLookups.TryGetAndRemove(message.OriginalTransactionId);
+			var info = _subscriptionManager.TryGetAndRemoveLookup(message);
 
 			if (info == null)
 				return;
 
-			var criteria = info.Criteria;
+			var criteria = (PortfolioLookupMessage)info.Criteria;
 			
-			RaiseLookupPortfoliosResult(criteria, message.Error, Portfolios.Where(pf => criteria.PortfolioName.IsEmpty() || pf.Name.ContainsIgnoreCase(criteria.PortfolioName)).ToArray(), info.Items.ToArray());
+			RaiseLookupPortfoliosResult(criteria, message.Error, Portfolios.Where(pf => criteria.PortfolioName.IsEmpty() || pf.Name.ContainsIgnoreCase(criteria.PortfolioName)).ToArray(), info.Items.Cast<Portfolio>().ToArray());
 		}
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
@@ -1146,16 +1103,6 @@ namespace StockSharp.Algo
 			return GetPortfolio(name, null, out _);
 		}
 
-		/// <summary>
-		/// To get the portfolio by the name.
-		/// </summary>
-		/// <remarks>
-		/// If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
-		/// </remarks>
-		/// <param name="name">Portfolio name.</param>
-		/// <param name="changePortfolio">Portfolio handler.</param>
-		/// <param name="isNew">Is newly created.</param>
-		/// <returns>Portfolio.</returns>
 		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio, out bool isNew)
 		{
 			if (name.IsEmpty())
@@ -1184,6 +1131,16 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioMessage(PortfolioMessage message)
 		{
+			if (message.Error != null)
+			{
+				var subscription = _subscriptionManager.TryGetSubscription(message.OriginalTransactionId, true);
+				
+				if (subscription != null)
+					RaiseSubscriptionFailed(subscription, message.Error, true);
+
+				return;
+			}
+
 			var portfolio = GetPortfolio(message.PortfolioName, p =>
 			{
 				message.ToPortfolio(p, _entityCache.ExchangeInfoProvider);
@@ -1194,20 +1151,9 @@ namespace StockSharp.Algo
 				return;
 
 			if (isNew)
-				ProcessLookupResponse(_portfolioLookups, message, portfolio);
+				_subscriptionManager.ProcessLookupResponse<PortfolioLookupMessage>(message, portfolio);
 
 			RaiseReceived(portfolio, message, PortfolioReceived);
-		}
-
-		private void ProcessPortfolioChangeMessage(PortfolioChangeMessage message)
-		{
-			var pf = GetPortfolio(message.PortfolioName, portfolio =>
-			{
-				portfolio.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
-				return true;
-			}, out _);
-
-			RaiseReceived(pf, message, PortfolioReceived);
 		}
 
 		//private void ProcessPositionMessage(PositionMessage message)
@@ -1221,26 +1167,39 @@ namespace StockSharp.Algo
 
 		private void ProcessPositionChangeMessage(PositionChangeMessage message)
 		{
-			var security = EnsureGetSecurity(message);
-			var portfolio = GetPortfolio(message.PortfolioName);
-
-			var valueInLots = message.Changes.TryGetValue(PositionChangeTypes.CurrentValueInLots);
-			if (valueInLots != null)
+			if (message.IsMoney())
 			{
-				if (!message.Changes.ContainsKey(PositionChangeTypes.CurrentValue))
+				var pf = GetPortfolio(message.PortfolioName, portfolio =>
 				{
-					var currValue = (decimal)valueInLots / (security.VolumeStep ?? 1);
-					message.Add(PositionChangeTypes.CurrentValue, currValue);
+					portfolio.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
+					return true;
+				}, out _);
+
+				RaiseReceived(pf, message, PortfolioReceived);
+			}
+			else
+			{
+				var security = EnsureGetSecurity(message);
+				var portfolio = GetPortfolio(message.PortfolioName);
+
+				var valueInLots = message.Changes.TryGetValue(PositionChangeTypes.CurrentValueInLots);
+				if (valueInLots != null)
+				{
+					if (!message.Changes.ContainsKey(PositionChangeTypes.CurrentValue))
+					{
+						var currValue = (decimal)valueInLots / (security.VolumeStep ?? 1);
+						message.Add(PositionChangeTypes.CurrentValue, currValue);
+					}
+
+					message.Changes.Remove(PositionChangeTypes.CurrentValueInLots);
 				}
 
-				message.Changes.Remove(PositionChangeTypes.CurrentValueInLots);
+				var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
+				position.ApplyChanges(message);
+
+				RaisePositionChanged(position);
+				RaiseReceived(position, message, PositionReceived);
 			}
-
-			var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
-			position.ApplyChanges(message);
-
-			RaisePositionChanged(position);
-			RaiseReceived(position, message, PositionReceived);
 		}
 
 		private void ProcessNewsMessage(NewsMessage message)
@@ -1768,21 +1727,21 @@ namespace StockSharp.Algo
 						}
 					}
 
+					Security security;
+
 					var order = _entityCache.GetOrder(message, out var transactionId);
 
 					if (order == null)
 					{
-						var security = EnsureGetSecurity(message);
+						security = EnsureGetSecurity(message);
 
 						if (transactionId == 0 && isStatusRequest)
 							transactionId = TransactionIdGenerator.GetNextId();
-
-						ProcessTransactionMessage(null, security, message, transactionId, isStatusRequest);
 					}
 					else
-					{
-						ProcessTransactionMessage(order, order.Security, message, transactionId, isStatusRequest);
-					}
+						security = order.Security;
+
+					ProcessTransactionMessage(order, security, message, transactionId, isStatusRequest);
 
 					break;
 				}
@@ -1813,38 +1772,25 @@ namespace StockSharp.Algo
 
 		private void ProcessCandleMessage(CandleMessage message)
 		{
-			var series = _entityCache.UpdateCandle(message, out var candle);
+			foreach (var tuple in _subscriptionManager.UpdateCandles(message))
+			{
+				var subscription = tuple.Item1;
+				var candle = tuple.Item2;
 
-			if (series == null)
-				return;
+				RaiseCandleSeriesProcessing(subscription.CandleSeries, candle);
 
-			RaiseCandleSeriesProcessing(series, candle);
-			RaiseReceived(candle, message, CandleReceived);
-		}
-
-		private CandleSeries ProcessCandleSeriesStopped(long originalTransactionId)
-		{
-			var series = _entityCache.RemoveCandleSeries(originalTransactionId);
-
-			if (series != null)
-				RaiseCandleSeriesStopped(series);
-
-			return series;
-		}
-
-		private void ProcessCandleSeriesError(MarketDataMessage reply)
-		{
-			var series = _entityCache.RemoveCandleSeries(reply.OriginalTransactionId);
-
-			if (series != null)
-				RaiseCandleSeriesError(series, reply);
+				CandleReceived?.Invoke(subscription, candle);
+			}
 		}
 
 		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
-		{
-			var series = ProcessCandleSeriesStopped(message.OriginalTransactionId);
-			var security = series?.Security ?? _subscriptionManager.TryGetSecurity(message.OriginalTransactionId);
-			RaiseMarketDataSubscriptionFinished(security, message);
+		{ 
+			var subscription = _subscriptionManager.ProcessMarketDataFinishedMessage(message);
+
+			if (subscription == null)
+				return;
+
+			RaiseMarketDataSubscriptionFinished(message, subscription);
 		}
 
 		private void ProcessChangePasswordMessage(ChangePasswordMessage message)

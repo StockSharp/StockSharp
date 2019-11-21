@@ -55,7 +55,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class NewsMessage : BaseSubscriptionIdMessage, IServerTimeMessage
+	public class NewsMessage : BaseSubscriptionIdMessage, IServerTimeMessage, INullableSecurityIdMessage
 	{
 		/// <summary>
 		/// News ID.
@@ -76,9 +76,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string BoardCode { get; set; }
 
-		/// <summary>
-		/// Security ID, for which news have been published.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 		[DescriptionLoc(LocalizedStrings.Str212Key)]

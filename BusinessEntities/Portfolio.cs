@@ -33,7 +33,7 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 	[DescriptionLoc(LocalizedStrings.Str541Key)]
-	public class Portfolio : BasePosition
+	public class Portfolio : Position
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Portfolio"/>.
@@ -205,17 +205,6 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Create a copy of <see cref="Portfolio"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public Portfolio Clone()
-		{
-			var clone = new Portfolio();
-			CopyTo(clone);
-			return clone;
-		}
-
-		/// <summary>
 		/// To copy the current portfolio fields to the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The portfolio, in which fields should be copied.</param>
@@ -225,7 +214,6 @@ namespace StockSharp.BusinessEntities
 
 			destination.Name = Name;
 			destination.Board = Board;
-			destination.Currency = Currency;
 			destination.Leverage = Leverage;
 			//destination.Connector = Connector;
 			destination.State = State;
@@ -238,6 +226,17 @@ namespace StockSharp.BusinessEntities
 		public override string ToString()
 		{
 			return Name;
+		}
+
+		/// <summary>
+		/// Create a copy of <see cref="Portfolio"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public new Portfolio Clone()
+		{
+			var clone = new Portfolio();
+			CopyTo(clone);
+			return clone;
 		}
 	}
 }

@@ -74,9 +74,7 @@
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AggregatedQuote.cs" />
-    <Compile Include="BasePosition.cs" />
     <Compile Include="CategoryAttributes.cs" />
-    <Compile Include="DataType.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="ExchangeBoard.cs" />
     <Compile Include="ExchangeBoard_Instances.cs" />

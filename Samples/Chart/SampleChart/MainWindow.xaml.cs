@@ -464,8 +464,12 @@
 
 				message.OriginalTransactionId = _transactionId;
 
-				if (_holder.UpdateCandle(message, out var candle) != null)
+				var info = _holder.UpdateCandles(message).FirstOrDefault();
+
+				if (info != null)
 				{
+					var candle = info.Item2;
+
 					if (candlesToUpdate.Count == 0 || candlesToUpdate.Last() != candle)
 						candlesToUpdate.Add(candle);
 				}
@@ -760,6 +764,8 @@
 
 			event Action<Security, MarketDataFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished { add { } remove { } }
 			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnexpectedCancelled { add { } remove { } }
+
+			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionOnline { add { } remove { } }
 			
 			void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria) { }
 			void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria) { }

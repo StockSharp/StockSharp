@@ -110,7 +110,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new OriginalTransactionMessageAdapter(InnerAdapter);
+			return new OriginalTransactionMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
 		}
 	}
 }

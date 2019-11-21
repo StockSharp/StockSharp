@@ -25,47 +25,47 @@ namespace StockSharp.Messages
 	public enum MessageTypes
 	{
 		/// <summary>
-		/// Security info.
+		/// <see cref="SecurityMessage"/>.
 		/// </summary>
 		Security,
 
 		/// <summary>
-		/// Level1 market-data changes.
+		/// <see cref="Level1ChangeMessage"/>.
 		/// </summary>
 		Level1Change,
 
 		/// <summary>
-		/// Register new order.
+		/// <see cref="OrderRegisterMessage"/>.
 		/// </summary>
 		OrderRegister,
 
 		/// <summary>
-		/// Modify order.
+		/// <see cref="OrderReplaceMessage"/>.
 		/// </summary>
 		OrderReplace,
 
 		/// <summary>
-		/// Pair order move.
+		/// <see cref="OrderPairReplaceMessage"/>.
 		/// </summary>
 		OrderPairReplace,
 
 		/// <summary>
-		/// Cancel order.
+		/// <see cref="OrderCancelMessage"/>.
 		/// </summary>
 		OrderCancel,
 
 		/// <summary>
-		/// Order group cancel.
+		/// <see cref="OrderGroupCancelMessage"/>.
 		/// </summary>
 		OrderGroupCancel,
 
 		/// <summary>
-		/// Time change.
+		/// <see cref="TimeMessage"/>.
 		/// </summary>
 		Time,
 
 		/// <summary>
-		/// News.
+		/// <see cref="NewsMessage"/>.
 		/// </summary>
 		News,
 
@@ -76,7 +76,7 @@ namespace StockSharp.Messages
 		OrderError,
 
 		/// <summary>
-		/// Portfolio.
+		/// <see cref="PortfolioMessage"/>.
 		/// </summary>
 		Portfolio,
 
@@ -87,32 +87,33 @@ namespace StockSharp.Messages
 		Position,
 
 		/// <summary>
-		/// Candle (time-frame).
+		/// <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		CandleTimeFrame,
 
 		/// <summary>
-		/// Quotes change.
+		/// <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		QuoteChange,
 
 		/// <summary>
-		/// Order execution.
+		/// <see cref="ExecutionMessage"/>.
 		/// </summary>
 		Execution,
 
 		/// <summary>
-		/// Position change.
+		/// <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		PositionChange,
 
 		/// <summary>
-		/// Portfolio change.
+		/// <see cref="PortfolioChangeMessage"/>.
 		/// </summary>
+		[Obsolete]
 		PortfolioChange,
 
 		/// <summary>
-		/// Subscribe/unsubscribe market-data.
+		/// <see cref="MarketDataMessage"/>.
 		/// </summary>
 		MarketData,
 
@@ -123,117 +124,118 @@ namespace StockSharp.Messages
 		NativeSecurityId,
 
 		/// <summary>
-		/// Connect.
+		/// <see cref="ConnectMessage"/>.
 		/// </summary>
 		Connect,
 
 		/// <summary>
-		/// Disconnect.
+		/// <see cref="DisconnectMessage"/>.
 		/// </summary>
 		Disconnect,
 
 		/// <summary>
-		/// Securities search.
+		/// <see cref="SecurityLookupMessage"/>.
 		/// </summary>
 		SecurityLookup,
 
 		/// <summary>
-		/// Portfolio lookup.
+		/// <see cref="PortfolioLookupMessage"/>.
 		/// </summary>
 		PortfolioLookup,
 
 		/// <summary>
-		/// Security lookup result.
+		/// <see cref="SecurityLookupResultMessage"/>.
 		/// </summary>
 		SecurityLookupResult,
 
 		/// <summary>
-		/// Error.
+		/// <see cref="ErrorMessage"/>.
 		/// </summary>
 		Error,
 
 		/// <summary>
-		/// Session.
+		/// <see cref="BoardStateMessage"/>.
 		/// </summary>
 		BoardState,
 
 		/// <summary>
-		/// Order state request.
+		/// <see cref="OrderStatusMessage"/>.
 		/// </summary>
 		OrderStatus,
 
 		/// <summary>
-		/// Electronic board info.
+		/// <see cref="BoardMessage"/>.
 		/// </summary>
 		Board,
 
 		/// <summary>
-		/// Portfolio lookup result.
+		/// <see cref="PortfolioLookupResultMessage"/>.
 		/// </summary>
 		PortfolioLookupResult,
 
 		/// <summary>
-		/// Password change.
+		/// <see cref="ChangePasswordMessage"/>.
 		/// </summary>
 		ChangePassword,
 
 		/// <summary>
 		/// Clear message queue.
 		/// </summary>
+		[Obsolete]
 		ClearQueue,
 
 		/// <summary>
-		/// Candle (tick).
+		/// <see cref="TickCandleMessage"/>.
 		/// </summary>
 		CandleTick,
 
 		/// <summary>
-		/// Candle (volume).
+		/// <see cref="VolumeCandleMessage"/>.
 		/// </summary>
 		CandleVolume,
 
 		/// <summary>
-		/// Candle (range).
+		/// <see cref="RangeCandleMessage"/>.
 		/// </summary>
 		CandleRange,
 
 		/// <summary>
-		/// Candle (X&amp;0).
+		/// <see cref="PnFCandleMessage"/>.
 		/// </summary>
 		CandlePnF,
 
 		/// <summary>
-		/// Candle (renko).
+		/// <see cref="RenkoCandleMessage"/>.
 		/// </summary>
 		CandleRenko,
 
 		/// <summary>
-		/// Reset state.
+		/// <see cref="ResetMessage"/>.
 		/// </summary>
 		Reset,
 
 		/// <summary>
-		/// Market data request finished.
+		/// <see cref="MarketDataFinishedMessage"/>.
 		/// </summary>
 		MarketDataFinished,
 
 		/// <summary>
-		/// Remove object request (security, portfolio etc.).
+		/// <see cref="RemoveMessage"/>.
 		/// </summary>
 		Remove,
 
 		/// <summary>
-		/// User info.
+		/// <see cref="UserInfoMessage"/>.
 		/// </summary>
 		UserInfo,
 
 		/// <summary>
-		/// Users search.
+		/// <see cref="UserLookupMessage"/>.
 		/// </summary>
 		UserLookup,
 
 		/// <summary>
-		/// Users search result.
+		/// <see cref="UserLookupResultMessage"/>.
 		/// </summary>
 		UserLookupResult,
 
@@ -244,27 +246,27 @@ namespace StockSharp.Messages
 		BoardRequest,
 
 		/// <summary>
-		/// Boards search.
+		/// <see cref="BoardLookupMessage"/>.
 		/// </summary>
 		BoardLookup,
 
 		/// <summary>
-		/// Boards search result.
+		/// <see cref="BoardLookupResultMessage"/>.
 		/// </summary>
 		BoardLookupResult,
 
 		/// <summary>
-		/// User subscription request.
+		/// <see cref="UserRequestMessage"/>.
 		/// </summary>
 		UserRequest,
 
 		/// <summary>
-		/// Time-frames search.
+		/// <see cref="TimeFrameLookupMessage"/>.
 		/// </summary>
 		TimeFrameLookup,
 
 		/// <summary>
-		/// Time-frames search result.
+		/// <see cref="TimeFrameLookupResultMessage"/>.
 		/// </summary>
 		TimeFrameLookupResult,
 
@@ -351,7 +353,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// <see cref="SecurityMappingMessage"/>.
 		/// </summary>
-		SecurityMapping
+		SecurityMapping,
 	}
 
 	/// <summary>

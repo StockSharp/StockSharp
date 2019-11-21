@@ -81,7 +81,6 @@
     <Compile Include="AdapterListRequestMessage.cs" />
     <Compile Include="AdapterResponseMessage.cs" />
     <Compile Include="BaseConnectionMessage.cs" />
-    <Compile Include="BasePositionChangeMessage.cs" />
     <Compile Include="BaseResultMessage.cs" />
     <Compile Include="BaseRouteMessage.cs" />
     <Compile Include="BaseSubscriptionIdMessage.cs" />
@@ -96,12 +95,16 @@
     <Compile Include="ConnectMessage.cs" />
     <Compile Include="Currency.cs" />
     <Compile Include="CurrencyTypes.cs" />
+    <Compile Include="DataType.cs" />
     <Compile Include="DisconnectMessage.cs" />
     <Compile Include="ExecutionMessage.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IBasketSecurityProcessor.cs" />
     <Compile Include="IBasketSecurityProcessorProvider.cs" />
     <Compile Include="IDailyInfoSoap.cs" />
+    <Compile Include="IErrorMessage.cs" />
+    <Compile Include="IMessage.cs" />
+    <Compile Include="IOriginalTransactionIdMessage.cs" />
     <Compile Include="IPortfolioNameMessage.cs" />
     <Compile Include="ISecurityIdMessage.cs" />
     <Compile Include="IServerTimeMessage.cs" />

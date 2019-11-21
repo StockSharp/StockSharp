@@ -270,6 +270,13 @@ StockSharp API Change log
 * (feature) Gopax, Hotbit, CoinHub connectors.
 * (feature) StorageMessageAdapter. Meta-info extracted into StorageMetaInfoMessageAdapter.
 * (feature) BasketMessageAdapter. Each connection uses own StorageMessageAdapter.
+* (feature) IPositionProvider. SubscribePositions filter by Portfolio added.
+* (feature) PortfolioLookupMessage. SecurityId filter added.
+* (feature) Connector. MarketDataSubscriptionOnline event added.
+* (feature) Algo. Remote types moved to Algo.Server namespace.
+* (feature) SecurityId. Money, News, All instances created.
+* (feature) Portfolio derived from Position.
+* (feature) Connector. All subscriptions and lookups done via Subscription class.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

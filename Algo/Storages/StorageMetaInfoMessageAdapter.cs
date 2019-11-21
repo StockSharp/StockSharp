@@ -137,6 +137,10 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.Portfolio:
 				{
 					var portfolioMsg = (PortfolioMessage)message;
+
+					if (portfolioMsg.Error != null)
+						break;
+
 					var portfolio = _positionStorage.GetPortfolio(portfolioMsg.PortfolioName) ?? new Portfolio
 					{
 						Name = portfolioMsg.PortfolioName
@@ -148,61 +152,39 @@ namespace StockSharp.Algo.Storages
 					break;
 				}
 
-				case MessageTypes.PortfolioChange:
-				{
-					var portfolioMsg = (PortfolioChangeMessage)message;
-					var portfolio = _positionStorage.GetPortfolio(portfolioMsg.PortfolioName) ?? new Portfolio
-					{
-						Name = portfolioMsg.PortfolioName
-					};
-
-					portfolio.ApplyChanges(portfolioMsg, _exchangeInfoProvider);
-					_positionStorage.Save(portfolio);
-
-					break;
-				}
-
-				//case MessageTypes.Position:
-				//{
-				//	var positionMsg = (PositionMessage)message;
-				//	var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
-
-				//	if (position == null)
-				//		break;
-
-				//	if (!positionMsg.DepoName.IsEmpty())
-				//		position.DepoName = positionMsg.DepoName;
-
-				//	if (positionMsg.LimitType != null)
-				//		position.LimitType = positionMsg.LimitType;
-
-				//	if (!positionMsg.Description.IsEmpty())
-				//		position.Description = positionMsg.Description;
-
-				//	_entityRegistry.Positions.Save(position);
-
-				//	break;
-				//}
-
 				case MessageTypes.PositionChange:
 				{
 					var positionMsg = (PositionChangeMessage)message;
-					var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
 
-					if (position == null)
-						break;
+					if (positionMsg.IsMoney())
+					{
+						var portfolio = _positionStorage.GetPortfolio(positionMsg.PortfolioName) ?? new Portfolio
+						{
+							Name = positionMsg.PortfolioName
+						};
 
-					if (!positionMsg.DepoName.IsEmpty())
-						position.DepoName = positionMsg.DepoName;
+						portfolio.ApplyChanges(positionMsg, _exchangeInfoProvider);
+						_positionStorage.Save(portfolio);
+					}
+					else
+					{
+						var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
 
-					if (positionMsg.LimitType != null)
-						position.LimitType = positionMsg.LimitType;
+						if (position == null)
+							break;
 
-					if (!positionMsg.Description.IsEmpty())
-						position.Description = positionMsg.Description;
+						if (!positionMsg.DepoName.IsEmpty())
+							position.DepoName = positionMsg.DepoName;
 
-					position.ApplyChanges(positionMsg);
-					_positionStorage.Save(position);
+						if (positionMsg.LimitType != null)
+							position.LimitType = positionMsg.LimitType;
+
+						if (!positionMsg.Description.IsEmpty())
+							position.Description = positionMsg.Description;
+
+						position.ApplyChanges(positionMsg);
+						_positionStorage.Save(position);
+					}
 
 					break;
 				}
@@ -349,7 +331,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new StorageMetaInfoMessageAdapter(InnerAdapter, _securityStorage, _positionStorage, _exchangeInfoProvider)
+			return new StorageMetaInfoMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), _securityStorage, _positionStorage, _exchangeInfoProvider)
 			{
 				OverrideSecurityData = OverrideSecurityData,
 			};

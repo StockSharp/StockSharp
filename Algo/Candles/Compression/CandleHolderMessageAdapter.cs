@@ -186,7 +186,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new CandleHolderMessageAdapter(InnerAdapter);
+			return new CandleHolderMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
 		}
 	}
 }

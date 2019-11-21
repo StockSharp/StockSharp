@@ -281,15 +281,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual bool PortfolioLookupRequired => InnerAdapter.PortfolioLookupRequired;
-
-		/// <inheritdoc />
-		public virtual bool SecurityLookupRequired => InnerAdapter.SecurityLookupRequired;
-
-		/// <inheritdoc />
-		public virtual bool OrderStatusRequired => InnerAdapter.OrderStatusRequired;
-
-		/// <inheritdoc />
 		public string StorageName => InnerAdapter.StorageName;
 
 		/// <inheritdoc />
@@ -306,9 +297,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public virtual bool IsSupportSubscriptionBySecurity => InnerAdapter.IsSupportSubscriptionBySecurity;
-
-		/// <inheritdoc />
-		public virtual bool IsSupportSubscriptionByPortfolio => InnerAdapter.IsSupportSubscriptionByPortfolio;
 
 		/// <inheritdoc />
 		public virtual bool IsSupportCandlesUpdates => InnerAdapter.IsSupportCandlesUpdates;
@@ -354,8 +342,8 @@ namespace StockSharp.Messages
 			=> InnerAdapter.GetCandleArgs(candleType, securityId, from, to);
 
 		/// <inheritdoc />
-		public virtual TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval)
-			=> InnerAdapter.GetHistoryStepSize(request, out iterationInterval);
+		public virtual TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
+			=> InnerAdapter.GetHistoryStepSize(dataType, out iterationInterval);
 
 		/// <inheritdoc />
 		public virtual bool IsAllDownloadingSupported(MarketDataTypes dataType)

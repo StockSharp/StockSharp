@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Algo
 {
+	using System.Collections.Generic;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -11,7 +12,7 @@
 	/// </summary>
 	public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly SynchronizedDictionary<SecurityId, int> _depths = new SynchronizedDictionary<SecurityId, int>();
+		private readonly SynchronizedDictionary<long, int> _depths = new SynchronizedDictionary<long, int>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderBookTruncateMessageAdapter"/>.
@@ -50,12 +51,14 @@
 									mdMsg = (MarketDataMessage)mdMsg.Clone();
 									mdMsg.MaxDepth = supportedDepth;
 
-									_depths[mdMsg.SecurityId] = actualDepth;
+									_depths.Add(mdMsg.TransactionId, actualDepth);
 								}
 							}
 						}
 						else
-							_depths.Remove(mdMsg.SecurityId);
+						{
+							_depths.Remove(mdMsg.OriginalTransactionId);
+						}
 					}
 
 					break;
@@ -68,26 +71,63 @@
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			List<QuoteChangeMessage> clones = null;
+
 			switch (message.Type)
 			{
 				case MessageTypes.QuoteChange:
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
 
-					if (_depths.TryGetValue(quoteMsg.SecurityId, out var maxDepth))
+					foreach (var group in quoteMsg.GetSubscriptionIds().GroupBy(_depths.TryGetValue2))
 					{
-						if (quoteMsg.Bids.Length > maxDepth)
-							quoteMsg.Bids = quoteMsg.Bids.Take(maxDepth).ToArray();
+						if (group.Key == null)
+							continue;
 
-						if (quoteMsg.Asks.Length > maxDepth)
-							quoteMsg.Asks = quoteMsg.Asks.Take(maxDepth).ToArray();
+						if (clones == null)
+							clones = new List<QuoteChangeMessage>();
+
+						var maxDepth = group.Key.Value;
+
+						var clone = (QuoteChangeMessage)quoteMsg.Clone();
+
+						clone.SubscriptionId = 0;
+						clone.SubscriptionIds = group.ToArray();
+
+						if (clone.Bids.Length > maxDepth)
+							clone.Bids = clone.Bids.Take(maxDepth).ToArray();
+
+						if (clone.Asks.Length > maxDepth)
+							clone.Asks = clone.Asks.Take(maxDepth).ToArray();
+
+						clones.Add(clone);
+					}
+
+					if (clones != null)
+					{
+						var ids = quoteMsg.GetSubscriptionIds().Except(clones.SelectMany(c => c.SubscriptionIds)).ToArray();
+
+						if (ids.Length > 0)
+						{
+							quoteMsg.SubscriptionId = 0;
+							quoteMsg.SubscriptionIds = ids;
+						}
+						else
+							message = null;
 					}
 
 					break;
 				}
 			}
 
-			base.OnInnerAdapterNewOutMessage(message);
+			if (message != null)
+				base.OnInnerAdapterNewOutMessage(message);
+
+			if (clones != null)
+			{
+				foreach (var clone in clones)
+					base.OnInnerAdapterNewOutMessage(clone);
+			}
 		}
 
 		/// <summary>

@@ -42,21 +42,17 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Request identifier.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// ID of the original message <see cref="TimeMessage.TransactionId"/> for which this message is a response.
+		/// ID of the original message <see cref="TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public string OriginalTransactionId { get; set; }
 
-		/// <summary>
-		/// Server time.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public DateTimeOffset ServerTime { get; set; }
 

@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Derivatives
 
 	using MathNet.Numerics.Distributions;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -519,15 +520,24 @@ namespace StockSharp.Algo.Derivatives
 			return (decimal)(price - intrinsic);
 		}
 
-		internal static DateTimeOffset GetExpirationTime(this Security security)
+		internal static DateTimeOffset GetExpirationTime(this Security security, IExchangeInfoProvider provider)
 		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
 			if (security.ExpiryDate == null)
 				throw new ArgumentException(LocalizedStrings.Str709Params.Put(security.Id), nameof(security));
 
 			var expDate = security.ExpiryDate.Value;
 
 			if (expDate.TimeOfDay == TimeSpan.Zero)
-				expDate += security.CheckExchangeBoard().ExpiryTime;
+			{
+				var board = provider.GetOrCreateBoard(security.ToSecurityId().BoardCode);
+				expDate += board.ExpiryTime;
+			}
 
 			return expDate;
 		}
@@ -536,11 +546,12 @@ namespace StockSharp.Algo.Derivatives
 		/// To check whether the instrument has finished the action.
 		/// </summary>
 		/// <param name="security">Security.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <param name="currentTime">The current time.</param>
 		/// <returns><see langword="true" /> if the instrument has finished its action.</returns>
-		public static bool IsExpired(this Security security, DateTimeOffset currentTime)
+		public static bool IsExpired(this Security security, IExchangeInfoProvider exchangeInfoProvider, DateTimeOffset currentTime)
 		{
-			return security.GetExpirationTime() <= currentTime;
+			return security.GetExpirationTime(exchangeInfoProvider) <= currentTime;
 		}
 
 		/// <summary>
@@ -629,16 +640,17 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="depth">The order book quotes of which will be changed to volatility quotes.</param>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="dataProvider">The market data provider.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <param name="currentTime">The current time.</param>
 		/// <param name="riskFree">The risk free interest rate.</param>
 		/// <param name="dividend">The dividend amount on shares.</param>
 		/// <returns>The order book volatility.</returns>
-		public static MarketDepth ImpliedVolatility(this MarketDepth depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTimeOffset currentTime, decimal riskFree = 0, decimal dividend = 0)
+		public static MarketDepth ImpliedVolatility(this MarketDepth depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider, DateTimeOffset currentTime, decimal riskFree = 0, decimal dividend = 0)
 		{
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
 
-			return depth.ImpliedVolatility(new BlackScholes(depth.Security, securityProvider, dataProvider) { RiskFree = riskFree, Dividend = dividend }, currentTime);
+			return depth.ImpliedVolatility(new BlackScholes(depth.Security, securityProvider, dataProvider, exchangeInfoProvider) { RiskFree = riskFree, Dividend = dividend }, currentTime);
 		}
 
 		/// <summary>
@@ -900,6 +912,24 @@ namespace StockSharp.Algo.Derivatives
 		private static double NormalDistr(double x)
 		{
 			return _normalDistribution.CumulativeDistribution(x);
+		}
+
+		internal static void CheckOption(this Security option)
+		{
+			if (option == null)
+				throw new ArgumentNullException(nameof(option));
+
+			if (option.Type != SecurityTypes.Option)
+				throw new ArgumentException(LocalizedStrings.Str900Params.Put(option.Type), nameof(option));
+
+			if (option.OptionType == null)
+				throw new ArgumentException(LocalizedStrings.Str703Params.Put(option), nameof(option));
+
+			if (option.ExpiryDate == null)
+				throw new ArgumentException(LocalizedStrings.Str901Params.Put(option), nameof(option));
+
+			if (option.UnderlyingSecurityId == null)
+				throw new ArgumentException(LocalizedStrings.Str902Params.Put(option), nameof(option));
 		}
 	}
 }

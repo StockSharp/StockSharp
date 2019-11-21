@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Testing
 			this.AddSupportedMessage(MessageTypes.Security, true);
 			this.AddSupportedMessage(MessageTypes.Board, true);
 			this.AddSupportedMessage(MessageTypes.Level1Change, true);
-			this.AddSupportedMessage(MessageTypes.PortfolioChange, false);
+			//this.AddSupportedMessage(MessageTypes.PortfolioChange, false);
 			this.AddSupportedMessage(MessageTypes.PositionChange, false);
 			this.AddSupportedMessage(ExtendedMessageTypes.CommissionRule, false);
 			this.AddSupportedMessage(ExtendedMessageTypes.Clearing, null);

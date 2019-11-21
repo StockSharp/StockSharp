@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class SubscriptionListRequestMessage : Message
+	public class SubscriptionListRequestMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="SubscriptionListRequestMessage"/>.
@@ -18,9 +18,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Request identifier.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
 

@@ -1,4 +1,4 @@
-namespace StockSharp.BusinessEntities
+namespace StockSharp.Messages
 {
 	using System;
 
@@ -7,7 +7,6 @@ namespace StockSharp.BusinessEntities
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Data type info.
@@ -88,6 +87,19 @@ namespace StockSharp.BusinessEntities
 		/// <param name="tf">Candle arg.</param>
 		/// <returns>Data type info.</returns>
 		public static DataType TimeFrame(TimeSpan tf) => Create(typeof(TimeFrameCandleMessage), tf).Immutable();
+
+		/// <summary>
+		/// Create data type info for <see cref="PortfolioMessage"/>.
+		/// </summary>
+		/// <param name="portfolioName">Portfolio name.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType Portfolio(string portfolioName)
+		{
+			if (portfolioName.IsEmpty())
+				throw new ArgumentNullException(nameof(portfolioName));
+
+			return Create(typeof(PortfolioMessage), portfolioName).Immutable();
+		}
 
 		private Type _messageType;
 
@@ -196,6 +208,11 @@ namespace StockSharp.BusinessEntities
 		/// Determines whether the specified message type is derived from <see cref="CandleMessage"/>.
 		/// </summary>
 		public bool IsCandles => MessageType?.IsCandleMessage() == true;
+
+		/// <summary>
+		/// Determines whether the specified message type is derived from <see cref="PortfolioMessage"/>.
+		/// </summary>
+		public bool IsPortfolio => MessageType == typeof(PortfolioMessage);
 
 		/// <summary>
 		/// Determines whether the specified message type is market-data.

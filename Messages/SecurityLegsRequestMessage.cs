@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class SecurityLegsRequestMessage : Message
+	public class SecurityLegsRequestMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="SecurityLegsRequestMessage"/>.
@@ -18,9 +18,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Request identifier.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
 

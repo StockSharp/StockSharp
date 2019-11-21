@@ -163,6 +163,11 @@ namespace StockSharp.BusinessEntities
 		event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled;
 
 		/// <summary>
+		/// Subscription is online.
+		/// </summary>
+		event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline;
+
+		/// <summary>
 		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="LookupSecuritiesResult"/>.
 		/// </summary>
 		/// <param name="criteria">The criterion which fields will be used as a filter.</param>

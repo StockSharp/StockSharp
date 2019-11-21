@@ -18,6 +18,9 @@ namespace StockSharp.Messages
 	using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
+
+	using Ecng.Common;
 
 	using StockSharp.Localization;
 
@@ -48,7 +51,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioMessage : BaseSubscriptionIdMessage, ISubscriptionMessage, IPortfolioNameMessage
+	public class PortfolioMessage : BaseSubscriptionIdMessage,
+	        ISubscriptionMessage, IPortfolioNameMessage, IErrorMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -110,6 +114,25 @@ namespace StockSharp.Messages
 		[DataMember]
 		public Guid? InternalId { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str343Key)]
+		[DescriptionLoc(LocalizedStrings.Str344Key)]
+		[MainCategory]
+		public DateTimeOffset? From { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str345Key)]
+		[DescriptionLoc(LocalizedStrings.Str346Key)]
+		[MainCategory]
+		public DateTimeOffset? To { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		[XmlIgnore]
+		public Exception Error { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
 		/// </summary>
@@ -130,7 +153,24 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Name={PortfolioName}";
+			var str = base.ToString() + $",Name={PortfolioName}";
+
+			if (TransactionId > 0)
+				str += $",TransId={TransactionId}";
+
+			if (Currency != null)
+				str += $",Curr={Currency.Value}";
+
+			if (!BoardCode.IsEmpty())
+				str += $",TransId={TransactionId}";
+
+			if (IsSubscribe)
+				str += $",IsSubscribe={IsSubscribe}";
+
+			if (Error != null)
+				str += $",Error={Error.Message}";
+
+			return str;
 		}
 
 		/// <summary>
@@ -147,7 +187,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
 		/// <returns>The object, to which copied information.</returns>
-		protected PortfolioMessage CopyTo(PortfolioMessage destination)
+		public PortfolioMessage CopyTo(PortfolioMessage destination)
 		{
 			base.CopyTo(destination);
 
@@ -159,6 +199,9 @@ namespace StockSharp.Messages
 			destination.TransactionId = TransactionId;
 			destination.ClientCode = ClientCode;
 			destination.InternalId = InternalId;
+			destination.From = From;
+			destination.To = To;
+			destination.Error = Error;
 
 			return destination;
 		}

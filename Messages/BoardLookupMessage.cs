@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class BoardLookupMessage : Message, ITransactionIdMessage
+	public class BoardLookupMessage : Message, ISubscriptionMessage
 	{
 		/// <summary>
 		/// The filter for board search.
@@ -16,9 +16,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public string Like { get; set; }
 
-		/// <summary>
-		/// Request identifier.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
 
@@ -58,6 +56,30 @@ namespace StockSharp.Messages
 		public override string ToString()
 		{
 			return base.ToString() + $",Like={Like},TrId={TransactionId}";
+		}
+
+		DateTimeOffset? ISubscriptionMessage.From
+		{
+			get => null;
+			set { }
+		}
+
+		DateTimeOffset? ISubscriptionMessage.To
+		{
+			get => null;
+			set { }
+		}
+
+		bool ISubscriptionMessage.IsSubscribe
+		{
+			get => true;
+			set { }
+		}
+
+		long IOriginalTransactionIdMessage.OriginalTransactionId
+		{
+			get => 0;
+			set { }
 		}
 	}
 }

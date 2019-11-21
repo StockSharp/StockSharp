@@ -24,7 +24,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class ErrorMessage : Message
+	public class ErrorMessage : Message, IErrorMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ErrorMessage"/>.
@@ -34,9 +34,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Error info.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[XmlIgnore]
 		public Exception Error { get; set; }

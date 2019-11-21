@@ -23,7 +23,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -233,7 +232,8 @@ namespace StockSharp.Algo.Storages
 		/// <param name="dataType">Data type info.</param>
 		public void Subscribe(SecurityId securityId, DataType dataType)
 		{
-			Subscribe(Tuple.Create(securityId, dataType));
+			lock (_subscriptionsLock)
+				Subscribe(Tuple.Create(securityId, dataType));
 		}
 
 		private void Subscribe(Tuple<SecurityId, DataType> subscription)
@@ -263,22 +263,10 @@ namespace StockSharp.Algo.Storages
 				case MarketDataTypes.Board:
 					return DataType.Board;
 
-				case MarketDataTypes.CandleTick:
-					return DataType.Create(typeof(TickCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandleVolume:
-					return DataType.Create(typeof(VolumeCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandleRange:
-					return DataType.Create(typeof(RangeCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandlePnF:
-					return DataType.Create(typeof(PnFCandleMessage), msg.Arg);
-
-				case MarketDataTypes.CandleRenko:
-					return DataType.Create(typeof(RenkoCandleMessage), msg.Arg);
-
 				default:
+					if (msg.DataType.IsCandleDataType())
+						return DataType.Create(msg.DataType.ToCandleMessage(), msg.Arg);
+
 					return null;
 					//throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str1219);
 			}
@@ -571,10 +559,6 @@ namespace StockSharp.Algo.Storages
 
 					break;
 				}
-				//case MessageTypes.Position:
-				//	break;
-				//case MessageTypes.Portfolio:
-				//	break;
 				case MessageTypes.PositionChange:
 				{
 					var posMsg = (PositionChangeMessage)message;
@@ -585,9 +569,6 @@ namespace StockSharp.Algo.Storages
 
 					break;
 				}
-				case MessageTypes.PortfolioChange:
-					// TODO
-					break;
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
@@ -619,7 +600,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new BufferMessageAdapter(InnerAdapter);
+			return new BufferMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
 		}
 	}
 }

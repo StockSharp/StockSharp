@@ -38,16 +38,18 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Subscribe on positions changes.
 		/// </summary>
-		/// <param name="security">Security for subscription.</param>
+		/// <param name="security">The instrument on which the position should be found.</param>
+		/// <param name="portfolio">The portfolio on which the position should be found.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <param name="count">Max count.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void SubscribePositions(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
+		void SubscribePositions(Security security = null, Portfolio portfolio = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// Unsubscribe from positions changes.
 		/// </summary>
-		void UnSubscribePositions();
+		/// <param name="originalTransactionId">ID of the original message <see cref="SubscribePositions"/> for which this message is a response.</param>
+		void UnSubscribePositions(long originalTransactionId = 0);
 	}
 }

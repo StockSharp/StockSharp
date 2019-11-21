@@ -2,6 +2,7 @@ namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Common;
 
@@ -22,17 +23,15 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
 		/// <param name="extendedInfoStorage">Extended info <see cref="Message.ExtensionInfo"/> storage.</param>
-		/// <param name="storageName">Storage name.</param>
-		/// <param name="fields">Extended fields (names and types).</param>
-		public ExtendedInfoStorageMessageAdapter(IMessageAdapter innerAdapter, IExtendedInfoStorage extendedInfoStorage, string storageName, IEnumerable<Tuple<string, Type>> fields)
+		public ExtendedInfoStorageMessageAdapter(IMessageAdapter innerAdapter, IExtendedInfoStorage extendedInfoStorage)
 			: base(innerAdapter)
 		{
-			if (storageName.IsEmpty())
-				throw new ArgumentNullException(nameof(storageName));
+			if (InnerAdapter.StorageName.IsEmpty())
+				throw new ArgumentException(nameof(innerAdapter));
 
 			_extendedInfoStorage = extendedInfoStorage ?? throw new ArgumentNullException(nameof(extendedInfoStorage));
-			_storageName = storageName;
-			_fields = fields ?? throw new ArgumentNullException(nameof(fields));
+			_storageName = InnerAdapter.StorageName;
+			_fields = InnerAdapter.SecurityExtendedFields.ToArray();
 		}
 
 		private readonly SyncObject _sync = new SyncObject();
@@ -69,7 +68,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new ExtendedInfoStorageMessageAdapter(InnerAdapter, _extendedInfoStorage, _storageName, _fields);
+			return new ExtendedInfoStorageMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), _extendedInfoStorage);
 		}
 	}
 }

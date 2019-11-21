@@ -95,21 +95,6 @@ namespace StockSharp.Messages
 		TimeSpan HeartbeatInterval { get; set; }
 
 		/// <summary>
-		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
-		/// </summary>
-		bool PortfolioLookupRequired { get; }
-
-		/// <summary>
-		/// <see cref="SecurityLookupMessage"/> required to get securities.
-		/// </summary>
-		bool SecurityLookupRequired { get; }
-
-		/// <summary>
-		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
-		/// </summary>
-		bool OrderStatusRequired { get; }
-
-		/// <summary>
 		/// The storage name, associated with the adapter.
 		/// </summary>
 		string StorageName { get; }
@@ -138,11 +123,6 @@ namespace StockSharp.Messages
 		/// Support filtering subscriptions (subscribe/unsubscribe for specified security).
 		/// </summary>
 		bool IsSupportSubscriptionBySecurity { get; }
-
-		/// <summary>
-		/// Support portfolio subscriptions.
-		/// </summary>
-		bool IsSupportSubscriptionByPortfolio { get; }
 
 		/// <summary>
 		/// Support candles subscription and live updates.
@@ -231,10 +211,10 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Get maximum size step allowed for historical download.
 		/// </summary>
-		/// <param name="request">Market data request.</param>
+		/// <param name="dataType">Data type info.</param>
 		/// <param name="iterationInterval">Interval between iterations.</param>
 		/// <returns>Step.</returns>
-		TimeSpan GetHistoryStepSize(MarketDataMessage request, out TimeSpan iterationInterval);
+		TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval);
 
 		/// <summary>
 		/// Is for the specified <paramref name="dataType"/> all securities downloading enabled.

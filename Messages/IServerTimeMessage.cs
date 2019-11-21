@@ -5,7 +5,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The interface describing an message with <see cref="ServerTime"/> property.
 	/// </summary>
-	public interface IServerTimeMessage
+	public interface IServerTimeMessage : IMessage
 	{
 		/// <summary>
 		/// Server time.

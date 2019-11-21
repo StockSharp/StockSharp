@@ -12,7 +12,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class UserRequestMessage : Message, ITransactionIdMessage
+	public class UserRequestMessage : Message, ITransactionIdMessage, IOriginalTransactionIdMessage, IErrorMessage
 	{
 		/// <summary>
 		/// Login.
@@ -32,21 +32,15 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool IsSubscribe { get; set; }
 
-		/// <summary>
-		/// Request identifier.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
 
-		/// <summary>
-		/// ID of the original message <see cref="TransactionId"/> for which this message is a response.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
-		/// <summary>
-		/// Subscribe or unsubscribe error info. To be set if the answer.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[XmlIgnore]
 		public Exception Error { get; set; }

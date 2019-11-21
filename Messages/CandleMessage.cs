@@ -63,9 +63,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	public abstract class CandleMessage : BaseSubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage
 	{
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
 		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]

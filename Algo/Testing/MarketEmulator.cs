@@ -1452,7 +1452,18 @@ namespace StockSharp.Algo.Testing
 
 			public void ProcessPositionChange(PositionChangeMessage posMsg, ICollection<Message> result)
 			{
-				var beginValue = posMsg.Changes.TryGetValue(PositionChangeTypes.BeginValue).To<decimal?>() ?? 0m;
+				var beginValue = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.BeginValue);
+
+				if (posMsg.IsMoney())
+				{
+					if (beginValue == null)
+						return;
+
+					_currentMoney = _beginMoney = (decimal)beginValue;
+
+					AddPortfolioChangeMessage(posMsg.ServerTime, result);
+					return;
+				}
 
 				//if (!_moneys.ContainsKey(posMsg.SecurityId))
 				//{
@@ -1469,7 +1480,7 @@ namespace StockSharp.Algo.Testing
 
 				var prevPrice = money.PositionPrice;
 
-				money.PositionBeginValue = beginValue;
+				money.PositionBeginValue = beginValue ?? 0L;
 				money.PositionAveragePrice = posMsg.Changes.TryGetValue(PositionChangeTypes.AveragePrice).To<decimal?>() ?? money.PositionAveragePrice;
 
 				//if (beginValue == 0m)
@@ -1487,18 +1498,6 @@ namespace StockSharp.Algo.Testing
 						PortfolioName = _name,
 					}.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)
 				);
-			}
-
-			public void ProcessPortfolioChange(PortfolioChangeMessage pfChangeMsg, ICollection<Message> result)
-			{
-				var beginValue = pfChangeMsg.Changes.TryGetValue(PositionChangeTypes.BeginValue);
-
-				if (beginValue == null)
-					return;
-
-				_currentMoney = _beginMoney = (decimal)beginValue;
-
-				AddPortfolioChangeMessage(pfChangeMsg.ServerTime, result);
 			}
 
 			private MoneyInfo GetMoney(SecurityId securityId/*, DateTimeOffset time, ICollection<Message> result*/)
@@ -1845,12 +1844,12 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case MessageTypes.PortfolioChange:
-				{
-					var pfChangeMsg = (PortfolioChangeMessage)message;
-					GetPortfolioInfo(pfChangeMsg.PortfolioName).ProcessPortfolioChange(pfChangeMsg, retVal);
-					break;
-				}
+				//case MessageTypes.PortfolioChange:
+				//{
+				//	var pfChangeMsg = (PortfolioChangeMessage)message;
+				//	GetPortfolioInfo(pfChangeMsg.PortfolioName).ProcessPortfolioChange(pfChangeMsg, retVal);
+				//	break;
+				//}
 
 				case MessageTypes.PositionChange:
 				{

@@ -542,10 +542,7 @@ namespace StockSharp.Algo.Testing
 						.Add(PositionChangeTypes.BlockedValue, 0m));
 		}
 
-		/// <summary>
-		/// Subscribe on the portfolio changes.
-		/// </summary>
-		/// <param name="portfolio">Portfolio for subscription.</param>
+		/// <inheritdoc />
 		protected override void OnRegisterPortfolio(Portfolio portfolio)
 		{
 			_initialMoney.TryAdd(portfolio, portfolio.BeginValue);
@@ -567,7 +564,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Unregister historical data source, previously registeted by <see cref="RegisterHistorySource"/>.
+		/// Unregister historical data source, previously registered by <see cref="RegisterHistorySource"/>.
 		/// </summary>
 		/// <param name="security">Instrument. If passed <see langword="null"/> the source will be removed for all subscriptions.</param>
 		/// <param name="dataType">Data type.</param>

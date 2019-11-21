@@ -176,19 +176,6 @@ namespace StockSharp.Algo.PnL
 					return true;
 				}
 
-				case MessageTypes.PortfolioChange:
-				{
-					var pfMsg = (PortfolioChangeMessage)message;
-
-					var leverage = pfMsg.Changes.TryGetValue(PositionChangeTypes.Leverage).To<decimal?>();
-					if (leverage != null)
-					{
-						_securityPnLs.CachedValues.ForEach(q => q.Leverage = leverage.Value);
-					}
-
-					break;
-				}
-
 				case MessageTypes.PositionChange:
 				{
 					var posMsg = (PositionChangeMessage)message;
@@ -196,7 +183,10 @@ namespace StockSharp.Algo.PnL
 					var leverage = posMsg.Changes.TryGetValue(PositionChangeTypes.Leverage).To<decimal?>();
 					if (leverage != null)
 					{
-						_securityPnLs.SafeAdd(posMsg.SecurityId, security => new PnLQueue(security)).Leverage = leverage.Value;
+						if (posMsg.IsMoney())
+							_securityPnLs.CachedValues.ForEach(q => q.Leverage = leverage.Value);
+						else
+							_securityPnLs.SafeAdd(posMsg.SecurityId, security => new PnLQueue(security)).Leverage = leverage.Value;
 					}
 
 					break;

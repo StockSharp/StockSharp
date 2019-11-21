@@ -1,18 +1,3 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: StockSharp.Algo.Algo
-File: Connector_Raise.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
 namespace StockSharp.Algo
 {
 	using System;
@@ -242,6 +227,9 @@ namespace StockSharp.Algo
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled;
 
 		/// <inheritdoc />
+		public event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline;
+
+		/// <inheritdoc />
 		public event Action<ExchangeBoard, SessionStates> SessionStateChanged;
 
 		/// <inheritdoc />
@@ -288,6 +276,18 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public event Action<Subscription, Position> PositionReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription> SubscriptionOnline;
+
+		/// <inheritdoc />
+		public event Action<Subscription> SubscriptionStarted;
+
+		/// <inheritdoc />
+		public event Action<Subscription, Exception> SubscriptionStopped;
+
+		/// <inheritdoc />
+		public event Action<Subscription, Exception, bool> SubscriptionFailed;
 
 		/// <summary>
 		/// Connection restored.
@@ -658,8 +658,16 @@ namespace StockSharp.Algo
 			LookupPortfoliosResult2?.Invoke(message, portfolios, newPortfolios, error);
 		}
 
-		private void RaiseMarketDataSubscriptionSucceeded(Security security, MarketDataMessage message)
+		private void RaiseMarketDataSubscriptionSucceeded(MarketDataMessage message, Subscription subscription)
 		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			var security = subscription.Security;
+
 			var msg = LocalizedStrings.SubscribedOk.Put(security?.Id,
 				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
 
@@ -669,10 +677,25 @@ namespace StockSharp.Algo
 			this.AddDebugLog(msg + ".");
 
 			MarketDataSubscriptionSucceeded?.Invoke(security, message);
+
+			RaiseSubscriptionStarted(subscription);
+
+			if (message.IsOnline)
+				RaiseMarketDataSubscriptionOnline(security, message, subscription);
 		}
 
-		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage origin, MarketDataMessage reply)
+		private void RaiseMarketDataSubscriptionFailed(MarketDataMessage origin, MarketDataMessage reply, Subscription subscription)
 		{
+			if (origin == null)
+				throw new ArgumentNullException(nameof(origin));
+
+			if (reply == null)
+				throw new ArgumentNullException(nameof(reply));
+
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			var security = subscription.Security;
 			var error = reply.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(origin));
 
 			if (reply.IsNotSupported)
@@ -682,10 +705,23 @@ namespace StockSharp.Algo
 
 			MarketDataSubscriptionFailed?.Invoke(security, origin, error);
 			MarketDataSubscriptionFailed2?.Invoke(security, origin, reply);
+
+			RaiseSubscriptionFailed(subscription, error, true);
+
+			if (subscription.CandleSeries != null)
+				RaiseCandleSeriesError(subscription.CandleSeries, reply);
 		}
 
-		private void RaiseMarketDataUnSubscriptionSucceeded(Security security, MarketDataMessage message)
+		private void RaiseMarketDataUnSubscriptionSucceeded(MarketDataMessage message, Subscription subscription)
 		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			var security = subscription.Security;
+
 			var msg = LocalizedStrings.UnSubscribedOk.Put(security?.Id,
 				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
 
@@ -693,28 +729,123 @@ namespace StockSharp.Algo
 				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
 
 			this.AddDebugLog(msg + ".");
-
 			MarketDataUnSubscriptionSucceeded?.Invoke(security, message);
+
+			RaiseSubscriptionStopped(subscription, null);
+
+			if (subscription.CandleSeries != null)
+				RaiseCandleSeriesStopped(subscription.CandleSeries);
 		}
 
-		private void RaiseMarketDataUnSubscriptionFailed(Security security, MarketDataMessage origin, MarketDataMessage reply)
+		private void RaiseMarketDataUnSubscriptionFailed(MarketDataMessage origin, MarketDataMessage reply, Subscription subscription)
 		{
+			if (origin == null)
+				throw new ArgumentNullException(nameof(origin));
+
+			if (reply == null)
+				throw new ArgumentNullException(nameof(reply));
+
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			var security = subscription.Security;
 			var error = reply.Error ?? new NotSupportedException();
+
 			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security?.Id, origin.DataType, error.Message);
 			MarketDataUnSubscriptionFailed?.Invoke(security, origin, error);
 			MarketDataUnSubscriptionFailed2?.Invoke(security, origin, reply);
+
+			RaiseSubscriptionFailed(subscription, error, false);
 		}
 
-		private void RaiseMarketDataSubscriptionFinished(Security security, MarketDataFinishedMessage message)
+		private void RaiseMarketDataSubscriptionFinished(MarketDataFinishedMessage message, Subscription subscription)
 		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			var security = subscription.Security;
+
 			this.AddDebugLog(LocalizedStrings.SubscriptionFinished, security?.Id, message);
 			MarketDataSubscriptionFinished?.Invoke(security, message);
+
+			RaiseSubscriptionStopped(subscription, null);
+
+			if (subscription.CandleSeries != null)
+				RaiseCandleSeriesStopped(subscription.CandleSeries);
 		}
 
-		private void RaiseMarketDataUnexpectedCancelled(Security security, MarketDataMessage message, Exception error)
+		private void RaiseMarketDataUnexpectedCancelled(MarketDataMessage message, Exception error, Subscription subscription)
 		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (error == null)
+				throw new ArgumentNullException(nameof(error));
+
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			var security = subscription.Security;
+
 			this.AddErrorLog(LocalizedStrings.SubscriptionUnexpectedCancelled, security?.Id, message.DataType, error.Message);
 			MarketDataUnexpectedCancelled?.Invoke(security, message, error);
+
+			RaiseSubscriptionStopped(subscription, error);
+
+			if (subscription.CandleSeries != null)
+				RaiseCandleSeriesStopped(subscription.CandleSeries);
+		}
+
+		private void RaiseSubscriptionOnline(Subscription subscription)
+		{
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			SubscriptionOnline?.Invoke(subscription);
+		}
+
+		private void RaiseSubscriptionStarted(Subscription subscription)
+		{
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			SubscriptionStarted?.Invoke(subscription);
+		}
+
+		private void RaiseSubscriptionStopped(Subscription subscription, Exception error)
+		{
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			SubscriptionStopped?.Invoke(subscription, error);
+		}
+
+		private void RaiseSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
+		{
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			if (error == null)
+				throw new ArgumentNullException(nameof(error));
+
+			SubscriptionFailed?.Invoke(subscription, error, isSubscribe);
+		}
+
+		private void RaiseMarketDataSubscriptionOnline(Security security, MarketDataMessage message, Subscription subscription)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			this.AddDebugLog(LocalizedStrings.SubscriptionOnline, security?.Id, message);
+			MarketDataSubscriptionOnline?.Invoke(security, message);
+
+			RaiseSubscriptionOnline(subscription);
 		}
 
 		/// <summary>
@@ -786,10 +917,10 @@ namespace StockSharp.Algo
 
 			foreach (var id in message.GetSubscriptionIds())
 			{
-				if (!_subscriptions.TryGetValue(id, out var subscription))
-					continue;
+				var subscription = _subscriptionManager.TryGetSubscription(id);
 
-				evt(subscription, entity);
+				if (subscription != null)
+					evt(subscription, entity);
 			}
 		}
 	}

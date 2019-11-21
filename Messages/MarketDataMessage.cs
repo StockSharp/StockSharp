@@ -151,20 +151,16 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class MarketDataMessage : SecurityMessage, ISubscriptionMessage
+	public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IErrorMessage
 	{
-		/// <summary>
-		/// Start date, from which data needs to be retrieved.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str343Key)]
 		[DescriptionLoc(LocalizedStrings.Str344Key)]
 		[MainCategory]
 		public DateTimeOffset? From { get; set; }
 
-		/// <summary>
-		/// End date, until which data needs to be retrieved.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str345Key)]
 		[DescriptionLoc(LocalizedStrings.Str346Key)]
@@ -201,9 +197,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool IsNotSupported { get; set; }
 
-		/// <summary>
-		/// Subscribe or unsubscribe error info. To be set if the answer.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[XmlIgnore]
 		public Exception Error { get; set; }
@@ -278,6 +272,12 @@ namespace StockSharp.Messages
 		public string BoardCode { get; set; }
 
 		/// <summary>
+		/// Subscription is online.
+		/// </summary>
+		[DataMember]
+		public bool IsOnline { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDataMessage"/>.
 		/// </summary>
 		public MarketDataMessage()
@@ -332,6 +332,7 @@ namespace StockSharp.Messages
 			destination.IsRegularTradingHours = IsRegularTradingHours;
 			destination.IsFinished = IsFinished;
 			destination.BoardCode = BoardCode;
+			destination.IsOnline = IsOnline;
 		}
 
 		/// <inheritdoc />
@@ -380,6 +381,9 @@ namespace StockSharp.Messages
 
 			if (Error != null)
 				str += $",Error={Error.Message}";
+
+			if (IsOnline)
+				str += $",Online={IsOnline}";
 
 			return str;
 		}

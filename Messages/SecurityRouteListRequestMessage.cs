@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class SecurityRouteListRequestMessage : Message
+	public class SecurityRouteListRequestMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="SecurityRouteListRequestMessage"/>.
@@ -18,9 +18,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Request identifier.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
 

@@ -25,6 +25,7 @@ namespace StockSharp.Algo
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Server;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Community;
@@ -685,7 +686,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="portfolio">Portfolio.</param>
 		/// <returns>Message.</returns>
-		public static PortfolioChangeMessage ToChangeMessage(this Portfolio portfolio)
+		public static PositionChangeMessage ToChangeMessage(this Portfolio portfolio)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -1840,60 +1841,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Convert <see cref="DataType"/> to <see cref="MarketDataTypes"/> value.
-		/// </summary>
-		/// <param name="dataType">Data type info.</param>
-		/// <returns><see cref="MarketDataTypes"/> value or <see langword="null"/> if cannot be converted.</returns>
-		public static MarketDataTypes? ToMarketDataType(this DataType dataType)
-		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
-
-			if (dataType == DataType.Ticks)
-				return MarketDataTypes.Trades;
-			else if (dataType == DataType.Level1)
-				return MarketDataTypes.Level1;
-			else if (dataType == DataType.OrderLog)
-				return MarketDataTypes.OrderLog;
-			else if (dataType == DataType.MarketDepth)
-				return MarketDataTypes.MarketDepth;
-			else if (dataType == DataType.News)
-				return MarketDataTypes.News;
-			else if (dataType == DataType.Board)
-				return MarketDataTypes.Board;
-			else if (dataType.IsCandles)
-				return dataType.MessageType.ToCandleMarketDataType();
-			else
-				return null;
-		}
-
-		/// <summary>
-		/// Convert <see cref="MarketDataTypes"/> to <see cref="DataType"/> value.
-		/// </summary>
-		/// <param name="type">Market data type.</param>
-		/// <returns>Data type info.</returns>
-		public static DataType ToDataType(this MarketDataTypes type)
-		{
-			switch (type)
-			{
-				case MarketDataTypes.Level1:
-					return DataType.Level1;
-				case MarketDataTypes.MarketDepth:
-					return DataType.MarketDepth;
-				case MarketDataTypes.Trades:
-					return DataType.Ticks;
-				case MarketDataTypes.OrderLog:
-					return DataType.OrderLog;
-				case MarketDataTypes.News:
-					return DataType.News;
-				case MarketDataTypes.Board:
-					return DataType.Board;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-			}
-		}
-
-		/// <summary>
 		/// Convert <see cref="MarketDataTypes"/> to <see cref="MessageTypes"/> value.
 		/// </summary>
 		/// <param name="type"><see cref="MarketDataTypes"/> value.</param>
@@ -2037,6 +1984,65 @@ namespace StockSharp.Algo
 			}
 
 			return message;
+		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to <see cref="ISubscriptionMessage"/> value.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Subscription message.</returns>
+		public static ISubscriptionMessage ToSubscriptionMessage(this DataType dataType)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			if (dataType.IsMarketData)
+			{
+				return new MarketDataMessage
+				{
+					DataType = dataType.ToMarketDataType().Value,
+					Arg = dataType.Arg,
+				};
+			}
+			else if (dataType == DataType.Transactions)
+				return new OrderStatusMessage();
+			else if (dataType == DataType.PositionChanges)
+				return new PortfolioLookupMessage();
+			else if (dataType == DataType.Securities)
+				return new SecurityLookupMessage();
+			else if (dataType == DataType.Board)
+				return new BoardLookupMessage();
+			else if (dataType.IsPortfolio)
+				return new PortfolioMessage();
+			else
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
+		}
+
+		/// <summary>
+		/// Convert <see cref="ISubscriptionMessage"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="message">Subscription message.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this ISubscriptionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			switch (message)
+			{
+				case MarketDataMessage mdMsg:
+					return mdMsg.DataType.ToDataType(mdMsg.Arg);
+				case SecurityLookupMessage _:
+					return DataType.Securities;
+				case BoardLookupMessage _:
+					return DataType.Board;
+				case OrderStatusMessage _:
+					return DataType.Transactions;
+				case PortfolioLookupMessage _:
+					return DataType.PositionChanges;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(message), message.GetType(), LocalizedStrings.Str1219);
+			}
 		}
 	}
 }

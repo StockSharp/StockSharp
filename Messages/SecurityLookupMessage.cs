@@ -28,11 +28,9 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class SecurityLookupMessage : SecurityMessage, ITransactionIdMessage
+	public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage
 	{
-		/// <summary>
-		/// Transaction ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
 		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
@@ -86,6 +84,24 @@ namespace StockSharp.Messages
 		public override string ToString()
 		{
 			return base.ToString() + $",TransId={TransactionId},SecId={SecurityId},Name={Name},SecType={this.GetSecurityTypes().Select(t => t.To<string>()).Join("|")},ExpDate={ExpiryDate}";
+		}
+
+		DateTimeOffset? ISubscriptionMessage.From
+		{
+			get => null;
+			set { }
+		}
+
+		DateTimeOffset? ISubscriptionMessage.To
+		{
+			get => null;
+			set { }
+		}
+
+		bool ISubscriptionMessage.IsSubscribe
+		{
+			get => true;
+			set { }
 		}
 	}
 }

@@ -179,21 +179,14 @@ namespace StockSharp.Messages
 			return EnsureGetHashCode();
 		}
 
-		/// <summary>
-		/// Evaluate and cache hash code.
-		/// </summary>
-		public void EnsureHashCode()
+		private int EnsureGetHashCode()
 		{
 			if (_hashCode == 0)
 			{
 				_hashCode = (_nativeAsInt != 0 ? _nativeAsInt.GetHashCode() : _native?.GetHashCode())
-						?? (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
+				            ?? (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
 			}
-		}
 
-		private int EnsureGetHashCode()
-		{
-			EnsureHashCode();
 			return _hashCode;
 		}
 
@@ -290,5 +283,32 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(SecurityCode), SecurityCode);
 			storage.SetValue(nameof(BoardCode), BoardCode);
 		}
+
+		/// <summary>
+		/// "Money" security id.
+		/// </summary>
+		public static readonly SecurityId Money = new SecurityId
+		{
+			SecurityCode = "MONEY",
+			BoardCode = "ALL"
+		};
+
+		/// <summary>
+		/// "News" security id.
+		/// </summary>
+		public static readonly SecurityId News = new SecurityId
+		{
+			SecurityCode = "NEWS",
+			BoardCode = "ALL"
+		};
+
+		/// <summary>
+		/// "ALL" security id.
+		/// </summary>
+		public static readonly SecurityId All = new SecurityId
+		{
+			SecurityCode = "ALL",
+			BoardCode = "ALL"
+		};
 	}
 }

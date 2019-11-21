@@ -62,26 +62,6 @@ namespace StockSharp.Algo
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new Dictionary<string, List<ExecutionMessage>>();
 
-		private class LookupInfo<TCriteria, TItem>
-			where TCriteria : Message
-		{
-			public TCriteria Criteria { get; }
-			public IList<TItem> Items { get; } = new List<TItem>();
-
-			public LookupInfo(TCriteria criteria)
-			{
-				if (criteria == null)
-					throw new ArgumentNullException(nameof(criteria));
-
-				Criteria = (TCriteria)criteria.Clone();
-			}
-		}
-
-		private readonly SynchronizedDictionary<long, LookupInfo<SecurityLookupMessage, Security>> _securityLookups = new SynchronizedDictionary<long, LookupInfo<SecurityLookupMessage, Security>>();
-		private readonly SynchronizedDictionary<long, LookupInfo<PortfolioLookupMessage, Portfolio>> _portfolioLookups = new SynchronizedDictionary<long, LookupInfo<PortfolioLookupMessage, Portfolio>>();
-		private readonly SynchronizedDictionary<long, LookupInfo<BoardLookupMessage, ExchangeBoard>> _boardLookups = new SynchronizedDictionary<long, LookupInfo<BoardLookupMessage, ExchangeBoard>>();
-		private readonly SynchronizedDictionary<long, LookupInfo<TimeFrameLookupMessage, TimeSpan>> _timeFrameLookups = new SynchronizedDictionary<long, LookupInfo<TimeFrameLookupMessage, TimeSpan>>();
-
 		private readonly SubscriptionManager _subscriptionManager;
 
 		private class Level1Info
@@ -138,8 +118,6 @@ namespace StockSharp.Algo
 
 		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _boardStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
 		private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = new SynchronizedDictionary<Security, Level1Info>();
-
-		private readonly CachedSynchronizedDictionary<long, Subscription> _subscriptions = new CachedSynchronizedDictionary<long, Subscription>();
 
 		private bool _isDisposing;
 
@@ -643,153 +621,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void LookupSecurities(Security criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			var boardCode = criteria.Board?.Code;
-			var securityCode = criteria.Code;
-
-			if (!criteria.Id.IsEmpty())
-			{
-				var id = SecurityIdGenerator.Split(criteria.Id);
-
-				if (boardCode.IsEmpty())
-					boardCode = GetBoardCode(id.BoardCode);
-
-				if (securityCode.IsEmpty())
-					securityCode = id.SecurityCode;
-			}
-
-			var message = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode));
-			message.Adapter = adapter;
-			message.OfflineMode = offlineMode;
-
-			LookupSecurities(message);
-		}
-
-		/// <inheritdoc />
-		public void LookupSecurities(SecurityLookupMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (criteria.TransactionId == 0)
-				criteria.TransactionId = TransactionIdGenerator.GetNextId();
-
-			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
-
-			_securityLookups.Add(criteria.TransactionId, new LookupInfo<SecurityLookupMessage, Security>(criteria));
-
-			SendInMessage(criteria);
-		}
-
-		/// <inheritdoc />
-		public void LookupTimeFrames(TimeFrameLookupMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (criteria.TransactionId == 0)
-				criteria.TransactionId = TransactionIdGenerator.GetNextId();
-
-			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
-
-			_timeFrameLookups.Add(criteria.TransactionId, new LookupInfo<TimeFrameLookupMessage, TimeSpan>(criteria));
-
-			SendInMessage(criteria);
-		}
-
-		/// <inheritdoc />
-		[Obsolete("Use SubscribeOrders method.")]
-		public void LookupOrders(Order criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
-		{
-			var msg = criteria.ToLookupCriteria();
-
-			msg.Adapter = adapter;
-			msg.OfflineMode = offlineMode;
-
-			LookupOrders(msg);
-		}
-
-		/// <inheritdoc />
-		[Obsolete("Use SubscribeOrders method.")]
-		public void LookupOrders(OrderStatusMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (criteria.TransactionId == 0)
-				criteria.TransactionId = TransactionIdGenerator.GetNextId();
-
-			_entityCache.AddOrderStatusTransactionId(criteria.TransactionId);
-			
-			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
-			SendInMessage(criteria);
-		}
-
-		/// <inheritdoc />
-		[Obsolete("Use SubscribePositions method.")]
-		public void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			var msg = criteria.ToLookupCriteria();
-
-			msg.Adapter = adapter;
-			msg.OfflineMode = offlineMode;
-
-			LookupPortfolios(msg);
-		}
-
-		/// <inheritdoc />
-		[Obsolete("Use SubscribePositions method.")]
-		public void LookupPortfolios(PortfolioLookupMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (criteria.TransactionId == 0)
-				criteria.TransactionId = TransactionIdGenerator.GetNextId();
-
-			_portfolioLookups.Add(criteria.TransactionId, new LookupInfo<PortfolioLookupMessage, Portfolio>(criteria));
-
-			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
-			SendInMessage(criteria);
-		}
-
-		/// <inheritdoc />
-		public void LookupBoards(ExchangeBoard criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			var msg = new BoardLookupMessage
-			{
-				TransactionId = TransactionIdGenerator.GetNextId(),
-				Like = criteria.Code,
-				Adapter = adapter,
-				OfflineMode = offlineMode,
-			};
-
-			LookupBoards(msg);
-		}
-
-		/// <inheritdoc />
-		public void LookupBoards(BoardLookupMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			_boardLookups.Add(criteria.TransactionId, new LookupInfo<BoardLookupMessage, ExchangeBoard>(criteria));
-
-			this.AddInfoLog("Lookup '{0}' for '{1}'.", criteria, criteria.Adapter);
-			SendInMessage(criteria);
-		}
-
-		/// <inheritdoc />
 		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "")
 		{
 			return GetPosition(portfolio, security, clientCode, depoName, null, string.Empty);
@@ -843,11 +674,20 @@ namespace StockSharp.Algo
 		{
 			try
 			{
-				this.AddOrderInfoLog(order, "RegisterOrder");
+				this.AddOrderInfoLog(order, nameof(RegisterOrder));
 
 				if (initOrder)
 				{
-					CheckOnNew(order, order.Type != OrderTypes.Conditional);
+					CheckOnNew(order);
+
+					if (order.Type != OrderTypes.Conditional)
+					{
+						if (order.Volume == 0)
+							throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
+
+						if (order.Volume < 0)
+							throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895);
+					}
 
 					if (order.Type == null)
 						order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
@@ -890,7 +730,7 @@ namespace StockSharp.Algo
 				else
 				{
 					CheckOnOld(oldOrder);
-					CheckOnNew(newOrder, false);
+					CheckOnNew(newOrder);
 
 					if (oldOrder.Comment.IsEmpty())
 						oldOrder.Comment = newOrder.Comment;
@@ -953,10 +793,10 @@ namespace StockSharp.Algo
 				else
 				{
 					CheckOnOld(oldOrder1);
-					CheckOnNew(newOrder1, false);
+					CheckOnNew(newOrder1);
 
 					CheckOnOld(oldOrder2);
-					CheckOnNew(newOrder2, false);
+					CheckOnNew(newOrder2);
 
 					if (oldOrder1.Comment.IsEmpty())
 						oldOrder1.Comment = newOrder1.Comment;
@@ -995,7 +835,7 @@ namespace StockSharp.Algo
 
 			try
 			{
-				this.AddOrderInfoLog(order, "CancelOrder");
+				this.AddOrderInfoLog(order, nameof(CancelOrder));
 
 				CheckOnOld(order);
 
@@ -1023,37 +863,25 @@ namespace StockSharp.Algo
 			SendOutMessage(fail.ToMessage(originalTransactionId));
 		}
 
-		private static void CheckOnNew(Order order, bool checkVolume = true, bool checkTransactionId = true)
+		private static void CheckOnNew(Order order)
 		{
 			CheckOrderState(order);
-
-			if (checkVolume)
-			{
-				if (order.Volume == 0)
-					throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
-
-				if (order.Volume < 0)
-					throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895);
-			}
-
-			if (order.Id != null || !order.StringId.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), nameof(order));
-
-			if (!checkTransactionId)
-				return;
 
 			if (order.TransactionId != 0)
 				throw new ArgumentException(LocalizedStrings.Str897Params.Put(order.TransactionId), nameof(order));
 
 			if (order.State != OrderStates.None)
 				throw new ArgumentException(LocalizedStrings.Str898Params.Put(order.State), nameof(order));
+
+			if (order.Id != null || !order.StringId.IsEmpty())
+				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), nameof(order));
 		}
 
 		private static void CheckOnOld(Order order)
 		{
 			CheckOrderState(order);
 
-			if (order.TransactionId == 0 && order.Id == null && order.StringId.IsEmpty())
+			if (order.TransactionId == 0)
 				throw new ArgumentException(LocalizedStrings.Str899, nameof(order));
 		}
 
@@ -1113,13 +941,7 @@ namespace StockSharp.Algo
 		/// <param name="order">Registration details.</param>
 		protected virtual void OnRegisterOrder(Order order)
 		{
-			var regMsg = order.CreateRegisterMessage(GetSecurityId(order.Security));
-
-			//var depoName = order.Portfolio.GetValue<string>(nameof(PositionChangeTypes.DepoName));
-			//if (depoName != null)
-			//	regMsg.AddValue(nameof(PositionChangeTypes.DepoName), depoName);
-
-			SendInMessage(regMsg);
+			SendInMessage(order.CreateRegisterMessage(GetSecurityId(order.Security)));
 		}
 
 		/// <summary>
@@ -1129,16 +951,7 @@ namespace StockSharp.Algo
 		/// <param name="newOrder">New order to register.</param>
 		protected virtual void OnReRegisterOrder(Order oldOrder, Order newOrder)
 		{
-			//if (IsSupportAtomicReRegister && oldOrder.Security.Board.IsSupportAtomicReRegister)
-			//{
-			var replaceMsg = oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security));
-			SendInMessage(replaceMsg);
-			//}
-			//else
-			//{
-			//	CancelOrder(oldOrder);
-			//	RegisterOrder(newOrder, false);
-			//}
+			SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
 		}
 
 		/// <summary>
@@ -1151,12 +964,6 @@ namespace StockSharp.Algo
 		protected virtual void OnReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 		{
 			SendInMessage(oldOrder1.CreateReplaceMessage(newOrder1, GetSecurityId(newOrder1.Security), oldOrder2, newOrder2, GetSecurityId(newOrder2.Security)));
-
-			//CancelOrder(oldOrder1);
-			//RegisterOrder(newOrder1, false);
-
-			//CancelOrder(oldOrder2);
-			//RegisterOrder(newOrder2, false);
 		}
 
 		/// <summary>
@@ -1193,7 +1000,7 @@ namespace StockSharp.Algo
 			if (transactionId == null)
 				transactionId = TransactionIdGenerator.GetNextId();
 
-			_entityCache.AddMassCancelationId(transactionId.Value);
+			_entityCache.TryAddMassCancelationId(transactionId.Value);
 			OnCancelOrders(transactionId.Value, isStopOrder, portfolio, direction, board, security, securityType);
 		}
 
@@ -1412,11 +1219,6 @@ namespace StockSharp.Algo
 			_prevTime = default;
 			_currentTime = default;
 
-			_securityLookups.Clear();
-			_boardLookups.Clear();
-			_portfolioLookups.Clear();
-			_timeFrameLookups.Clear();
-
 			_nonAssociatedByIdMyTrades.Clear();
 			_nonAssociatedByStringIdMyTrades.Clear();
 			_nonAssociatedByTransactionIdMyTrades.Clear();
@@ -1432,8 +1234,6 @@ namespace StockSharp.Algo
 
 			_securityValues.Clear();
 			_boardStates.Clear();
-
-			_subscriptions.Clear();
 
 			SendInMessage(new ResetMessage());
 
