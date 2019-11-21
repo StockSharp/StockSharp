@@ -490,6 +490,11 @@ namespace StockSharp.Algo
 			}
 		}
 
+		/// <summary>
+		/// Use separated <see cref="IMessageChannel"/> for each adapters.
+		/// </summary>
+		public bool UseSeparatedChannels { get; set; }
+
 		/// <inheritdoc />
 		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 			=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId, from, to)).Distinct().OrderBy();
@@ -539,6 +544,16 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 		{
+			if (UseSeparatedChannels)
+			{
+				adapter = new ChannelMessageAdapter(adapter,
+					new InMemoryMessageChannel($"{adapter} In", SendOutError), 
+					new InMemoryMessageChannel($"{adapter} Out", SendOutError))
+				{
+					OwnInnerAdapter = true,
+				};
+			}
+
 			if (LatencyManager != null)
 			{
 				adapter = new LatencyMessageAdapter(adapter) { LatencyManager = LatencyManager.Clone(), OwnInnerAdapter = true };
@@ -1881,6 +1896,7 @@ namespace StockSharp.Algo
 				StorageFilterSubscription = StorageFilterSubscription,
 				ConnectDisconnectEventOnFirstAdapter = ConnectDisconnectEventOnFirstAdapter,
 				IsAutoUnSubscribeOnDisconnect = IsAutoUnSubscribeOnDisconnect,
+				UseSeparatedChannels = UseSeparatedChannels,
 			};
 
 			clone.Load(this.Save());

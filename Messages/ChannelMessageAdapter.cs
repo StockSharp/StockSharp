@@ -51,12 +51,12 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Control the lifetime of the incoming messages channel.
 		/// </summary>
-		public bool OwnInputChannel { get; set; }
+		public bool OwnInputChannel { get; set; } = true;
 
 		/// <summary>
 		/// Control the lifetime of the outgoing messages channel.
 		/// </summary>
-		public bool OwnOutputChannel { get; set; }
+		public bool OwnOutputChannel { get; set; } = true;
 
 		private void OutputChannelOnNewOutMessage(Message message)
 		{
