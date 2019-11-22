@@ -170,6 +170,12 @@ namespace StockSharp.Messages
 			if (Error != null)
 				str += $",Error={Error.Message}";
 
+			if (From != null)
+				str += $",From={From.Value}";
+
+			if (To != null)
+				str += $",To={To.Value}";
+
 			return str;
 		}
 

@@ -49,7 +49,7 @@ namespace StockSharp.Algo
 					if (type == DataType.PositionChanges ||
 					    type == DataType.Securities ||
 					    type == DataType.Board ||
-					    subscription.SubscriptionMessage is TimeFrameLookupMessage)
+					    type == DataType.TimeFrames)
 					{
 						Lookup = new LookupInfo(subscription.SubscriptionMessage);
 					}
@@ -263,37 +263,7 @@ namespace StockSharp.Algo
 				if (subscription == null)
 					throw new ArgumentNullException(nameof(subscription));
 
-				ISubscriptionMessage unsubscribe;
-
-				if (subscription.DataType.IsMarketData)
-				{
-					unsubscribe = new MarketDataMessage();
-				}
-				else if (subscription.DataType == DataType.Transactions)
-				{
-					unsubscribe = new OrderStatusMessage();
-				}
-				else if (subscription.DataType == DataType.PositionChanges)
-				{
-					unsubscribe = new PortfolioLookupMessage();
-				}
-				else if (subscription.DataType.IsPortfolio)
-				{
-					unsubscribe = new PortfolioMessage();
-				}
-				else
-					throw new ArgumentOutOfRangeException(nameof(subscription), subscription.DataType, LocalizedStrings.Str1219);
-
-				//// "immediate" unsubscribe
-				//if (unsubscribe == null)
-				//{
-				//	lock (_syncObject)
-				//	{
-				//		_subscriptions.Remove(subscription.TransactionId);
-				//	}
-
-				//	return;
-				//}
+				var unsubscribe = subscription.DataType.ToSubscriptionMessage();
 
 				unsubscribe.TransactionId = _connector.TransactionIdGenerator.GetNextId();
 				unsubscribe.OriginalTransactionId = subscription.TransactionId;
