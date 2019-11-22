@@ -338,7 +338,7 @@ connector.NewSecurity += s =>
 	{
 		if (emulationInfo.UseMarketDepth)
 		{
-			connector.RegisterMarketDepth(security);
+			connector.SubscribeMarketDepth(security);
 
 			if (
 				// if order book will be generated
@@ -349,33 +349,35 @@ connector.NewSecurity += s =>
 			{
 				// if no have order book historical data, but strategy is required,
 				// use generator based on last prices
-				connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
+				connector.MarketDataAdapter.SendInMessage(new GeneratorMessage
 				{
-					Interval = TimeSpan.FromSeconds(1), // order book freq refresh is 1 sec
-					MaxAsksDepth = maxDepth,
-					MaxBidsDepth = maxDepth,
-					UseTradeVolume = true,
-					MaxVolume = maxVolume,
-					MinSpreadStepCount = 2,	// min spread generation is 2 pips
-					MaxSpreadStepCount = 5,	// max spread generation size (prevent extremely size)
-					MaxPriceStepCount = 3	// pips size,
-				});
+					IsSubscribe = true,
+					Generator = new RandomWalkTradeGenerator(new SecurityId { SecurityCode = security.Code })
+					{
+						Interval = TimeSpan.FromSeconds(1),
+						MaxVolume = maxVolume,
+						MaxPriceStepCount = 3,	
+						GenerateOriginSide = true,
+						MinVolume = minVolume,
+						RandomArrayLength = 99,
+					}
+				});				
 			}
 		}
 
 		if (emulationInfo.UseOrderLog)
 		{
-			connector.RegisterOrderLog(security);
+			connector.SubscribeOrderLog(security);
 		}
 
 		if (emulationInfo.UseTicks)
 		{
-			connector.RegisterTrades(security);
+			connector.SubscribeTrades(security);
 		}
 
 		if (emulationInfo.UseLevel1)
 		{
-			connector.RegisterSecurity(security);
+			connector.SubscribeLevel1(security);
 		}
 	}
 

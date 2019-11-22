@@ -16,10 +16,10 @@
           <content>
             	<para>Для получения свечей через <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
             	необходимо создать <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> и добавить в него соответствующий 
-            	<codeEntityReference>T: StockSharp.Messages.MessageAdapter</codeEntityReference>. 
+            	<codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>. 
             	Как это сделать с помощью специального контрола описано в пункте <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />.</para>
 <para>Также добавить соответствующий 
-            	<codeEntityReference>T: StockSharp.Messages.MessageAdapter</codeEntityReference> в 
+            	<codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference> в 
             	<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> можно через код. 
             	Например, инициализация адаптера для <link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" /> описана в пункте 
             	<link xlink:href="7c23b480-d472-43df-aabf-f743ad09fded" /> и выглядит следующим образом:</para>
@@ -94,7 +94,7 @@ var series = new CandleSeries(typeof(TimeFrameCandle), SelectedSecurity, tf);
           <content>
             	<para>Для получения свечей через <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference> 
             	необходимо созлать соответствующий 
-            	<codeEntityReference>T: StockSharp.Messages.MessageAdapter</codeEntityReference>.</para>
+            	<codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>.</para>
 <para>Например, инициализация адаптера для <link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" /> описана в пункте 
             	<link xlink:href="7c23b480-d472-43df-aabf-f743ad09fded" /> и выглядит следующим образом:</para>
           <code language="C#">

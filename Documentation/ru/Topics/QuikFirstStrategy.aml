@@ -115,7 +115,7 @@ trader.NewSecurity += security =>
 			Console.WriteLine(LocalizedStrings.Str2987);
 
 			// запускаем экспорт стакана
-			trader.RegisterMarketDepth(_lkoh);
+			trader.SubscribeMarketDepth(_lkoh);
 
 			if (_portfolio != null && _depth != null)
 				waitHandle.Set();

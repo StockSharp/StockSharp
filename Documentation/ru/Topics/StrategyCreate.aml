@@ -326,13 +326,13 @@ private void StartClick(object sender, RoutedEventArgs e)
 	if (_strategy.ProcessState == ProcessStates.Stopped)
 	{
 		// запускаем процесс получения стакана, необходимый для работы алгоритма котирования
-		_connector.RegisterMarketDepth(_strategy.Security);
+		_connector.SubscribeMarketDepth(_strategy.Security);
 		_strategy.Start();
 		Start.Content = LocalizedStrings.Str242;
 	}
 	else
 	{
-		_connector.UnRegisterMarketDepth(_strategy.Security);
+		_connector.UnSubscribeMarketDepth(_strategy.Security);
 		_strategy.Stop();
 		Start.Content = LocalizedStrings.Str2421;
 	}

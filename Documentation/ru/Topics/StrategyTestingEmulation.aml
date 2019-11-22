@@ -39,9 +39,6 @@
 		  </para>
 	  </introduction>
 
-<!--_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
-				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });-->
-
 	  <procedure>
 		  <title>Тестирование на случайных данных стратегии скользящих средних из примеров SampleSMA и SampleSmartSMA</title>
 		  <steps class="ordered">
@@ -57,8 +54,21 @@
 						  и для тиковых сделок. В SampleHistoryTesting используется только один генератор - для стакана, так как нет сохраненной истории.
 					  </para>
 					  <code language="C#"><![CDATA[
-_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
-_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
+_connector.MarketDataAdapter.SendInMessage(new GeneratorMessage
+{
+    IsSubscribe = true,
+    Generator = new RandomWalkTradeGenerator(new SecurityId { SecurityCode = security.Code })
+    {
+        Interval = TimeSpan.FromSeconds(1),
+        MaxVolume = maxVolume,
+        MaxPriceStepCount = 3,	
+        GenerateOriginSide = true,
+        MinVolume = minVolume,
+        RandomArrayLength = 99,
+    }
+});
+
+_connector.SubscribeMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
 ]]></code>
 				  </content>
 			  </step>

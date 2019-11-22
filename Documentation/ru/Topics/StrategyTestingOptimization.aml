@@ -173,11 +173,19 @@ connector.NewSecurity += s =>
 	// fill level1 values
 	connector.SendInMessage(level1Info);
 
-	connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
+	connector.MarketDataAdapter.SendInMessage(new GeneratorMessage
 	{
-		// order book freq refresh is 1 sec
-		Interval = TimeSpan.FromSeconds(1),
-	});
+		IsSubscribe = true,
+		Generator = new RandomWalkTradeGenerator(new SecurityId { SecurityCode = security.Code })
+		{
+			Interval = TimeSpan.FromSeconds(1),
+			MaxVolume = maxVolume,
+			MaxPriceStepCount = 3,	
+			GenerateOriginSide = true,
+			MinVolume = minVolume,
+			RandomArrayLength = 99,
+		}
+	});				
 };
 
 TestingProcess.Maximum = 100;
