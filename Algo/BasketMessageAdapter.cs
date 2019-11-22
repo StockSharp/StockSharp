@@ -872,7 +872,7 @@ namespace StockSharp.Algo
 
 						if (IsAutoUnSubscribeOnDisconnect)
 						{
-							var unsubscribes = new List<Message>();
+							var unsubscribes = new List<ISubscriptionMessage>();
 
 							lock (_requestsById.SyncRoot)
 							{
@@ -900,13 +900,13 @@ namespace StockSharp.Algo
 									unsubscribeRequest.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 									unsubscribeRequest.OriginalTransactionId = subscrMsg.TransactionId;
 
-									unsubscribes.Add((Message)unsubscribeRequest);
+									unsubscribes.Add(unsubscribeRequest);
 								}
 							}
 
 							foreach (var unsubscribe in unsubscribes)
 							{
-								adapter.SendInMessage(unsubscribe);
+								SendRequest(unsubscribe, adapter);
 							}
 						}
 
@@ -1855,7 +1855,7 @@ namespace StockSharp.Algo
 		private MarketDataMessage ProcessMarketDataResponse(IMessageAdapter adapter, MarketDataMessage message)
 		{
 			var originalTransactionId = message.OriginalTransactionId;
-			var tuple = _requestsById.TryGetValue(originalTransactionId);
+			var tuple = _requestsById.TryGetAndRemove(originalTransactionId);
 
 			if (tuple == null)
 			{
@@ -1865,8 +1865,8 @@ namespace StockSharp.Algo
 				return message;
 			}
 
-			if (!message.IsOk())
-				_requestsById.Remove(originalTransactionId);
+			//if (!message.IsOk())
+			//	_requestsById.Remove(originalTransactionId);
 
 			MarketDataMessage CreateMarketDataMessage(IMessageAdapter a, long id, Exception error)
 			{
