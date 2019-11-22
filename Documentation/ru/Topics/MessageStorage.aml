@@ -58,7 +58,7 @@
 				 и декларируем переменную для хранилища транзакций. 
 				 Само хранилище транзакций для заданного инструмента будет получено в событии получения
 				 инструментов при помощи метода	
-				 <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetTransactionStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>.
+				 <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.IMessageStorageRegistry.IStorageRegistry.GetTransactionStorage(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>.
 		</para>		
 
 <code language="C#">
@@ -82,7 +82,7 @@ IMarketDataStorage<ExecutionMessage> tranStorage = null;
 connector.NewSecurity += security =>
 {
 		if (security.Id == securityId)
-			tranStorage = storage.GetTransactionStorage(security);
+			tranStorage = storage.GetTransactionStorage(security.ToSecurityId());
 };
 
  ]]>
