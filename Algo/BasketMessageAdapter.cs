@@ -58,7 +58,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Adapter-aggregator that allows simultaneously to operate multiple adapters connected to different trading systems.
 	/// </summary>
-	public class BasketMessageAdapter : MessageAdapter
+	public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	{
 		private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
 		{
@@ -284,8 +284,9 @@ namespace StockSharp.Algo
 			CandleBuilderProvider candleBuilderProvider,
 			IStorageRegistry storageRegistry,
 			SnapshotRegistry snapshotRegistry)
-			: base(transactionIdGenerator)
+
 		{
+			_transactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 			_innerAdapters = new InnerAdapterList(this);
 			SecurityAdapterProvider = securityAdapterProvider ?? throw new ArgumentNullException(nameof(securityAdapterProvider));
 			PortfolioAdapterProvider = portfolioAdapterProvider ?? throw new ArgumentNullException(nameof(portfolioAdapterProvider));
@@ -372,20 +373,105 @@ namespace StockSharp.Algo
 		/// </summary>
 		public ISlippageManager SlippageManager { get; set; }
 
-		/// <inheritdoc />
-		public override IEnumerable<MessageTypes> SupportedMessages => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct();
+		private readonly IdGenerator _transactionIdGenerator;
+
+		IdGenerator IMessageAdapter.TransactionIdGenerator => _transactionIdGenerator;
+
+		IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages
+		{
+			get => GetSortedAdapters().SelectMany(a => a.PossibleSupportedMessages).DistinctBy(i => i.Type);
+			set { }
+		}
+
+		IEnumerable<MessageTypes> IMessageAdapter.SupportedMessages
+		{
+			get => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct();
+			set { }
+		}
+
+		IEnumerable<MessageTypes> IMessageAdapter.SupportedOutMessages
+		{
+			get => GetSortedAdapters().SelectMany(a => a.SupportedOutMessages).Distinct();
+			set { }
+		}
 
 		/// <inheritdoc />
-		public override IEnumerable<MessageTypes> SupportedOutMessages => GetSortedAdapters().SelectMany(a => a.SupportedOutMessages).Distinct();
+		IEnumerable<MarketDataTypes> IMessageAdapter.SupportedMarketDataTypes
+		{
+			get => GetSortedAdapters().SelectMany(a => a.SupportedMarketDataTypes).Distinct();
+			set { }
+		}
+
+		// TODO
+		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo => null;
+
+		IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => GetSortedAdapters().SelectMany(a => a.CandlesBuildFrom).Distinct();
+
+		bool IMessageAdapter.CheckTimeFrameByRequest => false;
+
+		ReConnectionSettings IMessageAdapter.ReConnectionSettings { get; } = new ReConnectionSettings();
+
+		TimeSpan IMessageAdapter.HeartbeatInterval { get; set; }
+
+		string IMessageAdapter.StorageName => nameof(BasketMessageAdapter).Remove(nameof(MessageAdapter));
+
+		bool IMessageAdapter.IsNativeIdentifiersPersistable => false;
+
+		bool IMessageAdapter.IsNativeIdentifiers => false;
+
+		bool IMessageAdapter.IsFullCandlesOnly => GetSortedAdapters().All(a => a.IsFullCandlesOnly);
+
+		bool IMessageAdapter.IsSupportSubscriptions => true;
+
+		bool IMessageAdapter.IsSupportSubscriptionBySecurity => true;
+
+		bool IMessageAdapter.IsSupportCandlesUpdates => GetSortedAdapters().Any(a => a.IsSupportCandlesUpdates);
+
+		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => GetSortedAdapters().SelectMany(a => a.SecurityExtendedFields).Distinct();
+
+		bool IMessageAdapter.IsSupportSecuritiesLookupAll => GetSortedAdapters().Any(a => a.IsSupportSecuritiesLookupAll);
+
+		IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => GetSortedAdapters().SelectMany(a => a.SupportedOrderBookDepths).Distinct().OrderBy();
+
+		bool IMessageAdapter.IsSupportOrderBookIncrements => GetSortedAdapters().Any(a => a.IsSupportOrderBookIncrements);
+
+		bool IMessageAdapter.IsSupportExecutionsPnL => GetSortedAdapters().Any(a => a.IsSupportExecutionsPnL);
+
+		MessageAdapterCategories IMessageAdapter.Categories => GetSortedAdapters().Select(a => a.Categories).JoinMask();
+
+		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => GetSortedAdapters().FirstOrDefault()?.OrderCancelVolumeRequired;
 
 		/// <inheritdoc />
-		public override IEnumerable<MarketDataTypes> SupportedMarketDataTypes => GetSortedAdapters().SelectMany(a => a.SupportedMarketDataTypes).Distinct();
+		public string AssociatedBoardCode => MessageAdapter.DefaultAssociatedBoardCode;
+
+		Type IMessageAdapter.OrderConditionType => null;
+
+		OrderCondition IMessageAdapter.CreateOrderCondition() => null;
+
+		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
+			=> new OrderLogMarketDepthBuilder(securityId);
+
+		IEnumerable<object> IMessageAdapter.GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+			=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId, from, to)).Distinct().OrderBy();
+
+		TimeSpan IMessageAdapter.GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
+		{
+			foreach (var adapter in GetSortedAdapters())
+			{
+				var step = adapter.GetHistoryStepSize(dataType, out iterationInterval);
+
+				if (step > TimeSpan.Zero)
+					return step;
+			}
+
+			iterationInterval = TimeSpan.Zero;
+			return TimeSpan.Zero;
+		}
+
+		bool IMessageAdapter.IsAllDownloadingSupported(MarketDataTypes dataType) => GetSortedAdapters().Any(a => a.IsAllDownloadingSupported(dataType));
 
 		/// <inheritdoc />
-		public override bool IsSupportSecuritiesLookupAll => GetSortedAdapters().Any(a => a.IsSupportSecuritiesLookupAll);
-
-		/// <inheritdoc />
-		public override MessageAdapterCategories Categories => GetSortedAdapters().Select(a => a.Categories).JoinMask();
+		public bool IsSecurityNewsOnly => GetSortedAdapters().All(a => a.IsSecurityNewsOnly);
 
 		/// <summary>
 		/// Restore subscription on reconnect.
@@ -494,13 +580,6 @@ namespace StockSharp.Algo
 		/// Use separated <see cref="IMessageChannel"/> for each adapters.
 		/// </summary>
 		public bool UseSeparatedChannels { get; set; }
-
-		/// <inheritdoc />
-		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
-			=> GetSortedAdapters().SelectMany(a => a.GetCandleArgs(candleType, securityId, from, to)).Distinct().OrderBy();
-
-		/// <inheritdoc />
-		public override bool IsSecurityNewsOnly => GetSortedAdapters().All(a => a.IsSecurityNewsOnly);
 
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
@@ -673,7 +752,16 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		void IMessageChannel.SendInMessage(Message message)
+		{
+			OnSendInMessage(message);
+		}
+
+		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		protected virtual void OnSendInMessage(Message message)
 		{
 			if (message is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
 				throw new ArgumentException(message.ToString());
@@ -872,6 +960,9 @@ namespace StockSharp.Algo
 				}
 			}
 		}
+
+		/// <inheritdoc />
+		public event Action<Message> NewOutMessage;
 
 		private void ProcessAdapterMessage(IMessageAdapter adapter, Message message)
 		{
@@ -1388,6 +1479,25 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private void SendOutMarketDataNotSupported(long id)
+		{
+			SendOutMessage(new MarketDataMessage
+			{
+				OriginalTransactionId = id,
+				IsNotSupported = true,
+			});
+		}
+
+		private void SendOutError(Exception error)
+		{
+			SendOutMessage(error.ToErrorMessage());
+		}
+
+		private void SendOutMessage(Message message)
+		{
+			NewOutMessage?.Invoke(message);
+		}
+
 		private Message ProcessLookupResult(Message message)
 		{
 			var transId = ((IOriginalTransactionIdMessage)message).OriginalTransactionId;
@@ -1541,7 +1651,7 @@ namespace StockSharp.Algo
 			{
 				foreach (var notSupportedMsg in notSupportedMsgs)
 				{
-					SendOutError(LocalizedStrings.Str629Params.Put(notSupportedMsg.Type));
+					SendOutError(new InvalidOperationException(LocalizedStrings.Str629Params.Put(notSupportedMsg.Type)));
 				}
 			}
 
@@ -1822,7 +1932,7 @@ namespace StockSharp.Algo
 				{
 					try
 					{
-						var adapter = s.GetValue<Type>("AdapterType").CreateAdapter(TransactionIdGenerator);
+						var adapter = s.GetValue<Type>("AdapterType").CreateAdapter(_transactionIdGenerator);
 						adapter.Load(s.GetValue<SettingsStorage>("AdapterSettings"));
 						InnerAdapters[adapter] = s.GetValue<int>("Priority");
 
@@ -1875,9 +1985,9 @@ namespace StockSharp.Algo
 		/// Create a copy of <see cref="BasketMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone()
+		public IMessageChannel Clone()
 		{
-			var clone = new BasketMessageAdapter(TransactionIdGenerator, SecurityAdapterProvider, PortfolioAdapterProvider, CandleBuilderProvider, StorageRegistry, SnapshotRegistry)
+			var clone = new BasketMessageAdapter(_transactionIdGenerator, SecurityAdapterProvider, PortfolioAdapterProvider, CandleBuilderProvider, StorageRegistry, SnapshotRegistry)
 			{
 				ExtendedInfoStorage = ExtendedInfoStorage,
 				SupportCandlesCompression = SupportCandlesCompression,
@@ -1902,6 +2012,27 @@ namespace StockSharp.Algo
 			clone.Load(this.Save());
 
 			return clone;
+		}
+
+		object ICloneable.Clone()
+		{
+			return Clone();
+		}
+
+		bool IMessageChannel.IsOpened => true;
+
+		void IMessageChannel.Open()
+		{
+		}
+
+		void IMessageChannel.Close()
+		{
+		}
+
+		event Action IMessageChannel.StateChanged
+		{
+			add { }
+			remove { }
 		}
 	}
 }
