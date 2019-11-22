@@ -2,6 +2,7 @@ namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -11,12 +12,19 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Message adapters initializes <see cref="ISubscriptionIdMessage.SubscriptionId"/> property.
+	/// Subscription counter adapter.
 	/// </summary>
-	public class SubscriptionIdMessageAdapter : MessageAdapterWrapper
+	public class SubscriptionMessageAdapter : MessageAdapterWrapper
 	{
 		private class SubscriptionInfo
 		{
+			public ISubscriptionMessage Subscription { get; }
+
+			public SubscriptionInfo(ISubscriptionMessage subscription)
+			{
+				Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+			}
+
 			public readonly CachedSynchronizedSet<long> Subscribers = new CachedSynchronizedSet<long>();
 		}
 
@@ -25,15 +33,24 @@ namespace StockSharp.Algo
 		private readonly HashSet<long> _historicalRequests = new HashSet<long>();
 		private readonly PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo> _subscriptionsByKey = new PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo>();
 		private readonly PairSet<SubscriptionInfo, long> _subscriptionsById = new PairSet<SubscriptionInfo, long>();
+		private readonly Dictionary<long, long> _replaceId = new Dictionary<long, long>();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SubscriptionIdMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Inner message adapter.</param>
-		public SubscriptionIdMessageAdapter(IMessageAdapter innerAdapter)
+		public SubscriptionMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
 		}
+
+		/// <summary>
+		/// Restore subscription on reconnect.
+		/// </summary>
+		/// <remarks>
+		/// Error case like connection lost etc.
+		/// </remarks>
+		public bool IsRestoreSubscriptionOnErrorReconnect { get; set; }
 
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
@@ -89,6 +106,7 @@ namespace StockSharp.Algo
 				_historicalRequests.Clear();
 				_subscriptionsByKey.Clear();
 				_subscriptionsById.Clear();
+				_replaceId.Clear();
 			}
 
 			base.OnSendInMessage(message);
@@ -97,6 +115,18 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			void TryReplaceOriginId(IOriginalTransactionIdMessage originIdMsg)
+			{
+				lock (_sync)
+				{
+					if (_replaceId.TryGetValue(originIdMsg.OriginalTransactionId, out var prevId))
+						originIdMsg.OriginalTransactionId = prevId;
+				}
+			}
+
+			if (message is IOriginalTransactionIdMessage originIdMsg1)
+				TryReplaceOriginId(originIdMsg1);
+
 			switch (message.Type)
 			{
 				case MessageTypes.MarketData:
@@ -171,6 +201,37 @@ namespace StockSharp.Algo
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+
+			switch (message.Type)
+			{
+				case ExtendedMessageTypes.ReconnectingFinished:
+				{
+					Message[] subscriptions;
+
+					lock (_sync)
+					{
+						_replaceId.Clear();
+
+						subscriptions = _subscriptionsById.Keys.Select(i =>
+						{
+							var subscription = (ISubscriptionMessage)i.Subscription.Clone();
+							subscription.TransactionId = TransactionIdGenerator.GetNextId();
+
+							_replaceId.Add(subscription.TransactionId, i.Subscription.TransactionId);
+
+							var msg = (Message)subscription;
+							msg.Adapter = this;
+							msg.IsBack = true;
+							return msg;
+						}).ToArray();
+					}
+
+					foreach (var subscription in subscriptions)
+						base.OnInnerAdapterNewOutMessage(subscription);
+
+					break;
+				}
+			}
 		}
 
 		private void ProcessUserLookupMessage(UserLookupMessage message)
@@ -258,27 +319,30 @@ namespace StockSharp.Algo
 			var isSubscribe = message.IsSubscribe;
 			var transId = message.TransactionId;
 
-			if (isSubscribe)
-			{
-				if (message.To != null)
-				{
-					lock (_sync)
-						_historicalRequests.Add(transId);
-
-					return;
-				}
-			}
-
 			Message sendInMsg = null;
 			Message sendOutMsg = null;
 
 			try
 			{
-				var key = Tuple.Create(dataType, securityId);
-
 				lock (_sync)
 				{
+					if (isSubscribe)
+					{
+						if (_replaceId.ContainsKey(transId))
+						{
+							sendInMsg = message;
+							return;
+						}
+
+						if (message.To != null)
+						{
+							_historicalRequests.Add(transId);
+							return;
+						}
+					}
+
 					var sendIn = false;
+					var key = Tuple.Create(dataType, securityId);
 
 					var info = _subscriptionsByKey.TryGetValue(key);
 
@@ -287,7 +351,7 @@ namespace StockSharp.Algo
 						if (info == null)
 						{
 							sendIn = true;
-							info = new SubscriptionInfo();
+							info = new SubscriptionInfo((ISubscriptionMessage)message.Clone());
 							_subscriptionsByKey.Add(key, info);
 							_subscriptionsById.Add(info, message.TransactionId);
 						}
@@ -345,12 +409,15 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="SubscriptionIdMessageAdapter"/>.
+		/// Create a copy of <see cref="SubscriptionMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new SubscriptionIdMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new SubscriptionMessageAdapter((IMessageAdapter)InnerAdapter.Clone())
+			{
+				IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
+			};
 		}
 	}
 }

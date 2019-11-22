@@ -15793,7 +15793,6 @@ DocStr11420;Subscription message;Сообщение подписки
 DocStr11421;"""Money"" security instance";"Объект инструмента ""Money"""
 DocStr11422;Send unsubscribe on disconnect command;Отправлять отписку при отключении
 DocStr11423;Use separated {0} for each adapters;Использовать отдельные {0} для каждого адаптера
-DocStr11424;Message adapters initializes {0} property;Адаптер сообщений, инициализирующий свойство {0}
 DocStr11425;Request imbalance volume {0} orders, which have not been filled;Запросить дисбаланс объема заявок {0}, которые не были исполнены
 DocStr11426;Imbalance;Дисбаланс
 DocStr11427;Request imbalance bid and ask, when best bid of one board has more price than best ask on different board;Запросить дисбаланс бид и аска, когда лучший бид одной площадки имеет большую цену, чем лучший аск на другой

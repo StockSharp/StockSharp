@@ -668,7 +668,11 @@ namespace StockSharp.Algo
 
 			if (adapter.IsSupportSubscriptions)
 			{
-				adapter = new SubscriptionIdMessageAdapter(adapter) { OwnInnerAdapter = true };
+				adapter = new SubscriptionMessageAdapter(adapter)
+				{
+					OwnInnerAdapter = true,
+					IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
+				};
 			}
 
 			adapter = new PartialDownloadMessageAdapter(adapter) { OwnInnerAdapter = true };
@@ -802,26 +806,28 @@ namespace StockSharp.Algo
 
 					_activeAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
 					{
+						var adapter = a;
+
 						lock (_connectedResponseLock)
 						{
-							_pendingConnectAdapters.Add(a);
-							_adapterStates.Add(a, ConnectionStates.Connecting);
+							_pendingConnectAdapters.Add(adapter);
+							_adapterStates.Add(adapter, ConnectionStates.Connecting);
 						}
 
-						var adapter = IgnoreExtraAdapters ? a : CreateWrappers(a);
-
-						if (IsHeartbeatOn(a))
+						if (IsHeartbeatOn(adapter))
 						{
 							adapter = new HeartbeatMessageAdapter(adapter)
 							{
 								SuppressReconnectingErrors = SuppressReconnectingErrors,
 								Parent = this,
-								OwnInnerAdapter = adapter != a
 							};
 						}
 
 						if (SupportOffline)
 							adapter = new OfflineMessageAdapter(adapter) { OwnInnerAdapter = adapter != a };
+
+						if (!IgnoreExtraAdapters)
+							adapter = CreateWrappers(adapter);
 
 						adapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(adapter, m);
 						
@@ -1426,11 +1432,6 @@ namespace StockSharp.Algo
 						ProcessDisconnectMessage(innerAdapter, (DisconnectMessage)message, extra);
 						break;
 
-					case ExtendedMessageTypes.ReconnectingFinished:
-						extra = new List<Message>();
-						ProcessReconnectingFinished(innerAdapter, extra);
-						break;
-
 					case MessageTypes.MarketData:
 						message = ProcessMarketDataResponse(innerAdapter, (MarketDataMessage)message);
 						break;
@@ -1593,14 +1594,6 @@ namespace StockSharp.Algo
 				return null;
 
 			return FillIdAndAdapter(adapter, new PortfolioMessage { PortfolioName = portfolioName });
-		}
-
-		private void ProcessReconnectingFinished(IMessageAdapter innerAdapter, List<Message> extra)
-		{
-			if (!IsRestoreSubscriptionOnErrorReconnect)
-				return;
-
-			ProcessReSubscribe(innerAdapter, extra);
 		}
 
 		private void ProcessReSubscribe(IMessageAdapter innerAdapter, List<Message> extra)
