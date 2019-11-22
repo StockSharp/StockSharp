@@ -183,44 +183,54 @@ namespace StockSharp.Algo
 
 			public Subscription ProcessResponse(MarketDataMessage response, out MarketDataMessage originalMsg, out bool unexpectedCancelled)
 			{
-				unexpectedCancelled = false;
+				var addLog = false;
 
-				if (!_requests.TryGetValue(response.OriginalTransactionId, out var tuple))
+				try
 				{
-					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, response.OriginalTransactionId);
-					originalMsg = null;
-					return null;
-				}
-
-				_requests.Remove(response.OriginalTransactionId);
-
-				originalMsg = (MarketDataMessage)tuple.Item1;
-
-				var info = originalMsg.IsSubscribe
-					? TryGetInfo(originalMsg.TransactionId, false)
-					: TryGetInfo(originalMsg.OriginalTransactionId, true);
-
-				lock (_syncObject)
-				{
-					if (originalMsg.IsSubscribe)
+					lock (_syncObject)
 					{
-						if (response.IsOk())
+						unexpectedCancelled = false;
+
+						if (!_requests.TryGetValue(response.OriginalTransactionId, out var tuple))
 						{
-							info.Active = true;
+							addLog = true;
+							originalMsg = null;
+							return null;
+						}
+
+						_requests.Remove(response.OriginalTransactionId);
+
+						originalMsg = (MarketDataMessage)tuple.Item1;
+
+						var info = originalMsg.IsSubscribe
+							? TryGetInfo(originalMsg.TransactionId, false)
+							: TryGetInfo(originalMsg.OriginalTransactionId, true);
+
+						if (originalMsg.IsSubscribe)
+						{
+							if (response.IsOk())
+							{
+								info.Active = true;
+							}
+							else
+							{
+								_subscriptions.Remove(info.Subscription.TransactionId);
+								unexpectedCancelled = info.Active;
+							}
 						}
 						else
 						{
 							_subscriptions.Remove(info.Subscription.TransactionId);
-							unexpectedCancelled = info.Active;
 						}
-					}
-					else
-					{
-						_subscriptions.Remove(info.Subscription.TransactionId);
+
+						return info.Subscription;
 					}
 				}
-				
-				return info.Subscription;
+				finally
+				{
+					if (addLog)
+						_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, response.OriginalTransactionId);
+				}
 			}
 
 			public void Subscribe(Subscription subscription)
@@ -294,26 +304,30 @@ namespace StockSharp.Algo
 
 			private void SendRequest(ISubscriptionMessage request, Subscription subscription)
 			{
-				_connector.AddInfoLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.Security?.Id, subscription);
+				lock (_syncObject)
+					_requests.Add(request.TransactionId, Tuple.Create(request, subscription));
 
-				_requests.Add(request.TransactionId, Tuple.Create(request, subscription));
+				_connector.AddInfoLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.Security?.Id, subscription);
 				_connector.SendInMessage((Message)request);
 			}
 
-			public void ProcessLookupResponse(IOriginalTransactionIdMessage message, object item)
+			public void ProcessLookupResponse(ISubscriptionIdMessage message, object item)
 			{
-				var info = TryGetInfo(message.OriginalTransactionId, false);
-
-				if (info == null)
-					return;
-
-				if (info.Lookup == null)
+				foreach (var id in message.GetSubscriptionIds())
 				{
-					_connector.AddWarningLog(LocalizedStrings.Str2142Params, info.Subscription.SubscriptionMessage);
-					return;
-				}
+					var info = TryGetInfo(id, false);
 
-				info.Lookup.Items.Add(item);
+					if (info == null)
+						continue;
+
+					if (info.Lookup == null)
+					{
+						_connector.AddWarningLog(LocalizedStrings.Str2142Params, info.Subscription.SubscriptionMessage);
+						continue;
+					}
+
+					info.Lookup.Items.Add(item);	
+				}
 			}
 
 			public LookupInfo TryGetAndRemoveLookup(IOriginalTransactionIdMessage result)
