@@ -105,9 +105,6 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsSupportSecuritiesLookupAll">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
@@ -162,6 +159,91 @@
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.ToString">
       <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Blackwood.ImbalanceRequestMessage">
+      <summary>
+            Request imbalance volume <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" /> orders, which have not been filled.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.ImbalanceRequestMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.ImbalanceRequestMessage" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Blackwood.ImbalanceResposeMessage">
+      <summary>
+            The result message for the <see cref="T:StockSharp.Blackwood.ImbalanceRequestMessage" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.ImbalanceResposeMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.ImbalanceResposeMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.ImbalanceResposeMessage.Imbalance">
+      <summary>
+            Imbalance.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Blackwood.CrossLockRequestMessage">
+      <summary>
+            Request imbalance bid and ask, when best bid of one board has more price than best ask on different board.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.CrossLockRequestMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.CrossLockRequestMessage" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Blackwood.CrossLockResposeMessage">
+      <summary>
+            The result message for the <see cref="T:StockSharp.Blackwood.CrossLockRequestMessage" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.CrossLockResposeMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.CrossLockResposeMessage" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Blackwood.PreMarketRequestMessage">
+      <summary>
+            Request for the appearance of a new indicator in the pre-market.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.PreMarketRequestMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.PreMarketRequestMessage" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Blackwood.PreMarketResposeMessage">
+      <summary>
+            The result message for the <see cref="T:StockSharp.Blackwood.PreMarketRequestMessage" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.PreMarketResposeMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.PreMarketResposeMessage" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Blackwood.HighLowRequestMessage">
+      <summary>
+            The request for maximum and minimum values for instruments.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.HighLowRequestMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.HighLowRequestMessage" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Blackwood.MarketSorterRequestMessage">
+      <summary>
+            The request for market sorter.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.MarketSorterRequestMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.MarketSorterRequestMessage" />.
+            </summary>
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodOrderConditionTypes">
       <summary>
@@ -382,54 +464,6 @@
       <summary>
             Override dll file from resources. Turned on by default.
             </summary>
-    </member>
-    <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewCrossLock">
-      <summary>
-            Event imbalance in prices, when a bid price of one board more than or equal to ask price on another board.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCrossLock">
-      <summary>
-            Subscribe to the event imbalance prices of bids and asks. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewCrossLock" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewImbalance">
-      <summary>
-            Event receiving of imbalance for orders type <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, which have not been filled.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeImbalance">
-      <summary>
-            Subscribe to the new imbalance event for orders type <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, which have not been filled. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewImbalance" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewPreMarketIndication">
-      <summary>
-            Event receiving of a new signal in the pre-market.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestPreMarketIndications">
-      <summary>
-            Request information about prices in the pre-market. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewPreMarketIndication" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeHighLow(System.Boolean)">
-      <summary>
-            Subscribe to the event getting the maximum and minimum values of an instruments. The data will transfer through event <see cref="E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged" />.
-            </summary>
-      <param name="isSubscribe">
-        <see langword="true" />, if you want to subscribe to data, otherwise, <see langword="false" />.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeMarketSorter">
-      <summary>
-            Subscribe to receive information about the best and worst instruments per session.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestNewsStory(StockSharp.BusinessEntities.News,StockSharp.Messages.IMessageAdapter)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.OnProcessMessage(StockSharp.Messages.Message)">
-      <inheritdoc />
     </member>
   </members>
 </doc>

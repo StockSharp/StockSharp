@@ -15,7 +15,7 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportSecuritiesLookupAll">
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportExecutionsPnL">

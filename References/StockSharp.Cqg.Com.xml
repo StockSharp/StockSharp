@@ -18,7 +18,7 @@
         <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsNativeIdentifiers">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportSecuritiesLookupAll">
+        <member name="M:StockSharp.Cqg.Com.CqgComMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportCandlesUpdates">

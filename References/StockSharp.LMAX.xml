@@ -99,7 +99,7 @@
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.StorageName">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportSecuritiesLookupAll">
+    <member name="M:StockSharp.LMAX.LmaxMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="T:StockSharp.LMAX.LmaxOrderCondition">

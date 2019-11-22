@@ -15,13 +15,13 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
+        <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)">
+            <inheritdoc />
+        </member>
         <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportCandlesUpdates">
             <inheritdoc />
         </member>
         <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityExtendedFields">
-            <inheritdoc />
-        </member>
-        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportSecuritiesLookupAll">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

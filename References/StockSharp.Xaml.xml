@@ -1223,7 +1223,7 @@
     </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.DataTypeEditor">
       <summary>
-            Editor for <see cref="T:StockSharp.BusinessEntities.DataType" />.
+            Editor for <see cref="T:StockSharp.Messages.DataType" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.DataTypeEditor.#ctor">
@@ -2524,6 +2524,11 @@
             The market data provider.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.OptionDeskModel.ExchangeInfoProvider">
+      <summary>
+            Exchanges and trading boards provider.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.OptionDeskModel.UnderlyingAsset">
       <summary>
             Underlying asset.
@@ -3239,7 +3244,7 @@
     </member>
     <member name="T:StockSharp.Xaml.ConnectorSupportedMessagesPanel">
       <summary>
-            The panel for modifying <see cref="P:StockSharp.Messages.IMessageAdapter.SupportedMessages" />.
+            The panel for modifying <see cref="P:StockSharp.Messages.IMessageAdapter.SupportedInMessages" />.
             </summary>
       <summary>
             ConnectorSupportedMessagesPanel
@@ -3796,7 +3801,7 @@
     </member>
     <member name="T:StockSharp.Xaml.SecurityJumpsEditor">
       <summary>
-            Graphical component for editing of rollovers between tools.
+            Graphical component for editing of rollovers between instruments.
             </summary>
       <summary>
             SecurityJumpsEditor
@@ -4419,18 +4424,18 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.MarketDataGrid" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)">
+    <member name="M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,System.Nullable{StockSharp.Messages.SecurityId},StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)">
       <summary>
             To refresh the table. It is carried out asynchronously.
             </summary>
       <param name="storageRegistry">Market-data storage.</param>
-      <param name="security">Security.</param>
+      <param name="securityId">Security ID.</param>
       <param name="format">Data format.</param>
       <param name="drive">Storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.MarketDataGrid.CancelMakeEntires">
       <summary>
-            To cancel the operation launched by <see cref="M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)" />.
+            To cancel the operation launched by <see cref="M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,System.Nullable{StockSharp.Messages.SecurityId},StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.MarketDataGrid.InitializeComponent">

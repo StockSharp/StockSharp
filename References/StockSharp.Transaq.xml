@@ -34,11 +34,6 @@
             Адаптер сообщений для Transaq.
             </summary>
     </member>
-    <member name="E:StockSharp.Transaq.TransaqMessageAdapter.CandleTimeFramesInitialized">
-      <summary>
-            Событие инициализации поля <see cref="M:StockSharp.Transaq.TransaqMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})" />.
-            </summary>
-    </member>
     <member name="F:StockSharp.Transaq.TransaqMessageAdapter.MaxNewsHeaderCount">
       <summary>
             Максимально-допустимое количество заголовков новостей.
@@ -59,10 +54,7 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Transaq.TransaqMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Отправить сообщение.
-            </summary>
-      <param name="message">Сообщение.</param>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Transaq.TransaqMessageAdapter.Login">
       <summary>
@@ -532,31 +524,6 @@
     <member name="P:StockSharp.Transaq.TransaqTrader.OverrideDll">
       <summary>
             Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Transaq.TransaqTrader.ConnectorVersion">
-      <summary>
-            Версия коннектора.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Transaq.TransaqTrader.CurrentServer">
-      <summary>
-            Текущий сервер.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Transaq.TransaqTrader.ServerTimeDiff">
-      <summary>
-            Разница между локальным и серверным временем.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Transaq.TransaqTrader.CandleTimeFrames">
-      <summary>
-            Список доступных периодов свечей.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Transaq.TransaqTrader.CandleTimeFramesInitialized">
-      <summary>
-            Событие инициализации поля <see cref="P:StockSharp.Transaq.TransaqTrader.CandleTimeFrames" />.
             </summary>
     </member>
   </members>

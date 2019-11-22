@@ -21,7 +21,7 @@ M:StockSharp.LMAX.LmaxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/in
 M:StockSharp.LMAX.LmaxMessageAdapter.ToString/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.StorageName/inheritdoc;DocStr8459
-P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
+M:StockSharp.LMAX.LmaxMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 T:StockSharp.LMAX.LmaxOrderCondition/summary;DocStr60
 M:StockSharp.LMAX.LmaxOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.LMAX.LmaxOrderCondition.StopLossOffset/summary;Str3383

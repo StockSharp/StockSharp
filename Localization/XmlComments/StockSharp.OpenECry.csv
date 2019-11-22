@@ -1,9 +1,9 @@
 T:StockSharp.OpenECry.OpenECryMessageAdapter/summary;DocStr5926
 M:StockSharp.OpenECry.OpenECryMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.OpenECry.OpenECryMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.OpenECry.OpenECryMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityExtendedFields/inheritdoc;DocStr8459
-P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.OpenECry.OpenECryMessageAdapter.Address/summary;DocStr5927

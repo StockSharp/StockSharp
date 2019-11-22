@@ -56,7 +56,7 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="P:StockSharp.Micex.MicexMessageAdapter.IsSupportSecuritiesLookupAll">
+    <member name="M:StockSharp.Micex.MicexMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Micex.MicexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

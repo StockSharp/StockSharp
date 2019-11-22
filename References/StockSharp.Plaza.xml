@@ -6334,21 +6334,17 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
+    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsNativeIdentifiers">
-      <summary>
-            Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsSupportSubscriptionBySecurity">
-      <summary>
-            Поддерживает ли фильтрация подписки (подписка/отписка для указанного инструмента).
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
-      <summary>
-            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
-            </summary>
-      <param name="message">Сообщение.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
@@ -7579,37 +7575,6 @@
             По-умолчанию путь равен директории StockSharp_Plaza\Configs, которая будет создана в локальной директории.
             </remarks>
     </member>
-    <member name="P:StockSharp.Plaza.PlazaTrader.CreateDepthFromOrdersLog">
-      <summary>
-            Использовать лог заявок (orders log) для создания стаканов. По-умолчанию выключено.
-            </summary>
-      <remarks>
-            Режим автоматически добавляет или удаляет из <see cref="P:StockSharp.Plaza.PlazaTrader.Tables" /> таблицу <see cref="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.AnonymousOrdersLog" />.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaTrader.CreateTradesFromOrdersLog">
-      <summary>
-            Использовать лог заявок (orders log) для создания тиковых сделок. По-умолчанию выключено.
-            </summary>
-      <remarks>
-            Режим автоматически добавляет или удаляет из <see cref="P:StockSharp.Plaza.PlazaTrader.Tables" /> таблицу <see cref="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.AnonymousOrdersLog" />.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaTrader.TableRegistry">
-      <summary>
-            Реестр всех таблиц сервера Плазы.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaTrader.Router">
-      <summary>
-            Получить управление и настройки программы P2MQRouter.exe, которая осуществляет подключение к Plaza 2.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaTrader.TransactionManager">
-      <summary>
-            Менеджер транзакций.
-            </summary>
-    </member>
     <member name="P:StockSharp.Plaza.PlazaTrader.OnlySystemTrades">
       <summary>
             Передавать через событие <see cref="E:StockSharp.BusinessEntities.IConnector.NewTrades" /> только системные сделки. По-умолчанию значение равно <see langword="true" />.
@@ -7631,28 +7596,10 @@
             Значение по умолчанию равно <see cref="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.Aggregation5Option" />.
             </remarks>
     </member>
-    <member name="P:StockSharp.Plaza.PlazaTrader.Tables">
-      <summary>
-            Таблицы, которые будут использоваться при запуске потоков репликации.
-            </summary>
-    </member>
     <member name="P:StockSharp.Plaza.PlazaTrader.OverrideDll">
       <summary>
             Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
             </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
-      <summary>
-            Отменить группу заявок на бирже по фильтру.
-            </summary>
-      <param name="transactionId">Идентификатор транзакции отмены.</param>
-      <param name="isStopOrder">
-        <see langword="true" />, если нужно отменить только стоп-заявки, <see langword="false" /> - если только обычный и <see langword="null" /> - если оба типа.</param>
-      <param name="portfolio">Портфель. Если значение равно <see langword="null" />, то портфель не попадает в фильтр снятия заявок.</param>
-      <param name="direction">Направление заявки. Если значение равно <see langword="null" />, то направление не попадает в фильтр снятия заявок.</param>
-      <param name="board">Торговая площадка. Если значение равно <see langword="null" />, то площадка не попадает в фильтр снятия заявок.</param>
-      <param name="security">Инструмент. Если значение равно <see langword="null" />, то инструмент не попадает в фильтр снятия заявок.</param>
-      <param name="securityType">Тип инструмента. Если значение равно <see langword="null" />, то тип не попадает в фильтр снятия заявок.</param>
     </member>
     <member name="T:StockSharp.Plaza.TransactionHelper">
       <summary>

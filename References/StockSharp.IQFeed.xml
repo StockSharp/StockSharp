@@ -117,10 +117,13 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportSecuritiesLookupAll">
+    <member name="M:StockSharp.IQFeed.IQFeedMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.IQFeed.IQFeedMessageAdapter.IsSupportCandlesUpdates">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -535,67 +538,6 @@
       <summary>
             Protocol version.
             </summary>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.RequestNews(System.DateTimeOffset)">
-      <summary>
-            To query news for a specified date.
-            </summary>
-      <param name="date">Date.</param>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetTrades(StockSharp.BusinessEntities.Security,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)">
-      <summary>
-            Load historical ticks.
-            </summary>
-      <param name="security">The instrument for which you need to get all trades.</param>
-      <param name="from">Begin period.</param>
-      <param name="to">End period.</param>
-      <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
-      <returns>Historical ticks.</returns>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.Int64,System.Boolean@)">
-      <summary>
-            To get historical ticks.
-            </summary>
-      <param name="securityId">The instrument identifier for which you need to get all trades.</param>
-      <param name="count">Maximum ticks count.</param>
-      <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
-      <returns>Historical ticks.</returns>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)">
-      <summary>
-            To get historical ticks.
-            </summary>
-      <param name="securityId">The instrument identifier for which you need to get all trades.</param>
-      <param name="from">Begin period.</param>
-      <param name="to">End period.</param>
-      <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
-      <returns>Historical ticks.</returns>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)">
-      <summary>
-            To get historical candles.
-            </summary>
-      <param name="security">The instrument for which you need to get candles.</param>
-      <param name="candleType">The candle type.</param>
-      <param name="arg">The candle parameter (for example, time-frame).</param>
-      <param name="count">Maximum ticks count.</param>
-      <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
-      <returns>Historical candles.</returns>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)">
-      <summary>
-            To get historical candles.
-            </summary>
-      <param name="security">The instrument for which you need to get candles.</param>
-      <param name="candleType">The candle type.</param>
-      <param name="arg">The candle parameter (for example, time-frame).</param>
-      <param name="from">Begin period.</param>
-      <param name="to">End period.</param>
-      <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
-      <returns>Historical candles.</returns>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.OnProcessMessage(StockSharp.Messages.Message)">
-      <inheritdoc />
     </member>
   </members>
 </doc>

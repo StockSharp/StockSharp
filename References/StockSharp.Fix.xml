@@ -52,10 +52,7 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportSecuritiesLookupAll">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.SecurityLookupRequired">
+    <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.SupportedOrderBookDepths">
@@ -210,15 +207,6 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Format">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SecurityLookup">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.PortfolioLookup">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.OrderLookup">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TickAsLevel1">
       <inheritdoc />
     </member>
@@ -237,9 +225,6 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsNativeIdentifiers">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSubscriptionByPortfolio">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportMarketDataResponse">
@@ -276,9 +261,6 @@
             Reply errors for messages of type <see cref="F:StockSharp.Fix.Native.FixMessages.NewOrderSingle" /> transfers via <see cref="F:StockSharp.Fix.Native.FixMessages.Reject" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSecuritiesLookupAll">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.CheckTimeFrameByRequest">
       <inheritdoc />
     </member>
@@ -300,9 +282,6 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedOutMessages">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.CreateOrderCondition">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
       <inheritdoc />
     </member>
@@ -314,7 +293,7 @@
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.Write(StockSharp.Messages.Message,System.Action{StockSharp.Messages.Message})">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)">
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
@@ -506,12 +485,11 @@
             The default implementation of <see cref="T:StockSharp.Fix.Dialects.IFixDialect" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.#ctor(Ecng.Common.IdGenerator,System.Func{StockSharp.Messages.OrderCondition})">
+    <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.#ctor(Ecng.Common.IdGenerator)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.DefaultFixDialect" />.
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
-      <param name="createOrderCondition">Order condition creating handler.</param>
     </member>
     <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.SupportedMessages">
       <inheritdoc />
@@ -602,15 +580,12 @@
             Support candles subscription and live updates.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFastDialect.IsSupportSecuritiesLookupAll">
+    <member name="M:StockSharp.Fix.Dialects.IFastDialect.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <summary>
-            Support lookup all securities.
+            Is for the specified <paramref name="dataType" /> all securities downloading enabled.
             </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.IFastDialect.SecurityLookupRequired">
-      <summary>
-        <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
-            </summary>
+      <param name="dataType">Data type info.</param>
+      <returns>Check result.</returns>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFastDialect.SupportedOrderBookDepths">
       <summary>
@@ -1391,21 +1366,6 @@
             The reader of data recorded in the FIX protocol format.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.SecurityLookup">
-      <summary>
-            Supports <see cref="T:StockSharp.Messages.SecurityLookupMessage" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.PortfolioLookup">
-      <summary>
-            Supports <see cref="T:StockSharp.Messages.PortfolioLookupMessage" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.OrderLookup">
-      <summary>
-            Supports <see cref="T:StockSharp.Messages.OrderStatusMessage" /> for mass orders.
-            </summary>
-    </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.TickAsLevel1">
       <summary>
             Translate tick data as <see cref="T:StockSharp.Messages.Level1ChangeMessage" /> or <see cref="T:StockSharp.Messages.ExecutionMessage" />.
@@ -1439,11 +1399,6 @@
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsNativeIdentifiersPersistable">
       <summary>
             Native identifier can be stored.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSubscriptionByPortfolio">
-      <summary>
-            Support portfolio subscriptions.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportMarketDataResponse">
@@ -1481,11 +1436,6 @@
             Support executions processing, generated by third-party software.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSecuritiesLookupAll">
-      <summary>
-            Support lookup all securities.
-            </summary>
-    </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.CheckTimeFrameByRequest">
       <summary>
             Check possible time-frame by request.
@@ -1513,7 +1463,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.OrderConditionType">
       <summary>
-        <see cref="M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition" /> type.
+            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
             </summary>
       <remarks>
             If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.
@@ -1523,15 +1473,6 @@
       <summary>
             Supported by adapter message types.
             </summary>
-    </member>
-    <member name="M:StockSharp.Fix.Dialects.IFixDialect.CreateOrderCondition">
-      <summary>
-            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
-            </summary>
-      <returns>Order condition.</returns>
-      <remarks>
-            If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.
-            </remarks>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
       <summary>
@@ -1559,11 +1500,11 @@
       <returns>
         <see langword="true" /> if incoming messages was processed successfully, otherwise, <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.IFixDialect.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)">
+    <member name="M:StockSharp.Fix.Dialects.IFixDialect.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <summary>
             Is for the specified <paramref name="dataType" /> all securities downloading enabled.
             </summary>
-      <param name="dataType">Market data type.</param>
+      <param name="dataType">Data type info.</param>
       <returns>Check result.</returns>
     </member>
     <member name="T:StockSharp.Fix.FastFeedGroup">
@@ -1666,10 +1607,7 @@
     <member name="M:StockSharp.Fix.FastMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.FastMessageAdapter.SecurityLookupRequired">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportSecuritiesLookupAll">
+    <member name="M:StockSharp.Fix.FastMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FastMessageAdapter.SupportedOrderBookDepths">
@@ -1869,9 +1807,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixUserForceLogoffMessage.OriginalTransactionId">
-      <summary>
-            ID of the original message <see cref="P:StockSharp.Messages.ChangePasswordMessage.TransactionId" /> for which this message is a response.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixUserForceLogoffMessage.Clone">
       <summary>
@@ -1932,7 +1868,7 @@
       <param name="reader">Data reader.</param>
       <returns>Whether the data was successfully processed.</returns>
     </member>
-    <member name="M:StockSharp.Fix.FixServer.#ctor(StockSharp.Algo.IRemoteAuthorization,StockSharp.Algo.Server.ITransactionIdStorage)">
+    <member name="M:StockSharp.Fix.FixServer.#ctor(StockSharp.Algo.Server.IRemoteAuthorization,StockSharp.Algo.Server.ITransactionIdStorage)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixServer" />.
             </summary>
@@ -7910,18 +7846,6 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.OrderConditionType">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.SecurityLookupRequired">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.PortfolioLookupRequired">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.OrderCancelVolumeRequired">
       <inheritdoc />
     </member>
@@ -7929,9 +7853,6 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsNativeIdentifiersPersistable">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportSubscriptionByPortfolio">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.StorageName">
@@ -7946,16 +7867,13 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportSecuritiesLookupAll">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.GetCandleArgs(System.Type,StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.CheckTimeFrameByRequest">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.SupportedOutMessages">
@@ -8021,16 +7939,6 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.Password">
       <summary>
             Password.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.RequestAllPortfolios">
-      <summary>
-            Request all portfolios on start.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.RequestAllSecurities">
-      <summary>
-            Request all securities on connection.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.Encoding">

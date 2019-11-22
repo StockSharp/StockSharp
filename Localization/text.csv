@@ -15783,3 +15783,35 @@ DocStr11410;Meta-info storage based message adapter;Хранилище мета-
 DocStr11411;Convert message storage to entity;Преобразовать хранилище сообщений в объектное
 DocStr11412;Message storage;Хранилище сообщений
 DocStr11413;Entity storage;Хранилище объектов
+DocStr11414;Update candle by new message;Обновить свечу новым сообщением
+DocStr11415;Subscription is online;Подписка онлайн
+DocStr11416;Subscription is started;Подписка запущена
+DocStr11417;Subscription is stopped;Подписка остановлена
+DocStr11418;Subscription is failed;Подписка получила ошибку
+DocStr11419;Message adapter that tracks multiple lookups requests and put them into single queue;Адаптер сообщений, который отслеживает множественные запросы поиска и складывает их в очередное исполнение
+DocStr11420;Subscription message;Сообщение подписки
+DocStr11421;"""Money"" security instance";"Объект инструмента ""Money"""
+DocStr11422;Send unsubscribe on disconnect command;Отправлять отписку при отключении
+DocStr11423;Use separated {0} for each adapters;Использовать отдельные {0} для каждого адаптера
+DocStr11424;Message adapters initializes {0} property;Адаптер сообщений, инициализирующий свойство {0}
+DocStr11425;Request imbalance volume {0} orders, which have not been filled;Запросить дисбаланс объема заявок {0}, которые не были исполнены
+DocStr11426;Imbalance;Дисбаланс
+DocStr11427;Request imbalance bid and ask, when best bid of one board has more price than best ask on different board;Запросить дисбаланс бид и аска, когда лучший бид одной площадки имеет большую цену, чем лучший аск на другой
+DocStr11428;Request for the appearance of a new indicator in the pre-market;Запрос на получение индикативного значения пре-маркета
+DocStr11429;The request for maximum and minimum values for instruments;Запрос получения максимумов и минимумов инструментов
+DocStr11430;The request for market sorter;Запрос на рыночную сортировку
+DocStr11431;Convert lookup message type to result type;Преобразовать тип сообщения поиска в тип результата
+DocStr11432;Lookup message type;Тип сообщения поиска
+DocStr11433;Result message type;Тип сообщения результата
+DocStr11434;Convert result message type to lookup type;Преобразовать тип результата в тип поиска
+DocStr11435;Determines the specified type is lookup message;Определить, является ли переданный тип сообщением поиска
+DocStr11436;Determines the specified type is lookup result message;Определить, является ли переданный тип сообщением результата поиска
+DocStr11437;Create message by the specified type;Создать сообщение по указанному типу
+DocStr11438;Replace security id by the specified;Заменить идентификатор инструмента указанным
+DocStr11439;Determines the security id required for the specified message;Определить, необходим ли идентификатор инструмента для указанного сообщения
+DocStr11440;Determines the specified message contains {0} position;Определить, содержит ли позицию {0} переданное сообщение
+DocStr11441;The interface describing an message with {0} method;Интерфейс, описывающий сообщение с методом {0}
+DocStr11442;Create security id with board code set as {0};Создать идентификатор инструмента с кодом площадки, установленным в {0}
+DocStr11443;"""Money"" security id";"Идентификатор инструмента ""Money"""
+DocStr11444;"""News"" security id";"Идентификатор инструмента ""News"""
+DocStr11445;"""ALL"" security id";"Идентификатор инструмента ""ALL"""

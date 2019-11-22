@@ -979,10 +979,11 @@ F:StockSharp.Xaml.Charting.OptionPositionChartParams.Vega/summary;DocStr608
 F:StockSharp.Xaml.Charting.OptionPositionChartParams.Rho/summary;DocStr608
 T:StockSharp.Xaml.Charting.OptionPositionChart/summary;DocStr7859
 M:StockSharp.Xaml.Charting.OptionPositionChart.#ctor/summary;DocStr1
-P:StockSharp.Xaml.Charting.OptionPositionChart.ChartTheme/summary;DocStr7731
+P:StockSharp.Xaml.Charting.OptionPositionChart.ChartTheme/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.OptionPositionChart.SecurityProvider/summary;DocStr972
 P:StockSharp.Xaml.Charting.OptionPositionChart.MarketDataProvider/summary;DocStr973
 P:StockSharp.Xaml.Charting.OptionPositionChart.PositionProvider/summary;DocStr10175
+P:StockSharp.Xaml.Charting.OptionPositionChart.ExchangeInfoProvider/summary;DocStr9509
 P:StockSharp.Xaml.Charting.OptionPositionChart.Model/summary;DocStr951
 P:StockSharp.Xaml.Charting.OptionPositionChart.UnderlyingAsset/summary;UnderlyingAsset
 P:StockSharp.Xaml.Charting.OptionPositionChart.Options/summary;DocStr7863

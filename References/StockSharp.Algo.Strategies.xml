@@ -654,10 +654,11 @@
             The options delta hedging strategy.
             </summary>
         </member>
-        <member name="M:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.#ctor">
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy"/>.
             </summary>
+            <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
         </member>
         <member name="P:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.PositionOffset">
             <summary>
@@ -672,10 +673,11 @@
             The base strategy of hedging.
             </summary>
         </member>
-        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.#ctor">
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)">
             <summary>
             Initialize <see cref="T:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy"/>.
             </summary>
+            <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
         </member>
         <member name="P:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.BlackScholes">
             <summary>
@@ -766,13 +768,14 @@
             Option volatility quoting.
             </summary>
         </member>
-        <member name="M:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,Ecng.ComponentModel.Range{System.Decimal})">
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,Ecng.ComponentModel.Range{System.Decimal},StockSharp.Algo.Storages.IExchangeInfoProvider)">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy"/>.
             </summary>
             <param name="quotingDirection">Quoting direction.</param>
             <param name="quotingVolume">Total quoting volume.</param>
             <param name="ivRange">Volatility range.</param>
+            <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
         </member>
         <member name="P:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy.IVRange">
             <summary>

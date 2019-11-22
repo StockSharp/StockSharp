@@ -15,7 +15,7 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportSecuritiesLookupAll">
+    <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">

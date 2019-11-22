@@ -565,6 +565,7 @@ P:StockSharp.Xaml.OptionDeskModel.EvaluateFildes/summary;DocStr9476
 P:StockSharp.Xaml.OptionDeskModel.Options/summary;DocStr8223
 P:StockSharp.Xaml.OptionDeskModel.Rows/summary;DocStr9477
 P:StockSharp.Xaml.OptionDeskModel.MarketDataProvider/summary;DocStr973
+P:StockSharp.Xaml.OptionDeskModel.ExchangeInfoProvider/summary;DocStr9509
 P:StockSharp.Xaml.OptionDeskModel.UnderlyingAsset/summary;UnderlyingAsset
 P:StockSharp.Xaml.OptionDeskModel.UseBlackModel/summary;DocStr8222
 M:StockSharp.Xaml.OptionDeskModel.#ctor/summary;DocStr1
