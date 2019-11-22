@@ -1637,7 +1637,7 @@ namespace StockSharp.Algo.Testing
 				}
 				catch (OverflowException ex)
 				{
-					result.Add(new ErrorMessage { Error = ex });
+					result.Add(ex.ToErrorMessage());
 				}
 
 				result.Add(new PortfolioChangeMessage

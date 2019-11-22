@@ -169,7 +169,7 @@
 					{
 						// если ОЛ поврежден, то не нарушаем весь цикл обработки сообщения
 						// а только выводим сообщение в лог
-						base.OnInnerAdapterNewOutMessage(new ErrorMessage { Error = ex });
+						base.OnInnerAdapterNewOutMessage(ex.ToErrorMessage());
 					}
 
 				}
