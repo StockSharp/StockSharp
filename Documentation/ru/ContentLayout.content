@@ -151,8 +151,6 @@
           <Topic id="21aa8b6b-137d-4c28-87d9-dfbc5e446d95" visible="True" title="Подключение IQFeed" />
           <Topic id="b158d4bd-8fa0-402f-9071-3cbbac026025" visible="True" title="Графическое конфигурирование IQFeed" />
           <Topic id="66003162-d1b0-4f5f-8126-508055d15470" visible="True" title="Инициализация адаптера IQFeed" />
-          <Topic id="443734c7-7c88-47e0-a96a-4eec6fdfcfc7" visible="True" title="Получение инструментов" />
-          <Topic id="310155fd-ef3a-40f4-9920-179dcaf2b6bf" visible="True" title="Исторические данные" />
         </Topic>
         <Topic id="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" visible="True" title="ITCH">
           <Topic id="35f9c7d1-741e-4721-8deb-1991102c0e28" visible="True" title="Настройки коннектора ITCH" />
