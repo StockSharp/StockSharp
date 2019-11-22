@@ -95,9 +95,6 @@ namespace StockSharp.Algo.Testing
 		public int ProcessedMessageCount { get; private set; }
 
 		/// <inheritdoc />
-		public override bool IsFullCandlesOnly => false;
-
-		/// <inheritdoc />
 		public override bool IsSupportSubscriptions => false;
 
 		/// <inheritdoc />

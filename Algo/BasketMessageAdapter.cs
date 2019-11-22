@@ -373,6 +373,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		public ISlippageManager SlippageManager { get; set; }
 
+		/// <summary>
+		/// Translates <see cref="CandleMessage"/> as only fully filled.
+		/// </summary>
+		public bool IsFullCandlesOnly { get; set; } = true;
+
 		private IdGenerator _transactionIdGenerator;
 
 		/// <inheritdoc />
@@ -422,8 +427,6 @@ namespace StockSharp.Algo
 		bool IMessageAdapter.IsNativeIdentifiersPersistable => false;
 
 		bool IMessageAdapter.IsNativeIdentifiers => false;
-
-		bool IMessageAdapter.IsFullCandlesOnly => GetSortedAdapters().All(a => a.IsFullCandlesOnly);
 
 		bool IMessageAdapter.IsSupportSubscriptions => true;
 
@@ -667,7 +670,7 @@ namespace StockSharp.Algo
 
 			adapter = new PartialDownloadMessageAdapter(adapter) { OwnInnerAdapter = true };
 
-			if (adapter.IsFullCandlesOnly)
+			if (IsFullCandlesOnly)
 			{
 				adapter = new CandleHolderMessageAdapter(adapter) { OwnInnerAdapter = true };
 			}
@@ -2013,6 +2016,7 @@ namespace StockSharp.Algo
 				ConnectDisconnectEventOnFirstAdapter = ConnectDisconnectEventOnFirstAdapter,
 				IsAutoUnSubscribeOnDisconnect = IsAutoUnSubscribeOnDisconnect,
 				UseSeparatedChannels = UseSeparatedChannels,
+				IsFullCandlesOnly = IsFullCandlesOnly,
 			};
 
 			clone.Load(this.Save());

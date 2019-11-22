@@ -286,9 +286,6 @@ namespace StockSharp.Messages
 		public virtual bool IsNativeIdentifiers => InnerAdapter.IsNativeIdentifiers;
 
 		/// <inheritdoc />
-		public virtual bool IsFullCandlesOnly => InnerAdapter.IsFullCandlesOnly;
-
-		/// <inheritdoc />
 		public virtual bool IsSupportSubscriptions => InnerAdapter.IsSupportSubscriptions;
 
 		/// <inheritdoc />
