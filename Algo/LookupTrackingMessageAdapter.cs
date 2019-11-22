@@ -240,7 +240,6 @@ namespace StockSharp.Algo
 				}
 			}
 
-
 			if (_prevTime != DateTimeOffset.MinValue)
 			{
 				var diff = message.LocalTime - _prevTime;

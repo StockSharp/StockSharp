@@ -88,22 +88,21 @@ namespace StockSharp.Algo
 			DataType = subscriptionMessage.ToDataType();
 			Security = security;
 
-			if (Security != null)
-			{
-				switch (subscriptionMessage)
-				{
-					case MarketDataMessage mdMsg:
-						mdMsg.FillSecurityInfo(Security);
-						break;
-					case ISecurityIdMessage secIdMsg:
-						secIdMsg.SecurityId = security.ToSecurityId();
-						break;
-					case INullableSecurityIdMessage nullSecIdMsg:
-						nullSecIdMsg.SecurityId = security.ToSecurityId();
-						break;
-				}
-			}
+			if (Security == null)
+				return;
 
+			switch (subscriptionMessage)
+			{
+				case MarketDataMessage mdMsg:
+					mdMsg.FillSecurityInfo(Security);
+					break;
+				case ISecurityIdMessage secIdMsg:
+					secIdMsg.SecurityId = security.ToSecurityId();
+					break;
+				case INullableSecurityIdMessage nullSecIdMsg:
+					nullSecIdMsg.SecurityId = security.ToSecurityId();
+					break;
+			}
 		}
 	}
 }
