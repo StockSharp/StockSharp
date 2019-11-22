@@ -61,7 +61,7 @@ public Level1Window()
     _connector.NewMessage += OnNewMessage;
 
     if (!_connector.RegisteredSecurities.Contains(MainWindow.This.SelectedSecurity))
-                _connector.RegisterSecurity(MainWindow.This.SelectedSecurity);
+                _connector.SubscribeLevel1(MainWindow.This.SelectedSecurity);
 
 }
 
