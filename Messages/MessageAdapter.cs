@@ -183,6 +183,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual bool IsFullCandlesOnly => true;
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool IsSupportSubscriptions => true;
 
 		/// <inheritdoc />

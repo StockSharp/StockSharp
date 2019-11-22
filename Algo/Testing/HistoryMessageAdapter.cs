@@ -215,6 +215,9 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <inheritdoc />
+		public override bool IsFullCandlesOnly => false;
+
+		/// <inheritdoc />
 		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			var drive = DriveInternal;

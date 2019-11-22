@@ -276,7 +276,6 @@ namespace StockSharp.Algo.Testing
 			TradesKeepCount = 0;
 
 			Adapter.ConnectDisconnectEventOnFirstAdapter = false;
-			Adapter.IsFullCandlesOnly = false;
 		}
 
 		/// <summary>

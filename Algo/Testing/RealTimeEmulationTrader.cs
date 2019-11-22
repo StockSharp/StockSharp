@@ -233,8 +233,6 @@ namespace StockSharp.Algo.Testing
 				Adapter.ApplyHeartbeat(adapter, false);
 			}
 
-			Adapter.IsFullCandlesOnly = false;
-
 			//if (_ownAdapter)
 			//	UnderlyngMarketDataAdapter.Log += RaiseLog;
 		}
