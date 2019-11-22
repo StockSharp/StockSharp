@@ -1464,7 +1464,7 @@ namespace StockSharp.Algo
 						return new SecurityId
 						{
 							SecurityCode = security.BasketExpression.Replace('@', '_'),
-							BoardCode = security.Board?.Code ?? MessageAdapter.DefaultAssociatedBoardCode
+							BoardCode = security.Board?.Code ?? SecurityId.AssociatedBoardCode
 						};
 					}
 

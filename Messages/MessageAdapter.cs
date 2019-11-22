@@ -255,20 +255,6 @@ namespace StockSharp.Messages
 			set => _transactionIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		/// <summary>
-		/// Default value for <see cref="AssociatedBoardCode"/>.
-		/// </summary>
-		public const string DefaultAssociatedBoardCode = "ALL";
-
-		/// <inheritdoc />
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.AssociatedSecurityBoardKey,
-			Description = LocalizedStrings.Str199Key,
-			GroupName = LocalizedStrings.Str186Key,
-			Order = 301)]
-		public string AssociatedBoardCode { get; set; } = DefaultAssociatedBoardCode;
-
 		/// <inheritdoc />
 		public event Action<Message> NewOutMessage;
 
@@ -501,8 +487,6 @@ namespace StockSharp.Messages
 			if (storage.ContainsKey(nameof(SupportedInMessages)) || storage.ContainsKey("SupportedMessages"))
 				SupportedInMessages = (storage.GetValue<string[]>(nameof(SupportedInMessages)) ?? storage.GetValue<string[]>("SupportedMessages")).Select(i => i.To<MessageTypes>()).ToArray();
 			
-			AssociatedBoardCode = storage.GetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
-
 			if (storage.ContainsKey(nameof(ReConnectionSettings)))
 				ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 
@@ -515,7 +499,6 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(Id), Id);
 			storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
 			storage.SetValue(nameof(SupportedInMessages), SupportedInMessages.Select(t => t.To<string>()).ToArray());
-			storage.SetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 
 			base.Save(storage);

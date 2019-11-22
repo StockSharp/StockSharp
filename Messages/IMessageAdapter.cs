@@ -140,11 +140,6 @@ namespace StockSharp.Messages
 		OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; }
 
 		/// <summary>
-		/// Board code for combined security.
-		/// </summary>
-		string AssociatedBoardCode { get; }
-
-		/// <summary>
 		/// Names of extended security fields in <see cref="SecurityMessage"/>.
 		/// </summary>
 		IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; }

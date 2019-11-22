@@ -443,9 +443,6 @@ namespace StockSharp.Algo
 
 		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => GetSortedAdapters().FirstOrDefault()?.OrderCancelVolumeRequired;
 
-		/// <inheritdoc />
-		public string AssociatedBoardCode => MessageAdapter.DefaultAssociatedBoardCode;
-
 		Type IMessageAdapter.OrderConditionType => null;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)

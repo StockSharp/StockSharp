@@ -303,9 +303,6 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
 
-		/// <inheritdoc />
-		public string AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;
-
 		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
 
 		/// <inheritdoc />

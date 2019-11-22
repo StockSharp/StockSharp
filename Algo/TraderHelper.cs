@@ -4467,7 +4467,7 @@ namespace StockSharp.Algo
 		public static Security AllSecurity { get; } = new Security
 		{
 			Id = SecurityId.All.ToStringId(),
-			Code = MessageAdapter.DefaultAssociatedBoardCode,
+			Code = SecurityId.AssociatedBoardCode,
 			//Class = task.GetDisplayName(),
 			Name = LocalizedStrings.Str2835,
 			Board = ExchangeBoard.Associated,
@@ -4516,7 +4516,7 @@ namespace StockSharp.Algo
 			//if (security == null)
 			//	throw new ArgumentNullException(nameof(security));
 
-			return securityId.SecurityCode.CompareIgnoreCase(MessageAdapter.DefaultAssociatedBoardCode) && securityId.BoardCode.CompareIgnoreCase(MessageAdapter.DefaultAssociatedBoardCode);
+			return securityId.SecurityCode.CompareIgnoreCase(SecurityId.AssociatedBoardCode) && securityId.BoardCode.CompareIgnoreCase(SecurityId.AssociatedBoardCode);
 		}
 
 		/// <summary>

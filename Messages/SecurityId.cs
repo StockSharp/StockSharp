@@ -285,12 +285,31 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Board code for combined security.
+		/// </summary>
+		public const string AssociatedBoardCode = "ALL";
+
+		/// <summary>
+		/// Create security id with board code set as <see cref="AssociatedBoardCode"/>.
+		/// </summary>
+		/// <param name="securityCode">Security code.</param>
+		/// <returns>Security ID.</returns>
+		public static SecurityId CreateAssociated(string securityCode)
+		{
+			return new SecurityId
+			{
+				SecurityCode = securityCode,
+				BoardCode = AssociatedBoardCode,
+			};
+		}
+
+		/// <summary>
 		/// "Money" security id.
 		/// </summary>
 		public static readonly SecurityId Money = new SecurityId
 		{
 			SecurityCode = "MONEY",
-			BoardCode = "ALL"
+			BoardCode = AssociatedBoardCode
 		};
 
 		/// <summary>
@@ -299,7 +318,7 @@ namespace StockSharp.Messages
 		public static readonly SecurityId News = new SecurityId
 		{
 			SecurityCode = "NEWS",
-			BoardCode = "ALL"
+			BoardCode = AssociatedBoardCode
 		};
 
 		/// <summary>
@@ -308,7 +327,7 @@ namespace StockSharp.Messages
 		public static readonly SecurityId All = new SecurityId
 		{
 			SecurityCode = "ALL",
-			BoardCode = "ALL"
+			BoardCode = AssociatedBoardCode
 		};
 	}
 }
