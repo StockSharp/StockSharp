@@ -82,7 +82,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Check possible time-frame by request.
 		/// </summary>
-		bool CheckTimeFrameByRequest { get; set; }
+		bool CheckTimeFrameByRequest { get; }
 
 		/// <summary>
 		/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.

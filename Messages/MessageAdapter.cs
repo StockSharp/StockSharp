@@ -509,7 +509,6 @@ namespace StockSharp.Messages
 				SupportedMessages = storage.GetValue<string[]>(nameof(SupportedMessages)).Select(i => i.To<MessageTypes>()).ToArray();
 			
 			AssociatedBoardCode = storage.GetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
-			CheckTimeFrameByRequest = storage.GetValue(nameof(CheckTimeFrameByRequest), CheckTimeFrameByRequest);
 
 			if (storage.ContainsKey(nameof(ReConnectionSettings)))
 				ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
@@ -524,7 +523,6 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
 			storage.SetValue(nameof(SupportedMessages), SupportedMessages.Select(t => t.To<string>()).ToArray());
 			storage.SetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
-			storage.SetValue(nameof(CheckTimeFrameByRequest), CheckTimeFrameByRequest);
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 
 			base.Save(storage);

@@ -231,11 +231,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public bool CheckTimeFrameByRequest
-		{
-			get => InnerAdapter.CheckTimeFrameByRequest;
-			set => InnerAdapter.CheckTimeFrameByRequest = value;
-		}
+		public bool CheckTimeFrameByRequest => InnerAdapter.CheckTimeFrameByRequest;
 
 		/// <inheritdoc />
 		public ReConnectionSettings ReConnectionSettings => InnerAdapter.ReConnectionSettings;
