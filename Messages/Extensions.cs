@@ -1969,5 +1969,31 @@ namespace StockSharp.Messages
 
 			return posMsg.SecurityId == SecurityId.Money;
 		}
+
+		/// <summary>
+		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
+		/// </summary>
+		/// <remarks>
+		/// If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.
+		/// </remarks>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Order condition.</returns>
+		public static OrderCondition CreateOrderCondition(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.OrderConditionType?.CreateOrderCondition();
+		}
+
+		/// <summary>
+		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
+		/// </summary>
+		/// <param name="orderConditionType">Type of <see cref="OrderCondition"/>.</param>
+		/// <returns>Order condition.</returns>
+		public static OrderCondition CreateOrderCondition(this Type orderConditionType)
+		{
+			return orderConditionType?.CreateInstance<OrderCondition>();
+		}
 	}
 }

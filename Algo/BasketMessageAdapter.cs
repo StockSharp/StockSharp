@@ -286,7 +286,7 @@ namespace StockSharp.Algo
 			SnapshotRegistry snapshotRegistry)
 
 		{
-			_transactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
+			TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 			_innerAdapters = new InnerAdapterList(this);
 			SecurityAdapterProvider = securityAdapterProvider ?? throw new ArgumentNullException(nameof(securityAdapterProvider));
 			PortfolioAdapterProvider = portfolioAdapterProvider ?? throw new ArgumentNullException(nameof(portfolioAdapterProvider));
@@ -373,9 +373,14 @@ namespace StockSharp.Algo
 		/// </summary>
 		public ISlippageManager SlippageManager { get; set; }
 
-		private readonly IdGenerator _transactionIdGenerator;
+		private IdGenerator _transactionIdGenerator;
 
-		IdGenerator IMessageAdapter.TransactionIdGenerator => _transactionIdGenerator;
+		/// <inheritdoc />
+		public IdGenerator TransactionIdGenerator
+		{
+			get => _transactionIdGenerator;
+			set => _transactionIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
 		IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages
 		{
@@ -429,7 +434,8 @@ namespace StockSharp.Algo
 
 		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => GetSortedAdapters().SelectMany(a => a.SecurityExtendedFields).Distinct();
 
-		bool IMessageAdapter.IsSupportSecuritiesLookupAll => GetSortedAdapters().Any(a => a.IsSupportSecuritiesLookupAll);
+		/// <inheritdoc />
+		public bool IsSupportSecuritiesLookupAll => GetSortedAdapters().Any(a => a.IsSupportSecuritiesLookupAll);
 
 		IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => GetSortedAdapters().SelectMany(a => a.SupportedOrderBookDepths).Distinct().OrderBy();
 
@@ -445,8 +451,6 @@ namespace StockSharp.Algo
 		public string AssociatedBoardCode => MessageAdapter.DefaultAssociatedBoardCode;
 
 		Type IMessageAdapter.OrderConditionType => null;
-
-		OrderCondition IMessageAdapter.CreateOrderCondition() => null;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);
@@ -1495,6 +1499,15 @@ namespace StockSharp.Algo
 
 		private void SendOutMessage(Message message)
 		{
+			OnSendOutMessage(message);
+		}
+
+		/// <summary>
+		/// Send outgoing message and raise <see cref="NewOutMessage"/> event.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		protected virtual void OnSendOutMessage(Message message)
+		{
 			NewOutMessage?.Invoke(message);
 		}
 
@@ -1932,7 +1945,7 @@ namespace StockSharp.Algo
 				{
 					try
 					{
-						var adapter = s.GetValue<Type>("AdapterType").CreateAdapter(_transactionIdGenerator);
+						var adapter = s.GetValue<Type>("AdapterType").CreateAdapter(TransactionIdGenerator);
 						adapter.Load(s.GetValue<SettingsStorage>("AdapterSettings"));
 						InnerAdapters[adapter] = s.GetValue<int>("Priority");
 
@@ -1987,7 +2000,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public IMessageChannel Clone()
 		{
-			var clone = new BasketMessageAdapter(_transactionIdGenerator, SecurityAdapterProvider, PortfolioAdapterProvider, CandleBuilderProvider, StorageRegistry, SnapshotRegistry)
+			var clone = new BasketMessageAdapter(TransactionIdGenerator, SecurityAdapterProvider, PortfolioAdapterProvider, CandleBuilderProvider, StorageRegistry, SnapshotRegistry)
 			{
 				ExtendedInfoStorage = ExtendedInfoStorage,
 				SupportCandlesCompression = SupportCandlesCompression,

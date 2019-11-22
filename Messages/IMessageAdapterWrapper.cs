@@ -328,8 +328,6 @@ namespace StockSharp.Messages
 
 		Type IMessageAdapter.OrderConditionType => InnerAdapter.OrderConditionType;
 
-		OrderCondition IMessageAdapter.CreateOrderCondition() => InnerAdapter.CreateOrderCondition();
-
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 

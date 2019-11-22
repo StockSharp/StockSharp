@@ -175,21 +175,12 @@ namespace StockSharp.Messages
 		bool IsSecurityNewsOnly { get; }
 
 		/// <summary>
-		/// <see cref="CreateOrderCondition"/> type.
+		/// Type of <see cref="OrderCondition"/>.
 		/// </summary>
 		/// <remarks>
 		/// If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.
 		/// </remarks>
 		Type OrderConditionType { get; }
-
-		/// <summary>
-		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
-		/// </summary>
-		/// <returns>Order condition.</returns>
-		/// <remarks>
-		/// If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.
-		/// </remarks>
-		OrderCondition CreateOrderCondition();
 
 		/// <summary>
 		/// Create market depth builder.

@@ -246,9 +246,6 @@ namespace StockSharp.Messages
 			.ConditionType;
 
 		/// <inheritdoc />
-		public virtual OrderCondition CreateOrderCondition() => OrderConditionType?.CreateInstance<OrderCondition>();
-
-		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
