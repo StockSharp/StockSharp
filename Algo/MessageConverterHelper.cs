@@ -2012,6 +2012,10 @@ namespace StockSharp.Algo
 				return new SecurityLookupMessage();
 			else if (dataType == DataType.Board)
 				return new BoardLookupMessage();
+			else if (dataType == DataType.Users)
+				return new UserLookupMessage();
+			else if (dataType == DataType.TimeFrames)
+				return new TimeFrameLookupMessage();
 			else if (dataType.IsPortfolio)
 				return new PortfolioMessage();
 			else
@@ -2031,7 +2035,7 @@ namespace StockSharp.Algo
 			switch (message)
 			{
 				case MarketDataMessage mdMsg:
-					return mdMsg.DataType.ToDataType(mdMsg.Arg);
+					return mdMsg.ToDataType();
 				case SecurityLookupMessage _:
 					return DataType.Securities;
 				case BoardLookupMessage _:
@@ -2040,6 +2044,10 @@ namespace StockSharp.Algo
 					return DataType.Transactions;
 				case PortfolioLookupMessage _:
 					return DataType.PositionChanges;
+				case TimeFrameLookupMessage _:
+					return DataType.TimeFrames;
+				case UserLookupMessage _:
+					return DataType.Users;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.GetType(), LocalizedStrings.Str1219);
 			}

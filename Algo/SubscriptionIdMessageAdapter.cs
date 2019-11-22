@@ -52,6 +52,22 @@ namespace StockSharp.Algo
 					ProcessInPortfolioMessage((PortfolioMessage)message);
 					break;
 
+				case MessageTypes.SecurityLookup:
+					ProcessSecurityLookupMessage((SecurityLookupMessage)message);
+					break;
+
+				case MessageTypes.BoardLookup:
+					ProcessBoardLookupMessage((BoardLookupMessage)message);
+					break;
+
+				case MessageTypes.TimeFrameLookup:
+					ProcessTimeFrameLookupMessage((TimeFrameLookupMessage)message);
+					break;
+
+				case MessageTypes.UserLookup:
+					ProcessUserLookupMessage((UserLookupMessage)message);
+					break;
+
 				case MessageTypes.PortfolioLookup:
 					ProcessPortfolioLookupMessage((PortfolioLookupMessage)message);
 					break;
@@ -157,11 +173,36 @@ namespace StockSharp.Algo
 			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		private void ProcessInMarketDataMessage(MarketDataMessage message)
+		private void ProcessUserLookupMessage(UserLookupMessage message)
 		{
-			var secId = GetSecurityId(message.DataType.ToDataType(message.Arg), message.SecurityId);
+			ProcessInSubscriptionMessage(message, DataType.Users, default, (id, error) => new UserLookupResultMessage
+			{
+				OriginalTransactionId = id,
+				Error = error,
+			});
+		}
 
-			ProcessInSubscriptionMessage(message, message.DataType.ToDataType(message.Arg), secId, (id, error) => new MarketDataMessage
+		private void ProcessTimeFrameLookupMessage(TimeFrameLookupMessage message)
+		{
+			ProcessInSubscriptionMessage(message, DataType.TimeFrames, default, (id, error) => new TimeFrameLookupResultMessage
+			{
+				OriginalTransactionId = id,
+				Error = error,
+			});
+		}
+
+		private void ProcessBoardLookupMessage(BoardLookupMessage message)
+		{
+			ProcessInSubscriptionMessage(message, DataType.Board, default, (id, error) => new BoardLookupResultMessage
+			{
+				OriginalTransactionId = id,
+				Error = error,
+			});
+		}
+
+		private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
+		{
+			ProcessInSubscriptionMessage(message, DataType.Securities, default, (id, error) => new SecurityLookupResultMessage
 			{
 				OriginalTransactionId = id,
 				Error = error,
@@ -185,6 +226,18 @@ namespace StockSharp.Algo
 		private void ProcessInPortfolioMessage(PortfolioMessage message)
 		{
 			ProcessInSubscriptionMessage(message, DataType.Portfolio(message.PortfolioName), default, null);
+		}
+
+		private void ProcessInMarketDataMessage(MarketDataMessage message)
+		{
+			var dataType = message.ToDataType();
+			var secId = GetSecurityId(dataType, message.SecurityId);
+
+			ProcessInSubscriptionMessage(message, dataType, secId, (id, error) => new MarketDataMessage
+			{
+				OriginalTransactionId = id,
+				Error = error,
+			});
 		}
 
 		private SecurityId GetSecurityId(DataType dataType, SecurityId securityId) => IsSecurityRequired(dataType) ? securityId : default;

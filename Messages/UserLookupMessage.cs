@@ -10,7 +10,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class UserLookupMessage : Message, ITransactionIdMessage
+	public class UserLookupMessage : Message, ISubscriptionMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserLookupMessage"/>.
@@ -61,6 +61,30 @@ namespace StockSharp.Messages
 			destination.TransactionId = TransactionId;
 
 			return destination;
+		}
+
+		DateTimeOffset? ISubscriptionMessage.From
+		{
+			get => null;
+			set { }
+		}
+
+		DateTimeOffset? ISubscriptionMessage.To
+		{
+			get => null;
+			set { }
+		}
+
+		bool ISubscriptionMessage.IsSubscribe
+		{
+			get => true;
+			set { }
+		}
+
+		long IOriginalTransactionIdMessage.OriginalTransactionId
+		{
+			get => 0;
+			set { }
 		}
 	}
 }
