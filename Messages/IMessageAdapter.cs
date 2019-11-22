@@ -150,11 +150,6 @@ namespace StockSharp.Messages
 		IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; }
 
 		/// <summary>
-		/// Support lookup all securities.
-		/// </summary>
-		bool IsSupportSecuritiesLookupAll { get; }
-
-		/// <summary>
 		/// Available options for <see cref="MarketDataMessage.MaxDepth"/>.
 		/// </summary>
 		IEnumerable<int> SupportedOrderBookDepths { get; }
@@ -210,8 +205,8 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Is for the specified <paramref name="dataType"/> all securities downloading enabled.
 		/// </summary>
-		/// <param name="dataType">Market data type.</param>
+		/// <param name="dataType">Data type info.</param>
 		/// <returns>Check result.</returns>
-		bool IsAllDownloadingSupported(MarketDataTypes dataType);
+		bool IsAllDownloadingSupported(DataType dataType);
 	}
 }

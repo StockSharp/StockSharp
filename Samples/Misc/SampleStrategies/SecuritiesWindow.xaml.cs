@@ -24,9 +24,11 @@ namespace SampleStrategies
 
 	using MoreLinq;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	public partial class SecuritiesWindow
 	{
@@ -38,6 +40,8 @@ namespace SampleStrategies
 			InitializeComponent();
 		}
 
+		private static Connector Connector => MainWindow.Instance.Connector;
+
 		protected override void OnClosed(EventArgs e)
 		{
 			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
@@ -46,7 +50,7 @@ namespace SampleStrategies
 				w.Close();
 			}));
 
-			var connector = MainWindow.Instance.Connector;
+			var connector = Connector;
 
 			if (connector != null)
 			{
@@ -59,7 +63,7 @@ namespace SampleStrategies
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
 		{
-			var connector = MainWindow.Instance.Connector;
+			var connector = Connector;
 
 			var newOrder = new OrderWindow
 			{
@@ -77,7 +81,7 @@ namespace SampleStrategies
 
 		private void DepthClick(object sender, RoutedEventArgs e)
 		{
-			var connector = MainWindow.Instance.Connector;
+			var connector = Connector;
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
@@ -113,7 +117,7 @@ namespace SampleStrategies
 
 		private void QuotesClick(object sender, RoutedEventArgs e)
 		{
-			var connector = MainWindow.Instance.Connector;
+			var connector = Connector;
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
@@ -136,7 +140,7 @@ namespace SampleStrategies
 		{
 			var wnd = new SecurityLookupWindow
 			{
-				ShowAllOption = MainWindow.Instance.Connector.Adapter.IsSupportSecuritiesLookupAll,
+				ShowAllOption = Connector.Adapter.IsSupportSecuritiesLookupAll(),
 				Criteria = new Security
 				{
 					Code = "IS"
@@ -146,7 +150,7 @@ namespace SampleStrategies
 			if (!wnd.ShowModal(this))
 				return;
 
-			MainWindow.Instance.Connector.LookupSecurities(wnd.Criteria);
+			Connector.LookupSecurities(wnd.Criteria);
 		}
 
 		public void ProcessOrder(Order order)

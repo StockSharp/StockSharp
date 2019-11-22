@@ -221,10 +221,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool IsSupportSecuritiesLookupAll => true;
-
-		/// <inheritdoc />
-		[Browsable(false)]
 		public virtual IEnumerable<int> SupportedOrderBookDepths => Enumerable.Empty<int>();
 
 		/// <inheritdoc />
@@ -494,7 +490,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual bool IsAllDownloadingSupported(MarketDataTypes dataType) => false;
+		public virtual bool IsAllDownloadingSupported(DataType dataType) => false;
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)

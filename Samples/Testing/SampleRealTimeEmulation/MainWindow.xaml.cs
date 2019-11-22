@@ -337,7 +337,7 @@ namespace SampleRealTimeEmulation
 		{
 			var wnd = new SecurityLookupWindow
 			{
-				ShowAllOption = _emuConnector.MarketDataAdapter.IsSupportSecuritiesLookupAll,
+				ShowAllOption = _emuConnector.MarketDataAdapter.IsSupportSecuritiesLookupAll(),
 				Criteria = new Security { Code = "AAPL" }
 			};
 

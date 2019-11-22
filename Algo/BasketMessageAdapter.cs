@@ -434,9 +434,6 @@ namespace StockSharp.Algo
 
 		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => GetSortedAdapters().SelectMany(a => a.SecurityExtendedFields).Distinct();
 
-		/// <inheritdoc />
-		public bool IsSupportSecuritiesLookupAll => GetSortedAdapters().Any(a => a.IsSupportSecuritiesLookupAll);
-
 		IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => GetSortedAdapters().SelectMany(a => a.SupportedOrderBookDepths).Distinct().OrderBy();
 
 		bool IMessageAdapter.IsSupportOrderBookIncrements => GetSortedAdapters().Any(a => a.IsSupportOrderBookIncrements);
@@ -472,7 +469,7 @@ namespace StockSharp.Algo
 			return TimeSpan.Zero;
 		}
 
-		bool IMessageAdapter.IsAllDownloadingSupported(MarketDataTypes dataType) => GetSortedAdapters().Any(a => a.IsAllDownloadingSupported(dataType));
+		bool IMessageAdapter.IsAllDownloadingSupported(DataType dataType) => GetSortedAdapters().Any(a => a.IsAllDownloadingSupported(dataType));
 
 		/// <inheritdoc />
 		public bool IsSecurityNewsOnly => GetSortedAdapters().All(a => a.IsSecurityNewsOnly);
@@ -1085,7 +1082,7 @@ namespace StockSharp.Algo
 						var isAll = ((SecurityLookupMessage)message).IsLookupAll();
 
 						if (isAll)
-							adapters = adapters.Where(a => a.IsSupportSecuritiesLookupAll).ToArray();
+							adapters = adapters.Where(a => a.IsSupportSecuritiesLookupAll()).ToArray();
 					}
 				}
 
@@ -1691,7 +1688,7 @@ namespace StockSharp.Algo
 					extra.Add(FillIdAndAdapter(innerAdapter, new OrderStatusMessage()));
 				}
 
-				if (HasSubscription(DataType.Securities) && innerAdapter.IsSecurityLookupRequired() && innerAdapter.IsSupportSecuritiesLookupAll)
+				if (HasSubscription(DataType.Securities) && innerAdapter.IsSecurityLookupRequired() && innerAdapter.IsSupportSecuritiesLookupAll())
 				{
 					extra.Add(FillIdAndAdapter(innerAdapter, new SecurityLookupMessage()));
 				}

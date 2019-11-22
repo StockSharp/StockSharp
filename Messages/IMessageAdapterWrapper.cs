@@ -309,9 +309,6 @@ namespace StockSharp.Messages
 		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
 
 		/// <inheritdoc />
-		public virtual bool IsSupportSecuritiesLookupAll => InnerAdapter.IsSupportSecuritiesLookupAll;
-
-		/// <inheritdoc />
 		public virtual IEnumerable<int> SupportedOrderBookDepths => InnerAdapter.SupportedOrderBookDepths;
 
 		/// <inheritdoc />
@@ -340,7 +337,7 @@ namespace StockSharp.Messages
 			=> InnerAdapter.GetHistoryStepSize(dataType, out iterationInterval);
 
 		/// <inheritdoc />
-		public virtual bool IsAllDownloadingSupported(MarketDataTypes dataType)
+		public virtual bool IsAllDownloadingSupported(DataType dataType)
 			=> InnerAdapter.IsAllDownloadingSupported(dataType);
 
 		/// <inheritdoc />

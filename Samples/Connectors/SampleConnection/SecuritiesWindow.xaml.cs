@@ -178,7 +178,7 @@ namespace SampleConnection
 		{
 			var wnd = new SecurityLookupWindow
 			{
-				ShowAllOption = Connector.Adapter.IsSupportSecuritiesLookupAll,
+				ShowAllOption = Connector.Adapter.IsSupportSecuritiesLookupAll(),
 				Criteria = new Security { Code = "IS" }
 			};
 

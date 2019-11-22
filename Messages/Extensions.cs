@@ -1995,5 +1995,18 @@ namespace StockSharp.Messages
 		{
 			return orderConditionType?.CreateInstance<OrderCondition>();
 		}
+
+		/// <summary>
+		/// Support lookup all securities.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSupportSecuritiesLookupAll(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.IsAllDownloadingSupported(DataType.Securities);
+		}
 	}
 }
