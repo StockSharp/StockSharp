@@ -692,6 +692,19 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Convert <see cref="MarketDataMessage"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="message"> Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this MarketDataMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.DataType.ToDataType(message.Arg);
+		}
+
+		/// <summary>
 		/// Convert <see cref="MarketDataTypes"/> to <see cref="DataType"/> value.
 		/// </summary>
 		/// <param name="type">Market data type.</param>
