@@ -57,7 +57,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Supported by adapter message types.
 		/// </summary>
-		IEnumerable<MessageTypes> SupportedMessages { get; set; }
+		IEnumerable<MessageTypes> SupportedInMessages { get; set; }
 
 		/// <summary>
 		/// Supported by adapter message types.

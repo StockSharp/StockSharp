@@ -247,10 +247,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual IEnumerable<MessageTypes> SupportedMessages
+		public virtual IEnumerable<MessageTypes> SupportedInMessages
 		{
-			get => InnerAdapter.SupportedMessages;
-			set => InnerAdapter.SupportedMessages = value;
+			get => InnerAdapter.SupportedInMessages;
+			set => InnerAdapter.SupportedInMessages = value;
 		}
 
 		/// <inheritdoc />

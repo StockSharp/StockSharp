@@ -361,7 +361,7 @@ namespace StockSharp.Messages
 		public static IEnumerable<MessageTypes> TransactionalMessageTypes => _transactionalTypes.Cache;
 
 		/// <summary>
-		/// Fill the <see cref="IMessageAdapter.SupportedMessages"/> message types related to transactional.
+		/// Fill the <see cref="IMessageAdapter.SupportedInMessages"/> message types related to transactional.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		public static void AddTransactionalSupport(this IMessageAdapter adapter)
@@ -371,7 +371,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Remove from <see cref="IMessageAdapter.SupportedMessages"/> message types related to transactional.
+		/// Remove from <see cref="IMessageAdapter.SupportedInMessages"/> message types related to transactional.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		public static void RemoveTransactionalSupport(this IMessageAdapter adapter)
@@ -392,7 +392,7 @@ namespace StockSharp.Messages
 		public static IEnumerable<MessageTypes> MarketDataMessageTypes => _marketDataTypes.Cache;
 
 		/// <summary>
-		/// Fill the <see cref="IMessageAdapter.SupportedMessages"/> message types related to market-data.
+		/// Fill the <see cref="IMessageAdapter.SupportedInMessages"/> message types related to market-data.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		public static void AddMarketDataSupport(this IMessageAdapter adapter)
@@ -402,7 +402,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Remove from <see cref="IMessageAdapter.SupportedMessages"/> message types related to market-data.
+		/// Remove from <see cref="IMessageAdapter.SupportedInMessages"/> message types related to market-data.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		public static void RemoveMarketDataSupport(this IMessageAdapter adapter)
@@ -424,7 +424,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Add the message type info <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// Add the message type info <see cref="IMessageAdapter.SupportedInMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
@@ -435,7 +435,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Add the message type info <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// Add the message type info <see cref="IMessageAdapter.SupportedInMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
@@ -446,7 +446,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Add the message type info <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// Add the message type info <see cref="IMessageAdapter.SupportedInMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="info">Extended info for <see cref="MessageTypes"/>.</param>
@@ -465,7 +465,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Remove the message type from <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// Remove the message type from <see cref="IMessageAdapter.SupportedInMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
@@ -488,7 +488,7 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			return adapter.SupportedMessages.Contains(type);
+			return adapter.SupportedInMessages.Contains(type);
 		}
 
 		/// <summary>
@@ -505,7 +505,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Remove market data type from <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// Remove market data type from <see cref="IMessageAdapter.SupportedInMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Market data type.</param>
@@ -836,7 +836,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Remove all market data types from <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// Remove all market data types from <see cref="IMessageAdapter.SupportedInMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		public static void RemoveSupportedAllMarketDataTypes(this IMessageAdapter adapter)

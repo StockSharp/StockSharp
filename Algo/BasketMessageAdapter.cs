@@ -388,9 +388,9 @@ namespace StockSharp.Algo
 			set { }
 		}
 
-		IEnumerable<MessageTypes> IMessageAdapter.SupportedMessages
+		IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages
 		{
-			get => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct();
+			get => GetSortedAdapters().SelectMany(a => a.SupportedInMessages).Distinct();
 			set { }
 		}
 
@@ -1637,7 +1637,7 @@ namespace StockSharp.Algo
 				}
 				else
 				{
-					foreach (var supportedMessage in innerAdapter.SupportedMessages)
+					foreach (var supportedMessage in innerAdapter.SupportedInMessages)
 					{
 						_messageTypeAdapters.SafeAdd(supportedMessage).Add(wrapper);
 					}
@@ -1793,7 +1793,7 @@ namespace StockSharp.Algo
 
 			lock (_connectedResponseLock)
 			{
-				foreach (var supportedMessage in innerAdapter.SupportedMessages)
+				foreach (var supportedMessage in innerAdapter.SupportedInMessages)
 				{
 					var list = _messageTypeAdapters.TryGetValue(supportedMessage);
 

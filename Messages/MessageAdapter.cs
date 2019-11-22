@@ -53,13 +53,13 @@ namespace StockSharp.Messages
 				Categories = attr.Categories;
 		}
 
-		private IEnumerable<MessageTypes> _supportedMessages = Enumerable.Empty<MessageTypes>();
+		private IEnumerable<MessageTypes> _supportedInMessages = Enumerable.Empty<MessageTypes>();
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual IEnumerable<MessageTypes> SupportedMessages
+		public virtual IEnumerable<MessageTypes> SupportedInMessages
 		{
-			get => _supportedMessages;
+			get => _supportedInMessages;
 			set
 			{
 				if (value == null)
@@ -69,9 +69,9 @@ namespace StockSharp.Messages
 				if (duplicate != null)
 					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
 
-				_supportedMessages = value.ToArray();
+				_supportedInMessages = value.ToArray();
 
-				OnPropertyChanged(nameof(SupportedMessages));
+				OnPropertyChanged(nameof(SupportedInMessages));
 			}
 		}
 
@@ -116,7 +116,7 @@ namespace StockSharp.Messages
 				_possibleSupportedMessages = value;
 				OnPropertyChanged(nameof(PossibleSupportedMessages));
 
-				SupportedMessages = value.Select(t => t.Type).ToArray();
+				SupportedInMessages = value.Select(t => t.Type).ToArray();
 			}
 		}
 
@@ -498,8 +498,8 @@ namespace StockSharp.Messages
 			Id = storage.GetValue(nameof(Id), Id);
 			HeartbeatInterval = storage.GetValue<TimeSpan>(nameof(HeartbeatInterval));
 
-			if (storage.ContainsKey(nameof(SupportedMessages)))
-				SupportedMessages = storage.GetValue<string[]>(nameof(SupportedMessages)).Select(i => i.To<MessageTypes>()).ToArray();
+			if (storage.ContainsKey(nameof(SupportedInMessages)) || storage.ContainsKey("SupportedMessages"))
+				SupportedInMessages = (storage.GetValue<string[]>(nameof(SupportedInMessages)) ?? storage.GetValue<string[]>("SupportedMessages")).Select(i => i.To<MessageTypes>()).ToArray();
 			
 			AssociatedBoardCode = storage.GetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
 
@@ -514,7 +514,7 @@ namespace StockSharp.Messages
 		{
 			storage.SetValue(nameof(Id), Id);
 			storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
-			storage.SetValue(nameof(SupportedMessages), SupportedMessages.Select(t => t.To<string>()).ToArray());
+			storage.SetValue(nameof(SupportedInMessages), SupportedInMessages.Select(t => t.To<string>()).ToArray());
 			storage.SetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 
