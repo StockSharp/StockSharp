@@ -191,10 +191,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool IsSupportSubscriptionBySecurity => true;
-
-		/// <inheritdoc />
-		[Browsable(false)]
 		public virtual bool IsSupportCandlesUpdates => false;
 
 		/// <inheritdoc />
@@ -477,6 +473,9 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public virtual bool IsAllDownloadingSupported(DataType dataType) => false;
+
+		/// <inheritdoc />
+		public virtual bool IsSecurityRequired(DataType dataType) => true;
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)

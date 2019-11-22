@@ -427,8 +427,6 @@ namespace StockSharp.Algo
 
 		bool IMessageAdapter.IsSupportSubscriptions => true;
 
-		bool IMessageAdapter.IsSupportSubscriptionBySecurity => true;
-
 		bool IMessageAdapter.IsSupportCandlesUpdates => GetSortedAdapters().Any(a => a.IsSupportCandlesUpdates);
 
 		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => GetSortedAdapters().SelectMany(a => a.SecurityExtendedFields).Distinct();
@@ -466,6 +464,8 @@ namespace StockSharp.Algo
 		}
 
 		bool IMessageAdapter.IsAllDownloadingSupported(DataType dataType) => GetSortedAdapters().Any(a => a.IsAllDownloadingSupported(dataType));
+		
+		bool IMessageAdapter.IsSecurityRequired(DataType dataType) => GetSortedAdapters().Any(a => a.IsSecurityRequired(dataType));
 
 		/// <inheritdoc />
 		public bool IsSecurityNewsOnly => GetSortedAdapters().All(a => a.IsSecurityNewsOnly);

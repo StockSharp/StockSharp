@@ -120,11 +120,6 @@ namespace StockSharp.Messages
 		bool IsSupportSubscriptions { get; }
 
 		/// <summary>
-		/// Support filtering subscriptions (subscribe/unsubscribe for specified security).
-		/// </summary>
-		bool IsSupportSubscriptionBySecurity { get; }
-
-		/// <summary>
 		/// Support candles subscription and live updates.
 		/// </summary>
 		bool IsSupportCandlesUpdates { get; }
@@ -203,5 +198,12 @@ namespace StockSharp.Messages
 		/// <param name="dataType">Data type info.</param>
 		/// <returns>Check result.</returns>
 		bool IsAllDownloadingSupported(DataType dataType);
+
+		/// <summary>
+		/// Support filtering subscriptions (subscribe/unsubscribe for specified security).
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Check result.</returns>
+		bool IsSecurityRequired(DataType dataType);
 	}
 }

@@ -63,7 +63,7 @@
 
 							IOrderLogMarketDepthBuilder builder = null;
 
-							if (InnerAdapter.IsSupportSubscriptionBySecurity)
+							if (InnerAdapter.IsSecurityRequired(DataType.OrderLog))
 								builder = InnerAdapter.CreateOrderLogMarketDepthBuilder(secId);
 
 							_subscriptionIds.Add(message.TransactionId, RefTuple.Create(secId, true, builder));
@@ -127,7 +127,7 @@
 
 		private SecurityId GetSecurityId(SecurityId securityId)
 		{
-			return InnerAdapter.IsSupportSubscriptionBySecurity
+			return InnerAdapter.IsSecurityRequired(DataType.OrderLog)
 				? securityId
 				: default;
 		}

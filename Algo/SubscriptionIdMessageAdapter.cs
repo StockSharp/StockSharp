@@ -139,7 +139,7 @@ namespace StockSharp.Algo
 								else
 								{
 									var dataType = message.Type.ToDataType((message as CandleMessage)?.Arg ?? (message as ExecutionMessage)?.ExecutionType);
-									var secId = GetSecurityId((subscrMsg as ISecurityIdMessage)?.SecurityId ?? default);
+									var secId = GetSecurityId(dataType, (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default);
 
 									if (!_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, secId), out info))
 										break;
@@ -159,7 +159,7 @@ namespace StockSharp.Algo
 
 		private void ProcessInMarketDataMessage(MarketDataMessage message)
 		{
-			var secId = GetSecurityId(message.SecurityId);
+			var secId = GetSecurityId(message.DataType.ToDataType(message.Arg), message.SecurityId);
 
 			ProcessInSubscriptionMessage(message, message.DataType.ToDataType(message.Arg), secId, (id, error) => new MarketDataMessage
 			{
@@ -187,7 +187,7 @@ namespace StockSharp.Algo
 			ProcessInSubscriptionMessage(message, DataType.Portfolio(message.PortfolioName), default, null);
 		}
 
-		private SecurityId GetSecurityId(SecurityId securityId) => IsSupportSubscriptionBySecurity ? securityId : default;
+		private SecurityId GetSecurityId(DataType dataType, SecurityId securityId) => IsSecurityRequired(dataType) ? securityId : default;
 
 		private void ProcessInSubscriptionMessage<TMessage>(TMessage message,
 			DataType dataType, SecurityId securityId,

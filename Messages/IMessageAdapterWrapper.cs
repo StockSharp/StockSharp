@@ -292,9 +292,6 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportSubscriptions => InnerAdapter.IsSupportSubscriptions;
 
 		/// <inheritdoc />
-		public virtual bool IsSupportSubscriptionBySecurity => InnerAdapter.IsSupportSubscriptionBySecurity;
-
-		/// <inheritdoc />
 		public virtual bool IsSupportCandlesUpdates => InnerAdapter.IsSupportCandlesUpdates;
 
 		/// <inheritdoc />
@@ -336,6 +333,10 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual bool IsAllDownloadingSupported(DataType dataType)
 			=> InnerAdapter.IsAllDownloadingSupported(dataType);
+
+		/// <inheritdoc />
+		public virtual bool IsSecurityRequired(DataType dataType)
+			=> InnerAdapter.IsSecurityRequired(dataType);
 
 		/// <inheritdoc />
 		public virtual void Dispose()
