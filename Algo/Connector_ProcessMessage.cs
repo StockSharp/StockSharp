@@ -608,6 +608,10 @@ namespace StockSharp.Algo
 						ProcessExecutionMessage((ExecutionMessage)message);
 						break;
 
+					case MessageTypes.OrderStatus:
+						ProcessOrderStatusMessage((OrderStatusMessage)message);
+						break;
+
 					case MessageTypes.Portfolio:
 						ProcessPortfolioMessage((PortfolioMessage)message);
 						break;
@@ -792,14 +796,14 @@ namespace StockSharp.Algo
 
 			if (error == null)
 			{
-				if (adapter == null)
+				if (adapter == Adapter)
 					RaiseDisconnected();
 				else
 					RaiseDisconnectedEx(adapter);
 			}
 			else
 			{
-				if (adapter == null)
+				if (adapter == Adapter)
 					RaiseConnectionError(error);
 				else
 					RaiseConnectionErrorEx(adapter, error);
@@ -1654,6 +1658,10 @@ namespace StockSharp.Algo
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
 			}
+		}
+
+		private void ProcessOrderStatusMessage(OrderStatusMessage message)
+		{
 		}
 
 		private void ProcessCandleMessage(CandleMessage message)

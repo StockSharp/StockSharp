@@ -211,7 +211,11 @@ namespace StockSharp.Algo
 
 		private void ProcessOrderStatusMessage(OrderStatusMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.Transactions, default, (id, error) => null);
+			ProcessInSubscriptionMessage(message, DataType.Transactions, default, (id, error) => new OrderStatusMessage
+			{
+				OriginalTransactionId = id,
+				Error = error,
+			});
 		}
 
 		private void ProcessPortfolioLookupMessage(PortfolioLookupMessage message)
@@ -225,7 +229,11 @@ namespace StockSharp.Algo
 
 		private void ProcessInPortfolioMessage(PortfolioMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.Portfolio(message.PortfolioName), default, null);
+			ProcessInSubscriptionMessage(message, DataType.Portfolio(message.PortfolioName), default, (id, error) => new PortfolioMessage
+			{
+				OriginalTransactionId = id,
+				Error = error,
+			});
 		}
 
 		private void ProcessInMarketDataMessage(MarketDataMessage message)

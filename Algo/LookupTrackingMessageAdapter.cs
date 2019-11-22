@@ -184,7 +184,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			if (!this.IsOutMessageSupported(info.ResultType))
+			if (message.Type != MessageTypes.OrderStatus && !this.IsOutMessageSupported(info.ResultType))
 				info.LookupTimeOut.StartTimeOut(transId, TimeOut);
 
 			return true;

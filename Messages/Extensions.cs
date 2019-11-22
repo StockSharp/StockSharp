@@ -1735,6 +1735,17 @@ namespace StockSharp.Messages
 					});
 					return true;
 				}
+
+				case MessageTypes.OrderStatus:
+				{
+					var requestMsg = (OrderStatusMessage)message;
+					sendOut(new OrderStatusMessage
+					{
+						OriginalTransactionId = requestMsg.TransactionId,
+						Error = ex
+					});
+					return true;
+				}
 			}
 
 			return false;
@@ -1803,6 +1814,7 @@ namespace StockSharp.Messages
 			{ MessageTypes.TimeFrameLookup, MessageTypes.TimeFrameLookupResult },
 			{ MessageTypes.PortfolioLookup, MessageTypes.PortfolioLookupResult },
 			{ MessageTypes.UserLookup, MessageTypes.UserLookupResult },
+			{ MessageTypes.OrderStatus, MessageTypes.Execution },
 		};
 
 		/// <summary>
