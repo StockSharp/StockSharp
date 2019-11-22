@@ -143,7 +143,7 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException(nameof(subscrMsg));
 
 				if (subscrMsg is MarketDataMessage mdMsg)
-					return mdMsg.DataType.ToDataType(mdMsg.Arg);
+					return mdMsg.ToDataType();
 				else if (subscrMsg is PortfolioLookupMessage)
 					return DataType.PositionChanges;
 				else if (subscrMsg is OrderStatusMessage)
@@ -224,6 +224,12 @@ namespace StockSharp.Algo
 			{
 				lock (_syncObject)
 					_childToParentIds.Clear();
+			}
+
+			public long? TryGetParent(long childId)
+			{
+				lock (_syncObject)
+					return _childToParentIds.TryGetValue(childId)?.First;
 			}
 
 			public bool IsChild(long childId)
@@ -1433,6 +1439,8 @@ namespace StockSharp.Algo
 					//case MessageTypes.PortfolioChange:
 					case MessageTypes.PositionChange:
 					{
+						ApplyParentLookupId((ISubscriptionIdMessage)message);
+
 						if (message.Type == MessageTypes.Portfolio)
 						{
 							var pfMsg1 = (PortfolioMessage)message;
@@ -1448,14 +1456,25 @@ namespace StockSharp.Algo
 						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
 
 						if (HasSubscription(DataType.PositionChanges) && innerAdapter.IsSupportSubscriptionByPortfolio())
-							extra = new List<Message> { CreatePortfolioSubscription(innerAdapter, pfMsg.PortfolioName) };
+						{
+							var pfSubscrMsg = CreatePortfolioSubscription(innerAdapter, pfMsg.PortfolioName);
+
+							if (pfSubscrMsg != null)
+								extra = new List<Message> { pfSubscrMsg };
+						}
 
 						break;
 					}
 
 					case MessageTypes.Security:
 						var secMsg = (SecurityMessage)message;
+						ApplyParentLookupId(secMsg);
 						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, null, GetUnderlyingAdapter(innerAdapter).Id);
+						break;
+
+					case MessageTypes.Board:
+					case MessageTypes.BoardState:
+						ApplyParentLookupId((ISubscriptionIdMessage)message);
 						break;
 
 					default:
@@ -1474,6 +1493,25 @@ namespace StockSharp.Algo
 				foreach (var m in extra)
 					SendOutMessage(m);	
 			}
+		}
+
+		private void ApplyParentLookupId(ISubscriptionIdMessage msg)
+		{
+			if (msg == null)
+				throw new ArgumentNullException(nameof(msg));
+
+			var ids = msg.GetSubscriptionIds().ToArray();
+
+			for (var i = 0; i < ids.Length; i++)
+			{
+				var parentId = _parentChildMap.TryGetParent(ids[i]);
+
+				if (parentId != null)
+					ids[i] = parentId.Value;
+			}
+
+			msg.SubscriptionId = 0;
+			msg.SubscriptionIds = ids;
 		}
 
 		private void SendOutMarketDataNotSupported(long id)
@@ -1501,6 +1539,9 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		protected virtual void OnSendOutMessage(Message message)
 		{
+			if (message.Adapter == null)
+				message.Adapter = this;
+
 			NewOutMessage?.Invoke(message);
 		}
 
@@ -1522,6 +1563,7 @@ namespace StockSharp.Algo
 				return null;
 
 			var parentResponse = message.Type.CreateLookupResult(parentId.Value);
+			parentResponse.LocalTime = message.LocalTime;
 
 			if (allError)
 				((IErrorMessage)parentResponse).Error = new InvalidOperationException(LocalizedStrings.Str629Params.Put(parentId));
