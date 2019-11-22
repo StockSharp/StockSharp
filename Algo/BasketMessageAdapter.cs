@@ -407,8 +407,7 @@ namespace StockSharp.Algo
 			set { }
 		}
 
-		// TODO
-		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo => null;
+		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo { get; } = new Dictionary<string, RefPair<SecurityTypes, string>>();
 
 		IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => GetSortedAdapters().SelectMany(a => a.CandlesBuildFrom).Distinct();
 

@@ -748,7 +748,7 @@ namespace StockSharp.Algo
 
 			if (error == null)
 			{
-				if (adapter == null)
+				if (adapter == Adapter)
 				{
 					RaiseConnected();
 
@@ -773,7 +773,7 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				if (adapter == null)
+				if (adapter == Adapter)
 				{
 					RaiseConnectionError(error);
 
