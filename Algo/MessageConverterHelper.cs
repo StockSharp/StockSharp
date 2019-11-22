@@ -2035,7 +2035,8 @@ namespace StockSharp.Algo
 			switch (message)
 			{
 				case MarketDataMessage mdMsg:
-					return mdMsg.ToDataType();
+					// prevent stack overflow
+					return Messages.Extensions.ToDataType(mdMsg);
 				case SecurityLookupMessage _:
 					return DataType.Securities;
 				case BoardLookupMessage _:
