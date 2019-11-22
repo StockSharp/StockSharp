@@ -485,19 +485,6 @@ namespace StockSharp.Algo
 		public bool IsRestoreSubscriptionOnErrorReconnect { get; set; } = true;
 
 		/// <summary>
-		/// Restore subscription on reconnect.
-		/// </summary>
-		/// <remarks>
-		/// Normal case connect/disconnect.
-		/// </remarks>
-		public bool IsRestoreSubscriptionOnNormalReconnect { get; set; } = true;
-
-		/// <summary>
-		/// Send unsubscribe on disconnect command.
-		/// </summary>
-		public bool IsAutoUnSubscribeOnDisconnect { get; set; } = true;
-
-		/// <summary>
 		/// Suppress reconnecting errors.
 		/// </summary>
 		public bool SuppressReconnectingErrors { get; set; } = true;
@@ -592,7 +579,7 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter[] ActiveAdapters => _activeAdapters.CachedValues;
 
-		private void ProcessReset(ResetMessage message, bool clearSubscriptions)
+		private void ProcessReset(ResetMessage message)
 		{
 			ActiveAdapters.ForEach(a =>
 			{
@@ -614,14 +601,14 @@ namespace StockSharp.Algo
 				_currState = ConnectionStates.Disconnected;
 			}
 
-			if (clearSubscriptions)
-			{
-				_keysToTransId.Clear();
-				_requestsById.Clear();
-				_parentChildMap.Clear();
-				_subscriptionListRequests.Clear();
-				_subscribedPortfolios.Clear();
-			}
+			//if (clearSubscriptions)
+			//{
+			_keysToTransId.Clear();
+			_requestsById.Clear();
+			_parentChildMap.Clear();
+			_subscriptionListRequests.Clear();
+			_subscribedPortfolios.Clear();
+			//}
 		}
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
@@ -795,12 +782,12 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					ProcessReset((ResetMessage)message, true);
+					ProcessReset((ResetMessage)message);
 					break;
 
 				case MessageTypes.Connect:
 				{
-					ProcessReset(new ResetMessage(), !IsRestoreSubscriptionOnNormalReconnect);
+					ProcessReset(new ResetMessage());
 
 					_currState = ConnectionStates.Connecting;
 
@@ -875,47 +862,6 @@ namespace StockSharp.Algo
 						var u = a.Value;
 
 						this.AddInfoLog("Disconnecting '{0}'.", u);
-
-						if (IsAutoUnSubscribeOnDisconnect)
-						{
-							var unsubscribes = new List<ISubscriptionMessage>();
-
-							lock (_requestsById.SyncRoot)
-							{
-								foreach (var pair in _requestsById)
-								{
-									if (pair.Value.Item2 != u)
-										continue;
-
-									var subscrMsg = pair.Value.Item1;
-
-									if (subscrMsg == null)
-										continue;
-
-									if (!subscrMsg.IsSubscribe)
-										continue;
-
-									var unsubscribeRequest = (ISubscriptionMessage)subscrMsg.Clone();
-								
-									unsubscribeRequest.IsSubscribe = false;
-
-									// some messages can only be subscriptions
-									if (unsubscribeRequest.IsSubscribe)
-										continue;
-
-									unsubscribeRequest.TransactionId = adapter.TransactionIdGenerator.GetNextId();
-									unsubscribeRequest.OriginalTransactionId = subscrMsg.TransactionId;
-
-									unsubscribes.Add(unsubscribeRequest);
-								}
-							}
-
-							foreach (var unsubscribe in unsubscribes)
-							{
-								SendRequest(unsubscribe, adapter);
-							}
-						}
-
 						adapter.SendInMessage(message);
 					}
 
@@ -1596,48 +1542,6 @@ namespace StockSharp.Algo
 			return FillIdAndAdapter(adapter, new PortfolioMessage { PortfolioName = portfolioName });
 		}
 
-		private void ProcessReSubscribe(IMessageAdapter innerAdapter, List<Message> extra)
-		{
-			var underlying = GetUnderlyingAdapter(innerAdapter);
-
-			lock (_connectedResponseLock)
-			{
-				foreach (var pair in _nonSupportedAdapters.ToArray())
-				{
-					if (pair.Value.Remove(underlying) && pair.Value.Count == 0)
-						_nonSupportedAdapters.Remove(pair.Key);
-				}
-			}
-
-			lock (_requestsById.SyncRoot)
-			{
-				var adapterRequests = _requestsById.Where(p => p.Value.Item2 == underlying && p.Value.Item1 != null).ToArray();
-
-				foreach (var pair in adapterRequests)
-				{
-					var transId = pair.Key;
-					var subscrMsg = pair.Value.Item1;
-
-					var tuple = _parentChildMap.RemoveByChild(transId);
-					_requestsById.Remove(transId);
-
-					if (subscrMsg.IsSubscribe)
-					{
-						subscrMsg = (ISubscriptionMessage)subscrMsg.Clone();
-						subscrMsg.TransactionId = innerAdapter.TransactionIdGenerator.GetNextId();
-
-						if (tuple != null)
-							_parentChildMap.AddMapping(subscrMsg.TransactionId, tuple.First, underlying);
-
-						var msg = (Message)subscrMsg;
-						msg.Adapter = innerAdapter;
-						msg.IsBack = true;
-						extra.Add(msg);
-					}
-				}
-			}
-		}
-
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message, List<Message> extra)
 		{
 			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
@@ -1698,53 +1602,53 @@ namespace StockSharp.Algo
 
 			message.Adapter = underlyingAdapter;
 
-			if (isError)
-				return;
+			//if (isError)
+			//	return;
 
-			bool AnySubscription()
-			{
-				lock (_requestsById.SyncRoot)
-					return _requestsById.Any(p => p.Value.Item2 == underlyingAdapter);
-			}
+			//bool AnySubscription()
+			//{
+			//	lock (_requestsById.SyncRoot)
+			//		return _requestsById.Any(p => p.Value.Item2 == underlyingAdapter);
+			//}
 
-			if (AnySubscription())
-			{
-				if (IsRestoreSubscriptionOnNormalReconnect)
-					ProcessReSubscribe(innerAdapter, extra);
-			}
-			else
-			{
-				if (HasSubscription(DataType.Transactions) && innerAdapter.IsOrderStatusRequired())
-				{
-					extra.Add(FillIdAndAdapter(innerAdapter, new OrderStatusMessage()));
-				}
+			//if (AnySubscription())
+			//{
+			//	if (IsRestoreSubscriptionOnNormalReconnect)
+			//		ProcessReSubscribe(innerAdapter, extra);
+			//}
+			//else
+			//{
+			//	if (HasSubscription(DataType.Transactions) && innerAdapter.IsOrderStatusRequired())
+			//	{
+			//		extra.Add(FillIdAndAdapter(innerAdapter, new OrderStatusMessage()));
+			//	}
 
-				if (HasSubscription(DataType.Securities) && innerAdapter.IsSecurityLookupRequired() && innerAdapter.IsSupportSecuritiesLookupAll())
-				{
-					extra.Add(FillIdAndAdapter(innerAdapter, new SecurityLookupMessage()));
-				}
+			//	if (HasSubscription(DataType.Securities) && innerAdapter.IsSecurityLookupRequired() && innerAdapter.IsSupportSecuritiesLookupAll())
+			//	{
+			//		extra.Add(FillIdAndAdapter(innerAdapter, new SecurityLookupMessage()));
+			//	}
 
-				if (HasSubscription(DataType.PositionChanges) && innerAdapter.IsPortfolioLookupRequired())
-				{
-					extra.Add(FillIdAndAdapter(innerAdapter, new PortfolioLookupMessage()));
+			//	if (HasSubscription(DataType.PositionChanges) && innerAdapter.IsPortfolioLookupRequired())
+			//	{
+			//		extra.Add(FillIdAndAdapter(innerAdapter, new PortfolioLookupMessage()));
 
-					if (innerAdapter.IsSupportSubscriptionByPortfolio())
-					{
-						var portfolioNames = PortfolioAdapterProvider
-						                     .Adapters
-						                     .Where(p => p.Value == innerAdapter.Id)
-						                     .Select(p => p.Key);
+			//		if (innerAdapter.IsSupportSubscriptionByPortfolio())
+			//		{
+			//			var portfolioNames = PortfolioAdapterProvider
+			//			                     .Adapters
+			//			                     .Where(p => p.Value == innerAdapter.Id)
+			//			                     .Select(p => p.Key);
 
-						foreach (var portfolioName in portfolioNames)
-						{
-							var msg = CreatePortfolioSubscription(innerAdapter, portfolioName);
+			//			foreach (var portfolioName in portfolioNames)
+			//			{
+			//				var msg = CreatePortfolioSubscription(innerAdapter, portfolioName);
 
-							if (msg != null)
-								extra.Add(msg);
-						}
-					}
-				}
-			}
+			//				if (msg != null)
+			//					extra.Add(msg);
+			//			}
+			//		}
+			//	}
+			//}
 		}
 
 		private bool HasSubscription(DataType dataType) => _keysToTransId.SyncGet(c => c.Any(p => p.Key.Item1 == dataType && p.Key.Item2 == null));
@@ -2034,7 +1938,6 @@ namespace StockSharp.Algo
 				SupportCandlesCompression = SupportCandlesCompression,
 				SuppressReconnectingErrors = SuppressReconnectingErrors,
 				IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
-				IsRestoreSubscriptionOnNormalReconnect = IsRestoreSubscriptionOnNormalReconnect,
 				SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
 				SupportOrderBookTruncate = SupportOrderBookTruncate,
 				SupportOffline = SupportOffline,
@@ -2046,7 +1949,6 @@ namespace StockSharp.Algo
 				StorageDrive = StorageDrive,
 				StorageFilterSubscription = StorageFilterSubscription,
 				ConnectDisconnectEventOnFirstAdapter = ConnectDisconnectEventOnFirstAdapter,
-				IsAutoUnSubscribeOnDisconnect = IsAutoUnSubscribeOnDisconnect,
 				UseSeparatedChannels = UseSeparatedChannels,
 			};
 

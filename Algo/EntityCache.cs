@@ -377,6 +377,11 @@ namespace StockSharp.Algo
 				throw new InvalidOperationException();
 		}
 
+		public void RemoveOrderStatusTransactionId(long transactionId)
+		{
+			_orderStatusTransactions.Remove(transactionId);
+		}
+
 		public IEnumerable<Order> GetOrders(Security security, OrderStates state)
 		{
 			if (security == null)

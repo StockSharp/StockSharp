@@ -756,21 +756,22 @@ namespace StockSharp.Algo
 				{
 					RaiseConnected();
 
-					if (!LookupMessagesOnConnect)
-						return;
-
-					if (Adapter.IsRestoreSubscriptionOnNormalReconnect)
+					if (_subscriptionManager.Subscriptions.Any())
 					{
-						// with auto restore sends lookups only first time
-						if (_lookupsSent)
+						if (!IsRestoreSubscriptionOnNormalReconnect)
 							return;
 
-						_lookupsSent = true;
+						_subscriptionManager.ReSubscribeAll();
 					}
+					else
+					{
+						if (!LookupMessagesOnConnect)
+							return;
 
-					LookupSecurities(TraderHelper.LookupAllCriteria);
-					SubscribePositions();
-					SubscribeOrders();
+						LookupSecurities(TraderHelper.LookupAllCriteria);
+						SubscribePositions();
+						SubscribeOrders();
+					}
 				}
 				else
 					RaiseConnectedEx(adapter);

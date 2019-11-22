@@ -58,6 +58,18 @@ namespace StockSharp.Algo
 				public LookupInfo Lookup { get; }
 				public bool Active { get; set; }
 				public CandlesSeriesHolder Holder { get; }
+
+				public DateTimeOffset? Last { get; set; }
+
+				public ISubscriptionMessage CreateSubscriptionContinue()
+				{
+					var subscrMsg = (ISubscriptionMessage)Subscription.SubscriptionMessage.Clone();
+
+					if (Last != null)
+						subscrMsg.From = Last.Value;
+
+					return subscrMsg;
+				}
 			}
 
 			private readonly SyncObject _syncObject = new SyncObject();
@@ -253,9 +265,7 @@ namespace StockSharp.Algo
 					_subscriptions.Add(subscription.TransactionId, info);
 				}
 
-				subscrMsg = (ISubscriptionMessage)subscrMsg.Clone();
-
-				SendRequest(subscrMsg, subscription);
+				SendRequest((ISubscriptionMessage)subscrMsg.Clone(), subscription);
 			}
 
 			public void UnSubscribe(Subscription subscription)
@@ -279,6 +289,49 @@ namespace StockSharp.Algo
 
 				_connector.AddInfoLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.Security?.Id, subscription);
 				_connector.SendInMessage((Message)request);
+			}
+
+			public void ReSubscribeAll()
+			{
+				var requests = new Dictionary<ISubscriptionMessage, SubscriptionInfo>();
+
+				lock (_syncObject)
+				{
+					_requests.Clear();
+
+					foreach (var pair in _subscriptions)
+					{
+						var info = pair.Value;
+						var newId = _connector.TransactionIdGenerator.GetNextId();
+
+						if (info.Subscription.DataType == DataType.Transactions)
+						{
+							_connector._entityCache.RemoveOrderStatusTransactionId(info.Subscription.TransactionId);
+							_connector._entityCache.AddOrderStatusTransactionId(newId);
+						}
+
+						info.Subscription.TransactionId = newId;
+						requests.Add(info.CreateSubscriptionContinue(), info);
+					}
+
+					_subscriptions.Clear();
+
+					foreach (var pair in requests)
+						_subscriptions.Add(pair.Value.Subscription.TransactionId, pair.Value);
+				}
+
+				foreach (var pair in requests)
+				{
+					SendRequest(pair.Key, pair.Value.Subscription);
+				}
+			}
+
+			public void UnSubscribeAll()
+			{
+				foreach (var subscription in Subscriptions)
+				{
+					UnSubscribe(subscription);
+				}
 			}
 
 			public void ProcessLookupResponse(ISubscriptionIdMessage message, object item)

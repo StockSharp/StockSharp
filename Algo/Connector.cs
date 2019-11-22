@@ -63,8 +63,6 @@ namespace StockSharp.Algo
 
 		private readonly SubscriptionManager _subscriptionManager;
 
-		private bool _lookupsSent;
-
 		private bool _isDisposing;
 
 		/// <summary>
@@ -190,6 +188,19 @@ namespace StockSharp.Algo
 			get => _basketSecurityProcessorProvider;
 			set => _basketSecurityProcessorProvider = value ?? throw new ArgumentNullException(nameof(value));
 		}
+
+		/// <summary>
+		/// Restore subscription on reconnect.
+		/// </summary>
+		/// <remarks>
+		/// Normal case connect/disconnect.
+		/// </remarks>
+		public bool IsRestoreSubscriptionOnNormalReconnect { get; set; } = true;
+
+		/// <summary>
+		/// Send unsubscribe on disconnect command.
+		/// </summary>
+		public bool IsAutoUnSubscribeOnDisconnect { get; set; } = true;
 
 		private void InitAdapter(IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
 		{
@@ -512,6 +523,9 @@ namespace StockSharp.Algo
 			if (TimeChange)
 				CreateTimer();
 
+			if (!IsRestoreSubscriptionOnNormalReconnect)
+				_subscriptionManager.ClearCache();
+
 			SendInMessage(new ConnectMessage());
 		}
 
@@ -543,6 +557,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnDisconnect()
 		{
+			if (IsAutoUnSubscribeOnDisconnect)
+				_subscriptionManager.UnSubscribeAll();
+
 			SendInMessage(new DisconnectMessage());
 		}
 
@@ -1125,8 +1142,6 @@ namespace StockSharp.Algo
 			CloseTimer();
 
 			_cleared?.Invoke();
-
-			_lookupsSent = false;
 		}
 
 		/// <summary>
@@ -1188,6 +1203,8 @@ namespace StockSharp.Algo
 			SupportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
 			LookupMessagesOnConnect = storage.GetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
+			IsRestoreSubscriptionOnNormalReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
+			IsAutoUnSubscribeOnDisconnect = storage.GetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 
 			base.Load(storage);
 		}
@@ -1217,6 +1234,8 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
 			storage.SetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
+			storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
+			storage.SetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 
 			base.Save(storage);
 		}
