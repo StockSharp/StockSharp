@@ -17,29 +17,30 @@ namespace StockSharp.Algo
 
 	partial class Connector
 	{
-		private class LookupInfo
+		private class SubscriptionManager
 		{
-			public ISubscriptionMessage Criteria { get; }
-			public IList<object> Items { get; } = new List<object>();
-
-			public LookupInfo(ISubscriptionMessage criteria)
+			private class LookupInfo
 			{
-				if (criteria == null)
-					throw new ArgumentNullException(nameof(criteria));
+				public ISubscriptionMessage Criteria { get; }
+				public IList<object> Items { get; } = new List<object>();
 
-				Criteria = (ISubscriptionMessage)criteria.Clone();
+				public LookupInfo(ISubscriptionMessage criteria)
+				{
+					if (criteria == null)
+						throw new ArgumentNullException(nameof(criteria));
+
+					Criteria = (ISubscriptionMessage)criteria.Clone();
+				}
 			}
-		}
 
-		private sealed class SubscriptionManager
-		{
 			private class SubscriptionInfo
 			{
 				private DateTimeOffset? _last;
 
-				public SubscriptionInfo(Subscription subscription)
+				public SubscriptionInfo(Subscription subscription, bool keepAfterFinish)
 				{
 					Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+					KeepAfterFinish = keepAfterFinish;
 
 					if (Subscription.CandleSeries != null)
 						Holder = new CandlesSeriesHolder(subscription.CandleSeries);
@@ -59,6 +60,7 @@ namespace StockSharp.Algo
 				}
 
 				public Subscription Subscription { get; }
+				public bool KeepAfterFinish { get; }
 				public LookupInfo Lookup { get; }
 				public bool Active { get; set; }
 				public CandlesSeriesHolder Holder { get; }
@@ -89,6 +91,7 @@ namespace StockSharp.Algo
 
 			private readonly Dictionary<long, SubscriptionInfo> _subscriptions = new Dictionary<long, SubscriptionInfo>();
 			private readonly Dictionary<long, Tuple<ISubscriptionMessage, Subscription>> _requests = new Dictionary<long, Tuple<ISubscriptionMessage, Subscription>>();
+			private readonly List<SubscriptionInfo> _finished = new List<SubscriptionInfo>();
 
 			private readonly Connector _connector;
 
@@ -116,6 +119,7 @@ namespace StockSharp.Algo
 				{
 					_subscriptions.Clear();
 					_requests.Clear();
+					_finished.Clear();
 				}
 			}
 
@@ -260,7 +264,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public void Subscribe(Subscription subscription)
+			public void Subscribe(Subscription subscription, bool keepAfterFinish = false)
 			{
 				if (subscription == null)
 					throw new ArgumentNullException(nameof(subscription));
@@ -272,7 +276,7 @@ namespace StockSharp.Algo
 
 				lock (_syncObject)
 				{
-					var info = new SubscriptionInfo(subscription);
+					var info = new SubscriptionInfo(subscription, keepAfterFinish);
 
 					if (subscription.DataType == DataType.Transactions)
 						_connector._entityCache.AddOrderStatusTransactionId(subscription.TransactionId);
@@ -320,9 +324,8 @@ namespace StockSharp.Algo
 				{
 					_requests.Clear();
 
-					foreach (var pair in _subscriptions)
+					foreach (var info in _subscriptions.Values.Concat(_finished))
 					{
-						var info = pair.Value;
 						var newId = _connector.TransactionIdGenerator.GetNextId();
 
 						if (info.Subscription.DataType == DataType.Transactions)
@@ -335,6 +338,7 @@ namespace StockSharp.Algo
 						requests.Add(info.CreateSubscriptionContinue(), info);
 					}
 
+					_finished.Clear();
 					_subscriptions.Clear();
 
 					foreach (var pair in requests)
@@ -351,7 +355,15 @@ namespace StockSharp.Algo
 			{
 				_connector.AddInfoLog(nameof(UnSubscribeAll));
 
-				foreach (var subscription in Subscriptions)
+				var subscriptions = new List<Subscription>();
+
+				lock (_syncObject)
+				{
+					subscriptions.AddRange(Subscriptions);
+					subscriptions.AddRange(_finished.Select(i => i.Subscription));
+				}
+
+				foreach (var subscription in subscriptions)
 				{
 					UnSubscribe(subscription);
 				}
@@ -376,10 +388,30 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public LookupInfo TryGetAndRemoveLookup(IOriginalTransactionIdMessage result)
+			public bool TryGetAndRemoveLookup<TMessage, TItem>(IOriginalTransactionIdMessage result, out TMessage criteria, out TItem[] items)
+				where TMessage : Message, ISubscriptionMessage
 			{
+				criteria = null;
+				items = null;
+
 				lock (_syncObject)
-					return _subscriptions.TryGetAndRemove(result.OriginalTransactionId)?.Lookup;
+				{
+					var info = _subscriptions.TryGetAndRemove(result.OriginalTransactionId);
+
+					if (info == null)
+						return false;
+
+					if (info.KeepAfterFinish)
+						_finished.Add(info);
+
+					var lookup = info.Lookup;
+					if (lookup == null)
+						return false;
+
+					criteria = (TMessage)lookup.Criteria;
+					items = lookup.Items.CopyAndClear().Cast<TItem>().ToArray();
+					return true;
+				}
 			}
 
 			public Subscription ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)

@@ -501,16 +501,12 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void Subscribe(Subscription subscription)
 		{
-			this.AddInfoLog(nameof(Subscribe));
-
 			_subscriptionManager.Subscribe(subscription);
 		}
 
 		/// <inheritdoc />
 		public void UnSubscribe(Subscription subscription)
 		{
-			this.AddInfoLog(nameof(UnSubscribe));
-
 			_subscriptionManager.UnSubscribe(subscription);
 		}
 	}
