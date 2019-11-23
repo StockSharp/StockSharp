@@ -1996,7 +1996,15 @@ namespace StockSharp.Algo
 			if (dataType == null)
 				throw new ArgumentNullException(nameof(dataType));
 
-			if (dataType.IsMarketData)
+			if (dataType == DataType.Securities)
+				return new SecurityLookupMessage();
+			else if (dataType == DataType.Board)
+				return new BoardLookupMessage();
+			else if (dataType == DataType.Users)
+				return new UserLookupMessage();
+			else if (dataType == DataType.TimeFrames)
+				return new TimeFrameLookupMessage();
+			else if (dataType.IsMarketData)
 			{
 				return new MarketDataMessage
 				{
@@ -2008,14 +2016,6 @@ namespace StockSharp.Algo
 				return new OrderStatusMessage();
 			else if (dataType == DataType.PositionChanges)
 				return new PortfolioLookupMessage();
-			else if (dataType == DataType.Securities)
-				return new SecurityLookupMessage();
-			else if (dataType == DataType.Board)
-				return new BoardLookupMessage();
-			else if (dataType == DataType.Users)
-				return new UserLookupMessage();
-			else if (dataType == DataType.TimeFrames)
-				return new TimeFrameLookupMessage();
 			else if (dataType.IsPortfolio)
 				return new PortfolioMessage();
 			else

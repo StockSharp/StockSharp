@@ -235,7 +235,8 @@ namespace StockSharp.Messages
 			this == Securities	||
 			this == Ticks		||
 			this == OrderLog	||
-			this == Board;
+			this == Board		||
+			this == TimeFrames;
 
 		/// <summary>
 		/// Is the data type required security info.
