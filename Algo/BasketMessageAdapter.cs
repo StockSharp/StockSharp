@@ -1235,12 +1235,7 @@ namespace StockSharp.Algo
 						
 						adapter = tuple.Item2.First();
 
-						// copy full subscription's details into unsubscribe request
-						var transId = mdMsg.TransactionId;
 						mdMsg = (MarketDataMessage)mdMsg.Clone();
-						((MarketDataMessage)tuple.Item1)?.CopyTo(mdMsg);
-						mdMsg.TransactionId = transId;
-						mdMsg.OriginalTransactionId = originTransId;
 					}
 
 					SendRequest(mdMsg, adapter);

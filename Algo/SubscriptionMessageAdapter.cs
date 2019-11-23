@@ -344,14 +344,14 @@ namespace StockSharp.Algo
 					var sendIn = false;
 					var key = Tuple.Create(dataType, securityId);
 
-					var info = _subscriptionsByKey.TryGetValue(key);
-
 					if (isSubscribe)
 					{
-						if (info == null)
+						if (!_subscriptionsByKey.TryGetValue(key, out var info))
 						{
 							sendIn = true;
+
 							info = new SubscriptionInfo((ISubscriptionMessage)message.Clone());
+							
 							_subscriptionsByKey.Add(key, info);
 							_subscriptionsById.Add(info, message.TransactionId);
 						}
@@ -360,7 +360,7 @@ namespace StockSharp.Algo
 					}
 					else
 					{
-						if (info != null)
+						if (_subscriptionsById.TryGetKey(message.OriginalTransactionId, out var info))
 						{
 							if (!info.Subscribers.Remove(message.OriginalTransactionId))
 							{
@@ -371,7 +371,19 @@ namespace StockSharp.Algo
 								sendIn = info.Subscribers.Count == 0;
 
 								if (sendIn)
+								{
 									_subscriptionsByKey.Remove(key);
+									_subscriptionsById.Remove(info);
+
+									var originId = message.OriginalTransactionId;
+
+									// copy full subscription's details into unsubscribe request
+									message = (TMessage)info.Subscription.Clone();
+
+									message.IsSubscribe = false;
+									message.TransactionId = transId;
+									message.OriginalTransactionId = originId;
+								}
 							}
 						}
 						else
@@ -382,12 +394,6 @@ namespace StockSharp.Algo
 
 					if (sendIn)
 					{
-						if (!isSubscribe)
-						{
-							message = (TMessage)message.Clone();
-							message.OriginalTransactionId = _subscriptionsById.GetAndRemove(info);
-						}
-
 						sendInMsg = message;
 					}
 				}
