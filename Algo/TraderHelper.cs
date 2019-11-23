@@ -4955,29 +4955,32 @@ namespace StockSharp.Algo
 		/// Filter boards by code criteria.
 		/// </summary>
 		/// <param name="provider">The exchange boards provider.</param>
-		/// <param name="like">Criteria.</param>
+		/// <param name="criteria">Criteria.</param>
 		/// <returns>Found boards.</returns>
-		public static IEnumerable<ExchangeBoard> LookupBoards(this IExchangeInfoProvider provider, string like)
+		public static IEnumerable<ExchangeBoard> LookupBoards(this IExchangeInfoProvider provider, BoardLookupMessage criteria)
 		{
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			return provider.Boards.Filter(like);
+			return provider.Boards.Filter(criteria);
 		}
 
 		/// <summary>
 		/// Filter boards by code criteria.
 		/// </summary>
 		/// <param name="boards">All boards.</param>
-		/// <param name="like">Criteria.</param>
+		/// <param name="criteria">Criteria.</param>
 		/// <returns>Found boards.</returns>
-		public static IEnumerable<ExchangeBoard> Filter(this IEnumerable<ExchangeBoard> boards, string like)
+		public static IEnumerable<ExchangeBoard> Filter(this IEnumerable<ExchangeBoard> boards, BoardLookupMessage criteria)
 		{
 			if (boards == null)
 				throw new ArgumentNullException(nameof(boards));
 
-			if (!like.IsEmpty())
-				boards = boards.Where(b => b.Code.ContainsIgnoreCase(like));
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (!criteria.Like.IsEmpty())
+				boards = boards.Where(b => b.Code.ContainsIgnoreCase(criteria.Like));
 
 			return boards;
 		}

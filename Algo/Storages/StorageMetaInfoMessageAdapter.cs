@@ -221,7 +221,7 @@ namespace StockSharp.Algo.Storages
 				return;
 			}
 
-			foreach (var board in _exchangeInfoProvider.LookupBoards(msg.Like))
+			foreach (var board in _exchangeInfoProvider.LookupBoards(msg))
 				RaiseNewOutMessage(board.ToMessage(msg.TransactionId));
 
 			base.OnSendInMessage(msg);
