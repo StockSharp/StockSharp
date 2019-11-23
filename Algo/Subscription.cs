@@ -104,5 +104,8 @@ namespace StockSharp.Algo
 					break;
 			}
 		}
+
+		/// <inheritdoc />
+		public override string ToString() => SubscriptionMessage.ToString();
 	}
 }

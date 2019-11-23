@@ -7,6 +7,7 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -16,7 +17,13 @@ namespace StockSharp.Algo
 	{
 		private class LookupTimeOutTimer
 		{
+			private readonly ILogReceiver _logReceiver;
 			private readonly CachedSynchronizedDictionary<long, TimeSpan> _registeredIds = new CachedSynchronizedDictionary<long, TimeSpan>();
+
+			public LookupTimeOutTimer(ILogReceiver logReceiver)
+			{
+				_logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
+			}
 
 			public void StartTimeOut(long transactionId, TimeSpan timeOut)
 			{
@@ -29,6 +36,7 @@ namespace StockSharp.Algo
 				if (timeOut == default)
 					return;
 
+				_logReceiver.AddInfoLog("Lookup timeout {0} started for {1}.", timeOut, transactionId);
 				_registeredIds.SafeAdd(transactionId, s => timeOut);
 			}
 
@@ -90,11 +98,12 @@ namespace StockSharp.Algo
 			private readonly Func<long, Message> _createResult;
 
 			public readonly Queue<ITransactionIdMessage> LookupQueue = new Queue<ITransactionIdMessage>();
-			public readonly LookupTimeOutTimer LookupTimeOut = new LookupTimeOutTimer();
+			public readonly LookupTimeOutTimer LookupTimeOut;
 
-			public LookupInfo(MessageTypes resultType)
+			public LookupInfo(ILogReceiver logReceiver, MessageTypes resultType)
 			{
 				ResultType = resultType;
+				LookupTimeOut = new LookupTimeOutTimer(logReceiver);
 				_createResult = id => resultType.CreateLookupResult(id);
 			}
 
@@ -172,7 +181,7 @@ namespace StockSharp.Algo
 
 			lock (_lookups.SyncRoot)
 			{
-				info = _lookups.SafeAdd(message.Type, key => new LookupInfo(message.Type.ToResultType()));
+				info = _lookups.SafeAdd(message.Type, key => new LookupInfo(this, message.Type.ToResultType()));
 
 				// not prev queued lookup
 				if (info.LookupQueue.All(msg => msg.TransactionId != transId))
@@ -250,6 +259,8 @@ namespace StockSharp.Algo
 
 					foreach (var id in info.LookupTimeOut.ProcessTime(diff))
 					{
+						this.AddInfoLog("Lookup timeout {0}.", id);
+
 						base.OnInnerAdapterNewOutMessage(info.CreateResultMessage(id));
 					}
 				}

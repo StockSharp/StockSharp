@@ -294,6 +294,10 @@ namespace StockSharp.Algo
 				unsubscribe.OriginalTransactionId = subscription.TransactionId;
 				unsubscribe.IsSubscribe = false;
 
+				// some subscription can be only for subscribe
+				if (unsubscribe.IsSubscribe)
+					return;
+
 				SendRequest(unsubscribe, subscription);
 			}
 
@@ -308,6 +312,8 @@ namespace StockSharp.Algo
 
 			public void ReSubscribeAll()
 			{
+				_connector.AddInfoLog(nameof(ReSubscribeAll));
+
 				var requests = new Dictionary<ISubscriptionMessage, SubscriptionInfo>();
 
 				lock (_syncObject)
@@ -343,6 +349,8 @@ namespace StockSharp.Algo
 
 			public void UnSubscribeAll()
 			{
+				_connector.AddInfoLog(nameof(UnSubscribeAll));
+
 				foreach (var subscription in Subscriptions)
 				{
 					UnSubscribe(subscription);
