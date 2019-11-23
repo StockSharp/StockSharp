@@ -92,6 +92,7 @@ namespace StockSharp.Algo
 			private readonly Dictionary<long, SubscriptionInfo> _subscriptions = new Dictionary<long, SubscriptionInfo>();
 			private readonly Dictionary<long, Tuple<ISubscriptionMessage, Subscription>> _requests = new Dictionary<long, Tuple<ISubscriptionMessage, Subscription>>();
 			private readonly List<SubscriptionInfo> _finished = new List<SubscriptionInfo>();
+			private readonly List<SubscriptionInfo> _keeped = new List<SubscriptionInfo>();
 
 			private readonly Connector _connector;
 
@@ -120,6 +121,7 @@ namespace StockSharp.Algo
 					_subscriptions.Clear();
 					_requests.Clear();
 					_finished.Clear();
+					_keeped.Clear();
 				}
 			}
 
@@ -324,7 +326,7 @@ namespace StockSharp.Algo
 				{
 					_requests.Clear();
 
-					foreach (var info in _subscriptions.Values.Concat(_finished))
+					foreach (var info in _subscriptions.Values.Concat(_finished).Concat(_keeped).Distinct())
 					{
 						var newId = _connector.TransactionIdGenerator.GetNextId();
 
@@ -338,6 +340,7 @@ namespace StockSharp.Algo
 						requests.Add(info.CreateSubscriptionContinue(), info);
 					}
 
+					_keeped.Clear();
 					_finished.Clear();
 					_subscriptions.Clear();
 
@@ -359,6 +362,9 @@ namespace StockSharp.Algo
 
 				lock (_syncObject)
 				{
+					_keeped.Clear();
+					_keeped.AddRange(_subscriptions.Values);
+
 					subscriptions.AddRange(Subscriptions);
 					subscriptions.AddRange(_finished.Select(i => i.Subscription));
 				}
