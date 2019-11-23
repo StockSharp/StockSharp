@@ -175,6 +175,9 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			if (message.Type == MessageTypes.OrderStatus)
+				return true;
+
 			var transId = ((ITransactionIdMessage)message).TransactionId;
 
 			LookupInfo info;
@@ -193,7 +196,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			if (message.Type != MessageTypes.OrderStatus && !this.IsOutMessageSupported(info.ResultType))
+			if (!this.IsOutMessageSupported(info.ResultType))
 				info.LookupTimeOut.StartTimeOut(transId, TimeOut);
 
 			return true;
@@ -223,30 +226,40 @@ namespace StockSharp.Algo
 
 			base.OnInnerAdapterNewOutMessage(message);
 
+			Message nextLookup = null;
+
 			if (message.Type.IsLookupResult())
 			{
-				var info = _lookups.TryGetValue(message.Type.ToLookupType());
+				var lookupType = message.Type.ToLookupType();
 
-				if (info != null)
+				lock (_lookups.SyncRoot)
 				{
-					info.LookupTimeOut.RemoveTimeOut(((IOriginalTransactionIdMessage)message).OriginalTransactionId);
+					var info = _lookups.TryGetValue(lookupType);
 
-					if (info.LookupQueue.Count > 0)
+					if (info != null)
 					{
-						//удаляем текущий запрос лукапа из очереди
-						info.LookupQueue.Dequeue();
+						info.LookupTimeOut.RemoveTimeOut(((IOriginalTransactionIdMessage)message).OriginalTransactionId);
 
-						var nextLookup = (Message)info.LookupQueue.TryPeek();
-
-						if (nextLookup != null)
+						if (info.LookupQueue.Count > 0)
 						{
-							nextLookup.IsBack = true;
-							nextLookup.Adapter = this;
+							//удаляем текущий запрос лукапа из очереди
+							info.LookupQueue.Dequeue();
 
-							base.OnInnerAdapterNewOutMessage(nextLookup);
+							nextLookup = (Message)info.LookupQueue.TryPeek();
+
+							if (nextLookup == null)
+								_lookups.Remove(lookupType);
 						}
 					}
 				}
+			}
+
+			if (nextLookup != null)
+			{
+				nextLookup.IsBack = true;
+				nextLookup.Adapter = this;
+
+				base.OnInnerAdapterNewOutMessage(nextLookup);
 			}
 
 			if (_prevTime != DateTimeOffset.MinValue)

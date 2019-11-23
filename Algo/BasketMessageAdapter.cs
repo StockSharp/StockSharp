@@ -142,19 +142,19 @@ namespace StockSharp.Algo
 			private readonly SyncObject _syncObject = new SyncObject();
 			private readonly Dictionary<long, RefTriple<long, States, IMessageAdapter>> _childToParentIds = new Dictionary<long, RefTriple<long, States, IMessageAdapter>>();
 
-			public void AddMapping(long childId, long parentId, IMessageAdapter adapter)
+			public void AddMapping(long childId, ISubscriptionMessage parentMsg, IMessageAdapter adapter)
 			{
 				if (childId <= 0)
 					throw new ArgumentOutOfRangeException(nameof(childId));
 
-				if (parentId <= 0)
-					throw new ArgumentOutOfRangeException(nameof(parentId));
+				if (parentMsg == null)
+					throw new ArgumentNullException(nameof(parentMsg));
 
 				if (adapter == null)
 					throw new ArgumentNullException(nameof(adapter));
 
 				lock (_syncObject)
-					_childToParentIds.Add(childId, RefTuple.Create(parentId, States.None, adapter));
+					_childToParentIds.Add(childId, RefTuple.Create(parentMsg.TransactionId, parentMsg is OrderStatusMessage ? States.Ok : States.None, adapter));
 			}
 
 			public IDictionary<long, IMessageAdapter> GetChild(long parentId)
@@ -1146,7 +1146,7 @@ namespace StockSharp.Algo
 
 					child.Add(clone, adapter);
 
-					_parentChildMap.AddMapping(clone.TransactionId, subscrMsg.TransactionId, adapter);
+					_parentChildMap.AddMapping(clone.TransactionId, subscrMsg, adapter);
 				}
 			}
 			else
@@ -1163,7 +1163,7 @@ namespace StockSharp.Algo
 
 					child.Add(clone, adapter);
 
-					_parentChildMap.AddMapping(clone.TransactionId, subscrMsg.TransactionId, adapter);
+					_parentChildMap.AddMapping(clone.TransactionId, subscrMsg, adapter);
 				}
 			}
 
@@ -1174,6 +1174,7 @@ namespace StockSharp.Algo
 		{
 			// if the message was looped back via IsBack=true
 			_requestsById.TryAdd(subscrMsg.TransactionId, Tuple.Create(subscrMsg, GetUnderlyingAdapter(adapter)));
+			this.AddInfoLog("Send to {0}: {1}", adapter, subscrMsg);
 			adapter.SendInMessage((Message)subscrMsg);
 		}
 
