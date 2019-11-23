@@ -35,7 +35,7 @@ namespace StockSharp.Algo
 		{
 			private class SubscriptionInfo
 			{
-				public Subscription Subscription { get; }
+				private DateTimeOffset? _last;
 
 				public SubscriptionInfo(Subscription subscription)
 				{
@@ -43,6 +43,9 @@ namespace StockSharp.Algo
 
 					if (Subscription.CandleSeries != null)
 						Holder = new CandlesSeriesHolder(subscription.CandleSeries);
+
+					// TODO
+					//_last = subscription.SubscriptionMessage.From;
 
 					var type = subscription.DataType;
 
@@ -55,20 +58,30 @@ namespace StockSharp.Algo
 					}
 				}
 
+				public Subscription Subscription { get; }
 				public LookupInfo Lookup { get; }
 				public bool Active { get; set; }
 				public CandlesSeriesHolder Holder { get; }
-
-				public DateTimeOffset? Last { get; set; }
 
 				public ISubscriptionMessage CreateSubscriptionContinue()
 				{
 					var subscrMsg = (ISubscriptionMessage)Subscription.SubscriptionMessage.Clone();
 
-					if (Last != null)
-						subscrMsg.From = Last.Value;
+					if (_last != null)
+						subscrMsg.From = _last.Value;
 
 					return subscrMsg;
+				}
+
+				public bool UpdateLastTime(DateTimeOffset time)
+				{
+					if (_last == null || _last.Value < time)
+					{
+						_last = time;
+						return true;
+					}
+
+					return false;
 				}
 			}
 
@@ -117,7 +130,7 @@ namespace StockSharp.Algo
 
 			public IEnumerable<CandleSeries> SubscribedCandleSeries => Subscriptions.Select(s => s.CandleSeries).Where(p => p != null);
 
-			private SubscriptionInfo TryGetInfo(long id, bool remove)
+			private SubscriptionInfo TryGetInfo(long id, bool remove, DateTimeOffset? time = null)
 			{
 				lock (_syncObject)
 				{
@@ -125,6 +138,8 @@ namespace StockSharp.Algo
 					{
 						if (remove)
 							_subscriptions.Remove(id);
+						else if (time != null)
+							info.UpdateLastTime(time.Value);
 
 						return info;
 					}
@@ -134,9 +149,9 @@ namespace StockSharp.Algo
 				return null;
 			}
 
-			public Subscription TryGetSubscription(long id, bool remove)
+			public Subscription TryGetSubscription(long id, bool remove, DateTimeOffset? time = null)
 			{
-				return TryGetInfo(id, remove)?.Subscription;
+				return TryGetInfo(id, remove, time)?.Subscription;
 			}
 
 			public Subscription TryFindSubscription(long id, DataType dataType, Security security = null)

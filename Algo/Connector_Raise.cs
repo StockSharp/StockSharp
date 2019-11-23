@@ -915,9 +915,11 @@ namespace StockSharp.Algo
 			if (evt == null)
 				return;
 
+			var time = message is IServerTimeMessage timeMsg ? timeMsg.ServerTime : (DateTimeOffset?)null;
+
 			foreach (var id in message.GetSubscriptionIds())
 			{
-				var subscription = _subscriptionManager.TryGetSubscription(id, false);
+				var subscription = _subscriptionManager.TryGetSubscription(id, false, time);
 
 				if (subscription != null)
 					evt(subscription, entity);
