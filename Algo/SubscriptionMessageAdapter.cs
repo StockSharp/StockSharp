@@ -26,6 +26,8 @@ namespace StockSharp.Algo
 			}
 
 			public readonly CachedSynchronizedSet<long> Subscribers = new CachedSynchronizedSet<long>();
+
+			public override string ToString() => Subscription.ToString();
 		}
 
 		private readonly SyncObject _sync = new SyncObject();
@@ -150,18 +152,13 @@ namespace StockSharp.Algo
 					
 					break;
 				}
-				case MessageTypes.MarketDataFinished:
-				{
-					var resMsg = (MarketDataFinishedMessage)message;
 
-					lock (_sync)
-						_historicalRequests.Remove(resMsg.OriginalTransactionId);
-					
-					break;
-				}
+				case MessageTypes.MarketDataFinished:
+				case MessageTypes.SecurityLookupResult:
 				case MessageTypes.PortfolioLookupResult:
+				case MessageTypes.OrderStatus:
 				{
-					var resMsg = (PortfolioLookupResultMessage)message;
+					var resMsg = (IOriginalTransactionIdMessage)message;
 
 					lock (_sync)
 						_historicalRequests.Remove(resMsg.OriginalTransactionId);
@@ -337,6 +334,7 @@ namespace StockSharp.Algo
 						if (message.To != null)
 						{
 							_historicalRequests.Add(transId);
+							sendInMsg = message;
 							return;
 						}
 					}
