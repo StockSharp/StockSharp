@@ -4,16 +4,21 @@
     <introduction>
         
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.ConnectorWindow</codeEntityReference> - A special window for configuring the connector connection adapters.
+      	<codeEntityReference>T:StockSharp.Xaml.ConnectorWindow</codeEntityReference> - Специальное окно для настройки адаптеров подключения коннектора.
       </para>
       <mediaLink><image placement="left" xlink:href="API_GUI_ConnectorWindow" /></mediaLink>
+      				<para>
+				 Здесь представлено окно настройки подключений. Из раскрывающегося списка (открывается кнопкой '+') необходимо выбрать нужные адаптеры и настроить их свойства
+				 в окне свойств, расположенном справа. 
+				</para>
       <para>
-      You should call this window through the 
-      <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference>, 
-      extension method to which the <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
-      and the parent window are passed. If the configuration is successful, the 
-      <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference>
-      extension method will return the <legacyBold>"True"</legacyBold> value. Below is the code to call the connector connection settings window and saving the settings to a file.
+      Вызов данного окна следует выполнять через метод расширение 
+      <codeEntityReference>M:StockSharp.Xaml.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference>, 
+      в который передается <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
+      и родительское окно. При удачной настройке метод расширение 
+      <codeEntityReference>M:StockSharp.Xaml.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference>
+      вернет значение "true". 
+      Ниже приведен код вызова окна настройки подключения коннектора и сохранения настроек в файл. 
       </para>
       
       <code title="C#" language="C#">
@@ -27,6 +32,16 @@
 		}
 	  				]]>
 				   </code>
+
+				<alert class="note">
+  					<para>Корректность подключения можно проверить при помощи кнопки <legacyBold>Проверить</legacyBold>.</para>
+				</alert>
+				
+				<para>
+				Результатом работы этого окна будет создание и добавление адаптеров в список <legacyItalic>внутренних</legacyItalic> адаптеров свойства 
+				<codeEntityReference qualifyHint="true" >P:StockSharp.Algo.Connector.Adapter</codeEntityReference>.
+				</para>
+<para>Более подробно о сохранении и загрузки настроек коннектора описано в пункте <link xlink:href="c23300a1-bf38-444a-b103-28350766477f" />.</para>
 
     </introduction>
    </developerConceptualDocument>
