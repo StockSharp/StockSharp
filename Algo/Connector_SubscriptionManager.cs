@@ -444,7 +444,8 @@ namespace StockSharp.Algo
 					
 					if (!info.Holder.UpdateCandle(message, out var candle))
 						continue;
-				
+
+					info.UpdateLastTime(candle.OpenTime);
 					yield return Tuple.Create(info.Subscription, candle);
 				}
 			}
