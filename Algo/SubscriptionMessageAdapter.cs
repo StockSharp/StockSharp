@@ -117,35 +117,43 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			void TryReplaceOriginId(IOriginalTransactionIdMessage originIdMsg)
+			long TryReplaceOriginId(long id)
 			{
 				lock (_sync)
-				{
-					if (_replaceId.TryGetValue(originIdMsg.OriginalTransactionId, out var prevId))
-						originIdMsg.OriginalTransactionId = prevId;
-				}
+					return _replaceId.TryGetValue(id, out var prevId) ? prevId : id;
 			}
 
+			var newOriginId = 0L;
+
 			if (message is IOriginalTransactionIdMessage originIdMsg1)
-				TryReplaceOriginId(originIdMsg1);
+			{
+				newOriginId = originIdMsg1.OriginalTransactionId;
+				originIdMsg1.OriginalTransactionId = TryReplaceOriginId(newOriginId);
+			}
 
 			switch (message.Type)
 			{
 				case MessageTypes.MarketData:
 				{
-					var resMsg = (MarketDataMessage)message;
+					var responseMsg = (MarketDataMessage)message;
 
-					if (!resMsg.IsOk())
+					var originId = responseMsg.OriginalTransactionId;
+
+					lock (_sync)
 					{
-						lock (_sync)
+						if (responseMsg.IsOk())
 						{
-							var originId = resMsg.OriginalTransactionId;
-
+							// no need send response after re-subscribe cause response was handled prev time
+							if (_replaceId.ContainsKey(newOriginId))
+								return;
+						}
+						else
+						{
 							if (!_historicalRequests.Remove(originId))
 							{
 								if (_subscriptionsById.TryGetKey(originId, out var info))
 								{
-									_replaceId.Remove(originId);
+									_replaceId.Remove(newOriginId);
 									_subscriptionsById.Remove(info);
 									_subscriptionsByKey.RemoveByValue(info);
 								}
@@ -161,12 +169,12 @@ namespace StockSharp.Algo
 				case MessageTypes.PortfolioLookupResult:
 				case MessageTypes.OrderStatus:
 				{
-					var resMsg = (IOriginalTransactionIdMessage)message;
+					var resultMsg = (IOriginalTransactionIdMessage)message;
 
 					lock (_sync)
 					{
-						_replaceId.Remove(resMsg.OriginalTransactionId);
-						_historicalRequests.Remove(resMsg.OriginalTransactionId);
+						_replaceId.Remove(newOriginId);
+						_historicalRequests.Remove(resultMsg.OriginalTransactionId);
 					}
 					
 					break;
