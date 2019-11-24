@@ -139,10 +139,13 @@ namespace StockSharp.Algo
 					{
 						lock (_sync)
 						{
-							if (!_historicalRequests.Remove(resMsg.OriginalTransactionId))
+							var originId = resMsg.OriginalTransactionId;
+
+							if (!_historicalRequests.Remove(originId))
 							{
-								if (_subscriptionsById.TryGetKey(resMsg.OriginalTransactionId, out var info))
+								if (_subscriptionsById.TryGetKey(originId, out var info))
 								{
+									_replaceId.Remove(originId);
 									_subscriptionsById.Remove(info);
 									_subscriptionsByKey.RemoveByValue(info);
 								}
@@ -161,7 +164,10 @@ namespace StockSharp.Algo
 					var resMsg = (IOriginalTransactionIdMessage)message;
 
 					lock (_sync)
+					{
+						_replaceId.Remove(resMsg.OriginalTransactionId);
 						_historicalRequests.Remove(resMsg.OriginalTransactionId);
+					}
 					
 					break;
 				}
