@@ -45,8 +45,7 @@ namespace StockSharp.Algo
 					if (Subscription.CandleSeries != null)
 						Holder = new CandlesSeriesHolder(subscription.CandleSeries);
 
-					// TODO
-					//_last = subscription.SubscriptionMessage.From;
+					_last = subscription.SubscriptionMessage.From;
 
 					var type = subscription.DataType;
 
@@ -77,7 +76,7 @@ namespace StockSharp.Algo
 
 				public bool UpdateLastTime(DateTimeOffset time)
 				{
-					if (_last == null || _last.Value < time)
+					if (_last == null || _last.Value <= time)
 					{
 						_last = time;
 						return true;
@@ -147,7 +146,10 @@ namespace StockSharp.Algo
 						if (remove)
 							_subscriptions.Remove(id);
 						else if (time != null)
-							info.UpdateLastTime(time.Value);
+						{
+							if (!info.UpdateLastTime(time.Value))
+								return null;
+						}
 
 						return info;
 					}
@@ -441,11 +443,13 @@ namespace StockSharp.Algo
 
 					if (info.Holder == null)
 						continue;
+
+					if (!info.UpdateLastTime(message.OpenTime))
+						continue;
 					
 					if (!info.Holder.UpdateCandle(message, out var candle))
 						continue;
 
-					info.UpdateLastTime(candle.OpenTime);
 					yield return Tuple.Create(info.Subscription, candle);
 				}
 			}
