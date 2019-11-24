@@ -646,6 +646,8 @@ namespace StockSharp.Algo
 				adapter = new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone(), OwnInnerAdapter = true };
 			}
 
+			adapter = new PartialDownloadMessageAdapter(adapter) { OwnInnerAdapter = true };
+
 			if (adapter.IsSupportSubscriptions)
 			{
 				adapter = new SubscriptionMessageAdapter(adapter)
@@ -654,8 +656,6 @@ namespace StockSharp.Algo
 					IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
 				};
 			}
-
-			adapter = new PartialDownloadMessageAdapter(adapter) { OwnInnerAdapter = true };
 
 			if (adapter.IsFullCandlesOnly)
 			{
