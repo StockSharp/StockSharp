@@ -85,6 +85,8 @@ namespace StockSharp.Algo
 
 					return false;
 				}
+
+				public override string ToString() => Subscription.ToString();
 			}
 
 			private readonly SyncObject _syncObject = new SyncObject();

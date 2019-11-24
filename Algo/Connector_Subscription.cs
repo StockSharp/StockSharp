@@ -441,9 +441,15 @@ namespace StockSharp.Algo
 
 			var mdMsg = (MarketDataMessage)subscription.SubscriptionMessage;
 
-			mdMsg.From = from;
-			mdMsg.To = to;
-			mdMsg.Count = count;
+			if (from != null)
+				mdMsg.From = from.Value;
+
+			if (to != null)
+				mdMsg.To = to.Value;
+
+			if (count != null)
+				mdMsg.Count = count.Value;
+
 			mdMsg.Adapter = adapter;
 
 			if (transactionId != null)
