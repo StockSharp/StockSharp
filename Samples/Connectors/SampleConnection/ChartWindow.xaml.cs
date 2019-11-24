@@ -20,6 +20,8 @@
 
 			InitializeComponent();
 
+			Title = candleSeries.ToString();
+
 			_candleSeries = candleSeries;
 			_connector = MainWindow.Instance.Connector;
 
