@@ -139,6 +139,7 @@
     <Compile Include="Storages\Remote\RemoteStorageClient.cs" />
     <Compile Include="Storages\StorageMetaInfoMessageAdapter.cs" />
     <Compile Include="Storages\Storages.cs" />
+    <Compile Include="Strategies\Strategy_SubscriptionProvider.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="Testing\IHistoryMessageAdapter.cs" />
     <Compile Include="TraderHelper_FORTS.cs" />
