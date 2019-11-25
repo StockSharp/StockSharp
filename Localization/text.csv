@@ -5635,13 +5635,13 @@ DocStr556;The number of decimal places for the volume;Количество зн�
 DocStr557;Whether the grouping of candles by the specified attribute is registered;Зарегистрирована ли группировка свечей по определённому признаку
 DocStr558;The instrument for which the grouping is registered;Инструмент, для которого зарегистрирована группировка
 DocStr559;{0} if registered. Otherwise, {1};{0}, если зарегистрирована. Иначе, {1}
-DocStr562;The current time within the range of time frames;Текущее время, входящее в диапазон временных рамок
-DocStr564;To get the candle time range;Получить временные рамки свечи
+DocStr562;The current time within the range of time frames;Текущее время, входящее в диапазон тайм-фремоы
+DocStr564;To get the candle time range;Получить тайм-фремы свечи
 DocStr565;The time frame for which you need to get time range;Тайм-фрейм, по которому необходимо получить временные рамки
-DocStr566;The candle time frames;Временные рамки свечи
-DocStr567;To get candle time frames relatively to the exchange working hours;Получить временные рамки свечи относительно времени работы биржи
+DocStr566;The candle time frames;Тайм-фремы свечи
+DocStr567;To get candle time frames relatively to the exchange working hours;Получить тайм-фремы свечи относительно времени работы биржи
 DocStr568;The information about the board from which {0} working hours will be taken;Информация о площадке, из которой будет взято время работы {0}
-DocStr569;To get candle time frames relatively to the exchange working pattern;Получить временные рамки свечи относительно режиме работы биржи
+DocStr569;To get candle time frames relatively to the exchange working pattern;Получить тайм-фремы свечи относительно режиме работы биржи
 DocStr570;The information about the exchange working pattern;Информация о режиме работы биржи
 DocStr571;To get the candle length;Получить длину свечи
 DocStr572;The candle for which you need to get a length;Свеча, для которой необходимо получить длины
@@ -5673,11 +5673,11 @@ DocStr597;{0} if the dragonfly, {1} if the tombstone, {2} - neither one nor the 
 DocStr598;Whether the candle is bullish or bearish;Бычья ли или медвежья свеча
 DocStr599;The candle which should be checked for the trend;Свеча, которую необходимо проверить на тренд
 DocStr600;{0} if bullish, {1}, if bearish, {2} - neither one nor the other;{0}, если бычья, {1}, если медвежья, {2} - ни то, ни другое
-DocStr601;To get the number of time frames within the specified time range;Получить количество временных интервалов в пределах заданного отрезка времени
+DocStr601;To get the number of time frames within the specified time range;Получить количество тайм-фремов в пределах заданного отрезка времени
 DocStr602;The instrument by which exchange working hours are calculated through the {0} property;Инструмент, по которому вычисляется время работы биржи через свойство {0}
-DocStr603;The specified time range for which you need to get the number of time frames;Заданный отрезок времени, для которого нужно получить количество временных интервалов
-DocStr604;The time frame size;Размер временного интервала
-DocStr605;The received number of time frames;Полученное количество временных интервалов
+DocStr603;The specified time range for which you need to get the number of time frames;Заданный отрезок времени, для которого нужно получить количество тайм-фремов
+DocStr604;The time frame size;Размер тайм-фрема
+DocStr605;The received number of time frames;Полученное количество тайм-фремов
 DocStr606;The information about the board by which working hours are calculated through the {0} property;Информация о площадке, по которому вычисляется время работы через свойство {0}
 DocStr607;To calculate the {0} for the candles group;Рассчитать {0} для группы свечей
 DocStr608;{0};{0}
