@@ -462,17 +462,15 @@
 
 				lastTime = message.OpenTime;
 
-				message.OriginalTransactionId = _transactionId;
+				var info = _holder.UpdateCandles(_transactionId, message);
 
-				var info = _holder.UpdateCandles(message).FirstOrDefault();
+				if (info == null)
+					continue;
 
-				if (info != null)
-				{
-					var candle = info.Item2;
+				var candle = info.Item2;
 
-					if (candlesToUpdate.Count == 0 || candlesToUpdate.Last() != candle)
-						candlesToUpdate.Add(candle);
-				}
+				if (candlesToUpdate.Count == 0 || candlesToUpdate.Last() != candle)
+					candlesToUpdate.Add(candle);
 			}
 
 			candlesToUpdate.Reverse();
