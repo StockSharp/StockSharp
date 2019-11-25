@@ -272,6 +272,11 @@ namespace StockSharp.Algo.Testing
 
 			TradesKeepCount = 0;
 
+			Adapter.SupportCandlesCompression = false;
+			Adapter.SupportBuildingFromOrderLog = false;
+			Adapter.SupportPartialDownload = false;
+			Adapter.SupportLookupTracking = false;
+			Adapter.SupportOrderBookTruncate = false;
 			Adapter.ConnectDisconnectEventOnFirstAdapter = false;
 		}
 

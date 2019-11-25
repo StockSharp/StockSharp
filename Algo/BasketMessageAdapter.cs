@@ -501,6 +501,16 @@ namespace StockSharp.Algo
 		public bool SupportOrderBookTruncate { get; set; } = true;
 
 		/// <summary>
+		/// Use <see cref="PartialDownloadMessageAdapter"/>.
+		/// </summary>
+		public bool SupportPartialDownload { get; set; } = true;
+
+		/// <summary>
+		/// Use <see cref="LookupTrackingMessageAdapter"/>.
+		/// </summary>
+		public bool SupportLookupTracking { get; set; } = true;
+
+		/// <summary>
 		/// Use <see cref="OfflineMessageAdapter"/>.
 		/// </summary>
 		public bool SupportOffline { get; set; }
@@ -646,7 +656,8 @@ namespace StockSharp.Algo
 				adapter = new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone(), OwnInnerAdapter = true };
 			}
 
-			adapter = new PartialDownloadMessageAdapter(adapter) { OwnInnerAdapter = true };
+			if (SupportPartialDownload)
+				adapter = new PartialDownloadMessageAdapter(adapter) { OwnInnerAdapter = true };
 
 			if (adapter.IsSupportSubscriptions)
 			{
@@ -662,7 +673,8 @@ namespace StockSharp.Algo
 				adapter = new CandleHolderMessageAdapter(adapter) { OwnInnerAdapter = true };
 			}
 
-			adapter = new LookupTrackingMessageAdapter(adapter) { OwnInnerAdapter = true };
+			if (SupportLookupTracking)
+				adapter = new LookupTrackingMessageAdapter(adapter) { OwnInnerAdapter = true };
 
 			if (StorageRegistry != null)
 			{
