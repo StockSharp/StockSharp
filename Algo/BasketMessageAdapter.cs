@@ -657,7 +657,9 @@ namespace StockSharp.Algo
 			}
 
 			if (SupportPartialDownload)
+			{
 				adapter = new PartialDownloadMessageAdapter(adapter) { OwnInnerAdapter = true };
+			}
 
 			if (adapter.IsSupportSubscriptions)
 			{
@@ -674,7 +676,9 @@ namespace StockSharp.Algo
 			}
 
 			if (SupportLookupTracking)
+			{
 				adapter = new LookupTrackingMessageAdapter(adapter) { OwnInnerAdapter = true };
+			}
 
 			if (StorageRegistry != null)
 			{

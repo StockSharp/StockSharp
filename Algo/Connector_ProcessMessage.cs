@@ -568,12 +568,32 @@ namespace StockSharp.Algo
 			{
 				switch (message.Type)
 				{
+					case MessageTypes.Connect:
+						ProcessConnectMessage((ConnectMessage)message);
+						break;
+
+					case MessageTypes.Disconnect:
+						ProcessDisconnectMessage((DisconnectMessage)message);
+						break;
+
+					case ExtendedMessageTypes.ReconnectingStarted:
+						ProcessReconnectingStartedMessage(message);
+						break;
+
+					case ExtendedMessageTypes.ReconnectingFinished:
+						ProcessReconnectingFinishedMessage(message);
+						break;
+
 					case MessageTypes.QuoteChange:
 						ProcessQuotesMessage((QuoteChangeMessage)message);
 						break;
 
 					case MessageTypes.Board:
 						ProcessBoardMessage((BoardMessage)message);
+						break;
+
+					case MessageTypes.BoardState:
+						ProcessBoardStateMessage((BoardStateMessage)message);
 						break;
 
 					case MessageTypes.Security:
@@ -642,29 +662,13 @@ namespace StockSharp.Algo
 						ProcessMarketDataMessage((MarketDataMessage)message);
 						break;
 
+					case MessageTypes.MarketDataFinished:
+						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
+						break;
+
 					case MessageTypes.Error:
 						var errorMsg = (ErrorMessage)message;
 						RaiseError(errorMsg.Error);
-						break;
-
-					case MessageTypes.Connect:
-						ProcessConnectMessage((ConnectMessage)message);
-						break;
-
-					case MessageTypes.Disconnect:
-						ProcessDisconnectMessage((DisconnectMessage)message);
-						break;
-
-					case ExtendedMessageTypes.ReconnectingStarted:
-						ProcessReconnectingStartedMessage(message);
-						break;
-
-					case ExtendedMessageTypes.ReconnectingFinished:
-						ProcessReconnectingFinishedMessage(message);
-						break;
-
-					case MessageTypes.BoardState:
-						ProcessBoardStateMessage((BoardStateMessage)message);
 						break;
 
 					case ExtendedMessageTypes.RemoveSecurity:
@@ -678,10 +682,6 @@ namespace StockSharp.Algo
 					case MessageTypes.CandleTick:
 					case MessageTypes.CandleVolume:
 						ProcessCandleMessage((CandleMessage)message);
-						break;
-
-					case MessageTypes.MarketDataFinished:
-						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
 						break;
 
 					case MessageTypes.ChangePassword:
