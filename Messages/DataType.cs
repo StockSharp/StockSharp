@@ -87,7 +87,7 @@ namespace StockSharp.Messages
 		public static DataType Users { get; } = Create(typeof(UserInfoMessage), null).Immutable();
 
 		/// <summary>
-		/// Time frames.
+		/// The candle time frames.
 		/// </summary>
 		public static DataType TimeFrames { get; } = Create(typeof(TimeFrameLookupResultMessage), null).Immutable();
 
