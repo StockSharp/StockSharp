@@ -247,6 +247,10 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <inheritdoc />
+		public override bool IsAllDownloadingSupported(DataType dataType)
+			=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
+
+		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
