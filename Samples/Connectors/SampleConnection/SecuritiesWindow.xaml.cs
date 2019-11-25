@@ -22,6 +22,7 @@ namespace SampleConnection
 	public partial class SecuritiesWindow
 	{
 		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
+		private readonly SynchronizedList<ChartWindow> _chartWindows = new SynchronizedList<ChartWindow>();
 		private bool _initialized;
 
 		public SecuritiesWindow()
@@ -42,6 +43,12 @@ namespace SampleConnection
 			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
 			{
 				w.DeleteHideable();
+				w.Close();
+			}));
+
+			_chartWindows.SyncDo(c => c.ToArray().ForEach(w =>
+			{
+				w.SeriesInactive = true;
 				w.Close();
 			}));
 
@@ -204,13 +211,16 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf)
+				var chartWnd = new ChartWindow(new CandleSeries(typeof(TimeFrameCandle), security, tf)
 				{
 					From = wnd.From,
 					To = wnd.To
-				};
+				});
 
-				new ChartWindow(series).Show();
+				_chartWindows.Add(chartWnd);
+				chartWnd.Closed += (s, e1) => _chartWindows.Remove(chartWnd);
+
+				chartWnd.Show();
 			}
 		}
 
