@@ -1871,8 +1871,10 @@ namespace StockSharp.Messages
 					return new BoardLookupResultMessage { OriginalTransactionId = id };
 				case MessageTypes.UserLookupResult:
 					return new UserLookupResultMessage { OriginalTransactionId = id };
+				case MessageTypes.OrderStatus:
+					return new OrderStatusMessage { OriginalTransactionId = id };
 				default:
-					throw new ArgumentOutOfRangeException(nameof(type));
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 			}
 		}
 
