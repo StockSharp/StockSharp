@@ -160,7 +160,7 @@
 		private readonly Dictionary<long, DownloadInfo> _original = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, DownloadInfo> _partialRequests = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, Tuple<long, DownloadInfo>> _unsubscribeRequests = new Dictionary<long, Tuple<long, DownloadInfo>>();
-		private readonly HashSet<long> _liveRequests = new HashSet<long>();
+		private readonly Dictionary<long, bool> _liveRequests = new Dictionary<long, bool>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PartialDownloadMessageAdapter"/>.
@@ -258,7 +258,7 @@
 									mdMsg.From = null;
 									mdMsg.To = null;
 
-									_liveRequests.Add(mdMsg.TransactionId);
+									_liveRequests.Add(mdMsg.TransactionId, true);
 									break;
 								}
 							}
@@ -273,6 +273,8 @@
 								_partialRequests.Add(info.CurrTransId, info);
 							}
 						}
+						else
+							_liveRequests.Add(mdMsg.TransactionId, false);
 					}
 					else
 					{
@@ -305,7 +307,7 @@
 
 						if (mdMsg.To == null)
 						{
-							_liveRequests.Add(mdMsg.TransactionId);
+							_liveRequests.Add(mdMsg.TransactionId, true);
 
 							_original.Remove(partialMsg.OriginalTransactionId);
 							_partialRequests.RemoveWhere(p => p.Value == info);
@@ -326,36 +328,58 @@
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			Message extra = null;
+
+
 			switch (message.Type)
 			{
 				case MessageTypes.MarketData:
 				{
 					var responseMsg = (MarketDataMessage)message;
+					var originId = responseMsg.OriginalTransactionId;
 
 					lock (_syncObject)
 					{
-						if (_liveRequests.Contains(responseMsg.OriginalTransactionId))
+						if (_liveRequests.TryGetValue(originId, out var isPartial))
 						{
-							_liveRequests.Remove(responseMsg.OriginalTransactionId);
+							_liveRequests.Remove(originId);
 
-							responseMsg.IsOnline = true;
+							if (isPartial)
+							{
+								if (responseMsg.IsOk())
+								{
+									// reply was sent prev for first partial request,
+									// now sending "online" message
+									message = new MarketDataOnlineMessage
+									{
+										OriginalTransactionId = originId
+									};
+								}
+							}
+							else
+							{
+								extra = new MarketDataOnlineMessage
+								{
+									OriginalTransactionId = originId
+								};
+							}
+
 							break;
 						}
 
 						long requestId;
 
-						if (!_partialRequests.TryGetValue(responseMsg.OriginalTransactionId, out var info))
+						if (!_partialRequests.TryGetValue(originId, out var info))
 						{
-							if (!_unsubscribeRequests.TryGetValue(responseMsg.OriginalTransactionId, out var tuple))
+							if (!_unsubscribeRequests.TryGetValue(originId, out var tuple))
 								break;
 							
 							requestId = tuple.Item1;
 							info = tuple.Item2;
 
-							var originId = info.Origin.TransactionId;
-							_original.Remove(originId);
+							_original.Remove(info.Origin.TransactionId);
 							_partialRequests.RemoveWhere(p => p.Value == info);
-							_unsubscribeRequests.Remove(responseMsg.OriginalTransactionId);
+							_unsubscribeRequests.Remove(originId);
 						}
 						else
 						{
@@ -448,6 +472,9 @@
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+
+			if (extra != null)
+				base.OnInnerAdapterNewOutMessage(extra);
 		}
 
 		private void TryUpdateSubscriptionResult<TMessage>(TMessage message)

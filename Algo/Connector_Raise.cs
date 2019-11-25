@@ -679,9 +679,6 @@ namespace StockSharp.Algo
 			MarketDataSubscriptionSucceeded?.Invoke(security, message);
 
 			RaiseSubscriptionStarted(subscription);
-
-			if (message.IsOnline)
-				RaiseMarketDataSubscriptionOnline(security, message, subscription);
 		}
 
 		private void RaiseMarketDataSubscriptionFailed(MarketDataMessage origin, MarketDataMessage reply, Subscription subscription)
@@ -834,13 +831,13 @@ namespace StockSharp.Algo
 			SubscriptionFailed?.Invoke(subscription, error, isSubscribe);
 		}
 
-		private void RaiseMarketDataSubscriptionOnline(Security security, MarketDataMessage message, Subscription subscription)
+		private void RaiseMarketDataSubscriptionOnline(Subscription subscription)
 		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
+
+			var security = subscription.Security;
+			var message = (MarketDataMessage)subscription.SubscriptionMessage;
 
 			this.AddDebugLog(LocalizedStrings.SubscriptionOnline, security?.Id, message);
 			MarketDataSubscriptionOnline?.Invoke(security, message);

@@ -429,6 +429,16 @@ namespace StockSharp.Algo
 				return TryGetSubscription(message.OriginalTransactionId, true);
 			}
 
+			public Subscription ProcessMarketDataOnlineMessage(MarketDataOnlineMessage message)
+			{
+				var subscription = TryGetSubscription(message.OriginalTransactionId, false);
+
+				if (subscription != null)
+					_connector.AddInfoLog("Subscription {0} online.", subscription.TransactionId);
+
+				return subscription;
+			}
+
 			public IEnumerable<Tuple<Subscription, Candle>> UpdateCandles(CandleMessage message)
 			{
 				foreach (var subscriptionId in message.GetSubscriptionIds())

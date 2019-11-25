@@ -272,12 +272,6 @@ namespace StockSharp.Messages
 		public string BoardCode { get; set; }
 
 		/// <summary>
-		/// Subscription is online.
-		/// </summary>
-		[DataMember]
-		public bool IsOnline { get; set; }
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDataMessage"/>.
 		/// </summary>
 		public MarketDataMessage()
@@ -332,7 +326,6 @@ namespace StockSharp.Messages
 			destination.IsRegularTradingHours = IsRegularTradingHours;
 			destination.IsFinished = IsFinished;
 			destination.BoardCode = BoardCode;
-			destination.IsOnline = IsOnline;
 		}
 
 		/// <inheritdoc />
@@ -381,9 +374,6 @@ namespace StockSharp.Messages
 
 			if (Error != null)
 				str += $",Error={Error.Message}";
-
-			if (IsOnline)
-				str += $",Online={IsOnline}";
 
 			return str;
 		}

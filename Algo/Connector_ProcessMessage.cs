@@ -666,6 +666,10 @@ namespace StockSharp.Algo
 						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
 						break;
 
+					case MessageTypes.MarketDataOnline:
+						ProcessMarketDataOnlineMessage((MarketDataOnlineMessage)message);
+						break;
+
 					case MessageTypes.Error:
 						var errorMsg = (ErrorMessage)message;
 						RaiseError(errorMsg.Error);
@@ -730,6 +734,26 @@ namespace StockSharp.Algo
 				else
 					RaiseMarketDataUnSubscriptionFailed(originalMsg, replyMsg, subscription);
 			}
+		}
+
+		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
+		{ 
+			var subscription = _subscriptionManager.ProcessMarketDataFinishedMessage(message);
+
+			if (subscription == null)
+				return;
+
+			RaiseMarketDataSubscriptionFinished(message, subscription);
+		}
+
+		private void ProcessMarketDataOnlineMessage(MarketDataOnlineMessage message)
+		{
+			var subscription = _subscriptionManager.ProcessMarketDataOnlineMessage(message);
+
+			if (subscription == null)
+				return;
+
+			RaiseMarketDataSubscriptionOnline(subscription);
 		}
 
 		private void ProcessSecurityRemoveMessage(SecurityRemoveMessage message)
@@ -1665,16 +1689,6 @@ namespace StockSharp.Algo
 
 				CandleReceived?.Invoke(subscription, candle);
 			}
-		}
-
-		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
-		{ 
-			var subscription = _subscriptionManager.ProcessMarketDataFinishedMessage(message);
-
-			if (subscription == null)
-				return;
-
-			RaiseMarketDataSubscriptionFinished(message, subscription);
 		}
 
 		private void ProcessChangePasswordMessage(ChangePasswordMessage message)
