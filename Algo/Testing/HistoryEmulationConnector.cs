@@ -24,8 +24,6 @@ namespace StockSharp.Algo.Testing
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
@@ -170,7 +168,7 @@ namespace StockSharp.Algo.Testing
 								}
 
 								if (!sended && !processed && !_messageQueue.IsClosed)
-									Thread.Sleep(100);
+									Thread.Sleep(1000);
 							}
 							catch (Exception ex)
 							{
@@ -249,8 +247,7 @@ namespace StockSharp.Algo.Testing
 			// чтобы каждый раз при повторной эмуляции получать одинаковые номера транзакций
 			TransactionIdGenerator = new IncrementalIdGenerator();
 
-			_initialMoney = portfolios.ToDictionary(pf => pf, pf => pf.BeginValue);
-			EntityFactory = new EmulationEntityFactory(securityProvider, _initialMoney.Keys);
+			EntityFactory = new EmulationEntityFactory(securityProvider, portfolios);
 			
 			RiskManager = null;
 
@@ -296,13 +293,6 @@ namespace StockSharp.Algo.Testing
 		//	get => HistoryMessageAdapter.MaxMessageCount;
 		//	set => HistoryMessageAdapter.MaxMessageCount = value;
 		//}
-
-		private readonly Dictionary<Portfolio, decimal?> _initialMoney;
-
-		/// <summary>
-		/// The initial size of monetary funds on accounts.
-		/// </summary>
-		public IDictionary<Portfolio, decimal?> InitialMoney => _initialMoney;
 
 		///// <summary>
 		///// The number of loaded messages.
@@ -441,16 +431,6 @@ namespace StockSharp.Algo.Testing
 			{
 				switch (message.Type)
 				{
-					case MessageTypes.Connect:
-					{
-						base.OnProcessMessage(message);
-
-						if (message.Adapter == TransactionAdapter)
-							_initialMoney.ForEach(p => SendPortfolio(p.Key));
-
-						break;
-					}
-
 					case ExtendedMessageTypes.Last:
 					{
 						var lastMsg = (LastMessage)message;
@@ -526,29 +506,6 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 			}
-		}
-
-		private void SendPortfolio(Portfolio portfolio)
-		{
-			SendInMessage(portfolio.ToMessage());
-
-			var money = _initialMoney[portfolio];
-
-			SendInMessage(
-				EmulationAdapter
-					.CreatePortfolioChangeMessage(portfolio.Name)
-						.TryAdd(PositionChangeTypes.BeginValue, money, true)
-						.TryAdd(PositionChangeTypes.CurrentValue, money, true)
-						.Add(PositionChangeTypes.BlockedValue, 0m));
-		}
-
-		/// <inheritdoc />
-		protected override void OnRegisterPortfolio(Portfolio portfolio)
-		{
-			_initialMoney.TryAdd(portfolio, portfolio.BeginValue);
-
-			if (State == EmulationStates.Started)
-				SendPortfolio(portfolio);
 		}
 
 		/// <summary>
