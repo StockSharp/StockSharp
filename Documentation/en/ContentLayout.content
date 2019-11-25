@@ -284,10 +284,7 @@
         </Topic>
         <Topic id="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93" visible="True" title="FIX Server" />
       </Topic>
-      <Topic id="2bffe740-b901-40dc-9d0b-cf2600270ad4" visible="True" noFile="true" title="Connectors (advanced)">
-        <Topic id="293859e2-6c39-486c-afde-d9ae96243618" visible="True" title="Custom connector" />
-        <Topic id="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" visible="True" title="Multiple connections" />
-        <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Reconnections" />
+      <Topic id="2bffe740-b901-40dc-9d0b-cf2600270ad4" visible="True" noFile="true" title="Connectors (common)">
         <Topic id="08b8a9ca-6658-4088-b6b8-8715b12732ab" visible="True" title="RSS" />
       </Topic>
       <Topic id="1d5b1223-15ba-4364-a31f-2e5592f76fe3" visible="True" title="Getting historical data" />
