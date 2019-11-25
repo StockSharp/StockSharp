@@ -153,9 +153,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.ChartTheme">
-      <summary>
-            The name of the graphic theme.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.ShowLegend">
       <summary>
@@ -168,9 +166,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.ShowPerfStats">
-      <summary>
-            Show FPS.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IsInteracted">
       <summary>
@@ -1971,6 +1967,9 @@
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.ChartTheme">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartPanel.ShowPerfStats">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.OrderSettings">
       <summary>
             Chart order registering settings.
@@ -3269,6 +3268,11 @@
     <member name="P:StockSharp.Xaml.Charting.IChart.ShowNonFormedIndicators">
       <summary>
             Show non formed indicators values.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IChart.ShowPerfStats">
+      <summary>
+            Show FPS.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)">

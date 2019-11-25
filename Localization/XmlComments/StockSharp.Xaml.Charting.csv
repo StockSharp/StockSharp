@@ -40,10 +40,10 @@ M:StockSharp.Xaml.Charting.Chart.SetSource(StockSharp.Xaml.Charting.IChartElemen
 M:StockSharp.Xaml.Charting.Chart.SetSource(StockSharp.Xaml.Charting.IChartElement,System.Object)/param/source;Str213
 P:StockSharp.Xaml.Charting.Chart.AutoRangeByAnnotations/summary;DocStr7729
 P:StockSharp.Xaml.Charting.Chart.MinimumRange/summary;DocStr7730
-P:StockSharp.Xaml.Charting.Chart.ChartTheme/summary;DocStr7731
+P:StockSharp.Xaml.Charting.Chart.ChartTheme/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.Chart.ShowLegend/summary;DocStr7732
 P:StockSharp.Xaml.Charting.Chart.ShowOverview/summary;DocStr7733
-P:StockSharp.Xaml.Charting.Chart.ShowPerfStats/summary;DocStr8856
+P:StockSharp.Xaml.Charting.Chart.ShowPerfStats/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.Chart.IsInteracted/summary;DocStr7734
 P:StockSharp.Xaml.Charting.Chart.CrossHair/summary;DocStr7735
 P:StockSharp.Xaml.Charting.Chart.CrossHairTooltip/summary;DocStr7736
@@ -537,6 +537,7 @@ P:StockSharp.Xaml.Charting.ChartPanel.Elements/summary;DocStr7715
 P:StockSharp.Xaml.Charting.ChartPanel.IsAutoRange/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.ChartPanel.XAxisType/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.ChartPanel.ChartTheme/inheritdoc;DocStr8459
+P:StockSharp.Xaml.Charting.ChartPanel.ShowPerfStats/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.ChartPanel.OrderSettings/summary;DocStr8869
 P:StockSharp.Xaml.Charting.ChartPanel.ShareSettings/summary;DocStr8870
 P:StockSharp.Xaml.Charting.ChartPanel.DisableIndicatorReset/summary;DocStr10505
@@ -892,6 +893,7 @@ P:StockSharp.Xaml.Charting.IChart.IsAutoRange/summary;DocStr7718
 P:StockSharp.Xaml.Charting.IChart.XAxisType/summary;DocStr10676
 P:StockSharp.Xaml.Charting.IChart.IndicatorTypes/summary;DocStr7740
 P:StockSharp.Xaml.Charting.IChart.ShowNonFormedIndicators/summary;ShowNonFormedIndicators
+P:StockSharp.Xaml.Charting.IChart.ShowPerfStats/summary;DocStr8856
 M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)/summary;DocStr7706
 M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)/param/area;Str1903
 M:StockSharp.Xaml.Charting.IChart.RemoveArea(StockSharp.Xaml.Charting.ChartArea)/summary;DocStr7707
