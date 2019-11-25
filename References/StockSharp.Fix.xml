@@ -113,7 +113,7 @@
     <member name="E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportSubscriptionBySecurity">
+    <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.IsSecurityRequired(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
@@ -294,6 +294,9 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.IsSecurityRequired(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
@@ -565,10 +568,12 @@
             Password.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFastDialect.IsSupportSubscriptionBySecurity">
+    <member name="M:StockSharp.Fix.Dialects.IFastDialect.IsSecurityRequired(StockSharp.Messages.DataType)">
       <summary>
             Support filtering subscriptions (subscribe/unsubscribe for specified security).
             </summary>
+      <param name="dataType">Data type info.</param>
+      <returns>Check result.</returns>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFastDialect.SupportedMarketDataTypes">
       <summary>
@@ -1507,6 +1512,13 @@
       <param name="dataType">Data type info.</param>
       <returns>Check result.</returns>
     </member>
+    <member name="M:StockSharp.Fix.Dialects.IFixDialect.IsSecurityRequired(StockSharp.Messages.DataType)">
+      <summary>
+            Support filtering subscriptions (subscribe/unsubscribe for specified security).
+            </summary>
+      <param name="dataType">Data type info.</param>
+      <returns>Check result.</returns>
+    </member>
     <member name="T:StockSharp.Fix.FastFeedGroup">
       <summary>
             Network configuration group.
@@ -1595,7 +1607,7 @@
     <member name="P:StockSharp.Fix.FastMessageAdapter.SecurityExtendedFields">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportSubscriptionBySecurity">
+    <member name="M:StockSharp.Fix.FastMessageAdapter.IsSecurityRequired(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FastMessageAdapter.SupportedMarketDataTypes">
@@ -7889,6 +7901,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSecurityNewsOnly">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.IsSecurityRequired(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
