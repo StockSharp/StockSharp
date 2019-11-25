@@ -15814,3 +15814,8 @@ DocStr11442;Create security id with board code set as {0};Создать иде�
 DocStr11443;"""Money"" security id";"Идентификатор инструмента ""Money"""
 DocStr11444;"""News"" security id";"Идентификатор инструмента ""News"""
 DocStr11445;"""ALL"" security id";"Идентификатор инструмента ""ALL"""
+DocStr11446;To create a rule for the event of started subscription;Создать правило для события запуска подписки
+DocStr11447;Subscription provider;Провайдер подписок
+DocStr11448;To create a rule for the event of online subscription;Создать правило для события перехода подписки в состояние онлайн
+DocStr11449;To create a rule for the event of stopped subscription;Создать правило для события остановки подписки
+DocStr11450;To create a rule for the event of failed subscription;Создать правило для события ошибки подписки

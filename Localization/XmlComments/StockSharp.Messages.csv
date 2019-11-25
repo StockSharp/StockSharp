@@ -479,7 +479,7 @@ P:StockSharp.Messages.DataType.OrderLog/summary;DocStr4035
 P:StockSharp.Messages.DataType.Transactions/summary;Transactions
 P:StockSharp.Messages.DataType.Board/summary;BoardInfo
 P:StockSharp.Messages.DataType.Users/summary;DocStr10745
-P:StockSharp.Messages.DataType.TimeFrames/summary;DocStr11446
+P:StockSharp.Messages.DataType.TimeFrames/summary;DocStr566
 M:StockSharp.Messages.DataType.TimeFrame(System.TimeSpan)/summary;DocStr10098
 M:StockSharp.Messages.DataType.TimeFrame(System.TimeSpan)/param/tf;DocStr548
 M:StockSharp.Messages.DataType.TimeFrame(System.TimeSpan)/returns;DocStr8490
