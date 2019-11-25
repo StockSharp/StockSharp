@@ -6,7 +6,7 @@
       <para>Существуют два способа установки <token>stocksharp</token>:</para>
 		<list class="ordered">
   			<listItem>
-  				<para>Установка из репозитория <token>stocksharpgithub</token> с веб-сервиса <token>github</token>.</para>
+  				<para>Установка из репозитория <token>stocksharpgithubreleases</token> с веб-сервиса <token>github</token>.</para>
   			</listItem>
   			<listItem>
   				<para>Установка из Visual Studio при помощи сервиса Nuget.</para>

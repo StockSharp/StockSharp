@@ -21,15 +21,7 @@
 <link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" />.</para>
 
  <para>
- Вы можете работать с <token>stocksharp</token> у любого брокера или 
-<externalLink>
-<linkText>брокер-партнер</linkText>
-<linkUri>https://stocksharp.ru/broker/</linkUri>
-</externalLink>
-<externalLink>
-<linkText>(преимущества).</linkText>
-<linkUri>https://stocksharp.ru/products/pricing/</linkUri>
-</externalLink>
+ Вы можете работать с <token>stocksharp</token> у любого брокера, который поддерживает наши подключения.
  </para>
  <title>S#.Designer</title>
  <mediaLink>
@@ -170,11 +162,8 @@
   <listItem><para><link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" /> - универсальная программа для создания торговых роботов и стратегий.</para></listItem>
   <listItem><para><link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> - программа для скачивания маркет-данных.</para></listItem>
   <listItem><para><link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" /> - библиотека для написания торговых роботов на языке <token>csharp</token> в Visual Studio.</para></listItem>
-  <listItem><para> <externalLink>
-<linkText>S#.Terminal</linkText>
-<linkUri>https://stocksharp.ru/products/terminal/</linkUri>
-</externalLink>
- - торговый терминал.</para></listItem>
+  <listItem><para><link xlink:href="e4b5e112-bd08-4f40-8741-7514e7e4088e" /> - торговый терминал.</para></listItem>
+  <listItem><para><link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" /> - готовый графический каркас c исходными кодами.</para></listItem>
   <listItem><para><link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0" /> - интеграция MatLab с торговыми системами. Торговля из скриптов MatLab.</para></listItem>
   <listItem><para><externalLink>
 <linkText>ЛЧИ Viewer</linkText>

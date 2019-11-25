@@ -8,7 +8,7 @@
 				Обучение и консультации C# и S# - <token>stocksharpeducation</token>.
 			</listItem>
 			<listItem>
-				Исходные коды - <token>stocksharpsources</token>.
+				Исходные коды ядра S# - <token>stocksharpgithub</token>.
 			</listItem>
 			<listItem>
 				Каркас готового робота с исходниками - <token>stocksharpshell</token>.
@@ -21,10 +21,7 @@
 				Сайт платформы - <token>stocksharpsite</token>.
 			</listItem>
 			<listItem>
-				Форум для обсуждения вопросов - <token>stocksharpforum</token>.
-			</listItem>
-			<listItem>
-				Новости - <token>stocksharpnews</token>.
+				Раздел со статьями, новостями, обсуждениями - <token>stocksharpforum</token>.
 			</listItem>
 			<listItem>
 				Канал на YouTube - <token>stocksharpyoutube</token>.
