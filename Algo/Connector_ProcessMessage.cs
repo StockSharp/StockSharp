@@ -754,9 +754,12 @@ namespace StockSharp.Algo
 			{
 				if (adapter == Adapter)
 				{
+					// check before event cause handler on Connected event can send some subscriptions
+					var hasSubscriptions = _subscriptionManager.Subscriptions.Any();
+
 					RaiseConnected();
 
-					if (_subscriptionManager.Subscriptions.Any())
+					if (hasSubscriptions)
 					{
 						if (!IsRestoreSubscriptionOnNormalReconnect)
 							return;
