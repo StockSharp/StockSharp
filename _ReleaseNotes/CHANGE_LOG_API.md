@@ -150,7 +150,6 @@ StockSharp API Change log
 * (bug) StorageMessageAdapter. Fix processing offline cancel order requests.
 * (feature) IMessageAdapter. IsSupportExecutionsPnL properties added.
 * (feature) PnLMessageAdapter. Translates PortfolioChangeMessage.
-* (feature) Plaza. Spectra 6.2.20 supported.
 * (feature) InteractiveBrokers. V9.76.01
 * (bug) PnLMessageAdapter. Fix processing for empty portfolio name trades.
 * (feature) IConnector. Moved market data members to IMarketDataProvider.
@@ -308,7 +307,7 @@ StockSharp API Change log
 * (feature) FIX connector. IBKR dialect supported algo orders.
 * (feature) FixServer. Support SecurityStatusRequest.
 * (feature) OKEx. Web sockets v3 supported.
-* (feature) Plaza CGate. Spectra 6.2 supported.
+* (feature) Plaza CGate. Spectra 6.3 supported.
 * (feature) TWIME. Spectra 6.2 supported.
 * (feature) Micex TEAP. Interface 31 supported.
 * (feature) Storage lists. WaitFlush added. Removed ReadLasts.

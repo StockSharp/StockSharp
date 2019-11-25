@@ -6340,7 +6340,7 @@
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsNativeIdentifiers">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsSupportSubscriptionBySecurity">
+    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.IsSecurityRequired(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
