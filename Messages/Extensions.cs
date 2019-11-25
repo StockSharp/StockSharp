@@ -1814,7 +1814,7 @@ namespace StockSharp.Messages
 			{ MessageTypes.TimeFrameLookup, MessageTypes.TimeFrameLookupResult },
 			{ MessageTypes.PortfolioLookup, MessageTypes.PortfolioLookupResult },
 			{ MessageTypes.UserLookup, MessageTypes.UserLookupResult },
-			{ MessageTypes.OrderStatus, MessageTypes.Execution },
+			{ MessageTypes.OrderStatus, MessageTypes.OrderStatus },
 		};
 
 		/// <summary>
