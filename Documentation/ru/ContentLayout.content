@@ -891,7 +891,7 @@
       <Topic id="07223530-00cf-45ac-8aa7-d1e0550a89ce" visible="True" title="Обратная связь" />
     </Topic>
   </Topic>
-  <Topic id="E4B5E112-BD08-4F40-8741-7514E7E4088E" visible="True" title="S#.Terminal">
+  <Topic id="e4b5e112-bd08-4f40-8741-7514e7e4088e" visible="True" title="S#.Terminal">
     <Topic id="f70783b8-59e1-4ea7-9d94-c20524f3470a" visible="True" title="Установка S#.Terminal" />
     <Topic id="e51b9e8f-52d3-4e16-887e-1aad12db2cc8" visible="True" title="Обновление на новую версию" />
     <Topic id="b7809562-d829-42d2-95c9-cbca8bf5549e" visible="True" title="Быстрый запуск" />
