@@ -11,7 +11,7 @@
 
  <para>It is necessary to install <token>stocksharpapi</token> 
  in the created project. There are two ways to install <token>stocksharpapi</token>: 
- Installing from the <token>stocksharpgithub</token>  repository of the GitHub 
+ Installing from the <token>stocksharpgithubreleases</token>  repository of the GitHub 
  web service and installing from Visual Studio using the Nuget service. The 
  installation of <token>stocksharpapi</token> is described in the 
  <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8" /> section.

@@ -13,16 +13,10 @@
 			</externalLink>
 			It's include: </para>
 			 		<list class="ordered">
-  			<listItem>
-<token>designer</token>
-  			</listItem>
-  			<listItem>
-<token>hydra</token>
-  			</listItem>
-  			<listItem>
-<token>stocksharpapi</token>
-			 
-  			</listItem>
+  			<listItem><token>designer</token></listItem>
+  			<listItem><token>hydra</token></listItem>
+  			<listItem><token>terminal</token></listItem>
+  			<listItem><token>stocksharpapi</token></listItem>
 		</list>
 
 		<para>See also <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">StockSharp installation</link>.</para>

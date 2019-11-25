@@ -2,6 +2,7 @@
 <Topics>
   <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" title="About StockSharp" />
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="StockSharp Licensing" />
+  <Topic id="536b1c81-5336-4dc0-ab29-8bef70a162ba" visible="True" title="Source codes" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Reference materials" />
   <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Architecture" />

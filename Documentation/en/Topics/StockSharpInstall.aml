@@ -6,7 +6,7 @@
       <para>There are two ways to install <token>stocksharp</token>:</para>
 		<list class="ordered">
   			<listItem>
-  				<para>Install from the <token>stocksharpgithub</token> repository of the <token>github</token> web service.</para>
+  				<para>Install from the <token>stocksharpgithubreleases</token> repository of the <token>github</token> web service.</para>
   			</listItem>
   			<listItem>
   				<para>Install from the Visual Studio using the service Nuget.</para>
