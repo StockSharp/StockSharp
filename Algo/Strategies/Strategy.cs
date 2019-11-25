@@ -2572,31 +2572,30 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
-		int ISecurityProvider.Count => SafeGetConnector().Count;
+		private ISecurityProvider SecurityProvider => SafeGetConnector();
+
+		int ISecurityProvider.Count => SecurityProvider.Count;
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
-			add => SafeGetConnector().Added += value;
-			remove => SafeGetConnector().Added -= value;
+			add => SecurityProvider.Added += value;
+			remove => SecurityProvider.Added -= value;
 		}
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add => SafeGetConnector().Removed += value;
-			remove => SafeGetConnector().Removed -= value;
+			add => SecurityProvider.Removed += value;
+			remove => SecurityProvider.Removed -= value;
 		}
 
 		event Action ISecurityProvider.Cleared
 		{
-			add => SafeGetConnector().Cleared += value;
-			remove => SafeGetConnector().Cleared -= value;
+			add => SecurityProvider.Cleared += value;
+			remove => SecurityProvider.Cleared -= value;
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
-		{
-			return SafeGetConnector().Lookup(criteria);
-		}
+		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => SecurityProvider.Lookup(criteria);
 
 		/// <summary>
 		/// New <see cref="StrategyStateMessage"/> occurred event.
