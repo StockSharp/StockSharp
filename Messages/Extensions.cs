@@ -1786,12 +1786,8 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.RemoveSupportedMessage(MessageTypes.SecurityLookup);
-			adapter.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
-			adapter.RemoveSupportedMessage(MessageTypes.OrderStatus);
-			adapter.RemoveSupportedMessage(MessageTypes.Portfolio);
-			adapter.RemoveSupportedMessage(MessageTypes.BoardLookup);
-			adapter.RemoveSupportedMessage(MessageTypes.TimeFrameLookup);
+			foreach (var type in _lookupResults.Keys)
+				adapter.RemoveSupportedMessage(type);
 		}
 
 		/// <summary>
