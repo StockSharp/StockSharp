@@ -108,7 +108,7 @@ namespace SampleConnection
 				var window = _quotesWindows.SafeAdd(security, s =>
 				{
 					// subscribe on order book flow
-					connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth);
+					connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
 
 					// create order book window
 					var wnd = new QuotesWindow

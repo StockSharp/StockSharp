@@ -12,6 +12,8 @@
 
 		public int? MaxDepth { get; set; }
 
-		public MarketDataBuildModes BuildMode { get; set; } = MarketDataBuildModes.LoadAndBuild;
+		public MarketDataTypes? BuildFrom { get; set; } = MarketDataTypes.OrderLog;
+
+		public MarketDataBuildModes BuildMode { get; set; } = MarketDataBuildModes.Build;
 	}
 }
