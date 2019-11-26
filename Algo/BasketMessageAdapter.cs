@@ -1100,14 +1100,25 @@ namespace StockSharp.Algo
 								return false;
 							case MarketDataTypes.MarketDepth:
 							{
-								if (mdMsg.BuildMode != MarketDataBuildModes.Load)
+								if (mdMsg.BuildMode == MarketDataBuildModes.Load)
+									return false;
+
+								switch (mdMsg.BuildFrom)
 								{
-									switch (mdMsg.BuildFrom)
+									case MarketDataTypes.Level1:
+										return a.IsMarketDataTypeSupported(MarketDataTypes.Level1);
+									case MarketDataTypes.OrderLog:
+										return a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog);
+									case null:
 									{
-										case MarketDataTypes.Level1:
-											return a.IsMarketDataTypeSupported(MarketDataTypes.Level1);
-										case MarketDataTypes.OrderLog:
-											return a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog);
+										if (a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog))
+											mdMsg.BuildFrom = MarketDataTypes.OrderLog;
+										else if (a.IsMarketDataTypeSupported(MarketDataTypes.Level1))
+											mdMsg.BuildFrom = MarketDataTypes.Level1;
+										else
+											return false;
+
+										return true;
 									}
 								}
 
