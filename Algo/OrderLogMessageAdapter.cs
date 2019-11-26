@@ -1,7 +1,6 @@
 ﻿namespace StockSharp.Algo
 {
 	using System;
-	using System.Collections.Generic;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -14,7 +13,7 @@
 	/// </summary>
 	public class OrderLogMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly Dictionary<long, RefTriple<SecurityId, bool, IOrderLogMarketDepthBuilder>> _subscriptionIds = new Dictionary<long, RefTriple<SecurityId, bool, IOrderLogMarketDepthBuilder>>();
+		private readonly SynchronizedDictionary<long, RefTriple<SecurityId, bool, IOrderLogMarketDepthBuilder>> _subscriptionIds = new SynchronizedDictionary<long, RefTriple<SecurityId, bool, IOrderLogMarketDepthBuilder>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderLogMessageAdapter"/>.
