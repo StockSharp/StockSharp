@@ -1130,6 +1130,12 @@ M:StockSharp.Messages.OrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.Secur
 M:StockSharp.Messages.OrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 M:StockSharp.Messages.OrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.QuoteChangeMessage)/summary;DocStr1
 M:StockSharp.Messages.OrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.QuoteChangeMessage)/param/depth;DocStr4444
+T:StockSharp.Messages.MarketDataOnlineMessage/summary;DocStr11451
+P:StockSharp.Messages.MarketDataOnlineMessage.OriginalTransactionId/inheritdoc;DocStr8459
+M:StockSharp.Messages.MarketDataOnlineMessage.#ctor/summary;DocStr93
+M:StockSharp.Messages.MarketDataOnlineMessage.Clone/summary;DocStr643
+M:StockSharp.Messages.MarketDataOnlineMessage.Clone/returns;DocStr1116
+M:StockSharp.Messages.MarketDataOnlineMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.MessagePriorityQueue/summary;DocStr9143
 M:StockSharp.Messages.MessagePriorityQueue.#ctor/summary;DocStr1
 M:StockSharp.Messages.MessagePriorityQueue.TryDequeue(StockSharp.Messages.Message@,System.Boolean,System.Boolean)/summary;DocStr8459
@@ -1348,6 +1354,7 @@ F:StockSharp.Messages.MessageTypes.PortfolioRouteListRequest/summary;DocStr608
 F:StockSharp.Messages.MessageTypes.PortfolioRoute/summary;DocStr608
 F:StockSharp.Messages.MessageTypes.PortfolioRouteListFinished/summary;DocStr608
 F:StockSharp.Messages.MessageTypes.SecurityMapping/summary;DocStr608
+F:StockSharp.Messages.MessageTypes.MarketDataOnline/summary;DocStr608
 T:StockSharp.Messages.MessageTypeInfo/summary;DocStr11352
 P:StockSharp.Messages.MessageTypeInfo.Type/summary;DocStr9
 P:StockSharp.Messages.MessageTypeInfo.IsMarketData/summary;DocStr11351
@@ -1793,7 +1800,6 @@ P:StockSharp.Messages.MarketDataMessage.AllowBuildFromSmallerTimeFrame/remarks;D
 P:StockSharp.Messages.MarketDataMessage.IsRegularTradingHours/summary;RegularTradingHours
 P:StockSharp.Messages.MarketDataMessage.IsFinished/summary;DocStr11144
 P:StockSharp.Messages.MarketDataMessage.BoardCode/summary;BoardCode
-P:StockSharp.Messages.MarketDataMessage.IsOnline/summary;DocStr11415
 M:StockSharp.Messages.MarketDataMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.MarketDataMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.MarketDataMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
