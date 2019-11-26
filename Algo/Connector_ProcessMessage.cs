@@ -778,27 +778,23 @@ namespace StockSharp.Algo
 			{
 				if (adapter == Adapter)
 				{
-					// check before event cause handler on Connected event can send some subscriptions
-					var hasSubscriptions = _subscriptionManager.Subscriptions.Any();
-
-					RaiseConnected();
-
-					if (hasSubscriptions)
+					if (_subscriptionManager.Subscriptions.Any())
 					{
-						if (!IsRestoreSubscriptionOnNormalReconnect)
-							return;
-
-						_subscriptionManager.ReSubscribeAll();
+						if (IsRestoreSubscriptionOnNormalReconnect)
+							_subscriptionManager.ReSubscribeAll();
 					}
 					else
 					{
-						if (!LookupMessagesOnConnect)
-							return;
-
-						_subscriptionManager.Subscribe(new Subscription(DataType.Securities, null), true);
-						_subscriptionManager.Subscribe(new Subscription(DataType.PositionChanges, null), true);
-						_subscriptionManager.Subscribe(new Subscription(DataType.Transactions, null), true);
+						if (LookupMessagesOnConnect)
+						{
+							_subscriptionManager.Subscribe(new Subscription(DataType.Securities, null), true);
+							_subscriptionManager.Subscribe(new Subscription(DataType.PositionChanges, null), true);
+							_subscriptionManager.Subscribe(new Subscription(DataType.Transactions, null), true);
+						}
 					}
+
+					// raise event after re subscriptions cause handler on Connected event can send some subscriptions
+					RaiseConnected();
 				}
 				else
 					RaiseConnectedEx(adapter);

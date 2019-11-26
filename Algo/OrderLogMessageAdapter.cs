@@ -30,10 +30,8 @@
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-				{
 					_subscriptionIds.Clear();
 					break;
-				}
 
 				case MessageTypes.MarketData:
 					message = ProcessMarketDataRequest((MarketDataMessage)message);
