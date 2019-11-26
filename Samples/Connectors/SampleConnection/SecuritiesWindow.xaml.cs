@@ -78,12 +78,28 @@ namespace SampleConnection
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Quotes.IsEnabled = Ticks.IsEnabled = HistTicks.IsEnabled = OrderLog.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
+			Quotes.IsEnabled = Ticks.IsEnabled = HistTicks.IsEnabled = OrderLog.IsEnabled
+				= NewOrder.IsEnabled = Depth.IsEnabled = DepthAdvanced.IsEnabled = security != null;
 
 			TryEnableCandles();
 		}
 
+		private void DepthAdvancedClick(object sender, RoutedEventArgs e)
+		{
+			var settingsWnd = new DepthSettingsWindow();
+
+			if (!settingsWnd.ShowModal(this))
+				return;
+
+			SubscribeDepths(settingsWnd.Settings);
+		}
+
 		private void DepthClick(object sender, RoutedEventArgs e)
+		{
+			SubscribeDepths(null);
+		}
+
+		private void SubscribeDepths(DepthSettings settings)
 		{
 			var connector = Connector;
 
@@ -92,7 +108,7 @@ namespace SampleConnection
 				var window = _quotesWindows.SafeAdd(security, s =>
 				{
 					// subscribe on order book flow
-					connector.SubscribeMarketDepth(security);
+					connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth);
 
 					// create order book window
 					var wnd = new QuotesWindow
