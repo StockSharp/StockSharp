@@ -3,6 +3,7 @@ namespace SampleConnection
 	using System;
 	using System.ComponentModel;
 	using System.IO;
+	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Common;
@@ -73,7 +74,10 @@ namespace SampleConnection
 				this.GuiAsync(() => ChangeConnectStatus(true));
 
 				if (Connector.Adapter.IsMarketDataTypeSupported(MarketDataTypes.News) && !Connector.Adapter.IsSecurityNewsOnly)
-					Connector.SubscribeNews();
+				{
+					if (Connector.Subscriptions.All(s => s.DataType != DataType.News))
+						Connector.SubscribeNews();
+				}
 			};
 
 			// subscribe on connection error event
