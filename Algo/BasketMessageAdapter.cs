@@ -136,7 +136,8 @@ namespace StockSharp.Algo
 				None,
 				Ok,
 				Error,
-				Finished
+				Finished,
+				Online,
 			}
 
 			private readonly SyncObject _syncObject = new SyncObject();
@@ -201,6 +202,12 @@ namespace StockSharp.Algo
 			}
 
 			public long? ProcessChildFinish(long childId, out bool needParentResponse)
+				=> ProcessChild(childId, States.Finished, out needParentResponse);
+
+			public long? ProcessChildOnline(long childId, out bool needParentResponse)
+				=> ProcessChild(childId, States.Online, out needParentResponse);
+
+			private long? ProcessChild(long childId, States state, out bool needParentResponse)
 			{
 				needParentResponse = true;
 
@@ -210,14 +217,13 @@ namespace StockSharp.Algo
 						return null;
 					
 					var parentId = tuple.First;
-					tuple.Second = States.Finished;
+					tuple.Second = state;
 
 					foreach (var pair in FilterByParent(parentId))
 					{
 						var t = pair.Value;
 
-						// one of adapter still not yet response or has active live subscription.
-						if (t.Second == States.None || t.Second == States.Ok)
+						if (t.Second != States.Error && t.Second != state)
 						{
 							needParentResponse = false;
 							break;
@@ -1381,6 +1387,10 @@ namespace StockSharp.Algo
 						message = ProcessMarketDataFinished((MarketDataFinishedMessage)message);
 						break;
 
+					case MessageTypes.MarketDataOnline:
+						message = ProcessMarketDataOnline((MarketDataOnlineMessage)message);
+						break;
+
 					case MessageTypes.Portfolio:
 					//case MessageTypes.PortfolioChange:
 					case MessageTypes.PositionChange:
@@ -1698,6 +1708,23 @@ namespace StockSharp.Algo
 			}
 
 			message.Adapter = underlyingAdapter;
+		}
+
+		private MarketDataOnlineMessage ProcessMarketDataOnline(MarketDataOnlineMessage message)
+		{
+			var originalTransactionId = message.OriginalTransactionId;
+
+			_subscription.Remove(originalTransactionId);
+
+			var parentId = _parentChildMap.ProcessChildOnline(originalTransactionId, out var needParentResponse);
+
+			if (parentId == null)
+				return message;
+
+			if (!needParentResponse)
+				return null;
+
+			return new MarketDataOnlineMessage { OriginalTransactionId = parentId.Value };
 		}
 
 		private MarketDataFinishedMessage ProcessMarketDataFinished(MarketDataFinishedMessage message)
