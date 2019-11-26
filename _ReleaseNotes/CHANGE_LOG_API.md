@@ -278,6 +278,8 @@ StockSharp API Change log
 * (feature) Connector. ReConnectionSettings marked as obsolete.
 * (feature) BasketMessageAdapter. UseSeparatedChannels property created.
 * (feature) MarketRuleHelper. Subscription rules.
+* (feature) OKEX. PostOnly order supported.
+* (feature) OKEX. MatchPrice supported.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

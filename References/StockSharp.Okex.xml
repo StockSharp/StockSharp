@@ -82,6 +82,16 @@
             Leverage.
             </summary>
         </member>
+        <member name="P:StockSharp.Okex.OkexOrderCondition.PostOnly">
+            <summary>
+            Post-only order.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexOrderCondition.MatchPrice">
+            <summary>
+            Whether order is placed at best counter party price.
+            </summary>
+        </member>
         <member name="T:StockSharp.Okex.OkexTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Okex"/>.
