@@ -1725,8 +1725,6 @@ namespace StockSharp.Algo
 		{
 			var originalTransactionId = message.OriginalTransactionId;
 
-			_subscription.Remove(originalTransactionId);
-
 			var parentId = _parentChildMap.ProcessChildOnline(originalTransactionId, out var needParentResponse);
 
 			if (parentId == null)
@@ -1742,12 +1740,13 @@ namespace StockSharp.Algo
 		{
 			var originalTransactionId = message.OriginalTransactionId;
 
-			_subscription.Remove(originalTransactionId);
-
 			var parentId = _parentChildMap.ProcessChildFinish(originalTransactionId, out var needParentResponse);
 
 			if (parentId == null)
+			{
+				_subscription.Remove(originalTransactionId);
 				return message;
+			}
 
 			if (!needParentResponse)
 				return null;
