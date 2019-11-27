@@ -630,7 +630,7 @@
     <None Include="Topics\Designer_connection_mapping.aml" />
     <None Include="Topics\Designer_Options.aml" />
     <None Include="Topics\Designer_Commission_Rule.aml" />
-    <None Include="Topics\Designer_Creating_indicator_from_source_code.aml.aml" />
+    <None Include="Topics\Designer_Creating_indicator_from_source_code.aml" />
     <None Include="Topics\FxcmNews.aml" />
     <None Include="Topics\CQGHistory.aml" />
     <None Include="Topics\FxcmHistory.aml" />
@@ -652,7 +652,7 @@
     <None Include="Topics\hydra_options.aml" />
     <None Include="Topics\CreateNewOrder.aml" />
     <None Include="Topics\QuikLuaFirstStrategy.aml" />
-    <None Include="Topics\QuikLuaStrategy.aml.aml" />
+    <None Include="Topics\QuikLuaStrategy.aml" />
     <None Include="Topics\RSS.aml" />
     <None Include="Topics\HydraSettingsBarChart.aml" />
     <None Include="Topics\OECNews.aml" />
