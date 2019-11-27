@@ -319,6 +319,8 @@ namespace StockSharp.Messages
 
 		Type IMessageAdapter.OrderConditionType => InnerAdapter.OrderConditionType;
 
+		bool IMessageAdapter.HeartbeatBeforConnect => InnerAdapter.HeartbeatBeforConnect;
+
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 

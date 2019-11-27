@@ -238,6 +238,10 @@ namespace StockSharp.Messages
 			.ConditionType;
 
 		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool HeartbeatBeforConnect => false;
+
+		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 

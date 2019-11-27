@@ -499,7 +499,7 @@ namespace StockSharp.Algo
 		{
 			lock (_timeSync)
 			{
-				if (_currState != ConnectionStates.Connected)
+				if (_currState != ConnectionStates.Connected && !InnerAdapter.HeartbeatBeforConnect)
 					return;
 
 				if (!_canSendTime)

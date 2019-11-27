@@ -168,6 +168,11 @@ namespace StockSharp.Messages
 		Type OrderConditionType { get; }
 
 		/// <summary>
+		/// Start sending <see cref="TimeMessage"/> before connection established.
+		/// </summary>
+		bool HeartbeatBeforConnect { get; }
+
+		/// <summary>
 		/// Create market depth builder.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>

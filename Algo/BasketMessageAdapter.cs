@@ -450,6 +450,8 @@ namespace StockSharp.Algo
 		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => GetSortedAdapters().FirstOrDefault()?.OrderCancelVolumeRequired;
 
 		Type IMessageAdapter.OrderConditionType => null;
+		
+		bool IMessageAdapter.HeartbeatBeforConnect => false;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);
