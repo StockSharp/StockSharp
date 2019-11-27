@@ -12,24 +12,7 @@ action (Close positions, Stop trading, Cancel orders), which will be executed wh
 <image placement="center" xlink:href="Terminal_Risk_Rule"/>
 </mediaLink>
 
-<definitionTable>
-  <definedTerm>List of Risk-rules</definedTerm>
-  <definition>
-<list class="bullet">
-<listItem><para><legacyBold>Order (volume)</legacyBold> – the risk-rule that monitors the volume of the order.</para></listItem>
-<listItem><para><legacyBold>Order (price)</legacyBold> – the risk-rule that monitors the order price.</para></listItem>
-<listItem><para><legacyBold>Order (frequency)</legacyBold> – the risk-rule that monitors the frequency of orders.</para></listItem>
-<listItem><para><legacyBold>Commission</legacyBold> – the risk-rule that monitors the amount of the commission.</para></listItem>
-<listItem><para><legacyBold>P/L</legacyBold> – the risk-rule that monitors profit-loss.</para></listItem>
-<listItem><para><legacyBold>Position</legacyBold> – the risk-rule that monitors the position size.</para></listItem>
-<listItem><para><legacyBold>Position (time)</legacyBold> – the risk-rule that monitors the lifetime of a position.</para></listItem>
-<listItem><para><legacyBold>Slippage</legacyBold> – the risk-rule that monitors the slippage size.</para></listItem>
-<listItem><para><legacyBold>Trade (volume)</legacyBold> – the risk-rule that monitors the frequency of trades.</para></listItem>
-<listItem><para><legacyBold>Trade (price)</legacyBold> – the risk-rule that monitors the trade price.</para></listItem>
-<listItem><para><legacyBold>Trade (frequency)</legacyBold> – the risk-rule that monitors the trade volume.</para></listItem>
-</list>
-  </definition>
-</definitionTable>
+<para>The list of risk rules and their description is available in the section <link xlink:href="b4f8c503-6589-4979-93ee-506df859d967" />.</para>
 
 </introduction>
 
