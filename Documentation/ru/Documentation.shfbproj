@@ -731,7 +731,7 @@
     <None Include="Topics\Terminal_Notifications.aml" />
     <None Include="Topics\Terminal_Notifications_Panel.aml" />
     <None Include="Topics\Terminal_Creating_repository_of_historical_data.aml" />
-    <None Include="Topics\Terminal_Risk_Rule.aml.aml" />
+    <None Include="Topics\Terminal_Risk_Rule.aml" />
     <None Include="Topics\HydraUpdate.aml" />
     <None Include="Topics\Hydra_Creation_tool.aml" />
     <None Include="Topics\HydraSettingsSecurityEditor.aml" />
