@@ -60,21 +60,21 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Load(SettingsStorage settings)
+		public override void Load(SettingsStorage storage)
 		{
-			base.Load(settings);
+			base.Load(storage);
 
-			_line1.LoadNotNull(settings, "line1");
-			_line2.LoadNotNull(settings, "line2");
+			_line1.LoadNotNull(storage, "line1");
+			_line2.LoadNotNull(storage, "line2");
 		}
 
 		/// <inheritdoc />
-		public override void Save(SettingsStorage settings)
+		public override void Save(SettingsStorage storage)
 		{
-			base.Save(settings);
+			base.Save(storage);
 
-			settings.SetValue("line1", _line1.Save());
-			settings.SetValue("line2", _line2.Save());
+			storage.SetValue("line1", _line1.Save());
+			storage.SetValue("line2", _line2.Save());
 		}
 	}
 }

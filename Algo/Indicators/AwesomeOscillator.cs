@@ -94,23 +94,23 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Load(SettingsStorage settings)
+		public override void Load(SettingsStorage storage)
 		{
-			base.Load(settings);
+			base.Load(storage);
 
-			LongMa.LoadNotNull(settings, nameof(LongMa));
-			ShortMa.LoadNotNull(settings, nameof(ShortMa));
-			MedianPrice.LoadNotNull(settings, nameof(MedianPrice));
+			LongMa.LoadNotNull(storage, nameof(LongMa));
+			ShortMa.LoadNotNull(storage, nameof(ShortMa));
+			MedianPrice.LoadNotNull(storage, nameof(MedianPrice));
 		}
 
 		/// <inheritdoc />
-		public override void Save(SettingsStorage settings)
+		public override void Save(SettingsStorage storage)
 		{
-			base.Save(settings);
+			base.Save(storage);
 
-			settings.SetValue(nameof(LongMa), LongMa.Save());
-			settings.SetValue(nameof(ShortMa), ShortMa.Save());
-			settings.SetValue(nameof(MedianPrice), MedianPrice.Save());
+			storage.SetValue(nameof(LongMa), LongMa.Save());
+			storage.SetValue(nameof(ShortMa), ShortMa.Save());
+			storage.SetValue(nameof(MedianPrice), MedianPrice.Save());
 		}
 	}
 }

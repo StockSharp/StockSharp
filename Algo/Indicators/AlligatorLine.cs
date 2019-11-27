@@ -91,17 +91,17 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Load(SettingsStorage settings)
+		public override void Load(SettingsStorage storage)
 		{
-			base.Load(settings);
-			Shift = settings.GetValue<int>(nameof(Shift));
+			base.Load(storage);
+			Shift = storage.GetValue<int>(nameof(Shift));
 		}
 
 		/// <inheritdoc />
-		public override void Save(SettingsStorage settings)
+		public override void Save(SettingsStorage storage)
 		{
-			base.Save(settings);
-			settings.SetValue(nameof(Shift), Shift);
+			base.Save(storage);
+			storage.SetValue(nameof(Shift), Shift);
 		}
 	}
 }

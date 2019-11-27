@@ -161,9 +161,19 @@
 				<p>Менеджер параметров риска стратегии.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Algo.Server">
+			<summary>
+				<p>Компоненты серверной части.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Algo.Storages">
 			<summary>
 				<p>Механизмы сохранения и загрузки маркет данных.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Storages.Remote">
+			<summary>
+				<p>Механизмы удаленного сохранения и загрузки маркет данных.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Expressions">
@@ -194,6 +204,11 @@
 		<member name="N:StockSharp.Algo.Strategies.Reporting">
 			<summary>
 				<p>Отчеты работы стратегии.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Strategies.Messages">
+			<summary>
+				<p>Сообщения для работы со стратегиями.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Strategies.Testing">
@@ -496,6 +511,16 @@
 				<p>Классы для нативного API FIX протокола.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Fix.Dialects.Moex.Asts">
+			<summary>
+				<p>Диалекты FIX протокола Московской бирже валютной и спот секций.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Fix.Dialects.Moex.Spectra">
+			<summary>
+				<p>Диалекты FIX протокола Московской бирже срочной секции.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Rithmic">
 			<summary>
 				<p>Коннектор к торговой системе Rithmic.</p>
@@ -691,9 +716,209 @@
 				<p>Коннектор к крипто-бирже OKEx.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Bibox">
+			<summary>
+				<p>Коннектор к крипто-бирже Bibox.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Bitbank">
+			<summary>
+				<p>Коннектор к крипто-бирже Bitbank.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.BitMax">
+			<summary>
+				<p>Коннектор к крипто-бирже BitMax.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.BitZ">
+			<summary>
+				<p>Коннектор к крипто-бирже BitZ.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.BW">
+			<summary>
+				<p>Коннектор к крипто-бирже BW.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.CoinBene">
+			<summary>
+				<p>Коннектор к крипто-бирже CoinBene.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.CoinCap">
+			<summary>
+				<p>Коннектор к крипто-сервису CoinCap.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.CoinEx">
+			<summary>
+				<p>Коннектор к крипто-бирже CoinEx.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.CoinHub">
+			<summary>
+				<p>Коннектор к крипто-бирже CoinHub.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Coinigy">
+			<summary>
+				<p>Коннектор к крипто-сервису Coinigy.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Digifinex">
+			<summary>
+				<p>Коннектор к крипто-бирже Digifinex.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.FatBTC">
+			<summary>
+				<p>Коннектор к крипто-бирже FatBTC.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Gopax">
+			<summary>
+				<p>Коннектор к крипто-бирже GOPAX.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Hotbit">
+			<summary>
+				<p>Коннектор к крипто-бирже HotBIT.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Idax">
+			<summary>
+				<p>Коннектор к крипто-бирже IDAX.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.LATOKEN">
+			<summary>
+				<p>Коннектор к крипто-бирже LATOKEN.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.LBank">
+			<summary>
+				<p>Коннектор к крипто-бирже LBank.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Quoinex">
+			<summary>
+				<p>Коннектор к крипто-бирже Quoinex.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.TradeOgre">
+			<summary>
+				<p>Коннектор к крипто-бирже TradeOgre.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Upbit">
+			<summary>
+				<p>Коннектор к крипто-бирже Upbit.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Zaif">
+			<summary>
+				<p>Коннектор к крипто-бирже Zaif.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.ZB">
+			<summary>
+				<p>Коннектор к крипто-бирже ZB.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Tradier">
+			<summary>
+				<p>Коннектор к брокеру Tradier.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xignite">
+			<summary>
+				<p>Коннектор к сервису Xignite.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.BarChart">
 			<summary>
 				<p>Реализация шлюза для взаимодействия с BarChart для скачивания исторических и реал-тайм маркет-данных.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Finam">
+			<summary>
+				<p>Коннектор к историческим данных сайта Finam.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Mfd">
+			<summary>
+				<p>Коннектор к историческим данных сайта MFD.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.AlorHistory">
+			<summary>
+				<p>Коннектор к историческим данных сайта Alor.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.DukasCopy">
+			<summary>
+				<p>Коннектор к историческим данных сайта DukasCopy.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.GainCapital">
+			<summary>
+				<p>Коннектор к историческим данных сайта GainCapital.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.MBTrading">
+			<summary>
+				<p>Коннектор к историческим данных сайта MBTrading.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Google">
+			<summary>
+				<p>Коннектор к историческим данных сайта Google Finance.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Yahoo">
+			<summary>
+				<p>Коннектор к историческим данных сайта Yahoo Finance.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.RtsHistory">
+			<summary>
+				<p>Коннектор к историческим данных биржи RTS.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.FinViz">
+			<summary>
+				<p>Коннектор к историческим данных сайта FinViz.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.MoexLchi">
+			<summary>
+				<p>Коннектор к историческим данных сайта ЛЧИ.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Quandl">
+			<summary>
+				<p>Коннектор к историческим данных сайта Quandl.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.TrueFX">
+			<summary>
+				<p>Коннектор к историческим данных сайта TrueFX.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.UrkExh">
+			<summary>
+				<p>Коннектор к историческим данных сайта UrkExh.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.AlphaVantage">
+			<summary>
+				<p>Коннектор к бирже AlphaVantage.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.IEX">
+			<summary>
+				<p>Коннектор к бирже IEX.</p>
 			</summary>
 		</member>
 	</members>

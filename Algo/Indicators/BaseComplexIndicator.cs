@@ -115,9 +115,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Save(SettingsStorage settings)
+		public override void Save(SettingsStorage storage)
 		{
-			base.Save(settings);
+			base.Save(storage);
 
 			var index = 0;
 
@@ -125,21 +125,21 @@ namespace StockSharp.Algo.Indicators
 			{
 				var innerSettings = new SettingsStorage();
 				indicator.Save(innerSettings);
-				settings.SetValue(indicator.Name + index, innerSettings);
+				storage.SetValue(indicator.Name + index, innerSettings);
 				index++;
 			}
 		}
 
 		/// <inheritdoc />
-		public override void Load(SettingsStorage settings)
+		public override void Load(SettingsStorage storage)
 		{
-			base.Load(settings);
+			base.Load(storage);
 
 			var index = 0;
 
 			foreach (var indicator in InnerIndicators)
 			{
-				indicator.Load(settings.GetValue<SettingsStorage>(indicator.Name + index));
+				indicator.Load(storage.GetValue<SettingsStorage>(indicator.Name + index));
 				index++;
 			}
 		}

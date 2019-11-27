@@ -19,9 +19,9 @@ namespace StockSharp.Algo
 		private static readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
 		/// <summary>
-		/// 
+		/// Exchanges and trading boards provider.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Exchanges and trading boards provider.</returns>
 		public static IExchangeInfoProvider EnsureGetExchangeInfoProvider() => ConfigManager.TryGetService<IExchangeInfoProvider>() ?? _exchangeInfoProvider;
 
 		/// <summary>

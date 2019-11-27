@@ -44,44 +44,44 @@ namespace StockSharp.Algo.Storages
 		public event Action<string, Guid, bool> Changed;
 
 		/// <inheritdoc />
-		public Guid? TryGetAdapter(string portfolioName)
+		public Guid? TryGetAdapter(string key)
 		{
-			if (portfolioName.IsEmpty())
-				throw new ArgumentNullException(nameof(portfolioName));
+			if (key.IsEmpty())
+				throw new ArgumentNullException(nameof(key));
 
-			return _adapters.TryGetValue2(portfolioName);
+			return _adapters.TryGetValue2(key);
 		}
 
 		/// <inheritdoc />
-		public bool SetAdapter(string portfolioName, Guid adapterId)
+		public bool SetAdapter(string key, Guid adapterId)
 		{
 			if (adapterId.IsDefault())
 				throw new ArgumentNullException(nameof(adapterId));
 
 			lock (_adapters.SyncRoot)
 			{
-				var prev = TryGetAdapter(portfolioName);
+				var prev = TryGetAdapter(key);
 
 				if (prev == adapterId)
 					return false;
 
-				_adapters[portfolioName] = adapterId;
+				_adapters[key] = adapterId;
 			}
 
-			Changed?.Invoke(portfolioName, adapterId, true);
+			Changed?.Invoke(key, adapterId, true);
 			return true;
 		}
 
 		/// <inheritdoc />
-		public bool RemoveAssociation(string portfolioName)
+		public bool RemoveAssociation(string key)
 		{
-			if (portfolioName.IsEmpty())
-				throw new ArgumentNullException(nameof(portfolioName));
+			if (key.IsEmpty())
+				throw new ArgumentNullException(nameof(key));
 
-			if (!_adapters.Remove(portfolioName))
+			if (!_adapters.Remove(key))
 				return false;
 
-			Changed?.Invoke(portfolioName, Guid.Empty, false);
+			Changed?.Invoke(key, Guid.Empty, false);
 			return true;
 		}
 	}

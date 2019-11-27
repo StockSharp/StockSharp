@@ -4,8 +4,9 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Security route response message.
+	/// Base route response message.
 	/// </summary>
+	/// <typeparam name="TMessage">Message type.</typeparam>
 	[Serializable]
 	[DataContract]
 	public abstract class BaseRouteMessage<TMessage> : BaseResultMessage<TMessage>

@@ -52,17 +52,17 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Load(SettingsStorage settings)
+		public override void Load(SettingsStorage storage)
 		{
-			base.Load(settings);
-			Width = settings.GetValue<decimal>(nameof(Width));
+			base.Load(storage);
+			Width = storage.GetValue<decimal>(nameof(Width));
 		}
 
 		/// <inheritdoc />
-		public override void Save(SettingsStorage settings)
+		public override void Save(SettingsStorage storage)
 		{
-			base.Save(settings);
-			settings.SetValue(nameof(Width), Width);
+			base.Save(storage);
+			storage.SetValue(nameof(Width), Width);
 		}
 	}
 }

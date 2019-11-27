@@ -89,17 +89,17 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Load(SettingsStorage settings)
+		public override void Load(SettingsStorage storage)
 		{
-			base.Load(settings);
-			SqrtPeriod = settings.GetValue<int>(nameof(SqrtPeriod));
+			base.Load(storage);
+			SqrtPeriod = storage.GetValue<int>(nameof(SqrtPeriod));
 		}
 
 		/// <inheritdoc />
-		public override void Save(SettingsStorage settings)
+		public override void Save(SettingsStorage storage)
 		{
-			base.Save(settings);
-			settings.SetValue(nameof(SqrtPeriod), SqrtPeriod);
+			base.Save(storage);
+			storage.SetValue(nameof(SqrtPeriod), SqrtPeriod);
 		}
 	}
 }
