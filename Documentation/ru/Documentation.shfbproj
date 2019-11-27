@@ -364,7 +364,7 @@
     <None Include="Topics\LCI.aml" />
     <None Include="Topics\UX.aml" />
     <None Include="Topics\BarChartSample.aml" />
-    <None Include="Topics\API_GUI_Settings_РТС.aml" />
+    <None Include="Topics\API_GUI_Settings_RTS.aml" />
     <None Include="Topics\API_GUI_Settings_ZB.COM.aml" />
     <None Include="Topics\API_GUI_Settings_Zaif.aml" />
     <None Include="Topics\API_GUI_Settings_Yobit.aml" />
@@ -4669,9 +4669,9 @@
       <ImageId>API_GUI_Settings_SmartCOM (ITI Capital)</ImageId>
       <AlternateText>API GUI Settings SmartCOM (ITI Capital)</AlternateText>
     </Image>
-    <Image Include="Art\API_GUI_Settings_РТС.png">
-      <ImageId>API_GUI_Settings_РТС</ImageId>
-      <AlternateText>API GUI Settings РТС</AlternateText>
+    <Image Include="Art\API_GUI_Settings_RTS.png">
+      <ImageId>API_GUI_Settings_RTS</ImageId>
+      <AlternateText>API GUI Settings RTS</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_Quik LUA Transactions.png">
       <ImageId>API_GUI_Settings_Quik LUA Transactions</ImageId>
