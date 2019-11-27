@@ -26,9 +26,9 @@ orders), which will be executed when the <legacyBold>Risk-rule</legacyBold> cond
 <listItem><para><legacyBold>Position</legacyBold> – the risk-rule that monitors the position size.</para></listItem>
 <listItem><para><legacyBold>Position (time</legacyBold> – the risk-rule that monitors the lifetime of a position.</para></listItem>
 <listItem><para><legacyBold>Slippage</legacyBold> – the risk-rule that monitors the slippage size.</para></listItem>
-<listItem><para><legacyBold>Trade (volume)</legacyBold> – the risk-rule that monitors the frequency of trades.</para></listItem>
+<listItem><para><legacyBold>Trade (volume)</legacyBold> – the risk-rule that monitors the trade volume.</para></listItem>
 <listItem><para><legacyBold>Trade (price)</legacyBold> – the risk-rule that monitors the trade price.</para></listItem>
-<listItem><para><legacyBold>Trade (frequency)</legacyBold> – the risk-rule that monitors the trade volume.</para></listItem>
+<listItem><para><legacyBold>Trade (frequency)</legacyBold> – the risk-rule that monitors the frequency of trades.</para></listItem>
 </list>
   </definition>
 </definitionTable>
