@@ -1888,23 +1888,28 @@
     </member>
     <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.OkCommand">
       <summary>
-      </summary>
+            OK command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.AddCommand">
       <summary>
-      </summary>
+            Add credentials command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.RemoveCommand">
       <summary>
-      </summary>
+            Remove credentials command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.SelectAllCommand">
       <summary>
-      </summary>
+            Select all credentials command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.UnSelectAllCommand">
       <summary>
-      </summary>
+            Un select all credentials command.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.PermissionCredentialsWindow.#ctor">
       <summary>
@@ -2204,19 +2209,23 @@
     </member>
     <member name="F:StockSharp.Xaml.ImportSettingsPanel.SelectFieldCommand">
       <summary>
-      </summary>
+            Select field command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.ImportSettingsPanel.UnselectFieldCommand">
       <summary>
-      </summary>
+            Unselect field command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.ImportSettingsPanel.MoveUpFieldCommand">
       <summary>
-      </summary>
+            Move up field command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.ImportSettingsPanel.MoveDownFieldCommand">
       <summary>
-      </summary>
+            Move down field command.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.ImportSettingsPanel.#ctor">
       <summary>
@@ -2762,23 +2771,28 @@
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.StartCommand">
       <summary>
-      </summary>
+            Start strategy command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.StopCommand">
       <summary>
-      </summary>
+            Stop strategy command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.ClosePositionCommand">
       <summary>
-      </summary>
+            Close position for selected strategy command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.RevertPositionCommand">
       <summary>
-      </summary>
+            Revert position for selected strategy command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.RiskRulesCommand">
       <summary>
-      </summary>
+            Risk management for selected strategy command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.SecurityProviderProperty">
       <summary>
@@ -2948,7 +2962,8 @@
     </member>
     <member name="F:StockSharp.Xaml.QuestionWindow.OkCommand">
       <summary>
-      </summary>
+            OK command.
+            </summary>
     </member>
     <member name="P:StockSharp.Xaml.QuestionWindow.Link">
       <summary>
@@ -2984,7 +2999,8 @@
     </member>
     <member name="F:StockSharp.Xaml.SecurityLookupWindow.OkCommand">
       <summary>
-      </summary>
+            OK command.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.SecurityLookupWindow.#ctor">
       <summary>
@@ -3767,7 +3783,8 @@
     </member>
     <member name="F:StockSharp.Xaml.SecretWindow.OkCommand">
       <summary>
-      </summary>
+            OK command.
+            </summary>
     </member>
     <member name="P:StockSharp.Xaml.SecretWindow.Secret">
       <summary>

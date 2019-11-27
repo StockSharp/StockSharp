@@ -189,19 +189,17 @@
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixServer.TryAddSecurityCode(System.String)">
       <summary>
-      </summary>
-      <param name="secCode">
-      </param>
-      <returns>
-      </returns>
+            Попытаться добавить код инструмента.
+            </summary>
+      <param name="secCode">Код инструмента.</param>
+      <returns>Результат.</returns>
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixServer.TryGetSecurityCode(System.String)">
       <summary>
-      </summary>
-      <param name="secCode">
-      </param>
-      <returns>
-      </returns>
+            Попытаться получить код инструмента.
+            </summary>
+      <param name="secCode">Код инструмента.</param>
+      <returns>Код инструмента.</returns>
     </member>
     <member name="T:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter">
       <summary>

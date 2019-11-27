@@ -5771,8 +5771,8 @@ M:StockSharp.Algo.Indicators.ShiftedIndicatorValue.IsSupport(System.Type)/inheri
 M:StockSharp.Algo.Indicators.ShiftedIndicatorValue.GetValue``1/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.ShiftedIndicatorValue.SetValue``1(StockSharp.Algo.Indicators.IIndicator,``0)/inheritdoc;DocStr8459
 T:StockSharp.Algo.ServicesRegistry/summary;DocStr10880
-M:StockSharp.Algo.ServicesRegistry.EnsureGetExchangeInfoProvider/summary;DocStr8459
-M:StockSharp.Algo.ServicesRegistry.EnsureGetExchangeInfoProvider/returns;DocStr8459
+M:StockSharp.Algo.ServicesRegistry.EnsureGetExchangeInfoProvider/summary;DocStr9509
+M:StockSharp.Algo.ServicesRegistry.EnsureGetExchangeInfoProvider/returns;DocStr9509
 P:StockSharp.Algo.ServicesRegistry.ExchangeInfoProvider/summary;DocStr9509
 P:StockSharp.Algo.ServicesRegistry.TryExchangeInfoProvider/summary;DocStr9509
 P:StockSharp.Algo.ServicesRegistry.SecurityStorage/summary;DocStr110

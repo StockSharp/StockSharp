@@ -15821,3 +15821,18 @@ DocStr11449;To create a rule for the event of stopped subscription;Создат�
 DocStr11450;To create a rule for the event of failed subscription;Создать правило для события ошибки подписки
 DocStr11451;Market data subscription goes online message;Сообщение о переходе подписки в онлайн
 DocStr11452;Whether order is placed at best counter party price;Будет ли заявка размещена по лучшей цене контрагента
+DocStr11453;Base route response message;Базовое сообщение ответа маршрутизации
+DocStr11454;OK command;Команда OK
+DocStr11455;Add credentials command;Команда добавления разрешений
+DocStr11456;Remove credentials command;Remove credentials command
+DocStr11457;Select all credentials command;Команда выбора всех разрешений
+DocStr11458;Un select all credentials command;Команда снятия выбора всех разрешений
+DocStr11459;Select field command;Команда выбора поля
+DocStr11460;Unselect field command;Команда снятия выбора поля
+DocStr11461;Move up field command;Команда передвижения поля вверх
+DocStr11462;Move down field command;Команда передвижения поля вниз
+DocStr11463;Start strategy command;Команда запуска стратегии
+DocStr11464;Stop strategy command;Команда остановки стратегии
+DocStr11465;Close position for selected strategy command;Команда закрытия позиции для выбранной стратегии
+DocStr11466;Revert position for selected strategy command;Команда переворота позиции для выбранной стратегии
+DocStr11467;Risk management for selected strategy command;Команда риск-менеджмента для выбранной стратегии

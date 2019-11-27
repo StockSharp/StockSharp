@@ -12191,8 +12191,7 @@
       <param name="settlecode">Код расчетов по сделке.</param>
       <param name="discount">Дисконт в процентах.</param>
       <param name="repoterm">Срок РЕПО - промежуток времени, выраженный в календарных днях, между датами исполнения первой и второй частей сделки РЕПО. Срок РЕПО исчисляется со дня, следующего за днем исполнения первой части сделки РЕПО, до дня исполнения второй части сделки РЕПО включительно.</param>
-      <param name="decimals">
-      </param>
+      <param name="decimals">Количество знаков после запятой.</param>
       <returns>Указатель на таблицу 'Ценовые границы'.</returns>
     </member>
     <member name="M:StockSharp.Micex.Native.MicexClient.ReadPricemovelimitTable(StockSharp.Micex.Native.MicexPtrReader)">
