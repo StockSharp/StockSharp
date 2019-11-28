@@ -1,4 +1,4 @@
-namespace SampleConnectionWithStorage
+namespace SampleConnection
 {
 	using System;
 	using System.ComponentModel;
