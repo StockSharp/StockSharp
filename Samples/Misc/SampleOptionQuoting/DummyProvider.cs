@@ -240,7 +240,7 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeMarketData(Security security, MarketDataMessage message)
+		long IMarketDataProvider.SubscribeMarketData(Security security, MarketDataMessage message)
 		{
 			throw new NotSupportedException();
 		}
@@ -250,7 +250,7 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeMarketData(MarketDataMessage message)
+		long IMarketDataProvider.SubscribeMarketData(MarketDataMessage message)
 		{
 			throw new NotSupportedException();
 		}
@@ -260,7 +260,7 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter)
+		long IMarketDataProvider.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
@@ -270,7 +270,7 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.RegisterFilteredMarketDepth(Security security)
+		long IMarketDataProvider.RegisterFilteredMarketDepth(Security security)
 		{
 			throw new NotSupportedException();
 		}
@@ -280,7 +280,7 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
+		long IMarketDataProvider.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
@@ -290,7 +290,7 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeLevel1(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
+		long IMarketDataProvider.SubscribeLevel1(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
@@ -300,7 +300,7 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		long IMarketDataProvider.SubscribeOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
@@ -310,7 +310,7 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeNews(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		long IMarketDataProvider.SubscribeNews(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
@@ -320,12 +320,17 @@ namespace SampleOptionQuoting
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.SubscribeBoard(ExchangeBoard board, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		long IMarketDataProvider.SubscribeBoard(ExchangeBoard board, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
 		{
 			throw new NotSupportedException();
 		}
 
 		void IMarketDataProvider.UnSubscribeBoard(ExchangeBoard board)
+		{
+			throw new NotSupportedException();
+		}
+
+		void IMarketDataProvider.UnSubscribe(long subscriptionId)
 		{
 			throw new NotSupportedException();
 		}
