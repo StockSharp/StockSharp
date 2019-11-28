@@ -137,7 +137,7 @@ namespace StockSharp.Algo
 
 			public IEnumerable<CandleSeries> SubscribedCandleSeries => Subscriptions.Select(s => s.CandleSeries).Where(p => p != null);
 
-			private SubscriptionInfo TryGetInfo(long id, bool remove, DateTimeOffset? time = null)
+			private SubscriptionInfo TryGetInfo(long id, bool remove, DateTimeOffset? time = null, bool addLog = true)
 			{
 				lock (_syncObject)
 				{
@@ -155,7 +155,9 @@ namespace StockSharp.Algo
 					}
 				}
 
-				_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
+				if (addLog)
+					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
+
 				return null;
 			}
 
@@ -220,7 +222,7 @@ namespace StockSharp.Algo
 
 			public Subscription ProcessResponse(MarketDataMessage response, out MarketDataMessage originalMsg, out bool unexpectedCancelled)
 			{
-				var addLog = false;
+				originalMsg = null;
 
 				try
 				{
@@ -230,7 +232,6 @@ namespace StockSharp.Algo
 
 						if (!_requests.TryGetValue(response.OriginalTransactionId, out var tuple))
 						{
-							addLog = true;
 							originalMsg = null;
 							return null;
 						}
@@ -240,8 +241,14 @@ namespace StockSharp.Algo
 						originalMsg = (MarketDataMessage)tuple.Item1;
 
 						var info = originalMsg.IsSubscribe
-							? TryGetInfo(originalMsg.TransactionId, false)
-							: TryGetInfo(originalMsg.OriginalTransactionId, true);
+							? TryGetInfo(originalMsg.TransactionId, false, addLog: false)
+							: TryGetInfo(originalMsg.OriginalTransactionId, true, addLog: false);
+
+						if (info == null)
+						{
+							originalMsg = null;
+							return null;
+						}
 
 						if (originalMsg.IsSubscribe)
 						{
@@ -265,7 +272,7 @@ namespace StockSharp.Algo
 				}
 				finally
 				{
-					if (addLog)
+					if (originalMsg == null)
 						_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, response.OriginalTransactionId);
 				}
 			}
