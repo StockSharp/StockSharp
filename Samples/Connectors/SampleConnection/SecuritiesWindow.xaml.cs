@@ -21,7 +21,7 @@ namespace SampleConnection
 
 	public partial class SecuritiesWindow
 	{
-		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
+		private readonly SynchronizedDictionary<long, QuotesWindow> _quotesWindows = new SynchronizedDictionary<long, QuotesWindow>();
 		private readonly SynchronizedList<ChartWindow> _chartWindows = new SynchronizedList<ChartWindow>();
 		private bool _initialized;
 
@@ -40,11 +40,7 @@ namespace SampleConnection
 
 		protected override void OnClosed(EventArgs e)
 		{
-			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
-			{
-				w.DeleteHideable();
-				w.Close();
-			}));
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w => w.Close()));
 
 			_chartWindows.SyncDo(c => c.ToArray().ForEach(w =>
 			{
@@ -57,7 +53,7 @@ namespace SampleConnection
 			if (connector != null)
 			{
 				if (_initialized)
-					connector.MarketDepthChanged -= TraderOnMarketDepthChanged;
+					connector.MarketDepthReceived -= TraderOnMarketDepthChanged;
 			}
 
 			base.OnClosed(e);
@@ -105,31 +101,24 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var window = _quotesWindows.SafeAdd(security, s =>
-				{
-					// subscribe on order book flow
-					connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
+				// subscribe on order book flow
+				var id = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
 
-					// create order book window
-					var wnd = new QuotesWindow
-					{
-						Title = security.Id + " " + LocalizedStrings.MarketDepth
-					};
-					wnd.MakeHideable();
-					return wnd;
-				});
-
-				if (window.Visibility == Visibility.Visible)
-					window.Hide();
-				else
+				// create order book window
+				var window = new QuotesWindow
 				{
-					window.Show();
-					window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
-				}
+					Title = security.Id + " " + LocalizedStrings.MarketDepth
+				};
+				window.Closed += (s, e) => connector.UnSubscribe(id);
+
+				window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
+				window.Show();
+
+				_quotesWindows.Add(id, window);
 
 				if (!_initialized)
 				{
-					connector.MarketDepthChanged += TraderOnMarketDepthChanged;
+					connector.MarketDepthReceived += TraderOnMarketDepthChanged;
 					_initialized = true;
 				}
 			}
@@ -189,11 +178,9 @@ namespace SampleConnection
 			}
 		}
 
-		private void TraderOnMarketDepthChanged(MarketDepth depth)
+		private void TraderOnMarketDepthChanged(Subscription subscription, MarketDepth depth)
 		{
-			var wnd = _quotesWindows.TryGetValue(depth.Security);
-
-			if (wnd != null)
+			if (_quotesWindows.TryGetValue(subscription.TransactionId, out var wnd))
 				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 
