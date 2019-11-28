@@ -167,11 +167,12 @@ namespace StockSharp.Algo
 					if (mdMsg.DataType != MarketDataTypes.MarketDepth)
 						break;
 
+					var isFilteredMsg = mdMsg is FilteredMarketDepthMessage;
 					var transId = mdMsg.TransactionId;
 
 					if (mdMsg.IsSubscribe)
 					{
-						if (!(mdMsg is FilteredMarketDepthMessage))
+						if (!isFilteredMsg)
 							break;
 
 						var data = (Tuple<QuoteChangeMessage, ExecutionMessage[]>)mdMsg.Arg;
@@ -203,7 +204,7 @@ namespace StockSharp.Algo
 					}
 					else
 					{
-						MarketDataMessage reply = null;
+						MarketDataMessage reply;
 
 						lock (_syncObject)
 						{
@@ -211,36 +212,41 @@ namespace StockSharp.Algo
 
 							if (info != null)
 							{
-								if (info.Subscriptions.Remove(mdMsg.OriginalTransactionId))
-								{
-									if (info.Subscriptions.Count > 0)
-									{
-										reply = new MarketDataMessage
-										{
-											OriginalTransactionId = transId,
-										};
-									}
-									else
-									{
-										message = new MarketDataMessage
-										{
-											IsSubscribe = false,
-											TransactionId = transId,
-											OriginalTransactionId = info.TransactionId,
-										};
+								info.Subscriptions.Remove(mdMsg.OriginalTransactionId);
 
-										break;
-									}
+								if (info.Subscriptions.Count > 0)
+								{
+									reply = new MarketDataMessage
+									{
+										OriginalTransactionId = transId,
+									};
 								}
+								else
+								{
+									message = new MarketDataMessage
+									{
+										IsSubscribe = false,
+										TransactionId = transId,
+										OriginalTransactionId = info.TransactionId,
+									};
+
+									break;
+								}
+							}
+							else
+							{
+								if (!isFilteredMsg)
+									break;
+
+								reply = new MarketDataMessage
+								{
+									OriginalTransactionId = transId,
+									Error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId)),
+								};
 							}
 						}
 
-						RaiseNewOutMessage(reply ?? new MarketDataMessage
-						{
-							OriginalTransactionId = transId,
-							Error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId)),
-						});
-
+						RaiseNewOutMessage(reply);
 						return;
 					}
 
