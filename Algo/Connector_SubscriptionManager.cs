@@ -94,6 +94,7 @@ namespace StockSharp.Algo
 			private readonly Dictionary<long, Tuple<ISubscriptionMessage, Subscription>> _requests = new Dictionary<long, Tuple<ISubscriptionMessage, Subscription>>();
 			private readonly List<SubscriptionInfo> _finished = new List<SubscriptionInfo>();
 			private readonly List<SubscriptionInfo> _keeped = new List<SubscriptionInfo>();
+			private readonly HashSet<long> _notFound = new HashSet<long>();
 
 			private readonly Connector _connector;
 
@@ -123,6 +124,7 @@ namespace StockSharp.Algo
 					_requests.Clear();
 					_finished.Clear();
 					_keeped.Clear();
+					_notFound.Clear();
 				}
 			}
 
@@ -136,6 +138,12 @@ namespace StockSharp.Algo
 			public IEnumerable<Portfolio> SubscribedPortfolios => Subscriptions.Select(s => s.Portfolio).Where(p => p != null);
 
 			public IEnumerable<CandleSeries> SubscribedCandleSeries => Subscriptions.Select(s => s.CandleSeries).Where(p => p != null);
+
+			private void TryWriteLog(long id)
+			{
+				if (_notFound.Add(id))
+					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
+			}
 
 			private SubscriptionInfo TryGetInfo(long id, bool remove, DateTimeOffset? time = null, bool addLog = true)
 			{
@@ -156,7 +164,7 @@ namespace StockSharp.Algo
 				}
 
 				if (addLog)
-					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
+					TryWriteLog(id);
 
 				return null;
 			}
@@ -273,7 +281,7 @@ namespace StockSharp.Algo
 				finally
 				{
 					if (originalMsg == null)
-						_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, response.OriginalTransactionId);
+						TryWriteLog(response.OriginalTransactionId);
 				}
 			}
 
@@ -455,7 +463,10 @@ namespace StockSharp.Algo
 					lock (_syncObject)
 					{
 						if (!_subscriptions.TryGetValue(subscriptionId, out info))
+						{
+							TryWriteLog(subscriptionId);
 							continue;
+						}
 					}
 
 					if (info.Holder == null)
