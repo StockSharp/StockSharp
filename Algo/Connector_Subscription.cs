@@ -92,18 +92,15 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void RegisterFilteredMarketDepth(Security security)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
 			var quotes = GetMarketDepth(security).ToMessage();
 			var executions = _entityCache
 				.GetOrders(security, OrderStates.Active)
 				.Select(o => o.ToMessage())
 				.ToArray();
 
-			SubscribeMarketData(security, new MarketDataMessage
+			SubscribeMarketData(security, new FilteredMarketDepthMessage
 			{
-				DataType = FilteredMarketDepthAdapter.FilteredMarketDepth,
+				DataType = MarketDataTypes.MarketDepth,
 				IsSubscribe = true,
 				Arg = Tuple.Create(quotes, executions)
 			});
@@ -112,7 +109,12 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void UnRegisterFilteredMarketDepth(Security security)
 		{
-			UnSubscribeMarketData(security, FilteredMarketDepthAdapter.FilteredMarketDepth);
+			var subscription = _subscriptionManager.TryFindFilteredMarketDepth(security);
+
+			if (subscription == null)
+				return;
+
+			UnSubscribe(subscription);
 		}
 
 		/// <inheritdoc />

@@ -463,6 +463,16 @@ namespace StockSharp.Algo
 					yield return Tuple.Create(info.Subscription, candle);
 				}
 			}
+
+			public Subscription TryFindFilteredMarketDepth(Security security)
+			{
+				var subscription = Subscriptions.FirstOrDefault(s => s.SubscriptionMessage is FilteredMarketDepthMessage && s.Security == security);
+
+				if (subscription == null)
+					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, $"Filtered({security?.Id})");
+
+				return subscription;
+			}
 		}
 	}
 }

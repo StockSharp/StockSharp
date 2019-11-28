@@ -1128,10 +1128,9 @@ namespace StockSharp.Algo
 				message.ToMarketDepth(marketDepth, GetSecurity);
 
 				if (!message.IsFiltered)
-				{
 					RaiseMarketDepthChanged(marketDepth);
-					RaiseReceived(marketDepth, message, MarketDepthReceived);
-				}
+
+				RaiseReceived(marketDepth, message, MarketDepthReceived);
 			}
 			else
 			{
