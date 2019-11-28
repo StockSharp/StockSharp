@@ -137,7 +137,6 @@
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			List<QuoteChangeMessage> clones = null;
-			HashSet<long> incrSubscriptionIds = null;
 
 			switch (message.Type)
 			{
@@ -155,11 +154,6 @@
 						if (!_states.TryGetValue(subscriptionId, out var info))
 							continue;
 
-						if (incrSubscriptionIds == null)
-							incrSubscriptionIds = new HashSet<long>();
-
-						incrSubscriptionIds.Add(subscriptionId);
-
 						var newQuoteMsg = ApplyNewState(subscriptionId, info, quoteMsg, state.Value);
 
 						if (newQuoteMsg == null)
@@ -171,18 +165,7 @@
 						clones.Add(newQuoteMsg);
 					}
 
-					if (incrSubscriptionIds != null)
-					{
-						var ids = quoteMsg.GetSubscriptionIds().Except(incrSubscriptionIds).ToArray();
-
-						if (ids.Length > 0)
-						{
-							quoteMsg.SubscriptionId = 0;
-							quoteMsg.SubscriptionIds = ids;
-						}
-						else
-							message = null;
-					}
+					message = null;
 
 					break;
 				}
