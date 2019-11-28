@@ -1336,8 +1336,10 @@ E:StockSharp.Algo.FilterableSecurityProvider.Removed/inheritdoc;DocStr8459
 E:StockSharp.Algo.FilterableSecurityProvider.Cleared/inheritdoc;DocStr8459
 M:StockSharp.Algo.FilterableSecurityProvider.Lookup(StockSharp.Messages.SecurityLookupMessage)/inheritdoc;DocStr8459
 M:StockSharp.Algo.FilterableSecurityProvider.DisposeManaged/summary;DocStr7
+T:StockSharp.Algo.FilteredMarketDepthMessage/summary;DocStr9392
+M:StockSharp.Algo.FilteredMarketDepthMessage.Clone/summary;DocStr643
+M:StockSharp.Algo.FilteredMarketDepthMessage.Clone/returns;DocStr1116
 T:StockSharp.Algo.FilteredMarketDepthAdapter/summary;DocStr9391
-F:StockSharp.Algo.FilteredMarketDepthAdapter.FilteredMarketDepth/summary;DocStr9392
 M:StockSharp.Algo.FilteredMarketDepthAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
 M:StockSharp.Algo.FilteredMarketDepthAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr9208
 M:StockSharp.Algo.FilteredMarketDepthAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

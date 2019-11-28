@@ -15836,3 +15836,4 @@ DocStr11464;Stop strategy command;Команда остановки страте
 DocStr11465;Close position for selected strategy command;Команда закрытия позиции для выбранной стратегии
 DocStr11466;Revert position for selected strategy command;Команда переворота позиции для выбранной стратегии
 DocStr11467;Risk management for selected strategy command;Команда риск-менеджмента для выбранной стратегии
+DocStr11468;Start sending {0} before connection established;Начинать отправлять {0} до установки подключения
