@@ -354,10 +354,11 @@ namespace StockSharp.Algo
 					}
 
 					var sendIn = false;
-					var key = Tuple.Create(dataType, securityId);
 
 					if (isSubscribe)
 					{
+						var key = Tuple.Create(dataType, securityId);
+
 						if (!_subscriptionsByKey.TryGetValue(key, out var info))
 						{
 							sendIn = true;
@@ -384,7 +385,7 @@ namespace StockSharp.Algo
 
 								if (sendIn)
 								{
-									_subscriptionsByKey.Remove(key);
+									_subscriptionsByKey.RemoveByValue(info);
 									_subscriptionsById.Remove(info);
 
 									var originId = message.OriginalTransactionId;
