@@ -75,7 +75,10 @@
 					case QuoteChangeStates.SnapshotStarted:
 					{
 						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
-							this.AddWarningLog($"{currState}->{newState}");
+						{
+							this.AddDebugLog($"{currState}->{newState}");
+							return null;
+						}
 
 						info.First.Clear();
 						info.Second.Clear();
@@ -85,7 +88,10 @@
 					case QuoteChangeStates.SnapshotBuilding:
 					{
 						if (newState != QuoteChangeStates.SnapshotComplete)
-							this.AddWarningLog($"{currState}->{newState}");
+						{
+							this.AddDebugLog($"{currState}->{newState}");
+							return null;
+						}
 
 						break;
 					}
@@ -93,7 +99,10 @@
 					case QuoteChangeStates.Increment:
 					{
 						if (newState == QuoteChangeStates.SnapshotBuilding)
-							this.AddWarningLog($"{currState}->{newState}");
+						{
+							this.AddDebugLog($"{currState}->{newState}");
+							return null;
+						}
 
 						break;
 					}

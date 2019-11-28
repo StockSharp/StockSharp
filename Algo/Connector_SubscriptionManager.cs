@@ -232,6 +232,8 @@ namespace StockSharp.Algo
 			{
 				originalMsg = null;
 
+				SubscriptionInfo info = null;
+
 				try
 				{
 					lock (_syncObject)
@@ -248,7 +250,7 @@ namespace StockSharp.Algo
 
 						originalMsg = (MarketDataMessage)tuple.Item1;
 
-						var info = originalMsg.IsSubscribe
+						info = originalMsg.IsSubscribe
 							? TryGetInfo(originalMsg.TransactionId, false, addLog: false)
 							: TryGetInfo(originalMsg.OriginalTransactionId, true, addLog: false);
 
@@ -282,6 +284,27 @@ namespace StockSharp.Algo
 				{
 					if (originalMsg == null)
 						TryWriteLog(response.OriginalTransactionId);
+					else
+					{
+						if (info != null)
+						{
+							var subscription = info.Subscription;
+
+							if (originalMsg.IsSubscribe)
+							{
+								if (response.IsOk())
+								{
+									_connector.AddInfoLog("Subscription {0} active.", subscription.TransactionId);
+								}
+								else
+								{
+									_connector.AddErrorLog("Subscription {0} error.", subscription.TransactionId);
+								}
+							}
+							else
+								_connector.AddInfoLog("Subscription {0} stopped.", subscription.TransactionId);
+						}
+					}
 				}
 			}
 
