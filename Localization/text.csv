@@ -15819,7 +15819,7 @@ DocStr11447;Subscription provider;Провайдер подписок
 DocStr11448;To create a rule for the event of online subscription;Создать правило для события перехода подписки в состояние онлайн
 DocStr11449;To create a rule for the event of stopped subscription;Создать правило для события остановки подписки
 DocStr11450;To create a rule for the event of failed subscription;Создать правило для события ошибки подписки
-DocStr11451;Market data subscription goes online message;Сообщение о переходе подписки в онлайн
+DocStr11451;Subscription goes online message;Сообщение о переходе подписки в онлайн
 DocStr11452;Whether order is placed at best counter party price;Будет ли заявка размещена по лучшей цене контрагента
 DocStr11453;Base route response message;Базовое сообщение ответа маршрутизации
 DocStr11454;OK command;Команда OK

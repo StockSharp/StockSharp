@@ -1400,8 +1400,8 @@ namespace StockSharp.Algo
 						message = ProcessMarketDataFinished((MarketDataFinishedMessage)message);
 						break;
 
-					case MessageTypes.MarketDataOnline:
-						message = ProcessMarketDataOnline((MarketDataOnlineMessage)message);
+					case MessageTypes.SubscriptionOnline:
+						message = ProcessSubscriptionOnline((SubscriptionOnlineMessage)message);
 						break;
 
 					case MessageTypes.Portfolio:
@@ -1723,7 +1723,7 @@ namespace StockSharp.Algo
 			message.Adapter = underlyingAdapter;
 		}
 
-		private MarketDataOnlineMessage ProcessMarketDataOnline(MarketDataOnlineMessage message)
+		private SubscriptionOnlineMessage ProcessSubscriptionOnline(SubscriptionOnlineMessage message)
 		{
 			var originalTransactionId = message.OriginalTransactionId;
 
@@ -1735,7 +1735,7 @@ namespace StockSharp.Algo
 			if (!needParentResponse)
 				return null;
 
-			return new MarketDataOnlineMessage { OriginalTransactionId = parentId.Value };
+			return new SubscriptionOnlineMessage { OriginalTransactionId = parentId.Value };
 		}
 
 		private MarketDataFinishedMessage ProcessMarketDataFinished(MarketDataFinishedMessage message)

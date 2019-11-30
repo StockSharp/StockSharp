@@ -350,7 +350,7 @@
 								{
 									// reply was sent prev for first partial request,
 									// now sending "online" message
-									message = new MarketDataOnlineMessage
+									message = new SubscriptionOnlineMessage
 									{
 										OriginalTransactionId = originId
 									};
@@ -358,7 +358,7 @@
 							}
 							else
 							{
-								extra = new MarketDataOnlineMessage
+								extra = new SubscriptionOnlineMessage
 								{
 									OriginalTransactionId = originId
 								};

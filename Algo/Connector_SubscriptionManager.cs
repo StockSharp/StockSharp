@@ -467,7 +467,7 @@ namespace StockSharp.Algo
 				return TryGetSubscription(message.OriginalTransactionId, true);
 			}
 
-			public Subscription ProcessMarketDataOnlineMessage(MarketDataOnlineMessage message)
+			public Subscription ProcessSubscriptionOnlineMessage(SubscriptionOnlineMessage message)
 			{
 				var subscription = TryGetSubscription(message.OriginalTransactionId, false);
 

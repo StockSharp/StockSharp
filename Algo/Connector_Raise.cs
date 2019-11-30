@@ -837,10 +837,11 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(subscription));
 
 			var security = subscription.Security;
-			var message = (MarketDataMessage)subscription.SubscriptionMessage;
+			
+			this.AddDebugLog(LocalizedStrings.SubscriptionOnline, security?.Id, subscription.SubscriptionMessage);
 
-			this.AddDebugLog(LocalizedStrings.SubscriptionOnline, security?.Id, message);
-			MarketDataSubscriptionOnline?.Invoke(security, message);
+			if (subscription.SubscriptionMessage is MarketDataMessage mdMsg)
+				MarketDataSubscriptionOnline?.Invoke(security, mdMsg);
 
 			RaiseSubscriptionOnline(subscription);
 		}

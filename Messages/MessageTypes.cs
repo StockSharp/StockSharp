@@ -356,9 +356,9 @@ namespace StockSharp.Messages
 		SecurityMapping,
 
 		/// <summary>
-		/// <see cref="MarketDataOnlineMessage"/>.
+		/// <see cref="SubscriptionOnlineMessage"/>.
 		/// </summary>
-		MarketDataOnline,
+		SubscriptionOnline,
 	}
 
 	/// <summary>

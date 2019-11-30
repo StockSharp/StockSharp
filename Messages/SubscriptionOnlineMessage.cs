@@ -4,31 +4,31 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Market data subscription goes online message.
+	/// Subscription goes online message.
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class MarketDataOnlineMessage : Message, IOriginalTransactionIdMessage
+	public class SubscriptionOnlineMessage : Message, IOriginalTransactionIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Initialize <see cref="MarketDataOnlineMessage"/>.
+		/// Initialize <see cref="SubscriptionOnlineMessage"/>.
 		/// </summary>
-		public MarketDataOnlineMessage()
-			: base(MessageTypes.MarketDataOnline)
+		public SubscriptionOnlineMessage()
+			: base(MessageTypes.SubscriptionOnline)
 		{
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="MarketDataOnlineMessage"/>.
+		/// Create a copy of <see cref="SubscriptionOnlineMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new MarketDataOnlineMessage
+			var clone = new SubscriptionOnlineMessage
 			{
 				OriginalTransactionId = OriginalTransactionId,
 			};
