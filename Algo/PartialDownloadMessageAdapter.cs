@@ -212,7 +212,7 @@
 
 									if (message.Type == MessageTypes.PortfolioLookup)
 									{
-										RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = subscriptionMsg.TransactionId });
+										RaiseNewOutMessage(message.Type.ToResultType().CreateLookupResult(subscriptionMsg.TransactionId));
 									}
 
 									return;
@@ -222,9 +222,13 @@
 									// or sending further only live subscription
 									subscriptionMsg.From = null;
 									subscriptionMsg.To = null;
+
+									_liveRequests.Add(subscriptionMsg.TransactionId, false);
 								}
 							}
 						}
+						else
+							_liveRequests.Add(subscriptionMsg.TransactionId, false);
 					}
 
 					break;
@@ -258,7 +262,7 @@
 									mdMsg.From = null;
 									mdMsg.To = null;
 
-									_liveRequests.Add(mdMsg.TransactionId, true);
+									_liveRequests.Add(mdMsg.TransactionId, false);
 									break;
 								}
 							}
@@ -330,9 +334,45 @@
 		{
 			Message extra = null;
 
-
 			switch (message.Type)
 			{
+				case MessageTypes.PortfolioLookupResult:
+				case MessageTypes.OrderStatus:
+				{
+					var responseMsg = (IOriginalTransactionIdMessage)message;
+					var originId = responseMsg.OriginalTransactionId;
+
+					lock (_syncObject)
+					{
+						if (_liveRequests.TryGetValue(originId, out var isPartial))
+						{
+							_liveRequests.Remove(originId);
+
+							if (isPartial)
+							{
+								if (((IErrorMessage)responseMsg).Error == null)
+								{
+									// reply was sent prev for first partial request,
+									// now sending "online" message
+									message = new SubscriptionOnlineMessage
+									{
+										OriginalTransactionId = originId
+									};
+								}
+							}
+							else
+							{
+								extra = new SubscriptionOnlineMessage
+								{
+									OriginalTransactionId = originId
+								};
+							}
+						}
+					}
+
+					break;
+				}
+
 				case MessageTypes.MarketData:
 				{
 					var responseMsg = (MarketDataMessage)message;
