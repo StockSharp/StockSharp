@@ -1,10 +1,58 @@
 namespace StockSharp.Algo
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
+	using System.Runtime.Serialization;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
+
+	using DataType = StockSharp.Messages.DataType;
+
+	/// <summary>
+	/// Subscription states.
+	/// </summary>
+	[DataContract]
+	[Serializable]
+	public enum SubscriptionStates
+	{
+		/// <summary>
+		/// Stopped.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str3178Key)]
+		Stopped,
+
+		/// <summary>
+		/// Active.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2229Key)]
+		Active,
+
+		/// <summary>
+		/// Error.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str152Key)]
+		Error,
+
+		/// <summary>
+		/// Finished.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FinishedKey)]
+		Finished,
+
+		/// <summary>
+		/// Online.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OnlineKey)]
+		Online,
+	}
 
 	/// <summary>
 	/// Subscription.
@@ -44,6 +92,11 @@ namespace StockSharp.Algo
 		/// Portfolio, describing the trading account and the size of its generated commission.
 		/// </summary>
 		public Portfolio Portfolio { get; }
+
+		/// <summary>
+		/// State.
+		/// </summary>
+		public SubscriptionStates State { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Subscription"/>.

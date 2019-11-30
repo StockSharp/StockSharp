@@ -61,7 +61,6 @@ namespace StockSharp.Algo
 				public Subscription Subscription { get; }
 				public bool KeepAfterFinish { get; }
 				public LookupInfo Lookup { get; }
-				public bool Active { get; set; }
 				public CandlesSeriesHolder Holder { get; }
 
 				public ISubscriptionMessage CreateSubscriptionContinue()
@@ -228,6 +227,12 @@ namespace StockSharp.Algo
 				}
 			}
 
+			private void ChangeState(Subscription subscription, SubscriptionStates state)
+			{
+				_connector.AddInfoLog("Subscription {0} {1}->{2}.", subscription.TransactionId, subscription.State, state);
+				subscription.State = state;
+			}
+
 			public Subscription ProcessResponse(MarketDataMessage response, out MarketDataMessage originalMsg, out bool unexpectedCancelled)
 			{
 				originalMsg = null;
@@ -260,24 +265,30 @@ namespace StockSharp.Algo
 							return null;
 						}
 
+						var subscription = info.Subscription;
+
 						if (originalMsg.IsSubscribe)
 						{
 							if (response.IsOk())
 							{
-								info.Active = true;
+								ChangeState(subscription, SubscriptionStates.Active);
 							}
 							else
 							{
-								_subscriptions.Remove(info.Subscription.TransactionId);
-								unexpectedCancelled = info.Active;
+								ChangeState(subscription, SubscriptionStates.Error);
+
+								_subscriptions.Remove(subscription.TransactionId);
+								unexpectedCancelled = subscription.State == SubscriptionStates.Active;
 							}
 						}
 						else
 						{
-							_subscriptions.Remove(info.Subscription.TransactionId);
+							ChangeState(subscription, SubscriptionStates.Stopped);
+
+							_subscriptions.Remove(subscription.TransactionId);
 						}
 
-						return info.Subscription;
+						return subscription;
 					}
 				}
 				finally
@@ -464,7 +475,12 @@ namespace StockSharp.Algo
 
 			public Subscription ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
 			{
-				return TryGetSubscription(message.OriginalTransactionId, true);
+				var subscription = TryGetSubscription(message.OriginalTransactionId, true);
+
+				if (subscription != null)
+					ChangeState(subscription, SubscriptionStates.Finished);
+
+				return subscription;
 			}
 
 			public Subscription ProcessSubscriptionOnlineMessage(SubscriptionOnlineMessage message)
@@ -472,7 +488,7 @@ namespace StockSharp.Algo
 				var subscription = TryGetSubscription(message.OriginalTransactionId, false);
 
 				if (subscription != null)
-					_connector.AddInfoLog("Subscription {0} online.", subscription.TransactionId);
+					ChangeState(subscription, SubscriptionStates.Online);
 
 				return subscription;
 			}

@@ -131,17 +131,8 @@ namespace StockSharp.Algo
 
 		private class ParentChildMap
 		{
-			private enum States
-			{
-				None,
-				Ok,
-				Error,
-				Finished,
-				Online,
-			}
-
 			private readonly SyncObject _syncObject = new SyncObject();
-			private readonly Dictionary<long, RefTriple<long, States, IMessageAdapter>> _childToParentIds = new Dictionary<long, RefTriple<long, States, IMessageAdapter>>();
+			private readonly Dictionary<long, RefTriple<long, SubscriptionStates, IMessageAdapter>> _childToParentIds = new Dictionary<long, RefTriple<long, SubscriptionStates, IMessageAdapter>>();
 
 			public void AddMapping(long childId, ISubscriptionMessage parentMsg, IMessageAdapter adapter)
 			{
@@ -155,7 +146,7 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException(nameof(adapter));
 
 				lock (_syncObject)
-					_childToParentIds.Add(childId, RefTuple.Create(parentMsg.TransactionId, parentMsg is OrderStatusMessage ? States.Ok : States.None, adapter));
+					_childToParentIds.Add(childId, RefTuple.Create(parentMsg.TransactionId, parentMsg is OrderStatusMessage ? SubscriptionStates.Active : SubscriptionStates.Stopped, adapter));
 			}
 
 			public IDictionary<long, IMessageAdapter> GetChild(long parentId)
@@ -164,10 +155,10 @@ namespace StockSharp.Algo
 					throw new ArgumentOutOfRangeException(nameof(parentId));
 
 				lock (_syncObject)
-					return FilterByParent(parentId).Where(p => p.Value.Second == States.Ok).ToDictionary(p => p.Key, p => p.Value.Third);
+					return FilterByParent(parentId).Where(p => p.Value.Second == SubscriptionStates.Active).ToDictionary(p => p.Key, p => p.Value.Third);
 			}
 
-			private IEnumerable<KeyValuePair<long, RefTriple<long, States, IMessageAdapter>>> FilterByParent(long parentId) => _childToParentIds.Where(p => p.Value.First == parentId);
+			private IEnumerable<KeyValuePair<long, RefTriple<long, SubscriptionStates, IMessageAdapter>>> FilterByParent(long parentId) => _childToParentIds.Where(p => p.Value.First == parentId);
 
 			public long? ProcessChildResponse(long childId, bool isOk, out bool needParentResponse, out bool allError)
 			{
@@ -180,20 +171,20 @@ namespace StockSharp.Algo
 						return null;
 					
 					var parentId = tuple.First;
-					tuple.Second = isOk ? States.Ok : States.Error;
+					tuple.Second = isOk ? SubscriptionStates.Active : SubscriptionStates.Error;
 
 					foreach (var pair in FilterByParent(parentId))
 					{
 						var t = pair.Value;
 
 						// one of adapter still not yet response.
-						if (t.Second == States.None)
+						if (t.Second == SubscriptionStates.Stopped)
 						{
 							needParentResponse = false;
 							break;
 						}
 						
-						if (t.Second != States.Error)
+						if (t.Second != SubscriptionStates.Error)
 							allError = false;
 					}
 
@@ -202,12 +193,12 @@ namespace StockSharp.Algo
 			}
 
 			public long? ProcessChildFinish(long childId, out bool needParentResponse)
-				=> ProcessChild(childId, States.Finished, out needParentResponse);
+				=> ProcessChild(childId, SubscriptionStates.Finished, out needParentResponse);
 
 			public long? ProcessChildOnline(long childId, out bool needParentResponse)
-				=> ProcessChild(childId, States.Online, out needParentResponse);
+				=> ProcessChild(childId, SubscriptionStates.Online, out needParentResponse);
 
-			private long? ProcessChild(long childId, States state, out bool needParentResponse)
+			private long? ProcessChild(long childId, SubscriptionStates state, out bool needParentResponse)
 			{
 				needParentResponse = true;
 
@@ -223,7 +214,7 @@ namespace StockSharp.Algo
 					{
 						var t = pair.Value;
 
-						if (t.Second != States.Error && t.Second != state)
+						if (t.Second != SubscriptionStates.Error && t.Second != state)
 						{
 							needParentResponse = false;
 							break;
