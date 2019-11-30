@@ -341,6 +341,7 @@ namespace StockSharp.Algo
 
 			Message sendInMsg = null;
 			Message sendOutMsg = null;
+			Message onlineMsg = null;
 
 			try
 			{
@@ -375,7 +376,10 @@ namespace StockSharp.Algo
 							_subscriptionsByKey.Add(key, info);
 						}
 						else
+						{
 							sendOutMsg = createSendOut(transId, null);
+							onlineMsg = new SubscriptionOnlineMessage { OriginalTransactionId = transId };
+						}
 
 						_subscriptionsById.Add(transId, info);
 						info.Subscribers.Add(transId);
@@ -430,6 +434,12 @@ namespace StockSharp.Algo
 			{
 				this.AddInfoLog("Out: {0}", sendOutMsg);
 				RaiseNewOutMessage(sendOutMsg);
+			}
+
+			if (onlineMsg != null)
+			{
+				this.AddInfoLog("Out: {0}", onlineMsg);
+				RaiseNewOutMessage(onlineMsg);
 			}
 		}
 
