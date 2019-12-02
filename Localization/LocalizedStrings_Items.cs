@@ -50686,5 +50686,15 @@ namespace StockSharp.Localization
 		/// Hotbit
 		/// </summary>
 		public static string Hotbit => GetString(HotbitKey);
+
+		/// <summary>
+		/// Brasil Bolsa
+		/// </summary>
+		public const string BrasilBolsaKey = nameof(BrasilBolsa);
+
+		/// <summary>
+		/// Brasil Bolsa
+		/// </summary>
+		public static string BrasilBolsa => GetString(BrasilBolsaKey);
 	}
 }
