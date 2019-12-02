@@ -1048,6 +1048,7 @@ M:StockSharp.Algo.Connector.LookupBoards(StockSharp.BusinessEntities.ExchangeBoa
 M:StockSharp.Algo.Connector.LookupBoards(StockSharp.Messages.BoardLookupMessage)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.UnSubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Connector.UnSubscribe(System.Int64)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.SubscribeOrders(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.SubscribeOrders(StockSharp.Messages.OrderStatusMessage)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.UnSubscribeOrders(System.Int64)/inheritdoc;DocStr8459
@@ -3092,6 +3093,7 @@ M:StockSharp.Algo.Strategies.Strategy.SubscribeNews(StockSharp.BusinessEntities.
 M:StockSharp.Algo.Strategies.Strategy.UnSubscribeNews(StockSharp.BusinessEntities.Security)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Strategies.Strategy.SubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.IMessageAdapter)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Strategies.Strategy.UnSubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Strategies.Strategy.UnSubscribe(System.Int64)/inheritdoc;DocStr8459
 T:StockSharp.Algo.Strategies.Analytics.AnalyticsResultTypes/summary;DocStr10072
 F:StockSharp.Algo.Strategies.Analytics.AnalyticsResultTypes.Grid/summary;Str3280
 F:StockSharp.Algo.Strategies.Analytics.AnalyticsResultTypes.Bubble/summary;DocStr10073
@@ -3531,6 +3533,12 @@ P:StockSharp.Algo.Strategies.TimeFrameStrategy.Interval/summary;DocStr1911
 M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnStarted/inheritdoc;DocStr8459
 M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess/summary;DocStr1909
 M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess/returns;DocStr1910
+T:StockSharp.Algo.SubscriptionStates/summary;DocStr11066
+F:StockSharp.Algo.SubscriptionStates.Stopped/summary;Str3178
+F:StockSharp.Algo.SubscriptionStates.Active/summary;DocStr4511
+F:StockSharp.Algo.SubscriptionStates.Error/summary;Str152
+F:StockSharp.Algo.SubscriptionStates.Finished/summary;Finished
+F:StockSharp.Algo.SubscriptionStates.Online/summary;Online
 T:StockSharp.Algo.Subscription/summary;DocStr11068
 P:StockSharp.Algo.Subscription.Security/summary;DocStr2831
 P:StockSharp.Algo.Subscription.DataType/summary;DocStr8490
@@ -3538,6 +3546,7 @@ P:StockSharp.Algo.Subscription.SubscriptionMessage/summary;DocStr11420
 P:StockSharp.Algo.Subscription.TransactionId/summary;DocStr3166
 P:StockSharp.Algo.Subscription.CandleSeries/summary;CandlesSeries
 P:StockSharp.Algo.Subscription.Portfolio/summary;Str541
+P:StockSharp.Algo.Subscription.State/summary;State
 M:StockSharp.Algo.Subscription.#ctor(StockSharp.Messages.DataType,StockSharp.BusinessEntities.Security)/summary;DocStr1
 M:StockSharp.Algo.Subscription.#ctor(StockSharp.Messages.DataType,StockSharp.BusinessEntities.Security)/param/dataType;DocStr8490
 M:StockSharp.Algo.Subscription.#ctor(StockSharp.Messages.DataType,StockSharp.BusinessEntities.Security)/param/security;DocStr2831

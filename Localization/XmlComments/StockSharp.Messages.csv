@@ -1132,12 +1132,12 @@ M:StockSharp.Messages.OrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.Secur
 M:StockSharp.Messages.OrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 M:StockSharp.Messages.OrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.QuoteChangeMessage)/summary;DocStr1
 M:StockSharp.Messages.OrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.QuoteChangeMessage)/param/depth;DocStr4444
-T:StockSharp.Messages.MarketDataOnlineMessage/summary;DocStr11451
-P:StockSharp.Messages.MarketDataOnlineMessage.OriginalTransactionId/inheritdoc;DocStr8459
-M:StockSharp.Messages.MarketDataOnlineMessage.#ctor/summary;DocStr93
-M:StockSharp.Messages.MarketDataOnlineMessage.Clone/summary;DocStr643
-M:StockSharp.Messages.MarketDataOnlineMessage.Clone/returns;DocStr1116
-M:StockSharp.Messages.MarketDataOnlineMessage.ToString/inheritdoc;DocStr8459
+T:StockSharp.Messages.SubscriptionOnlineMessage/summary;DocStr11451
+P:StockSharp.Messages.SubscriptionOnlineMessage.OriginalTransactionId/inheritdoc;DocStr8459
+M:StockSharp.Messages.SubscriptionOnlineMessage.#ctor/summary;DocStr93
+M:StockSharp.Messages.SubscriptionOnlineMessage.Clone/summary;DocStr643
+M:StockSharp.Messages.SubscriptionOnlineMessage.Clone/returns;DocStr1116
+M:StockSharp.Messages.SubscriptionOnlineMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.MessagePriorityQueue/summary;DocStr9143
 M:StockSharp.Messages.MessagePriorityQueue.#ctor/summary;DocStr1
 M:StockSharp.Messages.MessagePriorityQueue.TryDequeue(StockSharp.Messages.Message@,System.Boolean,System.Boolean)/summary;DocStr8459
@@ -1357,7 +1357,7 @@ F:StockSharp.Messages.MessageTypes.PortfolioRouteListRequest/summary;DocStr608
 F:StockSharp.Messages.MessageTypes.PortfolioRoute/summary;DocStr608
 F:StockSharp.Messages.MessageTypes.PortfolioRouteListFinished/summary;DocStr608
 F:StockSharp.Messages.MessageTypes.SecurityMapping/summary;DocStr608
-F:StockSharp.Messages.MessageTypes.MarketDataOnline/summary;DocStr608
+F:StockSharp.Messages.MessageTypes.SubscriptionOnline/summary;DocStr608
 T:StockSharp.Messages.MessageTypeInfo/summary;DocStr11352
 P:StockSharp.Messages.MessageTypeInfo.Type/summary;DocStr9
 P:StockSharp.Messages.MessageTypeInfo.IsMarketData/summary;DocStr11351
