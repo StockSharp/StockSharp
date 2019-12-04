@@ -18,6 +18,7 @@ M:StockSharp.Okex.OkexOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Okex.OkexOrderCondition.Leverage/summary;Leverage
 P:StockSharp.Okex.OkexOrderCondition.PostOnly/summary;PostOnlyOrder
 P:StockSharp.Okex.OkexOrderCondition.MatchPrice/summary;DocStr11452
+P:StockSharp.Okex.OkexOrderCondition.ClosePosition/summary;DocStr11471
 T:StockSharp.Okex.OkexTrader/summary;DocStr2539
 M:StockSharp.Okex.OkexTrader.#ctor/summary;DocStr1
 P:StockSharp.Okex.OkexTrader.Key/summary;Str3304

@@ -1470,6 +1470,7 @@ P:StockSharp.Messages.OrderMessage.UserOrderId/summary;Str166
 P:StockSharp.Messages.OrderMessage.BrokerCode/summary;Str2619
 P:StockSharp.Messages.OrderMessage.ClientCode/summary;ClientCodeDesc
 P:StockSharp.Messages.OrderMessage.Condition/summary;Str155
+P:StockSharp.Messages.OrderMessage.Comment/summary;Str136
 M:StockSharp.Messages.OrderMessage.CopyTo(StockSharp.Messages.OrderMessage)/summary;DocStr629
 M:StockSharp.Messages.OrderMessage.CopyTo(StockSharp.Messages.OrderMessage)/param/destination;DocStr630
 M:StockSharp.Messages.OrderMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
@@ -1486,7 +1487,6 @@ P:StockSharp.Messages.OrderRegisterMessage.Price/summary;Str1341
 P:StockSharp.Messages.OrderRegisterMessage.Volume/summary;OrderVolume
 P:StockSharp.Messages.OrderRegisterMessage.VisibleVolume/summary;Str127
 P:StockSharp.Messages.OrderRegisterMessage.Side/summary;Str129
-P:StockSharp.Messages.OrderRegisterMessage.Comment/summary;Str136
 P:StockSharp.Messages.OrderRegisterMessage.TillDate/summary;DocStr2918
 P:StockSharp.Messages.OrderRegisterMessage.TillDate/remarks;DocStr4284
 P:StockSharp.Messages.OrderRegisterMessage.TimeInForce/summary;Str232

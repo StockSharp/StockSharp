@@ -15838,3 +15838,7 @@ DocStr11465;Close position for selected strategy command;Команда закр
 DocStr11466;Revert position for selected strategy command;Команда переворота позиции для выбранной стратегии
 DocStr11467;Risk management for selected strategy command;Команда риск-менеджмента для выбранной стратегии
 DocStr11468;Start sending {0} before connection established;Начинать отправлять {0} до установки подключения
+DocStr11469;Write extra parameters for {0} message;Записать дополнительные параметры для сообщения {0}
+DocStr11470;Resets Market Protections;Сбросить защиту рынком
+DocStr11471;Indicates whether the resulting position after a trade should be a closing position;Указывает, должна ли результирующая позиция после сделки быть закрывающей позицией
+DocStr11472;Indicates additional order instruction;Указывает на дополнительную инструкцию заявки

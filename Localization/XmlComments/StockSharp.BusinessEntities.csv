@@ -905,11 +905,8 @@ M:StockSharp.BusinessEntities.OrderLogItem.ToString/inheritdoc;DocStr8459
 T:StockSharp.BusinessEntities.Portfolio/summary;Str541
 M:StockSharp.BusinessEntities.Portfolio.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.Portfolio.Name/summary;Str247
-P:StockSharp.BusinessEntities.Portfolio.Leverage/summary;Str261
 P:StockSharp.BusinessEntities.Portfolio.Board/summary;Str544
 P:StockSharp.BusinessEntities.Portfolio.State/summary;Str265
-P:StockSharp.BusinessEntities.Portfolio.CommissionTaker/summary;CommissionTaker
-P:StockSharp.BusinessEntities.Portfolio.CommissionMaker/summary;CommissionMaker
 P:StockSharp.BusinessEntities.Portfolio.AnonymousPortfolio/summary;DocStr2932
 P:StockSharp.BusinessEntities.Portfolio.InternalId/summary;DocStr11281
 M:StockSharp.BusinessEntities.Portfolio.CreateSimulator/summary;DocStr11273
@@ -943,6 +940,9 @@ P:StockSharp.BusinessEntities.Position.Portfolio/summary;Str270
 P:StockSharp.BusinessEntities.Position.Security/summary;Str271
 P:StockSharp.BusinessEntities.Position.DepoName/summary;DocStr2933
 P:StockSharp.BusinessEntities.Position.LimitType/summary;DocStr2934
+P:StockSharp.BusinessEntities.Position.Leverage/summary;Str261
+P:StockSharp.BusinessEntities.Position.CommissionTaker/summary;CommissionTaker
+P:StockSharp.BusinessEntities.Position.CommissionMaker/summary;CommissionMaker
 M:StockSharp.BusinessEntities.Position.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Position.Clone/returns;DocStr1116
 M:StockSharp.BusinessEntities.Position.CopyTo(StockSharp.BusinessEntities.Position)/summary;DocStr2615
