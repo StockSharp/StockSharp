@@ -63,6 +63,7 @@ namespace StockSharp.Algo
 
 		private readonly SubscriptionManager _subscriptionManager;
 
+		private bool _notFirstTimeConnected;
 		private bool _isDisposing;
 
 		/// <summary>
@@ -1122,6 +1123,8 @@ namespace StockSharp.Algo
 		public virtual void ClearCache()
 		{
 			_entityCache.Clear();
+
+			_notFirstTimeConnected = default;
 
 			_prevTime = default;
 			_currentTime = default;

@@ -778,13 +778,15 @@ namespace StockSharp.Algo
 			{
 				if (adapter == Adapter)
 				{
-					if (_subscriptionManager.Subscriptions.Any())
+					if (_notFirstTimeConnected)
 					{
 						if (IsRestoreSubscriptionOnNormalReconnect)
 							_subscriptionManager.ReSubscribeAll();
 					}
 					else
 					{
+						_notFirstTimeConnected = true;
+
 						if (LookupMessagesOnConnect)
 						{
 							_subscriptionManager.Subscribe(new Subscription(DataType.Securities, null), true);
