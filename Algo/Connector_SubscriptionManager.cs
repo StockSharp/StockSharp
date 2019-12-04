@@ -250,8 +250,6 @@ namespace StockSharp.Algo
 			{
 				originalMsg = null;
 
-				SubscriptionInfo info = null;
-
 				try
 				{
 					lock (_syncObject)
@@ -268,7 +266,7 @@ namespace StockSharp.Algo
 
 						originalMsg = (MarketDataMessage)tuple.Item1;
 
-						info = originalMsg.IsSubscribe
+						var info = originalMsg.IsSubscribe
 							? TryGetInfo(originalMsg.TransactionId, false, addLog: false)
 							: TryGetInfo(originalMsg.OriginalTransactionId, true, addLog: false);
 
