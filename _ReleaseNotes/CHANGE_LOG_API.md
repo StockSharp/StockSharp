@@ -282,6 +282,7 @@ StockSharp API Change log
 * (feature) OKEX. MatchPrice supported.
 * (feature) OKEX. Futures, Swap close position operation supported.
 * (feature) FIX connector. BrasilBolsa fix dialect added.
+* (feature) PortfolioGrid. Leverage column added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
