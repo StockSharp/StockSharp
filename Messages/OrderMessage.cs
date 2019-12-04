@@ -86,6 +86,15 @@ namespace StockSharp.Messages
 		public OrderCondition Condition { get; set; }
 
 		/// <summary>
+		/// Placed order comment.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str135Key)]
+		[DescriptionLoc(LocalizedStrings.Str136Key)]
+		[MainCategory]
+		public string Comment { get; set; }
+
+		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
@@ -100,6 +109,7 @@ namespace StockSharp.Messages
 			destination.BrokerCode = BrokerCode;
 			destination.ClientCode = ClientCode;
 			destination.Condition = Condition?.Clone();
+			destination.Comment = Comment;
 		}
 
 		/// <summary>
