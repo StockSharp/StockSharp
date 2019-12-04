@@ -280,6 +280,7 @@ StockSharp API Change log
 * (feature) MarketRuleHelper. Subscription rules.
 * (feature) OKEX. PostOnly order supported.
 * (feature) OKEX. MatchPrice supported.
+* (feature) OKEX. Futures, Swap close position operation supported.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

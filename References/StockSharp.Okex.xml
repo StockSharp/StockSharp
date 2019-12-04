@@ -92,6 +92,11 @@
             Whether order is placed at best counter party price.
             </summary>
         </member>
+        <member name="P:StockSharp.Okex.OkexOrderCondition.ClosePosition">
+            <summary>
+            Indicates whether the resulting position after a trade should be a closing position.
+            </summary>
+        </member>
         <member name="T:StockSharp.Okex.OkexTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Okex"/>.
