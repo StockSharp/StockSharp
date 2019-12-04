@@ -948,6 +948,9 @@ namespace StockSharp.Algo
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
 		{
+			if (!RaiseReceived(message, message, Level1Received))
+				return;
+
 			var security = EnsureGetSecurity(message);
 
 			if (UpdateSecurityByLevel1)
@@ -996,8 +999,6 @@ namespace StockSharp.Algo
 
 			if (changes.Count > 0)
 				RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
-
-			RaiseReceived(message, message, Level1Received);
 		}
 
 		/// <inheritdoc />
@@ -1111,35 +1112,60 @@ namespace StockSharp.Algo
 
 			var news = _entityCache.ProcessNewsMessage(security, message);
 
+			if (!RaiseReceived(news.Item1, message, NewsReceived))
+				return;
+
 			if (news.Item2)
 				RaiseNewNews(news.Item1);
 			else
 				RaiseNewsChanged(news.Item1);
-
-			RaiseReceived(news.Item1, message, NewsReceived);
 		}
 
 		private void ProcessQuotesMessage(QuoteChangeMessage message)
 		{
 			var security = EnsureGetSecurity(message);
 
-			if (MarketDepthChanged != null || MarketDepthsChanged != null || MarketDepthReceived != null)
+			var hasOnline = false;
+
+			foreach (var subscription in _subscriptionManager.GetSubscriptions(message))
 			{
-				var marketDepth = GetMarketDepth(security, message.IsFiltered);
+				MarketDepth depth;
 
-				message.ToMarketDepth(marketDepth, GetSecurity);
+				if (!hasOnline)
+				{
+					if (subscription.State == SubscriptionStates.Online)
+					{
+						hasOnline = true;
 
-				if (!message.IsFiltered)
-					RaiseMarketDepthChanged(marketDepth);
+						if (MarketDepthChanged != null || MarketDepthsChanged != null || MarketDepthReceived != null)
+						{
+							depth = GetMarketDepth(security, message.IsFiltered);
 
-				RaiseReceived(marketDepth, message, MarketDepthReceived);
+							message.ToMarketDepth(depth, GetSecurity);
+
+							if (!message.IsFiltered)
+								RaiseMarketDepthChanged(depth);
+						}
+						else
+						{
+							_entityCache.UpdateMarketDepth(security, message);
+							continue;
+						}
+					}
+					else
+					{
+						depth = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security), GetSecurity);
+					}
+				}
+				else
+				{
+					depth = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security), GetSecurity);
+				}
+
+				MarketDepthReceived?.Invoke(subscription, depth);
 			}
-			else
-			{
-				_entityCache.UpdateMarketDepth(security, message);
-			}
-
-			if (message.IsFiltered)
+			
+			if (!hasOnline || message.IsFiltered)
 				return;
 
 			var bestBid = message.GetBestBid();
@@ -1270,13 +1296,19 @@ namespace StockSharp.Algo
 			var logItem = message.ToOrderLog(EntityFactory.CreateOrderLogItem(new Order { Security = security }, trade));
 			//logItem.LocalTime = message.LocalTime;
 
+			if (!RaiseReceived(logItem, message, OrderLogItemReceived))
+				return;
+
 			RaiseNewOrderLogItem(logItem);
-			RaiseReceived(logItem, message, OrderLogItemReceived);
 		}
 
 		private void ProcessTradeMessage(Security security, ExecutionMessage message)
 		{
 			var tuple = _entityCache.ProcessTradeMessage(security, message);
+
+			if (!RaiseReceived(tuple.Item1, message, TickTradeReceived))
+				return;
+
 			var info = _entityCache.GetSecurityValues(security);
 
 			info.ClearLastTrade();
@@ -1324,8 +1356,6 @@ namespace StockSharp.Algo
 
 			if (tuple.Item2)
 				RaiseNewTrade(tuple.Item1);
-
-			RaiseReceived(tuple.Item1, message, TickTradeReceived);
 
 			RaiseValuesChanged(security, changes, message.ServerTime, message.LocalTime);
 

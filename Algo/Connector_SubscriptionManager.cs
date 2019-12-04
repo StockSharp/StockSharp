@@ -168,6 +168,19 @@ namespace StockSharp.Algo
 				return null;
 			}
 
+			public IEnumerable<Subscription> GetSubscriptions(ISubscriptionIdMessage message)
+			{
+				var time = message is IServerTimeMessage timeMsg ? timeMsg.ServerTime : (DateTimeOffset?)null;
+
+				foreach (var id in message.GetSubscriptionIds())
+				{
+					var subscription = TryGetSubscription(id, false, time);
+
+					if (subscription != null)
+						yield return subscription;
+				}
+			}
+
 			public Subscription TryGetSubscription(long id, bool remove, DateTimeOffset? time = null)
 			{
 				return TryGetInfo(id, remove, time)?.Subscription;

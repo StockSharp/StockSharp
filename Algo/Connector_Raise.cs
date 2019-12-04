@@ -908,20 +908,19 @@ namespace StockSharp.Algo
 			ChangePasswordResult?.Invoke(transactionId, error);
 		}
 
-		private void RaiseReceived<TEntity>(TEntity entity, ISubscriptionIdMessage message, Action<Subscription, TEntity> evt)
+		private bool RaiseReceived<TEntity>(TEntity entity, ISubscriptionIdMessage message, Action<Subscription, TEntity> evt)
 		{
-			if (evt == null)
-				return;
+			var anyOnline = false;
 
-			var time = message is IServerTimeMessage timeMsg ? timeMsg.ServerTime : (DateTimeOffset?)null;
-
-			foreach (var id in message.GetSubscriptionIds())
+			foreach (var subscription in _subscriptionManager.GetSubscriptions(message))
 			{
-				var subscription = _subscriptionManager.TryGetSubscription(id, false, time);
+				if (!anyOnline && subscription.State == SubscriptionStates.Online)
+					anyOnline = true;
 
-				if (subscription != null)
-					evt(subscription, entity);
+				evt?.Invoke(subscription, entity);
 			}
+
+			return anyOnline;
 		}
 	}
 }
