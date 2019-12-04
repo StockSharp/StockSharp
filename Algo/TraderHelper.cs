@@ -2321,34 +2321,7 @@ namespace StockSharp.Algo
 			if (!message.ClientCode.IsEmpty())
 				portfolio.ClientCode = message.ClientCode;
 
-			foreach (var change in message.Changes)
-			{
-				switch (change.Key)
-				{
-					case PositionChangeTypes.Currency:
-						portfolio.Currency = (CurrencyTypes)change.Value;
-						break;
-					case PositionChangeTypes.Leverage:
-						portfolio.Leverage = (decimal)change.Value;
-						break;
-					case PositionChangeTypes.State:
-						portfolio.State = (PortfolioStates)change.Value;
-						break;
-					case PositionChangeTypes.CommissionMaker:
-						portfolio.CommissionMaker = (decimal)change.Value;
-						break;
-					case PositionChangeTypes.CommissionTaker:
-						portfolio.CommissionTaker = (decimal)change.Value;
-						break;
-					default:
-						ApplyChange(portfolio, change);
-						break;
-				}
-			}
-
-			portfolio.LocalTime = message.LocalTime;
-			portfolio.LastChangeTime = message.ServerTime;
-			message.CopyExtensionInfo(portfolio);
+			ApplyChanges(portfolio, message);
 		}
 
 		/// <summary>
@@ -2364,71 +2337,83 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			var pf = position as Portfolio ?? position.Portfolio;
+
 			foreach (var change in message.Changes)
-				ApplyChange(position, change);
+			{
+				try
+				{
+					switch (change.Key)
+					{
+						case PositionChangeTypes.BeginValue:
+							position.BeginValue = (decimal)change.Value;
+							break;
+						case PositionChangeTypes.CurrentValue:
+							position.CurrentValue = (decimal)change.Value;
+							break;
+						case PositionChangeTypes.BlockedValue:
+							position.BlockedValue = (decimal)change.Value;
+							break;
+						case PositionChangeTypes.CurrentPrice:
+							position.CurrentPrice = (decimal)change.Value;
+							break;
+						case PositionChangeTypes.AveragePrice:
+							position.AveragePrice = (decimal)change.Value;
+							break;
+						//case PositionChangeTypes.ExtensionInfo:
+						//	var pair = change.Value.To<KeyValuePair<string, object>>();
+						//	position.ExtensionInfo[pair.Key] = pair.Value;
+						//	break;
+						case PositionChangeTypes.RealizedPnL:
+							position.RealizedPnL = (decimal)change.Value;
+							break;
+						case PositionChangeTypes.UnrealizedPnL:
+							position.UnrealizedPnL = (decimal)change.Value;
+							break;
+						case PositionChangeTypes.Commission:
+							position.Commission = (decimal)change.Value;
+							break;
+						case PositionChangeTypes.VariationMargin:
+							position.VariationMargin = (decimal)change.Value;
+							break;
+						//case PositionChangeTypes.DepoName:
+						//	position.ExtensionInfo[nameof(PositionChangeTypes.DepoName)] = change.Value;
+						//	break;
+						case PositionChangeTypes.Currency:
+							position.Currency = (CurrencyTypes)change.Value;
+							break;
+						case PositionChangeTypes.ExpirationDate:
+							position.ExpirationDate = (DateTimeOffset)change.Value;
+							break;
+						case PositionChangeTypes.SettlementPrice:
+							position.SettlementPrice = (decimal)change.Value;
+							break;
+						case PositionChangeTypes.Leverage:
+							position.Leverage = (decimal)change.Value;
+							break;
+						case PositionChangeTypes.State:
+							if (pf != null)
+								pf.State = (PortfolioStates)change.Value;
+							break;
+						case PositionChangeTypes.CommissionMaker:
+							position.CommissionMaker = (decimal)change.Value;
+							break;
+						case PositionChangeTypes.CommissionTaker:
+							position.CommissionTaker = (decimal)change.Value;
+							break;
+						default:
+							throw new ArgumentOutOfRangeException(nameof(change), change.Key, LocalizedStrings.Str1219);
+					}
+				}
+				catch (Exception ex)
+				{
+					throw new InvalidOperationException(LocalizedStrings.Str1220Params.Put(change.Key), ex);
+				}
+			}
 
 			position.LocalTime = message.LocalTime;
 			position.LastChangeTime = message.ServerTime;
 			message.CopyExtensionInfo(position);
-		}
-
-		private static void ApplyChange(this Position position, KeyValuePair<PositionChangeTypes, object> change)
-		{
-			try
-			{
-				switch (change.Key)
-				{
-					case PositionChangeTypes.BeginValue:
-						position.BeginValue = (decimal)change.Value;
-						break;
-					case PositionChangeTypes.CurrentValue:
-						position.CurrentValue = (decimal)change.Value;
-						break;
-					case PositionChangeTypes.BlockedValue:
-						position.BlockedValue = (decimal)change.Value;
-						break;
-					case PositionChangeTypes.CurrentPrice:
-						position.CurrentPrice = (decimal)change.Value;
-						break;
-					case PositionChangeTypes.AveragePrice:
-						position.AveragePrice = (decimal)change.Value;
-						break;
-					//case PositionChangeTypes.ExtensionInfo:
-					//	var pair = change.Value.To<KeyValuePair<string, object>>();
-					//	position.ExtensionInfo[pair.Key] = pair.Value;
-					//	break;
-					case PositionChangeTypes.RealizedPnL:
-						position.RealizedPnL = (decimal)change.Value;
-						break;
-					case PositionChangeTypes.UnrealizedPnL:
-						position.UnrealizedPnL = (decimal)change.Value;
-						break;
-					case PositionChangeTypes.Commission:
-						position.Commission = (decimal)change.Value;
-						break;
-					case PositionChangeTypes.VariationMargin:
-						position.VariationMargin = (decimal)change.Value;
-						break;
-					//case PositionChangeTypes.DepoName:
-					//	position.ExtensionInfo[nameof(PositionChangeTypes.DepoName)] = change.Value;
-					//	break;
-					case PositionChangeTypes.Currency:
-						position.Currency = (CurrencyTypes)change.Value;
-						break;
-					case PositionChangeTypes.ExpirationDate:
-						position.ExpirationDate = (DateTimeOffset)change.Value;
-						break;
-					case PositionChangeTypes.SettlementPrice:
-						position.SettlementPrice = (decimal)change.Value;
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(change), change.Key, LocalizedStrings.Str1219);
-				}
-			}
-			catch (Exception ex)
-			{
-				throw new InvalidOperationException(LocalizedStrings.Str1220Params.Put(change.Key), ex);
-			}
 		}
 
 		/// <summary>
