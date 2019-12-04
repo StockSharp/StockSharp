@@ -177,6 +177,7 @@
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
+				case MessageTypes.Disconnect:
 				{
 					lock (_syncObject)
 					{
