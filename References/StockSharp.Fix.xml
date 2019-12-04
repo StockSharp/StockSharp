@@ -282,6 +282,9 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedOutMessages">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.CancelOnDisconnect">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
       <inheritdoc />
     </member>
@@ -326,12 +329,12 @@
       <returns>
         <see cref="T:StockSharp.Fix.Native.FixMessages" /> value.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.WriteLogonRequest(StockSharp.Fix.Native.IFixWriter,System.String)">
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.WriteLogonRequest(StockSharp.Fix.Native.IFixWriter,System.Action{StockSharp.Fix.Native.IFixWriter})">
       <summary>
             To record the <see cref="F:StockSharp.Fix.Native.FixMessages.Logon" /> message (request).
             </summary>
       <param name="writer">The recorder of data in the FIX protocol format.</param>
-      <param name="defaultApplVerId">Specifies the service pack release being applied, by default, to message at the session level.</param>
+      <param name="extra">Write extra parameters for <see cref="F:StockSharp.Fix.Native.FixMessages.Logon" /> message.</param>
       <returns>
         <see cref="T:StockSharp.Fix.Native.FixMessages" /> value.</returns>
     </member>
@@ -471,6 +474,26 @@
         <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> value.</param>
       <returns>
         <see cref="T:StockSharp.Messages.OrderStates" /> value.</returns>
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.BrasilBolsaFixOrderCondition">
+      <summary>
+            InteractiveBrokers (FIX CTCI) order condition.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BrasilBolsaFixOrderCondition.MarketProtectionReset">
+      <summary>
+            Resets Market Protections.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BrasilBolsaFixOrderCondition.ClosePosition">
+      <summary>
+            Indicates whether the resulting position after a trade should be a closing position.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BrasilBolsaFixOrderCondition.IsRetailLiquidity">
+      <summary>
+            Indicates additional order instruction.
+            </summary>
     </member>
     <member name="T:StockSharp.Fix.Dialects.DefaultFastDialect">
       <summary>
@@ -1479,6 +1502,11 @@
             Supported by adapter message types.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.CancelOnDisconnect">
+      <summary>
+            Cancel On Disconnect.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
       <summary>
             Initialize dialect.
@@ -2185,26 +2213,13 @@
       <param name="encoding">Text encoding.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadTag">
-      <summary>
-            To read the following tag.
-            </summary>
-      <returns>The next tag. The -1 indicates the end of data.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadDateTime(Ecng.Common.FastDateTimeParser)">
-      <summary>
-            Read <see cref="T:System.DateTime" /> value.
-            </summary>
-      <param name="parser">Time parser. Required if data will be transferred as string.</param>
-      <returns>
-        <see cref="T:System.DateTime" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadTimeSpan(Ecng.Common.FastTimeSpanParser)">
-      <summary>
-            Read <see cref="T:System.TimeSpan" /> value.
-            </summary>
-      <param name="parser">Time parser. Required if data will be transferred as string.</param>
-      <returns>
-        <see cref="T:System.TimeSpan" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadUInt">
       <summary>
@@ -2221,11 +2236,7 @@
         <see cref="T:System.Nullable`1" /> value.</returns>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadInt">
-      <summary>
-            Read <see cref="T:System.Int32" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Int32" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadIntNullable">
       <summary>
@@ -2249,11 +2260,7 @@
         <see cref="T:System.Nullable`1" /> value.</returns>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadLong">
-      <summary>
-            Read <see cref="T:System.Int64" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Int64" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadLongNullable">
       <summary>
@@ -2263,11 +2270,7 @@
         <see cref="T:System.Nullable`1" /> value.</returns>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadDecimal">
-      <summary>
-            Read <see cref="T:System.Decimal" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Decimal" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadDecimalNullable">
       <summary>
@@ -2277,11 +2280,7 @@
         <see cref="T:System.Nullable`1" /> value.</returns>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadChar">
-      <summary>
-            Read <see cref="T:System.Char" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Char" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadChar(System.Char)">
       <summary>
@@ -2339,23 +2338,13 @@
       <param name="constValue">The constant value.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadString">
-      <summary>
-            Read <see cref="T:System.String" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.String" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadBool">
-      <summary>
-            Read <see cref="T:System.Boolean" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Boolean" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.SkipValue">
-      <summary>
-            Skip value.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadFastPresenceMap(StockSharp.Fix.Native.FastPMap)">
       <summary>
@@ -2406,68 +2395,31 @@
       <param name="encoding">Text encoding.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(StockSharp.Fix.Native.FixTags)">
-      <summary>
-            Last tag.
-            </summary>
-      <param name="tag">Tag.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.Boolean)">
-      <summary>
-            To record the <see cref="T:System.Boolean" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Boolean" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.Int32)">
-      <summary>
-            To record the <see cref="T:System.Int32" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Int32" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.Int64)">
-      <summary>
-            To record the <see cref="T:System.Int64" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Int64" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.Decimal)">
-      <summary>
-            To record the <see cref="T:System.Decimal" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Decimal" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.DateTime,Ecng.Common.FastDateTimeParser)">
-      <summary>
-            To record the <see cref="T:System.DateTime" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.DateTime" /> value.</param>
-      <param name="parser">Time parser. Required if data will be transferred as string.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.TimeSpan,Ecng.Common.FastTimeSpanParser)">
-      <summary>
-            To record the <see cref="T:System.TimeSpan" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="parser">Time parser. Required if data will be transferred as string.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.String)">
-      <summary>
-            To record the <see cref="T:System.String" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.String" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.Char)">
-      <summary>
-            To record the <see cref="T:System.Char" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Char" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.Collections.BitArray)">
       <summary>
@@ -6293,7 +6245,19 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.PositionEffect">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.RptSeq">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.RawDataLength">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.RawData">
       <summary>
       </summary>
     </member>
@@ -7565,73 +7529,34 @@
       <param name="encoding">Text encoding.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixReader.ReadTag">
-      <summary>
-            To read the following tag.
-            </summary>
-      <returns>The next tag. The -1 indicates the end of data.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixReader.ReadDateTime(Ecng.Common.FastDateTimeParser)">
-      <summary>
-            Read <see cref="T:System.DateTime" /> value.
-            </summary>
-      <param name="parser">Time parser. Required if data will be transferred as string.</param>
-      <returns>
-        <see cref="T:System.DateTime" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixReader.ReadTimeSpan(Ecng.Common.FastTimeSpanParser)">
-      <summary>
-            Read <see cref="T:System.TimeSpan" /> value.
-            </summary>
-      <param name="parser">Time parser. Required if data will be transferred as string.</param>
-      <returns>
-        <see cref="T:System.TimeSpan" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixReader.ReadInt">
-      <summary>
-            Read <see cref="T:System.Int32" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Int32" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixReader.ReadLong">
-      <summary>
-            Read <see cref="T:System.Int64" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Int64" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixReader.ReadDecimal">
-      <summary>
-            Read <see cref="T:System.Decimal" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Decimal" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixReader.ReadChar">
-      <summary>
-            Read <see cref="T:System.Char" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Char" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixReader.ReadString">
-      <summary>
-            Read <see cref="T:System.String" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.String" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixReader.ReadBool">
-      <summary>
-            Read <see cref="T:System.Boolean" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Boolean" /> value.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixReader.SkipValue">
-      <summary>
-            Skip value.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.Native.TextFixWriter">
       <summary>
@@ -7646,68 +7571,31 @@
       <param name="encoding">Text encoding.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(StockSharp.Fix.Native.FixTags)">
-      <summary>
-            Last tag.
-            </summary>
-      <param name="tag">Tag.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Boolean)">
-      <summary>
-            To record the <see cref="T:System.Boolean" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Boolean" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Int32)">
-      <summary>
-            To record the <see cref="T:System.Int32" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Int32" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Int64)">
-      <summary>
-            To record the <see cref="T:System.Int64" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Int64" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Decimal)">
-      <summary>
-            To record the <see cref="T:System.Decimal" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Decimal" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.DateTime,Ecng.Common.FastDateTimeParser)">
-      <summary>
-            To record the <see cref="T:System.DateTime" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.DateTime" /> value.</param>
-      <param name="parser">Time parser. Required if data will be transferred as string.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.TimeSpan,Ecng.Common.FastTimeSpanParser)">
-      <summary>
-            To record the <see cref="T:System.TimeSpan" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="parser">Time parser. Required if data will be transferred as string.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.String)">
-      <summary>
-            To record the <see cref="T:System.String" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.String" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Char)">
-      <summary>
-            To record the <see cref="T:System.Char" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Char" /> value.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.Native.IFixReader">
       <summary>
@@ -8026,6 +7914,11 @@
             Support executions processing, generated by third-party software.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.CancelOnDisconnect">
+      <summary>
+            Cancel On Disconnect.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <inheritdoc />
     </member>
@@ -8128,6 +8021,11 @@
     <member name="F:StockSharp.Fix.FixDialects.Lmax">
       <summary>
             LMAX.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixDialects.BrasilBolsa">
+      <summary>
+            Brasil Bolsa.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.FixTrader">
