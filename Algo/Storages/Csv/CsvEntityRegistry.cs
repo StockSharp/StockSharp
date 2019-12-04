@@ -833,6 +833,18 @@ namespace StockSharp.Algo.Storages.Csv
 					position.ExpirationDate = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).UtcKind();
 				}
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				{
+					position.Leverage = reader.ReadNullableDecimal();
+					position.CommissionMaker = reader.ReadNullableDecimal();
+					position.CommissionTaker = reader.ReadNullableDecimal();
+					position.AveragePrice = reader.ReadNullableDecimal();
+					position.RealizedPnL = reader.ReadNullableDecimal();
+					position.UnrealizedPnL = reader.ReadNullableDecimal();
+					position.CurrentPrice = reader.ReadNullableDecimal();
+					position.SettlementPrice = reader.ReadNullableDecimal();
+				}
+
 				return position;
 			}
 
@@ -853,8 +865,16 @@ namespace StockSharp.Algo.Storages.Csv
 					data.LastChangeTime.UtcDateTime.ToString(_dateTimeFormat),
 					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat),
 					data.ClientCode,
-					data.Currency?.To<string>(),
+					data.Currency.To<string>(),
 					data.ExpirationDate?.UtcDateTime.ToString(_dateTimeFormat),
+					data.Leverage.To<string>(),
+					data.CommissionMaker.To<string>(),
+					data.CommissionTaker.To<string>(),
+					data.AveragePrice.To<string>(),
+					data.RealizedPnL.To<string>(),
+					data.UnrealizedPnL.To<string>(),
+					data.CurrentPrice.To<string>(),
+					data.SettlementPrice.To<string>(),
 				});
 			}
 
