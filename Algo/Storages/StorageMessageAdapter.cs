@@ -493,7 +493,7 @@ namespace StockSharp.Algo.Storages
 							_orderStringIds.TryAdd(snapshot.OrderStringId, snapshot.TransactionId);
 
 						snapshot.OriginalTransactionId = transId;
-						snapshot.SubscriptionId = transId;
+						snapshot.SetSubscriptionIds(subscriptionId: transId);
 						RaiseStorageMessage(snapshot);
 					}
 				}
@@ -600,7 +600,7 @@ namespace StockSharp.Algo.Storages
 						{
 							lastTime = level1Msg.ServerTime;
 
-							level1Msg.SubscriptionId = transactionId;
+							level1Msg.SetSubscriptionIds(subscriptionId: transactionId);
 							RaiseStorageMessage(level1Msg);
 						}
 					}
@@ -618,7 +618,7 @@ namespace StockSharp.Algo.Storages
 						{
 							lastTime = quotesMsg.ServerTime;
 
-							quotesMsg.SubscriptionId = transactionId;
+							quotesMsg.SetSubscriptionIds(subscriptionId: transactionId);
 							RaiseStorageMessage(quotesMsg);
 						}
 					}
@@ -831,7 +831,7 @@ namespace StockSharp.Algo.Storages
 			foreach (var message in messages)
 			{
 				message.OriginalTransactionId = transactionId;
-				message.SubscriptionId = transactionId;
+				message.SetSubscriptionIds(subscriptionId: transactionId);
 
 				lastTime = message.ServerTime;
 

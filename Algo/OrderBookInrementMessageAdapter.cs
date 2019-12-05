@@ -277,7 +277,7 @@
 						if (clones == null)
 							clones = new List<QuoteChangeMessage>();
 
-						newQuoteMsg.SubscriptionIds = info.SubscriptionIds.Cache;
+						newQuoteMsg.SetSubscriptionIds(info.SubscriptionIds.Cache);
 						clones.Add(newQuoteMsg);
 					}
 

@@ -1,7 +1,6 @@
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -26,7 +25,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
-		public IEnumerable<long> SubscriptionIds { get; set; }
+		public long[] SubscriptionIds { get; set; }
 
 		/// <summary>
 		/// Initialize <see cref="BaseSubscriptionIdMessage"/>.

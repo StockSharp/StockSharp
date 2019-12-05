@@ -277,10 +277,10 @@ namespace StockSharp.Algo
 
 						filtered = info.Process(quoteMsg);
 
-						filtered.SubscriptionId = info.TransactionId;
+						filtered.SetSubscriptionIds(subscriptionId: info.TransactionId);
 
 						// subscription for origin book was initialized only by filtered book
-						if (quoteMsg.SubscriptionId == info.TransactionId && quoteMsg.SubscriptionIds == null)
+						if ((quoteMsg.SubscriptionIds?.Length == 1 && quoteMsg.SubscriptionIds[0] == info.TransactionId) || quoteMsg.SubscriptionId == info.TransactionId)
 							message = null;
 					}
 

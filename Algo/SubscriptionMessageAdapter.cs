@@ -187,7 +187,7 @@ namespace StockSharp.Algo
 						lock (_sync)
 						{
 							if (subscrMsg.OriginalTransactionId != 0 && _historicalRequests.Contains(subscrMsg.OriginalTransactionId))
-								subscrMsg.SubscriptionId = subscrMsg.OriginalTransactionId;
+								subscrMsg.SetSubscriptionIds(subscriptionId: subscrMsg.OriginalTransactionId);
 							else
 							{
 								if (subscrMsg.OriginalTransactionId != 0 && _subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info))
@@ -202,7 +202,7 @@ namespace StockSharp.Algo
 										break;
 								}
 								
-								subscrMsg.SubscriptionIds = info.Subscribers.Cache;
+								subscrMsg.SetSubscriptionIds(info.Subscribers.Cache);
 							}
 						}
 					}

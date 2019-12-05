@@ -1470,8 +1470,7 @@ namespace StockSharp.Algo
 					ids[i] = parentId.Value;
 			}
 
-			msg.SubscriptionId = 0;
-			msg.SubscriptionIds = ids;
+			msg.SetSubscriptionIds(ids);
 		}
 
 		private void SendOutMarketDataNotSupported(long id)

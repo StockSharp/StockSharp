@@ -1752,11 +1752,33 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Set subscription identifiers into the specified message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="subscriptionIds">Identifiers.</param>
+		/// <param name="subscriptionId">Identifier.</param>
+		public static void SetSubscriptionIds(this ISubscriptionIdMessage message, long[] subscriptionIds = null, long subscriptionId = 0)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (subscriptionId != 0)
+			{
+				message.SubscriptionId = subscriptionId;
+				message.SubscriptionIds = null;
+			}
+			else if (subscriptionIds != null && subscriptionIds.Length > 0)
+			{
+				message.SubscriptionIds = subscriptionIds;
+			}
+		}
+
+		/// <summary>
 		/// Get subscription identifiers from the specified message.
 		/// </summary>
 		/// <param name="message">Message.</param>
 		/// <returns>Identifiers.</returns>
-		public static IEnumerable<long> GetSubscriptionIds(this ISubscriptionIdMessage message)
+		public static long[] GetSubscriptionIds(this ISubscriptionIdMessage message)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -1766,7 +1788,7 @@ namespace StockSharp.Messages
 			else if (message.SubscriptionId > 0)
 				return new[] { message.SubscriptionId };
 			else
-				return Enumerable.Empty<long>();
+				return ArrayHelper.Empty<long>();
 		}
 
 		/// <summary>
