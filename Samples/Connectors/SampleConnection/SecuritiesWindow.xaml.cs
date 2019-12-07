@@ -103,18 +103,23 @@ namespace SampleConnection
 			{
 				// subscribe on order book flow
 				var id = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
+				var subscription = connector.TryGetSubscriptionById(id);
 
 				// create order book window
 				var window = new QuotesWindow
 				{
 					Title = security.Id + " " + LocalizedStrings.MarketDepth
 				};
-				window.Closed += (s, e) => connector.UnSubscribe(id);
+				window.Closed += (s, e) =>
+				{
+					if (subscription.State == SubscriptionStates.Active || subscription.State == SubscriptionStates.Online)
+						connector.UnSubscribe(subscription);
+				};
 
 				window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
 				window.Show();
 
-				_quotesWindows.Add(connector.TryGetSubscriptionById(id), window);
+				_quotesWindows.Add(subscription, window);
 
 				if (!_initialized)
 				{
