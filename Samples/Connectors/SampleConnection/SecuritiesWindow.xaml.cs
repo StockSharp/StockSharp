@@ -24,6 +24,7 @@ namespace SampleConnection
 		private readonly SynchronizedDictionary<Subscription, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Subscription, QuotesWindow>();
 		private readonly SynchronizedList<ChartWindow> _chartWindows = new SynchronizedList<ChartWindow>();
 		private bool _initialized;
+		private bool _appClosing;
 
 		public SecuritiesWindow()
 		{
@@ -40,6 +41,7 @@ namespace SampleConnection
 
 		protected override void OnClosed(EventArgs e)
 		{
+			_appClosing = true;
 			_quotesWindows.SyncDo(d => d.Values.ForEach(w => w.Close()));
 
 			_chartWindows.SyncDo(c => c.ToArray().ForEach(w =>
@@ -112,6 +114,9 @@ namespace SampleConnection
 				};
 				window.Closed += (s, e) =>
 				{
+					if (_appClosing)
+						return;
+
 					if (subscription.State == SubscriptionStates.Active || subscription.State == SubscriptionStates.Online)
 						connector.UnSubscribe(subscription);
 				};
