@@ -21,7 +21,7 @@ namespace SampleConnection
 
 	public partial class SecuritiesWindow
 	{
-		private readonly SynchronizedDictionary<long, QuotesWindow> _quotesWindows = new SynchronizedDictionary<long, QuotesWindow>();
+		private readonly SynchronizedDictionary<Subscription, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Subscription, QuotesWindow>();
 		private readonly SynchronizedList<ChartWindow> _chartWindows = new SynchronizedList<ChartWindow>();
 		private bool _initialized;
 
@@ -114,7 +114,7 @@ namespace SampleConnection
 				window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
 				window.Show();
 
-				_quotesWindows.Add(id, window);
+				_quotesWindows.Add(connector.TryGetSubscriptionById(id), window);
 
 				if (!_initialized)
 				{
@@ -180,7 +180,7 @@ namespace SampleConnection
 
 		private void TraderOnMarketDepthChanged(Subscription subscription, MarketDepth depth)
 		{
-			if (_quotesWindows.TryGetValue(subscription.TransactionId, out var wnd))
+			if (_quotesWindows.TryGetValue(subscription, out var wnd))
 				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 

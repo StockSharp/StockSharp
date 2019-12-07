@@ -374,7 +374,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void UnSubscribe(long subscriptionId)
 		{
-			var subscription = _subscriptionManager.TryGetSubscription(subscriptionId, false);
+			var subscription = TryGetSubscriptionById(subscriptionId);
 
 			if (subscription == null)
 				return;
@@ -529,6 +529,16 @@ namespace StockSharp.Algo
 		public void UnSubscribe(Subscription subscription)
 		{
 			_subscriptionManager.UnSubscribe(subscription);
+		}
+
+		/// <summary>
+		/// Try get subscription by id.
+		/// </summary>
+		/// <param name="subscriptionId">Subscription id.</param>
+		/// <returns>Subscription.</returns>
+		public Subscription TryGetSubscriptionById(long subscriptionId)
+		{
+			return _subscriptionManager.TryGetSubscription(subscriptionId, false);
 		}
 	}
 }
