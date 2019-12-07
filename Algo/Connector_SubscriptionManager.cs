@@ -37,10 +37,9 @@ namespace StockSharp.Algo
 			{
 				private DateTimeOffset? _last;
 
-				public SubscriptionInfo(Subscription subscription, bool keepAfterFinish)
+				public SubscriptionInfo(Subscription subscription)
 				{
 					Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
-					KeepAfterFinish = keepAfterFinish;
 
 					if (Subscription.CandleSeries != null)
 						Holder = new CandlesSeriesHolder(subscription.CandleSeries);
@@ -59,7 +58,7 @@ namespace StockSharp.Algo
 				}
 
 				public Subscription Subscription { get; }
-				public bool KeepAfterFinish { get; }
+				public bool HasResult { get; set; }
 				public LookupInfo Lookup { get; }
 				public CandlesSeriesHolder Holder { get; }
 
@@ -91,7 +90,6 @@ namespace StockSharp.Algo
 
 			private readonly Dictionary<long, SubscriptionInfo> _subscriptions = new Dictionary<long, SubscriptionInfo>();
 			private readonly Dictionary<long, Tuple<ISubscriptionMessage, Subscription>> _requests = new Dictionary<long, Tuple<ISubscriptionMessage, Subscription>>();
-			private readonly List<SubscriptionInfo> _finished = new List<SubscriptionInfo>();
 			private readonly List<SubscriptionInfo> _keeped = new List<SubscriptionInfo>();
 			private readonly HashSet<long> _notFound = new HashSet<long>();
 
@@ -121,7 +119,6 @@ namespace StockSharp.Algo
 				{
 					_subscriptions.Clear();
 					_requests.Clear();
-					_finished.Clear();
 					_keeped.Clear();
 					_notFound.Clear();
 				}
@@ -309,7 +306,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public void Subscribe(Subscription subscription, bool keepAfterFinish = false)
+			public void Subscribe(Subscription subscription)
 			{
 				if (subscription == null)
 					throw new ArgumentNullException(nameof(subscription));
@@ -321,7 +318,7 @@ namespace StockSharp.Algo
 
 				lock (_syncObject)
 				{
-					var info = new SubscriptionInfo(subscription, keepAfterFinish);
+					var info = new SubscriptionInfo(subscription);
 
 					if (subscription.DataType == DataType.Transactions)
 						_connector._entityCache.AddOrderStatusTransactionId(subscription.TransactionId);
@@ -369,7 +366,7 @@ namespace StockSharp.Algo
 				{
 					_requests.Clear();
 
-					foreach (var info in _subscriptions.Values.Concat(_finished).Concat(_keeped).Distinct())
+					foreach (var info in _subscriptions.Values.Concat(_keeped).Distinct())
 					{
 						var newId = _connector.TransactionIdGenerator.GetNextId();
 
@@ -379,12 +376,12 @@ namespace StockSharp.Algo
 							_connector._entityCache.AddOrderStatusTransactionId(newId);
 						}
 
+						info.HasResult = false;
 						info.Subscription.TransactionId = newId;
 						requests.Add(info.CreateSubscriptionContinue(), info);
 					}
 
 					_keeped.Clear();
-					_finished.Clear();
 					_subscriptions.Clear();
 
 					foreach (var pair in requests)
@@ -409,7 +406,6 @@ namespace StockSharp.Algo
 					_keeped.AddRange(_subscriptions.Values);
 
 					subscriptions.AddRange(Subscriptions);
-					subscriptions.AddRange(_finished.Select(i => i.Subscription));
 				}
 
 				foreach (var subscription in subscriptions)
@@ -424,7 +420,7 @@ namespace StockSharp.Algo
 				{
 					var info = TryGetInfo(id, false);
 
-					if (info == null)
+					if (info == null || info.HasResult)
 						continue;
 
 					if (info.Lookup == null)
@@ -445,13 +441,12 @@ namespace StockSharp.Algo
 
 				lock (_syncObject)
 				{
-					var info = _subscriptions.TryGetAndRemove(result.OriginalTransactionId);
+					var info = _subscriptions.TryGetValue(result.OriginalTransactionId);
 
 					if (info == null)
 						return false;
 
-					if (info.KeepAfterFinish)
-						_finished.Add(info);
+					info.HasResult = true;
 
 					var lookup = info.Lookup;
 					if (lookup == null)

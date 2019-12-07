@@ -789,9 +789,9 @@ namespace StockSharp.Algo
 
 						if (LookupMessagesOnConnect)
 						{
-							_subscriptionManager.Subscribe(new Subscription(DataType.Securities, null), true);
-							_subscriptionManager.Subscribe(new Subscription(DataType.PositionChanges, null), true);
-							_subscriptionManager.Subscribe(new Subscription(DataType.Transactions, null), true);
+							_subscriptionManager.Subscribe(new Subscription(DataType.Securities, null));
+							_subscriptionManager.Subscribe(new Subscription(DataType.PositionChanges, null));
+							_subscriptionManager.Subscribe(new Subscription(DataType.Transactions, null));
 						}
 					}
 
