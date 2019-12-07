@@ -385,9 +385,9 @@
 						{
 							_liveRequests.Remove(originId);
 
-							if (isPartial)
+							if (responseMsg.IsOk())
 							{
-								if (responseMsg.IsOk())
+								if (isPartial)
 								{
 									// reply was sent prev for first partial request,
 									// now sending "online" message
@@ -396,13 +396,13 @@
 										OriginalTransactionId = originId
 									};
 								}
-							}
-							else
-							{
-								extra = new SubscriptionOnlineMessage
+								else
 								{
-									OriginalTransactionId = originId
-								};
+									extra = new SubscriptionOnlineMessage
+									{
+										OriginalTransactionId = originId
+									};
+								}
 							}
 
 							break;
