@@ -35,22 +35,23 @@ namespace StockSharp.Messages
 			MemoryStatistics.Instance.Values.Add(_msgStat);
 		}
 
-		private readonly MessagePriorityQueue _queue;
+		private readonly IMessageQueue _queue;
 		private readonly Action<Exception> _errorHandler;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryMessageChannel"/>.
 		/// </summary>
+		/// <param name="queue">Message queue.</param>
 		/// <param name="name">Channel name.</param>
 		/// <param name="errorHandler">Error handler.</param>
-		public InMemoryMessageChannel(string name, Action<Exception> errorHandler)
+		public InMemoryMessageChannel(IMessageQueue queue, string name, Action<Exception> errorHandler)
 		{
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
 			Name = name;
 
-			_queue = new MessagePriorityQueue();
+			_queue = queue ?? throw new ArgumentNullException(nameof(queue));
 			_errorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
 			
 			Close();
@@ -93,7 +94,7 @@ namespace StockSharp.Messages
 			ThreadingHelper
 				.Thread(() => CultureInfo.InvariantCulture.DoInCulture(() =>
 				{
-					while (!_queue.IsClosed)
+					while (IsOpened)
 					{
 						try
 						{
@@ -144,7 +145,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public virtual IMessageChannel Clone()
 		{
-			return new InMemoryMessageChannel(Name, _errorHandler) { MaxMessageCount = MaxMessageCount };
+			return new InMemoryMessageChannel(_queue, Name, _errorHandler) { MaxMessageCount = MaxMessageCount };
 		}
 
 		object ICloneable.Clone()

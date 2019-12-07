@@ -145,8 +145,8 @@ namespace StockSharp.Algo
 
 			if (initChannels)
 			{
-				InMessageChannel = new InMemoryMessageChannel($"Connector In ({Name})", RaiseError);
-				OutMessageChannel = new InMemoryMessageChannel($"Connector Out ({Name})", RaiseError);
+				InMessageChannel = new InMemoryMessageChannel(new MessageByOrderQueue(), $"Connector In ({Name})", RaiseError);
+				OutMessageChannel = new InMemoryMessageChannel(new MessageByOrderQueue(), $"Connector Out ({Name})", RaiseError);
 			}
 
 			if (initAdapter)

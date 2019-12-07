@@ -618,8 +618,8 @@ namespace StockSharp.Algo
 			if (UseSeparatedChannels)
 			{
 				adapter = new ChannelMessageAdapter(adapter,
-					new InMemoryMessageChannel($"{adapter} In", SendOutError), 
-					new InMemoryMessageChannel($"{adapter} Out", SendOutError))
+					new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} In", SendOutError), 
+					new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} Out", SendOutError))
 				{
 					OwnInnerAdapter = true,
 				};
