@@ -128,13 +128,13 @@ namespace StockSharp.Algo.Testing
 		private sealed class HistoryEmulationMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
 		{
 			private readonly HistoryEmulationConnector _parent;
-			private readonly MessagePriorityQueue _messageQueue;
+			private readonly MessageByLocalTimeQueue _messageQueue;
 
 			public HistoryEmulationMessageChannel(HistoryEmulationConnector parent)
 			{
 				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 
-				_messageQueue = new MessagePriorityQueue();
+				_messageQueue = new MessageByLocalTimeQueue();
 				_messageQueue.Close();
 			}
 

@@ -119,7 +119,7 @@
     <Compile Include="InMemoryMessageChannel.cs" />
     <Compile Include="IOrderLogMarketDepthBuilder.cs" />
     <Compile Include="SubscriptionOnlineMessage.cs" />
-    <Compile Include="MessagePriorityQueue.cs" />
+    <Compile Include="IMessageQueue.cs" />
     <Compile Include="PortfolioRouteListFinishedMessage.cs" />
     <Compile Include="PortfolioRouteListRequestMessage.cs" />
     <Compile Include="PortfolioRouteMessage.cs" />

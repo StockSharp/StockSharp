@@ -24,7 +24,7 @@ namespace StockSharp.Algo.Storages
 	public class CachedBasketMarketDataStorage<T> : BaseLogReceiver, IEnumerator<T>
 		where T : Message
 	{
-		private readonly MessagePriorityQueue _messageQueue = new MessagePriorityQueue();
+		private readonly MessageByLocalTimeQueue _messageQueue = new MessageByLocalTimeQueue();
 		private readonly List<Tuple<IMarketDataStorage, long>> _actions = new List<Tuple<IMarketDataStorage, long>>();
 		private readonly SyncObject _moveNextSyncRoot = new SyncObject();
 		private readonly SyncObject _syncRoot = new SyncObject();
