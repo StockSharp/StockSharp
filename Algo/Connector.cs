@@ -590,8 +590,13 @@ namespace StockSharp.Algo
 		{
 			var depth = _entityCache.GetMarketDepth(security, isFiltered, GetSecurity, out var isNew);
 
-			if (isNew && !isFiltered)
-				RaiseNewMarketDepth(depth);
+			if (isNew)
+			{
+				if (isFiltered)
+					RaiseFilteredMarketDepthChanged(depth);
+				else
+					RaiseNewMarketDepth(depth);
+			}
 
 			return depth;
 		}

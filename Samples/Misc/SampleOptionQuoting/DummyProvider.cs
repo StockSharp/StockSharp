@@ -112,6 +112,12 @@ namespace SampleOptionQuoting
 			remove => throw new NotSupportedException();
 		}
 
+		event Action<MarketDepth> IMarketDataProvider.FilteredMarketDepthChanged
+		{
+			add => throw new NotSupportedException();
+			remove => throw new NotSupportedException();
+		}
+
 		event Action<OrderLogItem> IMarketDataProvider.NewOrderLogItem
 		{
 			add => throw new NotSupportedException();

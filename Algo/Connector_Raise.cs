@@ -134,6 +134,9 @@ namespace StockSharp.Algo
 		public event Action<MarketDepth> MarketDepthChanged;
 
 		/// <inheritdoc />
+		public event Action<MarketDepth> FilteredMarketDepthChanged;
+
+		/// <inheritdoc />
 		public event Action<IEnumerable<MarketDepth>> NewMarketDepths;
 
 		/// <inheritdoc />
@@ -492,6 +495,11 @@ namespace StockSharp.Algo
 		{
 			MarketDepthChanged?.Invoke(marketDepth);
 			MarketDepthsChanged?.Invoke(new[] { marketDepth });
+		}
+
+		private void RaiseFilteredMarketDepthChanged(MarketDepth marketDepth)
+		{
+			FilteredMarketDepthChanged?.Invoke(marketDepth);
 		}
 
 		/// <summary>

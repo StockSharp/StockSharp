@@ -1005,11 +1005,18 @@ namespace StockSharp.Algo
 
 		private sealed class SecurityMarketDepthChangedRule : SecurityRule<MarketDepth>
 		{
-			public SecurityMarketDepthChangedRule(Security security, IMarketDataProvider provider)
+			private readonly bool _isFiltered;
+
+			public SecurityMarketDepthChangedRule(Security security, IMarketDataProvider provider, bool isFiltered)
 				: base(security, provider)
 			{
-				Name = LocalizedStrings.Str1050 + " " + security;
-				Provider.MarketDepthChanged += OnMarketDepthChanged;
+				_isFiltered = isFiltered;
+				Name = LocalizedStrings.Str1050 + (_isFiltered ? " (filtered)" : string.Empty) + " " + security;
+
+				if (_isFiltered)
+					Provider.FilteredMarketDepthChanged += OnMarketDepthChanged;
+				else
+					Provider.MarketDepthChanged += OnMarketDepthChanged;
 			}
 
 			private void OnMarketDepthChanged(MarketDepth depth)
@@ -1022,7 +1029,11 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				Provider.MarketDepthChanged -= OnMarketDepthChanged;
+				if (_isFiltered)
+					Provider.FilteredMarketDepthChanged -= OnMarketDepthChanged;
+				else
+					Provider.MarketDepthChanged -= OnMarketDepthChanged;
+
 				base.DisposeManaged();
 			}
 		}
@@ -1097,7 +1108,18 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<Security, MarketDepth> WhenMarketDepthChanged(this Security security, IMarketDataProvider provider)
 		{
-			return new SecurityMarketDepthChangedRule(security, provider);
+			return new SecurityMarketDepthChangedRule(security, provider, false);
+		}
+
+		/// <summary>
+		/// To create a rule for the event of order book change by instrument.
+		/// </summary>
+		/// <param name="security">The instrument to be traced for the event of order book change by instrument.</param>
+		/// <param name="provider">The market data provider.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Security, MarketDepth> WhenFilteredMarketDepthChanged(this Security security, IMarketDataProvider provider)
+		{
+			return new SecurityMarketDepthChangedRule(security, provider, true);
 		}
 
 		/// <summary>

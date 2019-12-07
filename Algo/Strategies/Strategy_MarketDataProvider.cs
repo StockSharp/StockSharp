@@ -73,6 +73,13 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		public event Action<MarketDepth> FilteredMarketDepthChanged
+		{
+			add => MarketDataProvider.FilteredMarketDepthChanged += value;
+			remove => MarketDataProvider.FilteredMarketDepthChanged -= value;
+		}
+
+		/// <inheritdoc />
 		public event Action<OrderLogItem> NewOrderLogItem
 		{
 			add => MarketDataProvider.NewOrderLogItem += value;

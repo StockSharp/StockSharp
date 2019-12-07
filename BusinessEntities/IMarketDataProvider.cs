@@ -78,6 +78,11 @@ namespace StockSharp.BusinessEntities
 		event Action<MarketDepth> MarketDepthChanged;
 
 		/// <summary>
+		/// Order book changed.
+		/// </summary>
+		event Action<MarketDepth> FilteredMarketDepthChanged;
+
+		/// <summary>
 		/// Order log received.
 		/// </summary>
 		event Action<OrderLogItem> NewOrderLogItem;
@@ -221,7 +226,7 @@ namespace StockSharp.BusinessEntities
 		void UnSubscribeMarketData(MarketDataMessage message);
 
 		/// <summary>
-		/// To start getting filtered quotes (order book) by the instrument. Quotes values are available through the event <see cref="GetFilteredMarketDepth"/>.
+		/// To start getting filtered quotes (order book) by the instrument. Quotes values are available through the event <see cref="FilteredMarketDepthChanged"/>.
 		/// </summary>
 		/// <param name="security">The instrument by which quotes getting should be started.</param>
 		/// <returns>Subscription id.</returns>
@@ -234,7 +239,7 @@ namespace StockSharp.BusinessEntities
 		void UnRegisterFilteredMarketDepth(Security security);
 
 		/// <summary>
-		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="IConnector.MarketDepthsChanged"/>.
+		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="MarketDepthChanged"/>.
 		/// </summary>
 		/// <param name="security">The instrument by which quotes getting should be started.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
@@ -254,7 +259,7 @@ namespace StockSharp.BusinessEntities
 		void UnSubscribeMarketDepth(Security security);
 
 		/// <summary>
-		/// To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="IConnector.NewTrades"/>.
+		/// To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="NewTrade"/>.
 		/// </summary>
 		/// <param name="security">The instrument by which trades getting should be started.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>

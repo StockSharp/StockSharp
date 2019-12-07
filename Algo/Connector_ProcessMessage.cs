@@ -1137,13 +1137,15 @@ namespace StockSharp.Algo
 					{
 						hasOnline = true;
 
-						if (MarketDepthChanged != null || MarketDepthsChanged != null || MarketDepthReceived != null)
+						if (MarketDepthChanged != null || MarketDepthsChanged != null || MarketDepthReceived != null || FilteredMarketDepthChanged != null)
 						{
 							depth = GetMarketDepth(security, message.IsFiltered);
 
 							message.ToMarketDepth(depth, GetSecurity);
 
-							if (!message.IsFiltered)
+							if (message.IsFiltered)
+								RaiseFilteredMarketDepthChanged(depth);
+							else
 								RaiseMarketDepthChanged(depth);
 						}
 						else

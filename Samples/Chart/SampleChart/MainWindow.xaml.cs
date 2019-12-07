@@ -743,6 +743,7 @@
 			event Action<Security> IMarketDataProvider.NewSecurity { add { } remove { } }
 			event Action<MarketDepth> IMarketDataProvider.NewMarketDepth { add { } remove { } }
 			event Action<MarketDepth> IMarketDataProvider.MarketDepthChanged { add { } remove { } }
+			event Action<MarketDepth> IMarketDataProvider.FilteredMarketDepthChanged { add { } remove { } }
 			event Action<OrderLogItem> IMarketDataProvider.NewOrderLogItem { add { } remove { } }
 			event Action<News> IMarketDataProvider.NewNews { add { } remove { } }
 			event Action<News> IMarketDataProvider.NewsChanged { add { } remove { } }
