@@ -320,7 +320,7 @@ namespace StockSharp.Algo
 				{
 					var info = new SubscriptionInfo(subscription);
 
-					if (subscription.DataType == DataType.Transactions)
+					if (subscrMsg is OrderStatusMessage)
 						_connector._entityCache.AddOrderStatusTransactionId(subscription.TransactionId);
 
 					_subscriptions.Add(subscription.TransactionId, info);
@@ -370,7 +370,7 @@ namespace StockSharp.Algo
 					{
 						var newId = _connector.TransactionIdGenerator.GetNextId();
 
-						if (info.Subscription.DataType == DataType.Transactions)
+						if (info.Subscription.SubscriptionMessage is OrderStatusMessage)
 						{
 							_connector._entityCache.RemoveOrderStatusTransactionId(info.Subscription.TransactionId);
 							_connector._entityCache.AddOrderStatusTransactionId(newId);

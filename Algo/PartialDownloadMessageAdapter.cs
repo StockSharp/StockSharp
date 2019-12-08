@@ -197,6 +197,9 @@
 
 					if (subscriptionMsg.IsSubscribe)
 					{
+						if (subscriptionMsg is OrderStatusMessage statusMsg && statusMsg.HasOrderId())
+							break;
+
 						var from = subscriptionMsg.From;
 						var to = subscriptionMsg.To;
 

@@ -318,18 +318,31 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.OrderStatus:
 					{
 						var statusMsg = (OrderStatusMessage)message;
+						var checkByPf = !statusMsg.PortfolioName.IsEmpty();
+
+						var finish = false;
 
 						foreach (var order in _activeOrders.Values)
 						{
-							if (!statusMsg.PortfolioName.IsEmpty())
+							if (checkByPf)
 							{
 								if (!order.PortfolioName.CompareIgnoreCase(statusMsg.PortfolioName))
 									continue;
+							}
+							else if (statusMsg.OrderId != null)
+							{
+								if (order.OrderId != statusMsg.OrderId)
+									continue;
+
+								finish = true;
 							}
 
 							var clone = (ExecutionMessage)order.Clone();
 							clone.OriginalTransactionId = statusMsg.TransactionId;
 							result.Add(clone);
+
+							if (finish)
+								break;
 						}
 
 						break;

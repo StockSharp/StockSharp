@@ -2051,5 +2051,18 @@ namespace StockSharp.Messages
 
 			return adapter.IsAllDownloadingSupported(DataType.Securities);
 		}
+
+		/// <summary>
+		/// Determines the specified message contains single order request.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <returns>Check result.</returns>
+		public static bool HasOrderId(this OrderStatusMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.OrderId != null || !message.OrderStringId.IsEmpty();
+		}
 	}
 }

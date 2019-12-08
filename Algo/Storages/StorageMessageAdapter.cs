@@ -476,7 +476,7 @@ namespace StockSharp.Algo.Storages
 				return;
 			}
 
-			if (msg.OrderId == null && msg.OrderStringId.IsEmpty() && msg.OriginalTransactionId == 0 && DaysLoad > TimeSpan.Zero)
+			if (!msg.HasOrderId() && msg.OriginalTransactionId == 0 && DaysLoad > TimeSpan.Zero)
 			{
 				var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
 				var to = msg.To;

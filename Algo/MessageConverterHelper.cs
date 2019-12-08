@@ -740,6 +740,7 @@ namespace StockSharp.Algo
 				PortfolioName = criteria.Portfolio?.Name,
 				SecurityId = criteria.Security?.ToSecurityId() ?? default,
 				OrderId = criteria.Id,
+				OrderStringId = criteria.StringId,
 				OrderType = criteria.Type,
 			};
 		}

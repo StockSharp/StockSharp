@@ -283,6 +283,12 @@ namespace StockSharp.Algo
 
 		private void ProcessOrderStatusMessage(OrderStatusMessage message)
 		{
+			if (message.HasOrderId())
+			{
+				base.OnSendInMessage(message);
+				return;
+			}
+
 			ProcessInSubscriptionMessage(message, DataType.Transactions, default, (id, error) => new OrderStatusMessage
 			{
 				OriginalTransactionId = id,
