@@ -1490,7 +1490,10 @@ namespace StockSharp.Algo
 							break;
 
 						if (execMsg.TransactionId != default)
+						{
+							ApplyParentLookupId(execMsg);
 							_orderAdapters.TryAdd(execMsg.TransactionId, innerAdapter);
+						}
 
 						break;
 
@@ -1517,17 +1520,28 @@ namespace StockSharp.Algo
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			var ids = msg.GetSubscriptionIds().ToArray();
+			var originIds = msg.GetSubscriptionIds();
+			var ids = originIds;
+			var changed = false;
 
 			for (var i = 0; i < ids.Length; i++)
 			{
 				var parentId = _parentChildMap.TryGetParent(ids[i]);
 
-				if (parentId != null)
-					ids[i] = parentId.Value;
+				if (parentId == null)
+					continue;
+
+				if (!changed)
+				{
+					ids = originIds.ToArray();
+					changed = true;
+				}
+
+				ids[i] = parentId.Value;
 			}
 
-			msg.SetSubscriptionIds(ids);
+			if (changed)
+				msg.SetSubscriptionIds(ids);
 		}
 
 		private void SendOutMarketDataNotSupported(long id)
