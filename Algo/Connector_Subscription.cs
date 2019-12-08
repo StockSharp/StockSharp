@@ -293,7 +293,7 @@ namespace StockSharp.Algo
 		[Obsolete("Use SubscribeOrders method.")]
 		public void LookupOrders(Order criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 		{
-			var msg = criteria.ToLookupCriteria();
+			var msg = criteria.ToLookupCriteria(null, null);
 
 			msg.Adapter = adapter;
 			msg.OfflineMode = offlineMode;

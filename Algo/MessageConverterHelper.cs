@@ -728,21 +728,31 @@ namespace StockSharp.Algo
 		/// Convert <see cref="Order"/> to <see cref="OrderStatusMessage"/> value.
 		/// </summary>
 		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <param name="volume">Volume.</param>
+		/// <param name="side">Order side.</param>
 		/// <returns>A message requesting current registered orders and trades.</returns>
-		public static OrderStatusMessage ToLookupCriteria(this Order criteria)
+		public static OrderStatusMessage ToLookupCriteria(this Order criteria, decimal? volume, Sides? side)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			return new OrderStatusMessage
+			var statusMsg = new OrderStatusMessage
 			{
 				IsSubscribe = true,
 				PortfolioName = criteria.Portfolio?.Name,
-				SecurityId = criteria.Security?.ToSecurityId() ?? default,
 				OrderId = criteria.Id,
 				OrderStringId = criteria.StringId,
 				OrderType = criteria.Type,
+				UserOrderId = criteria.UserOrderId,
+				BrokerCode = criteria.BrokerCode,
+				ClientCode = criteria.ClientCode,
+				Volume = volume,
+				Side = side,
 			};
+
+			criteria.Security?.ToMessage().CopyTo(statusMsg);
+
+			return statusMsg;
 		}
 
 		/// <summary>
