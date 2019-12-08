@@ -977,6 +977,8 @@ namespace StockSharp.Algo
 						SendOutMessage(message.Type.ToResultType().CreateLookupResult(subscrMsg.TransactionId));
 						return;
 					}
+
+					_subscription.TryAdd(subscrMsg.TransactionId, Tuple.Create((ISubscriptionMessage)subscrMsg.Clone(), adapters, subscrMsg.ToDataType()));
 				}
 				else
 					adapters = null;
@@ -1451,14 +1453,20 @@ namespace StockSharp.Algo
 						}
 
 						var pfMsg = (IPortfolioNameMessage)message;
-						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
+						var pfName = pfMsg.PortfolioName;
+
+						var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
+						PortfolioAdapterProvider.SetAdapter(pfName, underlyingAdapter.Id);
 
 						if (HasSubscription(DataType.PositionChanges) && innerAdapter.IsSupportSubscriptionByPortfolio())
 						{
-							var pfSubscrMsg = CreatePortfolioSubscription(innerAdapter, pfMsg.PortfolioName);
+							if (_subscribedPortfolios.SafeAdd(underlyingAdapter, key => new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)).Add(pfName))
+							{
+								var pfSubscrMsg = FillIdAndAdapter(innerAdapter, new PortfolioMessage { PortfolioName = pfName });
 
-							if (pfSubscrMsg != null)
-								extra = new List<Message> { pfSubscrMsg };
+								if (pfSubscrMsg != null)
+									extra = new List<Message> { pfSubscrMsg };
+							}
 						}
 
 						break;
@@ -1577,19 +1585,6 @@ namespace StockSharp.Algo
 			m.IsBack = true;
 
 			return m;
-		}
-
-		private PortfolioMessage CreatePortfolioSubscription(IMessageAdapter adapter, string portfolioName)
-		{
-			if (portfolioName.IsEmpty())
-				throw new ArgumentNullException(nameof(portfolioName));
-
-			var underlyingAdapter = GetUnderlyingAdapter(adapter);
-
-			if (!_subscribedPortfolios.SafeAdd(underlyingAdapter, key => new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)).Add(portfolioName))
-				return null;
-
-			return FillIdAndAdapter(adapter, new PortfolioMessage { PortfolioName = portfolioName });
 		}
 
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message, List<Message> extra)
