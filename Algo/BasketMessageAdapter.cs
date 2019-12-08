@@ -1483,6 +1483,17 @@ namespace StockSharp.Algo
 						ApplyParentLookupId((ISubscriptionIdMessage)message);
 						break;
 
+					case MessageTypes.Execution:
+						var execMsg = (ExecutionMessage)message;
+
+						if (execMsg.ExecutionType != ExecutionTypes.Transaction)
+							break;
+
+						if (execMsg.TransactionId != default)
+							_orderAdapters.TryAdd(execMsg.TransactionId, innerAdapter);
+
+						break;
+
 					default:
 						if (message.Type.IsLookupResult())
 							message = ProcessLookupResult(message);
