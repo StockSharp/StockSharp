@@ -9,6 +9,9 @@
             The messages adapter for OpenECry.
             </summary>
         </member>
+        <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.HeartbeatBeforConnect">
+            <inheritdoc />
+        </member>
         <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.OpenECry.OpenECryMessageAdapter"/>.

@@ -7646,9 +7646,11 @@ M:StockSharp.Algo.MessageConverterHelper.ToChangeMessage(StockSharp.BusinessEnti
 M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.BusinessEntities.Portfolio)/summary;DocStr8644
 M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.BusinessEntities.Portfolio)/param/criteria;DocStr809
 M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.BusinessEntities.Portfolio)/returns;DocStr11390
-M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.BusinessEntities.Order)/summary;DocStr8644
-M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.BusinessEntities.Order)/param/criteria;DocStr809
-M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.BusinessEntities.Order)/returns;DocStr4419
+M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.BusinessEntities.Order,System.Nullable{System.Decimal},System.Nullable{StockSharp.Messages.Sides})/summary;DocStr8644
+M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.BusinessEntities.Order,System.Nullable{System.Decimal},System.Nullable{StockSharp.Messages.Sides})/param/criteria;DocStr809
+M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.BusinessEntities.Order,System.Nullable{System.Decimal},System.Nullable{StockSharp.Messages.Sides})/param/volume;DocStr3526
+M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.BusinessEntities.Order,System.Nullable{System.Decimal},System.Nullable{StockSharp.Messages.Sides})/param/side;OrderSide
+M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.BusinessEntities.Order,System.Nullable{System.Decimal},System.Nullable{StockSharp.Messages.Sides})/returns;DocStr4419
 M:StockSharp.Algo.MessageConverterHelper.ToChangeMessage(StockSharp.BusinessEntities.Position,System.Int64)/summary;DocStr2152
 M:StockSharp.Algo.MessageConverterHelper.ToChangeMessage(StockSharp.BusinessEntities.Position,System.Int64)/param/position;Str862
 M:StockSharp.Algo.MessageConverterHelper.ToChangeMessage(StockSharp.BusinessEntities.Position,System.Int64)/param/originalTransactionId;OriginalTransactionId

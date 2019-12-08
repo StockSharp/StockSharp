@@ -5103,7 +5103,7 @@ Gopax;Gopax;Gopax
 CoinHub;CoinHub;CoinHub
 Hotbit;Hotbit;Hotbit
 BrasilBolsa;Brasil Bolsa;Brasil Bolsa
-UnknownTransactionId;Unknown transaction id {0}.;Неизвестный идентификатор транзакции.
+UnknownTransactionId;Unknown transaction id {0}.;Неизвестный идентификатор транзакции {0}.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15852,3 +15852,4 @@ DocStr11478;Try dequeue a message;Попытаться достать из оч�
 DocStr11479;Exit from method if the queue closed;Выйти из метода если очередь закрыта
 DocStr11480;Block the operation;Блокировать операцию
 DocStr11482;Sorted by incoming order queue;Очередь, отсортированная по порядковому номеру
+DocStr11483;Determines the specified message contains single order request;Определить, содержит ли сообщение запрос на единичную заявку

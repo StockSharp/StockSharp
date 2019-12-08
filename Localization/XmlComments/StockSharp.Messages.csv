@@ -939,6 +939,9 @@ M:StockSharp.Messages.Extensions.CreateOrderCondition(System.Type)/returns;DocSt
 M:StockSharp.Messages.Extensions.IsSupportSecuritiesLookupAll(StockSharp.Messages.IMessageAdapter)/summary;DocStr10559
 M:StockSharp.Messages.Extensions.IsSupportSecuritiesLookupAll(StockSharp.Messages.IMessageAdapter)/param/adapter;Adapter
 M:StockSharp.Messages.Extensions.IsSupportSecuritiesLookupAll(StockSharp.Messages.IMessageAdapter)/returns;DocStr8659
+M:StockSharp.Messages.Extensions.HasOrderId(StockSharp.Messages.OrderStatusMessage)/summary;DocStr11483
+M:StockSharp.Messages.Extensions.HasOrderId(StockSharp.Messages.OrderStatusMessage)/param/message;Str3166
+M:StockSharp.Messages.Extensions.HasOrderId(StockSharp.Messages.OrderStatusMessage)/returns;DocStr8659
 T:StockSharp.Messages.IBasketSecurityProcessor/summary;DocStr10604
 P:StockSharp.Messages.IBasketSecurityProcessor.SecurityId/summary;SecurityId
 P:StockSharp.Messages.IBasketSecurityProcessor.BasketExpression/summary;DocStr10613
@@ -1155,7 +1158,7 @@ M:StockSharp.Messages.IMessageQueue.TryDequeue(StockSharp.Messages.Message@,Syst
 M:StockSharp.Messages.IMessageQueue.TryDequeue(StockSharp.Messages.Message@,System.Boolean,System.Boolean)/param/exitOnClose;DocStr11479
 M:StockSharp.Messages.IMessageQueue.TryDequeue(StockSharp.Messages.Message@,System.Boolean,System.Boolean)/param/block;DocStr11480
 M:StockSharp.Messages.IMessageQueue.TryDequeue(StockSharp.Messages.Message@,System.Boolean,System.Boolean)/returns;DocStr10449
-T:StockSharp.Messages.BaseMessageQueue/summary;DocStr11481
+T:StockSharp.Messages.BaseMessageQueue/summary;DocStr11475
 M:StockSharp.Messages.BaseMessageQueue.#ctor/summary;DocStr1
 M:StockSharp.Messages.BaseMessageQueue.TryDequeue(StockSharp.Messages.Message@,System.Boolean,System.Boolean)/inheritdoc;DocStr8459
 M:StockSharp.Messages.BaseMessageQueue.Enqueue(StockSharp.Messages.Message)/inheritdoc;DocStr8459
@@ -1432,7 +1435,6 @@ F:StockSharp.Messages.OptionTypes.Put/summary;Str224
 T:StockSharp.Messages.OrderCancelMessage/summary;DocStr4376
 P:StockSharp.Messages.OrderCancelMessage.OrderId/summary;DocStr4379
 P:StockSharp.Messages.OrderCancelMessage.OrderStringId/summary;DocStr4380
-P:StockSharp.Messages.OrderCancelMessage.OrderTransactionId/summary;DocStr4381
 P:StockSharp.Messages.OrderCancelMessage.Volume/summary;DocStr4382
 P:StockSharp.Messages.OrderCancelMessage.Side/summary;OrderSide
 M:StockSharp.Messages.OrderCancelMessage.#ctor/summary;DocStr1
@@ -1523,7 +1525,6 @@ M:StockSharp.Messages.OrderRegisterMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.OrderReplaceMessage/summary;DocStr4391
 P:StockSharp.Messages.OrderReplaceMessage.OldOrderId/summary;DocStr4392
 P:StockSharp.Messages.OrderReplaceMessage.OldOrderStringId/summary;DocStr4393
-P:StockSharp.Messages.OrderReplaceMessage.OldTransactionId/summary;DocStr4394
 M:StockSharp.Messages.OrderReplaceMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.OrderReplaceMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.OrderReplaceMessage.Clone/returns;DocStr1116
