@@ -895,6 +895,7 @@ E:StockSharp.Algo.Connector.PositionChanged/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.PositionsChanged/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.NewMarketDepth/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.MarketDepthChanged/inheritdoc;DocStr8459
+E:StockSharp.Algo.Connector.FilteredMarketDepthChanged/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.NewMarketDepths/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.MarketDepthsChanged/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.NewOrderLogItem/inheritdoc;DocStr8459
@@ -1070,6 +1071,9 @@ M:StockSharp.Algo.Connector.UnSubscribePositions(System.Int64)/inheritdoc;DocStr
 P:StockSharp.Algo.Connector.Subscriptions/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.Subscribe(StockSharp.Algo.Subscription)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.UnSubscribe(StockSharp.Algo.Subscription)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Connector.TryGetSubscriptionById(System.Int64)/summary;DocStr11473
+M:StockSharp.Algo.Connector.TryGetSubscriptionById(System.Int64)/param/subscriptionId;DocStr9420
+M:StockSharp.Algo.Connector.TryGetSubscriptionById(System.Int64)/returns;DocStr11068
 M:StockSharp.Algo.Connector.#ctor/summary;DocStr1
 M:StockSharp.Algo.Connector.#ctor(StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.SnapshotRegistry,System.Boolean)/summary;DocStr1
 M:StockSharp.Algo.Connector.#ctor(StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.SnapshotRegistry,System.Boolean)/param/entityRegistry;DocStr1309
@@ -3053,6 +3057,7 @@ E:StockSharp.Algo.Strategies.Strategy.NewSecurity/inheritdoc;DocStr8459
 E:StockSharp.Algo.Strategies.Strategy.SecurityChanged/inheritdoc;DocStr8459
 E:StockSharp.Algo.Strategies.Strategy.NewMarketDepth/inheritdoc;DocStr8459
 E:StockSharp.Algo.Strategies.Strategy.MarketDepthChanged/inheritdoc;DocStr8459
+E:StockSharp.Algo.Strategies.Strategy.FilteredMarketDepthChanged/inheritdoc;DocStr8459
 E:StockSharp.Algo.Strategies.Strategy.NewOrderLogItem/inheritdoc;DocStr8459
 E:StockSharp.Algo.Strategies.Strategy.NewNews/inheritdoc;DocStr8459
 E:StockSharp.Algo.Strategies.Strategy.NewsChanged/inheritdoc;DocStr8459
@@ -7195,6 +7200,10 @@ M:StockSharp.Algo.MarketRuleHelper.WhenMarketDepthChanged(StockSharp.BusinessEnt
 M:StockSharp.Algo.MarketRuleHelper.WhenMarketDepthChanged(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/security;DocStr1958
 M:StockSharp.Algo.MarketRuleHelper.WhenMarketDepthChanged(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/provider;DocStr973
 M:StockSharp.Algo.MarketRuleHelper.WhenMarketDepthChanged(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/returns;DocStr14
+M:StockSharp.Algo.MarketRuleHelper.WhenFilteredMarketDepthChanged(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/summary;DocStr1957
+M:StockSharp.Algo.MarketRuleHelper.WhenFilteredMarketDepthChanged(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/security;DocStr1958
+M:StockSharp.Algo.MarketRuleHelper.WhenFilteredMarketDepthChanged(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/provider;DocStr973
+M:StockSharp.Algo.MarketRuleHelper.WhenFilteredMarketDepthChanged(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/returns;DocStr14
 M:StockSharp.Algo.MarketRuleHelper.WhenMarketDepthChanged(StockSharp.Algo.BasketSecurity,StockSharp.BusinessEntities.IMarketDataProvider)/summary;DocStr1959
 M:StockSharp.Algo.MarketRuleHelper.WhenMarketDepthChanged(StockSharp.Algo.BasketSecurity,StockSharp.BusinessEntities.IMarketDataProvider)/param/security;DocStr1960
 M:StockSharp.Algo.MarketRuleHelper.WhenMarketDepthChanged(StockSharp.Algo.BasketSecurity,StockSharp.BusinessEntities.IMarketDataProvider)/param/provider;DocStr973

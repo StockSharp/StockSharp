@@ -6525,26 +6525,6 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.SubscriptionStates">
-      <summary>
-            Subscription states.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SubscriptionStates.Stopped">
-      <summary>
-            Stopped.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SubscriptionStates.Active">
-      <summary>
-            Active.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SubscriptionStates.Failed">
-      <summary>
-            Failed.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.ISubscriptionsView">
       <summary>
             The interface for visual panel for modify subscriptions.
@@ -6579,20 +6559,20 @@
     </member>
     <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionFailed(StockSharp.Messages.MarketDataMessage,System.Exception)">
       <summary>
-            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Failed" /> state.
+            Set for the specified subscription <see cref="F:StockSharp.Algo.SubscriptionStates.Error" /> state.
             </summary>
       <param name="subscription">Subscription.</param>
       <param name="error">Error.</param>
     </member>
     <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionActive(StockSharp.Messages.MarketDataMessage)">
       <summary>
-            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Active" /> state.
+            Set for the specified subscription <see cref="F:StockSharp.Algo.SubscriptionStates.Active" /> state.
             </summary>
       <param name="subscription">Subscription.</param>
     </member>
     <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionStopped(StockSharp.Messages.MarketDataMessage)">
       <summary>
-            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Stopped" /> state.
+            Set for the specified subscription <see cref="F:StockSharp.Algo.SubscriptionStates.Stopped" /> state.
             </summary>
       <param name="subscription">Subscription.</param>
     </member>

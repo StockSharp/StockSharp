@@ -1433,10 +1433,6 @@ M:StockSharp.Xaml.SubscriptionPanel.Load(Ecng.Serialization.SettingsStorage)/par
 M:StockSharp.Xaml.SubscriptionPanel.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.SubscriptionPanel.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.SubscriptionPanel.InitializeComponent/summary;DocStr8
-T:StockSharp.Xaml.SubscriptionStates/summary;DocStr11066
-F:StockSharp.Xaml.SubscriptionStates.Stopped/summary;Str3178
-F:StockSharp.Xaml.SubscriptionStates.Active/summary;DocStr4511
-F:StockSharp.Xaml.SubscriptionStates.Failed/summary;Failed
 T:StockSharp.Xaml.ISubscriptionsView/summary;DocStr11059
 P:StockSharp.Xaml.ISubscriptionsView.Subscriptions/summary;DocStr11054
 E:StockSharp.Xaml.ISubscriptionsView.Adding/summary;DocStr11061

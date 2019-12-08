@@ -508,6 +508,7 @@ E:StockSharp.BusinessEntities.IMarketDataProvider.NewSecurity/summary;DocStr8552
 E:StockSharp.BusinessEntities.IMarketDataProvider.SecurityChanged/summary;DocStr898
 E:StockSharp.BusinessEntities.IMarketDataProvider.NewMarketDepth/summary;DocStr8557
 E:StockSharp.BusinessEntities.IMarketDataProvider.MarketDepthChanged/summary;DocStr8558
+E:StockSharp.BusinessEntities.IMarketDataProvider.FilteredMarketDepthChanged/summary;DocStr8558
 E:StockSharp.BusinessEntities.IMarketDataProvider.NewOrderLogItem/summary;DocStr885
 E:StockSharp.BusinessEntities.IMarketDataProvider.NewNews/summary;DocStr887
 E:StockSharp.BusinessEntities.IMarketDataProvider.NewsChanged/summary;DocStr888

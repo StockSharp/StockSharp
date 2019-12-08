@@ -15842,3 +15842,12 @@ DocStr11469;Write extra parameters for {0} message;Записать дополн
 DocStr11470;Resets Market Protections;Сбросить защиту рынком
 DocStr11471;Indicates whether the resulting position after a trade should be a closing position;Указывает, должна ли результирующая позиция после сделки быть закрывающей позицией
 DocStr11472;Indicates additional order instruction;Указывает на дополнительную инструкцию заявки
+DocStr11473;Try get subscription by id;Попытаться получить идентификатор подписки
+DocStr11474;Set subscription identifiers into the specified message;Установить идентификаторы подписки в указанное сообщение
+DocStr11475;Message queue;Очередь сообщений
+DocStr11476;The interfaces described message queue;Интерфейс, описывающий очередь сообщений
+DocStr11477;Enqueue the specified message;Добавить в очередь сообщение
+DocStr11478;Try dequeue a message;Попытаться достать из очереди сообщение
+DocStr11479;Exit from method if the queue closed;Выйти из метода если очередь закрыта
+DocStr11480;Block the operation;Блокировать операцию
+DocStr11482;Sorted by incoming order queue;Очередь, отсортированная по порядковому номеру

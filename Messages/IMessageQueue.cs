@@ -27,7 +27,7 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Sorted message queue.
+	/// Message queue.
 	/// </summary>
 	public abstract class BaseMessageQueue :
 		BaseBlockingQueue<KeyValuePair<long, Message>,
