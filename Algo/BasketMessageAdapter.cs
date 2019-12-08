@@ -258,6 +258,8 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<IMessageAdapter, HashSet<string>> _subscribedPortfolios = new SynchronizedDictionary<IMessageAdapter, HashSet<string>>();
 		private readonly ParentChildMap _parentChildMap = new ParentChildMap();
 
+		private readonly SynchronizedDictionary<long, IMessageAdapter> _orderAdapters = new SynchronizedDictionary<long, IMessageAdapter>();
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
 		/// </summary>
@@ -883,19 +885,33 @@ namespace StockSharp.Algo
 				}
 
 				case MessageTypes.OrderRegister:
-				case MessageTypes.OrderReplace:
-				case MessageTypes.OrderCancel:
-				case MessageTypes.OrderGroupCancel:
 				{
 					var ordMsg = (OrderMessage)message;
 					ProcessPortfolioMessage(ordMsg.PortfolioName, ordMsg);
 					break;
 				}
-
+				case MessageTypes.OrderReplace:
+				case MessageTypes.OrderCancel:
+				{
+					var ordMsg = (OrderMessage)message;
+					ProcessOrderMessage(ordMsg.OriginalTransactionId, ordMsg);
+					break;
+				}
 				case MessageTypes.OrderPairReplace:
 				{
 					var ordMsg = (OrderPairReplaceMessage)message;
-					ProcessPortfolioMessage(ordMsg.Message1.PortfolioName, ordMsg);
+					ProcessOrderMessage(ordMsg.Message1.OriginalTransactionId, ordMsg);
+					break;
+				}
+				case MessageTypes.OrderGroupCancel:
+				{
+					var groupMsg = (OrderGroupCancelMessage)message;
+
+					if (groupMsg.PortfolioName.IsEmpty())
+						ProcessOtherMessage(message);
+					else
+						ProcessPortfolioMessage(groupMsg.PortfolioName, groupMsg);
+
 					break;
 				}
 
@@ -1284,7 +1300,29 @@ namespace StockSharp.Algo
 					return;
 				}
 			}
+
+			if (message is OrderRegisterMessage regMsg)
+				_orderAdapters.TryAdd(regMsg.TransactionId, adapter);
 				
+			adapter.SendInMessage(message);
+		}
+
+		private void ProcessOrderMessage(long transId, Message message)
+		{
+			if (!_orderAdapters.TryGetValue(transId, out var adapter))
+			{
+				this.AddErrorLog(LocalizedStrings.UnknownTransactionId, transId);
+
+				SendOutMessage(new ExecutionMessage
+				{
+					ExecutionType = ExecutionTypes.Transaction,
+					OriginalTransactionId = transId,
+					Error = new InvalidOperationException(LocalizedStrings.UnknownTransactionId.Put(transId)),
+				});
+
+				return;
+			}
+
 			adapter.SendInMessage(message);
 		}
 

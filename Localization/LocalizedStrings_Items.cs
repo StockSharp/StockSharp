@@ -50696,5 +50696,15 @@ namespace StockSharp.Localization
 		/// Brasil Bolsa
 		/// </summary>
 		public static string BrasilBolsa => GetString(BrasilBolsaKey);
+
+		/// <summary>
+		/// Unknown transaction id {0}.
+		/// </summary>
+		public const string UnknownTransactionIdKey = nameof(UnknownTransactionId);
+
+		/// <summary>
+		/// Unknown transaction id {0}.
+		/// </summary>
+		public static string UnknownTransactionId => GetString(UnknownTransactionIdKey);
 	}
 }
