@@ -263,7 +263,7 @@ namespace StockSharp.Algo.Testing
 						//при перерегистрации могут приходить заявки с нулевым объемом
 						//объем при этом надо взять из старой заявки.
 						var orderMsg = (OrderReplaceMessage)message;
-						var oldOrder = _activeOrders.TryGetValue(orderMsg.OldTransactionId);
+						var oldOrder = _activeOrders.TryGetValue(orderMsg.OriginalTransactionId);
 
 						foreach (var execMsg in _execLogConverter.ToExecutionLog(orderMsg, GetTotalVolume(orderMsg.Side.Invert())))
 						{
@@ -308,7 +308,7 @@ namespace StockSharp.Algo.Testing
 									HasOrderInfo = true,
 								});
 
-								this.AddErrorLog(LocalizedStrings.Str1148Params, orderMsg.OldTransactionId);
+								this.AddErrorLog(LocalizedStrings.Str1148Params, orderMsg.OriginalTransactionId);
 							}
 						}
 

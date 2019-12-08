@@ -38,12 +38,6 @@ namespace StockSharp.Messages
 		public string OrderStringId { get; set; }
 
 		/// <summary>
-		/// Transaction ID cancellation order.
-		/// </summary>
-		[DataMember]
-		public long OrderTransactionId { get; set; }
-
-		/// <summary>
 		/// Cancelling volume. If not specified, then it canceled the entire balance.
 		/// </summary>
 		[DataMember]
@@ -82,7 +76,6 @@ namespace StockSharp.Messages
 
 			destination.OrderId = OrderId;
 			destination.OrderStringId = OrderStringId;
-			destination.OrderTransactionId = OrderTransactionId;
 			destination.Volume = Volume;
 			destination.Side = Side;
 		}
@@ -101,7 +94,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",OrderTransId={OrderTransactionId},TransId={TransactionId},OrderId={OrderId}";
+			return base.ToString() + $",OrderTransId={OriginalTransactionId},TransId={TransactionId},OrderId={OrderId}";
 		}
 	}
 }

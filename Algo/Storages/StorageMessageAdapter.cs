@@ -476,7 +476,7 @@ namespace StockSharp.Algo.Storages
 				return;
 			}
 
-			if (msg.OrderId == null && msg.OrderStringId.IsEmpty() && msg.OrderTransactionId == 0 && DaysLoad > TimeSpan.Zero)
+			if (msg.OrderId == null && msg.OrderStringId.IsEmpty() && msg.OriginalTransactionId == 0 && DaysLoad > TimeSpan.Zero)
 			{
 				var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
 				var to = msg.To;
@@ -519,7 +519,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(msg));
 
 			// can be looped back from offline
-			_cancellationTransactions.TryAdd(msg.TransactionId, msg.OrderTransactionId);
+			_cancellationTransactions.TryAdd(msg.TransactionId, msg.OriginalTransactionId);
 			base.OnSendInMessage(msg);
 		}
 

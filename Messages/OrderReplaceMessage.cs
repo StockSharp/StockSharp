@@ -38,12 +38,6 @@ namespace StockSharp.Messages
 		public string OldOrderStringId { get; set; }
 
 		/// <summary>
-		/// Modified order transaction id.
-		/// </summary>
-		[DataMember]
-		public long OldTransactionId { get; set; }
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderReplaceMessage"/>.
 		/// </summary>
 		public OrderReplaceMessage()
@@ -61,7 +55,6 @@ namespace StockSharp.Messages
 			{
 				OldOrderId = OldOrderId,
 				OldOrderStringId = OldOrderStringId,
-				OldTransactionId = OldTransactionId,
 			};
 
 			CopyTo(clone);
@@ -72,7 +65,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",OldTransId={OldTransactionId},OldOrdId={OldOrderId},NewTransId={TransactionId}";
+			return base.ToString() + $",OldTransId={OriginalTransactionId},OldOrdId={OldOrderId},NewTransId={TransactionId}";
 		}
 	}
 }

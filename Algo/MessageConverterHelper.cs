@@ -399,7 +399,7 @@ namespace StockSharp.Algo
 			{
 				PortfolioName = order.Portfolio.Name,
 				OrderType = order.Type,
-				OrderTransactionId = order.TransactionId,
+				OriginalTransactionId = order.TransactionId,
 				TransactionId = transactionId,
 				OrderId = order.Id,
 				OrderStringId = order.StringId,
@@ -447,7 +447,7 @@ namespace StockSharp.Algo
 
 				OldOrderId = oldOrder.Id,
 				OldOrderStringId = oldOrder.StringId,
-				OldTransactionId = oldOrder.TransactionId,
+				OriginalTransactionId = oldOrder.TransactionId,
 
 				UserOrderId = oldOrder.UserOrderId,
 
