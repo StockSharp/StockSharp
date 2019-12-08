@@ -300,9 +300,7 @@ namespace StockSharp.Algo.Risk
 						return false;
 					}
 
-					var openTime = _posOpenTime.TryGetValue2(key);
-
-					if (openTime == null)
+					if (!_posOpenTime.TryGetValue(key, out var openTime))
 					{
 						_posOpenTime.Add(key, posMsg.LocalTime);
 						return false;

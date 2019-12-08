@@ -629,12 +629,10 @@ namespace StockSharp.Messages
 			if (messageType == null)
 				throw new ArgumentNullException(nameof(messageType));
 
-			var dataType = _candleMarketDataTypes.TryGetValue2(messageType);
-
-			if (dataType == null)
+			if (!_candleMarketDataTypes.TryGetValue(messageType, out var dataType))
 				throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
 
-			return dataType.Value;
+			return dataType;
 		}
 
 		/// <summary>

@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Export
 	using System.Linq;
 	using System.Windows.Media;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Interop;
@@ -288,15 +287,13 @@ namespace StockSharp.Algo.Export
 					{
 						var field = pair.Key;
 
-						var columnIndex = columns.TryGetValue2(field);
-
-						if (columnIndex == null)
+						if (!columns.TryGetValue(field, out var columnIndex))
 						{
 							columnIndex = columns.Count;
-							columns.Add(field, columnIndex.Value);
+							columns.Add(field, columnIndex);
 
-							worker.SetCell(columnIndex.Value, 0, field.GetDisplayName());
-							ApplyCellStyle(worker, field, columnIndex.Value);
+							worker.SetCell(columnIndex, 0, field.GetDisplayName());
+							ApplyCellStyle(worker, field, columnIndex);
 						}
 
 						worker.SetCell(columns[field], row, pair.Value);
@@ -336,15 +333,13 @@ namespace StockSharp.Algo.Export
 					{
 						var type = pair.Key;
 
-						var columnIndex = columns.TryGetValue2(type);
-
-						if (columnIndex == null)
+						if (!columns.TryGetValue(type, out var columnIndex))
 						{
 							columnIndex = columns.Count;
-							columns.Add(type, columnIndex.Value);
+							columns.Add(type, columnIndex);
 
-							worker.SetCell(columnIndex.Value, 0, type.GetDisplayName());
-							ApplyCellStyle(worker, type, columnIndex.Value);
+							worker.SetCell(columnIndex, 0, type.GetDisplayName());
+							ApplyCellStyle(worker, type, columnIndex);
 						}
 
 						worker.SetCell(columns[type], row, pair.Value);
