@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class PortfolioRouteMessage : BaseRouteMessage<PortfolioRouteMessage>
+	public class PortfolioRouteMessage : BaseRouteMessage<PortfolioRouteMessage>, IPortfolioNameMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="PortfolioRouteMessage"/>.
@@ -18,9 +18,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Portfolio.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public string PortfolioName { get; set; }
 

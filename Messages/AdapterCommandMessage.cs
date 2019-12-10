@@ -53,7 +53,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class AdapterCommandMessage : Message
+	public class AdapterCommandMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="AdapterCommandMessage"/>.
@@ -63,9 +63,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Request identifier.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
 
@@ -94,13 +92,17 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new AdapterCommandMessage
+			var clone = new AdapterCommandMessage
 			{
 				TransactionId = TransactionId,
 				Command = Command,
 				Parameters = Parameters.ToDictionary(),
 				AdapterId = AdapterId,
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 
 		/// <inheritdoc />
