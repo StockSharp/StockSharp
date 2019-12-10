@@ -1493,8 +1493,12 @@ namespace StockSharp.Algo
 						if (execMsg.TransactionId != default)
 						{
 							ApplyParentLookupId(execMsg);
-							_orderAdapters.TryAdd(execMsg.TransactionId, innerAdapter);
+
+							if (execMsg.HasOrderInfo)
+								_orderAdapters.TryAdd(execMsg.TransactionId, innerAdapter);
 						}
+						else if (execMsg.HasTradeInfo)
+							ApplyParentLookupId(execMsg);
 
 						break;
 
