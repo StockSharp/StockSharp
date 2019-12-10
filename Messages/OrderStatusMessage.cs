@@ -89,12 +89,6 @@ namespace StockSharp.Messages
 		{
 			var str = base.ToString();
 
-			if (TransactionId > 0)
-				str += $",TrId={TransactionId}";
-
-			if (OriginalTransactionId > 0)
-				str += $",OrigId={OriginalTransactionId}";
-
 			if (From != null)
 				str += $",From={From.Value}";
 
