@@ -894,13 +894,14 @@ namespace StockSharp.Algo
 				case MessageTypes.OrderCancel:
 				{
 					var ordMsg = (OrderMessage)message;
-					ProcessOrderMessage(ordMsg.OriginalTransactionId, ordMsg);
+					ProcessOrderMessage(ordMsg.TransactionId, ordMsg.OriginalTransactionId, ordMsg);
 					break;
 				}
 				case MessageTypes.OrderPairReplace:
 				{
 					var ordMsg = (OrderPairReplaceMessage)message;
-					ProcessOrderMessage(ordMsg.Message1.OriginalTransactionId, ordMsg);
+					var m1 = ordMsg.Message1;
+					ProcessOrderMessage(m1.TransactionId, m1.OriginalTransactionId, ordMsg);
 					break;
 				}
 				case MessageTypes.OrderGroupCancel:
@@ -1309,18 +1310,18 @@ namespace StockSharp.Algo
 			adapter.SendInMessage(message);
 		}
 
-		private void ProcessOrderMessage(long transId, Message message)
+		private void ProcessOrderMessage(long transId, long originId, Message message)
 		{
-			if (!_orderAdapters.TryGetValue(transId, out var adapter))
+			if (!_orderAdapters.TryGetValue(originId, out var adapter))
 			{
-				this.AddErrorLog(LocalizedStrings.UnknownTransactionId, transId);
+				this.AddErrorLog(LocalizedStrings.UnknownTransactionId, originId);
 
 				SendOutMessage(new ExecutionMessage
 				{
 					ExecutionType = ExecutionTypes.Transaction,
 					HasOrderInfo = true,
 					OriginalTransactionId = transId,
-					Error = new InvalidOperationException(LocalizedStrings.UnknownTransactionId.Put(transId)),
+					Error = new InvalidOperationException(LocalizedStrings.UnknownTransactionId.Put(originId)),
 				});
 
 				return;
