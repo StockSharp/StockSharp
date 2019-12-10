@@ -1318,6 +1318,7 @@ namespace StockSharp.Algo
 				SendOutMessage(new ExecutionMessage
 				{
 					ExecutionType = ExecutionTypes.Transaction,
+					HasOrderInfo = true,
 					OriginalTransactionId = transId,
 					Error = new InvalidOperationException(LocalizedStrings.UnknownTransactionId.Put(transId)),
 				});
