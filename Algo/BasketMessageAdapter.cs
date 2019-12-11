@@ -255,7 +255,6 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>> _subscription = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>>();
 		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>>();
 		private readonly SynchronizedSet<long> _subscriptionListRequests = new SynchronizedSet<long>();
-		private readonly SynchronizedDictionary<IMessageAdapter, HashSet<string>> _subscribedPortfolios = new SynchronizedDictionary<IMessageAdapter, HashSet<string>>();
 		private readonly ParentChildMap _parentChildMap = new ParentChildMap();
 
 		private readonly SynchronizedDictionary<long, IMessageAdapter> _orderAdapters = new SynchronizedDictionary<long, IMessageAdapter>();
@@ -612,7 +611,6 @@ namespace StockSharp.Algo
 			_subscription.Clear();
 			_parentChildMap.Clear();
 			_subscriptionListRequests.Clear();
-			_subscribedPortfolios.Clear();
 		}
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
@@ -1443,32 +1441,23 @@ namespace StockSharp.Algo
 					{
 						ApplyParentLookupId((ISubscriptionIdMessage)message);
 
-						if (message.Type == MessageTypes.Portfolio)
+						if (message is PortfolioMessage pfMsg)
 						{
-							var pfMsg1 = (PortfolioMessage)message;
-
-							if (pfMsg1.Error != null)
+							if (pfMsg.Error != null)
 							{
-								_requestsById.Remove(pfMsg1.OriginalTransactionId);
+								_requestsById.Remove(pfMsg.OriginalTransactionId);
 								break;
 							}
 						}
 
-						var pfMsg = (IPortfolioNameMessage)message;
-						var pfName = pfMsg.PortfolioName;
+						var pfName = ((IPortfolioNameMessage)message).PortfolioName;
 
-						var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
-						PortfolioAdapterProvider.SetAdapter(pfName, underlyingAdapter.Id);
-
-						if (HasSubscription(DataType.PositionChanges) && innerAdapter.IsSupportSubscriptionByPortfolio())
+						// reply on RegisterPortfolio subscription do not contains any portfolio info
+						if (!pfName.IsEmpty())
 						{
-							if (_subscribedPortfolios.SafeAdd(underlyingAdapter, key => new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)).Add(pfName))
-							{
-								var pfSubscrMsg = FillIdAndAdapter(innerAdapter, new PortfolioMessage { PortfolioName = pfName });
-
-								if (pfSubscrMsg != null)
-									extra = new List<Message> { pfSubscrMsg };
-							}
+							var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
+						
+							PortfolioAdapterProvider.SetAdapter(pfName, underlyingAdapter.Id);
 						}
 
 						break;
@@ -1605,17 +1594,6 @@ namespace StockSharp.Algo
 			return parentResponse;
 		}
 
-		private static TMessage FillIdAndAdapter<TMessage>(IMessageAdapter adapter, TMessage m)
-			where TMessage : Message, ISubscriptionMessage
-		{
-			m.TransactionId = adapter.TransactionIdGenerator.GetNextId();
-			m.IsSubscribe = true;
-			m.Adapter = adapter;
-			m.IsBack = true;
-
-			return m;
-		}
-
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message, List<Message> extra)
 		{
 			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
@@ -1677,7 +1655,7 @@ namespace StockSharp.Algo
 			message.Adapter = underlyingAdapter;
 		}
 
-		private bool HasSubscription(DataType dataType) => _subscription.SyncGet(c => c.Any(p => p.Value.Item3 == dataType));
+		//private bool HasSubscription(DataType dataType) => _subscription.SyncGet(c => c.Any(p => p.Value.Item3 == dataType));
 
 		private void UpdateAdapterState(IMessageAdapter adapter, BaseConnectionMessage message, List<Message> extra)
 		{

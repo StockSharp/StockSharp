@@ -515,6 +515,44 @@ namespace StockSharp.Algo
 
 				return subscription;
 			}
+
+			public Subscription TryGetSubscription(Portfolio portfolio)
+			{
+				if (portfolio == null)
+					throw new ArgumentNullException(nameof(portfolio));
+
+				return Subscriptions.FirstOrDefault(s => s.Portfolio == portfolio);
+			}
+
+			public Subscription ProcessResponse(PortfolioMessage response)
+			{
+				var originId = response.OriginalTransactionId;
+
+				Subscription subscription;
+
+				lock (_syncObject)
+				{
+					if (response.Error != null)
+					{
+						subscription = TryGetSubscription(originId, true);
+				
+						if (subscription != null)
+							ChangeState(subscription, SubscriptionStates.Error);
+					}
+					else
+					{
+						if (originId == 0)
+							return null;
+
+						subscription = TryGetSubscription(originId, false);
+
+						if (subscription?.Portfolio != null && subscription.State != SubscriptionStates.Active)
+							ChangeState(subscription, SubscriptionStates.Active);
+					}
+				}
+
+				return subscription;
+			}
 		}
 	}
 }

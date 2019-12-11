@@ -284,6 +284,7 @@ StockSharp API Change log
 * (feature) FIX connector. BrasilBolsa fix dialect added.
 * (feature) PortfolioGrid. Leverage column added.
 * (feature) Connector. Support single order status requests.
+* (feature) Connector. IsAutoPortfoliosSubscribe added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

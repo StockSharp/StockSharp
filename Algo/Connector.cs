@@ -201,7 +201,14 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Send unsubscribe on disconnect command.
 		/// </summary>
+		/// <remarks>By default is <see langword="true"/>.</remarks>
 		public bool IsAutoUnSubscribeOnDisconnect { get; set; } = true;
+
+		/// <summary>
+		/// Send subscribe for all portfolios.
+		/// </summary>
+		/// <remarks>By default is <see langword="true"/>.</remarks>
+		public bool IsAutoPortfoliosSubscribe { get; set; } = true;
 
 		private void InitAdapter(IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
 		{
@@ -1213,6 +1220,7 @@ namespace StockSharp.Algo
 			LookupMessagesOnConnect = storage.GetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
 			IsRestoreSubscriptionOnNormalReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 			IsAutoUnSubscribeOnDisconnect = storage.GetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
+			IsAutoPortfoliosSubscribe = storage.GetValue(nameof(IsAutoPortfoliosSubscribe), IsAutoPortfoliosSubscribe);
 
 			base.Load(storage);
 		}
@@ -1244,6 +1252,7 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
 			storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 			storage.SetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
+			storage.SetValue(nameof(IsAutoPortfoliosSubscribe), IsAutoPortfoliosSubscribe);
 
 			base.Save(storage);
 		}

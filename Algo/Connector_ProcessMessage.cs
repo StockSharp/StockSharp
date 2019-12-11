@@ -636,14 +636,6 @@ namespace StockSharp.Algo
 						ProcessPortfolioMessage((PortfolioMessage)message);
 						break;
 
-					//case MessageTypes.PortfolioChange:
-					//	ProcessPortfolioChangeMessage((PortfolioChangeMessage)message);
-					//	break;
-
-					//case MessageTypes.Position:
-					//	ProcessPositionMessage((PositionMessage)message);
-					//	break;
-
 					case MessageTypes.PositionChange:
 						ProcessPositionChangeMessage((PositionChangeMessage)message);
 						break;
@@ -1033,58 +1025,67 @@ namespace StockSharp.Algo
 				RaisePortfolioChanged(portfolio);
 		}
 
-		private void ProcessPortfolioMessage(PortfolioMessage message)
+		private void TrySubscribePortfolio(Portfolio portfolio, IMessageAdapter adapter)
 		{
-			if (message.Error != null)
-			{
-				var subscription = _subscriptionManager.TryGetSubscription(message.OriginalTransactionId, true);
-				
-				if (subscription != null)
-					RaiseSubscriptionFailed(subscription, message.Error, true);
-
-				return;
-			}
-
-			var portfolio = GetPortfolio(message.PortfolioName, p =>
-			{
-				message.ToPortfolio(p, _entityCache.ExchangeInfoProvider);
-				return true;
-			}, out var isNew);
-
-			if (message.OriginalTransactionId == 0)
+			if (!IsAutoPortfoliosSubscribe || adapter?.IsSupportSubscriptionByPortfolio() != true)
 				return;
 
-			if (isNew)
-				_subscriptionManager.ProcessLookupResponse(message, portfolio);
+			var subscription = _subscriptionManager.TryGetSubscription(portfolio);
 
-			RaiseReceived(portfolio, message, PortfolioReceived);
+			if (subscription == null)
+				RegisterPortfolio(portfolio);
 		}
 
-		//private void ProcessPositionMessage(PositionMessage message)
-		//{
-		//	var security = LookupSecurity(message.SecurityId);
-		//	var portfolio = GetPortfolio(message.PortfolioName);
-		//	var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
+		private void ProcessPortfolioMessage(PortfolioMessage message)
+		{
+			var subscription = _subscriptionManager.ProcessResponse(message);
 
-		//	message.CopyExtensionInfo(position);
-		//}
+			if (message.Error != null)
+			{
+				if (subscription != null)
+					RaiseSubscriptionFailed(subscription, message.Error, true);
+			}
+			else
+			{
+				// reply on RegisterPortfolio subscription do not contains any portfolio info
+				if (message.PortfolioName.IsEmpty())
+					return;
+
+				var portfolio = GetPortfolio(message.PortfolioName, p =>
+				{
+					message.ToPortfolio(p, _entityCache.ExchangeInfoProvider);
+					return true;
+				}, out var isNew);
+
+				//if (message.OriginalTransactionId == 0)
+				//	return;
+
+				if (isNew)
+					_subscriptionManager.ProcessLookupResponse(message, portfolio);
+
+				RaiseReceived(portfolio, message, PortfolioReceived);
+				TrySubscribePortfolio(portfolio, message.Adapter);
+			}
+		}
 
 		private void ProcessPositionChangeMessage(PositionChangeMessage message)
 		{
+			Portfolio portfolio;
+
 			if (message.IsMoney())
 			{
-				var pf = GetPortfolio(message.PortfolioName, portfolio =>
+				portfolio = GetPortfolio(message.PortfolioName, pf =>
 				{
-					portfolio.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
+					pf.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
 					return true;
 				}, out _);
 
-				RaiseReceived(pf, message, PortfolioReceived);
+				RaiseReceived(portfolio, message, PortfolioReceived);
 			}
 			else
 			{
 				var security = EnsureGetSecurity(message);
-				var portfolio = GetPortfolio(message.PortfolioName);
+				portfolio = GetPortfolio(message.PortfolioName);
 
 				var valueInLots = message.Changes.TryGetValue(PositionChangeTypes.CurrentValueInLots);
 				if (valueInLots != null)
@@ -1104,6 +1105,8 @@ namespace StockSharp.Algo
 				RaisePositionChanged(position);
 				RaiseReceived(position, message, PositionReceived);
 			}
+
+			TrySubscribePortfolio(portfolio, message.Adapter);
 		}
 
 		private void ProcessNewsMessage(NewsMessage message)
