@@ -121,7 +121,6 @@ namespace SampleConnection
 			Connector.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
 
 			Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-			Connector.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 			
 			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Positions.Add;
@@ -131,11 +130,6 @@ namespace SampleConnection
 			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 			// subscribe on error of order cancelling event
 			Connector.OrderCancelFailed += OrderFailed;
-
-			// subscribe on error of stop-order registration event
-			Connector.StopOrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			// subscribe on error of stop-order cancelling event
-			Connector.StopOrderCancelFailed += OrderFailed;
 
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;

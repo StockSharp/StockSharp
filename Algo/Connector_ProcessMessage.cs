@@ -1457,10 +1457,7 @@ namespace StockSharp.Algo
 					{
 						this.AddOrderInfoLog(order, "New order");
 
-						if (order.Type == OrderTypes.Conditional)
-							RaiseNewStopOrder(order);
-						else
-							RaiseNewOrder(order);
+						RaiseNewOrder(order);
 
 						RaiseReceived(order, message, OrderReceived);
 
@@ -1474,10 +1471,7 @@ namespace StockSharp.Algo
 					{
 						this.AddOrderInfoLog(order, "Order changed");
 
-						if (order.Type == OrderTypes.Conditional)
-							RaiseStopOrderChanged(order);
-						else
-							RaiseOrderChanged(order);
+						RaiseOrderChanged(order);
 
 						RaiseReceived(order, message, OrderReceived);
 					}
@@ -1530,16 +1524,11 @@ namespace StockSharp.Algo
 					this.AddErrorLog(() => (isCancelTransaction ? "OrderCancelFailed" : "OrderRegisterFailed")
 						+ Environment.NewLine + fail.Order + Environment.NewLine + fail.Error);
 
-					var isStop = fail.Order.Type == OrderTypes.Conditional;
-
 					if (!isCancelTransaction)
 					{
 						_entityCache.AddRegisterFail(fail);
 
-						if (isStop)
-							RaiseStopOrdersRegisterFailed(fail);
-						else
-							RaiseOrderRegisterFailed(fail);
+						RaiseOrderRegisterFailed(fail);
 
 						RaiseReceived(fail, message, OrderRegisterFailReceived);
 					}
@@ -1547,39 +1536,13 @@ namespace StockSharp.Algo
 					{
 						_entityCache.AddCancelFail(fail);
 
-						if (isStop)
-							RaiseStopOrdersCancelFailed(fail);
-						else
-							RaiseOrderCancelFailed(fail);
+						RaiseOrderCancelFailed(fail);
 
 						RaiseReceived(fail, message, OrderCancelFailReceived);
 					}
 				}
 			}
 		}
-
-		//private void ProcessConditionOrders(Order order)
-		//{
-		//	var changedStopOrders = new List<Order>();
-
-		//	var key = Tuple.Create(order.Id, order.StringId);
-
-		//	var collection = _orderStopOrderAssociations.TryGetValue(key);
-
-		//	if (collection == null)
-		//		return;
-
-		//	foreach (var pair in collection)
-		//	{
-		//		pair.Second(pair.First, order);
-		//		changedStopOrders.TryAdd(pair.First);
-		//	}
-
-		//	_orderStopOrderAssociations.Remove(key);
-
-		//	if (changedStopOrders.Count > 0)
-		//		RaiseStopOrdersChanged(changedStopOrders);
-		//}
 
 		private void ProcessMyTradeMessage(Order order, Security security, ExecutionMessage message, long transactionId)
 		{

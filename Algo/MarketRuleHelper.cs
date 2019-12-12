@@ -84,38 +84,6 @@ namespace StockSharp.Algo
 			}
 		}
 
-		//private sealed class RegisteredOrderRule : OrderRule<Order>
-		//{
-		//	public RegisteredOrderRule(Order order)
-		//		: base(order)
-		//	{
-		//		Name = "Регистрация заявки ";
-		//		TrySubscribe();
-		//	}
-
-		//	protected override void Subscribe()
-		//	{
-		//		if (Order.Type == OrderTypes.Conditional)
-		//			Order.Trader.StopOrdersChanged += OnNewOrder;
-		//		else
-		//			Order.Trader.Orders += OnNewOrder;
-		//	}
-
-		//	protected override void UnSubscribe()
-		//	{
-		//		if (Order.Type == OrderTypes.Conditional)
-		//			Order.Trader.NewStopOrders -= OnNewOrder;
-		//		else
-		//			Order.Trader.NewOrders -= OnNewOrder;
-		//	}
-
-		//	private void OnNewOrder(IEnumerable<Order> orders)
-		//	{
-		//		if (orders.Contains(Order))
-		//			Activate(Order);
-		//	}
-		//}
-
 		private sealed class RegisterFailedOrderRule : OrderRule<OrderFail>
 		{
 			public RegisterFailedOrderRule(Order order, ITransactionProvider provider)
@@ -127,18 +95,12 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-					Provider.StopOrderRegisterFailed += OnOrderRegisterFailed;
-				else
-					Provider.OrderRegisterFailed += OnOrderRegisterFailed;
+				Provider.OrderRegisterFailed += OnOrderRegisterFailed;
 			}
 
 			protected override void UnSubscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-					Provider.StopOrderRegisterFailed -= OnOrderRegisterFailed;
-				else
-					Provider.OrderRegisterFailed -= OnOrderRegisterFailed;
+				Provider.OrderRegisterFailed -= OnOrderRegisterFailed;
 			}
 
 			private void OnOrderRegisterFailed(OrderFail fail)
@@ -159,18 +121,12 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-					Provider.StopOrderCancelFailed += OnOrderCancelFailed;
-				else
-					Provider.OrderCancelFailed += OnOrderCancelFailed;
+				Provider.OrderCancelFailed += OnOrderCancelFailed;
 			}
 
 			protected override void UnSubscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-					Provider.StopOrderCancelFailed -= OnOrderCancelFailed;
-				else
-					Provider.OrderCancelFailed -= OnOrderCancelFailed;
+				Provider.OrderCancelFailed -= OnOrderCancelFailed;
 			}
 
 			private void OnOrderCancelFailed(OrderFail fail)
@@ -202,30 +158,14 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-				{
-					Provider.StopOrderChanged += OnOrderChanged;
-					Provider.NewStopOrder += OnOrderChanged;
-				}
-				else
-				{
-					Provider.OrderChanged += OnOrderChanged;
-					Provider.NewOrder += OnOrderChanged;
-				}
+				Provider.OrderChanged += OnOrderChanged;
+				Provider.NewOrder += OnOrderChanged;
 			}
 
 			protected override void UnSubscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-				{
-					Provider.StopOrderChanged -= OnOrderChanged;
-					Provider.NewStopOrder -= OnOrderChanged;
-				}
-				else
-				{
-					Provider.OrderChanged -= OnOrderChanged;
-					Provider.NewOrder -= OnOrderChanged;
-				}
+				Provider.OrderChanged -= OnOrderChanged;
+				Provider.NewOrder -= OnOrderChanged;
 			}
 
 			private void OnOrderChanged(Order order)
@@ -293,32 +233,16 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-				{
-					Provider.StopOrderChanged += OnOrderChanged;
-					Provider.NewStopOrder += OnOrderChanged;
-				}
-				else
-				{
-					Provider.OrderChanged += OnOrderChanged;
-					Provider.NewOrder += OnOrderChanged;
-				}
+				Provider.OrderChanged += OnOrderChanged;
+				Provider.NewOrder += OnOrderChanged;
 
 				Provider.NewMyTrade += OnNewMyTrade;
 			}
 
 			protected override void UnSubscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-				{
-					Provider.StopOrderChanged -= OnOrderChanged;
-					Provider.NewStopOrder -= OnOrderChanged;
-				}
-				else
-				{
-					Provider.OrderChanged -= OnOrderChanged;
-					Provider.NewOrder -= OnOrderChanged;
-				}
+				Provider.OrderChanged -= OnOrderChanged;
+				Provider.NewOrder -= OnOrderChanged;
 
 				Provider.NewMyTrade -= OnNewMyTrade;
 			}
@@ -2902,7 +2826,7 @@ namespace StockSharp.Algo
 			private readonly List<object> _args = new List<object>();
 			private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new SynchronizedSet<IMarketRule>();
 
-			public AndRule(IEnumerable<IMarketRule> innerRules)
+			public AndRule(IMarketRule[] innerRules)
 				: base(innerRules)
 			{
 				_nonActivatedRules.AddRange(innerRules);
@@ -2936,7 +2860,7 @@ namespace StockSharp.Algo
 			private readonly List<TArg> _args = new List<TArg>();
 			private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new SynchronizedSet<IMarketRule>();
 
-			public AndRule(IEnumerable<MarketRule<TToken, TArg>> innerRules)
+			public AndRule(MarketRule<TToken, TArg>[] innerRules)
 				: base(innerRules)
 			{
 				_nonActivatedRules.AddRange(innerRules);
@@ -3017,7 +2941,7 @@ namespace StockSharp.Algo
 		/// <returns>Combined rule.</returns>
 		public static IMarketRule And(this IEnumerable<IMarketRule> rules)
 		{
-			return new AndRule(rules);
+			return new AndRule(rules.ToArray());
 		}
 
 		/// <summary>

@@ -142,12 +142,10 @@ namespace StockSharp.Algo.Strategies
 			remove => _orderStatusFailed2 -= value;
 		}
 
-		private Action<Order> _newStopOrder;
-
 		event Action<Order> ITransactionProvider.NewStopOrder
 		{
-			add => _newStopOrder += value;
-			remove => _newStopOrder -= value;
+			add { }
+			remove { }
 		}
 
 		private Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> _lookupPortfoliosResult;

@@ -93,7 +93,8 @@ namespace StockSharp.Algo.Strategies.Reporting
 									new XElement("volume", o.Volume),
 									new XElement("type", o.Type),
 									new XElement("latencyRegistration", Format(o.LatencyRegistration)),
-									new XElement("latencyCancellation", Format(o.LatencyCancellation))
+									new XElement("latencyCancellation", Format(o.LatencyCancellation)),
+									new XElement("parameters", o.Condition?.Parameters.Select(p => new XElement(p.Key, p.Value)))
 									))),
 						new XElement("trades",
 							strategy.MyTrades.OrderBy(t => t.Order.TransactionId).Select(t =>
@@ -106,22 +107,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 									new XElement("order", t.Order.Id),
 									new XElement("PnL", strategy.PnLManager.ProcessMessage(t.ToMessage())?.PnL),
 									new XElement("slippage", t.Slippage)
-									))),
-						new XElement("stopOrders",
-							strategy.StopOrders.OrderBy(o => o.TransactionId).Select(o =>
-								new XElement("order",
-									new XElement("id", o.Id),
-									new XElement("transactionId", o.TransactionId),
-									new XElement("direction", o.Direction),
-									new XElement("time", Format(o.Time)),
-									new XElement("price", o.Price),
-									new XElement("state", o.State),
-									new XElement("volume", o.Volume),
-									new XElement("latencyRegistration", Format(o.LatencyRegistration)),
-									new XElement("latencyCancellation", Format(o.LatencyCancellation)),
-									//new XElement("derivedOrderId", o.DerivedOrder != null ? (object)o.DerivedOrder.Id : string.Empty),
-									new XElement("parameters", o.Condition.Parameters.Select(p => new XElement(p.Key, p.Value)))
-								)))
+									)))
 					))
 				).Save(FileName);
 		}

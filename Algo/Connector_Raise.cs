@@ -35,6 +35,7 @@ namespace StockSharp.Algo
 		public event Action<Order> OrderChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use NewOrders event.")]
 		public event Action<IEnumerable<Order>> NewStopOrders;
 
 		/// <inheritdoc />
@@ -47,21 +48,26 @@ namespace StockSharp.Algo
 		public event Action<OrderFail> OrderCancelFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrdersChanged event.")]
 		public event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <inheritdoc />
 		public event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderRegisterFailed event.")]
 		public event Action<OrderFail> StopOrderRegisterFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderCancelFailed event.")]
 		public event Action<OrderFail> StopOrderCancelFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use NewOrder event.")]
 		public event Action<Order> NewStopOrder;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderChanged event.")]
 		public event Action<Order> StopOrderChanged;
 
 		/// <inheritdoc />
@@ -89,9 +95,11 @@ namespace StockSharp.Algo
 		public event Action<long, Exception> OrderStatusFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrdersRegisterFailed event.")]
 		public event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrdersCancelFailed event.")]
 		public event Action<IEnumerable<OrderFail>> StopOrdersCancelFailed;
 
 		/// <inheritdoc />
@@ -362,26 +370,6 @@ namespace StockSharp.Algo
 			OrdersChanged?.Invoke(new[] { order });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="NewStopOrders"/>.
-		/// </summary>
-		/// <param name="stopOrder">Stop order that should be passed to the event.</param>
-		private void RaiseNewStopOrder(Order stopOrder)
-		{
-			NewStopOrder?.Invoke(stopOrder);
-			NewStopOrders?.Invoke(new[] { stopOrder });
-		}
-
-		/// <summary>
-		/// To call the event <see cref="StopOrdersChanged"/>.
-		/// </summary>
-		/// <param name="stopOrder">Stop orders that should be passed to the event.</param>
-		private void RaiseStopOrderChanged(Order stopOrder)
-		{
-			StopOrderChanged?.Invoke(stopOrder);
-			StopOrdersChanged?.Invoke(new[] { stopOrder });
-		}
-
 		private void RaiseOrderRegisterFailed(OrderFail fail)
 		{
 			OrderRegisterFailed?.Invoke(fail);
@@ -392,26 +380,6 @@ namespace StockSharp.Algo
 		{
 			OrderCancelFailed?.Invoke(fail);
 			OrdersCancelFailed?.Invoke(new[] { fail });
-		}
-
-		/// <summary>
-		/// To call the event <see cref="StopOrdersRegisterFailed"/>.
-		/// </summary>
-		/// <param name="fail">Error information that should be passed to the event.</param>
-		private void RaiseStopOrdersRegisterFailed(OrderFail fail)
-		{
-			StopOrderRegisterFailed?.Invoke(fail);
-			StopOrdersRegisterFailed?.Invoke(new[] { fail });
-		}
-
-		/// <summary>
-		/// To call the event <see cref="StopOrdersCancelFailed"/>.
-		/// </summary>
-		/// <param name="fail">Error information that should be passed to the event.</param>
-		private void RaiseStopOrdersCancelFailed(OrderFail fail)
-		{
-			StopOrderCancelFailed?.Invoke(fail);
-			StopOrdersCancelFailed?.Invoke(new[] { fail });
 		}
 
 		private void RaiseMassOrderCanceled(long transactionId, DateTimeOffset time)

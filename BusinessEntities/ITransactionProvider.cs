@@ -75,21 +75,25 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Stop-order registration error event.
 		/// </summary>
+		[Obsolete("Use OrderRegisterFailed event.")]
 		event Action<OrderFail> StopOrderRegisterFailed;
 
 		/// <summary>
 		/// Stop-order cancellation error event.
 		/// </summary>
+		[Obsolete("Use OrderCancelFailed event.")]
 		event Action<OrderFail> StopOrderCancelFailed;
 
 		/// <summary>
 		/// Stop-order received.
 		/// </summary>
+		[Obsolete("Use NewOrder event.")]
 		event Action<Order> NewStopOrder;
 
 		/// <summary>
 		/// Stop order state change event.
 		/// </summary>
+		[Obsolete("Use OrderChanged event.")]
 		event Action<Order> StopOrderChanged;
 
 		/// <summary>
