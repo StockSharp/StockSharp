@@ -176,7 +176,7 @@ namespace SampleConnection
 					var ctx = new ContinueOnExceptionContext();
 					ctx.Error += ex => ex.LogError();
 
-					using (new Scope<ContinueOnExceptionContext>(ctx))
+					using (ctx.ToScope())
 						Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 				}
 			}

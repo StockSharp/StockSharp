@@ -102,7 +102,7 @@ namespace SampleRealTimeEmulation
 					var ctx = new ContinueOnExceptionContext();
 					ctx.Error += ex => ex.LogError();
 
-					using (new Scope<ContinueOnExceptionContext>(ctx))
+					using (ctx.ToScope())
 						_realConnector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 				}
 			}

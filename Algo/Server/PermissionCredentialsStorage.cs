@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Server
 					var ctx = new ContinueOnExceptionContext();
 					ctx.Error += ex => ex.LogError();
 
-					using (new Scope<ContinueOnExceptionContext>(ctx))
+					using (ctx.ToScope())
 						Credentials = credentials.Select(s => s.Load<PermissionCredentials>()).ToArray();
 				});
 			}
