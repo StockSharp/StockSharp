@@ -114,7 +114,7 @@ namespace SampleConnection
 			Connector.OrderCancelFailed += OrderFailed;
 
 			// subscribe on error of stop-order registration event
-			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
+			Connector.StopOrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 			// subscribe on error of stop-order cancelling event
 			Connector.StopOrderCancelFailed += OrderFailed;
 
