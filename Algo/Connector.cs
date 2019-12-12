@@ -205,7 +205,7 @@ namespace StockSharp.Algo
 		public bool IsAutoUnSubscribeOnDisconnect { get; set; } = true;
 
 		/// <summary>
-		/// Send subscribe for all portfolios.
+		/// Subscribe for new portfolios.
 		/// </summary>
 		/// <remarks>By default is <see langword="true"/>.</remarks>
 		public bool IsAutoPortfoliosSubscribe { get; set; } = true;

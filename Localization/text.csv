@@ -15853,3 +15853,5 @@ DocStr11479;Exit from method if the queue closed;Выйти из метода е
 DocStr11480;Block the operation;Блокировать операцию
 DocStr11482;Sorted by incoming order queue;Очередь, отсортированная по порядковому номеру
 DocStr11483;Determines the specified message contains single order request;Определить, содержит ли сообщение запрос на единичную заявку
+DocStr11484;By default is {0};По-умолчанию {0}
+DocStr11485;Subscribe for new portfolios;Подписываться на новые портфели

@@ -8,7 +8,7 @@ F:StockSharp.Messages.AdapterCommands.Remove/summary;DocStr11180
 F:StockSharp.Messages.AdapterCommands.RequestState/summary;DocStr11173
 T:StockSharp.Messages.AdapterCommandMessage/summary;DocStr11115
 M:StockSharp.Messages.AdapterCommandMessage.#ctor/summary;DocStr93
-P:StockSharp.Messages.AdapterCommandMessage.TransactionId/summary;DocStr3166
+P:StockSharp.Messages.AdapterCommandMessage.TransactionId/inheritdoc;DocStr8459
 P:StockSharp.Messages.AdapterCommandMessage.AdapterId/summary;DocStr11158
 P:StockSharp.Messages.AdapterCommandMessage.Command/summary;DocStr10840
 P:StockSharp.Messages.AdapterCommandMessage.Parameters/summary;Str225
@@ -19,7 +19,7 @@ T:StockSharp.Messages.AdapterListFinishedMessage/summary;DocStr11116
 M:StockSharp.Messages.AdapterListFinishedMessage.#ctor/summary;DocStr93
 T:StockSharp.Messages.AdapterListRequestMessage/summary;DocStr11117
 M:StockSharp.Messages.AdapterListRequestMessage.#ctor/summary;DocStr93
-P:StockSharp.Messages.AdapterListRequestMessage.TransactionId/summary;DocStr3166
+P:StockSharp.Messages.AdapterListRequestMessage.TransactionId/inheritdoc;DocStr8459
 M:StockSharp.Messages.AdapterListRequestMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.AdapterListRequestMessage.Clone/returns;DocStr1116
 M:StockSharp.Messages.AdapterListRequestMessage.ToString/inheritdoc;DocStr8459
@@ -1179,13 +1179,13 @@ T:StockSharp.Messages.PortfolioRouteListFinishedMessage/summary;DocStr11182
 M:StockSharp.Messages.PortfolioRouteListFinishedMessage.#ctor/summary;DocStr93
 T:StockSharp.Messages.PortfolioRouteListRequestMessage/summary;DocStr11183
 M:StockSharp.Messages.PortfolioRouteListRequestMessage.#ctor/summary;DocStr93
-P:StockSharp.Messages.PortfolioRouteListRequestMessage.TransactionId/summary;DocStr3166
+P:StockSharp.Messages.PortfolioRouteListRequestMessage.TransactionId/inheritdoc;DocStr8459
 M:StockSharp.Messages.PortfolioRouteListRequestMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.PortfolioRouteListRequestMessage.Clone/returns;DocStr1116
 M:StockSharp.Messages.PortfolioRouteListRequestMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.PortfolioRouteMessage/summary;DocStr11184
 M:StockSharp.Messages.PortfolioRouteMessage.#ctor/summary;DocStr93
-P:StockSharp.Messages.PortfolioRouteMessage.PortfolioName/summary;Portfolio
+P:StockSharp.Messages.PortfolioRouteMessage.PortfolioName/inheritdoc;DocStr8459
 M:StockSharp.Messages.PortfolioRouteMessage.CopyTo(StockSharp.Messages.PortfolioRouteMessage)/inheritdoc;DocStr8459
 T:StockSharp.Messages.ReConnectionSettings/summary;DocStr4079
 M:StockSharp.Messages.ReConnectionSettings.#ctor/summary;DocStr1
@@ -1450,6 +1450,7 @@ M:StockSharp.Messages.OrderCondition.#ctor/summary;DocStr93
 P:StockSharp.Messages.OrderCondition.Parameters/summary;DocStr4386
 M:StockSharp.Messages.OrderCondition.Clone/summary;DocStr643
 M:StockSharp.Messages.OrderCondition.Clone/returns;DocStr1116
+M:StockSharp.Messages.OrderCondition.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.IRepoOrderCondition/summary;DocStr11070
 P:StockSharp.Messages.IRepoOrderCondition.IsRepo/summary;Repo
 P:StockSharp.Messages.IRepoOrderCondition.RepoInfo/summary;RepoInfo
