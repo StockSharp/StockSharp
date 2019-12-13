@@ -403,15 +403,6 @@ namespace StockSharp.Messages
 		[XmlIgnore]
 		public OrderCondition Condition { get; set; }
 
-		///// <summary>
-		///// Является ли сообщение последним в запрашиваемом пакете (только для исторических сделок).
-		///// </summary>
-		//[DataMember]
-		//[DisplayName("Последний")]
-		//[Description("Является ли сообщение последним в запрашиваемом пакете (только для исторических сделок).")]
-		//[MainCategory]
-		//public bool IsFinished { get; set; }
-
 		/// <summary>
 		/// Is tick uptrend or downtrend in price. Uses only <see cref="ExecutionType"/> for <see cref="ExecutionTypes.Tick"/>.
 		/// </summary>
@@ -549,7 +540,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},({ExecutionType}),Sec={SecurityId},O/T={HasOrderInfo}/{HasTradeInfo},Ord={OrderId}/{TransactionId}/{OriginalTransactionId},Fail={Error},Price={OrderPrice},OrdVol={OrderVolume},TrVol={TradeVolume},Bal={Balance},TId={TradeId},Pf={PortfolioName},TPrice={TradePrice},UId={UserOrderId},State={OrderState}";
+			return base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},({ExecutionType}),Sec={SecurityId},O/T={HasOrderInfo}/{HasTradeInfo},Ord={OrderId}/{TransactionId}/{OriginalTransactionId},Fail={Error},Price={OrderPrice},OrdVol={OrderVolume},TrVol={TradeVolume},Bal={Balance},TId={TradeId},Pf={PortfolioName},TPrice={TradePrice},UId={UserOrderId},State={OrderState},Cond={Condition}";
 		}
 
 		/// <summary>

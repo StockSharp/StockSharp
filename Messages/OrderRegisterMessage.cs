@@ -174,7 +174,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",TransId={TransactionId},Price={Price},Side={Side},OrdType={OrderType},Vol={Volume},Sec={SecurityId},Pf={PortfolioName}";
+			return base.ToString() + $",Price={Price},Side={Side},Vol={Volume}/{VisibleVolume},Till={TillDate},TIF={TimeInForce},MM={IsMarketMaker},MR={IsMargin},SLP={Slippage},MN={IsManual}";
 		}
 	}
 }

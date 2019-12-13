@@ -98,17 +98,17 @@ namespace StockSharp.Messages
 		{
 			var str = base.ToString();
 
-			if (TransactionId > 0)
-				str += $",TrId={TransactionId}";
-
-			if (OriginalTransactionId > 0)
-				str += $",OrigId={OriginalTransactionId}";
-
 			if (OrderId != null)
 				str += $",OrdId={OrderId.Value}";
 
 			if (!OrderStringId.IsEmpty())
 				str += $",OrdStrId={OrderStringId}";
+
+			if (Volume != null)
+				str += $",Vol={Volume.Value}";
+
+			if (Side != null)
+				str += $",Side={Side.Value}";
 
 			return str;
 		}

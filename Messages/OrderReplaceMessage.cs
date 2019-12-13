@@ -18,6 +18,8 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
+
 	/// <summary>
 	/// The message containing the information for modify order.
 	/// </summary>
@@ -65,7 +67,15 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",OldTransId={OriginalTransactionId},OldOrdId={OldOrderId},NewTransId={TransactionId}";
+			var str = base.ToString();
+
+			if (OldOrderId != null)
+				str += $"OldOrdId={OldOrderId.Value}";
+
+			if (!OldOrderStringId.IsEmpty())
+				str += $"OldOrdId={OldOrderStringId}";
+
+			return str;
 		}
 	}
 }

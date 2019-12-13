@@ -19,6 +19,8 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
+	using Ecng.Common;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -119,6 +121,23 @@ namespace StockSharp.Messages
 		protected OrderMessage(MessageTypes type)
 			: base(type)
 		{
+		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			var str = base.ToString() + $",TransId={TransactionId},OrdType={OrderType},Pf={PortfolioName}(ClCode={ClientCode}),Cond={Condition}";
+
+			if (!Comment.IsEmpty())
+				str += $",Comment={Comment}";
+
+			if (!UserOrderId.IsEmpty())
+				str += $",UID={UserOrderId}";
+
+			if (!BrokerCode.IsEmpty())
+				str += $",BrID={BrokerCode}";
+
+			return str;
 		}
 	}
 }
