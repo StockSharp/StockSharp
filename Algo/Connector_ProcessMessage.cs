@@ -784,6 +784,9 @@ namespace StockSharp.Algo
 							_subscriptionManager.Subscribe(new Subscription(DataType.Securities, null));
 							_subscriptionManager.Subscribe(new Subscription(DataType.PositionChanges, null));
 							_subscriptionManager.Subscribe(new Subscription(DataType.Transactions, null));
+
+							if (Adapter.IsMessageSupported(MessageTypes.TimeFrameLookup))
+								_subscriptionManager.Subscribe(new Subscription(DataType.TimeFrames, null));
 						}
 					}
 

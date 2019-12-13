@@ -1585,13 +1585,15 @@ namespace StockSharp.Algo
 			if (parentId == null || !needParentResponse)
 				return null;
 
-			var parentResponse = message.Type.CreateLookupResult(parentId.Value);
+			var parentResponse = (IOriginalTransactionIdMessage)message.Clone();
+			parentResponse.OriginalTransactionId = parentId.Value;
 			parentResponse.LocalTime = message.LocalTime;
 
-			if (allError)
-				((IErrorMessage)parentResponse).Error = new InvalidOperationException(LocalizedStrings.Str629Params.Put(parentId));
+			((IErrorMessage)parentResponse).Error = allError
+				? new InvalidOperationException(LocalizedStrings.Str629Params.Put(parentId))
+				: null;
 				
-			return parentResponse;
+			return (Message)parentResponse;
 		}
 
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message, List<Message> extra)

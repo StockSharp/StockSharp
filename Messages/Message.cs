@@ -53,9 +53,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	public abstract class Message : Cloneable<Message>, IExtendableEntity, IMessage
 	{
-		/// <summary>
-		/// Local timestamp when a message was received/created.
-		/// </summary>
+		/// <inheritdoc />
 		[DisplayNameLoc(LocalizedStrings.Str203Key)]
 		[DescriptionLoc(LocalizedStrings.Str204Key)]
 		[MainCategory]
@@ -65,9 +63,7 @@ namespace StockSharp.Messages
 		[field: NonSerialized]
 		private readonly MessageTypes _type;
 
-		/// <summary>
-		/// Message type.
-		/// </summary>
+		/// <inheritdoc />
 		public MessageTypes Type => _type;
 
 		[field: NonSerialized]
