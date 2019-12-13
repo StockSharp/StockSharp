@@ -25,8 +25,10 @@ namespace StockSharp.Algo
 				_logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
 			}
 
-			public void StartTimeOut(long transactionId, TimeSpan timeOut)
+			public void StartTimeOut(ITransactionIdMessage message, TimeSpan timeOut)
 			{
+				var transactionId = message.TransactionId;
+
 				if (transactionId == 0)
 				{
 					//throw new ArgumentNullException(nameof(transactionId));
@@ -40,8 +42,11 @@ namespace StockSharp.Algo
 				_registeredIds.SafeAdd(transactionId, s => timeOut);
 			}
 
-			public void UpdateTimeOut(long transactionId)
+			public void UpdateTimeOut<TMessage>(TMessage message)
+				where TMessage : IOriginalTransactionIdMessage
 			{
+				var transactionId = message.OriginalTransactionId;
+
 				if (transactionId == 0)
 					return;
 
@@ -54,11 +59,15 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public void RemoveTimeOut(long transactionId)
+			public void RemoveTimeOut<TMessage>(TMessage message)
+				where TMessage : IOriginalTransactionIdMessage
 			{
+				var transactionId = message.OriginalTransactionId;
+
 				if (transactionId == 0)
 					return;
 
+				_logReceiver.AddInfoLog("Lookup finished {0}.", transactionId);
 				_registeredIds.Remove(transactionId);
 			}
 
@@ -178,7 +187,8 @@ namespace StockSharp.Algo
 			if (message.Type == MessageTypes.OrderStatus)
 				return true;
 
-			var transId = ((ITransactionIdMessage)message).TransactionId;
+			var transIdMsg = (ITransactionIdMessage)message;
+			var transId = transIdMsg.TransactionId;
 
 			LookupInfo info;
 
@@ -197,7 +207,7 @@ namespace StockSharp.Algo
 			}
 
 			if (!this.IsOutMessageSupported(info.ResultType))
-				info.LookupTimeOut.StartTimeOut(transId, TimeOut);
+				info.LookupTimeOut.StartTimeOut(transIdMsg, TimeOut);
 
 			return true;
 		}
@@ -208,19 +218,19 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.Security:
-					_lookups.TryGetValue(MessageTypes.SecurityLookup)?.LookupTimeOut.UpdateTimeOut(((SecurityMessage)message).OriginalTransactionId);
+					_lookups.TryGetValue(MessageTypes.SecurityLookup)?.LookupTimeOut.UpdateTimeOut((SecurityMessage)message);
 					break;
 
 				case MessageTypes.Board:
-					_lookups.TryGetValue(MessageTypes.BoardLookup)?.LookupTimeOut.UpdateTimeOut(((BoardMessage)message).OriginalTransactionId);
+					_lookups.TryGetValue(MessageTypes.BoardLookup)?.LookupTimeOut.UpdateTimeOut((BoardMessage)message);
 					break;
 
 				case MessageTypes.Portfolio:
-					_lookups.TryGetValue(MessageTypes.PortfolioLookup)?.LookupTimeOut.UpdateTimeOut(((PortfolioMessage)message).OriginalTransactionId);
+					_lookups.TryGetValue(MessageTypes.PortfolioLookup)?.LookupTimeOut.UpdateTimeOut((PortfolioMessage)message);
 					break;
 
 				case MessageTypes.UserInfo:
-					_lookups.TryGetValue(MessageTypes.UserLookup)?.LookupTimeOut.UpdateTimeOut(((UserInfoMessage)message).OriginalTransactionId);
+					_lookups.TryGetValue(MessageTypes.UserLookup)?.LookupTimeOut.UpdateTimeOut((UserInfoMessage)message);
 					break;
 			}
 
@@ -238,7 +248,7 @@ namespace StockSharp.Algo
 
 					if (info != null)
 					{
-						info.LookupTimeOut.RemoveTimeOut(((IOriginalTransactionIdMessage)message).OriginalTransactionId);
+						info.LookupTimeOut.RemoveTimeOut((IOriginalTransactionIdMessage)message);
 
 						if (info.LookupQueue.Count > 0)
 						{
