@@ -781,9 +781,14 @@ namespace StockSharp.Algo
 
 						if (LookupMessagesOnConnect)
 						{
-							_subscriptionManager.Subscribe(new Subscription(DataType.Securities, null));
-							_subscriptionManager.Subscribe(new Subscription(DataType.PositionChanges, null));
-							_subscriptionManager.Subscribe(new Subscription(DataType.Transactions, null));
+							if (Adapter.IsMessageSupported(MessageTypes.SecurityLookup))
+								_subscriptionManager.Subscribe(new Subscription(DataType.Securities, null));
+							
+							if (Adapter.IsMessageSupported(MessageTypes.PortfolioLookup))
+								_subscriptionManager.Subscribe(new Subscription(DataType.PositionChanges, null));
+							
+							if (Adapter.IsMessageSupported(MessageTypes.OrderStatus))
+								_subscriptionManager.Subscribe(new Subscription(DataType.Transactions, null));
 
 							if (Adapter.IsMessageSupported(MessageTypes.TimeFrameLookup))
 								_subscriptionManager.Subscribe(new Subscription(DataType.TimeFrames, null));
