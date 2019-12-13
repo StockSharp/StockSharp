@@ -1046,7 +1046,10 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioMessage(PortfolioMessage message)
 		{
-			var subscription = _subscriptionManager.ProcessResponse(message);
+			// reply on RegisterPortfolio subscription do not contains any portfolio info
+			var isReply = message.PortfolioName.IsEmpty();
+
+			var subscription = isReply ? _subscriptionManager.ProcessResponse(message) : null;
 
 			if (message.Error != null)
 			{
@@ -1055,8 +1058,7 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				// reply on RegisterPortfolio subscription do not contains any portfolio info
-				if (message.PortfolioName.IsEmpty())
+				if (isReply)
 					return;
 
 				var portfolio = GetPortfolio(message.PortfolioName, p =>
