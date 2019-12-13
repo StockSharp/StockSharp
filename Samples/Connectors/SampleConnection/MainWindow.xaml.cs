@@ -118,6 +118,12 @@ namespace SampleConnection
 			// set news provider
 			_newsWindow.NewsPanel.NewsProvider = Connector;
 
+			Connector.LookupTimeFramesResult += (message, timeFrames, error) =>
+			{
+				if (error == null)
+					this.GuiAsync(() => _securitiesWindow.UpdateTimeFrames(timeFrames));
+			};
+
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
 			ConfigManager.RegisterService<IMessageAdapterProvider>(new FullInMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
 

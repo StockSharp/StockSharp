@@ -1,6 +1,7 @@
 namespace SampleConnection
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Windows;
 
@@ -35,7 +36,20 @@ namespace SampleConnection
 
 		private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			CandlesPeriods.ItemsSource = Connector.Adapter.GetTimeFrames();
+			UpdateTimeFrames(Connector.Adapter.GetTimeFrames());
+		}
+
+		public void UpdateTimeFrames(IEnumerable<TimeSpan> timeFrames)
+		{
+			if (timeFrames == null)
+				throw new ArgumentNullException(nameof(timeFrames));
+
+			timeFrames = timeFrames.ToArray();
+
+			if (!timeFrames.Any())
+				return;
+
+			CandlesPeriods.ItemsSource = timeFrames;
 			CandlesPeriods.SelectedIndex = 0;
 		}
 
