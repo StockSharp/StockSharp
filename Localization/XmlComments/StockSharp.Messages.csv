@@ -969,6 +969,8 @@ M:StockSharp.Messages.IDailyInfoSoap.GetCursOnDate(System.DateTime)/returns;DocS
 T:StockSharp.Messages.IErrorMessage/summary;DocStr11086
 P:StockSharp.Messages.IErrorMessage.Error/summary;DocStr4509
 T:StockSharp.Messages.IMessage/summary;DocStr11441
+P:StockSharp.Messages.IMessage.Type/summary;DocStr9
+P:StockSharp.Messages.IMessage.LocalTime/summary;Str204
 M:StockSharp.Messages.IMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.IMessage.Clone/returns;DocStr1116
 T:StockSharp.Messages.IOriginalTransactionIdMessage/summary;DocStr11086
@@ -1398,8 +1400,8 @@ F:StockSharp.Messages.MessageOfflineModes.None/summary;Str1658
 F:StockSharp.Messages.MessageOfflineModes.Force/summary;DocStr10547
 F:StockSharp.Messages.MessageOfflineModes.Cancel/summary;DocStr10593
 T:StockSharp.Messages.Message/summary;DocStr4040
-P:StockSharp.Messages.Message.LocalTime/summary;Str204
-P:StockSharp.Messages.Message.Type/summary;DocStr9
+P:StockSharp.Messages.Message.LocalTime/inheritdoc;DocStr8459
+P:StockSharp.Messages.Message.Type/inheritdoc;DocStr8459
 P:StockSharp.Messages.Message.ExtensionInfo/inheritdoc;DocStr8459
 P:StockSharp.Messages.Message.IsBack/summary;DocStr4045
 P:StockSharp.Messages.Message.OfflineMode/summary;DocStr10591
@@ -1496,6 +1498,7 @@ M:StockSharp.Messages.OrderMessage.CopyTo(StockSharp.Messages.OrderMessage)/summ
 M:StockSharp.Messages.OrderMessage.CopyTo(StockSharp.Messages.OrderMessage)/param/destination;DocStr630
 M:StockSharp.Messages.OrderMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.OrderMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
+M:StockSharp.Messages.OrderMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.OrderPairReplaceMessage/summary;DocStr4388
 P:StockSharp.Messages.OrderPairReplaceMessage.Message1/summary;DocStr4389
 P:StockSharp.Messages.OrderPairReplaceMessage.Message2/summary;DocStr4390
