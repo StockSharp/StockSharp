@@ -1,0 +1,13 @@
+T:StockSharp.Bitalong.BitalongMessageAdapter/summary;DocStr2538
+P:StockSharp.Bitalong.BitalongMessageAdapter.Key/summary;Str3304
+P:StockSharp.Bitalong.BitalongMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Bitalong.BitalongMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
+P:StockSharp.Bitalong.BitalongMessageAdapter.Domain/summary;Str3486
+M:StockSharp.Bitalong.BitalongMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.Bitalong.BitalongMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.Bitalong.BitalongMessageAdapter.ToString/inheritdoc;DocStr8459
+M:StockSharp.Bitalong.BitalongMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Bitalong.BitalongMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Bitalong.BitalongMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+T:StockSharp.Bitalong.BitalongOrderCondition/summary;DocStr60
+M:StockSharp.Bitalong.BitalongOrderCondition.#ctor/summary;DocStr1

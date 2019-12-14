@@ -286,6 +286,7 @@ StockSharp API Change log
 * (feature) Connector. Support single order status requests.
 * (feature) Connector. IsAutoPortfoliosSubscribe added.
 * (feature) ITransactionProvider. StopOrder events marked as obsolete. Use events for regular orders.
+* (feature) Bitalong connector.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

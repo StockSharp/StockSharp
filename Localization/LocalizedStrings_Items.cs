@@ -50706,5 +50706,15 @@ namespace StockSharp.Localization
 		/// Unknown transaction id {0}.
 		/// </summary>
 		public static string UnknownTransactionId => GetString(UnknownTransactionIdKey);
+
+		/// <summary>
+		/// Bitalong
+		/// </summary>
+		public const string BitalongKey = nameof(Bitalong);
+
+		/// <summary>
+		/// Bitalong
+		/// </summary>
+		public static string Bitalong => GetString(BitalongKey);
 	}
 }
