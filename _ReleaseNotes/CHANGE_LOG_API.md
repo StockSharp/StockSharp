@@ -288,6 +288,7 @@ StockSharp API Change log
 * (feature) ITransactionProvider. StopOrder events marked as obsolete. Use events for regular orders.
 * (feature) Bitalong connector.
 * (feature) IExternalCandleSource removed.
+* (feature) ExecutionMessage. IsCancelled -> IsCancellation.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

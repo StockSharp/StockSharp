@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Storages.Csv
 				/*data.DerivedOrderId.ToString()*/string.Empty,
 				/*data.DerivedOrderStringId*/string.Empty,
 				data.IsUpTick.ToString(),
-				data.IsCancelled.ToString(),
+				data.IsCancellation.ToString(),
 				data.OpenInterest.ToString(),
 				data.PnL.ToString(),
 				data.Position.ToString(),
@@ -147,7 +147,7 @@ namespace StockSharp.Algo.Storages.Csv
 			reader.ReadString();
 
 			msg.IsUpTick = reader.ReadNullableBool();
-			msg.IsCancelled = reader.ReadBool();
+			msg.IsCancellation = reader.ReadBool();
 			msg.OpenInterest = reader.ReadNullableDecimal();
 			msg.PnL = reader.ReadNullableDecimal();
 			msg.Position = reader.ReadNullableDecimal();

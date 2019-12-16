@@ -465,7 +465,7 @@ namespace StockSharp.Algo.Storages
 						SecurityId = cancelMsg.SecurityId,
 						HasOrderInfo = true,
 						TransactionId = cancelMsg.TransactionId,
-						IsCancelled = true,
+						IsCancellation = true,
 						OrderId = cancelMsg.OrderId,
 						OrderStringId = cancelMsg.OrderStringId,
 						OriginalTransactionId = cancelMsg.OriginalTransactionId,

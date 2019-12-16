@@ -145,7 +145,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("error", item.Error?.Message);
 						writer.WriteAttribute("currency", item.Currency);
 						writer.WriteAttribute("openInterest", item.OpenInterest);
-						writer.WriteAttribute("isCancelled", item.IsCancelled);
+						writer.WriteAttribute("isCancelled", item.IsCancellation);
 						writer.WriteAttribute("isSystem", item.IsSystem);
 						writer.WriteAttribute("isUpTick", item.IsUpTick);
 						writer.WriteAttribute("isMargin", item.IsMargin);

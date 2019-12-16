@@ -211,7 +211,7 @@ namespace StockSharp.Algo.Testing
 
 								if (_parent.Settings.Latency > TimeSpan.Zero)
 								{
-									this.AddInfoLog(LocalizedStrings.Str1145Params, execMsg.IsCancelled ? LocalizedStrings.Str1146 : LocalizedStrings.Str1147, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
+									this.AddInfoLog(LocalizedStrings.Str1145Params, execMsg.IsCancellation ? LocalizedStrings.Str1146 : LocalizedStrings.Str1147, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
 									_pendingExecutions.Add((ExecutionMessage)execMsg.Clone(), _parent.Settings.Latency);
 								}
 								else
@@ -269,12 +269,12 @@ namespace StockSharp.Algo.Testing
 						{
 							if (oldOrder != null)
 							{
-								if (!execMsg.IsCancelled && execMsg.OrderVolume == 0)
+								if (!execMsg.IsCancellation && execMsg.OrderVolume == 0)
 									execMsg.OrderVolume = oldOrder.Balance;
 
 								Process(execMsg, result);
 							}
-							else if (execMsg.IsCancelled)
+							else if (execMsg.IsCancellation)
 							{
 								var error = LocalizedStrings.Str1148Params.Put(execMsg.OrderId);
 								var serverTime = GetServerTime(orderMsg.LocalTime);
@@ -287,7 +287,7 @@ namespace StockSharp.Algo.Testing
 									OrderId = execMsg.OrderId,
 									ExecutionType = ExecutionTypes.Transaction,
 									SecurityId = orderMsg.SecurityId,
-									IsCancelled = true,
+									IsCancellation = true,
 									OrderState = OrderStates.Failed,
 									Error = new InvalidOperationException(error),
 									ServerTime = serverTime,
@@ -301,7 +301,7 @@ namespace StockSharp.Algo.Testing
 									OriginalTransactionId = orderMsg.TransactionId,
 									ExecutionType = ExecutionTypes.Transaction,
 									SecurityId = orderMsg.SecurityId,
-									IsCancelled = false,
+									IsCancellation = false,
 									OrderState = OrderStates.Failed,
 									Error = new InvalidOperationException(error),
 									ServerTime = serverTime,
@@ -597,7 +597,7 @@ namespace StockSharp.Algo.Testing
 				{
 					if (RandomGen.GetDouble() < (_parent.Settings.Failing / 100.0))
 					{
-						this.AddErrorLog(LocalizedStrings.Str1151Params, execution.IsCancelled ? LocalizedStrings.Str1152 : LocalizedStrings.Str1153, execution.OriginalTransactionId == 0 ? execution.TransactionId : execution.OriginalTransactionId);
+						this.AddErrorLog(LocalizedStrings.Str1151Params, execution.IsCancellation ? LocalizedStrings.Str1152 : LocalizedStrings.Str1153, execution.OriginalTransactionId == 0 ? execution.TransactionId : execution.OriginalTransactionId);
 
 						var replyMsg = CreateReply(execution, time);
 
@@ -610,7 +610,7 @@ namespace StockSharp.Algo.Testing
 					}
 				}
 
-				if (execution.IsCancelled)
+				if (execution.IsCancellation)
 				{
 					var order = _activeOrders.TryGetValue(execution.OriginalTransactionId);
 
@@ -745,7 +745,7 @@ namespace StockSharp.Algo.Testing
 				if (message.OrderVolume == null || message.OrderVolume <= 0)
 					throw new ArgumentOutOfRangeException(nameof(message), message.OrderVolume, LocalizedStrings.Str1160Params.Put(message.TransactionId));
 
-				var isRegister = !message.IsCancelled;
+				var isRegister = !message.IsCancellation;
 
 				if (!isRegister)
 				{

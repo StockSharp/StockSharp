@@ -154,7 +154,7 @@ namespace StockSharp.Algo.Storages
 								else
 								{
 									// do not store cancellation commands into snapshot
-									if (message.IsCancelled && message.TransactionId != 0)
+									if (message.IsCancellation && message.TransactionId != 0)
 									{
 										continue;
 									}
