@@ -207,7 +207,6 @@
     <Compile Include="Candles\ICandleManagerContainer.cs" />
     <Compile Include="Candles\ICandleManager.cs" />
     <Compile Include="Candles\ICandleSource.cs" />
-    <Compile Include="Candles\IExternalCandleSource.cs" />
     <Compile Include="Candles\Compression\VolumeProfileHelper.cs" />
     <Compile Include="Commissions\CommissionManager.cs" />
     <Compile Include="Commissions\CommissionRule.cs" />
