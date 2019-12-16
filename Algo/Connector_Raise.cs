@@ -35,6 +35,7 @@ namespace StockSharp.Algo
 		public event Action<Order> OrderChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use NewOrders event.")]
 		public event Action<IEnumerable<Order>> NewStopOrders;
 
 		/// <inheritdoc />
@@ -47,21 +48,26 @@ namespace StockSharp.Algo
 		public event Action<OrderFail> OrderCancelFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrdersChanged event.")]
 		public event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <inheritdoc />
 		public event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderRegisterFailed event.")]
 		public event Action<OrderFail> StopOrderRegisterFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderCancelFailed event.")]
 		public event Action<OrderFail> StopOrderCancelFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use NewOrder event.")]
 		public event Action<Order> NewStopOrder;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderChanged event.")]
 		public event Action<Order> StopOrderChanged;
 
 		/// <inheritdoc />
@@ -89,9 +95,11 @@ namespace StockSharp.Algo
 		public event Action<long, Exception> OrderStatusFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrdersRegisterFailed event.")]
 		public event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrdersCancelFailed event.")]
 		public event Action<IEnumerable<OrderFail>> StopOrdersCancelFailed;
 
 		/// <inheritdoc />
@@ -132,6 +140,9 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public event Action<MarketDepth> MarketDepthChanged;
+
+		/// <inheritdoc />
+		public event Action<MarketDepth> FilteredMarketDepthChanged;
 
 		/// <inheritdoc />
 		public event Action<IEnumerable<MarketDepth>> NewMarketDepths;
@@ -359,26 +370,6 @@ namespace StockSharp.Algo
 			OrdersChanged?.Invoke(new[] { order });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="NewStopOrders"/>.
-		/// </summary>
-		/// <param name="stopOrder">Stop order that should be passed to the event.</param>
-		private void RaiseNewStopOrder(Order stopOrder)
-		{
-			NewStopOrder?.Invoke(stopOrder);
-			NewStopOrders?.Invoke(new[] { stopOrder });
-		}
-
-		/// <summary>
-		/// To call the event <see cref="StopOrdersChanged"/>.
-		/// </summary>
-		/// <param name="stopOrder">Stop orders that should be passed to the event.</param>
-		private void RaiseStopOrderChanged(Order stopOrder)
-		{
-			StopOrderChanged?.Invoke(stopOrder);
-			StopOrdersChanged?.Invoke(new[] { stopOrder });
-		}
-
 		private void RaiseOrderRegisterFailed(OrderFail fail)
 		{
 			OrderRegisterFailed?.Invoke(fail);
@@ -389,26 +380,6 @@ namespace StockSharp.Algo
 		{
 			OrderCancelFailed?.Invoke(fail);
 			OrdersCancelFailed?.Invoke(new[] { fail });
-		}
-
-		/// <summary>
-		/// To call the event <see cref="StopOrdersRegisterFailed"/>.
-		/// </summary>
-		/// <param name="fail">Error information that should be passed to the event.</param>
-		private void RaiseStopOrdersRegisterFailed(OrderFail fail)
-		{
-			StopOrderRegisterFailed?.Invoke(fail);
-			StopOrdersRegisterFailed?.Invoke(new[] { fail });
-		}
-
-		/// <summary>
-		/// To call the event <see cref="StopOrdersCancelFailed"/>.
-		/// </summary>
-		/// <param name="fail">Error information that should be passed to the event.</param>
-		private void RaiseStopOrdersCancelFailed(OrderFail fail)
-		{
-			StopOrderCancelFailed?.Invoke(fail);
-			StopOrdersCancelFailed?.Invoke(new[] { fail });
 		}
 
 		private void RaiseMassOrderCanceled(long transactionId, DateTimeOffset time)
@@ -492,6 +463,11 @@ namespace StockSharp.Algo
 		{
 			MarketDepthChanged?.Invoke(marketDepth);
 			MarketDepthsChanged?.Invoke(new[] { marketDepth });
+		}
+
+		private void RaiseFilteredMarketDepthChanged(MarketDepth marketDepth)
+		{
+			FilteredMarketDepthChanged?.Invoke(marketDepth);
 		}
 
 		/// <summary>
@@ -679,9 +655,6 @@ namespace StockSharp.Algo
 			MarketDataSubscriptionSucceeded?.Invoke(security, message);
 
 			RaiseSubscriptionStarted(subscription);
-
-			if (message.IsOnline)
-				RaiseMarketDataSubscriptionOnline(security, message, subscription);
 		}
 
 		private void RaiseMarketDataSubscriptionFailed(MarketDataMessage origin, MarketDataMessage reply, Subscription subscription)
@@ -834,16 +807,17 @@ namespace StockSharp.Algo
 			SubscriptionFailed?.Invoke(subscription, error, isSubscribe);
 		}
 
-		private void RaiseMarketDataSubscriptionOnline(Security security, MarketDataMessage message, Subscription subscription)
+		private void RaiseMarketDataSubscriptionOnline(Subscription subscription)
 		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			this.AddDebugLog(LocalizedStrings.SubscriptionOnline, security?.Id, message);
-			MarketDataSubscriptionOnline?.Invoke(security, message);
+			var security = subscription.Security;
+			
+			this.AddDebugLog(LocalizedStrings.SubscriptionOnline, security?.Id, subscription.SubscriptionMessage);
+
+			if (subscription.SubscriptionMessage is MarketDataMessage mdMsg)
+				MarketDataSubscriptionOnline?.Invoke(security, mdMsg);
 
 			RaiseSubscriptionOnline(subscription);
 		}
@@ -910,18 +884,19 @@ namespace StockSharp.Algo
 			ChangePasswordResult?.Invoke(transactionId, error);
 		}
 
-		private void RaiseReceived<TEntity>(TEntity entity, ISubscriptionIdMessage message, Action<Subscription, TEntity> evt)
+		private bool RaiseReceived<TEntity>(TEntity entity, ISubscriptionIdMessage message, Action<Subscription, TEntity> evt)
 		{
-			if (evt == null)
-				return;
+			var anyOnline = false;
 
-			foreach (var id in message.GetSubscriptionIds())
+			foreach (var subscription in _subscriptionManager.GetSubscriptions(message))
 			{
-				var subscription = _subscriptionManager.TryGetSubscription(id);
+				if (!anyOnline && subscription.State == SubscriptionStates.Online)
+					anyOnline = true;
 
-				if (subscription != null)
-					evt(subscription, entity);
+				evt?.Invoke(subscription, entity);
 			}
+
+			return anyOnline;
 		}
 	}
 }

@@ -67,15 +67,6 @@ namespace StockSharp.Messages
 		public Sides Side { get; set; }
 
 		/// <summary>
-		/// Placed order comment.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str135Key)]
-		[DescriptionLoc(LocalizedStrings.Str136Key)]
-		[MainCategory]
-		public string Comment { get; set; }
-
-		/// <summary>
 		/// Order expiry time. The default is <see langword="null" />, which mean (GTC).
 		/// </summary>
 		/// <remarks>
@@ -172,7 +163,6 @@ namespace StockSharp.Messages
 			destination.Volume = Volume;
 			destination.VisibleVolume = VisibleVolume;
 			destination.Side = Side;
-			destination.Comment = Comment;
 			destination.TillDate = TillDate;
 			destination.TimeInForce = TimeInForce;
 			destination.IsMarketMaker = IsMarketMaker;
@@ -184,7 +174,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",TransId={TransactionId},Price={Price},Side={Side},OrdType={OrderType},Vol={Volume},Sec={SecurityId},Pf={PortfolioName}";
+			return base.ToString() + $",Price={Price},Side={Side},Vol={Volume}/{VisibleVolume},Till={TillDate},TIF={TimeInForce},MM={IsMarketMaker},MR={IsMargin},SLP={Slippage},MN={IsManual}";
 		}
 	}
 }

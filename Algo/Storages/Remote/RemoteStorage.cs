@@ -413,7 +413,7 @@ namespace StockSharp.Algo.Storages.Remote
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			return ExchangeInfoProvider.LookupBoards(criteria.Like).Select(b => b.Code).ToArray();
+			return ExchangeInfoProvider.LookupBoards(criteria).Select(b => b.Code).ToArray();
 		}
 
 		string[] IRemoteStorage.GetExchanges(Guid sessionId, string[] codes)

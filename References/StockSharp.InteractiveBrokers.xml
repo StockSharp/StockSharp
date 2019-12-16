@@ -37,7 +37,7 @@
     </member>
     <member name="T:StockSharp.InteractiveBrokers.FundamentalReportMarketDataMessage">
       <summary>
-            The message to receive market reports for the specified instrument. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport" /> event.
+            The message to receive market reports for the specified instrument. The results will come through the <see cref="T:StockSharp.InteractiveBrokers.FundamentalReportMessage" /> event.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.FundamentalReportMarketDataMessage.Report">
@@ -97,9 +97,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.HistogramMessage.OriginalTransactionId">
-      <summary>
-            ID of the original message <see cref="P:StockSharp.Messages.MarketDataMessage.TransactionId" /> for which this message is a response.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.InteractiveBrokers.HistogramMessage.Data">
       <summary>
@@ -132,9 +130,6 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportCandlesUpdates">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsSupportSecuritiesLookupAll">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SupportedOrderBookDepths">
@@ -1816,121 +1811,6 @@
             Use V100 plus version at the connect time.
             </summary>
     </member>
-    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults">
-      <summary>
-            The new results occurring event of the scanner started previously via <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport">
-      <summary>
-            The new report occurring event obtained by subscription <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports)" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerParameters">
-      <summary>
-            The event of occurring of new scanner parameters which are applied via <see cref="T:StockSharp.InteractiveBrokers.ScannerFilter" />. Parameters are passed in the xml format.
-            </summary>
-    </member>
-    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFinancialAdvise">
-      <summary>
-            The new financial advice occurring event. Parameters are passed in the xml format.
-            </summary>
-    </member>
-    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewOptionParameters">
-      <summary>
-            The new option parameters event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewHistogramData">
-      <summary>
-            The new histogram data event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewSoftDollarTiers">
-      <summary>
-            The new Soft Dollar Tier event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestOptionParameters(StockSharp.BusinessEntities.Security)">
-      <summary>
-            Request option parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewOptionParameters" /> event.
-            </summary>
-      <param name="security">Security.</param>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestScannerParameters">
-      <summary>
-            Request scanner parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerParameters" /> event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestSoftDollarTier">
-      <summary>
-            Request Soft Dollar Tier information. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewSoftDollarTiers" /> event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)">
-      <summary>
-            To start the instruments scanner based on specified parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults" /> event.
-            </summary>
-      <param name="filter">Filter.</param>
-      <returns>Subscription id.</returns>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeScanner(System.Int64)">
-      <summary>
-            To stop the instruments scanner.
-            </summary>
-      <param name="transactionId">Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)" />.</param>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports)">
-      <summary>
-            To subscribe to receive market reports for the specified instrument. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport" /> event.
-            </summary>
-      <param name="security">Security.</param>
-      <param name="report">The report type.</param>
-      <returns>Subscription id.</returns>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeFundamentalReport(System.Int64)">
-      <summary>
-            To unsubscribe from receive market reports.
-            </summary>
-      <param name="transactionId">Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports)" />.</param>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeHistogram(StockSharp.BusinessEntities.Security,System.DateTimeOffset,System.DateTimeOffset)">
-      <summary>
-            To subscribe to receive histogram data for the specified instrument. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewHistogramData" /> event.
-            </summary>
-      <param name="security">Security.</param>
-      <param name="from">The initial date from which you need to get data.</param>
-      <param name="to">The final date by which you need to get data.</param>
-      <returns>Subscription id.</returns>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeHistogram(System.Int64)">
-      <summary>
-            To unsubscribe from receive histogram data.
-            </summary>
-      <param name="transactionId">Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeHistogram(StockSharp.BusinessEntities.Security,System.DateTimeOffset,System.DateTimeOffset)" />.</param>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal)">
-      <summary>
-            To subscribe to receive the estimated option values. The results will come through the <see cref="E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged" /> event.
-            </summary>
-      <param name="security">Security.</param>
-      <param name="impliedVolatility">The implied volatility.</param>
-      <param name="optionPrice">The option price.</param>
-      <param name="assetPrice">Underlying asset price.</param>
-      <returns>Subscription id.</returns>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeOptionCalc(System.Int64)">
-      <summary>
-            To unsubscribe from receive the estimated option values.
-            </summary>
-      <param name="transactionId">Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal)" />.</param>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnProcessMessage(StockSharp.Messages.Message)">
-      <inheritdoc />
-    </member>
     <member name="T:StockSharp.InteractiveBrokers.OptionCalcMarketDataMessage">
       <summary>
             The message about subscription to the estimated option values getting.
@@ -1988,7 +1868,7 @@
     </member>
     <member name="T:StockSharp.InteractiveBrokers.ScannerMarketDataMessage">
       <summary>
-            The message about start of the instruments scanner based on specified parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults" /> event.
+            The message about start of the instruments scanner based on specified parameters. The results will come through the <see cref="T:StockSharp.InteractiveBrokers.ScannerResultMessage" /> event.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.ScannerMarketDataMessage.IsParametersRequest">
@@ -2029,7 +1909,7 @@
     </member>
     <member name="T:StockSharp.InteractiveBrokers.ScannerResult">
       <summary>
-            The filter result of scanner starting via <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)" />.
+            The filter result of scanner starting via <see cref="T:StockSharp.InteractiveBrokers.ScannerMarketDataMessage" />.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.ScannerResult.SecurityId">
@@ -2297,7 +2177,7 @@
     </member>
     <member name="T:StockSharp.InteractiveBrokers.ScannerFilter">
       <summary>
-            Filter settings of the scanner starting via <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)" />.
+            Filter settings of the scanner starting via <see cref="T:StockSharp.InteractiveBrokers.ScannerMarketDataMessage" />.
             </summary>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.ScannerFilter.#ctor">
@@ -2451,9 +2331,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.OriginalTransactionId">
-      <summary>
-            ID of the original message <see cref="P:StockSharp.Messages.MarketDataMessage.TransactionId" /> for which this message is a response.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Tiers">
       <summary>

@@ -18,7 +18,6 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -62,32 +61,6 @@ namespace StockSharp.BusinessEntities
 
 				_name = value;
 				NotifyChanged(nameof(Name));
-			}
-		}
-
-		private decimal? _leverage;
-
-		/// <summary>
-		/// Margin leverage.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.LeverageKey)]
-		[DescriptionLoc(LocalizedStrings.Str261Key, true)]
-		[MainCategory]
-		[Nullable]
-		public decimal? Leverage
-		{
-			get => _leverage;
-			set
-			{
-				if (_leverage == value)
-					return;
-
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
-
-				_leverage = value;
-				NotifyChanged(nameof(Leverage));
 			}
 		}
 
@@ -141,42 +114,6 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal? _commissionTaker;
-
-		/// <summary>
-		/// Commission (taker).
-		/// </summary>
-		[Ignore]
-		[XmlIgnore]
-		[Browsable(false)]
-		public decimal? CommissionTaker
-		{
-			get => _commissionTaker;
-			set
-			{
-				_commissionTaker = value;
-				NotifyChanged(nameof(CommissionTaker));
-			}
-		}
-
-		private decimal? _commissionMaker;
-
-		/// <summary>
-		/// Commission (maker).
-		/// </summary>
-		[Ignore]
-		[XmlIgnore]
-		[Browsable(false)]
-		public decimal? CommissionMaker
-		{
-			get => _commissionMaker;
-			set
-			{
-				_commissionMaker = value;
-				NotifyChanged(nameof(CommissionMaker));
-			}
-		}
-
 		/// <summary>
 		/// Portfolio associated with the orders received through the orders log.
 		/// </summary>
@@ -214,11 +151,8 @@ namespace StockSharp.BusinessEntities
 
 			destination.Name = Name;
 			destination.Board = Board;
-			destination.Leverage = Leverage;
 			//destination.Connector = Connector;
 			destination.State = State;
-			destination.CommissionMaker = CommissionMaker;
-			destination.CommissionTaker = CommissionTaker;
 			destination.InternalId = InternalId;
 		}
 

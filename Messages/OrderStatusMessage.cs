@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
+	using System.Xml.Serialization;
 
 	using StockSharp.Localization;
 
@@ -25,7 +26,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
+	public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage, IErrorMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -44,6 +45,11 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[DataMember]
 		public bool IsSubscribe { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		[XmlIgnore]
+		public Exception Error { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderStatusMessage"/>.
@@ -64,6 +70,7 @@ namespace StockSharp.Messages
 			destination.From = From;
 			destination.To = To;
 			destination.IsSubscribe = IsSubscribe;
+			destination.Error = Error;
 		}
 
 		/// <summary>
@@ -80,7 +87,18 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",TransId={TransactionId}";
+			var str = base.ToString();
+
+			if (From != null)
+				str += $",From={From.Value}";
+
+			if (To != null)
+				str += $",To={To.Value}";
+
+			if (Error != null)
+				str += $",Error={Error.Message}";
+
+			return str;
 		}
 	}
 }

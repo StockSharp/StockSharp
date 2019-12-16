@@ -8,7 +8,7 @@
 				C# and S# training - <token>stocksharpeducation</token>.
 			</listItem>
 			<listItem>
-				Source code - <token>stocksharpsources</token>.
+				Source code of S# core - <token>stocksharpgithub</token>.
 			</listItem>
 			<listItem>
 				Host application for trading algorithms with source code - <token>stocksharpshell</token>.
@@ -21,10 +21,7 @@
 				Platform site - <token>stocksharpsite</token>.
 			</listItem>
 			<listItem>
-				Forum for discussion - <token>stocksharpforum</token>.
-			</listItem>
-			<listItem>
-				News - <token>stocksharpnews</token>.
+				News, articles, forum for discussion - <token>stocksharpforum</token>.
 			</listItem>
 			<listItem>
 				YouTube channel - <token>stocksharpyoutube</token>.

@@ -50686,5 +50686,35 @@ namespace StockSharp.Localization
 		/// Hotbit
 		/// </summary>
 		public static string Hotbit => GetString(HotbitKey);
+
+		/// <summary>
+		/// Brasil Bolsa
+		/// </summary>
+		public const string BrasilBolsaKey = nameof(BrasilBolsa);
+
+		/// <summary>
+		/// Brasil Bolsa
+		/// </summary>
+		public static string BrasilBolsa => GetString(BrasilBolsaKey);
+
+		/// <summary>
+		/// Unknown transaction id {0}.
+		/// </summary>
+		public const string UnknownTransactionIdKey = nameof(UnknownTransactionId);
+
+		/// <summary>
+		/// Unknown transaction id {0}.
+		/// </summary>
+		public static string UnknownTransactionId => GetString(UnknownTransactionIdKey);
+
+		/// <summary>
+		/// Bitalong
+		/// </summary>
+		public const string BitalongKey = nameof(Bitalong);
+
+		/// <summary>
+		/// Bitalong
+		/// </summary>
+		public static string Bitalong => GetString(BitalongKey);
 	}
 }

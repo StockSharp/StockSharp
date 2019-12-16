@@ -351,7 +351,7 @@ namespace StockSharp.Algo.Strategies
 			private readonly Dictionary<DateTimeOffset, Order[]> _orders;
 			private readonly Dictionary<Tuple<Security, Portfolio>, Strategy> _childStrategies;
 
-			public EquityStrategy(IEnumerable<Order> orders, IDictionary<Security, decimal> openedPositions)
+			public EquityStrategy(Order[] orders, IDictionary<Security, decimal> openedPositions)
 			{
 				_orders = orders.GroupBy(o => o.Time).ToDictionary(g => g.Key, g => g.ToArray());
 
@@ -547,13 +547,11 @@ namespace StockSharp.Algo.Strategies
 			{
 				Name = LocalizedStrings.Str1252 + " " + strategy;
 				Strategy.OrderRegistered += Activate;
-				Strategy.StopOrderRegistered += Activate;
 			}
 
 			protected override void DisposeManaged()
 			{
 				Strategy.OrderRegistered -= Activate;
-				Strategy.StopOrderRegistered -= Activate;
 				base.DisposeManaged();
 			}
 		}
@@ -565,13 +563,11 @@ namespace StockSharp.Algo.Strategies
 			{
 				Name = LocalizedStrings.Str1253 + " " + strategy;
 				Strategy.OrderChanged += Activate;
-				Strategy.StopOrderChanged += Activate;
 			}
 
 			protected override void DisposeManaged()
 			{
 				Strategy.OrderChanged -= Activate;
-				Strategy.StopOrderChanged -= Activate;
 				base.DisposeManaged();
 			}
 		}

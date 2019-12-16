@@ -25,17 +25,20 @@
 
 			<StackPanel Grid.Column="2" Orientation="Horizontal">
 				<Button x:Name="Quotes" Content="{x:Static loc:LocalizedStrings.XamlStr40}" Width="100" IsEnabled="False" Click="QuotesClick" />
-				<Button x:Name="Depth" Width="100" IsEnabled="False" Click="DepthClick">
+				<Button x:Name="Depth" Width="100" IsEnabled="False" Click="DepthClick" Margin="5,0,0,0">
 					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
 				</Button>
-				<Button x:Name="Ticks" Content="{x:Static loc:LocalizedStrings.Ticks}" Width="100" IsEnabled="False" Click="TicksClick" />
-				<Button x:Name="HistTicks" Content="{x:Static loc:LocalizedStrings.XamlStr223}" IsEnabled="False" Width="100" Click="HistTicksClick" />
-				<Button x:Name="OrderLog" Content="{x:Static loc:LocalizedStrings.OrderLog}" Width="100" IsEnabled="False" Click="OrderLogClick" />
-				<Button x:Name="NewOrder" Width="100" IsEnabled="False" Click="NewOrderClick">
+				<Button x:Name="DepthAdvanced" IsEnabled="False" Click="DepthAdvancedClick" Margin="5,0,0,0" Padding="5,0,5,0">
+					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" /> (advanced)...</TextBlock>
+				</Button>
+				<Button x:Name="Ticks" Content="{x:Static loc:LocalizedStrings.Ticks}" Width="70" Margin="5,0,0,0" IsEnabled="False" Click="TicksClick" />
+				<Button x:Name="HistTicks" Content="{x:Static loc:LocalizedStrings.XamlStr223}" IsEnabled="False" Width="100" Margin="5,0,0,0" Click="HistTicksClick" />
+				<Button x:Name="OrderLog" Content="{x:Static loc:LocalizedStrings.OrderLog}" Width="100" Margin="5,0,0,0" IsEnabled="False" Click="OrderLogClick" />
+				<Button x:Name="NewOrder" Width="100" IsEnabled="False" Click="NewOrderClick" Margin="5,0,0,0">
 					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
 				</Button>
-			    <Button x:Name="Candles" Content="{x:Static loc:LocalizedStrings.Candles}" Width="100" IsEnabled="False" Click="CandlesClick" />
-			    <ComboBox x:Name="CandlesPeriods" Width="100" SelectionChanged="CandlesPeriods_SelectionChanged" />
+			    <Button x:Name="Candles" Content="{x:Static loc:LocalizedStrings.Candles}" Width="100" Margin="5,0,0,0" IsEnabled="False" Click="CandlesClick" />
+			    <ComboBox x:Name="CandlesPeriods" Width="100" Margin="5,0,0,0" SelectionChanged="CandlesPeriods_SelectionChanged" />
             </StackPanel>
 		</Grid>
 	</Grid>

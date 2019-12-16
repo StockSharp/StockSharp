@@ -28,10 +28,14 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new SecurityRouteListRequestMessage
+			var clone = new SecurityRouteListRequestMessage
 			{
 				TransactionId = TransactionId,
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 
 		/// <inheritdoc />

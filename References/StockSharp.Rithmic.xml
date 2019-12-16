@@ -18,7 +18,7 @@
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportCandlesUpdates">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportSecuritiesLookupAll">
+        <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)">
             <inheritdoc />
         </member>
         <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

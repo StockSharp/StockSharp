@@ -91,8 +91,7 @@
 
 						var clone = (QuoteChangeMessage)quoteMsg.Clone();
 
-						clone.SubscriptionId = 0;
-						clone.SubscriptionIds = group.ToArray();
+						clone.SetSubscriptionIds(group.ToArray());
 
 						if (clone.Bids.Length > maxDepth)
 							clone.Bids = clone.Bids.Take(maxDepth).ToArray();
@@ -105,13 +104,10 @@
 
 					if (clones != null)
 					{
-						var ids = quoteMsg.GetSubscriptionIds().Except(clones.SelectMany(c => c.SubscriptionIds)).ToArray();
+						var ids = quoteMsg.GetSubscriptionIds().Except(clones.SelectMany(c => c.GetSubscriptionIds())).ToArray();
 
 						if (ids.Length > 0)
-						{
-							quoteMsg.SubscriptionId = 0;
-							quoteMsg.SubscriptionIds = ids;
-						}
+							quoteMsg.SetSubscriptionIds(ids);
 						else
 							message = null;
 					}

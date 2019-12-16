@@ -1,7 +1,6 @@
 ﻿namespace StockSharp.Algo
 {
 	using System;
-	using System.Collections.Generic;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -14,7 +13,7 @@
 	/// </summary>
 	public class OrderLogMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly Dictionary<long, RefTriple<SecurityId, bool, IOrderLogMarketDepthBuilder>> _subscriptionIds = new Dictionary<long, RefTriple<SecurityId, bool, IOrderLogMarketDepthBuilder>>();
+		private readonly SynchronizedDictionary<long, RefTriple<SecurityId, bool, IOrderLogMarketDepthBuilder>> _subscriptionIds = new SynchronizedDictionary<long, RefTriple<SecurityId, bool, IOrderLogMarketDepthBuilder>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderLogMessageAdapter"/>.
@@ -31,10 +30,8 @@
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-				{
 					_subscriptionIds.Clear();
 					break;
-				}
 
 				case MessageTypes.MarketData:
 					message = ProcessMarketDataRequest((MarketDataMessage)message);
@@ -63,7 +60,7 @@
 
 							IOrderLogMarketDepthBuilder builder = null;
 
-							if (InnerAdapter.IsSupportSubscriptionBySecurity)
+							if (InnerAdapter.IsSecurityRequired(DataType.OrderLog))
 								builder = InnerAdapter.CreateOrderLogMarketDepthBuilder(secId);
 
 							_subscriptionIds.Add(message.TransactionId, RefTuple.Create(secId, true, builder));
@@ -127,7 +124,7 @@
 
 		private SecurityId GetSecurityId(SecurityId securityId)
 		{
-			return InnerAdapter.IsSupportSubscriptionBySecurity
+			return InnerAdapter.IsSecurityRequired(DataType.OrderLog)
 				? securityId
 				: default;
 		}
@@ -141,7 +138,8 @@
 			{
 				if (!_subscriptionIds.TryGetValue(subscriptionId, out var tuple))
 				{
-					this.AddDebugLog("OL processing {0}/{1} not found.", execMsg.SecurityId, subscriptionId);
+					// can be non OL->MB subscription
+					//this.AddDebugLog("OL processing {0}/{1} not found.", execMsg.SecurityId, subscriptionId);
 					continue;
 				}
 
@@ -169,7 +167,7 @@
 					{
 						// если ОЛ поврежден, то не нарушаем весь цикл обработки сообщения
 						// а только выводим сообщение в лог
-						base.OnInnerAdapterNewOutMessage(new ErrorMessage { Error = ex });
+						base.OnInnerAdapterNewOutMessage(ex.ToErrorMessage());
 					}
 
 				}

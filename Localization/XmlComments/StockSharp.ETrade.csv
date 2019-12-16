@@ -14,7 +14,6 @@ M:StockSharp.ETrade.Native.OAuthToken.Deserialize(System.String)/returns;DocStr3
 T:StockSharp.ETrade.ETradeMessageAdapter/summary;DocStr3108
 M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
 M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.ETrade.ETradeMessageAdapter.SetCustomAuthorizationMethod(System.Action{System.String})/summary;DocStr3117
 M:StockSharp.ETrade.ETradeMessageAdapter.SetCustomAuthorizationMethod(System.Action{System.String})/param/method;DocStr3118
@@ -40,8 +39,6 @@ P:StockSharp.ETrade.ETradeTrader.AccessToken/summary;DocStr3136
 P:StockSharp.ETrade.ETradeTrader.VerificationCode/summary;Str3371
 P:StockSharp.ETrade.ETradeTrader.Sandbox/summary;DocStr3141
 M:StockSharp.ETrade.ETradeTrader.#ctor/summary;DocStr1
-M:StockSharp.ETrade.ETradeTrader.SetCustomAuthorizationMethod(System.Action{System.String})/summary;DocStr3117
-M:StockSharp.ETrade.ETradeTrader.SetCustomAuthorizationMethod(System.Action{System.String})/param/method;DocStr3118
 T:StockSharp.ETrade.Xaml.AuthDialog/summary;DocStr3150
 F:StockSharp.ETrade.Xaml.AuthDialog.VerificationCodeProperty/summary;DocStr29
 M:StockSharp.ETrade.Xaml.AuthDialog.#ctor(System.String)/summary;DocStr1

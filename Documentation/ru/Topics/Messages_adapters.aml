@@ -134,7 +134,7 @@ public class SmartAdapter: MessageAdapter
   								<para>
   								При помощи метода 
   								<codeEntityReference>M:StockSharp.Messages.Extensions.AddSupportedMessage(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageTypes)</codeEntityReference>
-    							добавляем в массив <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedMessages</codeEntityReference> типы сообщений, 
+    							добавляем в массив <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedInMessages</codeEntityReference> типы сообщений, 
     							которые будет поддерживать адаптер.
   								</para>
   							</listItem>
@@ -319,34 +319,32 @@ protected override void OnSendInMessage(Message message)
 					</para>
 					<para>
 					 В обработчике события соединения нативного API необходимо послать исходящее сообщение <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>.
-					 При обработке этого сообщения в коде базового класса  <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
-					 будут проверены значения булевых свойств:
+					 При обработке этого сообщения в коде класса <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
+					 будут проверены наличие в <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedInMessages</codeEntityReference> следующие типов сообщений:
 					 </para>
 					<list class="bullet">
   						<listItem>
-  								<para>
-  									<codeEntityReference>P:StockSharp.Messages.MessageAdapter.PortfolioLookupRequired</codeEntityReference> - необходимо ли сообщение
-  									<codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> для получения портфелей и позиций.
-  								</para>
-  						</listItem>
-  						<listItem>
   							<para>
-  								<codeEntityReference>P:StockSharp.Messages.MessageAdapter.SecurityLookupRequired</codeEntityReference> - необходимо ли сообщение
-  									<codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> для получения инструментов.
+  								<codeEntityReference>F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference> - необходимо ли сообщение
+  								<codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> для получения портфелей и позиций.
   							</para>
   						</listItem>
   						<listItem>
   							<para>
-  								<codeEntityReference>P:StockSharp.Messages.MessageAdapter.OrderStatusRequired</codeEntityReference> - необходимо ли сообщение
-  									<codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference> для получения заявок и собственных сделок.
+  								<codeEntityReference>F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> - необходимо ли сообщение
+  								<codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> для получения инструментов.
+  							</para>
+  						</listItem>
+  						<listItem>
+  							<para>
+  								<codeEntityReference>F:StockSharp.Messages.MessageTypes.OrderStatus</codeEntityReference> - необходимо ли сообщение
+  								<codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference> для получения заявок и собственных сделок.
   							</para>
   						</listItem>
 					</list>
 					<para>
-					 Если значение <legacyBold>true</legacyBold>, то соответствующее сообщение будет послано. По умолчанию значения этих свойств зависят от
-					 наличия соответствующего типа сообщения в списке поддерживаемых сообщений. В нашем примере (см. Конструктор адаптера.) в этот список были
-					 добавлены типы 
-					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> и  
+					 Если типы сообщения установлены у адаптера, то соответствующие сообщения будут посланы. В нашем примере (см. Конструктор адаптера.) в этот список
+					 были добавлены типы <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> и  
 					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference>, поэтому
 					 следует ожидать получения исходящих сообщений <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> и
 					 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference>.

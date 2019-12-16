@@ -21,7 +21,6 @@ namespace StockSharp.BusinessEntities
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
-	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
@@ -453,6 +452,68 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public TPlusLimits? LimitType { get; set; }
 
+		private decimal? _leverage;
+
+		/// <summary>
+		/// Margin leverage.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.LeverageKey)]
+		[DescriptionLoc(LocalizedStrings.Str261Key, true)]
+		[MainCategory]
+		[Nullable]
+		public decimal? Leverage
+		{
+			get => _leverage;
+			set
+			{
+				if (_leverage == value)
+					return;
+
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+
+				_leverage = value;
+				NotifyChanged(nameof(Leverage));
+			}
+		}
+
+		private decimal? _commissionTaker;
+
+		/// <summary>
+		/// Commission (taker).
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public decimal? CommissionTaker
+		{
+			get => _commissionTaker;
+			set
+			{
+				_commissionTaker = value;
+				NotifyChanged(nameof(CommissionTaker));
+			}
+		}
+
+		private decimal? _commissionMaker;
+
+		/// <summary>
+		/// Commission (maker).
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public decimal? CommissionMaker
+		{
+			get => _commissionMaker;
+			set
+			{
+				_commissionMaker = value;
+				NotifyChanged(nameof(CommissionMaker));
+			}
+		}
+
 		/// <summary>
 		/// Create a copy of <see cref="Position"/>.
 		/// </summary>
@@ -494,12 +555,16 @@ namespace StockSharp.BusinessEntities
 			destination.Security = Security;
 			destination.DepoName = DepoName;
 			destination.LimitType = LimitType;
+
+			destination.Leverage = Leverage;
+			destination.CommissionMaker = CommissionMaker;
+			destination.CommissionTaker = CommissionTaker;
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return "{0}-{1}".Put(Portfolio, Security);
+			return $"{Portfolio}-{Security}";
 		}
 	}
 }

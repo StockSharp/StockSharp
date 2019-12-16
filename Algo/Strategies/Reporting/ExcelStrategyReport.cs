@@ -307,57 +307,15 @@ namespace StockSharp.Algo.Strategies.Reporting
 								.SetCell(columnShift + 13, rowIndex, Format(order.LatencyCancellation))
 								.SetCell(columnShift + 14, rowIndex, order.Comment);
 
-							rowIndex++;
-						}
-
-						var stopOrders = strategy.StopOrders.ToArray();
-
-						if (stopOrders.Length > 0)
-						{
-							rowIndex += 2;
-
-							worker
-								.SetCell(columnShift + 0, rowIndex - 1, LocalizedStrings.Str1351)
-
-								.SetCell(columnShift + 0, rowIndex, LocalizedStrings.Str1190).SetStyle(columnShift + 0, typeof(long))
-								.SetCell(columnShift + 1, rowIndex, LocalizedStrings.Transaction).SetStyle(columnShift + 1, typeof(long))
-								.SetCell(columnShift + 2, rowIndex, LocalizedStrings.Str128)
-								.SetCell(columnShift + 3, rowIndex, LocalizedStrings.Time).SetStyle(columnShift + 3, "HH:mm:ss.fff")
-								.SetCell(columnShift + 4, rowIndex, LocalizedStrings.Price).SetStyle(columnShift + 4, typeof(decimal))
-								.SetCell(columnShift + 5, rowIndex, LocalizedStrings.Str1324)
-								.SetCell(columnShift + 6, rowIndex, LocalizedStrings.State)
-								.SetCell(columnShift + 7, rowIndex, LocalizedStrings.Volume).SetStyle(columnShift + 7, typeof(decimal))
-								.SetCell(columnShift + 8, rowIndex, LocalizedStrings.Str1326)
-								.SetCell(columnShift + 9, rowIndex, LocalizedStrings.Str1327)
-								//.SetCell(columnShift + 10, rowIndex, LocalizedStrings.Str1352).SetStyle(columnShift + 9, typeof(long))
-								;
-
-							var stopParams = stopOrders[0].Condition.Parameters.Keys.ToArray();
-
-							for (var i = 0; i < stopParams.Length; i++)
-								worker.SetCell(columnShift + 11 + i, rowIndex, stopParams[i]);
-
-							foreach (var order in stopOrders)
+							if (order.Condition != null)
 							{
-								worker
-									.SetCell(columnShift + 0, rowIndex, order.Id)
-									.SetCell(columnShift + 1, rowIndex, order.TransactionId)
-									.SetCell(columnShift + 2, rowIndex, Format(order.Direction))
-									.SetCell(columnShift + 3, rowIndex, Format(order.Time))
-									.SetCell(columnShift + 4, rowIndex, order.Price)
-									.SetCell(columnShift + 5, rowIndex, Format(order.State))
-									.SetCell(columnShift + 6, rowIndex, order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : string.Empty))
-									.SetCell(columnShift + 7, rowIndex, order.Volume)
-									.SetCell(columnShift + 8, rowIndex, Format(order.LatencyRegistration))
-									.SetCell(columnShift + 9, rowIndex, Format(order.LatencyCancellation))
-									//.SetCell(columnShift + 10, rowIndex, order.DerivedOrder != null ? (object)order.DerivedOrder.Id : string.Empty)
-									;
+								var stopParams = order.Condition.Parameters.Keys.ToArray();
 
 								for (var i = 0; i < stopParams.Length; i++)
-									worker.SetCell(columnShift + 11 + i, rowIndex, order.Condition.Parameters[stopParams[i]] ?? string.Empty);
-
-								rowIndex++;
+									worker.SetCell(columnShift + 11 + i, rowIndex, stopParams[i]);
 							}
+
+							rowIndex++;
 						}
 					}
 				}

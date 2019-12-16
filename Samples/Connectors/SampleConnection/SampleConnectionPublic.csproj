@@ -104,6 +104,10 @@
     <Compile Include="DatesWindow.xaml.cs">
       <DependentUpon>DatesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DepthSettings.cs" />
+    <Compile Include="DepthSettingsWindow.xaml.cs">
+      <DependentUpon>DepthSettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewsWindow.xaml.cs">
       <DependentUpon>NewsWindow.xaml</DependentUpon>
     </Compile>
@@ -124,6 +128,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DatesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DepthSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

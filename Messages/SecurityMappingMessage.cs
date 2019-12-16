@@ -43,12 +43,16 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new SecurityMappingMessage
+			var clone = new SecurityMappingMessage
 			{
 				Mapping = Mapping.Clone(),
 				StorageName = StorageName,
 				IsDelete = IsDelete,
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 
 		/// <inheritdoc />

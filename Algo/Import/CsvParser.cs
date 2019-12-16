@@ -118,7 +118,7 @@ namespace StockSharp.Algo.Import
 		{
 			var columnSeparator = ColumnSeparator.ReplaceIgnoreCase("TAB", "\t");
 
-			using (new Scope<TimeZoneInfo>(TimeZone))
+			using (TimeZone.ToScope())
 			using (var reader = new CsvFileReader(fileName) { Delimiter = columnSeparator[0] })
 			{
 				var skipLines = SkipFromHeader;

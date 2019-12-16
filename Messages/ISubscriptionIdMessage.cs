@@ -1,7 +1,5 @@
 namespace StockSharp.Messages
 {
-	using System.Collections.Generic;
-
 	/// <summary>
 	/// The interface describing an message with <see cref="SubscriptionId"/> property.
 	/// </summary>
@@ -15,6 +13,6 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Identifiers.
 		/// </summary>
-		IEnumerable<long> SubscriptionIds { get; set; }
+		long[] SubscriptionIds { get; set; }
 	}
 }

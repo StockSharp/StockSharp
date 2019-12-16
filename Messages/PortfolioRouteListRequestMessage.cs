@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class PortfolioRouteListRequestMessage : Message
+	public class PortfolioRouteListRequestMessage : Message, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="PortfolioRouteListRequestMessage"/>.
@@ -18,9 +18,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Request identifier.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
 
@@ -30,10 +28,14 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return new PortfolioRouteListRequestMessage
+			var clone = new PortfolioRouteListRequestMessage
 			{
 				TransactionId = TransactionId,
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 
 		/// <inheritdoc />

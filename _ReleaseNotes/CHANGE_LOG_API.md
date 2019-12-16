@@ -150,7 +150,6 @@ StockSharp API Change log
 * (bug) StorageMessageAdapter. Fix processing offline cancel order requests.
 * (feature) IMessageAdapter. IsSupportExecutionsPnL properties added.
 * (feature) PnLMessageAdapter. Translates PortfolioChangeMessage.
-* (feature) Plaza. Spectra 6.2.20 supported.
 * (feature) InteractiveBrokers. V9.76.01
 * (bug) PnLMessageAdapter. Fix processing for empty portfolio name trades.
 * (feature) IConnector. Moved market data members to IMarketDataProvider.
@@ -260,7 +259,6 @@ StockSharp API Change log
 * (feature) ISubscriptionProvider interface created.
 * (feature) Boards subscription unified with MarketDataMessage.
 * (feature) BoardStateStorage added.
-* (feature) Connector. Moved lookup auto send logic into BasketMessageAdapter.
 * (feature) Connector. SupportSubscriptionTracking enabled by default.
 * (feature) IMarketDataProvider. LookupTimeFrames added.
 * (feature) IMessageAdapter. SupportedOutMessages property added.
@@ -277,6 +275,18 @@ StockSharp API Change log
 * (feature) SecurityId. Money, News, All instances created.
 * (feature) Portfolio derived from Position.
 * (feature) Connector. All subscriptions and lookups done via Subscription class.
+* (feature) Connector. ReConnectionSettings marked as obsolete.
+* (feature) BasketMessageAdapter. UseSeparatedChannels property created.
+* (feature) MarketRuleHelper. Subscription rules.
+* (feature) OKEX. PostOnly order supported.
+* (feature) OKEX. MatchPrice supported.
+* (feature) OKEX. Futures, Swap close position operation supported.
+* (feature) FIX connector. BrasilBolsa fix dialect added.
+* (feature) PortfolioGrid. Leverage column added.
+* (feature) Connector. Support single order status requests.
+* (feature) Connector. IsAutoPortfoliosSubscribe added.
+* (feature) ITransactionProvider. StopOrder events marked as obsolete. Use events for regular orders.
+* (feature) Bitalong connector.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
@@ -306,7 +316,7 @@ StockSharp API Change log
 * (feature) FIX connector. IBKR dialect supported algo orders.
 * (feature) FixServer. Support SecurityStatusRequest.
 * (feature) OKEx. Web sockets v3 supported.
-* (feature) Plaza CGate. Spectra 6.2 supported.
+* (feature) Plaza CGate. Spectra 6.3 supported.
 * (feature) TWIME. Spectra 6.2 supported.
 * (feature) Micex TEAP. Interface 31 supported.
 * (feature) Storage lists. WaitFlush added. Removed ReadLasts.

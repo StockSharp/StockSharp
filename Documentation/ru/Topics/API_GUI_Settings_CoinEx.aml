@@ -4,7 +4,7 @@
     <introduction>
      <para>Для всех продуктов <token>stocksharp</token> графическая настройка подключения 
      выполняется в экранной форме <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />:</para>
-     <mediaLink><image placement="center" xlink:href="API_GUI_Settings_Bibox" /></mediaLink>
+     <mediaLink><image placement="center" xlink:href="API_GUI_Settings_CoinEx" /></mediaLink>
      <list class="bullet">
 	   <listItem>
 	      <legacyBold>Ключ</legacyBold> - Ключ.

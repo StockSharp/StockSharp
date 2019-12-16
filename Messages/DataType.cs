@@ -82,6 +82,16 @@ namespace StockSharp.Messages
 		public static DataType Board { get; } = Create(typeof(BoardStateMessage), null).Immutable();
 
 		/// <summary>
+		/// User info.
+		/// </summary>
+		public static DataType Users { get; } = Create(typeof(UserInfoMessage), null).Immutable();
+
+		/// <summary>
+		/// The candle time frames.
+		/// </summary>
+		public static DataType TimeFrames { get; } = Create(typeof(TimeFrameLookupResultMessage), null).Immutable();
+
+		/// <summary>
 		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		/// <param name="tf">Candle arg.</param>
@@ -225,7 +235,8 @@ namespace StockSharp.Messages
 			this == Securities	||
 			this == Ticks		||
 			this == OrderLog	||
-			this == Board;
+			this == Board		||
+			this == TimeFrames;
 
 		/// <summary>
 		/// Is the data type required security info.

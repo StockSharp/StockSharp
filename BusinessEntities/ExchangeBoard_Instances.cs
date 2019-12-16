@@ -32,7 +32,7 @@ namespace StockSharp.BusinessEntities
 
 			Associated = new ExchangeBoard
 			{
-				Code = MessageAdapter.DefaultAssociatedBoardCode,
+				Code = SecurityId.AssociatedBoardCode,
 				Exchange = Exchange.Test,
 			};
 
@@ -3528,5 +3528,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Hotbit.Name,
 			Exchange = Exchange.Hotbit,
 		};
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Bitalong"/>.
+		/// </summary>
+		public static ExchangeBoard Bitalong { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Bitalong.Name,
+			Exchange = Exchange.Bitalong,
+		};
+
 	}
 }

@@ -18,9 +18,6 @@
         <member name="M:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
             <inheritdoc />
         </member>
-        <member name="P:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.IsSupportSecuritiesLookupAll">
-            <inheritdoc />
-        </member>
         <member name="M:StockSharp.AlphaVantage.AlphaVantageMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>

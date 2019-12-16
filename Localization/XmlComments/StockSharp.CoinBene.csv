@@ -11,6 +11,9 @@ M:StockSharp.CoinBene.CoinBeneMessageAdapter.#ctor(Ecng.Common.IdGenerator)/para
 M:StockSharp.CoinBene.CoinBeneMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.CoinBene.CoinBeneOrderCondition/summary;DocStr60
 M:StockSharp.CoinBene.CoinBeneOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.CoinBene.CoinBeneOrderCondition.Leverage/summary;Leverage
+P:StockSharp.CoinBene.CoinBeneOrderCondition.PostOnly/summary;PostOnlyOrder
+P:StockSharp.CoinBene.CoinBeneOrderCondition.MarginMode/summary;DocStr10814
 T:StockSharp.CoinBene.CoinBeneTrader/summary;DocStr2539
 M:StockSharp.CoinBene.CoinBeneTrader.#ctor/summary;DocStr1
 P:StockSharp.CoinBene.CoinBeneTrader.Key/summary;Str3304

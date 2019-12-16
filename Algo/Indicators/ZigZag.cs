@@ -398,23 +398,23 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Load(SettingsStorage settings)
+		public override void Load(SettingsStorage storage)
 		{
-			base.Load(settings);
+			base.Load(storage);
 
-			BackStep = settings.GetValue<int>(nameof(BackStep));
-			Depth = settings.GetValue<int>(nameof(Depth));
-			Deviation.Load(settings.GetValue<SettingsStorage>(nameof(Deviation)));
+			BackStep = storage.GetValue<int>(nameof(BackStep));
+			Depth = storage.GetValue<int>(nameof(Depth));
+			Deviation.Load(storage.GetValue<SettingsStorage>(nameof(Deviation)));
 		}
 
 		/// <inheritdoc />
-		public override void Save(SettingsStorage settings)
+		public override void Save(SettingsStorage storage)
 		{
-			base.Save(settings);
+			base.Save(storage);
 
-			settings.SetValue(nameof(BackStep), BackStep);
-			settings.SetValue(nameof(Depth), Depth);
-			settings.SetValue(nameof(Deviation), Deviation.Save());
+			storage.SetValue(nameof(BackStep), BackStep);
+			storage.SetValue(nameof(Depth), Depth);
+			storage.SetValue(nameof(Deviation), Deviation.Save());
 		}
 	}
 }

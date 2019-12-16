@@ -24,8 +24,6 @@ namespace StockSharp.Algo.Testing
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
@@ -130,13 +128,13 @@ namespace StockSharp.Algo.Testing
 		private sealed class HistoryEmulationMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
 		{
 			private readonly HistoryEmulationConnector _parent;
-			private readonly MessagePriorityQueue _messageQueue;
+			private readonly MessageByLocalTimeQueue _messageQueue;
 
 			public HistoryEmulationMessageChannel(HistoryEmulationConnector parent)
 			{
 				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 
-				_messageQueue = new MessagePriorityQueue();
+				_messageQueue = new MessageByLocalTimeQueue();
 				_messageQueue.Close();
 			}
 
@@ -170,7 +168,7 @@ namespace StockSharp.Algo.Testing
 								}
 
 								if (!sended && !processed && !_messageQueue.IsClosed)
-									Thread.Sleep(100);
+									Thread.Sleep(1000);
 							}
 							catch (Exception ex)
 							{
@@ -249,8 +247,7 @@ namespace StockSharp.Algo.Testing
 			// чтобы каждый раз при повторной эмуляции получать одинаковые номера транзакций
 			TransactionIdGenerator = new IncrementalIdGenerator();
 
-			_initialMoney = portfolios.ToDictionary(pf => pf, pf => pf.BeginValue);
-			EntityFactory = new EmulationEntityFactory(securityProvider, _initialMoney.Keys);
+			EntityFactory = new EmulationEntityFactory(securityProvider, portfolios);
 			
 			RiskManager = null;
 
@@ -269,13 +266,18 @@ namespace StockSharp.Algo.Testing
 			Adapter.SlippageManager = null;
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
-			ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
+			//ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
 			//MaxMessageCount = 1000;
 
 			TradesKeepCount = 0;
 
-			RaiseConnectedOnFirstAdapter = false;
+			Adapter.SupportCandlesCompression = false;
+			Adapter.SupportBuildingFromOrderLog = false;
+			Adapter.SupportPartialDownload = false;
+			Adapter.SupportLookupTracking = false;
+			Adapter.SupportOrderBookTruncate = false;
+			Adapter.ConnectDisconnectEventOnFirstAdapter = false;
 		}
 
 		/// <summary>
@@ -296,13 +298,6 @@ namespace StockSharp.Algo.Testing
 		//	get => HistoryMessageAdapter.MaxMessageCount;
 		//	set => HistoryMessageAdapter.MaxMessageCount = value;
 		//}
-
-		private readonly Dictionary<Portfolio, decimal?> _initialMoney;
-
-		/// <summary>
-		/// The initial size of monetary funds on accounts.
-		/// </summary>
-		public IDictionary<Portfolio, decimal?> InitialMoney => _initialMoney;
 
 		///// <summary>
 		///// The number of loaded messages.
@@ -441,16 +436,6 @@ namespace StockSharp.Algo.Testing
 			{
 				switch (message.Type)
 				{
-					case MessageTypes.Connect:
-					{
-						base.OnProcessMessage(message);
-
-						if (message.Adapter == TransactionAdapter)
-							_initialMoney.ForEach(p => SendPortfolio(p.Key));
-
-						break;
-					}
-
 					case ExtendedMessageTypes.Last:
 					{
 						var lastMsg = (LastMessage)message;
@@ -526,29 +511,6 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 			}
-		}
-
-		private void SendPortfolio(Portfolio portfolio)
-		{
-			SendInMessage(portfolio.ToMessage());
-
-			var money = _initialMoney[portfolio];
-
-			SendInMessage(
-				EmulationAdapter
-					.CreatePortfolioChangeMessage(portfolio.Name)
-						.TryAdd(PositionChangeTypes.BeginValue, money, true)
-						.TryAdd(PositionChangeTypes.CurrentValue, money, true)
-						.Add(PositionChangeTypes.BlockedValue, 0m));
-		}
-
-		/// <inheritdoc />
-		protected override void OnRegisterPortfolio(Portfolio portfolio)
-		{
-			_initialMoney.TryAdd(portfolio, portfolio.BeginValue);
-
-			if (State == EmulationStates.Started)
-				SendPortfolio(portfolio);
 		}
 
 		/// <summary>

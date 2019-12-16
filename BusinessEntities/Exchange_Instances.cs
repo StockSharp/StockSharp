@@ -1100,5 +1100,14 @@ namespace StockSharp.BusinessEntities
 			Name = "HTBT",
 			FullNameLoc = LocalizedStrings.HotbitKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="Bitalong"/>.
+		/// </summary>
+		public static Exchange Bitalong { get; } = new Exchange
+		{
+			Name = "BTLG",
+			FullNameLoc = LocalizedStrings.BitalongKey,
+		};
 	}
 }

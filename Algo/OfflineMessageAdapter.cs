@@ -58,7 +58,7 @@
 		{
 			void ProcessOrderReplaceMessage(OrderReplaceMessage replaceMsg)
 			{
-				var originOrderMsg = _pendingRegistration.TryGetAndRemove(replaceMsg.OldTransactionId);
+				var originOrderMsg = _pendingRegistration.TryGetAndRemove(replaceMsg.OriginalTransactionId);
 
 				if (originOrderMsg == null)
 					_pendingMessages.Add(replaceMsg);
@@ -70,7 +70,7 @@
 					{
 						ExecutionType = ExecutionTypes.Transaction,
 						HasOrderInfo = true,
-						OriginalTransactionId = replaceMsg.OldTransactionId,
+						OriginalTransactionId = replaceMsg.OriginalTransactionId,
 						ServerTime = DateTimeOffset.Now,
 						OrderState = OrderStates.Done,
 						OrderType = originOrderMsg.OrderType,
@@ -146,7 +146,7 @@
 						{
 							var cancelMsg = (OrderCancelMessage)message.Clone();
 
-							var originOrderMsg = _pendingRegistration.TryGetAndRemove(cancelMsg.OrderTransactionId);
+							var originOrderMsg = _pendingRegistration.TryGetAndRemove(cancelMsg.OriginalTransactionId);
 
 							if (originOrderMsg == null)
 								_pendingMessages.Add(cancelMsg);

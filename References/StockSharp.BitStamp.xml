@@ -34,6 +34,11 @@
             Balance check interval. Required in case of deposit and withdraw actions.
             </summary>
         </member>
+        <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.AuthV2">
+            <summary>
+            V2 authentication method.
+            </summary>
+        </member>
         <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <inheritdoc />
         </member>

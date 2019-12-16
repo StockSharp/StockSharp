@@ -18,6 +18,8 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
+
 	/// <summary>
 	/// The message containing the information for modify order.
 	/// </summary>
@@ -38,12 +40,6 @@ namespace StockSharp.Messages
 		public string OldOrderStringId { get; set; }
 
 		/// <summary>
-		/// Modified order transaction id.
-		/// </summary>
-		[DataMember]
-		public long OldTransactionId { get; set; }
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderReplaceMessage"/>.
 		/// </summary>
 		public OrderReplaceMessage()
@@ -61,7 +57,6 @@ namespace StockSharp.Messages
 			{
 				OldOrderId = OldOrderId,
 				OldOrderStringId = OldOrderStringId,
-				OldTransactionId = OldTransactionId,
 			};
 
 			CopyTo(clone);
@@ -72,7 +67,15 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",OldTransId={OldTransactionId},OldOrdId={OldOrderId},NewTransId={TransactionId}";
+			var str = base.ToString();
+
+			if (OldOrderId != null)
+				str += $"OldOrdId={OldOrderId.Value}";
+
+			if (!OldOrderStringId.IsEmpty())
+				str += $"OldOrdId={OldOrderStringId}";
+
+			return str;
 		}
 	}
 }

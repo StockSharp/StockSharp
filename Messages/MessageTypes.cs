@@ -354,6 +354,11 @@ namespace StockSharp.Messages
 		/// <see cref="SecurityMappingMessage"/>.
 		/// </summary>
 		SecurityMapping,
+
+		/// <summary>
+		/// <see cref="SubscriptionOnlineMessage"/>.
+		/// </summary>
+		SubscriptionOnline,
 	}
 
 	/// <summary>

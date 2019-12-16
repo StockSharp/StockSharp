@@ -219,19 +219,19 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Load(SettingsStorage settings)
+		public override void Load(SettingsStorage storage)
 		{
-			base.Load(settings);
+			base.Load(storage);
 
-			Deviation = settings.GetValue<decimal>(nameof(Deviation));
+			Deviation = storage.GetValue<decimal>(nameof(Deviation));
 		}
 
 		/// <inheritdoc />
-		public override void Save(SettingsStorage settings)
+		public override void Save(SettingsStorage storage)
 		{
-			base.Save(settings);
+			base.Save(storage);
 
-			settings.SetValue(nameof(Deviation), Deviation);
+			storage.SetValue(nameof(Deviation), Deviation);
 		}
 	}
 }

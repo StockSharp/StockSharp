@@ -15,7 +15,7 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="P:StockSharp.GainCapital.GainCapitalMessageAdapter.IsSupportSecuritiesLookupAll">
+    <member name="M:StockSharp.GainCapital.GainCapitalMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.GainCapital.GainCapitalMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

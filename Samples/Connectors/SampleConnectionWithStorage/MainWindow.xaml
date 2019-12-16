@@ -1,4 +1,4 @@
-<Window x:Class="SampleConnectionWithStorage.MainWindow"
+<Window x:Class="SampleConnection.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"

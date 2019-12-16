@@ -83,6 +83,7 @@
 		</ddue:externalLink></item>
   <item id="Deribit"><ddue:link xlink:href="0b4fde09-8808-4ef8-89df-39aebcdd64a1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="designer"><ddue:link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Designer</ddue:link></item>
+  <item id="terminal"><ddue:link xlink:href="e4b5e112-bd08-4f40-8741-7514e7e4088e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Terminal</ddue:link></item>
   <item id="Digifinex"><ddue:link xlink:href="5097b5fb-42fa-4418-9afc-de5b6ff69df6" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="dotnet"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>.NET</ddue:linkText>
@@ -303,31 +304,27 @@
     <ddue:linkUri>https://stocksharp.ru/company/contacts/</ddue:linkUri>
    </ddue:externalLink></item>
   <item id="stocksharpeducation"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-		  <ddue:linkText>StockSharp Education</ddue:linkText>
-		  <ddue:linkUri>https://stocksharp.ru/edu/#pricing/</ddue:linkUri>
+		  <ddue:linkText>StockSharp Курсы</ddue:linkText>
+		  <ddue:linkUri>https://stocksharp.ru/edu/</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="stocksharpfacebook"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>StockSharp Facebook</ddue:linkText>
     <ddue:linkUri>https://facebook.com/stocksharp</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharpforum"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-		  <ddue:linkText>StockSharp Forum</ddue:linkText>
-		  <ddue:linkUri>https://stocksharp.ru/forum/</ddue:linkUri>
+		  <ddue:linkText>Форум, Статьи, Новости</ddue:linkText>
+		  <ddue:linkUri>https://stocksharp.ru/community/</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="stocksharpgithub"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>GitHub/StockSharp</ddue:linkText>
-    <ddue:linkUri>https://github.com/StockSharp/</ddue:linkUri>
-  </ddue:externalLink></item>
-  <item id="stocksharpnews"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>StockSharp News</ddue:linkText>
-    <ddue:linkUri>https://stocksharp.ru/news/</ddue:linkUri>
+    <ddue:linkUri>https://github.com/StockSharp/StockSharp</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharpnotify"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
    <ddue:linkText>S#.Notify</ddue:linkText>
    <ddue:linkUri>https://stocksharp.ru/products/notify/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharppricing"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>StockSharp Pricing</ddue:linkText>
+    <ddue:linkText>StockSharp Стоимость</ddue:linkText>
     <ddue:linkUri>https://stocksharp.ru/products/pricing/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharpprofile"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
@@ -335,15 +332,15 @@
     <ddue:linkUri>https://stocksharp.ru/profile/</ddue:linkUri>
    </ddue:externalLink></item>
   <item id="stocksharpshell"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>StockSharp Shell</ddue:linkText>
+    <ddue:linkText>S#.Shell</ddue:linkText>
     <ddue:linkUri>https://stocksharp.ru/products/shell/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharpsite"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>https://stocksharp.ru</ddue:linkText>
 		  <ddue:linkUri>https://stocksharp.ru</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="stocksharpsources"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>StockSharp Sources</ddue:linkText>
+  <item id="stocksharpgithubreleases"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>StockSharp Releases</ddue:linkText>
     <ddue:linkUri>https://github.com/StockSharp/StockSharp/releases/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharpstudio"><ddue:link xlink:href="49ba804f-908b-473a-a31f-76540d8a79d7" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Studio</ddue:link></item>

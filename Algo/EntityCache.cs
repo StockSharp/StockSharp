@@ -366,12 +366,20 @@ namespace StockSharp.Algo
 			_positions.Clear();
 
 			_marketDepths.Clear();
+
+			_securityValues.Clear();
+			_boardStates.Clear();
 		}
 
 		public void AddOrderStatusTransactionId(long transactionId)
 		{
 			if (!_orderStatusTransactions.Add(transactionId))
 				throw new InvalidOperationException();
+		}
+
+		public void RemoveOrderStatusTransactionId(long transactionId)
+		{
+			_orderStatusTransactions.Remove(transactionId);
 		}
 
 		public IEnumerable<Order> GetOrders(Security security, OrderStates state)
@@ -1247,5 +1255,96 @@ namespace StockSharp.Algo
 				info.Third = message.Asks;
 			}
 		}
+
+		public class Level1Info
+		{
+			public readonly object[] Values = new object[Enumerator.GetValues<Level1Fields>().Count()];
+			public bool CanBestQuotes { get; private set; } = true;
+			public bool CanLastTrade { get; private set; } = true;
+
+			public void SetValue(Level1Fields field, object value)
+			{
+				var idx = (int)field;
+
+				if (idx >= Values.Length)
+					return;
+
+				Values[idx] = value;
+			}
+
+			public object GetValue(Level1Fields field)
+			{
+				var idx = (int)field;
+
+				if (idx >= Values.Length)
+					return null;
+
+				return Values[idx];
+			}
+
+			public void ClearBestQuotes()
+			{
+				if (!CanBestQuotes)
+					return;
+
+				foreach (var field in Messages.Extensions.BestBidFields.Cache)
+					SetValue(field, null);
+
+				foreach (var field in Messages.Extensions.BestAskFields.Cache)
+					SetValue(field, null);
+
+				CanBestQuotes = false;
+			}
+
+			public void ClearLastTrade()
+			{
+				if (!CanLastTrade)
+					return;
+
+				foreach (var field in Messages.Extensions.LastTradeFields.Cache)
+					SetValue(field, null);
+
+				CanLastTrade = false;
+			}
+		}
+
+		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates?> _boardStates = new SynchronizedDictionary<ExchangeBoard, SessionStates?>();
+
+		public SessionStates? GetSessionState(ExchangeBoard board) => _boardStates.TryGetValue(board);
+		public void SetSessionState(ExchangeBoard board, SessionStates? value) => _boardStates[board] = value;
+
+		private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = new SynchronizedDictionary<Security, Level1Info>();
+
+		public object GetSecurityValue(Security security, Level1Fields field)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return _securityValues.TryGetValue(security)?.GetValue(field);
+		}
+
+		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			var info = _securityValues.TryGetValue(security);
+
+			if (info == null)
+				return Enumerable.Empty<Level1Fields>();
+
+			var fields = new List<Level1Fields>(30);
+
+			for (var i = 0; i < info.Values.Length; i++)
+			{
+				if (info.Values[i] != null)
+					fields.Add((Level1Fields)i);
+			}
+
+			return fields;
+		}
+
+		public Level1Info GetSecurityValues(Security security)
+			=> _securityValues.SafeAdd(security, key => new Level1Info());
 	}
 }

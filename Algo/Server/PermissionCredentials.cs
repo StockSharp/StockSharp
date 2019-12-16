@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Server
 		/// <summary>
 		/// 
 		/// </summary>
-		public string IpRestrictionsStr
+		private string IpRestrictionsStr
 		{
 			get
 			{

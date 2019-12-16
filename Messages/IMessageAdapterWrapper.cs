@@ -231,11 +231,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public bool CheckTimeFrameByRequest
-		{
-			get => InnerAdapter.CheckTimeFrameByRequest;
-			set => InnerAdapter.CheckTimeFrameByRequest = value;
-		}
+		public bool CheckTimeFrameByRequest => InnerAdapter.CheckTimeFrameByRequest;
 
 		/// <inheritdoc />
 		public ReConnectionSettings ReConnectionSettings => InnerAdapter.ReConnectionSettings;
@@ -251,10 +247,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual IEnumerable<MessageTypes> SupportedMessages
+		public virtual IEnumerable<MessageTypes> SupportedInMessages
 		{
-			get => InnerAdapter.SupportedMessages;
-			set => InnerAdapter.SupportedMessages = value;
+			get => InnerAdapter.SupportedInMessages;
+			set => InnerAdapter.SupportedInMessages = value;
 		}
 
 		/// <inheritdoc />
@@ -296,9 +292,6 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportSubscriptions => InnerAdapter.IsSupportSubscriptions;
 
 		/// <inheritdoc />
-		public virtual bool IsSupportSubscriptionBySecurity => InnerAdapter.IsSupportSubscriptionBySecurity;
-
-		/// <inheritdoc />
 		public virtual bool IsSupportCandlesUpdates => InnerAdapter.IsSupportCandlesUpdates;
 
 		/// <inheritdoc />
@@ -307,13 +300,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
 
-		/// <inheritdoc />
-		public string AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;
-
 		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
-
-		/// <inheritdoc />
-		public virtual bool IsSupportSecuritiesLookupAll => InnerAdapter.IsSupportSecuritiesLookupAll;
 
 		/// <inheritdoc />
 		public virtual IEnumerable<int> SupportedOrderBookDepths => InnerAdapter.SupportedOrderBookDepths;
@@ -332,7 +319,7 @@ namespace StockSharp.Messages
 
 		Type IMessageAdapter.OrderConditionType => InnerAdapter.OrderConditionType;
 
-		OrderCondition IMessageAdapter.CreateOrderCondition() => InnerAdapter.CreateOrderCondition();
+		bool IMessageAdapter.HeartbeatBeforConnect => InnerAdapter.HeartbeatBeforConnect;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
@@ -346,8 +333,12 @@ namespace StockSharp.Messages
 			=> InnerAdapter.GetHistoryStepSize(dataType, out iterationInterval);
 
 		/// <inheritdoc />
-		public virtual bool IsAllDownloadingSupported(MarketDataTypes dataType)
+		public virtual bool IsAllDownloadingSupported(DataType dataType)
 			=> InnerAdapter.IsAllDownloadingSupported(dataType);
+
+		/// <inheritdoc />
+		public virtual bool IsSecurityRequired(DataType dataType)
+			=> InnerAdapter.IsSecurityRequired(dataType);
 
 		/// <inheritdoc />
 		public virtual void Dispose()

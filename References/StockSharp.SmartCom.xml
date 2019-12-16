@@ -897,7 +897,7 @@
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsNativeIdentifiers">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsSupportSecuritiesLookupAll">
+    <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -1067,12 +1067,6 @@
       <summary>
             Настройки конфигурации серверной части SmartCOM 3.x.
             </summary>
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartTrader.OnConnect">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
-      <inheritdoc />
     </member>
     <member name="T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox">
       <summary>

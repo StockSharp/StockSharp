@@ -20,6 +20,8 @@
 
 			InitializeComponent();
 
+			Title = candleSeries.ToString();
+
 			_candleSeries = candleSeries;
 			_connector = MainWindow.Instance.Connector;
 
@@ -43,6 +45,8 @@
 			_connector.SubscribeCandles(_candleSeries);
 		}
 
+		public bool SeriesInactive { get; set; }
+
 		private void ProcessNewCandle(CandleSeries series, Candle candle)
 		{
 			if (series != _candleSeries)
@@ -54,7 +58,9 @@
 		protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
 		{
 			_connector.CandleSeriesProcessing -= ProcessNewCandle;
-			_connector.UnSubscribeCandles(_candleSeries);
+
+			if (!SeriesInactive)
+				_connector.UnSubscribeCandles(_candleSeries);
 
 			base.OnClosing(e);
 		}

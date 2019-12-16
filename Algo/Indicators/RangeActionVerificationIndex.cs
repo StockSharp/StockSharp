@@ -69,21 +69,21 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Load(SettingsStorage settings)
+		public override void Load(SettingsStorage storage)
 		{
-			base.Load(settings);
+			base.Load(storage);
 
-			ShortSma.LoadNotNull(settings, nameof(ShortSma));
-			LongSma.LoadNotNull(settings, nameof(LongSma));
+			ShortSma.LoadNotNull(storage, nameof(ShortSma));
+			LongSma.LoadNotNull(storage, nameof(LongSma));
 		}
 
 		/// <inheritdoc />
-		public override void Save(SettingsStorage settings)
+		public override void Save(SettingsStorage storage)
 		{
-			base.Save(settings);
+			base.Save(storage);
 
-			settings.SetValue(nameof(ShortSma), ShortSma.Save());
-			settings.SetValue(nameof(LongSma), LongSma.Save());
+			storage.SetValue(nameof(ShortSma), ShortSma.Save());
+			storage.SetValue(nameof(LongSma), LongSma.Save());
 		}
 	}
 }

@@ -3,6 +3,7 @@ namespace SampleConnection
 	using System;
 	using System.ComponentModel;
 	using System.IO;
+	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Common;
@@ -73,7 +74,10 @@ namespace SampleConnection
 				this.GuiAsync(() => ChangeConnectStatus(true));
 
 				if (Connector.Adapter.IsMarketDataTypeSupported(MarketDataTypes.News) && !Connector.Adapter.IsSecurityNewsOnly)
-					Connector.SubscribeNews();
+				{
+					if (Connector.Subscriptions.All(s => s.DataType != DataType.News))
+						Connector.SubscribeNews();
+				}
 			};
 
 			// subscribe on connection error event
@@ -98,7 +102,6 @@ namespace SampleConnection
 			Connector.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
 
 			Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-			Connector.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 			
 			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Positions.Add;
@@ -109,16 +112,17 @@ namespace SampleConnection
 			// subscribe on error of order cancelling event
 			Connector.OrderCancelFailed += OrderFailed;
 
-			// subscribe on error of stop-order registration event
-			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			// subscribe on error of stop-order cancelling event
-			Connector.StopOrderCancelFailed += OrderFailed;
-
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
 
 			// set news provider
 			_newsWindow.NewsPanel.NewsProvider = Connector;
+
+			Connector.LookupTimeFramesResult += (message, timeFrames, error) =>
+			{
+				if (error == null)
+					this.GuiAsync(() => _securitiesWindow.UpdateTimeFrames(timeFrames));
+			};
 
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
 			ConfigManager.RegisterService<IMessageAdapterProvider>(new FullInMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
@@ -130,7 +134,7 @@ namespace SampleConnection
 					var ctx = new ContinueOnExceptionContext();
 					ctx.Error += ex => ex.LogError();
 
-					using (new Scope<ContinueOnExceptionContext>(ctx))
+					using (ctx.ToScope())
 						Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 				}
 			}

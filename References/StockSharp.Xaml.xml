@@ -1223,7 +1223,7 @@
     </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.DataTypeEditor">
       <summary>
-            Editor for <see cref="T:StockSharp.BusinessEntities.DataType" />.
+            Editor for <see cref="T:StockSharp.Messages.DataType" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.DataTypeEditor.#ctor">
@@ -1888,23 +1888,28 @@
     </member>
     <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.OkCommand">
       <summary>
-      </summary>
+            OK command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.AddCommand">
       <summary>
-      </summary>
+            Add credentials command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.RemoveCommand">
       <summary>
-      </summary>
+            Remove credentials command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.SelectAllCommand">
       <summary>
-      </summary>
+            Select all credentials command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.PermissionCredentialsWindow.UnSelectAllCommand">
       <summary>
-      </summary>
+            Un select all credentials command.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.PermissionCredentialsWindow.#ctor">
       <summary>
@@ -2204,19 +2209,23 @@
     </member>
     <member name="F:StockSharp.Xaml.ImportSettingsPanel.SelectFieldCommand">
       <summary>
-      </summary>
+            Select field command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.ImportSettingsPanel.UnselectFieldCommand">
       <summary>
-      </summary>
+            Unselect field command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.ImportSettingsPanel.MoveUpFieldCommand">
       <summary>
-      </summary>
+            Move up field command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.ImportSettingsPanel.MoveDownFieldCommand">
       <summary>
-      </summary>
+            Move down field command.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.ImportSettingsPanel.#ctor">
       <summary>
@@ -2524,6 +2533,11 @@
             The market data provider.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.OptionDeskModel.ExchangeInfoProvider">
+      <summary>
+            Exchanges and trading boards provider.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.OptionDeskModel.UnderlyingAsset">
       <summary>
             Underlying asset.
@@ -2757,23 +2771,28 @@
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.StartCommand">
       <summary>
-      </summary>
+            Start strategy command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.StopCommand">
       <summary>
-      </summary>
+            Stop strategy command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.ClosePositionCommand">
       <summary>
-      </summary>
+            Close position for selected strategy command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.RevertPositionCommand">
       <summary>
-      </summary>
+            Revert position for selected strategy command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.RiskRulesCommand">
       <summary>
-      </summary>
+            Risk management for selected strategy command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.StrategiesDashboard.SecurityProviderProperty">
       <summary>
@@ -2943,7 +2962,8 @@
     </member>
     <member name="F:StockSharp.Xaml.QuestionWindow.OkCommand">
       <summary>
-      </summary>
+            OK command.
+            </summary>
     </member>
     <member name="P:StockSharp.Xaml.QuestionWindow.Link">
       <summary>
@@ -2979,7 +2999,8 @@
     </member>
     <member name="F:StockSharp.Xaml.SecurityLookupWindow.OkCommand">
       <summary>
-      </summary>
+            OK command.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.SecurityLookupWindow.#ctor">
       <summary>
@@ -3239,7 +3260,7 @@
     </member>
     <member name="T:StockSharp.Xaml.ConnectorSupportedMessagesPanel">
       <summary>
-            The panel for modifying <see cref="P:StockSharp.Messages.IMessageAdapter.SupportedMessages" />.
+            The panel for modifying <see cref="P:StockSharp.Messages.IMessageAdapter.SupportedInMessages" />.
             </summary>
       <summary>
             ConnectorSupportedMessagesPanel
@@ -3762,7 +3783,8 @@
     </member>
     <member name="F:StockSharp.Xaml.SecretWindow.OkCommand">
       <summary>
-      </summary>
+            OK command.
+            </summary>
     </member>
     <member name="P:StockSharp.Xaml.SecretWindow.Secret">
       <summary>
@@ -3796,7 +3818,7 @@
     </member>
     <member name="T:StockSharp.Xaml.SecurityJumpsEditor">
       <summary>
-            Graphical component for editing of rollovers between tools.
+            Graphical component for editing of rollovers between instruments.
             </summary>
       <summary>
             SecurityJumpsEditor
@@ -4419,18 +4441,18 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.MarketDataGrid" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)">
+    <member name="M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,System.Nullable{StockSharp.Messages.SecurityId},StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)">
       <summary>
             To refresh the table. It is carried out asynchronously.
             </summary>
       <param name="storageRegistry">Market-data storage.</param>
-      <param name="security">Security.</param>
+      <param name="securityId">Security ID.</param>
       <param name="format">Data format.</param>
       <param name="drive">Storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.MarketDataGrid.CancelMakeEntires">
       <summary>
-            To cancel the operation launched by <see cref="M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)" />.
+            To cancel the operation launched by <see cref="M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,System.Nullable{StockSharp.Messages.SecurityId},StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.MarketDataGrid.InitializeComponent">
@@ -6503,26 +6525,6 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.SubscriptionStates">
-      <summary>
-            Subscription states.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SubscriptionStates.Stopped">
-      <summary>
-            Stopped.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SubscriptionStates.Active">
-      <summary>
-            Active.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SubscriptionStates.Failed">
-      <summary>
-            Failed.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.ISubscriptionsView">
       <summary>
             The interface for visual panel for modify subscriptions.
@@ -6557,20 +6559,20 @@
     </member>
     <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionFailed(StockSharp.Messages.MarketDataMessage,System.Exception)">
       <summary>
-            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Failed" /> state.
+            Set for the specified subscription <see cref="F:StockSharp.Algo.SubscriptionStates.Error" /> state.
             </summary>
       <param name="subscription">Subscription.</param>
       <param name="error">Error.</param>
     </member>
     <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionActive(StockSharp.Messages.MarketDataMessage)">
       <summary>
-            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Active" /> state.
+            Set for the specified subscription <see cref="F:StockSharp.Algo.SubscriptionStates.Active" /> state.
             </summary>
       <param name="subscription">Subscription.</param>
     </member>
     <member name="M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionStopped(StockSharp.Messages.MarketDataMessage)">
       <summary>
-            Set for the specified subscription <see cref="F:StockSharp.Xaml.SubscriptionStates.Stopped" /> state.
+            Set for the specified subscription <see cref="F:StockSharp.Algo.SubscriptionStates.Stopped" /> state.
             </summary>
       <param name="subscription">Subscription.</param>
     </member>

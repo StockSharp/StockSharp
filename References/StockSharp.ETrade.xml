@@ -56,9 +56,6 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportSecuritiesLookupAll">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
@@ -171,12 +168,6 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.ETrade.ETradeTrader" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.ETrade.ETradeTrader.SetCustomAuthorizationMethod(System.Action{System.String})">
-      <summary>
-            Set own authorization mode (the default is browser uses).
-            </summary>
-      <param name="method">ETrade authorization method.</param>
     </member>
     <member name="T:StockSharp.ETrade.Xaml.AuthDialog">
       <summary>

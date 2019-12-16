@@ -95,7 +95,7 @@ private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, Candle 
 			<step>
 				<content>
 					<para>Далее передаём в коннектор созданную серию свечей и запускаем получение данных через 
-<codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object},StockSharp.Messages.IMessageAdapter)</codeEntityReference>:</para>
+<codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},StockSharp.Messages.IMessageAdapter)</codeEntityReference>:</para>
 
 					<code language="C#">
 					<![CDATA[

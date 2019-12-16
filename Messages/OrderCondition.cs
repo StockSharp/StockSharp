@@ -74,6 +74,12 @@ namespace StockSharp.Messages
 			clone.Parameters.AddRange(_parameters.SyncGet(d => d.Select(p => new KeyValuePair<string, object>(p.Key, p.Value is ICloneable cl ? cl.Clone() : (p.Value is IPersistable pers ? pers.Clone() : p.Value))).ToArray()));
 			return clone;
 		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			return GetType().Name.Remove(nameof(OrderCondition)) + ": " + _parameters.SyncGet(d => d.Select(p => $"{p.Key}={p.Value}").Join(","));
+		}
 	}
 
 	/// <summary>

@@ -160,7 +160,7 @@
 		private readonly Dictionary<long, DownloadInfo> _original = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, DownloadInfo> _partialRequests = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, Tuple<long, DownloadInfo>> _unsubscribeRequests = new Dictionary<long, Tuple<long, DownloadInfo>>();
-		private readonly HashSet<long> _liveRequests = new HashSet<long>();
+		private readonly Dictionary<long, bool> _liveRequests = new Dictionary<long, bool>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PartialDownloadMessageAdapter"/>.
@@ -177,6 +177,7 @@
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
+				case MessageTypes.Disconnect:
 				{
 					lock (_syncObject)
 					{
@@ -196,6 +197,9 @@
 
 					if (subscriptionMsg.IsSubscribe)
 					{
+						if (subscriptionMsg is OrderStatusMessage statusMsg && statusMsg.HasOrderId())
+							break;
+
 						var from = subscriptionMsg.From;
 						var to = subscriptionMsg.To;
 
@@ -212,7 +216,7 @@
 
 									if (message.Type == MessageTypes.PortfolioLookup)
 									{
-										RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = subscriptionMsg.TransactionId });
+										RaiseNewOutMessage(message.Type.ToResultType().CreateLookupResult(subscriptionMsg.TransactionId));
 									}
 
 									return;
@@ -222,9 +226,13 @@
 									// or sending further only live subscription
 									subscriptionMsg.From = null;
 									subscriptionMsg.To = null;
+
+									_liveRequests.Add(subscriptionMsg.TransactionId, false);
 								}
 							}
 						}
+						else
+							_liveRequests.Add(subscriptionMsg.TransactionId, false);
 					}
 
 					break;
@@ -241,7 +249,7 @@
 
 						if (from != null || to != null)
 						{
-							var step = InnerAdapter.GetHistoryStepSize(mdMsg.DataType.ToDataType(mdMsg.Arg), out var iterationInterval);
+							var step = InnerAdapter.GetHistoryStepSize(mdMsg.ToDataType(), out var iterationInterval);
 
 							// adapter do not provide historical request
 							if (step == TimeSpan.Zero)
@@ -258,7 +266,7 @@
 									mdMsg.From = null;
 									mdMsg.To = null;
 
-									_liveRequests.Add(mdMsg.TransactionId);
+									_liveRequests.Add(mdMsg.TransactionId, false);
 									break;
 								}
 							}
@@ -273,6 +281,8 @@
 								_partialRequests.Add(info.CurrTransId, info);
 							}
 						}
+						else
+							_liveRequests.Add(mdMsg.TransactionId, false);
 					}
 					else
 					{
@@ -305,7 +315,7 @@
 
 						if (mdMsg.To == null)
 						{
-							_liveRequests.Add(mdMsg.TransactionId);
+							_liveRequests.Add(mdMsg.TransactionId, true);
 
 							_original.Remove(partialMsg.OriginalTransactionId);
 							_partialRequests.RemoveWhere(p => p.Value == info);
@@ -326,36 +336,94 @@
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			Message extra = null;
+
 			switch (message.Type)
 			{
-				case MessageTypes.MarketData:
+				case MessageTypes.PortfolioLookupResult:
+				case MessageTypes.OrderStatus:
 				{
-					var responseMsg = (MarketDataMessage)message;
+					var responseMsg = (IOriginalTransactionIdMessage)message;
+					var originId = responseMsg.OriginalTransactionId;
 
 					lock (_syncObject)
 					{
-						if (_liveRequests.Contains(responseMsg.OriginalTransactionId))
+						if (_liveRequests.TryGetValue(originId, out var isPartial))
 						{
-							_liveRequests.Remove(responseMsg.OriginalTransactionId);
+							_liveRequests.Remove(originId);
 
-							responseMsg.IsOnline = true;
+							if (isPartial)
+							{
+								if (((IErrorMessage)responseMsg).Error == null)
+								{
+									// reply was sent prev for first partial request,
+									// now sending "online" message
+									message = new SubscriptionOnlineMessage
+									{
+										OriginalTransactionId = originId
+									};
+								}
+							}
+							else
+							{
+								extra = new SubscriptionOnlineMessage
+								{
+									OriginalTransactionId = originId
+								};
+							}
+						}
+					}
+
+					break;
+				}
+
+				case MessageTypes.MarketData:
+				{
+					var responseMsg = (MarketDataMessage)message;
+					var originId = responseMsg.OriginalTransactionId;
+
+					lock (_syncObject)
+					{
+						if (_liveRequests.TryGetValue(originId, out var isPartial))
+						{
+							_liveRequests.Remove(originId);
+
+							if (responseMsg.IsOk())
+							{
+								if (isPartial)
+								{
+									// reply was sent prev for first partial request,
+									// now sending "online" message
+									message = new SubscriptionOnlineMessage
+									{
+										OriginalTransactionId = originId
+									};
+								}
+								else
+								{
+									extra = new SubscriptionOnlineMessage
+									{
+										OriginalTransactionId = originId
+									};
+								}
+							}
+
 							break;
 						}
 
 						long requestId;
 
-						if (!_partialRequests.TryGetValue(responseMsg.OriginalTransactionId, out var info))
+						if (!_partialRequests.TryGetValue(originId, out var info))
 						{
-							if (!_unsubscribeRequests.TryGetValue(responseMsg.OriginalTransactionId, out var tuple))
+							if (!_unsubscribeRequests.TryGetValue(originId, out var tuple))
 								break;
 							
 							requestId = tuple.Item1;
 							info = tuple.Item2;
 
-							var originId = info.Origin.TransactionId;
-							_original.Remove(originId);
+							_original.Remove(info.Origin.TransactionId);
 							_partialRequests.RemoveWhere(p => p.Value == info);
-							_unsubscribeRequests.Remove(responseMsg.OriginalTransactionId);
+							_unsubscribeRequests.Remove(originId);
 						}
 						else
 						{
@@ -448,6 +516,9 @@
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+
+			if (extra != null)
+				base.OnInnerAdapterNewOutMessage(extra);
 		}
 
 		private void TryUpdateSubscriptionResult<TMessage>(TMessage message)

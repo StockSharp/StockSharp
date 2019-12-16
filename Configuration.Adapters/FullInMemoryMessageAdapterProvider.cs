@@ -9,6 +9,7 @@ namespace StockSharp.Configuration
 	using StockSharp.BarChart;
 	using StockSharp.Bibox;
 	using StockSharp.Binance;
+	using StockSharp.Bitalong;
 	using StockSharp.Bitbank;
 	using StockSharp.Bitexbook;
 	using StockSharp.Bitfinex;
@@ -226,6 +227,7 @@ namespace StockSharp.Configuration
 			() => typeof(GopaxMessageAdapter),
 			() => typeof(HotbitMessageAdapter),
 			() => typeof(CoinHubMessageAdapter),
+			() => typeof(BitalongMessageAdapter),
 		});
 	}
 }

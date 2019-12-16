@@ -4,7 +4,8 @@
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:sx="http://schemas.stocksharp.com/xaml"
         xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
-        Title="{x:Static loc:LocalizedStrings.SelectDates}" Width="300" MinHeight="200" SizeToContent="Height"
+        Title="{x:Static loc:LocalizedStrings.SelectDates}"
+        Width="300" MinHeight="200" SizeToContent="Height"
         ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
     <Grid Margin="5">
         <Grid.RowDefinitions>
@@ -15,6 +16,6 @@
 
 		<sx:PropertyGridEx x:Name="PropGrid" Grid.Row="0" />
 
-		<Button Grid.Row="2" xaml:XamlHelper.DialogResult="True" Content="{x:Static loc:LocalizedStrings.OK}"  />
+		<Button Grid.Row="2" xaml:XamlHelper.DialogResult="True" Content="{x:Static loc:LocalizedStrings.OK}" />
     </Grid>
 </Window>

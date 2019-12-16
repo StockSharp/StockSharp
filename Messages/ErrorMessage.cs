@@ -42,7 +42,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Error={Error.Message}";
+			return base.ToString() + $",Error={Error?.Message}";
 		}
 
 		/// <summary>

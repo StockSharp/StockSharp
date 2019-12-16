@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Testing
 			}
 
 			public override OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired => null;
-			public override IEnumerable<MessageTypes> SupportedMessages => InnerAdapter.SupportedMessages.Except(Extensions.TransactionalMessageTypes).ToArray();
+			public override IEnumerable<MessageTypes> SupportedInMessages => InnerAdapter.SupportedInMessages.Except(Extensions.TransactionalMessageTypes).ToArray();
 			public override IEnumerable<MessageTypes> SupportedOutMessages => InnerAdapter.SupportedOutMessages.Except(new[] { MessageTypes.Portfolio, MessageTypes.PortfolioRoute, MessageTypes.PortfolioRouteListFinished, MessageTypes.PositionChange, MessageTypes.PortfolioLookupResult }).ToArray();
 
 			private ILogSource _parent;

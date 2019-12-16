@@ -9,7 +9,7 @@ namespace StockSharp.Algo.Strategies
 
 	partial class Strategy
 	{
-		private ICandleManager CandleManager => (Connector)SafeGetConnector();
+		private ICandleManager CandleManager => (ICandleManager)SafeGetConnector();
 
 		event Action<Exception> ICandleSource<Candle>.Error
 		{

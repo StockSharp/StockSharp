@@ -263,7 +263,7 @@ namespace StockSharp.Algo.Testing
 						//при перерегистрации могут приходить заявки с нулевым объемом
 						//объем при этом надо взять из старой заявки.
 						var orderMsg = (OrderReplaceMessage)message;
-						var oldOrder = _activeOrders.TryGetValue(orderMsg.OldTransactionId);
+						var oldOrder = _activeOrders.TryGetValue(orderMsg.OriginalTransactionId);
 
 						foreach (var execMsg in _execLogConverter.ToExecutionLog(orderMsg, GetTotalVolume(orderMsg.Side.Invert())))
 						{
@@ -308,7 +308,7 @@ namespace StockSharp.Algo.Testing
 									HasOrderInfo = true,
 								});
 
-								this.AddErrorLog(LocalizedStrings.Str1148Params, orderMsg.OldTransactionId);
+								this.AddErrorLog(LocalizedStrings.Str1148Params, orderMsg.OriginalTransactionId);
 							}
 						}
 
@@ -318,18 +318,31 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.OrderStatus:
 					{
 						var statusMsg = (OrderStatusMessage)message;
+						var checkByPf = !statusMsg.PortfolioName.IsEmpty();
+
+						var finish = false;
 
 						foreach (var order in _activeOrders.Values)
 						{
-							if (!statusMsg.PortfolioName.IsEmpty())
+							if (checkByPf)
 							{
 								if (!order.PortfolioName.CompareIgnoreCase(statusMsg.PortfolioName))
 									continue;
+							}
+							else if (statusMsg.OrderId != null)
+							{
+								if (order.OrderId != statusMsg.OrderId)
+									continue;
+
+								finish = true;
 							}
 
 							var clone = (ExecutionMessage)order.Clone();
 							clone.OriginalTransactionId = statusMsg.TransactionId;
 							result.Add(clone);
+
+							if (finish)
+								break;
 						}
 
 						break;
@@ -1637,7 +1650,7 @@ namespace StockSharp.Algo.Testing
 				}
 				catch (OverflowException ex)
 				{
-					result.Add(new ErrorMessage { Error = ex });
+					result.Add(ex.ToErrorMessage());
 				}
 
 				result.Add(new PortfolioChangeMessage

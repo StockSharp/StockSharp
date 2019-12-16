@@ -43,7 +43,8 @@ namespace StockSharp.Algo.Strategies
 	/// The base class for all trade strategies.
 	/// </summary>
 	public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer,
-	    ICloneable<Strategy>, IMarketDataProvider, ISecurityProvider, ICandleManager, ITransactionProvider
+	    ICloneable<Strategy>, IMarketDataProvider, ISecurityProvider, ICandleManager,
+	    ITransactionProvider, ISubscriptionProvider
 	{
 		private class StrategyChangeStateMessage : Message
 		{
@@ -104,18 +105,11 @@ namespace StockSharp.Algo.Strategies
 				item.OrderChanged += _parent.OnChildOrderChanged;
 				item.OrderRegisterFailed += _parent.OnChildOrderRegisterFailed;
 				item.OrderCancelFailed += _parent.OnChildOrderCancelFailed;
-				item.StopOrderRegistering += _parent.ProcessChildStopOrderRegistering;
-				item.StopOrderRegistered += _parent.ProcessOrder;
-				item.StopOrderChanged += _parent.OnChildStopOrderChanged;
-				item.StopOrderRegisterFailed += _parent.OnChildStopOrderRegisterFailed;
-				item.StopOrderCancelFailed += _parent.OnChildStopOrderCancelFailed;
 				item.NewMyTrade += _parent.AddMyTrade;
 				item.OrderReRegistering += _parent.OnOrderReRegistering;
-				item.StopOrderReRegistering += _parent.OnStopOrderReRegistering;
 				item.ProcessStateChanged += OnChildProcessStateChanged;
 				item.Error += _parent.OnError;
 
-				item.StopOrders.ForEach(_parent.ProcessOrder);
 				item.Orders.ForEach(_parent.ProcessOrder);
 
 				if (!item.MyTrades.IsEmpty())
@@ -166,15 +160,8 @@ namespace StockSharp.Algo.Strategies
 				item.OrderRegisterFailed -= _parent.OnChildOrderRegisterFailed;
 				item.OrderCancelFailed -= _parent.OnChildOrderCancelFailed;
 				item.OrderCanceling -= _parent.OnOrderCanceling;
-				item.StopOrderRegistering -= _parent.ProcessChildStopOrderRegistering;
-				item.StopOrderRegistered -= _parent.ProcessOrder;
-				item.StopOrderChanged -= _parent.OnChildStopOrderChanged;
-				item.StopOrderRegisterFailed -= _parent.OnChildStopOrderRegisterFailed;
-				item.StopOrderCancelFailed -= _parent.OnChildStopOrderCancelFailed;
-				item.StopOrderCanceling -= _parent.OnStopOrderCanceling;
 				item.NewMyTrade -= _parent.AddMyTrade;
 				item.OrderReRegistering -= _parent.OnOrderReRegistering;
-				item.StopOrderReRegistering -= _parent.OnStopOrderReRegistering;
 				item.ProcessStateChanged -= OnChildProcessStateChanged;
 				item.Error -= _parent.OnError;
 
@@ -287,9 +274,7 @@ namespace StockSharp.Algo.Strategies
 
 		private readonly StrategyParam<LogLevels> _logLevel;
 
-		/// <summary>
-		/// The logging level. The default is set to <see cref="LogLevels.Inherit"/>.
-		/// </summary>
+		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.LoggingKey)]
 		//[PropertyOrder(8)]
 		[DisplayNameLoc(LocalizedStrings.Str9Key)]
@@ -350,10 +335,6 @@ namespace StockSharp.Algo.Strategies
 					_connector.OrderChanged -= OnConnectorOrderChanged;
 					_connector.OrderRegisterFailed -= OnConnectorOrderRegisterFailed;
 					_connector.OrderCancelFailed -= ProcessCancelOrderFail;
-					_connector.NewStopOrder -= OnConnectorNewOrder;
-					_connector.StopOrderChanged -= OnConnectorStopOrderChanged;
-					_connector.StopOrderRegisterFailed -= OnConnectorStopOrderRegisterFailed;
-					_connector.StopOrderCancelFailed -= ProcessCancelOrderFail;
 					_connector.NewMyTrade -= OnConnectorNewMyTrade;
 					_connector.NewMessage -= OnConnectorNewMessage;
 					_connector.ValuesChanged -= OnConnectorValuesChanged;
@@ -380,10 +361,6 @@ namespace StockSharp.Algo.Strategies
 					_connector.OrderChanged += OnConnectorOrderChanged;
 					_connector.OrderRegisterFailed += OnConnectorOrderRegisterFailed;
 					_connector.OrderCancelFailed += ProcessCancelOrderFail;
-					_connector.NewStopOrder += OnConnectorNewOrder;
-					_connector.StopOrderChanged += OnConnectorStopOrderChanged;
-					_connector.StopOrderRegisterFailed += OnConnectorStopOrderRegisterFailed;
-					_connector.StopOrderCancelFailed += ProcessCancelOrderFail;
 					_connector.NewMyTrade += OnConnectorNewMyTrade;
 					_connector.NewMessage += OnConnectorNewMessage;
 					_connector.ValuesChanged += OnConnectorValuesChanged;
@@ -869,13 +846,14 @@ namespace StockSharp.Algo.Strategies
 		/// Orders, registered within the strategy framework.
 		/// </summary>
 		[Browsable(false)]
-		public IEnumerable<Order> Orders => _ordersInfo.CachedKeys.Where(o => o.Type != OrderTypes.Conditional);
+		public IEnumerable<Order> Orders => _ordersInfo.CachedKeys;
 
 		/// <summary>
 		/// Stop-orders, registered within the strategy framework.
 		/// </summary>
 		[Browsable(false)]
-		public IEnumerable<Order> StopOrders => _ordersInfo.CachedKeys.Where(o => o.Type == OrderTypes.Conditional);
+		[Obsolete("Use Orders property.")]
+		public IEnumerable<Order> StopOrders => Orders.Where(o => o.Type == OrderTypes.Conditional);
 
 		private readonly StrategyParam<TimeSpan> _ordersKeepTime;
 
@@ -909,8 +887,6 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Browsable(false)]
 		public IEnumerable<MyTrade> MyTrades => _myTrades.Cache;
-
-		//private readonly CachedSynchronizedSet<OrderFail> _orderFails = new CachedSynchronizedSet<OrderFail> { ThrowIfDuplicate = true };
 
 		/// <summary>
 		/// Orders with errors, registered within the strategy.
@@ -1106,48 +1082,57 @@ namespace StockSharp.Algo.Strategies
 		public event Action<OrderFail> OrderRegisterFailed;
 
 		/// <summary>
-		/// The event of sending stop-order for registration.
+		/// The event of sending order for re-registration.
 		/// </summary>
-		public event Action<Order> StopOrderRegistering;
-
-		/// <summary>
-		/// The event of stop-order successful registration.
-		/// </summary>
-		public event Action<Order> StopOrderRegistered;
+		public event Action<Order, Order> OrderReRegistering;
 
 		/// <inheritdoc />
-		public event Action<OrderFail> StopOrderRegisterFailed;
-
-		/// <inheritdoc />
-		public event Action<Order> OrderChanged;
-
-		/// <inheritdoc />
-		public event Action<Order> StopOrderChanged;
+		public event Action<OrderFail> OrderCancelFailed;
 
 		/// <summary>
 		/// The event of sending order for cancelling.
 		/// </summary>
 		public event Action<Order> OrderCanceling;
 
+		/// <inheritdoc />
+		public event Action<Order> OrderChanged;
+
+		/// <inheritdoc />
+		[Obsolete("Use OrderRegisterFailed event.")]
+		public event Action<OrderFail> StopOrderRegisterFailed;
+
+		/// <inheritdoc />
+		[Obsolete("Use OrderChanged event.")]
+		public event Action<Order> StopOrderChanged;
+
+#pragma warning disable 67
+		/// <summary>
+		/// The event of sending stop-order for registration.
+		/// </summary>
+		[Obsolete("Use OrderRegistering event.")]
+		public event Action<Order> StopOrderRegistering;
+
+		/// <summary>
+		/// The event of stop-order successful registration.
+		/// </summary>
+		[Obsolete("Use OrderRegistered event.")]
+		public event Action<Order> StopOrderRegistered;
+
 		/// <summary>
 		/// The event of sending stop-order for cancelling.
 		/// </summary>
+		[Obsolete("Use OrderCanceling event.")]
 		public event Action<Order> StopOrderCanceling;
-
-		/// <summary>
-		/// The event of sending order for re-registration.
-		/// </summary>
-		public event Action<Order, Order> OrderReRegistering;
 
 		/// <summary>
 		/// The event of sending stop-order for re-registration.
 		/// </summary>
+		[Obsolete("Use OrderReRegistering event.")]
 		public event Action<Order, Order> StopOrderReRegistering;
+#pragma warning restore 67
 
 		/// <inheritdoc />
-		public event Action<OrderFail> OrderCancelFailed;
-
-		/// <inheritdoc />
+		[Obsolete("Use OrderCancelFailed event.")]
 		public event Action<OrderFail> StopOrderCancelFailed;
 
 		/// <inheritdoc />
@@ -1237,10 +1222,7 @@ namespace StockSharp.Algo.Strategies
 
 			ProcessRegisterOrderAction(null, order, (oOrder, nOrder) =>
 			{
-				if (nOrder.Type == OrderTypes.Conditional)
-					OnStopOrderRegistering(nOrder);
-				else
-					OnOrderRegistering(nOrder);
+				OnOrderRegistering(nOrder);
 
 				SafeGetConnector().RegisterOrder(nOrder);
 			});
@@ -1267,10 +1249,7 @@ namespace StockSharp.Algo.Strategies
 
 			ProcessRegisterOrderAction(oldOrder, newOrder, (oOrder, nOrder) =>
 			{
-				if (oOrder.Type == OrderTypes.Conditional)
-					OnStopOrderReRegistering(oOrder, nOrder);
-				else
-					OnOrderReRegistering(oOrder, nOrder);
+				OnOrderReRegistering(oOrder, nOrder);
 
 				//ReRegisterSlippage(oOrder, nOrder);
 
@@ -1304,13 +1283,6 @@ namespace StockSharp.Algo.Strategies
 			ProcessRisk(order);
 		}
 
-		private void ProcessChildStopOrderRegistering(Order order)
-		{
-			OnStopOrderRegistering(order);
-
-			_newStopOrder?.Invoke(order);
-		}
-
 		private void AddOrder(Order order)
 		{
 			ProcessRisk(order);
@@ -1320,10 +1292,7 @@ namespace StockSharp.Algo.Strategies
 			if (!order.State.IsFinal())
 				ApplyMonitorRules(order);
 
-			if (order.Type == OrderTypes.Conditional)
-				_newStopOrder?.Invoke(order);
-			else
-				_newOrder?.Invoke(order);
+			_newOrder?.Invoke(order);
 		}
 
 		private void ProcessRegisterOrderAction(Order oOrder, Order nOrder, Action<Order, Order> action)
@@ -1340,10 +1309,7 @@ namespace StockSharp.Algo.Strategies
 
 				var fail = new OrderFail { Order = nOrder, Error = excp, ServerTime = CurrentTime };
 
-				if (nOrder.Type == OrderTypes.Conditional)
-					OnConnectorStopOrderRegisterFailed(fail);
-				else
-					OnConnectorOrderRegisterFailed(fail);
+				OnConnectorOrderRegisterFailed(fail);
 			}
 		}
 
@@ -1448,10 +1414,7 @@ namespace StockSharp.Algo.Strategies
 
 			this.AddInfoLog(LocalizedStrings.Str1315Params, order.TransactionId);
 
-			if (order.Type == OrderTypes.Conditional)
-				OnStopOrderCanceling(order);
-			else
-				OnOrderCanceling(order);
+			OnOrderCanceling(order);
 
 			SafeGetConnector().CancelOrder(order);
 		}
@@ -1500,7 +1463,7 @@ namespace StockSharp.Algo.Strategies
 					if (order.Type == OrderTypes.Conditional)
 					{
 						//_stopOrders.Add(order);
-						OnStopOrderRegistered(order);
+						OnOrderRegistered(order);
 
 						StatisticManager.AddNewOrder(order);
 					}
@@ -1598,14 +1561,7 @@ namespace StockSharp.Algo.Strategies
 
 			ProcessOrder(order);
 
-			if (order.Type == OrderTypes.Conditional)
-			{
-				OnStopOrderRegistering(order);
-			}
-			else
-			{
-				OnOrderRegistering(order);
-			}
+			OnOrderRegistering(order);
 		}
 
 		/// <summary>
@@ -1868,50 +1824,12 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Strategy.StopOrderRegistering"/>.
-		/// </summary>
-		/// <param name="order">The stop order.</param>
-		protected virtual void OnStopOrderRegistering(Order order)
-		{
-			StopOrderRegistering?.Invoke(order);
-			//SlippageManager.Registering(order);
-		}
-
-		/// <summary>
-		/// To call the event <see cref="Strategy.StopOrderRegistered"/>.
-		/// </summary>
-		/// <param name="order">The stop order.</param>
-		protected virtual void OnStopOrderRegistered(Order order)
-		{
-			StopOrderRegistered?.Invoke(order);
-		}
-
-		/// <summary>
-		/// To call the event <see cref="Strategy.StopOrderRegistered"/>.
-		/// </summary>
-		/// <param name="order">The stop order.</param>
-		protected virtual void OnStopOrderCanceling(Order order)
-		{
-			StopOrderCanceling?.Invoke(order);
-		}
-
-		/// <summary>
 		/// To call the event <see cref="Strategy.OrderRegistered"/>.
 		/// </summary>
 		/// <param name="order">Order.</param>
 		protected virtual void OnOrderCanceling(Order order)
 		{
 			OrderCanceling?.Invoke(order);
-		}
-
-		/// <summary>
-		/// To call the event <see cref="Strategy.StopOrderReRegistering"/>.
-		/// </summary>
-		/// <param name="oldOrder">The stop order to be cancelled.</param>
-		/// <param name="newOrder">New stop order to be registered.</param>
-		protected virtual void OnStopOrderReRegistering(Order oldOrder, Order newOrder)
-		{
-			StopOrderReRegistering?.Invoke(oldOrder, newOrder);
 		}
 
 		/// <summary>
@@ -1945,46 +1863,6 @@ namespace StockSharp.Algo.Strategies
 			Latency += latency.Value;
 			RaiseLatencyChanged();
 		}
-	
-		/// <summary>
-		/// The method, called at strategy stop order change.
-		/// </summary>
-		/// <param name="order">The changed stop order.</param>
-		protected virtual void OnStopOrderChanged(Order order)
-		{
-			StopOrderChanged?.Invoke(order);
-			StatisticManager.AddChangedOrder(order);
-		}
-
-		/// <summary>
-		/// The method, called at strategy stop orders change.
-		/// </summary>
-		/// <param name="orders">Changed stop orders.</param>
-		protected virtual void OnStopOrdersChanged(IEnumerable<Order> orders)
-		{
-			foreach (var order in orders)
-			{
-				OnStopOrderChanged(order);
-
-				//if (order.DerivedOrder == null)
-				//	continue;
-
-				//lock (_ordersInfo.SyncRoot)
-				//{
-				//	var derivedOrder = order.DerivedOrder;
-
-				//	if (_ordersInfo.ContainsKey(derivedOrder))
-				//		continue;
-
-				//	AssignOrderStrategyId(derivedOrder);
-				//	_ordersInfo.Add(derivedOrder, new OrderInfo { IsOwn = true });
-				//	ProcessOrder(derivedOrder);
-
-				//	//заявка могла придти позже сделок по ней
-				//	SafeGetConnector().MyTrades.Where(t => t.Order == derivedOrder).ForEach(OnConnectorNewMyTrade);
-				//}
-			}
-		}
 
 		/// <summary>
 		/// The method, called at strategy order registration error.
@@ -1993,16 +1871,6 @@ namespace StockSharp.Algo.Strategies
 		protected virtual void OnOrderRegisterFailed(OrderFail fail)
 		{
 			OrderRegisterFailed?.Invoke(fail);
-			StatisticManager.AddRegisterFailedOrder(fail);
-		}
-
-		/// <summary>
-		/// The method, called at strategy stop order registration error.
-		/// </summary>
-		/// <param name="fail">The stop order registration error.</param>
-		protected virtual void OnStopOrderRegisterFailed(OrderFail fail)
-		{
-			StopOrderRegisterFailed?.Invoke(fail);
 			StatisticManager.AddRegisterFailedOrder(fail);
 		}
 
@@ -2162,20 +2030,9 @@ namespace StockSharp.Algo.Strategies
 				TryInvoke(() => ProcessOrder(order, true));
 		}
 
-		private void OnConnectorStopOrderChanged(Order order)
-		{
-			if (IsOwnOrder(order))
-				TryInvoke(() => OnStopOrdersChanged(new[] { order }));
-		}
-
 		private void OnConnectorOrderRegisterFailed(OrderFail fail)
 		{
 			ProcessRegisterOrderFail(fail, OnOrderRegisterFailed);
-		}
-
-		private void OnConnectorStopOrderRegisterFailed(OrderFail fail)
-		{
-			ProcessRegisterOrderFail(fail, OnStopOrderRegisterFailed);
 		}
 
 		private void OnConnectorValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
@@ -2419,31 +2276,15 @@ namespace StockSharp.Algo.Strategies
 			ProcessOrder(order, true);
 		}
 
-		private void OnChildStopOrderChanged(Order order)
-		{
-			TryInvoke(() => StopOrderChanged?.Invoke(order));
-		}
-
 		private void OnChildOrderRegisterFailed(OrderFail fail)
 		{
 			//SlippageManager.RegisterFailed(fail);
 			TryInvoke(() => OrderRegisterFailed?.Invoke(fail));
 		}
 
-		private void OnChildStopOrderRegisterFailed(OrderFail fail)
-		{
-			//SlippageManager.RegisterFailed(fail);
-			TryInvoke(() => StopOrderRegisterFailed?.Invoke(fail));
-		}
-
 		private void OnChildOrderCancelFailed(OrderFail fail)
 		{
 			TryInvoke(() => OrderCancelFailed?.Invoke(fail));
-		}
-
-		private void OnChildStopOrderCancelFailed(OrderFail fail)
-		{
-			TryInvoke(() => StopOrderCancelFailed?.Invoke(fail));
 		}
 
 		private void ProcessCancelOrderFail(OrderFail fail)
@@ -2462,10 +2303,7 @@ namespace StockSharp.Algo.Strategies
 
 			this.AddErrorLog(LocalizedStrings.Str1402Params, order.TransactionId, fail.Error);
 
-			if (order.Type == OrderTypes.Conditional)
-				StopOrderCancelFailed?.Invoke(fail);
-			else
-				OrderCancelFailed?.Invoke(fail);
+			OrderCancelFailed?.Invoke(fail);
 
 			StatisticManager.AddFailedOrderCancel(fail);
 		}
@@ -2571,31 +2409,30 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
-		int ISecurityProvider.Count => SafeGetConnector().Count;
+		private ISecurityProvider SecurityProvider => SafeGetConnector();
+
+		int ISecurityProvider.Count => SecurityProvider.Count;
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
-			add => SafeGetConnector().Added += value;
-			remove => SafeGetConnector().Added -= value;
+			add => SecurityProvider.Added += value;
+			remove => SecurityProvider.Added -= value;
 		}
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add => SafeGetConnector().Removed += value;
-			remove => SafeGetConnector().Removed -= value;
+			add => SecurityProvider.Removed += value;
+			remove => SecurityProvider.Removed -= value;
 		}
 
 		event Action ISecurityProvider.Cleared
 		{
-			add => SafeGetConnector().Cleared += value;
-			remove => SafeGetConnector().Cleared -= value;
+			add => SecurityProvider.Cleared += value;
+			remove => SecurityProvider.Cleared -= value;
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
-		{
-			return SafeGetConnector().Lookup(criteria);
-		}
+		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => SecurityProvider.Lookup(criteria);
 
 		/// <summary>
 		/// New <see cref="StrategyStateMessage"/> occurred event.

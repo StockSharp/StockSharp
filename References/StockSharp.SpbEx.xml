@@ -158,7 +158,10 @@
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.IsNativeIdentifiers">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.IsSupportSubscriptionBySecurity">
+    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.IsSecurityRequired(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

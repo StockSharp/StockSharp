@@ -399,7 +399,7 @@ namespace StockSharp.Algo
 			{
 				PortfolioName = order.Portfolio.Name,
 				OrderType = order.Type,
-				OrderTransactionId = order.TransactionId,
+				OriginalTransactionId = order.TransactionId,
 				TransactionId = transactionId,
 				OrderId = order.Id,
 				OrderStringId = order.StringId,
@@ -447,7 +447,7 @@ namespace StockSharp.Algo
 
 				OldOrderId = oldOrder.Id,
 				OldOrderStringId = oldOrder.StringId,
-				OldTransactionId = oldOrder.TransactionId,
+				OriginalTransactionId = oldOrder.TransactionId,
 
 				UserOrderId = oldOrder.UserOrderId,
 
@@ -728,20 +728,31 @@ namespace StockSharp.Algo
 		/// Convert <see cref="Order"/> to <see cref="OrderStatusMessage"/> value.
 		/// </summary>
 		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <param name="volume">Volume.</param>
+		/// <param name="side">Order side.</param>
 		/// <returns>A message requesting current registered orders and trades.</returns>
-		public static OrderStatusMessage ToLookupCriteria(this Order criteria)
+		public static OrderStatusMessage ToLookupCriteria(this Order criteria, decimal? volume, Sides? side)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			return new OrderStatusMessage
+			var statusMsg = new OrderStatusMessage
 			{
 				IsSubscribe = true,
 				PortfolioName = criteria.Portfolio?.Name,
-				SecurityId = criteria.Security?.ToSecurityId() ?? default,
 				OrderId = criteria.Id,
+				OrderStringId = criteria.StringId,
 				OrderType = criteria.Type,
+				UserOrderId = criteria.UserOrderId,
+				BrokerCode = criteria.BrokerCode,
+				ClientCode = criteria.ClientCode,
+				Volume = volume,
+				Side = side,
 			};
+
+			criteria.Security?.ToMessage().CopyTo(statusMsg);
+
+			return statusMsg;
 		}
 
 		/// <summary>
@@ -1464,7 +1475,7 @@ namespace StockSharp.Algo
 						return new SecurityId
 						{
 							SecurityCode = security.BasketExpression.Replace('@', '_'),
-							BoardCode = security.Board?.Code ?? MessageAdapter.DefaultAssociatedBoardCode
+							BoardCode = security.Board?.Code ?? SecurityId.AssociatedBoardCode
 						};
 					}
 
@@ -1996,7 +2007,15 @@ namespace StockSharp.Algo
 			if (dataType == null)
 				throw new ArgumentNullException(nameof(dataType));
 
-			if (dataType.IsMarketData)
+			if (dataType == DataType.Securities)
+				return new SecurityLookupMessage();
+			else if (dataType == DataType.Board)
+				return new BoardLookupMessage();
+			else if (dataType == DataType.Users)
+				return new UserLookupMessage();
+			else if (dataType == DataType.TimeFrames)
+				return new TimeFrameLookupMessage();
+			else if (dataType.IsMarketData)
 			{
 				return new MarketDataMessage
 				{
@@ -2008,10 +2027,6 @@ namespace StockSharp.Algo
 				return new OrderStatusMessage();
 			else if (dataType == DataType.PositionChanges)
 				return new PortfolioLookupMessage();
-			else if (dataType == DataType.Securities)
-				return new SecurityLookupMessage();
-			else if (dataType == DataType.Board)
-				return new BoardLookupMessage();
 			else if (dataType.IsPortfolio)
 				return new PortfolioMessage();
 			else
@@ -2031,7 +2046,8 @@ namespace StockSharp.Algo
 			switch (message)
 			{
 				case MarketDataMessage mdMsg:
-					return mdMsg.DataType.ToDataType(mdMsg.Arg);
+					// prevent stack overflow
+					return Messages.Extensions.ToDataType(mdMsg);
 				case SecurityLookupMessage _:
 					return DataType.Securities;
 				case BoardLookupMessage _:
@@ -2040,6 +2056,10 @@ namespace StockSharp.Algo
 					return DataType.Transactions;
 				case PortfolioLookupMessage _:
 					return DataType.PositionChanges;
+				case TimeFrameLookupMessage _:
+					return DataType.TimeFrames;
+				case UserLookupMessage _:
+					return DataType.Users;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.GetType(), LocalizedStrings.Str1219);
 			}

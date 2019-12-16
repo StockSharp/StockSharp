@@ -23,9 +23,6 @@
     <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.MarketDataTypes)">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
@@ -192,19 +189,17 @@
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixServer.TryAddSecurityCode(System.String)">
       <summary>
-      </summary>
-      <param name="secCode">
-      </param>
-      <returns>
-      </returns>
+            Попытаться добавить код инструмента.
+            </summary>
+      <param name="secCode">Код инструмента.</param>
+      <returns>Результат.</returns>
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixServer.TryGetSecurityCode(System.String)">
       <summary>
-      </summary>
-      <param name="secCode">
-      </param>
-      <returns>
-      </returns>
+            Попытаться получить код инструмента.
+            </summary>
+      <param name="secCode">Код инструмента.</param>
+      <returns>Код инструмента.</returns>
     </member>
     <member name="T:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter">
       <summary>
@@ -2301,7 +2296,7 @@
             Маркет-дата адаптер сообщений для Quik, работающий через протокол DDE.
             </summary>
     </member>
-    <member name="P:StockSharp.Quik.QuikDdeAdapter.IsSupportSecuritiesLookupAll">
+    <member name="M:StockSharp.Quik.QuikDdeAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Quik.QuikDdeAdapter.CustomTables">
@@ -2624,11 +2619,6 @@
             Использовать для старое подключение DDE + Trans2Quik. По-умолчанию выключено.
             </summary>
     </member>
-    <member name="P:StockSharp.Quik.QuikTrader.RequestAllSecurities">
-      <summary>
-            Запрашивать все инструменты при подключении.
-            </summary>
-    </member>
     <member name="P:StockSharp.Quik.QuikTrader.IsCommonMonetaryPosition">
       <summary>
             Поддерживает ли Quik Единую Денежную Позицию.
@@ -2798,26 +2788,10 @@
     <member name="M:StockSharp.Quik.QuikTrader.OnProcessMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Quik.QuikTrader.OnReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Quik.QuikTrader.DdeTables">
       <summary>
             Таблицы, для которых будет запущен экспорт данных по DDE.
             </summary>
-    </member>
-    <member name="M:StockSharp.Quik.QuikTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
-      <summary>
-            Отменить группу заявок на бирже по фильтру.
-            </summary>
-      <param name="transactionId">Идентификатор транзакции отмены.</param>
-      <param name="isStopOrder">
-        <see langword="true" />, если нужно отменить только стоп-заявки, <see langword="false" /> - если только обычный и <see langword="null" /> - если оба типа.</param>
-      <param name="portfolio">Портфель. Если значение равно <see langword="null" />, то портфель не попадает в фильтр снятия заявок.</param>
-      <param name="direction">Направление заявки. Если значение равно <see langword="null" />, то направление не попадает в фильтр снятия заявок.</param>
-      <param name="board">Торговая площадка. Если значение равно <see langword="null" />, то площадка не попадает в фильтр снятия заявок.</param>
-      <param name="security">Инструмент. Если значение равно <see langword="null" />, то инструмент не попадает в фильтр снятия заявок.</param>
-      <param name="securityType">Тип инструмента. Если значение равно <see langword="null" />, то тип не попадает в фильтр снятия заявок.</param>
     </member>
     <member name="M:StockSharp.Quik.QuikTrader.StartExport(StockSharp.Quik.DdeCustomTable)">
       <summary>

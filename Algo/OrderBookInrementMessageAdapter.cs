@@ -10,7 +10,6 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, decimal>;
-	using BookInfo = Ecng.Common.RefTriple<System.Collections.Generic.SortedDictionary<decimal, decimal>, System.Collections.Generic.SortedDictionary<decimal, decimal>, Messages.QuoteChangeStates>;
 
 	/// <summary>
 	/// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
@@ -19,7 +18,26 @@
 	{
 		private const QuoteChangeStates _none = (QuoteChangeStates)(-1);
 
-		private readonly SynchronizedDictionary<long, BookInfo> _states = new SynchronizedDictionary<long, BookInfo>();
+		private class BookInfo
+		{
+			public BookInfo(SecurityId securityId)
+			{
+				SecurityId = securityId;
+			}
+
+			public SecurityId SecurityId { get; }
+
+			public QuoteChangeStates State { get; set; } = _none;
+
+			public readonly QuotesDict Bids = new QuotesDict(new BackwardComparer<decimal>());
+			public readonly QuotesDict Asks = new QuotesDict();
+
+			public readonly CachedSynchronizedSet<long> SubscriptionIds = new CachedSynchronizedSet<long>();
+		}
+
+		private readonly SyncObject _syncObject = new SyncObject();
+		private readonly Dictionary<long, BookInfo> _byId = new Dictionary<long, BookInfo>();
+		private readonly Dictionary<SecurityId, BookInfo> _online = new Dictionary<SecurityId, BookInfo>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderBookInrementMessageAdapter"/>.
@@ -36,8 +54,15 @@
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					_states.Clear();
+				{
+					lock (_syncObject)
+					{
+						_byId.Clear();
+						_online.Clear();
+					}
+
 					break;
+				}
 
 				case MessageTypes.MarketData:
 				{
@@ -47,12 +72,18 @@
 					{
 						if (mdMsg.IsSubscribe)
 						{
-							if (IsSupportOrderBookIncrements)
-								_states.Add(mdMsg.TransactionId, RefTuple.Create(new QuotesDict(new BackwardComparer<decimal>()), new QuotesDict(), _none));
+							lock (_syncObject)
+							{
+								var info = new BookInfo(mdMsg.SecurityId);
+
+								info.SubscriptionIds.Add(mdMsg.TransactionId);
+								
+								_byId.Add(mdMsg.TransactionId, info);
+							}
 						}
 						else
 						{
-							_states.Remove(mdMsg.OriginalTransactionId);
+							RemoveSubscription(mdMsg.OriginalTransactionId);
 						}
 					}
 
@@ -63,9 +94,39 @@
 			base.OnSendInMessage(message);
 		}
 
-		private QuoteChangeMessage ApplyNewState(long subscriptionId, BookInfo info, QuoteChangeMessage quoteMsg, QuoteChangeStates newState)
+		private void RemoveSubscription(long id)
 		{
-			var currState = info.Third;
+			lock (_syncObject)
+			{
+				var info = _byId.TryGetAndRemove(id);
+
+				var changeId = info != null;
+
+				if (info == null)
+				{
+					info = _online.FirstOrDefault(p => p.Value.SubscriptionIds.Contains(id)).Value;
+
+					if (info == null)
+						return;
+				}
+
+				if (info != _online.TryGetValue(info.SecurityId))
+					return;
+
+				info.SubscriptionIds.Remove(id);
+
+				var ids = info.SubscriptionIds.Cache;
+
+				if (ids.Length == 0)
+					_online.Remove(info.SecurityId);
+				else if (changeId)
+					_byId.Add(ids[0], info);
+			}
+		}
+
+		private QuoteChangeMessage ApplyNewState(BookInfo info, QuoteChangeMessage quoteMsg, QuoteChangeStates newState)
+		{
+			var currState = info.State;
 
 			if (currState != newState)
 			{
@@ -75,17 +136,23 @@
 					case QuoteChangeStates.SnapshotStarted:
 					{
 						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
-							this.AddWarningLog($"{currState}->{newState}");
+						{
+							this.AddDebugLog($"{currState}->{newState}");
+							return null;
+						}
 
-						info.First.Clear();
-						info.Second.Clear();
+						info.Bids.Clear();
+						info.Asks.Clear();
 
 						break;
 					}
 					case QuoteChangeStates.SnapshotBuilding:
 					{
 						if (newState != QuoteChangeStates.SnapshotComplete)
-							this.AddWarningLog($"{currState}->{newState}");
+						{
+							this.AddDebugLog($"{currState}->{newState}");
+							return null;
+						}
 
 						break;
 					}
@@ -93,7 +160,10 @@
 					case QuoteChangeStates.Increment:
 					{
 						if (newState == QuoteChangeStates.SnapshotBuilding)
-							this.AddWarningLog($"{currState}->{newState}");
+						{
+							this.AddDebugLog($"{currState}->{newState}");
+							return null;
+						}
 
 						break;
 					}
@@ -101,7 +171,7 @@
 						throw new ArgumentOutOfRangeException(currState.ToString());
 				}
 
-				info.Third = currState = newState;
+				info.State = currState = newState;
 			}
 
 			void Copy(IEnumerable<QuoteChange> from, QuotesDict to)
@@ -115,8 +185,8 @@
 				}
 			}
 
-			Copy(quoteMsg.Bids, info.First);
-			Copy(quoteMsg.Asks, info.Second);
+			Copy(quoteMsg.Bids, info.Bids);
+			Copy(quoteMsg.Asks, info.Asks);
 
 			if (currState == QuoteChangeStates.SnapshotStarted || currState == QuoteChangeStates.SnapshotBuilding)
 				return null;
@@ -124,11 +194,10 @@
 			return new QuoteChangeMessage
 			{
 				SecurityId = quoteMsg.SecurityId,
-				Bids = info.First.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value)).ToArray(),
-				Asks = info.Second.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value)).ToArray(),
+				Bids = info.Bids.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value)).ToArray(),
+				Asks = info.Asks.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value)).ToArray(),
 				IsSorted = true,
 				ServerTime = quoteMsg.ServerTime,
-				SubscriptionId = subscriptionId,
 				OriginalTransactionId = quoteMsg.OriginalTransactionId,
 			};
 		}
@@ -137,10 +206,50 @@
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			List<QuoteChangeMessage> clones = null;
-			HashSet<long> incrSubscriptionIds = null;
 
 			switch (message.Type)
 			{
+				case MessageTypes.MarketData:
+				{
+					var mdMsg = (MarketDataMessage)message;
+
+					if (!mdMsg.IsOk())
+						RemoveSubscription(mdMsg.OriginalTransactionId);
+
+					break;
+				}
+
+				case MessageTypes.MarketDataFinished:
+				{
+					RemoveSubscription(((MarketDataFinishedMessage)message).OriginalTransactionId);
+					break;
+				}
+
+				case MessageTypes.SubscriptionOnline:
+				{
+					var onlineMsg = (SubscriptionOnlineMessage)message;
+
+					lock (_syncObject)
+					{
+						var info = _byId.TryGetValue(onlineMsg.OriginalTransactionId);
+
+						if (info != null)
+						{
+							if (_online.TryGetValue(info.SecurityId, out var online))
+							{
+								online.SubscriptionIds.Add(onlineMsg.OriginalTransactionId);
+								_byId.Remove(onlineMsg.OriginalTransactionId);
+							}
+							else
+							{
+								_online.Add(info.SecurityId, info);
+							}
+						}
+					}
+					
+					break;
+				}
+
 				case MessageTypes.QuoteChange:
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
@@ -152,15 +261,15 @@
 
 					foreach (var subscriptionId in quoteMsg.GetSubscriptionIds())
 					{
-						if (!_states.TryGetValue(subscriptionId, out var info))
-							continue;
+						BookInfo info;
 
-						if (incrSubscriptionIds == null)
-							incrSubscriptionIds = new HashSet<long>();
+						lock (_syncObject)
+						{
+							if (!_byId.TryGetValue(subscriptionId, out info))
+								continue;
+						}
 
-						incrSubscriptionIds.Add(subscriptionId);
-
-						var newQuoteMsg = ApplyNewState(subscriptionId, info, quoteMsg, state.Value);
+						var newQuoteMsg = ApplyNewState(info, quoteMsg, state.Value);
 
 						if (newQuoteMsg == null)
 							continue;
@@ -168,21 +277,11 @@
 						if (clones == null)
 							clones = new List<QuoteChangeMessage>();
 
+						newQuoteMsg.SetSubscriptionIds(info.SubscriptionIds.Cache);
 						clones.Add(newQuoteMsg);
 					}
 
-					if (incrSubscriptionIds != null)
-					{
-						var ids = quoteMsg.GetSubscriptionIds().Except(incrSubscriptionIds).ToArray();
-
-						if (ids.Length > 0)
-						{
-							quoteMsg.SubscriptionId = 0;
-							quoteMsg.SubscriptionIds = ids;
-						}
-						else
-							message = null;
-					}
+					message = null;
 
 					break;
 				}

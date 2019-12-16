@@ -9,29 +9,47 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
+
+	/// <summary>
+	/// Filtered market depth data type.
+	/// </summary>
+	public class FilteredMarketDepthMessage : MarketDataMessage
+	{
+		/// <summary>
+		/// Create a copy of <see cref="FilteredMarketDepthMessage"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override Message Clone()
+		{
+			var clone = new FilteredMarketDepthMessage();
+			CopyTo(clone);
+			return clone;
+		}
+	}
 
 	/// <summary>
 	/// Filtered market depth adapter.
 	/// </summary>
 	public class FilteredMarketDepthAdapter : MessageAdapterWrapper
 	{
-		/// <summary>
-		/// Filtered market depth data type.
-		/// </summary>
-		public const MarketDataTypes FilteredMarketDepth = (MarketDataTypes)(-1);
-
-		private sealed class FilteredMarketDepthInfo
+		private class FilteredMarketDepthInfo
 		{
 			private readonly Dictionary<Tuple<Sides, decimal>, RefPair<Dictionary<long, decimal>, decimal>> _executions = new Dictionary<Tuple<Sides, decimal>, RefPair<Dictionary<long, decimal>, decimal>>();
 
-			public FilteredMarketDepthInfo(IEnumerable<ExecutionMessage> orders)
+			public FilteredMarketDepthInfo(long transactionId, IEnumerable<ExecutionMessage> orders)
 			{
 				if (orders == null)
 					throw new ArgumentNullException(nameof(orders));
 
+				TransactionId = transactionId;
+
 				orders.ForEach(Process);
 			}
+
+			public long TransactionId { get; }
+			public HashSet<long> Subscriptions { get; } = new HashSet<long>();
 
 			private QuoteChange[] Filter(IEnumerable<QuoteChange> quotes)
 			{
@@ -63,6 +81,7 @@ namespace StockSharp.Algo
 					LocalTime = message.LocalTime,
 					IsSorted = message.IsSorted,
 					IsByLevel1 = message.IsByLevel1,
+					Currency = message.Currency,
 					IsFiltered = true,
 					Bids = Filter(message.Bids),
 					Asks = Filter(message.Asks),
@@ -71,16 +90,8 @@ namespace StockSharp.Algo
 
 			public void Process(ExecutionMessage message)
 			{
-				if (!message.HasOrderInfo())
-					throw new ArgumentException(nameof(message));
-
-				// ignore market orders
-				if (message.OrderPrice == 0)
-					return;
-
-				// ignore unknown orders
-				if (message.OriginalTransactionId == 0)
-					return;
+				if (message == null)
+					throw new ArgumentNullException(nameof(message));
 
 				var key = Tuple.Create(message.Side, message.OrderPrice);
 
@@ -124,7 +135,8 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly SynchronizedDictionary<SecurityId, FilteredMarketDepthInfo> _filteredMarketDepths = new SynchronizedDictionary<SecurityId, FilteredMarketDepthInfo>();
+		private readonly SyncObject _syncObject = new SyncObject();
+		private readonly Dictionary<SecurityId, FilteredMarketDepthInfo> _infos = new Dictionary<SecurityId, FilteredMarketDepthInfo>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AssociatedSecurityAdapter"/>.
@@ -141,41 +153,104 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					_filteredMarketDepths.Clear();
+				{
+					lock (_syncObject)
+						_infos.Clear();
+
 					break;
+				}
 
 				case MessageTypes.MarketData:
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.DataType != FilteredMarketDepth)
+					if (mdMsg.DataType != MarketDataTypes.MarketDepth)
 						break;
+
+					var isFilteredMsg = mdMsg is FilteredMarketDepthMessage;
+					var transId = mdMsg.TransactionId;
 
 					if (mdMsg.IsSubscribe)
 					{
-						var clone = (MarketDataMessage)mdMsg.Clone();
-						clone.DataType = MarketDataTypes.MarketDepth;
-						clone.Arg = null;
-
-						base.OnSendInMessage(clone);
+						if (!isFilteredMsg)
+							break;
 
 						var data = (Tuple<QuoteChangeMessage, ExecutionMessage[]>)mdMsg.Arg;
-						var info = _filteredMarketDepths.SafeAdd(mdMsg.SecurityId, s => new FilteredMarketDepthInfo(data.Item2));
-						var quoteMsg = info.Process(data.Item1);
 
-						RaiseNewOutMessage(quoteMsg);
+						QuoteChangeMessage filtered = null;
+
+						lock (_syncObject)
+						{
+							var info = _infos.SafeAdd(mdMsg.SecurityId, key => new FilteredMarketDepthInfo(transId, data.Item2));
+							info.Subscriptions.Add(transId);
+
+							if (info.Subscriptions.Count == 1)
+							{
+								var clone = new MarketDataMessage();
+								mdMsg.CopyTo(clone);
+								message = clone;
+
+								filtered = info.Process(data.Item1);
+							}
+						}
+
+						if (filtered == null)
+						{
+							RaiseNewOutMessage(new MarketDataMessage { OriginalTransactionId = transId });
+							return;
+						}
+						else
+							RaiseNewOutMessage(filtered);
 					}
 					else
 					{
-						var clone = (MarketDataMessage)mdMsg.Clone();
-						clone.DataType = MarketDataTypes.MarketDepth;
+						MarketDataMessage reply;
 
-						base.OnSendInMessage(clone);
+						lock (_syncObject)
+						{
+							var info = _infos.FirstOrDefault(p => p.Value.Subscriptions.Contains(mdMsg.OriginalTransactionId)).Value;
 
-						_filteredMarketDepths.Remove(mdMsg.SecurityId);
+							if (info != null)
+							{
+								info.Subscriptions.Remove(mdMsg.OriginalTransactionId);
+
+								if (info.Subscriptions.Count > 0)
+								{
+									reply = new MarketDataMessage
+									{
+										OriginalTransactionId = transId,
+									};
+								}
+								else
+								{
+									message = new MarketDataMessage
+									{
+										IsSubscribe = false,
+										TransactionId = transId,
+										OriginalTransactionId = info.TransactionId,
+									};
+
+									break;
+								}
+							}
+							else
+							{
+								if (!isFilteredMsg)
+									break;
+
+								reply = new MarketDataMessage
+								{
+									OriginalTransactionId = transId,
+									Error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId)),
+								};
+							}
+						}
+
+						RaiseNewOutMessage(reply);
+						return;
 					}
 
-					return;
+					break;
 				}
 			}
 
@@ -191,14 +266,25 @@ namespace StockSharp.Algo
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
 
-					var info = _filteredMarketDepths.TryGetValue(quoteMsg.SecurityId);
+					QuoteChangeMessage filtered;
 
-					if (info != null)
+					lock (_syncObject)
 					{
-						var filteredQuoteMsg = info.Process(quoteMsg);
-						base.OnInnerAdapterNewOutMessage(filteredQuoteMsg);
+						var info = _infos.TryGetValue(quoteMsg.SecurityId);
+
+						if (info == null)
+							break;
+
+						filtered = info.Process(quoteMsg);
+
+						filtered.SetSubscriptionIds(subscriptionId: info.TransactionId);
+
+						// subscription for origin book was initialized only by filtered book
+						if ((quoteMsg.SubscriptionIds?.Length == 1 && quoteMsg.SubscriptionIds[0] == info.TransactionId) || quoteMsg.SubscriptionId == info.TransactionId)
+							message = null;
 					}
 
+					base.OnInnerAdapterNewOutMessage(filtered);
 					break;
 				}
 
@@ -209,17 +295,29 @@ namespace StockSharp.Algo
 					if (execMsg.ExecutionType != ExecutionTypes.Transaction)
 						break;
 
+					if (!execMsg.HasOrderInfo())
+						break;
+
+					// ignore market orders
+					if (execMsg.OrderPrice == 0)
+						break;
+
+					// ignore unknown orders
+					if (execMsg.OriginalTransactionId == 0)
+						break;
+
 					if (execMsg.OrderState == OrderStates.Active || execMsg.OrderState == OrderStates.Done)
 					{
-						var info = _filteredMarketDepths.TryGetValue(execMsg.SecurityId);
-						info?.Process(execMsg);
+						lock (_syncObject)
+							_infos.TryGetValue(execMsg.SecurityId)?.Process(execMsg);
 					}
 
 					break;
 				}
 			}
 
-			base.OnInnerAdapterNewOutMessage(message);
+			if (message != null)
+				base.OnInnerAdapterNewOutMessage(message);
 		}
 
 		/// <summary>

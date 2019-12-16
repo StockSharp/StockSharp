@@ -13,16 +13,10 @@
 			</externalLink>
 			 Эта лицензия включает: </para>
 			 		<list class="ordered">
-  			<listItem>
-<token>designer</token>
-  			</listItem>
-  			<listItem>
-<token>hydra</token>
-  			</listItem>
-  			<listItem>
-<token>stocksharpapi</token>
-			 
-  			</listItem>
+  			<listItem><token>designer</token></listItem>
+  			<listItem><token>hydra</token></listItem>
+  			<listItem><token>terminal</token></listItem>
+  			<listItem><token>stocksharpapi</token></listItem>
 		</list>
 
 		<para>Cм. также <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>.</para>
@@ -74,9 +68,6 @@
   		
 		<para><legacyBold>Расширенная лицензия</legacyBold></para>
 		<list class="ordered">
-  			<listItem>
-  				<para><token>plaza</token> коннектор (режим ClientGate COM).</para>
-  			</listItem>
   			<listItem>
   				<para>Готовые торговые стратегии (хеджирование опционов, маркет-мэйкинг, котирование, скользящие стоп и тейк защиты и т.д.).</para>
   			</listItem>

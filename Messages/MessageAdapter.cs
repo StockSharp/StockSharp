@@ -53,13 +53,13 @@ namespace StockSharp.Messages
 				Categories = attr.Categories;
 		}
 
-		private IEnumerable<MessageTypes> _supportedMessages = Enumerable.Empty<MessageTypes>();
+		private IEnumerable<MessageTypes> _supportedInMessages = Enumerable.Empty<MessageTypes>();
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual IEnumerable<MessageTypes> SupportedMessages
+		public virtual IEnumerable<MessageTypes> SupportedInMessages
 		{
-			get => _supportedMessages;
+			get => _supportedInMessages;
 			set
 			{
 				if (value == null)
@@ -69,9 +69,9 @@ namespace StockSharp.Messages
 				if (duplicate != null)
 					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
 
-				_supportedMessages = value.ToArray();
+				_supportedInMessages = value.ToArray();
 
-				OnPropertyChanged(nameof(SupportedMessages));
+				OnPropertyChanged(nameof(SupportedInMessages));
 			}
 		}
 
@@ -116,7 +116,7 @@ namespace StockSharp.Messages
 				_possibleSupportedMessages = value;
 				OnPropertyChanged(nameof(PossibleSupportedMessages));
 
-				SupportedMessages = value.Select(t => t.Type).ToArray();
+				SupportedInMessages = value.Select(t => t.Type).ToArray();
 			}
 		}
 
@@ -191,10 +191,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool IsSupportSubscriptionBySecurity => true;
-
-		/// <inheritdoc />
-		[Browsable(false)]
 		public virtual bool IsSupportCandlesUpdates => false;
 
 		/// <inheritdoc />
@@ -221,10 +217,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool IsSupportSecuritiesLookupAll => true;
-
-		/// <inheritdoc />
-		[Browsable(false)]
 		public virtual IEnumerable<int> SupportedOrderBookDepths => Enumerable.Empty<int>();
 
 		/// <inheritdoc />
@@ -246,7 +238,8 @@ namespace StockSharp.Messages
 			.ConditionType;
 
 		/// <inheritdoc />
-		public virtual OrderCondition CreateOrderCondition() => OrderConditionType?.CreateInstance<OrderCondition>();
+		[Browsable(false)]
+		public virtual bool HeartbeatBeforConnect => false;
 
 		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
@@ -261,20 +254,6 @@ namespace StockSharp.Messages
 			get => _transactionIdGenerator;
 			set => _transactionIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
 		}
-
-		/// <summary>
-		/// Default value for <see cref="AssociatedBoardCode"/>.
-		/// </summary>
-		public const string DefaultAssociatedBoardCode = "ALL";
-
-		/// <inheritdoc />
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.AssociatedSecurityBoardKey,
-			Description = LocalizedStrings.Str199Key,
-			GroupName = LocalizedStrings.Str186Key,
-			Order = 301)]
-		public string AssociatedBoardCode { get; set; } = DefaultAssociatedBoardCode;
 
 		/// <inheritdoc />
 		public event Action<Message> NewOutMessage;
@@ -497,7 +476,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual bool IsAllDownloadingSupported(MarketDataTypes dataType) => false;
+		public virtual bool IsAllDownloadingSupported(DataType dataType) => false;
+
+		/// <inheritdoc />
+		public virtual bool IsSecurityRequired(DataType dataType) => true;
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
@@ -505,12 +487,9 @@ namespace StockSharp.Messages
 			Id = storage.GetValue(nameof(Id), Id);
 			HeartbeatInterval = storage.GetValue<TimeSpan>(nameof(HeartbeatInterval));
 
-			if (storage.ContainsKey(nameof(SupportedMessages)))
-				SupportedMessages = storage.GetValue<string[]>(nameof(SupportedMessages)).Select(i => i.To<MessageTypes>()).ToArray();
+			if (storage.ContainsKey(nameof(SupportedInMessages)) || storage.ContainsKey("SupportedMessages"))
+				SupportedInMessages = (storage.GetValue<string[]>(nameof(SupportedInMessages)) ?? storage.GetValue<string[]>("SupportedMessages")).Select(i => i.To<MessageTypes>()).ToArray();
 			
-			AssociatedBoardCode = storage.GetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
-			CheckTimeFrameByRequest = storage.GetValue(nameof(CheckTimeFrameByRequest), CheckTimeFrameByRequest);
-
 			if (storage.ContainsKey(nameof(ReConnectionSettings)))
 				ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 
@@ -522,9 +501,7 @@ namespace StockSharp.Messages
 		{
 			storage.SetValue(nameof(Id), Id);
 			storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
-			storage.SetValue(nameof(SupportedMessages), SupportedMessages.Select(t => t.To<string>()).ToArray());
-			storage.SetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
-			storage.SetValue(nameof(CheckTimeFrameByRequest), CheckTimeFrameByRequest);
+			storage.SetValue(nameof(SupportedInMessages), SupportedInMessages.Select(t => t.To<string>()).ToArray());
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 
 			base.Save(storage);

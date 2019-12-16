@@ -1,7 +1,7 @@
 T:StockSharp.MBTrading.MBTradingMessageAdapter/summary;DocStr2538
 M:StockSharp.MBTrading.MBTradingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.MBTrading.MBTradingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.MBTrading.MBTradingMessageAdapter.IsSupportSecuritiesLookupAll/inheritdoc;DocStr8459
+M:StockSharp.MBTrading.MBTradingMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.MBTrading.MBTradingMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.MBTrading.MBTradingMessageAdapter.Login/summary;Login
 P:StockSharp.MBTrading.MBTradingMessageAdapter.Password/summary;Password

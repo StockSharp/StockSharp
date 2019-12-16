@@ -1,4 +1,4 @@
-namespace SampleConnectionWithStorage
+namespace SampleConnection
 {
 	using System;
 	using System.ComponentModel;
@@ -121,7 +121,6 @@ namespace SampleConnectionWithStorage
 			Connector.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
 
 			Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
-			Connector.NewStopOrder += _ordersWindow.OrderGrid.Orders.Add;
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 			
 			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Positions.Add;
@@ -132,16 +131,17 @@ namespace SampleConnectionWithStorage
 			// subscribe on error of order cancelling event
 			Connector.OrderCancelFailed += OrderFailed;
 
-			// subscribe on error of stop-order registration event
-			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			// subscribe on error of stop-order cancelling event
-			Connector.StopOrderCancelFailed += OrderFailed;
-
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
 
 			// set news provider
 			_newsWindow.NewsPanel.NewsProvider = Connector;
+
+			Connector.LookupTimeFramesResult += (message, timeFrames, error) =>
+			{
+				if (error == null)
+					this.GuiAsync(() => _securitiesWindow.UpdateTimeFrames(timeFrames));
+			};
 
 			Connector.Adapter.NativeIdStorage = nativeIdStorage;
 
@@ -182,7 +182,7 @@ namespace SampleConnectionWithStorage
 					var ctx = new ContinueOnExceptionContext();
 					ctx.Error += ex => ex.LogError();
 
-					using (new Scope<ContinueOnExceptionContext>(ctx))
+					using (ctx.ToScope())
 						Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 				}
 			}

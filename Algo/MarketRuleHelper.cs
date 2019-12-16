@@ -84,38 +84,6 @@ namespace StockSharp.Algo
 			}
 		}
 
-		//private sealed class RegisteredOrderRule : OrderRule<Order>
-		//{
-		//	public RegisteredOrderRule(Order order)
-		//		: base(order)
-		//	{
-		//		Name = "Регистрация заявки ";
-		//		TrySubscribe();
-		//	}
-
-		//	protected override void Subscribe()
-		//	{
-		//		if (Order.Type == OrderTypes.Conditional)
-		//			Order.Trader.StopOrdersChanged += OnNewOrder;
-		//		else
-		//			Order.Trader.Orders += OnNewOrder;
-		//	}
-
-		//	protected override void UnSubscribe()
-		//	{
-		//		if (Order.Type == OrderTypes.Conditional)
-		//			Order.Trader.NewStopOrders -= OnNewOrder;
-		//		else
-		//			Order.Trader.NewOrders -= OnNewOrder;
-		//	}
-
-		//	private void OnNewOrder(IEnumerable<Order> orders)
-		//	{
-		//		if (orders.Contains(Order))
-		//			Activate(Order);
-		//	}
-		//}
-
 		private sealed class RegisterFailedOrderRule : OrderRule<OrderFail>
 		{
 			public RegisterFailedOrderRule(Order order, ITransactionProvider provider)
@@ -127,18 +95,12 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-					Provider.StopOrderRegisterFailed += OnOrderRegisterFailed;
-				else
-					Provider.OrderRegisterFailed += OnOrderRegisterFailed;
+				Provider.OrderRegisterFailed += OnOrderRegisterFailed;
 			}
 
 			protected override void UnSubscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-					Provider.StopOrderRegisterFailed -= OnOrderRegisterFailed;
-				else
-					Provider.OrderRegisterFailed -= OnOrderRegisterFailed;
+				Provider.OrderRegisterFailed -= OnOrderRegisterFailed;
 			}
 
 			private void OnOrderRegisterFailed(OrderFail fail)
@@ -159,18 +121,12 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-					Provider.StopOrderCancelFailed += OnOrderCancelFailed;
-				else
-					Provider.OrderCancelFailed += OnOrderCancelFailed;
+				Provider.OrderCancelFailed += OnOrderCancelFailed;
 			}
 
 			protected override void UnSubscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-					Provider.StopOrderCancelFailed -= OnOrderCancelFailed;
-				else
-					Provider.OrderCancelFailed -= OnOrderCancelFailed;
+				Provider.OrderCancelFailed -= OnOrderCancelFailed;
 			}
 
 			private void OnOrderCancelFailed(OrderFail fail)
@@ -202,30 +158,14 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-				{
-					Provider.StopOrderChanged += OnOrderChanged;
-					Provider.NewStopOrder += OnOrderChanged;
-				}
-				else
-				{
-					Provider.OrderChanged += OnOrderChanged;
-					Provider.NewOrder += OnOrderChanged;
-				}
+				Provider.OrderChanged += OnOrderChanged;
+				Provider.NewOrder += OnOrderChanged;
 			}
 
 			protected override void UnSubscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-				{
-					Provider.StopOrderChanged -= OnOrderChanged;
-					Provider.NewStopOrder -= OnOrderChanged;
-				}
-				else
-				{
-					Provider.OrderChanged -= OnOrderChanged;
-					Provider.NewOrder -= OnOrderChanged;
-				}
+				Provider.OrderChanged -= OnOrderChanged;
+				Provider.NewOrder -= OnOrderChanged;
 			}
 
 			private void OnOrderChanged(Order order)
@@ -293,32 +233,16 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-				{
-					Provider.StopOrderChanged += OnOrderChanged;
-					Provider.NewStopOrder += OnOrderChanged;
-				}
-				else
-				{
-					Provider.OrderChanged += OnOrderChanged;
-					Provider.NewOrder += OnOrderChanged;
-				}
+				Provider.OrderChanged += OnOrderChanged;
+				Provider.NewOrder += OnOrderChanged;
 
 				Provider.NewMyTrade += OnNewMyTrade;
 			}
 
 			protected override void UnSubscribe()
 			{
-				if (Order.Type == OrderTypes.Conditional)
-				{
-					Provider.StopOrderChanged -= OnOrderChanged;
-					Provider.NewStopOrder -= OnOrderChanged;
-				}
-				else
-				{
-					Provider.OrderChanged -= OnOrderChanged;
-					Provider.NewOrder -= OnOrderChanged;
-				}
+				Provider.OrderChanged -= OnOrderChanged;
+				Provider.NewOrder -= OnOrderChanged;
 
 				Provider.NewMyTrade -= OnNewMyTrade;
 			}
@@ -1005,11 +929,18 @@ namespace StockSharp.Algo
 
 		private sealed class SecurityMarketDepthChangedRule : SecurityRule<MarketDepth>
 		{
-			public SecurityMarketDepthChangedRule(Security security, IMarketDataProvider provider)
+			private readonly bool _isFiltered;
+
+			public SecurityMarketDepthChangedRule(Security security, IMarketDataProvider provider, bool isFiltered)
 				: base(security, provider)
 			{
-				Name = LocalizedStrings.Str1050 + " " + security;
-				Provider.MarketDepthChanged += OnMarketDepthChanged;
+				_isFiltered = isFiltered;
+				Name = LocalizedStrings.Str1050 + (_isFiltered ? " (filtered)" : string.Empty) + " " + security;
+
+				if (_isFiltered)
+					Provider.FilteredMarketDepthChanged += OnMarketDepthChanged;
+				else
+					Provider.MarketDepthChanged += OnMarketDepthChanged;
 			}
 
 			private void OnMarketDepthChanged(MarketDepth depth)
@@ -1022,7 +953,11 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
-				Provider.MarketDepthChanged -= OnMarketDepthChanged;
+				if (_isFiltered)
+					Provider.FilteredMarketDepthChanged -= OnMarketDepthChanged;
+				else
+					Provider.MarketDepthChanged -= OnMarketDepthChanged;
+
 				base.DisposeManaged();
 			}
 		}
@@ -1097,7 +1032,18 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<Security, MarketDepth> WhenMarketDepthChanged(this Security security, IMarketDataProvider provider)
 		{
-			return new SecurityMarketDepthChangedRule(security, provider);
+			return new SecurityMarketDepthChangedRule(security, provider, false);
+		}
+
+		/// <summary>
+		/// To create a rule for the event of order book change by instrument.
+		/// </summary>
+		/// <param name="security">The instrument to be traced for the event of order book change by instrument.</param>
+		/// <param name="provider">The market data provider.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Security, MarketDepth> WhenFilteredMarketDepthChanged(this Security security, IMarketDataProvider provider)
+		{
+			return new SecurityMarketDepthChangedRule(security, provider, true);
 		}
 
 		/// <summary>
@@ -2306,6 +2252,169 @@ namespace StockSharp.Algo
 
 		#endregion
 
+		#region Subscription rules
+
+		private abstract class SubscriptionRule : MarketRule<ISubscriptionProvider, Subscription>
+		{
+			protected SubscriptionRule(ISubscriptionProvider provider, Subscription subscription)
+				: base(provider)
+			{
+				Provider = provider;
+				Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+			}
+
+			protected ISubscriptionProvider Provider { get; }
+			protected Subscription Subscription { get; }
+		}
+
+		private class SubscriptionStartedRule : SubscriptionRule
+		{
+			public SubscriptionStartedRule(ISubscriptionProvider provider, Subscription subscription)
+				: base(provider, subscription)
+			{
+				Name = $"{subscription.TransactionId}/{subscription.DataType} started";
+				Provider.SubscriptionStarted += ProviderOnSubscriptionStarted;
+			}
+
+			private void ProviderOnSubscriptionStarted(Subscription subscription)
+			{
+				if (Subscription == subscription)
+					Activate(subscription);
+			}
+
+			protected override void DisposeManaged()
+			{
+				Provider.SubscriptionStarted -= ProviderOnSubscriptionStarted;
+				base.DisposeManaged();
+			}
+		}
+
+		/// <summary>
+		/// To create a rule for the event of started subscription.
+		/// </summary>
+		/// <param name="provider">Subscription provider.</param>
+		/// <param name="subscription">Subscription.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<ISubscriptionProvider, Subscription> WhenSubscriptionStarted(this ISubscriptionProvider provider, Subscription subscription)
+		{
+			return new SubscriptionStartedRule(provider, subscription);
+		}
+
+		private class SubscriptionOnlineRule : SubscriptionRule
+		{
+			public SubscriptionOnlineRule(ISubscriptionProvider provider, Subscription subscription)
+				: base(provider, subscription)
+			{
+				Name = $"{subscription.TransactionId}/{subscription.DataType} online";
+				Provider.SubscriptionOnline += ProviderOnSubscriptionOnline;
+			}
+
+			private void ProviderOnSubscriptionOnline(Subscription subscription)
+			{
+				if (Subscription == subscription)
+					Activate(subscription);
+			}
+
+			protected override void DisposeManaged()
+			{
+				Provider.SubscriptionOnline -= ProviderOnSubscriptionOnline;
+				base.DisposeManaged();
+			}
+		}
+
+		/// <summary>
+		/// To create a rule for the event of online subscription.
+		/// </summary>
+		/// <param name="provider">Subscription provider.</param>
+		/// <param name="subscription">Subscription.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<ISubscriptionProvider, Subscription> WhenSubscriptionOnline(this ISubscriptionProvider provider, Subscription subscription)
+		{
+			return new SubscriptionOnlineRule(provider, subscription);
+		}
+
+		private class SubscriptionStoppedRule : MarketRule<ISubscriptionProvider, Tuple<Subscription, Exception>>
+		{
+			private readonly ISubscriptionProvider _provider;
+			private readonly Subscription _subscription;
+
+			public SubscriptionStoppedRule(ISubscriptionProvider provider, Subscription subscription)
+				: base(provider)
+			{
+				_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+				_subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+
+				Name = $"{subscription.TransactionId}/{subscription.DataType} stopped";
+				
+				_provider.SubscriptionStopped += ProviderOnSubscriptionStopped;
+			}
+
+			private void ProviderOnSubscriptionStopped(Subscription subscription, Exception error)
+			{
+				if (_subscription == subscription)
+					Activate(Tuple.Create(subscription, error));
+			}
+
+			protected override void DisposeManaged()
+			{
+				_provider.SubscriptionStopped -= ProviderOnSubscriptionStopped;
+				base.DisposeManaged();
+			}
+		}
+
+		/// <summary>
+		/// To create a rule for the event of stopped subscription.
+		/// </summary>
+		/// <param name="provider">Subscription provider.</param>
+		/// <param name="subscription">Subscription.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<ISubscriptionProvider, Tuple<Subscription, Exception>> WhenSubscriptionStopped(this ISubscriptionProvider provider, Subscription subscription)
+		{
+			return new SubscriptionStoppedRule(provider, subscription);
+		}
+
+		private class SubscriptionFailedRule : MarketRule<ISubscriptionProvider, Tuple<Subscription, Exception, bool>>
+		{
+			private readonly ISubscriptionProvider _provider;
+			private readonly Subscription _subscription;
+
+			public SubscriptionFailedRule(ISubscriptionProvider provider, Subscription subscription)
+				: base(provider)
+			{
+				_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+				_subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+				
+				Name = $"{subscription.TransactionId}/{subscription.DataType} failed";
+				
+				_provider.SubscriptionFailed += ProviderOnSubscriptionFailed;
+			}
+
+			private void ProviderOnSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
+			{
+				if (_subscription == subscription)
+					Activate(Tuple.Create(subscription, error, isSubscribe));
+			}
+
+			protected override void DisposeManaged()
+			{
+				_provider.SubscriptionFailed -= ProviderOnSubscriptionFailed;
+				base.DisposeManaged();
+			}
+		}
+
+		/// <summary>
+		/// To create a rule for the event of failed subscription.
+		/// </summary>
+		/// <param name="provider">Subscription provider.</param>
+		/// <param name="subscription">Subscription.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<ISubscriptionProvider, Tuple<Subscription, Exception, bool>> WhenSubscriptionFailed(this ISubscriptionProvider provider, Subscription subscription)
+		{
+			return new SubscriptionFailedRule(provider, subscription);
+		}
+
+		#endregion
+
 		#region Apply
 
 		/// <summary>
@@ -2717,7 +2826,7 @@ namespace StockSharp.Algo
 			private readonly List<object> _args = new List<object>();
 			private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new SynchronizedSet<IMarketRule>();
 
-			public AndRule(IEnumerable<IMarketRule> innerRules)
+			public AndRule(IMarketRule[] innerRules)
 				: base(innerRules)
 			{
 				_nonActivatedRules.AddRange(innerRules);
@@ -2751,7 +2860,7 @@ namespace StockSharp.Algo
 			private readonly List<TArg> _args = new List<TArg>();
 			private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new SynchronizedSet<IMarketRule>();
 
-			public AndRule(IEnumerable<MarketRule<TToken, TArg>> innerRules)
+			public AndRule(MarketRule<TToken, TArg>[] innerRules)
 				: base(innerRules)
 			{
 				_nonActivatedRules.AddRange(innerRules);
@@ -2832,7 +2941,7 @@ namespace StockSharp.Algo
 		/// <returns>Combined rule.</returns>
 		public static IMarketRule And(this IEnumerable<IMarketRule> rules)
 		{
-			return new AndRule(rules);
+			return new AndRule(rules.ToArray());
 		}
 
 		/// <summary>

@@ -11,7 +11,7 @@
 
  <para>В созданный проект необходимо установить <token>stocksharpapi</token>. 
  Существуют два способа установки <token>stocksharpapi</token>: Установка из репозитория GitHub/StockSharp 
- с веб-сервиса GitHub <token>stocksharpgithub</token> и установка из Visual Studio при помощи сервиса Nuget. 
+ с веб-сервиса GitHub <token>stocksharpgithubreleases</token> и установка из Visual Studio при помощи сервиса Nuget. 
  Об установке <token>stocksharpapi</token> описано в
  пункте <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8" />.
 </para>

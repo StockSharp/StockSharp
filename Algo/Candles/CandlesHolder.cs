@@ -122,25 +122,23 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Update candles by new message.
 		/// </summary>
+		/// <param name="transactionId">Request identifier.</param>
 		/// <param name="message">Message.</param>
 		/// <returns>Candles series.</returns>
-		public IEnumerable<Tuple<CandleSeries, Candle, long>> UpdateCandles(CandleMessage message)
+		public Tuple<CandleSeries, Candle> UpdateCandles(long transactionId, CandleMessage message)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			foreach (var subscriptionId in message.GetSubscriptionIds())
-			{
-				var info = _holders.TryGetValue(subscriptionId);
+			var info = _holders.TryGetValue(transactionId);
 
-				if (info == null)
-					continue;
+			if (info == null)
+				return null;
 					
-				if (!info.UpdateCandle(message, out var candle))
-					continue;
+			if (!info.UpdateCandle(message, out var candle))
+				return null;
 				
-				yield return Tuple.Create(info.Series, candle, subscriptionId);
-			}
+			return Tuple.Create(info.Series, candle);
 		}
 	}
 }

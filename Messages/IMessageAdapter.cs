@@ -57,7 +57,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Supported by adapter message types.
 		/// </summary>
-		IEnumerable<MessageTypes> SupportedMessages { get; set; }
+		IEnumerable<MessageTypes> SupportedInMessages { get; set; }
 
 		/// <summary>
 		/// Supported by adapter message types.
@@ -82,7 +82,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Check possible time-frame by request.
 		/// </summary>
-		bool CheckTimeFrameByRequest { get; set; }
+		bool CheckTimeFrameByRequest { get; }
 
 		/// <summary>
 		/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
@@ -120,11 +120,6 @@ namespace StockSharp.Messages
 		bool IsSupportSubscriptions { get; }
 
 		/// <summary>
-		/// Support filtering subscriptions (subscribe/unsubscribe for specified security).
-		/// </summary>
-		bool IsSupportSubscriptionBySecurity { get; }
-
-		/// <summary>
 		/// Support candles subscription and live updates.
 		/// </summary>
 		bool IsSupportCandlesUpdates { get; }
@@ -140,19 +135,9 @@ namespace StockSharp.Messages
 		OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; }
 
 		/// <summary>
-		/// Board code for combined security.
-		/// </summary>
-		string AssociatedBoardCode { get; }
-
-		/// <summary>
 		/// Names of extended security fields in <see cref="SecurityMessage"/>.
 		/// </summary>
 		IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; }
-
-		/// <summary>
-		/// Support lookup all securities.
-		/// </summary>
-		bool IsSupportSecuritiesLookupAll { get; }
 
 		/// <summary>
 		/// Available options for <see cref="MarketDataMessage.MaxDepth"/>.
@@ -175,7 +160,7 @@ namespace StockSharp.Messages
 		bool IsSecurityNewsOnly { get; }
 
 		/// <summary>
-		/// <see cref="CreateOrderCondition"/> type.
+		/// Type of <see cref="OrderCondition"/>.
 		/// </summary>
 		/// <remarks>
 		/// If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.
@@ -183,13 +168,9 @@ namespace StockSharp.Messages
 		Type OrderConditionType { get; }
 
 		/// <summary>
-		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
+		/// Start sending <see cref="TimeMessage"/> before connection established.
 		/// </summary>
-		/// <returns>Order condition.</returns>
-		/// <remarks>
-		/// If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.
-		/// </remarks>
-		OrderCondition CreateOrderCondition();
+		bool HeartbeatBeforConnect { get; }
 
 		/// <summary>
 		/// Create market depth builder.
@@ -219,8 +200,15 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Is for the specified <paramref name="dataType"/> all securities downloading enabled.
 		/// </summary>
-		/// <param name="dataType">Market data type.</param>
+		/// <param name="dataType">Data type info.</param>
 		/// <returns>Check result.</returns>
-		bool IsAllDownloadingSupported(MarketDataTypes dataType);
+		bool IsAllDownloadingSupported(DataType dataType);
+
+		/// <summary>
+		/// Support filtering subscriptions (subscribe/unsubscribe for specified security).
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Check result.</returns>
+		bool IsSecurityRequired(DataType dataType);
 	}
 }

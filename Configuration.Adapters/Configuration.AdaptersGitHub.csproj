@@ -323,6 +323,9 @@
     <Reference Include="StockSharp.Hotbit">
       <HintPath>..\References\StockSharp.Hotbit.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Bitalong">
+      <HintPath>..\References\StockSharp.Bitalong.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">

@@ -79,21 +79,21 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Load(SettingsStorage settings)
+		public override void Load(SettingsStorage storage)
 		{
-			base.Load(settings);
+			base.Load(storage);
 
-			Ema.LoadNotNull(settings, nameof(Ema));
-			Roc.LoadNotNull(settings, nameof(Roc));
+			Ema.LoadNotNull(storage, nameof(Ema));
+			Roc.LoadNotNull(storage, nameof(Roc));
 		}
 
 		/// <inheritdoc />
-		public override void Save(SettingsStorage settings)
+		public override void Save(SettingsStorage storage)
 		{
-			base.Save(settings);
+			base.Save(storage);
 
-			settings.SetValue(nameof(Ema), Ema.Save());
-			settings.SetValue(nameof(Roc), Roc.Save());
+			storage.SetValue(nameof(Ema), Ema.Save());
+			storage.SetValue(nameof(Roc), Roc.Save());
 		}
 	}
 }

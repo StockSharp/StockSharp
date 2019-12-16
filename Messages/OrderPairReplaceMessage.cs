@@ -65,7 +65,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",{Message1},{Message2}";
+			return base.ToString() + $",Msg1={Message1},Msg2={Message2}";
 		}
 	}
 }

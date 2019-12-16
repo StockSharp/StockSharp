@@ -100,19 +100,19 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Load(SettingsStorage settings)
+		public override void Load(SettingsStorage storage)
 		{
-			base.Load(settings);
+			base.Load(storage);
 
-			ReversalAmount.Load(settings.GetValue<SettingsStorage>(nameof(ReversalAmount)));
+			ReversalAmount.Load(storage.GetValue<SettingsStorage>(nameof(ReversalAmount)));
 		}
 
 		/// <inheritdoc />
-		public override void Save(SettingsStorage settings)
+		public override void Save(SettingsStorage storage)
 		{
-			base.Save(settings);
+			base.Save(storage);
 
-			settings.SetValue(nameof(ReversalAmount), ReversalAmount.Save());
+			storage.SetValue(nameof(ReversalAmount), ReversalAmount.Save());
 		}
 	}
 }

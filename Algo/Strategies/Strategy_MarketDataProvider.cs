@@ -8,13 +8,15 @@ namespace StockSharp.Algo.Strategies
 
 	partial class Strategy
 	{
+		private IMarketDataProvider MarketDataProvider => SafeGetConnector();
+
 		/// <inheritdoc />
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
 
 		/// <inheritdoc />
 		public MarketDepth GetMarketDepth(Security security)
 		{
-			return SafeGetConnector().GetMarketDepth(security);
+			return MarketDataProvider.GetMarketDepth(security);
 		}
 
 		/// <inheritdoc />
@@ -23,7 +25,7 @@ namespace StockSharp.Algo.Strategies
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return SafeGetConnector().GetSecurityValue(security, field);
+			return MarketDataProvider.GetSecurityValue(security, field);
 		}
 
 		/// <inheritdoc />
@@ -32,300 +34,313 @@ namespace StockSharp.Algo.Strategies
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return SafeGetConnector().GetLevel1Fields(security);
+			return MarketDataProvider.GetLevel1Fields(security);
 		}
 
 		/// <inheritdoc />
 		public event Action<Trade> NewTrade
 		{
-			add => SafeGetConnector().NewTrade += value;
-			remove => SafeGetConnector().NewTrade -= value;
+			add => MarketDataProvider.NewTrade += value;
+			remove => MarketDataProvider.NewTrade -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<Security> NewSecurity
 		{
-			add => SafeGetConnector().NewSecurity += value;
-			remove => SafeGetConnector().NewSecurity -= value;
+			add => MarketDataProvider.NewSecurity += value;
+			remove => MarketDataProvider.NewSecurity -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<Security> SecurityChanged
 		{
-			add => SafeGetConnector().SecurityChanged += value;
-			remove => SafeGetConnector().SecurityChanged -= value;
+			add => MarketDataProvider.SecurityChanged += value;
+			remove => MarketDataProvider.SecurityChanged -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<MarketDepth> NewMarketDepth
 		{
-			add => SafeGetConnector().NewMarketDepth += value;
-			remove => SafeGetConnector().NewMarketDepth -= value;
+			add => MarketDataProvider.NewMarketDepth += value;
+			remove => MarketDataProvider.NewMarketDepth -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<MarketDepth> MarketDepthChanged
 		{
-			add => SafeGetConnector().MarketDepthChanged += value;
-			remove => SafeGetConnector().MarketDepthChanged -= value;
+			add => MarketDataProvider.MarketDepthChanged += value;
+			remove => MarketDataProvider.MarketDepthChanged -= value;
+		}
+
+		/// <inheritdoc />
+		public event Action<MarketDepth> FilteredMarketDepthChanged
+		{
+			add => MarketDataProvider.FilteredMarketDepthChanged += value;
+			remove => MarketDataProvider.FilteredMarketDepthChanged -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<OrderLogItem> NewOrderLogItem
 		{
-			add => SafeGetConnector().NewOrderLogItem += value;
-			remove => SafeGetConnector().NewOrderLogItem -= value;
+			add => MarketDataProvider.NewOrderLogItem += value;
+			remove => MarketDataProvider.NewOrderLogItem -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<News> NewNews
 		{
-			add => SafeGetConnector().NewNews += value;
-			remove => SafeGetConnector().NewNews -= value;
+			add => MarketDataProvider.NewNews += value;
+			remove => MarketDataProvider.NewNews -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<News> NewsChanged
 		{
-			add => SafeGetConnector().NewsChanged += value;
-			remove => SafeGetConnector().NewsChanged -= value;
+			add => MarketDataProvider.NewsChanged += value;
+			remove => MarketDataProvider.NewsChanged -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> LookupSecuritiesResult
 		{
-			add => SafeGetConnector().LookupSecuritiesResult += value;
-			remove => SafeGetConnector().LookupSecuritiesResult -= value;
+			add => MarketDataProvider.LookupSecuritiesResult += value;
+			remove => MarketDataProvider.LookupSecuritiesResult -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> LookupSecuritiesResult2
 		{
-			add => SafeGetConnector().LookupSecuritiesResult2 += value;
-			remove => SafeGetConnector().LookupSecuritiesResult2 -= value;
+			add => MarketDataProvider.LookupSecuritiesResult2 += value;
+			remove => MarketDataProvider.LookupSecuritiesResult2 -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult
 		{
-			add => SafeGetConnector().LookupBoardsResult += value;
-			remove => SafeGetConnector().LookupBoardsResult -= value;
+			add => MarketDataProvider.LookupBoardsResult += value;
+			remove => MarketDataProvider.LookupBoardsResult -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2
 		{
-			add => SafeGetConnector().LookupBoardsResult2 += value;
-			remove => SafeGetConnector().LookupBoardsResult2 -= value;
+			add => MarketDataProvider.LookupBoardsResult2 += value;
+			remove => MarketDataProvider.LookupBoardsResult2 -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult
 		{
-			add => SafeGetConnector().LookupTimeFramesResult += value;
-			remove => SafeGetConnector().LookupTimeFramesResult -= value;
+			add => MarketDataProvider.LookupTimeFramesResult += value;
+			remove => MarketDataProvider.LookupTimeFramesResult -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2
 		{
-			add => SafeGetConnector().LookupTimeFramesResult2 += value;
-			remove => SafeGetConnector().LookupTimeFramesResult2 -= value;
+			add => MarketDataProvider.LookupTimeFramesResult2 += value;
+			remove => MarketDataProvider.LookupTimeFramesResult2 -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded
 		{
-			add => SafeGetConnector().MarketDataSubscriptionSucceeded += value;
-			remove => SafeGetConnector().MarketDataSubscriptionSucceeded -= value;
+			add => MarketDataProvider.MarketDataSubscriptionSucceeded += value;
+			remove => MarketDataProvider.MarketDataSubscriptionSucceeded -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed
 		{
-			add => SafeGetConnector().MarketDataSubscriptionFailed += value;
-			remove => SafeGetConnector().MarketDataSubscriptionFailed -= value;
+			add => MarketDataProvider.MarketDataSubscriptionFailed += value;
+			remove => MarketDataProvider.MarketDataSubscriptionFailed -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataSubscriptionFailed2
 		{
-			add => SafeGetConnector().MarketDataSubscriptionFailed2 += value;
-			remove => SafeGetConnector().MarketDataSubscriptionFailed2 -= value;
+			add => MarketDataProvider.MarketDataSubscriptionFailed2 += value;
+			remove => MarketDataProvider.MarketDataSubscriptionFailed2 -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded
 		{
-			add => SafeGetConnector().MarketDataUnSubscriptionSucceeded += value;
-			remove => SafeGetConnector().MarketDataUnSubscriptionSucceeded -= value;
+			add => MarketDataProvider.MarketDataUnSubscriptionSucceeded += value;
+			remove => MarketDataProvider.MarketDataUnSubscriptionSucceeded -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed
 		{
-			add => SafeGetConnector().MarketDataUnSubscriptionFailed += value;
-			remove => SafeGetConnector().MarketDataUnSubscriptionFailed -= value;
+			add => MarketDataProvider.MarketDataUnSubscriptionFailed += value;
+			remove => MarketDataProvider.MarketDataUnSubscriptionFailed -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataUnSubscriptionFailed2
 		{
-			add => SafeGetConnector().MarketDataUnSubscriptionFailed2 += value;
-			remove => SafeGetConnector().MarketDataUnSubscriptionFailed2 -= value;
+			add => MarketDataProvider.MarketDataUnSubscriptionFailed2 += value;
+			remove => MarketDataProvider.MarketDataUnSubscriptionFailed2 -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataFinishedMessage> MarketDataSubscriptionFinished
 		{
-			add => SafeGetConnector().MarketDataSubscriptionFinished += value;
-			remove => SafeGetConnector().MarketDataSubscriptionFinished -= value;
+			add => MarketDataProvider.MarketDataSubscriptionFinished += value;
+			remove => MarketDataProvider.MarketDataSubscriptionFinished -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled
 		{
-			add => SafeGetConnector().MarketDataUnexpectedCancelled += value;
-			remove => SafeGetConnector().MarketDataUnexpectedCancelled -= value;
+			add => MarketDataProvider.MarketDataUnexpectedCancelled += value;
+			remove => MarketDataProvider.MarketDataUnexpectedCancelled -= value;
 		}
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline
 		{
-			add => SafeGetConnector().MarketDataSubscriptionOnline += value;
-			remove => SafeGetConnector().MarketDataSubscriptionOnline -= value;
+			add => MarketDataProvider.MarketDataSubscriptionOnline += value;
+			remove => MarketDataProvider.MarketDataSubscriptionOnline -= value;
 		}
 
 		/// <inheritdoc />
 		public void LookupSecurities(SecurityLookupMessage criteria)
 		{
-			SafeGetConnector().LookupSecurities(criteria);
+			MarketDataProvider.LookupSecurities(criteria);
 		}
 
 		/// <inheritdoc />
 		public void LookupBoards(BoardLookupMessage criteria)
 		{
-			SafeGetConnector().LookupBoards(criteria);
+			MarketDataProvider.LookupBoards(criteria);
 		}
 
 		/// <inheritdoc />
 		public void LookupTimeFrames(TimeFrameLookupMessage criteria)
 		{
-			SafeGetConnector().LookupTimeFrames(criteria);
+			MarketDataProvider.LookupTimeFrames(criteria);
 		}
 
 		/// <inheritdoc />
 		public MarketDepth GetFilteredMarketDepth(Security security)
 		{
-			return SafeGetConnector().GetFilteredMarketDepth(security);
+			return MarketDataProvider.GetFilteredMarketDepth(security);
 		}
 
 		/// <inheritdoc />
-		public void SubscribeMarketData(Security security, MarketDataMessage message)
+		public long SubscribeMarketData(Security security, MarketDataMessage message)
 		{
-			SafeGetConnector().SubscribeMarketData(security, message);
+			return MarketDataProvider.SubscribeMarketData(security, message);
 		}
 
 		/// <inheritdoc />
 		public void UnSubscribeMarketData(Security security, MarketDataMessage message)
 		{
-			SafeGetConnector().UnSubscribeMarketData(security, message);
+			MarketDataProvider.UnSubscribeMarketData(security, message);
 		}
 
 		/// <inheritdoc />
-		public void SubscribeMarketData(MarketDataMessage message)
+		public long SubscribeMarketData(MarketDataMessage message)
 		{
-			SafeGetConnector().SubscribeMarketData(message);
+			return MarketDataProvider.SubscribeMarketData(message);
 		}
 
 		/// <inheritdoc />
 		public void UnSubscribeMarketData(MarketDataMessage message)
 		{
-			SafeGetConnector().UnSubscribeMarketData(message);
+			MarketDataProvider.UnSubscribeMarketData(message);
 		}
 
 		/// <inheritdoc />
-		public void RegisterFilteredMarketDepth(Security security)
+		public long RegisterFilteredMarketDepth(Security security)
 		{
-			SafeGetConnector().RegisterFilteredMarketDepth(security);
+			return MarketDataProvider.RegisterFilteredMarketDepth(security);
 		}
 
 		/// <inheritdoc />
 		public void UnRegisterFilteredMarketDepth(Security security)
 		{
-			SafeGetConnector().UnRegisterFilteredMarketDepth(security);
+			MarketDataProvider.UnRegisterFilteredMarketDepth(security);
 		}
 
 		/// <inheritdoc />
-		public void SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
+		public long SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().SubscribeMarketDepth(security, from, to, count, buildMode, buildFrom, maxDepth, adapter);
+			return MarketDataProvider.SubscribeMarketDepth(security, from, to, count, buildMode, buildFrom, maxDepth, adapter);
 		}
 
 		/// <inheritdoc />
 		public void UnSubscribeMarketDepth(Security security)
 		{
-			SafeGetConnector().UnSubscribeMarketDepth(security);
+			MarketDataProvider.UnSubscribeMarketDepth(security);
 		}
 
 		/// <inheritdoc />
-		public void SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		public long SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().SubscribeTrades(security, from, to, count, buildMode, buildFrom, adapter);
+			return MarketDataProvider.SubscribeTrades(security, from, to, count, buildMode, buildFrom, adapter);
 		}
 
 		/// <inheritdoc />
 		public void UnSubscribeTrades(Security security)
 		{
-			SafeGetConnector().UnSubscribeTrades(security);
+			MarketDataProvider.UnSubscribeTrades(security);
 		}
 
 		/// <inheritdoc />
-		public void SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		public long SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().SubscribeLevel1(security, from, to, count, buildMode, buildFrom, adapter);
+			return MarketDataProvider.SubscribeLevel1(security, from, to, count, buildMode, buildFrom, adapter);
 		}
 
 		/// <inheritdoc />
 		public void UnSubscribeLevel1(Security security)
 		{
-			SafeGetConnector().UnSubscribeLevel1(security);
+			MarketDataProvider.UnSubscribeLevel1(security);
 		}
 
 		/// <inheritdoc />
-		public void SubscribeOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		public long SubscribeOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().SubscribeOrderLog(security, from, to, count, adapter);
+			return MarketDataProvider.SubscribeOrderLog(security, from, to, count, adapter);
 		}
 
 		/// <inheritdoc />
 		public void UnSubscribeOrderLog(Security security)
 		{
-			SafeGetConnector().UnSubscribeOrderLog(security);
+			MarketDataProvider.UnSubscribeOrderLog(security);
 		}
 
 		/// <inheritdoc />
-		public void SubscribeNews(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		public long SubscribeNews(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().SubscribeNews(security, from, to, count, adapter);
+			return MarketDataProvider.SubscribeNews(security, from, to, count, adapter);
 		}
 
 		/// <inheritdoc />
 		public void UnSubscribeNews(Security security = null)
 		{
-			SafeGetConnector().UnSubscribeNews(security);
+			MarketDataProvider.UnSubscribeNews(security);
 		}
 
 		/// <inheritdoc />
-		public void SubscribeBoard(ExchangeBoard board, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		public long SubscribeBoard(ExchangeBoard board, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
-			SafeGetConnector().SubscribeBoard(board, from, to, count, adapter);
+			return MarketDataProvider.SubscribeBoard(board, from, to, count, adapter);
 		}
 
 		/// <inheritdoc />
 		public void UnSubscribeBoard(ExchangeBoard board)
 		{
-			SafeGetConnector().UnSubscribeBoard(board);
+			MarketDataProvider.UnSubscribeBoard(board);
+		}
+
+		/// <inheritdoc />
+		public void UnSubscribe(long subscriptionId)
+		{
+			MarketDataProvider.UnSubscribe(subscriptionId);
 		}
 	}
 }

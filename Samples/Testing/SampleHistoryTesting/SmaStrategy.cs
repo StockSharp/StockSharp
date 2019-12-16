@@ -38,8 +38,9 @@ namespace SampleHistoryTesting
 		private readonly ChartIndicatorElement _shortElem;
 		private readonly ChartIndicatorElement _longElem;
 		private readonly List<MyTrade> _myTrades = new List<MyTrade>();
-		private readonly CandleSeries _series;
+		private readonly Subscription _series;
 		private bool _isShortLessThenLong;
+		private bool _candlesStarted;
 
 		public SmaStrategy(IChart chart, ChartCandleElement candlesElem, ChartTradeElement tradesElem, 
 			SimpleMovingAverage shortMa, ChartIndicatorElement shortElem,
@@ -52,7 +53,7 @@ namespace SampleHistoryTesting
 			_shortElem = shortElem;
 			_longElem = longElem;
 
-			_series = series;
+			_series = new Subscription(series);
 
 			ShortSma = shortMa;
 			LongSma = longMa;
@@ -64,7 +65,7 @@ namespace SampleHistoryTesting
 		protected override void OnStarted()
 		{
 			this
-				.WhenCandlesFinished(_series)
+				.WhenCandlesFinished(_series.CandleSeries)
 				.Do(ProcessCandle)
 				.Apply(this);
 
@@ -76,14 +77,22 @@ namespace SampleHistoryTesting
 			// store current values for short and long
 			_isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
 
-			Start(_series);
+			_candlesStarted = false;
+
+			this
+				.WhenSubscriptionStarted(_series)
+			    .Do(() => _candlesStarted = true)
+			    .Apply(this);
+
+			Subscribe(_series);
 
 			base.OnStarted();
 		}
 
 		protected override void OnStopped()
 		{
-			Stop(_series);
+			if (_candlesStarted)
+				UnSubscribe(_series);
 
 			base.OnStopped();
 		}

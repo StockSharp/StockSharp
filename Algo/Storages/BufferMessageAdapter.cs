@@ -468,7 +468,7 @@ namespace StockSharp.Algo.Storages
 						IsCancelled = true,
 						OrderId = cancelMsg.OrderId,
 						OrderStringId = cancelMsg.OrderStringId,
-						OriginalTransactionId = cancelMsg.OrderTransactionId,
+						OriginalTransactionId = cancelMsg.OriginalTransactionId,
 						OrderVolume = cancelMsg.Volume,
 						//Side = cancelMsg.Side,
 					});

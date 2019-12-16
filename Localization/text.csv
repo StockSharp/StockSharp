@@ -5102,6 +5102,9 @@ ByYears;By years;По годам
 Gopax;Gopax;Gopax
 CoinHub;CoinHub;CoinHub
 Hotbit;Hotbit;Hotbit
+BrasilBolsa;Brasil Bolsa;Brasil Bolsa
+UnknownTransactionId;Unknown transaction id {0}.;Неизвестный идентификатор транзакции {0}.
+Bitalong;Bitalong;Bitalong
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5635,13 +5638,13 @@ DocStr556;The number of decimal places for the volume;Количество зн�
 DocStr557;Whether the grouping of candles by the specified attribute is registered;Зарегистрирована ли группировка свечей по определённому признаку
 DocStr558;The instrument for which the grouping is registered;Инструмент, для которого зарегистрирована группировка
 DocStr559;{0} if registered. Otherwise, {1};{0}, если зарегистрирована. Иначе, {1}
-DocStr562;The current time within the range of time frames;Текущее время, входящее в диапазон временных рамок
-DocStr564;To get the candle time range;Получить временные рамки свечи
+DocStr562;The current time within the range of time frames;Текущее время, входящее в диапазон тайм-фремоы
+DocStr564;To get the candle time range;Получить тайм-фремы свечи
 DocStr565;The time frame for which you need to get time range;Тайм-фрейм, по которому необходимо получить временные рамки
-DocStr566;The candle time frames;Временные рамки свечи
-DocStr567;To get candle time frames relatively to the exchange working hours;Получить временные рамки свечи относительно времени работы биржи
+DocStr566;The candle time frames;Тайм-фремы свечи
+DocStr567;To get candle time frames relatively to the exchange working hours;Получить тайм-фремы свечи относительно времени работы биржи
 DocStr568;The information about the board from which {0} working hours will be taken;Информация о площадке, из которой будет взято время работы {0}
-DocStr569;To get candle time frames relatively to the exchange working pattern;Получить временные рамки свечи относительно режиме работы биржи
+DocStr569;To get candle time frames relatively to the exchange working pattern;Получить тайм-фремы свечи относительно режиме работы биржи
 DocStr570;The information about the exchange working pattern;Информация о режиме работы биржи
 DocStr571;To get the candle length;Получить длину свечи
 DocStr572;The candle for which you need to get a length;Свеча, для которой необходимо получить длины
@@ -5673,11 +5676,11 @@ DocStr597;{0} if the dragonfly, {1} if the tombstone, {2} - neither one nor the 
 DocStr598;Whether the candle is bullish or bearish;Бычья ли или медвежья свеча
 DocStr599;The candle which should be checked for the trend;Свеча, которую необходимо проверить на тренд
 DocStr600;{0} if bullish, {1}, if bearish, {2} - neither one nor the other;{0}, если бычья, {1}, если медвежья, {2} - ни то, ни другое
-DocStr601;To get the number of time frames within the specified time range;Получить количество временных интервалов в пределах заданного отрезка времени
+DocStr601;To get the number of time frames within the specified time range;Получить количество тайм-фремов в пределах заданного отрезка времени
 DocStr602;The instrument by which exchange working hours are calculated through the {0} property;Инструмент, по которому вычисляется время работы биржи через свойство {0}
-DocStr603;The specified time range for which you need to get the number of time frames;Заданный отрезок времени, для которого нужно получить количество временных интервалов
-DocStr604;The time frame size;Размер временного интервала
-DocStr605;The received number of time frames;Полученное количество временных интервалов
+DocStr603;The specified time range for which you need to get the number of time frames;Заданный отрезок времени, для которого нужно получить количество тайм-фремов
+DocStr604;The time frame size;Размер тайм-фрема
+DocStr605;The received number of time frames;Полученное количество тайм-фремов
 DocStr606;The information about the board by which working hours are calculated through the {0} property;Информация о площадке, по которому вычисляется время работы через свойство {0}
 DocStr607;To calculate the {0} for the candles group;Рассчитать {0} для группы свечей
 DocStr608;{0};{0}
@@ -15783,3 +15786,73 @@ DocStr11410;Meta-info storage based message adapter;Хранилище мета-
 DocStr11411;Convert message storage to entity;Преобразовать хранилище сообщений в объектное
 DocStr11412;Message storage;Хранилище сообщений
 DocStr11413;Entity storage;Хранилище объектов
+DocStr11414;Update candle by new message;Обновить свечу новым сообщением
+DocStr11415;Subscription is online;Подписка онлайн
+DocStr11416;Subscription is started;Подписка запущена
+DocStr11417;Subscription is stopped;Подписка остановлена
+DocStr11418;Subscription is failed;Подписка получила ошибку
+DocStr11419;Message adapter that tracks multiple lookups requests and put them into single queue;Адаптер сообщений, который отслеживает множественные запросы поиска и складывает их в очередное исполнение
+DocStr11420;Subscription message;Сообщение подписки
+DocStr11421;"""Money"" security instance";"Объект инструмента ""Money"""
+DocStr11422;Send unsubscribe on disconnect command;Отправлять отписку при отключении
+DocStr11423;Use separated {0} for each adapters;Использовать отдельные {0} для каждого адаптера
+DocStr11425;Request imbalance volume {0} orders, which have not been filled;Запросить дисбаланс объема заявок {0}, которые не были исполнены
+DocStr11426;Imbalance;Дисбаланс
+DocStr11427;Request imbalance bid and ask, when best bid of one board has more price than best ask on different board;Запросить дисбаланс бид и аска, когда лучший бид одной площадки имеет большую цену, чем лучший аск на другой
+DocStr11428;Request for the appearance of a new indicator in the pre-market;Запрос на получение индикативного значения пре-маркета
+DocStr11429;The request for maximum and minimum values for instruments;Запрос получения максимумов и минимумов инструментов
+DocStr11430;The request for market sorter;Запрос на рыночную сортировку
+DocStr11431;Convert lookup message type to result type;Преобразовать тип сообщения поиска в тип результата
+DocStr11432;Lookup message type;Тип сообщения поиска
+DocStr11433;Result message type;Тип сообщения результата
+DocStr11434;Convert result message type to lookup type;Преобразовать тип результата в тип поиска
+DocStr11435;Determines the specified type is lookup message;Определить, является ли переданный тип сообщением поиска
+DocStr11436;Determines the specified type is lookup result message;Определить, является ли переданный тип сообщением результата поиска
+DocStr11437;Create message by the specified type;Создать сообщение по указанному типу
+DocStr11438;Replace security id by the specified;Заменить идентификатор инструмента указанным
+DocStr11439;Determines the security id required for the specified message;Определить, необходим ли идентификатор инструмента для указанного сообщения
+DocStr11440;Determines the specified message contains {0} position;Определить, содержит ли позицию {0} переданное сообщение
+DocStr11441;The interface describing an message with {0} method;Интерфейс, описывающий сообщение с методом {0}
+DocStr11442;Create security id with board code set as {0};Создать идентификатор инструмента с кодом площадки, установленным в {0}
+DocStr11443;"""Money"" security id";"Идентификатор инструмента ""Money"""
+DocStr11444;"""News"" security id";"Идентификатор инструмента ""News"""
+DocStr11445;"""ALL"" security id";"Идентификатор инструмента ""ALL"""
+DocStr11446;To create a rule for the event of started subscription;Создать правило для события запуска подписки
+DocStr11447;Subscription provider;Провайдер подписок
+DocStr11448;To create a rule for the event of online subscription;Создать правило для события перехода подписки в состояние онлайн
+DocStr11449;To create a rule for the event of stopped subscription;Создать правило для события остановки подписки
+DocStr11450;To create a rule for the event of failed subscription;Создать правило для события ошибки подписки
+DocStr11451;Subscription goes online message;Сообщение о переходе подписки в онлайн
+DocStr11452;Whether order is placed at best counter party price;Будет ли заявка размещена по лучшей цене контрагента
+DocStr11453;Base route response message;Базовое сообщение ответа маршрутизации
+DocStr11454;OK command;Команда OK
+DocStr11455;Add credentials command;Команда добавления разрешений
+DocStr11456;Remove credentials command;Remove credentials command
+DocStr11457;Select all credentials command;Команда выбора всех разрешений
+DocStr11458;Un select all credentials command;Команда снятия выбора всех разрешений
+DocStr11459;Select field command;Команда выбора поля
+DocStr11460;Unselect field command;Команда снятия выбора поля
+DocStr11461;Move up field command;Команда передвижения поля вверх
+DocStr11462;Move down field command;Команда передвижения поля вниз
+DocStr11463;Start strategy command;Команда запуска стратегии
+DocStr11464;Stop strategy command;Команда остановки стратегии
+DocStr11465;Close position for selected strategy command;Команда закрытия позиции для выбранной стратегии
+DocStr11466;Revert position for selected strategy command;Команда переворота позиции для выбранной стратегии
+DocStr11467;Risk management for selected strategy command;Команда риск-менеджмента для выбранной стратегии
+DocStr11468;Start sending {0} before connection established;Начинать отправлять {0} до установки подключения
+DocStr11469;Write extra parameters for {0} message;Записать дополнительные параметры для сообщения {0}
+DocStr11470;Resets Market Protections;Сбросить защиту рынком
+DocStr11471;Indicates whether the resulting position after a trade should be a closing position;Указывает, должна ли результирующая позиция после сделки быть закрывающей позицией
+DocStr11472;Indicates additional order instruction;Указывает на дополнительную инструкцию заявки
+DocStr11473;Try get subscription by id;Попытаться получить идентификатор подписки
+DocStr11474;Set subscription identifiers into the specified message;Установить идентификаторы подписки в указанное сообщение
+DocStr11475;Message queue;Очередь сообщений
+DocStr11476;The interfaces described message queue;Интерфейс, описывающий очередь сообщений
+DocStr11477;Enqueue the specified message;Добавить в очередь сообщение
+DocStr11478;Try dequeue a message;Попытаться достать из очереди сообщение
+DocStr11479;Exit from method if the queue closed;Выйти из метода если очередь закрыта
+DocStr11480;Block the operation;Блокировать операцию
+DocStr11482;Sorted by incoming order queue;Очередь, отсортированная по порядковому номеру
+DocStr11483;Determines the specified message contains single order request;Определить, содержит ли сообщение запрос на единичную заявку
+DocStr11484;By default is {0};По-умолчанию {0}
+DocStr11485;Subscribe for new portfolios;Подписываться на новые портфели
