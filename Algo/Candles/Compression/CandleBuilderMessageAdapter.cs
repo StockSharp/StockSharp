@@ -114,6 +114,16 @@ namespace StockSharp.Algo.Candles.Compression
 								this.AddInfoLog("Origin tf: {0}", originalTf);
 
 								var original = (MarketDataMessage)mdMsg.Clone();
+
+								if (mdMsg.To == null &&
+									mdMsg.BuildMode == MarketDataBuildModes.LoadAndBuild &&
+									!mdMsg.IsFinished &&
+									!InnerAdapter.IsSupportCandlesUpdates &&
+									InnerAdapter.TryGetCandlesBuildFrom(original, _candleBuilderProvider) != null)
+								{
+									mdMsg.To = DateTimeOffset.Now;
+								}
+
 								_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, original)
 								{
 									State = SeriesStates.Regular,
@@ -205,29 +215,27 @@ namespace StockSharp.Algo.Candles.Compression
 					{
 						var series = _seriesByTransactionId.TryGetAndRemove(mdMsg.OriginalTransactionId);
 
-						if (series != null)
+						if (series == null)
+							break;
+
+						RaiseNewOutMessage(new MarketDataMessage
 						{
-							RaiseNewOutMessage(new MarketDataMessage
-							{
-								OriginalTransactionId = mdMsg.TransactionId,
-							});
+							OriginalTransactionId = mdMsg.TransactionId,
+						});
 
-							var transactionId = TransactionIdGenerator.GetNextId();
+						var transactionId = TransactionIdGenerator.GetNextId();
 
-							_unsubscriptions.Add(transactionId);
+						_unsubscriptions.Add(transactionId);
 
-							var unsubscribe = (MarketDataMessage)series.Current.Clone();
+						var unsubscribe = (MarketDataMessage)series.Current.Clone();
 
-							unsubscribe.TransactionId = transactionId;
-							unsubscribe.OriginalTransactionId = series.Current.TransactionId;
-							unsubscribe.IsSubscribe = false;
+						unsubscribe.TransactionId = transactionId;
+						unsubscribe.OriginalTransactionId = series.Current.TransactionId;
+						unsubscribe.IsSubscribe = false;
 
-							base.OnSendInMessage(unsubscribe);
+						base.OnSendInMessage(unsubscribe);
 
-							return;
-						}
-
-						break;
+						return;
 					}
 				}
 			}
@@ -650,6 +658,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var clone = (CandleMessage)candleMsg.Clone();
 			clone.Adapter = candleMsg.Adapter;
 			clone.OriginalTransactionId = info.Original.TransactionId;
+			clone.SetSubscriptionIds(subscriptionId: info.Original.TransactionId);
 
 			RaiseNewOutMessage(clone);
 		}
