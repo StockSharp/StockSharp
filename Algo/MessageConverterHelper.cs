@@ -335,7 +335,6 @@ namespace StockSharp.Algo
 				ExpiryDate = order.ExpiryDate,
 				PortfolioName = order.Portfolio?.Name,
 				ExecutionType = ExecutionTypes.OrderLog,
-				IsCancelled = (order.State == OrderStates.Done && trade == null),
 				TradeId = trade?.Id,
 				TradePrice = trade?.Price,
 				Currency = order.Currency,
@@ -1392,7 +1391,7 @@ namespace StockSharp.Algo
 			if (message.OrderState != null)
 				order.State = order.State.CheckModification(message.OrderState.Value);
 			else
-				order.State = order.State.CheckModification(message.IsCancelled || message.TradeId != null ? OrderStates.Done : OrderStates.Active);
+				order.State = order.State.CheckModification(message.TradeId != null ? OrderStates.Done : OrderStates.Active);
 
 			if (message.TradeId != null)
 			{
@@ -2060,6 +2059,8 @@ namespace StockSharp.Algo
 					return DataType.TimeFrames;
 				case UserLookupMessage _:
 					return DataType.Users;
+				case PortfolioMessage pfMsg:
+					return DataType.Portfolio(pfMsg.PortfolioName);
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.GetType(), LocalizedStrings.Str1219);
 			}

@@ -231,7 +231,6 @@ namespace StockSharp.Algo.Testing
 				else
 				{
 					item.OrderState = OrderStates.Done;
-					item.IsCancelled = true;
 					_activeOrders.Dequeue();
 				}
 			}

@@ -410,9 +410,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 			else
 			{
-				var active = reader.Read();
-				execMsg.OrderState = active ? OrderStates.Active : OrderStates.Done;
-				execMsg.IsCancelled = !active;
+				execMsg.OrderState = reader.Read() ? OrderStates.Active : OrderStates.Done;
 			}
 
 			if (metaInfo.Version >= MarketDataVersions.Version31)
