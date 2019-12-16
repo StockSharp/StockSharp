@@ -540,12 +540,12 @@
     <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage)">
+    <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderCondition)">
       <summary>
             To record data by the order condition.
             </summary>
       <param name="writer">FIX data writer.</param>
-      <param name="regMsg">The message containing the information for the order registration.</param>
+      <param name="condition">Order condition (e.g., stop- and algo- orders parameters).</param>
     </member>
     <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})">
       <summary>
@@ -1882,12 +1882,12 @@
       <param name="ordType">Order type.</param>
       <param name="condition">The order condition.</param>
     </member>
-    <member name="M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.ExecutionMessage)">
+    <member name="M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderCondition)">
       <summary>
             To record data by the order condition.
             </summary>
       <param name="writer">FIX data writer.</param>
-      <param name="message">The message containing information about the order.</param>
+      <param name="condition">Order condition (e.g., stop- and algo- orders parameters).</param>
     </member>
     <member name="E:StockSharp.Fix.FixServer.NewOutMessage">
       <inheritdoc />
