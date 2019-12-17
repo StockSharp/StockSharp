@@ -778,35 +778,6 @@
 			MarketDepth IMarketDataProvider.GetMarketDepth(Security security) => null;
 			MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security) => null;
 
-			long IMarketDataProvider.SubscribeMarketData(Security security, MarketDataMessage message) => _idGenerator.GetNextId();
-			void IMarketDataProvider.UnSubscribeMarketData(Security security, MarketDataMessage message) { }
-			
-			long IMarketDataProvider.SubscribeMarketData(MarketDataMessage message) => _idGenerator.GetNextId();
-			void IMarketDataProvider.UnSubscribeMarketData(MarketDataMessage message) { }
-
-			long IMarketDataProvider.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter) => _idGenerator.GetNextId();
-			void IMarketDataProvider.UnSubscribeMarketDepth(Security security) { }
-
-			long IMarketDataProvider.RegisterFilteredMarketDepth(Security security) => _idGenerator.GetNextId();
-			void IMarketDataProvider.UnRegisterFilteredMarketDepth(Security security) { }
-
-			long IMarketDataProvider.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter) => _idGenerator.GetNextId();
-			void IMarketDataProvider.UnSubscribeTrades(Security security) { }
-
-			long IMarketDataProvider.SubscribeLevel1(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter) => _idGenerator.GetNextId();
-			void IMarketDataProvider.UnSubscribeLevel1(Security security) { }
-
-			long IMarketDataProvider.SubscribeOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) => _idGenerator.GetNextId();
-			void IMarketDataProvider.UnSubscribeOrderLog(Security security) { }
-			
-			long IMarketDataProvider.SubscribeNews(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) => _idGenerator.GetNextId();
-			void IMarketDataProvider.UnSubscribeNews(Security security) { }
-
-			long IMarketDataProvider.SubscribeBoard(ExchangeBoard board, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) => _idGenerator.GetNextId();
-			void IMarketDataProvider.UnSubscribeBoard(ExchangeBoard board) { }
-
-			void IMarketDataProvider.UnSubscribe(long subscriptionId) { }
-
 			#endregion
 		}
 	}

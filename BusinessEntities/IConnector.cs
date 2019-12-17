@@ -263,22 +263,22 @@ namespace StockSharp.BusinessEntities
 		//bool IsSupportAtomicReRegister { get; }
 
 		/// <summary>
-		/// List of all securities, subscribed via <see cref="IMarketDataProvider.SubscribeLevel1"/>.
+		/// List of all securities, subscribed via <see cref="RegisterSecurity"/>.
 		/// </summary>
 		IEnumerable<Security> RegisteredSecurities { get; }
 
 		/// <summary>
-		/// List of all securities, subscribed via <see cref="IMarketDataProvider.SubscribeMarketDepth"/>.
+		/// List of all securities, subscribed via <see cref="RegisteredMarketDepths"/>.
 		/// </summary>
 		IEnumerable<Security> RegisteredMarketDepths { get; }
 
 		/// <summary>
-		/// List of all securities, subscribed via <see cref="IMarketDataProvider.SubscribeTrades"/>.
+		/// List of all securities, subscribed via <see cref="RegisterTrades"/>.
 		/// </summary>
 		IEnumerable<Security> RegisteredTrades { get; }
 
 		/// <summary>
-		/// List of all securities, subscribed via <see cref="IMarketDataProvider.SubscribeOrderLog"/>.
+		/// List of all securities, subscribed via <see cref="RegisterOrderLog"/>.
 		/// </summary>
 		IEnumerable<Security> RegisteredOrderLogs { get; }
 

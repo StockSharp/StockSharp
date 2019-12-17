@@ -127,6 +127,7 @@
     <Compile Include="Expressions\ExpressionIndexSecurityProcessor.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
+    <Compile Include="IMarketDataProviderEx.cs" />
     <Compile Include="ISubscriptionProvider.cs" />
     <Compile Include="LookupTrackingMessageAdapter.cs" />
     <Compile Include="Storages\Binary\BoardStateBinarySerializer.cs" />

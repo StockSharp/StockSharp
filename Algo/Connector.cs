@@ -40,7 +40,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The class to create connections to trading systems.
 	/// </summary>
-	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager, ISubscriptionProvider
+	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager, IMarketDataProviderEx
 	{
 		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new MemoryStatisticsValue<Trade>(LocalizedStrings.Ticks);
 		private static readonly MemoryStatisticsValue<Connector> _connectorStat = new MemoryStatisticsValue<Connector>(LocalizedStrings.Str1093);

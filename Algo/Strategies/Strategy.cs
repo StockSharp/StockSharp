@@ -43,8 +43,8 @@ namespace StockSharp.Algo.Strategies
 	/// The base class for all trade strategies.
 	/// </summary>
 	public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer,
-	    ICloneable<Strategy>, IMarketDataProvider, ISecurityProvider, ICandleManager,
-	    ITransactionProvider, ISubscriptionProvider
+	    ICloneable<Strategy>, IMarketDataProviderEx, ISecurityProvider, ICandleManager,
+	    ITransactionProvider
 	{
 		private class StrategyChangeStateMessage : Message
 		{

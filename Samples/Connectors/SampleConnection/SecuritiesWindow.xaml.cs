@@ -118,8 +118,7 @@ namespace SampleConnection
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
 				// subscribe on order book flow
-				var id = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
-				var subscription = connector.TryGetSubscriptionById(id);
+				var subscription = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
 
 				// create order book window
 				var window = new QuotesWindow
