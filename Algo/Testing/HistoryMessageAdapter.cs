@@ -286,7 +286,7 @@ namespace StockSharp.Algo.Testing
 				{
 					_isSuspended = false;
 
-					if(_isStarted)
+					if (_isStarted)
 						SendOutMessage(new LastMessage { LocalTime = StopDate });
 
 					SendOutMessage(new DisconnectMessage { LocalTime = StopDate });

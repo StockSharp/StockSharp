@@ -37,7 +37,9 @@ namespace StockSharp.Algo.Testing
 
 		public override Message Clone()
 		{
-			return new LastMessage { IsError = IsError };
+			var clone = new LastMessage { IsError = IsError };
+			CopyTo(clone);
+			return clone;
 		}
 	}
 }
