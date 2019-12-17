@@ -50716,5 +50716,15 @@ namespace StockSharp.Localization
 		/// Bitalong
 		/// </summary>
 		public static string Bitalong => GetString(BitalongKey);
+
+		/// <summary>
+		/// Random
+		/// </summary>
+		public const string RandomKey = nameof(Random);
+
+		/// <summary>
+		/// Random
+		/// </summary>
+		public static string Random => GetString(RandomKey);
 	}
 }

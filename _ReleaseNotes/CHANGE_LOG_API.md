@@ -290,6 +290,7 @@ StockSharp API Change log
 * (feature) IExternalCandleSource removed.
 * (feature) ExecutionMessage. IsCancelled -> IsCancellation.
 * (feature) SampleHistoryTesting. OwnMessageAdapter added.
+* (feature) SampleRandomTesting removed.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
