@@ -309,7 +309,7 @@
 					lock (_syncObject)
 					{
 						if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
-							break;
+							return;
 
 						var mdMsg = info.InitNext();
 
