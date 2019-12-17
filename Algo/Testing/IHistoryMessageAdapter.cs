@@ -114,7 +114,14 @@ namespace StockSharp.Algo.Testing
 				lock (_subscriptions.SyncRoot)
 				{
 					if (_subscriptions.Remove(id) && _subscriptions.Count == 0)
-						lastMsg = new LastMessage { LocalTime = StopDate, IsError = isError };
+					{
+						lastMsg = new LastMessage
+						{
+							LocalTime = StopDate,
+							IsError = isError,
+							Adapter = this,
+						};
+					}
 				}
 			}
 
@@ -136,6 +143,8 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 			}
+
+			message.Adapter = this;
 
 			RaiseNewOutMessage(message);
 
