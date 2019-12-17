@@ -107,7 +107,8 @@ namespace SampleHistoryTesting
 				OrderLogProgress,
 				Level1Progress,
 				FinamCandlesProgress,
-				YahooCandlesProgress
+				YahooCandlesProgress,
+				OwnCandlesProgress,
 			});
 
 			_checkBoxes.AddRange(new[]
@@ -121,6 +122,7 @@ namespace SampleHistoryTesting
 				Level1CheckBox,
 				FinamCandlesCheckBox,
 				YahooCandlesCheckBox,
+				OwnCandlesCheckBox,
 			});
 		}
 
@@ -308,6 +310,22 @@ namespace SampleHistoryTesting
 					YahooCandlesChart,
 					YahooCandlesEquity,
 					YahooCandlesPosition),
+
+				Tuple.Create(
+					OwnCandlesCheckBox,
+					OwnCandlesProgress,
+					OwnCandlesParameterGrid,
+					// candles
+					new EmulationInfo
+					{
+						UseCandleTimeFrame = timeFrame,
+						CustomHistoryAdapter = g => new OwnMessageAdapter(g),
+						CurveColor = Colors.DarkBlue,
+						StrategyName = LocalizedStrings.Custom
+					},
+					OwnCandlesChart,
+					OwnCandlesEquity,
+					OwnCandlesPosition),
 			};
 
 			// storage to historical data

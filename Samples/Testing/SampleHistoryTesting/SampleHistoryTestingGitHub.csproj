@@ -125,6 +125,7 @@
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="OwnMessageAdapter.cs" />
     <Compile Include="SmaStrategy.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
