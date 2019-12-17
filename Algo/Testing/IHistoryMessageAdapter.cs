@@ -3,6 +3,8 @@ namespace StockSharp.Algo.Testing
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Collections;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -43,6 +45,7 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public class CustomHistoryMessageAdapter : MessageAdapterWrapper, IHistoryMessageAdapter
 	{
+		private readonly SynchronizedSet<long> _subscriptions = new SynchronizedSet<long>();
 		private readonly Queue<Message> _outMessages = new Queue<Message>();
 
 		/// <summary>
@@ -52,6 +55,7 @@ namespace StockSharp.Algo.Testing
 		public CustomHistoryMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
+			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState, null);
 		}
 
 		/// <inheritdoc />
@@ -62,6 +66,33 @@ namespace StockSharp.Algo.Testing
 
 		/// <inheritdoc />
 		public DateTimeOffset StopDate { get; set; }
+
+		/// <inheritdoc />
+		protected override void OnSendInMessage(Message message)
+		{
+			switch (message.Type)
+			{
+				case MessageTypes.Reset:
+					_subscriptions.Clear();
+					break;
+
+				case MessageTypes.MarketData:
+				{
+					var mdMsg = (MarketDataMessage)message;
+
+					if (mdMsg.IsSubscribe)
+						_subscriptions.Add(mdMsg.TransactionId);
+
+					break;
+				}
+
+				case ExtendedMessageTypes.EmulationState:
+					SendOutMessage(message);
+					return;
+			}
+
+			base.OnSendInMessage(message);
+		}
 
 		/// <inheritdoc />
 		public bool SendOutMessage()
@@ -76,7 +107,40 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		public void SendOutMessage(Message message)
 		{
+			LastMessage lastMsg = null;
+
+			void TryRemoveSubscription(long id, bool isError)
+			{
+				lock (_subscriptions.SyncRoot)
+				{
+					if (_subscriptions.Remove(id) && _subscriptions.Count == 0)
+						lastMsg = new LastMessage { LocalTime = StopDate, IsError = isError };
+				}
+			}
+
+			switch (message.Type)
+			{
+				case MessageTypes.MarketData:
+				{
+					var response = (MarketDataMessage)message;
+
+					if (!response.IsOk())
+						TryRemoveSubscription(response.OriginalTransactionId, true);
+
+					break;
+				}
+
+				case MessageTypes.MarketDataFinished:
+				{
+					TryRemoveSubscription(((MarketDataFinishedMessage)message).OriginalTransactionId, false);
+					break;
+				}
+			}
+
 			RaiseNewOutMessage(message);
+
+			if (lastMsg != null)
+				RaiseNewOutMessage(lastMsg);
 		}
 
 		/// <inheritdoc />
