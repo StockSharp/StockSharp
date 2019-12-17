@@ -53,7 +53,6 @@ namespace StockSharp.Messages
 			return new PortfolioChangeMessage
 			{
 				PortfolioName = pfName,
-				LocalTime = time,
 				ServerTime = time,
 			};
 		}
@@ -77,7 +76,6 @@ namespace StockSharp.Messages
 			{
 				PortfolioName = pfName,
 				SecurityId = securityId,
-				LocalTime = time,
 				ServerTime = time,
 				DepoName = depoName
 			};
