@@ -82,6 +82,13 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			if (message is ConnectMessage)
+				message.LocalTime = StartDate;
+			else if (message is IServerTimeMessage timeMsg)
+				message.LocalTime = timeMsg.ServerTime;
+			else
+				message.LocalTime = default;
+
 			_outMessages.Enqueue(message);
 		}
 
