@@ -530,6 +530,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="dataType">Data type.</param>
 		/// <param name="arg">The parameter associated with the <paramref name="dataType"/> type. For example, <see cref="CandleMessage.Arg"/>.</param>
 		/// <param name="getMessages">Historical data source.</param>
+		[Obsolete("Uses custom adapter implementation.")]
 		public void RegisterHistorySource(Security security, MarketDataTypes dataType, object arg, Func<DateTimeOffset, IEnumerable<Message>> getMessages)
 		{
 			SendInHistorySourceMessage(security, dataType, arg, getMessages);
@@ -541,6 +542,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="security">Instrument. If passed <see langword="null"/> the source will be removed for all subscriptions.</param>
 		/// <param name="dataType">Data type.</param>
 		/// <param name="arg">The parameter associated with the <paramref name="dataType"/> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		[Obsolete]
 		public void UnRegisterHistorySource(Security security, MarketDataTypes dataType, object arg)
 		{
 			SendInHistorySourceMessage(security, dataType, arg, null);

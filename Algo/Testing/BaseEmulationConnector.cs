@@ -36,11 +36,6 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public EmulationMessageAdapter EmulationAdapter { get; }
 
-		///// <summary>
-		///// Gets a value indicating whether the re-registration orders via the method <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction.
-		///// </summary>
-		//public override bool IsSupportAtomicReRegister => EmulationAdapter.Emulator.Settings.IsSupportAtomicReRegister;
-
 		private void SendInGeneratorMessage(MarketDataGenerator generator, bool isSubscribe)
 		{
 			if (generator == null)
@@ -48,6 +43,7 @@ namespace StockSharp.Algo.Testing
 
 			SendInMessage(new GeneratorMessage
 			{
+				TransactionId = TransactionIdGenerator.GetNextId(),
 				IsSubscribe = isSubscribe,
 				SecurityId = generator.SecurityId,
 				Generator = generator,
@@ -59,6 +55,7 @@ namespace StockSharp.Algo.Testing
 		/// To register the trades generator.
 		/// </summary>
 		/// <param name="generator">The trades generator.</param>
+		[Obsolete("Uses custom adapter implementation.")]
 		public void RegisterTrades(TradeGenerator generator)
 		{
 			SendInGeneratorMessage(generator, true);
@@ -68,6 +65,7 @@ namespace StockSharp.Algo.Testing
 		/// To delete the trades generator, registered earlier through <see cref="RegisterTrades"/>.
 		/// </summary>
 		/// <param name="generator">The trades generator.</param>
+		[Obsolete("Uses custom adapter implementation.")]
 		public void UnRegisterTrades(TradeGenerator generator)
 		{
 			SendInGeneratorMessage(generator, false);
@@ -77,6 +75,7 @@ namespace StockSharp.Algo.Testing
 		/// To register the order books generator.
 		/// </summary>
 		/// <param name="generator">The order books generator.</param>
+		[Obsolete("Uses custom adapter implementation.")]
 		public void RegisterMarketDepth(MarketDepthGenerator generator)
 		{
 			SendInGeneratorMessage(generator, true);
@@ -86,6 +85,7 @@ namespace StockSharp.Algo.Testing
 		/// To delete the order books generator, earlier registered through <see cref="RegisterMarketDepth"/>.
 		/// </summary>
 		/// <param name="generator">The order books generator.</param>
+		[Obsolete("Uses custom adapter implementation.")]
 		public void UnRegisterMarketDepth(MarketDepthGenerator generator)
 		{
 			SendInGeneratorMessage(generator, false);
@@ -95,6 +95,7 @@ namespace StockSharp.Algo.Testing
 		/// To register the orders log generator.
 		/// </summary>
 		/// <param name="generator">The orders log generator.</param>
+		[Obsolete("Uses custom adapter implementation.")]
 		public void RegisterOrderLog(OrderLogGenerator generator)
 		{
 			SendInGeneratorMessage(generator, true);
@@ -104,6 +105,7 @@ namespace StockSharp.Algo.Testing
 		/// To delete the orders log generator, earlier registered through <see cref="RegisterOrderLog"/>.
 		/// </summary>
 		/// <param name="generator">The orders log generator.</param>
+		[Obsolete("Uses custom adapter implementation.")]
 		public void UnRegisterOrderLog(OrderLogGenerator generator)
 		{
 			SendInGeneratorMessage(generator, false);
