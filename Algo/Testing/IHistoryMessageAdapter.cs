@@ -5,6 +5,7 @@ namespace StockSharp.Algo.Testing
 
 	using Ecng.Collections;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -45,17 +46,29 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public class CustomHistoryMessageAdapter : MessageAdapterWrapper, IHistoryMessageAdapter
 	{
+		private readonly ISecurityProvider _securityProvider;
 		private readonly SynchronizedSet<long> _subscriptions = new SynchronizedSet<long>();
 		private readonly Queue<Message> _outMessages = new Queue<Message>();
 
 		/// <summary>
-		/// Initialize <see cref="CustomHistoryMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="CustomHistoryMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
 		public CustomHistoryMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
 			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState, null);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CustomHistoryMessageAdapter"/>.
+		/// </summary>
+		/// <param name="innerAdapter">Underlying adapter.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		public CustomHistoryMessageAdapter(IMessageAdapter innerAdapter, ISecurityProvider securityProvider)
+			: this(innerAdapter)
+		{
+			_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 		}
 
 		/// <inheritdoc />
@@ -73,8 +86,33 @@ namespace StockSharp.Algo.Testing
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
+				{
 					_subscriptions.Clear();
 					break;
+				}
+
+				case MessageTypes.SecurityLookup:
+				{
+					if (_securityProvider != null)
+					{
+						var lookupMsg = (SecurityLookupMessage)message;
+
+						var securities = lookupMsg.SecurityId == default
+							? _securityProvider.LookupAll() 
+							: _securityProvider.Lookup(lookupMsg);
+
+						foreach (var security in securities)
+						{
+							SendOutMessage(security.Board.ToMessage());
+							SendOutMessage(security.ToMessage(originalTransactionId: lookupMsg.TransactionId));
+						}
+
+						SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
+						return;
+					}
+
+					break;
+				}
 
 				case MessageTypes.MarketData:
 				{

@@ -22,8 +22,6 @@ namespace StockSharp.Algo.Testing
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -306,21 +304,11 @@ namespace StockSharp.Algo.Testing
 							? SecurityProvider.LookupAll() 
 							: SecurityProvider.Lookup(lookupMsg);
 
-					securities.ForEach(security =>
+					foreach (var security in securities)
 					{
 						SendOutMessage(security.Board.ToMessage());
-
-						var secMsg = security.ToMessage();
-						secMsg.OriginalTransactionId = lookupMsg.TransactionId;
-						SendOutMessage(secMsg);
-
-						//SendOutMessage(new Level1ChangeMessage { SecurityId = security.ToSecurityId() }
-						//	.Add(Level1Fields.StepPrice, security.StepPrice)
-						//	.Add(Level1Fields.MinPrice, security.MinPrice)
-						//	.Add(Level1Fields.MaxPrice, security.MaxPrice)
-						//	.Add(Level1Fields.MarginBuy, security.MarginBuy)
-						//	.Add(Level1Fields.MarginSell, security.MarginSell));
-					});
+						SendOutMessage(security.ToMessage(originalTransactionId: lookupMsg.TransactionId));
+					}
 
 					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
 

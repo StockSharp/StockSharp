@@ -392,10 +392,11 @@ namespace SampleHistoryTesting
 				// test portfolio
 				var portfolio = Portfolio.CreateSimulator();
 
+				var secProvider = (ISecurityProvider)new CollectionSecurityProvider(new[] { security });
+
 				// create backtesting connector
 				var connector = new HistoryEmulationConnector(
-					new[] { security },
-					new[] { portfolio })
+					secProvider, new[] { portfolio })
 				{
 					EmulationAdapter =
 					{
@@ -482,7 +483,7 @@ namespace SampleHistoryTesting
 				if (emulationInfo.CustomHistoryAdapter != null)
 				{
 					connector.Adapter.InnerAdapters.Remove(connector.MarketDataAdapter);
-					connector.Adapter.InnerAdapters.Add(new CustomHistoryMessageAdapter(emulationInfo.CustomHistoryAdapter(connector.TransactionIdGenerator)));
+					connector.Adapter.InnerAdapters.Add(new CustomHistoryMessageAdapter(emulationInfo.CustomHistoryAdapter(connector.TransactionIdGenerator), secProvider));
 				}
 
 				// set history range
