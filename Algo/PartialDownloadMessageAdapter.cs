@@ -227,12 +227,16 @@
 									subscriptionMsg.From = null;
 									subscriptionMsg.To = null;
 
-									_liveRequests.Add(subscriptionMsg.TransactionId, false);
+									lock (_syncObject)
+										_liveRequests.Add(subscriptionMsg.TransactionId, false);
 								}
 							}
 						}
 						else
-							_liveRequests.Add(subscriptionMsg.TransactionId, false);
+						{
+							lock (_syncObject)
+								_liveRequests.Add(subscriptionMsg.TransactionId, false);
+						}
 					}
 
 					break;
@@ -266,7 +270,9 @@
 									mdMsg.From = null;
 									mdMsg.To = null;
 
-									_liveRequests.Add(mdMsg.TransactionId, false);
+									lock (_syncObject)
+										_liveRequests.Add(mdMsg.TransactionId, false);
+
 									break;
 								}
 							}
@@ -282,7 +288,10 @@
 							}
 						}
 						else
-							_liveRequests.Add(mdMsg.TransactionId, false);
+						{
+							lock (_syncObject)
+								_liveRequests.Add(mdMsg.TransactionId, false);
+						}
 					}
 					else
 					{
