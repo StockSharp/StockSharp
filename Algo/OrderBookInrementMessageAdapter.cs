@@ -98,12 +98,12 @@
 		{
 			lock (_syncObject)
 			{
-				var info = _byId.TryGetAndRemove(id);
+				var changeId = true;
 
-				var changeId = info != null;
-
-				if (info == null)
+				if (!_byId.TryGetAndRemove(id, out var info))
 				{
+					changeId = false;
+
 					info = _online.FirstOrDefault(p => p.Value.SubscriptionIds.Contains(id)).Value;
 
 					if (info == null)

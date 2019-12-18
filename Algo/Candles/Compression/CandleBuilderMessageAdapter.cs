@@ -273,9 +273,7 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			lock (_syncObject)
 			{
-				var series = _series.TryGetAndRemove(id);
-
-				if (series == null)
+				if (!_series.TryGetAndRemove(id, out var series))
 					return null;
 
 				_replaceId.RemoveWhere(p => p.Value == id);

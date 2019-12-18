@@ -94,9 +94,7 @@
 			}
 			else
 			{
-				var tuple = _subscriptionIds.TryGetAndRemove(message.OriginalTransactionId);
-
-				if (tuple != null)
+				if (_subscriptionIds.TryGetAndRemove(message.OriginalTransactionId, out var tuple))
 					this.AddInfoLog("OL->{0} unsubscribed {1}/{2}.", tuple.Second ? "MD" : "TICK", tuple.First, message.OriginalTransactionId);
 			}
 

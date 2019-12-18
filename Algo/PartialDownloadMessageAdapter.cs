@@ -357,10 +357,8 @@
 
 					lock (_syncObject)
 					{
-						if (_liveRequests.TryGetValue(originId, out var isPartial))
+						if (_liveRequests.TryGetAndRemove(originId, out var isPartial))
 						{
-							_liveRequests.Remove(originId);
-
 							if (isPartial)
 							{
 								if (((IErrorMessage)responseMsg).Error == null)
@@ -393,10 +391,8 @@
 
 					lock (_syncObject)
 					{
-						if (_liveRequests.TryGetValue(originId, out var isPartial))
+						if (_liveRequests.TryGetAndRemove(originId, out var isPartial))
 						{
-							_liveRequests.Remove(originId);
-
 							if (responseMsg.IsOk())
 							{
 								if (isPartial)
@@ -462,7 +458,7 @@
 
 					lock (_syncObject)
 					{
-						if (_partialRequests.TryGetValue(finishMsg.OriginalTransactionId, out var info))
+						if (_partialRequests.TryGetAndRemove(finishMsg.OriginalTransactionId, out var info))
 						{
 							var origin = info.Origin;
 
@@ -472,17 +468,16 @@
 								_partialRequests.RemoveWhere(p => p.Value == info);
 
 								finishMsg.OriginalTransactionId = origin.TransactionId;
-								break;
 							}
-							
-							_partialRequests.Remove(finishMsg.OriginalTransactionId);
-
-							message = new PartialDownloadMessage
+							else
 							{
-								Adapter = this,
-								IsBack = true,
-								OriginalTransactionId = origin.TransactionId,
-							};
+								message = new PartialDownloadMessage
+								{
+									Adapter = this,
+									IsBack = true,
+									OriginalTransactionId = origin.TransactionId,
+								};
+							}
 						}
 					}
 

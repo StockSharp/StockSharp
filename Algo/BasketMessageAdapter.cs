@@ -1793,9 +1793,8 @@ namespace StockSharp.Algo
 		{
 			var originalTransactionId = message.OriginalTransactionId;
 			var isOk = message.IsOk();
-			var tuple = _requestsById.TryGetAndRemove(originalTransactionId);
 
-			if (tuple == null)
+			if (!_requestsById.TryGetAndRemove(originalTransactionId, out var tuple))
 			{
 				if (_subscriptionListRequests.Contains(originalTransactionId))
 					_requestsById.TryAdd(message.TransactionId, Tuple.Create((ISubscriptionMessage)null, GetUnderlyingAdapter(adapter)));

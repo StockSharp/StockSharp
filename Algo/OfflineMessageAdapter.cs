@@ -58,9 +58,7 @@
 		{
 			void ProcessOrderReplaceMessage(OrderReplaceMessage replaceMsg)
 			{
-				var originOrderMsg = _pendingRegistration.TryGetAndRemove(replaceMsg.OriginalTransactionId);
-
-				if (originOrderMsg == null)
+				if (!_pendingRegistration.TryGetAndRemove(replaceMsg.OriginalTransactionId, out var originOrderMsg))
 					_pendingMessages.Add(replaceMsg);
 				else
 				{
@@ -146,9 +144,7 @@
 						{
 							var cancelMsg = (OrderCancelMessage)message.Clone();
 
-							var originOrderMsg = _pendingRegistration.TryGetAndRemove(cancelMsg.OriginalTransactionId);
-
-							if (originOrderMsg == null)
+							if (!_pendingRegistration.TryGetAndRemove(cancelMsg.OriginalTransactionId, out var originOrderMsg))
 								_pendingMessages.Add(cancelMsg);
 							else
 							{
