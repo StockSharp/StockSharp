@@ -246,7 +246,7 @@ namespace StockSharp.Algo
 		private readonly Queue<Message> _pendingMessages = new Queue<Message>();
 		private readonly HashSet<IMessageAdapter> _connectedAdapters = new HashSet<IMessageAdapter>();
 		
-		private readonly Dictionary<IMessageAdapter, ConnectionStates> _adapterStates = new Dictionary<IMessageAdapter, ConnectionStates>();
+		private readonly Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>> _adapterStates = new Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>>();
 		private ConnectionStates _currState = ConnectionStates.Disconnected;
 
 		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
@@ -759,6 +759,14 @@ namespace StockSharp.Algo
 			OnSendInMessage(message);
 		}
 
+		private static Tuple<ConnectionStates, Exception> CreateState(ConnectionStates state, Exception error = null)
+		{
+			if (state == ConnectionStates.Failed && error == null)
+				throw new ArgumentNullException(nameof(error));
+
+			return Tuple.Create(state, error);
+		}
+
 		/// <summary>
 		/// Send message.
 		/// </summary>
@@ -806,7 +814,7 @@ namespace StockSharp.Algo
 						lock (_connectedResponseLock)
 						{
 							_pendingConnectAdapters.Add(adapter);
-							_adapterStates.Add(adapter, ConnectionStates.Connecting);
+							_adapterStates.Add(adapter, CreateState(ConnectionStates.Connecting));
 						}
 
 						if (IsHeartbeatOn(adapter))
@@ -855,10 +863,10 @@ namespace StockSharp.Algo
 						{
 							var u = GetUnderlyingAdapter(a);
 
-							var prevState = _adapterStates.TryGetValue2(u);
+							var prevState = _adapterStates.TryGetValue(u);
 
-							if (prevState != ConnectionStates.Failed)
-								_adapterStates[u] = ConnectionStates.Disconnecting;
+							if (prevState != null && prevState.Item1 != ConnectionStates.Failed)
+								_adapterStates[u] = CreateState(ConnectionStates.Disconnecting);
 
 							return u;
 						});
@@ -1601,10 +1609,10 @@ namespace StockSharp.Algo
 			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
 			var wrapper = _activeAdapters[underlyingAdapter];
 
-			var isError = message.Error != null;
+			var error = message.Error;
 
-			if (isError)
-				this.AddErrorLog(LocalizedStrings.Str625Params, underlyingAdapter, message.Error);
+			if (error != null)
+				this.AddErrorLog(LocalizedStrings.Str625Params, underlyingAdapter, error);
 			else
 				this.AddInfoLog("Connected to '{0}'.", underlyingAdapter);
 
@@ -1614,7 +1622,7 @@ namespace StockSharp.Algo
 			{
 				_pendingConnectAdapters.Remove(underlyingAdapter);
 
-				if (isError)
+				if (error != null)
 				{
 					_connectedAdapters.Remove(wrapper);
 
@@ -1643,7 +1651,7 @@ namespace StockSharp.Algo
 					_pendingMessages.Clear();
 				}
 
-				UpdateAdapterState(underlyingAdapter, message, extra);
+				UpdateAdapterState(underlyingAdapter, true, error, extra);
 			}
 
 			if (notSupportedMsgs != null)
@@ -1657,80 +1665,17 @@ namespace StockSharp.Algo
 			message.Adapter = underlyingAdapter;
 		}
 
-		//private bool HasSubscription(DataType dataType) => _subscription.SyncGet(c => c.Any(p => p.Value.Item3 == dataType));
-
-		private void UpdateAdapterState(IMessageAdapter adapter, BaseConnectionMessage message, List<Message> extra)
-		{
-			var isConnect = message is ConnectMessage;
-			var error = message.Error;
-
-			if (isConnect)
-			{
-				void CreateConnectedMsg(ConnectionStates newState, Exception e = null)
-				{
-					extra.Add(new ConnectMessage { Error = e });
-					_currState = newState;
-				}
-
-				if (error == null)
-				{
-					_adapterStates[adapter] = ConnectionStates.Connected;
-
-					if (_currState == ConnectionStates.Connecting)
-					{
-						if (ConnectDisconnectEventOnFirstAdapter)
-						{
-							// raise Connected event only one time for the first adapter
-							CreateConnectedMsg(ConnectionStates.Connected);
-						}
-						else
-						{
-							var noPending = _adapterStates.All(v => v.Value != ConnectionStates.Connecting);
-
-							if (noPending)
-								CreateConnectedMsg(ConnectionStates.Connected);
-						}
-					}
-				}
-				else
-				{
-					_adapterStates[adapter] = ConnectionStates.Failed;
-
-					if (_currState == ConnectionStates.Connecting)
-					{
-						var allFailed = _adapterStates.All(v => v.Value == ConnectionStates.Failed);
-
-						if (allFailed)
-							CreateConnectedMsg(ConnectionStates.Failed, new InvalidOperationException(LocalizedStrings.Str2744));
-					}
-				}
-			}
-			else
-			{
-				if (error == null)
-					_adapterStates[adapter] = ConnectionStates.Disconnected;
-				else
-					_adapterStates[adapter] = ConnectionStates.Failed;
-
-				var noPending = _adapterStates.All(v => v.Value == ConnectionStates.Disconnected || v.Value == ConnectionStates.Failed);
-
-				if (noPending)
-				{
-					extra.Add(new DisconnectMessage());
-					_currState = ConnectionStates.Disconnected;
-				}
-			}
-		}
-
 		private void ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message, List<Message> extra)
 		{
 			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
 			var wrapper = _activeAdapters[underlyingAdapter];
 
-			if (message.Error == null)
+			var error = message.Error;
+
+			if (error == null)
 				this.AddInfoLog("Disconnected from '{0}'.", underlyingAdapter);
 			else
-				this.AddErrorLog(LocalizedStrings.Str627Params, underlyingAdapter, message.Error);
+				this.AddErrorLog(LocalizedStrings.Str627Params, underlyingAdapter, error);
 
 			lock (_connectedResponseLock)
 			{
@@ -1749,10 +1694,72 @@ namespace StockSharp.Algo
 
 				_connectedAdapters.Remove(wrapper);
 
-				UpdateAdapterState(underlyingAdapter, message, extra);
+				UpdateAdapterState(underlyingAdapter, false, error, extra);
 			}
 
 			message.Adapter = underlyingAdapter;
+		}
+
+		//private bool HasSubscription(DataType dataType) => _subscription.SyncGet(c => c.Any(p => p.Value.Item3 == dataType));
+
+		private void UpdateAdapterState(IMessageAdapter adapter, bool isConnect, Exception error, List<Message> extra)
+		{
+			if (isConnect)
+			{
+				void CreateConnectedMsg(ConnectionStates newState, Exception e = null)
+				{
+					extra.Add(new ConnectMessage { Error = e });
+					_currState = newState;
+				}
+
+				if (error == null)
+				{
+					_adapterStates[adapter] = CreateState(ConnectionStates.Connected);
+
+					if (_currState == ConnectionStates.Connecting)
+					{
+						if (ConnectDisconnectEventOnFirstAdapter)
+						{
+							// raise Connected event only one time for the first adapter
+							CreateConnectedMsg(ConnectionStates.Connected);
+						}
+						else
+						{
+							var noPending = _adapterStates.All(v => v.Value.Item1 != ConnectionStates.Connecting);
+
+							if (noPending)
+								CreateConnectedMsg(ConnectionStates.Connected);
+						}
+					}
+				}
+				else
+				{
+					_adapterStates[adapter] = CreateState(ConnectionStates.Failed, error);
+
+					if (_currState == ConnectionStates.Connecting)
+					{
+						var allFailed = _adapterStates.All(v => v.Value.Item1 == ConnectionStates.Failed);
+
+						if (allFailed)
+							CreateConnectedMsg(ConnectionStates.Failed, new AggregateException(_adapterStates.Select(v => v.Value.Item2).Where(e => e != null).ToArray()));
+					}
+				}
+			}
+			else
+			{
+				if (error == null)
+					_adapterStates[adapter] = CreateState(ConnectionStates.Disconnected);
+				else
+					_adapterStates[adapter] = CreateState(ConnectionStates.Failed, error);
+
+				var noPending = _adapterStates.All(v => v.Value.Item1 == ConnectionStates.Disconnected || v.Value.Item1 == ConnectionStates.Failed);
+
+				if (noPending)
+				{
+					extra.Add(new DisconnectMessage());
+					_currState = ConnectionStates.Disconnected;
+				}
+			}
 		}
 
 		private SubscriptionOnlineMessage ProcessSubscriptionOnline(SubscriptionOnlineMessage message)
