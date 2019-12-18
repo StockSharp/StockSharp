@@ -70,6 +70,7 @@
 			public bool LastIteration => Origin.To != null && _nextFrom >= Origin.To.Value;
 
 			public bool ReplyReceived { get; set; }
+			public long? UnsubscribingId { get; set; }
 
 			private readonly PartialDownloadMessageAdapter _adapter;
 			private readonly TimeSpan _iterationInterval;
@@ -159,7 +160,6 @@
 		private readonly SyncObject _syncObject = new SyncObject();
 		private readonly Dictionary<long, DownloadInfo> _original = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, DownloadInfo> _partialRequests = new Dictionary<long, DownloadInfo>();
-		private readonly Dictionary<long, Tuple<long, DownloadInfo>> _unsubscribeRequests = new Dictionary<long, Tuple<long, DownloadInfo>>();
 		private readonly Dictionary<long, bool> _liveRequests = new Dictionary<long, bool>();
 
 		/// <summary>
@@ -174,6 +174,8 @@
 		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
+			Message outMsg = null;
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -183,7 +185,6 @@
 					{
 						_partialRequests.Clear();
 						_original.Clear();
-						_unsubscribeRequests.Clear();
 						_liveRequests.Clear();
 					}
 
@@ -216,10 +217,10 @@
 
 									if (message.Type == MessageTypes.PortfolioLookup)
 									{
-										RaiseNewOutMessage(message.Type.ToResultType().CreateLookupResult(subscriptionMsg.TransactionId));
+										outMsg = message.Type.ToResultType().CreateLookupResult(subscriptionMsg.TransactionId);
 									}
 
-									return;
+									message = null;
 								}
 								else
 								{
@@ -245,6 +246,7 @@
 				case MessageTypes.MarketData:
 				{
 					var mdMsg = (MarketDataMessage)message;
+					var transId = mdMsg.TransactionId;
 
 					if (mdMsg.IsSubscribe)
 					{
@@ -261,8 +263,9 @@
 								if (to != null)
 								{
 									// finishing current history request
-									RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = mdMsg.TransactionId });
-									return;
+									outMsg = new MarketDataFinishedMessage { OriginalTransactionId = transId };
+									message = null;
+									break;
 								}
 								else
 								{
@@ -271,7 +274,7 @@
 									mdMsg.To = null;
 
 									lock (_syncObject)
-										_liveRequests.Add(mdMsg.TransactionId, false);
+										_liveRequests.Add(transId, false);
 
 									break;
 								}
@@ -290,7 +293,7 @@
 						else
 						{
 							lock (_syncObject)
-								_liveRequests.Add(mdMsg.TransactionId, false);
+								_liveRequests.Add(transId, false);
 						}
 					}
 					else
@@ -300,11 +303,8 @@
 							if (!_original.TryGetValue(mdMsg.OriginalTransactionId, out var info))
 								break;
 
-							var transId = TransactionIdGenerator.GetNextId();
-							_unsubscribeRequests.Add(transId, Tuple.Create(mdMsg.TransactionId, info));
-
-							mdMsg.OriginalTransactionId = info.CurrTransId;
-							mdMsg.TransactionId = transId;
+							info.UnsubscribingId = transId;
+							message = null;
 						}
 					}
 
@@ -319,6 +319,13 @@
 					{
 						if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
 							return;
+
+						if (info.UnsubscribingId != null)
+						{
+							outMsg = new MarketDataMessage { OriginalTransactionId = info.UnsubscribingId.Value };
+							message = null;
+							break;
+						}
 
 						var mdMsg = info.InitNext();
 
@@ -339,7 +346,11 @@
 				}
 			}
 			
-			base.OnSendInMessage(message);
+			if (message != null)
+				base.OnSendInMessage(message);
+
+			if (outMsg != null)
+				RaiseNewOutMessage(outMsg);
 		}
 
 		/// <inheritdoc />
@@ -416,34 +427,20 @@
 							break;
 						}
 
-						long requestId;
-
 						if (!_partialRequests.TryGetValue(originId, out var info))
-						{
-							if (!_unsubscribeRequests.TryGetValue(originId, out var tuple))
-								break;
-							
-							requestId = tuple.Item1;
-							info = tuple.Item2;
+							break;
+						
+						if (info.ReplyReceived)
+							return;
 
-							_original.Remove(info.Origin.TransactionId);
+						info.ReplyReceived = true;
+
+						var requestId = info.Origin.TransactionId;
+
+						if (!responseMsg.IsOk())
+						{
+							_original.Remove(requestId);
 							_partialRequests.RemoveWhere(p => p.Value == info);
-							_unsubscribeRequests.Remove(originId);
-						}
-						else
-						{
-							if (info.ReplyReceived)
-								return;
-
-							info.ReplyReceived = true;
-
-							requestId = info.Origin.TransactionId;
-
-							if (!responseMsg.IsOk())
-							{
-								_original.Remove(requestId);
-								_partialRequests.RemoveWhere(p => p.Value == info);
-							}
 						}
 						
 						responseMsg.OriginalTransactionId = requestId;
