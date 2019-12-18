@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		private readonly SyncObject _syncObject = new SyncObject();
-		private readonly Dictionary<long, SeriesInfo> _seriesByTransactionId = new Dictionary<long, SeriesInfo>();
+		private readonly Dictionary<long, SeriesInfo> _series = new Dictionary<long, SeriesInfo>();
 		private readonly Dictionary<long, long> _replaceId = new Dictionary<long, long>();
 		private readonly CandleBuilderProvider _candleBuilderProvider;
 
@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					lock (_syncObject)
 					{
-						_seriesByTransactionId.Clear();
+						_series.Clear();
 						_replaceId.Clear();
 					}
 
@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 								lock (_syncObject)
 								{
-									_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, original)
+									_series.Add(transactionId, new SeriesInfo(original, original)
 									{
 										State = SeriesStates.Regular,
 										LastTime = original.From,
@@ -177,7 +177,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 									lock (_syncObject)
 									{
-										_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, current)
+										_series.Add(transactionId, new SeriesInfo(original, current)
 										{
 											State = SeriesStates.SmallTimeFrame,
 											BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(MarketDataTypes.CandleTimeFrame)),
@@ -209,7 +209,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 								lock (_syncObject)
 								{
-									_seriesByTransactionId.Add(transactionId, new SeriesInfo(original, original)
+									_series.Add(transactionId, new SeriesInfo(original, original)
 									{
 										State = SeriesStates.Regular,
 										LastTime = original.From,
@@ -265,7 +265,7 @@ namespace StockSharp.Algo.Candles.Compression
 				else
 					originalId = id;
 
-				return _seriesByTransactionId.TryGetValue(id);
+				return _series.TryGetValue(id);
 			}
 		}
 
@@ -273,7 +273,7 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			lock (_syncObject)
 			{
-				var series = _seriesByTransactionId.TryGetAndRemove(id);
+				var series = _series.TryGetAndRemove(id);
 
 				if (series == null)
 					return null;
@@ -328,7 +328,7 @@ namespace StockSharp.Algo.Candles.Compression
 			};
 
 			lock (_syncObject)
-				_seriesByTransactionId.Add(original.TransactionId, series);
+				_series.Add(original.TransactionId, series);
 
 			base.OnSendInMessage(current);
 			return true;
@@ -492,7 +492,7 @@ namespace StockSharp.Algo.Candles.Compression
 					bool HasSubscription(long id)
 					{
 						lock (_syncObject)
-							return _seriesByTransactionId.ContainsKey(id) || _replaceId.ContainsKey(id);
+							return _series.ContainsKey(id) || _replaceId.ContainsKey(id);
 					}
 
 					var isCandleOnlySubscription =
