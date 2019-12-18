@@ -402,7 +402,7 @@ namespace StockSharp.Algo
 						switch (_currState)
 						{
 							case ConnectionStates.Connecting:
-								if (!SuppressReconnectingErrors)
+								if (!SuppressReconnectingErrors || _connectingAttemptCount == 0)
 									RaiseNewOutMessage(new ConnectMessage { Error = new TimeoutException(LocalizedStrings.Str170) });
 								break;
 							case ConnectionStates.Disconnecting:
