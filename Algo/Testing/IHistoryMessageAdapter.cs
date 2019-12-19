@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <inheritdoc />
-		public bool SendOutMessage()
+		bool IHistoryMessageAdapter.SendOutMessage()
 		{
 			if (_outMessages.Count == 0)
 				return false;

@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			{
 				Adapter = new BasketEmulationAdapter(this);
 				Adapter.InnerAdapters.Add(EmulationAdapter);
-				Adapter.InnerAdapters.Add(HistoryMessageAdapter);
+				Adapter.InnerAdapters.Add(HistoryMessageAdapterEx);
 
 				Adapter.LatencyManager = null;
 				Adapter.CommissionManager = null;
@@ -392,8 +392,8 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			InitAdapters();
 
-			EmulationConnector.HistoryMessageAdapter.StartDate = EmulationSettings.StartTime;
-			EmulationConnector.HistoryMessageAdapter.StopDate = EmulationSettings.StopTime;
+			EmulationConnector.HistoryMessageAdapterEx.StartDate = EmulationSettings.StartTime;
+			EmulationConnector.HistoryMessageAdapterEx.StopDate = EmulationSettings.StopTime;
 
 			EmulationConnector.LookupSecuritiesResult += OnEmulationConnectorOnLookupSecuritiesResult;
 

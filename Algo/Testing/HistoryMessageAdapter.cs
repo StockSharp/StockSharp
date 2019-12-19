@@ -572,7 +572,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <inheritdoc />
-		public bool SendOutMessage()
+		bool IHistoryMessageAdapter.SendOutMessage()
 		{
 			if (!_isStarted || _isSuspended)
 				return false;
@@ -587,8 +587,10 @@ namespace StockSharp.Algo.Testing
 			return true;
 		}
 
+		void IHistoryMessageAdapter.SendOutMessage(Message message) => SendOutMessage(message);
+
 		/// <inheritdoc cref="MessageAdapter" />
-		public override void SendOutMessage(Message message)
+		protected override void SendOutMessage(Message message)
 		{
 			LoadedMessageCount++;
 			
