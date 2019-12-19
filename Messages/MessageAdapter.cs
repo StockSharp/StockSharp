@@ -316,7 +316,7 @@ namespace StockSharp.Messages
 		/// Send outgoing message and raise <see cref="NewOutMessage"/> event.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		public virtual void SendOutMessage(Message message)
+		protected virtual void SendOutMessage(Message message)
 		{
 			//// do not process empty change msgs
 			//if (!message.IsBack)
