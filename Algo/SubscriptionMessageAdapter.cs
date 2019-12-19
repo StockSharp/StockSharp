@@ -25,6 +25,8 @@ namespace StockSharp.Algo
 				Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
 			}
 
+			public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
+
 			public readonly CachedSynchronizedSet<long> Subscribers = new CachedSynchronizedSet<long>();
 
 			public override string ToString() => Subscription.ToString();
@@ -114,11 +116,20 @@ namespace StockSharp.Algo
 			base.OnSendInMessage(message);
 		}
 
+		private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
+		{
+			this.AddInfoLog("Subscription {0} {1}->{2}.", info.Subscription.TransactionId, info.State, state);
+			info.State = state;
+		}
+
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			long TryReplaceOriginId(long id)
 			{
+				if (id == 0)
+					return 0;
+
 				lock (_sync)
 					return _replaceId.TryGetValue(id, out var prevId) ? prevId : id;
 			}
@@ -136,16 +147,23 @@ namespace StockSharp.Algo
 				case MessageTypes.MarketData:
 				{
 					var responseMsg = (MarketDataMessage)message;
-
 					var originId = responseMsg.OriginalTransactionId;
 
 					lock (_sync)
 					{
 						if (responseMsg.IsOk())
 						{
-							// no need send response after re-subscribe cause response was handled prev time
-							if (_replaceId.ContainsKey(newOriginId))
-								return;
+							if (_subscriptionsById.TryGetValue(originId, out var info))
+							{
+								// no need send response after re-subscribe cause response was handled prev time
+								if (_replaceId.ContainsKey(newOriginId))
+								{
+									if (info.State != SubscriptionStates.Stopped)
+										return;
+								}
+								else
+									ChangeState(info, SubscriptionStates.Active);
+							}
 						}
 						else
 						{
@@ -164,6 +182,29 @@ namespace StockSharp.Algo
 					break;
 				}
 
+				case MessageTypes.SubscriptionOnline:
+				{
+					var onlineMsg = (SubscriptionOnlineMessage)message;
+
+					lock (_sync)
+					{
+						if (!_subscriptionsById.TryGetValue(onlineMsg.OriginalTransactionId, out var info))
+							break;
+
+						if (_replaceId.ContainsKey(newOriginId))
+						{
+							// no need send response after re-subscribe cause response was handled prev time
+
+							if (info.State == SubscriptionStates.Online)
+								return;
+						}
+						else
+							ChangeState(info, SubscriptionStates.Online);
+					}
+
+					break;
+				}
+
 				case MessageTypes.MarketDataFinished:
 				case MessageTypes.SecurityLookupResult:
 				case MessageTypes.PortfolioLookupResult:
@@ -173,7 +214,9 @@ namespace StockSharp.Algo
 
 					lock (_sync)
 					{
-						_replaceId.Remove(newOriginId);
+						if (_replaceId.ContainsKey(newOriginId))
+							return;
+
 						_historicalRequests.Remove(resultMsg.OriginalTransactionId);
 					}
 					
@@ -229,6 +272,8 @@ namespace StockSharp.Algo
 							subscription.TransactionId = TransactionIdGenerator.GetNextId();
 
 							_replaceId.Add(subscription.TransactionId, i.Subscription.TransactionId);
+
+							this.AddInfoLog("Re-map subscription: {0}->{1} for '{2}'.", i.Subscription.TransactionId, subscription.TransactionId, i.Subscription);
 
 							return ((Message)subscription).LoopBack(this);
 						}).ToArray();
