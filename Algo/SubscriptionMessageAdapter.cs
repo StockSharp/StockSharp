@@ -230,10 +230,7 @@ namespace StockSharp.Algo
 
 							_replaceId.Add(subscription.TransactionId, i.Subscription.TransactionId);
 
-							var msg = (Message)subscription;
-							msg.Adapter = this;
-							msg.IsBack = true;
-							return msg;
+							return ((Message)subscription).LoopBack(this);
 						}).ToArray();
 					}
 

@@ -468,12 +468,7 @@
 							}
 							else
 							{
-								message = new PartialDownloadMessage
-								{
-									Adapter = this,
-									IsBack = true,
-									OriginalTransactionId = origin.TransactionId,
-								};
+								message = new PartialDownloadMessage { OriginalTransactionId = origin.TransactionId }.LoopBack(this);
 							}
 						}
 					}

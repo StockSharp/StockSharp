@@ -2062,5 +2062,45 @@ namespace StockSharp.Messages
 
 			return message.OrderId != null || !message.OrderStringId.IsEmpty();
 		}
+
+		/// <summary>
+		/// Made the  specified message as <see cref="Message.IsBack"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Message type.</typeparam>
+		/// <param name="message">Message.</param>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Message.</returns>
+		public static TMessage LoopBack<TMessage>(this TMessage message, IMessageAdapter adapter)
+			where TMessage : Message
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			message.IsBack = true;
+			message.Adapter = adapter;
+
+			return message;
+		}
+
+		/// <summary>
+		/// Undo operation made via <see cref="LoopBack{TMessage}"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Message type.</typeparam>
+		/// <param name="message">Message.</param>
+		/// <returns>Message.</returns>
+		public static TMessage UndoBack<TMessage>(this TMessage message)
+			where TMessage : Message
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			message.IsBack = false;
+			message.Adapter = null;
+
+			return message;
+		}
 	}
 }

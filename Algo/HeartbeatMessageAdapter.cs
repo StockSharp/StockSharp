@@ -25,15 +25,15 @@ namespace StockSharp.Algo
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
-	class RestoredConnectMessage : ConnectMessage
-	{
-	}
-
 	/// <summary>
 	/// The messages adapter controlling the connection.
 	/// </summary>
 	public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	{
+		private class RestoredConnectMessage : ConnectMessage
+		{
+		}
+
 		private class ReconnectMessage : Message
 		{
 			public ReconnectMessage()
@@ -192,15 +192,7 @@ namespace StockSharp.Algo
 								RaiseNewOutMessage(disconnectMsg.Error.ToErrorMessage());
 								disconnectMsg.Error = null;
 							}
-
-							//if (_currState == ConnectionStates.Connected)
-							//	_prevState = _reConnecting;
-
-							//_currState = _reConnecting;
 						}
-
-						//_connectionTimeOut = _reConnectionSettings.Interval;
-						//_connectingAttemptCount = _reConnectionSettings.ReAttemptCount;
 					}
 
 					base.OnInnerAdapterNewOutMessage(message);
@@ -462,12 +454,7 @@ namespace StockSharp.Algo
 
 						_connectionTimeOut = _reConnectionSettings.Interval;
 
-						//_prevState = _currState;
-						RaiseNewOutMessage(new ReconnectMessage
-						{
-							IsBack = true,
-							Adapter = this
-						});
+						RaiseNewOutMessage(new ReconnectMessage().LoopBack(this));
 					}
 					else
 					{
@@ -508,12 +495,10 @@ namespace StockSharp.Algo
 				_canSendTime = false;
 			}
 
-			_timeMessage.IsBack = true;
-			_timeMessage.Adapter = this;
+			_timeMessage.LoopBack(this);
 			_timeMessage.TransactionId = TransactionIdGenerator.GetNextId();
 
 			RaiseNewOutMessage(_timeMessage);
-			//InnerAdapter.SendInMessage(_timeMessage);
 		}
 
 		/// <summary>

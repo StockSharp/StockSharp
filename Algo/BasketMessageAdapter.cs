@@ -785,8 +785,7 @@ namespace StockSharp.Algo
 
 				if (adapter == this)
 				{
-					message.Adapter = null;
-					message.IsBack = false;
+					message.UndoBack();
 				}
 				else
 				{
@@ -1641,12 +1640,7 @@ namespace StockSharp.Algo
 
 					_connectedAdapters.Add(wrapper);
 
-					extra.AddRange(_pendingMessages.Select(m =>
-					{
-						m.IsBack = true;
-						m.Adapter = this;
-						return m;
-					}));
+					extra.AddRange(_pendingMessages.Select(m => m.LoopBack(this)));
 
 					_pendingMessages.Clear();
 				}
@@ -1842,8 +1836,7 @@ namespace StockSharp.Algo
 						var set = _nonSupportedAdapters.SafeAdd(originalTransactionId, k => new HashSet<IMessageAdapter>());
 						set.Add(GetUnderlyingAdapter(adapter));
 
-						originMsg.Adapter = this;
-						originMsg.IsBack = true;
+						originMsg.LoopBack(this);
 					}
 				}
 

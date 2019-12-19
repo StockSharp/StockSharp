@@ -266,8 +266,7 @@ namespace StockSharp.Algo
 
 			if (nextLookup != null)
 			{
-				nextLookup.IsBack = true;
-				nextLookup.Adapter = this;
+				nextLookup.LoopBack(this);
 
 				base.OnInnerAdapterNewOutMessage(nextLookup);
 			}

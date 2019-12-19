@@ -376,8 +376,7 @@
 			{
 				foreach (var msg in msgs)
 				{
-					msg.IsBack = true;
-					msg.Adapter = this;
+					msg.LoopBack(this);
 
 					base.OnInnerAdapterNewOutMessage(msg);
 				}

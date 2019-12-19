@@ -62,8 +62,7 @@ namespace StockSharp.Algo.Risk
 			{
 				if (message.Adapter == this)
 				{
-					message.Adapter = null;
-					message.IsBack = false;
+					message.UndoBack();
 
 					base.OnSendInMessage(message);
 					return;
@@ -106,12 +105,7 @@ namespace StockSharp.Algo.Risk
 					//	base.OnSendInMessage(new DisconnectMessage());
 					//	break;
 					case RiskActions.CancelOrders:
-						RaiseNewOutMessage(new OrderGroupCancelMessage
-						{
-							TransactionId = TransactionIdGenerator.GetNextId(),
-							IsBack = true,
-							Adapter = this,
-						});
+						RaiseNewOutMessage(new OrderGroupCancelMessage { TransactionId = TransactionIdGenerator.GetNextId() }.LoopBack(this));
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

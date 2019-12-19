@@ -136,8 +136,7 @@ namespace StockSharp.Messages
 			{
 				if (message.Adapter == this)
 				{
-					message.Adapter = null;
-					message.IsBack = false;
+					message.UndoBack();
 				}
 				else
 				{
