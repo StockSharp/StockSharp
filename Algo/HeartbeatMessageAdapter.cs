@@ -121,7 +121,7 @@ namespace StockSharp.Algo
 
 					if (connectMsg.Error == null)
 					{
-						isRestored = _currState == ConnectionStates.Connecting && _prevState == ConnectionStates.Failed;
+						isRestored = _currState == ConnectionStates.Connecting && (_prevState == ConnectionStates.Failed || _prevState == _reConnecting);
 
 						lock (_timeSync)
 						{
@@ -432,7 +432,7 @@ namespace StockSharp.Algo
 				{
 					if (_connectingAttemptCount == 0)
 					{
-						this.AddWarningLog("RCM: Reconnecting attemts {0} PrevState {1}.", _connectingAttemptCount, FormatState(_prevState));
+						this.AddWarningLog("RCM: Reconnecting attempts {0} PrevState {1}.", _connectingAttemptCount, FormatState(_prevState));
 
 						lock (_timeSync)
 							_currState = _none;
