@@ -68,8 +68,6 @@
     </Compile>
     <Compile Include="CandleElement.cs" />
     <Compile Include="CandleElementCollection.cs" />
-    <Compile Include="ConnectionElement.cs" />
-    <Compile Include="ConnectionElementCollection.cs" />
     <Compile Include="DiagramElement.cs" />
     <Compile Include="DiagramElementCollection.cs" />
     <Compile Include="Extensions.cs" />

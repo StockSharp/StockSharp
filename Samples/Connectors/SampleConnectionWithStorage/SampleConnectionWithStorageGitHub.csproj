@@ -41,6 +41,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>SampleConnection.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Configuration">
       <HintPath>..\..\..\References\Ecng.Configuration.dll</HintPath>
