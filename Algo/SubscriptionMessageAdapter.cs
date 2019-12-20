@@ -143,8 +143,10 @@ namespace StockSharp.Algo
 				prevOriginId = originIdMsg1.OriginalTransactionId = TryReplaceOriginId(newOriginId);
 			}
 
-			bool UpdateSubscriptionResult(bool isOk)
+			bool UpdateSubscriptionResult(bool isOk, out IEnumerable<long> subscribers)
 			{
+				subscribers = null;
+
 				lock (_sync)
 				{
 					if (isOk)
@@ -171,6 +173,10 @@ namespace StockSharp.Algo
 
 								_replaceId.Remove(newOriginId);
 								_subscriptionsByKey.RemoveByValue(info);
+
+								var set = new HashSet<long>(info.Subscribers.Cache);
+								set.Remove(prevOriginId);
+								subscribers = set;
 							}
 						}
 					}
@@ -185,8 +191,21 @@ namespace StockSharp.Algo
 				{
 					var responseMsg = (MarketDataMessage)message;
 
-					if (!UpdateSubscriptionResult(responseMsg.IsOk()))
+					if (!UpdateSubscriptionResult(responseMsg.IsOk(), out var subscribers))
 						return;
+
+					if (subscribers == null)
+						break;
+
+					foreach (var subscriber in subscribers)
+					{
+						base.OnInnerAdapterNewOutMessage(new MarketDataMessage
+						{
+							OriginalTransactionId = subscriber,
+							Error = responseMsg.Error,
+							IsNotSupported = responseMsg.IsNotSupported,
+						});
+					}
 					
 					break;
 				}
@@ -235,8 +254,20 @@ namespace StockSharp.Algo
 					// reply on RegisterPortfolio subscription do not contains any portfolio info
 					if (pfMsg.PortfolioName.IsEmpty())
 					{
-						if (!UpdateSubscriptionResult(pfMsg.Error == null))
+						if (!UpdateSubscriptionResult(pfMsg.Error == null, out var subscribers))
 							return;
+
+						if (subscribers == null)
+							break;
+
+						foreach (var subscriber in subscribers)
+						{
+							base.OnInnerAdapterNewOutMessage(new PortfolioMessage
+							{
+								OriginalTransactionId = subscriber,
+								Error = pfMsg.Error,
+							});
+						}
 					}
 
 					break;
