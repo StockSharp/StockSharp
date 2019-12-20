@@ -2064,7 +2064,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Made the  specified message as <see cref="Message.IsBack"/>.
+		/// Made the specified message as <see cref="Message.IsBack"/>.
 		/// </summary>
 		/// <typeparam name="TMessage">Message type.</typeparam>
 		/// <param name="message">Message.</param>

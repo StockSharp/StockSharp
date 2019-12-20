@@ -52,5 +52,10 @@
             Initializes a new instance of the <see cref="T:StockSharp.Hotbit.HotbitOrderCondition"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.Hotbit.HotbitOrderCondition.IsFee">
+            <summary>
+            Include fee in operation.
+            </summary>
+        </member>
     </members>
 </doc>

@@ -15857,3 +15857,7 @@ DocStr11482;Sorted by incoming order queue;Очередь, отсортиров�
 DocStr11483;Determines the specified message contains single order request;Определить, содержит ли сообщение запрос на единичную заявку
 DocStr11484;By default is {0};По-умолчанию {0}
 DocStr11485;Subscribe for new portfolios;Подписываться на новые портфели
+DocStr11486;Whether to pause this order when no credit is available;Приостанавливать ли заявку когда недостаточно кредита
+DocStr11487;Include fee in operation;Включать комиссию в операцию
+DocStr11488;Made the specified message as {0};Сделать указанно сообщение как {0}
+DocStr11489;Undo operation made via {0};Отменить операцию, сделанная {0}
