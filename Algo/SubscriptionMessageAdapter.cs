@@ -134,12 +134,49 @@ namespace StockSharp.Algo
 					return _replaceId.TryGetValue(id, out var prevId) ? prevId : id;
 			}
 
+			var prevOriginId = 0L;
 			var newOriginId = 0L;
 
 			if (message is IOriginalTransactionIdMessage originIdMsg1)
 			{
 				newOriginId = originIdMsg1.OriginalTransactionId;
-				originIdMsg1.OriginalTransactionId = TryReplaceOriginId(newOriginId);
+				prevOriginId = originIdMsg1.OriginalTransactionId = TryReplaceOriginId(newOriginId);
+			}
+
+			bool UpdateSubscriptionResult(bool isOk)
+			{
+				lock (_sync)
+				{
+					if (isOk)
+					{
+						if (_subscriptionsById.TryGetValue(prevOriginId, out var info))
+						{
+							// no need send response after re-subscribe cause response was handled prev time
+							if (_replaceId.ContainsKey(newOriginId))
+							{
+								if (info.State != SubscriptionStates.Stopped)
+									return false;
+							}
+							else
+								ChangeState(info, SubscriptionStates.Active);
+						}
+					}
+					else
+					{
+						if (!_historicalRequests.Remove(prevOriginId))
+						{
+							if (_subscriptionsById.TryGetAndRemove(prevOriginId, out var info))
+							{
+								ChangeState(info, SubscriptionStates.Error);
+
+								_replaceId.Remove(newOriginId);
+								_subscriptionsByKey.RemoveByValue(info);
+							}
+						}
+					}
+				}
+
+				return true;
 			}
 
 			switch (message.Type)
@@ -147,48 +184,18 @@ namespace StockSharp.Algo
 				case MessageTypes.MarketData:
 				{
 					var responseMsg = (MarketDataMessage)message;
-					var originId = responseMsg.OriginalTransactionId;
 
-					lock (_sync)
-					{
-						if (responseMsg.IsOk())
-						{
-							if (_subscriptionsById.TryGetValue(originId, out var info))
-							{
-								// no need send response after re-subscribe cause response was handled prev time
-								if (_replaceId.ContainsKey(newOriginId))
-								{
-									if (info.State != SubscriptionStates.Stopped)
-										return;
-								}
-								else
-									ChangeState(info, SubscriptionStates.Active);
-							}
-						}
-						else
-						{
-							if (!_historicalRequests.Remove(originId))
-							{
-								if (_subscriptionsById.TryGetValue(originId, out var info))
-								{
-									_replaceId.Remove(newOriginId);
-									_subscriptionsById.Remove(originId);
-									_subscriptionsByKey.RemoveByValue(info);
-								}
-							}
-						}
-					}
+					if (!UpdateSubscriptionResult(responseMsg.IsOk()))
+						return;
 					
 					break;
 				}
 
 				case MessageTypes.SubscriptionOnline:
 				{
-					var onlineMsg = (SubscriptionOnlineMessage)message;
-
 					lock (_sync)
 					{
-						if (!_subscriptionsById.TryGetValue(onlineMsg.OriginalTransactionId, out var info))
+						if (!_subscriptionsById.TryGetValue(prevOriginId, out var info))
 							break;
 
 						if (_replaceId.ContainsKey(newOriginId))
@@ -210,16 +217,28 @@ namespace StockSharp.Algo
 				case MessageTypes.PortfolioLookupResult:
 				case MessageTypes.OrderStatus:
 				{
-					var resultMsg = (IOriginalTransactionIdMessage)message;
-
 					lock (_sync)
 					{
 						if (_replaceId.ContainsKey(newOriginId))
 							return;
 
-						_historicalRequests.Remove(resultMsg.OriginalTransactionId);
+						_historicalRequests.Remove(prevOriginId);
 					}
 					
+					break;
+				}
+
+				case MessageTypes.Portfolio:
+				{
+					var pfMsg = (PortfolioMessage)message;
+
+					// reply on RegisterPortfolio subscription do not contains any portfolio info
+					if (pfMsg.PortfolioName.IsEmpty())
+					{
+						if (!UpdateSubscriptionResult(pfMsg.Error == null))
+							return;
+					}
+
 					break;
 				}
 
