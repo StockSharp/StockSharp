@@ -540,8 +540,6 @@ namespace StockSharp.Algo.Storages
 
 				if (Enabled)
 				{
-					RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId });
-
 					var lastTime = LoadMessages(msg, msg.From, msg.To, transactionId);
 
 					if (msg.To != null && lastTime != null && msg.To <= lastTime)
@@ -587,6 +585,8 @@ namespace StockSharp.Algo.Storages
 
 		private DateTimeOffset? LoadMessages(MarketDataMessage msg, DateTimeOffset? from, DateTimeOffset? to, long transactionId)
 		{
+			void SendReply() => RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId });
+
 			DateTimeOffset? lastTime = null;
 
 			var secId = msg.SecurityId;
@@ -600,6 +600,8 @@ namespace StockSharp.Algo.Storages
 
 						if (level1Msg != null)
 						{
+							SendReply();
+
 							lastTime = level1Msg.ServerTime;
 
 							level1Msg.SetSubscriptionIds(subscriptionId: transactionId);
@@ -607,7 +609,7 @@ namespace StockSharp.Algo.Storages
 						}
 					}
 					else if (Mode.Contains(StorageModes.Incremental))
-						lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(secId, null), from, to, TimeSpan.Zero, transactionId);
+						lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(secId, null), from, to, TimeSpan.Zero, transactionId, SendReply);
 					
 					break;
 
@@ -618,6 +620,8 @@ namespace StockSharp.Algo.Storages
 
 						if (quotesMsg != null)
 						{
+							SendReply();
+
 							lastTime = quotesMsg.ServerTime;
 
 							quotesMsg.SetSubscriptionIds(subscriptionId: transactionId);
@@ -625,24 +629,24 @@ namespace StockSharp.Algo.Storages
 						}
 					}
 					else if (Mode.Contains(StorageModes.Incremental))
-						lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(secId, null), from, to, TimeSpan.Zero, transactionId);
+						lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(secId, null), from, to, TimeSpan.Zero, transactionId, SendReply);
 					
 					break;
 
 				case MarketDataTypes.Trades:
-					lastTime = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick), from, to, DaysLoad, transactionId);
+					lastTime = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick), from, to, DaysLoad, transactionId, SendReply);
 					break;
 
 				case MarketDataTypes.OrderLog:
-					lastTime = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog), from, to, DaysLoad, transactionId);
+					lastTime = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog), from, to, DaysLoad, transactionId, SendReply);
 					break;
 
 				case MarketDataTypes.News:
-					lastTime = LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to, DaysLoad, transactionId);
+					lastTime = LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to, DaysLoad, transactionId, SendReply);
 					break;
 
 				case MarketDataTypes.Board:
-					lastTime = LoadMessages(_storageRegistry.GetBoardStateMessageStorage(Drive, Format), from, to, DaysLoad, transactionId);
+					lastTime = LoadMessages(_storageRegistry.GetBoardStateMessageStorage(Drive, Format), from, to, DaysLoad, transactionId, SendReply);
 					break;
 
 				case MarketDataTypes.CandleTimeFrame:
@@ -688,7 +692,7 @@ namespace StockSharp.Algo.Storages
 								case MarketDataTypes.Trades:
 									lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-										.ToCandles(mdMsg, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId);
+										.ToCandles(mdMsg, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId, SendReply);
 
 									break;
 
@@ -700,7 +704,7 @@ namespace StockSharp.Algo.Storages
 										case Level1Fields.LastTradePrice:
 											lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											    .ToCandles(mdMsg, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId);
+											    .ToCandles(mdMsg, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId, SendReply);
 
 											break;
 											
@@ -709,7 +713,7 @@ namespace StockSharp.Algo.Storages
 										//	lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 										//	    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 										//		.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(security.ToSecurityId()))
-										//	    .ToCandles(mdMsg, false, exchangeInfoProvider: exchangeInfoProvider), range.Item1, msg.TransactionId);
+										//	    .ToCandles(mdMsg, false, exchangeInfoProvider: exchangeInfoProvider), range.Item1, transactionId, SendReply);
 										//	break;
 									}
 
@@ -724,7 +728,7 @@ namespace StockSharp.Algo.Storages
 											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
 												.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 												.ToTicks()
-												.ToCandles(mdMsg, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId);
+												.ToCandles(mdMsg, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId, SendReply);
 											break;
 
 										case Level1Fields.BestBidPrice:
@@ -733,7 +737,7 @@ namespace StockSharp.Algo.Storages
 											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
 											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 											    .ToOrderBooks()
-											    .ToCandles(mdMsg, msg.BuildField.Value, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId);
+											    .ToCandles(mdMsg, msg.BuildField.Value, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId, SendReply);
 											break;
 									}
 									
@@ -742,7 +746,7 @@ namespace StockSharp.Algo.Storages
 								case MarketDataTypes.MarketDepth:
 									lastTime = LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
 										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-										.ToCandles(mdMsg, msg.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId);
+										.ToCandles(mdMsg, msg.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId, SendReply);
 									break;
 
 								default:
@@ -766,29 +770,29 @@ namespace StockSharp.Algo.Storages
 						//		days = TimeSpan.FromTicks(tf.Ticks * 50);	
 						//}
 
-						lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(secId, tf, msg.AllowBuildFromSmallerTimeFrame), from, to, days, transactionId);
+						lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(secId, tf, msg.AllowBuildFromSmallerTimeFrame), from, to, days, transactionId, SendReply);
 					}
 					
 					break;
 
 				case MarketDataTypes.CandlePnF:
-					lastTime = LoadMessages(GetStorage<PnFCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId);
+					lastTime = LoadMessages(GetStorage<PnFCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId, SendReply);
 					break;
 
 				case MarketDataTypes.CandleRange:
-					lastTime = LoadMessages(GetStorage<RangeCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId);
+					lastTime = LoadMessages(GetStorage<RangeCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId, SendReply);
 					break;
 
 				case MarketDataTypes.CandleRenko:
-					lastTime = LoadMessages(GetStorage<RenkoCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId);
+					lastTime = LoadMessages(GetStorage<RenkoCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId, SendReply);
 					break;
 
 				case MarketDataTypes.CandleTick:
-					lastTime = LoadMessages(GetStorage<TickCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId);
+					lastTime = LoadMessages(GetStorage<TickCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId, SendReply);
 					break;
 
 				case MarketDataTypes.CandleVolume:
-					lastTime = LoadMessages(GetStorage<VolumeCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId);
+					lastTime = LoadMessages(GetStorage<VolumeCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId, SendReply);
 					break;
 
 				//default:
@@ -814,7 +818,7 @@ namespace StockSharp.Algo.Storages
 			return Tuple.Create(from.Value, to.Value);
 		}
 
-		private DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset? from, DateTimeOffset? to, TimeSpan daysLoad, long transactionId) 
+		private DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset? from, DateTimeOffset? to, TimeSpan daysLoad, long transactionId, Action sendReply) 
 			where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 		{
 			var range = GetRange(storage, from, to, daysLoad);
@@ -824,14 +828,28 @@ namespace StockSharp.Algo.Storages
 
 			var messages = storage.Load(range.Item1.Date, range.Item2.Date.EndOfDay());
 
-			return LoadMessages(messages, range.Item1, transactionId);
+			return LoadMessages(messages, range.Item1, transactionId, sendReply);
 		}
 
-		private DateTimeOffset? LoadMessages<TMessage>(IEnumerable<TMessage> messages, DateTimeOffset lastTime, long transactionId)
+		private DateTimeOffset? LoadMessages<TMessage>(IEnumerable<TMessage> messages, DateTimeOffset lastTime, long transactionId, Action sendReply)
 			where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 		{
+			if (messages == null)
+				throw new ArgumentNullException(nameof(messages));
+
+			if (sendReply == null)
+				throw new ArgumentNullException(nameof(sendReply));
+
+			var replySent = false;
+
 			foreach (var message in messages)
 			{
+				if (!replySent)
+				{
+					sendReply();
+					replySent = true;
+				}
+
 				message.OriginalTransactionId = transactionId;
 				message.SetSubscriptionIds(subscriptionId: transactionId);
 
