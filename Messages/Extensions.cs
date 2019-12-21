@@ -1612,7 +1612,16 @@ namespace StockSharp.Messages
 			return timeFrame;
 		}
 
-		internal static bool HandleErrorResponse(this Message message, Exception ex, DateTimeOffset currentTime, Action<Message> sendOut)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="ex"></param>
+		/// <param name="currentTime"></param>
+		/// <param name="sendOut"></param>
+		/// <param name="getSubscribers"></param>
+		/// <returns></returns>
+		public static bool HandleErrorResponse(this Message message, Exception ex, DateTimeOffset currentTime, Action<Message> sendOut, Func<DataType, long[]> getSubscribers = null)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -1628,6 +1637,12 @@ namespace StockSharp.Messages
 				execMsg.ServerTime = currentTime;
 				execMsg.Error = ex;
 				execMsg.OrderState = OrderStates.Failed;
+
+				var subscribers = getSubscribers?.Invoke(DataType.Transactions);
+
+				if (subscribers != null)
+					execMsg.SetSubscriptionIds(subscribers);
+
 				sendOut(execMsg);
 			}
 

@@ -767,11 +767,29 @@ namespace StockSharp.Algo
 			return Tuple.Create(state, error);
 		}
 
+		private long[] GetSubscribers(DataType dataType) => _subscription.SyncGet(c => c.Where(p => p.Value.Item3 == dataType).Select(p => p.Key).ToArray());
+
 		/// <summary>
 		/// Send message.
 		/// </summary>
 		/// <param name="message">Message.</param>
 		protected virtual void OnSendInMessage(Message message)
+		{
+			try
+			{
+				InternalSendInMessage(message);
+			}
+			catch (Exception ex)
+			{
+				this.AddErrorLog(ex);
+
+				message.HandleErrorResponse(ex, CurrentTime, SendOutMessage, GetSubscribers);
+
+				SendOutError(ex);
+			}
+		}
+
+		private void InternalSendInMessage(Message message)
 		{
 			if (message is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
 				throw new ArgumentException(message.ToString());
@@ -1400,7 +1418,10 @@ namespace StockSharp.Algo
 			{
 				var a = _activeAdapters.TryGetValue(adapter);
 
-				return a ?? throw new InvalidOperationException(LocalizedStrings.Str1838Params.Put(adapter.GetType()));
+				if (a == null)
+					throw new InvalidOperationException(LocalizedStrings.ConnectionIsNotConnected.Put(adapter));
+				
+				return a;
 			}
 		}
 
@@ -1693,8 +1714,6 @@ namespace StockSharp.Algo
 
 			message.Adapter = underlyingAdapter;
 		}
-
-		//private bool HasSubscription(DataType dataType) => _subscription.SyncGet(c => c.Any(p => p.Value.Item3 == dataType));
 
 		private void UpdateAdapterState(IMessageAdapter adapter, bool isConnect, Exception error, List<Message> extra)
 		{

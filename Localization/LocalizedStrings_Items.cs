@@ -50726,5 +50726,15 @@ namespace StockSharp.Localization
 		/// Random
 		/// </summary>
 		public static string Random => GetString(RandomKey);
+
+		/// <summary>
+		/// Connection '{0}' is not connected.
+		/// </summary>
+		public const string ConnectionIsNotConnectedKey = nameof(ConnectionIsNotConnected);
+
+		/// <summary>
+		/// Connection '{0}' is not connected.
+		/// </summary>
+		public static string ConnectionIsNotConnected => GetString(ConnectionIsNotConnectedKey);
 	}
 }
