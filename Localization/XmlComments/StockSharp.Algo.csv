@@ -933,7 +933,6 @@ E:StockSharp.Algo.Connector.TimeOut/summary;DocStr900
 E:StockSharp.Algo.Connector.CandleSeriesProcessing/summary;DocStr464
 E:StockSharp.Algo.Connector.CandleSeriesStopped/summary;DocStr91
 E:StockSharp.Algo.Connector.CandleSeriesError/summary;DocStr11277
-E:StockSharp.Algo.Connector.OrderInitialized/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.ChangePasswordResult/inheritdoc;DocStr8459
 M:StockSharp.Algo.Connector.RaiseNewNews(StockSharp.BusinessEntities.News)/summary;DocStr466
 M:StockSharp.Algo.Connector.RaiseNewNews(StockSharp.BusinessEntities.News)/param/news;News
@@ -3031,8 +3030,7 @@ M:StockSharp.Algo.Strategies.Strategy.AttachOrder(StockSharp.BusinessEntities.Or
 M:StockSharp.Algo.Strategies.Strategy.AssignOrderStrategyId(StockSharp.BusinessEntities.Order)/summary;DocStr1651
 M:StockSharp.Algo.Strategies.Strategy.AssignOrderStrategyId(StockSharp.BusinessEntities.Order)/param/order;DocStr1652
 P:StockSharp.Algo.Strategies.Strategy.CurrentTime/summary;DocStr910
-M:StockSharp.Algo.Strategies.Strategy.RaiseLog(StockSharp.Logging.LogMessage)/summary;DocStr466
-M:StockSharp.Algo.Strategies.Strategy.RaiseLog(StockSharp.Logging.LogMessage)/param/message;DocStr1653
+M:StockSharp.Algo.Strategies.Strategy.RaiseLog(StockSharp.Logging.LogMessage)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Strategies.Strategy.Start/summary;DocStr1654
 M:StockSharp.Algo.Strategies.Strategy.Stop/summary;DocStr1655
 E:StockSharp.Algo.Strategies.Strategy.Reseted/summary;DocStr1725
@@ -4784,6 +4782,9 @@ M:StockSharp.Algo.TraderHelper.AddAdapter``1(StockSharp.Algo.Connector,System.Ac
 M:StockSharp.Algo.TraderHelper.AddAdapter``1(StockSharp.Algo.Connector,System.Action{``0})/param/connector;DocStr754
 M:StockSharp.Algo.TraderHelper.AddAdapter``1(StockSharp.Algo.Connector,System.Action{``0})/param/init;DocStr93
 M:StockSharp.Algo.TraderHelper.AddAdapter``1(StockSharp.Algo.Connector,System.Action{``0})/returns;DocStr754
+M:StockSharp.Algo.TraderHelper.IsActive(StockSharp.Algo.SubscriptionStates)/summary;DocStr11490
+M:StockSharp.Algo.TraderHelper.IsActive(StockSharp.Algo.SubscriptionStates)/param/state;State
+M:StockSharp.Algo.TraderHelper.IsActive(StockSharp.Algo.SubscriptionStates)/returns;DocStr8659
 M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/summary;DocStr2373
 M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/order;Orders
 M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398

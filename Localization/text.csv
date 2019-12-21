@@ -15861,3 +15861,4 @@ DocStr11486;Whether to pause this order when no credit is available;Приост
 DocStr11487;Include fee in operation;Включать комиссию в операцию
 DocStr11488;Made the specified message as {0};Сделать указанно сообщение как {0}
 DocStr11489;Undo operation made via {0};Отменить операцию, сделанная {0}
+DocStr11490;Determines the specified state equals {0} or {1};Определить, равно ли указанное состояние {0} или {1}

@@ -446,7 +446,6 @@ M:StockSharp.BusinessEntities.IConnector.LookupOrders(StockSharp.BusinessEntitie
 M:StockSharp.BusinessEntities.IConnector.GetSecurity(StockSharp.Messages.SecurityId)/summary;DocStr845
 M:StockSharp.BusinessEntities.IConnector.GetSecurity(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 M:StockSharp.BusinessEntities.IConnector.GetSecurity(StockSharp.Messages.SecurityId)/returns;DocStr2831
-E:StockSharp.BusinessEntities.IConnector.OrderInitialized/summary;DocStr11238
 M:StockSharp.BusinessEntities.IConnector.SendOutMessage(StockSharp.Messages.Message)/summary;DocStr755
 M:StockSharp.BusinessEntities.IConnector.SendOutMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32},StockSharp.Messages.IMessageAdapter)/summary;DocStr779
