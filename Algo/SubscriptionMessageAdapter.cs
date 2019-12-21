@@ -118,7 +118,13 @@ namespace StockSharp.Algo
 
 		private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
 		{
-			this.AddInfoLog("Subscription {0} {1}->{2}.", info.Subscription.TransactionId, info.State, state);
+			const string text = "Subscription {0} {1}->{2}.";
+
+			if (info.State.IsOk(state))
+				this.AddInfoLog(text, info.Subscription.TransactionId, info.State, state);
+			else
+				this.AddWarningLog(text, info.Subscription.TransactionId, info.State, state);
+
 			info.State = state;
 		}
 
@@ -143,9 +149,9 @@ namespace StockSharp.Algo
 				prevOriginId = originIdMsg1.OriginalTransactionId = TryReplaceOriginId(newOriginId);
 			}
 
-			bool UpdateSubscriptionResult(bool isOk, out IEnumerable<long> subscribers)
+			bool UpdateSubscriptionResult(bool isOk, Func<long, Message> createReply)
 			{
-				subscribers = null;
+				HashSet<long> subscribers = null;
 
 				lock (_sync)
 				{
@@ -182,6 +188,12 @@ namespace StockSharp.Algo
 					}
 				}
 
+				if (subscribers != null)
+				{
+					foreach (var subscriber in subscribers)
+						base.OnInnerAdapterNewOutMessage(createReply(subscriber));
+				}
+
 				return true;
 			}
 
@@ -191,22 +203,14 @@ namespace StockSharp.Algo
 				{
 					var responseMsg = (MarketDataMessage)message;
 
-					if (!UpdateSubscriptionResult(responseMsg.IsOk(), out var subscribers))
+					if (!UpdateSubscriptionResult(responseMsg.IsOk(), subscriber => new MarketDataMessage
+					{
+						OriginalTransactionId = subscriber,
+						Error = responseMsg.Error,
+						IsNotSupported = responseMsg.IsNotSupported,
+					}))
 						return;
 
-					if (subscribers == null)
-						break;
-
-					foreach (var subscriber in subscribers)
-					{
-						base.OnInnerAdapterNewOutMessage(new MarketDataMessage
-						{
-							OriginalTransactionId = subscriber,
-							Error = responseMsg.Error,
-							IsNotSupported = responseMsg.IsNotSupported,
-						});
-					}
-					
 					break;
 				}
 
@@ -254,20 +258,12 @@ namespace StockSharp.Algo
 					// reply on RegisterPortfolio subscription do not contains any portfolio info
 					if (pfMsg.PortfolioName.IsEmpty())
 					{
-						if (!UpdateSubscriptionResult(pfMsg.Error == null, out var subscribers))
-							return;
-
-						if (subscribers == null)
-							break;
-
-						foreach (var subscriber in subscribers)
+						if (!UpdateSubscriptionResult(pfMsg.Error == null, subscriber => new PortfolioMessage
 						{
-							base.OnInnerAdapterNewOutMessage(new PortfolioMessage
-							{
-								OriginalTransactionId = subscriber,
-								Error = pfMsg.Error,
-							});
-						}
+							OriginalTransactionId = subscriber,
+							Error = pfMsg.Error,
+						}))
+							return;
 					}
 
 					break;

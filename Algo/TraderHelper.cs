@@ -5326,5 +5326,26 @@ namespace StockSharp.Algo
 			connector.Adapter.InnerAdapters.Add(adapter);
 			return connector;
 		}
+
+		internal static bool IsOk(this SubscriptionStates fromState, SubscriptionStates toState)
+		{
+			if (fromState == toState)
+				return false;
+
+			switch (fromState)
+			{
+				case SubscriptionStates.Stopped:
+					return true;
+				case SubscriptionStates.Active:
+					return true;
+				case SubscriptionStates.Error:
+				case SubscriptionStates.Finished:
+					return false;
+				case SubscriptionStates.Online:
+					return toState != SubscriptionStates.Active;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(fromState), fromState, LocalizedStrings.Str1219);
+			}
+		}
 	}
 }

@@ -239,7 +239,13 @@ namespace StockSharp.Algo
 
 			private void ChangeState(Subscription subscription, SubscriptionStates state)
 			{
-				_connector.AddInfoLog("Subscription {0} {1}->{2}.", subscription.TransactionId, subscription.State, state);
+				const string text = "Subscription {0} {1}->{2}.";
+
+				if (subscription.State.IsOk(state))
+					_connector.AddInfoLog(text, subscription.TransactionId, subscription.State, state);
+				else
+					_connector.AddWarningLog(text, subscription.TransactionId, subscription.State, state);
+
 				subscription.State = state;
 			}
 
