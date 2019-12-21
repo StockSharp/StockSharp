@@ -130,7 +130,7 @@ namespace SampleConnection
 					if (_appClosing)
 						return;
 
-					if (subscription.State == SubscriptionStates.Active || subscription.State == SubscriptionStates.Online)
+					if (subscription.State.IsActive())
 						connector.UnSubscribe(subscription);
 				};
 

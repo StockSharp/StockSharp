@@ -5347,5 +5347,15 @@ namespace StockSharp.Algo
 					throw new ArgumentOutOfRangeException(nameof(fromState), fromState, LocalizedStrings.Str1219);
 			}
 		}
+
+		/// <summary>
+		/// Determines the specified state equals <see cref="SubscriptionStates.Active"/> or <see cref="SubscriptionStates.Online"/>.
+		/// </summary>
+		/// <param name="state">State.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsActive(this SubscriptionStates state)
+		{
+			return state == SubscriptionStates.Active || state == SubscriptionStates.Online;
+		}
 	}
 }

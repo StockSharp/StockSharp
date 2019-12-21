@@ -294,8 +294,7 @@ namespace StockSharp.Algo
 
 								_subscriptions.Remove(subscription.TransactionId);
 
-								unexpectedCancelled = subscription.State == SubscriptionStates.Active ||
-								                      subscription.State == SubscriptionStates.Online;
+								unexpectedCancelled = subscription.State.IsActive();
 
 								_requests.Remove(response.OriginalTransactionId);
 							}
@@ -348,6 +347,12 @@ namespace StockSharp.Algo
 			{
 				if (subscription == null)
 					throw new ArgumentNullException(nameof(subscription));
+
+				if (!subscription.State.IsActive())
+				{
+					_connector.AddWarningLog("Subscription {0} has state {1}. Cannot unsubscribe.", subscription.TransactionId, subscription.State);
+					return;
+				}
 
 				var unsubscribe = subscription.DataType.ToSubscriptionMessage();
 
@@ -420,7 +425,7 @@ namespace StockSharp.Algo
 					_keeped.Clear();
 					_keeped.AddRange(_subscriptions.Values);
 
-					subscriptions.AddRange(Subscriptions);
+					subscriptions.AddRange(Subscriptions.Where(s => s.State.IsActive()));
 				}
 
 				foreach (var subscription in subscriptions)
