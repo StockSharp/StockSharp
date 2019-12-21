@@ -265,7 +265,8 @@ namespace StockSharp.Algo
 							return null;
 						}
 
-						_requests.Remove(response.OriginalTransactionId);
+						// do not remove cause subscription can be interrupted after successful response
+						//_requests.Remove(response.OriginalTransactionId);
 
 						originalMsg = (MarketDataMessage)tuple.Item1;
 
@@ -292,7 +293,11 @@ namespace StockSharp.Algo
 								ChangeState(subscription, SubscriptionStates.Error);
 
 								_subscriptions.Remove(subscription.TransactionId);
-								unexpectedCancelled = subscription.State == SubscriptionStates.Active;
+
+								unexpectedCancelled = subscription.State == SubscriptionStates.Active ||
+								                      subscription.State == SubscriptionStates.Online;
+
+								_requests.Remove(response.OriginalTransactionId);
 							}
 						}
 						else
@@ -300,6 +305,10 @@ namespace StockSharp.Algo
 							ChangeState(subscription, SubscriptionStates.Stopped);
 
 							_subscriptions.Remove(subscription.TransactionId);
+
+							// remove subscribe and unsubscribe requests
+							_requests.Remove(subscription.TransactionId);
+							_requests.Remove(response.OriginalTransactionId);
 						}
 
 						return subscription;
@@ -469,7 +478,10 @@ namespace StockSharp.Algo
 				var subscription = TryGetSubscription(message.OriginalTransactionId, true);
 
 				if (subscription != null)
+				{
 					ChangeState(subscription, SubscriptionStates.Finished);
+					_requests.Remove(message.OriginalTransactionId);
+				}
 
 				return subscription;
 			}

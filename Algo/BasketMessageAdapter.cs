@@ -1775,6 +1775,8 @@ namespace StockSharp.Algo
 		{
 			var originalTransactionId = message.OriginalTransactionId;
 
+			_requestsById.Remove(originalTransactionId);
+
 			var parentId = _parentChildMap.ProcessChildFinish(originalTransactionId, out var needParentResponse);
 
 			if (parentId == null)
@@ -1793,23 +1795,30 @@ namespace StockSharp.Algo
 		private MarketDataMessage ProcessMarketDataResponse(IMessageAdapter adapter, MarketDataMessage message)
 		{
 			var originalTransactionId = message.OriginalTransactionId;
-			var isOk = message.IsOk();
 
-			if (!_requestsById.TryGetAndRemove(originalTransactionId, out var tuple))
+			if (!_requestsById.TryGetValue(originalTransactionId, out var tuple))
 			{
-				if (_subscriptionListRequests.Contains(originalTransactionId))
+				if (_subscriptionListRequests.Contains(originalTransactionId) && message.TransactionId != 0)
 					_requestsById.TryAdd(message.TransactionId, Tuple.Create((ISubscriptionMessage)null, GetUnderlyingAdapter(adapter)));
 
 				return message;
 			}
 
+			var isOk = message.IsOk();
+			var originMsg = (MarketDataMessage)tuple.Item1;
+
 			if (!isOk)
 			{
 				this.AddWarningLog("Subscription Error out: {0}", message);
 				_subscription.Remove(originalTransactionId);
+				_requestsById.Remove(originalTransactionId);
 			}
-
-			var originMsg = (MarketDataMessage)tuple.Item1;
+			else if (!originMsg.IsSubscribe)
+			{
+				// remove subscribe and unsubscribe requests
+				_requestsById.Remove(originMsg.OriginalTransactionId);
+				_requestsById.Remove(originalTransactionId);
+			}
 
 			var parentId = _parentChildMap.ProcessChildResponse(originalTransactionId, isOk, out var needParentResponse, out var allError);
 
