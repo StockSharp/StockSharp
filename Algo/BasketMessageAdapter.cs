@@ -1834,6 +1834,11 @@ namespace StockSharp.Algo
 						Error = allError ? new InvalidOperationException(LocalizedStrings.Str629Params.Put(originMsg)) : null,
 					} : null;
 			}
+			else
+			{
+				if (!originMsg.IsSubscribe)
+					_subscription.Remove(originMsg.OriginalTransactionId);
+			}
 
 			if (message.IsNotSupported)
 			{
