@@ -887,8 +887,6 @@ namespace StockSharp.Algo
 			_entityCache.AddOrderByRegistrationId(order);
 
 			SendOutMessage(order.ToMessage());
-
-			RaiseOrderInitialized(order);
 		}
 
 		/// <summary>

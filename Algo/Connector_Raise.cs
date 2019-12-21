@@ -334,15 +334,7 @@ namespace StockSharp.Algo
 		public event Action<CandleSeries, MarketDataMessage> CandleSeriesError;
 
 		/// <inheritdoc />
-		public event Action<Order> OrderInitialized;
-
-		/// <inheritdoc />
 		public event Action<long, Exception> ChangePasswordResult;
-
-		private void RaiseOrderInitialized(Order order)
-		{
-			OrderInitialized?.Invoke(order);
-		}
 
 		private void RaiseNewMyTrade(MyTrade trade)
 		{

@@ -354,11 +354,6 @@ namespace StockSharp.BusinessEntities
 		Security GetSecurity(SecurityId securityId);
 
 		/// <summary>
-		/// The order was initialized and ready to send for registration.
-		/// </summary>
-		event Action<Order> OrderInitialized;
-
-		/// <summary>
 		/// Send outgoing message.
 		/// </summary>
 		/// <param name="message">Message.</param>
