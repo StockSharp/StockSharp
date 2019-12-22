@@ -32,9 +32,6 @@
     <DocumentationFile>bin\Release\StockSharp.Messages.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Mvvm.v18.1">
-      <HintPath>..\References\DevExpress.Mvvm.v18.1.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
     </Reference>
@@ -67,7 +64,6 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
