@@ -516,7 +516,7 @@ namespace StockSharp.Algo.Storages
 							buffer = _ticksBuffer;
 							break;
 						case ExecutionTypes.Transaction:
-							
+						{
 							// some responses do not contains sec id
 							if (secId.IsDefault() && !_securityIds.TryGetValue(execMsg.OriginalTransactionId, out secId))
 							{
@@ -526,12 +526,16 @@ namespace StockSharp.Algo.Storages
 
 							buffer = _transactionsBuffer;
 							break;
+						}
 						case ExecutionTypes.OrderLog:
 							buffer = _orderLogBuffer;
 							break;
 						default:
 							throw new ArgumentOutOfRangeException(nameof(message), execType, LocalizedStrings.Str1695Params.Put(message));
 					}
+
+					if (execType == ExecutionTypes.Transaction && execMsg.TransactionId == 0)
+						break;
 
 					if (execType == ExecutionTypes.Transaction || CanStore<ExecutionMessage>(secId, execType))
 						buffer.Add(secId, (ExecutionMessage)message.Clone());
