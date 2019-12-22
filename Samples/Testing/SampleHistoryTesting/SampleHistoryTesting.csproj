@@ -46,6 +46,9 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.Xaml.DevExp">
+      <HintPath>..\..\..\References\Ecng.Xaml.DevExp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />

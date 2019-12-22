@@ -39,6 +39,9 @@
     <ApplicationIcon>..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Xpf.Dialogs.v19.2">
+      <HintPath>..\..\References\DevExpress.Xpf.Dialogs.v19.2.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\References\Ecng.Collections.dll</HintPath>
     </Reference>
