@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Server
 {
 	using System;
 
-	using StockSharp.Algo;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
