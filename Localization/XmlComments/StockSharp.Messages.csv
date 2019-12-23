@@ -871,6 +871,13 @@ M:StockSharp.Messages.Extensions.CreateOrderLogMarketDepthBuilder(System.Type,St
 M:StockSharp.Messages.Extensions.GetTimeFrame(StockSharp.Messages.MarketDataMessage)/summary;DocStr11331
 M:StockSharp.Messages.Extensions.GetTimeFrame(StockSharp.Messages.MarketDataMessage)/param/mdMsg;DocStr4473
 M:StockSharp.Messages.Extensions.GetTimeFrame(StockSharp.Messages.MarketDataMessage)/returns;Str1242
+M:StockSharp.Messages.Extensions.HandleErrorResponse(StockSharp.Messages.Message,System.Exception,System.DateTimeOffset,System.Action{StockSharp.Messages.Message},System.Func{StockSharp.Messages.DataType,System.Int64[]})/summary;DocStr8459
+M:StockSharp.Messages.Extensions.HandleErrorResponse(StockSharp.Messages.Message,System.Exception,System.DateTimeOffset,System.Action{StockSharp.Messages.Message},System.Func{StockSharp.Messages.DataType,System.Int64[]})/param/message;DocStr8459
+M:StockSharp.Messages.Extensions.HandleErrorResponse(StockSharp.Messages.Message,System.Exception,System.DateTimeOffset,System.Action{StockSharp.Messages.Message},System.Func{StockSharp.Messages.DataType,System.Int64[]})/param/ex;DocStr8459
+M:StockSharp.Messages.Extensions.HandleErrorResponse(StockSharp.Messages.Message,System.Exception,System.DateTimeOffset,System.Action{StockSharp.Messages.Message},System.Func{StockSharp.Messages.DataType,System.Int64[]})/param/currentTime;DocStr8459
+M:StockSharp.Messages.Extensions.HandleErrorResponse(StockSharp.Messages.Message,System.Exception,System.DateTimeOffset,System.Action{StockSharp.Messages.Message},System.Func{StockSharp.Messages.DataType,System.Int64[]})/param/sendOut;DocStr8459
+M:StockSharp.Messages.Extensions.HandleErrorResponse(StockSharp.Messages.Message,System.Exception,System.DateTimeOffset,System.Action{StockSharp.Messages.Message},System.Func{StockSharp.Messages.DataType,System.Int64[]})/param/getSubscribers;DocStr8459
+M:StockSharp.Messages.Extensions.HandleErrorResponse(StockSharp.Messages.Message,System.Exception,System.DateTimeOffset,System.Action{StockSharp.Messages.Message},System.Func{StockSharp.Messages.DataType,System.Int64[]})/returns;DocStr8459
 M:StockSharp.Messages.Extensions.SetSubscriptionIds(StockSharp.Messages.ISubscriptionIdMessage,System.Int64[],System.Int64)/summary;DocStr11474
 M:StockSharp.Messages.Extensions.SetSubscriptionIds(StockSharp.Messages.ISubscriptionIdMessage,System.Int64[],System.Int64)/param/message;Str3166
 M:StockSharp.Messages.Extensions.SetSubscriptionIds(StockSharp.Messages.ISubscriptionIdMessage,System.Int64[],System.Int64)/param/subscriptionIds;Identifiers
