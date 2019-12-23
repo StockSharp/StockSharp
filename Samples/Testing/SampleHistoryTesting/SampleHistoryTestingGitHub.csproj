@@ -61,6 +61,9 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ecng.Xaml.DevExp">
+      <HintPath>..\..\..\References\Ecng.Xaml.DevExp.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Finam">
       <HintPath>..\..\..\References\StockSharp.Finam.dll</HintPath>
     </Reference>
