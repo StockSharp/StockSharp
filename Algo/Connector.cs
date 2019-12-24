@@ -108,6 +108,8 @@ namespace StockSharp.Algo
 			SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
 			PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
 
+			EntityFactory = new StorageEntityFactory(SecurityStorage, PositionStorage, true);
+
 			InitAdapter(storageRegistry, snapshotRegistry);
 		}
 
