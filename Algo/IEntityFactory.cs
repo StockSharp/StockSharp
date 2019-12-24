@@ -135,32 +135,19 @@ namespace StockSharp.Algo
 		{
 		}
 
-		/// <summary>
-		/// To create the instrument by the identifier.
-		/// </summary>
-		/// <param name="id">Security ID.</param>
-		/// <returns>Created instrument.</returns>
+		/// <inheritdoc />
 		public virtual Security CreateSecurity(string id)
 		{
 			return new Security { Id = id };
 		}
 
-		/// <summary>
-		/// To create the portfolio by the account number.
-		/// </summary>
-		/// <param name="name">Account number.</param>
-		/// <returns>Created portfolio.</returns>
+		/// <inheritdoc />
 		public virtual Portfolio CreatePortfolio(string name)
 		{
 			return new Portfolio { Name = name };
 		}
 
-		/// <summary>
-		/// Create position.
-		/// </summary>
-		/// <param name="portfolio">Portfolio.</param>
-		/// <param name="security">Security.</param>
-		/// <returns>Created position.</returns>
+		/// <inheritdoc />
 		public virtual Position CreatePosition(Portfolio portfolio, Security security)
 		{
 			if (portfolio == null)
@@ -176,25 +163,13 @@ namespace StockSharp.Algo
 			};
 		}
 
-		/// <summary>
-		/// To create the tick trade by its identifier.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="id">The trade identifier (equals <see langword="null" />, if string identifier is used).</param>
-		/// <param name="stringId">Trade ID (as string, if electronic board does not use numeric order ID representation).</param>
-		/// <returns>Created trade.</returns>
+		/// <inheritdoc />
 		public virtual Trade CreateTrade(Security security, long? id, string stringId)
 		{
 			return new Trade { Security = security, Id = id ?? 0, StringId = stringId };
 		}
 
-		/// <summary>
-		/// To create the order by the transaction identifier.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="type">Order type.</param>
-		/// <param name="transactionId">The identifier of the order registration transaction.</param>
-		/// <returns>Created order.</returns>
+		/// <inheritdoc />
 		public virtual Order CreateOrder(Security security, OrderTypes? type, long transactionId)
 		{
 			return new Order
@@ -205,23 +180,13 @@ namespace StockSharp.Algo
 			};
 		}
 
-		/// <summary>
-		/// To create the error description for the order.
-		/// </summary>
-		/// <param name="order">Order.</param>
-		/// <param name="error">The system description of error.</param>
-		/// <returns>Created error description.</returns>
+		/// <inheritdoc />
 		public virtual OrderFail CreateOrderFail(Order order, Exception error)
 		{
 			return new OrderFail { Order = order, Error = error };
 		}
 
-		/// <summary>
-		/// To create own trade.
-		/// </summary>
-		/// <param name="order">Order.</param>
-		/// <param name="trade">Tick trade.</param>
-		/// <returns>Created own trade.</returns>
+		/// <inheritdoc />
 		public virtual MyTrade CreateMyTrade(Order order, Trade trade)
 		{
 			return new MyTrade
@@ -231,22 +196,13 @@ namespace StockSharp.Algo
 			};
 		}
 
-		/// <summary>
-		/// To create the order book for the instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <returns>Created order book.</returns>
+		/// <inheritdoc />
 		public virtual MarketDepth CreateMarketDepth(Security security)
 		{
 			return new MarketDepth(security);
 		}
 
-		/// <summary>
-		/// To create the string of orders log.
-		/// </summary>
-		/// <param name="order">Order.</param>
-		/// <param name="trade">Tick trade.</param>
-		/// <returns>Order log item.</returns>
+		/// <inheritdoc />
 		public virtual OrderLogItem CreateOrderLogItem(Order order, Trade trade)
 		{
 			return new OrderLogItem
@@ -256,31 +212,19 @@ namespace StockSharp.Algo
 			};
 		}
 
-		/// <summary>
-		/// To create news.
-		/// </summary>
-		/// <returns>News.</returns>
+		/// <inheritdoc />
 		public virtual News CreateNews()
 		{
 			return new News();
 		}
 
-		/// <summary>
-		/// To create exchange.
-		/// </summary>
-		/// <param name="code"><see cref="Exchange.Name"/> value.</param>
-		/// <returns>Exchange.</returns>
+		/// <inheritdoc />
 		public Exchange CreateExchange(string code)
 		{
 			return new Exchange { Name = code };
 		}
 
-		/// <summary>
-		/// To create exchange.
-		/// </summary>
-		/// <param name="code"><see cref="ExchangeBoard.Code"/> value.</param>
-		/// <param name="exchange"><see cref="ExchangeBoard.Exchange"/> value.</param>
-		/// <returns>Exchange.</returns>
+		/// <inheritdoc />
 		public ExchangeBoard CreateBoard(string code, Exchange exchange)
 		{
 			return new ExchangeBoard { Code = code, Exchange = exchange };

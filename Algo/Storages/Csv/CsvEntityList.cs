@@ -66,9 +66,7 @@ namespace StockSharp.Algo.Storages.Csv
 		private DelayAction.IGroup<CsvFileWriter> _delayActionGroup;
 		private DelayAction _delayAction;
 
-		/// <summary>
-		/// The time delayed action.
-		/// </summary>
+		/// <inheritdoc cref="ICsvEntityList" />
 		public DelayAction DelayAction
 		{
 			get => _delayAction;
