@@ -56,15 +56,26 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class StorageMessageAdapter : BufferMessageAdapter
 	{
-		private readonly IStorageRegistry _storageRegistry;
-		private readonly SnapshotRegistry _snapshotRegistry;
-		private readonly CandleBuilderProvider _candleBuilderProvider;
-
 		private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = new SynchronizedSet<long>();
 		private readonly SynchronizedDictionary<long, long> _orderIds = new SynchronizedDictionary<long, long>();
 		private readonly SynchronizedDictionary<string, long> _orderStringIds = new SynchronizedDictionary<string, long>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly SynchronizedDictionary<long, long> _cancellationTransactions = new SynchronizedDictionary<long, long>();
 		private readonly SynchronizedSet<long> _orderStatusIds = new SynchronizedSet<long>();
+
+		/// <summary>
+		/// The storage of market data.
+		/// </summary>
+		public IStorageRegistry StorageRegistry { get; }
+
+		/// <summary>
+		/// Snapshot storage registry.
+		/// </summary>
+		public SnapshotRegistry SnapshotRegistry { get; }
+
+		/// <summary>
+		/// Candle builders provider.
+		/// </summary>
+		public CandleBuilderProvider CandleBuilderProvider { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StorageMessageAdapter"/>.
@@ -76,9 +87,9 @@ namespace StockSharp.Algo.Storages
 		public StorageMessageAdapter(IMessageAdapter innerAdapter, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, CandleBuilderProvider candleBuilderProvider)
 			: base(innerAdapter)
 		{
-			_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
-			_snapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
-			_candleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(candleBuilderProvider));
+			StorageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
+			SnapshotRegistry = snapshotRegistry ?? throw new ArgumentNullException(nameof(snapshotRegistry));
+			CandleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(candleBuilderProvider));
 
 			var isProcessing = false;
 			var sync = new SyncObject();
@@ -288,7 +299,7 @@ namespace StockSharp.Algo.Storages
 
 					if (news.Length > 0)
 					{
-						_storageRegistry.GetNewsMessageStorage(Drive, Format).Save(news);
+						StorageRegistry.GetNewsMessageStorage(Drive, Format).Save(news);
 					}
 				}
 				catch (Exception excp)
@@ -346,7 +357,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public IMarketDataDrive Drive { get; set; }
 
-		private IMarketDataDrive DriveInternal => Drive ?? _storageRegistry.DefaultDrive;
+		private IMarketDataDrive DriveInternal => Drive ?? StorageRegistry.DefaultDrive;
 
 		/// <summary>
 		/// Format.
@@ -403,7 +414,7 @@ namespace StockSharp.Algo.Storages
 
 		private ISnapshotStorage GetSnapshotStorage(Type messageType, object arg)
 		{
-			return _snapshotRegistry.GetSnapshotStorage(messageType, arg);
+			return SnapshotRegistry.GetSnapshotStorage(messageType, arg);
 		}
 
 		private IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, object arg)
@@ -414,18 +425,18 @@ namespace StockSharp.Algo.Storages
 
 		private IMarketDataStorage GetStorage(SecurityId securityId, Type messageType, object arg)
 		{
-			return _storageRegistry.GetStorage(securityId, messageType, arg, Drive, Format);
+			return StorageRegistry.GetStorage(securityId, messageType, arg, Drive, Format);
 		}
 
 		private IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(SecurityId securityId, TimeSpan timeFrame, bool allowBuildFromSmallerTimeFrame)
 		{
 			if (!allowBuildFromSmallerTimeFrame)
-				return _storageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, timeFrame, Drive, Format);
+				return StorageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, timeFrame, Drive, Format);
 
-			var storage = _storageRegistry.GetCandleMessageBuildableStorage(securityId, timeFrame, Drive, Format);
+			var storage = StorageRegistry.GetCandleMessageBuildableStorage(securityId, timeFrame, Drive, Format);
 
 			if (CacheBuildableCandles)
-				storage = new CacheableMarketDataStorage<CandleMessage>(storage, _storageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, timeFrame, Drive, Format));
+				storage = new CacheableMarketDataStorage<CandleMessage>(storage, StorageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, timeFrame, Drive, Format));
 
 			return storage;
 		}
@@ -444,7 +455,7 @@ namespace StockSharp.Algo.Storages
 					break;
 
 				case MessageTypes.MarketData:
-					ProcessMarketDataRequest((MarketDataMessage)message);
+					message = ProcessMarketDataRequest((MarketDataMessage)message);
 					break;
 
 				case MessageTypes.OrderStatus:
@@ -454,11 +465,10 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.OrderCancel:
 					ProcessOrderCancel((OrderCancelMessage)message);
 					break;
-
-				default:
-					base.OnSendInMessage(message);
-					break;
 			}
+
+			if (message != null)
+				base.OnSendInMessage(message);
 		}
 
 		private void ProcessOrderStatus(OrderStatusMessage msg)
@@ -471,10 +481,7 @@ namespace StockSharp.Algo.Storages
 			_orderStatusIds.Add(transId);
 
 			if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
-			{
-				base.OnSendInMessage(msg);
 				return;
-			}
 
 			if (!msg.HasOrderId() && msg.OriginalTransactionId == 0 && DaysLoad > TimeSpan.Zero)
 			{
@@ -509,8 +516,6 @@ namespace StockSharp.Algo.Storages
 					}
 				}
 			}
-
-			base.OnSendInMessage(msg);
 		}
 
 		private void ProcessOrderCancel(OrderCancelMessage msg)
@@ -520,19 +525,15 @@ namespace StockSharp.Algo.Storages
 
 			// can be looped back from offline
 			_cancellationTransactions.TryAdd(msg.TransactionId, msg.OriginalTransactionId);
-			base.OnSendInMessage(msg);
 		}
 
-		private void ProcessMarketDataRequest(MarketDataMessage msg)
+		private MarketDataMessage ProcessMarketDataRequest(MarketDataMessage msg)
 		{
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
 			if (msg.From == null && DaysLoad == TimeSpan.Zero)
-			{
-				base.OnSendInMessage(msg);
-				return;
-			}
+				return msg;
 
 			if (msg.IsSubscribe)
 			{
@@ -547,7 +548,7 @@ namespace StockSharp.Algo.Storages
 						_fullyProcessedSubscriptions.Add(transactionId);
 						RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId });
 
-						return;
+						return null;
 					}
 
 					Subscribe(msg);
@@ -564,8 +565,6 @@ namespace StockSharp.Algo.Storages
 
 					msg.ValidateBounds();
 				}
-
-				base.OnSendInMessage(msg);
 			}
 			else
 			{
@@ -577,10 +576,12 @@ namespace StockSharp.Algo.Storages
 					{
 						OriginalTransactionId = msg.TransactionId,
 					});
+
+					return null;
 				}
-				else
-					base.OnSendInMessage(msg);
 			}
+
+			return msg;
 		}
 
 		private DateTimeOffset? LoadMessages(MarketDataMessage msg, DateTimeOffset? from, DateTimeOffset? to, long transactionId)
@@ -642,11 +643,11 @@ namespace StockSharp.Algo.Storages
 					break;
 
 				case MarketDataTypes.News:
-					lastTime = LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to, DaysLoad, transactionId, SendReply);
+					lastTime = LoadMessages(StorageRegistry.GetNewsMessageStorage(Drive, Format), from, to, DaysLoad, transactionId, SendReply);
 					break;
 
 				case MarketDataTypes.Board:
-					lastTime = LoadMessages(_storageRegistry.GetBoardStateMessageStorage(Drive, Format), from, to, DaysLoad, transactionId, SendReply);
+					lastTime = LoadMessages(StorageRegistry.GetBoardStateMessageStorage(Drive, Format), from, to, DaysLoad, transactionId, SendReply);
 					break;
 
 				case MarketDataTypes.CandleTimeFrame:
@@ -692,7 +693,7 @@ namespace StockSharp.Algo.Storages
 								case MarketDataTypes.Trades:
 									lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-										.ToCandles(mdMsg, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId, SendReply);
+										.ToCandles(mdMsg, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply);
 
 									break;
 
@@ -704,7 +705,7 @@ namespace StockSharp.Algo.Storages
 										case Level1Fields.LastTradePrice:
 											lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											    .ToCandles(mdMsg, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId, SendReply);
+											    .ToCandles(mdMsg, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply);
 
 											break;
 											
@@ -728,7 +729,7 @@ namespace StockSharp.Algo.Storages
 											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
 												.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 												.ToTicks()
-												.ToCandles(mdMsg, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId, SendReply);
+												.ToCandles(mdMsg, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply);
 											break;
 
 										case Level1Fields.BestBidPrice:
@@ -737,7 +738,7 @@ namespace StockSharp.Algo.Storages
 											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
 											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 											    .ToOrderBooks()
-											    .ToCandles(mdMsg, msg.BuildField.Value, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId, SendReply);
+											    .ToCandles(mdMsg, msg.BuildField.Value, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply);
 											break;
 									}
 									
@@ -746,7 +747,7 @@ namespace StockSharp.Algo.Storages
 								case MarketDataTypes.MarketDepth:
 									lastTime = LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
 										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-										.ToCandles(mdMsg, msg.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: _candleBuilderProvider), range.Item1, transactionId, SendReply);
+										.ToCandles(mdMsg, msg.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply);
 									break;
 
 								default:
@@ -868,28 +869,6 @@ namespace StockSharp.Algo.Storages
 			RaiseNewOutMessage(message);
 		}
 
-		private static DateTimeOffset SetTransactionId(CandleMessage msg, long transactionId)
-		{
-			msg.OriginalTransactionId = transactionId;
-
-			var lastTime = msg.CloseTime;
-
-			if (lastTime.IsDefault())
-			{
-				lastTime = msg.OpenTime;
-
-				if (msg is TimeFrameCandleMessage tfMsg)
-				{
-					if (tfMsg.TimeFrame.IsDefault())
-						throw new InvalidOperationException("tf == 0");
-
-					lastTime += tfMsg.TimeFrame;
-				}
-			}
-
-			return lastTime;
-		}
-
 		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
@@ -924,7 +903,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new StorageMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), _storageRegistry, _snapshotRegistry, _candleBuilderProvider)
+			return new StorageMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), StorageRegistry, SnapshotRegistry, CandleBuilderProvider)
 			{
 				CacheBuildableCandles = CacheBuildableCandles,
 				DaysLoad = DaysLoad,
