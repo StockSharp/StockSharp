@@ -551,6 +551,9 @@ namespace StockSharp.Algo.Storages
 				{
 					var candleMsg = (CandleMessage)message;
 
+					if (candleMsg.State != CandleStates.Finished)
+						break;
+
 					if (CanStore(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg))
 						_candleBuffer.Add(Tuple.Create(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg), (CandleMessage)candleMsg.Clone());
 
