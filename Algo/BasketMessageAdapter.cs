@@ -615,107 +615,124 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 		{
+			var first = adapter;
+
+			IMessageAdapter ApplyOwnInner(MessageAdapterWrapper a)
+			{
+				a.OwnInnerAdapter = first != adapter;
+				return a;
+			}
+
+			if (IsHeartbeatOn(adapter))
+			{
+				adapter = ApplyOwnInner(new HeartbeatMessageAdapter(adapter)
+				{
+					SuppressReconnectingErrors = SuppressReconnectingErrors,
+					Parent = this,
+				});
+			}
+
+			if (SupportOffline)
+				adapter = ApplyOwnInner(new OfflineMessageAdapter(adapter));
+
+			if (IgnoreExtraAdapters)
+				return adapter;
+
 			if (UseSeparatedChannels)
 			{
-				adapter = new ChannelMessageAdapter(adapter,
+				adapter = ApplyOwnInner(new ChannelMessageAdapter(adapter,
 					new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} In", SendOutError), 
-					new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} Out", SendOutError))
-				{
-					OwnInnerAdapter = true,
-				};
+					new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} Out", SendOutError)));
 			}
 
 			if (LatencyManager != null)
 			{
-				adapter = new LatencyMessageAdapter(adapter) { LatencyManager = LatencyManager.Clone(), OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new LatencyMessageAdapter(adapter) { LatencyManager = LatencyManager.Clone() });
 			}
 
 			if (SlippageManager != null)
 			{
-				adapter = new SlippageMessageAdapter(adapter) { SlippageManager = SlippageManager.Clone(), OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new SlippageMessageAdapter(adapter) { SlippageManager = SlippageManager.Clone() });
 			}
 
 			if (adapter.IsNativeIdentifiers)
 			{
-				adapter = new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage) { OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage));
 			}
 
 			if (SecurityMappingStorage != null)
 			{
-				adapter = new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage) { OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage));
 			}
 
 			if (PnLManager != null && !adapter.IsSupportExecutionsPnL)
 			{
-				adapter = new PnLMessageAdapter(adapter) { PnLManager = PnLManager.Clone(), OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new PnLMessageAdapter(adapter) { PnLManager = PnLManager.Clone() });
 			}
 
 			if (CommissionManager != null)
 			{
-				adapter = new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone(), OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone() });
 			}
 
 			if (SupportPartialDownload)
 			{
-				adapter = new PartialDownloadMessageAdapter(adapter) { OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new PartialDownloadMessageAdapter(adapter));
 			}
 
 			if (adapter.IsSupportSubscriptions)
 			{
-				adapter = new SubscriptionMessageAdapter(adapter)
+				adapter = ApplyOwnInner(new SubscriptionMessageAdapter(adapter)
 				{
-					OwnInnerAdapter = true,
 					IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
-				};
+				});
 			}
 
 			if (adapter.IsFullCandlesOnly)
 			{
-				adapter = new CandleHolderMessageAdapter(adapter) { OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new CandleHolderMessageAdapter(adapter));
 			}
 
 			if (SupportLookupTracking)
 			{
-				adapter = new LookupTrackingMessageAdapter(adapter) { OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new LookupTrackingMessageAdapter(adapter));
 			}
 
 			if (StorageRegistry != null)
 			{
-				adapter = new StorageMessageAdapter(adapter, StorageRegistry, SnapshotRegistry, CandleBuilderProvider)
+				adapter = ApplyOwnInner(new StorageMessageAdapter(adapter, StorageRegistry, SnapshotRegistry, CandleBuilderProvider)
 				{
-					OwnInnerAdapter = true,
-
 					FilterSubscription = StorageFilterSubscription,
 					Drive = StorageDrive,
 					DaysLoad = StorageDaysLoad,
 					Format = StorageFormat,
 					Mode = StorageMode,
-				};
+				});
 			}
 
 			if (SupportBuildingFromOrderLog)
 			{
-				adapter = new OrderLogMessageAdapter(adapter) { OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new OrderLogMessageAdapter(adapter));
 			}
 
 			if (adapter.IsSupportOrderBookIncrements)
 			{
-				adapter = new OrderBookInrementMessageAdapter(adapter) { OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new OrderBookInrementMessageAdapter(adapter));
 			}
 
 			if (SupportOrderBookTruncate)
 			{
-				adapter = new OrderBookTruncateMessageAdapter(adapter) { OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new OrderBookTruncateMessageAdapter(adapter));
 			}
 
 			if (SupportCandlesCompression)
 			{
-				adapter = new CandleBuilderMessageAdapter(adapter, CandleBuilderProvider) { OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new CandleBuilderMessageAdapter(adapter, CandleBuilderProvider));
 			}
 
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
 			{
-				adapter = new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage) { OwnInnerAdapter = true };
+				adapter = ApplyOwnInner(new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage));
 			}
 
 			return adapter;
@@ -834,20 +851,7 @@ namespace StockSharp.Algo
 							_adapterStates.Add(adapter, CreateState(ConnectionStates.Connecting));
 						}
 
-						if (IsHeartbeatOn(adapter))
-						{
-							adapter = new HeartbeatMessageAdapter(adapter)
-							{
-								SuppressReconnectingErrors = SuppressReconnectingErrors,
-								Parent = this,
-							};
-						}
-
-						if (SupportOffline)
-							adapter = new OfflineMessageAdapter(adapter) { OwnInnerAdapter = adapter != a };
-
-						if (!IgnoreExtraAdapters)
-							adapter = CreateWrappers(adapter);
+						adapter = CreateWrappers(adapter);
 
 						adapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(adapter, m);
 						
