@@ -87,7 +87,7 @@ namespace StockSharp.Algo
 			protected override bool OnRemoving(IMessageAdapter item)
 			{
 				_enables.Remove(item);
-				_parent._activeAdapters.Remove(item);
+				_parent._adapterWrappers.Remove(item);
 
 				lock (_parent._connectedResponseLock)
 					_parent._adapterStates.Remove(item);
@@ -98,7 +98,7 @@ namespace StockSharp.Algo
 			protected override bool OnClearing()
 			{
 				_enables.Clear();
-				_parent._activeAdapters.Clear();
+				_parent._adapterWrappers.Clear();
 
 				lock (_parent._connectedResponseLock)
 					_parent._adapterStates.Clear();
@@ -239,12 +239,10 @@ namespace StockSharp.Algo
 		}
 
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
-		private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _activeAdapters = new CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
+		private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _adapterWrappers = new CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly SyncObject _connectedResponseLock = new SyncObject();
 		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
-		private readonly HashSet<IMessageAdapter> _pendingConnectAdapters = new HashSet<IMessageAdapter>();
 		private readonly Queue<Message> _pendingMessages = new Queue<Message>();
-		private readonly HashSet<IMessageAdapter> _connectedAdapters = new HashSet<IMessageAdapter>();
 		
 		private readonly Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>> _adapterStates = new Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>>();
 		private ConnectionStates _currState = ConnectionStates.Disconnected;
@@ -583,23 +581,21 @@ namespace StockSharp.Algo
 		/// <returns>Sorted adapters.</returns>
 		protected IEnumerable<IMessageAdapter> GetSortedAdapters() => _innerAdapters.SortedAdapters;
 
-		private IMessageAdapter[] ActiveAdapters => _activeAdapters.CachedValues;
+		private IMessageAdapter[] Wrappers => _adapterWrappers.CachedValues;
 
 		private void ProcessReset(ResetMessage message)
 		{
-			ActiveAdapters.ForEach(a =>
+			Wrappers.ForEach(a =>
 			{
 				a.SendInMessage(message);
 				a.Dispose();
 			});
 
-			_activeAdapters.Clear();
+			_adapterWrappers.Clear();
 
 			lock (_connectedResponseLock)
 			{
-				_connectedAdapters.Clear();
 				_messageTypeAdapters.Clear();
-				_pendingConnectAdapters.Clear();
 				_pendingMessages.Clear();
 				_nonSupportedAdapters.Clear();
 
@@ -841,15 +837,12 @@ namespace StockSharp.Algo
 
 					_currState = ConnectionStates.Connecting;
 
-					_activeAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
+					_adapterWrappers.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
 					{
 						var adapter = a;
 
 						lock (_connectedResponseLock)
-						{
-							_pendingConnectAdapters.Add(adapter);
 							_adapterStates.Add(adapter, CreateState(ConnectionStates.Connecting));
-						}
 
 						adapter = CreateWrappers(adapter);
 
@@ -858,15 +851,15 @@ namespace StockSharp.Algo
 						return adapter;
 					}));
 					
-					if (ActiveAdapters.Length == 0)
+					if (Wrappers.Length == 0)
 						throw new InvalidOperationException(LocalizedStrings.Str3650);
 
-					ActiveAdapters.ForEach(a =>
+					Wrappers.ForEach(w =>
 					{
-						var u = GetUnderlyingAdapter(a);
+						var u = GetUnderlyingAdapter(w);
 						this.AddInfoLog("Connecting '{0}'.", u);
 
-						a.SendInMessage(message);
+						w.SendInMessage(message);
 					});
 
 					break;
@@ -880,26 +873,21 @@ namespace StockSharp.Algo
 					{
 						_currState = ConnectionStates.Disconnecting;
 
-						adapters = _connectedAdapters.ToDictionary(a => a, a =>
+						adapters = _adapterStates.ToArray().Where(p => _adapterWrappers.ContainsKey(p.Key) && (p.Value.Item1 == ConnectionStates.Connecting || p.Value.Item1 == ConnectionStates.Connected)).ToDictionary(p => _adapterWrappers[p.Key], p =>
 						{
-							var u = GetUnderlyingAdapter(a);
-
-							var prevState = _adapterStates.TryGetValue(u);
-
-							if (prevState != null && prevState.Item1 != ConnectionStates.Failed)
-								_adapterStates[u] = CreateState(ConnectionStates.Disconnecting);
-
-							return u;
+							var underlying = p.Key;
+							_adapterStates[underlying] = CreateState(ConnectionStates.Disconnecting);
+							return underlying;
 						});
 					}
 
 					foreach (var a in adapters)
 					{
-						var adapter = a.Key;
-						var u = a.Value;
+						var wrapper = a.Key;
+						var underlying = a.Value;
 
-						this.AddInfoLog("Disconnecting '{0}'.", u);
-						adapter.SendInMessage(message);
+						this.AddInfoLog("Disconnecting '{0}'.", underlying);
+						wrapper.SendInMessage(message);
 					}
 
 					break;
@@ -1048,7 +1036,7 @@ namespace StockSharp.Algo
 
 			if (adapter != null)
 			{
-				adapter = _activeAdapters.TryGetValue(adapter);
+				adapter = _adapterWrappers.TryGetValue(adapter);
 
 				if (adapter != null)
 				{
@@ -1092,7 +1080,7 @@ namespace StockSharp.Algo
 
 				if (adapters == null)
 				{
-					if (_pendingConnectAdapters.Count > 0)
+					if (HasPendingAdapters())
 					{
 						isPended = true;
 						_pendingMessages.Enqueue(message.Clone());
@@ -1114,6 +1102,9 @@ namespace StockSharp.Algo
 
 			return adapters;
 		}
+
+		private bool HasPendingAdapters()
+			=> _adapterStates.Any(p => p.Value.Item1 == ConnectionStates.Connecting);
 
 		private IMessageAdapter[] GetSubscriptionAdapters(MarketDataMessage mdMsg)
 		{
@@ -1420,7 +1411,7 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				var a = _activeAdapters.TryGetValue(adapter);
+				var a = _adapterWrappers.TryGetValue(adapter);
 
 				if (a == null)
 					throw new InvalidOperationException(LocalizedStrings.ConnectionIsNotConnected.Put(adapter));
@@ -1631,7 +1622,7 @@ namespace StockSharp.Algo
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message, List<Message> extra)
 		{
 			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
-			var wrapper = _activeAdapters[underlyingAdapter];
+			var wrapper = _adapterWrappers[underlyingAdapter];
 
 			var error = message.Error;
 
@@ -1644,13 +1635,9 @@ namespace StockSharp.Algo
 
 			lock (_connectedResponseLock)
 			{
-				_pendingConnectAdapters.Remove(underlyingAdapter);
-
 				if (error != null)
 				{
-					_connectedAdapters.Remove(wrapper);
-
-					if (_pendingConnectAdapters.Count == 0)
+					if (!HasPendingAdapters())
 					{
 						notSupportedMsgs = _pendingMessages.ToArray();
 						_pendingMessages.Clear();
@@ -1662,8 +1649,6 @@ namespace StockSharp.Algo
 					{
 						_messageTypeAdapters.SafeAdd(supportedMessage).Add(wrapper);
 					}
-
-					_connectedAdapters.Add(wrapper);
 
 					extra.AddRange(_pendingMessages.Select(m => m.LoopBack(this)));
 
@@ -1687,7 +1672,7 @@ namespace StockSharp.Algo
 		private void ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message, List<Message> extra)
 		{
 			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
-			var wrapper = _activeAdapters[underlyingAdapter];
+			var wrapper = _adapterWrappers[underlyingAdapter];
 
 			var error = message.Error;
 
@@ -1710,8 +1695,6 @@ namespace StockSharp.Algo
 					if (list.Count == 0)
 						_messageTypeAdapters.Remove(supportedMessage);
 				}
-
-				_connectedAdapters.Remove(wrapper);
 
 				UpdateAdapterState(underlyingAdapter, false, error, extra);
 			}
@@ -1990,7 +1973,7 @@ namespace StockSharp.Algo
 			SecurityAdapterProvider.Changed -= SecurityAdapterProviderOnChanged;
 			PortfolioAdapterProvider.Changed -= PortfolioAdapterProviderOnChanged;
 
-			ActiveAdapters.ForEach(a => a.Parent = null);
+			Wrappers.ForEach(a => a.Parent = null);
 
 			base.DisposeManaged();
 		}
