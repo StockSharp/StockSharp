@@ -583,7 +583,7 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter[] Wrappers => _adapterWrappers.CachedValues;
 
-		private void ProcessReset(ResetMessage message)
+		private void ProcessReset(ResetMessage message, bool isConnect)
 		{
 			Wrappers.ForEach(a =>
 			{
@@ -596,7 +596,10 @@ namespace StockSharp.Algo
 			lock (_connectedResponseLock)
 			{
 				_messageTypeAdapters.Clear();
-				_pendingMessages.Clear();
+
+				if (!isConnect)
+					_pendingMessages.Clear();
+
 				_nonSupportedAdapters.Clear();
 
 				_adapterStates.Clear();
@@ -828,12 +831,12 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					ProcessReset((ResetMessage)message);
+					ProcessReset((ResetMessage)message, false);
 					break;
 
 				case MessageTypes.Connect:
 				{
-					ProcessReset(new ResetMessage());
+					ProcessReset(new ResetMessage(), true);
 
 					_currState = ConnectionStates.Connecting;
 
@@ -1080,7 +1083,7 @@ namespace StockSharp.Algo
 
 				if (adapters == null)
 				{
-					if (HasPendingAdapters())
+					if (HasPendingAdapters() || _adapterStates.Count == 0 || _adapterStates.All(p => p.Value.Item1 == ConnectionStates.Disconnected || p.Value.Item1 == ConnectionStates.Failed))
 					{
 						isPended = true;
 						_pendingMessages.Enqueue(message.Clone());
@@ -1106,9 +1109,9 @@ namespace StockSharp.Algo
 		private bool HasPendingAdapters()
 			=> _adapterStates.Any(p => p.Value.Item1 == ConnectionStates.Connecting);
 
-		private IMessageAdapter[] GetSubscriptionAdapters(MarketDataMessage mdMsg)
+		private IMessageAdapter[] GetSubscriptionAdapters(MarketDataMessage mdMsg, out bool isPended)
 		{
-			var adapters = GetAdapters(mdMsg, out _, out var skipSupportedMessages).Where(a =>
+			var adapters = GetAdapters(mdMsg, out isPended, out var skipSupportedMessages).Where(a =>
 			{
 				if (skipSupportedMessages)
 					return true;
@@ -1243,22 +1246,36 @@ namespace StockSharp.Algo
 
 		private void ProcessMarketDataRequest(MarketDataMessage mdMsg)
 		{
+			IMessageAdapter[] GetAdapters()
+			{
+				if (!mdMsg.IsSubscribe)
+					return null;
+
+				var adapters = GetSubscriptionAdapters(mdMsg, out var isPended);
+
+				if (isPended)
+					return null;
+
+				if (adapters.Length == 0)
+				{
+					SendOutMarketDataNotSupported(mdMsg.TransactionId);
+					return null;
+				}
+
+				return adapters;
+			}
+
 			switch (mdMsg.DataType)
 			{
 				case MarketDataTypes.News:
 				case MarketDataTypes.Board:
 				{
-					IMessageAdapter[] adapters = null;
+					var adapters = GetAdapters();
 
 					if (mdMsg.IsSubscribe)
 					{
-						adapters = GetSubscriptionAdapters(mdMsg);
-
-						if (adapters.Length == 0)
-						{
-							SendOutMarketDataNotSupported(mdMsg.TransactionId);
-							break;
-						}
+						if (adapters == null)
+							return;
 
 						_subscription.TryAdd(mdMsg.TransactionId, Tuple.Create((ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.ToDataType()));
 					}
@@ -1275,13 +1292,10 @@ namespace StockSharp.Algo
 
 					if (mdMsg.IsSubscribe)
 					{
-						adapter = GetSubscriptionAdapters(mdMsg).FirstOrDefault();
+						adapter = GetAdapters()?.First();
 
 						if (adapter == null)
-						{
-							SendOutMarketDataNotSupported(mdMsg.TransactionId);
-							break;
-						}
+							return;
 
 						mdMsg = (MarketDataMessage)mdMsg.Clone();
 						_subscription.TryAdd(mdMsg.TransactionId, Tuple.Create((ISubscriptionMessage)mdMsg.Clone(), new[] { adapter }, mdMsg.ToDataType()));
