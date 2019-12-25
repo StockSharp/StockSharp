@@ -642,6 +642,14 @@ namespace StockSharp.Algo.Candles.Compression
 				info.NonFinishedCandle = null;
 			}
 
+			candleMsg = (CandleMessage)candleMsg.Clone();
+
+			if (candleMsg.Type == MessageTypes.CandleTimeFrame)
+			{
+				// make all incoming candles as Active until next come
+				candleMsg.State = CandleStates.Active;
+			}
+
 			SendCandle(info, candleMsg);
 
 			if (candleMsg.State != CandleStates.Finished)
@@ -688,19 +696,18 @@ namespace StockSharp.Algo.Candles.Compression
 					if (series.Original.IsFinished && candleMessage.State != CandleStates.Finished)
 						continue;
 
-					SendCandle(series, candleMessage);
+					SendCandle(series, (CandleMessage)candleMessage.Clone());
 				}
 			}
 		}
 
 		private void SendCandle(SeriesInfo info, CandleMessage candleMsg)
 		{
-			var clone = (CandleMessage)candleMsg.Clone();
-			clone.Adapter = candleMsg.Adapter;
-			clone.OriginalTransactionId = info.Id;
-			clone.SetSubscriptionIds(subscriptionId: info.Id);
+			candleMsg.Adapter = candleMsg.Adapter;
+			candleMsg.OriginalTransactionId = info.Id;
+			candleMsg.SetSubscriptionIds(subscriptionId: info.Id);
 
-			RaiseNewOutMessage(clone);
+			RaiseNewOutMessage(candleMsg);
 		}
 
 		/// <summary>
