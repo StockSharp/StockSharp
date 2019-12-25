@@ -288,7 +288,7 @@ namespace StockSharp.Algo
 
 					if (SecurityStorage != null && StorageRegistry != null && SnapshotRegistry != null)
 					{
-						_inAdapter = StorageAdapter = new StorageMetaInfoMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry.ExchangeInfoProvider)
+						_inAdapter = StorageAdapter = new StorageMetaInfoMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry.ExchangeInfoProvider, StorageRegistry, SnapshotRegistry, _adapter.CandleBuilderProvider)
 						{
 							OwnInnerAdapter = true,
 							OverrideSecurityData = OverrideSecurityData
