@@ -110,7 +110,7 @@ namespace SampleHistoryTesting
 									});
 								}
 							
-								SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = mdMsg.TransactionId });
+								SendSubscriptionFinished(mdMsg.TransactionId);
 							}
 							else
 							{

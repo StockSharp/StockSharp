@@ -8,12 +8,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class SubscriptionFinishedMessage : Message, IOriginalTransactionIdMessage
+	public class SubscriptionFinishedMessage : BaseResultMessage<SubscriptionFinishedMessage>
 	{
-		/// <inheritdoc />
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
-
 		/// <summary>
 		/// Initialize <see cref="SubscriptionFinishedMessage"/>.
 		/// </summary>
@@ -21,24 +17,5 @@ namespace StockSharp.Messages
 			: base(MessageTypes.SubscriptionFinished)
 		{
 		}
-
-		/// <summary>
-		/// Create a copy of <see cref="SubscriptionFinishedMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new SubscriptionFinishedMessage
-			{
-				OriginalTransactionId = OriginalTransactionId,
-			};
-
-			CopyTo(clone);
-
-			return clone;
-		}
-
-		/// <inheritdoc />
-		public override string ToString() => base.ToString() + $",OrigTransId={OriginalTransactionId}";
 	}
 }

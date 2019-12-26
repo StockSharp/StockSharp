@@ -419,6 +419,15 @@ namespace StockSharp.Messages
 			SendOutMessage(originalTransactionId.CreateNotSupported());
 		}
 
+		/// <summary>
+		/// Initialize a new message <see cref="SubscriptionFinishedMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
+		/// </summary>
+		/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
+		protected void SendSubscriptionFinished(long originalTransactionId)
+		{
+			SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = originalTransactionId });
+		}
+
 		/// <inheritdoc />
 		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);
