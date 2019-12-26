@@ -232,7 +232,7 @@ namespace StockSharp.Algo
 		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataUnSubscriptionFailed2;
 
 		/// <inheritdoc />
-		public event Action<Security, MarketDataFinishedMessage> MarketDataSubscriptionFinished;
+		public event Action<Security, SubscriptionFinishedMessage> MarketDataSubscriptionFinished;
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled;
@@ -723,7 +723,7 @@ namespace StockSharp.Algo
 			RaiseSubscriptionFailed(subscription, error, false);
 		}
 
-		private void RaiseMarketDataSubscriptionFinished(MarketDataFinishedMessage message, Subscription subscription)
+		private void RaiseMarketDataSubscriptionFinished(SubscriptionFinishedMessage message, Subscription subscription)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));

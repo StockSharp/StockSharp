@@ -400,9 +400,9 @@ namespace StockSharp.Algo.Candles.Compression
 					return;
 				}
 
-				case MessageTypes.MarketDataFinished:
+				case MessageTypes.SubscriptionFinished:
 				{
-					var finishMsg = (MarketDataFinishedMessage)message;
+					var finishMsg = (SubscriptionFinishedMessage)message;
 					var subscriptionId = finishMsg.OriginalTransactionId;
 
 					var series = TryGetSeries(subscriptionId, out _);
@@ -526,7 +526,7 @@ namespace StockSharp.Algo.Candles.Compression
 					RaiseNewOutMessage(response);
 				}
 				else
-					RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = original.TransactionId });
+					RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = original.TransactionId });
 			}
 
 			if (original.To != null && series.LastTime != null && original.To <= series.LastTime)
@@ -676,7 +676,7 @@ namespace StockSharp.Algo.Candles.Compression
 				if (origin.To != null && origin.To.Value < time)
 				{
 					TryRemoveSeries(subscriptionId);
-					RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = origin.TransactionId });
+					RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = origin.TransactionId });
 					continue;
 				}
 

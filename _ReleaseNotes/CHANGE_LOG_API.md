@@ -293,6 +293,7 @@ StockSharp API Change log
 * (feature) SampleRandomTesting removed.
 * (feature) DevExpress 18.1 -> 19.2
 * (feature) Ookii.Dialogs -> DXDialogs.
+* (feature) MarketDataFinished -> SubscriptionFinished.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

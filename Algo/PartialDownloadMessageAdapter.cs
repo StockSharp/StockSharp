@@ -263,7 +263,7 @@
 								if (to != null)
 								{
 									// finishing current history request
-									outMsg = new MarketDataFinishedMessage { OriginalTransactionId = transId };
+									outMsg = new SubscriptionFinishedMessage { OriginalTransactionId = transId };
 									message = null;
 									break;
 								}
@@ -449,9 +449,9 @@
 					break;
 				}
 
-				case MessageTypes.MarketDataFinished:
+				case MessageTypes.SubscriptionFinished:
 				{
-					var finishMsg = (MarketDataFinishedMessage)message;
+					var finishMsg = (SubscriptionFinishedMessage)message;
 
 					lock (_syncObject)
 					{

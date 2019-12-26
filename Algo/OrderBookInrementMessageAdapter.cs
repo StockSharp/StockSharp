@@ -219,9 +219,9 @@
 					break;
 				}
 
-				case MessageTypes.MarketDataFinished:
+				case MessageTypes.SubscriptionFinished:
 				{
-					RemoveSubscription(((MarketDataFinishedMessage)message).OriginalTransactionId);
+					RemoveSubscription(((SubscriptionFinishedMessage)message).OriginalTransactionId);
 					break;
 				}
 

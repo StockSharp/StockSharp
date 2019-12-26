@@ -761,7 +761,7 @@
 			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnSubscriptionFailed { add { } remove { } }
 			event Action<Security, MarketDataMessage, MarketDataMessage> IMarketDataProvider.MarketDataUnSubscriptionFailed2 { add { } remove { } }
 
-			event Action<Security, MarketDataFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished { add { } remove { } }
+			event Action<Security, SubscriptionFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished { add { } remove { } }
 			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnexpectedCancelled { add { } remove { } }
 
 			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionOnline { add { } remove { } }

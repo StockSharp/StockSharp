@@ -478,7 +478,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public Subscription ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
+			public Subscription ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message)
 			{
 				var subscription = TryGetSubscription(message.OriginalTransactionId, true);
 

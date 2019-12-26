@@ -110,7 +110,7 @@ namespace SampleHistoryTesting
 									});
 								}
 							
-								SendOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = mdMsg.TransactionId });
+								SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = mdMsg.TransactionId });
 							}
 							else
 							{

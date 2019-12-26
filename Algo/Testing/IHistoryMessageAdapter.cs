@@ -175,9 +175,9 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case MessageTypes.MarketDataFinished:
+				case MessageTypes.SubscriptionFinished:
 				{
-					TryRemoveSubscription(((MarketDataFinishedMessage)message).OriginalTransactionId, false);
+					TryRemoveSubscription(((SubscriptionFinishedMessage)message).OriginalTransactionId, false);
 					break;
 				}
 			}

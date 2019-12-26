@@ -546,7 +546,7 @@ namespace StockSharp.Algo.Storages
 					if (msg.To != null && lastTime != null && msg.To <= lastTime)
 					{
 						_fullyProcessedSubscriptions.Add(transactionId);
-						RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId });
+						RaiseStorageMessage(new SubscriptionFinishedMessage { OriginalTransactionId = transactionId });
 
 						return null;
 					}

@@ -160,7 +160,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Subscription market-data finished.
 		/// </summary>
-		event Action<Security, MarketDataFinishedMessage> MarketDataSubscriptionFinished;
+		event Action<Security, SubscriptionFinishedMessage> MarketDataSubscriptionFinished;
 
 		/// <summary>
 		/// Market-data subscription unexpected cancelled.

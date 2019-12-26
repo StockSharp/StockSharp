@@ -185,7 +185,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public event Action<Security, MarketDataFinishedMessage> MarketDataSubscriptionFinished
+		public event Action<Security, SubscriptionFinishedMessage> MarketDataSubscriptionFinished
 		{
 			add => MarketDataProvider.MarketDataSubscriptionFinished += value;
 			remove => MarketDataProvider.MarketDataSubscriptionFinished -= value;

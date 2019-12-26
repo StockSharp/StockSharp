@@ -654,8 +654,8 @@ namespace StockSharp.Algo
 						ProcessMarketDataMessage((MarketDataMessage)message);
 						break;
 
-					case MessageTypes.MarketDataFinished:
-						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
+					case MessageTypes.SubscriptionFinished:
+						ProcessSubscriptionFinishedMessage((SubscriptionFinishedMessage)message);
 						break;
 
 					case MessageTypes.SubscriptionOnline:
@@ -728,9 +728,9 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
+		private void ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message)
 		{ 
-			var subscription = _subscriptionManager.ProcessMarketDataFinishedMessage(message);
+			var subscription = _subscriptionManager.ProcessSubscriptionFinishedMessage(message);
 
 			if (subscription == null)
 				return;

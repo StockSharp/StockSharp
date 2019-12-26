@@ -5081,7 +5081,7 @@ namespace StockSharp.Algo
 							sync.PulseSignal();
 					}
 				}
-				else if (msg is MarketDataFinishedMessage)
+				else if (msg is SubscriptionFinishedMessage)
 				{
 					lock (sync)
 					{

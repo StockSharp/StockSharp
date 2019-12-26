@@ -208,7 +208,7 @@ namespace SampleOptionQuoting
 			remove => throw new NotSupportedException();
 		}
 
-		event Action<Security, MarketDataFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished
+		event Action<Security, SubscriptionFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished
 		{
 			add => throw new NotSupportedException();
 			remove => throw new NotSupportedException();

@@ -215,9 +215,9 @@ namespace StockSharp.Messages
 		Reset,
 
 		/// <summary>
-		/// <see cref="MarketDataFinishedMessage"/>.
+		/// <see cref="SubscriptionFinishedMessage"/>.
 		/// </summary>
-		MarketDataFinished,
+		SubscriptionFinished,
 
 		/// <summary>
 		/// <see cref="RemoveMessage"/>.

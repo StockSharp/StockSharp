@@ -235,7 +235,7 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				case MessageTypes.MarketDataFinished:
+				case MessageTypes.SubscriptionFinished:
 				case MessageTypes.SecurityLookupResult:
 				case MessageTypes.PortfolioLookupResult:
 				case MessageTypes.OrderStatus:
