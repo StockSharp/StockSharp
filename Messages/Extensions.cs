@@ -1544,13 +1544,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines whether the reply contains an error <see cref="BaseResultMessage{TMessage}.Error"/>.
+		/// Determines whether the reply contains an error <see cref="SubscriptionResponseMessage.Error"/>.
 		/// </summary>
-		/// <typeparam name="TMessage">Message type.</typeparam>
 		/// <param name="message">Reply.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsOk<TMessage>(this BaseResultMessage<TMessage> message)
-			where TMessage : BaseResultMessage<TMessage>, new()
+		public static bool IsOk(this SubscriptionResponseMessage message)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -1718,52 +1716,12 @@ namespace StockSharp.Messages
 				case MessageTypes.MarketData:
 				case MessageTypes.Portfolio:
 				case MessageTypes.OrderStatus:
-				{
-					sendOut(((ITransactionIdMessage)message).TransactionId.CreateSubscriptionResponse(ex));
-					return true;
-				}
-
 				case MessageTypes.SecurityLookup:
-				{
-					var lookupMsg = (SecurityLookupMessage)message;
-					sendOut(new SecurityLookupResultMessage
-					{
-						OriginalTransactionId = lookupMsg.TransactionId,
-						Error = ex
-					});
-					return true;
-				}
-
 				case MessageTypes.BoardLookup:
-				{
-					var lookupMsg = (BoardLookupMessage)message;
-					sendOut(new BoardLookupResultMessage
-					{
-						OriginalTransactionId = lookupMsg.TransactionId,
-						Error = ex
-					});
-					return true;
-				}
-
 				case MessageTypes.PortfolioLookup:
-				{
-					var lookupMsg = (PortfolioLookupMessage)message;
-					sendOut(new PortfolioLookupResultMessage
-					{
-						OriginalTransactionId = lookupMsg.TransactionId,
-						Error = ex
-					});
-					return true;
-				}
-
 				case MessageTypes.UserLookup:
 				{
-					var lookupMsg = (UserLookupMessage)message;
-					sendOut(new UserLookupResultMessage
-					{
-						OriginalTransactionId = lookupMsg.TransactionId,
-						Error = ex
-					});
+					sendOut(((ITransactionIdMessage)message).TransactionId.CreateSubscriptionResponse(ex));
 					return true;
 				}
 

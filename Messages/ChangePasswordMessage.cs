@@ -3,13 +3,15 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 	using System.Security;
+	using System.Xml.Serialization;
 
 	/// <summary>
 	/// Change password message.
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class ChangePasswordMessage : BaseResultMessage<ChangePasswordMessage>, ITransactionIdMessage
+	public class ChangePasswordMessage :
+		BaseResultMessage<ChangePasswordMessage>, ITransactionIdMessage, IErrorMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="ChangePasswordMessage"/>.
@@ -32,6 +34,11 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long TransactionId { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		[XmlIgnore]
+		public Exception Error { get; set; }
+
 		[field: NonSerialized]
 		private SecureString _newPassword;
 
@@ -52,6 +59,7 @@ namespace StockSharp.Messages
 
 			destination.TransactionId = TransactionId;
 			destination.NewPassword = NewPassword;
+			destination.Error = Error;
 		}
 	}
 }

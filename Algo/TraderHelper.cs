@@ -5095,7 +5095,6 @@ namespace StockSharp.Algo
 					lock (sync)
 					{
 						responseReceived = true;
-						error = resMsg.Error;
 
 						sync.PulseSignal();
 					}

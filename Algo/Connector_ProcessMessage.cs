@@ -693,12 +693,14 @@ namespace StockSharp.Algo
 
 		private void ProcessSubscriptionResponseMessage(SubscriptionResponseMessage replyMsg)
 		{
+			var error = replyMsg.Error;
+
 			var subscription = _subscriptionManager.ProcessResponse(replyMsg, out var originalMsg, out var unexpectedCancelled);
 
 			if (originalMsg == null)
 			{
-				if (replyMsg.Error != null)
-					RaiseError(replyMsg.Error);
+				if (error != null)
+					RaiseError(error);
 
 				return;
 			}
@@ -712,7 +714,7 @@ namespace StockSharp.Algo
 					else
 					{
 						if (unexpectedCancelled)
-							RaiseMarketDataUnexpectedCancelled(mdMdg, replyMsg.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)), subscription);
+							RaiseMarketDataUnexpectedCancelled(mdMdg, error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)), subscription);
 						else
 							RaiseMarketDataSubscriptionFailed(mdMdg, replyMsg, subscription);
 					}
@@ -727,14 +729,22 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				if (replyMsg.Error == null)
+				if (error == null)
 					RaiseSubscriptionStarted(subscription);
 				else
 				{
-					RaiseSubscriptionFailed(subscription, replyMsg.Error, originalMsg.IsSubscribe);
+					RaiseSubscriptionFailed(subscription, error, originalMsg.IsSubscribe);
 
-					if (_entityCache.IsOrderStatusRequest(originalMsg.TransactionId))
-						RaiseOrderStatusFailed(originalMsg.TransactionId, replyMsg.Error, replyMsg.LocalTime);
+					if (originalMsg is OrderStatusMessage orderLookup)
+						RaiseOrderStatusFailed(orderLookup.TransactionId, error, replyMsg.LocalTime);
+					else if (originalMsg is SecurityLookupMessage secLookup)
+						RaiseLookupSecuritiesResult(secLookup, error, Securities.Filter(secLookup).ToArray(), ArrayHelper.Empty<Security>());
+					else if (originalMsg is BoardLookupMessage boardLookup)
+						RaiseLookupBoardsResult(boardLookup, error, ExchangeBoards.Filter(boardLookup).ToArray(), ArrayHelper.Empty<ExchangeBoard>());
+					else if (originalMsg is PortfolioLookupMessage pfLookup)
+						RaiseLookupPortfoliosResult(pfLookup, error, Portfolios.Filter(pfLookup).ToArray(), ArrayHelper.Empty<Portfolio>());
+					else if (originalMsg is TimeFrameLookupMessage tfLookup)
+						RaiseLookupTimeFramesResult(tfLookup, error, ArrayHelper.Empty<TimeSpan>(), ArrayHelper.Empty<TimeSpan>());
 				}
 			}
 		}
@@ -915,46 +925,34 @@ namespace StockSharp.Algo
 
 		private void ProcessSecurityLookupResultMessage(SecurityLookupResultMessage message)
 		{
-			if (message.Error != null)
-				RaiseError(message.Error);
-
 			if (!_subscriptionManager.TryGetAndRemoveLookup<SecurityLookupMessage, Security>(message, out var criteria, out var items))
 				return;
 
-			RaiseLookupSecuritiesResult(criteria, message.Error, Securities.Filter(criteria).ToArray(), items);
+			RaiseLookupSecuritiesResult(criteria, null, Securities.Filter(criteria).ToArray(), items);
 		}
 
 		private void ProcessBoardLookupResultMessage(BoardLookupResultMessage message)
 		{
-			if (message.Error != null)
-				RaiseError(message.Error);
-
 			if (!_subscriptionManager.TryGetAndRemoveLookup<BoardLookupMessage, ExchangeBoard>(message, out var criteria, out var items))
 				return;
 
-			RaiseLookupBoardsResult(criteria, message.Error, ExchangeBoards.Filter(criteria).ToArray(), items);
+			RaiseLookupBoardsResult(criteria, null, ExchangeBoards.Filter(criteria).ToArray(), items);
 		}
 
 		private void ProcessTimeFrameLookupResultMessage(TimeFrameLookupResultMessage message)
 		{
-			if (message.Error != null)
-				RaiseError(message.Error);
-
 			if (!_subscriptionManager.TryGetAndRemoveLookup<TimeFrameLookupMessage, TimeSpan>(message, out var criteria, out _))
 				return;
 
-			RaiseLookupTimeFramesResult(criteria, message.Error, message.TimeFrames, message.TimeFrames);
+			RaiseLookupTimeFramesResult(criteria, null, message.TimeFrames, message.TimeFrames);
 		}
 
 		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)
 		{
-			if (message.Error != null)
-				RaiseError(message.Error);
-
 			if (!_subscriptionManager.TryGetAndRemoveLookup<PortfolioLookupMessage, Portfolio>(message, out var criteria, out var portfolios))
 				return;
 
-			RaiseLookupPortfoliosResult(criteria, message.Error, Portfolios.Filter(criteria).ToArray(), portfolios);
+			RaiseLookupPortfoliosResult(criteria, null, Portfolios.Filter(criteria).ToArray(), portfolios);
 		}
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
