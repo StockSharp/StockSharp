@@ -1673,6 +1673,7 @@ namespace StockSharp.Messages
 				}
 
 				case MessageTypes.MarketData:
+				case MessageTypes.Portfolio:
 				{
 					sendOut(new SubscriptionResponseMessage
 					{

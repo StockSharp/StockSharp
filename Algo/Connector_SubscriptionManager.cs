@@ -249,7 +249,7 @@ namespace StockSharp.Algo
 				subscription.State = state;
 			}
 
-			public Subscription ProcessResponse(SubscriptionResponseMessage response, out MarketDataMessage originalMsg, out bool unexpectedCancelled)
+			public Subscription ProcessResponse(SubscriptionResponseMessage response, out ISubscriptionMessage originalMsg, out bool unexpectedCancelled)
 			{
 				originalMsg = null;
 
@@ -268,7 +268,7 @@ namespace StockSharp.Algo
 						// do not remove cause subscription can be interrupted after successful response
 						//_requests.Remove(response.OriginalTransactionId);
 
-						originalMsg = (MarketDataMessage)tuple.Item1;
+						originalMsg = tuple.Item1;
 
 						var info = originalMsg.IsSubscribe
 							? TryGetInfo(originalMsg.TransactionId, false, addLog: false)
@@ -545,36 +545,6 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException(nameof(portfolio));
 
 				return Subscriptions.FirstOrDefault(s => s.Portfolio == portfolio);
-			}
-
-			public Subscription ProcessResponse(PortfolioMessage response)
-			{
-				var originId = response.OriginalTransactionId;
-
-				Subscription subscription;
-
-				lock (_syncObject)
-				{
-					if (response.Error != null)
-					{
-						subscription = TryGetSubscription(originId, true);
-				
-						if (subscription != null)
-							ChangeState(subscription, SubscriptionStates.Error);
-					}
-					else
-					{
-						if (originId == 0)
-							return null;
-
-						subscription = TryGetSubscription(originId, false);
-
-						if (subscription?.Portfolio != null && subscription.State != SubscriptionStates.Active)
-							ChangeState(subscription, SubscriptionStates.Active);
-					}
-				}
-
-				return subscription;
 			}
 		}
 	}

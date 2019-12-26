@@ -295,6 +295,7 @@ StockSharp API Change log
 * (feature) Ookii.Dialogs -> DXDialogs.
 * (feature) MarketDataFinished -> SubscriptionFinished.
 * (feature) MarketDataMessage. Extracted response logic into SubscriptionResponseMessage.
+* (feature) Portfolio subscription uses SubscriptionResponseMessage as response.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

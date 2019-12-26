@@ -1372,7 +1372,7 @@ namespace StockSharp.Algo
 				{
 					this.AddDebugLog("No adapter for {0}", message);
 
-					SendOutMessage(new PortfolioMessage
+					SendOutMessage(new SubscriptionResponseMessage
 					{
 						OriginalTransactionId = message.TransactionId,
 						Error = new InvalidOperationException(LocalizedStrings.Str629Params.Put(message))
@@ -1476,27 +1476,9 @@ namespace StockSharp.Algo
 					//case MessageTypes.PortfolioChange:
 					case MessageTypes.PositionChange:
 					{
+						var pfMsg = (IPortfolioNameMessage)message;
 						ApplyParentLookupId((ISubscriptionIdMessage)message);
-
-						if (message is PortfolioMessage pfMsg)
-						{
-							if (pfMsg.Error != null)
-							{
-								_requestsById.Remove(pfMsg.OriginalTransactionId);
-								break;
-							}
-						}
-
-						var pfName = ((IPortfolioNameMessage)message).PortfolioName;
-
-						// reply on RegisterPortfolio subscription do not contains any portfolio info
-						if (!pfName.IsEmpty())
-						{
-							var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
-						
-							PortfolioAdapterProvider.SetAdapter(pfName, underlyingAdapter.Id);
-						}
-
+						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
 						break;
 					}
 

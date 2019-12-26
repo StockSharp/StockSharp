@@ -144,9 +144,6 @@ namespace StockSharp.Algo.Storages
 				{
 					var portfolioMsg = (PortfolioMessage)message;
 
-					if (portfolioMsg.Error != null)
-						break;
-
 					var portfolio = _positionStorage.GetPortfolio(portfolioMsg.PortfolioName) ?? new Portfolio
 					{
 						Name = portfolioMsg.PortfolioName

@@ -18,7 +18,6 @@ namespace StockSharp.Messages
 	using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
 
 	using Ecng.Common;
 
@@ -52,7 +51,7 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	public class PortfolioMessage : BaseSubscriptionIdMessage,
-	        ISubscriptionMessage, IPortfolioNameMessage, IErrorMessage
+	        ISubscriptionMessage, IPortfolioNameMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -128,11 +127,6 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public DateTimeOffset? To { get; set; }
 
-		/// <inheritdoc />
-		[DataMember]
-		[XmlIgnore]
-		public Exception Error { get; set; }
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
 		/// </summary>
@@ -166,9 +160,6 @@ namespace StockSharp.Messages
 
 			if (IsSubscribe)
 				str += $",IsSubscribe={IsSubscribe}";
-
-			if (Error != null)
-				str += $",Error={Error.Message}";
 
 			if (From != null)
 				str += $",From={From.Value}";
@@ -207,7 +198,6 @@ namespace StockSharp.Messages
 			destination.InternalId = InternalId;
 			destination.From = From;
 			destination.To = To;
-			destination.Error = Error;
 
 			return destination;
 		}

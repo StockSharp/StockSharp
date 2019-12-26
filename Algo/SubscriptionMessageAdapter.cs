@@ -149,13 +149,13 @@ namespace StockSharp.Algo
 				prevOriginId = originIdMsg1.OriginalTransactionId = TryReplaceOriginId(newOriginId);
 			}
 
-			bool UpdateSubscriptionResult(bool isOk, Func<long, Message> createReply)
+			bool UpdateSubscriptionResult(SubscriptionResponseMessage responseMsg)
 			{
 				HashSet<long> subscribers = null;
 
 				lock (_sync)
 				{
-					if (isOk)
+					if (responseMsg.IsOk())
 					{
 						if (_subscriptionsById.TryGetValue(prevOriginId, out var info))
 						{
@@ -191,7 +191,14 @@ namespace StockSharp.Algo
 				if (subscribers != null)
 				{
 					foreach (var subscriber in subscribers)
-						base.OnInnerAdapterNewOutMessage(createReply(subscriber));
+					{
+						base.OnInnerAdapterNewOutMessage(new SubscriptionResponseMessage
+						{
+							OriginalTransactionId = subscriber,
+							Error = responseMsg.Error,
+							IsNotSupported = responseMsg.IsNotSupported,
+						});
+					}
 				}
 
 				return true;
@@ -201,14 +208,7 @@ namespace StockSharp.Algo
 			{
 				case MessageTypes.SubscriptionResponse:
 				{
-					var responseMsg = (SubscriptionResponseMessage)message;
-
-					if (!UpdateSubscriptionResult(responseMsg.IsOk(), subscriber => new SubscriptionResponseMessage
-					{
-						OriginalTransactionId = subscriber,
-						Error = responseMsg.Error,
-						IsNotSupported = responseMsg.IsNotSupported,
-					}))
+					if (!UpdateSubscriptionResult((SubscriptionResponseMessage)message))
 						return;
 
 					break;
@@ -248,24 +248,6 @@ namespace StockSharp.Algo
 						_historicalRequests.Remove(prevOriginId);
 					}
 					
-					break;
-				}
-
-				case MessageTypes.Portfolio:
-				{
-					var pfMsg = (PortfolioMessage)message;
-
-					// reply on RegisterPortfolio subscription do not contains any portfolio info
-					if (pfMsg.PortfolioName.IsEmpty())
-					{
-						if (!UpdateSubscriptionResult(pfMsg.Error == null, subscriber => new PortfolioMessage
-						{
-							OriginalTransactionId = subscriber,
-							Error = pfMsg.Error,
-						}))
-							return;
-					}
-
 					break;
 				}
 
@@ -395,11 +377,7 @@ namespace StockSharp.Algo
 
 		private void ProcessInPortfolioMessage(PortfolioMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.Portfolio(message.PortfolioName), default, (id, error) => new PortfolioMessage
-			{
-				OriginalTransactionId = id,
-				Error = error,
-			});
+			ProcessInSubscriptionMessage(message, DataType.Portfolio(message.PortfolioName));
 		}
 
 		private void ProcessInMarketDataMessage(MarketDataMessage message)
@@ -407,18 +385,14 @@ namespace StockSharp.Algo
 			var dataType = message.ToDataType();
 			var secId = GetSecurityId(dataType, message.SecurityId);
 
-			ProcessInSubscriptionMessage(message, dataType, secId, (id, error) => new SubscriptionResponseMessage
-			{
-				OriginalTransactionId = id,
-				Error = error,
-			});
+			ProcessInSubscriptionMessage(message, dataType, secId);
 		}
 
 		private SecurityId GetSecurityId(DataType dataType, SecurityId securityId) => IsSecurityRequired(dataType) ? securityId : default;
 
 		private void ProcessInSubscriptionMessage<TMessage>(TMessage message,
-			DataType dataType, SecurityId securityId,
-			Func<long, Exception, Message> createSendOut)
+			DataType dataType, SecurityId securityId = default,
+			Func<long, Exception, Message> createSendOut = null)
 			where TMessage : Message, ISubscriptionMessage
 		{
 			if (message == null)
@@ -428,7 +402,14 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(dataType));
 
 			if (createSendOut == null)
-				throw new ArgumentNullException(nameof(createSendOut));
+			{
+				createSendOut = (id, error) => new SubscriptionResponseMessage
+				{
+					OriginalTransactionId = id,
+					Error = error,
+				};
+				//throw new ArgumentNullException(nameof(createSendOut));
+			}
 
 			var isSubscribe = message.IsSubscribe;
 			var transId = message.TransactionId;

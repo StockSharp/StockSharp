@@ -707,24 +707,34 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			if (originalMsg.IsSubscribe)
+			if (originalMsg is MarketDataMessage mdMdg)
 			{
-				if (replyMsg.IsOk())
-					RaiseMarketDataSubscriptionSucceeded(originalMsg, subscription);
+				if (originalMsg.IsSubscribe)
+				{
+					if (replyMsg.IsOk())
+						RaiseMarketDataSubscriptionSucceeded(mdMdg, subscription);
+					else
+					{
+						if (unexpectedCancelled)
+							RaiseMarketDataUnexpectedCancelled(mdMdg, replyMsg.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)), subscription);
+						else
+							RaiseMarketDataSubscriptionFailed(mdMdg, replyMsg, subscription);
+					}
+				}
 				else
 				{
-					if (unexpectedCancelled)
-						RaiseMarketDataUnexpectedCancelled(originalMsg, replyMsg.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)), subscription);
+					if (replyMsg.IsOk())
+						RaiseMarketDataUnSubscriptionSucceeded(mdMdg, subscription);
 					else
-						RaiseMarketDataSubscriptionFailed(originalMsg, replyMsg, subscription);
+						RaiseMarketDataUnSubscriptionFailed(mdMdg, replyMsg, subscription);
 				}
 			}
 			else
 			{
-				if (replyMsg.IsOk())
-					RaiseMarketDataUnSubscriptionSucceeded(originalMsg, subscription);
+				if (replyMsg.Error == null)
+					RaiseSubscriptionStarted(subscription);
 				else
-					RaiseMarketDataUnSubscriptionFailed(originalMsg, replyMsg, subscription);
+					RaiseSubscriptionFailed(subscription, replyMsg.Error, originalMsg.IsSubscribe);
 			}
 		}
 
@@ -1046,36 +1056,20 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioMessage(PortfolioMessage message)
 		{
-			// reply on RegisterPortfolio subscription do not contains any portfolio info
-			var isReply = message.PortfolioName.IsEmpty();
-
-			var subscription = isReply ? _subscriptionManager.ProcessResponse(message) : null;
-
-			if (message.Error != null)
+			var portfolio = GetPortfolio(message.PortfolioName, p =>
 			{
-				if (subscription != null)
-					RaiseSubscriptionFailed(subscription, message.Error, true);
-			}
-			else
-			{
-				if (isReply)
-					return;
+				message.ToPortfolio(p, _entityCache.ExchangeInfoProvider);
+				return true;
+			}, out var isNew);
 
-				var portfolio = GetPortfolio(message.PortfolioName, p =>
-				{
-					message.ToPortfolio(p, _entityCache.ExchangeInfoProvider);
-					return true;
-				}, out var isNew);
+			//if (message.OriginalTransactionId == 0)
+			//	return;
 
-				//if (message.OriginalTransactionId == 0)
-				//	return;
+			if (isNew)
+				_subscriptionManager.ProcessLookupResponse(message, portfolio);
 
-				if (isNew)
-					_subscriptionManager.ProcessLookupResponse(message, portfolio);
-
-				RaiseReceived(portfolio, message, PortfolioReceived);
-				TrySubscribePortfolio(portfolio, message.Adapter);
-			}
+			RaiseReceived(portfolio, message, PortfolioReceived);
+			TrySubscribePortfolio(portfolio, message.Adapter);
 		}
 
 		private void ProcessPositionChangeMessage(PositionChangeMessage message)
