@@ -663,7 +663,7 @@ namespace StockSharp.Algo
 			var security = subscription.Security;
 			var error = reply.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(origin));
 
-			if (reply.IsNotSupported)
+			if (reply.IsNotSupported())
 				this.AddWarningLog(LocalizedStrings.SubscriptionNotSupported, origin);
 			else
 				this.AddErrorLog(LocalizedStrings.SubscribedError, security?.Id, origin.DataType, error.Message);

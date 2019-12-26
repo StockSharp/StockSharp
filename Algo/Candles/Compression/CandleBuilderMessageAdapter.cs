@@ -106,11 +106,7 @@ namespace StockSharp.Algo.Candles.Compression
 						{
 							if (isLoadOnly || !TrySubscribeBuild(mdMsg))
 							{
-								RaiseNewOutMessage(new SubscriptionResponseMessage
-								{
-									OriginalTransactionId = transactionId,
-									IsNotSupported = true,
-								});
+								RaiseNewOutMessage(transactionId.CreateNotSupported());
 							}
 
 							return;
@@ -150,11 +146,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 							if (isLoadOnly)
 							{
-								RaiseNewOutMessage(new SubscriptionResponseMessage
-								{
-									OriginalTransactionId = transactionId,
-									IsNotSupported = true,
-								});
+								RaiseNewOutMessage(transactionId.CreateNotSupported());
 
 								return;
 							}
@@ -192,11 +184,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 							if (!TrySubscribeBuild(mdMsg))
 							{
-								RaiseNewOutMessage(new SubscriptionResponseMessage
-								{
-									OriginalTransactionId = transactionId,
-									IsNotSupported = true,
-								});
+								RaiseNewOutMessage(transactionId.CreateNotSupported());
 							}
 						}
 						else
@@ -222,11 +210,7 @@ namespace StockSharp.Algo.Candles.Compression
 							{
 								if (isLoadOnly || !TrySubscribeBuild(mdMsg))
 								{
-									RaiseNewOutMessage(new SubscriptionResponseMessage
-									{
-										OriginalTransactionId = transactionId,
-										IsNotSupported = true,
-									});
+									RaiseNewOutMessage(transactionId.CreateNotSupported());
 								}
 							}
 						}

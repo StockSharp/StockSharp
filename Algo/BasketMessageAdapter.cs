@@ -1372,11 +1372,7 @@ namespace StockSharp.Algo
 				{
 					this.AddDebugLog("No adapter for {0}", message);
 
-					SendOutMessage(new SubscriptionResponseMessage
-					{
-						OriginalTransactionId = message.TransactionId,
-						Error = new InvalidOperationException(LocalizedStrings.Str629Params.Put(message))
-					});
+					SendOutMessage(message.TransactionId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.Str629Params.Put(message))));
 				}
 				else
 				{
@@ -1558,11 +1554,7 @@ namespace StockSharp.Algo
 
 		private void SendOutMarketDataNotSupported(long id)
 		{
-			SendOutMessage(new SubscriptionResponseMessage
-			{
-				OriginalTransactionId = id,
-				IsNotSupported = true,
-			});
+			SendOutMessage(id.CreateNotSupported());
 		}
 
 		private void SendOutError(Exception error)
@@ -1831,11 +1823,8 @@ namespace StockSharp.Algo
 					_subscription.Remove(parentId.Value);
 
 				return needParentResponse
-					? new SubscriptionResponseMessage
-					{
-						OriginalTransactionId = parentId.Value,
-						Error = allError ? new InvalidOperationException(LocalizedStrings.Str629Params.Put(originMsg)) : null,
-					} : null;
+					? parentId.Value.CreateSubscriptionResponse(allError ? new InvalidOperationException(LocalizedStrings.Str629Params.Put(originMsg)) : null)
+					: null;
 			}
 			else
 			{
@@ -1843,7 +1832,7 @@ namespace StockSharp.Algo
 					_subscription.Remove(originMsg.OriginalTransactionId);
 			}
 
-			if (message.IsNotSupported)
+			if (message.IsNotSupported())
 			{
 				lock (_connectedResponseLock)
 				{

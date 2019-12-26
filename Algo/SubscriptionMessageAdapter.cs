@@ -192,12 +192,7 @@ namespace StockSharp.Algo
 				{
 					foreach (var subscriber in subscribers)
 					{
-						base.OnInnerAdapterNewOutMessage(new SubscriptionResponseMessage
-						{
-							OriginalTransactionId = subscriber,
-							Error = responseMsg.Error,
-							IsNotSupported = responseMsg.IsNotSupported,
-						});
+						base.OnInnerAdapterNewOutMessage(subscriber.CreateSubscriptionResponse(responseMsg.Error));
 					}
 				}
 
@@ -399,11 +394,7 @@ namespace StockSharp.Algo
 
 			if (createSendOut == null)
 			{
-				createSendOut = (id, error) => new SubscriptionResponseMessage
-				{
-					OriginalTransactionId = id,
-					Error = error,
-				};
+				createSendOut = Extensions.CreateSubscriptionResponse;
 				//throw new ArgumentNullException(nameof(createSendOut));
 			}
 

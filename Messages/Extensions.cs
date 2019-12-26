@@ -1544,13 +1544,56 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines whether the reply contains an error <see cref="BaseResultMessage{TMessage}.Error"/> or has <see cref="SubscriptionResponseMessage.IsNotSupported"/>.
+		/// Determines whether the reply contains an error <see cref="BaseResultMessage{TMessage}.Error"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Message type.</typeparam>
+		/// <param name="message">Reply.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsOk<TMessage>(this BaseResultMessage<TMessage> message)
+			where TMessage : BaseResultMessage<TMessage>, new()
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.Error == null;
+		}
+
+		/// <summary>
+		/// Determines whether the reply contains the error <see cref="SubscriptionResponseMessage.NotSupported"/>.
 		/// </summary>
 		/// <param name="message">Reply.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsOk(this SubscriptionResponseMessage message)
+		public static bool IsNotSupported(this SubscriptionResponseMessage message)
 		{
-			return message.Error == null && !message.IsNotSupported;
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.Error == SubscriptionResponseMessage.NotSupported;
+		}
+
+		/// <summary>
+		/// Create non supported subscription response.
+		/// </summary>
+		/// <param name="id">ID of the original message for which this message is a response.</param>
+		/// <returns>Subscription response message.</returns>
+		public static SubscriptionResponseMessage CreateNotSupported(this long id)
+		{
+			return id.CreateSubscriptionResponse(SubscriptionResponseMessage.NotSupported);
+		}
+
+		/// <summary>
+		/// Create subscription response.
+		/// </summary>
+		/// <param name="id">ID of the original message for which this message is a response.</param>
+		/// <param name="error">Error info.</param>
+		/// <returns>Subscription response message.</returns>
+		public static SubscriptionResponseMessage CreateSubscriptionResponse(this long id, Exception error = null)
+		{
+			return new SubscriptionResponseMessage
+			{
+				OriginalTransactionId = id,
+				Error = error
+			};
 		}
 
 		/// <summary>
@@ -1676,11 +1719,7 @@ namespace StockSharp.Messages
 				case MessageTypes.Portfolio:
 				case MessageTypes.OrderStatus:
 				{
-					sendOut(new SubscriptionResponseMessage
-					{
-						OriginalTransactionId = ((ITransactionIdMessage)message).TransactionId,
-						Error = ex
-					});
+					sendOut(((ITransactionIdMessage)message).TransactionId.CreateSubscriptionResponse(ex));
 					return true;
 				}
 

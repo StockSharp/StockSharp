@@ -238,11 +238,7 @@ namespace StockSharp.Algo
 								if (!isFilteredMsg)
 									break;
 
-								reply = new SubscriptionResponseMessage
-								{
-									OriginalTransactionId = transId,
-									Error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId)),
-								};
+								reply = transId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId)));
 							}
 						}
 
