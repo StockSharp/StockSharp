@@ -296,6 +296,7 @@ StockSharp API Change log
 * (feature) MarketDataFinished -> SubscriptionFinished.
 * (feature) MarketDataMessage. Extracted response logic into SubscriptionResponseMessage.
 * (feature) Portfolio subscription uses SubscriptionResponseMessage as response.
+* (feature) OrderStatus subscription uses SubscriptionResponseMessage as response.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

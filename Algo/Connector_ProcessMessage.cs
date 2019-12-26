@@ -628,10 +628,6 @@ namespace StockSharp.Algo
 						ProcessExecutionMessage((ExecutionMessage)message);
 						break;
 
-					case MessageTypes.OrderStatus:
-						ProcessOrderStatusMessage((OrderStatusMessage)message);
-						break;
-
 					case MessageTypes.Portfolio:
 						ProcessPortfolioMessage((PortfolioMessage)message);
 						break;
@@ -734,7 +730,12 @@ namespace StockSharp.Algo
 				if (replyMsg.Error == null)
 					RaiseSubscriptionStarted(subscription);
 				else
+				{
 					RaiseSubscriptionFailed(subscription, replyMsg.Error, originalMsg.IsSubscribe);
+
+					if (_entityCache.IsOrderStatusRequest(originalMsg.TransactionId))
+						RaiseOrderStatusFailed(originalMsg.TransactionId, replyMsg.Error, replyMsg.LocalTime);
+				}
 			}
 		}
 
@@ -1671,10 +1672,6 @@ namespace StockSharp.Algo
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
 			}
-		}
-
-		private void ProcessOrderStatusMessage(OrderStatusMessage message)
-		{
 		}
 
 		private void ProcessCandleMessage(CandleMessage message)

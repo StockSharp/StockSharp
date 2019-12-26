@@ -359,11 +359,7 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			ProcessInSubscriptionMessage(message, DataType.Transactions, default, (id, error) => new OrderStatusMessage
-			{
-				OriginalTransactionId = id,
-				Error = error,
-			});
+			ProcessInSubscriptionMessage(message, DataType.Transactions);
 		}
 
 		private void ProcessPortfolioLookupMessage(PortfolioLookupMessage message)

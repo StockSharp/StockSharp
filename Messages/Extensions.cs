@@ -1674,6 +1674,7 @@ namespace StockSharp.Messages
 
 				case MessageTypes.MarketData:
 				case MessageTypes.Portfolio:
+				case MessageTypes.OrderStatus:
 				{
 					sendOut(new SubscriptionResponseMessage
 					{
@@ -1744,17 +1745,6 @@ namespace StockSharp.Messages
 					sendOut(new ChangePasswordMessage
 					{
 						OriginalTransactionId = pwdMsg.TransactionId,
-						Error = ex
-					});
-					return true;
-				}
-
-				case MessageTypes.OrderStatus:
-				{
-					var requestMsg = (OrderStatusMessage)message;
-					sendOut(new OrderStatusMessage
-					{
-						OriginalTransactionId = requestMsg.TransactionId,
 						Error = ex
 					});
 					return true;
