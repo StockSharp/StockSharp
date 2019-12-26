@@ -921,24 +921,6 @@ namespace StockSharp.Messages
 			return new ErrorMessage { Error = error };
 		}
 
-		///// <summary>
-		///// Get inner <see cref="IMessageAdapter"/>.
-		///// </summary>
-		///// <param name="adapter"><see cref="IMessageAdapter"/>.</param>
-		///// <returns>Inner <see cref="IMessageAdapter"/>.</returns>
-		//public static IMessageAdapter GetInnerAdapter(this IMessageAdapter adapter)
-		//{
-		//	if (adapter == null)
-		//		return null;
-
-		//	IMessageAdapterWrapper wrapper;
-
-		//	while ((wrapper = adapter as IMessageAdapterWrapper) != null)
-		//		adapter = wrapper.InnerAdapter;
-
-		//	return adapter;
-		//}
-
 		private static readonly ChannelFactory<IDailyInfoSoap> _dailyInfoFactory = new ChannelFactory<IDailyInfoSoap>(new BasicHttpBinding(), new EndpointAddress("http://www.cbr.ru/dailyinfowebserv/dailyinfo.asmx"));
 		private static readonly Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>> _rateInfo = new Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>>();
 
@@ -1040,19 +1022,6 @@ namespace StockSharp.Messages
 
 			if (message.LocalTime.IsDefault())
 				message.LocalTime = source.CurrentTime;
-		}
-
-		/// <summary>
-		/// Is specified message id real-time subscription.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns><see langword="true" />, if real-time, otherwise, <see langword="false"/>.</returns>
-		public static bool IsRealTimeSubscription(this MarketDataMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			return /*message.From == null && */message.To == null;
 		}
 
 		/// <summary>
@@ -1977,30 +1946,6 @@ namespace StockSharp.Messages
 		/// <returns>Check result.</returns>
 		public static bool IsSupportSubscriptionByPortfolio(this IMessageAdapter adapter)
 			=> adapter.IsMessageSupported(MessageTypes.Portfolio);
-
-		/// <summary>
-		/// <see cref="SecurityLookupMessage"/> required to get securities.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsSecurityLookupRequired(this IMessageAdapter adapter) 
-			=> adapter.IsMessageSupported(MessageTypes.SecurityLookup);
-
-		/// <summary>
-		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsPortfolioLookupRequired(this IMessageAdapter adapter)
-			=> adapter.IsMessageSupported(MessageTypes.PortfolioLookup);
-
-		/// <summary>
-		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsOrderStatusRequired(this IMessageAdapter adapter)
-			=> adapter.IsMessageSupported(MessageTypes.OrderStatus);
 
 		/// <summary>
 		/// Determines the specified message contains <see cref="SecurityId.Money"/> position.
