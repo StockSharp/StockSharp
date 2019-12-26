@@ -1258,7 +1258,7 @@ namespace StockSharp.Algo
 
 				if (adapters.Length == 0)
 				{
-					SendOutMarketDataNotSupported(mdMsg.TransactionId);
+					SendOutMessage(mdMsg.TransactionId.CreateNotSupported());
 					return null;
 				}
 
@@ -1550,11 +1550,6 @@ namespace StockSharp.Algo
 
 			if (changed)
 				msg.SetSubscriptionIds(ids);
-		}
-
-		private void SendOutMarketDataNotSupported(long id)
-		{
-			SendOutMessage(id.CreateNotSupported());
 		}
 
 		private void SendOutError(Exception error)

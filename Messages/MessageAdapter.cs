@@ -405,7 +405,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
 		/// <param name="error">Subscribe or unsubscribe error info. To be set if the answer.</param>
-		protected void SendOutMarketDataReply(long originalTransactionId, Exception error = null)
+		protected void SendSubscriptionReply(long originalTransactionId, Exception error = null)
 		{
 			SendOutMessage(originalTransactionId.CreateSubscriptionResponse(error));
 		}
@@ -414,7 +414,7 @@ namespace StockSharp.Messages
 		/// Initialize a new message <see cref="SubscriptionResponseMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
 		/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
-		protected void SendOutMarketDataNotSupported(long originalTransactionId)
+		protected void SendSubscriptionNotSupported(long originalTransactionId)
 		{
 			SendOutMessage(originalTransactionId.CreateNotSupported());
 		}

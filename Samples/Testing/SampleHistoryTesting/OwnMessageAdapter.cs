@@ -78,7 +78,7 @@ namespace SampleHistoryTesting
 								var tf = mdMsg.GetTimeFrame();
 
 								// sends subscribed successfully
-								SendOutMarketDataReply(mdMsg.TransactionId);
+								SendSubscriptionReply(mdMsg.TransactionId);
 
 								const decimal step = 0.01m;
 
@@ -115,14 +115,14 @@ namespace SampleHistoryTesting
 							else
 							{
 								// sends unsubscribed successfully
-								SendOutMarketDataReply(mdMsg.TransactionId);
+								SendSubscriptionReply(mdMsg.TransactionId);
 							}
 
 							break;
 						}
 						default:
 							// not supported other data types
-							SendOutMarketDataNotSupported(mdMsg.TransactionId);
+							SendSubscriptionNotSupported(mdMsg.TransactionId);
 							break;
 					}
 

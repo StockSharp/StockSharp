@@ -411,13 +411,13 @@ namespace StockSharp.Algo.Testing
 
 			if (SecurityProvider.LookupById(securityId) == null)
 			{
-				SendOutMarketDataReply(transId, new InvalidOperationException(LocalizedStrings.Str704Params.Put(securityId)));
+				SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.Str704Params.Put(securityId)));
 				return;
 			}
 
 			if (StorageRegistry == null)
 			{
-				SendOutMarketDataReply(transId, new InvalidOperationException(LocalizedStrings.Str1117Params.Put(dataType, securityId)));
+				SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.Str1117Params.Put(dataType, securityId)));
 				return;
 			}
 
@@ -542,7 +542,7 @@ namespace StockSharp.Algo.Testing
 					if (_generators.ContainsKey(Tuple.Create(securityId, MarketDataTypes.Trades, arg)))
 					{
 						if (isSubscribe)
-							SendOutMarketDataNotSupported(transId);
+							SendSubscriptionNotSupported(transId);
 
 						return;
 					}
@@ -568,7 +568,7 @@ namespace StockSharp.Algo.Testing
 					break;
 			}
 
-			SendOutMarketDataReply(transId, error);
+			SendSubscriptionReply(transId, error);
 		}
 
 		/// <inheritdoc />
