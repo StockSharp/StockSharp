@@ -1581,12 +1581,7 @@ namespace StockSharp.Algo
 			if (transId == 0)
 				return message;
 
-			var errorMsg = (IErrorMessage)message;
-
-			if (errorMsg.Error != null)
-				this.AddWarningLog("Lookup out: {0}", errorMsg);
-
-			var parentId = _parentChildMap.ProcessChildResponse(transId, errorMsg.Error == null, out var needParentResponse, out var allError);
+			var parentId = _parentChildMap.ProcessChildResponse(transId, true, out var needParentResponse, out _);
 
 			if (parentId == null || !needParentResponse)
 				return null;
@@ -1595,10 +1590,6 @@ namespace StockSharp.Algo
 			parentResponse.OriginalTransactionId = parentId.Value;
 			parentResponse.LocalTime = message.LocalTime;
 
-			((IErrorMessage)parentResponse).Error = allError
-				? new InvalidOperationException(LocalizedStrings.Str629Params.Put(parentId))
-				: null;
-				
 			return (Message)parentResponse;
 		}
 
@@ -1795,7 +1786,7 @@ namespace StockSharp.Algo
 			}
 
 			var isOk = message.IsOk();
-			var originMsg = (MarketDataMessage)tuple.Item1;
+			var originMsg = tuple.Item1;
 
 			if (!isOk)
 			{
@@ -1827,21 +1818,21 @@ namespace StockSharp.Algo
 					_subscription.Remove(originMsg.OriginalTransactionId);
 			}
 
-			if (message.IsNotSupported())
+			if (message.IsNotSupported() && originMsg is MarketDataMessage mdMsg)
 			{
 				lock (_connectedResponseLock)
 				{
 					// try loopback only subscribe messages
-					if (originMsg.IsSubscribe)
+					if (mdMsg.IsSubscribe)
 					{
 						var set = _nonSupportedAdapters.SafeAdd(originalTransactionId, k => new HashSet<IMessageAdapter>());
 						set.Add(GetUnderlyingAdapter(adapter));
 
-						originMsg.LoopBack(this);
+						mdMsg.LoopBack(this);
 					}
 				}
 
-				return originMsg;
+				return mdMsg;
 			}
 			
 			return message;

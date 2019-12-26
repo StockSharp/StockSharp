@@ -360,41 +360,6 @@
 
 			switch (message.Type)
 			{
-				case MessageTypes.PortfolioLookupResult:
-				case MessageTypes.OrderStatus:
-				{
-					var responseMsg = (IOriginalTransactionIdMessage)message;
-					var originId = responseMsg.OriginalTransactionId;
-
-					lock (_syncObject)
-					{
-						if (_liveRequests.TryGetAndRemove(originId, out var isPartial))
-						{
-							if (isPartial)
-							{
-								if (((IErrorMessage)responseMsg).Error == null)
-								{
-									// reply was sent prev for first partial request,
-									// now sending "online" message
-									message = new SubscriptionOnlineMessage
-									{
-										OriginalTransactionId = originId
-									};
-								}
-							}
-							else
-							{
-								extra = new SubscriptionOnlineMessage
-								{
-									OriginalTransactionId = originId
-								};
-							}
-						}
-					}
-
-					break;
-				}
-
 				case MessageTypes.SubscriptionResponse:
 				{
 					var responseMsg = (SubscriptionResponseMessage)message;
