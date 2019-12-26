@@ -211,10 +211,10 @@
 			{
 				case MessageTypes.SubscriptionResponse:
 				{
-					var mdMsg = (SubscriptionResponseMessage)message;
+					var responseMsg = (SubscriptionResponseMessage)message;
 
-					if (!mdMsg.IsOk())
-						RemoveSubscription(mdMsg.OriginalTransactionId);
+					if (!responseMsg.IsOk())
+						RemoveSubscription(responseMsg.OriginalTransactionId);
 
 					break;
 				}

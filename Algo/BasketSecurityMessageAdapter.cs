@@ -145,7 +145,7 @@ namespace StockSharp.Algo
 			{
 				case MessageTypes.SubscriptionResponse:
 				{
-					var mdMsg = (SubscriptionResponseMessage)message;
+					var responseMsg = (SubscriptionResponseMessage)message;
 					break;
 				}
 
