@@ -115,6 +115,12 @@ namespace SampleConnection
 		{
 			var connector = Connector;
 
+			if (!_initialized)
+			{
+				connector.MarketDepthReceived += TraderOnMarketDepthChanged;
+				_initialized = true;
+			}
+
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
 				// subscribe on order book flow
@@ -138,12 +144,6 @@ namespace SampleConnection
 				window.Show();
 
 				_quotesWindows.Add(subscription, window);
-
-				if (!_initialized)
-				{
-					connector.MarketDepthReceived += TraderOnMarketDepthChanged;
-					_initialized = true;
-				}
 			}
 		}
 
