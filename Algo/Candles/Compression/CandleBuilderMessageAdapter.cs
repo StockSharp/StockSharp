@@ -106,7 +106,7 @@ namespace StockSharp.Algo.Candles.Compression
 						{
 							if (isLoadOnly || !TrySubscribeBuild(mdMsg))
 							{
-								RaiseNewOutMessage(new MarketDataMessage
+								RaiseNewOutMessage(new SubscriptionResponseMessage
 								{
 									OriginalTransactionId = transactionId,
 									IsNotSupported = true,
@@ -150,7 +150,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 							if (isLoadOnly)
 							{
-								RaiseNewOutMessage(new MarketDataMessage
+								RaiseNewOutMessage(new SubscriptionResponseMessage
 								{
 									OriginalTransactionId = transactionId,
 									IsNotSupported = true,
@@ -192,7 +192,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 							if (!TrySubscribeBuild(mdMsg))
 							{
-								RaiseNewOutMessage(new MarketDataMessage
+								RaiseNewOutMessage(new SubscriptionResponseMessage
 								{
 									OriginalTransactionId = transactionId,
 									IsNotSupported = true,
@@ -222,7 +222,7 @@ namespace StockSharp.Algo.Candles.Compression
 							{
 								if (isLoadOnly || !TrySubscribeBuild(mdMsg))
 								{
-									RaiseNewOutMessage(new MarketDataMessage
+									RaiseNewOutMessage(new SubscriptionResponseMessage
 									{
 										OriginalTransactionId = transactionId,
 										IsNotSupported = true,
@@ -379,9 +379,9 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.MarketData:
+				case MessageTypes.SubscriptionResponse:
 				{
-					var response = (MarketDataMessage)message;
+					var response = (SubscriptionResponseMessage)message;
 					var requestId = response.OriginalTransactionId;
 
 					var series = TryGetSeries(requestId, out _);
@@ -508,7 +508,7 @@ namespace StockSharp.Algo.Candles.Compression
 			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		private void UpgradeSubscription(SeriesInfo series, MarketDataMessage response)
+		private void UpgradeSubscription(SeriesInfo series, SubscriptionResponseMessage response)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
@@ -521,7 +521,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 				if (response != null && !response.IsOk())
 				{
-					response = (MarketDataMessage)response.Clone();
+					response = (SubscriptionResponseMessage)response.Clone();
 					response.OriginalTransactionId = original.TransactionId;
 					RaiseNewOutMessage(response);
 				}

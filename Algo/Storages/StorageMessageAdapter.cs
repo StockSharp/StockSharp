@@ -572,7 +572,7 @@ namespace StockSharp.Algo.Storages
 
 				if (_fullyProcessedSubscriptions.Remove(msg.OriginalTransactionId))
 				{
-					RaiseNewOutMessage(new MarketDataMessage
+					RaiseNewOutMessage(new SubscriptionResponseMessage
 					{
 						OriginalTransactionId = msg.TransactionId,
 					});
@@ -586,7 +586,7 @@ namespace StockSharp.Algo.Storages
 
 		private DateTimeOffset? LoadMessages(MarketDataMessage msg, DateTimeOffset? from, DateTimeOffset? to, long transactionId)
 		{
-			void SendReply() => RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId });
+			void SendReply() => RaiseStorageMessage(new SubscriptionResponseMessage { OriginalTransactionId = transactionId });
 
 			DateTimeOffset? lastTime = null;
 

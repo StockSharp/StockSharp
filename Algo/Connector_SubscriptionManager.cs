@@ -249,7 +249,7 @@ namespace StockSharp.Algo
 				subscription.State = state;
 			}
 
-			public Subscription ProcessResponse(MarketDataMessage response, out MarketDataMessage originalMsg, out bool unexpectedCancelled)
+			public Subscription ProcessResponse(SubscriptionResponseMessage response, out MarketDataMessage originalMsg, out bool unexpectedCancelled)
 			{
 				originalMsg = null;
 

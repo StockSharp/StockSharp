@@ -209,9 +209,9 @@
 
 			switch (message.Type)
 			{
-				case MessageTypes.MarketData:
+				case MessageTypes.SubscriptionResponse:
 				{
-					var mdMsg = (MarketDataMessage)message;
+					var mdMsg = (SubscriptionResponseMessage)message;
 
 					if (!mdMsg.IsOk())
 						RemoveSubscription(mdMsg.OriginalTransactionId);

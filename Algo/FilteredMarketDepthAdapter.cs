@@ -196,7 +196,7 @@ namespace StockSharp.Algo
 
 						if (filtered == null)
 						{
-							RaiseNewOutMessage(new MarketDataMessage { OriginalTransactionId = transId });
+							RaiseNewOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = transId });
 							return;
 						}
 						else
@@ -204,7 +204,7 @@ namespace StockSharp.Algo
 					}
 					else
 					{
-						MarketDataMessage reply;
+						SubscriptionResponseMessage reply;
 
 						lock (_syncObject)
 						{
@@ -216,7 +216,7 @@ namespace StockSharp.Algo
 
 								if (info.Subscriptions.Count > 0)
 								{
-									reply = new MarketDataMessage
+									reply = new SubscriptionResponseMessage
 									{
 										OriginalTransactionId = transId,
 									};
@@ -238,7 +238,7 @@ namespace StockSharp.Algo
 								if (!isFilteredMsg)
 									break;
 
-								reply = new MarketDataMessage
+								reply = new SubscriptionResponseMessage
 								{
 									OriginalTransactionId = transId,
 									Error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId)),

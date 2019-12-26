@@ -174,6 +174,7 @@
     <Compile Include="MessageAdapterCategories.cs" />
     <Compile Include="SubscriptionListFinishedMessage.cs" />
     <Compile Include="SubscriptionListRequestMessage.cs" />
+    <Compile Include="SubscriptionResponseMessage.cs" />
     <Compile Include="TimeFrameLookupMessage.cs" />
     <Compile Include="TimeFrameLookupResultMessage.cs" />
     <Compile Include="TimeInForce.cs" />

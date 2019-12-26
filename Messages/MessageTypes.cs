@@ -359,6 +359,11 @@ namespace StockSharp.Messages
 		/// <see cref="SubscriptionOnlineMessage"/>.
 		/// </summary>
 		SubscriptionOnline,
+
+		/// <summary>
+		/// <see cref="SubscriptionResponseMessage"/>.
+		/// </summary>
+		SubscriptionResponse,
 	}
 
 	/// <summary>

@@ -1460,8 +1460,8 @@ namespace StockSharp.Algo
 						ProcessDisconnectMessage(innerAdapter, (DisconnectMessage)message, extra);
 						break;
 
-					case MessageTypes.MarketData:
-						message = ProcessMarketDataResponse(innerAdapter, (MarketDataMessage)message);
+					case MessageTypes.SubscriptionResponse:
+						message = ProcessSubscriptionResponse(innerAdapter, (SubscriptionResponseMessage)message);
 						break;
 
 					case MessageTypes.SubscriptionFinished:
@@ -1576,7 +1576,7 @@ namespace StockSharp.Algo
 
 		private void SendOutMarketDataNotSupported(long id)
 		{
-			SendOutMessage(new MarketDataMessage
+			SendOutMessage(new SubscriptionResponseMessage
 			{
 				OriginalTransactionId = id,
 				IsNotSupported = true,
@@ -1812,14 +1812,15 @@ namespace StockSharp.Algo
 			return new SubscriptionFinishedMessage { OriginalTransactionId = parentId.Value };
 		}
 
-		private MarketDataMessage ProcessMarketDataResponse(IMessageAdapter adapter, MarketDataMessage message)
+		private Message ProcessSubscriptionResponse(IMessageAdapter adapter, SubscriptionResponseMessage message)
 		{
 			var originalTransactionId = message.OriginalTransactionId;
 
 			if (!_requestsById.TryGetValue(originalTransactionId, out var tuple))
 			{
-				if (_subscriptionListRequests.Contains(originalTransactionId) && message.TransactionId != 0)
-					_requestsById.TryAdd(message.TransactionId, Tuple.Create((ISubscriptionMessage)null, GetUnderlyingAdapter(adapter)));
+				// TODO
+				//if (_subscriptionListRequests.Contains(originalTransactionId) && message.TransactionId != 0)
+				//	_requestsById.TryAdd(message.TransactionId, Tuple.Create((ISubscriptionMessage)null, GetUnderlyingAdapter(adapter)));
 
 				return message;
 			}
@@ -1848,7 +1849,7 @@ namespace StockSharp.Algo
 					_subscription.Remove(parentId.Value);
 
 				return needParentResponse
-					? new MarketDataMessage
+					? new SubscriptionResponseMessage
 					{
 						OriginalTransactionId = parentId.Value,
 						Error = allError ? new InvalidOperationException(LocalizedStrings.Str629Params.Put(originMsg)) : null,

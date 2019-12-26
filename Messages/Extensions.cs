@@ -1544,11 +1544,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines whether the reply contains an error <see cref="MarketDataMessage.Error"/> or has <see cref="MarketDataMessage.IsNotSupported"/>.
+		/// Determines whether the reply contains an error <see cref="BaseResultMessage{TMessage}.Error"/> or has <see cref="SubscriptionResponseMessage.IsNotSupported"/>.
 		/// </summary>
 		/// <param name="message">Reply.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsOk(this MarketDataMessage message)
+		public static bool IsOk(this SubscriptionResponseMessage message)
 		{
 			return message.Error == null && !message.IsNotSupported;
 		}
@@ -1674,10 +1674,11 @@ namespace StockSharp.Messages
 
 				case MessageTypes.MarketData:
 				{
-					var reply = (MarketDataMessage)message.Clone();
-					reply.OriginalTransactionId = reply.TransactionId;
-					reply.Error = ex;
-					sendOut(reply);
+					sendOut(new SubscriptionResponseMessage
+					{
+						OriginalTransactionId = ((ITransactionIdMessage)message).TransactionId,
+						Error = ex
+					});
 					return true;
 				}
 

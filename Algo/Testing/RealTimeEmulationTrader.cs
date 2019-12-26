@@ -142,7 +142,7 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.Connect:
 					case MessageTypes.Disconnect:
 					case MessageTypes.ChangePassword:
-					case MessageTypes.MarketData:
+					case MessageTypes.SubscriptionResponse:
 					{
 						if (_connector._ownAdapter)
 							break;
@@ -270,7 +270,7 @@ namespace StockSharp.Algo.Testing
 					{
 						case MessageTypes.Connect:
 						case MessageTypes.Disconnect:
-						case MessageTypes.MarketData:
+						case MessageTypes.SubscriptionResponse:
 						case MessageTypes.SecurityLookupResult:
 						//case MessageTypes.Session:
 						case MessageTypes.ChangePassword:

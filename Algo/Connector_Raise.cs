@@ -220,7 +220,7 @@ namespace StockSharp.Algo
 		public event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
 
 		/// <inheritdoc />
-		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataSubscriptionFailed2;
+		public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataSubscriptionFailed2;
 
 		/// <inheritdoc />
 		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
@@ -229,7 +229,7 @@ namespace StockSharp.Algo
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
 
 		/// <inheritdoc />
-		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataUnSubscriptionFailed2;
+		public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataUnSubscriptionFailed2;
 
 		/// <inheritdoc />
 		public event Action<Security, SubscriptionFinishedMessage> MarketDataSubscriptionFinished;
@@ -331,7 +331,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The series error event.
 		/// </summary>
-		public event Action<CandleSeries, MarketDataMessage> CandleSeriesError;
+		public event Action<CandleSeries, SubscriptionResponseMessage> CandleSeriesError;
 
 		/// <inheritdoc />
 		public event Action<long, Exception> ChangePasswordResult;
@@ -649,7 +649,7 @@ namespace StockSharp.Algo
 			RaiseSubscriptionStarted(subscription);
 		}
 
-		private void RaiseMarketDataSubscriptionFailed(MarketDataMessage origin, MarketDataMessage reply, Subscription subscription)
+		private void RaiseMarketDataSubscriptionFailed(MarketDataMessage origin, SubscriptionResponseMessage reply, Subscription subscription)
 		{
 			if (origin == null)
 				throw new ArgumentNullException(nameof(origin));
@@ -702,7 +702,7 @@ namespace StockSharp.Algo
 				RaiseCandleSeriesStopped(subscription.CandleSeries);
 		}
 
-		private void RaiseMarketDataUnSubscriptionFailed(MarketDataMessage origin, MarketDataMessage reply, Subscription subscription)
+		private void RaiseMarketDataUnSubscriptionFailed(MarketDataMessage origin, SubscriptionResponseMessage reply, Subscription subscription)
 		{
 			if (origin == null)
 				throw new ArgumentNullException(nameof(origin));
@@ -861,7 +861,7 @@ namespace StockSharp.Algo
 			CandleSeriesStopped?.Invoke(series);
 		}
 
-		private void RaiseCandleSeriesError(CandleSeries series, MarketDataMessage reply)
+		private void RaiseCandleSeriesError(CandleSeries series, SubscriptionResponseMessage reply)
 		{
 			CandleSeriesError?.Invoke(series, reply);
 		}

@@ -165,9 +165,9 @@ namespace StockSharp.Algo.Testing
 
 			switch (message.Type)
 			{
-				case MessageTypes.MarketData:
+				case MessageTypes.SubscriptionResponse:
 				{
-					var response = (MarketDataMessage)message;
+					var response = (SubscriptionResponseMessage)message;
 
 					if (!response.IsOk())
 						TryRemoveSubscription(response.OriginalTransactionId, true);

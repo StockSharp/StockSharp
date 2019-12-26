@@ -184,7 +184,7 @@ namespace SampleOptionQuoting
 			remove => throw new NotSupportedException();
 		}
 
-		event Action<Security, MarketDataMessage, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionFailed2
+		event Action<Security, MarketDataMessage, SubscriptionResponseMessage> IMarketDataProvider.MarketDataSubscriptionFailed2
 		{
 			add => throw new NotSupportedException();
 			remove => throw new NotSupportedException();
@@ -202,7 +202,7 @@ namespace SampleOptionQuoting
 			remove => throw new NotSupportedException();
 		}
 
-		event Action<Security, MarketDataMessage, MarketDataMessage> IMarketDataProvider.MarketDataUnSubscriptionFailed2
+		event Action<Security, MarketDataMessage, SubscriptionResponseMessage> IMarketDataProvider.MarketDataUnSubscriptionFailed2
 		{
 			add => throw new NotSupportedException();
 			remove => throw new NotSupportedException();

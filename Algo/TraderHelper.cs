@@ -5070,12 +5070,12 @@ namespace StockSharp.Algo
 			{
 				if (msg is TResult typedMsg)
 					retVal.Add(typedMsg);
-				else if (msg is MarketDataMessage mdMsg)
+				else if (msg is SubscriptionResponseMessage responseMsg)
 				{
 					lock (sync)
 					{
 						responseReceived = true;
-						error = mdMsg.Error;
+						error = responseMsg.Error;
 
 						if (error != null)
 							sync.PulseSignal();

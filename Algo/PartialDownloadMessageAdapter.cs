@@ -322,7 +322,7 @@
 
 						if (info.UnsubscribingId != null)
 						{
-							outMsg = new MarketDataMessage { OriginalTransactionId = info.UnsubscribingId.Value };
+							outMsg = new SubscriptionResponseMessage { OriginalTransactionId = info.UnsubscribingId.Value };
 							message = null;
 							break;
 						}
@@ -395,9 +395,9 @@
 					break;
 				}
 
-				case MessageTypes.MarketData:
+				case MessageTypes.SubscriptionResponse:
 				{
-					var responseMsg = (MarketDataMessage)message;
+					var responseMsg = (SubscriptionResponseMessage)message;
 					var originId = responseMsg.OriginalTransactionId;
 
 					lock (_syncObject)

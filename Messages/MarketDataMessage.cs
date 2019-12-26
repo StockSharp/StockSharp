@@ -19,7 +19,6 @@ namespace StockSharp.Messages
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
 
 	using Ecng.Common;
 
@@ -151,7 +150,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IErrorMessage
+	public class MarketDataMessage : SecurityMessage, ISubscriptionMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -190,17 +189,6 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
-
-		/// <summary>
-		/// The message is not supported by adapter. To be set if the answer.
-		/// </summary>
-		[DataMember]
-		public bool IsNotSupported { get; set; }
-
-		/// <inheritdoc />
-		[DataMember]
-		[XmlIgnore]
-		public Exception Error { get; set; }
 
 		/// <summary>
 		/// Market-data count.
@@ -309,7 +297,6 @@ namespace StockSharp.Messages
 
 			destination.Arg = Arg;
 			destination.DataType = DataType;
-			destination.Error = Error;
 			destination.From = From;
 			destination.To = To;
 			destination.IsSubscribe = IsSubscribe;
@@ -317,7 +304,6 @@ namespace StockSharp.Messages
 			destination.Count = Count;
 			destination.MaxDepth = MaxDepth;
 			destination.NewsId = NewsId;
-			destination.IsNotSupported = IsNotSupported;
 			destination.BuildMode = BuildMode;
 			destination.BuildFrom = BuildFrom;
 			destination.BuildField = BuildField;
@@ -371,9 +357,6 @@ namespace StockSharp.Messages
 
 			if (!BoardCode.IsEmpty())
 				str += $",BoardCode={BoardCode}";
-
-			if (Error != null)
-				str += $",Error={Error.Message}";
 
 			return str;
 		}

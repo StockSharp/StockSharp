@@ -650,8 +650,8 @@ namespace StockSharp.Algo
 					//	// MarketTimeChanged необходимо вызывать при обработке времени из любых месседжей.
 					//	break;
 
-					case MessageTypes.MarketData:
-						ProcessMarketDataMessage((MarketDataMessage)message);
+					case MessageTypes.SubscriptionResponse:
+						ProcessSubscriptionResponseMessage((SubscriptionResponseMessage)message);
 						break;
 
 					case MessageTypes.SubscriptionFinished:
@@ -695,7 +695,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessMarketDataMessage(MarketDataMessage replyMsg)
+		private void ProcessSubscriptionResponseMessage(SubscriptionResponseMessage replyMsg)
 		{
 			var subscription = _subscriptionManager.ProcessResponse(replyMsg, out var originalMsg, out var unexpectedCancelled);
 

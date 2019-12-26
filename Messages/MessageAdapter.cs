@@ -407,7 +407,7 @@ namespace StockSharp.Messages
 		/// <param name="error">Subscribe or unsubscribe error info. To be set if the answer.</param>
 		protected void SendOutMarketDataReply(long originalTransactionId, Exception error = null)
 		{
-			SendOutMessage(new MarketDataMessage
+			SendOutMessage(new SubscriptionResponseMessage
 			{
 				OriginalTransactionId = originalTransactionId,
 				Error = error,
@@ -420,7 +420,11 @@ namespace StockSharp.Messages
 		/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
 		protected void SendOutMarketDataNotSupported(long originalTransactionId)
 		{
-			SendOutMessage(new MarketDataMessage { OriginalTransactionId = originalTransactionId, IsNotSupported = true });
+			SendOutMessage(new SubscriptionResponseMessage
+			{
+				OriginalTransactionId = originalTransactionId,
+				IsNotSupported = true
+			});
 		}
 
 		/// <inheritdoc />

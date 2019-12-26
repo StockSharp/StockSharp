@@ -157,7 +157,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataSubscriptionFailed2
+		public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataSubscriptionFailed2
 		{
 			add => MarketDataProvider.MarketDataSubscriptionFailed2 += value;
 			remove => MarketDataProvider.MarketDataSubscriptionFailed2 -= value;
@@ -178,7 +178,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public event Action<Security, MarketDataMessage, MarketDataMessage> MarketDataUnSubscriptionFailed2
+		public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataUnSubscriptionFailed2
 		{
 			add => MarketDataProvider.MarketDataUnSubscriptionFailed2 += value;
 			remove => MarketDataProvider.MarketDataUnSubscriptionFailed2 -= value;

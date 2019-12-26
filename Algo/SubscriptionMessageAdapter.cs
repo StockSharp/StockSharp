@@ -199,11 +199,11 @@ namespace StockSharp.Algo
 
 			switch (message.Type)
 			{
-				case MessageTypes.MarketData:
+				case MessageTypes.SubscriptionResponse:
 				{
-					var responseMsg = (MarketDataMessage)message;
+					var responseMsg = (SubscriptionResponseMessage)message;
 
-					if (!UpdateSubscriptionResult(responseMsg.IsOk(), subscriber => new MarketDataMessage
+					if (!UpdateSubscriptionResult(responseMsg.IsOk(), subscriber => new SubscriptionResponseMessage
 					{
 						OriginalTransactionId = subscriber,
 						Error = responseMsg.Error,
@@ -407,7 +407,7 @@ namespace StockSharp.Algo
 			var dataType = message.ToDataType();
 			var secId = GetSecurityId(dataType, message.SecurityId);
 
-			ProcessInSubscriptionMessage(message, dataType, secId, (id, error) => new MarketDataMessage
+			ProcessInSubscriptionMessage(message, dataType, secId, (id, error) => new SubscriptionResponseMessage
 			{
 				OriginalTransactionId = id,
 				Error = error,
