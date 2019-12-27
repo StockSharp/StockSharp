@@ -299,6 +299,7 @@ StockSharp API Change log
 * (feature) OrderStatus subscription uses SubscriptionResponseMessage as response.
 * (feature) SubscriptionResponseMessage. IsNotSupported property removed.
 * (feature) Use SubscriptionResponseMessage.Error as response for error lookup messages.
+* (feature) Uses SubscriptionOnlineMessage, SubscriptionFinishedMessage instead of SecurityLookupResultMessage, PortfolioLookupResultMessage, OrderStatusMessage.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

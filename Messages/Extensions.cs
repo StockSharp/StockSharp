@@ -1796,12 +1796,12 @@ namespace StockSharp.Messages
 
 		private static readonly PairSet<MessageTypes, MessageTypes> _lookupResults = new PairSet<MessageTypes, MessageTypes>
 		{
-			{ MessageTypes.SecurityLookup, MessageTypes.SecurityLookupResult },
-			{ MessageTypes.BoardLookup, MessageTypes.BoardLookupResult },
+			{ MessageTypes.SecurityLookup, MessageTypes.SubscriptionFinished },
+			{ MessageTypes.BoardLookup, MessageTypes.SubscriptionFinished },
+			{ MessageTypes.UserLookup, MessageTypes.SubscriptionFinished },
 			{ MessageTypes.TimeFrameLookup, MessageTypes.TimeFrameLookupResult },
-			{ MessageTypes.PortfolioLookup, MessageTypes.PortfolioLookupResult },
-			{ MessageTypes.UserLookup, MessageTypes.UserLookupResult },
-			{ MessageTypes.OrderStatus, MessageTypes.OrderStatus },
+			{ MessageTypes.PortfolioLookup, MessageTypes.SubscriptionOnline },
+			{ MessageTypes.OrderStatus, MessageTypes.SubscriptionOnline },
 		};
 
 		/// <summary>
@@ -1849,17 +1849,14 @@ namespace StockSharp.Messages
 			switch (type)
 			{
 				case MessageTypes.SecurityLookupResult:
-					return new SecurityLookupResultMessage { OriginalTransactionId = id };
+				case MessageTypes.BoardLookupResult:
+				case MessageTypes.UserLookupResult:
+					return new SubscriptionFinishedMessage { OriginalTransactionId = id };
 				case MessageTypes.PortfolioLookupResult:
-					return new PortfolioLookupResultMessage { OriginalTransactionId = id };
+				case MessageTypes.OrderStatus:
+					return new SubscriptionOnlineMessage { OriginalTransactionId = id };
 				case MessageTypes.TimeFrameLookupResult:
 					return new TimeFrameLookupResultMessage { OriginalTransactionId = id };
-				case MessageTypes.BoardLookupResult:
-					return new BoardLookupResultMessage { OriginalTransactionId = id };
-				case MessageTypes.UserLookupResult:
-					return new UserLookupResultMessage { OriginalTransactionId = id };
-				case MessageTypes.OrderStatus:
-					return new OrderStatusMessage { OriginalTransactionId = id };
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 			}

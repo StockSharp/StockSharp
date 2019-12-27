@@ -58,7 +58,7 @@ namespace SampleHistoryTesting
 						});	
 					}
 
-					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
+					SendSubscriptionFinished(lookupMsg.TransactionId);
 					break;
 				}
 

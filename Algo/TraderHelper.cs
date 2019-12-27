@@ -5090,15 +5090,6 @@ namespace StockSharp.Algo
 						sync.PulseSignal();
 					}
 				}
-				else if (msg is SecurityLookupResultMessage resMsg)
-				{
-					lock (sync)
-					{
-						responseReceived = true;
-
-						sync.PulseSignal();
-					}
-				}
 				else if (msg is ConnectMessage conMsg)
 				{
 					lock (sync)

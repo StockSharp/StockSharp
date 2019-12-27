@@ -150,10 +150,9 @@ namespace StockSharp.Algo.Testing
 						return;
 					}
 
-					case MessageTypes.OrderStatus:
+					case MessageTypes.SubscriptionOnline:
 					case MessageTypes.Portfolio:
 					//case MessageTypes.PortfolioChange:
-					case MessageTypes.PortfolioLookupResult:
 					case MessageTypes.PositionChange:
 						return;
 
@@ -271,7 +270,7 @@ namespace StockSharp.Algo.Testing
 						case MessageTypes.Connect:
 						case MessageTypes.Disconnect:
 						case MessageTypes.SubscriptionResponse:
-						case MessageTypes.SecurityLookupResult:
+						case MessageTypes.SubscriptionFinished:
 						//case MessageTypes.Session:
 						case MessageTypes.ChangePassword:
 							break;

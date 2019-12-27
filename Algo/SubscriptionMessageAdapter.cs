@@ -231,9 +231,6 @@ namespace StockSharp.Algo
 				}
 
 				case MessageTypes.SubscriptionFinished:
-				case MessageTypes.SecurityLookupResult:
-				case MessageTypes.PortfolioLookupResult:
-				case MessageTypes.OrderStatus:
 				{
 					lock (_sync)
 					{
@@ -312,7 +309,7 @@ namespace StockSharp.Algo
 
 		private void ProcessUserLookupMessage(UserLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.Users, default, id => new UserLookupResultMessage
+			ProcessInSubscriptionMessage(message, DataType.Users, default, id => new SubscriptionFinishedMessage
 			{
 				OriginalTransactionId = id,
 			});
@@ -328,7 +325,7 @@ namespace StockSharp.Algo
 
 		private void ProcessBoardLookupMessage(BoardLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.Board, default, id => new BoardLookupResultMessage
+			ProcessInSubscriptionMessage(message, DataType.Board, default, id => new SubscriptionFinishedMessage
 			{
 				OriginalTransactionId = id,
 			});
@@ -336,7 +333,7 @@ namespace StockSharp.Algo
 
 		private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.Securities, default, id => new SecurityLookupResultMessage
+			ProcessInSubscriptionMessage(message, DataType.Securities, default, id => new SubscriptionFinishedMessage
 			{
 				OriginalTransactionId = id,
 			});
@@ -350,12 +347,15 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			ProcessInSubscriptionMessage(message, DataType.Transactions);
+			ProcessInSubscriptionMessage(message, DataType.Transactions, default, id => new SubscriptionOnlineMessage
+			{
+				OriginalTransactionId = id,
+			});
 		}
 
 		private void ProcessPortfolioLookupMessage(PortfolioLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.PositionChanges, default, id => new PortfolioLookupResultMessage
+			ProcessInSubscriptionMessage(message, DataType.PositionChanges, default, id => new SubscriptionOnlineMessage
 			{
 				OriginalTransactionId = id,
 			});

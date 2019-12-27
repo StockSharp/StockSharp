@@ -107,7 +107,7 @@ namespace StockSharp.Algo.Testing
 							SendOutMessage(security.ToMessage(originalTransactionId: lookupMsg.TransactionId));
 						}
 
-						SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
+						SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = lookupMsg.TransactionId });
 						return;
 					}
 

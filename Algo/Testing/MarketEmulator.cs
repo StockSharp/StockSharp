@@ -1966,7 +1966,7 @@ namespace StockSharp.Algo.Testing
 						}
 					}
 
-					retVal.Add(new PortfolioLookupResultMessage { OriginalTransactionId = pfMsg.TransactionId });
+					retVal.Add(new SubscriptionOnlineMessage { OriginalTransactionId = pfMsg.TransactionId });
 
 					break;
 				}

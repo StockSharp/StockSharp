@@ -247,14 +247,14 @@
 							{
 								case MessageTypes.SecurityLookup:
 									var secLookup = (SecurityLookupMessage)message;
-									RaiseNewOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = secLookup.TransactionId });
+									RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = secLookup.TransactionId });
 									break;
 
 								case MessageTypes.PortfolioLookup:
 									var pfLookup = (PortfolioLookupMessage)message;
 
 									if (pfLookup.IsSubscribe)
-										RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = pfLookup.TransactionId });
+										RaiseNewOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = pfLookup.TransactionId });
 									
 									break;
 							}

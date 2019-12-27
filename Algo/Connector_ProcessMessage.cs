@@ -600,20 +600,8 @@ namespace StockSharp.Algo
 						ProcessSecurityMessage((SecurityMessage)message);
 						break;
 
-					case MessageTypes.SecurityLookupResult:
-						ProcessSecurityLookupResultMessage((SecurityLookupResultMessage)message);
-						break;
-
-					case MessageTypes.BoardLookupResult:
-						ProcessBoardLookupResultMessage((BoardLookupResultMessage)message);
-						break;
-
 					case MessageTypes.TimeFrameLookupResult:
 						ProcessTimeFrameLookupResultMessage((TimeFrameLookupResultMessage)message);
-						break;
-
-					case MessageTypes.PortfolioLookupResult:
-						ProcessPortfolioLookupResultMessage((PortfolioLookupResultMessage)message);
 						break;
 
 					case MessageTypes.Level1Change:
@@ -757,6 +745,8 @@ namespace StockSharp.Algo
 				return;
 
 			RaiseMarketDataSubscriptionFinished(message, subscription);
+
+			ProcessSubscriptionResult(subscription);
 		}
 
 		private void ProcessSubscriptionOnlineMessage(SubscriptionOnlineMessage message)
@@ -767,6 +757,27 @@ namespace StockSharp.Algo
 				return;
 
 			RaiseMarketDataSubscriptionOnline(subscription);
+
+			ProcessSubscriptionResult(subscription);
+		}
+
+		private void ProcessSubscriptionResult(Subscription subscription)
+		{
+			if (subscription.SubscriptionMessage is SecurityLookupMessage secLookup)
+			{
+				var items = _subscriptionManager.GetLookupItems<Security>(subscription);
+				RaiseLookupSecuritiesResult(secLookup, null, Securities.Filter(secLookup).ToArray(), items);
+			}
+			else if (subscription.SubscriptionMessage is BoardLookupMessage boardLookup)
+			{
+				var items = _subscriptionManager.GetLookupItems<ExchangeBoard>(subscription);
+				RaiseLookupBoardsResult(boardLookup, null, ExchangeBoards.Filter(boardLookup).ToArray(), items);
+			}
+			else if (subscription.SubscriptionMessage is PortfolioLookupMessage pfLookup)
+			{
+				var items = _subscriptionManager.GetLookupItems<Portfolio>(subscription);
+				RaiseLookupPortfoliosResult(pfLookup, null, Portfolios.Filter(pfLookup).ToArray(), items);
+			}
 		}
 
 		private void ProcessSecurityRemoveMessage(SecurityRemoveMessage message)
@@ -923,36 +934,14 @@ namespace StockSharp.Algo
 			RaiseReceived(security, message, SecurityReceived);
 		}
 
-		private void ProcessSecurityLookupResultMessage(SecurityLookupResultMessage message)
-		{
-			if (!_subscriptionManager.TryGetAndRemoveLookup<SecurityLookupMessage, Security>(message, out var criteria, out var items))
-				return;
-
-			RaiseLookupSecuritiesResult(criteria, null, Securities.Filter(criteria).ToArray(), items);
-		}
-
-		private void ProcessBoardLookupResultMessage(BoardLookupResultMessage message)
-		{
-			if (!_subscriptionManager.TryGetAndRemoveLookup<BoardLookupMessage, ExchangeBoard>(message, out var criteria, out var items))
-				return;
-
-			RaiseLookupBoardsResult(criteria, null, ExchangeBoards.Filter(criteria).ToArray(), items);
-		}
-
 		private void ProcessTimeFrameLookupResultMessage(TimeFrameLookupResultMessage message)
 		{
-			if (!_subscriptionManager.TryGetAndRemoveLookup<TimeFrameLookupMessage, TimeSpan>(message, out var criteria, out _))
+			var subscription = _subscriptionManager.TryGetSubscription(message.OriginalTransactionId, true);
+			
+			if (subscription == null)
 				return;
 
-			RaiseLookupTimeFramesResult(criteria, null, message.TimeFrames, message.TimeFrames);
-		}
-
-		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)
-		{
-			if (!_subscriptionManager.TryGetAndRemoveLookup<PortfolioLookupMessage, Portfolio>(message, out var criteria, out var portfolios))
-				return;
-
-			RaiseLookupPortfoliosResult(criteria, null, Portfolios.Filter(criteria).ToArray(), portfolios);
+			RaiseLookupTimeFramesResult((TimeFrameLookupMessage)subscription.SubscriptionMessage, null, message.TimeFrames, message.TimeFrames);
 		}
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)

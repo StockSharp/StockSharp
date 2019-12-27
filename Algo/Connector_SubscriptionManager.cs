@@ -453,28 +453,18 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public bool TryGetAndRemoveLookup<TMessage, TItem>(IOriginalTransactionIdMessage result, out TMessage criteria, out TItem[] items)
-				where TMessage : Message, ISubscriptionMessage
+			public TItem[] GetLookupItems<TItem>(Subscription subscription)
 			{
-				criteria = null;
-				items = null;
-
 				lock (_syncObject)
 				{
-					var info = _subscriptions.TryGetValue(result.OriginalTransactionId);
+					var info = _subscriptions.TryGetValue(subscription.TransactionId);
 
 					if (info == null)
-						return false;
+						return ArrayHelper.Empty<TItem>();
 
 					info.HasResult = true;
 
-					var lookup = info.Lookup;
-					if (lookup == null)
-						return false;
-
-					criteria = (TMessage)lookup.Criteria;
-					items = lookup.Items.CopyAndClear().Cast<TItem>().ToArray();
-					return true;
+					return info.Lookup?.Items.CopyAndClear().Cast<TItem>().ToArray() ?? ArrayHelper.Empty<TItem>();
 				}
 			}
 
