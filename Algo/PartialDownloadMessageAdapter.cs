@@ -217,7 +217,7 @@
 
 									if (message.Type == MessageTypes.PortfolioLookup)
 									{
-										outMsg = message.Type.ToResultType().CreateLookupResult(subscriptionMsg.TransactionId);
+										outMsg = subscriptionMsg.CreateResult();
 									}
 
 									message = null;

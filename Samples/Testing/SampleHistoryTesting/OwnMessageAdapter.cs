@@ -16,7 +16,7 @@ namespace SampleHistoryTesting
 			this.AddMarketDataSupport();
 			this.AddSupportedMarketDataType(MarketDataTypes.CandleTimeFrame);
 
-			this.AddSupportedOutMessage(MessageTypes.SecurityLookupResult);
+			this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
 		}
 
 		/// <inheritdoc />
@@ -58,7 +58,7 @@ namespace SampleHistoryTesting
 						});	
 					}
 
-					SendSubscriptionFinished(lookupMsg.TransactionId);
+					SendSubscriptionResult(lookupMsg);
 					break;
 				}
 
@@ -110,7 +110,7 @@ namespace SampleHistoryTesting
 									});
 								}
 							
-								SendSubscriptionFinished(mdMsg.TransactionId);
+								SendSubscriptionResult(mdMsg);
 							}
 							else
 							{
