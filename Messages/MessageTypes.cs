@@ -144,8 +144,9 @@ namespace StockSharp.Messages
 		PortfolioLookup,
 
 		/// <summary>
-		/// <see cref="SecurityLookupResultMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		SecurityLookupResult,
 
 		/// <summary>
@@ -169,8 +170,9 @@ namespace StockSharp.Messages
 		Board,
 
 		/// <summary>
-		/// <see cref="PortfolioLookupResultMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		PortfolioLookupResult,
 
 		/// <summary>
