@@ -476,7 +476,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines whether the specified message type is supported by the adapter.
+		/// Determines whether the specified message type is contained in <see cref="IMessageAdapter.SupportedInMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
@@ -516,12 +516,55 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Add the message type info <see cref="IMessageAdapter.SupportedResultMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		public static void AddSupportedResultMessage(this IMessageAdapter adapter, MessageTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.SupportedResultMessages = adapter.SupportedResultMessages.Concat(type).Distinct();
+		}
+
+		/// <summary>
+		/// Remove the message type from <see cref="IMessageAdapter.SupportedResultMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		public static void RemoveSupportedResultMessage(this IMessageAdapter adapter, MessageTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.SupportedResultMessages = adapter.SupportedResultMessages.Where(t => t != type);
+		}
+
+		/// <summary>
+		/// Determines whether the specified message type is contained in <see cref="IMessageAdapter.SupportedResultMessages"/>..
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		/// <returns><see langword="true"/> if the specified message type is supported, otherwise, <see langword="false"/>.</returns>
+		public static bool IsResultMessageSupported(this IMessageAdapter adapter, MessageTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.SupportedResultMessages.Contains(type);
+		}
+
+		/// <summary>
 		/// Add the message type info <see cref="IMessageAdapter.SupportedOutMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
 		public static void AddSupportedOutMessage(this IMessageAdapter adapter, MessageTypes type)
 		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
 			adapter.SupportedOutMessages = adapter.SupportedOutMessages.Concat(type).Distinct();
 		}
 
@@ -539,7 +582,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines whether the specified message type is supported by the adapter.
+		/// Determines whether the specified message type is contained in <see cref="IMessageAdapter.SupportedOutMessages"/>..
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
@@ -1564,6 +1607,24 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Create <see cref="SubscriptionOnlineMessage"/> or <see cref="SubscriptionFinishedMessage"/> depends of <see cref="ISubscriptionMessage.To"/>.
+		/// </summary>
+		/// <param name="message">Subscription.</param>
+		/// <returns>Message.</returns>
+		public static Message CreateResult(this ISubscriptionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (message.Type == MessageTypes.TimeFrameLookup)
+				return new TimeFrameLookupResultMessage { OriginalTransactionId = message.TransactionId };
+
+			var reply = message.To == null ? (IOriginalTransactionIdMessage)new SubscriptionOnlineMessage() : new SubscriptionFinishedMessage();
+			reply.OriginalTransactionId = message.TransactionId;
+			return (Message)reply;
+		}
+
+		/// <summary>
 		/// Special set mean any depth for <see cref="IMessageAdapter.SupportedOrderBookDepths"/> option.
 		/// </summary>
 		public static IEnumerable<int> AnyDepths = Array.AsReadOnly(new[] { -1 });
@@ -1777,7 +1838,7 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			foreach (var type in _lookupResults.Keys)
+			foreach (var type in _lookupResults)
 				adapter.RemoveSupportedMessage(type);
 		}
 
@@ -1794,74 +1855,23 @@ namespace StockSharp.Messages
 			return execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog;
 		}
 
-		private static readonly PairSet<MessageTypes, MessageTypes> _lookupResults = new PairSet<MessageTypes, MessageTypes>
+		private static readonly HashSet<MessageTypes> _lookupResults = new HashSet<MessageTypes>
 		{
-			{ MessageTypes.SecurityLookup, MessageTypes.SubscriptionFinished },
-			{ MessageTypes.BoardLookup, MessageTypes.SubscriptionFinished },
-			{ MessageTypes.UserLookup, MessageTypes.SubscriptionFinished },
-			{ MessageTypes.TimeFrameLookup, MessageTypes.TimeFrameLookupResult },
-			{ MessageTypes.PortfolioLookup, MessageTypes.SubscriptionOnline },
-			{ MessageTypes.OrderStatus, MessageTypes.SubscriptionOnline },
+			MessageTypes.SecurityLookup,
+			MessageTypes.BoardLookup,
+			MessageTypes.UserLookup,
+			MessageTypes.TimeFrameLookup,
+			MessageTypes.PortfolioLookup,
+			MessageTypes.OrderStatus,
 		};
-
-		/// <summary>
-		/// Convert lookup message type to result type.
-		/// </summary>
-		/// <param name="lookup">Lookup message type.</param>
-		/// <returns>Result message type.</returns>
-		public static MessageTypes ToResultType(this MessageTypes lookup)
-		{
-			return _lookupResults.GetValue(lookup);
-		}
-
-		/// <summary>
-		/// Convert result message type to lookup type.
-		/// </summary>
-		/// <param name="result">Result message type.</param>
-		/// <returns>Lookup message type.</returns>
-		public static MessageTypes ToLookupType(this MessageTypes result)
-		{
-			return _lookupResults.GetKey(result);
-		}
 
 		/// <summary>
 		/// Determines the specified type is lookup message.
 		/// </summary>
 		/// <param name="type">Message type.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsLookup(this MessageTypes type) => _lookupResults.ContainsKey(type);
+		public static bool IsLookup(this MessageTypes type) => _lookupResults.Contains(type);
 		
-		/// <summary>
-		/// Determines the specified type is lookup result message.
-		/// </summary>
-		/// <param name="type">Message type.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsLookupResult(this MessageTypes type) => _lookupResults.ContainsValue(type);
-
-		/// <summary>
-		/// Create message by the specified type.
-		/// </summary>
-		/// <param name="type">Result message type.</param>
-		/// <param name="id">ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.</param>
-		/// <returns>Message.</returns>
-		public static Message CreateLookupResult(this MessageTypes type, long id)
-		{
-			switch (type)
-			{
-				case MessageTypes.SecurityLookupResult:
-				case MessageTypes.BoardLookupResult:
-				case MessageTypes.UserLookupResult:
-					return new SubscriptionFinishedMessage { OriginalTransactionId = id };
-				case MessageTypes.PortfolioLookupResult:
-				case MessageTypes.OrderStatus:
-					return new SubscriptionOnlineMessage { OriginalTransactionId = id };
-				case MessageTypes.TimeFrameLookupResult:
-					return new TimeFrameLookupResultMessage { OriginalTransactionId = id };
-				default:
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-			}
-		}
-
 		/// <summary>
 		/// Get <see cref="ExecutionMessage.TradePrice"/>.
 		/// </summary>

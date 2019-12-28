@@ -15,113 +15,39 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class LookupTrackingMessageAdapter : MessageAdapterWrapper
 	{
-		private class LookupTimeOutTimer
-		{
-			private readonly ILogReceiver _logReceiver;
-			private readonly CachedSynchronizedDictionary<long, TimeSpan> _registeredIds = new CachedSynchronizedDictionary<long, TimeSpan>();
-
-			public LookupTimeOutTimer(ILogReceiver logReceiver)
-			{
-				_logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
-			}
-
-			public void StartTimeOut(ITransactionIdMessage message, TimeSpan timeOut)
-			{
-				var transactionId = message.TransactionId;
-
-				if (transactionId == 0)
-				{
-					//throw new ArgumentNullException(nameof(transactionId));
-					return;
-				}
-
-				if (timeOut == default)
-					return;
-
-				_logReceiver.AddInfoLog("Lookup timeout {0} started for {1}.", timeOut, transactionId);
-				_registeredIds.SafeAdd(transactionId, s => timeOut);
-			}
-
-			public void UpdateTimeOut<TMessage>(TMessage message)
-				where TMessage : IOriginalTransactionIdMessage
-			{
-				var transactionId = message.OriginalTransactionId;
-
-				if (transactionId == 0)
-					return;
-
-				lock (_registeredIds.SyncRoot)
-				{
-					if (!_registeredIds.TryGetValue(transactionId, out var timeOut))
-						return;
-
-					_registeredIds[transactionId] = timeOut;
-				}
-			}
-
-			public void RemoveTimeOut<TMessage>(TMessage message)
-				where TMessage : IOriginalTransactionIdMessage
-			{
-				var transactionId = message.OriginalTransactionId;
-
-				if (transactionId == 0)
-					return;
-
-				_logReceiver.AddInfoLog("Lookup finished {0}.", transactionId);
-				_registeredIds.Remove(transactionId);
-			}
-
-			public IEnumerable<long> ProcessTime(TimeSpan diff)
-			{
-				if (_registeredIds.Count == 0)
-					return Enumerable.Empty<long>();
-
-				List<long> timeOutCodes = null;
-
-				lock (_registeredIds.SyncRoot)
-				{
-					foreach (var pair in _registeredIds.CachedPairs)
-					{
-						var left = pair.Value - diff;
-
-						if (left > TimeSpan.Zero)
-						{
-							_registeredIds[pair.Key] = left;
-							continue;
-						}
-
-						if (timeOutCodes == null)
-							timeOutCodes = new List<long>();
-
-						timeOutCodes.Add(pair.Key);
-						_registeredIds.Remove(pair.Key);
-					}
-				}
-				
-				return timeOutCodes ?? Enumerable.Empty<long>();
-			}
-		}
-
 		private class LookupInfo
 		{
-			private readonly Func<long, Message> _createResult;
+			private readonly TimeSpan _initLeft;
+			private TimeSpan _left;
 
-			public readonly Queue<ITransactionIdMessage> LookupQueue = new Queue<ITransactionIdMessage>();
-			public readonly LookupTimeOutTimer LookupTimeOut;
-
-			public LookupInfo(ILogReceiver logReceiver, MessageTypes resultType)
+			public LookupInfo(ISubscriptionMessage subscription, TimeSpan left)
 			{
-				ResultType = resultType;
-				LookupTimeOut = new LookupTimeOutTimer(logReceiver);
-				_createResult = id => resultType.CreateLookupResult(id);
+				Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+				_initLeft = left;
+				_left = left;
 			}
 
-			public MessageTypes ResultType { get; }
+			public ISubscriptionMessage Subscription { get; }
 
-			public Message CreateResultMessage(long id) => _createResult(id);
+			public bool ProcessTime(TimeSpan diff)
+			{
+				var left = _left - diff;
+
+				if (left <= TimeSpan.Zero)
+					return true;
+
+				_left = left;
+				return false;
+			}
+
+			public void UpdateTimeOut()
+			{
+				_left = _initLeft;
+			}
 		}
 
-		private readonly CachedSynchronizedDictionary<MessageTypes, LookupInfo> _lookups = new CachedSynchronizedDictionary<MessageTypes, LookupInfo>();
+		private readonly CachedSynchronizedDictionary<long, LookupInfo> _lookups = new CachedSynchronizedDictionary<long, LookupInfo>();
+		private readonly Dictionary<MessageTypes, Queue<ITransactionIdMessage>> _queue = new Dictionary<MessageTypes, Queue<ITransactionIdMessage>>();
 		private DateTimeOffset _prevTime;
 
 		/// <summary>
@@ -164,13 +90,14 @@ namespace StockSharp.Algo
 					{
 						_prevTime = default;
 						_lookups.Clear();
+						_queue.Clear();
 					}
 
 					break;
 				}
 
 				default:
-					if (message.Type.IsLookup() && !ProcessLookupMessage(message))
+					if (message.Type.IsLookup() && !ProcessLookupMessage((ISubscriptionMessage)message))
 						return;
 
 					break;
@@ -179,7 +106,7 @@ namespace StockSharp.Algo
 			base.OnSendInMessage(message);
 		}
 
-		private bool ProcessLookupMessage(Message message)
+		private bool ProcessLookupMessage(ISubscriptionMessage message)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -187,27 +114,27 @@ namespace StockSharp.Algo
 			if (message.Type == MessageTypes.OrderStatus)
 				return true;
 
-			var transIdMsg = (ITransactionIdMessage)message;
-			var transId = transIdMsg.TransactionId;
-
-			LookupInfo info;
+			var transId = message.TransactionId;
 
 			lock (_lookups.SyncRoot)
 			{
-				info = _lookups.SafeAdd(message.Type, key => new LookupInfo(this, message.Type.ToResultType()));
+				var queue = _queue.SafeAdd(message.Type, key => new Queue<ITransactionIdMessage>());
 
 				// not prev queued lookup
-				if (info.LookupQueue.All(msg => msg.TransactionId != transId))
+				if (queue.All(msg => msg.TransactionId != transId))
 				{
-					info.LookupQueue.Enqueue((ITransactionIdMessage)message.Clone());
+					queue.Enqueue((ITransactionIdMessage)message.Clone());
 
-					if (info.LookupQueue.Count > 1)
+					if (queue.Count > 1)
 						return false;
 				}
-			}
 
-			if (!this.IsOutMessageSupported(info.ResultType))
-				info.LookupTimeOut.StartTimeOut(transIdMsg, TimeOut);
+				if (!this.IsResultMessageSupported(message.Type) && TimeOut > TimeSpan.Zero)
+				{
+					_lookups.Add(transId, new LookupInfo((ISubscriptionMessage)message.Clone(), TimeOut));
+					this.AddInfoLog("Lookup timeout {0} started for {1}.", TimeOut, transId);
+				}
+			}
 
 			return true;
 		}
@@ -215,51 +142,40 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			switch (message.Type)
-			{
-				case MessageTypes.Security:
-					_lookups.TryGetValue(MessageTypes.SecurityLookup)?.LookupTimeOut.UpdateTimeOut((SecurityMessage)message);
-					break;
-
-				case MessageTypes.Board:
-					_lookups.TryGetValue(MessageTypes.BoardLookup)?.LookupTimeOut.UpdateTimeOut((BoardMessage)message);
-					break;
-
-				case MessageTypes.Portfolio:
-					_lookups.TryGetValue(MessageTypes.PortfolioLookup)?.LookupTimeOut.UpdateTimeOut((PortfolioMessage)message);
-					break;
-
-				case MessageTypes.UserInfo:
-					_lookups.TryGetValue(MessageTypes.UserLookup)?.LookupTimeOut.UpdateTimeOut((UserInfoMessage)message);
-					break;
-			}
-
 			base.OnInnerAdapterNewOutMessage(message);
 
 			Message nextLookup = null;
 
-			if (message.Type.IsLookupResult())
+			void TryInitNextLookup(LookupInfo info)
 			{
-				var lookupType = message.Type.ToLookupType();
+				if (_queue.TryGetValue(info.Subscription.Type, out var queue))
+				{
+					//удаляем текущий запрос лукапа из очереди
+					queue.Dequeue();
 
+					nextLookup = (Message)queue.TryPeek();
+
+					if (nextLookup == null)
+						_queue.Remove(info.Subscription.Type);
+				}
+			}
+
+			if (message is IOriginalTransactionIdMessage originIdMsg)
+			{
 				lock (_lookups.SyncRoot)
 				{
-					var info = _lookups.TryGetValue(lookupType);
-
-					if (info != null)
+					if (_lookups.TryGetValue(originIdMsg.OriginalTransactionId, out var info))
 					{
-						info.LookupTimeOut.RemoveTimeOut((IOriginalTransactionIdMessage)message);
-
-						if (info.LookupQueue.Count > 0)
+						if (originIdMsg is SubscriptionFinishedMessage ||
+						    originIdMsg is SubscriptionResponseMessage resp && !resp.IsOk())
 						{
-							//удаляем текущий запрос лукапа из очереди
-							info.LookupQueue.Dequeue();
+							_lookups.Remove(originIdMsg.OriginalTransactionId);
+							this.AddInfoLog("Lookup finished {0}.", originIdMsg.OriginalTransactionId);
 
-							nextLookup = (Message)info.LookupQueue.TryPeek();
-
-							if (nextLookup == null)
-								_lookups.Remove(lookupType);
+							TryInitNextLookup(info);
 						}
+						else
+							info.UpdateTimeOut();
 					}
 				}
 			}
@@ -267,7 +183,6 @@ namespace StockSharp.Algo
 			if (nextLookup != null)
 			{
 				nextLookup.LoopBack(this);
-
 				base.OnInnerAdapterNewOutMessage(nextLookup);
 			}
 
@@ -279,13 +194,27 @@ namespace StockSharp.Algo
 				{
 					var info = pair.Value;
 
-					foreach (var id in info.LookupTimeOut.ProcessTime(diff))
-					{
-						this.AddInfoLog("Lookup timeout {0}.", id);
+					if (!info.ProcessTime(diff))
+						continue;
 
-						base.OnInnerAdapterNewOutMessage(info.CreateResultMessage(id));
+					var transId = info.Subscription.TransactionId;
+					_lookups.Remove(transId);
+					this.AddInfoLog("Lookup timeout {0}.", transId);
+
+					base.OnInnerAdapterNewOutMessage(info.Subscription.CreateResult());
+
+					if (nextLookup == null)
+					{
+						lock (_lookups.SyncRoot)
+							TryInitNextLookup(info);
 					}
 				}
+			}
+
+			if (nextLookup != null)
+			{
+				nextLookup.LoopBack(this);
+				base.OnInnerAdapterNewOutMessage(nextLookup);
 			}
 
 			_prevTime = message.LocalTime;

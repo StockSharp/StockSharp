@@ -53,6 +53,22 @@ namespace StockSharp.Messages
 				Categories = attr.Categories;
 		}
 
+		private IEnumerable<MessageTypes> CheckDuplicate(IEnumerable<MessageTypes> value, string propName)
+		{
+			if (value == null)
+				throw new ArgumentNullException(nameof(value));
+
+			var arr = value.ToArray();
+
+			var duplicate = arr.GroupBy(m => m).FirstOrDefault(g => g.Count() > 1);
+			if (duplicate != null)
+				throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
+
+			OnPropertyChanged(propName);
+
+			return arr;
+		}
+
 		private IEnumerable<MessageTypes> _supportedInMessages = Enumerable.Empty<MessageTypes>();
 
 		/// <inheritdoc />
@@ -60,19 +76,7 @@ namespace StockSharp.Messages
 		public virtual IEnumerable<MessageTypes> SupportedInMessages
 		{
 			get => _supportedInMessages;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				var duplicate = value.GroupBy(m => m).FirstOrDefault(g => g.Count() > 1);
-				if (duplicate != null)
-					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
-
-				_supportedInMessages = value.ToArray();
-
-				OnPropertyChanged(nameof(SupportedInMessages));
-			}
+			set => _supportedInMessages = CheckDuplicate(value, nameof(SupportedInMessages));
 		}
 
 		private IEnumerable<MessageTypes> _supportedOutMessages = Enumerable.Empty<MessageTypes>();
@@ -82,19 +86,17 @@ namespace StockSharp.Messages
 		public virtual IEnumerable<MessageTypes> SupportedOutMessages
 		{
 			get => _supportedOutMessages;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
+			set => _supportedOutMessages = CheckDuplicate(value, nameof(SupportedOutMessages));
+		}
 
-				var duplicate = value.GroupBy(m => m).FirstOrDefault(g => g.Count() > 1);
-				if (duplicate != null)
-					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
+		private IEnumerable<MessageTypes> _supportedResultMessages = Enumerable.Empty<MessageTypes>();
 
-				_supportedOutMessages = value.ToArray();
-
-				OnPropertyChanged(nameof(SupportedOutMessages));
-			}
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual IEnumerable<MessageTypes> SupportedResultMessages
+		{
+			get => _supportedResultMessages;
+			set => _supportedResultMessages = CheckDuplicate(value, nameof(SupportedResultMessages));
 		}
 
 		private IEnumerable<MessageTypeInfo> _possibleSupportedMessages = Enumerable.Empty<MessageTypeInfo>();
@@ -116,7 +118,7 @@ namespace StockSharp.Messages
 				_possibleSupportedMessages = value;
 				OnPropertyChanged(nameof(PossibleSupportedMessages));
 
-				SupportedInMessages = value.Select(t => t.Type).ToArray();
+				SupportedInMessages = value.Select(t => t.Type);
 			}
 		}
 
@@ -435,6 +437,15 @@ namespace StockSharp.Messages
 		protected void SendSubscriptionOnline(long originalTransactionId)
 		{
 			SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = originalTransactionId });
+		}
+
+		/// <summary>
+		/// Initialize a new message <see cref="SubscriptionOnlineMessage"/> or <see cref="SubscriptionFinishedMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
+		/// </summary>
+		/// <param name="message">Subscription.</param>
+		protected void SendSubscriptionResult(ISubscriptionMessage message)
+		{
+			SendOutMessage(message.CreateResult());
 		}
 
 		/// <inheritdoc />
