@@ -235,8 +235,9 @@ namespace StockSharp.Messages
 		UserLookup,
 
 		/// <summary>
-		/// <see cref="UserLookupResultMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		UserLookupResult,
 
 		/// <summary>
@@ -251,8 +252,9 @@ namespace StockSharp.Messages
 		BoardLookup,
 
 		/// <summary>
-		/// <see cref="BoardLookupResultMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		BoardLookupResult,
 
 		/// <summary>
@@ -296,8 +298,9 @@ namespace StockSharp.Messages
 		AdapterListRequest,
 
 		/// <summary>
-		/// <see cref="AdapterListFinishedMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		AdapterListFinished,
 
 		/// <summary>
@@ -316,8 +319,9 @@ namespace StockSharp.Messages
 		SubscriptionListRequest,
 
 		/// <summary>
-		/// <see cref="SubscriptionListFinishedMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		SubscriptionListFinished,
 
 		/// <summary>
@@ -331,8 +335,9 @@ namespace StockSharp.Messages
 		SecurityRoute,
 
 		/// <summary>
-		/// <see cref="SecurityRouteListFinishedMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		SecurityRouteListFinished,
 
 		/// <summary>
@@ -346,8 +351,9 @@ namespace StockSharp.Messages
 		PortfolioRoute,
 
 		/// <summary>
-		/// <see cref="PortfolioRouteListFinishedMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		PortfolioRouteListFinished,
 
 		/// <summary>
