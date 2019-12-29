@@ -165,6 +165,9 @@ namespace StockSharp.Algo
 				allError = true;
 				needParentResponse = true;
 
+				if (childId == 0)
+					return null;
+
 				lock (_syncObject)
 				{
 					if (!_childToParentIds.TryGetValue(childId, out var tuple))
@@ -252,7 +255,6 @@ namespace StockSharp.Algo
 
 		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>> _subscription = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>>();
 		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>>();
-		private readonly SynchronizedSet<long> _subscriptionListRequests = new SynchronizedSet<long>();
 		private readonly ParentChildMap _parentChildMap = new ParentChildMap();
 
 		private readonly SynchronizedDictionary<long, IMessageAdapter> _orderAdapters = new SynchronizedDictionary<long, IMessageAdapter>();
@@ -395,6 +397,12 @@ namespace StockSharp.Algo
 		IEnumerable<MessageTypes> IMessageAdapter.SupportedOutMessages
 		{
 			get => GetSortedAdapters().SelectMany(a => a.SupportedOutMessages).Distinct();
+			set { }
+		}
+
+		IEnumerable<MessageTypes> IMessageAdapter.SupportedResultMessages
+		{
+			get => GetSortedAdapters().SelectMany(a => a.SupportedResultMessages).Distinct();
 			set { }
 		}
 
@@ -609,7 +617,6 @@ namespace StockSharp.Algo
 			_requestsById.Clear();
 			_subscription.Clear();
 			_parentChildMap.Clear();
-			_subscriptionListRequests.Clear();
 		}
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
@@ -993,7 +1000,7 @@ namespace StockSharp.Algo
 
 					if (adapters.Length == 0)
 					{
-						SendOutMessage(message.Type.ToResultType().CreateLookupResult(subscrMsg.TransactionId));
+						SendOutMessage(subscrMsg.CreateResult());
 						return;
 					}
 
@@ -1014,9 +1021,6 @@ namespace StockSharp.Algo
 
 				if (adapters.Length == 0)
 					return;
-
-				if (message is SubscriptionListRequestMessage listRequest)
-					_subscriptionListRequests.Add(listRequest.TransactionId);
 
 				adapters.ForEach(a => a.SendInMessage(message));
 			}
@@ -1504,12 +1508,6 @@ namespace StockSharp.Algo
 						}
 
 						break;
-
-					default:
-						if (message.Type.IsLookupResult())
-							message = ProcessLookupResult(message);
-
-						break;
 				}
 			}
 
@@ -1572,25 +1570,6 @@ namespace StockSharp.Algo
 				message.Adapter = this;
 
 			NewOutMessage?.Invoke(message);
-		}
-
-		private Message ProcessLookupResult(Message message)
-		{
-			var transId = ((IOriginalTransactionIdMessage)message).OriginalTransactionId;
-
-			if (transId == 0)
-				return message;
-
-			var parentId = _parentChildMap.ProcessChildResponse(transId, true, out var needParentResponse, out _);
-
-			if (parentId == null || !needParentResponse)
-				return null;
-
-			var parentResponse = (IOriginalTransactionIdMessage)message.Clone();
-			parentResponse.OriginalTransactionId = parentId.Value;
-			parentResponse.LocalTime = message.LocalTime;
-
-			return (Message)parentResponse;
 		}
 
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message, List<Message> extra)
