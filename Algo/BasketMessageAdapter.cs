@@ -21,6 +21,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using MoreLinq;
@@ -450,6 +451,8 @@ namespace StockSharp.Algo
 		Type IMessageAdapter.OrderConditionType => null;
 		
 		bool IMessageAdapter.HeartbeatBeforConnect => false;
+
+		Uri IMessageAdapter.Icon => GetType().GetIconUrl();
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);

@@ -178,6 +178,11 @@ namespace StockSharp.Messages
 		bool HeartbeatBeforConnect { get; }
 
 		/// <summary>
+		/// Icon.
+		/// </summary>
+		Uri Icon { get; }
+
+		/// <summary>
 		/// Create market depth builder.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>

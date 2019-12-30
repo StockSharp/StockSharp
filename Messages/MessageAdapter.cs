@@ -22,6 +22,7 @@ namespace StockSharp.Messages
 	using System.Linq;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Interop;
 	using Ecng.Serialization;
 
@@ -242,6 +243,10 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual bool HeartbeatBeforConnect => false;
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual Uri Icon => GetType().GetIconUrl();
 
 		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]

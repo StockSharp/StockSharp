@@ -327,6 +327,8 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.HeartbeatBeforConnect => InnerAdapter.HeartbeatBeforConnect;
 
+		Uri IMessageAdapter.Icon => InnerAdapter.Icon;
+
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 
