@@ -155,7 +155,7 @@ namespace StockSharp.Algo
 					throw new ArgumentOutOfRangeException(nameof(parentId));
 
 				lock (_syncObject)
-					return FilterByParent(parentId).Where(p => p.Value.Second == SubscriptionStates.Active).ToDictionary(p => p.Key, p => p.Value.Third);
+					return FilterByParent(parentId).Where(p => p.Value.Second.IsActive()).ToDictionary(p => p.Key, p => p.Value.Third);
 			}
 
 			private IEnumerable<KeyValuePair<long, RefTriple<long, SubscriptionStates, IMessageAdapter>>> FilterByParent(long parentId) => _childToParentIds.Where(p => p.Value.First == parentId);
@@ -1756,13 +1756,7 @@ namespace StockSharp.Algo
 			var originalTransactionId = message.OriginalTransactionId;
 
 			if (!_requestsById.TryGetValue(originalTransactionId, out var tuple))
-			{
-				// TODO
-				//if (_subscriptionListRequests.Contains(originalTransactionId) && message.TransactionId != 0)
-				//	_requestsById.TryAdd(message.TransactionId, Tuple.Create((ISubscriptionMessage)null, GetUnderlyingAdapter(adapter)));
-
 				return message;
-			}
 
 			var isOk = message.IsOk();
 			var originMsg = tuple.Item1;
