@@ -47,7 +47,7 @@ namespace StockSharp.Algo
 		}
 
 		private readonly CachedSynchronizedDictionary<long, LookupInfo> _lookups = new CachedSynchronizedDictionary<long, LookupInfo>();
-		private readonly Dictionary<MessageTypes, Queue<ITransactionIdMessage>> _queue = new Dictionary<MessageTypes, Queue<ITransactionIdMessage>>();
+		private readonly Dictionary<MessageTypes, Dictionary<long, ITransactionIdMessage>> _queue = new Dictionary<MessageTypes, Dictionary<long, ITransactionIdMessage>>();
 		private DateTimeOffset _prevTime;
 
 		/// <summary>
@@ -116,27 +116,42 @@ namespace StockSharp.Algo
 
 			var transId = message.TransactionId;
 
-			lock (_lookups.SyncRoot)
+			var isEnqueue = false;
+			var isStarted = false;
+
+			try
 			{
-				var queue = _queue.SafeAdd(message.Type, key => new Queue<ITransactionIdMessage>());
-
-				// not prev queued lookup
-				if (queue.All(msg => msg.TransactionId != transId))
+				lock (_lookups.SyncRoot)
 				{
-					queue.Enqueue((ITransactionIdMessage)message.Clone());
+					var queue = _queue.SafeAdd(message.Type);
 
-					if (queue.Count > 1)
-						return false;
-				}
+					// not prev queued lookup
+					if (queue.TryAdd(transId, (ITransactionIdMessage)message.Clone()))
+					{
+						if (queue.Count > 1)
+						{
+							isEnqueue = true;
+							return false;
+						}
+					}
 
-				if (!this.IsResultMessageSupported(message.Type) && TimeOut > TimeSpan.Zero)
-				{
-					_lookups.Add(transId, new LookupInfo((ISubscriptionMessage)message.Clone(), TimeOut));
-					this.AddInfoLog("Lookup timeout {0} started for {1}.", TimeOut, transId);
+					if (!this.IsResultMessageSupported(message.Type) && TimeOut > TimeSpan.Zero)
+					{
+						_lookups.Add(transId, new LookupInfo((ISubscriptionMessage)message.Clone(), TimeOut));
+						isStarted = true;
+					}
 				}
+			
+				return true;
 			}
+			finally
+			{
+				if (isEnqueue)
+					this.AddInfoLog("Lookup queued {0}.", message);
 
-			return true;
+				if (isStarted)
+					this.AddInfoLog("Lookup timeout {0} started for {1}.", TimeOut, transId);
+			}
 		}
 
 		/// <inheritdoc />
@@ -144,37 +159,57 @@ namespace StockSharp.Algo
 		{
 			base.OnInnerAdapterNewOutMessage(message);
 
-			Message nextLookup = null;
-
-			void TryInitNextLookup(LookupInfo info)
+			Message TryInitNextLookup(MessageTypes type, long id)
 			{
-				if (_queue.TryGetValue(info.Subscription.Type, out var queue))
+				if (!_queue.TryGetValue(type, out var queue))
+					return null;
+
+				if (!queue.Remove(id))
+					return null;
+
+				if (queue.Count == 0)
 				{
-					//удаляем текущий запрос лукапа из очереди
-					queue.Dequeue();
-
-					nextLookup = (Message)queue.TryPeek();
-
-					if (nextLookup == null)
-						_queue.Remove(info.Subscription.Type);
+					_queue.Remove(type);
+					return null;
 				}
+				
+				return (Message)queue.First().Value;
 			}
+
+			Message nextLookup = null;
 
 			if (message is IOriginalTransactionIdMessage originIdMsg)
 			{
+				var id = originIdMsg.OriginalTransactionId;
+
 				lock (_lookups.SyncRoot)
 				{
-					if (_lookups.TryGetValue(originIdMsg.OriginalTransactionId, out var info))
+					if (originIdMsg is SubscriptionFinishedMessage ||
+					    originIdMsg is SubscriptionOnlineMessage ||
+					    originIdMsg is TimeFrameLookupResultMessage ||
+					    originIdMsg is SubscriptionResponseMessage resp && !resp.IsOk())
 					{
-						if (originIdMsg is SubscriptionFinishedMessage ||
-						    originIdMsg is SubscriptionResponseMessage resp && !resp.IsOk())
+						if (_lookups.TryGetValue(id, out var info))
 						{
 							_lookups.Remove(originIdMsg.OriginalTransactionId);
-							this.AddInfoLog("Lookup finished {0}.", originIdMsg.OriginalTransactionId);
+							this.AddInfoLog("Lookup finished {0}.", id);
 
-							TryInitNextLookup(info);
+							nextLookup = TryInitNextLookup(info.Subscription.Type, info.Subscription.TransactionId);
 						}
 						else
+						{
+							foreach (var type in _queue.Keys.ToArray())
+							{
+								nextLookup = TryInitNextLookup(type, id);
+
+								if (nextLookup != null)
+									break;
+							}
+						}
+					}
+					else
+					{
+						if (_lookups.TryGetValue(id, out var info))
 							info.UpdateTimeOut();
 					}
 				}
@@ -185,6 +220,8 @@ namespace StockSharp.Algo
 				nextLookup.LoopBack(this);
 				base.OnInnerAdapterNewOutMessage(nextLookup);
 			}
+
+			List<Message> nextLookups = null;
 
 			if (_prevTime != DateTimeOffset.MinValue)
 			{
@@ -203,18 +240,26 @@ namespace StockSharp.Algo
 
 					base.OnInnerAdapterNewOutMessage(info.Subscription.CreateResult());
 
-					if (nextLookup == null)
+					if (nextLookups == null)
+						nextLookups = new List<Message>();
+
+					lock (_lookups.SyncRoot)
 					{
-						lock (_lookups.SyncRoot)
-							TryInitNextLookup(info);
+						var next = TryInitNextLookup(info.Subscription.Type, info.Subscription.TransactionId);
+
+						if (next != null)
+							nextLookups.Add(next);
 					}
 				}
 			}
 
-			if (nextLookup != null)
+			if (nextLookups != null)
 			{
-				nextLookup.LoopBack(this);
-				base.OnInnerAdapterNewOutMessage(nextLookup);
+				foreach (var lookup in nextLookups)
+				{
+					lookup.LoopBack(this);
+					base.OnInnerAdapterNewOutMessage(lookup);	
+				}
 			}
 
 			_prevTime = message.LocalTime;
