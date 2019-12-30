@@ -57,7 +57,7 @@
 						}
 						else
 						{
-							_depths.Remove(mdMsg.OriginalTransactionId);
+							RemoveSubscription(mdMsg.OriginalTransactionId);
 						}
 					}
 
@@ -66,6 +66,11 @@
 			}
 
 			base.OnSendInMessage(message);
+		}
+
+		private void RemoveSubscription(long id)
+		{
+			_depths.Remove(id);
 		}
 
 		/// <inheritdoc />
@@ -80,8 +85,13 @@
 					var responseMsg = (SubscriptionResponseMessage)message;
 
 					if (!responseMsg.IsOk())
-						_depths.Remove(responseMsg.OriginalTransactionId);
+						RemoveSubscription(responseMsg.OriginalTransactionId);
 
+					break;
+				}
+				case MessageTypes.SubscriptionFinished:
+				{
+					RemoveSubscription(((SubscriptionFinishedMessage)message).OriginalTransactionId);
 					break;
 				}
 				case MessageTypes.QuoteChange:
