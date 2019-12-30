@@ -5,6 +5,7 @@
 
 	using Ecng.Collections;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -52,6 +53,8 @@
 									mdMsg.MaxDepth = supportedDepth;
 
 									_depths.Add(mdMsg.TransactionId, actualDepth);
+
+									this.AddInfoLog("MD truncate {0}/{1} ({2}->{3}).", mdMsg.SecurityId, mdMsg.TransactionId, actualDepth, supportedDepth);
 								}
 							}
 						}
@@ -71,6 +74,7 @@
 		private void RemoveSubscription(long id)
 		{
 			_depths.Remove(id);
+			this.AddInfoLog("Unsubscribed {0}.", id);
 		}
 
 		/// <inheritdoc />

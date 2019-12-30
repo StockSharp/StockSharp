@@ -80,6 +80,8 @@
 								
 								_byId.Add(mdMsg.TransactionId, info);
 							}
+
+							this.AddInfoLog("OB incr subscribed {0}/{1}.", mdMsg.SecurityId, mdMsg.TransactionId);
 						}
 						else
 						{
@@ -122,6 +124,8 @@
 				else if (changeId)
 					_byId.Add(ids[0], info);
 			}
+
+			this.AddInfoLog("Unsubscribed {0}.", id);
 		}
 
 		private QuoteChangeMessage ApplyNewState(BookInfo info, QuoteChangeMessage quoteMsg, QuoteChangeStates newState)

@@ -82,6 +82,8 @@ namespace StockSharp.Messages
 		{
 			var str = base.ToString();
 
+			str += $",IsSubscribe={IsSubscribe}";
+
 			if (From != null)
 				str += $",From={From.Value}";
 

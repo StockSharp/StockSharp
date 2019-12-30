@@ -372,7 +372,7 @@ namespace StockSharp.Algo
 				lock (_syncObject)
 					_requests.Add(request.TransactionId, Tuple.Create(request, subscription));
 
-				_connector.AddInfoLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.Security?.Id, subscription);
+				_connector.AddInfoLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.Security?.Id, request);
 				_connector.SendInMessage((Message)request);
 			}
 
