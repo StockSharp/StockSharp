@@ -156,7 +156,7 @@ namespace StockSharp.Messages
 				str += $",Curr={Currency.Value}";
 
 			if (!BoardCode.IsEmpty())
-				str += $",TransId={TransactionId}";
+				str += $",Board={BoardCode}";
 
 			if (IsSubscribe)
 				str += $",IsSubscribe={IsSubscribe}";

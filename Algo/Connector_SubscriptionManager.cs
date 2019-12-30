@@ -19,20 +19,6 @@ namespace StockSharp.Algo
 	{
 		private class SubscriptionManager
 		{
-			private class LookupInfo
-			{
-				public ISubscriptionMessage Criteria { get; }
-				public IList<object> Items { get; } = new List<object>();
-
-				public LookupInfo(ISubscriptionMessage criteria)
-				{
-					if (criteria == null)
-						throw new ArgumentNullException(nameof(criteria));
-
-					Criteria = (ISubscriptionMessage)criteria.Clone();
-				}
-			}
-
 			private class SubscriptionInfo
 			{
 				private DateTimeOffset? _last;
@@ -53,13 +39,13 @@ namespace StockSharp.Algo
 					    type == DataType.Board ||
 					    type == DataType.TimeFrames)
 					{
-						Lookup = new LookupInfo(subscription.SubscriptionMessage);
+						LookupItems = new List<object>();
 					}
 				}
 
 				public Subscription Subscription { get; }
 				public bool HasResult { get; set; }
-				public LookupInfo Lookup { get; }
+				public List<object> LookupItems { get; }
 				public CandlesSeriesHolder Holder { get; }
 
 				public ISubscriptionMessage CreateSubscriptionContinue()
@@ -443,13 +429,13 @@ namespace StockSharp.Algo
 					if (info == null || info.HasResult)
 						continue;
 
-					if (info.Lookup == null)
+					if (info.LookupItems == null)
 					{
 						_connector.AddWarningLog(LocalizedStrings.Str2142Params, info.Subscription.SubscriptionMessage);
 						continue;
 					}
 
-					info.Lookup.Items.Add(item);	
+					info.LookupItems.Add(item);	
 				}
 			}
 
@@ -464,7 +450,7 @@ namespace StockSharp.Algo
 
 					info.HasResult = true;
 
-					return info.Lookup?.Items.CopyAndClear().Cast<TItem>().ToArray() ?? ArrayHelper.Empty<TItem>();
+					return info.LookupItems.CopyAndClear().Cast<TItem>().ToArray() ?? ArrayHelper.Empty<TItem>();
 				}
 			}
 

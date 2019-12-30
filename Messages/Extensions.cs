@@ -1616,6 +1616,9 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			if (!message.IsSubscribe)
+				return new SubscriptionResponseMessage { OriginalTransactionId = message.TransactionId };
+
 			if (message.Type == MessageTypes.TimeFrameLookup)
 				return new TimeFrameLookupResultMessage { OriginalTransactionId = message.TransactionId };
 
