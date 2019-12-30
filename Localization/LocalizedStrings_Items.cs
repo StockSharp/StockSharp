@@ -50736,5 +50736,25 @@ namespace StockSharp.Localization
 		/// Connection '{0}' is not connected.
 		/// </summary>
 		public static string ConnectionIsNotConnected => GetString(ConnectionIsNotConnectedKey);
+
+		/// <summary>
+		/// CBOE
+		/// </summary>
+		public const string CboeKey = nameof(Cboe);
+
+		/// <summary>
+		/// CBOE
+		/// </summary>
+		public static string Cboe => GetString(CboeKey);
+
+		/// <summary>
+		/// ICE
+		/// </summary>
+		public const string IceKey = nameof(Ice);
+
+		/// <summary>
+		/// ICE
+		/// </summary>
+		public static string Ice => GetString(IceKey);
 	}
 }
