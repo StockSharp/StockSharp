@@ -1399,6 +1399,7 @@ namespace StockSharp.Algo
 					var transId = message.TransactionId;
 					message = (PortfolioMessage)message.Clone();
 					((PortfolioMessage)tuple.Item1).CopyTo(message);
+					message.IsSubscribe = false;
 					message.TransactionId = transId;
 				}
 				else
