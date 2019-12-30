@@ -2061,5 +2061,39 @@ namespace StockSharp.Messages
 
 			return message;
 		}
+
+		/// <summary>
+		/// Get maximum size step allowed for historical download.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <param name="supportedMarketDataTypes">Supported by adapter market data types.</param>
+		/// <param name="iterationInterval">Interval between iterations.</param>
+		/// <returns>Step.</returns>
+		public static TimeSpan GetHistoryStepSize(this DataType dataType, IEnumerable<MarketDataTypes> supportedMarketDataTypes, out TimeSpan iterationInterval)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			iterationInterval = TimeSpan.FromSeconds(2);
+
+			if (dataType.IsCandles)
+			{
+				if (!supportedMarketDataTypes.Contains(dataType.ToMarketDataType().Value))
+					return TimeSpan.Zero;
+
+				if (dataType.MessageType == typeof(TimeFrameCandleMessage))
+				{
+					var tf = (TimeSpan)dataType.Arg;
+
+					if (tf.TotalDays <= 1)
+						return TimeSpan.FromDays(30);
+
+					return TimeSpan.MaxValue;
+				}
+			}
+
+			// by default adapter do not provide historical data except candles
+			return TimeSpan.Zero;
+		}
 	}
 }
