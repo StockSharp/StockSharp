@@ -276,6 +276,11 @@ namespace StockSharp.Messages
 			remove { }
 		}
 
+		/// <summary>
+		/// Send auto response for <see cref="OrderStatusMessage"/> and <see cref="PortfolioLookupMessage"/> unsubscribes.
+		/// </summary>
+		protected virtual bool IsAutoReplyOnTransactonalUnsubscription => true;
+
 		/// <inheritdoc />
 		public void SendInMessage(Message message)
 		{
@@ -297,6 +302,23 @@ namespace StockSharp.Messages
 			try
 			{
 				OnSendInMessage(message);
+
+				if (IsAutoReplyOnTransactonalUnsubscription)
+				{
+					switch (message.Type)
+					{
+						case MessageTypes.PortfolioLookup:
+						case MessageTypes.OrderStatus:
+						{
+							var subscrMsg = (ISubscriptionMessage)message;
+
+							if (!subscrMsg.IsSubscribe)
+								SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = subscrMsg.TransactionId });
+
+							break;
+						}
+					}
+				}
 			}
 			catch (Exception ex)
 			{
