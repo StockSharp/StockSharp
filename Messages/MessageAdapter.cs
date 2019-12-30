@@ -249,6 +249,10 @@ namespace StockSharp.Messages
 		public virtual Uri Icon => GetType().GetIconUrl();
 
 		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsAutoReplyOnTransactonalUnsubscription => true;
+
+		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
@@ -280,11 +284,6 @@ namespace StockSharp.Messages
 			add { }
 			remove { }
 		}
-
-		/// <summary>
-		/// Send auto response for <see cref="OrderStatusMessage"/> and <see cref="PortfolioLookupMessage"/> unsubscribes.
-		/// </summary>
-		protected virtual bool IsAutoReplyOnTransactonalUnsubscription => true;
 
 		/// <inheritdoc />
 		public void SendInMessage(Message message)
@@ -501,31 +500,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public virtual TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
-		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
-
-			iterationInterval = TimeSpan.FromSeconds(2);
-
-			if (dataType.IsCandles)
-			{
-				if (!this.IsMarketDataTypeSupported(dataType.ToMarketDataType().Value))
-					return TimeSpan.Zero;
-
-				if (dataType.MessageType == typeof(TimeFrameCandleMessage))
-				{
-					var tf = (TimeSpan)dataType.Arg;
-
-					if (tf.TotalDays <= 1)
-						return TimeSpan.FromDays(30);
-
-					return TimeSpan.MaxValue;
-				}
-			}
-
-			// by default adapter do not provide historical data except candles
-			return TimeSpan.Zero;
-		}
+			=> dataType.GetHistoryStepSize(SupportedMarketDataTypes, out iterationInterval);
 
 		/// <inheritdoc />
 		public virtual bool IsAllDownloadingSupported(DataType dataType) => false;
@@ -587,7 +562,7 @@ namespace StockSharp.Messages
 		/// Raise <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
 		/// </summary>
 		/// <param name="propertyName">The name of the property that changed.</param>
-		protected virtual void OnPropertyChanged(string propertyName)
+		protected void OnPropertyChanged(string propertyName)
 		{
 			_propertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}

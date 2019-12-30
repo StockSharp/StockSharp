@@ -183,6 +183,11 @@ namespace StockSharp.Messages
 		Uri Icon { get; }
 
 		/// <summary>
+		/// Send auto response for <see cref="OrderStatusMessage"/> and <see cref="PortfolioLookupMessage"/> unsubscribes.
+		/// </summary>
+		bool IsAutoReplyOnTransactonalUnsubscription { get; }
+
+		/// <summary>
 		/// Create market depth builder.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>

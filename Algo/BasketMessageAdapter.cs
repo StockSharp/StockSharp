@@ -454,6 +454,8 @@ namespace StockSharp.Algo
 
 		Uri IMessageAdapter.Icon => GetType().GetIconUrl();
 
+		bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => GetSortedAdapters().All(a => a.IsAutoReplyOnTransactonalUnsubscription);
+
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);
 

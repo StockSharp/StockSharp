@@ -329,6 +329,8 @@ namespace StockSharp.Messages
 
 		Uri IMessageAdapter.Icon => InnerAdapter.Icon;
 
+		bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => InnerAdapter.IsAutoReplyOnTransactonalUnsubscription;
+
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 
