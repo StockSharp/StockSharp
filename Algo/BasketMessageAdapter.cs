@@ -146,7 +146,7 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException(nameof(adapter));
 
 				lock (_syncObject)
-					_childToParentIds.Add(childId, RefTuple.Create(parentMsg.TransactionId, parentMsg is OrderStatusMessage ? SubscriptionStates.Active : SubscriptionStates.Stopped, adapter));
+					_childToParentIds.Add(childId, RefTuple.Create(parentMsg.TransactionId, SubscriptionStates.Stopped, adapter));
 			}
 
 			public IDictionary<long, IMessageAdapter> GetChild(long parentId)

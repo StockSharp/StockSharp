@@ -111,7 +111,7 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			if (message.Type == MessageTypes.OrderStatus)
+			if (message is OrderStatusMessage orderMsg && orderMsg.HasOrderId())
 				return true;
 
 			var transId = message.TransactionId;

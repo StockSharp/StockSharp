@@ -246,16 +246,9 @@
 							switch (message.Type)
 							{
 								case MessageTypes.SecurityLookup:
-									var secLookup = (SecurityLookupMessage)message;
-									RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = secLookup.TransactionId });
-									break;
-
 								case MessageTypes.PortfolioLookup:
-									var pfLookup = (PortfolioLookupMessage)message;
-
-									if (pfLookup.IsSubscribe)
-										RaiseNewOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = pfLookup.TransactionId });
-									
+								case MessageTypes.OrderStatus:
+									RaiseNewOutMessage(((ISubscriptionMessage)message).CreateResult());
 									break;
 							}
 

@@ -215,11 +215,7 @@
 								{
 									// finishing current history request
 
-									if (message.Type == MessageTypes.PortfolioLookup)
-									{
-										outMsg = subscriptionMsg.CreateResult();
-									}
-
+									outMsg = subscriptionMsg.CreateResult();
 									message = null;
 								}
 								else
