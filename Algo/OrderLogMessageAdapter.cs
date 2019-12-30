@@ -93,12 +93,15 @@
 				}
 			}
 			else
-			{
-				if (_subscriptionIds.TryGetAndRemove(message.OriginalTransactionId, out var tuple))
-					this.AddInfoLog("OL->{0} unsubscribed {1}/{2}.", tuple.Second ? "MD" : "TICK", tuple.First, message.OriginalTransactionId);
-			}
+				RemoveSubscription(message.OriginalTransactionId);
 
 			return message;
+		}
+
+		private void RemoveSubscription(long id)
+		{
+			if (_subscriptionIds.TryGetAndRemove(id, out var tuple))
+				this.AddInfoLog("OL->{0} unsubscribed {1}/{2}.", tuple.Second ? "MD" : "TICK", tuple.First, id);
 		}
 
 		/// <inheritdoc />
@@ -108,6 +111,20 @@
 
 			switch (message.Type)
 			{
+				case MessageTypes.SubscriptionResponse:
+				{
+					var responseMsg = (SubscriptionResponseMessage)message;
+
+					if (!responseMsg.IsOk())
+						RemoveSubscription(responseMsg.OriginalTransactionId);
+
+					break;
+				}
+				case MessageTypes.SubscriptionFinished:
+				{
+					RemoveSubscription(((SubscriptionFinishedMessage)message).OriginalTransactionId);
+					break;
+				}
 				case MessageTypes.Execution:
 				{
 					var execMsg = (ExecutionMessage)message;
