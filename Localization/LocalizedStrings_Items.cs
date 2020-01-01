@@ -50838,13 +50838,13 @@ namespace StockSharp.Localization
 		public static string Mbp => GetString(MbpKey);
 
 		/// <summary>
-		/// TOP
+		/// TOB
 		/// </summary>
-		public const string TopKey = nameof(Top);
+		public const string TobKey = nameof(Tob);
 
 		/// <summary>
-		/// TOP
+		/// TOB
 		/// </summary>
-		public static string Top => GetString(TopKey);
+		public static string Tob => GetString(TobKey);
 	}
 }

@@ -5117,7 +5117,7 @@ MarketByPrice;Market By Price.;Группировка по цене.
 TopOfBook;Top Of Book.;Лучшие цены.
 Mbo;MBO;MBO
 Mbp;MBP;MBP
-Top;TOP;TOP
+Tob;TOB;TOB
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
