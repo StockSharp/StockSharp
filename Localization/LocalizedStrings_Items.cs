@@ -50756,5 +50756,95 @@ namespace StockSharp.Localization
 		/// ICE
 		/// </summary>
 		public static string Ice => GetString(IceKey);
+
+		/// <summary>
+		/// UDP A
+		/// </summary>
+		public const string UdpAKey = nameof(UdpA);
+
+		/// <summary>
+		/// UDP A
+		/// </summary>
+		public static string UdpA => GetString(UdpAKey);
+
+		/// <summary>
+		/// UDP B
+		/// </summary>
+		public const string UdpBKey = nameof(UdpB);
+
+		/// <summary>
+		/// UDP B
+		/// </summary>
+		public static string UdpB => GetString(UdpBKey);
+
+		/// <summary>
+		/// UDP C
+		/// </summary>
+		public const string UdpCKey = nameof(UdpC);
+
+		/// <summary>
+		/// UDP C
+		/// </summary>
+		public static string UdpC => GetString(UdpCKey);
+
+		/// <summary>
+		/// Market By Order.
+		/// </summary>
+		public const string MarketByOrderKey = nameof(MarketByOrder);
+
+		/// <summary>
+		/// Market By Order.
+		/// </summary>
+		public static string MarketByOrder => GetString(MarketByOrderKey);
+
+		/// <summary>
+		/// Market By Price.
+		/// </summary>
+		public const string MarketByPriceKey = nameof(MarketByPrice);
+
+		/// <summary>
+		/// Market By Price.
+		/// </summary>
+		public static string MarketByPrice => GetString(MarketByPriceKey);
+
+		/// <summary>
+		/// Top Of Book.
+		/// </summary>
+		public const string TopOfBookKey = nameof(TopOfBook);
+
+		/// <summary>
+		/// Top Of Book.
+		/// </summary>
+		public static string TopOfBook => GetString(TopOfBookKey);
+
+		/// <summary>
+		/// MBO
+		/// </summary>
+		public const string MboKey = nameof(Mbo);
+
+		/// <summary>
+		/// MBO
+		/// </summary>
+		public static string Mbo => GetString(MboKey);
+
+		/// <summary>
+		/// MBP
+		/// </summary>
+		public const string MbpKey = nameof(Mbp);
+
+		/// <summary>
+		/// MBP
+		/// </summary>
+		public static string Mbp => GetString(MbpKey);
+
+		/// <summary>
+		/// TOP
+		/// </summary>
+		public const string TopKey = nameof(Top);
+
+		/// <summary>
+		/// TOP
+		/// </summary>
+		public static string Top => GetString(TopKey);
 	}
 }
