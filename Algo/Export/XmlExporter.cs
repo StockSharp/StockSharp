@@ -296,6 +296,9 @@ namespace StockSharp.Algo.Export
 				if (n.Priority != null)
 					writer.WriteAttribute("priority", n.Priority.Value);
 
+				if (!n.Language.IsEmpty())
+					writer.WriteAttribute("language", n.Language);
+
 				if (!n.Story.IsEmpty())
 					writer.WriteCData(n.Story);
 

@@ -300,6 +300,7 @@ StockSharp API Change log
 * (feature) SubscriptionResponseMessage. IsNotSupported property removed.
 * (feature) Use SubscriptionResponseMessage.Error as response for error lookup messages.
 * (feature) Uses SubscriptionOnlineMessage, SubscriptionFinishedMessage instead of SecurityLookupResultMessage, PortfolioLookupResultMessage, OrderStatusMessage.
+* (feature) News. Language property added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

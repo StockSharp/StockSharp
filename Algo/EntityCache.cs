@@ -846,6 +846,9 @@ namespace StockSharp.Algo
 			if (message.Priority != null)
 				news.Priority = message.Priority;
 
+			if (!message.Language.IsEmpty())
+				news.Language = message.Language;
+
 			message.CopyExtensionInfo(news);
 
 			return Tuple.Create(news, isNew);

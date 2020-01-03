@@ -1430,6 +1430,7 @@ namespace StockSharp.Algo
 				BoardCode = news.Board == null ? string.Empty : news.Board.Code,
 				Url = news.Url,
 				Priority = news.Priority,
+				Language = news.Language,
 			};
 		}
 
@@ -1646,6 +1647,7 @@ namespace StockSharp.Algo
 				Board = message.BoardCode.IsEmpty() ? null : exchangeInfoProvider?.GetOrCreateBoard(message.BoardCode),
 				LocalTime = message.LocalTime,
 				Priority = message.Priority,
+				Language = message.Language,
 				Security = message.SecurityId == null ? null : new Security
 				{
 					Id = message.SecurityId.Value.SecurityCode
