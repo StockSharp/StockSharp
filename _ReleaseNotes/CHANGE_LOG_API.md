@@ -302,6 +302,7 @@ StockSharp API Change log
 * (feature) Uses SubscriptionOnlineMessage, SubscriptionFinishedMessage instead of SecurityLookupResultMessage, PortfolioLookupResultMessage, OrderStatusMessage.
 * (feature) News. Language property added.
 * (feature) Quote. OrdersCount added.
+* (feature) SecurityTypes. Gdr, MultiLeg, Loan, Spread, Receipt, Indicator, Strategy, Volatility types added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

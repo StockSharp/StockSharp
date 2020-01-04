@@ -50846,5 +50846,45 @@ namespace StockSharp.Localization
 		/// TOB
 		/// </summary>
 		public static string Tob => GetString(TobKey);
+
+		/// <summary>
+		/// Receipt
+		/// </summary>
+		public const string ReceiptKey = nameof(Receipt);
+
+		/// <summary>
+		/// Receipt
+		/// </summary>
+		public static string Receipt => GetString(ReceiptKey);
+
+		/// <summary>
+		/// GDR
+		/// </summary>
+		public const string GdrKey = nameof(Gdr);
+
+		/// <summary>
+		/// GDR
+		/// </summary>
+		public static string Gdr => GetString(GdrKey);
+
+		/// <summary>
+		/// Loan
+		/// </summary>
+		public const string LoanKey = nameof(Loan);
+
+		/// <summary>
+		/// Loan
+		/// </summary>
+		public static string Loan => GetString(LoanKey);
+
+		/// <summary>
+		/// Imbalance
+		/// </summary>
+		public const string ImbalanceKey = nameof(Imbalance);
+
+		/// <summary>
+		/// Imbalance
+		/// </summary>
+		public static string Imbalance => GetString(ImbalanceKey);
 	}
 }

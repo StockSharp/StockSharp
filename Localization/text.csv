@@ -5118,6 +5118,10 @@ TopOfBook;Top Of Book.;Лучшие цены.
 Mbo;MBO;MBO
 Mbp;MBP;MBP
 Tob;TOB;TOB
+Receipt;Receipt;Расписка
+Gdr;GRD;GRD
+Loan;Loan;Заём
+Imbalance;Imbalance;Дисбаланс
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15810,7 +15814,6 @@ DocStr11421;"""Money"" security instance";"Объект инструмента "
 DocStr11422;Send unsubscribe on disconnect command;Отправлять отписку при отключении
 DocStr11423;Use separated {0} for each adapters;Использовать отдельные {0} для каждого адаптера
 DocStr11425;Request imbalance volume {0} orders, which have not been filled;Запросить дисбаланс объема заявок {0}, которые не были исполнены
-DocStr11426;Imbalance;Дисбаланс
 DocStr11427;Request imbalance bid and ask, when best bid of one board has more price than best ask on different board;Запросить дисбаланс бид и аска, когда лучший бид одной площадки имеет большую цену, чем лучший аск на другой
 DocStr11428;Request for the appearance of a new indicator in the pre-market;Запрос на получение индикативного значения пре-маркета
 DocStr11429;The request for maximum and minimum values for instruments;Запрос получения максимумов и минимумов инструментов
