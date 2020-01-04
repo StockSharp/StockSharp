@@ -1,19 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="162def79-bc07-4d24-8d16-4e04df216b08" revisionNumber="1">
-  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>   
+<topic id="fbe46be3-7234-4815-a18f-4a3cb4bb06e8" revisionNumber="1">
+   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>     
       <para>The code below demonstrates how to initialize the 
-      <codeEntityReference>T:StockSharp.BarChart.BarChartMessageAdapter</codeEntityReference>
+      <codeEntityReference>T:StockSharp.UkrExh.UkrExhMessageAdapter</codeEntityReference>
       and pass it to the 
       <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
       <code language="C#">
             				<![CDATA[
 Connector Connector = new Connector();				
 ...				
-var messageAdapter = new BarChartMessageAdapter(Connector.TransactionIdGenerator)
-{
-    Token = "<Your Token>".To<SecureString>(),
-};
+var messageAdapter = new UkrExhMessageAdapter(Connector.TransactionIdGenerator);
 
 Connector.Adapter.InnerAdapters.Add(messageAdapter);
 ...	

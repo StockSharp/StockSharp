@@ -1,18 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="162def79-bc07-4d24-8d16-4e04df216b08" revisionNumber="1">
+<topic id="356a822b-a4ed-42a9-8e7f-dfa595a15432" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>   
+    <introduction>     
       <para>The code below demonstrates how to initialize the 
-      <codeEntityReference>T:StockSharp.BarChart.BarChartMessageAdapter</codeEntityReference>
+      <codeEntityReference>T:StockSharp.Micex.MicexMessageAdapter</codeEntityReference>
       and pass it to the 
       <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
       <code language="C#">
             				<![CDATA[
 Connector Connector = new Connector();				
 ...				
-var messageAdapter = new BarChartMessageAdapter(Connector.TransactionIdGenerator)
+var messageAdapter = new MicexMessageAdapter(Connector.TransactionIdGenerator)
 {
-    Token = "<Your Token>".To<SecureString>(),
+    Login = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+    Addresses = new[] { "<Address>".To<EndPoint>() },
+	Server = "<Server>",
+	CompressionLevel = CompressionLevels.None,
+	Interface = MicexInterfaces.Stock18,
+	OrderBookDepth = 20,
 };
 
 Connector.Adapter.InnerAdapters.Add(messageAdapter);

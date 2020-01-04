@@ -2,9 +2,9 @@
 <topic id="dda99f90-0d3f-4c1d-ada4-7a4d5280c0c7" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>    
-      <para>Код ниже демонстрирует как инициализировать 
+      <para>The code below demonstrates how to initialize the 
       <codeEntityReference>T:StockSharp.Rss.RssMessageAdapter</codeEntityReference>
-      и передать его в
+      and pass it to the 
       <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
       <code language="C#">
             				<![CDATA[

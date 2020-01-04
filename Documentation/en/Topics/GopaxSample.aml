@@ -2,9 +2,9 @@
 <topic id="b00fd313-2a70-4622-a29c-3b060b4bd595" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Код ниже демонстрирует как инициализировать 
+      <para>The code below demonstrates how to initialize the 
       <codeEntityReference>T:StockSharp.Gopax.GopaxMessageAdapter</codeEntityReference>
-      и передать его в
+      and pass it to the 
       <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
       <code language="C#">
             				<![CDATA[
