@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		Version ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Version { get; } = SnapshotVersions.V20;
+		Version ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Version { get; } = SnapshotVersions.V21;
 
 		string ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Name => "OrderBook";
 
@@ -87,6 +87,11 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			var snapshotSize = typeof(QuotesSnapshot).SizeOf();
 			var rowSize = typeof(QuotesSnapshotRow).SizeOf();
 
+			var is21 = version == SnapshotVersions.V21;
+
+			if (is21)
+				rowSize += sizeof(int);
+
 			var buffer = new byte[snapshotSize + (bids.Length + asks.Length) * rowSize];
 
 			var ptr = snapshot.StructToPtr();
@@ -104,6 +109,10 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				};
 
 				var rowPtr = row.StructToPtr();
+
+				if (is21)
+					rowPtr.Write(quote.OrdersCount ?? 0);
+
 				Marshal.Copy(rowPtr, buffer, offset, rowSize);
 				Marshal.FreeHGlobal(rowPtr);
 
@@ -132,19 +141,28 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				var rowSize = Marshal.SizeOf(typeof(QuotesSnapshotRow));
 
-				for (var i = 0; i < snapshot.BidCount; i++)
+				var is21 = version == SnapshotVersions.V21;
+
+				QuoteChange ReadQuote(Sides side)
 				{
 					var row = ptr.ToStruct<QuotesSnapshotRow>();
-					bids[i] = new QuoteChange(Sides.Buy, row.Price, row.Volume);
+					var quote = new QuoteChange(side, row.Price, row.Volume);
 					ptr += rowSize;
+
+					if (is21)
+					{
+						quote.OrdersCount = ptr.Read<int>().DefaultAsNull();
+						ptr += sizeof(int);
+					}
+
+					return quote;
 				}
 
+				for (var i = 0; i < snapshot.BidCount; i++)
+					bids[i] = ReadQuote(Sides.Buy);
+
 				for (var i = 0; i < snapshot.AskCount; i++)
-				{
-					var row = ptr.ToStruct<QuotesSnapshotRow>();
-					asks[i] = new QuoteChange(Sides.Sell, row.Price, row.Volume);
-					ptr += rowSize;
-				}
+					asks[i] = ReadQuote(Sides.Sell);
 
 				return new QuoteChangeMessage
 				{

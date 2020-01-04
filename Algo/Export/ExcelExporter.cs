@@ -225,7 +225,8 @@ namespace StockSharp.Algo.Export
 					{
 						worker
 							.SetCell(columnIndex, rowIndex + (quote.Side == Sides.Buy ? 1 : 3), quote.Price)
-							.SetCell(columnIndex, rowIndex + 2, quote.Volume);
+							.SetCell(columnIndex, rowIndex + 2, quote.Volume)
+							.SetCell(columnIndex, rowIndex + 4, quote.OrdersCount);
 
 						columnIndex++;
 					}

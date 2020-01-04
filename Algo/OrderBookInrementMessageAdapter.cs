@@ -9,7 +9,7 @@
 
 	using StockSharp.Logging;
 	using StockSharp.Messages;
-	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, decimal>;
+	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, System.Tuple<decimal, int?>>;
 
 	/// <summary>
 	/// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
@@ -185,7 +185,7 @@
 					if (quote.Volume == 0)
 						to.Remove(quote.Price);
 					else
-						to[quote.Price] = quote.Volume;
+						to[quote.Price] = Tuple.Create(quote.Volume, quote.OrdersCount);
 				}
 			}
 
@@ -198,8 +198,8 @@
 			return new QuoteChangeMessage
 			{
 				SecurityId = quoteMsg.SecurityId,
-				Bids = info.Bids.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value)).ToArray(),
-				Asks = info.Asks.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value)).ToArray(),
+				Bids = info.Bids.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value.Item1, p.Value.Item2)).ToArray(),
+				Asks = info.Asks.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value.Item1, p.Value.Item2)).ToArray(),
 				IsSorted = true,
 				ServerTime = quoteMsg.ServerTime,
 				OriginalTransactionId = quoteMsg.OriginalTransactionId,

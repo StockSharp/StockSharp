@@ -920,6 +920,7 @@ namespace StockSharp.Algo
 			{
 				var aggQuote = new AggregatedQuote(false) { Price = g.Key };
 				aggQuote.InnerQuotes.AddRange(g);
+				aggQuote.OrdersCount = aggQuote.InnerQuotes.Sum(q => q.OrdersCount ?? 0).DefaultAsNull();
 				return aggQuote;
 			});
 			

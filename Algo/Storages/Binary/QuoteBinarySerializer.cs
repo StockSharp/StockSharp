@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
 	{
 		public QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 16 + 20 * 25, MarketDataVersions.Version55, exchangeInfoProvider)
+			: base(securityId, 16 + 20 * 25, MarketDataVersions.Version56, exchangeInfoProvider)
 		{
 		}
 
@@ -278,7 +278,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return quoteMsg;
 		}
 
-		private void SerializeQuotes(BitArrayWriter writer, IEnumerable<QuoteChange> quotes, QuoteMetaInfo metaInfo/*, bool isFull*/, bool useLong, bool nonAdjustPrice)
+		private void SerializeQuotes(BitArrayWriter writer, QuoteChange[] quotes, QuoteMetaInfo metaInfo/*, bool isFull*/, bool useLong, bool nonAdjustPrice)
 		{
 			if (writer == null)
 				throw new ArgumentNullException(nameof(writer));
@@ -307,6 +307,11 @@ namespace StockSharp.Algo.Storages.Binary
 				metaInfo.LastPrice = pricePrice;
 
 				writer.WriteVolume(quote.Volume, metaInfo, SecurityId);
+
+				if (metaInfo.Version < MarketDataVersions.Version56)
+					continue;
+
+				writer.WriteNullableInt(quote.OrdersCount);
 			}
 		}
 
@@ -333,7 +338,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 				var volume = reader.ReadVolume(metaInfo);
 
-				quotes[i] = new QuoteChange(side, price, volume);
+				var ordersCount = metaInfo.Version >= MarketDataVersions.Version56
+					? reader.ReadNullableInt()
+					: null;
+
+				quotes[i] = new QuoteChange(side, price, volume, ordersCount);
 			}
 
 			return quotes;

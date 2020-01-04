@@ -180,6 +180,9 @@ namespace StockSharp.Algo.Export
 					writer.WriteAttribute("volume", quote.Volume);
 					writer.WriteAttribute("side", quote.Side);
 
+					if (quote.OrdersCount != null)
+						writer.WriteAttribute("ordersCount", quote.OrdersCount.Value);
+
 					writer.WriteEndElement();
 				}
 

@@ -38,6 +38,7 @@ namespace StockSharp.Algo.Storages.Csv
 			Price = quote.Price;
 			Volume = quote.Volume;
 			Side = quote.Side;
+			OrdersCount = quote.OrdersCount;
 		}
 
 		public DateTimeOffset ServerTime { get; set; }
@@ -45,6 +46,7 @@ namespace StockSharp.Algo.Storages.Csv
 		public decimal? Price { get; set; }
 		public decimal Volume { get; set; }
 		public Sides Side { get; set; }
+		public int? OrdersCount { get; set; }
 	}
 
 	/// <summary>
@@ -76,7 +78,8 @@ namespace StockSharp.Algo.Storages.Csv
 				data.ServerTime.ToString("zzz"),
 				data.Price?.ToString(),
 				data.Volume.ToString(),
-				data.Side.ToString()
+				data.Side.ToString(),
+				data.OrdersCount?.ToString(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -90,13 +93,18 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <returns>Data.</returns>
 		protected override NullableTimeQuoteChange Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
-			return new NullableTimeQuoteChange
+			var quote = new NullableTimeQuoteChange
 			{
 				ServerTime = reader.ReadTime(metaInfo.Date),
 				Price = reader.ReadNullableDecimal(),
 				Volume = reader.ReadDecimal(),
 				Side = reader.ReadEnum<Sides>()
 			};
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				quote.OrdersCount = reader.ReadNullableInt();
+
+			return quote;
 		}
 	}
 }

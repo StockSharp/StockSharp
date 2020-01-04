@@ -50,16 +50,16 @@ namespace StockSharp.BusinessEntities
 		/// <param name="security">The instrument by which the quote is received.</param>
 		/// <param name="price">Quote price.</param>
 		/// <param name="volume">Quote volume.</param>
-		/// <param name="direction">Direction (buy or sell).</param>
-		public Quote(Security security, decimal price, decimal volume, Sides direction)
+		/// <param name="side">Direction (buy or sell).</param>
+		/// <param name="ordersCount">Orders count.</param>
+		public Quote(Security security, decimal price, decimal volume, Sides side, int? ordersCount = null)
 		{
-			_security = security;
-			_price = price;
-			_volume = volume;
-			_direction = direction;
+			Security = security;
+			Price = price;
+			Volume = volume;
+			OrderDirection = side;
+			OrdersCount = ordersCount;
 		}
-
-		private Security _security;
 
 		/// <summary>
 		/// The instrument by which the quote is received.
@@ -67,13 +67,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		public Security Security
-		{
-			get => _security;
-			set => _security = value;
-		}
-
-		private decimal _price;
+		public Security Security { get; set; }
 
 		/// <summary>
 		/// Quote price.
@@ -82,13 +76,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str275Key)]
 		[MainCategory]
-		public decimal Price
-		{
-			get => _price;
-			set => _price = value;
-		}
-
-		private decimal _volume;
+		public decimal Price { get; set; }
 
 		/// <summary>
 		/// Quote volume.
@@ -97,13 +85,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str276Key)]
 		[MainCategory]
-		public decimal Volume
-		{
-			get => _volume;
-			set => _volume = value;
-		}
-
-		private Sides _direction;
+		public decimal Volume { get; set; }
 
 		/// <summary>
 		/// Direction (buy or sell).
@@ -112,11 +94,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str128Key)]
 		[DescriptionLoc(LocalizedStrings.Str277Key)]
 		[MainCategory]
-		public Sides OrderDirection
-		{
-			get => _direction;
-			set => _direction = value;
-		}
+		public Sides OrderDirection { get; set; }
 
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
@@ -134,12 +112,19 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
+		/// Orders count.
+		/// </summary>
+		[DataMember]
+		[Nullable]
+		public int? OrdersCount { get; set; }
+
+		/// <summary>
 		/// Create a copy of <see cref="Quote"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Quote Clone()
 		{
-			return new Quote(_security, _price, _volume, _direction)
+			return new Quote(Security, Price, Volume, OrderDirection, OrdersCount)
 			{
 				ExtensionInfo = ExtensionInfo,
 			};
@@ -148,7 +133,8 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return "{0} {1} {2}".Put(OrderDirection == Sides.Buy ? LocalizedStrings.Bid : LocalizedStrings.Ask, Price, Volume);
+			var type = OrderDirection == Sides.Buy ? LocalizedStrings.Bid : LocalizedStrings.Ask;
+			return $"{type} {Price} {Volume}";
 		}
 	}
 }

@@ -47,11 +47,13 @@ namespace StockSharp.Messages
 		/// <param name="side">Direction (buy or sell).</param>
 		/// <param name="price">Quote price.</param>
 		/// <param name="volume">Quote volume.</param>
-		public QuoteChange(Sides side, decimal price, decimal volume)
+		/// <param name="ordersCount">Orders count.</param>
+		public QuoteChange(Sides side, decimal price, decimal volume, int? ordersCount = null)
 		{
 			Side = side;
 			Price = price;
 			Volume = volume;
+			OrdersCount = ordersCount;
 		}
 
 		/// <summary>
@@ -106,12 +108,19 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Orders count.
+		/// </summary>
+		[DataMember]
+		[Nullable]
+		public int? OrdersCount { get; set; }
+
+		/// <summary>
 		/// Create a copy of <see cref="QuoteChange"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override QuoteChange Clone()
 		{
-			var clone = new QuoteChange(Side, Price, Volume);
+			var clone = new QuoteChange(Side, Price, Volume, OrdersCount);
 			this.CopyExtensionInfo(clone);
 			return clone;
 		}
