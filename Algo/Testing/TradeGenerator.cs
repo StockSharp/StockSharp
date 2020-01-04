@@ -38,9 +38,7 @@ namespace StockSharp.Algo.Testing
 			IdGenerator = new IncrementalIdGenerator();
 		}
 
-		/// <summary>
-		/// Market data type.
-		/// </summary>
+		/// <inheritdoc />
 		public override MarketDataTypes DataType => MarketDataTypes.Trades;
 
 		private IdGenerator _idGenerator;
@@ -76,11 +74,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public bool GenerateOriginSide { get; set; }
 
-		/// <summary>
-		/// Process message.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
+		/// <inheritdoc />
 		protected override Message OnProcess(Message message)
 		{
 			DateTimeOffset time;
