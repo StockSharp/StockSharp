@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Testing
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -133,6 +134,11 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public bool GenerateDepthOnEachTrade { get; set; }
 
+		/// <summary>
+		/// Generate <see cref="QuoteChange.OrdersCount"/>.
+		/// </summary>
+		public bool GenerateOrdersCount { get; set; }
+
 		private int _maxGenerations = 20;
 
 		/// <summary>
@@ -168,7 +174,12 @@ namespace StockSharp.Algo.Testing
 			if (price <= 0)
 				price = priceStep;
 
-			return new QuoteChange(side, price, Volumes.Next());
+			int? ordersCount = null;
+
+			if (GenerateOrdersCount && RandomGen.GetBool())
+				ordersCount = Volumes.Next();
+
+			return new QuoteChange(side, price, Volumes.Next(), ordersCount);
 		}
 	}
 
