@@ -58,7 +58,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str273Key)]
 	[DescriptionLoc(LocalizedStrings.Str274Key)]
-	public class QuoteChange : Equatable<QuoteChange>, IExtendableEntity
+	public class QuoteChange : Cloneable<QuoteChange>, IExtendableEntity
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="QuoteChange"/>.
@@ -175,25 +175,6 @@ namespace StockSharp.Messages
 			};
 			this.CopyExtensionInfo(clone);
 			return clone;
-		}
-
-		/// <summary>
-		/// Compare <see cref="QuoteChange"/> on the equivalence.
-		/// </summary>
-		/// <param name="other">Another value with which to compare.</param>
-		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
-		protected override bool OnEquals(QuoteChange other)
-		{
-			return Price == other.Price && Side == other.Side;
-		}
-
-		/// <summary>
-		/// Get the hash code of the object <see cref="QuoteChange"/>.
-		/// </summary>
-		/// <returns>A hash code.</returns>
-		public override int GetHashCode()
-		{
-			return Price.GetHashCode() ^ Side.GetHashCode();
 		}
 
 		/// <inheritdoc />
