@@ -4210,8 +4210,8 @@ namespace StockSharp.Algo
 							SecurityId = level1.SecurityId,
 							LocalTime = level1.LocalTime,
 							ServerTime = level1.ServerTime,
-							Bids = _prevBidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Buy, _prevBidPrice.Value, _prevBidVolume ?? 0) },
-							Asks = _prevAskPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Sell, _prevAskPrice.Value, _prevAskVolume ?? 0) },
+							Bids = _prevBidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0) },
+							Asks = _prevAskPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0) },
 						};
 
 						return true;
@@ -4693,7 +4693,20 @@ namespace StockSharp.Algo
 			if (messages == null)
 				throw new ArgumentNullException(nameof(messages));
 
-			return messages.SelectMany(d => d.Asks.Concat(d.Bids).OrderByDescending(q => q.Price).Select(q => new TimeQuoteChange(q, d)));
+			return messages.SelectMany(d => d.ToTimeQuotes());
+		}
+
+		/// <summary>
+		/// Convert depth to quotes.
+		/// </summary>
+		/// <param name="message">Depth.</param>
+		/// <returns>Quotes.</returns>
+		public static IEnumerable<TimeQuoteChange> ToTimeQuotes(this QuoteChangeMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.Asks.Select(q => new TimeQuoteChange(Sides.Sell, q, message)).Concat(message.Bids.Select(q => new TimeQuoteChange(Sides.Buy, q, message))).OrderByDescending(q => q.Price);
 		}
 
 		/// <summary>

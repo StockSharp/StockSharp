@@ -254,13 +254,13 @@
 
 			if (quoteMsg.HasPositions)
 			{
-				bids = info.BidsByPos.Select(p => new QuoteChange(Sides.Buy, p.Item1, p.Item2, p.Item3));
-				asks = info.AsksByPos.Select(p => new QuoteChange(Sides.Sell, p.Item1, p.Item2, p.Item3));
+				bids = info.BidsByPos.Select(p => new QuoteChange(p.Item1, p.Item2, p.Item3));
+				asks = info.AsksByPos.Select(p => new QuoteChange(p.Item1, p.Item2, p.Item3));
 			}
 			else
 			{
-				bids = info.Bids.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value.Item1, p.Value.Item2));
-				asks = info.Asks.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value.Item1, p.Value.Item2));
+				bids = info.Bids.Select(p => new QuoteChange(p.Key, p.Value.Item1, p.Value.Item2));
+				asks = info.Asks.Select(p => new QuoteChange(p.Key, p.Value.Item1, p.Value.Item2));
 			}
 
 			return new QuoteChangeMessage

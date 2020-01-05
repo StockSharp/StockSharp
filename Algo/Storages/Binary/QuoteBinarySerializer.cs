@@ -218,8 +218,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var isFull = reader.Read();
 			var prevDepth = enumerator.Previous;
 
-			var bids = DeserializeQuotes(reader, metaInfo, Sides.Buy, useLong, nonAdjustPrice);
-			var asks = DeserializeQuotes(reader, metaInfo, Sides.Sell, useLong, nonAdjustPrice);
+			var bids = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice);
+			var asks = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice);
 
 			var diff = new QuoteChangeMessage
 			{
@@ -315,7 +315,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		private static QuoteChange[] DeserializeQuotes(BitArrayReader reader, QuoteMetaInfo metaInfo, Sides side, bool useLong, bool nonAdjustPrice)
+		private static QuoteChange[] DeserializeQuotes(BitArrayReader reader, QuoteMetaInfo metaInfo, bool useLong, bool nonAdjustPrice)
 		{
 			if (reader == null)
 				throw new ArgumentNullException(nameof(reader));
@@ -342,7 +342,7 @@ namespace StockSharp.Algo.Storages.Binary
 					? reader.ReadNullableInt()
 					: null;
 
-				quotes[i] = new QuoteChange(side, price, volume, ordersCount);
+				quotes[i] = new QuoteChange(price, volume, ordersCount);
 			}
 
 			return quotes;

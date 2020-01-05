@@ -1160,7 +1160,7 @@ namespace StockSharp.Algo.Testing
 					if (!register)
 						return;
 
-					quotes[message.OrderPrice] = pair = RefTuple.Create(new LevelQuotes(), new QuoteChange(message.Side, message.OrderPrice, 0));
+					quotes[message.OrderPrice] = pair = RefTuple.Create(new LevelQuotes(), new QuoteChange(message.OrderPrice, 0));
 				}
 
 				var level = pair.First;

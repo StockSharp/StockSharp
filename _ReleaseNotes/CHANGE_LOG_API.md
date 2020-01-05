@@ -304,6 +304,7 @@ StockSharp API Change log
 * (feature) Quote. OrdersCount added.
 * (feature) SecurityTypes. Gdr, MultiLeg, Loan, Spread, Receipt, Indicator, Strategy, Volatility types added.
 * (feature) QuoteChangeMessage. Updates by position supported.
+* (feature) QuoteChange. Side removed.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 		}
 
-		public NullableTimeQuoteChange(QuoteChange quote, QuoteChangeMessage message)
+		public NullableTimeQuoteChange(Sides side, QuoteChange quote, QuoteChangeMessage message)
 		{
 			if (quote == null)
 				throw new ArgumentNullException(nameof(quote));
@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Storages.Csv
 			LocalTime = message.LocalTime;
 			Price = quote.Price;
 			Volume = quote.Volume;
-			Side = quote.Side;
+			Side = side;
 			OrdersCount = quote.OrdersCount;
 		}
 

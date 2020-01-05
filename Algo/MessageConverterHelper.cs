@@ -1299,8 +1299,8 @@ namespace StockSharp.Algo
 			var security = marketDepth.Security;
 
 			var depth = marketDepth.Update(
-				message.Bids.Select(c => c.ToQuote(security, getSecurity)),
-				message.Asks.Select(c => c.ToQuote(security, getSecurity)),
+				message.Bids.Select(c => c.ToQuote(Sides.Buy, security, getSecurity)),
+				message.Asks.Select(c => c.ToQuote(Sides.Sell, security, getSecurity)),
 				message.IsSorted, message.ServerTime);
 
 			depth.LocalTime = message.LocalTime;
@@ -1316,22 +1316,23 @@ namespace StockSharp.Algo
 		/// <returns>Message.</returns>
 		public static QuoteChange ToQuoteChange(this Quote quote)
 		{
-			return new QuoteChange(quote.OrderDirection, quote.Price, quote.Volume, quote.OrdersCount);
+			return new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount);
 		}
 
 		/// <summary>
 		/// To convert the message into quote.
 		/// </summary>
 		/// <param name="change">Message.</param>
+		/// <param name="side">Direction (buy or sell).</param>
 		/// <param name="security">Security.</param>
 		/// <param name="getSecurity">The function for getting instrument.</param>
 		/// <returns>Quote.</returns>
-		public static Quote ToQuote(this QuoteChange change, Security security, Func<SecurityId, Security> getSecurity = null)
+		public static Quote ToQuote(this QuoteChange change, Sides side, Security security, Func<SecurityId, Security> getSecurity = null)
 		{
 			if (!change.BoardCode.IsEmpty() && getSecurity != null)
 				security = getSecurity(new SecurityId { SecurityCode = security.Code, BoardCode = change.BoardCode });
 
-			var quote = new Quote(security, change.Price, change.Volume, change.Side, change.OrdersCount);
+			var quote = new Quote(security, change.Price, change.Volume, side, change.OrdersCount);
 			change.CopyExtensionInfo(quote);
 			return quote;
 		}

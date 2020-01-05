@@ -70,13 +70,11 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="QuoteChange"/>.
 		/// </summary>
-		/// <param name="side">Direction (buy or sell).</param>
 		/// <param name="price">Quote price.</param>
 		/// <param name="volume">Quote volume.</param>
 		/// <param name="ordersCount">Orders count.</param>
-		public QuoteChange(Sides side, decimal price, decimal volume, int? ordersCount = null)
+		public QuoteChange(decimal price, decimal volume, int? ordersCount = null)
 		{
-			Side = side;
 			Price = price;
 			Volume = volume;
 			OrdersCount = ordersCount;
@@ -99,15 +97,6 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str276Key)]
 		[MainCategory]
 		public decimal Volume { get; set; }
-
-		/// <summary>
-		/// Direction (buy or sell).
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str128Key)]
-		[DescriptionLoc(LocalizedStrings.Str277Key)]
-		[MainCategory]
-		public Sides Side { get; set; }
 
 		/// <summary>
 		/// Electronic board code.
@@ -167,7 +156,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override QuoteChange Clone()
 		{
-			var clone = new QuoteChange(Side, Price, Volume, OrdersCount)
+			var clone = new QuoteChange(Price, Volume, OrdersCount)
 			{
 				StartPosition = StartPosition,
 				EndPosition = EndPosition,
@@ -180,8 +169,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var side = Side == Sides.Buy ? LocalizedStrings.Bid : LocalizedStrings.Ask;
-			return $"{side} {Price} {Volume}";
+			return $"{Price} {Volume}";
 		}
 	}
 }

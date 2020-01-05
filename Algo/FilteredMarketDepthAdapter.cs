@@ -51,13 +51,13 @@ namespace StockSharp.Algo
 			public long TransactionId { get; }
 			public HashSet<long> Subscriptions { get; } = new HashSet<long>();
 
-			private QuoteChange[] Filter(IEnumerable<QuoteChange> quotes)
+			private QuoteChange[] Filter(Sides side, IEnumerable<QuoteChange> quotes)
 			{
 				return quotes
 					.Select(quote =>
 					{
 						var res = quote.Clone();
-						var key = Tuple.Create(res.Side, res.Price);
+						var key = Tuple.Create(side, res.Price);
 
 						var own = _executions.TryGetValue(key)?.Second;
 						if (own != null)
@@ -83,8 +83,8 @@ namespace StockSharp.Algo
 					IsByLevel1 = message.IsByLevel1,
 					Currency = message.Currency,
 					IsFiltered = true,
-					Bids = Filter(message.Bids),
-					Asks = Filter(message.Asks),
+					Bids = Filter(Sides.Buy, message.Bids),
+					Asks = Filter(Sides.Sell, message.Asks),
 				};
 			}
 

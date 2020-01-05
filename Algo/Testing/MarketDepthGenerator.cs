@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Testing
 			if (GenerateOrdersCount && RandomGen.GetBool())
 				ordersCount = Volumes.Next();
 
-			return new QuoteChange(side, price, Volumes.Next(), ordersCount);
+			return new QuoteChange(price, Volumes.Next(), ordersCount);
 		}
 	}
 

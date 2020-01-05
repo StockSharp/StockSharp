@@ -143,10 +143,10 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				var is21 = version == SnapshotVersions.V21;
 
-				QuoteChange ReadQuote(Sides side)
+				QuoteChange ReadQuote()
 				{
 					var row = ptr.ToStruct<QuotesSnapshotRow>();
-					var quote = new QuoteChange(side, row.Price, row.Volume);
+					var quote = new QuoteChange(row.Price, row.Volume);
 					ptr += rowSize;
 
 					if (is21)
@@ -159,10 +159,10 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				}
 
 				for (var i = 0; i < snapshot.BidCount; i++)
-					bids[i] = ReadQuote(Sides.Buy);
+					bids[i] = ReadQuote();
 
 				for (var i = 0; i < snapshot.AskCount; i++)
-					asks[i] = ReadQuote(Sides.Sell);
+					asks[i] = ReadQuote();
 
 				return new QuoteChangeMessage
 				{

@@ -172,13 +172,15 @@ namespace StockSharp.Algo.Export
 				writer.WriteAttribute("serverTime", depth.ServerTime.ToString(_timeFormat));
 				writer.WriteAttribute("localTime", depth.LocalTime.ToString(_timeFormat));
 
+				var bids = new HashSet<QuoteChange>(depth.Bids);
+
 				foreach (var quote in depth.Bids.Concat(depth.Asks).OrderByDescending(q => q.Price))
 				{
 					writer.WriteStartElement("quote");
 
 					writer.WriteAttribute("price", quote.Price);
 					writer.WriteAttribute("volume", quote.Volume);
-					writer.WriteAttribute("side", quote.Side);
+					writer.WriteAttribute("side", bids.Contains(quote) ? Sides.Buy : Sides.Sell);
 
 					if (quote.OrdersCount != null)
 						writer.WriteAttribute("ordersCount", quote.OrdersCount.Value);
