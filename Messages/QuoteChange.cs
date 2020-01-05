@@ -26,6 +26,32 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
+	/// Change actions.
+	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
+	public enum QuoteChangeActions : byte
+	{
+		/// <summary>
+		/// New quote for <see cref="QuoteChange.StartPosition"/>.
+		/// </summary>
+		[EnumMember]
+		New,
+
+		/// <summary>
+		/// Update quote for <see cref="QuoteChange.StartPosition"/>.
+		/// </summary>
+		[EnumMember]
+		Update,
+
+		/// <summary>
+		/// Delete quotes from <see cref="QuoteChange.StartPosition"/> till <see cref="QuoteChange.EndPosition"/>.
+		/// </summary>
+		[EnumMember]
+		Delete,
+	}
+
+	/// <summary>
 	/// Market depth quote representing bid or ask.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
@@ -115,12 +141,38 @@ namespace StockSharp.Messages
 		public int? OrdersCount { get; set; }
 
 		/// <summary>
+		/// Start position, related for <see cref="Action"/>.
+		/// </summary>
+		[DataMember]
+		[Nullable]
+		public int? StartPosition { get; set; }
+
+		/// <summary>
+		/// End position, related for <see cref="Action"/>.
+		/// </summary>
+		[DataMember]
+		[Nullable]
+		public int? EndPosition { get; set; }
+
+		/// <summary>
+		/// Change action.
+		/// </summary>
+		[DataMember]
+		[Nullable]
+		public QuoteChangeActions? Action { get; set; }
+
+		/// <summary>
 		/// Create a copy of <see cref="QuoteChange"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override QuoteChange Clone()
 		{
-			var clone = new QuoteChange(Side, Price, Volume, OrdersCount);
+			var clone = new QuoteChange(Side, Price, Volume, OrdersCount)
+			{
+				StartPosition = StartPosition,
+				EndPosition = EndPosition,
+				Action = Action,
+			};
 			this.CopyExtensionInfo(clone);
 			return clone;
 		}

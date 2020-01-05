@@ -7,9 +7,11 @@
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, System.Tuple<decimal, int?>>;
+	using QuotesByPosList = System.Collections.Generic.List<System.Tuple<decimal, decimal, int?>>;
 
 	/// <summary>
 	/// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
@@ -31,6 +33,9 @@
 
 			public readonly QuotesDict Bids = new QuotesDict(new BackwardComparer<decimal>());
 			public readonly QuotesDict Asks = new QuotesDict();
+
+			public readonly QuotesByPosList BidsByPos = new QuotesByPosList();
+			public readonly QuotesByPosList AsksByPos = new QuotesByPosList();
 
 			public readonly CachedSynchronizedSet<long> SubscriptionIds = new CachedSynchronizedSet<long>();
 		}
@@ -178,7 +183,7 @@
 				info.State = currState = newState;
 			}
 
-			void Copy(IEnumerable<QuoteChange> from, QuotesDict to)
+			void Apply(IEnumerable<QuoteChange> from, QuotesDict to)
 			{
 				foreach (var quote in from)
 				{
@@ -189,17 +194,80 @@
 				}
 			}
 
-			Copy(quoteMsg.Bids, info.Bids);
-			Copy(quoteMsg.Asks, info.Asks);
+			void ApplyByPos(IEnumerable<QuoteChange> from, QuotesByPosList to)
+			{
+				foreach (var quote in from)
+				{
+					var startPos = quote.StartPosition.Value;
+
+					switch (quote.Action)
+					{
+						case QuoteChangeActions.New:
+						{
+							var tuple = Tuple.Create(quote.Price, quote.Volume, quote.OrdersCount);
+
+							if (startPos > to.Count)
+								throw new InvalidOperationException($"Pos={startPos}>Count={to.Count}");
+							else if (startPos == to.Count)
+								to.Add(tuple);
+							else
+								to.Insert(startPos, tuple);
+
+							break;
+						}
+						case QuoteChangeActions.Update:
+						{
+							to[startPos] = Tuple.Create(quote.Price, quote.Volume, quote.OrdersCount);
+							break;
+						}
+						case QuoteChangeActions.Delete:
+						{
+							if (quote.EndPosition == null)
+								to.RemoveAt(startPos);
+							else
+								to.RemoveRange(startPos, (quote.EndPosition.Value - startPos) + 1);
+
+							break;
+						}
+						default:
+							throw new ArgumentOutOfRangeException(nameof(from), quote.Action, LocalizedStrings.Str1219);
+					}
+				}
+			}
+
+			if (quoteMsg.HasPositions)
+			{
+				ApplyByPos(quoteMsg.Bids, info.BidsByPos);
+				ApplyByPos(quoteMsg.Asks, info.AsksByPos);
+			}
+			else
+			{
+				Apply(quoteMsg.Bids, info.Bids);
+				Apply(quoteMsg.Asks, info.Asks);
+			}
 
 			if (currState == QuoteChangeStates.SnapshotStarted || currState == QuoteChangeStates.SnapshotBuilding)
 				return null;
 
+			IEnumerable<QuoteChange> bids;
+			IEnumerable<QuoteChange> asks;
+
+			if (quoteMsg.HasPositions)
+			{
+				bids = info.BidsByPos.Select(p => new QuoteChange(Sides.Buy, p.Item1, p.Item2, p.Item3));
+				asks = info.AsksByPos.Select(p => new QuoteChange(Sides.Sell, p.Item1, p.Item2, p.Item3));
+			}
+			else
+			{
+				bids = info.Bids.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value.Item1, p.Value.Item2));
+				asks = info.Asks.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value.Item1, p.Value.Item2));
+			}
+
 			return new QuoteChangeMessage
 			{
 				SecurityId = quoteMsg.SecurityId,
-				Bids = info.Bids.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value.Item1, p.Value.Item2)).ToArray(),
-				Asks = info.Asks.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value.Item1, p.Value.Item2)).ToArray(),
+				Bids = bids.ToArray(),
+				Asks = asks.ToArray(),
 				IsSorted = true,
 				ServerTime = quoteMsg.ServerTime,
 				OriginalTransactionId = quoteMsg.OriginalTransactionId,
