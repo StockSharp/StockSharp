@@ -5,7 +5,7 @@
     <introduction>
       <para><link xlink:href="c84e2ec8-88b4-4055-ad76-14c22c7844a6" /> can run strategies created in <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />.</para>
       <para>To launch a strategy created in <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />, 
-      you need to select it on the <link xlink:href="d0744680-ba4d-44f6-8414-26fc177bbc08" /> выбрать 
+      you need to select it on the <link xlink:href="d0744680-ba4d-44f6-8414-26fc177bbc08" /> select  
       tab and click the <legacyBold>Add Designer strategy</legacyBold> button. 
       
       In the window that appears, select the strategy file exported from <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />. </para>

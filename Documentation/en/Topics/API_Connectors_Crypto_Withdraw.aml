@@ -2,10 +2,9 @@
 <topic id="925f42ba-d6d8-41bb-bb27-b1fa56e71ea8" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>Для вывода средств с биржи криптовалют необходимо сформировать заявку на вывод 
-и зарегистрировать ее в коннекторе как обычную заявку. Например, для биржи 
+<para>To withdraw funds from the cryptocurrency exchange, it is necessary to create an order for withdrawal and register it in the connector as a regular order. For example, for the 
 <link xlink:href="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" /> 
-код заявки на вывод средств будет выглядеть следующим образом:</para>
+exchange, the withdrawal request code will look like this:</para>
             				<code language="C#">
             				<![CDATA[
 Connector Connector = new Connector();		
@@ -21,7 +20,7 @@ public void Withdraw()
 			IsWithdraw = true,
 			WithdrawInfo = new WithdrawInfo
 			{
-				// заполняются необходимые реквизиты
+				// fill in the necessary details
 				Comment = "My profit",
 				//PaymentId = "45467dyjyttR8WBiTJXptyuTx4wbSerGZ5t45", //Riple
 				CryptoAddress = "16zK3M53JBGnjs9ajTBGBfkRqoHtm4E573",

@@ -13,7 +13,7 @@
       <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" isExpanded="true" title="Connectors (Stock, Futures and Options)">
         <Topic id="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" visible="True" isExpanded="true" title="AlphaVantage">
           <Topic id="28cee4c9-f9c2-4e87-a160-991fc18221af" visible="True" title="Configuration AlphaVantage" />
-          <Topic id="4091ca5f-352f-4ad8-8b7b-e017f634a486" visible="True" title="Graphical configuration AlphaVantage" />
+          <Topic id="4091ca5f-352f-4ad8-8b7b-e017f634a486" visible="True" isSelected="true" title="Graphical configuration AlphaVantage" />
           <Topic id="02913c08-eeab-48e3-9e62-35dccea1db59" visible="True" title="Adapter initialization AlphaVantage" />
         </Topic>
         <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" isExpanded="true" title="BarChart">
@@ -26,7 +26,7 @@
           <Topic id="0bbad367-a35e-4173-b19d-602f7324ec55" visible="True" title="Graphical configuration Blackwood (Fusion)" />
           <Topic id="95d01586-b798-4d38-82aa-38d8533586b5" visible="True" title="Adapter initialization Blackwood (Fusion)" />
         </Topic>
-        <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" isExpanded="true" title="CQG">
+        <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" title="CQG">
           <Topic id="3ee05287-d25f-4967-9dc0-26d9a5a9578a" visible="True" title="Configuration CQG" />
           <Topic id="122ef5c0-eae9-49f4-a225-1d55c5d2636f" visible="True" title="Graphical configuration CQG COM" />
           <Topic id="246028c4-7d79-4552-b133-d419373a5d16" visible="True" title="Graphical configuration CQG Continuum" />
@@ -41,12 +41,12 @@
           <Topic id="7aefa333-0c0c-4cd5-8a53-eb237f11ce85" visible="True" title="Graphical configuration Google" />
           <Topic id="ddbfc076-9092-40b8-8625-91500654e4f2" visible="True" title="Adapter initialization Google" />
         </Topic>
-        <Topic id="fb946f86-fe4b-4e30-97f7-543178e81792" visible="True" isExpanded="true" title="IEX">
+        <Topic id="fb946f86-fe4b-4e30-97f7-543178e81792" visible="True" title="IEX">
           <Topic id="f826d615-3d80-42fe-980e-985e883acdeb" visible="True" title="Configuration IEX" />
           <Topic id="312233b1-e39f-4e66-982a-49113177afab" visible="True" title="Graphical configuration IEX" />
           <Topic id="0da3d6e1-12fa-4732-9834-9008b63714ce" visible="True" title="Adapter initialization IEX" />
         </Topic>
-        <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" isExpanded="true" title="Interactive Brokers">
+        <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" title="Interactive Brokers">
           <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" title="Configuration Interactive Brokers" />
           <Topic id="d744f267-b4b7-42e4-9356-ba2a0c7c8dbf" visible="True" title="Graphical configuration Interactive Brokers" />
           <Topic id="7c23b480-d472-43df-aabf-f743ad09fded" visible="True" title="Adapter initialization Interactive Brokers" />
@@ -395,7 +395,7 @@
           <Topic id="9012c95b-9858-4ee8-948d-c6f776b128eb" visible="True" title="Configuration FIX/FAST" />
           <Topic id="76bc2cb9-f6fb-41e6-a1b6-88f43f348ee3" visible="True" title="Graphical configuration FIX" />
           <Topic id="0265145f-5831-420f-8f64-99e6bb3c3ed4" visible="True" title="Graphical configuration FAST" />
-          <Topic id="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" visible="True" isSelected="true" title="Adapter initialization FIX" />
+          <Topic id="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" visible="True" title="Adapter initialization FIX" />
           <Topic id="40b2420d-40db-492c-a66c-d5b0ea7dfc40" visible="True" title="Adapter initialization FAST" />
         </Topic>
         <Topic id="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93" visible="True" title="FIX Server" />

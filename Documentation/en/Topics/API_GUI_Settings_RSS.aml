@@ -7,7 +7,7 @@
      <mediaLink><image placement="center" xlink:href="API_GUI_Settings_RSS" /></mediaLink>
      <list class="bullet">
 <listItem><legacyBold>Address</legacyBold> - RSS feed address.</listItem>
-<listItem><legacyBold>Dates format</legacyBold> - Dates format Required to be filled if RSS stream format is different from ddd, dd МММ yyyy HH:mm:ss zzzz.</listItem>
+<listItem><legacyBold>Dates format</legacyBold> - Dates format Required to be filled if RSS stream format is different from ddd, dd MMM yyyy HH:mm:ss zzzz.</listItem>
 <listItem><legacyBold>Heart beat</legacyBold> - Server check interval for track the connection alive. By default equal to 1 minute.</listItem>
 <listItem><legacyBold>Reconnection settings</legacyBold> - Mechanism for tracking connections with the trading system settings. (<link xlink:href="a188710e-7bb7-41b3-8119-6088f2bf1780" />)</listItem>
 

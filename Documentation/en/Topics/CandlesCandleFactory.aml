@@ -17,7 +17,7 @@
 				<content>
 <para>First, you need to create your own candle type. The type must inherit from the <codeEntityReference>T:StockSharp.Algo.Candles.Candle</codeEntityReference> class:</para>
 
-<alert class="caution">ТTick candles are supported by <token>stocksharp</token> as standard and this step is presented only as an example.</alert>
+<alert class="caution">Tick candles are supported by <token>stocksharp</token> as standard and this step is presented only as an example.</alert>
 
 <code language="C#">
 <![CDATA[

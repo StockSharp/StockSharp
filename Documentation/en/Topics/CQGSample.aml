@@ -3,11 +3,11 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>     
       <para>The code below demonstrates how to initialize the 
-      <codeEntityReference>T:StockSharp.Cqg.Com.CqgComMessageAdapter</codeEntityReference> и 
-      <codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter</codeEntityReference> и
-      передать их в
+      <codeEntityReference>T:StockSharp.Cqg.Com.CqgComMessageAdapter</codeEntityReference> and 
+      <codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter</codeEntityReference> and
+      and pass it to the 
       <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
-      <para>1. <legacyBold>CQG COM</legacyBold>, подключение через локальный 
+      <para>1. <legacyBold>CQG COM</legacyBold>, connection by local
 <legacyBold>CQG Integrated Client</legacyBold>:</para>
       <code language="C#">
             				<![CDATA[
@@ -23,7 +23,7 @@ Connector.Adapter.InnerAdapters.Add(messageAdapter);
 ...	
 							]]>
 					</code>
-<para>2. <legacyBold>CQG Continuum</legacyBold>, подключение напрямую к серверу:</para>
+<para>2. <legacyBold>CQG Continuum</legacyBold>, connecting directly to the server:</para>
       <code language="C#">
             				<![CDATA[
 Connector Connector = new Connector();				

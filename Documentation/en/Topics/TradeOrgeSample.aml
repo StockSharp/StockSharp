@@ -19,12 +19,6 @@
             ...	
 							]]>
 					</code>
-		<alert class="caution">
-			<para>
-				<token>smartcom</token> 2 имеет те же ограничения на разрядность операционной системы, что и <token>quik</token>. Приложение необходимо компилировать
-				под 32 бита. Как это сделать показано в <link xlink:href="b6fea084-f43c-4eb7-ab63-ad3031d748a5"/>. В <token>smartcom</token> 3 режим компиляции выбирается в зависимости от установленной сборки (32- или 64-битной).
-			</para>
-		</alert>
     </introduction>
   
         <relatedTopics>

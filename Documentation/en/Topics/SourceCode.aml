@@ -3,50 +3,51 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
   
     <introduction>
-     <para>В настоящее время ядро <token>stocksharp</token> разрабатывается в рамках Open Source комьюнити, доступны в виде исходных кодов, и размещены в репозитории
-     <token>stocksharpgithub</token>.
+     <para>Currently, the <token>stocksharp</token> core is being developed as 
+     part of the Open Source community, available as source code, and hosted in the
+     <token>stocksharpgithub</token> repository.
  	</para>
  	<para><externalLink>
-	<linkText>Инструкция использования GitHub</linkText>
-		<linkAlternateText>Инструкция использования GitHub</linkAlternateText>
-		<linkUri>https://stocksharp.ru/forum/4848/rukovodstvo-po-github/</linkUri>
+	<linkText>Instructions for using GitHub</linkText>
+		<linkAlternateText>Instructions for using GitHub</linkAlternateText>
+		<linkUri>https://stocksharp.com/forum/4848/rukovodstvo-po-github/</linkUri>
 		<linkTarget>_blank</linkTarget>
 	</externalLink>
 </para>
- 	<para>Список компонент, доступных с исходными кодами:</para>
+ 	<para>List of components available with source code:</para>
 	<list class="bullet">
   		<listItem>
-			<para>Общие классы для создания собственных подключений.</para>
+			<para>Common classes for creating your own connections.</para>
 		</listItem>
 		<listItem>
-			<para>Формат хранилища маркет-данных.</para>
+			<para>Format of the market data storage.</para>
 		</listItem>
 		<listItem>
-			<para>Симулятор торгов.</para>
+			<para>Trading simulator.</para>
 		</listItem>
 		<listItem>
-			<para>Симулятор истории (бэктестер).</para>
+			<para>History simulator (backtester).</para>
 		</listItem>
 		<listItem>
-			<para>Индикаторы (более 70) технического анализа.</para>
+			<para>Indicators (more than 70) of technical analysis.</para>
 		</listItem>
 		<listItem>
-			<para>Алгоритмы расчета прибыли-убытка, проскальзывания, задержки.</para>
+			<para>Algorithms for calculating profit-loss, slippage, delay.</para>
 		</listItem>
 		<listItem>
-			<para>Алгоритмы построения свечей любого тайм-фрейма, а так же свечей, отличных от временных (тиковые, рендж и т.д.).</para>
+			<para>Algorithms for building candles of any time frame, as well as candles, other than the time (tick, range, etc.).</para>
 		</listItem>
 		<listItem>
-			<para>Логирование.</para>
+			<para>Logging.</para>
 		</listItem>
 		<listItem>
-			<para>Импорт и экспорт.</para>
+			<para>Import and export.</para>
 		</listItem>
 	</list>
-  		<para>Исходные коды всех закрытых компоненте, а так же готовых программ, доступен при покупке. Подробную информацию о стоимости исходных кодов
+  		<para>The source codes of all closed components, as well as ready-made programs, are available upon purchase. For more information about the cost of source codes, see 
   			<externalLink>
-				<linkText>Стоимость исходных кодов StockSharp</linkText>
-				<linkAlternateText>Стоимость исходных кодов</linkAlternateText>
+				<linkText>Source Code Cost</linkText>
+				<linkAlternateText>Source Code Cost</linkAlternateText>
 				<linkUri>https://stocksharp.ru/products/pricing/#sources</linkUri>
 				<linkTarget>_blank</linkTarget>
 			</externalLink>.
@@ -54,7 +55,7 @@
    </introduction>
 
 	<relatedTopics>
-    <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>
+    <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8"/>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

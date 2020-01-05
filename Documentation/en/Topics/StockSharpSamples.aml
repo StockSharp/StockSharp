@@ -4,7 +4,7 @@
 
     <introduction>
       <para>
-		  В дистрибутиве <token>stocksharp</token> идут примеры, демонстрирующие, как нужно разрабатывать торговые программы на основе библиотеки.
+The <token>stocksharp</token> distribution kit includes examples showing how to develop trading programs based on the library.
 	  </para>
     </introduction>
     
@@ -12,73 +12,73 @@
     	<content>
     		<table>
 			  <title>
-				  Описание примеров:
+				  Description of examples:
 			  </title>
 			  <tableHeader>
 				  <row>
-					  <entry>Название</entry>
-					  <entry>Описание</entry>
+					  <entry>Name</entry>
+					  <entry>Description</entry>
 				  </row>
 			  </tableHeader>
 			  <row>
 				  <entry>SampleChart</entry>
-				  <entry>Пример работы с графиком.</entry>
+				  <entry>An example of working with a chart.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleChartActiveOrders</entry>
-				  <entry>Пример выставления заявок с графика. </entry>
+				  <entry>An example of registering orders from the chart.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleChartPerformance</entry>
-				  <entry>Пример высокой производительности работы графика.</entry>
+				  <entry>An example of high performance of chart.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleConnection</entry>
-				  <entry>Пример подключений к различным коннекторам.</entry>
+				  <entry>An example of connections to various connectors.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleConnectionWithStorage</entry>
-				  <entry>Пример подключений к различным коннекторам с использованием исторических данных.</entry>
+				  <entry>An example of connections to various connectors using historical data.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleCurrency</entry>
-				  <entry>Пример перевода валют.</entry>
+				  <entry>An example of currency conversion.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleLogging</entry>
-				  <entry>Пример работы с логированием.</entry>
+				  <entry>An example of working with logging.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleOptionQuoting</entry>
-				  <entry>Пример стратегии котирования опционов.</entry>
+				  <entry>An example of options quoting strategy.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleStorage</entry>
-				  <entry>Пример работы с локальным хранилищем данных.</entry>
+				  <entry>An example of working with a local data storage.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleStrategies</entry>
-				  <entry>Пример создания стратегии.</entry>
+				  <entry>An example of creating a strategy.</entry>
 			  </row>
 			   <row>
 				  <entry>SampleUnit</entry>
-				  <entry>Пример работы с классом Unit.</entry>
+				  <entry>An example of working with the Unit class.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleHistoryTesting</entry>
-				  <entry>Пример тестирования на истории.</entry>
+				  <entry>An example of backtesting.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleHistoryTestingParallel</entry>
-				  <entry>Пример параллельного тестирования на истории.</entry>
+				  <entry>An example of parallel backtesting.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleRandomEmulation</entry>
-				  <entry>Пример тестирования на случайных данных.</entry>
+				  <entry>An example of testing on random data.</entry>
 			  </row>
 			  <row>
 				  <entry>SampleRealTimeEmulation</entry>
-				  <entry>Пример тестирования на реальных данных.</entry>
+				  <entry>An example of testing on real data.</entry>
 			  </row>
 
 
@@ -93,7 +93,7 @@
     </section>
 
 	<relatedTopics>
-	    <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>
+	    <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8"/>
     </relatedTopics>
 
   </developerConceptualDocument>

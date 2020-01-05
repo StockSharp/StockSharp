@@ -2,14 +2,14 @@
 <topic id="e37be6cb-638e-445e-b0df-f40ecec74343" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    <para><legacyBold>MB Trading</legacyBold> - сервис поставки исторических маркет-данных котировок Форекс.</para>
+    <para><legacyBold>MB Trading</legacyBold> - the historical data provides for variety of financial instruments (e.g. Forex).</para>
     	<para>
-До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
+Before you start writing trading robots for the current trading platform, it is recommended to read the links in the  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
 		</para>
 		<alert class="caution">
 			<para>
-				Коннектор поддерживает только получение маркет-данных и не предоставляет возможности для отправления торговых приказов.
+				Connector support only market-data feed, transaction are not supported.
 			</para>
 		</alert>
      </introduction>

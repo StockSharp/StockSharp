@@ -11,7 +11,7 @@
 var messageAdapter = new RssMessageAdapter(Connector.TransactionIdGenerator)
 {
     Address = new Uri("http://energy.rss"),
-    CustomDateFormat = "ddd, dd МММ yyyy HH:mm:ss zzzz"
+    CustomDateFormat = "ddd, dd MMM yyyy HH:mm:ss zzzz"
 };
 
 Connector.Adapter.InnerAdapters.Add(messageAdapter);

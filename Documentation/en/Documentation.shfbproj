@@ -4703,6 +4703,26 @@
       <ImageId>API_GUI_Settings_Bitexbook</ImageId>
       <AlternateText>API GUI Settings Bitexbook</AlternateText>
     </Image>
+    <Image Include="Art\API_GUI_ReconnectionSettings.png">
+      <ImageId>API_GUI_ReconnectionSettings</ImageId>
+      <AlternateText>API GUI Reconnection Settings</AlternateText>
+    </Image>
+    <Image Include="Art\API_ReconnectionLog.png">
+      <ImageId>API_ReconnectionLog</ImageId>
+      <AlternateText>API Reconnection Log</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Universal_formula_00.png">
+      <ImageId>Designer_Universal_formula_00</ImageId>
+      <AlternateText>Designer Universal formula 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_connector_security_mapping_00.png">
+      <ImageId>Designer_connector_security_mapping_00</ImageId>
+      <AlternateText>Designer connector security mapping 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_connector_security_mapping_01.png">
+      <ImageId>Designer_connector_security_mapping_01</ImageId>
+      <AlternateText>Designer connector security mapping 01</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

@@ -2,9 +2,9 @@
 <topic id="2de49aa5-33f4-43e0-a36a-3312b274daa2" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    <para><legacyBold>CoinEx</legacyBold> - биржа для торговли криптовалютой.</para>
+    <para><legacyBold>CoinEx</legacyBold> - cryptocurrency exchange.</para>
     	<para>
-До того, как приступить к написанию торговых роботов под текущую торговую платформу рекомендуется ознакомиться с ссылками приведенными в пункте  
+Before you start writing trading robots for the current trading platform, it is recommended to read the links in the  
 <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
 		</para>
      </introduction>
