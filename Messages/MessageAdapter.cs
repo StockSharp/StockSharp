@@ -21,6 +21,7 @@ namespace StockSharp.Messages
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Interop;
@@ -362,8 +363,8 @@ namespace StockSharp.Messages
 
 			switch (message.Type)
 			{
-				case MessageTypes.TimeFrameLookupResult:
-					_timeFrames = ((TimeFrameLookupResultMessage)message).TimeFrames;
+				case MessageTypes.TimeFrameInfo:
+					_timeFrames.AddRange(((TimeFrameInfoMessage)message).TimeFrames);
 					break;
 			}
 
@@ -478,7 +479,7 @@ namespace StockSharp.Messages
 		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);
 
-		private IEnumerable<TimeSpan> _timeFrames = Enumerable.Empty<TimeSpan>();
+		private readonly HashSet<TimeSpan> _timeFrames = new HashSet<TimeSpan>();
 
 		/// <summary>
 		/// Get possible time-frames for the specified instrument.

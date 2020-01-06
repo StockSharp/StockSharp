@@ -107,7 +107,7 @@ namespace StockSharp.Messages
 		PositionChange,
 
 		/// <summary>
-		/// <see cref="PortfolioChangeMessage"/>.
+		/// Obsolete.
 		/// </summary>
 		[Obsolete]
 		PortfolioChange,
@@ -270,9 +270,9 @@ namespace StockSharp.Messages
 		TimeFrameLookup,
 
 		/// <summary>
-		/// <see cref="TimeFrameLookupResultMessage"/>.
+		/// <see cref="TimeFrameInfoMessage"/>.
 		/// </summary>
-		TimeFrameLookupResult,
+		TimeFrameInfo,
 
 		/// <summary>
 		/// <see cref="SecurityMappingRequestMessage"/>.
@@ -280,9 +280,9 @@ namespace StockSharp.Messages
 		SecurityMappingRequest,
 
 		/// <summary>
-		/// <see cref="SecurityMappingResultMessage"/>.
+		/// <see cref="SecurityMappingInfoMessage"/>.
 		/// </summary>
-		SecurityMappingResult,
+		SecurityMappingInfo,
 
 		/// <summary>
 		/// <see cref="SecurityLegsRequestMessage"/>.
@@ -290,9 +290,9 @@ namespace StockSharp.Messages
 		SecurityLegsRequest,
 
 		/// <summary>
-		/// <see cref="SecurityLegsResultMessage"/>.
+		/// <see cref="SecurityLegsInfoMessage"/>.
 		/// </summary>
-		SecurityLegsResult,
+		SecurityLegsInfo,
 
 		/// <summary>
 		/// <see cref="AdapterListRequestMessage"/>.
