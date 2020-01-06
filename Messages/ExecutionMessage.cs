@@ -62,7 +62,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	public sealed class ExecutionMessage : BaseSubscriptionIdMessage,
+	public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage,
 		IPortfolioNameMessage, IErrorMessage
 	{
@@ -543,80 +543,72 @@ namespace StockSharp.Messages
 			return base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},({ExecutionType}),Sec={SecurityId},O/T={HasOrderInfo}/{HasTradeInfo},Ord={OrderId}/{TransactionId}/{OriginalTransactionId},Fail={Error},Price={OrderPrice},OrdVol={OrderVolume},TrVol={TradeVolume},Bal={Balance},TId={TradeId},Pf={PortfolioName},TPrice={TradePrice},UId={UserOrderId},State={OrderState},Cond={Condition}";
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="ExecutionMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
+		/// <inheritdoc />
+		public override void CopyTo(ExecutionMessage destination)
 		{
-			var clone = new ExecutionMessage
-			{
-				Balance = Balance,
-				Comment = Comment,
-				Condition = Condition?.Clone(),
-				ClientCode = ClientCode,
-				BrokerCode = BrokerCode,
-				Currency = Currency,
-				ServerTime = ServerTime,
-				DepoName = DepoName,
-				Error = Error,
-				ExpiryDate = ExpiryDate,
-				IsSystem = IsSystem,
-				OpenInterest = OpenInterest,
-				OrderId = OrderId,
-				OrderStringId = OrderStringId,
-				OrderBoardId = OrderBoardId,
-				ExecutionType = ExecutionType,
-				IsCancellation = IsCancellation,
-				//Action = Action,
-				OrderState = OrderState,
-				OrderStatus = OrderStatus,
-				OrderType = OrderType,
-				OriginSide = OriginSide,
-				PortfolioName = PortfolioName,
-				OrderPrice = OrderPrice,
-				SecurityId = SecurityId,
-				Side = Side,
-				SystemComment = SystemComment,
-				TimeInForce = TimeInForce,
-				TradeId = TradeId,
-				TradeStringId = TradeStringId,
-				TradePrice = TradePrice,
-				TradeStatus = TradeStatus,
-				TransactionId = TransactionId,
-				OrderVolume = OrderVolume,
-				TradeVolume = TradeVolume,
-				//IsFinished = IsFinished,
-				VisibleVolume = VisibleVolume,
-				IsUpTick = IsUpTick,
-				Commission = Commission,
-				Latency = Latency,
-				Slippage = Slippage,
-				UserOrderId = UserOrderId,
+			base.CopyTo(destination);
 
-				//DerivedOrderId = DerivedOrderId,
-				//DerivedOrderStringId = DerivedOrderStringId,
+			destination.Balance = Balance;
+			destination.Comment = Comment;
+			destination.Condition = Condition?.Clone();
+			destination.ClientCode = ClientCode;
+			destination.BrokerCode = BrokerCode;
+			destination.Currency = Currency;
+			destination.ServerTime = ServerTime;
+			destination.DepoName = DepoName;
+			destination.Error = Error;
+			destination.ExpiryDate = ExpiryDate;
+			destination.IsSystem = IsSystem;
+			destination.OpenInterest = OpenInterest;
+			destination.OrderId = OrderId;
+			destination.OrderStringId = OrderStringId;
+			destination.OrderBoardId = OrderBoardId;
+			destination.ExecutionType = ExecutionType;
+			destination.IsCancellation = IsCancellation;
+			//destination.Action = Action;
+			destination.OrderState = OrderState;
+			destination.OrderStatus = OrderStatus;
+			destination.OrderType = OrderType;
+			destination.OriginSide = OriginSide;
+			destination.PortfolioName = PortfolioName;
+			destination.OrderPrice = OrderPrice;
+			destination.SecurityId = SecurityId;
+			destination.Side = Side;
+			destination.SystemComment = SystemComment;
+			destination.TimeInForce = TimeInForce;
+			destination.TradeId = TradeId;
+			destination.TradeStringId = TradeStringId;
+			destination.TradePrice = TradePrice;
+			destination.TradeStatus = TradeStatus;
+			destination.TransactionId = TransactionId;
+			destination.OrderVolume = OrderVolume;
+			destination.TradeVolume = TradeVolume;
+			//destination.IsFinished = IsFinished;
+			destination.VisibleVolume = VisibleVolume;
+			destination.IsUpTick = IsUpTick;
+			destination.Commission = Commission;
+			destination.Latency = Latency;
+			destination.Slippage = Slippage;
+			destination.UserOrderId = UserOrderId;
 
-				PnL = PnL,
-				Position = Position,
+			//destination.DerivedOrderId = DerivedOrderId;
+			//destination.DerivedOrderStringId = DerivedOrderStringId;
 
-				HasTradeInfo = HasTradeInfo,
-				HasOrderInfo = HasOrderInfo,
+			destination.PnL = PnL;
+			destination.Position = Position;
 
-				IsMarketMaker = IsMarketMaker,
-				IsMargin = IsMargin,
-				IsManual = IsManual,
+			destination.HasTradeInfo = HasTradeInfo;
+			destination.HasOrderInfo = HasOrderInfo;
 
-				CommissionCurrency = CommissionCurrency,
+			destination.IsMarketMaker = IsMarketMaker;
+			destination.IsMargin = IsMargin;
+			destination.IsManual = IsManual;
 
-				AveragePrice = AveragePrice,
-				Yield = Yield,
-				MinVolume = MinVolume,
-			};
+			destination.CommissionCurrency = CommissionCurrency;
 
-			CopyTo(clone);
-
-			return clone;
+			destination.AveragePrice = AveragePrice;
+			destination.Yield = Yield;
+			destination.MinVolume = MinVolume;
 		}
 	}
 }

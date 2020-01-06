@@ -175,7 +175,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str862Key)]
 	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
-	public class PositionChangeMessage : BaseChangeMessage<PositionChangeTypes>, IPortfolioNameMessage, ISecurityIdMessage
+	public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage, PositionChangeTypes>, IPortfolioNameMessage, ISecurityIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -265,11 +265,8 @@ namespace StockSharp.Messages
 			return clone;
 		}
 
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		protected virtual void CopyTo(PositionChangeMessage destination)
+		/// <inheritdoc />
+		public override void CopyTo(PositionChangeMessage destination)
 		{
 			base.CopyTo(destination);
 

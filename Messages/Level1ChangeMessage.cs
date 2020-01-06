@@ -746,7 +746,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Level1Key)]
 	[DescriptionLoc(LocalizedStrings.Level1MarketDataKey)]
-	public class Level1ChangeMessage : BaseChangeMessage<Level1Fields>, ISecurityIdMessage
+	public class Level1ChangeMessage : BaseChangeMessage<Level1ChangeMessage, Level1Fields>, ISecurityIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -763,20 +763,12 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="Level1ChangeMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
+		/// <inheritdoc />
+		public override void CopyTo(Level1ChangeMessage destination)
 		{
-			var clone = new Level1ChangeMessage
-			{
-				SecurityId = SecurityId,
-			};
+			base.CopyTo(destination);
 
-			CopyTo(clone);
-
-			return clone;
+			destination.SecurityId = SecurityId;
 		}
 
 		/// <inheritdoc />

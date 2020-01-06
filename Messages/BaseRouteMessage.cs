@@ -9,7 +9,7 @@ namespace StockSharp.Messages
 	/// <typeparam name="TMessage">Message type.</typeparam>
 	[Serializable]
 	[DataContract]
-	public abstract class BaseRouteMessage<TMessage> : BaseResultMessage<TMessage>
+	public abstract class BaseRouteMessage<TMessage> : BaseSubscriptionIdMessage<TMessage>
 		where TMessage : BaseRouteMessage<TMessage>, new()
 	{
 		/// <summary>
@@ -28,7 +28,7 @@ namespace StockSharp.Messages
 		public Guid AdapterId { get; set; }
 
 		/// <inheritdoc />
-		protected override void CopyTo(TMessage destination)
+		public override void CopyTo(TMessage destination)
 		{
 			base.CopyTo(destination);
 

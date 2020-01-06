@@ -18,7 +18,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class UserInfoMessage : Message, ITransactionIdMessage, IOriginalTransactionIdMessage
+	public class UserInfoMessage : BaseSubscriptionIdMessage<UserInfoMessage>, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
@@ -60,11 +60,8 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public long TransactionId { get; set; }
-
-		/// <inheritdoc />
 		[DataMember]
-		public long OriginalTransactionId { get; set; }
+		public long TransactionId { get; set; }
 
 		/// <summary>
 		/// Is blocked.
@@ -95,21 +92,8 @@ namespace StockSharp.Messages
 			return base.ToString() + $",Name={Login}";
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="UserInfoMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			return CopyTo(new UserInfoMessage());
-		}
-
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		/// <returns>The object, to which copied information.</returns>
-		protected UserInfoMessage CopyTo(UserInfoMessage destination)
+		/// <inheritdoc />
+		public override void CopyTo(UserInfoMessage destination)
 		{
 			base.CopyTo(destination);
 
@@ -119,8 +103,6 @@ namespace StockSharp.Messages
 			destination.IsBlocked = IsBlocked;
 			destination.IpRestrictions = IpRestrictions.ToArray();
 			destination.Permissions.AddRange(Permissions.ToDictionary());
-
-			return destination;
 		}
 	}
 }

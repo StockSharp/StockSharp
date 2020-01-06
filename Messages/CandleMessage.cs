@@ -61,7 +61,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public abstract class CandleMessage : BaseSubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage
+	public abstract class CandleMessage : Message, ISubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -282,6 +282,20 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public virtual object CloneArg() => Arg;
 
+		/// <inheritdoc />
+		[DataMember]
+		public long OriginalTransactionId { get; set; }
+
+		/// <inheritdoc />
+		[Ignore]
+		[XmlIgnore]
+		public long SubscriptionId { get; set; }
+
+		/// <inheritdoc />
+		[Ignore]
+		[XmlIgnore]
+		public long[] SubscriptionIds { get; set; }
+
 		/// <summary>
 		/// Copy parameters.
 		/// </summary>
@@ -290,6 +304,10 @@ namespace StockSharp.Messages
 		protected CandleMessage CopyTo(CandleMessage copy)
 		{
 			base.CopyTo(copy);
+
+			copy.OriginalTransactionId = OriginalTransactionId;
+			copy.SubscriptionId = SubscriptionId;
+			copy.SubscriptionIds = SubscriptionIds;//?.ToArray();
 
 			copy.OpenPrice = OpenPrice;
 			copy.OpenTime = OpenTime;

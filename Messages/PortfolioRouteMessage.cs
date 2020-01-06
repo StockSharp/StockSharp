@@ -23,7 +23,7 @@ namespace StockSharp.Messages
 		public string PortfolioName { get; set; }
 
 		/// <inheritdoc />
-		protected override void CopyTo(PortfolioRouteMessage destination)
+		public override void CopyTo(PortfolioRouteMessage destination)
 		{
 			base.CopyTo(destination);
 

@@ -26,7 +26,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class BoardMessage : BaseSubscriptionIdMessage
+	public class BoardMessage : BaseSubscriptionIdMessage<BoardMessage>
 	{
 		/// <summary>
 		/// Exchange code, which owns the board. Maybe be the same <see cref="Code"/>.
@@ -132,26 +132,18 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="BoardMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
+		/// <inheritdoc />
+		public override void CopyTo(BoardMessage destination)
 		{
-			var clone = new BoardMessage
-			{
-				Code = Code,
-				ExchangeCode = ExchangeCode,
-				ExpiryTime = ExpiryTime,
-				//IsSupportAtomicReRegister = IsSupportAtomicReRegister,
-				//IsSupportMarketOrders = IsSupportMarketOrders,
-				WorkingTime = WorkingTime.Clone(),
-				TimeZone = TimeZone,
-			};
+			base.CopyTo(destination);
 
-			CopyTo(clone);
-
-			return clone;
+			destination.Code = Code;
+			destination.ExchangeCode = ExchangeCode;
+			destination.ExpiryTime = ExpiryTime;
+			//destination.IsSupportAtomicReRegister = IsSupportAtomicReRegister;
+			//destination.IsSupportMarketOrders = IsSupportMarketOrders;
+			destination.WorkingTime = WorkingTime.Clone();
+			destination.TimeZone = TimeZone;
 		}
 
 		/// <inheritdoc />

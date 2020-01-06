@@ -9,9 +9,11 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// A message containing subscription identifiers.
 	/// </summary>
+	/// <typeparam name="TMessage">Message type.</typeparam>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public abstract class BaseSubscriptionIdMessage : Message, ISubscriptionIdMessage
+	public abstract class BaseSubscriptionIdMessage<TMessage> : Message, ISubscriptionIdMessage
+		where TMessage : BaseSubscriptionIdMessage<TMessage>, new()
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -28,7 +30,7 @@ namespace StockSharp.Messages
 		public long[] SubscriptionIds { get; set; }
 
 		/// <summary>
-		/// Initialize <see cref="BaseSubscriptionIdMessage"/>.
+		/// Initialize <see cref="BaseSubscriptionIdMessage{TMessage}"/>.
 		/// </summary>
 		/// <param name="type">Message type.</param>
 		protected BaseSubscriptionIdMessage(MessageTypes type)
@@ -40,13 +42,24 @@ namespace StockSharp.Messages
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
-		protected virtual void CopyTo(BaseSubscriptionIdMessage destination)
+		public virtual void CopyTo(TMessage destination)
 		{
 			base.CopyTo(destination);
 
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.SubscriptionId = SubscriptionId;
 			destination.SubscriptionIds = SubscriptionIds;//?.ToArray();
+		}
+
+		/// <summary>
+		/// Create a copy of <see cref="BaseSubscriptionIdMessage{TMessage}"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override Message Clone()
+		{
+			var clone = new TMessage();
+			CopyTo(clone);
+			return clone;
 		}
 	}
 }

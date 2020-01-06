@@ -12,7 +12,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class AdapterResponseMessage : BaseResultMessage<AdapterResponseMessage>
+	public class AdapterResponseMessage : BaseSubscriptionIdMessage<AdapterResponseMessage>
 	{
 		/// <summary>
 		/// Initialize <see cref="AdapterResponseMessage"/>.
@@ -36,7 +36,7 @@ namespace StockSharp.Messages
 		public IDictionary<string, Tuple<string, string>> Parameters { get; private set; } = new Dictionary<string, Tuple<string, string>>();
 
 		/// <inheritdoc />
-		protected override void CopyTo(AdapterResponseMessage destination)
+		public override void CopyTo(AdapterResponseMessage destination)
 		{
 			base.CopyTo(destination);
 

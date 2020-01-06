@@ -42,7 +42,9 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return CopyTo(new PortfolioLookupMessage { SecurityId = SecurityId } );
+			var clone = new PortfolioLookupMessage { SecurityId = SecurityId };
+			CopyTo(clone);
+			return clone;
 		}
 
 		/// <inheritdoc />

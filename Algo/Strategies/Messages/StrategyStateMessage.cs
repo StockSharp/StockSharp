@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Strategies.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class StrategyStateMessage : BaseResultMessage<StrategyStateMessage>, ITransactionIdMessage
+	public class StrategyStateMessage : BaseSubscriptionIdMessage<StrategyStateMessage>, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyStateMessage"/>.
@@ -84,9 +84,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		[DataMember]
 		public StrategyCommands? Command { get; set; }
 
-		/// <summary>
-		/// Transaction ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
 
@@ -110,14 +108,11 @@ namespace StockSharp.Algo.Strategies.Messages
 			if (Command != null)
 				str += $",Command={Command}";
 
-			if (Error != null)
-				str += $",Error={Error.Message}";
-
 			return str;
 		}
 
 		/// <inheritdoc />
-		protected override void CopyTo(StrategyStateMessage destination)
+		public override void CopyTo(StrategyStateMessage destination)
 		{
 			base.CopyTo(destination);
 

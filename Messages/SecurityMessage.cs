@@ -30,7 +30,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public class SecurityMessage : BaseSubscriptionIdMessage, ISecurityIdMessage
+	public class SecurityMessage : BaseSubscriptionIdMessage<SecurityMessage>, ISecurityIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -284,17 +284,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="SecurityMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new SecurityMessage();
-			CopyTo(clone);
-			return clone;
-		}
-
-		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
@@ -303,10 +292,18 @@ namespace StockSharp.Messages
 		{
 			var originTransId = destination.OriginalTransactionId;
 
+			CopyTo(destination);
+
+			if (!copyOriginalTransactionId)
+				destination.OriginalTransactionId = originTransId;
+		}
+
+		/// <inheritdoc />
+		public override void CopyTo(SecurityMessage destination)
+		{
 			base.CopyTo(destination);
 
-			destination.OriginalTransactionId = copyOriginalTransactionId ? OriginalTransactionId : originTransId;
-
+			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.SecurityId = SecurityId;
 			destination.Name = Name;
 			destination.ShortName = ShortName;

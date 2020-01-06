@@ -50,7 +50,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioMessage : BaseSubscriptionIdMessage,
+	public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>,
 	        ISubscriptionMessage, IPortfolioNameMessage
 	{
 		/// <inheritdoc />
@@ -170,21 +170,8 @@ namespace StockSharp.Messages
 			return str;
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="PortfolioMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			return CopyTo(new PortfolioMessage());
-		}
-
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		/// <returns>The object, to which copied information.</returns>
-		public PortfolioMessage CopyTo(PortfolioMessage destination)
+		/// <inheritdoc />
+		public override void CopyTo(PortfolioMessage destination)
 		{
 			base.CopyTo(destination);
 
@@ -198,8 +185,6 @@ namespace StockSharp.Messages
 			destination.InternalId = InternalId;
 			destination.From = From;
 			destination.To = To;
-
-			return destination;
 		}
 	}
 }

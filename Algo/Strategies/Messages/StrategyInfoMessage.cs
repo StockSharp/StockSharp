@@ -15,7 +15,7 @@ namespace StockSharp.Algo.Strategies.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class StrategyInfoMessage : Message, IOriginalTransactionIdMessage
+	public class StrategyInfoMessage : BaseSubscriptionIdMessage<StrategyInfoMessage>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyInfoMessage"/>.
@@ -44,39 +44,19 @@ namespace StockSharp.Algo.Strategies.Messages
 		public IDictionary<string, Tuple<string, string>> Parameters { get; } = new Dictionary<string, Tuple<string, string>>();
 
 		/// <inheritdoc />
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
-
-		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",Id={StrategyId},Name={StrategyName},Params={Parameters.Select(p => $"{p.Key}={p.Value}").Join(",")}";
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="StrategyInfoMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			return CopyTo(new StrategyInfoMessage());
-		}
-
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		/// <returns>The object, to which copied information.</returns>
-		protected StrategyInfoMessage CopyTo(StrategyInfoMessage destination)
+		/// <inheritdoc />
+		public override void CopyTo(StrategyInfoMessage destination)
 		{
 			base.CopyTo(destination);
 
 			destination.StrategyName = StrategyName;
 			destination.StrategyId = StrategyId;
 			destination.Parameters.AddRange(Parameters);
-			destination.OriginalTransactionId = OriginalTransactionId;
-
-			return destination;
 		}
 	}
 }
