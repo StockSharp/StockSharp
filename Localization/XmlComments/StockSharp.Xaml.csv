@@ -988,6 +988,8 @@ F:StockSharp.Xaml.MarketDepthColumns.Sell/summary;DocStr8925
 F:StockSharp.Xaml.MarketDepthColumns.OwnSell/summary;DocStr8926
 F:StockSharp.Xaml.MarketDepthColumns.Board/summary;Board
 F:StockSharp.Xaml.MarketDepthColumns.Volume/summary;DocStr3526
+F:StockSharp.Xaml.MarketDepthColumns.OrdersCountBuy/summary;DocStr11562
+F:StockSharp.Xaml.MarketDepthColumns.OrdersCountSell/summary;DocStr11563
 T:StockSharp.Xaml.MarketDepthControl/summary;DocStr8243
 F:StockSharp.Xaml.MarketDepthControl.CellMouseLeftButtonUp/summary;DocStr8459
 F:StockSharp.Xaml.MarketDepthControl.CellMouseRightButtonUp/summary;DocStr8459

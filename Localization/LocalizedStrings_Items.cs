@@ -50886,5 +50886,25 @@ namespace StockSharp.Localization
 		/// Imbalance
 		/// </summary>
 		public static string Imbalance => GetString(ImbalanceKey);
+
+		/// <summary>
+		/// Orders (bids)
+		/// </summary>
+		public const string OrdersBidsKey = nameof(OrdersBids);
+
+		/// <summary>
+		/// Orders (bids)
+		/// </summary>
+		public static string OrdersBids => GetString(OrdersBidsKey);
+
+		/// <summary>
+		/// Orders (asks)
+		/// </summary>
+		public const string OrdersAsksKey = nameof(OrdersAsks);
+
+		/// <summary>
+		/// Orders (asks)
+		/// </summary>
+		public static string OrdersAsks => GetString(OrdersAsksKey);
 	}
 }

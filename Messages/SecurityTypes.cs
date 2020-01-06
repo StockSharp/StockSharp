@@ -169,7 +169,7 @@ namespace StockSharp.Messages
 		Spread,
 		
 		/// <summary>
-		/// Germany Depositary Receipts.
+		/// Global Depositary Receipts.
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.GdrKey)]

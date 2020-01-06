@@ -36,7 +36,7 @@ T:StockSharp.Blackwood.ImbalanceRequestMessage/summary;DocStr11425
 M:StockSharp.Blackwood.ImbalanceRequestMessage.#ctor/summary;DocStr1
 T:StockSharp.Blackwood.ImbalanceResposeMessage/summary;DocStr9569
 M:StockSharp.Blackwood.ImbalanceResposeMessage.#ctor/summary;DocStr1
-P:StockSharp.Blackwood.ImbalanceResposeMessage.Imbalance/summary;DocStr11426
+P:StockSharp.Blackwood.ImbalanceResposeMessage.Imbalance/summary;Imbalance
 T:StockSharp.Blackwood.CrossLockRequestMessage/summary;DocStr11427
 M:StockSharp.Blackwood.CrossLockRequestMessage.#ctor/summary;DocStr1
 T:StockSharp.Blackwood.CrossLockResposeMessage/summary;DocStr9569
