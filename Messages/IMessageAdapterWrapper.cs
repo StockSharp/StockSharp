@@ -48,6 +48,19 @@ namespace StockSharp.Messages
 		protected MessageAdapterWrapper(IMessageAdapter innerAdapter)
 		{
 			InnerAdapter = innerAdapter ?? throw new ArgumentNullException(nameof(innerAdapter));
+
+			_innerAdapterName = GetUnderlyingAdapter(InnerAdapter).Name;
+		}
+
+		private IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			if (adapter is IMessageAdapterWrapper wrapper)
+				return GetUnderlyingAdapter(wrapper.InnerAdapter);
+
+			return adapter;
 		}
 
 		/// <inheritdoc />
@@ -194,10 +207,12 @@ namespace StockSharp.Messages
 
 		Guid ILogSource.Id => InnerAdapter.Id;
 
+		private readonly string _innerAdapterName;
+
 		string ILogSource.Name
 		{
-			get => InnerAdapter.Name;
-			set => InnerAdapter.Name = value;
+			get => _innerAdapterName + $" ({GetType().Name.Remove(nameof(MessageAdapter))})";
+			set { }
 		}
 
 		/// <inheritdoc />
