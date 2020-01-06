@@ -54,9 +54,7 @@ namespace StockSharp.Algo.Derivatives
 		{
 		}
 
-		/// <summary>
-		/// The dividend amount on shares.
-		/// </summary>
+		/// <inheritdoc />
 		public override decimal Dividend
 		{
 			set
@@ -78,85 +76,43 @@ namespace StockSharp.Algo.Derivatives
 			return (decimal)DerivativesHelper.ExpRate(RiskFree, timeLine.Value);
 		}
 
-		/// <summary>
-		/// To calculate the option premium.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option premium. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Premium(currentTime, deviation, assetPrice);
 		}
 
-		/// <summary>
-		/// To calculate the option delta.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option delta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Delta(currentTime, deviation, assetPrice);
 		}
 
-		/// <summary>
-		/// To calculate the option gamma.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option gamma. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Gamma(currentTime, deviation, assetPrice);
 		}
 
-		/// <summary>
-		/// To calculate the option vega.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option vega. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Vega(currentTime, deviation, assetPrice);
 		}
 
-		/// <summary>
-		/// To calculate the option theta.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option theta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Theta(currentTime, deviation, assetPrice);
 		}
 
-		/// <summary>
-		/// To calculate the option rho.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
-		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>The option rho. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+		/// <inheritdoc />
 		public override decimal? Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Rho(currentTime, deviation, assetPrice);
 		}
 
-		/// <summary>
-		/// To calculate the d1 parameter of the option fulfilment probability estimating.
-		/// </summary>
-		/// <param name="deviation">Standard deviation.</param>
-		/// <param name="assetPrice">Underlying asset price.</param>
-		/// <param name="timeToExp">The option period before the expiration.</param>
-		/// <returns>The d1 parameter.</returns>
+		/// <inheritdoc />
 		protected override double D1(decimal deviation, decimal assetPrice, double timeToExp)
 		{
 			return DerivativesHelper.D1(assetPrice, GetStrike(), 0, 0, deviation, timeToExp);

@@ -37,10 +37,7 @@ namespace StockSharp.Logging
 		/// </summary>
 		public ILogListener Logger { get; }
 
-		/// <summary>
-		/// To record messages.
-		/// </summary>
-		/// <param name="messages">Debug messages.</param>
+		/// <inheritdoc />
 		protected override void OnWriteMessages(IEnumerable<LogMessage> messages)
 		{
 			Logger.WriteMessages(messages);

@@ -78,16 +78,12 @@ namespace StockSharp.Logging
 		/// </summary>
 		public T[] Objects => _objects.Cache;
 
-		/// <summary>
-		/// Name.
-		/// </summary>
+		/// <inheritdoc />
 		public string Name { get; }
 
 		private int _objectCount;
 
-		/// <summary>
-		/// The number of active objects.
-		/// </summary>
+		/// <inheritdoc />
 		public int ObjectCount => _objectCount;
 
 		/// <summary>

@@ -34,9 +34,7 @@ namespace StockSharp.Logging
 			TaskScheduler.UnobservedTaskException += OnTaskSchedulerException;
 		}
 
-		/// <summary>
-		/// Name.
-		/// </summary>
+		/// <inheritdoc />
 		public override string Name => "Unhandled Exception";
 
 		private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

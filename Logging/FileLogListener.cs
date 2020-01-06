@@ -278,10 +278,7 @@ namespace StockSharp.Logging
 			return writer;
 		}
 
-		/// <summary>
-		/// To record messages.
-		/// </summary>
-		/// <param name="messages">Debug messages.</param>
+		/// <inheritdoc />
 		protected override void OnWriteMessages(IEnumerable<LogMessage> messages)
 		{
 			// pyh: эмуляция года данных происходит за 5 секунд. На выходе 365 файлов лога? Бред.
@@ -477,10 +474,7 @@ namespace StockSharp.Logging
 			return timeChars;
 		}
 
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -497,10 +491,7 @@ namespace StockSharp.Logging
 			SeparateByDates = storage.GetValue<SeparateByDateModes>(nameof(SeparateByDates));
 		}
 
-		/// <summary>
-		/// Save settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
+		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);

@@ -42,9 +42,7 @@ namespace StockSharp.Algo.Risk
 
 		private RiskActions _action;
 
-		/// <summary>
-		/// Action that needs to be taken in case of rule activation.
-		/// </summary>
+		/// <inheritdoc />
 		[DisplayNameLoc(LocalizedStrings.Str722Key)]
 		[DescriptionLoc(LocalizedStrings.Str859Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

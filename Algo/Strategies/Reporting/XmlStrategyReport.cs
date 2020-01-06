@@ -51,9 +51,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 		{
 		}
 
-		/// <summary>
-		/// To generate the report.
-		/// </summary>
+		/// <inheritdoc />
 		public override void Generate()
 		{
 			new XElement("strategies",

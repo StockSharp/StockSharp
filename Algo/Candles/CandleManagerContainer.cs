@@ -149,12 +149,7 @@ namespace StockSharp.Algo.Candles
 
 		private TimeSpan _candlesKeepTime;
 
-		/// <summary>
-		/// Candles storage time in memory. The default is 2 days.
-		/// </summary>
-		/// <remarks>
-		/// If the value is set to <see cref="TimeSpan.Zero"/> then candles will not be deleted.
-		/// </remarks>
+		/// <inheritdoc />
 		public TimeSpan CandlesKeepTime
 		{
 			get => _candlesKeepTime;
@@ -170,12 +165,7 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		/// <summary>
-		/// To add a candle for the series.
-		/// </summary>
-		/// <param name="series">Candles series.</param>
-		/// <param name="candle">Candle.</param>
-		/// <returns><see langword="true" /> if the candle is not added previously, otherwise, <see langword="false" />.</returns>
+		/// <inheritdoc />
 		public bool AddCandle(CandleSeries series, Candle candle)
 		{
 			var info = GetInfo(series);
@@ -186,35 +176,21 @@ namespace StockSharp.Algo.Candles
 			return info.AddCandle(candle);
 		}
 
-		/// <summary>
-		/// To get all associated with the series candles for the <paramref name="time" /> period.
-		/// </summary>
-		/// <param name="series">Candles series.</param>
-		/// <param name="time">The candle period.</param>
-		/// <returns>Candles.</returns>
+		/// <inheritdoc />
 		public IEnumerable<Candle> GetCandles(CandleSeries series, DateTimeOffset time)
 		{
 			var info = GetInfo(series);
 			return info != null ? info.GetCandles(time) : Enumerable.Empty<Candle>();
 		}
 
-		/// <summary>
-		/// To get all associated with the series candles.
-		/// </summary>
-		/// <param name="series">Candles series.</param>
-		/// <returns>Candles.</returns>
+		/// <inheritdoc />
 		public IEnumerable<Candle> GetCandles(CandleSeries series)
 		{
 			var info = GetInfo(series);
 			return info != null ? info.GetCandles() : Enumerable.Empty<Candle>();
 		}
 
-		/// <summary>
-		/// To get a candle by the index.
-		/// </summary>
-		/// <param name="series">Candles series.</param>
-		/// <param name="candleIndex">The candle's position number from the end.</param>
-		/// <returns>The found candle. If the candle does not exist, then <see langword="null" /> will be returned.</returns>
+		/// <inheritdoc />
 		public Candle GetCandle(CandleSeries series, int candleIndex)
 		{
 			if (candleIndex < 0)
@@ -224,12 +200,7 @@ namespace StockSharp.Algo.Candles
 			return info?.GetCandle(candleIndex);
 		}
 
-		/// <summary>
-		/// To get candles by the series and date range.
-		/// </summary>
-		/// <param name="series">Candles series.</param>
-		/// <param name="timeRange">The date range which should include candles. The <see cref="Candle.OpenTime"/> value is taken into consideration.</param>
-		/// <returns>Found candles.</returns>
+		/// <inheritdoc />
 		public IEnumerable<Candle> GetCandles(CandleSeries series, Range<DateTimeOffset> timeRange)
 		{
 			return GetCandles(series)
@@ -237,12 +208,7 @@ namespace StockSharp.Algo.Candles
 						.OrderBy(c => c.OpenTime);
 		}
 
-		/// <summary>
-		/// To get candles by the series and the total number.
-		/// </summary>
-		/// <param name="series">Candles series.</param>
-		/// <param name="candleCount">The number of candles that should be returned.</param>
-		/// <returns>Found candles.</returns>
+		/// <inheritdoc />
 		public IEnumerable<Candle> GetCandles(CandleSeries series, int candleCount)
 		{
 			if (candleCount <= 0)
@@ -254,23 +220,14 @@ namespace StockSharp.Algo.Candles
 							.OrderBy(c => c.OpenTime);
 		}
 
-		/// <summary>
-		/// To get the number of candles.
-		/// </summary>
-		/// <param name="series">Candles series.</param>
-		/// <returns>Number of candles.</returns>
+		/// <inheritdoc />
 		public int GetCandleCount(CandleSeries series)
 		{
 			var info = GetInfo(series);
 			return info?.CandleCount ?? 0;
 		}
 
-		/// <summary>
-		/// To notify the container about the start of the candles getting for the series.
-		/// </summary>
-		/// <param name="series">Candles series.</param>
-		/// <param name="from">The initial date from which the candles will be get.</param>
-		/// <param name="to">The final date by which the candles will be get.</param>
+		/// <inheritdoc />
 		public void Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			if (series == null)

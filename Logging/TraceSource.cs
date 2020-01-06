@@ -108,9 +108,7 @@ namespace StockSharp.Logging
 			Trace.Listeners.Add(new TraceListenerEx(this));
 		}
 
-		/// <summary>
-		/// Name.
-		/// </summary>
+		/// <inheritdoc />
 		public override string Name => "Trace";
 
 		/// <summary>
