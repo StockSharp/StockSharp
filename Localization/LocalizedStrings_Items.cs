@@ -50906,5 +50906,15 @@ namespace StockSharp.Localization
 		/// Orders (asks)
 		/// </summary>
 		public static string OrdersAsks => GetString(OrdersAsksKey);
+
+		/// <summary>
+		/// Error unsubscription market-data.
+		/// </summary>
+		public const string UnsubscribeErrorKey = nameof(UnsubscribeError);
+
+		/// <summary>
+		/// Error unsubscription market-data.
+		/// </summary>
+		public static string UnsubscribeError => GetString(UnsubscribeErrorKey);
 	}
 }

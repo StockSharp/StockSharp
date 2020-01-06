@@ -73,8 +73,8 @@
 
 		private void RemoveSubscription(long id)
 		{
-			_depths.Remove(id);
-			this.AddInfoLog("Unsubscribed {0}.", id);
+			if (_depths.Remove(id))
+				this.AddInfoLog("Unsubscribed {0}.", id);
 		}
 
 		/// <inheritdoc />
