@@ -288,7 +288,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
 		/// <param name="copyOriginalTransactionId">Copy <see cref="IOriginalTransactionIdMessage.OriginalTransactionId"/>.</param>
-		public void CopyTo(SecurityMessage destination, bool copyOriginalTransactionId = true)
+		public void CopyTo(SecurityMessage destination, bool copyOriginalTransactionId)
 		{
 			var originTransId = destination.OriginalTransactionId;
 
