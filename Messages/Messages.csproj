@@ -139,7 +139,6 @@
     <Compile Include="OrderStatus.cs" />
     <Compile Include="OrderStatusMessage.cs" />
     <Compile Include="OrderTypes.cs" />
-    <Compile Include="PortfolioChangeMessage.cs" />
     <Compile Include="PortfolioLookupMessage.cs" />
     <Compile Include="PortfolioMessage.cs" />
     <Compile Include="PositionChangeMessage.cs" />
@@ -153,11 +152,11 @@
     <Compile Include="SecurityId.cs" />
     <Compile Include="SecurityIdMapping.cs" />
     <Compile Include="SecurityLegsRequestMessage.cs" />
-    <Compile Include="SecurityLegsResultMessage.cs" />
+    <Compile Include="SecurityLegsInfoMessage.cs" />
     <Compile Include="SecurityLookupMessage.cs" />
     <Compile Include="SecurityMappingMessage.cs" />
     <Compile Include="SecurityMappingRequestMessage.cs" />
-    <Compile Include="SecurityMappingResultMessage.cs" />
+    <Compile Include="SecurityMappingInfoMessage.cs" />
     <Compile Include="SecurityMessage.cs" />
     <Compile Include="SecurityRouteListRequestMessage.cs" />
     <Compile Include="SecurityRouteMessage.cs" />
@@ -169,7 +168,7 @@
     <Compile Include="SubscriptionListRequestMessage.cs" />
     <Compile Include="SubscriptionResponseMessage.cs" />
     <Compile Include="TimeFrameLookupMessage.cs" />
-    <Compile Include="TimeFrameLookupResultMessage.cs" />
+    <Compile Include="TimeFrameInfoMessage.cs" />
     <Compile Include="TimeInForce.cs" />
     <Compile Include="TimeMessage.cs" />
     <Compile Include="TPlusLimits.cs" />

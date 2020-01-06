@@ -59,6 +59,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Adapter-aggregator that allows simultaneously to operate multiple adapters connected to different trading systems.
 	/// </summary>
+	[DisplayNameLoc(LocalizedStrings.BasketKey)]
 	public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	{
 		private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
@@ -1489,17 +1490,25 @@ namespace StockSharp.Algo
 					}
 
 					case MessageTypes.Security:
+					{
 						var secMsg = (SecurityMessage)message;
 						ApplyParentLookupId(secMsg);
 						SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, null, GetUnderlyingAdapter(innerAdapter).Id);
 						break;
+					}
 
 					case MessageTypes.Board:
 					case MessageTypes.BoardState:
+					case MessageTypes.TimeFrameInfo:
+					case MessageTypes.SecurityLegsInfo:
+					case MessageTypes.SecurityMappingInfo:
+					case MessageTypes.SecurityRoute:
+					case MessageTypes.PortfolioRoute:
 						ApplyParentLookupId((ISubscriptionIdMessage)message);
 						break;
 
 					case MessageTypes.Execution:
+					{
 						var execMsg = (ExecutionMessage)message;
 
 						if (execMsg.ExecutionType != ExecutionTypes.Transaction)
@@ -1514,6 +1523,7 @@ namespace StockSharp.Algo
 						}
 
 						break;
+					}
 				}
 			}
 

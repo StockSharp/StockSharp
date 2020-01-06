@@ -11,13 +11,13 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class TimeFrameLookupResultMessage : BaseResultMessage<TimeFrameLookupResultMessage>
+	public class TimeFrameInfoMessage : BaseSubscriptionIdMessage<TimeFrameInfoMessage>
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TimeFrameLookupResultMessage"/>.
+		/// Initializes a new instance of the <see cref="TimeFrameInfoMessage"/>.
 		/// </summary>
-		public TimeFrameLookupResultMessage()
-			: base(MessageTypes.TimeFrameLookupResult)
+		public TimeFrameInfoMessage()
+			: base(MessageTypes.TimeFrameInfo)
 		{
 		}
 
@@ -34,10 +34,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		protected override void CopyTo(TimeFrameLookupResultMessage destination)
+		public override void CopyTo(TimeFrameInfoMessage destination)
 		{
 			base.CopyTo(destination);
-			destination.TimeFrames = TimeFrames.ToArray();
+
+			destination.TimeFrames = TimeFrames;
 		}
 
 		/// <inheritdoc />

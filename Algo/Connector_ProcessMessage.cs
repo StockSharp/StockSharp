@@ -600,8 +600,8 @@ namespace StockSharp.Algo
 						ProcessSecurityMessage((SecurityMessage)message);
 						break;
 
-					case MessageTypes.TimeFrameLookupResult:
-						ProcessTimeFrameLookupResultMessage((TimeFrameLookupResultMessage)message);
+					case MessageTypes.TimeFrameInfo:
+						ProcessTimeFrameInfoMessage((TimeFrameInfoMessage)message);
 						break;
 
 					case MessageTypes.Level1Change:
@@ -778,6 +778,11 @@ namespace StockSharp.Algo
 				var items = _subscriptionManager.GetLookupItems<Portfolio>(subscription);
 				RaiseLookupPortfoliosResult(pfLookup, null, Portfolios.Filter(pfLookup).ToArray(), items);
 			}
+			else if (subscription.SubscriptionMessage is TimeFrameLookupMessage tfLookup)
+			{
+				var items = _subscriptionManager.GetLookupItems<TimeSpan>(subscription);
+				RaiseLookupTimeFramesResult(tfLookup, null, items, items);
+			}
 		}
 
 		private void ProcessSecurityRemoveMessage(SecurityRemoveMessage message)
@@ -934,14 +939,15 @@ namespace StockSharp.Algo
 			RaiseReceived(security, message, SecurityReceived);
 		}
 
-		private void ProcessTimeFrameLookupResultMessage(TimeFrameLookupResultMessage message)
+		private void ProcessTimeFrameInfoMessage(TimeFrameInfoMessage message)
 		{
-			var subscription = _subscriptionManager.TryGetSubscription(message.OriginalTransactionId, true);
-			
-			if (subscription == null)
+			if (message.OriginalTransactionId == 0)
 				return;
 
-			RaiseLookupTimeFramesResult((TimeFrameLookupMessage)subscription.SubscriptionMessage, null, message.TimeFrames, message.TimeFrames);
+			_subscriptionManager.ProcessLookupResponse(message, message.TimeFrames);
+
+			// TODO
+			//RaiseReceived(security, message, TimeFrameReceived);
 		}
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)

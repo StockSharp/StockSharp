@@ -14,13 +14,13 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class SecurityMappingResultMessage : BaseResultMessage<SecurityMappingResultMessage>
+	public class SecurityMappingInfoMessage : BaseSubscriptionIdMessage<SecurityMappingInfoMessage>
 	{
 		/// <summary>
-		/// Initialize <see cref="SecurityMappingResultMessage"/>.
+		/// Initialize <see cref="SecurityMappingInfoMessage"/>.
 		/// </summary>
-		public SecurityMappingResultMessage()
-			: base(MessageTypes.SecurityMappingResult)
+		public SecurityMappingInfoMessage()
+			: base(MessageTypes.SecurityMappingInfo)
 		{
 		}
 
@@ -38,7 +38,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		protected override void CopyTo(SecurityMappingResultMessage destination)
+		public override void CopyTo(SecurityMappingInfoMessage destination)
 		{
 			base.CopyTo(destination);
 			destination.Mapping = Mapping.ToDictionary(StringComparer.InvariantCultureIgnoreCase);

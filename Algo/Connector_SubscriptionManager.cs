@@ -420,7 +420,12 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public void ProcessLookupResponse(ISubscriptionIdMessage message, object item)
+			public void ProcessLookupResponse<T>(ISubscriptionIdMessage message, T item)
+			{
+				ProcessLookupResponse(message, new[] { item });
+			}
+
+			public void ProcessLookupResponse<T>(ISubscriptionIdMessage message, T[] items)
 			{
 				foreach (var id in message.GetSubscriptionIds())
 				{
@@ -435,7 +440,7 @@ namespace StockSharp.Algo
 						continue;
 					}
 
-					info.LookupItems.Add(item);	
+					info.LookupItems.AddRange(items.Cast<object>());	
 				}
 			}
 

@@ -89,7 +89,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The candle time frames.
 		/// </summary>
-		public static DataType TimeFrames { get; } = Create(typeof(TimeFrameLookupResultMessage), null).Immutable();
+		public static DataType TimeFrames { get; } = Create(typeof(TimeFrameInfoMessage), null).Immutable();
 
 		/// <summary>
 		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.

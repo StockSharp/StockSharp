@@ -13,13 +13,13 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class SecurityLegsResultMessage : BaseResultMessage<SecurityLegsResultMessage>
+	public class SecurityLegsInfoMessage : BaseSubscriptionIdMessage<SecurityLegsInfoMessage>
 	{
 		/// <summary>
-		/// Initialize <see cref="SecurityLegsResultMessage"/>.
+		/// Initialize <see cref="SecurityLegsInfoMessage"/>.
 		/// </summary>
-		public SecurityLegsResultMessage()
-			: base(MessageTypes.SecurityLegsResult)
+		public SecurityLegsInfoMessage()
+			: base(MessageTypes.SecurityLegsInfo)
 		{
 		}
 
@@ -37,7 +37,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		protected override void CopyTo(SecurityLegsResultMessage destination)
+		public override void CopyTo(SecurityLegsInfoMessage destination)
 		{
 			base.CopyTo(destination);
 

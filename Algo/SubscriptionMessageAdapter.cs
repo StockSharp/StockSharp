@@ -317,7 +317,7 @@ namespace StockSharp.Algo
 
 		private void ProcessTimeFrameLookupMessage(TimeFrameLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.TimeFrames, default, id => new TimeFrameLookupResultMessage
+			ProcessInSubscriptionMessage(message, DataType.TimeFrames, default, id => new SubscriptionFinishedMessage
 			{
 				OriginalTransactionId = id,
 			});

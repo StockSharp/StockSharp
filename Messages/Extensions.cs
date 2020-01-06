@@ -820,6 +820,12 @@ namespace StockSharp.Messages
 				case MessageTypes.Execution:
 					return ((ExecutionTypes)arg).ToDataType();
 
+				case MessageTypes.TimeFrameInfo:
+					return DataType.TimeFrames;
+
+				case MessageTypes.UserInfo:
+					return DataType.Users;
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 			}
@@ -1618,9 +1624,6 @@ namespace StockSharp.Messages
 
 			if (!message.IsSubscribe)
 				return new SubscriptionResponseMessage { OriginalTransactionId = message.TransactionId };
-
-			if (message.Type == MessageTypes.TimeFrameLookup)
-				return new TimeFrameLookupResultMessage { OriginalTransactionId = message.TransactionId };
 
 			var reply = message.To == null ? (IOriginalTransactionIdMessage)new SubscriptionOnlineMessage() : new SubscriptionFinishedMessage();
 			reply.OriginalTransactionId = message.TransactionId;
