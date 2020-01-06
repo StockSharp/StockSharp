@@ -186,7 +186,6 @@ namespace StockSharp.Algo
 				{
 					if (originIdMsg is SubscriptionFinishedMessage ||
 					    originIdMsg is SubscriptionOnlineMessage ||
-					    originIdMsg is TimeFrameLookupResultMessage ||
 					    originIdMsg is SubscriptionResponseMessage resp && !resp.IsOk())
 					{
 						if (_lookups.TryGetValue(id, out var info))
