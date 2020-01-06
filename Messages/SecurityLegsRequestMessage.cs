@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class SecurityLegsRequestMessage : Message, ITransactionIdMessage
+	public class SecurityLegsRequestMessage : Message, ISubscriptionMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="SecurityLegsRequestMessage"/>.
@@ -45,6 +45,31 @@ namespace StockSharp.Messages
 		public override string ToString()
 		{
 			return base.ToString() + $",Like={Like},TrId={TransactionId}";
+		}
+
+		DateTimeOffset? ISubscriptionMessage.From
+		{
+			get => null;
+			set { }
+		}
+
+		DateTimeOffset? ISubscriptionMessage.To
+		{
+			// prevent for online mode
+			get => DateTimeOffset.MaxValue;
+			set { }
+		}
+
+		bool ISubscriptionMessage.IsSubscribe
+		{
+			get => true;
+			set { }
+		}
+
+		long IOriginalTransactionIdMessage.OriginalTransactionId
+		{
+			get => 0;
+			set { }
 		}
 	}
 }

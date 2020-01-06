@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class PortfolioRouteListRequestMessage : Message, ITransactionIdMessage
+	public class PortfolioRouteListRequestMessage : Message, ISubscriptionMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="PortfolioRouteListRequestMessage"/>.
@@ -40,5 +40,30 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public override string ToString() => base.ToString() + $",TrId={TransactionId}";
+
+		DateTimeOffset? ISubscriptionMessage.From
+		{
+			get => null;
+			set { }
+		}
+
+		DateTimeOffset? ISubscriptionMessage.To
+		{
+			// prevent for online mode
+			get => DateTimeOffset.MaxValue;
+			set { }
+		}
+
+		bool ISubscriptionMessage.IsSubscribe
+		{
+			get => true;
+			set { }
+		}
+
+		long IOriginalTransactionIdMessage.OriginalTransactionId
+		{
+			get => 0;
+			set { }
+		}
 	}
 }

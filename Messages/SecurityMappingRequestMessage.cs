@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class SecurityMappingRequestMessage : Message, ITransactionIdMessage
+	public class SecurityMappingRequestMessage : Message, ISubscriptionMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="SecurityMappingRequestMessage"/>.
@@ -42,6 +42,31 @@ namespace StockSharp.Messages
 		public override string ToString()
 		{
 			return base.ToString() + $",TrId={TransactionId}";
+		}
+
+		DateTimeOffset? ISubscriptionMessage.From
+		{
+			get => null;
+			set { }
+		}
+
+		DateTimeOffset? ISubscriptionMessage.To
+		{
+			// prevent for online mode
+			get => DateTimeOffset.MaxValue;
+			set { }
+		}
+
+		bool ISubscriptionMessage.IsSubscribe
+		{
+			get => true;
+			set { }
+		}
+
+		long IOriginalTransactionIdMessage.OriginalTransactionId
+		{
+			get => 0;
+			set { }
 		}
 	}
 }
