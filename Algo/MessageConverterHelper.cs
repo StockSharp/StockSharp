@@ -690,8 +690,9 @@ namespace StockSharp.Algo
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
 
-			return new PortfolioChangeMessage
+			return new PositionChangeMessage
 			{
+				SecurityId = SecurityId.Money,
 				PortfolioName = portfolio.Name,
 				BoardCode = portfolio.Board?.Code,
 				LocalTime = portfolio.LocalTime,

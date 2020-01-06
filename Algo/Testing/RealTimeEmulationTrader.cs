@@ -252,8 +252,9 @@ namespace StockSharp.Algo.Testing
 					{
 						// passing into initial values
 						TransactionAdapter.SendInMessage(portfolio.ToMessage());
-						TransactionAdapter.SendInMessage(new PortfolioChangeMessage
+						TransactionAdapter.SendInMessage(new PositionChangeMessage
 						{
+							SecurityId = SecurityId.Money,
 							PortfolioName = portfolio.Name
 						}.TryAdd(PositionChangeTypes.BeginValue, portfolio.BeginValue, true));	
 					}

@@ -306,6 +306,7 @@ StockSharp API Change log
 * (feature) QuoteChangeMessage. Updates by position supported.
 * (feature) QuoteChange. Side removed.
 * (feature) Removed XXXResultMessage. Uses SubscriptionFinishedMessage.
+* (feature) PortfolioChangeMessage removed.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -63,8 +63,9 @@ namespace StockSharp.Algo.PnL
 
 			foreach (var manager in list)
 			{
-				base.OnInnerAdapterNewOutMessage(new PortfolioChangeMessage
+				base.OnInnerAdapterNewOutMessage(new PositionChangeMessage
 				{
+					SecurityId = SecurityId.Money,
 					ServerTime = message.LocalTime,
 					PortfolioName = manager.PortfolioName,
 				}

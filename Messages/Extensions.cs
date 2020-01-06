@@ -50,8 +50,9 @@ namespace StockSharp.Messages
 
 			var time = adapter.CurrentTime;
 
-			return new PortfolioChangeMessage
+			return new PositionChangeMessage
 			{
+				SecurityId = SecurityId.Money,
 				PortfolioName = pfName,
 				ServerTime = time,
 			};
