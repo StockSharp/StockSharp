@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Testing
 
 			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
 
-			protected override void OnSendInMessage(Message message)
+			protected override bool OnSendInMessage(Message message)
 			{
 				if (!message.IsBack && message.Type == MessageTypes.MarketData)
 				{
@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Testing
 					}
 				}
 
-				base.OnSendInMessage(message);
+				return base.OnSendInMessage(message);
 			}
 
 			protected override void OnInnerAdapterNewOutMessage(IMessageAdapter innerAdapter, Message message)
@@ -187,12 +187,13 @@ namespace StockSharp.Algo.Testing
 				_messageQueue.Close();
 			}
 
-			public void SendInMessage(Message message)
+			public bool SendInMessage(Message message)
 			{
 				if (!IsOpened)
 					Open();
 
 				_messageQueue.Enqueue(message);
+				return true;
 			}
 
 			void IDisposable.Dispose()

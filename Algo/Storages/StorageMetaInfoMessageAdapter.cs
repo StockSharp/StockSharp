@@ -71,7 +71,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -88,9 +88,10 @@ namespace StockSharp.Algo.Storages
 					break;
 
 				default:
-					base.OnSendInMessage(message);
-					break;
+					return base.OnSendInMessage(message);
 			}
+
+			return true;
 		}
 
 		/// <inheritdoc />

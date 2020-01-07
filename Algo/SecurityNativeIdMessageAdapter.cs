@@ -236,7 +236,7 @@
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -265,7 +265,7 @@
 							break;
 						}
 
-						return;
+						return true;
 					}
 
 					securityId.Native = native;
@@ -287,12 +287,12 @@
 					var nativeId1 = GetNativeId(pairMsg, securityId1);
 
 					if (nativeId1 == null)
-						return;
+						return true;
 
 					var nativeId2 = GetNativeId(pairMsg, securityId2);
 
 					if (nativeId2 == null)
-						return;
+						return true;
 
 					securityId1.Native = nativeId1;
 					pairMsg.Message1.ReplaceSecurityId(securityId1);
@@ -307,7 +307,7 @@
 					break;
 			}
 
-			base.OnSendInMessage(message);
+			return base.OnSendInMessage(message);
 		}
 
 		private object GetNativeId(Message message, SecurityId securityId)

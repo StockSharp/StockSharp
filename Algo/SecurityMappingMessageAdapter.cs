@@ -89,7 +89,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message)
 			{
@@ -103,7 +103,7 @@ namespace StockSharp.Algo
 					break;
 			}
 
-			base.OnSendInMessage(message);
+			return base.OnSendInMessage(message);
 		}
 
 		/// <summary>

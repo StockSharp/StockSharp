@@ -287,7 +287,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public void SendInMessage(Message message)
+		public bool SendInMessage(Message message)
 		{
 			if (message.Type == MessageTypes.Connect)
 			{
@@ -298,7 +298,7 @@ namespace StockSharp.Messages
 						Error = new InvalidOperationException(LocalizedStrings.Str169Params.Put(GetType().Name, Platform))
 					});
 
-					return;
+					return true;
 				}
 			}
 
@@ -306,7 +306,7 @@ namespace StockSharp.Messages
 
 			try
 			{
-				OnSendInMessage(message);
+				var result = OnSendInMessage(message);
 
 				if (IsAutoReplyOnTransactonalUnsubscription)
 				{
@@ -324,6 +324,8 @@ namespace StockSharp.Messages
 						}
 					}
 				}
+
+				return result;
 			}
 			catch (Exception ex)
 			{
@@ -332,6 +334,8 @@ namespace StockSharp.Messages
 				message.HandleErrorResponse(ex, CurrentTime, SendOutMessage);
 
 				SendOutError(ex);
+
+				return false;
 			}
 		}
 
@@ -339,7 +343,8 @@ namespace StockSharp.Messages
 		/// Send message.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		protected abstract void OnSendInMessage(Message message);
+		/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
+		protected abstract bool OnSendInMessage(Message message);
 
 		/// <summary>
 		/// Send outgoing message and raise <see cref="NewOutMessage"/> event.
@@ -584,9 +589,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			SendOutMessage(message);
+			return true;
 		}
 	}
 }

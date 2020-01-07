@@ -127,13 +127,14 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public void SendInMessage(Message message)
+		public bool SendInMessage(Message message)
 		{
 			if (!IsOpened)
 				throw new InvalidOperationException();
 
 			_msgStat.Add(message);
 			_queue.Enqueue(message);
+			return true;
 		}
 
 		/// <inheritdoc />

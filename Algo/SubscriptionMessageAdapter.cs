@@ -57,7 +57,7 @@ namespace StockSharp.Algo
 		public bool IsRestoreSubscriptionOnErrorReconnect { get; set; }
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -98,9 +98,10 @@ namespace StockSharp.Algo
 					break;
 
 				default:
-					base.OnSendInMessage(message);
-					break;
+					return base.OnSendInMessage(message);
 			}
+
+			return true;
 		}
 
 		private void ProcessReset(Message message)

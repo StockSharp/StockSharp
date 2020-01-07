@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Testing
 				}
 			}
 
-			protected override void OnSendInMessage(Message message)
+			protected override bool OnSendInMessage(Message message)
 			{
 				switch (message.Type)
 				{
@@ -93,7 +93,7 @@ namespace StockSharp.Algo.Testing
 						if (!_connector._ownAdapter)
 						{
 							RaiseNewOutMessage(new ResetMessage());
-							return;
+							return true;
 						}
 
 						break;
@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Testing
 						if (!_connector._ownAdapter)
 						{
 							RaiseNewOutMessage(new ConnectMessage());
-							return;
+							return true;
 						}
 
 						break;
@@ -115,7 +115,7 @@ namespace StockSharp.Algo.Testing
 						if (!_connector._ownAdapter)
 						{
 							RaiseNewOutMessage(new DisconnectMessage());
-							return;
+							return true;
 						}
 
 						break;
@@ -125,13 +125,13 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.ChangePassword:
 					{
 						if (!_connector._ownAdapter)
-							return;
+							return true;
 
 						break;
 					}
 				}
 
-				InnerAdapter.SendInMessage(message);
+				return InnerAdapter.SendInMessage(message);
 			}
 
 			protected override void OnInnerAdapterNewOutMessage(Message message)

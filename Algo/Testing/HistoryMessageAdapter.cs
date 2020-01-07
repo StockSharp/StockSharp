@@ -249,7 +249,7 @@ namespace StockSharp.Algo.Testing
 			=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -395,7 +395,12 @@ namespace StockSharp.Algo.Testing
 					_basketStorage.MarketTimeChangedInterval = intervalMsg.Interval;
 					break;
 				}
+
+				default:
+					return false;
 			}
+
+			return true;
 
 			//SendOutMessage(message);
 		}

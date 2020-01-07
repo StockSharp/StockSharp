@@ -93,12 +93,12 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			if (!InputChannel.IsOpened)
 				InputChannel.Open();
 
-			InputChannel.SendInMessage(message);
+			return InputChannel.SendInMessage(message);
 		}
 
 		/// <summary>

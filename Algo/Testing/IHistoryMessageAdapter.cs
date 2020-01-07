@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Testing
 		public DateTimeOffset StopDate { get; set; }
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -108,7 +108,7 @@ namespace StockSharp.Algo.Testing
 						}
 
 						SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = lookupMsg.TransactionId });
-						return;
+						return true;
 					}
 
 					break;
@@ -126,10 +126,10 @@ namespace StockSharp.Algo.Testing
 
 				case ExtendedMessageTypes.EmulationState:
 					SendOutMessage(message);
-					return;
+					return true;
 			}
 
-			base.OnSendInMessage(message);
+			return base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

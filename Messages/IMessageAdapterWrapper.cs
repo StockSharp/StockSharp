@@ -143,7 +143,7 @@ namespace StockSharp.Messages
 		protected virtual bool SendInBackFurther => true;
 
 		/// <inheritdoc />
-		public virtual void SendInMessage(Message message)
+		public virtual bool SendInMessage(Message message)
 		{
 			if (message.IsBack)
 			{
@@ -155,15 +155,14 @@ namespace StockSharp.Messages
 				{
 					if (SendInBackFurther)
 					{
-						InnerAdapter.SendInMessage(message);
-						return;
+						return InnerAdapter.SendInMessage(message);
 					}
 				}
 			}
 
 			try
 			{
-				OnSendInMessage(message);
+				return OnSendInMessage(message);
 			}
 			catch (Exception ex)
 			{
@@ -179,9 +178,10 @@ namespace StockSharp.Messages
 		/// Send message.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		protected virtual void OnSendInMessage(Message message)
+		/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
+		protected virtual bool OnSendInMessage(Message message)
 		{
-			InnerAdapter.SendInMessage(message);
+			return InnerAdapter.SendInMessage(message);
 		}
 
 		/// <inheritdoc />

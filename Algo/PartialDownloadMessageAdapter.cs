@@ -172,7 +172,7 @@
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			Message outMsg = null;
 
@@ -314,7 +314,7 @@
 					lock (_syncObject)
 					{
 						if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
-							return;
+							return false;
 
 						if (info.UnsubscribingId != null)
 						{
@@ -341,12 +341,16 @@
 					break;
 				}
 			}
+
+			var result = true;
 			
 			if (message != null)
-				base.OnSendInMessage(message);
+				result = base.OnSendInMessage(message);
 
 			if (outMsg != null)
 				RaiseNewOutMessage(outMsg);
+
+			return result;
 		}
 
 		/// <inheritdoc />

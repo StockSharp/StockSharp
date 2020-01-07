@@ -1739,7 +1739,7 @@ namespace StockSharp.Algo.Testing
 		public IncrementalIdGenerator TradeIdGenerator { get; set; } = new IncrementalIdGenerator();
 
 		/// <inheritdoc />
-		public void SendInMessage(Message message)
+		public bool SendInMessage(Message message)
 		{
 			if (message == null) 
 				throw new ArgumentNullException(nameof(message));
@@ -2021,6 +2021,8 @@ namespace StockSharp.Algo.Testing
 			RecalcPnL(message.LocalTime, retVal);
 
 			BufferResult(retVal, message.LocalTime).ForEach(RaiseNewOutMessage);
+
+			return true;
 		}
 
 		/// <inheritdoc />

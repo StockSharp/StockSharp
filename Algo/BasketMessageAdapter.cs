@@ -783,9 +783,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		void IMessageChannel.SendInMessage(Message message)
+		bool IMessageChannel.SendInMessage(Message message)
 		{
-			OnSendInMessage(message);
+			return OnSendInMessage(message);
 		}
 
 		private static Tuple<ConnectionStates, Exception> CreateState(ConnectionStates state, Exception error = null)
@@ -802,11 +802,12 @@ namespace StockSharp.Algo
 		/// Send message.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		protected virtual void OnSendInMessage(Message message)
+		/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
+		protected virtual bool OnSendInMessage(Message message)
 		{
 			try
 			{
-				InternalSendInMessage(message);
+				return InternalSendInMessage(message);
 			}
 			catch (Exception ex)
 			{
@@ -815,10 +816,12 @@ namespace StockSharp.Algo
 				message.HandleErrorResponse(ex, CurrentTime, SendOutMessage, GetSubscribers);
 
 				SendOutError(ex);
+
+				return false;
 			}
 		}
 
-		private void InternalSendInMessage(Message message)
+		private bool InternalSendInMessage(Message message)
 		{
 			if (message is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
 				throw new ArgumentException(message.ToString());
@@ -837,7 +840,7 @@ namespace StockSharp.Algo
 				else
 				{
 					ProcessAdapterMessage(adapter, message);
-					return;	
+					return true;	
 				}
 			}
 
@@ -970,6 +973,8 @@ namespace StockSharp.Algo
 					break;
 				}
 			}
+
+			return true;
 		}
 
 		/// <inheritdoc />

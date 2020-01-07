@@ -45,10 +45,10 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			CommissionManager.Process(message);
-			base.OnSendInMessage(message);
+			return base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

@@ -521,14 +521,14 @@ namespace StockSharp.Algo
 		public StorageMetaInfoMessageAdapter StorageAdapter { get; private set; }
 
 		/// <inheritdoc />
-		public void SendInMessage(Message message)
+		public bool SendInMessage(Message message)
 		{
 			message.TryInitLocalTime(this);
 
 			if (!InMessageChannel.IsOpened)
 				InMessageChannel.Open();
 
-			InMessageChannel.SendInMessage(message);
+			return InMessageChannel.SendInMessage(message);
 		}
 
 		/// <inheritdoc />

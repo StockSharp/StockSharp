@@ -24,7 +24,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 			}
 
-			base.OnSendInMessage(message);
+			return base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

@@ -148,7 +148,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -197,7 +197,7 @@ namespace StockSharp.Algo
 						if (filtered == null)
 						{
 							RaiseNewOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = transId });
-							return;
+							return true;
 						}
 						else
 							RaiseNewOutMessage(filtered);
@@ -243,14 +243,14 @@ namespace StockSharp.Algo
 						}
 
 						RaiseNewOutMessage(reply);
-						return;
+						return true;
 					}
 
 					break;
 				}
 			}
 
-			base.OnSendInMessage(message);
+			return base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

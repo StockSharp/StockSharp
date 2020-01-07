@@ -442,7 +442,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -468,7 +468,9 @@ namespace StockSharp.Algo.Storages
 			}
 
 			if (message != null)
-				base.OnSendInMessage(message);
+				return base.OnSendInMessage(message);
+
+			return true;
 		}
 
 		private void ProcessOrderStatus(OrderStatusMessage msg)

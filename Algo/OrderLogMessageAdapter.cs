@@ -25,7 +25,7 @@
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -38,7 +38,7 @@
 					break;
 			}
 
-			base.OnSendInMessage(message);
+			return base.OnSendInMessage(message);
 		}
 
 		private MarketDataMessage ProcessMarketDataRequest(MarketDataMessage message)

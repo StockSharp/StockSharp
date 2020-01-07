@@ -54,7 +54,7 @@
 		protected override bool SendInBackFurther => false;
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			void ProcessOrderReplaceMessage(OrderReplaceMessage replaceMsg)
 			{
@@ -113,7 +113,7 @@
 							if (timeMsg.OfflineMode == MessageOfflineModes.Force)
 								break;
 
-							return;
+							return true;
 						}
 					}
 
@@ -130,7 +130,7 @@
 							_pendingRegistration.Add(orderMsg.TransactionId, orderMsg);
 							StoreMessage(orderMsg);
 
-							return;
+							return true;
 						}
 					}
 
@@ -161,7 +161,7 @@
 								});
 							}
 
-							return;
+							return true;
 						}
 					}
 
@@ -174,7 +174,7 @@
 						if (!_connected)
 						{
 							ProcessOrderReplaceMessage((OrderReplaceMessage)message.Clone());
-							return;
+							return true;
 						}
 					}
 
@@ -190,7 +190,7 @@
 
 							ProcessOrderReplaceMessage(pairMsg.Message1);
 							ProcessOrderReplaceMessage(pairMsg.Message2);
-							return;
+							return true;
 						}
 					}
 
@@ -204,7 +204,7 @@
 						{
 							var pfMsg = (PortfolioMessage)message;
 							ProcessSubscriptionMessage(pfMsg, pfMsg.IsSubscribe, pfMsg.TransactionId, pfMsg.OriginalTransactionId, _pfSubscriptions);
-							return;
+							return true;
 						}
 					}
 
@@ -218,7 +218,7 @@
 						{
 							var mdMsg = (MarketDataMessage)message;
 							ProcessSubscriptionMessage(mdMsg, mdMsg.IsSubscribe, mdMsg.TransactionId, mdMsg.OriginalTransactionId, _mdSubscriptions);
-							return;
+							return true;
 						}
 					}
 
@@ -234,7 +234,7 @@
 								if (!_connected)
 								{
 									StoreMessage(message.Clone());
-									return;
+									return true;
 								}
 							}
 
@@ -252,7 +252,7 @@
 									break;
 							}
 
-							return;
+							return true;
 						}
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -262,7 +262,7 @@
 				}
 			}
 
-			base.OnSendInMessage(message);
+			return base.OnSendInMessage(message);
 		}
 
 		private void ProcessSubscriptionMessage<TMessage>(TMessage message, bool isSubscribe, long transactionId, long originalTransactionId, PairSet<long, TMessage> subscriptions)

@@ -36,6 +36,7 @@ namespace StockSharp.Algo.Server
 		/// <param name="session">Session.</param>
 		/// <param name="requestId">Request identifier.</param>
 		/// <param name="message">Message.</param>
-		void SendInMessage(IMessageListenerSession session, string requestId, Message message);
+		/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
+		bool SendInMessage(IMessageListenerSession session, string requestId, Message message);
 	}
 }

@@ -206,7 +206,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			var isStartTimer = false;
 
@@ -276,7 +276,7 @@ namespace StockSharp.Algo
 						lock (_timeSync)
 						{
 							if (_currState == ConnectionStates.Disconnecting || _currState == ConnectionStates.Disconnected)
-								return;
+								return true;
 						}
 					}
 
@@ -285,20 +285,21 @@ namespace StockSharp.Algo
 
 				case ExtendedMessageTypes.Reconnect:
 				{
-					OnSendInMessage(new ConnectMessage());
-					return;
+					return OnSendInMessage(new ConnectMessage());
 				}
 			}
 
 			try
 			{
-				base.OnSendInMessage(message);
+				var result = base.OnSendInMessage(message);
 
 				lock (_timeSync)
 				{
 					if (isStartTimer && (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected))
 						StartTimer();
 				}
+
+				return result;
 			}
 			finally
 			{

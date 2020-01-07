@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -109,7 +109,7 @@ namespace StockSharp.Algo.Candles.Compression
 								RaiseNewOutMessage(transactionId.CreateNotSupported());
 							}
 
-							return;
+							return true;
 						}
 
 						if (mdMsg.DataType == MarketDataTypes.CandleTimeFrame)
@@ -148,7 +148,7 @@ namespace StockSharp.Algo.Candles.Compression
 							{
 								RaiseNewOutMessage(transactionId.CreateNotSupported());
 
-								return;
+								return true;
 							}
 
 							if (mdMsg.AllowBuildFromSmallerTimeFrame)
@@ -177,8 +177,7 @@ namespace StockSharp.Algo.Candles.Compression
 										});
 									}
 
-									base.OnSendInMessage(current);
-									return;
+									return base.OnSendInMessage(current);
 								}
 							}
 
@@ -215,7 +214,7 @@ namespace StockSharp.Algo.Candles.Compression
 							}
 						}
 						
-						return;
+						return true;
 					}
 					else
 					{
@@ -237,7 +236,7 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 			}
 
-			base.OnSendInMessage(message);
+			return base.OnSendInMessage(message);
 		}
 
 		private SeriesInfo TryGetSeries(long id, out long originalId)

@@ -45,13 +45,13 @@ namespace StockSharp.Algo.Latency
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			message.TryInitLocalTime(this);
 
 			LatencyManager.ProcessMessage(message);
 
-			base.OnSendInMessage(message);
+			return base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />

@@ -48,7 +48,8 @@ namespace StockSharp.Messages
 		/// Send message.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		void SendInMessage(Message message);
+		/// <returns><see langword="true"/> if the specified message was processed successfully, otherwise, <see langword="false"/>.</returns>
+		bool SendInMessage(Message message);
 
 		/// <summary>
 		/// New message event.
@@ -88,9 +89,10 @@ namespace StockSharp.Messages
 		{
 		}
 
-		void IMessageChannel.SendInMessage(Message message)
+		bool IMessageChannel.SendInMessage(Message message)
 		{
 			_newMessage?.Invoke(message);
+			return true;
 		}
 
 		private Action<Message> _newMessage;

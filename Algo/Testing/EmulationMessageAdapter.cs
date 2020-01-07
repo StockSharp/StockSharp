@@ -101,7 +101,7 @@ namespace StockSharp.Algo.Testing
 		public override bool IsSupportSubscriptions => false;
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			var localTime = message.LocalTime;
 
@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Testing
 			{
 				case MessageTypes.Connect:
 					SendOutMessage(new ConnectMessage());
-					return;
+					return true;
 
 				case MessageTypes.Reset:
 					ProcessedMessageCount = 0;
@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Testing
 
 				case MessageTypes.Disconnect:
 					SendOutMessage(new DisconnectMessage());
-					return;
+					return true;
 
 				//case ExtendedMessageTypes.EmulationState:
 				//	//SendOutMessage(message.Clone());
@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Testing
 			}
 
 			ProcessedMessageCount++;
-			Emulator.SendInMessage(message);
+			return Emulator.SendInMessage(message);
 		}
 	}
 }

@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <inheritdoc />
-		public override void SendInMessage(Message message)
+		public override bool SendInMessage(Message message)
 		{
 			if (message.IsBack)
 			{
@@ -64,20 +64,19 @@ namespace StockSharp.Algo.Risk
 				{
 					message.UndoBack();
 
-					base.OnSendInMessage(message);
-					return;
+					return base.OnSendInMessage(message);
 				}
 			}
 
-			base.SendInMessage(message);
+			return base.SendInMessage(message);
 		}
 
 		/// <inheritdoc />
-		protected override void OnSendInMessage(Message message)
+		protected override bool OnSendInMessage(Message message)
 		{
 			ProcessRisk(message);
 			
-			base.OnSendInMessage(message);
+			return base.OnSendInMessage(message);
 		}
 
 		/// <inheritdoc />
