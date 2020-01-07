@@ -310,34 +310,22 @@ namespace StockSharp.Algo
 
 		private void ProcessUserLookupMessage(UserLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.Users, default, id => new SubscriptionFinishedMessage
-			{
-				OriginalTransactionId = id,
-			});
+			ProcessInSubscriptionMessage(message, DataType.Users);
 		}
 
 		private void ProcessTimeFrameLookupMessage(TimeFrameLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.TimeFrames, default, id => new SubscriptionFinishedMessage
-			{
-				OriginalTransactionId = id,
-			});
+			ProcessInSubscriptionMessage(message, DataType.TimeFrames);
 		}
 
 		private void ProcessBoardLookupMessage(BoardLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.Board, default, id => new SubscriptionFinishedMessage
-			{
-				OriginalTransactionId = id,
-			});
+			ProcessInSubscriptionMessage(message, DataType.Board);
 		}
 
 		private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.Securities, default, id => new SubscriptionFinishedMessage
-			{
-				OriginalTransactionId = id,
-			});
+			ProcessInSubscriptionMessage(message, DataType.Securities);
 		}
 
 		private void ProcessOrderStatusMessage(OrderStatusMessage message)
@@ -348,18 +336,12 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			ProcessInSubscriptionMessage(message, DataType.Transactions, default, id => new SubscriptionOnlineMessage
-			{
-				OriginalTransactionId = id,
-			});
+			ProcessInSubscriptionMessage(message, DataType.Transactions);
 		}
 
 		private void ProcessPortfolioLookupMessage(PortfolioLookupMessage message)
 		{
-			ProcessInSubscriptionMessage(message, DataType.PositionChanges, default, id => new SubscriptionOnlineMessage
-			{
-				OriginalTransactionId = id,
-			});
+			ProcessInSubscriptionMessage(message, DataType.PositionChanges);
 		}
 
 		private void ProcessInPortfolioMessage(PortfolioMessage message)
@@ -378,8 +360,7 @@ namespace StockSharp.Algo
 		private SecurityId GetSecurityId(DataType dataType, SecurityId securityId) => IsSecurityRequired(dataType) ? securityId : default;
 
 		private void ProcessInSubscriptionMessage<TMessage>(TMessage message,
-			DataType dataType, SecurityId securityId = default,
-			Func<long, Message> createSendOut = null)
+			DataType dataType, SecurityId securityId = default)
 			where TMessage : Message, ISubscriptionMessage
 		{
 			if (message == null)
@@ -388,14 +369,14 @@ namespace StockSharp.Algo
 			if (dataType == null)
 				throw new ArgumentNullException(nameof(dataType));
 
-			if (createSendOut == null)
-			{
-				createSendOut = id => id.CreateSubscriptionResponse();
-				//throw new ArgumentNullException(nameof(createSendOut));
-			}
+			var transId = message.TransactionId;
+
+			Message CreateSendOut()
+				=> message.Type.IsLookup()
+					? message.CreateResult()
+					: transId.CreateSubscriptionResponse();
 
 			var isSubscribe = message.IsSubscribe;
-			var transId = message.TransactionId;
 
 			Message sendInMsg = null;
 			Message sendOutMsg = null;
@@ -428,7 +409,7 @@ namespace StockSharp.Algo
 						}
 						else
 						{
-							sendOutMsg = createSendOut(transId);
+							sendOutMsg = CreateSendOut();
 							onlineMsg = new SubscriptionOnlineMessage { OriginalTransactionId = transId };
 						}
 
@@ -472,7 +453,7 @@ namespace StockSharp.Algo
 								sendInMsg = MakeUnsubscribe((TMessage)info.Subscription.Clone());
 							}
 							else
-								sendOutMsg = createSendOut(transId);
+								sendOutMsg = CreateSendOut();
 						}
 					}
 					else
