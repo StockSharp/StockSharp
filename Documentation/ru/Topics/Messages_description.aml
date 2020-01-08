@@ -142,7 +142,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Запрашивает информацию о портфелях по заданному критерию. Результат запроса возвращается при помощи сообщения <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference>.</para>
+    		<para>Запрашивает информацию о портфелях по заданному критерию. Результат запроса возвращается при помощи сообщения <codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference>.</para>
     	</entry>
   		</row>
   		
@@ -189,7 +189,7 @@
    		</entry>
     	<entry>
     		<para>Запрашивает список инструментов по заданному критерию. Результат запроса будет возвращен при помощи сообщения
-    		<codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.</para>
+    		<codeEntityReference>T:StockSharp.Messages.SecurityMessage</codeEntityReference>.</para>
     	</entry>
   		</row>
   		

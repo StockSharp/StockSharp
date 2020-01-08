@@ -374,8 +374,8 @@ private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
                 <para>
 In the <legacyBold>IBSocket.NewPortfolio</legacyBold> event handler, the received portfolio information must 
 be converted to the incoming <codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference>.
-message. And after receiving all the portfolios, you need to send the incoming 
-<codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference> message. 
+message. And after receiving all the portfolios, you need to send the 
+<codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference> message. 
 Note that in the latter case, the <codeEntityReference>P:StockSharp.Messages.BaseResultMessage`1.OriginalTransactionId</codeEntityReference> 
 property must be set to the <legacyBold>TransactionId</legacyBold> value of the corresponding outgoing message.
 				</para>
@@ -393,7 +393,7 @@ private void IBSocket_NewPortfolio(int row, int nrows, string portfolioName, str
      if ((row + 1) < nrows)
           return;
 
-     SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = _lookupPortfoliosId });
+     SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = _lookupPortfoliosId });
      _lookupPortfoliosId = 0;
 }
 				]]>	
@@ -409,7 +409,7 @@ private void IBSocket_NewPortfolio(int row, int nrows, string portfolioName, str
 In the <legacyBold>IBSocket.NewSymbol</legacyBold> event handler, the received information about the instrument 
 must be converted to the incoming <codeEntityReference>T:StockSharp.Messages.SecurityMessage</codeEntityReference> message. 
 And after receiving all the instruments, you need to send the incoming message 
-<codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.
+<codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference>.
 Note that the <legacyBold>OriginalTransactionId</legacyBold> property of both incoming messages must be 
 set to the <legacyBold>TransactionId</legacyBold> value of the corresponding outgoing message.
 				</para>

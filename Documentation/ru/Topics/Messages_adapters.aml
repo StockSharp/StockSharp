@@ -408,8 +408,8 @@ private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
                 <para>
 					 В обработчике события <legacyBold>StServer.AddPortfolio</legacyBold> полученную информацию о портфеле
 					 необходимо преобразовать во входящее сообщение <codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference>.
-					 А после получения всех портфелей необходимо послать входящее сообщение 
-					 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference>.
+					 А после получения всех портфелей необходимо послать сообщение 
+					 <codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference>.
 					 Обратите внимание, что в последнем случае свойству 
 					 <codeEntityReference>P:StockSharp.Messages.BaseResultMessage`1.OriginalTransactionId</codeEntityReference> нужно
 					 присвоить значение <legacyBold>TransactionId</legacyBold> соответствующего исходящего сообщения.  
@@ -427,7 +427,7 @@ private void smartCom_AddPortfolio(int row, int nrows, string portfolioName, str
      if ((row + 1) < nrows)
           return;
 
-     SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = _lookupPortfoliosId });
+     SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = _lookupPortfoliosId });
      _lookupPortfoliosId = 0;
 }
 				]]>	
@@ -442,8 +442,8 @@ private void smartCom_AddPortfolio(int row, int nrows, string portfolioName, str
 				<para>
 					 В обработчике события <legacyBold>StServer.AddSymbol</legacyBold> полученную информацию об инструменте
 					 необходимо преобразовать во входящее сообщение <codeEntityReference>T:StockSharp.Messages.SecurityMessage</codeEntityReference>.
-					 А после получения всех инструментов необходимо послать входящее сообщение 
-					 <codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.
+					 А после получения всех инструментов необходимо послать сообщение 
+					 <codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference>.
 					 Обратите внимание, что свойству <legacyBold>OriginalTransactionId</legacyBold> обоих входящих сообщений нужно 
 					 присвоить значение <legacyBold>TransactionId</legacyBold> соответствующего исходящего сообщения.  
 				</para>
@@ -550,7 +550,7 @@ private void smartCom_AddSymbol(int row, int rowCount, string smartId, string na
      if ((row + 1) < rowCount)
           return;
 
-     SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = _lookupSecuritiesId });
+     SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = _lookupSecuritiesId });
       _lookupSecuritiesId = 0;
 }
 				]]>	

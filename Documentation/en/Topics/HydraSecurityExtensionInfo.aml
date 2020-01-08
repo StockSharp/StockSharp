@@ -7,7 +7,7 @@
 <token>hydra</token> and get the existing data in the storage or write new ones. 
 Enabling the <token>hydra</token> server mode is described in the <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
 <para>To connect to <token>hydra</token> through WCF there is the 
-<codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference> class in <token>stocksharpapi</token>:</para>
+<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.Remote.RemoteStorageClient</codeEntityReference> class in <token>stocksharpapi</token>:</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri("net.tcp://localhost:8000"))

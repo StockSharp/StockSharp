@@ -143,7 +143,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Requests portfolio information according to the given criteria. The request result returns by means of the <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference> message.</para>
+    		<para>Requests portfolio information according to the given criteria. The request result returns by means of the <codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference> message.</para>
     	</entry>
   		</row>
   		
@@ -190,7 +190,7 @@
    		</entry>
     	<entry>
     		<para>Requests list of instruments according to the given criteria. The request result returns by means of the
-    		<codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.</para>
+    		<codeEntityReference>T:StockSharp.Messages.SecurityMessage</codeEntityReference>.</para>
     	</entry>
   		</row>
   		
