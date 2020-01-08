@@ -138,7 +138,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.CancelKey)]
 		[DescriptionLoc(LocalizedStrings.IsActionOrderCancellationKey)]
 		[MainCategory]
-		public bool IsCancelled { get; set; }
+		public bool IsCancellation { get; set; }
 
 		/// <summary>
 		/// Order ID.
@@ -567,7 +567,7 @@ namespace StockSharp.Messages
 				OrderStringId = OrderStringId,
 				OrderBoardId = OrderBoardId,
 				ExecutionType = ExecutionType,
-				IsCancelled = IsCancelled,
+				IsCancellation = IsCancellation,
 				//Action = Action,
 				OrderState = OrderState,
 				OrderStatus = OrderStatus,

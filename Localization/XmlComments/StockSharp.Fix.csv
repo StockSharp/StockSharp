@@ -182,9 +182,9 @@ P:StockSharp.Fix.Dialects.DefaultFixDialect.CheckTimeFrameByRequest/inheritdoc;D
 P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportMarketDataResponse/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.DefaultFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.DefaultFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/inheritdoc;DocStr8459
-M:StockSharp.Fix.Dialects.DefaultFixDialect.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage)/summary;DocStr3168
-M:StockSharp.Fix.Dialects.DefaultFixDialect.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage)/param/writer;DocStr3169
-M:StockSharp.Fix.Dialects.DefaultFixDialect.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage)/param/regMsg;DocStr3328
+M:StockSharp.Fix.Dialects.DefaultFixDialect.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderCondition)/summary;DocStr3168
+M:StockSharp.Fix.Dialects.DefaultFixDialect.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderCondition)/param/writer;DocStr3169
+M:StockSharp.Fix.Dialects.DefaultFixDialect.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderCondition)/param/condition;Str155
 M:StockSharp.Fix.Dialects.DefaultFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/summary;DocStr8772
 M:StockSharp.Fix.Dialects.DefaultFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/param/reader;DocStr3154
 M:StockSharp.Fix.Dialects.DefaultFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/param/tag;DocStr3155
@@ -506,9 +506,9 @@ M:StockSharp.Fix.FixServer.CreateCondition/returns;DocStr3159
 M:StockSharp.Fix.FixServer.PostInitCondition(System.Char,StockSharp.Messages.OrderCondition)/summary;DocStr3160
 M:StockSharp.Fix.FixServer.PostInitCondition(System.Char,StockSharp.Messages.OrderCondition)/param/ordType;Str132
 M:StockSharp.Fix.FixServer.PostInitCondition(System.Char,StockSharp.Messages.OrderCondition)/param/condition;DocStr3159
-M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.ExecutionMessage)/summary;DocStr3168
-M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.ExecutionMessage)/param/writer;DocStr3169
-M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.ExecutionMessage)/param/message;DocStr3170
+M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderCondition)/summary;DocStr3168
+M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderCondition)/param/writer;DocStr3169
+M:StockSharp.Fix.FixServer.WriterFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderCondition)/param/condition;Str155
 E:StockSharp.Fix.FixServer.NewOutMessage/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixServer.RaiseNewOutMessage(StockSharp.Fix.FixSession,StockSharp.Messages.Message)/summary;DocStr466
 M:StockSharp.Fix.FixServer.RaiseNewOutMessage(StockSharp.Fix.FixSession,StockSharp.Messages.Message)/param/session;Session

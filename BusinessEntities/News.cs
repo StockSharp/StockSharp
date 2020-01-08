@@ -158,6 +158,11 @@ namespace StockSharp.BusinessEntities
 			set => _extensionInfo = value;
 		}
 
+		/// <summary>
+		/// Language.
+		/// </summary>
+		public string Language { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{

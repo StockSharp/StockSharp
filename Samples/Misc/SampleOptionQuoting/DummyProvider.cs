@@ -184,7 +184,7 @@ namespace SampleOptionQuoting
 			remove => throw new NotSupportedException();
 		}
 
-		event Action<Security, MarketDataMessage, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionFailed2
+		event Action<Security, MarketDataMessage, SubscriptionResponseMessage> IMarketDataProvider.MarketDataSubscriptionFailed2
 		{
 			add => throw new NotSupportedException();
 			remove => throw new NotSupportedException();
@@ -202,13 +202,13 @@ namespace SampleOptionQuoting
 			remove => throw new NotSupportedException();
 		}
 
-		event Action<Security, MarketDataMessage, MarketDataMessage> IMarketDataProvider.MarketDataUnSubscriptionFailed2
+		event Action<Security, MarketDataMessage, SubscriptionResponseMessage> IMarketDataProvider.MarketDataUnSubscriptionFailed2
 		{
 			add => throw new NotSupportedException();
 			remove => throw new NotSupportedException();
 		}
 
-		event Action<Security, MarketDataFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished
+		event Action<Security, SubscriptionFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished
 		{
 			add => throw new NotSupportedException();
 			remove => throw new NotSupportedException();
@@ -242,101 +242,6 @@ namespace SampleOptionQuoting
 		}
 
 		MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security)
-		{
-			throw new NotSupportedException();
-		}
-
-		long IMarketDataProvider.SubscribeMarketData(Security security, MarketDataMessage message)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.UnSubscribeMarketData(Security security, MarketDataMessage message)
-		{
-			throw new NotSupportedException();
-		}
-
-		long IMarketDataProvider.SubscribeMarketData(MarketDataMessage message)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.UnSubscribeMarketData(MarketDataMessage message)
-		{
-			throw new NotSupportedException();
-		}
-
-		long IMarketDataProvider.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.UnSubscribeMarketDepth(Security security)
-		{
-			throw new NotSupportedException();
-		}
-
-		long IMarketDataProvider.RegisterFilteredMarketDepth(Security security)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.UnRegisterFilteredMarketDepth(Security security)
-		{
-			throw new NotSupportedException();
-		}
-
-		long IMarketDataProvider.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.UnSubscribeTrades(Security security)
-		{
-			throw new NotSupportedException();
-		}
-
-		long IMarketDataProvider.SubscribeLevel1(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.UnSubscribeLevel1(Security security)
-		{
-			throw new NotSupportedException();
-		}
-
-		long IMarketDataProvider.SubscribeOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.UnSubscribeOrderLog(Security security)
-		{
-			throw new NotSupportedException();
-		}
-
-		long IMarketDataProvider.SubscribeNews(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.UnSubscribeNews(Security security)
-		{
-			throw new NotSupportedException();
-		}
-
-		long IMarketDataProvider.SubscribeBoard(ExchangeBoard board, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.UnSubscribeBoard(ExchangeBoard board)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.UnSubscribe(long subscriptionId)
 		{
 			throw new NotSupportedException();
 		}

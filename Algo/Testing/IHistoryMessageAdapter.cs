@@ -3,6 +3,9 @@ namespace StockSharp.Algo.Testing
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Collections;
+
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -43,15 +46,29 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public class CustomHistoryMessageAdapter : MessageAdapterWrapper, IHistoryMessageAdapter
 	{
+		private readonly ISecurityProvider _securityProvider;
+		private readonly SynchronizedSet<long> _subscriptions = new SynchronizedSet<long>();
 		private readonly Queue<Message> _outMessages = new Queue<Message>();
 
 		/// <summary>
-		/// Initialize <see cref="CustomHistoryMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="CustomHistoryMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
 		public CustomHistoryMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
+			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState, null);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CustomHistoryMessageAdapter"/>.
+		/// </summary>
+		/// <param name="innerAdapter">Underlying adapter.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		public CustomHistoryMessageAdapter(IMessageAdapter innerAdapter, ISecurityProvider securityProvider)
+			: this(innerAdapter)
+		{
+			_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 		}
 
 		/// <inheritdoc />
@@ -64,7 +81,59 @@ namespace StockSharp.Algo.Testing
 		public DateTimeOffset StopDate { get; set; }
 
 		/// <inheritdoc />
-		public bool SendOutMessage()
+		protected override void OnSendInMessage(Message message)
+		{
+			switch (message.Type)
+			{
+				case MessageTypes.Reset:
+				{
+					_subscriptions.Clear();
+					break;
+				}
+
+				case MessageTypes.SecurityLookup:
+				{
+					if (_securityProvider != null)
+					{
+						var lookupMsg = (SecurityLookupMessage)message;
+
+						var securities = lookupMsg.SecurityId == default
+							? _securityProvider.LookupAll() 
+							: _securityProvider.Lookup(lookupMsg);
+
+						foreach (var security in securities)
+						{
+							SendOutMessage(security.Board.ToMessage());
+							SendOutMessage(security.ToMessage(originalTransactionId: lookupMsg.TransactionId));
+						}
+
+						SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = lookupMsg.TransactionId });
+						return;
+					}
+
+					break;
+				}
+
+				case MessageTypes.MarketData:
+				{
+					var mdMsg = (MarketDataMessage)message;
+
+					if (mdMsg.IsSubscribe)
+						_subscriptions.Add(mdMsg.TransactionId);
+
+					break;
+				}
+
+				case ExtendedMessageTypes.EmulationState:
+					SendOutMessage(message);
+					return;
+			}
+
+			base.OnSendInMessage(message);
+		}
+
+		/// <inheritdoc />
+		bool IHistoryMessageAdapter.SendOutMessage()
 		{
 			if (_outMessages.Count == 0)
 				return false;
@@ -76,12 +145,61 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		public void SendOutMessage(Message message)
 		{
+			LastMessage lastMsg = null;
+
+			void TryRemoveSubscription(long id, bool isError)
+			{
+				lock (_subscriptions.SyncRoot)
+				{
+					if (_subscriptions.Remove(id) && _subscriptions.Count == 0)
+					{
+						lastMsg = new LastMessage
+						{
+							LocalTime = StopDate,
+							IsError = isError,
+							Adapter = this,
+						};
+					}
+				}
+			}
+
+			switch (message.Type)
+			{
+				case MessageTypes.SubscriptionResponse:
+				{
+					var response = (SubscriptionResponseMessage)message;
+
+					if (!response.IsOk())
+						TryRemoveSubscription(response.OriginalTransactionId, true);
+
+					break;
+				}
+
+				case MessageTypes.SubscriptionFinished:
+				{
+					TryRemoveSubscription(((SubscriptionFinishedMessage)message).OriginalTransactionId, false);
+					break;
+				}
+			}
+
+			message.Adapter = this;
+
 			RaiseNewOutMessage(message);
+
+			if (lastMsg != null)
+				RaiseNewOutMessage(lastMsg);
 		}
 
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			if (message is ConnectMessage)
+				message.LocalTime = StartDate;
+			else if (message is IServerTimeMessage timeMsg)
+				message.LocalTime = timeMsg.ServerTime;
+			else
+				message.LocalTime = default;
+
 			_outMessages.Enqueue(message);
 		}
 

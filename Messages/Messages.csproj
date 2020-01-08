@@ -32,9 +32,6 @@
     <DocumentationFile>bin\Release\StockSharp.Messages.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Mvvm.v18.1">
-      <HintPath>..\References\DevExpress.Mvvm.v18.1.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
     </Reference>
@@ -67,7 +64,6 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
@@ -77,7 +73,6 @@
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AdapterCommandMessage.cs" />
-    <Compile Include="AdapterListFinishedMessage.cs" />
     <Compile Include="AdapterListRequestMessage.cs" />
     <Compile Include="AdapterResponseMessage.cs" />
     <Compile Include="BaseConnectionMessage.cs" />
@@ -85,7 +80,6 @@
     <Compile Include="BaseRouteMessage.cs" />
     <Compile Include="BaseSubscriptionIdMessage.cs" />
     <Compile Include="BoardLookupMessage.cs" />
-    <Compile Include="BoardLookupResultMessage.cs" />
     <Compile Include="BoardMessage.cs" />
     <Compile Include="CandleMessage.cs" />
     <Compile Include="CandlePriceLevel.cs" />
@@ -111,7 +105,7 @@
     <Compile Include="ISubscriptionIdMessage.cs" />
     <Compile Include="ISubscriptionMessage.cs" />
     <Compile Include="ITransactionIdMessage.cs" />
-    <Compile Include="MarketDataFinishedMessage.cs" />
+    <Compile Include="SubscriptionFinishedMessage.cs" />
     <Compile Include="IExtendableEntity.cs" />
     <Compile Include="IMessageAdapter.cs" />
     <Compile Include="IMessageAdapterProvider.cs" />
@@ -120,7 +114,6 @@
     <Compile Include="IOrderLogMarketDepthBuilder.cs" />
     <Compile Include="SubscriptionOnlineMessage.cs" />
     <Compile Include="IMessageQueue.cs" />
-    <Compile Include="PortfolioRouteListFinishedMessage.cs" />
     <Compile Include="PortfolioRouteListRequestMessage.cs" />
     <Compile Include="PortfolioRouteMessage.cs" />
     <Compile Include="ReConnectionSettings.cs" />
@@ -148,7 +141,6 @@
     <Compile Include="OrderTypes.cs" />
     <Compile Include="PortfolioChangeMessage.cs" />
     <Compile Include="PortfolioLookupMessage.cs" />
-    <Compile Include="PortfolioLookupResultMessage.cs" />
     <Compile Include="PortfolioMessage.cs" />
     <Compile Include="PositionChangeMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -163,12 +155,10 @@
     <Compile Include="SecurityLegsRequestMessage.cs" />
     <Compile Include="SecurityLegsResultMessage.cs" />
     <Compile Include="SecurityLookupMessage.cs" />
-    <Compile Include="SecurityLookupResultMessage.cs" />
     <Compile Include="SecurityMappingMessage.cs" />
     <Compile Include="SecurityMappingRequestMessage.cs" />
     <Compile Include="SecurityMappingResultMessage.cs" />
     <Compile Include="SecurityMessage.cs" />
-    <Compile Include="SecurityRouteListFinishedMessage.cs" />
     <Compile Include="SecurityRouteListRequestMessage.cs" />
     <Compile Include="SecurityRouteMessage.cs" />
     <Compile Include="SecurityStates.cs" />
@@ -176,8 +166,8 @@
     <Compile Include="BoardStateMessage.cs" />
     <Compile Include="Sides.cs" />
     <Compile Include="MessageAdapterCategories.cs" />
-    <Compile Include="SubscriptionListFinishedMessage.cs" />
     <Compile Include="SubscriptionListRequestMessage.cs" />
+    <Compile Include="SubscriptionResponseMessage.cs" />
     <Compile Include="TimeFrameLookupMessage.cs" />
     <Compile Include="TimeFrameLookupResultMessage.cs" />
     <Compile Include="TimeInForce.cs" />
@@ -187,7 +177,6 @@
     <Compile Include="CandleMessageVolumeProfile.cs" />
     <Compile Include="UserInfoMessage.cs" />
     <Compile Include="UserLookupMessage.cs" />
-    <Compile Include="UserLookupResultMessage.cs" />
     <Compile Include="UserPermissions.cs" />
     <Compile Include="UserRequestMessage.cs" />
     <Compile Include="WithdrawInfo.cs" />

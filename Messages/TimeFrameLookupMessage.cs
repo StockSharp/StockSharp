@@ -64,7 +64,8 @@ namespace StockSharp.Messages
 
 		DateTimeOffset? ISubscriptionMessage.To
 		{
-			get => null;
+			// prevent for online mode
+			get => DateTimeOffset.MaxValue;
 			set { }
 		}
 

@@ -107,7 +107,8 @@ namespace SampleHistoryTesting
 				OrderLogProgress,
 				Level1Progress,
 				FinamCandlesProgress,
-				YahooCandlesProgress
+				YahooCandlesProgress,
+				RandomProgress,
 			});
 
 			_checkBoxes.AddRange(new[]
@@ -121,6 +122,7 @@ namespace SampleHistoryTesting
 				Level1CheckBox,
 				FinamCandlesCheckBox,
 				YahooCandlesCheckBox,
+				RandomCheckBox,
 			});
 		}
 
@@ -308,6 +310,22 @@ namespace SampleHistoryTesting
 					YahooCandlesChart,
 					YahooCandlesEquity,
 					YahooCandlesPosition),
+
+				Tuple.Create(
+					RandomCheckBox,
+					RandomProgress,
+					RandomParameterGrid,
+					// candles
+					new EmulationInfo
+					{
+						UseCandleTimeFrame = timeFrame,
+						CustomHistoryAdapter = g => new OwnMessageAdapter(g),
+						CurveColor = Colors.DarkBlue,
+						StrategyName = LocalizedStrings.Custom
+					},
+					RandomChart,
+					RandomEquity,
+					RandomPosition),
 			};
 
 			// storage to historical data
@@ -374,10 +392,11 @@ namespace SampleHistoryTesting
 				// test portfolio
 				var portfolio = Portfolio.CreateSimulator();
 
+				var secProvider = (ISecurityProvider)new CollectionSecurityProvider(new[] { security });
+
 				// create backtesting connector
 				var connector = new HistoryEmulationConnector(
-					new[] { security },
-					new[] { portfolio })
+					secProvider, new[] { portfolio })
 				{
 					EmulationAdapter =
 					{
@@ -464,7 +483,7 @@ namespace SampleHistoryTesting
 				if (emulationInfo.CustomHistoryAdapter != null)
 				{
 					connector.Adapter.InnerAdapters.Remove(connector.MarketDataAdapter);
-					connector.Adapter.InnerAdapters.Add(new CustomHistoryMessageAdapter(emulationInfo.CustomHistoryAdapter(connector.TransactionIdGenerator)));
+					connector.Adapter.InnerAdapters.Add(new CustomHistoryMessageAdapter(emulationInfo.CustomHistoryAdapter(connector.TransactionIdGenerator), secProvider));
 				}
 
 				// set history range

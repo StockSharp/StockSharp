@@ -650,9 +650,7 @@ namespace StockSharp.Algo
 
 				lock (_allOrdersByFailedId.SyncRoot)
 				{
-					var cancelFail = _allOrdersByFailedId.TryGetAndRemove(Tuple.Create(message.OriginalTransactionId, true));
-
-					if (cancelFail != null)
+					if (_allOrdersByFailedId.TryGetAndRemove(Tuple.Create(message.OriginalTransactionId, true), out var cancelFail))
 						fails.Add(Tuple.Create(cancelFail, true));
 				}
 
@@ -660,9 +658,7 @@ namespace StockSharp.Algo
 
 				lock (_allOrdersByFailedId.SyncRoot)
 				{
-					var regFail = _allOrdersByFailedId.TryGetAndRemove(Tuple.Create(message.OriginalTransactionId, false));
-
-					if (regFail != null)
+					if (_allOrdersByFailedId.TryGetAndRemove(Tuple.Create(message.OriginalTransactionId, false), out var regFail))
 					{
 						regOrder = regFail.Order;
 						fails.Add(Tuple.Create(regFail, false));
@@ -849,6 +845,9 @@ namespace StockSharp.Algo
 
 			if (message.Priority != null)
 				news.Priority = message.Priority;
+
+			if (!message.Language.IsEmpty())
+				news.Language = message.Language;
 
 			message.CopyExtensionInfo(news);
 

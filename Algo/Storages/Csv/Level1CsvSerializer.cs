@@ -42,12 +42,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 		}
 
-		/// <summary>
-		/// Write data to the specified writer.
-		/// </summary>
-		/// <param name="writer">CSV writer.</param>
-		/// <param name="data">Data.</param>
-		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		/// <inheritdoc />
 		protected override void Write(CsvFileWriter writer, Level1ChangeMessage data, IMarketDataMetaInfo metaInfo)
 		{
 			var row = new List<string>();
@@ -74,12 +69,7 @@ namespace StockSharp.Algo.Storages.Csv
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
 		}
 
-		/// <summary>
-		/// Read data from the specified reader.
-		/// </summary>
-		/// <param name="reader">CSV reader.</param>
-		/// <param name="metaInfo">Meta-information on data for one day.</param>
-		/// <returns>Data.</returns>
+		/// <inheritdoc />
 		protected override Level1ChangeMessage Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
 			var level1 = new Level1ChangeMessage

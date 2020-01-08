@@ -126,7 +126,7 @@ namespace StockSharp.Algo
 						}
 					}
 
-					RaiseNewOutMessage(new MarketDataMessage
+					RaiseNewOutMessage(new SubscriptionResponseMessage
 					{
 						OriginalTransactionId = mdMsg.TransactionId
 					});
@@ -143,9 +143,9 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.MarketData:
+				case MessageTypes.SubscriptionResponse:
 				{
-					var mdMsg = (MarketDataMessage)message;
+					var responseMsg = (SubscriptionResponseMessage)message;
 					break;
 				}
 

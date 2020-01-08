@@ -43,8 +43,8 @@ namespace StockSharp.Algo.Strategies
 	/// The base class for all trade strategies.
 	/// </summary>
 	public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer,
-	    ICloneable<Strategy>, IMarketDataProvider, ISecurityProvider, ICandleManager,
-	    ITransactionProvider, ISubscriptionProvider
+	    ICloneable<Strategy>, IMarketDataProviderEx, ISecurityProvider, ICandleManager,
+	    ITransactionProvider
 	{
 		private class StrategyChangeStateMessage : Message
 		{
@@ -338,9 +338,6 @@ namespace StockSharp.Algo.Strategies
 					_connector.NewMyTrade -= OnConnectorNewMyTrade;
 					_connector.NewMessage -= OnConnectorNewMessage;
 					_connector.ValuesChanged -= OnConnectorValuesChanged;
-					//_connector.NewTrades -= OnConnectorNewTrades;
-					//_connector.MarketDepthsChanged -= OnConnectorMarketDepthsChanged;
-					_connector.OrderInitialized -= OnConnectorOrderInitialized;
 					_connector.OrderStatusFailed -= OnConnectorOrderStatusFailed;
 					_connector.OrderStatusFailed2 -= OnConnectorOrderStatusFailed2;
 					_connector.LookupPortfoliosResult -= OnConnectorLookupPortfoliosResult;
@@ -364,9 +361,6 @@ namespace StockSharp.Algo.Strategies
 					_connector.NewMyTrade += OnConnectorNewMyTrade;
 					_connector.NewMessage += OnConnectorNewMessage;
 					_connector.ValuesChanged += OnConnectorValuesChanged;
-					//_connector.NewTrades += OnConnectorNewTrades;
-					//_connector.MarketDepthsChanged += OnConnectorMarketDepthsChanged;
-					_connector.OrderInitialized += OnConnectorOrderInitialized;
 					_connector.OrderStatusFailed += OnConnectorOrderStatusFailed;
 					_connector.OrderStatusFailed2 += OnConnectorOrderStatusFailed2;
 					_connector.LookupPortfoliosResult += OnConnectorLookupPortfoliosResult;
@@ -1257,18 +1251,6 @@ namespace StockSharp.Algo.Strategies
 			});
 		}
 
-		private void OnConnectorOrderInitialized(Order order)
-		{
-			if (_ordersInfo.TryGetValue(order, out var info) && info.IsOwn)
-			{
-				PnLManager.ProcessMessage(new OrderRegisterMessage
-				{
-					TransactionId = order.TransactionId,
-					PortfolioName = order.Portfolio.Name,
-				});
-			}
-		}
-
 		private void ProcessRisk(Order order)
 		{
 			ProcessRisk(order.CreateRegisterMessage());
@@ -1593,10 +1575,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public override DateTimeOffset CurrentTime => Connector?.CurrentTime ?? TimeHelper.NowWithOffset;
 
-		/// <summary>
-		/// To call the event <see cref="ILogSource.Log"/>.
-		/// </summary>
-		/// <param name="message">A debug message.</param>
+		/// <inheritdoc />
 		protected override void RaiseLog(LogMessage message)
 		{
 			if (message == null)
@@ -2086,11 +2065,18 @@ namespace StockSharp.Algo.Strategies
 
 			UpdatePnLManager(trade.Trade.Security);
 
-			var tradeInfo = PnLManager.ProcessMessage(trade.ToMessage());
-			if (tradeInfo != null && tradeInfo.PnL != 0)
-				isPnLChanged = true;
+			var execMsg = trade.ToMessage();
 
-			var pos = PositionManager.ProcessMessage(trade.ToMessage());
+			var tradeInfo = PnLManager.ProcessMessage(execMsg);
+			if (tradeInfo != null)
+			{
+				if (tradeInfo.PnL != 0)
+					isPnLChanged = true;
+
+				StatisticManager.AddMyTrade(tradeInfo);
+			}
+
+			var pos = PositionManager.ProcessMessage(execMsg);
 
 			if (trade.Slippage != null)
 			{
@@ -2100,9 +2086,6 @@ namespace StockSharp.Algo.Strategies
 				Slippage += trade.Slippage.Value;
 				isSlipChanged = true;
 			}
-
-			if (tradeInfo != null)
-				StatisticManager.AddMyTrade(tradeInfo);
 
 			TryInvoke(() =>
 			{
@@ -2119,10 +2102,7 @@ namespace StockSharp.Algo.Strategies
 					RaiseSlippageChanged();
 			});
 
-			//foreach (var trade in filteredTrades)
-			//{
-			ProcessRisk(trade.ToMessage());
-			//}
+			ProcessRisk(execMsg);
 		}
 
 		private void RaiseSlippageChanged()

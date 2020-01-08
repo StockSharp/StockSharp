@@ -136,8 +136,7 @@ namespace StockSharp.Messages
 			{
 				if (message.Adapter == this)
 				{
-					message.Adapter = null;
-					message.IsBack = false;
+					message.UndoBack();
 				}
 				else
 				{
@@ -261,6 +260,13 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public virtual IEnumerable<MessageTypes> SupportedResultMessages
+		{
+			get => InnerAdapter.SupportedResultMessages;
+			set => InnerAdapter.SupportedResultMessages = value;
+		}
+
+		/// <inheritdoc />
 		public virtual IEnumerable<MarketDataTypes> SupportedMarketDataTypes
 		{
 			get => InnerAdapter.SupportedMarketDataTypes;
@@ -320,6 +326,10 @@ namespace StockSharp.Messages
 		Type IMessageAdapter.OrderConditionType => InnerAdapter.OrderConditionType;
 
 		bool IMessageAdapter.HeartbeatBeforConnect => InnerAdapter.HeartbeatBeforConnect;
+
+		Uri IMessageAdapter.Icon => InnerAdapter.Icon;
+
+		bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => InnerAdapter.IsAutoReplyOnTransactonalUnsubscription;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);

@@ -41,23 +41,23 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v18.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v19.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v19.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Data.v18.1.dll</HintPath>
+    <Reference Include="DevExpress.Data.v19.2">
+      <HintPath>..\..\..\References\DevExpress.Data.v19.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v18.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v19.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v19.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.MetropolisDark.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisDark.v18.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.MetropolisDark.v19.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisDark.v19.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.MetropolisLight.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisLight.v18.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.MetropolisLight.v19.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisLight.v19.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016Black.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016Black.v18.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016Black.v19.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016Black.v19.2.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\References\Ecng.Collections.dll</HintPath>
@@ -82,6 +82,9 @@
     </Reference>
     <Reference Include="Ecng.Xaml.Charting">
       <HintPath>..\..\..\References\Ecng.Xaml.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml.DevExp">
+      <HintPath>..\..\..\References\Ecng.Xaml.DevExp.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Xaml">
       <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>

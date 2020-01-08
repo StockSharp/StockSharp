@@ -144,8 +144,9 @@ namespace StockSharp.Messages
 		PortfolioLookup,
 
 		/// <summary>
-		/// <see cref="SecurityLookupResultMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		SecurityLookupResult,
 
 		/// <summary>
@@ -169,8 +170,9 @@ namespace StockSharp.Messages
 		Board,
 
 		/// <summary>
-		/// <see cref="PortfolioLookupResultMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		PortfolioLookupResult,
 
 		/// <summary>
@@ -215,9 +217,9 @@ namespace StockSharp.Messages
 		Reset,
 
 		/// <summary>
-		/// <see cref="MarketDataFinishedMessage"/>.
+		/// <see cref="SubscriptionFinishedMessage"/>.
 		/// </summary>
-		MarketDataFinished,
+		SubscriptionFinished,
 
 		/// <summary>
 		/// <see cref="RemoveMessage"/>.
@@ -235,8 +237,9 @@ namespace StockSharp.Messages
 		UserLookup,
 
 		/// <summary>
-		/// <see cref="UserLookupResultMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		UserLookupResult,
 
 		/// <summary>
@@ -251,8 +254,9 @@ namespace StockSharp.Messages
 		BoardLookup,
 
 		/// <summary>
-		/// <see cref="BoardLookupResultMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		BoardLookupResult,
 
 		/// <summary>
@@ -296,8 +300,9 @@ namespace StockSharp.Messages
 		AdapterListRequest,
 
 		/// <summary>
-		/// <see cref="AdapterListFinishedMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		AdapterListFinished,
 
 		/// <summary>
@@ -316,8 +321,9 @@ namespace StockSharp.Messages
 		SubscriptionListRequest,
 
 		/// <summary>
-		/// <see cref="SubscriptionListFinishedMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		SubscriptionListFinished,
 
 		/// <summary>
@@ -331,8 +337,9 @@ namespace StockSharp.Messages
 		SecurityRoute,
 
 		/// <summary>
-		/// <see cref="SecurityRouteListFinishedMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		SecurityRouteListFinished,
 
 		/// <summary>
@@ -346,8 +353,9 @@ namespace StockSharp.Messages
 		PortfolioRoute,
 
 		/// <summary>
-		/// <see cref="PortfolioRouteListFinishedMessage"/>.
+		/// Obsolete.
 		/// </summary>
+		[Obsolete]
 		PortfolioRouteListFinished,
 
 		/// <summary>
@@ -359,6 +367,11 @@ namespace StockSharp.Messages
 		/// <see cref="SubscriptionOnlineMessage"/>.
 		/// </summary>
 		SubscriptionOnline,
+
+		/// <summary>
+		/// <see cref="SubscriptionResponseMessage"/>.
+		/// </summary>
+		SubscriptionResponse,
 	}
 
 	/// <summary>

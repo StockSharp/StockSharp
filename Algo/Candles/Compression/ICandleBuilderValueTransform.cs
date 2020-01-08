@@ -177,7 +177,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (quote == null)
 						return false;
 
-					Update(md.ServerTime, quote.Price, quote.Volume, quote.Side, null);
+					Update(md.ServerTime, quote.Price, quote.Volume, Sides.Buy, null);
 					return true;
 				}
 
@@ -188,7 +188,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (quote == null)
 						return false;
 
-					Update(md.ServerTime, quote.Price, quote.Volume, quote.Side, null);
+					Update(md.ServerTime, quote.Price, quote.Volume, Sides.Sell, null);
 					return true;
 				}
 

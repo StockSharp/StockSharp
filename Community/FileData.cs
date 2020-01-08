@@ -31,7 +31,7 @@ namespace StockSharp.Community
 		/// File body length.
 		/// </summary>
 		[DataMember]
-		public int BodyLength { get; set; }
+		public long BodyLength { get; set; }
 
 		/// <summary>
 		/// Is the file available for public.

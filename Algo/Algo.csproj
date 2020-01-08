@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StockSharp.Algo</RootNamespace>
     <AssemblyName>StockSharp.Algo</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -127,6 +127,7 @@
     <Compile Include="Expressions\ExpressionIndexSecurityProcessor.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
+    <Compile Include="IMarketDataProviderEx.cs" />
     <Compile Include="ISubscriptionProvider.cs" />
     <Compile Include="LookupTrackingMessageAdapter.cs" />
     <Compile Include="Storages\Binary\BoardStateBinarySerializer.cs" />
@@ -207,7 +208,6 @@
     <Compile Include="Candles\ICandleManagerContainer.cs" />
     <Compile Include="Candles\ICandleManager.cs" />
     <Compile Include="Candles\ICandleSource.cs" />
-    <Compile Include="Candles\IExternalCandleSource.cs" />
     <Compile Include="Candles\Compression\VolumeProfileHelper.cs" />
     <Compile Include="Commissions\CommissionManager.cs" />
     <Compile Include="Commissions\CommissionRule.cs" />

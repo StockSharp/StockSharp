@@ -108,7 +108,7 @@ namespace StockSharp.Messages
 				{
 					if (item.OrderId != null)
 					{
-						var quote = quotes.SafeAdd(item.OrderPrice, key => new QuoteChange(item.Side, key, 0));
+						var quote = quotes.SafeAdd(item.OrderPrice, key => new QuoteChange(key, 0));
 						var id = item.OrderId.Value;
 
 						if (item.OrderVolume != null)

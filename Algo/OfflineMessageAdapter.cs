@@ -58,9 +58,7 @@
 		{
 			void ProcessOrderReplaceMessage(OrderReplaceMessage replaceMsg)
 			{
-				var originOrderMsg = _pendingRegistration.TryGetAndRemove(replaceMsg.OriginalTransactionId);
-
-				if (originOrderMsg == null)
+				if (!_pendingRegistration.TryGetAndRemove(replaceMsg.OriginalTransactionId, out var originOrderMsg))
 					_pendingMessages.Add(replaceMsg);
 				else
 				{
@@ -146,9 +144,7 @@
 						{
 							var cancelMsg = (OrderCancelMessage)message.Clone();
 
-							var originOrderMsg = _pendingRegistration.TryGetAndRemove(cancelMsg.OriginalTransactionId);
-
-							if (originOrderMsg == null)
+							if (!_pendingRegistration.TryGetAndRemove(cancelMsg.OriginalTransactionId, out var originOrderMsg))
 								_pendingMessages.Add(cancelMsg);
 							else
 							{
@@ -250,16 +246,9 @@
 							switch (message.Type)
 							{
 								case MessageTypes.SecurityLookup:
-									var secLookup = (SecurityLookupMessage)message;
-									RaiseNewOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = secLookup.TransactionId });
-									break;
-
 								case MessageTypes.PortfolioLookup:
-									var pfLookup = (PortfolioLookupMessage)message;
-
-									if (pfLookup.IsSubscribe)
-										RaiseNewOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = pfLookup.TransactionId });
-									
+								case MessageTypes.OrderStatus:
+									RaiseNewOutMessage(((ISubscriptionMessage)message).CreateResult());
 									break;
 							}
 
@@ -380,8 +369,7 @@
 			{
 				foreach (var msg in msgs)
 				{
-					msg.IsBack = true;
-					msg.Adapter = this;
+					msg.LoopBack(this);
 
 					base.OnInnerAdapterNewOutMessage(msg);
 				}

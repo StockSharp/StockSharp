@@ -24,8 +24,7 @@
 			public ProcessSuspendedSecurityMessage(IMessageAdapter adapter, SecurityId securityId)
 				: base(ExtendedMessageTypes.ProcessSuspendedSecurityMessages)
 			{
-				IsBack = true;
-				Adapter = adapter;
+				this.LoopBack(adapter);
 				SecurityId = securityId;
 			}
 
@@ -324,8 +323,7 @@
 					return native;
 
 				var clone = message.Clone();
-				clone.IsBack = true;
-				clone.Adapter = this;
+				clone.LoopBack(this);
 				_suspendedInMessages.SafeAdd(securityId).Add(clone);
 			}
 

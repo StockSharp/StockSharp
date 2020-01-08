@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Testing
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -37,9 +38,7 @@ namespace StockSharp.Algo.Testing
 		{
 		}
 
-		/// <summary>
-		/// Market data type.
-		/// </summary>
+		/// <inheritdoc />
 		public override MarketDataTypes DataType => MarketDataTypes.MarketDepth;
 
 		/// <summary>
@@ -76,7 +75,7 @@ namespace StockSharp.Algo.Testing
 		/// The maximal value of spread between the best quotes in units of price increments number. The spread value will be selected randomly between <see cref="MarketDepthGenerator.MinSpreadStepCount"/> and <see cref="MarketDepthGenerator.MaxSpreadStepCount"/>.
 		/// </summary>
 		/// <remarks>
-		/// The default value is <see cref="Int32.MaxValue"/>.
+		/// The default value is <see cref="int.MaxValue"/>.
 		/// </remarks>
 		public int MaxSpreadStepCount
 		{
@@ -135,6 +134,11 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public bool GenerateDepthOnEachTrade { get; set; }
 
+		/// <summary>
+		/// Generate <see cref="QuoteChange.OrdersCount"/>.
+		/// </summary>
+		public bool GenerateOrdersCount { get; set; }
+
 		private int _maxGenerations = 20;
 
 		/// <summary>
@@ -170,7 +174,12 @@ namespace StockSharp.Algo.Testing
 			if (price <= 0)
 				price = priceStep;
 
-			return new QuoteChange(side, price, Volumes.Next());
+			int? ordersCount = null;
+
+			if (GenerateOrdersCount && RandomGen.GetBool())
+				ordersCount = Volumes.Next();
+
+			return new QuoteChange(price, Volumes.Next(), ordersCount);
 		}
 	}
 
@@ -200,9 +209,7 @@ namespace StockSharp.Algo.Testing
 		{
 		}
 
-		/// <summary>
-		/// To initialize the generator state.
-		/// </summary>
+		/// <inheritdoc />
 		public override void Init()
 		{
 			base.Init();
@@ -218,11 +225,7 @@ namespace StockSharp.Algo.Testing
 			_boardDefinition = null;
 		}
 
-		/// <summary>
-		/// Process message.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
+		/// <inheritdoc />
 		protected override Message OnProcess(Message message)
 		{
 			if (_boardDefinition == null)

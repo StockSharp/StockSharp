@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <assembly>
+    <name>DevExpress.Xpf.Dialogs.v19.2</name>
+  </assembly>
+  <members>
+    <member name="N:DevExpress.Xpf.Dialogs">
+      <summary>
+        <para>Contains classes that implement the main functionality of the WPF Dialogs and Dialog Services.</para>
+      </summary>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.DXCommonDialog">
+      <summary>
+        <para>Serves as a base class for the DevExpress File Dialogs.</para>
+      </summary>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXCommonDialog.#ctor">
+      <summary>
+        <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Dialogs.DXCommonDialog"/> class.</para>
+      </summary>
+    </member>
+    <member name="E:DevExpress.Xpf.Dialogs.DXCommonDialog.HelpRequest">
+      <summary>
+        <para>Occurs when the user clicks the Help button on a file dialog and allows you to provide a help link or cancel opening help resources.</para>
+      </summary>
+    </member>
+    <member name="E:DevExpress.Xpf.Dialogs.DXCommonDialog.ShowDefaultDialog">
+      <summary>
+        <para>Fires when running DevExpress file dialogs in an unsupported OS (e.g. Windows XP).</para>
+      </summary>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.DXFileDialog">
+      <summary>
+        <para>Serves as a base class for the DevExpress file dialogs (<see cref="T:DevExpress.Xpf.Dialogs.DXSaveFileDialog"/> and <see cref="T:DevExpress.Xpf.Dialogs.DXOpenFileDialog"/>) and implements common file dialog functionality.</para>
+      </summary>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXFileDialog.#ctor">
+      <summary>
+        <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Dialogs.DXFileDialog"/> class.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.AddExtension">
+      <summary>
+        <para>Gets or sets whether the file dialog automatically adds an extension to a file name if an end-user omits the extension.</para>
+      </summary>
+      <value>true, if the file dialog adds an extension to a file name if the user omits the extension; otherwise, false. The default value is true.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.AppendExtensionsToFilterDescriptions">
+      <summary>
+        <para>Gets or sets whether the file dialog should append affected extensions to filter descriptions.</para>
+      </summary>
+      <value>true, to append affected extensions to filter descriptions; otherwise, false.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.AutoUpgradeEnabled">
+      <summary>
+        <para>For internal use only.</para>
+      </summary>
+      <value></value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.CheckFileExists">
+      <summary>
+        <para>Gets or sets whether the file dialog displays a warning if an end-user specifies a file name that does not exist.</para>
+      </summary>
+      <value>true, if the file dialog displays a warning if an end-user specifies a file name that does not exist; otherwise, false.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.CheckPathExists">
+      <summary>
+        <para>Gets or sets whether the file dialog displays a warning if an end-user specifies a path that does not exist.</para>
+      </summary>
+      <value>true, if the file dialog displays a warning when an end-user specifies a path that does not exist; otherwise, false. The default value is true.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.CustomPlaces">
+      <summary>
+        <para>For internal use.</para>
+      </summary>
+      <value></value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.DefaultExt">
+      <summary>
+        <para>Gets or sets the default file name extension.</para>
+      </summary>
+      <value>The default file name extension. The returned string does not include the period. The default value is an empty string (&quot;&quot;).</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.DereferenceLinks">
+      <summary>
+        <para>Gets or sets whether the dialog box returns the location of the file referenced by the shortcut or whether it returns the location of the shortcut (.lnk).</para>
+      </summary>
+      <value>true if the file dialog returns the location of the file referenced by the shortcut; otherwise, false. The default value is true.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.FileName">
+      <summary>
+        <para>Gets or sets a string containing the file name selected in the file dialog.</para>
+      </summary>
+      <value>The file name selected in the file dialog. The default value is an empty string (&quot;&quot;).</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.FileNames">
+      <summary>
+        <para>Gets the file names of all selected files in the file dialog.</para>
+      </summary>
+      <value>An array of strings, containing the file names of all selected files in the file dialog.</value>
+    </member>
+    <member name="E:DevExpress.Xpf.Dialogs.DXFileDialog.FileOk">
+      <summary>
+        <para>Similar to the <see cref="E:System.Windows.Forms.FileDialog.FileOk"/> event.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.Filter">
+      <summary>
+        <para>Gets or sets the current file name filter string, which determines the choices that appear in a file dialog.</para>
+      </summary>
+      <value>The file filtering options available in the file dialog.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.FilterIndex">
+      <summary>
+        <para>Gets or sets the index of the currently selected filter in the file dialog.</para>
+      </summary>
+      <value>The index of the currently selected filter in the file dialog. The default value is 1.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.InitialDirectory">
+      <summary>
+        <para>Gets or sets the initial directory displayed by the file dialog.</para>
+      </summary>
+      <value>The initial directory displayed by the file dialog. The default is an empty string (&quot;&quot;).</value>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXFileDialog.Reset">
+      <summary>
+        <para>Resets all properties to their default values.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.RestoreDirectory">
+      <summary>
+        <para>Gets or sets a value indicating whether the file dialog restores the current directory to the previously selected directory before closing.</para>
+      </summary>
+      <value>true, if the file dialog restores the current directory to the previously selected directory; otherwise, false. The default value is false.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.ShowHelp">
+      <summary>
+        <para>Gets or sets a value indicating whether the Help button is displayed in the file dialog.</para>
+      </summary>
+      <value>true if the dialog box includes a help button; otherwise, false. The default value is false.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.SupportMultiDottedExtensions">
+      <summary>
+        <para>Gets or sets whether the file dialog supports displaying and saving files that have multiple file name extensions.</para>
+      </summary>
+      <value>true, if the file dialog supports multiple file name extensions; otherwise, false.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.Title">
+      <summary>
+        <para>Gets or sets the file dialog title.</para>
+      </summary>
+      <value>The file dialog title.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFileDialog.ValidateNames">
+      <summary>
+        <para>Gets or sets whether the dialog box accepts only valid Win32 file names.</para>
+      </summary>
+      <value>true if the dialog box accepts only valid Win32 file names; otherwise, false.</value>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.DXFolderBrowserDialog">
+      <summary>
+        <para>Represents a dialog box that allows end-users to browse and select a particular folder.</para>
+      </summary>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXFolderBrowserDialog.#ctor">
+      <summary>
+        <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Dialogs.DXFolderBrowserDialog"/> class.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFolderBrowserDialog.Description">
+      <summary>
+        <para>Gets or sets the description that is displayed above the folder hierarchy.</para>
+      </summary>
+      <value>A <see cref="T:System.String"/> value that is the description displayed above the folder hierarchy.</value>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXFolderBrowserDialog.Reset">
+      <summary>
+        <para>Resets all properties to their default values.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFolderBrowserDialog.RootFolder">
+      <summary>
+        <para>Gets or sets the root folder from which the navigation starts.</para>
+      </summary>
+      <value>A System.Environment+SpecialFolder object that specifies the folder from which the navigation starts.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFolderBrowserDialog.SelectedPath">
+      <summary>
+        <para>Gets or sets the selected path.</para>
+      </summary>
+      <value>A <see cref="T:System.String"/> value that specifies the selected path.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXFolderBrowserDialog.ShowNewFolderButton">
+      <summary>
+        <para>Gets or sets whether this <see cref="T:DevExpress.Xpf.Dialogs.DXFolderBrowserDialog"/> should display the &quot;Make New Folder&quot; button.</para>
+      </summary>
+      <value>true, if the &quot;Make New Folder&quot; button is visible; otherwise, false.</value>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.DXFolderBrowserDialogService">
+      <summary>
+        <para>Represents a dialog box that allows end-users to browse and select a particular folder.</para>
+      </summary>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXFolderBrowserDialogService.#ctor">
+      <summary>
+        <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Dialogs.DXFolderBrowserDialogService"/> class.</para>
+      </summary>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.DXOpenFileDialog">
+      <summary>
+        <para>Represents a dialog box that allows end-users to specify a filename for one or more files to open.</para>
+      </summary>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXOpenFileDialog.#ctor">
+      <summary>
+        <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Dialogs.DXOpenFileDialog"/> class.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXOpenFileDialog.Multiselect">
+      <summary>
+        <para>Gets or sets whether end-users are allowed to select multiple files in the current <see cref="T:DevExpress.Xpf.Dialogs.DXOpenFileDialog"/>.</para>
+      </summary>
+      <value>true, if end-users can select multiple files; otherwise, false.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXOpenFileDialog.OpenFileDialogMode">
+      <summary>
+        <para>Gets or sets the mode in which the <see cref="T:DevExpress.Xpf.Dialogs.DXOpenFileDialog"/> functions: selects files or selects folders.</para>
+      </summary>
+      <value>One of the <see cref="T:DevExpress.Xpf.Dialogs.OpenFileDialogMode"/> enumeration values.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXOpenFileDialog.ReadOnlyChecked">
+      <summary>
+        <para>For internal use only.</para>
+      </summary>
+      <value></value>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXOpenFileDialog.Reset">
+      <summary>
+        <para>Resets all properties to their default values.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXOpenFileDialog.ShowReadOnly">
+      <summary>
+        <para>For internal use only.</para>
+      </summary>
+      <value></value>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.DXOpenFileDialogService">
+      <summary>
+        <para>Represents a dialog box that allows end-users to specify a filename for one or more files to open.</para>
+      </summary>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXOpenFileDialogService.#ctor">
+      <summary>
+        <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Dialogs.DXOpenFileDialogService"/> class.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXOpenFileDialogService.OpenFileDialogMode">
+      <summary>
+        <para>For internal use.</para>
+      </summary>
+      <value>One of the <see cref="T:DevExpress.Xpf.Dialogs.OpenFileDialogMode"/> enumeration values.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.Dialogs.DXOpenFileDialogService.OpenFileDialogModeProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.Dialogs.DXOpenFileDialogService.OpenFileDialogMode"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.DXOpenFolderDialogService">
+      <summary>
+        <para>Represents a dialog box that allows end-users to specify folder names for one or more folders to open.</para>
+      </summary>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXOpenFolderDialogService.#ctor">
+      <summary>
+        <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Dialogs.DXOpenFolderDialogService"/> class.</para>
+      </summary>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.DXSaveFileDialog">
+      <summary>
+        <para>Represents a dialog box that allows end-users to specify a filename to which to save a file.</para>
+      </summary>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXSaveFileDialog.#ctor">
+      <summary>
+        <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Dialogs.DXSaveFileDialog"/> class.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXSaveFileDialog.CreatePrompt">
+      <summary>
+        <para>Gets or sets whether this <see cref="T:DevExpress.Xpf.Dialogs.DXSaveFileDialog"/> should ask users for the permission to create a file if the specified file does not yet exist.</para>
+      </summary>
+      <value>true to display a message; false to automatically create a file without confirmation.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.DXSaveFileDialog.OverwritePrompt">
+      <summary>
+        <para>Gets or sets whether this <see cref="T:DevExpress.Xpf.Dialogs.DXSaveFileDialog"/> should warn users when they try to save a file under an already existing name.</para>
+      </summary>
+      <value>true to display a warning, false to overwrite old files without confirmation.</value>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.DXSaveFileDialogService">
+      <summary>
+        <para>Represents a dialog box that allows end-users to specify a filename to which to save a file.</para>
+      </summary>
+    </member>
+    <member name="M:DevExpress.Xpf.Dialogs.DXSaveFileDialogService.#ctor">
+      <summary>
+        <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Dialogs.DXSaveFileDialogService"/> class.</para>
+      </summary>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.HelpRequestEventArgs">
+      <summary>
+        <para>Provides data tor the <see cref="E:DevExpress.Xpf.Dialogs.DXCommonDialog.HelpRequest"/> event.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.HelpRequestEventArgs.HelpLink">
+      <summary>
+        <para>Gets or sets a help link that is opened when an end-user clicks the help button.</para>
+      </summary>
+      <value>A <see cref="T:System.String"/> that is a help link that is opened when an end-user clicks the help button.</value>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.NotSupportedOsVersionEventArgs">
+      <summary>
+        <para>Provides data tor the <see cref="E:DevExpress.Xpf.Dialogs.DXCommonDialog.ShowDefaultDialog"/> event.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.NotSupportedOsVersionEventArgs.Dialog">
+      <summary>
+        <para>Gets the DevExpress file dialog that cannot be run under Windows versions before Vista.</para>
+      </summary>
+      <value>The DevExpress file dialog that cannot be run under Windows versions before Vista.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.NotSupportedOsVersionEventArgs.DialogResult">
+      <summary>
+        <para>Returns a result of a fallback dialog, which was launched instead of the DevExpress file dialog.</para>
+      </summary>
+      <value>A result of a fallback dialog.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Dialogs.NotSupportedOsVersionEventArgs.Handled">
+      <summary>
+        <para>Gets or sets whether a file dialog fallback is handled and no default processing is required.</para>
+      </summary>
+      <value>true, if a file dialog fallback is handled; otherwise, false.</value>
+    </member>
+    <member name="T:DevExpress.Xpf.Dialogs.OpenFileDialogMode">
+      <summary>
+        <para>Lists values that specify the open file dialog mode for <see cref="T:DevExpress.Xpf.Dialogs.DXOpenFileDialog"/>.</para>
+      </summary>
+    </member>
+    <member name="F:DevExpress.Xpf.Dialogs.OpenFileDialogMode.Files">
+      <summary>
+        <para>The <see cref="T:DevExpress.Xpf.Dialogs.DXOpenFileDialog"/> allows selecting files only.</para>
+      </summary>
+    </member>
+    <member name="F:DevExpress.Xpf.Dialogs.OpenFileDialogMode.Folders">
+      <summary>
+        <para>The <see cref="T:DevExpress.Xpf.Dialogs.DXOpenFileDialog"/> allows selecting folders only.</para>
+      </summary>
+    </member>
+  </members>
+</doc>

@@ -115,11 +115,16 @@ namespace SampleConnection
 		{
 			var connector = Connector;
 
+			if (!_initialized)
+			{
+				connector.MarketDepthReceived += TraderOnMarketDepthChanged;
+				_initialized = true;
+			}
+
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
 				// subscribe on order book flow
-				var id = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
-				var subscription = connector.TryGetSubscriptionById(id);
+				var subscription = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
 
 				// create order book window
 				var window = new QuotesWindow
@@ -131,7 +136,7 @@ namespace SampleConnection
 					if (_appClosing)
 						return;
 
-					if (subscription.State == SubscriptionStates.Active || subscription.State == SubscriptionStates.Online)
+					if (subscription.State.IsActive())
 						connector.UnSubscribe(subscription);
 				};
 
@@ -139,12 +144,6 @@ namespace SampleConnection
 				window.Show();
 
 				_quotesWindows.Add(subscription, window);
-
-				if (!_initialized)
-				{
-					connector.MarketDepthReceived += TraderOnMarketDepthChanged;
-					_initialized = true;
-				}
 			}
 		}
 

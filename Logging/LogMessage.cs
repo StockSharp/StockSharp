@@ -74,6 +74,8 @@ namespace StockSharp.Logging
 		/// </summary>
 		public LogLevels Level { get; }
 
+		private readonly SyncObject _messageLock = new SyncObject();
+
 		private string _message;
 
 		/// <summary>
@@ -86,27 +88,30 @@ namespace StockSharp.Logging
 				if (_message != null)
 					return _message;
 
-				try
+				lock (_messageLock)
 				{
-					_message = _getMessage();
-				}
-				catch (Exception ex)
-				{
-					_message = ex.ToString();
-				}
+					if (_getMessage != null)
+					{
+						try
+						{
+							_message = _getMessage();
+						}
+						catch (Exception ex)
+						{
+							_message = ex.ToString();
+						}
 
-				// делегат может захватить из внешнего кода лишние данные, что не будут удаляться GC
-				// в случае, если LogMessage будет храниться где-то (например, в LogControl)
-				_getMessage = null;
+						// делегат может захватить из внешнего кода лишние данные, что не будут удаляться GC
+						// в случае, если LogMessage будет храниться где-то (например, в LogControl)
+						_getMessage = null;
+					}
+				}
 
 				return _message;
 			}
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
-		{
-			return "{0} {1}".Put(Time, Message);
-		}
+		public override string ToString() => $"{Time} {Message}";
 	}
 }

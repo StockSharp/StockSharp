@@ -170,10 +170,7 @@ namespace StockSharp.Logging
 		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
 		public static void AddErrorLog(this string message, params object[] args)
 		{
-			var manager = ConfigManager.TryGetService<LogManager>();
-
-			if (manager != null)
-				manager.Application.AddMessage(LogLevels.Error, message, args);
+			ConfigManager.TryGetService<LogManager>()?.Application.AddMessage(LogLevels.Error, message, args);
 		}
 
 		/// <summary>
@@ -208,10 +205,7 @@ namespace StockSharp.Logging
 			if (error == null)
 				throw new ArgumentNullException(nameof(error));
 
-			var manager = ConfigManager.TryGetService<LogManager>();
-
-			if (manager != null)
-				manager.Application.AddErrorLog(error, format);
+			ConfigManager.TryGetService<LogManager>()?.Application.AddErrorLog(error, format);
 		}
 
 		/// <summary>

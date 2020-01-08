@@ -288,7 +288,7 @@ namespace StockSharp.Algo
 
 					if (SecurityStorage != null && StorageRegistry != null && SnapshotRegistry != null)
 					{
-						_inAdapter = StorageAdapter = new StorageMetaInfoMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry.ExchangeInfoProvider)
+						_inAdapter = StorageAdapter = new StorageMetaInfoMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry.ExchangeInfoProvider, StorageRegistry, SnapshotRegistry, _adapter.CandleBuilderProvider)
 						{
 							OwnInnerAdapter = true,
 							OverrideSecurityData = OverrideSecurityData
@@ -600,20 +600,8 @@ namespace StockSharp.Algo
 						ProcessSecurityMessage((SecurityMessage)message);
 						break;
 
-					case MessageTypes.SecurityLookupResult:
-						ProcessSecurityLookupResultMessage((SecurityLookupResultMessage)message);
-						break;
-
-					case MessageTypes.BoardLookupResult:
-						ProcessBoardLookupResultMessage((BoardLookupResultMessage)message);
-						break;
-
 					case MessageTypes.TimeFrameLookupResult:
 						ProcessTimeFrameLookupResultMessage((TimeFrameLookupResultMessage)message);
-						break;
-
-					case MessageTypes.PortfolioLookupResult:
-						ProcessPortfolioLookupResultMessage((PortfolioLookupResultMessage)message);
 						break;
 
 					case MessageTypes.Level1Change:
@@ -626,10 +614,6 @@ namespace StockSharp.Algo
 
 					case MessageTypes.Execution:
 						ProcessExecutionMessage((ExecutionMessage)message);
-						break;
-
-					case MessageTypes.OrderStatus:
-						ProcessOrderStatusMessage((OrderStatusMessage)message);
 						break;
 
 					case MessageTypes.Portfolio:
@@ -650,12 +634,12 @@ namespace StockSharp.Algo
 					//	// MarketTimeChanged необходимо вызывать при обработке времени из любых месседжей.
 					//	break;
 
-					case MessageTypes.MarketData:
-						ProcessMarketDataMessage((MarketDataMessage)message);
+					case MessageTypes.SubscriptionResponse:
+						ProcessSubscriptionResponseMessage((SubscriptionResponseMessage)message);
 						break;
 
-					case MessageTypes.MarketDataFinished:
-						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
+					case MessageTypes.SubscriptionFinished:
+						ProcessSubscriptionFinishedMessage((SubscriptionFinishedMessage)message);
 						break;
 
 					case MessageTypes.SubscriptionOnline:
@@ -695,47 +679,74 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessMarketDataMessage(MarketDataMessage replyMsg)
+		private void ProcessSubscriptionResponseMessage(SubscriptionResponseMessage replyMsg)
 		{
+			var error = replyMsg.Error;
+
 			var subscription = _subscriptionManager.ProcessResponse(replyMsg, out var originalMsg, out var unexpectedCancelled);
 
 			if (originalMsg == null)
 			{
-				if (replyMsg.Error != null)
-					RaiseError(replyMsg.Error);
+				if (error != null)
+					RaiseError(error);
 
 				return;
 			}
 
-			if (originalMsg.IsSubscribe)
+			if (originalMsg is MarketDataMessage mdMdg)
 			{
-				if (replyMsg.IsOk())
-					RaiseMarketDataSubscriptionSucceeded(originalMsg, subscription);
+				if (originalMsg.IsSubscribe)
+				{
+					if (replyMsg.IsOk())
+						RaiseMarketDataSubscriptionSucceeded(mdMdg, subscription);
+					else
+					{
+						if (unexpectedCancelled)
+							RaiseMarketDataUnexpectedCancelled(mdMdg, error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)), subscription);
+						else
+							RaiseMarketDataSubscriptionFailed(mdMdg, replyMsg, subscription);
+					}
+				}
 				else
 				{
-					if (unexpectedCancelled)
-						RaiseMarketDataUnexpectedCancelled(originalMsg, replyMsg.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(originalMsg)), subscription);
+					if (replyMsg.IsOk())
+						RaiseMarketDataUnSubscriptionSucceeded(mdMdg, subscription);
 					else
-						RaiseMarketDataSubscriptionFailed(originalMsg, replyMsg, subscription);
+						RaiseMarketDataUnSubscriptionFailed(mdMdg, replyMsg, subscription);
 				}
 			}
 			else
 			{
-				if (replyMsg.IsOk())
-					RaiseMarketDataUnSubscriptionSucceeded(originalMsg, subscription);
+				if (error == null)
+					RaiseSubscriptionStarted(subscription);
 				else
-					RaiseMarketDataUnSubscriptionFailed(originalMsg, replyMsg, subscription);
+				{
+					RaiseSubscriptionFailed(subscription, error, originalMsg.IsSubscribe);
+
+					if (originalMsg is OrderStatusMessage orderLookup)
+						RaiseOrderStatusFailed(orderLookup.TransactionId, error, replyMsg.LocalTime);
+					else if (originalMsg is SecurityLookupMessage secLookup)
+						RaiseLookupSecuritiesResult(secLookup, error, Securities.Filter(secLookup).ToArray(), ArrayHelper.Empty<Security>());
+					else if (originalMsg is BoardLookupMessage boardLookup)
+						RaiseLookupBoardsResult(boardLookup, error, ExchangeBoards.Filter(boardLookup).ToArray(), ArrayHelper.Empty<ExchangeBoard>());
+					else if (originalMsg is PortfolioLookupMessage pfLookup)
+						RaiseLookupPortfoliosResult(pfLookup, error, Portfolios.Filter(pfLookup).ToArray(), ArrayHelper.Empty<Portfolio>());
+					else if (originalMsg is TimeFrameLookupMessage tfLookup)
+						RaiseLookupTimeFramesResult(tfLookup, error, ArrayHelper.Empty<TimeSpan>(), ArrayHelper.Empty<TimeSpan>());
+				}
 			}
 		}
 
-		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
+		private void ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message)
 		{ 
-			var subscription = _subscriptionManager.ProcessMarketDataFinishedMessage(message);
+			var subscription = _subscriptionManager.ProcessSubscriptionFinishedMessage(message);
 
 			if (subscription == null)
 				return;
 
 			RaiseMarketDataSubscriptionFinished(message, subscription);
+
+			ProcessSubscriptionResult(subscription);
 		}
 
 		private void ProcessSubscriptionOnlineMessage(SubscriptionOnlineMessage message)
@@ -746,6 +757,27 @@ namespace StockSharp.Algo
 				return;
 
 			RaiseMarketDataSubscriptionOnline(subscription);
+
+			ProcessSubscriptionResult(subscription);
+		}
+
+		private void ProcessSubscriptionResult(Subscription subscription)
+		{
+			if (subscription.SubscriptionMessage is SecurityLookupMessage secLookup)
+			{
+				var items = _subscriptionManager.GetLookupItems<Security>(subscription);
+				RaiseLookupSecuritiesResult(secLookup, null, Securities.Filter(secLookup).ToArray(), items);
+			}
+			else if (subscription.SubscriptionMessage is BoardLookupMessage boardLookup)
+			{
+				var items = _subscriptionManager.GetLookupItems<ExchangeBoard>(subscription);
+				RaiseLookupBoardsResult(boardLookup, null, ExchangeBoards.Filter(boardLookup).ToArray(), items);
+			}
+			else if (subscription.SubscriptionMessage is PortfolioLookupMessage pfLookup)
+			{
+				var items = _subscriptionManager.GetLookupItems<Portfolio>(subscription);
+				RaiseLookupPortfoliosResult(pfLookup, null, Portfolios.Filter(pfLookup).ToArray(), items);
+			}
 		}
 
 		private void ProcessSecurityRemoveMessage(SecurityRemoveMessage message)
@@ -902,48 +934,14 @@ namespace StockSharp.Algo
 			RaiseReceived(security, message, SecurityReceived);
 		}
 
-		private void ProcessSecurityLookupResultMessage(SecurityLookupResultMessage message)
-		{
-			if (message.Error != null)
-				RaiseError(message.Error);
-
-			if (!_subscriptionManager.TryGetAndRemoveLookup<SecurityLookupMessage, Security>(message, out var criteria, out var items))
-				return;
-
-			RaiseLookupSecuritiesResult(criteria, message.Error, Securities.Filter(criteria).ToArray(), items);
-		}
-
-		private void ProcessBoardLookupResultMessage(BoardLookupResultMessage message)
-		{
-			if (message.Error != null)
-				RaiseError(message.Error);
-
-			if (!_subscriptionManager.TryGetAndRemoveLookup<BoardLookupMessage, ExchangeBoard>(message, out var criteria, out var items))
-				return;
-
-			RaiseLookupBoardsResult(criteria, message.Error, ExchangeBoards.Filter(criteria).ToArray(), items);
-		}
-
 		private void ProcessTimeFrameLookupResultMessage(TimeFrameLookupResultMessage message)
 		{
-			if (message.Error != null)
-				RaiseError(message.Error);
-
-			if (!_subscriptionManager.TryGetAndRemoveLookup<TimeFrameLookupMessage, TimeSpan>(message, out var criteria, out _))
+			var subscription = _subscriptionManager.TryGetSubscription(message.OriginalTransactionId, true);
+			
+			if (subscription == null)
 				return;
 
-			RaiseLookupTimeFramesResult(criteria, message.Error, message.TimeFrames, message.TimeFrames);
-		}
-
-		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)
-		{
-			if (message.Error != null)
-				RaiseError(message.Error);
-
-			if (!_subscriptionManager.TryGetAndRemoveLookup<PortfolioLookupMessage, Portfolio>(message, out var criteria, out var portfolios))
-				return;
-
-			RaiseLookupPortfoliosResult(criteria, message.Error, Portfolios.Filter(criteria).ToArray(), portfolios);
+			RaiseLookupTimeFramesResult((TimeFrameLookupMessage)subscription.SubscriptionMessage, null, message.TimeFrames, message.TimeFrames);
 		}
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
@@ -1046,36 +1044,20 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioMessage(PortfolioMessage message)
 		{
-			// reply on RegisterPortfolio subscription do not contains any portfolio info
-			var isReply = message.PortfolioName.IsEmpty();
-
-			var subscription = isReply ? _subscriptionManager.ProcessResponse(message) : null;
-
-			if (message.Error != null)
+			var portfolio = GetPortfolio(message.PortfolioName, p =>
 			{
-				if (subscription != null)
-					RaiseSubscriptionFailed(subscription, message.Error, true);
-			}
-			else
-			{
-				if (isReply)
-					return;
+				message.ToPortfolio(p, _entityCache.ExchangeInfoProvider);
+				return true;
+			}, out var isNew);
 
-				var portfolio = GetPortfolio(message.PortfolioName, p =>
-				{
-					message.ToPortfolio(p, _entityCache.ExchangeInfoProvider);
-					return true;
-				}, out var isNew);
+			//if (message.OriginalTransactionId == 0)
+			//	return;
 
-				//if (message.OriginalTransactionId == 0)
-				//	return;
+			if (isNew)
+				_subscriptionManager.ProcessLookupResponse(message, portfolio);
 
-				if (isNew)
-					_subscriptionManager.ProcessLookupResponse(message, portfolio);
-
-				RaiseReceived(portfolio, message, PortfolioReceived);
-				TrySubscribePortfolio(portfolio, message.Adapter);
-			}
+			RaiseReceived(portfolio, message, PortfolioReceived);
+			TrySubscribePortfolio(portfolio, message.Adapter);
 		}
 
 		private void ProcessPositionChangeMessage(PositionChangeMessage message)
@@ -1677,10 +1659,6 @@ namespace StockSharp.Algo
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
 			}
-		}
-
-		private void ProcessOrderStatusMessage(OrderStatusMessage message)
-		{
 		}
 
 		private void ProcessCandleMessage(CandleMessage message)

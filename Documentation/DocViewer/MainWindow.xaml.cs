@@ -20,9 +20,10 @@ namespace StockSharp.DocViewer
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Navigation;
-	using File = System.IO.File;
 
-	using Ookii.Dialogs.Wpf;
+	using DevExpress.Xpf.Dialogs;
+
+	using File = System.IO.File;
 
 	using XMLCommToHTM;
 	using XMLCommToHTM.DOM;
@@ -58,7 +59,7 @@ namespace StockSharp.DocViewer
 
 		private void Browse_Click(object sender, RoutedEventArgs e)
 		{
-			var dlg = new VistaOpenFileDialog
+			var dlg = new DXOpenFileDialog
 			{
 				Filter = "Assembly Files (*.dll)|*.dll",
 				Multiselect = true,

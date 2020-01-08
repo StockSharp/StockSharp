@@ -82,9 +82,9 @@ namespace StockSharp.Algo.Candles.Compression
 					break;
 				}
 
-				case MessageTypes.MarketDataFinished:
+				case MessageTypes.SubscriptionFinished:
 				{
-					_infos.Remove(((MarketDataFinishedMessage)message).OriginalTransactionId);
+					_infos.Remove(((SubscriptionFinishedMessage)message).OriginalTransactionId);
 					break;
 				}
 			}

@@ -190,7 +190,7 @@ namespace StockSharp.Algo.Testing
 							break;
 						else
 						{
-							AddExecMsg(diff, time, serverTime, currTo, currTo.Volume, false);
+							AddExecMsg(diff, time, serverTime, currTo, currTo.Volume, side, false);
 							currTo = null;
 						}
 					}
@@ -198,7 +198,7 @@ namespace StockSharp.Algo.Testing
 					{
 						if (currTo == null)
 						{
-							AddExecMsg(diff, time, serverTime, currFrom, -currFrom.Volume, isSpread.Value);
+							AddExecMsg(diff, time, serverTime, currFrom, -currFrom.Volume, side, isSpread.Value);
 							currFrom = null;
 						}
 						else
@@ -207,19 +207,19 @@ namespace StockSharp.Algo.Testing
 							{
 								if (currFrom.Volume != currTo.Volume)
 								{
-									AddExecMsg(diff, time, serverTime, currTo, currTo.Volume - currFrom.Volume, isSpread.Value);
+									AddExecMsg(diff, time, serverTime, currTo, currTo.Volume - currFrom.Volume, side, isSpread.Value);
 								}
 
 								currFrom = currTo = null;
 							}
 							else if (currFrom.Price * mult > currTo.Price * mult)
 							{
-								AddExecMsg(diff, time, serverTime, currTo, currTo.Volume, isSpread.Value);
+								AddExecMsg(diff, time, serverTime, currTo, currTo.Volume, side, isSpread.Value);
 								currTo = null;
 							}
 							else
 							{
-								AddExecMsg(diff, time, serverTime, currFrom, -currFrom.Volume, isSpread.Value);
+								AddExecMsg(diff, time, serverTime, currFrom, -currFrom.Volume, side, isSpread.Value);
 								currFrom = null;
 							}
 						}
@@ -230,10 +230,10 @@ namespace StockSharp.Algo.Testing
 
 		private readonly RandomArray<bool> _isMatch = new RandomArray<bool>(100);
 
-		private void AddExecMsg(List<ExecutionMessage> diff, DateTimeOffset time, DateTimeOffset serverTime, QuoteChange quote, decimal volume, bool isSpread)
+		private void AddExecMsg(List<ExecutionMessage> diff, DateTimeOffset time, DateTimeOffset serverTime, QuoteChange quote, decimal volume, Sides side, bool isSpread)
 		{
 			if (volume > 0)
-				diff.Add(CreateMessage(time, serverTime, quote.Side, quote.Price, volume));
+				diff.Add(CreateMessage(time, serverTime, side, quote.Price, volume));
 			else
 			{
 				volume = volume.Abs();
@@ -245,7 +245,7 @@ namespace StockSharp.Algo.Testing
 
 					diff.Add(new ExecutionMessage
 					{
-						Side = quote.Side,
+						Side = side,
 						TradeVolume = tradeVolume,
 						ExecutionType = ExecutionTypes.Tick,
 						SecurityId = SecurityId,
@@ -258,7 +258,7 @@ namespace StockSharp.Algo.Testing
 					//volume -= tradeVolume;
 				}
 
-				diff.Add(CreateMessage(time, serverTime, quote.Side, quote.Price, volume, true));
+				diff.Add(CreateMessage(time, serverTime, side, quote.Price, volume, true));
 			}
 		}
 
@@ -463,8 +463,8 @@ namespace StockSharp.Algo.Testing
 					SecurityId = message.SecurityId,
 					LocalTime = message.LocalTime,
 					ServerTime = message.ServerTime,
-					Bids = _prevBidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Buy, _prevBidPrice.Value, _prevBidVolume ?? 0) },
-					Asks = _prevAskPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Sell, _prevAskPrice.Value, _prevAskVolume ?? 0) },
+					Bids = _prevBidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0) },
+					Asks = _prevAskPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0) },
 				};
 			}
 		}
@@ -570,7 +570,7 @@ namespace StockSharp.Algo.Testing
 				OrderPrice = price,
 				OrderVolume = volume,
 				ExecutionType = ExecutionTypes.OrderLog,
-				IsCancelled = isCancelling,
+				IsCancellation = isCancelling,
 				SecurityId = SecurityId,
 				LocalTime = localTime,
 				ServerTime = serverTime,
@@ -643,7 +643,7 @@ namespace StockSharp.Algo.Testing
 						SecurityId = replaceMsg.SecurityId,
 						ExecutionType = ExecutionTypes.Transaction,
 						HasOrderInfo = true,
-						IsCancelled = true,
+						IsCancellation = true,
 						OrderId = replaceMsg.OldOrderId,
 						OriginalTransactionId = replaceMsg.OriginalTransactionId,
 						TransactionId = replaceMsg.TransactionId,
@@ -679,7 +679,7 @@ namespace StockSharp.Algo.Testing
 					{
 						ExecutionType = ExecutionTypes.Transaction,
 						HasOrderInfo = true,
-						IsCancelled = true,
+						IsCancellation = true,
 						OrderId = cancelMsg.OrderId,
 						TransactionId = cancelMsg.TransactionId,
 						OriginalTransactionId = cancelMsg.OriginalTransactionId,

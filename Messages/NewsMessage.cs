@@ -140,6 +140,11 @@ namespace StockSharp.Messages
 		public NewsPriorities? Priority { get; set; }
 
 		/// <summary>
+		/// Language.
+		/// </summary>
+		public string Language { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="NewsMessage"/>.
 		/// </summary>
 		public NewsMessage()
@@ -170,6 +175,7 @@ namespace StockSharp.Messages
 				ServerTime = ServerTime,
 				Url = Url,
 				Priority = Priority,
+				Language = Language,
 			};
 
 			CopyTo(clone);

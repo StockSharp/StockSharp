@@ -51,13 +51,13 @@ namespace StockSharp.Algo
 			public long TransactionId { get; }
 			public HashSet<long> Subscriptions { get; } = new HashSet<long>();
 
-			private QuoteChange[] Filter(IEnumerable<QuoteChange> quotes)
+			private QuoteChange[] Filter(Sides side, IEnumerable<QuoteChange> quotes)
 			{
 				return quotes
 					.Select(quote =>
 					{
 						var res = quote.Clone();
-						var key = Tuple.Create(res.Side, res.Price);
+						var key = Tuple.Create(side, res.Price);
 
 						var own = _executions.TryGetValue(key)?.Second;
 						if (own != null)
@@ -83,8 +83,8 @@ namespace StockSharp.Algo
 					IsByLevel1 = message.IsByLevel1,
 					Currency = message.Currency,
 					IsFiltered = true,
-					Bids = Filter(message.Bids),
-					Asks = Filter(message.Asks),
+					Bids = Filter(Sides.Buy, message.Bids),
+					Asks = Filter(Sides.Sell, message.Asks),
 				};
 			}
 
@@ -196,7 +196,7 @@ namespace StockSharp.Algo
 
 						if (filtered == null)
 						{
-							RaiseNewOutMessage(new MarketDataMessage { OriginalTransactionId = transId });
+							RaiseNewOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = transId });
 							return;
 						}
 						else
@@ -204,7 +204,7 @@ namespace StockSharp.Algo
 					}
 					else
 					{
-						MarketDataMessage reply;
+						SubscriptionResponseMessage reply;
 
 						lock (_syncObject)
 						{
@@ -216,7 +216,7 @@ namespace StockSharp.Algo
 
 								if (info.Subscriptions.Count > 0)
 								{
-									reply = new MarketDataMessage
+									reply = new SubscriptionResponseMessage
 									{
 										OriginalTransactionId = transId,
 									};
@@ -238,11 +238,7 @@ namespace StockSharp.Algo
 								if (!isFilteredMsg)
 									break;
 
-								reply = new MarketDataMessage
-								{
-									OriginalTransactionId = transId,
-									Error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId)),
-								};
+								reply = transId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId)));
 							}
 						}
 

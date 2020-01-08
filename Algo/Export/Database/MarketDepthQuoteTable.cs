@@ -56,6 +56,7 @@ namespace StockSharp.Algo.Export.Database
 				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 }
 			};
 			yield return new ColumnDescription(nameof(TimeQuoteChange.Side)) { IsPrimaryKey = true, DbType = typeof(int) };
+			yield return new ColumnDescription(nameof(TimeQuoteChange.OrdersCount)) { DbType = typeof(int?) };
 			yield return new ColumnDescription(nameof(TimeQuoteChange.ServerTime)) { IsPrimaryKey = true, DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription(nameof(TimeQuoteChange.LocalTime)) { DbType = typeof(DateTimeOffset) };
 		}
@@ -69,6 +70,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(TimeQuoteChange.Price), value.Price },
 				{ nameof(TimeQuoteChange.Volume), value.Volume },
 				{ nameof(TimeQuoteChange.Side), (int)value.Side },
+				{ nameof(TimeQuoteChange.OrdersCount), value.OrdersCount },
 				{ nameof(TimeQuoteChange.ServerTime), value.ServerTime },
 				{ nameof(TimeQuoteChange.LocalTime), value.LocalTime },
 			};

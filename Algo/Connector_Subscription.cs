@@ -34,17 +34,17 @@ namespace StockSharp.Algo
 		public IEnumerable<CandleSeries> SubscribedCandleSeries => _subscriptionManager.SubscribedCandleSeries;
 
 		/// <inheritdoc />
-		public long SubscribeMarketData(MarketDataMessage message)
+		public Subscription SubscribeMarketData(MarketDataMessage message)
 		{
 			return SubscribeMarketData(null, message);
 		}
 
 		/// <inheritdoc />
-		public long SubscribeMarketData(Security security, MarketDataMessage message)
+		public Subscription SubscribeMarketData(Security security, MarketDataMessage message)
 		{
 			var subscription = new Subscription(message, security);
 			Subscribe(subscription);
-			return subscription.TransactionId;
+			return subscription;
 		}
 
 		/// <inheritdoc />
@@ -65,7 +65,7 @@ namespace StockSharp.Algo
 				UnSubscribe(subscription);
 		}
 
-		private long SubscribeMarketData(Security security, MarketDataTypes type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null, IMessageAdapter adapter = null)
+		private Subscription SubscribeMarketData(Security security, MarketDataTypes type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null, IMessageAdapter adapter = null)
 		{
 			return SubscribeMarketData(security, new MarketDataMessage
 			{
@@ -92,7 +92,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public long RegisterFilteredMarketDepth(Security security)
+		public Subscription RegisterFilteredMarketDepth(Security security)
 		{
 			var quotes = GetMarketDepth(security).ToMessage();
 			var executions = _entityCache
@@ -120,7 +120,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public long SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
+		public Subscription SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null)
 		{
 			return SubscribeMarketData(security, MarketDataTypes.MarketDepth, from, to, count, buildMode, buildFrom, null, maxDepth, adapter);
 		}
@@ -132,7 +132,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public long SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		public Subscription SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
 		{
 			return SubscribeMarketData(security, MarketDataTypes.Trades, from, to, count, buildMode, buildFrom, adapter: adapter);
 		}
@@ -144,7 +144,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public long SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		public Subscription SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
 		{
 			return SubscribeMarketData(security, MarketDataTypes.Level1, from, to, count, buildMode, buildFrom, adapter: adapter);
 		}
@@ -156,7 +156,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public long SubscribeOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		public Subscription SubscribeOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
 			return SubscribeMarketData(security, MarketDataTypes.OrderLog, from, to, count, adapter: adapter);
 		}
@@ -168,7 +168,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public long SubscribeNews(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		public Subscription SubscribeNews(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
 			return SubscribeMarketData(security, MarketDataTypes.News, from, to, count, adapter: adapter);
 		}
@@ -354,7 +354,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public long SubscribeBoard(ExchangeBoard board, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		public Subscription SubscribeBoard(ExchangeBoard board, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
 		{
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));

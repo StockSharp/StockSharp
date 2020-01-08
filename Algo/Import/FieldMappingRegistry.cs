@@ -8,7 +8,6 @@ namespace StockSharp.Algo.Import
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Storages;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -185,6 +184,7 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(TimeQuoteChange.Price), LocalizedStrings.Price, LocalizedStrings.Str275, (i, v) => i.Price = v) { IsRequired = true });
 				fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(TimeQuoteChange.Volume), LocalizedStrings.Volume, LocalizedStrings.Str276, (i, v) => i.Volume = v) { IsRequired = true });
 				fields.Add(new FieldMapping<TimeQuoteChange, Sides>(nameof(TimeQuoteChange.Side), LocalizedStrings.Str128, LocalizedStrings.Str277, (i, v) => i.Side = v) { IsRequired = true });
+				fields.Add(new FieldMapping<TimeQuoteChange, int>(nameof(TimeQuoteChange.OrdersCount), LocalizedStrings.Str668, LocalizedStrings.XamlStr248, (i, v) => i.OrdersCount = v));
 			}
 			else if (msgType == typeof(Level1ChangeMessage))
 			{
@@ -304,6 +304,7 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Source), LocalizedStrings.Str213, LocalizedStrings.Str214, (i, v) => i.Source = v));
 				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Url), LocalizedStrings.Str221, LocalizedStrings.Str222, (i, v) => i.Url = v));
 				fields.Add(new FieldMapping<NewsMessage, NewsPriorities>(nameof(NewsMessage.Priority), LocalizedStrings.Priority, LocalizedStrings.NewsPriority, (i, v) => i.Priority = v));
+				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Language), LocalizedStrings.Str3429, LocalizedStrings.Str3429, (i, v) => i.Language = v));
 			}
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1655);

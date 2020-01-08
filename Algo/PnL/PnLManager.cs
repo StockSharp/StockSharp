@@ -30,8 +30,8 @@ namespace StockSharp.Algo.PnL
 	{
 		private readonly CachedSynchronizedDictionary<string, PortfolioPnLManager> _managersByPf = new CachedSynchronizedDictionary<string, PortfolioPnLManager>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<long, PortfolioPnLManager> _managersByTransId = new Dictionary<long, PortfolioPnLManager>();
-		private readonly Dictionary<long, long> _orderIds = new Dictionary<long, long>();
-		private readonly HashSet<long> _orderTransactions = new HashSet<long>();
+		private readonly Dictionary<long, PortfolioPnLManager> _managersByOrderId = new Dictionary<long, PortfolioPnLManager>();
+		private readonly Dictionary<string, PortfolioPnLManager> _managersByOrderStringId = new Dictionary<string, PortfolioPnLManager>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PnLManager"/>.
@@ -100,8 +100,8 @@ namespace StockSharp.Algo.PnL
 				_realizedPnL = 0;
 				_managersByPf.Clear();
 				_managersByTransId.Clear();
-				_orderIds.Clear();
-				_orderTransactions.Clear();
+				_managersByOrderId.Clear();
+				_managersByOrderStringId.Clear();
 			}
 		}
 
@@ -127,8 +127,6 @@ namespace StockSharp.Algo.PnL
 					{
 						var manager = _managersByPf.SafeAdd(regMsg.PortfolioName, pf => new PortfolioPnLManager(pf));
 						_managersByTransId.Add(regMsg.TransactionId, manager);
-
-						_orderTransactions.Add(regMsg.TransactionId);
 					}
 					
 					return null;
@@ -141,7 +139,55 @@ namespace StockSharp.Algo.PnL
 					switch (execMsg.ExecutionType)
 					{
 						case ExecutionTypes.Transaction:
+						{
+							var transId = execMsg.TransactionId == 0
+								? execMsg.OriginalTransactionId
+								: execMsg.TransactionId;
+
+							PortfolioPnLManager manager = null;
+
+							if (execMsg.HasOrderInfo())
+							{
+								lock (_managersByPf.SyncRoot)
+								{
+									if (!_managersByTransId.TryGetValue(transId, out manager))
+									{
+										if (!execMsg.PortfolioName.IsEmpty())
+											manager = _managersByPf.SafeAdd(execMsg.PortfolioName, key => new PortfolioPnLManager(key));
+										else if (execMsg.OrderId != null)
+											manager = _managersByOrderId.TryGetValue(execMsg.OrderId.Value);
+										else if (!execMsg.OrderStringId.IsEmpty())
+											manager = _managersByOrderStringId.TryGetValue(execMsg.OrderStringId);
+									}
+
+									if (manager == null)
+										return null;
+
+									if (execMsg.OrderId != null)
+										_managersByOrderId.TryAdd(execMsg.OrderId.Value, manager);
+									else if (!execMsg.OrderStringId.IsEmpty())
+										_managersByOrderStringId.TryAdd(execMsg.OrderStringId, manager);
+								}
+							}
+
+							if (execMsg.HasTradeInfo())
+							{
+								lock (_managersByPf.SyncRoot)
+								{
+									if (manager == null && !_managersByTransId.TryGetValue(transId, out manager))
+										return null;
+
+									if (!manager.ProcessMyTrade(execMsg, out var info))
+										return null;
+
+									_realizedPnL += info.PnL;
+									changedPortfolios?.Add(manager);
+									return info;
+								}
+							}
+
 							break;
+						}
 
 						case ExecutionTypes.Tick:
 						{
@@ -161,40 +207,6 @@ namespace StockSharp.Algo.PnL
 							return null;
 					}
 
-					var transId = execMsg.OriginalTransactionId;
-					var orderId = execMsg.OrderId;
-
-					if (transId != 0 && execMsg.HasOrderInfo())
-					{
-						lock (_managersByPf.SyncRoot)
-						{
-							if (orderId != null && _orderTransactions.Contains(transId))
-								_orderIds[orderId.Value] = transId;
-						}
-					}
-
-					if (execMsg.HasTradeInfo())
-					{
-						lock (_managersByPf.SyncRoot)
-						{
-							if (transId == 0)
-							{
-								if (orderId == null || !_orderIds.TryGetValue(orderId.Value, out transId))
-									return null;
-							}
-
-							if (!_managersByTransId.TryGetValue(transId, out var manager))
-								return null;
-
-							if (!manager.ProcessMyTrade(execMsg, out var info))
-								return null;
-
-							_realizedPnL += info.PnL;
-							changedPortfolios?.Add(manager);
-							return info;
-						}
-					}
-
 					break;
 				}
 
@@ -212,6 +224,7 @@ namespace StockSharp.Algo.PnL
 
 					break;
 				}
+
 				//case MessageTypes.PortfolioChange:
 				case MessageTypes.PositionChange:
 				{

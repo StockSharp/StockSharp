@@ -34,9 +34,10 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeQuoteChange"/>.
 		/// </summary>
+		/// <param name="side">Direction (buy or sell).</param>
 		/// <param name="quote">The quote, from which changes will be copied.</param>
 		/// <param name="message">The message with quotes.</param>
-		public TimeQuoteChange(QuoteChange quote, QuoteChangeMessage message)
+		public TimeQuoteChange(Sides side, QuoteChange quote, QuoteChangeMessage message)
 		{
 			if (quote == null)
 				throw new ArgumentNullException(nameof(quote));
@@ -49,8 +50,13 @@ namespace StockSharp.Algo
 			LocalTime = message.LocalTime;
 			Price = quote.Price;
 			Volume = quote.Volume;
-			Side = quote.Side;
+			Side = side;
 		}
+
+		/// <summary>
+		/// Direction (buy or sell).
+		/// </summary>
+		public Sides Side { get; set; }
 
 		/// <summary>
 		/// Security ID.
