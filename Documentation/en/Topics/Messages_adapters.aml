@@ -127,7 +127,7 @@ public class InteractiveBrokersAdapter : MessageAdapter
   								<para>
   								Using the 
   								<codeEntityReference>M:StockSharp.Messages.Extensions.AddSupportedMessage(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageTypes)</codeEntityReference>
-    							 method, we add to the <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedMessages</codeEntityReference> array 
+    							 method, we add to the <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedInMessages</codeEntityReference> array 
     							 the types of messages that the adapter will support.
   								</para>
   							</listItem>
@@ -150,6 +150,9 @@ public InteractiveBrokersAdapter(IdGenerator transactionIdGenerator)
     this.AddSupportedMessage(MessageTypes.Portfolio);
     this.AddSupportedMessage(MessageTypes.PortfolioLookup);
     this.AddSupportedMessage(MessageTypes.Position);
+
+    this.AddSupportedOutMessage(MessageTypes.SecurityLookupResult);
+	this.AddSupportedOutMessage(MessageTypes.PortfolioLookupResult);
 }
 						
 ]]>
@@ -161,31 +164,6 @@ public InteractiveBrokersAdapter(IdGenerator transactionIdGenerator)
 					<content>
 					<para>
 					<legacyBold>Adapter properties.</legacyBold>
-					</para>
-						<para>
-						 	We override the <codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportNativePortfolioLookup</codeEntityReference> and 
-						 	<codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportNativeSecurityLookup</codeEntityReference> properties. 
-						 	Because <token>IB</token> supports searching for portfolios and instruments, we make the properties return ‘true’. 
-						 	Also add properties for the login, password, address and port of the <token>IB</token> server.
-						</para>
-						<code language="C#">
-protected override bool IsSupportNativePortfolioLookup
-{
-	get { return true; }
-}
-
-protected override bool IsSupportNativeSecurityLookup
-{
-	get { return true; }
-}
-						</code>
-					</content>
-				</step>
-
-				<step>
-					<content>
-					<para>
-					 The  <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference> method.
 					</para>
 						<para>
 					    Next, you need to override the 
@@ -312,19 +290,19 @@ class, the values of the Boolean properties will be checked:
 					<list class="bullet">
   						<listItem>
   								<para>
-  									<codeEntityReference>P:StockSharp.Messages.MessageAdapter.PortfolioLookupRequired</codeEntityReference> - whether the 
+  									<codeEntityReference>F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference> - whether the 
   									<codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> message is required to obtain portfolios and positions.
   								</para>
   						</listItem>
   						<listItem>
   							<para>
-  								<codeEntityReference>P:StockSharp.Messages.MessageAdapter.SecurityLookupRequired</codeEntityReference> - whether the 
+  								<codeEntityReference>F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> - whether the 
   									<codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> message is required to receive the instruments.
   							</para>
   						</listItem>
   						<listItem>
   							<para>
-  								<codeEntityReference>P:StockSharp.Messages.MessageAdapter.OrderStatusRequired</codeEntityReference>  - whether the 
+  								<codeEntityReference>F:StockSharp.Messages.MessageTypes.OrderStatus</codeEntityReference>  - whether the 
   									<codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference> message is required to receive orders and own trades.
   							</para>
   						</listItem>
@@ -398,7 +376,7 @@ In the <legacyBold>IBSocket.NewPortfolio</legacyBold> event handler, the receive
 be converted to the incoming <codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference>.
 message. And after receiving all the portfolios, you need to send the incoming 
 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference> message. 
-Note that in the latter case, the <codeEntityReference>P:StockSharp.Messages.PortfolioLookupResultMessage.OriginalTransactionId</codeEntityReference> 
+Note that in the latter case, the <codeEntityReference>P:StockSharp.Messages.BaseResultMessage`1.OriginalTransactionId</codeEntityReference> 
 property must be set to the <legacyBold>TransactionId</legacyBold> value of the corresponding outgoing message.
 				</para>
 				<code language="C#">
@@ -484,9 +462,13 @@ private void IBSocket_NewSymbol(int row, int rowCount, long contractId, string n
 				 <legacyBold>Registration/cancellation of registration of trades.</legacyBold>
 				</para>
 				<para>
-When you call the <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> or
-				 <codeEntityReference>M:StockSharp.Algo.Connector.UnRegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> 
-				 methods, the outgoing message MarketDataMessage <codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference> will be received.
+When you call the 
+<codeEntityReference>M:StockSharp.Algo.Connector.SubscribeTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},StockSharp.Messages.IMessageAdapter)</codeEntityReference> 
+or
+				 <codeEntityReference>M:StockSharp.Algo.Connector.UnSubscribeTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> 
+methods, the outgoing message MarketDataMessage 
+<codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference>
+will be received.
 				 </para>
 				 <para>
 				When processing this message, you must call the  <token>IB</token> methods registering/canceling the registration of trades receiving.

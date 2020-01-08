@@ -2,11 +2,12 @@
 <topic id="583c9ad6-8798-4167-a6a1-667e9929fe2d" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+          <mediaLink><image placement="left" xlink:href="GUI_orderlog" /></mediaLink>
     <para>
       	<codeEntityReference>T:StockSharp.Xaml.OrderLogGrid</codeEntityReference> is a graphical component to display the order log (
       	<codeEntityReference>T:StockSharp.BusinessEntities.OrderLogItem</codeEntityReference>).
       </para>
-      <mediaLink><image placement="left" xlink:href="GUI_orderlog" /></mediaLink>
+
             <para>
        <legacyBold>Main properties and methods</legacyBold>
       </para>
@@ -26,7 +27,7 @@
 	  <para>
 Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/ITCH/SampleITCH.</legacyItalic>
       </para>
-           
+
        <code title="XAML" language="XAML">
 	  				<![CDATA[
 Window x:Class="SampleITCH.OrdersLogWindow"
@@ -40,53 +41,18 @@ Window x:Class="SampleITCH.OrdersLogWindow"
 	  				]]>
               </code>
               <code title="C#" language="C#">
-              		<![CDATA[
+					  <![CDATA[
+private readonly Connector _connector = new Connector();
+
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-	if (!_isConnected)
-	{
-		if (!_initialized)
-		{
-			_initialized = true;
-
-			// subscribe on connection successfully event
-			Trader.Connected += () =>
-			{
-				// set flag (connection is established)
-				_isConnected = true;
-
-				// update gui labes
-				this.GuiAsync(() => ChangeConnectStatus(true));
-			};
-			
-			.................................................
-			
-			
-			Trader.NewOrderLogItems += _orderLogWindow.OrderLogGrid.LogItems.AddRange;
-
-			.................................................
-
-			ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowOrdersLog.IsEnabled = true;
-		}
-
-		Trader.Connect();
-	}
-	else
-	{
-		Trader.Disconnect();
-	}
+	.................................................
+		
+	_connector.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
+	.................................................
 }
 	  				]]>
              </code>
-    
-    
-      <para>
-      
-      
-     
-      
-      
-      </para>
     </introduction>
   </developerConceptualDocument>
 </topic>

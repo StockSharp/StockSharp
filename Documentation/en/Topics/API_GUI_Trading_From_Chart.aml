@@ -17,7 +17,7 @@ ChartPanel.CreateOrder += (chartArea,order) =>
 	order.Security = _security;
 	order.Volume = 1;
 	
-	trader.RegisterOrder(order);
+	_connector.RegisterOrder(order);
 };
 
 ]]></code>

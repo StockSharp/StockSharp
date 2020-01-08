@@ -18,9 +18,7 @@
 		  <para>
 			  <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">Child strategies</link>
 		  </para>
-		  <!--para>
-			  <link xlink:href="ad145f75-a2d4-4766-af60-79489b84846c">Export of order book</link>
-		  </para-->
+
       </content>
     </prerequisites>
     
@@ -42,7 +40,7 @@
 			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.PriceType</codeEntityReference>, 
 			  parameter, which controls the position of the order movement in spread:
 			  <codeEntityReference qualifyHint="true">F:StockSharp.Algo.MarketPriceTypes.Following</codeEntityReference> – the algorithm looks the best quote,
-			  <codeEntityReference qualifyHint="true">F:StockSharp.Algo.MarketPriceTypes.Opposite</codeEntityReference> – the best opposite quote and the
+			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.PriceType</codeEntityReference>, 
 			  <codeEntityReference qualifyHint="true">F:StockSharp.Algo.MarketPriceTypes.Middle</codeEntityReference> – the algorithm will put the order in the middle
 			  of the spread. This parameter affects how soon the order will be matched.
 			</listItem>
@@ -82,7 +80,7 @@
 				section begin to work in association with the strategy:</para>
 			  <code language="C#">if (!_isAaplOrderBookStarted)
 {
-	_trader.RegisterMarketDepth(aapl);
+	_connector.SubscribeMarketDepth(aapl);
 	_isAaplOrderBookStarted = true;	
 }</code>
           </content>
@@ -93,7 +91,7 @@
 <code language="C#">
 base.RegisterOrder(order);</code>
 		<para>
-		  to:
+to:
 		</para>
 <code language="C#">
 var strategy = new MarketQuotingStrategy(direction, volume);

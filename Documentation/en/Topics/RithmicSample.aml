@@ -1,232 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="3e8732d0-71a5-44ab-be04-c482d5a41d71" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-      <para>
-      	The application SampleRithmic shows an example of working with <codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference>
-      	s shown in the figure below. The example source code is in the <legacyItalic>Samples/Rithmic</legacyItalic> folder of the installation package.
-      </para>
-      <mediaLink><image placement="center" xlink:href="RithmicSample"/></mediaLink>
+    <introduction>     
+      <para>The code below demonstrates how to initialize the 
+      <codeEntityReference>T:StockSharp.Rithmic.RithmicMessageAdapter</codeEntityReference>
+      and send it to
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new RithmicMessageAdapter(Connector.TransactionIdGenerator)
+{
+    UserName = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+    CertFile = "<Path to certificate file>",
+    Server = RithmicServers.Real,
+    //Server = RithmicServers.Test,
+    //Server = RithmicServers.Simulator,  
+};
+
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
+					</code>
+
     </introduction>
-    <procedure>
-		<steps class="ordered">
-			<step>
-				<content>
-					<para>First, you need to create an instance of the 
-					<codeEntityReference qualifyHint="false">T:StockSharp.Rithmic.RithmicTrader</codeEntityReference>:</para>
-            		<code language="C#">
-            				<![CDATA[
-Trader = new RithmicTrader { LogLevel = LogLevels.Debug };
-
-// to set a credentials + server addr + certificates
-Trader.UserName = settings.Username;
-Trader.Server = settings.Server;
-Trader.Password = pwd;
-Trader.CertFile = settings.CertFile;
-
-							]]>
-					</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Then you should to subscribe required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events:</para>
-					<code language="C#">
-<![CDATA[
-// subscribe on connection successfully event
-Trader.Connected += () =>
-{
-	this.GuiAsync(() => OnConnectionChanged(true));
-};
-
-// subscribe on connection error event
-Trader.ConnectionError += error => this.GuiAsync(() =>
-{
-	OnConnectionChanged(Trader.ConnectionState == ConnectionStates.Connected);
-	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
-});
-
-Trader.Disconnected += () => this.GuiAsync(() => OnConnectionChanged(false));
-
-// subscribe on error event
-//Trader.Error += error =>
-//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Error"));
-
-// subscribe on error of market data subscription event
-Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
-
-Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-Trader.NewPortfolio += portfolio =>
-{
-	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-
-	// subscribe on portfolio updates
-	Trader.RegisterPortfolio(portfolio);
-};
-Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-// subscribe on error of order registration event
-Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-// subscribe on error of order cancelling event
-Trader.OrderCancelFailed += OrderFailed;
-
-// subscribe on error of stop-order registration event
-Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-// subscribe on error of stop-order cancelling event
-Trader.StopOrderCancelFailed += OrderFailed;
-
-Trader.MassOrderCancelFailed += (transId, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
-
-]]>
-					</code>						
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Then you need to connect to the <token>rithmic</token> server:</para>
-            		<code language="C#">
-            				<![CDATA[
-Trader.Connect();
-							]]>
-					</code>						
-				</content>
-			</step>
-			
-			<step>
-				<content>
-					<para>When the connection is successful, you can expect to trigger the 
-					<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio</codeEntityReference> event. In this event handler
-					you should subscribe to changes in the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference>
-					portfolios using the <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method.</para>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Instruments search (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more detail</link>):</para>
-					<mediaLink><image placement="center" xlink:href="RithmicSecurities"/></mediaLink>
-         			<code language="C#">
-            				<![CDATA[
-private void FindClick(object sender, RoutedEventArgs e)
-{
-	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
-
-	if (!wnd.ShowModal(this))
-		return;
-
-	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
-}
-							]]>
-					</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>To get trades and changes by the selected instrument (the <legacyBold>Bid Offer</legacyBold> button) you should call the
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> and 
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> methods, respectively:</para>
-            		<code language="C#">
-            				<![CDATA[
-private void QuotesClick(object sender, RoutedEventArgs e)
-{
-	var security = SecurityPicker.SelectedSecurity;
-	var trader = MainWindow.Instance.Trader;
-
-	if (trader.RegisteredSecurities.Contains(security))
-	{
-		trader.UnRegisterSecurity(security);
-		trader.UnRegisterTrades(security);
-	}
-	else
-	{
-		trader.RegisterSecurity(security);
-		trader.RegisterTrades(security);
-	}
-}
-							]]>
-					</code>
-					<para>Trades will come in the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference>
-					event, and changes will come in the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> event.</para>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>To request updates on the order books you need to use the 
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference> method:</para>
-            		<code language="C#">
-            				<![CDATA[
-private void DepthClick(object sender, RoutedEventArgs e)
-{
-	var trader = MainWindow.Instance.Trader;
-
-	foreach (var security in SecurityPicker.SelectedSecurities)
-	{
-		var window = _quotesWindows.SafeAdd(security, s =>
-		{
-			// subscribe on order book flow
-			trader.RegisterMarketDepth(security);
-
-			// create order book window
-			var wnd = new QuotesWindow
-			{
-				Title = security.Id + " " + LocalizedStrings.MarketDepth
-			};
-			wnd.MakeHideable();
-			return wnd;
-		});
-
-		if (window.Visibility == Visibility.Visible)
-			window.Hide();
-		else
-			window.Show();
-
-		if (!_initialized)
-		{
-			TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
-			trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-			_initialized = true;
-		}
-	}
-}
-							]]>
-					</code>
-					<para>The order books appears in the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> event.</para>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para> orders registration the <legacyBold>New Order</legacyBold> button used. The 
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> method sends an order to the server:</para>
-            		<code language="C#">
-            				<![CDATA[
-private void NewOrderClick(object sender, RoutedEventArgs e)
-{
-	var newOrder = new OrderWindow
-	{
-		Order = new Order { Security = SecurityPicker.SelectedSecurity },
-		SecurityProvider = MainWindow.Instance.Trader,
-		MarketDataProvider = MainWindow.Instance.Trader,
-		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-	};
-
-	if (newOrder.ShowModal(this))
-		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
-}
-							]]>
-					</code>						
-				</content>
-			</step>
-		</steps>
-    </procedure>
-    
-    <relatedTopics>
+  
+        <relatedTopics>
+        <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />
     </relatedTopics>
   </developerConceptualDocument>
 </topic>
-
- 
-

@@ -3,12 +3,13 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     <para>
-Для работы с биржами и источниками данных в <token>stocksharp</token> рекомендуется работать через базовый класс 
+To work with exchanges and data sources in <token>stocksharp</token> it is recommended to use the base class 
 <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>. </para>
-<para>Рассмотрим работу с <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>. 
-Исходные коды примера находятся в проекте Samples/Common/SampleConnection.</para>
+<para>Let's consider working with 
+<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>. 
+The example source codes are in the project Samples/Common/SampleConnection.</para>
 <mediaLink><image placement="left" xlink:href="multiconnection_main" /></mediaLink>
-<para>Создаём экземпляр класса <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>:</para>
+<para>We create an instance of the <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> class:</para>
        				<code language="C#">
 				<![CDATA[
 ...
@@ -24,9 +25,11 @@ public MainWindow()
 		]]>
 				</code>
 <para>
-Для конфигурирования <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> у <legacyBold>S#.API</legacyBold>
-есть специальный графический интерфейс, в котором можно настроить сразу несколько подключений одновременно. 
-Как им воспользоваться описано в пункте <link xlink:href="554da27b-900a-462a-a2c2-d2b6cb1330ae" />.
+To configure 
+<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
+<legacyBold>S#.API</legacyBold>
+has a special graphical interface in which you can configure several connections 
+at once. How to use it see  <link xlink:href="554da27b-900a-462a-a2c2-d2b6cb1330ae" />.
 </para>
       <code title="C#" language="C#">
 <![CDATA[
@@ -43,17 +46,22 @@ private void Setting_Click(object sender, RoutedEventArgs e)
 	  				]]>
 				   </code>
 				   <mediaLink><image placement="left" xlink:href="API_GUI_ConnectorWindow" /></mediaLink>
-<para>Аналогично можно добавлять подключения напрямую из кода (без графических окон), воспользовавшись методом расширением <codeEntityReference qualifyHint="true">M:StockSharp.Algo.TraderHelper.AddAdapter``1(StockSharp.Algo.Connector,System.Action{``0})</codeEntityReference>:</para>
+<para>Similarly, you can add connections directly from the code (without graphic windows) 
+using the extension method 
+<codeEntityReference qualifyHint="true">M:StockSharp.Algo.TraderHelper.AddAdapter``1(StockSharp.Algo.Connector,System.Action{``0})</codeEntityReference>:</para>
 <code title="C#" language="C#">
 <![CDATA[
 ...
-// добавляем два подключения к QUIK (цены и заявки)
-connector.AddAdapter<LuaFixMarketDataMessageAdapter>(a => { });
-connector.AddAdapter<LuaFixTransactionMessageAdapter>(a => { });
-	  				]]>
-				   </code>
-<para>В один объект <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> можно добавлять неограниченное количество подключений. Поэтому одновременно из программы можно подключаться сразу к нескольким биржам и брокерам.</para>
-<para>В методе <legacyItalic>InitConnector</legacyItalic> устанавливаем требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
+connector.AddAdapter<BarChartMessageAdapter>(a => { });
+
+]]>
+</code>
+<para>You can add an unlimited number of connections to a single 
+<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
+object. Therefore, from the program you can simultaneously connect to several exchanges and brokers at once.</para>
+
+<para>In the <legacyItalic>InitConnector</legacyItalic> method, we set the required 
+<codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> event handlers:</para>
 <code language="C#">
 				<![CDATA[
 private void InitConnector()
@@ -121,17 +129,19 @@ private void InitConnector()
 
 	ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
 	
-	// нужен для графического конфигурирования
+	// needed for graphical settings
 	ConfigManager.RegisterService<IMessageAdapterProvider>(new FullInMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
 }
 ]]>
 			</code> 
-<para>Как сохранять и загружать настройки <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
-в файл можно ознакомиться в пункте <link xlink:href="c23300a1-bf38-444a-b103-28350766477f" />.</para>
+<para>To save and load <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
+settings to a file, see <link xlink:href="c23300a1-bf38-444a-b103-28350766477f" />.</para>
 
-<para>О создании собственного <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> можно ознакомиться в пункте <link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />.</para>
+<para>To create your own 
+<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>, see 
+<link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />.</para>
 	<para>
-	Выставление заявок описаны в пунктах 
+	For registering orders, see 
 	<link xlink:href="1c3c9835-b65b-48d5-8abf-70986c666ef4" />,
 	<link xlink:href="b740e98d-7bcf-406e-aad4-75432ab3009e" />,
 	<link xlink:href="2587051d-1e94-4fb2-b5c1-d57cb5af1b6d" />.

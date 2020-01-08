@@ -23,7 +23,7 @@
 					already created algorithm, and to use the logs in cases of force majeure.
 				</listItem>
 				<listItem>
-					<codeEntityReference>T:StockSharp.Logging.SoundLogListener</codeEntityReference> - plays the audio message when a new message arrives. It is
+					<codeEntityReference>T:StockSharp.Xaml.SoundLogListener</codeEntityReference> - plays the audio message when a new message arrives. It is
 					recommended to use if the algorithm is not under continuous monitoring.
 				</listItem>
 				<listItem>
@@ -44,15 +44,11 @@
 					window, and when a separate window is created for each <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference>.
 					It is recommended to use if the algorithm has a graphical interface.
 				</listItem>
-				<listItem>
-					<codeEntityReference>T:StockSharp.Logging.Log4NetLogListener</codeEntityReference> - records messages through the special <token>log4net</token> library.
-					It recommended for those who are already familiar with this library.
-				</listItem>
 			</list>
 			<para>
 				<codeEntityReference>T:StockSharp.Logging.LogListener</codeEntityReference> can be configured to filter messages through the
 				<codeEntityReference>P:StockSharp.Logging.LogListener.Filters</codeEntityReference> property. For example, through the filters you can specify what type
-				of messages should be processed. This is particularly useful when the <codeEntityReference>T:StockSharp.Logging.SoundLogListener</codeEntityReference>
+				of messages should be processed. This is particularly useful when the <codeEntityReference>T:StockSharp.Xaml.SoundLogListener</codeEntityReference>
 				or the <codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference> is used, in order that, for example, to send e-mail in emergency
 				situations only (trade algorithm error) rather than on each debug message.
 			</para>

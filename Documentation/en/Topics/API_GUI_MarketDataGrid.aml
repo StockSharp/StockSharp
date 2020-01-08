@@ -3,7 +3,8 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.MarketDataGrid</codeEntityReference> - a table displaying market data, in this table you can view available market data.
+      	<codeEntityReference>T:StockSharp.Xaml.MarketDataGrid</codeEntityReference> - 
+a table displaying market data, in this table you can view available market data.
       </para>
           <mediaLink><image placement="left" xlink:href="API_GUI_MarketDataGrid" /></mediaLink>
       <para>

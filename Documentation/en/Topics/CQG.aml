@@ -2,22 +2,23 @@
 <topic id="aac980b1-ac5b-415b-811c-a8d128942391" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>To create trading algorithms for <token>cqg_external</token> it is necessary to use:</para>
-
-<list class="bullet">
-  <listItem><para><codeEntityReference>T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference> 
-  - when working with the terminal. Authorization is performed when the 
-  <legacyBold>CQG Integrated Client</legacyBold> 
-  terminal is started.</para></listItem>
-  <listItem><para><codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference> 
-  - when working with the server.</para></listItem>
-</list>
-
-    </introduction>
+    <para><legacyBold>CQG</legacyBold> — trading platform for trading on the international exchanges CME, CBOT, NYMEX, ICE, EUREX.
+    </para>
+    	<para>
+Before you start writing trading robots for the current trading platform, it is recommended to read the links in the  
+<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
+		</para>
+     </introduction>
      <relatedTopics>
-	<link xlink:href="436fc377-85ff-4d37-ad62-4846313a8563">Getting started</link>
-  	<link xlink:href="355f6b70-c920-48b6-b2f1-31584ebb82f3">Stop orders</link>
-	<link xlink:href="20bbe0ce-703e-46c3-9af4-d1b517a00e82">Historical data</link>
+<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />
+<link xlink:href="554da27b-900a-462a-a2c2-d2b6cb1330ae" />
+<link xlink:href="c23300a1-bf38-444a-b103-28350766477f" />
+<link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />
+<link xlink:href="1c3c9835-b65b-48d5-8abf-70986c666ef4" />
+<link xlink:href="b740e98d-7bcf-406e-aad4-75432ab3009e" />
+<link xlink:href="2587051d-1e94-4fb2-b5c1-d57cb5af1b6d" />
+<link xlink:href="436fc377-85ff-4d37-ad62-4846313a8563" />
     </relatedTopics>
   </developerConceptualDocument>
 </topic>
+

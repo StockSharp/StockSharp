@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="febbcf31-63d1-449d-847e-92fd8424f926" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
 
     <introduction>
 		<para>
@@ -32,15 +29,10 @@
 			качестве торговой системы в режиме тестирования будет выступать не реальная торговая система, а эмуляция (зависит от выбранного режима). Поэтому
 			код стратегии никогда об этом не узнает - торгует ли он с реальной биржей или это происходит на эмуляции.
 		</para>
-		<para>
-			Основным требованием к коду стратегий является то, что он не должен содержать специфичные для шлюза операции. Например, если речь идет о <token>quik</token>,
-			то в коде стратегии не должно быть методов работы с <token>dde</token> данными. Или, если работа идет через <token>smartcom</token>, то не должно быть обращения
-			к историческим данным.
-		</para>
     </introduction>
 
     <relatedTopics>
- 
+    
     </relatedTopics>
 
   </developerConceptualDocument>

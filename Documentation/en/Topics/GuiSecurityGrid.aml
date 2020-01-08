@@ -56,11 +56,13 @@ In the figure, the <codeEntityReference>T:StockSharp.Xaml.SecurityGrid</codeEnti
               </code>
               <code title="C#" language="C#">
 
-Connector _connector = new InteractiveBrokersTrader();
+private readonly Connector _connector = new Connector();
+
 
 SecurityGrid.MarketDataProvider = _connector;
 
 ..........................
+
 
 _connector.NewSecurity += security =>
 {
@@ -69,9 +71,11 @@ _connector.NewSecurity += security =>
 
 ..........................
 
+
 private void ColumnsFilter()
 {
-	string[] columns = { "Board", "BestAsk.Price", "BestAsk.Volume" };
+
+	string[]  columns = { "Board", "BestAsk.Price", "BestAsk.Volume" };
 	
 	foreach (var column in SecurityGrid.Columns)
 	{

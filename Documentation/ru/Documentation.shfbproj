@@ -1216,15 +1216,15 @@
     </Image>
     <Image Include="Art\OECTraderMainWindow.png">
       <ImageId>OECTraderMainWindow</ImageId>
-      <AlternateText>OECTrader Main Window</AlternateText>
+      <AlternateText>OECTraderMainWindow</AlternateText>
     </Image>
     <Image Include="Art\OECTraderSecurity.png">
       <ImageId>OECTraderSecurity</ImageId>
-      <AlternateText>OECTrader Security</AlternateText>
+      <AlternateText>OECTraderSecurity</AlternateText>
     </Image>
     <Image Include="Art\OECTraderSettings.png">
       <ImageId>OECTraderSettings</ImageId>
-      <AlternateText>OECTrader Settings</AlternateText>
+      <AlternateText>OECTraderSettings</AlternateText>
     </Image>
     <Image Include="Art\hydra_candles_main.png">
       <ImageId>hydra_candles_main</ImageId>
@@ -1324,11 +1324,11 @@
     </Image>
     <Image Include="Art\wealthlab_settings_StockSharpStreamingDataProvider.png">
       <ImageId>wealthlab_settings_StockSharpStreamingDataProvider</ImageId>
-      <AlternateText>wealthlab settings Stock Sharp Streaming Data Provider</AlternateText>
+      <AlternateText>wealthlab settings StockSharpStreamingDataProvider</AlternateText>
     </Image>
     <Image Include="Art\wealthlab_settings_StreamingProvider.png">
       <ImageId>wealthlab_settings_StreamingProvider</ImageId>
-      <AlternateText>wealthlab settings Streaming Provider</AlternateText>
+      <AlternateText>wealthlab settings StreamingProvider</AlternateText>
     </Image>
     <Image Include="Art\hydra_securities_edit.png">
       <ImageId>hydra_securities_edit</ImageId>
@@ -1340,11 +1340,11 @@
     </Image>
     <Image Include="Art\wealthlab_menu2.PNG">
       <ImageId>wealthlab_menu2</ImageId>
-      <AlternateText>wealthlab menu 2</AlternateText>
+      <AlternateText>wealthlab menu2</AlternateText>
     </Image>
     <Image Include="Art\wealthlab_connect2.PNG">
       <ImageId>wealthlab_connect2</ImageId>
-      <AlternateText>wealthlab connect 2</AlternateText>
+      <AlternateText>wealthlab connect2</AlternateText>
     </Image>
     <Image Include="Art\wealthlab_settings_quik.png">
       <ImageId>wealthlab_settings_quik</ImageId>
@@ -1352,11 +1352,11 @@
     </Image>
     <Image Include="Art\wealthlab_settings_StaticProvider.PNG">
       <ImageId>wealthlab_settings_StaticProvider</ImageId>
-      <AlternateText>wealthlab settings Static Provider</AlternateText>
+      <AlternateText>wealthlab settings StaticProvider</AlternateText>
     </Image>
     <Image Include="Art\wealthlab_menu3.PNG">
       <ImageId>wealthlab_menu3</ImageId>
-      <AlternateText>wealthlab menu 3</AlternateText>
+      <AlternateText>wealthlab menu3</AlternateText>
     </Image>
     <Image Include="Art\wealthlab_account.PNG">
       <ImageId>wealthlab_account</ImageId>
@@ -1404,23 +1404,23 @@
     </Image>
     <Image Include="Art\HydraGluingCheckData.png">
       <ImageId>HydraGluingCheckData</ImageId>
-      <AlternateText>Hydra Gluing Check Data</AlternateText>
+      <AlternateText>HydraGluingCheckData</AlternateText>
     </Image>
     <Image Include="Art\HydraGluingCSAuto.png">
       <ImageId>HydraGluingCSAuto</ImageId>
-      <AlternateText>Hydra GluingCSAuto</AlternateText>
+      <AlternateText>HydraGluingCSAuto</AlternateText>
     </Image>
     <Image Include="Art\HydraGluingCSCustom.png">
       <ImageId>HydraGluingCSCustom</ImageId>
-      <AlternateText>Hydra GluingCSCustom</AlternateText>
+      <AlternateText>HydraGluingCSCustom</AlternateText>
     </Image>
     <Image Include="Art\HydraGluingTrades.png">
       <ImageId>HydraGluingTrades</ImageId>
-      <AlternateText>Hydra Gluing Trades</AlternateText>
+      <AlternateText>HydraGluingTrades</AlternateText>
     </Image>
     <Image Include="Art\HydraGluingWindow.png">
       <ImageId>HydraGluingWindow</ImageId>
-      <AlternateText>Hydra Gluing Window</AlternateText>
+      <AlternateText>HydraGluingWindow</AlternateText>
     </Image>
     <Image Include="Art\quik_mks_mytrades.jpg">
       <ImageId>quik_mks_mytrades</ImageId>
@@ -1436,15 +1436,15 @@
     </Image>
     <Image Include="Art\hydra_setup1.png">
       <ImageId>hydra_setup1</ImageId>
-      <AlternateText>hydra setup 1</AlternateText>
+      <AlternateText>hydra setup1</AlternateText>
     </Image>
     <Image Include="Art\hydra_setup3.png">
       <ImageId>hydra_setup3</ImageId>
-      <AlternateText>hydra setup 3</AlternateText>
+      <AlternateText>hydra setup3</AlternateText>
     </Image>
     <Image Include="Art\hydra_setup4.png">
       <ImageId>hydra_setup4</ImageId>
-      <AlternateText>hydra setup 4</AlternateText>
+      <AlternateText>hydra setup4</AlternateText>
     </Image>
     <Image Include="Art\transaq_sample_main_window.png">
       <ImageId>transaq_sample_main_window</ImageId>
@@ -1504,7 +1504,7 @@
     </Image>
     <Image Include="Art\LMaxTrader.png">
       <ImageId>LMaxTrader</ImageId>
-      <AlternateText>LMax Trader</AlternateText>
+      <AlternateText>LMaxTrader</AlternateText>
     </Image>
     <Image Include="Art\studio_first_step_1.jpg">
       <ImageId>studio_first_step_1</ImageId>
@@ -1644,27 +1644,27 @@
     </Image>
     <Image Include="Art\IQFeedFindSecurity.jpg">
       <ImageId>IQFeedFindSecurity</ImageId>
-      <AlternateText>IQFeed Find Security</AlternateText>
+      <AlternateText>IQFeedFindSecurity</AlternateText>
     </Image>
     <Image Include="Art\IQFeedHistoryCandles.jpg">
       <ImageId>IQFeedHistoryCandles</ImageId>
-      <AlternateText>IQFeed History Candles</AlternateText>
+      <AlternateText>IQFeedHistoryCandles</AlternateText>
     </Image>
     <Image Include="Art\IQFeedHistoryTrades.jpg">
       <ImageId>IQFeedHistoryTrades</ImageId>
-      <AlternateText>IQFeed History Trades</AlternateText>
+      <AlternateText>IQFeedHistoryTrades</AlternateText>
     </Image>
     <Image Include="Art\IQFeedNews.jpg">
       <ImageId>IQFeedNews</ImageId>
-      <AlternateText>IQFeed News</AlternateText>
+      <AlternateText>IQFeedNews</AlternateText>
     </Image>
     <Image Include="Art\IqFeedSample.jpg">
       <ImageId>IqFeedSample</ImageId>
-      <AlternateText>Iq Feed Sample</AlternateText>
+      <AlternateText>IqFeedSample</AlternateText>
     </Image>
     <Image Include="Art\OrderStates.png">
       <ImageId>OrderStates</ImageId>
-      <AlternateText>Order States</AlternateText>
+      <AlternateText>OrderStates</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_blackwood.png">
       <ImageId>hydra_settings_blackwood</ImageId>
@@ -1752,7 +1752,7 @@
     </Image>
     <Image Include="Art\QuikLua.png">
       <ImageId>QuikLua</ImageId>
-      <AlternateText>Quik Lua</AlternateText>
+      <AlternateText>QuikLua</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_ux_ftp.png">
       <ImageId>hydra_settings_ux_ftp</ImageId>
@@ -1792,7 +1792,7 @@
     </Image>
     <Image Include="Art\hydra_export_level1.png">
       <ImageId>hydra_export_level1</ImageId>
-      <AlternateText>hydra export level 1</AlternateText>
+      <AlternateText>hydra export level1</AlternateText>
     </Image>
     <Image Include="Art\hydra_export_news.png">
       <ImageId>hydra_export_news</ImageId>
@@ -1860,7 +1860,7 @@
     </Image>
     <Image Include="Art\hydra_import_level1.png">
       <ImageId>hydra_import_level1</ImageId>
-      <AlternateText>hydra import level 1</AlternateText>
+      <AlternateText>hydra import level1</AlternateText>
     </Image>
     <Image Include="Art\hydra_import_news.png">
       <ImageId>hydra_import_news</ImageId>
@@ -1908,27 +1908,27 @@
     </Image>
     <Image Include="Art\stocksharp_instalation1.png">
       <ImageId>stocksharp_instalation1</ImageId>
-      <AlternateText>stocksharp instalation 1</AlternateText>
+      <AlternateText>stocksharp instalation1</AlternateText>
     </Image>
     <Image Include="Art\stocksharp_instalation2.png">
       <ImageId>stocksharp_instalation2</ImageId>
-      <AlternateText>stocksharp instalation 2</AlternateText>
+      <AlternateText>stocksharp instalation2</AlternateText>
     </Image>
     <Image Include="Art\stocksharp_instalation3.png">
       <ImageId>stocksharp_instalation3</ImageId>
-      <AlternateText>stocksharp instalation 3</AlternateText>
+      <AlternateText>stocksharp instalation3</AlternateText>
     </Image>
     <Image Include="Art\stocksharp_instalation4.png">
       <ImageId>stocksharp_instalation4</ImageId>
-      <AlternateText>stocksharp instalation 4</AlternateText>
+      <AlternateText>stocksharp instalation4</AlternateText>
     </Image>
     <Image Include="Art\stocksharp_instalation5.png">
       <ImageId>stocksharp_instalation5</ImageId>
-      <AlternateText>stocksharp instalation 5</AlternateText>
+      <AlternateText>stocksharp instalation5</AlternateText>
     </Image>
     <Image Include="Art\SterlingSample.png">
       <ImageId>SterlingSample</ImageId>
-      <AlternateText>Sterling Sample</AlternateText>
+      <AlternateText>SterlingSample</AlternateText>
     </Image>
     <Image Include="Art\Sterling_securities.png">
       <ImageId>Sterling_securities</ImageId>
@@ -1936,7 +1936,7 @@
     </Image>
     <Image Include="Art\Sterling_StopOrder.png">
       <ImageId>Sterling_StopOrder</ImageId>
-      <AlternateText>Sterling Stop Order</AlternateText>
+      <AlternateText>Sterling StopOrder</AlternateText>
     </Image>
     <Image Include="Art\Sterling_loging.png">
       <ImageId>Sterling_loging</ImageId>
@@ -1944,43 +1944,43 @@
     </Image>
     <Image Include="Art\CQGTraderSample.png">
       <ImageId>CQGTraderSample</ImageId>
-      <AlternateText>CQGTrader Sample</AlternateText>
+      <AlternateText>CQGTraderSample</AlternateText>
     </Image>
     <Image Include="Art\RithmicSample.png">
       <ImageId>RithmicSample</ImageId>
-      <AlternateText>Rithmic Sample</AlternateText>
+      <AlternateText>RithmicSample</AlternateText>
     </Image>
     <Image Include="Art\RithmicSecurities.png">
       <ImageId>RithmicSecurities</ImageId>
-      <AlternateText>Rithmic Securities</AlternateText>
+      <AlternateText>RithmicSecurities</AlternateText>
     </Image>
     <Image Include="Art\OandaSample.png">
       <ImageId>OandaSample</ImageId>
-      <AlternateText>Oanda Sample</AlternateText>
+      <AlternateText>OandaSample</AlternateText>
     </Image>
     <Image Include="Art\OandaSecurities.png">
       <ImageId>OandaSecurities</ImageId>
-      <AlternateText>Oanda Securities</AlternateText>
+      <AlternateText>OandaSecurities</AlternateText>
     </Image>
     <Image Include="Art\BtceSample.png">
       <ImageId>BtceSample</ImageId>
-      <AlternateText>Btce Sample</AlternateText>
+      <AlternateText>BtceSample</AlternateText>
     </Image>
     <Image Include="Art\BtceSecurities.png">
       <ImageId>BtceSecurities</ImageId>
-      <AlternateText>Btce Securities</AlternateText>
+      <AlternateText>BtceSecurities</AlternateText>
     </Image>
     <Image Include="Art\BitStampSample.png">
       <ImageId>BitStampSample</ImageId>
-      <AlternateText>Bit Stamp Sample</AlternateText>
+      <AlternateText>BitStampSample</AlternateText>
     </Image>
     <Image Include="Art\FixSample.png">
       <ImageId>FixSample</ImageId>
-      <AlternateText>Fix Sample</AlternateText>
+      <AlternateText>FixSample</AlternateText>
     </Image>
     <Image Include="Art\FixSecurities.png">
       <ImageId>FixSecurities</ImageId>
-      <AlternateText>Fix Securities</AlternateText>
+      <AlternateText>FixSecurities</AlternateText>
     </Image>
     <Image Include="Art\sample_candleschart.png">
       <ImageId>sample_candleschart</ImageId>
@@ -1992,7 +1992,7 @@
     </Image>
     <Image Include="Art\GUI_LogControl.png">
       <ImageId>GUI_LogControl</ImageId>
-      <AlternateText>GUI Log Control</AlternateText>
+      <AlternateText>GUI LogControl</AlternateText>
     </Image>
     <Image Include="Art\GUI_Monitor.png">
       <ImageId>GUI_Monitor</ImageId>
@@ -2020,11 +2020,11 @@
     </Image>
     <Image Include="Art\MicexSample.png">
       <ImageId>MicexSample</ImageId>
-      <AlternateText>Micex Sample</AlternateText>
+      <AlternateText>MicexSample</AlternateText>
     </Image>
     <Image Include="Art\MicexSampleSecirities.png">
       <ImageId>MicexSampleSecirities</ImageId>
-      <AlternateText>Micex Sample Secirities</AlternateText>
+      <AlternateText>MicexSampleSecirities</AlternateText>
     </Image>
     <Image Include="Art\hydra_source_first.png">
       <ImageId>hydra_source_first</ImageId>
@@ -2032,39 +2032,39 @@
     </Image>
     <Image Include="Art\hydra_settings_oanda_hist.png">
       <ImageId>hydra_settings_oanda_hist2</ImageId>
-      <AlternateText>hydra settings oanda hist 2</AlternateText>
+      <AlternateText>hydra settings oanda hist2</AlternateText>
     </Image>
     <Image Include="Art\Aws3_CallMeNow.png">
       <ImageId>Aws3_CallMeNow</ImageId>
-      <AlternateText>Aws 3 Call Me Now</AlternateText>
+      <AlternateText>Aws3 CallMeNow</AlternateText>
     </Image>
     <Image Include="Art\Aws3_CreateAccount.png">
       <ImageId>Aws3_CreateAccount</ImageId>
-      <AlternateText>Aws 3 Create Account</AlternateText>
+      <AlternateText>Aws3 CreateAccount</AlternateText>
     </Image>
     <Image Include="Art\Aws3_console.png">
       <ImageId>Aws3_console</ImageId>
-      <AlternateText>Aws 3 console</AlternateText>
+      <AlternateText>Aws3 console</AlternateText>
     </Image>
     <Image Include="Art\Aws3_CreateBucket.png">
       <ImageId>Aws3_CreateBucket</ImageId>
-      <AlternateText>Aws 3 Create Bucket</AlternateText>
+      <AlternateText>Aws3 CreateBucket</AlternateText>
     </Image>
     <Image Include="Art\Aws3_CreateBucketDialog.png">
       <ImageId>Aws3_CreateBucketDialog</ImageId>
-      <AlternateText>Aws 3 Create Bucket Dialog</AlternateText>
+      <AlternateText>Aws3 CreateBucketDialog</AlternateText>
     </Image>
     <Image Include="Art\Aws3_SecurityCredentials.png">
       <ImageId>Aws3_SecurityCredentials</ImageId>
-      <AlternateText>Aws 3 Security Credentials</AlternateText>
+      <AlternateText>Aws3 SecurityCredentials</AlternateText>
     </Image>
     <Image Include="Art\Aws3_CreateNewAccessKey.png">
       <ImageId>Aws3_CreateNewAccessKey</ImageId>
-      <AlternateText>Aws 3 Create New Access Key</AlternateText>
+      <AlternateText>Aws3 CreateNewAccessKey</AlternateText>
     </Image>
     <Image Include="Art\Aws3_SecurityCredentialsCreate.png">
       <ImageId>Aws3_SecurityCredentialsCreate</ImageId>
-      <AlternateText>Aws 3 Security Credentials Create</AlternateText>
+      <AlternateText>Aws3 SecurityCredentialsCreate</AlternateText>
     </Image>
     <Image Include="Art\hydra_tasks_backup.png">
       <ImageId>hydra_tasks_backup</ImageId>
@@ -2076,7 +2076,7 @@
     </Image>
     <Image Include="Art\Aws3_download.png">
       <ImageId>Aws3_download</ImageId>
-      <AlternateText>Aws 3 download</AlternateText>
+      <AlternateText>Aws3 download</AlternateText>
     </Image>
     <Image Include="Art\hydra_source_add.png">
       <ImageId>hydra_source_add</ImageId>
@@ -2088,19 +2088,19 @@
     </Image>
     <Image Include="Art\GUI_SecurityPicker2.png">
       <ImageId>GUI_SecurityPicker2</ImageId>
-      <AlternateText>GUI Security Picker 2</AlternateText>
+      <AlternateText>GUI SecurityPicker2</AlternateText>
     </Image>
     <Image Include="Art\Gui_SecurityCreateWindow.png">
       <ImageId>Gui_SecurityCreateWindow</ImageId>
-      <AlternateText>Gui Security Create Window</AlternateText>
+      <AlternateText>Gui SecurityCreateWindow</AlternateText>
     </Image>
     <Image Include="Art\GUI_TradeGrid.png">
       <ImageId>GUI_TradeGrid</ImageId>
-      <AlternateText>GUI Trade Grid</AlternateText>
+      <AlternateText>GUI TradeGrid</AlternateText>
     </Image>
     <Image Include="Art\GUI_OrderGrid.png">
       <ImageId>GUI_OrderGrid</ImageId>
-      <AlternateText>GUI Order Grid</AlternateText>
+      <AlternateText>GUI OrderGrid</AlternateText>
     </Image>
     <Image Include="Art\multiconnection_main.png">
       <ImageId>multiconnection_main</ImageId>
@@ -2112,63 +2112,63 @@
     </Image>
     <Image Include="Art\Gui_PortfolioComboBox.png">
       <ImageId>Gui_PortfolioComboBox</ImageId>
-      <AlternateText>Gui Portfolio Combo Box</AlternateText>
+      <AlternateText>Gui PortfolioComboBox</AlternateText>
     </Image>
     <Image Include="Art\GUI_PortfolioGrid.png">
       <ImageId>GUI_PortfolioGrid</ImageId>
-      <AlternateText>GUI Portfolio Grid</AlternateText>
+      <AlternateText>GUI PortfolioGrid</AlternateText>
     </Image>
     <Image Include="Art\GUI_PortfolioPickerWindow.png">
       <ImageId>GUI_PortfolioPickerWindow</ImageId>
-      <AlternateText>GUI Portfolio Picker Window</AlternateText>
+      <AlternateText>GUI PortfolioPickerWindow</AlternateText>
     </Image>
     <Image Include="Art\GUI_MarketDepthControl.png">
       <ImageId>GUI_MarketDepthControl</ImageId>
-      <AlternateText>GUI Market Depth Control</AlternateText>
+      <AlternateText>GUI MarketDepthControl</AlternateText>
     </Image>
     <Image Include="Art\GUI_OrderConditionalWindow.png">
       <ImageId>GUI_OrderConditionalWindow</ImageId>
-      <AlternateText>GUI Order Conditional Window</AlternateText>
+      <AlternateText>GUI OrderConditionalWindow</AlternateText>
     </Image>
     <Image Include="Art\GUI_OrderWindow.png">
       <ImageId>GUI_OrderWindow</ImageId>
-      <AlternateText>GUI Order Window</AlternateText>
+      <AlternateText>GUI OrderWindow</AlternateText>
     </Image>
     <Image Include="Art\GUI_MytradeGrid.png">
       <ImageId>GUI_MytradeGrid</ImageId>
-      <AlternateText>GUI Mytrade Grid</AlternateText>
+      <AlternateText>GUI MytradeGrid</AlternateText>
     </Image>
     <Image Include="Art\GUI_PropertyDataGridEx.png">
       <ImageId>GUI_PropertyDataGridEx</ImageId>
-      <AlternateText>GUI Property Data Grid Ex</AlternateText>
+      <AlternateText>GUI PropertyDataGridEx</AlternateText>
     </Image>
     <Image Include="Art\GUI_StrategiesStatisticsPanel.png">
       <ImageId>GUI_StrategiesStatisticsPanel</ImageId>
-      <AlternateText>GUI Strategies Statistics Panel</AlternateText>
+      <AlternateText>GUI StrategiesStatisticsPanel</AlternateText>
     </Image>
     <Image Include="Art\Gui_ChartElements.png">
       <ImageId>Gui_ChartElements</ImageId>
-      <AlternateText>Gui Chart Elements</AlternateText>
+      <AlternateText>Gui ChartElements</AlternateText>
     </Image>
     <Image Include="Art\Gui_ChartSample.png">
       <ImageId>Gui_ChartSample</ImageId>
-      <AlternateText>Gui Chart Sample</AlternateText>
+      <AlternateText>Gui ChartSample</AlternateText>
     </Image>
     <Image Include="Art\Gui_ChartPanel.png">
       <ImageId>Gui_ChartPanel</ImageId>
-      <AlternateText>Gui Chart Panel</AlternateText>
+      <AlternateText>Gui ChartPanel</AlternateText>
     </Image>
     <Image Include="Art\Gui_ChartPanelTools.png">
       <ImageId>Gui_ChartPanelTools</ImageId>
-      <AlternateText>Gui Chart Panel Tools</AlternateText>
+      <AlternateText>Gui ChartPanelTools</AlternateText>
     </Image>
     <Image Include="Art\Gui_ClasterChart.png">
       <ImageId>Gui_ClasterChart</ImageId>
-      <AlternateText>Gui Claster Chart</AlternateText>
+      <AlternateText>Gui ClasterChart</AlternateText>
     </Image>
     <Image Include="Art\Gui_BoxChart.png">
       <ImageId>Gui_BoxChart</ImageId>
-      <AlternateText>Gui Box Chart</AlternateText>
+      <AlternateText>Gui BoxChart</AlternateText>
     </Image>
     <Image Include="Art\ITCHSettings.png">
       <ImageId>ITCHSettings</ImageId>
@@ -2176,7 +2176,7 @@
     </Image>
     <Image Include="Art\Gui_EquityCurveChart.png">
       <ImageId>Gui_EquityCurveChart</ImageId>
-      <AlternateText>Gui Equity Curve Chart</AlternateText>
+      <AlternateText>Gui EquityCurveChart</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_itch.png">
       <ImageId>hydra_settings_itch</ImageId>
@@ -2184,15 +2184,15 @@
     </Image>
     <Image Include="Art\TwimeSample.png">
       <ImageId>TwimeSample</ImageId>
-      <AlternateText>Twime Sample</AlternateText>
+      <AlternateText>TwimeSample</AlternateText>
     </Image>
     <Image Include="Art\GUI_Leve1Grid.png">
       <ImageId>GUI_Leve1Grid</ImageId>
-      <AlternateText>GUI Leve 1 Grid</AlternateText>
+      <AlternateText>GUI Leve1Grid</AlternateText>
     </Image>
     <Image Include="Art\FixServer.png">
       <ImageId>FixServer</ImageId>
-      <AlternateText>Fix Server</AlternateText>
+      <AlternateText>FixServer</AlternateText>
     </Image>
     <Image Include="Art\Designer_Installation_00.png">
       <ImageId>Designer_Installation_00</ImageId>
@@ -2300,7 +2300,7 @@
     </Image>
     <Image Include="Art\Designer_Panel_Portfolios_00.png">
       <ImageId>Designer_Panel_A_Portfolios_00</ImageId>
-      <AlternateText>Designer Panel Portfolios 00</AlternateText>
+      <AlternateText>Designer Panel A Portfolios 00</AlternateText>
     </Image>
     <Image Include="Art\Designer_Panel_Portfolios_01.png">
       <ImageId>Designer_Panel_A_Portfolios_01</ImageId>
@@ -2516,7 +2516,7 @@
     </Image>
     <Image Include="Art\Designer_Black_Scholes_00.png">
       <ImageId>Designer_Black_Sols_00</ImageId>
-      <AlternateText>Designer Black Scholes 00</AlternateText>
+      <AlternateText>Designer Black Sols 00</AlternateText>
     </Image>
     <Image Include="Art\Designer_Hedging_00.png">
       <ImageId>Designer_Hedging_00</ImageId>
@@ -2820,11 +2820,11 @@
     </Image>
     <Image Include="Art\Designer_Debug_Break_Points_00.png">
       <ImageId>Designer_Stopping_point_00</ImageId>
-      <AlternateText>Designer Debug Break Points 00</AlternateText>
+      <AlternateText>Designer Stopping point 00</AlternateText>
     </Image>
     <Image Include="Art\Designer_Debug_Break_Points_01.png">
       <ImageId>Designer_Stopping_point_01</ImageId>
-      <AlternateText>Designer Debug Break Points 01</AlternateText>
+      <AlternateText>Designer Stopping point 01</AlternateText>
     </Image>
     <Image Include="Art\Designer_Optimization_00.png">
       <ImageId>Designer_Optimization_00</ImageId>
@@ -3036,20 +3036,20 @@
     </Image>
     <Image Include="Art\QuikLuaFirstStrategy.png">
       <ImageId>QuikLuaFirstStrategy</ImageId>
-      <AlternateText>Quik Lua First Strategy</AlternateText>
+      <AlternateText>QuikLuaFirstStrategy</AlternateText>
       <CopyToMedia>False</CopyToMedia>
     </Image>
     <Image Include="Art\StockSharpTitle_0.png">
       <ImageId>StockSharpTitle_0</ImageId>
-      <AlternateText>Stock Sharp Title 0</AlternateText>
+      <AlternateText>StockSharpTitle 0</AlternateText>
     </Image>
     <Image Include="Art\StockSharpTitle_1.png">
       <ImageId>StockSharpTitle_1</ImageId>
-      <AlternateText>Stock Sharp Title 1</AlternateText>
+      <AlternateText>StockSharpTitle 1</AlternateText>
     </Image>
     <Image Include="Art\GUI_IndexSecurityWindow.png">
       <ImageId>GUI_IndexSecurityWindow</ImageId>
-      <AlternateText>GUI Index Security Window</AlternateText>
+      <AlternateText>GUI IndexSecurityWindow</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_Barchart.png">
       <ImageId>hydra_settings_Barchart</ImageId>
@@ -3085,19 +3085,19 @@
     </Image>
     <Image Include="Art\hydra_ExtensionInfo_csv_notepad.png">
       <ImageId>hydra_ExtensionInfo_csv_notepad</ImageId>
-      <AlternateText>hydra Extension Info csv notepad</AlternateText>
+      <AlternateText>hydra ExtensionInfo csv notepad</AlternateText>
     </Image>
     <Image Include="Art\hydra_ExtensionInfo_csv_excel.png">
       <ImageId>hydra_ExtensionInfo_csv_excel</ImageId>
-      <AlternateText>hydra Extension Info csv excel</AlternateText>
+      <AlternateText>hydra ExtensionInfo csv excel</AlternateText>
     </Image>
     <Image Include="Art\hydra_ExtensionInfo_securities.png">
       <ImageId>hydra_ExtensionInfo_securities</ImageId>
-      <AlternateText>hydra Extension Info securities</AlternateText>
+      <AlternateText>hydra ExtensionInfo securities</AlternateText>
     </Image>
     <Image Include="Art\hydra_ExtensionInfo_window.png">
       <ImageId>hydra_ExtensionInfo_window</ImageId>
-      <AlternateText>hydra Extension Info window</AlternateText>
+      <AlternateText>hydra ExtensionInfo window</AlternateText>
     </Image>
     <Image Include="Art\hydra_Quick_start_00.png">
       <ImageId>hydra_Quick_start_00</ImageId>
@@ -3133,7 +3133,7 @@
     </Image>
     <Image Include="Art\Designer_ExtensionInfo_securities.png">
       <ImageId>Designer_ExtensionInfo_securities</ImageId>
-      <AlternateText>Designer Extension Info securities</AlternateText>
+      <AlternateText>Designer ExtensionInfo securities</AlternateText>
     </Image>
     <Image Include="Art\Designer_Chat.png">
       <ImageId>Designer_Chat</ImageId>
@@ -3213,11 +3213,11 @@
     </Image>
     <Image Include="Art\FxcmSample.png">
       <ImageId>FxcmSample</ImageId>
-      <AlternateText>Fxcm Sample</AlternateText>
+      <AlternateText>FxcmSample</AlternateText>
     </Image>
     <Image Include="Art\FxcmSecurities.png">
       <ImageId>FxcmSecurities</ImageId>
-      <AlternateText>Fxcm Securities</AlternateText>
+      <AlternateText>FxcmSecurities</AlternateText>
     </Image>
     <Image Include="Art\matlab_stocksharp.png">
       <ImageId>matlab_stocksharp</ImageId>
@@ -3273,35 +3273,35 @@
     </Image>
     <Image Include="Art\SpbExSample.png">
       <ImageId>SpbExSample</ImageId>
-      <AlternateText>Пример SpbEx</AlternateText>
+      <AlternateText>SpbExSample</AlternateText>
     </Image>
     <Image Include="Art\SpbExSecurities.png">
       <ImageId>SpbExSecurities</ImageId>
-      <AlternateText>Инструменты Spb Ex</AlternateText>
+      <AlternateText>SpbExSecurities</AlternateText>
     </Image>
     <Image Include="Art\QuantFeedSample.png">
       <ImageId>QuantFeedSample</ImageId>
-      <AlternateText>Пример QuantFEED</AlternateText>
+      <AlternateText>QuantFeedSample</AlternateText>
     </Image>
     <Image Include="Art\SpbExNewOrder.png">
       <ImageId>SpbExNewOrder</ImageId>
-      <AlternateText>Ввод заявки Spb Ex</AlternateText>
+      <AlternateText>SpbExNewOrder</AlternateText>
     </Image>
     <Image Include="Art\SecuritiesLookupWindow.png">
       <ImageId>SecuritiesLookupWindow</ImageId>
-      <AlternateText>Securities Lookup Window</AlternateText>
+      <AlternateText>SecuritiesLookupWindow</AlternateText>
     </Image>
     <Image Include="Art\BinanceSample.png">
       <ImageId>BinanceSample</ImageId>
-      <AlternateText>Binance Sample</AlternateText>
+      <AlternateText>BinanceSample</AlternateText>
     </Image>
     <Image Include="Art\BitexbookSample.png">
       <ImageId>BitexbookSample</ImageId>
-      <AlternateText>Bitexbook Sample</AlternateText>
+      <AlternateText>BitexbookSample</AlternateText>
     </Image>
     <Image Include="Art\BithumbSample.png">
       <ImageId>BithumbSample</ImageId>
-      <AlternateText>Bithumb Sample</AlternateText>
+      <AlternateText>BithumbSample</AlternateText>
     </Image>
     <Image Include="Art\BitMEXSample.png">
       <ImageId>BitMEXSample</ImageId>
@@ -3309,7 +3309,7 @@
     </Image>
     <Image Include="Art\BittrexSample.png">
       <ImageId>BittrexSample</ImageId>
-      <AlternateText>Bittrex Sample</AlternateText>
+      <AlternateText>BittrexSample</AlternateText>
     </Image>
     <Image Include="Art\CEXSample.png">
       <ImageId>CEXSample</ImageId>
@@ -3317,23 +3317,23 @@
     </Image>
     <Image Include="Art\CoinbaseSample.png">
       <ImageId>CoinbaseSample</ImageId>
-      <AlternateText>Coinbase Sample</AlternateText>
+      <AlternateText>CoinbaseSample</AlternateText>
     </Image>
     <Image Include="Art\CoincheckSample.png">
       <ImageId>CoincheckSample</ImageId>
-      <AlternateText>Coincheck Sample</AlternateText>
+      <AlternateText>CoincheckSample</AlternateText>
     </Image>
     <Image Include="Art\CoinExchangeSample.png">
       <ImageId>CoinExchangeSample</ImageId>
-      <AlternateText>Coin Exchange Sample</AlternateText>
+      <AlternateText>CoinExchangeSample</AlternateText>
     </Image>
     <Image Include="Art\CryptopiaSample.png">
       <ImageId>CryptopiaSample</ImageId>
-      <AlternateText>Cryptopia Sample</AlternateText>
+      <AlternateText>CryptopiaSample</AlternateText>
     </Image>
     <Image Include="Art\DeribitSample.png">
       <ImageId>DeribitSample</ImageId>
-      <AlternateText>Deribit Sample</AlternateText>
+      <AlternateText>DeribitSample</AlternateText>
     </Image>
     <Image Include="Art\EXMOSample.png">
       <ImageId>EXMOSample</ImageId>
@@ -3345,43 +3345,43 @@
     </Image>
     <Image Include="Art\HuobiSample.png">
       <ImageId>HuobiSample</ImageId>
-      <AlternateText>Huobi Sample</AlternateText>
+      <AlternateText>HuobiSample</AlternateText>
     </Image>
     <Image Include="Art\KrakenSample.png">
       <ImageId>KrakenSample</ImageId>
-      <AlternateText>Kraken Sample</AlternateText>
+      <AlternateText>KrakenSample</AlternateText>
     </Image>
     <Image Include="Art\KucoinSample.png">
       <ImageId>KucoinSample</ImageId>
-      <AlternateText>Kucoin Sample</AlternateText>
+      <AlternateText>KucoinSample</AlternateText>
     </Image>
     <Image Include="Art\LiquiSample.png">
       <ImageId>LiquiSample</ImageId>
-      <AlternateText>Liqui Sample</AlternateText>
+      <AlternateText>LiquiSample</AlternateText>
     </Image>
     <Image Include="Art\LivecoinSample.png">
       <ImageId>LivecoinSample</ImageId>
-      <AlternateText>Livecoin Sample</AlternateText>
+      <AlternateText>LivecoinSample</AlternateText>
     </Image>
     <Image Include="Art\OKCoinSample.png">
       <ImageId>OKCoinSample</ImageId>
-      <AlternateText>OKCoin Sample</AlternateText>
+      <AlternateText>OKCoinSample</AlternateText>
     </Image>
     <Image Include="Art\OKexSample.png">
       <ImageId>OKexSample</ImageId>
-      <AlternateText>OKex Sample</AlternateText>
+      <AlternateText>OKexSample</AlternateText>
     </Image>
     <Image Include="Art\BitfinexSample.png">
       <ImageId>BitfinexSample</ImageId>
-      <AlternateText>Bitfinex Sample</AlternateText>
+      <AlternateText>BitfinexSample</AlternateText>
     </Image>
     <Image Include="Art\PoloniexSample.png">
       <ImageId>PoloniexSample</ImageId>
-      <AlternateText>Poloniex Sample</AlternateText>
+      <AlternateText>PoloniexSample</AlternateText>
     </Image>
     <Image Include="Art\YobitSample.png">
       <ImageId>YobitSample</ImageId>
-      <AlternateText>Yobit Sample</AlternateText>
+      <AlternateText>YobitSample</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_Yobit.png">
       <ImageId>hydra_settings_Yobit</ImageId>
@@ -3445,7 +3445,7 @@
     </Image>
     <Image Include="Art\hydra_settings_CoinExchange.png">
       <ImageId>hydra_settings_CoinExchange</ImageId>
-      <AlternateText>hydra settings Coin Exchange</AlternateText>
+      <AlternateText>hydra settings CoinExchange</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_CEX.IO.png">
       <ImageId>hydra_settings_CEX.IO</ImageId>
@@ -3481,7 +3481,7 @@
     </Image>
     <Image Include="Art\GdaxSample.png">
       <ImageId>GdaxSample</ImageId>
-      <AlternateText>Gdax Sample</AlternateText>
+      <AlternateText>GdaxSample</AlternateText>
     </Image>
     <Image Include="Art\Terminal_orderlog_00.png">
       <ImageId>Terminal_orderlog_00</ImageId>
@@ -3513,7 +3513,7 @@
     </Image>
     <Image Include="Art\Terminal_Level1_00.png">
       <ImageId>Terminal_Level1_00</ImageId>
-      <AlternateText>Terminal Level 1 00</AlternateText>
+      <AlternateText>Terminal Level1 00</AlternateText>
     </Image>
     <Image Include="Art\Designer_Connection_settings_00.png">
       <ImageId>Designer_Connection_settings_00</ImageId>
@@ -3569,11 +3569,11 @@
     </Image>
     <Image Include="Art\APIConnectorsSettingsHydraWindow.png">
       <ImageId>APIConnectorsSettingsHydraWindow</ImageId>
-      <AlternateText>APIConnectors Settings Hydra Window</AlternateText>
+      <AlternateText>APIConnectorsSettingsHydraWindow</AlternateText>
     </Image>
     <Image Include="Art\APIConnectorsSettingsWindow.png">
       <ImageId>APIConnectorsSettingsWindow</ImageId>
-      <AlternateText>APIConnectors Settings Window</AlternateText>
+      <AlternateText>APIConnectorsSettingsWindow</AlternateText>
     </Image>
     <Image Include="Art\hydra_setting_source_button.png">
       <ImageId>hydra_setting_source_button</ImageId>
@@ -3621,15 +3621,15 @@
     </Image>
     <Image Include="Art\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
-      <AlternateText>hydra securities Panel 00</AlternateText>
+      <AlternateText>hydra securitiesPanel 00</AlternateText>
     </Image>
     <Image Include="Art\Terminal_OrderPanel_02.png">
       <ImageId>Terminal_OrderPanel_02</ImageId>
-      <AlternateText>Terminal Order Panel 02</AlternateText>
+      <AlternateText>Terminal OrderPanel 02</AlternateText>
     </Image>
     <Image Include="Art\Terminal_OrderPanel_01.png">
       <ImageId>Terminal_OrderPanel_01</ImageId>
-      <AlternateText>Terminal Order Panel 01</AlternateText>
+      <AlternateText>Terminal OrderPanel 01</AlternateText>
     </Image>
     <Image Include="Art\Terminal_Orders_conditional_panel_03.png">
       <ImageId>Terminal_Orders_conditional_panel_03</ImageId>
@@ -3665,15 +3665,15 @@
     </Image>
     <Image Include="Art\PlazaConnection.png">
       <ImageId>PlazaConnection</ImageId>
-      <AlternateText>Plaza Connection</AlternateText>
+      <AlternateText>PlazaConnection</AlternateText>
     </Image>
     <Image Include="Art\iQFeedIQConnectLogin.png">
       <ImageId>iQFeedIQConnectLogin</ImageId>
-      <AlternateText>iQFeedIQConnect Login</AlternateText>
+      <AlternateText>iQFeedIQConnectLogin</AlternateText>
     </Image>
     <Image Include="Art\iQFeedIQLinkLauncher.png">
       <ImageId>iQFeedIQLinkLauncher</ImageId>
-      <AlternateText>iQFeedIQLink Launcher</AlternateText>
+      <AlternateText>iQFeedIQLinkLauncher</AlternateText>
     </Image>
     <Image Include="Art\Terminal_Risk_Rule.png">
       <ImageId>Terminal_Risk_Rule</ImageId>
@@ -3709,31 +3709,31 @@
     </Image>
     <Image Include="Art\API_GUI_ConnectorWindow.png">
       <ImageId>API_GUI_ConnectorWindow</ImageId>
-      <AlternateText>API GUI Connector Window</AlternateText>
+      <AlternateText>API GUI ConnectorWindow</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_RiskWindow.png">
       <ImageId>API_GUI_RiskWindow</ImageId>
-      <AlternateText>API GUI Risk Window</AlternateText>
+      <AlternateText>API GUI RiskWindow</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_BuySell.png">
       <ImageId>API_GUI_BuySell</ImageId>
-      <AlternateText>API GUI Buy Sell</AlternateText>
+      <AlternateText>API GUI BuySell</AlternateText>
     </Image>
     <Image Include="Art\API_ComissionWindow.png">
       <ImageId>API_ComissionWindow</ImageId>
-      <AlternateText>API Comission Window</AlternateText>
+      <AlternateText>API ComissionWindow</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_MarketDataGrid.png">
       <ImageId>API_GUI_MarketDataGrid</ImageId>
-      <AlternateText>API GUI Market Data Grid</AlternateText>
+      <AlternateText>API GUI MarketDataGrid</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_AlertWindow.png">
       <ImageId>API_GUI_AlertWindow</ImageId>
-      <AlternateText>API GUI Alert Window</AlternateText>
+      <AlternateText>API GUI AlertWindow</AlternateText>
     </Image>
     <Image Include="Art\hyda_export_TSLab_MetaStock.png">
       <ImageId>hyda_export_TSLab_MetaStock</ImageId>
-      <AlternateText>hyda export TSLab Meta Stock</AlternateText>
+      <AlternateText>hyda export TSLab MetaStock</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Thems_02.png">
       <ImageId>API_GUI_Thems_02</ImageId>
@@ -3757,35 +3757,35 @@
     </Image>
     <Image Include="Art\CoinigySample.png">
       <ImageId>CoinigySample</ImageId>
-      <AlternateText>Coinigy Sample</AlternateText>
+      <AlternateText>CoinigySample</AlternateText>
     </Image>
     <Image Include="Art\CoinCapSample.png">
       <ImageId>CoinCapSample</ImageId>
-      <AlternateText>Coin Cap Sample</AlternateText>
+      <AlternateText>CoinCapSample</AlternateText>
     </Image>
     <Image Include="Art\TradeOrgeSample.png">
       <ImageId>TradeOrgeSample</ImageId>
-      <AlternateText>Trade Orge Sample</AlternateText>
+      <AlternateText>TradeOrgeSample</AlternateText>
     </Image>
     <Image Include="Art\IdaxSample.png">
       <ImageId>IdaxSample</ImageId>
-      <AlternateText>Idax Sample</AlternateText>
+      <AlternateText>IdaxSample</AlternateText>
     </Image>
     <Image Include="Art\DigifinexSample.png">
       <ImageId>DigifinexSample</ImageId>
-      <AlternateText>Digifinex Sample</AlternateText>
+      <AlternateText>DigifinexSample</AlternateText>
     </Image>
     <Image Include="Art\BitbankSample.png">
       <ImageId>BitbankSample</ImageId>
-      <AlternateText>Bitbank Sample</AlternateText>
+      <AlternateText>BitbankSample</AlternateText>
     </Image>
     <Image Include="Art\QuoinexSample.png">
       <ImageId>QuoinexSample</ImageId>
-      <AlternateText>Quoinex Sample</AlternateText>
+      <AlternateText>QuoinexSample</AlternateText>
     </Image>
     <Image Include="Art\ZaifSample.png">
       <ImageId>ZaifSample</ImageId>
-      <AlternateText>Zaif Sample</AlternateText>
+      <AlternateText>ZaifSample</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_Zaif.png">
       <ImageId>hydra_settings_Zaif</ImageId>
@@ -3797,11 +3797,11 @@
     </Image>
     <Image Include="Art\hydra_settings_CoinCap.png">
       <ImageId>hydra_settings_CoinCap</ImageId>
-      <AlternateText>hydra settings Coin Cap</AlternateText>
+      <AlternateText>hydra settings CoinCap</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_TradeOrge.png">
       <ImageId>hydra_settings_TradeOrge</ImageId>
-      <AlternateText>hydra settings Trade Orge</AlternateText>
+      <AlternateText>hydra settings TradeOrge</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_Idax.png">
       <ImageId>hydra_settings_Idax</ImageId>
@@ -3825,7 +3825,7 @@
     </Image>
     <Image Include="Art\AlphaVantageSample.png">
       <ImageId>AlphaVantageSample</ImageId>
-      <AlternateText>Alpha Vantage Sample</AlternateText>
+      <AlternateText>AlphaVantageSample</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_IEX.png">
       <ImageId>hydra_settings_IEX</ImageId>
@@ -3833,19 +3833,19 @@
     </Image>
     <Image Include="Art\hydra_settings_AlphaVantage.png">
       <ImageId>hydra_settings_AlphaVantage</ImageId>
-      <AlternateText>hydra settings Alpha Vantage</AlternateText>
+      <AlternateText>hydra settings AlphaVantage</AlternateText>
     </Image>
     <Image Include="Art\Designer_MarketDepthTruncateDiagramElement_00.png">
       <ImageId>Designer_MarketDepthTruncateDiagramElement_00</ImageId>
-      <AlternateText>Designer Market Depth Truncate Diagram Element 00</AlternateText>
+      <AlternateText>Designer MarketDepthTruncateDiagramElement 00</AlternateText>
     </Image>
     <Image Include="Art\Designer_StrategyPnLDiagramElement_00.png">
       <ImageId>Designer_StrategyPnLDiagramElement_00</ImageId>
-      <AlternateText>Designer Strategy PnLDiagram Element 00</AlternateText>
+      <AlternateText>Designer StrategyPnLDiagramElement 00</AlternateText>
     </Image>
     <Image Include="Art\Designer_TradeAllowedDiagramElement_00.png">
       <ImageId>Designer_TradeAllowedDiagramElement_00</ImageId>
-      <AlternateText>Designer Trade Allowed Diagram Element 00</AlternateText>
+      <AlternateText>Designer TradeAllowedDiagramElement 00</AlternateText>
     </Image>
     <Image Include="Art\Shell_Quick_start_05.png">
       <ImageId>Shell_Quick_start_05</ImageId>
@@ -3885,51 +3885,51 @@
     </Image>
     <Image Include="Art\Shell_RemoteManager_11.png">
       <ImageId>Shell_RemoteManager_11</ImageId>
-      <AlternateText>Shell Remote Manager 11</AlternateText>
+      <AlternateText>Shell RemoteManager 11</AlternateText>
     </Image>
     <Image Include="Art\Shell_RemoteManager_10.png">
       <ImageId>Shell_RemoteManager_10</ImageId>
-      <AlternateText>Shell Remote Manager 10</AlternateText>
+      <AlternateText>Shell RemoteManager 10</AlternateText>
     </Image>
     <Image Include="Art\Shell_RemoteManager_09.png">
       <ImageId>Shell_RemoteManager_09</ImageId>
-      <AlternateText>Shell Remote Manager 09</AlternateText>
+      <AlternateText>Shell RemoteManager 09</AlternateText>
     </Image>
     <Image Include="Art\Shell_RemoteManager_08.png">
       <ImageId>Shell_RemoteManager_08</ImageId>
-      <AlternateText>Shell Remote Manager 08</AlternateText>
+      <AlternateText>Shell RemoteManager 08</AlternateText>
     </Image>
     <Image Include="Art\Shell_RemoteManager_07.png">
       <ImageId>Shell_RemoteManager_07</ImageId>
-      <AlternateText>Shell Remote Manager 07</AlternateText>
+      <AlternateText>Shell RemoteManager 07</AlternateText>
     </Image>
     <Image Include="Art\Shell_RemoteManager_06.png">
       <ImageId>Shell_RemoteManager_06</ImageId>
-      <AlternateText>Shell Remote Manager 06</AlternateText>
+      <AlternateText>Shell RemoteManager 06</AlternateText>
     </Image>
     <Image Include="Art\Shell_RemoteManager_05.png">
       <ImageId>Shell_RemoteManager_05</ImageId>
-      <AlternateText>Shell Remote Manager 05</AlternateText>
+      <AlternateText>Shell RemoteManager 05</AlternateText>
     </Image>
     <Image Include="Art\Shell_RemoteManager_04.png">
       <ImageId>Shell_RemoteManager_04</ImageId>
-      <AlternateText>Shell Remote Manager 04</AlternateText>
+      <AlternateText>Shell RemoteManager 04</AlternateText>
     </Image>
     <Image Include="Art\Shell_RemoteManager_03.png">
       <ImageId>Shell_RemoteManager_03</ImageId>
-      <AlternateText>Shell Remote Manager 03</AlternateText>
+      <AlternateText>Shell RemoteManager 03</AlternateText>
     </Image>
     <Image Include="Art\Shell_RemoteManager_02.png">
       <ImageId>Shell_RemoteManager_02</ImageId>
-      <AlternateText>Shell Remote Manager 02</AlternateText>
+      <AlternateText>Shell RemoteManager 02</AlternateText>
     </Image>
     <Image Include="Art\Shell_RemoteManager_01.png">
       <ImageId>Shell_RemoteManager_01</ImageId>
-      <AlternateText>Shell Remote Manager 01</AlternateText>
+      <AlternateText>Shell RemoteManager 01</AlternateText>
     </Image>
     <Image Include="Art\Shell_RemoteManager_00.png">
       <ImageId>Shell_RemoteManager_00</ImageId>
-      <AlternateText>Shell Remote Manager 00</AlternateText>
+      <AlternateText>Shell RemoteManager 00</AlternateText>
     </Image>
     <Image Include="Art\Shell_emulation_00.png">
       <ImageId>Shell_emulation_00</ImageId>
@@ -3981,11 +3981,11 @@
     </Image>
     <Image Include="Art\CoinBeneSample.png">
       <ImageId>CoinBeneSample</ImageId>
-      <AlternateText>Coin Bene Sample</AlternateText>
+      <AlternateText>CoinBeneSample</AlternateText>
     </Image>
     <Image Include="Art\BiboxSample.png">
       <ImageId>BiboxSample</ImageId>
-      <AlternateText>Bibox Sample</AlternateText>
+      <AlternateText>BiboxSample</AlternateText>
     </Image>
     <Image Include="Art\BWSample.png">
       <ImageId>BWSample</ImageId>
@@ -3993,11 +3993,11 @@
     </Image>
     <Image Include="Art\BitMaxSample.png">
       <ImageId>BitMaxSample</ImageId>
-      <AlternateText>Bit Max Sample</AlternateText>
+      <AlternateText>BitMaxSample</AlternateText>
     </Image>
     <Image Include="Art\LBankSample.png">
       <ImageId>LBankSample</ImageId>
-      <AlternateText>LBank Sample</AlternateText>
+      <AlternateText>LBankSample</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_LBank.png">
       <ImageId>hydra_settings_LBank</ImageId>
@@ -4005,11 +4005,11 @@
     </Image>
     <Image Include="Art\hydra_settings_CoinBene.png">
       <ImageId>hydra_settings_CoinBene</ImageId>
-      <AlternateText>hydra settings Coin Bene</AlternateText>
+      <AlternateText>hydra settings CoinBene</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_BitMax.png">
       <ImageId>hydra_settings_BitMax</ImageId>
-      <AlternateText>hydra settings Bit Max</AlternateText>
+      <AlternateText>hydra settings BitMax</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_BitZ.png">
       <ImageId>hydra_settings_BitZ</ImageId>
@@ -4033,87 +4033,87 @@
     </Image>
     <Image Include="Art\IndicatorZigZagEquis.png">
       <ImageId>IndicatorZigZagEquis</ImageId>
-      <AlternateText>Indicator Zig Zag Equis</AlternateText>
+      <AlternateText>IndicatorZigZagEquis</AlternateText>
     </Image>
     <Image Include="Art\IndicatorZigZag.png">
       <ImageId>IndicatorZigZag</ImageId>
-      <AlternateText>Indicator Zig Zag</AlternateText>
+      <AlternateText>IndicatorZigZag</AlternateText>
     </Image>
     <Image Include="Art\IndicatorWilliamsR.png">
       <ImageId>IndicatorWilliamsR</ImageId>
-      <AlternateText>Indicator WilliamsR</AlternateText>
+      <AlternateText>IndicatorWilliamsR</AlternateText>
     </Image>
     <Image Include="Art\IndicatorWilderMovingAverage.png">
       <ImageId>IndicatorWilderMovingAverage</ImageId>
-      <AlternateText>Indicator Wilder Moving Average</AlternateText>
+      <AlternateText>IndicatorWilderMovingAverage</AlternateText>
     </Image>
     <Image Include="Art\IndicatorWeightedMovingAverage.png">
       <ImageId>IndicatorWeightedMovingAverage</ImageId>
-      <AlternateText>Indicator Weighted Moving Average</AlternateText>
+      <AlternateText>IndicatorWeightedMovingAverage</AlternateText>
     </Image>
     <Image Include="Art\IndicatorVolumeWeightedMovingAverage.png">
       <ImageId>IndicatorVolumeWeightedMovingAverage</ImageId>
-      <AlternateText>Indicator Volume Weighted Moving Average</AlternateText>
+      <AlternateText>IndicatorVolumeWeightedMovingAverage</AlternateText>
     </Image>
     <Image Include="Art\IndicatorVolumeIndicator.png">
       <ImageId>IndicatorVolumeIndicator</ImageId>
-      <AlternateText>Indicator Volume Indicator</AlternateText>
+      <AlternateText>IndicatorVolumeIndicator</AlternateText>
     </Image>
     <Image Include="Art\IndicatorVerticalHorizontalFilter.png">
       <ImageId>IndicatorVerticalHorizontalFilter</ImageId>
-      <AlternateText>Indicator Vertical Horizontal Filter</AlternateText>
+      <AlternateText>IndicatorVerticalHorizontalFilter</AlternateText>
     </Image>
     <Image Include="Art\IndicatorUltimateOscillator.png">
       <ImageId>IndicatorUltimateOscillator</ImageId>
-      <AlternateText>Indicator Ultimate Oscillator</AlternateText>
+      <AlternateText>IndicatorUltimateOscillator</AlternateText>
     </Image>
     <Image Include="Art\IndicatorTrueRange.png">
       <ImageId>IndicatorTrueRange</ImageId>
-      <AlternateText>Indicator True Range</AlternateText>
+      <AlternateText>IndicatorTrueRange</AlternateText>
     </Image>
     <Image Include="Art\IndicatorTroughBar.png">
       <ImageId>IndicatorTroughBar</ImageId>
-      <AlternateText>Indicator Trough Bar</AlternateText>
+      <AlternateText>IndicatorTroughBar</AlternateText>
     </Image>
     <Image Include="Art\IndicatorTrough.png">
       <ImageId>IndicatorTrough</ImageId>
-      <AlternateText>Indicator Trough</AlternateText>
+      <AlternateText>IndicatorTrough</AlternateText>
     </Image>
     <Image Include="Art\IndicatorTrix.png">
       <ImageId>IndicatorTrix</ImageId>
-      <AlternateText>Indicator Trix</AlternateText>
+      <AlternateText>IndicatorTrix</AlternateText>
     </Image>
     <Image Include="Art\IndicatorTripleExponentialMovingAverage.png">
       <ImageId>IndicatorTripleExponentialMovingAverage</ImageId>
-      <AlternateText>Indicator Triple Exponential Moving Average</AlternateText>
+      <AlternateText>IndicatorTripleExponentialMovingAverage</AlternateText>
     </Image>
     <Image Include="Art\IndicatorSum.png">
       <ImageId>IndicatorSum</ImageId>
-      <AlternateText>Indicator Sum</AlternateText>
+      <AlternateText>IndicatorSum</AlternateText>
     </Image>
     <Image Include="Art\IndicatorStochasticOscillator.png">
       <ImageId>IndicatorStochasticOscillator</ImageId>
-      <AlternateText>Indicator Stochastic Oscillator</AlternateText>
+      <AlternateText>IndicatorStochasticOscillator</AlternateText>
     </Image>
     <Image Include="Art\IndicatorStochasticK.png">
       <ImageId>IndicatorStochasticK</ImageId>
-      <AlternateText>Indicator StochasticK</AlternateText>
+      <AlternateText>IndicatorStochasticK</AlternateText>
     </Image>
     <Image Include="Art\IndicatorStandardError.png">
       <ImageId>IndicatorStandardError</ImageId>
-      <AlternateText>Indicator Standard Error</AlternateText>
+      <AlternateText>IndicatorStandardError</AlternateText>
     </Image>
     <Image Include="Art\IndicatorStandardDeviation.png">
       <ImageId>IndicatorStandardDeviation</ImageId>
-      <AlternateText>Indicator Standard Deviation</AlternateText>
+      <AlternateText>IndicatorStandardDeviation</AlternateText>
     </Image>
     <Image Include="Art\IndicatorSmoothedMovingAverage.png">
       <ImageId>IndicatorSmoothedMovingAverage</ImageId>
-      <AlternateText>Indicator Smoothed Moving Average</AlternateText>
+      <AlternateText>IndicatorSmoothedMovingAverage</AlternateText>
     </Image>
     <Image Include="Art\IndicatorSimpleMovingAverage.png">
       <ImageId>IndicatorSimpleMovingAverage</ImageId>
-      <AlternateText>Indicator Simple Moving Average</AlternateText>
+      <AlternateText>IndicatorSimpleMovingAverage</AlternateText>
     </Image>
     <Image Include="Art\IndicatorRSquared.png">
       <ImageId>IndicatorRSquared</ImageId>
@@ -4121,19 +4121,19 @@
     </Image>
     <Image Include="Art\IndicatorRelativeVigorIndex.png">
       <ImageId>IndicatorRelativeVigorIndex</ImageId>
-      <AlternateText>Indicator Relative Vigor Index</AlternateText>
+      <AlternateText>IndicatorRelativeVigorIndex</AlternateText>
     </Image>
     <Image Include="Art\IndicatorRelativeStrengthIndex.png">
       <ImageId>IndicatorRelativeStrengthIndex</ImageId>
-      <AlternateText>Indicator Relative Strength Index</AlternateText>
+      <AlternateText>IndicatorRelativeStrengthIndex</AlternateText>
     </Image>
     <Image Include="Art\IndicatorRateOfChange.png">
       <ImageId>IndicatorRateOfChange</ImageId>
-      <AlternateText>Indicator Rate Of Change</AlternateText>
+      <AlternateText>IndicatorRateOfChange</AlternateText>
     </Image>
     <Image Include="Art\IndicatorRangeActionVerificationIndex.png">
       <ImageId>IndicatorRangeActionVerificationIndex</ImageId>
-      <AlternateText>Indicator Range Action Verification Index</AlternateText>
+      <AlternateText>IndicatorRangeActionVerificationIndex</AlternateText>
     </Image>
     <Image Include="Art\IndicatorQStick.png">
       <ImageId>IndicatorQStick</ImageId>
@@ -4141,167 +4141,167 @@
     </Image>
     <Image Include="Art\IndicatorPeakBar.png">
       <ImageId>IndicatorPeakBar</ImageId>
-      <AlternateText>Indicator Peak Bar</AlternateText>
+      <AlternateText>IndicatorPeakBar</AlternateText>
     </Image>
     <Image Include="Art\IndicatorPeak.png">
       <ImageId>IndicatorPeak</ImageId>
-      <AlternateText>Indicator Peak</AlternateText>
+      <AlternateText>IndicatorPeak</AlternateText>
     </Image>
     <Image Include="Art\IndicatorParabolicSar.png">
       <ImageId>IndicatorParabolicSar</ImageId>
-      <AlternateText>Indicator Parabolic Sar</AlternateText>
+      <AlternateText>IndicatorParabolicSar</AlternateText>
     </Image>
     <Image Include="Art\IndicatorOptimalTracking.png">
       <ImageId>IndicatorOptimalTracking</ImageId>
-      <AlternateText>Indicator Optimal Tracking</AlternateText>
+      <AlternateText>IndicatorOptimalTracking</AlternateText>
     </Image>
     <Image Include="Art\IndicatorNickRypockTrailingReverse.png">
       <ImageId>IndicatorNickRypockTrailingReverse</ImageId>
-      <AlternateText>Indicator Nick Rypock Trailing Reverse</AlternateText>
+      <AlternateText>IndicatorNickRypockTrailingReverse</AlternateText>
     </Image>
     <Image Include="Art\IndicatorMovingAverageConvergenceDivergenceSignal.png">
       <ImageId>IndicatorMovingAverageConvergenceDivergenceSignal</ImageId>
-      <AlternateText>Indicator Moving Average Convergence Divergence Signal</AlternateText>
+      <AlternateText>IndicatorMovingAverageConvergenceDivergenceSignal</AlternateText>
     </Image>
     <Image Include="Art\IndicatorMovingAverageConvergenceDivergenceHistogram.png">
       <ImageId>IndicatorMovingAverageConvergenceDivergenceHistogram</ImageId>
-      <AlternateText>Indicator Moving Average Convergence Divergence Histogram</AlternateText>
+      <AlternateText>IndicatorMovingAverageConvergenceDivergenceHistogram</AlternateText>
     </Image>
     <Image Include="Art\IndicatorMovingAverageConvergenceDivergence.png">
       <ImageId>IndicatorMovingAverageConvergenceDivergence</ImageId>
-      <AlternateText>Indicator Moving Average Convergence Divergence</AlternateText>
+      <AlternateText>IndicatorMovingAverageConvergenceDivergence</AlternateText>
     </Image>
     <Image Include="Art\IndicatorMoneyFlowIndex.png">
       <ImageId>IndicatorMoneyFlowIndex</ImageId>
-      <AlternateText>Indicator Money Flow Index</AlternateText>
+      <AlternateText>IndicatorMoneyFlowIndex</AlternateText>
     </Image>
     <Image Include="Art\IndicatorMomentum.png">
       <ImageId>IndicatorMomentum</ImageId>
-      <AlternateText>Indicator Momentum</AlternateText>
+      <AlternateText>IndicatorMomentum</AlternateText>
     </Image>
     <Image Include="Art\IndicatorMedianPrice.png">
       <ImageId>IndicatorMedianPrice</ImageId>
-      <AlternateText>Indicator Median Price</AlternateText>
+      <AlternateText>IndicatorMedianPrice</AlternateText>
     </Image>
     <Image Include="Art\IndicatorMeanDeviation.png">
       <ImageId>IndicatorMeanDeviation</ImageId>
-      <AlternateText>Indicator Mean Deviation</AlternateText>
+      <AlternateText>IndicatorMeanDeviation</AlternateText>
     </Image>
     <Image Include="Art\IndicatorMarketFacilitationIndex.png">
       <ImageId>IndicatorMarketFacilitationIndex</ImageId>
-      <AlternateText>Indicator Market Facilitation Index</AlternateText>
+      <AlternateText>IndicatorMarketFacilitationIndex</AlternateText>
     </Image>
     <Image Include="Art\IndicatorLowest.png">
       <ImageId>IndicatorLowest</ImageId>
-      <AlternateText>Indicator Lowest</AlternateText>
+      <AlternateText>IndicatorLowest</AlternateText>
     </Image>
     <Image Include="Art\IndicatorLinearRegSlope.png">
       <ImageId>IndicatorLinearRegSlope</ImageId>
-      <AlternateText>Indicator Linear Reg Slope</AlternateText>
+      <AlternateText>IndicatorLinearRegSlope</AlternateText>
     </Image>
     <Image Include="Art\IndicatorLinearReg.png">
       <ImageId>IndicatorLinearReg</ImageId>
-      <AlternateText>Indicator Linear Reg</AlternateText>
+      <AlternateText>IndicatorLinearReg</AlternateText>
     </Image>
     <Image Include="Art\IndicatorKaufmannAdaptiveMovingAverage.png">
       <ImageId>IndicatorKaufmannAdaptiveMovingAverage</ImageId>
-      <AlternateText>Indicator Kaufmann Adaptive Moving Average</AlternateText>
+      <AlternateText>IndicatorKaufmannAdaptiveMovingAverage</AlternateText>
     </Image>
     <Image Include="Art\IndicatorJurikMovingAverage.png">
       <ImageId>IndicatorJurikMovingAverage</ImageId>
-      <AlternateText>Indicator Jurik Moving Average</AlternateText>
+      <AlternateText>IndicatorJurikMovingAverage</AlternateText>
     </Image>
     <Image Include="Art\IndicatorIchimoku.png">
       <ImageId>IndicatorIchimoku</ImageId>
-      <AlternateText>Indicator Ichimoku</AlternateText>
+      <AlternateText>IndicatorIchimoku</AlternateText>
     </Image>
     <Image Include="Art\IndicatorHullMovingAverage.png">
       <ImageId>IndicatorHullMovingAverage</ImageId>
-      <AlternateText>Indicator Hull Moving Average</AlternateText>
+      <AlternateText>IndicatorHullMovingAverage</AlternateText>
     </Image>
     <Image Include="Art\IndicatorHighest.png">
       <ImageId>IndicatorHighest</ImageId>
-      <AlternateText>Indicator Highest</AlternateText>
+      <AlternateText>IndicatorHighest</AlternateText>
     </Image>
     <Image Include="Art\IndicatorGatorOscillator.png">
       <ImageId>IndicatorGatorOscillator</ImageId>
-      <AlternateText>Indicator Gator Oscillator</AlternateText>
+      <AlternateText>IndicatorGatorOscillator</AlternateText>
     </Image>
     <Image Include="Art\IndicatorFractals.png">
       <ImageId>IndicatorFractals</ImageId>
-      <AlternateText>Indicator Fractals</AlternateText>
+      <AlternateText>IndicatorFractals</AlternateText>
     </Image>
     <Image Include="Art\IndicatorExponentialMovingAverage.png">
       <ImageId>IndicatorExponentialMovingAverage</ImageId>
-      <AlternateText>Indicator Exponential Moving Average</AlternateText>
+      <AlternateText>IndicatorExponentialMovingAverage</AlternateText>
     </Image>
     <Image Include="Art\IndicatorEnvelope.png">
       <ImageId>IndicatorEnvelope</ImageId>
-      <AlternateText>Indicator Envelope</AlternateText>
+      <AlternateText>IndicatorEnvelope</AlternateText>
     </Image>
     <Image Include="Art\IndicatorDoubleExponentialMovingAverage.png">
       <ImageId>IndicatorDoubleExponentialMovingAverage</ImageId>
-      <AlternateText>Indicator Double Exponential Moving Average</AlternateText>
+      <AlternateText>IndicatorDoubleExponentialMovingAverage</AlternateText>
     </Image>
     <Image Include="Art\IndicatorDirectionalIndex.png">
       <ImageId>IndicatorDirectionalIndex</ImageId>
-      <AlternateText>Indicator Directional Index</AlternateText>
+      <AlternateText>IndicatorDirectionalIndex</AlternateText>
     </Image>
     <Image Include="Art\IndicatorDetrendedPriceOscillator.png">
       <ImageId>IndicatorDetrendedPriceOscillator</ImageId>
-      <AlternateText>Indicator Detrended Price Oscillator</AlternateText>
+      <AlternateText>IndicatorDetrendedPriceOscillator</AlternateText>
     </Image>
     <Image Include="Art\IndicatorCommodityChannelIndex.png">
       <ImageId>IndicatorCommodityChannelIndex</ImageId>
-      <AlternateText>Indicator Commodity Channel Index</AlternateText>
+      <AlternateText>IndicatorCommodityChannelIndex</AlternateText>
     </Image>
     <Image Include="Art\IndicatorChandeMomentumOscillator.png">
       <ImageId>IndicatorChandeMomentumOscillator</ImageId>
-      <AlternateText>Indicator Chande Momentum Oscillator</AlternateText>
+      <AlternateText>IndicatorChandeMomentumOscillator</AlternateText>
     </Image>
     <Image Include="Art\IndicatorChaikinVolatility.png">
       <ImageId>IndicatorChaikinVolatility</ImageId>
-      <AlternateText>Indicator Chaikin Volatility</AlternateText>
+      <AlternateText>IndicatorChaikinVolatility</AlternateText>
     </Image>
     <Image Include="Art\IndicatorBollingerBands.png">
       <ImageId>IndicatorBollingerBands</ImageId>
-      <AlternateText>Indicator Bollinger Bands</AlternateText>
+      <AlternateText>IndicatorBollingerBands</AlternateText>
     </Image>
     <Image Include="Art\IndicatorAwesomeOscillator.png">
       <ImageId>IndicatorAwesomeOscillator</ImageId>
-      <AlternateText>Indicator Awesome Oscillator</AlternateText>
+      <AlternateText>IndicatorAwesomeOscillator</AlternateText>
     </Image>
     <Image Include="Art\IndicatorAverageTrueRange.png">
       <ImageId>IndicatorAverageTrueRange</ImageId>
-      <AlternateText>Indicator Average True Range</AlternateText>
+      <AlternateText>IndicatorAverageTrueRange</AlternateText>
     </Image>
     <Image Include="Art\IndicatorAverageDirectionalIndex.png">
       <ImageId>IndicatorAverageDirectionalIndex</ImageId>
-      <AlternateText>Indicator Average Directional Index</AlternateText>
+      <AlternateText>IndicatorAverageDirectionalIndex</AlternateText>
     </Image>
     <Image Include="Art\IndicatorAlligator.png">
       <ImageId>IndicatorAlligator</ImageId>
-      <AlternateText>Indicator Alligator</AlternateText>
+      <AlternateText>IndicatorAlligator</AlternateText>
     </Image>
     <Image Include="Art\IndicatorAcceleration.png">
       <ImageId>IndicatorAcceleration</ImageId>
-      <AlternateText>Indicator Acceleration</AlternateText>
+      <AlternateText>IndicatorAcceleration</AlternateText>
     </Image>
     <Image Include="Art\IndicatorVidya.png">
       <ImageId>IndicatorVidya</ImageId>
-      <AlternateText>Indicator Vidya</AlternateText>
+      <AlternateText>IndicatorVidya</AlternateText>
     </Image>
     <Image Include="Art\API_ConnectionWindow.png">
       <ImageId>API_ConnectionWindow</ImageId>
-      <AlternateText>API Connection Window</AlternateText>
+      <AlternateText>API ConnectionWindow</AlternateText>
     </Image>
     <Image Include="Art\ChartAnnotations.png">
       <ImageId>ChartAnnotations</ImageId>
-      <AlternateText>Chart Annotations</AlternateText>
+      <AlternateText>ChartAnnotations</AlternateText>
     </Image>
     <Image Include="Art\API_ReconnectionLog.png">
       <ImageId>API_ReconnectionLog</ImageId>
-      <AlternateText>API Reconnection Log</AlternateText>
+      <AlternateText>API ReconnectionLog</AlternateText>
     </Image>
     <Image Include="Art\Designer_connector_security_mapping_01.png">
       <ImageId>Designer_connector_security_mapping_01</ImageId>
@@ -4341,7 +4341,7 @@
     </Image>
     <Image Include="Art\API_GUI_Settings_FinViz.png">
       <ImageId>API_GUI_Settings_FinViz</ImageId>
-      <AlternateText>API GUI Settings Fin Viz</AlternateText>
+      <AlternateText>API GUI Settings FinViz</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_Dukascopy.png">
       <ImageId>API_GUI_Settings_Dukascopy</ImageId>
@@ -4377,7 +4377,7 @@
     </Image>
     <Image Include="Art\API_GUI_Settings_OpenECry_GainFutures.png">
       <ImageId>API_GUI_Settings_OpenECry_GainFutures</ImageId>
-      <AlternateText>API GUI Settings OpenECry Gain Futures</AlternateText>
+      <AlternateText>API GUI Settings OpenECry GainFutures</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_ITCH.png">
       <ImageId>API_GUI_Settings_ITCH</ImageId>
@@ -4421,7 +4421,7 @@
     </Image>
     <Image Include="Art\API_GUI_Settings_AlphaVantage.png">
       <ImageId>API_GUI_Settings_AlphaVantage</ImageId>
-      <AlternateText>API GUI Settings Alpha Vantage</AlternateText>
+      <AlternateText>API GUI Settings AlphaVantage</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_UX.png">
       <ImageId>API_GUI_Settings_UX</ImageId>
@@ -4477,11 +4477,11 @@
     </Image>
     <Image Include="Art\API_GUI_Settings_AlorHistory.png">
       <ImageId>API_GUI_Settings_AlorHistory</ImageId>
-      <AlternateText>API GUI Settings Alor History</AlternateText>
+      <AlternateText>API GUI Settings AlorHistory</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_AlfaDirect.png">
       <ImageId>API_GUI_Settings_AlfaDirect</ImageId>
-      <AlternateText>API GUI Settings Alfa Direct</AlternateText>
+      <AlternateText>API GUI Settings AlfaDirect</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_RSS.png">
       <ImageId>API_GUI_Settings_RSS</ImageId>
@@ -4517,7 +4517,7 @@
     </Image>
     <Image Include="Art\API_GUI_Settings_TradeOgre.png">
       <ImageId>API_GUI_Settings_TradeOgre</ImageId>
-      <AlternateText>API GUI Settings Trade Ogre</AlternateText>
+      <AlternateText>API GUI Settings TradeOgre</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_QUOINEX.png">
       <ImageId>API_GUI_Settings_QUOINEX</ImageId>
@@ -4577,7 +4577,7 @@
     </Image>
     <Image Include="Art\API_GUI_Settings_DigiFinex.png">
       <ImageId>API_GUI_Settings_DigiFinex</ImageId>
-      <AlternateText>API GUI Settings Digi Finex</AlternateText>
+      <AlternateText>API GUI Settings DigiFinex</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_Deribit.png">
       <ImageId>API_GUI_Settings_Deribit</ImageId>
@@ -4593,7 +4593,7 @@
     </Image>
     <Image Include="Art\API_GUI_Settings_CoinExchange.png">
       <ImageId>API_GUI_Settings_CoinExchange</ImageId>
-      <AlternateText>API GUI Settings Coin Exchange</AlternateText>
+      <AlternateText>API GUI Settings CoinExchange</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_Coincheck.png">
       <ImageId>API_GUI_Settings_Coincheck</ImageId>
@@ -4601,11 +4601,11 @@
     </Image>
     <Image Include="Art\API_GUI_Settings_CoinCap.png">
       <ImageId>API_GUI_Settings_CoinCap</ImageId>
-      <AlternateText>API GUI Settings Coin Cap</AlternateText>
+      <AlternateText>API GUI Settings CoinCap</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_CoinBene.png">
       <ImageId>API_GUI_Settings_CoinBene</ImageId>
-      <AlternateText>API GUI Settings Coin Bene</AlternateText>
+      <AlternateText>API GUI Settings CoinBene</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_Coinbase.png">
       <ImageId>API_GUI_Settings_Coinbase</ImageId>
@@ -4641,7 +4641,7 @@
     </Image>
     <Image Include="Art\API_GUI_Settings_BitMax.png">
       <ImageId>API_GUI_Settings_BitMax</ImageId>
-      <AlternateText>API GUI Settings Bit Max</AlternateText>
+      <AlternateText>API GUI Settings BitMax</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_Bithumb.png">
       <ImageId>API_GUI_Settings_Bithumb</ImageId>
@@ -4669,7 +4669,7 @@
     </Image>
     <Image Include="Art\API_GUI_ReconnectionSettings.png">
       <ImageId>API_GUI_ReconnectionSettings</ImageId>
-      <AlternateText>API GUI Reconnection Settings</AlternateText>
+      <AlternateText>API GUI ReconnectionSettings</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_Gopax.png">
       <ImageId>API_GUI_Settings_Gopax</ImageId>
@@ -4677,7 +4677,7 @@
     </Image>
     <Image Include="Art\API_GUI_Settings_CoinHub.png">
       <ImageId>API_GUI_Settings_CoinHub</ImageId>
-      <AlternateText>API GUI Settings Coin Hub</AlternateText>
+      <AlternateText>API GUI Settings CoinHub</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_Settings_Hotbit.png">
       <ImageId>API_GUI_Settings_Hotbit</ImageId>
@@ -4693,7 +4693,7 @@
     </Image>
     <Image Include="Art\API_GUI_Settings_CoinEx.png">
       <ImageId>API_GUI_Settings_CoinEx</ImageId>
-      <AlternateText>API GUI Settings Coin Ex</AlternateText>
+      <AlternateText>API GUI Settings CoinEx</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -4711,255 +4711,255 @@
   <ItemGroup>
     <Image Include="Art\transactions.png">
       <ImageId>transactions</ImageId>
-      <AlternateText>Внешние транзакции.</AlternateText>
+      <AlternateText>transactions</AlternateText>
     </Image>
     <Image Include="Art\security_dde.png">
       <ImageId>securities</ImageId>
-      <AlternateText>Инструменты.</AlternateText>
+      <AlternateText>securities</AlternateText>
     </Image>
     <Image Include="Art\order_dde.png">
       <ImageId>orders</ImageId>
-      <AlternateText>Заявки.</AlternateText>
+      <AlternateText>orders</AlternateText>
     </Image>
     <Image Include="Art\stoporder_dde.png">
       <ImageId>stoporders</ImageId>
-      <AlternateText>Стоп-заявки.</AlternateText>
+      <AlternateText>stoporders</AlternateText>
     </Image>
     <Image Include="Art\trade_dde.png">
       <ImageId>trades</ImageId>
-      <AlternateText>Все сделки.</AlternateText>
+      <AlternateText>trades</AlternateText>
     </Image>
     <Image Include="Art\trade_my_dde.png">
       <ImageId>mytrades</ImageId>
-      <AlternateText>Мои сделки.</AlternateText>
+      <AlternateText>mytrades</AlternateText>
     </Image>
     <Image Include="Art\quote_dde.png">
       <ImageId>quotes</ImageId>
-      <AlternateText>Стакан.</AlternateText>
+      <AlternateText>quotes</AlternateText>
     </Image>
     <Image Include="Art\position_equity_dde.png">
       <ImageId>positionsequity</ImageId>
-      <AlternateText>Позиции по бумагам.</AlternateText>
+      <AlternateText>positionsequity</AlternateText>
     </Image>
     <Image Include="Art\position_derivative_dde.png">
       <ImageId>positionsderivative</ImageId>
-      <AlternateText>Позиции по деривативам.</AlternateText>
+      <AlternateText>positionsderivative</AlternateText>
     </Image>
     <Image Include="Art\portfolio_equity_dde.png">
       <ImageId>portfoliosequity</ImageId>
-      <AlternateText>Портфели по бумагам.</AlternateText>
+      <AlternateText>portfoliosequity</AlternateText>
     </Image>
     <Image Include="Art\portfolio_derivative_dde.png">
       <ImageId>portfoliosderivative</ImageId>
-      <AlternateText>Портфели по деривативам.</AlternateText>
+      <AlternateText>portfoliosderivative</AlternateText>
     </Image>
     <Image Include="Art\security_ex_dde.png">
       <ImageId>securitiesex</ImageId>
-      <AlternateText>Инструменты (расширенные).</AlternateText>
+      <AlternateText>securitiesex</AlternateText>
     </Image>
     <Image Include="Art\quote_ex_dde.png">
       <ImageId>quotesex</ImageId>
-      <AlternateText>Стакан (расширенный).</AlternateText>
+      <AlternateText>quotesex</AlternateText>
     </Image>
     <Image Include="Art\portfolio_dde.png">
       <ImageId>portfolio</ImageId>
-      <AlternateText>Портфель.</AlternateText>
+      <AlternateText>portfolio</AlternateText>
     </Image>
     <Image Include="Art\compile_x86.png">
       <ImageId>compile</ImageId>
-      <AlternateText>Компиляция приложений.</AlternateText>
+      <AlternateText>compile</AlternateText>
     </Image>
     <Image Include="Art\QuikTrader.png">
       <ImageId>quiktrader</ImageId>
-      <AlternateText>Архитектура взаимодействия с Quik.</AlternateText>
+      <AlternateText>quiktrader</AlternateText>
     </Image>
     <Image Include="Art\SmartTrader.png">
       <ImageId>smarttrader</ImageId>
-      <AlternateText>Архитектура взаимодействия со SmartCOM.</AlternateText>
+      <AlternateText>smarttrader</AlternateText>
     </Image>
     <Image Include="Art\Ecng.Trading.png">
       <ImageId>ecngtrading</ImageId>
-      <AlternateText>Архитектура StockSharp.</AlternateText>
+      <AlternateText>ecngtrading</AlternateText>
     </Image>
     <Image Include="Art\quik_new_order.png">
       <ImageId>quikneworder</ImageId>
-      <AlternateText>Ввод заявки в Quik-е.</AlternateText>
+      <AlternateText>quikneworder</AlternateText>
     </Image>
     <Image Include="Art\quik_connections.png">
       <ImageId>quikconnections</ImageId>
-      <AlternateText>Настройка соединения в Quik-е.</AlternateText>
+      <AlternateText>quikconnections</AlternateText>
     </Image>
     <Image Include="Art\candle_qpile.png">
       <ImageId>candleqpile</ImageId>
-      <AlternateText>Таблица со свечками, созданная через QPILE.</AlternateText>
+      <AlternateText>candleqpile</AlternateText>
     </Image>
     <Image Include="Art\sample_stop_order.png">
       <ImageId>samplestoporder</ImageId>
-      <AlternateText>Пример работы со стоп заявками.</AlternateText>
+      <AlternateText>samplestoporder</AlternateText>
     </Image>
     <Image Include="Art\sample_quote_ex.png">
       <ImageId>samplequotesex</ImageId>
-      <AlternateText>Пример экспорта расширенного стакана.</AlternateText>
+      <AlternateText>samplequotesex</AlternateText>
     </Image>
     <Image Include="Art\sample_securities_ex.png">
       <ImageId>samplesecuritiesex</ImageId>
-      <AlternateText>Пример экспорта расширенных инструментов.</AlternateText>
+      <AlternateText>samplesecuritiesex</AlternateText>
     </Image>
     <Image Include="Art\sample_portfolio.png">
       <ImageId>sampleportfolio</ImageId>
-      <AlternateText>Пример экспорт таблицы Портфель.</AlternateText>
+      <AlternateText>sampleportfolio</AlternateText>
     </Image>
     <Image Include="Art\sample_candle_qpile.png">
       <ImageId>samplecandleqpile</ImageId>
-      <AlternateText>Пример экспорт QPILE свечек.</AlternateText>
+      <AlternateText>samplecandleqpile</AlternateText>
     </Image>
     <Image Include="Art\sample_sma.png">
       <ImageId>samplesma</ImageId>
-      <AlternateText>Пример скользящих средних.</AlternateText>
+      <AlternateText>samplesma</AlternateText>
     </Image>
     <Image Include="Art\sample_currency.png">
       <ImageId>samplecurrency</ImageId>
-      <AlternateText>Перевод валюты.</AlternateText>
+      <AlternateText>samplecurrency</AlternateText>
     </Image>
     <Image Include="Art\sample_connection_error.png">
       <ImageId>sampleconnectionerror</ImageId>
-      <AlternateText>Разрыв соединения.</AlternateText>
+      <AlternateText>sampleconnectionerror</AlternateText>
     </Image>
     <Image Include="Art\sample_connection_restored.png">
       <ImageId>sampleconnectionrestore</ImageId>
-      <AlternateText>Восстановление соединения.</AlternateText>
+      <AlternateText>sampleconnectionrestore</AlternateText>
     </Image>
     <Image Include="Art\sample_metadata_trades.png">
       <ImageId>samplemetadatatrades</ImageId>
-      <AlternateText>Расширенный экспорт всех сделок.</AlternateText>
+      <AlternateText>samplemetadatatrades</AlternateText>
     </Image>
     <Image Include="Art\sample_metadata_securities.png">
       <ImageId>samplemetadatasecurities</ImageId>
-      <AlternateText>Расширенный экспорт инструментов.</AlternateText>
+      <AlternateText>samplemetadatasecurities</AlternateText>
     </Image>
     <Image Include="Art\sample_metadata_quik_trades.png">
       <ImageId>samplemetadataquiktrades</ImageId>
-      <AlternateText>Расширенная таблица Все Сделки в Quik-е.</AlternateText>
+      <AlternateText>samplemetadataquiktrades</AlternateText>
     </Image>
     <Image Include="Art\sample_metadata_quik_securities.png">
       <ImageId>samplemetadataquiksecurities</ImageId>
-      <AlternateText>Расширенная таблица Инструменты в Quik-е.</AlternateText>
+      <AlternateText>samplemetadataquiksecurities</AlternateText>
     </Image>
     <Image Include="Art\sample_async_error.png">
       <ImageId>sampleasyncerror</ImageId>
-      <AlternateText>Ошибка при регистрации неправильной заявки в асинхронном режиме.</AlternateText>
+      <AlternateText>sampleasyncerror</AlternateText>
     </Image>
     <Image Include="Art\sample_quik_smart.png">
       <ImageId>samplequiksmart</ImageId>
-      <AlternateText>Одновременная работа с Quik и SmartCOM.</AlternateText>
+      <AlternateText>samplequiksmart</AlternateText>
     </Image>
     <Image Include="Art\sample_smart_history.png">
       <ImageId>samplesmarthistory</ImageId>
-      <AlternateText>Исторические данные SmartCOM.</AlternateText>
+      <AlternateText>samplesmarthistory</AlternateText>
     </Image>
     <Image Include="Art\sample_history_test.png">
       <ImageId>samplehistorytest</ImageId>
-      <AlternateText>Пример тестирования стратегии на истории.</AlternateText>
+      <AlternateText>samplehistorytest</AlternateText>
     </Image>
     <Image Include="Art\sample_emulation_test.png">
       <ImageId>sampleemulationtest</ImageId>
-      <AlternateText>Пример тестирования стратегии на случайных данных.</AlternateText>
+      <AlternateText>sampleemulationtest</AlternateText>
     </Image>
     <Image Include="Art\verifier_error.png">
       <ImageId>verifiererror</ImageId>
-      <AlternateText>Неправильная настройка Quik.</AlternateText>
+      <AlternateText>verifiererror</AlternateText>
     </Image>
     <Image Include="Art\verifier_success.png">
       <ImageId>verifiersuccess</ImageId>
-      <AlternateText>Полностью правильная настройка Quik.</AlternateText>
+      <AlternateText>verifiersuccess</AlternateText>
     </Image>
     <Image Include="Art\verifier_warning.png">
       <ImageId>verifierwarning</ImageId>
-      <AlternateText>Предупреждение о замене колонки другой.</AlternateText>
+      <AlternateText>verifierwarning</AlternateText>
     </Image>
     <Image Include="Art\verifier_refresh.png">
       <ImageId>verifierrefresh</ImageId>
-      <AlternateText>Кнопка Обновить.</AlternateText>
+      <AlternateText>verifierrefresh</AlternateText>
     </Image>
     <Image Include="Art\strategy.png">
       <ImageId>strategy</ImageId>
-      <AlternateText>Архитектура стратегий.</AlternateText>
+      <AlternateText>strategy</AlternateText>
     </Image>
     <Image Include="Art\strategy_childs.png">
       <ImageId>strategychilds</ImageId>
-      <AlternateText>Дочерние стратегий.</AlternateText>
+      <AlternateText>strategychilds</AlternateText>
     </Image>
     <Image Include="Art\strategy_logging.png">
       <ImageId>strategylogging</ImageId>
-      <AlternateText>Логирование стратегий.</AlternateText>
+      <AlternateText>strategylogging</AlternateText>
     </Image>
     <Image Include="Art\platform_independency.png">
       <ImageId>platformindep</ImageId>
-      <AlternateText>Макет платформо-независимого робота.</AlternateText>
+      <AlternateText>platformindep</AlternateText>
     </Image>
     <Image Include="Art\hydra.png">
       <ImageId>hydra</ImageId>
-      <AlternateText>Архитектура.</AlternateText>
+      <AlternateText>hydra</AlternateText>
     </Image>
     <Image Include="Art\hydra_main_first.png">
       <ImageId>hydra_main_first</ImageId>
-      <AlternateText>Главное окно.</AlternateText>
+      <AlternateText>hydra main first</AlternateText>
     </Image>
     <Image Include="Art\hydra_securities.png">
       <ImageId>hydra_securities</ImageId>
-      <AlternateText>Окно инструментов.</AlternateText>
+      <AlternateText>hydra securities</AlternateText>
     </Image>
     <Image Include="Art\hydra_security_edit.png">
       <ImageId>hydra_security_edit</ImageId>
-      <AlternateText>Окно нового инструмента.</AlternateText>
+      <AlternateText>hydra security edit</AlternateText>
     </Image>
     <Image Include="Art\hydra_security_select.png">
       <ImageId>hydra_security_select</ImageId>
-      <AlternateText>Окно выбора инструмента.</AlternateText>
+      <AlternateText>hydra security select</AlternateText>
     </Image>
     <Image Include="Art\security_options.png">
       <ImageId>security_options</ImageId>
-      <AlternateText>Опционные инструменты.</AlternateText>
+      <AlternateText>security options</AlternateText>
     </Image>
     <Image Include="Art\sample_options_calc.png">
       <ImageId>sample_options_calc</ImageId>
-      <AlternateText>Опционный калькулятор.</AlternateText>
+      <AlternateText>sample options calc</AlternateText>
     </Image>
     <Image Include="Art\sample_quote_iv.png">
       <ImageId>sample_quote_iv</ImageId>
-      <AlternateText>Стакан волатильности.</AlternateText>
+      <AlternateText>sample quote iv</AlternateText>
     </Image>
     <Image Include="Art\AlfaTrader.png">
       <ImageId>AlfaTrader</ImageId>
-      <AlternateText>Архитектура взаимодействия с Альфа-Директ.</AlternateText>
+      <AlternateText>AlfaTrader</AlternateText>
     </Image>
     <Image Include="Art\PlazaTrader.png">
       <ImageId>PlazaTrader</ImageId>
-      <AlternateText>Plaza Trader</AlternateText>
+      <AlternateText>PlazaTrader</AlternateText>
     </Image>
     <Image Include="Art\AlfaCfgMyPositions.png">
       <ImageId>AlfaCfgMyPositions</ImageId>
-      <AlternateText>Настройка терминала Альфа-Директ</AlternateText>
+      <AlternateText>AlfaCfgMyPositions</AlternateText>
     </Image>
     <Image Include="Art\AlfaCfgDisableConfirmations.png">
       <ImageId>AlfaCfgDisableConfirmations</ImageId>
-      <AlternateText>Настройка терминала Альфа-Директ</AlternateText>
+      <AlternateText>AlfaCfgDisableConfirmations</AlternateText>
     </Image>
     <Image Include="Art\AlfaCfgUpdateBalance.png">
       <ImageId>AlfaCfgUpdateBalance</ImageId>
-      <AlternateText>Настройка терминала Альфа-Директ</AlternateText>
+      <AlternateText>AlfaCfgUpdateBalance</AlternateText>
     </Image>
     <Image Include="Art\AlfaCfgMaxSpeed.png">
       <ImageId>AlfaCfgMaxSpeed</ImageId>
-      <AlternateText>Настройка терминала Альфа-Директ</AlternateText>
+      <AlternateText>AlfaCfgMaxSpeed</AlternateText>
     </Image>
     <Image Include="Art\AlfaConnectorTest.png">
       <ImageId>AlfaConnectorTest</ImageId>
-      <AlternateText>Alfa Connector Test</AlternateText>
+      <AlternateText>AlfaConnectorTest</AlternateText>
     </Image>
     <Image Include="Art\sample_history_test_parallel.png">
       <ImageId>sample_history_test_parallel</ImageId>
-      <AlternateText>Оптимизация на истории.</AlternateText>
+      <AlternateText>sample history test parallel</AlternateText>
     </Image>
     <None Include="Art\transactions.png">
       <ImageId>transactions</ImageId>
@@ -4971,7 +4971,7 @@
     </None>
     <None Include="Art\SmartTrader.png">
       <ImageId>SmartTrader</ImageId>
-      <AlternateText>Smart Trader</AlternateText>
+      <AlternateText>SmartTrader</AlternateText>
     </None>
     <None Include="Art\sample_smart_sma.png">
       <ImageId>sample_smart_sma</ImageId>
@@ -4983,7 +4983,7 @@
     </None>
     <None Include="Art\QuikTrader.png">
       <ImageId>QuikTrader</ImageId>
-      <AlternateText>Quik Trader</AlternateText>
+      <AlternateText>QuikTrader</AlternateText>
     </None>
   </ItemGroup>
   <ItemGroup>

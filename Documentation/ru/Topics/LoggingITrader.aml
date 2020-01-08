@@ -69,10 +69,5 @@ private readonly LogManager _logManager = new LogManager();
 		  </step>
       </steps>
     </procedure>
-
-    <!--relatedTopics>
-      <link xlink:href="dc7d8d3b-1d25-4f81-a043-dd4ee9f34147">Настройка терминала</link>
-      <link xlink:href="bc7a69cf-35f2-413d-a041-de705543f23c">Пример использования</link>
-    </relatedTopics-->
   </developerWalkthroughDocument>
 </topic>

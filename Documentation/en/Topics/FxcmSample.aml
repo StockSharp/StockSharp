@@ -1,201 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="59f72b02-f133-49a5-9248-b8d9bcb9f5c9" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-   <introduction>
-      <para>The SampleFxcm application shows an example of working with the <codeEntityReference qualifyHint="false">T:StockSharp.Fxcm.FxcmTrader</codeEntityReference>
-      as shown in the figure below. The example source code is in the <legacyItalic>Samples/FXCM</legacyItalic> folder of the installation package.</para>
-		<mediaLink><image placement="center" xlink:href="FxcmSample"/></mediaLink>
+    <introduction>    
+      <para>The code below demonstrates how to initialize the 
+      <codeEntityReference>T:StockSharp.Fxcm.FxcmMessageAdapter</codeEntityReference>
+      and send it to
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new FxcmMessageAdapter(Connector.TransactionIdGenerator)
+{
+    Login = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+    Address = "<Your Address>".To<Uri>(),
+    IsDemo = true
+};
+
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
+					</code>
+
     </introduction>
-    <procedure>
-		<steps class="ordered">
-			<step>
-				<content>
-					<para>First, you need to create an instance of the 
-					<codeEntityReference qualifyHint="false">T:StockSharp.Fxcm.FxcmTrader</codeEntityReference>:</para>
-            		<code language="C#">
-            				<![CDATA[
-Trader = new FxcmTrader();
-.....
-Trader.Login = Login.Text;
-Trader.Password = Password.Password;
-Trader.Address = Address.Text.To<Uri>();
-Trader.IsDemo = IsDemo.IsChecked == true;
-							]]>
-					</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Next, you should subscribe on required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events:</para>
-            		<code language="C#">
-            				<![CDATA[
-// subscribe on connection successfully event
-Trader.Connected += () =>
-{
-	// set flag (connection is established)
-	_isConnected = true;
-
-	// update gui labes
-	this.GuiAsync(() => ChangeConnectStatus(true));
-};
-Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
-
-// subscribe on connection error event
-Trader.ConnectionError += error => this.GuiAsync(() =>
-{
-	// update gui labes
-	ChangeConnectStatus(false);
-
-	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
-});
-
-// subscribe on error event
-Trader.Error += error =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
-
-// subscribe on error of market data subscription event
-Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
-
-Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-
-Trader.NewPortfolio += portfolio =>
-{
-	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-
-	// subscribe on portfolio updates
-	Trader.RegisterPortfolio(portfolio);
-};
-Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-// subscribe on error of order registration event
-Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-// subscribe on error of order cancelling event
-Trader.OrderCancelFailed += OrderFailed;
-
-// subscribe on error of stop-order registration event
-Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-// subscribe on error of stop-order cancelling event
-Trader.StopOrderCancelFailed += OrderFailed;
-
-Trader.MassOrderCancelFailed += (transId, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
-							]]>
-					</code>						
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Finally, you need to connect to <token>fxcm</token> server:</para>
-            		<code language="C#">
-            				<![CDATA[
-Trader.Connect();
-							]]>
-					</code>						
-				</content>
-			</step>
-					
-			<step>
-				<content>
-					<para>Once connected, you can expect to trigger events:</para>
-						<list class="bullet">
-							<listItem>
-								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – 
-								instrument change (last price, best bid/ask price, etc.) requested through 
-								<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> method.</para>
-							</listItem>
-							<listItem>
-								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – 
-									order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference> method.</para>
-							</listItem>
-							<listItem>
-								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> – 
-									new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> method.</para>
-							</listItem>
-							<listItem>
-								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – 
-									portfolios change requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method.</para>
-							</listItem>
-						</list>
-				</content>
-			</step>
-
-			<step>
-				<content>
-					<para>Instruments search (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more detail</link>):</para>
-					<mediaLink><image placement="center" xlink:href="FxcmSecurities"/></mediaLink>
-            		<code language="C#">
-            				<![CDATA[
-private void FindClick(object sender, RoutedEventArgs e)
-{
-	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "USD" } };
-
-	if (!wnd.ShowModal(this))
-		return;
-
-	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
-}
-							]]>
-					</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>For updates on the selected instrument and ticks you need to use the
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> method:</para>
-            		<code language="C#">
-            				<![CDATA[
-private void Level1Click(object sender, RoutedEventArgs e)
-{
-	var trader = MainWindow.Instance.Trader;
-
-	foreach (var security in SecurityPicker.SelectedSecurities)
-	{
-		if (trader.RegisteredSecurities.Contains(security))
-		{
-			trader.UnRegisterSecurity(security);
-		}
-		else
-		{
-			trader.RegisterSecurity(security);
-		}
-	}
-}
-							]]>
-							</code>						
-						</content>
-					</step>
-					<step>
-						<content>
-							<para>For orders registration the <legacyBold>New Order</legacyBold> button used. 
-							The <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
-							method sends an order to the server:</para>
-            				<code language="C#">
-            				<![CDATA[
-private void NewOrderClick(object sender, RoutedEventArgs e)
-{
-	var newOrder = new OrderWindow
-	{
-		Order = new Order { Security = SecurityPicker.SelectedSecurity },
-		SecurityProvider = MainWindow.Instance.Trader,
-		MarketDataProvider = MainWindow.Instance.Trader,
-		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-	};
-
-	if (newOrder.ShowModal(this))
-		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
-}
-							]]>
-							</code>						
-						</content>
-					</step>
-
-				</steps>
-		</procedure>
-   
+  
+        <relatedTopics>
+        <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

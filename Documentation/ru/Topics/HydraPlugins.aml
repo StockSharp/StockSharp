@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
     <introduction>
       <para>
       Для добавления собственного источника необходимо создать собственный <codeEntityReference>T:StockSharp.Messages.IMessageAdapter</codeEntityReference>. 

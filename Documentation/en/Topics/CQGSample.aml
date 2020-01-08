@@ -1,233 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="436fc377-85ff-4d37-ad62-4846313a8563" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-     <para>
-      	The application SampleCQG shows an example of working with <codeEntityReference>T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference> and <codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference>,
-      	as shown in the figure below. The example source code is in the <legacyItalic>Samples/CQG</legacyItalic> folder of the installation package.
-      </para>
-      <mediaLink><image placement="center" xlink:href="CQGTraderSample"/></mediaLink>
-    
+    <introduction>     
+      <para>The code below demonstrates how to initialize the 
+      <codeEntityReference>T:StockSharp.Cqg.Com.CqgComMessageAdapter</codeEntityReference> and 
+      <codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter</codeEntityReference> and
+      and send it to
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+      <para>1. <legacyBold>CQG COM</legacyBold>, connection by local
+<legacyBold>CQG Integrated Client</legacyBold>:</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new CqgComMessageAdapter(Connector.TransactionIdGenerator)
+{
+    UserName = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+};
+
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
+					</code>
+<para>2. <legacyBold>CQG Continuum</legacyBold>, connecting directly to the server:</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new CqgContinuumMessageAdapter(Connector.TransactionIdGenerator)
+{
+    UserName = "<Your Login>",
+    Password = "<Your Password>".To<SecureString>(),
+    Address = "<Address>".To<IPAddress>(),
+};
+
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
+					</code>
+
     </introduction>
-   
-    <procedure>
-		<steps class="ordered">
-			<step>
-				<content>
-					<para>1.	First, you need to create an instance of the gateway class 
-<codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference> or 
-<codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference>, depending on the connection used:</para>
-            		<code language="C#">
-            				<![CDATA[
-
-Connector = new.CqgContinuumTrader { LogLevel = LogLevels.Debug };
-// Or
-Connector = new.CqgComTrader { LogLevel = LogLevels.Debug };
-							]]>
-					</code>
-
-				</content>
-			</step>
-			<step>
-				<content>
-<para>Then we install the necessary <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> event handlers:</para>
-					<code language="C#">
-            				<![CDATA[
-// subscribe on connection successfully event
-Connector.Connected += () =>
-{
-	this.GuiAsync(() => OnConnectionChanged(true));
-};
-
-// subscribe on connection error event
-Connector.ConnectionError += error => this.GuiAsync(() =>
-{
-	OnConnectionChanged(Connector.ConnectionState == ConnectionStates.Connected);
-	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
-});
-
-Connector.Disconnected += () => this.GuiAsync(() => OnConnectionChanged(false));
-
-// subscribe on error event
-Connector.Error += error =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
-
-// subscribe on error of market data subscription event
-Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
-
-Connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-Connector.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-Connector.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-Connector.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-Connector.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-Connector.NewPortfolio += portfolio =>
-{
-	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-
-	// subscribe on portfolio updates
-	Connector.RegisterPortfolio(portfolio);
-};
-Connector.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-// subscribe on error of order registration event
-Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-// subscribe on error of order cancelling event
-Connector.OrderCancelFailed += OrderFailed;
-
-// subscribe on error of stop-order registration event
-Connector.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-// subscribe on error of stop-order cancelling event
-Connector.StopOrderCancelFailed += OrderFailed;
-
-Connector.MassOrderCancelFailed += (transId, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
-							]]>
-					</code>						
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Then you need to connect to the <token>cqg</token> server:</para>
-            		<code language="C#">
-            				<![CDATA[
-Trader.Connect();
-							]]>
-					</code>						
-				</content>
-			</step>
-			
-			<step>
-				<content>
-<para>When the connection is successful, you can expect to trigger the 
-<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio</codeEntityReference> 
-event. In this event handler you should subscribe to changes in the 
-<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference>
-portfolios using the 
-<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> 
-method.</para>
-</content>
-			</step>
-			<step>
-				<content>
-					<para>Instruments search (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more detail</link>):</para>
-         			<code language="C#">
-<![CDATA[
-private void FindClick(object sender, RoutedEventArgs e)
-{
-	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "ES" } };
-
-	if (!wnd.ShowModal(this))
-		return;
-
-	Connector.LookupSecurities(wnd.Criteria);
-}
-]]>
-					</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>To get trades by the selected instrument you should call the
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> method:</para>
-            		<code language="C#">
-<![CDATA[
-private void QuotesClick(object sender, RoutedEventArgs e)
-{
-	foreach (var security in SecurityPicker.SelectedSecurities)
-	{
-		if (Connector.RegisteredSecurities.Contains(security))
-		{
-			Connector.UnRegisterSecurity(security);
-			Connector.UnRegisterTrades(security);
-		}
-		else
-		{
-			Connector.RegisterSecurity(security);
-			Connector.RegisterTrades(security);
-		}
-	}
-}
-]]>
-					</code>
-					<para>Trades will come in the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> event.</para>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>To request updates on the order books you need to use the
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference> method:</para>
-            		<code language="C#">
-<![CDATA[
-private void DepthClick(object sender, RoutedEventArgs e)
-{
-	foreach (var security in SecurityPicker.SelectedSecurities)
-	{
-		var window = _quotesWindows.SafeAdd(security, key =>
-		{
-			// create order book window
-			var wnd = new QuotesWindow
-			{
-				Title = security.Id + " " + LocalizedStrings.MarketDepth
-			};
-			wnd.MakeHideable();
-			return wnd;
-		});
-
-		if (window.Visibility == Visibility.Visible)
-		{
-			// unsubscribe from order book flow
-			Connector.UnRegisterMarketDepth(security);
-
-			window.Hide();
-		}
-		else
-		{
-			// subscribe on order book flow
-			Connector.RegisterMarketDepth(security);
-
-			window.Show();
-		}
-
-		if (!_initialized)
-		{
-			OnMarketDepthChanged(Connector.GetMarketDepth(security));
-			Connector.MarketDepthChanged += OnMarketDepthChanged;
-			_initialized = true;
-		}
-	}
-}
-							]]>
-					</code>
-					<para>The order books appears in the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> event.</para>
-				</content>
-			</step>
-			<step>
-				<content>
-<para>There is the  <legacyBold>New Order</legacyBold> button for registering orders. The
-<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
-method sends an order to the server:</para>
-            		<code language="C#">
-            				<![CDATA[
-private void NewOrderClick(object sender, RoutedEventArgs e)
-{
-	var newOrder = new OrderWindow
-	{
-		Order = new Order { Security = SecurityPicker.SelectedSecurity },
-		SecurityProvider = Connector,
-		MarketDataProvider = Connector,
-		Portfolios = new PortfolioDataSource(Connector)
-	};
-
-	if (newOrder.ShowModal(this))
-		Connector.RegisterOrder(newOrder.Order);
-}
-							]]>
-					</code>						
-				</content>
-			</step>
-		</steps>
-    </procedure>
-   
+  
+        <relatedTopics>
+        <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

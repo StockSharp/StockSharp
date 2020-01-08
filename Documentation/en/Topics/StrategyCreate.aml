@@ -66,17 +66,17 @@
 			  The implementation code of the trading strategy for moving average:
 			</para>
 			<code language="C#">
-<![CDATA[
+				<![CDATA[
 class SmaStrategy : Strategy
 {
-	private readonly Connector _trader;
+	private readonly Connector _connector;
 	private readonly CandleSeries _series;
 	private bool _isShortLessThenLong;
 
 	public SmaStrategy(CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
 	{
 		_series = series;
-		_trader = ((Connector)this.Connector);
+		_connector = ((Connector)this.Connector);
 		LongSma = longSma;
 		ShortSma = shortSma;
 	}
@@ -86,7 +86,7 @@ class SmaStrategy : Strategy
 
 	protected override void OnStarted()
 	{
-		_trader
+		_connector
 			.WhenCandlesFinished(_series)
 			.Do(ProcessCandle)
 			.Apply(this);
@@ -123,11 +123,11 @@ class SmaStrategy : Strategy
 			var volume = Position == 0 ? Volume : Position.Abs() * 2;
 
 			// register order (limit order)
-			RegisterOrder(this.CreateOrder(direction, (decimal)(Security.GetCurrentPrice(this, direction) ?? 0), volume));
+			//RegisterOrder(this.CreateOrder(direction, (decimal)Security.GetCurrentPrice(direction), volume));
 
 			// or revert position via market quoting
-			//var strategy = new MarketQuotingStrategy(direction, volume);
-			//ChildStrategies.Add(strategy);
+			var strategy = new MarketQuotingStrategy(direction, volume);
+			ChildStrategies.Add(strategy);
 
 			// store current values for short and long
 			_isShortLessThenLong = isShortLessThenLong;
@@ -155,7 +155,7 @@ class SmaStrategy : Strategy
 			<para>
 			  The code of work with moving average goes after checking. <legacyBold>Important!</legacyBold> The <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
 			  class has the <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
-			  method, which must be called instead of direct registration through the (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>)
+			  method, which must be called instead of direct registration through the (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>)
 			  connector. All trades that have taken place on such order will be captured by the <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>.
 			  And on the basis of these trades the calculation of position, slippage, P&amp;L etc. will be done. In addition, such orders and trades will be added to the
 			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Orders</codeEntityReference> and
@@ -165,7 +165,7 @@ class SmaStrategy : Strategy
 			<alert class-="note">
 			  <para>
 				If you want to change the registered order, you also have to call <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>
-				method, and not to apply directly to the connector through the <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>
+				method, and not to apply directly to the connector through the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>
 				method.
 			  </para>
 			</alert>
@@ -184,11 +184,9 @@ class SmaStrategy : Strategy
 			</para>
 			<code language="C#">
 	<![CDATA[
-_trader = new InteractiveBrokersTrader();
-
-_trader.Connected += () =>
+_connector.Connected += () =>
 {
-	_trader.NewSecurity += security =>
+	_connector.NewSecurity += security =>
 	{
 		if (!security.Code.CompareIgnoreCase("AAPL"))
 			return;
@@ -200,7 +198,7 @@ _trader.Connected += () =>
 		});
 	};
 
-	_trader.NewMyTrade += trade =>
+	_connector.NewMyTrade += trade =>
 	{
 		if (_strategy != null)
 		{
@@ -209,13 +207,13 @@ _trader.Connected += () =>
 		}
 	};
 
-	_trader.CandleSeriesProcessing += (series, candle) =>
+	_connector.CandleSeriesProcessing += (series, candle) =>
 	{
 		if (_isTodaySmaDrawn && candle.State == CandleStates.Finished)
 			ProcessCandle(candle);
 	};
-	//_trader.Error += ex => this.GuiAsync(() => MessageBox.Show(this, ex.ToString()));
-	_trader.ConnectionError += ex =>
+	//_connector.Error += ex => this.GuiAsync(() => MessageBox.Show(this, ex.ToString()));
+	_connector.ConnectionError += ex =>
 	{
 		if (ex != null)
 			this.GuiAsync(() => MessageBox.Show(this, ex.ToString()));
@@ -247,7 +245,7 @@ private void StartClick(object sender, RoutedEventArgs e)
 			Volume = 1,
 			Security = _aapl,
 			Portfolio = Portfolios.SelectedPortfolio,
-			Connector = _trader,
+			Connector = _connector,
 		};
 		_strategy.Log += OnLog;
 		_strategy.PropertyChanged += OnStrategyPropertyChanged;
@@ -296,7 +294,7 @@ private void StartClick(object sender, RoutedEventArgs e)
 			lastCandleTime = candle.OpenTime;
 		}
 
-		_trader.SubscribeCandles(_candleSeries, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+		_connector.SubscribeCandles(_candleSeries, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 ...
 ]]></code>
 		  </content>
@@ -310,13 +308,13 @@ private void StartClick(object sender, RoutedEventArgs e)
 ...
 	if (_strategy.ProcessState == ProcessStates.Stopped)
 	{
-		_trader.RegisterMarketDepth(_strategy.Security);
+		_connector.SubscribeMarketDepth(_strategy.Security);
 		_strategy.Start();
 		Start.Content = LocalizedStrings.Str242;
 	}
 	else
 	{
-		_trader.UnRegisterMarketDepth(_strategy.Security);
+		_connector.UnSubscribeMarketDepth(_strategy.Security);
 		_strategy.Stop();
 		Start.Content = LocalizedStrings.Str2421;
 	}
@@ -351,11 +349,11 @@ foreach (var candle in candles)
 	lastCandleTime = candle.OpenTime;
 }
 
-trader.Start(series);
+_connector.Start(series);
 
-var bounds = _timeFrame.GetCandleBounds(_trader.CurrentTime);
+var bounds = _timeFrame.GetCandleBounds(_connector.CurrentTime);
 
-candles = _trader.GetCandles(series, new Range<DateTimeOffset>(lastCandleTime + _timeFrame, bounds.Min));
+candles = _connector.GetCandles(series, new Range<DateTimeOffset>(lastCandleTime + _timeFrame, bounds.Min));
 
 foreach (var candle in candles)
 {
@@ -393,7 +391,6 @@ private void ProcessCandle(Candle candle)
     </nextSteps>
     
     <relatedTopics>
-  
     </relatedTopics>
     
   </developerWalkthroughDocument>

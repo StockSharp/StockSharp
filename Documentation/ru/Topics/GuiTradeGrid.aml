@@ -25,9 +25,6 @@
 	  <para>
 Ниже показаны фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Common/SampleConnection</legacyItalic>.
       </para>
-      
-
-      
        <code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="Sample.TradesWindow"
@@ -44,7 +41,7 @@
               		<![CDATA[
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-    .......................................
+	.......................................
 
 	// Добавляем свои сделки в таблицу MyTradeGrid
 	_connector.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);

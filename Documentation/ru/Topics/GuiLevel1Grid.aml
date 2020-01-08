@@ -30,9 +30,7 @@
 	  <para>
 	  Ниже показаны фрагменты кода с его использованием.
       </para>
-      
 
-      
        <code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="Membrane02.Level1Window"

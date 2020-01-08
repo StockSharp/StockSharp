@@ -1,21 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" revisionNumber="1">
-  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-
-	<introduction>
-		<para>The <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference> should be used for trading algorithms creating for <token>IB_external</token>. 
-		The scheme of interaction is shown in this figure:</para>
-		
-		<mediaLink><image placement="center" xlink:href="IBTrader"/></mediaLink>
-		
-		<para>As can be seen from the figure, the interaction takes place through the <token>IB_TWS</token> terminal or <token>IB_Gate</token>, which must be pre-installed and configured.</para>
-	</introduction>
-	<relatedTopics>
-		<link xlink:href="eab815a2-65f7-46e8-9989-4ae52d234703">TWS configuration</link>
-		<link xlink:href="7c23b480-d472-43df-aabf-f743ad09fded">Getting started</link>
-		<link xlink:href="3e0f02b3-3e2f-405d-a8a2-6d44a50db166">Algorithmic orders</link>
-		<link xlink:href="f7074321-9e5c-4bc0-a8a3-b2025c5b7268">Historical data</link>
-		<link xlink:href="9817c52a-fc3e-4fc8-a5f0-d7caf654b440">Scanner</link>
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    <para><legacyBold>Interactive Brokers</legacyBold> - 
+    trading platform to trade financial assets including stocks, options, futures, EFPs, futures options, forex, bonds, and funds.</para>
+    	<para>
+Before you start writing trading robots for the current trading platform, it is recommended to read the links in the  
+<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
+		</para>
+     </introduction>
+     <relatedTopics>
+<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />
+<link xlink:href="554da27b-900a-462a-a2c2-d2b6cb1330ae" />
+<link xlink:href="c23300a1-bf38-444a-b103-28350766477f" />
+<link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />
+<link xlink:href="1c3c9835-b65b-48d5-8abf-70986c666ef4" />
+<link xlink:href="b740e98d-7bcf-406e-aad4-75432ab3009e" />
+<link xlink:href="2587051d-1e94-4fb2-b5c1-d57cb5af1b6d" />
+<link xlink:href="eab815a2-65f7-46e8-9989-4ae52d234703" />
+<link xlink:href="7c23b480-d472-43df-aabf-f743ad09fded" />
     </relatedTopics>
-	</developerWalkthroughDocument>
+  </developerConceptualDocument>
 </topic>

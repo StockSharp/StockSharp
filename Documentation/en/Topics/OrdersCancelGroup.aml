@@ -7,7 +7,7 @@
 
     <introduction>
       <para>
-		  To cancel several orders the <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes},System.Nullable{System.Int64})</codeEntityReference>
+		  To cancel several orders the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes},System.Nullable{System.Int64})</codeEntityReference>
 		  method used, which cancel the active orders by the parameters mask passed.
 	  </para>
     </introduction>
@@ -25,17 +25,17 @@
 
       <content>
         <para>To cancel all ordinary orders (<codeEntityReference qualifyHint="true">F:StockSharp.Messages.OrderTypes.Limit</codeEntityReference>) for the specified portfolio and instrument:</para>
-		  <code language="C#">trader.CancelOrders(false, MainWindow.Instance.Portfolio, null, null, security);</code>
+		  <code language="C#">_connector.CancelOrders(false, MainWindow.Instance.Portfolio, null, null, security);</code>
 
 		  <para>
 			  To cancel all orders for the specified instrument:
 		  </para>
-		  <code language="C#">trader.CancelOrders(null, null, null, null, security);</code>
+		  <code language="C#">_connector.CancelOrders(null, null, null, null, security);</code>
 
 		  <para>
 			  To cancel all long stop orders:
 		  </para>
-		  <code language="C#">trader.CancelOrders(true, null, Sides.Buy, null, null);</code>
+		  <code language="C#">_connector.CancelOrders(true, null, Sides.Buy, null, null);</code>
       </content>
     </section>
     

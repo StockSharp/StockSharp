@@ -3,33 +3,32 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.IndexEditor</codeEntityReference> -  Графический контрол для редактирования
+      	<codeEntityReference>T:StockSharp.Xaml.IndexEditor</codeEntityReference> - Graphic control for editing 
       	<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>. 
       	</para>
       	<para>
       	<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> -
-      	специальный тип индексного инструмента, в основе которого лежит комбинирование нескольких инструментов при помощи математических формул. Этот тип имеет свойство  
-      	<codeEntityReference>P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Expression</codeEntityReference>, в котором хранится формула в текстовом виде и список подлежащих инструментов 
-       <codeEntityReference>P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.InnerSecurityIds</codeEntityReference>.   
+      	is a special type of index security based on a combination of several securities using mathematical formulas. This type has the 
+      	<codeEntityReference>P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Expression</codeEntityReference>, property, which stores the formula in text form and the list of underlying 
+       <codeEntityReference>P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.InnerSecurityIds</codeEntityReference> securities. 
       </para>
       <mediaLink>
 <image placement="center" xlink:href="GUI_IndexSecurityWindow"/>
 </mediaLink>
 
       <para>
-      	<legacyBold>Основные свойства </legacyBold>
+      	<legacyBold>Basic properties</legacyBold>
       </para>
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.IndexEditor.Securities</codeEntityReference> - все доступные инструменты.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.IndexEditor.Securities</codeEntityReference> - all available securities.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.IndexEditor.Formula</codeEntityReference> - математическая формула индекса.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.IndexEditor.Formula</codeEntityReference> - mathematical formula of the index.</para>
   			</listItem>
 		</list>
-<para>Для использования <codeEntityReference>T:StockSharp.Xaml.IndexEditor</codeEntityReference> 
-предварительно необходимо зарегистрировать специальную службу:</para>
+<para>To use <codeEntityReference>T:StockSharp.Xaml.IndexEditor</codeEntityReference>, first you need to register a special service:</para>
  <code title="C#" language="C#">
   <![CDATA[
 ...
@@ -37,8 +36,7 @@ ConfigManager.RegisterService<ICompilerService>(new RoslynCompilerService());
 ...
 ]]>
  </code> 
- <para>Далее в <codeEntityReference>T:StockSharp.Xaml.IndexEditor</codeEntityReference> 
- следует передать инструменты необходимые для расчета индекса:</para>
+ <para>Next, the securities necessary for index calculating should be passed to <codeEntityReference>T:StockSharp.Xaml.IndexEditor</codeEntityReference>:</para>
  <code title="C#" language="C#">
   <![CDATA[
 ...

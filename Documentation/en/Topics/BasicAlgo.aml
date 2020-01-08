@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="e1d2c02b-ee6e-41ab-93c5-f2286f1fe897" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-
     <introduction>
       <para>Along with <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Quoting</link>, the <token>stocksharp</token> contains the 
 	  <codeEntityReference>T:StockSharp.Algo.TraderHelper</codeEntityReference>  
@@ -17,13 +16,13 @@
 method (to register the orders in relation to other market players and to prevent own algorithms to fight each other):</para>
 <code language="C#"><![CDATA[
 // the sample security
-var someSecurity = trader.Securities.First();
+var someSecurity = _connector.Securities.First();
 
 var someOrders = new List<Order>();
 // fill the collection by own orders
 
 // to get the best big price
-Console.WriteLine(trader.GetMarketDepth(someSecurity).GetFilteredQuotes(Sides.Buy, someOrders, null).Max(q => q.Price));
+Console.WriteLine(_connector.GetMarketDepth(someSecurity).GetFilteredQuotes(Sides.Buy, someOrders, null).Max(q => q.Price));
 ]]></code>
 </content>
 </step>
@@ -35,7 +34,7 @@ To adjust the price through the
 method, so it become a multiple of price increment and trading system accepts the order:</para>
 <code language="C#">
 // the sample security
-var someSecurity = trader.Securities.First();
+var someSecurity = _connector.Securities.First();
 Console.WriteLine(someSecurity.ShrinkPrice(13453.65342));
 </code>
 			  </content>
@@ -47,7 +46,7 @@ To get the position on closed trades through the
 <codeEntityReference>Overload:StockSharp.Algo.TraderHelper.GetPosition</codeEntityReference> 
 method:</para>
 <code language="C#">
-Console.WriteLine(_trader.GetPosition(Portfolio,Security, clientCode, depoName);
+Console.WriteLine(_connector.GetPosition(Portfolio,Security, clientCode, depoName);
 </code>
 			  </content>
 		  </step>
@@ -59,10 +58,9 @@ To check whether the current time traded (is session closed? is clearing started
 </para>
 <code language="C#">
 // the sample security
-var someSecurity = trader.Securities.First();
+var someSecurity = _connector.Securities.First();
 
-Console.WriteLine(someSecurity.Exchange.IsTradeTime(currentTime));
-</code>
+Console.WriteLine(someSecurity.Board.IsTradeTime(currentTime));</code>
 			  </content>
 		  </step>
 		  <step>
@@ -76,7 +74,6 @@ Console.WriteLine(someSecurity.Exchange.IsTradeTime(currentTime));
 		  </step>
       </steps>
     </procedure>
-
     
     <relatedTopics>
 

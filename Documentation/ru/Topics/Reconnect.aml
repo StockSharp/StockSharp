@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" revisionNumber="0">
   <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
     <introduction>
     <title>Визуальная настройка переподключения</title>
     <para>
@@ -47,12 +43,6 @@
 				<codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.ReAttemptCount</codeEntityReference> задается количество
 				попыток для переустановки соединения. По умолчанию оно равно 100. -1 означает бесконечное количество попыток. 0 - режим отключен.
 			</listItem>
-			<!-- <listItem>
-				Экспорт данных не приходит долгое время. Через свойство
-				<codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.TimeOutInterval</codeEntityReference> задается время,
-				максимально допустимое для отсутствия новых данных. По умолчанию оно равно TimeSpan.Zero, что означает, что режим отключен.
-				Время ожидания успешного подключения/отключения. Если значение равно TimeSpan.Zero, то мониторинг не производится.  По-умолчанию значение равно 30 секундам. 
-			</listItem> -->
 			<listItem>
 				В процессе установки или отключения соединения соответствующие события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Connected</codeEntityReference> или
 				 <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Disconnected</codeEntityReference> могут не приходить долгое время. Для таких ситуаций можно использовать свойство
@@ -60,10 +50,7 @@
 				 Если по истечению данного времени желаемое событие не возникает, то вызывается событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.ConnectionError</codeEntityReference> с ошибкой окончания ожидания.
 			</listItem>
 		</list>
-
     </introduction>
-
-    <!-- Specify at least one procedure or section/procedure and codeExample -->
 
    <procedure>
 
@@ -135,11 +122,7 @@ Connector.Restored += () => this.Sync(() => MessageBox.Show(this, "Соедин�
 			</para>
 		  </content>
 		</step>
-
       </steps>
-    </procedure>
-
-	
-    
+    </procedure>    
   </developerHowToDocument>
 </topic>

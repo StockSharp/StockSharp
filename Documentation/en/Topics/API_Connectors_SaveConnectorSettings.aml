@@ -3,14 +3,15 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <para>
-      Для сохранения и загрузки настроек <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> используются переопределения методов
-      <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Connector.Save(Ecng.Serialization.SettingsStorage)</codeEntityReference> и 
+      <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Connector.Save(Ecng.Serialization.SettingsStorage)</codeEntityReference> and 
       <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Connector.Load(Ecng.Serialization.SettingsStorage)</codeEntityReference>
-      соответственно.
+      methods, respectively, are used to save and load 
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> settings.
 </para>
       <para>
-      Для сохранения и загрузки настроек из внешнего файла можно воспользоваться соответственно сериализацией и десериализацией, 
-      реализованной в <token>stocksharp</token>.
+      To save and load settings from an external file, you can use the serialization 
+      and deserialization, respectively, implemented in
+      <token>stocksharp</token>.
       </para>
        				<code language="C#">
 				<![CDATA[
@@ -23,7 +24,7 @@ public void Load()
 {
 	if (File.Exists(_connectorFile))
 	{
-		//Загрузка настроек коннектора из существующего конфигурационного файла
+		//Download connector settings from an existing configuration file
 		_connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_connectorFile));
 	}
 }
@@ -31,7 +32,7 @@ public void Load()
 
 public void Save()
 {
-	//Сохранение настроек коннектора в конфигурационный файл
+	//Save the connector settings to the configuration file
 	new XmlSerializer<SettingsStorage>().Serialize(_connector.Save(), _connectorFile);
 }
 ...

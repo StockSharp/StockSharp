@@ -120,12 +120,6 @@ private void SecurityPicker_OnSecuritySelected(Security security)
    </sections>
 </section>
       
-    </introduction>
-    
-         <!--<relatedTopics>
-       <link xlink:href="3dc4f866-ab4e-4c74-a627-13727abdb966">SecurityPickerWindow</link>
-    </relatedTopics>-->
-
-    
+    </introduction> 
   </developerConceptualDocument>
 </topic>
