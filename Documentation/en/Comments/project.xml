@@ -256,6 +256,11 @@
 				<p><see cref="N:StockSharp.Xaml.Diagram"/> elements.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Xaml.Diagram.Themes">
+			<summary>
+				<p><see cref="N:StockSharp.Xaml.Diagram"/> themes.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Xaml.GridControl">
 			<summary>
 				<p>Table components.</p>

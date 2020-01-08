@@ -256,6 +256,11 @@
 				<p>Элементы для <see cref="N:StockSharp.Xaml.Diagram"/>.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Xaml.Diagram.Themes">
+			<summary>
+				<p>Темы для <see cref="N:StockSharp.Xaml.Diagram"/>.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Xaml.GridControl">
 			<summary>
 				<p>Табличные компоненты.</p>
@@ -921,7 +926,7 @@
 				<p>Коннектор к историческим данных сайта ЛЧИ.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.UrkExh">
+		<member name="N:StockSharp.UkrExh">
 			<summary>
 				<p>Коннектор к историческим данных сайта UrkExh.</p>
 			</summary>
