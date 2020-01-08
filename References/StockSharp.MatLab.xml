@@ -227,26 +227,6 @@
             Order cancellation error event.
             </summary>
         </member>
-        <member name="E:StockSharp.MatLab.MatLabConnector.NewStopOrder">
-            <summary>
-            Stop-order received.
-            </summary>
-        </member>
-        <member name="E:StockSharp.MatLab.MatLabConnector.StopOrderChanged">
-            <summary>
-            Stop order state change event.
-            </summary>
-        </member>
-        <member name="E:StockSharp.MatLab.MatLabConnector.StopOrderRegisterFailed">
-            <summary>
-            Stop-order registration error event.
-            </summary>
-        </member>
-        <member name="E:StockSharp.MatLab.MatLabConnector.StopOrderCancelFailed">
-            <summary>
-            Stop-order cancellation error event.
-            </summary>
-        </member>
         <member name="E:StockSharp.MatLab.MatLabConnector.NewMarketDepth">
             <summary>
             Order book received.

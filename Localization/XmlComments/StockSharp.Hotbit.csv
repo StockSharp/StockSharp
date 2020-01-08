@@ -10,3 +10,4 @@ M:StockSharp.Hotbit.HotbitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tr
 M:StockSharp.Hotbit.HotbitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Hotbit.HotbitOrderCondition/summary;DocStr60
 M:StockSharp.Hotbit.HotbitOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.Hotbit.HotbitOrderCondition.IsFee/summary;DocStr11487

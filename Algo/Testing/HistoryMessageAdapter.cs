@@ -22,8 +22,6 @@ namespace StockSharp.Algo.Testing
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -286,7 +284,7 @@ namespace StockSharp.Algo.Testing
 				{
 					_isSuspended = false;
 
-					if(_isStarted)
+					if (_isStarted)
 						SendOutMessage(new LastMessage { LocalTime = StopDate });
 
 					SendOutMessage(new DisconnectMessage { LocalTime = StopDate });
@@ -306,23 +304,13 @@ namespace StockSharp.Algo.Testing
 							? SecurityProvider.LookupAll() 
 							: SecurityProvider.Lookup(lookupMsg);
 
-					securities.ForEach(security =>
+					foreach (var security in securities)
 					{
 						SendOutMessage(security.Board.ToMessage());
+						SendOutMessage(security.ToMessage(originalTransactionId: lookupMsg.TransactionId));
+					}
 
-						var secMsg = security.ToMessage();
-						secMsg.OriginalTransactionId = lookupMsg.TransactionId;
-						SendOutMessage(secMsg);
-
-						//SendOutMessage(new Level1ChangeMessage { SecurityId = security.ToSecurityId() }
-						//	.Add(Level1Fields.StepPrice, security.StepPrice)
-						//	.Add(Level1Fields.MinPrice, security.MinPrice)
-						//	.Add(Level1Fields.MaxPrice, security.MaxPrice)
-						//	.Add(Level1Fields.MarginBuy, security.MarginBuy)
-						//	.Add(Level1Fields.MarginSell, security.MarginSell));
-					});
-
-					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
+					SendSubscriptionResult(lookupMsg);
 
 					break;
 				}
@@ -423,13 +411,13 @@ namespace StockSharp.Algo.Testing
 
 			if (SecurityProvider.LookupById(securityId) == null)
 			{
-				SendOutMarketDataReply(transId, new InvalidOperationException(LocalizedStrings.Str704Params.Put(securityId)));
+				SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.Str704Params.Put(securityId)));
 				return;
 			}
 
 			if (StorageRegistry == null)
 			{
-				SendOutMarketDataReply(transId, new InvalidOperationException(LocalizedStrings.Str1117Params.Put(dataType, securityId)));
+				SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.Str1117Params.Put(dataType, securityId)));
 				return;
 			}
 
@@ -554,7 +542,7 @@ namespace StockSharp.Algo.Testing
 					if (_generators.ContainsKey(Tuple.Create(securityId, MarketDataTypes.Trades, arg)))
 					{
 						if (isSubscribe)
-							SendOutMarketDataNotSupported(transId);
+							SendSubscriptionNotSupported(transId);
 
 						return;
 					}
@@ -580,11 +568,11 @@ namespace StockSharp.Algo.Testing
 					break;
 			}
 
-			SendOutMarketDataReply(transId, error);
+			SendSubscriptionReply(transId, error);
 		}
 
 		/// <inheritdoc />
-		public bool SendOutMessage()
+		bool IHistoryMessageAdapter.SendOutMessage()
 		{
 			if (!_isStarted || _isSuspended)
 				return false;
@@ -599,8 +587,10 @@ namespace StockSharp.Algo.Testing
 			return true;
 		}
 
+		void IHistoryMessageAdapter.SendOutMessage(Message message) => SendOutMessage(message);
+
 		/// <inheritdoc cref="MessageAdapter" />
-		public override void SendOutMessage(Message message)
+		protected override void SendOutMessage(Message message)
 		{
 			LoadedMessageCount++;
 			

@@ -51,7 +51,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public FileData GetFile(long id, Action<int> progress = null, Func<bool> cancel = null)
+		public FileData GetFile(long id, Action<long> progress = null, Func<bool> cancel = null)
 		{
 			var data = GetFileInfo(id);
 			Download(data, progress, cancel);
@@ -65,7 +65,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public bool Download(FileData data, Action<int> progress = null, Func<bool> cancel = null)
+		public bool Download(FileData data, Action<long> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -95,7 +95,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void Update(FileData data, Action<int> progress = null, Func<bool> cancel = null)
+		public void Update(FileData data, Action<long> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -110,9 +110,9 @@ namespace StockSharp.Community
 			Upload(operationId, data.Body, progress, cancel);
 		}
 
-		private long? Upload(Guid operationId, byte[] body, Action<int> progress, Func<bool> cancel)
+		private long? Upload(Guid operationId, byte[] body, Action<long> progress, Func<bool> cancel)
 		{
-			var sentCount = 0;
+			var sentCount = 0L;
 
 			foreach (var part in body.Batch(_partSize))
 			{
@@ -139,7 +139,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public FileData Upload(string fileName, byte[] body, bool isPublic, Action<int> progress = null, Func<bool> cancel = null)
+		public FileData Upload(string fileName, byte[] body, bool isPublic, Action<long> progress = null, Func<bool> cancel = null)
 		{
 			if (fileName.IsEmpty())
 				throw new ArgumentNullException(nameof(fileName));
@@ -162,7 +162,7 @@ namespace StockSharp.Community
 				Id = id.Value,
 				FileName = fileName,
 				Body = body,
-				BodyLength = body.Length,
+				BodyLength = body.LongLength,
 				IsPublic = isPublic,
 				CreationDate = DateTime.UtcNow
 			};

@@ -129,6 +129,10 @@ namespace SampleHistoryTesting
 
 				RegisterOrder(this.CreateOrder(direction, price, volume));
 
+				// or revert position via market quoting
+				//var strategy = new MarketQuotingStrategy(direction, volume);
+				//ChildStrategies.Add(strategy);
+
 				// store current values for short and long
 				_isShortLessThenLong = isShortLessThenLong;
 			}

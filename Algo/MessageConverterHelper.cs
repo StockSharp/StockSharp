@@ -335,7 +335,6 @@ namespace StockSharp.Algo
 				ExpiryDate = order.ExpiryDate,
 				PortfolioName = order.Portfolio?.Name,
 				ExecutionType = ExecutionTypes.OrderLog,
-				IsCancelled = (order.State == OrderStates.Done && trade == null),
 				TradeId = trade?.Id,
 				TradePrice = trade?.Price,
 				Currency = order.Currency,
@@ -1300,8 +1299,8 @@ namespace StockSharp.Algo
 			var security = marketDepth.Security;
 
 			var depth = marketDepth.Update(
-				message.Bids.Select(c => c.ToQuote(security, getSecurity)),
-				message.Asks.Select(c => c.ToQuote(security, getSecurity)),
+				message.Bids.Select(c => c.ToQuote(Sides.Buy, security, getSecurity)),
+				message.Asks.Select(c => c.ToQuote(Sides.Sell, security, getSecurity)),
 				message.IsSorted, message.ServerTime);
 
 			depth.LocalTime = message.LocalTime;
@@ -1317,22 +1316,23 @@ namespace StockSharp.Algo
 		/// <returns>Message.</returns>
 		public static QuoteChange ToQuoteChange(this Quote quote)
 		{
-			return new QuoteChange(quote.OrderDirection, quote.Price, quote.Volume);
+			return new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount);
 		}
 
 		/// <summary>
 		/// To convert the message into quote.
 		/// </summary>
 		/// <param name="change">Message.</param>
+		/// <param name="side">Direction (buy or sell).</param>
 		/// <param name="security">Security.</param>
 		/// <param name="getSecurity">The function for getting instrument.</param>
 		/// <returns>Quote.</returns>
-		public static Quote ToQuote(this QuoteChange change, Security security, Func<SecurityId, Security> getSecurity = null)
+		public static Quote ToQuote(this QuoteChange change, Sides side, Security security, Func<SecurityId, Security> getSecurity = null)
 		{
 			if (!change.BoardCode.IsEmpty() && getSecurity != null)
 				security = getSecurity(new SecurityId { SecurityCode = security.Code, BoardCode = change.BoardCode });
 
-			var quote = new Quote(security, change.Price, change.Volume, change.Side);
+			var quote = new Quote(security, change.Price, change.Volume, side, change.OrdersCount);
 			change.CopyExtensionInfo(quote);
 			return quote;
 		}
@@ -1392,7 +1392,7 @@ namespace StockSharp.Algo
 			if (message.OrderState != null)
 				order.State = order.State.CheckModification(message.OrderState.Value);
 			else
-				order.State = order.State.CheckModification(message.IsCancelled || message.TradeId != null ? OrderStates.Done : OrderStates.Active);
+				order.State = order.State.CheckModification(message.TradeId != null ? OrderStates.Done : OrderStates.Active);
 
 			if (message.TradeId != null)
 			{
@@ -1431,6 +1431,7 @@ namespace StockSharp.Algo
 				BoardCode = news.Board == null ? string.Empty : news.Board.Code,
 				Url = news.Url,
 				Priority = news.Priority,
+				Language = news.Language,
 			};
 		}
 
@@ -1647,6 +1648,7 @@ namespace StockSharp.Algo
 				Board = message.BoardCode.IsEmpty() ? null : exchangeInfoProvider?.GetOrCreateBoard(message.BoardCode),
 				LocalTime = message.LocalTime,
 				Priority = message.Priority,
+				Language = message.Language,
 				Security = message.SecurityId == null ? null : new Security
 				{
 					Id = message.SecurityId.Value.SecurityCode
@@ -2060,6 +2062,8 @@ namespace StockSharp.Algo
 					return DataType.TimeFrames;
 				case UserLookupMessage _:
 					return DataType.Users;
+				case PortfolioMessage pfMsg:
+					return DataType.Portfolio(pfMsg.PortfolioName);
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.GetType(), LocalizedStrings.Str1219);
 			}

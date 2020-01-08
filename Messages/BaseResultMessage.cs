@@ -2,7 +2,6 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
 
 	/// <summary>
 	/// Base result message.
@@ -10,7 +9,7 @@ namespace StockSharp.Messages
 	/// <typeparam name="TMessage">Message type.</typeparam>
 	[DataContract]
 	[Serializable]
-	public abstract class BaseResultMessage<TMessage> : Message, IOriginalTransactionIdMessage, IErrorMessage
+	public abstract class BaseResultMessage<TMessage> : Message, IOriginalTransactionIdMessage
 		where TMessage : BaseResultMessage<TMessage>, new()
 	{
 		/// <summary>
@@ -25,11 +24,6 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
-
-		/// <inheritdoc />
-		[DataMember]
-		[XmlIgnore]
-		public Exception Error { get; set; }
 
 		/// <summary>
 		/// Create a copy of <see cref="BaseResultMessage{TMessage}"/>.
@@ -51,18 +45,9 @@ namespace StockSharp.Messages
 			base.CopyTo(destination);
 
 			destination.OriginalTransactionId = OriginalTransactionId;
-			destination.Error = Error;
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
-		{
-			var str = base.ToString() + $",Orig={OriginalTransactionId}";
-
-			if (Error != null)
-				str += $",Error={Error.Message}";
-
-			return str;
-		}
+		public override string ToString() => base.ToString() + $",Orig={OriginalTransactionId}";
 	}
 }

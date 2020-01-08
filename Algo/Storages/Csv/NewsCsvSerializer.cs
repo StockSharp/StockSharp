@@ -38,6 +38,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.BoardCode,
 				data.SecurityId?.SecurityCode,
 				data.Priority?.To<string>(),
+				data.Language,
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -63,6 +64,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				news.Priority = reader.ReadNullableEnum<NewsPriorities>();
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				news.Language = reader.ReadString();
 
 			return news;
 		}

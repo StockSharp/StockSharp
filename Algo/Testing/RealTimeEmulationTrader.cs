@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Testing
 
 			public override OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired => null;
 			public override IEnumerable<MessageTypes> SupportedInMessages => InnerAdapter.SupportedInMessages.Except(Extensions.TransactionalMessageTypes).ToArray();
-			public override IEnumerable<MessageTypes> SupportedOutMessages => InnerAdapter.SupportedOutMessages.Except(new[] { MessageTypes.Portfolio, MessageTypes.PortfolioRoute, MessageTypes.PortfolioRouteListFinished, MessageTypes.PositionChange, MessageTypes.PortfolioLookupResult }).ToArray();
+			public override IEnumerable<MessageTypes> SupportedOutMessages => InnerAdapter.SupportedOutMessages.Except(new[] { MessageTypes.Portfolio, MessageTypes.PortfolioRoute, MessageTypes.PositionChange }).ToArray();
 
 			private ILogSource _parent;
 
@@ -142,7 +142,7 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.Connect:
 					case MessageTypes.Disconnect:
 					case MessageTypes.ChangePassword:
-					case MessageTypes.MarketData:
+					case MessageTypes.SubscriptionResponse:
 					{
 						if (_connector._ownAdapter)
 							break;
@@ -150,10 +150,9 @@ namespace StockSharp.Algo.Testing
 						return;
 					}
 
-					case MessageTypes.OrderStatus:
+					case MessageTypes.SubscriptionOnline:
 					case MessageTypes.Portfolio:
 					//case MessageTypes.PortfolioChange:
-					case MessageTypes.PortfolioLookupResult:
 					case MessageTypes.PositionChange:
 						return;
 
@@ -270,8 +269,8 @@ namespace StockSharp.Algo.Testing
 					{
 						case MessageTypes.Connect:
 						case MessageTypes.Disconnect:
-						case MessageTypes.MarketData:
-						case MessageTypes.SecurityLookupResult:
+						case MessageTypes.SubscriptionResponse:
+						case MessageTypes.SubscriptionFinished:
 						//case MessageTypes.Session:
 						case MessageTypes.ChangePassword:
 							break;

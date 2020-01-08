@@ -6,13 +6,14 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// Meta-info storage based message adapter.
 	/// </summary>
-	public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
+	public class StorageMetaInfoMessageAdapter : StorageMessageAdapter
 	{
 		private readonly ISecurityStorage _securityStorage;
 		private readonly IPositionStorage _positionStorage;
@@ -25,8 +26,13 @@ namespace StockSharp.Algo.Storages
 		/// <param name="securityStorage">Securities meta info storage.</param>
 		/// <param name="positionStorage">Position storage.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		public StorageMetaInfoMessageAdapter(IMessageAdapter innerAdapter, ISecurityStorage securityStorage, IPositionStorage positionStorage, IExchangeInfoProvider exchangeInfoProvider)
-			: base(innerAdapter)
+		/// <param name="storageRegistry">The storage of market data.</param>
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
+		/// <param name="candleBuilderProvider">Candle builders provider.</param>
+		public StorageMetaInfoMessageAdapter(IMessageAdapter innerAdapter, ISecurityStorage securityStorage,
+			IPositionStorage positionStorage, IExchangeInfoProvider exchangeInfoProvider,
+			IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, CandleBuilderProvider candleBuilderProvider)
+			: base(innerAdapter, storageRegistry, snapshotRegistry, candleBuilderProvider)
 		{
 			_securityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
 			_positionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
@@ -137,9 +143,6 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.Portfolio:
 				{
 					var portfolioMsg = (PortfolioMessage)message;
-
-					if (portfolioMsg.Error != null)
-						break;
 
 					var portfolio = _positionStorage.GetPortfolio(portfolioMsg.PortfolioName) ?? new Portfolio
 					{
@@ -331,7 +334,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new StorageMetaInfoMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), _securityStorage, _positionStorage, _exchangeInfoProvider)
+			return new StorageMetaInfoMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), _securityStorage, _positionStorage, _exchangeInfoProvider, StorageRegistry, SnapshotRegistry, CandleBuilderProvider)
 			{
 				OverrideSecurityData = OverrideSecurityData,
 			};

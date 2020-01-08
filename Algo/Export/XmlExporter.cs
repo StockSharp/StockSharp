@@ -145,7 +145,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("error", item.Error?.Message);
 						writer.WriteAttribute("currency", item.Currency);
 						writer.WriteAttribute("openInterest", item.OpenInterest);
-						writer.WriteAttribute("isCancelled", item.IsCancelled);
+						writer.WriteAttribute("isCancelled", item.IsCancellation);
 						writer.WriteAttribute("isSystem", item.IsSystem);
 						writer.WriteAttribute("isUpTick", item.IsUpTick);
 						writer.WriteAttribute("isMargin", item.IsMargin);
@@ -172,13 +172,18 @@ namespace StockSharp.Algo.Export
 				writer.WriteAttribute("serverTime", depth.ServerTime.ToString(_timeFormat));
 				writer.WriteAttribute("localTime", depth.LocalTime.ToString(_timeFormat));
 
+				var bids = new HashSet<QuoteChange>(depth.Bids);
+
 				foreach (var quote in depth.Bids.Concat(depth.Asks).OrderByDescending(q => q.Price))
 				{
 					writer.WriteStartElement("quote");
 
 					writer.WriteAttribute("price", quote.Price);
 					writer.WriteAttribute("volume", quote.Volume);
-					writer.WriteAttribute("side", quote.Side);
+					writer.WriteAttribute("side", bids.Contains(quote) ? Sides.Buy : Sides.Sell);
+
+					if (quote.OrdersCount != null)
+						writer.WriteAttribute("ordersCount", quote.OrdersCount.Value);
 
 					writer.WriteEndElement();
 				}
@@ -295,6 +300,9 @@ namespace StockSharp.Algo.Export
 
 				if (n.Priority != null)
 					writer.WriteAttribute("priority", n.Priority.Value);
+
+				if (!n.Language.IsEmpty())
+					writer.WriteAttribute("language", n.Language);
 
 				if (!n.Story.IsEmpty())
 					writer.WriteCData(n.Story);

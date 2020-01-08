@@ -11,3 +11,4 @@ M:StockSharp.CoinHub.CoinHubMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/
 M:StockSharp.CoinHub.CoinHubMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.CoinHub.CoinHubOrderCondition/summary;DocStr60
 M:StockSharp.CoinHub.CoinHubOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.CoinHub.CoinHubOrderCondition.PauseNoCredit/summary;DocStr11486

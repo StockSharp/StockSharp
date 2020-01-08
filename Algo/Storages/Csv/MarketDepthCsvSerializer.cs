@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Storages.Csv
 						if (quote.Price != null)
 						{
 							var quotes = quote.Side == Sides.Buy ? bids : asks;
-							quotes.Add(new QuoteChange(quote.Side, quote.Price.Value, quote.Volume));
+							quotes.Add(new QuoteChange(quote.Price.Value, quote.Volume));
 						}
 					}
 					while (_enumerator.MoveNext());
@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				var items = new List<NullableTimeQuoteChange>();
 
-				items.AddRange(d.Bids.OrderByDescending(q => q.Price).Select(q => new NullableTimeQuoteChange(q, d)));
+				items.AddRange(d.Bids.OrderByDescending(q => q.Price).Select(q => new NullableTimeQuoteChange(Sides.Buy, q, d)));
 
 				if (items.Count == 0)
 				{
@@ -151,7 +151,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 				var bidsCount = items.Count;
 
-				items.AddRange(d.Asks.OrderBy(q => q.Price).Select(q => new NullableTimeQuoteChange(q, d)));
+				items.AddRange(d.Asks.OrderBy(q => q.Price).Select(q => new NullableTimeQuoteChange(Sides.Sell, q, d)));
 
 				if (items.Count == bidsCount)
 				{

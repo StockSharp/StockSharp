@@ -86,7 +86,7 @@ namespace StockSharp.Configuration
 
 						adapters.AddRange(asm
 							.GetTypes()
-							.Where(t => typeof(IMessageAdapter).IsAssignableFrom(t) && !t.IsAbstract && !t.IsObsolete())
+							.Where(t => typeof(IMessageAdapter).IsAssignableFrom(t) && t.IsPublic && !t.IsAbstract && !t.IsObsolete() && t.IsBrowsable())
 							.ToArray());
 					}
 					catch (Exception e)

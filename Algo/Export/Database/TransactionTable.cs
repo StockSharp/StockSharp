@@ -88,7 +88,7 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription(nameof(ExecutionMessage.OrderStatus)) { DbType = typeof(int?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.IsSystem)) { DbType = typeof(bool?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.IsUpTick)) { DbType = typeof(bool?) };
-			yield return new ColumnDescription(nameof(ExecutionMessage.IsCancelled)) { DbType = typeof(bool) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.IsCancellation)) { DbType = typeof(bool) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.TradeId))
 			{
 				DbType = typeof(string),
@@ -159,7 +159,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(ExecutionMessage.OrderStatus), (int?)value.OrderStatus },
 				{ nameof(ExecutionMessage.IsSystem), value.IsSystem },
 				{ nameof(ExecutionMessage.IsUpTick), value.IsUpTick },
-				{ nameof(ExecutionMessage.IsCancelled), value.IsCancelled },
+				{ nameof(ExecutionMessage.IsCancellation), value.IsCancellation },
 				{ nameof(ExecutionMessage.TradeId), value.TradeId == null ? value.TradeStringId : value.TradeId.To<string>() },
 				{ nameof(ExecutionMessage.TradePrice), value.TradePrice },
 				{ nameof(ExecutionMessage.TradeVolume), value.TradeVolume },

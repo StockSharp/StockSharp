@@ -69,8 +69,8 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v18.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v19.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v19.2.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

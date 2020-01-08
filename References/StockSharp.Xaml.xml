@@ -5750,10 +5750,7 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Monitor.WriteMessages(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})">
-      <summary>
-            To record messages.
-            </summary>
-      <param name="messages">Debug messages.</param>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.Monitor.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -6185,59 +6182,6 @@
       <summary>
             InitializeComponent
             </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.LogSourceNode">
-      <summary>
-            The logs source tree node.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.LogSourceNode.Key">
-      <summary>
-            The unique key.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.LogSourceNode.Name">
-      <summary>
-            The display name.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.LogSourceNode.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.LogSourceNode.#ctor(System.Guid,System.String,StockSharp.Xaml.LogSourceNode)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.LogSourceNode" />.
-            </summary>
-      <param name="key">The unique key.</param>
-      <param name="name">The display name.</param>
-      <param name="parentNode">The parent node.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.LogSourceNode.ParentNode">
-      <summary>
-            The parent node.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.LogSourceNode.ChildNodes">
-      <summary>
-            Child nodes.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.LogSourceNode.Add(StockSharp.Xaml.LogSourceNode)">
-      <summary>
-            Add <see cref="T:StockSharp.Xaml.LogSourceNode" />.
-            </summary>
-      <param name="node">Node.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.LogSourceNode.Remove(StockSharp.Xaml.LogSourceNode)">
-      <summary>
-            Remove <see cref="T:StockSharp.Xaml.LogSourceNode" />.
-            </summary>
-      <param name="node">Node.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.LogSourceNode.ToString">
-      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.StorageSettingsPanel">
       <summary>

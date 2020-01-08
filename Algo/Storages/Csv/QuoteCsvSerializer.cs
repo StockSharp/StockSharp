@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 		}
 
-		public NullableTimeQuoteChange(QuoteChange quote, QuoteChangeMessage message)
+		public NullableTimeQuoteChange(Sides side, QuoteChange quote, QuoteChangeMessage message)
 		{
 			if (quote == null)
 				throw new ArgumentNullException(nameof(quote));
@@ -37,7 +37,8 @@ namespace StockSharp.Algo.Storages.Csv
 			LocalTime = message.LocalTime;
 			Price = quote.Price;
 			Volume = quote.Volume;
-			Side = quote.Side;
+			Side = side;
+			OrdersCount = quote.OrdersCount;
 		}
 
 		public DateTimeOffset ServerTime { get; set; }
@@ -45,6 +46,7 @@ namespace StockSharp.Algo.Storages.Csv
 		public decimal? Price { get; set; }
 		public decimal Volume { get; set; }
 		public Sides Side { get; set; }
+		public int? OrdersCount { get; set; }
 	}
 
 	/// <summary>
@@ -62,12 +64,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 		}
 
-		/// <summary>
-		/// Write data to the specified writer.
-		/// </summary>
-		/// <param name="writer">CSV writer.</param>
-		/// <param name="data">Data.</param>
-		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		/// <inheritdoc />
 		protected override void Write(CsvFileWriter writer, NullableTimeQuoteChange data, IMarketDataMetaInfo metaInfo)
 		{
 			writer.WriteRow(new[]
@@ -76,27 +73,28 @@ namespace StockSharp.Algo.Storages.Csv
 				data.ServerTime.ToString("zzz"),
 				data.Price?.ToString(),
 				data.Volume.ToString(),
-				data.Side.ToString()
+				data.Side.ToString(),
+				data.OrdersCount?.ToString(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
 		}
 
-		/// <summary>
-		/// Read data from the specified reader.
-		/// </summary>
-		/// <param name="reader">CSV reader.</param>
-		/// <param name="metaInfo">Meta-information on data for one day.</param>
-		/// <returns>Data.</returns>
+		/// <inheritdoc />
 		protected override NullableTimeQuoteChange Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
-			return new NullableTimeQuoteChange
+			var quote = new NullableTimeQuoteChange
 			{
 				ServerTime = reader.ReadTime(metaInfo.Date),
 				Price = reader.ReadNullableDecimal(),
 				Volume = reader.ReadDecimal(),
 				Side = reader.ReadEnum<Sides>()
 			};
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				quote.OrdersCount = reader.ReadNullableInt();
+
+			return quote;
 		}
 	}
 }

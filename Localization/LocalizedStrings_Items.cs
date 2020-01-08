@@ -50716,5 +50716,175 @@ namespace StockSharp.Localization
 		/// Bitalong
 		/// </summary>
 		public static string Bitalong => GetString(BitalongKey);
+
+		/// <summary>
+		/// Random
+		/// </summary>
+		public const string RandomKey = nameof(Random);
+
+		/// <summary>
+		/// Random
+		/// </summary>
+		public static string Random => GetString(RandomKey);
+
+		/// <summary>
+		/// Connection '{0}' is not connected.
+		/// </summary>
+		public const string ConnectionIsNotConnectedKey = nameof(ConnectionIsNotConnected);
+
+		/// <summary>
+		/// Connection '{0}' is not connected.
+		/// </summary>
+		public static string ConnectionIsNotConnected => GetString(ConnectionIsNotConnectedKey);
+
+		/// <summary>
+		/// CBOE
+		/// </summary>
+		public const string CboeKey = nameof(Cboe);
+
+		/// <summary>
+		/// CBOE
+		/// </summary>
+		public static string Cboe => GetString(CboeKey);
+
+		/// <summary>
+		/// ICE
+		/// </summary>
+		public const string IceKey = nameof(Ice);
+
+		/// <summary>
+		/// ICE
+		/// </summary>
+		public static string Ice => GetString(IceKey);
+
+		/// <summary>
+		/// UDP A
+		/// </summary>
+		public const string UdpAKey = nameof(UdpA);
+
+		/// <summary>
+		/// UDP A
+		/// </summary>
+		public static string UdpA => GetString(UdpAKey);
+
+		/// <summary>
+		/// UDP B
+		/// </summary>
+		public const string UdpBKey = nameof(UdpB);
+
+		/// <summary>
+		/// UDP B
+		/// </summary>
+		public static string UdpB => GetString(UdpBKey);
+
+		/// <summary>
+		/// UDP C
+		/// </summary>
+		public const string UdpCKey = nameof(UdpC);
+
+		/// <summary>
+		/// UDP C
+		/// </summary>
+		public static string UdpC => GetString(UdpCKey);
+
+		/// <summary>
+		/// Market By Order.
+		/// </summary>
+		public const string MarketByOrderKey = nameof(MarketByOrder);
+
+		/// <summary>
+		/// Market By Order.
+		/// </summary>
+		public static string MarketByOrder => GetString(MarketByOrderKey);
+
+		/// <summary>
+		/// Market By Price.
+		/// </summary>
+		public const string MarketByPriceKey = nameof(MarketByPrice);
+
+		/// <summary>
+		/// Market By Price.
+		/// </summary>
+		public static string MarketByPrice => GetString(MarketByPriceKey);
+
+		/// <summary>
+		/// Top Of Book.
+		/// </summary>
+		public const string TopOfBookKey = nameof(TopOfBook);
+
+		/// <summary>
+		/// Top Of Book.
+		/// </summary>
+		public static string TopOfBook => GetString(TopOfBookKey);
+
+		/// <summary>
+		/// MBO
+		/// </summary>
+		public const string MboKey = nameof(Mbo);
+
+		/// <summary>
+		/// MBO
+		/// </summary>
+		public static string Mbo => GetString(MboKey);
+
+		/// <summary>
+		/// MBP
+		/// </summary>
+		public const string MbpKey = nameof(Mbp);
+
+		/// <summary>
+		/// MBP
+		/// </summary>
+		public static string Mbp => GetString(MbpKey);
+
+		/// <summary>
+		/// TOB
+		/// </summary>
+		public const string TobKey = nameof(Tob);
+
+		/// <summary>
+		/// TOB
+		/// </summary>
+		public static string Tob => GetString(TobKey);
+
+		/// <summary>
+		/// Receipt
+		/// </summary>
+		public const string ReceiptKey = nameof(Receipt);
+
+		/// <summary>
+		/// Receipt
+		/// </summary>
+		public static string Receipt => GetString(ReceiptKey);
+
+		/// <summary>
+		/// GDR
+		/// </summary>
+		public const string GdrKey = nameof(Gdr);
+
+		/// <summary>
+		/// GDR
+		/// </summary>
+		public static string Gdr => GetString(GdrKey);
+
+		/// <summary>
+		/// Loan
+		/// </summary>
+		public const string LoanKey = nameof(Loan);
+
+		/// <summary>
+		/// Loan
+		/// </summary>
+		public static string Loan => GetString(LoanKey);
+
+		/// <summary>
+		/// Imbalance
+		/// </summary>
+		public const string ImbalanceKey = nameof(Imbalance);
+
+		/// <summary>
+		/// Imbalance
+		/// </summary>
+		public static string Imbalance => GetString(ImbalanceKey);
 	}
 }

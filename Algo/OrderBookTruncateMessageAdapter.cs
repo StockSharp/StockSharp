@@ -5,6 +5,7 @@
 
 	using Ecng.Collections;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -52,12 +53,14 @@
 									mdMsg.MaxDepth = supportedDepth;
 
 									_depths.Add(mdMsg.TransactionId, actualDepth);
+
+									this.AddInfoLog("MD truncate {0}/{1} ({2}->{3}).", mdMsg.SecurityId, mdMsg.TransactionId, actualDepth, supportedDepth);
 								}
 							}
 						}
 						else
 						{
-							_depths.Remove(mdMsg.OriginalTransactionId);
+							RemoveSubscription(mdMsg.OriginalTransactionId);
 						}
 					}
 
@@ -68,6 +71,12 @@
 			base.OnSendInMessage(message);
 		}
 
+		private void RemoveSubscription(long id)
+		{
+			_depths.Remove(id);
+			this.AddInfoLog("Unsubscribed {0}.", id);
+		}
+
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
@@ -75,6 +84,20 @@
 
 			switch (message.Type)
 			{
+				case MessageTypes.SubscriptionResponse:
+				{
+					var responseMsg = (SubscriptionResponseMessage)message;
+
+					if (!responseMsg.IsOk())
+						RemoveSubscription(responseMsg.OriginalTransactionId);
+
+					break;
+				}
+				case MessageTypes.SubscriptionFinished:
+				{
+					RemoveSubscription(((SubscriptionFinishedMessage)message).OriginalTransactionId);
+					break;
+				}
 				case MessageTypes.QuoteChange:
 				{
 					var quoteMsg = (QuoteChangeMessage)message;

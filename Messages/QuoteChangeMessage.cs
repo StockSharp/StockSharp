@@ -145,6 +145,12 @@ namespace StockSharp.Messages
 		public QuoteChangeStates? State { get; set; }
 
 		/// <summary>
+		/// Determines a <see cref="QuoteChange.StartPosition"/> initialized.
+		/// </summary>
+		[DataMember]
+		public bool HasPositions { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		public QuoteChangeMessage()
@@ -169,6 +175,7 @@ namespace StockSharp.Messages
 				IsByLevel1 = IsByLevel1,
 				IsFiltered = IsFiltered,
 				State = State,
+				HasPositions = HasPositions,
 			};
 
 			CopyTo(clone);

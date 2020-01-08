@@ -46,6 +46,9 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.Xaml.DevExp">
+      <HintPath>..\..\..\References\Ecng.Xaml.DevExp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -69,20 +72,20 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Data.v18.1.dll</HintPath>
+    <Reference Include="DevExpress.Data.v19.2">
+      <HintPath>..\..\..\References\DevExpress.Data.v19.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v18.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v19.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v19.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v18.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v19.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v19.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v18.1.Core">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v18.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v19.2.Core">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v19.2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v18.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v18.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v19.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v19.2.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +96,7 @@
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="OwnMessageAdapter.cs" />
     <Compile Include="SmaStrategy.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

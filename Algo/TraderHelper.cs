@@ -920,6 +920,7 @@ namespace StockSharp.Algo
 			{
 				var aggQuote = new AggregatedQuote(false) { Price = g.Key };
 				aggQuote.InnerQuotes.AddRange(g);
+				aggQuote.OrdersCount = aggQuote.InnerQuotes.Sum(q => q.OrdersCount ?? 0).DefaultAsNull();
 				return aggQuote;
 			});
 			
@@ -4209,8 +4210,8 @@ namespace StockSharp.Algo
 							SecurityId = level1.SecurityId,
 							LocalTime = level1.LocalTime,
 							ServerTime = level1.ServerTime,
-							Bids = _prevBidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Buy, _prevBidPrice.Value, _prevBidVolume ?? 0) },
-							Asks = _prevAskPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Sell, _prevAskPrice.Value, _prevAskVolume ?? 0) },
+							Bids = _prevBidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0) },
+							Asks = _prevAskPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0) },
 						};
 
 						return true;
@@ -4692,7 +4693,20 @@ namespace StockSharp.Algo
 			if (messages == null)
 				throw new ArgumentNullException(nameof(messages));
 
-			return messages.SelectMany(d => d.Asks.Concat(d.Bids).OrderByDescending(q => q.Price).Select(q => new TimeQuoteChange(q, d)));
+			return messages.SelectMany(d => d.ToTimeQuotes());
+		}
+
+		/// <summary>
+		/// Convert depth to quotes.
+		/// </summary>
+		/// <param name="message">Depth.</param>
+		/// <returns>Quotes.</returns>
+		public static IEnumerable<TimeQuoteChange> ToTimeQuotes(this QuoteChangeMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.Asks.Select(q => new TimeQuoteChange(Sides.Sell, q, message)).Concat(message.Bids.Select(q => new TimeQuoteChange(Sides.Buy, q, message))).OrderByDescending(q => q.Price);
 		}
 
 		/// <summary>
@@ -5070,32 +5084,22 @@ namespace StockSharp.Algo
 			{
 				if (msg is TResult typedMsg)
 					retVal.Add(typedMsg);
-				else if (msg is MarketDataMessage mdMsg)
+				else if (msg is SubscriptionResponseMessage responseMsg)
 				{
 					lock (sync)
 					{
 						responseReceived = true;
-						error = mdMsg.Error;
+						error = responseMsg.Error;
 
 						if (error != null)
 							sync.PulseSignal();
 					}
 				}
-				else if (msg is MarketDataFinishedMessage)
+				else if (msg is SubscriptionFinishedMessage)
 				{
 					lock (sync)
 					{
 						responseReceived = true;
-
-						sync.PulseSignal();
-					}
-				}
-				else if (msg is SecurityLookupResultMessage resMsg)
-				{
-					lock (sync)
-					{
-						responseReceived = true;
-						error = resMsg.Error;
 
 						sync.PulseSignal();
 					}
@@ -5325,6 +5329,37 @@ namespace StockSharp.Algo
 			init(adapter);
 			connector.Adapter.InnerAdapters.Add(adapter);
 			return connector;
+		}
+
+		internal static bool IsOk(this SubscriptionStates fromState, SubscriptionStates toState)
+		{
+			if (fromState == toState)
+				return false;
+
+			switch (fromState)
+			{
+				case SubscriptionStates.Stopped:
+					return true;
+				case SubscriptionStates.Active:
+					return true;
+				case SubscriptionStates.Error:
+				case SubscriptionStates.Finished:
+					return false;
+				case SubscriptionStates.Online:
+					return toState != SubscriptionStates.Active;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(fromState), fromState, LocalizedStrings.Str1219);
+			}
+		}
+
+		/// <summary>
+		/// Determines the specified state equals <see cref="SubscriptionStates.Active"/> or <see cref="SubscriptionStates.Online"/>.
+		/// </summary>
+		/// <param name="state">State.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsActive(this SubscriptionStates state)
+		{
+			return state == SubscriptionStates.Active || state == SubscriptionStates.Online;
 		}
 	}
 }

@@ -68,6 +68,11 @@ namespace StockSharp.Algo.Export.Database
 			{
 				DbType = typeof(int?),
 			};
+			yield return new ColumnDescription(nameof(NewsMessage.Language))
+			{
+				DbType = typeof(string),
+				ValueRestriction = new StringRestriction(8)
+			};
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(NewsMessage value)
@@ -84,6 +89,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(NewsMessage.Source), value.Source },
 				{ nameof(NewsMessage.Url), value.Url },
 				{ nameof(NewsMessage.Priority), value.Priority.To<int?>() },
+				{ nameof(NewsMessage.Language), value.Language },
 			};
 			return result;
 		}

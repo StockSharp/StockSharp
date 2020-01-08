@@ -7,7 +7,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using Ecng.Interop;
 	using Ecng.Serialization;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>

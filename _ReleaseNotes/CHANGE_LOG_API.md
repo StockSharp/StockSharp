@@ -287,6 +287,24 @@ StockSharp API Change log
 * (feature) Connector. IsAutoPortfoliosSubscribe added.
 * (feature) ITransactionProvider. StopOrder events marked as obsolete. Use events for regular orders.
 * (feature) Bitalong connector.
+* (feature) IExternalCandleSource removed.
+* (feature) ExecutionMessage. IsCancelled -> IsCancellation.
+* (feature) SampleHistoryTesting. OwnMessageAdapter added.
+* (feature) SampleRandomTesting removed.
+* (feature) DevExpress 18.1 -> 19.2
+* (feature) Ookii.Dialogs -> DXDialogs.
+* (feature) MarketDataFinished -> SubscriptionFinished.
+* (feature) MarketDataMessage. Extracted response logic into SubscriptionResponseMessage.
+* (feature) Portfolio subscription uses SubscriptionResponseMessage as response.
+* (feature) OrderStatus subscription uses SubscriptionResponseMessage as response.
+* (feature) SubscriptionResponseMessage. IsNotSupported property removed.
+* (feature) Use SubscriptionResponseMessage.Error as response for error lookup messages.
+* (feature) Uses SubscriptionOnlineMessage, SubscriptionFinishedMessage instead of SecurityLookupResultMessage, PortfolioLookupResultMessage, OrderStatusMessage.
+* (feature) News. Language property added.
+* (feature) Quote. OrdersCount added.
+* (feature) SecurityTypes. Gdr, MultiLeg, Loan, Spread, Receipt, Indicator, Strategy, Volatility types added.
+* (feature) QuoteChangeMessage. Updates by position supported.
+* (feature) QuoteChange. Side removed.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

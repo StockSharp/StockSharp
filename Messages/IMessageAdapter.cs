@@ -65,6 +65,11 @@ namespace StockSharp.Messages
 		IEnumerable<MessageTypes> SupportedOutMessages { get; set; }
 
 		/// <summary>
+		/// Supported by adapter result message types.
+		/// </summary>
+		IEnumerable<MessageTypes> SupportedResultMessages { get; set; }
+
+		/// <summary>
 		/// Supported by adapter market data types.
 		/// </summary>
 		IEnumerable<MarketDataTypes> SupportedMarketDataTypes { get; set; }
@@ -171,6 +176,16 @@ namespace StockSharp.Messages
 		/// Start sending <see cref="TimeMessage"/> before connection established.
 		/// </summary>
 		bool HeartbeatBeforConnect { get; }
+
+		/// <summary>
+		/// Icon.
+		/// </summary>
+		Uri Icon { get; }
+
+		/// <summary>
+		/// Send auto response for <see cref="OrderStatusMessage"/> and <see cref="PortfolioLookupMessage"/> unsubscribes.
+		/// </summary>
+		bool IsAutoReplyOnTransactonalUnsubscription { get; }
 
 		/// <summary>
 		/// Create market depth builder.

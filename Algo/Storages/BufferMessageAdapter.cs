@@ -465,7 +465,7 @@ namespace StockSharp.Algo.Storages
 						SecurityId = cancelMsg.SecurityId,
 						HasOrderInfo = true,
 						TransactionId = cancelMsg.TransactionId,
-						IsCancelled = true,
+						IsCancellation = true,
 						OrderId = cancelMsg.OrderId,
 						OrderStringId = cancelMsg.OrderStringId,
 						OriginalTransactionId = cancelMsg.OriginalTransactionId,
@@ -516,7 +516,7 @@ namespace StockSharp.Algo.Storages
 							buffer = _ticksBuffer;
 							break;
 						case ExecutionTypes.Transaction:
-							
+						{
 							// some responses do not contains sec id
 							if (secId.IsDefault() && !_securityIds.TryGetValue(execMsg.OriginalTransactionId, out secId))
 							{
@@ -526,12 +526,16 @@ namespace StockSharp.Algo.Storages
 
 							buffer = _transactionsBuffer;
 							break;
+						}
 						case ExecutionTypes.OrderLog:
 							buffer = _orderLogBuffer;
 							break;
 						default:
 							throw new ArgumentOutOfRangeException(nameof(message), execType, LocalizedStrings.Str1695Params.Put(message));
 					}
+
+					if (execType == ExecutionTypes.Transaction && execMsg.TransactionId == 0)
+						break;
 
 					if (execType == ExecutionTypes.Transaction || CanStore<ExecutionMessage>(secId, execType))
 						buffer.Add(secId, (ExecutionMessage)message.Clone());
@@ -546,6 +550,9 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.CandleVolume:
 				{
 					var candleMsg = (CandleMessage)message;
+
+					if (candleMsg.State != CandleStates.Finished)
+						break;
 
 					if (CanStore(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg))
 						_candleBuffer.Add(Tuple.Create(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg), (CandleMessage)candleMsg.Clone());

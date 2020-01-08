@@ -53,7 +53,6 @@ namespace StockSharp.Messages
 			return new PortfolioChangeMessage
 			{
 				PortfolioName = pfName,
-				LocalTime = time,
 				ServerTime = time,
 			};
 		}
@@ -77,7 +76,6 @@ namespace StockSharp.Messages
 			{
 				PortfolioName = pfName,
 				SecurityId = securityId,
-				LocalTime = time,
 				ServerTime = time,
 				DepoName = depoName
 			};
@@ -478,7 +476,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines whether the specified message type is supported by the adapter.
+		/// Determines whether the specified message type is contained in <see cref="IMessageAdapter.SupportedInMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
@@ -518,12 +516,55 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Add the message type info <see cref="IMessageAdapter.SupportedResultMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		public static void AddSupportedResultMessage(this IMessageAdapter adapter, MessageTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.SupportedResultMessages = adapter.SupportedResultMessages.Concat(type).Distinct();
+		}
+
+		/// <summary>
+		/// Remove the message type from <see cref="IMessageAdapter.SupportedResultMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		public static void RemoveSupportedResultMessage(this IMessageAdapter adapter, MessageTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.SupportedResultMessages = adapter.SupportedResultMessages.Where(t => t != type);
+		}
+
+		/// <summary>
+		/// Determines whether the specified message type is contained in <see cref="IMessageAdapter.SupportedResultMessages"/>..
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		/// <returns><see langword="true"/> if the specified message type is supported, otherwise, <see langword="false"/>.</returns>
+		public static bool IsResultMessageSupported(this IMessageAdapter adapter, MessageTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.SupportedResultMessages.Contains(type);
+		}
+
+		/// <summary>
 		/// Add the message type info <see cref="IMessageAdapter.SupportedOutMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
 		public static void AddSupportedOutMessage(this IMessageAdapter adapter, MessageTypes type)
 		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
 			adapter.SupportedOutMessages = adapter.SupportedOutMessages.Concat(type).Distinct();
 		}
 
@@ -541,7 +582,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines whether the specified message type is supported by the adapter.
+		/// Determines whether the specified message type is contained in <see cref="IMessageAdapter.SupportedOutMessages"/>..
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
@@ -923,24 +964,6 @@ namespace StockSharp.Messages
 			return new ErrorMessage { Error = error };
 		}
 
-		///// <summary>
-		///// Get inner <see cref="IMessageAdapter"/>.
-		///// </summary>
-		///// <param name="adapter"><see cref="IMessageAdapter"/>.</param>
-		///// <returns>Inner <see cref="IMessageAdapter"/>.</returns>
-		//public static IMessageAdapter GetInnerAdapter(this IMessageAdapter adapter)
-		//{
-		//	if (adapter == null)
-		//		return null;
-
-		//	IMessageAdapterWrapper wrapper;
-
-		//	while ((wrapper = adapter as IMessageAdapterWrapper) != null)
-		//		adapter = wrapper.InnerAdapter;
-
-		//	return adapter;
-		//}
-
 		private static readonly ChannelFactory<IDailyInfoSoap> _dailyInfoFactory = new ChannelFactory<IDailyInfoSoap>(new BasicHttpBinding(), new EndpointAddress("http://www.cbr.ru/dailyinfowebserv/dailyinfo.asmx"));
 		private static readonly Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>> _rateInfo = new Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>>();
 
@@ -1042,19 +1065,6 @@ namespace StockSharp.Messages
 
 			if (message.LocalTime.IsDefault())
 				message.LocalTime = source.CurrentTime;
-		}
-
-		/// <summary>
-		/// Is specified message id real-time subscription.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns><see langword="true" />, if real-time, otherwise, <see langword="false"/>.</returns>
-		public static bool IsRealTimeSubscription(this MarketDataMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			return /*message.From == null && */message.To == null;
 		}
 
 		/// <summary>
@@ -1546,13 +1556,75 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines whether the reply contains an error <see cref="MarketDataMessage.Error"/> or has <see cref="MarketDataMessage.IsNotSupported"/>.
+		/// Determines whether the reply contains an error <see cref="SubscriptionResponseMessage.Error"/>.
 		/// </summary>
 		/// <param name="message">Reply.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsOk(this MarketDataMessage message)
+		public static bool IsOk(this SubscriptionResponseMessage message)
 		{
-			return message.Error == null && !message.IsNotSupported;
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.Error == null;
+		}
+
+		/// <summary>
+		/// Determines whether the reply contains the error <see cref="SubscriptionResponseMessage.NotSupported"/>.
+		/// </summary>
+		/// <param name="message">Reply.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsNotSupported(this SubscriptionResponseMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.Error == SubscriptionResponseMessage.NotSupported;
+		}
+
+		/// <summary>
+		/// Create non supported subscription response.
+		/// </summary>
+		/// <param name="id">ID of the original message for which this message is a response.</param>
+		/// <returns>Subscription response message.</returns>
+		public static SubscriptionResponseMessage CreateNotSupported(this long id)
+		{
+			return id.CreateSubscriptionResponse(SubscriptionResponseMessage.NotSupported);
+		}
+
+		/// <summary>
+		/// Create subscription response.
+		/// </summary>
+		/// <param name="id">ID of the original message for which this message is a response.</param>
+		/// <param name="error">Error info.</param>
+		/// <returns>Subscription response message.</returns>
+		public static SubscriptionResponseMessage CreateSubscriptionResponse(this long id, Exception error = null)
+		{
+			return new SubscriptionResponseMessage
+			{
+				OriginalTransactionId = id,
+				Error = error
+			};
+		}
+
+		/// <summary>
+		/// Create <see cref="SubscriptionOnlineMessage"/> or <see cref="SubscriptionFinishedMessage"/> depends of <see cref="ISubscriptionMessage.To"/>.
+		/// </summary>
+		/// <param name="message">Subscription.</param>
+		/// <returns>Message.</returns>
+		public static Message CreateResult(this ISubscriptionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (!message.IsSubscribe)
+				return new SubscriptionResponseMessage { OriginalTransactionId = message.TransactionId };
+
+			if (message.Type == MessageTypes.TimeFrameLookup)
+				return new TimeFrameLookupResultMessage { OriginalTransactionId = message.TransactionId };
+
+			var reply = message.To == null ? (IOriginalTransactionIdMessage)new SubscriptionOnlineMessage() : new SubscriptionFinishedMessage();
+			reply.OriginalTransactionId = message.TransactionId;
+			return (Message)reply;
 		}
 
 		/// <summary>
@@ -1614,7 +1686,16 @@ namespace StockSharp.Messages
 			return timeFrame;
 		}
 
-		internal static bool HandleErrorResponse(this Message message, Exception ex, DateTimeOffset currentTime, Action<Message> sendOut)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="ex"></param>
+		/// <param name="currentTime"></param>
+		/// <param name="sendOut"></param>
+		/// <param name="getSubscribers"></param>
+		/// <returns></returns>
+		public static bool HandleErrorResponse(this Message message, Exception ex, DateTimeOffset currentTime, Action<Message> sendOut, Func<DataType, long[]> getSubscribers = null)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -1630,6 +1711,12 @@ namespace StockSharp.Messages
 				execMsg.ServerTime = currentTime;
 				execMsg.Error = ex;
 				execMsg.OrderState = OrderStates.Failed;
+
+				var subscribers = getSubscribers?.Invoke(DataType.Transactions);
+
+				if (subscribers != null)
+					execMsg.SetSubscriptionIds(subscribers);
+
 				sendOut(execMsg);
 			}
 
@@ -1660,55 +1747,14 @@ namespace StockSharp.Messages
 				}
 
 				case MessageTypes.MarketData:
-				{
-					var reply = (MarketDataMessage)message.Clone();
-					reply.OriginalTransactionId = reply.TransactionId;
-					reply.Error = ex;
-					sendOut(reply);
-					return true;
-				}
-
+				case MessageTypes.Portfolio:
+				case MessageTypes.OrderStatus:
 				case MessageTypes.SecurityLookup:
-				{
-					var lookupMsg = (SecurityLookupMessage)message;
-					sendOut(new SecurityLookupResultMessage
-					{
-						OriginalTransactionId = lookupMsg.TransactionId,
-						Error = ex
-					});
-					return true;
-				}
-
 				case MessageTypes.BoardLookup:
-				{
-					var lookupMsg = (BoardLookupMessage)message;
-					sendOut(new BoardLookupResultMessage
-					{
-						OriginalTransactionId = lookupMsg.TransactionId,
-						Error = ex
-					});
-					return true;
-				}
-
 				case MessageTypes.PortfolioLookup:
-				{
-					var lookupMsg = (PortfolioLookupMessage)message;
-					sendOut(new PortfolioLookupResultMessage
-					{
-						OriginalTransactionId = lookupMsg.TransactionId,
-						Error = ex
-					});
-					return true;
-				}
-
 				case MessageTypes.UserLookup:
 				{
-					var lookupMsg = (UserLookupMessage)message;
-					sendOut(new UserLookupResultMessage
-					{
-						OriginalTransactionId = lookupMsg.TransactionId,
-						Error = ex
-					});
+					sendOut(((ITransactionIdMessage)message).TransactionId.CreateSubscriptionResponse(ex));
 					return true;
 				}
 
@@ -1729,17 +1775,6 @@ namespace StockSharp.Messages
 					sendOut(new ChangePasswordMessage
 					{
 						OriginalTransactionId = pwdMsg.TransactionId,
-						Error = ex
-					});
-					return true;
-				}
-
-				case MessageTypes.OrderStatus:
-				{
-					var requestMsg = (OrderStatusMessage)message;
-					sendOut(new OrderStatusMessage
-					{
-						OriginalTransactionId = requestMsg.TransactionId,
 						Error = ex
 					});
 					return true;
@@ -1806,7 +1841,7 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			foreach (var type in _lookupResults.Keys)
+			foreach (var type in _lookupResults)
 				adapter.RemoveSupportedMessage(type);
 		}
 
@@ -1823,77 +1858,23 @@ namespace StockSharp.Messages
 			return execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog;
 		}
 
-		private static readonly PairSet<MessageTypes, MessageTypes> _lookupResults = new PairSet<MessageTypes, MessageTypes>
+		private static readonly HashSet<MessageTypes> _lookupResults = new HashSet<MessageTypes>
 		{
-			{ MessageTypes.SecurityLookup, MessageTypes.SecurityLookupResult },
-			{ MessageTypes.BoardLookup, MessageTypes.BoardLookupResult },
-			{ MessageTypes.TimeFrameLookup, MessageTypes.TimeFrameLookupResult },
-			{ MessageTypes.PortfolioLookup, MessageTypes.PortfolioLookupResult },
-			{ MessageTypes.UserLookup, MessageTypes.UserLookupResult },
-			{ MessageTypes.OrderStatus, MessageTypes.OrderStatus },
+			MessageTypes.SecurityLookup,
+			MessageTypes.BoardLookup,
+			MessageTypes.UserLookup,
+			MessageTypes.TimeFrameLookup,
+			MessageTypes.PortfolioLookup,
+			MessageTypes.OrderStatus,
 		};
-
-		/// <summary>
-		/// Convert lookup message type to result type.
-		/// </summary>
-		/// <param name="lookup">Lookup message type.</param>
-		/// <returns>Result message type.</returns>
-		public static MessageTypes ToResultType(this MessageTypes lookup)
-		{
-			return _lookupResults.GetValue(lookup);
-		}
-
-		/// <summary>
-		/// Convert result message type to lookup type.
-		/// </summary>
-		/// <param name="result">Result message type.</param>
-		/// <returns>Lookup message type.</returns>
-		public static MessageTypes ToLookupType(this MessageTypes result)
-		{
-			return _lookupResults.GetKey(result);
-		}
 
 		/// <summary>
 		/// Determines the specified type is lookup message.
 		/// </summary>
 		/// <param name="type">Message type.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsLookup(this MessageTypes type) => _lookupResults.ContainsKey(type);
+		public static bool IsLookup(this MessageTypes type) => _lookupResults.Contains(type);
 		
-		/// <summary>
-		/// Determines the specified type is lookup result message.
-		/// </summary>
-		/// <param name="type">Message type.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsLookupResult(this MessageTypes type) => _lookupResults.ContainsValue(type);
-
-		/// <summary>
-		/// Create message by the specified type.
-		/// </summary>
-		/// <param name="type">Result message type.</param>
-		/// <param name="id">ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.</param>
-		/// <returns>Message.</returns>
-		public static Message CreateLookupResult(this MessageTypes type, long id)
-		{
-			switch (type)
-			{
-				case MessageTypes.SecurityLookupResult:
-					return new SecurityLookupResultMessage { OriginalTransactionId = id };
-				case MessageTypes.PortfolioLookupResult:
-					return new PortfolioLookupResultMessage { OriginalTransactionId = id };
-				case MessageTypes.TimeFrameLookupResult:
-					return new TimeFrameLookupResultMessage { OriginalTransactionId = id };
-				case MessageTypes.BoardLookupResult:
-					return new BoardLookupResultMessage { OriginalTransactionId = id };
-				case MessageTypes.UserLookupResult:
-					return new UserLookupResultMessage { OriginalTransactionId = id };
-				case MessageTypes.OrderStatus:
-					return new OrderStatusMessage { OriginalTransactionId = id };
-				default:
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-			}
-		}
-
 		/// <summary>
 		/// Get <see cref="ExecutionMessage.TradePrice"/>.
 		/// </summary>
@@ -1977,30 +1958,6 @@ namespace StockSharp.Messages
 			=> adapter.IsMessageSupported(MessageTypes.Portfolio);
 
 		/// <summary>
-		/// <see cref="SecurityLookupMessage"/> required to get securities.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsSecurityLookupRequired(this IMessageAdapter adapter) 
-			=> adapter.IsMessageSupported(MessageTypes.SecurityLookup);
-
-		/// <summary>
-		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsPortfolioLookupRequired(this IMessageAdapter adapter)
-			=> adapter.IsMessageSupported(MessageTypes.PortfolioLookup);
-
-		/// <summary>
-		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsOrderStatusRequired(this IMessageAdapter adapter)
-			=> adapter.IsMessageSupported(MessageTypes.OrderStatus);
-
-		/// <summary>
 		/// Determines the specified message contains <see cref="SecurityId.Money"/> position.
 		/// </summary>
 		/// <param name="posMsg">The message contains information about the position changes.</param>
@@ -2063,6 +2020,80 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(message));
 
 			return message.OrderId != null || !message.OrderStringId.IsEmpty();
+		}
+
+		/// <summary>
+		/// Made the specified message as <see cref="Message.IsBack"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Message type.</typeparam>
+		/// <param name="message">Message.</param>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Message.</returns>
+		public static TMessage LoopBack<TMessage>(this TMessage message, IMessageAdapter adapter)
+			where TMessage : Message
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			message.IsBack = true;
+			message.Adapter = adapter;
+
+			return message;
+		}
+
+		/// <summary>
+		/// Undo operation made via <see cref="LoopBack{TMessage}"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Message type.</typeparam>
+		/// <param name="message">Message.</param>
+		/// <returns>Message.</returns>
+		public static TMessage UndoBack<TMessage>(this TMessage message)
+			where TMessage : Message
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			message.IsBack = false;
+			message.Adapter = null;
+
+			return message;
+		}
+
+		/// <summary>
+		/// Get maximum size step allowed for historical download.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <param name="supportedMarketDataTypes">Supported by adapter market data types.</param>
+		/// <param name="iterationInterval">Interval between iterations.</param>
+		/// <returns>Step.</returns>
+		public static TimeSpan GetHistoryStepSize(this DataType dataType, IEnumerable<MarketDataTypes> supportedMarketDataTypes, out TimeSpan iterationInterval)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			iterationInterval = TimeSpan.FromSeconds(2);
+
+			if (dataType.IsCandles)
+			{
+				if (!supportedMarketDataTypes.Contains(dataType.ToMarketDataType().Value))
+					return TimeSpan.Zero;
+
+				if (dataType.MessageType == typeof(TimeFrameCandleMessage))
+				{
+					var tf = (TimeSpan)dataType.Arg;
+
+					if (tf.TotalDays <= 1)
+						return TimeSpan.FromDays(30);
+
+					return TimeSpan.MaxValue;
+				}
+			}
+
+			// by default adapter do not provide historical data except candles
+			return TimeSpan.Zero;
 		}
 	}
 }
