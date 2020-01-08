@@ -416,6 +416,11 @@
 				<p>FIX and FAST dialects for Moscow exchange (derivatives section).</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Fix.Dialects.Bovespa">
+			<summary>
+				<p>FIX and FAST dialects for B3 BM&amp;F Bovespa exchange.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Rithmic">
 			<summary>
 				<p>Rithmic connectivity components.</p>

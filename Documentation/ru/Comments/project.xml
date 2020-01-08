@@ -408,12 +408,17 @@
 		</member>
 		<member name="N:StockSharp.Fix.Dialects.Moex.Asts">
 			<summary>
-				<p>Диалекты FIX протокола Московской бирже валютной и спот секций.</p>
+				<p>Диалекты FIX и FAST протоколов Московской бирже валютной и спот секций.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Fix.Dialects.Moex.Spectra">
 			<summary>
-				<p>Диалекты FIX протокола Московской бирже срочной секции.</p>
+				<p>Диалекты FIX и FAST протоколов Московской бирже срочной секции.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Fix.Dialects.Bovespa">
+			<summary>
+				<p>Диалекты FIX и FAST протоколов B3 BM&amp;F Bovespa биржи.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Rithmic">
