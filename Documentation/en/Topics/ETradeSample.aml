@@ -1,199 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" revisionNumber="1">
-  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-      <para>The application SampleETrade shows an example of working with <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeTrader</codeEntityReference>
-      as shown in the figure below. The example source code is in the <legacyItalic>Samples/ETrade</legacyItalic> folder of the installation package.</para>
-		
-		<mediaLink><image placement="center" xlink:href="etrade_sample_main_window"/></mediaLink>
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>     
+      <para>The code below demonstrates how to initialize the 
+      <codeEntityReference>T:StockSharp.ETrade.ETradeMessageAdapter</codeEntityReference>
+      and send it to
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new ETradeMessageAdapter(Connector.TransactionIdGenerator)
+{
+    ConsumerSecret = "<Your Secret>".To<SecureString>(),
+    ConsumerKey = "<Your Key>",
+};
+
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
+					</code>
+
     </introduction>
-    <procedure>
-				<steps class="ordered">
-					<step>
-						<content>
-							<para>First, you need to create an instance of the <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeTrader</codeEntityReference>:</para>
-            				<code language="C#">
-            				<![CDATA[
-Trader = new ETradeTrader(IsSandbox, IsSandbox ? GetSandboxSecurities() : null)
-{
-	ConsumerKey = ConsumerKey,
-	ConsumerSecret = secret,
-	LogLevel = LogLevels.Debug,
-	DumpRestData = true
-};
-							]]>
-							</code>
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>Then you should to subscribe on required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events:</para>
-            				<code language="C#">
-            				<![CDATA[
-// subscribe on connection successfully event
-Trader.Connected += () => this.GuiAsync(() =>
-{
-	Properties.Settings.Default.AccessToken = Trader.AccessToken.Serialize();
-	OnConnectionChanged(true);
-});
-
-// subscribe on connection error event
-Trader.ConnectionError += error => this.GuiAsync(() =>
-{
-	OnConnectionChanged(Trader.ConnectionState == ConnectionStates.Connected);
-	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
-});
-
-Trader.Disconnected += () => this.GuiAsync(() => OnConnectionChanged(false));
-
-// subscribe on error event
-Trader.Error += error =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
-
-// subscribe on error of market data subscription event
-Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
-
-Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-Trader.NewPortfolio += portfolio =>
-{
-	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-
-	// subscribe on portfolio updates
-	Trader.RegisterPortfolio(portfolio);
-};
-Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-// subscribe on error of order registration event
-Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-// subscribe on error of order cancelling event
-Trader.OrderCancelFailed += OrderFailed;
-
-// subscribe on error of stop-order registration event
-Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-// subscribe on error of stop-order cancelling event
-Trader.StopOrderCancelFailed += OrderFailed;
-
-Trader.MassOrderCancelFailed += (transId, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
-							]]>
-							</code>						
-						</content>
-					</step>
-					
-					<step>
-						<content>
-							<para>Next, you should to sign in the <token>etrade</token> server:</para>
-            				
-            				<code language="C#">
-            				<![CDATA[
-Trader.Connect();
-							]]>
-							</code>	
-							
-							<para>If the authorization was already carried out on the current day, the single call of 
-							<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.Connect</codeEntityReference>
-							is enough. Otherwise <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeTrader</codeEntityReference>
-							automatically launches the full authorization procedure, where the user will be prompted to enter a username/password to the <token>etrade</token> site,
-							after which the user will receive a verification code.
-							
-							The verification code must be written in the <codeEntityReference qualifyHint="true">P:StockSharp.ETrade.ETradeTrader.VerificationCode</codeEntityReference>
-							property, and then the authorization procedure should be re-started:</para>
-							
-            				<code language="C#">
-            				<![CDATA[
-Trader.VerificationCode = Verifier;
-Trader.Connect();
-							]]>
-							</code>							
-						</content>
-					</step>
-					<step>
-					<content>
-							<para>Once connected, you can expect to trigger events:</para>
-							<list class="bullet">
-								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> –
-									instrument change (last price, best bid/ask price, etc.) requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> method.</para>
-								</listItem>
-								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – 
-									portfolios change requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method.</para>
-								</listItem>
-							</list>							
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>Instruments search (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more detail</link>):</para>
-							
-							<mediaLink><image placement="center" xlink:href="etrade_sample_securities"/></mediaLink>
-            				
-            				<code language="C#">
-            				<![CDATA[
-private void FindClick(object sender, RoutedEventArgs e)
-{
-	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
-
-	if (!wnd.ShowModal(this))
-		return;
-
-	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
-}
-							]]>
-							</code>
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>To request updates on the portfolios you need to use the 
-							<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method:</para>
-            				<code language="C#">
-            				<![CDATA[
-Trader.NewPortfolio += portfolio =>
-{
-	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-
-	// subscribe on portfolio updates
-	Trader.RegisterPortfolio(portfolio);
-};
-
-							]]>
-							</code>						
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>For orders registration the New Order button used. The 
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> 
-							method sends an order to the server:</para>
-            				<code language="C#">
-            				<![CDATA[
-private void NewOrderClick(object sender, RoutedEventArgs e)
-{
-	var newOrder = new OrderWindow
-	{
-		Order = new Order { Security = SecurityPicker.SelectedSecurity },
-		SecurityProvider = MainWindow.Instance.Trader,
-		MarketDataProvider = MainWindow.Instance.Trader,
-		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-	};
-
-	if (newOrder.ShowModal(this))
-		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
-}
-							]]>
-							</code>						
-						</content>
-					</step>
-				</steps>
-		</procedure>
-  </developerWalkthroughDocument>
+  
+        <relatedTopics>
+        <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />
+    </relatedTopics>
+  </developerConceptualDocument>
 </topic>

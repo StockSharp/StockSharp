@@ -7,14 +7,13 @@
 
     <introduction>
       <para>
-		  Программа <token>hydra</token> построена с возможностью создания собственных расширений. 
-		  Для добавления собственного расширения необходимо скопировать dll в подпапку <legacyBold>Plugins</legacyBold> где установлена <token>hydra</token>.
-		  Ниже представлен процесс создания утилиты резервирования имеющихся данных (она входит стандартно и представлена в качестве обучающего материала).
+<token>hydra</token> is built with the ability to create custom extensions. To add your own extension, you need to copy the dll to the <legacyBold>Plugins</legacyBold> subfolder where <token>hydra</token>. 
+is installed. Below is the process of creating a utility for backing up existing data (it is included as standard and is presented as training material).
 	  </para>
 <para>
-Каждая утилита должна реализовать интерфейс <codeEntityReference>T:StockSharp.Hydra.Core.IHydraTask</codeEntityReference>
-(или наследоваться от классов <codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.BaseHydraTask</codeEntityReference> или
-<codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.ConnectorHydraTask`1</codeEntityReference>):
+Each utility has to implement the <codeEntityReference>T:StockSharp.Hydra.Core.IHydraTask</codeEntityReference>
+interface (or inherit from the <codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.BaseHydraTask</codeEntityReference> or 
+<codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.ConnectorHydraTask`1</codeEntityReference> classes):
 </para>
 
 					<code language="C#">
@@ -158,9 +157,8 @@
 ]]>
 					</code>
 					<para>
-Важным этапом создания утилиты является реализация метода 
-<codeEntityReference qualifyHint="true">M:StockSharp.Hydra.Core.BaseHydraTask.OnProcess</codeEntityReference>, в котором реализуется логика утилиты. 
-В случае реализации резервирования, вся логика находится внутри <link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" />:
+An important step in creating the utility is the implementation of the 
+<codeEntityReference qualifyHint="true">M:StockSharp.Hydra.Core.BaseHydraTask.OnProcess</codeEntityReference>, method, which implements the utility logic. In the case of implementing data backup, all the logic is inside <link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" />:
 					</para>
 					<code language="C#">
 <![CDATA[

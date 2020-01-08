@@ -203,50 +203,6 @@ private void Assets_OnSelectionChanged(object sender, SelectionChangedEventArgs 
                   	</code>
 					</content>
 				</step>
-				
-				
-				
-				<!--step>
-					<content>
-						<para>При изменении параметров опционов:</para>
-						<list class="ordered">
-  							<listItem>Заполняем массив опционами, которые не были добавлены ранее в коллекцию опционов контрола;</listItem>
-  							<listItem>Если добавлены новые опционы, то обновляем значение свойства 
-  							<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference>;</listItem>
-  							<listItem>
-  									 Если были добавлены новые опционы или изменились параметры ранее добавленных опционов, то обновляем доску опционов 
-  									<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference>.</listItem>
-						</list>
-            			<code title="C#" language="C#">
-                  <![CDATA[
-_connector.SecuritiesChanged += securities =>
-{
-	this.GuiAsync(() =>
-	{
-		if (SelectedAsset == null)
-			return;
-			
-		var newStrikes = securities
-				.Where(s => s.Type == SecurityTypes.Option && s.UnderlyingSecurityId.CompareIgnoreCase(SelectedAsset.Id))
-				.Where(s => !_options.Contains(s))
-				.ToArray();
-
-		if (newStrikes.Length > 0)
-		{
-			_options.AddRange(newStrikes);
-			Desk.Options = _options;
-			Desk.RefreshOptions();
-		}
-
-		if (Desk.Options.Intersect(securities).Any())
-			Desk.RefreshOptions();
-	});
-};
-
-]]>
-                  		</code>
-					</content>
-				</step-->
 			</steps>
  	</procedure>
 

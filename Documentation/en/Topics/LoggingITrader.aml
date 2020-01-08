@@ -16,18 +16,19 @@
 
       <steps class="ordered">
           <step>
-			  <content>
-				  <para>
-				  	As a demonstration selected examples showing work with the <token>ib</token>. All examples log information from the connector to a text file.
-				  </para>
-			  </content>
-		  </step>
-          <step>
           	<content>
 			  	<para>
 					First, you need to create a log manager:
 			 	</para>
-				<code language="C#">private readonly LogManager _logManager = new LogManager();</code>
+				<code language="C#">
+...
+
+private readonly Connector _connector = new Connector();
+private readonly LogManager _logManager = new LogManager();
+
+...
+				
+				</code>
 			</content>
 		  </step>
 		  <step>
@@ -45,7 +46,7 @@
 							The final step is to add the <codeEntityReference>T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>
 							in <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>:
 						</para>
-						<code language="C#">_logManager.Sources.Add(_trader);</code>
+						<code language="C#">_logManager.Sources.Add(_connector);</code>
 					</content>
 			  </content>
 		  </step>

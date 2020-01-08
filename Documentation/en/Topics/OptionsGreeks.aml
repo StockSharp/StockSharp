@@ -11,7 +11,7 @@
 		  </para>
 		  <para>The following code shows the <codeEntityReference>T:StockSharp.Algo.Derivatives.BlackScholes</codeEntityReference> class methods to calculate the “Greeks”.</para>
 		  <code language="C#"><![CDATA[
-var bs = new BlackScholes(option, trader, trader);
+var bs = new BlackScholes(option, _connector, _connector);
 
 DateTimeOffset currentTime = DateTimeOffset.Now;
 

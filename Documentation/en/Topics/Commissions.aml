@@ -6,7 +6,8 @@
 		<para>The <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>
 		manager is used to calculate commissions in the trading algorithm.</para>
 		
-		<para>The tariff plan is created by adding the relevant <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionRule</codeEntityReference>
+		<para>The tariff plan is created by adding the relevant 
+		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionRule</codeEntityReference>
 		rules, based on which commissions will be calculated further.</para>
 	</introduction>
 
@@ -31,7 +32,7 @@ private CommissionManager _commissionManager = new CommissionManager();
 						
 						<code language="C#">
 						<![CDATA[
- CommissionRule commissionRule = new CommissionRule {Type = CommissionTypes.PerTradeVolume, Value = new Unit(1m)};
+ CommissionRule commissionRule =  new CommissionPerTradeRule {  Value = new Unit(1m) };
 						]]>
 						</code>
 					</content>
@@ -54,8 +55,7 @@ _commissionManager.Rules.Add(commissionRule);;
 	<summary>
 		<para>The commission can be calculated both by the trades and by orders. To calculate the commission by the trade the 
 		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.Process(StockSharp.Messages.Message)</codeEntityReference>
-		method is called, in which as a parameter the <codeEntityReference qualifyHint="false">T:StockSharp.Messages.Message</codeEntityReference> is passed
-		(<codeEntityReference qualifyHint="false">T:StockSharp.Messages.ExecutionMessage</codeEntityReference> or <codeEntityReference qualifyHint="false">T:StockSharp.Messages.OrderRegisterMessage</codeEntityReference>).</para>
+		method is called, in which as a parameter the <codeEntityReference qualifyHint="false">T:StockSharp.Messages.Message</codeEntityReference> - a message containing information about the order or own transaction.</para>
 		<para>The total value of the commission can be found through the <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Commissions.CommissionManager.Commission</codeEntityReference>.</para>
 	</summary>
     

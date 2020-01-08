@@ -172,7 +172,7 @@ private void ShowChartClick(object sender, RoutedEventArgs e)
 					  Результат работы программы представлен на рисунке выше.
 				</para>
 				  
-				    <code title="C#" language="C#">
+<code title="C#" language="C#">
               		<![CDATA[
 private void DrawCandle(CandleSeries series, Candle candle)
 {

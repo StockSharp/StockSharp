@@ -1,190 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="66003162-d1b0-4f5f-8126-508055d15470" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-      <para>
-      	The application SampleIQFeed shows an example of working with <codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference>
-      	as shown in the figure below. The example source code is in the <legacyBold>Samples/IQFeed</legacyBold> folder of the installation package.
-      </para>
-      <mediaLink><image placement="center" xlink:href="IQFeedSample"/></mediaLink>
- 	  <list class="ordered">
- 	  	<listItem>
- 	  		<para>First, you need to create an instance of the <codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference>:</para>
- 	  		<code language="C#">
-Trader = new IQFeedTrader();
-			</code>
-		</listItem>
-		<listItem>
- 	  		<para>Next, you should subscribe on required <codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> events:</para>
- 	  		<code language="C#">
-// subscribe on connection successfully event
-Trader.Connected += () =>
+    <introduction>     
+      <para>The code below demonstrates how to initialize the 
+      <codeEntityReference>T:StockSharp.IQFeed.IQFeedMessageAdapter</codeEntityReference>
+      and send it to
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new IQFeedMessageAdapter(Connector.TransactionIdGenerator)
 {
-	Trader.RegisterNews();
-
-	// update gui labes
-	this.GuiAsync(() => ChangeConnectStatus(true));
+	Level1Address = "127.0.0.1:5009".To<EndPoint>(),
+	Level2Address = "127.0.0.1:9200".To<EndPoint>(),
+	LookupAddress = "127.0.0.1:9100".To<EndPoint>(),
+	AdminAddress =  "127.0.0.1:9200".To<EndPoint>(),
 };
-Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-// subscribe on connection error event
-Trader.ConnectionError += error => this.GuiAsync(() =>
-{
-	// update gui labes
-	this.GuiAsync(() => ChangeConnectStatus(false));
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
+					</code>
 
-	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
-});
-
-// subscribe on error event
-Trader.Error += error =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
-
-// subscribe on error of market data subscription event
-Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
-
-Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-Trader.NewNews += news => _newsWindow.NewsGrid.News.Add(news);
-			</code>
-		</listItem>
-		<listItem>
- 	  		<para>Then you need to establish the connection:</para>
- 	  		<code language="C#">
-Trader.Connect();
-			</code>
-		</listItem>
-		<listItem>
- 	  		<para>The subscription to the news in the event handler will be done after a successful connection:</para>
- 	  		<code language="C#">
-Trader.RegisterNews();
-			</code>
- 	  		<para>After this operation the following events should be expected:</para>
- 	  		<list class="ordered">
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – instrument change (last price, best bid/ask price, etc.).</listItem>
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – 
- 	  			order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference> method.</listItem>
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> – 
- 	  			new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> method.</listItem>
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference> – news.</listItem>
- 	  		</list>
- 	  	</listItem>
-		<listItem>
- 	  		<para>Instruments search (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more detail</link>):</para>
- 	  		<mediaLink><image placement="center" xlink:href="IQFeedFindSecurity"/></mediaLink>
- 	  		<code language="C#">
-private void FindClick(object sender, RoutedEventArgs e)
-{
-	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
-
-	if (!wnd.ShowModal(this))
-		return;
-
-	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
-}
-			</code>
-		</listItem>
-		<listItem>
- 	  		<para>
- 	  			For updates on the selected instrument and ticks you need to use the
- 	  			<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> and
- 	  			<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> methods, respectively:
- 	  		</para>
- 	  		<code language="C#">
-private void Level1Click(object sender, RoutedEventArgs e)
-{
-	TryInitialize();
-
-	foreach (var security in SecurityPicker.SelectedSecurities)
-	{
-		var window = _level1Windows.SafeAdd(security, s =>
-		{
-			// create level1 window
-			var wnd = new Level1Window
-			{
-				Title = security.Code + " level1"
-			};
-
-			// subscribe on level1
-			MainWindow.Instance.Trader.RegisterSecurity(security);
-
-			wnd.MakeHideable();
-			return wnd;
-		});
-
-		if (window.Visibility == Visibility.Visible)
-			window.Hide();
-		else
-			window.Show();
-	}
-}
-			</code>
-		</listItem>
-		<listItem>
- 	  		<para>To request updates on the order books you need to use the <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference> method:</para>
- 	  		<code language="C#">
-private void DepthClick(object sender, RoutedEventArgs e)
-{
-	var trader = MainWindow.Instance.Trader;
-
-	foreach (var security in SecurityPicker.SelectedSecurities)
-	{
-		var window = _quotesWindows.SafeAdd(security, s =>
-		{
-			// subscribe on order book flow
-			trader.RegisterMarketDepth(security);
-
-			// create order book window
-			var wnd = new QuotesWindow
-			{
-				Title = security.Id + " " + LocalizedStrings.MarketDepth
-			};
-			wnd.MakeHideable();
-			return wnd;
-		});
-
-		if (window.Visibility == Visibility.Visible)
-			window.Hide();
-		else
-			window.Show();
-
-		TryInitialize();
-
-		TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
-	}
-}
-
-			</code>
-		</listItem>
-		
-		<listItem>
- 	  		<para>For the trade history getting on the specified date the 
- 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)</codeEntityReference> method should be used:</para>
- 	  		<mediaLink><image placement="center" xlink:href="IQFeedHistoryTrades"/></mediaLink>
-  	  		<code language="C#">
-var ticks = MainWindow.Instance.Trader.GetHistoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out isSuccess);
-
-this.GuiAsync(() =>
-{
-	BusyIndicator.IsBusy = false;
-
-	L1Grid.Messages.Clear();
-	L1Grid.Messages.AddRange(ticks);
-});
-			</code>
-		</listItem>
-		<listItem>
- 	  		<para>For the candles history on instrument getting on the specified period the 
- 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)</codeEntityReference> method should be used:</para>
- 	  		<mediaLink><image placement="center" xlink:href="IQFeedHistoryCandles"/></mediaLink>
-  	  		<code language="C#">
-var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandle), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
-Chart.Reset(new[] { _candlesElem });
-foreach (var message in messages)
-	Chart.Draw(_candlesElem, message.ToCandle(_security));
-			</code>
-		</listItem>
-      </list>
     </introduction>
+  
+        <relatedTopics>
+        <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

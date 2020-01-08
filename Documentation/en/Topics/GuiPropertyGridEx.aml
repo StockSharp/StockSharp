@@ -2,6 +2,7 @@
 <topic id="c4aa5add-198d-432b-93fa-6ce60d0b7856" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+          
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference> - the table for editing object properties. The component includes a set of additional editors for system types and <token>stocksharp</token> types.
       	
@@ -108,7 +109,7 @@
 Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/Fix/SampleFix</legacyItalic>.
       </para>
       
-      
+
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[
@@ -161,7 +162,9 @@ Below is the code snippet with its use. The code example is taken from <legacyIt
 	  				]]>
               </code>
               <code title="C#" language="C#">
-              		<![CDATA[
+					  <![CDATA[
+private readonly Connector _connector = new Connector();
+
 public MainWindow()
 {
 	InitializeComponent();
@@ -178,17 +181,17 @@ public MainWindow()
 
 	if (File.Exists(_settingsFile))
 	{
-		Trader.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+		_connector_connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 	}
 
-	MarketDataSessionSettings.SelectedObject = ((ChannelMessageAdapter)Trader.MarketDataAdapter).InnerAdapter;
-	TransactionSessionSettings.SelectedObject = ((ChannelMessageAdapter)Trader.TransactionAdapter).InnerAdapter;
+	MarketDataSessionSettings.SelectedObject = ((ChannelMessageAdapter)_connector.MarketDataAdapter).InnerAdapter;
+	TransactionSessionSettings.SelectedObject = ((ChannelMessageAdapter)_connector.TransactionAdapter).InnerAdapter;
 
 	Instance = this;
 
-	Trader.LogLevel = LogLevels.Debug;
+	_connector.LogLevel = LogLevels.Debug;
 
-	_logManager.Sources.Add(Trader);
+	_logManager.Sources.Add(_connector);
 	_logManager.Listeners.Add(new FileLogListener { LogDirectory = "StockSharp_Fix" });
 }
 	  				]]>

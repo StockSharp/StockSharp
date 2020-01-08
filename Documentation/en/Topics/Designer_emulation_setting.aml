@@ -26,7 +26,6 @@ the <legacyBold>Emulator settings</legacyBold> window opens:</para>
 <listItem><para><legacyBold>Instruments</legacyBold> – Instruments.</para></listItem>
 </list>
 <para>2. <legacyBold>Settings</legacyBold></para>
-
 <list class="bullet">
 <listItem><para><legacyBold>Combine on touch</legacyBold> - During emulation of trade combining, combine trades when the trade price touches the order price (equal to order price).</para></listItem>
 <listItem><para><legacyBold>Market depth (lifetime)</legacyBold> - Maximum time, during which the order book is in emulator. If during this time there was no update, the order book is erased. This property can be used to remove old order books when there are holes in the data.</para></listItem>

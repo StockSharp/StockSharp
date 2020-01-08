@@ -2,20 +2,20 @@
 <topic id="4cd2b7f9-fe8d-404a-bec6-227783410beb" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para><token>stocksharp</token> предлагает несколько графических компонент для отображения логов, в основе которых лежит
-      <codeEntityReference>T:StockSharp.Xaml.LogControl</codeEntityReference>. Другие компоненты: 
+      <para><token>stocksharp</token> offers several graphical components for displaying logs, which are based on 
+      <codeEntityReference>T:StockSharp.Xaml.LogControl</codeEntityReference>. Other components: 
       <codeEntityReference>T:StockSharp.Xaml.LogWindow</codeEntityReference>,
-      <codeEntityReference>T:StockSharp.Xaml.Monitor</codeEntityReference> и 
-      <codeEntityReference>T:StockSharp.Xaml.MonitorWindow</codeEntityReference> только дополняют функциональность 
-      <codeEntityReference>T:StockSharp.Xaml.LogControl</codeEntityReference>.
+      <codeEntityReference>T:StockSharp.Xaml.Monitor</codeEntityReference> and   
+      <codeEntityReference>T:StockSharp.Xaml.MonitorWindow</codeEntityReference> only complement 
+      <codeEntityReference>T:StockSharp.Xaml.LogControl</codeEntityReference> functionality.
       </para>
-      <para>При использовании визуальных компонентов логирования в качестве "слушателя" необходимо использовать логгер
-      <codeEntityReference>T:StockSharp.Xaml.GuiLogListener</codeEntityReference>. Этот логгер обеспечивает потоковую синхронизацию с GUI при записи новых сообщений
-      <codeEntityReference>T:StockSharp.Logging.LogMessage</codeEntityReference>.</para>
-      <para>Чтобы в собственном классе реализовать возможность логирования необходимо реализовать интерфейс   
-      <codeEntityReference>T:StockSharp.Logging.ILogReceiver</codeEntityReference>. Более простой способ это унаследоваться от класса 
-      <codeEntityReference>T:StockSharp.Logging.BaseLogReceiver</codeEntityReference>, как это сделать 
-      продемонстрировано в примере <legacyItalic>Samples\Misc\SampleLoggingGitHub</legacyItalic>:</para>
+      <para>When using the logging visual components, you need to use the
+      <codeEntityReference>T:StockSharp.Xaml.GuiLogListener</codeEntityReference>logger as a "listener". This logger provides streaming synchronization with the GUI when recording new 
+      <codeEntityReference>T:StockSharp.Logging.LogMessage</codeEntityReference> messages.</para>
+      <para>In order to implement the logging possibility in your own class, you need to implement the 
+      <codeEntityReference>T:StockSharp.Logging.ILogReceiver</codeEntityReference>interface. An easier way is to inherit from the 
+      <codeEntityReference>T:StockSharp.Logging.BaseLogReceiver</codeEntityReference>class, as shown in the 
+      <legacyItalic>Samples\Misc\SampleLoggingGitHub</legacyItalic> example:</para>
                          <code title="C#" language="C#">
 	  				<![CDATA[
 private class TestSource : BaseLogReceiver
@@ -52,9 +52,9 @@ public MainWindow()
     </introduction>
  
     <relatedTopics>
-       <link xlink:href="82437493-cd53-41eb-b756-d913af0f4f8e">Логирование</link>
-       <link xlink:href="a206d470-20f1-42ed-b066-6e322d55d436">Панель логов</link>
-       <link xlink:href="dc573dca-b2ea-44c4-884d-b7d0ba8b212d">Расширенная панель логов</link>
+       <link xlink:href="82437493-cd53-41eb-b756-d913af0f4f8e"/>
+       <link xlink:href="a206d470-20f1-42ed-b066-6e322d55d436"/>
+       <link xlink:href="dc573dca-b2ea-44c4-884d-b7d0ba8b212d"/>
     </relatedTopics>
     
   </developerConceptualDocument>

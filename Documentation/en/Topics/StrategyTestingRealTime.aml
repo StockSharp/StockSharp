@@ -30,7 +30,7 @@
 						  "virtual" transactions using the <legacyBold>MillisecondIncrementalIdGenerator</legacyBold> identifier generator.
 					  </para>
 					  <code language="C#"><![CDATA[
-					_connector = new RealTimeEmulationTrader<OpenECryMessageAdapter>(new OpenECryMessageAdapter(new MillisecondIncrementalIdGenerator())
+					_connector = new RealTimeEmulationTrader<SmartComMessageAdapter>(new SmartComMessageAdapter(new MillisecondIncrementalIdGenerator())
 					{
 						Login = Login.Text,
 						Password = Password.Password.To<SecureString>(),
@@ -50,11 +50,7 @@ SecurityPicker.SecurityProvider = new FilterableSecurityProvider(_connector);
 SecurityPicker.MarketDataProvider = _connector;
 
 _logManager.Sources.Add(_connector);
-
-// clear password for security reason
-//Password.Clear();
-
-// subscribe on connection successfully event
+					
 _connector.Connected += () =>
 {
 	// update gui labels

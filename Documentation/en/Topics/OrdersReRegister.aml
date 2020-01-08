@@ -8,9 +8,8 @@
 	<introduction>
 		<para>
 			Orders replacement in the trading algorithms creating is more advanced way than the <link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Orders cancel</link>
-			and the following registration. To replace the order you should call the <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)</codeEntityReference>
-			method or pass the new order object <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>
-			at once.
+			and the following registration. To replace the order you should call the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>
+			method.
 		</para>
 	  <para>
 			As the result or orders replacement the new <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
@@ -60,9 +59,10 @@
 	var newOrder = registeredOrder.Clone();
 
 	// changing the price to be the best on order book
-	    newOrder.Price = (registeredOrder.Direction == Sides.Buy ? registeredOrder.Security.BestBid : registeredOrder.Security.BestAsk).Price;
+	newOrder.Price = (registeredOrder.Direction == Sides.Buy ? registeredOrder.Security.BestBid : registeredOrder.Security.BestAsk).Price;
+
 	// sending request the replace our order with new price
-	trader.ReRegisterOrder(registeredOrder, newOrder);
+	_connector.ReRegisterOrder(registeredOrder, newOrder);
 }]]></code>
 
     <!--<buildInstructions>

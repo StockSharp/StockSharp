@@ -18,9 +18,6 @@
   		<listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference> - расширенный графический компонент для отображения биржевых графиков.</para>
   		</listItem>
-  		<!--listItem>
-  			<para><codeEntityReference>T:StockSharp.Xaml.Charting.BufferedChart</codeEntityReference> - графический компонент для отображения биржевых графиков, который использует буфферизацию при выводе данных.</para>
-  		</listItem-->
   		<listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> - графический компонент для отображения кривой доходности.</para>
   		</listItem>
@@ -114,7 +111,8 @@
       <title>ChartArea</title>
       <content>
         <para>
-           <codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea</codeEntityReference> - область построения графика, является контейнером для элементов <codeEntityReference>T:StockSharp.Xaml.Charting.IChartElement</codeEntityReference> (индикаторы, свечи и т.п.),
+           <codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea</codeEntityReference> - область построения графика, является контейнером для элементов 
+           <codeEntityReference>T:StockSharp.Xaml.Charting.IChartElement</codeEntityReference> (индикаторы, свечи и т.п.),
            которые отрисовываются на графике, и осей (<codeEntityReference>T:StockSharp.Xaml.Charting.ChartAxis</codeEntityReference>) графика.
 		</para>
 		

@@ -53,7 +53,7 @@ Connector.Connect();
 ...
 var tf = (TimeSpan)CandlesPeriods.SelectedItem;
 var series = new CandleSeries(typeof(TimeFrameCandle), SelectedSecurity, tf);
-Сonnector.SubscribeCandles(SelectedSecurity, DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100)), DateTime.Now);
+Connector.SubscribeCandles(SelectedSecurity, DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100)), DateTime.Now);
 ...
 			]]>
 			</code>
@@ -67,7 +67,7 @@ var series = new CandleSeries(typeof(TimeFrameCandle), SelectedSecurity, tf);
           <code language="C#">
             <![CDATA[
 ...
-Сonnector.CandleSeriesProcessing += ProcessCandle;
+Connector.CandleSeriesProcessing += ProcessCandle;
 ...
 			]]>
 			</code>

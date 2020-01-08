@@ -20,11 +20,8 @@
 		</list>
 
 		<para>Cм. также <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>.</para>
-		<para><legacyBold>
-Крипто-трейдер
-
-</legacyBold></para>
-		<para><token>Binance</token>,
+		<para><legacyBold>Крипто-трейдер</legacyBold></para>
+<para><token>Binance</token>,
 <token>Bitbank</token>,
 <token>Bitexbook</token>,
 <token>Bitfinex</token>,
@@ -130,9 +127,6 @@
   		</para>
 
 	</introduction>
-	
-	 <relatedTopics>
-     	</relatedTopics>
 	</developerWalkthroughDocument>
 </topic>
 

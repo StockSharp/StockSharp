@@ -7,7 +7,7 @@
      <mediaLink><image placement="center" xlink:href="API_GUI_Settings_RSS" /></mediaLink>
      <list class="bullet">
 	   <listItem><legacyBold>Адрес</legacyBold> - Адрес сервера.</listItem>
-	   <listItem><legacyBold>Формат дат</legacyBold> - Формат дат. Необходимо заполнить, если формат RSS потока отличается от ddd, dd МММ уууу HH:mm:ss zzzz.</listItem>
+	   <listItem><legacyBold>Формат дат</legacyBold> - Формат дат. Необходимо заполнить, если формат RSS потока отличается от ddd, dd MMM уууу HH:mm:ss zzzz.</listItem>
 	   <listItem>
 	      <legacyBold>Настройки переподключения</legacyBold> - Настройки механизма отслеживания подключения с торговой системой (<link xlink:href="a188710e-7bb7-41b3-8119-6088f2bf1780" />).
 		</listItem>

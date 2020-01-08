@@ -16,11 +16,8 @@
      <alert class="note">
   		<para>В стандартную поставку <token>hydra</token> входят два готовых скрипта: 
   		"Объем внутри дня" и "Профиль объема".</para>
-	 </alert>
-
-      
-    </introduction>
-   
+	 </alert>      
+    </introduction>   
   </developerConceptualDocument>
 </topic>
 

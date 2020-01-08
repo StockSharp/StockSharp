@@ -27,7 +27,7 @@
 		<para>
 			The nesting of sources is showing in the form of a tree. Each parent node contains messages of all nested and so on, until the lowest level. For strategies such hierarchy allows you to see
 			<link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">child strategies</link>.
-			For connectors it is also useful in the case of <link xlink:href="1cfb4f7c-b9fc-43da-a958-b0e0f881479d">BasketTrader</link>.
+			For connectors it is also useful in the case of <link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2">BasketTrader</link>.
 			using. Similarly, the same nesting can be arranged for your own algorithm, implementing the
 			<codeEntityReference qualifyHint="true">P:StockSharp.Logging.ILogSource.Parent</codeEntityReference> property.
 			<!--<codeEntityReference qualifyHint="true">P:StockSharp.Logging.ILogSource.Childs</codeEntityReference>.-->

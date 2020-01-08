@@ -32,7 +32,6 @@ switching to the strategy, in the bar the <legacyBold>Emulation</legacyBold> tab
 which contains the main elements for strategy creation, debugging, strategy 
 testing (<link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" />, 
 <link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />)</para>
-
 <mediaLink><image placement="center" xlink:href="Designer_Quick_start_03"/></mediaLink>
 <para>In the <legacyBold>Emulation</legacyBold> tab, you need to set a test period, and select 
 <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" /> in the <legacyBold>Market Data</legacyBold> field.</para>

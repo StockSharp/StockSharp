@@ -6,29 +6,29 @@
 		
 		<list class="bullet">
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> - the new order received event.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITransactionProvider.NewOrder</codeEntityReference> - the new order received event.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersCancelFailed</codeEntityReference> - the event on errors related to orders cancel.
+				<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.OrderCancelFailed</codeEntityReference> - the event on errors related to orders cancel.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference> - the order state change event (cancelled, matched).
+				<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.OrderChanged</codeEntityReference> - the order state change event (cancelled, matched).
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersRegisterFailed</codeEntityReference> - the event on errors related to orders registration.
+				<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.OrderRegisterFailed</codeEntityReference> - the event on errors related to orders registration.
 			</listItem>
 			
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewStopOrder</codeEntityReference> - the new stop order received event.
+				<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.NewStopOrder</codeEntityReference> - the new stop order received event.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersCancelFailed</codeEntityReference> - the event on errors related to stop orders cancelling.
+				<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.StopOrderCancelFailed</codeEntityReference> - the event on errors related to stop orders cancelling.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersChanged</codeEntityReference> - the stop orders state change event.
+				<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.StopOrderChanged</codeEntityReference> - the stop orders state change event.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersRegisterFailed</codeEntityReference> - the event on errors related to stop orders registration.
+				<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.StopOrderRegisterFailed</codeEntityReference> - the event on errors related to stop orders registration.
 			</listItem>
 		</list>
 
@@ -39,17 +39,17 @@
 		</para>
 		<para>
 			To find out in the program when the exchange has assigned the <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Id</codeEntityReference>
-			to the order, you need to subscribe for the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>
-			event (or the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.StopOrdersChanged</codeEntityReference> for stop orders).
-			To determine the registration failed the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersRegisterFailed</codeEntityReference>
-			event is used (or the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.StopOrdersRegisterFailed</codeEntityReference> for stop orders).
+			to the order, you need to subscribe for the <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.OrderChanged</codeEntityReference>
+			event (or the <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.StopOrderChanged</codeEntityReference> for stop orders).
+			To determine the registration failed the <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.OrderRegisterFailed</codeEntityReference>
+			event is used (or the <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.StopOrderRegisterFailed</codeEntityReference> for stop orders).
 		</para>
 		<alert class="caution">
 			<para>
 				If at the start of the application the previously registered orders have been passed from the connector, they all passed through the
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> events, regardless of their state (except the
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITransactionProvider.NewOrder</codeEntityReference> events, regardless of their state (except the
 				<codeEntityReference>F:StockSharp.Messages.OrderStates.Failed</codeEntityReference> state). This is because the
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> event shows the new orders receiving
+				<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.NewOrder</codeEntityReference> event shows the new orders receiving
 				in the program, not the event of order successful registration.
 			</para>
 		</alert>

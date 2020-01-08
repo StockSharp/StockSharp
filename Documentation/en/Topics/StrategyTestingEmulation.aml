@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="ab42038e-836b-4c00-9332-0b2db2cbd948" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
 	  <introduction>
 		  <para>
 			  Testing on random data is a special kind of testing. It is not intended to search for the optimal parameters. Instead, such testing can detect errors
@@ -37,9 +33,6 @@
 		  </para>
 	  </introduction>
 
-<!--_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
-				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });-->
-
 	  <procedure>
 		  <title>Testing on random data of moving averages strategy</title>
 		  <steps class="ordered">
@@ -54,8 +47,21 @@
 						  tick trades. In SampleHistoryTesting only one generator is used - for the order book, as there is no history stored.
 					  </para>
 					  <code language="C#"><![CDATA[
-_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
-_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
+_connector.MarketDataAdapter.SendInMessage(new GeneratorMessage
+{
+    IsSubscribe = true,
+    Generator = new RandomWalkTradeGenerator(new SecurityId { SecurityCode = security.Code })
+    {
+        Interval = TimeSpan.FromSeconds(1),
+        MaxVolume = maxVolume,
+        MaxPriceStepCount = 3,	
+        GenerateOriginSide = true,
+        MinVolume = minVolume,
+        RandomArrayLength = 99,
+    }
+});
+
+_connector.SubscribeMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
 ]]></code>
 				  </content>
 			  </step>
@@ -71,69 +77,5 @@ _connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecur
 			  </step>
 		  </steps>
 	  </procedure>
-
-    <!--<section>
-      <title>A topic section</title>
-
-      <content>
-        <para>Some topic content</para>
-      </content>
-    </section>-->
-
-    <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-        
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
-    </relatedTopics>
-
   </developerConceptualDocument>
 </topic>

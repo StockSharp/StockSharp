@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="eca7454c-0532-4aaf-92bf-7a3d0cba635b" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    -->
     <introduction>
       <para>
 		The <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> class implements the <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference>

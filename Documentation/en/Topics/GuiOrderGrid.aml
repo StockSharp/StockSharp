@@ -46,157 +46,57 @@
      	  <para>
 Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/InteractiveBrokers/SampleIB</legacyItalic>.
       </para>
-      
-     
-      
-       <code title="XAML" language="XAML">
+
+      <code title="XAML" language="XAML">
 	  				<![CDATA[
-<Window x:Class="SampleIB.OrdersWindow"
+<Window x:Class="Sample.OrdersWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:xaml="http://schemas.stocksharp.com/xaml"
     Title="{x:Static loc:LocalizedStrings.Orders}" Height="410" Width="930">
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
-
-		<xaml:OrderGrid x:Name="OrderGrid" x:FieldModifier="public" OrderCanceling="OrderGrid_OnOrderCanceling" OrderReRegistering="OrderGrid_OnOrderReRegistering" />
-		<Button Grid.Row="1" Width="100" HorizontalAlignment="Right" Content="{x:Static loc:LocalizedStrings.CancelAll}" Click="CancelAll_OnClick" />
-	</Grid>
+	<xaml:OrderGrid x:Name="OrderGrid" x:FieldModifier="public" OrderCanceling="OrderGrid_OnOrderCanceling" OrderReRegistering="OrderGrid_OnOrderReRegistering" />
 </Window>
 	  				]]>
               </code>
               <code title="C#" language="C#">
-              		<![CDATA[
+					  <![CDATA[
+private readonly Connector _connector = new Connector();
+
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-	if (!_isConnected)
-	{
+ 	.......................................	
 
-        .......................................
+	_connector.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+	
 
-
-			// subscribe on connection successfully event
-			Trader.Connected += () =>
-			{
-				// set flag (connection is established)
-				_isConnected = true;
-
-				// update gui labes
-				this.GuiAsync(() => ChangeConnectStatus(true));
-
-				// subscribe on news
-				Trader.RegisterNews();
-			};
-
-			// subscribe on connection error event
-			Trader.ConnectionError += error => this.GuiAsync(() =>
-			{
-				// update gui labes
-				ChangeConnectStatus(false);
-
-				MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);	
-			});
-
-			Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
-
-			// subscribe on error event
-			Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
-
-			Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-			Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-			Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-			Trader.NewPortfolio += portfolio =>
-			{
-				_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-
-				// subscribe on portfolio updates
-				Trader.RegisterPortfolio(portfolio);
-			};
-			Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-			// subscribe on error of order registration event
-			Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			// subscribe on error of order cancelling event
-			Trader.OrderCancelFailed += OrderFailed;
-
-			// subscribe on error of stop-order registration event
-			Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-			// subscribe on error of stop-order cancelling event
-			Trader.StopOrderCancelFailed += OrderFailed;
-
-			Trader.MassOrderCancelFailed += (transId, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
-
-			Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
-
-			// set market data provider
-			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
-
-			// set news provider
-			_newsWindow.NewsPanel.NewsProvider = Trader;
-
-			ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
-			ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = 
-			ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
-		}
-
-
-		Trader.Login = Login.Text;
-		Trader.Password = Password.Password;
-		Trader.Address = Address.SelectedAddress;
-
-		// clear password box for security reason
-		//Password.Clear();
-
-		Trader.Connect();
-	}
-	else
-	{
-		Trader.UnRegisterNews();
-
-		Trader.Disconnect();
-	}
+	_connector.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+	.......................................			
 }
               	
+
 private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
 {
-	orders.ForEach(MainWindow.Instance.Trader.CancelOrder);
+	orders.ForEach(_connector.CancelOrder);
 }
+
 
 private void OrderGrid_OnOrderReRegistering(Order order)
 {
 	var window = new OrderWindow
 	{
 		Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
-		SecurityProvider = MainWindow.Instance.Trader,
-		MarketDataProvider = MainWindow.Instance.Trader,
-		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-		Order = order.ReRegisterClone(newVolume: order.Balance),
+		SecurityProvider = _connector,
+		MarketDataProvider = _connector,
+		Portfolios = new PortfolioDataSource(_connector),
+		Order = order.ReRegisterClone(newVolume: order.Balance)
 	};
 
 	if (window.ShowModal(this))
-	{
-		MainWindow.Instance.Trader.ReRegisterOrder(order, window.Order);
-	}
-}
-
-private void CancelAll_OnClick(object sender, RoutedEventArgs e)
-{
-	MainWindow.Instance.Trader.CancelOrders();
+		_connector.ReRegisterOrder(order, window.Order);
 }
 	  				]]>
              </code>
-
-      
-      
-      
-      
     </introduction>
   </developerConceptualDocument>
 </topic>

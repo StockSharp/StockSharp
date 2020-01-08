@@ -1,231 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7c23b480-d472-43df-aabf-f743ad09fded" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-      <para>The application SampleIB shows an example of working with <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>,
-      as shown in the figure below. The example source code is in the <legacyItalic>Samples/InteractiveBrokers</legacyItalic> folder of the installation package.</para>
-		
-		<mediaLink><image placement="center" xlink:href="ib_main_window"/></mediaLink>
+    <introduction>     
+      <para>The code below demonstrates how to initialize the 
+      <codeEntityReference>T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter</codeEntityReference>
+      and send it to
+      <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
+      <code language="C#">
+            				<![CDATA[
+Connector Connector = new Connector();				
+...				
+var messageAdapter = new InteractiveBrokersMessageAdapter(Connector.TransactionIdGenerator)
+{
+	Address = "<Your Address>".To<EndPoint>(),
+};
+
+Connector.Adapter.InnerAdapters.Add(messageAdapter);
+...	
+							]]>
+					</code>
+
     </introduction>
-    <procedure>
-				<steps class="ordered">
-					<step>
-						<content>
-							<para>First, you need to create an instance of the <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>:</para>
-            				<code language="C#">
-            				<![CDATA[
-Trader = new InteractiveBrokersTrader {
-	Address = Address.Text.To<IPEndPoint>(),
-};
-							]]>
-							</code>
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>Then you should to subscribe on required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events:</para>
-            				<code language="C#">
-            				<![CDATA[
-// subscribe on connection successfully event
-Trader.Connected += () =>
-{
-	this.GuiAsync(() => ChangeConnectStatus(true));
-
-	// subscribe on news
-	Trader.RegisterNews();
-};
-
-// subscribe on connection error event
-Trader.ConnectionError += error => this.GuiAsync(() =>
-{
-	ChangeConnectStatus(false);
-	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
-});
-
-Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
-
-// subscribe on error event
-Trader.Error += error =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
-
-// subscribe on error of market data subscription event
-Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
-
-Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-Trader.NewStopOrder += order => _conditionOrdersWindow.OrderGrid.Orders.Add(order);
-
-Trader.NewPortfolio += portfolio =>
-{
-	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-	Trader.RegisterPortfolio(portfolio);
-};
-Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-// subscribe on error of order registration event
-Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-// subscribe on error of order cancelling event
-Trader.OrderCancelFailed += OrderFailed;
-
-Trader.MassOrderCancelFailed += (transId, error) =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
-
-Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
-							]]>
-							</code>						
-						</content>
-					</step>
-					
-					<step>
-						<content>
-							<para>Then you need to connect to <token>ib</token> server:</para>
-            				<code language="C#">
-            				<![CDATA[
-Trader.Connect();
-							]]>
-							</code>						
-						</content>
-					</step>
-					
-					<step>
-						<content>
-							<para>Once connected, you can expect to trigger events:</para>
-							<list class="bullet">
-								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – 
-									instrument change (last price, best bid/ask price, etc.) requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> method.</para>
-								</listItem>
-								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – 
-									order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference> method.</para>
-								</listItem>
-								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> – 
-									new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> method.</para>
-								</listItem>
-								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – 
-									portfolios change requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method.</para>
-								</listItem>
-							</list>
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>Instruments search  (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more details</link>):</para>
-							
-							<mediaLink><image placement="center" xlink:href="ib_securities"/></mediaLink>
-            				
-            				<code language="C#">
-            				<![CDATA[
-private void FindClick(object sender, RoutedEventArgs e)
-{
-	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL", Type = SecurityTypes.Stock } };
-
-	if (!wnd.ShowModal(this))
-		return;
-
-	Trader.LookupSecurities(wnd.Criteria);
-}
-							]]>
-							</code>
-							
-							<para>If instruments with specified criteria are not found, then the error returns through the <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.Error</codeEntityReference> event:</para>
-							<mediaLink><image placement="center" xlink:href="ib_security_not_found"/></mediaLink>
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>For updates on the selected instrument you need to call
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes})</codeEntityReference> method:</para>
-            				<code language="C#">
-            				<![CDATA[
-Trader.RegisterSecurity(SelectedSecurity);
-							]]>
-							</code>						
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>To request updates on the order books you need to use the 
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},System.Nullable{System.Int32})</codeEntityReference> method:</para>
-            				<code language="C#">
-            				<![CDATA[
-private void DepthClick(object sender, RoutedEventArgs e)
-{
-	foreach (var security in SecurityPicker.SelectedSecurities)
-	{
-		var wnd = _quotesWindows.TryGetValue(security);
-
-		if (wnd == null)
-		{
-			// create order book window
-			wnd = new QuotesWindow
-			{
-				Title = security.Id + " " + LocalizedStrings.MarketDepth
-			};
-			_quotesWindows.Add(security, wnd);
-
-			// subscribe on order book flow
-			Trader.RegisterMarketDepth(security);
-
-			wnd.Show();
-		}
-		else
-		{
-			Trader.UnRegisterMarketDepth(security);
-
-			_quotesWindows.Remove(security);
-
-			wnd.Close();
-		}
-
-		if (!_mdInitialized)
-		{
-			TraderOnMarketDepthChanged(Trader.GetMarketDepth(security));
-			Trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-			_mdInitialized = true;
-		}
-	}
-}
-							]]>
-							</code>
-							<mediaLink><image placement="center" xlink:href="ib_market_depth"/></mediaLink>
-						</content>
-					</step>
-
-					<step>
-						<content>
-							<para>For orders registration the <legacyItalic>New Order</legacyItalic> button used. The <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
-							method sends an order to the server:</para>
-            				<code language="C#">
-            				<![CDATA[
-private void NewOrderClick(object sender, RoutedEventArgs e)
-{
-	var newOrder = new OrderWindow
-	{
-		Order = new Order { Security = SelectedSecurity },
-		SecurityProvider = Trader,
-		MarketDataProvider = Trader,
-		Portfolios = new PortfolioDataSource(Trader),
-	};
-
-	if (newOrder.ShowModal(this))
-		Trader.RegisterOrder(newOrder.Order);
-}
-							]]>
-							</code>						
-						</content>
-					</step>
-
-				</steps>
-		</procedure>
+  
+        <relatedTopics>
+        <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

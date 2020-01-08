@@ -18,7 +18,7 @@ of the example can be found in the <legacyItalic>Samples\Options\SampleOptionQuo
     	<steps class="ordered">
 			<step>
 				<content>
-					<para>1.	In the XAML code, adding the <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference>
+					<para>In the XAML code, adding the <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference>
 element and assigning it the <legacyBold>Desk</legacyBold> name. </para>
             		<code title="XAML" language="XAML">
 	  				<![CDATA[

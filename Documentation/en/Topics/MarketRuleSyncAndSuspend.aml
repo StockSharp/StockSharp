@@ -11,7 +11,6 @@
     </introduction>
 
 
-
     <section address="Section2">
 		<title>Rules suspension using</title>
 		<content>
@@ -26,19 +25,17 @@
 MarketRuleHelper.SuspendRules(() =>	
 {
 	order
-		.WhenRegistered()
-		.Do(() => trader.AddInfoLog("The order was successfully registered."))
+		.WhenRegistered(Connector)
+		.Do(() => Connector.AddInfoLog("The order was successfully registered."))
 		.Once()
 		.Apply(this);
 	
 	order
-		.WhenCancelled()
-		.Do(() => trader.AddInfoLog("The order was successfully cancelled."))
+		.WhenCancelled(Connector)
+		.Do(() => Connector.AddInfoLog("The order was successfully cancelled."))
 		.Once()
 		.Apply(this);
 });
-
-trader.RegisterOrder(order);
 							]]>
 							</code>				
 						</content>
@@ -54,24 +51,20 @@ class FirstStrategy : Strategy
 {
 	...
 	
-    protected override void OnStarting()
-    {
-		this.SuspendRules(() =>
-		{
-			Trader
-                .WhenCandlesFinished(_series)
-			    .Do(FinishCandle)
-				.Apply(this);
+       this.SuspendRules(() =>
+       {
+		_connector
+               .WhenCandlesFinished(_series)
+               .Do(FinishCandle)
+               .Apply(this);
 
-			Security
-				.WhenNewTrade()
-				.Do(NewTrade)
-				.Apply(this);
-		});
+           Security
+               .WhenNewTrade(Connector)
+               .Do(NewTrade)
+               .Apply(this);
+       });
+   }
 
-        base.OnStarting();
-    }
-    
     ...
 }
 							]]>

@@ -49,6 +49,7 @@ The example from Samples/Chart/SampleChart is taken as a basis, in which some ch
               		<![CDATA[
               		
 private readonly Dictionary<CandleSeries, ChartWindow> _chartWindows = new Dictionary<CandleSeries, ChartWindow>();
+private readonly Connector _connector = new Connector();
 
 private readonly LogManager _logManager;
 
@@ -80,24 +81,15 @@ event. of this event, The chart plotting will be performed in the handler of thi
 				  </para>
 				    <code title="C#" language="C#">
               		<![CDATA[
+              		
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-        ..........................................         
-        _logManager.Sources.Add(_trader);
-        _trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
+		..........................................		 
 
-        _trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));
+		_connector.CandleSeriesProcessing += DrawCandle;
+{
+		..........................................		 
 
-        _trader.MarketDataSubscriptionFailed += (security, type, error) =>
-            this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
-
-		Security.SecurityProvider = new FilterableSecurityProvider(_trader);
-
-		_trader.CandleSeriesProcessing += DrawCandle;
-		_trader.Connect();
-
-        ConnectBtn.IsEnabled = false;
-    }
 }
 	  				]]>
 				   </code>
@@ -114,43 +106,50 @@ Opening the chart window and start the candle manager.
               		<![CDATA[
 private void ShowChartClick(object sender, RoutedEventArgs e)
 {
-    var security = SelectedSecurity;
+	var security = SelectedSecurity;
 
-    var series = new CandleSeries(CandlesSettings.Settings.CandleType, security, CandlesSettings.Settings.Arg);
+	var series = new CandleSeries(CandlesSettings.Settings.CandleType, security, CandlesSettings.Settings.Arg);
 
-    _chartWindows.SafeAdd(series, key =>
-    {
-        var wnd = new ChartWindow
-        {
-            Title = "{0} {1} {2}".Put(security.Code, series.CandleType.Name, series.Arg)
-        };
+	_chartWindows.SafeAdd(series, key =>
+	{
+		var wnd = new ChartWindow
+		{
+			Title = "{0} {1} {2}".Put(security.Code, series.CandleType.Name, series.Arg)
+		};
 
-        wnd.MakeHideable();
+		wnd.MakeHideable();
+
 
         _sma = new SimpleMovingAverage() { Length = 11 };
         _macd = new MovingAverageConvergenceDivergence();
+
 
         _smaChartElement = new ChartIndicatorElement();
         _macdChartElement = new ChartIndicatorElement();
         _candlesElem = new ChartCandleElement();
 
+
         _macdChartElement.DrawStyle = ChartIndicatorDrawStyles.Histogram;
+
 
         _candlesArea = new ChartArea();
         _indicatorsArea = new ChartArea();
 
+
         wnd.Chart.Areas.Add(_candlesArea);
         wnd.Chart.Areas.Add(_indicatorsArea);
+
 
         _candlesArea.Elements.Add(_candlesElem);
         _candlesArea.Elements.Add(_smaChartElement);
         _indicatorsArea.Elements.Add(_macdChartElement);
 
         return wnd;
-    }).Show();
-    _trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+	}).Show();
+	_connector.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 }
-]]></code>
+	  				]]>
+				   </code>
 			  </content>
 		  </step>
 		  		  <step>
@@ -178,31 +177,32 @@ method, to which we pass the time and the dictionary of elements.</para>
 The result of the program is shown in the figure above.
 </para>
 				  
-<code title="C#" language="C#"><![CDATA[
+<code title="C#" language="C#">
+              		<![CDATA[
 private void DrawCandle(CandleSeries series, Candle candle)
 {
-    var wnd = _chartWindows.TryGetValue(series);
+	var wnd = _chartWindows.TryGetValue(series);
 
-    if (wnd != null)
-    {
-        if (candle.State != CandleStates.Finished)
-            return;
+	if (wnd != null)
+	{
+		if (candle.State != CandleStates.Finished)
+			return;
 
-        var smaValue = _sma.Process(candle);
-        var macdValue = _macd.Process(candle);
+		var smaValue = _sma.Process(candle);
+		var macdValue = _macd.Process(candle);
 
-        var data = new ChartDrawData();
-        data
-          .Group(candle.OpenTime)
-            .Add(_candlesElem, candle)
-            .Add(_smaChartElement, smaValue)
-            .Add(_macdChartElement, macdValue);
+		var data = new ChartDrawData();
+		data
+		  .Group(candle.OpenTime)
+		    .Add(_candlesElem, candle)
+		    .Add(_smaChartElement, smaValue)
+		    .Add(_macdChartElement, macdValue);
 
-            wnd.Chart.Draw(data);
-
-    }
-}
-]]></code>
+        	wnd.Chart.Draw(data);
+               
+	}
+}]]>
+				   </code>
 			  </content>
 		  </step>
 		  

@@ -33,12 +33,13 @@
 						<para>Next, you need to extend the event method-handler of the strategy parameter change:</para>
 						<code language="C#">
 						<![CDATA[
-this.Sync(() =>
+this.GuiAsync(() =>
 {
 	Status.Content = _strategy.ProcessState;
-	PnL.Content = _strategy.PnLManager.PnL;
-	Slippage.Content = _strategy.SlippageManager.Slippage;
+	PnL.Content = _strategy.PnL;
+	Slippage.Content = _strategy.Slippage;
 });
+
 						]]>
 						</code>
 					</content>

@@ -111,15 +111,15 @@ public MainWindow()
 				   <code title="C#" language="C#">
               		<![CDATA[
 _strategy.PnLChanged += () =>
-{
-	var data = new EquityData
-	{
-		Time = _strategy.CurrentTime,
-		Value = _strategy.PnL,
-	};
+		{
+			var data = new EquityData
+			{
+				Time = _strategy.CurrentTime,
+				Value = _strategy.PnL,
+			};
 			
-	this.GuiAsync(() => _curveItems.Add(data));
-};
+			this.GuiAsync(() => _curveItems.Add(data));
+		};
 	  				]]>
 
 				   </code>

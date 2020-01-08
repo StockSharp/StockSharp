@@ -1,22 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="f8cae46b-57e1-4954-a4cf-832854840981" revisionNumber="1">
-	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-
-	<introduction>
-		<para><codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> (FuturesOnline)
-		(not to be confused with the name of the “OEC Trader” terminal) should be used for <token>OpenECry_external</token> trading algorithms creating.
-		The scheme of interaction is shown in this figure:</para>
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    <para><legacyBold>OpenECry  (GAIN Futures)</legacyBold> — 
+    trading platform for trading on the international exchanges.</para>
+    	<para>
+Before you start writing trading robots for the current trading platform, it is recommended to read the links in the  
+<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.
+		</para>
 		
-		<mediaLink><image placement="center" xlink:href="OECTrader"/></mediaLink>
-		
-		<para>As can be seen from the figure, <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>
-		communicates with the OEC server through the <token>OECApi</token>. The <token>OECApi</token> using does not require a working OEC Trader terminal.</para>
-	</introduction>
-	<relatedTopics>
-		<link xlink:href="1dbc72c4-cc59-4094-824a-a2b77f9623d6">Example of working with OpenECryTrader</link>
-		<link xlink:href="6f3be323-80bb-4823-9d27-8060c238af32">Stop orders</link>
-		<link xlink:href="c56a139b-fb64-4f4f-992f-96a1480233cf">Several algorithms connection</link>
-		<link xlink:href="49a7bfef-38e4-41e7-afe5-21bb8ac64258">The simultaneous connection of terminal and algorithm</link>
+     </introduction>
+     <relatedTopics>
+<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />
+<link xlink:href="554da27b-900a-462a-a2c2-d2b6cb1330ae" />
+<link xlink:href="c23300a1-bf38-444a-b103-28350766477f" />
+<link xlink:href="293859e2-6c39-486c-afde-d9ae96243618" />
+<link xlink:href="1c3c9835-b65b-48d5-8abf-70986c666ef4" />
+<link xlink:href="b740e98d-7bcf-406e-aad4-75432ab3009e" />
+<link xlink:href="2587051d-1e94-4fb2-b5c1-d57cb5af1b6d" />
+<link xlink:href="1dbc72c4-cc59-4094-824a-a2b77f9623d6" />
+<link xlink:href="c56a139b-fb64-4f4f-992f-96a1480233cf" />
+<link xlink:href="49a7bfef-38e4-41e7-afe5-21bb8ac64258" />
     </relatedTopics>
-	</developerWalkthroughDocument>
+  </developerConceptualDocument>
 </topic>
