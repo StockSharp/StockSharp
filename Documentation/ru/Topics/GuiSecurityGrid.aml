@@ -74,7 +74,7 @@ _connector.NewSecurity += security =>
 private void ColumnsFilter()
 {
 	// Задаем список видимых колонок
-	string[] сolumns = { "Board", "BestAsk.Price", "BestAsk.Volume" };
+	string[] columns = { "Board", "BestAsk.Price", "BestAsk.Volume" };
 	
 	foreach (var column in SecurityGrid.Columns)
 	{

@@ -21,8 +21,6 @@
 Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Common/SampleConnection</legacyItalic>.
       </para>
       
-
-      
        <code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="SampleAsyncTransactions.MainWindow"

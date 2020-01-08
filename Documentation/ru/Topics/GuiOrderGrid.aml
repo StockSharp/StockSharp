@@ -45,10 +45,8 @@
      	  <para>
 Ниже показаны фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Common/SampleConnection</legacyItalic>.
       </para>
-      
-      
-      
-       <code title="XAML" language="XAML">
+
+      <code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="Sample.OrdersWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

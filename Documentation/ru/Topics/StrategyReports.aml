@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <topic id="eeaa9b57-9108-4cbb-a9c1-e135eee35ae5" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
     <introduction>
 		<para>
 			Для стратегий, построенных на базе <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>, <token>stocksharp</token>

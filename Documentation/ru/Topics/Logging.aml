@@ -39,20 +39,12 @@
 					<codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference> - отсылает сообщения на указанный email адрес.
 					Рекомендуется использовать, если робот расположен на непостоянно контролируемом компьютере	(на сервере у хостера).
 				</listItem>
-				<!-- <listItem>
-					<codeEntityReference>T:StockSharp.Logging.SmsLogListener</codeEntityReference> - отсылает сообщения на телефон через Google
-					Calendar. Рекомендуется использовать, если робот расположен на непостоянно контролируемом компьютере (на сервере у провайдера).
-				</listItem> -->
 				<listItem>
 					<codeEntityReference>T:StockSharp.Xaml.GuiLogListener</codeEntityReference> - отображает сообщения через
 					специальное окно <codeEntityReference>T:StockSharp.Xaml.LogWindow</codeEntityReference>. Умеет работать в двух режимах: когда
 					все сообщения пишутся в одно окно, и когда для каждого <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference> создается
 					отдельное окно. Рекомендуется использовать, если робот обладает графическим интерфейсом.
 				</listItem>
-				<!--listItem>
-					<codeEntityReference>T:StockSharp.Logging.Log4NetLogListener</codeEntityReference> - записывает сообщения через специальную
-					библиотеку <token>log4net</token>. Рекомендуется для тех, кто уже знаком с данной библиотекой.
-				</listItem-->
 			</list>
 			<para>
 				<codeEntityReference>T:StockSharp.Logging.LogListener</codeEntityReference> можно настроить на фильтрацию сообщений через
