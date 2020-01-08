@@ -6,16 +6,6 @@
 				<p>Оповещения.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.AlfaDirect">
-			<summary>
-				<p>Коннектор к торговой программе AlfaDirect.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.AlfaDirect.Xaml">
-			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.AlfaDirect"/>.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.Algo">
 			<summary>
 				<p>Торговые алгоритмы.</p>
@@ -216,16 +206,6 @@
 				<p>Тестирование стратегий.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.BitStamp">
-			<summary>
-				<p>Коннектор к крипто-бирже BitStamp.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Btce">
-			<summary>
-				<p>Коннектор к крипто-бирже BTCE.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.BusinessEntities">
 			<summary>
 				<p>Основные сущности торговли (инструмент, заказ, шлюз к торговой системе и т.д.).</p>
@@ -236,94 +216,14 @@
 				<p>Веб сервисы сайта StockSharp.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Configuration">
-			<summary>
-				<p>Классы для конфигурирования различных компонентов StockSharp.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Cqg.Com">
-			<summary>
-				<p>Коннектор к торговой программе CQG Client.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Cqg.Continuum">
-			<summary>
-				<p>Коннектор прямого доступа к торговой системе CQG.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.Logging">
 			<summary>
 				<p>Логирование операций.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Plaza">
+		<member name="N:StockSharp.Configuration">
 			<summary>
-				<p>Коннектор к торговой системе РТС Плаза (Московская биржа).</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Metadata">
-			<summary>
-				<p>Метаданные торговой системы РТС Плаза.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Xaml">
-			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.Plaza"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Native.CGate">
-			<summary>
-				<p>Классы для нативного API Plaza CGate.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Native.ClientGate">
-			<summary>
-				<p>Классы для нативного API Plaza CGate.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Quik">
-			<summary>
-				<p>Коннектор к торговой программе Quik.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Quik.Xaml">
-			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.Quik"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Quik.Lua">
-			<summary>
-				<p>Классы для работы с Quik Lua.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Quik.Native">
-			<summary>
-				<p>Классы для нативного API Quik.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.SmartCom">
-			<summary>
-				<p>Коннектор к торговой программе SmartCOM.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.SmartCom.Wrapper">
-			<summary>
-				<p>Системные классы SmartCOM.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.SmartCom.Xaml">
-			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.SmartCom"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.SmartCom.Native">
-			<summary>
-				<p>Классы нативного API SmartCOM.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Sterling">
-			<summary>
-				<p>Коннектор для платформы Sterling.</p>
+				<p>Классы для конфигурирования различных компонентов StockSharp.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Xaml">
@@ -346,6 +246,31 @@
 				<p>Графические рендереры индикаторов <see cref="N:StockSharp.Algo.Indicators"/>.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Xaml.Diagram">
+			<summary>
+				<p>Дизайнер стратегий.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.Diagram.Elements">
+			<summary>
+				<p>Элементы для <see cref="N:StockSharp.Xaml.Diagram"/>.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.GridControl">
+			<summary>
+				<p>Табличные компоненты.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.PropertyGrid">
+			<summary>
+				<p>Графический компонент PropertyGridEx.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.Code">
+			<summary>
+				<p>Графические компоненты для редактирования кода.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Hydra.Core">
 			<summary>
 				<p>Общие классы S#.Data, использующиеся для написания собственных источников.</p>
@@ -359,6 +284,36 @@
 		<member name="N:StockSharp.Licensing.Xaml">
 			<summary>
 				<p>Лицензии: графические компоненты.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Messages">
+			<summary>
+				<p>Торговые сообщения.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.BitStamp">
+			<summary>
+				<p>Коннектор к крипто-бирже BitStamp.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Btce">
+			<summary>
+				<p>Коннектор к крипто-бирже BTCE.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Cqg.Com">
+			<summary>
+				<p>Коннектор к торговой программе CQG Client.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Cqg.Continuum">
+			<summary>
+				<p>Коннектор прямого доступа к торговой системе CQG.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Sterling">
+			<summary>
+				<p>Коннектор для платформы Sterling.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.InteractiveBrokers">
@@ -391,71 +346,11 @@
 				<p>Графические компоненты для <see cref="N:StockSharp.OpenECry"/>.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Plaza.Wrapper">
-			<summary>
-				<p>Системные классы Plaza.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Wrapper.ClientGate">
-			<summary>
-				<p>Системные классы Plaza версии ClientGate (COM).</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Wrapper.CGate">
-			<summary>
-				<p>Системные классы Plaza версии CGate.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.MatLab">
 			<summary>
 				<p>Интеграция MatLab с StockSharp.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Micex">
-			<summary>
-				<p>Коннектор к Micex Bridge через TEAP (Московская биржа).</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Micex.Xaml">
-			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.Micex"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Micex.Schema">
-			<summary>
-				<p>Схема данных в Micex Bridge.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Micex.Native">
-			<summary>
-				<p>Низкоуровневый доступ к Micex Bridge.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Micex.Native.Tables">
-			<summary>
-				<p>Описание табличных данных.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Micex.Native.Transactions">
-			<summary>
-				<p>Команды к Micex Bridge.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Transaq">
-			<summary>
-				<p>Коннектор к Transaq.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Transaq.Wrapper">
-			<summary>
-				<p>Низкоуровневый доступ к Transaq.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Transaq.Native">
-			<summary>
-				<p>Низкоуровневый доступ к Transaq.</p>
-			</summary>
-		</member>	
 		<member name="N:StockSharp.ETrade">
 			<summary>
 				<p>Реализация шлюза к ETrade.</p>
@@ -539,51 +434,6 @@
 		<member name="N:StockSharp.Rss.Xaml">
 			<summary>
 				<p>Графические компоненты для <see cref="N:StockSharp.Rss"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Twime">
-			<summary>
-				<p>Коннектор прямого доступа на срочный рынок Московской биржи.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Messages">
-			<summary>
-				<p>Торговые сообщения.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Xaml.Diagram">
-			<summary>
-				<p>Дизайнер стратегий.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Xaml.Diagram.Elements">
-			<summary>
-				<p>Элементы для <see cref="N:StockSharp.Xaml.Diagram"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Xaml.GridControl">
-			<summary>
-				<p>Табличные компоненты.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Xaml.PropertyGrid">
-			<summary>
-				<p>Графический компонент PropertyGridEx.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Xaml.Code">
-			<summary>
-				<p>Графические компоненты для редактирования кода.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.SpbEx">
-			<summary>
-				<p>Коннектор прямого подключения по бинарному протоколу к SPB Exchange.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.SpbEx.Xaml">
-			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.SpbEx"/>.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Fxcm">
@@ -841,21 +691,6 @@
 				<p>Реализация шлюза для взаимодействия с BarChart для скачивания исторических и реал-тайм маркет-данных.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Finam">
-			<summary>
-				<p>Коннектор к историческим данных сайта Finam.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Mfd">
-			<summary>
-				<p>Коннектор к историческим данных сайта MFD.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.AlorHistory">
-			<summary>
-				<p>Коннектор к историческим данных сайта Alor.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.DukasCopy">
 			<summary>
 				<p>Коннектор к историческим данных сайта DukasCopy.</p>
@@ -881,19 +716,9 @@
 				<p>Коннектор к историческим данных сайта Yahoo Finance.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.RtsHistory">
-			<summary>
-				<p>Коннектор к историческим данных биржи RTS.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.FinViz">
 			<summary>
 				<p>Коннектор к историческим данных сайта FinViz.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.MoexLchi">
-			<summary>
-				<p>Коннектор к историческим данных сайта ЛЧИ.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Quandl">
@@ -906,11 +731,6 @@
 				<p>Коннектор к историческим данных сайта TrueFX.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.UrkExh">
-			<summary>
-				<p>Коннектор к историческим данных сайта UrkExh.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.AlphaVantage">
 			<summary>
 				<p>Коннектор к бирже AlphaVantage.</p>
@@ -919,6 +739,186 @@
 		<member name="N:StockSharp.IEX">
 			<summary>
 				<p>Коннектор к бирже IEX.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.AlfaDirect">
+			<summary>
+				<p>Коннектор к торговой программе AlfaDirect.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.AlfaDirect.Xaml">
+			<summary>
+				<p>Графические компоненты для <see cref="N:StockSharp.AlfaDirect"/>.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Plaza">
+			<summary>
+				<p>Коннектор к торговой системе РТС Плаза (Московская биржа).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Plaza.Metadata">
+			<summary>
+				<p>Метаданные торговой системы РТС Плаза.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Plaza.Xaml">
+			<summary>
+				<p>Графические компоненты для <see cref="N:StockSharp.Plaza"/>.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Plaza.Native.CGate">
+			<summary>
+				<p>Классы для нативного API Plaza CGate.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Plaza.Native.ClientGate">
+			<summary>
+				<p>Классы для нативного API Plaza ClientGate.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Plaza.Wrapper">
+			<summary>
+				<p>Системные классы Plaza.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Plaza.Wrapper.ClientGate">
+			<summary>
+				<p>Системные классы Plaza версии ClientGate (COM).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Plaza.Wrapper.CGate">
+			<summary>
+				<p>Системные классы Plaza версии CGate.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Quik">
+			<summary>
+				<p>Коннектор к торговой программе Quik.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Quik.Xaml">
+			<summary>
+				<p>Графические компоненты для <see cref="N:StockSharp.Quik"/>.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Quik.Lua">
+			<summary>
+				<p>Классы для работы с Quik Lua.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Quik.Native">
+			<summary>
+				<p>Классы для нативного API Quik.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.SmartCom">
+			<summary>
+				<p>Коннектор к торговой программе SmartCOM.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.SmartCom.Wrapper">
+			<summary>
+				<p>Системные классы SmartCOM.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.SmartCom.Xaml">
+			<summary>
+				<p>Графические компоненты для <see cref="N:StockSharp.SmartCom"/>.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.SmartCom.Native">
+			<summary>
+				<p>Классы нативного API SmartCOM.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Micex">
+			<summary>
+				<p>Коннектор к Micex Bridge через TEAP (Московская биржа).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Micex.Xaml">
+			<summary>
+				<p>Графические компоненты для <see cref="N:StockSharp.Micex"/>.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Micex.Schema">
+			<summary>
+				<p>Схема данных в Micex Bridge.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Micex.Native">
+			<summary>
+				<p>Низкоуровневый доступ к Micex Bridge.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Micex.Native.Tables">
+			<summary>
+				<p>Описание табличных данных.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Micex.Native.Transactions">
+			<summary>
+				<p>Команды к Micex Bridge.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Transaq">
+			<summary>
+				<p>Коннектор к Transaq.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Transaq.Wrapper">
+			<summary>
+				<p>Низкоуровневый доступ к Transaq.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Transaq.Native">
+			<summary>
+				<p>Низкоуровневый доступ к Transaq.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Twime">
+			<summary>
+				<p>Коннектор прямого доступа на срочный рынок Московской биржи.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.SpbEx">
+			<summary>
+				<p>Коннектор прямого подключения по бинарному протоколу к SPB Exchange.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.SpbEx.Xaml">
+			<summary>
+				<p>Графические компоненты для <see cref="N:StockSharp.SpbEx"/>.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Finam">
+			<summary>
+				<p>Коннектор к историческим данных сайта Finam.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Mfd">
+			<summary>
+				<p>Коннектор к историческим данных сайта MFD.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.AlorHistory">
+			<summary>
+				<p>Коннектор к историческим данных сайта Alor.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.RtsHistory">
+			<summary>
+				<p>Коннектор к историческим данных биржи RTS.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.MoexLchi">
+			<summary>
+				<p>Коннектор к историческим данных сайта ЛЧИ.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.UrkExh">
+			<summary>
+				<p>Коннектор к историческим данных сайта UrkExh.</p>
 			</summary>
 		</member>
 	</members>

@@ -5032,9 +5032,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\StockSharpReleases\LatestDocRefs\ru\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\..\..\StockSharpReleases\LatestDocRefs\ru\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Alerts">
       <HintPath>..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Alerts.dll</HintPath>
     </Reference>
@@ -5055,12 +5052,6 @@
     </Reference>
     <Reference Include="StockSharp.Messages">
       <HintPath>..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Messages.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\..\StockSharpReleases\LatestDocRefs\ru\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
-    <Reference Include="xNet">
-      <HintPath>..\..\..\StockSharpReleases\LatestDocRefs\ru\xNet.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
