@@ -101,7 +101,7 @@
   </ddue:externalLink></item>
   <item id="excel"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>Excel</ddue:linkText>
-		  <ddue:linkUri>http://en.wikipedia.org/wiki/Excel</ddue:linkUri>
+		  <ddue:linkUri>https://en.wikipedia.org/wiki/Excel</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="Exmo"><ddue:link xlink:href="601781f1-fae7-4c82-adb4-a5e7d9394cfb" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="fast_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">

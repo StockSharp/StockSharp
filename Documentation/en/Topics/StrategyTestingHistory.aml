@@ -130,6 +130,7 @@ var settings = new[]
 		YahooCandlesEquity,
 		YahooCandlesPosition),
 };
+
 		]]>
 		</code>
 				  </content>
@@ -299,7 +300,7 @@ connector.NewSecurity += s =>
 	{
 		if (emulationInfo.UseMarketDepth)
 		{
-			connector.RegisterMarketDepth(security);
+			connector.SubscribeMarketDepth(security);
 
 			if (
 				// if order book will be generated
@@ -310,33 +311,35 @@ connector.NewSecurity += s =>
 			{
 				// if no have order book historical data, but strategy is required,
 				// use generator based on last prices
-				connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
+				connector.MarketDataAdapter.SendInMessage(new GeneratorMessage
 				{
-					Interval = TimeSpan.FromSeconds(1), // order book freq refresh is 1 sec
-					MaxAsksDepth = maxDepth,
-					MaxBidsDepth = maxDepth,
-					UseTradeVolume = true,
-					MaxVolume = maxVolume,
-					MinSpreadStepCount = 2,	// min spread generation is 2 pips
-					MaxSpreadStepCount = 5,	// max spread generation size (prevent extremely size)
-					MaxPriceStepCount = 3	// pips size,
+					IsSubscribe = true,
+					Generator = new RandomWalkTradeGenerator(new SecurityId { SecurityCode = security.Code })
+					{
+						Interval = TimeSpan.FromSeconds(1),
+						MaxVolume = maxVolume,
+						MaxPriceStepCount = 3,	
+						GenerateOriginSide = true,
+						MinVolume = minVolume,
+						RandomArrayLength = 99,
+					}
 				});
 			}
 		}
 
 		if (emulationInfo.UseOrderLog)
 		{
-			connector.RegisterOrderLog(security);
+			connector.SubscribeOrderLog(security);
 		}
 
 		if (emulationInfo.UseTicks)
 		{
-			connector.RegisterTrades(security);
+			connector.SubscribeTrades(security);
 		}
 
 		if (emulationInfo.UseLevel1)
 		{
-			connector.RegisterSecurity(security);
+			connector.SubscribeLevel1(security);
 		}
 	}
 
@@ -357,11 +360,11 @@ connector.NewSecurity += s =>
 						  Connection:
 					  </para>
 					  <code language="C#">
-connector.Connect();
+						_connector.Connect();
 					</code>
 					  <para>
 				
-						  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>
+						  <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.NewSecurity</codeEntityReference>
 						  and <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio</codeEntityReference>
 						  are called for instruments and portfolios passed to the <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> constructor.
 					  </para>
@@ -406,7 +409,7 @@ statistic.Parameters.AddRange(strategy.StatisticManager.Parameters);
 var equity = set.Item6;
 
 var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, emulationInfo.CurveColor, ChartIndicatorDrawStyles.Area);
-var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black, ChartIndicatorDrawStyles.Line);
+var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + emulationInfo.StrategyName, Colors.Black, ChartIndicatorDrawStyles.Line);
 var commissionCurve = equity.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, ChartIndicatorDrawStyles.DashedLine);
 var posItems = set.Item7.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor, ChartIndicatorDrawStyles.Line);
 strategy.PnLChanged += () =>
@@ -447,7 +450,8 @@ connector.MarketTimeChanged += d =>
 	var steps = (connector.CurrentTime - startTime).Ticks / progressStep.Ticks + 1;
 	nextTime = startTime + (steps * progressStep.Ticks).To<TimeSpan>();
 	this.GuiAsync(() => progressBar.Value = steps);
-}
+};
+
 					]]>
 					</code>				
 				  </content>
@@ -465,10 +469,11 @@ foreach (var connector in _connectors)
 	connector.Connect();
 
 	// 1 cent commission for trade
-	connector.SendInMessage(new CommissionRuleMessage
-	{
-		Rule = new CommissionPerTradeRule { Value = 0.01m }
-	});
+		connector.SendInMessage(new CommissionRuleMessage
+		{
+			Rule = new CommissionPerTradeRule { Value = 0.01m }
+		});
+
 }
 					 ]]> </code>
 				  </content>

@@ -4,7 +4,7 @@
     <introduction>
       <para>The code below demonstrates how to initialize the 
       <codeEntityReference>T:StockSharp.BW.BWMessageAdapter</codeEntityReference>
-      and pass it to the 
+      and send it to
       <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
       <code language="C#">
             				<![CDATA[

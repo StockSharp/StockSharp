@@ -95,7 +95,7 @@
 
 <list class="bullet">
   <listItem><para>Complete source code</para></listItem>
-  <listItem><para>Support for all StockSharp platform connections: Quik, SmartCom, Plaza II CGate, FIX/FAST, Crypto Exchange (+30 at the moment), etc.</para></listItem>
+  <listItem><para>Support for all StockSharp platform connections: FIX/FAST, Crypto Exchange (+30 at the moment), etc.</para></listItem>
   <listItem><para>Support for S#.Designer schemas</para></listItem>
   <listItem><para>Flexible user interface</para></listItem>
   <listItem><para>Strategy testing (statistics, equity, reports)</para></listItem>

@@ -8,7 +8,7 @@
       	</mediaLink>
        <para><legacyBold>Connection</legacyBold></para>
  		<list class="bullet">
- 		<listItem><legacyBold>Connection</legacyBold> - Connection settings.</listItem>
+<listItem><legacyBold>Connection</legacyBold> - Connection settings.</listItem>
 <listItem><legacyBold>Title</legacyBold> - Title of the task.</listItem>
 <listItem><legacyBold>Start date (ticks)</legacyBold> - From what date to start downloading data.</listItem>
 <listItem><legacyBold>Work from</legacyBold> - Start time.</listItem>

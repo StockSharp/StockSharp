@@ -50,7 +50,7 @@ Connector.Connect();
           <content>
             <para>
             	In order to get historical candles, you need to call the 
-            	<codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object},StockSharp.Messages.IMessageAdapter)</codeEntityReference> 
+            	<codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},StockSharp.Messages.IMessageAdapter)</codeEntityReference> 
             	method:
        		</para>
             <code language="C#">

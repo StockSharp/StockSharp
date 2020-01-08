@@ -9,23 +9,24 @@
 				<![CDATA[
 private void btnBuy_Click(object sender, RoutedEventArgs e)
 {
-	var order = new Order
-	{
-		Portfolio = Portfolio.SelectedPortfolio,
-		Price = _instr1.BestAsk.Price,
-		Security = _instr1,
-		Volume = 1,
-		Direction = Sides.Buy,
-	};
-    
-	order
-		.WhenRegistered()
-		.Do(() => trader.AddInfoLog("The order was successfully registered."))
-		.Once()
-		.Apply(this);
+   var order = new Order
+   { 
+       Portfolio = Portfolio.SelectedPortfolio,
+       Price = _instr1.BestAsk.Price,
+       Security = _instr1,
+       Volume = 1,
+       Direction = Sides.Buy,
+   };
+
+   order
+       .WhenRegistered(Connector)
+       .Do(() => Connector.AddInfoLog("The order was successfully registered."))
+       .Once()
+       .Apply(this);
+
     
 	// registering the order
-	trader.RegisterOrder(order);
+   Connector.RegisterOrder(order);
 }
 	  	  		]]>
 				</code>
@@ -50,13 +51,13 @@ class FirstStrategy : Strategy
 	
 	protected override void OnStarting()
 	{
-		Trader
+		_connector
 			.WhenCandlesFinished(_series)
 			.Do(FinishCandle)
 			.Apply(this);
 
 		Security
-			.WhenNewTrade(Trader)
+			.WhenNewTrade(_connector)
 			.Do(NewTrade)
 			.Apply(this);
 
@@ -64,7 +65,7 @@ class FirstStrategy : Strategy
 	}
     
     ...
-}      
+}    
 	  	  		]]>
 				</code>	  				
   			</listItem>
@@ -74,7 +75,7 @@ class FirstStrategy : Strategy
   				
 				<para>The <codeEntityReference qualifyHint="false">T:StockSharp.Algo.IMarketRule</codeEntityReference> has the
 				<codeEntityReference qualifyHint="false">P:StockSharp.Algo.IMarketRule.Token</codeEntityReference> - this token is associated with the rule. For example, for the
-				<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCanceled(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
+				<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCanceled(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.ITransactionProvider)</codeEntityReference>
 				rule the token will be the order.</para>  				
   				
   				<para>When the rule of the successful order cancel has worked, then it is better to remove all of the other rules related to this order:</para>
@@ -82,39 +83,40 @@ class FirstStrategy : Strategy
 				<![CDATA[
 var order = this.CreateOrder(direction, (decimal) Security.GetCurrentPrice(direction), Volume);
 
-var ruleCanceled = order.WhenCanceled();
+var ruleCanceled = order.WhenCanceled(Connector);
 
 ruleCanceled
-	.Do(() => 
-			{
-				this.AddInfoLog("The order was successfully cancelled.");
-				
-				// removing all rules associated with the specified order
-				Rules.RemoveRulesByToken(ruleCanceled, ruleCanceled.Token);
-			})
-	.Once()
-	.Apply(this);
+    .Do(() =>
+    {
+        this.AddInfoLog("The order was successfully cancelled.");
+
+	// removing all rules associated with the specified order
+        Rules.RemoveRulesByToken(ruleCanceled, (IMarketRule) ruleCanceled.Token);
+    })
+    .Once()
+    .Apply(this);
 
 order
-	.WhenRegistered()
+    .WhenRegistered(Connector)
     .Do(() => this.AddInfoLog("The order was successfully registered."))
     .Once()
-    .Apply(this)
+    .Apply(this);
 
 order
-	.WhenRegisterFailed()
+    .WhenRegisterFailed(Connector)
     .Do(() => this.AddInfoLog("The order was not accepted by broker."))
     .Once()
-    .Apply(this)
-	
+    .Apply(this);
+
 order
-	.WhenMatched()
-	.Do(() => this.AddInfoLog("The order was fully matched."))
-	.Once()
-	.Apply(this);	
-        
+    .WhenMatched(Connector)
+    .Do(() => this.AddInfoLog("The order was fully matched."))
+    .Once()
+    .Apply(this);
+
 // registering the order
 RegisterOrder(order);
+
 	  	  		]]>
 				</code>	  				
   			</listItem>  
@@ -134,9 +136,9 @@ TimeSpan _holdTimeToOpen = TimeSpan.FromMilliseconds(5000);
 
 ...
 
-Trader
+_connector
 	.WhenIntervalElapsed(_holdTimeToOpen)
-	.Or(Trader.WhenCandlesStarted(_series))
+	.Or(_connector.WhenCandlesStarted(_series))
 	.Do(() => this.AddInfoLog("The candle is finished or time is over."))
 	.Once()
 	.Apply(this);
@@ -148,7 +150,7 @@ Trader
   				<code language="C#">
 				<![CDATA[
 MarketRuleHelper
-	.Or(new IMarketRule[] {Trader.WhenIntervalElapsed(_holdTimeToOpen), Trader.WhenCandlesStarted(_series)})
+	.Or(new IMarketRule[] {_connector.WhenIntervalElapsed(_holdTimeToOpen), _connector.WhenCandlesStarted(_series)})
 	.Do(() => this.AddInfoLog("The candle is finished or time is over."))
 	.Once()
 	.Apply(this);
@@ -162,8 +164,8 @@ var priceMore = new Unit(135000m, UnitTypes.Limit);
 var priceLess = new Unit(140000m, UnitTypes.Limit);
 				
 MarketRuleHelper
-    .And(new IMarketRule[] {Security.WhenLastTradePriceMore(Connector, Connector, priceMore), Security.WhenLastTradePriceLess(Connector, Connector, priceLess)})
-    .Do(() => /* some action */))
+	.And(new IMarketRule[] {Security.WhenLastTradePriceMore(Connector, Connector, priceMore), Security.WhenLastTradePriceLess(Connector, Connector, priceLess)})
+	.Do(() => this.AddInfoLog(string.Format("The price of the last transaction is in the range from {0} to {1}", priceMore, priceLess)))
 	.Apply(this);
 	  	  		]]>
 				</code>

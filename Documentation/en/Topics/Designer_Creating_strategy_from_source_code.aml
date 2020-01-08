@@ -205,7 +205,7 @@ protected override void OnStarted()
     .Do(ord => NewMyOrder?.Invoke(ord))
     .Apply(this);
     
-    Connector.RegisterSecurity(Security);
+    Connector.SubscribeLevel1(Security);
 
     base.OnStarted();
 }
@@ -219,7 +219,7 @@ method is overridden to stop receiving new information by the instrument:</para>
 protected override void OnStopped()
 {
     this.AddInfoLog("OnStopped");
-    Connector.UnRegisterSecurity(Security);
+    Connector.UnSubscribeLevel1(Security);
     base.OnStopped();
 }
 

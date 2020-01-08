@@ -38,8 +38,8 @@ RegisterOrder(order);
 		<![CDATA[
 var order = this.CreateOrder(direction, (decimal) Security.GetCurrentPrice(direction), Volume);
 
-var ruleReg = order.WhenRegistered();
-var ruleRegFailed = order.WhenRegisterFailed();
+var ruleReg = order.WhenRegistered(Connector);
+var ruleRegFailed = order.WhenRegisterFailed(Connector);
 
 ruleReg.ExclusiveRules.Add(ruleRegFailed);
 ruleRegFailed.ExclusiveRules.Add(ruleReg);

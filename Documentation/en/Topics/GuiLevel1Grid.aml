@@ -3,11 +3,11 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
        <introduction>
+             <mediaLink><image placement="left" xlink:href="GUI_Leve1Grid" /></mediaLink>
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.Level1Grid</codeEntityReference> is the table for displaying the Level1 fields. This table uses the data as 
 <codeEntityReference>T:StockSharp.Messages.Level1ChangeMessage</codeEntityReference> messages.
       </para>
-      <mediaLink><image placement="left" xlink:href="GUI_Leve1Grid" /></mediaLink>
       <para>
        <legacyBold>Main properties</legacyBold>
       </para>
@@ -30,7 +30,7 @@
 	  <para>
 Below is the code snippet with its use. 
       </para>
-        
+
        <code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="Membrane02.Level1Window"
@@ -59,7 +59,7 @@ public Level1Window()
     _connector.NewMessage += OnNewMessage;
 
     if (!_connector.RegisteredSecurities.Contains(MainWindow.This.SelectedSecurity))
-                _connector.RegisterSecurity(MainWindow.This.SelectedSecurity);
+                _connector.SubscribeLevel1(MainWindow.This.SelectedSecurity);
 
 }
 

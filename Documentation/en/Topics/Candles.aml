@@ -7,19 +7,23 @@
 	  
 		<list class="bullet">
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> - candle based on timeframe. You can set both popular intervals (minute, hour, day), and customized. For example, 21 seconds, 4.5 minutes, etc.
+				<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> - 
+candle based on timeframe. You can set both popular intervals (minute, hour, day), and customized. For example, 21 seconds, 4.5 minutes, etc.
 			</listItem>
 			
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference> - price range candle. A new candle is created when a trade appears with a price that is out of range. An allowable range is formed each time based on the price of the first trade.
+				<codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference> - 
+price range candle. A new candle is created when a trade appears with a price that is out of range. An allowable range is formed each time based on the price of the first trade.
 			</listItem>
 		  
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference> - a candle is created until the total volume of trades is exceeded. If the new trade exceeds the permissible volume, then it falls into the new candle already.
+				<codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference> - 
+a candle is created until the total volume of trades is exceeded. If the new trade exceeds the permissible volume, then it falls into the new candle already.
 			</listItem>
 		  
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.TickCandle</codeEntityReference> - is the same as <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference>, only the number of trades is taken as a restriction instead of volume.
+				<codeEntityReference>T:StockSharp.Algo.Candles.TickCandle</codeEntityReference> - 
+is the same as <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference>, only the number of trades is taken as a restriction instead of volume.
 			</listItem>
 		  
 			<listItem>
@@ -92,7 +96,7 @@ private void Connector_CandleSeriesProcessing(CandleSeries candleSeries, Candle 
 			<step>
 				<content>
 					<para>Next, pass the created candle series to the connector and start getting data through 
-<codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object},StockSharp.Messages.IMessageAdapter)</codeEntityReference>:</para>
+<codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},StockSharp.Messages.IMessageAdapter)</codeEntityReference>:</para>
 
 					<code language="C#">
 					<![CDATA[

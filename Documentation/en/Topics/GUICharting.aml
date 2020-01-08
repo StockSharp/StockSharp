@@ -98,11 +98,11 @@
   				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})</codeEntityReference> - to “reset" the values drawn before.</para>
   			</listItem>
   			<listItem>
-  				<para>
-  				<codeEntityReference>M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference> - to draw the value on the chart.
-  				</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference> - to draw the value on the chart.</para>
   			</listItem>
-  			
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.OrderCreationMode</codeEntityReference> - The order creation mode, when set, allows you to create orders from the chart. Disabled by default.</para>
+	  		</listItem>
 		</list>
 
       </content>

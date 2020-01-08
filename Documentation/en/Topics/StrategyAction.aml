@@ -36,89 +36,93 @@
 	  </para>
 
 		<code language="C#">
-<![CDATA[
+		<![CDATA[
+
 /// <summary>
-/// The options delta hedging strategy.
+/// Delta hedging options strategy.
 /// </summary>
-public class DeltaHedgeStrategy : HedgeStrategy
+public class DeltaHedgeStrategy : Strategy
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="DeltaHedgeStrategy"/>.
-	/// </summary>
-	public DeltaHedgeStrategy()
-	{
-		_positionOffset = new StrategyParam<decimal>(this, "PositionOffset");
-	}
+    private readonly Strategy _tradingStrategy;
 
-	private readonly StrategyParam<decimal> _positionOffset;
+    /// <summary>
+    /// Create <see cref="DeltaHedgeStrategy"/>.
+    /// </summary>
+    /// <param name="tradingStrategy">A strategy that contains child strategies that trade on a separate strike.</param>
+    public DeltaHedgeStrategy(Strategy tradingStrategy)
+    {
+        if (tradingStrategy == null)
+            throw new ArgumentNullException("tradingStrategy");
 
-	/// <summary>
-	/// Shift in position for underlying asset, allowing not to hedge part of the options position.
-	/// </summary>
-	[CategoryLoc(LocalizedStrings.Str1244Key)]
-	[DisplayNameLoc(LocalizedStrings.Str1245Key)]
-	[DescriptionLoc(LocalizedStrings.Str1246Key)]
-	public decimal PositionOffset
-	{
-		get { return _positionOffset.Value; }
-		set { _positionOffset.Value = value; }
-	}
+        _tradingStrategy = tradingStrategy;
+    }
 
-	/// <summary>
-	/// To get a list of orders rehedging the option position.
-	/// </summary>
-	/// <returns>Rehedging orders.</returns>
-	protected override IEnumerable<Order> GetReHedgeOrders()
-	{
-		var futurePosition = BlackScholes.Delta(CurrentTime);
 
-		if (futurePosition == null)
-			return Enumerable.Empty<Order>();
+    protected override void OnStarted()
+    {
+        _tradingStrategy
+            .WhenNewMyTrade()
+            .Do(ReHedge).Apply(this);
 
-		var diff = futurePosition.Value.Round() + PositionOffset;
+        Security.WhenChanged(Connector).Do(ReHedge).Apply(this);
 
-		this.AddInfoLog(LocalizedStrings.Str1247Params,
-			futurePosition, BlackScholes.UnderlyingAssetPosition.Position, PositionOffset, diff);
+        base.OnStarted();
+    }
 
-		if (diff == 0)
-			return Enumerable.Empty<Order>();
+    private void ReHedge()
+    {
+        if (base.ChildStrategies.Count > 0)
+        {
+            this.AddWarningLog("Re-hedging has already been launched.");
+            return;
+        }
 
-		var dir = diff > 0 ? Sides.Sell : Sides.Buy;
+        var futurePosition = _tradingStrategy.ChildStrategies.SyncGet(c => c.Sum(strategy =>
+        {
+            var delta = strategy.Security.Delta;
 
-		var price = Security.GetCurrentPrice(this, dir);
+            this.AddInfoLog("The Delta for the {0} tool is equal to {1}.", strategy.Security, delta);
+            this.AddInfoLog("Position {0}.", strategy.PositionManager.Position);
 
-		if (price == null)
-			return Enumerable.Empty<Order>();
+            return delta * strategy.PositionManager.Position;
+        }));
 
-		return new[]
-		{
-			new Order
-			{
-				Direction = dir,
-				Volume = diff.Abs(),
-				Security = BlackScholes.UnderlyingAsset,
-				Portfolio = Portfolio,
-				Price = price.ApplyOffset(dir, PriceOffset, Security)
-			}
-		};
-	}
-}]]>
+        this.AddInfoLog("Delta total {0}.", futurePosition);
+
+        var diff = (int)futurePosition.Round() + (int)base.PositionManager.Position;
+
+        if (diff != 0)
+        {
+            this.AddInfoLog("The difference in position {0}.", diff);
+
+            base.ChildStrategies.Add(CreateQuoting(diff > 0 ? Sides.Sell : Sides.Buy, diff.Abs()));
+        }
+    }
+
+    /// <summary>
+    /// Create a quote strategy to change the position.
+    /// </summary>
+    /// <param name="direction">Direction of quotation.</param>
+    /// <param name="volume">The volume of quotation.</param>
+    /// <returns>The strategy of quoting.</returns>
+    protected virtual QuotingStrategy CreateQuoting(Sides direction, int volume)
+    {
+        return new MarketQuotingStrategy(direction, volume);
+    }
+}
+		]]>
 		</code>
 		<para>
 			This strategy at start adds the rule on new trades event (for rehedging):
 		</para>
 		<code language="C#">
-_tradingStrategy
-	.WhenNewMyTrade()
-	.Do(ReHedge).Apply(this);
+_tradingStrategy.WhenNewMyTrade().Do(ReHedge).Apply(this);
 		</code>
 		<para>
 			and also the rule for event of the futures contract change (its price):
 		</para>
 		<code language="C#">
-Security
-	.WhenChanged()
-	.Do(ReHedge).Apply(this);
+Security.WhenChanged(Connector).Do(ReHedge).Apply(this);
 		</code>
 				
 		<para>

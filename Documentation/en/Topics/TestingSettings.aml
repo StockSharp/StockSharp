@@ -29,14 +29,14 @@
 		<para>Even if the strategy is tested on the candles, it is necessary to subscribe to the tick trades:</para>
 		<code language="C#">
 		<![CDATA[
-trader.RegisterTrades(security);
+		_connector.SubscribeTrades(security);
 		]]>
 		</code>
 		
 		<para>If the strategy needs the order books, it is necessary to subscribe to the order books:</para>
 		<code language="C#">
 		<![CDATA[
-trader.RegisterMarketDepth(security);
+		_connector.SubscribeMarketDepth(security);
 		]]>
 		</code>
 		
@@ -44,7 +44,12 @@ trader.RegisterMarketDepth(security);
 		<code language="C#">
 		<![CDATA[
 var mdGenerator = new TrendMarketDepthGenerator(connector.GetSecurityId(security));
-trader.RegisterMarketDepth(mdGenerator);
+_connector.MarketDataAdapter.SendInMessage(new GeneratorMessage
+{
+    IsSubscribe = true,
+    Generator = mdGenerator
+});
+
 		]]>
 		</code>
 		

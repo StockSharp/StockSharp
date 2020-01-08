@@ -32,9 +32,9 @@ private void StopOrder_Click(object sender, RoutedEventArgs e)
 		Volume = decimal.Parse(TextBoxVolumePrice.Text),
 		Direction = Sides.Buy,
         Type = OrderTypes.Conditional,
-        Condition = new QuikOrderCondition()
+        Condition = new FixOrderCondition()
         {
-            Type = QuikOrderConditionTypes.StopLimit,
+            Type = FixOrderConditionTypes.StopLimit,
             StopLimitPrice = decimal.Parse(TextBoxStopLimitPrice.Text),
         }
 	};

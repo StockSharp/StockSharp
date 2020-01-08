@@ -2,10 +2,12 @@
 <topic id="3a23bf32-fcbd-409b-99b3-2ff1b953c85a" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+          <mediaLink><image placement="left" xlink:href="GUI_MarketDepthControl" /></mediaLink>
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.MarketDepthControl</codeEntityReference> - is a graphical component for displaying an order book. The component allows you to display quotes and own orders.
       </para>
-      <mediaLink><image placement="left" xlink:href="GUI_MarketDepthControl" /></mediaLink>
+
+
             <para>
        <legacyBold>Main properties and methods</legacyBold>
       </para>
@@ -36,7 +38,7 @@
 Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/BarChart/SampleBarChart</legacyItalic>.
       </para>
       
-      
+
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[
@@ -51,12 +53,15 @@ Below is the code snippet with its use. The code example is taken from <legacyIt
               </code>
               <code title="C#" language="C#">
               		<![CDATA[
-private void TraderOnMarketDepthChanged(MarketDepth depth)
+private void ConnectorOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
 {
-	var wnd = _quotesWindows.TryGetValue(depth.Security);
+	foreach (var depth in depths)
+	{
+		var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-	if (wnd != null)
-		wnd.DepthCtrl.UpdateDepth(depth);
+		if (wnd != null)
+			wnd.DepthCtrl.UpdateDepth(depth);
+	}
 }
 	  				]]>
              </code>

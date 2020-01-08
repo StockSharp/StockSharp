@@ -81,39 +81,42 @@ Below is the code snippet with its use. The code example is taken from <legacyIt
               		<![CDATA[
 var strategies = periods
 	.Select(period =>
-	{
-		...
-		// create strategy based SMA
-		var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
 		{
-			Volume = 1,
-			Security = security,
-			Portfolio = portfolio,
-			Connector = connector,
+			...
 
-			// by default interval is 1 min,
-			// it is excessively for time range with several months
-			UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
-		};
-
-		...
-
-		var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3, ChartIndicatorDrawStyles.Line);
-		strategy.PnLChanged += () =>
-		{
-			var data = new EquityData
+			// create strategy based SMA
+			var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
 			{
-				Time = strategy.CurrentTime,
-				Value = strategy.PnL,
+				Volume = 1,
+				Security = security,
+				Portfolio = portfolio,
+				Connector = connector,
+
+				// by default interval is 1 min,
+				// it is excessively for time range with several months
+				UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
 			};
 
-			this.GuiAsync(() => curveItems.Add(data));
-		};
+			...
 
-		Stat.AddStrategies(new[] { strategy });
+			var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3, ChartIndicatorDrawStyles.Line);
+			strategy.PnLChanged += () =>
+			{
+				var data = new EquityData
+				{
+					Time = strategy.CurrentTime,
+					Value = strategy.PnL,
+				};
 
-		return strategy;
-	});
+				this.GuiAsync(() => curveItems.Add(data));
+			};
+
+			Stat.AddStrategies(new[] { strategy });
+
+			return strategy;
+		})
+		.ToEx(periods.Length);
+              		
 	  				]]>
              </code>
     </introduction>

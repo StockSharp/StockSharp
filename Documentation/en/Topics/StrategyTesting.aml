@@ -28,10 +28,6 @@
 			In testing mode not real trading system, but the emulation will act as the trading system (depending on the selected mode). Therefore, the strategy code
 			will never know about it - whether it is trading with a real exchange, or it is the emulation.
 		</para>
-		<para>
-			The basic requirement for the strategies code is that it should not contain gateway specific operations. For example, if we are talking about the
-			<token>openecry</token> the strategy code should not have methods to work with <link xlink:href="a1e2b191-995c-4b03-9858-8fe9d2ae1fa1"/>.
-		</para>
     </introduction>
 
     <relatedTopics>

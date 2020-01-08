@@ -45,7 +45,12 @@ Below is the code snippet with its use. The code example is taken from <legacyIt
       
       
               <code title="C#" language="C#">
-              		<![CDATA[
+					  <![CDATA[
+...
+
+private readonly Connector _connector = new Connector();
+
+...
 private void NewStopOrderClick(object sender, RoutedEventArgs e)
 {
 	var newOrder = new OrderConditionalWindow
@@ -54,16 +59,18 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 		{
 			Security = SecurityPicker.SelectedSecurity,
 			Type = OrderTypes.Conditional,
+			ExpiryDate = DateTime.Today
 		},
-		SecurityProvider = MainWindow.Instance.Trader,
-		MarketDataProvider = MainWindow.Instance.Trader,
-		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-		Adapter = MainWindow.Instance.Trader.TransactionAdapter
+		SecurityProvider = _connector,
+		MarketDataProvider = _connector,
+		Portfolios = new PortfolioDataSource(_connector),
+		Adapter = _connector.Adapter
 	};
 
 	if (newOrder.ShowModal(this))
-		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
-}	
+		_connector.RegisterOrder(newOrder.Order);
+}
+              		
 	  				]]>
              </code>
     </introduction>

@@ -29,7 +29,7 @@
 			</listItem>
 		</list>
 		<para>
-			Found instruments will be returned through the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference> event.
+			Found instruments will be returned through the <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.NewSecurity</codeEntityReference> event.
 		</para>
     </introduction>
     <relatedTopics>

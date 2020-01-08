@@ -59,28 +59,31 @@ message storage. The following example shows how to store own trades in the stor
 we specify the identifier of the instrument with which we will work and declare a 
 variable for the transaction storage. The transaction storage itself for the specified 
 instrument will be received in the instrument getting event using the 
-<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetTransactionStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference> method.
+<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IMessageStorageRegistry.GetTransactionStorage(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference> method.
 		</para>		
 
 <code language="C#">
 					<![CDATA[
-var connector = new InteractiveBrokersTrader();
 
-var securityId = "ESM5@NYSE";
+var connector = new Connector();
 
-// storage to historical data
-var storageRegistry = new StorageRegistry
-{
-	// set historical path
-	DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
-};
+
+var storagePath = @"....";
+
+var securityId = "RIM5@FORTS";
+
+
+var storage = new StorageRegistry() { DefaultDrive = new LocalMarketDataDrive(storagePath) };
+
 
 IMarketDataStorage<ExecutionMessage> tranStorage = null;
+
+
 
 connector.NewSecurity += security =>
 {
 		if (security.Id == securityId)
-			tranStorage = _storage.GetTransactionStorage(security);
+			tranStorage = storage.GetTransactionStorage(security.ToSecurityId());
 };
 
  ]]>
@@ -91,16 +94,17 @@ connector.NewSecurity += security =>
 		<content>
 
 			<para>Saving own trades will be performed in the 
-			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrades</codeEntityReference> event handler using the 
+			<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.NewMyTrade</codeEntityReference> event handler using the 
 			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IMarketDataStorage.Save(System.Collections.IEnumerable)</codeEntityReference>. 
 method. Before saving, the list of own trades is converted to the IEnumerable&lt;ExecutionMessage&gt; 
 type. The procedure for order registering itself in this example is omitted.
             </para>
 					<code language="C#">
 					<![CDATA[
-connector.NewMyTrades += trades =>
+
+connector.NewMyTrade += trade =>
 {
-	tranStorage.Save((IEnumerable<ExecutionMessage>)trades);
+    tranStorage.Save(new[] {trade.ToMessage()});
 };
 ]]>
 					</code>

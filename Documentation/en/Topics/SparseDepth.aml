@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="9feaabde-52ea-4562-a666-380ce49c6df6" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
 	  <introduction>
 		  <para>
 			  Order books in the <token>stocksharp</token> are presented by the <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>
@@ -12,15 +8,6 @@
 			  groupe the data by price levels.
 		  </para>
 	  </introduction>
-
-    <!--<prerequisites>
-      <content>
-        <para>Optional information on prerequisites</para>
-      </content>
-    </prerequisites>-->
-    
-    <!-- One or more procedure or section elements -->
-
 	  <procedure>
 		  <title>Order book modifications</title>
 

@@ -30,11 +30,11 @@
 Below is the code snippet with its use. The code example is taken from <legacyItalic>Samples/InteractiveBrokers/SampleIB.</legacyItalic>
       </para>
       
-      
+
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[
-<Window x:Class="SampleIB.PortfoliosWindow"
+<Window x:Class="Sample.PortfoliosWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
@@ -45,45 +45,18 @@ Below is the code snippet with its use. The code example is taken from <legacyIt
 	  				]]>
               </code>
               <code title="C#" language="C#">
-              		<![CDATA[
+					  <![CDATA[				  
+private readonly Connector _connector = new Connector();
+
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-    if (!_isConnected)
-    {
-        if (Trader == null)
-        {
-            Trader = new InteractiveBrokersTrader
-            {
-            };
-
-            .........................................................    
-
-            Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-            Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-            _securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
-
-            ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
-                ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
-                    ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
-        }
-
-        Trader.Connect();
-
-        _isConnected = true;
-        ConnectBtn.Content = LocalizedStrings.Disconnect;
-    }
-    else
-    {
-        Trader.Disconnect();
-
-        _isConnected = false;
-        ConnectBtn.Content = LocalizedStrings.Connect;
-    }
+	.........................................................				
+	_connector.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+	_connector.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+	.........................................................
 }
 	  				]]>
              </code>
-
     </introduction>
   </developerConceptualDocument>
 </topic>

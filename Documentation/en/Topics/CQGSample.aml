@@ -5,7 +5,7 @@
       <para>The code below demonstrates how to initialize the 
       <codeEntityReference>T:StockSharp.Cqg.Com.CqgComMessageAdapter</codeEntityReference> and 
       <codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter</codeEntityReference> and
-      and pass it to the 
+      and send it to
       <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>.</para>
       <para>1. <legacyBold>CQG COM</legacyBold>, connection by local
 <legacyBold>CQG Integrated Client</legacyBold>:</para>
