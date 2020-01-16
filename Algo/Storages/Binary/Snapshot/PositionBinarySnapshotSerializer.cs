@@ -110,8 +110,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			var buffer = new byte[typeof(PositionSnapshot).SizeOf()];
 
 			var ptr = snapshot.StructToPtr();
-			Marshal.Copy(ptr, buffer, 0, buffer.Length);
-			Marshal.FreeHGlobal(ptr);
+			ptr.CopyTo(buffer);
+			ptr.FreeHGlobal();
 
 			return buffer;
 		}

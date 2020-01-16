@@ -229,8 +229,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			var buffer = new byte[snapshotSize];
 
 			var ptr = snapshot.StructToPtr();
-			Marshal.Copy(ptr, buffer, 0, snapshotSize);
-			Marshal.FreeHGlobal(ptr);
+			ptr.CopyTo(buffer);
+			ptr.FreeHGlobal();
 
 			result.AddRange(buffer);
 
@@ -348,8 +348,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				var paramBuff = new byte[paramSize];
 
 				var rowPtr = version > SnapshotVersions.V20 ? ((TransactionConditionParamV21)param).StructToPtr() : ((TransactionConditionParamV20)param).StructToPtr();
-				Marshal.Copy(rowPtr, paramBuff, 0, paramSize);
-				Marshal.FreeHGlobal(rowPtr);
+				rowPtr.CopyTo(paramBuff);
+				rowPtr.FreeHGlobal();
 
 				result.AddRange(paramBuff);
 
