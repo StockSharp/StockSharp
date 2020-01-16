@@ -99,26 +99,13 @@ namespace StockSharp.Algo.Storages
 
 		public abstract object LastId { get; set; }
 
-		/// <summary>
-		/// To save meta-information parameters to stream.
-		/// </summary>
-		/// <param name="stream">Data stream.</param>
+		/// <inheritdoc />
 		public abstract void Write(Stream stream);
 
-		/// <summary>
-		/// To load meta-information parameters from the stream.
-		/// </summary>
-		/// <param name="stream">Data stream.</param>
+		/// <inheritdoc />
 		public abstract void Read(Stream stream);
 
-		/// <summary>
-		/// Is override all data.
-		/// </summary>
+		/// <inheritdoc />
 		public virtual bool IsOverride => false;
-
-		//public static TMetaInfo CreateMetaInfo(DateTime date)
-		//{
-		//	return typeof(TMetaInfo).CreateInstance<TMetaInfo>(date);
-		//}
 	}
 }

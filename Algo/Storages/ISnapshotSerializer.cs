@@ -27,13 +27,6 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		string Name { get; }
 
-		///// <summary>
-		///// Get snapshot size in bytes.
-		///// </summary>
-		///// <param name="version">Version of data format.</param>
-		///// <returns>Snapshot size in bytes.</returns>
-		//int GetSnapshotSize(Version version);
-
 		/// <summary>
 		/// Serialize the specified message to byte array.
 		/// </summary>
