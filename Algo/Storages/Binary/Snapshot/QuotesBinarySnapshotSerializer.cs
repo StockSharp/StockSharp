@@ -127,33 +127,24 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
 
-			// Pin the managed memory while, copy it out the data, then unpin it
-			using (var handle = new GCHandle<byte[]>(buffer, GCHandleType.Pinned))
+			using (var handle = new GCHandle<byte[]>(buffer))
 			{
-				var ptr = handle.Value.AddrOfPinnedObject();
+				var ptr = handle.CreatePointer();
 
-				var snapshot = ptr.ToStruct<QuotesSnapshot>();
+				var snapshot = ptr.ToStruct<QuotesSnapshot>(true);
 
 				var bids = new QuoteChange[snapshot.BidCount];
 				var asks = new QuoteChange[snapshot.AskCount];
-
-				ptr += typeof(QuotesSnapshot).SizeOf();
-
-				var rowSize = Marshal.SizeOf(typeof(QuotesSnapshotRow));
 
 				var is21 = version == SnapshotVersions.V21;
 
 				QuoteChange ReadQuote()
 				{
-					var row = ptr.ToStruct<QuotesSnapshotRow>();
+					var row = ptr.ToStruct<QuotesSnapshotRow>(true);
 					var quote = new QuoteChange(row.Price, row.Volume);
-					ptr += rowSize;
 
 					if (is21)
-					{
-						quote.OrdersCount = ptr.Read<int>().DefaultAsNull();
-						ptr += sizeof(int);
-					}
+						quote.OrdersCount = ptr.Read<int>(true).DefaultAsNull();
 
 					return quote;
 				}

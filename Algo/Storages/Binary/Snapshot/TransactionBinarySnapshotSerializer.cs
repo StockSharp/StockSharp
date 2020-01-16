@@ -370,12 +370,11 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
 
-			// Pin the managed memory while, copy it out the data, then unpin it
-			using (var handle = new GCHandle<byte[]>(buffer, GCHandleType.Pinned))
+			using (var handle = new GCHandle<byte[]>(buffer))
 			{
-				var ptr = handle.Value.AddrOfPinnedObject();
+				var ptr = handle.CreatePointer();
 
-				var snapshot = ptr.ToStruct<TransactionSnapshot>();
+				var snapshot = ptr.ToStruct<TransactionSnapshot>(true);
 
 				var execMsg = new ExecutionMessage
 				{
@@ -433,8 +432,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					TimeInForce = snapshot.OrderTif == null ? (TimeInForce?)null : (TimeInForce)snapshot.OrderTif.Value,
 				};
 
-				ptr += typeof(TransactionSnapshot).SizeOf();
-
 				var paramSize = (version > SnapshotVersions.V20 ? typeof(TransactionConditionParamV21) : typeof(TransactionConditionParamV20)).SizeOf();
 
 				if (!snapshot.ConditionType.IsEmpty())
@@ -450,25 +447,19 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 					if (version > SnapshotVersions.V20)
 					{
-						var s = ptr.ToStruct<TransactionConditionParamV21>();
-
-						ptr += paramSize;
+						var s = ptr.ToStruct<TransactionConditionParamV21>(true);
 
 						var typeBuffer = new byte[s.ValueTypeLen];
-						Marshal.Copy(ptr, typeBuffer, 0, typeBuffer.Length);
+						ptr.CopyTo(typeBuffer, true);
 
 						paramTypeName = typeBuffer.UTF8();
-
-						ptr += s.ValueTypeLen;
 
 						param = s;
 					}
 					else
 					{
-						var s = ptr.ToStruct<TransactionConditionParamV20>();
+						var s = ptr.ToStruct<TransactionConditionParamV20>(true);
 						paramTypeName = s.ValueType;
-
-						ptr += paramSize;
 
 						param = s;
 					}
@@ -490,8 +481,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						else if (param.StringValueLen > 0)
 						{
 							var strBuffer = new byte[(int)param.StringValueLen];
-							Marshal.Copy(ptr, strBuffer, 0, strBuffer.Length);
-							ptr += strBuffer.Length;
+							ptr.CopyTo(strBuffer, true);
 
 							if (typeof(IPersistable).IsAssignableFrom(paramType))
 							{

@@ -374,10 +374,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
 
-			// Pin the managed memory while, copy it out the data, then unpin it
-			using (var handle = new GCHandle<byte[]>(buffer, GCHandleType.Pinned))
+			using (var handle = new GCHandle<byte[]>(buffer))
 			{
-				var snapshot = handle.Value.AddrOfPinnedObject().ToStruct<Level1Snapshot>();
+				var snapshot = handle.CreatePointer().ToStruct<Level1Snapshot>(true);
 
 				var level1Msg = new Level1ChangeMessage
 				{
