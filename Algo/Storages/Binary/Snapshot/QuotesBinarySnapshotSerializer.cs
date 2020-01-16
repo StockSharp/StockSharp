@@ -85,7 +85,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			snapshot.AskCount = asks.Length;
 
 			var snapshotSize = typeof(QuotesSnapshot).SizeOf();
-			var rowSize = typeof(QuotesSnapshotRow).SizeOf();
+			var rowSizeOld = typeof(QuotesSnapshotRow).SizeOf();
+			var rowSize = rowSizeOld;
 
 			var is21 = version == SnapshotVersions.V21;
 
@@ -108,10 +109,14 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					Volume = quote.Volume,
 				};
 
-				var rowPtr = row.StructToPtr();
+				var rowPtr = row.StructToPtr(rowSize);
 
 				if (is21)
+				{
+					rowPtr += rowSizeOld;
 					rowPtr.Write(quote.OrdersCount ?? 0);
+					rowPtr -= rowSizeOld;
+				}
 
 				Marshal.Copy(rowPtr, buffer, offset, rowSize);
 				Marshal.FreeHGlobal(rowPtr);
