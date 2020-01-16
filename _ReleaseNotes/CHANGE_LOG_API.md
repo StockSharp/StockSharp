@@ -308,6 +308,7 @@ StockSharp API Change log
 * (feature) Removed XXXResultMessage. Uses SubscriptionFinishedMessage.
 * (feature) PortfolioChangeMessage removed.
 * (feature) Storages. Check version of an app and stored format.
+* (bug) Fix snapshot storage fractional values.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

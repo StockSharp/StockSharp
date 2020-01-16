@@ -18,8 +18,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		private struct QuotesSnapshotRow
 		{
-			public decimal Price;
-			public decimal Volume;
+			public BlittableDecimal Price;
+			public BlittableDecimal Volume;
+			public int OrdersCount;
 		}
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Unicode)]
@@ -85,13 +86,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			snapshot.AskCount = asks.Length;
 
 			var snapshotSize = typeof(QuotesSnapshot).SizeOf();
-			var rowSizeOld = typeof(QuotesSnapshotRow).SizeOf();
-			var rowSize = rowSizeOld;
-
-			var is21 = version == SnapshotVersions.V21;
-
-			if (is21)
-				rowSize += sizeof(int);
+			var rowSize = typeof(QuotesSnapshotRow).SizeOf();
 
 			var buffer = new byte[snapshotSize + (bids.Length + asks.Length) * rowSize];
 
@@ -105,18 +100,12 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			{
 				var row = new QuotesSnapshotRow
 				{
-					Price = quote.Price,
-					Volume = quote.Volume,
+					Price = (BlittableDecimal)quote.Price,
+					Volume = (BlittableDecimal)quote.Volume,
+					OrdersCount = quote.OrdersCount ?? 0,
 				};
 
 				var rowPtr = row.StructToPtr(rowSize);
-
-				if (is21)
-				{
-					rowPtr += rowSizeOld;
-					rowPtr.Write(quote.OrdersCount ?? 0);
-					rowPtr -= rowSizeOld;
-				}
 
 				rowPtr.CopyTo(buffer, offset, rowSize);
 				rowPtr.FreeHGlobal();
@@ -141,17 +130,10 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				var bids = new QuoteChange[snapshot.BidCount];
 				var asks = new QuoteChange[snapshot.AskCount];
 
-				var is21 = version == SnapshotVersions.V21;
-
 				QuoteChange ReadQuote()
 				{
 					var row = ptr.ToStruct<QuotesSnapshotRow>(true);
-					var quote = new QuoteChange(row.Price, row.Volume);
-
-					if (is21)
-						quote.OrdersCount = ptr.Read<int>(true).DefaultAsNull();
-
-					return quote;
+					return new QuoteChange(row.Price, row.Volume, row.OrdersCount.DefaultAsNull());
 				}
 
 				for (var i = 0; i < snapshot.BidCount; i++)
