@@ -5125,6 +5125,7 @@ Imbalance;Imbalance;Дисбаланс
 OrdersBids;Orders (bids);Заявки (биды)
 OrdersAsks;Orders (asks);Заявки (аски)
 UnsubscribeError;Error unsubscription market-data.;Ошибка отписки от маркет-данных.
+StorageVersionNewer;The storage '{0}' has version {1} is newer than the app {2}.;Хранилище '{0}' имеет версию {1} новее, чем приложение {2}.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

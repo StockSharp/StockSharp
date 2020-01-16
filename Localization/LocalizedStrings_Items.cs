@@ -50916,5 +50916,15 @@ namespace StockSharp.Localization
 		/// Error unsubscription market-data.
 		/// </summary>
 		public static string UnsubscribeError => GetString(UnsubscribeErrorKey);
+
+		/// <summary>
+		/// The storage '{0}' has version {1} is newer than the app {2}.
+		/// </summary>
+		public const string StorageVersionNewerKey = nameof(StorageVersionNewer);
+
+		/// <summary>
+		/// The storage '{0}' has version {1} is newer than the app {2}.
+		/// </summary>
+		public static string StorageVersionNewer => GetString(StorageVersionNewerKey);
 	}
 }

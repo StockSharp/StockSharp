@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.IO;
 	using System.Linq;
 
@@ -26,6 +27,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using Ecng.Reflection;
 	using Ecng.Serialization;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	static class MarketDataVersions
@@ -400,11 +402,12 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		protected BinaryMarketDataSerializer(SecurityId securityId, int dataSize, Version version, IExchangeInfoProvider exchangeInfoProvider)
+		protected BinaryMarketDataSerializer(SecurityId securityId, object arg, int dataSize, Version version, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (securityId == null)
 				throw new ArgumentNullException(nameof(securityId));
 
+			Arg = arg;
 			SecurityId = securityId;
 			DataSize = dataSize;
 
@@ -412,6 +415,7 @@ namespace StockSharp.Algo.Storages.Binary
 			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		}
 
+		protected object Arg { get; }
 		protected SecurityId SecurityId { get; }
 		protected int DataSize { get; }
 		protected Version Version { get; set; }
@@ -438,23 +442,39 @@ namespace StockSharp.Algo.Storages.Binary
 			return Deserialize(stream, metaInfo);
 		}
 
+		private void CheckVersion(TMetaInfo metaInfo, string operation)
+		{
+			if (metaInfo.Version <= Version)
+				return;
+
+			var name = $"{SecurityId}/{typeof(TData)}/{Arg}";
+			Debug.WriteLine($"Storage ({operation}) !! DISABLED !!: {name}");
+
+			throw new InvalidOperationException(LocalizedStrings.StorageVersionNewerKey.Put(name, metaInfo.Version, Version));
+		}
+
 		public void Serialize(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
 		{
+			var typedInfo = (TMetaInfo)metaInfo;
+			CheckVersion(typedInfo, "Save");
 			//var temp = new MemoryStream { Capacity = DataSize * data.Count() * 2 };
 
 			using (var writer = new BitArrayWriter(stream))
-				OnSave(writer, data, (TMetaInfo)metaInfo);
+				OnSave(writer, data, typedInfo);
 
 			//return stream.To<byte[]>();
 		}
 
 		public IEnumerable<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
 		{
+			var typedInfo = (TMetaInfo)metaInfo;
+			CheckVersion(typedInfo, "Load");
+
 			var data = new MemoryStream();
 			stream.CopyTo(data);
 			stream.Dispose();
 
-			return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(data), (TMetaInfo)metaInfo));
+			return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(data), typedInfo));
 		}
 
 		protected abstract void OnSave(BitArrayWriter writer, IEnumerable<TData> data, TMetaInfo metaInfo);

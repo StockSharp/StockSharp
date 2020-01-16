@@ -50,6 +50,7 @@ namespace StockSharp.Algo.Storages
 				private readonly string _fileName;
 				//private long _currOffset;
 				private bool _resetFile;
+				private bool _disabled;
 
 				// version has 2 bytes
 				//private const int _versionLen = 2;
@@ -72,6 +73,15 @@ namespace StockSharp.Algo.Storages
 						using (var stream = File.OpenRead(_fileName))
 						{
 							_version = new Version(stream.ReadByte(), stream.ReadByte());
+
+							if (_version > _serializer.Version)
+							{
+								Debug.WriteLine($"Snapshot !! DISABLED !!: {_fileName}");
+
+								new InvalidOperationException(LocalizedStrings.StorageVersionNewerKey.Put(_fileName, _version, _serializer.Version)).LogError();
+								_disabled = true;
+								return;
+							}
 
 							while (stream.Position < stream.Length)
 							{
@@ -215,6 +225,12 @@ namespace StockSharp.Algo.Storages
 					Directory.CreateDirectory(Path.GetDirectoryName(_fileName));
 
 					Debug.WriteLine($"Snapshot (Save): {_fileName}");
+
+					if (_disabled)
+					{
+						Debug.WriteLine($"Snapshot !! DISABLED !!: {_fileName}");
+						return;
+					}
 
 					using (var stream = new FileStream(_fileName, FileMode.Create, FileAccess.Write))
 					{
