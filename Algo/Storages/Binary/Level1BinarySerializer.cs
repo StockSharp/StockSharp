@@ -546,7 +546,7 @@ namespace StockSharp.Algo.Storages.Binary
 		};
 
 		public Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 50, MarketDataVersions.Version61, exchangeInfoProvider)
+			: base(securityId, null, 50, MarketDataVersions.Version61, exchangeInfoProvider)
 		{
 		}
 

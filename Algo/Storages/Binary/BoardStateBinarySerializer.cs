@@ -40,7 +40,7 @@
 	class BoardStateBinarySerializer : BinaryMarketDataSerializer<BoardStateMessage, BoardStateMetaInfo>
 	{
 		public BoardStateBinarySerializer(IExchangeInfoProvider exchangeInfoProvider)
-			: base(default, 200, MarketDataVersions.Version31, exchangeInfoProvider)
+			: base(default, null, 200, MarketDataVersions.Version31, exchangeInfoProvider)
 		{
 		}
 
