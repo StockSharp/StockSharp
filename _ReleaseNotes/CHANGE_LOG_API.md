@@ -310,6 +310,7 @@ StockSharp API Change log
 * (feature) Storages. Check version of an app and stored format.
 * (bug) Fix snapshot storage fractional values.
 * (feature) QuoteCondition added.
+* (feature) Level1Fields. Index, Imbalance, UnderlyingPrice.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

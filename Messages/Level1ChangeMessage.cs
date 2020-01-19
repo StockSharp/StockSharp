@@ -737,6 +737,27 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.YieldVWAPPrevKey)]
 		YieldVWAPPrev,
+
+		/// <summary>
+		/// Index.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IndexKey)]
+		Index,
+
+		/// <summary>
+		/// Imbalance.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ImbalanceKey)]
+		Imbalance,
+
+		/// <summary>
+		/// Underlying price.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UnderlyingKey)]
+		UnderlyingPrice
 	}
 
 	/// <summary>
