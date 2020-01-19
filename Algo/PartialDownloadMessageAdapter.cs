@@ -371,21 +371,24 @@
 						{
 							if (responseMsg.IsOk())
 							{
-								if (isPartial)
+								if (!this.IsOutMessageSupported(MessageTypes.SubscriptionOnline))
 								{
-									// reply was sent prev for first partial request,
-									// now sending "online" message
-									message = new SubscriptionOnlineMessage
+									if (isPartial)
 									{
-										OriginalTransactionId = originId
-									};
-								}
-								else
-								{
-									extra = new SubscriptionOnlineMessage
+										// reply was sent previously for the first partial request,
+										// now sending "online" message
+										message = new SubscriptionOnlineMessage
+										{
+											OriginalTransactionId = originId
+										};
+									}
+									else
 									{
-										OriginalTransactionId = originId
-									};
+										extra = new SubscriptionOnlineMessage
+										{
+											OriginalTransactionId = originId
+										};
+									}
 								}
 							}
 
