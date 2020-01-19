@@ -988,8 +988,8 @@ F:StockSharp.Xaml.MarketDepthColumns.Sell/summary;DocStr8925
 F:StockSharp.Xaml.MarketDepthColumns.OwnSell/summary;DocStr8926
 F:StockSharp.Xaml.MarketDepthColumns.Board/summary;Board
 F:StockSharp.Xaml.MarketDepthColumns.Volume/summary;DocStr3526
-F:StockSharp.Xaml.MarketDepthColumns.OrdersCountBuy/summary;DocStr11562
-F:StockSharp.Xaml.MarketDepthColumns.OrdersCountSell/summary;DocStr11563
+F:StockSharp.Xaml.MarketDepthColumns.OrdersCountBuy/summary;OrdersBids
+F:StockSharp.Xaml.MarketDepthColumns.OrdersCountSell/summary;OrdersAsks
 T:StockSharp.Xaml.MarketDepthControl/summary;DocStr8243
 F:StockSharp.Xaml.MarketDepthControl.CellMouseLeftButtonUp/summary;DocStr8459
 F:StockSharp.Xaml.MarketDepthControl.CellMouseRightButtonUp/summary;DocStr8459
@@ -1187,8 +1187,7 @@ M:StockSharp.Xaml.StatisticParameterGrid.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.GuiLogListener/summary;DocStr8338
 M:StockSharp.Xaml.GuiLogListener.#ctor(StockSharp.Logging.ILogListener)/summary;DocStr1
 M:StockSharp.Xaml.GuiLogListener.#ctor(StockSharp.Logging.ILogListener)/param/listener;DocStr8339
-M:StockSharp.Xaml.GuiLogListener.OnWriteMessages(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})/summary;DocStr3912
-M:StockSharp.Xaml.GuiLogListener.OnWriteMessages(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})/param/messages;DocStr3913
+M:StockSharp.Xaml.GuiLogListener.OnWriteMessages(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})/inheritdoc;DocStr8459
 T:StockSharp.Xaml.LogControl/summary;DocStr8344
 M:StockSharp.Xaml.LogControl.#ctor/summary;DocStr1
 F:StockSharp.Xaml.LogControl.AutoScrollProperty/summary;DocStr29
