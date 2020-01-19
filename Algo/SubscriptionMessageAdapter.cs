@@ -409,7 +409,7 @@ namespace StockSharp.Algo
 							{
 								sendOutMsgs = new[]
 								{
-									message.TransactionId.CreateSubscriptionResponse(),
+									message.CreateResponse(),
 									resultMsg,
 								};
 							}

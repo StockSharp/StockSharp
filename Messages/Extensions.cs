@@ -1614,6 +1614,20 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Create subscription response.
+		/// </summary>
+		/// <param name="message">Subscription.</param>
+		/// <param name="error">Error info.</param>
+		/// <returns>Subscription response message.</returns>
+		public static SubscriptionResponseMessage CreateResponse(this ISubscriptionMessage message, Exception error = null)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.TransactionId.CreateSubscriptionResponse(error);
+		}
+
+		/// <summary>
 		/// Create <see cref="SubscriptionOnlineMessage"/> or <see cref="SubscriptionFinishedMessage"/> depends of <see cref="ISubscriptionMessage.To"/>.
 		/// </summary>
 		/// <param name="message">Subscription.</param>
@@ -1758,7 +1772,7 @@ namespace StockSharp.Messages
 				case MessageTypes.PortfolioLookup:
 				case MessageTypes.UserLookup:
 				{
-					sendOut(((ITransactionIdMessage)message).TransactionId.CreateSubscriptionResponse(ex));
+					sendOut(((ISubscriptionMessage)message).CreateResponse(ex));
 					return true;
 				}
 

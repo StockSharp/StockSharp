@@ -1387,7 +1387,7 @@ namespace StockSharp.Algo
 				{
 					this.AddDebugLog("No adapter for {0}", message);
 
-					SendOutMessage(message.TransactionId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.Str629Params.Put(message))));
+					SendOutMessage(message.CreateResponse(new InvalidOperationException(LocalizedStrings.Str629Params.Put(message))));
 				}
 				else
 				{
