@@ -20,7 +20,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
+    <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateDialect(System.Type)">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -208,7 +208,7 @@
     <member name="P:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.SupportedMarketDataTypes">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
+    <member name="M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.CreateDialect(System.Type)">
       <inheritdoc />
     </member>
     <member name="T:StockSharp.Quik.Native.Codes">

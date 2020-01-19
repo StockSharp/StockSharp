@@ -314,6 +314,7 @@ StockSharp API Change log
 * (feature) Deribit. Test environment supported.
 * (feature) MarketDepthControl. OrdersCount, Condition columns added.
 * (feature) QuikLua32 (C# version).
+* (bug) QuikLua. Turn off auto logic with client code initialization. Possible fix https://stocksharp.ru/forum/11227/ne-udaetsya-avtomaticheski-podat-zayavku-na-spb/
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
