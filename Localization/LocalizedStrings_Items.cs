@@ -50948,6 +50948,16 @@ namespace StockSharp.Localization
 		public static string Indicative => GetString(IndicativeKey);
 
 		/// <summary>
+		/// I
+		/// </summary>
+		public const string IndicativeCharKey = nameof(IndicativeChar);
+
+		/// <summary>
+		/// I
+		/// </summary>
+		public static string IndicativeChar => GetString(IndicativeCharKey);
+
+		/// <summary>
 		/// Quote condition.
 		/// </summary>
 		public const string QuoteConditionKey = nameof(QuoteCondition);
