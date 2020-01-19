@@ -762,6 +762,7 @@
       <summary>
             Set property value and raise events.
             </summary>
+      <typeparam name="T">Value type.</typeparam>
       <param name="field">Property backing field.</param>
       <param name="value">New value.</param>
       <param name="propertyName">Name of the property.</param>
@@ -3756,8 +3757,7 @@
       <summary>
             Create instance.
             </summary>
-      <param name="element">
-      </param>
+      <param name="element">Element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartIndicatorElementSettingsObject.OnGetProperties(StockSharp.Xaml.Charting.IChartElement)">
       <inheritdoc />
@@ -3766,6 +3766,7 @@
       <summary>
             Base proxy object to edit chart element in property grid.
             </summary>
+      <typeparam name="T">Value type.</typeparam>
     </member>
     <member name="T:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.PdSelector">
       <summary>
@@ -3833,6 +3834,7 @@
       <summary>
             Create instance.
             </summary>
+      <param name="orig">Parent chart element or indicator.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.OnGetProperties(`0)">
       <summary>

@@ -2553,6 +2553,7 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.ChartIndicatorElementWrapper" />.
             </summary>
+      <param name="element">The chart element representing the indicator.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.CandleElements">
       <summary>
@@ -3599,11 +3600,17 @@
       <summary>
             The method is called when the input socket is connected.
             </summary>
+      <param name="socket">The diagram element socket.</param>
+      <param name="source">The source diagram element socket.</param>
+      <param name="isOutput">Is the output socket connected.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnInputSocketDisconnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean)">
       <summary>
             The method is called when the input socket is disconnected.
             </summary>
+      <param name="socket">The diagram element socket.</param>
+      <param name="source">The source diagram element socket.</param>
+      <param name="isOutput">Is the output socket disconnected.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>

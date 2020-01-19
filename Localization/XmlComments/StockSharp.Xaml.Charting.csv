@@ -175,6 +175,7 @@ M:StockSharp.Xaml.Charting.ChartBandElement.Save(Ecng.Serialization.SettingsStor
 T:StockSharp.Xaml.Charting.ChartBaseViewModel/summary;DocStr10682
 E:StockSharp.Xaml.Charting.ChartBaseViewModel.PropertyValueChanging/summary;DocStr10683
 M:StockSharp.Xaml.Charting.ChartBaseViewModel.SetField``1(``0@,``0,System.String)/summary;DocStr10684
+M:StockSharp.Xaml.Charting.ChartBaseViewModel.SetField``1(``0@,``0,System.String)/typeparam/T;DocStr1145
 M:StockSharp.Xaml.Charting.ChartBaseViewModel.SetField``1(``0@,``0,System.String)/param/field;DocStr10685
 M:StockSharp.Xaml.Charting.ChartBaseViewModel.SetField``1(``0@,``0,System.String)/param/value;DocStr8879
 M:StockSharp.Xaml.Charting.ChartBaseViewModel.SetField``1(``0@,``0,System.String)/param/propertyName;DocStr10686
@@ -1033,9 +1034,10 @@ M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.Save(Ecng.Serialization.Se
 M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Charting.Ultrachart.ChartIndicatorElementSettingsObject/summary;DocStr10765
 M:StockSharp.Xaml.Charting.Ultrachart.ChartIndicatorElementSettingsObject.#ctor(StockSharp.Xaml.Charting.IChartElement)/summary;DocStr10681
-M:StockSharp.Xaml.Charting.Ultrachart.ChartIndicatorElementSettingsObject.#ctor(StockSharp.Xaml.Charting.IChartElement)/param/element;DocStr8459
+M:StockSharp.Xaml.Charting.Ultrachart.ChartIndicatorElementSettingsObject.#ctor(StockSharp.Xaml.Charting.IChartElement)/param/element;DocStr419
 M:StockSharp.Xaml.Charting.Ultrachart.ChartIndicatorElementSettingsObject.OnGetProperties(StockSharp.Xaml.Charting.IChartElement)/inheritdoc;DocStr8459
 T:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1/summary;DocStr10766
+T:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1/typeparam/T;DocStr1145
 T:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.PdSelector/summary;DocStr10767
 T:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor/summary;DocStr10768
 M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.#ctor(System.String,System.Object,`0,System.Collections.Generic.IEnumerable{System.Attribute},StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase{`0}.PdSelector)/summary;DocStr10681
@@ -1053,6 +1055,7 @@ P:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ProxyDescriptor.
 P:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.Orig/summary;DocStr10771
 P:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.CategoriesMode/summary;DocStr10772
 M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.#ctor(`0)/summary;DocStr10681
+M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.#ctor(`0)/param/orig;DocStr10771
 M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.OnGetProperties(`0)/summary;DocStr10773
 M:StockSharp.Xaml.Charting.Ultrachart.ChartSettingsObjectBase`1.ToString/inheritdoc;DocStr8459
 T:StockSharp.Xaml.Charting.Ultrachart.RulerAnnotation/summary;DocStr11360
