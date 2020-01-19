@@ -281,7 +281,7 @@ StockSharp API Change log
 * (feature) OKEX. PostOnly order supported.
 * (feature) OKEX. MatchPrice supported.
 * (feature) OKEX. Futures, Swap close position operation supported.
-* (feature) FIX connector. BrasilBolsa fix dialect added.
+* (feature) FIX connector. Bovespa FIX and FAST dialects added.
 * (feature) PortfolioGrid. Leverage column added.
 * (feature) Connector. Support single order status requests.
 * (feature) Connector. IsAutoPortfoliosSubscribe added.
@@ -315,6 +315,8 @@ StockSharp API Change log
 * (feature) MarketDepthControl. OrdersCount, Condition columns added.
 * (feature) QuikLua32 (C# version).
 * (bug) QuikLua. Turn off auto logic with client code initialization. Possible fix https://stocksharp.ru/forum/11227/ne-udaetsya-avtomaticheski-podat-zayavku-na-spb/
+* (feature) FIX connector. OneZero dialect added.
+* (feature) FIX connector. Dialects inherited from IMessageAdapter.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
