@@ -2,6 +2,7 @@ T:StockSharp.Deribit.DeribitMessageAdapter/summary;DocStr2538
 P:StockSharp.Deribit.DeribitMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Deribit.DeribitMessageAdapter.Key/summary;Str3304
 P:StockSharp.Deribit.DeribitMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Deribit.DeribitMessageAdapter.IsDemo/summary;Str3388
 M:StockSharp.Deribit.DeribitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Deribit.DeribitMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Deribit.DeribitMessageAdapter.ToString/inheritdoc;DocStr8459

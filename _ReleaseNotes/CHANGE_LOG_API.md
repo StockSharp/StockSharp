@@ -311,6 +311,7 @@ StockSharp API Change log
 * (bug) Fix snapshot storage fractional values.
 * (feature) QuoteCondition added.
 * (feature) Level1Fields. Index, Imbalance, UnderlyingPrice.
+* (feature) Deribit. Test environment supported.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

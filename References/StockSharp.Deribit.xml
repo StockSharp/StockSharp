@@ -24,6 +24,11 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Deribit.DeribitMessageAdapter.IsDemo">
+            <summary>
+            Connect to demo trading instead of real trading server.
+            </summary>
+        </member>
         <member name="M:StockSharp.Deribit.DeribitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <inheritdoc />
         </member>
