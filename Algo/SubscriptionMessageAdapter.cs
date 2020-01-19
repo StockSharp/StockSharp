@@ -371,16 +371,10 @@ namespace StockSharp.Algo
 
 			var transId = message.TransactionId;
 
-			Message CreateSendOut()
-				=> message.Type.IsLookup()
-					? message.CreateResult()
-					: transId.CreateSubscriptionResponse();
-
 			var isSubscribe = message.IsSubscribe;
 
 			Message sendInMsg = null;
-			Message sendOutMsg = null;
-			Message onlineMsg = null;
+			Message[] sendOutMsgs = null;
 
 			lock (_sync)
 			{
@@ -409,8 +403,11 @@ namespace StockSharp.Algo
 						}
 						else
 						{
-							sendOutMsg = CreateSendOut();
-							onlineMsg = new SubscriptionOnlineMessage { OriginalTransactionId = transId };
+							sendOutMsgs = new[]
+							{
+								message.CreateResult(),
+								new SubscriptionOnlineMessage { OriginalTransactionId = transId }
+							};
 						}
 
 						_subscriptionsById.Add(transId, info);
@@ -440,7 +437,10 @@ namespace StockSharp.Algo
 					{
 						if (!info.Subscribers.Remove(originId))
 						{
-							sendOutMsg = originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)));
+							sendOutMsgs = new[]
+							{
+								(Message)originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
+							};
 						}
 						else
 						{
@@ -453,12 +453,17 @@ namespace StockSharp.Algo
 								sendInMsg = MakeUnsubscribe((TMessage)info.Subscription.Clone());
 							}
 							else
-								sendOutMsg = CreateSendOut();
+							{
+								sendOutMsgs = new[] { message.CreateResult() };
+							}
 						}
 					}
 					else
 					{
-						sendOutMsg = originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)));
+						sendOutMsgs = new[]
+						{
+							(Message)originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
+						};
 					}
 				}
 			}
@@ -469,16 +474,13 @@ namespace StockSharp.Algo
 				base.OnSendInMessage(sendInMsg);
 			}
 
-			if (sendOutMsg != null)
+			if (sendOutMsgs != null)
 			{
-				this.AddInfoLog("Out: {0}", sendOutMsg);
-				RaiseNewOutMessage(sendOutMsg);
-			}
-
-			if (onlineMsg != null)
-			{
-				this.AddInfoLog("Out: {0}", onlineMsg);
-				RaiseNewOutMessage(onlineMsg);
+				foreach (var sendOutMsg in sendOutMsgs)
+				{
+					this.AddInfoLog("Out: {0}", sendOutMsg);
+					RaiseNewOutMessage(sendOutMsg);	
+				}
 			}
 		}
 
