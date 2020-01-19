@@ -403,11 +403,20 @@ namespace StockSharp.Algo
 						}
 						else
 						{
-							sendOutMsgs = new[]
+							var resultMsg = message.CreateResult();
+
+							if (message.Type == MessageTypes.MarketData)
 							{
-								message.CreateResult(),
-								new SubscriptionOnlineMessage { OriginalTransactionId = transId }
-							};
+								sendOutMsgs = new[]
+								{
+									message.TransactionId.CreateSubscriptionResponse(),
+									resultMsg,
+								};
+							}
+							else
+							{
+								sendOutMsgs = new[] { resultMsg };
+							}
 						}
 
 						_subscriptionsById.Add(transId, info);
