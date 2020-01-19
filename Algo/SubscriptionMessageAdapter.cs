@@ -425,22 +425,20 @@ namespace StockSharp.Algo
 				}
 				else
 				{
-					var originId = message.OriginalTransactionId;
-
-					TMessage MakeUnsubscribe(TMessage m)
+					TMessage MakeUnsubscribe(TMessage m, long subscriptionId)
 					{
 						m.IsSubscribe = false;
 						m.TransactionId = transId;
-						m.OriginalTransactionId = originId;
+						m.OriginalTransactionId = subscriptionId;
 
 						return m;
 					}
 
-					if (_historicalRequests.TryGetValue(originId, out var subscription))
-					{
-						_historicalRequests.Remove(originId);
+					var originId = message.OriginalTransactionId;
 
-						sendInMsg = MakeUnsubscribe((TMessage)subscription);
+					if (_historicalRequests.TryGetAndRemove(originId, out var subscription))
+					{
+						sendInMsg = MakeUnsubscribe((TMessage)subscription, originId);
 					}
 					else if (_subscriptionsById.TryGetValue(originId, out var info))
 					{
@@ -459,7 +457,7 @@ namespace StockSharp.Algo
 								_subscriptionsById.Remove(originId);
 
 								// copy full subscription's details into unsubscribe request
-								sendInMsg = MakeUnsubscribe((TMessage)info.Subscription.Clone());
+								sendInMsg = MakeUnsubscribe((TMessage)info.Subscription.Clone(), info.Subscription.TransactionId);
 							}
 							else
 							{
