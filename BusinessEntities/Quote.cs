@@ -52,13 +52,15 @@ namespace StockSharp.BusinessEntities
 		/// <param name="volume">Quote volume.</param>
 		/// <param name="side">Direction (buy or sell).</param>
 		/// <param name="ordersCount">Orders count.</param>
-		public Quote(Security security, decimal price, decimal volume, Sides side, int? ordersCount = null)
+		/// <param name="condition">Condition.</param>
+		public Quote(Security security, decimal price, decimal volume, Sides side, int? ordersCount = null, QuoteConditions condition = default)
 		{
 			Security = security;
 			Price = price;
 			Volume = volume;
 			OrderDirection = side;
 			OrdersCount = ordersCount;
+			Condition = condition;
 		}
 
 		/// <summary>
@@ -119,12 +121,18 @@ namespace StockSharp.BusinessEntities
 		public int? OrdersCount { get; set; }
 
 		/// <summary>
+		/// Quote condition.
+		/// </summary>
+		[DataMember]
+		public QuoteConditions Condition { get; set; }
+
+		/// <summary>
 		/// Create a copy of <see cref="Quote"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Quote Clone()
 		{
-			return new Quote(Security, Price, Volume, OrderDirection, OrdersCount)
+			return new Quote(Security, Price, Volume, OrderDirection, OrdersCount, Condition)
 			{
 				ExtensionInfo = ExtensionInfo,
 			};

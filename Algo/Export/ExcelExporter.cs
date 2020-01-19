@@ -230,10 +230,13 @@ namespace StockSharp.Algo.Export
 							.SetCell(columnIndex, rowIndex + 2, quote.Volume)
 							.SetCell(columnIndex, rowIndex + 4, quote.OrdersCount);
 
+						if (quote.Condition != default)
+							worker.SetCell(columnIndex, rowIndex + 5, quote.Condition.GetDisplayName());
+
 						columnIndex++;
 					}
 
-					rowIndex += 4;
+					rowIndex += 5;
 
 					if (!Check(rowIndex))
 						break;

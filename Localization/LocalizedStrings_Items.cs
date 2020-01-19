@@ -50926,5 +50926,35 @@ namespace StockSharp.Localization
 		/// The storage '{0}' has version {1} is newer than the app {2}.
 		/// </summary>
 		public static string StorageVersionNewer => GetString(StorageVersionNewerKey);
+
+		/// <summary>
+		/// oneZERO
+		/// </summary>
+		public const string OneZeroKey = nameof(OneZero);
+
+		/// <summary>
+		/// oneZERO
+		/// </summary>
+		public static string OneZero => GetString(OneZeroKey);
+
+		/// <summary>
+		/// Indicative
+		/// </summary>
+		public const string IndicativeKey = nameof(Indicative);
+
+		/// <summary>
+		/// Indicative
+		/// </summary>
+		public static string Indicative => GetString(IndicativeKey);
+
+		/// <summary>
+		/// Quote condition.
+		/// </summary>
+		public const string QuoteConditionKey = nameof(QuoteCondition);
+
+		/// <summary>
+		/// Quote condition.
+		/// </summary>
+		public static string QuoteCondition => GetString(QuoteConditionKey);
 	}
 }

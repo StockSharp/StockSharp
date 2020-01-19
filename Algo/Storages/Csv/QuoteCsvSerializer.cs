@@ -39,6 +39,7 @@ namespace StockSharp.Algo.Storages.Csv
 			Volume = quote.Volume;
 			Side = side;
 			OrdersCount = quote.OrdersCount;
+			Condition = quote.Condition;
 		}
 
 		public DateTimeOffset ServerTime { get; set; }
@@ -47,6 +48,7 @@ namespace StockSharp.Algo.Storages.Csv
 		public decimal Volume { get; set; }
 		public Sides Side { get; set; }
 		public int? OrdersCount { get; set; }
+		public QuoteConditions Condition { get; set; }
 	}
 
 	/// <summary>
@@ -71,10 +73,11 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				data.ServerTime.WriteTimeMls(),
 				data.ServerTime.ToString("zzz"),
-				data.Price?.ToString(),
-				data.Volume.ToString(),
-				data.Side.ToString(),
-				data.OrdersCount?.ToString(),
+				data.Price.To<string>(),
+				data.Volume.To<string>(),
+				data.Side.To<string>(),
+				data.OrdersCount.To<string>(),
+				data.Condition == default ? null : data.Condition.To<string>(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -93,6 +96,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				quote.OrdersCount = reader.ReadNullableInt();
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				quote.Condition = reader.ReadNullableEnum<QuoteConditions>() ?? default;
 
 			return quote;
 		}

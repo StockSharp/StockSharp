@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public BlittableDecimal Price;
 			public BlittableDecimal Volume;
 			public int OrdersCount;
+			public byte QuoteCondition;
 		}
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Unicode)]
@@ -103,6 +104,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					Price = (BlittableDecimal)quote.Price,
 					Volume = (BlittableDecimal)quote.Volume,
 					OrdersCount = quote.OrdersCount ?? 0,
+					QuoteCondition = (byte)quote.Condition,
 				};
 
 				var rowPtr = row.StructToPtr(rowSize);
@@ -133,7 +135,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				QuoteChange ReadQuote()
 				{
 					var row = ptr.ToStruct<QuotesSnapshotRow>(true);
-					return new QuoteChange(row.Price, row.Volume, row.OrdersCount.DefaultAsNull());
+					return new QuoteChange(row.Price, row.Volume, row.OrdersCount.DefaultAsNull(), (QuoteConditions)row.QuoteCondition);
 				}
 
 				for (var i = 0; i < snapshot.BidCount; i++)

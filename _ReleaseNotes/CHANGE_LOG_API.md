@@ -309,6 +309,7 @@ StockSharp API Change log
 * (feature) PortfolioChangeMessage removed.
 * (feature) Storages. Check version of an app and stored format.
 * (bug) Fix snapshot storage fractional values.
+* (feature) QuoteCondition added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

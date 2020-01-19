@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -52,6 +53,28 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
+	/// Quote conditions.
+	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
+	public enum QuoteConditions : byte
+	{
+		/// <summary>
+		/// Active.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str238Key)]
+		Active,
+
+		/// <summary>
+		/// Indicative.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IndicativeKey)]
+		Indicative,
+	}
+
+	/// <summary>
 	/// Market depth quote representing bid or ask.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
@@ -73,11 +96,13 @@ namespace StockSharp.Messages
 		/// <param name="price">Quote price.</param>
 		/// <param name="volume">Quote volume.</param>
 		/// <param name="ordersCount">Orders count.</param>
-		public QuoteChange(decimal price, decimal volume, int? ordersCount = null)
+		/// <param name="condition">Quote condition.</param>
+		public QuoteChange(decimal price, decimal volume, int? ordersCount = null, QuoteConditions condition = default)
 		{
 			Price = price;
 			Volume = volume;
 			OrdersCount = ordersCount;
+			Condition = condition;
 		}
 
 		/// <summary>
@@ -151,12 +176,18 @@ namespace StockSharp.Messages
 		public QuoteChangeActions? Action { get; set; }
 
 		/// <summary>
+		/// Quote condition.
+		/// </summary>
+		[DataMember]
+		public QuoteConditions Condition { get; set; }
+
+		/// <summary>
 		/// Create a copy of <see cref="QuoteChange"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override QuoteChange Clone()
 		{
-			var clone = new QuoteChange(Price, Volume, OrdersCount)
+			var clone = new QuoteChange(Price, Volume, OrdersCount, Condition)
 			{
 				StartPosition = StartPosition,
 				EndPosition = EndPosition,

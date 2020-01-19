@@ -185,6 +185,7 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(TimeQuoteChange.Volume), LocalizedStrings.Volume, LocalizedStrings.Str276, (i, v) => i.Volume = v) { IsRequired = true });
 				fields.Add(new FieldMapping<TimeQuoteChange, Sides>(nameof(TimeQuoteChange.Side), LocalizedStrings.Str128, LocalizedStrings.Str277, (i, v) => i.Side = v) { IsRequired = true });
 				fields.Add(new FieldMapping<TimeQuoteChange, int>(nameof(TimeQuoteChange.OrdersCount), LocalizedStrings.Str668, LocalizedStrings.XamlStr248, (i, v) => i.OrdersCount = v));
+				fields.Add(new FieldMapping<TimeQuoteChange, QuoteConditions>(nameof(TimeQuoteChange.Condition), LocalizedStrings.Str154, LocalizedStrings.QuoteCondition, (i, v) => i.Condition = v));
 			}
 			else if (msgType == typeof(Level1ChangeMessage))
 			{

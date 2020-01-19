@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Storages.Csv
 						if (quote.Price != null)
 						{
 							var quotes = quote.Side == Sides.Buy ? bids : asks;
-							quotes.Add(new QuoteChange(quote.Price.Value, quote.Volume));
+							quotes.Add(new QuoteChange(quote.Price.Value, quote.Volume, quote.OrdersCount, quote.Condition));
 						}
 					}
 					while (_enumerator.MoveNext());

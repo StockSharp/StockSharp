@@ -1317,7 +1317,7 @@ namespace StockSharp.Algo
 		/// <returns>Message.</returns>
 		public static QuoteChange ToQuoteChange(this Quote quote)
 		{
-			return new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount);
+			return new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
 		}
 
 		/// <summary>
@@ -1333,7 +1333,7 @@ namespace StockSharp.Algo
 			if (!change.BoardCode.IsEmpty() && getSecurity != null)
 				security = getSecurity(new SecurityId { SecurityCode = security.Code, BoardCode = change.BoardCode });
 
-			var quote = new Quote(security, change.Price, change.Volume, side, change.OrdersCount);
+			var quote = new Quote(security, change.Price, change.Volume, side, change.OrdersCount, change.Condition);
 			change.CopyExtensionInfo(quote);
 			return quote;
 		}

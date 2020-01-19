@@ -185,6 +185,9 @@ namespace StockSharp.Algo.Export
 					if (quote.OrdersCount != null)
 						writer.WriteAttribute("ordersCount", quote.OrdersCount.Value);
 
+					if (quote.Condition != default)
+						writer.WriteAttribute("condition", quote.Condition);
+
 					writer.WriteEndElement();
 				}
 

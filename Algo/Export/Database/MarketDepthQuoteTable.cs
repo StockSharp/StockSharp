@@ -57,6 +57,7 @@ namespace StockSharp.Algo.Export.Database
 			};
 			yield return new ColumnDescription(nameof(TimeQuoteChange.Side)) { IsPrimaryKey = true, DbType = typeof(int) };
 			yield return new ColumnDescription(nameof(TimeQuoteChange.OrdersCount)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(TimeQuoteChange.Condition)) { DbType = typeof(byte) };
 			yield return new ColumnDescription(nameof(TimeQuoteChange.ServerTime)) { IsPrimaryKey = true, DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription(nameof(TimeQuoteChange.LocalTime)) { DbType = typeof(DateTimeOffset) };
 		}
@@ -71,6 +72,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(TimeQuoteChange.Volume), value.Volume },
 				{ nameof(TimeQuoteChange.Side), (int)value.Side },
 				{ nameof(TimeQuoteChange.OrdersCount), value.OrdersCount },
+				{ nameof(TimeQuoteChange.Condition), (byte)value.Condition },
 				{ nameof(TimeQuoteChange.ServerTime), value.ServerTime },
 				{ nameof(TimeQuoteChange.LocalTime), value.LocalTime },
 			};

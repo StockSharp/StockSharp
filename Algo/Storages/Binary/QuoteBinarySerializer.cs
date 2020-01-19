@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
 	{
 		public QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, null, 16 + 20 * 25, MarketDataVersions.Version56, exchangeInfoProvider)
+			: base(securityId, null, 16 + 20 * 25, MarketDataVersions.Version57, exchangeInfoProvider)
 		{
 		}
 
@@ -289,7 +289,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (metaInfo == null)
 				throw new ArgumentNullException(nameof(metaInfo));
 
-			writer.WriteInt(quotes.Count());
+			writer.WriteInt(quotes.Length);
 
 			foreach (var quote in quotes)
 			{
@@ -312,6 +312,17 @@ namespace StockSharp.Algo.Storages.Binary
 					continue;
 
 				writer.WriteNullableInt(quote.OrdersCount);
+
+				if (metaInfo.Version < MarketDataVersions.Version57)
+					continue;
+
+				if (quote.Condition != default)
+				{
+					writer.Write(true);
+					writer.WriteInt((int)quote.Condition);
+				}
+				else
+					writer.Write(false);
 			}
 		}
 
@@ -342,16 +353,14 @@ namespace StockSharp.Algo.Storages.Binary
 					? reader.ReadNullableInt()
 					: null;
 
-				quotes[i] = new QuoteChange(price, volume, ordersCount);
+				var condition = metaInfo.Version >= MarketDataVersions.Version57
+					? reader.Read() ? (QuoteConditions)reader.ReadInt() : default
+					: default;
+
+				quotes[i] = new QuoteChange(price, volume, ordersCount, condition);
 			}
 
 			return quotes;
 		}
-
-		//private static decimal GetDepthPrice(QuoteChangeMessage message)
-		//{
-		//	var quote = message.GetBestBid() ?? message.GetBestAsk();
-		//	return quote == null ? 0 : quote.Price;
-		//}
 	}
 }

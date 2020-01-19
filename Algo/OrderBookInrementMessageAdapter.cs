@@ -10,8 +10,8 @@
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
-	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, System.Tuple<decimal, int?>>;
-	using QuotesByPosList = System.Collections.Generic.List<System.Tuple<decimal, decimal, int?>>;
+	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, System.Tuple<decimal, int?, Messages.QuoteConditions>>;
+	using QuotesByPosList = System.Collections.Generic.List<System.Tuple<decimal, decimal, int?, Messages.QuoteConditions>>;
 
 	/// <summary>
 	/// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
@@ -190,7 +190,7 @@
 					if (quote.Volume == 0)
 						to.Remove(quote.Price);
 					else
-						to[quote.Price] = Tuple.Create(quote.Volume, quote.OrdersCount);
+						to[quote.Price] = Tuple.Create(quote.Volume, quote.OrdersCount, quote.Condition);
 				}
 			}
 
@@ -204,7 +204,7 @@
 					{
 						case QuoteChangeActions.New:
 						{
-							var tuple = Tuple.Create(quote.Price, quote.Volume, quote.OrdersCount);
+							var tuple = Tuple.Create(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
 
 							if (startPos > to.Count)
 								throw new InvalidOperationException($"Pos={startPos}>Count={to.Count}");
@@ -217,7 +217,7 @@
 						}
 						case QuoteChangeActions.Update:
 						{
-							to[startPos] = Tuple.Create(quote.Price, quote.Volume, quote.OrdersCount);
+							to[startPos] = Tuple.Create(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
 							break;
 						}
 						case QuoteChangeActions.Delete:
@@ -254,13 +254,13 @@
 
 			if (quoteMsg.HasPositions)
 			{
-				bids = info.BidsByPos.Select(p => new QuoteChange(p.Item1, p.Item2, p.Item3));
-				asks = info.AsksByPos.Select(p => new QuoteChange(p.Item1, p.Item2, p.Item3));
+				bids = info.BidsByPos.Select(p => new QuoteChange(p.Item1, p.Item2, p.Item3, p.Item4));
+				asks = info.AsksByPos.Select(p => new QuoteChange(p.Item1, p.Item2, p.Item3, p.Item4));
 			}
 			else
 			{
-				bids = info.Bids.Select(p => new QuoteChange(p.Key, p.Value.Item1, p.Value.Item2));
-				asks = info.Asks.Select(p => new QuoteChange(p.Key, p.Value.Item1, p.Value.Item2));
+				bids = info.Bids.Select(p => new QuoteChange(p.Key, p.Value.Item1, p.Value.Item2, p.Value.Item3));
+				asks = info.Asks.Select(p => new QuoteChange(p.Key, p.Value.Item1, p.Value.Item2, p.Value.Item3));
 			}
 
 			return new QuoteChangeMessage
