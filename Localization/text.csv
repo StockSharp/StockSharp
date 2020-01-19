@@ -15951,7 +15951,13 @@ DocStr11554;Start position, related for {0};Начальная позиция, �
 DocStr11555;End position, related for {0};Конечная позиция, относящаяся к {0}
 DocStr11556;Change action;Действие изменения
 DocStr11557;Determines a {0} initialized;Определить, инициализирован ли {0}
-DocStr11558;Underlying price;Underlying price
-DocStr11559;Multi leg;Multi leg
+DocStr11558;Underlying price;Цена базового актива
+DocStr11559;Multi leg;Сложно-составной
 DocStr11560;Global Depositary Receipts;Глобальные депозитарные расписки
 DocStr11561;Not supported error;Ошибка о неподдерживаемой подписке
+DocStr11562;Is dump mode;Режим дамп-отладки
+DocStr11563;Include {0} settings;Включать настройки {0}
+DocStr11564;Administrative custom message;Произвольное сообщение администрирования
+DocStr11565;Space-delimited list of conditions describing a quote;Разделенный пробелом список условий, описывающий котировку
+DocStr11566;Quote conditions;Условия котировки
+DocStr11567;Is the output socket disconnected;Отключен ли выходной сокет
