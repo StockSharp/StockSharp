@@ -52,6 +52,9 @@ namespace StockSharp.Messages
 		{
 			var str = base.ToString();
 
+			if (!IsSubscribe)
+				str += $",IsSubscribe={IsSubscribe}";
+
 			if (SecurityId != null)
 				str += $",Sec={SecurityId}";
 

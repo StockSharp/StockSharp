@@ -317,7 +317,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe}";
+			var str = base.ToString() + $",Type={DataType},IsSubscribe={IsSubscribe}";
 
 			if (Arg != null)
 				str += $",Arg={Arg}";
