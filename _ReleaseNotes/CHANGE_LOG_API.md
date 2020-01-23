@@ -317,6 +317,7 @@ StockSharp API Change log
 * (bug) QuikLua. Turn off auto logic with client code initialization. Possible fix https://stocksharp.ru/forum/11227/ne-udaetsya-avtomaticheski-podat-zayavku-na-spb/
 * (feature) FIX connector. OneZero dialect added.
 * (feature) FIX connector. Dialects inherited from IMessageAdapter.
+* (feature) Strategy. Connector now is class type.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

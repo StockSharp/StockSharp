@@ -1,5 +1,7 @@
 namespace StockSharp.Algo
 {
+	using System;
+
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Interop;
@@ -97,7 +99,10 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Connector.
 		/// </summary>
+		[Obsolete("Use Connector property.")]
+		// ReSharper disable InconsistentNaming
 		public static IConnector IConnector => ConfigManager.GetService<IConnector>();
+		// ReSharper restore InconsistentNaming
 		
 		/// <summary>
 		/// Log manager.

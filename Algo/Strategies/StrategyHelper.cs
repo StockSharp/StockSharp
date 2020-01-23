@@ -276,7 +276,7 @@ namespace StockSharp.Algo.Strategies
 			var settings = storage.GetValue<SettingsStorage>("Settings");
 			if (settings != null && settings.Count != 0)
 			{
-				var connector = strategy.Connector ?? ServicesRegistry.IConnector;
+				var connector = strategy.Connector ?? ServicesRegistry.Connector;
 
 				if (connector != null && settings.Contains("security"))
 					strategy.Security = connector.LookupById(settings.GetValue<string>("security"));

@@ -315,13 +315,13 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public StrategyNameGenerator NameGenerator { get; }
 
-		private IConnector _connector;
+		private Connector _connector;
 
 		/// <summary>
 		/// Connection to the trading system.
 		/// </summary>
 		[Browsable(false)]
-		public virtual IConnector Connector
+		public virtual Connector Connector
 		{
 			get => _connector;
 			set
