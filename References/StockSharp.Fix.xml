@@ -34,9 +34,6 @@
             Initialize <see cref="T:StockSharp.Fix.Dialects.BaseFastDialect" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.Name">
-      <inheritdoc />
-    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.StorageName">
       <inheritdoc />
     </member>
@@ -151,7 +148,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsDump">
       <summary>
-            Is dump move.
+            Is dump mode.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
@@ -203,9 +200,6 @@
       <param name="encoding">Encoding.</param>
       <param name="version">FIX version.</param>
       <param name="format">FIX protocol format.</param>
-    </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.Name">
-      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.ToString">
       <inheritdoc />
@@ -1476,9 +1470,6 @@
     <member name="P:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.SupportedMarketDataTypes">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Open">
-      <inheritdoc />
-    </member>
     <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.SendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
@@ -1563,9 +1554,6 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.SupportedMarketDataTypes">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.Open">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.SendInMessage(StockSharp.Messages.Message)">
