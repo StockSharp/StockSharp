@@ -79,7 +79,9 @@
 			private DateTimeOffset _currFrom;
 			private bool _firstIteration;
 			private DateTimeOffset _nextFrom;
-			private readonly DateTimeOffset _maxFrom;
+			private readonly DateTimeOffset _to;
+
+			private bool IsStepMax => _step == TimeSpan.MaxValue;
 
 			public DownloadInfo(PartialDownloadMessageAdapter adapter, MarketDataMessage origin, TimeSpan step, TimeSpan iterationInterval)
 			{
@@ -94,8 +96,8 @@
 				_step = step;
 				_iterationInterval = iterationInterval;
 
-				_maxFrom = origin.To ?? DateTimeOffset.Now;
-				_currFrom = origin.From ?? _maxFrom - step;
+				_to = origin.To ?? DateTimeOffset.Now;
+				_currFrom = origin.From ?? _to - (IsStepMax ? TimeSpan.FromDays(1) : step);
 
 				_firstIteration = true;
 			}
@@ -117,10 +119,10 @@
 				{
 					_firstIteration = false;
 
-					_nextFrom = _currFrom + _step;
+					_nextFrom = IsStepMax ? _to : _currFrom + _step;
 
-					if (_nextFrom > _maxFrom)
-						_nextFrom = _maxFrom;
+					if (_nextFrom > _to)
+						_nextFrom = _to;
 
 					mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
 					mdMsg.From = _currFrom;
@@ -132,7 +134,7 @@
 				{
 					_iterationInterval.Sleep();
 
-					if (Origin.To == null && _nextFrom >= _maxFrom)
+					if (Origin.To == null && _nextFrom >= _to)
 					{
 						// on-line
 						mdMsg.From = null;
@@ -142,8 +144,8 @@
 						_currFrom = _nextFrom;
 						_nextFrom += _step;
 
-						if (_nextFrom > _maxFrom)
-							_nextFrom = _maxFrom;
+						if (_nextFrom > _to)
+							_nextFrom = _to;
 
 						mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
 						mdMsg.From = _currFrom;
