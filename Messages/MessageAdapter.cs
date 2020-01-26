@@ -515,6 +515,14 @@ namespace StockSharp.Messages
 		public virtual bool IsSecurityRequired(DataType dataType) => true;
 
 		/// <inheritdoc />
+		[ReadOnly(false)]
+		public override string Name
+		{
+			get => base.Name;
+			set => base.Name = value;
+		}
+
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			Id = storage.GetValue(nameof(Id), Id);
