@@ -67,22 +67,24 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private string GetLocName(Languages? language) => FullNameLoc.IsEmpty() ? null : LocalizedStrings.GetString(FullNameLoc, language);
+
 		/// <summary>
 		/// Russian exchange name.
 		/// </summary>
 		[Obsolete]
-		public string RusName => LocalizedStrings.GetString(FullNameLoc, Languages.Russian);
+		public string RusName => GetLocName(Languages.Russian);
 
 		/// <summary>
 		/// English exchange name.
 		/// </summary>
 		[Obsolete]
-		public string EngName => LocalizedStrings.GetString(FullNameLoc, Languages.English);
+		public string EngName => GetLocName(Languages.English);
 
 		/// <summary>
 		/// Full name.
 		/// </summary>
-		public string FullName => FullNameLoc.IsEmpty() ? null : LocalizedStrings.GetString(FullNameLoc);
+		public string FullName => GetLocName(null);
 
 		private string _fullNameLoc;
 
