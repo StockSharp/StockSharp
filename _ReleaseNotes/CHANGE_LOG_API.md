@@ -319,6 +319,7 @@ StockSharp API Change log
 * (feature) FIX connector. Dialects inherited from IMessageAdapter.
 * (feature) Strategy. Connector now is class type.
 * (feature) Binance. Futures and Margin supported.
+* (feature) Huobi. Removed obsolete HADAX.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
