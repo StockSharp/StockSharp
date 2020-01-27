@@ -50966,5 +50966,15 @@ namespace StockSharp.Localization
 		/// Quote condition.
 		/// </summary>
 		public static string QuoteCondition => GetString(QuoteConditionKey);
+
+		/// <summary>
+		/// Margin section.
+		/// </summary>
+		public const string MarginSectionKey = nameof(MarginSection);
+
+		/// <summary>
+		/// Margin section.
+		/// </summary>
+		public static string MarginSection => GetString(MarginSectionKey);
 	}
 }

@@ -24,6 +24,21 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Binance.BinanceMessageAdapter.IsFutures">
+            <summary>
+            Futures section.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Binance.BinanceMessageAdapter.IsSpot">
+            <summary>
+            Spot section.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Binance.BinanceMessageAdapter.IsMargin">
+            <summary>
+            Margin section.
+            </summary>
+        </member>
         <member name="M:StockSharp.Binance.BinanceMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <inheritdoc />
         </member>
