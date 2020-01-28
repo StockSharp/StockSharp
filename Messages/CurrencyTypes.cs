@@ -1014,6 +1014,7 @@ namespace StockSharp.Messages
 		/// Bitcoin.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		BTC,
 
 		/// <summary>
@@ -1038,234 +1039,273 @@ namespace StockSharp.Messages
 		/// Ethereum.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		ETH,
 
 		/// <summary>
 		/// Litecoin.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		LTC,
 		
 		/// <summary>
 		/// Ethereum Classic.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		ETC,
 		
 		/// <summary>
 		/// Tether USD.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		USDT,
 		
 		/// <summary>
 		/// Zcash.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		ZEC,
 		
 		/// <summary>
 		/// Monero.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		XMR,
 
 		/// <summary>
 		/// Cardano.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		ADA,
 		
 		/// <summary>
 		/// IOTA.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		MIOTA,
 		
 		/// <summary>
 		/// Ripple.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		XRP,
 		
 		/// <summary>
 		/// Dash.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		DASH,
 		
 		/// <summary>
 		/// EOS.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		EOS,
 		
 		/// <summary>
 		/// Santiment.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		SAN,
 		
 		/// <summary>
 		/// Omisego.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		OMG,
 		
 		/// <summary>
 		/// Bitcoin Cash.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		BCH,
 		
 		/// <summary>
 		/// Neo.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		NEO,
 		
 		/// <summary>
 		/// Metaverse.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		ETP,
 		
 		/// <summary>
 		/// Qtum.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		QTUM,
 		
 		/// <summary>
 		/// Aventus.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		AVT,
 		
 		/// <summary>
 		/// Eidoo.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		EDO,
 		
 		/// <summary>
 		/// Datacoin.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		DTC,
 		
 		/// <summary>
 		/// Bitcoin Gold.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		BTG,
 		
 		/// <summary>
 		/// QASH.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		QASH,
 		
 		/// <summary>
 		/// Yoyow.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		YOYOW,
 		
 		/// <summary>
 		/// Golem.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		GNT,
 		
 		/// <summary>
 		/// Status.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		SNT,
 		
 		/// <summary>
 		/// Tether EUR.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		EURT,
 		
 		/// <summary>
 		/// Basic Attention Token.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		BAT,
 		
 		/// <summary>
 		/// MNA.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		MNA,
 		
 		/// <summary>
 		/// FunFair.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		FUN,
 		
 		/// <summary>
 		/// ZRX.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		ZRX,
 		
 		/// <summary>
 		/// Time New Bank.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		TNB,
 		
 		/// <summary>
 		/// Sparks.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		SPK,
 		
 		/// <summary>
 		/// TRON.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		TRX,
 		
 		/// <summary>
 		/// Ripio Credit Network.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		RCN,
 		
 		/// <summary>
 		/// iExec.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		RLC,
 		
 		/// <summary>
 		/// AidCoin.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		AID,
 		
 		/// <summary>
 		/// SnowGem.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		SNG,
 
 		/// <summary>
 		/// Augur.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		REP,
 
 		/// <summary>
 		/// Aelf.
 		/// </summary>
 		[EnumMember]
+		[Crypto]
 		ELF,
 
 		/// <summary>

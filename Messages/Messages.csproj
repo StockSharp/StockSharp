@@ -87,6 +87,7 @@
     <Compile Include="ChannelMessageAdapter.cs" />
     <Compile Include="ConnectionStates.cs" />
     <Compile Include="ConnectMessage.cs" />
+    <Compile Include="CryptoAttribute.cs" />
     <Compile Include="Currency.cs" />
     <Compile Include="CurrencyTypes.cs" />
     <Compile Include="DataType.cs" />

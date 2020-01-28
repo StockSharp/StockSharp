@@ -2113,5 +2113,12 @@ namespace StockSharp.Messages
 			// by default adapter do not provide historical data except candles
 			return TimeSpan.Zero;
 		}
+
+		/// <summary>
+		/// Determines the specified type is crypto currency.
+		/// </summary>
+		/// <param name="type">Currency type.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsCrypto(this CurrencyTypes type) => type.GetAttributeOfType<CryptoAttribute>() != null;
 	}
 }
