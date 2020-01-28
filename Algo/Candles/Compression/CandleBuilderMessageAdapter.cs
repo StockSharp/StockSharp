@@ -254,6 +254,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private SeriesInfo TryRemoveSeries(long id)
 		{
+			this.AddInfoLog("Series removing {0}.", id);
+
 			lock (_syncObject)
 			{
 				if (!_series.TryGetAndRemove(id, out var series))
@@ -400,10 +402,14 @@ namespace StockSharp.Algo.Candles.Compression
 				case MessageTypes.SubscriptionOnline:
 				{
 					var onlineMsg = (SubscriptionOnlineMessage)message;
+					var subscriptionId = onlineMsg.OriginalTransactionId;
 
 					lock (_syncObject)
 					{
-						if (_replaceId.TryGetValue(onlineMsg.OriginalTransactionId, out var originalId))
+						if (_series.ContainsKey(subscriptionId))
+							this.AddInfoLog("Series online {0}.", subscriptionId);
+
+						if (_replaceId.TryGetValue(subscriptionId, out var originalId))
 							onlineMsg.OriginalTransactionId = originalId;
 					}
 
@@ -414,34 +420,53 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					var candle = (CandleMessage)message;
 
-					var series = TryGetSeries(candle.OriginalTransactionId, out _);
+					var subscriptionIds = candle.GetSubscriptionIds();
+					HashSet<long> newSubscriptionIds = null;
 
-					if (series == null)
-						break;
-
-					switch (series.State)
+					foreach (var subscriptionId in subscriptionIds)
 					{
-						case SeriesStates.Regular:
-							ProcessCandle(series, candle);
-							break;
+						var series = TryGetSeries(subscriptionId, out _);
 
-						case SeriesStates.SmallTimeFrame:
-							var candles = series.BigTimeFrameCompressor.Process(candle).Where(c => c.State == CandleStates.Finished);
+						if (series == null)
+							continue;
 
-							foreach (var bigCandle in candles)
-							{
-								bigCandle.OriginalTransactionId = series.Id;
-								bigCandle.Adapter = candle.Adapter;
-								series.LastTime = bigCandle.CloseTime;
-								base.OnInnerAdapterNewOutMessage(bigCandle);
-							}
+						if (newSubscriptionIds == null)
+							newSubscriptionIds = new HashSet<long>(subscriptionIds);
 
-							break;
+						newSubscriptionIds.Remove(subscriptionId);
 
-						// TODO default
+						switch (series.State)
+						{
+							case SeriesStates.Regular:
+								ProcessCandle(series, candle);
+								break;
+
+							case SeriesStates.SmallTimeFrame:
+								var candles = series.BigTimeFrameCompressor.Process(candle).Where(c => c.State == CandleStates.Finished);
+
+								foreach (var bigCandle in candles)
+								{
+									bigCandle.OriginalTransactionId = series.Id;
+									bigCandle.Adapter = candle.Adapter;
+									series.LastTime = bigCandle.CloseTime;
+									base.OnInnerAdapterNewOutMessage(bigCandle);
+								}
+
+								break;
+
+							// TODO default
+						}
 					}
 
-					return;
+					if (newSubscriptionIds != null)
+					{
+						if (newSubscriptionIds.Count == 0)
+							return;
+
+						candle.SubscriptionIds = newSubscriptionIds.ToArray();
+					}
+					
+					break;
 				}
 
 				case MessageTypes.CandlePnF:
@@ -452,12 +477,32 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					var candle = (CandleMessage)message;
 
-					var series = TryGetSeries(candle.OriginalTransactionId, out _);
+					var subscriptionIds = candle.GetSubscriptionIds();
+					HashSet<long> newSubscriptionIds = null;
 
-					if (series == null)
-						break;
+					foreach (var subscriptionId in subscriptionIds)
+					{
+						var series = TryGetSeries(subscriptionId, out _);
 
-					ProcessCandle(series, candle);
+						if (series == null)
+							continue;
+
+						if (newSubscriptionIds == null)
+							newSubscriptionIds = new HashSet<long>(subscriptionIds);
+
+						newSubscriptionIds.Remove(subscriptionId);
+
+						ProcessCandle(series, candle);	
+					}
+
+					if (newSubscriptionIds != null)
+					{
+						if (newSubscriptionIds.Count == 0)
+							return;
+
+						candle.SubscriptionIds = newSubscriptionIds.ToArray();
+					}
+					
 					break;
 				}
 
@@ -470,21 +515,10 @@ namespace StockSharp.Algo.Candles.Compression
 
 					var subscrMsg = (ISubscriptionIdMessage)message;
 
-					bool HasSubscription(long id)
-					{
-						lock (_syncObject)
-							return _series.ContainsKey(id) || _replaceId.ContainsKey(id);
-					}
+					if (ProcessValue(subscrMsg))
+						return;
 
-					var isCandleOnlySubscription =
-						(subscrMsg.SubscriptionIds?.Length == 1 && HasSubscription(subscrMsg.SubscriptionIds[0])) ||
-						(subscrMsg.SubscriptionId > 0 && HasSubscription(subscrMsg.SubscriptionId));
-
-					if (!isCandleOnlySubscription)
-						base.OnInnerAdapterNewOutMessage(message);
-
-					ProcessValue(subscrMsg);
-					return;
+					break;
 				}
 			}
 
@@ -601,6 +635,8 @@ namespace StockSharp.Algo.Candles.Compression
 			lock (_syncObject)
 				_replaceId.Add(current.TransactionId, series.Id);
 
+			this.AddInfoLog("Series compress: ids {0}->{1}", original.TransactionId, current.TransactionId);
+
 			series.Transform = CreateTransform(current.DataType, current.BuildField);
 			series.Current = current;
 
@@ -639,14 +675,23 @@ namespace StockSharp.Algo.Candles.Compression
 				info.NonFinishedCandle = (CandleMessage)candleMsg.Clone();
 		}
 
-		private void ProcessValue(ISubscriptionIdMessage message)
+		private bool ProcessValue(ISubscriptionIdMessage message)
 		{
-			foreach (var id in message.GetSubscriptionIds())
+			var subsciptionIds = message.GetSubscriptionIds();
+
+			HashSet<long> newSubscriptionIds = null;
+
+			foreach (var id in subsciptionIds)
 			{
 				var series = TryGetSeries(id, out var subscriptionId);
 
 				if (series == null)
 					continue;
+
+				if (newSubscriptionIds == null)
+					newSubscriptionIds = new HashSet<long>(subsciptionIds);
+
+				newSubscriptionIds.Remove(id);
 
 				var transform = series.Transform;
 
@@ -682,6 +727,16 @@ namespace StockSharp.Algo.Candles.Compression
 					SendCandle(series, (CandleMessage)candleMessage.Clone());
 				}
 			}
+
+			if (newSubscriptionIds != null)
+			{
+				if (newSubscriptionIds.Count == 0)
+					return true;
+
+				message.SubscriptionIds = newSubscriptionIds.ToArray();
+			}
+
+			return false;
 		}
 
 		private void SendCandle(SeriesInfo info, CandleMessage candleMsg)
