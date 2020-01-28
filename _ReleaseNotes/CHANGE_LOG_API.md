@@ -326,6 +326,8 @@ StockSharp API Change log
 * (feature) Quoinex. Supports Liquid.
 * (bug) Upbit. Fix non minutes candles request.
 * (feature) Binance. New position events processing and fast order book subscription.
+* (bug) Bittrex. Fix subscription replies send.
+* (bug) Bitexbook. Fix market data.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
