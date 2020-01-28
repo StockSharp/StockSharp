@@ -58,7 +58,7 @@ namespace SampleConnection
 
 			var logManager = new LogManager();
 			logManager.Listeners.Add(new FileLogListener { LogDirectory = Path.Combine(path, "Logs") });
-            logManager.Listeners.Add(Monitor);
+            logManager.Listeners.Add(new GuiLogListener(Monitor));
 
 			Connector = new Connector();
 			logManager.Sources.Add(Connector);
