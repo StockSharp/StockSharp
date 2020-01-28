@@ -325,6 +325,7 @@ StockSharp API Change log
 * (bug) Coincheck. Fix historical ticks parsing.
 * (feature) Quoinex. Supports Liquid.
 * (bug) Upbit. Fix non minutes candles request.
+* (feature) Binance. New position events processing and fast order book subscription.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
