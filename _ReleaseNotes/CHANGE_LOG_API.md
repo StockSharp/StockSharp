@@ -324,6 +324,7 @@ StockSharp API Change log
 * (bug) Coinbase and GDAX. Fix historical step.
 * (bug) Coincheck. Fix historical ticks parsing.
 * (feature) Quoinex. Supports Liquid.
+* (bug) Upbit. Fix non minutes candles request.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
