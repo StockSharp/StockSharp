@@ -463,7 +463,7 @@ namespace StockSharp.Algo.Candles.Compression
 						if (newSubscriptionIds.Count == 0)
 							return;
 
-						candle.SubscriptionIds = newSubscriptionIds.ToArray();
+						candle.SetSubscriptionIds(newSubscriptionIds.ToArray());
 					}
 					
 					break;
@@ -500,7 +500,7 @@ namespace StockSharp.Algo.Candles.Compression
 						if (newSubscriptionIds.Count == 0)
 							return;
 
-						candle.SubscriptionIds = newSubscriptionIds.ToArray();
+						candle.SetSubscriptionIds(newSubscriptionIds.ToArray());
 					}
 					
 					break;
@@ -733,7 +733,7 @@ namespace StockSharp.Algo.Candles.Compression
 				if (newSubscriptionIds.Count == 0)
 					return true;
 
-				message.SubscriptionIds = newSubscriptionIds.ToArray();
+				message.SetSubscriptionIds(newSubscriptionIds.ToArray());
 			}
 
 			return false;

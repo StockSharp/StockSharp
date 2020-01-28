@@ -1820,6 +1820,7 @@ namespace StockSharp.Messages
 			}
 			else if (subscriptionIds != null && subscriptionIds.Length > 0)
 			{
+				message.SubscriptionId = 0;
 				message.SubscriptionIds = subscriptionIds;
 			}
 		}
