@@ -4882,7 +4882,7 @@ TruncatedBookDesc;Truncate market depth element.;Элемент обрезани
 SearchColumns;Search columns...;Поиск столбцов...
 AlphaVantage;AlphaVantage;AlphaVantage
 IEX;IEX;IEX
-Quoinex;QUOINEX;QUOINEX
+Quoinex;Liquid;Liquid
 Zaif;Zaif;Zaif
 Bitbank;Bitbank;Bitbank
 Funding;Funding;Фондирование
@@ -15962,3 +15962,13 @@ DocStr11564;Administrative custom message;Произвольное сообще�
 DocStr11565;Space-delimited list of conditions describing a quote;Разделенный пробелом список условий, описывающий котировку
 DocStr11566;Quote conditions;Условия котировки
 DocStr11567;Is the output socket disconnected;Отключен ли выходной сокет
+DocStr11568;Interval for data refresh;Интервал обновления данных
+DocStr11569;The member marked as associated with crypto currency;Член помечен как ассоциированный с криптовалютой
+DocStr11570;Determines the specified type is crypto currency;Определить, является ли указанный тип криптовалютой
+DocStr11571;Margin types;Типы маржинальности
+DocStr11572;Cross;Пересечение
+DocStr11573;Isolated;Исключение
+DocStr11574;Trailing stop types;Типы скользящего стопа
+DocStr11578;Margin type;Тип маржинальности
+DocStr11579;Trailing stop type;Тип скользящего стопа
+DocStr11580;Trailing stop value;Значение скользящего стопа

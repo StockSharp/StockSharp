@@ -214,6 +214,7 @@ T:StockSharp.Messages.ConnectMessage/summary;DocStr4093
 M:StockSharp.Messages.ConnectMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.ConnectMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.ConnectMessage.Clone/returns;DocStr1116
+T:StockSharp.Messages.CryptoAttribute/summary;DocStr11569
 T:StockSharp.Messages.Currency/summary;Currency
 M:StockSharp.Messages.Currency.#ctor/summary;DocStr1
 P:StockSharp.Messages.Currency.Type/summary;DocStr4111
@@ -965,6 +966,9 @@ M:StockSharp.Messages.Extensions.GetHistoryStepSize(StockSharp.Messages.DataType
 M:StockSharp.Messages.Extensions.GetHistoryStepSize(StockSharp.Messages.DataType,System.Collections.Generic.IEnumerable{StockSharp.Messages.MarketDataTypes},System.TimeSpan@)/param/supportedMarketDataTypes;DocStr10120
 M:StockSharp.Messages.Extensions.GetHistoryStepSize(StockSharp.Messages.DataType,System.Collections.Generic.IEnumerable{StockSharp.Messages.MarketDataTypes},System.TimeSpan@)/param/iterationInterval;DocStr11109
 M:StockSharp.Messages.Extensions.GetHistoryStepSize(StockSharp.Messages.DataType,System.Collections.Generic.IEnumerable{StockSharp.Messages.MarketDataTypes},System.TimeSpan@)/returns;Str812
+M:StockSharp.Messages.Extensions.IsCrypto(StockSharp.Messages.CurrencyTypes)/summary;DocStr11570
+M:StockSharp.Messages.Extensions.IsCrypto(StockSharp.Messages.CurrencyTypes)/param/type;DocStr2490
+M:StockSharp.Messages.Extensions.IsCrypto(StockSharp.Messages.CurrencyTypes)/returns;DocStr8659
 T:StockSharp.Messages.IBasketSecurityProcessor/summary;DocStr10604
 P:StockSharp.Messages.IBasketSecurityProcessor.SecurityId/summary;SecurityId
 P:StockSharp.Messages.IBasketSecurityProcessor.BasketExpression/summary;DocStr10613
@@ -1337,6 +1341,7 @@ M:StockSharp.Messages.MessageAdapter.GetCandleArgs(System.Type,StockSharp.Messag
 M:StockSharp.Messages.MessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.IsSecurityRequired(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapter.Name/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.Clone/summary;DocStr643
@@ -1853,6 +1858,7 @@ P:StockSharp.Messages.MarketDataMessage.AllowBuildFromSmallerTimeFrame/remarks;D
 P:StockSharp.Messages.MarketDataMessage.IsRegularTradingHours/summary;RegularTradingHours
 P:StockSharp.Messages.MarketDataMessage.IsFinished/summary;DocStr11144
 P:StockSharp.Messages.MarketDataMessage.BoardCode/summary;BoardCode
+P:StockSharp.Messages.MarketDataMessage.RefreshSpeed/summary;DocStr11568
 M:StockSharp.Messages.MarketDataMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.MarketDataMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.MarketDataMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
