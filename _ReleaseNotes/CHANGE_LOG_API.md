@@ -323,6 +323,7 @@ StockSharp API Change log
 * (feature) MarketDataMessage. RefreshSpeed option added.
 * (bug) Coinbase and GDAX. Fix historical step.
 * (bug) Coincheck. Fix historical ticks parsing.
+* (feature) Quoinex. Supports Liquid.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -19,26 +19,6 @@
             Secret.
             </summary>
         </member>
-        <member name="P:StockSharp.Quoinex.QuoinexMessageAdapter.IsQryptos">
-            <summary>
-            Is QRYPTOS API.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Quoinex.QuoinexMessageAdapter.UserId">
-            <summary>
-            User id.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Quoinex.QuoinexMessageAdapter.PusherAccessKey">
-            <summary>
-            Pusher access key.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Quoinex.QuoinexMessageAdapter.BalanceCheckInterval">
-            <summary>
-            Balance check interval. Required in case of deposit and withdraw actions.
-            </summary>
-        </member>
         <member name="M:StockSharp.Quoinex.QuoinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <inheritdoc />
         </member>
@@ -57,24 +37,34 @@
         <member name="M:StockSharp.Quoinex.QuoinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>
-        <member name="T:StockSharp.Quoinex.QuoinexOrderDirections">
+        <member name="T:StockSharp.Quoinex.QuoinexMarginTypes">
             <summary>
-            Order directions.
+            Margin types.
             </summary>
         </member>
-        <member name="F:StockSharp.Quoinex.QuoinexOrderDirections.One">
+        <member name="F:StockSharp.Quoinex.QuoinexMarginTypes.Cross">
             <summary>
-            One way.
+            Cross.
             </summary>
         </member>
-        <member name="F:StockSharp.Quoinex.QuoinexOrderDirections.Two">
+        <member name="F:StockSharp.Quoinex.QuoinexMarginTypes.Isolated">
             <summary>
-            Two way.
+            Isolated.
             </summary>
         </member>
-        <member name="F:StockSharp.Quoinex.QuoinexOrderDirections.NetOut">
+        <member name="T:StockSharp.Quoinex.QuoinexTrailingStopTypes">
             <summary>
-            Netout.
+            Trailing stop types.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Quoinex.QuoinexTrailingStopTypes.Price">
+            <summary>
+            Price.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Quoinex.QuoinexTrailingStopTypes.Percent">
+            <summary>
+            Percent.
             </summary>
         </member>
         <member name="T:StockSharp.Quoinex.QuoinexOrderCondition">
@@ -87,11 +77,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Quoinex.QuoinexOrderCondition"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.PriceRange">
-            <summary>
-            Slippage.
-            </summary>
-        </member>
         <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.LeverageLevel">
             <summary>
             Leverage.
@@ -102,9 +87,34 @@
             Currency used to fund the trade with.
             </summary>
         </member>
-        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.OrderDirection">
+        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.PostOnly">
             <summary>
-            Order direction.
+            Post-only order.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.StopLoss">
+            <summary>
+            Stop loss.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.TakeProfit">
+            <summary>
+            Take profit.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.MarginType">
+            <summary>
+            Margin type.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.TrailingStopType">
+            <summary>
+            Trailing stop type.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.TrailingStopValue">
+            <summary>
+            Trailing stop value.
             </summary>
         </member>
         <member name="T:StockSharp.Quoinex.QuoinexTrader">
