@@ -320,6 +320,7 @@ StockSharp API Change log
 * (feature) Strategy. Connector now is class type.
 * (feature) Binance. Futures and Margin supported.
 * (feature) Huobi. Removed obsolete HADAX.
+* (feature) MarketDataMessage. RefreshSpeed option added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
