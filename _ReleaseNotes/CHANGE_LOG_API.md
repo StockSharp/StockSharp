@@ -321,6 +321,7 @@ StockSharp API Change log
 * (feature) Binance. Futures and Margin supported.
 * (feature) Huobi. Removed obsolete HADAX.
 * (feature) MarketDataMessage. RefreshSpeed option added.
+* (feature) Coinbase and GDAX. Fix historical step.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
