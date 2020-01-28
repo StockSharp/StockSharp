@@ -51,6 +51,17 @@ namespace StockSharp.Messages
 			destination.SubscriptionIds = SubscriptionIds;//?.ToArray();
 		}
 
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			var str = base.ToString();
+
+			if (OriginalTransactionId != 0)
+				str += $",OriginId={OriginalTransactionId}";
+
+			return str;
+		}
+
 		/// <summary>
 		/// Create a copy of <see cref="BaseSubscriptionIdMessage{TMessage}"/>.
 		/// </summary>
