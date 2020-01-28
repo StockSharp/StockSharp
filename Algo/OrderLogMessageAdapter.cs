@@ -175,7 +175,9 @@
 
 						if (updated)
 						{
-							base.OnInnerAdapterNewOutMessage(builder.Depth.Clone());
+							var depth = (QuoteChangeMessage)builder.Depth.Clone();
+							depth.SetSubscriptionIds(subscriptionId: subscriptionId);
+							base.OnInnerAdapterNewOutMessage(depth);
 						}
 					}
 					catch (Exception ex)
@@ -184,7 +186,6 @@
 						// а только выводим сообщение в лог
 						base.OnInnerAdapterNewOutMessage(ex.ToErrorMessage());
 					}
-
 				}
 				else
 				{
