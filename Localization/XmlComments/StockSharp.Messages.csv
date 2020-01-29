@@ -58,6 +58,7 @@ M:StockSharp.Messages.BaseSubscriptionIdMessage`1.#ctor(StockSharp.Messages.Mess
 M:StockSharp.Messages.BaseSubscriptionIdMessage`1.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
 M:StockSharp.Messages.BaseSubscriptionIdMessage`1.CopyTo(`0)/summary;DocStr629
 M:StockSharp.Messages.BaseSubscriptionIdMessage`1.CopyTo(`0)/param/destination;DocStr630
+M:StockSharp.Messages.BaseSubscriptionIdMessage`1.ToString/inheritdoc;DocStr8459
 M:StockSharp.Messages.BaseSubscriptionIdMessage`1.Clone/summary;DocStr643
 M:StockSharp.Messages.BaseSubscriptionIdMessage`1.Clone/returns;DocStr1116
 T:StockSharp.Messages.BoardLookupMessage/summary;DocStr10790

@@ -64,7 +64,7 @@
         </member>
         <member name="F:StockSharp.Quoinex.QuoinexTrailingStopTypes.Percent">
             <summary>
-            Percent.
+            Percentage.
             </summary>
         </member>
         <member name="T:StockSharp.Quoinex.QuoinexOrderCondition">
@@ -94,12 +94,12 @@
         </member>
         <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.StopLoss">
             <summary>
-            Stop loss.
+            Stop-loss.
             </summary>
         </member>
         <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.TakeProfit">
             <summary>
-            Take profit.
+            Take-profit.
             </summary>
         </member>
         <member name="P:StockSharp.Quoinex.QuoinexOrderCondition.MarginType">
