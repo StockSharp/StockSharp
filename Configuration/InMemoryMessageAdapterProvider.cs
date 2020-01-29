@@ -86,7 +86,7 @@ namespace StockSharp.Configuration
 
 						adapters.AddRange(asm
 							.GetTypes()
-							.Where(t => typeof(IMessageAdapter).IsAssignableFrom(t) && t.IsPublic && !t.IsAbstract && !t.IsObsolete() && t.IsBrowsable())
+							.Where(t => typeof(IMessageAdapter).IsAssignableFrom(t) && t.IsPublic && !t.IsAbstract && !t.IsObsolete() && t.IsBrowsable() && !t.Name.EndsWith("Dialect"))
 							.ToArray());
 					}
 					catch (Exception e)
