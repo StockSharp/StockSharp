@@ -1455,7 +1455,7 @@ namespace StockSharp.BusinessEntities
 				ExpiryTime = new TimeSpan(18, 45, 00),
 				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Ux,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"),
+				TimeZone = TimeHelper.Fle,
 			};
 
 			UxStock = new ExchangeBoard
@@ -1476,11 +1476,8 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Ux,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"),
+				TimeZone = TimeHelper.Fle,
 			};
-
-			var newYorkTime = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-			var chicagoTime = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
 
 			Amex = new ExchangeBoard
 			{
@@ -1500,35 +1497,35 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				//IsSupportMarketOrders = true,
-				TimeZone = newYorkTime,
+				TimeZone = TimeHelper.Est,
 				Exchange = Exchange.Amex
 			};
 
 			Cme = new ExchangeBoard
 			{
 				Code = "CME",
-				TimeZone = chicagoTime,
+				TimeZone = TimeHelper.Cst,
 				Exchange = Exchange.Cme,
 			};
 
 			CmeMini = new ExchangeBoard
 			{
 				Code = "CMEMINI",
-				TimeZone = chicagoTime,
+				TimeZone = TimeHelper.Cst,
 				Exchange = Exchange.Cme,
 			};
 
 			Cbot = new ExchangeBoard
 			{
 				Code = "CBOT",
-				TimeZone = chicagoTime,
+				TimeZone = TimeHelper.Cst,
 				Exchange = Exchange.Cbot,
 			};
 
 			Cce = new ExchangeBoard
 			{
 				Code = "CCE",
-				TimeZone = chicagoTime,
+				TimeZone = TimeHelper.Cst,
 				Exchange = Exchange.Cce,
 			};
 
@@ -1550,14 +1547,14 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				//IsSupportMarketOrders = true,
-				TimeZone = newYorkTime,
+				TimeZone = TimeHelper.Est,
 				Exchange = Exchange.Nyse
 			};
 
 			Nymex = new ExchangeBoard
 			{
 				Code = "NYMEX",
-				TimeZone = newYorkTime,
+				TimeZone = TimeHelper.Est,
 				Exchange = Exchange.Nymex,
 			};
 
@@ -1580,14 +1577,14 @@ namespace StockSharp.BusinessEntities
 				},
 				//IsSupportMarketOrders = true,
 				Exchange = Exchange.Nasdaq,
-				TimeZone = newYorkTime,
+				TimeZone = TimeHelper.Est,
 			};
 
 			Nqlx = new ExchangeBoard
 			{
 				Code = "NQLX",
 				Exchange = Exchange.Nqlx,
-				TimeZone = newYorkTime,
+				TimeZone = TimeHelper.Est,
 			};
 
 			Tsx = new ExchangeBoard
@@ -1608,7 +1605,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Tsx,
-				TimeZone = newYorkTime,
+				TimeZone = TimeHelper.Est,
 			};
 
 			Lse = new ExchangeBoard
@@ -1629,7 +1626,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Lse,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
+				TimeZone = TimeHelper.Gmt,
 			};
 
 			Lme = new ExchangeBoard
@@ -1650,7 +1647,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Lme,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
+				TimeZone = TimeHelper.Gmt,
 			};
 
 			Tse = new ExchangeBoard
@@ -1672,10 +1669,8 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Tse,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"),
+				TimeZone = TimeHelper.Tokyo,
 			};
-
-			var chinaTime = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
 
 			Hkex = new ExchangeBoard
 			{
@@ -1696,7 +1691,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Hkex,
-				TimeZone = chinaTime,
+				TimeZone = TimeHelper.China,
 			};
 
 			Hkfe = new ExchangeBoard
@@ -1718,7 +1713,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Hkfe,
-				TimeZone = chinaTime,
+				TimeZone = TimeHelper.China,
 			};
 
 			Sse = new ExchangeBoard
@@ -1740,7 +1735,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Sse,
-				TimeZone = chinaTime,
+				TimeZone = TimeHelper.China,
 			};
 
 			Szse = new ExchangeBoard
@@ -1762,7 +1757,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Szse,
-				TimeZone = chinaTime,
+				TimeZone = TimeHelper.China,
 			};
 
 			Tsec = new ExchangeBoard
@@ -1783,7 +1778,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Tsec,
-				TimeZone = chinaTime,
+				TimeZone = TimeHelper.China,
 			};
 
 			var singaporeTime = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
@@ -1981,7 +1976,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Krx,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time"),
+				TimeZone = TimeHelper.Korea,
 			};
 
 			Asx = new ExchangeBoard
