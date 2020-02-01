@@ -1,7 +1,6 @@
 T:StockSharp.LATOKEN.LatokenMessageAdapter/summary;DocStr2538
 P:StockSharp.LATOKEN.LatokenMessageAdapter.Key/summary;Str3304
 P:StockSharp.LATOKEN.LatokenMessageAdapter.Secret/summary;DocStr3146
-P:StockSharp.LATOKEN.LatokenMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.LATOKEN.LatokenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.LATOKEN.LatokenMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.LATOKEN.LatokenMessageAdapter.ToString/inheritdoc;DocStr8459

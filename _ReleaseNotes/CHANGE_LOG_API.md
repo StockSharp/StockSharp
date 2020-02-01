@@ -328,6 +328,7 @@ StockSharp API Change log
 * (feature) Binance. New position events processing and fast order book subscription.
 * (bug) Bittrex. Fix subscription replies send.
 * (bug) Bitexbook. Fix market data.
+* (feature) Latoken. V2 protocol supported.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

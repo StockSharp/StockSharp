@@ -19,11 +19,6 @@
             Secret.
             </summary>
         </member>
-        <member name="P:StockSharp.LATOKEN.LatokenMessageAdapter.BalanceCheckInterval">
-            <summary>
-            Balance check interval. Required in case of deposit and withdraw actions.
-            </summary>
-        </member>
         <member name="M:StockSharp.LATOKEN.LatokenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <inheritdoc />
         </member>
