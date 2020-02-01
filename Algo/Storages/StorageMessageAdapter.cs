@@ -463,7 +463,7 @@ namespace StockSharp.Algo.Storages
 					break;
 
 				case MessageTypes.OrderStatus:
-					ProcessOrderStatus((OrderStatusMessage)message);
+					message = ProcessOrderStatus((OrderStatusMessage)message);
 					break;
 
 				case MessageTypes.OrderCancel:
@@ -477,7 +477,7 @@ namespace StockSharp.Algo.Storages
 			return true;
 		}
 
-		private void ProcessOrderStatus(OrderStatusMessage msg)
+		private OrderStatusMessage ProcessOrderStatus(OrderStatusMessage msg)
 		{
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
@@ -487,7 +487,7 @@ namespace StockSharp.Algo.Storages
 			_orderStatusIds.Add(transId);
 
 			if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
-				return;
+				return msg;
 
 			if (!msg.HasOrderId() && msg.OriginalTransactionId == 0 && DaysLoad > TimeSpan.Zero)
 			{
@@ -508,7 +508,14 @@ namespace StockSharp.Algo.Storages
 						snapshot.OriginalTransactionId = transId;
 						snapshot.SetSubscriptionIds(subscriptionId: transId);
 						RaiseStorageMessage(snapshot);
+
+						from = snapshot.ServerTime;
 					}
+
+					if (from >= to)
+						return null;
+
+					msg.From = from;
 				}
 				else if (Mode.Contains(StorageModes.Incremental))
 				{
@@ -522,6 +529,8 @@ namespace StockSharp.Algo.Storages
 					}
 				}
 			}
+
+			return msg;
 		}
 
 		private void ProcessOrderCancel(OrderCancelMessage msg)
