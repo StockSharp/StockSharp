@@ -330,6 +330,7 @@ StockSharp API Change log
 * (bug) Bitexbook. Fix market data.
 * (feature) Latoken. V2 protocol supported.
 * (feature) FIX connector. Dialects made as public.
+* (feature) SecurityGrid. ProcessLevel1 method added.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

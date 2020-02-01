@@ -5176,6 +5176,12 @@
             Price chart data provider.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.SecurityGrid.ProcessLevel1(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1ChangeMessage})">
+      <summary>
+            Directly update last values.
+            </summary>
+      <param name="changes">Changes.</param>
+    </member>
     <member name="M:StockSharp.Xaml.SecurityGrid.InitializeComponent">
       <summary>
             InitializeComponent
@@ -6091,6 +6097,12 @@
             </summary>
       <param name="name">The field name.</param>
       <param name="visibility">The visibility.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityPicker.ProcessLevel1(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1ChangeMessage})">
+      <summary>
+            Directly update last values.
+            </summary>
+      <param name="changes">Changes.</param>
     </member>
     <member name="M:StockSharp.Xaml.SecurityPicker.Load(Ecng.Serialization.SettingsStorage)">
       <summary>

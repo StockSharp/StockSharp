@@ -1133,6 +1133,8 @@ P:StockSharp.Xaml.SecurityGrid.SelectedSecurities/summary;DocStr8294
 P:StockSharp.Xaml.SecurityGrid.ExtendedInfoStorage/summary;DocStr9374
 P:StockSharp.Xaml.SecurityGrid.MarketDataProvider/summary;DocStr973
 P:StockSharp.Xaml.SecurityGrid.PriceChartDataProvider/summary;DocStr10163
+M:StockSharp.Xaml.SecurityGrid.ProcessLevel1(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1ChangeMessage})/summary;DocStr11613
+M:StockSharp.Xaml.SecurityGrid.ProcessLevel1(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1ChangeMessage})/param/changes;DocStr8448
 M:StockSharp.Xaml.SecurityGrid.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityIdTextBox/summary;DocStr8295
 M:StockSharp.Xaml.SecurityIdTextBox.#ctor/summary;DocStr1
@@ -1335,6 +1337,8 @@ P:StockSharp.Xaml.SecurityPicker.PriceChartDataProvider/summary;DocStr10163
 M:StockSharp.Xaml.SecurityPicker.SetColumnVisibility(System.String,System.Windows.Visibility)/summary;DocStr8369
 M:StockSharp.Xaml.SecurityPicker.SetColumnVisibility(System.String,System.Windows.Visibility)/param/name;DocStr8370
 M:StockSharp.Xaml.SecurityPicker.SetColumnVisibility(System.String,System.Windows.Visibility)/param/visibility;DocStr8371
+M:StockSharp.Xaml.SecurityPicker.ProcessLevel1(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1ChangeMessage})/summary;DocStr11613
+M:StockSharp.Xaml.SecurityPicker.ProcessLevel1(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1ChangeMessage})/param/changes;DocStr8448
 M:StockSharp.Xaml.SecurityPicker.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.SecurityPicker.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.SecurityPicker.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
