@@ -534,8 +534,8 @@ namespace StockSharp.Algo.Storages
 							throw new ArgumentOutOfRangeException(nameof(message), execType, LocalizedStrings.Str1695Params.Put(message));
 					}
 
-					if (execType == ExecutionTypes.Transaction && execMsg.TransactionId == 0)
-						break;
+					//if (execType == ExecutionTypes.Transaction && execMsg.TransactionId == 0)
+					//	break;
 
 					if (execType == ExecutionTypes.Transaction || CanStore<ExecutionMessage>(secId, execType))
 						buffer.Add(secId, (ExecutionMessage)message.Clone());
