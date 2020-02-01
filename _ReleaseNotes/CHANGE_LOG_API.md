@@ -329,6 +329,7 @@ StockSharp API Change log
 * (bug) Bittrex. Fix subscription replies send.
 * (bug) Bitexbook. Fix market data.
 * (feature) Latoken. V2 protocol supported.
+* (feature) FIX connector. Dialects made as public.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

@@ -15,17 +15,6 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="P:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.AllTimeFrames">
-      <summary>
-            Possible time-frames.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateDialect(System.Type)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <inheritdoc />
-    </member>
     <member name="T:StockSharp.Quik.Lua.LuaFixServer">
       <summary>
             FIX сервер, запускающийся LUA.
@@ -205,10 +194,47 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="P:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.SupportedMarketDataTypes">
+    <member name="T:StockSharp.Quik.Lua.LuaFixDialect">
+      <summary>
+            QUIK Lua FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.NasdaqFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixDialect.AllTimeFrames">
+      <summary>
+            Possible time-frames.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixDialect.Name">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.CreateDialect(System.Type)">
+    <member name="P:StockSharp.Quik.Lua.LuaFixDialect.TimeFrames">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixDialect.IsSupportCandlesUpdates">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixDialect.OrderConditionType">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixDialect.IsAllDownloadingSupported(StockSharp.Messages.DataType)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixDialect.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderCondition)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})">
       <inheritdoc />
     </member>
     <member name="T:StockSharp.Quik.Native.Codes">

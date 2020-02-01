@@ -289,11 +289,6 @@
             Support market-data response.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportTransactionalUnsubscribe">
-      <summary>
-            Support unsubscribe requests for transactional subscriptions.
-            </summary>
-    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SecurityExtendedFields">
       <inheritdoc />
     </member>
@@ -824,6 +819,29 @@
     <member name="M:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.LoadSettingsFromFile(System.String)">
       <inheritdoc />
     </member>
+    <member name="T:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect">
+      <summary>
+            B3 BM&amp;F Bovespa FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect.OrderConditionType">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Fix.Dialects.Bovespa.BovespaFixOrderTypes">
       <summary>
             Types.
@@ -884,6 +902,80 @@
             Time in force.
             </summary>
     </member>
+    <member name="T:StockSharp.Fix.Dialects.BrvmFixDialect">
+      <summary>
+            BRVM FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BrvmFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.BrvmFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BrvmFixDialect.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BrvmFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BrvmFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BrvmFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.CboeFixDialect">
+      <summary>
+            CBOE FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.CboeFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.CboeFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.CboeFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.CfhFixDialect">
+      <summary>
+            CFH FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.CfhFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.CfhFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.CfhFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.CfhFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.CfhFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.CfhFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.CmeFixDialect">
+      <summary>
+            CME FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.CmeFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.CmeFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.CmeFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Fix.Dialects.DefaultFixDialect">
       <summary>
             The default implementation of <see cref="T:StockSharp.Fix.Dialects.IFixDialect" />.
@@ -915,7 +1007,7 @@
     <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportMarketDataResponse">
       <inheritdoc />
     </member>
-    <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportTransactionalUnsubscribe">
+    <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.IsAutoReplyOnTransactonalUnsubscription">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.DefaultFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
@@ -939,6 +1031,55 @@
       <param name="tag">Tag.</param>
       <param name="getCondition">The function returning the order condition.</param>
       <returns>Whether the data was successfully processed.</returns>
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.DukasCopyFixDialect">
+      <summary>
+            DukasCopy FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.DukasCopyFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.DukasCopyFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.DukasCopyFixDialect.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.DukasCopyFixDialect.LoginAsPortfolioName">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.DukasCopyFixDialect.OnReset">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.DukasCopyFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.DukasCopyFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.DukasCopyFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.DukasCopyFixDialect.IsLogoutError(System.String)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.DukasCopyFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.IceFixDialect">
+      <summary>
+            ICE FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.IceFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.IceFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.IceFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.Dialects.IFastNetworkFeed">
       <summary>
@@ -965,6 +1106,237 @@
             Test dump files.
             </summary>
       <param name="dumpFiles">Dump files.</param>
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.Lmax.LmaxFixDialect">
+      <summary>
+            LMAX FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Lmax.LmaxFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.Lmax.LmaxFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Lmax.LmaxFixDialect.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Lmax.LmaxFixDialect.LoginAsPortfolioName">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Lmax.LmaxFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Lmax.LmaxFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Lmax.LmaxFixDialect.IsNativeIdentifiers">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Lmax.LmaxFixDialect.StorageName">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Lmax.LmaxFixDialect.SendInMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Lmax.LmaxFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.LseFixDialect">
+      <summary>
+            LSE FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.LseFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.LseFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.LseFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.NasdaqFixDialect">
+      <summary>
+            NASDAQ protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.NasdaqFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.NasdaqFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.NasdaqFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.OneZeroFixDialect">
+      <summary>
+            oneZero FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.OneZeroFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.OneZeroFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.OneZeroFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.OneZeroFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.OneZeroFixDialect.SendInMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.OneZeroFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.OneZeroFixDialect.GetOrderState(StockSharp.Fix.Native.ExecutionReport)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.ReutersFixDialect">
+      <summary>
+            Reuters FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.ReutersFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.ReutersFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.ReutersFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.SuperDerivativesFixDialect">
+      <summary>
+            SuperDerivatives FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SuperDerivativesFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.SuperDerivativesFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.SuperDerivativesFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.SuperDerivativesFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SuperDerivativesFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SuperDerivativesFixDialect.GetSecurityType(System.String)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SuperDerivativesFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.XOpenHubFixDialect">
+      <summary>
+            XOpenHub FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.XOpenHubFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.XOpenHubFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.XOpenHubFixDialect.LoginAsPortfolioName">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.XOpenHubFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.XOpenHubFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.XOpenHubFixDialect.SendInMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.XOpenHubFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.XOpenHubFixDialect.IsLogoutError(System.String)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.SwissQuoteFixDialect">
+      <summary>
+            SwissQuote FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SwissQuoteFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.SwissQuoteFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.SwissQuoteFixDialect.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.SwissQuoteFixDialect.LoginAsPortfolioName">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.SwissQuoteFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.SwissQuoteFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SwissQuoteFixDialect.SendInMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SwissQuoteFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SwissQuoteFixDialect.GetOrderState(StockSharp.Fix.Native.ExecutionReport)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SwissQuoteFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},System.Action{StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SwissQuoteFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.ExanteFixDialect">
+      <summary>
+            Exante FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.ExanteFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.ExanteFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.ExanteFixDialect.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.ExanteFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.ExanteFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.ExanteFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.ExanteFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},System.Action{StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.ExanteFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.ExanteFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.ExanteFixDialect.InitSecId(StockSharp.Messages.SecurityMessage,System.String,System.String,System.String,System.String)">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.Dialects.IFastDialect">
       <summary>
@@ -1001,6 +1373,32 @@
       <param name="includeA">Include <see cref="P:StockSharp.Fix.FastFeedGroup.UdpA" /> settings.</param>
       <param name="includeB">Include <see cref="P:StockSharp.Fix.FastFeedGroup.UdpB" /> settings.</param>
       <param name="includeC">Include <see cref="P:StockSharp.Fix.FastFeedGroup.UdpC" /> settings.</param>
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.InteractiveBrokersFixDialect">
+      <summary>
+            Interactive Brokers FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.InteractiveBrokersFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.InteractiveBrokersFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixDialect.OrderConditionType">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.InteractiveBrokersFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.InteractiveBrokersFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.InteractiveBrokersFixDialect.IsLogoutError(System.String)">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.Dialects.InteractiveBrokersFixOrderCondition">
       <summary>
@@ -1534,6 +1932,64 @@
     <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFastDialect.Load(Ecng.Serialization.SettingsStorage)">
       <inheritdoc />
     </member>
+    <member name="T:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect">
+      <summary>
+            ASTS FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.WriteSecurityId(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.SecurityMessage)">
+      <summary>
+            Write security id.
+            </summary>
+      <param name="writer">Writer.</param>
+      <param name="secMsg">Security ID.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.IsLogoutError(System.String)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.Moex.Asts.AstsCurrencyFixDialect">
+      <summary>
+            ASTS (currencies section) FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsCurrencyFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.Moex.Asts.AstsCurrencyFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsCurrencyFixDialect.WriteSecurityId(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.SecurityMessage)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.Moex.Asts.AstsEquityFixDialect">
+      <summary>
+            ASTS (equity section) FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsEquityFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.Moex.Asts.AstsEquityFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsEquityFixDialect.WriteSecurityId(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.SecurityMessage)">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect">
       <summary>
             Spectra FAST dialect.
@@ -1636,6 +2092,148 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFastDialect.Save(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFixDialect">
+      <summary>
+            SPECTRA FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFixDialect.IsLogoutError(System.String)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.Moex.Spectra.SpectraFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.SovaCapitalFixDialect">
+      <summary>
+            Sova Capital FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SovaCapitalFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.SovaCapitalFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.SovaCapitalFixDialect.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.SovaCapitalFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.SovaCapitalFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SovaCapitalFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SovaCapitalFixDialect.IsLogoutError(System.String)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.SovaCapitalFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.QuikDropCopyFixDialect">
+      <summary>
+            QUIK DropCopy FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikDropCopyFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.QuikDropCopyFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.QuikDropCopyFixDialect.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.QuikDropCopyFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikDropCopyFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikDropCopyFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikDropCopyFixDialect.IsLogoutError(System.String)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikDropCopyFixDialect.ProcessSecurityDefinition(StockSharp.Fix.Native.FixTags,StockSharp.Fix.Native.IFixReader,StockSharp.Messages.SecurityMessage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikDropCopyFixDialect.FromSecurityTradingStatus(System.Nullable{System.Int32})">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.QuikPreTradeFixDialect">
+      <summary>
+            QUIK PreTrade FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikPreTradeFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.QuikPreTradeFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.QuikPreTradeFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikPreTradeFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Fix.Dialects.QuikServerFixDialect">
+      <summary>
+            QUIK server FIX protocol dialect.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikServerFixDialect.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.QuikServerFixDialect" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.QuikServerFixDialect.SupportedOrderBookDepths">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.QuikServerFixDialect.PossibleSupportedMessages">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikServerFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikServerFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})">
+      <summary>
+            Read order condition.
+            </summary>
+      <param name="reader">Reader.</param>
+      <param name="tag">Tag.</param>
+      <param name="getCondition">Condition.</param>
+      <returns>Result.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikServerFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikServerFixDialect.IsLogoutError(System.String)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikServerFixDialect.ProcessSecurityDefinition(StockSharp.Fix.Native.FixTags,StockSharp.Fix.Native.IFixReader,StockSharp.Messages.SecurityMessage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.QuikServerFixDialect.FromSecurityTradingStatus(System.Nullable{System.Int32})">
       <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.Dialects.IFixDialect">
@@ -2680,6 +3278,19 @@
             To record an array of bytes.
             </summary>
       <param name="bytes">Bytes array.</param>
+    </member>
+    <member name="T:StockSharp.Fix.Native.DialectSource`1">
+      <summary>
+            Dialect source.
+            </summary>
+      <typeparam name="TInterfaceType">
+        <see cref="T:StockSharp.Fix.Dialects.IFixDialect" /> or <see cref="T:StockSharp.Fix.Dialects.IFastDialect" />.</typeparam>
+    </member>
+    <member name="M:StockSharp.Fix.Native.DialectSource`1.Add(System.Type)">
+      <summary>
+            Add new dialect.
+            </summary>
+      <param name="type">Type.</param>
     </member>
     <member name="T:StockSharp.Fix.Native.EncryptMethod">
       <summary>
@@ -8238,13 +8849,6 @@
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateDialect(System.Type)">
-      <summary>
-            Create FIX protocol dialect.
-            </summary>
-      <param name="dialect">The FIX dialect.</param>
-      <returns>The dialect.</returns>
     </member>
     <member name="F:StockSharp.Fix.FixMessageAdapter.DefaultHeartbeatInterval">
       <summary>
