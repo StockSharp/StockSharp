@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			var buffer = new byte[snapshotSize + (bids.Length + asks.Length) * rowSize];
 
 			var ptr = snapshot.StructToPtr();
-			ptr.CopyTo(buffer);
+			ptr.CopyTo(buffer, 0, snapshotSize);
 			ptr.FreeHGlobal();
 
 			var offset = snapshotSize;

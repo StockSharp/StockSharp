@@ -110,22 +110,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 		}
 
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
-		private struct TransactionConditionParamV20
-		{
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S32)]
-			public string Name;
-
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S256)]
-			public string ValueType;
-
-			public long? NumValue;
-			public BlittableDecimal? DecimalValue;
-			public bool? BoolValue;
-
-			public int StringValueLen;
-		}
-
-		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		private struct TransactionConditionParamV21
 		{
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S32)]
@@ -215,12 +199,11 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			snapshot.ConditionParamsCount = conParams.Length;
 
-			var paramSize = (version > SnapshotVersions.V20 ? typeof(TransactionConditionParamV21) : typeof(TransactionConditionParamV20)).SizeOf();
-			var snapshotSize = typeof(TransactionSnapshot).SizeOf();
+			var paramSize = typeof(TransactionConditionParamV21).SizeOf();
 
 			var result = new List<byte>();
 
-			var buffer = new byte[snapshotSize];
+			var buffer = new byte[typeof(TransactionSnapshot).SizeOf()];
 
 			var ptr = snapshot.StructToPtr();
 			ptr.CopyTo(buffer);
@@ -234,24 +217,11 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				var paramTypeName = paramType.GetTypeAsString(false);
 
-				dynamic param;
-
-				if (version > SnapshotVersions.V20)
+				var param = new TransactionConditionParamV21
 				{
-					param = new TransactionConditionParamV21
-					{
-						ValueTypeLen = paramTypeName.UTF8().Length
-					};
-				}
-				else
-				{
-					param = new TransactionConditionParamV20
-					{
-						ValueType = paramTypeName.VerifySize(Sizes.S256),
-					};
-				}
-
-				param.Name = conParam.Key.VerifySize(Sizes.S32);
+					ValueTypeLen = paramTypeName.UTF8().Length,
+					Name = conParam.Key.VerifySize(Sizes.S32)
+				};
 
 				byte[] stringValue = null;
 
@@ -291,13 +261,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						param.NumValue = ts.To<long>();
 						break;
 					case float f:
-						param.DecimalValue = (decimal)f;
+						param.DecimalValue = (BlittableDecimal)(decimal)f;
 						break;
 					case double d:
-						param.DecimalValue = (decimal)d;
+						param.DecimalValue = (BlittableDecimal)(decimal)d;
 						break;
 					case decimal dec:
-						param.DecimalValue = dec;
+						param.DecimalValue = (BlittableDecimal)dec;
 						break;
 					case bool bln:
 						param.BoolValue = bln;
@@ -341,7 +311,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				var paramBuff = new byte[paramSize];
 
-				var rowPtr = version > SnapshotVersions.V20 ? ((TransactionConditionParamV21)param).StructToPtr() : ((TransactionConditionParamV20)param).StructToPtr();
+				var rowPtr = param.StructToPtr();
 				rowPtr.CopyTo(paramBuff);
 				rowPtr.FreeHGlobal();
 
@@ -437,27 +407,12 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 				for (var i = 0; i < snapshot.ConditionParamsCount; i++)
 				{
-					dynamic param;
-					string paramTypeName;
+					var param = ptr.ToStruct<TransactionConditionParamV21>(true);
 
-					if (version > SnapshotVersions.V20)
-					{
-						var s = ptr.ToStruct<TransactionConditionParamV21>(true);
+					var typeBuffer = new byte[param.ValueTypeLen];
+					ptr.CopyTo(typeBuffer, true);
 
-						var typeBuffer = new byte[s.ValueTypeLen];
-						ptr.CopyTo(typeBuffer, true);
-
-						paramTypeName = typeBuffer.UTF8();
-
-						param = s;
-					}
-					else
-					{
-						var s = ptr.ToStruct<TransactionConditionParamV20>(true);
-						paramTypeName = s.ValueType;
-
-						param = s;
-					}
+					var paramTypeName = typeBuffer.UTF8();
 
 					try
 					{
@@ -475,7 +430,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						//	value = param.StringValue.ToUnit();
 						else if (param.StringValueLen > 0)
 						{
-							var strBuffer = new byte[(int)param.StringValueLen];
+							var strBuffer = new byte[param.StringValueLen];
 							ptr.CopyTo(strBuffer, true);
 
 							if (typeof(IPersistable).IsAssignableFrom(paramType))
@@ -507,7 +462,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 							value = null;
 					
 						value = value.To(paramType);
-						execMsg.Condition.Parameters.Add((string)param.Name, value);
+						execMsg.Condition.Parameters.Add(param.Name, value);
 					}
 					catch (Exception ex)
 					{
