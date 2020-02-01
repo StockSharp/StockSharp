@@ -50,7 +50,6 @@ namespace StockSharp.Algo.Storages
 				private readonly string _fileName;
 				//private long _currOffset;
 				private bool _resetFile;
-				private bool _disabled;
 
 				// version has 2 bytes
 				//private const int _versionLen = 2;
@@ -70,47 +69,50 @@ namespace StockSharp.Algo.Storages
 					{
 						Debug.WriteLine($"Snapshot (Load): {_fileName}");
 
-						using (var stream = File.OpenRead(_fileName))
+						try
 						{
-							_version = new Version(stream.ReadByte(), stream.ReadByte());
-
-							if (_version > _serializer.Version)
+							using (var stream = File.OpenRead(_fileName))
 							{
-								Debug.WriteLine($"Snapshot !! DISABLED !!: {_fileName}");
+								_version = new Version(stream.ReadByte(), stream.ReadByte());
 
-								new InvalidOperationException(LocalizedStrings.StorageVersionNewerKey.Put(_fileName, _version, _serializer.Version)).LogError();
-								_disabled = true;
-								return;
-							}
+								if (_version > _serializer.Version)
+									new InvalidOperationException(LocalizedStrings.StorageVersionNewerKey.Put(_fileName, _version, _serializer.Version)).LogError();
 
-							while (stream.Position < stream.Length)
-							{
-								var size = stream.Read<int>();
-
-								var buffer = new byte[size];
-								stream.ReadBytes(buffer, buffer.Length);
-
-								//var offset = stream.Position;
-
-								TMessage message;
-
-								try
+								while (stream.Position < stream.Length)
 								{
-									message = _serializer.Deserialize(_version, buffer);
-								}
-								catch (Exception ex)
-								{
-									ex.LogError();
-									continue;
+									var size = stream.Read<int>();
+
+									var buffer = new byte[size];
+									stream.ReadBytes(buffer, buffer.Length);
+
+									//var offset = stream.Position;
+
+									TMessage message;
+
+									try
+									{
+										message = _serializer.Deserialize(_version, buffer);
+									}
+									catch (Exception ex)
+									{
+										ex.LogError();
+										continue;
+									}
+
+									var key = _serializer.GetKey(message);
+
+									_snapshots.Add(key, message);
+									_buffers.Add(key, buffer);
 								}
 
-								var key = _serializer.GetKey(message);
-
-								_snapshots.Add(key, message);
-								_buffers.Add(key, buffer);
+								//_currOffset = stream.Length;
 							}
-
-							//_currOffset = stream.Length;
+						}
+						catch (Exception ex)
+						{
+							Debug.WriteLine($"Snapshot (ERROR): {ex.Message}");
+							ex.LogError();
+							File.Delete(_fileName);
 						}
 					}
 					else
@@ -226,13 +228,7 @@ namespace StockSharp.Algo.Storages
 
 					Debug.WriteLine($"Snapshot (Save): {_fileName}");
 
-					if (_disabled)
-					{
-						Debug.WriteLine($"Snapshot !! DISABLED !!: {_fileName}");
-						return;
-					}
-
-					using (var stream = new FileStream(_fileName, FileMode.Create, FileAccess.Write))
+					using (var stream = new TransactionFileStream(_fileName, FileMode.Create))
 					{
 						stream.WriteByte((byte)_version.Major);
 						stream.WriteByte((byte)_version.Minor);
