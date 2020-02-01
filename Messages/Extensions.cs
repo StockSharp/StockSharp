@@ -1888,7 +1888,7 @@ namespace StockSharp.Messages
 		};
 
 		/// <summary>
-		/// Determines the specified type is lookup message.
+		/// Determines the specified type is lookup.
 		/// </summary>
 		/// <param name="type">Message type.</param>
 		/// <returns>Check result.</returns>
@@ -2121,5 +2121,24 @@ namespace StockSharp.Messages
 		/// <param name="type">Currency type.</param>
 		/// <returns>Check result.</returns>
 		public static bool IsCrypto(this CurrencyTypes type) => type.GetAttributeOfType<CryptoAttribute>() != null;
+
+		/// <summary>
+		/// Determines the specified type is lookup.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsLookup(this DataType dataType)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			return
+				dataType == DataType.Transactions ||
+				dataType == DataType.Securities ||
+				dataType == DataType.PositionChanges ||
+				dataType == DataType.TimeFrames ||
+				dataType == DataType.Users ||
+				dataType == DataType.Transactions;
+		}
 	}
 }

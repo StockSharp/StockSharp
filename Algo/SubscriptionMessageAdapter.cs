@@ -260,7 +260,9 @@ namespace StockSharp.Algo
 								else
 								{
 									var dataType = message.Type.ToDataType((message as CandleMessage)?.Arg ?? (message as ExecutionMessage)?.ExecutionType);
-									var secId = GetSecurityId(dataType, (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default);
+									var secId = dataType.IsLookup()
+										? default
+										: GetSecurityId(dataType, (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default);
 
 									if (!_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, secId), out info))
 										break;
