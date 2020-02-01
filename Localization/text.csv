@@ -15830,7 +15830,7 @@ DocStr11431;Convert lookup message type to result type;Преобразоват�
 DocStr11432;Lookup message type;Тип сообщения поиска
 DocStr11433;Result message type;Тип сообщения результата
 DocStr11434;Convert result message type to lookup type;Преобразовать тип результата в тип поиска
-DocStr11435;Determines the specified type is lookup message;Определить, является ли переданный тип сообщением поиска
+DocStr11435;Determines the specified type is lookup;Определить, является ли переданный тип поиском
 DocStr11436;Determines the specified type is lookup result message;Определить, является ли переданный тип сообщением результата поиска
 DocStr11437;Create message by the specified type;Создать сообщение по указанному типу
 DocStr11438;Replace security id by the specified;Заменить идентификатор инструмента указанным
@@ -15972,3 +15972,34 @@ DocStr11574;Trailing stop types;Типы скользящего стопа
 DocStr11578;Margin type;Тип маржинальности
 DocStr11579;Trailing stop type;Тип скользящего стопа
 DocStr11580;Trailing stop value;Значение скользящего стопа
+DocStr11581;Dialect source;Источник диалектов
+DocStr11582;{0} or {1};{0} или {1}
+DocStr11583;Add new dialect;Добавить новый диалект
+DocStr11584;B3 BM&F Bovespa FIX protocol dialect;B3 BM&F Bovespa диалект FIX протокола
+DocStr11585;BRVM FIX protocol dialect;BRVM диалект FIX протокола
+DocStr11586;CBOE FIX protocol dialect;CBOE диалект FIX протокола
+DocStr11587;CFH FIX protocol dialect;CFH диалект FIX протокола
+DocStr11588;CME FIX protocol dialect;CME диалект FIX протокола
+DocStr11589;DukasCopy FIX protocol dialect;DukasCopy диалект FIX протокола
+DocStr11590;ICE FIX protocol dialect;ICE диалект FIX протокола
+DocStr11591;LMAX FIX protocol dialect;LMAX диалект FIX протокола
+DocStr11592;LSE FIX protocol dialect;LSE диалект FIX протокола
+DocStr11593;NASDAQ FIX protocol dialect;NASDAQ диалект FIX протокола
+DocStr11594;oneZero FIX protocol dialect;oneZero диалект FIX протокола
+DocStr11595;Reuters FIX protocol dialect;Reuters диалект FIX протокола
+DocStr11596;SuperDerivatives FIX protocol dialect;SuperDerivatives диалект FIX протокола
+DocStr11597;XOpenHub FIX protocol dialect;XOpenHub диалект FIX протокола
+DocStr11598;SwissQuote FIX protocol dialect;SwissQuote диалект FIX протокола
+DocStr11599;Exante FIX protocol dialect;Exante диалект FIX протокола
+DocStr11600;Interactive Brokers FIX protocol dialect;Interactive Brokers диалект FIX протокола
+DocStr11601;ASTS FIX protocol dialect;ASTS диалект FIX протокола
+DocStr11602;Write security id;Записать идентификатор инструмента
+DocStr11604;ASTS (currencies section) FIX protocol dialect;ASTS (currencies section) диалект FIX протокола
+DocStr11605;ASTS (equity section) FIX protocol dialect;ASTS (equity section) диалект FIX протокола
+DocStr11606;SPECTRA FIX protocol dialect;SPECTRA диалект FIX протокола
+DocStr11607;Sova Capital FIX protocol dialect;Sova Capital диалект FIX протокола
+DocStr11608;QUIK DropCopy FIX protocol dialect;QUIK DropCopy диалект FIX протокола
+DocStr11609;QUIK PreTrade FIX protocol dialect;QUIK PreTrade диалект FIX протокола
+DocStr11610;QUIK server FIX protocol dialect;QUIK server диалект FIX протокола
+DocStr11611;Read order condition;Прочитать условие заявки
+DocStr11613;Directly update last values;Напрямую обновить последние значения

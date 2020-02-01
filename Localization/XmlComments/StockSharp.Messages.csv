@@ -970,6 +970,9 @@ M:StockSharp.Messages.Extensions.GetHistoryStepSize(StockSharp.Messages.DataType
 M:StockSharp.Messages.Extensions.IsCrypto(StockSharp.Messages.CurrencyTypes)/summary;DocStr11570
 M:StockSharp.Messages.Extensions.IsCrypto(StockSharp.Messages.CurrencyTypes)/param/type;DocStr2490
 M:StockSharp.Messages.Extensions.IsCrypto(StockSharp.Messages.CurrencyTypes)/returns;DocStr8659
+M:StockSharp.Messages.Extensions.IsLookup(StockSharp.Messages.DataType)/summary;DocStr11435
+M:StockSharp.Messages.Extensions.IsLookup(StockSharp.Messages.DataType)/param/dataType;DocStr8490
+M:StockSharp.Messages.Extensions.IsLookup(StockSharp.Messages.DataType)/returns;DocStr8659
 T:StockSharp.Messages.IBasketSecurityProcessor/summary;DocStr10604
 P:StockSharp.Messages.IBasketSecurityProcessor.SecurityId/summary;SecurityId
 P:StockSharp.Messages.IBasketSecurityProcessor.BasketExpression/summary;DocStr10613
