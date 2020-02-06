@@ -323,6 +323,10 @@
       <Project>{B8103F63-11BE-455A-89CB-2AD9A0BC07D9}</Project>
       <Name>Poloniex</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\PrizmBit\PrizmBit.csproj">
+      <Project>{FC30E17C-70F7-423C-AC16-6628B5F1E76C}</Project>
+      <Name>PrizmBit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quandl\Quandl.csproj">
       <Project>{5E0866F2-3238-4B87-9A5E-414FD994CFD0}</Project>
       <Name>Quandl</Name>

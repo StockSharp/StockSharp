@@ -333,6 +333,7 @@ StockSharp API Change log
 * (feature) SecurityGrid. ProcessLevel1 method added.
 * (bug) OKEX. Fix tick volume for margin section - https://stocksharp.ru/forum/11367/dlya-fyuchersov-okex-ne-prihodit-znachenie-obema-tika/
 * (feature) LBank. V2 protocol supported.
+* (feature) PrizmBit connector.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

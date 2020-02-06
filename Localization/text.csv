@@ -5131,6 +5131,7 @@ Indicative;Indicative;Индикативная
 IndicativeChar;I;И
 QuoteCondition;Quote condition.;Условие котировки.
 MarginSection;Margin section.;Маржинальная секция.
+PrizmBit;PrizmBit;PrizmBit
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

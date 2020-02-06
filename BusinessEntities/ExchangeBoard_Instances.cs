@@ -3523,6 +3523,7 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Hotbit.Name,
 			Exchange = Exchange.Hotbit,
 		};
+
 		/// <summary>
 		/// Information about board <see cref="BusinessEntities.Exchange.Bitalong"/>.
 		/// </summary>
@@ -3532,5 +3533,13 @@ namespace StockSharp.BusinessEntities
 			Exchange = Exchange.Bitalong,
 		};
 
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.PrizmBit"/>.
+		/// </summary>
+		public static ExchangeBoard PrizmBit { get; } = new ExchangeBoard
+		{
+			Code = Exchange.PrizmBit.Name,
+			Exchange = Exchange.PrizmBit,
+		};
 	}
 }

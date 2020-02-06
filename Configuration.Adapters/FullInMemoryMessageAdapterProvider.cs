@@ -73,6 +73,7 @@ namespace StockSharp.Configuration
 	using StockSharp.OpenECry;
 	using StockSharp.Plaza;
 	using StockSharp.Poloniex;
+	using StockSharp.PrizmBit;
 	using StockSharp.Quandl;
 	using StockSharp.QuantHouse;
 	//using StockSharp.Quik;
@@ -228,6 +229,7 @@ namespace StockSharp.Configuration
 			() => typeof(HotbitMessageAdapter),
 			() => typeof(CoinHubMessageAdapter),
 			() => typeof(BitalongMessageAdapter),
+			() => typeof(PrizmBitMessageAdapter),
 		});
 	}
 }

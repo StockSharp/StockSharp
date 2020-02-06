@@ -50976,5 +50976,15 @@ namespace StockSharp.Localization
 		/// Margin section.
 		/// </summary>
 		public static string MarginSection => GetString(MarginSectionKey);
+
+		/// <summary>
+		/// PrizmBit
+		/// </summary>
+		public const string PrizmBitKey = nameof(PrizmBit);
+
+		/// <summary>
+		/// PrizmBit
+		/// </summary>
+		public static string PrizmBit => GetString(PrizmBitKey);
 	}
 }

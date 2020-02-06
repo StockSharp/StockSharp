@@ -1109,5 +1109,14 @@ namespace StockSharp.BusinessEntities
 			Name = "BTLG",
 			FullNameLoc = LocalizedStrings.BitalongKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="PrizmBit"/>.
+		/// </summary>
+		public static Exchange PrizmBit { get; } = new Exchange
+		{
+			Name = "PRZM",
+			FullNameLoc = LocalizedStrings.PrizmBitKey,
+		};
 	}
 }
