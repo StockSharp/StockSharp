@@ -605,6 +605,9 @@
     <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.SupportedMarketDataTypes">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.IsNativeIdentifiers">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.Open">
       <inheritdoc />
     </member>
@@ -1158,7 +1161,7 @@
     </member>
     <member name="T:StockSharp.Fix.Dialects.NasdaqFixDialect">
       <summary>
-            NASDAQ protocol dialect.
+            NASDAQ FIX protocol dialect.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.NasdaqFixDialect.#ctor(Ecng.Common.IdGenerator)">
@@ -1953,7 +1956,7 @@
       <summary>
             Write security id.
             </summary>
-      <param name="writer">Writer.</param>
+      <param name="writer">FIX data writer.</param>
       <param name="secMsg">Security ID.</param>
     </member>
     <member name="M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.IsLogoutError(System.String)">
@@ -2219,7 +2222,7 @@
       <summary>
             Read order condition.
             </summary>
-      <param name="reader">Reader.</param>
+      <param name="reader">The reader of data recorded in the FIX protocol format.</param>
       <param name="tag">Tag.</param>
       <param name="getCondition">Condition.</param>
       <returns>Result.</returns>

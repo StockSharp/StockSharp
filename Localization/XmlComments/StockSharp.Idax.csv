@@ -11,6 +11,10 @@ M:StockSharp.Idax.IdaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transa
 M:StockSharp.Idax.IdaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Idax.IdaxOrderCondition/summary;DocStr60
 M:StockSharp.Idax.IdaxOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.Idax.IdaxOrderCondition.PostOnly/summary;PostOnlyOrder
+P:StockSharp.Idax.IdaxOrderCondition.StopLossActivationPrice/summary;DocStr398
+P:StockSharp.Idax.IdaxOrderCondition.TakeProfitActivationPrice/summary;DocStr398
+P:StockSharp.Idax.IdaxOrderCondition.IsStopLossTrailing/summary;Str3446
 T:StockSharp.Idax.IdaxTrader/summary;DocStr2539
 M:StockSharp.Idax.IdaxTrader.#ctor/summary;DocStr1
 P:StockSharp.Idax.IdaxTrader.Key/summary;Str3304

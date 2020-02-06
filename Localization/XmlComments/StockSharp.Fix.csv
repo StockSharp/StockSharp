@@ -204,6 +204,7 @@ M:StockSharp.Fix.Dialects.BaseFixDialect.GetOrderState(StockSharp.Fix.Native.Exe
 T:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect/summary;DocStr11499
 M:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.#ctor/summary;DocStr1
 P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.SupportedMarketDataTypes/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.IsNativeIdentifiers/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.Open/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.Close/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
@@ -539,7 +540,7 @@ M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.#ctor(Ecng.Common.IdGenerator
 P:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.PossibleSupportedMessages/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.WriteSecurityId(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.SecurityMessage)/summary;DocStr11602
-M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.WriteSecurityId(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.SecurityMessage)/param/writer;DocStr11603
+M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.WriteSecurityId(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.SecurityMessage)/param/writer;DocStr3169
 M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.WriteSecurityId(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.SecurityMessage)/param/secMsg;SecurityId
 M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.IsLogoutError(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.Moex.Asts.AstsFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/inheritdoc;DocStr8459
@@ -613,7 +614,7 @@ P:StockSharp.Fix.Dialects.QuikServerFixDialect.SupportedOrderBookDepths/inheritd
 P:StockSharp.Fix.Dialects.QuikServerFixDialect.PossibleSupportedMessages/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.QuikServerFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.QuikServerFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/summary;DocStr11611
-M:StockSharp.Fix.Dialects.QuikServerFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/param/reader;DocStr11612
+M:StockSharp.Fix.Dialects.QuikServerFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/param/reader;DocStr3327
 M:StockSharp.Fix.Dialects.QuikServerFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/param/tag;DocStr3155
 M:StockSharp.Fix.Dialects.QuikServerFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/param/getCondition;Str154
 M:StockSharp.Fix.Dialects.QuikServerFixDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/returns;Str1738
