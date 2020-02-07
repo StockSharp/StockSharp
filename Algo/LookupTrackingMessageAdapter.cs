@@ -40,7 +40,7 @@ namespace StockSharp.Algo
 				return false;
 			}
 
-			public void UpdateTimeOut()
+			public void IncreaseTimeOut()
 			{
 				_left = _initLeft;
 			}
@@ -135,7 +135,7 @@ namespace StockSharp.Algo
 						}
 					}
 
-					if (!this.IsResultMessageSupported(message.Type) && TimeOut > TimeSpan.Zero)
+					if (message.IsSubscribe && !this.IsResultMessageSupported(message.Type) && TimeOut > TimeSpan.Zero)
 					{
 						_lookups.Add(transId, new LookupInfo((ISubscriptionMessage)message.Clone(), TimeOut));
 						isStarted = true;
@@ -180,13 +180,13 @@ namespace StockSharp.Algo
 
 			if (message is IOriginalTransactionIdMessage originIdMsg)
 			{
-				var id = originIdMsg.OriginalTransactionId;
-
-				lock (_lookups.SyncRoot)
+				if (originIdMsg is SubscriptionFinishedMessage ||
+				    originIdMsg is SubscriptionOnlineMessage ||
+				    originIdMsg is SubscriptionResponseMessage resp && !resp.IsOk())
 				{
-					if (originIdMsg is SubscriptionFinishedMessage ||
-					    originIdMsg is SubscriptionOnlineMessage ||
-					    originIdMsg is SubscriptionResponseMessage resp && !resp.IsOk())
+					var id = originIdMsg.OriginalTransactionId;
+
+					lock (_lookups.SyncRoot)
 					{
 						if (_lookups.TryGetValue(id, out var info))
 						{
@@ -206,10 +206,16 @@ namespace StockSharp.Algo
 							}
 						}
 					}
-					else
+				}
+				else if (message is ISubscriptionIdMessage subscrMsg)
+				{
+					lock (_lookups.SyncRoot)
 					{
-						if (_lookups.TryGetValue(id, out var info))
-							info.UpdateTimeOut();
+						foreach (var id in subscrMsg.GetSubscriptionIds())
+						{
+							if (_lookups.TryGetValue(id, out var info))
+								info.IncreaseTimeOut();	
+						}
 					}
 				}
 			}
