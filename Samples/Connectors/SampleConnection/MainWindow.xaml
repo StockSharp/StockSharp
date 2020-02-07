@@ -25,6 +25,6 @@
             <Button x:Name="ShowOrders" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" Width="100"/>
 	        <Button x:Name="ShowNews" Content="{x:Static loc:LocalizedStrings.News}" Click="ShowNewsClick" Width="100"/>
         </WrapPanel>
-        <sx:Monitor x:Name="Monitor" Grid.Row="4"/>
+        <sx:Monitor x:Name="Monitor" Grid.Row="4" ShowStrategies="False"/>
     </Grid>
 </Window>
