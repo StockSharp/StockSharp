@@ -102,15 +102,15 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void SendFeedback(Products product, int rating, string comment)
+		public void SendFeedback(ProductData product, int rating, string comment)
 		{
-			ValidateError(Invoke(f => f.SendFeedback(SessionId, product, rating, comment)));
+			ValidateError(Invoke(f => f.SendFeedback2(SessionId, product.Id, rating, comment)));
 		}
 
 		/// <inheritdoc />
-		public bool HasFeedback(Products product)
+		public bool HasFeedback(ProductData product)
 		{
-			return Invoke(f => f.HasFeedback(SessionId, product));
+			return Invoke(f => f.HasFeedback2(SessionId, product.Id));
 		}
 
 		/// <inheritdoc />

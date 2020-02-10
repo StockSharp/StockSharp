@@ -44,14 +44,14 @@ namespace StockSharp.Community
 		/// <param name="product">Product.</param>
 		/// <param name="rating">Rating.</param>
 		/// <param name="comment">Comment.</param>
-		void SendFeedback(Products product, int rating, string comment);
+		void SendFeedback(ProductData product, int rating, string comment);
 
 		/// <summary>
 		/// Has feedback for specified product.
 		/// </summary>
 		/// <param name="product">Product.</param>
 		/// <returns>Check result.</returns>
-		bool HasFeedback(Products product);
+		bool HasFeedback(ProductData product);
 
 		/// <summary>
 		/// News received.

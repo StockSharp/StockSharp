@@ -203,11 +203,16 @@ namespace StockSharp.Algo.Storages.Remote
 
 		Tuple<Guid, long> IAuthenticationService.Login3(Products product, string version, string email, string password)
 		{
+			return ((IAuthenticationService)this).Login4(product.FromEnum().Id, version, email, password);
+		}
+
+		Tuple<Guid, long> IAuthenticationService.Login4(long productId, string version, string email, string password)
+		{
 			var sessionId = Authorization.ValidateCredentials(email, password.Secure(), NetworkHelper.UserAddress);
 
 			_sessions.Add(sessionId, new SynchronizedDictionary<UserPermissions, SynchronizedDictionary<Tuple<string, string, string, DateTime?>, bool>>());
 
-			this.AddInfoLog(LocalizedStrings.Str2084Params, sessionId, email, product, version);
+			this.AddInfoLog(LocalizedStrings.Str2084Params, sessionId, email, productId, version);
 
 			return Tuple.Create(sessionId, -1L);
 		}
