@@ -46,6 +46,12 @@ namespace StockSharp.Community
 		public string Url { get; set; }
 
 		/// <summary>
+		/// Hash.
+		/// </summary>
+		[DataMember]
+		public string Hash { get; set; }
+
+		/// <summary>
 		/// Date of creation.
 		/// </summary>
 		[DataMember]

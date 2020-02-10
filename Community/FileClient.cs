@@ -22,8 +22,11 @@ namespace StockSharp.Community
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.IO;
+	using Ecng.Security;
 
 	using MoreLinq;
+
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// The client for access to the service of work with files and documents.
@@ -51,6 +54,16 @@ namespace StockSharp.Community
 		{
 		}
 
+		/// <summary>
+		/// Use compression.
+		/// </summary>
+		public bool Compression { get; set; } = true;
+
+		/// <summary>
+		/// Check hash of downloaded files.
+		/// </summary>
+		public bool CheckDownloadedHash { get; set; }
+
 		/// <inheritdoc />
 		public FileData GetFile(long id, Action<long> progress = null, Func<bool> cancel = null)
 		{
@@ -74,7 +87,7 @@ namespace StockSharp.Community
 			if (data.Body != null)
 				return true;
 
-			var operationId = Invoke(f => f.BeginDownload(SessionId, data.Id));
+			var operationId = Invoke(f => f.BeginDownload2(SessionId, data.Id, Compression));
 
 			var body = new List<byte>();
 
@@ -82,16 +95,31 @@ namespace StockSharp.Community
 			{
 				if (cancel?.Invoke() == true)
 				{
-					Invoke(f => f.FinishDownload(operationId, true));
+					Invoke(f => f.FinishDownload2(operationId, true));
 					return false;
 				}
 
-				body.AddRange(Invoke(f => f.ProcessDownload2(operationId, body.Count, _partSize, true)).DeflateFrom());
+				var part = Invoke(f => f.ProcessDownload2(operationId, body.Count, _partSize));
+
+				if (Compression)
+					part = part.DeflateFrom();
+
+				body.AddRange(part);
 				progress?.Invoke(body.Count);
 			}
 
-			Invoke(f => f.FinishDownload(operationId, false));
+			var hash = Invoke(f => f.FinishDownload2(operationId, false));
+
 			data.Body = body.ToArray();
+
+			if (CheckDownloadedHash)
+			{
+				var calc = data.Body.Md5();
+
+				if (!hash.CompareIgnoreCase(calc))
+					throw new InvalidOperationException(LocalizedStrings.FileHashNotMatchKey.Put(hash, calc));
+			}
+
 			return true;
 		}
 
@@ -107,36 +135,8 @@ namespace StockSharp.Community
 			if (data.Body.Length == 0)
 				throw new ArgumentOutOfRangeException(nameof(data));
 
-			var operationId = Invoke(f => f.BeginUploadExisting(SessionId, data.Id));
+			var operationId = Invoke(f => f.BeginUploadExisting2(SessionId, data.Id, Compression, data.Body.Md5()));
 			Upload(operationId, data.Body, progress, cancel);
-		}
-
-		private long? Upload(Guid operationId, byte[] body, Action<long> progress, Func<bool> cancel)
-		{
-			var sentCount = 0L;
-
-			foreach (var part in body.Batch(_partSize))
-			{
-				if (cancel?.Invoke() == true)
-				{
-					Invoke(f => f.FinishUpload(operationId, true));
-					return null;
-				}
-
-				var arr = part.ToArray();
-
-				ValidateError(Invoke(f => f.ProcessUpload2(operationId, arr.DeflateTo(), true)));
-
-				sentCount += arr.Length;
-				progress?.Invoke(sentCount);
-			}
-
-			var id = Invoke(f => f.FinishUpload(operationId, false));
-
-			if (id < 0)
-				ValidateError((byte)-id);
-
-			return id;
 		}
 
 		/// <inheritdoc />
@@ -151,7 +151,9 @@ namespace StockSharp.Community
 			if (body.Length == 0)
 				throw new ArgumentOutOfRangeException(nameof(body));
 
-			var operationId = Invoke(f => f.BeginUpload(SessionId, fileName, isPublic));
+			var hash = body.Md5();
+
+			var operationId = Invoke(f => f.BeginUpload2(SessionId, fileName, isPublic, Compression, hash));
 
 			var id = Upload(operationId, body, progress, cancel);
 
@@ -165,12 +167,44 @@ namespace StockSharp.Community
 				Body = body,
 				BodyLength = body.LongLength,
 				IsPublic = isPublic,
-				CreationDate = DateTime.UtcNow
+				CreationDate = DateTime.UtcNow,
+				Hash = hash,
 			};
 
 			_cache.Add(id.Value, data);
 
 			return data;
+		}
+
+		private long? Upload(Guid operationId, byte[] body, Action<long> progress, Func<bool> cancel)
+		{
+			var sentCount = 0L;
+
+			if (Compression)
+				body = body.DeflateTo();
+
+			foreach (var part in body.Batch(_partSize))
+			{
+				if (cancel?.Invoke() == true)
+				{
+					Invoke(f => f.FinishUpload(operationId, true));
+					return null;
+				}
+
+				var arr = part.ToArray();
+
+				ValidateError(Invoke(f => f.ProcessUpload(operationId, arr)));
+
+				sentCount += arr.Length;
+				progress?.Invoke(sentCount);
+			}
+
+			var id = Invoke(f => f.FinishUpload(operationId, false));
+
+			if (id < 0)
+				ValidateError((byte)-id);
+
+			return id;
 		}
 
 		/// <inheritdoc />

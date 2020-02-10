@@ -50986,5 +50986,15 @@ namespace StockSharp.Localization
 		/// PrizmBit
 		/// </summary>
 		public static string PrizmBit => GetString(PrizmBitKey);
+
+		/// <summary>
+		/// Downloaded hash '{0}' not match with calculated '{1}'.
+		/// </summary>
+		public const string FileHashNotMatchKey = nameof(FileHashNotMatch);
+
+		/// <summary>
+		/// Downloaded hash '{0}' not match with calculated '{1}'.
+		/// </summary>
+		public static string FileHashNotMatch => GetString(FileHashNotMatchKey);
 	}
 }
