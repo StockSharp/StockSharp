@@ -40,6 +40,7 @@ namespace StockSharp.Community
 		/// <param name="id">File ID.</param>
 		/// <returns>Operation ID.</returns>
 		[OperationContract]
+		[Obsolete]
 		Guid BeginDownload(Guid sessionId, long id);
 
 		/// <summary>
@@ -60,6 +61,7 @@ namespace StockSharp.Community
 		/// <param name="count">The maximum number of bytes to be read.</param>
 		/// <returns>The part of file.</returns>
 		[OperationContract]
+		[Obsolete]
 		byte[] ProcessDownload(Guid operationId, int startIndex, int count);
 
 		/// <summary>
@@ -78,6 +80,7 @@ namespace StockSharp.Community
 		/// <param name="operationId">Operation ID, received from <see cref="BeginDownload"/>.</param>
 		/// <param name="isCancel">Cancel the operation.</param>
 		[OperationContract]
+		[Obsolete]
 		void FinishDownload(Guid operationId, bool isCancel);
 
 		/// <summary>
@@ -97,6 +100,7 @@ namespace StockSharp.Community
 		/// <param name="isPublic">Is the file available for public.</param>
 		/// <returns>Operation ID.</returns>
 		[OperationContract]
+		[Obsolete]
 		Guid BeginUpload(Guid sessionId, string fileName, bool isPublic);
 
 		/// <summary>
@@ -118,6 +122,7 @@ namespace StockSharp.Community
 		/// <param name="id">File ID.</param>
 		/// <returns>Operation ID.</returns>
 		[OperationContract]
+		[Obsolete]
 		Guid BeginUploadExisting(Guid sessionId, long id);
 
 		/// <summary>

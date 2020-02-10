@@ -97,6 +97,7 @@ namespace StockSharp.Community
 		/// <param name="product">Product.</param>
 		/// <returns>Check result.</returns>
 		[OperationContract]
+		[Obsolete]
 		bool HasFeedback(Guid sessionId, Products product);
 
 		/// <summary>
@@ -117,6 +118,7 @@ namespace StockSharp.Community
 		/// <param name="comment">Comment.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
+		[Obsolete]
 		byte SendFeedback(Guid sessionId, Products product, int rating, string comment);
 
 		/// <summary>

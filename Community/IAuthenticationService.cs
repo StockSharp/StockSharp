@@ -31,6 +31,7 @@ namespace StockSharp.Community
 		/// <param name="password">Password.</param>
 		/// <returns>Session ID.</returns>
 		[OperationContract]
+		[Obsolete]
 		Guid Login(string email, string password);
 
 		/// <summary>
@@ -41,6 +42,7 @@ namespace StockSharp.Community
 		/// <param name="password">Password.</param>
 		/// <returns>Session ID.</returns>
 		[OperationContract]
+		[Obsolete]
 		Tuple<Guid, long> Login2(Products product, string email, string password);
 
 		/// <summary>
@@ -52,6 +54,7 @@ namespace StockSharp.Community
 		/// <param name="password">Password.</param>
 		/// <returns>Session ID.</returns>
 		[OperationContract]
+		[Obsolete]
 		Tuple<Guid, long> Login3(Products product, string version, string email, string password);
 
 		/// <summary>

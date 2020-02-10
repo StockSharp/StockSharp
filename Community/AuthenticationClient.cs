@@ -95,27 +95,11 @@ namespace StockSharp.Community
 			if (password.IsEmpty())
 				throw new ArgumentNullException(nameof(password));
 
-			Guid sessionId;
+			var tuple = Invoke(f => f.Login4(product?.Id ?? 0, version.To<string>(), login, password.UnSecure()));
+			tuple.Item1.ToErrorCode().ThrowIfError();
 
-			if (product == null)
-			{
-				sessionId = Invoke(f => f.Login(login, password.UnSecure()));
-				sessionId.ToErrorCode().ThrowIfError();
-
-				NullableSessionId = sessionId;
-				UserId = Invoke(f => f.GetId(sessionId));
-			}
-			else
-			{
-				var tuple = Invoke(f => version == null
-					? f.Login2(product.ToEnum(), login, password.UnSecure())
-					: f.Login4(product.Id, version.To<string>(), login, password.UnSecure()));
-
-				tuple.Item1.ToErrorCode().ThrowIfError();
-
-				NullableSessionId = tuple.Item1;
-				UserId = tuple.Item2;
-			}
+			NullableSessionId = tuple.Item1;
+			UserId = tuple.Item2;
 
 			if (product != null)
 			{

@@ -43,7 +43,7 @@ namespace StockSharp.Community
 		private static IAuthenticationClient Client => ConfigManager.GetService<IAuthenticationClient>();
 
 		/// <summary>
-		/// The session identifier received from <see cref="IAuthenticationService.Login"/>.
+		/// The session identifier received from <see cref="IAuthenticationService.Login4"/>.
 		/// </summary>
 		protected virtual Guid SessionId => Client.SessionId;
 
