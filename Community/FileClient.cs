@@ -21,6 +21,7 @@ namespace StockSharp.Community
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.IO;
 
 	using MoreLinq;
 
@@ -29,7 +30,7 @@ namespace StockSharp.Community
 	/// </summary>
 	public class FileClient : BaseCommunityClient<IFileService>, IFileClient
 	{
-		private const int _partSize = 20 * 1024; // 10kb
+		private const int _partSize = 100 * 1024; // 100kb
 
 		private readonly CachedSynchronizedDictionary<long, FileData> _cache = new CachedSynchronizedDictionary<long, FileData>(); 
 
@@ -85,7 +86,7 @@ namespace StockSharp.Community
 					return false;
 				}
 
-				body.AddRange(Invoke(f => f.ProcessDownload(operationId, body.Count, _partSize)));
+				body.AddRange(Invoke(f => f.ProcessDownload2(operationId, body.Count, _partSize, true)).DeflateFrom());
 				progress?.Invoke(body.Count);
 			}
 
@@ -124,7 +125,7 @@ namespace StockSharp.Community
 
 				var arr = part.ToArray();
 
-				ValidateError(Invoke(f => f.ProcessUpload(operationId, arr)));
+				ValidateError(Invoke(f => f.ProcessUpload2(operationId, arr.DeflateTo(), true)));
 
 				sentCount += arr.Length;
 				progress?.Invoke(sentCount);

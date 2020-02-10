@@ -53,6 +53,17 @@ namespace StockSharp.Community
 		byte[] ProcessDownload(Guid operationId, int startIndex, int count);
 
 		/// <summary>
+		/// Download part of file.
+		/// </summary>
+		/// <param name="operationId">Operation ID, received from <see cref="BeginDownload"/>.</param>
+		/// <param name="startIndex">The zero-based byte offset in file.</param>
+		/// <param name="count">The maximum number of bytes to be read.</param>
+		/// <param name="compression">Use compression.</param>
+		/// <returns>The part of file.</returns>
+		[OperationContract]
+		byte[] ProcessDownload2(Guid operationId, long startIndex, int count, bool compression);
+
+		/// <summary>
 		/// To finish downloading the file.
 		/// </summary>
 		/// <param name="operationId">Operation ID, received from <see cref="BeginDownload"/>.</param>
@@ -80,6 +91,15 @@ namespace StockSharp.Community
 		Guid BeginUploadExisting(Guid sessionId, long id);
 
 		/// <summary>
+		/// To start uploading temp file to the site.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="fileName">File name.</param>
+		/// <returns>Operation ID.</returns>
+		[OperationContract]
+		Guid BeginUploadTemp(Guid sessionId, string fileName);
+
+		/// <summary>
 		/// Upload part of file.
 		/// </summary>
 		/// <param name="operationId">Operation ID, received from <see cref="BeginUpload"/> or <see cref="BeginUploadExisting"/>.</param>
@@ -87,6 +107,16 @@ namespace StockSharp.Community
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte ProcessUpload(Guid operationId, byte[] bodyPart);
+
+		/// <summary>
+		/// Upload part of file.
+		/// </summary>
+		/// <param name="operationId">Operation ID, received from <see cref="BeginUpload"/> or <see cref="BeginUploadExisting"/>.</param>
+		/// <param name="bodyPart">The part of file.</param>
+		/// <param name="compression">Use compression.</param>
+		/// <returns>The execution result code.</returns>
+		[OperationContract]
+		byte ProcessUpload2(Guid operationId, byte[] bodyPart, bool compression);
 
 		/// <summary>
 		/// To finish uploading the file.
