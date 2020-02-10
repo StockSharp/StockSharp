@@ -336,6 +336,7 @@ StockSharp API Change log
 * (feature) PrizmBit connector.
 * (bug) OKEX. Fix https://stocksharp.ru/forum/11384/oshibki-registratsii-orderov-dlya-okex/
 * (feature) IFileService. Compression added.
+* (feature) IUpdateService created.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
