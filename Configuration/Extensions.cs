@@ -19,10 +19,9 @@ namespace StockSharp.Configuration
 	using System.IO;
 	using System.Linq;
 
+	using Ecng.ComponentModel;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
-
-	using StockSharp.Community;
 
 	/// <summary>
 	/// Extension class.

@@ -11,6 +11,7 @@ namespace StockSharp.Algo.Storages.Remote
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using MoreLinq;
 

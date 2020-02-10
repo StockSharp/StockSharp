@@ -6,9 +6,9 @@ namespace StockSharp.Algo.Server
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
-	using StockSharp.Community;
 	using StockSharp.Messages;
 
 	using Pair = System.Tuple<string, string, object, System.DateTime?>;
