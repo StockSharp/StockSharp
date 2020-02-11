@@ -12,11 +12,13 @@ namespace StockSharp.Community
 		private static readonly Dictionary<Products, ProductData> _productsMapping = new Dictionary<Products, ProductData>
 		{
 			{ Products.Api, new ProductData { Id = 5, Name = "S#.API" } },
-			{ Products.Designer, new ProductData { Id = 9, Name = "S#.Designer" } },
 			{ Products.Hydra, new ProductData { Id = 8, Name = "S#.Data" } },
+			{ Products.Designer, new ProductData { Id = 9, Name = "S#.Designer" } },
 			{ Products.Terminal, new ProductData { Id = 10, Name = "S#.Terminal" } },
+			{ Products.Shell, new ProductData { Id = 11, Name = "S#.Shell" } },
+			{ Products.MatLab, new ProductData { Id = 12, Name = "S#.MatLab" } },
 			{ Products.Server, new ProductData { Id = 14, Name = "S#.Server" } },
-			{ Products.Studio, new ProductData { Id = 7, Name = "S#.Studio" } },
+			{ Products.Updater, new ProductData { Id = 16, Name = "S#.Updater" } },
 		};
 
 		/// <summary>

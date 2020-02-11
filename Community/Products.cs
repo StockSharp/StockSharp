@@ -49,5 +49,23 @@ namespace StockSharp.Community
 		/// </summary>
 		[EnumMember]
 		Server,
+
+		/// <summary>
+		/// S#.Shell.
+		/// </summary>
+		[EnumMember]
+		Shell,
+
+		/// <summary>
+		/// S#.MatLab.
+		/// </summary>
+		[EnumMember]
+		MatLab,
+
+		/// <summary>
+		/// S#.Updater.
+		/// </summary>
+		[EnumMember]
+		Updater,
 	}
 }
