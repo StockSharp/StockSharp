@@ -50996,5 +50996,15 @@ namespace StockSharp.Localization
 		/// Downloaded hash '{0}' not match with calculated '{1}'.
 		/// </summary>
 		public static string FileHashNotMatch => GetString(FileHashNotMatchKey);
+
+		/// <summary>
+		/// File hash
+		/// </summary>
+		public const string FileHashKey = nameof(FileHash);
+
+		/// <summary>
+		/// File hash
+		/// </summary>
+		public static string FileHash => GetString(FileHashKey);
 	}
 }

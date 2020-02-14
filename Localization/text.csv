@@ -5133,6 +5133,7 @@ QuoteCondition;Quote condition.;Условие котировки.
 MarginSection;Margin section.;Маржинальная секция.
 PrizmBit;PrizmBit;PrizmBit
 FileHashNotMatch;Downloaded hash '{0}' not match with calculated '{1}'.;Скаченный хэш '{0}' не совпадает с расчитанным '{1}'.
+FileHash;File hash;Хэш файла
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -16009,7 +16010,6 @@ DocStr11614;Use compression;Использовать сжатие
 DocStr11615;Check hash of downloaded files;Проверять хэш скаченных файлов
 DocStr11616;Product ID;Идентификатор продукта
 DocStr11617;To start uploading temp file to the site;Запустить загрузку временного файла на сайт
-DocStr11618;File hash;Хэш файла
 DocStr11619;All available products;Все доступные продукты
 DocStr11620;Check on availability of the newest version;Проверить на наличие новой версии
 DocStr11621;Local files info (name and hash);Информация о локальных файлах (имя и хэш)

@@ -73,5 +73,6 @@ namespace StockSharp.Community
 		Suspicious,
 
 		InvalidDisplayName,
+		FileHashNotMatch,
 	}
 }
