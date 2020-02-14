@@ -30,22 +30,7 @@ namespace StockSharp.Community
 		public ProductData[] Products => _products ?? (_products = Invoke(f => f.GetProducts(SessionId)));
 
 		/// <inheritdoc />
-		public void Upload(ProductData product, string releaseNotes, Guid[] operationIds)
-		{
-			if (product == null)
-				throw new ArgumentNullException(nameof(product));
-
-			if (operationIds == null)
-				throw new ArgumentNullException(nameof(operationIds));
-
-			if (operationIds.Length == 0)
-				throw new ArgumentOutOfRangeException(nameof(operationIds));
-
-			Invoke(f => f.Upload(SessionId, product.Id, releaseNotes, operationIds));
-		}
-
-		/// <inheritdoc />
-		public Tuple<string, Tuple<string, Guid, bool>[]> Download(ProductData product, Tuple<string, string>[] localFiles)
+		public string HasNewVersion(ProductData product, Tuple<string, string>[] localFiles)
 		{
 			if (product == null)
 				throw new ArgumentNullException(nameof(product));
@@ -53,7 +38,19 @@ namespace StockSharp.Community
 			if (localFiles == null)
 				throw new ArgumentNullException(nameof(localFiles));
 
-			return Invoke(f => f.Download(SessionId, product.Id, localFiles));
+			return Invoke(f => f.HasNewVersion(SessionId, product.Id, localFiles));
+		}
+
+		/// <inheritdoc />
+		public Tuple<string, Guid, bool>[] GetChanges(ProductData product, Tuple<string, string>[] localFiles)
+		{
+			if (product == null)
+				throw new ArgumentNullException(nameof(product));
+
+			if (localFiles == null)
+				throw new ArgumentNullException(nameof(localFiles));
+
+			return Invoke(f => f.GetChanges(SessionId, product.Id, localFiles));
 		}
 	}
 }
