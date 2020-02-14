@@ -123,20 +123,30 @@ namespace StockSharp.Community
 			return true;
 		}
 
+		private static string GetHash(byte[] body)
+		{
+			if (body == null)
+				throw new ArgumentNullException(nameof(body));
+
+			if (body.Length == 0)
+				throw new ArgumentOutOfRangeException(nameof(body));
+
+			return body.Md5();
+		}
+
 		/// <inheritdoc />
 		public void Update(FileData data, Action<long> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
 
-			if (data.Body == null)
+			if (data.Id == 0)
 				throw new ArgumentException(nameof(data));
 
-			if (data.Body.Length == 0)
-				throw new ArgumentOutOfRangeException(nameof(data));
+			var hash = GetHash(data.Body);
 
-			var operationId = Invoke(f => f.BeginUploadExisting2(SessionId, data.Id, Compression, data.Body.Md5()));
-			Upload(operationId, data.Body, progress, cancel);
+			var operationId = Invoke(f => f.BeginUploadExisting2(SessionId, data.Id, Compression, hash));
+			Upload(operationId, data, progress, cancel);
 		}
 
 		/// <inheritdoc />
@@ -145,24 +155,12 @@ namespace StockSharp.Community
 			if (fileName.IsEmpty())
 				throw new ArgumentNullException(nameof(fileName));
 
-			if (body == null)
-				throw new ArgumentNullException(nameof(body));
-
-			if (body.Length == 0)
-				throw new ArgumentOutOfRangeException(nameof(body));
-
-			var hash = body.Md5();
+			var hash = GetHash(body);
 
 			var operationId = Invoke(f => f.BeginUpload2(SessionId, fileName, isPublic, Compression, hash));
 
-			var id = Upload(operationId, body, progress, cancel);
-
-			if (id == null)
-				return null;
-
 			var data = new FileData
 			{
-				Id = id.Value,
 				FileName = fileName,
 				Body = body,
 				BodyLength = body.LongLength,
@@ -171,14 +169,46 @@ namespace StockSharp.Community
 				Hash = hash,
 			};
 
-			_cache.Add(id.Value, data);
+			var id = Upload(operationId, data, progress, cancel);
 
-			return data;
+			return id == null ? null : data;
 		}
 
-		private long? Upload(Guid operationId, byte[] body, Action<long> progress, Func<bool> cancel)
+		/// <inheritdoc />
+		public Guid? UploadTemp(string fileName, byte[] body, Action<long> progress = null, Func<bool> cancel = null)
 		{
+			if (fileName.IsEmpty())
+				throw new ArgumentNullException(nameof(fileName));
+
+			var hash = GetHash(body);
+
+			var operationId = Invoke(f => f.BeginUploadTemp(SessionId, fileName, Compression, hash));
+
+			var data = new FileData
+			{
+				FileName = fileName,
+				Body = body,
+				BodyLength = body.LongLength,
+				CreationDate = DateTime.UtcNow,
+				Hash = hash,
+			};
+
+			var id = Upload(operationId, data, progress, cancel);
+
+			if (id == null)
+				return null;
+
+			return operationId;
+		}
+
+		private long? Upload(Guid operationId, FileData file, Action<long> progress, Func<bool> cancel)
+		{
+			if (file == null)
+				throw new ArgumentNullException(nameof(file));
+
 			var sentCount = 0L;
+
+			var body = file.Body;
 
 			if (Compression)
 				body = body.DeflateTo();
@@ -203,6 +233,15 @@ namespace StockSharp.Community
 
 			if (id < 0)
 				ValidateError((byte)-id);
+
+			// temp upload
+			if (id == 0)
+				return 0;
+
+			if (file.Id == 0)
+				file.Id = id;
+
+			_cache.TryAdd(id, file);
 
 			return id;
 		}

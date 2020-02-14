@@ -52,6 +52,16 @@ namespace StockSharp.Community
 		FileData Upload(string fileName, byte[] body, bool isPublic, Action<long> progress = null, Func<bool> cancel = null);
 
 		/// <summary>
+		/// To start uploading temp file to the site.
+		/// </summary>
+		/// <param name="fileName">File name.</param>
+		/// <param name="body">File body.</param>
+		/// <param name="progress">Progress callback.</param>
+		/// <param name="cancel">Cancel callback.</param>
+		/// <returns>File data. If the operation was cancelled by <paramref name="cancel"/>, <see langword="null"/> will return.</returns>
+		Guid? UploadTemp(string fileName, byte[] body, Action<long> progress = null, Func<bool> cancel = null);
+
+		/// <summary>
 		/// To get a upload size limit.
 		/// </summary>
 		/// <returns>Upload size limit.</returns>
