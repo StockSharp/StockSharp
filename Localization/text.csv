@@ -16005,3 +16005,18 @@ DocStr11609;QUIK PreTrade FIX protocol dialect;QUIK PreTrade диалект FIX 
 DocStr11610;QUIK server FIX protocol dialect;QUIK server диалект FIX протокола
 DocStr11611;Read order condition;Прочитать условие заявки
 DocStr11613;Directly update last values;Напрямую обновить последние значения
+DocStr11614;Use compression;Использовать сжатие
+DocStr11615;Check hash of downloaded files;Проверять хэш скаченных файлов
+DocStr11616;Product ID;Идентификатор продукта
+DocStr11617;To start uploading temp file to the site;Запустить загрузку временного файла на сайт
+DocStr11618;File hash;Хэш файла
+DocStr11619;All available products;Все доступные продукты
+DocStr11620;Check on availability of the newest version;Проверить на наличие новой версии
+DocStr11621;Local files info (name and hash);Информация о локальных файлах (имя и хэш)
+DocStr11622;List of files actions. Empty array means no any updates;Список изменений файлов. Пустой список означает отсутствие обновлений
+DocStr11623;Get changes;Получить изменения
+DocStr11624;The interface describing the updates service;Интерфейс, описывающий сервис обновлений
+DocStr11625;Get all products;Получить все продукты
+DocStr11626;S#.Shell;S#.Shell
+DocStr11627;S#.MatLab;S#.MatLab
+DocStr11628;S#.Updater;S#.Updater

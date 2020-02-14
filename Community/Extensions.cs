@@ -5,7 +5,7 @@ namespace StockSharp.Community
 	using System.Linq;
 
 	/// <summary>
-	/// Extensions.
+	/// Extensions for <see cref="Community"/>.
 	/// </summary>
 	public static class Extensions
 	{
