@@ -23,9 +23,9 @@ namespace StockSharp.Community
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="productId">Product ID.</param>
 		/// <param name="localFiles">Local files info (name and hash).</param>
-		/// <returns>List of files actions. Empty array means no any updates.</returns>
+		/// <returns>Check result.</returns>
 		[OperationContract]
-		string HasNewVersion(Guid sessionId, long productId, Tuple<string, string>[] localFiles);
+		bool HasNewVersion(Guid sessionId, long productId, Tuple<string, string>[] localFiles);
 
 		/// <summary>
 		/// Get changes.

@@ -30,7 +30,7 @@ namespace StockSharp.Community
 		public ProductData[] Products => _products ?? (_products = Invoke(f => f.GetProducts(SessionId)));
 
 		/// <inheritdoc />
-		public string HasNewVersion(ProductData product, Tuple<string, string>[] localFiles)
+		public bool HasNewVersion(ProductData product, Tuple<string, string>[] localFiles)
 		{
 			if (product == null)
 				throw new ArgumentNullException(nameof(product));
