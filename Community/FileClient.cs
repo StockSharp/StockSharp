@@ -33,8 +33,6 @@ namespace StockSharp.Community
 	/// </summary>
 	public class FileClient : BaseCommunityClient<IFileService>, IFileClient
 	{
-		private const int _partSize = 100 * 1024; // 100kb
-
 		private readonly CachedSynchronizedDictionary<long, FileData> _cache = new CachedSynchronizedDictionary<long, FileData>(); 
 
 		/// <summary>
@@ -54,15 +52,14 @@ namespace StockSharp.Community
 		{
 		}
 
-		/// <summary>
-		/// Use compression.
-		/// </summary>
+		/// <inheritdoc />
 		public bool Compression { get; set; } = true;
 
-		/// <summary>
-		/// Check hash of downloaded files.
-		/// </summary>
+		/// <inheritdoc />
 		public bool CheckDownloadedHash { get; set; }
+
+		/// <inheritdoc />
+		public int PartSize { get; set; } = 40 * 1024; // 40kb
 
 		/// <inheritdoc />
 		public FileData GetFile(long id, Action<long> progress = null, Func<bool> cancel = null)
@@ -99,7 +96,7 @@ namespace StockSharp.Community
 					return false;
 				}
 
-				var part = Invoke(f => f.ProcessDownload2(operationId, body.Count, _partSize));
+				var part = Invoke(f => f.ProcessDownload2(operationId, body.Count, PartSize));
 
 				if (Compression)
 					part = part.DeflateFrom();
@@ -213,7 +210,7 @@ namespace StockSharp.Community
 			if (Compression)
 				body = body.DeflateTo();
 
-			foreach (var part in body.Batch(_partSize))
+			foreach (var part in body.Batch(PartSize))
 			{
 				if (cancel?.Invoke() == true)
 				{

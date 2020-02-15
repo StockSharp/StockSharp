@@ -8,6 +8,21 @@ namespace StockSharp.Community
 	public interface IFileClient
 	{
 		/// <summary>
+		/// Part size.
+		/// </summary>
+		int PartSize { get; set; }
+
+		/// <summary>
+		/// Use compression.
+		/// </summary>
+		bool Compression { get; set; }
+
+		/// <summary>
+		/// Check hash of downloaded files.
+		/// </summary>
+		bool CheckDownloadedHash { get; set; }
+
+		/// <summary>
 		/// To get the file data.
 		/// </summary>
 		/// <param name="id">File ID.</param>
