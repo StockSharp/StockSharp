@@ -48,6 +48,16 @@ namespace StockSharp.Community
 		bool Download(FileData data, Action<long> progress = null, Func<bool> cancel = null);
 
 		/// <summary>
+		/// Download file.
+		/// </summary>
+		/// <param name="data">The file data.</param>
+		/// <param name="operationId">Operation ID.</param>
+		/// <param name="progress">Progress callback.</param>
+		/// <param name="cancel">Cancel callback.</param>
+		/// <returns>If the operation was cancelled by <paramref name="cancel"/>, <see langword="false"/> will return.</returns>
+		bool DownloadTemp(FileData data, Guid operationId, Action<long> progress = null, Func<bool> cancel = null);
+
+		/// <summary>
 		/// To upload the existing file.
 		/// </summary>
 		/// <param name="data">File data.</param>

@@ -84,40 +84,70 @@ namespace StockSharp.Community
 			if (data.Body != null)
 				return true;
 
-			var operationId = Invoke(f => f.BeginDownload2(SessionId, data.Id, Compression));
+			var tuple = Invoke(f => f.BeginDownload2(SessionId, data.Id, Compression));
 
-			var body = new List<byte>();
+			var body = Download(tuple.Item1, tuple.Item2, true, tuple.Item3, progress, cancel);
 
-			while (body.Count < data.BodyLength)
+			if (body == null)
+				return false;
+
+			data.Body = body;
+
+			return true;
+		}
+
+		/// <inheritdoc />
+		public bool DownloadTemp(FileData data, Guid operationId, Action<long> progress = null, Func<bool> cancel = null)
+		{
+			if (data == null)
+				throw new ArgumentNullException(nameof(data));
+
+			var body = Download(operationId, data.BodyLength, false, data.Hash, progress, cancel);
+
+			if (body == null)
+				return false;
+
+			data.Body = body;
+			return true;
+		}
+
+		private byte[] Download(Guid operationId, long size, bool checkHash, string hash, Action<long> progress, Func<bool> cancel)
+		{
+			if (operationId == Guid.Empty)
+				throw new ArgumentNullException(nameof(operationId));
+
+			var list = new List<byte>();
+
+			while (list.Count < size)
 			{
 				if (cancel?.Invoke() == true)
 				{
-					Invoke(f => f.FinishDownload2(operationId, true));
-					return false;
+					Invoke(f => f.FinishDownload(operationId, true));
+					return null;
 				}
 
-				var part = Invoke(f => f.ProcessDownload2(operationId, body.Count, PartSize));
+				var part = Invoke(f => f.ProcessDownload2(operationId, list.Count, PartSize));
 
 				if (Compression)
 					part = part.DeflateFrom();
 
-				body.AddRange(part);
-				progress?.Invoke(body.Count);
+				list.AddRange(part);
+				progress?.Invoke(list.Count);
 			}
 
-			var hash = Invoke(f => f.FinishDownload2(operationId, false));
+			Invoke(f => f.FinishDownload(operationId, false));
+			
+			var body = list.ToArray();
 
-			data.Body = body.ToArray();
-
-			if (CheckDownloadedHash)
+			if (checkHash && CheckDownloadedHash && !hash.IsEmpty())
 			{
-				var calc = data.Body.Md5();
+				var calc = body.Md5();
 
 				if (!hash.CompareIgnoreCase(calc))
 					throw new InvalidOperationException(LocalizedStrings.FileHashNotMatchKey.Put(hash, calc));
 			}
 
-			return true;
+			return body;
 		}
 
 		private static string GetHash(byte[] body)
