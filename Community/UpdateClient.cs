@@ -1,6 +1,7 @@
 namespace StockSharp.Community
 {
 	using System;
+	using System.ServiceModel;
 
 	/// <summary>
 	/// The client for access to <see cref="IUpdateService"/>.
@@ -24,6 +25,23 @@ namespace StockSharp.Community
 		{
 		}
 
+		/// <inheritdoc />
+		protected override ChannelFactory<IUpdateService> CreateChannel()
+		{
+			var f = new ChannelFactory<IUpdateService>(new WSHttpBinding(SecurityMode.Transport)
+			{
+				MaxReceivedMessageSize = int.MaxValue,
+				ReaderQuotas =
+				{
+					MaxArrayLength = int.MaxValue,
+					MaxBytesPerRead = int.MaxValue
+				},
+				MaxBufferPoolSize = int.MaxValue
+			}, new EndpointAddress(Address));
+
+			return f;
+		}
+
 		private ProductData[] _products;
 
 		/// <inheritdoc />
@@ -42,7 +60,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public Tuple<string, Guid, bool>[] GetChanges(ProductData product, Tuple<string, string>[] localFiles)
+		public Tuple<string, Guid, bool, string, long>[] GetChanges(ProductData product, Tuple<string, string>[] localFiles)
 		{
 			if (product == null)
 				throw new ArgumentNullException(nameof(product));
