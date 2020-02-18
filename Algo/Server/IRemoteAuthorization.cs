@@ -6,6 +6,7 @@ namespace StockSharp.Algo.Server
 	using System.Net;
 	using System.Security;
 
+	using Ecng.Common;
 	using Ecng.Security;
 
 	using StockSharp.Localization;
@@ -104,6 +105,46 @@ namespace StockSharp.Algo.Server
 		public virtual bool DeleteRemoteUser(string login)
 		{
 			return DeleteUser(login);
+		}
+	}
+
+	/// <summary>
+	/// The connection access check module which provides access by simple login and password set.
+	/// </summary>
+	public class SimpleRemoteAuthorization : AnonymousRemoteAuthorization
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SimpleRemoteAuthorization"/>.
+		/// </summary>
+		public SimpleRemoteAuthorization()
+		{
+		}
+
+		/// <summary>
+		/// Login.
+		/// </summary>
+		public string Login { get; set; }
+
+		/// <summary>
+		/// Password.
+		/// </summary>
+		public SecureString Password { get; set; }
+
+		/// <inheritdoc />
+		public override Guid ValidateCredentials(string login, SecureString password, IPAddress clientAddress)
+		{
+			if (Login.IsEmpty())
+				return base.ValidateCredentials(login, password, clientAddress);
+			else if (login.CompareIgnoreCase(Login) && password != null && Password != null && password.IsEqualTo(Password))
+				return Guid.NewGuid();
+
+			throw new UnauthorizedAccessException();
+		}
+
+		/// <inheritdoc />
+		public override bool HasPermissions(Guid sessionId, UserPermissions requiredPermissions, string securityId, string dataType, object arg, DateTime? date)
+		{
+			return true;
 		}
 	}
 }
