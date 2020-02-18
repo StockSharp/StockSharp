@@ -16020,3 +16020,9 @@ DocStr11625;Get all products;Получить все продукты
 DocStr11626;S#.Shell;S#.Shell
 DocStr11627;S#.MatLab;S#.MatLab
 DocStr11628;S#.Updater;S#.Updater
+DocStr11629;Part size;Размер части
+DocStr11630;S#.ЛЧИ;S#.ЛЧИ
+DocStr11631;Get product's public name;Получить публичное имя продукта
+DocStr11632;Public name;Публичное имя
+DocStr11633;Get file list and their hashes in the specified folder;Получить список файлов и их хэши в указанной директории
+DocStr11634;Path to the folder;Путь к директории

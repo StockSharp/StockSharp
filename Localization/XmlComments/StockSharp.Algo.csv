@@ -5809,6 +5809,7 @@ P:StockSharp.Algo.ServicesRegistry.ExcelProvider/summary;DocStr11326
 P:StockSharp.Algo.ServicesRegistry.SnapshotRegistry/summary;DocStr10509
 P:StockSharp.Algo.ServicesRegistry.NewsProvider/summary;DocStr11343
 P:StockSharp.Algo.ServicesRegistry.RiskManager/summary;DocStr1257
+P:StockSharp.Algo.ServicesRegistry.UpdateClient/summary;DocStr2979
 T:StockSharp.Algo.SecurityMappingMessageAdapter/summary;DocStr9945
 P:StockSharp.Algo.SecurityMappingMessageAdapter.Storage/summary;DocStr9935
 M:StockSharp.Algo.SecurityMappingMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.ISecurityMappingStorage)/summary;DocStr1
