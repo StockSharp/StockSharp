@@ -1821,6 +1821,11 @@ F:StockSharp.Messages.Level1Fields.YieldVWAPPrev/summary;YieldVWAPPrev
 F:StockSharp.Messages.Level1Fields.Index/summary;Index
 F:StockSharp.Messages.Level1Fields.Imbalance/summary;Imbalance
 F:StockSharp.Messages.Level1Fields.UnderlyingPrice/summary;DocStr11558
+F:StockSharp.Messages.Level1Fields.MaxVolume/summary;MaxVolumeDesc
+F:StockSharp.Messages.Level1Fields.LowBidPrice/summary;LowBidPriceDesc
+F:StockSharp.Messages.Level1Fields.HighAskPrice/summary;HighAskPriceDesc
+F:StockSharp.Messages.Level1Fields.LastTradeVolumeLow/summary;LastTradeVolumeLowDesc
+F:StockSharp.Messages.Level1Fields.LastTradeVolumeHigh/summary;LastTradeVolumeHighDesc
 T:StockSharp.Messages.Level1ChangeMessage/summary;DocStr4470
 P:StockSharp.Messages.Level1ChangeMessage.SecurityId/inheritdoc;DocStr8459
 M:StockSharp.Messages.Level1ChangeMessage.#ctor/summary;DocStr1
@@ -2009,6 +2014,7 @@ P:StockSharp.Messages.SecurityMessage.Name/summary;DocStr217
 P:StockSharp.Messages.SecurityMessage.ShortName/summary;Str364
 P:StockSharp.Messages.SecurityMessage.VolumeStep/summary;Str307
 P:StockSharp.Messages.SecurityMessage.MinVolume/summary;MinVolumeDesc
+P:StockSharp.Messages.SecurityMessage.MaxVolume/summary;MaxVolumeDesc
 P:StockSharp.Messages.SecurityMessage.Multiplier/summary;DocStr2623
 P:StockSharp.Messages.SecurityMessage.Decimals/summary;Str548
 P:StockSharp.Messages.SecurityMessage.PriceStep/summary;Str306

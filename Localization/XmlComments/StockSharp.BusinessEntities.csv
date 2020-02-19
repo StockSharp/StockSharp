@@ -906,6 +906,7 @@ P:StockSharp.BusinessEntities.Security.Class/summary;SecurityClass
 P:StockSharp.BusinessEntities.Security.PriceStep/summary;Str306
 P:StockSharp.BusinessEntities.Security.VolumeStep/summary;Str307
 P:StockSharp.BusinessEntities.Security.MinVolume/summary;MinVolumeDesc
+P:StockSharp.BusinessEntities.Security.MaxVolume/summary;MaxVolumeDesc
 P:StockSharp.BusinessEntities.Security.Multiplier/summary;DocStr2623
 P:StockSharp.BusinessEntities.Security.Decimals/summary;Str548
 P:StockSharp.BusinessEntities.Security.ExpiryDate/summary;Str371

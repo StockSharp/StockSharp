@@ -4825,6 +4825,12 @@ M:StockSharp.Algo.Server.AnonymousRemoteAuthorization.HasPermissions(System.Guid
 P:StockSharp.Algo.Server.AnonymousRemoteAuthorization.AllRemoteUsers/inheritdoc;DocStr8459
 M:StockSharp.Algo.Server.AnonymousRemoteAuthorization.SaveRemoteUser(System.String,System.Security.SecureString,System.Collections.Generic.IEnumerable{System.Net.IPAddress},StockSharp.Messages.UserPermissions)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Server.AnonymousRemoteAuthorization.DeleteRemoteUser(System.String)/inheritdoc;DocStr8459
+T:StockSharp.Algo.Server.SimpleRemoteAuthorization/summary;DocStr11635
+M:StockSharp.Algo.Server.SimpleRemoteAuthorization.#ctor/summary;DocStr1
+P:StockSharp.Algo.Server.SimpleRemoteAuthorization.Login/summary;Login
+P:StockSharp.Algo.Server.SimpleRemoteAuthorization.Password/summary;Password
+M:StockSharp.Algo.Server.SimpleRemoteAuthorization.ValidateCredentials(System.String,System.Security.SecureString,System.Net.IPAddress)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Server.SimpleRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Messages.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/inheritdoc;DocStr8459
 T:StockSharp.Algo.Server.PermissionCredentials/summary;DocStr10446
 M:StockSharp.Algo.Server.PermissionCredentials.#ctor/summary;DocStr1
 P:StockSharp.Algo.Server.PermissionCredentials.IpRestrictionsStr/summary;DocStr8459

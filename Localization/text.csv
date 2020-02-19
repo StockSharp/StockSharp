@@ -16037,3 +16037,4 @@ DocStr11631;Get product's public name;Получить публичное имя
 DocStr11632;Public name;Публичное имя
 DocStr11633;Get file list and their hashes in the specified folder;Получить список файлов и их хэши в указанной директории
 DocStr11634;Path to the folder;Путь к директории
+DocStr11635;The connection access check module which provides access by simple login and password set;Модуль проверки доступа соединения, который предоставляется через простую установку логина и пароля

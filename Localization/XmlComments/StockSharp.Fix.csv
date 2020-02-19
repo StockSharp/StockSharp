@@ -247,7 +247,15 @@ P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.DerivativesSection.FxSpot/s
 P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.DerivativesSection.Mini/summary;DocStr11525
 P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.Equities/summary;DocStr11501
 P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.Derivatives/summary;Str437
-P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplayAddress/summary;DocStr3793
+T:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection/summary;ReplayServer
+P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection.Address/summary;DocStr3793
+P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection.SenderCompId/summary;Str1665
+P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection.TargetCompId/summary;Str1667
+P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection.Login/summary;Login
+P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection.Password/summary;Password
+P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.MbpReplay/summary;DocStr3793
+P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.MboReplay/summary;DocStr3793
+P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.TobReplay/summary;DocStr3793
 M:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.LoadSettingsFromFile(System.String)/inheritdoc;DocStr8459
@@ -2064,6 +2072,7 @@ F:StockSharp.Fix.Native.FixTags.MatchIncrement/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MDEntryForwardPoints/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ApplVerId/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.DefaultApplVerID/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.MaxTradeVol/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ApplId/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ApplSeqNum/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ApplBegSeqNum/summary;DocStr8459

@@ -808,7 +808,47 @@
             Derivatives.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplayAddress">
+    <member name="T:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection">
+      <summary>
+            Replay server.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection.Address">
+      <summary>
+            Replay state server address.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection.SenderCompId">
+      <summary>
+            Sender ID.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection.TargetCompId">
+      <summary>
+            Target ID.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection.Login">
+      <summary>
+            Login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.ReplaySection.Password">
+      <summary>
+            Password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.MbpReplay">
+      <summary>
+            Replay state server address.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.MboReplay">
+      <summary>
+            Replay state server address.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect.TobReplay">
       <summary>
             Replay state server address.
             </summary>
@@ -8017,6 +8057,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.DefaultApplVerID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MaxTradeVol">
       <summary>
       </summary>
     </member>
