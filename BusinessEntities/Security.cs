@@ -367,6 +367,36 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private decimal? _maxVolume;
+
+		/// <summary>
+		/// Maximum volume allowed in order.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MaxVolumeKey,
+			Description = LocalizedStrings.MaxVolumeDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 11)]
+		[Nullable]
+		//[GreaterThanZero]
+		public decimal? MaxVolume
+		{
+			get => _maxVolume;
+			set
+			{
+				if (_maxVolume == value)
+					return;
+
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+
+				_maxVolume = value;
+				Notify(nameof(MaxVolume));
+			}
+		}
+
 		private decimal? _multiplier;
 
 		/// <summary>
@@ -378,7 +408,7 @@ namespace StockSharp.BusinessEntities
 			Name = LocalizedStrings.Str330Key,
 			Description = LocalizedStrings.LotVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey,
-			Order = 11)]
+			Order = 12)]
 		[Nullable]
 		public decimal? Multiplier
 		{
@@ -407,7 +437,7 @@ namespace StockSharp.BusinessEntities
 			Name = LocalizedStrings.DecimalsKey,
 			Description = LocalizedStrings.Str548Key,
 			GroupName = LocalizedStrings.GeneralKey,
-			Order = 12)]
+			Order = 13)]
 		//[ReadOnly(true)]
 		[Nullable]
 		public int? Decimals
@@ -438,7 +468,7 @@ namespace StockSharp.BusinessEntities
 			Name = LocalizedStrings.ExpiryDateKey,
 			Description = LocalizedStrings.Str371Key,
 			GroupName = LocalizedStrings.GeneralKey,
-			Order = 13)]
+			Order = 14)]
 		public DateTimeOffset? ExpiryDate
 		{
 			get => _expiryDate;
@@ -464,7 +494,7 @@ namespace StockSharp.BusinessEntities
 			Name = LocalizedStrings.SettlementDateKey,
 			Description = LocalizedStrings.Str373Key,
 			GroupName = LocalizedStrings.GeneralKey,
-			Order = 14)]
+			Order = 15)]
 		public DateTimeOffset? SettlementDate
 		{
 			get => _settlementDate;
@@ -489,7 +519,7 @@ namespace StockSharp.BusinessEntities
 			Name = LocalizedStrings.CfiCodeKey,
 			Description = LocalizedStrings.CfiCodeDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
-			Order = 15)]
+			Order = 16)]
 		public string CfiCode
 		{
 			get => _cfiCode;
@@ -514,7 +544,7 @@ namespace StockSharp.BusinessEntities
 			Name = LocalizedStrings.FaceValueKey,
 			Description = LocalizedStrings.FaceValueDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
-			Order = 16)]
+			Order = 17)]
 		public decimal? FaceValue
 		{
 			get => _faceValue;
@@ -1974,6 +2004,7 @@ namespace StockSharp.BusinessEntities
 			destination.ShortName = ShortName;
 			destination.VolumeStep = VolumeStep;
 			destination.MinVolume = MinVolume;
+			destination.MaxVolume = MaxVolume;
 			destination.Multiplier = Multiplier;
 			destination.PriceStep = PriceStep;
 			destination.Decimals = Decimals;

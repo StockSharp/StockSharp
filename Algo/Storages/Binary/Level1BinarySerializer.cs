@@ -841,6 +841,7 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.BestBidVolume:
 						case Level1Fields.BestAskVolume:
 						case Level1Fields.MinVolume:
+						case Level1Fields.MaxVolume:
 						{
 							writer.WriteVolume((decimal)value, metaInfo, SecurityId);
 							break;
@@ -1400,6 +1401,7 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.BestBidVolume:
 					case Level1Fields.BestAskVolume:
 					case Level1Fields.MinVolume:
+					case Level1Fields.MaxVolume:
 					{
 						l1Msg.Add(field, reader.ReadVolume(metaInfo));
 						break;

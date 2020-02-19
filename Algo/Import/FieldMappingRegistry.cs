@@ -42,6 +42,7 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<SecurityMessage, int>(nameof(SecurityMessage.Decimals), LocalizedStrings.Decimals, LocalizedStrings.Str548, (i, v) => i.Decimals = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.VolumeStep), LocalizedStrings.VolumeStep, LocalizedStrings.Str366, (i, v) => i.VolumeStep = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.MinVolume), LocalizedStrings.MinVolume, LocalizedStrings.MinVolumeDesc, (i, v) => i.MinVolume = v));
+				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.MaxVolume), LocalizedStrings.MaxVolume, LocalizedStrings.MaxVolumeDesc, (i, v) => i.MaxVolume = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.Multiplier), LocalizedStrings.Str330, LocalizedStrings.LotVolume, (i, v) => i.Multiplier = v));
 				fields.Add(new FieldMapping<SecurityMessage, SecurityTypes>(nameof(SecurityMessage.SecurityType), LocalizedStrings.Type, LocalizedStrings.Str360, (i, v) => i.SecurityType = v));
 				fields.Add(new FieldMapping<SecurityMessage, CurrencyTypes>(nameof(SecurityMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382, (i, v) => i.Currency = v));

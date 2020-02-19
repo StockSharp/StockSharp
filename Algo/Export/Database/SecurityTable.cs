@@ -56,6 +56,11 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(decimal?),
 				ValueRestriction = new DecimalRestriction { Scale = 1 }
 			};
+			yield return new ColumnDescription(nameof(SecurityMessage.MaxVolume))
+			{
+				DbType = typeof(decimal?),
+				ValueRestriction = new DecimalRestriction { Scale = 1 }
+			};
 			yield return new ColumnDescription(nameof(SecurityMessage.Multiplier))
 			{
 				DbType = typeof(decimal?),
@@ -206,6 +211,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(SecurityMessage.PriceStep), value.PriceStep },
 				{ nameof(SecurityMessage.VolumeStep), value.VolumeStep },
 				{ nameof(SecurityMessage.MinVolume), value.MinVolume },
+				{ nameof(SecurityMessage.MaxVolume), value.MaxVolume },
 				{ nameof(SecurityMessage.Multiplier), value.Multiplier },
 				{ nameof(SecurityMessage.Decimals), value.Decimals },
 				{ nameof(SecurityMessage.SecurityType), value.SecurityType.ToString() },

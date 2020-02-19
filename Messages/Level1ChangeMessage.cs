@@ -757,7 +757,14 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UnderlyingKey)]
-		UnderlyingPrice
+		UnderlyingPrice,
+
+		/// <summary>
+		/// Maximum volume allowed in order.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MaxVolumeKey)]
+		MaxVolume,
 	}
 
 	/// <summary>

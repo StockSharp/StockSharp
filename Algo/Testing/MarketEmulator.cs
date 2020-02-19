@@ -559,6 +559,9 @@ namespace StockSharp.Algo.Testing
 						case Level1Fields.MinVolume:
 							_securityDefinition.MinVolume = (decimal)change.Value;
 							break;
+						case Level1Fields.MaxVolume:
+							_securityDefinition.MaxVolume = (decimal)change.Value;
+							break;
 						case Level1Fields.Multiplier:
 							_securityDefinition.Multiplier = (decimal)change.Value;
 							break;
@@ -2151,6 +2154,7 @@ namespace StockSharp.Algo.Testing
 			var priceStep = securityDefinition?.PriceStep;
 			var volumeStep = securityDefinition?.VolumeStep;
 			var minVolume = securityDefinition?.MinVolume;
+			var maxVolume = securityDefinition?.MaxVolume;
 
 			if (state != null && execMsg.OrderType != OrderTypes.Market)
 			{
@@ -2178,6 +2182,9 @@ namespace StockSharp.Algo.Testing
 
 			if (minVolume != null && execMsg.OrderVolume < minVolume)
 				return LocalizedStrings.OrderVolumeLessMin.Put(execMsg.OrderVolume, execMsg.TransactionId, minVolume);
+
+			if (maxVolume != null && execMsg.OrderVolume > maxVolume)
+				return LocalizedStrings.OrderVolumeMoreMax.Put(execMsg.OrderVolume, execMsg.TransactionId, maxVolume);
 
 			return GetPortfolioInfo(execMsg.PortfolioName).CheckRegistration(execMsg/*, result*/);
 		}

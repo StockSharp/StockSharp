@@ -1959,6 +1959,9 @@ namespace StockSharp.Algo
 				if (criteria.MinVolume != null && s.MinVolume != null && s.MinVolume != criteria.MinVolume)
 					return false;
 
+				if (criteria.MaxVolume != null && s.MaxVolume != null && s.MaxVolume != criteria.MaxVolume)
+					return false;
+
 				if (criteria.UnderlyingSecurityMinVolume != null && s.UnderlyingSecurityMinVolume != null && s.UnderlyingSecurityMinVolume != criteria.UnderlyingSecurityMinVolume)
 					return false;
 
@@ -2640,6 +2643,9 @@ namespace StockSharp.Algo
 						case Level1Fields.MinVolume:
 							security.MinVolume = (decimal)value;
 							break;
+						case Level1Fields.MaxVolume:
+							security.MaxVolume = (decimal)value;
+							break;
 						case Level1Fields.UnderlyingMinVolume:
 							security.UnderlyingSecurityMinVolume = (decimal)value;
 							break;
@@ -2750,6 +2756,12 @@ namespace StockSharp.Algo
 			{
 				if (isOverride || security.MinVolume == null)
 					security.MinVolume = message.MinVolume.Value;
+			}
+
+			if (message.MaxVolume != null)
+			{
+				if (isOverride || security.MaxVolume == null)
+					security.MaxVolume = message.MaxVolume.Value;
 			}
 
 			if (message.Multiplier != null)
