@@ -49478,6 +49478,26 @@ namespace StockSharp.Localization
 		public static string MinVolumeDesc => GetString(MinVolumeDescKey);
 
 		/// <summary>
+		/// Max volume
+		/// </summary>
+		public const string MaxVolumeKey = nameof(MaxVolume);
+
+		/// <summary>
+		/// Max volume
+		/// </summary>
+		public static string MaxVolume => GetString(MaxVolumeKey);
+
+		/// <summary>
+		/// Maximum volume allowed in order.
+		/// </summary>
+		public const string MaxVolumeDescKey = nameof(MaxVolumeDesc);
+
+		/// <summary>
+		/// Maximum volume allowed in order.
+		/// </summary>
+		public static string MaxVolumeDesc => GetString(MaxVolumeDescKey);
+
+		/// <summary>
 		/// Shortable
 		/// </summary>
 		public const string ShortableKey = nameof(Shortable);
@@ -49536,6 +49556,16 @@ namespace StockSharp.Localization
 		/// Volume {0} of order '{1}' is less than minimum allowed {2}.
 		/// </summary>
 		public static string OrderVolumeLessMin => GetString(OrderVolumeLessMinKey);
+
+		/// <summary>
+		/// Volume {0} of order '{1}' is more than maximum allowed {2}.
+		/// </summary>
+		public const string OrderVolumeMoreMaxKey = nameof(OrderVolumeMoreMax);
+
+		/// <summary>
+		/// Volume {0} of order '{1}' is more than maximum allowed {2}.
+		/// </summary>
+		public static string OrderVolumeMoreMax => GetString(OrderVolumeMoreMaxKey);
 
 		/// <summary>
 		/// Show strategy socket
