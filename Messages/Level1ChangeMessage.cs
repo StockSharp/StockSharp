@@ -765,6 +765,34 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MaxVolumeKey)]
 		MaxVolume,
+
+		/// <summary>
+		/// Lowest bid during the session.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LowBidPriceKey, Description = LocalizedStrings.LowBidPriceDescKey)]
+		LowBidPrice,
+
+		/// <summary>
+		/// Highest ask during the session.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.HighAskPriceKey, Description = LocalizedStrings.HighAskPriceDescKey)]
+		HighAskPrice,
+
+		/// <summary>
+		/// Lowest last trade volume.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LastTradeVolumeLowKey, Description = LocalizedStrings.LastTradeVolumeLowDescKey)]
+		LastTradeVolumeLow,
+
+		/// <summary>
+		/// Highest last trade volume.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LastTradeVolumeHighKey, Description = LocalizedStrings.LastTradeVolumeHighDescKey)]
+		LastTradeVolumeHigh,
 	}
 
 	/// <summary>

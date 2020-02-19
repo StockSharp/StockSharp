@@ -5137,6 +5137,14 @@ MarginSection;Margin section.;Маржинальная секция.
 PrizmBit;PrizmBit;PrizmBit
 FileHashNotMatch;Downloaded hash '{0}' not match with calculated '{1}'.;Скаченный хэш '{0}' не совпадает с расчитанным '{1}'.
 FileHash;File hash;Хэш файла
+LowBidPrice;Low bid;Мин бид
+LowBidPriceDesc;Lowest bid during the session.;Наименьший бид за сессию.
+HighAskPrice;High ask;Макс оффер
+HighAskPriceDesc;Highest ask during the session.;Наивысший оффер за сессию.
+LastTradeVolumeLow;Low trade vol;Мин объем сделки
+LastTradeVolumeLowDesc;Lowest last trade volume.;Наименьший объем сделки.
+LastTradeVolumeHigh;High trade vol;Макс объем сделки
+LastTradeVolumeHighDesc;Highest last trade volume.;Наибольший объем сделки.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5148,7 +5156,7 @@ DocStr7;Release resources;Освободить занятые ресурсы
 DocStr8;InitializeComponent;InitializeComponent
 DocStr9;Message type;Тип сообщения
 DocStr10;Schema change event;Событие изменения схемы
-DocStr11;Popup window for alert type {0};Всплывающее окно для типа сигнала {0}
+DocStr11;Popup window for alert type {0};Всплывающее окно для сигнала типа {0}
 DocStr12;Alert creation time;Время формирования сигнала
 DocStr13;Alert text;Текст сигнала
 DocStr14;Rule;Правило

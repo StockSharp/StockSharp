@@ -51036,5 +51036,85 @@ namespace StockSharp.Localization
 		/// File hash
 		/// </summary>
 		public static string FileHash => GetString(FileHashKey);
+
+		/// <summary>
+		/// Low bid
+		/// </summary>
+		public const string LowBidPriceKey = nameof(LowBidPrice);
+
+		/// <summary>
+		/// Low bid
+		/// </summary>
+		public static string LowBidPrice => GetString(LowBidPriceKey);
+
+		/// <summary>
+		/// Lowest bid during the session.
+		/// </summary>
+		public const string LowBidPriceDescKey = nameof(LowBidPriceDesc);
+
+		/// <summary>
+		/// Lowest bid during the session.
+		/// </summary>
+		public static string LowBidPriceDesc => GetString(LowBidPriceDescKey);
+
+		/// <summary>
+		/// High ask
+		/// </summary>
+		public const string HighAskPriceKey = nameof(HighAskPrice);
+
+		/// <summary>
+		/// High ask
+		/// </summary>
+		public static string HighAskPrice => GetString(HighAskPriceKey);
+
+		/// <summary>
+		/// Highest ask during the session.
+		/// </summary>
+		public const string HighAskPriceDescKey = nameof(HighAskPriceDesc);
+
+		/// <summary>
+		/// Highest ask during the session.
+		/// </summary>
+		public static string HighAskPriceDesc => GetString(HighAskPriceDescKey);
+
+		/// <summary>
+		/// Low trade vol
+		/// </summary>
+		public const string LastTradeVolumeLowKey = nameof(LastTradeVolumeLow);
+
+		/// <summary>
+		/// Low trade vol
+		/// </summary>
+		public static string LastTradeVolumeLow => GetString(LastTradeVolumeLowKey);
+
+		/// <summary>
+		/// Lowest last trade volume.
+		/// </summary>
+		public const string LastTradeVolumeLowDescKey = nameof(LastTradeVolumeLowDesc);
+
+		/// <summary>
+		/// Lowest last trade volume.
+		/// </summary>
+		public static string LastTradeVolumeLowDesc => GetString(LastTradeVolumeLowDescKey);
+
+		/// <summary>
+		/// High trade vol
+		/// </summary>
+		public const string LastTradeVolumeHighKey = nameof(LastTradeVolumeHigh);
+
+		/// <summary>
+		/// High trade vol
+		/// </summary>
+		public static string LastTradeVolumeHigh => GetString(LastTradeVolumeHighKey);
+
+		/// <summary>
+		/// Highest last trade volume.
+		/// </summary>
+		public const string LastTradeVolumeHighDescKey = nameof(LastTradeVolumeHighDesc);
+
+		/// <summary>
+		/// Highest last trade volume.
+		/// </summary>
+		public static string LastTradeVolumeHighDesc => GetString(LastTradeVolumeHighDescKey);
 	}
 }

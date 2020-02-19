@@ -338,6 +338,7 @@ StockSharp API Change log
 * (feature) IFileService. Compression added.
 * (feature) IUpdateService created.
 * (feature) Security. MaxVolume property added.
+* (feature) Level1. LowBidPrice, HighAskPrice, LastTradeVolumeLow, LastTradeVolumeHigh new fields.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

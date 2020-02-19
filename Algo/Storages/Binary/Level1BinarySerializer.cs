@@ -823,6 +823,8 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.HighBidPrice:
 						case Level1Fields.LowAskPrice:
 						case Level1Fields.SpreadMiddle:
+						case Level1Fields.LowBidPrice:
+						case Level1Fields.HighAskPrice:
 						{
 							SerializePrice(writer, metaInfo, (decimal)value, useLong, nonAdjustPrice);
 							break;
@@ -842,6 +844,8 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.BestAskVolume:
 						case Level1Fields.MinVolume:
 						case Level1Fields.MaxVolume:
+						case Level1Fields.LastTradeVolumeLow:
+						case Level1Fields.LastTradeVolumeHigh:
 						{
 							writer.WriteVolume((decimal)value, metaInfo, SecurityId);
 							break;
@@ -1379,6 +1383,8 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.HighBidPrice:
 					case Level1Fields.LowAskPrice:
 					case Level1Fields.SpreadMiddle:
+					case Level1Fields.LowBidPrice:
+					case Level1Fields.HighAskPrice:
 					{
 						var price = DeserializePrice(reader, metaInfo, useLong, nonAdjustPrice);
 						l1Msg.Add(field, price);
@@ -1402,6 +1408,8 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.BestAskVolume:
 					case Level1Fields.MinVolume:
 					case Level1Fields.MaxVolume:
+					case Level1Fields.LastTradeVolumeLow:
+					case Level1Fields.LastTradeVolumeHigh:
 					{
 						l1Msg.Add(field, reader.ReadVolume(metaInfo));
 						break;
