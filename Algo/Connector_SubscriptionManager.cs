@@ -164,9 +164,15 @@ namespace StockSharp.Algo
 				}
 			}
 
+			private Subscription TryGetSubscription(long id, bool remove, DateTimeOffset? time, out SubscriptionInfo info)
+			{
+				info = TryGetInfo(id, remove, time);
+				return info?.Subscription;
+			}
+
 			public Subscription TryGetSubscription(long id, bool remove, DateTimeOffset? time = null)
 			{
-				return TryGetInfo(id, remove, time)?.Subscription;
+				return TryGetSubscription(id, remove, time, out _);
 			}
 
 			public Subscription TryFindSubscription(long id, DataType dataType, Security security = null)
@@ -444,42 +450,42 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public TItem[] GetLookupItems<TItem>(Subscription subscription)
+			public Subscription ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message, out object[] items)
 			{
 				lock (_syncObject)
 				{
-					var info = _subscriptions.TryGetValue(subscription.TransactionId);
+					var subscription = TryGetSubscription(message.OriginalTransactionId, true, null, out var info);
 
-					if (info == null)
-						return ArrayHelper.Empty<TItem>();
+					if (subscription != null)
+					{
+						items = info.LookupItems?.CopyAndClear() ?? ArrayHelper.Empty<object>();
 
-					info.HasResult = true;
+						ChangeState(subscription, SubscriptionStates.Finished);
+						_requests.Remove(message.OriginalTransactionId);
+					}
+					else
+						items = ArrayHelper.Empty<object>();
 
-					return info.LookupItems.CopyAndClear().Cast<TItem>().ToArray() ?? ArrayHelper.Empty<TItem>();
+					return subscription;
 				}
 			}
 
-			public Subscription ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message)
+			public Subscription ProcessSubscriptionOnlineMessage(SubscriptionOnlineMessage message, out object[] items)
 			{
-				var subscription = TryGetSubscription(message.OriginalTransactionId, true);
-
-				if (subscription != null)
+				lock (_syncObject)
 				{
-					ChangeState(subscription, SubscriptionStates.Finished);
-					_requests.Remove(message.OriginalTransactionId);
+					var subscription = TryGetSubscription(message.OriginalTransactionId, false, null, out var info);
+
+					if (subscription != null)
+					{
+						items = info.LookupItems?.CopyAndClear() ?? ArrayHelper.Empty<object>();
+						ChangeState(subscription, SubscriptionStates.Online);
+					}
+					else
+						items = ArrayHelper.Empty<object>();
+
+					return subscription;
 				}
-
-				return subscription;
-			}
-
-			public Subscription ProcessSubscriptionOnlineMessage(SubscriptionOnlineMessage message)
-			{
-				var subscription = TryGetSubscription(message.OriginalTransactionId, false);
-
-				if (subscription != null)
-					ChangeState(subscription, SubscriptionStates.Online);
-
-				return subscription;
 			}
 
 			public IEnumerable<Tuple<Subscription, Candle>> UpdateCandles(CandleMessage message)
