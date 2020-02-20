@@ -307,6 +307,7 @@ P:StockSharp.Fix.Dialects.DefaultFixDialect.PossibleSupportedMessages/inheritdoc
 P:StockSharp.Fix.Dialects.DefaultFixDialect.SupportedResultMessages/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.DefaultFixDialect.SupportedOutMessages/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.DefaultFixDialect.ConvertToLatin/summary;DocStr9080
+P:StockSharp.Fix.Dialects.DefaultFixDialect.TimeFrames/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.DefaultFixDialect.CheckTimeFrameByRequest/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.DefaultFixDialect.IsSupportMarketDataResponse/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.DefaultFixDialect.IsAutoReplyOnTransactonalUnsubscription/inheritdoc;DocStr8459
