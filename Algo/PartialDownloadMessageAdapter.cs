@@ -446,17 +446,6 @@
 					break;
 				}
 
-				case MessageTypes.CandleTimeFrame:
-				case MessageTypes.CandlePnF:
-				case MessageTypes.CandleRange:
-				case MessageTypes.CandleRenko:
-				case MessageTypes.CandleTick:
-				case MessageTypes.CandleVolume:
-				{
-					TryUpdateSubscriptionResult((CandleMessage)message);
-					break;
-				}
-
 				case MessageTypes.Execution:
 				{
 					var execMsg = (ExecutionMessage)message;
@@ -477,6 +466,14 @@
 				case MessageTypes.QuoteChange:
 				{
 					TryUpdateSubscriptionResult((QuoteChangeMessage)message);
+					break;
+				}
+
+				default:
+				{
+					if (message is CandleMessage candleMsg)
+						TryUpdateSubscriptionResult(candleMsg);
+
 					break;
 				}
 			}

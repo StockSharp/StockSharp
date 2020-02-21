@@ -69,20 +69,6 @@ namespace StockSharp.Algo.Strategies.Testing
 						break;
 					}
 
-					case MessageTypes.CandlePnF:
-					case MessageTypes.CandleRange:
-					case MessageTypes.CandleRenko:
-					case MessageTypes.CandleTick:
-					case MessageTypes.CandleTimeFrame:
-					case MessageTypes.CandleVolume:
-					{
-						if (message.Adapter != _parent.MarketDataAdapter)
-							break;
-
-						SendMessageToEmulationAdapters(message);
-						return;
-					}
-
 					case MessageTypes.Execution:
 					{
 						if (message.Adapter != _parent.MarketDataAdapter)
@@ -97,6 +83,20 @@ namespace StockSharp.Algo.Strategies.Testing
 						}
 						else
 							SendMessageToEmulationAdapters(message);
+
+						break;
+					}
+
+					default:
+					{
+						if (message is CandleMessage)
+						{
+							if (message.Adapter != _parent.MarketDataAdapter)
+								break;
+
+							SendMessageToEmulationAdapters(message);
+							return;
+						}
 
 						break;
 					}

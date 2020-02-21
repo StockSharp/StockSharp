@@ -43,20 +43,11 @@ namespace StockSharp.Algo.Candles.Compression
 						break;
 					}
 
-					switch (mdMsg.DataType)
+					if (mdMsg.DataType.IsCandleDataType())
 					{
-						case MarketDataTypes.CandleTimeFrame:
-						case MarketDataTypes.CandleTick:
-						case MarketDataTypes.CandleVolume:
-						case MarketDataTypes.CandleRange:
-						case MarketDataTypes.CandlePnF:
-						case MarketDataTypes.CandleRenko:
-						{
-							var info = _infos.SafeAdd(mdMsg.TransactionId, k => mdMsg.DataType.ToCandleMessage().CreateInstance<CandleMessage>());
-							info.SecurityId = mdMsg.SecurityId;
-							info.Arg = mdMsg.Arg;
-							break;
-						}
+						var info = _infos.SafeAdd(mdMsg.TransactionId, k => mdMsg.DataType.ToCandleMessage().CreateInstance<CandleMessage>());
+						info.SecurityId = mdMsg.SecurityId;
+						info.Arg = mdMsg.Arg;
 					}
 
 					break;
@@ -69,24 +60,14 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			switch (message.Type)
+			switch (message)
 			{
-				case MessageTypes.CandleTimeFrame:
-				case MessageTypes.CandlePnF:
-				case MessageTypes.CandleRange:
-				case MessageTypes.CandleRenko:
-				case MessageTypes.CandleTick:
-				case MessageTypes.CandleVolume:
-				{
-					ProcessCandle((CandleMessage)message);
+				case CandleMessage candleMsg:
+					ProcessCandle(candleMsg);
 					break;
-				}
-
-				case MessageTypes.SubscriptionFinished:
-				{
-					_infos.Remove(((SubscriptionFinishedMessage)message).OriginalTransactionId);
+				case SubscriptionFinishedMessage finishedMsg:
+					_infos.Remove(finishedMsg.OriginalTransactionId);
 					break;
-				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);

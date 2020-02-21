@@ -28,7 +28,6 @@ namespace StockSharp.Algo
 	using StockSharp.Algo.Server;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Community;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -37,6 +36,16 @@ namespace StockSharp.Algo
 	/// </summary>
 	public static class MessageConverterHelper
 	{
+		static MessageConverterHelper()
+		{
+			RegisterCandle(typeof(TimeFrameCandle), typeof(TimeFrameCandleMessage), () => new TimeFrameCandle(), () => new TimeFrameCandleMessage());
+			RegisterCandle(typeof(TickCandle), typeof(TickCandleMessage), () => new TickCandle(), () => new TickCandleMessage());
+			RegisterCandle(typeof(VolumeCandle), typeof(VolumeCandleMessage), () => new VolumeCandle(), () => new VolumeCandleMessage());
+			RegisterCandle(typeof(RangeCandle), typeof(RangeCandleMessage), () => new RangeCandle(), () => new RangeCandleMessage());
+			RegisterCandle(typeof(PnFCandle), typeof(PnFCandleMessage), () => new PnFCandle(), () => new PnFCandleMessage());
+			RegisterCandle(typeof(RenkoCandle), typeof(RenkoCandleMessage), () => new RenkoCandle(), () => new RenkoCandleMessage());
+		}
+
 		/// <summary>
 		/// Cast <see cref="MarketDepth"/> to the <see cref="QuoteChangeMessage"/>.
 		/// </summary>
@@ -61,15 +70,7 @@ namespace StockSharp.Algo
 			};
 		}
 
-		private static readonly PairSet<Type, Type> _candleTypes = new PairSet<Type, Type>
-		{
-			{ typeof(TimeFrameCandle), typeof(TimeFrameCandleMessage) },
-			{ typeof(TickCandle), typeof(TickCandleMessage) },
-			{ typeof(VolumeCandle), typeof(VolumeCandleMessage) },
-			{ typeof(RangeCandle), typeof(RangeCandleMessage) },
-			{ typeof(PnFCandle), typeof(PnFCandleMessage) },
-			{ typeof(RenkoCandle), typeof(RenkoCandleMessage) },
-		};
+		private static readonly SynchronizedPairSet<Type, Type> _candleTypes = new SynchronizedPairSet<Type, Type>();
 
 		/// <summary>
 		/// Cast candle type <see cref="Candle"/> to the message <see cref="CandleMessage"/>.
@@ -117,22 +118,10 @@ namespace StockSharp.Algo
 			if (candle == null)
 				throw new ArgumentNullException(nameof(candle));
 
-			CandleMessage message;
-
-			if (candle is TimeFrameCandle)
-				message = new TimeFrameCandleMessage();
-			else if (candle is TickCandle)
-				message = new TickCandleMessage();
-			else if (candle is VolumeCandle)
-				message = new VolumeCandleMessage();
-			else if (candle is RangeCandle)
-				message = new RangeCandleMessage();
-			else if (candle is PnFCandle)
-				message = new PnFCandleMessage();
-			else if (candle is RenkoCandle)
-				message = new RenkoCandleMessage();
-			else
+			if (!_candleTypes.TryGetValue(candle.GetType(), out var messageType))
 				throw new ArgumentException(LocalizedStrings.UnknownCandleType.Put(candle.GetType()), nameof(candle));
+
+			var message = CreateCandleMessage(messageType);
 
 			message.LocalTime = candle.OpenTime;
 			message.SecurityId = candle.Security.ToSecurityId();
@@ -1072,6 +1061,48 @@ namespace StockSharp.Algo
 			return candle;
 		}
 
+		private static readonly SynchronizedDictionary<Type, Func<Candle>> _candleCreators = new SynchronizedDictionary<Type, Func<Candle>>();
+		private static readonly SynchronizedDictionary<Type, Func<CandleMessage>> _candleMessageCreators = new SynchronizedDictionary<Type, Func<CandleMessage>>();
+
+		/// <summary>
+		/// Create instance of <see cref="CandleMessage"/>.
+		/// </summary>
+		/// <param name="messageType">The type of candle message.</param>
+		/// <returns>Instance of <see cref="CandleMessage"/>.</returns>
+		public static CandleMessage CreateCandleMessage(this Type messageType)
+		{
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
+
+			if (!_candleMessageCreators.TryGetValue(messageType, out var creator))
+				throw new ArgumentException(LocalizedStrings.UnknownCandleType.Put(messageType), nameof(messageType));
+
+			return creator();
+		}
+
+		/// <summary>
+		/// Register new candle type.
+		/// </summary>
+		/// <param name="candleType">Candle type.</param>
+		/// <param name="messageType">The type of candle message.</param>
+		/// <param name="candleCreator"><see cref="Candle"/> instance creator.</param>
+		/// <param name="candleMessageCreator"><see cref="CandleMessage"/> instance creator.</param>
+		public static void RegisterCandle(Type candleType, Type messageType, Func<Candle> candleCreator, Func<CandleMessage> candleMessageCreator)
+		{
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
+
+			if (candleCreator == null)
+				throw new ArgumentNullException(nameof(candleCreator));
+
+			if (candleMessageCreator == null)
+				throw new ArgumentNullException(nameof(candleMessageCreator));
+
+			_candleTypes.Add(candleType, messageType);
+			_candleCreators.Add(candleType, candleCreator);
+			_candleMessageCreators.Add(messageType, candleMessageCreator);
+		}
+
 		/// <summary>
 		/// To convert <see cref="CandleMessage"/> into candle.
 		/// </summary>
@@ -1086,37 +1117,10 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			Candle candle;
+			if (!_candleTypes.TryGetKey(message.GetType(), out var candleType) || !_candleCreators.TryGetValue(candleType, out var creator))
+				throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.WrongCandleType);
 
-			switch (message.Type)
-			{
-				case MessageTypes.CandleTimeFrame:
-					candle = new TimeFrameCandle();
-					break;
-
-				case MessageTypes.CandleVolume:
-					candle = new VolumeCandle();
-					break;
-
-				case MessageTypes.CandleTick:
-					candle = new TickCandle();
-					break;
-
-				case MessageTypes.CandleRange:
-					candle = new RangeCandle();
-					break;
-
-				case MessageTypes.CandleRenko:
-					candle = new RenkoCandle();
-					break;
-
-				case MessageTypes.CandlePnF:
-					candle = new PnFCandle();
-					break;
-
-				default:
-					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.WrongCandleType);
-			}
+			var candle = creator();
 
 			candle.Security = security;
 			candle.Arg = message.Arg;

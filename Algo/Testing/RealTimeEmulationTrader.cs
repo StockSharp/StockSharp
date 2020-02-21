@@ -276,18 +276,11 @@ namespace StockSharp.Algo.Testing
 						case MessageTypes.ChangePassword:
 							break;
 
-						case MessageTypes.Security:
-						case MessageTypes.CandleTimeFrame:
-						case MessageTypes.CandlePnF:
-						case MessageTypes.CandleRange:
-						case MessageTypes.CandleRenko:
-						case MessageTypes.CandleTick:
-						case MessageTypes.CandleVolume:
-							TransactionAdapter.SendInMessage(message);
-							break;
-
 						default:
 							TransactionAdapter.SendInMessage(message);
+
+							if (message.Type == MessageTypes.Security || message is CandleMessage)
+								break;
 
 							// ignore emu connector "raw" (without emu orders) market data
 							return;

@@ -241,23 +241,8 @@ namespace StockSharp.Algo.Storages
 					if (s.DataType == typeof(TimeMessage))
 						dataTypes.Add(MessageTypes.Time);
 
-					if (s.DataType == typeof(TimeFrameCandleMessage))
-						dataTypes.Add(MessageTypes.CandleTimeFrame);
-
-					if (s.DataType == typeof(PnFCandleMessage))
-						dataTypes.Add(MessageTypes.CandlePnF);
-
-					if (s.DataType == typeof(RangeCandleMessage))
-						dataTypes.Add(MessageTypes.CandleRange);
-
-					if (s.DataType == typeof(RenkoCandleMessage))
-						dataTypes.Add(MessageTypes.CandleRenko);
-
-					if (s.DataType == typeof(TickCandleMessage))
-						dataTypes.Add(MessageTypes.CandleTick);
-
-					if (s.DataType == typeof(VolumeCandleMessage))
-						dataTypes.Add(MessageTypes.CandleVolume);
+					if (s.DataType.IsCandleMessage())
+						dataTypes.Add(s.DataType.ToCandleMarketDataType().ToCandleMessageType());
 				}
 
 				DataTypes = dataTypes.ToArray();

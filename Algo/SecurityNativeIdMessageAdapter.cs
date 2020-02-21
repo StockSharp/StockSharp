@@ -198,18 +198,6 @@
 					break;
 				}
 
-				case MessageTypes.CandleTimeFrame:
-				case MessageTypes.CandleRange:
-				case MessageTypes.CandlePnF:
-				case MessageTypes.CandleRenko:
-				case MessageTypes.CandleTick:
-				case MessageTypes.CandleVolume:
-				{
-					var candleMsg = (CandleMessage)message;
-					ProcessMessage(candleMsg, candleMsg.OriginalTransactionId == 0, null);
-					break;
-				}
-
 				case MessageTypes.News:
 				{
 					var newsMsg = (NewsMessage)message;
@@ -223,8 +211,14 @@
 				}
 
 				default:
-					base.OnInnerAdapterNewOutMessage(message);
+				{
+					if (message is CandleMessage candleMsg)
+						ProcessMessage(candleMsg, candleMsg.OriginalTransactionId == 0, null);
+					else
+						base.OnInnerAdapterNewOutMessage(message);
+
 					break;
+				}
 			}
 		}
 

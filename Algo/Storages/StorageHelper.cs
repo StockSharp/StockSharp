@@ -380,50 +380,6 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To convert string representation of the candle argument into typified.
-		/// </summary>
-		/// <param name="messageType">The type of candle message.</param>
-		/// <param name="str">The string representation of the argument.</param>
-		/// <returns>Argument.</returns>
-		public static object ToCandleArg(this Type messageType, string str)
-		{
-			if (messageType == null)
-				throw new ArgumentNullException(nameof(messageType));
-
-			if (str.IsEmpty())
-				throw new ArgumentNullException(nameof(str));
-
-			if (messageType == typeof(TimeFrameCandleMessage))
-			{
-				return str.Replace('-', ':').To<TimeSpan>();
-			}
-			else if (messageType == typeof(TickCandleMessage))
-			{
-				return str.To<int>();
-			}
-			else if (messageType == typeof(VolumeCandleMessage))
-			{
-				return str.To<decimal>();
-			}
-			else if (messageType == typeof(RangeCandleMessage) || messageType == typeof(RenkoCandleMessage))
-			{
-				return str.ToUnit();
-			}
-			else if (messageType == typeof(PnFCandleMessage))
-			{
-				var parts = str.Split('_');
-
-				return new PnFArg
-				{
-					BoxSize = parts[0].ToUnit(),
-					ReversalAmount = parts[1].To<int>()
-				};
-			}
-			else
-				throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
-		}
-
-		/// <summary>
 		/// Read instrument by identifier.
 		/// </summary>
 		/// <param name="securities">Instrument storage collection.</param>

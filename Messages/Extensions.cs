@@ -37,6 +37,25 @@ namespace StockSharp.Messages
 	/// </summary>
 	public static class Extensions
 	{
+		static Extensions()
+		{
+			RegisterCandleType(typeof(TimeFrameCandleMessage), MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame, str => str.Replace('-', ':').To<TimeSpan>());
+			RegisterCandleType(typeof(TickCandleMessage), MessageTypes.CandleTick, MarketDataTypes.CandleTick, str => str.To<int>());
+			RegisterCandleType(typeof(VolumeCandleMessage), MessageTypes.CandleVolume, MarketDataTypes.CandleVolume, str => str.To<decimal>());
+			RegisterCandleType(typeof(RangeCandleMessage), MessageTypes.CandleRange, MarketDataTypes.CandleRange, str => str.ToUnit());
+			RegisterCandleType(typeof(RenkoCandleMessage), MessageTypes.CandleRenko, MarketDataTypes.CandleRenko, str => str.ToUnit());
+			RegisterCandleType(typeof(PnFCandleMessage), MessageTypes.CandlePnF, MarketDataTypes.CandlePnF, str =>
+			{
+				var parts = str.Split('_');
+
+				return new PnFArg
+				{
+					BoxSize = parts[0].ToUnit(),
+					ReversalAmount = parts[1].To<int>()
+				};
+			});
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
 		/// </summary>
@@ -596,15 +615,7 @@ namespace StockSharp.Messages
 			return adapter.SupportedOutMessages.Contains(type);
 		}
 
-		private static readonly PairSet<MessageTypes, MarketDataTypes> _candleDataTypes = new PairSet<MessageTypes, MarketDataTypes>
-		{
-			{ MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame },
-			{ MessageTypes.CandleTick, MarketDataTypes.CandleTick },
-			{ MessageTypes.CandleVolume, MarketDataTypes.CandleVolume },
-			{ MessageTypes.CandleRange, MarketDataTypes.CandleRange },
-			{ MessageTypes.CandlePnF, MarketDataTypes.CandlePnF },
-			{ MessageTypes.CandleRenko, MarketDataTypes.CandleRenko },
-		};
+		private static readonly PairSet<MessageTypes, MarketDataTypes> _candleDataTypes = new PairSet<MessageTypes, MarketDataTypes>();
 
 		/// <summary>
 		/// Determine the <paramref name="type"/> is candle data type.
@@ -636,15 +647,54 @@ namespace StockSharp.Messages
 			return _candleDataTypes[type];
 		}
 
-		private static readonly PairSet<Type, MarketDataTypes> _candleMarketDataTypes = new PairSet<Type, MarketDataTypes>
+		private static readonly SynchronizedPairSet<Type, Func<string, object>> _candleArgParsers = new SynchronizedPairSet<Type, Func<string, object>>();
+
+		/// <summary>
+		/// To convert string representation of the candle argument into typified.
+		/// </summary>
+		/// <param name="messageType">The type of candle message.</param>
+		/// <param name="str">The string representation of the argument.</param>
+		/// <returns>Argument.</returns>
+		public static object ToCandleArg(this Type messageType, string str)
 		{
-			{ typeof(TimeFrameCandleMessage), MarketDataTypes.CandleTimeFrame },
-			{ typeof(TickCandleMessage), MarketDataTypes.CandleTick },
-			{ typeof(VolumeCandleMessage), MarketDataTypes.CandleVolume },
-			{ typeof(RangeCandleMessage), MarketDataTypes.CandleRange },
-			{ typeof(PnFCandleMessage), MarketDataTypes.CandlePnF },
-			{ typeof(RenkoCandleMessage), MarketDataTypes.CandleRenko },
-		};
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
+
+			if (str.IsEmpty())
+				throw new ArgumentNullException(nameof(str));
+
+			if (_candleArgParsers.TryGetValue(messageType, out var parser))
+				return parser(str);
+
+			throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
+		}
+
+		private static readonly CachedSynchronizedPairSet<Type, MarketDataTypes> _candleMarketDataTypes = new CachedSynchronizedPairSet<Type, MarketDataTypes>();
+
+		/// <summary>
+		/// All registered candle types.
+		/// </summary>
+		public static IEnumerable<Type> AllCandleTypes => _candleMarketDataTypes.CachedKeys;
+
+		/// <summary>
+		/// Register new candle type.
+		/// </summary>
+		/// <param name="messageType">The type of candle message.</param>
+		/// <param name="type">Message type.</param>
+		/// <param name="dataType">Candles type.</param>
+		/// <param name="argParser">Candle arg parser.</param>
+		public static void RegisterCandleType(Type messageType, MessageTypes type, MarketDataTypes dataType, Func<string, object> argParser)
+		{
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
+
+			if (argParser == null)
+				throw new ArgumentNullException(nameof(argParser));
+
+			_candleDataTypes.Add(type, dataType);
+			_candleMarketDataTypes.Add(messageType, dataType);
+			_candleArgParsers.Add(messageType, argParser);
+		}
 
 		/// <summary>
 		/// Cast candle type <see cref="MarketDataTypes"/> to the message <see cref="CandleMessage"/>.
@@ -766,15 +816,13 @@ namespace StockSharp.Messages
 					return DataType.News;
 				case MarketDataTypes.Board:
 					return DataType.Board;
-				case MarketDataTypes.CandleTimeFrame:
-				case MarketDataTypes.CandleTick:
-				case MarketDataTypes.CandleVolume:
-				case MarketDataTypes.CandleRange:
-				case MarketDataTypes.CandlePnF:
-				case MarketDataTypes.CandleRenko:
-					return DataType.Create(type.ToCandleMessage(), arg);
 				default:
+				{
+					if (type.IsCandleDataType())
+						return DataType.Create(type.ToCandleMessage(), arg);
+
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+				}
 			}
 		}
 

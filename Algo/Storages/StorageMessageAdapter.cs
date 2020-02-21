@@ -791,28 +791,24 @@ namespace StockSharp.Algo.Storages
 					
 					break;
 
-				case MarketDataTypes.CandlePnF:
-					lastTime = LoadMessages(GetStorage<PnFCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId, SendReply);
-					break;
+				default:
+				{
+					if (msg.DataType.IsCandleDataType())
+					{
+						var storage = (IMarketDataStorage<CandleMessage>)GetStorage(secId, msg.DataType.ToCandleMessage(), msg.Arg);
 
-				case MarketDataTypes.CandleRange:
-					lastTime = LoadMessages(GetStorage<RangeCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId, SendReply);
-					break;
+						var range = GetRange(storage, from, to, DaysLoad);
 
-				case MarketDataTypes.CandleRenko:
-					lastTime = LoadMessages(GetStorage<RenkoCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId, SendReply);
-					break;
+						if (range != null)
+						{
+							var messages = storage.Load(range.Item1.Date, range.Item2.Date.EndOfDay());
+							lastTime = LoadMessages(messages, range.Item1, transactionId, SendReply);
+						}
+					}
 
-				case MarketDataTypes.CandleTick:
-					lastTime = LoadMessages(GetStorage<TickCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId, SendReply);
 					break;
-
-				case MarketDataTypes.CandleVolume:
-					lastTime = LoadMessages(GetStorage<VolumeCandleMessage>(secId, msg.Arg), from, to, DaysLoad, transactionId, SendReply);
-					break;
-
-				//default:
-				//	throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str721);
+					// throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str721);
+				}
 			}
 
 			return lastTime;

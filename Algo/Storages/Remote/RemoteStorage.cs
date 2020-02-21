@@ -47,12 +47,8 @@ namespace StockSharp.Algo.Storages.Remote
 			AddDataType(typeof(QuoteChangeMessage));
 			AddDataType(typeof(NewsMessage));
 
-			AddDataType(typeof(TimeFrameCandleMessage));
-			AddDataType(typeof(RangeCandleMessage));
-			AddDataType(typeof(RenkoCandleMessage));
-			AddDataType(typeof(PnFCandleMessage));
-			AddDataType(typeof(TickCandleMessage));
-			AddDataType(typeof(VolumeCandleMessage));
+			foreach (var candleType in Messages.Extensions.AllCandleTypes)
+				AddDataType(candleType);
 
 			AddDataType(typeof(PositionChangeMessage));
 		}

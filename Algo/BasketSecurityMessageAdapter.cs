@@ -149,34 +149,6 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				case MessageTypes.CandleTimeFrame:
-				case MessageTypes.CandleRange:
-				case MessageTypes.CandleTick:
-				case MessageTypes.CandleVolume:
-				case MessageTypes.CandlePnF:
-				case MessageTypes.CandleRenko:
-				{
-					var candleMsg = (CandleMessage)message;
-
-					if (_subscriptions.TryGetValue(message.Type.ToCandleMarketDataType(), out var dict))
-					{
-						if (dict.TryGetValue(candleMsg.OriginalTransactionId, out var info))
-						{
-							var basketMsgs = info.Processor.Process(candleMsg).Cast<CandleMessage>();
-
-							foreach (var basketMsg in basketMsgs)
-							{
-								basketMsg.OriginalTransactionId = info.TransactionId;
-								base.OnInnerAdapterNewOutMessage(basketMsg);
-							}
-
-							return;
-						}
-					}
-
-					break;
-				}
-
 				case MessageTypes.QuoteChange:
 				{
 					var quotesMsg = (QuoteChangeMessage)message;
@@ -225,6 +197,27 @@ namespace StockSharp.Algo
 
 								return;
 							}
+						}
+					}
+
+					break;
+				}
+
+				default:
+				{
+					if (message is CandleMessage candleMsg && _subscriptions.TryGetValue(message.Type.ToCandleMarketDataType(), out var dict))
+					{
+						if (dict.TryGetValue(candleMsg.OriginalTransactionId, out var info))
+						{
+							var basketMsgs = info.Processor.Process(candleMsg).Cast<CandleMessage>();
+
+							foreach (var basketMsg in basketMsgs)
+							{
+								basketMsg.OriginalTransactionId = info.TransactionId;
+								base.OnInnerAdapterNewOutMessage(basketMsg);
+							}
+
+							return;
 						}
 					}
 

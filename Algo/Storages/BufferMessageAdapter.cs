@@ -41,11 +41,6 @@ namespace StockSharp.Algo.Storages
 		{
 			private readonly SynchronizedDictionary<TKey, List<TMarketData>> _data = new SynchronizedDictionary<TKey, List<TMarketData>>();
 
-			///// <summary>
-			///// The buffer size.
-			///// </summary>
-			//public int Size { get; set; }
-
 			/// <summary>
 			/// To add new information to the buffer.
 			/// </summary>
@@ -53,19 +48,8 @@ namespace StockSharp.Algo.Storages
 			/// <param name="data">New information.</param>
 			public void Add(TKey key, TMarketData data)
 			{
-				//Add(key, new[] { data });
 				_data.SyncDo(d => d.SafeAdd(key).Add(data));
 			}
-
-			///// <summary>
-			///// To add new information to the buffer.
-			///// </summary>
-			///// <param name="key">The key possessing new information.</param>
-			///// <param name="data">New information.</param>
-			//public void Add(TKey key, IEnumerable<TMarketData> data)
-			//{
-			//	_data.SyncDo(d => d.SafeAdd(key).AddRange(data));
-			//}
 
 			/// <summary>
 			/// To get accumulated data from the buffer and delete them.
@@ -80,31 +64,6 @@ namespace StockSharp.Algo.Storages
 					return retVal;
 				});
 			}
-
-			///// <summary>
-			///// To get accumulated data from the buffer and delete them.
-			///// </summary>
-			///// <param name="key">The key possessing market data.</param>
-			///// <returns>Gotten data.</returns>
-			//public IEnumerable<TMarketData> Get(TKey key)
-			//{
-			//	if (key.IsDefault())
-			//		throw new ArgumentNullException(nameof(key));
-
-			//	return _data.SyncGet(d =>
-			//	{
-			//		var data = d.TryGetValue(key);
-
-			//		if (data != null)
-			//		{
-			//			var retVal = data.CopyAndClear();
-			//			d.Remove(key);
-			//			return retVal;
-			//		}
-
-			//		return Enumerable.Empty<TMarketData>();
-			//	});
-			//}
 
 			public void Clear()
 			{
@@ -542,23 +501,6 @@ namespace StockSharp.Algo.Storages
 
 					break;
 				}
-				case MessageTypes.CandlePnF:
-				case MessageTypes.CandleRange:
-				case MessageTypes.CandleRenko:
-				case MessageTypes.CandleTick:
-				case MessageTypes.CandleTimeFrame:
-				case MessageTypes.CandleVolume:
-				{
-					var candleMsg = (CandleMessage)message;
-
-					if (candleMsg.State != CandleStates.Finished)
-						break;
-
-					if (CanStore(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg))
-						_candleBuffer.Add(Tuple.Create(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg), (CandleMessage)candleMsg.Clone());
-
-					break;
-				}
 				case MessageTypes.News:
 				{
 					if (CanStore<NewsMessage>(default))
@@ -573,6 +515,17 @@ namespace StockSharp.Algo.Storages
 
 					//if (CanStore<PositionChangeMessage>(secId))
 					_positionChangesBuffer.Add(secId, (PositionChangeMessage)posMsg.Clone());
+
+					break;
+				}
+
+				default:
+				{
+					if (message is CandleMessage candleMsg && candleMsg.State == CandleStates.Finished)
+					{
+						if (CanStore(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg))
+							_candleBuffer.Add(Tuple.Create(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg), (CandleMessage)candleMsg.Clone());
+					}
 
 					break;
 				}

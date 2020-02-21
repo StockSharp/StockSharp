@@ -655,22 +655,19 @@ namespace StockSharp.Algo
 						ProcessSecurityRemoveMessage((SecurityRemoveMessage)message);
 						break;
 
-					case MessageTypes.CandleTimeFrame:
-					case MessageTypes.CandlePnF:
-					case MessageTypes.CandleRange:
-					case MessageTypes.CandleRenko:
-					case MessageTypes.CandleTick:
-					case MessageTypes.CandleVolume:
-						ProcessCandleMessage((CandleMessage)message);
-						break;
-
 					case MessageTypes.ChangePassword:
 						ProcessChangePasswordMessage((ChangePasswordMessage)message);
 						break;
 
-					// если адаптеры передают специфичные сообщения
-					//default:
-					//	throw new ArgumentOutOfRangeException(LocalizedStrings.Str2142Params.Put(message.Type));
+					default:
+					{
+						if (message is CandleMessage candleMsg)
+							ProcessCandleMessage(candleMsg);
+
+						// если адаптеры передают специфичные сообщения
+						// throw new ArgumentOutOfRangeException(LocalizedStrings.Str2142Params.Put(message.Type));
+						break;
+					}
 				}
 			}
 			catch (Exception ex)

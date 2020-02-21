@@ -400,32 +400,6 @@ namespace StockSharp.Algo.Testing
 						break;
 					}
 
-					case MessageTypes.CandleTimeFrame:
-					case MessageTypes.CandlePnF:
-					case MessageTypes.CandleRange:
-					case MessageTypes.CandleRenko:
-					case MessageTypes.CandleTick:
-					case MessageTypes.CandleVolume:
-					{
-						var candleMsg = (CandleMessage)message;
-
-						// в трейдах используется время открытия свечи, при разных MarketTimeChangedInterval и TimeFrame свечек
-						// возможны ситуации, когда придет TimeMsg 11:03:00, а время закрытия будет 11:03:30
-						// т.о. время уйдет вперед данных, которые построены по свечкам.
-						var info = _candleInfo.SafeAdd(candleMsg.OpenTime, key => Tuple.Create(new List<CandleMessage>(), new List<ExecutionMessage>()));
-
-						info.Item1.Add((CandleMessage)candleMsg.Clone());
-
-						if (_securityDefinition != null/* && _parent._settings.UseCandlesTimeFrame != null*/)
-						{
-							var trades = candleMsg.ToTrades(GetVolumeStep(), _volumeDecimals).ToArray();
-							Process(trades[0], result);
-							info.Item2.AddRange(trades.Skip(1));	
-						}
-						
-						break;
-					}
-
 					case ExtendedMessageTypes.Generator:
 					{
 						var generatorMsg = (GeneratorMessage)message;
@@ -485,7 +459,28 @@ namespace StockSharp.Algo.Testing
 					}
 
 					default:
+					{
+						if (message is CandleMessage candleMsg)
+						{
+							// в трейдах используется время открытия свечи, при разных MarketTimeChangedInterval и TimeFrame свечек
+							// возможны ситуации, когда придет TimeMsg 11:03:00, а время закрытия будет 11:03:30
+							// т.о. время уйдет вперед данных, которые построены по свечкам.
+							var info = _candleInfo.SafeAdd(candleMsg.OpenTime, key => Tuple.Create(new List<CandleMessage>(), new List<ExecutionMessage>()));
+
+							info.Item1.Add((CandleMessage)candleMsg.Clone());
+
+							if (_securityDefinition != null/* && _parent._settings.UseCandlesTimeFrame != null*/)
+							{
+								var trades = candleMsg.ToTrades(GetVolumeStep(), _volumeDecimals).ToArray();
+								Process(trades[0], result);
+								info.Item2.AddRange(trades.Skip(1));	
+							}
+						
+							break;
+						}
+
 						throw new ArgumentOutOfRangeException();
+					}
 				}
 
 				ProcessTime(message, result);
@@ -1901,18 +1896,6 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case MessageTypes.CandleTimeFrame:
-				case MessageTypes.CandlePnF:
-				case MessageTypes.CandleRange:
-				case MessageTypes.CandleRenko:
-				case MessageTypes.CandleTick:
-				case MessageTypes.CandleVolume:
-				{
-					var candleMsg = (CandleMessage)message;
-					GetEmulator(candleMsg.SecurityId).Process(candleMsg, retVal);
-					break;
-				}
-
 				case MessageTypes.Portfolio:
 				{
 					var pfMsg = (PortfolioMessage)message;
@@ -2017,8 +2000,14 @@ namespace StockSharp.Algo.Testing
 					break;
 
 				default:
-					retVal.Add(message);
+				{
+					if (message is CandleMessage candleMsg)
+						GetEmulator(candleMsg.SecurityId).Process(candleMsg, retVal);
+					else
+						retVal.Add(message);
+
 					break;
+				}
 			}
 
 			RecalcPnL(message.LocalTime, retVal);

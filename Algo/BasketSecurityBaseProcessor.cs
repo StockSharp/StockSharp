@@ -91,6 +91,7 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.QuoteChange:
+				{
 					var quoteMsg = (QuoteChangeMessage)message;
 
 					if (!ContainsLeg(quoteMsg.SecurityId))
@@ -108,8 +109,10 @@ namespace StockSharp.Algo
 						yield break;
 
 					break;
+				}
 
 				case MessageTypes.Execution:
+				{
 					var execMsg = (ExecutionMessage)message;
 
 					if (!ContainsLeg(execMsg.SecurityId))
@@ -131,25 +134,23 @@ namespace StockSharp.Algo
 					}
 
 					break;
-
-				case MessageTypes.CandleTimeFrame:
-				case MessageTypes.CandlePnF:
-				case MessageTypes.CandleRange:
-				case MessageTypes.CandleRenko:
-				case MessageTypes.CandleTick:
-				case MessageTypes.CandleVolume:
-					var candleMsg = (CandleMessage)message;
-
-					if (!ContainsLeg(candleMsg.SecurityId))
-						yield break;
-
-					if (!CanProcess(candleMsg.SecurityId, candleMsg.OpenTime, candleMsg.ClosePrice, candleMsg.TotalVolume, candleMsg.OpenInterest))
-						yield break;
-
-					break;
+				}
 
 				default:
+				{
+					if (message is CandleMessage candleMsg)
+					{
+						if (!ContainsLeg(candleMsg.SecurityId))
+							yield break;
+
+						if (!CanProcess(candleMsg.SecurityId, candleMsg.OpenTime, candleMsg.ClosePrice, candleMsg.TotalVolume, candleMsg.OpenInterest))
+							yield break;
+
+						break;
+					}
+
 					throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str2142Params.Put(message.Type));
+				}
 			}
 
 			message = message.Clone();
@@ -289,11 +290,7 @@ namespace StockSharp.Algo
 	public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
 		where TBasketSecurity : IndexSecurity, new()
 	{
-		private static class Holder<TMessage>
-			where TMessage : Message
-		{
-			public static readonly Dictionary<SecurityId, TMessage> Messages = new Dictionary<SecurityId, TMessage>();
-		}
+		private readonly SynchronizedDictionary<MessageTypes, object> _messages = new SynchronizedDictionary<MessageTypes, object>();
 
 		private readonly Dictionary<SecurityId, ExecutionMessage> _ticks = new Dictionary<SecurityId, ExecutionMessage>();
 		private readonly Dictionary<SecurityId, ExecutionMessage> _ol = new Dictionary<SecurityId, ExecutionMessage>();
@@ -320,7 +317,7 @@ namespace StockSharp.Algo
 					if (!ContainsLeg(quotesMsg.SecurityId))
 						yield break;
 
-					foreach (var msg in ProcessMessage(Holder<QuoteChangeMessage>.Messages, quotesMsg.SecurityId, quotesMsg, quotes => new QuoteChangeMessage
+					foreach (var msg in ProcessMessage(GetDict<QuoteChangeMessage>(message.Type), quotesMsg.SecurityId, quotesMsg, quotes => new QuoteChangeMessage
 					{
 						SecurityId = SecurityId,
 						ServerTime = quotesMsg.ServerTime,
@@ -431,63 +428,16 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				case MessageTypes.CandlePnF:
+				default:
 				{
-					var candleMsg = (PnFCandleMessage)message;
+					if (message is CandleMessage candleMsg)
+					{
+						if (!ContainsLeg(candleMsg.SecurityId))
+							yield break;
 
-					if (!ContainsLeg(candleMsg.SecurityId))
-						yield break;
-
-					foreach (var msg in ProcessMessage(Holder<PnFCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
-						yield return msg;
-
-					break;
-				}
-				case MessageTypes.CandleRange:
-				{
-					var candleMsg = (RangeCandleMessage)message;
-
-					if (!ContainsLeg(candleMsg.SecurityId))
-						yield break;
-
-					foreach (var msg in ProcessMessage(Holder<RangeCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
-						yield return msg;
-
-					break;
-				}
-				case MessageTypes.CandleRenko:
-				{
-					var candleMsg = (RenkoCandleMessage)message;
-
-					if (!ContainsLeg(candleMsg.SecurityId))
-						yield break;
-
-					foreach (var msg in ProcessMessage(Holder<RenkoCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
-						yield return msg;
-
-					break;
-				}
-				case MessageTypes.CandleTick:
-				{
-					var candleMsg = (TickCandleMessage)message;
-
-					if (!ContainsLeg(candleMsg.SecurityId))
-						yield break;
-
-					foreach (var msg in ProcessMessage(Holder<TickCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
-						yield return msg;
-
-					break;
-				}
-				case MessageTypes.CandleVolume:
-				{
-					var candleMsg = (VolumeCandleMessage)message;
-
-					if (!ContainsLeg(candleMsg.SecurityId))
-						yield break;
-
-					foreach (var msg in ProcessMessage(Holder<VolumeCandleMessage>.Messages, candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
-						yield return msg;
+						foreach (var msg in ProcessMessage(GetDict<CandleMessage>(candleMsg.Type), candleMsg.SecurityId, candleMsg, candles => CreateBasketCandle(candles, candleMsg)))
+							yield return msg;
+					}
 
 					break;
 				}
@@ -496,8 +446,12 @@ namespace StockSharp.Algo
 			//return Enumerable.Empty<Message>();
 		}
 
-		private void FillIndexCandle<TCandleMessage>(TCandleMessage indexCandle, TCandleMessage candleMsg, TCandleMessage[] candles)
-			where TCandleMessage : CandleMessage
+		private Dictionary<SecurityId, TMessage> GetDict<TMessage>(MessageTypes type)
+		{
+			return (Dictionary<SecurityId, TMessage>)_messages.SafeAdd(type, key => new Dictionary<SecurityId, TMessage>());
+		}
+
+		private void FillIndexCandle(CandleMessage indexCandle, CandleMessage candleMsg, CandleMessage[] candles)
 		{
 			indexCandle.SecurityId = SecurityId;
 			indexCandle.Arg = candleMsg.CloneArg();
@@ -582,10 +536,12 @@ namespace StockSharp.Algo
 			indexCandle.State = CandleStates.Finished;
 		}
 
-		private TCandleMessage CreateBasketCandle<TCandleMessage>(TCandleMessage[] candles, TCandleMessage last)
-			where TCandleMessage : CandleMessage, new()
+		private CandleMessage CreateBasketCandle(CandleMessage[] candles, CandleMessage last)
 		{
-			var indexCandle = new TCandleMessage();
+			if (last == null)
+				throw new ArgumentNullException(nameof(last));
+
+			var indexCandle = last.GetType().CreateCandleMessage();
 
 			FillIndexCandle(indexCandle, last, candles);
 
