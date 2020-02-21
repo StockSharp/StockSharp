@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Ecng.Xaml.Charting</id>
+    <version>1.0.0</version>
+    <authors>Ecng.Xaml.Charting</authors>
+    <owners>Ecng.Xaml.Charting</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework=".NETFramework4.0">
+        <dependency id="Ecng.Common" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Ecng.Xaml" version="1.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework=".NETFramework4.0" />
+      <frameworkAssembly assemblyName="PresentationCore" targetFramework=".NETFramework4.0" />
+      <frameworkAssembly assemblyName="PresentationFramework" targetFramework=".NETFramework4.0" />
+      <frameworkAssembly assemblyName="System.Xaml" targetFramework=".NETFramework4.0" />
+      <frameworkAssembly assemblyName="WindowsBase" targetFramework=".NETFramework4.0" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

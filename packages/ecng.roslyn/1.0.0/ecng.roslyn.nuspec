@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Ecng.Roslyn</id>
+    <version>1.0.0</version>
+    <authors>Ecng.Roslyn</authors>
+    <owners>Ecng.Roslyn</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="Ecng.Collections" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Ecng.Common" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Collections.Immutable" version="1.7.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework=".NETFramework4.5" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

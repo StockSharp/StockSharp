@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Comment>
+    <Member name="DdeContext">
+        <example>
+        The following example demonstrates how to instantiate a DdeContext in a console application.
+            <code lang="C#">
+            using System;
+            using NDde.Advanced;
+             
+            public class Example 
+            {
+                public static void Main()
+                {
+                    // Create a context that uses a dedicated thread for DDE message pumping.
+                    DdeContext context = new DdeContext();
+                }
+            }
+            </code>
+            <code lang="Visual Basic" >
+            Imports NDde.Advanced
+
+            Public Class Example
+                Public Shared Sub Main()
+                    ' Create a context that uses a dedicated thread for DDE message pumping.
+                    Dim context As DdeContext = New DdeContext()
+                End Sub
+            End Class
+            </code>
+            The following example demonstrates how to instantiate a DdeContext in a windows application.
+            <code lang="C#">
+            using System;
+            using NDde.Advanced;
+             
+            public class Example : Form
+            {
+                // Standard Form code omitted for brevity.
+                
+                private DdeContext context = null;
+                
+                private void Form1_Load(object sender, System.EventArgs e)
+                {
+                    // Create a context that uses the UI thread for DDE message pumping.
+                    context = new DdeContext(this);
+                }
+            }
+            </code>
+            <code lang="Visual Basic">
+            Imports NDde.Advanced
+            
+            Public Class Example
+                Inherits Form
+                
+                Private context as DdeContext = Nothing
+                
+                Private Sub Form1_Load(ByVal sender As Object, ByVal e As System.EventArgs)
+                    ' Create a context that uses the UI thread for DDE message pumping.
+                    context = New DdeContext(Me)
+                End Sub
+            End Class
+            </code>
+        </example>
+    </Member>
+    <Member name="DdeServer">
+        <example>
+        The following example demostrates how to use a DdeServer.
+            <code lang="C#">
+            using System;
+            using System.Collections;
+            using System.Timers;
+            using NDde.Server;
+
+            public class Server
+            {
+                public static void Main()
+                {
+                    try
+                    {
+                        // Create a server that will register the service name 'myapp'.
+                        using (DdeServer server = new MyServer("myapp"))
+                        {
+                            // Register the service name.
+                            server.Register();
+
+                            // Wait for the user to press ENTER before proceding.
+                            Console.WriteLine("Press ENTER to quit...");
+                            Console.ReadLine();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        Console.WriteLine("Press ENTER to quit...");
+                        Console.ReadLine();
+                    }
+                }
+
+                private sealed class MyServer : DdeServer
+                {
+                    private System.Timers.Timer _Timer = new System.Timers.Timer();
+
+                    public MyServer(string service) : base(service)
+                    {
+                        // Create a timer that will be used to advise clients of new data.
+                        _Timer.Elapsed += this.OnTimerElapsed;
+                        _Timer.Interval = 1000;
+                        _Timer.SynchronizingObject = this.Context;
+                        _Timer.Start();
+                    }
+
+                    private void OnTimerElapsed(object sender, ElapsedEventArgs args)
+                    {
+                        // Advise all topic name and item name pairs.
+                        Advise("*", "*");
+                    }
+
+                    protected override bool OnBeforeConnect(string topic)
+                    {
+                        Console.WriteLine("OnBeforeConnect:".PadRight(16)
+                            + " Service='" + base.Service + "'"
+                            + " Topic='" + topic + "'");
+
+                        return true;
+                    }
+
+                    protected override void OnAfterConnect(DdeConversation conversation)
+                    {
+                        Console.WriteLine("OnAfterConnect:".PadRight(16)
+                            + " Service='" + conversation.Service + "'"
+                            + " Topic='" + conversation.Topic + "'"
+                            + " Handle=" + conversation.Handle.ToString());
+                    }
+
+                    protected override void OnDisconnect(DdeConversation conversation)
+                    {
+                        Console.WriteLine("OnDisconnect:".PadRight(16)
+                            + " Service='" + conversation.Service + "'"
+                            + " Topic='" + conversation.Topic + "'"
+                            + " Handle=" + conversation.Handle.ToString());
+                    }
+
+                    protected override bool OnStartAdvise(DdeConversation conversation, string item, int format)
+                    {
+                        Console.WriteLine("OnStartAdvise:".PadRight(16)
+                            + " Service='" + conversation.Service + "'"
+                            + " Topic='" + conversation.Topic + "'"
+                            + " Handle=" + conversation.Handle.ToString()
+                            + " Item='" + item + "'"
+                            + " Format=" + format.ToString());
+
+                        // Initiate the advisory loop only if the format is CF_TEXT.
+                        return format == 1;
+                    }
+
+                    protected override void OnStopAdvise(DdeConversation conversation, string item)
+                    {
+                        Console.WriteLine("OnStopAdvise:".PadRight(16)
+                            + " Service='" + conversation.Service + "'"
+                            + " Topic='" + conversation.Topic + "'"
+                            + " Handle=" + conversation.Handle.ToString()
+                            + " Item='" + item + "'");
+                    }
+
+                    protected override ExecuteResult OnExecute(DdeConversation conversation, string command)
+                    {
+                        Console.WriteLine("OnExecute:".PadRight(16)
+                            + " Service='" + conversation.Service + "'"
+                            + " Topic='" + conversation.Topic + "'"
+                            + " Handle=" + conversation.Handle.ToString()
+                            + " Command='" + command + "'");
+
+                        // Tell the client that the command was processed.
+                        return ExecuteResult.Processed;
+                    }
+
+                    protected override PokeResult OnPoke(DdeConversation conversation, string item, byte[] data, int format)
+                    {
+                        Console.WriteLine("OnPoke:".PadRight(16)
+                            + " Service='" + conversation.Service + "'"
+                            + " Topic='" + conversation.Topic + "'"
+                            + " Handle=" + conversation.Handle.ToString()
+                            + " Item='" + item + "'"
+                            + " Data=" + data.Length.ToString()
+                            + " Format=" + format.ToString());
+
+                        // Tell the client that the data was processed.
+                        return PokeResult.Processed;
+                    }
+
+                    protected override RequestResult OnRequest(DdeConversation conversation, string item, int format)
+                    {
+                        Console.WriteLine("OnRequest:".PadRight(16)
+                            + " Service='" + conversation.Service + "'"
+                            + " Topic='" + conversation.Topic + "'"
+                            + " Handle=" + conversation.Handle.ToString()
+                            + " Item='" + item + "'"
+                            + " Format=" + format.ToString());
+
+                        // Return data to the client only if the format is CF_TEXT.
+                        if (format == 1)
+                        {
+                            return new RequestResult(System.Text.Encoding.ASCII.GetBytes("Time=" + DateTime.Now.ToString() + "\0"));
+                        }
+                        return RequestResult.NotProcessed;
+                    }
+
+                    protected override byte[] OnAdvise(string topic, string item, int format)
+                    {
+                        Console.WriteLine("OnAdvise:".PadRight(16)
+                            + " Service='" + this.Service + "'"
+                            + " Topic='" + topic + "'"
+                            + " Item='" + item + "'"
+                            + " Format=" + format.ToString());
+
+                        // Send data to the client only if the format is CF_TEXT.
+                        if (format == 1)
+                        {
+                            return System.Text.Encoding.ASCII.GetBytes("Time=" + DateTime.Now.ToString() + "\0");
+                        }
+                        return null;
+                    }
+
+                } // class
+
+            } // class
+            </code>
+            <code lang="Visual Basic">
+            Imports NDde.Server
+
+            Module Program
+
+                Sub Main()
+
+                    Try
+
+                        ' Create a server that will register the service name 'myapp'.
+                        Using server As DdeServer = New MyServer("myapp")
+
+                            ' Register the service name.
+                            server.Register()
+
+                            ' Wait for the user to press ENTER before proceding.
+                            Console.WriteLine("Press ENTER to quit...")
+                            Console.ReadLine()
+
+                        End Using
+
+                    Catch e As Exception
+
+                        Console.WriteLine(e)
+                        Console.WriteLine("Press ENTER to quit...")
+                        Console.ReadLine()
+
+                    End Try
+
+                End Sub
+
+                Private Class MyServer
+                    Inherits DdeServer
+
+                    Private WithEvents theTimer As System.Timers.Timer = New System.Timers.Timer()
+
+                    Public Sub New(ByVal service As String)
+                        MyBase.New(service)
+                        ' Create a timer that will be used to advise clients of new data.
+                        theTimer.Interval = 1000
+                        theTimer.SynchronizingObject = Me.Context
+                        theTimer.Start()
+                    End Sub
+
+                    Private Sub theTimer_Elapsed(ByVal sender As Object, ByVal e As System.Timers.ElapsedEventArgs) Handles theTimer.Elapsed
+                        Me.Advise("*", "*")
+                    End Sub
+
+                    Protected Overrides Function OnBeforeConnect(ByVal topic As String) As Boolean
+                        Console.WriteLine("OnBeforeConnect:".PadRight(16) _
+                         + " Service='" + MyBase.Service + "'" _
+                         + " Topic='" + topic + "'")
+
+                        Return True
+                    End Function
+
+                    Protected Overrides Sub OnAfterConnect(ByVal conversation As DdeConversation)
+                        Console.WriteLine("OnAfterConnect:".PadRight(16) _
+                         + " Service='" + conversation.Service + "'" _
+                         + " Topic='" + conversation.Topic + "'" _
+                         + " Handle=" + conversation.Handle.ToString())
+                    End Sub
+
+                    Protected Overrides Sub OnDisconnect(ByVal conversation As DdeConversation)
+                        Console.WriteLine("OnDisconnect:".PadRight(16) _
+                         + " Service='" + conversation.Service + "'" _
+                         + " Topic='" + conversation.Topic + "'" _
+                         + " Handle=" + conversation.Handle.ToString())
+                    End Sub
+
+                    Protected Overrides Function OnStartAdvise(ByVal conversation As DdeConversation, ByVal item As String, ByVal format As Integer) As Boolean
+                        Console.WriteLine("OnStartAdvise:".PadRight(16) _
+                         + " Service='" + conversation.Service + "'" _
+                         + " Topic='" + conversation.Topic + "'" _
+                         + " Handle=" + conversation.Handle.ToString() _
+                         + " Item='" + item + "'" _
+                         + " Format=" + format.ToString())
+
+                        ' Initiate the advisory loop only if the format is CF_TEXT.
+                        Return format = 1
+                    End Function
+
+                    Protected Overrides Sub OnStopAdvise(ByVal conversation As DdeConversation, ByVal item As String)
+                        Console.WriteLine("OnStopAdvise:".PadRight(16) _
+                          + " Service='" + conversation.Service + "'" _
+                          + " Topic='" + conversation.Topic + "'" _
+                          + " Handle=" + conversation.Handle.ToString() _
+                          + " Item='" + item + "'")
+                    End Sub
+
+                    Protected Overrides Function OnExecute(ByVal conversation As DdeConversation, ByVal command As String) As ExecuteResult
+                        Console.WriteLine("OnExecute:".PadRight(16) _
+                         + " Service='" + conversation.Service + "'" _
+                         + " Topic='" + conversation.Topic + "'" _
+                         + " Handle=" + conversation.Handle.ToString() _
+                         + " Command='" + command + "'")
+
+                        ' Tell the client that the command was processed.
+                        Return ExecuteResult.Processed
+                    End Function
+
+                    Protected Overrides Function OnPoke(ByVal conversation As DdeConversation, ByVal item As String, ByVal data As Byte(), ByVal format As Integer) As PokeResult
+                        Console.WriteLine("OnPoke:".PadRight(16) _
+                         + " Service='" + conversation.Service + "'" _
+                         + " Topic='" + conversation.Topic + "'" _
+                         + " Handle=" + conversation.Handle.ToString() _
+                         + " Item='" + item + "'" _
+                         + " Data=" + data.Length.ToString() _
+                         + " Format=" + format.ToString())
+
+                        ' Tell the client that the data was processed.
+                        Return PokeResult.Processed
+                    End Function
+
+                    Protected Overrides Function OnRequest(ByVal conversation As DdeConversation, ByVal item As String, ByVal format As Integer) As RequestResult
+                        Console.WriteLine("OnRequest:".PadRight(16) _
+                         + " Service='" + conversation.Service + "'" _
+                         + " Topic='" + conversation.Topic + "'" _
+                         + " Handle=" + conversation.Handle.ToString() _
+                         + " Item='" + item + "'" _
+                         + " Format=" + format.ToString())
+
+                        ' Return data to the client only if the format is CF_TEXT.
+                        If format = 1 Then
+                            Return New RequestResult(System.Text.Encoding.ASCII.GetBytes("Time=" + DateTime.Now.ToString() + Convert.ToChar(0)))
+                        End If
+                        Return RequestResult.NotProcessed
+                    End Function
+
+                    Protected Overrides Function OnAdvise(ByVal topic As String, ByVal item As String, ByVal format As Integer) As Byte()
+                        Console.WriteLine("OnAdvise:".PadRight(16) _
+                         + " Service='" + Me.Service + "'" _
+                         + " Topic='" + topic + "'" _
+                         + " Item='" + item + "'" _
+                         + " Format=" + format.ToString())
+
+                        ' Send data to the client only if the format is CF_TEXT.
+                        If format = 1 Then
+                            Return System.Text.Encoding.ASCII.GetBytes("Time=" + DateTime.Now.ToString() + Convert.ToChar(0))
+                        End If
+                        Return Nothing
+                    End Function
+
+                End Class
+
+            End Module
+            </code>
+        </example>
+    </Member>
+    <Member name="DdeClient">
+        <example>
+        The following example demonstrates how to use a DdeClient.
+            <code lang="C#">
+            using System;
+            using System.Text;
+            using NDde.Client;
+
+            public sealed class Client
+            {
+                public static void Main(string[] args)
+                {
+                    // Wait for the user to press ENTER before proceding.
+                    Console.WriteLine("The Server sample must be running before the client can connect.");
+                    Console.WriteLine("Press ENTER to continue...");
+                    Console.ReadLine();
+                    try
+                    {
+                        // Create a client that connects to 'myapp|mytopic'. 
+                        using (DdeClient client = new DdeClient("myapp", "mytopic"))
+                        {
+                            // Subscribe to the Disconnected event.  This event will notify the application when a conversation has been terminated.
+                            client.Disconnected += OnDisconnected;
+
+                            // Connect to the server.  It must be running or an exception will be thrown.
+                            client.Connect();
+
+                            // Synchronous Execute Operation
+                            client.Execute("mycommand", 60000);
+
+                            // Synchronous Poke Operation
+                            client.Poke("myitem", DateTime.Now.ToString(), 60000);
+
+                            // Syncronous Request Operation
+                            Console.WriteLine("Request: " + client.Request("myitem", 60000));
+
+                            // Asynchronous Execute Operation
+                            client.BeginExecute("mycommand", OnExecuteComplete, client);
+
+                            // Asynchronous Poke Operation
+                            client.BeginPoke("myitem", Encoding.ASCII.GetBytes(DateTime.Now.ToString() + "\0"), 1, OnPokeComplete, client);
+
+                            // Asynchronous Request Operation
+                            client.BeginRequest("myitem", 1, OnRequestComplete, client);
+
+                            // Advise Loop
+                            client.StartAdvise("myitem", 1, true, 60000);
+                            client.Advise += OnAdvise;
+
+                            // Wait for the user to press ENTER before proceding.
+                            Console.WriteLine("Press ENTER to quit...");
+                            Console.ReadLine();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                        Console.WriteLine("Press ENTER to quit...");
+                        Console.ReadLine();
+                    }
+                }
+
+                private static void OnExecuteComplete(IAsyncResult ar)
+                {
+                    try
+                    {
+                        DdeClient client = (DdeClient)ar.AsyncState;
+                        client.EndExecute(ar);
+                        Console.WriteLine("OnExecuteComplete");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("OnExecuteComplete: " + e.Message);
+                    }
+                }
+
+                private static void OnPokeComplete(IAsyncResult ar)
+                {
+                    try
+                    {
+                        DdeClient client = (DdeClient)ar.AsyncState;
+                        client.EndPoke(ar);
+                        Console.WriteLine("OnPokeComplete");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("OnPokeComplete: " + e.Message);
+                    }
+                }
+
+                private static void OnRequestComplete(IAsyncResult ar)
+                {
+                    try
+                    {
+                        DdeClient client = (DdeClient)ar.AsyncState;
+                        byte[] data = client.EndRequest(ar);
+                        Console.WriteLine("OnRequestComplete: " + Encoding.ASCII.GetString(data));
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("OnRequestComplete: " + e.Message);
+                    }
+                }
+
+                private static void OnStartAdviseComplete(IAsyncResult ar)
+                {
+                    try
+                    {
+                        DdeClient client = (DdeClient)ar.AsyncState;
+                        client.EndStartAdvise(ar);
+                        Console.WriteLine("OnStartAdviseComplete");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("OnStartAdviseComplete: " + e.Message);
+                    }
+                }
+
+                private static void OnStopAdviseComplete(IAsyncResult ar)
+                {
+                    try
+                    {
+                        DdeClient client = (DdeClient)ar.AsyncState;
+                        client.EndStopAdvise(ar);
+                        Console.WriteLine("OnStopAdviseComplete");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("OnStopAdviseComplete: " + e.Message);
+                    }
+                }
+
+                private static void OnAdvise(object sender, DdeAdviseEventArgs args)
+                {
+                    Console.WriteLine("OnAdvise: " + args.Text);
+                }
+
+                private static void OnDisconnected(object sender, DdeDisconnectedEventArgs args)
+                {
+                    Console.WriteLine(
+                        "OnDisconnected: " +
+                        "IsServerInitiated=" + args.IsServerInitiated.ToString() + " " +
+                        "IsDisposed=" + args.IsDisposed.ToString());
+                }
+
+            } // class
+
+            </code>
+            <code lang="Visual Basic">
+            Imports System.Text
+            Imports NDde.Client
+
+            Module Program
+
+                Sub Main()
+
+                    ' Wait for the user to press ENTER before proceding.
+                    Console.WriteLine("The Server sample must be running before the client can connect.")
+                    Console.WriteLine("Press ENTER to continue...")
+                    Console.ReadLine()
+
+                    Try
+                        ' Create a client that connects to 'myapp|mytopic'. 
+                        Using client As DdeClient = New DdeClient("myapp", "mytopic")
+
+                            ' Subscribe to the Disconnected event.  This event will notify the application when a conversation has been terminated.
+                            AddHandler client.Disconnected, AddressOf OnDisconnected
+
+                            ' Connect to the server.  It must be running or an exception will be thrown.
+                            client.Connect()
+
+                            ' Synchronous Execute Operation
+                            client.Execute("mycommand", 60000)
+
+                            ' Synchronous Poke Operation
+                            client.Poke("myitem", DateTime.Now.ToString(), 60000)
+
+                            ' Syncronous Request Operation
+                            Console.WriteLine("Request: " + client.Request("myitem", 60000))
+
+                            ' Asynchronous Execute Operation
+                            client.BeginExecute("mycommand", AddressOf OnExecuteComplete, client)
+
+                            ' Asynchronous Poke Operation
+                            client.BeginPoke("myitem", Encoding.ASCII.GetBytes(DateTime.Now.ToString() + Convert.ToChar(0)), 1, AddressOf OnPokeComplete, client)
+
+                            ' Asynchronous Request Operation
+                            client.BeginRequest("myitem", 1, AddressOf OnRequestComplete, client)
+
+                            ' Advise Loop
+                            client.StartAdvise("myitem", 1, True, 60000)
+                            AddHandler client.Advise, AddressOf OnAdvise
+
+                            ' Wait for the user to press ENTER before proceding.
+                            Console.WriteLine("Press ENTER to quit...")
+                            Console.ReadLine()
+
+                        End Using
+
+                    Catch e As Exception
+
+                        Console.WriteLine(e.ToString())
+                        Console.WriteLine("Press ENTER to quit...")
+                        Console.ReadLine()
+
+                    End Try
+
+                End Sub
+
+                Private Sub OnExecuteComplete(ByVal ar As IAsyncResult)
+                    Try
+                        Dim client As DdeClient = DirectCast(ar.AsyncState, DdeClient)
+                        client.EndExecute(ar)
+                        Console.WriteLine("OnExecuteComplete")
+                    Catch e As Exception
+                        Console.WriteLine("OnExecuteComplete: " + e.Message)
+                    End Try
+                End Sub
+
+                Private Sub OnPokeComplete(ByVal ar As IAsyncResult)
+                    Try
+                        Dim client As DdeClient = DirectCast(ar.AsyncState, DdeClient)
+                        client.EndPoke(ar)
+                        Console.WriteLine("OnPokeComplete")
+                    Catch e As Exception
+                        Console.WriteLine("OnPokeComplete: " + e.Message)
+                    End Try
+                End Sub
+
+                Private Sub OnRequestComplete(ByVal ar As IAsyncResult)
+                    Try
+                        Dim client As DdeClient = DirectCast(ar.AsyncState, DdeClient)
+                        client.EndRequest(ar)
+                        Console.WriteLine("OnRequestComplete")
+                    Catch e As Exception
+                        Console.WriteLine("OnRequestComplete: " + e.Message)
+                    End Try
+                End Sub
+
+                Private Sub OnStartAdviseComplete(ByVal ar As IAsyncResult)
+                    Try
+                        Dim client As DdeClient = DirectCast(ar.AsyncState, DdeClient)
+                        client.EndStartAdvise(ar)
+                        Console.WriteLine("OnStartAdviseComplete")
+                    Catch e As Exception
+                        Console.WriteLine("OnStartAdviseComplete: " + e.Message)
+                    End Try
+                End Sub
+
+                Private Sub OnStopAdviseComplete(ByVal ar As IAsyncResult)
+                    Try
+                        Dim client As DdeClient = DirectCast(ar.AsyncState, DdeClient)
+                        client.EndStopAdvise(ar)
+                        Console.WriteLine("OnStopAdviseComplete")
+                    Catch e As Exception
+                        Console.WriteLine("OnStopAdviseComplete: " + e.Message)
+                    End Try
+                End Sub
+
+                Private Sub OnAdvise(ByVal sender As Object, ByVal args As DdeAdviseEventArgs)
+                    Console.WriteLine("OnAdvise: " + args.Text)
+                End Sub
+
+                Private Sub OnDisconnected(ByVal sender As Object, ByVal args As DdeDisconnectedEventArgs)
+                    Console.WriteLine( _
+                     "OnDisconnected: " + _
+                     "IsServerInitiated=" + args.IsServerInitiated.ToString() + " " + _
+                     "IsDisposed=" + args.IsDisposed.ToString())
+                End Sub
+
+            End Module
+            </code>
+        </example>
+    </Member>
+</Comment>

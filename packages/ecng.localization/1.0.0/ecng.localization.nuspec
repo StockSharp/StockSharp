@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Ecng.Localization</id>
+    <version>1.0.0</version>
+    <authors>Ecng.Localization</authors>
+    <owners>Ecng.Localization</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework=".NETFramework4.0">
+        <dependency id="Ecng.Collections" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Ecng.Common" version="1.0.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETCoreApp3.1">
+        <dependency id="Ecng.Collections" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Ecng.Common" version="1.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

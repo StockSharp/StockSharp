@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Ecng.Backup</id>
+    <version>1.0.0</version>
+    <authors>Ecng.Backup</authors>
+    <owners>Ecng.Backup</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework=".NETFramework4.6">
+        <dependency id="Ecng.Common" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Ecng.ComponentModel" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Ecng.Localization" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Ecng.Serialization" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Ecng.Xaml.DevExp" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Ecng.Xaml" version="1.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="PresentationCore" targetFramework=".NETFramework4.6" />
+      <frameworkAssembly assemblyName="PresentationFramework" targetFramework=".NETFramework4.6" />
+      <frameworkAssembly assemblyName="System.Xaml" targetFramework=".NETFramework4.6" />
+      <frameworkAssembly assemblyName="WindowsBase" targetFramework=".NETFramework4.6" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

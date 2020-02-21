@@ -811,7 +811,14 @@
 			Subscription IMarketDataProviderEx.RegisterFilteredMarketDepth(Security security) => null;
 			void IMarketDataProviderEx.UnRegisterFilteredMarketDepth(Security security) { }
 
-			Subscription IMarketDataProviderEx.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, IMessageAdapter adapter) => null;
+            public Subscription SubscribeMarketDepth(Security security, DateTimeOffset? @from = null, DateTimeOffset? to = null,
+                long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild,
+                MarketDataTypes? buildFrom = null, int? maxDepth = null, TimeSpan? refreshSpeed = null,
+                IMessageAdapter adapter = null)
+            {
+                throw new NotImplementedException();
+            }
+
 			void IMarketDataProviderEx.UnSubscribeMarketDepth(Security security) { }
 
 			Subscription IMarketDataProviderEx.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter) => null;
