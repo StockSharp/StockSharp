@@ -14,6 +14,7 @@
         <dependency id="Ecng.ComponentModel" version="1.0.0" exclude="Build,Analyzers" />
         <dependency id="Ecng.Configuration" version="1.0.0" exclude="Build,Analyzers" />
         <dependency id="Ecng.Localization" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Ecng.Net" version="1.0.0" exclude="Build,Analyzers" />
         <dependency id="Ecng.Reflection" version="1.0.0" exclude="Build,Analyzers" />
         <dependency id="Ecng.Security" version="1.0.0" exclude="Build,Analyzers" />
         <dependency id="Ecng.Serialization" version="1.0.0" exclude="Build,Analyzers" />
