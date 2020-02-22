@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string Description;
 
-			public byte? LimitType;
+			public int? LimitType;
 			public long? ExpirationDate;
 
 			public BlittableDecimal? CommissionTaker;
@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				LastChangeServerTime = message.ServerTime.To<long>(),
 				LastChangeLocalTime = message.LocalTime.To<long>(),
 				DepoName = message.DepoName,
-				LimitType = (byte?)message.LimitType,
+				LimitType = (int?)message.LimitType,
 				BoardCode = message.BoardCode,
 				ClientCode = message.ClientCode,
 				Description = message.Description,

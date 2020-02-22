@@ -112,6 +112,9 @@ namespace StockSharp.Community
 				case ErrorCodes.Suspicious:
 					throw new InvalidOperationException(LocalizedStrings.SuspiciousAction);
 
+				case ErrorCodes.FileHashNotMatch:
+					throw new InvalidOperationException(LocalizedStrings.FileHash);
+
 				default:
 					throw new InvalidOperationException(LocalizedStrings.UnknownServerErrorCode.Put(code));
 			}

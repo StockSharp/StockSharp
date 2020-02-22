@@ -2975,11 +2975,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.QuestionWindow" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.Products,System.Version,System.String,System.String)">
+    <member name="M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.ProductData,System.Version,System.String,System.String)">
       <summary>
             Variables initial initialization.
             </summary>
-      <param name="product">Product type.</param>
+      <param name="product">Product.</param>
       <param name="version">App version.</param>
       <param name="caption">The message title.</param>
       <param name="text">Message text.</param>
@@ -3913,7 +3913,7 @@
     </member>
     <member name="T:StockSharp.Xaml.CredentialsWindow">
       <summary>
-            The window for editing <see cref="T:StockSharp.Community.ServerCredentials" />.
+            The window for editing <see cref="T:Ecng.ComponentModel.ServerCredentials" />.
             </summary>
       <summary>
             CredentialsWindow

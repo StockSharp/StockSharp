@@ -4981,6 +4981,8 @@ FileNameFormat;File name format;Формат имени файла
 FileNameFormatDesc;File name format. For ex., 'candles_{Security.Id}_{From:yyyy_MM_dd}_{To:yyyy_MM_dd}.csv'.;Формат имени файла. Например, 'candles_{Security.Id}_{From:yyyy_MM_dd}_{To:yyyy_MM_dd}.csv'.
 MinVolume;Min volume;Мин объем
 MinVolumeDesc;Minimum volume allowed in order.;Минимальный объем, допустимый в заявке.
+MaxVolume;Max volume;Макс объем
+MaxVolumeDesc;Maximum volume allowed in order.;Максимальные объем, допустимый в заявке.
 UnderlyingMinVolume;Min volume (under);Мин объем (базов)
 UnderlyingMinVolumeDesc;Minimum volume allowed in order for underlying security.;Минимальный объем базового инструмента, допустимый в заявке.
 Shortable;Shortable;Шортовый
@@ -4989,6 +4991,7 @@ IntervalDataUpdates;The interval between data updates.;Периодичност�
 Zero;Zero;Ноль
 Connector;Connector;Коннектор
 OrderVolumeLessMin;Volume {0} of order '{1}' is less than minimum allowed {2}.;Объем {0} заявки '{1}' меньше минимально допустимого {2}.
+OrderVolumeMoreMax;Volume {0} of order '{1}' is more than maximum allowed {2}.;Объем {0} заявки '{1}' больше максимально допустимого {2}.
 ShowStrategySocket;Show strategy socket;Показывать сокет стратегии
 ShowPositionSocket;Show position socket;Показывать сокет позиции
 EncryptedSchema;Encrypted scheme;Зашифрованная схема
@@ -5133,6 +5136,15 @@ QuoteCondition;Quote condition.;Условие котировки.
 MarginSection;Margin section.;Маржинальная секция.
 PrizmBit;PrizmBit;PrizmBit
 FileHashNotMatch;Downloaded hash '{0}' not match with calculated '{1}'.;Скаченный хэш '{0}' не совпадает с расчитанным '{1}'.
+FileHash;File hash;Хэш файла
+LowBidPrice;Low bid;Мин бид
+LowBidPriceDesc;Lowest bid during the session.;Наименьший бид за сессию.
+HighAskPrice;High ask;Макс оффер
+HighAskPriceDesc;Highest ask during the session.;Наивысший оффер за сессию.
+LastTradeVolumeLow;Low trade vol;Мин объем сделки
+LastTradeVolumeLowDesc;Lowest last trade volume.;Наименьший объем сделки.
+LastTradeVolumeHigh;High trade vol;Макс объем сделки
+LastTradeVolumeHighDesc;Highest last trade volume.;Наибольший объем сделки.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5144,7 +5156,7 @@ DocStr7;Release resources;Освободить занятые ресурсы
 DocStr8;InitializeComponent;InitializeComponent
 DocStr9;Message type;Тип сообщения
 DocStr10;Schema change event;Событие изменения схемы
-DocStr11;Popup window for alert type {0};Всплывающее окно для типа сигнала {0}
+DocStr11;Popup window for alert type {0};Всплывающее окно для сигнала типа {0}
 DocStr12;Alert creation time;Время формирования сигнала
 DocStr13;Alert text;Текст сигнала
 DocStr14;Rule;Правило
@@ -16005,3 +16017,24 @@ DocStr11609;QUIK PreTrade FIX protocol dialect;QUIK PreTrade диалект FIX 
 DocStr11610;QUIK server FIX protocol dialect;QUIK server диалект FIX протокола
 DocStr11611;Read order condition;Прочитать условие заявки
 DocStr11613;Directly update last values;Напрямую обновить последние значения
+DocStr11614;Use compression;Использовать сжатие
+DocStr11615;Check hash of downloaded files;Проверять хэш скаченных файлов
+DocStr11616;Product ID;Идентификатор продукта
+DocStr11617;To start uploading temp file to the site;Запустить загрузку временного файла на сайт
+DocStr11619;All available products;Все доступные продукты
+DocStr11620;Check on availability of the newest version;Проверить на наличие новой версии
+DocStr11621;Local files info (name and hash);Информация о локальных файлах (имя и хэш)
+DocStr11622;List of files actions. Empty array means no any updates;Список изменений файлов. Пустой список означает отсутствие обновлений
+DocStr11623;Get changes;Получить изменения
+DocStr11624;The interface describing the updates service;Интерфейс, описывающий сервис обновлений
+DocStr11625;Get all products;Получить все продукты
+DocStr11626;S#.Shell;S#.Shell
+DocStr11627;S#.MatLab;S#.MatLab
+DocStr11628;S#.Updater;S#.Updater
+DocStr11629;Part size;Размер части
+DocStr11630;S#.ЛЧИ;S#.ЛЧИ
+DocStr11631;Get product's public name;Получить публичное имя продукта
+DocStr11632;Public name;Публичное имя
+DocStr11633;Get file list and their hashes in the specified folder;Получить список файлов и их хэши в указанной директории
+DocStr11634;Path to the folder;Путь к директории
+DocStr11635;The connection access check module which provides access by simple login and password set;Модуль проверки доступа соединения, который предоставляется через простую установку логина и пароля

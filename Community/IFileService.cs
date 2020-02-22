@@ -51,7 +51,7 @@ namespace StockSharp.Community
 		/// <param name="compression">Use compression.</param>
 		/// <returns>Operation ID.</returns>
 		[OperationContract]
-		Guid BeginDownload2(Guid sessionId, long id, bool compression);
+		Tuple<Guid, long, string> BeginDownload2(Guid sessionId, long id, bool compression);
 
 		/// <summary>
 		/// Download part of file.
@@ -80,17 +80,7 @@ namespace StockSharp.Community
 		/// <param name="operationId">Operation ID, received from <see cref="BeginDownload"/>.</param>
 		/// <param name="isCancel">Cancel the operation.</param>
 		[OperationContract]
-		[Obsolete]
 		void FinishDownload(Guid operationId, bool isCancel);
-
-		/// <summary>
-		/// To finish downloading the file.
-		/// </summary>
-		/// <param name="operationId">Operation ID, received from <see cref="BeginDownload"/>.</param>
-		/// <param name="isCancel">Cancel the operation.</param>
-		/// <returns>File hash.</returns>
-		[OperationContract]
-		string FinishDownload2(Guid operationId, bool isCancel);
 
 		/// <summary>
 		/// To start uploading the file to the site.

@@ -337,6 +337,8 @@ StockSharp API Change log
 * (bug) OKEX. Fix https://stocksharp.ru/forum/11384/oshibki-registratsii-orderov-dlya-okex/
 * (feature) IFileService. Compression added.
 * (feature) IUpdateService created.
+* (feature) Security. MaxVolume property added.
+* (feature) Level1. LowBidPrice, HighAskPrice, LastTradeVolumeLow, LastTradeVolumeHigh new fields.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

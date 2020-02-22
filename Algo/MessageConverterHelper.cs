@@ -531,6 +531,7 @@ namespace StockSharp.Algo
 			message.Decimals = security.Decimals;
 			message.VolumeStep = security.VolumeStep;
 			message.MinVolume = security.MinVolume;
+			message.MaxVolume = security.MaxVolume;
 			message.Multiplier = security.Multiplier;
 			message.Currency = security.Currency;
 			message.SecurityType = security.Type;

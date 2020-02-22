@@ -8,6 +8,21 @@ namespace StockSharp.Community
 	public interface IFileClient
 	{
 		/// <summary>
+		/// Part size.
+		/// </summary>
+		int PartSize { get; set; }
+
+		/// <summary>
+		/// Use compression.
+		/// </summary>
+		bool Compression { get; set; }
+
+		/// <summary>
+		/// Check hash of downloaded files.
+		/// </summary>
+		bool CheckDownloadedHash { get; set; }
+
+		/// <summary>
 		/// To get the file data.
 		/// </summary>
 		/// <param name="id">File ID.</param>
@@ -33,6 +48,16 @@ namespace StockSharp.Community
 		bool Download(FileData data, Action<long> progress = null, Func<bool> cancel = null);
 
 		/// <summary>
+		/// Download file.
+		/// </summary>
+		/// <param name="data">The file data.</param>
+		/// <param name="operationId">Operation ID.</param>
+		/// <param name="progress">Progress callback.</param>
+		/// <param name="cancel">Cancel callback.</param>
+		/// <returns>If the operation was cancelled by <paramref name="cancel"/>, <see langword="false"/> will return.</returns>
+		bool DownloadTemp(FileData data, Guid operationId, Action<long> progress = null, Func<bool> cancel = null);
+
+		/// <summary>
 		/// To upload the existing file.
 		/// </summary>
 		/// <param name="data">File data.</param>
@@ -50,6 +75,16 @@ namespace StockSharp.Community
 		/// <param name="cancel">Cancel callback.</param>
 		/// <returns>File data. If the operation was cancelled by <paramref name="cancel"/>, <see langword="null"/> will return.</returns>
 		FileData Upload(string fileName, byte[] body, bool isPublic, Action<long> progress = null, Func<bool> cancel = null);
+
+		/// <summary>
+		/// To start uploading temp file to the site.
+		/// </summary>
+		/// <param name="fileName">File name.</param>
+		/// <param name="body">File body.</param>
+		/// <param name="progress">Progress callback.</param>
+		/// <param name="cancel">Cancel callback.</param>
+		/// <returns>File data. If the operation was cancelled by <paramref name="cancel"/>, <see langword="null"/> will return.</returns>
+		Guid? UploadTemp(string fileName, byte[] body, Action<long> progress = null, Func<bool> cancel = null);
 
 		/// <summary>
 		/// To get a upload size limit.

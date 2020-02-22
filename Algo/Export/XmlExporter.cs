@@ -339,6 +339,9 @@ namespace StockSharp.Algo.Export
 				if (security.MinVolume != null)
 					writer.WriteAttribute("minVolume", security.MinVolume.Value);
 
+				if (security.MaxVolume != null)
+					writer.WriteAttribute("maxVolume", security.MaxVolume.Value);
+
 				if (security.Multiplier != null)
 					writer.WriteAttribute("multiplier", security.Multiplier.Value);
 

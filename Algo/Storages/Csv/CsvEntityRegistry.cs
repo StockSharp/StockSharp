@@ -330,6 +330,7 @@ namespace StockSharp.Algo.Storages.Csv
 				public decimal? PriceStep { get; set; }
 				public decimal? VolumeStep { get; set; }
 				public decimal? MinVolume { get; set; }
+				public decimal? MaxVolume { get; set; }
 				public decimal? Multiplier { get; set; }
 				public int? Decimals { get; set; }
 				public SecurityTypes? Type { get; set; }
@@ -368,6 +369,7 @@ namespace StockSharp.Algo.Storages.Csv
 						PriceStep = PriceStep,
 						VolumeStep = VolumeStep,
 						MinVolume = MinVolume,
+						MaxVolume = MaxVolume,
 						Multiplier = Multiplier,
 						Decimals = Decimals,
 						Type = Type,
@@ -400,6 +402,7 @@ namespace StockSharp.Algo.Storages.Csv
 					PriceStep = security.PriceStep;
 					VolumeStep = security.VolumeStep;
 					MinVolume = security.MinVolume;
+					MaxVolume = security.MaxVolume;
 					Multiplier = security.Multiplier;
 					Decimals = security.Decimals;
 					Type = security.Type;
@@ -475,6 +478,9 @@ namespace StockSharp.Algo.Storages.Csv
 					return true;
 
 				if (IsChanged(security.MinVolume, liteSec.MinVolume, forced))
+					return true;
+
+				if (IsChanged(security.MaxVolume, liteSec.MaxVolume, forced))
 					return true;
 
 				if (IsChanged(security.Multiplier, liteSec.Multiplier, forced))
@@ -624,6 +630,9 @@ namespace StockSharp.Algo.Storages.Csv
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					liteSec.UnderlyingSecurityMinVolume = reader.ReadNullableDecimal();
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					liteSec.MaxVolume = reader.ReadNullableDecimal();
+
 				return liteSec.ToSecurity(this);
 			}
 
@@ -666,6 +675,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.MinVolume.To<string>(),
 					data.Shortable.To<string>(),
 					data.UnderlyingSecurityMinVolume.To<string>(),
+					data.MaxVolume.To<string>(),
 				});
 			}
 

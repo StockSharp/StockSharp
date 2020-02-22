@@ -79,6 +79,16 @@ namespace StockSharp.Messages
 		public decimal? MinVolume { get; set; }
 
 		/// <summary>
+		/// Maximum volume allowed in order.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.MaxVolumeKey)]
+		[DescriptionLoc(LocalizedStrings.MaxVolumeDescKey)]
+		[MainCategory]
+		[Nullable]
+		public decimal? MaxVolume { get; set; }
+
+		/// <summary>
 		/// Lot multiplier.
 		/// </summary>
 		[DataMember]
@@ -319,6 +329,7 @@ namespace StockSharp.Messages
 			destination.UnderlyingSecurityCode = UnderlyingSecurityCode;
 			destination.VolumeStep = VolumeStep;
 			destination.MinVolume = MinVolume;
+			destination.MaxVolume = MaxVolume;
 			destination.Multiplier = Multiplier;
 			destination.Class = Class;
 			destination.BinaryOptionType = BinaryOptionType;
@@ -357,6 +368,9 @@ namespace StockSharp.Messages
 
 			if (MinVolume != null)
 				str += $",MinVol={MinVolume}";
+
+			if (MaxVolume != null)
+				str += $",MaxVol={MaxVolume}";
 
 			if (Decimals != null)
 				str += $",Dec={Decimals}";

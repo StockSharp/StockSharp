@@ -49478,6 +49478,26 @@ namespace StockSharp.Localization
 		public static string MinVolumeDesc => GetString(MinVolumeDescKey);
 
 		/// <summary>
+		/// Max volume
+		/// </summary>
+		public const string MaxVolumeKey = nameof(MaxVolume);
+
+		/// <summary>
+		/// Max volume
+		/// </summary>
+		public static string MaxVolume => GetString(MaxVolumeKey);
+
+		/// <summary>
+		/// Maximum volume allowed in order.
+		/// </summary>
+		public const string MaxVolumeDescKey = nameof(MaxVolumeDesc);
+
+		/// <summary>
+		/// Maximum volume allowed in order.
+		/// </summary>
+		public static string MaxVolumeDesc => GetString(MaxVolumeDescKey);
+
+		/// <summary>
 		/// Shortable
 		/// </summary>
 		public const string ShortableKey = nameof(Shortable);
@@ -49536,6 +49556,16 @@ namespace StockSharp.Localization
 		/// Volume {0} of order '{1}' is less than minimum allowed {2}.
 		/// </summary>
 		public static string OrderVolumeLessMin => GetString(OrderVolumeLessMinKey);
+
+		/// <summary>
+		/// Volume {0} of order '{1}' is more than maximum allowed {2}.
+		/// </summary>
+		public const string OrderVolumeMoreMaxKey = nameof(OrderVolumeMoreMax);
+
+		/// <summary>
+		/// Volume {0} of order '{1}' is more than maximum allowed {2}.
+		/// </summary>
+		public static string OrderVolumeMoreMax => GetString(OrderVolumeMoreMaxKey);
 
 		/// <summary>
 		/// Show strategy socket
@@ -50996,5 +51026,95 @@ namespace StockSharp.Localization
 		/// Downloaded hash '{0}' not match with calculated '{1}'.
 		/// </summary>
 		public static string FileHashNotMatch => GetString(FileHashNotMatchKey);
+
+		/// <summary>
+		/// File hash
+		/// </summary>
+		public const string FileHashKey = nameof(FileHash);
+
+		/// <summary>
+		/// File hash
+		/// </summary>
+		public static string FileHash => GetString(FileHashKey);
+
+		/// <summary>
+		/// Low bid
+		/// </summary>
+		public const string LowBidPriceKey = nameof(LowBidPrice);
+
+		/// <summary>
+		/// Low bid
+		/// </summary>
+		public static string LowBidPrice => GetString(LowBidPriceKey);
+
+		/// <summary>
+		/// Lowest bid during the session.
+		/// </summary>
+		public const string LowBidPriceDescKey = nameof(LowBidPriceDesc);
+
+		/// <summary>
+		/// Lowest bid during the session.
+		/// </summary>
+		public static string LowBidPriceDesc => GetString(LowBidPriceDescKey);
+
+		/// <summary>
+		/// High ask
+		/// </summary>
+		public const string HighAskPriceKey = nameof(HighAskPrice);
+
+		/// <summary>
+		/// High ask
+		/// </summary>
+		public static string HighAskPrice => GetString(HighAskPriceKey);
+
+		/// <summary>
+		/// Highest ask during the session.
+		/// </summary>
+		public const string HighAskPriceDescKey = nameof(HighAskPriceDesc);
+
+		/// <summary>
+		/// Highest ask during the session.
+		/// </summary>
+		public static string HighAskPriceDesc => GetString(HighAskPriceDescKey);
+
+		/// <summary>
+		/// Low trade vol
+		/// </summary>
+		public const string LastTradeVolumeLowKey = nameof(LastTradeVolumeLow);
+
+		/// <summary>
+		/// Low trade vol
+		/// </summary>
+		public static string LastTradeVolumeLow => GetString(LastTradeVolumeLowKey);
+
+		/// <summary>
+		/// Lowest last trade volume.
+		/// </summary>
+		public const string LastTradeVolumeLowDescKey = nameof(LastTradeVolumeLowDesc);
+
+		/// <summary>
+		/// Lowest last trade volume.
+		/// </summary>
+		public static string LastTradeVolumeLowDesc => GetString(LastTradeVolumeLowDescKey);
+
+		/// <summary>
+		/// High trade vol
+		/// </summary>
+		public const string LastTradeVolumeHighKey = nameof(LastTradeVolumeHigh);
+
+		/// <summary>
+		/// High trade vol
+		/// </summary>
+		public static string LastTradeVolumeHigh => GetString(LastTradeVolumeHighKey);
+
+		/// <summary>
+		/// Highest last trade volume.
+		/// </summary>
+		public const string LastTradeVolumeHighDescKey = nameof(LastTradeVolumeHighDesc);
+
+		/// <summary>
+		/// Highest last trade volume.
+		/// </summary>
+		public static string LastTradeVolumeHighDesc => GetString(LastTradeVolumeHighDescKey);
 	}
 }

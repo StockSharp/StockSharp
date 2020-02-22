@@ -739,49 +739,47 @@ namespace StockSharp.Algo
 
 		private void ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message)
 		{ 
-			var subscription = _subscriptionManager.ProcessSubscriptionFinishedMessage(message);
+			var subscription = _subscriptionManager.ProcessSubscriptionFinishedMessage(message, out var items);
 
 			if (subscription == null)
 				return;
 
 			RaiseMarketDataSubscriptionFinished(message, subscription);
 
-			ProcessSubscriptionResult(subscription);
+			ProcessSubscriptionResult(subscription, items);
 		}
 
 		private void ProcessSubscriptionOnlineMessage(SubscriptionOnlineMessage message)
 		{
-			var subscription = _subscriptionManager.ProcessSubscriptionOnlineMessage(message);
+			var subscription = _subscriptionManager.ProcessSubscriptionOnlineMessage(message, out var items);
 
 			if (subscription == null)
 				return;
 
 			RaiseMarketDataSubscriptionOnline(subscription);
 
-			ProcessSubscriptionResult(subscription);
+			ProcessSubscriptionResult(subscription, items);
 		}
 
-		private void ProcessSubscriptionResult(Subscription subscription)
+		private void ProcessSubscriptionResult(Subscription subscription, object[] items)
 		{
+			T[] Typed<T>() => items.Cast<T>().ToArray();
+
 			if (subscription.SubscriptionMessage is SecurityLookupMessage secLookup)
 			{
-				var items = _subscriptionManager.GetLookupItems<Security>(subscription);
-				RaiseLookupSecuritiesResult(secLookup, null, Securities.Filter(secLookup).ToArray(), items);
+				RaiseLookupSecuritiesResult(secLookup, null, Securities.Filter(secLookup).ToArray(), Typed<Security>());
 			}
 			else if (subscription.SubscriptionMessage is BoardLookupMessage boardLookup)
 			{
-				var items = _subscriptionManager.GetLookupItems<ExchangeBoard>(subscription);
-				RaiseLookupBoardsResult(boardLookup, null, ExchangeBoards.Filter(boardLookup).ToArray(), items);
+				RaiseLookupBoardsResult(boardLookup, null, ExchangeBoards.Filter(boardLookup).ToArray(), Typed<ExchangeBoard>());
 			}
 			else if (subscription.SubscriptionMessage is PortfolioLookupMessage pfLookup)
 			{
-				var items = _subscriptionManager.GetLookupItems<Portfolio>(subscription);
-				RaiseLookupPortfoliosResult(pfLookup, null, Portfolios.Filter(pfLookup).ToArray(), items);
+				RaiseLookupPortfoliosResult(pfLookup, null, Portfolios.Filter(pfLookup).ToArray(), Typed<Portfolio>());
 			}
 			else if (subscription.SubscriptionMessage is TimeFrameLookupMessage tfLookup)
 			{
-				var items = _subscriptionManager.GetLookupItems<TimeSpan>(subscription);
-				RaiseLookupTimeFramesResult(tfLookup, null, items, items);
+				RaiseLookupTimeFramesResult(tfLookup, null, Typed<TimeSpan>(), Typed<TimeSpan>());
 			}
 		}
 

@@ -13,19 +13,19 @@ namespace StockSharp.Community
 		ProductData[] Products { get; }
 
 		/// <summary>
-		/// Upload new version.
+		/// Check on availability of the newest version.
 		/// </summary>
 		/// <param name="product">Product.</param>
-		/// <param name="releaseNotes">Release notes.</param>
-		/// <param name="operationIds">List of operation, previously made by <see cref="IFileService.BeginUploadTemp"/>.</param>
-		void Upload(ProductData product, string releaseNotes, Guid[] operationIds);
+		/// <param name="localFiles">Local files info (name and hash).</param>
+		/// <returns>Check result.</returns>
+		bool HasNewVersion(ProductData product, Tuple<string, string>[] localFiles);
 
 		/// <summary>
-		/// Download a new version.
+		/// Get changes.
 		/// </summary>
 		/// <param name="product">Product.</param>
 		/// <param name="localFiles">Local files info (name and hash).</param>
 		/// <returns>List of files actions. Empty array means no any updates.</returns>
-		Tuple<string, Tuple<string, Guid, bool>[]> Download(ProductData product, Tuple<string, string>[] localFiles);
+		Tuple<string, Guid, bool, string, long>[] GetChanges(ProductData product, Tuple<string, string>[] localFiles);
 	}
 }
