@@ -205,11 +205,6 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="transform">The data source transformation.</param>
 		protected virtual void UpdateCandle(MarketDataMessage message, TCandleMessage candle, ICandleBuilderValueTransform transform)
 		{
-			Update(candle, transform);
-		}
-
-		private static void Update(TCandleMessage candle, ICandleBuilderValueTransform transform)
-		{
 			if (candle == null)
 				throw new ArgumentNullException(nameof(candle));
 

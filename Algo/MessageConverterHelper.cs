@@ -70,7 +70,7 @@ namespace StockSharp.Algo
 			};
 		}
 
-		private static readonly SynchronizedPairSet<Type, Type> _candleTypes = new SynchronizedPairSet<Type, Type>();
+		private static readonly CachedSynchronizedPairSet<Type, Type> _candleTypes = new CachedSynchronizedPairSet<Type, Type>();
 
 		/// <summary>
 		/// Cast candle type <see cref="Candle"/> to the message <see cref="CandleMessage"/>.
@@ -1079,6 +1079,11 @@ namespace StockSharp.Algo
 
 			return creator();
 		}
+
+		/// <summary>
+		/// All registered candle types.
+		/// </summary>
+		public static IEnumerable<Type> AllCandleTypes => _candleTypes.CachedKeys;
 
 		/// <summary>
 		/// Register new candle type.
