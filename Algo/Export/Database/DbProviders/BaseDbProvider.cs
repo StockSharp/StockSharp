@@ -24,7 +24,6 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 
 	using Ecng.Common;
 	using Ecng.Data;
-	using Ecng.Xaml.DevExp.Database;
 
 	abstract class BaseDbProvider : Disposable
 	{

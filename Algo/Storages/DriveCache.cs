@@ -11,7 +11,9 @@
 
 	using MoreLinq;
 
+#if NETFRAMEWORK
 	using StockSharp.Algo.Storages.Remote;
+#endif
 	using StockSharp.Localization;
 
 	using PathPair = System.Tuple<string, System.Net.EndPoint>;
@@ -128,7 +130,13 @@
 				if (pair.Item2 == null)
 					drive = new LocalMarketDataDrive(path);
 				else
+				{
+#if NETFRAMEWORK
 					drive = new RemoteMarketDataDrive(new RemoteStorageClient(new Uri(pair.Item2.To<string>())));
+#else
+					throw new PlatformNotSupportedException();
+#endif
+				}
 
 				NewDriveCreated?.Invoke(drive);
 

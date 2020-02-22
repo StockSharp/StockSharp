@@ -140,6 +140,8 @@ publish/
 
 # NuGet Packages Directory
 packages/*
+!packages/ecng.*
+!packages/protobuf-net
 ## TODO: If the tool you use requires repositories.config uncomment the next line
 #!packages/repositories.config
 

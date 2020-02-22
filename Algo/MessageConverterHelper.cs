@@ -28,7 +28,6 @@ namespace StockSharp.Algo
 	using StockSharp.Algo.Server;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Community;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 

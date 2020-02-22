@@ -18,7 +18,9 @@ namespace StockSharp.Logging
 	using System;
 
 	using Ecng.Common;
+#if NETFRAMEWORK
 	using Ecng.Interop;
+#endif
 
 	using StockSharp.Localization;
 
@@ -32,8 +34,10 @@ namespace StockSharp.Logging
 		/// </summary>
 		public ConsoleLogListener()
 		{
+#if NETFRAMEWORK
 			if (!WinApi.AllocateConsole())
 				throw new InvalidOperationException(LocalizedStrings.CannotCreateConsoleWindow);
+#endif
 		}
 
 		/// <inheritdoc />

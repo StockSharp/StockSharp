@@ -19,7 +19,9 @@ namespace StockSharp.Messages
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Linq;
+#if NETFRAMEWORK
 	using System.ServiceModel;
+#endif
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -971,8 +973,10 @@ namespace StockSharp.Messages
 			return new ErrorMessage { Error = error };
 		}
 
+#if NETFRAMEWORK
 		private static readonly ChannelFactory<IDailyInfoSoap> _dailyInfoFactory = new ChannelFactory<IDailyInfoSoap>(new BasicHttpBinding(), new EndpointAddress("http://www.cbr.ru/dailyinfowebserv/dailyinfo.asmx"));
 		private static readonly Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>> _rateInfo = new Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>>();
+#endif
 
 		/// <summary>
 		/// To convert one currency to another.
@@ -1008,6 +1012,7 @@ namespace StockSharp.Messages
 		/// <returns>The rate.</returns>
 		public static decimal Convert(this CurrencyTypes from, CurrencyTypes to, DateTime date)
 		{
+#if NETFRAMEWORK
 			if (from == to)
 				return 1;
 
@@ -1029,6 +1034,9 @@ namespace StockSharp.Messages
 				return info[from];
 			else
 				return info[from] / info[to];
+#else
+			throw new PlatformNotSupportedException();
+#endif
 		}
 
 		/// <summary>

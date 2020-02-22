@@ -1,204 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StockSharp.Messages</RootNamespace>
     <AssemblyName>StockSharp.Messages</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworks>net40;netcoreapp3.1</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\StockSharp.Messages.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\StockSharp.Messages.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ecng.Collections">
-      <HintPath>..\References\Ecng.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Common">
-      <HintPath>..\References\Ecng.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\References\Ecng.ComponentModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Interop">
-      <HintPath>..\References\Ecng.Interop.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Net">
-      <HintPath>..\References\Ecng.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Reflection">
-      <HintPath>..\References\Ecng.Reflection.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Serialization">
-      <HintPath>..\References\Ecng.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Serialization.FieldFactories">
-      <HintPath>..\References\Ecng.Serialization.FieldFactories.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Localization">
-      <HintPath>..\References\Ecng.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
+    <PackageReference Include="Ecng.Common" Version="1.0.0" />
+    <PackageReference Include="Ecng.Collections" Version="1.0.0" />
+    <PackageReference Include="Ecng.ComponentModel" Version="1.0.0" />
+    <PackageReference Include="Ecng.Serialization" Version="1.0.0" />
+    <PackageReference Include="Ecng.Serialization.FieldFactories" Version="1.0.0" />
+    <PackageReference Include="Ecng.Configuration" Version="1.0.0" />
+    <PackageReference Include="Ecng.Interop" Version="1.0.0" />
+    <PackageReference Include="Ecng.Net" Version="1.0.0" />
+    <PackageReference Include="Ecng.Localization" Version="1.0.0" />
+    <PackageReference Include="Ecng.Reflection" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\StockSharpAssemblyInfo.cs">
-      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="AdapterCommandMessage.cs" />
-    <Compile Include="AdapterListRequestMessage.cs" />
-    <Compile Include="AdapterResponseMessage.cs" />
-    <Compile Include="BaseConnectionMessage.cs" />
-    <Compile Include="BaseResultMessage.cs" />
-    <Compile Include="BaseRouteMessage.cs" />
-    <Compile Include="BaseSubscriptionIdMessage.cs" />
-    <Compile Include="BoardLookupMessage.cs" />
-    <Compile Include="BoardMessage.cs" />
-    <Compile Include="CandleMessage.cs" />
-    <Compile Include="CandlePriceLevel.cs" />
-    <Compile Include="ChangePasswordMessage.cs" />
-    <Compile Include="ChannelMessageAdapter.cs" />
-    <Compile Include="ConnectionStates.cs" />
-    <Compile Include="ConnectMessage.cs" />
-    <Compile Include="CryptoAttribute.cs" />
-    <Compile Include="Currency.cs" />
-    <Compile Include="CurrencyTypes.cs" />
-    <Compile Include="DataType.cs" />
-    <Compile Include="DisconnectMessage.cs" />
-    <Compile Include="ExecutionMessage.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="IBasketSecurityProcessor.cs" />
-    <Compile Include="IBasketSecurityProcessorProvider.cs" />
-    <Compile Include="IDailyInfoSoap.cs" />
-    <Compile Include="IErrorMessage.cs" />
-    <Compile Include="IMessage.cs" />
-    <Compile Include="IOriginalTransactionIdMessage.cs" />
-    <Compile Include="IPortfolioNameMessage.cs" />
-    <Compile Include="ISecurityIdMessage.cs" />
-    <Compile Include="IServerTimeMessage.cs" />
-    <Compile Include="ISubscriptionIdMessage.cs" />
-    <Compile Include="ISubscriptionMessage.cs" />
-    <Compile Include="ITransactionIdMessage.cs" />
-    <Compile Include="SubscriptionFinishedMessage.cs" />
-    <Compile Include="IExtendableEntity.cs" />
-    <Compile Include="IMessageAdapter.cs" />
-    <Compile Include="IMessageAdapterProvider.cs" />
-    <Compile Include="IMessageAdapterWrapper.cs" />
-    <Compile Include="InMemoryMessageChannel.cs" />
-    <Compile Include="IOrderLogMarketDepthBuilder.cs" />
-    <Compile Include="SubscriptionOnlineMessage.cs" />
-    <Compile Include="IMessageQueue.cs" />
-    <Compile Include="PortfolioRouteListRequestMessage.cs" />
-    <Compile Include="PortfolioRouteMessage.cs" />
-    <Compile Include="ReConnectionSettings.cs" />
-    <Compile Include="RemoveMessage.cs" />
-    <Compile Include="ResetMessage.cs" />
-    <Compile Include="IMessageChannel.cs" />
-    <Compile Include="MainCategoryAttribute.cs" />
-    <Compile Include="BaseChangeMessage.cs" />
-    <Compile Include="ErrorMessage.cs" />
-    <Compile Include="MessageAdapter.cs" />
-    <Compile Include="MessageTypes.cs" />
-    <Compile Include="Message.cs" />
-    <Compile Include="NewsMessage.cs" />
-    <Compile Include="OptionTypes.cs" />
-    <Compile Include="OrderCancelMessage.cs" />
-    <Compile Include="OrderCondition.cs" />
-    <Compile Include="OrderGroupCancelMessage.cs" />
-    <Compile Include="OrderMessage.cs" />
-    <Compile Include="OrderPairReplaceMessage.cs" />
-    <Compile Include="OrderRegisterMessage.cs" />
-    <Compile Include="OrderReplaceMessage.cs" />
-    <Compile Include="OrderStates.cs" />
-    <Compile Include="OrderStatus.cs" />
-    <Compile Include="OrderStatusMessage.cs" />
-    <Compile Include="OrderTypes.cs" />
-    <Compile Include="PortfolioLookupMessage.cs" />
-    <Compile Include="PortfolioMessage.cs" />
-    <Compile Include="PositionChangeMessage.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuoteChange.cs" />
-    <Compile Include="QuoteChangeMessage.cs" />
-    <Compile Include="Level1ChangeMessage.cs" />
-    <Compile Include="MarketDataMessage.cs" />
-    <Compile Include="RepoOrderInfo.cs" />
-    <Compile Include="NtmOrderInfo.cs" />
-    <Compile Include="SecurityId.cs" />
-    <Compile Include="SecurityIdMapping.cs" />
-    <Compile Include="SecurityLegsRequestMessage.cs" />
-    <Compile Include="SecurityLegsInfoMessage.cs" />
-    <Compile Include="SecurityLookupMessage.cs" />
-    <Compile Include="SecurityMappingMessage.cs" />
-    <Compile Include="SecurityMappingRequestMessage.cs" />
-    <Compile Include="SecurityMappingInfoMessage.cs" />
-    <Compile Include="SecurityMessage.cs" />
-    <Compile Include="SecurityRouteListRequestMessage.cs" />
-    <Compile Include="SecurityRouteMessage.cs" />
-    <Compile Include="SecurityStates.cs" />
-    <Compile Include="SecurityTypes.cs" />
-    <Compile Include="BoardStateMessage.cs" />
-    <Compile Include="Sides.cs" />
-    <Compile Include="MessageAdapterCategories.cs" />
-    <Compile Include="SubscriptionListRequestMessage.cs" />
-    <Compile Include="SubscriptionResponseMessage.cs" />
-    <Compile Include="TimeFrameLookupMessage.cs" />
-    <Compile Include="TimeFrameInfoMessage.cs" />
-    <Compile Include="TimeInForce.cs" />
-    <Compile Include="TimeMessage.cs" />
-    <Compile Include="TPlusLimits.cs" />
-    <Compile Include="Unit.cs" />
-    <Compile Include="CandleMessageVolumeProfile.cs" />
-    <Compile Include="UserInfoMessage.cs" />
-    <Compile Include="UserLookupMessage.cs" />
-    <Compile Include="UserPermissions.cs" />
-    <Compile Include="UserRequestMessage.cs" />
-    <Compile Include="WithdrawInfo.cs" />
-    <Compile Include="WorkingTime.cs" />
-    <Compile Include="WorkingTimePeriod.cs" />
+    <Compile Include="..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Localization\Localization.csproj">
-      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
-      <Name>Localization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Logging\Logging.csproj">
-      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
-      <Name>Logging</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Localization\Localization.csproj" />
+    <ProjectReference Include="..\Logging\Logging.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+    <Compile Remove="IDailyInfoSoap.cs" />
+  </ItemGroup>
 </Project>
