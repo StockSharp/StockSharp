@@ -8,9 +8,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Package Description</description>
     <dependencies>
-      <group targetFramework=".NETFramework4.0" />
+      <group targetFramework=".NETFramework4.0">
+        <dependency id="TimeZoneConverter" version="3.2.0" exclude="Build,Analyzers" />
+      </group>
       <group targetFramework=".NETCoreApp3.1">
         <dependency id="System.CodeDom" version="4.4.0" exclude="Build,Analyzers" />
+        <dependency id="TimeZoneConverter" version="3.2.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
     <frameworkAssemblies>

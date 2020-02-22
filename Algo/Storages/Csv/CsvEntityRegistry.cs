@@ -180,7 +180,7 @@ namespace StockSharp.Algo.Storages.Csv
 					ExpiryTime = reader.ReadString().ToTime(),
 					//IsSupportAtomicReRegister = reader.ReadBool(),
 					//IsSupportMarketOrders = reader.ReadBool(),
-					TimeZone = TimeZoneInfo.FindSystemTimeZoneById(reader.ReadString()),
+					TimeZone = reader.ReadString().To<TimeZoneInfo>(),
 				};
 
 				var time = board.WorkingTime;

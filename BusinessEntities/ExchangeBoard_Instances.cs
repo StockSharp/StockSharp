@@ -1781,7 +1781,7 @@ namespace StockSharp.BusinessEntities
 				TimeZone = TimeHelper.China,
 			};
 
-			var singaporeTime = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
+			var singaporeTime = "Singapore Standard Time".To<TimeZoneInfo>();
 
 			Sgx = new ExchangeBoard
 			{
@@ -1848,7 +1848,7 @@ namespace StockSharp.BusinessEntities
 				TimeZone = singaporeTime,
 			};
 
-			var bangkokTime = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+			var bangkokTime = "SE Asia Standard Time".To<TimeZoneInfo>();
 
 			Idx = new ExchangeBoard
 			{
@@ -1893,7 +1893,7 @@ namespace StockSharp.BusinessEntities
 				TimeZone = bangkokTime,
 			};
 
-			var indiaTime = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+			var indiaTime = "India Standard Time".To<TimeZoneInfo>();
 
 			Bse = new ExchangeBoard
 			{
@@ -1955,7 +1955,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Cse,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time"),
+				TimeZone = "Sri Lanka Standard Time".To<TimeZoneInfo>(),
 			};
 
 			Krx = new ExchangeBoard
@@ -1997,7 +1997,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Asx,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time"),
+				TimeZone = "AUS Eastern Standard Time".To<TimeZoneInfo>(),
 			};
 
 			Nzx = new ExchangeBoard
@@ -2018,7 +2018,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Nzx,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("New Zealand Standard Time"),
+				TimeZone = "New Zealand Standard Time".To<TimeZoneInfo>(),
 			};
 
 			Tase = new ExchangeBoard
@@ -2039,7 +2039,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Tase,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time"),
+				TimeZone = "Israel Standard Time".To<TimeZoneInfo>(),
 			};
 
 			Fwb = new ExchangeBoard
@@ -2060,7 +2060,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Fwb,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"),
+				TimeZone = "W. Europe Standard Time".To<TimeZoneInfo>(),
 			};
 
 			Mse = new ExchangeBoard
@@ -2081,7 +2081,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Mse,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Romance Standard Time"),
+				TimeZone = "Romance Standard Time".To<TimeZoneInfo>(),
 			};
 
 			Swx = new ExchangeBoard
@@ -2223,7 +2223,7 @@ namespace StockSharp.BusinessEntities
 		{
 			try
 			{
-				return TimeZoneInfo.FindSystemTimeZoneById(id);
+				return id.To<TimeZoneInfo>();
 			}
 			catch (TimeZoneNotFoundException)
 			{
