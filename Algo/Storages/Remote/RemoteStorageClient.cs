@@ -632,7 +632,9 @@ namespace StockSharp.Algo.Storages.Remote
 		/// </summary>
 		public void Login()
 		{
-			_sessionId = base.Invoke(f => f.Login(Credentials.Email, Credentials.Password.UnSecure()));
+			var tuple = base.Invoke(f => f.Login4(Products.Hydra.FromEnum().Id, GetType().Assembly.GetName().Version.To<string>(), Credentials.Email, Credentials.Password.UnSecure()));
+			//tuple.Item1.ToErrorCode().ThrowIfError();
+			_sessionId = tuple.Item1;
 		}
 
 		/// <inheritdoc />
