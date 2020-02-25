@@ -1091,6 +1091,7 @@ namespace StockSharp.Algo.Strategies
 		/// <inheritdoc />
 		public event Action<Order> OrderChanged;
 
+#pragma warning disable 67
 		/// <inheritdoc />
 		[Obsolete("Use OrderRegisterFailed event.")]
 		public event Action<OrderFail> StopOrderRegisterFailed;
@@ -1099,7 +1100,6 @@ namespace StockSharp.Algo.Strategies
 		[Obsolete("Use OrderChanged event.")]
 		public event Action<Order> StopOrderChanged;
 
-#pragma warning disable 67
 		/// <summary>
 		/// The event of sending stop-order for registration.
 		/// </summary>

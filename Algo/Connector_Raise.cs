@@ -35,10 +35,6 @@ namespace StockSharp.Algo
 		public event Action<Order> OrderChanged;
 
 		/// <inheritdoc />
-		[Obsolete("Use NewOrders event.")]
-		public event Action<IEnumerable<Order>> NewStopOrders;
-
-		/// <inheritdoc />
 		public event Action<IEnumerable<Order>> OrdersChanged;
 
 		/// <inheritdoc />
@@ -48,11 +44,16 @@ namespace StockSharp.Algo
 		public event Action<OrderFail> OrderCancelFailed;
 
 		/// <inheritdoc />
-		[Obsolete("Use OrdersChanged event.")]
-		public event Action<IEnumerable<Order>> StopOrdersChanged;
+		public event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
+
+#pragma warning disable 67
+		/// <inheritdoc />
+		[Obsolete("Use NewOrders event.")]
+		public event Action<IEnumerable<Order>> NewStopOrders;
 
 		/// <inheritdoc />
-		public event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
+		[Obsolete("Use OrdersChanged event.")]
+		public event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <inheritdoc />
 		[Obsolete("Use OrderRegisterFailed event.")]
@@ -69,6 +70,15 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		[Obsolete("Use OrderChanged event.")]
 		public event Action<Order> StopOrderChanged;
+
+		/// <inheritdoc />
+		[Obsolete("Use OrdersRegisterFailed event.")]
+		public event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;
+
+		/// <inheritdoc />
+		[Obsolete("Use OrdersCancelFailed event.")]
+		public event Action<IEnumerable<OrderFail>> StopOrdersCancelFailed;
+#pragma warning restore 67
 
 		/// <inheritdoc />
 		public event Action<Security> NewSecurity;
@@ -93,14 +103,6 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public event Action<long, Exception> OrderStatusFailed;
-
-		/// <inheritdoc />
-		[Obsolete("Use OrdersRegisterFailed event.")]
-		public event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;
-
-		/// <inheritdoc />
-		[Obsolete("Use OrdersCancelFailed event.")]
-		public event Action<IEnumerable<OrderFail>> StopOrdersCancelFailed;
 
 		/// <inheritdoc />
 		public event Action<IEnumerable<Security>> NewSecurities;
