@@ -64,7 +64,6 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
@@ -74,7 +73,6 @@
     <Compile Include="ConsoleLogListener.cs" />
     <Compile Include="DebugLogListener.cs" />
     <Compile Include="EmailLogListener.cs" />
-    <Compile Include="ErrorLoggingAttribute.cs" />
     <Compile Include="ExternalLogListener.cs" />
     <Compile Include="FileLogListener.cs" />
     <Compile Include="ILogListener.cs" />

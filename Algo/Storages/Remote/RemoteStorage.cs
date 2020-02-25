@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Storages.Remote
 	/// <summary>
 	/// The external market data storage access to which is organized through the WCF network connection (for more details see <see cref="System.ServiceModel"/>).
 	/// </summary>
-	[ErrorLogging]
 	public abstract class RemoteStorage : BaseLogReceiver, IRemoteStorage
 	{
 		private readonly SynchronizedDictionary<Guid, SynchronizedDictionary<UserPermissions, SynchronizedDictionary<Tuple<string, string, string, DateTime?>, bool>>> _sessions = new SynchronizedDictionary<Guid, SynchronizedDictionary<UserPermissions, SynchronizedDictionary<Tuple<string, string, string, DateTime?>, bool>>>();
